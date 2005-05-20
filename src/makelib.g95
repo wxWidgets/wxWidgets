@@ -7,8 +7,6 @@
 #
 # Include file for Cygwin/Mingw32 libraries
 
-WXDIR = $(WXWIN)
-
 # All common UNIX compiler flags and options are now in
 # this central makefile.
 include $(WXDIR)/src/makeg95.env

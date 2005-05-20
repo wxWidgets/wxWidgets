@@ -33,8 +33,11 @@ public:
                               const wxString& controlName,
                               wxWindowID id = -1,
                               const wxPoint& pos = wxDefaultPosition,
-                              const wxSize& size = wxDefaultSize)
-        : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL | wxNO_BORDER,
+                              const wxSize& size = wxDefaultSize,
+                              long style = 0)
+        // Always add the wxTAB_TRAVERSAL and wxNO_BORDER styles to what comes
+        // from the XRC if anything.
+        : wxPanel(parent, id, pos, size, style | wxTAB_TRAVERSAL | wxNO_BORDER,
                   controlName + wxT("_container")),
           m_controlName(controlName), m_controlAdded(FALSE)
     {
@@ -43,6 +46,7 @@ public:
     }
 
     virtual void AddChild(wxWindowBase *child);
+    virtual void RemoveChild(wxWindowBase *child);
 
 protected:
     wxString m_controlName;
@@ -68,19 +72,29 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
     Layout();
 }
 
-
+void wxUnknownControlContainer::RemoveChild(wxWindowBase *child)
+{
+    wxPanel::RemoveChild(child);
+    m_controlAdded = FALSE;
+    GetSizer()->Remove((wxWindow*)child);
+}
 
 wxUnknownWidgetXmlHandler::wxUnknownWidgetXmlHandler()
 : wxXmlResourceHandler()
 {
+    XRC_ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
 }
 
 wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
 {
+    wxASSERT_MSG( m_instance == NULL,
+                  _T("'unknown' controls can't be subclassed, use wxXmlResource::AttachUnknownControl") );
+    
     wxPanel *panel =
         new wxUnknownControlContainer(m_parentAsWindow,
                                       GetName(), -1,
-                                      GetPosition(), GetSize());
+                                      GetPosition(), GetSize(),
+                                      GetStyle(wxT("style")));
     SetupWindow(panel);
     return panel;
 }

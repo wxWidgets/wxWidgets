@@ -92,7 +92,9 @@ public:
   void SetBorderY(int y);
 
   void OnPaint(wxPaintEvent& event);
-  void OnSize(wxSizeEvent& event);
+  
+  void OnLeftDown(wxMouseEvent& event);
+  void OnRightDown(wxMouseEvent& event);
 
   virtual void InitColours();
 
@@ -105,6 +107,8 @@ protected:
 
   wxArrayString     m_statusStrings;
 
+  // the last known width of the client rect (used to rebuild cache)
+  int               m_lastClientWidth;
   // the widths of the status bar panes in pixels
   wxArrayInt        m_widthsAbs;
 

@@ -122,7 +122,7 @@ bool MyApp::OnInit()
   wxConvCurrent = &wxConvLibc;
 #endif
 
-  m_canvasTextColour = wxColour("BLACK");
+  m_canvasTextColour = wxColour(_T("BLACK"));
   m_canvasFont = *wxNORMAL_FONT;
 
   // Create the main frame window
@@ -170,12 +170,12 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_BUSYINFO, _T("&Busy info dialog\tCtrl-B"));
 #endif // wxUSE_BUSYINFO
 #if wxUSE_FINDREPLDLG
-  file_menu->Append(DIALOGS_FIND, _T("&Find dialog\tCtrl-F"), "", TRUE);
-  file_menu->Append(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"), "", TRUE);
+  file_menu->Append(DIALOGS_FIND, _T("&Find dialog\tCtrl-F"), _T(""), TRUE);
+  file_menu->Append(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"), _T(""), TRUE);
 #endif // wxUSE_FINDREPLDLG
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_MODAL, _T("Mo&dal dialog\tCtrl-W"));
-  file_menu->Append(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"), "", TRUE);
+  file_menu->Append(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"), _T(""), TRUE);
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
   wxMenuBar *menu_bar = new wxMenuBar;
@@ -226,7 +226,7 @@ void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
     }
 
     wxColourDialog dialog(this, &data);
-    dialog.SetTitle("Choose the background colour");
+    dialog.SetTitle(_T("Choose the background colour"));
     if (dialog.ShowModal() == wxID_OK)
     {
         wxColourData retData = dialog.GetColourData();
@@ -375,7 +375,7 @@ void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
 {
     wxString pwd = wxGetPasswordFromUser(_T("Enter password:"),
                                          _T("Password entry dialog"),
-                                         "",
+                                         _T(""),
                                          this);
     if ( !!pwd )
     {
@@ -457,7 +457,11 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     _T("Testing open file dialog"),
                     _T(""),
                     _T(""),
+#ifdef __WXMOTIF__
+                    _T("C++ files (*.cpp)|*.cpp")
+#else
                     _T("C++ files (*.h;*.cpp)|*.h;*.cpp")
+#endif
                  );
 
     dialog.SetDirectory(wxGetHomeDir());
@@ -503,8 +507,14 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 {
+    wxString wildcards = 
+#ifdef __WXMOTIF__
+                    _T("C++ files (*.cpp)|*.cpp");
+#else
+                    _T("All files (*.*)|*.*|C++ files (*.h;*.cpp)|*.h;*.cpp");
+#endif
     wxFileDialog dialog(this, _T("Testing open multiple file dialog"),
-                        _T(""), _T(""), wxFileSelectorDefaultWildcardStr,
+                        _T(""), _T(""), wildcards,
                         wxMULTIPLE);
 
     if (dialog.ShowModal() == wxID_OK)
@@ -523,6 +533,8 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 
             msg += s;
         }
+        s.Printf(_T("Filter index: %d"), dialog.GetFilterIndex());
+        msg += s;
 
         wxMessageDialog dialog2(this, msg, _T("Selected files"));
         dialog2.ShowModal();
@@ -534,16 +546,16 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
     wxFileDialog dialog(this,
                         _T("Testing save file dialog"),
                         _T(""),
-                        _T("myletter.txt"),
+                        _T("myletter.doc"),
                         _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
                         wxSAVE|wxOVERWRITE_PROMPT);
 
+    dialog.SetFilterIndex(1);
+
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxChar buf[400];
-        wxSprintf(buf, _T("%s, filter %d"), (const wxChar*)dialog.GetPath(), dialog.GetFilterIndex());
-        wxMessageDialog dialog2(this, wxString(buf), _T("Selected path"));
-        dialog2.ShowModal();
+        wxLogMessage(_T("%s, filter %d"),
+                     dialog.GetPath().c_str(), dialog.GetFilterIndex());
     }
 }
 
@@ -557,8 +569,7 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxMessageDialog dialog2(this, dialog.GetPath(), _T("Selected path"));
-        dialog2.ShowModal();
+        wxLogMessage(_T("Selected path: %s"), dialog.GetPath().c_str());
     }
 }
 
@@ -708,7 +719,7 @@ void MyFrame::ShowBusyInfo(wxCommandEvent& WXUNUSED(event))
 {
     wxWindowDisabler disableAll;
 
-    wxBusyInfo info("Working, please wait...", this);
+    wxBusyInfo info(_T("Working, please wait..."), this);
 
     for ( int i = 0; i < 18; i++ )
     {
@@ -851,7 +862,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
     dc.SetFont(wxGetApp().m_canvasFont);
     dc.SetTextForeground(wxGetApp().m_canvasTextColour);
     dc.SetBackgroundMode(wxTRANSPARENT);
-    dc.DrawText("wxWindows common dialogs test application", 10, 10);
+    dc.DrawText(_T("wxWindows common dialogs test application"), 10, 10);
 }
 
 // ----------------------------------------------------------------------------
@@ -859,7 +870,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 // ----------------------------------------------------------------------------
 
 MyModelessDialog::MyModelessDialog(wxWindow *parent)
-                : wxDialog(parent, -1, wxString("Modeless dialog"))
+                : wxDialog(parent, -1, wxString(_T("Modeless dialog")))
 {
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 

@@ -45,18 +45,13 @@
 #include "wx/wizard.h"
 
 // ----------------------------------------------------------------------------
-// simple types
-// ----------------------------------------------------------------------------
-
-WX_DEFINE_ARRAY(wxPanel *, wxArrayPages);
-
-// ----------------------------------------------------------------------------
 // event tables and such
 // ----------------------------------------------------------------------------
 
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGING)
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_CANCEL)
+DEFINE_EVENT_TYPE(wxEVT_WIZARD_FINISHED)
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_HELP)
 
 BEGIN_EVENT_TABLE(wxWizard, wxDialog)
@@ -68,6 +63,7 @@ BEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_WIZARD_PAGE_CHANGED(-1, wxWizard::OnWizEvent)
     EVT_WIZARD_PAGE_CHANGING(-1, wxWizard::OnWizEvent)
     EVT_WIZARD_CANCEL(-1, wxWizard::OnWizEvent)
+    EVT_WIZARD_FINISHED(-1, wxWizard::OnWizEvent)
     EVT_WIZARD_HELP(-1, wxWizard::OnWizEvent)
 END_EVENT_TABLE()
 
@@ -348,7 +344,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
         m_page->Hide();
 
-        btnLabelWasNext = m_page->GetNext() != (wxWizardPage *)NULL;
+        btnLabelWasNext = HasNextPage(m_page);
 
         // Get the bitmap of the previous page (if it exists)
         if ( m_page->GetBitmap().Ok() )
@@ -365,6 +361,11 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     {
         // terminate successfully
         EndModal(wxID_OK);
+        if ( !IsModal() )
+         {
+           wxWizardEvent event(wxEVT_WIZARD_FINISHED, GetId(),FALSE, 0);
+           (void)GetEventHandler()->ProcessEvent(event);
+         }
         return TRUE;
     }
 
@@ -395,9 +396,9 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     }
 
     // and update the buttons state
-    m_btnPrev->Enable(m_page->GetPrev() != (wxWizardPage *)NULL);
+    m_btnPrev->Enable(HasPrevPage(m_page));
 
-    bool hasNext = m_page->GetNext() != (wxWizardPage *)NULL;
+    bool hasNext = HasNextPage(m_page);
     if ( btnLabelWasNext != hasNext )
     {
         // need to update
@@ -445,7 +446,7 @@ wxSize wxWizard::GetPageSize() const
     return wxSize(m_width, m_height);
 }
 
-void wxWizard::OnCancel(wxCommandEvent& WXUNUSED(event))
+void wxWizard::OnCancel(wxCommandEvent& WXUNUSED(eventUnused))
 {
     // this function probably can never be called when we don't have an active
     // page, but a small extra check won't hurt
@@ -514,6 +515,7 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
     if ( !(GetExtraStyle() & wxWS_EX_BLOCK_EVENTS) )
     {
         // the event will be propagated anyhow
+        event.Skip();
         return;
     }
 

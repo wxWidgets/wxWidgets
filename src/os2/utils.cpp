@@ -282,7 +282,7 @@ void wxUsleep(
   unsigned long                     ulMilliseconds
 )
 {
-    ::DosSleep(ulMilliseconds/1000l);
+    ::DosSleep(ulMilliseconds);
 }
 
 void wxSleep(
@@ -658,18 +658,24 @@ const wxChar* wxGetHomeDir(
     wxString&                       rStrDir = *pStr;
 
     // OS/2 has no idea about home,
-    // so use the working directory instead?
+    // so use the working directory instead.
+    // However, we might have a valid HOME directory,
+    // as is used on many machines that have unix utilities
+    // on them, so we should use that, if available.
 
     // 256 was taken from os2def.h
 #ifndef MAX_PATH
 #  define MAX_PATH  256
 #endif
 
-    char                            zDirName[256];
-    ULONG                           ulDirLen;
+    const wxChar *szHome = wxGetenv("HOME");
+    if ( szHome == NULL ) {
+      // we're homeless, use current directory.
+      rStrDir = wxT(".");
+    }
+    else
+       rStrDir = szHome;
 
-    ::DosQueryCurrentDir(0, zDirName, &ulDirLen);
-    rStrDir = zDirName;
     return rStrDir.c_str();
 }
 
@@ -710,7 +716,7 @@ wxChar* wxGetUserHome (
         if ((zHome = wxGetenv(_T("HOME"))) != NULL)
         {
             wxStrcpy(wxBuffer, zHome);
-            Unix2DosFilename(wxBuffer);
+            wxUnix2DosFilename(wxBuffer);
             wxStrcpy(zHome, wxBuffer);
             delete[] wxBuffer;
             return zHome;

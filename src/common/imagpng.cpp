@@ -57,7 +57,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #if wxUSE_LIBPNG
 
 #ifndef PNGLINKAGEMODE
-  #define PNGLINKAGEMODE LINKAGEMODE
+    #ifdef __WATCOMC__
+        // we need an explicit cdecl for Watcom, at least according to
+        //
+        // http://sf.net/tracker/index.php?func=detail&aid=651492&group_id=9863&atid=109863
+        //
+        // more testing is needed for this however, please remove this comment
+        // if you can confirm that my fix works with Watcom 11
+        #define PNGLINKAGEMODE cdecl
+    #else
+        #define PNGLINKAGEMODE LINKAGEMODE
+    #endif
 #endif
 
 
@@ -95,12 +105,14 @@ struct wxPNGInfoStruct
 extern "C"
 {
 
-void PNGLINKAGEMODE _PNG_stream_reader( png_structp png_ptr, png_bytep data, png_size_t length )
+void PNGLINKAGEMODE wx_PNG_stream_reader( png_structp png_ptr, png_bytep data,
+                                          png_size_t length )
 {
     WX_PNG_INFO(png_ptr)->stream.in->Read(data, length);
 }
 
-void PNGLINKAGEMODE _PNG_stream_writer( png_structp png_ptr, png_bytep data, png_size_t length )
+void PNGLINKAGEMODE wx_PNG_stream_writer( png_structp png_ptr, png_bytep data,
+                                          png_size_t length )
 {
     WX_PNG_INFO(png_ptr)->stream.out->Write(data, length);
 }
@@ -111,8 +123,8 @@ void
 PNGLINKAGEMODE wx_png_error(png_structp png_ptr, png_const_charp message)
 {
     wxPNGInfoStruct *info = WX_PNG_INFO(png_ptr);
-    if ( info->verbose )
-        wxLogError(wxString(message));
+    if (info->verbose)
+        wxLogError( wxString::FromAscii(message) );
 
 #ifdef USE_FAR_KEYWORD
     {
@@ -129,8 +141,8 @@ void
 PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 {
     wxPNGInfoStruct *info = WX_PNG_INFO(png_ptr);
-    if ( info->verbose )
-        wxLogWarning(wxString(message));
+    if (info->verbose)
+        wxLogWarning( wxString::FromAscii(message) );
 }
 
 } // extern "C"
@@ -167,7 +179,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
     // NB: please see the comment near wxPNGInfoStruct declaration for
     //     explanation why this line is mandatory
-    png_set_read_fn( png_ptr, &wxinfo, _PNG_stream_reader);
+    png_set_read_fn( png_ptr, &wxinfo, wx_PNG_stream_reader);
 
     info_ptr = png_create_info_struct( png_ptr );
     if (!info_ptr)
@@ -186,6 +198,10 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, (int*) NULL, (int*) NULL );
 
     if (color_type == PNG_COLOR_TYPE_PALETTE)
+        png_set_expand( png_ptr );
+
+    // Fix for Bug [ 439207 ] Monochrome PNG images come up black
+    if (bit_depth < 8)
         png_set_expand( png_ptr );
 
     png_set_strip_16( png_ptr );
@@ -356,7 +372,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
     // NB: please see the comment near wxPNGInfoStruct declaration for
     //     explanation why this line is mandatory
-    png_set_write_fn( png_ptr, &wxinfo, _PNG_stream_writer, NULL);
+    png_set_write_fn( png_ptr, &wxinfo, wx_PNG_stream_writer, NULL);
 
     png_set_IHDR( png_ptr, info_ptr, image->GetWidth(), image->GetHeight(), 8,
         PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,

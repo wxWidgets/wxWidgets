@@ -14,9 +14,10 @@ class MyMiniFrame(wxMiniFrame):
         EVT_CLOSE(self, self.OnCloseWindow)
 
     def OnCloseMe(self, event):
-        self.Close(true)
+        self.Close(True)
 
     def OnCloseWindow(self, event):
+        print "OnCloseWindow"
         self.Destroy()
 
 #---------------------------------------------------------------------------
@@ -28,7 +29,7 @@ def runTest(frame, nb, log):
     win.SetSize((200, 200))
     win.CenterOnParent(wxBOTH)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 #---------------------------------------------------------------------------
@@ -44,3 +45,12 @@ def runTest(frame, nb, log):
 
 overview = """\
 """
+
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])

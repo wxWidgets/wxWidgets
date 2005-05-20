@@ -42,7 +42,7 @@ public:
     virtual ~MyApp();
     void Init_wxPython();
 private:
-    PyThreadState* main_tstate;
+    PyThreadState* m_mainTState;
 };
 
 
@@ -83,16 +83,22 @@ void MyApp::Init_wxPython()
     // module and sets a pointer to a function table located there.
     wxPyCoreAPI_IMPORT();
 
+    // Ensure that the new classes defined in the wxPython wrappers are
+    // recognised by the wx RTTI system.  (If you don't use wxWindows in
+    // your C++ app you won't need to do this.)
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
+
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
-    main_tstate = wxPyBeginAllowThreads();
+    m_mainTState = wxPyBeginAllowThreads();
 }
 
 
 MyApp::~MyApp()
 {
     // Restore the thread state and tell Python to cleanup after itself.
-    wxPyEndAllowThreads(main_tstate);
+    wxPyEndAllowThreads(m_mainTState);
     Py_Finalize();
 }
 
@@ -167,7 +173,7 @@ void MyFrame::OnPyFrame(wxCommandEvent& event)
     // C++ code in any way, you can execute it with PyRun_SimpleString.
 
 
-    // First, whenever you do anyting with Python objects or code, you
+    // First, whenever you do anything with Python objects or code, you
     // *MUST* aquire the Global Interpreter Lock and block other
     // Python threads from running.
     wxPyBeginBlockThreads();

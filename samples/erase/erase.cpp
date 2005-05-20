@@ -73,9 +73,11 @@ public:
     MyCanvas( MyFrame *parent );
 
     void OnPaint( wxPaintEvent &event );
+    void OnChar( wxKeyEvent &event );
     void OnEraseBackground( wxEraseEvent &event );
 
     wxBitmap    m_bitmap;
+    wxString    m_text;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -123,7 +125,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 {
     SetIcon(wxICON(mondrian));
 
-    wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(wxID_ABOUT, _T("&About...\tCtrl-A"), _T("Show about dialog"));
@@ -160,6 +162,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(  MyCanvas::OnPaint)
+    EVT_CHAR(  MyCanvas::OnChar)
     EVT_ERASE_BACKGROUND(  MyCanvas::OnEraseBackground)
 END_EVENT_TABLE()
 
@@ -176,6 +179,30 @@ MyCanvas::MyCanvas( MyFrame *parent )
     new wxStaticBitmap( this, -1, m_bitmap, wxPoint(80,20) );
 }
 
+void MyCanvas::OnChar( wxKeyEvent &event )
+{
+#if wxUSE_UNICODE
+    if (event.m_uniChar)
+    {
+        m_text += event.m_uniChar;
+        Refresh();
+        return;
+    }
+#endif
+
+    // some test cases
+    switch (event.m_keyCode)
+    {
+        case WXK_UP: m_text += wxT( "<UP>" ); break;
+        case WXK_LEFT: m_text += wxT( "<LEFT>" ); break;
+        case WXK_RIGHT: m_text += wxT( "<RIGHT>" ); break;
+        case WXK_DOWN: m_text += wxT( "<DOWN>" ); break;
+        case WXK_RETURN: m_text += wxT( "<ENTER>" ); break;
+        default: m_text += event.m_keyCode; break;
+    }
+    
+}
+
 void MyCanvas::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc(this);
@@ -188,12 +215,20 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
 
     dc.SetTextForeground(*wxBLUE);
     dc.DrawText(_T("This text is drawn from OnPaint"), 65, 65);
+    
+    wxString tmp;
+    tmp.Printf( _T("Hit any key to display more text: %s"), m_text.c_str() );
+    int w,h;
+    dc.GetTextExtent( tmp, &w, &h );
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.DrawRectangle( 65, 85, w, h );
+    dc.DrawText( tmp, 65, 85 );
 
 #if 0
     wxRegionIterator upd( GetUpdateRegion() );
     while (upd)
     {
-        wxLogDebug( "Paint: %d %d %d %d", upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+        wxLogDebug( _T("Paint: %d %d %d %d"), upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
         upd ++;
     }
 #endif
@@ -201,7 +236,7 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
 #if 0
     wxSize size = GetSize();
     wxSize client_size = GetClientSize();
-    wxLogDebug( "size %d %d client_size %d %d", size.x, size.y, client_size.x, client_size.y );
+    wxLogDebug( _T("size %d %d client_size %d %d"), size.x, size.y, client_size.x, client_size.y );
 #endif
 
 #if 0

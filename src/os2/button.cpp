@@ -47,9 +47,7 @@ bool wxButton::Create(
 , const wxPoint&                    rPos
 , const wxSize&                     rSize
 , long                              lStyle
-#if wxUSE_VALIDATORS
 , const wxValidator&                rValidator
-#endif
 , const wxString&                   rsName
 )
 {
@@ -313,7 +311,7 @@ void wxButton::SetDefaultStyle(
         if ((lStyle & BS_USERBUTTON) != BS_USERBUTTON)
         {
             if (bOn)
-                lStyle | BS_DEFAULT;
+                lStyle |= BS_DEFAULT;
             else
                 lStyle &= ~BS_DEFAULT;
             ::WinSetWindowULong(GetHwndOf(pBtn), QWL_STYLE, lStyle);

@@ -1,27 +1,26 @@
 /* XPM */
-static char * PgmCtrl_xpm[] = {
-/* width height ncolors chars_per_pixel */
-"16 16 5 1",
-/* colors */
-" 	s None	c None",
-".	c #000000",
-"+	c #ff0000",
-"@	c #0000ff",
-"#	c #ffffff",
+static char *pgmctrl_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 4 1",
+". c #FFFFFF",
+"  c None",
+"o c #FF0000",
+"X c #0000FF",
 /* pixels */
 "                ",
-"                ",
-" ##########     ",
-" #........#     ",
-" #........#     ",
-" #........#     ",
-" #..########### ",
-" #..#+++++++++# ",
-" ####++#####++# ",
-"    #+#@@@@@#+# ",
-"    #+#@@@@@#+# ",
-"    #+#@@@@@#+# ",
-"    #++#####++# ",
-"    #+++++++++# ",
-"    ########### ",
-"                "};
+"     .......... ",
+"     .XXXXXXXX. ",
+"     .XXXXXXXX. ",
+"     .XXXXXXXX. ",
+" ............X. ",
+" .oooooooooo.X. ",
+" .oooooooooo... ",
+" .oooooooooo.   ",
+" .oooooooooo.   ",
+" .oooooooooo.   ",
+" .oooooooooo.   ",
+" .oooooooooo.   ",
+" .oooooooooo.   ",
+" ............   ",
+"                "
+};

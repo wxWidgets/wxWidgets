@@ -147,7 +147,7 @@ static inline wxString ExtractNotLang(const wxString& langFull)
 // This is a "low-level" class and is used only by wxMsgCatalog
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxString, wxMessagesHash)
+WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxString, wxMessagesHash);
 
 class wxMsgCatalogFile
 {
@@ -449,7 +449,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
     if ( convertEncoding )
     {
         wxFontEncoding targetEnc = wxFONTENCODING_SYSTEM;
-        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(charset, FALSE);
+        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(m_charset, FALSE);
         if ( enc == wxFONTENCODING_SYSTEM )
         {
             convertEncoding = FALSE; // unknown encoding
@@ -506,7 +506,7 @@ wxString wxMsgCatalogFile::GetCharset() const
         return wxEmptyString;
     }
 
-    wxString header(StringAtOfs(m_pTransTable, 0));
+    wxString header = wxString::FromAscii( StringAtOfs(m_pTransTable, 0));
     wxString charset;
     int pos = header.Find(wxT("Content-Type: text/plain; charset="));
     if ( pos == wxNOT_FOUND )
@@ -610,8 +610,11 @@ bool wxLocale::Init(const wxChar *szName,
     // the argument to setlocale()
     szLocale = szShort;
   }
+
   m_pszOldLocale = wxSetlocale(LC_ALL, szLocale);
-  if ( m_pszOldLocale == NULL )
+  if ( m_pszOldLocale )
+    m_pszOldLocale = wxStrdup(m_pszOldLocale);
+  else
     wxLogError(_("locale '%s' can not be set."), szLocale);
 
   // the short name will be used to look for catalog files as well,
@@ -619,7 +622,7 @@ bool wxLocale::Init(const wxChar *szName,
   if ( m_strShort.IsEmpty() ) {
     // FIXME I don't know how these 2 letter abbreviations are formed,
     //       this wild guess is surely wrong
-    if ( szLocale[0] )
+    if ( szLocale && szLocale[0] )
     {
         m_strShort += (wxChar)wxTolower(szLocale[0]);
         if ( szLocale[1] )
@@ -638,6 +641,39 @@ bool wxLocale::Init(const wxChar *szName,
 
   return bOk;
 }
+
+
+#if defined(__UNIX__) && wxUSE_UNICODE
+static wxWCharBuffer wxSetlocaleTryUTF(int c, const wxChar *lc)
+{
+    wxMB2WXbuf l = wxSetlocale(c, lc);
+    if ( !l && lc && lc[0] != 0 )
+    {
+    	wxString buf(lc);
+        wxString buf2;
+    	buf2 = buf + wxT(".UTF-8");
+    	l = wxSetlocale(c, buf2.c_str());
+        if ( !l )
+        {
+            buf2 = buf + wxT(".utf-8");
+    	    l = wxSetlocale(c, buf2.c_str());
+        }
+        if ( !l )
+        {
+            buf2 = buf + wxT(".UTF8");
+    	    l = wxSetlocale(c, buf2.c_str());
+        }
+        if ( !l )
+        {
+            buf2 = buf + wxT(".utf8");
+    	    l = wxSetlocale(c, buf2.c_str());
+        }
+    }
+    return l;
+}
+#else
+#define wxSetlocaleTryUTF(c, lc)  wxSetlocale(c, lc)
+#endif
 
 bool wxLocale::Init(int language, int flags)
 {
@@ -666,7 +702,6 @@ bool wxLocale::Init(int language, int flags)
     wxString name = info->Description;
     wxString canonical = info->CanonicalName;
     wxString locale;
-    const wxChar *retloc;
 
     // Set the locale:
 #if defined(__UNIX__) && !defined(__WXMAC__)
@@ -675,90 +710,141 @@ bool wxLocale::Init(int language, int flags)
     else
         locale = info->CanonicalName;
 
-    retloc = wxSetlocale(LC_ALL, locale);
+    wxMB2WXbuf retloc = wxSetlocaleTryUTF(LC_ALL, locale);
 
-    if (retloc == NULL)
+    if ( !retloc )
     {
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        retloc = wxSetlocaleTryUTF(LC_ALL, locale.Mid(0,2));
     }
-    if (retloc == NULL)
+    if ( !retloc )
     {
         // Some C libraries (namely glibc) still use old ISO 639,
         // so will translate the abbrev for them
         wxString mid = locale.Mid(0,2);
-        if (mid == wxT("he")) locale = wxT("iw") + locale.Mid(3);
-        else if (mid == wxT("id")) locale = wxT("in") + locale.Mid(3);
-        else if (mid == wxT("yi")) locale = wxT("ji") + locale.Mid(3);
-        retloc = wxSetlocale(LC_ALL, locale);
+        if (mid == wxT("he"))
+            locale = wxT("iw") + locale.Mid(3);
+        else if (mid == wxT("id"))
+            locale = wxT("in") + locale.Mid(3);
+        else if (mid == wxT("yi"))
+            locale = wxT("ji") + locale.Mid(3);
+        else if (mid == wxT("nb"))
+            locale = wxT("no_NO");
+        else if (mid == wxT("nn"))
+            locale = wxT("no_NY");
+
+        retloc = wxSetlocaleTryUTF(LC_ALL, locale);
     }
-    if (retloc == NULL)
+    if ( !retloc )
     {
         // (This time, we changed locale in previous if-branch, so try again.)
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        retloc = wxSetlocaleTryUTF(LC_ALL, locale.Mid(0,2));
     }
-    if (retloc == NULL)
+    if ( !retloc )
     {
         wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
         return FALSE;
     }
 #elif defined(__WIN32__)
+
+    #if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
+        // NB: setlocale() from msvcrt.dll (used by VC++ and Mingw)
+        //     can't set locale to language that can only be written using
+        //     Unicode.  Therefore wxSetlocale call failed, but we don't want
+        //     to report it as an error -- so that at least message catalogs
+        //     can be used. Watch for code marked with
+        //     #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS bellow.
+        #define SETLOCALE_FAILS_ON_UNICODE_LANGS
+    #endif
+    
+    wxMB2WXbuf retloc = wxT("C");
     if (language != wxLANGUAGE_DEFAULT)
     {
         if (info->WinLang == 0)
         {
             wxLogWarning(wxT("Locale '%s' not supported by OS."), name.c_str());
-            retloc = wxT("C");
+            // retloc already set to "C"
         }
         else
         {
+            int codepage = -1;
             wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
                                      SORT_DEFAULT);
-            if (SetThreadLocale(lcid))
-                retloc = wxSetlocale(LC_ALL, wxEmptyString);
+            SetThreadLocale(lcid);
+            // NB: we must translate LCID to CRT's setlocale string ourselves,
+            //     because SetThreadLocale does not modify change the
+            //     interpretation of setlocale(LC_ALL, "") call:
+            wxChar buffer[256];
+            buffer[0] = wxT('\0');
+            GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, 256);
+            locale << buffer;
+            if (GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256) > 0)
+                locale << wxT("_") << buffer;
+            if (GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE, buffer, 256) > 0)
+            {
+                codepage = wxAtoi(buffer);
+                if (codepage != 0)
+                    locale << wxT(".") << buffer;
+            }
+            if (locale.IsEmpty())
+            {
+                wxLogLastError(wxT("SetThreadLocale"));
+                wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
+                return FALSE;
+            }
             else
             {
-                // Windows9X doesn't support SetThreadLocale, so we must
-                // translate LCID to CRT's setlocale string ourselves
-                locale.Empty();
-                if (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
+                retloc = wxSetlocale(LC_ALL, locale);
+#ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
+                if (codepage == 0 && (const wxChar*)retloc == NULL)
                 {
-                    wxChar buffer[256];
-                    buffer[0] = wxT('\0');
-                    GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, 256);
-                    locale << buffer;
-                    if (GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256) > 0)
-                        locale << wxT("_") << buffer;
+                    retloc = wxT("C");
                 }
-                if (locale.IsEmpty())
-                {
-                    wxLogLastError(wxT("SetThreadLocale"));
-                    wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
-                    return FALSE;
-                }
-                else
-                    retloc = wxSetlocale(LC_ALL, locale);
+#endif
             }
         }
     }
     else
+    {
         retloc = wxSetlocale(LC_ALL, wxEmptyString);
+#ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
+        if ((const wxChar*)retloc == NULL)
+        {
+            wxChar buffer[16];
+            if (GetLocaleInfo(LOCALE_USER_DEFAULT,
+                              LOCALE_IDEFAULTANSICODEPAGE, buffer, 16) > 0 &&
+                 wxStrcmp(buffer, wxT("0")) == 0)
+            {
+                retloc = wxT("C");
+            }
+        }
+#endif
+    }
 
-    if (retloc == NULL)
+    if ( !retloc )
     {
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
         return FALSE;
     }
-#elif defined(__WXMAC__)
-    retloc = wxSetlocale(LC_ALL , wxEmptyString);
+#elif defined(__WXMAC__) || defined(__WXPM__)
+    wxMB2WXbuf retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #else
     return FALSE;
+    #define WX_NO_LOCALE_SUPPORT
 #endif
 
-    return Init(name, canonical, wxString(retloc),
-                (flags & wxLOCALE_LOAD_DEFAULT) != 0,
-                (flags & wxLOCALE_CONV_ENCODING) != 0);
+#ifndef WX_NO_LOCALE_SUPPORT
+    wxChar *szLocale = retloc ? wxStrdup(retloc) : NULL;
+    bool ret = Init(name, canonical, retloc,
+                    (flags & wxLOCALE_LOAD_DEFAULT) != 0,
+                    (flags & wxLOCALE_CONV_ENCODING) != 0);
+    if (szLocale)
+        free(szLocale);
+    if ( ret )
+        m_language = lang;
+    return ret;
+#endif
 }
 
 
@@ -844,10 +930,16 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         wxString lang;
         if ( langOrig == wxT("iw"))
             lang = _T("he");
-        else if ( langOrig == wxT("in") )
+        else if (langOrig == wxT("in"))
             lang = wxT("id");
-        else if ( langOrig == wxT("ji") )
+        else if (langOrig == wxT("ji"))
             lang = wxT("yi");
+        else if (langOrig == wxT("no_NO"))
+            lang = wxT("nb_NO");
+        else if (langOrig == wxT("no_NY"))
+            lang = wxT("nn_NO");
+        else if (langOrig == wxT("no"))
+            lang = wxT("nb_NO");
         else
             lang = langOrig;
 
@@ -1241,7 +1333,7 @@ wxString wxLocale::GetSystemEncodingName()
     // to Unix98)
     char *oldLocale = strdup(setlocale(LC_CTYPE, NULL));
     setlocale(LC_CTYPE, "");
-    char *alang = nl_langinfo(CODESET);
+    const char *alang = nl_langinfo(CODESET);
     setlocale(LC_CTYPE, oldLocale);
     free(oldLocale);
 
@@ -1334,6 +1426,17 @@ wxFontEncoding wxLocale::GetSystemEncoding()
         wxFontEncoding enc = wxFontMapper::Get()->
             CharsetToEncoding(encname, FALSE /* not interactive */);
 
+        // on some modern Linux systems (RedHat 8) the default system locale
+        // is UTF8 -- but it isn't supported by wxGTK in ANSI build at all so
+        // don't even try to use it in this case
+#if !wxUSE_UNICODE
+        if ( enc == wxFONTENCODING_UTF8 )
+        {
+            // the most similar supported encoding...
+            enc = wxFONTENCODING_ISO8859_1;
+        }
+#endif // !wxUSE_UNICODE
+
         // this should probably be considered as a bug in CharsetToEncoding():
         // it shouldn't return wxFONTENCODING_DEFAULT at all - but it does it
         // for US-ASCII charset
@@ -1394,6 +1497,7 @@ wxLocale::~wxLocale()
     // restore old locale
     wxSetLocale(m_pOldLocale);
     wxSetlocale(LC_ALL, m_pszOldLocale);
+    free((wxChar *)m_pszOldLocale);     // const_cast
 }
 
 // get the translation of given string in current locale
@@ -1489,6 +1593,11 @@ bool wxLocale::AddCatalog(const wxChar *szDomain)
   else {
     // don't add it because it couldn't be loaded anyway
     delete pMsgCat;
+    
+    // it's OK to not load English catalog, the texts are embedded in
+    // the program:
+    if (m_strShort.Mid(0, 2) == wxT("en"))
+        return TRUE;
 
     return FALSE;
   }
@@ -2095,7 +2204,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxLocaleModule, wxModule)
 #define LNG(wxlang, canonical, winlang, winsublang, desc) \
     info.Language = wxlang;                               \
     info.CanonicalName = wxT(canonical);                  \
-    info.Description = desc;                              \
+    info.Description = wxT(desc);                         \
     SETWINLANG(info, winlang, winsublang)                 \
     AddLanguage(info);
 
@@ -2147,11 +2256,11 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_CATALAN,                    "ca_ES", LANG_CATALAN   , SUBLANG_DEFAULT                   , "Catalan")
    LNG(wxLANGUAGE_CHINESE,                    "zh_CN", LANG_CHINESE   , SUBLANG_DEFAULT                   , "Chinese")
    LNG(wxLANGUAGE_CHINESE_SIMPLIFIED,         "zh_CN", LANG_CHINESE   , SUBLANG_CHINESE_SIMPLIFIED        , "Chinese (Simplified)")
-   LNG(wxLANGUAGE_CHINESE_TRADITIONAL,        "zh_CN", LANG_CHINESE   , SUBLANG_CHINESE_TRADITIONAL       , "Chinese (Traditional)")
+   LNG(wxLANGUAGE_CHINESE_TRADITIONAL,        "zh_TW", LANG_CHINESE   , SUBLANG_CHINESE_TRADITIONAL       , "Chinese (Traditional)")
    LNG(wxLANGUAGE_CHINESE_HONGKONG,           "zh_HK", LANG_CHINESE   , SUBLANG_CHINESE_HONGKONG          , "Chinese (Hongkong)")
    LNG(wxLANGUAGE_CHINESE_MACAU,              "zh_MO", LANG_CHINESE   , SUBLANG_CHINESE_MACAU             , "Chinese (Macau)")
    LNG(wxLANGUAGE_CHINESE_SINGAPORE,          "zh_SG", LANG_CHINESE   , SUBLANG_CHINESE_SINGAPORE         , "Chinese (Singapore)")
-   LNG(wxLANGUAGE_CHINESE_TAIWAN,             "zh_TW", 0              , 0                                 , "Chinese (Taiwan)")
+   LNG(wxLANGUAGE_CHINESE_TAIWAN,             "zh_TW", LANG_CHINESE   , SUBLANG_CHINESE_TRADITIONAL       , "Chinese (Taiwan)")
    LNG(wxLANGUAGE_CORSICAN,                   "co"   , 0              , 0                                 , "Corsican")
    LNG(wxLANGUAGE_CROATIAN,                   "hr_HR", LANG_CROATIAN  , SUBLANG_DEFAULT                   , "Croatian")
    LNG(wxLANGUAGE_CZECH,                      "cs_CZ", LANG_CZECH     , SUBLANG_DEFAULT                   , "Czech")
@@ -2245,7 +2354,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_NAURU,                      "na"   , 0              , 0                                 , "Nauru")
    LNG(wxLANGUAGE_NEPALI,                     "ne"   , LANG_NEPALI    , SUBLANG_DEFAULT                   , "Nepali")
    LNG(wxLANGUAGE_NEPALI_INDIA,               "ne_IN", LANG_NEPALI    , SUBLANG_NEPALI_INDIA              , "Nepali (India)")
-   LNG(wxLANGUAGE_NORWEGIAN_BOKMAL,           "no_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_BOKMAL          , "Norwegian (Bokmal)")
+   LNG(wxLANGUAGE_NORWEGIAN_BOKMAL,           "nb_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_BOKMAL          , "Norwegian (Bokmal)")
    LNG(wxLANGUAGE_NORWEGIAN_NYNORSK,          "nn_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_NYNORSK         , "Norwegian (Nynorsk)")
    LNG(wxLANGUAGE_OCCITAN,                    "oc"   , 0              , 0                                 , "Occitan")
    LNG(wxLANGUAGE_ORIYA,                      "or"   , LANG_ORIYA     , SUBLANG_DEFAULT                   , "Oriya")
@@ -2302,7 +2411,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_SWAHILI,                    "sw_KE", LANG_SWAHILI   , SUBLANG_DEFAULT                   , "Swahili")
    LNG(wxLANGUAGE_SWEDISH,                    "sv_SE", LANG_SWEDISH   , SUBLANG_SWEDISH                   , "Swedish")
    LNG(wxLANGUAGE_SWEDISH_FINLAND,            "sv_FI", LANG_SWEDISH   , SUBLANG_SWEDISH_FINLAND           , "Swedish (Finland)")
-   LNG(wxLANGUAGE_TAGALOG,                    "tl"   , 0              , 0                                 , "Tagalog")
+   LNG(wxLANGUAGE_TAGALOG,                    "tl_PH", 0              , 0                                 , "Tagalog")
    LNG(wxLANGUAGE_TAJIK,                      "tg"   , 0              , 0                                 , "Tajik")
    LNG(wxLANGUAGE_TAMIL,                      "ta"   , LANG_TAMIL     , SUBLANG_DEFAULT                   , "Tamil")
    LNG(wxLANGUAGE_TATAR,                      "tt"   , LANG_TATAR     , SUBLANG_DEFAULT                   , "Tatar")

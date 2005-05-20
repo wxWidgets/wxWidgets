@@ -27,9 +27,7 @@ public:
                   ,const wxPoint&     rPos = wxDefaultPosition
                   ,const wxSize&      rSize = wxDefaultSize
                   ,long               lStyle = wxSL_HORIZONTAL
-#if wxUSE_VALIDATORS
                   ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                   ,const wxString&    rsName = wxSliderNameStr
                  )
     {
@@ -41,9 +39,7 @@ public:
                ,rPos
                ,rSize
                ,lStyle
-#if wxUSE_VALIDATORS
                ,rValidator
-#endif
                ,rsName
               );
     }
@@ -57,9 +53,7 @@ public:
                 ,const wxPoint&     rPos = wxDefaultPosition
                 ,const wxSize&      rSize = wxDefaultSize
                 ,long               lStyle = wxSL_HORIZONTAL
-#if wxUSE_VALIDATORS
                 ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                 ,const wxString&    rsName = wxSliderNameStr
                );
 

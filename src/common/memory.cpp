@@ -33,6 +33,7 @@
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/hash.h"
 #endif
 
 #if wxUSE_THREADS
@@ -349,7 +350,7 @@ void wxMemStruct::PrintNode ()
   }
   else
   {
-    wxString msg("");
+    wxString msg(wxT(""));
 
     if (m_fileName)
       msg.Printf(wxT("%s(%d): "), m_fileName, (int)m_lineNum);
@@ -387,7 +388,7 @@ void wxMemStruct::Dump ()
     else
       msg += wxT("unknown object class");
 
-    wxString msg2("");
+    wxString msg2(wxT(""));
     msg2.Printf(wxT(" at $%lX, size %d"), (long)GetActualData(), (int)RequestSize());
     msg += msg2;
 
@@ -399,7 +400,7 @@ void wxMemStruct::Dump ()
     if (m_fileName)
       msg.Printf(wxT("%s(%d): "), m_fileName, (int)m_lineNum);
 
-    wxString msg2("");
+    wxString msg2(wxT(""));
     msg2.Printf(wxT("non-object data at $%lX, size %d"), (long)GetActualData(), (int)RequestSize() );
     msg += msg2;
     wxLogMessage(msg);
@@ -607,7 +608,7 @@ bool wxDebugContext::Dump(void)
 #ifdef __WXDEBUG__
   {
     wxChar* appName = (wxChar*) wxT("application");
-    wxString appNameStr("");
+    wxString appNameStr(wxT(""));
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
@@ -1074,13 +1075,5 @@ void wxTraceLevel(int, const wxChar * ...)
 #endif
 }
 
-#else // wxUSE_MEMORY_TRACING && defined(__WXDEBUG__)
-void wxTrace(const char *WXUNUSED(fmt) ...)
-{
-}
-
-void wxTraceLevel(int WXUNUSED(level), const char *WXUNUSED(fmt) ...)
-{
-}
 #endif
 

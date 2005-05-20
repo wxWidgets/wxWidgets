@@ -7,8 +7,10 @@
 
 WXDIR = $(%WXWIN)
 
-PROGRAM = dialoged
-OBJECTS = dialoged.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj edtree.obj edlist.obj symbtabl.obj winstyle.obj
+PROGRAM = $(OUTPUTDIR)\dialoged
+OBJECTS = $(OUTPUTDIR)\dialoged.obj $(OUTPUTDIR)\reseditr.obj $(OUTPUTDIR)\dlghndlr.obj &
+    $(OUTPUTDIR)\reswrite.obj $(OUTPUTDIR)\winprop.obj $(OUTPUTDIR)\edtree.obj  &
+    $(OUTPUTDIR)\edlist.obj $(OUTPUTDIR)\symbtabl.obj $(OUTPUTDIR)\winstyle.obj
 
 !include $(WXDIR)\src\makeprog.wat
 

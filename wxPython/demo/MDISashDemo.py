@@ -44,7 +44,7 @@ class MyParentFrame(wxMDIParentFrame):
         win.SetOrientation(wxLAYOUT_HORIZONTAL)
         win.SetAlignment(wxLAYOUT_TOP)
         win.SetBackgroundColour(wxColour(255, 0, 0))
-        win.SetSashVisible(wxSASH_BOTTOM, true)
+        win.SetSashVisible(wxSASH_BOTTOM, True)
 
         self.topWindow = win
 
@@ -55,7 +55,7 @@ class MyParentFrame(wxMDIParentFrame):
         win.SetOrientation(wxLAYOUT_HORIZONTAL)
         win.SetAlignment(wxLAYOUT_BOTTOM)
         win.SetBackgroundColour(wxColour(0, 0, 255))
-        win.SetSashVisible(wxSASH_TOP, true)
+        win.SetSashVisible(wxSASH_TOP, True)
 
         self.bottomWindow = win
 
@@ -66,7 +66,7 @@ class MyParentFrame(wxMDIParentFrame):
         win.SetOrientation(wxLAYOUT_VERTICAL)
         win.SetAlignment(wxLAYOUT_LEFT)
         win.SetBackgroundColour(wxColour(0, 255, 0))
-        win.SetSashVisible(wxSASH_RIGHT, TRUE)
+        win.SetSashVisible(wxSASH_RIGHT, True)
         win.SetExtraBorderSize(10)
         textWindow = wxTextCtrl(win, -1, "", wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE|wxSUNKEN_BORDER)
@@ -81,7 +81,7 @@ class MyParentFrame(wxMDIParentFrame):
         win.SetOrientation(wxLAYOUT_VERTICAL)
         win.SetAlignment(wxLAYOUT_LEFT)
         win.SetBackgroundColour(wxColour(0, 255, 255))
-        win.SetSashVisible(wxSASH_RIGHT, TRUE)
+        win.SetSashVisible(wxSASH_RIGHT, True)
 
         self.leftWindow2 = win
 
@@ -113,14 +113,14 @@ class MyParentFrame(wxMDIParentFrame):
 
 
     def OnExit(self, evt):
-        self.Close(true)
+        self.Close(True)
 
 
     def OnNewWindow(self, evt):
         self.winCount = self.winCount + 1
         win = wxMDIChildFrame(self, -1, "Child Window: %d" % self.winCount)
         canvas = MyCanvas(win)
-        win.Show(true)
+        win.Show(True)
 
 
 #----------------------------------------------------------------------
@@ -130,9 +130,9 @@ if __name__ == '__main__':
         def OnInit(self):
             wxInitAllImageHandlers()
             frame = MyParentFrame()
-            frame.Show(true)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return true
+            return True
 
 
     app = MyApp(0)

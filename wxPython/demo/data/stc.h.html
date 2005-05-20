@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>/home/others/projects/wx2.3/contrib/include/wx/stc/stc.h.html</title>
-<meta name="Generator" content="Vim/6.0">
+<title>/home/work/projects/wx2.4/contrib/include/wx/stc/stc.h.html</title>
+<meta name="Generator" content="Vim/6.1">
 </head>
 <body bgcolor="#f5deb3" text="#000000">
 <pre>
@@ -31,6 +31,30 @@
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;wx/wx.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;wx/dnd.h&gt;</font>
 
+<font color="#a020f0">#ifndef SWIG</font>
+<font color="#0000ff">/*</font>
+<font color="#0000ff"> * If we're using wx in Dynamic Library format do we</font>
+<font color="#0000ff"> * want wxStyledTextCtrl to be in DLL form as well?</font>
+<font color="#0000ff"> */</font>
+<font color="#a020f0">#if defined(WXUSINGDLL) &amp;&amp; \</font>
+<font color="#a020f0">    (defined(WXMAKING_STC_DLL) || defined(WXUSING_STC_DLL))</font>
+
+<font color="#a020f0">#if defined(WXMAKING_STC_DLL)</font>
+    <font color="#0000ff">// When building the DLL WXSTC_DECLSPEC exports classes</font>
+<font color="#a020f0">#   define WXSTC_DECLSPEC            WXEXPORT</font>
+<font color="#a020f0">#elif defined(WXUSING_STC_DLL)</font>
+    <font color="#0000ff">// When using the DLL WXSTC_DECLSPEC imports classes</font>
+<font color="#a020f0">#   define WXSTC_DECLSPEC            WXIMPORT</font>
+<font color="#a020f0">#endif</font> <font color="#0000ff">// defined(WXBUILD_STC_DLL)</font>
+
+<font color="#a020f0">#else</font>
+<font color="#0000ff">// When building the static library nullify the effect of WXSTC_DECLSPEC</font>
+<font color="#a020f0">#define WXSTC_DECLSPEC</font>
+<font color="#a020f0">#endif</font> <font color="#0000ff">// WXUSINGDLL &amp;&amp; (WXMAKING_STC_DLL || WXUSING_STC_DLL)</font>
+
+<font color="#a020f0">#endif</font> <font color="#0000ff">// SWIG</font>
+
+
 <font color="#0000ff">//----------------------------------------------------------------------</font>
 
 <font color="#0000ff">// Should a wxPopupWindow be used for the call tips and autocomplete windows?</font>
@@ -50,12 +74,6 @@
 <font color="#a020f0">#define wxSTC_START </font><font color="#ff00ff">2000</font>
 <font color="#a020f0">#define wxSTC_OPTIONAL_START </font><font color="#ff00ff">3000</font>
 <font color="#a020f0">#define wxSTC_LEXER_START </font><font color="#ff00ff">4000</font>
-
-<font color="#0000ff">// Redoes the next action on the undo history.</font>
-<font color="#a020f0">#define wxSTC_CMD_REDO </font><font color="#ff00ff">2011</font>
-
-<font color="#0000ff">// Select all the text in the document.</font>
-<font color="#a020f0">#define wxSTC_CMD_SELECTALL </font><font color="#ff00ff">2013</font>
 <font color="#a020f0">#define wxSTC_WS_INVISIBLE </font><font color="#ff00ff">0</font>
 <font color="#a020f0">#define wxSTC_WS_VISIBLEALWAYS </font><font color="#ff00ff">1</font>
 <font color="#a020f0">#define wxSTC_WS_VISIBLEAFTERINDENT </font><font color="#ff00ff">2</font>
@@ -66,6 +84,9 @@
 <font color="#0000ff">// The SC_CP_UTF8 value can be used to enter Unicode mode.</font>
 <font color="#0000ff">// This is the same value as CP_UTF8 in Windows</font>
 <font color="#a020f0">#define wxSTC_CP_UTF8 </font><font color="#ff00ff">65001</font>
+
+<font color="#0000ff">// The SC_CP_DBCS value can be used to indicate a DBCS mode for GTK+.</font>
+<font color="#a020f0">#define wxSTC_CP_DBCS </font><font color="#ff00ff">1</font>
 <font color="#a020f0">#define wxSTC_MARKER_MAX </font><font color="#ff00ff">31</font>
 <font color="#a020f0">#define wxSTC_MARK_CIRCLE </font><font color="#ff00ff">0</font>
 <font color="#a020f0">#define wxSTC_MARK_ROUNDRECT </font><font color="#ff00ff">1</font>
@@ -96,6 +117,7 @@
 <font color="#a020f0">#define wxSTC_MARK_BACKGROUND </font><font color="#ff00ff">22</font>
 <font color="#a020f0">#define wxSTC_MARK_DOTDOTDOT </font><font color="#ff00ff">23</font>
 <font color="#a020f0">#define wxSTC_MARK_ARROWS </font><font color="#ff00ff">24</font>
+<font color="#a020f0">#define wxSTC_MARK_PIXMAP </font><font color="#ff00ff">25</font>
 <font color="#a020f0">#define wxSTC_MARK_CHARACTER </font><font color="#ff00ff">10000</font>
 
 <font color="#0000ff">// Markers used for outlining column.</font>
@@ -174,22 +196,20 @@
 <font color="#a020f0">#define wxSTC_FIND_MATCHCASE </font><font color="#ff00ff">4</font>
 <font color="#a020f0">#define wxSTC_FIND_WORDSTART </font><font color="#ff00ff">0x00100000</font>
 <font color="#a020f0">#define wxSTC_FIND_REGEXP </font><font color="#ff00ff">0x00200000</font>
-
-<font color="#0000ff">// Undo one action in the undo history.</font>
-<font color="#a020f0">#define wxSTC_CMD_UNDO </font><font color="#ff00ff">2176</font>
-
-<font color="#0000ff">// Cut the selection to the clipboard.</font>
-<font color="#a020f0">#define wxSTC_CMD_CUT </font><font color="#ff00ff">2177</font>
-
-<font color="#0000ff">// Copy the selection to the clipboard.</font>
-<font color="#a020f0">#define wxSTC_CMD_COPY </font><font color="#ff00ff">2178</font>
-
-<font color="#0000ff">// Paste the contents of the clipboard into the document replacing the selection.</font>
-<font color="#a020f0">#define wxSTC_CMD_PASTE </font><font color="#ff00ff">2179</font>
 <font color="#a020f0">#define wxSTC_FOLDLEVELBASE </font><font color="#ff00ff">0x400</font>
 <font color="#a020f0">#define wxSTC_FOLDLEVELWHITEFLAG </font><font color="#ff00ff">0x1000</font>
 <font color="#a020f0">#define wxSTC_FOLDLEVELHEADERFLAG </font><font color="#ff00ff">0x2000</font>
+<font color="#a020f0">#define wxSTC_FOLDLEVELBOXHEADERFLAG </font><font color="#ff00ff">0x4000</font>
+<font color="#a020f0">#define wxSTC_FOLDLEVELBOXFOOTERFLAG </font><font color="#ff00ff">0x8000</font>
+<font color="#a020f0">#define wxSTC_FOLDLEVELCONTRACTED </font><font color="#ff00ff">0x10000</font>
+<font color="#a020f0">#define wxSTC_FOLDLEVELUNINDENT </font><font color="#ff00ff">0x20000</font>
 <font color="#a020f0">#define wxSTC_FOLDLEVELNUMBERMASK </font><font color="#ff00ff">0x0FFF</font>
+<font color="#a020f0">#define wxSTC_FOLDFLAG_LINEBEFORE_EXPANDED </font><font color="#ff00ff">0x0002</font>
+<font color="#a020f0">#define wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED </font><font color="#ff00ff">0x0004</font>
+<font color="#a020f0">#define wxSTC_FOLDFLAG_LINEAFTER_EXPANDED </font><font color="#ff00ff">0x0008</font>
+<font color="#a020f0">#define wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED </font><font color="#ff00ff">0x0010</font>
+<font color="#a020f0">#define wxSTC_FOLDFLAG_LEVELNUMBERS </font><font color="#ff00ff">0x0040</font>
+<font color="#a020f0">#define wxSTC_FOLDFLAG_BOX </font><font color="#ff00ff">0x0001</font>
 <font color="#a020f0">#define wxSTC_TIME_FOREVER </font><font color="#ff00ff">10000000</font>
 <font color="#a020f0">#define wxSTC_WRAP_NONE </font><font color="#ff00ff">0</font>
 <font color="#a020f0">#define wxSTC_WRAP_WORD </font><font color="#ff00ff">1</font>
@@ -197,163 +217,11 @@
 <font color="#a020f0">#define wxSTC_CACHE_CARET </font><font color="#ff00ff">1</font>
 <font color="#a020f0">#define wxSTC_CACHE_PAGE </font><font color="#ff00ff">2</font>
 <font color="#a020f0">#define wxSTC_CACHE_DOCUMENT </font><font color="#ff00ff">3</font>
-
-<font color="#0000ff">// Move caret down one line.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINEDOWN </font><font color="#ff00ff">2300</font>
-
-<font color="#0000ff">// Move caret down one line extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINEDOWNEXTEND </font><font color="#ff00ff">2301</font>
-
-<font color="#0000ff">// Move caret up one line.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINEUP </font><font color="#ff00ff">2302</font>
-
-<font color="#0000ff">// Move caret up one line extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINEUPEXTEND </font><font color="#ff00ff">2303</font>
-
-<font color="#0000ff">// Move caret left one character.</font>
-<font color="#a020f0">#define wxSTC_CMD_CHARLEFT </font><font color="#ff00ff">2304</font>
-
-<font color="#0000ff">// Move caret left one character extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_CHARLEFTEXTEND </font><font color="#ff00ff">2305</font>
-
-<font color="#0000ff">// Move caret right one character.</font>
-<font color="#a020f0">#define wxSTC_CMD_CHARRIGHT </font><font color="#ff00ff">2306</font>
-
-<font color="#0000ff">// Move caret right one character extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_CHARRIGHTEXTEND </font><font color="#ff00ff">2307</font>
-
-<font color="#0000ff">// Move caret left one word.</font>
-<font color="#a020f0">#define wxSTC_CMD_WORDLEFT </font><font color="#ff00ff">2308</font>
-
-<font color="#0000ff">// Move caret left one word extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_WORDLEFTEXTEND </font><font color="#ff00ff">2309</font>
-
-<font color="#0000ff">// Move caret right one word.</font>
-<font color="#a020f0">#define wxSTC_CMD_WORDRIGHT </font><font color="#ff00ff">2310</font>
-
-<font color="#0000ff">// Move caret right one word extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_WORDRIGHTEXTEND </font><font color="#ff00ff">2311</font>
-
-<font color="#0000ff">// Move caret to first position on line.</font>
-<font color="#a020f0">#define wxSTC_CMD_HOME </font><font color="#ff00ff">2312</font>
-
-<font color="#0000ff">// Move caret to first position on line extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_HOMEEXTEND </font><font color="#ff00ff">2313</font>
-
-<font color="#0000ff">// Move caret to last position on line.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINEEND </font><font color="#ff00ff">2314</font>
-
-<font color="#0000ff">// Move caret to last position on line extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINEENDEXTEND </font><font color="#ff00ff">2315</font>
-
-<font color="#0000ff">// Move caret to first position in document.</font>
-<font color="#a020f0">#define wxSTC_CMD_DOCUMENTSTART </font><font color="#ff00ff">2316</font>
-
-<font color="#0000ff">// Move caret to first position in document extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_DOCUMENTSTARTEXTEND </font><font color="#ff00ff">2317</font>
-
-<font color="#0000ff">// Move caret to last position in document.</font>
-<font color="#a020f0">#define wxSTC_CMD_DOCUMENTEND </font><font color="#ff00ff">2318</font>
-
-<font color="#0000ff">// Move caret to last position in document extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_DOCUMENTENDEXTEND </font><font color="#ff00ff">2319</font>
-
-<font color="#0000ff">// Move caret one page up.</font>
-<font color="#a020f0">#define wxSTC_CMD_PAGEUP </font><font color="#ff00ff">2320</font>
-
-<font color="#0000ff">// Move caret one page up extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_PAGEUPEXTEND </font><font color="#ff00ff">2321</font>
-
-<font color="#0000ff">// Move caret one page down.</font>
-<font color="#a020f0">#define wxSTC_CMD_PAGEDOWN </font><font color="#ff00ff">2322</font>
-
-<font color="#0000ff">// Move caret one page down extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_PAGEDOWNEXTEND </font><font color="#ff00ff">2323</font>
-
-<font color="#0000ff">// Switch from insert to overtype mode or the reverse.</font>
-<font color="#a020f0">#define wxSTC_CMD_EDITTOGGLEOVERTYPE </font><font color="#ff00ff">2324</font>
-
-<font color="#0000ff">// Cancel any modes such as call tip or auto-completion list display.</font>
-<font color="#a020f0">#define wxSTC_CMD_CANCEL </font><font color="#ff00ff">2325</font>
-
-<font color="#0000ff">// Delete the selection or if no selection, the character before the caret.</font>
-<font color="#a020f0">#define wxSTC_CMD_DELETEBACK </font><font color="#ff00ff">2326</font>
-
-<font color="#0000ff">// If selection is empty or all on one line replace the selection with a tab character.</font>
-<font color="#0000ff">// If more than one line selected, indent the lines.</font>
-<font color="#a020f0">#define wxSTC_CMD_TAB </font><font color="#ff00ff">2327</font>
-
-<font color="#0000ff">// Dedent the selected lines.</font>
-<font color="#a020f0">#define wxSTC_CMD_BACKTAB </font><font color="#ff00ff">2328</font>
-
-<font color="#0000ff">// Insert a new line, may use a CRLF, CR or LF depending on EOL mode.</font>
-<font color="#a020f0">#define wxSTC_CMD_NEWLINE </font><font color="#ff00ff">2329</font>
-
-<font color="#0000ff">// Insert a Form Feed character.</font>
-<font color="#a020f0">#define wxSTC_CMD_FORMFEED </font><font color="#ff00ff">2330</font>
-
-<font color="#0000ff">// Move caret to before first visible character on line.</font>
-<font color="#0000ff">// If already there move to first character on line.</font>
-<font color="#a020f0">#define wxSTC_CMD_VCHOME </font><font color="#ff00ff">2331</font>
-
-<font color="#0000ff">// Like VCHome but extending selection to new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_VCHOMEEXTEND </font><font color="#ff00ff">2332</font>
-
-<font color="#0000ff">// Magnify the displayed text by increasing the sizes by 1 point.</font>
-<font color="#a020f0">#define wxSTC_CMD_ZOOMIN </font><font color="#ff00ff">2333</font>
-
-<font color="#0000ff">// Make the displayed text smaller by decreasing the sizes by 1 point.</font>
-<font color="#a020f0">#define wxSTC_CMD_ZOOMOUT </font><font color="#ff00ff">2334</font>
-
-<font color="#0000ff">// Delete the word to the left of the caret.</font>
-<font color="#a020f0">#define wxSTC_CMD_DELWORDLEFT </font><font color="#ff00ff">2335</font>
-
-<font color="#0000ff">// Delete the word to the right of the caret.</font>
-<font color="#a020f0">#define wxSTC_CMD_DELWORDRIGHT </font><font color="#ff00ff">2336</font>
-
-<font color="#0000ff">// Cut the line containing the caret.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINECUT </font><font color="#ff00ff">2337</font>
-
-<font color="#0000ff">// Delete the line containing the caret.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINEDELETE </font><font color="#ff00ff">2338</font>
-
-<font color="#0000ff">// Switch the current line with the previous.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINETRANSPOSE </font><font color="#ff00ff">2339</font>
-
-<font color="#0000ff">// Transform the selection to lower case.</font>
-<font color="#a020f0">#define wxSTC_CMD_LOWERCASE </font><font color="#ff00ff">2340</font>
-
-<font color="#0000ff">// Transform the selection to upper case.</font>
-<font color="#a020f0">#define wxSTC_CMD_UPPERCASE </font><font color="#ff00ff">2341</font>
-
-<font color="#0000ff">// Scroll the document down, keeping the caret visible.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINESCROLLDOWN </font><font color="#ff00ff">2342</font>
-
-<font color="#0000ff">// Scroll the document up, keeping the caret visible.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINESCROLLUP </font><font color="#ff00ff">2343</font>
-
-<font color="#0000ff">// Delete the selection or if no selection, the character before the caret.</font>
-<font color="#0000ff">// Will not delete the character before at the start of a line.</font>
-<font color="#a020f0">#define wxSTC_CMD_DELETEBACKNOTLINE </font><font color="#ff00ff">2344</font>
-
-<font color="#0000ff">// Move caret to first position on display line.</font>
-<font color="#a020f0">#define wxSTC_CMD_HOMEDISPLAY </font><font color="#ff00ff">2345</font>
-
-<font color="#0000ff">// Move caret to first position on display line extending selection to </font>
-<font color="#0000ff">// new caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_HOMEDISPLAYEXTEND </font><font color="#ff00ff">2346</font>
-
-<font color="#0000ff">// Move caret to last position on display line.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINEENDDISPLAY </font><font color="#ff00ff">2347</font>
-
-<font color="#0000ff">// Move caret to last position on display line extending selection to new </font>
-<font color="#0000ff">// caret position.</font>
-<font color="#a020f0">#define wxSTC_CMD_LINEENDDISPLAYEXTEND </font><font color="#ff00ff">2348</font>
 <font color="#a020f0">#define wxSTC_EDGE_NONE </font><font color="#ff00ff">0</font>
 <font color="#a020f0">#define wxSTC_EDGE_LINE </font><font color="#ff00ff">1</font>
 <font color="#a020f0">#define wxSTC_EDGE_BACKGROUND </font><font color="#ff00ff">2</font>
 <font color="#a020f0">#define wxSTC_CURSORNORMAL -</font><font color="#ff00ff">1</font>
-<font color="#a020f0">#define wxSTC_CURSORWAIT </font><font color="#ff00ff">3</font>
+<font color="#a020f0">#define wxSTC_CURSORWAIT </font><font color="#ff00ff">4</font>
 
 <font color="#0000ff">// Constants for use with SetVisiblePolicy, similar to SetCaretPolicy.</font>
 <font color="#a020f0">#define wxSTC_VISIBLE_SLOP </font><font color="#ff00ff">0x01</font>
@@ -461,6 +329,11 @@
 <font color="#a020f0">#define wxSTC_LEX_BAAN </font><font color="#ff00ff">31</font>
 <font color="#a020f0">#define wxSTC_LEX_MATLAB </font><font color="#ff00ff">32</font>
 <font color="#a020f0">#define wxSTC_LEX_SCRIPTOL </font><font color="#ff00ff">33</font>
+<font color="#a020f0">#define wxSTC_LEX_ASM </font><font color="#ff00ff">34</font>
+<font color="#a020f0">#define wxSTC_LEX_CPPNOCASE </font><font color="#ff00ff">35</font>
+<font color="#a020f0">#define wxSTC_LEX_FORTRAN </font><font color="#ff00ff">36</font>
+<font color="#a020f0">#define wxSTC_LEX_F77 </font><font color="#ff00ff">37</font>
+<font color="#a020f0">#define wxSTC_LEX_CSS </font><font color="#ff00ff">38</font>
 
 <font color="#0000ff">// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a</font>
 <font color="#0000ff">// value assigned in sequence from SCLEX_AUTOMATIC+1.</font>
@@ -729,6 +602,7 @@
 <font color="#a020f0">#define wxSTC_ERR_DIFF_ADDITION </font><font color="#ff00ff">11</font>
 <font color="#a020f0">#define wxSTC_ERR_DIFF_DELETION </font><font color="#ff00ff">12</font>
 <font color="#a020f0">#define wxSTC_ERR_DIFF_MESSAGE </font><font color="#ff00ff">13</font>
+<font color="#a020f0">#define wxSTC_ERR_PHP </font><font color="#ff00ff">14</font>
 
 <font color="#0000ff">// Lexical states for SCLEX_BATCH</font>
 <font color="#a020f0">#define wxSTC_BAT_DEFAULT </font><font color="#ff00ff">0</font>
@@ -775,24 +649,31 @@
 <font color="#a020f0">#define wxSTC_AVE_COMMENT </font><font color="#ff00ff">1</font>
 <font color="#a020f0">#define wxSTC_AVE_NUMBER </font><font color="#ff00ff">2</font>
 <font color="#a020f0">#define wxSTC_AVE_WORD </font><font color="#ff00ff">3</font>
-<font color="#a020f0">#define wxSTC_AVE_KEYWORD </font><font color="#ff00ff">4</font>
-<font color="#a020f0">#define wxSTC_AVE_STATEMENT </font><font color="#ff00ff">5</font>
 <font color="#a020f0">#define wxSTC_AVE_STRING </font><font color="#ff00ff">6</font>
 <font color="#a020f0">#define wxSTC_AVE_ENUM </font><font color="#ff00ff">7</font>
 <font color="#a020f0">#define wxSTC_AVE_STRINGEOL </font><font color="#ff00ff">8</font>
 <font color="#a020f0">#define wxSTC_AVE_IDENTIFIER </font><font color="#ff00ff">9</font>
 <font color="#a020f0">#define wxSTC_AVE_OPERATOR </font><font color="#ff00ff">10</font>
+<font color="#a020f0">#define wxSTC_AVE_WORD1 </font><font color="#ff00ff">11</font>
+<font color="#a020f0">#define wxSTC_AVE_WORD2 </font><font color="#ff00ff">12</font>
+<font color="#a020f0">#define wxSTC_AVE_WORD3 </font><font color="#ff00ff">13</font>
+<font color="#a020f0">#define wxSTC_AVE_WORD4 </font><font color="#ff00ff">14</font>
+<font color="#a020f0">#define wxSTC_AVE_WORD5 </font><font color="#ff00ff">15</font>
+<font color="#a020f0">#define wxSTC_AVE_WORD6 </font><font color="#ff00ff">16</font>
 
 <font color="#0000ff">// Lexical states for SCLEX_ADA</font>
 <font color="#a020f0">#define wxSTC_ADA_DEFAULT </font><font color="#ff00ff">0</font>
-<font color="#a020f0">#define wxSTC_ADA_COMMENT </font><font color="#ff00ff">1</font>
-<font color="#a020f0">#define wxSTC_ADA_NUMBER </font><font color="#ff00ff">2</font>
-<font color="#a020f0">#define wxSTC_ADA_WORD </font><font color="#ff00ff">3</font>
-<font color="#a020f0">#define wxSTC_ADA_STRING </font><font color="#ff00ff">4</font>
+<font color="#a020f0">#define wxSTC_ADA_WORD </font><font color="#ff00ff">1</font>
+<font color="#a020f0">#define wxSTC_ADA_IDENTIFIER </font><font color="#ff00ff">2</font>
+<font color="#a020f0">#define wxSTC_ADA_NUMBER </font><font color="#ff00ff">3</font>
+<font color="#a020f0">#define wxSTC_ADA_DELIMITER </font><font color="#ff00ff">4</font>
 <font color="#a020f0">#define wxSTC_ADA_CHARACTER </font><font color="#ff00ff">5</font>
-<font color="#a020f0">#define wxSTC_ADA_OPERATOR </font><font color="#ff00ff">6</font>
-<font color="#a020f0">#define wxSTC_ADA_IDENTIFIER </font><font color="#ff00ff">7</font>
+<font color="#a020f0">#define wxSTC_ADA_CHARACTEREOL </font><font color="#ff00ff">6</font>
+<font color="#a020f0">#define wxSTC_ADA_STRING </font><font color="#ff00ff">7</font>
 <font color="#a020f0">#define wxSTC_ADA_STRINGEOL </font><font color="#ff00ff">8</font>
+<font color="#a020f0">#define wxSTC_ADA_LABEL </font><font color="#ff00ff">9</font>
+<font color="#a020f0">#define wxSTC_ADA_COMMENTLINE </font><font color="#ff00ff">10</font>
+<font color="#a020f0">#define wxSTC_ADA_ILLEGAL </font><font color="#ff00ff">11</font>
 
 <font color="#0000ff">// Lexical states for SCLEX_BAAN</font>
 <font color="#a020f0">#define wxSTC_BAAN_DEFAULT </font><font color="#ff00ff">0</font>
@@ -873,6 +754,252 @@
 <font color="#a020f0">#define wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR </font><font color="#ff00ff">18</font>
 <font color="#a020f0">#define wxSTC_SCRIPTOL_COMMENTBASIC </font><font color="#ff00ff">19</font>
 
+<font color="#0000ff">// Lexical states for SCLEX_ASM</font>
+<font color="#a020f0">#define wxSTC_ASM_DEFAULT </font><font color="#ff00ff">0</font>
+<font color="#a020f0">#define wxSTC_ASM_COMMENT </font><font color="#ff00ff">1</font>
+<font color="#a020f0">#define wxSTC_ASM_NUMBER </font><font color="#ff00ff">2</font>
+<font color="#a020f0">#define wxSTC_ASM_STRING </font><font color="#ff00ff">3</font>
+<font color="#a020f0">#define wxSTC_ASM_OPERATOR </font><font color="#ff00ff">4</font>
+<font color="#a020f0">#define wxSTC_ASM_IDENTIFIER </font><font color="#ff00ff">5</font>
+<font color="#a020f0">#define wxSTC_ASM_CPUINSTRUCTION </font><font color="#ff00ff">6</font>
+<font color="#a020f0">#define wxSTC_ASM_MATHINSTRUCTION </font><font color="#ff00ff">7</font>
+<font color="#a020f0">#define wxSTC_ASM_REGISTER </font><font color="#ff00ff">8</font>
+<font color="#a020f0">#define wxSTC_ASM_DIRECTIVE </font><font color="#ff00ff">9</font>
+<font color="#a020f0">#define wxSTC_ASM_DIRECTIVEOPERAND </font><font color="#ff00ff">10</font>
+
+<font color="#0000ff">// Lexical states for SCLEX_FORTRAN</font>
+<font color="#a020f0">#define wxSTC_F_DEFAULT </font><font color="#ff00ff">0</font>
+<font color="#a020f0">#define wxSTC_F_COMMENT </font><font color="#ff00ff">1</font>
+<font color="#a020f0">#define wxSTC_F_NUMBER </font><font color="#ff00ff">2</font>
+<font color="#a020f0">#define wxSTC_F_STRING1 </font><font color="#ff00ff">3</font>
+<font color="#a020f0">#define wxSTC_F_STRING2 </font><font color="#ff00ff">4</font>
+<font color="#a020f0">#define wxSTC_F_STRINGEOL </font><font color="#ff00ff">5</font>
+<font color="#a020f0">#define wxSTC_F_OPERATOR </font><font color="#ff00ff">6</font>
+<font color="#a020f0">#define wxSTC_F_IDENTIFIER </font><font color="#ff00ff">7</font>
+<font color="#a020f0">#define wxSTC_F_WORD </font><font color="#ff00ff">8</font>
+<font color="#a020f0">#define wxSTC_F_WORD2 </font><font color="#ff00ff">9</font>
+<font color="#a020f0">#define wxSTC_F_WORD3 </font><font color="#ff00ff">10</font>
+<font color="#a020f0">#define wxSTC_F_PREPROCESSOR </font><font color="#ff00ff">11</font>
+<font color="#a020f0">#define wxSTC_F_OPERATOR2 </font><font color="#ff00ff">12</font>
+<font color="#a020f0">#define wxSTC_F_LABEL </font><font color="#ff00ff">13</font>
+<font color="#a020f0">#define wxSTC_F_CONTINUATION </font><font color="#ff00ff">14</font>
+
+<font color="#0000ff">// Lexical states for SCLEX_CSS</font>
+<font color="#a020f0">#define wxSTC_CSS_DEFAULT </font><font color="#ff00ff">0</font>
+<font color="#a020f0">#define wxSTC_CSS_TAG </font><font color="#ff00ff">1</font>
+<font color="#a020f0">#define wxSTC_CSS_CLASS </font><font color="#ff00ff">2</font>
+<font color="#a020f0">#define wxSTC_CSS_PSEUDOCLASS </font><font color="#ff00ff">3</font>
+<font color="#a020f0">#define wxSTC_CSS_UNKNOWN_PSEUDOCLASS </font><font color="#ff00ff">4</font>
+<font color="#a020f0">#define wxSTC_CSS_OPERATOR </font><font color="#ff00ff">5</font>
+<font color="#a020f0">#define wxSTC_CSS_IDENTIFIER </font><font color="#ff00ff">6</font>
+<font color="#a020f0">#define wxSTC_CSS_UNKNOWN_IDENTIFIER </font><font color="#ff00ff">7</font>
+<font color="#a020f0">#define wxSTC_CSS_VALUE </font><font color="#ff00ff">8</font>
+<font color="#a020f0">#define wxSTC_CSS_COMMENT </font><font color="#ff00ff">9</font>
+<font color="#a020f0">#define wxSTC_CSS_ID </font><font color="#ff00ff">10</font>
+<font color="#a020f0">#define wxSTC_CSS_IMPORTANT </font><font color="#ff00ff">11</font>
+<font color="#a020f0">#define wxSTC_CSS_DIRECTIVE </font><font color="#ff00ff">12</font>
+
+
+<font color="#0000ff">//-----------------------------------------</font>
+<font color="#0000ff">// Commands that can be bound to keystrokes</font>
+
+<font color="#0000ff">// Redoes the next action on the undo history.</font>
+<font color="#a020f0">#define wxSTC_CMD_REDO </font><font color="#ff00ff">2011</font>
+
+<font color="#0000ff">// Select all the text in the document.</font>
+<font color="#a020f0">#define wxSTC_CMD_SELECTALL </font><font color="#ff00ff">2013</font>
+
+<font color="#0000ff">// Undo one action in the undo history.</font>
+<font color="#a020f0">#define wxSTC_CMD_UNDO </font><font color="#ff00ff">2176</font>
+
+<font color="#0000ff">// Cut the selection to the clipboard.</font>
+<font color="#a020f0">#define wxSTC_CMD_CUT </font><font color="#ff00ff">2177</font>
+
+<font color="#0000ff">// Copy the selection to the clipboard.</font>
+<font color="#a020f0">#define wxSTC_CMD_COPY </font><font color="#ff00ff">2178</font>
+
+<font color="#0000ff">// Paste the contents of the clipboard into the document replacing the selection.</font>
+<font color="#a020f0">#define wxSTC_CMD_PASTE </font><font color="#ff00ff">2179</font>
+
+<font color="#0000ff">// Clear the selection.</font>
+<font color="#a020f0">#define wxSTC_CMD_CLEAR </font><font color="#ff00ff">2180</font>
+
+<font color="#0000ff">// Move caret down one line.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEDOWN </font><font color="#ff00ff">2300</font>
+
+<font color="#0000ff">// Move caret down one line extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEDOWNEXTEND </font><font color="#ff00ff">2301</font>
+
+<font color="#0000ff">// Move caret up one line.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEUP </font><font color="#ff00ff">2302</font>
+
+<font color="#0000ff">// Move caret up one line extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEUPEXTEND </font><font color="#ff00ff">2303</font>
+
+<font color="#0000ff">// Move caret left one character.</font>
+<font color="#a020f0">#define wxSTC_CMD_CHARLEFT </font><font color="#ff00ff">2304</font>
+
+<font color="#0000ff">// Move caret left one character extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_CHARLEFTEXTEND </font><font color="#ff00ff">2305</font>
+
+<font color="#0000ff">// Move caret right one character.</font>
+<font color="#a020f0">#define wxSTC_CMD_CHARRIGHT </font><font color="#ff00ff">2306</font>
+
+<font color="#0000ff">// Move caret right one character extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_CHARRIGHTEXTEND </font><font color="#ff00ff">2307</font>
+
+<font color="#0000ff">// Move caret left one word.</font>
+<font color="#a020f0">#define wxSTC_CMD_WORDLEFT </font><font color="#ff00ff">2308</font>
+
+<font color="#0000ff">// Move caret left one word extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_WORDLEFTEXTEND </font><font color="#ff00ff">2309</font>
+
+<font color="#0000ff">// Move caret right one word.</font>
+<font color="#a020f0">#define wxSTC_CMD_WORDRIGHT </font><font color="#ff00ff">2310</font>
+
+<font color="#0000ff">// Move caret right one word extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_WORDRIGHTEXTEND </font><font color="#ff00ff">2311</font>
+
+<font color="#0000ff">// Move caret to first position on line.</font>
+<font color="#a020f0">#define wxSTC_CMD_HOME </font><font color="#ff00ff">2312</font>
+
+<font color="#0000ff">// Move caret to first position on line extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_HOMEEXTEND </font><font color="#ff00ff">2313</font>
+
+<font color="#0000ff">// Move caret to last position on line.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEEND </font><font color="#ff00ff">2314</font>
+
+<font color="#0000ff">// Move caret to last position on line extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEENDEXTEND </font><font color="#ff00ff">2315</font>
+
+<font color="#0000ff">// Move caret to first position in document.</font>
+<font color="#a020f0">#define wxSTC_CMD_DOCUMENTSTART </font><font color="#ff00ff">2316</font>
+
+<font color="#0000ff">// Move caret to first position in document extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_DOCUMENTSTARTEXTEND </font><font color="#ff00ff">2317</font>
+
+<font color="#0000ff">// Move caret to last position in document.</font>
+<font color="#a020f0">#define wxSTC_CMD_DOCUMENTEND </font><font color="#ff00ff">2318</font>
+
+<font color="#0000ff">// Move caret to last position in document extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_DOCUMENTENDEXTEND </font><font color="#ff00ff">2319</font>
+
+<font color="#0000ff">// Move caret one page up.</font>
+<font color="#a020f0">#define wxSTC_CMD_PAGEUP </font><font color="#ff00ff">2320</font>
+
+<font color="#0000ff">// Move caret one page up extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_PAGEUPEXTEND </font><font color="#ff00ff">2321</font>
+
+<font color="#0000ff">// Move caret one page down.</font>
+<font color="#a020f0">#define wxSTC_CMD_PAGEDOWN </font><font color="#ff00ff">2322</font>
+
+<font color="#0000ff">// Move caret one page down extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_PAGEDOWNEXTEND </font><font color="#ff00ff">2323</font>
+
+<font color="#0000ff">// Switch from insert to overtype mode or the reverse.</font>
+<font color="#a020f0">#define wxSTC_CMD_EDITTOGGLEOVERTYPE </font><font color="#ff00ff">2324</font>
+
+<font color="#0000ff">// Cancel any modes such as call tip or auto-completion list display.</font>
+<font color="#a020f0">#define wxSTC_CMD_CANCEL </font><font color="#ff00ff">2325</font>
+
+<font color="#0000ff">// Delete the selection or if no selection, the character before the caret.</font>
+<font color="#a020f0">#define wxSTC_CMD_DELETEBACK </font><font color="#ff00ff">2326</font>
+
+<font color="#0000ff">// If selection is empty or all on one line replace the selection with a tab character.</font>
+<font color="#0000ff">// If more than one line selected, indent the lines.</font>
+<font color="#a020f0">#define wxSTC_CMD_TAB </font><font color="#ff00ff">2327</font>
+
+<font color="#0000ff">// Dedent the selected lines.</font>
+<font color="#a020f0">#define wxSTC_CMD_BACKTAB </font><font color="#ff00ff">2328</font>
+
+<font color="#0000ff">// Insert a new line, may use a CRLF, CR or LF depending on EOL mode.</font>
+<font color="#a020f0">#define wxSTC_CMD_NEWLINE </font><font color="#ff00ff">2329</font>
+
+<font color="#0000ff">// Insert a Form Feed character.</font>
+<font color="#a020f0">#define wxSTC_CMD_FORMFEED </font><font color="#ff00ff">2330</font>
+
+<font color="#0000ff">// Move caret to before first visible character on line.</font>
+<font color="#0000ff">// If already there move to first character on line.</font>
+<font color="#a020f0">#define wxSTC_CMD_VCHOME </font><font color="#ff00ff">2331</font>
+
+<font color="#0000ff">// Like VCHome but extending selection to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_VCHOMEEXTEND </font><font color="#ff00ff">2332</font>
+
+<font color="#0000ff">// Magnify the displayed text by increasing the sizes by 1 point.</font>
+<font color="#a020f0">#define wxSTC_CMD_ZOOMIN </font><font color="#ff00ff">2333</font>
+
+<font color="#0000ff">// Make the displayed text smaller by decreasing the sizes by 1 point.</font>
+<font color="#a020f0">#define wxSTC_CMD_ZOOMOUT </font><font color="#ff00ff">2334</font>
+
+<font color="#0000ff">// Delete the word to the left of the caret.</font>
+<font color="#a020f0">#define wxSTC_CMD_DELWORDLEFT </font><font color="#ff00ff">2335</font>
+
+<font color="#0000ff">// Delete the word to the right of the caret.</font>
+<font color="#a020f0">#define wxSTC_CMD_DELWORDRIGHT </font><font color="#ff00ff">2336</font>
+
+<font color="#0000ff">// Cut the line containing the caret.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINECUT </font><font color="#ff00ff">2337</font>
+
+<font color="#0000ff">// Delete the line containing the caret.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEDELETE </font><font color="#ff00ff">2338</font>
+
+<font color="#0000ff">// Switch the current line with the previous.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINETRANSPOSE </font><font color="#ff00ff">2339</font>
+
+<font color="#0000ff">// Duplicate the current line.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEDUPLICATE </font><font color="#ff00ff">2404</font>
+
+<font color="#0000ff">// Transform the selection to lower case.</font>
+<font color="#a020f0">#define wxSTC_CMD_LOWERCASE </font><font color="#ff00ff">2340</font>
+
+<font color="#0000ff">// Transform the selection to upper case.</font>
+<font color="#a020f0">#define wxSTC_CMD_UPPERCASE </font><font color="#ff00ff">2341</font>
+
+<font color="#0000ff">// Scroll the document down, keeping the caret visible.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINESCROLLDOWN </font><font color="#ff00ff">2342</font>
+
+<font color="#0000ff">// Scroll the document up, keeping the caret visible.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINESCROLLUP </font><font color="#ff00ff">2343</font>
+
+<font color="#0000ff">// Delete the selection or if no selection, the character before the caret.</font>
+<font color="#0000ff">// Will not delete the character before at the start of a line.</font>
+<font color="#a020f0">#define wxSTC_CMD_DELETEBACKNOTLINE </font><font color="#ff00ff">2344</font>
+
+<font color="#0000ff">// Move caret to first position on display line.</font>
+<font color="#a020f0">#define wxSTC_CMD_HOMEDISPLAY </font><font color="#ff00ff">2345</font>
+
+<font color="#0000ff">// Move caret to first position on display line extending selection to</font>
+<font color="#0000ff">// new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_HOMEDISPLAYEXTEND </font><font color="#ff00ff">2346</font>
+
+<font color="#0000ff">// Move caret to last position on display line.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEENDDISPLAY </font><font color="#ff00ff">2347</font>
+
+<font color="#0000ff">// Move caret to last position on display line extending selection to new</font>
+<font color="#0000ff">// caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEENDDISPLAYEXTEND </font><font color="#ff00ff">2348</font>
+
+<font color="#0000ff">// Move to the previous change in capitalisation.</font>
+<font color="#a020f0">#define wxSTC_CMD_WORDPARTLEFT </font><font color="#ff00ff">2390</font>
+
+<font color="#0000ff">// Move to the previous change in capitalisation extending selection</font>
+<font color="#0000ff">// to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_WORDPARTLEFTEXTEND </font><font color="#ff00ff">2391</font>
+
+<font color="#0000ff">// Move to the change next in capitalisation.</font>
+<font color="#a020f0">#define wxSTC_CMD_WORDPARTRIGHT </font><font color="#ff00ff">2392</font>
+
+<font color="#0000ff">// Move to the next change in capitalisation extending selection</font>
+<font color="#0000ff">// to new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_WORDPARTRIGHTEXTEND </font><font color="#ff00ff">2393</font>
+
+<font color="#0000ff">// Delete back from the current position to the start of the line.</font>
+<font color="#a020f0">#define wxSTC_CMD_DELLINELEFT </font><font color="#ff00ff">2395</font>
+
+<font color="#0000ff">// Delete forwards from the current position to the end of the line.</font>
+<font color="#a020f0">#define wxSTC_CMD_DELLINERIGHT </font><font color="#ff00ff">2396</font>
+
+
 <font color="#0000ff">// END of generated section</font>
 <font color="#0000ff">//----------------------------------------------------------------------</font>
 
@@ -880,8 +1007,11 @@
 <font color="#2e8b57"><b>class</b></font>  WordList;
 <font color="#2e8b57"><b>struct</b></font> SCNotification;
 
-
-<font color="#2e8b57"><b>extern</b></font> <font color="#2e8b57"><b>const</b></font> wxChar* wxSTCNameStr;
+<font color="#a020f0">#ifndef SWIG</font>
+<font color="#2e8b57"><b>extern</b></font> WXSTC_DECLSPEC <font color="#2e8b57"><b>const</b></font> wxChar* wxSTCNameStr;
+<font color="#2e8b57"><b>class</b></font> WXSTC_DECLSPEC wxStyledTextCtrl;
+<font color="#2e8b57"><b>class</b></font> WXSTC_DECLSPEC wxStyledTextEvent;
+<font color="#a020f0">#endif</font>
 
 <font color="#0000ff">//----------------------------------------------------------------------</font>
 
@@ -1043,8 +1173,8 @@
     <font color="#0000ff">// Set the symbol used for a particular marker number,</font>
     <font color="#0000ff">// and optionally the fore and background colours.</font>
     <font color="#2e8b57"><b>void</b></font> MarkerDefine(<font color="#2e8b57"><b>int</b></font> markerNumber, <font color="#2e8b57"><b>int</b></font> markerSymbol,
-                         <font color="#2e8b57"><b>const</b></font> wxColour&amp; foreground = wxNullColour,
-                         <font color="#2e8b57"><b>const</b></font> wxColour&amp; background = wxNullColour);
+                <font color="#2e8b57"><b>const</b></font> wxColour&amp; foreground = wxNullColour,
+                <font color="#2e8b57"><b>const</b></font> wxColour&amp; background = wxNullColour);
 
     <font color="#0000ff">// Set the foreground colour used for a particular marker number.</font>
     <font color="#2e8b57"><b>void</b></font> MarkerSetForeground(<font color="#2e8b57"><b>int</b></font> markerNumber, <font color="#2e8b57"><b>const</b></font> wxColour&amp; fore);
@@ -1069,6 +1199,9 @@
 
     <font color="#0000ff">// Find the previous line before lineStart that includes a marker in mask.</font>
     <font color="#2e8b57"><b>int</b></font> MarkerPrevious(<font color="#2e8b57"><b>int</b></font> lineStart, <font color="#2e8b57"><b>int</b></font> markerMask);
+
+    <font color="#0000ff">// Define a marker from a bitmap</font>
+    <font color="#2e8b57"><b>void</b></font> MarkerDefineBitmap(<font color="#2e8b57"><b>int</b></font> markerNumber, <font color="#2e8b57"><b>const</b></font> wxBitmap&amp; bmp);
 
     <font color="#0000ff">// Set a margin to be either numeric or symbolic.</font>
     <font color="#2e8b57"><b>void</b></font> SetMarginType(<font color="#2e8b57"><b>int</b></font> margin, <font color="#2e8b57"><b>int</b></font> marginType);
@@ -1291,6 +1424,19 @@
     <font color="#0000ff">// after the inserted text upon completion.</font>
     <font color="#2e8b57"><b>bool</b></font> AutoCompGetDropRestOfWord();
 
+    <font color="#0000ff">// Register an image for use in autocompletion lists.</font>
+    <font color="#2e8b57"><b>void</b></font> RegisterImage(<font color="#2e8b57"><b>int</b></font> type, <font color="#2e8b57"><b>const</b></font> wxBitmap&amp; bmp);
+
+    <font color="#0000ff">// Clear all the registered images.</font>
+    <font color="#2e8b57"><b>void</b></font> ClearRegisteredImages();
+
+    <font color="#0000ff">// Retrieve the auto-completion list type-separator character.</font>
+    <font color="#2e8b57"><b>int</b></font> AutoCompGetTypeSeparator();
+
+    <font color="#0000ff">// Change the type-separator character in the string setting up an auto-completion list.</font>
+    <font color="#0000ff">// Default is '?' but can be changed if items contain '?'.</font>
+    <font color="#2e8b57"><b>void</b></font> AutoCompSetTypeSeparator(<font color="#2e8b57"><b>int</b></font> separatorCharacter);
+
     <font color="#0000ff">// Set the number of spaces used for one level of indentation.</font>
     <font color="#2e8b57"><b>void</b></font> SetIndent(<font color="#2e8b57"><b>int</b></font> indentSize);
 
@@ -1379,14 +1525,14 @@
 
     <font color="#0000ff">// On Windows, will draw the document into a display context such as a printer.</font>
     <font color="#2e8b57"><b>int</b></font> FormatRange(<font color="#2e8b57"><b>bool</b></font>   doDraw,
-                               <font color="#2e8b57"><b>int</b></font>    startPos,
-                               <font color="#2e8b57"><b>int</b></font>    endPos,
-                               wxDC*  draw,
-                               wxDC*  target,  <font color="#0000ff">// Why does it use two? Can they be the same?</font>
-                               wxRect renderRect,
-                               wxRect pageRect);
+               <font color="#2e8b57"><b>int</b></font>    startPos,
+               <font color="#2e8b57"><b>int</b></font>    endPos,
+               wxDC*  draw,
+               wxDC*  target,  <font color="#0000ff">// Why does it use two? Can they be the same?</font>
+               wxRect renderRect,
+               wxRect pageRect);
 
-    <font color="#0000ff">// Retrieve the line at the top of the display.</font>
+    <font color="#0000ff">// Retrieve the display line at the top of the display.</font>
     <font color="#2e8b57"><b>int</b></font> GetFirstVisibleLine();
 
     <font color="#0000ff">// Retrieve the contents of a line.</font>
@@ -1582,7 +1728,7 @@
     <font color="#0000ff">// Ensure a particular line is visible by expanding any header line hiding it.</font>
     <font color="#2e8b57"><b>void</b></font> EnsureVisible(<font color="#2e8b57"><b>int</b></font> line);
 
-    <font color="#0000ff">// Set some debugging options for folding.</font>
+    <font color="#0000ff">// Set some style options for folding.</font>
     <font color="#2e8b57"><b>void</b></font> SetFoldFlags(<font color="#2e8b57"><b>int</b></font> flags);
 
     <font color="#0000ff">// Ensure a particular line is visible by expanding any header line hiding it.</font>
@@ -1648,17 +1794,51 @@
     <font color="#0000ff">// Retrieve the height of a particular line of text in pixels.</font>
     <font color="#2e8b57"><b>int</b></font> TextHeight(<font color="#2e8b57"><b>int</b></font> line);
 
+    <font color="#0000ff">// Show or hide the vertical scroll bar.</font>
+    <font color="#2e8b57"><b>void</b></font> SetUseVerticalScrollBar(<font color="#2e8b57"><b>bool</b></font> show);
+
+    <font color="#0000ff">// Is the vertical scroll bar visible?</font>
+    <font color="#2e8b57"><b>bool</b></font> GetUseVerticalScrollBar();
+
+    <font color="#0000ff">// Append a string to the end of the document without changing the selection.</font>
+    <font color="#2e8b57"><b>void</b></font> AppendText(<font color="#2e8b57"><b>int</b></font> length, <font color="#2e8b57"><b>const</b></font> wxString&amp; text);
+
+    <font color="#0000ff">// Is drawing done in two phases with backgrounds drawn before foregrounds?</font>
+    <font color="#2e8b57"><b>bool</b></font> GetTwoPhaseDraw();
+
+    <font color="#0000ff">// In twoPhaseDraw mode, drawing is performed in two phases, first the background</font>
+    <font color="#0000ff">// and then the foreground. This avoids chopping off characters that overlap the next run.</font>
+    <font color="#2e8b57"><b>void</b></font> SetTwoPhaseDraw(<font color="#2e8b57"><b>bool</b></font> twoPhase);
+
+    <font color="#0000ff">// Make the target range start and end be the same as the selection range start and end.</font>
+    <font color="#2e8b57"><b>void</b></font> TargetFromSelection();
+
+    <font color="#0000ff">// Join the lines in the target.</font>
+    <font color="#0000ff">// This is an experimental feature and may be changed or removed.</font>
+    <font color="#2e8b57"><b>void</b></font> LinesJoin();
+
+    <font color="#0000ff">// Split the lines in the target into lines that are less wide than pixelWidth</font>
+    <font color="#0000ff">// where possible.</font>
+    <font color="#2e8b57"><b>void</b></font> LinesSplit(<font color="#2e8b57"><b>int</b></font> pixelWidth);
+
+    <font color="#0000ff">// Set the colours used as a chequerboard pattern in the fold margin</font>
+    <font color="#2e8b57"><b>void</b></font> SetFoldMarginColour(<font color="#2e8b57"><b>bool</b></font> useSetting, <font color="#2e8b57"><b>const</b></font> wxColour&amp; back);
+    <font color="#2e8b57"><b>void</b></font> SetFoldMarginHiColour(<font color="#2e8b57"><b>bool</b></font> useSetting, <font color="#2e8b57"><b>const</b></font> wxColour&amp; fore);
+
+    <font color="#0000ff">// Duplicate the current line.</font>
+    <font color="#2e8b57"><b>void</b></font> LineDuplicate();
+
     <font color="#0000ff">// Move caret to first position on display line.</font>
     <font color="#2e8b57"><b>void</b></font> HomeDisplay();
 
-    <font color="#0000ff">// Move caret to first position on display line extending selection to </font>
+    <font color="#0000ff">// Move caret to first position on display line extending selection to</font>
     <font color="#0000ff">// new caret position.</font>
     <font color="#2e8b57"><b>void</b></font> HomeDisplayExtend();
 
     <font color="#0000ff">// Move caret to last position on display line.</font>
     <font color="#2e8b57"><b>void</b></font> LineEndDisplay();
 
-    <font color="#0000ff">// Move caret to last position on display line extending selection to new </font>
+    <font color="#0000ff">// Move caret to last position on display line extending selection to new</font>
     <font color="#0000ff">// caret position.</font>
     <font color="#2e8b57"><b>void</b></font> LineEndDisplayExtend();
 
@@ -1812,6 +1992,9 @@
     <font color="#2e8b57"><b>void</b></font> SetXOffset(<font color="#2e8b57"><b>int</b></font> newOffset);
     <font color="#2e8b57"><b>int</b></font> GetXOffset();
 
+    <font color="#0000ff">// Set the last x chosen value to be the caret x position</font>
+    <font color="#2e8b57"><b>void</b></font> ChooseCaretX();
+
     <font color="#0000ff">// Set the way the caret is kept visible when going sideway.</font>
     <font color="#0000ff">// The exclusion zone is given in pixels.</font>
     <font color="#2e8b57"><b>void</b></font> SetXCaretPolicy(<font color="#2e8b57"><b>int</b></font> caretPolicy, <font color="#2e8b57"><b>int</b></font> caretSlop);
@@ -1819,6 +2002,12 @@
     <font color="#0000ff">// Set the way the line the caret is on is kept visible.</font>
     <font color="#0000ff">// The exclusion zone is given in lines.</font>
     <font color="#2e8b57"><b>void</b></font> SetYCaretPolicy(<font color="#2e8b57"><b>int</b></font> caretPolicy, <font color="#2e8b57"><b>int</b></font> caretSlop);
+
+    <font color="#0000ff">// Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).</font>
+    <font color="#2e8b57"><b>void</b></font> SetPrintWrapMode(<font color="#2e8b57"><b>int</b></font> mode);
+
+    <font color="#0000ff">// Is printing line wrapped.</font>
+    <font color="#2e8b57"><b>int</b></font> GetPrintWrapMode();
 
     <font color="#0000ff">// Start notifying the container of all key presses and commands.</font>
     <font color="#2e8b57"><b>void</b></font> StartRecord();
@@ -1940,6 +2129,7 @@
     <font color="#2e8b57"><b>void</b></font> OnMouseMove(wxMouseEvent&amp; evt);
     <font color="#2e8b57"><b>void</b></font> OnMouseLeftUp(wxMouseEvent&amp; evt);
     <font color="#2e8b57"><b>void</b></font> OnMouseRightUp(wxMouseEvent&amp; evt);
+    <font color="#2e8b57"><b>void</b></font> OnMouseMiddleUp(wxMouseEvent&amp; evt);
     <font color="#2e8b57"><b>void</b></font> OnContextMenu(wxContextMenuEvent&amp; evt);
     <font color="#2e8b57"><b>void</b></font> OnMouseWheel(wxMouseEvent&amp; evt);
     <font color="#2e8b57"><b>void</b></font> OnChar(wxKeyEvent&amp; evt);
@@ -1975,7 +2165,7 @@
 
 <font color="#0000ff">//----------------------------------------------------------------------</font>
 
-<font color="#0000ff">// SWIG can't handle &quot;#if&quot; type of conditionals, onlu &quot;#ifdef&quot;</font>
+<font color="#0000ff">// SWIG can't handle &quot;#if&quot; type of conditionals, only &quot;#ifdef&quot;</font>
 <font color="#a020f0">#ifdef SWIG</font>
 <font color="#a020f0">#define STC_USE_DND </font><font color="#ff00ff">1</font>
 <font color="#a020f0">#else</font>

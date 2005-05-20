@@ -43,6 +43,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/ffile.h"
 
 #ifdef __WXGTK__
     #include "wx/mdi.h"
@@ -262,7 +263,7 @@ bool wxDocument::SaveAs()
 
     if (ext.IsEmpty() || ext == wxT(""))
     {
-        fileName += ".";
+        fileName += wxT(".");
         fileName += docTemplate->GetDefaultExtension();
     }
 
@@ -295,11 +296,11 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    wxSTD ofstream store(wxString(file.fn_str()).mb_str());
+    wxSTD ofstream store(file.mb_str());
     if (store.fail() || store.bad())
 #else
-    wxFileOutputStream store(wxString(file.fn_str()));
-    if (store.LastError() != wxSTREAM_NOERROR)
+    wxFileOutputStream store(file);
+    if (store.GetLastError() != wxSTREAM_NO_ERROR)
 #endif
     {
         (void)wxMessageBox(_("Sorry, could not open this file for saving."), msgTitle, wxOK | wxICON_EXCLAMATION,
@@ -332,11 +333,11 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    wxSTD ifstream store(wxString(file.fn_str()).mb_str());
+    wxSTD ifstream store(file.mb_str());
     if (store.fail() || store.bad())
 #else
-    wxFileInputStream store(wxString(file.fn_str()));
-    if (store.LastError() != wxSTREAM_NOERROR)
+    wxFileInputStream store(file);
+    if (store.GetLastError() != wxSTREAM_NO_ERROR)
 #endif
     {
         (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
@@ -347,8 +348,8 @@ bool wxDocument::OnOpenDocument(const wxString& file)
     LoadObject(store);
     if ( !store && !store.eof() )
 #else
-    int res = LoadObject(store).LastError();
-    if ((res != wxSTREAM_NOERROR) &&
+    int res = LoadObject(store).GetLastError();
+    if ((res != wxSTREAM_NO_ERROR) &&
         (res != wxSTREAM_EOF))
 #endif
     {
@@ -506,7 +507,8 @@ void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
     while (node)
     {
         wxView *view = (wxView *)node->Data();
-        view->OnUpdate(sender, hint);
+		if (view != sender)
+            view->OnUpdate(sender, hint);
         node = node->Next();
     }
 }
@@ -838,12 +840,12 @@ void wxDocManager::OnFileCloseAll(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 {
-    CreateDocument(wxString(""), wxDOC_NEW);
+    CreateDocument( wxT(""), wxDOC_NEW );
 }
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-    if ( !CreateDocument(wxString(""), 0) )
+    if ( !CreateDocument( wxT(""), 0) )
     {
         OnOpenFileFailure();
     }
@@ -918,8 +920,13 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
     if (printout)
     {
         // Pass two printout objects: for preview, and possible printing.
-        wxPrintPreviewBase *preview = (wxPrintPreviewBase *) NULL;
-        preview = new wxPrintPreview(printout, view->OnCreatePrintout());
+        wxPrintPreviewBase *preview = new wxPrintPreview(printout, view->OnCreatePrintout());
+        if ( !preview->Ok() )
+        {
+            delete preview;
+            wxMessageBox( _("Sorry, print preview needs a printer to be installed.") );
+            return;
+        }
 
         wxPreviewFrame *frame = new wxPreviewFrame(preview, (wxFrame *)wxTheApp->GetTopWindow(), _("Print Preview"),
                 wxPoint(100, 100), wxSize(600, 650));
@@ -930,22 +937,26 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
-void wxDocManager::OnUndo(wxCommandEvent& WXUNUSED(event))
+void wxDocManager::OnUndo(wxCommandEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
     if (!doc)
         return;
     if (doc->GetCommandProcessor())
         doc->GetCommandProcessor()->Undo();
+    else
+        event.Skip();
 }
 
-void wxDocManager::OnRedo(wxCommandEvent& WXUNUSED(event))
+void wxDocManager::OnRedo(wxCommandEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
     if (!doc)
         return;
     if (doc->GetCommandProcessor())
         doc->GetCommandProcessor()->Redo();
+    else
+        event.Skip();
 }
 
 // Handlers for UI update commands
@@ -987,17 +998,29 @@ void wxDocManager::OnUpdateFileSaveAs(wxUpdateUIEvent& event)
 void wxDocManager::OnUpdateUndo(wxUpdateUIEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc && doc->GetCommandProcessor() && doc->GetCommandProcessor()->CanUndo()) );
-    if (doc && doc->GetCommandProcessor())
+    if (!doc)
+        event.Enable(FALSE);
+    else if (!doc->GetCommandProcessor())
+        event.Skip();
+    else
+    {
+        event.Enable( doc->GetCommandProcessor()->CanUndo() );
         doc->GetCommandProcessor()->SetMenuStrings();
+    }
 }
 
 void wxDocManager::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc && doc->GetCommandProcessor() && doc->GetCommandProcessor()->CanRedo()) );
-    if (doc && doc->GetCommandProcessor())
+    if (!doc)
+        event.Enable(FALSE);
+    else if (!doc->GetCommandProcessor())
+        event.Skip();
+    else
+    {
+        event.Enable( doc->GetCommandProcessor()->CanRedo() );
         doc->GetCommandProcessor()->SetMenuStrings();
+    }
 }
 
 void wxDocManager::OnUpdatePrint(wxUpdateUIEvent& event)
@@ -1947,8 +1970,10 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
         while (node)
         {
             wxMenu* menu = (wxMenu*) node->Data();
-            if (m_fileHistoryN == 0)
+            if ( m_fileHistoryN == 0 && menu->GetMenuItemCount() )
+            {
                 menu->AppendSeparator();
+            }
             menu->Append(wxID_FILE1+m_fileHistoryN, _("[EMPTY]"));
             node = node->Next();
         }
@@ -2084,7 +2109,7 @@ void wxFileHistory::Load(wxConfigBase& config)
     wxString buf;
     buf.Printf(wxT("file%d"), m_fileHistoryN+1);
     wxString historyFile;
-    while ((m_fileHistoryN <= m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != wxT("")))
+    while ((m_fileHistoryN < m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != wxT("")))
     {
         m_fileHistory[m_fileHistoryN] = copystring((const wxChar*) historyFile);
         m_fileHistoryN ++;
@@ -2114,7 +2139,10 @@ void wxFileHistory::AddFilesToMenu()
         while (node)
         {
             wxMenu* menu = (wxMenu*) node->Data();
-            menu->AppendSeparator();
+            if (menu->GetMenuItemCount())
+            {
+                menu->AppendSeparator();
+            }
             int i;
             for (i = 0; i < m_fileHistoryN; i++)
             {
@@ -2134,7 +2162,10 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
 {
     if (m_fileHistoryN > 0)
     {
-        menu->AppendSeparator();
+        if (menu->GetMenuItemCount())
+        {
+            menu->AppendSeparator();
+        }
         int i;
         for (i = 0; i < m_fileHistoryN; i++)
         {
@@ -2154,77 +2185,99 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
 // ----------------------------------------------------------------------------
 
 #if wxUSE_STD_IOSTREAM
+
 bool wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream)
 {
-    FILE *fd1;
-    int ch;
-
-    if ((fd1 = wxFopen (filename.fn_str(), _T("rb"))) == NULL)
+    wxFFile file(filename, "rb");
+    if ( !file.IsOpened() )
         return FALSE;
 
-    while ((ch = getc (fd1)) != EOF)
-        stream << (unsigned char)ch;
+    char buf[4096];
 
-    fclose (fd1);
+    size_t nRead;
+    do
+    {
+        nRead = file.Read(buf, WXSIZEOF(buf));
+        if ( file.Error() )
+            return FALSE;
+
+        stream.write(buf, nRead);
+        if ( !stream )
+            return FALSE;
+    }
+    while ( !file.Eof() );
+
     return TRUE;
 }
 
 bool wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename)
 {
-    FILE *fd1;
-    int ch;
-
-    if ((fd1 = wxFopen (filename.fn_str(), _T("wb"))) == NULL)
-    {
+    wxFFile file(filename, "wb");
+    if ( !file.IsOpened() )
         return FALSE;
-    }
 
-    while (!stream.eof())
+    char buf[4096];
+    do
     {
-        ch = stream.get();
-        if (!stream.eof())
-            putc (ch, fd1);
+        stream.read(buf, WXSIZEOF(buf));
+        if ( !stream.bad() ) // fail may be set on EOF, don't use operator!()
+        {
+            if ( !file.Write(buf, stream.gcount()) )
+                return FALSE;
+        }
     }
-    fclose (fd1);
+    while ( !stream.eof() );
+
     return TRUE;
 }
-#else
+
+#else // !wxUSE_STD_IOSTREAM
+
 bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
 {
-    FILE *fd1;
-    int ch;
-
-    if ((fd1 = wxFopen (filename, wxT("rb"))) == NULL)
+    wxFFile file(filename, "rb");
+    if ( !file.IsOpened() )
         return FALSE;
 
-    while ((ch = getc (fd1)) != EOF)
-        stream.PutC((char) ch);
+    char buf[4096];
 
-    fclose (fd1);
+    size_t nRead;
+    do
+    {
+        nRead = file.Read(buf, WXSIZEOF(buf));
+        if ( file.Error() )
+            return FALSE;
+
+        stream.Write(buf, nRead);
+        if ( !stream )
+            return FALSE;
+    }
+    while ( !file.Eof() );
+
     return TRUE;
 }
 
 bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
 {
-    FILE *fd1;
-    char ch;
-
-    if ((fd1 = wxFopen (filename, wxT("wb"))) == NULL)
-    {
+    wxFFile file(filename, "wb");
+    if ( !file.IsOpened() )
         return FALSE;
-    }
 
-    int len = stream.StreamSize();
-    // TODO: is this the correct test for EOF?
-    while (stream.TellI() < (len - 1))
+    char buf[4096];
+    do
     {
-        ch = stream.GetC();
-        putc (ch, fd1);
+        stream.Read(buf, WXSIZEOF(buf));
+
+        const size_t nRead = stream.LastRead();
+        if ( !nRead || !file.Write(buf, nRead) )
+            return FALSE;
     }
-    fclose (fd1);
+    while ( !stream.Eof() );
+
     return TRUE;
 }
-#endif
+
+#endif // wxUSE_STD_IOSTREAM/!wxUSE_STD_IOSTREAM
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
 

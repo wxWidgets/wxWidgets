@@ -47,19 +47,21 @@ Has no effect under other platforms.}
 on top of its parent (unlike wxSTAY\_ON\_TOP). A frame created with this style
 must have a non-NULL parent.}
 \twocolitem{\windowstyle{wxFRAME\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
-caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
+caption. When pressed, Windows will go into a context-sensitive help mode and wxWidgets will send
 a wxEVT\_HELP event if the user clicked on an application window. {\it Note} that this is an extended
 style and must be set by calling \helpref{SetExtraStyle}{wxwindowsetextrastyle} before Create is called (two-step construction).
 You cannot use this style together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX, so
-you should use 
-{\tt wxDEFAULT\_FRAME\_STYLE \& \~ (wxMINIMIZE\_BOX | wxMAXIMIZE\_BOX)} for the
+you should use
+{\tt wxDEFAULT\_FRAME\_STYLE \& ~ (wxMINIMIZE\_BOX | wxMAXIMIZE\_BOX)} for the
 frames having this style (the dialogs don't have minimize nor maximize box by
 default)}
+\twocolitem{\windowstyle{wxFRAME\_SHAPED}}{Windows with this style are
+  allowed to have their shape changed with the \helpref{SetShape}{wxframesetshape} method.}
 \end{twocollist}
 
 The default frame style is for normal, resizeable frames. To create a frame
 which can not be resized by user, you may use the following combination of
-styles: {\tt wxDEFAULT\_FRAME\_STYLE \& \~ (wxRESIZE\_BORDER \pipe wxRESIZE\_BOX \pipe wxMAXIMIZE\_BOX)}.
+styles: {\tt wxDEFAULT\_FRAME\_STYLE \& ~ (wxRESIZE\_BORDER \pipe wxRESIZE\_BOX \pipe wxMAXIMIZE\_BOX)}.
 % Note: the space after the tilde is necessary or Tex2RTF complains.
 
 See also \helpref{window styles overview}{windowstyles}.
@@ -99,10 +101,10 @@ always be displayed on top of the parent window on Windows.}
 \docparam{title}{The caption to be displayed on the frame's title bar.}
 
 \docparam{pos}{The window position. A value of (-1, -1) indicates a default position, chosen by
-either the windowing system or wxWindows, depending on platform.}
+either the windowing system or wxWidgets, depending on platform.}
 
 \docparam{size}{The window size. A value of (-1, -1) indicates a default size, chosen by
-either the windowing system or wxWindows, depending on platform.}
+either the windowing system or wxWidgets, depending on platform.}
 
 \docparam{style}{The window style. See \helpref{wxFrame}{wxframe}.}
 
@@ -172,7 +174,7 @@ value greater than 1 to create a multi-field status bar.}
 of valid styles.}
 
 \docparam{id}{The status bar window identifier. If -1, an identifier will be chosen by
-wxWindows.}
+wxWidgets.}
 
 \docparam{name}{The status bar window name.}
 
@@ -209,7 +211,7 @@ Creates a toolbar at the top or left of the frame.
 of valid styles.}
 
 \docparam{id}{The toolbar window identifier. If -1, an identifier will be chosen by
-wxWindows.}
+wxWidgets.}
 
 \docparam{name}{The toolbar window name.}
 
@@ -366,7 +368,7 @@ Virtual function called when a status bar is requested by \helpref{wxFrame::Crea
 of valid styles.}
 
 \docparam{id}{The window identifier. If -1, an identifier will be chosen by
-wxWindows.}
+wxWidgets.}
 
 \docparam{name}{The window name.}
 
@@ -396,7 +398,7 @@ Virtual function called when a toolbar is requested by \helpref{wxFrame::CreateT
 of valid styles.}
 
 \docparam{id}{The toolbar window identifier. If -1, an identifier will be chosen by
-wxWindows.}
+wxWidgets.}
 
 \docparam{name}{The toolbar window name.}
 
@@ -476,7 +478,7 @@ Sets the icons for this frame.
 
 See also \helpref{wxIconBundle}{wxiconbundle}.
 
-% VZ: we don't have all this any more (18.08.00) 
+% VZ: we don't have all this any more (18.08.00)
 %
 %Under Windows, instead of using {\bf SetIcon}, you can add the
 %following lines to your MS Windows resource file:
@@ -501,7 +503,7 @@ See also \helpref{wxIconBundle}{wxiconbundle}.
 %\end{verbatim}
 %
 %You can replace std.ico, mdi.ico and child.ico with your own defaults
-%for all your wxWindows application. Currently they show the same icon.
+%for all your wxWidgets application. Currently they show the same icon.
 
 \membersection{wxFrame::SetMenuBar}\label{wxframesetmenubar}
 
@@ -528,6 +530,17 @@ Note that it is not possible to call this function twice for the same frame obje
 \wxheading{See also}
 
 \helpref{wxFrame::GetMenuBar}{wxframegetmenubar}, \helpref{wxMenuBar}{wxmenubar}, \helpref{wxMenu}{wxmenu}.
+
+\membersection{wxFrame::SetShape}\label{wxframesetshape}
+
+\func{bool}{SetShape}{\param{const wxRegion&}{ region}}
+
+If the platform supports it, sets the shape of the window to that
+depicted by \it{region}.  The system will not display or
+respond to any mouse event for the pixels that lie outside of the
+region.  To reset the window to the normal rectangular shape simply
+call \it{SetShape} again with an empty region.  Returns TRUE if the
+operation is successful.
 
 \membersection{wxFrame::SetStatusBar}\label{wxframesetstatusbar}
 

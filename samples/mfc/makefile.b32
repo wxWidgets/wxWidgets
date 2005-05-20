@@ -3,7 +3,8 @@
 # Author:       Andre Beltman
 # Created:      1995
 # Updated:	
-# Copyright:    (c) 1995, AIAI, University of Edinburgh
+# Copyright:    Andre Beltman
+# Licence:      wxWindows Licence
 #
 # "%W% %G%"
 #
@@ -30,7 +31,7 @@ PROLOGLIB = $(WXLIBDIR)\prologio.lib
 LIBS=$(WXLIB) cw32 import32 ctl3d32 $(FAFALIB) $(ITSYLIB) $(DIBLIB)\
   $(XPMLIB) $(PROLOGLIB) $(RCPARSERLIB) $(GAUGELIB) $(WXTREELIB)
 
-TARGET=hello
+TARGET=mfctest
 
 !if "$(FINAL)" == "0"
 LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
@@ -43,7 +44,7 @@ DEBUG_FLAGS =
 !endif
 CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
 
-OBJECTS = hello.obj
+OBJECTS = mfctest.obj
 
 $(TARGET).exe:	$(OBJECTS) $(TARGET).def $(TARGET).res
   tlink32 $(LINKFLAGS) @&&!
@@ -63,9 +64,13 @@ $(TARGET).res
 
 hello.obj:      hello.$(SRCSUFF)
 
-$(TARGET).res :      $(TARGET).rc $(WXDIR)\include\msw\wx.rc
+$(TARGET).res :      $(TARGET).rc 
     brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa $(TARGET)
 
 clean:
-        -erase *.obj *.exe *.res *.map *.rws
+        -$(RM) *.obj 
+        -$(RM) *.exe 
+        -$(RM) *.res 
+        -$(RM) *.map 
+        -$(RM) *.rws
 

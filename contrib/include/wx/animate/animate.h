@@ -21,6 +21,7 @@
 #include <wx/gdicmn.h>
 #include <wx/list.h>
 #include <wx/timer.h>
+#include <wx/control.h>
 
 //#define ANIMDLLEXPORT WXDLLEXPORT
 #define ANIMDLLEXPORT
@@ -138,7 +139,7 @@ public:
 //// Implementation
 
     // Play the frame
-    virtual bool PlayFrame(int frame, wxWindow& window, wxPoint& pos);
+    virtual bool PlayFrame(int frame, wxWindow& window, const wxPoint& pos);
     virtual bool PlayFrame();
     virtual void DrawFrame(int frame, wxDC& dc, const wxPoint& pos);
     virtual void DrawBackground(wxDC& dc, const wxPoint& pos, const wxColour& colour);

@@ -6,6 +6,7 @@
 # Created:   29 Aug 1999
 # Copyright: (c) 1999 Michael Bedward
 # Version:   $Id$
+# Licence:   wxWindows licence
 #
 # This creates the makefiles for all compilers from the templates using
 # tmake. The tmake executable should be in the path.
@@ -22,7 +23,6 @@ do
 	b32.t)
 	    echo "Generating $mswdir/makefile.b32 for Borland C++ (32 bits)..."
 	    ./tmake -t b32 wxwin.pro -o $mswdir/makefile.b32
-	    ./tmake -t b32univ wxwin.pro -o $mswdir/makeuniv.b32
 	    ./tmake -t b32base wxwin.pro -o $mswdir/makebase.b32 ;;
 
 	bcc.t)

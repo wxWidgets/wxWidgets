@@ -8,8 +8,8 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = cube
-OBJECTS = $(PROGRAM).obj
-#EXTRALIBS=$(WXDIR)\lib\glcanvas.lib
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj
+#EXTRALIBS=$(WXDIR)\lib\glc_w.lib
 #EXTRACPPFLAGS=-I$(WXDIR)\utils\glcanvas\win
 
 !include $(WXDIR)\src\makeprog.wat

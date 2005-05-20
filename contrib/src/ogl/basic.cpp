@@ -30,12 +30,6 @@
 #undef new
 #endif
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#endif
-
 #include <stdio.h>
 #include <ctype.h>
 #include <math.h>
@@ -286,7 +280,7 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_brush = wxWHITE_BRUSH;
   m_font = g_oglNormalFont;
   m_textColour = wxBLACK;
-  m_textColourName = "BLACK";
+  m_textColourName = wxT("BLACK");
   m_visible = FALSE;
   m_selected = FALSE;
   m_attachmentMode = ATTACHMENT_MODE_NONE;
@@ -305,7 +299,7 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_shadowBrush = wxBLACK_BRUSH;
   m_textMarginX = 5;
   m_textMarginY = 5;
-  m_regionName = "0";
+  m_regionName = wxT("0");
   m_centreResize = TRUE;
   m_maintainAspectRatio = FALSE;
   m_highlighted = FALSE;
@@ -319,10 +313,10 @@ wxShape::wxShape(wxShapeCanvas *can)
   // the region eventually (the duplication is for compatibility)
   wxShapeRegion *region = new wxShapeRegion;
   m_regions.Append(region);
-  region->SetName("0");
+  region->SetName(wxT("0"));
   region->SetFont(g_oglNormalFont);
   region->SetFormatMode(FORMAT_CENTRE_HORIZ | FORMAT_CENTRE_VERT);
-  region->SetColour("BLACK");
+  region->SetColour(wxT("BLACK"));
 }
 
 wxShape::~wxShape()
@@ -607,7 +601,8 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
     return;
 
   wxShapeRegion *region = (wxShapeRegion *)node->Data();
-  region->SetText(s);
+  // region->SetText(s);  // don't set the formatted text yet, it will be done below
+  region->m_regionText = s;
   dc.SetFont(* region->GetFont());
 
   region->GetSize(&w, &h);
@@ -616,7 +611,7 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
   node = stringList->First();
   while (node)
   {
-    char *s = (char *)node->Data();
+    wxChar *s = (wxChar *)node->Data();
     wxShapeTextLine *line = new wxShapeTextLine(0.0, 0.0, s);
     region->GetFormattedText().Append((wxObject *)line);
     node = node->Next();
@@ -776,7 +771,7 @@ wxString wxShape::GetTextColour(int regionId) const
 {
   wxNode *node = m_regions.Nth(regionId);
   if (!node)
-    return wxString("");
+    return wxEmptyString;
   wxShapeRegion *region = (wxShapeRegion *)node->Data();
   return region->GetColour();
 }
@@ -794,7 +789,7 @@ wxString wxShape::GetRegionName(int regionId)
 {
   wxNode *node = m_regions.Nth(regionId);
   if (!node)
-    return wxString("");
+    return wxEmptyString;
   wxShapeRegion *region = (wxShapeRegion *)node->Data();
   return region->GetName();
 }
@@ -822,7 +817,7 @@ void wxShape::NameRegions(const wxString& parentName)
   for (int i = 0; i < n; i++)
   {
     if (parentName.Length() > 0)
-      buff << parentName << "." << i;
+      buff << parentName << wxT(".") << i;
     else
       buff << i;
     SetRegionName(buff, i);
@@ -834,7 +829,7 @@ void wxShape::NameRegions(const wxString& parentName)
     buff.Empty();
     wxShape *child = (wxShape *)node->Data();
     if (parentName.Length() > 0)
-      buff << parentName << "." << j;
+      buff << parentName << wxT(".") << j;
     else
       buff << j;
     child->NameRegions(buff);
@@ -1697,7 +1692,7 @@ void wxShape::RemoveLine(wxLineShape *line)
   m_lines.DeleteObject(line);
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxShape::WriteAttributes(wxExpr *clause)
 {
   clause->AddAttributeValueString("type", GetClassInfo()->GetClassName());

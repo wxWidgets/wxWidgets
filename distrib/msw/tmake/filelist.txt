@@ -30,6 +30,7 @@
 #  MotifH	/include/wx/motif
 #  MSWH	/include/wx/msw
 #  OS2H	/include/wx/os2
+#  MGLH /include/wx/mgl
 #  X11H	/include/wx/x11
 #  GenericH	/include/wx/generic
 #  HtmlH	/include/wx/html
@@ -79,7 +80,7 @@ dirctrlg.cpp	Generic
 dirdlgg.cpp	Generic	NotWin32
 dragimgg.cpp	Generic	NotOS2
 fdrepdlg.cpp	Generic	NotMSW
-filedlgg.cpp	Generic	NotMSW,NotX,NotOS2,NotMac
+filedlgg.cpp	Generic	Generic,NotX,NotOS2,NotMac
 fontdlgg.cpp	Generic	Generic,NotOS2
 grid.cpp	Generic
 gridctrl.cpp	Generic
@@ -90,7 +91,7 @@ imaglist.cpp	Generic	NotWin32
 laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
 logg.cpp	Generic
-mdig.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMac
+mdig.cpp	Generic	NotWin32,NotGTK,NotMac
 msgdlgg.cpp	Generic	Generic
 notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotMicro
 numdlgg.cpp	Generic
@@ -216,6 +217,7 @@ protocol.cpp	Common	Socket,Base
 quantize.cpp	Common
 radiocmn.cpp	Common	NotMac
 regex.cpp	Common	Base
+rgncmn.cpp	Common
 resource.cpp	Common
 sckaddr.cpp	Common	Socket,Base
 sckfile.cpp	Common	Socket,Base
@@ -282,18 +284,20 @@ dcprint.cpp	MSW	LowLevel
 dcscreen.cpp	MSW	LowLevel
 dde.cpp	MSW	LowLevel,Base
 dialog.cpp	MSW
-dialup.cpp	MSW
+dialup.cpp	MSW	LowLevel
 dib.cpp	MSW	LowLevel
 dibutils.cpp	MSW
 dir.cpp	MSW	Base
-dirdlg.cpp	MSW	Win32Only
+dirdlg.cpp	MSW	Win32Only,LowLevel
 dragimag.cpp	MSW
 dropsrc.cpp	MSW	OLE
 droptgt.cpp	MSW	OLE
-enhmeta.cpp	MSW	Win32Only
-helpbest.cpp	MSW	Win32Only
+enhmeta.cpp	MSW	Win32Only,LowLevel
+helpbest.cpp	MSW	Win32Only,LowLevel
 evtloop.cpp	MSW	LowLevel
 fdrepdlg.cpp	MSW	Win32Only
+# FIXME: the generic implementation doesn't work under MSW, so we must
+#        the native dialog under MSW
 filedlg.cpp	MSW
 font.cpp	MSW	LowLevel
 fontdlg.cpp	MSW
@@ -304,13 +308,13 @@ gauge95.cpp	MSW	Win32Only
 gaugemsw.cpp	MSW	NotWin32
 gdiimage.cpp	MSW	LowLevel
 gdiobj.cpp	MSW	LowLevel
-glcanvas.cpp	MSW
-helpchm.cpp	MSW	Win32Only
-helpwin.cpp	MSW
+glcanvas.cpp	MSW	LowLevel
+helpchm.cpp	MSW	Win32Only,LowLevel
+helpwin.cpp	MSW	LowLevel
 icon.cpp	MSW	LowLevel
 imaglist.cpp	MSW	Win32Only
 iniconf.cpp	MSW
-joystick.cpp	MSW
+joystick.cpp	MSW	LowLevel
 listbox.cpp	MSW
 listctrl.cpp	MSW	Win32Only
 main.cpp	MSW	LowLevel,Base
@@ -350,21 +354,22 @@ statbr95.cpp	MSW	Win32Only
 statline.cpp	MSW
 stattext.cpp	MSW
 tabctrl.cpp	MSW
-taskbar.cpp	MSW	Win32Only
+taskbar.cpp	MSW	Win32Only,LowLevel
 tbar95.cpp	MSW	Win32Only
 tbarmsw.cpp	MSW	NotWin32
 textctrl.cpp	MSW
 tglbtn.cpp	MSW
 thread.cpp	MSW	Win32Only,Base,LowLevel
 timer.cpp	MSW	LowLevel
-tooltip.cpp	MSW	Win32Only
+tooltip.cpp	MSW	Win32Only,LowLevel
 toplevel.cpp	MSW	LowLevel
 treectrl.cpp	MSW	Win32Only
 utils.cpp	MSW	Base,LowLevel
 utilsexc.cpp	MSW	Base,LowLevel
 uuid.cpp	MSW	OLE
+uxtheme.cpp	MSW
 volume.cpp	MSW	Base
-wave.cpp	MSW
+wave.cpp	MSW	LowLevel
 window.cpp	MSW	LowLevel
 
 dialup.cpp	Unix	NotMac
@@ -530,7 +535,6 @@ notebmac.cpp	Mac
 palette.cpp	Mac
 pen.cpp	Mac
 pnghand.cpp	Mac
-print.cpp	Mac
 printdlg.cpp	Mac
 printmac.cpp	Mac
 radiobox.cpp	Mac
@@ -687,12 +691,10 @@ iniconf.cpp	OS2
 joystick.cpp	OS2
 listbox.cpp	OS2
 main.cpp	OS2
-mdi.cpp	OS2
 menu.cpp	OS2
 menuitem.cpp	OS2
 metafile.cpp	OS2
 mimetype.cpp	OS2
-minifram.cpp	OS2
 msgdlg.cpp	OS2
 nativdlg.cpp	OS2
 notebook.cpp	OS2
@@ -745,7 +747,6 @@ m_list.cpp	HTML
 m_dflist.cpp	HTML
 m_pre.cpp	HTML
 m_tables.cpp	HTML
-m_meta.cpp	HTML
 m_style.cpp	HTML
 htmprint.cpp	HTML
 
@@ -843,7 +844,7 @@ gdiobj.h	WXH
 geometry.h	WXH
 gifdecod.h	WXH
 xpmdecod.h	WXH
-dbkeyg.h	WXH
+dbkeyg.h	WXH	Base
 glcanvas.h	WXH
 grid.h	WXH
 gsocket.h	WXH	Base
@@ -915,6 +916,7 @@ progdlg.h	WXH
 prop.h	WXH
 propform.h	WXH
 proplist.h	WXH
+quantize.h	WXH
 radiobox.h	WXH
 radiobut.h	WXH
 regex.h	WXH	Base
@@ -1188,7 +1190,6 @@ radiobox.h	MotifH
 radiobut.h	MotifH
 region.h	MotifH
 scrolbar.h	MotifH
-settings.h	MotifH
 slider.h	MotifH
 spinbutt.h	MotifH
 statbmp.h	MotifH
@@ -1230,6 +1231,28 @@ textctrl.h	X11H
 toplevel.h	X11H
 window.h	X11H
 
+app.h	MGLH
+bitmap.h	MGLH
+brush.h	MGLH
+clipbrd.h	MGLH
+colour.h	MGLH
+cursor.h	MGLH
+dc.h	MGLH
+dcclient.h	MGLH
+dcmemory.h	MGLH
+dcscreen.h	MGLH
+font.h	MGLH
+fontutil.h	MGLH
+gdiobj.h	MGLH
+icon.h	MGLH
+palette.h	MGLH
+pen.h	MGLH
+popupwin.h	MGLH
+private.h	MGLH
+region.h	MGLH
+toplevel.h	MGLH
+window.h	MGLH
+
 accel.h	MSWH
 app.h	MSWH
 bitmap.h	MSWH
@@ -1267,7 +1290,7 @@ fontdlg.h	MSWH
 frame.h	MSWH
 gauge95.h	MSWH
 gaugemsw.h	MSWH
-gccpriv.h	MSWH
+gccpriv.h	MSWH	Base
 gdiimage.h	MSWH
 gdiobj.h	MSWH
 glcanvas.h	MSWH
@@ -1392,7 +1415,6 @@ dialog.h	OS2H
 radiobox.h	OS2H
 toolbar.h	OS2H
 checkbox.h	OS2H
-mdi.h	OS2H
 radiobut.h	OS2H
 tooltip.h	OS2H
 checklst.h	OS2H
@@ -1453,6 +1475,7 @@ htmlcell.h	HtmlH
 htmldefs.h	HtmlH
 htmlfilt.h	HtmlH
 htmlpars.h	HtmlH
+htmlproc.h	HtmlH
 htmltag.h	HtmlH
 htmlwin.h	HtmlH
 winpars.h	HtmlH
@@ -1479,7 +1502,7 @@ helphtml.h	GenericH
 imaglist.h	GenericH
 laywin.h	GenericH
 listctrl.h	GenericH	NotWin32
-mdig.h	    GenericH	NotWin32,NotGTK,NotOS2,NotMac
+mdig.h	GenericH	NotWin32,NotGTK,NotMac
 msgdlgg.h	GenericH
 notebook.h	GenericH
 paletteg.h	GenericH	NotMSW,NotX,NotX11,NotOS2

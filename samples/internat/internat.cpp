@@ -120,7 +120,7 @@ bool MyApp::OnInit()
 #ifdef __LINUX__
     {
     wxLogNull noLog;
-    m_locale.AddCatalog("fileutils");  // 3) and another just for testing
+    m_locale.AddCatalog(_T("fileutils"));  // 3) and another just for testing
     }
 #endif
 
@@ -171,10 +171,12 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString localeInfo;
+    wxString locale = m_locale.GetLocale();
+    wxString sysname = m_locale.GetSysName();
+    wxString canname = m_locale.GetCanonicalName();
+
     localeInfo.Printf( _("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
-        m_locale.GetLocale(),
-        m_locale.GetSysName().c_str(),
-        m_locale.GetCanonicalName().c_str() );
+        locale.c_str(), sysname.c_str(), canname.c_str() );
 
     wxMessageDialog(this, wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
         + wxT("\n\n") + localeInfo,
@@ -193,7 +195,7 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     if ( num == 0 )
         str = _("You've probably entered an invalid number.");
     else if ( num == 9 )  // this message is not translated (not in catalog)
-        str = "You've found a bug in this program!";
+        str = _T("You've found a bug in this program!");
     else if ( num != 17 ) // a more implicit way to write _()
         str = wxGetTranslation(wxT("Bad luck! try again..."));
     else

@@ -32,11 +32,7 @@
 
 #include <windows.h>
 
-#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#else
-    #include "wx/msw/gnuwin32/extra.h"
-#endif
+#include <commctrl.h>
 
 #include "wx/msw/dib.h"
 #include "wx/tabctrl.h"
@@ -45,6 +41,7 @@
 #include "wx/msw/imaglist.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxNotifyEvent)
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGING)
@@ -76,15 +73,8 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
   m_windowStyle = style;
 
-  SetFont(* (wxTheFontList->FindOrCreateFont(11, wxSWISS, wxNORMAL, wxNORMAL)));
-
   SetParent(parent);
 
-  DWORD msflags = 0;
-  if (style & wxBORDER)
-    msflags |= WS_BORDER;
-  msflags |= WS_CHILD | WS_VISIBLE;
-  
   if (width <= 0)
     width = 100;
   if (height <= 0)
@@ -96,7 +86,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
   m_windowId = (id < 0 ? NewControlId() : id);
 
-  long tabStyle = 0;
+  long tabStyle = WS_CHILD;
   if (m_windowStyle & wxTC_MULTILINE)
     tabStyle |= TCS_MULTILINE;
   if (m_windowStyle & wxTC_RIGHTJUSTIFY)
@@ -105,6 +95,8 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     tabStyle |= TCS_FIXEDWIDTH;
   if (m_windowStyle & wxTC_OWNERDRAW)
     tabStyle |= TCS_OWNERDRAWFIXED;
+  if (m_windowStyle & wxBORDER)
+    tabStyle |= WS_BORDER;
 
   tabStyle |= TCS_TOOLTIPS;
 
@@ -112,7 +104,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
   HWND hWndTabCtrl = CreateWindowEx(0L,     // No extended styles.
     WC_TABCONTROL,                          // Class name for the tab control
     wxT(""),                                 // No default text.
-    WS_CHILD | WS_BORDER | WS_VISIBLE | tabStyle,    // Styles and defaults.
+    tabStyle,    // Styles and defaults.
     x, y, width, height,                    // Standard size and position.
     (HWND) parent->GetHWND(),               // Parent window
     (HMENU)m_windowId,                      // ID.
@@ -123,6 +115,8 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
   if (parent) parent->AddChild(this);
   
   SubclassWin((WXHWND) hWndTabCtrl);
+
+  SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
   return TRUE;
 }
@@ -161,6 +155,7 @@ bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     event.SetEventObject( this );
     event.SetEventType(eventType);
     event.SetInt(idCtrl) ;
+    event.SetSelection(idCtrl);
 
     return ProcessEvent(event);
 }
@@ -441,15 +436,6 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 
 }
 #endif
-
-// Tab event
-IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxCommandEvent)
-
-wxTabEvent::wxTabEvent(wxEventType commandType, int id):
-  wxCommandEvent(commandType, id)
-{
-}
-
 
 #endif
     // __WIN95__

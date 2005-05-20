@@ -37,6 +37,14 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxListBoxNameStr);
 
+  bool Create(wxWindow *parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                int n = 0, const wxString choices[] = NULL,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxListBoxNameStr);
+
   // override base class virtuals
   virtual void Delete(int n);
 
@@ -56,7 +64,7 @@ public:
 protected:
   // we create our items ourselves and they have non-standard size,
   // so we need to override these functions
-  virtual wxOwnerDrawn *CreateItem(size_t n);
+  virtual wxOwnerDrawn *CreateLboxItem(size_t n);
   virtual bool          MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
 
   // this can't be called DoHitTest() because wxWindow already has this method

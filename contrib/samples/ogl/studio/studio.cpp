@@ -25,6 +25,10 @@
 #include "wx/config.h"
 #include "wx/laywin.h"
 
+#if !wxUSE_WX_RESOURCES 
+#error "OGL studio sample requires wxUSE_WX_RESOURCES" 
+#endif // wxUSE_WX_RESOURCES 
+
 #include "studio.h"
 #include "view.h"
 #include "doc.h"

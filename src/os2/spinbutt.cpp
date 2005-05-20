@@ -102,15 +102,6 @@ bool wxSpinButton::Create(
     if (m_windowStyle & wxCLIP_SIBLINGS )
         lSstyle |= WS_CLIPSIBLINGS;
 
-    SPBCDATA                        vCtrlData;
-
-    vCtrlData.cbSize = sizeof(SPBCDATA);
-    vCtrlData.ulTextLimit = 10L;
-    vCtrlData.lLowerLimit = 0L;
-    vCtrlData.lUpperLimit = 100L;
-    vCtrlData.idMasterSpb = vId;
-    vCtrlData.pHWXCtlData = NULL;
-
     m_hWnd = (WXHWND)::WinCreateWindow( GetWinHwnd(pParent)
                                        ,WC_SPINBUTTON
                                        ,(PSZ)NULL
@@ -119,13 +110,14 @@ bool wxSpinButton::Create(
                                        ,GetWinHwnd(pParent)
                                        ,HWND_TOP
                                        ,(HMENU)vId
-                                       ,(PVOID)&vCtrlData
+                                       ,NULL
                                        ,NULL
                                       );
     if (m_hWnd == 0)
     {
         return FALSE;
     }
+    SetRange(m_min, m_max);
     if(pParent)
         pParent->AddChild((wxSpinButton *)this);
 
@@ -150,8 +142,13 @@ bool wxSpinButton::Create(
     wxAssociateWinWithHandle( m_hWnd
                              ,(wxWindowOS2*)this
                             );
+#if 0
+    // FIXME:
+    // Apparently, this does not work, as it crashes in setvalue/setrange calls
+    // What's it supposed to do anyway?
     ::WinSetWindowULong(GetHwnd(), QWL_USER, (LONG)this);
     fnWndProcSpinCtrl = (WXFARPROC)::WinSubclassWindow(m_hWnd, (PFNWP)wxSpinCtrlWndProc);
+#endif
     delete pTextFont;
     return TRUE;
 } // end of wxSpinButton::Create
@@ -167,10 +164,11 @@ wxSpinButton::~wxSpinButton()
 wxSize wxSpinButton::DoGetBestSize() const
 {
     //
-    // OS/2 PM does not really have system metrics so we'll just set our best guess
+    // OS/2 PM does not really have system metrics so we'll just set  it to
+    // 24x20 which is the size of the buttons and the borders.
     // Also we have no horizontal spin buttons.
     //
-    return (wxSize(10,20));
+    return (wxSize(24,20));
 } // end of wxSpinButton::DoGetBestSize
 
 // ----------------------------------------------------------------------------
@@ -179,7 +177,6 @@ wxSize wxSpinButton::DoGetBestSize() const
 
 int wxSpinButton::GetValue() const
 {
-    int                             nVal = 0;
     long                            lVal = 0L;
     char                            zVal[10];
 

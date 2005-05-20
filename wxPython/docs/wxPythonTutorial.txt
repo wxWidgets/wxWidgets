@@ -1,0 +1,43 @@
+=======================
+ The wxPython Tutorial
+=======================
+
+-----------------------------------------
+ How to get up and running with wxPython
+-----------------------------------------
+
+:Author: Patrick K. O'Brien
+:Contact: pobrien@orbtech.com
+:Organization: Orbtech_
+:Date: $Date$
+:Revision: $Revision$
+:License: wxWindows Free Documentation Licence, Version 3
+
+.. _Orbtech: http://www.orbtech.com/
+
+.. contents::
+
+
+Introduction
+============
+
+This is a tutorial for the wxPython GUI toolkit.  It uses the new wx
+package syntax that was introduced in wxPython 2.4.1.
+
+
+What is wxPython?
+=================
+
+wxPython is a GUI toolkit for the Python programming language.  It
+allows Python programmers to create programs with a graphical user
+interface for Windows, Linux, and Mac OS X.
+
+
+License
+=======
+
+This document adheres to the same license as the other documentation
+that comes with wxWindows:
+
+.. include:: ../licence/licendoc.txt
+   :literal:

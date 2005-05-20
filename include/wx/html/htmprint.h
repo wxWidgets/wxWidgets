@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik
 // Created:     25/09/99
 // RCS-ID:      $Id$
-// Copyright:   (c)
+// Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -25,6 +25,8 @@
 #include "wx/print.h"
 #include "wx/printdlg.h"
 
+#include <limits.h> // INT_MAX
+
 //--------------------------------------------------------------------------------
 // wxHtmlDCRenderer
 //                  This class is capable of rendering HTML into specified 
@@ -39,7 +41,7 @@ public:
 
     // Following 3 methods *must* be called before any call to Render:
 
-    // Asign DC to this render
+    // Assign DC to this render
     void SetDC(wxDC *dc, double pixel_scale = 1.0);
 
     // Sets size of output rectangle, in pixels. Note that you *can't* change
@@ -53,16 +55,36 @@ public:
     // (see wxFileSystem for detailed explanation)
     void SetHtmlText(const wxString& html, const wxString& basepath = wxEmptyString, bool isdir = TRUE);
 
+    // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
+    void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = NULL);
+
     // [x,y] is position of upper-left corner of printing rectangle (see SetSize)
-    // from is y-coordinate of the very first visible cell 
+    // from is y-coordinate of the very first visible cell
+    // to is y-coordinate of the next following page break, if any
     // Returned value is y coordinate of first cell than didn't fit onto page.
     // Use this value as 'from' in next call to Render in order to print multiple pages
     // document
     // If dont_render is TRUE then nothing is rendered into DC and it only counts
     // pixels and return y coord of the next page
     //
-    // CAUTION! Render() changes DC's user scale and does NOT restore it! 
+    // known_pagebreaks and number_of_pages are used only when counting pages;
+    // otherwise, their default values should be used. Their purpose is to
+    // support pagebreaks using a subset of CSS2's <DIV>. The <DIV> handler
+    // needs to know what pagebreaks have already been set so that it doesn't
+    // set the same pagebreak twice.
+    //
+    // CAUTION! Render() changes DC's user scale and does NOT restore it!
     int Render(int x, int y, int from = 0, int dont_render = FALSE);
+// wx 2.5 will use this signature instead of the preceding:
+//    int Render(int x, int y, int from = 0, int dont_render = FALSE, int to = INT_MAX,
+//               int *known_pagebreaks = NULL, int number_of_pages = 0);
+// but for this backport we have to get rid of the default arguments
+// so that the following signature is distinct from the original. This is
+// OK because the implementation never uses those defaults, and user code
+// wouldn't know about the extra arguments anyway. The default argument
+// on the original signature above still works.
+    int Render(int x, int y, int from /* = 0 */, int dont_render /* = FALSE */, int to /* = INT_MAX */,
+               int *known_pagebreaks /* = NULL */, int number_of_pages /* = 0 */);
 
     // returns total height of the html document
     // (compare Render's return value with this)
@@ -98,7 +120,7 @@ enum {
 class WXDLLEXPORT wxHtmlPrintout : public wxPrintout
 {
 public:
-    wxHtmlPrintout(const wxString& title = "Printout");
+    wxHtmlPrintout(const wxString& title = wxT("Printout"));
     ~wxHtmlPrintout();
 
     void SetHtmlText(const wxString& html, const wxString &basepath = wxEmptyString, bool isdir = TRUE); 
@@ -122,6 +144,9 @@ public:
             //
             // pg is one of wxPAGE_ODD, wxPAGE_EVEN and wx_PAGE_ALL constants.
             // You can set different header/footer for odd and even pages
+
+    // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
+    void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = NULL);
 
     void SetMargins(float top = 25.2, float bottom = 25.2, float left = 25.2, float right = 25.2, 
                     float spaces = 5);
@@ -176,7 +201,7 @@ private:
 class WXDLLEXPORT wxHtmlEasyPrinting : public wxObject
 {
 public:
-    wxHtmlEasyPrinting(const wxString& name = "Printing", wxFrame *parent_frame = NULL);
+    wxHtmlEasyPrinting(const wxString& name = wxT("Printing"), wxFrame *parent_frame = NULL);
     ~wxHtmlEasyPrinting();
 
     bool PreviewFile(const wxString &htmlfile);
@@ -208,7 +233,7 @@ public:
             // return page setting data objects. 
             // (You can set their parameters.)
 
-protected:                
+protected:
     virtual wxHtmlPrintout *CreatePrintout();
     virtual bool DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2);
     virtual bool DoPrint(wxHtmlPrintout *printout);

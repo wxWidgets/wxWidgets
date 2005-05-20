@@ -209,7 +209,7 @@ public:
     void GetEnds(double *OUTPUT, double *OUTPUT, double *OUTPUT, double *OUTPUT);
     wxPyShape * GetFrom();
     void GetLabelPosition(int position, double *OUTPUT, double *OUTPUT);
-    wxPoint * GetNextControlPoint(wxPyShape *shape);
+    wxRealPoint * GetNextControlPoint(wxPyShape *shape);
     wxPyShape * GetTo();
     void Initialise();
     void InsertLineControlPoint(wxDC* dc);
@@ -303,12 +303,25 @@ public:
     %addmethods {
         PyObject* GetPoints() {
             wxList* list = self->GetPoints();
-            return wxPy_ConvertList(list, "wxRealPoint");
+            PyObject*   pyList;
+            PyObject*   pyObj;
+            wxObject*   wxObj;
+            wxNode*     node = list->GetFirst();
+
+            wxPyBeginBlockThreads();
+            pyList = PyList_New(0);
+            while (node) {
+                wxObj = node->GetData();
+                pyObj = wxPyConstructObject(wxObj, wxT("wxRealPoint"), 0);
+                PyList_Append(pyList, pyObj);
+                node = node->GetNext();
+            }
+            wxPyEndBlockThreads();
+            return pyList;
         }
     }
 
     void UpdateOriginalPoints();
-
 
     void base_OnDraw(wxDC& dc);
     void base_OnDrawContents(wxDC& dc);

@@ -55,7 +55,7 @@ class TestPopup(wxPopupWindow):
         self.ReleaseMouse()
 
     def OnRightUp(self, evt):
-        self.Show(false)
+        self.Show(False)
         self.Destroy()
 
 
@@ -71,7 +71,8 @@ class TestTransientPopup(wxPopupTransientWindow):
                           "wxPopupWindow which disappears\n"
                           "automatically when the user\n"
                           "clicks the mouse outside it or if it\n"
-                          "loses focus in any other way."
+                          "(or its first child) loses focus in \n"
+                          "any other way."
                           ,
                           pos=(10,10))
         sz = st.GetBestSize()
@@ -80,7 +81,7 @@ class TestTransientPopup(wxPopupTransientWindow):
 
     def ProcessLeftDown(self, evt):
         self.log.write("ProcessLeftDown\n")
-        return false
+        return False
 
     def OnDismiss(self):
         self.log.write("OnDismiss\n")
@@ -113,7 +114,7 @@ class TestPanel(wxPanel):
         sz =  btn.GetSize()
         win.Position(pos, (0, sz.height))
 
-        win.Show(true)
+        win.Show(True)
 
 
     def OnShowPopupTransient(self, evt):
@@ -139,7 +140,7 @@ class TestPanel(wxPanel):
         sz =  btn.GetSize()
         win.Position(pos, (0, sz.height))
 
-        win.Show(true)
+        win.Show(True)
 
 class TestPopupWithListbox(wxPopupWindow):
     def __init__(self, parent, style, log):

@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Name:         _extra.py
-# Purpose:	This file is appended to the shadow class file generated
+# Purpose:      This file is appended to the shadow class file generated
 #               by SWIG.  We add some unSWIGable things here.
 #
 # Author:       Robin Dunn
@@ -130,6 +130,12 @@ def EVT_WINDOW_CREATE(win, func):
 
 def EVT_WINDOW_DESTROY(win, func):
     win.Connect(-1, -1, wxEVT_DESTROY, func)
+
+def EVT_WINDOW_CREATE_ID(win, id, func):
+    win.Connect(id, -1, wxEVT_CREATE, func)
+
+def EVT_WINDOW_DESTROY_ID(win, id, func):
+    win.Connect(id, -1, wxEVT_DESTROY, func)
 
 def EVT_SET_CURSOR(win, func):
     win.Connect(-1, -1, wxEVT_SET_CURSOR, func)
@@ -263,7 +269,7 @@ def EVT_COMMAND_SCROLL(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_PAGEDOWN,  func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBRELEASE,func)
-    win.Connect(-1, -1, wxEVT_SCROLL_ENDSCROLL,   func)
+    win.Connect(id, -1, wxEVT_SCROLL_ENDSCROLL,   func)
 
 def EVT_COMMAND_SCROLL_TOP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_TOP, func)
@@ -511,10 +517,10 @@ def EVT_SASH_DRAGGED_RANGE(win, id1, id2, func):
     win.Connect(id1, id2, wxEVT_SASH_DRAGGED, func)
 
 def EVT_QUERY_LAYOUT_INFO(win, func):
-    win.Connect(-1, -1, wxEVT_EVT_QUERY_LAYOUT_INFO, func)
+    win.Connect(-1, -1, wxEVT_QUERY_LAYOUT_INFO, func)
 
 def EVT_CALCULATE_LAYOUT(win, func):
-    win.Connect(-1, -1, wxEVT_EVT_CALCULATE_LAYOUT, func)
+    win.Connect(-1, -1, wxEVT_CALCULATE_LAYOUT, func)
 
 
 #wxSplitterWindow
@@ -587,16 +593,51 @@ wxColor      = wxColour
 wxNamedColor = wxNamedColour
 wxPen        = wxPyPen
 wxScrollbar  = wxScrollBar
+wxPoint2D    = wxPoint2DDouble
+
+wxPyAssertionError = wxc.wxPyAssertionError
 
 
 # backwards compatibility
-wxNoRefBitmap       = wxBitmap
-wxPyDefaultPosition = wxDefaultPosition
-wxPyDefaultSize     = wxDefaultSize
-NULL                = None
+wxNoRefBitmap           = wxBitmap
+wxPyDefaultPosition     = wxDefaultPosition
+wxPyDefaultSize         = wxDefaultSize
+NULL                    = None
 wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
 wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
 wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
+
+
+# workarounds for bad wxRTTI names
+__wxPyPtrTypeMap['wxGauge95']    = 'wxGauge'
+__wxPyPtrTypeMap['wxSlider95']   = 'wxSlider'
+__wxPyPtrTypeMap['wxStatusBar95']   = 'wxStatusBar'
+
+
+
+def NewId():
+    import warnings
+    warnings.warn("Use wxNewId instead", DeprecationWarning, 2)
+    return wxNewId()
+
+def RegisterId(ID):
+    import warnings
+    warnings.warn("Use wxRegisterId instead", DeprecationWarning, 2)
+    return wxRegisterId(ID)
+
+
+
+# Use Python's bool constants if available, make aliases if not
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
+# Backwards compaatible
+TRUE  = true  = True
+FALSE = false = False
+
 
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
@@ -608,18 +649,26 @@ if wxPlatform == "__WXGTK__":
     except:
         pass
 
-
+# On MSW add the directory where the wxWindows catalogs were installed
+# to the default catalog path.
+if wxPlatform == "__WXMSW__":
+    import os
+    localedir = os.path.join(os.path.split(__file__)[0], "locale")
+    wxLocale_AddCatalogLookupPathPrefix(localedir)
+    del os
 
 #----------------------------------------------------------------------
-# wxWindows version numbers.  wxPython version is in __version__.
+# Load version numbers from __version__...  Ensure that major and minor
+# versions are the same for both wxPython and wxWindows.
 
-wxMAJOR_VERSION   = wxc.wxMAJOR_VERSION
-wxMINOR_VERSION   = wxc.wxMINOR_VERSION
-wxRELEASE_NUMBER  = wxc.wxRELEASE_NUMBER
-wxVERSION_STRING  = wxc.wxVERSION_STRING
-wxVERSION_NUMBER  = wxc.wxVERSION_NUMBER
+from wxPython.__version__ import *
+__version__ = wxVERSION_STRING
 
-wxVERSION = (wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
+assert wxMAJOR_VERSION == wxc.wxMAJOR_VERSION, "wxPython/wxWindows version mismatch"
+assert wxMINOR_VERSION == wxc.wxMINOR_VERSION, "wxPython/wxWindows version mismatch"
+if wxRELEASE_VERSION != wxc.wxRELEASE_VERSION:
+    import warnings
+    warnings.warn("wxPython/wxWindows release number mismatch")
 
 
 #----------------------------------------------------------------------
@@ -660,6 +709,18 @@ def wxPyTypeCast(obj, typeStr):
         theObj.thisown = obj.thisown
     return theObj
 
+#----------------------------------------------------------------------------
+# An isinstance for Pythons < 2.2 that can check a sequence of class objects
+# like the one in 2.2 can.
+
+def wxPy_isinstance(obj, klasses):
+    import types
+    if sys.version[:3] < "2.2" and type(klasses) in [types.TupleType, types.ListType]:
+        for klass in klasses:
+            if isinstance(obj, klass): return True
+        return False
+    else:
+        return isinstance(obj, klasses)
 
 #----------------------------------------------------------------------------
 _wxCallAfterId = None
@@ -675,15 +736,107 @@ def wxCallAfter(callable, *args, **kw):
 
     global _wxCallAfterId
     if _wxCallAfterId is None:
-        _wxCallAfterId = wxNewId()
+        _wxCallAfterId = wxNewEventType()
         app.Connect(-1, -1, _wxCallAfterId,
-              lambda event: apply(event.callable, event.args, event.kw) )
+              lambda event: event.callable(*event.args, **event.kw) )
     evt = wxPyEvent()
     evt.SetEventType(_wxCallAfterId)
     evt.callable = callable
     evt.args = args
     evt.kw = kw
     wxPostEvent(app, evt)
+
+
+#----------------------------------------------------------------------
+
+
+class wxFutureCall:
+    """
+    A convenience class for wxTimer, that calls the given callable
+    object once after the given amount of milliseconds, passing any
+    positional or keyword args.  The return value of the callable is
+    availbale after it has been run with the GetResult method.
+
+    If you don't need to get the return value or restart the timer
+    then there is no need to hold a reference to this object.  It will
+    hold a reference to itself while the timer is running (the timer
+    has a reference to self.Notify) but the cycle will be broken when
+    the timer completes, automatically cleaning up the wxFutureCall
+    object.
+    """
+    def __init__(self, millis, callable, *args, **kwargs):
+        self.millis = millis
+        self.callable = callable
+        self.SetArgs(*args, **kwargs)
+        self.runCount = 0
+        self.hasRun = False
+        self.result = None
+        self.timer = None
+        self.Start()
+
+    def __del__(self):
+        self.Stop()
+
+
+    def Start(self, millis=None):
+        """
+        (Re)start the timer
+        """
+        self.hasRun = False
+        if millis is not None:
+            self.millis = millis
+        self.Stop()
+        self.timer = wxPyTimer(self.Notify)
+        self.timer.Start(self.millis, wxTIMER_ONE_SHOT)
+    Restart = Start
+
+
+    def Stop(self):
+        """
+        Stop and destroy the timer.
+        """
+        if self.timer is not None:
+            self.timer.Stop()
+            self.timer = None
+
+
+    def GetInterval(self):
+        if self.timer is not None:
+            return self.timer.GetInterval()
+        else:
+            return 0
+
+
+    def IsRunning(self):
+        return self.timer is not None and self.timer.IsRunning()
+
+
+    def SetArgs(self, *args, **kwargs):
+        """
+        (Re)set the args passed to the callable object.  This is
+        useful in conjunction with Restart if you want to schedule a
+        new call to the same callable object but with different
+        parameters.
+        """
+        self.args = args
+        self.kwargs = kwargs
+
+    def HasRun(self):
+        return self.hasRun
+
+    def GetResult(self):
+        return self.result
+
+    def Notify(self):
+        """
+        The timer has expired so call the callable.
+        """
+        if self.callable and getattr(self.callable, 'im_self', True):
+            self.runCount += 1
+            self.result = self.callable(*self.args, **self.kwargs)
+        self.hasRun = True
+        wxCallAfter(self.Stop)
+
 
 #----------------------------------------------------------------------
 
@@ -711,6 +864,35 @@ class _wxPyDeadObject:
 
     def __nonzero__(self):
         return 0
+
+
+#----------------------------------------------------------------------
+
+class wxNotebookPage(wxPanel):
+    """
+    There is an old (and apparently unsolvable) bug when placing a
+    window with a nonstandard background colour in a wxNotebook on
+    wxGTK, as the notbooks's background colour would always be used
+    when the window is refreshed.  The solution is to place a panel in
+    the notbook and the coloured window on the panel, sized to cover
+    the panel.  This simple class does that for you, just put an
+    instance of this in the notebook and make your regular window a
+    child of this one and it will handle the resize for you.
+    """
+    def __init__(self, parent, id=-1,
+                 pos=wxDefaultPosition, size=wxDefaultSize,
+                 style=wxTAB_TRAVERSAL, name="panel"):
+        wxPanel.__init__(self, parent, id, pos, size, style, name)
+        self.child = None
+        EVT_SIZE(self, self.OnSize)
+    def OnSize(self, evt):
+        if self.child is None:
+            children = self.GetChildren()
+            if len(children):
+                self.child = children[0]
+        if self.child:
+            self.child.SetPosition((0,0))
+            self.child.SetSize(self.GetSize())
 
 
 #----------------------------------------------------------------------
@@ -744,7 +926,7 @@ class wxPyOnDemandOutputWindow:
             self.text  = wxTextCtrl(self.frame, -1, "",
                                     style = wxTE_MULTILINE|wxTE_READONLY)
             self.frame.SetSize(wxSize(450, 300))
-            self.frame.Show(true)
+            self.frame.Show(True)
             EVT_CLOSE(self.frame, self.OnCloseWindow)
         self.text.AppendText(str)
 
@@ -765,12 +947,41 @@ class wxApp(wxPyApp):
     error = 'wxApp.error'
     outputWindowClass = wxPyOnDemandOutputWindow
 
-    def __init__(self, redirect=_defRedirect, filename=None):
+    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=False):
         wxPyApp.__init__(self)
+
+        if wx.wxPlatform == "__WXMAC__":
+            try:
+                import MacOS
+                if not MacOS.WMAvailable():
+                    print """This program needs access to the screen. Please run with
+'pythonw', not 'python', and only when you are logged in on the main display
+of your Mac."""
+                    sys.exit(1)
+            except:
+                pass
+
         self.stdioWin = None
         self.saveStdio = (sys.stdout, sys.stderr)
+
+        # This has to be done before OnInit
+        self.SetUseBestVisual(useBestVisual)
+
         if redirect:
             self.RedirectStdio(filename)
+
+        # Set the default handler for SIGINT.  This fixes a problem
+        # where if Ctrl-C is pressed in the console that started this
+        # app then it will not appear to do anything, (not even send
+        # KeyboardInterrupt???)  but will later segfault on exit.  By
+        # setting the default handler then the app will exit, as
+        # expected (depending on platform.)
+        try:
+            import signal
+            signal.signal(signal.SIGINT, signal.SIG_DFL)
+        except:
+            pass
+
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)
 
@@ -797,12 +1008,27 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            self.stdioWin = self.outputWindowClass() # wxPyOnDemandOutputWindow
+            self.stdioWin = self.outputWindowClass()
             sys.stdout = sys.stderr = self.stdioWin
 
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio
+
+
+# change from wxPyApp_ to wxApp_
+wxApp_GetMacDefaultEncodingIsPC = wxc.wxPyApp_GetMacDefaultEncodingIsPC
+wxApp_GetMacSupportPCMenuShortcuts = wxc.wxPyApp_GetMacSupportPCMenuShortcuts
+wxApp_GetMacAboutMenuItemId = wxc.wxPyApp_GetMacAboutMenuItemId
+wxApp_GetMacPreferencesMenuItemId = wxc.wxPyApp_GetMacPreferencesMenuItemId
+wxApp_GetMacExitMenuItemId = wxc.wxPyApp_GetMacExitMenuItemId
+wxApp_GetMacHelpMenuTitleName = wxc.wxPyApp_GetMacHelpMenuTitleName
+wxApp_SetMacDefaultEncodingIsPC = wxc.wxPyApp_SetMacDefaultEncodingIsPC
+wxApp_SetMacSupportPCMenuShortcuts = wxc.wxPyApp_SetMacSupportPCMenuShortcuts
+wxApp_SetMacAboutMenuItemId = wxc.wxPyApp_SetMacAboutMenuItemId
+wxApp_SetMacPreferencesMenuItemId = wxc.wxPyApp_SetMacPreferencesMenuItemId
+wxApp_SetMacExitMenuItemId = wxc.wxPyApp_SetMacExitMenuItemId
+wxApp_SetMacHelpMenuTitleName = wxc.wxPyApp_SetMacHelpMenuTitleName
 
 
 #----------------------------------------------------------------------------
@@ -812,7 +1038,7 @@ class wxPySimpleApp(wxApp):
         wxApp.__init__(self, flag)
     def OnInit(self):
         wxInitAllImageHandlers()
-        return true
+        return True
 
 
 class wxPyWidgetTester(wxApp):
@@ -823,11 +1049,11 @@ class wxPyWidgetTester(wxApp):
     def OnInit(self):
         self.frame = wxFrame(None, -1, "Widget Tester", pos=(0,0), size=self.size)
         self.SetTopWindow(self.frame)
-        return true
+        return True
 
     def SetWidget(self, widgetClass, *args):
-        w = apply(widgetClass, (self.frame,) + args)
-        self.frame.Show(true)
+        w = widgetClass(self.frame, *args)
+        self.frame.Show(True)
 
 #----------------------------------------------------------------------------
 # DO NOT hold any other references to this object.  This is how we

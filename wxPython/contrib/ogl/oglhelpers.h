@@ -54,8 +54,7 @@
     DEC_PYCALLBACK__WXCP2DBL2INT    (OnSizingEndDragLeft);  \
     DEC_PYCALLBACK__2DBL            (OnBeginSize);          \
     DEC_PYCALLBACK__2DBL            (OnEndSize);            \
-                                                            \
-    PYPRIVATE;
+    PYPRIVATE
 
 
 #define WXSHAPE_IMP_CALLBACKS(CLASS, PARENT)       \
@@ -87,7 +86,7 @@
     IMP_PYCALLBACK__WXCP2DBL2INT    (CLASS, PARENT,  OnSizingBeginDragLeft);\
     IMP_PYCALLBACK__WXCP2DBL2INT    (CLASS, PARENT,  OnSizingEndDragLeft);  \
     IMP_PYCALLBACK__2DBL            (CLASS, PARENT,  OnBeginSize);          \
-    IMP_PYCALLBACK__2DBL            (CLASS, PARENT,  OnEndSize);            \
+    IMP_PYCALLBACK__2DBL            (CLASS, PARENT,  OnEndSize)
 
 
     //  This one may be difficult...

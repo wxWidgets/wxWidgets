@@ -325,7 +325,7 @@ wxCursor::wxCursor(int cursor_type)
     }
     case wxCURSOR_NO_ENTRY:
     {
-      refData->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_NO_ENTRY"));
+      refData->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_NO);
       break;
     }
     case wxCURSOR_LEFT_BUTTON:
@@ -350,7 +350,7 @@ wxCursor::wxCursor(int cursor_type)
     }
     case wxCURSOR_WATCH:
     {
-      refData->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_WATCH"));
+      refData->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_WAIT);
       break;
     }
     case wxCURSOR_SPRAYCAN:
@@ -397,8 +397,7 @@ wxCursor::wxCursor(int cursor_type)
   }
 
   // no need to destroy the stock cursors
-  // TODO: check this
-  //m_refData->m_destroyCursor = FALSE;
+  ((wxCursorRefData *)m_refData)->m_destroyCursor = FALSE;
 #endif
 }
 

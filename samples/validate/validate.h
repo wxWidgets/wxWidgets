@@ -24,7 +24,7 @@ public:
 class MyFrame : public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h);
+    MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h);
 
     void OnQuit(wxCommandEvent& event);
     void OnTestDialog(wxCommandEvent& event);
@@ -45,7 +45,7 @@ class MyData
 public:
     wxString m_string;
 
-    MyData() { m_string = "My string"; }
+    MyData() { m_string = _T("My string"); }
 };
 
 #define VALIDATE_DIALOG_ID      200

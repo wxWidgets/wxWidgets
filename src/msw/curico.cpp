@@ -31,10 +31,6 @@
 #include <winuser.h>
 #endif
 
-#ifdef __GNUWIN32_OLD__
-    #include "wx/msw/gnuwin32/extra.h"
-#endif
-
 #include "wx/wxchar.h"
 #include "wx/msw/curicop.h"
 #include "wx/msw/curico.h"

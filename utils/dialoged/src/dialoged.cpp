@@ -23,10 +23,17 @@
 #include "wx/wx.h"
 #endif
 
+#if !wxUSE_WX_RESOURCES 
+#error "Dialog editor requires wxUSE_WX_RESOURCES" 
+#endif // wxUSE_WX_RESOURCES 
+
 #include "dialoged.h"
 
 #if !wxUSE_PROPSHEET
 #error Please set wxUSE_PROPSHEET to 1 in setup.h.
+#endif
+#if !wxUSE_RESOURCES
+#error Please set wxUSE_RESOURCES to 1 in setup.h.
 #endif
 
 IMPLEMENT_APP(MyApp)

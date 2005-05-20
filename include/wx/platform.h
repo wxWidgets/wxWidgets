@@ -14,6 +14,20 @@
 #ifndef _WX_PLATFORM_H_
 #define _WX_PLATFORM_H_
 
+
+/*
+    Codewarrior doesn't define any Windows symbols until some headers are included
+*/
+#if __MWERKS__
+    #include <stddef.h>
+    #if defined(WIN32) || defined(_WIN32)
+        #ifndef WINVER
+            #define WINVER  0x0400
+        #endif
+    #endif
+#endif
+
+
 /*
    first define Windows symbols if they're not defined on the command line: we
    can autodetect everything we need if _WIN32 is defined
@@ -25,6 +39,15 @@
 
     #ifndef __WIN32__
         #define __WIN32__
+    #endif
+
+    /*
+       see MSDN for the description of possible WINVER values, this one is a
+       good default and, anyhow, we check for most of the features we use
+       during run-time.
+     */
+    #ifndef WINVER
+        #define WINVER  0x0400
     #endif
 
     /* Win95 means Win95-style UI, i.e. Win9x/NT 4+ */
@@ -63,6 +86,15 @@
 
 /* check the consistency of the settings in setup.h */
 #include "wx/chkconf.h"
+
+/*
+   some compilers don't support iostream.h any longer, so override the users
+   setting here in such case.
+ */
+#if defined(_MSC_VER) && (_MSC_VER >= 1310)
+    #undef wxUSE_IOSTREAMH
+    #define wxUSE_IOSTREAMH 0
+#endif /* compilers not supporting iostream.h */
 
 /*
    old C++ headers (like <iostream.h>) declare classes in the global namespace
@@ -244,6 +276,14 @@
     #define __X__
 #endif
 
+#ifdef __SC__
+    #ifdef __DMC__
+         #define __DIGITALMARS__
+    #else
+         #define __SYMANTEC__
+    #endif
+#endif
+
 /*
    This macro can be used to test the gcc version and can be used like this:
 
@@ -262,7 +302,7 @@
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
  */
-#if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ )
+#if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ ) 
     #include "wx/msw/gccpriv.h"
 #else
     #undef wxCHECK_W32API_VERSION

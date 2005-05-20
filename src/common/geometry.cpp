@@ -164,7 +164,7 @@ void wxPoint2DInt::ReadFrom( wxDataInputStream &stream )
     m_y = stream.Read32();
 }
 
-wxDouble wxPoint2DInt::GetVectorAngle()
+wxDouble wxPoint2DInt::GetVectorAngle() const
 {
     if ( m_x == 0 )
     {

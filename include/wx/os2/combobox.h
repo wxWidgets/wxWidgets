@@ -31,9 +31,7 @@ class WXDLLEXPORT wxComboBox : public wxChoice
                     ,int                n = 0
                     ,const wxString     asChoices[] = NULL
                     ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                     ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                     ,const wxString&    rsName = wxComboBoxNameStr
                    )
     {
@@ -45,9 +43,7 @@ class WXDLLEXPORT wxComboBox : public wxChoice
                ,n
                ,asChoices
                ,lStyle
-#if wxUSE_VALIDATORS
                ,rValidator
-#endif
                ,rsName
               );
     }
@@ -60,9 +56,7 @@ class WXDLLEXPORT wxComboBox : public wxChoice
                 ,int                n = 0
                 ,const wxString     asChoices[] = NULL
                 ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                 ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                 ,const wxString&    rsName = wxComboBoxNameStr
                );
 

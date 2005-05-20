@@ -8,7 +8,8 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = forty
-OBJECTS = $(PROGRAM).obj canvas.obj card.obj game.obj pile.obj playerdg.obj scoredg.obj scorefil.obj
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj $(OUTPUTDIR)\canvas.obj $(OUTPUTDIR)\card.obj $(OUTPUTDIR)\game.obj &
+    $(OUTPUTDIR)\pile.obj $(OUTPUTDIR)\playerdg.obj $(OUTPUTDIR)\scoredg.obj $(OUTPUTDIR)\scorefil.obj
 
 !include $(WXDIR)\src\makeprog.wat
 

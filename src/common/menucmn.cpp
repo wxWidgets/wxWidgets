@@ -81,6 +81,15 @@ wxMenuItemBase::~wxMenuItemBase()
 
 #if wxUSE_ACCEL
 
+static inline bool CompareAccelString(const wxString& str, const wxChar *accel)
+{
+#if wxUSE_INTL
+    return str == accel || str == wxGetTranslation(accel);
+#else
+    return str == accel;
+#endif
+}
+
 // return wxAcceleratorEntry for the given menu string or NULL if none
 // specified
 wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
@@ -94,11 +103,11 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
         wxString current;
         for ( size_t n = (size_t)posTab + 1; n < label.Len(); n++ ) {
             if ( (label[n] == '+') || (label[n] == '-') ) {
-                if ( current == _("ctrl") )
+                if ( CompareAccelString(current, wxTRANSLATE("ctrl")) )
                     accelFlags |= wxACCEL_CTRL;
-                else if ( current == _("alt") )
+                else if ( CompareAccelString(current, wxTRANSLATE("alt")) )
                     accelFlags |= wxACCEL_ALT;
-                else if ( current == _("shift") )
+                else if ( CompareAccelString(current, wxTRANSLATE("shift")) )
                     accelFlags |= wxACCEL_SHIFT;
                 else {
                     // we may have "Ctrl-+", for example, but we still want to
@@ -132,7 +141,13 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
         else {
             if ( current.Len() == 1 ) {
                 // it's a letter
-                keyCode = wxToupper(current[0U]);
+                keyCode = current[0U];
+
+                // Only call wxToupper if control, alt, or shift is held down,
+                // otherwise lower case accelerators won't work.
+                if (accelFlags != wxACCEL_NORMAL) {
+                    keyCode = wxToupper(keyCode);
+                }
             }
             else {
                 // is it a function key?
@@ -153,20 +168,51 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     else if ( current == wxT("DELETE") ) {
                         keyCode = WXK_DELETE;
                     }
+                    else if ( current == wxT("BACK") ) {
+                        keyCode = WXK_BACK;
+                    }
                     else if ( current == wxT("INS") ) {
                         keyCode = WXK_INSERT;
                     }
                     else if ( current == wxT("INSERT") ) {
                         keyCode = WXK_INSERT;
                     }
-#if 0
+                    else if ( current == wxT("ENTER") || current == wxT("RETURN") ) {
+                        keyCode = WXK_RETURN;
+                    }
                     else if ( current == wxT("PGUP") ) {
-                        keyCode = VK_PRIOR;
+                        keyCode = WXK_PRIOR;
                     }
                     else if ( current == wxT("PGDN") ) {
-                        keyCode = VK_NEXT;
+                        keyCode = WXK_NEXT;
                     }
-#endif
+                    else if ( current == wxT("LEFT") ) {
+                        keyCode = WXK_LEFT;
+                    }
+                    else if ( current == wxT("RIGHT") ) {
+                        keyCode = WXK_RIGHT;
+                    }
+                    else if ( current == wxT("UP") ) {
+                        keyCode = WXK_UP;
+                    }
+                    else if ( current == wxT("DOWN") ) {
+                        keyCode = WXK_DOWN;
+                    }
+                    else if ( current == wxT("HOME") ) {
+                        keyCode = WXK_HOME;
+                    }
+                    else if ( current == wxT("END") ) {
+                        keyCode = WXK_END;
+                    }
+                    else if ( current == wxT("SPACE") ) {
+                        keyCode = WXK_SPACE;
+                    }
+                    else if ( current == wxT("TAB") ) {
+                        keyCode = WXK_TAB;
+                    }
+                    else if ( current == wxT("ESC") ) {
+                        keyCode = WXK_ESCAPE;
+                    }
                     else
                     {
                         wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
@@ -292,6 +338,7 @@ bool wxMenuBase::DoAppend(wxMenuItem *item)
     wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Append()") );
 
     m_items.Append(item);
+    item->SetMenu((wxMenu*)this);
     if ( item->IsSubMenu() )
     {
         AddSubMenu(item->GetSubMenu());
@@ -325,6 +372,7 @@ bool wxMenuBase::DoInsert(size_t pos, wxMenuItem *item)
     wxCHECK_MSG( node, FALSE, wxT("invalid index in wxMenu::Insert()") );
 
     m_items.Insert(node, item);
+    item->SetMenu((wxMenu*)this);
     if ( item->IsSubMenu() )
     {
         AddSubMenu(item->GetSubMenu());
@@ -353,10 +401,12 @@ wxMenuItem *wxMenuBase::DoRemove(wxMenuItem *item)
     m_items.DeleteNode(node);
 
     // item isn't attached to anything any more
+    item->SetMenu((wxMenu *)NULL);
     wxMenu *submenu = item->GetSubMenu();
     if ( submenu )
     {
         submenu->SetParent((wxMenu *)NULL);
+        if (submenu->IsAttached()) submenu->Detach();
     }
 
     return item;
@@ -488,6 +538,13 @@ wxMenuItem *wxMenuBase::FindChildItem(int id, size_t *ppos) const
     }
 
     return item;
+}
+
+// find by position
+wxMenuItem* wxMenuBase::FindItemByPosition(size_t position) const
+{
+    if ( position >= m_items.GetCount()) return NULL;
+    return m_items.Item( position )->GetData();
 }
 
 // ----------------------------------------------------------------------------
@@ -789,7 +846,7 @@ int wxMenuBarBase::FindMenu(const wxString& title) const
              (wxMenuItem::GetLabelFromText(title2) == label) )
         {
             // found
-            return (int)i; 
+            return (int)i;
         }
     }
 

@@ -47,9 +47,7 @@ bool wxControl::Create(
 , const wxPoint&                    rPos
 , const wxSize&                     rSize
 , long                              lStyle
-#if wxUSE_VALIDATORS
 , const wxValidator&                rValidator
-#endif
 , const wxString&                   rsName
 )
 {
@@ -285,10 +283,10 @@ void wxFindMaxSize(
     if (nRight > pRect->xRight)
         pRect->xRight = nRight;
 
-    if (nTop < pRect->yTop)
+    if (nTop > pRect->yTop)
         pRect->yTop = nTop;
 
-    if (nBottom > pRect->yBottom)
+    if (nBottom < pRect->yBottom)
         pRect->yBottom = nBottom;
 } // end of wxFindMaxSize
 

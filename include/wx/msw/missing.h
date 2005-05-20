@@ -4,6 +4,7 @@
 //              the version that comes with some compilers
 // Created:     2002/04/23
 // RCS-ID:      $Id$
+// Copyright:   (c) 2002 Mattia Barbon
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -43,16 +44,8 @@
     #define LVCFMT_JUSTIFYMASK 0x0003
 #endif
 
-// mingw32/cygwin don't have declarations for comctl32.dll 4.70+ stuff
-#ifndef NM_CACHEHINT
-    typedef struct tagNMLVCACHEHINT
-    {
-        NMHDR   hdr;
-        int     iFrom;
-        int     iTo;
-    } NMLVCACHEHINT;
-
-    #define NM_CACHEHINT NMLVCACHEHINT
+#ifndef LVSICF_NOSCROLL
+    #define LVSICF_NOSCROLL 0x0002
 #endif
 
 #ifndef LVN_ODCACHEHINT
@@ -84,42 +77,6 @@
     #define LVCFMT_BITMAP_ON_RIGHT 0x1000
 #endif
 
-#if defined(__GNUWIN32__) && !defined(LV_ITEM) \
-    && !wxCHECK_W32API_VERSION( 0, 5 )
-typedef struct _LVITEMW {
-    UINT mask;
-    int iItem;
-    int iSubItem;
-    UINT state;
-    UINT stateMask;
-    LPWSTR pszText;
-    int cchTextMax;
-    int iImage;
-    LPARAM lParam;
-#if (_WIN32_IE >= 0x0300)
-    int iIndent;
-#endif
-} LV_ITEMW;
-
-typedef struct tagLVITEMA
-{
-    UINT mask;
-    int iItem;
-    int iSubItem;
-    UINT state;
-    UINT stateMask;
-    LPSTR pszText;
-    int cchTextMax;
-    int iImage;
-    LPARAM lParam;
-#if (_WIN32_IE >= 0x0300)
-    int iIndent;
-#endif
-} LV_ITEMA;
-
-#define LV_ITEM LV_ITEMA;
-#endif
-
 #ifndef ListView_GetColumnWidth
 #define ListView_GetColumnWidth(hwnd, iCol) \
     (int)SNDMSG((hwnd), LVM_GETCOLUMNWIDTH, (WPARAM)(int)(iCol), 0)
@@ -140,25 +97,16 @@ typedef struct tagLVITEMA
     (int)SNDMSG((hwnd), LVM_FINDITEM, (WPARAM)(int)(iStart), (LPARAM)(const LV_FINDINFO FAR*)(plvfi))
 #endif
 
-#if defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 0, 5 )
-#ifndef LV_DISPINFOA
-typedef struct tagNMLVDISPINFOA {
-        NMHDR hdr;
-        LV_ITEMA item;
-} NMLVDISPINFOA, FAR *LPNMLVDISPINFOA;
-#define _LV_DISPINFOA tagNMLVDISPINFOA
-#define LV_DISPINFOA NMLVDISPINFOA
-#endif
-#ifndef LV_DISPINFOW
-typedef struct tagNMLVDISPINFOW {
-        NMHDR hdr;
-        LV_ITEMW item;
-} NMLVDISPINFOW, FAR *LPNMLVDISPINFOW;
-#define _LV_DISPINFOW tagNMLVDISPINFOW
-#define LV_DISPINFOW NMLVDISPINFOW
-#endif
+#ifndef HDN_GETDISPINFOW
+#define HDN_GETDISPINFOW (HDN_FIRST-29)
 #endif
 
+// ----------------------------------------------------------------------------
+// Toolbar define value missing 
+// ----------------------------------------------------------------------------
+#if !defined(CCS_VERT)
+#define CCS_VERT                0x00000080L
+#endif
 
 // ----------------------------------------------------------------------------
 // MS HTML Help

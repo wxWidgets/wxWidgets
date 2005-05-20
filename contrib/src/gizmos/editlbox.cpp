@@ -41,7 +41,7 @@ public:
                   const wxSize &size = wxDefaultSize,
                   long style = wxLC_ICON,
                   const wxValidator& validator = wxDefaultValidator,
-                  const wxString &name = "listctrl")
+                  const wxString &name = _T("listctrl"))
          : wxListCtrl(parent, id, pos, size, style, validator, name)
     {
         CreateColumns();

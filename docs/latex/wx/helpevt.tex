@@ -10,7 +10,7 @@ A help event is sent to the window that the user clicked on, and is propagated u
 window hierarchy until the event is processed or there are no more event handlers.
 The application should call wxEvent::GetId to check the identity of the clicked-on window,
 and then either show some suitable help or call wxEvent::Skip if the identifier is unrecognised.
-Calling Skip is important because it allows wxWindows to generate further events for ancestors
+Calling Skip is important because it allows wxWidgets to generate further events for ancestors
 of the clicked-on window. Otherwise it would be impossible to show help for container windows,
 since processing would stop after the first window found.
 

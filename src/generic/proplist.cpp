@@ -149,7 +149,7 @@ bool wxPropertyListView::UpdatePropertyList(bool clearEditArea)
   if (clearEditArea)
   {
     m_valueList->Clear();
-    m_valueText->SetValue(_T(""));
+    m_valueText->SetValue( wxT("") );
   }
   wxNode *node = m_propertySheet->GetProperties().First();
 
@@ -223,7 +223,7 @@ wxString wxPropertyListView::MakeNameValueString(wxString name, wxString value)
   if (GetFlags() & wxPROP_SHOWVALUES)
   {
     // Want to pad with spaces
-    theString.Append(' ', padWith);
+    theString.Append( wxT(' '), padWith);
     theString += value;
   }
 
@@ -241,7 +241,7 @@ bool wxPropertyListView::ShowProperty(wxProperty *property, bool select)
   }
 
   m_valueList->Clear();
-  m_valueText->SetValue(_T(""));
+  m_valueText->SetValue( wxT("") );
 
   if (property)
   {
@@ -894,9 +894,9 @@ bool wxRealListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxPropert
 
   if (val < m_realMin || val > m_realMax)
   {
-    char buf[200];
-    sprintf(buf, "Value must be a real number between %.2f and %.2f!", m_realMin, m_realMax);
-    wxMessageBox(buf, "Property value error", wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxChar buf[200];
+    wxSprintf(buf, wxT("Value must be a real number between %.2f and %.2f!"), m_realMin, m_realMax);
+    wxMessageBox(buf, wxT("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
   return TRUE;
@@ -1129,10 +1129,10 @@ bool wxStringListValidator::OnCheckValue(wxProperty *WXUNUSED(property), wxPrope
 
   if (!m_strings->Member(value.GetData()))
   {
-    wxString s("Value ");
-    s += value.GetData();
-    s += " is not valid.";
-    wxMessageBox(s.GetData(), "Property value error", wxOK | wxICON_EXCLAMATION, parentWindow);
+    wxString str( wxT("Value ") );
+    str += value.GetData();
+    str += wxT(" is not valid.");
+    wxMessageBox( str.GetData(), wxT("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
     return FALSE;
   }
   return TRUE;
@@ -1563,7 +1563,7 @@ class wxPropertyStringListEditorDialog: public wxDialog
   public:
     wxPropertyStringListEditorDialog(wxWindow *parent, const wxString& title,
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-          long windowStyle = wxDEFAULT_DIALOG_STYLE, const wxString& name = "stringEditorDialogBox"):
+          long windowStyle = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("stringEditorDialogBox")):
                wxDialog(parent, -1, title, pos, size, windowStyle, name)
     {
       m_stringList = NULL;
@@ -1613,7 +1613,7 @@ class wxPropertyStringListEditorText: public wxTextCtrl
  public:
   wxPropertyStringListEditorText(wxWindow *parent, wxWindowID id, const wxString& val,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long windowStyle = 0, const wxString& name = "text"):
+    long windowStyle = 0, const wxString& name = wxT("text")):
      wxTextCtrl(parent, id, val, pos, size, windowStyle, wxDefaultValidator, name)
   {
   }
@@ -1642,14 +1642,14 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
     wxPoint(-1, -1), wxSize(-1, -1), 0, NULL, wxLB_SINGLE);
 
   dialog->m_stringText = new wxPropertyStringListEditorText(dialog,
-  wxID_PROP_SL_TEXT, "", wxPoint(5, 240),
+  wxID_PROP_SL_TEXT, wxT(""), wxPoint(5, 240),
        wxSize(300, -1), wxPROCESS_ENTER);
   dialog->m_stringText->Enable(FALSE);
 
-  wxButton *addButton = new wxButton(dialog, wxID_PROP_SL_ADD, "Add", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
-  wxButton *deleteButton = new wxButton(dialog, wxID_PROP_SL_DELETE, "Delete", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
-  wxButton *cancelButton = new wxButton(dialog, wxID_CANCEL, "Cancel", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
-  wxButton *okButton = new wxButton(dialog, wxID_OK, "OK", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
+  wxButton *addButton = new wxButton(dialog, wxID_PROP_SL_ADD, wxT("Add"), wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
+  wxButton *deleteButton = new wxButton(dialog, wxID_PROP_SL_DELETE, wxT("Delete"), wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
+  wxButton *cancelButton = new wxButton(dialog, wxID_CANCEL, wxT("Cancel"), wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
+  wxButton *okButton = new wxButton(dialog, wxID_OK, wxT("OK"), wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
 
 #ifndef __WXGTK__
   okButton->SetDefault();
@@ -1701,9 +1701,9 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
   wxNode *node = stringList->First();
   while (node)
   {
-    char *str = (char *)node->Data();
+    wxChar *str = (wxChar *)node->Data();
     // Save node as client data for each listbox item
-    dialog->m_listBox->Append(str, (char *)node);
+    dialog->m_listBox->Append(str, (wxChar *)node);
     node = node->Next();
   }
 
@@ -1807,21 +1807,21 @@ void wxPropertyStringListEditorDialog::SaveCurrentSelection()
 
   wxString txt(m_stringText->GetValue());
   if (node->Data())
-    delete[] (char *)node->Data();
-  node->SetData((wxObject *)copystring(txt));
+    delete[] (wxChar *)node->Data();
+  node->SetData((wxObject *)wxStrdup(txt));
 
-  m_listBox->SetString(m_currentSelection, (char *)node->Data());
+  m_listBox->SetString(m_currentSelection, (wxChar *)node->Data());
 }
 
 void wxPropertyStringListEditorDialog::ShowCurrentSelection()
 {
   if (m_currentSelection == -1)
   {
-    m_stringText->SetValue(_T(""));
+    m_stringText->SetValue(wxT(""));
     return;
   }
   wxNode *node = (wxNode *)m_listBox->wxListBox::GetClientData(m_currentSelection);
-  char *txt = (char *)node->Data();
+  wxChar *txt = (wxChar *)node->Data();
   m_stringText->SetValue(txt);
   m_stringText->Enable(TRUE);
 }

@@ -32,6 +32,12 @@ wxToolBarXmlHandler::wxToolBarXmlHandler()
     XRC_ADD_STYLE(wxTB_DOCKABLE);
     XRC_ADD_STYLE(wxTB_VERTICAL);
     XRC_ADD_STYLE(wxTB_HORIZONTAL);
+    XRC_ADD_STYLE(wxTB_3DBUTTONS);
+    XRC_ADD_STYLE(wxTB_TEXT);
+    XRC_ADD_STYLE(wxTB_NOICONS);
+    XRC_ADD_STYLE(wxTB_NODIVIDER);
+    XRC_ADD_STYLE(wxTB_NOALIGN);
+    AddWindowStyles();
 }
 
 wxObject *wxToolBarXmlHandler::DoCreateResource()
@@ -39,15 +45,38 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
     if (m_class == wxT("tool"))
     {
         wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XRC resource: tool not within a toolbar!"));
-        m_toolbar->AddTool(GetID(),
-                           GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
-                           GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
-                           GetBool(wxT("toggle")),
-                           GetPosition().x,
-                           GetPosition().y,
-                           NULL,
-                           GetText(wxT("tooltip")),
-                           GetText(wxT("longhelp")));
+        
+        if (GetPosition() != wxDefaultPosition)
+        {
+            m_toolbar->AddTool(GetID(),
+                               GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
+                               GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
+                               GetBool(wxT("toggle")),
+                               GetPosition().x,
+                               GetPosition().y,
+                               NULL,
+                               GetText(wxT("tooltip")),
+                               GetText(wxT("longhelp")));
+        }
+        else
+        {        
+            wxItemKind kind = wxITEM_NORMAL;
+            if (GetBool(wxT("radio")))
+                kind = wxITEM_RADIO;
+            if (GetBool(wxT("toggle")))
+            {
+                wxASSERT_MSG( kind == wxITEM_NORMAL,
+                              _T("can't have both toggleable and radion button at once") );
+                kind = wxITEM_CHECK;
+            }        
+            m_toolbar->AddTool(GetID(),
+                               GetText(wxT("label")),
+                               GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
+                               GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
+                               kind,
+                               GetText(wxT("tooltip")),
+                               GetText(wxT("longhelp")));
+        }
         return m_toolbar; // must return non-NULL
     }
     
@@ -118,8 +147,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
         toolbar->Realize();
 
-        // FIXME: how can I create a toolbar without immediately setting it to the frame?
-        if (m_parentAsWindow)
+        if (m_parentAsWindow && !GetBool(wxT("dontattachtoframe")))
         {
             wxFrame *parentFrame = wxDynamicCast(m_parent, wxFrame);
             if (parentFrame)

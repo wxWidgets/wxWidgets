@@ -1,0 +1,7 @@
+?package(libwxgtk=SOV-python):needs="X11" section="Apps/Programming"\
+  title="pycrust" command="/usr/bin/pycrust"
+?package(libwxgtk=SOV-python):needs="X11" section="Apps/Programming"\
+  title="pyshell" command="/usr/bin/pyshell"
+?package(libwxgtk=SOV-python):needs="X11" section="Apps/Programming"\
+  title="xrced" command="/usr/bin/xrced"
+

@@ -45,7 +45,7 @@ public:
 
 bool MyVFS::CanOpen(const wxString& location)
 {
-    return (GetProtocol(location) == "myVFS");
+    return (GetProtocol(location) == wxT("myVFS"));
 }
 
 
@@ -55,6 +55,7 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
     wxFSFile *f;
     wxInputStream *str;
     static char buf[1024];
+    const wxWX2MBbuf loc = location.ToAscii();
 
     sprintf(buf, "<html><body><h2><i>You're in Node <u>%s</u></i></h2><p>"
                  "Where do you want to go?<br><blockquote>"
@@ -62,7 +63,8 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
                  "<a href=\"%s-2\">sub-2</a><br>"
                  "<a href=\"%s-3\">sub-3</a><br>"
                  "</blockquote></body></html>",
-                 location.GetData(), location.GetData(), location.GetData(), location.GetData());
+                 (const char*)loc, (const char*)loc, (const char*)loc, 
+                 (const char*)loc);
 
     // NB: There's a terrible hack involved: we fill 'buf' with new data every
     //     time this method is called and return new wxMemoryInputStream pointing to it.
@@ -70,7 +72,7 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
     //     this won't happen because wxHTML keeps only one "page" file opened at the
     //     time.
     str = new wxMemoryInputStream(buf, strlen(buf));
-    f = new wxFSFile(str, location, "text/html", wxEmptyString, wxDateTime::Today());
+    f = new wxFSFile(str, location, wxT("text/html"), wxEmptyString, wxDateTime::Today());
     
     return f;
 }
@@ -159,7 +161,7 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
    bool MyApp::OnInit()
    {
     // Create the main application window
-      MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
+      MyFrame *frame = new MyFrame(_("wxHtmlWindow testing application"),
          wxPoint(50, 50), wxSize(640, 480));
 
     // Show it and tell the application that it's our main window
@@ -188,14 +190,14 @@ wxHtmlWindow *html;
       wxMenu *menuFile = new wxMenu;
       wxMenu *menuNav = new wxMenu;
 
-      menuFile->Append(Minimal_Quit, "E&xit");
-      menuNav->Append(Minimal_Back, "Go &BACK");
-      menuNav->Append(Minimal_Forward, "Go &FORWARD");
+      menuFile->Append(Minimal_Quit, _("E&xit"));
+      menuNav->Append(Minimal_Back, _("Go &BACK"));
+      menuNav->Append(Minimal_Forward, _("Go &FORWARD"));
 
     // now append the freshly created menu to the menu bar...
       wxMenuBar *menuBar = new wxMenuBar;
-      menuBar->Append(menuFile, "&File");
-      menuBar->Append(menuNav, "&Navigate");
+      menuBar->Append(menuFile, _("&File"));
+      menuBar->Append(menuNav, _("&Navigate"));
 
     // ... and attach this menu bar to the frame
       SetMenuBar(menuBar);
@@ -203,9 +205,9 @@ wxHtmlWindow *html;
       CreateStatusBar(2);
 
       html = new wxHtmlWindow(this);
-      html -> SetRelatedFrame(this, "VFS Demo: '%s'");
+      html -> SetRelatedFrame(this, _("VFS Demo: '%s'"));
       html -> SetRelatedStatusBar(1);
-      html -> LoadPage("start.htm");
+      html -> LoadPage(wxT("start.htm"));
    }
 
 
@@ -219,11 +221,11 @@ wxHtmlWindow *html;
 
    void MyFrame::OnBack(wxCommandEvent& WXUNUSED(event))
    {
-   if (!html -> HistoryBack()) wxMessageBox("You reached prehistory era!");
+   if (!html -> HistoryBack()) wxMessageBox(_("You reached prehistory era!"));
    }
 
 
    void MyFrame::OnForward(wxCommandEvent& WXUNUSED(event))
    {
-   if (!html -> HistoryForward()) wxMessageBox("No more items in history!");
+   if (!html -> HistoryForward()) wxMessageBox(_("No more items in history!"));
    }

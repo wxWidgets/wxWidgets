@@ -111,6 +111,9 @@ public:
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;
     
+    // Basically, this corresponds to Win32 StretchBlt()
+    wxBitmap Rescale( int clipx, int clipy, int clipwidth, int clipheight, int width, int height );
+    
 protected:
     bool CreateFromXpm(const char **bits);
     bool CreateFromImage(const wxImage& image, int depth);

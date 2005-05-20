@@ -20,6 +20,10 @@
 #pragma hdrstop
 #endif
 
+#ifdef __EMX__
+#define __OS2__
+#endif
+
 #if wxUSE_DIRDLG
 
 #include "wx/utils.h"
@@ -66,15 +70,17 @@
 
 #endif
 
-#ifdef __WXPM__
+#ifdef __OS2__
 
 #define INCL_BASE
 #include <os2.h>
+#ifndef __EMX__
 #include <direct.h>
+#endif
 #include <stdlib.h>
 #include <ctype.h>
 
-#endif // __WXPM__
+#endif // __OS2__
 
 #if defined(__WXMAC__)
 #  include "MoreFilesExtras.h"
@@ -332,7 +338,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
         return TRUE;
 }
 
-#elif defined(__WINDOWS__) || defined(__WXPM__)
+#elif defined(__WINDOWS__) || defined(__OS2__)
 
 int setdrive(int drive)
 {
@@ -340,13 +346,18 @@ int setdrive(int drive)
     (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
     return _chdrive(drive);
 #else
-	wxChar  newdrive[3];
+	wxChar  newdrive[4];
 
 	if (drive < 1 || drive > 31)
 		return -1;
 	newdrive[0] = (wxChar)(wxT('A') + drive - 1);
 	newdrive[1] = wxT(':');
+#ifdef __OS2__
+	newdrive[2] = wxT('\\');
+	newdrive[3] = wxT('\0');
+#else
 	newdrive[2] = wxT('\0');
+#endif
 #if defined(__WXMSW__)
 #ifdef __WIN16__
     if (wxSetWorkingDirectory(newdrive))
@@ -355,7 +366,7 @@ int setdrive(int drive)
 #endif
 #else
     // VA doesn't know what LPSTR is and has its own set
-	if (DosSetCurrentDir((PSZ)newdrive))
+	if (!DosSetCurrentDir((PSZ)newdrive))
 #endif
 		return 0;
 	else
@@ -379,6 +390,11 @@ bool wxIsDriveAvailable(const wxString& dirName)
     !(defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1))
         success = wxPathExists(dirNameLower);
 #else
+        #if defined(__OS2__)
+        // Avoid changing to drive since no media may be inserted.
+        if (dirNameLower[(size_t)0] == 'a' || dirNameLower[(size_t)0] == 'b')
+            return success;
+        #endif
         int currentDrive = _getdrive();
         int thisDrive = (int) (dirNameLower[(size_t)0] - 'a' + 1) ;
         int err = setdrive( thisDrive ) ;
@@ -396,7 +412,8 @@ bool wxIsDriveAvailable(const wxString& dirName)
 
     return success;
 }
-#endif // __WINDOWS__ || __WXPM__
+#endif // __WINDOWS__ || __OS2__
+
 
 // Function which is called by quick sort. We want to override the default wxArrayString behaviour,
 // and sort regardless of case.
@@ -473,10 +490,10 @@ bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
 IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
-  EVT_TREE_ITEM_EXPANDING     (-1, wxGenericDirCtrl::OnExpandItem)
-  EVT_TREE_ITEM_COLLAPSED     (-1, wxGenericDirCtrl::OnCollapseItem)
-  EVT_TREE_BEGIN_LABEL_EDIT   (-1, wxGenericDirCtrl::OnBeginEditItem)
-  EVT_TREE_END_LABEL_EDIT     (-1, wxGenericDirCtrl::OnEndEditItem)
+  EVT_TREE_ITEM_EXPANDING     (wxID_TREECTRL, wxGenericDirCtrl::OnExpandItem)
+  EVT_TREE_ITEM_COLLAPSED     (wxID_TREECTRL, wxGenericDirCtrl::OnCollapseItem)
+  EVT_TREE_BEGIN_LABEL_EDIT   (wxID_TREECTRL, wxGenericDirCtrl::OnBeginEditItem)
+  EVT_TREE_END_LABEL_EDIT     (wxID_TREECTRL, wxGenericDirCtrl::OnEndEditItem)
   EVT_SIZE                    (wxGenericDirCtrl::OnSize)
 END_EVENT_TABLE()
 
@@ -509,10 +526,14 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         treeStyle |= wxNO_BORDER;
+    else
+        treeStyle |= wxBORDER_SUNKEN;
 
     long filterStyle = 0;
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         filterStyle |= wxNO_BORDER;
+    else
+        filterStyle |= wxBORDER_SUNKEN;
 
     m_treeCtrl = new wxTreeCtrl(this, wxID_TREECTRL, pos, size, treeStyle);
 
@@ -543,7 +564,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     wxString rootName;
 
-#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__DOS__)
+#if defined(__WINDOWS__) || defined(__OS2__) || defined(__DOS__)
     rootName = _("Computer");
 #else
     rootName = _("Sections");
@@ -596,7 +617,7 @@ void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, in
 
 void wxGenericDirCtrl::SetupSections()
 {
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
 
 #ifdef __WIN32__
     wxChar driveBuffer[256];
@@ -685,7 +706,7 @@ void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
     }
 
     // don't rename the individual sections
-    if (m_treeCtrl->GetParent( event.GetItem() ) == m_rootId)
+    if (m_treeCtrl->GetItemParent( event.GetItem() ) == m_rootId)
     {
         event.Veto();
         return;
@@ -740,7 +761,7 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
 
     // VS: this is needed because the event handler is called from wxTreeCtrl
     //     ctor when wxTR_HIDE_ROOT was specified
-    if (m_rootId == 0)
+    if (!m_rootId.IsOk())
         m_rootId = m_treeCtrl->GetRootItem();
 
     ExpandDir(parentId);
@@ -794,7 +815,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
     // Check if this is a root directory and if so,
     // whether the drive is avaiable.
     if (!wxIsDriveAvailable(dirName))
@@ -808,7 +829,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
 
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -928,7 +949,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     path2 += wxString(wxFILE_SEP_PATH);
 
     // In MSW or PM, case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
     path2.MakeLower();
 #endif
 
@@ -945,7 +966,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
                 childPath += wxString(wxFILE_SEP_PATH);
 
             // In MSW and PM, case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
             childPath.MakeLower();
 #endif
 
@@ -1077,7 +1098,7 @@ void wxGenericDirCtrl::FindChildFiles(wxTreeItemId id, int dirFlags, wxArrayStri
 
     wxString dirName(data->m_path);
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__OS2__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif

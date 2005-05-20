@@ -6,7 +6,7 @@
 // Created:     08.12.99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -76,19 +76,19 @@ static inline FIND_DATA FindFirst(
 )
 {
     ULONG                       ulFindCount = 1;
-    FIND_DATA                   hDir;
+    FIND_DATA                   hDir = HDIR_CREATE;
     FIND_ATTR                   rc;
 
     rc = ::DosFindFirst( rsSpec.c_str()
                         ,&hDir
-                        ,FILE_NORMAL
+			,0x37 // was: FILE_NORMAL
                         ,pFinddata
                         ,sizeof(FILEFINDBUF3)
                         ,&ulFindCount
                         ,FIL_STANDARD
                        );
     if (rc != 0)
-        return 0;
+        return InitFindData();
     return hDir;
 }
 
@@ -103,7 +103,7 @@ static inline bool FindNext(
                          ,pFinddata
                          ,sizeof(FILEFINDBUF3)
                          ,&ulFindCount
-                         ) != 0;
+                         ) == 0;
 }
 
 static const wxChar* GetNameFromFindData(
