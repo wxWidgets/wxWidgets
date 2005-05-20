@@ -940,7 +940,7 @@ samples/rotate/*.def
 samples/rotate/*.ico
 samples/rotate/*.xpm
 samples/rotate/*.txt
-samples/rotate/*.bmp
+samples/rotate/*.png
 samples/rotate/*.pro
 
 samples/sashtest/*.cpp

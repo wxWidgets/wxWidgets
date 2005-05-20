@@ -4,7 +4,7 @@ Installing and compiling wxMac
 On MacOS X, you can download Apple's free developer tools (gcc
 and associated headers and libraries, such as the Carbon API).
 You can then use configure in a similar way to compiling
-wxWindows on Linux, (or on Windows using MinGW or Cygwin). See
+wxWidgets on Linux, (or on Windows using MinGW or Cygwin). See
 'Apple Developers Tools' below for more details on using
 configure.
 

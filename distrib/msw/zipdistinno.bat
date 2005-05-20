@@ -1,5 +1,5 @@
 @echo off
-rem Zip up an external, generic + Windows distribution of wxWindows 2
+rem Zip up an external, generic + Windows distribution of wxWidgets 2
 rem using Inno Setup + ScriptMaker
 set src=%wxwin
 set dest=%src\deliver
@@ -7,7 +7,7 @@ set webfiles=c:\wx2dev\wxWebSite
 set inno=0
 
 Rem Set this to the required version
-set version=2.4.2
+set version=2.4.3
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -17,7 +17,7 @@ if "%1" == "/?" goto usage
 if "%1" == "innoonly" goto dounzip
 if "%1" == "inno" set inno=1
 if "%1" == "tidyup" goto tidyup
-echo About to archive an external wxWindows distribution:
+echo About to archive an external wxWidgets distribution:
 echo   From   %src
 echo   To     %dest
 if "%inno" == "1" echo with Inno Setup creation.
@@ -43,7 +43,7 @@ erase %dest\make*
 
 if direxist %dest\wx erase /sxyz %dest\wx\
 if not direxist %dest mkdir %dest
-if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
+if direxist %dest%\wxWidgets-%version% erase /sxyz %dest%\wxWidgets-%version%
 
 Rem Copy FAQ from wxWebSite CVS
 if not direxist %webfiles% echo Error - %webfiles% does not exist
@@ -76,11 +76,11 @@ zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\xml.rsp
 zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\contrib.rsp
 zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\makefile.rsp
 
-Rem Rearchive under wxWindows-%version%
-if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
+Rem Rearchive under wxWidgets-%version%
+if direxist %dest%\wxWidgets-%version% erase /sxyz %dest%\wxWidgets-%version%
 
-mkdir %dest%\wxWindows-%version%
-cd %dest%\wxWindows-%version%
+mkdir %dest%\wxWidgets-%version%
+cd %dest%\wxWidgets-%version%
 unzip ..\wxOS2-%version%.zip
 echo Overwriting with OS2-specific versions of configure files...
 unzip -o %src%\distrib\os2\os2-specific.zip
@@ -97,7 +97,7 @@ call %src%\distrib\msw\lower.bat
 cd %dest%
 
 erase wxOS2-%version%.zip
-zip -r wxOS2-%version%.zip wxWindows-%version%/*
+zip -r wxOS2-%version%.zip wxWidgets-%version%/*
 
 cd %src%
 
@@ -119,14 +119,14 @@ zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
 zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
 zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
 
-zip -@ %dest%\wxWindows-%version%-CW-Mac.zip < %src%\distrib\msw\cw_mac.rsp
+zip -@ %dest%\wxWidgets-%version%-CW-Mac.zip < %src%\distrib\msw\cw_mac.rsp
 
 erase /Y %src%\include\wx\setup.h
 
-if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
+if direxist %dest%\wxWidgets-%version% erase /sxyz %dest%\wxWidgets-%version%
 
-mkdir %dest%\wxWindows-%version%
-cd %dest%\wxWindows-%version%
+mkdir %dest%\wxWidgets-%version%
+cd %dest%\wxWidgets-%version%
 unzip ..\wxMac-%version%.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
 erase /SXY docs\html\dialoged docs\html\tex2rtf docs\htmlhelp
@@ -134,93 +134,93 @@ erase /SXY docs\html\dialoged docs\html\tex2rtf docs\htmlhelp
 cd %dest%
 
 erase wxMac-%version%.zip
-zip -r wxMac-%version%.zip wxWindows-%version%/*
+zip -r wxMac-%version%.zip wxWidgets-%version%/*
 
 cd %src%
 
-Rem Create wxWindows-%version%-win.zip which is used to create wxMSW
+Rem Create wxWidgets-%version%-win.zip which is used to create wxMSW
 echo Zipping individual components
-zip -@ %dest\wxWindows-%version%-win.zip < %src\distrib\msw\generic.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\makefile.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\msw.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\ogl.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\mmedia.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\stc.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\tex2rtf.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\jpeg.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\tiff.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\xml.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\contrib.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\dialoged.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\utils.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\utilmake.rsp
-zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\univ.rsp
+zip -@ %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\generic.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\makefile.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\msw.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\ogl.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\mmedia.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\stc.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\tex2rtf.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\jpeg.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\tiff.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\xml.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\contrib.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\dialoged.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\utils.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\utilmake.rsp
+zip -@ -u %dest\wxWidgets-%version%-win.zip < %src\distrib\msw\univ.rsp
 
-echo Re-archiving wxWindows-%version%-win.zip
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-win.zip wxWindows-%version% %dest%
+echo Re-archiving wxWidgets-%version%-win.zip
+call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-win.zip wxWidgets-%version% %dest%
 
 echo Removing .mms files
-zip -d %dest%\wxWindows-%version%-win.zip wxWindows-%version%/src/gtk/descrip.mms wxWindows-%version%/src/motif/descrip.mms
+zip -d %dest%\wxWidgets-%version%-win.zip wxWidgets-%version%/src/gtk/descrip.mms wxWidgets-%version%/src/motif/descrip.mms
 
-echo Creating %dest\wxWindows-%version%-DocSource.zip
-zip -@ %dest\wxWindows-%version%-DocSource.zip < %src\distrib\msw\docsrc.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-DocSource.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-DocSource.zip
+zip -@ %dest\wxWidgets-%version%-DocSource.zip < %src\distrib\msw\docsrc.rsp
+call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-DocSource.zip wxWidgets-%version% %dest%
 
-echo Creating %dest\wxWindows-%version%-WinHelp.zip
-zip -@ %dest\wxWindows-%version%-WinHelp.zip < %src\distrib\msw\wx_hlp.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-WinHelp.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-WinHelp.zip
+zip -@ %dest\wxWidgets-%version%-WinHelp.zip < %src\distrib\msw\wx_hlp.rsp
+call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-WinHelp.zip wxWidgets-%version% %dest%
 
-echo Creating %dest\wxWindows-%version%-HTML.zip
-zip -@ %dest\wxWindows-%version%-HTML.zip < %src\distrib\msw\wx_html.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTML.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-HTML.zip
+zip -@ %dest\wxWidgets-%version%-HTML.zip < %src\distrib\msw\wx_html.rsp
+call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-HTML.zip wxWidgets-%version% %dest%
 
-echo Creating %dest\wxWindows-%version%-PDF.zip
-zip -@ %dest\wxWindows-%version%-PDF.zip < %src\distrib\msw\wx_pdf.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-PDF.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-PDF.zip
+zip -@ %dest\wxWidgets-%version%-PDF.zip < %src\distrib\msw\wx_pdf.rsp
+call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-PDF.zip wxWidgets-%version% %dest%
 
-Rem zip -@ %dest\wxWindows-%version%-Word.zip < %src\distrib\msw\wx_word.rsp
-Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-Word.zip wxWindows-%version% %dest%
+Rem zip -@ %dest\wxWidgets-%version%-Word.zip < %src\distrib\msw\wx_word.rsp
+Rem call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-Word.zip wxWidgets-%version% %dest%
 
-echo Creating %dest\wxWindows-%version%-HTB.zip
-zip -@ %dest\wxWindows-%version%-HTB.zip < %src\distrib\msw\wx_htb.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTB.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-HTB.zip
+zip -@ %dest\wxWidgets-%version%-HTB.zip < %src\distrib\msw\wx_htb.rsp
+call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-HTB.zip wxWidgets-%version% %dest%
 
-echo Creating %dest\wxWindows-%version%-HTMLHelp.zip
-zip -@ %dest\wxWindows-%version%-HTMLHelp.zip < %src\distrib\msw\wx_chm.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTMLHelp.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-HTMLHelp.zip
+zip -@ %dest\wxWidgets-%version%-HTMLHelp.zip < %src\distrib\msw\wx_chm.rsp
+call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-HTMLHelp.zip wxWidgets-%version% %dest%
 
 Rem Add Linuxy docs to a separate archive to be transported to Linux for the
 Rem Linux-based releases
-echo Creating %dest\wxWindows-%version%-LinuxDocs.zip
-zip -@ %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_html.rsp
-zip -@ -u %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_pdf.rsp
-zip -@ -u %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_htb.rsp
+echo Creating %dest\wxWidgets-%version%-LinuxDocs.zip
+zip -@ %dest\wxWidgets-%version%-LinuxDocs.zip < %src\distrib\msw\wx_html.rsp
+zip -@ -u %dest\wxWidgets-%version%-LinuxDocs.zip < %src\distrib\msw\wx_pdf.rsp
+zip -@ -u %dest\wxWidgets-%version%-LinuxDocs.zip < %src\distrib\msw\wx_htb.rsp
 
 Rem PDF/HTML docs that should go into the Windows setup because
 Rem there are no WinHelp equivalents
-echo Creating %dest\wxWindows-%version%-ExtraDoc.zip
-zip -@ %dest\wxWindows-%version%-ExtraDoc.zip < %src\distrib\msw\extradoc.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-ExtraDoc.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-ExtraDoc.zip
+zip -@ %dest\wxWidgets-%version%-ExtraDoc.zip < %src\distrib\msw\extradoc.rsp
+call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-ExtraDoc.zip wxWidgets-%version% %dest%
 
 Rem zip up Univ-specific files
-echo Creating %dest\wxWindows-%version%-Univ.zip
-zip -@ %dest\wxWindows-%version%-Univ.zip < %src\distrib\msw\univ.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-Univ.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-Univ.zip
+zip -@ %dest\wxWidgets-%version%-Univ.zip < %src\distrib\msw\univ.rsp
+call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-Univ.zip wxWidgets-%version% %dest%
 
 rem VC++ project files
-echo Creating %dest\wxWindows-%version%-VC.zip
-zip -@ %dest\wxWindows-%version%-VC.zip < %src\distrib\msw\vc.rsp
-Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-VC.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-VC.zip
+zip -@ %dest\wxWidgets-%version%-VC.zip < %src\distrib\msw\vc.rsp
+Rem call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-VC.zip wxWidgets-%version% %dest%
 
 rem BC++ project files
-echo Creating %dest\wxWindows-%version%-BC.zip
-zip -@ %dest\wxWindows-%version%-BC.zip < %src\distrib\msw\bc.rsp
-Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-BC.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-BC.zip
+zip -@ %dest\wxWidgets-%version%-BC.zip < %src\distrib\msw\bc.rsp
+Rem call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-BC.zip wxWidgets-%version% %dest%
 
 rem CodeWarrior project files
-echo Creating %dest\wxWindows-%version%-CW.zip
-zip -@ %dest\wxWindows-%version%-CW.zip < %src\distrib\msw\cw.rsp
-Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-CW.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWidgets-%version%-CW.zip
+zip -@ %dest\wxWidgets-%version%-CW.zip < %src\distrib\msw\cw.rsp
+Rem call %WXWIN%\distrib\msw\rearchive wxWidgets-%version%-CW.zip wxWidgets-%version% %dest%
 
 rem Dialog Editor source and binary
 Rem erase %dest\dialoged-source.zip
@@ -262,32 +262,32 @@ Rem zip %dest\tex2rtf-win32-%version%.zip tex2rtf.*
 cd %dest
 
 rem Put all archives for transit to Linux in a zip file
-echo Creating %dest\wxWindows-%version%-LinuxTransit.zip
-erase %dest\wxWindows-%version%-LinuxTransit.zip
-zip %dest\wxWindows-%version%-LinuxTransit.zip wxWindows-%version%-LinuxDocs.zip wxWindows-%version%-VC.zip wxWindows-%version%-CW-Mac.zip
+echo Creating %dest\wxWidgets-%version%-LinuxTransit.zip
+erase %dest\wxWidgets-%version%-LinuxTransit.zip
+zip %dest\wxWidgets-%version%-LinuxTransit.zip wxWidgets-%version%-LinuxDocs.zip wxWidgets-%version%-VC.zip wxWidgets-%version%-CW-Mac.zip
 
-echo Unzipping the Windows files into wxWindows-%version%
+echo Unzipping the Windows files into wxWidgets-%version%
 
-unzip -o wxWindows-%version%-win.zip
-unzip -o wxWindows-%version%-VC.zip -d wxWindows-%version
-unzip -o wxWindows-%version%-BC.zip -d wxWindows-%version
-unzip -o wxWindows-%version%-CW.zip -d wxWindows-%version
-unzip -o wxWindows-%version%-HTMLHelp.zip
-unzip -o wxWindows-%version%-ExtraDoc.zip
+unzip -o wxWidgets-%version%-win.zip
+unzip -o wxWidgets-%version%-VC.zip -d wxWidgets-%version
+unzip -o wxWidgets-%version%-BC.zip -d wxWidgets-%version
+unzip -o wxWidgets-%version%-CW.zip -d wxWidgets-%version
+unzip -o wxWidgets-%version%-HTMLHelp.zip
+unzip -o wxWidgets-%version%-ExtraDoc.zip
 Rem Need Word file, for Remstar DB classes
 Rem Not any more
-Rem unzip -o wxWindows-%version%-Word.zip
+Rem unzip -o wxWidgets-%version%-Word.zip
 
 Rem After this change of directory, we're in the
 Rem temporary 'wx' directory and not acting on
-Rem the source wxWindows directory.
-cd %dest%\wxWindows-%version%
+Rem the source wxWidgets directory.
+cd %dest%\wxWidgets-%version%
 
 rem Now delete a few files that are unnecessary
 attrib -R *
 erase /Y BuildCVS.txt descrip.mms
 erase /Y setup.h_vms
-erase /Y docs\html\wxbook.htm docs\html\roadmap.htm
+erase /Y docs\html\roadmap.htm
 Rem erase /Y contrib\docs\winhelp\mmedia.*
 Rem erase /Y contrib\docs\winhelp\stc.*
 Rem erase /Y contrib\docs\htmlhelp\mmedia.*
@@ -319,8 +319,8 @@ Rem copy %src\docs\pdf\wxTutorial.pdf docs\pdf
 
 Rem Make wxMSW-xxx.zip
 cd %dest%
-zip -r wxMSW-%version%.zip wxWindows-%version%/*
-cd wxWindows-%version%
+zip -r wxMSW-%version%.zip wxWidgets-%version%/*
+cd wxWidgets-%version%
 
 echo Calling 'makeinno' to generate wxwin2.iss...
 call %WXWIN\distrib\msw\makeinno.bat
@@ -328,10 +328,10 @@ call %WXWIN\distrib\msw\makeinno.bat
 erase /Y %dest\setup.*
 
 rem Now invoke Inno Setup on the new wxwin2.iss
-set innocmd="C:\Program Files\Inno Setup 4\compil32.exe" /cc %WXWIN\distrib\msw\wxwin2.iss
+set innocmd="C:\Program Files\Inno Setup 5\compil32.exe" /cc %WXWIN\distrib\msw\wxwin2.iss
 echo Invoking %innocmd...
 start "Inno Setup" /w %innocmd%
-Rem pause Press any key to continue with the wxWindows distribution...
+Rem pause Press any key to continue with the wxWidgets distribution...
 
 :tidyup
 cd %dest
@@ -339,15 +339,15 @@ cd %dest
 rem Put all the setup files into a single zip archive.
 zip wxMSW-%version%-setup.zip readme-%version%.txt setup*.*
 
-erase /Y wxWindows-%version%-win.zip
-erase /Y wxWindows-%version%-ExtraDoc.zip
+erase /Y wxWidgets-%version%-win.zip
+erase /Y wxWidgets-%version%-ExtraDoc.zip
 
-echo wxWindows archived.
+echo wxWidgets archived.
 
 goto end
 
 :usage
-echo DOS wxWindows distribution. Zips up all MSW, OS/2, Mac and doc files,
+echo DOS wxWidgets distribution. Zips up all MSW, OS/2, Mac and doc files,
 echo and optionally makes a setup.exe echo if you specify 'inno'
 echo (skipping the zipping if you use 'innoonly').
 echo.

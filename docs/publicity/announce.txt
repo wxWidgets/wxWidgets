@@ -1,8 +1,8 @@
-Announcing wxWindows 2.4.2: a cross-platform GUI toolkit
+Announcing wxWidgets 2.4.3: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
-June 13th, 2003 -- the wxWindows team is pleased to announce
-an official 2.4.2 release of the mature cross-platform C++
+June 13th, 2003 -- the wxWidgets team is pleased to announce
+an official 2.4.3 release of the mature cross-platform C++
 application framework.
 
 The following platforms are supported:
@@ -15,34 +15,34 @@ The following platforms are supported:
 - MacOS 8.6, 9.x and 10.x
 - OS/2 (alpha release)
 
-A non-GUI subset of wxWindows called wxBase is also supported
+A non-GUI subset of wxWidgets called wxBase is also supported
 on most of these platforms.
 
-To get wxWindows, go to the Download page at:
+To get wxWidgets, go to the Download page at:
 
-  http://www.wxwindows.org
+  http://www.wxwidgets.org
 
 This is a bug-fix release. Improvements include
 better border and theme handling under Windows XP,
 additional XRC resource types, and removal of
 some memory leaks.
 
-*** About wxWindows
+*** About wxWidgets
 
-wxWindows is a comprehensive open-source, multi-platform C++ GUI
+wxWidgets is a comprehensive open-source, multi-platform C++ GUI
 framework, that can be used to build commercial and free
 software. First released in 1992, it's increasingly used by
 organisations and individuals all over the world due to its
 winning combination of sophistication, wide platform coverage,
 ease of use, unrestrictive licence and vibrant user community.
 
-For most ports, wxWindows adopts the native look and feel of
+For most ports, wxWidgets adopts the native look and feel of
 each platform since it uses the native widget sets. There is also
 a generic widget set, used for the wxX11 port - no other widget set
 is required, giving the potential for embedded use.
 
 An extraordinary range of classes is provided - but don't be put
-off by this because most people find wxWindows easier to learn
+off by this because most people find wxWidgets easier to learn
 and use than MFC and other frameworks.
 
 As well as comprehensive support for the usual widgets, advanced
@@ -52,41 +52,41 @@ and dialogs on all platforms, document/view, OpenGL support,
 HTML-based and context-sensitive help, wizards, drag and drop,
 a grid class, ODBC support, threads, sockets, container classes,
 a styled text control, and much more. An 1800-page reference manual
-is provided in HTML, MS HTML Help, WinHelp, wxWindows Help and PDF
+is provided in HTML, MS HTML Help, WinHelp, wxWidgets Help and PDF
 formats, and there are over 70 samples and demos.
 
-If you're an MFC user, you'll find many wxWindows concepts
+If you're an MFC user, you'll find many wxWidgets concepts
 reassuringly familiar, while often clearer and more consistent.
 If you're not, you should still find it intuitive from the start.
 
-wxWindows bindings for several other languages are available,
+wxWidgets bindings for several other languages are available,
 including Python, Perl, Basic, Lua, JavaScript and Eiffel.
 
-If you're considering wxWindows, do check out some of these links:
+If you're considering wxWidgets, do check out some of these links:
 
-    http://www.wxwindows.org/feedback.htm ; Comments from users
-    http://www.wxwindows.org/screensh.htm ; Screenshots
-    http://www.wxwindows.org/users.htm    ; A list of some of our
+    http://www.wxwidgets.org/feedback.htm ; Comments from users
+    http://www.wxwidgets.org/screensh.htm ; Screenshots
+    http://www.wxwidgets.org/users.htm    ; A list of some of our
                                           ; users
 
-==> Look out for reviews of wxWindows in the July editions of
+==> Look out for reviews of wxWidgets in the July editions of
     Linux Journal and the UK's PC Plus magazine.
 
 Have fun!
 
-The wxWindows team
+The wxWidgets team
 
 =====
 
 A small selection of the comments from the Feedback page:
 
-"wxWindows 2.xx has been an absolute dream; putting together a
+"wxWidgets 2.xx has been an absolute dream; putting together a
 nice interface has been quite easy, and I'm especially pleased
 that I can do most of our development on *nix with confidence
 that only minor issues will have to get cleaned up when we build
 on Windows." 
 
-"I use wxWindows as a GUI Toolkit for Python. Its stability,
+"I use wxWidgets as a GUI Toolkit for Python. Its stability,
 flexibility and speed are the base of industrial strength
 cross-platform GUI application design with interpreted languages
 like Python. Porting is child's play. Thanks for this great
@@ -96,5 +96,5 @@ piece of software!"
 learn and easy to port Java, X11 and Win32 code to." 
 
 "Thanks heaps for the best piece of software I've ever come
-across (wxWindows)." 
+across (wxWidgets)." 
 

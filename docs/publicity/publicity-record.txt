@@ -8,7 +8,7 @@ PUBLICITY RECORD
 The 2.4.0 release has been publicised at
 the following places:
 
-wx-users@lists.wxwindows.org
+wx-users@lists.wxwidgets.org
 
 comp.os.ms-windows.programmer.misc
 comp.os.ms-windows.programmer.tools.mfc

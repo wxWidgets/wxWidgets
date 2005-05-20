@@ -3,7 +3,7 @@ wxMicroWindows port
 
 Julian Smart 2001-12-08
 
-This is a port of wxWindows to MicroWindows, under Linux.
+This is a port of wxWidgets to MicroWindows, under Linux.
 Widgets are supplied by the wxUniversal project, while the
 underlying port uses the Windows ports with small modifications
 for the MicroWindows API.
@@ -45,7 +45,7 @@ MicroWindows:
 
   Note: these are already applied by the patch below.
 
-- apply microwindows.patches (from wxWindows:
+- apply microwindows.patches (from wxWidgets:
   docs/microwin/microwindows.patches) to fix PeekMessage
   and other issues. If the patch doesn't apply automatically,
   you may need to apply it by hand, and the relevant changed
@@ -156,7 +156,7 @@ XPMs etc. Unfortunately the XPM routines are also #ifdefed
 for FILE_IO, even though for inline XPMs we don't need file I/O.
 (Embedded systems tend not to have file I/O, anyway.)
 
-Now, wxWindows has its own XPM decoder, src/common/xpmdecod.cpp,
+Now, wxWidgets has its own XPM decoder, src/common/xpmdecod.cpp,
 so in theory we don't need to use MicroWindows' code there.
 wxImage can load an inline XPM, _but_ we need to convert to
 a wxBitmap since this is what the widgets need.
