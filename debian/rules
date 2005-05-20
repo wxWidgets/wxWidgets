@@ -649,6 +649,9 @@ install-gtk-py: build-gtk-py-stamp
 	find debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages	\
 		-name '*.py?' -exec rm '{}' ';'
 
+	# This is rather bogus, its included in the main copyright file now though.
+	rm -f debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages/wxPython/tools/XRCed/license.txt
+
 	dh_installman debian/wxPython-tools.1
 	dh_link usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2py.1     \
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2xpm.1    \
