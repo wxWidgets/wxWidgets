@@ -123,8 +123,8 @@ Architecture: any
 Section: python
 Depends: =PY, ${shlibs:Depends}
 Suggests: wxwin=V-doc, wxwin=V-examples, =PY-xml
-Conflicts: libwxgtk-python, libwxgtk=V-dbg-python, python-wxwin, libwxgtk2.2-python-contrib, libwxgtk2.2-python, libwxgtk2.3-python
-Replaces: libwxgtk-python, libwxgtk=V-dbg-python, python-wxwin, libwxgtk2.2-python-contrib, libwxgtk2.2-python, libwxgtk2.3-python
+Conflicts: libwxgtk-python, libwxgtk=SOV-dbg-python, python-wxwin, libwxgtk2.2-python-contrib, libwxgtk2.2-python, libwxgtk2.3-python
+Replaces: libwxgtk-python, libwxgtk=SOV-dbg-python, python-wxwin, libwxgtk2.2-python-contrib, libwxgtk2.2-python, libwxgtk2.3-python
 Provides: libwxgtk-python
 Description: wxWindows Cross-platform C++ GUI toolkit (wxPython binding)
  wxWindows is a class library for C++ providing GUI (Graphical User
@@ -139,9 +139,9 @@ Package: libwxgtk=SOV-contrib
 Architecture: any
 Section: libs
 Depends: libwxgtk=SOV (= ${Source-Version}), ${shlibs:Depends}
-Conflicts: libwxgtk-contrib=V
-Replaces: libwxgtk-contrib=V
-Provides: libwxgtk-contrib=V
+Conflicts: libwxgtk=V-contrib
+Replaces: libwxgtk=V-contrib
+Provides: libwxgtk=V-contrib
 Description: wxWindows Cross-platform C++ GUI toolkit (runtime contrib libs)
  wxWindows is a class library for C++ providing GUI (Graphical User
  Interface) and other facilities on more than one platform.  Version =V
