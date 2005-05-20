@@ -1182,7 +1182,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/printing/*.cpp $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.h $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.xpm $(DISTDIR)/samples/printing
-	cp $(SAMPDIR)/printing/*.xbm $(DISTDIR)/samples/printing
 
 	mkdir $(DISTDIR)/samples/resource
 	cp $(SAMPDIR)/resource/Makefile.in $(DISTDIR)/samples/resource
@@ -1580,8 +1579,6 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	rm -rf $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 
-# This is to keep non-gnu make's happy.
-@IF_NOT_GNU_MAKE@debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
 
 @IF_GNU_MAKE@debian-native-dist: $(filter-out DEMOS_DIST,@GUIDIST@) MANUAL_DIST PYTHON_DIST
 	cp $(SRCDIR)/files.lst $(DISTDIR)/src
@@ -1589,6 +1586,11 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 debian-msw-dirs:
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/src/msw
+
+
+# This is to keep non-gnu make's happy.
+# ... but is of course stupid and useless here, so make it a noop at least.
+@IF_NOT_GNU_MAKE@debian-native-dist: 
 
 
 clean:
