@@ -125,9 +125,10 @@ class MyCellEditor(gridlib.PyGridCellEditor):
         """
         self.log.write("MyCellEditor: IsAcceptedKey: %d\n" % (evt.GetKeyCode()))
 
-        ## Oops, there's a bug here, we'll have to do it ourself..
-        ##return self.base_IsAcceptedKey(evt)
+        ## We can ask the base class to do it
+        #return self.base_IsAcceptedKey(evt)
 
+        # or do it ourselves
         return (not (evt.ControlDown() or evt.AltDown()) and
                 evt.GetKeyCode() != wx.WXK_SHIFT)
 
