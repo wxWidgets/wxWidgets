@@ -1,3 +1,66 @@
+wxwindows2.4 (2.4.3) unstable; urgency=medium
+
+  * Really should be high urgency, as this resolves more licence
+    trouble found in 2.4.2.6.1, but we are well frozen and the
+    changes are extensive where not major, so I'm a little more
+    cautious of pushing this through as hard as the last upload.
+    - Much of the artwork has been replaced by images from a known
+      good source.
+    - Many files with missing or wrong licence/attribution have been
+      amended or replaced.
+    - The afm files have been removed as they are GPL and it is not
+      clear they can be (universally) distributed with wx under its
+      more relaxed licence.  We should source these via a dependency
+      on some other Debian package.  Printing with wx2.4 may be
+      affected without those files.
+      The most promising option is probably to backport the printing
+      code from 2.6 but that cannot be considered even remotely viable
+      for sarge.  My apologies to the clear-felling industry while we
+      sort this one out.
+    Many thanks to all the people who found and reported potential for
+    trouble, and who lent their support to ensure it would be fixed.
+
+  * The library package names themselves now incorporate the soname,
+    this should have been done long ago (per common best practice),
+    but this branch again feigned stability well.
+    We're going to need this for clean upgrades if more changes are
+    made after the freeze.  Provides the old package names at present
+    for compatibility with existing dependent packages, but may simply
+    conflict/replace or ignore them in future if and as required.
+    This isn't an _essential_ change for sarge, but its Havana cigar
+    sanction busting George Galloway style that I think we'll be better
+    off for having, given the evidence at hand.
+
+  * Drop support for the 'universal' builds.  In 2.4 they have always
+    been universally useless to us, no need to keep the cruft for them
+    any longer.
+  * Drop the static builds also, time is proving them worse than useless
+    and there is already sufficient danger to be found in wx build
+    combinations without encouraging trouble down that avenue too.
+
+      Neither of these two prunings affect any existing package,
+      but both are consistent with existing long term plans.
+
+ -- Ron Lee <ron@debian.org>  Fri, 20 May 2005 11:42:40 +0930
+
+wxwindows2.4 (2.4.2.6.1) unstable; urgency=high
+
+  * High urgency because this removes some source files we appear
+    not to have permssion to distribute.  Fortunately their removal
+    does not effect any of the existing package binaries.  This must
+    propagate through the archive before we freeze.  Closes: #306013
+  * Remove typo apostrophe in control.in  Closes: #268527
+  * There are no other changes in this otherwise unintended release,
+    it should have no effect on dependent packages.
+
+ -- Ron Lee <ron@debian.org>  Sun, 24 Apr 2005 01:14:56 +0930
+
+wxwindows2.4 (2.4.2.7) unstable; urgency=low
+
+  * vapourware bugfix release...
+
+ -- Ron Lee <ron@debian.org>  Thu,  2 Dec 2004 01:30:28 +1030
+
 wxwindows2.4 (2.4.2.6) unstable; urgency=high
 
   * High urgency so as not to reset the shotclock for getting wx and
