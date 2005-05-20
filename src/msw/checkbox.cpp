@@ -374,6 +374,12 @@ void wxCheckBox::MakeOwnerDrawn(bool ownerDrawn)
     }
 
     ::SetWindowLong(GetHwnd(), GWL_STYLE, style);
+
+    if ( !ownerDrawn )
+    {
+        // ensure that controls state is consistent with internal state
+        DoSet3StateValue(m_state);
+    }
 }
 
 void wxCheckBox::OnMouseEnterOrLeave(wxMouseEvent& event)
