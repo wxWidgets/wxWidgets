@@ -92,7 +92,7 @@
 #define wxUSE_DRAG_AND_DROP 0
 #endif
 
-#if !wxUSE_OWNER_DRAWN
+#if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
 #undef wxUSE_CHECKLISTBOX
 #define wxUSE_CHECKLISTBOX 0
 #endif
