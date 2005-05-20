@@ -7259,7 +7259,7 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
         return;
 
     wxRect rect;
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
     rect.SetX( 1 );
     rect.SetY( GetRowTop(row) + 1 );
     rect.SetWidth( m_rowLabelWidth - 2 );
@@ -7323,7 +7323,7 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     int colLeft = GetColLeft(col);
 
     wxRect rect;
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
     rect.SetX( colLeft + 1 );
     rect.SetY( 1 );
     rect.SetWidth( GetColWidth(col) - 2 );
