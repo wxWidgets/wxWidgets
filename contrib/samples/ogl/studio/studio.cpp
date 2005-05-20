@@ -35,7 +35,6 @@
 #include "project.h"
 #include "symbols.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "bitmaps/new.xpm"
 #include "bitmaps/open.xpm"
 #include "bitmaps/save.xpm"
@@ -60,7 +59,6 @@
 #include "bitmaps/straight.xpm"
 
 #include "studio.xpm"
-#endif
 
 IMPLEMENT_APP(csApp)
 
@@ -324,18 +322,6 @@ void csApp::InitToolBar(wxToolBar* toolBar)
 {
     wxBitmap* bitmaps[10];
 
-#ifdef __WXMSW__
-    bitmaps[0] = new wxBitmap(_T("new"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[1] = new wxBitmap(_T("open"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[2] = new wxBitmap(_T("save"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[3] = new wxBitmap(_T("copy"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[4] = new wxBitmap(_T("cut"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[5] = new wxBitmap(_T("paste"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[6] = new wxBitmap(_T("print"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[7] = new wxBitmap(_T("help"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[8] = new wxBitmap(_T("undo"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[9] = new wxBitmap(_T("redo"), wxBITMAP_TYPE_RESOURCE);
-#elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     bitmaps[0] = new wxBitmap( new_xpm );
     bitmaps[1] = new wxBitmap( open_xpm );
     bitmaps[2] = new wxBitmap( save_xpm );
@@ -346,36 +332,33 @@ void csApp::InitToolBar(wxToolBar* toolBar)
     bitmaps[7] = new wxBitmap( help_xpm );
     bitmaps[8] = new wxBitmap( undo_xpm );
     bitmaps[9] = new wxBitmap( redo_xpm );
-#else
-#error "Not implemented for this platform."
-#endif
 
-  toolBar->AddTool(wxID_NEW, *bitmaps[0], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("New file"));
-  toolBar->AddTool(wxID_OPEN, *bitmaps[1], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Open file"));
-  toolBar->AddTool(wxID_SAVE, *bitmaps[2], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Save file"));
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_PRINT, *bitmaps[6], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Print"));
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_COPY, *bitmaps[3], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Copy"));
-  toolBar->AddTool(wxID_CUT, *bitmaps[4], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Cut"));
-  toolBar->AddTool(wxID_PASTE, *bitmaps[5], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Paste"));
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_UNDO, *bitmaps[8], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Undo"));
-  toolBar->AddTool(wxID_REDO, *bitmaps[9], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Redo"));
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_HELP, *bitmaps[7], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Help"));
+    toolBar->AddTool(wxID_NEW, *bitmaps[0], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("New file"));
+    toolBar->AddTool(wxID_OPEN, *bitmaps[1], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Open file"));
+    toolBar->AddTool(wxID_SAVE, *bitmaps[2], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Save file"));
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_PRINT, *bitmaps[6], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Print"));
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_COPY, *bitmaps[3], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Copy"));
+    toolBar->AddTool(wxID_CUT, *bitmaps[4], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Cut"));
+    toolBar->AddTool(wxID_PASTE, *bitmaps[5], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Paste"));
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_UNDO, *bitmaps[8], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Undo"));
+    toolBar->AddTool(wxID_REDO, *bitmaps[9], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Redo"));
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_HELP, *bitmaps[7], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Help"));
 
-  toolBar->Realize();
+    toolBar->Realize();
 
-  toolBar->EnableTool(wxID_COPY, false);
-  toolBar->EnableTool(wxID_PASTE, false);
-  toolBar->EnableTool(wxID_PRINT, false);
-  toolBar->EnableTool(wxID_UNDO, false);
-  toolBar->EnableTool(wxID_REDO, false);
+    toolBar->EnableTool(wxID_COPY, false);
+    toolBar->EnableTool(wxID_PASTE, false);
+    toolBar->EnableTool(wxID_PRINT, false);
+    toolBar->EnableTool(wxID_UNDO, false);
+    toolBar->EnableTool(wxID_REDO, false);
 
-  int i;
-  for (i = 0; i < 10; i++)
-    delete bitmaps[i];
+    int i;
+    for (i = 0; i < 10; i++)
+        delete bitmaps[i];
 }
 
 // Create and initialise the diagram toolbar
@@ -396,19 +379,6 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
 
     wxBitmap* bitmaps[11];
 
-#ifdef __WXMSW__
-    bitmaps[0] = new wxBitmap(_T("alignl"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[1] = new wxBitmap(_T("alignr"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[2] = new wxBitmap(_T("alignt"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[3] = new wxBitmap(_T("alignb"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[4] = new wxBitmap(_T("horiz"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[5] = new wxBitmap(_T("vert"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[6] = new wxBitmap(_T("copysize"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[7] = new wxBitmap(_T("linearrow"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[8] = new wxBitmap(_T("newpoint"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[9] = new wxBitmap(_T("cutpoint"), wxBITMAP_TYPE_RESOURCE);
-    bitmaps[10] = new wxBitmap(_T("straighten"), wxBITMAP_TYPE_RESOURCE);
-#elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     bitmaps[0] = new wxBitmap( alignl_xpm );
     bitmaps[1] = new wxBitmap( alignr_xpm );
     bitmaps[2] = new wxBitmap( alignt_xpm );
@@ -420,9 +390,6 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
     bitmaps[8] = new wxBitmap( newpoint_xpm );
     bitmaps[9] = new wxBitmap( cutpoint_xpm );
     bitmaps[10] = new wxBitmap( straight_xpm );
-#else
-#error "Not implemented for this platform."
-#endif
 
     m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNL, *bitmaps[0], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Align left"));
     m_diagramToolBar->AddTool(DIAGRAM_TOOLBAR_ALIGNR, *bitmaps[1], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL, _T("Align right"));
