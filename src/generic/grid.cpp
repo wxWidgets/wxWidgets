@@ -3758,6 +3758,9 @@ void wxGridWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 
 void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
 {
+    if (event.ButtonDown(wxMOUSE_BTN_LEFT) && FindFocus() != this)
+        SetFocus();
+    
     m_owner->ProcessGridCellMouseEvent( event );
 }
 
