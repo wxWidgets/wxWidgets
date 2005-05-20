@@ -9,9 +9,6 @@ Package: libwxbase=SOV
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}
-Conflicts: libwxbase=V
-Replaces: libwxbase=V
-Provides: libwxbase=V
 Description: wxBase library (runtime) - non-GUI support classes of wxWindows toolkit
  wxBase is a collection of C++ classes providing basic data structures
  (strings, lists, arrays), powerful wxDateTime class for date manipulations,
@@ -71,9 +68,7 @@ Package: libwxgtk=SOV
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}
-Conflicts: libwxgtk=V
-Replaces: libwxgtk=V, wxgtk2.1
-Provides: libwxgtk=V
+Replaces: wxgtk2.1
 Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ runtime)
  wxWindows is a class library for C++ providing GUI (Graphical User
  Interface) and other facilities on more than one platform.  Version =V
@@ -139,9 +134,6 @@ Package: libwxgtk=SOV-contrib
 Architecture: any
 Section: libs
 Depends: libwxgtk=SOV (= ${Source-Version}), ${shlibs:Depends}
-Conflicts: libwxgtk=V-contrib
-Replaces: libwxgtk=V-contrib
-Provides: libwxgtk=V-contrib
 Description: wxWindows Cross-platform C++ GUI toolkit (runtime contrib libs)
  wxWindows is a class library for C++ providing GUI (Graphical User
  Interface) and other facilities on more than one platform.  Version =V

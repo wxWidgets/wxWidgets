@@ -27,9 +27,11 @@ wxwindows2.4 (2.4.3) unstable; urgency=medium
     made after the freeze.  Provides the old package names at present
     for compatibility with existing dependent packages, but may simply
     conflict/replace or ignore them in future if and as required.
-    This isn't an _essential_ change for sarge, but its Havana cigar
-    sanction busting George Galloway style that I think we'll be better
-    off for having, given the evidence at hand.
+
+    Correction: we cannot seamlessly make this transition at present,
+    since some dependent packages use a versioned dependency which
+    ignores the virtual package that would be provided.  Take out its
+    teeth again until we can.
 
   * Drop support for the 'universal' builds.  In 2.4 they have always
     been universally useless to us, no need to keep the cruft for them
