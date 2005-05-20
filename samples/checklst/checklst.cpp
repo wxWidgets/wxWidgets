@@ -34,6 +34,10 @@
 #include  "wx/menuitem.h"
 #include  "wx/checklst.h"
 
+#if !wxUSE_CHECKLISTBOX
+    #error "This sample can't be built without wxUSE_CHECKLISTBOX"
+#endif // wxUSE_CHECKLISTBOX
+
 // Define a new application type
 class CheckListBoxApp: public wxApp
 {
