@@ -20,7 +20,7 @@
 
 #if wxUSE_TOGGLEBTN
 
-class WXDLLIMPEXP_XRC wxToggleButtonXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxToggleButtonXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxToggleButtonXmlHandler)
 public:
