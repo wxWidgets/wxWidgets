@@ -4679,7 +4679,7 @@ if test "$wxUSE_MEM_TRACING" = "yes" ; then
 fi
 
 if test "$wxUSE_DMALLOC" = "yes" ; then
-    DMALLOC_LIBS="-ldmalloc"
+    DMALLOC_LIBS="-ldmallocthcxx"
 fi
 
 PROFILE=
