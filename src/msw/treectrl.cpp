@@ -2245,13 +2245,37 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     WXLRESULT rc = 0;
     bool isMultiple = HasFlag(wxTR_MULTIPLE);
 
+    // This message is sent after a right-click, or when the "menu" key is pressed
     if ( nMsg == WM_CONTEXTMENU )
     {
+        int x = GET_X_LPARAM(lParam),
+            y = GET_Y_LPARAM(lParam);
+        // Convert the screen point to a client point
+        wxPoint MenuPoint = ScreenToClient(wxPoint(x, y));
+
         wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
 
         // can't use GetSelection() here as it would assert in multiselect mode
         event.m_item = wxTreeItemId(TreeView_GetSelection(GetHwnd()));
         event.SetEventObject( this );
+
+        // Get the bounding rectangle for the item, including the non-text areas
+        wxRect ItemRect;
+        GetBoundingRect(event.m_item, ItemRect, false);
+        // If the point is inside the bounding rectangle, use it as the click position.
+        // This should be the case for WM_CONTEXTMENU as the result of a right-click
+        if (ItemRect.Inside(MenuPoint))
+        {
+            event.m_pointDrag = MenuPoint;
+        }
+        // Use the Explorer standard of putting the menu at the left edge of the text,
+        // in the vertical middle of the text. Should be the case for the "menu" key
+        else
+        {
+            // Use the bounding rectangle of only the text part
+            GetBoundingRect(event.m_item, ItemRect, true);
+            event.m_pointDrag = wxPoint(ItemRect.GetX(), ItemRect.GetY() + ItemRect.GetHeight() / 2);
+        }
 
         if ( GetEventHandler()->ProcessEvent(event) )
             processed = true;
