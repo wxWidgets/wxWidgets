@@ -79,10 +79,10 @@ wxXFont::wxXFont()
 
 wxXFont::~wxXFont()
 {
-    // TODO: why does freeing the font produce a segv???
-    // Note that XFreeFont wasn't called in wxWin 1.68 either.
-    // XFontStruct* fontStruct = (XFontStruct*) m_fontStruct;
-    //        XFreeFont((Display*) m_display, fontStruct);
+    // Freeing the font used to produce a segv, but
+    // appears to be OK now (bug fix in X11?)
+    XFontStruct* fontStruct = (XFontStruct*) m_fontStruct;
+    XFreeFont((Display*) m_display, fontStruct);
 }
 #endif
 
