@@ -198,6 +198,8 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
         // set both DM_PAPERSIZE and DM_PAPERWIDTH & DM_PAPERLENGTH. Since
         // dmPaperSize >= DMPAPER_USER wouldn't be in wxWin's database, this
         // code wouldn't set m_paperSize correctly.
+
+        bool foundPaperSize = false;
         if ((devMode->dmFields & DM_PAPERSIZE) && (devMode->dmPaperSize < DMPAPER_USER))
         {
             if (wxThePrintPaperDatabase)
@@ -207,13 +209,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
                 {
                     data.SetPaperId( paper->GetId() );
                     data.SetPaperSize( wxSize(paper->GetWidth() / 10,paper->GetHeight() / 10) );
-                }
-                else
-                {
-                    // Shouldn't really get here
-                    wxFAIL_MSG(wxT("Couldn't find paper size in paper database."));
-                    data.SetPaperId( wxPAPER_NONE );
-                    data.SetPaperSize( wxSize(0,0) );
+                    foundPaperSize = true;
                 }
             }
             else
@@ -222,9 +218,13 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
                 wxFAIL_MSG(wxT("Paper database wasn't initialized in wxPrintData::ConvertFromNative."));
                 data.SetPaperId( wxPAPER_NONE );
                 data.SetPaperSize( wxSize(0,0) );
+                
+                GlobalUnlock(hDevMode);
+                return false;
             }
         }
-        else if ((devMode->dmFields & DM_PAPERWIDTH) && (devMode->dmFields & DM_PAPERLENGTH))
+        
+        if (!foundPaperSize && (devMode->dmFields & DM_PAPERWIDTH) && (devMode->dmFields & DM_PAPERLENGTH))
         {
             // DEVMODE is in tenths of a milimeter
             data.SetPaperId( wxPAPER_NONE );
@@ -236,6 +236,9 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
             wxFAIL_MSG(wxT("Couldn't find paper size from DEVMODE."));
             data.SetPaperId( wxPAPER_NONE );
             data.SetPaperSize( wxSize(0,0) );
+            
+            GlobalUnlock(hDevMode);
+            return false;
         }
 
         //// Duplex
@@ -427,6 +430,15 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
                 {
                     devMode->dmPaperSize = (short)paper->GetPlatformId();
                     devMode->dmFields |= DM_PAPERSIZE;
+                }
+                else
+                {
+                    // Fall back on specifying the paper size explicitly
+                    devMode->dmPaperWidth = (short)(data.GetPaperSize().x * 10);
+                    devMode->dmPaperLength = (short)(data.GetPaperSize().y * 10);
+                    devMode->dmPaperSize = DMPAPER_USER;
+                    devMode->dmFields |= DM_PAPERWIDTH;
+                    devMode->dmFields |= DM_PAPERLENGTH;
                 }
             }
         }
