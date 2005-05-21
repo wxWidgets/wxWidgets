@@ -2693,8 +2693,15 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
         case WXK_MENU:
             {
+                // Use the item's bounding rectangle to determine position for the event
+                wxRect ItemRect;
+                GetBoundingRect(m_current, ItemRect, true);
+
                 wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
                 event.m_item = m_current;
+                // Use the left edge, vertical middle
+                event.m_pointDrag = wxPoint(ItemRect.GetX(),
+                                            ItemRect.GetY() + ItemRect.GetHeight() / 2);
                 event.SetEventObject( this );
                 GetEventHandler()->ProcessEvent( event );
                 break;
@@ -3226,6 +3233,14 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             nevent.m_pointDrag = CalcScrolledPosition(pt);
             nevent.SetEventObject(this);
             event.Skip(!GetEventHandler()->ProcessEvent(nevent));
+
+            // Consistent with MSW (for now), send the ITEM_MENU *after*
+            // the RIGHT_CLICK event. TODO: This behavior may change.
+            wxTreeEvent nevent2(wxEVT_COMMAND_TREE_ITEM_MENU, GetId());
+            nevent2.m_item = item;
+            nevent2.m_pointDrag = CalcScrolledPosition(pt);
+            nevent2.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(nevent2);
         }
         else if ( event.LeftUp() )
         {
