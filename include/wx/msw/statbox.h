@@ -61,7 +61,7 @@ protected:
     virtual void MSWGetRegionWithoutSelf(WXHRGN hrgn, int w, int h);
 
     // paint the given rectangle with our background brush/colour
-    void PaintBackground(wxDC& dc, const struct tagRECT& rc);
+    virtual void PaintBackground(wxDC& dc, const struct tagRECT& rc);
     // paint the foreground of the static box
     virtual void PaintForeground(wxDC& dc, const struct tagRECT& rc);
 
