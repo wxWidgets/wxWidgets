@@ -144,6 +144,9 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
 
     // so many differents ways to handle right mouse button clicks...
     EVT_CONTEXT_MENU(MyTreeCtrl::OnContextMenu)
+    // EVT_TREE_ITEM_MENU is the preferred event for creating context menus
+    // on a tree control, because it includes the point of the click or item,
+    // meaning that no additional placement calculations are required.
     EVT_TREE_ITEM_MENU(TreeTest_Ctrl, MyTreeCtrl::OnItemMenu)
     EVT_TREE_ITEM_RIGHT_CLICK(TreeTest_Ctrl, MyTreeCtrl::OnItemRClick)
 
