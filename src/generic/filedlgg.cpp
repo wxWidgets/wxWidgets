@@ -1267,16 +1267,19 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     }
 #endif // __UNIX__
 
-    if ((filename.Find(wxT('*')) != wxNOT_FOUND) ||
-        (filename.Find(wxT('?')) != wxNOT_FOUND))
+    if (!(m_dialogStyle & wxSAVE))
     {
-        if (filename.Find(wxFILE_SEP_PATH) != wxNOT_FOUND)
+        if ((filename.Find(wxT('*')) != wxNOT_FOUND) ||
+            (filename.Find(wxT('?')) != wxNOT_FOUND))
         {
-            wxMessageBox(_("Illegal file specification."), _("Error"), wxOK | wxICON_ERROR );
+            if (filename.Find(wxFILE_SEP_PATH) != wxNOT_FOUND)
+            {
+                wxMessageBox(_("Illegal file specification."), _("Error"), wxOK | wxICON_ERROR );
+                return;
+            }
+            m_list->SetWild( filename );
             return;
         }
-        m_list->SetWild( filename );
-        return;
     }
 
     if (!IsTopMostDir(dir))
