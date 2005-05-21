@@ -4370,7 +4370,8 @@ void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     if (m_wxwindow)
         gtk_widget_modify_style(m_wxwindow, style);
-    gtk_widget_modify_style(m_widget, style);
+    else
+        gtk_widget_modify_style(m_widget, style);
 }
 
 bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
