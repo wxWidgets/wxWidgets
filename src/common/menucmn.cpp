@@ -199,6 +199,104 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                         keyCode = WXK_TAB;
                     else if ( current == wxT("ESC") || current == wxT("ESCAPE") )
                         keyCode = WXK_ESCAPE;
+                    else if ( current == wxT("CANCEL") )
+                        keyCode = WXK_CANCEL;
+                    else if ( current == wxT("CLEAR") )
+                        keyCode = WXK_CLEAR;
+                    else if ( current == wxT("MENU") )
+                        keyCode = WXK_MENU;
+                    else if ( current == wxT("PAUSE") )
+                        keyCode = WXK_PAUSE;
+                    else if ( current == wxT("CAPITAL") )
+                        keyCode = WXK_CAPITAL;
+                    else if ( current == wxT("SELECT") )
+                        keyCode = WXK_SELECT;
+                    else if ( current == wxT("PRINT") )
+                        keyCode = WXK_PRINT;
+                    else if ( current == wxT("EXECUTE") )
+                        keyCode = WXK_EXECUTE;
+                    else if ( current == wxT("SNAPSHOT") )
+                        keyCode = WXK_SNAPSHOT;
+                    else if ( current == wxT("HELP") )
+                        keyCode = WXK_HELP;
+                    else if ( current == wxT("HELP") )
+                        keyCode = WXK_HELP;
+                    else if ( current == wxT("ADD") )
+                        keyCode = WXK_ADD;
+                    else if ( current == wxT("SEPARATOR") )
+                        keyCode = WXK_SEPARATOR;
+                    else if ( current == wxT("SUBTRACT") )
+                        keyCode = WXK_SUBTRACT;
+                    else if ( current == wxT("DECIMAL") )
+                        keyCode = WXK_DECIMAL;
+                    else if ( current == wxT("DIVIDE") )
+                        keyCode = WXK_DIVIDE;
+                    else if ( current == wxT("NUM_LOCK") )
+                        keyCode = WXK_NUMLOCK;
+                    else if ( current == wxT("SCROLL_LOCK") )
+                        keyCode = WXK_SCROLL;
+                    else if ( current == wxT("PAGEUP") )
+                        keyCode = WXK_PAGEUP;
+                    else if ( current == wxT("PAGEDOWN") )
+                        keyCode = WXK_PAGEDOWN;
+                    else if ( current == wxT("KP_SPACE") )
+                        keyCode = WXK_NUMPAD_SPACE;
+                    else if ( current == wxT("KP_TAB") )
+                        keyCode = WXK_NUMPAD_TAB;
+                    else if ( current == wxT("KP_ENTER") )
+                        keyCode = WXK_NUMPAD_ENTER;
+                    else if ( current == wxT("KP_HOME") )
+                        keyCode = WXK_NUMPAD_HOME;
+                    else if ( current == wxT("KP_LEFT") )
+                        keyCode = WXK_NUMPAD_LEFT;
+                    else if ( current == wxT("KP_UP") )
+                        keyCode = WXK_NUMPAD_UP;
+                    else if ( current == wxT("KP_RIGHT") )
+                        keyCode = WXK_NUMPAD_RIGHT;
+                    else if ( current == wxT("KP_DOWN") )
+                        keyCode = WXK_NUMPAD_DOWN;
+                    else if ( current == wxT("KP_PRIOR") )
+                        keyCode = WXK_NUMPAD_PRIOR;
+                    else if ( current == wxT("KP_PAGEUP") )
+                        keyCode = WXK_NUMPAD_PAGEUP;
+                    else if ( current == wxT("KP_NEXT;") )
+                        keyCode = WXK_NUMPAD_NEXT;
+                    else if ( current == wxT("KP_PAGEDOWN") )
+                        keyCode = WXK_NUMPAD_PAGEDOWN;
+                    else if ( current == wxT("KP_END") )
+                        keyCode = WXK_NUMPAD_END;
+                    else if ( current == wxT("KP_BEGIN") )
+                        keyCode = WXK_NUMPAD_BEGIN;
+                    else if ( current == wxT("KP_INSERT") )
+                        keyCode = WXK_NUMPAD_INSERT;
+                    else if ( current == wxT("KP_DELETE") )
+                        keyCode = WXK_NUMPAD_DELETE;
+                    else if ( current == wxT("KP_EQUAL") )
+                        keyCode = WXK_NUMPAD_EQUAL;
+                    else if ( current == wxT("KP_MULTIPLY") )
+                        keyCode = WXK_NUMPAD_MULTIPLY;
+                    else if ( current == wxT("KP_ADD") )
+                        keyCode = WXK_NUMPAD_ADD;
+                    else if ( current == wxT("KP_SEPARATOR") )
+                        keyCode = WXK_NUMPAD_SEPARATOR;
+                    else if ( current == wxT("KP_SUBTRACT") )
+                        keyCode = WXK_NUMPAD_SUBTRACT;
+                    else if ( current == wxT("KP_DECIMAL") )
+                        keyCode = WXK_NUMPAD_DECIMAL;
+                    else if ( current == wxT("KP_DIVIDE") )
+                        keyCode = WXK_NUMPAD_DIVIDE;
+                    else if ( current == wxT("WINDOWS_LEFT") )
+                        keyCode = WXK_WINDOWS_LEFT;
+                    else if ( current == wxT("WINDOWS_RIGHT") )
+                        keyCode = WXK_WINDOWS_RIGHT;
+                     else if ( current == wxT("WINDOWS_MENU") )
+                        keyCode = WXK_WINDOWS_MENU;
+                    else if ( current == wxT("COMMAND") )
+                        keyCode = WXK_COMMAND;
+                    else if ( current.Left(3) == wxT("KP_") && wxIsdigit(current[3U]) ) {
+                    keyCode = WXK_NUMPAD0 + wxAtoi(current.c_str() + 3);  }
+                    else if ( current.Left(7) == wxT("SPECIAL") && wxIsdigit(current[7U]) ) {
+                    keyCode = WXK_SPECIAL1 + wxAtoi(current.c_str() + 7) - 1;  }
                     else
                     {
                         wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
