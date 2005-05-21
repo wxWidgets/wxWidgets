@@ -1250,7 +1250,6 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
         UInt32 state = 0;
         UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey|shiftKey|optionKey))) | keycode, &state);
         keychar = short(keyInfo & charCodeMask);
-        keycode = short(keyInfo & keyCodeMask) >> 8 ;
     }
     long keyval = wxMacTranslateKey(keychar, keycode) ;
     long realkeyval = keyval ;
@@ -1259,6 +1258,39 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
         // we are not on a special character combo -> pass the real os event-value to EVT_CHAR, but not to EVT_KEY (make upper first)
         realkeyval = short(keymessage & charCodeMask) ;
         keyval = wxToupper( keyval ) ;
+    }
+
+    // Check for NUMPAD keys
+    if (keyval >= '0' && keyval <= '9' && keycode >= 82 && keycode <= 92)
+    {
+        keyval = keyval - '0' + WXK_NUMPAD0;
+    }
+    else if (keycode >= 67 && keycode <= 81)
+    {
+        switch (keycode)
+        {
+        case 76 :
+            keyval = WXK_NUMPAD_ENTER;
+            break;
+        case 81:
+            keyval = WXK_NUMPAD_EQUAL;
+            break;
+        case 67:
+            keyval = WXK_NUMPAD_MULTIPLY;
+            break;
+        case 75:
+            keyval = WXK_NUMPAD_DIVIDE;
+            break;
+        case 78:
+            keyval = WXK_NUMPAD_SUBTRACT;
+            break;
+        case 69:
+            keyval = WXK_NUMPAD_ADD;
+            break;
+        case 65:
+            keyval = WXK_NUMPAD_DECIMAL;
+            break;
+        } // end switch
     }
 
     wxKeyEvent event(wxEVT_KEY_DOWN);
@@ -1271,7 +1303,8 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
 #if wxUSE_UNICODE
     event.m_uniChar = uniChar ;
 #endif
-
+    event.m_rawCode = keymessage;
+    event.m_rawFlags = modifiers;
     event.m_x = wherex;
     event.m_y = wherey;
     event.SetTimestamp(when);
@@ -1397,7 +1430,6 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
         UInt32 state = 0;
         UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey|shiftKey|optionKey))) | keycode, &state);
         keychar = short(keyInfo & charCodeMask);
-        keycode = short(keyInfo & keyCodeMask) >> 8 ;
     }
     long keyval = wxMacTranslateKey(keychar, keycode) ;
 
@@ -1405,6 +1437,40 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     {
         keyval = wxToupper( keyval ) ;
     }
+
+    // Check for NUMPAD keys
+    if (keyval >= '0' && keyval <= '9' && keycode >= 82 && keycode <= 92)
+    {
+        keyval = keyval - '0' + WXK_NUMPAD0;
+    }
+    else if (keycode >= 67 && keycode <= 81)
+    {
+        switch (keycode)
+        {
+        case 76 :
+            keyval = WXK_NUMPAD_ENTER;
+            break;
+        case 81:
+            keyval = WXK_NUMPAD_EQUAL;
+            break;
+        case 67:
+            keyval = WXK_NUMPAD_MULTIPLY;
+            break;
+        case 75:
+            keyval = WXK_NUMPAD_DIVIDE;
+            break;
+        case 78:
+            keyval = WXK_NUMPAD_SUBTRACT;
+            break;
+        case 69:
+            keyval = WXK_NUMPAD_ADD;
+            break;
+        case 65:
+            keyval = WXK_NUMPAD_DECIMAL;
+            break;
+        } // end switch
+    }
+
     bool handled = false ;
 
     wxKeyEvent event(wxEVT_KEY_UP);
@@ -1417,6 +1483,8 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     event.m_uniChar = uniChar ;
 #endif
 
+    event.m_rawCode = keymessage;
+    event.m_rawFlags = modifiers;
     event.m_x = wherex;
     event.m_y = wherey;
     event.SetTimestamp(when);
