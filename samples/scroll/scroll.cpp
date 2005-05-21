@@ -406,7 +406,8 @@ BEGIN_EVENT_TABLE( MyAutoScrollWindow, wxScrolledWindow)
 END_EVENT_TABLE()
 
 MyAutoScrollWindow::MyAutoScrollWindow( wxWindow *parent )
-    : wxScrolledWindow( parent )
+    : wxScrolledWindow( parent, -1, wxDefaultPosition, wxDefaultSize, 
+                        wxSUNKEN_BORDER|wxScrolledWindowStyle )
 {
     SetBackgroundColour( wxT("GREEN") );
 
