@@ -111,7 +111,7 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
     OSStatus result = eventNotHandledErr ;
 
     wxWindow* focus = wxWindow::FindFocus() ;
-    char charCode ;
+    unsigned char charCode ;
     UInt32 keyCode ;
     UInt32 modifiers ;
     Point point ;
@@ -167,7 +167,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
     if ( focus == NULL )
         return result ;
         
-    char charCode ;
+    unsigned char charCode ;
     wxChar uniChar = 0 ; 
     UInt32 keyCode ;
     UInt32 modifiers ;
