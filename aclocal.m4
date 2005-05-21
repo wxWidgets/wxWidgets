@@ -2799,7 +2799,7 @@ while test ${D}# -gt 0; do
         shift
         ;;
 
-       -l*|-L*|-flat_namespace|-headerpad_max_install_names)
+       -l*|-L*|-Wl,*|-flat_namespace|-headerpad_max_install_names)
         # collect these options
         args="${D}{args} ${D}1"
         ;;
