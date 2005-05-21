@@ -250,7 +250,6 @@ wx/confbase.h
 wx/config.h
 wx/containr.h
 wx/datetime.h
-wx/datetime.inl
 wx/datstrm.h
 wx/dde.h
 wx/debug.h
