@@ -506,6 +506,13 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 #endif
 
+#if GTK_CHECK_VERSION(2,4,0)
+    if (style & wxSTAY_ON_TOP)
+    {
+        gtk_window_set_keep_above(GTK_WINDOW(m_widget), TRUE);
+    }
+#endif
+
     if (!name.IsEmpty())
         gtk_window_set_wmclass( GTK_WINDOW(m_widget), wxGTK_CONV( name ), wxGTK_CONV( name ) );
 
