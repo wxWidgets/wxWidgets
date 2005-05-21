@@ -190,6 +190,9 @@ public:
     double GetPlaybackRate();           //All but MCI & GStreamer
     bool SetPlaybackRate(double dRate); //All but MCI & GStreamer
 
+    double GetVolume();                 //DirectShow only
+    bool   SetVolume(double dVolume);   //DirectShow only
+
 protected:
     static wxClassInfo* NextBackend();
 
@@ -270,8 +273,11 @@ public:
     virtual wxMediaState GetState()
     {   return wxMEDIASTATE_STOPPED;    }
 
-    virtual void RESERVED1() {}
-    virtual void RESERVED2() {}
+    virtual double GetVolume()
+    {   return 0.0;                     }
+    virtual bool SetVolume(double WXUNUSED(dVolume))
+    {   return false;                   }
+
     virtual void RESERVED3() {}
     virtual void RESERVED4() {}
     virtual void RESERVED5() {}

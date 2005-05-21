@@ -311,6 +311,8 @@ bool wxMediaCtrl::Load(const wxURI& location)
 // wxMediaCtrl::Length --> GetDuration
 // wxMediaCtrl::GetState
 // wxMediaCtrl::DoGetBestSize
+// wxMediaCtrl::SetVolume
+// wxMediaCtrl::GetVolume
 //
 // 1) Check to see whether the backend exists and is loading
 // 2) Call the backend's version of the method, returning success
@@ -400,6 +402,20 @@ wxSize wxMediaCtrl::DoGetBestSize() const
     if(m_imp)
         return m_imp->GetVideoSize();
     return wxSize(0,0);
+}
+
+double wxMediaCtrl::GetVolume() 
+{
+    if(m_imp && m_bLoaded)
+        return m_imp->GetVolume();
+    return 0.0;
+}
+
+bool wxMediaCtrl::SetVolume(double dVolume) 
+{
+    if(m_imp && m_bLoaded)
+        return m_imp->SetVolume(dVolume);
+    return false;
 }
 
 //---------------------------------------------------------------------------

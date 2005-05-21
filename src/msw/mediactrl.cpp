@@ -27,6 +27,8 @@
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
+#define wxUSE_DIRECTSHOW 0
+#define wxUSE_QUICKTIME 0
 
 //---------------------------------------------------------------------------
 // Includes
@@ -736,6 +738,9 @@ public:
     virtual double GetPlaybackRate();
     virtual bool SetPlaybackRate(double);
 
+    virtual double GetVolume();
+    virtual bool SetVolume(double);
+
     void Cleanup();
 
     bool m_bVideo;
@@ -807,6 +812,9 @@ public:
 
     virtual double GetPlaybackRate();
     virtual bool SetPlaybackRate(double dRate);
+
+    virtual double GetVolume();
+    virtual bool SetVolume(double);
 
     static LRESULT CALLBACK NotifyWndProc(HWND hWnd, UINT nMsg,
                                              WPARAM wParam, LPARAM lParam);
@@ -978,6 +986,8 @@ public:
     wxDL_METHOD_DEFINE(TimeScale, GetMovieTimeScale, (Movie m), (m), 0);
     wxDL_METHOD_DEFINE(long, GetMovieTime, (Movie m, void* cruft), (m,cruft), 0);
     wxDL_VOIDMETHOD_DEFINE(SetMovieTime, (Movie m, TimeRecord* tr), (m,tr) );
+    wxDL_METHOD_DEFINE(short, GetMovieVolume, (Movie m), (m), 0);
+    wxDL_VOIDMETHOD_DEFINE(SetMovieVolume, (Movie m, short sVolume), (m,sVolume) );
 };
 
 bool wxQuickTimeLibrary::Initialize()
@@ -1022,6 +1032,8 @@ bool wxQuickTimeLibrary::Initialize()
     wxDL_METHOD_LOAD( m_dll, GetMovieTimeScale, bOk );
     wxDL_METHOD_LOAD( m_dll, GetMovieTime, bOk );
     wxDL_METHOD_LOAD( m_dll, SetMovieTime, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetMovieVolume, bOk );
+    wxDL_METHOD_LOAD( m_dll, SetMovieVolume, bOk );
     
     m_ok = true;
 
@@ -1061,6 +1073,9 @@ public:
 
     virtual double GetPlaybackRate();
     virtual bool SetPlaybackRate(double dRate);
+
+    virtual double GetVolume();
+    virtual bool SetVolume(double);
 
     void Cleanup();
     void FinishLoad();
@@ -1287,8 +1302,13 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
         return false;
     }
 
+#if defined(_WIN32)
+    ::SetWindowLong(m_hNotifyWnd, GWL_WNDPROC,
+                       (LONG)wxAMMediaBackend::NotifyWndProc);
+#else
     ::SetWindowLongPtr(m_hNotifyWnd, GWLP_WNDPROC,
                        (LONG_PTR)wxAMMediaBackend::NotifyWndProc);
+#endif
 
     ::SetWindowLong(m_hNotifyWnd, GWL_USERDATA,
                        (LONG) this);
@@ -1389,6 +1409,33 @@ wxLongLong wxAMMediaBackend::GetPosition()
     return (outCur*1000);
 }
 
+//---------------------------------------------------------------------------
+// wxAMMediaBackend::SetVolume
+//
+// Sets the volume through the IBasicAudio interface -
+// value ranges from 0 (MAX volume) to -10000 (minimum volume).
+// -100 per decibel.
+//---------------------------------------------------------------------------
+bool wxAMMediaBackend::SetVolume(double dVolume) 
+{ 
+    return SUCCEEDED(m_pBA->put_Volume( (long) ((dVolume-1.0) * 10000.0) )); 
+} 
+
+//---------------------------------------------------------------------------
+// wxAMMediaBackend::GetVolume
+//
+// Gets the volume through the IBasicAudio interface -
+// value ranges from 0 (MAX volume) to -10000 (minimum volume).
+// -100 per decibel.
+//---------------------------------------------------------------------------
+double wxAMMediaBackend::GetVolume()
+{
+    long lVolume;
+    if ( SUCCEEDED(m_pBA->get_Volume(&lVolume)) )
+        return (((double)(lVolume + 10000)) / 10000.0);
+    return 0.0;
+}
+ 
 //---------------------------------------------------------------------------
 // wxAMMediaBackend::GetDuration
 //
@@ -1646,6 +1693,15 @@ typedef struct {
     DWORD     dwSpeed;
 } MCI_DGV_SET_PARMS;
 
+typedef struct {
+    DWORD_PTR   dwCallback;
+    DWORD   dwItem;
+    DWORD   dwValue;
+    DWORD   dwOver;
+    wxChar*   lpstrAlgorithm;
+    wxChar*   lpstrQuality;
+} MCI_DGV_SETAUDIO_PARMS;
+
 //---------------------------------------------------------------------------
 // wxMCIMediaBackend Constructor
 //
@@ -1782,8 +1838,13 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
         return false;
     }
 
+#if defined(_WIN32)
     ::SetWindowLong(m_hNotifyWnd, GWL_WNDPROC,
                        (LONG)wxMCIMediaBackend::NotifyWndProc);
+#else
+    ::SetWindowLongPtr(m_hNotifyWnd, GWLP_WNDPROC,
+                       (LONG_PTR)wxMCIMediaBackend::NotifyWndProc);
+#endif
 
     ::SetWindowLong(m_hNotifyWnd, GWL_USERDATA,
                        (LONG) this);
@@ -1932,6 +1993,48 @@ wxLongLong wxMCIMediaBackend::GetPosition()
         return 0;
 
     return statusParms.dwReturn;
+}
+
+//---------------------------------------------------------------------------
+// wxMCIMediaBackend::GetVolume
+//
+// Gets the volume of the current media via the MCI_DGV_STATUS_VOLUME
+// message.  Value ranges from 0 (minimum) to 1000 (maximum volume).
+//---------------------------------------------------------------------------
+double wxMCIMediaBackend::GetVolume()
+{
+    MCI_STATUS_PARMS statusParms;
+    statusParms.dwCallback = NULL;
+    statusParms.dwItem = 0x4019; //MCI_DGV_STATUS_VOLUME
+
+    if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM,
+                       (DWORD)(LPSTR)&statusParms) != 0)
+        return 0;
+
+    return ((double)statusParms.dwReturn) / 1000.0;
+}
+
+//---------------------------------------------------------------------------
+// wxMCIMediaBackend::SetVolume
+//
+// Sets the volume of the current media via the MCI_DGV_SETAUDIO_VOLUME
+// message.  Value ranges from 0 (minimum) to 1000 (maximum volume).
+//---------------------------------------------------------------------------
+bool wxMCIMediaBackend::SetVolume(double dVolume)
+{
+    MCI_DGV_SETAUDIO_PARMS audioParms;
+    audioParms.dwCallback = NULL;
+    audioParms.dwItem = 0x4002; //MCI_DGV_SETAUDIO_VOLUME
+    audioParms.dwValue = (DWORD) (dVolume * 1000.0);
+    audioParms.dwOver = 0;
+    audioParms.lpstrAlgorithm = NULL;
+    audioParms.lpstrQuality = NULL;
+
+    if (mciSendCommand(m_hDev, 0x0873, //MCI_SETAUDIO 
+                        0x00800000L | 0x01000000L, //MCI_DGV_SETAUDIO+(_ITEM | _VALUE)
+                       (DWORD)(LPSTR)&audioParms) != 0)
+        return false;
+    return true;
 }
 
 //---------------------------------------------------------------------------
@@ -2448,6 +2551,54 @@ bool wxQTMediaBackend::SetPosition(wxLongLong where)
 wxLongLong wxQTMediaBackend::GetPosition()
 {
     return m_lib.GetMovieTime(m_movie, NULL);
+}
+
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::GetVolume
+//
+// Gets the volume through GetMovieVolume - which returns a 16 bit short -
+//
+// +--------+--------+
+// +   (1)  +   (2)  +
+// +--------+--------+
+//
+// (1) first 8 bits are value before decimal
+// (2) second 8 bits are value after decimal
+//
+// Volume ranges from -1.0 (gain but no sound), 0 (no sound and no gain) to
+// 1 (full gain and sound)
+//---------------------------------------------------------------------------
+double wxQTMediaBackend::GetVolume()
+{
+    short sVolume = m_lib.GetMovieVolume(m_movie);
+    
+    if(sVolume & (128 << 8)) //negative - no sound
+        return 0.0;
+
+    return (sVolume & (127 << 8)) ? 1.0 : ((double)(sVolume & 255)) / 255.0;
+}
+
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::SetVolume
+//
+// Sets the volume through SetMovieVolume - which takes a 16 bit short -
+//
+// +--------+--------+
+// +   (1)  +   (2)  +
+// +--------+--------+
+//
+// (1) first 8 bits are value before decimal
+// (2) second 8 bits are value after decimal
+//
+// Volume ranges from -1.0 (gain but no sound), 0 (no sound and no gain) to
+// 1 (full gain and sound)
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::SetVolume(double dVolume)
+{
+    short sVolume = (dVolume >= .9999 ? 1 << 8 : 
+                                       (short) (dVolume * 255));
+    m_lib.SetMovieVolume(m_movie, sVolume);
+    return true;
 }
 
 //---------------------------------------------------------------------------
