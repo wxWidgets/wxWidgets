@@ -33,6 +33,10 @@ wxMSW:
 - Fixed alpha blitting to take into account source position.
 - Setting foreground colour for wxCheckBox now works when using XP themes too
 
+wxGTK:
+
+- Added support for wxSTAY_ON_TOP (GTK 2.4+).
+
 wxMac:
 
 - Added support for launching 'APPL' bundles with wxExecute (usually they have a
