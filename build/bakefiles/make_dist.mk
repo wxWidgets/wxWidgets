@@ -448,6 +448,9 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/controls/makefile.unx $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.cpp $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.xpm $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/*.bmp $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/*.ico $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/*.rc $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.mms $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/icons/*.??? $(DISTDIR)/samples/controls/icons
 
