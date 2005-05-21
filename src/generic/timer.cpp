@@ -147,7 +147,6 @@ void wxTimerScheduler::NotifyTimers()
         {
             if ( desc->running && desc->shotTime <= now )
             {
-                desc = m_timers;
                 oneShot = desc->timer->IsOneShot();
                 RemoveTimer(desc);
 
@@ -167,6 +166,8 @@ void wxTimerScheduler::NotifyTimers()
                     if ( !oneShot )
                         QueueTimer(desc, now + desc->timer->GetInterval());
                 }
+                else
+                    desc = m_timers;
             }
         }
     }
