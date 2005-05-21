@@ -3932,6 +3932,7 @@ extern wxCOLORMAP *wxGetStdColourMap()
             // we want to avoid Windows' "help" and for this we need to have a
             // reference bitmap which can tell us what the RGB values change
             // to.
+            wxLogNull logNo; // suppress error if we couldn't load the bitmap
             wxBitmap stdColourBitmap(_T("wxBITMAP_STD_COLOURS"));
             if ( stdColourBitmap.Ok() )
             {
