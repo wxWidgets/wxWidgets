@@ -12,24 +12,26 @@
 #ifndef _WX_CURSOR_H_BASE_
 #define _WX_CURSOR_H_BASE_
 
+#include "wx/defs.h"
+
 #if defined(__WXPALMOS__)
-#include "wx/palmos/cursor.h"
+    #include "wx/palmos/cursor.h"
 #elif defined(__WXMSW__)
-#include "wx/msw/cursor.h"
+    #include "wx/msw/cursor.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/cursor.h"
+    #include "wx/motif/cursor.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk/cursor.h"
+    #include "wx/gtk/cursor.h"
 #elif defined(__WXX11__)
-#include "wx/x11/cursor.h"
+    #include "wx/x11/cursor.h"
 #elif defined(__WXMGL__)
-#include "wx/mgl/cursor.h"
+    #include "wx/mgl/cursor.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/cursor.h"
+    #include "wx/mac/cursor.h"
 #elif defined(__WXCOCOA__)
-#include "wx/cocoa/cursor.h"
+    #include "wx/cocoa/cursor.h"
 #elif defined(__WXPM__)
-#include "wx/os2/cursor.h"
+    #include "wx/os2/cursor.h"
 #endif
 
 #include "wx/utils.h"
