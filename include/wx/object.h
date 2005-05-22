@@ -191,7 +191,7 @@ inline void wxClassInfo::CleanUpClasses() {}
     wxIMPLEMENT_CLASS_COMMON(name, basename, NULL, func)
 
 #define wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, func)           \
-    wxIMPLEMENT_CLASS_COMMON(name, basename1, &basename2::ms_classInfo)
+    wxIMPLEMENT_CLASS_COMMON(name, basename1, &basename2::ms_classInfo, func)
 
 // -----------------------------------
 // for concrete classes
