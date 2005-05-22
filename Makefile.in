@@ -24341,8 +24341,18 @@ MACX_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/wx/mac/carbon/*.h $(DISTDIR)/include/wx/mac/carbon
 	cp $(INCDIR)/wx/mac/carbon/private/*.h $(DISTDIR)/include/wx/mac/carbon/private
 	cp $(INCDIR)/wx/mac/private/*.h $(DISTDIR)/include/wx/mac/private
+	mkdir $(DISTDIR)/include/wx/mac/corefoundation
+	cp $(INCDIR)/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
+	mkdir $(DISTDIR)/src/mac/corefoundation
+	cp $(MACDIR)/corefoundation/*.cpp $(DISTDIR)/src/mac/corefoundation
+	mkdir $(DISTDIR)/src/html/htmlctrl
+	mkdir $(DISTDIR)/src/html/htmlctrl/webkit
+	cp $(WXDIR)/src/html/htmlctrl/webkit/*.mm $(DISTDIR)/src/html/htmlctrl/webkit
+	mkdir $(DISTDIR)/src/mac/carbon
 	cp $(MACDIR)/carbon/*.cpp $(DISTDIR)/src/mac/carbon
-	cp $(MACDIR)/carbon/*.c $(DISTDIR)/src/mac/carbon
+	cp $(MACDIR)/carbon/*.mm $(DISTDIR)/src/mac/carbon
+	cp $(MACDIR)/carbon/*.icns $(DISTDIR)/src/mac/carbon
+	cp $(MACDIR)/carbon/Info.plist.in $(DISTDIR)/src/mac/carbon
 	cp $(MACDIR)/carbon/*.h $(DISTDIR)/src/mac/carbon
 	cp $(MACDIR)/carbon/*.r $(DISTDIR)/src/mac/carbon
 	mkdir $(DISTDIR)/src/mac/carbon/morefile
