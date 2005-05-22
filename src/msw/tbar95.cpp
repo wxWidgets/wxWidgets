@@ -249,8 +249,12 @@ bool wxToolBar::Create(wxWindow *parent,
 #if wxUSE_UXTHEME
     if ( style & wxTB_FLAT )
     {
+        // Testing for an active theme appears to be unnecessary (see comments in patch 1204217).
+        // Disabling the test brings back separator lines.
+#if 0
         wxUxThemeEngine *p = wxUxThemeEngine::Get();
         if ( !p || !p->IsThemeActive() )
+#endif            
         {
             DWORD dwToolbarStyle;
 
