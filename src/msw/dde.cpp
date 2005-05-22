@@ -595,7 +595,7 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
     }
 
     DWORD len = DdeGetData(returned_data, NULL, 0, 0);
-    len = ceil( static_cast<double>(len)/sizeof(wxChar) );
+    len = ceil( double(len)/sizeof(wxChar) );
 
     wxChar *data = GetBufferAtLeast( len );
     wxASSERT_MSG(data != NULL,
@@ -777,7 +777,7 @@ _DDECallback(WORD wType,
                 if (connection)
                 {
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
-                    len = ceil( static_cast<double>(len)/sizeof(wxChar) );
+                    len = ceil( double(len)/sizeof(wxChar) );
 
                     wxChar *data = connection->GetBufferAtLeast( len );
                     wxASSERT_MSG(data != NULL,
@@ -839,7 +839,7 @@ _DDECallback(WORD wType,
                     wxString item_name = DDEStringFromAtom(hsz2);
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
-                    len = ceil( static_cast<double>(len) / sizeof(wxChar) );
+                    len = ceil( double(len) / sizeof(wxChar) );
 
                     wxChar *data = connection->GetBufferAtLeast( len );
                     wxASSERT_MSG(data != NULL,
@@ -927,7 +927,7 @@ _DDECallback(WORD wType,
                     wxString item_name = DDEStringFromAtom(hsz2);
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
-                    len = ceil( static_cast<double>(len) / sizeof(wxChar) );
+                    len = ceil( double(len) / sizeof(wxChar) );
 
                     wxChar *data = connection->GetBufferAtLeast( len );
                     wxASSERT_MSG(data != NULL,
