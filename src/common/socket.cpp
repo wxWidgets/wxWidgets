@@ -1154,6 +1154,8 @@ bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
 
 bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
 {
+    wxASSERT_MSG( m_socket, _T("Socket not initialised") );
+
     if (m_socket->GetSockOpt(level, optname, optval, optlen)
         != GSOCK_NOERROR)
     {
@@ -1165,6 +1167,8 @@ bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
 bool wxSocketBase::SetOption(int level, int optname, const void *optval,
                               int optlen)
 {
+    wxASSERT_MSG( m_socket, _T("Socket not initialised") );
+    
     if (m_socket->SetSockOpt(level, optname, optval, optlen)
         != GSOCK_NOERROR)
     {
@@ -1304,6 +1308,8 @@ wxDatagramSocket& wxDatagramSocket::SendTo( wxSockAddress& addr,
                                             const void* buf,
                                             wxUint32 nBytes )
 {
+    wxASSERT_MSG( m_socket, _T("Socket not initialised") );
+    
     m_socket->SetPeer(addr.GetAddress());
     Write(buf, nBytes);
     return (*this);
