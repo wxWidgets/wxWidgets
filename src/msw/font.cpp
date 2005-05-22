@@ -606,8 +606,16 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
 
         case wxDEFAULT:
         default:
+        {
+            // We want Windows 2000 or later to have new fonts even MS Shell Dlg
+            // is returned as default GUI font for compatibility
+            int verMaj;
             ff_family = FF_SWISS;
-            facename = _T("MS Sans Serif");
+            if(wxGetOsVersion(&verMaj) == wxWINDOWS_NT && verMaj >= 5)
+                facename = _T("MS Shell Dlg 2");
+            else
+                facename = _T("MS Shell Dlg");
+        }
     }
 
     lf.lfPitchAndFamily = (BYTE)(DEFAULT_PITCH) | ff_family;
