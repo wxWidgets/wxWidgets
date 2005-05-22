@@ -7258,7 +7258,7 @@ void wxGrid::DrawRowLabels( wxDC& dc ,const wxArrayInt& rows)
 
 void wxGrid::DrawRowLabel( wxDC& dc, int row )
 {
-    if ( GetRowHeight(row) <= 0 )
+    if ( GetRowHeight(row) <= 0 || m_rowLabelWidth <= 0 )
         return;
 
     wxRect rect;
@@ -7320,7 +7320,7 @@ void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
 
 void wxGrid::DrawColLabel( wxDC& dc, int col )
 {
-    if ( GetColWidth(col) <= 0 )
+    if ( GetColWidth(col) <= 0 || m_colLabelHeight <= 0 )
         return;
 
     int colLeft = GetColLeft(col);
