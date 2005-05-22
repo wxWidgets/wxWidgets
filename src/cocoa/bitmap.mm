@@ -299,7 +299,8 @@ bool wxBitmap::Create(int w, int h, int d)
             hasAlpha: NO
             isPlanar: NO
             colorSpaceName: NSCalibratedRGBColorSpace
-            bytesPerRow: 0
+            bytesPerRow: 0  // NOTE: Contrary to Apple documentation Mac OS
+                            // 10.4 will add padding bytes when 0 is used here
             bitsPerPixel: 0];
 
     wxLogTrace(wxTRACE_COCOA,wxT("M_BITMAPDATA=%p NSBitmapImageRep bitmapData=%p"), M_BITMAPDATA, [M_BITMAPDATA->m_cocoaNSBitmapImageRep bitmapData]);
@@ -447,9 +448,11 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
             hasAlpha: NO
             isPlanar: NO
             colorSpaceName: NSCalibratedRGBColorSpace
-            bytesPerRow: 0
+            bytesPerRow: image.GetWidth()*3
             bitsPerPixel: 0];
 
+    // TODO: Specify bytesPerRow:0 and then use [bitmapImage bytesPerRow]
+    // so that the rows are aligned suitably for altivec by the OS (Tiger)
     const int numBytes = image.GetWidth()*image.GetHeight()*3;
     memcpy([bitmapImage bitmapData], image.GetData(), numBytes);
     // TODO: Alpha and convert to desired depth
