@@ -57,9 +57,6 @@
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
-// hide the ugly cast
-#define m_hwnd    (HWND)GetHWND()
-
 #ifdef __WXWINCE__
 #define USE_NOTEBOOK_ANTIFLICKER    0
 #else
@@ -100,7 +97,7 @@ BEGIN_EVENT_TABLE(wxNotebook, wxControl)
 #if USE_NOTEBOOK_ANTIFLICKER
     EVT_ERASE_BACKGROUND(wxNotebook::OnEraseBackground)
     EVT_PAINT(wxNotebook::OnPaint)
-#endif        
+#endif
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
     EVT_SIZE(wxNotebook::OnSize)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
@@ -345,7 +342,7 @@ bool wxNotebook::Create(wxWindow *parent,
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
     if (HasFlag(wxNB_FLAT))
     {
-        SendMessage(m_hwnd, CCM_SETVERSION, COMCTL32_VERSION, 0);
+        SendMessage(GetHwnd(), CCM_SETVERSION, COMCTL32_VERSION, 0);
         if (!m_hasBgCol)
             SetBackgroundColour(*wxWHITE);
     }
@@ -397,14 +394,14 @@ wxNotebook::~wxNotebook()
 size_t wxNotebook::GetPageCount() const
 {
   // consistency check
-  wxASSERT( (int)m_pages.Count() == TabCtrl_GetItemCount(m_hwnd) );
+  wxASSERT( (int)m_pages.Count() == TabCtrl_GetItemCount(GetHwnd()) );
 
   return m_pages.Count();
 }
 
 int wxNotebook::GetRowCount() const
 {
-  return TabCtrl_GetRowCount(m_hwnd);
+  return TabCtrl_GetRowCount(GetHwnd());
 }
 
 int wxNotebook::SetSelection(size_t nPage)
@@ -423,7 +420,7 @@ int wxNotebook::SetSelection(size_t nPage)
       event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
       (void)GetEventHandler()->ProcessEvent(event);
 
-      TabCtrl_SetCurSel(m_hwnd, nPage);
+      TabCtrl_SetCurSel(GetHwnd(), nPage);
     }
   }
 
@@ -438,7 +435,7 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
   tcItem.mask = TCIF_TEXT;
   tcItem.pszText = (wxChar *)strText.c_str();
 
-  return TabCtrl_SetItem(m_hwnd, nPage, &tcItem) != 0;
+  return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
 }
 
 wxString wxNotebook::GetPageText(size_t nPage) const
@@ -452,7 +449,7 @@ wxString wxNotebook::GetPageText(size_t nPage) const
   tcItem.cchTextMax = WXSIZEOF(buf);
 
   wxString str;
-  if ( TabCtrl_GetItem(m_hwnd, nPage, &tcItem) )
+  if ( TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) )
     str = tcItem.pszText;
 
   return str;
@@ -465,7 +462,7 @@ int wxNotebook::GetPageImage(size_t nPage) const
   TC_ITEM tcItem;
   tcItem.mask = TCIF_IMAGE;
 
-  return TabCtrl_GetItem(m_hwnd, nPage, &tcItem) ? tcItem.iImage : -1;
+  return TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) ? tcItem.iImage : -1;
 }
 
 bool wxNotebook::SetPageImage(size_t nPage, int nImage)
@@ -476,7 +473,7 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
   tcItem.mask = TCIF_IMAGE;
   tcItem.iImage = nImage;
 
-  return TabCtrl_SetItem(m_hwnd, nPage, &tcItem) != 0;
+  return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
 }
 
 void wxNotebook::SetImageList(wxImageList* imageList)
@@ -485,7 +482,7 @@ void wxNotebook::SetImageList(wxImageList* imageList)
 
   if ( imageList )
   {
-    TabCtrl_SetImageList(m_hwnd, (HIMAGELIST)imageList->GetHIMAGELIST());
+    TabCtrl_SetImageList(GetHwnd(), (HIMAGELIST)imageList->GetHIMAGELIST());
   }
 }
 
@@ -508,7 +505,7 @@ wxRect wxNotebook::GetPageSize() const
     // then please do so.  --RD
     if ( !HasFlag(wxNB_MULTILINE) || (rc.right > 20 && rc.bottom > 20) )
     {
-        TabCtrl_AdjustRect(m_hwnd, false, &rc);
+        TabCtrl_AdjustRect(GetHwnd(), false, &rc);
 
         wxCopyRECTToRect(rc, r);
     }
@@ -592,7 +589,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     if ( !pageRemoved )
         return NULL;
 
-    TabCtrl_DeleteItem(m_hwnd, nPage);
+    TabCtrl_DeleteItem(GetHwnd(), nPage);
 
     if ( m_pages.IsEmpty() )
     {
@@ -601,7 +598,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     }
     else // notebook still not empty
     {
-        int selNew = TabCtrl_GetCurSel(m_hwnd);
+        int selNew = TabCtrl_GetCurSel(GetHwnd());
         if (selNew != -1)
         {
             // No selection change, just refresh the current selection.
@@ -645,7 +642,7 @@ bool wxNotebook::DeleteAllPages()
 
   m_pages.Clear();
 
-  TabCtrl_DeleteAllItems(m_hwnd);
+  TabCtrl_DeleteAllItems(GetHwnd());
 
   m_nSelection = -1;
 
@@ -704,7 +701,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     AdjustPageSize(pPage);
 
     // finally do insert it
-    if ( TabCtrl_InsertItem(m_hwnd, nPage, &tcItem) == -1 )
+    if ( TabCtrl_InsertItem(GetHwnd(), nPage, &tcItem) == -1 )
     {
         wxLogError(wxT("Can't create the notebook page '%s'."), strText.c_str());
 
@@ -797,17 +794,17 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         // This needs to be reconciled with the RefreshRect calls
         // at the end of this function, which weren't enough to prevent
         // the droppings.
-        
+
         wxSize sz = GetClientSize();
 
         // Refresh right side
         wxRect rect(sz.x-4, 0, 4, sz.y);
         RefreshRect(rect);
-        
+
         // Refresh bottom side
         rect = wxRect(0, sz.y-4, sz.x, 4);
         RefreshRect(rect);
-        
+
         // Refresh left side
         rect = wxRect(0, 0, 4, sz.y);
         RefreshRect(rect);
@@ -852,7 +849,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     UpdateBgBrush();
 #endif // wxUSE_UXTHEME
 
-    TabCtrl_AdjustRect(m_hwnd, false, &rc);
+    TabCtrl_AdjustRect(GetHwnd(), false, &rc);
 
     int width = rc.right - rc.left,
         height = rc.bottom - rc.top;
@@ -928,7 +925,7 @@ bool wxNotebook::MSWTranslateMessage(WXMSG *wxmsg)
     // intercept SHIFT+TAB. This goes to the parent of the notebook which will
     // process it.
     if ( msg->message == WM_KEYDOWN && msg->wParam == VK_TAB &&
-            msg->hwnd == m_hwnd &&
+            msg->hwnd == GetHwnd() &&
                 (wxIsCtrlDown() || !wxIsShiftDown()) )
     {
         return MSWProcessMessage(wxmsg);
@@ -1133,7 +1130,7 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
 
         wxBrush brush(GetBackgroundColour());
         HBRUSH hbr = GetHbrushOf(brush);
-       
+
         ::FillRect((HDC) hDC, &rc, hbr);
 
         return true;
@@ -1244,7 +1241,7 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
       return wxControl::MSWOnNotify(idCtrl, lParam, result);
   }
 
-  event.SetSelection(TabCtrl_GetCurSel(m_hwnd));
+  event.SetSelection(TabCtrl_GetCurSel(GetHwnd()));
   event.SetOldSelection(m_nSelection);
   event.SetEventObject(this);
   event.SetInt(idCtrl);
@@ -1286,7 +1283,7 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
                 s_wndprocNotebookSpinBtn = (WXFARPROC)wxGetWindowProc(child);
 
             wxSetWindowProc(child, wxNotebookSpinBtnWndProc);
-	    break;
+            break;
         }
     }
 
@@ -1326,7 +1323,6 @@ LRESULT APIENTRY _EXPORT wxNotebookSpinBtnWndProc(HWND hwnd,
     return ::CallWindowProc(CASTWNDPROC s_wndprocNotebookSpinBtn, hwnd, message, wParam, lParam);
 }
 
-#endif
-    // USE_NOTEBOOK_ANTIFLICKER
-    
+#endif // USE_NOTEBOOK_ANTIFLICKER
+
 #endif // wxUSE_NOTEBOOK
