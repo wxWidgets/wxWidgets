@@ -867,7 +867,7 @@ void wxDatePickerCtrlGeneric::OnKillFocus(wxFocusEvent &ev)
         m_txt->SetValue(wxEmptyString);
 
     // notify that we had to change the date after validation
-    if ( (dt.IsValid() && m_currentDate != dt) ||
+    if ( (dt.IsValid() && (!m_currentDate.IsValid() || m_currentDate != dt)) ||
             (!dt.IsValid() && m_currentDate.IsValid()) )
     {
         m_currentDate = dt;
