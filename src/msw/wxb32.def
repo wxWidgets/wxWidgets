@@ -1,9 +1,0 @@
-LIBRARY 	WX
-
-DESCRIPTION     'wxWindows DLL'
-
-CODE            EXECUTEREAD MOVEABLE LOADONCALL
-DATA            READWRITE
-
-
-
