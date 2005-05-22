@@ -348,7 +348,8 @@ public:
         {
             m_selections.Empty();
 
-            DoTraverse(tree->GetRootItem());
+            if (tree->GetCount() > 0)
+                DoTraverse(tree->GetRootItem());
         }
 
     virtual bool OnVisit(const wxTreeItemId& item)
