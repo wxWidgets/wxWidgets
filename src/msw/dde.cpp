@@ -44,6 +44,7 @@
 
 #include <string.h>
 #include <ddeml.h>
+#include <math.h>
 
 // ----------------------------------------------------------------------------
 // macros and constants
@@ -594,8 +595,9 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
     }
 
     DWORD len = DdeGetData(returned_data, NULL, 0, 0);
+    len = ceil( static_cast<double>(len)/sizeof(wxChar) );
 
-    wxChar *data = GetBufferAtLeast( len/sizeof(wxChar) );
+    wxChar *data = GetBufferAtLeast( len );
     wxASSERT_MSG(data != NULL,
                  _T("Buffer too small in wxDDEConnection::Request") );
     (void) DdeGetData(returned_data, (LPBYTE)data, len, 0);
@@ -603,7 +605,7 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
     (void) DdeFreeDataHandle(returned_data);
 
     if (size)
-        *size = (int)len/sizeof(wxChar);
+        *size = len;
 
     return data;
 }
@@ -775,8 +777,9 @@ _DDECallback(WORD wType,
                 if (connection)
                 {
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
+                    len = ceil( static_cast<double>(len)/sizeof(wxChar) );
 
-                    wxChar *data = connection->GetBufferAtLeast( len/sizeof(wxChar) );
+                    wxChar *data = connection->GetBufferAtLeast( len );
                     wxASSERT_MSG(data != NULL,
                                  _T("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
 
@@ -786,7 +789,7 @@ _DDECallback(WORD wType,
 
                     if ( connection->OnExecute(connection->m_topicName,
                                                data,
-                                               (int)len/sizeof(wxChar),
+                                               (int)len,
                                                (wxIPCFormat) wFmt) )
                     {
                         return (DDERETURN)(DWORD)DDE_FACK;
@@ -836,8 +839,9 @@ _DDECallback(WORD wType,
                     wxString item_name = DDEStringFromAtom(hsz2);
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
+                    len = ceil( static_cast<double>(len) / sizeof(wxChar) );
 
-                    wxChar *data = connection->GetBufferAtLeast( len/sizeof(wxChar) );
+                    wxChar *data = connection->GetBufferAtLeast( len );
                     wxASSERT_MSG(data != NULL,
                                  _T("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
 
@@ -848,7 +852,7 @@ _DDECallback(WORD wType,
                     connection->OnPoke(connection->m_topicName,
                                        item_name,
                                        data,
-                                       (int)len/sizeof(wxChar),
+                                       (int)len,
                                        (wxIPCFormat) wFmt);
 
                     return (DDERETURN)DDE_FACK;
@@ -923,8 +927,9 @@ _DDECallback(WORD wType,
                     wxString item_name = DDEStringFromAtom(hsz2);
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
+                    len = ceil( static_cast<double>(len) / sizeof(wxChar) );
 
-                    wxChar *data = connection->GetBufferAtLeast( len/sizeof(wxChar) );
+                    wxChar *data = connection->GetBufferAtLeast( len );
                     wxASSERT_MSG(data != NULL,
                                  _T("Buffer too small in _DDECallback (XTYP_ADVDATA)") );
 
@@ -934,7 +939,7 @@ _DDECallback(WORD wType,
                     if ( connection->OnAdvise(connection->m_topicName,
                                               item_name,
                                               data,
-                                              (int)len/sizeof(wxChar),
+                                              (int)len,
                                               (wxIPCFormat) wFmt) )
                     {
                         return (DDERETURN)(DWORD)DDE_FACK;
