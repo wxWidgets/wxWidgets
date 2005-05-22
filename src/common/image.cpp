@@ -498,25 +498,53 @@ wxImage wxImage::Rotate90( bool clockwise ) const
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
 
+    unsigned char *source_data = M_IMGDATA->m_data;
+    unsigned char *target_data;
+    unsigned char *alpha_data = 0 ;
+    unsigned char *source_alpha = 0 ;
+    unsigned char *target_alpha = 0 ;
+
     if (M_IMGDATA->m_hasMask)
+    {
         image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
+    }
+    else
+    {
+        source_alpha = M_IMGDATA->m_alpha ;
+        if ( source_alpha )
+        {
+            image.SetAlpha() ;
+            alpha_data = image.GetAlpha() ;
+        }
+    }
 
     long height = M_IMGDATA->m_height;
     long width  = M_IMGDATA->m_width;
-
-    unsigned char *source_data = M_IMGDATA->m_data;
-    unsigned char *target_data;
 
     for (long j = 0; j < height; j++)
     {
         for (long i = 0; i < width; i++)
         {
             if (clockwise)
+            {
                 target_data = data + (((i+1)*height) - j - 1)*3;
+                if(source_alpha)
+                    target_alpha = alpha_data + (((i+1)*height) - j - 1);
+            }
             else
+            {
                 target_data = data + ((height*(width-1)) + j - (i*height))*3;
+                if(source_alpha)
+                    target_alpha = alpha_data + ((height*(width-1)) + j - (i*height));
+            }
             memcpy( target_data, source_data, 3 );
             source_data += 3;
+
+            if(source_alpha)
+            {
+                memcpy( target_alpha, source_alpha, 1 );
+                source_alpha += 1;
+            }
         }
     }
 
