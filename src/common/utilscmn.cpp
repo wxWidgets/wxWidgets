@@ -635,7 +635,10 @@ bool wxLaunchDefaultBrowser(const wxString& url)
         sei.hIcon = NULL;
         sei.hInstApp = NULL;
         sei.hkeyClass = NULL;
+        // Not in WinCE
+#if 0
         sei.hMonitor = NULL;
+#endif
         sei.hProcess = NULL;
         sei.hwnd = NULL;
         sei.lpClass = NULL;

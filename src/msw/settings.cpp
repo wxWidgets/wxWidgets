@@ -225,12 +225,13 @@ wxFont wxCreateFontFromStockObject(int index)
         {
             wxNativeFontInfo info;
             info.lf = lf;
+#ifndef __WXWINCE__
             // We want Windows 2000 or later to have new fonts even MS Shell Dlg
             // is returned as default GUI font for compatibility
             int verMaj;
             if(index == DEFAULT_GUI_FONT && wxGetOsVersion(&verMaj) == wxWINDOWS_NT && verMaj >= 5)
                 wxStrcpy(info.lf.lfFaceName, wxT("MS Shell Dlg 2"));
-
+#endif
             // Under MicroWindows we pass the HFONT as well
             // because it's hard to convert HFONT -> LOGFONT -> HFONT
             // It's OK to delete stock objects, the delete will be ignored.
