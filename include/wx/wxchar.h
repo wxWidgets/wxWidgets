@@ -473,24 +473,24 @@
             #endif /* gcc/!gcc */
 
             /* string.h functions (wchar.h) */
-            #define  wxStrcat    wcscat
-            #define  wxStrchr    wcschr
-            #define  wxStrcmp    wcscmp
-            #define  wxStrcoll   wcscoll
-            #define  wxStrcpy    wcscpy
-            #define  wxStrcspn   wcscspn
+            #define  wxStrcat    ::wcscat
+            #define  wxStrchr    ::wcschr
+            #define  wxStrcmp    ::wcscmp
+            #define  wxStrcoll   ::wcscoll
+            #define  wxStrcpy    ::wcscpy
+            #define  wxStrcspn   ::wcscspn
             #define  wxStrlen_   wxWcslen /* wxStrlen_() is used in wxStrlen() */
-            #define  wxStrncat   wcsncat
-            #define  wxStrncmp   wcsncmp
-            #define  wxStrncpy   wcsncpy
-            #define  wxStrpbrk   wcspbrk
-            #define  wxStrrchr   wcsrchr
-            #define  wxStrspn    wcsspn
-            #define  wxStrstr    wcsstr
-            #define  wxStrtod    wcstod
-            #define  wxStrtol    wcstol
-            #define  wxStrtoul   wcstoul
-            #define  wxStrxfrm   wcsxfrm
+            #define  wxStrncat   ::wcsncat
+            #define  wxStrncmp   ::wcsncmp
+            #define  wxStrncpy   ::wcsncpy
+            #define  wxStrpbrk   ::wcspbrk
+            #define  wxStrrchr   ::wcsrchr
+            #define  wxStrspn    ::wcsspn
+            #define  wxStrstr    ::wcsstr
+            #define  wxStrtod    ::wcstod
+            #define  wxStrtol    ::wcstol
+            #define  wxStrtoul   ::wcstoul
+            #define  wxStrxfrm   ::wcsxfrm
 
             #define  wxFgetc     fgetwc
             #define  wxFgetchar  fgetwchar
