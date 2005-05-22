@@ -839,8 +839,10 @@ void wxMDIChildFrame::DoGetPosition(int *x, int *y) const
   wxMDIParentFrame *mdiParent = (wxMDIParentFrame *)GetParent();
   ::ScreenToClient((HWND) mdiParent->GetClientWindow()->GetHWND(), &point);
 
-  *x = point.x;
-  *y = point.y;
+  if (x)
+      *x = point.x;
+  if (y)
+      *y = point.y;
 }
 
 void wxMDIChildFrame::InternalSetMenuBar()
