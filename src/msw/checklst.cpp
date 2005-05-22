@@ -145,11 +145,11 @@ public:
   void SendEvent();
 
 private:
-
-    DECLARE_NO_COPY_CLASS(wxCheckListBoxItem)
   bool            m_bChecked;
   wxCheckListBox *m_pParent;
   size_t          m_nIndex;
+
+  DECLARE_NO_COPY_CLASS(wxCheckListBoxItem)
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
@@ -163,64 +163,67 @@ wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
   // done in OnMeasure while they are used only in OnDraw and we
   // know that there will always be OnMeasure before OnDraw
 
-  // fix appearance
-  SetMarginWidth(GetDefaultMarginWidth());
+  // fix appearance for check list boxes: they don't look quite the same as
+  // menu icons
+  SetMarginWidth(::GetSystemMetrics(SM_CXMENUCHECK) -
+                    2*wxSystemSettings::GetMetric(wxSYS_EDGE_X) + 1);
+  SetBackgroundColour(pParent->GetBackgroundColour());
 }
 
 bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                                     wxODAction act, wxODStatus stat)
 {
-  if ( IsChecked() )
-    stat = (wxOwnerDrawn::wxODStatus)(stat | wxOwnerDrawn::wxODChecked);
+    // first draw the label
+    if ( IsChecked() )
+        stat = (wxOwnerDrawn::wxODStatus)(stat | wxOwnerDrawn::wxODChecked);
 
-  if ( wxOwnerDrawn::OnDrawItem(dc, rc, act, stat) ) {
-    // ## using native API for performance and precision
+    if ( !wxOwnerDrawn::OnDrawItem(dc, rc, act, stat) )
+        return false;
+
+
+    // now draw the check mark part
     size_t nCheckWidth  = GetDefaultMarginWidth(),
-         nCheckHeight = m_pParent->GetItemHeight();
+           nCheckHeight = m_pParent->GetItemHeight();
 
     int x = rc.GetX(),
         y = rc.GetY();
 
     HDC hdc = (HDC)dc.GetHDC();
 
-    // create pens
-    HPEN hpenBack = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_WINDOW)),
-         hpenGray = CreatePen(PS_SOLID, 0, RGB(128, 128, 128)),
-         hpenPrev = (HPEN)SelectObject(hdc, hpenBack);
+    // create pens, brushes &c
+    COLORREF colBg = ::GetSysColor(COLOR_WINDOW);
+    AutoHPEN hpenBack(colBg),
+             hpenGray(RGB(0xc0, 0xc0, 0xc0));
 
-    // we erase the 1-pixel border
-    Rectangle(hdc, x, y, x + nCheckWidth, y + nCheckHeight);
+    SelectInHDC selPen(hdc, (HGDIOBJ)hpenBack);
+    AutoHBRUSH hbrBack(colBg);
+    SelectInHDC selBrush(hdc, hbrBack);
 
-    // shift check mark 1 pixel to the right (it looks better like this)
+    // erase the background: it could have been filled with the selected colour
+    Rectangle(hdc, x, y, x + nCheckWidth + 1, rc.GetBottom() + 1);
+
+    // shift check mark 1 pixel to the right, looks better like this
     x++;
 
-    if ( IsChecked() ) {
-      // first create a monochrome bitmap in a memory DC
-      HDC hdcMem = CreateCompatibleDC(hdc);
-      HBITMAP hbmpCheck = CreateBitmap(nCheckWidth, nCheckHeight, 1, 1, 0);
-      HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcMem, hbmpCheck);
+    if ( IsChecked() )
+    {
+        // first create a monochrome bitmap in a memory DC
+        MemoryHDC hdcMem(hdc);
+        MonoBitmap hbmpCheck(nCheckWidth, nCheckHeight);
+        SelectInHDC selBmp(hdcMem, hbmpCheck);
 
-      // then draw a check mark into it
-
-      RECT rect;
-      rect.left   = 0;
-      rect.top    = 0;
-      rect.right  = nCheckWidth;
-      rect.bottom = nCheckHeight;
-
+        // then draw a check mark into it
+        RECT rect = { 0, 0, nCheckWidth, nCheckHeight };
+        ::DrawFrameControl(hdcMem, &rect,
 #ifdef __WXWINCE__
-      DrawFrameControl(hdcMem, &rect, DFC_BUTTON, DFCS_BUTTONCHECK);
+                           DFC_BUTTON, DFCS_BUTTONCHECK
 #else
-      DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
+                           DFC_MENU, DFCS_MENUCHECK
 #endif
+                           );
 
-      // finally copy it to screen DC and clean up
-      BitBlt(hdc, x, y, nCheckWidth - 1, nCheckHeight,
-             hdcMem, 0, 0, SRCCOPY);
-
-      SelectObject(hdcMem, hbmpOld);
-      DeleteObject(hbmpCheck);
-      DeleteDC(hdcMem);
+        // finally copy it to screen DC
+        ::BitBlt(hdc, x, y, nCheckWidth, nCheckHeight, hdcMem, 0, 0, SRCCOPY);
     }
 
     // now we draw the smaller rectangle
@@ -229,30 +232,12 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     nCheckHeight -= 2;
 
     // draw hollow gray rectangle
-    (void)SelectObject(hdc, hpenGray);
-    HBRUSH hbrPrev  = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
+    (void)::SelectObject(hdc, (HGDIOBJ)hpenGray);
+
+    SelectInHDC selBrush2(hdc, ::GetStockObject(NULL_BRUSH));
     Rectangle(hdc, x, y, x + nCheckWidth, y + nCheckHeight);
 
-    // clean up
-    (void)SelectObject(hdc, hpenPrev);
-    (void)SelectObject(hdc, hbrPrev);
-
-    DeleteObject(hpenBack);
-    DeleteObject(hpenGray);
-
-    /*
-    dc.DrawRectangle(x, y, nCheckWidth, nCheckHeight);
-
-    if ( IsChecked() ) {
-      dc.DrawLine(x, y, x + nCheckWidth, y + nCheckHeight);
-      dc.DrawLine(x, y + nCheckHeight, x + nCheckWidth, y);
-    }
-    */
-
     return true;
-  }
-
-  return false;
 }
 
 // change the state of the item and redraw it
