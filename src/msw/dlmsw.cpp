@@ -79,8 +79,15 @@ public:
         wxVersionDLL *verDLL;
     };
 
+    // TODO: fix EnumerateLoadedModules() to use EnumerateLoadedModules64()
+    #ifdef __WIN64__
+        typedef DWORD64 DWORD_32_64;
+    #else
+        typedef DWORD DWORD_32_64;
+    #endif
+
     static BOOL CALLBACK
-        EnumModulesProc(PSTR name, DWORD64 base, ULONG size, void *data);
+    EnumModulesProc(PSTR name, DWORD_32_64 base, ULONG size, void *data);
 };
 
 // ----------------------------------------------------------------------------
@@ -209,7 +216,7 @@ wxString wxVersionDLL::GetFileVersion(const wxString& filename) const
 /* static */
 BOOL CALLBACK
 wxDynamicLibraryDetailsCreator::EnumModulesProc(PSTR name,
-                                                DWORD64 base,
+                                                DWORD_32_64 base,
                                                 ULONG size,
                                                 void *data)
 {
