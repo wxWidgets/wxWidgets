@@ -585,7 +585,7 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
   wxYield();
 
   // Get the data
-  wxFile fileTest(wxT("test.url"));
+  wxFile fileTest(wxT("test.url"), wxFile::write);
   wxFileOutputStream sout(fileTest);
   if (!sout.Ok())
   {
