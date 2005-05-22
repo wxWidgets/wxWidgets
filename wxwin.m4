@@ -7,7 +7,7 @@ dnl        ...
 dnl     AM_OPTIONS_WXCONFIG
 dnl        ...
 dnl        ...
-dnl     AM_PATH_WXCONFIG(2.3.4, wxWin=1)
+dnl     AM_PATH_WXCONFIG(2.6.0, wxWin=1)
 dnl     if test "$wxWin" != 1; then
 dnl        AC_MSG_ERROR([
 dnl                wxWindows must be installed on your system
@@ -23,7 +23,7 @@ dnl     CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
 dnl     CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
 dnl     CFLAGS="$CFLAGS $WX_CFLAGS_ONLY"
 dnl
-dnl     LDFLAGS="$LDFLAGS $WX_LIBS"
+dnl     LIBS="$LIBS $WX_LIBS"
 dnl ---------------------------------------------------------------------------
 
 dnl ---------------------------------------------------------------------------
@@ -229,6 +229,15 @@ AC_DEFUN([AM_PATH_WXCONFIG],
        ifelse([$3], , :, [$3])
 
     fi
+  else
+
+    WX_CFLAGS=""
+    WX_CPPFLAGS=""
+    WX_CXXFLAGS=""
+    WX_LIBS=""
+    WX_LIBS_STATIC=""
+    ifelse([$3], , :, [$3])
+
   fi
 
   AC_SUBST(WX_CPPFLAGS)
