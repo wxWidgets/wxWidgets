@@ -667,6 +667,26 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
     }
 
     XFreeGC( xdisplay, xgc );
+
+    // Move Clients, but not the scrollbars
+    // FIXME: There may be a better method to move a lot of Windows within X11
+    wxScrollBar *sbH = ((wxWindow *) this)->GetScrollbar( wxHORIZONTAL );
+    wxScrollBar *sbV = ((wxWindow *) this)->GetScrollbar( wxVERTICAL );
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+    while ( node )
+    {
+        // Only propagate to non-top-level windows
+        wxWindow *win = node->GetData();
+        if ( win->GetParent() && win != sbH && win != sbV )
+        {
+            wxPoint pos = win->GetPosition();
+            // Add the delta to the old Position
+            pos.x += dx;
+            pos.y += dy;
+            win->SetPosition(pos);
+        }
+        node = node->GetNext();
+    }
 }
 
 // ---------------------------------------------------------------------------
