@@ -48,11 +48,13 @@ This event applies to wxApp only.}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxCloseEvent::wxCloseEvent}\label{wxcloseeventctor}
 
 \func{}{wxCloseEvent}{\param{WXTYPE}{ commandEventType = 0}, \param{int}{ id = 0}}
 
 Constructor.
+
 
 \membersection{wxCloseEvent::CanVeto}\label{wxcloseeventcanveto}
 
@@ -62,11 +64,15 @@ Returns true if you can veto a system shutdown or a window close event.
 Vetoing a window close event is not possible if the calling code wishes to
 force the application to exit, and so this function must be called to check this.
 
+
 \membersection{wxCloseEvent::GetLoggingOff}\label{wxcloseeventgetloggingoff}
 
 \constfunc{bool}{GetLoggingOff}{\void}
 
-Returns true if the user is logging off.
+Returns true if the user is just logging off or false if the system is
+shutting down. This method can only be called for end session and query end
+session events, it doesn't make sense for close window event.
+
 
 \membersection{wxCloseEvent::GetForce}\label{wxcloseeventgetforce}
 
@@ -75,11 +81,13 @@ Returns true if the user is logging off.
 Returns true if the application wishes to force the window to close.
 This will shortly be obsolete, replaced by CanVeto.
 
+
 \membersection{wxCloseEvent::SetCanVeto}\label{wxcloseeventsetcanveto}
 
 \func{void}{SetCanVeto}{\param{bool}{ canVeto}}
 
 Sets the 'can veto' flag.
+
 
 \membersection{wxCloseEvent::SetForce}\label{wxcloseeventsetforce}
 
@@ -87,11 +95,13 @@ Sets the 'can veto' flag.
 
 Sets the 'force' flag.
 
+
 \membersection{wxCloseEvent::SetLoggingOff}\label{wxcloseeventsetloggingoff}
 
 \constfunc{void}{SetLoggingOff}{\param{bool}{ loggingOff}}
 
 Sets the 'logging off' flag.
+
 
 \membersection{wxCloseEvent::Veto}\label{wxcloseeventveto}
 

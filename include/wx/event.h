@@ -1389,7 +1389,15 @@ public:
         m_canVeto(event.m_canVeto) {}
 
     void SetLoggingOff(bool logOff) { m_loggingOff = logOff; }
-    bool GetLoggingOff() const { return m_loggingOff; }
+    bool GetLoggingOff() const
+    {
+        // m_loggingOff flag is only used by wxEVT_[QUERY_]END_SESSION, it
+        // doesn't make sense for wxEVT_CLOSE_WINDOW
+        wxASSERT_MSG( m_eventType != wxEVT_CLOSE_WINDOW,
+                      _T("this flag is for end session events only") );
+
+        return m_loggingOff;
+    }
 
     void Veto(bool veto = true)
     {
@@ -1400,19 +1408,18 @@ public:
         m_veto = veto;
     }
     void SetCanVeto(bool canVeto) { m_canVeto = canVeto; }
-    // No more asserts here please, the one you put here was wrong.
     bool CanVeto() const { return m_canVeto; }
     bool GetVeto() const { return m_canVeto && m_veto; }
 
     virtual wxEvent *Clone() const { return new wxCloseEvent(*this); }
 
 protected:
-    bool m_loggingOff;
-    bool m_veto, m_canVeto;
+    bool m_loggingOff,
+         m_veto,
+         m_canVeto;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCloseEvent)
-
 };
 
 /*
