@@ -583,9 +583,12 @@ bool wxLaunchDefaultBrowser(const wxString& url)
     //browser window
     if ( command.empty() || wxExecute(command) == -1)
     {
+        int nResult; //HINSTANCE error code
+
+#if !defined(__WXWINCE__)
         // CYGWIN and MINGW may have problems - so load ShellExecute
         // dynamically
-        typedef HINSTANCE (*LPShellExecute)(HWND hwnd, const wxChar* lpOperation,
+        typedef HINSTANCE (WINAPI *LPShellExecute)(HWND hwnd, const wxChar* lpOperation,
                                             const wxChar* lpFile,
                                             const wxChar* lpParameters,
                                             const wxChar* lpDirectory,
@@ -615,20 +618,46 @@ bool wxLaunchDefaultBrowser(const wxString& url)
 
         // Windows sometimes doesn't open the browser correctly when using mime
         // types, so do ShellExecute - i.e. start <url> (from James Carroll)
-        unsigned int nResult = (int) (*lpShellExecute)(NULL, NULL, finalurl.c_str(),
+        nResult = (int) (*lpShellExecute)(NULL, NULL, finalurl.c_str(),
                                                        NULL, wxT(""), SW_SHOWNORMAL);
-
         // Unload Shell32.dll
         ::FreeLibrary(hShellDll);
+#else
+        //Windows CE does not have normal ShellExecute - but it has
+        //ShellExecuteEx all the way back to version 1.0
 
-        // HINSTANCE_ERROR not defined on WinCE
-#ifndef __WXWINCE__
+
+        //Set up the SHELLEXECUTEINFO structure to pass to ShellExecuteEx
+        SHELLEXECUTEINFO sei;
+        sei.cbSize = sizeof(SHELLEXECUTEINFO);
+        sei.dwHotKey = 0;
+        sei.fMask = 0;
+        sei.hIcon = NULL;
+        sei.hInstApp = NULL;
+        sei.hkeyClass = NULL;
+        sei.hMonitor = NULL;
+        sei.hProcess = NULL;
+        sei.hwnd = NULL;
+        sei.lpClass = NULL;
+        sei.lpDirectory = NULL;
+        sei.lpFile = finalurl.c_str();
+        sei.lpIDList = NULL;
+        sei.lpParameters = NULL;
+        sei.lpVerb = TEXT("open");
+        sei.nShow = SW_SHOWNORMAL;
+
+        //Call ShellExecuteEx
+        ShellExecuteEx(&sei);
+
+        //Get error code
+        nResult = (int) sei.hInstApp;
+#endif
+
         // Hack for Firefox (returns file not found for some reason)
         // from Angelo Mandato's wxHyperlinksCtrl
-        // HINSTANCE_ERROR == 32
-        if (nResult <= HINSTANCE_ERROR && nResult != SE_ERR_FNF)
+        // HINSTANCE_ERROR == 32 (HINSTANCE_ERROR does not exist on Windows CE)
+        if (nResult <= 32 && nResult != SE_ERR_FNF)
             return false;
-#endif
 
 #ifdef __WXDEBUG__
         // Log something if SE_ERR_FNF happens
