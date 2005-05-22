@@ -27,8 +27,6 @@
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
-#define wxUSE_DIRECTSHOW 0
-#define wxUSE_QUICKTIME 0
 
 //---------------------------------------------------------------------------
 // Includes
