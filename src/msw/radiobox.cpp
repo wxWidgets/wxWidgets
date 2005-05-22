@@ -700,28 +700,11 @@ WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
 WXLRESULT
 wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( nMsg == WM_PRINTCLIENT )
-    {
-        // we have to process WM_PRINTCLIENT ourselves as otherwise the radio
-        // buttons background would never be drawn unless we have a parent with
-        // non default background
-
-        // so check first if we have one
-        if ( !HandlePrintClient((WXHDC)wParam) )
-        {
-            // no, we don't, erase the background ourselves (don't use our own
-            // colour as with static box, see comments there)
-            wxBrush brush(GetParent()->GetBackgroundColour());
-            wxFillRect(GetHwnd(), (HDC)wParam, GetHbrushOf(brush));
-        }
-
-        return 0;
-    }
     // FIXME: Without this, the radiobox corrupts other controls as it moves
     // in a dynamic layout. Refreshing causes flicker, but it's better than
     // leaving droppings. Note that for some reason, wxStaticBox doesn't need
     // this (perhaps because it has no real children?)
-    else if (nMsg == WM_MOVE)
+    if ( nMsg == WM_MOVE )
     {
         WXLRESULT res = wxControl::MSWWindowProc(nMsg, wParam, lParam);
         wxRect rect = GetRect();

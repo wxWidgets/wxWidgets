@@ -209,6 +209,24 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
         }
     }
 
+    if ( nMsg == WM_PRINTCLIENT )
+    {
+        // we have to process WM_PRINTCLIENT ourselves as otherwise child
+        // windows' background (eg buttons in radio box) would never be drawn
+        // unless we have a parent with non default background
+
+        // so check first if we have one
+        if ( !HandlePrintClient((WXHDC)wParam) )
+        {
+            // no, we don't, erase the background ourselves
+            // (don't use our own) - see PaintBackground for explanation
+            wxBrush brush(GetParent()->GetBackgroundColour());
+            wxFillRect(GetHwnd(), (HDC)wParam, GetHbrushOf(brush));
+        }
+
+        return 0;
+    }
+
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
@@ -275,7 +293,7 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
             // if the window isn't visible then it doesn't need clipped
             continue;
         }
-        
+
         LONG style = ::GetWindowLong(child, GWL_STYLE);
         wxString str(wxGetWindowClass(child));
         str.UpperCase();
@@ -287,7 +305,7 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
             // overlapping windows anyway.
             continue;
         }
-        
+
         ::GetWindowRect(child, &rc);
         if ( ::RectInRegion(hrgn, &rc) )
         {
@@ -297,7 +315,7 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
             {
                 style &= ~WS_CLIPSIBLINGS;
                 ::SetWindowLong(child, GWL_STYLE, style);
-                
+
                 // MSDN: "If you have changed certain window data using
                 // SetWindowLong, you must call SetWindowPos to have the
                 // changes take effect."
