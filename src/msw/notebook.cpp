@@ -57,12 +57,14 @@
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
+// you can set USE_NOTEBOOK_ANTIFLICKER to 0 for desktop Windows versions too
+// to disable code whih results in flicker-less notebook redrawing at the
+// expense of some extra GDI resource consumption
 #ifdef __WXWINCE__
-#define USE_NOTEBOOK_ANTIFLICKER    0
+    // notebooks are never resized under CE anyhow
+    #define USE_NOTEBOOK_ANTIFLICKER    0
 #else
-// Set this to 1 to compile anti-flicker code, which creates a potentially
-// large bitmap for every paint event
-#define USE_NOTEBOOK_ANTIFLICKER    0
+    #define USE_NOTEBOOK_ANTIFLICKER    1
 #endif
 
 // ----------------------------------------------------------------------------
@@ -83,6 +85,17 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+#if USE_NOTEBOOK_ANTIFLICKER
+
+// the pointer to standard spin button wnd proc
+static WXFARPROC gs_wndprocNotebookSpinBtn = (WXFARPROC)NULL;
+
+#endif // USE_NOTEBOOK_ANTIFLICKER
+
+// ----------------------------------------------------------------------------
 // event table
 // ----------------------------------------------------------------------------
 
@@ -94,13 +107,14 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
-#if USE_NOTEBOOK_ANTIFLICKER
-    EVT_ERASE_BACKGROUND(wxNotebook::OnEraseBackground)
-    EVT_PAINT(wxNotebook::OnPaint)
-#endif
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
     EVT_SIZE(wxNotebook::OnSize)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
+
+#if USE_NOTEBOOK_ANTIFLICKER
+    EVT_ERASE_BACKGROUND(wxNotebook::OnEraseBackground)
+    EVT_PAINT(wxNotebook::OnPaint)
+#endif // USE_NOTEBOOK_ANTIFLICKER
 END_EVENT_TABLE()
 
 #if wxUSE_EXTENDED_RTTI
@@ -184,25 +198,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookPageInfo, wxObject )
 #endif
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
-
-// ---------------------------------------------------------------------------
-// private functions
-// ---------------------------------------------------------------------------
-
-#if USE_NOTEBOOK_ANTIFLICKER
-// wnd proc for the spin button
-LRESULT APIENTRY _EXPORT wxNotebookSpinBtnWndProc(HWND hWnd,
-                                                  UINT message,
-                                                  WPARAM wParam,
-                                                  LPARAM lParam);
-
-// ---------------------------------------------------------------------------
-// global vars
-// ---------------------------------------------------------------------------
-
-// the pointer to standard spin button wnd proc
-static WXFARPROC s_wndprocNotebookSpinBtn = (WXFARPROC)NULL;
-#endif
 
 // ============================================================================
 // implementation
@@ -771,6 +766,53 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
     return item;
 }
 
+// ----------------------------------------------------------------------------
+// flicker-less notebook redraw
+// ----------------------------------------------------------------------------
+
+#if USE_NOTEBOOK_ANTIFLICKER
+
+// wnd proc for the spin button
+LRESULT APIENTRY _EXPORT wxNotebookSpinBtnWndProc(HWND hwnd,
+                                                  UINT message,
+                                                  WPARAM wParam,
+                                                  LPARAM lParam)
+{
+    if ( message == WM_ERASEBKGND )
+        return 0;
+
+    return ::CallWindowProc(CASTWNDPROC gs_wndprocNotebookSpinBtn,
+                            hwnd, message, wParam, lParam);
+}
+
+
+void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
+{
+    // do nothing here
+}
+
+void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+    wxMemoryDC memdc;
+    RECT rc;
+    ::GetClientRect(GetHwnd(), &rc);
+    wxBitmap bmp(rc.right, rc.bottom);
+    memdc.SelectObject(bmp);
+
+    // if there is no special brush just use the solid background colour
+    HBRUSH hbr = (HBRUSH)m_hbrBackground;
+    if ( !hbr )
+        hbr = GetHbrushOf(wxBrush(GetBackgroundColour()));
+
+    ::FillRect(GetHdcOf(memdc), &rc, hbr);
+
+    MSWDefWindowProc(WM_PAINT, (WPARAM)memdc.GetHDC(), 0);
+
+    dc.Blit(0, 0, rc.right, rc.bottom, &memdc, 0, 0);
+}
+
+#endif // USE_NOTEBOOK_ANTIFLICKER
 
 // ----------------------------------------------------------------------------
 // wxNotebook callbacks
@@ -809,7 +851,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         rect = wxRect(0, 0, 4, sz.y);
         RefreshRect(rect);
     }
-#endif
+#endif // !__WXWINCE__
 
     // fit all the notebook pages to the tab control's display area
 
@@ -871,6 +913,32 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         RefreshRect(wxRect(rc.right, rc.top, widthNbook - rc.bottom, height),
                     false);
     }
+
+#if USE_NOTEBOOK_ANTIFLICKER
+    // subclass the spin control used by the notebook to scroll pages to
+    // prevent it from flickering on resize
+    if ( !gs_wndprocNotebookSpinBtn )
+    {
+        // iterate over all child windows to find spin button
+        for ( HWND child = ::GetWindow(GetHwnd(), GW_CHILD);
+              child;
+              child = ::GetWindow(child, GW_HWNDNEXT) )
+        {
+            wxWindow *childWindow = wxFindWinFromHandle((WXHWND)child);
+
+            // see if it exists, if no wxWindow found then assume it's the spin
+            // btn
+            if ( !childWindow )
+            {
+                // subclass the spin button to override WM_ERASEBKGND
+                gs_wndprocNotebookSpinBtn = (WXFARPROC)wxGetWindowProc(child);
+
+                wxSetWindowProc(child, wxNotebookSpinBtnWndProc);
+                break;
+            }
+        }
+    }
+#endif // USE_NOTEBOOK_ANTIFLICKER
 
     event.Skip();
 }
@@ -1250,79 +1318,5 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   *result = !event.IsAllowed();
   return processed;
 }
-
-#ifndef __WXWINCE__
-void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
-{
-    // do nothing here
-}
-
-void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
-    // Better painting behaviour, at the expense of system resources
-#if USE_NOTEBOOK_ANTIFLICKER
-    wxPaintDC dc(this);
-    wxMemoryDC memdc;
-    RECT rc;
-    ::GetClientRect(GetHwnd(), &rc);
-    wxBitmap bmp(rc.right, rc.bottom);
-    memdc.SelectObject(bmp);
-
-    // iterate over all child windows to find spin button
-    for ( HWND child = ::GetWindow(GetHwnd(), GW_CHILD);
-          child;
-          child = ::GetWindow(child, GW_HWNDNEXT) )
-    {
-        wxWindow *childWindow = wxFindWinFromHandle((WXHWND)child);
-
-        // see if it exists, if no wxWindow found then assume it's the spin btn
-        if ( !childWindow )
-        {
-            // subclass the spin button to override WM_ERASEBKGND
-            if ( !s_wndprocNotebookSpinBtn )
-                s_wndprocNotebookSpinBtn = (WXFARPROC)wxGetWindowProc(child);
-
-            wxSetWindowProc(child, wxNotebookSpinBtnWndProc);
-            break;
-        }
-    }
-
-    HBRUSH hbr = (HBRUSH)m_hbrBackground;
-
-    // if there is no special brush just use the solid background colour
-    wxBrush brush;
-    if ( !hbr )
-    {
-        brush = wxBrush(GetBackgroundColour());
-        hbr = GetHbrushOf(brush);
-    }
-
-    ::FillRect(GetHdcOf(memdc), &rc, hbr);
-
-    MSWDefWindowProc(WM_PAINT, (WPARAM)memdc.GetHDC(), 0);
-
-    dc.Blit(0, 0, rc.right, rc.bottom, &memdc, 0, 0);
-#endif
-}
-#endif
-  // __WXWINCE__
-
-#if USE_NOTEBOOK_ANTIFLICKER
-// ---------------------------------------------------------------------------
-// window proc for spin button
-// ---------------------------------------------------------------------------
-
-LRESULT APIENTRY _EXPORT wxNotebookSpinBtnWndProc(HWND hwnd,
-                                                  UINT message,
-                                                  WPARAM wParam,
-                                                  LPARAM lParam)
-{
-    if ( message == WM_ERASEBKGND )
-        return 0;
-
-    return ::CallWindowProc(CASTWNDPROC s_wndprocNotebookSpinBtn, hwnd, message, wParam, lParam);
-}
-
-#endif // USE_NOTEBOOK_ANTIFLICKER
 
 #endif // wxUSE_NOTEBOOK
