@@ -81,6 +81,9 @@ public:
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
 
+    wxBitmap  *my_horse_asciigrey_pnm;
+    wxBitmap  *my_horse_rawgrey_pnm;
+
     int xH, yH ;
     int m_ani_images ;
 
@@ -410,6 +413,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_square = (wxBitmap*) NULL;
     my_anti = (wxBitmap*) NULL;
 
+    my_horse_asciigrey_pnm = (wxBitmap*) NULL;
+    my_horse_rawgrey_pnm = (wxBitmap*) NULL;
+
     m_ani_images = 0 ;
 
     SetBackgroundColour(* wxWHITE);
@@ -506,6 +512,20 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         wxLogError(wxT("Can't load PNM image"));
     else
         my_horse_pnm = new wxBitmap( image );
+
+    image.Destroy();
+
+    if ( !image.LoadFile( dir + _T("horse_ag.pnm"), wxBITMAP_TYPE_PNM ) )
+        wxLogError(wxT("Can't load PNM image"));
+    else
+        my_horse_asciigrey_pnm = new wxBitmap( image );
+
+    image.Destroy();
+
+    if ( !image.LoadFile( dir + _T("horse_rg.pnm"), wxBITMAP_TYPE_PNM ) )
+        wxLogError(wxT("Can't load PNM image"));
+    else
+        my_horse_rawgrey_pnm = new wxBitmap( image );
 #endif
 
 #if wxUSE_LIBTIFF
@@ -622,6 +642,8 @@ MyCanvas::~MyCanvas()
     delete my_smile_xbm;
     delete my_square;
     delete my_anti;
+    delete my_horse_asciigrey_pnm;
+    delete my_horse_rawgrey_pnm;
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -675,6 +697,14 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawText( _T("PNM handler"), 30, 1285 );
     if (my_horse_pnm && my_horse_pnm->Ok())
         dc.DrawBitmap( *my_horse_pnm, 30, 1300 );
+    
+    dc.DrawText( _T("PNM handler (ascii grey)"), 280, 1285 );
+    if (my_horse_asciigrey_pnm && my_horse_asciigrey_pnm->Ok())
+        dc.DrawBitmap( *my_horse_asciigrey_pnm, 280, 1300 );
+
+    dc.DrawText( _T("PNM handler (raw grey)"), 530, 1285 );
+    if (my_horse_rawgrey_pnm && my_horse_rawgrey_pnm->Ok())
+        dc.DrawBitmap( *my_horse_rawgrey_pnm, 530, 1300 );
 
     dc.DrawText( _T("TIFF handler"), 30, 1515 );
     if (my_horse_tiff && my_horse_tiff->Ok())
