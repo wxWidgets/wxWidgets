@@ -98,6 +98,7 @@ protected:
     void OnSmallIconView(wxCommandEvent& event);
     void OnSmallIconTextView(wxCommandEvent& event);
     void OnVirtualView(wxCommandEvent& event);
+    void OnSmallVirtualView(wxCommandEvent& event);
 
     void OnFocusLast(wxCommandEvent& event);
     void OnToggleFirstSel(wxCommandEvent& event);
@@ -144,6 +145,8 @@ private:
 
     wxLog *m_logOld;
 
+    bool m_smallVirtual;
+
     DECLARE_NO_COPY_CLASS(MyFrame)
     DECLARE_EVENT_TABLE()
 };
@@ -162,6 +165,7 @@ enum
     LIST_SMALL_ICON_TEXT_VIEW,
     LIST_REPORT_VIEW,
     LIST_VIRTUAL_VIEW,
+    LIST_SMALL_VIRTUAL_VIEW,
 
     LIST_DESELECT_ALL,
     LIST_SELECT_ALL,

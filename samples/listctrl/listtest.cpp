@@ -47,6 +47,21 @@
 
 #include "listtest.h"
 
+const wxChar *SMALL_VIRTUAL_VIEW_ITEMS[][2] =
+{
+    { _T("Cat"), _T("meow") },
+    { _T("Cow"), _T("moo") },
+    { _T("Crow"), _T("caw") },
+    { _T("Dog"), _T("woof") },
+    { _T("Duck"), _T("quack") },
+    { _T("Mouse"), _T("squeak") },
+    { _T("Owl"), _T("hoo") },
+    { _T("Pig"), _T("oink") },
+    { _T("Pigeon"), _T("coo") },
+    { _T("Sheep"), _T("baaah") },
+};
+
+
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
 
@@ -59,6 +74,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SMALL_ICON_VIEW, MyFrame::OnSmallIconView)
     EVT_MENU(LIST_SMALL_ICON_TEXT_VIEW, MyFrame::OnSmallIconTextView)
     EVT_MENU(LIST_VIRTUAL_VIEW, MyFrame::OnVirtualView)
+    EVT_MENU(LIST_SMALL_VIRTUAL_VIEW, MyFrame::OnSmallVirtualView)
 
     EVT_MENU(LIST_FOCUS_LAST, MyFrame::OnFocusLast)
     EVT_MENU(LIST_TOGGLE_FIRST, MyFrame::OnToggleFirstSel)
@@ -145,10 +161,11 @@ bool MyApp::OnInit()
 
 // My frame constructor
 MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
+       : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
-    m_listCtrl = (MyListCtrl *) NULL;
-    m_logWindow = (wxTextCtrl *) NULL;
+    m_listCtrl = NULL;
+    m_logWindow = NULL;
+    m_smallVirtual = false;
 
     // Give it an icon
     SetIcon( wxICON(mondrian) );
@@ -197,7 +214,8 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuView->Append(LIST_ICON_TEXT_VIEW, _T("Icon view with &text\tF4"));
     menuView->Append(LIST_SMALL_ICON_VIEW, _T("&Small icon view\tF5"));
     menuView->Append(LIST_SMALL_ICON_TEXT_VIEW, _T("Small icon &view with text\tF6"));
-    menuView->Append(LIST_VIRTUAL_VIEW, _T("Virtual view\tF7"));
+    menuView->Append(LIST_VIRTUAL_VIEW, _T("&Virtual view\tF7"));
+    menuView->Append(LIST_SMALL_VIRTUAL_VIEW, _T("Small virtual vie&w\tF8"));
 
     wxMenu *menuList = new wxMenu;
     menuList->Append(LIST_FOCUS_LAST, _T("&Make last item current\tCtrl-L"));
@@ -521,6 +539,13 @@ void MyFrame::OnSmallIconTextView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnVirtualView(wxCommandEvent& WXUNUSED(event))
 {
+    m_smallVirtual = false;
+    RecreateList(wxLC_REPORT | wxLC_VIRTUAL);
+}
+
+void MyFrame::OnSmallVirtualView(wxCommandEvent& WXUNUSED(event))
+{
+    m_smallVirtual = true;
     RecreateList(wxLC_REPORT | wxLC_VIRTUAL);
 }
 
@@ -528,12 +553,20 @@ void MyFrame::InitWithVirtualItems()
 {
     m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
 
-    m_listCtrl->InsertColumn(0, _T("First Column"));
-    m_listCtrl->InsertColumn(1, _T("Second Column"));
-    m_listCtrl->SetColumnWidth(0, 150);
-    m_listCtrl->SetColumnWidth(1, 150);
-
-    m_listCtrl->SetItemCount(1000000);
+    if ( m_smallVirtual )
+    {
+        m_listCtrl->InsertColumn(0, _T("Animal"));
+        m_listCtrl->InsertColumn(1, _T("Sound"));
+        m_listCtrl->SetItemCount(WXSIZEOF(SMALL_VIRTUAL_VIEW_ITEMS));
+    }
+    else
+    {
+        m_listCtrl->InsertColumn(0, _T("First Column"));
+        m_listCtrl->InsertColumn(1, _T("Second Column"));
+        m_listCtrl->SetColumnWidth(0, 150);
+        m_listCtrl->SetColumnWidth(1, 150);
+        m_listCtrl->SetItemCount(1000000);
+    }
 }
 
 void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
@@ -954,7 +987,14 @@ void MyListCtrl::LogEvent(const wxListEvent& event, const wxChar *eventName)
 
 wxString MyListCtrl::OnGetItemText(long item, long column) const
 {
-    return wxString::Format(_T("Column %ld of item %ld"), column, item);
+    if ( GetItemCount() == WXSIZEOF(SMALL_VIRTUAL_VIEW_ITEMS) )
+    {
+        return SMALL_VIRTUAL_VIEW_ITEMS[item][column];
+    }
+    else
+    {
+        return wxString::Format(_T("Column %ld of item %ld"), column, item);
+    }
 }
 
 int MyListCtrl::OnGetItemImage(long WXUNUSED(item)) const
