@@ -21,7 +21,7 @@
 
 #if wxUSE_XRC
 
-#if wxUSE_OWNER_DRAWN || !defined(__WXMSW__)
+#if wxUSE_CHECKLISTBOX
 
 #include "wx/xrc/xh_chckl.h"
 #include "wx/checklst.h"
@@ -131,6 +131,6 @@ bool wxCheckListBoxXmlHandler::CanHandle(wxXmlNode *node)
            (m_insideBox && node->GetName() == wxT("item")));
 }
 
-#endif // wxUSE_OWNER_DRAWN || !defined(__WXMSW__)
+#endif // wxUSE_CHECKLISTBOX
 
 #endif // wxUSE_XRC

@@ -17,6 +17,8 @@
 
 #include "wx/xrc/xmlres.h"
 
+#if wxUSE_CHECKLISTBOX
+
 class WXDLLIMPEXP_XRC wxCheckListBoxXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxCheckListBoxXmlHandler)
@@ -29,6 +31,6 @@ private:
     wxArrayString strList;
 };
 
-
+#endif
 
 #endif // _WX_XH_CHECKLIST_H_
