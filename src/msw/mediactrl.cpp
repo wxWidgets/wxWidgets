@@ -1303,13 +1303,15 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
 #if defined(_WIN32)
     ::SetWindowLong(m_hNotifyWnd, GWL_WNDPROC,
                        (LONG)wxAMMediaBackend::NotifyWndProc);
+    ::SetWindowLong(m_hNotifyWnd, GWL_USERDATA,
+                       (LONG) this);
 #else
     ::SetWindowLongPtr(m_hNotifyWnd, GWLP_WNDPROC,
                        (LONG_PTR)wxAMMediaBackend::NotifyWndProc);
+    ::SetWindowLongPtr(m_hNotifyWnd, GWL_USERDATA,
+                       (LONG) this);
 #endif
 
-    ::SetWindowLong(m_hNotifyWnd, GWL_USERDATA,
-                       (LONG) this);
 
     wxAMVERIFY( m_pME->SetNotifyWindow((LONG_PTR)m_hNotifyWnd,
                                        WM_GRAPHNOTIFY, 0) );
@@ -2141,7 +2143,11 @@ LRESULT CALLBACK wxMCIMediaBackend::NotifyWndProc(HWND hWnd, UINT nMsg,
                                                   LPARAM lParam)
 {
     wxMCIMediaBackend* backend = (wxMCIMediaBackend*)
+#ifdef _WIN32
         ::GetWindowLong(hWnd, GWL_USERDATA);
+#else
+        ::GetWindowLongPtr(hWnd, GWLP_USERDATA);
+#endif        
     wxASSERT(backend);
 
     return backend->OnNotifyWndProc(hWnd, nMsg, wParam, lParam);

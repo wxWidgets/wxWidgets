@@ -82,7 +82,7 @@ IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 // hook function for moving the dialog
 // ----------------------------------------------------------------------------
 
-UINT APIENTRY
+UINT_PTR APIENTRY
 wxFileDialogHookFunction(HWND      hDlg,
                          UINT      iMsg,
                          WPARAM    WXUNUSED(wParam),

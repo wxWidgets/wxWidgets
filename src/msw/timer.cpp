@@ -61,7 +61,7 @@ static wxTimerMap& TimerMap()
 // ----------------------------------------------------------------------------
 
 // timer callback used for all timers
-void WINAPI wxTimerProc(HWND hwnd, UINT msg, UINT idTimer, DWORD dwTime);
+void WINAPI wxTimerProc(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
 
 // ----------------------------------------------------------------------------
 // macros
@@ -155,7 +155,7 @@ void wxProcessTimer(wxTimer& timer)
 void WINAPI
 wxTimerProc(HWND WXUNUSED(hwnd),
             UINT WXUNUSED(msg),
-            UINT idTimer,
+            UINT_PTR idTimer,
             DWORD WXUNUSED(dwTime))
 {
     wxTimerMap::iterator node = TimerMap().find((unsigned long)idTimer);

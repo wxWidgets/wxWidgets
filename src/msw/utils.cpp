@@ -1045,9 +1045,9 @@ wxMemorySize wxGetFreeMemory()
 {
 #if defined(__WIN64__)
     MEMORYSTATUSEX memStatex;
-    statex.dwLength = sizeof (statex);
-    ::GlobalMemoryStatusEx (&statex);
-    return (wxMemorySize)memStatus.ullAvailPhys;
+    memStatex.dwLength = sizeof (memStatex);
+    ::GlobalMemoryStatusEx (&memStatex);
+    return (wxMemorySize)memStatex.ullAvailPhys;
 #else /* if defined(__WIN32__) */
     MEMORYSTATUS memStatus;
     memStatus.dwLength = sizeof(MEMORYSTATUS);
