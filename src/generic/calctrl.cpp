@@ -792,6 +792,10 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
         height += m_spinYear->GetBestSize().y;
     }
 
+	wxCoord w2= m_comboMonth->GetBestSize().x + HORZ_MARGIN + GetCharWidth()*6;
+	if (width < w2)
+	  width=w2;
+
     if ( !HasFlag(wxBORDER_NONE) )
     {
         // the border would clip the last line otherwise
@@ -913,6 +917,8 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #endif
 
     wxCoord y = 0;
+    wxCoord x0 = (GetSize().x - m_widthCol*7) /2;
+    if (x0 < 0) x0 = 0;
 
     if ( HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
@@ -922,7 +928,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetTextForeground(*wxBLACK);
         dc.SetBrush(wxBrush(m_colHeaderBg, wxSOLID));
         dc.SetPen(wxPen(m_colHeaderBg, 1, wxSOLID));
-        dc.DrawRectangle(0, y, GetClientSize().x, m_heightRow);
+        dc.DrawRectangle(x0, y, GetClientSize().x, m_heightRow);
 
         // Get extent of month-name + year
         wxCoord monthw, monthh;
@@ -930,7 +936,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.GetTextExtent(headertext, &monthw, &monthh);
 
         // draw month-name centered above weekdays
-        wxCoord monthx = ((m_widthCol * 7) - monthw) / 2;
+        wxCoord monthx = ((m_widthCol * 7) - monthw) / 2 + x0;
         wxCoord monthy = ((m_heightRow - monthh) / 2) + y;
         dc.DrawText(headertext, monthx,  monthy);
 
@@ -951,8 +957,8 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         // draw the "month-arrows"
 
         wxCoord arrowy = (m_heightRow - arrowheight) / 2;
-        wxCoord larrowx = (m_widthCol - (arrowheight / 2)) / 2;
-        wxCoord rarrowx = ((m_widthCol - (arrowheight / 2)) / 2) + m_widthCol*6;
+        wxCoord larrowx = (m_widthCol - (arrowheight / 2)) / 2 + x0;
+        wxCoord rarrowx = ((m_widthCol - (arrowheight / 2)) / 2) + m_widthCol*6 + x0;
         m_leftArrowRect = m_rightArrowRect = wxRect(0,0,0,0);
 
         if ( AllowMonthChange() )
@@ -984,7 +990,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 
     // first draw the week days
-    if ( IsExposed(0, y, 7*m_widthCol, m_heightRow) )
+    if ( IsExposed(x0, y, 7*m_widthCol, m_heightRow) )
     {
 #if DEBUG_PAINT
         wxLogDebug("painting the header");
@@ -1006,7 +1012,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 n = wd;
             wxCoord dayw, dayh;
             dc.GetTextExtent(m_weekdays[n], &dayw, &dayh);
-            dc.DrawText(m_weekdays[n], (wd*m_widthCol) + ((m_widthCol- dayw) / 2), y); // center the day-name
+            dc.DrawText(m_weekdays[n], x0 + (wd*m_widthCol) + ((m_widthCol- dayw) / 2), y); // center the day-name
         }
     }
 
@@ -1107,7 +1113,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                     }
                 }
 
-                wxCoord x = wd*m_widthCol + (m_widthCol - width) / 2;
+                wxCoord x = wd*m_widthCol + (m_widthCol - width) / 2 + x0;
                 dc.DrawText(dayStr, x, y + 1);
 
                 if ( !isSel && attr && attr->HasBorder() )
