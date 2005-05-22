@@ -1834,7 +1834,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_item.m_data = internaldata->lParam;
         }
 
-
+        bool processed = true;
         switch ( nmhdr->code )
         {
             case LVN_BEGINRDRAG:
@@ -2133,6 +2133,76 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
+            case LVN_ODFINDITEM:
+                // this message is only used with the virtual list control but
+                // even there we don't want to always use it: in a control with
+                // sufficiently big number of items (defined as > 1000 here),
+                // accidentally pressing a key could result in hanging an
+                // application waiting while it performs linear search
+                if ( IsVirtual() && GetItemCount() <= 1000 )
+                {
+                    NMLVFINDITEM* pFindInfo = (NMLVFINDITEM*)lParam;
+
+                    // no match by default
+                    *result = -1;
+
+                    // we only handle string-based searches here
+                    //
+                    // TODO: what about LVFI_PARTIAL, should we handle this?
+                    if ( !(pFindInfo->lvfi.flags & LVFI_STRING) )
+                    {
+                        return false;
+                    }
+
+                    const wxChar * const searchstr = pFindInfo->lvfi.psz;
+                    const size_t len = wxStrlen(searchstr);
+
+                    // this is the first item we should examine, search from it
+                    // wrapping if necessary
+                    const int startPos = pFindInfo->iStart;
+                    const int maxPos = GetItemCount();
+                    wxCHECK_MSG( startPos <= maxPos, false,
+                                 _T("bad starting position in LVN_ODFINDITEM") );
+
+                    int currentPos = startPos;
+                    do
+                    {
+                        // wrap to the beginning if necessary
+                        if ( currentPos == maxPos )
+                        {
+                            // somewhat surprizingly, LVFI_WRAP isn't set in
+                            // flags but we still should wrap
+                            currentPos = 0;
+                        }
+
+                        // does this item begin with searchstr?
+                        if ( wxStrnicmp(searchstr,
+                                            GetItemText(currentPos), len) == 0 )
+                        {
+                            *result = currentPos;
+                            break;
+                        }
+                    }
+                    while ( ++currentPos != startPos );
+
+                    if ( *result == -1 )
+                    {
+                        // not found
+                        return false;
+                    }
+
+                    SetItemState(*result,
+                                 wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
+                                 wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED);
+                    EnsureVisible(*result);
+                    return true;
+                }
+                else
+                {
+                    processed = false;
+                }
+                break;
+
             case LVN_GETDISPINFO:
                 if ( IsVirtual() )
                 {
@@ -2165,8 +2235,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // fall through
 
             default:
-                return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                processed = false;
         }
+
+        if ( !processed )
+            return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }
     else
     {
