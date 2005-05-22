@@ -49,6 +49,7 @@
 // with newer SDK headers
 #if !defined(__WIN64__) && !defined(__WXWINCE__)
     #define UINT_PTR unsigned int
+    #define LONG_PTR long
     #define ULONG_PTR unsigned long
     #define DWORD_PTR unsigned long
 #endif // !__WIN64__
