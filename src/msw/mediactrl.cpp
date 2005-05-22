@@ -1323,6 +1323,7 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
     m_ctrl->GetParent()->Layout();
     m_ctrl->GetParent()->Refresh();
     m_ctrl->GetParent()->Update();
+    m_ctrl->SetSize(m_ctrl->GetSize()); 
 
     return true;
 }
@@ -1856,6 +1857,7 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
     m_ctrl->GetParent()->Layout();
     m_ctrl->GetParent()->Refresh();
     m_ctrl->GetParent()->Update();
+    m_ctrl->SetSize(m_ctrl->GetSize()); 
 
     return true;
 }
@@ -2063,14 +2065,19 @@ void wxMCIMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
     if (m_hNotifyWnd && m_bVideo)
     {
         MCI_DGV_RECT_PARMS putParms; //ifdefed MCI_DGV_PUT_PARMS
-        putParms.rc.top = 0;
-        putParms.rc.bottom = 0;
-        putParms.rc.right = w;
+        memset(&putParms, 0, sizeof(MCI_DGV_RECT_PARMS)); 
         putParms.rc.bottom = h;
+        putParms.rc.right = w; 
 
-        wxMCIVERIFY( mciSendCommand(m_hDev, MCI_PUT,
+        //wxStackWalker will crash and burn here on assert 
+        //and mci doesn't like 0 and 0 for some reason (out of range ) 
+        //so just don't it in that case 
+        if(w || h) 
+        { 
+            wxMCIVERIFY( mciSendCommand(m_hDev, MCI_PUT,
                                    0x00040000L, //MCI_DGV_PUT_DESTINATION
                                    (DWORD)(LPSTR)&putParms) );
+        }
     }
 }
 
