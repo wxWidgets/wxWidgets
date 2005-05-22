@@ -636,6 +636,8 @@ public:
 
     // Data Source Name, User ID, Password and whether open should fail on data type not supported
     bool         Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported=true);
+                    ///This version of Open will open the odbc source selection dialog. Cast a wxWindow::GetHandle() to SQLHWND to use.
+    bool         Open(const wxString& inConnectStr, SQLHWND parentWnd, bool failOnDataTypeUnsupported=true);
     bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported=true);
     bool         Open(wxDbConnectInf *dbConnectInf, bool failOnDataTypeUnsupported=true);
     bool         Open(wxDb *copyDb);  // pointer to a wxDb whose connection info should be copied rather than re-queried

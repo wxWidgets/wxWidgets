@@ -804,6 +804,11 @@ bool wxDb::open(bool failOnDataTypeUnsupported)
 bool wxDb::Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported)
 {
     wxASSERT(inConnectStr.Length());
+    return Open(inConnectStr, NULL, failOnDataTypeUnsupported);
+}
+
+bool wxDb::Open(const wxString& inConnectStr, SQLHWND parentWnd, bool failOnDataTypeUnsupported)
+{
     dsn        = wxT("");
     uid        = wxT("");
     authStr    = wxT("");
@@ -832,7 +837,7 @@ bool wxDb::Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported)
 
     inConnectionStr = inConnectStr;
 
-    retcode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR FAR *)inConnectionStr.c_str(),
+    retcode = SQLDriverConnect(hdbc, parentWnd, (SQLTCHAR FAR *)inConnectionStr.c_str(),
                         (SWORD)inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
                         sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE );
 
