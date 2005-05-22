@@ -440,16 +440,53 @@ private:
     HGDIOBJ m_gdiobj;
 };
 
-// a class for temporary bitmaps
-class CompatibleBitmap : private AutoGDIObject
+// TODO: all this asks for using a AutoHandler<T, CreateFunc> template...
+
+// a class for temporary pens
+class AutoHBRUSH : private AutoGDIObject
+{
+public:
+    AutoHBRUSH(COLORREF col)
+        : AutoGDIObject(::CreateSolidBrush(col)) { }
+
+    operator HBRUSH() const { return (HBRUSH)GetObject(); }
+};
+
+// a class for temporary pens
+class AutoHPEN : private AutoGDIObject
+{
+public:
+    AutoHPEN(COLORREF col)
+        : AutoGDIObject(::CreatePen(PS_SOLID, 0, col)) { }
+
+    operator HPEN() const { return (HPEN)GetObject(); }
+};
+
+// classes for temporary bitmaps
+class AutoHBITMAP : private AutoGDIObject
+{
+public:
+    AutoHBITMAP(HBITMAP hbmp) : AutoGDIObject(hbmp) { }
+
+    operator HBITMAP() const { return (HBITMAP)GetObject(); }
+};
+
+class CompatibleBitmap : public AutoHBITMAP
 {
 public:
     CompatibleBitmap(HDC hdc, int w, int h)
-        : AutoGDIObject(::CreateCompatibleBitmap(hdc, w, h))
+        : AutoHBITMAP(::CreateCompatibleBitmap(hdc, w, h))
     {
     }
+};
 
-    operator HBITMAP() const { return (HBITMAP)GetObject(); }
+class MonoBitmap : public AutoHBITMAP
+{
+public:
+    MonoBitmap(int w, int h)
+        : AutoHBITMAP(::CreateBitmap(w, h, 1, 1, 0))
+    {
+    }
 };
 
 // class automatically destroys the region object
