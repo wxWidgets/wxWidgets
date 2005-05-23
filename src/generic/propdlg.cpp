@@ -47,7 +47,7 @@ bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxStri
                                        const wxPoint& pos, const wxSize& sz, long style,
                                        const wxString& name)
 {
-    if (!wxDialog::Create(parent, id, title, pos, sz, style, name))
+    if (!wxDialog::Create(parent, id, title, pos, sz, style|wxCLIP_CHILDREN, name))
         return false;
     
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
@@ -110,7 +110,7 @@ void wxPropertySheetDialog::CreateButtons(int flags)
 // Creates the book control
 wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 {
-    int style = 0;
+    int style = wxCLIP_CHILDREN;
 #if defined(__POCKETPC__) && wxUSE_NOTEBOOK
     style |= wxNB_BOTTOM|wxNB_FLAT;
 #else
