@@ -1193,9 +1193,8 @@ off_t wxPyCBInputStream::OnSysTell() const {
         if (PyLong_Check(result))
             o = PyLong_AsLongLong(result);
         else
-#else
-        o = PyInt_AsLong(result);
 #endif
+            o = PyInt_AsLong(result);
         Py_DECREF(result);
     };
     wxPyEndBlockThreads();

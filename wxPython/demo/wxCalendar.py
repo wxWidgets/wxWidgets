@@ -598,7 +598,8 @@ class SetPrintout(wxPrintout):
 
 class MyApp(wxApp):
     def OnInit(self):
-        frame = CalendFrame(None, -1, "Test Calendar")
+        wxInitAllImageHandlers()
+        frame = CalendFrame(None, -1, "Test Calendar", sys.stdout)
         frame.Show(True)
         self.SetTopWindow(frame)
         return True
@@ -612,22 +613,19 @@ def MessageDlg(self, message, type = 'Message'):
 
 #---------------------------------------------------------------------------
 
-def main():
-    app = MyApp(0)
-    app.MainLoop()
-
-
-if __name__ == '__main__':
-    main()
-
-
-#---------------------------------------------------------------------------
-
 def runTest(frame, nb, log):
     win = TestPanel(nb, log, frame)
     return win
 
 #---------------------------------------------------------------------------
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+
+
 
 
 overview = """\

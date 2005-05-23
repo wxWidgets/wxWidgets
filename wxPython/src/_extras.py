@@ -535,7 +535,7 @@ def EVT_SPLITTER_UNSPLIT(win, id, func):
 
 def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, func)
-
+EVT_SPLITTER_DCLICK = EVT_SPLITTER_DOUBLECLICKED
 
 # wxTimer
 def EVT_TIMER(win, id, func):

@@ -350,12 +350,12 @@ class wxListEvent: public wxNotifyEvent {
 public:
     wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
-%readonly
     int           m_code;
     long          m_oldItemIndex;
     long          m_itemIndex;
     int           m_col;
     wxPoint       m_pointDrag;
+%readonly
     wxListItem    m_item;
 %readwrite
 

@@ -941,7 +941,7 @@ public:
 class wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
-    wxGridCellFloatEditor();
+    wxGridCellFloatEditor(int width = -1, int precision = -1);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 

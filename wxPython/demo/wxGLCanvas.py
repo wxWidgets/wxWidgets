@@ -96,14 +96,18 @@ else:
             EVT_LEFT_UP(self, self.OnMouseUp)
             EVT_MOTION(self, self.OnMouseMotion)
 
+
         def OnEraseBackground(self, event):
             pass # Do nothing, to avoid flashing on MSW.
+
 
         def OnSize(self, event):
             size = self.GetClientSize()
             if self.GetContext():
                 self.SetCurrent()
                 glViewport(0, 0, size.width, size.height)
+            event.Skip()
+            
 
         def OnPaint(self, event):
             dc = wxPaintDC(self)
@@ -113,11 +117,14 @@ else:
                 self.init = True
             self.OnDraw()
 
+
         def OnMouseDown(self, evt):
             self.CaptureMouse()
 
+
         def OnMouseUp(self, evt):
             self.ReleaseMouse()
+
 
         def OnMouseMotion(self, evt):
             if evt.Dragging() and evt.LeftIsDown():

@@ -19,10 +19,10 @@ class TestPanel( wxScrolledPanel ):
 
         text2 = wxStaticText( self, -1, "24-hour format:")
         spin2 = wxSpinButton( self, -1, wxDefaultPosition, wxSize(-1,20), 0 )
-        self.time24 = wxTimeCtrl( self, -1, name="24 hour control", fmt24hr=True, spinButton = spin2 )
+        self.time24 = wxTimeCtrl( self, -1, name="24 hour control", fmt24hr=True, spinButton=spin2 )
 
         text3 = wxStaticText( self, -1, "No seconds\nor spin button:")
-        self.spinless_ctrl = wxTimeCtrl( self, -1, name="spinless control", display_seconds = False )
+        self.spinless_ctrl = wxTimeCtrl( self, -1, name="spinless control", displaySeconds=False )
 
         grid = wxFlexGridSizer( 0, 2, 10, 5 )
         grid.Add( text1, 0, wxALIGN_RIGHT )
@@ -68,11 +68,12 @@ class TestPanel( wxScrolledPanel ):
         self.set_bounds = wxCheckBox( self, -1, "Set time bounds:" )
 
         minlabel = wxStaticText( self, -1, "minimum time:" )
-        self.min = wxTimeCtrl( self, -1, name="min", display_seconds = False )
+        # (Show use of format parameter to alternatively specify format of control:)
+        self.min = wxTimeCtrl( self, -1, name="min", format="HHMM" )
         self.min.Enable( False )
 
         maxlabel = wxStaticText( self, -1, "maximum time:" )
-        self.max = wxTimeCtrl( self, -1, name="max", display_seconds = False )
+        self.max = wxTimeCtrl( self, -1, name="max", format="HHMM" )
         self.max.Enable( False )
 
         self.limit_check = wxCheckBox( self, -1, "Limit control" )
