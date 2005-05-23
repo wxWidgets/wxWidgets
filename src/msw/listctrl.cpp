@@ -2133,6 +2133,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
+#if 0
+disable temporary for correct building before the missing headers are not completed
             case LVN_ODFINDITEM:
                 // this message is only used with the virtual list control but
                 // even there we don't want to always use it: in a control with
@@ -2202,6 +2204,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     processed = false;
                 }
                 break;
+#endif
 
             case LVN_GETDISPINFO:
                 if ( IsVirtual() )
