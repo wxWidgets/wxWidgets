@@ -75,11 +75,6 @@ class ImageView(wxWindow):
         dc = wxPaintDC(self)
         self.DrawImage(dc)
 
-    def DrawImage(self, dc):
-        dc.BeginDrawing()
-        self.DrawImage(dc)
-        dc.EndDrawing()
-
     def SetValue(self, file_nm):    # display the selected file in the panel
         image = ConvertBMP(file_nm)
         self.image = image

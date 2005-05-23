@@ -29,7 +29,7 @@
 #   are exceeded.
 #
 #   wxMaskedNumCtrl is intended to support fixed-point numeric entry, and
-#   is derived from  wxMaskedTextCtrl.  As such, it supports a limited range
+#   is derived from  wxBaseMaskedTextCtrl.  As such, it supports a limited range
 #   of values to comply with a fixed-width entry mask.
 """<html><body>
 <P>
@@ -74,6 +74,7 @@ Here's the API:
          <B>emptyBackgroundColour</B> = "White",
          <B>validBackgroundColour</B> = "White",
          <B>invalidBackgroundColour</B> = "Yellow",
+         <B>autoSize</B> = True
          )
 </PRE>
 <UL>
@@ -164,6 +165,15 @@ Here's the API:
     <DT><B>invalidBackgroundColour</B>
     <DD>Color value used for illegal values or values out-of-bounds of the
         control when the bounds are set but the control is not limited.
+    <BR>
+    <DT><B>autoSize</B>
+    <DD>Boolean indicating whether or not the control should set its own
+        width based on the integer and fraction widths.  True by default.
+        <B><I>Note:</I></B> Setting this to False will produce seemingly odd
+        behavior unless the control is large enough to hold the maximum
+        specified value given the widths and the sign positions; if not,
+        the control will appear to "jump around" as the contents scroll.
+        (ie. autoSize is highly recommended.)
 </UL>
 <BR>
 <BR>
@@ -340,6 +350,12 @@ within the control.  (The default is True.)
 the field values on entry.
 <BR>
 <BR>
+<DT><B>SetAutoSize(bool)</B>
+<DD>Resets the autoSize attribute of the control.
+<DT><B>GetAutoSize()</B>
+<DD>Returns the current state of the autoSize attribute for the control.
+<BR>
+<BR>
 </DL>
 </body></html>
 """
@@ -351,7 +367,7 @@ MAXINT = maxint     # (constants should be in upper case)
 MININT = -maxint-1
 
 from wxPython.tools.dbg import Logger
-from wxPython.lib.maskededit import wxMaskedEditMixin, wxMaskedTextCtrl, Field
+from wxPython.lib.maskededit import wxMaskedEditMixin, wxBaseMaskedTextCtrl, Field
 import wxPython.utils
 dbg = Logger()
 dbg(enable=0)
@@ -381,16 +397,54 @@ class wxMaskedNumNumberUpdatedEvent(wxPyCommandEvent):
 
 
 #----------------------------------------------------------------------------
+class wxMaskedNumCtrlAccessorsMixin:
+    # Define wxMaskedNumCtrl's list of attributes having their own
+    # Get/Set functions, ignoring those that make no sense for
+    # an numeric control.
+    exposed_basectrl_params = (
+         'decimalChar',
+         'shiftDecimalChar',
+         'groupChar',
+         'useParensForNegatives',
+         'defaultValue',
+         'description',
 
-class wxMaskedNumCtrl(wxMaskedTextCtrl):
+         'useFixedWidthFont',
+         'autoSize',
+         'signedForegroundColour',
+         'emptyBackgroundColour',
+         'validBackgroundColour',
+         'invalidBackgroundColour',
+
+         'emptyInvalid',
+         'validFunc',
+         'validRequired',
+        )
+    for param in exposed_basectrl_params:
+        propname = param[0].upper() + param[1:]
+        exec('def Set%s(self, value): self.SetCtrlParameters(%s=value)' % (propname, param))
+        exec('def Get%s(self): return self.GetCtrlParameter("%s")''' % (propname, param))
+
+        if param.find('Colour') != -1:
+            # add non-british spellings, for backward-compatibility
+            propname.replace('Colour', 'Color')
+
+            exec('def Set%s(self, value): self.SetCtrlParameters(%s=value)' % (propname, param))
+            exec('def Get%s(self): return self.GetCtrlParameter("%s")''' % (propname, param))
+
+
+
+#----------------------------------------------------------------------------
+
+class wxMaskedNumCtrl(wxBaseMaskedTextCtrl, wxMaskedNumCtrlAccessorsMixin):
 
     valid_ctrl_params = {
         'integerWidth': 10,                 # by default allow all 32-bit integers
-        'fractionWidth': 0,                  # by default, use integers
+        'fractionWidth': 0,                 # by default, use integers
         'decimalChar': '.',                 # by default, use '.' for decimal point
         'allowNegative': True,              # by default, allow negative numbers
         'useParensForNegatives': False,     # by default, use '-' to indicate negatives
-        'groupDigits': True,             # by default, don't insert grouping
+        'groupDigits': True,                # by default, don't insert grouping
         'groupChar': ',',                   # by default, use ',' for grouping
         'min': None,                        # by default, no bounds set
         'max': None,
@@ -402,7 +456,8 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         'emptyBackgroundColour': "White",
         'validBackgroundColour': "White",
         'invalidBackgroundColour': "Yellow",
-        'useFixedWidthFont': True,  # by default, use a fixed-width font
+        'useFixedWidthFont': True,          # by default, use a fixed-width font
+        'autoSize': True,                   # by default, set the width of the control based on the mask
         }
 
 
@@ -475,6 +530,12 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         del init_args['integerWidth']
         del init_args['fractionWidth']
 
+        self._autoSize = init_args['autoSize']
+        if self._autoSize:
+            formatcodes = 'FR<'
+        else:
+            formatcodes = 'R<'
+
 
         mask = intmask+fracmask
 
@@ -484,11 +545,11 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         self._typedSign = False
 
         # Construct the base control:
-        wxMaskedTextCtrl.__init__(
+        wxBaseMaskedTextCtrl.__init__(
                 self, parent, id, '',
                 pos, size, style, validator, name,
                 mask = mask,
-                formatcodes = 'FR<',
+                formatcodes = formatcodes,
                 fields = fields,
                 validFunc=self.IsInBounds,
                 setupEventHandling = False)
@@ -525,7 +586,8 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
         if( (kwargs.has_key('integerWidth') and kwargs['integerWidth'] != self._integerWidth)
             or (kwargs.has_key('fractionWidth') and kwargs['fractionWidth'] != self._fractionWidth)
-            or (kwargs.has_key('groupDigits') and kwargs['groupDigits'] != self._groupDigits) ):
+            or (kwargs.has_key('groupDigits') and kwargs['groupDigits'] != self._groupDigits)
+            or (kwargs.has_key('autoSize') and kwargs['autoSize'] != self._autoSize) ):
 
             fields = {}
 
@@ -601,7 +663,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         dbg('kwargs:', kwargs)
 
         # reprocess existing format codes to ensure proper resulting format:
-        formatcodes = self.GetFormatcodes()
+        formatcodes = self.GetCtrlParameter('formatcodes')
         if kwargs.has_key('allowNegative'):
             if kwargs['allowNegative'] and '-' not in formatcodes:
                 formatcodes += '-'
@@ -628,12 +690,23 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                 formatcodes = formatcodes.replace('S','')
                 maskededit_kwargs['formatcodes'] = formatcodes
 
+        if kwargs.has_key('autoSize'):
+            self._autoSize = kwargs['autoSize']
+            if kwargs['autoSize'] and 'F' not in formatcodes:
+                formatcodes += 'F'
+                maskededit_kwargs['formatcodes'] = formatcodes
+            elif not kwargs['autoSize'] and 'F' in formatcodes:
+                formatcodes = formatcodes.replace('F', '')
+                maskededit_kwargs['formatcodes'] = formatcodes
+
+
         if 'r' in formatcodes and self._fractionWidth:
             # top-level mask should only be right insert if no fractional
             # part will be shown; ie. if reconfiguring control, remove
             # previous "global" setting.
             formatcodes = formatcodes.replace('r', '')
             maskededit_kwargs['formatcodes'] = formatcodes
+
 
         if kwargs.has_key('limited'):
             if kwargs['limited'] and not self._limited:
@@ -720,7 +793,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
             dbg('abs(value):', value)
             self._isNeg = False
 
-        elif not self._allowNone and wxMaskedTextCtrl.GetValue(self) == '':
+        elif not self._allowNone and wxBaseMaskedTextCtrl.GetValue(self) == '':
             if self._min > 0:
                 value = self._min
             else:
@@ -762,7 +835,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         else:
             fracstart, fracend = self._fields[1]._extent
             if candidate is None:
-                value = self._toGUI(wxMaskedTextCtrl.GetValue(self))
+                value = self._toGUI(wxBaseMaskedTextCtrl.GetValue(self))
             else:
                 value = self._toGUI(candidate)
             fracstring = value[fracstart:fracend].strip()
@@ -811,8 +884,8 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
         if numvalue == "":
             if self._allowNone:
-                dbg('calling base wxMaskedTextCtrl._SetValue(self, "%s")' % value)
-                wxMaskedTextCtrl._SetValue(self, value)
+                dbg('calling base wxBaseMaskedTextCtrl._SetValue(self, "%s")' % value)
+                wxBaseMaskedTextCtrl._SetValue(self, value)
                 self.Refresh()
                 return
             elif self._min > 0 and self.IsLimited():
@@ -912,7 +985,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
             # reasonable instead:
             dbg('setting replacement value:', replacement)
             self._SetValue(self._toGUI(replacement))
-            sel_start = wxMaskedTextCtrl.GetValue(self).find(str(abs(replacement)))   # find where it put the 1, so we can select it
+            sel_start = wxBaseMaskedTextCtrl.GetValue(self).find(str(abs(replacement)))   # find where it put the 1, so we can select it
             sel_to = sel_start + len(str(abs(replacement)))
             dbg('queuing selection of (%d, %d)' %(sel_start, sel_to))
             wxCallAfter(self.SetInsertionPoint, sel_start)
@@ -938,8 +1011,8 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
 
         sel_start, sel_to = self._GetSelection()     # record current insertion point
-        dbg('calling base wxMaskedTextCtrl._SetValue(self, "%s")' % adjvalue)
-        wxMaskedTextCtrl._SetValue(self, adjvalue)
+        dbg('calling base wxBaseMaskedTextCtrl._SetValue(self, "%s")' % adjvalue)
+        wxBaseMaskedTextCtrl._SetValue(self, adjvalue)
         # After all actions so far scheduled, check that resulting cursor
         # position is appropriate, and move if not:
         wxCallAfter(self._CheckInsertionPoint)
@@ -972,7 +1045,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         # delete next digit to appropriate side:
         if self._groupDigits:
             key = event.GetKeyCode()
-            value = wxMaskedTextCtrl.GetValue(self)
+            value = wxBaseMaskedTextCtrl.GetValue(self)
             sel_start, sel_to = self._GetSelection()
 
             if key == WXK_BACK:
@@ -998,7 +1071,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                     self.SetInsertionPoint(sel_start)
                     self.SetSelection(sel_start, sel_to+1)
 
-        wxMaskedTextCtrl._OnErase(self, event)
+        wxBaseMaskedTextCtrl._OnErase(self, event)
         dbg(indent=0)
 
 
@@ -1012,7 +1085,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         before passing the events on.
         """
         dbg('wxMaskedNumCtrl::OnTextChange', indent=1)
-        if not wxMaskedTextCtrl._OnTextChange(self, event):
+        if not wxBaseMaskedTextCtrl._OnTextChange(self, event):
             dbg(indent=0)
             return
 
@@ -1033,7 +1106,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
     def _GetValue(self):
         """
-        Override of wxMaskedTextCtrl to allow amixin to get the raw text value of the
+        Override of wxBaseMaskedTextCtrl to allow mixin to get the raw text value of the
         control with this function.
         """
         return wxTextCtrl.GetValue(self)
@@ -1043,7 +1116,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         """
         Returns the current numeric value of the control.
         """
-        return self._fromGUI( wxMaskedTextCtrl.GetValue(self) )
+        return self._fromGUI( wxBaseMaskedTextCtrl.GetValue(self) )
 
     def SetValue(self, value):
         """
@@ -1054,16 +1127,16 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         A ValueError exception will be raised if an invalid value
         is specified.
         """
-        wxMaskedTextCtrl.SetValue( self, self._toGUI(value) )
+        wxBaseMaskedTextCtrl.SetValue( self, self._toGUI(value) )
 
 
     def SetIntegerWidth(self, value):
-        self.SetCtrlParameters(integerWidth=value)
+        self.SetParameters(integerWidth=value)
     def GetIntegerWidth(self):
         return self._integerWidth
 
     def SetFractionWidth(self, value):
-        self.SetCtrlParameters(fractionWidth=value)
+        self.SetParameters(fractionWidth=value)
     def GetFractionWidth(self):
         return self._fractionWidth
 
@@ -1208,7 +1281,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
             except ValueError, e:
                 dbg('error getting NumValue(self._toGUI(value)):', e, indent=0)
                 return False
-            if value == '':
+            if value.strip() == '':
                 value = None
             elif self._fractionWidth:
                 value = float(value)
@@ -1281,6 +1354,12 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
     def GetSelectOnEntry(self):
         return self._selectOnEntry
 
+    def SetAutoSize(self, value):
+        self.SetParameters(autoSize=value)
+    def GetAutoSize(self):
+        return self._autoSize
+
+
     # (Other parameter accessors are inherited from base class)
 
 
@@ -1298,6 +1377,14 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         elif type(value) in (types.StringType, types.UnicodeType):
             value = self._GetNumValue(value)
             dbg('cleansed num value: "%s"' % value)
+            if value == "":
+                if self.IsNoneAllowed():
+                    dbg(indent=0)
+                    return self._template
+                else:
+                    dbg('exception raised:', e, indent=0)
+                    raise ValueError ('wxMaskedNumCtrl requires numeric value, passed %s'% repr(value) )
+            # else...
             try:
                 if self._fractionWidth or value.find('.') != -1:
                     value = float(value)
@@ -1367,7 +1454,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         # So, to ensure consistency and to prevent spurious ValueErrors,
         # we make the following test, and react accordingly:
         #
-        if value == '':
+        if value.strip() == '':
             if not self.IsNoneAllowed():
                 dbg('empty value; not allowed,returning 0', indent = 0)
                 if self._fractionWidth:
@@ -1503,3 +1590,12 @@ i=0
 ## =============================##
 ##   1. Add support for printf-style format specification.
 ##   2. Add option for repositioning on 'illegal' insertion point.
+##
+## Version 1.1
+##   1. Fixed .SetIntegerWidth() and .SetFractionWidth() functions.
+##   2. Added autoSize parameter, to allow manual sizing of the control.
+##   3. Changed inheritance to use wxBaseMaskedTextCtrl, to remove exposure of
+##      nonsensical parameter methods from the control, so it will work
+##      properly with Boa.
+##   4. Fixed allowNone bug found by user sameerc1@grandecom.net
+
