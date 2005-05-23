@@ -74,11 +74,15 @@ void wxStaticText::SetLabel(const wxString& label)
     wxLogTrace(wxTRACE_COCOA_Window_Size, "wxStaticText::SetLabel Old Position: (%d,%d)", GetPosition().x, GetPosition().y);
     [GetNSTextField() sizeToFit];
     NSRect newFrameRect = [GetNSTextField() frame];
+    // Ensure new size is an integer so GetSize returns valid data
+    newFrameRect.size.height = ceil(newFrameRect.size.height);
+    newFrameRect.size.width = ceil(newFrameRect.size.width);
     if(![superview isFlipped])
     {
         newFrameRect.origin.y = oldFrameRect.origin.y + oldFrameRect.size.height - newFrameRect.size.height;
-        [GetNSTextField() setFrame:newFrameRect];
     }
+    [GetNSTextField() setFrame:newFrameRect];
+    // New origin (wx coords) should always match old origin
     wxLogTrace(wxTRACE_COCOA_Window_Size, "wxStaticText::SetLabel New Position: (%d,%d)", GetPosition().x, GetPosition().y);
 
     [[GetNSTextField() superview] setNeedsDisplayInRect:oldFrameRect];
