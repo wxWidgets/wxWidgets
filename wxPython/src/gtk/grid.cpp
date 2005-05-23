@@ -3017,19 +3017,21 @@ static void *SwigwxGridCellFloatEditorTowxGridCellEditor(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxGridCellFloatEditor() (new wxGridCellFloatEditor())
+#define new_wxGridCellFloatEditor(_swigarg0,_swigarg1) (new wxGridCellFloatEditor(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxGridCellFloatEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGridCellFloatEditor * _result;
-    char *_kwnames[] = {  NULL };
+    int  _arg0 = (int ) -1;
+    int  _arg1 = (int ) -1;
+    char *_kwnames[] = { "width","precision", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellFloatEditor",_kwnames)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxGridCellFloatEditor",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxGridCellFloatEditor *)new_wxGridCellFloatEditor();
+    _result = (wxGridCellFloatEditor *)new_wxGridCellFloatEditor(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;

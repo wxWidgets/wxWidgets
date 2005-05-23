@@ -787,18 +787,12 @@ static PyObject *_wrap_wxCalendarEvent_GetDate(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    const wxDateTime & _result_ref = wxCalendarEvent_GetDate(_arg0);
-    _result = (wxDateTime *) &_result_ref;
+    _result = new wxDateTime (wxCalendarEvent_GetDate(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDateTime_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxDateTime_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 

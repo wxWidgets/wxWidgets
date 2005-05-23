@@ -117,7 +117,7 @@ class wxCalendarEventPtr(wxCommandEventPtr):
         self.thisown = 0
     def GetDate(self, *_args, **_kwargs):
         val = calendarc.wxCalendarEvent_GetDate(self, *_args, **_kwargs)
-        if val: val = wxDateTimePtr(val) 
+        if val: val = wxDateTimePtr(val) ; val.thisown = 1
         return val
     def GetWeekDay(self, *_args, **_kwargs):
         val = calendarc.wxCalendarEvent_GetWeekDay(self, *_args, **_kwargs)
