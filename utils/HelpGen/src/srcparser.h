@@ -30,7 +30,7 @@
     #include "wx/string.h"
     #include "wxstlvec.h"
 
-    #ifdef wxUSE_STD_STRING
+    #if wxUSE_STD_STRING
         using std::string;
     #else
         // FOR NOW:: quick n' dirty:
@@ -166,7 +166,7 @@ public:
     // spClass on sorting the class members
 
     void VisitAll( spContext& atContext,
-                   bool sortContent = TRUE
+                   bool sortContent = true
                  );
 
     // methods invoked by visitor
@@ -236,7 +236,7 @@ public:
     string mText;
     bool   mIsMultiline; // multiline comments ar those with /**/'s
 
-    // TRUE, if these was an empty empty
+    // true, if these was an empty empty
     // line above single line comment
 
     bool   mStartsPar;
@@ -311,13 +311,13 @@ public:
     // see SRC_VISIBLITY_TYPES enumeration
     int           mVisibility;
 
-    // TRUE, if context does not really exist in the source
+    // true, if context does not really exist in the source
     //       but was created by external tools (e.g. forward engineering)
 
     bool         mIsVirtualContext;
     bool         mVirtualContextHasChildren;
 
-    // body of the context in case (mIsVirtual == TRUE)
+    // body of the context in case (mIsVirtual == true)
     string       mVirtualContextBody;
     string       mVittualContextFooter;
 
@@ -327,7 +327,7 @@ public:
 
 public:
     // universal identifier of the context (e.g. class name)
-    string        mName;
+    wxString      m_Name;
 
 public:
     // default constructor
@@ -360,7 +360,7 @@ public:
     bool VitualContextHasChildren();
 
     void SetVirtualContextBody( const string& body,
-                                bool  hasChildren = FALSE,
+                                bool  hasChildren = false,
                                 const string& footer = wxEmptyString );
 
     string GetVirtualContextBody();
@@ -373,7 +373,7 @@ public:
 
     virtual string GetHeader( spContext* pCtx = NULL );
 
-    // TRUE, if there is at least one entry
+    // true, if there is at least one entry
     // in the comment list of this context
     bool HasComments();
     MCommentListT& GetCommentList() { return mComments; }
@@ -384,7 +384,7 @@ public:
     virtual void SortMembers() {}
 
     // returns identifier of this context
-    inline string& GetName() { return mName; }
+    inline wxString& GetName() { return m_Name; }
 
     // returns -1, if souce line # is unknow
     inline int GetSourceLineNo() { return mSrcLineNo; }
@@ -413,11 +413,11 @@ public:
     // returns NULL, if the context with the given
     // name and type is not contained by this context
     // and it's children. Children's children are not
-    // searched recursivelly if searchSubMembers is FALSE
+    // searched recursivelly if searchSubMembers is false
 
     spContext* FindContext( const string& identifier,
                             int   contextType      = SP_CTX_ANY,
-                            bool  searchSubMembers = TRUE
+                            bool  searchSubMembers = true
                           );
 
     // removes this context from it's parent
@@ -426,19 +426,19 @@ public:
     //  will result assertion failure)
     void RemoveThisContext();
 
-    // returns TRUE, if this object is aggregated in the file
+    // returns true, if this object is aggregated in the file
     bool IsInFile();
 
-    // TRUE, if outter context is a namespace
+    // true, if outter context is a namespace
     bool IsInNameSpace();
 
-    // TRUE, if outter context is a class
+    // true, if outter context is a class
     bool IsInClass();
 
-    // TRUE, if outter cotext is an operation (TRUE for "spParameter"s)
+    // true, if outter cotext is an operation (true for "spParameter"s)
     bool IsInOperation();
 
-    // TRUE if the context is public
+    // true if the context is public
     bool IsPublic() const { return mVisibility == SP_VIS_PUBLIC; }
 
     // NOTE:: method returns not the type of this object
@@ -547,14 +547,14 @@ public:
     // argument list
     //MParamListT mParams;
 
-    // TRUE, if operation does not modify
+    // true, if operation does not modify
     // the content of the object
     bool        mIsConstant;
 
     // flag, specific to C++
     bool        mIsVirtual;
 
-    // TRUE, if definition follows the declaration immediatelly
+    // true, if definition follows the declaration immediatelly
     bool        mHasDefinition;
 
     // scope if any (e.g. MyClass::MyFunction(), scope stirng is "MyClass" )
@@ -634,7 +634,7 @@ public:
     // valid if mClassSubType is SP_CLTYPE_TEMPLATE_CLASS
     string       mTemplateTypes;
 
-    // TRUE, if it's and interface of abstract base class
+    // true, if it's and interface of abstract base class
     bool         mIsAbstract;
 
 public:

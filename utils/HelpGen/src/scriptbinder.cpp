@@ -149,7 +149,7 @@ bool ScriptTemplate::HasVar( const char* name )
 {
     for( size_t i = 0; i != mVars.size(); ++i )
 
-        if ( strcmp( mVars[i]->mName, name ) == 0 )
+        if ( strcmp( mVars[i]->m_Name, name ) == 0 )
 
             return 1;
 
@@ -197,7 +197,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
         case TVAR_INTEGER :
             {
                 sprintf(buf, "%d",*( (int*) ((char*)dataObj + pInfo->mOfs) ) );
-                
+
                 stm.WriteBytes( buf, strlen(buf ) );
                 break;
             }
@@ -213,7 +213,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
                 cout << "DBG:: dataObj points to " << (int)dataObj << endl;
                 cout << "DBG:: pInfo->mOfs value is " << (int)pInfo->mOfs << endl;
                 cout << "DBG:: d+pInfo->mOfs is " << (int)((char*)dataObj + pInfo->mOfs) << endl;
-                cout << "DBG:: pInfo->mName is " << pInfo->mName << endl;
+                cout << "DBG:: pInfo->m_Name is " << pInfo->m_Name << endl;
                 cout << "DBG:: pInfo->mType is " << pInfo->mType << endl;
                 cout << "DBG:: end of dump. " << endl;
 
@@ -246,7 +246,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
                 }
 
                 int*   array = *((int**)( (char*)dataObj+info.mRefOfs ));
-    
+
                 ScriptTemplate* pRefTempl;
 
                 for( int i = 0; i != sz; ++i )
@@ -297,7 +297,7 @@ void ScriptTemplate::PrintScript( void* dataObj, ScriptStream& stm )
 
         for( size_t i = 0; i != sz; ++i )
         {
-            if ( strcmp( mVars[i]->mName, start ) == 0 )
+            if ( strcmp( mVars[i]->m_Name, start ) == 0 )
             {
                 PrintVar( mVars[i], dataObj, stm );
 
@@ -328,7 +328,7 @@ ScriptSection::ScriptSection( const string&   name,
                             )
     : mpParent ( NULL ),
 
-      mName    ( name ),
+      m_Name   ( name ),
       mBody    ( body ),
 
       mAutoHide( autoHide ),
@@ -411,7 +411,7 @@ ScriptSection* ScriptSection::GetSubsection( const char* name )
         // DBG::
         //ScriptSection& sect = *mSubsections[i];
 
-        if ( mSubsections[i]->mName == buf )
+        if ( mSubsections[i]->m_Name == buf )
         {
             if ( name[cur] == '/' )
 
@@ -467,8 +467,8 @@ void ScriptSection::RegisterTemplate( ScriptTemplate& sectionTempalte )
         arrRefOfs, arrSizeOfs, refTemplOfs;
 
     // obtaining offsets of member vars
-    
-    GET_VAR_OFS( ScriptSection, mName,     &nameOfs    )
+
+    GET_VAR_OFS( ScriptSection, m_Name,    &nameOfs    )
     GET_VAR_OFS( ScriptSection, mBody,     &bodyOfs    )
     GET_VAR_OFS( ScriptSection, mId,       &idOfs      )
     GET_VAR_OFS( ScriptSection, mRefFirst, &arrRefOfs  )
@@ -511,7 +511,7 @@ void ScriptSection::DoRemoveEmptySections(int& nRemoved, SectListT& removedLst)
         sect.DoRemoveEmptySections( nRemoved, removedLst );
 
         if (sect.mAutoHide )
-            
+
             if ( sect.mReferences.size() == 0 )
             {
                 bool found = false;
@@ -522,7 +522,7 @@ void ScriptSection::DoRemoveEmptySections(int& nRemoved, SectListT& removedLst)
                         found = 1;
                         break;
                     }
-                
+
                 if ( !found )
                 {
                     removedLst.push_back( &sect );

@@ -6,7 +6,7 @@
 // Created:     22/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleskandars Gluchovas
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -425,7 +425,7 @@ string spOperation::GetFullName(MarkupTagsT tags)
 {
     string txt = tags[TAG_BOLD].start + mRetType;
     txt += " ";
-    txt += mName;
+    txt += m_Name;
     txt += "( ";
     txt += tags[TAG_BOLD].end;
 
@@ -447,7 +447,7 @@ string spOperation::GetFullName(MarkupTagsT tags)
         txt += tags[TAG_ITALIC].start;
 
         txt += " ";
-        txt += param.mName;
+        txt += param.m_Name;
 
         if ( param.mInitVal != "" )
         {
@@ -575,13 +575,13 @@ void spContext::DumpThis(const wxString& WXUNUSED(indent)) const
 void spParameter::DumpThis(const wxString& indent) const
 {
     wxLogDebug("%sparam named '%s' of type '%s'",
-               indent.c_str(), mName.c_str(), mType.c_str());
+               indent.c_str(), m_Name.c_str(), mType.c_str());
 }
 
 void spAttribute::DumpThis(const wxString& indent) const
 {
     wxLogDebug("%svariable named '%s' of type '%s'",
-               indent.c_str(), mName.c_str(), mType.c_str());
+               indent.c_str(), m_Name.c_str(), mType.c_str());
 }
 
 void spOperation::DumpThis(const wxString& indent) const
@@ -614,7 +614,7 @@ void spOperation::DumpThis(const wxString& indent) const
                mIsConstant ? "const " : "",
                mIsVirtual ? "virtual " : "",
                protection.c_str(),
-               mScope.c_str(), mName.c_str(), mRetType.c_str());
+               mScope.c_str(), m_Name.c_str(), mRetType.c_str());
 }
 
 void spPreprocessorLine::DumpThis(const wxString& indent) const
@@ -649,7 +649,7 @@ void spClass::DumpThis(const wxString& indent) const
     for ( StrListT::const_iterator i = mSuperClassNames.begin();
           i != mSuperClassNames.end();
           i++ ) {
-        if ( !!base )
+        if ( !base.empty() )
             base += ", ";
         base += *i;
     }
@@ -685,19 +685,19 @@ void spClass::DumpThis(const wxString& indent) const
 
     wxLogDebug("%s%s named '%s' (base classes: %s)",
                indent.c_str(), kind.c_str(),
-               mName.c_str(), base.c_str());
+               m_Name.c_str(), base.c_str());
 }
 
 void spEnumeration::DumpThis(const wxString& indent) const
 {
     wxLogDebug("%senum named '%s'",
-               indent.c_str(), mName.c_str());
+               indent.c_str(), m_Name.c_str());
 }
 
 void spTypeDef::DumpThis(const wxString& indent) const
 {
     wxLogDebug("%stypedef %s = %s",
-               indent.c_str(), mName.c_str(), mOriginalType.c_str());
+               indent.c_str(), m_Name.c_str(), mOriginalType.c_str());
 }
 
 void spFile::DumpThis(const wxString& indent) const

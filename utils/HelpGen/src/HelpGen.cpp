@@ -675,7 +675,7 @@ int main(int argc, char **argv)
                         }
 
                         directoryOut = argv[current];
-                        if ( !directoryOut.IsEmpty() ) {
+                        if ( !directoryOut.empty() ) {
                             // terminate with a '/' if it doesn't have it
                             switch ( directoryOut.Last() ) {
                                 case '/':
@@ -735,7 +735,7 @@ int main(int argc, char **argv)
     // create a parser object and a visitor derivation
     CJSourceParser parser;
     HelpGenVisitor visitor(directoryOut, overwrite);
-    if ( !ignoreFile.IsEmpty() && mode == Mode_Dump )
+    if ( !ignoreFile.empty() && mode == Mode_Dump )
         visitor.GetIgnoreHandler().AddNamesFromFile(ignoreFile);
 
     spContext *ctxTop = NULL;
@@ -781,7 +781,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if ( !ignoreFile.IsEmpty() )
+        if ( !ignoreFile.empty() )
             docman.GetIgnoreHandler().AddNamesFromFile(ignoreFile);
 
         docman.DumpDifferences(ctxTop);
@@ -869,7 +869,7 @@ void HelpGenVisitor::CloseFunction()
 
         m_textFunc << "}\n\n";
 
-        if ( !m_textStoredFunctionComment.IsEmpty() ) {
+        if ( !m_textStoredFunctionComment.empty() ) {
             m_textFunc << m_textStoredFunctionComment << '\n';
         }
 
@@ -1201,7 +1201,7 @@ void HelpGenVisitor::VisitTypeDef( spTypeDef& td )
 
     // remember for later use if we're not inside a class yet
     if ( !m_inClass ) {
-        if ( !m_textStoredTypedefs.IsEmpty() ) {
+        if ( !m_textStoredTypedefs.empty() ) {
             m_textStoredTypedefs << '\n';
         }
 
@@ -1319,7 +1319,7 @@ void HelpGenVisitor::VisitParameter( spParameter& param )
 
     m_textFunc << "\\param{" << param.mType << " }{" << param.GetName();
     wxString defvalue = param.mInitVal;
-    if ( !defvalue.IsEmpty() ) {
+    if ( !defvalue.empty() ) {
         m_textFunc << " = " << defvalue;
     }
 
@@ -1615,9 +1615,9 @@ bool DocManager::ParseTeXFile(const wxString& filename)
 
                 // now come {paramtype}{paramname}
                 wxString paramType = ExtractStringBetweenBraces(&current);
-                if ( !!paramType ) {
+                if ( !paramType.empty() ) {
                     wxString paramText = ExtractStringBetweenBraces(&current);
-                    if ( !!paramText ) {
+                    if ( !paramText.empty() ) {
                         // the param declaration may contain default value
                         wxString paramName = paramText.BeforeFirst('='),
                                  paramValue = paramText.AfterFirst('=');
@@ -1750,7 +1750,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
         }
 
         spClass *ctxClass = (spClass *)ctx;
-        const wxString& nameClass = ctxClass->mName;
+        const wxString& nameClass = ctxClass->m_Name;
         int index = m_classes.Index(nameClass);
         if ( index == wxNOT_FOUND ) {
             if ( !m_ignoreNames.IgnoreClass(nameClass) ) {
@@ -1786,7 +1786,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                 continue;
 
             spOperation *ctxMethod = (spOperation *)ctx;
-            const wxString& nameMethod = ctxMethod->mName;
+            const wxString& nameMethod = ctxMethod->m_Name;
 
             // find all functions with the same name
             wxArrayInt aMethodsWithSameName;
@@ -1864,7 +1864,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                         spParameter *ctxParam = (spParameter *)ctx;
                         const ParamInfo& param = method.GetParam(nParam);
                         if ( m_checkParamNames &&
-                             (param.GetName() != ctxParam->mName.c_str()) ) {
+                             (param.GetName() != ctxParam->m_Name.c_str()) ) {
                             foundDiff = true;
 
                             wxLogError("Parameter #%d of '%s::%s' should be "
@@ -1872,7 +1872,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                                        nParam + 1,
                                        nameClass.c_str(),
                                        nameMethod.c_str(),
-                                       ctxParam->mName.c_str(),
+                                       ctxParam->m_Name.c_str(),
                                        param.GetName().c_str());
 
                             continue;
@@ -1883,7 +1883,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
 
                             wxLogError("Type of parameter '%s' of '%s::%s' "
                                        "should be '%s' and not '%s'.",
-                                       ctxParam->mName.c_str(),
+                                       ctxParam->m_Name.c_str(),
                                        nameClass.c_str(),
                                        nameMethod.c_str(),
                                        ctxParam->mType.c_str(),
@@ -1896,7 +1896,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                             wxLogWarning("Default value of parameter '%s' of "
                                          "'%s::%s' should be '%s' and not "
                                          "'%s'.",
-                                         ctxParam->mName.c_str(),
+                                         ctxParam->m_Name.c_str(),
                                          nameClass.c_str(),
                                          nameMethod.c_str(),
                                          ctxParam->mInitVal.c_str(),
@@ -2159,7 +2159,7 @@ static wxString GetAllComments(const spContext& ctx)
 
         // don't take comments like "// ----------" &c
         comment.Trim(false);
-        if ( !!comment &&
+        if ( !comment.empty() &&
               comment == wxString(comment[0u], comment.length() - 1) + '\n' )
             comments << "\n";
         else
@@ -2192,6 +2192,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.37  2005/05/23 15:22:08  ABX
+   Initial HelpGen source cleaning.
+
    Revision 1.36  2005/04/07 19:54:58  MW
    Workarounds to allow compilation by Sun C++ 5.5
 

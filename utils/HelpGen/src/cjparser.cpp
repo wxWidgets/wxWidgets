@@ -1304,7 +1304,7 @@ void CJSourceParser::AddMacroNode( char*& cur )
 
             get_next_token( tok );
 
-            pPL->mName = get_token_str( tok );
+            pPL->m_Name = get_token_str( tok );
 
             skip_token( tok );
             get_next_token( tok);
@@ -1576,7 +1576,7 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
     pOp->mSrcOffset    = int( start - _gSrcStart );
     pOp->mHeaderLength = int( bracketPos - start );
     if ( mpCurCtx->GetContextType() == SP_CTX_CLASS )
-        pOp->mScope = mpCurCtx->mName;
+        pOp->mScope = mpCurCtx->m_Name;
 
     mpCurCtx->AddMember( pOp );
     pOp->mVisibility = mCurVis;
@@ -1588,10 +1588,10 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
     // go backwards to method name
     skip_token_back( cur );
 
-    pOp->mName = get_token_str( cur );
+    pOp->m_Name = get_token_str( cur );
 
     // checker whether it's not an operator
-    char chFirst = *pOp->mName.c_str();
+    char chFirst = *pOp->m_Name.c_str();
     if ( !isalpha(chFirst) && chFirst != '_' && chFirst != '~' ) {
         // skip 'operator'
         skip_next_token_back( cur );
@@ -1599,20 +1599,20 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
 
         string lastToken = get_token_str( cur );
         if ( lastToken == "operator" ) {
-            lastToken += pOp->mName;
-            pOp->mName = lastToken;
+            lastToken += pOp->m_Name;
+            pOp->m_Name = lastToken;
         }
         else {
             // ok, it wasn't an operator after all
             skip_token( cur );
         }
     }
-    else if ( pOp->mName == "operator" ) {
+    else if ( pOp->m_Name == "operator" ) {
         skip_token( cur );
         get_next_token( cur );
         string oper = get_token_str( cur );
 
-        pOp->mName += oper;
+        pOp->m_Name += oper;
     }
 
     // go backwards to method return type
@@ -1622,14 +1622,14 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
     {
         string rettype = string( start, size_t( cur-start ) );
         // FIXME just for now...
-        string::size_type pos = 0; 
+        string::size_type pos = 0;
         string toerase("WXDLLEXPORT ");
         while((pos = rettype.find(toerase, pos)) != string::npos)
             rettype.erase(pos, toerase.length());
         pOp->mRetType = rettype;
     }
 
-    arrange_indirection_tokens_between( pOp->mRetType, pOp->mName );
+    arrange_indirection_tokens_between( pOp->mRetType, pOp->m_Name );
 
     cur = savedPos;
     restore_line_no( tmpLnNo );
@@ -1746,7 +1746,7 @@ bool CJSourceParser::ParseArguments( char*& cur )
         AttachComments( *pPar, blocks[nameBlock] );
 
         // retrieve argument name
-        pPar->mName = string( blocks[nameBlock], blockSizes[nameBlock] );
+        pPar->m_Name = string( blocks[nameBlock], blockSizes[nameBlock] );
 
         // retreive argument type
 
@@ -1755,7 +1755,7 @@ bool CJSourceParser::ParseArguments( char*& cur )
 
         pPar->mType = string( blocks[0], len );
 
-        arrange_indirection_tokens_between( pPar->mType, pPar->mName );
+        arrange_indirection_tokens_between( pPar->mType, pPar->m_Name );
 
         if ( *cur == ')' )
         {
@@ -1871,7 +1871,7 @@ void CJSourceParser::ParseMemberVar( char*& cur )
         // attach comments about the attribute
         AttachComments( *pAttr, cur );
 
-        pAttr->mName = get_token_str( cur );
+        pAttr->m_Name = get_token_str( cur );
 
         // guessing that this going to be variable type
         skip_next_token_back( cur );
@@ -1887,13 +1887,13 @@ void CJSourceParser::ParseMemberVar( char*& cur )
             // yes, we've mistaken, it was not a identifier,
             // but it's default value
             pAttr->mInitVal =
-                pAttr->mName;
+                pAttr->m_Name;
 
             // skip default value and '=' symbol
             skip_next_token_back( cur );
             skip_token_back( cur );
 
-            pAttr->mName = get_token_str( cur );
+            pAttr->m_Name = get_token_str( cur );
 
             skip_next_token_back( cur );
             skip_token_back( cur );
@@ -1920,8 +1920,8 @@ void CJSourceParser::ParseMemberVar( char*& cur )
             pAttr->mType = type;
         pAttr->mVisibility = mCurVis;
 
-        if ( !pAttr->mName.empty() )
-            arrange_indirection_tokens_between( pAttr->mType, pAttr->mName );
+        if ( !pAttr->m_Name.empty() )
+            arrange_indirection_tokens_between( pAttr->mType, pAttr->m_Name );
     }
 
     cur = savedPos;
@@ -1984,15 +1984,15 @@ void CJSourceParser::SkipFunctionBody( char*& cur )
 
         // separate scope resolution token from the name of operation
 
-        for( size_t i = 0; i != op.mName.length(); ++i )
+        for( size_t i = 0; i != op.m_Name.length(); ++i )
         {
-            if ( op.mName[i] == ':' && op.mName[i+1] == ':' )
+            if ( op.m_Name[i] == ':' && op.m_Name[i+1] == ':' )
             {
-                string unscoped( op.mName, i+2, op.mName.length() - ( i + 2 ) );
+                string unscoped( op.m_Name, i+2, op.m_Name.length() - ( i + 2 ) );
 
-                op.mScope = string( op.mName, 0, i );
+                op.mScope = string( op.m_Name, 0, i );
 
-                op.mName = unscoped;
+                op.m_Name = unscoped;
 
                 break;
             }
@@ -2075,7 +2075,7 @@ void CJSourceParser::AddClassNode( char*& cur )
     pClass->mSrcOffset = int( ctxStart - _gSrcStart );
 
     char* nameTok = cur;
-    pClass->mName = get_token_str( cur );
+    pClass->m_Name = get_token_str( cur );
 
     bool isDerived = 0;
 
@@ -2106,7 +2106,7 @@ void CJSourceParser::AddClassNode( char*& cur )
 
             if ( nameTok != tok )
             {
-                pClass->mName = get_token_str( tok );
+                pClass->m_Name = get_token_str( tok );
             }
 
         }
@@ -2180,7 +2180,7 @@ void CJSourceParser::AddClassNode( char*& cur )
         skip_next_token_back( tok );
         skip_token_back( tok );
 
-        pClass->mName = get_token_str( tok );
+        pClass->m_Name = get_token_str( tok );
 
         restore_line_no( tmpLn );
     }
@@ -2215,7 +2215,7 @@ void CJSourceParser::AddEnumNode( char*& cur )
     // check if enumeration has got it's identifier
     if ( *cur != '{' )
     {
-        pEnum->mName = get_token_str( cur );
+        pEnum->m_Name = get_token_str( cur );
     }
 
     if ( !skip_imp_block( cur ) ) return;
@@ -2227,7 +2227,7 @@ void CJSourceParser::AddEnumNode( char*& cur )
         // check if the identifier if after the {...} block
         if ( *cur != ';' )
 
-            pEnum->mName = get_token_str( cur );
+            pEnum->m_Name = get_token_str( cur );
     }
 
     clear_commets_queue();
@@ -2288,7 +2288,7 @@ void CJSourceParser::AddTypeDefNode( char*& cur )
 
     get_string_between( start, typeEnd, &pTDef->mOriginalType );
 
-    get_string_between( nameStart, nameEnd, &pTDef->mName );
+    get_string_between( nameStart, nameEnd, &pTDef->m_Name );
 
     clear_commets_queue();
 
