@@ -13,10 +13,12 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/stattext.h"
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/log.h"
 
 #import <Foundation/NSString.h>
 #import <AppKit/NSTextField.h>
@@ -66,7 +68,21 @@ wxStaticText::~wxStaticText()
 
 void wxStaticText::SetLabel(const wxString& label)
 {
-    // TODO
+    [GetNSTextField() setStringValue:wxNSStringWithWxString(label)];
+    NSRect oldFrameRect = [GetNSTextField() frame];
+    NSView *superview = [GetNSTextField() superview];
+    wxLogTrace(wxTRACE_COCOA_Window_Size, "wxStaticText::SetLabel Old Position: (%d,%d)", GetPosition().x, GetPosition().y);
+    [GetNSTextField() sizeToFit];
+    NSRect newFrameRect = [GetNSTextField() frame];
+    if(![superview isFlipped])
+    {
+        newFrameRect.origin.y = oldFrameRect.origin.y + oldFrameRect.size.height - newFrameRect.size.height;
+        [GetNSTextField() setFrame:newFrameRect];
+    }
+    wxLogTrace(wxTRACE_COCOA_Window_Size, "wxStaticText::SetLabel New Position: (%d,%d)", GetPosition().x, GetPosition().y);
+
+    [[GetNSTextField() superview] setNeedsDisplayInRect:oldFrameRect];
+    [[GetNSTextField() superview] setNeedsDisplayInRect:newFrameRect];
 }
 
 void wxStaticText::Cocoa_didChangeText(void)
