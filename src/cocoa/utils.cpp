@@ -4,9 +4,9 @@
 // Author:      AUTHOR
 // Modified by:
 // Created:     2003/??/??
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/setup.h"
@@ -58,11 +58,16 @@ wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
     return info;
 }
 
-// Return TRUE if we have a colour display
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+{
+    return wxGenericFindWindowAtPoint(pt);
+}
+
+// Return true if we have a colour display
 bool wxColourDisplay()
 {
     // TODO
-    return TRUE;
+    return true;
 }
 
 void wxGetMousePosition( int* x, int* y )
@@ -97,7 +102,7 @@ void wxFlushEvents()
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 #endif
@@ -107,72 +112,72 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
 {
-  char buf[50];
-  sprintf(buf, "%.4f", value);
-  return wxWriteResource(section, entry, buf, file);
+    char buf[50];
+    sprintf(buf, "%.4f", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file)
 {
-  char buf[50];
-  sprintf(buf, "%ld", value);
-  return wxWriteResource(section, entry, buf, file);
+    char buf[50];
+    sprintf(buf, "%ld", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file)
 {
-  char buf[50];
-  sprintf(buf, "%d", value);
-  return wxWriteResource(section, entry, buf, file);
+    char buf[50];
+    sprintf(buf, "%d", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
 {
-  char *s = NULL;
-  bool succ = wxGetResource(section, entry, (char **)&s, file);
-  if (succ)
-  {
-    *value = (float)strtod(s, NULL);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    char *s = NULL;
+    bool succ = wxGetResource(section, entry, (char **)&s, file);
+    if (succ)
+    {
+        *value = (float)strtod(s, NULL);
+        delete[] s;
+        return true;
+    }
+    else return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file)
 {
-  char *s = NULL;
-  bool succ = wxGetResource(section, entry, (char **)&s, file);
-  if (succ)
-  {
-    *value = strtol(s, NULL, 10);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    char *s = NULL;
+    bool succ = wxGetResource(section, entry, (char **)&s, file);
+    if (succ)
+    {
+        *value = strtol(s, NULL, 10);
+        delete[] s;
+        return true;
+    }
+    else return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file)
 {
-  char *s = NULL;
-  bool succ = wxGetResource(section, entry, (char **)&s, file);
-  if (succ)
-  {
-    *value = (int)strtol(s, NULL, 10);
-    delete[] s; 
-    return TRUE;
-  }
-  else return FALSE;
+    char *s = NULL;
+    bool succ = wxGetResource(section, entry, (char **)&s, file);
+    if (succ)
+    {
+        *value = (int)strtol(s, NULL, 10);
+        delete[] s;
+        return true;
+    }
+    else return false;
 }
 #endif // wxUSE_RESOURCES
