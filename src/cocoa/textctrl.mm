@@ -215,7 +215,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
     NSCell *cell = [GetNSControl() cell];
     wxASSERT(cell);
     NSSize cellSize = [cell cellSize];
-    wxSize size(100,(int)ceilf(cellSize.height));
+    wxSize size(100,(int)ceil(cellSize.height));
 
     wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxTextCtrl=%p::DoGetBestSize()==(%d,%d)"),this,size.x,size.y);
     return size;

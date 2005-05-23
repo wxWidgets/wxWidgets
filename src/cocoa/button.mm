@@ -106,6 +106,6 @@ wxSize wxButtonBase::GetDefaultSize()
 {
     static NSRect cocoaRect = MakeNSButtonDefaultRect();
     // Apple HIG says OK/Cancel buttons have default width of 68.
-    return wxSize(68,(int)ceilf(cocoaRect.size.height));
+    return wxSize(68,(int)ceil(cocoaRect.size.height));
 }
 

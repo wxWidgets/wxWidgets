@@ -97,7 +97,7 @@ NS_ENDHANDLER
     if(didFit)
     {
         NSRect cocoaRect = [m_cocoaNSView frame];
-        wxSize size((int)ceilf(cocoaRect.size.width),(int)ceilf(cocoaRect.size.height));
+        wxSize size((int)ceil(cocoaRect.size.width),(int)ceil(cocoaRect.size.height));
         [m_cocoaNSView setFrame: storedRect];
         wxLogTrace(wxTRACE_COCOA_Window_Size,wxT("wxControl=%p::DoGetBestSize()==(%d,%d) from sizeToFit"),this,size.x,size.y);
         return /*wxConstCast(this, wxControl)->m_bestSize =*/ size;
