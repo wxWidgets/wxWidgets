@@ -321,7 +321,6 @@ MSW_DIST: ALL_GUI_DIST
 	cp $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.rc $(DISTDIR)/src/msw
-	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
 	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
 
 MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
@@ -339,7 +338,6 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/msw/wince
 	cp $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
-	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
 	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
 	cp $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
 	cp $(SRCDIR)/*.??? $(DISTDIR)/src
@@ -1131,7 +1129,7 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp"    \
 			   -o -name "*.dsw" -o -name "*.hh*" -o -name "*.mms"    \
 			   -o -name "*.mcp" -o -name "*M*.xml" -o -name "*.r"    \
-			   -o -name "*.bkl" -o -name "*.pro" -o -name "*.def"    \
+			   -o -name "*.bkl" -o -name "*.pro"  \
 			   -o -name "*.vpj" -o -name "*.sc"                      \
 			   -o \( -name "makefile.*" -a ! -name "makefile.unx" \) \
 			\) -print0 | xargs -0 rm -rf
