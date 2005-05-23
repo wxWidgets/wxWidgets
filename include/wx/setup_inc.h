@@ -484,20 +484,6 @@
 // Recommended setting: 1 
 #define wxUSE_MEDIACTRL     1
 
-// Use QuickTime
-//
-// Default is 0
-//
-// Recommended setting: 1 if you have the QT SDK installed and you need it, else 0
-#define wxUSE_QUICKTIME     0
-
-// Use DirectShow (requires linkage to strmiids.lib)
-//
-// Default is 0
-//
-// Recommended setting: 1 if the DirectX 7 SDK is installed (highly recommended), else 0
-#define wxUSE_DIRECTSHOW    0
-
 // Use GStreamer for Unix (req a lot of dependancies)
 //
 // Default is 0

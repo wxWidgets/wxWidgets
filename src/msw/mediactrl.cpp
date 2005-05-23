@@ -59,11 +59,6 @@ extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
-//  Compilation guard for DirectShow
-//---------------------------------------------------------------------------
-#if wxUSE_DIRECTSHOW
-
-//---------------------------------------------------------------------------
 //  COM includes
 //---------------------------------------------------------------------------
 #include "wx/msw/ole/oleutils.h" //wxBasicString, IID etc.
@@ -764,8 +759,6 @@ public:
     DECLARE_DYNAMIC_CLASS(wxAMMediaBackend);
 };
 
-#endif //wxUSE_DIRECTSHOW
-
 //---------------------------------------------------------------------------
 //
 //  wxMCIMediaBackend
@@ -833,11 +826,6 @@ public:
 //  wxQTMediaBackend
 //
 //---------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------
-//  QT Compilation Guard
-//---------------------------------------------------------------------------
-#if wxUSE_QUICKTIME
 
 //---------------------------------------------------------------------------
 //  QT Includes
@@ -1089,10 +1077,6 @@ public:
     DECLARE_DYNAMIC_CLASS(wxQTMediaBackend);
 };
 
-//---------------------------------------------------------------------------
-//  End QT Compilation Guard
-//---------------------------------------------------------------------------
-#endif //wxUSE_QUICKTIME
 
 //===========================================================================
 //  IMPLEMENTATION
@@ -1103,11 +1087,6 @@ public:
 // wxAMMediaBackend
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-//---------------------------------------------------------------------------
-// Only use if user wants it -
-//---------------------------------------------------------------------------
-#if wxUSE_DIRECTSHOW
 
 IMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
 
@@ -1300,17 +1279,8 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
         return false;
     }
 
-#if defined(_WIN32)
-    ::SetWindowLong(m_hNotifyWnd, GWL_WNDPROC,
-                       (LONG)wxAMMediaBackend::NotifyWndProc);
-    ::SetWindowLong(m_hNotifyWnd, GWL_USERDATA,
-                       (LONG) this);
-#else
-    ::SetWindowLongPtr(m_hNotifyWnd, GWLP_WNDPROC,
-                       (LONG_PTR)wxAMMediaBackend::NotifyWndProc);
-    ::SetWindowLongPtr(m_hNotifyWnd, GWL_USERDATA,
-                       (LONG) this);
-#endif
+    wxSetWindowProc(m_hNotifyWnd, wxAMMediaBackend::NotifyWndProc);
+    wxSetWindowUserData(m_hNotifyWnd, (void*)this);
 
 
     wxAMVERIFY( m_pME->SetNotifyWindow((LONG_PTR)m_hNotifyWnd,
@@ -1625,7 +1595,6 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int w, int h)
 //---------------------------------------------------------------------------
 // End of wxAMMediaBackend
 //---------------------------------------------------------------------------
-#endif //wxUSE_DIRECTSHOW
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
@@ -1839,13 +1808,7 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
         return false;
     }
 
-#if defined(_WIN32)
-    ::SetWindowLong(m_hNotifyWnd, GWL_WNDPROC,
-                       (LONG)wxMCIMediaBackend::NotifyWndProc);
-#else
-    ::SetWindowLongPtr(m_hNotifyWnd, GWLP_WNDPROC,
-                       (LONG_PTR)wxMCIMediaBackend::NotifyWndProc);
-#endif
+    wxSetWindowProc(m_hNotifyWnd, wxMCIMediaBackend::NotifyWndProc);
 
     ::SetWindowLong(m_hNotifyWnd, GWL_USERDATA,
                        (LONG) this);
@@ -2186,8 +2149,6 @@ LRESULT CALLBACK wxMCIMediaBackend::OnNotifyWndProc(HWND hWnd, UINT nMsg,
 // TODO: Use a less cludgy way to pause/get state/set state
 // TODO: Dynamically load from qtml.dll
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#if wxUSE_QUICKTIME
 
 IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
 
@@ -2680,9 +2641,8 @@ void wxQTMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int w, int h)
 }
 
 //---------------------------------------------------------------------------
-//  End QT Compilation Guard
+//  End QT Backend
 //---------------------------------------------------------------------------
-#endif //wxUSE_QUICKTIME
 
 //in source file that contains stuff you don't directly use
 #include <wx/html/forcelnk.h>

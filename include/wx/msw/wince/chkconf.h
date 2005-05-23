@@ -35,9 +35,6 @@
 #define wxUSE_ON_FATAL_EXCEPTION 0
 
 // media stuff not supported under CE
-#undef wxUSE_DIRECTSHOW
-#define wxUSE_DIRECTSHOW 0
-
 #undef wxUSE_MEDIACTRL
 #define wxUSE_MEDIACTRL 0
 
