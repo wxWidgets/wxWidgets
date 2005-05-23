@@ -1002,7 +1002,7 @@ which are usually the same for all panes in
 a frame layout.
 */
 
-class cbCommonPaneProperties : public wxObject
+class WXDLLIMPEXP_FL cbCommonPaneProperties : public wxObject
 {
     DECLARE_DYNAMIC_CLASS( cbCommonPaneProperties )
 
