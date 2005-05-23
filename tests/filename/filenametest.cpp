@@ -193,7 +193,7 @@ void FileNameTestCase::TestStrip()
 
 void FileNameTestCase::TestShortLongPath()
 {
-    wxFileName fn("C:\\Program Files\\Windows NT\\Accessories\\wordpad.exe");
+    wxFileName fn(_T("C:\\Program Files\\Windows NT\\Accessories\\wordpad.exe"));
 
     // incredibly enough, GetLongPath() used to return different results during
     // the first and subsequent runs, test for this
