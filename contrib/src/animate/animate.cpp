@@ -270,7 +270,11 @@ bool wxAnimationPlayer::PlayFrame()
     PlayFrame(GetCurrentFrame(), * GetWindow(), GetPosition());
 
     // Set the timer for the next frame
-    m_timer.Start(GetDelay(GetCurrentFrame()));
+    int delay = GetDelay(GetCurrentFrame());
+    if (delay == 0)
+        delay = 1;      // 0 is invalid timeout for wxTimer.
+    
+    m_timer.Start(delay);
 
     m_currentFrame ++;
 
