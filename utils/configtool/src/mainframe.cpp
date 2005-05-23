@@ -421,7 +421,9 @@ void ctMainFrame::OnUpdateDisable(wxUpdateUIEvent& event)
 IMPLEMENT_CLASS(ctOutputWindow, wxPanel)
 
 BEGIN_EVENT_TABLE(ctOutputWindow, wxPanel)
+#if wxUSE_CLIPBOARD
     EVT_BUTTON(wxID_COPY, ctOutputWindow::OnCopyToClipboard)
+#endif // wxUSE_CLIPBOARD
     EVT_BUTTON(wxID_SAVE, ctOutputWindow::OnSaveText)
     EVT_BUTTON(ctID_REGENERATE, ctOutputWindow::OnRegenerate)
     EVT_UPDATE_UI(wxID_SAVE, ctOutputWindow::OnUpdateSaveText)
@@ -471,6 +473,7 @@ void ctOutputWindow::CreateWindows()
     SetSizer( item0 );
 }
 
+#if wxUSE_CLIPBOARD
 /// Copies the text to the clipboard.
 void ctOutputWindow::OnCopyToClipboard(wxCommandEvent& WXUNUSED(event))
 {
@@ -506,6 +509,7 @@ void ctOutputWindow::OnCopyToClipboard(wxCommandEvent& WXUNUSED(event))
         wxTheClipboard->Close();
     }
 }
+#endif // wxUSE_CLIPBOARD
 
 /// Sets the code in the text control.
 void ctOutputWindow::SetText(const wxString& text)

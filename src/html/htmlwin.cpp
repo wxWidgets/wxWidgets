@@ -826,6 +826,8 @@ bool wxHtmlWindow::CopySelection(ClipboardType t)
             return true;
         }
     }
+#else
+    wxUnusedVar(t);
 #endif // wxUSE_CLIPBOARD
 
     return false;
@@ -1027,6 +1029,8 @@ void wxHtmlWindow::OnMouseDown(wxMouseEvent& event)
             CaptureMouse();
         }
     }
+#else
+    wxUnusedVar(event);
 #endif // wxUSE_CLIPBOARD
 }
 

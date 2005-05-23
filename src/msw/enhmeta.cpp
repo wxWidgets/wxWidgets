@@ -120,7 +120,7 @@ void wxEnhMetaFile::Free()
 bool wxEnhMetaFile::Play(wxDC *dc, wxRect *rectBound)
 {
     wxCHECK_MSG( Ok(), false, _T("can't play invalid enhanced metafile") );
-    wxCHECK_MSG( dc, FALSE, _T("invalid wxDC in wxEnhMetaFile::Play") );
+    wxCHECK_MSG( dc, false, _T("invalid wxDC in wxEnhMetaFile::Play") );
 
     RECT rect;
     if ( rectBound )
@@ -180,8 +180,8 @@ wxSize wxEnhMetaFile::GetSize() const
 
 bool wxEnhMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
 {
-#if wxUSE_DRAG_AND_DROP
-    wxCHECK_MSG( m_hMF, FALSE, _T("can't copy invalid metafile to clipboard") );
+#if wxUSE_DRAG_AND_DROP && wxUSE_CLIPBOARD
+    wxCHECK_MSG( m_hMF, false, _T("can't copy invalid metafile to clipboard") );
 
     return wxTheClipboard->AddData(new wxEnhMetaFileDataObject(*this));
 #else // !wxUSE_DRAG_AND_DROP
@@ -318,7 +318,7 @@ bool wxEnhMetaFileDataObject::GetDataHere(const wxDataFormat& format, void *buf)
 
         // first get the buffer size and alloc memory
         size_t size = ::GetWinMetaFileBits(hEMF, 0, NULL, MM_ANISOTROPIC, hdc);
-        wxCHECK_MSG( size, FALSE, _T("GetWinMetaFileBits() failed") );
+        wxCHECK_MSG( size, false, _T("GetWinMetaFileBits() failed") );
 
         BYTE *bits = (BYTE *)malloc(size);
 
@@ -366,7 +366,7 @@ bool wxEnhMetaFileDataObject::SetData(const wxDataFormat& format,
     {
         hEMF = *(HENHMETAFILE *)buf;
 
-        wxCHECK_MSG( hEMF, FALSE, _T("pasting invalid enh metafile") );
+        wxCHECK_MSG( hEMF, false, _T("pasting invalid enh metafile") );
     }
     else
     {
@@ -377,7 +377,7 @@ bool wxEnhMetaFileDataObject::SetData(const wxDataFormat& format,
 
         // first get the buffer size
         size_t size = ::GetMetaFileBitsEx(mfpict->hMF, 0, NULL);
-        wxCHECK_MSG( size, FALSE, _T("GetMetaFileBitsEx() failed") );
+        wxCHECK_MSG( size, false, _T("GetMetaFileBitsEx() failed") );
 
         // then get metafile bits
         BYTE *bits = (BYTE *)malloc(size);
@@ -441,7 +441,7 @@ bool wxEnhMetaFileSimpleDataObject::SetData(size_t WXUNUSED(len),
 {
     HENHMETAFILE hEMF = *(HENHMETAFILE *)buf;
 
-    wxCHECK_MSG( hEMF, FALSE, _T("pasting invalid enh metafile") );
+    wxCHECK_MSG( hEMF, false, _T("pasting invalid enh metafile") );
     m_metafile.SetHENHMETAFILE((WXHANDLE)hEMF);
 
     return true;

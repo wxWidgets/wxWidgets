@@ -574,7 +574,7 @@ bool wxComboBox::CanUndo() const
 {
     if (!IsEditable())
         return false;
-    
+
     HWND hEditWnd = (HWND) GetEditHWND() ;
     if ( hEditWnd )
         return ::SendMessage(hEditWnd, EM_CANUNDO, 0, 0) != 0;
@@ -586,7 +586,7 @@ bool wxComboBox::CanRedo() const
 {
     if (!IsEditable())
         return false;
-    
+
     HWND hEditWnd = (HWND) GetEditHWND() ;
     if ( hEditWnd )
         return ::SendMessage(hEditWnd, EM_CANUNDO, 0, 0) != 0;
@@ -697,6 +697,10 @@ void wxComboBox::Replace(long from, long to, const wxString& value)
 
     // Paste into edit control
     SendMessage(GetHwnd(), WM_PASTE, (WPARAM)0, (LPARAM)0L);
+#else
+    wxUnusedVar(from);
+    wxUnusedVar(to);
+    wxUnusedVar(value);
 #endif
 }
 

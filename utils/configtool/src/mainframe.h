@@ -184,7 +184,9 @@ public:
     void CreateWindows();
 
     /// Copies the text to the clipboard.
+#if wxUSE_CLIPBOARD
     void OnCopyToClipboard(wxCommandEvent& event);
+#endif // wxUSE_CLIPBOARD
     void OnUpdateCopy(wxUpdateUIEvent& event);
 
     /// Regenerates setup.h/configure command
