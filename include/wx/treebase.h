@@ -28,6 +28,15 @@
 #include "wx/event.h"
 #include "wx/dynarray.h"
 
+// flags for deprecated `Expand(int action)', will be removed in next versions
+enum
+{
+    wxTREE_EXPAND_EXPAND,
+    wxTREE_EXPAND_COLLAPSE,
+    wxTREE_EXPAND_COLLAPSE_RESET,
+    wxTREE_EXPAND_TOGGLE
+};
+
 // ----------------------------------------------------------------------------
 // wxTreeItemId identifies an element of the tree. In this implementation, it's
 // just a trivial wrapper around Win32 HTREEITEM or a pointer to some private

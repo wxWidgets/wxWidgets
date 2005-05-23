@@ -35,15 +35,6 @@ struct WXDLLEXPORT wxTreeViewItem;
 // NB: all the following flags are for compatbility only and will be removed in the
 //     next versions
 
-// flags for deprecated `Expand(int action)'
-enum
-{
-    wxTREE_EXPAND_EXPAND,
-    wxTREE_EXPAND_COLLAPSE,
-    wxTREE_EXPAND_COLLAPSE_RESET,
-    wxTREE_EXPAND_TOGGLE
-};
-
 // flags for deprecated InsertItem() variant (their values are the same as of
 // TVI_FIRST and TVI_LAST)
 #define wxTREE_INSERT_FIRST 0xFFFF0001

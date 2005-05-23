@@ -40,15 +40,6 @@ struct WXDLLEXPORT wxTreeViewItem;
 // they're equivalent
 class wxTreeItemData;
 
-// flags for deprecated `Expand(int action)'
-enum
-{
-    wxTREE_EXPAND_EXPAND,
-    wxTREE_EXPAND_COLLAPSE,
-    wxTREE_EXPAND_COLLAPSE_RESET,
-    wxTREE_EXPAND_TOGGLE
-};
-
 // flags for deprecated InsertItem() variant
 #define wxTREE_INSERT_FIRST 0xFFFF0001
 #define wxTREE_INSERT_LAST  0xFFFF0002
@@ -67,7 +58,7 @@ public:
     wxTreeCtrl() { Init(); }
 
     wxTreeCtrl( wxWindow*          pParent
-               ,wxWindowID         vId = -1
+               ,wxWindowID         vId = wxID_ANY
                ,const wxPoint&     rPos = wxDefaultPosition
                ,const wxSize&      rSize = wxDefaultSize
                ,long               lStyle = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT
@@ -87,7 +78,7 @@ public:
     virtual ~wxTreeCtrl();
 
     bool Create( wxWindow*          pParent
-                ,wxWindowID         vId = -1
+                ,wxWindowID         vId = wxID_ANY
                 ,const wxPoint&     rPos = wxDefaultPosition
                 ,const wxSize&      rSize = wxDefaultSize
                 ,long               lStyle = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT
