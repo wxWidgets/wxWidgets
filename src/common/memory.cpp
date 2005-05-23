@@ -1075,5 +1075,13 @@ void wxTraceLevel(int, const wxChar * ...)
 #endif
 }
 
+#else // wxUSE_MEMORY_TRACING && defined(__WXDEBUG__)
+void wxTrace(const char *WXUNUSED(fmt) ...)
+{
+}
+
+void wxTraceLevel(int WXUNUSED(level), const char *WXUNUSED(fmt) ...)
+{
+}
 #endif
 
