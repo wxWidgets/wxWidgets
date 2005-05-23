@@ -39,12 +39,12 @@
 #include "wx/dde.h"
 #include "wx/intl.h"
 #include "wx/hashmap.h"
+#include "wx/math.h"
 
 #include "wx/msw/private.h"
 
 #include <string.h>
 #include <ddeml.h>
-#include <math.h>
 
 // ----------------------------------------------------------------------------
 // macros and constants
