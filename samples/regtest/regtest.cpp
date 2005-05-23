@@ -964,7 +964,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
     while ( bCont )
     {
         wxString strItem;
-        if (str.IsEmpty())
+        if (str.empty())
             strItem = _T("<default>");
         else
             strItem = str;
