@@ -35,6 +35,7 @@
 #include "wx/log.h"
 #include "wx/sizer.h"
 #include "wx/icon.h"
+#include "wx/intl.h"
 
 #endif
 
@@ -120,7 +121,7 @@ wxFont apStringToFont(const wxString& str)
     int style = wxNORMAL;
     int weight = wxNORMAL;
     int underlined = 0;
-    wxString facename(wxT(""));
+    wxString facename;
 
     wxStringTokenizer tkz(str, wxT(","));
     int i = 0;
@@ -206,7 +207,7 @@ void apViewHTMLFile(const wxString& url)
 
     wxString cmd;
     bool ok = ft->GetOpenCommand(&cmd,
-                                 wxFileType::MessageParameters(url, _T("")));
+                                 wxFileType::MessageParameters(url, wxEmptyString));
     delete ft;
 
     if (!ok)
@@ -266,7 +267,7 @@ bool apInvokeAppForFile(const wxString& filename)
     }
 
     wxString cmd;
-    ft->GetOpenCommand(&cmd, wxFileType::MessageParameters(filename, _T("")));
+    ft->GetOpenCommand(&cmd, wxFileType::MessageParameters(filename, wxEmptyString));
     delete ft;
 
     return (wxExecute(cmd, false) != 0);
@@ -281,10 +282,10 @@ bool apInvokeAppForFile(const wxString& filename)
 wxString apFindAppPath(const wxString& argv0, const wxString& cwd, const wxString& appVariableName)
 {
     // Try appVariableName
-    if (!appVariableName.IsEmpty())
+    if (!appVariableName.empty())
     {
         wxString strVar(wxGetenv(appVariableName.c_str()));
-        if (!strVar.IsEmpty())
+        if (!strVar.empty())
             return strVar;
     }
 
@@ -308,7 +309,7 @@ wxString apFindAppPath(const wxString& argv0, const wxString& cwd, const wxStrin
     wxPathList pathList;
     pathList.AddEnvList(wxT("PATH"));
     wxString strPath = pathList.FindAbsoluteValidPath(argv0);
-    if (!strPath.IsEmpty())
+    if (!strPath.empty())
         return wxPathOnly(strPath);
 
     // Failed
@@ -525,7 +526,7 @@ bool ctMatchString(const wxString& matchAgainst, const wxString& matchText, bool
     wxString left(matchAgainst);
     bool success = false;
     int matchTextLen = (int) matchText.Length();
-    while (!success && !matchAgainst.IsEmpty())
+    while (!success && !matchAgainst.empty())
     {
         int pos = left.Find(matchText);
         if (pos == wxNOT_FOUND)
