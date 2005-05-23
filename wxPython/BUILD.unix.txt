@@ -1,7 +1,7 @@
 Building wxPython on Unix or Unix-like Systems
 ----------------------------------------------
 
-NOTE:  You should probably look at the ../ README.1st.txt file for
+NOTE:  You should probably look at the ../README.1st.txt file for
 directions for how to build wxPython the "new way."  This files
 describes the "old way" to build on unix-like systems.  The difference
 is very simple:  The new way uses a private copy of wxGTK while the
