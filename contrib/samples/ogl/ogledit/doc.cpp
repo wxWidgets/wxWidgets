@@ -24,6 +24,8 @@
 #include <wx/wx.h>
 #endif
 
+#include <wx/ioswrap.h>
+
 #if !wxUSE_DOC_VIEW_ARCHITECTURE
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in wx_setup.h!
 #endif
@@ -31,10 +33,6 @@
 #include "ogledit.h"
 #include "doc.h"
 #include "view.h"
-
-#if wxUSE_STD_IOSTREAM
-#include <ioswrap.h>
-#endif
 
 IMPLEMENT_DYNAMIC_CLASS(DiagramDocument, wxDocument)
 
