@@ -57,7 +57,7 @@ WX_MSW_VERSION=$WX_MAJOR_VERSION_NUMBER$WX_MINOR_VERSION_NUMBER$WX_RELEASE_NUMBE
 
 WX_CURRENT=0
 WX_REVISION=2
-WX_AGE=0
+WX_AGE=1
 
 
 dnl ------------------------------------------------------------------------
