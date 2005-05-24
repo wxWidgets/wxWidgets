@@ -25,7 +25,7 @@ class TestFrame(wxFrame):
         EVT_RIGHT_UP(self, self.OnExit)
         EVT_PAINT(self, self.OnPaint)
 
-        self.bmp = images.getTuxBitmap()
+        self.bmp = images.getVippiBitmap()
         w, h = self.bmp.GetWidth(), self.bmp.GetHeight()
         self.SetClientSize( (w, h) )
 

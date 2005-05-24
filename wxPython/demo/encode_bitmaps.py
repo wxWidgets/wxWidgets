@@ -13,10 +13,7 @@ from wxPython.tools import img2py
 command_lines = [
     "   -u -i -n Mondrian bmp_source/mondrian.ico images.py",
 
-    "-a -u -n _10s_ bmp_source/10s.gif images.py",
-    "-a -u -n _01c_ bmp_source/01c.gif images.py",
-    "-a -u -n _12h_ bmp_source/12h.gif images.py",
-    "-a -u -n _13d_ bmp_source/13d.gif images.py",
+    "-a -u -n TheKid bmp_source/thekid.png images.py",
     "-a -u -n Background bmp_source/backgrnd.png images.py",
     "-a -u -n TestStar -m #FFFFFF bmp_source/teststar.png images.py",
     "-a -u -n TestStar2 bmp_source/teststar.png images.py",
@@ -25,10 +22,9 @@ command_lines = [
     "-a -u -n Test2 bmp_source/test2.bmp images.py",
     "-a -u -n Robin bmp_source/robin.jpg images.py",
 
-    "-a -u -n Bulb1 bmp_source/lb1.bmp images.py",
-    "-a -u -n Bulb2 bmp_source/lb2.bmp images.py",
+    "-a -u -n Bulb1 bmp_source/bulb1.bmp images.py",
+    "-a -u -n Bulb2 bmp_source/bulb2.bmp images.py",
 
-    "-a -u -n Calendar bmp_source/Calend.bmp images.py",
     "-a -u -n DbDec bmp_source/DbDec.bmp images.py",
     "-a -u -n Dec bmp_source/Dec.bmp images.py",
     "-a -u -n Pt bmp_source/Pt.bmp images.py",
@@ -61,7 +57,7 @@ command_lines = [
     "-a -u -n WizTest1 bmp_source/wiztest1.bmp images.py",
     "-a -u -n WizTest2 bmp_source/wiztest2.bmp images.py",
 
-    "-a -u -n Tux bmp_source/Tux.png images.py",
+    "-a -u -n Vippi bmp_source/Vippi.png images.py",
 
 
     "   -u -c bmp_source/001.png throbImages.py",

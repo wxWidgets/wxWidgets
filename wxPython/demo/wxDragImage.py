@@ -83,17 +83,10 @@ class DragCanvas(wxScrolledWindow):
         shape.text = "Some dragging text"
         self.shapes.append(shape)
 
-
-        # Make some shapes from some playing card images.
-        x = 200
-        for card in ['_01c_', '_12h_', '_13d_', '_10s_']:
-            bmpFunc = getattr(images, "get%sBitmap" % card)
-            bmp = bmpFunc()
-            shape = DragShape(bmp)
-            shape.pos = wxPoint(x, 5)
-            self.shapes.append(shape)
-            x = x + 80
-
+        bmp = images.getTheKidBitmap()
+        shape = DragShape(bmp)
+        shape.pos = wxPoint(200, 5)
+        self.shapes.append(shape)
 
         EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
         EVT_PAINT(self, self.OnPaint)

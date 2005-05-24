@@ -756,7 +756,7 @@ class wxPythonDemo(wx.Frame):
 
 class MySplashScreen(wx.SplashScreen):
     def __init__(self):
-        bmp = wx.Image(opj("bitmaps/splash.gif")).ConvertToBitmap()
+        bmp = wx.Image(opj("bitmaps/splash.png")).ConvertToBitmap()
         wx.SplashScreen.__init__(self, bmp,
                                 wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_TIMEOUT,
                                 4000, None, -1,

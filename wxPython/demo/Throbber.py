@@ -32,7 +32,7 @@ class TestPanel(wxPanel):
 
         images = [throbImages.catalog[i].getBitmap()
                   for i in throbImages.index
-                  if i not in ['eclouds', 'logo']]
+                  if i not in ['logo']]
 
         self.throbbers['plain']['throbber'] = Throbber(self, -1,
                                                        images, size=(36, 36),
@@ -68,23 +68,12 @@ class TestPanel(wxPanel):
                                                                   weight = wxBOLD))
 
 
-        # this throbber is created using a single, composite image
-        self.otherThrobber = Throbber(self, -1,
-                                      throbImages.catalog['eclouds'].getBitmap(), #size=(48, 48),
-                                      frameDelay = 0.15,
-                                      frames = 12,
-                                      frameWidth = 48,
-                                      label = "Stop")
 
-
-        EVT_LEFT_DOWN(self.otherThrobber, self.OnClickThrobber)
 
         box = wxBoxSizer(wxVERTICAL)
         sizer = RowColSizer()
         box.Add(sizer, 1, wxEXPAND|wxALL, 5)
         sizer.AddGrowableCol(1)
-
-        sizer.Add(self.otherThrobber, row = 0, col = 2, rowspan = 4, flag = wxALIGN_CENTER_VERTICAL)
 
         row = 2
         # use a list so we can keep our order
@@ -120,8 +109,6 @@ class TestPanel(wxPanel):
 
         for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Start()
-        self.otherThrobber.Start()
-        self.otherThrobber.Reverse()
 
         EVT_WINDOW_DESTROY(self, self.OnDestroy)
 
@@ -137,16 +124,7 @@ class TestPanel(wxPanel):
         for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Rest()
 
-    def OnClickThrobber(self, event):
-        if self.otherThrobber.Running():
-            self.otherThrobber.Rest()
-            self.otherThrobber.SetLabel("Start")
-        else:
-            self.otherThrobber.Start()
-            self.otherThrobber.SetLabel("Stop")
-
     def ShutdownDemo(self):
-        self.otherThrobber.Rest()
         for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Rest()
 
