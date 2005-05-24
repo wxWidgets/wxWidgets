@@ -53,43 +53,6 @@
 #define DEBUG_PAINT 0
 
 // ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
-
-class wxMonthComboBox : public wxComboBox
-{
-public:
-    wxMonthComboBox(wxCalendarCtrl *cal);
-
-    void OnMonthChange(wxCommandEvent& event) { m_cal->OnMonthChange(event); }
-
-private:
-    wxCalendarCtrl *m_cal;
-
-    DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxMonthComboBox)
-};
-
-class wxYearSpinCtrl : public wxSpinCtrl
-{
-public:
-    wxYearSpinCtrl(wxCalendarCtrl *cal);
-
-    void OnYearTextChange(wxCommandEvent& event)
-    {
-        m_cal->SetUserChangedYear();
-        m_cal->OnYearChange(event);
-    }
-    void OnYearChange(wxSpinEvent& event) { m_cal->OnYearChange(event); }
-
-private:
-    wxCalendarCtrl *m_cal;
-
-    DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxYearSpinCtrl)
-};
-
-// ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
@@ -100,15 +63,6 @@ BEGIN_EVENT_TABLE(wxCalendarCtrl, wxControl)
 
     EVT_LEFT_DOWN(wxCalendarCtrl::OnClick)
     EVT_LEFT_DCLICK(wxCalendarCtrl::OnDClick)
-END_EVENT_TABLE()
-
-BEGIN_EVENT_TABLE(wxMonthComboBox, wxComboBox)
-    EVT_COMBOBOX(wxID_ANY, wxMonthComboBox::OnMonthChange)
-END_EVENT_TABLE()
-
-BEGIN_EVENT_TABLE(wxYearSpinCtrl, wxSpinCtrl)
-    EVT_TEXT(wxID_ANY, wxYearSpinCtrl::OnYearTextChange)
-    EVT_SPINCTRL(wxID_ANY, wxYearSpinCtrl::OnYearChange)
 END_EVENT_TABLE()
 
 #if wxUSE_EXTENDED_RTTI
@@ -186,46 +140,6 @@ DEFINE_EVENT_TYPE(wxEVT_CALENDAR_WEEKDAY_CLICKED)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxMonthComboBox and wxYearSpinCtrl
-// ----------------------------------------------------------------------------
-
-wxMonthComboBox::wxMonthComboBox(wxCalendarCtrl *cal)
-               : wxComboBox(cal->GetParent(), wxID_ANY,
-                            wxEmptyString,
-                            wxDefaultPosition,
-                            wxDefaultSize,
-                            0, NULL,
-                            wxCB_READONLY | wxCLIP_SIBLINGS)
-{
-    m_cal = cal;
-
-    wxDateTime::Month m;
-    for ( m = wxDateTime::Jan; m < wxDateTime::Inv_Month; wxNextMonth(m) )
-    {
-        Append(wxDateTime::GetMonthName(m));
-    }
-
-    SetSelection(m_cal->GetDate().GetMonth());
-    SetSize(wxDefaultCoord,
-            wxDefaultCoord,
-            wxDefaultCoord,
-            wxDefaultCoord,
-            wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
-}
-
-wxYearSpinCtrl::wxYearSpinCtrl(wxCalendarCtrl *cal)
-              : wxSpinCtrl(cal->GetParent(), wxID_ANY,
-                           cal->GetDate().Format(_T("%Y")),
-                           wxDefaultPosition,
-                           wxDefaultSize,
-                           wxSP_ARROW_KEYS | wxCLIP_SIBLINGS,
-                           -4300, 10000, cal->GetDate().GetYear())
-
-{
-    m_cal = cal;
-}
-
-// ----------------------------------------------------------------------------
 // wxCalendarCtrl
 // ----------------------------------------------------------------------------
 
@@ -300,12 +214,12 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
 
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
-        m_spinYear = new wxYearSpinCtrl(this);
+        CreateYearSpinCtrl();
         m_staticYear = new wxStaticText(GetParent(), wxID_ANY, m_date.Format(_T("%Y")),
                                         wxDefaultPosition, wxDefaultSize,
                                         wxALIGN_CENTRE);
 
-        m_comboMonth = new wxMonthComboBox(this);
+        CreateMonthComboBox();
         m_staticMonth = new wxStaticText(GetParent(), wxID_ANY, m_date.Format(_T("%B")),
                                          wxDefaultPosition, wxDefaultSize,
                                          wxALIGN_CENTRE);
@@ -334,6 +248,55 @@ wxCalendarCtrl::~wxCalendarCtrl()
     {
         delete m_attrs[n];
     }
+}
+
+// ----------------------------------------------------------------------------
+// Create the wxComboBox and wxSpinCtrl
+// ----------------------------------------------------------------------------
+
+void wxCalendarCtrl::CreateMonthComboBox()
+{
+    m_comboMonth = new wxComboBox(GetParent(), wxID_ANY,
+                                  wxEmptyString,
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  0, NULL,
+                                  wxCB_READONLY | wxCLIP_SIBLINGS);
+
+    wxDateTime::Month m;
+    for ( m = wxDateTime::Jan; m < wxDateTime::Inv_Month; wxNextMonth(m) )
+    {
+        m_comboMonth->Append(wxDateTime::GetMonthName(m));
+    }
+
+    m_comboMonth->SetSelection(GetDate().GetMonth());
+    m_comboMonth->SetSize(wxDefaultCoord,
+                          wxDefaultCoord,
+                          wxDefaultCoord,
+                          wxDefaultCoord,
+                          wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
+
+    m_comboMonth->Connect(wxEVT_COMMAND_COMBOBOX_SELECTED,
+                          wxCommandEventHandler(wxCalendarCtrl::OnMonthChange),
+                          NULL, this);
+}
+
+void wxCalendarCtrl::CreateYearSpinCtrl()
+{
+    m_spinYear = new wxSpinCtrl(GetParent(), wxID_ANY,
+                                GetDate().Format(_T("%Y")),
+                                wxDefaultPosition,
+                                wxDefaultSize,
+                                wxSP_ARROW_KEYS | wxCLIP_SIBLINGS,
+                                -4300, 10000, GetDate().GetYear());
+
+    m_spinYear->Connect(wxEVT_COMMAND_TEXT_UPDATED,
+                        wxCommandEventHandler(wxCalendarCtrl::OnYearTextChange),
+                        NULL, this);
+
+    m_spinYear->Connect(wxEVT_COMMAND_SPINCTRL_UPDATED,
+                        wxCommandEventHandler(wxCalendarCtrl::OnYearChange),
+                        NULL, this);
 }
 
 // ----------------------------------------------------------------------------
@@ -1620,6 +1583,12 @@ void wxCalendarCtrl::OnYearChange(wxCommandEvent& event)
         // inside the same year but a strange number of months forward/back..
         m_spinYear->SetValue(target.GetYear());
     }
+}
+
+void wxCalendarCtrl::OnYearTextChange(wxCommandEvent& event)
+{
+    SetUserChangedYear();
+    OnYearChange(event);
 }
 
 // ----------------------------------------------------------------------------
