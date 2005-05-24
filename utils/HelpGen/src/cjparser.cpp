@@ -935,12 +935,12 @@ static bool is_keyword( char* cur )
     return i == __gMultiLangMap.end() ? false : true;
 }
 
-static inline void get_string_between( char* start, char* end,
-                                       string* pStr )
+static inline void get_string_between( wxChar* start, wxChar* end,
+                                       wxString* pStr )
 {
     char saved = *end;
 
-    *end  = '\0';
+    *end  = _T('\0');
     *pStr = start;
     *end  = saved;
 }
