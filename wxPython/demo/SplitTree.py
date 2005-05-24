@@ -16,7 +16,6 @@
 import  wx
 import  wx.gizmos as gizmos
 
-import  images
 
 #----------------------------------------------------------------------
 
@@ -27,8 +26,8 @@ class TestTree(gizmos.RemotelyScrolledTreeCtrl):
         # make an image list
         im1 = im2 = -1
         self.il = wx.ImageList(16, 16)
-        im1 = self.il.Add(images.getFolder1Bitmap())
-        im2 = self.il.Add(images.getFile1Bitmap())
+        im1 = self.il.Add(wx.ArtProvider.GetBitmap(wx.ART_FOLDER, wx.ART_TOOLBAR, (16,16)))
+        im2 = self.il.Add(wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR, (16,16)))
         self.SetImageList(self.il)
 
         # Add some items

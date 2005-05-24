@@ -1028,8 +1028,59 @@ typedef enum {
     wxPAPER_B5_EXTRA,           // B5 (ISO) Extra 201 x 276 mm
     wxPAPER_A2,                 // A2 420 x 594 mm
     wxPAPER_A3_TRANSVERSE,      // A3 Transverse 297 x 420 mm
-    wxPAPER_A3_EXTRA_TRANSVERSE // A3 Extra Transverse 322 x 445 mm
+    wxPAPER_A3_EXTRA_TRANSVERSE, // A3 Extra Transverse 322 x 445 mm
 
+    wxPAPER_DBL_JAPANESE_POSTCARD,/* Japanese Double Postcard 200 x 148 mm */
+    wxPAPER_A6,                 /* A6 105 x 148 mm */
+    wxPAPER_JENV_KAKU2,         /* Japanese Envelope Kaku #2 */
+    wxPAPER_JENV_KAKU3,         /* Japanese Envelope Kaku #3 */
+    wxPAPER_JENV_CHOU3,         /* Japanese Envelope Chou #3 */
+    wxPAPER_JENV_CHOU4,         /* Japanese Envelope Chou #4 */
+    wxPAPER_LETTER_ROTATED,     /* Letter Rotated 11 x 8 1/2 in */
+    wxPAPER_A3_ROTATED,         /* A3 Rotated 420 x 297 mm */
+    wxPAPER_A4_ROTATED,         /* A4 Rotated 297 x 210 mm */
+    wxPAPER_A5_ROTATED,         /* A5 Rotated 210 x 148 mm */
+    wxPAPER_B4_JIS_ROTATED,     /* B4 (JIS) Rotated 364 x 257 mm */
+    wxPAPER_B5_JIS_ROTATED,     /* B5 (JIS) Rotated 257 x 182 mm */
+    wxPAPER_JAPANESE_POSTCARD_ROTATED,/* Japanese Postcard Rotated 148 x 100 mm */
+    wxPAPER_DBL_JAPANESE_POSTCARD_ROTATED,/* Double Japanese Postcard Rotated 148 x 200 mm */
+    wxPAPER_A6_ROTATED,         /* A6 Rotated 148 x 105 mm */
+    wxPAPER_JENV_KAKU2_ROTATED, /* Japanese Envelope Kaku #2 Rotated */
+    wxPAPER_JENV_KAKU3_ROTATED, /* Japanese Envelope Kaku #3 Rotated */
+    wxPAPER_JENV_CHOU3_ROTATED, /* Japanese Envelope Chou #3 Rotated */
+    wxPAPER_JENV_CHOU4_ROTATED, /* Japanese Envelope Chou #4 Rotated */
+    wxPAPER_B6_JIS,             /* B6 (JIS) 128 x 182 mm */
+    wxPAPER_B6_JIS_ROTATED,     /* B6 (JIS) Rotated 182 x 128 mm */
+    wxPAPER_12X11,              /* 12 x 11 in */
+    wxPAPER_JENV_YOU4,          /* Japanese Envelope You #4 */
+    wxPAPER_JENV_YOU4_ROTATED,  /* Japanese Envelope You #4 Rotated */
+    wxPAPER_P16K,               /* PRC 16K 146 x 215 mm */
+    wxPAPER_P32K,               /* PRC 32K 97 x 151 mm */
+    wxPAPER_P32KBIG,            /* PRC 32K(Big) 97 x 151 mm */
+    wxPAPER_PENV_1,             /* PRC Envelope #1 102 x 165 mm */
+    wxPAPER_PENV_2,             /* PRC Envelope #2 102 x 176 mm */
+    wxPAPER_PENV_3,             /* PRC Envelope #3 125 x 176 mm */
+    wxPAPER_PENV_4,             /* PRC Envelope #4 110 x 208 mm */
+    wxPAPER_PENV_5,             /* PRC Envelope #5 110 x 220 mm */
+    wxPAPER_PENV_6,             /* PRC Envelope #6 120 x 230 mm */
+    wxPAPER_PENV_7,             /* PRC Envelope #7 160 x 230 mm */
+    wxPAPER_PENV_8,             /* PRC Envelope #8 120 x 309 mm */
+    wxPAPER_PENV_9,             /* PRC Envelope #9 229 x 324 mm */
+    wxPAPER_PENV_10,            /* PRC Envelope #10 324 x 458 mm */
+    wxPAPER_P16K_ROTATED,       /* PRC 16K Rotated */
+    wxPAPER_P32K_ROTATED,       /* PRC 32K Rotated */
+    wxPAPER_P32KBIG_ROTATED,    /* PRC 32K(Big) Rotated */
+    wxPAPER_PENV_1_ROTATED,     /* PRC Envelope #1 Rotated 165 x 102 mm */
+    wxPAPER_PENV_2_ROTATED,     /* PRC Envelope #2 Rotated 176 x 102 mm */
+    wxPAPER_PENV_3_ROTATED,     /* PRC Envelope #3 Rotated 176 x 125 mm */
+    wxPAPER_PENV_4_ROTATED,     /* PRC Envelope #4 Rotated 208 x 110 mm */
+    wxPAPER_PENV_5_ROTATED,     /* PRC Envelope #5 Rotated 220 x 110 mm */
+    wxPAPER_PENV_6_ROTATED,     /* PRC Envelope #6 Rotated 230 x 120 mm */
+    wxPAPER_PENV_7_ROTATED,     /* PRC Envelope #7 Rotated 230 x 160 mm */
+    wxPAPER_PENV_8_ROTATED,     /* PRC Envelope #8 Rotated 309 x 120 mm */
+    wxPAPER_PENV_9_ROTATED,     /* PRC Envelope #9 Rotated 324 x 229 mm */
+    wxPAPER_PENV_10_ROTATED    /* PRC Envelope #10 Rotated 458 x 324 m */
+   
 } wxPaperSize ;
 
 typedef enum {

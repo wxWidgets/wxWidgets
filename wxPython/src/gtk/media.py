@@ -112,6 +112,14 @@ class MediaCtrl(_core.Control):
         """Stop(self) -> bool"""
         return _media.MediaCtrl_Stop(*args, **kwargs)
 
+    def GetVolume(*args, **kwargs):
+        """GetVolume(self) -> double"""
+        return _media.MediaCtrl_GetVolume(*args, **kwargs)
+
+    def SetVolume(*args, **kwargs):
+        """SetVolume(self, double dVolume) -> bool"""
+        return _media.MediaCtrl_SetVolume(*args, **kwargs)
+
     def Load(*args, **kwargs):
         """Load(self, String fileName) -> bool"""
         return _media.MediaCtrl_Load(*args, **kwargs)

@@ -79,19 +79,18 @@ class TestPanel(wx.Panel):
     def OnChooseCursor(self, evt):
         # clear the dots
         self.win.Refresh()
-        
-        choice = self.cb.GetStringSelection()
+
+        choice = evt.GetString() #self.cb.GetStringSelection()
         self.log.write("Selecting the %s cursor\n" % choice)
 
         cnum = cursors[choice]
         
         if cnum == CUSTOMID:
-            image = images.getBlom12Image()
-            image.SetMaskColour(255, 255, 255)
+            image = images.getPointyImage()
 
             # since this image didn't come from a .cur file, tell it where the hotspot is
-            image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, 0)
-            image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, 22)
+            image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, 1)
+            image.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, 1)
 
             # make the image into a cursor
             cursor = wx.CursorFromImage(image)

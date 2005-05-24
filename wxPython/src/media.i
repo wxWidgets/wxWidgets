@@ -102,6 +102,9 @@ public:
     
     wxFileOffset Tell()    { return 0; }
     wxFileOffset Length()    { return 0; }
+
+    double GetVolume() { return 0.0; }
+    bool   SetVolume(double dVolume) { return false; }
 };
 
 const wxEventType wxEVT_MEDIA_FINISHED = 0;
@@ -176,6 +179,9 @@ public:
     bool Play();
     bool Pause();
     bool Stop();
+
+    double GetVolume();                 //DirectShow only
+    bool   SetVolume(double dVolume);   //DirectShow only
 
     bool Load(const wxString& fileName);
     %extend {

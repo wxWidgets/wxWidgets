@@ -27,6 +27,7 @@ epydoc --name wxPython \
     --url http://wxPython.org/ \
     --no-frames \
     $* \
+    wxversion/wxversion.py \
     wx
 
 #    wx/__init__.py \

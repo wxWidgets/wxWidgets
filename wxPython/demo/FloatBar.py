@@ -32,20 +32,26 @@ class TestFloatBar(wx.Frame):
         tb.SetTitle("Floating!")
         self.CreateStatusBar()
 
-        tb.AddSimpleTool(10, images.getNewBitmap(), "New", "Long help for 'New'")
+        tsize = (16,16)
+        new_bmp =  wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR, tsize)
+        open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, tsize)
+        copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR, tsize)
+        paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR, tsize)
+
+        tb.AddSimpleTool(10, new_bmp, "New", "Long help for 'New'")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=10)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=10)
 
-        tb.AddSimpleTool(20, images.getOpenBitmap(), "Open")
+        tb.AddSimpleTool(20, open_bmp, "Open")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=20)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=20)
 
         tb.AddSeparator()
-        tb.AddSimpleTool(30, images.getCopyBitmap(), "Copy")
+        tb.AddSimpleTool(30, copy_bmp, "Copy")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=30)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=30)
 
-        tb.AddSimpleTool(40, images.getPasteBitmap(), "Paste")
+        tb.AddSimpleTool(40, paste_bmp, "Paste")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=40)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick, id=40)
 

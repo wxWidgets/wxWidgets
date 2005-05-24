@@ -1697,7 +1697,10 @@ public:
     
     DocDeclStr(
         bool , GetLoggingOff() const,
-        "Returns true if the user is logging off.", "");
+        "Returns ``True`` if the user is logging off or ``False`` if the
+system is shutting down. This method can only be called for end
+session and query end session events, it doesn't make sense for close
+window event.", "");
     
 
     DocDeclStr(

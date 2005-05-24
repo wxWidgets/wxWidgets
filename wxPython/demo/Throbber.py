@@ -69,21 +69,10 @@ class TestPanel(wx.Panel):
             pointSize = 8, family = wx.DEFAULT, style = wx.NORMAL, weight = wx.BOLD
             ))
 
-        # this throbber is created using a single, composite image
-        self.otherThrobber = throb.Throbber(
-            self, -1, throbImages.catalog['eclouds'].getBitmap(), frameDelay = 0.15, 
-            frames = 12, frameWidth = 48, label = "Stop"
-            )
-
-
-        self.otherThrobber.Bind(wx.EVT_LEFT_DOWN, self.OnClickThrobber)
-
         box = wx.BoxSizer(wx.VERTICAL)
         sizer = wx.GridBagSizer()
         box.Add(sizer, 1, wx.EXPAND|wx.ALL, 5)
         sizer.AddGrowableCol(1)
-
-        sizer.Add(self.otherThrobber, (0, 2), (4, 1),flag = wx.ALIGN_CENTER_VERTICAL)
 
         row = 2
 
@@ -127,9 +116,6 @@ class TestPanel(wx.Panel):
         for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Start()
 
-        self.otherThrobber.Start()
-        self.otherThrobber.Reverse()
-
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
 
     def OnDestroy(self, event):
@@ -144,16 +130,7 @@ class TestPanel(wx.Panel):
         for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Rest()
 
-    def OnClickThrobber(self, event):
-        if self.otherThrobber.Running():
-            self.otherThrobber.Rest()
-            self.otherThrobber.SetLabel("Start")
-        else:
-            self.otherThrobber.Start()
-            self.otherThrobber.SetLabel("Stop")
-
     def ShutdownDemo(self):
-        self.otherThrobber.Rest()
         for t in self.throbbers.keys():
             self.throbbers[t]['throbber'].Rest()
 

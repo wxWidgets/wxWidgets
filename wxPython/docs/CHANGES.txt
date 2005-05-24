@@ -102,6 +102,31 @@ More updates to the docview library modules and sample apps from the
 ActiveGrid folks.  Their sample IDE is now able to integrate with
 Subversion. 
 
+wx.grid.Grid:  Ensure that the grid gets the focus when it is
+left-clicked.  Note that if you have custom widgets that handle the
+EVT_LEFT_DOWN event but do not call event.Skip() then you will
+probably want to add a call to self.SetFocus in the event handler.
+
+wxGTK:  Add wxSTAY_ON_TOP support [Patch 1206023]
+
+wx.TreeCtrl:  wx.EVT_TREE_ITEM_MENU event made consistent on all
+platforms.  The location of the click or the item is included in the
+event as well.
+
+wxGTK: Setting background colour of a window now only affects the
+window itself, not the borders, scrollbars, etc.  (Bug #1204069)
+
+Print framework:  Add more paper sizes and code to fallback to an
+explicit paper size if a known paper size is not found for the
+printer. 
+
+wxMac: Applied patch for bug #1206181 Option-key decodes are wrong,
+also applied patch for bug #1205691 Modified Fn keys don't work.
+
+wx.Image: Fixed to preserve alpha channel in Rotate90 method.
+
+
+
 
 
 

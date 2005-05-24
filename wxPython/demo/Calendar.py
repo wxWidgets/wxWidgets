@@ -122,23 +122,14 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_SPIN, self.OnSpin, self.spin)
 
         # button for calendar dialog test
-
-        wx.StaticText(self, -1, "Test Calendar Dialog", (350, 50), (150, -1))
-
-        bmp = images.getCalendarBitmap()
-        self.but1 = wx.BitmapButton(self, -1, bmp, (380, 80))
+        self.but1 = wx.Button(self, -1, "Test Calendar Dialog", (380, 80))
         self.Bind(wx.EVT_BUTTON, self.TestDlg, self.but1)
 
         # button for calendar window test
-
-        wx.StaticText(self, -1, "Test Calendar Window", (350, 150), (150, -1))
-
-        self.but2 = wx.BitmapButton(self, -1, bmp, (380, 180))
+        self.but2 = wx.Button(self, -1, "Test Calendar Window", (380, 180))
         self.Bind(wx.EVT_BUTTON, self.TestFrame, self.but2)
 
-        wx.StaticText(self, -1, "Test Calendar Print", (350, 250), (150, -1))
-
-        self.but3 = wx.BitmapButton(self, -1, bmp, (380, 280))
+        self.but3 = wx.Button(self, -1, "Test Calendar Print", (380, 280))
         self.Bind(wx.EVT_BUTTON, self.OnPreview, self.but3)
 
         # calendar dialog

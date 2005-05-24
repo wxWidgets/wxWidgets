@@ -33,8 +33,8 @@ class TextEditorApplication(pydocview.DocApp):
         pydocview.DocApp.OnInit(self)
 
         # Show the splash dialog while everything is loading up
-        if os.path.exists("splash.jpg"):
-            self.ShowSplash("splash.jpg")
+        if os.path.exists("splash.png"):
+            self.ShowSplash("splash.png")
 
         # Set the name and the icon
         self.SetAppName(_("wxPython PyDocView Demo"))

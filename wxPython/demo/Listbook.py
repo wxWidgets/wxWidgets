@@ -6,19 +6,7 @@ import images
 
 colourList = [ "Aquamarine", "Black", "Blue", "Blue Violet", "Brown", "Cadet Blue",
                "Coral", "Cornflower Blue", "Cyan", "Dark Grey", "Dark Green",
-               "Dark Olive Green", "Dark Orchid", "Dark Slate Blue",
-               "Dark Slate Grey", "Dark Turquoise", "Dim Grey", "Firebrick",
-               "Forest Green", "Gold", "Goldenrod", "Grey", "Green", "Green Yellow",
-               "Indian Red", "Khaki", "Light Blue", "Light Grey", "Light Steel Blue",
-               "Lime Green", "Magenta", "Maroon", "Medium Aquamarine", "Medium Blue",
-               "Medium Forest Green", "Medium Goldenrod", "Medium Orchid",
-               "Medium Sea Green", "Medium Slate Blue", "Medium Spring Green",
-               "Medium Turquoise", "Medium Violet Red", "Midnight Blue", "Navy",
-               "Orange", "Orange Red", "Orchid", "Pale Green", "Pink", "Plum",
-               "Purple", "Red", "Salmon", "Sea Green", "Sienna", "Sky Blue",
-               "Slate Blue", "Spring Green", "Steel Blue", "Tan", "Thistle",
-               "Turquoise", "Violet", "Violet Red", "Wheat", "White", "Yellow",
-               "Yellow Green"
+               "Dark Olive Green",
                ]
 
 #----------------------------------------------------------------------------
@@ -34,10 +22,10 @@ class TestLB(wx.Listbook):
                             )
         self.log = log
 
-        # make an image list using the BlomXX images
+        # make an image list using the LBXX images
         il = wx.ImageList(32, 32)
-        for x in range(1, 16):
-            f = getattr(images, 'getBlom%02dBitmap' % x)
+        for x in range(12):
+            f = getattr(images, 'getLB%02dBitmap' % (x+1))
             bmp = f()
             il.Add(bmp)
         self.AssignImageList(il)
@@ -55,8 +43,6 @@ class TestLB(wx.Listbook):
                           "You can put nearly any type of window here,\n"
                           "and the list can be on any side of the Listbook",
                           wx.Point(10, 10))
-                #st.SetForegroundColour(wxWHITE)
-                #st.SetBackgroundColour(wxBLUE)
                 first = False
 
         self.Bind(wx.EVT_LISTBOOK_PAGE_CHANGED, self.OnPageChanged)

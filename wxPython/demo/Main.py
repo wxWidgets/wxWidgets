@@ -1080,8 +1080,7 @@ class DemoTaskBarIcon(wx.TaskBarIcon):
 
 
     def OnTaskBarChange(self, evt):
-        names = [ "WXPdemo", "WXP", "Mondrian", "Test2m",
-                  "Blom08m", "Blom10m", "Blom15m" ]
+        names = [ "WXPdemo", "Mondrian", "Pencil", "Carrot" ]                  
         name = names[self.imgidx]
         
         getFunc = getattr(images, "get%sImage" % name)
@@ -1675,18 +1674,22 @@ class wxPythonDemo(wx.Frame):
 
 class MySplashScreen(wx.SplashScreen):
     def __init__(self):
-        bmp = wx.Image(opj("bitmaps/splash.gif")).ConvertToBitmap()
+        bmp = wx.Image(opj("bitmaps/splash.png")).ConvertToBitmap()
         wx.SplashScreen.__init__(self, bmp,
                                  wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
-                                 3000, None, -1)
+                                 5000, None, -1)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
+        wx.FutureCall(2000, self.ShowMain)
 
     def OnClose(self, evt):
         self.Hide()
-        frame = wxPythonDemo(None, "wxPython: (A Demonstration)")
-        frame.Show()
         evt.Skip()  # Make sure the default handler runs too...
 
+    def ShowMain(self):
+        frame = wxPythonDemo(None, "wxPython: (A Demonstration)")
+        frame.Show()
+        self.Raise()
+        
 
 class MyApp(wx.App):
     def OnInit(self):
@@ -1705,7 +1708,7 @@ class MyApp(wx.App):
         # initialization, finally creating and showing the main
         # application window(s).  In this case we have nothing else to
         # do so we'll delay showing the main frame until later (see
-        # OnClose above) so the users can see the SplashScreen effect.        
+        # ShowMain above) so the users can see the SplashScreen effect.        
         splash = MySplashScreen()
         splash.Show()
 

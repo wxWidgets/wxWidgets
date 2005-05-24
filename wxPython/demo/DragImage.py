@@ -51,7 +51,7 @@ class DragCanvas(wx.ScrolledWindow):
         # Make a shape from an image and mask.  This one will demo
         # dragging outside the window
         bmp = images.getTestStarBitmap()
-        ##bmp = wx.Bitmap('bitmaps/toucan.png')
+        #bmp = wx.Bitmap('bitmaps/toucan.png')
         shape = DragShape(bmp)
         shape.pos = (5, 5)
         shape.fullscreen = True
@@ -83,17 +83,10 @@ class DragCanvas(wx.ScrolledWindow):
         self.shapes.append(shape)
 
 
-        # Make some shapes from some playing card images.
-        x = 200
-
-        for card in ['_01c_', '_12h_', '_13d_', '_10s_']:
-            bmpFunc = getattr(images, "get%sBitmap" % card)
-            bmp = bmpFunc()
-            shape = DragShape(bmp)
-            shape.pos = (x, 5)
-            self.shapes.append(shape)
-            x = x + 80
-
+        bmp = images.getTheKidBitmap()
+        shape = DragShape(bmp)
+        shape.pos = (200, 5)
+        self.shapes.append(shape)
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_PAINT, self.OnPaint)

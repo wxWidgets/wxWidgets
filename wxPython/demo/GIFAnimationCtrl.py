@@ -5,13 +5,12 @@ from wx.animate import GIFAnimationCtrl
 from Main import opj
 
 GIFNames = [
-    "bitmaps/ani-bttrfly.gif",
-    "bitmaps/ani-avtr.gif",
-    "bitmaps/ani-phone.gif",
-#    "bitmaps/ani-walker.gif",
-    "bitmaps/ani-man.gif",
-    "bitmaps/ani-bookworm.gif",
-    "bitmaps/ani-hooked.gif",
+    'bitmaps/AG00178_.gif',
+    'bitmaps/BD13656_.gif',  
+    'bitmaps/AG00185_.gif',
+    'bitmaps/AG00039_.gif',
+    'bitmaps/AG00183_.gif',
+    'bitmaps/AG00028_.gif',
     ]
 
 #----------------------------------------------------------------------

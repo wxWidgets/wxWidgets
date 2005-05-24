@@ -25,7 +25,7 @@ class TestFrame(wx.Frame):
         self.Bind(wx.EVT_RIGHT_UP,      self.OnExit)
         self.Bind(wx.EVT_PAINT,         self.OnPaint)
 
-        self.bmp = images.getTuxBitmap()
+        self.bmp = images.getVippiBitmap()
         w, h = self.bmp.GetWidth(), self.bmp.GetHeight()
         self.SetClientSize( (w, h) )
 

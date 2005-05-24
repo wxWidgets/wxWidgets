@@ -45,6 +45,8 @@
 import sys
 import cPickle, os.path
 import wx
+from wx.lib.buttons import GenBitmapButton
+
 
 import traceback, types
 
@@ -208,25 +210,22 @@ class DrawingFrame(wx.Frame):
 
         # Create our toolbar.
 
+        tsize = (16,16)
         self.toolbar = self.CreateToolBar(wx.TB_HORIZONTAL |
                                           wx.NO_BORDER | wx.TB_FLAT)
 
         self.toolbar.AddSimpleTool(wx.ID_NEW,
-                                   wx.Bitmap("images/new.bmp",
-                                            wx.BITMAP_TYPE_BMP),
+                                   wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR, tsize),
                                    "New")
         self.toolbar.AddSimpleTool(wx.ID_OPEN,
-                                   wx.Bitmap("images/open.bmp",
-                                            wx.BITMAP_TYPE_BMP),
+                                   wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, tsize),
                                    "Open")
         self.toolbar.AddSimpleTool(wx.ID_SAVE,
-                                   wx.Bitmap("images/save.bmp",
-                                            wx.BITMAP_TYPE_BMP),
+                                   wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE, wx.ART_TOOLBAR, tsize),
                                    "Save")
         self.toolbar.AddSeparator()
         self.toolbar.AddSimpleTool(menu_UNDO,
-                                   wx.Bitmap("images/undo.bmp",
-                                            wx.BITMAP_TYPE_BMP),
+                                   wx.ArtProvider.GetBitmap(wx.ART_UNDO, wx.ART_TOOLBAR, tsize),
                                    "Undo")
         self.toolbar.AddSeparator()
         self.toolbar.AddSimpleTool(menu_DUPLICATE,
@@ -414,7 +413,6 @@ class DrawingFrame(wx.Frame):
         """ Respond to the user clicking on one of our tool icons.
         """
         iconID = event.GetEventObject().GetId()
-        print iconID
         if   iconID == id_SELECT:   self.doChooseSelectTool()
         elif iconID == id_LINE:     self.doChooseLineTool()
         elif iconID == id_RECT:     self.doChooseRectTool()
@@ -2232,7 +2230,7 @@ class DrawingObject:
 
 #----------------------------------------------------------------------------
 
-class ToolPaletteIcon(wx.BitmapButton):
+class ToolPaletteIcon(GenBitmapButton):
     """ An icon appearing in the tool palette area of our sketching window.
 
         Note that this is actually implemented as a wx.Bitmap rather
@@ -2251,7 +2249,7 @@ class ToolPaletteIcon(wx.BitmapButton):
             The icon name is used to get the appropriate bitmap for this icon.
         """
         bmp = wx.Bitmap("images/" + iconName + "Icon.bmp", wx.BITMAP_TYPE_BMP)
-        wx.BitmapButton.__init__(self, parent, iconID, bmp, wx.DefaultPosition,
+        GenBitmapButton.__init__(self, parent, iconID, bmp, wx.DefaultPosition,
                                 wx.Size(bmp.GetWidth(), bmp.GetHeight()))
         self.SetToolTip(wx.ToolTip(toolTip))
 
