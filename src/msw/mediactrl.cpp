@@ -854,27 +854,27 @@ typedef unsigned char                   Str255[256];
 #define TimeBase struct TimeBaseRecord *
 
 struct FSSpec {
-    short                           vRefNum;
-    long                            parID;
-    Str255                           name;  /*Str63 on mac, Str255 on msw */
+    short      vRefNum;
+    long       parID;
+    Str255     name;  /*Str63 on mac, Str255 on msw */
 };
 
 struct Rect {
-    short                           top;
-    short                           left;
-    short                           bottom;
-    short                           right;
+    short      top;
+    short      left;
+    short      bottom;
+    short      right;
 };
 
 struct wide {
-    wxInt32                          hi;
-    wxUint32                          lo;
+    wxInt32    hi;
+    wxUint32   lo;
 };
 
 struct TimeRecord {
-    wide                  value;                      /* units */
-    TimeScale                       scale;                      /* units per second */
-    TimeBase                        base;
+    wide       value; /* units */
+    TimeScale  scale; /* units per second */
+    TimeBase   base;
 };
 
 //---------------------------------------------------------------------------
@@ -1377,7 +1377,11 @@ wxLongLong wxAMMediaBackend::GetPosition()
     wxAMVERIFY( m_pMS->get_CurrentPosition(&outCur) );
 
     //h,m,s,milli - outdur is in 1 second (double)
-    return (outCur*1000);
+    outCur *= 1000;
+    wxLongLong ll;
+    ll.Assign(outCur);
+
+    return ll;
 }
 
 //---------------------------------------------------------------------------
@@ -1419,7 +1423,11 @@ wxLongLong wxAMMediaBackend::GetDuration()
     wxAMVERIFY( m_pMS->get_Duration(&outDuration) );
 
     //h,m,s,milli - outdur is in 1 second (double)
-    return (outDuration*1000);
+    outDuration *= 1000;
+    wxLongLong ll;
+    ll.Assign(outDuration);
+
+    return ll;
 }
 
 //---------------------------------------------------------------------------
@@ -1433,11 +1441,14 @@ wxLongLong wxAMMediaBackend::GetDuration()
 //---------------------------------------------------------------------------
 wxMediaState wxAMMediaBackend::GetState()
 {
-    HRESULT hr;
     long theState; //OAFilterState
-    hr = m_pMC->GetState(INFINITE, &theState);
+    HRESULT hr = m_pMC->GetState(INFINITE, &theState);
 
     wxASSERT( SUCCEEDED(hr) );
+
+#ifndef __WXDEBUG__
+    wxUnusedVar(hr);
+#endif
 
     //MSW state is the same as ours
     //State_Stopped   = 0,
@@ -1552,7 +1563,7 @@ void wxAMMediaBackend::Cleanup()
     if(m_pVW)
     {
         m_pVW->put_Visible(0); //OSFALSE == 0
-        m_pVW->put_Owner(NULL);
+        m_pVW->put_Owner(0);
     }
 
     // Release and zero DirectShow interfaces
@@ -1969,7 +1980,7 @@ wxLongLong wxMCIMediaBackend::GetPosition()
 double wxMCIMediaBackend::GetVolume()
 {
     MCI_STATUS_PARMS statusParms;
-    statusParms.dwCallback = NULL;
+    statusParms.dwCallback = 0;
     statusParms.dwItem = 0x4019; //MCI_DGV_STATUS_VOLUME
 
     if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM,
@@ -1988,7 +1999,7 @@ double wxMCIMediaBackend::GetVolume()
 bool wxMCIMediaBackend::SetVolume(double dVolume)
 {
     MCI_DGV_SETAUDIO_PARMS audioParms;
-    audioParms.dwCallback = NULL;
+    audioParms.dwCallback = 0;
     audioParms.dwItem = 0x4002; //MCI_DGV_SETAUDIO_VOLUME
     audioParms.dwValue = (DWORD) (dVolume * 1000.0);
     audioParms.dwOver = 0;
@@ -2266,8 +2277,8 @@ bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     if(!m_lib.Initialize())
         return false;
 
-    int nError;
-    if ((nError = m_lib.InitializeQTML(0)) != noErr)    //-2093 no dll
+    int nError = m_lib.InitializeQTML(0);
+    if (nError != noErr)    //-2093 no dll
     {
         wxFAIL_MSG(wxString::Format(wxT("Couldn't Initialize Quicktime-%i"), nError));
         return false;
@@ -2304,7 +2315,6 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     if(m_timer)
         Cleanup();
 
-    OSErr err = noErr;
     short movieResFile;
     FSSpec sfFile;
 
@@ -2318,13 +2328,14 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     short movieResID = 0;
     Str255 movieName;
 
-    err = m_lib.NewMovieFromFile (
-    &m_movie,
-    movieResFile,
-    &movieResID,
-    movieName,
-    newMovieActive,
-    NULL); //wasChanged
+    OSErr err = m_lib.NewMovieFromFile (
+                   &m_movie,
+                   movieResFile,
+                   &movieResID,
+                   movieName,
+                   newMovieActive,
+                   NULL
+                ); //wasChanged
 
     m_lib.CloseMovieFile (movieResFile);
 
@@ -2348,15 +2359,13 @@ bool wxQTMediaBackend::Load(const wxURI& location)
 
     wxString theURI = location.BuildURI();
 
-    OSErr err = noErr;
-
     Handle theHandle = m_lib.NewHandleClear(theURI.length() + 1);
     wxASSERT(theHandle);
 
     m_lib.BlockMove(theURI.mb_str(), *theHandle, theURI.length() + 1);
 
     //create the movie from the handle that refers to the URI
-    err = m_lib.NewMovieFromDataRef(&m_movie, newMovieActive,
+    OSErr err = m_lib.NewMovieFromDataRef(&m_movie, newMovieActive,
                                 NULL, theHandle,
                                 'url'); //URLDataHandlerSubType
 
@@ -2503,7 +2512,7 @@ bool wxQTMediaBackend::SetPosition(wxLongLong where)
 {
     TimeRecord theTimeRecord;
     memset(&theTimeRecord, 0, sizeof(TimeRecord));
-    theTimeRecord.value.lo = where.GetValue();
+    theTimeRecord.value.lo = where.GetLo();
     theTimeRecord.scale = m_lib.GetMovieTimeScale(m_movie);
     theTimeRecord.base = m_lib.GetMovieTimeBase(m_movie);
     m_lib.SetMovieTime(m_movie, &theTimeRecord);
@@ -2567,8 +2576,7 @@ double wxQTMediaBackend::GetVolume()
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::SetVolume(double dVolume)
 {
-    short sVolume = (dVolume >= .9999 ? 1 << 8 :
-                                       (short) (dVolume * 255));
+    short sVolume = (short) (dVolume >= .9999 ? 1 << 8 : (dVolume * 255) );
     m_lib.SetMovieVolume(m_movie, sVolume);
     return true;
 }
@@ -2633,7 +2641,7 @@ void wxQTMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int w, int h)
 {
     if(m_timer)
     {
-        Rect theRect = {0, 0, h, w};
+        Rect theRect = {0, 0, (short)h, (short)w};
 
         m_lib.SetMovieBox(m_movie, &theRect);
         wxASSERT(m_lib.GetMoviesError() == noErr);
