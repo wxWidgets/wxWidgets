@@ -192,7 +192,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
 {
     char buf[128];
 
-    switch ( pInfo->mType )
+    switch ( pInfo->m_Type )
     {
         case TVAR_INTEGER :
             {
@@ -214,7 +214,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
                 cout << "DBG:: pInfo->mOfs value is " << (int)pInfo->mOfs << endl;
                 cout << "DBG:: d+pInfo->mOfs is " << (int)((char*)dataObj + pInfo->mOfs) << endl;
                 cout << "DBG:: pInfo->m_Name is " << pInfo->m_Name << endl;
-                cout << "DBG:: pInfo->mType is " << pInfo->mType << endl;
+                cout << "DBG:: pInfo->m_Type is " << pInfo->m_Type << endl;
                 cout << "DBG:: end of dump. " << endl;
 
                 cout << "DBG:: cs value is " << endl << cs << endl;

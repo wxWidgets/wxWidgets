@@ -1300,7 +1300,7 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
                       "\\%sfunc{%s%s}{%s}{",
                       op.mIsConstant ? "const" : "",
                       op.mIsVirtual ? "virtual " : "",
-                      op.mRetType.c_str(),
+                      op.m_RetType.c_str(),
                       funcname.c_str());
     m_textFunc += func;
 }
@@ -1317,7 +1317,7 @@ void HelpGenVisitor::VisitParameter( spParameter& param )
         m_textFunc << ", ";
     }
 
-    m_textFunc << "\\param{" << param.mType << " }{" << param.GetName();
+    m_textFunc << "\\param{" << param.m_Type << " }{" << param.GetName();
     wxString defvalue = param.mInitVal;
     if ( !defvalue.empty() ) {
         m_textFunc << " = " << defvalue;
@@ -1878,7 +1878,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                             continue;
                         }
 
-                        if ( param.GetType() != ctxParam->mType ) {
+                        if ( param.GetType() != ctxParam->m_Type ) {
                             foundDiff = true;
 
                             wxLogError("Type of parameter '%s' of '%s::%s' "
@@ -1886,7 +1886,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                                        ctxParam->m_Name.c_str(),
                                        nameClass.c_str(),
                                        nameMethod.c_str(),
-                                       ctxParam->mType.c_str(),
+                                       ctxParam->m_Type.c_str(),
                                        param.GetType().GetName().c_str());
 
                             continue;
@@ -2192,6 +2192,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.38  2005/05/24 09:06:20  ABX
+   More fixes and wxWidgets coding standards.
+
    Revision 1.37  2005/05/23 15:22:08  ABX
    Initial HelpGen source cleaning.
 

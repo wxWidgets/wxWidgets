@@ -493,7 +493,7 @@ void RipperDocGen::VisitAttribute( spAttribute& attr )
 {
     string body;
     body += mTags[TAG_BOLD].start;
-    body += attr.mType;
+    body += attr.m_Type;
     body += mTags[TAG_BOLD].end;
 
     body += mTags[TAG_ITALIC].start;

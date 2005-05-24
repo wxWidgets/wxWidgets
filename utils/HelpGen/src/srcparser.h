@@ -500,7 +500,7 @@ class spParameter : public spContext
 {
 public:
     // type of argument (parameter)
-    string mType;
+    wxString m_Type;
 
     // "stringified" initial value
     string mInitVal;
@@ -521,7 +521,7 @@ class spAttribute : public spContext
 {
 public:
     // type of the attribute
-    string mType;
+    wxString m_Type;
 
     // it's initial value
     string mInitVal;
@@ -542,7 +542,7 @@ class spOperation : public spContext
 {
 public:
     // type of return value
-    string      mRetType;
+    wxString    m_RetType;
 
     // argument list
     //MParamListT mParams;

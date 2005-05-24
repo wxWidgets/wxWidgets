@@ -423,7 +423,7 @@ spOperation::spOperation()
 
 string spOperation::GetFullName(MarkupTagsT tags)
 {
-    string txt = tags[TAG_BOLD].start + mRetType;
+    string txt = tags[TAG_BOLD].start + m_RetType;
     txt += " ";
     txt += m_Name;
     txt += "( ";
@@ -441,7 +441,7 @@ string spOperation::GetFullName(MarkupTagsT tags)
 
         txt += tags[TAG_BOLD].start;
 
-        txt += param.mType;
+        txt += param.m_Type;
 
         txt += tags[TAG_BOLD].end;
         txt += tags[TAG_ITALIC].start;
@@ -575,13 +575,13 @@ void spContext::DumpThis(const wxString& WXUNUSED(indent)) const
 void spParameter::DumpThis(const wxString& indent) const
 {
     wxLogDebug("%sparam named '%s' of type '%s'",
-               indent.c_str(), m_Name.c_str(), mType.c_str());
+               indent.c_str(), m_Name.c_str(), m_Type.c_str());
 }
 
 void spAttribute::DumpThis(const wxString& indent) const
 {
     wxLogDebug("%svariable named '%s' of type '%s'",
-               indent.c_str(), m_Name.c_str(), mType.c_str());
+               indent.c_str(), m_Name.c_str(), m_Type.c_str());
 }
 
 void spOperation::DumpThis(const wxString& indent) const
@@ -614,7 +614,7 @@ void spOperation::DumpThis(const wxString& indent) const
                mIsConstant ? "const " : "",
                mIsVirtual ? "virtual " : "",
                protection.c_str(),
-               mScope.c_str(), m_Name.c_str(), mRetType.c_str());
+               mScope.c_str(), m_Name.c_str(), m_RetType.c_str());
 }
 
 void spPreprocessorLine::DumpThis(const wxString& indent) const

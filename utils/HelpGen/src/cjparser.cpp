@@ -898,13 +898,13 @@ static inline void skip_scope_block( char*& cur )
 // moves tokens like '*' '**', '***', '&' from the name
 // to the type
 
-static void arrange_indirection_tokens_between( string& type,
-                                                string& identifier )
+static void arrange_indirection_tokens_between( wxString& type,
+                                                wxString& identifier )
 {
     // TBD:: FIXME:: return value of operators !
 
-    while ( identifier[0u] == '*' ||
-            identifier[0u] == '&'
+    while ( identifier[0u] == _T('*') ||
+            identifier[0u] == _T('&')
           )
     {
         type += identifier[0u];
@@ -1626,10 +1626,10 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
         string toerase("WXDLLEXPORT ");
         while((pos = rettype.find(toerase, pos)) != string::npos)
             rettype.erase(pos, toerase.length());
-        pOp->mRetType = rettype;
+        pOp->m_RetType = rettype;
     }
 
-    arrange_indirection_tokens_between( pOp->mRetType, pOp->m_Name );
+    arrange_indirection_tokens_between( pOp->m_RetType, pOp->m_Name );
 
     cur = savedPos;
     restore_line_no( tmpLnNo );
@@ -1753,9 +1753,9 @@ bool CJSourceParser::ParseArguments( char*& cur )
         size_t len = blockSizes[ typeBlock ];
         len = size_t ( (blocks[ typeBlock ] + len) - blocks[ 0 ] );
 
-        pPar->mType = string( blocks[0], len );
+        pPar->m_Type = string( blocks[0], len );
 
-        arrange_indirection_tokens_between( pPar->mType, pPar->m_Name );
+        arrange_indirection_tokens_between( pPar->m_Type, pPar->m_Name );
 
         if ( *cur == ')' )
         {
@@ -1877,7 +1877,7 @@ void CJSourceParser::ParseMemberVar( char*& cur )
         skip_next_token_back( cur );
         skip_token_back( cur );
 
-        pAttr->mType = get_token_str( cur );
+        pAttr->m_Type = get_token_str( cur );
 
         // if comma, than variable list continues
         // otherwise the variable type reached - stop
@@ -1916,12 +1916,12 @@ void CJSourceParser::ParseMemberVar( char*& cur )
         if ( !pAttr )
             continue;
 
-        if ( pAttr->mType.empty() )
-            pAttr->mType = type;
+        if ( pAttr->m_Type.empty() )
+            pAttr->m_Type = type;
         pAttr->mVisibility = mCurVis;
 
         if ( !pAttr->m_Name.empty() )
-            arrange_indirection_tokens_between( pAttr->mType, pAttr->m_Name );
+            arrange_indirection_tokens_between( pAttr->m_Type, pAttr->m_Name );
     }
 
     cur = savedPos;

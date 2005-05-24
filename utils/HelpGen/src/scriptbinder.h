@@ -90,12 +90,12 @@ struct TVarInfo
 {
 public:
     const char*     m_Name;
-    int             mType;
+    int             m_Type;
     int             mOfs;
 
     TVarInfo( const char* name, int ofs, int varType )
         : m_Name(name),
-          mType( varType ),
+          m_Type( varType ),
           mOfs( ofs )
     {}
 };
