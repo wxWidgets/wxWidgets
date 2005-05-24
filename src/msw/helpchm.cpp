@@ -242,6 +242,7 @@ wxString wxCHMHelpController::GetValidFilename(const wxString& file) const
 
 wxCHMHelpController::~wxCHMHelpController()
 {
+    gs_htmlHelp(GetSuitableHWND(), 0, HH_CLOSE_ALL, 0L);
     UnloadHtmlHelpLibrary();
 }
 
