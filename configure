@@ -2093,7 +2093,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_SOUND=no
   DEFAULT_wxUSE_MEDIACTRL=no
-  DEFAULT_wxUSE_DIRECTSHOW=no
   DEFAULT_wxUSE_INTL=no
   DEFAULT_wxUSE_CONFIG=no
   DEFAULT_wxUSE_FONTMAP=no
@@ -2290,7 +2289,6 @@ else
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_SOUND=yes
   DEFAULT_wxUSE_MEDIACTRL=no
-  DEFAULT_wxUSE_DIRECTSHOW=no
   DEFAULT_wxUSE_INTL=yes
   DEFAULT_wxUSE_CONFIG=yes
   DEFAULT_wxUSE_FONTMAP=yes
@@ -35739,7 +35737,9 @@ fi
 
 if test "$wxUSE_DEBUG_GDB" = "yes" ; then
     wxUSE_DEBUG_INFO=yes
-    WXDEBUG="-ggdb"
+    if test "$GCC" = yes; then
+        WXDEBUG="-ggdb"
+    fi
 fi
 
 if test "$wxUSE_DEBUG_FLAG" = "yes" ; then
@@ -37161,10 +37161,16 @@ _ACEOF
 fi
 
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
-  cat >>confdefs.h <<\_ACEOF
+  if test "$USE_UNIX" != 1; then
+    { echo "$as_me:$LINENO: WARNING: Catching fatal exceptions not currently supported on this system, wxApp::OnFatalException will not be called" >&5
+echo "$as_me: WARNING: Catching fatal exceptions not currently supported on this system, wxApp::OnFatalException will not be called" >&2;}
+    wxUSE_ON_FATAL_EXCEPTION=no
+  else
+    cat >>confdefs.h <<\_ACEOF
 #define wxUSE_ON_FATAL_EXCEPTION 1
 _ACEOF
 
+  fi
 fi
 
 if test "$wxUSE_STACKWALKER" = "yes"; then
@@ -37175,9 +37181,9 @@ _ACEOF
 fi
 
 if test "$wxUSE_DEBUGREPORT" = "yes"; then
-    if test "$USE_OS2" = "1" -o "$USE_WIN32" = "1"; then
-        { echo "$as_me:$LINENO: WARNING: Creating debug reports not supported by this compiler, disabled" >&5
-echo "$as_me: WARNING: Creating debug reports not supported by this compiler, disabled" >&2;}
+    if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
+        { echo "$as_me:$LINENO: WARNING: Creating debug reports not currently supported on this system, disabled" >&5
+echo "$as_me: WARNING: Creating debug reports not currently supported on this system, disabled" >&2;}
         wxUSE_DEBUGREPORT=no
     else
         cat >>confdefs.h <<\_ACEOF
@@ -40215,85 +40221,6 @@ fi
 
 
 if test "$wxUSE_MEDIACTRL" = "yes"; then
-    if test "$wxUSE_MSW" = 1; then
-                    wxUSE_DIRECTSHOW="yes"
-
-for ac_header in dshow.h
-do
-as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $ac_header" >&5
-echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
-if eval "test \"\${$as_ac_Header+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <windows.h>
-
-#include <$ac_header>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  eval "$as_ac_Header=yes"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-eval "$as_ac_Header=no"
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
-if test `eval echo '${'$as_ac_Header'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-else
-
-                wxUSE_DIRECTSHOW="no"
-                { echo "$as_me:$LINENO: WARNING: DirectShow not installed; consider installing the DirectX7 SDK or higher" >&5
-echo "$as_me: WARNING: DirectShow not installed; consider installing the DirectX7 SDK or higher" >&2;}
-
-fi
-
-done
-
-
-       if test "$wxUSE_DIRECTSHOW" = "yes"; then
-            cat >>confdefs.h <<\_ACEOF
-#define wxUSE_DIRECTSHOW 1
-_ACEOF
-
-            LIBS="$LIBS -lstrmiids"
-       fi
-    fi
-
                 if test "$wxUSE_GTK" = 1; then
         wxUSE_GSTREAMER="yes"
 

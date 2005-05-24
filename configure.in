@@ -4994,7 +4994,12 @@ if test "$wxUSE_ZIPSTREAM" = "yes"; then
 fi
 
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
-  AC_DEFINE(wxUSE_ON_FATAL_EXCEPTION)
+  if test "$USE_UNIX" != 1; then
+    AC_MSG_WARN([Catching fatal exceptions not currently supported on this system, wxApp::OnFatalException will not be called])
+    wxUSE_ON_FATAL_EXCEPTION=no
+  else
+    AC_DEFINE(wxUSE_ON_FATAL_EXCEPTION)
+  fi
 fi
 
 if test "$wxUSE_STACKWALKER" = "yes"; then
@@ -5002,8 +5007,8 @@ if test "$wxUSE_STACKWALKER" = "yes"; then
 fi
 
 if test "$wxUSE_DEBUGREPORT" = "yes"; then
-    if test "$USE_OS2" = "1" -o "$USE_WIN32" = "1"; then
-        AC_MSG_WARN([Creating debug reports not supported by this compiler, disabled])
+    if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
+        AC_MSG_WARN([Creating debug reports not currently supported on this system, disabled])
         wxUSE_DEBUGREPORT=no
     else
         AC_DEFINE(wxUSE_DEBUGREPORT)
