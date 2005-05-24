@@ -1,0 +1,32 @@
+/* XPM */
+static char *redo_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"24 23 3 1",
+". c Black",
+"X c #000080",
+"  c None",
+/* pixels */
+"                        ",
+"                        ",
+"                        ",
+"                        ",
+"                        ",
+"                        ",
+"     .XXXXX             ",
+"    .X.   .XX           ",
+"   .X       .X     X    ",
+"   X.        .X   XX    ",
+"   X          .X XXX    ",
+"   X           .XXXX    ",
+"   X           XXXXX    ",
+"   ..         XXXXXX    ",
+"    X.       XXXXXXX    ",
+"     X.                 ",
+"      X                 ",
+"                        ",
+"                        ",
+"                        ",
+"                        ",
+"                        ",
+"                        "
+};

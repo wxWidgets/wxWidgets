@@ -1,0 +1,35 @@
+/* XPM */
+static char *paste_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"24 23 6 1",
+". c Black",
+"+ c #FFFFFF",
+"O c #000080",
+"X c #FFFF00",
+"o c #808000",
+"  c None",
+/* pixels */
+"                        ",
+"        .....           ",
+" ........X.X........    ",
+"..o.o.o.X.X.X.o.o.o..   ",
+".o.o.o.X.....X.o.o.o.   ",
+"..o.o.         .o.o..   ",
+".o.o.............o.o.   ",
+"..o.o.o.o.o.o.o.o.o..   ",
+".o.o.o.o.o.o.o.o.o.o.   ",
+"..o.o.o.oOOOOOOOOOO..   ",
+".o.o.o.o.O++++++++OO.   ",
+"..o.o.o.oO++++++++O+O   ",
+".o.o.o.o.O++OOOOO+O++O  ",
+"..o.o.o.oO++++++++O+++O ",
+".o.o.o.o.O++++++++OOOOOO",
+"..o.o.o.oO++OOOOO++++++O",
+".o.o.o.o.O+++++++++++++O",
+"..o.o.o.oO+++++++++++++O",
+".o.o.o.o.O++OOOOOOOOO++O",
+" .o.o.o.oO+++++++++++++O",
+"  .......O+++++++++++++O",
+"         OOOOOOOOOOOOOOO",
+"                        "
+};
