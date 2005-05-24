@@ -48,11 +48,7 @@
     #endif // wxUSE_DATEPICKCTRL_GENERIC
 #endif // wxUSE_DATEPICKCTRL
 
-// the application icon (under Windows and OS/2 it is in resources and even
-// though we could still include the XPM here it would be unused)
-#if !defined(__WXMSW__) && !defined(__WXPM__)
-    #include "../sample.xpm"
-#endif
+#include "../sample.xpm"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -277,7 +273,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
     // set the frame icon
-    SetIcon(wxICON(sample));
+    SetIcon(sample_xpm);
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
