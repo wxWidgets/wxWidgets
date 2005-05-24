@@ -229,6 +229,10 @@ void wxNotebook::Init()
 #if wxUSE_UXTHEME
   m_hbrBackground = NULL;
 #endif // wxUSE_UXTHEME
+
+#if USE_NOTEBOOK_ANTIFLICKER
+  m_hasSubclassedUpdown = false;
+#endif // USE_NOTEBOOK_ANTIFLICKER
 }
 
 // default for dynamic class
@@ -921,7 +925,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
 #if USE_NOTEBOOK_ANTIFLICKER
     // subclass the spin control used by the notebook to scroll pages to
     // prevent it from flickering on resize
-    if ( !gs_wndprocNotebookSpinBtn )
+    if ( !m_hasSubclassedUpdown )
     {
         // iterate over all child windows to find spin button
         for ( HWND child = ::GetWindow(GetHwnd(), GW_CHILD);
@@ -935,9 +939,11 @@ void wxNotebook::OnSize(wxSizeEvent& event)
             if ( !childWindow )
             {
                 // subclass the spin button to override WM_ERASEBKGND
-                gs_wndprocNotebookSpinBtn = (WXFARPROC)wxGetWindowProc(child);
+                if ( !gs_wndprocNotebookSpinBtn )
+                    gs_wndprocNotebookSpinBtn = (WXFARPROC)wxGetWindowProc(child);
 
                 wxSetWindowProc(child, wxNotebookSpinBtnWndProc);
+                m_hasSubclassedUpdown = true;
                 break;
             }
         }

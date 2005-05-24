@@ -222,6 +222,16 @@ protected:
   bool DoDrawBackground(WXHDC hDC, wxWindow *child = NULL);
 #endif // wxUSE_UXTHEME
 
+  // these function are only used for reducing flicker on notebook resize and
+  // we don't need to do this for WinCE
+#ifndef __WXWINCE__
+  void OnEraseBackground(wxEraseEvent& event);
+  void OnPaint(wxPaintEvent& event);
+
+  // true if we have already subclassed our updown control
+  bool m_hasSubclassedUpdown;
+#endif // __WXWINCE__
+
   // the current selection (-1 if none)
   int m_nSelection;
 
@@ -232,11 +242,6 @@ protected:
   WXHBRUSH m_hbrBackground;
 #endif // wxUSE_UXTHEME
 
-  // No need to optimize for WinCE
-#ifndef __WXWINCE__
-  void OnEraseBackground(wxEraseEvent& event);
-  void OnPaint(wxPaintEvent& event);
-#endif
 
   DECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook)
   DECLARE_EVENT_TABLE()
