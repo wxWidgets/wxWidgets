@@ -802,8 +802,12 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     // if there is no special brush just use the solid background colour
     HBRUSH hbr = (HBRUSH)m_hbrBackground;
+    wxBrush brush;
     if ( !hbr )
-        hbr = GetHbrushOf(wxBrush(GetBackgroundColour()));
+    {
+        brush = wxBrush(GetBackgroundColour());
+        hbr = GetHbrushOf(brush);
+    }
 
     ::FillRect(GetHdcOf(memdc), &rc, hbr);
 
