@@ -46,40 +46,48 @@ DiagramDocument::~DiagramDocument(void)
 
 bool DiagramDocument::OnCloseDocument(void)
 {
-  diagram.DeleteAllShapes();
-  return true;
+    diagram.DeleteAllShapes();
+    return true;
 }
 
 #if wxUSE_STD_IOSTREAM
 wxSTD ostream& DiagramDocument::SaveObject(wxSTD ostream& stream)
 {
-  wxDocument::SaveObject(stream);
+#if wxUSE_PROLOGIO
 
-  char buf[400];
-  (void) wxGetTempFileName("diag", buf);
+    wxDocument::SaveObject(stream);
 
-  diagram.SaveFile(buf);
-  wxTransferFileToStream(buf, stream);
+    char buf[400];
+    (void) wxGetTempFileName("diag", buf);
 
-  wxRemoveFile(buf);
+    diagram.SaveFile(buf);
+    wxTransferFileToStream(buf, stream);
 
-  return stream;
+    wxRemoveFile(buf);
+
+#endif
+
+    return stream;
 }
 
 wxSTD istream& DiagramDocument::LoadObject(wxSTD istream& stream)
 {
-  wxDocument::LoadObject(stream);
+#if wxUSE_PROLOGIO
 
-  char buf[400];
-  (void) wxGetTempFileName("diag", buf);
+    wxDocument::LoadObject(stream);
 
-  wxTransferStreamToFile(stream, buf);
+    char buf[400];
+    (void) wxGetTempFileName("diag", buf);
 
-  diagram.DeleteAllShapes();
-  diagram.LoadFile(buf);
-  wxRemoveFile(buf);
+    wxTransferStreamToFile(stream, buf);
 
-  return stream;
+    diagram.DeleteAllShapes();
+    diagram.LoadFile(buf);
+    wxRemoveFile(buf);
+
+#endif
+
+    return stream;
 }
 #else
 
@@ -87,37 +95,37 @@ wxOutputStream& DiagramDocument::SaveObject(wxOutputStream& stream)
 {
 #if wxUSE_PROLOGIO
 
-  wxDocument::SaveObject(stream);
-  wxChar buf[400];
-  (void) wxGetTempFileName(_T("diag"), buf);
+    wxDocument::SaveObject(stream);
+    wxChar buf[400];
+    (void) wxGetTempFileName(_T("diag"), buf);
 
-  diagram.SaveFile(buf);
+    diagram.SaveFile(buf);
 
-  wxTransferFileToStream(buf, stream);
+    wxTransferFileToStream(buf, stream);
 
-  wxRemoveFile(buf);
+    wxRemoveFile(buf);
 
 #endif
 
-  return stream;
+    return stream;
 }
 
 wxInputStream& DiagramDocument::LoadObject(wxInputStream& stream)
 {
 #if wxUSE_PROLOGIO
-  wxDocument::LoadObject(stream);
+    wxDocument::LoadObject(stream);
 
-  wxChar buf[400];
-  (void) wxGetTempFileName(_T("diag"), buf);
+    wxChar buf[400];
+    (void) wxGetTempFileName(_T("diag"), buf);
 
-  wxTransferStreamToFile(stream, buf);
+    wxTransferStreamToFile(stream, buf);
 
-  diagram.DeleteAllShapes();
-  diagram.LoadFile(buf);
-  wxRemoveFile(buf);
+    diagram.DeleteAllShapes();
+    diagram.LoadFile(buf);
+    wxRemoveFile(buf);
 #endif
 
-  return stream;
+    return stream;
 }
 
 #endif
@@ -127,56 +135,56 @@ wxInputStream& DiagramDocument::LoadObject(wxInputStream& stream)
  */
 
 DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocument *ddoc, wxClassInfo *info, double xx, double yy,
-  bool sel, wxShape *theShape, wxShape *fs, wxShape *ts):
-  wxCommand(true, name)
+                               bool sel, wxShape *theShape, wxShape *fs, wxShape *ts)
+               :wxCommand(true, name)
 {
-  doc = ddoc;
-  cmd = command;
-  shape = theShape;
-  fromShape = fs;
-  toShape = ts;
-  shapeInfo = info;
-  shapeBrush = NULL;
-  shapePen = NULL;
-  x = xx;
-  y = yy;
-  selected = sel;
-  deleteShape = false;
+    doc = ddoc;
+    cmd = command;
+    shape = theShape;
+    fromShape = fs;
+    toShape = ts;
+    shapeInfo = info;
+    shapeBrush = NULL;
+    shapePen = NULL;
+    x = xx;
+    y = yy;
+    selected = sel;
+    deleteShape = false;
 }
 
-DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocument *ddoc, wxBrush *backgroundColour, wxShape *theShape):
-  wxCommand(true, name)
+DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocument *ddoc, wxBrush *backgroundColour, wxShape *theShape)
+               :wxCommand(true, name)
 {
-  doc = ddoc;
-  cmd = command;
-  shape = theShape;
-  fromShape = NULL;
-  toShape = NULL;
-  shapeInfo = NULL;
-  x = 0.0;
-  y = 0.0;
-  selected = false;
-  deleteShape = false;
-  shapeBrush = backgroundColour;
-  shapePen = NULL;
+    doc = ddoc;
+    cmd = command;
+    shape = theShape;
+    fromShape = NULL;
+    toShape = NULL;
+    shapeInfo = NULL;
+    x = 0.0;
+    y = 0.0;
+    selected = false;
+    deleteShape = false;
+    shapeBrush = backgroundColour;
+    shapePen = NULL;
 }
 
-DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocument *ddoc, const wxString& lab, wxShape *theShape):
-  wxCommand(true, name)
+DiagramCommand::DiagramCommand(const wxString& name, int command, DiagramDocument *ddoc, const wxString& lab, wxShape *theShape)
+               :wxCommand(true, name)
 {
-  doc = ddoc;
-  cmd = command;
-  shape = theShape;
-  fromShape = NULL;
-  toShape = NULL;
-  shapeInfo = NULL;
-  x = 0.0;
-  y = 0.0;
-  selected = false;
-  deleteShape = false;
-  shapeBrush = NULL;
-  shapePen = NULL;
-  shapeLabel = lab;
+    doc = ddoc;
+    cmd = command;
+    shape = theShape;
+    fromShape = NULL;
+    toShape = NULL;
+    shapeInfo = NULL;
+    x = 0.0;
+    y = 0.0;
+    selected = false;
+    deleteShape = false;
+    shapeBrush = NULL;
+    shapePen = NULL;
+    shapeLabel = lab;
 }
 
 DiagramCommand::~DiagramCommand(void)
