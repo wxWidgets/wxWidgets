@@ -101,16 +101,16 @@ MIDL_INTERFACE("56A868B9-0AD4-11CE-B03A-0020AF0BA770")
 IAMCollection : public IDispatch
 {
 public:
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count(
         /* [retval][out] */ long __RPC_FAR *plCount) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Item( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Item(
         /* [in] */ long lItem,
         /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum(
         /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
+
 };
 
 MIDL_INTERFACE("56A868B1-0AD4-11CE-B03A-0020AF0BA770")
@@ -118,420 +118,420 @@ IMediaControl : public IDispatch
 {
 public:
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE Run( void) = 0;
-    
+
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
-    
+
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetState( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetState(
         /* [in] */ long msTimeout,
         /* [out] */ long __RPC_FAR *pfs) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE RenderFile( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE RenderFile(
         /* [in] */ BSTR strFilename) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddSourceFilter( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddSourceFilter(
         /* [in] */ BSTR strFilename,
         /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FilterCollection( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FilterCollection(
         /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_RegFilterCollection( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_RegFilterCollection(
         /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
+
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE StopWhenReady( void) = 0;
-    
+
 };
 
 MIDL_INTERFACE("56A868B6-0AD4-11CE-B03A-0020AF0BA770")
 IMediaEvent : public IDispatch
 {
 public:
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEventHandle( 
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEventHandle(
         /* [out] */ LONG_PTR __RPC_FAR *hEvent) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEvent( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEvent(
         /* [out] */ long __RPC_FAR *lEventCode,
         /* [out] */ LONG_PTR __RPC_FAR *lParam1,
         /* [out] */ LONG_PTR __RPC_FAR *lParam2,
         /* [in] */ long msTimeout) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE WaitForCompletion( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE WaitForCompletion(
         /* [in] */ long msTimeout,
         /* [out] */ long __RPC_FAR *pEvCode) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE CancelDefaultHandling( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE CancelDefaultHandling(
         /* [in] */ long lEvCode) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE RestoreDefaultHandling( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE RestoreDefaultHandling(
         /* [in] */ long lEvCode) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE FreeEventParams( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE FreeEventParams(
         /* [in] */ long lEvCode,
         /* [in] */ LONG_PTR lParam1,
         /* [in] */ LONG_PTR lParam2) = 0;
-    
+
 };
 
 MIDL_INTERFACE("56A868C0-0AD4-11CE-B03A-0020AF0BA770")
 IMediaEventEx : public IMediaEvent
 {
 public:
-    virtual HRESULT __stdcall SetNotifyWindow( 
+    virtual HRESULT __stdcall SetNotifyWindow(
         /* [in] */ LONG_PTR hwnd,
         /* [in] */ long lMsg,
         /* [in] */ LONG_PTR lInstanceData) = 0;
-    
-    virtual HRESULT __stdcall SetNotifyFlags( 
+
+    virtual HRESULT __stdcall SetNotifyFlags(
         /* [in] */ long lNoNotifyFlags) = 0;
-    
-    virtual HRESULT __stdcall GetNotifyFlags( 
+
+    virtual HRESULT __stdcall GetNotifyFlags(
         /* [out] */ long __RPC_FAR *lplNoNotifyFlags) = 0;
-    
+
 };
-    
+
 MIDL_INTERFACE("56A868B2-0AD4-11CE-B03A-0020AF0BA770")
 IMediaPosition : public IDispatch
 {
 public:
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Duration( 
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Duration(
         /* [retval][out] */ double __RPC_FAR *plength) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_CurrentPosition( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_CurrentPosition(
         /* [in] */ double pllTime) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_CurrentPosition( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_CurrentPosition(
         /* [retval][out] */ double __RPC_FAR *pllTime) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_StopTime( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_StopTime(
         /* [retval][out] */ double __RPC_FAR *pllTime) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_StopTime( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_StopTime(
         /* [in] */ double pllTime) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_PrerollTime( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_PrerollTime(
         /* [retval][out] */ double __RPC_FAR *pllTime) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_PrerollTime( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_PrerollTime(
         /* [in] */ double pllTime) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Rate( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Rate(
         /* [in] */ double pdRate) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Rate( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Rate(
         /* [retval][out] */ double __RPC_FAR *pdRate) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanSeekForward( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanSeekForward(
         /* [retval][out] */ long __RPC_FAR *pCanSeekForward) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanSeekBackward( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE CanSeekBackward(
         /* [retval][out] */ long __RPC_FAR *pCanSeekBackward) = 0;
-    
+
 };
 
 MIDL_INTERFACE("56A868B3-0AD4-11CE-B03A-0020AF0BA770")
 IBasicAudio : public IDispatch
 {
 public:
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Volume( 
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Volume(
         /* [in] */ long plVolume) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Volume( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Volume(
         /* [retval][out] */ long __RPC_FAR *plVolume) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Balance( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Balance(
         /* [in] */ long plBalance) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Balance( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Balance(
         /* [retval][out] */ long __RPC_FAR *plBalance) = 0;
-    
+
 };
-    
+
 MIDL_INTERFACE("56A868B4-0AD4-11CE-B03A-0020AF0BA770")
 IVideoWindow : public IDispatch
 {
 public:
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Caption( 
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Caption(
         /* [in] */ BSTR strCaption) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Caption( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Caption(
         /* [retval][out] */ BSTR __RPC_FAR *strCaption) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowStyle( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowStyle(
         /* [in] */ long WindowStyle) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowStyle( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowStyle(
         /* [retval][out] */ long __RPC_FAR *WindowStyle) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowStyleEx( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowStyleEx(
         /* [in] */ long WindowStyleEx) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowStyleEx( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowStyleEx(
         /* [retval][out] */ long __RPC_FAR *WindowStyleEx) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AutoShow( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_AutoShow(
         /* [in] */ long AutoShow) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_AutoShow( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_AutoShow(
         /* [retval][out] */ long __RPC_FAR *AutoShow) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowState( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_WindowState(
         /* [in] */ long WindowState) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowState( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_WindowState(
         /* [retval][out] */ long __RPC_FAR *WindowState) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BackgroundPalette( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BackgroundPalette(
         /* [in] */ long pBackgroundPalette) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BackgroundPalette( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BackgroundPalette(
         /* [retval][out] */ long __RPC_FAR *pBackgroundPalette) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Visible( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Visible(
         /* [in] */ long pVisible) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Visible( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Visible(
         /* [retval][out] */ long __RPC_FAR *pVisible) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Left( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Left(
         /* [in] */ long pLeft) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Left( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Left(
         /* [retval][out] */ long __RPC_FAR *pLeft) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Width( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Width(
         /* [in] */ long pWidth) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Width( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Width(
         /* [retval][out] */ long __RPC_FAR *pWidth) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Top( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Top(
         /* [in] */ long pTop) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Top( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Top(
         /* [retval][out] */ long __RPC_FAR *pTop) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Height( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Height(
         /* [in] */ long pHeight) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Height( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Height(
         /* [retval][out] */ long __RPC_FAR *pHeight) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Owner( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Owner(
         /* [in] */ LONG_PTR Owner) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Owner( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Owner(
         /* [retval][out] */ LONG_PTR __RPC_FAR *Owner) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_MessageDrain( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_MessageDrain(
         /* [in] */ LONG_PTR Drain) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_MessageDrain( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_MessageDrain(
         /* [retval][out] */ LONG_PTR __RPC_FAR *Drain) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BorderColor( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BorderColor(
         /* [retval][out] */ long __RPC_FAR *Color) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BorderColor( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BorderColor(
         /* [in] */ long Color) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FullScreenMode( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FullScreenMode(
         /* [retval][out] */ long __RPC_FAR *FullScreenMode) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_FullScreenMode( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_FullScreenMode(
         /* [in] */ long FullScreenMode) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetWindowForeground( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetWindowForeground(
         /* [in] */ long Focus) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE NotifyOwnerMessage( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE NotifyOwnerMessage(
         /* [in] */ LONG_PTR hwnd,
         /* [in] */ long uMsg,
         /* [in] */ LONG_PTR wParam,
         /* [in] */ LONG_PTR lParam) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetWindowPosition( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetWindowPosition(
         /* [in] */ long Left,
         /* [in] */ long Top,
         /* [in] */ long Width,
         /* [in] */ long Height) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetWindowPosition( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetWindowPosition(
         /* [out] */ long __RPC_FAR *pLeft,
         /* [out] */ long __RPC_FAR *pTop,
         /* [out] */ long __RPC_FAR *pWidth,
         /* [out] */ long __RPC_FAR *pHeight) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetMinIdealImageSize( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetMinIdealImageSize(
         /* [out] */ long __RPC_FAR *pWidth,
         /* [out] */ long __RPC_FAR *pHeight) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetMaxIdealImageSize( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetMaxIdealImageSize(
         /* [out] */ long __RPC_FAR *pWidth,
         /* [out] */ long __RPC_FAR *pHeight) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetRestorePosition( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetRestorePosition(
         /* [out] */ long __RPC_FAR *pLeft,
         /* [out] */ long __RPC_FAR *pTop,
         /* [out] */ long __RPC_FAR *pWidth,
         /* [out] */ long __RPC_FAR *pHeight) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE HideCursor( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE HideCursor(
         /* [in] */ long HideCursor) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsCursorHidden( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsCursorHidden(
         /* [out] */ long __RPC_FAR *CursorHidden) = 0;
-    
+
 };
 
 MIDL_INTERFACE("56A868B5-0AD4-11CE-B03A-0020AF0BA770")
 IBasicVideo : public IDispatch
 {
 public:
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_AvgTimePerFrame( 
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_AvgTimePerFrame(
         /* [retval][out] */ double __RPC_FAR *pAvgTimePerFrame) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BitRate( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BitRate(
         /* [retval][out] */ long __RPC_FAR *pBitRate) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BitErrorRate( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_BitErrorRate(
         /* [retval][out] */ long __RPC_FAR *pBitErrorRate) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_VideoWidth( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_VideoWidth(
         /* [retval][out] */ long __RPC_FAR *pVideoWidth) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_VideoHeight( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_VideoHeight(
         /* [retval][out] */ long __RPC_FAR *pVideoHeight) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceLeft( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceLeft(
         /* [in] */ long pSourceLeft) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceLeft( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceLeft(
         /* [retval][out] */ long __RPC_FAR *pSourceLeft) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceWidth( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceWidth(
         /* [in] */ long pSourceWidth) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceWidth( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceWidth(
         /* [retval][out] */ long __RPC_FAR *pSourceWidth) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceTop( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceTop(
         /* [in] */ long pSourceTop) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceTop( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceTop(
         /* [retval][out] */ long __RPC_FAR *pSourceTop) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceHeight( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_SourceHeight(
         /* [in] */ long pSourceHeight) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceHeight( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SourceHeight(
         /* [retval][out] */ long __RPC_FAR *pSourceHeight) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationLeft( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationLeft(
         /* [in] */ long pDestinationLeft) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationLeft( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationLeft(
         /* [retval][out] */ long __RPC_FAR *pDestinationLeft) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationWidth( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationWidth(
         /* [in] */ long pDestinationWidth) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationWidth( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationWidth(
         /* [retval][out] */ long __RPC_FAR *pDestinationWidth) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationTop( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationTop(
         /* [in] */ long pDestinationTop) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationTop( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationTop(
         /* [retval][out] */ long __RPC_FAR *pDestinationTop) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationHeight( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_DestinationHeight(
         /* [in] */ long pDestinationHeight) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationHeight( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DestinationHeight(
         /* [retval][out] */ long __RPC_FAR *pDestinationHeight) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetSourcePosition( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetSourcePosition(
         /* [in] */ long Left,
         /* [in] */ long Top,
         /* [in] */ long Width,
         /* [in] */ long Height) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetSourcePosition( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetSourcePosition(
         /* [out] */ long __RPC_FAR *pLeft,
         /* [out] */ long __RPC_FAR *pTop,
         /* [out] */ long __RPC_FAR *pWidth,
         /* [out] */ long __RPC_FAR *pHeight) = 0;
-    
+
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDefaultSourcePosition( void) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDestinationPosition( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDestinationPosition(
         /* [in] */ long Left,
         /* [in] */ long Top,
         /* [in] */ long Width,
         /* [in] */ long Height) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDestinationPosition( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDestinationPosition(
         /* [out] */ long __RPC_FAR *pLeft,
         /* [out] */ long __RPC_FAR *pTop,
         /* [out] */ long __RPC_FAR *pWidth,
         /* [out] */ long __RPC_FAR *pHeight) = 0;
-    
+
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDefaultDestinationPosition( void) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetVideoSize( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetVideoSize(
         /* [out] */ long __RPC_FAR *pWidth,
         /* [out] */ long __RPC_FAR *pHeight) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetVideoPaletteEntries( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetVideoPaletteEntries(
         /* [in] */ long StartIndex,
         /* [in] */ long Entries,
         /* [out] */ long __RPC_FAR *pRetrieved,
         /* [out] */ long __RPC_FAR *pPalette) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCurrentImage( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCurrentImage(
         /* [out][in] */ long __RPC_FAR *pBufferSize,
         /* [out] */ long __RPC_FAR *pDIBImage) = 0;
-    
+
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsUsingDefaultSource( void) = 0;
-    
+
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsUsingDefaultDestination( void) = 0;
-    
+
 };
-    
+
 MIDL_INTERFACE("329BB360-F6EA-11D1-9038-00A0C9697298")
 IBasicVideo2 : public IBasicVideo
 {
 public:
-    virtual HRESULT __stdcall GetPreferredAspectRatio( 
+    virtual HRESULT __stdcall GetPreferredAspectRatio(
         /* [out] */ long __RPC_FAR *plAspectX,
         /* [out] */ long __RPC_FAR *plAspectY) = 0;
-    
+
 };
-    
+
 MIDL_INTERFACE("56A868B8-0AD4-11CE-B03A-0020AF0BA770")
 IDeferredCommand : public IUnknown
 {
 public:
     virtual HRESULT __stdcall Cancel( void) = 0;
-    
-    virtual HRESULT __stdcall Confidence( 
+
+    virtual HRESULT __stdcall Confidence(
         /* [out] */ long __RPC_FAR *pConfidence) = 0;
-    
-    virtual HRESULT __stdcall Postpone( 
+
+    virtual HRESULT __stdcall Postpone(
         /* [in] */ double newtime) = 0;
-    
-    virtual HRESULT __stdcall GetHResult( 
+
+    virtual HRESULT __stdcall GetHResult(
         /* [out] */ HRESULT __RPC_FAR *phrResult) = 0;
-    
+
 };
 
 MIDL_INTERFACE("56A868B7-0AD4-11CE-B03A-0020AF0BA770")
 IQueueCommand : public IUnknown
 {
 public:
-    virtual HRESULT __stdcall InvokeAtStreamTime( 
+    virtual HRESULT __stdcall InvokeAtStreamTime(
         /* [out] */ IDeferredCommand __RPC_FAR *__RPC_FAR *pCmd,
         /* [in] */ double time,
         /* [in] */ GUID __RPC_FAR *iid,
@@ -541,8 +541,8 @@ public:
         /* [in] */ VARIANT __RPC_FAR *pDispParams,
         /* [out][in] */ VARIANT __RPC_FAR *pvarResult,
         /* [out] */ short __RPC_FAR *puArgErr) = 0;
-    
-    virtual HRESULT __stdcall InvokeAtPresentationTime( 
+
+    virtual HRESULT __stdcall InvokeAtPresentationTime(
         /* [out] */ IDeferredCommand __RPC_FAR *__RPC_FAR *pCmd,
         /* [in] */ double time,
         /* [in] */ GUID __RPC_FAR *iid,
@@ -552,106 +552,106 @@ public:
         /* [in] */ VARIANT __RPC_FAR *pDispParams,
         /* [out][in] */ VARIANT __RPC_FAR *pvarResult,
         /* [out] */ short __RPC_FAR *puArgErr) = 0;
-    
+
 };
-    
+
 MIDL_INTERFACE("56A868BA-0AD4-11CE-B03A-0020AF0BA770")
 IFilterInfo : public IDispatch
 {
 public:
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindPin( 
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE FindPin(
         /* [in] */ BSTR strPinID,
         /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name(
         /* [retval][out] */ BSTR __RPC_FAR *strName) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_VendorInfo( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_VendorInfo(
         /* [retval][out] */ BSTR __RPC_FAR *strVendorInfo) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Filter( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Filter(
         /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Pins( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Pins(
         /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_IsFileSource( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_IsFileSource(
         /* [retval][out] */ long __RPC_FAR *pbIsSource) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Filename( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Filename(
         /* [retval][out] */ BSTR __RPC_FAR *pstrFilename) = 0;
-    
-    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Filename( 
+
+    virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Filename(
         /* [in] */ BSTR pstrFilename) = 0;
-    
+
 };
-    
+
 MIDL_INTERFACE("56A868BB-0AD4-11CE-B03A-0020AF0BA770")
 IRegFilterInfo : public IDispatch
 {
 public:
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name(
         /* [retval][out] */ BSTR __RPC_FAR *strName) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Filter( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Filter(
         /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
+
 };
-    
+
 MIDL_INTERFACE("56A868BC-0AD4-11CE-B03A-0020AF0BA770")
 IMediaTypeInfo : public IDispatch
 {
 public:
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Type( 
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Type(
         /* [retval][out] */ BSTR __RPC_FAR *strType) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Subtype( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Subtype(
         /* [retval][out] */ BSTR __RPC_FAR *strType) = 0;
-    
+
 };
-    
+
 MIDL_INTERFACE("56A868BD-0AD4-11CE-B03A-0020AF0BA770")
 IPinInfo : public IDispatch
 {
 public:
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Pin( 
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Pin(
         /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ConnectedTo( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ConnectedTo(
         /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ConnectionMediaType( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ConnectionMediaType(
         /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FilterInfo( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_FilterInfo(
         /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name(
         /* [retval][out] */ BSTR __RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Direction( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Direction(
         /* [retval][out] */ long __RPC_FAR *ppDirection) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_PinID( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_PinID(
         /* [retval][out] */ BSTR __RPC_FAR *strPinID) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_MediaTypes( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_MediaTypes(
         /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnk) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Connect( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE Connect(
         /* [in] */ IUnknown __RPC_FAR *pPin) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectDirect( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectDirect(
         /* [in] */ IUnknown __RPC_FAR *pPin) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectWithType( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectWithType(
         /* [in] */ IUnknown __RPC_FAR *pPin,
         /* [in] */ IDispatch __RPC_FAR *pMediaType) = 0;
-    
+
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
-    
+
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE Render( void) = 0;
-    
+
 };
 
 MIDL_INTERFACE("BC9BCF80-DCD2-11D2-ABF6-00A0C905F375")
@@ -659,11 +659,11 @@ IAMStats : public IDispatch
 {
 public:
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
-    
-    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
+
+    virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count(
         /* [retval][out] */ long __RPC_FAR *plCount) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetValueByIndex( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetValueByIndex(
         /* [in] */ long lIndex,
         /* [out] */ BSTR __RPC_FAR *szName,
         /* [out] */ long __RPC_FAR *lCount,
@@ -672,8 +672,8 @@ public:
         /* [out] */ double __RPC_FAR *dStdDev,
         /* [out] */ double __RPC_FAR *dMin,
         /* [out] */ double __RPC_FAR *dMax) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetValueByName( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetValueByName(
         /* [in] */ BSTR szName,
         /* [out] */ long __RPC_FAR *lIndex,
         /* [out] */ long __RPC_FAR *lCount,
@@ -682,16 +682,16 @@ public:
         /* [out] */ double __RPC_FAR *dStdDev,
         /* [out] */ double __RPC_FAR *dMin,
         /* [out] */ double __RPC_FAR *dMax) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetIndex( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetIndex(
         /* [in] */ BSTR szName,
         /* [in] */ long lCreate,
         /* [out] */ long __RPC_FAR *plIndex) = 0;
-    
-    virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddValue( 
+
+    virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddValue(
         /* [in] */ long lIndex,
         /* [in] */ double dValue) = 0;
-    
+
 };
 
 //------------------------------------------------------------------
@@ -845,13 +845,13 @@ typedef wxInt32 OSStatus;
 typedef unsigned char                   Str255[256];
 #define StringPtr unsigned char*
 #define newMovieActive 1
-#define Ptr char* 
+#define Ptr char*
 #define Handle Ptr*
 #define Fixed long
 #define OSType unsigned long
-#define CGrafPtr struct GrafPort *                      
+#define CGrafPtr struct GrafPort *
 #define TimeScale long
-#define TimeBase struct TimeBaseRecord *                
+#define TimeBase struct TimeBaseRecord *
 
 struct FSSpec {
     short                           vRefNum;
@@ -885,7 +885,7 @@ struct TimeRecord {
     name ## Type pfn_ ## name; \
     rettype name args \
     { if (m_ok) return pfn_ ## name shortargs ; return defret; }
-    
+
 #define wxDL_VOIDMETHOD_DEFINE( name, args, shortargs ) \
     typedef void (* name ## Type) args ; \
     name ## Type pfn_ ## name; \
@@ -897,11 +897,11 @@ struct TimeRecord {
     if (!success) return false;
 
 //Class that utilizes Robert Roeblings Dynamic Library Macros
-class wxQuickTimeLibrary 
+class WXDLLIMPEXP_MEDIA wxQuickTimeLibrary
 {
 public:
     ~wxQuickTimeLibrary()
-    {   
+    {
         if(m_dll.IsLoaded())
             m_dll.Unload();
     }
@@ -924,11 +924,11 @@ public:
     wxDL_METHOD_DEFINE( OSErr, InitializeQTML, (long flags), (flags), -1);
     wxDL_VOIDMETHOD_DEFINE( TerminateQTML, (), () );
 
-    wxDL_METHOD_DEFINE( OSErr, NativePathNameToFSSpec, 
-                        (char* inName, FSSpec* outFile, long flags), 
+    wxDL_METHOD_DEFINE( OSErr, NativePathNameToFSSpec,
+                        (char* inName, FSSpec* outFile, long flags),
                         (inName, outFile, flags), -1);
 
-    wxDL_METHOD_DEFINE( OSErr, OpenMovieFile, 
+    wxDL_METHOD_DEFINE( OSErr, OpenMovieFile,
                         (const FSSpec * fileSpec, short * resRefNum, wxInt8 permission),
                         (fileSpec, resRefNum, permission), -1 );
 
@@ -938,28 +938,28 @@ public:
     wxDL_METHOD_DEFINE( OSErr, NewMovieFromFile,
                             (Movie * theMovie, short resRefNum, short *  resId,
                              StringPtr resName, short newMovieFlags,
-                             bool * dataRefWasChanged), 
+                             bool * dataRefWasChanged),
                              (theMovie, resRefNum, resId, resName, newMovieFlags,
                               dataRefWasChanged), -1);
 
     wxDL_VOIDMETHOD_DEFINE( SetMovieRate, (Movie m, Fixed rate), (m, rate) );
     wxDL_METHOD_DEFINE( Fixed, GetMovieRate, (Movie m), (m), 0);
     wxDL_VOIDMETHOD_DEFINE( MoviesTask, (Movie m, long maxms), (m, maxms) );
-    wxDL_VOIDMETHOD_DEFINE( BlockMove, 
+    wxDL_VOIDMETHOD_DEFINE( BlockMove,
         (const char* p1, const char* p2, long s), (p1,p2,s) );
     wxDL_METHOD_DEFINE( Handle, NewHandleClear, (long s), (s), NULL );
 
-    wxDL_METHOD_DEFINE( OSErr, NewMovieFromDataRef, 
+    wxDL_METHOD_DEFINE( OSErr, NewMovieFromDataRef,
                            (Movie * m, short flags, short * id,
                             Handle  dataRef, OSType  dataRefType),
                             (m,flags,id,dataRef,dataRefType), -1 );
 
     wxDL_VOIDMETHOD_DEFINE( DisposeHandle, (Handle h), (h) );
     wxDL_VOIDMETHOD_DEFINE( GetMovieNaturalBoundsRect, (Movie m, Rect* r), (m,r) );
-    wxDL_METHOD_DEFINE( void*, GetMovieIndTrackType, 
-                        (Movie m, long index, OSType type, long flags), 
+    wxDL_METHOD_DEFINE( void*, GetMovieIndTrackType,
+                        (Movie m, long index, OSType type, long flags),
                         (m,index,type,flags), NULL );
-    wxDL_VOIDMETHOD_DEFINE( CreatePortAssociation, 
+    wxDL_VOIDMETHOD_DEFINE( CreatePortAssociation,
             (void* hWnd, void* junk, long morejunk), (hWnd, junk, morejunk) );
     wxDL_METHOD_DEFINE(void*, GetNativeWindowPort, (void* hWnd), (hWnd), NULL);
     wxDL_VOIDMETHOD_DEFINE(SetMovieGWorld, (Movie m, CGrafPtr port, void* whatever),
@@ -1020,7 +1020,7 @@ bool wxQuickTimeLibrary::Initialize()
     wxDL_METHOD_LOAD( m_dll, SetMovieTime, bOk );
     wxDL_METHOD_LOAD( m_dll, GetMovieVolume, bOk );
     wxDL_METHOD_LOAD( m_dll, SetMovieVolume, bOk );
-    
+
     m_ok = true;
 
     return true;
@@ -1295,7 +1295,7 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
     m_ctrl->GetParent()->Layout();
     m_ctrl->GetParent()->Refresh();
     m_ctrl->GetParent()->Update();
-    m_ctrl->SetSize(m_ctrl->GetSize()); 
+    m_ctrl->SetSize(m_ctrl->GetSize());
 
     return true;
 }
@@ -1361,7 +1361,7 @@ bool wxAMMediaBackend::SetPosition(wxLongLong where)
 {
     return SUCCEEDED( m_pMS->put_CurrentPosition(
                         ((LONGLONG)where.GetValue()) / 1000
-                                                ) 
+                                                )
                     );
 }
 
@@ -1387,10 +1387,10 @@ wxLongLong wxAMMediaBackend::GetPosition()
 // value ranges from 0 (MAX volume) to -10000 (minimum volume).
 // -100 per decibel.
 //---------------------------------------------------------------------------
-bool wxAMMediaBackend::SetVolume(double dVolume) 
-{ 
-    return SUCCEEDED(m_pBA->put_Volume( (long) ((dVolume-1.0) * 10000.0) )); 
-} 
+bool wxAMMediaBackend::SetVolume(double dVolume)
+{
+    return SUCCEEDED(m_pBA->put_Volume( (long) ((dVolume-1.0) * 10000.0) ));
+}
 
 //---------------------------------------------------------------------------
 // wxAMMediaBackend::GetVolume
@@ -1406,7 +1406,7 @@ double wxAMMediaBackend::GetVolume()
         return (((double)(lVolume + 10000)) / 10000.0);
     return 0.0;
 }
- 
+
 //---------------------------------------------------------------------------
 // wxAMMediaBackend::GetDuration
 //
@@ -1822,7 +1822,7 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
     m_ctrl->GetParent()->Layout();
     m_ctrl->GetParent()->Refresh();
     m_ctrl->GetParent()->Update();
-    m_ctrl->SetSize(m_ctrl->GetSize()); 
+    m_ctrl->SetSize(m_ctrl->GetSize());
 
     return true;
 }
@@ -1995,7 +1995,7 @@ bool wxMCIMediaBackend::SetVolume(double dVolume)
     audioParms.lpstrAlgorithm = NULL;
     audioParms.lpstrQuality = NULL;
 
-    if (mciSendCommand(m_hDev, 0x0873, //MCI_SETAUDIO 
+    if (mciSendCommand(m_hDev, 0x0873, //MCI_SETAUDIO
                         0x00800000L | 0x01000000L, //MCI_DGV_SETAUDIO+(_ITEM | _VALUE)
                        (DWORD)(LPSTR)&audioParms) != 0)
         return false;
@@ -2030,15 +2030,15 @@ void wxMCIMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
     if (m_hNotifyWnd && m_bVideo)
     {
         MCI_DGV_RECT_PARMS putParms; //ifdefed MCI_DGV_PUT_PARMS
-        memset(&putParms, 0, sizeof(MCI_DGV_RECT_PARMS)); 
+        memset(&putParms, 0, sizeof(MCI_DGV_RECT_PARMS));
         putParms.rc.bottom = h;
-        putParms.rc.right = w; 
+        putParms.rc.right = w;
 
-        //wxStackWalker will crash and burn here on assert 
-        //and mci doesn't like 0 and 0 for some reason (out of range ) 
-        //so just don't it in that case 
-        if(w || h) 
-        { 
+        //wxStackWalker will crash and burn here on assert
+        //and mci doesn't like 0 and 0 for some reason (out of range )
+        //so just don't it in that case
+        if(w || h)
+        {
             wxMCIVERIFY( mciSendCommand(m_hDev, MCI_PUT,
                                    0x00040000L, //MCI_DGV_PUT_DESTINATION
                                    (DWORD)(LPSTR)&putParms) );
@@ -2110,7 +2110,7 @@ LRESULT CALLBACK wxMCIMediaBackend::NotifyWndProc(HWND hWnd, UINT nMsg,
         ::GetWindowLong(hWnd, GWL_USERDATA);
 #else
         ::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-#endif        
+#endif
     wxASSERT(backend);
 
     return backend->OnNotifyWndProc(hWnd, nMsg, wParam, lParam);
@@ -2265,7 +2265,7 @@ bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 {
     if(!m_lib.Initialize())
         return false;
-    
+
     int nError;
     if ((nError = m_lib.InitializeQTML(0)) != noErr)    //-2093 no dll
     {
@@ -2373,7 +2373,7 @@ bool wxQTMediaBackend::Load(const wxURI& location)
     timeNow = GetMovieTime(m_movie, NULL);
     playRate = GetMoviePreferredRate(m_movie);
     PrePrerollMovie(m_movie, timeNow, playRate, NULL, NULL);
-    PrerollMovie(m_movie, timeNow, playRate);    
+    PrerollMovie(m_movie, timeNow, playRate);
     m_lib.SetMovieRate(m_movie, playRate);
 */
 
@@ -2403,7 +2403,7 @@ void wxQTMediaBackend::FinishLoad()
     //reparent movie/*AudioMediaCharacteristic*/
     if(m_lib.GetMovieIndTrackType(m_movie, 1,
                             'eyes', //VisualMediaCharacteristic,
-                            (1 << 1) //movieTrackCharacteristic 
+                            (1 << 1) //movieTrackCharacteristic
                             | (1 << 2) //movieTrackEnabledOnly
                             ) != NULL)
     {
@@ -2543,7 +2543,7 @@ wxLongLong wxQTMediaBackend::GetPosition()
 double wxQTMediaBackend::GetVolume()
 {
     short sVolume = m_lib.GetMovieVolume(m_movie);
-    
+
     if(sVolume & (128 << 8)) //negative - no sound
         return 0.0;
 
@@ -2567,7 +2567,7 @@ double wxQTMediaBackend::GetVolume()
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::SetVolume(double dVolume)
 {
-    short sVolume = (dVolume >= .9999 ? 1 << 8 : 
+    short sVolume = (dVolume >= .9999 ? 1 << 8 :
                                        (short) (dVolume * 255));
     m_lib.SetMovieVolume(m_movie, sVolume);
     return true;
