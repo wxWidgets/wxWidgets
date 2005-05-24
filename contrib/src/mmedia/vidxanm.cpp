@@ -475,10 +475,11 @@ bool wxVideoXANIM::RestartXANIM()
                      "XANIM_PROPERTY", False);
     
     // Build the command
-    xanim_command.Printf(wxT("xanim -Zr +Ze +Sr +f +W%d +f +q "
-                 "+Av70 %s %s"), m_internal->xanim_window,
-             (xanim_chg_size) ? _T("") : _T(""),
-             WXSTRINGCAST m_filename);
+    xanim_command.Printf(
+        wxT("xanim -Zr +Ze +Sr +f +W%d +f +q +Av70 %s %s"),
+        (int)m_internal->xanim_window,
+        (xanim_chg_size) ? _T("") : _T(""),   // ??? why ???
+        WXSTRINGCAST m_filename);
     
         // Execute it
     if (!wxExecute(xanim_command, false, m_xanim_detector))
