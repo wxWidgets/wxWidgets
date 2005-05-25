@@ -310,11 +310,38 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
 
     refData->m_hBitmap = (WXHBITMAP)iconInfo.hbmColor;
 
-    // the mask returned by GetIconInfo() is inversed compared to the usual
-    // wxWin convention
-    refData->SetMask(wxInvertMask(iconInfo.hbmMask, w, h));
-
-
+#if wxUSE_WXDIB
+    // If the icon is 32 bits per pixel then it may have alpha channel data,
+    // although there are some icons that are 32 bpp but have no alpha... So
+    // convert to a DIB and manually check the 4th byte for each pixel.
+    BITMAP bm;
+    if ( ::GetObject(iconInfo.hbmColor, sizeof(BITMAP), (LPVOID)&bm)
+         && bm.bmBitsPixel == 32)
+    {
+        wxDIB dib(iconInfo.hbmColor);
+        if (dib.IsOk())
+        {
+            unsigned char* pixels = dib.GetData();
+            for (int idx=0; idx<w*h*4; idx+=4)
+            {
+                if (pixels[idx+3] != 0) 
+                {
+                    // If there is an alpha byte that is non-zero then set the
+                    // alpha flag and bail out of the loop.
+                    refData->m_hasAlpha = true;
+                    break;
+                }
+            }
+        }
+    }
+#endif
+    if ( !refData->m_hasAlpha )
+    {
+        // the mask returned by GetIconInfo() is inversed compared to the usual
+        // wxWin convention
+        refData->SetMask(wxInvertMask(iconInfo.hbmMask, w, h));
+    }
+    
     // delete the old one now as we don't need it any more
     ::DeleteObject(iconInfo.hbmMask);
 

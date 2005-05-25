@@ -37,6 +37,8 @@ wxMSW:
 - Compiles again with WIN64.
 - Restored separators on toolbars under XP themes.
 - Winelib compilation now works.
+- When converting a wxIcon to a bitmap check if the icon has an alpha
+  channel and set the bitmap to use it.
 
 wxGTK:
 
