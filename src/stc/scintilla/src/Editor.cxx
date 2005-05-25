@@ -3292,6 +3292,7 @@ void Editor::ClearAll() {
 	currentPos = 0;
 	SetTopLine(0);
 	SetVerticalScrollPos();
+        InvalidateStyleRedraw();        // RPD: patch #1106564
 }
 
 void Editor::ClearDocumentStyle() {
