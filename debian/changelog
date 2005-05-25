@@ -1,3 +1,17 @@
+wxwindows2.4 (2.4.3.1) unstable; urgency=high
+
+  * This one is for Sarge.
+  * Restore some symbols inadvertantly removed before the last snapshot.
+    We are going to tolerate the newly added symbols that should have
+    resulted in an soname change.  Not as a habit though.
+  * Restore the static builds for sarge, we can't be easily certain
+    of no package, or no build script they use, doing something
+    stupid that relies on them, even tangentially.  Too late to
+    test that now, so be on notice, its a sign-o-the-times for etch.
+  * New artwork.  See below.
+
+ -- Ron Lee <ron@debian.org>  Wed, 25 May 2005 11:36:49 +0930
+
 wxwindows2.4 (2.4.3) unstable; urgency=medium
 
   * Really should be high urgency, as this resolves more licence

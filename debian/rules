@@ -68,8 +68,10 @@ package_headers_msw     = wxwin$(release)-headers-msw
 
 # Build directories:
 objdir_wxbase_shared       = objs_wxbase_sh
+objdir_wxbase_static       = objs_wxbase_st
 objdir_wxbase_debug        = objs_wxbase_d
 objdir_gtk_shared          = objs_gtk_sh
+objdir_gtk_static          = objs_gtk_st
 objdir_gtk_debug           = objs_gtk_d
 objdir_gtk_install         = objs_gtk_install
 objdir_gtk_contrib_install = objs_gtk_contrib_install
@@ -85,8 +87,8 @@ objdir_msw_shared          = objs_msw_sh
 objdir_msw_static          = objs_msw_st
 objdir_msw_dbg             = objs_msw_d
 
-objdirs = $(objdir_wxbase_shared) $(objdir_wxbase_debug)                     \
-	  $(objdir_gtk_shared) $(objdir_gtk_debug)                           \
+objdirs = $(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
+	  $(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug)          \
 	  $(objdir_gtk_install) $(objdir_gtk_contrib_install)                \
 	  $(objdir_doc_cruft) $(objdir_doc) $(objdir_examples)               \
 	  $(objdir_wxbase_msw_shared) $(objdir_wxbase_msw_static)            \
@@ -99,8 +101,11 @@ objdirs = $(objdir_wxbase_shared) $(objdir_wxbase_debug)                     \
 
 # Build stamps:
 build_arch_stamps = build-wxbase-shared-stamp build-wxbase-debug-stamp       \
+                    build-wxbase-static-stamp                                \
                     build-gtk-shared-stamp build-gtk-debug-stamp             \
+                    build-gtk-static-stamp                                   \
                     build-contrib-shared-stamp                               \
+                    build-contrib-static-stamp                               \
 		    build-gtk-py-stamp build-i18n-stamp
 
 build_indep_stamps = build-examples-stamp build-doc-stamp
@@ -255,6 +260,23 @@ build-wxbase-shared-stamp: configure-wxbase-shared-stamp
 	cd $(objdir_wxbase_shared) && $(FAST_MAKE)
 	touch $@
 
+configure-wxbase-static-stamp:
+	dh_testdir
+	mkdir -p $(objdir_wxbase_static)
+	cd $(objdir_wxbase_static) 				\
+		&& ../configure --prefix=/usr 			\
+				--cache-file=$(config_cache) 	\
+				--disable-gui 			\
+				--disable-shared 		\
+				--with-zlib=sys			\
+				--enable-std_iostreams
+	touch $@
+
+build-wxbase-static-stamp: configure-wxbase-static-stamp
+	dh_testdir
+	cd $(objdir_wxbase_static) && $(FAST_MAKE)
+	touch $@
+
 configure-wxbase-debug-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_debug)
@@ -295,6 +317,28 @@ build-gtk-shared-stamp: configure-gtk-shared-stamp
 	cd $(objdir_gtk_shared) && $(FAST_MAKE)
 	touch $@
 
+configure-gtk-static-stamp:
+	dh_testdir
+	mkdir -p $(objdir_gtk_static)
+	cd $(objdir_gtk_static) 				\
+		&& ../configure --prefix=/usr 			\
+				--cache-file=$(config_cache) 	\
+				--with-gtk 			\
+				--with-opengl 			\
+				--disable-shared 		\
+				--with-zlib=sys 		\
+				--with-libjpeg=sys 		\
+				--with-libpng=sys 		\
+				--with-libtiff=sys 		\
+				--enable-dynamic-loader		\
+				--enable-std_iostreams
+	touch $@
+
+build-gtk-static-stamp: configure-gtk-static-stamp
+	dh_testdir
+	cd $(objdir_gtk_static) && $(FAST_MAKE)
+	touch $@
+
 configure-gtk-debug-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_debug)
@@ -324,6 +368,11 @@ build-contrib-shared-stamp: build-gtk-shared-stamp
 	cd $(objdir_gtk_shared)/contrib/src && $(FAST_MAKE)
 	cd $(objdir_gtk_shared)/contrib/utils/wxrc && $(FAST_MAKE)
 	cd $(objdir_gtk_shared)/contrib/utils/wxrcedit && $(FAST_MAKE)
+	touch $@
+
+build-contrib-static-stamp: build-gtk-static-stamp
+	dh_testdir
+	cd $(objdir_gtk_static)/contrib/src && $(FAST_MAKE)
 	touch $@
 
 purge-dbg-py:
@@ -561,13 +610,14 @@ install-wxbase-lib: build-wxbase-shared-stamp
 	dh_install $(objdir_wxbase_shared)/lib/*.so.* 	usr/lib
 
 install-wxbase-dev: DH_OPTIONS=-p$(package_wxbase_dev)
-install-wxbase-dev: build-wxbase-shared-stamp
+install-wxbase-dev: build-wxbase-static-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
 	dh_install $(objdir_wxbase_shared)/wxbase-$(release)-config 	usr/bin
 	dh_install $(objdir_wxbase_shared)/lib/{wx,*.so} 		usr/lib
+	dh_install $(objdir_wxbase_static)/lib/*.a 			usr/lib
 
 install-wxbase-dbg: DH_OPTIONS=-p$(package_wxbase_dbg)
 install-wxbase-dbg: build-wxbase-debug-stamp
@@ -595,13 +645,14 @@ install-gtk-lib: build-gtk-shared-stamp install-gtk-shared-stamp
 	dh_install $(objdir_gtk_install)/lib/*.so.* 	usr/lib
 
 install-gtk-dev: DH_OPTIONS=-p$(package_gtk_dev)
-install-gtk-dev: install-gtk-shared-stamp
+install-gtk-dev: build-gtk-static-stamp install-gtk-shared-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
 	dh_install $(objdir_gtk_install)/bin/wxgtk-$(release)-config 	usr/bin
 	dh_install $(objdir_gtk_install)/lib/{wx,*.so} 			usr/lib
+	dh_install $(objdir_gtk_static)/lib/libwx_gtk{-,_gl}*.a 	usr/lib
 
 install-gtk-dbg: DH_OPTIONS=-p$(package_gtk_dbg)
 install-gtk-dbg: build-gtk-debug-stamp
@@ -629,13 +680,15 @@ install-gtk-contrib: build-contrib-shared-stamp install-gtk-contrib-stamp
 	dh_install $(objdir_gtk_contrib_install)/lib/*.so.* 		usr/lib
 
 install-gtk-contrib-dev: DH_OPTIONS=-p$(package_gtk_contrib_dev)
-install-gtk-contrib-dev: install-gtk-contrib-stamp
+install-gtk-contrib-dev: build-contrib-static-stamp install-gtk-contrib-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
 	dh_install $(objdir_gtk_contrib_install)/include 		usr
 	dh_install $(objdir_gtk_contrib_install)/lib/*.so 		usr/lib
+	dh_install -Xlibwx_gtk- -Xlibwx_gtk_gl- 				\
+		   $(objdir_gtk_static)/lib/*.a 			usr/lib
 
 	dh_install $(objdir_gtk_shared)/contrib/utils/wxrc/wxrc		usr/bin
 	dh_install $(objdir_gtk_shared)/contrib/utils/wxrcedit/wxrcedit	usr/bin
