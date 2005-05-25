@@ -56,6 +56,15 @@
 // include <commctrl.h> "properly"
 #include "wx/msw/wrapcctl.h"
 
+// Currently gcc and watcom don't define NMLVFINDITEM, and DMC only defines
+// it by its old name NM_FINDTIEM.
+//
+#if defined __VISUALC__ || defined __BORLANDC__ || defined NMLVFINDITEM
+    #define HAVE_NMLVFINDITEM 1
+#elif defined __DMC__ || defined NM_FINDITEM
+    #define HAVE_NM_FINDITEM 1
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -2133,8 +2142,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
-#if 0
-disable temporary for correct building before the missing headers are not completed
+#if HAVE_NMLVFINDITEM || HAVE_NM_FINDITEM
             case LVN_ODFINDITEM:
                 // this message is only used with the virtual list control but
                 // even there we don't want to always use it: in a control with
@@ -2143,7 +2151,11 @@ disable temporary for correct building before the missing headers are not comple
                 // application waiting while it performs linear search
                 if ( IsVirtual() && GetItemCount() <= 1000 )
                 {
+#if HAVE_NMLVFINDITEM
                     NMLVFINDITEM* pFindInfo = (NMLVFINDITEM*)lParam;
+#else
+                    NM_FINDTIEM* pFindInfo = (NM_FINDTIEM*)lParam;
+#endif
 
                     // no match by default
                     *result = -1;
@@ -2204,7 +2216,7 @@ disable temporary for correct building before the missing headers are not comple
                     processed = false;
                 }
                 break;
-#endif
+#endif // HAVE_NMLVFINDITEM || HAVE_NM_FINDITEM
 
             case LVN_GETDISPINFO:
                 if ( IsVirtual() )
