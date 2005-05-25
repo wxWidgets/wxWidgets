@@ -1370,7 +1370,7 @@ void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
             pRect = NULL;
         }
 
-	// RedrawWindow not available on SmartPhone or eVC++ 3
+        // RedrawWindow not available on SmartPhone or eVC++ 3
 #if !defined(__SMARTPHONE__) && !(defined(_WIN32_WCE) && _WIN32_WCE < 400)
         UINT flags = RDW_INVALIDATE | RDW_ALLCHILDREN;
         if ( eraseBack )
@@ -1659,7 +1659,8 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     // save the pending dimensions or not.  This isn't done in DoMoveWindow
     // (where the hdwp is used) because some controls have thier own
     // DoMoveWindow so it is easier to catch it here.
-    HDWP hdwp = GetParent() && !IsTopLevel() ? (HDWP)GetParent()->m_hDWP : NULL;
+    wxWindowMSW *parent = wxDynamicCast(GetParent(), wxWindowMSW);
+    HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
     if (hdwp)
     {
         m_pendingPosition = wxPoint(x, y);
@@ -4286,7 +4287,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
               node;
               node = node->GetNext() )
         {
-            wxWindow *child = node->GetData();
+            wxWindowMSW *child = node->GetData();
             child->m_pendingPosition = wxDefaultPosition;
             child->m_pendingSize = wxDefaultSize;
         }
