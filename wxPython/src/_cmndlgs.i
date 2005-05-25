@@ -353,21 +353,34 @@ public:
                             int choices=0, wxString* choices_array=NULL,
                             long style = wxCHOICEDLG_STYLE,
                             const wxPoint& pos = wxDefaultPosition),
-        "__init__(Window parent, String message, String caption,
-    List choices=[], long style=CHOICEDLG_STYLE,
+        "__init__(self, Window parent, String message, String caption,
+    List choices=None, long style=CHOICEDLG_STYLE,
     Point pos=DefaultPosition) -> MultiChoiceDialog",
-        "Constructor.  Use ShowModal method to show the dialog.", "");
+        "Constructor.  Use the `ShowModal` method to show the dialog.
+
+    :param parent: The parent window.
+    :param message: Text to display above the list of selections.
+    :param caption: Text to use in the title bar of the dialog.
+    :param choices: A list of strings or unicode objects that the
+        user is allowed to choose from.
+    :param style: Styles to apply to the dialog.  The default value is
+        equivallent to wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER|wx.OK|wx.CANCEL|wx.CENTER.
+    :param pos: Where to position the dialog (not used on Windows)
+
+", "");
 
     
     DocDeclAStr(
         void, SetSelections(const wxArrayInt& selections),
         "SetSelections(List selections)",
         "Specify the items in the list that should be selected, using a list of
-integers.", "");
+integers.  The list should specify the indexes of the items that
+should be selected.", "");
 
     DocAStr(GetSelections,
             "GetSelections() -> [selections]",
-            "Returns a list of integers representing the items that are selected.", "");
+            "Returns a list of integers representing the items that are selected.
+If an item is selected then its index will appear in the list.", "");
     %extend {
         PyObject* GetSelections() {
             return wxArrayInt2PyList_helper(self->GetSelections());
