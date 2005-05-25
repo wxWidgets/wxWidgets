@@ -1659,7 +1659,7 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     // save the pending dimensions or not.  This isn't done in DoMoveWindow
     // (where the hdwp is used) because some controls have thier own
     // DoMoveWindow so it is easier to catch it here.
-    wxWindowMSW *parent = wxDynamicCast(GetParent(), wxWindowMSW);
+    wxWindowMSW *parent = GetParent();
     HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
     if (hdwp)
     {
