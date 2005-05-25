@@ -756,7 +756,7 @@ public:
     HWND m_hNotifyWnd;
     wxSize m_bestSize;
 
-    DECLARE_DYNAMIC_CLASS(wxAMMediaBackend);
+    DECLARE_DYNAMIC_CLASS(wxAMMediaBackend)
 };
 
 //---------------------------------------------------------------------------
@@ -852,6 +852,17 @@ typedef unsigned char                   Str255[256];
 #define CGrafPtr struct GrafPort *
 #define TimeScale long
 #define TimeBase struct TimeBaseRecord *
+
+#ifndef URLDataHandlerSubType
+#if defined(__WATCOMC__) || defined(__MINGW32__)
+// use magic numbers for compilers which complain about multicharacter integers
+const OSType URLDataHandlerSubType     = 1970433056;
+const OSType VisualMediaCharacteristic = 1702454643;
+#else
+const OSType URLDataHandlerSubType     = 'url ';
+const OSType VisualMediaCharacteristic = 'eyes';
+#endif
+#endif
 
 struct FSSpec {
     short      vRefNum;
@@ -1074,7 +1085,7 @@ public:
     wxQuickTimeLibrary m_lib;
 
 
-    DECLARE_DYNAMIC_CLASS(wxQTMediaBackend);
+    DECLARE_DYNAMIC_CLASS(wxQTMediaBackend)
 };
 
 
@@ -2367,7 +2378,7 @@ bool wxQTMediaBackend::Load(const wxURI& location)
     //create the movie from the handle that refers to the URI
     OSErr err = m_lib.NewMovieFromDataRef(&m_movie, newMovieActive,
                                 NULL, theHandle,
-                                'url'); //URLDataHandlerSubType
+                                URLDataHandlerSubType);
 
     m_lib.DisposeHandle(theHandle);
 
@@ -2411,7 +2422,7 @@ void wxQTMediaBackend::FinishLoad()
 
     //reparent movie/*AudioMediaCharacteristic*/
     if(m_lib.GetMovieIndTrackType(m_movie, 1,
-                            'eyes', //VisualMediaCharacteristic,
+                            VisualMediaCharacteristic,
                             (1 << 1) //movieTrackCharacteristic
                             | (1 << 2) //movieTrackEnabledOnly
                             ) != NULL)
