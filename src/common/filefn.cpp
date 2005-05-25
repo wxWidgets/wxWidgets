@@ -1924,7 +1924,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 //
 wxFileKind wxGetFileKind(int fd)
 {
-#if defined __WXMSW__ && !defined __WXWINCE__ && defined wxGetOSFHandle && !defined(__WINE__)
+#if defined __WXMSW__ && !defined __WXWINCE__ && defined wxGetOSFHandle
     switch (::GetFileType(wxGetOSFHandle(fd)) & ~FILE_TYPE_REMOTE)
     {
         case FILE_TYPE_CHAR:
