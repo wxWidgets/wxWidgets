@@ -147,7 +147,7 @@ protected:
 #include "../../art/copy.xpm"
 #include "../../art/cut.xpm"
 #include "../../art/paste.xpm"
-#include "../../art/delete_.xpm"
+#include "../../art/delete.xpm"
 #include "../../art/undo.xpm"
 #include "../../art/redo.xpm"
 #include "../../art/quit.xpm"
@@ -206,7 +206,7 @@ wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
     ART(wxART_COPY,                                copy)
     ART(wxART_CUT,                                 cut)
     ART(wxART_PASTE,                               paste)
-    ART(wxART_DELETE,                              delete_)
+    ART(wxART_DELETE,                              delete)
     ART(wxART_UNDO,                                undo)
     ART(wxART_REDO,                                redo)
     ART(wxART_QUIT,                                quit)
