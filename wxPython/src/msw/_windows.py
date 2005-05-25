@@ -2656,11 +2656,22 @@ class MultiChoiceDialog(Dialog):
         return "<%s.%s; proxy of C++ wxMultiChoiceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, String message, String caption,
-            List choices=[], long style=CHOICEDLG_STYLE,
+        __init__(self, Window parent, String message, String caption,
+            List choices=None, long style=CHOICEDLG_STYLE,
             Point pos=DefaultPosition) -> MultiChoiceDialog
 
-        Constructor.  Use ShowModal method to show the dialog.
+        Constructor.  Use the `ShowModal` method to show the dialog.
+
+            :param parent: The parent window.
+            :param message: Text to display above the list of selections.
+            :param caption: Text to use in the title bar of the dialog.
+            :param choices: A list of strings or unicode objects that the
+                user is allowed to choose from.
+            :param style: Styles to apply to the dialog.  The default value is
+                equivallent to wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER|wx.OK|wx.CANCEL|wx.CENTER.
+            :param pos: Where to position the dialog (not used on Windows)
+
+
         """
         newobj = _windows_.new_MultiChoiceDialog(*args, **kwargs)
         self.this = newobj.this
@@ -2673,7 +2684,8 @@ class MultiChoiceDialog(Dialog):
         SetSelections(List selections)
 
         Specify the items in the list that should be selected, using a list of
-        integers.
+        integers.  The list should specify the indexes of the items that
+        should be selected.
         """
         return _windows_.MultiChoiceDialog_SetSelections(*args, **kwargs)
 
@@ -2682,6 +2694,7 @@ class MultiChoiceDialog(Dialog):
         GetSelections() -> [selections]
 
         Returns a list of integers representing the items that are selected.
+        If an item is selected then its index will appear in the list.
         """
         return _windows_.MultiChoiceDialog_GetSelections(*args, **kwargs)
 

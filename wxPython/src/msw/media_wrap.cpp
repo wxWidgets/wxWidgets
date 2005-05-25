@@ -1435,6 +1435,9 @@ public:
     
     wxFileOffset Tell()    { return 0; }
     wxFileOffset Length()    { return 0; }
+
+    double GetVolume() { return 0.0; }
+    bool   SetVolume(double dVolume) { return false; }
 };
 
 const wxEventType wxEVT_MEDIA_FINISHED = 0;
@@ -1561,9 +1564,6 @@ SWIG_Check_long(PyObject* obj)
   return SWIG_AsVal_long(obj, (long*)0);
 }
 
-static bool wxMediaCtrl_LoadFromURI(wxMediaCtrl *self,wxString const &location){
-            return self->Load(wxURI(location));
-        }
 
   /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,66,SWIG_define@*/
 #define SWIG_From_double PyFloat_FromDouble
@@ -1604,6 +1604,9 @@ SWIG_Check_double(PyObject* obj)
   return SWIG_AsVal_double(obj, (double*)0);
 }
 
+static bool wxMediaCtrl_LoadFromURI(wxMediaCtrl *self,wxString const &location){
+            return self->Load(wxURI(location));
+        }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2050,6 +2053,68 @@ static PyObject *_wrap_MediaCtrl_Stop(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
+static PyObject *_wrap_MediaCtrl_GetVolume(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    double result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetVolume",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (double)(arg1)->GetVolume();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_double((double)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MediaCtrl_SetVolume(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    double arg2 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dVolume", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_SetVolume",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (double)(SWIG_As_double(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->SetVolume(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_MediaCtrl_Load(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
@@ -2351,6 +2416,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MediaCtrl_Play", (PyCFunction) _wrap_MediaCtrl_Play, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_Pause", (PyCFunction) _wrap_MediaCtrl_Pause, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_Stop", (PyCFunction) _wrap_MediaCtrl_Stop, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_GetVolume", (PyCFunction) _wrap_MediaCtrl_GetVolume, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_SetVolume", (PyCFunction) _wrap_MediaCtrl_SetVolume, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_Load", (PyCFunction) _wrap_MediaCtrl_Load, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_LoadFromURI", (PyCFunction) _wrap_MediaCtrl_LoadFromURI, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_GetState", (PyCFunction) _wrap_MediaCtrl_GetState, METH_VARARGS | METH_KEYWORDS, NULL},

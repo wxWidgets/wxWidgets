@@ -49385,6 +49385,156 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"PAPER_A3_EXTRA_TRANSVERSE", SWIG_From_int((int)(wxPAPER_A3_EXTRA_TRANSVERSE))); 
     }
     {
+        PyDict_SetItemString(d,"PAPER_DBL_JAPANESE_POSTCARD", SWIG_From_int((int)(wxPAPER_DBL_JAPANESE_POSTCARD))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_A6", SWIG_From_int((int)(wxPAPER_A6))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_KAKU2", SWIG_From_int((int)(wxPAPER_JENV_KAKU2))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_KAKU3", SWIG_From_int((int)(wxPAPER_JENV_KAKU3))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_CHOU3", SWIG_From_int((int)(wxPAPER_JENV_CHOU3))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_CHOU4", SWIG_From_int((int)(wxPAPER_JENV_CHOU4))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_LETTER_ROTATED", SWIG_From_int((int)(wxPAPER_LETTER_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_A3_ROTATED", SWIG_From_int((int)(wxPAPER_A3_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_A4_ROTATED", SWIG_From_int((int)(wxPAPER_A4_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_A5_ROTATED", SWIG_From_int((int)(wxPAPER_A5_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_B4_JIS_ROTATED", SWIG_From_int((int)(wxPAPER_B4_JIS_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_B5_JIS_ROTATED", SWIG_From_int((int)(wxPAPER_B5_JIS_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JAPANESE_POSTCARD_ROTATED", SWIG_From_int((int)(wxPAPER_JAPANESE_POSTCARD_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_DBL_JAPANESE_POSTCARD_ROTATED", SWIG_From_int((int)(wxPAPER_DBL_JAPANESE_POSTCARD_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_A6_ROTATED", SWIG_From_int((int)(wxPAPER_A6_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_KAKU2_ROTATED", SWIG_From_int((int)(wxPAPER_JENV_KAKU2_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_KAKU3_ROTATED", SWIG_From_int((int)(wxPAPER_JENV_KAKU3_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_CHOU3_ROTATED", SWIG_From_int((int)(wxPAPER_JENV_CHOU3_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_CHOU4_ROTATED", SWIG_From_int((int)(wxPAPER_JENV_CHOU4_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_B6_JIS", SWIG_From_int((int)(wxPAPER_B6_JIS))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_B6_JIS_ROTATED", SWIG_From_int((int)(wxPAPER_B6_JIS_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_12X11", SWIG_From_int((int)(wxPAPER_12X11))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_YOU4", SWIG_From_int((int)(wxPAPER_JENV_YOU4))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_JENV_YOU4_ROTATED", SWIG_From_int((int)(wxPAPER_JENV_YOU4_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_P16K", SWIG_From_int((int)(wxPAPER_P16K))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_P32K", SWIG_From_int((int)(wxPAPER_P32K))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_P32KBIG", SWIG_From_int((int)(wxPAPER_P32KBIG))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_1", SWIG_From_int((int)(wxPAPER_PENV_1))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_2", SWIG_From_int((int)(wxPAPER_PENV_2))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_3", SWIG_From_int((int)(wxPAPER_PENV_3))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_4", SWIG_From_int((int)(wxPAPER_PENV_4))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_5", SWIG_From_int((int)(wxPAPER_PENV_5))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_6", SWIG_From_int((int)(wxPAPER_PENV_6))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_7", SWIG_From_int((int)(wxPAPER_PENV_7))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_8", SWIG_From_int((int)(wxPAPER_PENV_8))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_9", SWIG_From_int((int)(wxPAPER_PENV_9))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_10", SWIG_From_int((int)(wxPAPER_PENV_10))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_P16K_ROTATED", SWIG_From_int((int)(wxPAPER_P16K_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_P32K_ROTATED", SWIG_From_int((int)(wxPAPER_P32K_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_P32KBIG_ROTATED", SWIG_From_int((int)(wxPAPER_P32KBIG_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_1_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_1_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_2_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_2_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_3_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_3_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_4_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_4_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_5_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_5_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_6_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_6_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_7_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_7_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_8_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_8_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_9_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_9_ROTATED))); 
+    }
+    {
+        PyDict_SetItemString(d,"PAPER_PENV_10_ROTATED", SWIG_From_int((int)(wxPAPER_PENV_10_ROTATED))); 
+    }
+    {
         PyDict_SetItemString(d,"DUPLEX_SIMPLEX", SWIG_From_int((int)(wxDUPLEX_SIMPLEX))); 
     }
     {
