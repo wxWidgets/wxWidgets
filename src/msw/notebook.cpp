@@ -497,12 +497,12 @@ wxRect wxNotebook::GetPageSize() const
     ::GetClientRect(GetHwnd(), &rc);
 
     // This check is to work around a bug in TabCtrl_AdjustRect which will
-    // cause a crash on win2k, or on XP with themes disabled, if the
-    // wxNB_MULTILINE style is used and the rectangle is very small, (such as
-    // when the notebook is first created.)  The value of 20 is just
-    // arbitrarily chosen, if there is a better way to determine this value
-    // then please do so.  --RD
-    if ( !HasFlag(wxNB_MULTILINE) || (rc.right > 20 && rc.bottom > 20) )
+    // cause a crash on win2k or on XP with themes disabled if either
+    // wxNB_MULTILINE is used or tabs are placed on a side, if the rectangle
+    // is too small.
+    //
+    // The value of 20 is chosen arbitrarily but seems to work
+    if ( rc.right > 20 && rc.bottom > 20 )
     {
         TabCtrl_AdjustRect(GetHwnd(), false, &rc);
 
