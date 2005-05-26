@@ -240,8 +240,7 @@ def runTest(frame, nb, log):
     # setup some markers
     ed.SetMarginType(1, stc.STC_MARGIN_SYMBOL)
     ed.MarkerDefine(0, stc.STC_MARK_ROUNDRECT, "#CCFF00", "RED")
-    #ed.MarkerDefine(1, stc.STC_MARK_CIRCLE, "FOREST GREEN", "SIENNA")
-    ed.MarkerDefineBitmap(1, images.getFolder1Bitmap())
+    ed.MarkerDefine(1, stc.STC_MARK_CIRCLE, "FOREST GREEN", "SIENNA")
     ed.MarkerDefine(2, stc.STC_MARK_SHORTARROW, "blue", "blue")
     ed.MarkerDefine(3, stc.STC_MARK_ARROW, "#00FF00", "#00FF00")
 
