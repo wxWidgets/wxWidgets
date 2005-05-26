@@ -29901,8 +29901,10 @@ rm -f conftest.err conftest.$ac_objext \
       ;;
 
       powerpc-*-darwin* )
-        SAMPLES_RPATH_POSTLINK="\$(top_builddir)change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
-        cat <<EOF >change-install-names
+        install_name_tool=`which install_name_tool`
+        if test "$install_name_tool" -a -x "$install_name_tool"; then
+            SAMPLES_RPATH_POSTLINK="\$(top_builddir)change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
+            cat <<EOF >change-install-names
 #!/bin/sh
 libnames=\`cd \${1} ; ls -1 | grep '\.[0-9][0-9]*\.dylib\$'\`
 inst_cmd="install_name_tool "
@@ -29911,7 +29913,8 @@ for i in \${libnames} ; do
 done
 \${inst_cmd} \${3}
 EOF
-        chmod +x change-install-names
+            chmod +x change-install-names
+        fi
       ;;
 
       *-*-cygwin* | *-*-mingw32* )
