@@ -753,11 +753,12 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
         // the combobox doesn't report its height correctly (it returns the
         // height including the drop down list) so don't use it
         height += m_spinYear->GetBestSize().y;
-    }
+
 
 	wxCoord w2= m_comboMonth->GetBestSize().x + HORZ_MARGIN + GetCharWidth()*6;
 	if (width < w2)
 	  width=w2;
+    }
 
     if ( !HasFlag(wxBORDER_NONE) )
     {
@@ -891,7 +892,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetTextForeground(*wxBLACK);
         dc.SetBrush(wxBrush(m_colHeaderBg, wxSOLID));
         dc.SetPen(wxPen(m_colHeaderBg, 1, wxSOLID));
-        dc.DrawRectangle(x0, y, GetClientSize().x, m_heightRow);
+        dc.DrawRectangle(0, y, GetClientSize().x, m_heightRow);
 
         // Get extent of month-name + year
         wxCoord monthw, monthh;
