@@ -14,29 +14,22 @@ class TestPanel(wx.Panel):
                              | wx.calendar.CAL_SUNDAY_FIRST
                              | wx.calendar.CAL_SEQUENTIAL_MONTH_SELECTION
                              )
-
-        self.Bind(wx.calendar.EVT_CALENDAR, self.OnCalSelected, id=cal.GetId())
-
-        b = wx.Button(self, -1, "Destroy the Calendar", pos = (275, 50))
-        self.Bind(wx.EVT_BUTTON, self.OnButton, id= b.GetId())
         self.cal = cal
+        self.Bind(wx.calendar.EVT_CALENDAR, self.OnCalSelected, id=cal.GetId())
 
         # Set up control to display a set of holidays:
         self.Bind(wx.calendar.EVT_CALENDAR_MONTH, self.OnChangeMonth, cal)
         self.holidays = [(1,1), (10,31), (12,25) ]    # (these don't move around)
         self.OnChangeMonth()
 
-    def OnButton(self, evt):
-        if self.cal is not None:
-            self.cal.Destroy()
-            self.cal = None
+        cal2 = wx.calendar.CalendarCtrl(self, -1, wx.DateTime_Now(), pos = (325,50))
+
 
     def OnCalSelected(self, evt):
         self.log.write('OnCalSelected: %s\n' % evt.GetDate())
 
     def OnChangeMonth(self, evt=None):
         cur_month = self.cal.GetDate().GetMonth() + 1   # convert wxDateTime 0-11 => 1-12
-
         for month, day in self.holidays:
             if month == cur_month:
                 self.cal.SetHoliday(day)
