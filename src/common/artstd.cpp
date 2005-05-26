@@ -148,6 +148,7 @@ protected:
 #include "../../art/cut.xpm"
 #include "../../art/paste.xpm"
 #include "../../art/delete.xpm"
+#include "../../art/new.xpm"
 #include "../../art/undo.xpm"
 #include "../../art/redo.xpm"
 #include "../../art/quit.xpm"
@@ -212,6 +213,8 @@ wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
     ART(wxART_QUIT,                                quit)
     ART(wxART_FIND,                                find)
     ART(wxART_FIND_AND_REPLACE,                    findrepl)
+    ART(wxART_NEW,                                 new)
+       
         
     return wxNullBitmap;
 }

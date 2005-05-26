@@ -76,6 +76,7 @@ MAKE_CONST_WXSTRING(ART_COPY);
 MAKE_CONST_WXSTRING(ART_CUT);
 MAKE_CONST_WXSTRING(ART_PASTE);
 MAKE_CONST_WXSTRING(ART_DELETE);
+MAKE_CONST_WXSTRING(ART_NEW);
 MAKE_CONST_WXSTRING(ART_UNDO);
 MAKE_CONST_WXSTRING(ART_REDO);
 MAKE_CONST_WXSTRING(ART_QUIT);
@@ -160,7 +161,6 @@ follow the freedesktop.org Icon Themes specification.  Note that themes are
 not guaranteed to contain all icons, so wx.ArtProvider may return wx.NullBitmap
 or wx.NullIcon.  The default theme is typically installed in /usr/share/icons/hicolor.
 
-
     * wx.ART_ADD_BOOKMARK
     * wx.ART_DEL_BOOKMARK
     * wx.ART_HELP_SIDE_PANEL
@@ -175,13 +175,20 @@ or wx.NullIcon.  The default theme is typically installed in /usr/share/icons/hi
     * wx.ART_GO_TO_PARENT
     * wx.ART_GO_HOME
     * wx.ART_FILE_OPEN
+    * wx.ART_FILE_SAVE
+    * wx.ART_FILE_SAVE_AS
     * wx.ART_PRINT
     * wx.ART_HELP
     * wx.ART_TIP
     * wx.ART_REPORT_VIEW
     * wx.ART_LIST_VIEW
     * wx.ART_NEW_DIR
+    * wx.ART_HARDDISK
+    * wx.ART_FLOPPY
+    * wx.ART_CDROM
+    * wx.ART_REMOVABLE
     * wx.ART_FOLDER
+    * wx.ART_FOLDER_OPEN
     * wx.ART_GO_DIR_UP
     * wx.ART_EXECUTABLE_FILE
     * wx.ART_NORMAL_FILE
@@ -191,7 +198,17 @@ or wx.NullIcon.  The default theme is typically installed in /usr/share/icons/hi
     * wx.ART_QUESTION
     * wx.ART_WARNING
     * wx.ART_INFORMATION
-    * wx.ART_MISSING_IMAGE 
+    * wx.ART_MISSING_IMAGE
+    * wx.ART_COPY
+    * wx.ART_CUT
+    * wx.ART_PASTE
+    * wx.ART_DELETE
+    * wx.ART_NEW
+    * wx.ART_UNDO
+    * wx.ART_REDO
+    * wx.ART_QUIT
+    * wx.ART_FIND
+    * wx.ART_FIND_AND_REPLACE
 
 
 Clients

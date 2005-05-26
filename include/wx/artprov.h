@@ -98,6 +98,7 @@ typedef wxString wxArtID;
 #define wxART_CUT                  wxART_MAKE_ART_ID(wxART_CUT)
 #define wxART_PASTE                wxART_MAKE_ART_ID(wxART_PASTE)
 #define wxART_DELETE               wxART_MAKE_ART_ID(wxART_DELETE)
+#define wxART_NEW                  wxART_MAKE_ART_ID(wxART_NEW)
 
 #define wxART_UNDO                 wxART_MAKE_ART_ID(wxART_UNDO)
 #define wxART_REDO                 wxART_MAKE_ART_ID(wxART_REDO)
