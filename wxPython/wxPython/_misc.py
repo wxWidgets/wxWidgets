@@ -443,6 +443,7 @@ wxART_COPY = wx._misc.ART_COPY
 wxART_CUT = wx._misc.ART_CUT
 wxART_PASTE = wx._misc.ART_PASTE
 wxART_DELETE = wx._misc.ART_DELETE
+wxART_NEW = wx._misc.ART_NEW
 wxART_UNDO = wx._misc.ART_UNDO
 wxART_REDO = wx._misc.ART_REDO
 wxART_QUIT = wx._misc.ART_QUIT
