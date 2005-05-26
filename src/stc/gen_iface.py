@@ -203,6 +203,8 @@ methodOverrideMap = {
         // convert bmp to a xpm in a string
         wxMemoryOutputStream strm;
         wxImage img = bmp.ConvertToImage();
+        if (img.HasAlpha())
+            img.ConvertAlphaToMask();
         img.SaveFile(strm, wxBITMAP_TYPE_XPM);
         size_t len = strm.GetSize();
         char* buff = new char[len+1];
@@ -299,6 +301,8 @@ methodOverrideMap = {
         // convert bmp to a xpm in a string
         wxMemoryOutputStream strm;
         wxImage img = bmp.ConvertToImage();
+        if (img.HasAlpha())
+            img.ConvertAlphaToMask();
         img.SaveFile(strm, wxBITMAP_TYPE_XPM);
         size_t len = strm.GetSize();
         char* buff = new char[len+1];
