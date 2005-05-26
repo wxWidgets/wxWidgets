@@ -19,7 +19,10 @@ class MemoryFile:
         self.name = name
         self.buffer = ''
     def write(self, data):
-        self.buffer += data.encode(g.currentEncoding)
+        if g.currentEncoding:
+            self.buffer += data.encode(g.currentEncoding)
+        else:
+            self.buffer += data.encode()
     def close(self):
         wxMemoryFSHandler_AddFile(self.name, self.buffer)
 
@@ -355,6 +358,8 @@ class HighLightBox:
     def Remove(self):
         map(wxWindow.Destroy, self.lines)
         g.testWin.highLight = None
+    def Refresh(self):
+        map(wxWindow.Refresh, self.lines)
 
 ################################################################################
 
@@ -648,6 +653,7 @@ class XML_Tree(wxTreeCtrl):
             g.testWin.highLight.Replace(pos, size)
         else:
             g.testWin.highLight = HighLightBox(pos, size)
+        g.testWin.highLight.Refresh()
         g.testWin.highLight.item = item
 
     def ShowTestWindow(self, item):
@@ -769,7 +775,7 @@ class XML_Tree(wxTreeCtrl):
         memFile.close()                 # write to wxMemoryFS
         xmlFlags = wxXRC_NO_SUBCLASSING
         # Use translations if encoding is not specified
-        if g.currentEncoding == 'ascii':
+        if not g.currentEncoding:
             xmlFlags != wxXRC_USE_LOCALE
         res = wxXmlResource('', xmlFlags)
         res.Load('memory:xxx.xrc')

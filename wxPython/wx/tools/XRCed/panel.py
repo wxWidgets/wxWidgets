@@ -13,6 +13,7 @@ class Panel(wxNotebook):
     def __init__(self, parent, id = -1):
         if wxPlatform != '__WXMAC__':   # some problems with this style on macs
             wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
+            self.SetBackgroundColour(parent.GetBackgroundColour())
         else:
             wxNotebook.__init__(self, parent, id)
         global panel

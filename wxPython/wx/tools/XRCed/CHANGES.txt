@@ -5,6 +5,12 @@ Using wx.GetDefaultPyEncoding/wx.SetDefaultPyEncoding for changing active encodi
 
 Fixed pasting siblings (Ctrl key pressed while pasting).
 
+Dealed with ascii build (Python does not recognize 'ascii' as valid encoding).
+If encoding is not specified it is not written in XRC. Will add more
+customization in the future.
+
+Changed to use SimpleTool instead or Toggle tool (does not work on Win32).
+
 0.1.5-1
 -------
 

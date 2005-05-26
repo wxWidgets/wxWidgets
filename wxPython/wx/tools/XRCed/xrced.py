@@ -198,9 +198,9 @@ class Frame(wxFrame):
         tb.AddSimpleTool(wxID_COPY, copy_bmp, 'Copy', 'Copy')
         tb.AddSimpleTool(self.ID_TOOL_PASTE, paste_bmp, 'Paste', 'Paste')
         tb.AddControl(wxStaticLine(tb, -1, size=(-1,23), style=wxLI_VERTICAL))
-        tb.AddCheckTool(self.ID_TOOL_LOCATE,
-                        images.getLocateBitmap(), images.getLocateArmedBitmap(),
-                        'Locate', 'Locate control in test window and select it')
+        tb.AddSimpleTool(self.ID_TOOL_LOCATE,
+                        images.getLocateBitmap(), #images.getLocateArmedBitmap(),
+                        'Locate', 'Locate control in test window and select it', True)
         tb.AddControl(wxStaticLine(tb, -1, size=(-1,23), style=wxLI_VERTICAL))
         tb.AddSimpleTool(self.ID_TEST, images.getTestBitmap(), 'Test', 'Test window')
         tb.AddSimpleTool(self.ID_REFRESH, images.getRefreshBitmap(),
@@ -977,6 +977,8 @@ Homepage: http://xrced.sourceforge.net\
             if dom.encoding:
                 g.currentEncoding = dom.encoding
                 wx.SetDefaultPyEncoding(g.currentEncoding.encode())
+            else:
+                g.currentEncoding = ''
             # Change dir
             self.dataFile = path = os.path.abspath(path)
             dir = os.path.dirname(path)
@@ -1016,9 +1018,9 @@ Homepage: http://xrced.sourceforge.net\
             if tree.selection and panel.IsModified():
                 self.OnRefresh(wxCommandEvent())
             if g.currentEncoding:
-                f = codecs.open(path, 'w', g.currentEncoding)
+                f = codecs.open(path, 'wt', g.currentEncoding)
             else:
-                f = codecs.open(path, 'w')
+                f = codecs.open(path, 'wt')
             # Make temporary copy for formatting it
             # !!! We can't clone dom node, it works only once
             #self.domCopy = tree.dom.cloneNode(True)
