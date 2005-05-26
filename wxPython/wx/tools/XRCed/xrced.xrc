@@ -388,11 +388,12 @@
                 <item>wxART_CUT</item>
                 <item>wxART_PASTE</item>
                 <item>wxART_DELETE</item>
+                <item>wxART_NEW</item>
                 <item>wxART_UNDO</item>
                 <item>wxART_REDO</item>
                 <item>wxART_QUIT</item>
                 <item>wxART_FIND</item>
-                <item>wxART_FIND</item>
+                <item>wxART_FIND_AND_REPLACE</item>
               </content>
             </object>
             <flag>wxRIGHT|wxEXPAND</flag>
