@@ -681,7 +681,7 @@ long wxMacExecute(wxChar **argv,
     //check for error
     if(status != noErr)
     {
-        wxLogDebug(wxString::Format(wxT("wxMacExecute ERROR: %d")), (int)status);
+        wxLogDebug(wxT("wxMacExecute ERROR: %d"), (int)status);
         return errorCode ;
     }
     return successCode; //success
