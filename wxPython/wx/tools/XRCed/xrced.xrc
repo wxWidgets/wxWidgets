@@ -179,6 +179,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxButton" name="BUTTON_REMOVE">
+                  <label>Remove</label>
                 </object>
                 <flag>wxEXPAND</flag>
               </object>
