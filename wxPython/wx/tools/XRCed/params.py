@@ -36,8 +36,6 @@ buttonSize = (35,-1)    # in dialog units, transformed to pixels in panel ctor
 class PPanel(wxPanel):
     def __init__(self, parent, name):
         wxPanel.__init__(self, parent, -1, name=name)
-        self.SetBackgroundColour(parent.GetBackgroundColour())
-        self.SetForegroundColour(parent.GetForegroundColour())
         self.modified = self.freeze = False
     def Enable(self, value):
         # Something strange is going on with enable so we make sure...
@@ -789,15 +787,9 @@ class ParamBitmap(PPanel):
         g.frame.res.LoadOnPanel(pre, parent, 'PANEL_BITMAP')
         self.this = pre.this
         self._setOORInfo(self)
-        self.SetBackgroundColour(parent.GetBackgroundColour())
-        self.SetForegroundColour(parent.GetForegroundColour())
         self.modified = self.freeze = False
         self.radio_std = XRCCTRL(self, 'RADIO_STD')
-        self.radio_std.SetBackgroundColour(parent.GetBackgroundColour())
-        self.radio_std.SetForegroundColour(parent.GetForegroundColour())
         self.radio_file = XRCCTRL(self, 'RADIO_FILE')
-        self.radio_file.SetBackgroundColour(parent.GetBackgroundColour())
-        self.radio_file.SetForegroundColour(parent.GetForegroundColour())
         self.combo = XRCCTRL(self, 'COMBO_STD')
         self.text = XRCCTRL(self, 'TEXT_FILE')
         self.button = XRCCTRL(self, 'BUTTON_BROWSE')

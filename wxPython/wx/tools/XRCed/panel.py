@@ -13,7 +13,6 @@ class Panel(wxNotebook):
     def __init__(self, parent, id = -1):
         if wxPlatform != '__WXMAC__':   # some problems with this style on macs
             wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
-            self.SetBackgroundColour(parent.GetBackgroundColour())
         else:
             wxNotebook.__init__(self, parent, id)
         global panel
@@ -172,8 +171,6 @@ class Panel(wxNotebook):
 class ParamPage(wxPanel):
     def __init__(self, parent, xxx):
         wxPanel.__init__(self, parent, -1)
-        self.SetBackgroundColour(parent.GetBackgroundColour())
-        self.SetForegroundColour(parent.GetForegroundColour())
         self.xxx = xxx
         # Register event handlers
         for id in paramIDs.values():
