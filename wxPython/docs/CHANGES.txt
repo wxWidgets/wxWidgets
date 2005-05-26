@@ -125,6 +125,21 @@ also applied patch for bug #1205691 Modified Fn keys don't work.
 
 wx.Image: Fixed to preserve alpha channel in Rotate90 method.
 
+wxMSW: Fixed incorrect background colour on wx.CheckListBox.
+
+wxMSW: Fixed drawing of owner drawn buttons with multiline labels
+
+Removed a bunch of unnecessary files, and removed or replaced images
+that we're not sure of their origin or license.
+
+The default DoGetBestSize is updated to not always return the current
+size if the window has no sizer, children, or minsize set.  Instead
+the current size is set as the minsize.  This solves the occasional
+problem where a sizer may cause a childless panel to grow but never
+shrink. 
+
+wxMSW: When converting a wx.Icon to a bitmap check if the icon has an
+alpha channel and set the bitmap to use it.
 
 
 
