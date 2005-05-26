@@ -507,7 +507,7 @@ void wxgtk_combo_size_request_callback(GtkWidget *widget,
         (gcombo->button, &entry_req );
     
     requisition->width = w - entry_req.width;
-    requisition->height = entry_req.height+4;  // TODO: why +4?
+    requisition->height = entry_req.height;
 }
 }
 
