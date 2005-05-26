@@ -259,11 +259,11 @@ the users can plug in their own wx.ArtProvider class and easily replace
 standard art with his/her own version. It is easy thing to do: all
 that is needed is to derive a class from wx.ArtProvider, override it's
 CreateBitmap method and register the provider with
-wx.ArtProvider_PushProvider.
+wx.ArtProvider.PushProvider.
 <p>
 
 This class can also be used to get the platform native icons as
-provided by wx.ArtProvider_GetBitmap or wx.ArtProvider_GetIcon methods.
+provided by wx.ArtProvider.GetBitmap or wx.ArtProvider.GetIcon methods.
 
 </body></html>
 """
