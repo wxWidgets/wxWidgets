@@ -153,6 +153,13 @@ also \helpref{wxCHECK\_VERSION}{wxcheckversion}}
 \twocolitem{wxUSE\_XXX}{if defined as $1$, feature XXX is active
 (the symbols of this form are always defined, use \#if and not \#ifdef to test
  for them)}
+\twocolitem{WX\_PRECOMP}{is defined if precompiled headers (PCH) are in use. In
+this case, \texttt{wx/wxprec.h} includes \texttt{wx/wx.h} which, in turn,
+includes a number of wxWidgets headers thus making it unnecessary to include
+them explicitly. However if this is not defined, you do need to include them
+and so the usual idiom which allows to support both cases is to first include 
+\texttt{wx/wxprec.h} and then, inside \texttt{#ifndef WX\_PRECOMP}, individual
+headers you need.}
 \twocolitem{\_UNICODE and UNICODE}{both are defined if wxUSE\_UNICODE is set to $1$}
 \twocolitem{wxUSE\_GUI}{this particular feature test macro is defined to $1$
 when compiling or using the library with the GUI features activated, if it is
