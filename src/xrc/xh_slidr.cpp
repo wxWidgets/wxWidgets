@@ -39,6 +39,7 @@ wxSliderXmlHandler::wxSliderXmlHandler()
     XRC_ADD_STYLE(wxSL_BOTTOM);
     XRC_ADD_STYLE(wxSL_BOTH);
     XRC_ADD_STYLE(wxSL_SELRANGE);
+    XRC_ADD_STYLE(wxSL_INVERSE);
     AddWindowStyles();
 }
 
