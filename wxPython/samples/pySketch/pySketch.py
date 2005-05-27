@@ -215,7 +215,7 @@ class DrawingFrame(wx.Frame):
                                           wx.NO_BORDER | wx.TB_FLAT)
 
         self.toolbar.AddSimpleTool(wx.ID_NEW,
-                                   wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR, tsize),
+                                   wx.ArtProvider.GetBitmap(wx.ART_NEW, wx.ART_TOOLBAR, tsize),
                                    "New")
         self.toolbar.AddSimpleTool(wx.ID_OPEN,
                                    wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, tsize),
