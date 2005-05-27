@@ -478,7 +478,7 @@ class xxxSlider(xxxObject):
     required = ['value', 'min', 'max']
     winStyles = ['wxSL_HORIZONTAL', 'wxSL_VERTICAL', 'wxSL_AUTOTICKS', 'wxSL_LABELS',
                  'wxSL_LEFT', 'wxSL_RIGHT', 'wxSL_TOP', 'wxSL_BOTTOM',
-                 'wxSL_BOTH', 'wxSL_SELRANGE']
+                 'wxSL_BOTH', 'wxSL_SELRANGE', 'wxSL_INVERSE']
 
 class xxxGauge(xxxObject):
     allParams = ['range', 'pos', 'size', 'style', 'value', 'shadow', 'bezel']
