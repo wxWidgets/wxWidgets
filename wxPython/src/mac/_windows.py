@@ -2629,7 +2629,7 @@ class MultiChoiceDialog(Dialog):
     def __init__(self, *args, **kwargs):
         """
         __init__(self, Window parent, String message, String caption,
-            List choices=None, long style=CHOICEDLG_STYLE,
+            List choices=EmptyList, long style=CHOICEDLG_STYLE,
             Point pos=DefaultPosition) -> MultiChoiceDialog
 
         Constructor.  Use the `ShowModal` method to show the dialog.
@@ -2685,7 +2685,7 @@ class SingleChoiceDialog(Dialog):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, String message, String caption,
-            List choices=[], long style=CHOICEDLG_STYLE,
+            List choices=EmptyList, long style=CHOICEDLG_STYLE,
             Point pos=DefaultPosition) -> SingleChoiceDialog
 
         Constructor.  Use ShowModal method to show the dialog.

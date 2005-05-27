@@ -481,7 +481,7 @@ class Choice(_core.ControlWithItems):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
-            List choices=[], long style=0, Validator validator=DefaultValidator,
+            List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> Choice
 
         Create and show a Choice control
@@ -495,7 +495,7 @@ class Choice(_core.ControlWithItems):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
-            List choices=[], long style=0, Validator validator=DefaultValidator,
+            List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
 
         Actually create the GUI Choice control for 2-phase creation
@@ -573,7 +573,7 @@ class ComboBox(_core.Control,_core.ItemContainer):
         """
         __init__(Window parent, int id, String value=EmptyString,
             Point pos=DefaultPosition, Size size=DefaultSize,
-            List choices=[], long style=0, Validator validator=DefaultValidator,
+            List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
             String name=ComboBoxNameStr) -> ComboBox
 
         Constructor, creates and shows a ComboBox control.
@@ -588,7 +588,7 @@ class ComboBox(_core.Control,_core.ItemContainer):
         """
         Create(Window parent, int id, String value=EmptyString,
             Point pos=DefaultPosition, Size size=DefaultSize,
-            List choices=[], long style=0, Validator validator=DefaultValidator,
+            List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
 
         Actually create the GUI wxComboBox control for 2-phase creation
