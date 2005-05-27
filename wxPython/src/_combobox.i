@@ -83,7 +83,7 @@ public:
                    const wxString& name = wxPyComboBoxNameStr),
         "__init__(Window parent, int id, String value=EmptyString,
     Point pos=DefaultPosition, Size size=DefaultSize,
-    List choices=[], long style=0, Validator validator=DefaultValidator,
+    List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
     String name=ComboBoxNameStr) -> ComboBox",
         "Constructor, creates and shows a ComboBox control.", "");
 
@@ -104,7 +104,7 @@ public:
                      const wxString& name = wxPyChoiceNameStr),
         "Create(Window parent, int id, String value=EmptyString,
     Point pos=DefaultPosition, Size size=DefaultSize,
-    List choices=[], long style=0, Validator validator=DefaultValidator,
+    List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
     String name=ChoiceNameStr) -> bool",
         "Actually create the GUI wxComboBox control for 2-phase creation", "");
     

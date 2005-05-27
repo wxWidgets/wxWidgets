@@ -51,7 +51,7 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxPyChoiceNameStr),
         "__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
-    List choices=[], long style=0, Validator validator=DefaultValidator,
+    List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
     String name=ChoiceNameStr) -> Choice",
         "Create and show a Choice control", "");
 
@@ -70,7 +70,7 @@ public:
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxPyChoiceNameStr),
         "Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
-    List choices=[], long style=0, Validator validator=DefaultValidator,
+    List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
     String name=ChoiceNameStr) -> bool",
         "Actually create the GUI Choice control for 2-phase creation", "");
     
