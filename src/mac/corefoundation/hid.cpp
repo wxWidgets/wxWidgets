@@ -573,13 +573,8 @@ bool wxGetKeyState (wxKeyCode key)
 //
 #include "wx/intl.h"
 
-#ifdef __WXCOCOA__
 #include <CoreFoundation/CoreFoundation.h>
 #include <ApplicationServices/ApplicationServices.h>
-#else
-#include "wx/mac/private.h"
-#include "LaunchServices.h"
-#endif
 
 #include "wx/uri.h"
 #include "wx/mac/corefoundation/cfstring.h"
