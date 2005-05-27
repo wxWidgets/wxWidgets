@@ -359,13 +359,11 @@ Source: "demo\demo.py";                     DestDir: "{app}\demo"; DestName: "de
 Source: "demo\*.py";                        DestDir: "{app}\demo"; 
 Source: "demo\*.xml";                       DestDir: "{app}\demo"; 
 Source: "demo\*.txt";                       DestDir: "{app}\demo"; 
-Source: "demo\*.ico";                       DestDir: "{app}\demo"; 
 
 Source: "demo\bitmaps\*.bmp";               DestDir: "{app}\demo\bitmaps"; 
 Source: "demo\bitmaps\*.gif";               DestDir: "{app}\demo\bitmaps"; 
 Source: "demo\bitmaps\*.jpg";               DestDir: "{app}\demo\bitmaps"; 
 Source: "demo\bitmaps\*.png";               DestDir: "{app}\demo\bitmaps"; 
-Source: "demo\bitmaps\*.ico";               DestDir: "{app}\demo\bitmaps"; 
 
 Source: "demo\bmp_source\*.gif";               DestDir: "{app}\demo\bmp_source"; 
 Source: "demo\bmp_source\*.bmp";               DestDir: "{app}\demo\bmp_source"; 
@@ -383,7 +381,6 @@ Source: "demo\data\*.txt";                  DestDir: "{app}\demo\data";
 Source: "demo\data\*.wav";                  DestDir: "{app}\demo\data"; 
 Source: "demo\data\*.wdr";                  DestDir: "{app}\demo\data"; 
 Source: "demo\data\*.xrc";                  DestDir: "{app}\demo\data"; 
-Source: "demo\data\*.gif";                  DestDir: "{app}\demo\data"; 
 Source: "demo\data\*.swf";                  DestDir: "{app}\demo\data";
 Source: "demo\data\*.mpg";                  DestDir: "{app}\demo\data";
 
@@ -411,7 +408,7 @@ Source: "samples\doodle\superdoodle.iss";   DestDir: "{app}\samples\doodle";
 
 Source: "samples\docview\*.py";                DestDir: "{app}\samples\docview"; 
 Source: "samples\pydocview\*.py";              DestDir: "{app}\samples\pydocview";
-Source: "samples\pydocview\*.jpg";             DestDir: "{app}\samples\pydocview";
+Source: "samples\pydocview\*.png";             DestDir: "{app}\samples\pydocview";
 Source: "samples\pydocview\*.txt";             DestDir: "{app}\samples\pydocview";
 
 Source: "samples\ide\*.py";                       DestDir: "{app}\samples\ide"; 
