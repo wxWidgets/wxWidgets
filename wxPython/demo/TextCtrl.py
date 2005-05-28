@@ -22,7 +22,7 @@ class TestPanel(wx.Panel):
 
         l1 = wx.StaticText(self, -1, "wx.TextCtrl")
         t1 = wx.TextCtrl(self, -1, "Test it out and see", size=(125, -1))
-        t1.SetInsertionPoint(0)
+        wx.CallAfter(t1.SetInsertionPoint, 0)
         self.tc1 = t1
 
         self.Bind(wx.EVT_TEXT, self.EvtText, t1)
