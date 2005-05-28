@@ -696,6 +696,12 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
+AEEventHandlerUPP sODocHandler = NULL ;
+AEEventHandlerUPP sOAppHandler = NULL ;
+AEEventHandlerUPP sPDocHandler = NULL ;
+AEEventHandlerUPP sRAppHandler = NULL ;
+AEEventHandlerUPP sQuitHandler = NULL ;
+
 bool wxApp::OnInitGui()
 {
     if( !wxAppBase::OnInitGui() )
@@ -712,21 +718,22 @@ bool wxApp::OnInitGui()
 
     if (!sm_isEmbedded)
     {
+        sODocHandler = NewAEEventHandlerUPP(AEHandleODoc) ;
+        sOAppHandler = NewAEEventHandlerUPP(AEHandleOApp) ;
+        sPDocHandler = NewAEEventHandlerUPP(AEHandlePDoc) ;
+        sRAppHandler = NewAEEventHandlerUPP(AEHandleRApp) ;
+        sQuitHandler = NewAEEventHandlerUPP(AEHandleQuit) ;
+
         AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,
-                               NewAEEventHandlerUPP(AEHandleODoc) ,
-                               0 , FALSE ) ;
+                               sODocHandler , 0 , FALSE ) ;
         AEInstallEventHandler( kCoreEventClass , kAEOpenApplication ,
-                               NewAEEventHandlerUPP(AEHandleOApp) ,
-                               0 , FALSE ) ;
+                               sOAppHandler , 0 , FALSE ) ;
         AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
-                               NewAEEventHandlerUPP(AEHandlePDoc) ,
-                               0 , FALSE ) ;
+                               sPDocHandler , 0 , FALSE ) ;
         AEInstallEventHandler( kCoreEventClass , kAEReopenApplication ,
-                               NewAEEventHandlerUPP(AEHandleRApp) ,
-                               0 , FALSE ) ;
+                               sRAppHandler , 0 , FALSE ) ;
         AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
-                               NewAEEventHandlerUPP(AEHandleQuit) ,
-                               0 , FALSE ) ;
+                               sQuitHandler , 0 , FALSE ) ;
     }
 
     return TRUE ;
@@ -763,9 +770,30 @@ void wxApp::CleanUp()
         ::DisposeRgn((RgnHandle)s_macCursorRgn);
     }
 
-    #if 0
-        TerminateAE() ;
-    #endif
+    if (!sm_isEmbedded)
+    {
+        RemoveEventHandler( (EventHandlerRef)(wxTheApp->m_macEventHandler) );
+    }
+	
+    if (!sm_isEmbedded)
+    {
+        AERemoveEventHandler( kCoreEventClass , kAEOpenDocuments ,
+                               sODocHandler , FALSE ) ;
+        AERemoveEventHandler( kCoreEventClass , kAEOpenApplication ,
+                               sOAppHandler , FALSE ) ;
+        AERemoveEventHandler( kCoreEventClass , kAEPrintDocuments ,
+                               sPDocHandler , FALSE ) ;
+        AERemoveEventHandler( kCoreEventClass , kAEReopenApplication ,
+                               sRAppHandler , FALSE ) ;
+        AERemoveEventHandler( kCoreEventClass , kAEQuitApplication ,
+                               sQuitHandler , FALSE ) ;
+                               
+        DisposeAEEventHandlerUPP( sODocHandler ) ;
+        DisposeAEEventHandlerUPP( sOAppHandler ) ;
+        DisposeAEEventHandlerUPP( sPDocHandler ) ;
+        DisposeAEEventHandlerUPP( sRAppHandler ) ;
+        DisposeAEEventHandlerUPP( sQuitHandler ) ;
+    }
 
     wxAppBase::CleanUp();
 }
