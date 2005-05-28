@@ -345,7 +345,7 @@ wxCursor::wxCursor(int cursor_type)
     }
     case wxCURSOR_SIZING:
     {
-      refData->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_SIZING"));
+      refData->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_SIZEALL);
       break;
     }
     case wxCURSOR_WATCH:

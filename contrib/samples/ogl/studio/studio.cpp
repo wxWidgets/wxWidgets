@@ -37,7 +37,6 @@
 #include "project.h"
 #include "symbols.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "bitmaps/new.xpm"
 #include "bitmaps/open.xpm"
 #include "bitmaps/save.xpm"
@@ -62,7 +61,6 @@
 #include "bitmaps/straight.xpm"
 
 #include "studio.xpm"
-#endif
 
 IMPLEMENT_APP(csApp)
 
@@ -315,18 +313,6 @@ void csApp::InitToolBar(wxToolBar* toolBar)
 {
     wxBitmap* bitmaps[10];
 
-#ifdef __WXMSW__
-    bitmaps[0] = new wxBitmap("new", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[1] = new wxBitmap("open", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[2] = new wxBitmap("save", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[3] = new wxBitmap("copy", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[4] = new wxBitmap("cut", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[5] = new wxBitmap("paste", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[6] = new wxBitmap("print", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[7] = new wxBitmap("help", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[8] = new wxBitmap("undo", wxBITMAP_TYPE_RESOURCE);
-    bitmaps[9] = new wxBitmap("redo", wxBITMAP_TYPE_RESOURCE);
-#elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     bitmaps[0] = new wxBitmap( new_xpm );
     bitmaps[1] = new wxBitmap( open_xpm );
     bitmaps[2] = new wxBitmap( save_xpm );
@@ -337,36 +323,33 @@ void csApp::InitToolBar(wxToolBar* toolBar)
     bitmaps[7] = new wxBitmap( help_xpm );
     bitmaps[8] = new wxBitmap( undo_xpm );
     bitmaps[9] = new wxBitmap( redo_xpm );
-#else
-#error "Not implemented for this platform."
-#endif
 
-  toolBar->AddTool(wxID_NEW, *bitmaps[0], wxNullBitmap, FALSE, -1, -1, NULL, "New file");
-  toolBar->AddTool(wxID_OPEN, *bitmaps[1], wxNullBitmap, FALSE, -1, -1, NULL, "Open file");
-  toolBar->AddTool(wxID_SAVE, *bitmaps[2], wxNullBitmap, FALSE, -1, -1, NULL, "Save file");
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_PRINT, *bitmaps[6], wxNullBitmap, FALSE, -1, -1, NULL, "Print");
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_COPY, *bitmaps[3], wxNullBitmap, FALSE, -1, -1, NULL, "Copy");
-  toolBar->AddTool(wxID_CUT, *bitmaps[4], wxNullBitmap, FALSE, -1, -1, NULL, "Cut");
-  toolBar->AddTool(wxID_PASTE, *bitmaps[5], wxNullBitmap, FALSE, -1, -1, NULL, "Paste");
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_UNDO, *bitmaps[8], wxNullBitmap, FALSE, -1, -1, NULL, "Undo");
-  toolBar->AddTool(wxID_REDO, *bitmaps[9], wxNullBitmap, FALSE, -1, -1, NULL, "Redo");
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_HELP, *bitmaps[7], wxNullBitmap, FALSE, -1, -1, NULL, "Help");
+    toolBar->AddTool(wxID_NEW, *bitmaps[0], wxNullBitmap, FALSE, -1, -1, NULL, "New file");
+    toolBar->AddTool(wxID_OPEN, *bitmaps[1], wxNullBitmap, FALSE, -1, -1, NULL, "Open file");
+    toolBar->AddTool(wxID_SAVE, *bitmaps[2], wxNullBitmap, FALSE, -1, -1, NULL, "Save file");
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_PRINT, *bitmaps[6], wxNullBitmap, FALSE, -1, -1, NULL, "Print");
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_COPY, *bitmaps[3], wxNullBitmap, FALSE, -1, -1, NULL, "Copy");
+    toolBar->AddTool(wxID_CUT, *bitmaps[4], wxNullBitmap, FALSE, -1, -1, NULL, "Cut");
+    toolBar->AddTool(wxID_PASTE, *bitmaps[5], wxNullBitmap, FALSE, -1, -1, NULL, "Paste");
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_UNDO, *bitmaps[8], wxNullBitmap, FALSE, -1, -1, NULL, "Undo");
+    toolBar->AddTool(wxID_REDO, *bitmaps[9], wxNullBitmap, FALSE, -1, -1, NULL, "Redo");
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_HELP, *bitmaps[7], wxNullBitmap, FALSE, -1, -1, NULL, "Help");
 
-  toolBar->Realize();
+    toolBar->Realize();
 
-  toolBar->EnableTool(wxID_COPY, FALSE);
-  toolBar->EnableTool(wxID_PASTE, FALSE);
-  toolBar->EnableTool(wxID_PRINT, FALSE);
-  toolBar->EnableTool(wxID_UNDO, FALSE);
-  toolBar->EnableTool(wxID_REDO, FALSE);
+    toolBar->EnableTool(wxID_COPY, FALSE);
+    toolBar->EnableTool(wxID_PASTE, FALSE);
+    toolBar->EnableTool(wxID_PRINT, FALSE);
+    toolBar->EnableTool(wxID_UNDO, FALSE);
+    toolBar->EnableTool(wxID_REDO, FALSE);
 
-  int i;
-  for (i = 0; i < 10; i++)
-    delete bitmaps[i];
+    int i;
+    for (i = 0; i < 10; i++)
+        delete bitmaps[i];
 }
 
 // Create and initialise the diagram toolbar
