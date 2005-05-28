@@ -22,6 +22,8 @@
 #include "wx/wfstream.h"
 #include "wx/image.h"
 #include "wx/gifdecod.h"
+#include "wx/log.h"
+#include "wx/dcmemory.h"
 #include "wx/animate/animate.h"
 
 /*
@@ -80,7 +82,7 @@ bool wxAnimationPlayer::Play(wxWindow& window, const wxPoint& pos, bool looped)
     {
         if (!Build())
         {
-            wxLogWarning("wxAnimationPlayer::Play: could not build the image cache.");
+            wxLogWarning(_T("wxAnimationPlayer::Play: could not build the image cache."));
             return FALSE;
         }
     }
@@ -212,7 +214,7 @@ bool wxAnimationPlayer::GetTransparentColour(wxColour& col) const
 }
 
 // Play the frame
-bool wxAnimationPlayer::PlayFrame(int frame, wxWindow& window, wxPoint& pos)
+bool wxAnimationPlayer::PlayFrame(int frame, wxWindow& window, const wxPoint& pos)
 {
     wxMemoryDC dc;
     dc.SelectObject(m_backingStore);

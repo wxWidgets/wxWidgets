@@ -136,7 +136,7 @@ bool wxIPV4address::Hostname(unsigned long addr)
   if (rv)
       m_origHostname = Hostname();
   else
-      m_origHostname = "";
+      m_origHostname = wxEmptyString;
   return rv;
 }
 
@@ -166,12 +166,24 @@ wxString wxIPV4address::Hostname()
 
    hostname[0] = 0;
    GAddress_INET_GetHostName(m_address, hostname, 1024);
-   return wxString(hostname);
+   return wxString::FromAscii(hostname);
 }
 
 unsigned short wxIPV4address::Service()
 {
   return GAddress_INET_GetPort(m_address);
+}
+
+wxString wxIPV4address::IPAddress() const
+{
+    unsigned long raw =  GAddress_INET_GetHostAddress(m_address);
+    return wxString::Format(
+        _T("%u.%u.%u.%u"),
+        (unsigned char)(raw & 0xff),
+        (unsigned char)((raw>>8) & 0xff),
+        (unsigned char)((raw>>16) & 0xff),
+        (unsigned char)((raw>>24) & 0xff)
+        );
 }
 
 wxSockAddress *wxIPV4address::Clone() const
@@ -268,7 +280,8 @@ wxString wxUNIXaddress::Filename()
 
   path[0] = 0;
   GAddress_UNIX_GetPath(m_address, path, 1024);
-  return wxString(path);
+  
+  return wxString::FromAscii(path);
 }
 
 #endif // __UNIX__

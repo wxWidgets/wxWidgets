@@ -93,9 +93,7 @@ bool wxListBox::Create(
 , int                               n
 , const wxString                    asChoices[]
 , long                              lStyle
-#if wxUSE_VALIDATORS
 , const wxValidator&                rValidator
-#endif
 , const wxString&                   rsName
 )
 {

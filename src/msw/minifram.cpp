@@ -45,12 +45,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame, wxFrame)
 
 #include "wx/minifram.h"
 
-#ifndef __TWIN32__
-    #ifdef __GNUWIN32_OLD__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
-#endif
-
 IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame, wxFrame)
 
 long wxMiniFrame::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)

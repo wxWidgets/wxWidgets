@@ -28,7 +28,7 @@ class TestWindow(wxScrolledWindow):
         dc = wxClientDC(self)
         dc.SetFont(self.font)
 
-        w,h,d,e = dc.GetFullTextExtent("Wy") # a wide character and one that decends
+        w,h,d,e = dc.GetFullTextExtent("Wy") # a wide character and one that descends
         self.textHeight = h + d
         self.lineHeight = self.textHeight + 5
         self.cellWidth = w
@@ -127,3 +127,10 @@ def runTest(frame, nb, log):
 
 overview = """
 """
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

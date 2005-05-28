@@ -221,6 +221,7 @@ enum {
     wxFRAME_FLOAT_ON_PARENT,
     wxFRAME_NO_WINDOW_MENU,
     wxFRAME_NO_TASKBAR,
+    wxFRAME_SHAPED,
 
     wxED_CLIENT_MARGIN,
     wxED_BUTTONS_BOTTOM,
@@ -298,6 +299,7 @@ enum {
     wxRA_SPECIFY_ROWS,
     wxRA_SPECIFY_COLS,
     wxRB_GROUP,
+    wxRB_SINGLE,
     wxGA_PROGRESSBAR,
     wxGA_HORIZONTAL,
     wxGA_VERTICAL,
@@ -490,6 +492,7 @@ enum {
     wxEXPAND,
 
     wxNB_FIXEDWIDTH,
+    wxNB_TOP,
     wxNB_LEFT,
     wxNB_RIGHT,
     wxNB_BOTTOM,
@@ -531,6 +534,17 @@ enum {
     wxMOUSE_BTN_LEFT,
     wxMOUSE_BTN_MIDDLE,
     wxMOUSE_BTN_RIGHT,
+
+    // It looks like wxTabCtrl may rise from the dead.  Uncomment these if
+    // it gets an implementation for all platforms...
+//     wxTC_RIGHTJUSTIFY,
+//     wxTC_FIXEDWIDTH,
+//     wxTC_TOP,
+//     wxTC_LEFT,
+//     wxTC_RIGHT,
+//     wxTC_BOTTOM,
+//     wxTC_MULTILINE,
+//     wxTC_OWNERDRAW,
 
 };
 
@@ -919,12 +933,6 @@ enum wxHitTest
     wxHT_MAX
 };
 
-
-
-#define FALSE 0
-#define false 0
-#define TRUE 1
-#define true 1
 
 
 //---------------------------------------------------------------------------

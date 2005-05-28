@@ -620,7 +620,7 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     wxCoord x2 = x1 + width,
             y2 = y1 + height;
 
-#if defined(__WIN32__) && !defined(__SC__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && (!defined(__SC__) || defined(__DIGITALMARS__)) && !defined(__WXMICROWIN__)
     RECT rect;
     rect.left   = x1;
     rect.top    = y1;
@@ -1552,8 +1552,8 @@ void wxDC::SetMapMode(int mode)
             return;
         }
 
-        double mm2pixelsX = pixel_width / mm_width,
-               mm2pixelsY = pixel_height / mm_height;
+        double mm2pixelsX = (double)pixel_width / mm_width,
+               mm2pixelsY = (double)pixel_height / mm_height;
 
         switch (mode)
         {

@@ -72,6 +72,11 @@ wxWindowDC::wxWindowDC(wxWindow *the_canvas)
 
 wxWindowDC::~wxWindowDC()
 {
+    // set clipping region to full window so that the OS can draw controls everywhere
+    RgnHandle       visRgn = NewRgn() ;
+    GetPortVisibleRegion( (CGrafPtr) m_macPort , visRgn );
+    SetPortClipRegion( (CGrafPtr) m_macPort , visRgn ) ;  
+    DisposeRgn( visRgn ) ;
 }
 
 /*

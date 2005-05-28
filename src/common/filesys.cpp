@@ -13,7 +13,7 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -25,6 +25,7 @@
 #include "wx/filesys.h"
 #include "wx/mimetype.h"
 #include "wx/filename.h"
+#include "wx/log.h"
 
 
 
@@ -127,7 +128,14 @@ wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
 {
     int i, l = location.Length();
     int l2 = l + 1;
-    for (i = l-1; (i >= 0) && ((location[i] != wxT(':')) || (i == 1) || (location[i-2] == wxT(':'))); i--) {if (location[i] == wxT('#')) l2 = i + 1;}
+
+    for (i = l-1; 
+         (i >= 0) && 
+         ((location[i] != wxT(':')) || (i == 1) || (location[i-2] == wxT(':')));
+         i--)
+    {
+        if (location[i] == wxT('#')) l2 = i + 1;
+    }
     if (i == 0) return wxEmptyString;
     else return location.Mid(i + 1, l2 - i - 2);
 }
@@ -172,24 +180,33 @@ bool wxLocalFSHandler::CanOpen(const wxString& location)
 wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
     // location has Unix path separators
-    wxString right = ms_root + GetRightLocation(location);
-    wxFileName fn(right, wxPATH_UNIX);
+    wxString right = GetRightLocation(location);
+    wxFileName fn = wxFileSystem::URLToFileName(right);
+    wxString fullpath = ms_root + fn.GetFullPath();
 
-    if (!wxFileExists(fn.GetFullPath()))
+    if (!wxFileExists(fullpath))
         return (wxFSFile*) NULL;
 
-    return new wxFSFile(new wxFFileInputStream(fn.GetFullPath()),
+    // we need to check whether we can really read from this file, otherwise
+    // wxFSFile is not going to work
+    wxFFileInputStream *is = new wxFFileInputStream(fullpath);
+    if ( !is->Ok() )
+    {
+        delete is;
+        return (wxFSFile*) NULL;
+    }
+
+    return new wxFSFile(is,
                         right,
                         GetMimeTypeFromExt(location),
                         GetAnchor(location),
-                        wxDateTime(wxFileModificationTime(fn.GetFullPath())));
-
+                        wxDateTime(wxFileModificationTime(fullpath)));
 }
 
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)
 {
-    wxString right = ms_root + GetRightLocation(spec);
-    return wxFindFirstFile(right, flags);
+    wxFileName fn = wxFileSystem::URLToFileName(GetRightLocation(spec));
+    return wxFindFirstFile(ms_root + fn.GetFullPath(), flags);
 }
 
 wxString wxLocalFSHandler::FindNext()
@@ -417,7 +434,81 @@ void wxFileSystem::CleanUpHandlers()
     m_Handlers.Clear();
 }
 
+const static wxString g_unixPathString(wxT("/"));
+const static wxString g_nativePathString(wxFILE_SEP_PATH);
 
+// Returns the native path for a file URL
+wxFileName wxFileSystem::URLToFileName(const wxString& url)
+{
+	wxString path = url;
+
+	if ( path.Find(wxT("file://")) == 0 )
+	{
+		path = path.Mid(7);
+	}
+    else if ( path.Find(wxT("file:")) == 0 )
+	{
+		path = path.Mid(5);
+	}
+	// Remove preceding double slash on Mac Classic
+#if defined(__WXMAC__) && !defined(__UNIX__)
+    else if ( path.Find(wxT("//")) == 0 )
+        path = path.Mid(2);
+#endif
+    
+    path.Replace(wxT("%25"), wxT("%"));
+    path.Replace(wxT("%3A"), wxT(":"));
+
+#ifdef __WXMSW__
+	// file urls either start with a forward slash (local harddisk),
+    // otherwise they have a servername/sharename notation,
+    // which only exists on msw and corresponds to a unc
+	if ( path[0u] == wxT('/') && path [1u] != wxT('/'))
+	{
+		path = path.Mid(1);
+	}
+	else if ( (url.Find(wxT("file://")) == 0) &&
+              (path.Find(wxT('/')) != wxNOT_FOUND) &&
+              (path.Length() > 1) && (path[1u] != wxT(':')) )
+	{
+		path = wxT("//") + path;
+	}
+#endif
+
+	path.Replace(g_unixPathString, g_nativePathString);
+
+	return wxFileName(path, wxPATH_NATIVE);
+}
+
+// Returns the file URL for a native path
+wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
+{
+    wxFileName fn = filename;
+    fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE);
+    wxString url = fn.GetFullPath(wxPATH_NATIVE);
+
+#ifndef __UNIX__
+    // unc notation, wxMSW
+    if ( url.Find(wxT("\\\\")) == 0 ) 
+    {
+        url = url.Mid(2);
+    }
+    else
+    {
+        url = wxT("/") + url;
+#ifdef __WXMAC__
+        url = wxT("/") + url;
+#endif
+
+    }
+#endif
+
+    url.Replace(g_nativePathString, g_unixPathString);
+    url.Replace(wxT("%"), wxT("%25"));
+    url.Replace(wxT(":"), wxT("%3A"));
+    url = wxT("file:") + url;
+    return url;
+}
 
 
 ///// Module:
@@ -438,31 +529,31 @@ class wxFileSystemModule : public wxModule
                            _T(""),
                            _T(""),
                            _T("JPEG image (from fallback)"),
-                           _T("jpg"), _T("jpeg"), NULL);
+                           _T("jpg"), _T("jpeg"), _T("JPG"), _T("JPEG"), NULL);
             gs_FSMimeFallbacks[1] =
             wxFileTypeInfo(_T("image/gif"),
                            _T(""),
                            _T(""),
                            _T("GIF image (from fallback)"),
-                           _T("gif"), NULL);
+                           _T("gif"), _T("GIF"), NULL);
             gs_FSMimeFallbacks[2] =
             wxFileTypeInfo(_T("image/png"),
                            _T(""),
                            _T(""),
                            _T("PNG image (from fallback)"),
-                           _T("png"), NULL);
+                           _T("png"), _T("PNG"), NULL);
             gs_FSMimeFallbacks[3] =
             wxFileTypeInfo(_T("image/bmp"),
                            _T(""),
                            _T(""),
                            _T("windows bitmap image (from fallback)"),
-                           _T("bmp"), NULL);
+                           _T("bmp"), _T("BMP"), NULL);
             gs_FSMimeFallbacks[4] =
             wxFileTypeInfo(_T("text/html"),
                            _T(""),
                            _T(""),
                            _T("HTML document (from fallback)"),
-                           _T("htm"), _T("html"), NULL);
+                           _T("htm"), _T("html"), _T("HTM"), _T("HTML"), NULL);
             gs_FSMimeFallbacks[5] =
             // must terminate the table with this!
             wxFileTypeInfo();

@@ -33,6 +33,7 @@
     #include "wx/frame.h"
     #include "wx/listbox.h"
     #include "wx/button.h"
+    #include "wx/bmpbuttn.h"
     #include "wx/msgdlg.h"
     #include "wx/scrolwin.h"
     #include "wx/radiobox.h"
@@ -1348,10 +1349,10 @@ void wxWindowOS2::OnIdle(
             //
             int                     nState = 0;
 
-            if (::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) != 0)
-                nState |= VK_SHIFT;
-            if (::WinGetKeyState(HWND_DESKTOP, VK_CTRL) != 0);
-                nState |= VK_CTRL;
+            if (IsShiftDown())
+                nState |= KC_SHIFT;
+            if (IsCtrlDown())
+                nState |= KC_CTRL;
 
             wxMouseEvent            rEvent(wxEVT_LEAVE_WINDOW);
 
@@ -1429,9 +1430,9 @@ void wxWindowOS2::Refresh(
             RECTL                   vOs2Rect;
 
             vOs2Rect.xLeft   = pRect->x;
-            vOs2Rect.yTop    = pRect->y;
+            vOs2Rect.yBottom = pRect->y;
             vOs2Rect.xRight  = pRect->x + pRect->width;
-            vOs2Rect.yBottom = pRect->y + pRect->height;
+            vOs2Rect.yTop    = pRect->y + pRect->height;
 
             ::WinInvalidateRect(hWnd, &vOs2Rect, bEraseBack);
         }
@@ -2050,7 +2051,7 @@ void wxWindowOS2::GetTextExtent(
     int                             i;
     int                             l;
     FONTMETRICS                     vFM; // metrics structure
-    BOOL                            bRc;
+    BOOL                            bRc = FALSE;
     char*                           pStr;
     ERRORID                         vErrorCode; // last error id code
     HPS                             hPS;
@@ -2233,6 +2234,8 @@ static void wxYieldForCommandsOnly()
     {
         wxTheApp->DoMessage((WXMSG*)&vMsg);
     }
+    if (vMsg.msg == WM_QUIT)
+        ::WinPostMsg(NULL, WM_QUIT, 0, 0);
 }
 #endif // wxUSE_MENUS_NATIVE
 
@@ -2425,6 +2428,14 @@ bool wxWindowOS2::OS2ProcessMessage(
                                 //
                                 pBtn->OS2Command(BN_CLICKED, 0 /* unused */);
                                 return TRUE;
+                            }
+                            else if (!IsTopLevel())
+                            {
+                                //
+                                // if not a top level window, let parent
+                                // handle it
+                                //
+                                return FALSE;
                             }
                             // else: but if it does not it makes sense to make
                             //       it work like a TAB - and that's what we do.
@@ -2805,7 +2816,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                     bProcessed = HandleMouseEvent( uMsg
                                                   ,nX
                                                   ,nY
-                                                  ,(WXUINT)SHORT1FROMMP(wParam)
+                                                  ,(WXUINT)SHORT2FROMMP(lParam)
                                                  );
                 }
                 else
@@ -2814,10 +2825,15 @@ MRESULT wxWindowOS2::OS2WindowProc(
                                                                    ,&nX
                                                                    ,&nY
                                                                   );
+                    if (!pWin->IsOfStandardClass())
+                    {
+                        if (uMsg == WM_BUTTON1DOWN && pWin->AcceptsFocus() )
+                            pWin->SetFocus();
+                    }
                     bProcessed = pWin->HandleMouseEvent( uMsg
                                                         ,nX
                                                         ,nY
-                                                        ,(WXUINT)SHORT1FROMMP(wParam)
+                                                        ,(WXUINT)SHORT2FROMMP(lParam)
                                                        );
                 }
             }
@@ -3471,7 +3487,7 @@ bool wxWindowOS2::OS2Create(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error creating frame. Error: %s\n", sError);
+        wxLogError("Error creating frame. Error: %s\n", sError.c_str());
         return FALSE;
     }
     SetSize( nX
@@ -3505,7 +3521,7 @@ bool wxWindowOS2::HandleCreate(
 bool wxWindowOS2::HandleDestroy()
 {
     wxWindowDestroyEvent            vEvent((wxWindow*)this);
-
+    vEvent.SetId(GetId());
     (void)GetEventHandler()->ProcessEvent(vEvent);
 
     //
@@ -3723,7 +3739,7 @@ bool wxWindowOS2::OS2OnDrawItem(
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table. Error: %s\n", sError);
+            wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
         }
         //
         // Set the color table to RGB mode
@@ -3738,7 +3754,7 @@ bool wxWindowOS2::OS2OnDrawItem(
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table. Error: %s\n", sError);
+            wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
         }
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
@@ -4275,13 +4291,20 @@ void wxWindowOS2::InitMouseEvent(
 , WXUINT                            uFlags
 )
 {
+    int                                 nHeight;
+    DoGetSize(0, &nHeight);
     rEvent.m_x           = nX;
-    rEvent.m_y           = nY;
-    rEvent.m_shiftDown   = ((uFlags & VK_SHIFT) != 0);
-    rEvent.m_controlDown = ((uFlags & VK_CTRL) != 0);
-    rEvent.m_leftDown    = ((uFlags & VK_BUTTON1) != 0);
-    rEvent.m_middleDown  = ((uFlags & VK_BUTTON3) != 0);
-    rEvent.m_rightDown   = ((uFlags & VK_BUTTON2) != 0);
+    // Convert to wxWindows standard coordinate system!
+    rEvent.m_y           = nHeight - nY;
+    rEvent.m_shiftDown   = ((uFlags & KC_SHIFT) != 0);
+    rEvent.m_controlDown = ((uFlags & KC_CTRL) != 0);
+    rEvent.m_altDown     = ((uFlags & KC_ALT) != 0);
+    rEvent.m_leftDown    = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON1) &
+			    0x8000) != 0;
+    rEvent.m_middleDown  = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON3) &
+			    0x8000) != 0;
+    rEvent.m_rightDown   = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON2) &
+			    0x8000) != 0;
     rEvent.SetTimestamp(s_currentMsg.time);
     rEvent.m_eventObject = this;
     rEvent.SetId(GetId());

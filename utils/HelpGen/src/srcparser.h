@@ -142,7 +142,7 @@ class spComment;
     typedef WXSTL_VECTOR_SHALLOW_COPY(spParameterPtrT) MParamListT;
     typedef WXSTL_VECTOR_SHALLOW_COPY(string)          StrListT;
 
-#endif;
+#endif
 // base class for all visitors of source code contents
 
 class spVisitor

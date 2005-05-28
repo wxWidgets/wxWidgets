@@ -28,11 +28,12 @@
 #include "wx/log.h"
 #include "wx/app.h"
 
-// NB: Some compilers define boolean type in Windows headers (e.g. Watcom C++).
+// NB: Some compilers define boolean type in Windows headers
+//     (e.g. Watcom C++, but not Open Watcom).
 //     This causes a conflict with jmorecfg.h header from libjpeg, so we have
 //     to make sure libjpeg won't try to define boolean itself. This is done by
 //     defining HAVE_BOOLEAN.
-#if defined(__WXMSW__) && (defined(__MWERKS__) || defined(__WATCOMC__))
+#if defined(__WXMSW__) && (defined(__MWERKS__) || defined(__DIGITALMARS__) || (defined(__WATCOMC__) && __WATCOMC__ < 1200))
     #define HAVE_BOOLEAN
     #include <windows.h>
 #endif
@@ -91,17 +92,17 @@ typedef struct {
 
     JOCTET* buffer;               /* start of buffer */
     wxInputStream *stream;
-} my_source_mgr;
+} wx_source_mgr;
 
-typedef my_source_mgr * my_src_ptr;
+typedef wx_source_mgr * wx_src_ptr;
 
-CPP_METHODDEF(void) my_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
+CPP_METHODDEF(void) wx_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
 {
 }
 
-CPP_METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr cinfo )
+CPP_METHODDEF(boolean) wx_fill_input_buffer ( j_decompress_ptr cinfo )
 {
-    my_src_ptr src = (my_src_ptr) cinfo->src;
+    wx_src_ptr src = (wx_src_ptr) cinfo->src;
 
     src->pub.next_input_byte = src->buffer;
     src->pub.bytes_in_buffer = src->stream->Read(src->buffer, JPEG_IO_BUFFER_SIZE).LastRead();
@@ -116,11 +117,11 @@ CPP_METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr cinfo )
     return TRUE;
 }
 
-CPP_METHODDEF(void) my_skip_input_data ( j_decompress_ptr cinfo, long num_bytes )
+CPP_METHODDEF(void) wx_skip_input_data ( j_decompress_ptr cinfo, long num_bytes )
 {
     if (num_bytes > 0)
     {
-        my_src_ptr src = (my_src_ptr) cinfo->src;
+        wx_src_ptr src = (wx_src_ptr) cinfo->src;
 
         while (num_bytes > (long)src->pub.bytes_in_buffer)
         {
@@ -132,9 +133,9 @@ CPP_METHODDEF(void) my_skip_input_data ( j_decompress_ptr cinfo, long num_bytes 
     }
 }
 
-CPP_METHODDEF(void) my_term_source ( j_decompress_ptr cinfo )
+CPP_METHODDEF(void) wx_term_source ( j_decompress_ptr cinfo )
 {
-    my_src_ptr src = (my_src_ptr) cinfo->src;
+    wx_src_ptr src = (wx_src_ptr) cinfo->src;
 
     if (src->pub.bytes_in_buffer > 0)
         src->stream->SeekI(-(long)src->pub.bytes_in_buffer, wxFromCurrent);
@@ -144,22 +145,22 @@ CPP_METHODDEF(void) my_term_source ( j_decompress_ptr cinfo )
 
 // JPEG error manager:
 
-struct my_error_mgr {
+struct wx_error_mgr {
   struct jpeg_error_mgr pub;    /* "public" fields */
 
   jmp_buf setjmp_buffer;    /* for return to caller */
 };
 
-typedef struct my_error_mgr * my_error_ptr;
+typedef struct wx_error_mgr * wx_error_ptr;
 
 /*
  * Here's the routine that will replace the standard error_exit method:
  */
 
-CPP_METHODDEF(void) my_error_exit (j_common_ptr cinfo)
+CPP_METHODDEF(void) wx_error_exit (j_common_ptr cinfo)
 {
-  /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
-  my_error_ptr myerr = (my_error_ptr) cinfo->err;
+  /* cinfo->err really points to a wx_error_mgr struct, so coerce pointer */
+  wx_error_ptr myerr = (wx_error_ptr) cinfo->err;
 
   /* Always display the message. */
   /* We could postpone this until after returning, if we chose. */
@@ -169,27 +170,27 @@ CPP_METHODDEF(void) my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
+void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
 {
-    my_src_ptr src;
+    wx_src_ptr src;
 
     if (cinfo->src == NULL) {    /* first time for this JPEG object? */
         cinfo->src = (struct jpeg_source_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-            sizeof(my_source_mgr));
-        src = (my_src_ptr) cinfo->src;
+            sizeof(wx_source_mgr));
+        src = (wx_src_ptr) cinfo->src;
     }
-    src = (my_src_ptr) cinfo->src;
+    src = (wx_src_ptr) cinfo->src;
     src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
     src->buffer = new JOCTET[JPEG_IO_BUFFER_SIZE];
     src->pub.next_input_byte = NULL; /* until buffer loaded */
     src->stream = &infile;
 
-    src->pub.init_source = my_init_source;
-    src->pub.fill_input_buffer = my_fill_input_buffer;
-    src->pub.skip_input_data = my_skip_input_data;
+    src->pub.init_source = wx_init_source;
+    src->pub.fill_input_buffer = wx_fill_input_buffer;
+    src->pub.skip_input_data = wx_skip_input_data;
     src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
-    src->pub.term_source = my_term_source;
+    src->pub.term_source = wx_term_source;
 }
 
 
@@ -202,18 +203,18 @@ void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
 bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
     struct jpeg_decompress_struct cinfo;
-    struct my_error_mgr jerr;
+    struct wx_error_mgr jerr;
     JSAMPARRAY tempbuf;
     unsigned char *ptr;
     unsigned stride;
 
     image->Destroy();
     cinfo.err = jpeg_std_error( &jerr.pub );
-    jerr.pub.error_exit = my_error_exit;
+    jerr.pub.error_exit = wx_error_exit;
 
     if (!verbose) cinfo.err->output_message=NULL;
 
-    /* Establish the setjmp return context for my_error_exit to use. */
+    /* Establish the setjmp return context for wx_error_exit to use. */
     if (setjmp(jerr.setjmp_buffer)) {
       /* If we get here, the JPEG code has signaled an error.
        * We need to clean up the JPEG object, close the input file, and return.
@@ -227,7 +228,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     }
 
     jpeg_create_decompress( &cinfo );
-    jpeg_wxio_src( &cinfo, stream );
+    wx_jpeg_io_src( &cinfo, stream );
     jpeg_read_header( &cinfo, TRUE );
     cinfo.out_color_space = JCS_RGB;
     jpeg_start_decompress( &cinfo );
@@ -259,15 +260,15 @@ typedef struct {
 
     wxOutputStream *stream;
     JOCTET * buffer;
-} my_destination_mgr;
+} wx_destination_mgr;
 
-typedef my_destination_mgr * my_dest_ptr;
+typedef wx_destination_mgr * wx_dest_ptr;
 
 #define OUTPUT_BUF_SIZE  4096    /* choose an efficiently fwrite'able size */
 
-CPP_METHODDEF(void) init_destination (j_compress_ptr cinfo)
+CPP_METHODDEF(void) wx_init_destination (j_compress_ptr cinfo)
 {
-    my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
+    wx_dest_ptr dest = (wx_dest_ptr) cinfo->dest;
 
     /* Allocate the output buffer --- it will be released when done with image */
     dest->buffer = (JOCTET *)
@@ -277,9 +278,9 @@ CPP_METHODDEF(void) init_destination (j_compress_ptr cinfo)
     dest->pub.free_in_buffer = OUTPUT_BUF_SIZE;
 }
 
-CPP_METHODDEF(boolean) empty_output_buffer (j_compress_ptr cinfo)
+CPP_METHODDEF(boolean) wx_empty_output_buffer (j_compress_ptr cinfo)
 {
-    my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
+    wx_dest_ptr dest = (wx_dest_ptr) cinfo->dest;
 
     dest->stream->Write(dest->buffer, OUTPUT_BUF_SIZE);
     dest->pub.next_output_byte = dest->buffer;
@@ -287,46 +288,46 @@ CPP_METHODDEF(boolean) empty_output_buffer (j_compress_ptr cinfo)
     return TRUE;
 }
 
-CPP_METHODDEF(void) term_destination (j_compress_ptr cinfo)
+CPP_METHODDEF(void) wx_term_destination (j_compress_ptr cinfo)
 {
-    my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
+    wx_dest_ptr dest = (wx_dest_ptr) cinfo->dest;
     size_t datacount = OUTPUT_BUF_SIZE - dest->pub.free_in_buffer;
     /* Write any data remaining in the buffer */
     if (datacount > 0)
         dest->stream->Write(dest->buffer, datacount);
 }
 
-GLOBAL(void) jpeg_wxio_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
+GLOBAL(void) wx_jpeg_io_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
 {
-    my_dest_ptr dest;
+    wx_dest_ptr dest;
 
     if (cinfo->dest == NULL) {    /* first time for this JPEG object? */
         cinfo->dest = (struct jpeg_destination_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-            sizeof(my_destination_mgr));
+            sizeof(wx_destination_mgr));
     }
 
-    dest = (my_dest_ptr) cinfo->dest;
-    dest->pub.init_destination = init_destination;
-    dest->pub.empty_output_buffer = empty_output_buffer;
-    dest->pub.term_destination = term_destination;
+    dest = (wx_dest_ptr) cinfo->dest;
+    dest->pub.init_destination = wx_init_destination;
+    dest->pub.empty_output_buffer = wx_empty_output_buffer;
+    dest->pub.term_destination = wx_term_destination;
     dest->stream = &outfile;
 }
 
 bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {
     struct jpeg_compress_struct cinfo;
-    struct my_error_mgr jerr;
+    struct wx_error_mgr jerr;
     JSAMPROW row_pointer[1];    /* pointer to JSAMPLE row[s] */
     JSAMPLE *image_buffer;
     int stride;                /* physical row width in image buffer */
 
     cinfo.err = jpeg_std_error(&jerr.pub);
-    jerr.pub.error_exit = my_error_exit;
+    jerr.pub.error_exit = wx_error_exit;
 
     if (!verbose) cinfo.err->output_message=NULL;
 
-    /* Establish the setjmp return context for my_error_exit to use. */
+    /* Establish the setjmp return context for wx_error_exit to use. */
     if (setjmp(jerr.setjmp_buffer))
     {
         /* If we get here, the JPEG code has signaled an error.
@@ -339,7 +340,7 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
 
     jpeg_create_compress(&cinfo);
-    jpeg_wxio_dest(&cinfo, stream);
+    wx_jpeg_io_dest(&cinfo, stream);
 
     cinfo.image_width = image->GetWidth();
     cinfo.image_height = image->GetHeight();

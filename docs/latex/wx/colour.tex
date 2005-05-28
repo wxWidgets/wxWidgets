@@ -7,6 +7,8 @@ named colour may be returned instead of creating a new colour.
 
 Valid RGB values are in the range 0 to 255.
 
+You can retrieve the current system font settings with \helpref{wxSystemSettings}{wxsystemsettings}.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
@@ -34,7 +36,7 @@ wxLIGHT\_GREY}
 \wxheading{See also}
 
 \helpref{wxColourDatabase}{wxcolourdatabase}, \helpref{wxPen}{wxpen}, \helpref{wxBrush}{wxbrush},\rtfsp
-\helpref{wxColourDialog}{wxcolourdialog}
+\helpref{wxColourDialog}{wxcolourdialog}, \helpref{wxSystemSettings}{wxsystemsettings}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -237,7 +239,7 @@ Assignment operator for the colour data.
 
 \section{\class{wxColourDatabase}}\label{wxcolourdatabase}
 
-wxWindows maintains a database of standard RGB colours for a predefined
+wxWidgets maintains a database of standard RGB colours for a predefined
 set of named colours (such as ``BLACK'', ``LIGHT GREY''). The
 application may add to this set if desired by using {\it Append}.  There
 is only one instance of this class: {\bf wxTheColourDatabase}.
@@ -296,7 +298,7 @@ Finds a colour name given the colour. Returns NULL if not found.
 
 \func{void}{Initialize}{\void}
 
-Initializes the database with a number of stock colours.  Called by wxWindows
+Initializes the database with a number of stock colours.  Called by wxWidgets
 on start-up.
 
 

@@ -102,6 +102,7 @@ ALL_HEADERS = \
 		datetime.inl \
 		datstrm.h \
 		db.h \
+		dbkeyg.h \
 		dbtable.h \
 		dde.h \
 		debug.h \
@@ -180,6 +181,7 @@ ALL_HEADERS = \
 		unix/gsockunx.h \
 		unix/mimetype.h \
 		msw/dde.h \
+		msw/gccpriv.h \
 		msw/mimetype.h \
 		msw/winundef.h \
 		protocol/file.h \

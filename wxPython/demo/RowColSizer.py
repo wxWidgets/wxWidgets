@@ -50,7 +50,7 @@ class TestPanel(wxPanel):
         sizer.AddSpacer(10,10, pos=(13,1))
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
 
 #----------------------------------------------------------------------
@@ -66,4 +66,10 @@ def runTest(frame, nb, log):
 import wxPython.lib.rcsizer
 overview = wxPython.lib.rcsizer.__doc__
 
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 

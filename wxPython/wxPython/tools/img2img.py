@@ -1,17 +1,21 @@
-"""
-Common routines for the image converter utilities.
-"""
-import sys, os, glob, getopt, string
+#----------------------------------------------------------------------
+# Name:        wxPython.tools.img2img
+# Purpose:     Common routines for the image converter utilities.
+#
+# Author:      Robin Dunn
+#
+# RCS-ID:      $Id$
+# Copyright:   (c) 2002 by Total Control Software
+# Licence:     wxWindows license
+#----------------------------------------------------------------------
+
+
+import sys, os, glob, getopt
 from wxPython.wx import *
 
-if wxPlatform == "__WXGTK__":
-    # some bitmap related things need to have a wxApp initialized...
-    app = wxPySimpleApp()
-
-wxInitAllImageHandlers()
 
 def convert(file, maskClr, outputDir, outputName, outType, outExt):
-    if string.lower(os.path.splitext(file)[1]) == ".ico":
+    if os.path.splitext(file)[1].lower() == ".ico":
         icon = wxIcon(file, wxBITMAP_TYPE_ICO)
         img = wxBitmapFromIcon(icon)
     else:

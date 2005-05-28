@@ -8,7 +8,7 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = bombs
-OBJECTS = $(PROGRAM).obj bombs1.obj game.obj
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj $(OUTPUTDIR)\bombs1.obj $(OUTPUTDIR)\game.obj
 
 !include $(WXDIR)\src\makeprog.wat
 

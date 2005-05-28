@@ -35,8 +35,57 @@
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 #include "wx/fontutil.h"
+#include "wx/module.h"
 
 #if wxUSE_OWNER_DRAWN
+
+class wxMSWSystemMenuFontModule : public wxModule
+{
+public:
+
+    virtual bool OnInit()
+    {
+        ms_systemMenuFont = new wxFont;
+
+#if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
+        NONCLIENTMETRICS nm;
+        nm.cbSize = sizeof(NONCLIENTMETRICS);
+        SystemParametersInfo(SPI_GETNONCLIENTMETRICS,0,&nm,0); 
+
+        ms_systemMenuButtonWidth = nm.iMenuHeight;
+        ms_systemMenuHeight = nm.iMenuHeight;
+
+        // create menu font
+        wxNativeFontInfo info;
+        memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
+        ms_systemMenuFont->Create(info);
+#endif
+
+        return true;
+    }
+
+    virtual void OnExit()
+    {
+        delete ms_systemMenuFont;
+        ms_systemMenuFont = NULL;
+    }
+
+    static wxFont* ms_systemMenuFont;
+    static int ms_systemMenuButtonWidth;   // windows clean install default
+    static int ms_systemMenuHeight;        // windows clean install default
+private:
+    DECLARE_DYNAMIC_CLASS(wxMSWSystemMenuFontModule)
+};
+
+// these static variables are by the wxMSWSystemMenuFontModule object
+// and reflect the system settings returned by the Win32 API's
+// SystemParametersInfo() call.
+
+wxFont* wxMSWSystemMenuFontModule::ms_systemMenuFont = NULL;
+int wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth = 18;   // windows clean install default
+int wxMSWSystemMenuFontModule::ms_systemMenuHeight = 18;        // windows clean install default
+
+IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
 
 
 // ============================================================================
@@ -46,10 +95,9 @@
 // ctor
 // ----
 wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
-                           bool bCheckable, bool WXUNUSED(bMenuItem))
+                           bool bCheckable, bool bMenuItem)
             : m_strName(str)
 {
-#if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
     // get the default menu height and font from the system
     NONCLIENTMETRICS nm;
     nm.cbSize = sizeof (NONCLIENTMETRICS);
@@ -60,30 +108,24 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
     // menu icons and checkmarks
     if (ms_nDefaultMarginWidth == 0)
     {
-       ms_nDefaultMarginWidth = nm.iMenuWidth;
-       ms_nLastMarginWidth = nm.iMenuWidth;
+       ms_nDefaultMarginWidth = wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth;
+       ms_nLastMarginWidth = wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth;
     }
 
-    wxNativeFontInfo info;
-    memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
-    m_font.Create(info);
-#else
-    // windows clean install default
-    m_nMinHeight = 18;
-    
-    if (ms_nDefaultMarginWidth == 0)
+    if (wxMSWSystemMenuFontModule::ms_systemMenuFont->Ok() && bMenuItem)
     {
-        ms_nDefaultMarginWidth = 18;
-        ms_nLastMarginWidth = 18;
+        m_font = *wxMSWSystemMenuFontModule::ms_systemMenuFont;
     }
-    if (wxNORMAL_FONT)
-       m_font = *wxNORMAL_FONT;
-#endif
+    else
+    {
+        m_font = *wxNORMAL_FONT;
+    }
 
     m_bCheckable   = bCheckable;
     m_bOwnerDrawn  = FALSE;
     m_nHeight      = 0;
     m_nMarginWidth = ms_nLastMarginWidth;
+    m_nMinHeight   = wxMSWSystemMenuFontModule::ms_systemMenuHeight;
 }
 
 
@@ -98,14 +140,22 @@ size_t wxOwnerDrawn::ms_nLastMarginWidth = 0;
 // -------
 
 // get size of the item
+// The item size includes the menu string, the accel string,
+// the bitmap and size for a submenu expansion arrow...
 bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 {
   wxMemoryDC dc;
 
   wxString str = wxStripMenuCodes(m_strName);
 
-  // # without this menu items look too tightly packed (at least under Windows)
-  str += wxT('W'); // 'W' is typically the widest letter
+  // if we have a valid accel string, then pad out
+  // the menu string so the menu and accel string are not
+  // placed ontop of eachother.
+  if ( !m_strAccel.empty() )
+   {
+       str.Pad(str.Length()%8);
+       str += m_strAccel;
+   }
 
   if (m_font.Ok())
       dc.SetFont(GetFont());
@@ -121,8 +171,12 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
       int accel_width, accel_height;
       dc.GetTextExtent(m_strAccel, &accel_width, &accel_height);
-      *pwidth += (accel_width + 16);
+      *pwidth += accel_width;
   }
+
+  // add space at the end of the menu for the submenu expansion arrow
+  // this will also allow offsetting the accel string from the right edge
+  *pwidth += (size_t) (GetDefaultMarginWidth() * 1.5);
 
   // JACS: items still look too tightly packed, so adding 5 pixels.
   (*pheight) = (*pheight) + 5;
@@ -143,13 +197,18 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
       // Does BMP encroach on default check menu position?
       size_t adjustedWidth = m_bmpChecked.GetWidth() +
                              (wxSystemSettings::GetMetric(wxSYS_EDGE_X) * 2);
-      if (ms_nDefaultMarginWidth < adjustedWidth)
-          *pwidth += adjustedWidth - ms_nDefaultMarginWidth;
 
       // Do we need to widen margin to fit BMP?
       if ((size_t)GetMarginWidth() < adjustedWidth)
           SetMarginWidth(adjustedWidth);
+
+      // add the size of the bitmap to our total size...
+      *pwidth += GetMarginWidth(); 
   }
+
+  // add the size of the bitmap to our total size - even if we don't have
+  // a bitmap we leave room for one...
+  *pwidth += GetMarginWidth(); 
 
   // make sure that this item is at least as
   // tall as the user's system settings specify
@@ -169,7 +228,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 // get drawn embossed? How can we tell DrawState that we don't want the
 // embossing?
 
-#if defined(__WIN32__) && !defined(__SC__) && !defined(__TWIN32__)
+#if defined(__WIN32__) && (!defined(__SC__) || defined (__DIGITALMARS__)) && !defined(__TWIN32__)
 #define   O_DRAW_NATIVE_API     // comments below explain why I use it
 #endif
 
@@ -186,6 +245,18 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   // wxColor <-> RGB
   #define   ToRGB(col)  PALETTERGB(col.Red(), col.Green(), col.Blue())
   #define   UnRGB(col)  GetRValue(col), GetGValue(col), GetBValue(col)
+
+
+  // this flag determines whether or not an edge will
+  // be drawn around the bitmap. In most "windows classic"
+  // applications, a 1-pixel highlight edge is drawn around
+  // the bitmap of an item when it is selected.  However,
+  // with the new "luna" theme, no edge is drawn around
+  // the bitmap because the background is white (this applies
+  // only to "non-XP style" menus w/ bitmaps --
+  // see IE 6 menus for an example)
+
+  bool draw_bitmap_edge = true;
 
   // set the colors
   // --------------
@@ -206,6 +277,17 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     colBack = m_colBack.Ok() ? ToRGB(m_colBack) : GetSysColor(COLOR_WINDOW);
     colText = m_colText.Ok() ? ToRGB(m_colText) : GetSysColor(COLOR_WINDOWTEXT);
   }
+
+
+  // if background is white, don't draw an edge around the bitmap
+  DWORD menu_bg_color = GetSysColor(COLOR_MENU);
+  if (GetRValue(menu_bg_color) >= 0xf0 &&
+      GetGValue(menu_bg_color) >= 0xf0 &&
+      GetBValue(menu_bg_color) >= 0xf0)
+  {
+      draw_bitmap_edge = false;
+  }
+
 
   #ifdef  O_DRAW_NATIVE_API
     #define  hdc           (HDC)dc.GetHDC()
@@ -233,15 +315,13 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
     RECT rectFill = { rc.GetLeft(), rc.GetTop(), rc.GetRight()+1, rc.GetBottom() };
 
-    if ( st & wxODSelected && m_bmpChecked.Ok()) {
+    if ( st & wxODSelected && m_bmpChecked.Ok() && draw_bitmap_edge) {
         // only draw the highlight under the text, not under
         // the bitmap or checkmark; leave a 1-pixel gap.
         rectFill.left = GetMarginWidth() + 1;
     }
 
     FillRect(hdc, &rectFill, hbr);
-
-    DeleteObject(hbr);
 
     // use default font if no font set
     HFONT hfont;
@@ -257,27 +337,33 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
     wxString strMenuText = m_strName.BeforeFirst('\t');
 
+    SIZE sizeRect;
+    GetTextExtentPoint32(hdc,strMenuText.c_str(), strMenuText.Length(),&sizeRect);
     ::DrawState(hdc, NULL, NULL,
                 (LPARAM)strMenuText.c_str(), strMenuText.length(),
-                x, rc.y + 1, rc.GetWidth(), rc.GetHeight(),
+                x, rc.y+( (int) ((rc.GetHeight()-sizeRect.cy)/2.0) )-1, // centre text vertically
+                rc.GetWidth()-GetMarginWidth(), sizeRect.cy,
                 DST_PREFIXTEXT |
                 (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
 
     if ( !m_strAccel.empty() )
     {
-        int accel_width, accel_height;
-        dc.GetTextExtent(m_strAccel, &accel_width, &accel_height);
-
+        // right align accel string with right edge of menu ( offset by the margin width )
+        ::SetTextAlign(hdc, TA_RIGHT);
         ::DrawState(hdc, NULL, NULL,
                     (LPARAM)m_strAccel.c_str(), m_strAccel.length(),
-                    rc.GetRight() - accel_width - 16, rc.y + 1, 0, 0,
+                    rc.GetWidth()-(GetMarginWidth()), rc.y+(int) ((rc.GetHeight()-sizeRect.cy)/2.0),
+                    rc.GetWidth()-GetMarginWidth(), sizeRect.cy,
                     DST_TEXT |
                     (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
+        ::SetTextAlign(hdc, TA_LEFT);
     }
 
     (void)SelectObject(hdc, hPrevBrush);
     (void)SelectObject(hdc, hPrevFont);
     (void)SetBkMode(hdc, nPrevMode);
+
+    DeleteObject(hbr);
   #else
     dc.SetFont(GetFont());
     dc.DrawText(wxStripMenuCodes(m_strName), x, rc.y);
@@ -336,8 +422,14 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
               nBmpWidth, nBmpHeight,
               &dcMem, 0, 0, wxCOPY, TRUE /* use mask */);
 
-      if ( st & wxODSelected ) {
-
+      if ( st & wxODSelected && draw_bitmap_edge ) {
+        #ifdef  O_DRAW_NATIVE_API
+          RECT rectBmp = { rc.GetLeft(), rc.GetTop(),
+                           rc.GetLeft() + GetMarginWidth(),
+                           rc.GetTop() + m_nHeight-1 };
+          SetBkColor(hdc, colBack);
+          DrawEdge(hdc, &rectBmp, BDR_RAISEDOUTER, BF_SOFT | BF_RECT);
+        #else
           int x1, y1, x2, y2;
           x1 = rc.x;
           y1 = rc.y;
@@ -350,6 +442,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
           dc.SetPen(*wxGREY_PEN);
           dc.DrawLine(x1, y2-1, x2, y2-1);
           dc.DrawLine(x2, y1, x2, y2);
+        #endif  //O_DRAW_NATIVE_API
       }
     }
   }

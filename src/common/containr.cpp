@@ -247,10 +247,12 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             event.SetEventObject(m_winParent);
             if ( !child->GetEventHandler()->ProcessEvent(event) )
             {
+                // set it first in case SetFocusFromKbd() results in focus
+                // change too
+                m_winLastFocused = child;
+
                 // everything is simple: just give focus to it
                 child->SetFocusFromKbd();
-
-                m_winLastFocused = child;
             }
             //else: the child manages its focus itself
 
@@ -288,39 +290,18 @@ bool wxControlContainer::DoSetFocus()
     wxLogTrace(_T("focus"), _T("SetFocus on wxPanel 0x%08lx."),
                (unsigned long)m_winParent->GetHandle());
 
-    // If the panel gets the focus *by way of getting it set directly*
-    // we move the focus to the first window that can get it.
+    // when the panel gets the focus we move the focus to either the last
+    // window that had the focus or the first one that can get it unless the
+    // focus had been already set to some other child
 
-    // VZ: no, we set the focus to the last window too. I don't understand why
-    //     should we make this distinction: if an app wants to set focus to
-    //     some precise control, it may always do it directly, but if we don't
-    //     use m_winLastFocused here, the focus won't be set correctly after a
-    //     notebook page change nor after frame activation under MSW (it calls
-    //     SetFocus too)
-    //
-    // RR: yes, when I the tab key to navigate in a panel with some controls and
-    //     a notebook and the focus jumps to the notebook (typically coming from
-    //     a button at the top) the notebook should focus the first child in the
-    //     current notebook page, not the last one which would otherwise get the
-    //     focus if you used the tab key to navigate from the current notebook
-    //     page to button at the bottom. See every page in the controls sample.
-    //
-    // VZ: ok, but this still doesn't (at least I don't see how it can) take
-    //     care of first/last child problem: i.e. if Shift-TAB is pressed in a
-    //     situation like above, the focus should be given to the last child,
-    //     not the first one (and not to the last focused one neither) - I
-    //     think my addition to OnNavigationKey() above takes care of it.
-    //     Keeping #ifdef __WXGTK__ for now, but please try removing it and see
-    //     what happens.
-    //
-    // RR: Removed for now. Let's see what happens..
-
-    // if our child already has focus, don't take it away from it
     wxWindow *win = wxWindow::FindFocus();
     while ( win )
     {
         if ( win == m_winParent )
+        {
+            // our child already has focus, don't take it away from it
             return TRUE;
+        }
 
         if ( win->IsTopLevel() )
         {
@@ -341,10 +322,7 @@ void wxControlContainer::HandleOnFocus(wxFocusEvent& event)
                (unsigned long)m_winParent->GetHandle(),
                m_winParent->GetName().c_str() );
 
-    // If we panel got the focus *by way of getting clicked on*
-    // we move the focus to either the last window that had the
-    // focus or the first one that can get it.
-    (void)SetFocusToChild();
+    DoSetFocus();
 
     event.Skip();
 }

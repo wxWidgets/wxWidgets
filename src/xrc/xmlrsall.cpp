@@ -43,7 +43,7 @@ void wxXmlResource::InitAllHandlers()
 #endif
     AddHandler(new wxListCtrlXmlHandler);
 #if wxUSE_CHECKLISTBOX
-    AddHandler(new wxCheckListXmlHandler);
+    AddHandler(new wxCheckListBoxXmlHandler);
 #endif
 #if wxUSE_CHOICE
     AddHandler(new wxChoiceXmlHandler);
@@ -94,4 +94,12 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxGenericDirCtrlXmlHandler);
 #endif
     AddHandler(new wxFrameXmlHandler);
+    AddHandler(new wxScrolledWindowXmlHandler);
+    AddHandler(new wxSplitterWindowXmlHandler);
+#if wxUSE_WIZARDDLG
+    AddHandler(new wxWizardXmlHandler);
+#endif
+#if wxUSE_STATUSBAR
+    AddHandler(new wxStatusBarXmlHandler);
+#endif
 }

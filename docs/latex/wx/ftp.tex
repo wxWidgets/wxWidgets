@@ -5,8 +5,8 @@
 %% Modified by:
 %% Created:     ~1997
 %% RCS-ID:      $Id$
-%% Copyright:   (c) wxWindows team
-%% License:     wxWindows license
+%% Copyright:   (c) wxWidgets team
+%% License:     wxWidgets license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\class{wxFTP}}\label{wxftp}
@@ -30,14 +30,14 @@ Example of using wxFTP for file downloading:
     ftp.SetUser("user");
     ftp.SetPassword("password");
 
-    if ( !ftp.Connect("ftp.wxwindows.org") )
+    if ( !ftp.Connect("ftp.wxwidgets.org") )
     {
         wxLogError("Couldn't connect");
         return;
     }
 
     ftp.ChDir("/pub");
-    wxInputStream *in = ftp.GetInputStream("wxWindows-4.2.0.tar.gz");
+    wxInputStream *in = ftp.GetInputStream("wxWidgets-4.2.0.tar.gz");
     if ( !in )
     {
         wxLogError("Coudln't get file");
@@ -114,6 +114,13 @@ Default constructor.
 \func{}{\destruct{wxFTP}}{\void}
 
 Destructor will close the connection if connected.
+
+\membersection{wxFTP::Abort}\label{wxftpabort}
+
+\func{bool}{Abort}{\void}
+
+Aborts the download currently in process, returns {\tt TRUE} if ok, {\tt FALSE} 
+if an error occured.
 
 \membersection{wxFTP::CheckCommand}
 
@@ -245,6 +252,21 @@ For example, you can use: "ftp://a\_user:a\_password@a.host:service/a\_directory
 to specify a user and a password.
 
 % ----------------------------------------------------------------------------
+
+\membersection{wxFTP::FileExists}\label{wxftpfileexists}
+
+\func{bool}{FileExists}{\param{const wxString\&}{ filename}}
+
+Returns {\tt TRUE} if the given remote file exists, {\tt FALSE} otherwise.
+
+\membersection{wxFTP::GetFileSize}\label{wxftpgetfilesize}
+
+\func{int}{GetFileSize}{\param{const wxString\&}{ filename}}
+
+Returns the file size in bytes or $-1$ if the file doesn't exist or the size
+couldn't be determined. Notice that this size can be approximative size only
+and shouldn't be used for allocating the buffer in which the remote file is
+copied, for example.
 
 \membersection{wxFTP::GetDirList}\label{wxftpgetdirlist}
 

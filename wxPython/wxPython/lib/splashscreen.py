@@ -57,7 +57,7 @@ class SplashScreen(wxFrame):
         EVT_PAINT(self, self.OnPaint)
         EVT_ERASE_BACKGROUND(self, self.OnEraseBG)
 
-        self.Show(true)
+        self.Show(True)
 
 
         class SplashTimer(wxTimer):
@@ -73,16 +73,16 @@ class SplashScreen(wxFrame):
 
     def OnPaint(self, event):
         dc = wxPaintDC(self)
-        dc.DrawBitmap(self.bitmap, 0,0, false)
+        dc.DrawBitmap(self.bitmap, 0,0, False)
 
     def OnEraseBG(self, event):
         pass
 
     def OnSplashExitDefault(self, event=None):
-        self.Close(true)
+        self.Close(True)
 
     def OnCloseWindow(self, event=None):
-        self.Show(false)
+        self.Show(False)
         self.timer.Stop()
         del self.timer
         self.Destroy()
@@ -100,12 +100,12 @@ if __name__ == "__main__":
             wxImage_AddHandler(wxPNGHandler())
             wxImage_AddHandler(wxGIFHandler())
             self.splash = SplashScreen(NULL, bitmapfile="splashscreen.jpg", callback=self.OnSplashExit)
-            self.splash.Show(true)
+            self.splash.Show(True)
             self.SetTopWindow(self.splash)
-            return true
+            return True
         def OnSplashExit(self, event=None):
             print "Yay! Application callback worked!"
-            self.splash.Close(true)
+            self.splash.Close(True)
             del self.splash
             ### Build working windows here...
     def test(sceneGraph=None):

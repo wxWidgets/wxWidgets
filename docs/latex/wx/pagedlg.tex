@@ -1,7 +1,7 @@
 \section{\class{wxPageSetupDialog}}\label{wxpagesetupdialog}
 
 This class represents the page setup common dialog. The page setup dialog is standard from
-Windows 95 on, replacing the print setup dialog (which is retained in Windows and wxWindows
+Windows 95 on, replacing the print setup dialog (which is retained in Windows and wxWidgets
 for backward compatibility). On Windows 95 and NT 4.0 and above, the page setup dialog is
 native to the windowing system, otherwise it is emulated.
 
@@ -50,13 +50,13 @@ Destructor.
 
 Returns the \helpref{page setup data}{wxpagesetupdialogdata} associated with the dialog.
 
-\membersection{wxPageSetupDialog::Ok}\label{wxpagesetupdialogok}
-
-\constfunc{bool}{Ok}{\void}
-
-Returns TRUE if the print data associated with the dialog data is valid.
-This can return FALSE on Windows if the current printer is not set, for example.
-On all other platforms, it returns TRUE.
+%\membersection{wxPageSetupDialog::Ok}\label{wxpagesetupdialogok}
+%
+%\constfunc{bool}{Ok}{\void}
+%
+%Returns TRUE if the print data associated with the dialog data is valid.
+%This can return FALSE on Windows if the current printer is not set, for example.
+%On all other platforms, it returns TRUE.
 
 \membersection{wxPageSetupDialog::ShowModal}\label{wxpagesetupdialogshowmodal}
 
@@ -96,9 +96,9 @@ Default constructor.
 
 Copy constructor.
 
-\func{}{wxPrintDialogData}{\param{wxPrintData\&}{ printData}}
+\func{}{wxPageSetupDialogData}{\param{wxPrintData\&}{ printData}}
 
-Construct an object from a print dialog data object.
+Construct an object from a print data object.
 
 \membersection{wxPageSetupDialogData::\destruct{wxPageSetupDialogData}}
 
@@ -250,7 +250,7 @@ selected printer properties. Windows only. Units are in millimetres
 
 \membersection{wxPageSetupDialogData::SetMarginTopLeft}\label{wxpagesetupdialogdatasetmargintopleft}
 
-\func{void}{GetMarginTopLeft}{\param{const wxPoint\& }{pt}}
+\func{void}{SetMarginTopLeft}{\param{const wxPoint\& }{pt}}
 
 Sets the left (x) and top (y) margins in millimetres.
 

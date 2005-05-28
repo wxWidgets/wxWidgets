@@ -1,18 +1,18 @@
 from wxPython.wx       import *
 try:
     from wxPython.glcanvas import *
-    haveGLCanvas = true
+    haveGLCanvas = True
 except ImportError:
-    haveGLCanvas = false
+    haveGLCanvas = False
 
 try:
     # The Python OpenGL package can be found at
     # http://PyOpenGL.sourceforge.net/
     from OpenGL.GL import *
     from OpenGL.GLUT import *
-    haveOpenGL = true
+    haveOpenGL = True
 except ImportError:
-    haveOpenGL = false
+    haveOpenGL = False
 
 #----------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ else:
                 c.SetSize((200, 200))
                 box.Add(c, 0, wxALIGN_CENTER|wxALL, 15)
 
-            self.SetAutoLayout(true)
+            self.SetAutoLayout(True)
             self.SetSizer(box)
 
 
@@ -71,7 +71,7 @@ else:
             canvasClass = eval(canvasClassName)
             frame = wxFrame(None, -1, canvasClassName, size=(400,400))
             canvas = canvasClass(frame)
-            frame.Show(true)
+            frame.Show(True)
 
 
 
@@ -85,7 +85,7 @@ else:
     class MyCanvasBase(wxGLCanvas):
         def __init__(self, parent):
             wxGLCanvas.__init__(self, parent, -1)
-            self.init = false
+            self.init = False
             # initial mouse position
             self.lastx = self.x = 30
             self.lasty = self.y = 30
@@ -110,7 +110,7 @@ else:
             self.SetCurrent()
             if not self.init:
                 self.InitGL()
-                self.init = true
+                self.init = True
             self.OnDraw()
 
         def OnMouseDown(self, evt):
@@ -123,7 +123,7 @@ else:
             if evt.Dragging() and evt.LeftIsDown():
                 self.x, self.y = self.lastx, self.lasty
                 self.x, self.y = evt.GetPosition()
-                self.Refresh(false)
+                self.Refresh(False)
 
 
 
@@ -268,9 +268,9 @@ def _test():
             frame = wxFrame(None, -1, "GL Demos", wxDefaultPosition, wxSize(600,300))
             #win = ConeCanvas(frame)
             MySplitter(frame)
-            frame.Show(TRUE)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return TRUE
+            return True
 
     app = MyApp(0)
     app.MainLoop()

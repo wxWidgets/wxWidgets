@@ -17,7 +17,7 @@
 #include "wx/defs.h"
 #if wxUSE_HTML && wxUSE_STREAMS
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -92,11 +92,9 @@ wxHtmlParser::~wxHtmlParser()
 
 wxObject* wxHtmlParser::Parse(const wxString& source)
 {
-    wxObject *result;
-
     InitParser(source);
     DoParsing();
-    result = GetProduct();
+    wxObject *result = GetProduct();
     DoneParser();
     return result;
 }
@@ -104,6 +102,7 @@ wxObject* wxHtmlParser::Parse(const wxString& source)
 void wxHtmlParser::InitParser(const wxString& source)
 {
     SetSource(source);
+    m_stopParsing = FALSE;
 }
 
 void wxHtmlParser::DoneParser()
@@ -128,6 +127,8 @@ void wxHtmlParser::CreateDOMTree()
     m_CurTextPiece = 0;
 }
 
+extern bool wxIsCDATAElement(const wxChar *tag);
+
 void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
                                     int begin_pos, int end_pos,
                                     wxHtmlTagsCache *cache)
@@ -137,6 +138,15 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
     wxChar c;
     int i = begin_pos;
     int textBeginning = begin_pos;
+
+    // If the tag contains CDATA text, we include the text between beginning
+    // and ending tag verbosely. Setting i=end_pos will skip to the very
+    // end of this function where text piece is added, bypassing any child
+    // tags parsing (CDATA element can't have child elements by definition):
+    if (cur != NULL && wxIsCDATAElement(cur->GetName().c_str()))
+    {
+        i = end_pos;
+    }
 
     while (i < end_pos)
     {
@@ -210,6 +220,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
                 }
                 else
                     i = chd->GetBeginPos();
+                
                 textBeginning = i;
             }
 
@@ -292,6 +303,8 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
             wxHtmlTag *t = m_CurTag;
             m_CurTag = m_CurTag->GetNextTag();
             AddTag(*t);
+            if (m_stopParsing)
+                return;
         }
         else break;
     }
@@ -304,7 +317,11 @@ void wxHtmlParser::AddTag(const wxHtmlTag& tag)
 
     h = (wxHtmlTagHandler*) m_HandlersHash.Get(tag.GetName());
     if (h)
+    {
         inner = h->HandleTag(tag);
+        if (m_stopParsing)
+            return;
+    }
     if (!inner)
     {
         if (tag.HasEnding())
@@ -432,11 +449,15 @@ wxHtmlEntitiesParser::~wxHtmlEntitiesParser()
 void wxHtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)
 {
 #if wxUSE_WCHAR_T && !wxUSE_UNICODE
-    if (encoding == m_encoding) return;
+    if (encoding == m_encoding)
+        return;
+
     delete m_conv;
-    m_conv = NULL;
+
     m_encoding = encoding;
-    if (m_encoding != wxFONTENCODING_SYSTEM)
+    if (m_encoding == wxFONTENCODING_SYSTEM)
+        m_conv = NULL;
+    else
         m_conv = new wxCSConv(wxFontMapper::GetEncodingName(m_encoding));
 #else
     (void) encoding;
@@ -496,11 +517,10 @@ extern "C" int LINKAGEMODE wxHtmlEntityCompare(const void *key, const void *item
     return wxStrcmp((wxChar*)key, ((wxHtmlEntityInfo*)item)->name);
 }
 
+#if !wxUSE_UNICODE
 wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code)
 {
-#if wxUSE_UNICODE
-    return (wxChar)code;
-#elif wxUSE_WCHAR_T
+#if wxUSE_WCHAR_T
     char buf[2];
     wchar_t wbuf[2];
     wbuf[0] = (wchar_t)code;
@@ -513,6 +533,7 @@ wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code)
     return (code < 256) ? (wxChar)code : '?';
 #endif
 }
+#endif
 
 wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
 {
@@ -817,5 +838,63 @@ wxFSFile *wxHtmlParser::OpenURL(wxHtmlURLType WXUNUSED(type),
 {
     return GetFS()->OpenFile(url);
 }
+
+
+//-----------------------------------------------------------------------------
+// wxHtmlParser::ExtractCharsetInformation
+//-----------------------------------------------------------------------------
+
+class wxMetaTagParser : public wxHtmlParser
+{
+public:
+    wxObject* GetProduct() { return NULL; }
+protected:
+    virtual void AddText(const wxChar* WXUNUSED(txt)) {}
+};
+
+class wxMetaTagHandler : public wxHtmlTagHandler
+{
+public:
+    wxMetaTagHandler(wxString *retval) : wxHtmlTagHandler(), m_retval(retval) {}
+    wxString GetSupportedTags() { return wxT("META,BODY"); }
+    bool HandleTag(const wxHtmlTag& tag);
+
+private:
+    wxString *m_retval;
+};
+
+bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
+{
+    if (tag.GetName() == _T("BODY"))
+    {
+        m_Parser->StopParsing();
+        return FALSE;
+    }
+
+    if (tag.HasParam(_T("HTTP-EQUIV")) &&
+        tag.GetParam(_T("HTTP-EQUIV")).IsSameAs(_T("Content-Type"), FALSE) &&
+        tag.HasParam(_T("CONTENT")))
+    {
+        wxString content = tag.GetParam(_T("CONTENT")).Lower();
+        if (content.Left(19) == _T("text/html; charset="))
+        {
+            *m_retval = content.Mid(19);
+            m_Parser->StopParsing();
+        }
+    }
+    return FALSE;
+}
+
+
+/*static*/
+wxString wxHtmlParser::ExtractCharsetInformation(const wxString& markup)
+{
+    wxString charset;
+    wxMetaTagParser parser;
+    parser.AddTagHandler(new wxMetaTagHandler(&charset));
+    parser.Parse(markup);
+    return charset;
+}
+
 
 #endif

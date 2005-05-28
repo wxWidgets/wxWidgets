@@ -1,7 +1,7 @@
-Notes for wxWindows compilation on AIX
+Notes for wxWidgets compilation on AIX
 --------------------------------------
 
-wxWindows 2.0 has been compiled under AIX with the C set ++ 3.1.
+wxWidgets 2.0 has been compiled under AIX with the C set ++ 3.1.
 
 The environment variables CC and CXX should be set accordingly before running
 configure for the first time:

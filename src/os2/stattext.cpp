@@ -121,6 +121,7 @@ wxSize wxStaticText::DoGetBestSize() const
     int                             nHeightLineDefault = 0;
     int                             nHeightLine = 0;
     wxString                        sCurLine;
+    bool                            bLastWasAmpersand = FALSE;
 
     for (const wxChar *pc = sText; ; pc++)
     {
@@ -161,6 +162,29 @@ wxSize wxStaticText::DoGetBestSize() const
         }
         else
         {
+            //
+            // We shouldn't take into account the '&' which just introduces the
+            // mnemonic characters and so are not shown on the screen -- except
+            // when it is preceded by another '&' in which case it stands for a
+            // literal ampersand
+            //
+            if (*pc == _T('&'))
+            {
+                if (!bLastWasAmpersand)
+                {
+                    bLastWasAmpersand = TRUE;
+
+                    //
+                    // Skip the statement adding pc to curLine below
+                    //
+                    continue;
+                }
+
+                //
+                // It is a literal ampersand
+                //
+                bLastWasAmpersand = FALSE;
+            }
             sCurLine += *pc;
         }
     }

@@ -62,7 +62,7 @@ class TestPanel(wxPanel):
         sizer.Add(btnSizer, 0, wxEXPAND)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
         EVT_WINDOW_DESTROY(self, self.OnDestroy)
 
@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
     app = wxPySimpleApp()
     frame = TestFrame()
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 
 

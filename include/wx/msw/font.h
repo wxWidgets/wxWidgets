@@ -90,11 +90,10 @@ public:
 
     virtual bool IsFree() const;
     virtual bool RealizeResource();
-    virtual WXHANDLE GetResourceHandle();
+    virtual WXHANDLE GetResourceHandle() const;
     virtual bool FreeResource(bool force = FALSE);
 
-    // for consistency with other wxMSW classes and to have a const
-    // GetResourceHandle()-like function we have a synonym for it
+    // for consistency with other wxMSW classes
     WXHFONT GetHFONT() const;
 
     /*

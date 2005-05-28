@@ -1144,11 +1144,35 @@ version 1.2.4beta3 [June 28, 2002]
   Added "test-installed" target to makefile.32sunu, makefile.64sunu,
     makefile.beos, makefile.darwin, makefile.dec, makefile.macosx, 
     makefile.solaris, makefile.hpux, makefile.hpgcc, and makefile.so9.
-version 1.2.4rc1 [July 2, 2002]
+version 1.2.4rc1 and 1.0.14rc1 [July 2, 2002]
   Added "test-installed" target to makefile.cygwin and makefile.sco.
   Revised pnggccrd.c to be able to back out version 1.0.x via PNG_1_0_X macro.
-version 1.2.4 [July 8, 2002]
+version 1.2.4 and 1.0.14 [July 8, 2002]
   Changed png_warning() to png_error() when width is too large to process.
+version 1.2.4patch01 [July 20, 2002]
+  Revised makefile.cygwin to use DLL number 12 instead of 13.
+version 1.2.5beta1 [August 6, 2002]
+  Added code to contrib/gregbook/readpng2.c to ignore unused chunks.
+  Replaced toucan.png in contrib/gregbook (it has been corrupt since 1.0.11)
+  Removed some stray *.o files from contrib/gregbook.
+  Changed png_error() to png_warning() about "Too much data" in pngpread.c
+    and about "Extra compressed data" in pngrutil.c.
+  Prevent png_ptr->pass from exceeding 7 in png_push_finish_row().
+  Updated makefile.hpgcc
+  Updated png.c and pnggccrd.c handling of return from png_mmx_support()
+version 1.2.5beta2 [August 15, 2002]
+  Only issue png_warning() about "Too much data" in pngpread.c when avail_in
+    is nonzero.
+  Updated makefiles to install a separate libpng.so.3 with its own rpath.
+version 1.2.5rc1 and 1.0.15rc1 [August 24, 2002]
+  Revised makefiles to not remove previous minor versions of shared libraries.
+version 1.2.5rc2 and 1.0.15rc2 [September 16, 2002]
+  Revised 13 makefiles to remove "-lz" and "-L$(ZLIBLIB)", etc., from shared
+    library loader directive.
+  Added missing "$OBJSDLL" line to makefile.gcmmx.
+  Added missing "; fi" to makefile.32sunu.
+version 1.2.5rc3 and 1.0.15rc3 [September 18, 2002]
+  Revised libpng-config script.
 
 Send comments/corrections/commendations to
 png-implement@ccrc.wustl.edu or to randeg@alum.rpi.edu

@@ -34,7 +34,7 @@ class FortyCanvas;
 class FortyFrame: public wxFrame
 {
 public:
-        FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h,bool largecards);
+        FortyFrame(wxFrame* frame, const wxString& title, int x, int y, int w, int h,bool largecards);
 	virtual ~FortyFrame();
 
 	void OnCloseWindow(wxCloseEvent& event);

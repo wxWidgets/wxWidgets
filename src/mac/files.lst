@@ -139,6 +139,7 @@ ALL_SOURCES = \
 		common/quantize.cpp \
 		common/regex.cpp \
 		common/resource.cpp \
+		common/rgncmn.cpp \
 		common/sckaddr.cpp \
 		common/sckfile.cpp \
 		common/sckipc.cpp \
@@ -225,7 +226,6 @@ ALL_SOURCES = \
 		mac/palette.cpp \
 		mac/pen.cpp \
 		mac/pnghand.cpp \
-		mac/print.cpp \
 		mac/printdlg.cpp \
 		mac/printmac.cpp \
 		mac/radiobox.cpp \
@@ -271,7 +271,6 @@ ALL_SOURCES = \
 		html/m_layout.cpp \
 		html/m_links.cpp \
 		html/m_list.cpp \
-		html/m_meta.cpp \
 		html/m_pre.cpp \
 		html/m_style.cpp \
 		html/m_tables.cpp \
@@ -440,6 +439,7 @@ ALL_HEADERS = \
 		prop.h \
 		propform.h \
 		proplist.h \
+		quantize.h \
 		radiobox.h \
 		radiobut.h \
 		regex.h \
@@ -621,7 +621,7 @@ ALL_HEADERS = \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
-		generic/mdig.cpp \
+		generic/mdig.h \
 		generic/msgdlgg.h \
 		generic/notebook.h \
 		generic/paletteg.h \
@@ -654,6 +654,7 @@ ALL_HEADERS = \
 		html/htmldefs.h \
 		html/htmlfilt.h \
 		html/htmlpars.h \
+		html/htmlproc.h \
 		html/htmltag.h \
 		html/htmlwin.h \
 		html/htmprint.h \
@@ -665,7 +666,6 @@ ALL_HEADERS = \
 		protocol/protocol.h
 
 COMMONOBJS = \
-		parser.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -760,6 +760,7 @@ COMMONOBJS = \
 		quantize.o \
 		regex.o \
 		resource.o \
+		rgncmn.o \
 		sckaddr.o \
 		sckfile.o \
 		sckipc.o \
@@ -903,7 +904,6 @@ GUIOBJS = \
 		palette.o \
 		pen.o \
 		pnghand.o \
-		print.o \
 		printdlg.o \
 		printmac.o \
 		radiobox.o \
@@ -953,7 +953,6 @@ HTMLOBJS = \
 		m_layout.o \
 		m_links.o \
 		m_list.o \
-		m_meta.o \
 		m_pre.o \
 		m_style.o \
 		m_tables.o \

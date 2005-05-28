@@ -23,23 +23,23 @@
 #if wxUSE_LIBPNG
 class WXDLLEXPORT wxPNGHandler: public wxImageHandler
 {
-  DECLARE_DYNAMIC_CLASS(wxPNGHandler)
-
 public:
-
-  inline wxPNGHandler()
-  {
-      m_name = "PNG file";
-      m_extension = "png";
-      m_type = wxBITMAP_TYPE_PNG;
-      m_mime = "image/png";
-  };
+    inline wxPNGHandler()
+    {
+        m_name = wxT("PNG file");
+        m_extension = wxT("png");
+        m_type = wxBITMAP_TYPE_PNG;
+        m_mime = wxT("image/png");
+    }
 
 #if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool DoCanRead( wxInputStream& stream );
+    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
+    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+    virtual bool DoCanRead( wxInputStream& stream );
 #endif
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPNGHandler)
 };
 #endif
 

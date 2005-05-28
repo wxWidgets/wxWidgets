@@ -146,7 +146,7 @@ wxLibrary::wxLibrary(wxDllType handle)
     m_handle = handle;
 
     // Some system may use a local heap for library.
-    get_first = (t_get_first)GetSymbol("wxGetClassFirst");
+    get_first = (t_get_first)GetSymbol(_T("wxGetClassFirst"));
     // It is a wxWindows DLL.
     if (get_first)
         PrepareClasses(get_first());
@@ -333,14 +333,11 @@ void *wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name, bool *su
 
     if ( !symbol )
     {
-        wxString msg(_("wxDllLoader failed to GetSymbol '%s'"));
-
 #ifdef HAVE_DLERROR
         const wxChar *err = dlerror();
         if( err )
         {
-            failed = TRUE;
-            wxLogError( msg, err );
+            wxLogError(wxT("%s"), err);
         }
 #else
         failed = TRUE;
@@ -483,7 +480,7 @@ void *dlopen(const char *path, int WXUNUSED(mode) /* mode is ignored */)
 
 int dlclose(void *handle)
 {
-    NSUnLinkModule( handle, NSUNLINKMODULE_OPTION_NONE);
+    NSUnLinkModule( (NSModule) handle, NSUNLINKMODULE_OPTION_NONE);
     return 0;
 }
 

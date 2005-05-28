@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/cursor.h
+// Purpose:     wxCursor base header
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// Copyright:   (c) Julian Smart
+// RCS-ID:      $Id$
+// Licence:     wxWindows Licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_CURSOR_H_BASE_
 #define _WX_CURSOR_H_BASE_
 
@@ -38,6 +49,9 @@
    interfere with the state of wxIsBusy() -- RL
 
 */
+
+#if wxUSE_GUI
+
 class wxBusyCursorSuspender
 {
 public:
@@ -56,5 +70,7 @@ public:
         }
     }
 };
+#endif
+
 #endif
     // _WX_CURSOR_H_BASE_

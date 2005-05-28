@@ -8,7 +8,6 @@ A combobox permits a single selection only. Combobox items are numbered from zer
 
 \wxheading{Derived from}
 
-\helpref{wxChoice}{wxchoice}\\
 \helpref{wxControl}{wxcontrol}\\
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
@@ -37,6 +36,8 @@ See also \helpref{window styles overview}{windowstyles}.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_COMBOBOX(id, func)}}{Process a wxEVT\_COMMAND\_COMBOBOX\_SELECTED event,
 when an item on the list is selected.}
+\twocolitem{{\bf EVT\_TEXT\_ENTER(id, func)}}{Process a wxEVT\_COMMAND\_TEXT\_ENTER event,
+when return is pressed in the combobox.}
 \twocolitem{{\bf EVT\_TEXT(id, func)}}{Process a wxEVT\_COMMAND\_TEXT\_UPDATED event,
 when the combobox text changes.}
 \end{twocollist}
@@ -66,6 +67,8 @@ Constructor, creating and showing a combobox.
 \docparam{parent}{Parent window. Must not be NULL.}
 
 \docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{value}{Initial selection string. An empty string indicates no selection.}
 
 \docparam{pos}{Window position.}
 
@@ -239,7 +242,7 @@ Returns the current value in the combobox text field.
 
 {\bf Obsolescence note:} This method is obsolete and was replaced with 
 \helpref{GetCount}{wxcomboboxgetcount}, please use the new method in the new
-code. This method is only available if wxWindows was compiled with 
+code. This method is only available if wxWidgets was compiled with 
 {\tt WXWIN\_COMPATIBILITY\_2\_2} defined and will disappear completely in
 future versions.
 

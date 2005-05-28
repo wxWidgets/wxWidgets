@@ -83,6 +83,7 @@
 #undef __FREEBSD__
 #undef __DARWIN__
 #undef __NETBSD__
+#undef __OPENBSD__
 #undef __VMS__
 #undef __ULTRIX__
 #undef __DATA_GENERAL__
@@ -102,7 +103,6 @@
 #undef __WINDOWS__
 #endif
 
-#undef __WIN95__
 #ifndef __WIN32__
 #undef __WIN32__
 #endif
@@ -859,6 +859,16 @@
 #define wxUSE_ICO_CUR 0
 
 /*
+ * Use dynamic DIB loading/saving code in utils/dib under MSW
+ */
+#define wxUSE_IMAGE_LOADING_IN_MSW 0
+
+/*
+ * Use dynamic cursor/icon loading/saving code under MSW
+ */
+#define wxUSE_RESOURCE_LOADING_IN_MSW 0
+
+/*
  * Disable this if your compiler can't cope
  * with omission of prototype parameters.
  */
@@ -880,6 +890,9 @@
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #undef SOCKLEN_T
 
+/* The type of statvfs(2) argument */
+#undef WX_STATFS_T
+
 /* The signal handler prototype */
 #undef wxTYPE_SA_HANDLER
 
@@ -889,6 +902,9 @@
 
 /* struct tm doesn't always have the tm_gmtoff field, define this if it does */
 #undef WX_GMTOFF_IN_TM
+
+/* Define if you have poll(2) function */
+#undef HAVE_POLL
 
 /* Define if you have pw_gecos field in struct passwd */
 #undef HAVE_PW_GECOS

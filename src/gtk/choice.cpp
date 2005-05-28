@@ -296,11 +296,33 @@ int wxChoice::GetSelection() const
 #endif
 }
 
-void wxChoice::SetString( int WXUNUSED(n), const wxString& WXUNUSED(string) )
+void wxChoice::SetString( int n, const wxString& str )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice") );
 
-    wxFAIL_MSG(wxT("not implemented"));
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+    int count = 0;
+    GList *child = menu_shell->children;
+    while (child)
+    {
+        GtkBin *bin = GTK_BIN( child->data );
+        if (count == n)
+        {
+            GtkLabel *label = (GtkLabel *) NULL;
+            if (bin->child)
+                label = GTK_LABEL(bin->child);
+            if (!label)
+                label = GTK_LABEL( BUTTON_CHILD(m_widget) );
+
+            wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
+
+            gtk_label_set_text( label, wxGTK_CONV( str ) ); 
+            
+            return;
+        }
+        child = child->next;
+        count++;
+    }
 }
 
 wxString wxChoice::GetString( int n ) const
@@ -448,14 +470,11 @@ wxSize wxChoice::DoGetBestSize() const
     ret.x = 0;
     if ( m_widget )
     {
-        GdkFont *font = m_font.GetInternalFont();
-
-        wxCoord width;
+        int width;
         size_t count = GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            // FIXME GTK 2.0
-            width = (wxCoord)gdk_string_width(font, wxGTK_CONV( GetString(n) ) );
+            GetTextExtent( GetString(n), &width, NULL, NULL, NULL, &m_font );
             if ( width > ret.x )
                 ret.x = width;
         }
@@ -477,10 +496,20 @@ wxSize wxChoice::DoGetBestSize() const
     if ( ret.x < 80 )
         ret.x = 80;
 
-    ret.y = 16 + gdk_char_height(GET_STYLE_FONT( m_widget->style ), 'H' );
+    ret.y = 16 + GetCharHeight();
 
     return ret;
 }
+
+bool wxChoice::IsOwnGtkWindow( GdkWindow *window )
+{
+#ifdef __WXGTK20__
+    return GTK_BUTTON(m_widget)->event_window;
+#else
+    return (window == m_widget->window);
+#endif
+}
+
 
 #endif // wxUSE_CHOICE
 

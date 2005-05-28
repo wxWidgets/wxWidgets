@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/dde.h
+// Purpose:     DDE base header
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// Copyright:   (c) Julian Smart
+// RCS-ID:      $Id$
+// Licence:     wxWindows Licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_DDE_H_BASE_
 #define _WX_DDE_H_BASE_
 

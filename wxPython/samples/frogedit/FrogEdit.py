@@ -12,8 +12,6 @@ from wxPython.wx         import *
 from StatusBar           import *
 from FrogEditor          import FrogEditor
 
-TRUE  = 1
-FALSE = 0
 
 ABOUT_TEXT = """FrogEdit : Copyright 2001 Adam Feuer and Steve Howell
 wxEditor component : Copyright 1999 - 2001 Dirk Holtwic, Robin Dunn, Adam Feuer, Steve Howell
@@ -95,7 +93,7 @@ class FrogEditFrame(wxFrame):
 
     def SetUpSplitter(self, splitter, win, log):
         splitter.SplitHorizontally(win, log)
-        splitter.SetSashPosition(360, true)
+        splitter.SetSashPosition(360, True)
         splitter.SetMinimumPaneSize(40)
 
     def MakeToolbar(self, win):
@@ -109,7 +107,7 @@ class FrogEditFrame(wxFrame):
         borderWidth = 5
         mainBox.Add(self.edl, 1, wxALL|wxGROW, borderWidth)
         win.SetSizer(mainBox)
-        win.SetAutoLayout(true)
+        win.SetAutoLayout(True)
 
 ##-------------- Init Menus
 
@@ -180,9 +178,9 @@ class FrogEditFrame(wxFrame):
         result = dialog.ShowModal()
         dialog.Destroy()
         if result == wxID_OK:
-            return TRUE
+            return True
         else:
-            return FALSE
+            return False
 
     def SelectFileDialog(self, defaultDir=None, defaultFile=None, wildCard=None):
         if defaultDir == None:
@@ -247,9 +245,9 @@ class FrogEditFrame(wxFrame):
             f.close()
             self.edl.UnTouchBuffer()
             self.sb.setFileName(fileName)
-            return TRUE
+            return True
         except:
-            return FALSE
+            return False
 
     def OpenFile(self, fileName):
         try:
@@ -262,9 +260,9 @@ class FrogEditFrame(wxFrame):
             self.edl.SetText(contents)
             self.fileName = fileName
             self.sb.setFileName(fileName)
-            return TRUE
+            return True
         except:
-            return FALSE
+            return False
 
 
 
@@ -288,7 +286,7 @@ class FrogEditFrame(wxFrame):
                 return
         fileName = self.SelectFileDialog(self.GetCurrentDir())
         if fileName is not None:
-            if self.OpenFile(fileName) is FALSE:
+            if self.OpenFile(fileName) is False:
                 self.OpenFileError(fileName)
         self.edl.SetFocus()
 
@@ -296,7 +294,7 @@ class FrogEditFrame(wxFrame):
         if self.fileName is None:
             return self.OnSaveFileAs(event)
         wxLogMessage("Saving %s..." % self.fileName)
-        if self.SaveFile(self.fileName) is not TRUE:
+        if self.SaveFile(self.fileName) is not True:
             self.SaveFileError(self.fileName)
         self.edl.SetFocus()
 
@@ -305,7 +303,7 @@ class FrogEditFrame(wxFrame):
         if fileName is not None:
             self.fileName = fileName
             wxLogMessage("Saving %s..." % self.fileName)
-            if self.SaveFile(self.fileName) is not TRUE:
+            if self.SaveFile(self.fileName) is not True:
                 self.SaveFileError(self.fileName)
         self.edl.SetFocus()
 
@@ -331,7 +329,7 @@ class FrogEditFrame(wxFrame):
 
     def LoadInitialFile(self, fileName):
         if fileName is not None:
-            if self.OpenFile(fileName) is FALSE:
+            if self.OpenFile(fileName) is False:
                 self.OpenFileError(fileName)
 
 
@@ -354,7 +352,7 @@ class FrogEditLauncher:
     def Main(self):
         app = wxPySimpleApp()
         win = self.MakeAppFrame()
-        win.Show(true)
+        win.Show(True)
         win.LoadInitialFile(self.GetArgvFilename())
         app.MainLoop()
 

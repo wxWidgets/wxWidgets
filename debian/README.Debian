@@ -1,6 +1,30 @@
 wxwindows for Debian
 ----------------------
 
+Note:  After some eleven years, the wxWindows project has undergone a
+       change of name and is now formally known upstream as wxWidgets.
+       This will not be altered retroactively for the existing Debian
+       packages of 2.4, since forcing a recompile for every dependent
+       package just to change this is simply unwarranted.  The Debian
+       packages will adopt the name wxwidgets for use from 2.5 onward.
+
+       The name change itself will not cause source incompatibilities,
+       and the library api will not be altered because of it, however
+       other maintainers will need to update their build dependencies
+       to accommodate a name as well as a version change for this one.
+
+       wxwindows.org will continue to refer to the existing project
+       site probably until sometime in 2005.  You should update any
+       references to use wxwidgets.org before then.
+
+       Why have we done this?
+       The new owners of the wxwindows.org domain have requested it.
+
+       Why have they done this?
+       Who can say...  I see pat@sf is crowing about a project named
+       WiX that they just accepted.  Perhaps they can tell you more.
+
+
 The following packages are built from the wxWindows CVS source.
 
 libwxbase		wxBase runtime shared libraries
@@ -24,15 +48,15 @@ wxwin-examples		wxWindows and wxPython demos and samples (source)
 wxwin-i18n		message catalogs for native language support
 
 
-	The following three can be built from the source package
+	The following binaries can be built from the source package
 	with the mingw32 cross compiler, but are not currently
 	distributed by Debian.  If you feel that should change,
-	please file a bug against the wxwindows2.2 package, or
+	please file a bug against the wxwindows2.4 package, or
 	append your views to a report already there if you're not
 	the first to do so.
 
 	[ you can check the current state of affairs at:
-	  http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=wxwindows2.2 ]
+	  http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=wxwindows2.4 ]
 
 	Oh and, please do *not* file bug reports for these packages
 	to the Debian bts.  But do feel free to email me personally
@@ -44,7 +68,28 @@ libwxbase-msw-dev	mingw32-cross wxBase libs.
 libwxbase-msw-dbg	mingw32-cross wxBase (debug) libs.
 wxwin-headers-msw	extra headers needed for wxMSW.
 
-libwxgtk-univ		wxUniversal for Gtk.
+	You can build all of these extra packages using the binary-cross
+	target in debian/rules.
+
+
+	It is also possible to build a libwxgtk-dbg-python package.
+	There are some limitations (like this package cannot be installed
+	concurrently with the release version), but some developers may
+	find such a thing useful in any case.  It will transparently
+	replace the release package for installed apps that depend on the
+	release package, but should NEVER be used when preparing packages
+	for upload.  This package may be created from the source using the
+	binary-dbg-py target in debian/rules.  (note that doing this will
+	also destroy any release build that exists in the same tree, they
+	cannot coexist there either yet)
+
+
+	Finally, because all of these packages can take quite some time to
+	build, the source package supports the use of distcc.  The package
+	builds will automatically parallelise to suit the number of hosts
+	you have listed in DISTCC_HOSTS.  This will work for both native
+	and cross builds of the c++ libraries, if you have the relevant
+	compilers on all your build hosts.
 
 
  -- Ron Lee <ron@debian.org>, Sun, 13 Feb 2000 18:40:00 +1030

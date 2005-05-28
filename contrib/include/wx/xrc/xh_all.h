@@ -19,6 +19,7 @@
 #include "wx/xrc/xh_dlg.h"
 #include "wx/xrc/xh_bttn.h"
 #include "wx/xrc/xh_chckb.h"
+#include "wx/xrc/xh_tglbtn.h"
 #include "wx/xrc/xh_gauge.h"
 #include "wx/xrc/xh_html.h"
 #include "wx/xrc/xh_spin.h"
@@ -46,5 +47,9 @@
 #include "wx/xrc/xh_unkwn.h"
 #include "wx/xrc/xh_gdctl.h"
 #include "wx/xrc/xh_frame.h"
+#include "wx/xrc/xh_scwin.h"
+#include "wx/xrc/xh_split.h"
+#include "wx/xrc/xh_wizrd.h"
+#include "wx/xrc/xh_statbar.h"
 
 #endif // _WX_XMLRES_H_

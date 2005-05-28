@@ -11,7 +11,7 @@ you can use just like wxWindow, (set the size and position, use in a
 sizer, etc.) except its contents will be the COM control.
 
 <p>
-This demo embeds the Internet Exploer WebBrowser control, and shows
+This demo embeds the Internet Explorer WebBrowser control, and shows
 how to receive events from the COM control.  (The title bar and status
 bar are updated as pages change, in addition to the log messages being
 shown.)
@@ -101,10 +101,16 @@ class TestPanel(wxWindow):
         self.location.Append(self.current)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         EVT_SIZE(self, self.OnSize)
 
         EVT_WINDOW_DESTROY(self, self.OnDestroy)
+
+
+    def ShutdownDemo(self):
+        # put the frame title back
+        if self.frame:
+            self.frame.SetTitle(self.titleBase)
 
 
     def OnDestroy(self, evt):
@@ -224,7 +230,7 @@ if __name__ == '__main__':
 
     app = wxPySimpleApp()
     frame = TestFrame()
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 
 

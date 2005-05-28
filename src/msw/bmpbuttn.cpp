@@ -234,7 +234,10 @@ void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int botto
     penLight    = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DLIGHT));
     penShadow   = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DSHADOW));
     penDkShadow = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DDKSHADOW));
-    brushFace   = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
+    // brushFace   = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
+    // Taking the background colour fits in better with
+    // Windows XP themes.
+    brushFace   = CreateSolidBrush(m_backgroundColour.m_pixel);
 
     // draw the rectangle
     RECT rect;

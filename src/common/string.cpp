@@ -161,6 +161,18 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
 #endif // WXSTRING_STATISTICS
 
 // ===========================================================================
+// wxStringData core
+// ===========================================================================
+
+#if defined(__VISUALC__) && defined(_MT) && !defined(_DLL)
+#  pragma message (__FILE__ ": building with Multithreaded non DLL runtime has a performance impact on wxString!")
+void wxStringData::Free()
+{
+   free(this);
+}
+#endif
+
+// ===========================================================================
 // wxString class core
 // ===========================================================================
 
@@ -229,24 +241,43 @@ wxString::wxString(const void *pStart, const void *pEnd)
 // from multibyte string
 wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 {
-  // first get necessary size
-  size_t nLen = psz ? conv.MB2WC((wchar_t *) NULL, psz, 0) : 0;
-
-  // nLength is number of *Unicode* characters here!
-  if ((nLen != (size_t)-1) && (nLen > nLength))
-    nLen = nLength;
-
-  // empty?
-  if ( (nLen != 0) && (nLen != (size_t)-1) ) {
-    if ( !AllocBuffer(nLen) ) {
-      wxFAIL_MSG( _T("out of memory in wxString::wxString") );
-      return;
+    // first get the size of the buffer we need
+    size_t nLen;
+    if ( psz )
+    {
+        // calculate the needed size ourselves or use a provide one
+        nLen = nLength == wxSTRING_MAXLEN ? conv.MB2WC(NULL, psz, 0) : nLength;
     }
-    conv.MB2WC(m_pchData, psz, nLen);
-  }
-  else {
+    else
+    {
+        // nothing to convert
+        nLen = 0;
+    }
+
+    // anything to do?
+    if ( (nLen != 0) && (nLen != (size_t)-1) )
+    {
+        if ( !AllocBuffer(nLen) )
+        {
+            wxFAIL_MSG( _T("out of memory in wxString::wxString") );
+            return;
+        }
+
+        // MB2WC wants the buffer size, not the string length hence +1
+        nLen = conv.MB2WC(m_pchData, psz, nLen + 1);
+
+        if ( nLen != (size_t)-1 )
+        {
+            // initialized ok, set the real length as nLength specified by
+            // the caller could be greater than the real string length
+            GetStringData()->nDataLength = nLen;
+            m_pchData[nLen] = 0;
+            return;
+        }
+        //else: the conversion failed -- leave the string empty (what else?)
+    }
+
     Init();
-  }
 }
 
 #else // ANSI
@@ -255,27 +286,38 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 // from wide string
 wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 {
-  // first get necessary size
-  size_t nLen = 0;
-  if (pwz)
-  {
-    if (nLength == wxSTRING_MAXLEN)
-      nLen = conv.WC2MB((char *) NULL, pwz, 0);
-    else
-      nLen = nLength;
-  }
-
-  // empty?
-  if ( (nLen != 0) && (nLen != (size_t)-1) ) {
-    if ( !AllocBuffer(nLen) ) {
-      wxFAIL_MSG( _T("out of memory in wxString::wxString") );
-      return;
+    // first get the size of the buffer we need
+    size_t nLen;
+    if ( pwz )
+    {
+        // calculate the needed size ourselves or use a provide one
+        nLen = nLength == wxSTRING_MAXLEN ? conv.WC2MB(NULL, pwz, 0) : nLength;
     }
-    conv.WC2MB(m_pchData, pwz, nLen);
-  }
-  else {
+    else
+    {
+        // nothing to convert
+        nLen = 0;
+    }
+
+    // anything to do?
+    if ( (nLen != 0) && (nLen != (size_t)-1) )
+    {
+        if ( !AllocBuffer(nLen) )
+        {
+            wxFAIL_MSG( _T("out of memory in wxString::wxString") );
+            return;
+        }
+
+        // WC2MB wants the buffer size, not the string length
+        if ( conv.WC2MB(m_pchData, pwz, nLen + 1) != (size_t)-1 )
+        {
+            // initialized ok
+            return;
+        }
+        //else: the conversion failed -- leave the string empty (what else?)
+    }
+
     Init();
-  }
 }
 #endif // wxUSE_WCHAR_T
 
@@ -726,6 +768,16 @@ wxString wxString::FromAscii(const char *ascii)
                break;
         }
     }
+
+    return res;
+}
+
+wxString wxString::FromAscii(const char ascii)
+{
+    // What do we do with '\0' ?
+
+    wxString res;
+    res += (wchar_t)(unsigned char) ascii;
 
     return res;
 }
@@ -1237,7 +1289,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 
         UngetWriteBuf();
 
-        if ( len >= 0 )
+        if ( (len >= 0) && (len <= size) )
         {
             // ok, there was enough space
             break;
@@ -1568,7 +1620,7 @@ size_t wxString::find_last_of(const wxChar* sz, size_t nStart) const
         wxASSERT( nStart <= Len() );
     }
 
-    for ( const wxChar *p = c_str() + length() - 1; p >= c_str(); p-- )
+    for ( const wxChar *p = c_str() + nStart - 1; p >= c_str(); p-- )
     {
         if ( wxStrchr(sz, *p) )
             return p - c_str();
@@ -1752,7 +1804,7 @@ void wxArrayString::Copy(const wxArrayString& src)
 void wxArrayString::Grow(size_t nIncrement)
 {
   // only do it if no more place
-  if ( m_nCount == m_nSize ) {
+  if ( (m_nSize - m_nCount) < nIncrement ) {
     // if ARRAY_DEFAULT_INITIAL_SIZE were set to 0, the initially empty would
     // be never resized!
     #if ARRAY_DEFAULT_INITIAL_SIZE == 0
@@ -1850,6 +1902,7 @@ void wxArrayString::Shrink()
     memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
     delete [] m_pItems;
     m_pItems = pNew;
+    m_nSize = m_nCount;
   }
 }
 

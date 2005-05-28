@@ -141,11 +141,11 @@ def makeBoxInBox(win):
     box.Add(wxButton(win, 1010, "one"), 0, wxEXPAND)
 
     box2 = wxBoxSizer(wxHORIZONTAL)
-    box2.AddMany([ (wxButton(win, 1010, "two"), 0, wxEXPAND),
-                   (wxButton(win, 1010, "three"), 0, wxEXPAND),
-                   (wxButton(win, 1010, "four"), 0, wxEXPAND),
-                   (wxButton(win, 1010, "five"), 0, wxEXPAND),
-                   ])
+    box2.Add(wxButton(win, 1010, "two"), 0, wxEXPAND)
+    btn3 = wxButton(win, 1010, "three")
+    box2.Add(btn3, 0, wxEXPAND)
+    box2.Add(wxButton(win, 1010, "four"), 0, wxEXPAND)
+    box2.Add(wxButton(win, 1010, "five"), 0, wxEXPAND)
 
     box3 = wxBoxSizer(wxVERTICAL)
     box3.AddMany([ (wxButton(win, 1010, "six"),   0, wxEXPAND),
@@ -158,6 +158,8 @@ def makeBoxInBox(win):
     box.Add(box2, 1, wxEXPAND)
 
     box.Add(wxButton(win, 1010, "ten"), 0, wxEXPAND)
+
+    ##box.Hide(btn3)
 
     return box
 
@@ -360,7 +362,7 @@ theTests = [
      ),
 
     ("Add a stretchable", makeSimpleBox3,
-     "We've added one more button with the strechable flag turned on.  Notice "
+     "We've added one more button with the stretchable flag turned on.  Notice "
      "how it grows to fill the extra space in the otherwise fixed dimension."
      ),
 
@@ -370,7 +372,7 @@ theTests = [
      ),
 
     ("Weighting factor", makeSimpleBox5,
-     "This one shows more than one strechable, but one of them has a weighting "
+     "This one shows more than one stretchable, but one of them has a weighting "
      "factor so it gets more of the free space."
      ),
 
@@ -419,7 +421,7 @@ theTests = [
      ),
 
     ("Boxes inside a Border", makeBoxInBorder,
-     "Sizers of different types can be nested withing each other as well. "
+     "Sizers of different types can be nested within each other as well. "
      "Here is a box sizer with several buttons embedded within a border sizer."
      ),
 
@@ -432,7 +434,7 @@ theTests = [
     ("Simple Grid", makeGrid1,
      "This is an example of the wxGridSizer.  In this case all row heights "
      "and column widths are kept the same as all the others and all items "
-     "fill their available space.  The horzontal and vertical gaps are set to "
+     "fill their available space.  The horizontal and vertical gaps are set to "
      "2 pixels each."
      ),
 
@@ -459,7 +461,7 @@ theTests = [
 
     ("Proportional resize", makeSimpleBoxShaped,
      "Managed items can preserve their original aspect ratio.  The last item has the "
-     "wxSHAPED flag set and will resize proportional to its origingal size."
+     "wxSHAPED flag set and will resize proportional to its original size."
      ),
 
     ("Proportional resize with Alignments", makeShapes,
@@ -479,16 +481,16 @@ class TestFrame(wxFrame):
         self.SetStatusText("Resize this frame to see how the sizers respond...")
         self.sizer.Fit(self)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(self.sizer)
         EVT_CLOSE(self, self.OnCloseWindow)
 
     def OnCloseWindow(self, event):
-        self.MakeModal(false)
+        self.MakeModal(False)
         self.Destroy()
 
     def OnButton(self, event):
-        self.Close(true)
+        self.Close(True)
 
 #----------------------------------------------------------------------
 
@@ -531,8 +533,8 @@ class TestSelectionPanel(wxPanel):
         if func:
             win = TestFrame(self, title, func)
             win.CentreOnParent(wxBOTH)
-            win.Show(true)
-            win.MakeModal(true)
+            win.Show(True)
+            win.MakeModal(True)
 
 #----------------------------------------------------------------------
 
@@ -555,12 +557,12 @@ if __name__ == '__main__':
         def __init__(self):
             wxFrame.__init__(self, None, -1, "Testing...")
 
-	    self.CreateStatusBar()
-	    mainmenu = wxMenuBar()
-	    menu = wxMenu()
-	    menu.Append(200, 'E&xit', 'Get the heck outta here!')
-	    mainmenu.Append(menu, "&File")
-	    self.SetMenuBar(mainmenu)
+            self.CreateStatusBar()
+            mainmenu = wxMenuBar()
+            menu = wxMenu()
+            menu.Append(200, 'E&xit', 'Get the heck outta here!')
+            mainmenu.Append(menu, "&File")
+            self.SetMenuBar(mainmenu)
             EVT_MENU(self, 200, self.OnExit)
             self.panel = TestSelectionPanel(self, self)
             self.SetSize(wxSize(400, 380))
@@ -570,15 +572,15 @@ if __name__ == '__main__':
             self.Destroy()
 
         def OnExit(self, event):
-            self.Close(true)
+            self.Close(True)
 
 
     class TestApp(wxApp):
         def OnInit(self):
             frame = MainFrame()
-            frame.Show(true)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return true
+            return True
 
     app = TestApp(0)
     app.MainLoop()

@@ -19,7 +19,7 @@ LIB_CPP_SRC=\
   canvas.o\
   ogldiag.o\
   lines.o\
-  misc.o\
+  oglmisc.o\
   divided.o\
   constrnt.o\
   composit.o\

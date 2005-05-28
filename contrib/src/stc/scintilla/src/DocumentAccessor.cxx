@@ -130,8 +130,8 @@ void DocumentAccessor::Flush() {
 	lenDoc = -1;
 	if (validLen > 0) {
 		pdoc->SetStyles(validLen, styleBuf);
-		validLen = 0;
 		startPosStyling += validLen;
+		validLen = 0;
 	}
 }
 
@@ -174,7 +174,7 @@ int DocumentAccessor::IndentAmount(int line, int *flags, PFNIsCommentLeader pfnI
 	*flags = spaceFlags;
 	indent += SC_FOLDLEVELBASE;
 	// if completely empty line or the start of a comment...
-	if ((ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r') || 
+	if ((ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r') ||
 		(pfnIsCommentLeader && (*pfnIsCommentLeader)(*this, pos, end-pos)) )
 		return indent | SC_FOLDLEVELWHITEFLAG;
 	else

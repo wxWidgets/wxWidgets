@@ -1,4 +1,4 @@
-wxWindows 2.3 for X11 installation
+wxWidgets 2.4 for X11 installation
 ----------------------------------
 
 IMPORTANT NOTE:
@@ -9,30 +9,30 @@ IMPORTANT NOTE:
   mailing wxwin-users or the author. Preferably, try to fix the
   problem first and then send a patch to the author.
 
-  When sending bug reports tell us what version of wxWindows you are 
+  When sending bug reports tell us what version of wxWidgets you are 
   using (including the beta) and what compiler on what system. One 
-  example: wxX11 2.3.3, gcc 2.95.4, Redhat 6.2
+  example: wxX11 2.4.3, gcc 2.95.4, Redhat 6.2
 
 First steps
 -----------
 
-- Download wxWindows-X-x.y.z.tgz, where x.y.z is the version number.
+- Download wxX11-x.y.z.tgz, where x.y.z is the version number.
   Download documentation in a preferred format, such as
-  wxWindows-HTML.zip or wxWindows-PDF.zip.
+  wxWidgets-HTML.zip or wxWidgets-PDF.zip.
 
 - Make a directory such as ~/wx and unarchive the files into this
   directory.
 
 - It is recommended that you install bison and flex; using yacc
   and lex may require tweaking of the makefiles. You also need
-  libXpm if you want to have XPM support in wxWindows (recommended).
+  libXpm if you want to have XPM support in wxWidgets (recommended).
 
-- You can now use configure to build wxWindows and the samples.
+- You can now use configure to build wxWidgets and the samples.
 
   Using configure is the recommended way to build the library. If it doesn't
   work for you for whatever reason, please report it (together with detailed
   information about your platform and the (relevant part of) contents of
-  config.log file) to wx-dev@lists.wxwindows.org.
+  config.log file) to wx-dev@lists.wxwidgets.org.
 
 COMPILING USING CONFIGURE
 =========================
@@ -40,7 +40,7 @@ COMPILING USING CONFIGURE
 * The simplest case
 -------------------
 
-If you compile wxWindows on Linux for the first time and don't like to read 
+If you compile wxWidgets on Linux for the first time and don't like to read 
 install instructions just do (in the base dir):
 
 > ./configure --with-x11
@@ -58,7 +58,7 @@ Afterwards you can continue with
 > ldconfig
 > exit
 
-If you want to remove wxWindows on Unix you can do this:
+If you want to remove wxWidgets on Unix you can do this:
 
 > su <type root password>
 > make uninstall
@@ -68,10 +68,10 @@ If you want to remove wxWindows on Unix you can do this:
 * The expert case
 -----------------
 
-If you want to do some more serious cross-platform programming with wxWindows, 
+If you want to do some more serious cross-platform programming with wxWidgets, 
 such as for GTK and X11, you can now build two complete libraries and use 
 them concurrently. For this end, you have to create a directory for each build 
-of wxWindows - you may also want to create different versions of wxWindows
+of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured 
 with --enable-debug_flag and one without. Note, that only one build can
 currently be installed, so you'd have to use local version of the library for
@@ -122,12 +122,12 @@ g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 * General
 ---------
 
-The Unix variants of wxWindows use GNU configure. If you have problems with
+The Unix variants of wxWidgets use GNU configure. If you have problems with
 your make use GNU make instead.
 
-If you have general problems with installation, see the wxWindows website at 
+If you have general problems with installation, see the wxWidgets website at 
 
-  http://www.wxwindows.org/
+  http://www.wxwidgets.org/
   
 for newest information. If you still don't have any success, please send a bug 
 report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF 
@@ -137,12 +137,13 @@ YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
 * GUI libraries
 ---------------
 
-wxWindows/X11 requires the X11 library to be installed on your system.
+wxWidgets/X11 only requires the X11 system to be installed. TinyX
+will also suffice.
   
 * Additional libraries
 ----------------------
 
-wxWindows/X11 requires a thread library and X libraries known to work with
+wxWidgets/X11 requires a thread library and X libraries known to work with
 threads.  This is the case on all commercial Unix-Variants and all
 Linux-Versions that are based on glibc 2 except RedHat 5.0 which is broken in
 many aspects. As of writing this, these Linux distributions have correct glibc
@@ -167,43 +168,48 @@ exit
 ------------------------
 
 Please send comments and question about the OS/2 installation
-to Andrea Venturoli <a.ventu@flashnet.it> and patches to
-the wxWindows mailing list.
+to Stefan Neis <Stefan.Neis@t-online.de> and patches to
+the wxWidgets mailing list.
 
-You'll need OS/2 Warp (4.00FP#6), X-Free86/2 (3.3.3 or newer), 
-emx (0.9d fix 1), flex (2.5.4), yacc (1.8), unix like shell,
-e.g. korn shell (5.2.13), Autoconf (2.13),  GNU file utilities (3.6),
-GNU text utilities (1.3), GNU shell utilites (1.12), m4 (1.4), 
-sed (2.05), grep (2.0), Awk (3.0.3), GNU Make (3.76.1).
+In the following list, the version numbers indicate the configuration that
+was actually used by myself, newer version should cause no problems and
+even older ones are expected to work most of the time.
+
+You'll need OS/2 Warp (4.51) or eCS(1.0), X-Free86/2 (3.3.6 or newer),
+emx (0.9d fix 4), flex (2.5.4), yacc (1.8) or bison (1.25),
+a Unix like shell (pdksh-5.2.14 or ash), Autoconf (2.57), GNU file
+utilities (3.13), GNU text utilities (1.19), GNU shell utilites (1.12),
+m4 (1.4), sed (2.05), grep (2.0), Awk (3.0.3), GNU Make (3.75).
+
+Preferably, you should have Posix/2 installed and C(PLUS)_INCLUDE_PATH and
+LIBRARY_PATH set up accordingly, however, wxGTK will even work without it.
+Presence of Posix/2 will be auto-detected.
 
 Open an OS/2 prompt and switch to the directory above.
-First set some global environment variables we need:
+If you didn't do it yet, unzip distrib/os2/os2-specific.zip into the current
+directory. This will overwrite the configure scripts in the main directory
+and in the samples, demos and utils subdirectory with the OS/2 aware
+versions. Alternatively, if you didn't get os2-specific.zip (e.g. because
+you downloaded wxX11 only), run autoconf yourself in the said directories.
 
-SET CXXFLAGS=-Zmtd -D__ST_MT_ERRNO__
-SET CFLAGS=-Zmtd -D__ST_MT_ERRNO__
-SET OSTYPE=OS2X              
-SET COMSPEC=sh
+Set MAKESHELL (and depending on your installation also INSTALL, for me
+it tends to try to use the system's tcpip\pcomos\install.exe which causes
+problems...) to a Unix like shell, e.g.
+SET MAKESHELL=ash
 
-Notice you can choose whatever you want, if you don't like OS2X.
+Be warned that depending on the precise version of your make, the
+variable that needs to be set might be MAKE_SHELL instead of MAKESHELL.
+If you have a really deficient version of GNU make, it might even be
+necessary to set SHELL or even COMSPEC to a unix like shell as well. 
 
-Now, run autoconf in the main directory and in the samples, demos
-and utils subdirectory. This will generate the OS/2 specific
-versions of the configure scripts. Now run
-    configure --with-x11
-as described above.
+Now run
+    ash -c "configure --with-x11"
+and make and possibly make install as described above.
 
 To verify X11 installation, configure will try to compile a
 sample program that requires X headers/libraries to be either
 available via C_INCLUDE_PATH and LIBRARY_PATH or you need to
 explicitly set CFLAGS prior to running configure.
-
-If you have pthreads library installed, it will be autodetected
-and the library will be compiled with thread-support.
-
-Note that configure assumes your flex will generate files named
-"lexyy.c", not "lex.yy.c". If you have a version which does
-generate "lex.yy.c", you need to manually change the generated
-makefile.
 
 * Building wxX11 on SGI
 -----------------------
@@ -312,7 +318,7 @@ The following options handle the kind of library you want to build.
 				such as gdb (or its many frontends).
 
 	--enable-debug_flag	Define __DEBUG__ and __WXDEBUG__ when
-	                        compiling. This enable wxWindows' very
+	                        compiling. This enable wxWidgets' very
 				useful internal debugging tricks (such
 				as automatically reporting illegal calls)
 				to work. Note that program and library
@@ -323,11 +329,11 @@ The following options handle the kind of library you want to build.
 -----------------
 
 Many of the configure options have been thoroughly tested
-in wxWindows snapshot 6, but not yet all (ODBC not).
+in wxWidgets snapshot 6, but not yet all (ODBC not).
 
 When producing an executable that is linked statically with wxX11
 you'll be surprised at its immense size. This can sometimes be
-drastically reduced by removing features from wxWindows that 
+drastically reduced by removing features from wxWidgets that 
 are not used in your program. The most relevant such features
 are
 
@@ -392,7 +398,7 @@ password) and type
 
         make install	
 
-You can remove any traces of wxWindows by typing
+You can remove any traces of wxWidgets by typing
 
         make uninstall
 	
@@ -429,7 +435,7 @@ This is certain to become the standard way unless we decide
 to stick to tmake.
 
 2) The other way creates a project within the source code 
-directories of wxWindows. For this endeavour, you'll need
+directories of wxWidgets. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
 to the bottom of the configure.in script and run autoconf
 and configure before you can type make.
@@ -446,7 +452,7 @@ and configure before you can type make.
   # makewxx11
   # Sets permissions (in case we extracted wxX11 from zip files)
   # and makes wxX11.
-  # Call from top-level wxWindows directory.
+  # Call from top-level wxWidgets directory.
   # Note that this uses standard (but commonly-used) configure options;
   # if you're feeling brave, you may wish to compile with threads:
   # if they're not supported by the target platform, they will be disabled
@@ -458,7 +464,7 @@ and configure before you can type make.
   -------:x-----Cut here-----:x-----
 
   This script will build wxX11 using shared libraries. If you want to build
-  a static wxWindows library, use --disable-shared.
+  a static wxWidgets library, use --disable-shared.
 
 Troubleshooting
 ---------------
@@ -496,7 +502,7 @@ Bug reports
 Please send bug reports with a description of your environment,
 compiler and the error message(s) to the wxwin-developers mailing list at:
 
-    wx-dev@lists.wxwindows.org
+    wx-dev@lists.wxwidgets.org
 
-Julian Smart, Robert Roebling and Vadim Zeitlin, February 2002.
+Julian Smart, Robert Roebling and Vadim Zeitlin, Decemver 2002.
 

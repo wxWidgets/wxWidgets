@@ -25,9 +25,13 @@ cdef*.res
 ldef*.res
 wx_*.rsrc
 wxbase*.dll
+wxbase*.lib
 wxbase*.exp
 wxbase*.ilk
+wxbase*.map
 wxmsw*.dll
+wxmsw*.lib
 wxmsw*.exp
 wxmsw*.ilk
+wxmsw*.map
 .DS_Store

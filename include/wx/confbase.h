@@ -62,6 +62,10 @@ enum
     wxCONFIG_USE_NO_ESCAPE_CHARACTERS = 8
 };
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
+
 // ----------------------------------------------------------------------------
 // abstract base class wxConfigBase which defines the interface for derived
 // classes
@@ -286,6 +290,10 @@ private:
   // Style flag
   long              m_style;
 };
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
 
 // a handy little class which changes current path to the path of given entry
 // and restores it in dtor: so if you declare a local variable of this type,

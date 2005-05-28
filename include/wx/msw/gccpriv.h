@@ -1,4 +1,13 @@
-// MinGW w32api specific stuff
+/*
+ Name:        wx/msw/gccpriv.h
+ Purpose:     MinGW/Cygwin definitions
+ Author:      Vadim Zeitlin
+ Modified by:
+ Created:
+ RCS-ID:      $Id$
+ Copyright:   (c) Vadim Zeitlin
+ Licence:     wxWindows Licence
+*/
 
 #ifndef _WX_MSW_GCCPRIV_H_
 #define _WX_MSW_GCCPRIV_H_
@@ -9,6 +18,10 @@
         #if __MINGW32_MAJOR_VERSION >= 1
             #define HAVE_W32API_H
         #endif
+    #endif
+#elif defined( __CYGWIN__ ) && !defined( HAVE_W32API_H )
+    #if ( __GNUC__ > 2 )
+        #define HAVE_W32API_H
     #endif
 #endif
 
@@ -48,7 +61,8 @@
 
 // Mingw runtime 1.0-20010604 has some missing _tXXXX functions,
 // so let's define them ourselves:
-#if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 )
+#if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 ) \
+    && !wxCHECK_W32API_VERSION( 1, 1 )
     #ifndef _tsetlocale
       #if wxUSE_UNICODE
       #define _tsetlocale _wsetlocale

@@ -67,16 +67,9 @@ copy *.* \wxmsw_dist\wxMSW\include\wx\msw
 rem del \wxmsw_dist\wxMSW\include\wx\msw\setup.h
 del \wxmsw_dist\wxMSW\include\wx\msw\Makefile.am
 del \wxmsw_dist\wxMSW\include\wx\msw\Makefile.in
-md \wxmsw_dist\wxMSW\include\wx\msw\gnuwin32
-cd gnuwin32
-copy *.h \wxmsw_dist\wxMSW\include\wx\msw\gnuwin32
-cd ..
 md \wxmsw_dist\wxMSW\include\wx\msw\ole
 cd ole
 copy *.h \wxmsw_dist\wxMSW\include\wx\msw\ole
-cd ..
-cd ctl3d
-copy *.h \wxmsw_dist\wxMSW\include\wx\msw\ctl3d
 cd ..
 cd ..
 

@@ -20,6 +20,10 @@
 #pragma hdrstop
 #endif
 
+#ifdef __EMX__
+#define __OS2__
+#endif
+
 #if wxUSE_DIRDLG
 
 #include "wx/utils.h"
@@ -66,15 +70,17 @@
 
 #endif
 
-#ifdef __WXPM__
+#ifdef __OS2__
 
 #define INCL_BASE
 #include <os2.h>
+#ifndef __EMX__
 #include <direct.h>
+#endif
 #include <stdlib.h>
 #include <ctype.h>
 
-#endif // __WXPM__
+#endif // __OS2__
 
 #if defined(__WXMAC__)
 #  include "MoreFilesExtras.h"
@@ -90,226 +96,562 @@
 #endif
 
 /* Closed folder */
+/* Copyright (c) Julian Smart */
 static const char * icon1_xpm[] = {
-/* width height ncolors chars_per_pixel */
-"16 16 6 1",
-/* colors */
-"   s None  c None",
-".  c #000000",
-"+  c #c0c0c0",
-"@  c #808080",
-"#  c #ffff00",
-"$  c #ffffff",
+/* columns rows colors chars-per-pixel */
+"16 16 112 2",
+"r  c #F7FAFD",
+"%. c #3562AF",
+"=. c #3F6AB2",
+"-  c #4975BE",
+"O. c #A5BDE6",
+"k  c #446EB4",
+"d  c #B9CDEC",
+"5  c #AFC5EA",
+"@  c #6790D4",
+".. c #769CDA",
+"M  c #6787BD",
+"D  c #CDDAF1",
+"F  c #D7E2F5",
+"]  c #99B5E4",
+"%  c #4772B8",
+";. c #476FB3",
+">. c #4C73B5",
+"@. c #5B7FBA",
+"`  c #4F80CF",
+"*. c #3B67B0",
+"O  c #406BB2",
+"N  c #406BB3",
+"R  c #6891D6",
+"j  c #6888BD",
+"(  c #D8E3F5",
+"$  c #3460A9",
+"&  c #4873BA",
+"'  c #5C89D3",
+"-. c #436CB2",
+"u  c #4870B4",
+"[  c #B8CBEC",
+"7  c #C2D3EF",
+"H  c #3C68B1",
+"a  c #A2BBE6",
+"+  c #6E96D8",
+":  c #698FCE",
+"9  c #D4E0F4",
+"t  c #FCFDFE",
+":. c #4971B4",
+"3  c #4E75B6",
+"<  c #6C93D1",
+"6  c #B9CCEC",
+"c  c #C3D4EF",
+"l  c #80A3DD",
+"|  c #4276CC",
+"q  c #E6EDF9",
+"e  c #F0F5FC",
+"#. c #2E5AA6",
+"x  c #A3BCE6",
+"s  c #ADC4E9",
+"B  c #749BDA",
+"1. c #567AB7",
+",  c #6A90D0",
+"#  c #6589C5",
+"G  c #6586BD",
+"8  c #CBD9F1",
+"g  c #D5E1F4",
+"z  c #8DACE0",
+"p  c #97B4E3",
+"   c None",
+"*  c #4A75BC",
+"+. c #C4D5EF",
+"V  c #81A4DD",
+"m  c #ECF2FA",
+"n  c #E7EEF9",
+"Y  c #3966B1",
+"Z  c #A4BDE6",
+"A  c #AEC5E9",
+"o  c #436BAD",
+"T  c #5C88D2",
+"J  c #6690D5",
+"<. c #5277B6",
+")  c #6183BC",
+"f  c #CCDAF1",
+"v  c #D6E2F5",
+"o. c #98B5E3",
+"Q  c #8EADE1",
+" . c #5080CF",
+"=  c #4B76BE",
+"I  c #B6CAEC",
+"S  c #BBCEED",
+"_  c #3563AF",
+"!  c #A5BEE6",
+"/  c #CDDBF2",
+"X. c #8FAEE1",
+"0  c #DFE8F7",
+"$. c #3160AE",
+"}  c #3160AF",
+"4  c #A1BBE5",
+"1  c #6D93D1",
+"{  c #5E81BB",
+"U  c #6385BC",
+"^  c #C4D4EF",
+"2  c #597DBC",
+"K  c #81A3DD",
+"i  c #8BABE0",
+"w  c #ECF1FA",
+"h  c #F1F5FC",
+"&. c #3965B0",
+"X  c #3E69B1",
+"P  c #AEC4E9",
+"~  c #B8CCEC",
+";  c #5C84C6",
+"E  c #759BDA",
+"y  c #6B8ABE",
+"b  c #E0E9F7",
+"C  c #98B4E3",
+".  c #325EA7",
+">  c #6990CE",
+",. c #5076B6",
+"W  c #82A4DD",
+"L  c #8CACE0",
 /* pixels */
-"                ",
-"   @@@@@        ",
-"  @#+#+#@       ",
-" @#+#+#+#@@@@@@ ",
-" @$$$$$$$$$$$$@.",
-" @$#+#+#+#+#+#@.",
-" @$+#+#+#+#+#+@.",
-" @$#+#+#+#+#+#@.",
-" @$+#+#+#+#+#+@.",
-" @$#+#+#+#+#+#@.",
-" @$+#+#+#+#+#+@.",
-" @$#+#+#+#+#+#@.",
-" @@@@@@@@@@@@@@.",
-"  ..............",
-"                ",
-"                "};
+"                                ",
+"                                ",
+"  . X X X o                     ",
+"  O + + + @ #                   ",
+"  $ % & * = - ; : : > , < 1 2   ",
+"  3 4 5 6 7 8 9 0 q w e r t y   ",
+"  u i p a s d 7 f g 0 q w h j   ",
+"  k l z p x 5 6 c f v b n m M   ",
+"  N B V z C Z A S c D F b n G   ",
+"  H J B K L C x P I c f v b U   ",
+"  Y T R E W Q C ! P ~ ^ / ( )   ",
+"  _ ` ' R E W z ] Z P [ ^ / {   ",
+"  } |  .' R ..V X.o.O.P [ +.@.  ",
+"  #.$.%.&.*.=.-.;.:.>.,.<.1.*.  ",
+"                                ",
+"                                "
+};
 
 /* Open folder */
+/* Copyright (c) Julian Smart */
 static const char * icon2_xpm[] = {
-/* width height ncolors chars_per_pixel */
-"16 16 6 1",
-/* colors */
-"   s None  c None",
-".  c #000000",
-"+  c #c0c0c0",
-"@  c #808080",
-"#  c #ffff00",
-"$  c #ffffff",
+/* columns rows colors chars-per-pixel */
+"16 16 57 1",
+"u c #83A5DD",
+"h c #83A5DE",
+"> c #DAE3F2",
+": c #F3F7FC",
+"t c #4A79C6",
+"s c #274E8F",
+"n c #4D71AB",
+"5 c #C2D0E8",
+"9 c #84A6DE",
+"x c #3761A5",
+"p c #ACC3E8",
+"$ c #ACC3E9",
+"= c #D9E4F5",
+"o c #91AFE2",
+"f c #5886D1",
+"2 c #B9CCEC",
+"& c #C3D4EF",
+"; c #EBF1FA",
+"7 c #4270BC",
+"# c #9EB8E5",
+"0 c #ADC4E9",
+"y c #658FD5",
+"  c None",
+"@ c #688DCA",
+"< c #779CDA",
+"r c #2A5498",
+"l c #254A87",
+"g c #6690D5",
+"M c #5778AE",
+"m c #5274AD",
+"a c #D6E2F4",
+", c #4672BA",
+"v c #4168A8",
+"c c #3C64A7",
+". c #416BB2",
+"- c #E3EBF8",
+"z c #305CA3",
+"X c #446CAE",
+"O c #5882C8",
+"N c #5D7DB0",
+"3 c #C3D3EF",
+"b c #476DAA",
+"k c #ADC3E9",
+"e c #E4ECF8",
+"d c #4576C7",
+"q c #C4D4EF",
+"* c #CEDCF2",
+"i c #90AFE1",
+"4 c #ECF1FA",
+"B c #4D72AE",
+"% c #B8CCEC",
+"8 c #759BDA",
+"+ c #617FB1",
+"1 c #9DB8E4",
+"j c #9DB8E5",
+"6 c #3762AA",
+"w c #CFDDF2",
 /* pixels */
 "                ",
-"   @@@@@        ",
-"  @$$$$$@       ",
-" @$#+#+#$@@@@@@ ",
-" @$+#+#+$$$$$$@.",
-" @$#+#+#+#+#+#@.",
-"@@@@@@@@@@@@@#@.",
-"@$$$$$$$$$$@@+@.",
-"@$#+#+#+#+##.@@.",
-" @$#+#+#+#+#+.@.",
-" @$+#+#+#+#+#.@.",
-"  @$+#+#+#+##@..",
-"  @@@@@@@@@@@@@.",
-"   .............",
 "                ",
-"                "};
+"                ",
+" ....           ",
+" Xooo.          ",
+" Xoooo.......   ",
+" Xoooooooooo.   ",
+" XoOOOOOOOOOOO+ ",
+" Xo@#$%&*=-;:>+ ",
+" X,<o1$23*=-45+ ",
+" 6789o#02qw=e+  ",
+" rty8ui#p%&*a+  ",
+" sdfg8hojk2&+   ",
+" lzxcvbnmMN+B   ",
+"                ",
+"                "
+};
 
 /* File */
+/* Copyright (c) Julian Smart */
 static const char * icon3_xpm[] = {
-/* width height ncolors chars_per_pixel */
-"16 16 3 1",
-/* colors */
-"     s None    c None",
-".    c #000000",
-"+    c #ffffff",
+/* columns rows colors chars-per-pixel */
+"16 16 29 1",
+"$ c #7198D9",
+"5 c #DCE6F6",
+"< c #FFFFFF",
+"= c #9AB6E4",
+"6 c #EAF0FA",
+"1 c #6992D7",
+"9 c #5886D2",
+"3 c #F7F9FD",
+"8 c #F0F5FC",
+"* c #A8C0E8",
+"  c None",
+"0 c #FDFEFF",
+"% c #C4D5F0",
+"2 c #E2EAF8",
+"O c #4377CD",
+"o c #487BCE",
+": c #6B94D7",
+"- c #89A9DF",
+"; c #5584D1",
+"@ c #3569BF",
+"+ c #3A70CA",
+"> c #D2DFF4",
+"# c #2E5CA8",
+"7 c #FAFCFE",
+"4 c #F5F8FD",
+", c #638ED5",
+"X c #5282D0",
+"& c #B8CCEC",
+". c #376EC9",
 /* pixels */
-"                ",
-"  ........      ",
-"  .++++++..     ",
-"  .+.+.++.+.    ",
-"  .++++++....   ",
-"  .+.+.+++++.   ",
-"  .+++++++++.   ",
-"  .+.+.+.+.+.   ",
-"  .+++++++++.   ",
-"  .+.+.+.+.+.   ",
-"  .+++++++++.   ",
-"  .+.+.+.+.+.   ",
-"  .+++++++++.   ",
-"  ...........   ",
-"                ",
-"                "};
+"  ..XoO+@#$     ",
+"  .%%&*=-;:;    ",
+"  .>>%&*=,<=X   ",
+"  $%%%%&*1<<=X  ",
+"  $2-----,oXO+  ",
+"  $2345>%&*=-+  ",
+"  $2--------=+  ",
+"  $244625>%&*O  ",
+"  $2--------&o  ",
+"  $27348625>%X  ",
+"  $2-------->9  ",
+"  $2<073486259  ",
+"  $2--------2,  ",
+"  $2<<<0734861  ",
+"  $$$$$$$$$$1$  ",
+"                "
+};
 
 /* Computer */
+/* Copyright (c) Julian Smart */
 static const char * icon4_xpm[] = {
-"16 16 7 1",
-"     s None    c None",
-".    c #808080",
-"X    c #c0c0c0",
-"o    c Black",
-"O    c Gray100",
-"+    c #008080",
-"@    c Blue",
-"    ........... ",
-"   .XXXXXXXXXX.o",
-"   .OOOOOOOOO..o",
-"   .OoooooooX..o",
-"   .Oo+...@+X..o",
-"   .Oo+XXX.+X..o",
-"   .Oo+....+X..o",
-"   .Oo++++++X..o",
-"   .OXXXXXXXX.oo",
-"   ..........o.o",
-"   ...........Xo",
-"   .XXXXXXXXXX.o",
-"  .o.o.o.o.o...o",
-" .oXoXoXoXoXo.o ",
-".XOXXXXXXXXX.o  ",
-"............o   "};
+/* columns rows colors chars-per-pixel */
+"16 16 42 1",
+"r c #4E7FD0",
+"$ c #7198D9",
+"; c #DCE6F6",
+"q c #FFFFFF",
+"u c #4A7CCE",
+"# c #779DDB",
+"w c #95B2E3",
+"y c #7FA2DD",
+"f c #3263B4",
+"= c #EAF0FA",
+"< c #B1C7EB",
+"% c #6992D7",
+"9 c #D9E4F5",
+"o c #9BB7E5",
+"6 c #F7F9FD",
+", c #BED0EE",
+"3 c #F0F5FC",
+"1 c #A8C0E8",
+"  c None",
+"0 c #FDFEFF",
+"4 c #C4D5F0",
+"@ c #81A4DD",
+"e c #4377CD",
+"- c #E2EAF8",
+"i c #9FB9E5",
+"> c #CCDAF2",
+"+ c #89A9DF",
+"s c #5584D1",
+"t c #5D89D3",
+": c #D2DFF4",
+"5 c #FAFCFE",
+"2 c #F5F8FD",
+"8 c #DFE8F7",
+"& c #5E8AD4",
+"X c #638ED5",
+"a c #CEDCF2",
+"p c #90AFE2",
+"d c #2F5DA9",
+"* c #5282D0",
+"7 c #E5EDF9",
+". c #A2BCE6",
+"O c #8CACE0",
+/* pixels */
+"                ",
+"  .XXXXXXXXXXX  ",
+"  oXO++@#$%&*X  ",
+"  oX=-;:>,<1%X  ",
+"  oX23=-;:4,$X  ",
+"  oX5633789:@X  ",
+"  oX05623=78+X  ",
+"  oXqq05623=OX  ",
+"  oX,,,,,<<<$X  ",
+"  wXXXXXXXXXXe  ",
+"  XrtX%$$y@+O,, ",
+"  uyiiiiiiiii@< ",
+" ouiiiiiiiiiip<a",
+" rustX%$$y@+Ow,,",
+" dfffffffffffffd",
+"                "
+};
 
 /* Drive */
+/* Copyright (c) Julian Smart */
 static const char * icon5_xpm[] = {
-"16 16 7 1",
-"     s None    c None",
-".    c #808080",
-"X    c #c0c0c0",
-"o    c Black",
-"O    c Gray100",
-"+    c Green",
-"@    c #008000",
+/* columns rows colors chars-per-pixel */
+"16 16 37 1",
+"o c #4E7FD0",
+"= c #B9CDED",
+"0 c #DCE6F6",
+"@ c #295193",
+"1 c #FFFFFF",
+"* c #C6D6F0",
+"O c #4A7CCE",
+"e c #B0C6EA",
+"3 c #95B2E3",
+"r c #2D59A3",
+"6 c #B1C7EB",
+"$ c #D9E4F5",
+"i c #3060AE",
+"y c #264C8A",
+"% c #214279",
+"; c #E1E9F7",
+"7 c #F0F5FC",
+"9 c #A8C0E8",
+"> c #3161B1",
+"  c None",
+"- c #B5C9EB",
+"X c #487BCE",
+", c #3A70CA",
+": c #3569BF",
+"q c #305FAC",
+"8 c #A5BEE7",
+"< c #5D89D3",
+"4 c #D2DFF4",
+". c #3366B9",
+"+ c #4075CC",
+"2 c #638ED5",
+"# c #3467BC",
+"t c #2F5DA9",
+"5 c #D6E1F4",
+"u c #070D17",
+"w c #A2BCE6",
+"& c #CFDDF3",
+/* pixels */
 "                ",
-"                ",
-"                ",
-"                ",
-"  ............. ",
-" .XXXXXXXXXXXX.o",
-".OOOOOOOOOOOO..o",
-".XXXXXXXXX+@X..o",
-".XXXXXXXXXXXX..o",
-".X..........X..o",
-".XOOOOOOOOOOX..o",
-"..............o ",
-" ooooooooooooo  ",
-"                ",
-"                ",
-"                "};
+"   .XoooXO+@    ",
+"  #$$%%%%$$$X   ",
+"  #$&**=-$$$#   ",
+" #;;=+o:>,<1o2  ",
+" #33+45--56,1,  ",
+" #1o17&89&70q1. ",
+"##1+17&oo&70o1. ",
+"#1%wo45--56,e%1.",
+"#11146wwww61111o",
+"r>>>>>>>>>>>>>>t",
+">**>;;;;;;;;;;;>",
+">**>;;;;;;;;yu;>",
+"i**#;;;;;;;;;;;>",
+">>>>>>>>>>>>>>>>",
+"                "
+};
 
 /* CD-ROM */
+/* Copyright (c) Julian Smart */
 static const char *icon6_xpm[] = {
-"16 16 10 1",
-"     s None    c None",
-".    c #808080",
-"X    c #c0c0c0",
-"o    c Yellow",
-"O    c Blue",
-"+    c Black",
-"@    c Gray100",
-"#    c #008080",
-"$    c Green",
-"%    c #008000",
-"        ...     ",
-"      ..XoX..   ",
-"     .O.XoXXX+  ",
-"    ...O.oXXXX+ ",
-"    .O..X.XXXX+ ",
-"   ....X.+..XXX+",
-"   .XXX.+@+.XXX+",
-"   .X@XX.+.X@@X+",
-" .....X...#XX@+ ",
-".@@@...XXo.O@X+ ",
-".@XXX..XXoXOO+  ",
-".@++++..XoX+++  ",
-".@$%@@XX+++X.+  ",
-".............+  ",
-" ++++++++++++   ",
-"                "};
+/* columns rows colors chars-per-pixel */
+"16 16 35 1",
+"$ c #EDF2FB",
+"O c #4E7FD0",
+". c #7198D9",
+"q c #DCE6F6",
+"y c #2E5BA6",
+"# c #FFFFFF",
+"& c #7FA2DD",
+"6 c #B1C7EB",
+"X c #356AC1",
+"* c #9BB7E5",
+"; c #85A7DF",
+"1 c #ADC4E9",
+"9 c #CBD9F1",
+"3 c #3161B1",
+"  c None",
+"- c #487BCE",
+": c #9FB9E5",
+"4 c #AEC5EA",
+"7 c #89A9DF",
+"@ c #98B5E4",
+"8 c #5584D1",
+"r c #3569BF",
+"% c #3A70CA",
+"t c #305FAC",
+", c #5D89D3",
+"w c #D2DFF4",
+"o c #3366B9",
+"e c #A6BFE8",
+"+ c #638ED5",
+"2 c #90AFE2",
+"0 c #3467BC",
+"< c #2F5DA9",
+"> c #B3C8EB",
+"= c #A2BCE6",
+"5 c #8CACE0",
+/* pixels */
+"     .XooOo     ",
+"    X+@###$o    ",
+"   %&*=#####o   ",
+"   O@=*######-  ",
+"  o;:>*,<,#1*o  ",
+"  o2:**<#<11*%  ",
+"  o;**#,3,14*X  ",
+"  o5#####16=7%  ",
+"   X$####1=*X   ",
+"   8%9###*7X0o  ",
+"  Xqw+O33X3,&,o ",
+" Xe61e:11111,,%3",
+" rr000oo333tyyyo",
+" r:###########:o",
+" XXXr000oo333tty",
+"                "
+};
 
 /* Floppy */
+/* Copyright (c) Julian Smart */
 static const char * icon7_xpm[] = {
-"16 16 7 1",
-"     s None    c None",
-".    c #808080",
-"X    c Gray100",
-"o    c #c0c0c0",
-"O    c Black",
-"+    c Cyan",
-"@    c Red",
-"         ......X",
-"        .ooooooO",
-"        .+++++OO",
-"        .++++++O",
-"        .++++++O",
-"        .ooooooO",
-"  .......o....oO",
-" .oooooo.o.O.XoO",
-".XXXXXXXXOOOOOO ",
-".ooooooooo@o..O ",
-".ooo....oooo..O ",
-".o..OOOO...o..O ",
-".oooXXXXoooo..O ",
-".............O  ",
-" OOOOOOOOOOOO   ",
-"                "};
+/* columns rows colors chars-per-pixel */
+"16 16 17 1",
+": c #DCE6F6",
+"+ c #FFFFFF",
+"= c #C6D6F0",
+"> c #2C58A0",
+". c #2D59A3",
+"- c #284F90",
+"; c #2B569D",
+"O c #214279",
+"$ c #1C3866",
+"# c #BED0EE",
+"  c None",
+"X c #162C50",
+"@ c #638ED5",
+"o c #3467BC",
+"& c #D6E1F4",
+"% c #3C72CA",
+"* c #87A8DF",
+/* pixels */
+"   .XoooooooXO  ",
+"   .o+++++++.O  ",
+"   .o+OOOOO+.O  ",
+"   .o+++++++.O  ",
+"   .o@@@@@@@.O  ",
+"   ..........O  ",
+"   ..#+++++#.O  ",
+"   ..+$O+++#.O  ",
+"   ..+$O+++#.O  ",
+"  %&.........*% ",
+" %=+++++++++++&%",
+" --------------;",
+" -:::::::::::::-",
+" -:X:XXXXXXXXX:>",
+" ---------------",
+"                "
+};
 
-/* Removeable */
+/* Removeable (same as drive for now) */
+/* Copyright (c) Julian Smart */
 static const char * icon8_xpm[] = {
-"16 16 7 1",
-"     s None    c None",
-".    c #808080",
-"X    c #c0c0c0",
-"o    c Black",
-"O    c Gray100",
-"+    c Red",
-"@    c #800000",
+/* columns rows colors chars-per-pixel */
+"16 16 37 1",
+"o c #4E7FD0",
+"= c #B9CDED",
+"0 c #DCE6F6",
+"@ c #295193",
+"1 c #FFFFFF",
+"* c #C6D6F0",
+"O c #4A7CCE",
+"e c #B0C6EA",
+"3 c #95B2E3",
+"r c #2D59A3",
+"6 c #B1C7EB",
+"$ c #D9E4F5",
+"i c #3060AE",
+"y c #264C8A",
+"% c #214279",
+"; c #E1E9F7",
+"7 c #F0F5FC",
+"9 c #A8C0E8",
+"> c #3161B1",
+"  c None",
+"- c #B5C9EB",
+"X c #487BCE",
+", c #3A70CA",
+": c #3569BF",
+"q c #305FAC",
+"8 c #A5BEE7",
+"< c #5D89D3",
+"4 c #D2DFF4",
+". c #3366B9",
+"+ c #4075CC",
+"2 c #638ED5",
+"# c #3467BC",
+"t c #2F5DA9",
+"5 c #D6E1F4",
+"u c #070D17",
+"w c #A2BCE6",
+"& c #CFDDF3",
+/* pixels */
 "                ",
-"                ",
-"                ",
-"  ............. ",
-" .XXXXXXXXXXXX.o",
-".OOOOOOOOOOOO..o",
-".OXXXXXXXXXXX..o",
-".O+@.oooooo.X..o",
-".OXXOooooooOX..o",
-".OXXXOOOOOOXX..o",
-".OXXXXXXXXXXX..o",
-".O............o ",
-" ooooooooooooo  ",
-"                ",
-"                ",
-"                "};
+"   .XoooXO+@    ",
+"  #$$%%%%$$$X   ",
+"  #$&**=-$$$#   ",
+" #;;=+o:>,<1o2  ",
+" #33+45--56,1,  ",
+" #1o17&89&70q1. ",
+"##1+17&oo&70o1. ",
+"#1%wo45--56,e%1.",
+"#11146wwww61111o",
+"r>>>>>>>>>>>>>>t",
+">**>;;;;;;;;;;;>",
+">**>;;;;;;;;yu;>",
+"i**#;;;;;;;;;;;>",
+">>>>>>>>>>>>>>>>",
+"                "
+};
 
 
 #if defined(__DOS__)
@@ -332,7 +674,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
         return TRUE;
 }
 
-#elif defined(__WINDOWS__) || defined(__WXPM__)
+#elif defined(__WINDOWS__) || defined(__OS2__)
 
 int setdrive(int drive)
 {
@@ -340,13 +682,18 @@ int setdrive(int drive)
     (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
     return _chdrive(drive);
 #else
-	wxChar  newdrive[3];
+	wxChar  newdrive[4];
 
 	if (drive < 1 || drive > 31)
 		return -1;
 	newdrive[0] = (wxChar)(wxT('A') + drive - 1);
 	newdrive[1] = wxT(':');
+#ifdef __OS2__
+	newdrive[2] = wxT('\\');
+	newdrive[3] = wxT('\0');
+#else
 	newdrive[2] = wxT('\0');
+#endif
 #if defined(__WXMSW__)
 #ifdef __WIN16__
     if (wxSetWorkingDirectory(newdrive))
@@ -355,7 +702,7 @@ int setdrive(int drive)
 #endif
 #else
     // VA doesn't know what LPSTR is and has its own set
-	if (DosSetCurrentDir((PSZ)newdrive))
+	if (!DosSetCurrentDir((PSZ)newdrive))
 #endif
 		return 0;
 	else
@@ -379,6 +726,11 @@ bool wxIsDriveAvailable(const wxString& dirName)
     !(defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1))
         success = wxPathExists(dirNameLower);
 #else
+        #if defined(__OS2__)
+        // Avoid changing to drive since no media may be inserted.
+        if (dirNameLower[(size_t)0] == 'a' || dirNameLower[(size_t)0] == 'b')
+            return success;
+        #endif
         int currentDrive = _getdrive();
         int thisDrive = (int) (dirNameLower[(size_t)0] - 'a' + 1) ;
         int err = setdrive( thisDrive ) ;
@@ -396,7 +748,8 @@ bool wxIsDriveAvailable(const wxString& dirName)
 
     return success;
 }
-#endif // __WINDOWS__ || __WXPM__
+#endif // __WINDOWS__ || __OS2__
+
 
 // Function which is called by quick sort. We want to override the default wxArrayString behaviour,
 // and sort regardless of case.
@@ -473,10 +826,10 @@ bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
 IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
-  EVT_TREE_ITEM_EXPANDING     (-1, wxGenericDirCtrl::OnExpandItem)
-  EVT_TREE_ITEM_COLLAPSED     (-1, wxGenericDirCtrl::OnCollapseItem)
-  EVT_TREE_BEGIN_LABEL_EDIT   (-1, wxGenericDirCtrl::OnBeginEditItem)
-  EVT_TREE_END_LABEL_EDIT     (-1, wxGenericDirCtrl::OnEndEditItem)
+  EVT_TREE_ITEM_EXPANDING     (wxID_TREECTRL, wxGenericDirCtrl::OnExpandItem)
+  EVT_TREE_ITEM_COLLAPSED     (wxID_TREECTRL, wxGenericDirCtrl::OnCollapseItem)
+  EVT_TREE_BEGIN_LABEL_EDIT   (wxID_TREECTRL, wxGenericDirCtrl::OnBeginEditItem)
+  EVT_TREE_END_LABEL_EDIT     (wxID_TREECTRL, wxGenericDirCtrl::OnEndEditItem)
   EVT_SIZE                    (wxGenericDirCtrl::OnSize)
 END_EVENT_TABLE()
 
@@ -509,10 +862,14 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         treeStyle |= wxNO_BORDER;
+    else
+        treeStyle |= wxBORDER_SUNKEN;
 
     long filterStyle = 0;
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         filterStyle |= wxNO_BORDER;
+    else
+        filterStyle |= wxBORDER_SUNKEN;
 
     m_treeCtrl = new wxTreeCtrl(this, wxID_TREECTRL, pos, size, treeStyle);
 
@@ -543,7 +900,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     wxString rootName;
 
-#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__DOS__)
+#if defined(__WINDOWS__) || defined(__OS2__) || defined(__DOS__)
     rootName = _("Computer");
 #else
     rootName = _("Sections");
@@ -596,7 +953,7 @@ void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, in
 
 void wxGenericDirCtrl::SetupSections()
 {
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
 
 #ifdef __WIN32__
     wxChar driveBuffer[256];
@@ -685,7 +1042,7 @@ void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
     }
 
     // don't rename the individual sections
-    if (m_treeCtrl->GetParent( event.GetItem() ) == m_rootId)
+    if (m_treeCtrl->GetItemParent( event.GetItem() ) == m_rootId)
     {
         event.Veto();
         return;
@@ -740,7 +1097,7 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
 
     // VS: this is needed because the event handler is called from wxTreeCtrl
     //     ctor when wxTR_HIDE_ROOT was specified
-    if (m_rootId == 0)
+    if (!m_rootId.IsOk())
         m_rootId = m_treeCtrl->GetRootItem();
 
     ExpandDir(parentId);
@@ -794,7 +1151,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
     // Check if this is a root directory and if so,
     // whether the drive is avaiable.
     if (!wxIsDriveAvailable(dirName))
@@ -808,7 +1165,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
 
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -928,7 +1285,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     path2 += wxString(wxFILE_SEP_PATH);
 
     // In MSW or PM, case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
     path2.MakeLower();
 #endif
 
@@ -945,7 +1302,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
                 childPath += wxString(wxFILE_SEP_PATH);
 
             // In MSW and PM, case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
             childPath.MakeLower();
 #endif
 
@@ -1077,7 +1434,7 @@ void wxGenericDirCtrl::FindChildFiles(wxTreeItemId id, int dirFlags, wxArrayStri
 
     wxString dirName(data->m_path);
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__OS2__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif

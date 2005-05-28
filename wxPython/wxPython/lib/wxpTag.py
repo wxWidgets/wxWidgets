@@ -89,7 +89,6 @@ from wxPython.wx   import *
 from wxPython.html import *
 import wxPython.wx
 
-import string
 import types
 
 #----------------------------------------------------------------------
@@ -146,12 +145,12 @@ class wxpTagHandler(wxHtmlWinTagHandler):
         if tag.HasParam('WIDTH'):
             width = tag.GetParam('WIDTH')
             if width[-1] == '%':
-                self.ctx.floatWidth = string.atoi(width[:-1], 0)
+                self.ctx.floatWidth = int(width[:-1], 0)
                 width = self.ctx.floatWidth
             else:
-                width = string.atoi(width)
+                width = int(width)
         if tag.HasParam('HEIGHT'):
-            height = string.atoi(tag.GetParam('HEIGHT'))
+            height = int(tag.GetParam('HEIGHT'))
         self.ctx.kwargs['size'] = wxSize(width, height)
 
         # parse up to the closing tag, and gather any nested Param tags.
@@ -163,18 +162,18 @@ class wxpTagHandler(wxHtmlWinTagHandler):
             obj = apply(self.ctx.classObj,
                         (parent,),
                         self.ctx.kwargs)
-            obj.Show(true)
+            obj.Show(True)
 
             # add it to the HtmlWindow
             self.GetParser().GetContainer().InsertCell(wxHtmlWidgetCell(obj, self.ctx.floatWidth))
             self.ctx = None
 
-        return true
+        return True
 
 
     def HandleParamTag(self, tag):
         if not tag.HasParam('NAME'):
-            return false
+            return False
 
         name = tag.GetParam('NAME')
         value = ""
@@ -185,7 +184,7 @@ class wxpTagHandler(wxHtmlWinTagHandler):
         if name == 'id':
             theID = -1
             try:
-                theID = string.atoi(value)
+                theID = int(value)
             except ValueError:
                 theID = getattr(self.ctx.classMod, value)
             value = theID
@@ -202,15 +201,15 @@ class wxpTagHandler(wxHtmlWinTagHandler):
         # convert to wxColour
         elif value[0] == '#':
             try:
-                red   = string.atoi('0x'+value[1:3], 16)
-                green = string.atoi('0x'+value[3:5], 16)
-                blue  = string.atoi('0x'+value[5:], 16)
+                red   = int('0x'+value[1:3], 16)
+                green = int('0x'+value[3:5], 16)
+                blue  = int('0x'+value[5:], 16)
                 value = wxColor(red, green, blue)
             except:
                 pass
 
         self.ctx.kwargs[str(name)] = value
-        return false
+        return False
 
 
 #----------------------------------------------------------------------
@@ -229,7 +228,7 @@ class _Context:
 # Function to assist with importing packages
 def _my_import(name):
     mod = __import__(name)
-    components = string.split(name, '.')
+    components = name.split('.')
     for comp in components[1:]:
         mod = getattr(mod, comp)
     return mod
@@ -241,27 +240,27 @@ def _my_import(name):
 def _param2dict(param):
     i = 0; j = 0; s = len(param); d = {}
     while 1:
-	while i<s and param[i] == " " : i = i+1
-	if i>=s: break
-	j = i
-	while j<s and param[j] != "=": j=j+1
-	if j+1>=s:
-	    break
-	word = param[i:j]
-	i=j+1
-	if (param[i] == '"'):
-	    j=i+1
-	    while j<s and param[j] != '"' : j=j+1
-	    if j == s: break
-	    val = param[i+1:j]
-	elif (param[i] != " "):
-	    j=i+1
-	    while j<s and param[j] != " " : j=j+1
-	    val = param[i:j]
-	else:
-	    val = ""
-	i=j+1
-	d[word] = val
+        while i<s and param[i] == " " : i = i+1
+        if i>=s: break
+        j = i
+        while j<s and param[j] != "=": j=j+1
+        if j+1>=s:
+            break
+        word = param[i:j]
+        i=j+1
+        if (param[i] == '"'):
+            j=i+1
+            while j<s and param[j] != '"' : j=j+1
+            if j == s: break
+            val = param[i+1:j]
+        elif (param[i] != " "):
+            j=i+1
+            while j<s and param[j] != " " : j=j+1
+            val = param[i:j]
+        else:
+            val = ""
+        i=j+1
+        d[word] = val
     return d
 
 #----------------------------------------------------------------------

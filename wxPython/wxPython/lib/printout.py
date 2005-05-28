@@ -15,7 +15,7 @@
 # add index to data list after parsing total pages for paging
 #----------------------------------------------------------------------------
 
-import os, sys, string, copy
+import os, sys, copy
 
 from wxPython.wx import *
 import copy
@@ -45,14 +45,14 @@ class PrintBase:
         fcolour = font["Colour"]
         return wxColour(fcolour[0], fcolour[1], fcolour[2])
 
-    def OutTextRegion(self, textout, txtdraw = TRUE):
-        textlines = string.splitfields(textout, '\n')
+    def OutTextRegion(self, textout, txtdraw = True):
+        textlines = textout.split('\n')
         y = copy.copy(self.y) + self.pt_space_before
         for text in textlines:
             remain = 'X'
             while remain != "":
                 vout, remain = self.SetFlow(text, self.region)
-                if self.draw == TRUE and txtdraw == TRUE:
+                if self.draw == True and txtdraw == True:
                     test_out = self.TestFull(vout)
                     if self.align == wxALIGN_LEFT:
                         self.DC.DrawText(test_out, self.indent+self.pcell_left_margin, y)
@@ -88,12 +88,12 @@ class PrintBase:
     def SetFlow(self, ln_text, width):
         width = width - self.pcell_right_margin
         text = ""
-        split = string.split(ln_text)
+        split = ln_text.split()
         if len(split) == 1:
             return ln_text, ""
 
         try:
-            w, h = self.DC.GetTextExtent(split[0])
+            w, h = self.DC.GetTextExtent(" " + split[0])
             if w >= width:
                 return ln_text, ""
         except:
@@ -101,7 +101,7 @@ class PrintBase:
 
         cnt = 0
         for word in split:
-            bword = " " + word	# blank + word
+            bword = " " + word  # blank + word
             length = len(bword)
 
             w, h = self.DC.GetTextExtent(text + bword)
@@ -109,12 +109,12 @@ class PrintBase:
                 text = text + bword
                 cnt = cnt + 1
             else:
-                remain = string.joinfields(split[cnt:],' ')
-                text = string.strip(text)
+                remain = ' '.join(split[cnt:])
+                text = text.strip()
                 return text, remain
 
-        remain = string.joinfields(split[cnt:],' ')
-        vout = string.strip(text)
+        remain = ' '.join(split[cnt:])
+        vout = text.strip()
         return vout, remain
 
     def SetChar(self, ln_text, width):  # truncate string to fit into width
@@ -128,8 +128,8 @@ class PrintBase:
             text = text + val
         return text
 
-    def OutTextPageWidth(self, textout, y_out, align, indent, txtdraw = TRUE):
-        textlines = string.splitfields(textout, '\n')
+    def OutTextPageWidth(self, textout, y_out, align, indent, txtdraw = True):
+        textlines = textout.split('\n')
         y = copy.copy(y_out)
 
         pagew = self.parent.page_width * self.pwidth        # full page width
@@ -140,7 +140,7 @@ class PrintBase:
             remain = 'X'
             while remain != "":
                 vout, remain = self.SetFlow(text, pagew)
-                if self.draw == TRUE and txtdraw == TRUE:
+                if self.draw == True and txtdraw == True:
                     test_out = vout
                     if align == wxALIGN_LEFT:
                         self.DC.DrawText(test_out, indent, y)
@@ -169,7 +169,7 @@ class PrintBase:
 
     def GetNow(self):
         full = str(wxDateTime_Now())        # get the current date and time in print format
-        flds = string.splitfields(full)
+        flds = full.split()
         date = flds[0]
         time = flds[1]
         return date, time
@@ -350,26 +350,26 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         x, y = self.DC.GetTextExtent("W")
         self.space = y
 
-        if self.total_pages == None:
+        if self.total_pages is None:
             self.GetTotalPages()    # total pages for display/printing
 
         self.data_cnt = self.page_index[self.page-1]
 
-        self.draw = TRUE
+        self.draw = True
         self.PrintHeader()
         self.PrintFooter()
         self.OutPage()
 
     def GetTotalPages(self):
         self.data_cnt = 0
-        self.draw = FALSE
+        self.draw = False
         self.page_index = [0]
 
         cnt = 0
         while 1:
             test = self.OutPage()
             self.page_index.append(self.data_cnt)
-            if  test == FALSE:
+            if  test == False:
                 break
             cnt = cnt + 1
 
@@ -383,23 +383,23 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             if self.label != []:        # check if header defined
                 self.PrintLabel()
         else:
-            return FALSE
+            return False
 
         for val in self.data:
             try:
                 row_val = self.data[self.data_cnt]
             except:
                 self.FinishDraw()
-                return FALSE
+                return False
 
-            max_y = self.PrintRow(row_val, FALSE)       # test to see if row will fit in remaining space
+            max_y = self.PrintRow(row_val, False)       # test to see if row will fit in remaining space
             test = max_y + self.space
 
             if test > self.y_end:
                 break
 
             self.ColourRowCells(max_y-self.y+self.space)       # colour the row/column
-            max_y = self.PrintRow(row_val, TRUE)      # row fits - print text
+            max_y = self.PrintRow(row_val, True)      # row fits - print text
             self.DrawGridLine()     # top line of cell
             self.y = max_y + self.space
 
@@ -411,9 +411,9 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.FinishDraw()
 
         if self.data_cnt == len(self.data):    # last value in list
-            return FALSE
+            return False
 
-        return TRUE
+        return True
 
 
     def PrintLabel(self):
@@ -431,7 +431,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
 
             self.align = wxALIGN_LEFT
 
-            max_out = self.OutTextRegion(vtxt, TRUE)
+            max_out = self.OutTextRegion(vtxt, True)
             if max_out > max_y:
                 max_y = max_out
             self.col = self.col + 1
@@ -440,7 +440,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.y = max_y + self.label_space
 
     def PrintHeader(self):      # print the header array
-        if self.draw == FALSE:
+        if self.draw == False:
             return
 
         for val in self.parent.header:
@@ -457,10 +457,10 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             else:
                 addtext = ""
 
-            self.OutTextPageWidth(text+addtext, self.pheader_margin, val["Align"], header_indent, TRUE)
+            self.OutTextPageWidth(text+addtext, self.pheader_margin, val["Align"], header_indent, True)
 
     def PrintFooter(self):      # print the header array
-        if self.draw == FALSE:
+        if self.draw == False:
             return
 
         footer_pos = self.parent.page_height * self.pheight - self.pfooter_margin + self.vertical_offset
@@ -484,7 +484,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             else:
                 addtext = ""
 
-            self.OutTextPageWidth(text+addtext, footer_pos, val["Align"], footer_indent, TRUE)
+            self.OutTextPageWidth(text+addtext, footer_pos, val["Align"], footer_indent, True)
 
 
     def LabelColorRow(self, colour):
@@ -494,13 +494,13 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.DC.DrawRectangle(self.column[0], self.y, self.end_x-self.column[0]+1, height)
 
     def ColourRowCells(self, height):
-        if self.draw == FALSE:
+        if self.draw == False:
             return
 
         col = 0
         for colour in self.column_bgcolour:
             cellcolour = self.GetCellColour(self.data_cnt, col)
-            if cellcolour != None:
+            if cellcolour is not None:
                 colour = cellcolour
 
             brush = wxBrush(colour, wxSOLID)
@@ -512,7 +512,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             self.DC.DrawRectangle(start_x, self.y, width, height)
             col = col + 1
 
-    def PrintRow(self, row_val, draw = TRUE, align = wxALIGN_LEFT):
+    def PrintRow(self, row_val, draw = True, align = wxALIGN_LEFT):
         self.SetPrintFont(self.text_font)
 
         self.pt_space_before = self.text_pt_space_before   # set the point spacing
@@ -527,7 +527,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
 
             fcolour = self.column_txtcolour[self.col]       # set font colour
             celltext = self.GetCellText(self.data_cnt, self.col)
-            if celltext != None:
+            if celltext is not None:
                 fcolour = celltext      # override the column colour
 
             self.DC.SetTextForeground(fcolour)
@@ -565,7 +565,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.DrawColumns()      # draw all vertical lines
 
     def DrawGridLine(self):
-        if self.draw == TRUE:
+        if self.draw == True:
             try:
                 size = self.row_line_size[self.data_cnt]
             except:
@@ -583,7 +583,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             self.DC.DrawLine(self.column[0], y_out, self.end_x, y_out)
 
     def DrawColumns(self):
-        if self.draw == TRUE:
+        if self.draw == True:
             col = 0
             for val in self.column:
                 try:
@@ -800,30 +800,30 @@ class PrintTable:
     def SetHeader(self, text = "", type = "Text", font=None, align = None, indent = None, colour = None, size = None):
         set = { "Text": text }
 
-        if font == None:
+        if font is None:
             set["Font"] = copy.copy(self.default_font)
         else:
             set["Font"] = font
 
-        if colour != None:
+        if colour is not None:
             setfont = set["Font"]
             setfont["Colour"] = self.GetColour(colour)
 
-        if size != None:
+        if size is not None:
             setfont = set["Font"]
             setfont["Size"] = size
 
-        if align == None:
+        if align is None:
             set["Align"] = self.header_align
         else:
             set["Align"] = align
 
-        if indent == None:
+        if indent is None:
             set["Indent"] = self.header_indent
         else:
             set["Indent"] = indent
 
-        if type == None:
+        if type is None:
             set["Type"] = self.header_type
         else:
             set["Type"] = type
@@ -833,30 +833,30 @@ class PrintTable:
     def SetFooter(self, text = "", type = None, font=None, align = None, indent = None, colour = None, size = None):
         set = { "Text": text }
 
-        if font == None:
+        if font is None:
             set["Font"] = copy.copy(self.default_font)
         else:
             set["Font"] = font
 
-        if colour != None:
+        if colour is not None:
             setfont = set["Font"]
             setfont["Colour"] = self.GetColour(colour)
 
-        if size != None:
+        if size is not None:
             setfont = set["Font"]
             setfont["Size"] = size
 
-        if align == None:
+        if align is None:
             set["Align"] = self.footer_align
         else:
             set["Align"] = align
 
-        if indent == None:
+        if indent is None:
             set["Indent"] = self.footer_indent
         else:
             set["Indent"] = indent
 
-        if type == None:
+        if type is None:
             set["Type"] = self.footer_type
         else:
             set["Type"] = type
@@ -879,7 +879,7 @@ class PrintTable:
         if self.parentFrame:
             frame.SetPosition(self.preview_frame_pos)
             frame.SetSize(self.preview_frame_size)
-        frame.Show(true)
+        frame.Show(True)
 
     def Print(self):
         pdd = wxPrintDialogData()
@@ -905,7 +905,7 @@ class PrintTable:
         if self.preview is None:
             table.SetPSize(size[0]/self.page_width, size[1]/self.page_height)
             table.SetPTSize(size[0], size[1])
-            table.SetPreview(FALSE)
+            table.SetPreview(False)
         else:
             if self.preview == 1:
                 table.scale = self.scale
@@ -933,9 +933,9 @@ class PrintTable:
 
     def HasPage(self, page):
         if page <= self.page_total:
-            return true
+            return True
         else:
-            return false
+            return False
 
     def SetPage(self, page):
         self.page = page
@@ -956,9 +956,9 @@ class PrintTable:
 
 class PrintGrid:
     def __init__(self, parent, grid, format = [], total_col = None, total_row = None):
-        if total_row == None:
+        if total_row is None:
             total_row = grid.GetNumberRows()
-        if total_col == None:
+        if total_col is None:
             total_col = grid.GetNumberCols()
 
         self.total_row = total_row
@@ -1025,7 +1025,7 @@ class SetPrintout(wxPrintout):
             end = self.canvas.HasPage(page)
             return end
         except:
-            return true
+            return True
 
     def GetPageInfo(self):
         try:
@@ -1084,7 +1084,7 @@ class SetPrintout(wxPrintout):
         self.canvas.SetPageSize(self.psizew, self.psizeh)
 
         self.canvas.DoDrawing(dc)
-        return true
+        return True
 
 
 

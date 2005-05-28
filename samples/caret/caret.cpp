@@ -176,7 +176,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create and show the main application window
-    MyFrame *frame = new MyFrame("Caret wxWindows sample",
+    MyFrame *frame = new MyFrame(_T("Caret wxWindows sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     frame->Show(TRUE);
@@ -201,16 +201,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Caret_SetBlinkTime, "&Blink time...\tCtrl-B");
-    menuFile->Append(Caret_Move, "&Move caret\tCtrl-C");
+    menuFile->Append(Caret_SetBlinkTime, _T("&Blink time...\tCtrl-B"));
+    menuFile->Append(Caret_Move, _T("&Move caret\tCtrl-C"));
     menuFile->AppendSeparator();
-    menuFile->Append(Caret_About, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->Append(Caret_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
     menuFile->AppendSeparator();
-    menuFile->Append(Caret_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(Caret_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
+    menuBar->Append(menuFile, _T("&File"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -219,7 +219,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText("Welcome to wxWindows!");
+    SetStatusText(_T("Welcome to wxWindows!"));
 }
 
 

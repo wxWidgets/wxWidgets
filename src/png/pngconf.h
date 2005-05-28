@@ -1,6 +1,6 @@
 /* pngconf.h - machine configurable file for libpng
  *
- * libpng 1.2.4 - July 8, 2002
+ * libpng 1.2.5rc3 - September 18, 2002
  * For conditions of distribution and use, see copyright notice in png.h
  * Copyright (c) 1998-2002 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
@@ -1228,7 +1228,7 @@ typedef z_stream FAR *  png_zstreamp;
 #     endif
 #  endif  /* PNG_IMPEXP */
 #else /* !(DLL || non-cygwin WINDOWS) */
-#    if (defined(__IBMC__) || defined(__IBMCPP__)) && defined(__OS2__)
+#    if (defined(__IBMC__) || defined(IBMCPP__)) && defined(__OS2__)
 #      define PNGAPI _System
 #      define PNG_IMPEXP
 #    else
@@ -1242,7 +1242,7 @@ typedef z_stream FAR *  png_zstreamp;
 #endif
 
 #if defined(__VISAGECPP__)
-/* I don't compile with _System linkage, ever! */
+/* I don't compile with this _System linkage for wxWindows */
 #  ifdef PNGAPI
 #    undef PNGAPI
 #  endif

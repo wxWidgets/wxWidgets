@@ -24,6 +24,7 @@
 #include "wx/frame.h"
 #include "wx/wfstream.h"
 #include "wx/filesys.h"
+#include "wx/filename.h"
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/tokenzr.h"
@@ -99,11 +100,30 @@ bool wxXmlResource::Load(const wxString& filemask)
         fnd = filemask;
     while (!!fnd)
     {
-#if wxUSE_FILESYSTEM
-        if (filemask.Lower().Matches(wxT("*.zip")) ||
-            filemask.Lower().Matches(wxT("*.xrs")))
+        // NB: Load() accepts both filenames and URLs (should probably be
+        //     changed to filenames only, but embedded resources currently
+        //     rely on its ability to handle URLs - FIXME). This check
+        //     serves as a quick way to determine whether found name is
+        //     filename and not URL:
+        if (wxFileName::FileExists(fnd))
         {
-            rt = rt && Load(fnd + wxT("#zip:*.xmlbin"));
+            // Make the name absolute filename, because the app may 
+            // change working directory later:
+            wxFileName fn(fnd);
+            if (fn.IsRelative())
+            {
+                fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE);
+                fnd = fn.GetFullPath();
+            }
+#if wxUSE_FILESYSTEM
+            fnd = wxFileSystem::FileNameToURL(fnd);
+#endif
+        }
+        
+#if wxUSE_FILESYSTEM
+        if (fnd.Lower().Matches(wxT("*.zip")) ||
+            fnd.Lower().Matches(wxT("*.xrs")))
+        {
             rt = rt && Load(fnd + wxT("#zip:*.xrc"));
         }
         else
@@ -144,7 +164,6 @@ void wxXmlResource::ClearHandlers()
 {
     m_handlers.Clear();
 }
-
 
 
 wxMenu *wxXmlResource::LoadMenu(const wxString& name)
@@ -261,7 +280,7 @@ static void ProcessPlatformProperty(wxXmlNode *node)
             isok = TRUE;
         else
         {
-            wxStringTokenizer tkn(s, " |");
+            wxStringTokenizer tkn(s, wxT(" |"));
 
             while (tkn.HasMoreTokens())
             {
@@ -311,9 +330,9 @@ void wxXmlResource::UpdateResources()
 #if !wxUSE_UNICODE && wxUSE_INTL
     if ( (GetFlags() & wxXRC_USE_LOCALE) == 0 )
     {
-        // In case we are not using wxLocale to translate strings, convert the strings
-        // GUI's charset. This must not be done when wxXRC_USE_LOCALE is on, because
-        // it could break wxGetTranslation lookup.
+        // In case we are not using wxLocale to translate strings, convert the
+        // strings GUI's charset. This must not be done when wxXRC_USE_LOCALE
+        // is on, because it could break wxGetTranslation lookup.
         encoding = wxLocale::GetSystemEncodingName();
     }
 #endif
@@ -380,7 +399,11 @@ void wxXmlResource::UpdateResources()
                     wxLogError(_("Resource files must have same version number!"));
 
                 ProcessPlatformProperty(m_data[i].Doc->GetRoot());
+#if wxUSE_FILESYSTEM
 				m_data[i].Time = file->GetModificationTime();
+#else
+                m_data[i].Time = wxDateTime(wxFileModificationTime(m_data[i].File));
+#endif
 			}
 
 #           if wxUSE_FILESYSTEM
@@ -408,10 +431,25 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
         if ( node->GetType() == wxXML_ELEMENT_NODE &&
                  (node->GetName() == wxT("object") ||
                   node->GetName() == wxT("object_ref")) &&
-                (!classname ||
-                 node->GetPropVal(wxT("class"), wxEmptyString) == classname) &&
-                node->GetPropVal(wxT("name"), &dummy) && dummy == name )
-            return node;
+             node->GetPropVal(wxT("name"), &dummy) && dummy == name )
+        {
+            wxString cls(node->GetPropVal(wxT("class"), wxEmptyString));
+            if (!classname || cls == classname)
+                return node;
+            // object_ref may not have 'class' property:
+            if (cls.empty() && node->GetName() == wxT("object_ref"))
+            {
+                wxString refName = node->GetPropVal(wxT("ref"), wxEmptyString);
+                if (refName.empty())
+                    continue;
+                wxXmlNode* refNode = FindResource(refName, wxEmptyString, TRUE);
+                if (refNode &&
+                    refNode->GetPropVal(wxT("class"), wxEmptyString) == classname)
+                {
+                    return node;
+                }
+            }
+        }
     }
 
     if ( recursive )
@@ -487,7 +525,7 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
         for (dnode = dest.GetChildren(); dnode; dnode = dnode->GetNext() )
         {
             if ( dnode->GetName() == node->GetName() &&
-                 dnode->GetPropVal("name", wxEmptyString) == name &&
+                 dnode->GetPropVal(wxT("name"), wxEmptyString) == name &&
                  dnode->GetType() == node->GetType() )
             {
                 MergeNodes(*dnode, *node);
@@ -503,7 +541,15 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
          dest.SetContent(with.GetContent());
 }
 
-wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance)
+wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
+                                           wxObject *instance)
+{
+    return CreateResFromNode2(node, parent, instance);
+}
+
+wxObject *wxXmlResource::CreateResFromNode2(wxXmlNode *node, wxObject *parent,
+                                            wxObject *instance,
+                                            wxXmlResourceHandler *handlerToUse)
 {
     if (node == NULL) return NULL;
 
@@ -527,17 +573,26 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
     }
 
     wxXmlResourceHandler *handler;
-    wxObject *ret;
-    wxNode * ND = m_handlers.GetFirst();
-    while (ND)
-    {
-        handler = (wxXmlResourceHandler*)ND->GetData();
-        if (node->GetName() == wxT("object") && handler->CanHandle(node))
+
+    if (handlerToUse)
+    {        
+        if (handlerToUse->CanHandle(node))
         {
-            ret = handler->CreateResource(node, parent, instance);
-            if (ret) return ret;
+            return handlerToUse->CreateResource(node, parent, instance);
         }
-        ND = ND->GetNext();
+    }
+    else if (node->GetName() == wxT("object"))
+    {    
+        wxNode *ND = m_handlers.GetFirst();
+        while (ND)
+        {
+            handler = (wxXmlResourceHandler*)ND->GetData();
+            if (handler->CanHandle(node))
+            {
+                return handler->CreateResource(node, parent, instance);
+            }
+            ND = ND->GetNext();
+        }
     }
 
     wxLogError(_("No handler found for XML node '%s', class '%s'!"),
@@ -545,6 +600,40 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
                node->GetPropVal(wxT("class"), wxEmptyString).c_str());
     return NULL;
 }
+
+
+#include "wx/listimpl.cpp"
+WX_DECLARE_LIST(wxXmlSubclassFactory, wxXmlSubclassFactoriesList);
+WX_DEFINE_LIST(wxXmlSubclassFactoriesList);
+
+wxXmlSubclassFactoriesList *wxXmlResource::ms_subclassFactories = NULL;
+
+/*static*/ void wxXmlResource::AddSubclassFactory(wxXmlSubclassFactory *factory)
+{
+    if (!ms_subclassFactories)
+    {
+        ms_subclassFactories = new wxXmlSubclassFactoriesList;
+        ms_subclassFactories->DeleteContents(TRUE);
+    }
+    ms_subclassFactories->Append(factory);
+}
+
+class wxXmlSubclassFactoryCXX : public wxXmlSubclassFactory
+{
+public:
+    ~wxXmlSubclassFactoryCXX() {}
+
+    wxObject *Create(const wxString& className)
+    {
+        wxClassInfo* classInfo = wxClassInfo::FindClass(className);
+
+        if (classInfo)
+            return classInfo->CreateObject();
+        else
+            return NULL;
+    }
+};
+
 
 
 
@@ -568,18 +657,23 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
         !(m_resource->GetFlags() & wxXRC_NO_SUBCLASSING))
     {
         wxString subclass = node->GetPropVal(wxT("subclass"), wxEmptyString);
-        wxClassInfo* classInfo = wxClassInfo::FindClass(subclass);
-
-        if (classInfo)
-            m_instance = classInfo->CreateObject();
-
-        if (!m_instance)
+        if (!subclass.empty())
         {
-            wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
-                       subclass.c_str(), node->GetPropVal(wxT("name"), wxEmptyString).c_str());
-        }
+            for (wxXmlSubclassFactoriesList::Node *i = wxXmlResource::ms_subclassFactories->GetFirst();
+                 i; i = i->GetNext())
+            {
+                m_instance = i->GetData()->Create(subclass);
+                if (m_instance)
+                    break;
+            }
 
-        m_instance = classInfo->CreateObject();
+            if (!m_instance)
+            {
+                wxString name = node->GetPropVal(wxT("name"), wxEmptyString);
+                wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
+                           subclass.c_str(), name.c_str());
+            }
+        }
     }
 
     m_node = node;
@@ -618,6 +712,7 @@ void wxXmlResourceHandler::AddWindowStyles()
     XRC_ADD_STYLE(wxTRANSPARENT_WINDOW);
     XRC_ADD_STYLE(wxWANTS_CHARS);
     XRC_ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
+    XRC_ADD_STYLE(wxWS_EX_BLOCK_EVENTS);
 }
 
 
@@ -634,7 +729,7 @@ int wxXmlResourceHandler::GetStyle(const wxString& param, int defaults)
 
     if (!s) return defaults;
 
-    wxStringTokenizer tkn(s, wxT("| "), wxTOKEN_STRTOK);
+    wxStringTokenizer tkn(s, wxT("| \t\n"), wxTOKEN_STRTOK);
     int style = 0;
     int index;
     wxString fl;
@@ -714,27 +809,7 @@ long wxXmlResourceHandler::GetLong(const wxString& param, long defaultv)
 
 int wxXmlResourceHandler::GetID()
 {
-    wxString sid = GetName();
-    long num;
-
-    if (sid == wxT("-1")) return -1;
-    else if (sid.IsNumber() && sid.ToLong(&num)) return num;
-#define stdID(id) else if (sid == wxT(#id)) return id
-    stdID(wxID_OPEN); stdID(wxID_CLOSE); stdID(wxID_NEW);
-    stdID(wxID_SAVE); stdID(wxID_SAVEAS); stdID(wxID_REVERT);
-    stdID(wxID_EXIT); stdID(wxID_UNDO); stdID(wxID_REDO);
-    stdID(wxID_HELP); stdID(wxID_PRINT); stdID(wxID_PRINT_SETUP);
-    stdID(wxID_PREVIEW); stdID(wxID_ABOUT); stdID(wxID_HELP_CONTENTS);
-    stdID(wxID_HELP_COMMANDS); stdID(wxID_HELP_PROCEDURES);
-    stdID(wxID_CUT); stdID(wxID_COPY); stdID(wxID_PASTE);
-    stdID(wxID_CLEAR); stdID(wxID_FIND); stdID(wxID_DUPLICATE);
-    stdID(wxID_SELECTALL); stdID(wxID_OK); stdID(wxID_CANCEL);
-    stdID(wxID_APPLY); stdID(wxID_YES); stdID(wxID_NO);
-    stdID(wxID_STATIC); stdID(wxID_FORWARD); stdID(wxID_BACKWARD);
-    stdID(wxID_DEFAULT); stdID(wxID_MORE); stdID(wxID_SETUP);
-    stdID(wxID_RESET); stdID(wxID_HELP_CONTEXT);
-#undef stdID
-    else return wxXmlResource::GetXRCID(sid);
+    return wxXmlResource::GetXRCID(GetName());
 }
 
 
@@ -829,15 +904,8 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
                                      const wxArtClient& defaultArtClient,
                                      wxSize size)
 {
-#if wxCHECK_VERSION(2,3,0) || defined(__WXMSW__)
     wxIcon icon;
     icon.CopyFromBitmap(GetBitmap(param, defaultArtClient, size));
-#else
-    wxIcon *iconpt;
-    wxBitmap bmppt = GetBitmap(param, size);
-    iconpt = (wxIcon*)(&bmppt);
-    wxIcon icon(*iconpt);
-#endif
     return icon;
 }
 
@@ -845,6 +913,8 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
 
 wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
 {
+    wxCHECK_MSG(m_node, NULL, wxT("You can't access handler data before it was initialized!"));
+
     wxXmlNode *n = m_node->GetChildren();
 
     while (n)
@@ -1027,7 +1097,7 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
     //FIXME : add cursor
 
     if (HasParam(wxT("exstyle")))
-        wnd->SetExtraStyle(GetStyle(wxT("exstyle")));
+        wnd->SetExtraStyle(wnd->GetExtraStyle()|GetStyle(wxT("exstyle")));
     if (HasParam(wxT("bg")))
         wnd->SetBackgroundColour(GetColour(wxT("bg")));
     if (HasParam(wxT("fg")))
@@ -1054,12 +1124,10 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
     while (n)
     {
         if (n->GetType() == wxXML_ELEMENT_NODE &&
-            n->GetName() == wxT("object"))
+           (n->GetName() == wxT("object") || n->GetName() == wxT("object_ref")))
         {
-            if (this_hnd_only && CanHandle(n))
-                CreateResource(n, parent, NULL);
-            else
-                m_resource->CreateResFromNode(n, parent, NULL);
+            m_resource->CreateResFromNode2(n, parent, NULL,
+                                           this_hnd_only ? this : NULL);
         }
         n = n->GetNext();
     }
@@ -1102,7 +1170,7 @@ struct XRCID_record
 
 static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
 
-/*static*/ int wxXmlResource::GetXRCID(const wxChar *str_id)
+static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = -2)
 {
     static int XRCID_LastID = wxID_HIGHEST;
 
@@ -1126,11 +1194,32 @@ static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
     XRCID_record **rec_var = (oldrec == NULL) ?
                               &XRCID_Records[index] : &oldrec->next;
     *rec_var = new XRCID_record;
-    (*rec_var)->id = ++XRCID_LastID;
     (*rec_var)->key = wxStrdup(str_id);
     (*rec_var)->next = NULL;
 
+    wxChar *end;
+    if (value_if_not_found != -2)
+        (*rec_var)->id = value_if_not_found;
+    else
+    {
+        int asint = wxStrtol(str_id, &end, 10);
+        if (*str_id && *end == 0)
+        {
+            // if str_id was integer, keep it verbosely:
+            (*rec_var)->id = asint;
+        }
+        else
+        {
+            (*rec_var)->id = ++XRCID_LastID;
+        }
+    }
+
     return (*rec_var)->id;
+}
+
+/*static*/ int wxXmlResource::GetXRCID(const wxChar *str_id)
+{
+    return XRCID_Lookup(str_id);
 }
 
 
@@ -1147,11 +1236,32 @@ static void CleanXRCID_Record(XRCID_record *rec)
 static void CleanXRCID_Records()
 {
     for (int i = 0; i < XRCID_TABLE_SIZE; i++)
+    {
         CleanXRCID_Record(XRCID_Records[i]);
+        XRCID_Records[i] = NULL;
+    }
 }
 
-
-
+static void AddStdXRCID_Records()
+{
+#define stdID(id) XRCID_Lookup(wxT(#id), id)
+    stdID(-1);
+    stdID(wxID_OPEN); stdID(wxID_CLOSE); stdID(wxID_NEW);
+    stdID(wxID_SAVE); stdID(wxID_SAVEAS); stdID(wxID_REVERT);
+    stdID(wxID_EXIT); stdID(wxID_UNDO); stdID(wxID_REDO);
+    stdID(wxID_HELP); stdID(wxID_PRINT); stdID(wxID_PRINT_SETUP);
+    stdID(wxID_PREVIEW); stdID(wxID_ABOUT); stdID(wxID_HELP_CONTENTS);
+    stdID(wxID_HELP_COMMANDS); stdID(wxID_HELP_PROCEDURES);
+    stdID(wxID_CUT); stdID(wxID_COPY); stdID(wxID_PASTE);
+    stdID(wxID_CLEAR); stdID(wxID_FIND); stdID(wxID_DUPLICATE);
+    stdID(wxID_SELECTALL); stdID(wxID_OK); stdID(wxID_CANCEL);
+    stdID(wxID_APPLY); stdID(wxID_YES); stdID(wxID_NO);
+    stdID(wxID_STATIC); stdID(wxID_FORWARD); stdID(wxID_BACKWARD);
+    stdID(wxID_DEFAULT); stdID(wxID_MORE); stdID(wxID_SETUP);
+    stdID(wxID_RESET); stdID(wxID_HELP_CONTEXT);
+    stdID(wxID_CLOSE_ALL);
+#undef stdID
+}
 
 
 
@@ -1166,11 +1276,14 @@ public:
     wxXmlResourceModule() {}
     bool OnInit()
     {
+        AddStdXRCID_Records();
+        wxXmlResource::AddSubclassFactory(new wxXmlSubclassFactoryCXX);
         return TRUE;
     }
     void OnExit()
     {
         delete wxXmlResource::Set(NULL);
+        wxDELETE(wxXmlResource::ms_subclassFactories);
         CleanXRCID_Records();
     }
 };

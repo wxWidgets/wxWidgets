@@ -8,7 +8,7 @@ much easier to share common data between several threads, it also makes much
 easier to shoot oneself in the foot, so careful use of synchronization objects
 such as \helpref{mutexes}{wxmutex} and/or \helpref{critical sections}{wxcriticalsection} is recommended.
 
-There are two types of threads in wxWindows: {\it detached} and {\it joinable}
+There are two types of threads in wxWidgets: {\it detached} and {\it joinable}
 ones, just as in the POSIX thread API (but unlike Win32 threads where all threads
 are joinable). The difference between the two is that only joinable threads
 can return a return code - this is returned by the Wait() function. Detached
@@ -134,7 +134,7 @@ be implemented by any derived class. The thread execution will start here.
 The returned value is the thread exit code which is only useful for
 joinable threads and is the value returned by \helpref{Wait}{wxthreadwait}.
 
-This function is called by wxWindows itself and should never be called
+This function is called by wxWidgets itself and should never be called
 directly.
 
 \membersection{wxThread::Exit}\label{wxthreadexit}

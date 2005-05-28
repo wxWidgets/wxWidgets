@@ -6,7 +6,7 @@
 %% Created:     30.11.01
 %% RCS-ID:      $Id$
 %% Copyright:   (c) 2001 Vadim Zeitlin
-%% License:     wxWindows license
+%% License:     wxWidgets license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\class{wxFileName}}\label{wxfilename}
@@ -14,7 +14,7 @@
 wxFileName encapsulates a file name. This class serves two purposes: first, it
 provides the functions to split the file names into components and to recombine
 these components in the full file name which can then be passed to the OS file
-functions (and \helpref{wxWindows functions}{filefunctions} wrapping them).
+functions (and \helpref{wxWidgets functions}{filefunctions} wrapping them).
 Second, it includes the functions for working with the files itself. Note that
 to change the file data you should use \helpref{wxFile}{wxfile} class instead.
 wxFileName provides functions for working with the file attributes.
@@ -87,10 +87,10 @@ File names can be case-sensitive or not, the function\rtfsp
 The rules for determining if the file name is absolute or relative also depends
 on the file name format and the only portable way to answer to this question is
 to use \helpref{IsAbsolute}{wxfilenameisabsolute} method. To ensure that the
-filename is absolute you may use \helpref{Normalize}{wxfilenamenormalize}. There
-is also an inverse function \helpref{MakeRelativeTo}{wxfilenamemakerelativeto} 
-which undoes what \helpref{Normalize(wxPATH\_NORM\_DOTS}{wxfilenamenormalize} 
-does.
+filename is absolute you may use
+\helpref{MakeAbsolute}{wxfilenamemakeabsolute}.  There is also an inverse
+function \helpref{MakeRelativeTo}{wxfilenamemakerelativeto} which undoes what
+\helpref{Normalize(wxPATH\_NORM\_DOTS)}{wxfilenamenormalize} does.
 
 Other functions returning information about the file format provided by this
 class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
@@ -525,6 +525,23 @@ directory or file really exists, you should use
 \helpref{DirExists}{wxfilenamedirexists} or 
 \helpref{FileExists}{wxfilenamefileexists} for this.
 
+\membersection{wxFileName::MakeAbsolute}\label{wxfilenamemakeabsolute}
+
+\func{bool}{MakeAbsolute}{\param{const wxString\& }{cwd = wxEmptyString}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+Make the file name absolute. This is a shortcut for
+{\tt \helpref{Normalize}{wxfilenamenormalize}(wxPATH\_NORM\_DOTS | wxPATH\_NORM\_ABSOLUTE | wxPATH\_NORM\_TILDE, cwd, format)}.
+
+\wxheading{See also}
+
+\helpref{MakeRelativeTo}{wxfilenamemakerelativeto},
+\helpref{Normalize}{wxfilenamenormalize},
+\helpref{IsAbsolute}{wxfilenameisabsolute}
+
+\wxheading{Note}
+
+This method was added in wxWidgets 2.4.1.
+
 \membersection{wxFileName::MakeRelativeTo}\label{wxfilenamemakerelativeto}
 
 \func{bool}{MakeRelativeTo}{\param{const wxString\& }{pathBase = ""}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
@@ -598,7 +615,7 @@ Deletes the specified directory from the file system.
 
 \membersection{wxFileName::SameAs}\label{wxfilenamesameas}
 
-\func{bool}{SameAs}{\param{const wxFileName\& }{filepath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\constfunc{bool}{SameAs}{\param{const wxFileName\& }{filepath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Compares the filename using the rules of this platform.
 
@@ -674,9 +691,19 @@ Assigns the new value to this filename object.
 
 \membersection{wxFileName::operator==}\label{wxfilenameoperatorequal}
 
-\func{bool operator}{operator==}{\param{const wxFileName\& }{filename}}
+\constfunc{bool operator}{operator==}{\param{const wxFileName\& }{filename}}
 
-\func{bool operator}{operator==}{\param{const wxString\& }{filename}}
+\constfunc{bool operator}{operator==}{\param{const wxString\& }{filename}}
 
-Returns {\tt TRUE} if the filenames are equal for the native file format.
+Returns {\tt TRUE} if the filenames are equal. The string {\it filenames} is
+interpreted as a path in the native filename format.
+
+\membersection{wxFileName::operator!=}\label{wxfilenameoperatornotequal}
+
+\constfunc{bool operator}{operator!=}{\param{const wxFileName\& }{filename}}
+
+\constfunc{bool operator}{operator!=}{\param{const wxString\& }{filename}}
+
+Returns {\tt TRUE} if the filenames are different. The string {\it filenames}
+is interpreted as a path in the native filename format.
 

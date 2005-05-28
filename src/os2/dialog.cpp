@@ -207,6 +207,15 @@ void wxDialog::DoShowModal()
     ::WinProcessDlg((HWND)GetHwnd());
 
     //
+    // Before entering the modal loop, reset the "is in OnIdle()" flag (see
+    // comment in app.cpp)
+    //
+    extern bool                     gbInOnIdle;
+    bool                            bWasInOnIdle = gbInOnIdle;
+
+    gbInOnIdle = FALSE;
+
+    //
     // Enter the modal loop
     //
     while ( IsModalShowing() )
@@ -221,6 +230,7 @@ void wxDialog::DoShowModal()
         // a message came or no more idle processing to do
         wxTheApp->DoMessage();
     }
+    gbInOnIdle = bWasInOnIdle;
 
     //
     // Snd restore focus

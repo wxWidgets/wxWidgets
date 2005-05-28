@@ -249,6 +249,8 @@ void wxToolBar::Init()
     m_bg = (GdkColor *)NULL;
     m_toolbar = (GtkToolbar *)NULL;
     m_blockEvent = FALSE;
+    m_defaultWidth = 32;
+    m_defaultHeight = 32;
 }
 
 wxToolBar::~wxToolBar()
@@ -278,6 +280,10 @@ bool wxToolBar::Create( wxWindow *parent,
 #ifdef __WXGTK20__
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
     GtkSetStyle();
+
+    // Doesn't work this way.
+    // GtkToolbarSpaceStyle space_style = GTK_TOOLBAR_SPACE_EMPTY;
+    // gtk_widget_style_set (GTK_WIDGET (m_toolbar), "space_style", &space_style, NULL);
 #else
     GtkOrientation orient;
     GtkToolbarStyle gtkStyle;
@@ -313,36 +319,6 @@ bool wxToolBar::Create( wxWindow *parent,
         gtk_toolbar_set_button_relief( GTK_TOOLBAR(m_toolbar), GTK_RELIEF_NONE );
 #endif
 
-
-    m_fg = new GdkColor;
-    m_fg->red = 0;
-    m_fg->green = 0;
-    m_fg->blue = 0;
-    wxColour fg(0,0,0);
-    fg.CalcPixel( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ) );
-    m_fg->pixel = fg.GetPixel();
-
-    m_bg = new GdkColor;
-    m_bg->red = 65535;
-    m_bg->green = 65535;
-    m_bg->blue = 49980;
-    wxColour bg(255,255,196);
-    bg.CalcPixel( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ) );
-    m_bg->pixel = bg.GetPixel();
-
-    gtk_tooltips_force_window( GTK_TOOLBAR(m_toolbar)->tooltips );
-
-    GtkStyle *g_style =
-        gtk_style_copy(
-                gtk_widget_get_style(
-                    GTK_TOOLBAR(m_toolbar)->tooltips->tip_window ) );
-
-    g_style->bg[GTK_STATE_NORMAL] = *m_bg;
-
-    SET_STYLE_FONT(g_style, GtkGetDefaultGuiFont());
-
-    gtk_widget_set_style( GTK_TOOLBAR(m_toolbar)->tooltips->tip_window, g_style );
-
     m_parent->DoAddChild( this );
 
     PostCreation();
@@ -374,37 +350,44 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
+#ifndef __WXGTK20__
     // if we have inserted a space before all the tools we must change the GTK
     // index by 1
     size_t posGtk = m_xMargin > 1 ? pos + 1 : pos;
+#else
+    size_t posGtk = pos;
+#endif
 
     if ( tool->IsButton() )
     {
-        wxBitmap bitmap = tool->GetNormalBitmap();
+        if ( !HasFlag(wxTB_NOICONS) )
+        {
+            wxBitmap bitmap = tool->GetNormalBitmap();
 
-        wxCHECK_MSG( bitmap.Ok(), FALSE,
-                     wxT("invalid bitmap for wxToolBar icon") );
+            wxCHECK_MSG( bitmap.Ok(), FALSE,
+                         wxT("invalid bitmap for wxToolBar icon") );
 
-        wxCHECK_MSG( bitmap.GetBitmap() == NULL, FALSE,
-                     wxT("wxToolBar doesn't support GdkBitmap") );
+            wxCHECK_MSG( bitmap.GetBitmap() == NULL, FALSE,
+                         wxT("wxToolBar doesn't support GdkBitmap") );
 
-        wxCHECK_MSG( bitmap.GetPixmap() != NULL, FALSE,
-                     wxT("wxToolBar::Add needs a wxBitmap") );
+            wxCHECK_MSG( bitmap.GetPixmap() != NULL, FALSE,
+                         wxT("wxToolBar::Add needs a wxBitmap") );
 
-        GtkWidget *tool_pixmap = (GtkWidget *)NULL;
+            GtkWidget *tool_pixmap = (GtkWidget *)NULL;
 
-        GdkPixmap *pixmap = bitmap.GetPixmap();
+            GdkPixmap *pixmap = bitmap.GetPixmap();
 
-        GdkBitmap *mask = (GdkBitmap *)NULL;
-        if ( bitmap.GetMask() )
-          mask = bitmap.GetMask()->GetBitmap();
+            GdkBitmap *mask = (GdkBitmap *)NULL;
+            if ( bitmap.GetMask() )
+              mask = bitmap.GetMask()->GetBitmap();
 
-        tool_pixmap = gtk_pixmap_new( pixmap, mask );
-        gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
+            tool_pixmap = gtk_pixmap_new( pixmap, mask );
+            gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
 
-        gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
+            gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 
-        tool->m_pixmap = tool_pixmap;
+            tool->m_pixmap = tool_pixmap;
+        }
     }
 
     switch ( tool->GetStyle() )
@@ -587,8 +570,10 @@ void wxToolBar::SetMargins( int x, int y )
     wxCHECK_RET( GetToolsCount() == 0,
                  wxT("wxToolBar::SetMargins must be called before adding tools.") );
 
+#ifndef __WXGTK20__
     if (x > 1)
         gtk_toolbar_append_space( m_toolbar );  // oh well
+#endif
 
     m_xMargin = x;
     m_yMargin = y;

@@ -415,7 +415,7 @@ void wxDividedShape::ResetMandatoryControlPoints()
   }
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxDividedShape::WriteAttributes(wxExpr *clause)
 {
   wxRectangleShape::WriteAttributes(clause);
@@ -434,7 +434,7 @@ void wxDividedShape::ReadAttributes(wxExpr *clause)
 
 void wxDividedShape::EditRegions()
 {
-  wxMessageBox("EditRegions() is unimplemented.", "OGL", wxOK);
+  wxMessageBox(wxT("EditRegions() is unimplemented."), wxT("OGL"), wxOK);
 
   // TODO
 #if 0

@@ -59,11 +59,11 @@ class SecondThreadApp(wxApp):
         catcher = HiddenCatcher()
         #self.SetTopWindow(catcher)
         self.catcher =catcher
-        return true
+        return True
 
 #---------------------------------------------------------------------------
 
 def add_cone():
    frame = VtkFrame(None, -1, "Cone")
-   frame.Show(true)
+   frame.Show(True)
 

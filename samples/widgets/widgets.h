@@ -17,7 +17,7 @@ class WXDLLEXPORT wxNotebook;
 class WXDLLEXPORT wxSizer;
 class WXDLLEXPORT wxTextCtrl;
 
-class WXDLLEXPORT WidgetsPageInfo;
+class WidgetsPageInfo;
 
 #include "wx/panel.h"
 
@@ -68,7 +68,7 @@ public:
 // dynamic WidgetsPage creation helpers
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT WidgetsPageInfo
+class WidgetsPageInfo
 {
 public:
     typedef WidgetsPage *(*Constructor)(wxNotebook *notebook,

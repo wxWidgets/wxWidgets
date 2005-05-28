@@ -10,7 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <wx/wx.h>
-#define wxUSE_DISPLAY 1
+#if ! wxUSE_DISPLAY 
+#error "wxUSE_DISPLAY must be set to 1 in $WXWIN\lib\_sc\wx\setup.h"
+#endif
 #include <wx/display.h>
 
 class TestApp : public wxApp

@@ -1,11 +1,11 @@
-\section{wxWindows Hello World sample}\label{helloworld}
+\section{wxWidgets Hello World sample}\label{helloworld}
 
 As many people have requested a mini-sample to be published here
 so that some quick judgment concerning syntax
-and basic principles can be made, you can now look at wxWindows'
+and basic principles can be made, you can now look at wxWidgets'
 "Hello World":
 
-You have to include wxWindows' header files, of course. This can
+You have to include wxWidgets' header files, of course. This can
 be done on a file by file basis (such as \#include "wx/window.h")
 or using one global include (\#include "wx/wx.h"). This is
 also useful on platforms which support precompiled headers such
@@ -15,7 +15,7 @@ as all major compilers on the Windows platform.
 //
 // file name: hworld.cpp
 //
-//   purpose: wxWindows "Hello world"
+//   purpose: wxWidgets "Hello world"
 //
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -94,7 +94,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 \end{verbatim}
 
-As in all programs there must be a "main" function. Under wxWindows main is implemented
+As in all programs there must be a "main" function. Under wxWidgets main is implemented
 using this macro, which creates an application instance and starts the program.
 
 \begin{verbatim}
@@ -137,7 +137,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetMenuBar( menuBar );
 
     CreateStatusBar();
-    SetStatusText( "Welcome to wxWindows!" );
+    SetStatusText( "Welcome to wxWidgets!" );
 }
 \end{verbatim}
 
@@ -159,7 +159,7 @@ case a typical "About" window with information about the program.
 \begin{verbatim}
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox( "This is a wxWindows' Hello world sample",
+    wxMessageBox( "This is a wxWidgets' Hello world sample",
                   "About Hello World", wxOK | wxICON_INFORMATION );
 }
 \end{verbatim}

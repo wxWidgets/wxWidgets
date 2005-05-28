@@ -32,7 +32,7 @@ class wxFrameManager;
 It is not clear what this class does. It is not used elsewhere in FL.
 */
 
-class wxFrameView : public wxEvtHandler
+class WXFL_DECLSPEC wxFrameView : public wxEvtHandler
 {
 protected:
     wxStringList    mTopMenus;
@@ -87,7 +87,7 @@ class wxFrame;
 It is not clear what this class does. It is not used elsewhere in FL.
 */
 
-class wxFrameManager : wxObject
+class WXFL_DECLSPEC wxFrameManager : wxObject
 {
 protected:
     wxList       mViews;

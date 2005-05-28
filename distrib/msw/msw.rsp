@@ -6,6 +6,8 @@ lib/watcom/*.txt
 lib/watcom/*.lib
 lib/watcom/*.bat
 lib/bcc16/*.lib
+lib/_sc/*.txt
+lib/_sc/*.def
 
 docs/licence.txt
 docs/msw/*.txt
@@ -23,6 +25,8 @@ tools/gettext/*.sed
 src/makeb32.env
 src/makeprog.b32
 src/makelib.b32
+src/makelib.sc
+src/makeprog.sc
 src/makebcc.env
 src/makeprog.bcc
 src/makelib.bcc
@@ -49,6 +53,7 @@ src/makelib.twn
 src/makefile.bcc
 src/makefile.dos
 src/makefile.vc
+src/version.mak
 src/*.bat
 
 src/common/dosyacc.c
@@ -73,10 +78,6 @@ src/msw/*.prj
 
 include/wx/msw/*.h
 include/wx/msw/*.rc
-include/wx/msw/ctl3d/*.h
-include/wx/msw/gnuwin32/*.h
-include/wx/msw/gnuwin32/*.def
-include/wx/msw/gnuwin32/gl/*.h
 include/wx/msw/ole/*.h
 include/wx/msw/*.cur
 include/wx/msw/*.ico

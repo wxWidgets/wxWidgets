@@ -38,7 +38,7 @@
 
 #include "scorefil.h"
 
-ScoreFile::ScoreFile(const char* appName)
+ScoreFile::ScoreFile(const wxString& appName)
 {
 #if 0
 	wxString filename;
@@ -68,7 +68,8 @@ ScoreFile::ScoreFile(const char* appName)
 	}
 #endif
 
-	m_config = new wxConfig(appName, "wxWindows", appName, "", wxCONFIG_USE_LOCAL_FILE);  // only local
+	m_config = new wxConfig(appName, _T("wxWindows"), appName, _T(""),
+                                wxCONFIG_USE_LOCAL_FILE);  // only local
 }
 
 ScoreFile::~ScoreFile()
@@ -84,7 +85,7 @@ ScoreFile::~ScoreFile()
 
 void ScoreFile::GetPlayerList( wxArrayString &list )
 {
-	m_config->SetPath("/Players");
+	m_config->SetPath(_T("/Players"));
 	int length = m_config->GetNumberOfGroups();
 
 	if (length <= 0) return;
@@ -106,12 +107,14 @@ void ScoreFile::GetPlayerList( wxArrayString &list )
 
 // Calculate an encrypted check number to prevent tampering with
 // score file
-long ScoreFile::CalcCheck(const char* name, int p1, int p2, int p3)
+long ScoreFile::CalcCheck(const wxString& name, int p1, int p2, int p3)
 {
     long check = 0;
-    while (*name)
+    size_t i, max = name.length();
+
+    for(i = 0; i < max; ++i )
 	{
-		check = (check << 1) ^ (long)*name++;
+		check = (check << 1) ^ (long)name[i];
 		check = ((check >> 23) ^ check) & 0xFFFFFF;
 	}
 	check = (check << 1) ^ (long)p1;
@@ -126,13 +129,13 @@ long ScoreFile::CalcCheck(const char* name, int p1, int p2, int p3)
 wxString ScoreFile::GetPreviousPlayer() const
 {
 	wxString result;
-	m_config->SetPath("/General");
-	m_config->Read("LastPlayer", &result);
+	m_config->SetPath(_T("/General"));
+	m_config->Read(_T("LastPlayer"), &result);
 	return result;
 }
 
 void ScoreFile::ReadPlayersScore(
-						const char* player,
+						const wxString& player,
 						int& wins,
 						int& games,
 						int& score)
@@ -142,17 +145,17 @@ void ScoreFile::ReadPlayersScore(
 
 	games = wins = score = 0;
 
-	m_config->SetPath("/Players");
+	m_config->SetPath(_T("/Players"));
 	m_config->SetPath(player);
-	if (m_config->Read("Score", &myScore, 0L) &&
-		m_config->Read("Games", &myGames, 0L) &&
-		m_config->Read("Wins",  &myWins, 0L) &&
-		m_config->Read("Check", &check, 0L))
+	if (m_config->Read(_T("Score"), &myScore, 0L) &&
+		m_config->Read(_T("Games"), &myGames, 0L) &&
+		m_config->Read(_T("Wins"),  &myWins, 0L) &&
+		m_config->Read(_T("Check"), &check, 0L))
 	{
 	    if (check != CalcCheck(player, myGames, myWins, myScore))
 		{
-			wxMessageBox("Score file corrupted", "Warning",
-						wxOK | wxICON_EXCLAMATION);
+			wxMessageBox(_T("Score file corrupted"), _T("Warning"),
+                                     wxOK | wxICON_EXCLAMATION);
 		}
 		else
 		{
@@ -165,18 +168,18 @@ void ScoreFile::ReadPlayersScore(
 }
 
 
-void ScoreFile::WritePlayersScore(const char* player, int wins, int games, int score)
+void ScoreFile::WritePlayersScore(const wxString& player, int wins, int games, int score)
 {
     if (player)
 	{
-		m_config->SetPath("/General");
-		m_config->Write("LastPlayer", wxString(player)); // Without wxString tmp, thinks it's bool in VC++
+		m_config->SetPath(_T("/General"));
+		m_config->Write(_T("LastPlayer"), wxString(player)); // Without wxString tmp, thinks it's bool in VC++
 
-		m_config->SetPath("/Players");
+		m_config->SetPath(_T("/Players"));
 		m_config->SetPath(player);
-		m_config->Write("Score", (long)score);
-		m_config->Write("Games", (long)games);
-		m_config->Write("Wins", (long)wins);
-		m_config->Write("Check", CalcCheck(player, games, wins, score));
+		m_config->Write(_T("Score"), (long)score);
+		m_config->Write(_T("Games"), (long)games);
+		m_config->Write(_T("Wins"), (long)wins);
+		m_config->Write(_T("Check"), CalcCheck(player, games, wins, score));
 	}
 }

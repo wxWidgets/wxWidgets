@@ -68,7 +68,8 @@ wxConfigBase::wxConfigBase(const wxString& appName,
                            long style)
             : m_appName(appName), m_vendorName(vendorName), m_style(style)
 {
-    m_bExpandEnvVars = TRUE; m_bRecordDefaults = FALSE;
+    m_bExpandEnvVars = TRUE;
+    m_bRecordDefaults = FALSE;
 }
 
 wxConfigBase::~wxConfigBase()
@@ -110,7 +111,12 @@ wxConfigBase *wxConfigBase::Create()
     {                                                                       \
         wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );  \
                                                                             \
-        return DoRead##name(key, val);                                      \
+        if ( !DoRead##name(key, val) )                                      \
+            return FALSE;                                                   \
+                                                                            \
+        *val = extra(*val);                                                 \
+                                                                            \
+        return TRUE;                                                        \
     }                                                                       \
                                                                             \
     bool wxConfigBase::Read(const wxString& key,                            \
@@ -119,17 +125,20 @@ wxConfigBase *wxConfigBase::Create()
     {                                                                       \
         wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );  \
                                                                             \
-        if ( DoRead##name(key, val) )                                       \
-            return TRUE;                                                    \
-                                                                            \
-        if ( IsRecordingDefaults() )                                        \
+        bool read = DoRead##name(key, val);                                 \
+        if ( !read )                                                        \
         {                                                                   \
-            ((wxConfigBase *)this)->DoWrite##name(key, defVal);             \
+            if ( IsRecordingDefaults() )                                    \
+            {                                                               \
+                ((wxConfigBase *)this)->DoWrite##name(key, defVal);         \
+            }                                                               \
+                                                                            \
+            *val = defVal;                                                  \
         }                                                                   \
                                                                             \
-        *val = extra(defVal);                                               \
+        *val = extra(*val);                                                 \
                                                                             \
-        return FALSE;                                                       \
+        return read;                                                        \
     }
 
 
@@ -278,10 +287,11 @@ wxString wxExpandEnvVars(const wxString& str)
   {
     Bracket_None,
     Bracket_Normal  = ')',
-    Bracket_Curly   = '}'
+    Bracket_Curly   = '}',
 #ifdef  __WXMSW__
-    ,Bracket_Windows = '%'     // yeah, Windows people are a bit strange ;-)
+    Bracket_Windows = '%',    // yeah, Windows people are a bit strange ;-)
 #endif
+    Bracket_Max
   };
 
   size_t m;
@@ -342,8 +352,16 @@ wxString wxExpandEnvVars(const wxString& str)
           // check the closing bracket
           if ( bracket != Bracket_None ) {
             if ( m == str.Len() || str[m] != (char)bracket ) {
-              wxLogWarning(_("Environment variables expansion failed: missing '%c' at position %d in '%s'."),
-                           (char)bracket, m + 1, str.c_str());
+              // under MSW it's common to have '%' characters in the registry
+              // and it's annoying to have warnings about them each time, so
+              // ignroe them silently if they are not used for env vars
+              //
+              // under Unix, OTOH, this warning could be useful for the user to
+              // understand why isn't the variable expanded as intended
+              #ifndef __WXMSW__
+                wxLogWarning(_("Environment variables expansion failed: missing '%c' at position %d in '%s'."),
+                             (char)bracket, m + 1, str.c_str());
+              #endif // __WXMSW__
             }
             else {
               // skip closing bracket unless the variables wasn't expanded
@@ -375,8 +393,6 @@ wxString wxExpandEnvVars(const wxString& str)
 }
 
 // this function is used to properly interpret '..' in path
-/// separates group and entry names (probably shouldn't be changed)
-
 void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
 {
   aParts.Empty();

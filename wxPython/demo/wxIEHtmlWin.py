@@ -9,7 +9,7 @@ if wxPlatform == '__WXMSW__':
 class TestPanel(wxWindow):
     def __init__(self, parent, log, frame=None):
         wxWindow.__init__(self, parent, -1,
-                          style=wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
+                          style=wxTAB_TRAVERSAL|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
         self.log = log
         self.current = "http://wxWindows.org/"
         self.frame = frame
@@ -68,7 +68,7 @@ class TestPanel(wxWindow):
         self.location.Append(self.current)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         EVT_SIZE(self, self.OnSize)
 
         # Hook up the event handlers for the IE window
@@ -78,6 +78,12 @@ class TestPanel(wxWindow):
         #EVT_MSHTML_PROGRESSCHANGE(self, -1, self.OnProgressChange)
         EVT_MSHTML_STATUSTEXTCHANGE(self, -1, self.OnStatusTextChange)
         EVT_MSHTML_TITLECHANGE(self, -1, self.OnTitleChange)
+
+
+    def ShutdownDemo(self):
+        # put the frame title back
+        if self.frame:
+            self.frame.SetTitle(self.titleBase)
 
 
     def OnSize(self, evt):

@@ -41,6 +41,7 @@
     #include "wx/validate.h"
 #endif
 
+#include "wx/tooltip.h"
 #include "wx/popupwin.h"
 
 #include "wx/univ/renderer.h"
@@ -54,6 +55,12 @@
    2. it forwards the ones it doesn't process to the wxComboControl
    3. which passes them to the popup window if it is popped up
  */
+
+// constants
+// ----------------------------------------------------------------------------
+
+// the margin between the text control and the combo button
+static const wxCoord g_comboMargin = 2;
 
 // ----------------------------------------------------------------------------
 // wxComboButton is just a normal button except that it sends commands to the
@@ -294,7 +301,7 @@ wxSize wxComboControl::DoGetBestClientSize() const
     wxSize sizeBtn = m_btn->GetBestSize(),
            sizeText = m_text->GetBestSize();
 
-    return wxSize(sizeBtn.x + sizeText.x, wxMax(sizeBtn.y, sizeText.y));
+    return wxSize(sizeText.x + g_comboMargin + sizeBtn.x, wxMax(sizeBtn.y, sizeText.y));
 }
 
 void wxComboControl::DoMoveWindow(int x, int y, int width, int height)
@@ -344,6 +351,29 @@ bool wxComboControl::Show(bool show)
 
     return TRUE;
 }
+
+#if wxUSE_TOOLTIPS
+void wxComboControl::DoSetToolTip(wxToolTip *tooltip)
+{
+    wxControl::DoSetToolTip(tooltip);    
+
+    // Set tool tip for button and text box
+    if (m_text && m_btn)
+    {
+        if (tooltip)
+        {
+            const wxString &tip = tooltip->GetTip();
+            m_text->SetToolTip(tip);
+            m_btn->SetToolTip(tip);
+        }
+        else
+        {
+            m_text->SetToolTip(NULL);
+            m_btn->SetToolTip(NULL);
+        }
+    }
+}
+#endif // wxUSE_TOOLTIPS
 
 // ----------------------------------------------------------------------------
 // popup window handling
@@ -718,10 +748,16 @@ void wxComboBox::SetEditable(bool editable)
 void wxComboBox::Clear()
 {
     GetLBox()->Clear();
+    GetText()->SetValue(wxEmptyString);
 }
 
 void wxComboBox::Delete(int n)
 {
+    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::Delete") );
+
+    if (GetSelection() == n)
+        GetText()->SetValue(wxEmptyString);
+
     GetLBox()->Delete(n);
 }
 
@@ -732,11 +768,15 @@ int wxComboBox::GetCount() const
 
 wxString wxComboBox::GetString(int n) const
 {
+    wxCHECK_MSG( (n >= 0) && (n < GetCount()), wxEmptyString, _T("invalid index in wxComboBox::GetString") );
+
     return GetLBox()->GetString(n);
 }
 
 void wxComboBox::SetString(int n, const wxString& s)
 {
+    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::SetString") );
+
     GetLBox()->SetString(n, s);
 }
 
@@ -747,7 +787,7 @@ int wxComboBox::FindString(const wxString& s) const
 
 void wxComboBox::Select(int n)
 {
-    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid combobox index") );
+	wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::Select ") );
 
     GetLBox()->SetSelection(n);
     GetText()->SetValue(GetLBox()->GetString(n));
@@ -755,8 +795,15 @@ void wxComboBox::Select(int n)
 
 int wxComboBox::GetSelection() const
 {
+#if 1 // FIXME:: What is the correct behavior?
     // if the current value isn't one of the listbox strings, return -1
+    return GetLBox()->GetSelection();
+#else    
+    // Why oh why is this done this way? 
+    // It is not because the value displayed in the text can be found 
+    // in the list that it is the item that is selected!
     return FindString(GetText()->GetValue());
+#endif
 }
 
 int wxComboBox::DoAppend(const wxString& item)

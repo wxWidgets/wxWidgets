@@ -131,6 +131,15 @@ enum wxFontEncoding
     wxFONTENCODING_UTF7,            // UTF-7 Unicode encoding
     wxFONTENCODING_UTF8,            // UTF-8 Unicode encoding
 
+    // Far Eastern encodings
+        // Chinese
+    wxFONTENCODING_GB2312 = wxFONTENCODING_CP936, // Simplified Chinese
+    wxFONTENCODING_BIG5 = wxFONTENCODING_CP950,   // Traditional Chinese
+
+        // Japanese (see http://zsigri.tripod.com/fontboard/cjk/jis.html)
+    wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932,  // Shift JIS
+    wxFONTENCODING_EUC_JP,          // Extended Unix Codepage for Japanese
+
     wxFONTENCODING_UNICODE,         // Unicode - currently used only by
                                     // wxEncodingConverter class
 
@@ -147,26 +156,11 @@ enum wxFontEncoding
 // ToString() and restore them using FromString())
 struct wxNativeFontInfo
 {
-#ifdef __WXGTK__
-    // init the elements from an XLFD, return TRUE if ok
-    bool FromXFontName(const wxString& xFontName);
-
-    // return false if we were never initialized with a valid XLFD
-    bool IsDefault() const;
-
-    // generate an XLFD using the fontElements
-    wxString GetXFontName() const;
-
-    // set the XFLD
-    void SetXFontName(const wxString& xFontName);
-#endif
-
-    wxNativeFontInfo() { Init(); }
+    wxNativeFontInfo();
 
     // reset to the default state
     void Init();
 
-#ifndef __WXGTK__
     // accessors and modifiers for the font elements
     int GetPointSize() const;
     wxFontStyle GetStyle() const;
@@ -183,7 +177,6 @@ struct wxNativeFontInfo
     void SetFaceName(wxString facename);
     void SetFamily(wxFontFamily family);
     void SetEncoding(wxFontEncoding encoding);
-#endif
 
     // it is important to be able to serialize wxNativeFontInfo objects to be
     // able to store them (in config file, for example)
@@ -203,6 +196,34 @@ struct wxNativeFontInfo
     wxString ToUserString() const;
 };
 
+
+%{
+// Fix some link errors...  Remove this when these methods get real implementations...
+#if defined(__WXGTK__) || defined(__WXX11__)
+#if wxUSE_PANGO
+void wxNativeFontInfo::SetPointSize(int pointsize)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetStyle(wxFontStyle style)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetFaceName(wxString facename)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetFamily(wxFontFamily family)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
+    { wxFAIL_MSG( _T("not implemented") ); }
+#endif
+#endif
+%}
 
 //---------------------------------------------------------------------------
 // wxFontMapper manages user-definable correspondence between logical font
@@ -307,6 +328,13 @@ public:
             wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
 
     %name(wxFontFromNativeInfo)wxFont(const wxNativeFontInfo& info);
+    %addmethods {
+        %new wxFont* wxFontFromNativeInfoString(const wxString& info) {
+            wxNativeFontInfo nfi;
+            nfi.FromString(info);
+            return new wxFont(nfi);
+        }
+    }
 
     ~wxFont();
 
@@ -340,9 +368,13 @@ public:
     wxString GetStyleString() const;
     wxString GetWeightString() const;
 
+    void SetNoAntiAliasing( bool no = TRUE );
+    bool GetNoAntiAliasing();
+
     static wxFontEncoding GetDefaultEncoding();
     static void SetDefaultEncoding(wxFontEncoding encoding);
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -412,7 +444,9 @@ public:
 
 enum wxLanguage
 {
+    // user's default/preffered language as got from OS:
     wxLANGUAGE_DEFAULT,
+    // unknown language, if wxLocale::GetSystemLanguage fails:
     wxLANGUAGE_UNKNOWN,
 
     wxLANGUAGE_ABKHAZIAN,
@@ -691,15 +725,27 @@ public:
     wxLocale(int language = wxLANGUAGE_DEFAULT,
              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
 
-        // the same as a function (returns TRUE on success)
-    bool Init(const wxString& szName,
-              const wxString& szShort = wxPyEmptyString,
-              const wxString& szLocale = wxPyEmptyString,
-              bool bLoadDefault = TRUE,
-              bool bConvertEncoding = FALSE);
-
         // restores old locale
     ~wxLocale();
+
+    %name(Init1)bool Init(const wxString& szName,
+                          const wxString& szShort = wxPyEmptyString,
+                          const wxString& szLocale = wxPyEmptyString,
+                          bool bLoadDefault = TRUE,
+                          bool bConvertEncoding = FALSE);
+
+    %name(Init2) bool Init(int language = wxLANGUAGE_DEFAULT,
+                           int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+
+    %pragma(python) addtoclass = "
+    def Init(self, *_args, **_kwargs):
+        if type(_args[0]) in [type(''), type(u'')]:
+            val = self.Init1(*_args, **_kwargs)
+        else:
+            val = self.Init2(*_args, **_kwargs)
+        return val
+    "
+
 
     // Try to get user's (or OS's) prefered language setting.
     // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
@@ -917,6 +963,7 @@ public:
     // equivalent encodings, regardless the platform, including itself.
     static wxFontEncodingArray GetAllEquivalents(wxFontEncoding enc);
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.IsOk()"
 };
 
 

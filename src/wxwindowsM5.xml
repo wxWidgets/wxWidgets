@@ -155,6 +155,15 @@
                     </SETTING>
                     <SETTING>
                         <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>:regex:</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:tiff:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
@@ -606,9 +615,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>‡þÀ</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>	ñ</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -2639,15 +2648,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:treectlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:html:</ACCESSPATH>
-                    <PATH>:m_meta.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -4809,13 +4809,6 @@
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:html:</ACCESSPATH>
-                    <PATH>:m_meta.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:</ACCESSPATH>
                     <PATH>:notebmac.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -5442,6 +5435,15 @@
                     </SETTING>
                     <SETTING>
                         <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>:regex:</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:tiff:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
@@ -5875,9 +5877,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>‡þÀ</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>	ñ</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -8305,13 +8307,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>m_meta.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>m_pre.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -10334,11 +10329,6 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>m_meta.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>m_pre.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
@@ -10700,9 +10690,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>‡þÀ</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>	ñ</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -11334,6 +11324,15 @@
                     </SETTING>
                     <SETTING>
                         <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>:regex:</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:tiff:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
@@ -11776,9 +11775,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>‡þÀ</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>	ñ</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -13807,15 +13806,6 @@
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:html:</ACCESSPATH>
-                    <PATH>:m_meta.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:</ACCESSPATH>
                     <PATH>:notebmac.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -15970,13 +15960,6 @@
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:html:</ACCESSPATH>
-                    <PATH>:m_meta.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:</ACCESSPATH>
                     <PATH>:notebmac.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -16599,6 +16582,15 @@
                     </SETTING>
                     <SETTING>
                         <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>:regex:</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:tiff:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
@@ -17041,9 +17033,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>‡þÀ</VALUE></SETTING>
-                    <SETTING><VALUE>%#H</VALUE></SETTING>
-                    <SETTING><VALUE>%8*</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>	ñ</VALUE></SETTING>
+                    <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -19069,15 +19061,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:treectlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:html:</ACCESSPATH>
-                    <PATH>:m_meta.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -21236,13 +21219,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:treectlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:html:</ACCESSPATH>
-                    <PATH>:m_meta.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -23693,14 +23669,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:html:</ACCESSPATH>
                     <PATH>:m_list.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <TARGETNAME>Classic Debug</TARGETNAME>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:html:</ACCESSPATH>
-                    <PATH>:m_meta.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
