@@ -34,16 +34,19 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID winid, int range,
             const wxPoint& pos, const wxSize& size, long style,
             const wxValidator& validator, const wxString& name)
 {
-    //flag checking
-    wxASSERT_MSG( !(style & wxGA_HORIZONTAL), wxT("Horizontal gauge not supported on cocoa"));//*
-    wxASSERT_MSG( !(style & wxGA_SMOOTH), wxT("Smooth gauge not supported on cocoa"));
-    //* - GNUStep made isVertical and setVertical part of thier framework, but its specific to them
-    //the way they do it is just handle that flag in drawRect.
-
+    // NOTE: wxGA_SMOOTH flag is simply ignored (gauges are ALWAYS smooth)
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     SetNSView([[NSProgressIndicator alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
+
+    // TODO: DoGetBestSize is likely totally wrong for vertical gauges but
+    // this actually makes the widgets sample work so it's better than nothing.
+    if(style & wxGA_VERTICAL)
+    {
+        wxLogDebug("wxGA_VERTICAL may not work correctly.  See src/cocoa/gauge.mm");
+        [m_cocoaNSView setBoundsRotation:-90.0];
+    }
 
     [(NSProgressIndicator*)m_cocoaNSView setMaxValue:range];
     [(NSProgressIndicator*)m_cocoaNSView setIndeterminate:NO];
