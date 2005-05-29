@@ -3777,7 +3777,7 @@ class PyScrolledWindow(ScrolledWindow):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)
+        self._setOORInfo(self); self._setCallbackInfo(self, PyScrolledWindow)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
