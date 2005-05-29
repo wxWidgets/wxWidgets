@@ -1679,16 +1679,27 @@ class MySplashScreen(wx.SplashScreen):
                                  wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
                                  5000, None, -1)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
-        wx.FutureCall(2000, self.ShowMain)
+        self.fc = wx.FutureCall(2000, self.ShowMain)
+
 
     def OnClose(self, evt):
+        # Make sure the default handler runs too so this window gets
+        # destroyed
+        evt.Skip()
         self.Hide()
-        evt.Skip()  # Make sure the default handler runs too...
+        
+        # if the timer is still running then go ahead and show the
+        # main frame now
+        if self.fc.IsRunning():
+            self.fc.Stop()
+            self.ShowMain()
+
 
     def ShowMain(self):
         frame = wxPythonDemo(None, "wxPython: (A Demonstration)")
         frame.Show()
-        self.Raise()
+        if self.fc.IsRunning():
+            self.Raise()
         
 
 class MyApp(wx.App):
