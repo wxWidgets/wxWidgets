@@ -15,8 +15,8 @@ from distutils.command.install_data import install_data
 
 VER_MAJOR        = 2      # The first three must match wxWindows
 VER_MINOR        = 4
-VER_RELEASE      = 2
-VER_SUBREL       = 4       # wxPython release num for x.y.z release of wxWindows
+VER_RELEASE      = 4
+VER_SUBREL       = 0       # wxPython release num for x.y.z release of wxWindows
 VER_FLAGS        = ""      # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
