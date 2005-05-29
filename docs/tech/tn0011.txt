@@ -1,9 +1,9 @@
-All about wxWindows Version Numbers
+All about wxWidgets Version Numbers
 ===================================
 
 1. Where to update the version numbers:
 
-   There are several places in the wxWindows source tree that
+   There are several places in the wxWidgets source tree that
    define the version number for the library.  When updating the
    version number all of these places need edited:
 
@@ -30,6 +30,9 @@ All about wxWindows Version Numbers
 Version: $Id$
 
 $Log$
+Revision 1.1.2.1  2004/05/04 08:52:33  JS
+Name change replacements
+
 Revision 1.1  2001/06/08 04:26:35  RD
 move the tech note to a correctly named file
 

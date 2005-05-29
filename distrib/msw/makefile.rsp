@@ -58,6 +58,7 @@ samples/rotate/Makefile.in
 samples/sashtest/Makefile.in
 samples/scroll/Makefile.in
 samples/scrollsub/Makefile.in
+samples/shaped/Makefile.in
 samples/splitter/Makefile.in
 samples/statbar/Makefile.in
 samples/text/Makefile.in
@@ -121,6 +122,7 @@ contrib/samples/gizmos/splittree/Makefile.in
 contrib/samples/gizmos/editlbox/Makefile.in
 contrib/samples/gizmos/dynsash/Makefile.in
 contrib/samples/gizmos/dynsash_switch/Makefile.in
+contrib/samples/gizmos/led/Makefile.in
 contrib/samples/ogl/Makefile.in
 contrib/samples/ogl/ogledit/Makefile.in
 contrib/samples/ogl/studio/Makefile.in

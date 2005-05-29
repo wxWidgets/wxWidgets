@@ -6,7 +6,7 @@
 // Created:     28.12.2000
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Robert Roebling
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -94,6 +94,10 @@
   #include  "wx/mac/private.h"  // includes mac headers
 #endif
 
+#ifdef __EMX__
+#define __OS2__
+#endif
+
 // utime() is POSIX so should normally be available on all Unices
 #ifdef __UNIX_LIKE__
 #include <sys/types.h>
@@ -125,6 +129,7 @@
 #endif
 
 #ifdef __EMX__
+#include <os2.h>
 #define MAX_PATH _MAX_PATH
 #endif
 
@@ -593,21 +598,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     }
 #endif // Win32/16
 
-#elif defined(__WXPM__)
-    // for now just create a file
-    //
-    // future enhancements can be to set some extended attributes for file
-    // systems OS/2 supports that have them (HPFS, FAT32) and security
-    // (HPFS386)
-    static const wxChar *szMktempSuffix = wxT("XXX");
-    path << dir << _T('/') << name << szMktempSuffix;
-
-    // Temporarily remove - MN
-    #ifndef __WATCOMC__
-        ::DosCreateDir(wxStringBuffer(path, MAX_PATH), NULL);
-    #endif
-
-#else // !Windows, !OS/2
+#else // !Windows
     if ( dir.empty() )
     {
 #if defined(__WXMAC__) && !defined(__DARWIN__)
@@ -622,7 +613,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
         if ( dir.empty() )
         {
             // default
-            #ifdef __DOS__
+            #if defined(__DOS__) || defined(__OS2__)
                 dir = _T(".");
             #else
                 dir = _T("/tmp");
@@ -646,7 +637,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     path += _T("XXXXXX");
 
     // we need to copy the path to the buffer in which mkstemp() can modify it
-    wxCharBuffer buf = wxConvFile.cWX2MB( path );
+    wxCharBuffer buf( wxConvFile.cWX2MB( path ) );
 
     // cast is safe because the string length doesn't change
     int fdTemp = mkstemp( (char*)(const char*) buf );
@@ -776,7 +767,14 @@ bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
         size_t count = dirs.GetCount();
         for ( size_t i = 0; i < count; i++ )
         {
-            if ( i > 0 || filename.IsAbsolute() )
+            if ( i > 0 || 
+#if defined(__WXMAC__) && !defined(__DARWIN__)
+			// relative pathnames are exactely the other way round under mac...
+            	!filename.IsAbsolute() 
+#else
+            	filename.IsAbsolute() 
+#endif
+            )
                 currPath += wxFILE_SEP_PATH;
             currPath += dirs[i];
 
@@ -1022,7 +1020,7 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
 // filename kind tests
 // ----------------------------------------------------------------------------
 
-bool wxFileName::SameAs(const wxFileName &filepath, wxPathFormat format)
+bool wxFileName::SameAs(const wxFileName& filepath, wxPathFormat format) const
 {
     wxFileName fn1 = *this,
                fn2 = filepath;
@@ -1425,7 +1423,7 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
 {
     if (format == wxPATH_NATIVE)
     {
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__DOS__)
+#if defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__)
         format = wxPATH_DOS;
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
         format = wxPATH_MAC;
@@ -1616,7 +1614,36 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtMod,
                           const wxDateTime *dtCreate)
 {
-#if defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
+#if defined(__WIN32__)
+    if ( IsDir() )
+    {
+        // VZ: please let me know how to do this if you can
+        wxFAIL_MSG( _T("SetTimes() not implemented for the directories") );
+    }
+    else // file
+    {
+        wxFileHandle fh(GetFullPath(), wxFileHandle::Write);
+        if ( fh.IsOk() )
+        {
+            FILETIME ftAccess, ftCreate, ftWrite;
+
+            if ( dtCreate )
+                ConvertWxToFileTime(&ftCreate, *dtCreate);
+            if ( dtAccess )
+                ConvertWxToFileTime(&ftAccess, *dtAccess);
+            if ( dtMod )
+                ConvertWxToFileTime(&ftWrite, *dtMod);
+
+            if ( ::SetFileTime(fh,
+                               dtCreate ? &ftCreate : NULL,
+                               dtAccess ? &ftAccess : NULL,
+                               dtMod ? &ftWrite : NULL) )
+            {
+                return TRUE;
+            }
+        }
+    }
+#elif defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
     if ( !dtAccess && !dtMod )
     {
         // can't modify the creation time anyhow, don't try
@@ -1631,27 +1658,6 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
     if ( utime(GetFullPath().fn_str(), &utm) == 0 )
     {
         return TRUE;
-    }
-#elif defined(__WIN32__)
-    wxFileHandle fh(GetFullPath(), wxFileHandle::Write);
-    if ( fh.IsOk() )
-    {
-        FILETIME ftAccess, ftCreate, ftWrite;
-
-        if ( dtCreate )
-            ConvertWxToFileTime(&ftCreate, *dtCreate);
-        if ( dtAccess )
-            ConvertWxToFileTime(&ftAccess, *dtAccess);
-        if ( dtMod )
-            ConvertWxToFileTime(&ftWrite, *dtMod);
-
-        if ( ::SetFileTime(fh,
-                           dtCreate ? &ftCreate : NULL,
-                           dtAccess ? &ftAccess : NULL,
-                           dtMod ? &ftWrite : NULL) )
-        {
-            return TRUE;
-        }
     }
 #else // other platform
 #endif // platforms
@@ -1685,7 +1691,52 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
                           wxDateTime *dtMod,
                           wxDateTime *dtCreate) const
 {
-#if defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
+#if defined(__WIN32__)
+    // we must use different methods for the files and directories under
+    // Windows as CreateFile(GENERIC_READ) doesn't work for the directories and
+    // CreateFile(FILE_FLAG_BACKUP_SEMANTICS) works -- but only under NT and
+    // not 9x
+    bool ok;
+    FILETIME ftAccess, ftCreate, ftWrite;
+    if ( IsDir() )
+    {
+        // implemented in msw/dir.cpp
+        extern bool wxGetDirectoryTimes(const wxString& dirname,
+                                        FILETIME *, FILETIME *, FILETIME *);
+
+        // we should pass the path without the trailing separator to
+        // wxGetDirectoryTimes()
+        ok = wxGetDirectoryTimes(GetPath(wxPATH_GET_VOLUME),
+                                 &ftAccess, &ftCreate, &ftWrite);
+    }
+    else // file
+    {
+        wxFileHandle fh(GetFullPath(), wxFileHandle::Read);
+        if ( fh.IsOk() )
+        {
+            ok = ::GetFileTime(fh,
+                               dtCreate ? &ftCreate : NULL,
+                               dtAccess ? &ftAccess : NULL,
+                               dtMod ? &ftWrite : NULL) != 0;
+        }
+        else
+        {
+            ok = FALSE;
+        }
+    }
+
+    if ( ok )
+    {
+        if ( dtCreate )
+            ConvertFileTimeToWx(dtCreate, ftCreate);
+        if ( dtAccess )
+            ConvertFileTimeToWx(dtAccess, ftAccess);
+        if ( dtMod )
+            ConvertFileTimeToWx(dtMod, ftWrite);
+
+        return TRUE;
+    }
+#elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
     wxStructStat stBuf;
     if ( wxStat( GetFullPath().c_str(), &stBuf) == 0 )
     {
@@ -1697,27 +1748,6 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
             dtCreate->Set(stBuf.st_ctime);
 
         return TRUE;
-    }
-#elif defined(__WIN32__)
-    wxFileHandle fh(GetFullPath(), wxFileHandle::Read);
-    if ( fh.IsOk() )
-    {
-        FILETIME ftAccess, ftCreate, ftWrite;
-
-        if ( ::GetFileTime(fh,
-                           dtCreate ? &ftCreate : NULL,
-                           dtAccess ? &ftAccess : NULL,
-                           dtMod ? &ftWrite : NULL) )
-        {
-            if ( dtCreate )
-                ConvertFileTimeToWx(dtCreate, ftCreate);
-            if ( dtAccess )
-                ConvertFileTimeToWx(dtAccess, ftAccess);
-            if ( dtMod )
-                ConvertFileTimeToWx(dtMod, ftWrite);
-
-            return TRUE;
-        }
     }
 #else // other platform
 #endif // platforms

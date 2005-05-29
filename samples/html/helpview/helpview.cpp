@@ -66,8 +66,8 @@ bool MyApp::OnInit()
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
-    SetVendorName("wxWindows");
-    SetAppName("wxHTMLHelp"); 
+    SetVendorName(wxT("wxWindows"));
+    SetAppName(wxT("wxHTMLHelp")); 
     wxConfig::Get(); // create an instance
 
     help = new wxHtmlHelpController;
@@ -79,7 +79,7 @@ bool MyApp::OnInit()
     }
 
     for (int i = 1; i < argc; i++)
-        help -> AddBook(argv[i]);
+        help->AddBook(wxFileName(argv[i]));
 
 #ifdef __WXMOTIF__
     delete wxLog::SetActiveTarget(new wxLogGui);

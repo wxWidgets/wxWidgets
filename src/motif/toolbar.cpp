@@ -164,9 +164,8 @@ wxToolBarTool::~wxToolBarTool()
 {
     if ( m_widget )
         XtDestroyWidget(m_widget);
-    if ( m_pixmap )
-        XmDestroyPixmap(DefaultScreenOfDisplay((Display*)wxGetDisplay()),
-                        m_pixmap);
+    // note: do not delete m_pixmap here because it will be deleted
+    //       by the base class when the bitmap is destroyed.
 }
 
 // ----------------------------------------------------------------------------

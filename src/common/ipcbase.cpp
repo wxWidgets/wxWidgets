@@ -77,7 +77,7 @@ wxChar *wxConnectionBase::GetBufferAtLeast( size_t bytes )
   {  // need to resize buffer
     if ( m_deletebufferwhendone )
     { // we're in charge of buffer, increase it
-      if ( !m_buffer )
+      if ( m_buffer )
         delete m_buffer;
       m_buffer = new wxChar[bytes];
       m_buffersize = bytes;

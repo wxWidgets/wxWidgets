@@ -302,6 +302,9 @@ public:
     wxControl* GetControl() { return m_control; }
     void SetControl(wxControl* control) { m_control = control; }
 
+    wxGridCellAttr* GetCellAttr() { return m_attr; }
+    void SetCellAttr(wxGridCellAttr* attr) { m_attr = attr; }
+
     // Creates the actual edit control
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -363,6 +366,9 @@ protected:
 
     // the control we show on screen
     wxControl*  m_control;
+
+    // a temporary pointer to the attribute being edited
+    wxGridCellAttr* m_attr;
 
     // if we change the colours/font of the control from the default ones, we
     // must restore the default later and we save them here between calls to
@@ -1303,6 +1309,39 @@ public:
     void     SetColMinimalWidth( int col, int width );
     void     SetRowMinimalHeight( int row, int width );
 
+    /*  These two members can be used to query and modify the minimal
+     *  acceptable size of grid rows and columns. In the implementation of
+     *  wxGrid and related functions and classes these replace the macros
+     *  WXGRID_MIN_ROW_HEIGHT and WXGRID_MIN_COL_WIDTH. This allows users
+     *  to override these defaults to allow for grids with smaller cells.
+     *
+     *  These numbers are the lower boundaries for the arguments which are
+     *  passed to the two versions above for setting per row/column minimum
+     *  sizes. Like the members SetColMinimalWidth and SetRowMinimalWidth,
+     *  the two Set members below must be called during grid creation, because
+     *  the existing rows or columns will not be resized if necessary.
+     *
+     *  Notes:
+     *  * In order to keep backwards compatibility, these bits of state
+     *    information cannot be stored in member variables in the 2.4 series.
+     *    Hence the implementations of these functions use auxiliary static
+     *    functions which hold the numbers as static data (see grid.cpp).
+     *  * Those data are initialised to according to the values of the macros
+     *    WXGRID_MIN_ROW_HEIGHT and WXGRID_MIN_COL_WIDTH. This ensures 
+     *    complete backward compatibility. There is guaranteed to be no 
+     *    effect of this change, unless you actually call this function.
+     *  * In the 2.6 series, the behaviour of these functions will change. The
+     *    minimal acceptable height and width will be stored in member
+     *    variables, so calling these members only affects the class on which
+     *    they are called.
+     */
+    void     SetColMinimalAcceptableWidth( int width );
+    void     SetRowMinimalAcceptableHeight( int width );
+    int      GetColMinimalAcceptableWidth() const;
+    int      GetRowMinimalAcceptableHeight() const;
+
+
+
     void     SetDefaultCellBackgroundColour( const wxColour& );
     void     SetCellBackgroundColour( int row, int col, const wxColour& );
     void     SetDefaultCellTextColour( const wxColour& );
@@ -1824,11 +1863,12 @@ protected:
     bool GetModelValues();
     bool SetModelValues();
 
-        friend class wxGridSelection;
+    friend class WXDLLEXPORT wxGridSelection;
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
 };
+
 
 // ----------------------------------------------------------------------------
 // Grid event class and event types
@@ -2021,6 +2061,23 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_EDITOR_HIDDEN(fn)       DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_HIDDEN,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
 #define EVT_GRID_EDITOR_CREATED(fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_CREATED,     -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEditorCreatedEventFunction) &fn, NULL ),
 
+// The same as above but with the ability to specify an identifier
+#define EVT_GRID_CMD_CELL_LEFT_CLICK(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_CLICK,    id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_CELL_RIGHT_CLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_CLICK,   id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_CELL_LEFT_DCLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_LEFT_DCLICK,   id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_CELL_RIGHT_DCLICK(id, fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_RIGHT_DCLICK,  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_LABEL_LEFT_CLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_CLICK,   id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_LABEL_RIGHT_CLICK(id, fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_CLICK,  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_LABEL_LEFT_DCLICK(id, fn)   DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_LEFT_DCLICK,  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_LABEL_RIGHT_DCLICK(id, fn)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_LABEL_RIGHT_DCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_ROW_SIZE(id, fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_ROW_SIZE,           id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridSizeEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_COL_SIZE(id, fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_COL_SIZE,           id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridSizeEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_RANGE_SELECT(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_RANGE_SELECT,       id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridRangeSelectEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_CELL_CHANGE(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CELL_CHANGE,        id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_SELECT_CELL(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_SELECT_CELL,        id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_EDITOR_SHOWN(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_SHOWN,       id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_EDITOR_HIDDEN(id, fn)       DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_HIDDEN,      id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL ),
+#define EVT_GRID_CMD_EDITOR_CREATED(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_EDITOR_CREATED,     id, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEditorCreatedEventFunction) &fn, NULL ),
 
 #if 0  // TODO: implement these ?  others ?
 

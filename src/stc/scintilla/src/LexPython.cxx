@@ -1,7 +1,7 @@
 // Scintilla source code edit control
 /** @file LexPython.cxx
  ** Lexer for Python.
- **/ 
+ **/
 // Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
@@ -42,7 +42,7 @@ static bool IsPyStringStart(int ch, int chNext, int chNext2) {
 }
 
 /* Return the state to use for the string starting at i; *nextIndex will be set to the first index following the quote(s) */
-static int GetPyStringState(Accessor &styler, int i, int *nextIndex) {
+static int GetPyStringState(Accessor &styler, int i, unsigned int *nextIndex) {
 	char ch = styler.SafeGetCharAt(i);
 	char chNext = styler.SafeGetCharAt(i + 1);
 
@@ -99,7 +99,8 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 	int lineCurrent = styler.GetLine(startPos);
 	if (startPos > 0) {
 		if (lineCurrent > 0) {
-			startPos = styler.LineStart(lineCurrent - 1);
+			lineCurrent--;
+			startPos = styler.LineStart(lineCurrent);
 			if (startPos == 0)
 				initStyle = SCE_P_DEFAULT;
 			else
@@ -139,6 +140,7 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 			} else if (whingeLevel == 4) {
 				chFlags = (spaceFlags & wsTab) ? chBad : chGood;
 			}
+			sc.SetState(sc.state);
 			styler.SetFlags(chFlags, static_cast<char>(sc.state));
 		}
 
@@ -148,7 +150,7 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 			        (sc.state == SCE_P_TRIPLEDOUBLE)) {
 				// Perform colourisation of white space and triple quoted strings at end of each line to allow
 				// tab marking to work inside white space and triple quoted strings
-				sc.ForwardSetState(sc.state);
+				sc.SetState(sc.state);
 			}
 			lineCurrent++;
 			styler.IndentAmount(lineCurrent, &spaceFlags, IsPyComment);
@@ -159,6 +161,8 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 			if (!sc.More())
 				break;
 		}
+
+		bool needEOLCheck = false;
 
 		// Check for a state end
 		if (sc.state == SCE_P_OPERATOR) {
@@ -212,8 +216,10 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 				sc.Forward();
 			} else if ((sc.state == SCE_P_STRING) && (sc.ch == '\"')) {
 				sc.ForwardSetState(SCE_P_DEFAULT);
+				needEOLCheck = true;
 			} else if ((sc.state == SCE_P_CHARACTER) && (sc.ch == '\'')) {
 				sc.ForwardSetState(SCE_P_DEFAULT);
+				needEOLCheck = true;
 			}
 		} else if (sc.state == SCE_P_TRIPLE) {
 			if (sc.ch == '\\') {
@@ -222,6 +228,7 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 				sc.Forward();
 				sc.Forward();
 				sc.ForwardSetState(SCE_P_DEFAULT);
+				needEOLCheck = true;
 			}
 		} else if (sc.state == SCE_P_TRIPLEDOUBLE) {
 			if (sc.ch == '\\') {
@@ -230,7 +237,16 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 				sc.Forward();
 				sc.Forward();
 				sc.ForwardSetState(SCE_P_DEFAULT);
+				needEOLCheck = true;
 			}
+		}
+
+		// State exit code may have moved on to end of line
+		if (needEOLCheck && sc.atLineEnd) {
+			lineCurrent++;
+			styler.IndentAmount(lineCurrent, &spaceFlags, IsPyComment);
+			if (!sc.More())
+				break;
 		}
 
 		// Check for a new state starting character
@@ -247,7 +263,7 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 			} else if (sc.ch == '#') {
 				sc.SetState(sc.chNext == '#' ? SCE_P_COMMENTBLOCK : SCE_P_COMMENTLINE);
 			} else if (IsPyStringStart(sc.ch, sc.chNext, sc.GetRelative(2))) {
-				int nextIndex = 0;
+				unsigned int nextIndex = 0;
 				sc.SetState(GetPyStringState(styler, sc.currentPos, &nextIndex));
 				while (nextIndex > (sc.currentPos + 1)) {
 					sc.Forward();
@@ -357,34 +373,40 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 			lev = lev + 1;
 		}
 
-		// Skip past any blank lines for next indent level info; we skip also comments
-		// starting in column 0 which effectively folds them into surrounding code rather
+		// Skip past any blank lines for next indent level info; we skip also
+		// comments (all comments, not just those starting in column 0)
+		// which effectively folds them into surrounding code rather
 		// than screwing up folding.
-		const int saveIndentNext = indentNext;
+
 		while (!quote &&
 		        (lineNext < docLines) &&
 		        ((indentNext & SC_FOLDLEVELWHITEFLAG) ||
-		         (lineNext <= docLines && styler[styler.LineStart(lineNext)] == '#'))) {
+		         (lineNext <= docLines && IsCommentLine(lineNext, styler)))) {
 
 			lineNext++;
 			indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
 		}
 
-		// Next compute max indent level of current line and next non-blank line.
-		// This is the level to which we set all the intervening blank or comment lines.
-		const int skip_level = Platform::Maximum(indentCurrentLevel,
-		                       indentNext & SC_FOLDLEVELNUMBERMASK);
+		const int levelAfterComments = indentNext & SC_FOLDLEVELNUMBERMASK;
+		const int levelBeforeComments = Platform::Maximum(indentCurrentLevel,levelAfterComments);
 
 		// Now set all the indent levels on the lines we skipped
-		int skipLine = lineCurrent + 1;
-		int skipIndentNext = saveIndentNext;
-		while (skipLine < lineNext) {
-			int skipLineLevel = skip_level;
-			if (skipIndentNext & SC_FOLDLEVELWHITEFLAG)
-				skipLineLevel = SC_FOLDLEVELWHITEFLAG | skipLineLevel;
-			styler.SetLevel(skipLine, skipLineLevel);
-			skipLine++;
-			skipIndentNext = styler.IndentAmount(skipLine, &spaceFlags, NULL);
+		// Do this from end to start.  Once we encounter one line
+		// which is indented more than the line after the end of
+		// the comment-block, use the level of the block before
+
+		int skipLine = lineNext;
+		int skipLevel = levelAfterComments;
+
+		while (--skipLine > lineCurrent) {
+			int skipLineIndent = styler.IndentAmount(skipLine, &spaceFlags, NULL);
+
+			if ((skipLineIndent & SC_FOLDLEVELNUMBERMASK) > levelAfterComments)
+				skipLevel = levelBeforeComments;
+
+			int whiteFlag = skipLineIndent & SC_FOLDLEVELWHITEFLAG;
+
+			styler.SetLevel(skipLine, skipLevel | whiteFlag);
 		}
 
 		// Set fold header on non-quote/non-comment line
@@ -409,9 +431,9 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 }
 
 static const char * const pythonWordListDesc[] = {
-	"Python keywords",
+	"Keywords",
 	0
 };
 
-LexerModule lmPython(SCLEX_PYTHON, ColourisePyDoc, "python", FoldPyDoc, 
+LexerModule lmPython(SCLEX_PYTHON, ColourisePyDoc, "python", FoldPyDoc,
 					 pythonWordListDesc);

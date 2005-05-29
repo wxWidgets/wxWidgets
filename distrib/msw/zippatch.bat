@@ -26,7 +26,7 @@ erase /Q /E %dest%\wxWindows-*-patch*.zip
 cd %src%
 echo Zipping...
 
-zip32 -@ %dest%\%patchname% < %src%\distrib\msw\patch.rsp
+zip -@ %dest%\%patchname% < %src%\distrib\msw\patch.rsp
 echo wxWindows patch archived.
 
 cd %dest

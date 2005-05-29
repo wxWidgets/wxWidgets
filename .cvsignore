@@ -29,6 +29,8 @@ UnivRelease
 UnivDebug
 BaseRelease
 BaseDebug
+BaseReleaseDLL
+BaseDebugDLL
 robert
 stamp-h.in
 Makefile

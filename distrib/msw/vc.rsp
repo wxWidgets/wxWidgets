@@ -51,6 +51,8 @@ samples/db/db.dsw
 
 samples/dialogs/dialogs.dsp
 samples/dialogs/dialogs.dsw
+samples/dialogs/dialogsUniv.dsp
+samples/dialogs/dialogsUniv.dsw
 
 samples/dialup/dialup.dsp
 samples/dialup/dialup.dsw
@@ -171,8 +173,8 @@ samples/notebook/notebook.dsw
 samples/oleauto/oleauto.dsp
 samples/oleauto/oleauto.dsw
 
-samples/ownerdrw/ownerDrw.dsp
-samples/ownerdrw/ownerDrw.dsw
+samples/ownerdrw/ownerdrw.dsp
+samples/ownerdrw/ownerdrw.dsw
 
 samples/png/png.dsp
 samples/png/png.dsw
@@ -203,6 +205,9 @@ samples/scroll/scroll.dsw
 
 samples/scrollsub/scrollsub.dsp
 samples/scrollsub/scrollsub.dsw
+
+samples/shaped/shaped.dsp
+samples/shaped/shaped.dsw
 
 samples/sockets/client.dsp
 samples/sockets/server.dsp
@@ -245,6 +250,7 @@ samples/wizard/wizard.dsw
 samples/widgets/widgets.dsp
 samples/widgets/widgets.dsw
 samples/widgets/widgetsUniv.dsp
+samples/widgets/widgetsUniv.dsw
 
 samples/opengl/cube/cube.dsp
 samples/opengl/cube/cube.dsw
@@ -285,6 +291,8 @@ utils/helpgen/src/HelpGenVC.dsw
 
 utils/helpview/src/helpview.dsp
 utils/helpview/src/helpview.dsw
+utils/helpview/src/client.dsp
+utils/helpview/src/client.dsw
 
 contrib/src/ogl/OglVC.dsp
 contrib/src/ogl/OglVC.dsw
@@ -301,10 +309,10 @@ contrib/samples/xrc/XrcDemoVC.dsp
 contrib/samples/xrc/XrcDemoVC.dsw
 
 contrib/src/mmedia/MmediaVC.dsp
-contrib/src/mmedia/MMediaVC.dsw
+contrib/src/mmedia/MmediaVC.dsw
 
-contrib/samples/mmedia/MmboardVC.dsp
-contrib/samples/mmedia/MmboardVC.dsw
+contrib/samples/mmedia/MMboardVC.dsp
+contrib/samples/mmedia/MMboardVC.dsw
 
 contrib/src/stc/StcVC.dsp
 contrib/src/stc/StcVC.dsw

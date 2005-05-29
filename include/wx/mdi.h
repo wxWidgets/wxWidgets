@@ -1,5 +1,20 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/mdi.h
+// Purpose:     wxMDI base header
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// Copyright:   (c) Julian Smart
+// RCS-ID:      $Id$
+// Licence:     wxWindows Licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_MDI_H_BASE_
 #define _WX_MDI_H_BASE_
+
+#include "wx/setup.h"
+
+#if wxUSE_MDI_ARCHITECTURE
 
 #if defined(__WXUNIVERSAL__)
 #include "wx/generic/mdig.h"
@@ -16,6 +31,8 @@
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/mdi.h"
 #endif
+
+#endif // wxUSE_MDI_ARCHITECTURE
 
 #endif
     // _WX_MDI_H_BASE_

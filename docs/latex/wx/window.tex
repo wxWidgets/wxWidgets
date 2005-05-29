@@ -3,13 +3,13 @@
 wxWindow is the base class for all windows. Any children of the window will be deleted
 automatically by the destructor before the window itself is deleted.
 
-Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this
-help text. These must not be called by a user program and are documented only for illustration.
-On several platforms, only a few of these handlers are actually written (they are not always
-needed) and if you are uncertain on how to add a certain behaviour to a window class, intercept
-the respective event as usual and call \helpref{wxEvent::Skip}{wxeventskip} so that the native
-platform can implement its native behaviour or just ignore the event if nothing needs to be
-done.
+%Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this
+%help text. These must not be called by a user program and are documented only for illustration.
+%On several platforms, only a few of these handlers are actually written (they are not always
+%needed) and if you are uncertain on how to add a certain behaviour to a window class, intercept
+%the respective event as usual and call \helpref{wxEvent::Skip}{wxeventskip} so that the native
+%platform can implement its native behaviour or just ignore the event if nothing needs to be
+%done.
 
 \wxheading{Derived from}
 
@@ -33,6 +33,7 @@ for this style. }
 \twocolitem{\windowstyle{wxSUNKEN\_BORDER}}{Displays a sunken border.}
 \twocolitem{\windowstyle{wxRAISED\_BORDER}}{Displays a raised border. GTK only. }
 \twocolitem{\windowstyle{wxSTATIC\_BORDER}}{Displays a border suitable for a static control. Windows only. }
+\twocolitem{\windowstyle{wxNO\_BORDER}}{Displays no border, overriding the default border style for the window.}
 \twocolitem{\windowstyle{wxTRANSPARENT\_WINDOW}}{The window is transparent, that is, it will not receive paint
 events. Windows only.}
 \twocolitem{\windowstyle{wxNO\_3D}}{Prevents the children of this window taking on 3D styles, even though
@@ -46,8 +47,8 @@ this style}
 the window completely when its size is changed - you will have to repaint the
 new window area manually if you use this style. Currently only has an effect for
 Windows.}
-\twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar. (Still used?) }
-\twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar. (Still used?) }
+\twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar.}
+\twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar.}
 \twocolitem{\windowstyle{wxCLIP\_CHILDREN}}{Use this style to eliminate flicker caused by the background being
 repainted, then children being painted over them. Windows only.}
 \end{twocollist}
@@ -80,11 +81,11 @@ Constructs a window, which can be a child of a frame, dialog or any other non-co
 
 \docparam{id}{Window identifier. If -1, will automatically create an identifier.}
 
-\docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxWindows
+\docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxWidgets
 should generate a default position for the window. If using the wxWindow class directly, supply
 an actual position.}
 
-\docparam{size}{Window size. wxDefaultSize is (-1, -1) which indicates that wxWindows
+\docparam{size}{Window size. wxDefaultSize is (-1, -1) which indicates that wxWidgets
 should generate a default size for the window. If no suitable size can  be found, the
 window will be sized to 20x20 pixels so that the window is visible but obviously not
 correctly sized. }
@@ -99,7 +100,7 @@ correctly sized. }
 
 Destructor. Deletes all subwindows, then deletes itself. Instead of using
 the {\bf delete} operator explicitly, you should normally
-use \helpref{wxWindow::Destroy}{wxwindowdestroy} so that wxWindows
+use \helpref{wxWindow::Destroy}{wxwindowdestroy} so that wxWidgets
 can delete a window only when it is safe to do so, in idle time.
 
 \wxheading{See also}
@@ -126,7 +127,7 @@ functions so should not be required by the application programmer.
 Directs all mouse input to this window. Call \helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse} to
 release the capture.
 
-Note that wxWindows maintains the stack of windows having captured the mouse
+Note that wxWidgets maintains the stack of windows having captured the mouse
 and when the mouse is released the capture returns to the window which had had
 captured it previously and it is only really released if there were no previous
 window. In particular, this means that you must release the mouse as many times
@@ -521,6 +522,16 @@ The search is recursive in both cases.
 Sizes the window so that it fits around its subwindows. This function won't do
 anything if there are no subwindows.
 
+\membersection{wxWindow::FitInside}\label{wxwindowfitinside}
+
+\func{virtual void}{FitInside}{\void}
+
+Similar to \helpref{Fit}{wxwindowfit}, but sizes the interior (virtual) size
+of a window.  Mainly useful with scrolled windows to reset scrollbars after
+sizing changes that do not trigger a size event, and/or scrolled windows without
+an interior sizer.  This function similarly won't do anything if there are no
+subwindows.
+
 \membersection{wxWindow::Freeze}\label{wxwindowfreeze}
 
 \func{virtual void}{Freeze}{\void}
@@ -532,8 +543,26 @@ be called to reenable window redrawing.
 This method is useful for visual appearance optimization (for example, it
 is a good idea to use it before inserting large amount of text into a
 wxTextCtrl under wxGTK) but is not implemented on all platforms nor for all
-controls so it is mostly just a hint to wxWindows and not a mandatory
+controls so it is mostly just a hint to wxWidgets and not a mandatory
 directive.
+
+\membersection{wxWindow::GetAcceleratorTable}\label{wxwindowgetacceleratortable}
+
+\constfunc{wxAcceleratorTable*}{GetAcceleratorTable}{\void}
+
+Gets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxacceleratortable}.
+
+\membersection{wxWindow::GetAccessible}\label{wxwindowgetaccessible}
+
+\membersection{wxWindow::GetAdjustedBestSize}\label{wxwindowgetadjustedbestsize}
+
+\constfunc{wxSize}{GetAdjustedBestSize}{\void}
+
+This method is similar to \helpref{GetBestSize}{wxwindowgetbestsize}, except
+in one thing.  GetBestSize should return the minimum untruncated size of the
+window, while this method will return the largest of BestSize and any user
+specified minimum size.  ie. it is the minimum size the window should currently
+be drawn at, not the minimal size it can possibly tolerate.
 
 \membersection{wxWindow::GetBackgroundColour}\label{wxwindowgetbackgroundcolour}
 
@@ -639,6 +668,16 @@ Returns a pointer to the window's layout constraints, or NULL if there are none.
 
 Return the sizer that this window is a member of, if any, otherwise
 {\tt NULL}.
+
+\membersection{wxWindow::GetCursor}\label{wxwindowgetcursor}
+
+\constfunc{const wxCursor\&}{GetCursor}{\void}
+
+Return the cursor associated with this window.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetCursor}{wxwindowsetcursor}
 
 \membersection{wxWindow::GetDropTarget}\label{wxwindowgetdroptarget}
 
@@ -946,6 +985,12 @@ Gets the window's title. Applicable only to frames and dialogs.
 
 \membersection{wxWindow::GetUpdateRegion}\label{wxwindowgetupdateregion}
 
+\membersection{wxWindow::GetToolTip}\label{wxwindowgettooltip}
+
+\constfunc{wxToolTip*}{GetToolTip}{\void}
+
+Get the associated tooltip or NULL if none.
+
 \constfunc{virtual wxRegion}{GetUpdateRegion}{\void}
 
 Returns the region specifying which parts of the window have been damaged. Should
@@ -1038,7 +1083,7 @@ only redrawing those areas, which have been exposed.
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{{\bf IsExposed(x,y, w=0,h=0}}{}
+\twocolitem{{\bf IsExposed(x,y, w=0,h=0)}}{}
 \twocolitem{{\bf IsExposedPoint(pt)}}{}
 \twocolitem{{\bf IsExposedRect(rect)}}{}
 \end{twocollist}}}
@@ -1074,8 +1119,8 @@ window).
 Invokes the constraint-based layout algorithm or the sizer-based algorithm
 for this window.
 
-See \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} on when
-this function gets called automatically using auto layout.
+See \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout}: when auto
+layout is on, this function gets called automatically when the window is resized.
 
 \membersection{wxWindow::LoadFromResource}\label{wxwindowloadfromresource}
 
@@ -1109,8 +1154,7 @@ or frame).
 \func{virtual void}{MakeModal}{\param{bool }{flag}}
 
 Disables all other windows in the application so that
-the user can only interact with this window. (This function
-is not implemented anywhere).
+the user can only interact with this window.
 
 \wxheading{Parameters}
 
@@ -1422,7 +1466,7 @@ implements the following methods:\par
 %% The default implementation for \helpref{wxFrame::OnMenuHighlight}{wxframeonmenuhighlight} displays help
 %% text in the first field of the status bar.
 %%
-%% This function was known as {\bf OnMenuSelect} in earlier versions of wxWindows, but this was confusing
+%% This function was known as {\bf OnMenuSelect} in earlier versions of wxWidgets, but this was confusing
 %% since a selection is normally a left-click action.
 %%
 %% \wxheading{See also}
@@ -1748,7 +1792,7 @@ or frame).
 \func{virtual void}{Refresh}{\param{bool}{ eraseBackground = {\tt TRUE}}, \param{const wxRect* }{rect
 = NULL}}
 
-Causes a message or event to be generated to repaint the
+Causes an event to be generated to repaint the
 window.
 
 \wxheading{Parameters}
@@ -1758,6 +1802,19 @@ erased.}
 
 \docparam{rect}{If non-NULL, only the given rectangle will
 be treated as damaged.}
+
+\wxheading{See also}
+
+\helpref{wxWindow::RefreshRect}{wxwindowrefreshrect}
+
+\membersection{wxWindow::RefreshRect}\label{wxwindowrefreshrect}
+
+\func{virtual void}{RefreshRect}{\param{const wxRect\& }{rect}}
+
+Redraws the contents of the given rectangle: the area inside it will be
+repainted.
+
+This is the same as \helpref{Refresh}{wxwindowrefresh} but has a nicer syntax.
 
 \membersection{wxWindow::ReleaseMouse}\label{wxwindowreleasemouse}
 
@@ -2114,7 +2171,7 @@ window from being used as an implicit parent for the dialogs which were
 created without a parent. It is useful for the windows which can disappear at
 any moment as creating children of such windows results in fatal problems.}
 \twocolitem{\windowstyle{wxFRAME\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
-caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
+caption. When pressed, Windows will go into a context-sensitive help mode and wxWidgets will send
 a wxEVT\_HELP event if the user clicked on an application window.
 This style cannot be used together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX, so
 you should use the style of
@@ -2137,7 +2194,7 @@ This sets the window to receive keyboard input.
 
 \func{virtual void}{SetFocusFromKbd}{\void}
 
-This function is called by wxWindows keyboard navigation code when the user
+This function is called by wxWidgets keyboard navigation code when the user
 gives the focus to this window from keyboard (e.g. using {\tt TAB} key).
 By default this method simply calls \helpref{SetFocus}{wxwindowsetfocus} but
 can be overridden to do something in addition to this in the derived classes.
@@ -2415,11 +2472,11 @@ value should be used.}
 \docparam{sizeFlags}{Indicates the interpretation of other parameters. It is a bit list of the following:
 
 {\bf wxSIZE\_AUTO\_WIDTH}: a -1 width value is taken to indicate
-a wxWindows-supplied default width.\\
+a wxWidgets-supplied default width.\\
 {\bf wxSIZE\_AUTO\_HEIGHT}: a -1 height value is taken to indicate
-a wxWindows-supplied default width.\\
+a wxWidgets-supplied default width.\\
 {\bf wxSIZE\_AUTO}: -1 size values are taken to indicate
-a wxWindows-supplied default size.\\
+a wxWidgets-supplied default size.\\
 {\bf wxSIZE\_USE\_EXISTING}: existing dimensions should be used
 if -1 values are supplied.\\
 {\bf wxSIZE\_ALLOW\_MINUS\_ONE}: allow dimensions of -1 and less to be interpreted
@@ -2433,7 +2490,7 @@ x and y parameters, and must be used with non-default width and height values.
 
 The first form sets the position and optionally size, of the window.
 Parameters may be -1 to indicate either that a default should be supplied
-by wxWindows, or that the current value of the dimension should be used.
+by wxWidgets, or that the current value of the dimension should be used.
 
 \wxheading{See also}
 
@@ -2500,7 +2557,7 @@ Pass FALSE if you wish to handle deleting the old sizer yourself.}
 
 \wxheading{Remarks}
 
-SetSizer now enables and disables Layout automatically, but prior to wxWindows 2.3.3
+SetSizer now enables and disables Layout automatically, but prior to wxWidgets 2.3.3
 the following applied:
 
 You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
@@ -2559,15 +2616,7 @@ create a new validator of this type.
 Attach a tooltip to the window.
 
 See also: \helpref{GetToolTip}{wxwindowgettooltip},
-          \helpref{wxToolTip}{wxtooltip}
-
-
-\membersection{wxWindow::GetToolTip}\label{wxwindowgettooltip}
-
-\constfunc{wxToolTip*}{GetToolTip}{\void}
-
-Get the associated tooltip or NULL if none.
-
+ \helpref{wxToolTip}{wxtooltip}
 
 \membersection{wxWindow::SetVirtualSize}\label{wxwindowsetvirtualsize}
 
@@ -2576,7 +2625,6 @@ Get the associated tooltip or NULL if none.
 \func{void}{SetVirtualSize}{\param{const wxSize\&}{ size}}
 
 Sets the virtual size of the window in pixels.
-
 
 \membersection{wxWindow::SetVirtualSizeHints}\label{wxwindowsetvirtualsizehints}
 
@@ -2681,6 +2729,17 @@ Returns {\tt FALSE} if a transfer failed.
 
 \helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow},\rtfsp
 \helpref{wxValidator}{wxvalidator}, \helpref{wxWindow::Validate}{wxwindowvalidate}
+
+\membersection{wxWindow::Update}\label{wxwindowupdate}
+
+\func{virtual void}{Update}{\void}
+
+Calling this method immediately repaints the invalidated area of the window
+while this would usually only happen when the flow of control returns to the
+event loop. Notice that this function doesn't refresh the window and does
+nothing if the window hadn't been already repainted. Use 
+\helpref{Refresh}{wxwindowrefresh} first if you want to immediately redraw the
+window unconditionally.
 
 \membersection{wxWindow::Validate}\label{wxwindowvalidate}
 

@@ -11,8 +11,8 @@ WXDIR = $(WXWIN)
 
 TARGET=stctest
 
-EXTRALIBS=$(WXDIR)\contrib\lib\stc.lib
-OBJECTS = $(TARGET).obj
+EXTRALIBS=$(WXDIR)\lib\stc.lib
+OBJECTS = $(TARGET).obj edit.obj prefs.obj
 
 !include $(WXDIR)\src\makeprog.b32
 

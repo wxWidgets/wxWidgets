@@ -53,7 +53,7 @@ class TestPanel(wxPanel):
         border = wxBoxSizer(wxVERTICAL)
         border.Add(sizer, 0, wxALL, 25)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(border)
         self.Layout()
 
@@ -81,12 +81,19 @@ def runTest(frame, nb, log):
 
 
 overview = """
-This demo shows how to encorporate Context Sensitive
-help into your applicaiton using the wxSimpleHelpProvider class.
+This demo shows how to incorporate Context Sensitive
+help into your application using the wxSimpleHelpProvider class.
 
 """
 
 
 
 #----------------------------------------------------------------------
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 

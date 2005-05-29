@@ -1,23 +1,23 @@
 Preamble
 ========
 
-The licensing of the wxWindows library is intended to protect the wxWindows
+The licensing of the wxWidgets library is intended to protect the wxWidgets
 library, its developers, and its users, so that the considerable investment
 it represents is not abused.
 
-Under the terms of the wxWindows Licence, you as a user are not
-obliged to distribute wxWindows source code with your products, if you
+Under the terms of the wxWidgets Licence, you as a user are not
+obliged to distribute wxWidgets source code with your products, if you
 distribute these products in binary form. However, you are prevented from
 restricting use of the library in source code form, or denying others the
-rights to use or distribute wxWindows library source code in the way
+rights to use or distribute wxWidgets library source code in the way
 intended.
 
-The wxWindows Licence establishes the copyright for the code and related
+The wxWidgets Licence establishes the copyright for the code and related
 material, and it gives you legal permission to copy, distribute and/or
 modify the library. It also asserts that no warranty is given by the authors
 for this or derived code.
 
-The core distribution of the wxWindows library contains files
+The core distribution of the wxWidgets library contains files
 under two different licences:
 
 - Most files are distributed under the GNU Library General Public
@@ -27,7 +27,7 @@ under two different licences:
   different licence), and distribute such binaries under your own
   terms.
 
-- Most core wxWindows manuals are made available under the "wxWindows
+- Most core wxWidgets manuals are made available under the "wxWidgets
   Free Documentation Licence", which allows you to distribute modified
   versions of the manuals, such as versions documenting any modifications
   made by you in your version of the library. However, you may not restrict
@@ -36,11 +36,11 @@ under two different licences:
 
 Other relevant files:
 
-- licence.txt: a statement that the wxWindows library is
+- licence.txt: a statement that the wxWidgets library is
   covered by the GNU Library General Public Licence, with an
   exception notice for binary distribution.
 
-- licendoc.txt: the wxWindows Documentation Licence.
+- licendoc.txt: the wxWidgets Documentation Licence.
 
 - lgpl.txt: the text of the GNU Library General Public Licence.
 

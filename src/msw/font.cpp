@@ -742,9 +742,9 @@ bool wxFont::FreeResource(bool WXUNUSED(force))
     return FALSE;
 }
 
-WXHANDLE wxFont::GetResourceHandle()
+WXHANDLE wxFont::GetResourceHandle() const
 {
-    return GetHFONT();
+    return (WXHANDLE)GetHFONT();
 }
 
 WXHFONT wxFont::GetHFONT() const

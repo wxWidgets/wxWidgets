@@ -2,7 +2,7 @@
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}
 
-The functions and macros defined in wxWindows are described here: you can
+The functions and macros defined in wxWidgets are described here: you can
 either look up a function using the alphabetical listing of them or find it in
 the corresponding topic.
 
@@ -153,6 +153,8 @@ the corresponding topic.
 \helpref{wxLogTrace}{wxlogtrace}\\
 \helpref{wxLogVerbose}{wxlogverbose}\\
 \helpref{wxLogWarning}{wxlogwarning}\\
+\helpref{wxLL}{wxll}\\
+\helpref{wxLongLongFmtSpec}{wxlonglongfmtspec}\\
 \helpref{wxMakeMetafilePlaceable}{wxmakemetafileplaceable}\\
 \helpref{wxMatchWild}{wxmatchwild}\\
 \helpref{wxMessageBox}{wxmessagebox}\\
@@ -205,6 +207,7 @@ the corresponding topic.
 \helpref{wxSplitPath}{wxsplitfunction}\\
 \helpref{wxStartTimer}{wxstarttimer}\\
 \helpref{wxStaticCast}{wxstaticcast}\\
+\helpref{wxStrcmp}{wxstrcmp}\\
 \helpref{wxStricmp}{wxstricmp}\\
 \helpref{wxStringEq}{wxstringeq}\\
 \helpref{wxStringMatch}{wxstringmatch}\\
@@ -230,21 +233,21 @@ the corresponding topic.
 
 \section{Version macros}\label{versionfunctions}
 
-The following constants are defined in wxWindows:
+The following constants are defined in wxWidgets:
 
 \begin{itemize}\itemsep=0pt
-\item {\tt wxMAJOR\_VERSION} is the major version of wxWindows
-\item {\tt wxMINOR\_VERSION} is the minor version of wxWindows
+\item {\tt wxMAJOR\_VERSION} is the major version of wxWidgets
+\item {\tt wxMINOR\_VERSION} is the minor version of wxWidgets
 \item {\tt wxRELEASE\_NUMBER} is the release number
 \end{itemize}
 
-For example, the values or these constants for wxWindows 2.1.15 are 2, 1 and
+For example, the values or these constants for wxWidgets 2.1.15 are 2, 1 and
 15.
 
 Additionally, {\tt wxVERSION\_STRING} is a user-readable string containing
-the full wxWindows version and {\tt wxVERSION\_NUMBER} is a combination of the
+the full wxWidgets version and {\tt wxVERSION\_NUMBER} is a combination of the
 three version numbers above: for 2.1.15, it is 2115 and it is 2200 for
-wxWindows 2.2.
+wxWidgets 2.2.
 
 \wxheading{Include files}
 
@@ -254,10 +257,10 @@ wxWindows 2.2.
 
 \func{bool}{wxCHECK\_VERSION}{\param{}{major, minor, release}}
 
-This is a macro which evaluates to true if the current wxWindows version is at
+This is a macro which evaluates to true if the current wxWidgets version is at
 least major.minor.release.
 
-For example, to test if the program is compiled with wxWindows 2.2 or higher,
+For example, to test if the program is compiled with wxWidgets 2.2 or higher,
 the following can be done:
 
 \begin{verbatim}
@@ -279,31 +282,31 @@ to control the behaviour of the main event loop of the GUI programs.
 
 \membersection{::wxEntry}\label{wxentry}
 
-This initializes wxWindows in a platform-dependent way. Use this if you
-are not using the default wxWindows entry code (e.g. main or WinMain). For example,
-you can initialize wxWindows from an Microsoft Foundation Classes application using
+This initializes wxWidgets in a platform-dependent way. Use this if you
+are not using the default wxWidgets entry code (e.g. main or WinMain). For example,
+you can initialize wxWidgets from an Microsoft Foundation Classes application using
 this function.
 
 \func{void}{wxEntry}{\param{HANDLE}{ hInstance}, \param{HANDLE}{ hPrevInstance},
  \param{const wxString\& }{commandLine}, \param{int}{ cmdShow}, \param{bool}{ enterLoop = TRUE}}
 
-wxWindows initialization under Windows (non-DLL). If {\it enterLoop} is FALSE, the
-function will return immediately after calling wxApp::OnInit. Otherwise, the wxWindows
+wxWidgets initialization under Windows (non-DLL). If {\it enterLoop} is FALSE, the
+function will return immediately after calling wxApp::OnInit. Otherwise, the wxWidgets
 message loop will be entered.
 
 \func{void}{wxEntry}{\param{HANDLE}{ hInstance}, \param{HANDLE}{ hPrevInstance},
  \param{WORD}{ wDataSegment}, \param{WORD}{ wHeapSize}, \param{const wxString\& }{ commandLine}}
 
-wxWindows initialization under Windows (for applications constructed as a DLL).
+wxWidgets initialization under Windows (for applications constructed as a DLL).
 
 \func{int}{wxEntry}{\param{int}{ argc}, \param{const wxString\& *}{argv}}
 
-wxWindows initialization under Unix.
+wxWidgets initialization under Unix.
 
 \wxheading{Remarks}
 
-To clean up wxWindows, call wxApp::OnExit followed by the static function
-wxApp::CleanUp. For example, if exiting from an MFC application that also uses wxWindows:
+To clean up wxWidgets, call wxApp::OnExit followed by the static function
+wxApp::CleanUp. For example, if exiting from an MFC application that also uses wxWidgets:
 
 \begin{verbatim}
 int CTheApp::ExitInstance()
@@ -353,7 +356,7 @@ see \helpref{wxImage}{wximage}.
 
 This function is used in wxBase only and only if you don't create
 \helpref{wxApp}{wxapp} object at all. In this case you must call it from your
-{\tt main()} function before calling any other wxWindows functions.
+{\tt main()} function before calling any other wxWidgets functions.
 
 If the function returns {\tt FALSE} the initialization could not be performed,
 in this case the library cannot be used and
@@ -369,7 +372,8 @@ call to this function.
 
 \membersection{::wxSafeYield}\label{wxsafeyield}
 
-\func{bool}{wxSafeYield}{\param{wxWindow*}{ win = NULL}}
+\func{bool}{wxSafeYield}{\param{wxWindow*}{ win = NULL}, \param{bool}{
+    onlyIfNeeded = FALSE}}
 
 This function is similar to wxYield, except that it disables the user input to
 all program windows before calling wxYield and re-enables it again
@@ -399,8 +403,8 @@ once for each previous successful call to \helpref{wxInitialize}{wxinitialize}.
 
 Calls \helpref{wxApp::Yield}{wxappyield}.
 
-This function is kept only for backwards compatibility, please use 
-\helpref{wxApp::Yield}{wxappyield}method instead in any new code.
+This function is kept only for backwards compatibility. Please use
+the \helpref{wxApp::Yield}{wxappyield} method instead in any new code.
 
 \wxheading{Include files}
 
@@ -430,17 +434,23 @@ processes.
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{int }{sync = wxEXEC\_ASYNC}, \param{wxProcess *}{callback = NULL}}
 
+\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteCommand}}
+
 \func{long}{wxExecute}{\param{char **}{argv}, \param{int }{flags = wxEXEC\_ASYNC}, \param{wxProcess *}{callback = NULL}}
+
+\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteArgs}}
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}}
 
-\perlnote{In wxPerl this function only takes the {\tt command} argument,
+\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteStdout} and it
+only takes the {\tt command} argument,
 and returns a 2-element list {\tt ( status, output )}, where {\tt output} is
 an array reference.}
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}, \param{wxArrayString\& }{errors}}
 
-\perlnote{In wxPerl this function only takes the {\tt command} argument,
+\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteStdoutStderr} 
+and it only takes the {\tt command} argument,
 and returns a 3-element list {\tt ( status, output, errors )}, where
 {\tt output} and {\tt errors} are array references.}
 
@@ -474,10 +484,10 @@ case of using DDE under Windows for command execution). In particular, in this,
 and only this, case the calling code will not get the notification about
 process termination.
 
-If callback isn't NULL and if execution is asynchronous, 
+If callback isn't NULL and if execution is asynchronous,
 \helpref{wxProcess::OnTerminate}{wxprocessonterminate} will be called when
 the process finishes. Specifying this parameter also allows you to redirect the
-standard input and/or output of the process being launched by calling 
+standard input and/or output of the process being launched by calling
 \helpref{Redirect}{wxprocessredirect}. If the child process IO is redirected,
 under Windows the process window is not shown by default (this avoids having to
 flush an unnecessary console for the processes which don't create any windows
@@ -507,7 +517,7 @@ single string.}
 array, any additional ones are the command parameters and the array must be
 terminated with a NULL pointer.}
 
-\docparam{flags}{Combination of bit masks {\tt wxEXEC\_ASYNC}, 
+\docparam{flags}{Combination of bit masks {\tt wxEXEC\_ASYNC},
 {\tt wxEXEC\_SYNC} and {\tt wxEXEC\_NOHIDE}}
 
 \docparam{callback}{An optional pointer to \helpref{wxProcess}{wxprocess}}
@@ -615,7 +625,7 @@ See also \helpref{wxExecute}{wxexecute}, \helpref{Exec sample}{sampleexec}.
 
 \func{bool}{wxShutdown}{\param{wxShutdownFlags}{flags}}
 
-This function shuts down or reboots the computer depending on the value of the 
+This function shuts down or reboots the computer depending on the value of the
 {\it flags}. Please notice that doing this requires the corresponding access
 rights (superuser under Unix, {\tt SE\_SHUTDOWN} privelege under Windows NT)
 and that this function is only implemented under Unix and Win32.
@@ -729,7 +739,7 @@ Returns time of last modification of given file.
 
 \func{char *}{wxFileNameFromPath}{\param{char *}{path}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxFileName::SplitPath}{wxfilenamesplitpath} instead.
 
 Returns the filename for a full path. The second form returns a pointer to
@@ -786,7 +796,7 @@ directory doesn't exist).
 This function is implemented for Win16 (only for drives less than 2Gb), Win32,
 Mac OS and generic Unix provided the system has {\tt statfs()} function.
 
-This function first appeared in wxWindows 2.3.2.
+This function first appeared in wxWidgets 2.3.2.
 
 \membersection{::wxGetOSDirectory}\label{wxgetosdirectory}
 
@@ -923,7 +933,7 @@ Under MS Windows, the current drive is also changed if {\it dir} contains a driv
 
 \func{void}{wxSplitPath}{\param{const char *}{ fullname}, \param{wxString *}{ path}, \param{wxString *}{ name}, \param{wxString *}{ ext}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxFileName::SplitPath}{wxfilenamesplitpath} instead.
 
 This function splits a full file name into components: the path (including possible disk/drive
@@ -1037,7 +1047,7 @@ the domain name.
 
 Under Windows or NT, this function first looks in the environment
 variable SYSTEM\_NAME; if this is not found, the entry {\bf HostName}\rtfsp
-in the {\bf wxWindows} section of the WIN.INI file is tried.
+in the {\bf wxWidgets} section of the WIN.INI file is tried.
 
 The first variant of this function returns the hostname if successful or an
 empty string otherwise. The second (deprecated) function returns TRUE
@@ -1062,7 +1072,7 @@ something like "jsmith". It uniquely identifies the current user (on this system
 
 Under Windows or NT, this function first looks in the environment
 variables USER and LOGNAME; if neither of these is found, the entry {\bf UserId}\rtfsp
-in the {\bf wxWindows} section of the WIN.INI file is tried.
+in the {\bf wxWidgets} section of the WIN.INI file is tried.
 
 The first variant of this function returns the login name if successful or an
 empty string otherwise. The second (deprecated) function returns TRUE
@@ -1125,7 +1135,7 @@ Gets operating system version information.
 \func{const wxChar *}{wxGetUserHome}{\param{const wxString\& }{user = ""}}
 
 Returns the home directory for the given user. If the username is empty
-(default value), this function behaves like 
+(default value), this function behaves like
 \helpref{wxGetHomeDir}{wxgethomedir}.
 
 \wxheading{Include files}
@@ -1141,7 +1151,7 @@ Returns the home directory for the given user. If the username is empty
 This function returns the full user name (something like "Mr. John Smith").
 
 Under Windows or NT, this function looks for the entry {\bf UserName}\rtfsp
-in the {\bf wxWindows} section of the WIN.INI file. If PenWindows
+in the {\bf wxWidgets} section of the WIN.INI file. If PenWindows
 is running, the entry {\bf Current} in the section {\bf User} of
 the PENWIN.INI file is used.
 
@@ -1174,6 +1184,16 @@ This function is deprecated, use \helpref{wxString}{wxstring} class instead.
 
 Returns {\tt TRUE} if the pointer is either {\tt NULL} or points to an empty
 string, {\tt FALSE} otherwise.
+
+\membersection{::wxStrcmp}\label{wxstrcmp}
+
+\func{int}{wxStrcmp}{\param{const char *}{p1}, \param{const char *}{p2}}
+
+Returns a negative value, 0, or positive value if {\it p1} is less than, equal
+to or greater than {\it p2}. The comparison is case-sensitive.
+
+This function complements the standard C function {\it stricmp()} which performs
+case-insensitive comparison.
 
 \membersection{::wxStricmp}\label{wxstricmp}
 
@@ -1358,7 +1378,7 @@ if ( !dir.empty() )
 
 \func{wxString}{wxFileSelector}{\param{const wxString\& }{message}, \param{const wxString\& }{default\_path = ""},\\
  \param{const wxString\& }{default\_filename = ""}, \param{const wxString\& }{default\_extension = ""},\\
- \param{const wxString\& }{wildcard = ``*.*''}, \param{int }{flags = 0}, \param{wxWindow *}{parent = ""},\\
+ \param{const wxString\& }{wildcard = "*.*"}, \param{int }{flags = 0}, \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1}}
 
 Pops up a file selector box. In Windows, this is the common file selector
@@ -1683,7 +1703,7 @@ See also \helpref{wxBusyCursor}{wxbusycursor}.
 
 \membersection{::wxMessageBox}\label{wxmessagebox}
 
-\func{int}{wxMessageBox}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Message"}, \param{int}{ style = wxOK \pipe wxCENTRE},\\
+\func{int}{wxMessageBox}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Message"}, \param{int}{ style = wxOK},\\
  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1}}
 
 General purpose message dialog.  {\it style} may be a bit list of the
@@ -1695,7 +1715,6 @@ wxCANCEL.}
 \twocolitem{wxCANCEL}{Puts a Cancel button on the message box. May be combined with
 wxYES\_NO or wxOK.}
 \twocolitem{wxOK}{Puts an Ok button on the message box. May be combined with wxCANCEL.}
-\twocolitem{wxCENTRE}{Centres the text.}
 \twocolitem{wxICON\_EXCLAMATION}{Displays an exclamation mark symbol.}
 \twocolitem{wxICON\_HAND}{Displays an error symbol.}
 \twocolitem{wxICON\_ERROR}{Displays an error symbol - the same as wxICON\_HAND.}
@@ -1719,11 +1738,6 @@ For example:
 {\it message} may contain newline characters, in which case the
 message will be split into separate lines, to cater for large messages.
 
-Under Windows, the native MessageBox function is used unless wxCENTRE
-is specified in the style, in which case a generic function is used.
-This is because the native MessageBox function cannot centre text.
-The symbols are not shown when the generic function is used.
-
 \wxheading{Include files}
 
 <wx/msgdlg.h>
@@ -1735,7 +1749,7 @@ The symbols are not shown when the generic function is used.
  \param{bool }{showAtStartup = TRUE}}
 
 This function shows a "startup tip" to the user. The return value is the
-state of the ``Show tips at startup'' checkbox.
+state of the `Show tips at startup' checkbox.
 
 \docparam{parent}{The parent window for the modal dialog}
 
@@ -1870,7 +1884,7 @@ the equivalent of the following code to the start of the metafile data:
  SetWindowExt(dc, maxX - minX, maxY - minY);
 \end{verbatim}
 
-This simulates the wxMM\_TEXT mapping mode, which wxWindows assumes.
+This simulates the wxMM\_TEXT mapping mode, which wxWidgets assumes.
 
 Placeable metafiles may be imported by many Windows applications, and can be
 used in RTF (Rich Text Format) files.
@@ -2109,6 +2123,44 @@ the compiler supports it or nothing otherwise. Thus, it can be used even in the
 code which might have to be compiled with an old compiler without support for
 this language feature but still take advantage of it when it is available.
 
+\membersection{wxLL}\label{wxll}
+
+\func{wxLongLong\_t}{wxLL}{\param{}{number}}
+
+This macro is defined for the platforms with a native 64 bit integer type and
+allows to define 64 bit compile time constants:
+
+\begin{verbatim}
+    #ifdef wxLongLong_t
+        wxLongLong_t ll = wxLL(0x1234567890abcdef);
+    #endif
+\end{verbatim}
+
+\wxheading{Include files}
+
+<wx/longlong.h>
+
+\membersection{wxLongLongFmtSpec}\label{wxlonglongfmtspec}
+
+This macro is defined to contain the {\tt printf()} format specifier using
+which 64 bit integer numbers (i.e. those of type {\tt wxLongLong\_t}) can be
+printed. Example of using it:
+
+\begin{verbatim}
+    #ifdef wxLongLong_t
+        wxLongLong_t ll = wxLL(0x1234567890abcdef);
+        printf("Long long = %" wxLongLongFmtSpec "x\n", ll);
+    #endif
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxLL}{wxll}
+
+\wxheading{Include files}
+
+<wx/longlong.h>
+
 \membersection{::wxNewId}\label{wxnewid}
 
 \func{long}{wxNewId}{\void}
@@ -2134,7 +2186,7 @@ the given {\bf id}.
 
 \func{void}{wxDDECleanUp}{\void}
 
-Called when wxWindows exits, to clean up the DDE system. This no longer needs to be
+Called when wxWidgets exits, to clean up the DDE system. This no longer needs to be
 called by the application.
 
 See also \helpref{wxDDEInitialize}{wxddeinitialize}.
@@ -2150,7 +2202,7 @@ See also \helpref{wxDDEInitialize}{wxddeinitialize}.
 Initializes the DDE system. May be called multiple times without harm.
 
 This no longer needs to be called by the application: it will be called
-by wxWindows if necessary.
+by wxWidgets if necessary.
 
 See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient}, \helpref{wxDDEConnection}{wxddeconnection},
 \helpref{wxDDECleanUp}{wxddecleanup}.
@@ -2184,7 +2236,7 @@ Find a menu item identifier associated with the given frame's menu bar.
 
 \func{wxWindow *}{wxFindWindowByLabel}{\param{const wxString\& }{label}, \param{wxWindow *}{parent=NULL}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxWindow::FindWindowByLabel}{wxwindowfindwindowbylabel} instead.
 
 Find a window by its label. Depending on the type of window, the label may be a window title
@@ -2200,7 +2252,7 @@ The search is recursive in both cases.
 
 \func{wxWindow *}{wxFindWindowByName}{\param{const wxString\& }{name}, \param{wxWindow *}{parent=NULL}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxWindow::FindWindowByName}{wxwindowfindwindowbyname} instead.
 
 Find a window by its name (as given in a window constructor or {\bf Create} function call).
@@ -2378,7 +2430,7 @@ See also \helpref{wxGetDisplayName}{wxgetdisplayname}.
 
 \func{void}{wxStripMenuCodes}{\param{char *}{in}, \param{char *}{out}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxMenuItem::GetLabelFromText}{wxmenuitemgetlabelfromtext} instead.
 
 Strips any menu codes from {\it in} and places the result
@@ -2482,7 +2534,7 @@ data in big-endian format.
 
 \section{RTTI functions}\label{rttimacros}
 
-wxWindows uses its own RTTI ("run-time type identification") system which
+wxWidgets uses its own RTTI ("run-time type identification") system which
 predates the current standard C++ RTTI and so is kept for backwards
 compatibility reasons but also because it allows some things which the
 standard RTTI doesn't directly support (such as creating a class from its
@@ -2490,7 +2542,7 @@ name).
 
 The standard C++ RTTI can be used in the user code without any problems and in
 general you shouldn't need to use the functions and the macros in this section
-unless you are thinking of modifying or adding any wxWindows classes.
+unless you are thinking of modifying or adding any wxWidgets classes.
 
 \wxheading{See also}
 
@@ -2576,7 +2628,7 @@ class wxFrame: public wxWindow
   DECLARE_DYNAMIC_CLASS(wxFrame)
 
  private:
-  const wxString\& frameTitle;
+  const wxString& frameTitle;
  public:
   ...
 };
@@ -2624,7 +2676,7 @@ a class that has run-time type information and two base classes. The same as IMP
 \func{}{IMPLEMENT\_APP}{className}
 
 This is used in the application class implementation file to make the application class known to
-wxWindows for dynamic construction. You use this instead of
+wxWidgets for dynamic construction. You use this instead of
 
 Old form:
 
@@ -2801,14 +2853,14 @@ result of executing an equivalent of {\tt static\_cast<classname *>(ptr)}.
 
 \overview{Resource functions}{resourceformats}
 
-This section details functions for manipulating wxWindows (.WXR) resource
+This section details functions for manipulating wxWidgets (.WXR) resource
 files and loading user interface elements from resources.
 
 \normalbox{Please note that this use of the word `resource' is different from that used when talking
 about initialisation file resource reading and writing, using such functions
 as wxWriteResource and wxGetResource. It is just an unfortunate clash of terminology.}
 
-\helponly{For an overview of the wxWindows resource mechanism, see \helpref{the wxWindows resource system}{resourceformats}.}
+\helponly{For an overview of the wxWidgets resource mechanism, see \helpref{the wxWidgets resource system}{resourceformats}.}
 
 See also \helpref{wxWindow::LoadFromResource}{wxwindowloadfromresource} for
 loading from resource data.
@@ -2825,14 +2877,14 @@ perhaps for implementing resource functionality for interpreted languages.
 
 \func{void}{wxResourceClear}{\void}
 
-Clears the wxWindows resource table.
+Clears the wxWidgets resource table.
 
 \membersection{::wxResourceCreateBitmap}\label{wxresourcecreatebitmap}
 
 \func{wxBitmap *}{wxResourceCreateBitmap}{\param{const wxString\& }{resource}}
 
 Creates a new bitmap from a file, static data, or Windows resource, given a valid
-wxWindows bitmap resource identifier. For example, if the .WXR file contains
+wxWidgets bitmap resource identifier. For example, if the .WXR file contains
 the following:
 
 \begin{verbatim}
@@ -2852,7 +2904,7 @@ then this function can be called as follows:
 \func{wxIcon *}{wxResourceCreateIcon}{\param{const wxString\& }{resource}}
 
 Creates a new icon from a file, static data, or Windows resource, given a valid
-wxWindows icon resource identifier. For example, if the .WXR file contains
+wxWidgets icon resource identifier. For example, if the .WXR file contains
 the following:
 
 \begin{verbatim}
@@ -2871,7 +2923,7 @@ then this function can be called as follows:
 
 \func{wxMenuBar *}{wxResourceCreateMenuBar}{\param{const wxString\& }{resource}}
 
-Creates a new menu bar given a valid wxWindows menubar resource
+Creates a new menu bar given a valid wxWidgets menubar resource
 identifier. For example, if the .WXR file contains the following:
 
 \begin{verbatim}
@@ -2910,10 +2962,10 @@ See \helpref{wxResourceAddIdentifier}{wxresourceaddidentifier}.
 
 \func{bool}{wxResourceParseData}{\param{const wxString\& }{resource}, \param{wxResourceTable *}{table = NULL}}
 
-Parses a string containing one or more wxWindows resource objects. If
+Parses a string containing one or more wxWidgets resource objects. If
 the resource objects are global static data that are included into the
 C++ program, then this function must be called for each variable
-containing the resource data, to make it known to wxWindows.
+containing the resource data, to make it known to wxWidgets.
 
 {\it resource} should contain data in the following form:
 
@@ -2926,7 +2978,7 @@ dialog(name = 'dialog1',
   control = [1000, wxStaticBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],
   control = [1001, wxTextCtrl, '', 'wxTE_MULTILINE', 'text3',
-      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',
+      156, 126, 200, 70, 'wxWidgets is a multi-platform, GUI toolkit.',
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).
 \end{verbatim}
@@ -2945,18 +2997,18 @@ of these variables should be passed to wxResourceParseData.
 
 \func{bool}{wxResourceParseFile}{\param{const wxString\& }{filename}, \param{wxResourceTable *}{table = NULL}}
 
-Parses a file containing one or more wxWindows resource objects
+Parses a file containing one or more wxWidgets resource objects
 in C++-compatible syntax. Use this function to dynamically load
-wxWindows resource data.
+wxWidgets resource data.
 
 \membersection{::wxResourceParseString}\label{wxresourceparsestring}
 
 \func{bool}{wxResourceParseString}{\param{char *}{s}, \param{wxResourceTable *}{table = NULL}}
 
-Parses a string containing one or more wxWindows resource objects. If
+Parses a string containing one or more wxWidgets resource objects. If
 the resource objects are global static data that are included into the
 C++ program, then this function must be called for each variable
-containing the resource data, to make it known to wxWindows.
+containing the resource data, to make it known to wxWidgets.
 
 {\it resource} should contain data with the following form:
 
@@ -2969,7 +3021,7 @@ dialog(name = 'dialog1',
   control = [1000, wxStaticBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],
   control = [1001, wxTextCtrl, '', 'wxTE_MULTILINE', 'text3',
-      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',
+      156, 126, 200, 70, 'wxWidgets is a multi-platform, GUI toolkit.',
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],
       [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).
 \end{verbatim}
@@ -2984,7 +3036,7 @@ load an entire {\tt .wxr file} into a string.
 
 \func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char **}{xpm\_data}}
 
-Makes {\tt\#}included XBM or XPM bitmap data known to the wxWindows resource system.
+Makes {\tt\#}included XBM or XPM bitmap data known to the wxWidgets resource system.
 This is required if other resources will use the bitmap data, since otherwise there
 is no connection between names used in resources, and the global bitmap data.
 
@@ -2997,7 +3049,7 @@ Another name for \helpref{wxResourceRegisterBitmapData}{registerbitmapdata}.
 These functions provide a variety of logging functions: see \helpref{Log classes overview}{wxlogoverview} for
 further information. The functions use (implicitly) the currently active log
 target, so their descriptions here may not apply if the log target is not the
-standard one (installed by wxWindows in the beginning of the program).
+standard one (installed by wxWidgets in the beginning of the program).
 
 \wxheading{Include files}
 
@@ -3029,14 +3081,14 @@ instead.
 
 \membersection{::wxError}\label{wxerror}
 
-\func{void}{wxError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Internal Error"}}
+\func{void}{wxError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWidgets Internal Error"}}
 
-{\bf NB:} This function is now obsolete, please use \helpref{wxLogError}{wxlogerror} 
+{\bf NB:} This function is now obsolete, please use \helpref{wxLogError}{wxlogerror}
 instead.
 
 Displays {\it msg} and continues. This writes to standard error under
 Unix, and pops up a message box under Windows. Used for internal
-wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
+wxWidgets errors. See also \helpref{wxFatalError}{wxfatalerror}.
 
 \wxheading{Include files}
 
@@ -3044,14 +3096,14 @@ wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
 
 \membersection{::wxFatalError}\label{wxfatalerror}
 
-\func{void}{wxFatalError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Fatal Error"}}
+\func{void}{wxFatalError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWidgets Fatal Error"}}
 
-{\bf NB:} This function is now obsolete, please use 
+{\bf NB:} This function is now obsolete, please use
 \helpref{wxLogFatalError}{wxlogfatalerror} instead.
 
 Displays {\it msg} and exits. This writes to standard error under Unix,
 and pops up a message box under Windows. Used for fatal internal
-wxWindows errors. See also \helpref{wxError}{wxerror}.
+wxWidgets errors. See also \helpref{wxError}{wxerror}.
 
 \wxheading{Include files}
 
@@ -3130,7 +3182,7 @@ If the target frame doesn't have a statusbar, the message will be lost.
 
 \func{void}{wxVLogSysError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
-Mostly used by wxWindows itself, but might be handy for logging errors after
+Mostly used by wxWidgets itself, but might be handy for logging errors after
 system call (API function) failure. It logs the specified message text as well
 as the last system error code ({\it errno} or {\it ::GetLastError()} depending
 on the platform) and the corresponding error message. The second form
@@ -3179,7 +3231,7 @@ the value of the trace mask (possible during the run-time).
 For the second function (taking a string mask), the message is logged only if
 the mask has been previously enabled by the call to
 \helpref{AddTraceMask}{wxlogaddtracemask}. The predefined string trace masks
-used by wxWindows are:
+used by wxWidgets are:
 
 \begin{itemize}\itemsep=0pt
 \item wxTRACE\_MemAlloc: trace memory allocation (new/delete)
@@ -3211,7 +3263,7 @@ trace masks.
 This function shows a message to the user in a safe way and should be safe to
 call even before the application has been initialized or if it is currently in
 some other strange state (for example, about to crash). Under Windows this
-function shows a message box using a native dialog instead of 
+function shows a message box using a native dialog instead of
 \helpref{wxMessageBox}{wxmessagebox} (which might be unsafe to call), elsewhere
 it simply prints the message to the standard output using the title as prefix.
 
@@ -3432,7 +3484,7 @@ standard usleep() function is not MT safe.
 \section{Debugging macros and functions}\label{debugmacros}
 
 Useful macros and functions for error checking and defensive programming.
-wxWindows defines three families of the assert-like macros:
+wxWidgets defines three families of the assert-like macros:
 the wxASSERT and wxFAIL macros only do anything if \_\_WXDEBUG\_\_ is defined
 (in other words, in the debug build) but disappear completely in the release
 build. On the other hand, the wxCHECK macros stay event in release builds but a
@@ -3454,7 +3506,7 @@ builds the \helpref{wxCHECK}{wxcheck} failures don't result in anything.
 
 To override the default behaviour in the debug builds which is to show the user
 a dialog asking whether he wants to abort the program, continue or continue
-ignoring any subsequent assert failures, you may override 
+ignoring any subsequent assert failures, you may override
 \helpref{wxApp::OnAssert}{wxapponassert} which is called by this function if
 the global application object exists.
 
@@ -3477,7 +3529,7 @@ because it will not be executed in release mode at all.
 
 \func{}{wxASSERT\_MIN\_BITSIZE}{\param{}{type}, \param{}{size}}
 
-This macro results in a 
+This macro results in a
 \helpref{compile time assertion failure}{wxcompiletimeassert} if the size
 of the given type {\it type} is less than {\it size} bits.
 
@@ -3511,14 +3563,14 @@ specified {\it condition} is false. The compiler error message should include
 the {\it msg} identifier - please note that it must be a valid C++ identifier
 and not a string unlike in the other cases.
 
-This macro is mostly useful for testing the expressions involving the 
+This macro is mostly useful for testing the expressions involving the
 {\tt sizeof} operator as they can't be tested by the preprocessor but it is
 sometimes desirable to test them at the compile time.
 
 Note that this macro internally declares a struct whose name it tries to make
 unique by using the {\tt \_\_LINE\_\_} in it but it may still not work if you
 use it on the same line in two different source files. In this case you may
-either change the line in which either of them appears on or use the 
+either change the line in which either of them appears on or use the
 \helpref{wxCOMPILE\_TIME\_ASSERT2}{wxcompiletimeassert2} macro.
 
 \wxheading{See also}
@@ -3530,7 +3582,7 @@ either change the line in which either of them appears on or use the
 
 \func{}{wxCOMPILE\_TIME\_ASSERT}{\param{}{condition}, \param{}{msg}, \param{}{name}}
 
-This macro is identical to \helpref{wxCOMPILE\_TIME\_ASSERT2}{wxcompiletimeassert2} 
+This macro is identical to \helpref{wxCOMPILE\_TIME\_ASSERT2}{wxcompiletimeassert2}
 except that it allows you to specify a unique {\it name} for the struct
 internally defined by this macro to avoid getting the compilation errors
 described \helpref{above}{wxcompiletimeassert}.

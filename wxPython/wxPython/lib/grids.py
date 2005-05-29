@@ -126,8 +126,8 @@ class wxGridSizer(wxPySizer):
 
         sz = self.GetSize()
         pt = self.GetPosition()
-	w = (sz.width  - (ncols - 1) * self.hgap) / ncols;
-	h = (sz.height - (nrows - 1) * self.vgap) / nrows;
+        w = (sz.width  - (ncols - 1) * self.hgap) / ncols;
+        h = (sz.height - (nrows - 1) * self.vgap) / nrows;
 
         x = pt.x
         for c in range(ncols):

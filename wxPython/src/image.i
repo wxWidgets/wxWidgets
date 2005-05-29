@@ -170,13 +170,35 @@ public:
         PyObject* GetDataBuffer() {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
-            return PyBuffer_FromReadWriteMemory(data, len);
+            PyObject* rv;
+            wxPyBLOCK_THREADS( rv = PyBuffer_FromReadWriteMemory(data, len) );
+            return rv;
         }
 
         PyObject* GetData() {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
-            return PyString_FromStringAndSize((char*)data, len);
+            PyObject* rv;
+            wxPyBLOCK_THREADS( rv = PyString_FromStringAndSize((char*)data, len));
+            return rv;
+        }
+
+        void SetDataBuffer(PyObject* data) {
+            unsigned char* buffer;
+            int size;
+
+            wxPyBeginBlockThreads();
+            if (!PyArg_Parse(data, "t#", &buffer, &size))
+                goto done;
+
+            if (size != self->GetWidth() * self->GetHeight() * 3) {
+                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
+                goto done;
+            }
+
+            self->SetData(buffer);
+        done:
+            wxPyEndBlockThreads();
         }
 
         void SetData(PyObject* data) {
@@ -189,7 +211,7 @@ public:
 
             size_t len = self->GetWidth() * self->GetHeight() * 3;
             dataPtr = (unsigned char*) malloc(len);
-            memcpy(dataPtr, PyString_AsString(data), len);
+            wxPyBLOCK_THREADS( memcpy(dataPtr, PyString_AsString(data), len) );
             self->SetData(dataPtr);
             // wxImage takes ownership of dataPtr...
         }
@@ -241,6 +263,8 @@ public:
             return bitmap;
         }
     }
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 

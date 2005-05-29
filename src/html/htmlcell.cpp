@@ -17,7 +17,7 @@
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -68,6 +68,14 @@ void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
 
 
 
+// wx 2.5 will use this signature:
+//   bool wxHtmlCell::AdjustPagebreak(int *pagebreak, int* WXUNUSED(known_pagebreaks), int WXUNUSED(number_of_pages)) const
+//
+// Workaround to backport html pagebreaks to 2.4.0:
+// Actually, we're passing a pointer to struct wxHtmlKludge, casting
+// that pointer to an int* . We don't need to do anything special
+// here because that struct's first element is an int* to 'pagebreak'.
+// Other struct members can be ignored because they'd be unused anyway.
 bool wxHtmlCell::AdjustPagebreak(int *pagebreak) const
 {
     if ((!m_CanLiveOnPagebreak) &&
@@ -215,9 +223,19 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
 
 
 
+// wx 2.5 will use this signature:
+//   bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak, int* known_pagebreaks, int number_of_pages) const
+//
+// Workaround to backport html pagebreaks to 2.4.0:
+// Actually, we're passing a pointer to struct wxHtmlKludge, casting
+// that pointer to an int* . We don't need to do anything special
+// here because that struct's first element is an int* to 'pagebreak'.
+// Other struct members aren't used here and can be ignored.
 bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
 {
     if (!m_CanLiveOnPagebreak)
+// wx 2.5 will use this call:
+//        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks, number_of_pages);
         return wxHtmlCell::AdjustPagebreak(pagebreak);
 
     else
@@ -226,14 +244,24 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
         bool rt = FALSE;
         int pbrk = *pagebreak - m_PosY;
 
+        // Temporary kludge for backporting html pagebreaks to 2.4.0;
+        // remove in 2.4.1 .
+        wxHtmlKludge kludge = *(wxHtmlKludge*)pagebreak;
+        kludge.pbreak = pbrk;
+
         while (c)
         {
-            if (c->AdjustPagebreak(&pbrk))
+// wx 2.5 will use this call:
+//            if (c->AdjustPagebreak(&pbrk, known_pagebreaks, number_of_pages))
+            if (c->AdjustPagebreak((int*)&kludge))
                 rt = TRUE;
             c = c->GetNext();
         }
         if (rt)
+            {
+            pbrk = kludge.pbreak;
             *pagebreak = pbrk + m_PosY;
+            }
         return rt;
     }
 }
@@ -255,8 +283,8 @@ void wxHtmlContainerCell::Layout(int w)
        m_Width = 0;
        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             cell->Layout(0);
-            // this does two things: it recursively calls this code on all child
-            // contrainers and resets children's position to (0,0)
+            // this does two things: it recursively calls this code on all
+            // child contrainers and resets children's position to (0,0)
        return;
     }
 
@@ -408,9 +436,8 @@ void wxHtmlContainerCell::Layout(int w)
 void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
     // container visible, draw it:
-    if ((y + m_PosY < view_y2) && (y + m_PosY + m_Height > view_y1))
+    if ((y + m_PosY <= view_y2) && (y + m_PosY + m_Height > view_y1))
     {
-
         if (m_UseBkColour)
         {
             wxBrush myb = wxBrush(m_BkColour, wxSOLID);
@@ -430,10 +457,10 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 
             dc.SetPen(mypen1);
             dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width - 1, y + m_PosY);
+            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width, y + m_PosY);
             dc.SetPen(mypen2);
             dc.DrawLine(x + m_PosX + m_Width - 1, y + m_PosY, x + m_PosX +  m_Width - 1, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width - 1, y + m_PosY + m_Height - 1);
+            dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width, y + m_PosY + m_Height - 1);
         }
 
         if (m_Cells)
@@ -462,6 +489,15 @@ void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y)
         for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             cell->DrawInvisible(dc, x + m_PosX, y + m_PosY);
     }
+}
+
+
+wxColour wxHtmlContainerCell::GetBackgroundColour()
+{
+    if (m_UseBkColour)
+        return m_BkColour;
+    else
+        return wxNullColour;
 }
 
 

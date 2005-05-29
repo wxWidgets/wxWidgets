@@ -6,7 +6,7 @@
 // Created:     10/17/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 class wxToolTip : public wxObject
@@ -24,6 +24,12 @@ public:
 
            void            SetTip(const wxString& rsTip);
     inline void            SetWindow(wxWindow* pWin) { m_pWindow = pWin; }
+
+    // controlling tooltip behaviour: globally change tooltip parameters
+        // enable or disable the tooltips globally
+    static void Enable(bool flag) {}
+        // set the delay after which the tooltip appears
+    static void SetDelay(long milliseconds) {}
 
     //
     // Implementation

@@ -58,6 +58,10 @@
     #include "wx/dnd.h"
 #endif
 
+#if wxUSE_POPUPWIN
+#include "wx/popupwin.h"
+#endif
+
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
@@ -92,15 +96,7 @@
     #include <windowsx.h>
 #endif
 
-#if (!defined(__GNUWIN32_OLD__) && !defined(__TWIN32__) && !defined(__WXMICROWIN__)) || defined(__CYGWIN10__)
-    #ifdef __WIN95__
-        #include <commctrl.h>
-    #endif
-#elif !defined(__WXMICROWIN__) // broken compiler
-    #ifndef __TWIN32__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
-#endif
+#include <commctrl.h>
 
 // ----------------------------------------------------------------------------
 // standard constants not available with all compilers/headers
@@ -125,16 +121,19 @@
 
 #ifndef VK_OEM_1
     #define VK_OEM_1        0xBA
-    #define VK_OEM_PLUS     0xBB
-    #define VK_OEM_COMMA    0xBC
-    #define VK_OEM_MINUS    0xBD
-    #define VK_OEM_PERIOD   0xBE
     #define VK_OEM_2        0xBF
     #define VK_OEM_3        0xC0
     #define VK_OEM_4        0xDB
     #define VK_OEM_5        0xDC
     #define VK_OEM_6        0xDD
     #define VK_OEM_7        0xDE
+#endif
+
+#ifndef VK_OEM_COMMA
+    #define VK_OEM_PLUS     0xBB
+    #define VK_OEM_COMMA    0xBC
+    #define VK_OEM_MINUS    0xBD
+    #define VK_OEM_PERIOD   0xBE
 #endif
 
 // ---------------------------------------------------------------------------
@@ -567,7 +566,11 @@ bool wxWindowMSW::Show(bool show)
     int cshow = show ? SW_SHOW : SW_HIDE;
     ::ShowWindow(hWnd, cshow);
 
-    if ( show )
+    if ( show && (IsTopLevel()
+#if wxUSE_POPUPWIN
+                  || IsKindOf(CLASSINFO(wxPopupWindow))
+#endif
+       ) )
     {
         wxBringWindowToTop(hWnd);
     }
@@ -1146,7 +1149,7 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
 WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 {
     // translate the style
-    WXDWORD style = WS_CHILD;
+    WXDWORD style = WS_CHILD | WS_VISIBLE;
 
     if ( flags & wxCLIP_CHILDREN )
         style |= WS_CLIPCHILDREN;
@@ -1154,8 +1157,29 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     if ( flags & wxCLIP_SIBLINGS )
         style |= WS_CLIPSIBLINGS;
 
+    if ( flags & wxVSCROLL )
+        style |= WS_VSCROLL;
+
+    if ( flags & wxHSCROLL )
+        style |= WS_HSCROLL;
+
     wxBorder border = (wxBorder)(flags & wxBORDER_MASK);
-    if ( border != wxBORDER_NONE && border != wxBORDER_DEFAULT )
+
+    // Check if we want to automatically give it a sunken style.
+    // Note than because 'sunken' actually maps to WS_EX_CLIENTEDGE, which
+    // is a more neutral term, we don't necessarily get a sunken effect in
+    // Windows XP. Instead we get the appropriate style for the theme.
+
+    if (border == wxBORDER_DEFAULT && wxTheApp->GetAuto3D() &&
+        IsKindOf(CLASSINFO(wxControl)) &&
+        GetParent() &&
+        ((GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))
+    {
+        border = (wxBorder)((flags & wxBORDER_MASK) | wxBORDER_SUNKEN);
+    }
+
+    // Only give it WS_BORDER for wxBORDER_SIMPLE
+    if (border & wxBORDER_SIMPLE)
         style |= WS_BORDER;
 
     // now deal with ext style if the caller wants it
@@ -1166,7 +1190,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
         if ( flags & wxTRANSPARENT_WINDOW )
             *exstyle |= WS_EX_TRANSPARENT;
 
-        switch ( flags & wxBORDER_MASK )
+        switch ( border )
         {
             default:
                 wxFAIL_MSG( _T("unknown border style") );
@@ -1182,11 +1206,12 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 break;
 
             case wxBORDER_RAISED:
-                *exstyle |= WS_EX_WINDOWEDGE;
+                *exstyle |= WS_EX_DLGMODALFRAME;
                 break;
 
             case wxBORDER_SUNKEN:
                 *exstyle |= WS_EX_CLIENTEDGE;
+                style &= ~WS_BORDER;
                 break;
 
             case wxBORDER_DOUBLE:
@@ -1209,6 +1234,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 }
 
 // Make a Windows extended style from the given wxWindows window style
+// OBSOLETE! DO NOT USE. USE MSWGetStyle INSTEAD.
 WXDWORD wxWindowMSW::MakeExtendedStyle(long style, bool eliminateBorders)
 {
     WXDWORD exStyle = 0;
@@ -1236,6 +1262,7 @@ WXDWORD wxWindowMSW::MakeExtendedStyle(long style, bool eliminateBorders)
 // Determines whether native 3D effects or CTL3D should be used,
 // applying a default border style if required, and returning an extended
 // style to pass to CreateWindowEx.
+// OBSOLETE! DO NOT USE. USE MSWGetStyle INSTEAD.
 WXDWORD wxWindowMSW::Determine3DEffects(WXDWORD defaultBorderStyle,
                                         bool *want3D) const
 {
@@ -1471,7 +1498,7 @@ void wxWindowMSW::Update()
         wxLogLastError(_T("UpdateWindow"));
     }
 #endif
-    
+
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
     // handler needs to be really drawn right now
@@ -1519,7 +1546,7 @@ void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
     wxWindowBase::DoSetToolTip(tooltip);
 
     if ( m_tooltip )
-        m_tooltip->SetWindow(this);
+        m_tooltip->SetWindow((wxWindow *)this);
 }
 
 #endif // wxUSE_TOOLTIPS
@@ -1891,10 +1918,16 @@ static void wxYieldForCommandsOnly()
     {
         wxTheApp->DoMessage((WXMSG *)&msg);
     }
+
+    // If we retrieved a WM_QUIT, insert back into the message queue.
+    if (msg.message == WM_QUIT)
+        ::PostQuitMessage(0);
 }
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
+    wxCHECK_MSG( menu != NULL, FALSE, wxT("invalid popup-menu") );
+
     menu->SetInvokingWindow(this);
     menu->UpdateUI();
 
@@ -1961,6 +1994,14 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             if ( !bCtrlDown )
             {
                 lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
+
+                // surprizingly, DLGC_WANTALLKEYS bit mask doesn't contain the
+                // DLGC_WANTTAB nor DLGC_WANTARROWS bits although, logically,
+                // it, of course, implies them
+                if ( lDlgCode & DLGC_WANTALLKEYS )
+                {
+                    lDlgCode |= DLGC_WANTTAB | DLGC_WANTARROWS;
+                }
             }
 
             bool bForward = TRUE,
@@ -2048,6 +2089,12 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                                     // need it for itself and don't let
                                     // ::IsDialogMessage() have it as it can
                                     // eat the Enter events sometimes
+                                    return FALSE;
+                                }
+                                else if (!IsTopLevel())
+                                {
+                                    // if not a top level window, let parent
+                                    // handle it
                                     return FALSE;
                                 }
                                 //else: treat Enter as TAB: pass to the next
@@ -2483,14 +2530,6 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                     break;
 
 #endif // __WXMICROWIN__
-                // VZ: if you find a situation when this is needed, tell
-                //     me about it, do *not* uncomment this code as it
-                //     causes other strange problems
-#if 0
-                if ( message == WM_LBUTTONDOWN && AcceptsFocus() )
-                    SetFocus();
-#endif // 0
-
                 int x = GET_X_LPARAM(lParam),
                     y = GET_Y_LPARAM(lParam);
 
@@ -2506,6 +2545,20 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 else
                 {
                     win = FindWindowForMouseEvent(this, &x, &y);
+
+                    // this should never happen
+                    wxCHECK_MSG( win, 0,
+                                 _T("FindWindowForMouseEvent() returned NULL") );
+
+                    // for the standard classes their WndProc sets the focus to
+                    // them anyhow and doing it from here results in some weird
+                    // problems, but for our windows we want them to acquire
+                    // focus when clicked
+                    if ( !win->IsOfStandardClass() )
+                    {
+                        if ( message == WM_LBUTTONDOWN && win->AcceptsFocus() )
+                            win->SetFocus();
+                    }
                 }
 
                 processed = win->HandleMouseEvent(message, x, y, wParam);
@@ -2598,71 +2651,73 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             if ( m_lastKeydownProcessed )
             {
                 processed = TRUE;
-                break;
             }
 
-            switch ( wParam )
+            if ( !processed )
             {
-                // we consider these message "not interesting" to OnChar, so
-                // just don't do anything more with them
-                case VK_SHIFT:
-                case VK_CONTROL:
-                case VK_MENU:
-                case VK_CAPITAL:
-                case VK_NUMLOCK:
-                case VK_SCROLL:
-                    processed = TRUE;
-                    break;
+                switch ( wParam )
+                {
+                    // we consider these message "not interesting" to OnChar, so
+                    // just don't do anything more with them
+                    case VK_SHIFT:
+                    case VK_CONTROL:
+                    case VK_MENU:
+                    case VK_CAPITAL:
+                    case VK_NUMLOCK:
+                    case VK_SCROLL:
+                        processed = TRUE;
+                        break;
 
-                // avoid duplicate messages to OnChar for these ASCII keys:
-                // they will be translated by TranslateMessage() and received
-                // in WM_CHAR
-                case VK_ESCAPE:
-                case VK_SPACE:
-                case VK_RETURN:
-                case VK_BACK:
-                case VK_TAB:
-                case VK_ADD:
-                case VK_SUBTRACT:
-                case VK_MULTIPLY:
-                case VK_DIVIDE:
-                case VK_OEM_1:
-                case VK_OEM_2:
-                case VK_OEM_3:
-                case VK_OEM_4:
-                case VK_OEM_5:
-                case VK_OEM_6:
-                case VK_OEM_7:
-                case VK_OEM_PLUS:
-                case VK_OEM_COMMA:
-                case VK_OEM_MINUS:
-                case VK_OEM_PERIOD:
-                    // but set processed to FALSE, not TRUE to still pass them
-                    // to the control's default window proc - otherwise
-                    // built-in keyboard handling won't work
-                    processed = FALSE;
-
-                    break;
+                    // avoid duplicate messages to OnChar for these ASCII keys:
+                    // they will be translated by TranslateMessage() and received
+                    // in WM_CHAR
+                    case VK_ESCAPE:
+                    case VK_SPACE:
+                    case VK_RETURN:
+                    case VK_BACK:
+                    case VK_TAB:
+                    case VK_ADD:
+                    case VK_SUBTRACT:
+                    case VK_MULTIPLY:
+                    case VK_DIVIDE:
+                    case VK_OEM_1:
+                    case VK_OEM_2:
+                    case VK_OEM_3:
+                    case VK_OEM_4:
+                    case VK_OEM_5:
+                    case VK_OEM_6:
+                    case VK_OEM_7:
+                    case VK_OEM_PLUS:
+                    case VK_OEM_COMMA:
+                    case VK_OEM_MINUS:
+                    case VK_OEM_PERIOD:
+                        // but set processed to FALSE, not TRUE to still pass them
+                        // to the control's default window proc - otherwise
+                        // built-in keyboard handling won't work
+                        processed = FALSE;
+                        break;
 
 #ifdef VK_APPS
-                // special case of VK_APPS: treat it the same as right mouse
-                // click because both usually pop up a context menu
-                case VK_APPS:
-                    {
-                        WPARAM flags;
-                        int x, y;
+                    // special case of VK_APPS: treat it the same as right mouse
+                    // click because both usually pop up a context menu
+                    case VK_APPS:
+                        {
+                            WPARAM flags;
+                            int x, y;
 
-                        TranslateKbdEventToMouse(this, &x, &y, &flags);
-                        processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, flags);
-                    }
-                    break;
+                            TranslateKbdEventToMouse(this, &x, &y, &flags);
+                            processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, flags);
+                        }
+                        break;
 #endif // VK_APPS
 
-                default:
-                    // do generate a CHAR event
-                    processed = HandleChar((WORD)wParam, lParam);
-
+                    default:
+                        // do generate a CHAR event
+                        processed = HandleChar((WORD)wParam, lParam);
+                }
             }
+            if (message == WM_SYSKEYDOWN)  // Let Windows still handle the SYSKEYs
+                processed = FALSE;
             break;
 
         case WM_SYSKEYUP:
@@ -3116,36 +3171,22 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
 
     LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
 
+#if !wxUSE_UNICODE
     if ( code == (WXUINT) TTN_NEEDTEXTA )
     {
-        ttText->lpszText = (wxChar *)ttip.c_str();
+        // we pass just the pointer as we store the string internally anyhow
+        ttText->lpszText = (char *)ttip.c_str();
     }
-    else
+    else // TTN_NEEDTEXTW
+#endif // !Unicode
     {
 #if wxUSE_UNICODE
+        // in Unicode mode this is just what we need
         ttText->lpszText = (wxChar *)ttip.c_str();
 #else // !Unicode
-        size_t lenAnsi = ttip.length();
-
-        // some compilers (MetroWerks and Cygwin) don't like calling mbstowcs
-        // with NULL argument
-        #if defined( __MWERKS__ ) || defined( __CYGWIN__ )
-            size_t lenUnicode = 2*lenAnsi;
-        #else
-            size_t lenUnicode = mbstowcs(NULL, ttip, lenAnsi);
-        #endif
-
-        // using the pointer of right type avoids us doing all sorts of
-        // pointer arithmetics ourselves
-        wchar_t *dst = (wchar_t *)ttText->szText,
-                *pwz = new wchar_t[lenUnicode + 1];
-        mbstowcs(pwz, ttip, lenAnsi + 1);
-        memcpy(dst, pwz, lenUnicode*sizeof(wchar_t));
-
-        // put the terminating wide NUL
-        dst[lenUnicode] = L'\0';
-
-        delete [] pwz;
+        MultiByteToWideChar(CP_ACP, 0, ttip, ttip.length()+1,
+                            (wchar_t *)ttText->szText,
+                            sizeof(ttText->szText) / sizeof(wchar_t));
 #endif // Unicode/!Unicode
     }
 
@@ -3259,6 +3300,7 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
 bool wxWindowMSW::HandleDestroy()
 {
     wxWindowDestroyEvent event((wxWindow *)this);
+    event.SetId(GetId());
     (void)GetEventHandler()->ProcessEvent(event);
 
     // delete our drop target if we've got one
@@ -3499,6 +3541,8 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
 
     if ( hcursor )
     {
+//        wxLogDebug("HandleSetCursor: Setting cursor %ld", (long) hcursor);
+
         ::SetCursor(hcursor);
 
         // cursor set, stop here
@@ -4116,7 +4160,10 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_leftDown = (flags & MK_LBUTTON) != 0;
     event.m_middleDown = (flags & MK_MBUTTON) != 0;
     event.m_rightDown = (flags & MK_RBUTTON) != 0;
-    event.m_altDown = (::GetKeyState(VK_MENU) & 0x80000000) != 0;
+//    event.m_altDown = (::GetKeyState(VK_MENU) & 0x80000000) != 0;
+    // Returns different negative values on WinME and WinNT,
+    // so simply test for negative value.
+    event.m_altDown = ::GetKeyState(VK_MENU) < 0;
 
     event.SetTimestamp(s_currentMsg.time);
     event.m_eventObject = this;
@@ -4378,9 +4425,18 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
     }
 
     wxKeyEvent event(CreateKeyEvent(wxEVT_CHAR, id, lParam, wParam));
-    if ( ctrlDown )
+
+    // the alphanumeric keys produced by pressing AltGr+something on European
+    // keyboards have both Ctrl and Alt modifiers which may confuse the user
+    // code as, normally, keys with Ctrl and/or Alt don't result in anything
+    // alphanumeric, so pretend that there are no modifiers at all (the
+    // KEY_DOWN event would still have the correct modifiers if they're really
+    // needed)
+    if ( event.m_controlDown && event.m_altDown &&
+            (id >= 32 && id < 256) )
     {
-        event.m_controlDown = TRUE;
+        event.m_controlDown =
+        event.m_altDown = FALSE;
     }
 
     return GetEventHandler()->ProcessEvent(event);
@@ -5434,9 +5490,10 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
-wxWindow* wxFindWindowAtPointer(wxPoint& WXUNUSED(pt))
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 {
-    return wxFindWindowAtPoint(wxGetMousePosition());
+    pt = wxGetMousePosition();
+    return wxFindWindowAtPoint(pt);
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

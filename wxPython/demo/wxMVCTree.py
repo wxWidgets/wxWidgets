@@ -29,11 +29,11 @@ def runTest(frame, nb, log):
     p = wxMVCTree(nb, -1)
     #f = wxFrame(frame, -1, "wxMVCTree")
     #p = wxMVCTree(f, -1)
-    p.SetAssumeChildren(true)
+    p.SetAssumeChildren(True)
     p.SetModel(LateFSTreeModel(os.path.normpath(os.getcwd() + os.sep +'..')))
     #Uncomment this to enable live filename editing!
 #    p.AddEditor(FileEditor(p))
-    p.SetMultiSelect(true)
+    p.SetMultiSelect(True)
     EVT_MVCTREE_SEL_CHANGING(p, p.GetId(), selchanging)
     EVT_MVCTREE_SEL_CHANGED(p, p.GetId(), selchanged)
     EVT_MVCTREE_ITEM_EXPANDED(p, p.GetId(), expanded)
@@ -44,20 +44,29 @@ def runTest(frame, nb, log):
 
     return p
     #frame.otherWin = f
-    #f.Show(true)
+    #f.Show(True)
     #return None
 
 
 
 
 overview = """\
-wxMVCTree is a control which handles hierarchical data. It is constructed in model-view-controller architecture, so the display of that data, and the content of the data can be changed greatly without affecting the other parts.
+
+wxMVCTree is a control which handles hierarchical data. It is
+constructed in model-view-controller architecture, so the display of
+that data, and the content of the data can be changed greatly without
+affecting the other parts.
 
 Multiple selections are possible by holding down the Ctrl key.
 
-This demo shows the wxPython directory structure. The interesting part is that the tree model is late-bound to the filesystem, so the filenames are not retrieved until the directory is expanded. In mvctree.py are models for generic data, and both the early and late-bound filesystem models.
+This demo shows the wxPython directory structure. The interesting part
+is that the tree model is late-bound to the filesystem, so the
+filenames are not retrieved until the directory is expanded. In
+mvctree.py are models for generic data, and both the early and
+late-bound filesystem models.
 
-There is also support for editing, though it's not enabled in this demo, to avoid accidentally renaming files!
+There is also support for editing, though it's not enabled in this
+demo, to avoid accidentally renaming files!
 
 """
 
@@ -65,6 +74,7 @@ There is also support for editing, though it's not enabled in this demo, to avoi
 
 
 
-
-
-
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])

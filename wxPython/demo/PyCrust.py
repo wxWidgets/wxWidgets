@@ -1,20 +1,18 @@
 
-
-from wxPython.lib.PyCrust import shell, version
+from wx import py
 
 
 #----------------------------------------------------------------------
 
-intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % version.VERSION
+intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % py.version.VERSION
 
 def runTest(frame, nb, log):
-    win = shell.Shell(nb, -1, introText=intro)
+    win = py.crust.Crust(nb, intro=intro)
     return win
 
 #----------------------------------------------------------------------
 
-overview = shell.__doc__
-
+overview = py.filling.__doc__ + "\n\n" + py.crust.__doc__
 
 if __name__ == '__main__':
     import sys,os

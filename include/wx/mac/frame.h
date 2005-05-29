@@ -113,6 +113,9 @@ protected:
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int height);
 
+    virtual void DetachMenuBar();
+    virtual void AttachMenuBar(wxMenuBar *menubar);
+
 protected:
 #if wxUSE_STATUSBAR
     static bool           m_useNativeStatusBar;

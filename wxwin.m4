@@ -7,7 +7,7 @@ dnl	...
 dnl	AM_OPTIONS_WXCONFIG
 dnl	...
 dnl	...
-dnl	AM_PATH_WXCONFIG(2.3.3, wxWin=1)
+dnl	AM_PATH_WXCONFIG(2.3.4, wxWin=1)
 dnl     if test "$wxWin" != 1; then
 dnl        AC_MSG_ERROR([
 dnl     	   wxWindows must be installed on your system
@@ -16,7 +16,7 @@ dnl
 dnl     	   Please check that wx-config is in path, the directory
 dnl     	   where wxWindows libraries are installed (returned by
 dnl     	   'wx-config --libs' command) is in LD_LIBRARY_PATH or
-dnl     	   equivalent variable and wxWindows version is 2.3.3 or above.
+dnl     	   equivalent variable and wxWindows version is 2.3.4 or above.
 dnl        ])
 dnl     fi
 dnl     CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
@@ -33,7 +33,7 @@ dnl adds support for --wx-prefix, --wx-exec-prefix and --wx-config
 dnl command line options
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AM_OPTIONS_WXCONFIG,
+AC_DEFUN([AM_OPTIONS_WXCONFIG],
 [
    AC_ARG_WITH(wx-prefix, [  --with-wx-prefix=PREFIX   Prefix where wxWindows is installed (optional)],
                wx_config_prefix="$withval", wx_config_prefix="")
@@ -56,7 +56,7 @@ dnl ---------------------------------------------------------------------------
 dnl
 dnl Get the cflags and libraries from the wx-config script
 dnl
-AC_DEFUN(AM_PATH_WXCONFIG,
+AC_DEFUN([AM_PATH_WXCONFIG],
 [
   dnl do we have wx-config name: it can be wx-config or wxd-config or ...
   if test x${WX_CONFIG_NAME+set} != xset ; then

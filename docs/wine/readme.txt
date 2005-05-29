@@ -1,8 +1,8 @@
 
-  Welcome to wxWindows/Wine 2.1 snapshot 7,
+  Welcome to wxWidgets/Wine 2.1 snapshot 7,
 
 you have downloaded version 2.1 of the WINE port of 
-the wxWindows GUI library. This is a developers release
+the wxWidgets GUI library. This is a developers release
 and is it not suited for production development. Beware
 that major changes can happen before a final release.
 
@@ -10,7 +10,7 @@ More information is available from my homepage at:
 
   http://wesley.informatik.uni-freiburg.de/~wxxt
   
-and about the wxWindows project as a whole (and the
+and about the wxWidgets project as a whole (and the
 Windows and Motif ports in particular) can be found
 at Julian Smart's homepage at:
 
@@ -29,14 +29,14 @@ this has no effect, but I tried...
 
 The library produced by the install process will be called 
 libwx_mse.a (static) and libwx_msw-2.1.so.0.0.0 (shared) so that 
-once a binary incompatible version of wxWindows/Gtk comes out 
+once a binary incompatible version of wxWidgets/Gtk comes out 
 we'll augment the library version number to avoid linking problems.
 
 Please send problems concerning installation, feature requests, 
-bug reports or comments to the wxWindows users list. Information 
+bug reports or comments to the wxWidgets users list. Information 
 on how to subscribe is available from my homepage.
 
-wxWindows/Wine doesn't come with any guarantee whatsoever. It might 
+wxWidgets/Wine doesn't come with any guarantee whatsoever. It might 
 crash your harddisk or destroy your monitor. It doesn't claim to be
 suitable for any special or general purpose.
 

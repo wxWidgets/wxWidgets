@@ -469,6 +469,9 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
     if (m_NormalFonts) delete m_NormalFonts;
     if (m_FixedFonts) delete m_FixedFonts;
     if (m_PagesHash) delete m_PagesHash;
+#if wxUSE_PRINTING_ARCHITECTURE
+    delete m_Printer;
+#endif
 }
 
 
@@ -878,10 +881,15 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
 
     cfg->Write(wxT("hcNavigPanel"), m_Cfg.navig_on);
     cfg->Write(wxT("hcSashPos"), (long)m_Cfg.sashpos);
-    cfg->Write(wxT("hcX"), (long)m_Cfg.x);
-    cfg->Write(wxT("hcY"), (long)m_Cfg.y);
-    cfg->Write(wxT("hcW"), (long)m_Cfg.w);
-    cfg->Write(wxT("hcH"), (long)m_Cfg.h);
+    if ( !IsIconized() )
+    {
+        //  Don't write if iconized as this would make the window
+        //  disappear next time it is shown!
+        cfg->Write(wxT("hcX"), (long)m_Cfg.x);
+        cfg->Write(wxT("hcY"), (long)m_Cfg.y);
+        cfg->Write(wxT("hcW"), (long)m_Cfg.w);
+        cfg->Write(wxT("hcH"), (long)m_Cfg.h);
+    }
     cfg->Write(wxT("hcFixedFace"), m_FixedFace);
     cfg->Write(wxT("hcNormalFace"), m_NormalFace);
     cfg->Write(wxT("hcBaseFontSize"), (long)m_FontSize);
@@ -1015,13 +1023,17 @@ Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> \
     {
         UpdateTestWin();
     }
+    void OnUpdateSpin(wxSpinEvent& WXUNUSED(event))
+    {
+        UpdateTestWin();
+    }
 
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxHtmlHelpFrameOptionsDialog, wxDialog)
     EVT_COMBOBOX(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
-    EVT_SPINCTRL(-1, wxHtmlHelpFrameOptionsDialog::OnUpdate)
+    EVT_SPINCTRL(-1, wxHtmlHelpFrameOptionsDialog::OnUpdateSpin)
 END_EVENT_TABLE()
 
 
@@ -1120,8 +1132,12 @@ void wxHtmlHelpFrame::OnActivate(wxActivateEvent& event)
 {
     // This saves one mouse click when using the
     // wxHTML for context sensitive help systems
+#ifndef __WXGTK__
+    // NB: wxActivateEvent is a bit broken in wxGTK
+    //     and is sometimes sent when it should not be
     if (event.GetActive() && m_HtmlWin)
         m_HtmlWin->SetFocus();
+#endif
 
     event.Skip();
 }

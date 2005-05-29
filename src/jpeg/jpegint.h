@@ -142,6 +142,7 @@ struct jpeg_decomp_master {
   boolean is_dummy_pass;	/* True during 1st pass for 2-pass quant */
 };
 
+
 /* Input control module */
 struct jpeg_input_controller {
   JMETHOD(int, consume_input, (j_decompress_ptr cinfo));
@@ -154,6 +155,7 @@ struct jpeg_input_controller {
   boolean eoi_reached;		/* True when EOI has been consumed */
 };
 
+
 /* Main buffer control (downsampled-data buffer) */
 struct jpeg_d_main_controller {
   JMETHOD(void, start_pass, (j_decompress_ptr cinfo, J_BUF_MODE pass_mode));
@@ -164,7 +166,15 @@ struct jpeg_d_main_controller {
 
 /* Coefficient buffer control */
 struct jpeg_d_coef_controller {
+#if defined(__VISAGECPP__)
+  /* the start input pass in jdcoeft must have a different name than the
+  // one in jdtrans under VisualAge or else we get a dup symbol error
+  */
+  JMETHOD(void, start_input_pass2, (j_decompress_ptr cinfo));
+#else
   JMETHOD(void, start_input_pass, (j_decompress_ptr cinfo));
+#endif
+
   JMETHOD(int, consume_data, (j_decompress_ptr cinfo));
   JMETHOD(void, start_output_pass, (j_decompress_ptr cinfo));
   JMETHOD(int, decompress_data, (j_decompress_ptr cinfo,

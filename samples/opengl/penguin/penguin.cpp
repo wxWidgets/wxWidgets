@@ -43,24 +43,24 @@
 #define VIEW_ASPECT 1.3
 
 /* `Main program' equivalent, creating windows and returning main app frame */
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
 
   /* Create the main frame window */
-  MyFrame *frame = new MyFrame(NULL, "wxWindows OpenGL Demo", wxPoint(50, 50), wxSize(400, 300));
+  MyFrame *frame = new MyFrame(NULL, wxT("wxWindows OpenGL Demo"), wxPoint(50, 50), wxSize(400, 300));
 
   /* Make a menubar */
   wxMenu *fileMenu = new wxMenu;
 
-  fileMenu->Append(wxID_EXIT, "E&xit");
+  fileMenu->Append(wxID_EXIT, wxT("E&xit"));
   wxMenuBar *menuBar = new wxMenuBar;
-  menuBar->Append(fileMenu, "&File");
+  menuBar->Append(fileMenu, wxT("&File"));
   frame->SetMenuBar(menuBar);
 
-  frame->m_canvas = new TestGLCanvas(frame, -1, wxPoint(0, 0), wxSize(200, 200), wxSUNKEN_BORDER);
+  frame->SetCanvas( new TestGLCanvas(frame, -1, wxPoint(0, 0), wxSize(200, 200), wxSUNKEN_BORDER) );
 
   /* Load file wiht mesh data */
-  frame->m_canvas->LoadLWO( "penguin.lwo" );
+  frame->GetCanvas()->LoadLWO( wxT("penguin.lwo") );
 
   /* Show the frame */
   frame->Show(TRUE);
@@ -178,10 +178,10 @@ void TestGLCanvas::OnEraseBackground(wxEraseEvent& event)
 void TestGLCanvas::LoadLWO(const wxString &filename)
 {
     /* test if lightwave object */
-    if (!lw_is_lwobject(filename)) return;
+    if (!lw_is_lwobject(filename.mb_str())) return;
   
     /* read lightwave object */
-    lwObject *lwobject = lw_object_read(filename);
+    lwObject *lwobject = lw_object_read(filename.mb_str());
     
     /* scale */
     lw_object_scale(lwobject, 10.0 / lw_object_radius(lwobject));

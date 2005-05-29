@@ -98,7 +98,7 @@ static void ColouriseLispDoc(unsigned int startPos, int length, int initStyle, W
 			if (isLispwordstart(ch)) {
 				styler.ColourTo(i - 1, state);
 				state = SCE_LISP_IDENTIFIER;
-			} 
+			}
 			else if (ch == ';') {
 				styler.ColourTo(i - 1, state);
 				state = SCE_LISP_COMMENT;
@@ -107,7 +107,7 @@ static void ColouriseLispDoc(unsigned int startPos, int length, int initStyle, W
 				styler.ColourTo(i - 1, state);
 				styler.ColourTo(i, SCE_LISP_OPERATOR);
 			}
-			
+
 			else if (ch == '\"') {
 					state = SCE_LISP_STRING;
 			}
@@ -115,12 +115,12 @@ static void ColouriseLispDoc(unsigned int startPos, int length, int initStyle, W
 			if (!isLispwordstart(ch)) {
 				classifyWordLisp(styler.GetStartSegment(), i - 1, keywords, styler);
 				state = SCE_LISP_DEFAULT;
-			} /*else*/ 
+			} /*else*/
 			if (isLispoperator(ch) || ch=='\'') {
 				styler.ColourTo(i - 1, state);
 				styler.ColourTo(i, SCE_LISP_OPERATOR);
 			}
-			
+
 		} else {
 			if (state == SCE_LISP_COMMENT) {
 				if (atEOL) {
@@ -192,4 +192,9 @@ static void FoldLispDoc(unsigned int startPos, int length, int /* initStyle */, 
 	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 }
 
-LexerModule lmLISP(SCLEX_LISP, ColouriseLispDoc, "lisp", FoldLispDoc);
+static const char * const lispWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmLISP(SCLEX_LISP, ColouriseLispDoc, "lisp", FoldLispDoc, lispWordListDesc);

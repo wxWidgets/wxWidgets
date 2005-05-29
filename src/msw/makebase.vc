@@ -97,6 +97,7 @@ COMMONOBJS = \
 		..\common\$D\memory.obj \
 		..\common\$D\mimecmn.obj \
 		..\common\$D\module.obj \
+		..\common\$D\msgout.obj \
 		..\common\$D\mstream.obj \
 		..\common\$D\object.obj \
 		..\common\$D\process.obj \

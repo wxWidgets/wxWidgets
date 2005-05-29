@@ -152,7 +152,8 @@ public:
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
    	virtual bool MacCanFocus() const { return true ; }
-    
+    virtual bool MacSetupCursor( const wxPoint& pt ) ;
+
     virtual void 	 MacSuperShown( bool show ) ;
     virtual bool	 Show(bool show = TRUE) ;
 

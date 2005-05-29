@@ -30,11 +30,15 @@ echo [Dirs] >> %temp\files2.tmp
 
 do i = 0 to %len by 1
     set line=%@LINE[%TEMP\files1.tmp,%i]
+Rem    echo line is %line
     Rem Skip files.
     if not isdir %line enddo
     set sz2=%@LEN[%line]
+Rem    echo size is %sz2
     set n=%@EVAL[%sz2-%sz]
+Rem    echo n is %sz2
     set line2=%@SUBSTR[%line,%sz,%n]
+Rem    echo line2 is %line2
     if "%line2%" == "" enddo
 
     echo   Name: {app}\%line2 >> %TEMP\files2.tmp
@@ -63,7 +67,7 @@ enddo
 Rem Concatenate the 3 sections
 cat %wxwindir\distrib\msw\innotop.txt %TEMP\files2.tmp %wxwindir\distrib\msw\innobott.txt > %wxwindir\distrib\msw\wxwin2.iss
 
-erase /Y %TEMP\files1.tmp
+rem erase /Y %TEMP\files1.tmp
 rem erase /Y %TEMP\files2.tmp
 
 goto end

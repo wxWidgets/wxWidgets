@@ -1,8 +1,6 @@
 
 from wxPython.wx import *
-from Main import opj
 
-import string
 import images
 
 #----------------------------------------------------------------------
@@ -40,10 +38,12 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
 overview = """\
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])

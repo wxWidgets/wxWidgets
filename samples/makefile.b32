@@ -19,166 +19,187 @@ THISDIR=$(WXDIR)\samples
 #
 # Indicates kind of pb with samples
 #
-# No makefile.vc file
-NOMAKE=1
-# No 16 bit version
-#ONLY32=1
+
 # Misc. compilation errors
 COMPIL=1
-# Need PNG
-PNGSETUP=
 # Need wxUSE_ODBC; define this to compile db sample
 ODBCSETUP=
-WXUSINGDLL=0
 
+!if "$(WXUSINGDLL)" == ""
+WXUSINGDLL=0
+!endif
+
+!if "$(FINAL)" == ""
+FINAL=0
+!endif
+
+
+#	$(MAKE) -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+#	cd $(WXDIR)\samples\console
 #
 # Please keep samples list up-to-date, in alphabetical order
 # not alphabetically organised ; 29 Nov 01
 all:
-        cd $(WXDIR)\samples\artprov
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\calendar
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\caret
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\checklst
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\config
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\controls
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\artprov
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\calendar
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\caret
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\checklst
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\config
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\controls
 !if "$(ODBCSETUP)"=="1"
-        cd $(WXDIR)\samples\db
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\db
 !endif
-        cd $(WXDIR)\samples\ipc
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\dialogs
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\dnd
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\docview
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\docvwmdi
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\drawing
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\dynamic
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\font
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\grid
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\newgrid
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-
-        cd $(WXDIR)\samples\help
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-
-!if "$(PNGSETUP)"==""
-        cd $(WXDIR)\samples\html
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\dialogs
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!if "$(COMPIL)" != "1"
+	cd $(WXDIR)\samples\dialup
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
 !endif
-        cd $(WXDIR)\samples\keyboard
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\image
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\internat
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\joytest
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\layout
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\listctrl
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\mdi
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\menu
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-!if "$(FINAL)" == "0"
-        cd $(WXDIR)\samples\memcheck
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\dnd
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\docview
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\docvwmdi
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\dragimag
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\drawing
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\dynamic
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\erase
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\event
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\exec
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\font
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\grid
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\help
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\html
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\image
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\internat
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\ipc
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\joytest
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\keyboard
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\layout
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!if "$(COMPIL)" != "1"
+	cd $(WXDIR)\samples\listbox
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
 !endif
-!if "$(COMPIL)"==""
-        cd $(WXDIR)\samples\mfc
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\listctrl
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\mdi
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!if "$(COMPIL)" != "1"
+	cd $(WXDIR)\samples\memcheck
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
 !endif
-        cd $(WXDIR)\samples\minifram
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\minimal
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\nativdlg
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-!if "$(COMPIL)"==""
-        cd $(WXDIR)\samples\dialup
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\menu
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!if "$(COMPIL)" != "1"
+	cd $(WXDIR)\samples\mfc
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
 !endif
-        cd $(WXDIR)\samples\notebook
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\oleauto
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\ownerdrw
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\png
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\printing
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\proplist
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\regtest
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\resource
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\rotate
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\sashtest
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\scroll
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\scrollsub
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\splitter
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-!if "$(COMPIL)"==""
-        cd $(WXDIR)\samples\tab
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\minifram
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\minimal
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!if "$(COMPIL)" != "1"
+	cd $(WXDIR)\samples\mobile
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
 !endif
-        cd $(WXDIR)\samples\taskbar
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\text
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\thread
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\toolbar
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\treectrl
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\typetest
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\validate
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\wizard
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\dragimag
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\exec
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\statbar
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\sockets
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\widgets
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\tab
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\treelay
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\erase
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\event
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
-        cd $(WXDIR)\samples\propsize
-        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\nativdlg
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\newgrid
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\notebook
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\oleauto
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!if "$(COMPIL)" != "1"
+	cd $(WXDIR)\samples\opengl
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!endif
+	cd $(WXDIR)\samples\ownerdrw
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\png
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\printing
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!if "$(COMPIL)" != "1"
+	cd $(WXDIR)\samples\proplist
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!endif
+	cd $(WXDIR)\samples\propsize
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\regtest
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!if "$(COMPIL)" != "1"
+	cd $(WXDIR)\samples\resource
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!endif
+	cd $(WXDIR)\samples\richedit
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\rotate
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\sashtest
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\scroll
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\scrollsub
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\shaped
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL) 
+	cd $(WXDIR)\samples\sockets
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\splitter
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\statbar
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!if "$(COMPIL)" != "1"
+	cd $(WXDIR)\samples\tab
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+!endif
+	cd $(WXDIR)\samples\taskbar
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\text
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\thread
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\toolbar
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\treectrl
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\treelay
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\typetest
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\validate
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\widgets
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\wizard
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
+	cd $(WXDIR)\samples\wxtest
+	$(MAKE) -f makefile.b32 -DFINAL=$(FINAL) -DWXUSINGDLL=$(WXUSINGDLL)
 
 clean:
         cd $(WXDIR)\samples\artprov
@@ -270,6 +291,8 @@ clean:
         cd $(WXDIR)\samples\scroll
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\scrollsub
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\shaped
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\splitter
         make -f makefile.b32 clean

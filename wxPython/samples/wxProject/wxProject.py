@@ -89,12 +89,12 @@ class main_window(wxFrame):
         # Install the tree and the editor.
         # ------------------------------------------------------------------------------------
         splitter.SplitVertically (self.tree, self.editor)
-        splitter.SetSashPosition (180, true)
+        splitter.SetSashPosition (180, True)
 
-        self.Show(true)
+        self.Show(True)
 
         # Some global state variables.
-        self.projectdirty = false
+        self.projectdirty = False
 
     # ----------------------------------------------------------------------------------------
     # Some nice little handlers.
@@ -118,9 +118,9 @@ class main_window(wxFrame):
             self.tree.Expand (self.root)
 
             self.editor.Clear()
-            self.editor.Enable (false)
+            self.editor.Enable (False)
 
-            self.projectdirty = false
+            self.projectdirty = False
         except IOError:
             pass
 
@@ -139,7 +139,7 @@ class main_window(wxFrame):
                   (child,iter) = self.tree.GetNextChild(self.root,iter)
                output.write (self.tree.GetItemText(child) + "\n")
             output.close()
-            self.projectdirty = false
+            self.projectdirty = False
         except IOError:
             dlg_m = wxMessageDialog (self, 'There was an error saving the project file.',
                                      'Error!', wxOK)
@@ -151,7 +151,7 @@ class main_window(wxFrame):
     # ----------------------------------------------------------------------------------------
 
     def OnProjectOpen(self, event):
-        open_it = true
+        open_it = True
         if self.projectdirty:
            dlg=wxMessageDialog(self, 'The project has been changed.  Save?', 'wxProject',
                                wxYES_NO | wxCANCEL)
@@ -159,7 +159,7 @@ class main_window(wxFrame):
            if result == wxID_YES:
               self.project_save()
            if result == wxID_CANCEL:
-              open_it = false
+              open_it = False
            dlg.Destroy()
         if open_it:
            dlg = wxFileDialog(self, "Choose a project to open", ".", "", "*.wxp", wxOPEN)
@@ -168,7 +168,7 @@ class main_window(wxFrame):
            dlg.Destroy()
 
     def OnProjectNew(self, event):
-        open_it = true
+        open_it = True
         if self.projectdirty:
            dlg=wxMessageDialog(self, 'The project has been changed.  Save?', 'wxProject',
                                wxYES_NO | wxCANCEL)
@@ -176,7 +176,7 @@ class main_window(wxFrame):
            if result == wxID_YES:
               self.project_save()
            if result == wxID_CANCEL:
-              open_it = false
+              open_it = False
            dlg.Destroy()
 
         if open_it:
@@ -202,7 +202,7 @@ class main_window(wxFrame):
         dlg.Destroy()
 
     def OnProjectExit(self, event):
-        close = true
+        close = True
         if self.projectdirty:
            dlg=wxMessageDialog(self, 'The project has been changed.  Save?', 'wxProject',
                                wxYES_NO | wxCANCEL)
@@ -210,7 +210,7 @@ class main_window(wxFrame):
            if result == wxID_YES:
               self.project_save()
            if result == wxID_CANCEL:
-              close = false
+              close = False
            dlg.Destroy()
         if close:
            self.Close()
@@ -243,10 +243,10 @@ class main_window(wxFrame):
            event.Veto()
 
     def OnTreeLabelEditEnd(self, event):
-        self.projectdirty = true
+        self.projectdirty = True
 
     def OnTreeItemActivated(self, event):
-        go_ahead = true
+        go_ahead = True
         if self.activeitem != self.root:
            if self.editor.IsModified():
               dlg=wxMessageDialog(self, 'The edited file has changed.  Save it?',
@@ -255,7 +255,7 @@ class main_window(wxFrame):
               if result == wxID_YES:
                  self.editor.SaveFile (self.tree.GetItemText (self.activeitem))
               if result == wxID_CANCEL:
-                 go_ahead = false
+                 go_ahead = False
               dlg.Destroy()
            if go_ahead:
               self.tree.SetItemBold (self.activeitem, 0)
@@ -279,7 +279,7 @@ class App(wxApp):
         self.SetTopWindow(frame)
         if (projfile != 'Unnamed'):
             frame.project_open (projfile)
-        return true
+        return True
 
 app = App(0)
 app.MainLoop()

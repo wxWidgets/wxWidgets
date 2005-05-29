@@ -282,7 +282,11 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
 
 bool wxSpinCtrl::IsOwnGtkWindow( GdkWindow *window )
 {
-    return GTK_SPIN_BUTTON(m_widget)->panel == window;
+    if (GTK_SPIN_BUTTON(m_widget)->entry.text_area == window) return TRUE;
+    
+    if (GTK_SPIN_BUTTON(m_widget)->panel == window) return TRUE;
+
+    return FALSE;
 }
 
 void wxSpinCtrl::ApplyWidgetStyle()

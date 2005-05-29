@@ -105,7 +105,7 @@ This sequence of operations ensures that the source's transparent area need not 
 and logical functions are supported.
 
 {\bf Note:} on Windows, blitting with masks can be speeded up considerably by compiling
-wxWindows with the wxUSE\_DC\_CACHE option enabled. You can also influence whether MaskBlt
+wxWidgets with the wxUSE\_DC\_CACHE option enabled. You can also influence whether MaskBlt
 or the explicit mask blitting code above is used, by using \helpref{wxSystemOptions}{wxsystemoptions} and
 setting the {\bf no-maskblt} option to 1.
 
@@ -357,7 +357,7 @@ The current pen is used for drawing the outline, and the current brush
 for filling the shape.  Using a transparent brush suppresses filling.
 The programmer is responsible for deleting the list of points.
 
-Note that wxWindows automatically closes the first and last points.
+Note that wxWidgets automatically closes the first and last points.
 
 \pythonnote{The wxPython version of this method accepts a Python list
 of wxPoint objects.}
@@ -592,8 +592,8 @@ Gets the current pen (see \helpref{wxDC::SetPen}{wxdcsetpen}).
 
 \func{bool}{GetPixel}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxColour *}{colour}}
 
-Sets {\it colour} to the colour at the specified location. Windows only; an X implementation
-is being worked on. Not available for wxPostScriptDC or wxMetafileDC.
+Sets {\it colour} to the colour at the specified location.
+Not available for wxPostScriptDC or wxMetafileDC.
 
 \pythonnote{For wxPython the wxColour value is returned and is not
 required as a parameter.}
@@ -601,16 +601,20 @@ required as a parameter.}
 \perlnote{This method only takes the parameters {\tt x} and {\tt y} and returns
 a Wx::Colour value}
 
+\membersection{wxDC::GetPPI}\label{wxdcgetppi}
+
+\constfunc{wxSize}{GetPPI}{\void}
+
+Returns the resolution of the device in pixels per inch.
+
 \membersection{wxDC::GetSize}\label{wxdcgetsize}
 
-\func{void}{GetSize}{\param{wxCoord *}{width}, \param{wxCoord *}{height}}
+\constfunc{void}{GetSize}{\param{wxCoord *}{width}, \param{wxCoord *}{height}}
 
-For a PostScript device context, this gets the maximum size of graphics
-drawn so far on the device context.
+\constfunc{wxSize}{GetSize}{\void}
 
-For a Windows printer device context, this gets the horizontal and vertical
-resolution. It can be used to scale graphics to fit the page when using
-a Windows printer device context. For example, if {\it maxX} and {\it maxY}\rtfsp
+This gets the horizontal and vertical resolution in device units. It can be used to scale graphics to fit the page.
+For example, if {\it maxX} and {\it maxY}\rtfsp
 represent the maximum horizontal and vertical `pixel' values used in your
 application, the following code will scale the graphic to fit on the
 printer page:
@@ -638,6 +642,14 @@ implements the following methods:\par
   {\tt ( width, height )}}
 \end{twocollist}
 }}
+
+\membersection{wxDC::GetSizeMM}\label{wxdcgetsizemm}
+
+\constfunc{void}{GetSizeMM}{\param{wxCoord *}{width}, \param{wxCoord *}{height}}
+
+\constfunc{wxSize}{GetSizeMM}{\void}
+
+Returns the horizontal and vertical resolution in millimetres.
 
 \membersection{wxDC::GetTextBackground}\label{wxdcgettextbackground}
 
@@ -916,12 +928,10 @@ user scale} (see \helpref{wxDC::SetUserScale}{wxdcsetuserscale}) scales the text
 Windows, scalable TrueType fonts are always used; in X, results depend
 on availability of fonts, but usually a reasonable match is found.
 
-Note that the coordinate origin should ideally be selectable, but for
-now is always at the top left of the screen/printer.
+The coordinate origin is always at the top left of the screen/printer.
 
-Drawing to a Windows printer device context under UNIX
-uses the current mapping mode, but mapping mode is currently ignored for
-PostScript output.
+Drawing to a Windows printer device context uses the current mapping mode,
+but mapping mode is currently ignored for PostScript output.
 
 The mapping mode can be one of the following:
 
@@ -941,9 +951,9 @@ The mapping mode can be one of the following:
 If {\it optimize} is TRUE (the default), this function sets optimization mode on.
 This currently means that under X, the device context will not try to set a pen or brush
 property if it is known to be set already. This approach can fall down
-if non-wxWindows code is using the same device context or window, for example
+if non-wxWidgets code is using the same device context or window, for example
 when the window is a panel on which the windowing system draws panel items.
-The wxWindows device context 'memory' will now be out of step with reality.
+The wxWidgets device context 'memory' will now be out of step with reality.
 
 Setting optimization off, drawing, then setting it back on again, is a trick
 that must occasionally be employed.

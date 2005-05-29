@@ -1,19 +1,19 @@
 Using and modifying the BC++ IDE files
 ======================================
 
-Readme for wxWindows 2.0 Ide-files
+Readme for wxWidgets 2.0 Ide-files
 First release Feb. 1999, detlev@reymann-online.de
 
 1. What you can do with the BC++ IDE files
 2. Where to install the files
 3. How to modify them for your own needs
-4. How to create IDE files for your own wxWindows-programs
+4. How to create IDE files for your own wxWidgets-programs
 
 1. What you can do with the IDE files
 =====================================
 
 There are two IDE files. src\bc32.ide should help you to
-create the wxWindows libraries from within the Ide of Borland's
+create the wxWidgets libraries from within the Ide of Borland's
 C++, v. 5.x. Note that this doesn't include debugging code: you
 need to change the settings if you wish to include debug
 information. Previously, bc32d.ide was supplied with debug
@@ -23,7 +23,7 @@ settings, but this proved to time-consuming to maintain.
 =============================
 
 You should copy the files for the libraries into the
-src-directory of your wxWindows-Installation (e.g. C:\wxwin\src).
+src-directory of your wxWidgets-Installation (e.g. C:\wxwin\src).
 And the other file for the samples should be copied into the
 samples-directory (e.g. C:\wxwin\samples).
 
@@ -34,7 +34,7 @@ automatically).
 3. How to modify them for your own needs
 ========================================
 
-If your wxWindows-Installation resides on the same drive as your
+If your wxWidgets-Installation resides on the same drive as your
 Borland-Compiler and additionally the Borland-Installation is
 the default (e.g. C:\BC5) then there should be no need to change
 anything. Otherwise please change the path from within the ide
@@ -59,10 +59,10 @@ To add a new sample to samples\bc32.ide, follow these steps:
    Intermediate: .\newsample
    Final: .\newsample
 
-4. How to create IDE files for your own wxWindows-programs
+4. How to create IDE files for your own wxWidgets-programs
 ==========================================================
 
-If you want to create an IDE file for your own wxWindows program,
+If you want to create an IDE file for your own wxWidgets program,
 please follow these steps.
 
 1. Create a new project from the menu file->new->project.
@@ -71,12 +71,12 @@ please follow these steps.
    the checkbox OLE (you can leave this checkbox unchecked,
    but then you have to add the library \bc5\lib\ole2w32.lib
    to your project), and the Multithread checkbox.
-3. Add the include-path of wxWindows to the include-path in the
+3. Add the include-path of wxWidgets to the include-path in the
    options-dialog (options->project->directories->include). The
    result should be something like:
    path_of_my_program;\bc5\include;\wxwin2\include;
 4. Add the libraries to the project. Open the project-view and
    activate your program. Then right-click and choose "add" and
-   select the wxWindows library (e.g. \wxwin\lib\wx32.lib). Also
+   select the wxWidgets library (e.g. \wxwin\lib\wx32.lib). Also
    add the xpm library.
 

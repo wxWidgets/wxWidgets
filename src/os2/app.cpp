@@ -171,15 +171,13 @@ void wxApp::HandleSockets()
         int i;
         struct GsocketCallbackInfo
           *CallbackInfo = (struct GsocketCallbackInfo *)m_sockCallbackInfo;
-        int r = 0;
         timeout.tv_sec = 0;
         timeout.tv_usec = 0;
         if ( select(m_maxSocketNr, &readfds, &writefds, 0, &timeout) > 0)
         {
-            for (i = m_lastUsedHandle + 1; i != m_lastUsedHandle; i++)
+            for (i = m_lastUsedHandle + 1; i != m_lastUsedHandle;
+                 (i < m_maxSocketNr - 1) ? i++ : (i = 0))
             {
-                if (i == m_maxSocketNr)
-                    i = 0;
                 if (FD_ISSET(i, &readfds))
                 {
                     int r;
@@ -192,7 +190,6 @@ void wxApp::HandleSockets()
                     {
                         CallbackInfo[r].proc(CallbackInfo[r].gsock);
                         pendingEvent = TRUE;
-                        wxYield();
                     }
                 }
                 if (FD_ISSET(i, &writefds))
@@ -206,14 +203,13 @@ void wxApp::HandleSockets()
                     {
                         CallbackInfo[r].proc(CallbackInfo[r].gsock);
                         pendingEvent = TRUE;
-                        wxYield();
                     }
                 }
             }
             m_lastUsedHandle = i;
         }
         if (pendingEvent)
-            wxYield();
+            ProcessPendingEvents();
     }
 }
 // ---------------------------------------------------------------------------
@@ -613,7 +609,7 @@ int wxEntry(
     {
         if (wxTheApp->OnInit())
         {
-            nRetValue = wxTheApp->OnRun();
+            wxTheApp->OnRun();
         }
         // Normal exit
         wxWindow*                   pTopWindow = wxTheApp->GetTopWindow();
@@ -641,7 +637,7 @@ int wxEntry(
     printf("wxTheApp->OnExit ");
     fflush(stdout);
 #endif
-    wxTheApp->OnExit();
+    nRetValue = wxTheApp->OnExit();
 #if wxUSE_CONSOLEDEBUG
     printf("wxApp::CleanUp ");
     fflush(stdout);
@@ -827,7 +823,6 @@ void wxApp::DoMessage(
 int wxApp::MainLoop()
 {
     m_bKeepGoing = TRUE;
-
     while (m_bKeepGoing)
     {
 #if wxUSE_THREADS
@@ -836,13 +831,13 @@ int wxApp::MainLoop()
         while (!Pending() && ProcessIdle())
         {
             HandleSockets();
-            wxUsleep(10000);
+            wxUsleep(10);
         }
         HandleSockets();
         if (Pending())
             DoMessage();
         else
-            wxUsleep(10000);
+            wxUsleep(10);
 
     }
     return (int)svCurrentMsg.mp1;
@@ -965,19 +960,20 @@ bool wxApp::ProcessMessage(
     return FALSE;
 } // end of wxApp::ProcessMessage
 
+bool                                gbInOnIdle = FALSE;
+
 void wxApp::OnIdle(
   wxIdleEvent&                      rEvent
 )
 {
-    static bool                     sbInOnIdle = FALSE;
 
     //
     // Avoid recursion (via ProcessEvent default case)
     //
-    if (sbInOnIdle)
+    if (gbInOnIdle)
         return;
 
-    sbInOnIdle = TRUE;
+    gbInOnIdle = TRUE;
 
     //
     // If there are pending events, we must process them: pending events
@@ -1019,7 +1015,7 @@ void wxApp::OnIdle(
         //
         rEvent.RequestMore(TRUE);
     }
-    sbInOnIdle = FALSE;
+    gbInOnIdle = FALSE;
 } // end of wxApp::OnIdle
 
 // Send idle event to all top-level windows
@@ -1164,6 +1160,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     if (wxTheApp)
         wxTheApp->ProcessPendingEvents();
 
+    HandleSockets();
     //
     // Let the logs be flashed again
     //

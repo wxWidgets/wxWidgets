@@ -25,7 +25,7 @@ wxToolBarBase\\
 
 \wxheading{Include files}
 
-<wx/toolbar.h> (to allow wxWindows to select an appropriate toolbar class)\\
+<wx/toolbar.h> (to allow wxWidgets to select an appropriate toolbar class)\\
 <wx/tbarbase.h> (the base class)\\
 <wx/tbarmsw.h> (the non-Windows 95 Windows toolbar class)\\
 <wx/tbar95.h> (the Windows 95/98 toolbar class)\\
@@ -124,11 +124,11 @@ Constructs a toolbar.
 
 \docparam{id}{Window identifier. If -1, will automatically create an identifier.}
 
-\docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxWindows
+\docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxWidgets
 should generate a default position for the window. If using the wxWindow class directly, supply
 an actual position.}
 
-\docparam{size}{Window size. wxDefaultSize is (-1, -1) which indicates that wxWindows
+\docparam{size}{Window size. wxDefaultSize is (-1, -1) which indicates that wxWidgets
 should generate a default size for the window.}
 
 \docparam{style}{Window style. See \helpref{wxToolBar}{wxtoolbar} for details.}
@@ -319,6 +319,13 @@ will change the visible state of the tool to indicate that it is disabled.
 
 \helpref{wxToolBar::GetToolEnabled}{wxtoolbargettoolenabled},\rtfsp
 \helpref{wxToolBar::ToggleTool}{wxtoolbartoggletool}
+
+\membersection{wxToolBar::FindById}\label{wxtoolbarfindbyid}
+
+\func{wxToolBarTool*}{FindById}{\param{int }{id}}
+
+Returns a pointer to the tool identified by {\it id} or
+NULL if no corresponding tool is found.
 
 \membersection{wxToolBar::FindControl}\label{wxtoolbarfindcontrol}
 
@@ -574,7 +581,7 @@ such as a short description on the status line.}
 
 \wxheading{Remarks}
 
-With some derived toolbar classes, if the mouse moves quickly out of the toolbar, wxWindows may not be able to
+With some derived toolbar classes, if the mouse moves quickly out of the toolbar, wxWidgets may not be able to
 detect it. Therefore this function may not always be called when expected.
 
 \membersection{wxToolBar::OnRightClick}\label{wxtoolbaronrightclick}
@@ -677,7 +684,7 @@ and not the eventual size of the tool button.
 
 \membersection{wxToolBar::SetToolClientData}\label{wxtoolbarsettoolclientdata}
 
-\func{void}{GetToolClientData}{\param{wxObject* }{clientData}}
+\func{void}{SetToolClientData}{\param{int }{id}, \param{wxObject* }{clientData}}
 
 Sets the client data associated with the tool.
 

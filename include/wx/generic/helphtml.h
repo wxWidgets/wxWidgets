@@ -2,6 +2,7 @@
  * helphtml.h - base class for html based help controllers          *
  *                                                                  *
  * (C) 1999 by Karsten Ballüder (Ballueder@usa.net)                 *
+ * License: wxWindows licence                                       *
  *                                                                  *
  * $Id$
  *******************************************************************/
@@ -86,7 +87,7 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
        @file Name of help directory.
        @return true on success
    */
-   virtual bool LoadFile(const wxString& file = "");
+   virtual bool LoadFile(const wxString& file = wxT(""));
 
    /** Display list of all help entries.
        @return true on success

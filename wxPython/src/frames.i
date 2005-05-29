@@ -116,6 +116,12 @@ public:
 
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle() const;
+
+    // Set the shape of the window to the given region.
+    // Returns TRUE if the platform supports this feature (and the operation
+    // is successful.)
+    virtual bool SetShape(const wxRegion& region);
+
 };
 
 //----------------------------------------------------------------------
@@ -145,11 +151,9 @@ public:
     wxMenuBar *GetMenuBar();
 
 
-    // call this to simulate a menu command
-    bool Command(int id);
-
     // process menu command: returns TRUE if processed
     bool ProcessCommand(int id);
+    %pragma(python) addtoclass = "Command = ProcessCommand"
 
     // create the main status bar
     wxStatusBar* CreateStatusBar(int number = 1,

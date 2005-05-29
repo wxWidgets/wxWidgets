@@ -199,7 +199,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 
                 if ( pHostEnt )
                 {
-                    host = pHostEnt->h_name;
+                    host = wxString::FromAscii(pHostEnt->h_name);
                 }
             }
         }
@@ -829,6 +829,9 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
         if ( ok && rc == STILL_ACTIVE )
         {
             // there is such process => success
+            if ( krc )
+                *krc = wxKILL_OK;
+
             return 0;
         }
     }
@@ -837,6 +840,9 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
         if ( ok && rc != STILL_ACTIVE )
         {
             // killed => success
+            if ( krc )
+                *krc = wxKILL_OK;
+
             return 0;
         }
     }
@@ -870,7 +876,7 @@ bool wxShell(const wxString& command)
     return wxExecute(cmd, wxEXEC_SYNC) == 0;
 }
 
-// Shutdown or reboot the PC 
+// Shutdown or reboot the PC
 bool wxShutdown(wxShutdownFlags wFlags)
 {
 #ifdef __WIN32__
@@ -878,28 +884,28 @@ bool wxShutdown(wxShutdownFlags wFlags)
 
     if ( wxGetOsVersion(NULL, NULL) == wxWINDOWS_NT ) // if is NT or 2K
     {
-        // Get a token for this process. 
-        HANDLE hToken; 
+        // Get a token for this process.
+        HANDLE hToken;
         bOK = ::OpenProcessToken(GetCurrentProcess(),
                                  TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                  &hToken) != 0;
 #ifndef __WXWINE__
         if ( bOK )
         {
-            TOKEN_PRIVILEGES tkp; 
+            TOKEN_PRIVILEGES tkp;
 
-            // Get the LUID for the shutdown privilege. 
+            // Get the LUID for the shutdown privilege.
             ::LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,
-                                   &tkp.Privileges[0].Luid); 
+                                   &tkp.Privileges[0].Luid);
 
-            tkp.PrivilegeCount = 1;  // one privilege to set    
-            tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
+            tkp.PrivilegeCount = 1;  // one privilege to set
+            tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            // Get the shutdown privilege for this process. 
+            // Get the shutdown privilege for this process.
             ::AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
-                                    (PTOKEN_PRIVILEGES)NULL, 0); 
+                                    (PTOKEN_PRIVILEGES)NULL, 0);
 
-            // Cannot test the return value of AdjustTokenPrivileges. 
+            // Cannot test the return value of AdjustTokenPrivileges.
             bOK = ::GetLastError() == ERROR_SUCCESS;
         }
 #endif
@@ -923,7 +929,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
                 return FALSE;
         }
 
-        bOK = ::ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE | EWX_REBOOT, 0) != 0; 
+        bOK = ::ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE | EWX_REBOOT, 0) != 0;
     }
 
     return bOK;
@@ -1016,7 +1022,7 @@ wxString wxGetOsDescription()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-#if defined(__WIN32__) && !defined(__SC__)
+#if defined(__WIN32__) && (!defined(__SC__) || defined(__DIGITALMARS__))
     static int ver = -1, major = -1, minor = -1;
 
     if ( ver == -1 )
@@ -1104,6 +1110,8 @@ void wxUsleep(unsigned long milliseconds)
 #else // !Win32
     if (gs_inTimer)
         return;
+    if (miliseconds <= 0)
+        return;
 
     wxTheSleepTimer = new wxSleepTimer;
     gs_inTimer = TRUE;
@@ -1121,6 +1129,8 @@ void wxUsleep(unsigned long milliseconds)
 void wxSleep(int nSecs)
 {
     if (gs_inTimer)
+        return;
+    if (nSecs <= 0)
         return;
 
     wxTheSleepTimer = new wxSleepTimer;

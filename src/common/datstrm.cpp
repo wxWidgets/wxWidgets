@@ -113,14 +113,14 @@ wxString wxDataInputStream::ReadString()
     char *tmp = new char[len + 1];
     m_input->Read(tmp, len);
     tmp[len] = 0;
-    wxString s(tmp, m_conv);
+    wxString ret( (const wxChar*) m_conv.cMB2WX(tmp) );
     delete[] tmp;
 #else
-    wxString s;
-    m_input->Read(s.GetWriteBuf(len), len);
-    s.UngetWriteBuf();
+    wxString ret;
+    m_input->Read( ret.GetWriteBuf(len), len);
+    ret.UngetWriteBuf();
 #endif
-    return s;
+    return ret;
   }
   else
     return wxEmptyString;

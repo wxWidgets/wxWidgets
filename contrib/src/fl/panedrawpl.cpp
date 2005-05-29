@@ -591,10 +591,14 @@ void cbPaneDrawPlugin::OnSizeBarWindow( cbSizeBarWndEvent& event )
 
         // FIXME:: +/- 1s
 
+        int nNewHeight = bounds.height - 2 - bar.mDimInfo.mVertGap *2;
+        if(nNewHeight < 0)
+           nNewHeight = 0;
+
         bar.mpBarWnd->wxWindow::SetSize( bounds.x      + 1 + bar.mDimInfo.mHorizGap,     
                                          bounds.y      + 1 + bar.mDimInfo.mVertGap,
                                          bounds.width  - 2 - bar.mDimInfo.mHorizGap*2,
-                                         bounds.height - 2 - bar.mDimInfo.mVertGap *2 , 
+                                         nNewHeight,
                                          0 
                                        );
 

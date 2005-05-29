@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/colour.h
+// Purpose:     Includes platform-specific wxColour file
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// RCS-ID:      $Id$
+// Copyright:   Julian Smart
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_COLOUR_H_BASE_
 #define _WX_COLOUR_H_BASE_
 

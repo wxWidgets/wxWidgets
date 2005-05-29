@@ -24,6 +24,7 @@
 #include <wx/scrolwin.h>
 
 #include <windows.h>
+#include "wx/msw/winundef.h"
 
 #include <GL/gl.h>
 
@@ -69,7 +70,7 @@ public:
    ~wxGLContext();
 
    void SetCurrent();
-   void SetColour(const char *colour);
+   void SetColour(const wxChar *colour);
    void SwapBuffers();
 
 
@@ -83,21 +84,26 @@ public:
    wxWindow*        m_window;
 };
 
+
+extern const wxChar* wxGLCanvasName;
+
+
 class wxGLCanvas: public wxWindow
 {
    DECLARE_CLASS(wxGLCanvas)
  public:
    wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
-        const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette);
+        const wxString& name = wxGLCanvasName, int *attribList = 0, const wxPalette& palette = wxNullPalette);
    wxGLCanvas( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
         wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "GLCanvas",
+        const wxSize& size = wxDefaultSize, long style = 0, const wxString&
+        name = wxGLCanvasName,
         int *attribList = (int*) NULL, const wxPalette& palette = wxNullPalette );
 
    wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL, wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0,
-        const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette );
+        const wxString& name = wxGLCanvasName, int *attribList = 0, const wxPalette& palette = wxNullPalette );
 
    ~wxGLCanvas();
 
@@ -106,7 +112,7 @@ class wxGLCanvas: public wxWindow
           const wxPoint& pos, const wxSize& size, long style, const wxString& name);
 
    void SetCurrent();
-   void SetColour(const char *colour);
+   void SetColour(const wxChar *colour);
    void SwapBuffers();
 
    void OnSize(wxSizeEvent& event);

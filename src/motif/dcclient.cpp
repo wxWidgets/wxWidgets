@@ -1105,6 +1105,18 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     int ascent = 0;
     int slen;
 
+    // Set FillStyle, otherwise X will use current stipple!
+    XGCValues gcV, gcBackingV;
+
+    XGetGCValues ((Display*) m_display, (GC)m_gc, GCFillStyle, &gcV);
+    XSetFillStyle ((Display*) m_display, (GC) m_gc, FillSolid);
+    if (m_window && m_window->GetBackingPixmap())
+    {
+        XGetGCValues ((Display*) m_display, (GC)m_gcBacking, GCFillStyle,
+                      &gcBackingV );
+        XSetFillStyle ((Display*) m_display, (GC) m_gcBacking, FillSolid);
+    }
+
     slen = strlen(text);
 
     if (m_font.Ok())
@@ -1212,6 +1224,12 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
             XDrawString((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
             XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent, (char*) (const char*) text, slen);
     }
+
+    // restore fill style
+    XSetFillStyle ((Display*) m_display, (GC) m_gc, gcV.fill_style);
+    if (m_window && m_window->GetBackingPixmap())
+        XSetFillStyle ((Display*) m_display, (GC) m_gcBacking,
+                       gcBackingV.fill_style);
 
     wxCoord w, h;
     GetTextExtent (text, &w, &h);
@@ -1872,23 +1890,33 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
         (oldBrushColour.Green () == m_currentColour.Green ()) &&
         (oldBrushColour.GetPixel() == m_currentColour.GetPixel()));
 
+    int stippleDepth = -1;
+
     if ((oldFill != m_brush.GetStyle ()) || !GetOptimization())
     {
         switch (brush.GetStyle ())
         {
         case wxTRANSPARENT:
             break;
+        case wxSTIPPLE:
+            stippleDepth = m_currentStipple.GetDepth();
+            // fall through!
         case wxBDIAGONAL_HATCH:
         case wxCROSSDIAG_HATCH:
         case wxFDIAGONAL_HATCH:
         case wxCROSS_HATCH:
         case wxHORIZONTAL_HATCH:
         case wxVERTICAL_HATCH:
-        case wxSTIPPLE:
             {
-                // Chris Breeze 23/07/97: use background mode to determine whether
-                // fill style should be solid or transparent
-                int style = (m_backgroundMode == wxSOLID ? FillOpaqueStippled : FillStippled);
+                if (stippleDepth == -1) stippleDepth = 1;
+
+                // Chris Breeze 23/07/97: use background mode to
+                // determine whether fill style should be solid or
+                // transparent
+                int style = stippleDepth == 1 ?
+                    (m_backgroundMode == wxSOLID ? 
+                     FillOpaqueStippled : FillStippled) :
+                    FillTiled;
                 XSetFillStyle ((Display*) m_display, (GC) m_gc, style);
                 if (m_window && m_window->GetBackingPixmap())
                     XSetFillStyle ((Display*) m_display,(GC) m_gcBacking, style);
@@ -1898,7 +1926,8 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
         default:
             XSetFillStyle ((Display*) m_display, (GC) m_gc, FillSolid);
             if (m_window && m_window->GetBackingPixmap())
-                XSetFillStyle ((Display*) m_display,(GC) m_gcBacking, FillSolid);
+                XSetFillStyle ((Display*) m_display,(GC) m_gcBacking,
+                               FillSolid);
         }
     }
 
@@ -1959,11 +1988,25 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
     }
     // X can forget the stipple value when resizing a window (apparently)
     // so always set the stipple.
-    else if (m_currentStipple.Ok()) // && m_currentStipple != oldStipple)
+    else if (m_currentFill != wxSOLID && m_currentFill != wxTRANSPARENT &&
+             m_currentStipple.Ok()) // && m_currentStipple != oldStipple)
     {
-        XSetStipple ((Display*) m_display, (GC) m_gc, (Pixmap) m_currentStipple.GetPixmap());
+        if (m_currentStipple.GetDepth() == 1)
+        {
+            XSetStipple ((Display*) m_display, (GC) m_gc,
+                         (Pixmap) m_currentStipple.GetPixmap());
         if (m_window && m_window->GetBackingPixmap())
-            XSetStipple ((Display*) m_display,(GC) m_gcBacking, (Pixmap) m_currentStipple.GetPixmap());
+                XSetStipple ((Display*) m_display,(GC) m_gcBacking,
+                             (Pixmap) m_currentStipple.GetPixmap());
+        }
+        else
+        {
+            XSetTile ((Display*) m_display, (GC) m_gc,
+                      (Pixmap) m_currentStipple.GetPixmap());
+            if (m_window && m_window->GetBackingPixmap())
+                XSetTile ((Display*) m_display,(GC) m_gcBacking,
+                          (Pixmap) m_currentStipple.GetPixmap());
+        }
     }
 
     // must test m_logicalFunction, because it involves background!

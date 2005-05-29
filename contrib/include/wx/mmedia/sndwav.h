@@ -4,6 +4,7 @@
 // Date: 08/11/1999
 // Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 1999
 // CVSID: $Id$
+// License:    wxWindows license
 // --------------------------------------------------------------------------
 #ifndef _WX_SNDWAV_H
 #define _WX_SNDWAV_H

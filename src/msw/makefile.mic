@@ -1,6 +1,7 @@
 ##############################################################################
 # Microwindows template Makefile
 # Copyright (c) 2000 Martin Jolicoeur, Greg Haerr
+# Licence:  wxWindows Licence
 ##############################################################################
 
 TOP=$(MICROWINDOWS)

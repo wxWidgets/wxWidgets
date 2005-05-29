@@ -32,9 +32,7 @@ bool wxBitmapButton::Create(
 , const wxPoint&                    rPos
 , const wxSize&                     rSize
 , long                              lStyle
-#if wxUSE_VALIDATORS
 , const wxValidator&                rValidator
-#endif
 , const wxString&                   rsName
 )
 {

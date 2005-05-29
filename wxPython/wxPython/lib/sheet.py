@@ -5,7 +5,7 @@
 
 from wxPython.wx import *
 from wxPython.grid import *
-from string import *
+import string
 
 #---------------------------------------------------------------------------
 class CTextCellEditor(wxTextCtrl):
@@ -20,26 +20,26 @@ class CTextCellEditor(wxTextCtrl):
         key = evt.GetKeyCode()
         if   key == WXK_DOWN:
             self._grid.DisableCellEditControl()     # Commit the edit
-            self._grid.MoveCursorDown(false)        # Change the current cell
+            self._grid.MoveCursorDown(False)        # Change the current cell
         elif key == WXK_UP:
             self._grid.DisableCellEditControl()     # Commit the edit
-            self._grid.MoveCursorUp(false)          # Change the current cell
+            self._grid.MoveCursorUp(False)          # Change the current cell
         elif key == WXK_LEFT:
             self._grid.DisableCellEditControl()     # Commit the edit
-            self._grid.MoveCursorLeft(false)        # Change the current cell
+            self._grid.MoveCursorLeft(False)        # Change the current cell
         elif key == WXK_RIGHT:
             self._grid.DisableCellEditControl()     # Commit the edit
-            self._grid.MoveCursorRight(false)       # Change the current cell
-            
+            self._grid.MoveCursorRight(False)       # Change the current cell
+
         evt.Skip()                                  # Continue event
-        
+
 #---------------------------------------------------------------------------
 class CCellEditor(wxPyGridCellEditor):
     """ Custom cell editor """
     def __init__(self, grid):
         wxPyGridCellEditor.__init__(self)
         self._grid = grid                           # Save a reference to the grid
-        
+
     def Create(self, parent, id, evtHandler):
         """ Create the actual edit control.  Must derive from wxControl.
             Must Override
@@ -68,7 +68,7 @@ class CCellEditor(wxPyGridCellEditor):
         """
         # Call base class method.
         self.base_PaintBackground(self, rect, attr)
-    
+
     def BeginEdit(self, row, col, grid):
         """ Fetch the value from the table and prepare edit control to begin editing.
             Set the focus to the edit control.  Must Override.
@@ -76,19 +76,19 @@ class CCellEditor(wxPyGridCellEditor):
         self._startValue = grid.GetTable().GetValue(row, col)
         self._tc.SetValue(self._startValue)
         self._tc.SetFocus()
-        
+
         # Select the text when initiating an edit so that subsequent typing
         # replaces the contents.
         self._tc.SetSelection(0, self._tc.GetLastPosition())
-        
+
     def EndEdit(self, row, col, grid):
-        """ Commit editing the current cell. Returns true if the value has changed.
+        """ Commit editing the current cell. Returns True if the value has changed.
             If necessary, the control may be destroyed. Must Override.
         """
-        changed = false                             # Assume value not changed
+        changed = False                             # Assume value not changed
         val = self._tc.GetValue()                   # Get value in edit control
         if val != self._startValue:                 # Compare
-            changed = true                          # If different then changed is true
+            changed = True                          # If different then changed is True
             grid.GetTable().SetValue(row, col, val) # Update the table
         self._startValue = ''                       # Clear the class' start value
         self._tc.SetValue('')                       # Clear contents of the edit control
@@ -101,7 +101,7 @@ class CCellEditor(wxPyGridCellEditor):
         self._tc.SetInsertionPointEnd()
 
     def IsAcceptedKey(self, evt):
-        """ Return true to allow the given key to start editing.  The base class
+        """ Return True to allow the given key to start editing.  The base class
             version only checks that the event has no modifiers.  F2 is special
             and will always start the editor.
         """
@@ -117,15 +117,15 @@ class CCellEditor(wxPyGridCellEditor):
         if key in [WXK_NUMPAD0, WXK_NUMPAD1, WXK_NUMPAD2, WXK_NUMPAD3, WXK_NUMPAD4,
                    WXK_NUMPAD5, WXK_NUMPAD6, WXK_NUMPAD7, WXK_NUMPAD8, WXK_NUMPAD9]:
             ch = chr(ord('0') + key - WXK_NUMPAD0)
-        
+
         elif key == WXK_BACK:               # Empty text control when init w/ back key
             ch = ""
                                             # Handle normal keys
         elif key < 256 and key >= 0 and chr(key) in string.printable:
             ch = chr(key)
             if not evt.ShiftDown():
-                ch = string.lower(ch)
-        
+                ch = ch.lower()
+
         if ch is not None:                  # If are at this point with a key,
             self._tc.SetValue(ch)           # replace the contents of the text control.
             self._tc.SetInsertionPointEnd() # Move to the end so that subsequent keys are appended
@@ -150,7 +150,7 @@ class CCellEditor(wxPyGridCellEditor):
 class CSheet(wxGrid):
     def __init__(self, parent):
         wxGrid.__init__(self, parent, -1)
-        
+
         # Init variables
         self._lastCol = -1              # Init last cell column clicked
         self._lastRow = -1              # Init last cell row clicked
@@ -159,7 +159,7 @@ class CSheet(wxGrid):
         self.RegisterDataType(wxGRID_VALUE_STRING,
                               wxGridCellStringRenderer(),
                               CCellEditor(self))
-        
+
         self.CreateGrid(4, 3)           # By default start with a 4 x 3 grid
         self.SetColLabelSize(18)        # Default sizes and alignment
         self.SetRowLabelSize(50)
@@ -167,8 +167,8 @@ class CSheet(wxGrid):
         self.SetColSize(0, 75)          # Default column sizes
         self.SetColSize(1, 75)
         self.SetColSize(2, 75)
-        
-        # Sink events        
+
+        # Sink events
         EVT_GRID_CELL_LEFT_CLICK(  self, self.OnLeftClick)
         EVT_GRID_CELL_RIGHT_CLICK( self, self.OnRightClick)
         EVT_GRID_CELL_LEFT_DCLICK( self, self.OnLeftDoubleClick)
@@ -183,7 +183,7 @@ class CSheet(wxGrid):
         # Save the last cell coordinates
         self._lastRow, self._lastCol = event.GetRow(), event.GetCol()
         event.Skip()
-        
+
     def OnRowSize(self, event):
         event.Skip()
 
@@ -192,48 +192,48 @@ class CSheet(wxGrid):
 
     def OnCellChange(self, event):
         event.Skip()
-    
+
     def OnLeftClick(self, event):
         """ Override left-click behavior to prevent left-click edit initiation """
         # Save the cell clicked
         currCell = (event.GetRow(), event.GetCol())
-        
+
         # Suppress event if same cell clicked twice in a row.
         # This prevents a single-click from initiating an edit.
         if currCell != (self._lastRow, self._lastCol): event.Skip()
-        
+
     def OnRightClick(self, event):
         """ Move grid cursor when a cell is right-clicked """
         self.SetGridCursor( event.GetRow(), event.GetCol() )
         event.Skip()
-        
+
     def OnLeftDoubleClick(self, event):
         """ Initiate the cell editor on a double-click """
         # Move grid cursor to double-clicked cell
         if self.CanEnableCellControl():
             self.SetGridCursor( event.GetRow(), event.GetCol() )
-            self.EnableCellEditControl(true)    # Show the cell editor
+            self.EnableCellEditControl(True)    # Show the cell editor
         event.Skip()
 
     def OnRangeSelect(self, event):
         """ Track which cells are selected so that copy/paste behavior can be implemented """
-        # If a single cell is selected, then Selecting() returns false (0)
+        # If a single cell is selected, then Selecting() returns False (0)
         # and range coords are entire grid.  In this case cancel previous selection.
-        # If more than one cell is selected, then Selecting() is true (1)
+        # If more than one cell is selected, then Selecting() is True (1)
         # and range accurately reflects selected cells.  Save them.
-        # If more cells are added to a selection, selecting remains true (1)
+        # If more cells are added to a selection, selecting remains True (1)
         self._selected = None
         if event.Selecting():
             self._selected = ((event.GetTopRow(), event.GetLeftCol()),
                               (event.GetBottomRow(), event.GetRightCol()))
         event.Skip()
-        
+
     def Copy(self):
         """ Copy the currently selected cells to the clipboard """
         # TODO: raise an error when there are no cells selected?
         if self._selected == None: return
         ((r1, c1), (r2, c2)) = self._selected
-        
+
         # Build a string to put on the clipboard
         # (Is there a faster way to do this in Python?)
         crlf = chr(13) + chr(10)
@@ -245,7 +245,7 @@ class CSheet(wxGrid):
                 s += tab
             s += self.GetCellValue(row, c2)
             s += crlf
-        
+
         # Put the string on the clipboard
         if wxTheClipboard.Open():
             wxTheClipboard.Clear()
@@ -261,15 +261,15 @@ class CSheet(wxGrid):
             wxTheClipboard.Close()
             if not success: return              # Exit on failure
             s = td.GetText()                    # Get the text
-            
+
             crlf = chr(13) + chr(10)            # CrLf characters
             tab = chr(9)                        # Tab character
-            
-            rows = split(s, crlf)               # split into rows
+
+            rows = s.split(crlf)               # split into rows
             rows = rows[0:-1]                   # leave out last element, which is always empty
             for i in range(0, len(rows)):       # split rows into elements
-                rows[i] = split(rows[i], tab)
-            
+                rows[i] = rows[i].split(tab)
+
             # Get the starting and ending cell range to paste into
             if self._selected == None:          # If no cells selected...
                 r1 = self.GetGridCursorRow()    # Start the paste at the current location
@@ -278,7 +278,7 @@ class CSheet(wxGrid):
                 c2 = self.GetNumberCols()-1
             else:                               # If cells selected, only paste there
                 ((r1, c1), (r2, c2)) = self._selected
-            
+
             # Enter data into spreadsheet cells one at a time
             r = r1                              # Init row and column counters
             c = c1
@@ -306,8 +306,8 @@ class CSheet(wxGrid):
     def SetNumberRows(self, numRows=1):
         """ Set the number of rows in the sheet """
         # Check for non-negative number
-        if numRows < 0:  return false
-        
+        if numRows < 0:  return False
+
         # Adjust number of rows
         curRows = self.GetNumberRows()
         if curRows < numRows:
@@ -315,13 +315,13 @@ class CSheet(wxGrid):
         elif curRows > numRows:
             self.DeleteRows(numRows, curRows - numRows)
 
-        return true
+        return True
 
     def SetNumberCols(self, numCols=1):
         """ Set the number of columns in the sheet """
         # Check for non-negative number
-        if numCols < 0:  return false
-        
+        if numCols < 0:  return False
+
         # Adjust number of rows
         curCols = self.GetNumberCols()
         if curCols < numCols:
@@ -329,4 +329,4 @@ class CSheet(wxGrid):
         elif curCols > numCols:
             self.DeleteCols(numCols, curCols - numCols)
 
-        return true
+        return True

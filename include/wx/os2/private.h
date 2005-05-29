@@ -120,6 +120,8 @@ WXDLLEXPORT_DATA(extern const wxChar*)  wxCanvasClassNameNR;
 // standard icons from the resources
 // ---------------------------------------------------------------------------
 
+#ifdef __WXPM__
+
 WXDLLEXPORT_DATA(extern HICON) wxSTD_FRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxSTD_MDIPARENTFRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxSTD_MDICHILDFRAME_ICON;
@@ -127,6 +129,8 @@ WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_FRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDIPARENTFRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDICHILDFRAME_ICON;
 WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
+
+#endif
 
 // ---------------------------------------------------------------------------
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
@@ -183,9 +187,13 @@ typedef MRESULT (APIENTRY * WndProcCast) (HWND, ULONG, MPARAM, MPARAM);
 // Scale font to get edit control height
 #define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
 
+#ifdef __WXPM__
+
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
 extern LONG APIENTRY wxSubclassedGenericControlProc(WXHWND hWnd, WXDWORD message, WXWPARAM wParam, WXLPARAM lParam);
+
+#endif
 
 // ---------------------------------------------------------------------------
 // constants which might miss from some compilers' headers
@@ -245,8 +253,11 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 // ---------------------------------------------------------------------------
 
 // The MakeProcInstance version of the function wxSubclassedGenericControlProc
-WXDLLEXPORT_DATA(extern) wxGenericControlSubClassProc;
+WXDLLEXPORT_DATA(extern int) wxGenericControlSubClassProc;
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
+
+#ifdef __WXPM__
+
 WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 
 // ---------------------------------------------------------------------------
@@ -262,6 +273,20 @@ WXDLLEXPORT void wxDrawBorder( HPS     hPS
                               ,RECTL&  rRect
                               ,WXDWORD dwStyle
                              );
+
+#include "wx/thread.h"
+static inline MRESULT MySendMsg(HWND hwnd, ULONG ulMsgid,
+                                MPARAM mpParam1, MPARAM mpParam2)
+{
+    MRESULT vRes;
+    vRes = ::WinSendMsg(hwnd, ulMsgid, mpParam1, mpParam2);
+#if wxUSE_THREADS
+    if (!wxThread::IsMain())
+        ::WinPostMsg(hwnd, ulMsgid, mpParam1, mpParam2);
+#endif
+    return vRes;
+}
+#define WinSendMsg MySendMsg
 
 WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 
@@ -341,6 +366,8 @@ WXDLLEXPORT extern bool wxCheckWindowWndProc( WXHWND    hWnd
 WXDLLEXPORT extern wxBitmap wxDisableBitmap( const wxBitmap& rBmp
                                             ,long            lColor
                                            );
+
+#endif // __WXPM__
 
 #endif // _WX_PRIVATE_H_
 

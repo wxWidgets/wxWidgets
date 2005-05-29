@@ -18,9 +18,6 @@
 // Handling of wxInputStreams by Joerg Baumann
 // See stream.i for implementations
 
-// list class for return list of strings, e.g. readlines()
-WX_DECLARE_LIST(wxString, wxStringPtrList);
-
 
 // C++ class wxPyInputStream to act as base for python class wxInputStream
 // You can use it in python like a python file object.
@@ -50,6 +47,19 @@ public:
       void write(wxString data);
       void writelines(wxStringPtrList);
     */
+
+    // wxInputStream methods that may come in handy...
+
+    char Peek()           { if (m_wxis) return m_wxis->Peek(); else return -1; }
+    char GetC()           { if (m_wxis) return m_wxis->GetC(); else return -1; }
+    size_t LastRead()     { if (m_wxis) return m_wxis->LastRead(); else return 0; }
+    bool CanRead()        { if (m_wxis) return m_wxis->CanRead(); else return FALSE; }
+    bool Eof()            { if (m_wxis) return m_wxis->Eof(); else return FALSE; }
+    bool Ungetch(char c)  { if (m_wxis) return m_wxis->Ungetch(c); else return FALSE; }
+
+    unsigned long SeekI(unsigned long pos, wxSeekMode mode)
+          { if (m_wxis) return m_wxis->SeekI(pos, mode); else return 0; }
+    unsigned long TellI() { if (m_wxis) return m_wxis->TellI(); else return 0; }
 };
 
 

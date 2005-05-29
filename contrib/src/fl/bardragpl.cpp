@@ -669,7 +669,7 @@ void cbBarDragPlugin::OnLButtonDown( cbLeftDownEvent& event )
 {
 	if ( mBarDragStarted  )
 	{
-		wxMessageBox("DblClick!");
+		wxMessageBox(wxT("DblClick!"));
 	}
 
 	event.Skip();

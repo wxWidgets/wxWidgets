@@ -1,7 +1,7 @@
 
 /* pngrtran.c - transforms the data in a row for PNG readers
  *
- * libpng 1.2.4 - July 8, 2002
+ * libpng 1.2.5rc3 - September 18, 2002
  * For conditions of distribution and use, see copyright notice in png.h
  * Copyright (c) 1998-2002 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
@@ -15,15 +15,6 @@
 
 #define PNG_INTERNAL
 #include "png.h"
-
-#if defined(_MSC_VER) && !defined(__MWERKS__)
-#define __VISUALC__ _MSC_VER
-#endif
-#ifdef __VISUALC__
-#ifndef WIN32
-#pragma warning(disable:4135)
-#endif
-#endif
 
 /* Set the action on getting a CRC error for an ancillary or critical chunk. */
 void PNGAPI

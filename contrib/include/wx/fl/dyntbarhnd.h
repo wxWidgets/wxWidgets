@@ -23,7 +23,7 @@
 Dynamic toolbar dimension handler.
 */
 
-class cbDynToolBarDimHandler : public cbBarDimHandlerBase
+class WXFL_DECLSPEC cbDynToolBarDimHandler : public cbBarDimHandlerBase
 {
     DECLARE_DYNAMIC_CLASS( cbDynToolBarDimHandler )
 public:

@@ -29,7 +29,11 @@ public:
     ~wxCursorRefData();
 
 protected:
-    WXHCURSOR m_hCursor;
+    WXHCURSOR     m_hCursor;
+    bool        m_disposeHandle;
+    bool        m_releaseHandle;
+    bool        m_isColorCursor ;
+    long        m_themeCursor ;
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)
@@ -51,13 +55,17 @@ public:
   wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);
 
+    wxCursor(const wxImage & image) ;
+    wxCursor(const char **bits) ;
+    wxCursor(char **bits) ;
   wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE,
    int hotSpotX = 0, int hotSpotY = 0);
 
   wxCursor(int cursor_type);
   ~wxCursor();
 
-  virtual bool Ok() const { return (m_refData != NULL && M_CURSORDATA->m_hCursor != NULL ) ; }
+	bool CreateFromXpm(const char **bits) ;
+  virtual bool Ok() const { return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ; }
 
   inline wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
   inline bool operator == (const wxCursor& cursor) { return m_refData == cursor.m_refData; }
@@ -67,6 +75,8 @@ public:
 
   void SetHCURSOR(WXHCURSOR cursor);
   inline WXHCURSOR GetHCURSOR() const { return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); }
+private :
+    void CreateFromImage(const wxImage & image) ;
 };
 
 extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);

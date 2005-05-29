@@ -76,7 +76,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = "wxTreeCtrl")
+               const wxString& name = wxTreeCtrlNameStr)
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -88,7 +88,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "wxTreeCtrl");
+                const wxString& name = wxTreeCtrlNameStr);
 
     // accessors
     // ---------
@@ -140,6 +140,15 @@ public:
                      wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
         // get the data associated with the item
     wxTreeItemData *GetItemData(const wxTreeItemId& item) const;
+
+        // get the item's text colour
+    wxColour GetItemTextColour(const wxTreeItemId& item) const;
+
+        // get the item's background colour
+    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
+
+        // get the item's font
+    wxFont GetItemFont(const wxTreeItemId& item) const;
 
     // modifiers
     // ---------
@@ -213,7 +222,16 @@ public:
     size_t GetSelections(wxArrayTreeItemIds& selections) const;
 
         // get the parent of this item (may return NULL if root)
-    wxTreeItemId GetParent(const wxTreeItemId& item) const;
+    wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
+
+#if WXWIN_COMPATIBILITY_2_2
+        // deprecated:  Use GetItemParent instead.
+    wxTreeItemId GetParent(const wxTreeItemId& item) const
+    	{ return GetItemParent( item ); }
+
+    	// Expose the base class method hidden by the one above.
+    wxWindow *GetParent() const { return wxControl::GetParent(); }
+#endif  // WXWIN_COMPATIBILITY_2_2
 
         // for this enumeration function you must pass in a "cookie" parameter
         // which is opaque for the application but is necessary for the library

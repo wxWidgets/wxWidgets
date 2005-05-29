@@ -26,7 +26,7 @@ wxBoundingBox::wxBoundingBox()
 }
 
 
-wxBoundingBox::wxBoundingBox(wxBoundingBox &other)
+wxBoundingBox::wxBoundingBox(const wxBoundingBox &other)
 {
     m_minx = other.m_minx;
     m_miny = other.m_miny;

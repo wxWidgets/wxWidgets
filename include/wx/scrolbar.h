@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        scrolbar.h
+// Purpose:     wxScrollBar base header
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// Copyright:   (c) Julian Smart
+// RCS-ID:      $Id$
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_SCROLBAR_H_BASE_
 #define _WX_SCROLBAR_H_BASE_
 

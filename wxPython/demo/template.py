@@ -1,12 +1,12 @@
 
-from wxPython.wx import *
+import wx                  # This module uses the new wx namespace
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
 #----------------------------------------------------------------------
 

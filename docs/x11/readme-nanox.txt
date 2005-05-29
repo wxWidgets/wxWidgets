@@ -14,12 +14,12 @@ The Microwindows web site is at
 	http://microwindows.org/
 
 Nano-X is intended to work on devices with very small amounts
-of memory. wxWindows is quite a large library, so if your
+of memory. wxWidgets is quite a large library, so if your
 memory is measured in KB instead of MB you will need to use
 an alternative library, such as FLTK. However, with memory
-capacity increasing all the time, wxWindows could become
+capacity increasing all the time, wxWidgets could become
 an appropriate embedded GUI solution for many projects.
-Also, it's possible to think of ways to cut wxWindows
+Also, it's possible to think of ways to cut wxWidgets
 further down to size, such as disabling advanced controls
 or rewriting utility functions. See the section on code size
 below.
@@ -43,7 +43,7 @@ both at configuration time and at subsequent make time, so you
 may find it convenient to put it in your .bash_profile or similar
 file.
 
-Typically, various features in wxWindows will be switched off to
+Typically, various features in wxWidgets will be switched off to
 conserve space. The sample script below calls configure with typical
 options for Nano-X.
 
@@ -64,7 +64,7 @@ Port notes
 ==========
 
 Nano-X has a different API from Xlib, although there
-are many similarities. Instead of changing the wxWindows
+are many similarities. Instead of changing the wxWidgets
 code to reflect Nano-X conventions, a compatibility
 layer has been added, in the form of these files:
 
@@ -105,14 +105,14 @@ Things to do:
 Code Size
 =========
 
-Allow about 2.5 MB for a shared wxWindows library, with the
+Allow about 2.5 MB for a shared wxWidgets library, with the
 dynamically linked minimal sample taking about 24KB. If statically
 linked, minimal takes up just over 1MB when stripped. This 1MB
-includes all of wxWindows used in the minimal sample including some of
+includes all of wxWidgets used in the minimal sample including some of
 the wxUniversal widgets. As application complexity increases,
-the amount of wxWindows code pulled into statically linked
+the amount of wxWidgets code pulled into statically linked
 executables increases, but for large applications, the overhead
-of wxWindows becomes less significant.
+of wxWidgets becomes less significant.
 
 Sample sizes:
 -------------
@@ -142,8 +142,8 @@ Strategies for reducing code size
 - Rewrite functions or classes for alternative stripped-down
   functionality.
 - Remove unnecessary functionality or obsolete code from
-  wxWindows.
-- Factor out wxWindows code to reduce repetition.
+  wxWidgets.
+- Factor out wxWidgets code to reduce repetition.
 - Add inlining, remove unnecessary empty functions.
 - Separate code out into individual files so that all of
   a .o file doesn't get pulled in, just because an app
@@ -162,7 +162,7 @@ Sample script for building wxNano-X
 ===================================
 
 This script assumes that you will invoke it
-from a build directory under the wxWindows
+from a build directory under the wxWidgets
 top level. So you might type:
 
 % cd wx2

@@ -13,8 +13,6 @@
     IncludeTemplate("filelist.t");
 
     #! find all our sources
-    $project{"COMMONOBJS"} .= "parser.o ";
-
     foreach $file (sort keys %wxGeneric) {
         next if $wxGeneric{$file} =~ /\bNotGTK\b/;
 
@@ -80,6 +78,8 @@
     }
 
     foreach $file (sort keys %wxGENERICINCLUDE) {
+        next if $wxGENERICINCLUDE{$file} =~ /\bNotGTK\b/;
+
         $project{"GTK_HEADERS"} .= "generic/" . $file . " "
     }
 

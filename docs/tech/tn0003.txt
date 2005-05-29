@@ -1,15 +1,15 @@
-                     Adding wxWindows class documentation
+                     Adding wxWidgets class documentation
                      ====================================
 
 This note is aimed at people wishing to add documentation for a
-class to either the main wxWindows manual, or to their own
+class to either the main wxWidgets manual, or to their own
 manual.
 
-wxWindows uses Tex2RTF to process Latex-like input files (.tex)
+wxWidgets uses Tex2RTF to process Latex-like input files (.tex)
 and output in HTML, WinHelp RTF and Word RTF. Tex2RTF is provided
-in the wxWindows distribution and in the CVS archive, under
+in the wxWidgets distribution and in the CVS archive, under
 utils/tex2rtf. Please start by perusing the Tex2RTF manual.
-See http://www.wxwindows.org/tex2rtf/index.htm for a browseable
+See http://www.wxwidgets.org/tex2rtf/index.htm for a browseable
 manual and binaries for specific platforms.
 
 If adding to the existing manual in docs/latex/wx, you need to
@@ -20,7 +20,7 @@ and add the entry to topics.tex.  If applicable, also add an entry
 to category.tex.
 
 If compiling a separate manual, copy an existing set of files from the
-wxWindows manual or a contribution. Contribution documentation
+wxWidgets manual or a contribution. Contribution documentation
 normally goes in the contrib/docs hierarchy, with the source
 going in a latex/mycontrib subdirectory.
 
@@ -55,12 +55,12 @@ parameter, and then choose FILE|GO from the menu.  For example:
    tex2rtf manual.tex manual.rtf -rtf -twice -interactive
 
 NOTE: You must be using the latest tex2rtf which was released with
-v2.2.0 of wxWindows to use the -interactive switch
+v2.2.0 of wxWidgets to use the -interactive switch
 
 If you wish to generate documentation for wxHTML Help Viewer
 (or Windows HTML Help), set htmlWorkshopFiles to true in your
 tex2rtf.ini file. See also the wxHTML Notes section in the
-wxWindows manual. To further speed-up HTML help books loading
+wxWidgets manual. To further speed-up HTML help books loading
 in your application, you may use hhp2cached (utils/hhp2cached).
 
 src/msw/makefile.vc contains targets for generating various

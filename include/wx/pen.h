@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/pen.h
+// Purpose:     Base header for wxPen
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows Licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_PEN_H_BASE_
 #define _WX_PEN_H_BASE_
 

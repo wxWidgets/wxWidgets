@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#if 1 // wxUSE_PROLOGIO
+#if wxUSE_PROLOGIO
 
 #include <stdarg.h>
 #include <ctype.h>

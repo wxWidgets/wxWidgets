@@ -47,14 +47,22 @@
     #include "malloc.h"
 #endif
 
+// ----------------------------------------------------------------------------
+// Toolbar define value missing 
+// ----------------------------------------------------------------------------
+
 #include "wx/msw/private.h"
+
+#if wxUSE_UXTHEME
+#include "wx/msw/uxtheme.h"
+#endif
 
 #ifndef __TWIN32__
 
-#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#else
-    #include "wx/msw/gnuwin32/extra.h"
+#include <commctrl.h>
+
+#if !defined(CCS_VERT)
+#define CCS_VERT                0x00000080L
 #endif
 
 #endif // __TWIN32__
@@ -245,6 +253,26 @@ bool wxToolBar::Create(wxWindow *parent,
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
+    // workaround for flat toolbar on Windows XP classic style
+#if wxUSE_UXTHEME
+    if ( style & wxTB_FLAT )
+    {
+        wxUxThemeEngine *p = wxUxThemeEngine::Get();
+        if ( !p || !p->m_pfnIsThemeActive() )
+        {
+            DWORD dwToolbarStyle;
+
+            dwToolbarStyle = (DWORD)::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L );
+        
+            if ((dwToolbarStyle & TBSTYLE_FLAT) == 0)
+            {
+                dwToolbarStyle |= TBSTYLE_FLAT;
+                ::SendMessage(GetHwnd(), TB_SETSTYLE, 0, (LPARAM)dwToolbarStyle );
+            }
+        }
+    }
+#endif
+
     return TRUE;
 }
 
@@ -368,6 +396,9 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & wxTB_NOALIGN )
         msStyle |= CCS_NOPARENTALIGN;
 
+    if ( style & wxTB_VERTICAL )
+        msStyle |= CCS_VERT;
+
     return msStyle;
 }
 
@@ -471,6 +502,15 @@ bool wxToolBar::Realize()
     }
 
     const bool isVertical = HasFlag(wxTB_VERTICAL);
+
+    // delete all old buttons, if any
+    for ( size_t pos = 0; pos < m_nButtons; pos++ )
+    {
+        if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, 0, 0) )
+        {
+            wxLogDebug(wxT("TB_DELETEBUTTON failed"));
+        }
+    }
 
     // First, add the bitmap: we use one bitmap for all toolbar buttons
     // ----------------------------------------------------------------
@@ -612,15 +652,6 @@ bool wxToolBar::Realize()
 
                 bitmapId = m_nButtons;
             }
-
-            // Now delete all the buttons
-            for ( size_t pos = 0; pos < m_nButtons; pos++ )
-            {
-                if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, 0, 0) )
-                {
-                    wxLogDebug(wxT("TB_DELETEBUTTON failed"));
-                }
-            }
         }
 
         if ( addBitmap ) // no old bitmap or we can't replace it
@@ -659,8 +690,8 @@ bool wxToolBar::Realize()
         wxToolBarToolBase *tool = node->GetData();
 
         // don't add separators to the vertical toolbar - looks ugly
-        if ( isVertical && tool->IsSeparator() )
-            continue;
+        //if ( isVertical && tool->IsSeparator() )
+        //    continue;
 
         TBBUTTON& button = buttons[i];
 
@@ -1197,7 +1228,7 @@ bool wxToolBar::HandleSize(WXWPARAM wParam, WXLPARAM lParam)
                 // FIXME: 6 is hardcoded separator line height...
                 //h += 6;
                 if (HasFlag(wxTB_NODIVIDER))
-                    h += 3;
+                    h += 4;
                 else
                     h += 6;
                 h *= m_maxRows;

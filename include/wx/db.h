@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        db.h
+// Name:        wx/db.h
 // Purpose:     Header file wxDb class.  The wxDb class represents a connection
 //              to an ODBC data source.  The wxDb class allows operations on the data
 //              source such as opening and closing the data source.
@@ -19,26 +19,12 @@
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
-// Licence:     wxWindows licence, plus:
-// Notice:      This class library and its intellectual design are free of charge for use,
-//              modification, enhancement, debugging under the following conditions:
-//              1) These classes may only be used as part of the implementation of a
-//                 wxWindows-based application
-//              2) All enhancements and bug fixes are to be submitted back to the wxWindows
-//                 user groups free of all charges for use with the wxWindows library.
-//              3) These classes may not be distributed as part of any other class library,
-//                 DLL, text (written or electronic), other than a complete distribution of
-//                 the wxWindows GUI development toolkit.
+// Licence:     wxWindows licence
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-/*
-// SYNOPSIS START
-// SYNOPSIS STOP
-*/
-
-#ifndef DB_DOT_H
-#define DB_DOT_H
+#ifndef _WX_DB_H_
+#define _WX_DB_H_
 
 
 // BJO 20000503: introduce new GetColumns members which are more database independant and 
@@ -58,36 +44,40 @@
 #include "wx/string.h"
 
 #ifdef __VISUALC__
-// include standard Windows headers
-#if defined(__WXMSW__) && !wxUSE_MFC
-    #ifndef STRICT
-        #define STRICT 1
-    #endif
+    // we need to include standard Windows headers but we can't include
+    // <windows.h> directly when using MFC because it includes it itself in a
+    // different manner
+    #if wxUSE_MFC
+        #include <afxwin.h>
+    #else // !wxUSE_MFC
+        #ifndef STRICT
+            #define STRICT 1
+        #endif
 
-    #include <windows.h>
-    #include "wx/msw/winundef.h"
-#endif
+        #include <windows.h>
+        #include "wx/msw/winundef.h"
+    #endif // wxUSE_MFC/!wxUSE_MFC
 
-// If you use the wxDbCreateDataSource() function with MSW/VC6,
-// you cannot use the iODBC headers, you must use the VC headers,
-// plus the odbcinst.h header - gt Nov 2 2000
-//
-//  Must add "odbccp32.lib" in \wx2\wxWindows\src\makevc.env to the WINLIBS= line
-//
+    // If you use the wxDbCreateDataSource() function with MSW/VC6,
+    // you cannot use the iODBC headers, you must use the VC headers,
+    // plus the odbcinst.h header - gt Nov 2 2000
+    //
+    // Must add "odbccp32.lib" in \wx2\wxWindows\src\makevc.env to the WINLIBS= line
+    //
     #include "sql.h"
     #include "sqlext.h"
     #include "odbcinst.h"
 #elif defined( __VMS )
-// For OpenVMS use the ones from the library
-extern "C" {
-    #include <isql.h>
-    #include <isqlext.h>
-}
-#else
-extern "C" {
-    #include "wx/isql.h"
-    #include "wx/isqlext.h"
-}
+    // For OpenVMS use the ones from the library
+    extern "C" {
+        #include <isql.h>
+        #include <isqlext.h>
+    }
+#else // !__VISUALC__, !__VMS
+    extern "C" {
+        #include "wx/isql.h"
+        #include "wx/isqlext.h"
+    }
 #endif
 
 
@@ -772,10 +762,11 @@ bool  WXDLLEXPORT  FreeDbConnection(wxDB *pDb);
 void  WXDLLEXPORT  CloseDbConnections(void);
 int   WXDLLEXPORT  NumberDbConnectionsInUse(void);
 
-bool SqlLog(sqlLog state, const char *filename = SQL_LOG_FILENAME);
+bool SqlLog(sqlLog state, const wxChar *filename = SQL_LOG_FILENAME);
 
 bool WXDLLEXPORT GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
                                UWORD direction = SQL_FETCH_NEXT);
 #endif  // Deprecated structures/classes/functions
 
-#endif
+#endif // _WX_DB_H_
+

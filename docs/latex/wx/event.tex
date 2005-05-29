@@ -62,14 +62,14 @@ Timestamp for this event.
 
 Returns a copy of the event.
 
-Any event that is posted to the wxWindows event system for later action (via
+Any event that is posted to the wxWidgets event system for later action (via
 \helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent} or
-\helpref{wxPostEvent}{wxpostevent}) must implement this method. All wxWindows
+\helpref{wxPostEvent}{wxpostevent}) must implement this method. All wxWidgets
 events fully implement this method, but any derived events implemented by the
 user should also implement this method just in case they (or some event
 derived from them) are ever posted.
 
-All wxWindows events implement a copy constructor, so the easiest way of
+All wxWidgets events implement a copy constructor, so the easiest way of
 implementing the Clone function is to implement a copy constructor for
 a new event (call it MyEvent) and then define the Clone function like this:
 \begin{verbatim}

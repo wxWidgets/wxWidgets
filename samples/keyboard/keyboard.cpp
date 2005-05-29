@@ -465,7 +465,8 @@ void TextWindow::LogEvent(const wxChar *name, wxKeyEvent& event)
                 if ( keycode == 0 )
                     key.Printf(_T("NUL"));
                 else if ( keycode < 27 )
-                    key.Printf(_T("Ctrl-%c"), _T('A') + keycode - 1);
+                    key.Printf(_T("Ctrl-%c"),
+                                (unsigned char)(_T('A') + keycode - 1));
                 else
                     key.Printf(_T("'%c'"), (unsigned char)keycode);
             }
@@ -488,8 +489,8 @@ void TextWindow::LogEvent(const wxChar *name, wxKeyEvent& event)
     if ( m_showRaw )
     {
         msg += wxString::Format(_T(" (raw key code/flags: %lu and 0x%lx)"),
-                                event.GetRawKeyCode(),
-                                event.GetRawKeyFlags());
+                                (unsigned long)event.GetRawKeyCode(),
+                                (unsigned long)event.GetRawKeyFlags());
     }
 
     wxLogMessage(msg);

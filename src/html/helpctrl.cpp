@@ -84,6 +84,11 @@ void wxHtmlHelpController::SetTitleFormat(const wxString& title)
 }
 
 
+bool wxHtmlHelpController::AddBook(const wxFileName& book_file, bool show_wait_msg)
+{
+    return AddBook(wxFileSystem::FileNameToURL(book_file), show_wait_msg);
+}
+
 bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
 {
     wxBusyCursor cur;
@@ -171,7 +176,7 @@ bool wxHtmlHelpController::Initialize(const wxString& file)
     wxSplitPath(file, & dir, & filename, & ext);
 
     if (!dir.IsEmpty())
-        dir = dir + wxString(wxT("/"));
+        dir = dir + wxFILE_SEP_PATH;
 
     // Try to find a suitable file
     wxString actualFilename = dir + filename + wxString(wxT(".zip"));
@@ -186,7 +191,7 @@ bool wxHtmlHelpController::Initialize(const wxString& file)
         }
     }
 
-    return AddBook(actualFilename);
+    return AddBook(wxFileName(actualFilename));
 }
 
 bool wxHtmlHelpController::LoadFile(const wxString& WXUNUSED(file))

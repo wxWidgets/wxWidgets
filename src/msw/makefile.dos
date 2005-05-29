@@ -176,6 +176,7 @@ COMMONOBJS2 = \
 		$(COMMDIR)\radiocmn.obj \
 		$(COMMDIR)\regex.obj \
 		$(COMMDIR)\resource.obj \
+		$(COMMDIR)\rgncmn.obj \
 		$(COMMDIR)\settcmn.obj \
 		$(COMMDIR)\sizer.obj \
 		$(COMMDIR)\statbar.obj \
@@ -1219,6 +1220,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/resource.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/rgncmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c)
+// Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -82,8 +82,8 @@ public:
     virtual void InitDialog();
 
 #ifdef __WXUNIVERSAL__
-    virtual bool IsCanvasWindow() { return TRUE; }
-    virtual bool ProvidesBackground() { return TRUE; }
+    virtual bool IsCanvasWindow() const { return TRUE; }
+    virtual bool ProvidesBackground() const { return TRUE; }
 #endif
 
     WX_DECLARE_CONTROL_CONTAINER();

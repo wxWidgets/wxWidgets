@@ -1,4 +1,4 @@
-wxWindows 2.3 for MGL installation
+wxWidgets 2.4 for MGL installation
 ------------------------------------
 
 IMPORTANT NOTE:
@@ -9,25 +9,30 @@ IMPORTANT NOTE:
   mailing wxwin-users or the author. Preferably, try to fix the
   problem first and then send a patch to the author.
   
-  When sending bug reports tell us what version of wxWindows you are 
+  When sending bug reports tell us what version of wxWidgets you are 
   using (including the beta) and what compiler on what system. One 
-  example: wxMGL 2.3.3, gcc 2.95.3, Redhat 7.0
+  example: wxMGL 2.4.3, gcc 2.95.3, Redhat 7.0
 
 First steps
 -----------
 
 - Download SciTech MGL library (version 5.0) from http://www.scitechsoft.com.
-  The downloads page is here:
+  The downloads page is here (you need MGL version 5.0beta7 or newer):
   http://www.scitechsoft.com/products/embedded/mgl_home.html
-  (You needed a version newer than Beta 5! Preferably the up-to-date one from 
-  SciTech Perforce repository.)
-  Install it according to provided instructions. In particular, make sure that
+  
+  Install MGL according to provided instructions. In particular, make sure that
   MGL_ROOT and NUCLEUS_PATH environment variables are set before attempting to
   build wxMGL.
 
+  Make sure you installed all MGL components, including the "fonts" package
+  (it's called mgl50b7-font.tar.gz in Linux version). It is important to have
+  SciTech's basic fonts in $(MGL_ROOT)/fonts directory (you may want to add
+  Arial TrueType font for better output quality) and basic cursors in 
+  $(MGL_ROOT)/cursors. wxMGL depends on their presence.
+
 - Download wxMGL-x.y.z.tgz, where x.y.z is the version number.
   Download documentation in a preferred format, such as
-  wxWindows-HTML.zip or wxWindows-PDF.zip.
+  wxWidgets-HTML.zip or wxWidgets-PDF.zip.
 
 - Make a directory such as ~/wx and unarchive the files into this
   directory.
@@ -35,7 +40,7 @@ First steps
 - It is recommended that you install bison and flex; using yacc
   and lex may require tweaking of the makefiles.
 
-- You can now use configure or makefiles to build wxWindows and the samples.
+- You can now use configure or makefiles to build wxWidgets and the samples.
   In case of problems, please use GNU make.
 
 
@@ -53,7 +58,7 @@ Following systems are supported by wxMGL so far:
 These instructions apply to installation on a Unix system (such as Linux). Please
 see bellow for information on using configure on non-Unix platforms.
 
-If you compile wxWindows on Linux for the first time and don't like to read 
+If you compile wxWidgets on Linux for the first time and don't like to read 
 install instructions just do (in the base dir):
 
 > ./configure --with-mgl
@@ -71,7 +76,7 @@ Afterwards you can continue with
 > ldconfig
 > exit
 
-If you want to remove wxWindows on Unix you can do this:
+If you want to remove wxWidgets on Unix you can do this:
 
 > su <type root password>
 > make uninstall
@@ -91,7 +96,7 @@ and you will get a list of supported options.
 'make install' will install wx-config script that can (and should) be used
 to get compiler flags that are needed to build your program. wx-config --cxxflags
 will output necessary C++ compiler flags and wx-config --libs will list all
-needed libraries. See an example of wxWindows application makefile:
+needed libraries. See an example of wxWidgets application makefile:
 
 minimal: minimal.o
 	$(CC) -o minimal minimal.o `wx-config --libs`
@@ -124,7 +129,7 @@ you have Cygwin utilities and DJGPP compiler in your PATH, run bash.exe and type
 > ./configure --with-mgl
 > make
 
-in wxWindows top directory. You can build wxMGL in MS-DOS with configure, sorry.
+in wxWidgets top directory. You can build wxMGL in MS-DOS with configure, sorry.
 
 
 * Building wxMGL for MS-DOS using Watcom C/C++
@@ -156,6 +161,6 @@ Bug reports
 Please send bug reports with a description of your environment,
 compiler and the error message(s) to the wxwin-developers mailing list at:
 
-    wx-dev@lists.wxwindows.org
+    wx-dev@lists.wxwidgets.org
 
 Vaclav Slavik, Julian Smart, Robert Roebling and Vadim Zeitlin, February 2002.
