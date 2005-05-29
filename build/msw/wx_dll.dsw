@@ -35,9 +35,6 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name wxzlib
     End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name xrc
-    End Project Dependency
 }}}
 
 ###############################################################################
@@ -325,6 +322,18 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name xml
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name adv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name base
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name core
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name html
     End Project Dependency
 }}}
 
