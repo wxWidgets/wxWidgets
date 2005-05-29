@@ -444,7 +444,7 @@ MustHaveApp(wxPyScrolledWindow);
 class wxPyScrolledWindow : public wxScrolledWindow
 {
 public:
-    %pythonAppend wxPyScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)"
+    %pythonAppend wxPyScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyScrolledWindow)"
     %pythonAppend wxPyScrolledWindow()       ""
 
     wxPyScrolledWindow(wxWindow* parent, const wxWindowID id=-1,
