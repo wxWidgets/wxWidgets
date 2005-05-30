@@ -1163,9 +1163,9 @@ void HelpGenVisitor::VisitEnumeration( spEnumeration& en )
     wxString enumeration = GetAllComments(en),
              enumerationVerb;
 
-    enumerationVerb << "\\begin{verbatim}\n"
-                    << en.mEnumContent
-                    << "\n\\end{verbatim}\n";
+    enumerationVerb << _T("\\begin{verbatim}\n")
+                    << en.m_EnumContent
+                    << _T("\n\\end{verbatim}\n");
 
     // remember for later use if we're not inside a class yet
     if ( !m_inClass ) {
@@ -1194,9 +1194,9 @@ void HelpGenVisitor::VisitTypeDef( spTypeDef& td )
     }
 
     wxString typedefdoc;
-    typedefdoc << "{\\small \\begin{verbatim}\n"
-               << "typedef " << td.mOriginalType << ' ' << td.GetName()
-               << "\n\\end{verbatim}}\n"
+    typedefdoc << _T("{\\small \\begin{verbatim}\n")
+               << _T("typedef ") << td.m_OriginalType << _T(' ') << td.GetName()
+               << _T("\n\\end{verbatim}}\n")
                << GetAllComments(td);
 
     // remember for later use if we're not inside a class yet
@@ -2197,6 +2197,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.41  2005/05/30 13:06:15  ABX
+   More warning and error fixes (work in progress with Tinderbox).
+
    Revision 1.40  2005/05/30 11:49:32  ABX
    More warning and error fixes (work in progress with Tinderbox).
 

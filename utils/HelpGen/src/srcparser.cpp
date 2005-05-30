@@ -479,7 +479,7 @@ string spPreprocessorLine::CPP_GetIncludedFileNeme() const
 
     size_t i = 0;
 
-    while( i < mLine.length() && mLine[i] != '"' && mLine[i] != '<' )
+    while( i < m_Line.length() && m_Line[i] != '"' && m_Line[i] != '<' )
 
         ++i;
 
@@ -487,14 +487,14 @@ string spPreprocessorLine::CPP_GetIncludedFileNeme() const
 
     size_t start = i;
 
-    while( i < mLine.length() && mLine[i] != '"' && mLine[i] != '>' )
+    while( i < m_Line.length() && m_Line[i] != '"' && m_Line[i] != '>' )
 
         ++i;
 
-    if ( start < mLine.length() )
+    if ( start < m_Line.length() )
     {
         string fname;
-        fname.append( mLine, start, ( i - start ) );
+        fname.append( m_Line, start, ( i - start ) );
 
         return fname;
     }
@@ -697,7 +697,7 @@ void spEnumeration::DumpThis(const wxString& indent) const
 void spTypeDef::DumpThis(const wxString& indent) const
 {
     wxLogDebug("%stypedef %s = %s",
-               indent.c_str(), m_Name.c_str(), mOriginalType.c_str());
+               indent.c_str(), m_Name.c_str(), m_OriginalType.c_str());
 }
 
 void spFile::DumpThis(const wxString& indent) const

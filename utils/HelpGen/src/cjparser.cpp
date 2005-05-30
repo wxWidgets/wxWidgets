@@ -1267,9 +1267,9 @@ void CJSourceParser::AttachComments( spContext& ctx, wxChar* cur )
     clear_commets_queue();
 }
 
-void CJSourceParser::AddMacroNode( char*& cur )
+void CJSourceParser::AddMacroNode( wxChar*& cur )
 {
-    char* start = cur;
+    wxChar* start = cur;
 
     int lineNo = get_line_no();
 
@@ -1285,7 +1285,7 @@ void CJSourceParser::AddMacroNode( char*& cur )
 
     AttachComments( *pPL, cur );
 
-    get_string_between( start, cur, &pPL->mLine );
+    get_string_between( start, cur, &pPL->m_Line );
 
     ++start; // skip '#'
     get_next_token( start );
@@ -1296,9 +1296,9 @@ void CJSourceParser::AddMacroNode( char*& cur )
     // determine the type exactly and assign
     // a name to the context
 
-    if ( *start == 'd' )
+    if ( *start == _T('d') )
     {
-        if ( cmp_tokens_fast( start, "define", 6 ) )
+        if ( cmp_tokens_fast( start, _T("define"), 6 ) )
         {
             char* tok = start+6;
 
@@ -1316,13 +1316,13 @@ void CJSourceParser::AddMacroNode( char*& cur )
                 pPL->mDefType = SP_PREP_DEF_REDEFINE_SYMBOL;
         }
     }
-    else if ( *start == 'i' )
+    else if ( *start == _T('i') )
     {
-        if ( cmp_tokens_fast( start, "include", 7 ) )
+        if ( cmp_tokens_fast( start, _T("include"), 7 ) )
         {
             pPL->mDefType = SP_PREP_DEF_INCLUDE_FILE;
         }
-        else if ( *++start == 'f' )
+        else if ( *++start == _T('f') )
         {
             // either "#if" or "#ifdef"
             cur = start;
@@ -1332,14 +1332,14 @@ void CJSourceParser::AddMacroNode( char*& cur )
             string condition = get_token_str( cur );
 
             // currently, everything except '0' is true
-            if ( condition == "0" ) {
+            if ( condition == _T("0") ) {
                 // skip until the following else or enif
                 while ( cur < _gSrcEnd ) {
                     skip_to_eol( cur );
                     skip_eol( cur );
 
                     get_next_token( cur );
-                    if ( *cur++ == '#' && *cur == 'e' )
+                    if ( *cur++ == _T('#') && *cur == _T('e') )
                         break;
                 }
             }
@@ -1347,7 +1347,7 @@ void CJSourceParser::AddMacroNode( char*& cur )
             // TODO parse the condition...
         }
     }
-    else if ( cmp_tokens_fast( start, "else", 4 ) )
+    else if ( cmp_tokens_fast( start, _T("else"), 4 ) )
     {
         // skip until "#endif"
         while ( cur < _gSrcEnd ) {
@@ -1355,7 +1355,7 @@ void CJSourceParser::AddMacroNode( char*& cur )
             skip_eol( cur );
 
             get_next_token( cur );
-            if ( *cur++ == '#' && cmp_tokens_fast( cur, "endif", 5 ) )
+            if ( *cur++ == _T('#') && cmp_tokens_fast( cur, "endif", 5 ) )
                 break;
         }
     }
@@ -1988,9 +1988,9 @@ void CJSourceParser::SkipFunctionBody( char*& cur )
         {
             if ( op.m_Name[i] == ':' && op.m_Name[i+1] == ':' )
             {
-                string unscoped( op.m_Name, i+2, op.m_Name.length() - ( i + 2 ) );
+                wxString unscoped( op.m_Name, i+2, op.m_Name.length() - ( i + 2 ) );
 
-                op.mScope = string( op.m_Name, 0, i );
+                op.mScope = wxString( op.m_Name, 0, i );
 
                 op.m_Name = unscoped;
 
@@ -2220,7 +2220,7 @@ void CJSourceParser::AddEnumNode( char*& cur )
 
     if ( !skip_imp_block( cur ) ) return;
 
-    get_string_between( start, cur, &pEnum->mEnumContent );
+    get_string_between( start, cur, &pEnum->m_EnumContent );
 
     if ( get_next_token(cur) )
     {
@@ -2286,7 +2286,7 @@ void CJSourceParser::AddTypeDefNode( char*& cur )
         if ( *nameStart == '*' ) ++nameStart;
     }
 
-    get_string_between( start, typeEnd, &pTDef->mOriginalType );
+    get_string_between( start, typeEnd, &pTDef->m_OriginalType );
 
     get_string_between( nameStart, nameEnd, &pTDef->m_Name );
 

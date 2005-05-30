@@ -374,7 +374,7 @@ void RipperDocGen::VisitEnumeration( spEnumeration& en )
     string body;
     body += mTags[TAG_BOLD].start;
 
-    AppendMulitilineStr( body, en.mEnumContent );
+    AppendMulitilineStr( body, en.m_EnumContent );
 
     body += mTags[TAG_BOLD].end;
 
@@ -399,8 +399,8 @@ void RipperDocGen::VisitTypeDef( spTypeDef& td )
     body += "typdef ";
     body += mTags[TAG_BOLD].end;
 
-    AppendMulitilineStr( body, td.mOriginalType );
-    body += td.mOriginalType;
+    AppendMulitilineStr( body, td.m_OriginalType );
+    body += td.m_OriginalType;
     body += ' ';
 
     body += mTags[TAG_BOLD].start;
@@ -429,8 +429,8 @@ void RipperDocGen::VisitPreprocessorLine( spPreprocessorLine& pd )
     string body;
     body += mTags[TAG_FIXED_FONT].start;
 
-    string coloredLine = pd.mLine;
-    AppendHighlightedSource( coloredLine, pd.mLine );
+    string coloredLine = pd.m_Line;
+    AppendHighlightedSource( coloredLine, pd.m_Line );
 
     AppendMulitilineStr( body, coloredLine );
 

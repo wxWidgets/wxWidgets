@@ -599,7 +599,7 @@ public:
 
     // prepocessor statement including '#' and
     // attached multiple lines with '\' character
-    string mLine;
+    wxString m_Line;
 
     int    mDefType; // see SP_PREP_DEFINITION_TYPES enumeration
 
@@ -665,7 +665,7 @@ public:
 class spEnumeration  : public spContext
 {
 public:
-    string mEnumContent; // full-text content of enumeration
+    wxString m_EnumContent; // full-text content of enumeration
 
 public:
     virtual int GetContextType() const { return SP_CTX_ENUMERATION; }
@@ -681,7 +681,7 @@ class spTypeDef  : public spContext
 public:
     // the original type which is redefined
     // by this type definition
-    string mOriginalType;
+    wxString m_OriginalType;
 
 public:
     virtual int GetContextType() const { return SP_CTX_TYPEDEF; }
