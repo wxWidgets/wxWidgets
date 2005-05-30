@@ -34,6 +34,7 @@
     #include "wx/menu.h"
     #include "wx/layout.h"
     #include "wx/msgdlg.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/sizer.h"
