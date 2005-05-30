@@ -840,10 +840,22 @@ void wxCalendarCtrl::RecalcGeometry()
     wxClientDC dc(this);
 
     dc.SetFont(GetFont());
+    int day = 10;
 
-    // determine the column width (we assume that the weekday names are always
-    // wider (in any language) than the numbers)
+    // determine the column width (weekday names are not necessarily wider
+    // than the numbers (in some languages), so let's not assume that they are)
     m_widthCol = 0;
+    for ( day = 10; day <= 31; day++)
+    {
+        wxCoord width;
+        dc.GetTextExtent(wxString::Format(wxT("%d"), day), &width, &m_heightRow);
+        if ( width > m_widthCol )
+        {
+            // 1.5 times the width gives nice margins even if the weekday
+            // names are short
+            m_widthCol = width+width/2;
+        }
+    }
     wxDateTime::WeekDay wd;
     for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
     {
