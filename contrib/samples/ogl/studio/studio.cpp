@@ -132,7 +132,7 @@ bool csApp::OnInit(void)
                      wxDEFAULT_FRAME_STYLE_NO_CLIP | wxHSCROLL | wxVSCROLL);
 
     // Give it an icon
-    frame->SetIcon(wxICON(studio));
+    frame->SetIcon(wxIcon(studio_xpm));
 
     // Make a menubar
     wxMenu *fileMenu = new wxMenu;
@@ -228,94 +228,94 @@ int csApp::OnExit(void)
 
 wxMDIChildFrame *csApp::CreateChildFrame(wxDocument *doc, wxView *view, wxMenu** editMenuRet)
 {
-  //// Make a child frame
-  csMDIChildFrame *subframe = new csMDIChildFrame(doc, view, ((wxDocMDIParentFrame*)GetTopWindow()), wxID_ANY, _T("Child Frame"),
-        wxPoint(10, 10), wxSize(300, 300), wxDEFAULT_FRAME_STYLE);
+    //// Make a child frame
+    csMDIChildFrame *subframe = new csMDIChildFrame(doc, view, ((wxDocMDIParentFrame*)GetTopWindow()), wxID_ANY, _T("Child Frame"),
+                                                    wxPoint(10, 10), wxSize(300, 300), wxDEFAULT_FRAME_STYLE);
 
 #ifdef __WXMSW__
-  subframe->SetIcon(wxString(_T("chart")));
+    subframe->SetIcon(wxString(_T("chart")));
 #endif
 #ifdef __X__
-  subframe->SetIcon(wxIcon(_T("doc.xbm")));
+    subframe->SetIcon(wxIcon(_T("doc.xbm")));
 #endif
 
-  //// Make a menubar
-  wxMenu *fileMenu = new wxMenu;
+    //// Make a menubar
+    wxMenu *fileMenu = new wxMenu;
 
-  fileMenu->Append(wxID_NEW, _T("&New...\tCtrl+N"));
-  fileMenu->Append(wxID_OPEN, _T("&Open...\tCtrl+O"));
-  fileMenu->Append(wxID_CLOSE, _T("&Close\tCtrl+W"));
-  fileMenu->Append(wxID_SAVE, _T("&Save\tCtrl+S"));
-  fileMenu->Append(wxID_SAVEAS, _T("Save &As...\tF12"));
+    fileMenu->Append(wxID_NEW, _T("&New...\tCtrl+N"));
+    fileMenu->Append(wxID_OPEN, _T("&Open...\tCtrl+O"));
+    fileMenu->Append(wxID_CLOSE, _T("&Close\tCtrl+W"));
+    fileMenu->Append(wxID_SAVE, _T("&Save\tCtrl+S"));
+    fileMenu->Append(wxID_SAVEAS, _T("Save &As...\tF12"));
 
-  fileMenu->AppendSeparator();
-  fileMenu->Append(wxID_PRINT, _T("&Print...\tCtrl+P"));
-  fileMenu->Append(wxID_PRINT_SETUP, _T("Print &Setup..."));
-  fileMenu->Append(wxID_PREVIEW, _T("Print Pre&view"));
+    fileMenu->AppendSeparator();
+    fileMenu->Append(wxID_PRINT, _T("&Print...\tCtrl+P"));
+    fileMenu->Append(wxID_PRINT_SETUP, _T("Print &Setup..."));
+    fileMenu->Append(wxID_PREVIEW, _T("Print Pre&view"));
 
-  fileMenu->AppendSeparator();
-  fileMenu->Append(wxID_EXIT, _T("E&xit"));
+    fileMenu->AppendSeparator();
+    fileMenu->Append(wxID_EXIT, _T("E&xit"));
 
-  wxMenu* editMenu = new wxMenu;
-  editMenu->Append(wxID_UNDO, _T("&Undo\tCtrl+Z"));
-  editMenu->Append(wxID_REDO, _T("&Redo\tCtrl+Y"));
-  editMenu->AppendSeparator();
-  editMenu->Append(wxID_CUT, _T("Cu&t\tCtrl+X"));
-  editMenu->Append(wxID_COPY, _T("&Copy\tCtrl+C"));
-  editMenu->Append(wxID_PASTE, _T("&Paste\tCtrl+V"));
-  editMenu->Append(wxID_DUPLICATE, _T("&Duplicate\tCtrl+D"));
-  editMenu->AppendSeparator();
-  editMenu->Append(wxID_CLEAR, _T("Cle&ar\tDelete"));
-  editMenu->Append(ID_CS_SELECT_ALL, _T("Select A&ll\tCtrl+A"));
-  editMenu->AppendSeparator();
-  editMenu->Append(ID_CS_EDIT_PROPERTIES, _T("Edit P&roperties..."));
+    wxMenu* editMenu = new wxMenu;
+    editMenu->Append(wxID_UNDO, _T("&Undo\tCtrl+Z"));
+    editMenu->Append(wxID_REDO, _T("&Redo\tCtrl+Y"));
+    editMenu->AppendSeparator();
+    editMenu->Append(wxID_CUT, _T("Cu&t\tCtrl+X"));
+    editMenu->Append(wxID_COPY, _T("&Copy\tCtrl+C"));
+    editMenu->Append(wxID_PASTE, _T("&Paste\tCtrl+V"));
+    editMenu->Append(wxID_DUPLICATE, _T("&Duplicate\tCtrl+D"));
+    editMenu->AppendSeparator();
+    editMenu->Append(wxID_CLEAR, _T("Cle&ar\tDelete"));
+    editMenu->Append(ID_CS_SELECT_ALL, _T("Select A&ll\tCtrl+A"));
+    editMenu->AppendSeparator();
+    editMenu->Append(ID_CS_EDIT_PROPERTIES, _T("Edit P&roperties..."));
 
-  *editMenuRet = editMenu;
+    *editMenuRet = editMenu;
 
-  m_docManager->FileHistoryUseMenu(fileMenu);
-  m_docManager->FileHistoryAddFilesToMenu(fileMenu);
+    m_docManager->FileHistoryUseMenu(fileMenu);
+    m_docManager->FileHistoryAddFilesToMenu(fileMenu);
 
-  doc->GetCommandProcessor()->SetEditMenu(editMenu);
+    doc->GetCommandProcessor()->SetEditMenu(editMenu);
 
-  wxMenu *viewMenu = new wxMenu;
-  viewMenu->Append(ID_CS_SETTINGS, _T("&Settings..."));
+    wxMenu *viewMenu = new wxMenu;
+    viewMenu->Append(ID_CS_SETTINGS, _T("&Settings..."));
 
-  wxMenu *helpMenu = new wxMenu;
-  helpMenu->Append(wxID_HELP, _T("&Help Contents\tF1"));
-  helpMenu->Append(ID_CS_ABOUT, _T("&About"));
+    wxMenu *helpMenu = new wxMenu;
+    helpMenu->Append(wxID_HELP, _T("&Help Contents\tF1"));
+    helpMenu->Append(ID_CS_ABOUT, _T("&About"));
 
-  wxMenuBar *menuBar = new wxMenuBar;
+    wxMenuBar *menuBar = new wxMenuBar;
 
-  menuBar->Append(fileMenu, _T("&File"));
-  menuBar->Append(editMenu, _T("&Edit"));
-  menuBar->Append(viewMenu, _T("&View"));
-  menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(fileMenu, _T("&File"));
+    menuBar->Append(editMenu, _T("&Edit"));
+    menuBar->Append(viewMenu, _T("&View"));
+    menuBar->Append(helpMenu, _T("&Help"));
 
-  //// Associate the menu bar with the frame
-  subframe->SetMenuBar(menuBar);
+    //// Associate the menu bar with the frame
+    subframe->SetMenuBar(menuBar);
 
-  return subframe;
+    return subframe;
 }
 
 // Creates a canvas. Called by OnInit as a child of the main window
 csCanvas *csApp::CreateCanvas(wxView *view, wxMDIChildFrame *parent)
 {
-  int width, height;
-  parent->GetClientSize(&width, &height);
+    int width, height;
+    parent->GetClientSize(&width, &height);
 
-  // Non-retained canvas
-  csCanvas *canvas = new csCanvas((csDiagramView*) view, parent, 1000, wxPoint(0, 0), wxSize(width, height), wxSUNKEN_BORDER);
+    // Non-retained canvas
+    csCanvas *canvas = new csCanvas((csDiagramView*) view, parent, 1000, wxPoint(0, 0), wxSize(width, height), wxSUNKEN_BORDER);
 
-  wxColour bgColour(_T("WHITE"));
-  canvas->SetBackgroundColour(bgColour);
+    wxColour bgColour(_T("WHITE"));
+    canvas->SetBackgroundColour(bgColour);
 
-  wxCursor cursor(wxCURSOR_HAND);
-  canvas->SetCursor(cursor);
+    wxCursor cursor(wxCURSOR_HAND);
+    canvas->SetCursor(cursor);
 
-  // Give it scrollbars
-  canvas->SetScrollbars(20, 20, 100, 100);
+    // Give it scrollbars
+    canvas->SetScrollbars(20, 20, 100, 100);
 
-  return canvas;
+    return canvas;
 }
 
 void csApp::InitToolBar(wxToolBar* toolBar)
