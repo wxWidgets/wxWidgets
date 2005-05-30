@@ -967,18 +967,14 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
       {
         wxNotebookPage *pPage = m_pages[sel];
         pPage->Show(true);
-        pPage->SetFocus();
-
-        // If the newly focused window is not a child of the new page,
-        // SetFocus was not successful and the notebook itself should be
-        // focused
-        wxWindow *currentFocus = FindFocus();
-        wxWindow *startFocus = currentFocus;
-        while ( currentFocus && currentFocus != pPage && currentFocus != this )
-            currentFocus = currentFocus->GetParent();
-
-        if ( startFocus == pPage || currentFocus != pPage )
-            SetFocus();
+        
+        // As per bug report:
+        // http://sourceforge.net/tracker/index.php?func=detail&aid=1150659&group_id=9863&atid=109863,
+        // we should not set the page focus (and thereby the focus for
+        // a child window) since it erroneously selects radio button controls and also
+        // breaks keyboard handling for a notebook's scroll buttons. So
+        // we always focus the notebook and not the page.
+        SetFocus();
 
       }
       else // no pages in the notebook, give the focus to itself
