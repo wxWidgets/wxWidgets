@@ -495,7 +495,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
         char buf[1024];
         do
         {
-            inStream.Read(buf, WXSIZEOF(buf));
+            inStream.Read(buf, WXSIZEOF(buf)-1);  // leave room for the NULL
 
             const wxStreamError err = inStream.GetLastError();
 
