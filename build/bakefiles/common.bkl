@@ -51,8 +51,13 @@
 
     <set var="WX_STABLE_BRANCH">$(int(int(WXVER_MINOR) % 2 == 0))</set>
 
+    <!-- this needs to be reset to 0 on beginning of stable series and
+         increment by one 1 every time binary incompatible change is made
+         (i.e. preferably never) -->
+    <set var="WX_BINARY_VERSION">0</set>
+    
     <set var="WXSOVERSION">
-        <if cond="WX_STABLE_BRANCH=='1'">0.0.0</if>
+        <if cond="WX_STABLE_BRANCH=='1'">$(WX_BINARY_VERSION).0.0</if>
         <if cond="WX_STABLE_BRANCH=='0'">$(WXVER_RELEASE).0.0</if>
     </set>
     <set var="WXMACVERSION">$(WX_VERSION)</set>
