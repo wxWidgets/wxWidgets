@@ -4,6 +4,7 @@ Recent Changes for wxPython
 
 2.6.0.1
 -------
+* 30-May-2005
 
 Added wx.BrushFromBitmap to create a stippled brush in a single step.
 Also added missing brysh style flags: wx.STIPPLE_MASK
@@ -143,6 +144,17 @@ alpha channel and set the bitmap to use it.
 
 Fixed the wrong class name used in wx.PyScrolledWindow's call to
 _setCallbackInfo.
+
+wxMSW: patch #1207202, Fixes GDI leak when using stock cursors.
+
+wx.calendar.CalendarCtrl: Patch #1207531, Keeps the CalendarCtrl wide
+enough even when the weekday names for the locale are shorter than
+usual.
+
+Made GridCellNumberEditor.StartingKey also insert the typed char when
+there is a range of allowed values (so a wx.SpinCtrl is used instead
+of a wx.TextCtrl.)
+
 
 
 
