@@ -1600,3 +1600,11 @@ void *calloc( size_t num, size_t size )
 
 #endif // __WXWINCE__ <= 211
 
+#ifdef __WXWINCE__
+
+int wxRemove(const wxChar *path)
+{
+    return ::DeleteFile(path) == 0;
+}
+
+#endif

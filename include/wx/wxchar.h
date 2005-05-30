@@ -364,10 +364,7 @@
         #ifdef __WXWINCE__
             /* carefully: wxRemove() must return 0 on success while DeleteFile()
                returns 0 on error, so don't just define one as the other */
-            inline int wxRemove(const wxChar *path)
-            {
-                return ::DeleteFile(path) == 0;
-            }
+            int wxRemove(const wxChar *path);
         #else
             #define  wxRemove    _tremove
             #define  wxRename    _trename
