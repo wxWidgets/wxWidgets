@@ -48,7 +48,7 @@ IMPLEMENT_APP(hvApp)
 
 hvApp::hvApp()
 {
-#if hvUSE_IPC
+#if wxUSE_IPC
     m_server = NULL;
 #endif
 }
@@ -76,7 +76,7 @@ bool hvApp::OnInit()
     bool hasWindowName = false;
     bool createServer = false;
 
-#if hvUSE_IPC
+#if wxUSE_IPC
     m_server = NULL;
 #endif
 
@@ -159,7 +159,7 @@ bool hvApp::OnInit()
             wxOPEN | wxFILE_MUST_EXIST,
             NULL);
 
-        if (!s.IsEmpty())
+        if (!s.empty())
         {
             book[0] = s;
             bookCount = 1;
@@ -167,7 +167,7 @@ bool hvApp::OnInit()
     }
 #endif
 
-#if hvUSE_IPC
+#if wxUSE_IPC
 
     if ( createServer )
     {
@@ -186,7 +186,7 @@ bool hvApp::OnInit()
         wxUnusedVar(createServer);
     }
 
-#endif  // hvUSE_IPC
+#endif  // wxUSE_IPC
 
     //now add help
     wxInitAllImageHandlers();
@@ -229,7 +229,7 @@ bool hvApp::OnInit()
 
 int hvApp::OnExit()
 {
-#if hvUSE_IPC
+#if wxUSE_IPC
     wxObjectList::compatibility_iterator node = m_connections.GetFirst();
     while (node)
     {
@@ -401,7 +401,7 @@ wxBitmap AlternateArtProvider::CreateBitmap(const wxArtID& id,
         return wxNullBitmap;
 }
 
-#if hvUSE_IPC
+#if wxUSE_IPC
 
 wxConnectionBase *hvServer::OnAcceptConnection(const wxString& topic)
 {
@@ -521,4 +521,4 @@ bool hvConnection::OnStartAdvise(const wxString& WXUNUSED(topic),
     return true;
 }
 
-#endif // #if hvUSE_IPC
+#endif // #if wxUSE_IPC
