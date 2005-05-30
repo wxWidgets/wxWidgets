@@ -51,14 +51,7 @@
     #include "wx/textfile.h"
 #endif
 
-// ----------------------------------------------------------------------------
-// resources
-// ----------------------------------------------------------------------------
-
-// the application icon (under Windows and OS/2 it is in resources)
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
-    #include "mondrian.xpm"
-#endif
+#include "../sample.xpm"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -210,7 +203,7 @@ MyFrame::MyFrame()
                  wxDefaultPosition, wxSize(400, 500))
 {
     // set the frame icon
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxIcon(sample_xpm));
 
 #if wxUSE_MENUS
     // create a menu bar
