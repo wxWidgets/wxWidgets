@@ -262,8 +262,8 @@ public:
     // to other sections (e.g. could be usefull for autoamically
     // hiding empty index-sections).
 
-    ScriptSection( const string&   name = "",
-                   const string&   body = "",
+    ScriptSection( const wxString& name = wxEmptyString,
+                   const wxString& body = wxEmptyString,
                    ScriptTemplate* pSectionTemplate   = NULL,
                    ScriptTemplate* pReferenceTemplate = NULL,
                    bool            autoHide           = false,

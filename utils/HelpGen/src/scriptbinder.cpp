@@ -319,8 +319,8 @@ void ScriptTemplate::PrintScript( void* dataObj, ScriptStream& stm )
 
 int ScriptSection::mIdCounter = 0;
 
-ScriptSection::ScriptSection( const string&   name,
-                              const string&   body,
+ScriptSection::ScriptSection( const wxString& name,
+                              const wxString& body,
                               ScriptTemplate* pSectionTemplate,
                               ScriptTemplate* pReferenceTemplate,
                               bool            autoHide,
@@ -342,8 +342,8 @@ ScriptSection::ScriptSection( const string&   name,
 {
     // generate GUID
 
-    char buf[32];
-    sprintf( buf, "%d", ++mIdCounter );
+    wxChar buf[32];
+    wxSprintf( buf, _T("%d"), ++mIdCounter );
     mId = buf;
 }
 
