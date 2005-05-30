@@ -59,9 +59,9 @@
 // Currently gcc and watcom don't define NMLVFINDITEM, and DMC only defines
 // it by its old name NM_FINDTIEM.
 //
-#if defined __VISUALC__ || defined __BORLANDC__ || defined NMLVFINDITEM
+#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(NMLVFINDITEM)
     #define HAVE_NMLVFINDITEM 1
-#elif defined __DMC__ || defined NM_FINDITEM
+#elif defined(__DMC__) || defined(NM_FINDITEM)
     #define HAVE_NM_FINDITEM 1
 #endif
 
@@ -2154,7 +2154,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #if HAVE_NMLVFINDITEM
                     NMLVFINDITEM* pFindInfo = (NMLVFINDITEM*)lParam;
 #else
-                    NM_FINDTIEM* pFindInfo = (NM_FINDTIEM*)lParam;
+                    NM_FINDITEM* pFindInfo = (NM_FINDITEM*)lParam;
 #endif
 
                     // no match by default
