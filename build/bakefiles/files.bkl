@@ -1451,12 +1451,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/floppy.ico
     wx/msw/folder1.ico
     wx/msw/folder2.ico
-    wx/msw/info.ico
     wx/msw/mdi.ico
     wx/msw/question.ico
     wx/msw/removble.ico
     wx/msw/std.ico
-    wx/msw/warning.ico
 </set>
 
 <!-- Files used only by desktop MSW port, but *not* WindowsCE one: -->

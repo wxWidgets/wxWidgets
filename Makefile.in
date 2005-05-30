@@ -1964,12 +1964,10 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/floppy.ico \
 	wx/msw/folder1.ico \
 	wx/msw/folder2.ico \
-	wx/msw/info.ico \
 	wx/msw/mdi.ico \
 	wx/msw/question.ico \
 	wx/msw/removble.ico \
 	wx/msw/std.ico \
-	wx/msw/warning.ico \
 	wx/msw/fdrepdlg.h \
 	wx/msw/fontdlg.h \
 	wx/msw/helpbest.h \
@@ -2162,12 +2160,10 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/floppy.ico \
 	wx/msw/folder1.ico \
 	wx/msw/folder2.ico \
-	wx/msw/info.ico \
 	wx/msw/mdi.ico \
 	wx/msw/question.ico \
 	wx/msw/removble.ico \
 	wx/msw/std.ico \
-	wx/msw/warning.ico \
 	wx/generic/fdrepdlg.h \
 	wx/generic/fontdlgg.h \
 	wx/msw/wince/choicece.h \
