@@ -109,14 +109,14 @@ bool spComment::StartsParagraph() const
     return mStartsPar;
 }
 
-string& spComment::GetText()
+wxString& spComment::GetText()
 {
-    return mText;
+    return m_Text;
 }
 
-string spComment::GetText() const
+wxString spComment::GetText() const
 {
-    return mText;
+    return m_Text;
 }
 
 /***** Implementation for class spContext *****/

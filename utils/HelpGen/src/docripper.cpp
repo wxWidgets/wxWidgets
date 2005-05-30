@@ -185,7 +185,7 @@ void RipperDocGen::AppendComments( spContext& fromContext, string& str )
                 str += mTags[TAG_PARAGRAPH].start;
             }
 
-        str += lst[i]->mText;
+        str += lst[i]->m_Text;
     }
 
     // remove new lines, and insert paragraph breaks

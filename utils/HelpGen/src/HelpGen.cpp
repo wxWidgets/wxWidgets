@@ -1685,7 +1685,8 @@ bool DocManager::ParseTeXFile(const wxString& filename)
             constStr = _T(" const");
 
         wxLogVerbose("file %s(%d): found '%s %s::%s(%s)%s'",
-                     m_filename.c_str(), m_line,
+                     m_filename.c_str(),
+                     (int)m_line,
                      returnType.c_str(),
                      classname.c_str(),
                      funcName.c_str(),
@@ -2196,6 +2197,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.40  2005/05/30 11:49:32  ABX
+   More warning and error fixes (work in progress with Tinderbox).
+
    Revision 1.39  2005/05/30 09:26:42  ABX
    More warning and error fixes (work in progress with Tinderbox).
 

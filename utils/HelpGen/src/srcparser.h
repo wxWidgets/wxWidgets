@@ -233,23 +233,23 @@ public:
 class spComment
 {
 public:
-    string mText;
-    bool   mIsMultiline; // multiline comments ar those with /**/'s
+    wxString m_Text;
+    bool     mIsMultiline; // multiline comments ar those with /**/'s
 
     // true, if these was an empty empty
     // line above single line comment
 
-    bool   mStartsPar;
+    bool     mStartsPar;
 
 public:
 
-    bool    IsMultiline() const;
-    bool    StartsParagraph() const;
+    bool     IsMultiline() const;
+    bool     StartsParagraph() const;
 
-    string& GetText();
+    string&  GetText();
 
     // contstant version of GetText()
-    string  GetText() const;
+    string   GetText() const;
 };
 
 // abstract base class for common (to most languages) code

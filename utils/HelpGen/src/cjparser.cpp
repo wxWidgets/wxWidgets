@@ -1190,7 +1190,7 @@ spFile* CJSourceParser::Parse( char* start, char* end )
     } while( 1 );
 }
 
-void CJSourceParser::AttachComments( spContext& ctx, char* cur )
+void CJSourceParser::AttachComments( spContext& ctx, wxChar* cur )
 {
     if ( !mCommentsOn ) return;
 
@@ -1240,7 +1240,7 @@ void CJSourceParser::AttachComments( spContext& ctx, char* cur )
                 pComment->mStartsPar = false;
         }
 
-        prevComEnd = set_comment_text( pComment->mText, start );
+        prevComEnd = set_comment_text( pComment->m_Text, start );
     }
 
 
@@ -1252,7 +1252,7 @@ void CJSourceParser::AttachComments( spContext& ctx, char* cur )
         spComment* pComment = new spComment();
         lst.push_back( pComment );
 
-        set_comment_text( pComment->mText, cur );
+        set_comment_text( pComment->m_Text, cur );
 
         pComment->mStartsPar = 1;
         pComment->mIsMultiline = ( *(cur+1) == '*' );
