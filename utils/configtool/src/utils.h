@@ -74,9 +74,6 @@ wxFont apStringToFont(const wxString& str);
 /// Get the index of the given named wxNotebook page
 int apFindNotebookPage(wxNotebook* notebook, const wxString& name);
 
-/// View the given URL
-void apViewHTMLFile(const wxString& url);
-
 /// Returns the system temporary directory.
 wxString wxGetTempDir();
 
@@ -139,7 +136,7 @@ class wxIconInfo: public wxObject
 {
 public:
     wxIconInfo(const wxString& name);
-    
+
     // How many states? (Each state
     //  has enabled/disabled state)
     // Max (say) 4 states, each with
@@ -151,7 +148,7 @@ public:
     void SetIconId(int state, bool enabled, int iconId);
 
     const wxString& GetName() const { return m_name; }
-    
+
 protected:
     int             m_maxStates;
     int             m_states[wxMAX_ICON_STATES * 2]; // Enabled/disabled
@@ -167,9 +164,9 @@ class wxIconTable: public wxList
 {
 public:
     wxIconTable(wxImageList* imageList = NULL);
-    
+
     void AppendInfo(wxIconInfo* info);
-    
+
     // Easy way of initialising both the image list and the
     // info db. It will generate image ids itself while appending the icon.
     // 'state' is an integer from 0 up to the max allowed, representing a different
@@ -177,17 +174,17 @@ public:
     // A folder that can be open or closed would have two states.
     // Enabled/disabled is taken as a special case.
     bool AddInfo(const wxString& name, const wxIcon& icon, int state, bool enabled);
-    
+
     wxIconInfo* FindInfo(const wxString& name) const;
-    
+
     int GetIconId(const wxString& name, int state, bool enabled = true) const;
     bool SetIconId(const wxString& name, int state, bool enabled, int iconId) ;
-    
+
     void SetImageList(wxImageList* imageList) { m_imageList = imageList; }
     wxImageList* GetImageList() const { return m_imageList; }
-    
+
 protected:
-    wxImageList*    m_imageList;    
+    wxImageList*    m_imageList;
 };
 
 /// Useful insertion operators for wxOutputStream.

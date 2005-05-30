@@ -172,56 +172,6 @@ int apFindNotebookPage(wxNotebook* notebook, const wxString& name)
     return -1;
 }
 
-/*
- * View an HTML file
- */
-
-void apViewHTMLFile(const wxString& url)
-{
-#ifdef __WXMSW__
-    HKEY hKey;
-    TCHAR szCmdName[1024];
-    DWORD dwType, dw = sizeof(szCmdName);
-    LONG lRes;
-    lRes = RegOpenKey(HKEY_CLASSES_ROOT, _T("htmlfile\\shell\\open\\command"), &hKey);
-    if(lRes == ERROR_SUCCESS && RegQueryValueEx(hKey,(LPTSTR)NULL, NULL,
-        &dwType, (LPBYTE)szCmdName, &dw) == ERROR_SUCCESS)
-    {
-        wxStrcat(szCmdName, (const wxChar*) url);
-        PROCESS_INFORMATION  piProcInfo;
-        STARTUPINFO          siStartInfo;
-        memset(&siStartInfo, 0, sizeof(STARTUPINFO));
-        siStartInfo.cb = sizeof(STARTUPINFO);
-        CreateProcess(NULL, szCmdName, NULL, NULL, false, 0, NULL,
-            NULL, &siStartInfo, &piProcInfo );
-    }
-    if(lRes == ERROR_SUCCESS)
-        RegCloseKey(hKey);
-#else
-    wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(wxT("html"));
-    if ( !ft )
-    {
-        wxLogError(_T("Impossible to determine the file type for extension html. Please edit your MIME types."));
-        return ;
-    }
-
-    wxString cmd;
-    bool ok = ft->GetOpenCommand(&cmd,
-                                 wxFileType::MessageParameters(url, wxEmptyString));
-    delete ft;
-
-    if (!ok)
-    {
-        // TODO: some kind of configuration dialog here.
-        wxMessageBox(_("Could not determine the command for running the browser."),
-                     wxT("Browsing problem"), wxOK|wxICON_EXCLAMATION);
-        return ;
-    }
-
-    ok = (wxExecute(cmd, false) != 0);
-#endif
-}
-
 wxString wxGetTempDir()
 {
     wxString dir;
