@@ -257,13 +257,13 @@ ScriptTemplate* RipperDocGen::GetRefTemplFor( spContext& ctx )
         return &mDeadRefTempl;
 }
 
-string RipperDocGen::GetScopedName( spContext& ofCtx )
+wxString RipperDocGen::GetScopedName( spContext& ofCtx )
 {
     if ( ofCtx.IsInFile() )
         return ofCtx.GetName();
     else
         return ofCtx.GetOutterContext()->GetName() +
-               "::" + ofCtx.GetName();
+               _T("::") + ofCtx.GetName();
 }
 
 void RipperDocGen::AddToCurrentClass( ScriptSection* pSection, spContext& ctx,
@@ -371,14 +371,14 @@ void RipperDocGen::VisitEnumeration( spEnumeration& en )
     if ( CheckIfUncommented( en, *mpEnumIdx ) )
         return;
 
-    string body;
+    wxString body;
     body += mTags[TAG_BOLD].start;
 
     AppendMulitilineStr( body, en.m_EnumContent );
 
     body += mTags[TAG_BOLD].end;
 
-    string line;
+    wxString line;
     AppendHighlightedSource( line, body );
     AppendComments( en, line );
 
@@ -394,7 +394,7 @@ void RipperDocGen::VisitTypeDef( spTypeDef& td )
     if ( CheckIfUncommented( td, *mpTypeDefIdx ) )
         return;
 
-    string body;
+    wxString body;
     body += mTags[TAG_BOLD].start;
     body += "typdef ";
     body += mTags[TAG_BOLD].end;
@@ -407,7 +407,7 @@ void RipperDocGen::VisitTypeDef( spTypeDef& td )
     body += td.GetName();
     body += mTags[TAG_BOLD].end;
 
-    string line;
+    wxString line;
     AppendHighlightedSource( line, body );
     AppendComments( td, line );
 
@@ -426,10 +426,10 @@ void RipperDocGen::VisitPreprocessorLine( spPreprocessorLine& pd )
     if ( CheckIfUncommented( pd, *mpMacroIdx ) )
         return;
 
-    string body;
+    wxString body;
     body += mTags[TAG_FIXED_FONT].start;
 
-    string coloredLine = pd.m_Line;
+    wxString coloredLine = pd.m_Line;
     AppendHighlightedSource( coloredLine, pd.m_Line );
 
     AppendMulitilineStr( body, coloredLine );
@@ -456,7 +456,7 @@ void RipperDocGen::VisitClass( spClass& cl )
         return;
     }
 
-    string body;
+    wxString body;
     AppendComments( cl, body );
 
     mpCurClassSect =
@@ -491,7 +491,7 @@ void RipperDocGen::VisitClass( spClass& cl )
 
 void RipperDocGen::VisitAttribute( spAttribute& attr )
 {
-    string body;
+    wxString body;
     body += mTags[TAG_BOLD].start;
     body += attr.m_Type;
     body += mTags[TAG_BOLD].end;
@@ -501,7 +501,7 @@ void RipperDocGen::VisitAttribute( spAttribute& attr )
     body += attr.GetName();
     body += mTags[TAG_ITALIC].end;
 
-    string line;
+    wxString line;
     AppendHighlightedSource( line, body );
     AppendComments( attr, line );
 
@@ -525,7 +525,7 @@ void RipperDocGen::VisitAttribute( spAttribute& attr )
 
 void RipperDocGen::VisitOperation( spOperation& op )
 {
-    string body;
+    wxString body;
 
     AppendHighlightedSource( body, op.GetFullName(mTags) );
 

@@ -386,13 +386,13 @@ static inline bool get_next_token( char*& cur )
         return true;
 }
 
-static inline void skip_preprocessor_dir( char*& cur )
+static inline void skip_preprocessor_dir( wxChar*& cur )
 {
     do
     {
         skip_to_eol(cur);
 
-        if ( *(cur-1) != '\\' )
+        if ( *(cur-1) != _T('\\') )
             break;
 
         if ( cur < _gSrcEnd )
@@ -2196,10 +2196,10 @@ void CJSourceParser::AddClassNode( char*& cur )
     clear_commets_queue();
 }
 
-void CJSourceParser::AddEnumNode( char*& cur )
+void CJSourceParser::AddEnumNode( wxChar*& cur )
 {
     // now the cursor is at "enum" keyword
-    char* start = cur;
+    wxChar* start = cur;
 
     spEnumeration* pEnum = new spEnumeration();
     mpCurCtx->AddMember( pEnum );
@@ -2233,13 +2233,13 @@ void CJSourceParser::AddEnumNode( char*& cur )
     clear_commets_queue();
 }
 
-void CJSourceParser::AddTypeDefNode( char*& cur )
+void CJSourceParser::AddTypeDefNode( wxChar*& cur )
 {
     // now the cursor at the token next to "typedef" keyword
 
     if ( !get_next_token(cur) ) return;
 
-    char* start = cur;
+    wxChar* start = cur;
 
     spTypeDef* pTDef = new spTypeDef();
     mpCurCtx->AddMember( pTDef );
@@ -2253,18 +2253,18 @@ void CJSourceParser::AddTypeDefNode( char*& cur )
     int tmpLnNo;
     store_line_no( tmpLnNo );
 
-    char* tok = cur-1;
+    wxChar* tok = cur-1;
     skip_next_token_back( tok );
 
-    char* nameEnd = tok;
+    wxChar* nameEnd = tok;
 
     skip_token_back( tok );
 
-    char* nameStart = tok;
+    wxChar* nameStart = tok;
 
     skip_next_token_back( tok );
 
-    char* typeEnd = tok;
+    wxChar* typeEnd = tok;
 
     // check if it's function prototype
     if ( *nameStart == ')' )
