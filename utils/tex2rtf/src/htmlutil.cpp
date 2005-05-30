@@ -39,6 +39,7 @@ static inline wxChar* copystring(const wxChar* s)
 
 extern wxHashTable TexReferences;
 
+extern int passNumber;
 
 extern void DecToHex(int, wxChar *);
 void GenerateHTMLIndexFile(wxChar *fname);
@@ -662,7 +663,7 @@ void OutputBodyStart(void)
     if (s)
     {
       TexOutput(_T(" BACKGROUND=\""));
-      TexOutput(s); 
+      TexOutput(s);
       TexOutput(_T("\""));
     }
   }
@@ -905,7 +906,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
           if ( combineSubSections && !subsectionStarted )
           {
             fflush(Sections);
-              
+
             // Read old .con file in at this point
             wxChar buf[256];
             wxStrcpy(buf, CurrentSectionFile);
@@ -1323,7 +1324,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         TexOutput(_T("\n<TABLE>\n"));
     else {
         TexOutput(_T("\n</TABLE>\n"));
-    // DHS 
+    // DHS
         TwoColWidthA = -1;
         TwoColWidthB = -1;
     }
@@ -2107,9 +2108,15 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
               TraverseChildrenFromChunk(helpRefText);
             if (!ignoreBadRefs)
               TexOutput(_T(" (REF NOT FOUND)"));
-            wxString errBuf;
-            errBuf.Printf(_T("Warning: unresolved reference '%s'"), refName);
-            OnInform((wxChar *)errBuf.c_str());
+
+            // for launching twice do not warn in preparation pass
+            if ((passNumber == 1 && !runTwice) ||
+                (passNumber == 2 && runTwice))
+            {
+              wxString errBuf;
+              errBuf.Printf(_T("Warning: unresolved reference '%s'"), refName);
+              OnInform((wxChar *)errBuf.c_str());
+            }
           }
         }
         else TexOutput(_T("??"));
@@ -2181,7 +2188,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
             TexOutput(_T("<img src=\""));
             TexOutput(ConvertCase(wxFileNameFromPath(inlineFilename)));
             TexOutput(_T("\""));
-            TexOutput(alignment); 
+            TexOutput(alignment);
             TexOutput(_T("></A>"));
           }
           else
@@ -2190,7 +2197,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
             TexOutput(_T("<img src=\""));
             TexOutput(ConvertCase(wxFileNameFromPath(inlineFilename)));
             TexOutput(_T("\""));
-            TexOutput(alignment); 
+            TexOutput(alignment);
             TexOutput(_T(">"));
             delete[] inlineFilename;
           }
@@ -2335,7 +2342,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           wxSnprintf(buf, sizeof(buf), _T("\n<TD VALIGN=TOP WIDTH=%d>\n"),TwoColWidthB);
           TexOutput(buf);
         }
-        else 
+        else
         {
           TexOutput(_T("\n<TD VALIGN=TOP>\n"));
         }
