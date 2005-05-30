@@ -26,7 +26,7 @@
 // WAVE codec
 //
 
-class wxSoundWave: public wxSoundFileStream {
+class WXDLLIMPEXP_MMEDIA wxSoundWave: public wxSoundFileStream {
 public:
     wxSoundWave(wxInputStream& stream, wxSoundStream& io_sound);
     wxSoundWave(wxOutputStream& stream, wxSoundStream& io_sound);

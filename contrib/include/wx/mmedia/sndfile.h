@@ -51,7 +51,7 @@ typedef enum {
 // Base class for file coders/decoders
 //
 
-class wxSoundFileStream: public wxSoundStream {
+class WXDLLIMPEXP_MMEDIA wxSoundFileStream: public wxSoundStream {
 public:
     wxSoundFileStream(wxInputStream& stream, wxSoundStream& io_sound);
     wxSoundFileStream(wxOutputStream& stream, wxSoundStream& io_sound);
