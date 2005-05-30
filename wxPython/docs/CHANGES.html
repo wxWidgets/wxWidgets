@@ -12,6 +12,9 @@
 <h1 class="title">Recent Changes for wxPython</h1>
 <div class="section" id="id1">
 <h1><a name="id1">2.6.0.1</a></h1>
+<ul class="simple">
+<li>30-May-2005</li>
+</ul>
 <p>Added wx.BrushFromBitmap to create a stippled brush in a single step.
 Also added missing brysh style flags: wx.STIPPLE_MASK
 wx.STIPPLE_MASK_OPAQUE.</p>
@@ -70,6 +73,55 @@ wx/lib/ticker_xrc.py</p>
 <p>wxSTC: Fixed CmdKeyAssign key bindings for Ctrl-Backspace.</p>
 <p>wxMSW: Fixed a bug in wx.TextCtrl where all the lines were being used
 to calculate the best size, instead of using a reasonable limit.</p>
+<p>XRCed: Use wx.GetDefaultPyEncoding/wx.SetDefaultPyEncoding for
+changing active encoding.  Fixed pasting siblings (Ctrl key pressed
+while pasting).</p>
+<p>wx.lib.filebrowsebutton: Bug fix from Chad Netzer for when
+self.history is None.</p>
+<p>wx.ogl: Patch from Davide Salomoni that adds an optional point
+parameter to LineShape.InsertLineControlPoint allowing one to
+optionally specify where the new control point has to be drawn.</p>
+<p>wxMSW: setting foreground colour for wx.CheckBox now works when using
+XP themes.</p>
+<p>More updates to the docview library modules and sample apps from the
+ActiveGrid folks.  Their sample IDE is now able to integrate with
+Subversion.</p>
+<p>wx.grid.Grid:  Ensure that the grid gets the focus when it is
+left-clicked.  Note that if you have custom widgets that handle the
+EVT_LEFT_DOWN event but do not call event.Skip() then you will
+probably want to add a call to self.SetFocus in the event handler.</p>
+<p>wxGTK:  Add wxSTAY_ON_TOP support [Patch 1206023]</p>
+<p>wx.TreeCtrl:  wx.EVT_TREE_ITEM_MENU event made consistent on all
+platforms.  The location of the click or the item is included in the
+event as well.</p>
+<p>wxGTK: Setting background colour of a window now only affects the
+window itself, not the borders, scrollbars, etc.  (Bug #1204069)</p>
+<p>Print framework:  Add more paper sizes and code to fallback to an
+explicit paper size if a known paper size is not found for the
+printer.</p>
+<p>wxMac: Applied patch for bug #1206181 Option-key decodes are wrong,
+also applied patch for bug #1205691 Modified Fn keys don't work.</p>
+<p>wx.Image: Fixed to preserve alpha channel in Rotate90 method.</p>
+<p>wxMSW: Fixed incorrect background colour on wx.CheckListBox.</p>
+<p>wxMSW: Fixed drawing of owner drawn buttons with multiline labels</p>
+<p>Removed a bunch of unnecessary files, and removed or replaced images
+that we're not sure of their origin or license.</p>
+<p>The default DoGetBestSize is updated to not always return the current
+size if the window has no sizer, children, or minsize set.  Instead
+the current size is set as the minsize.  This solves the occasional
+problem where a sizer may cause a childless panel to grow but never
+shrink.</p>
+<p>wxMSW: When converting a wx.Icon to a bitmap check if the icon has an
+alpha channel and set the bitmap to use it.</p>
+<p>Fixed the wrong class name used in wx.PyScrolledWindow's call to
+_setCallbackInfo.</p>
+<p>wxMSW: patch #1207202, Fixes GDI leak when using stock cursors.</p>
+<p>wx.calendar.CalendarCtrl: Patch #1207531, Keeps the CalendarCtrl wide
+enough even when the weekday names for the locale are shorter than
+usual.</p>
+<p>Made GridCellNumberEditor.StartingKey also insert the typed char when
+there is a range of allowed values (so a wx.SpinCtrl is used instead
+of a wx.TextCtrl.)</p>
 </div>
 <div class="section" id="id2">
 <h1><a name="id2">2.6.0.0</a></h1>
