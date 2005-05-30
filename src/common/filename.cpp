@@ -614,11 +614,11 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
         // FIXME. Create \temp dir?
         dir = wxT("\\");
     }
-    path = dir + wxT("\\") + prefix;
+    path = dir + wxT("\\") + name;
     int i = 1;
     while (FileExists(path))
     {
-        path = dir + wxT("\\") + prefix ;
+        path = dir + wxT("\\") + name ;
         path << i;
         i ++;
     }
