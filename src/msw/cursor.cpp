@@ -202,13 +202,13 @@ wxCursor::wxCursor(const wxImage& image)
     }
     else if ((w != image_w) || (h != image_h))
     {
-        hotSpotX = int(hotSpotX * double(w) / double(image_w)); 
-        hotSpotY = int(hotSpotY * double(h) / double(image_h)); 
+        hotSpotX = int(hotSpotX * double(w) / double(image_w));
+        hotSpotY = int(hotSpotY * double(h) / double(image_h));
 
         imageSized = image.Scale(w, h);
     }
 
-    HCURSOR hcursor = wxBitmapToHCURSOR( wxBitmap(imageSized), 
+    HCURSOR hcursor = wxBitmapToHCURSOR( wxBitmap(imageSized),
                                          hotSpotX, hotSpotY );
 
     if ( !hcursor )
@@ -357,7 +357,8 @@ wxCursor::wxCursor(int idCursor)
     }
     else
     {
-        m_refData = new wxCursorRefData(hcursor);
+        m_refData = new wxCursorRefData(hcursor,
+                                        !stdCursor.isStd /* delete it later */);
     }
 }
 
