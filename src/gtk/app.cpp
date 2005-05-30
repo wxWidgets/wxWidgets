@@ -136,9 +136,11 @@ bool wxApp::Yield(bool onlyIfNeeded)
     // never finish.
     wxTheApp->RemoveIdleTag();
 
+#if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
     wxLog::Suspend();
+#endif
 
     while (gtk_events_pending())
         gtk_main_iteration();
@@ -151,8 +153,10 @@ bool wxApp::Yield(bool onlyIfNeeded)
     // return value of Processidle().
     ProcessIdle();
 
+#if wxUSE_LOG
     // let the logs be flashed again
     wxLog::Resume();
+#endif
 
     wxIsInsideYield = FALSE;
 
