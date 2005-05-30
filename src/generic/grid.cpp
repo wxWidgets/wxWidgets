@@ -956,9 +956,9 @@ bool wxGridCellNumberEditor::IsAcceptedKey(wxKeyEvent& event)
 
 void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
 {
+    int keycode = event.GetKeyCode();
     if ( !HasRange() )
     {
-        int keycode = event.GetKeyCode();
         if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-')
         {
             wxGridCellTextEditor::StartingKey(event);
@@ -967,7 +967,18 @@ void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
             return;
         }
     }
-
+#if wxUSE_SPINCTRL
+    else
+    {
+        if ( wxIsdigit(keycode) )
+        {
+            wxSpinCtrl* spin = (wxSpinCtrl*)m_control;
+            spin->SetValue(keycode - '0');
+            spin->SetSelection(1,1);
+            return;
+        }
+    }
+#endif
     event.Skip();
 }
 
