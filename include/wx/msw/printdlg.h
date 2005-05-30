@@ -49,6 +49,8 @@ private:
     void* m_devMode;
     void* m_devNames;
 
+    short m_customWindowsPaperId;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowsPrintNativeData)
 };
