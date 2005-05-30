@@ -273,7 +273,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
     // set the frame icon
-    SetIcon(sample_xpm);
+    SetIcon(wxIcon(sample_xpm));
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
