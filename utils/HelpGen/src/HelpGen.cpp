@@ -915,7 +915,7 @@ void HelpGenVisitor::CloseClass()
                 }
                 else
                 {
-                    membersections.Put(ms, & membersections);
+                    membersections.Put(ms.c_str(), & membersections);
                 }
             }
 
@@ -1390,7 +1390,7 @@ wxString DocManager::ExtractStringBetweenBraces(const char **pp)
 
     if ( !SkipSpaceUntil(pp, '{') ) {
         wxLogWarning("file %s(%d): '{' expected after '\\param'",
-                     m_filename.c_str(), m_line);
+                     m_filename.c_str(), (int)m_line);
 
     }
     else {
@@ -1398,7 +1398,7 @@ wxString DocManager::ExtractStringBetweenBraces(const char **pp)
 
         if ( !SkipUntil(pp, '}') ) {
             wxLogWarning("file %s(%d): '}' expected after '\\param'",
-                         m_filename.c_str(), m_line);
+                         m_filename.c_str(), (int)m_line);
         }
         else {
             result = wxString(startParam, (*pp)++ - startParam);
@@ -1496,7 +1496,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
         if ( !SkipSpaceUntil(&current, '{') ) {
             wxLogWarning("file %s(%d): '{' expected after \\func, "
                          "\\constfunc or \\membersection.",
-                         m_filename.c_str(), m_line);
+                         m_filename.c_str(), (int)m_line);
 
             continue;
         }
@@ -1508,7 +1508,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
             const char *startClass = current;
             if ( !SkipUntil(&current, ':') || *(current + 1) != ':' ) {
                 wxLogWarning("file %s(%d): '::' expected after "
-                             "\\membersection.", m_filename.c_str(), m_line);
+                             "\\membersection.", m_filename.c_str(), (int)m_line);
             }
             else {
                 classname = wxString(startClass, current - startClass);
@@ -1523,7 +1523,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
 
         if ( !SkipUntil(&current, '}') ) {
             wxLogWarning("file %s(%d): '}' expected after return type",
-                         m_filename.c_str(), m_line);
+                         m_filename.c_str(), (int)m_line);
 
             continue;
         }
@@ -1534,7 +1534,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
         current++;
         if ( !SkipSpaceUntil(&current, '{') ) {
             wxLogWarning("file %s(%d): '{' expected after return type",
-                         m_filename.c_str(), m_line);
+                         m_filename.c_str(), (int)m_line);
 
             continue;
         }
@@ -1543,7 +1543,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
         const char *funcEnd = current;
         if ( !SkipUntil(&funcEnd, '}') ) {
             wxLogWarning("file %s(%d): '}' expected after function name",
-                         m_filename.c_str(), m_line);
+                         m_filename.c_str(), (int)m_line);
 
             continue;
         }
@@ -1572,7 +1572,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
             size_t len = strlen("\\destruct{");
             if ( funcName(0, len) != "\\destruct{" ) {
                 wxLogWarning("file %s(%d): \\destruct expected",
-                             m_filename.c_str(), m_line);
+                             m_filename.c_str(), (int)m_line);
 
                 continue;
             }
@@ -1582,7 +1582,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
 
             if ( !SkipSpaceUntil(&current, '}') ) {
                 wxLogWarning("file %s(%d): '}' expected after destructor",
-                             m_filename.c_str(), m_line);
+                             m_filename.c_str(), (int)m_line);
 
                 continue;
             }
@@ -1597,7 +1597,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
         if ( !SkipSpaceUntil(&current, '{') ||
              (current++, !SkipSpaceUntil(&current, '\\')) ) {
             wxLogWarning("file %s(%d): '\\param' or '\\void' expected",
-                         m_filename.c_str(), m_line);
+                         m_filename.c_str(), (int)m_line);
 
             continue;
         }
@@ -1654,7 +1654,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
                 }
                 else {
                     wxLogWarning("file %s(%d): ',' or '}' expected after "
-                                 "'\\param'", m_filename.c_str(), m_line);
+                                 "'\\param'", m_filename.c_str(), (int)m_line);
 
                     continue;
                 }
@@ -1663,7 +1663,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
             // if we got here there was no '\\void', so must have some params
             if ( paramNames.IsEmpty() ) {
                 wxLogWarning("file %s(%d): '\\param' or '\\void' expected",
-                        m_filename.c_str(), m_line);
+                        m_filename.c_str(), (int)m_line);
 
                 continue;
             }
@@ -1680,13 +1680,17 @@ bool DocManager::ParseTeXFile(const wxString& filename)
             paramsAll << paramTypes[param] << ' ' << paramNames[param];
         }
 
+        wxString constStr;
+        if (foundCommand == ConstFunc)
+            constStr = _T(" const");
+
         wxLogVerbose("file %s(%d): found '%s %s::%s(%s)%s'",
                      m_filename.c_str(), m_line,
                      returnType.c_str(),
                      classname.c_str(),
                      funcName.c_str(),
                      paramsAll.c_str(),
-                     foundCommand == ConstFunc ? " const" : "");
+                     constStr.c_str());
 
         // store the info about the just found function
         ArrayMethodInfo *methods;
@@ -1849,7 +1853,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                                "in the docs: should be %d instead of %d.",
                                nameClass.c_str(),
                                nameMethod.c_str(),
-                               params.size(), method.GetParamCount());
+                               (int)params.size(), (int)method.GetParamCount());
                 }
                 else {
                     size_t nParam = 0;
@@ -1869,7 +1873,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
 
                             wxLogError("Parameter #%d of '%s::%s' should be "
                                        "'%s' and not '%s'.",
-                                       nParam + 1,
+                                       (int)(nParam + 1),
                                        nameClass.c_str(),
                                        nameMethod.c_str(),
                                        ctxParam->m_Name.c_str(),
@@ -2192,6 +2196,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.39  2005/05/30 09:26:42  ABX
+   More warning and error fixes (work in progress with Tinderbox).
+
    Revision 1.38  2005/05/24 09:06:20  ABX
    More fixes and wxWidgets coding standards.
 

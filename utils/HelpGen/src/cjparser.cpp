@@ -42,7 +42,7 @@
 // statics used by inline'ed C helper-functions
 static char* _gSrcStart = 0;
 static char* _gSrcEnd   = 0;
-static char* _gLastSuppresedComment = 0;
+static wxChar* _gLastSuppresedComment = 0;
 static int   _gLineNo      = 0;
 
 // FOR NOW:: comments queue is static
@@ -945,23 +945,23 @@ static inline void get_string_between( wxChar* start, wxChar* end,
     *end  = saved;
 }
 
-static char* set_comment_text( string& text, char* start )
+static wxChar* set_comment_text( wxString& text, wxChar* start )
 {
-    char* end = start;
+    wxChar* end = start;
 
     // to avoid poluting the queue with this comment
     _gLastSuppresedComment = start;
 
     skip_comments( end );
 
-    if ( *(end-1) == '/' )
+    if ( *(end-1) == _T('/') )
         end -= 2;
 
     start += 2;
 
     // skip multiple leading '/''s or '*''s
-    while( *start == '/' && start < end ) ++start;
-    while( *start == '*' && start < end ) ++start;
+    while( *start == _T('/') && start < end ) ++start;
+    while( *start == _T('*') && start < end ) ++start;
 
     get_string_between( start, end, &text );
 
