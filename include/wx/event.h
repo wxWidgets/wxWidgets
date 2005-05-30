@@ -2788,7 +2788,8 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
     EVT_SCROLL_PAGEUP(func) \
     EVT_SCROLL_PAGEDOWN(func) \
     EVT_SCROLL_THUMBTRACK(func) \
-    EVT_SCROLL_THUMBRELEASE(func)
+    EVT_SCROLL_THUMBRELEASE(func) \
+    EVT_SCROLL_ENDSCROLL(func)
 
 // Scrolling from wxSlider and wxScrollBar, with an id
 #define EVT_COMMAND_SCROLL_TOP(winid, func) wx__DECLARE_EVT1(wxEVT_SCROLL_TOP, winid, wxScrollEventHandler(func))
@@ -2809,7 +2810,8 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
     EVT_COMMAND_SCROLL_PAGEUP(winid, func) \
     EVT_COMMAND_SCROLL_PAGEDOWN(winid, func) \
     EVT_COMMAND_SCROLL_THUMBTRACK(winid, func) \
-    EVT_COMMAND_SCROLL_THUMBRELEASE(winid, func)
+    EVT_COMMAND_SCROLL_THUMBRELEASE(winid, func) \
+    EVT_COMMAND_SCROLL_ENDSCROLL(winid, func)
 
 // Convenience macros for commonly-used commands
 #define EVT_CHECKBOX(winid, func) wx__DECLARE_EVT1(wxEVT_COMMAND_CHECKBOX_CLICKED, winid, wxCommandEventHandler(func))
