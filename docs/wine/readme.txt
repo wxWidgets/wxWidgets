@@ -1,7 +1,7 @@
 
-  Welcome to wxWidgets/Wine 2.6.0
+  Welcome to wxWidgets/Wine 2.6.1
 
-You have downloaded version 2.6.0 of the WINE port of 
+You have downloaded version 2.6.1 of the WINE port of 
 the wxWidgets GUI library.
 
 Information on how to install can be found in the file

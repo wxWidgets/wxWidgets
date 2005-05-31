@@ -1,7 +1,7 @@
-Announcing wxWidgets 2.6.0: a cross-platform GUI toolkit
+Announcing wxWidgets 2.6.1: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
-April 30th, 2005 -- the wxWidgets team is pleased to announce
+June 5th, 2005 -- the wxWidgets team is pleased to announce
 a new official release of the mature cross-platform C++
 application framework.
 

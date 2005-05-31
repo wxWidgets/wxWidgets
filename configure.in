@@ -17,7 +17,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.6.0], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [2.6.1], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -66,7 +66,7 @@ WX_SUBVERSION=$WX_VERSION.$wx_subrelease_number
 WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_number
 
 WX_CURRENT=0
-WX_REVISION=0
+WX_REVISION=1
 WX_AGE=0
 
 

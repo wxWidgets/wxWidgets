@@ -1,4 +1,4 @@
-wxWidgets 2.6.0 for Mac installation
+wxWidgets 2.6.1 for Mac installation
 ------------------------------------
 
 On MacOS X, you can download Apple's free developer tools (gcc
