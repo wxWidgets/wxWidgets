@@ -10,6 +10,7 @@ static char *repview_xpm[] = {
 " .............. ",
 " .  .    .    . ",
 " .............. ",
+" .............. ",
 " XXXXXXXXXXXXXX ",
 " X  X    X    X ",
 " XXXXXXXXXXXXXX ",
@@ -19,6 +20,5 @@ static char *repview_xpm[] = {
 " XXXXXXXXXXXXXX ",
 " X  X    X    X ",
 " XXXXXXXXXXXXXX ",
-" X  X    X    X ",
-" XXXXXXXXXXXXXX ",
+"                "
 };
