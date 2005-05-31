@@ -69,7 +69,7 @@ wxEND_FLAGS( wxScrollBarStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxScrollBar, wxControl,"wx/scrolbar.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxScrollBar)
-    wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxScrollEvent )
+    wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_CHANGED , wxScrollEvent )
 
     wxPROPERTY( ThumbPosition , int , SetThumbPosition, GetThumbPosition, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY( Range , int , SetRange, GetRange, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
@@ -205,7 +205,7 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
 
         case SB_ENDSCROLL:
             nScrollInc = 0;
-            scrollEvent = wxEVT_SCROLL_ENDSCROLL;
+            scrollEvent = wxEVT_SCROLL_CHANGED;
             break;
 
         default:
@@ -224,7 +224,7 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
         SetThumbPosition(position);
     }
     else if ( scrollEvent != wxEVT_SCROLL_THUMBRELEASE &&
-                scrollEvent != wxEVT_SCROLL_ENDSCROLL )
+                scrollEvent != wxEVT_SCROLL_CHANGED )
     {
         // don't process the event if there is no displacement,
         // unless this is a thumb release or end scroll event.

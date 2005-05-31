@@ -591,7 +591,7 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
         wxT("wxEVT_SCROLL_PAGEDOWN"),
         wxT("wxEVT_SCROLL_THUMBTRACK"),
         wxT("wxEVT_SCROLL_THUMBRELEASE"),
-        wxT("wxEVT_SCROLL_ENDSCROLL")
+        wxT("wxEVT_SCROLL_CHANGED")
     };
 
     int index = eventType - wxEVT_SCROLL_TOP;

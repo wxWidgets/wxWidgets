@@ -15,6 +15,7 @@ All (GUI):
 - Radio in menus do not send menu event for selections of already selected item.
 - Fixed wrong positioning of marks and enumerations in lists of wxHTML.
 - wxImage::Rotate90 respects alpha channel.
+- Added wxEVT_SCROLL_CHANGED as synonym for wxEVT_SCROLL_ENDSCROLL
 
 wxMSW:
 

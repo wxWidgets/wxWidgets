@@ -112,7 +112,7 @@ wxEND_FLAGS( wxSliderStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl,"wx/scrolbar.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSlider)
-    wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxScrollEvent )
+    wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_CHANGED , wxScrollEvent )
     wxEVENT_PROPERTY( Updated , wxEVT_COMMAND_SLIDER_UPDATED , wxCommandEvent )
 
     wxPROPERTY( Value , int , SetValue, GetValue , 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
@@ -335,7 +335,7 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
             break;
 
         case SB_ENDSCROLL:
-            scrollEvent = wxEVT_SCROLL_ENDSCROLL;
+            scrollEvent = wxEVT_SCROLL_CHANGED;
             break;
 
         default:
