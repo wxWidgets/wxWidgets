@@ -39,13 +39,13 @@ USERC("svg.rc");
 #include <wx/toolbar.h>
 #include <wx/svg/dcsvg.h>
 
-#include "mondrian.xpm"									     
+#include "mondrian.xpm"
 
 #include "bitmaps/new.xpm"
 #include "bitmaps/save.xpm"
 #include "bitmaps/help.xpm"
 #include "SVGlogo24.xpm"
-									     
+
 class MyChild;
 
 // Define a new application
@@ -83,7 +83,7 @@ class MyCanvas : public wxScrolledWindow
 {
     public:
         int m_index ;
-   
+
         MyChild * m_child ;
         MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size);
         virtual void OnDraw(wxDC& dc);
@@ -160,7 +160,7 @@ bool MyApp::OnInit()
     frame = new MyFrame((wxFrame *)NULL, -1, wxT("SVG Demo"),
         wxPoint(-1, -1), wxSize(500, 400),
         wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
-        
+
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
@@ -328,8 +328,8 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
     currentX += width + 5;
     toolBar->AddTool( MDI_SAVE, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, wxT("Save test in SVG format"));
     currentX += width + 5;
-    toolBar->AddSeparator();      
-    toolBar->AddTool(MDI_ABOUT, *bitmaps[2], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, wxT("Help"));
+    toolBar->AddSeparator();
+    toolBar->AddTool(MDI_ABOUT, *bitmaps[2], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, wxT("Help"));
 
     toolBar->Realize();
 
@@ -342,7 +342,7 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
 {
     MyChild * pChild = (MyChild *)GetActiveChild ();
-    if (pChild == NULL) 
+    if (pChild == NULL)
     {
         return ;
     }
@@ -405,7 +405,7 @@ void MyCanvas::OnDraw(wxDC& dc)
     dc.SetFont(*wxSWISS_FONT);
     dc.SetPen(*wxGREEN_PEN);
 
-    
+
     switch (m_index)
     {
         default:
@@ -458,7 +458,7 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawText(wxT("This is a Swiss-style string"), 50, 30);
             wC = dc.GetTextForeground() ;
             dc.SetTextForeground (_T("FIREBRICK"));
-                                 
+
             // no effect in msw ??
             dc.SetTextBackground (_T("WHEAT"));
             dc.DrawText(wxT("This is a Red string"), 50, 200);
@@ -545,7 +545,7 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.SetMapMode (wxMM_METRIC) ; //svg ignores this
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
-            dc.DrawText(wxT("This is an 18pt string in MapMode"), 50, 60); 
+            dc.DrawText(wxT("This is an 18pt string in MapMode"), 50, 60);
 #if wxUSE_STATUSBAR
             s = wxT("Scaling test page");
 #endif // wxUSE_STATUSBAR
@@ -581,7 +581,7 @@ const long style)
     m_frame = (MyFrame *) parent ;
 #if wxUSE_STATUSBAR
     CreateStatusBar();
-    SetStatusText(title);    
+    SetStatusText(title);
 #endif // wxUSE_STATUSBAR
 
     int w, h ;

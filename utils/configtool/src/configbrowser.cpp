@@ -75,7 +75,7 @@ void ctConfigurationBrowserWindow::CreateControls()
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
 
-    wxSplitterWindow* item3 = new wxSplitterWindow(item1, ID_CONFIGBROWSER_SPLITTERWINDOW, wxDefaultPosition, wxSize(400, 400), wxSP_3DBORDER|wxSP_3DSASH|wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE);
+    wxSplitterWindow* item3 = new wxSplitterWindow(item1, ID_CONFIGBROWSER_SPLITTERWINDOW, wxDefaultPosition, wxSize(400, 400), wxSP_3DBORDER|wxSP_3DSASH|wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxSP_NO_XP_THEME);
     wxTreeCtrl* item4 = new wxTreeCtrl(item3, ID_CONFIGURATION_BROWSER_TREECTRL, wxDefaultPosition, wxSize(100, 100), wxTR_SINGLE|wxNO_BORDER);
     ctConfigurationBrowserControlPanel* item5 = new ctConfigurationBrowserControlPanel(item3, ID_PANEL, wxDefaultPosition, wxSize(100, 80), wxNO_BORDER|wxTAB_TRAVERSAL);
     item3->SplitVertically(item4, item5, 200);

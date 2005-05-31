@@ -110,7 +110,7 @@ ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, 
     m_findDialog = NULL;
 
     m_treeSplitterWindow = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxSize(400, 300),
-        wxSP_3DSASH|wxSP_3DBORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
+        wxSP_3DSASH|wxSP_3DBORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxSP_NO_XP_THEME);
 
     m_configTreeCtrl = new ctConfigTreeCtrl(m_treeSplitterWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxTR_HAS_BUTTONS|wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
