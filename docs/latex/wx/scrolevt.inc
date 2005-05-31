@@ -46,10 +46,7 @@ change the thumb position, and when clicking next to the thumb (In all these
 cases the {\tt EVT\_SCROLL\_THUMBRELEASE} event does not happen).
 
 In short, the {\tt EVT\_SCROLL\_CHANGED} event is triggered when scrolling/
-moving has finished. The only exception (unfortunately) is that changing the
-thumb position using the mousewheel does give a {\tt EVT\_SCROLL\_THUMBRELEASE}
-event but NOT an {\tt EVT\_SCROLL\_CHANGED} event.
-
-Please see the widgets sample ("Slider" page) to see the difference
-between {\tt EVT\_SCROLL\_THUMBRELEASE} and {\tt EVT\_SCROLL\_CHANGED} in action.
+moving has finished independently of the way it had started. Please see the
+widgets sample ("Slider" page) to see the difference between {\tt
+EVT\_SCROLL\_THUMBRELEASE} and {\tt EVT\_SCROLL\_CHANGED} in action.
 

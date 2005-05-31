@@ -39,6 +39,7 @@ wxMSW:
 - Winelib compilation now works.
 - When converting a wxIcon to a bitmap check if the icon has an alpha
   channel and set the bitmap to use it.
+- wxSlider now also sends wxEVT_SCROLL_CHANGED when using mouse wheel
 
 wxGTK:
 

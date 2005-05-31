@@ -130,6 +130,9 @@ protected:
     int           m_lineSize;
     int           m_tickFreq;
 
+    // flag needed to detect whether we're getting THUMBRELEASE event because
+    // of dragging the thumb or scrolling the mouse wheel
+    bool m_isDragging;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider)
 };

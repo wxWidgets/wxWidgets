@@ -149,6 +149,8 @@ void wxSlider::Init()
     m_rangeMax = 0;
     m_rangeMin = 0;
     m_tickFreq = 0;
+
+    m_isDragging = false;
 }
 
 bool
@@ -328,10 +330,25 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
 
         case SB_THUMBTRACK:
             scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+            m_isDragging = true;
             break;
 
         case SB_THUMBPOSITION:
-            scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
+            if ( m_isDragging )
+            {
+                scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
+                m_isDragging = false;
+            }
+            else
+            {
+                // this seems to only happen when the mouse wheel is used: in
+                // this case, as it might be unexpected to get THUMBRELEASE
+                // without preceding THUMBTRACKs, we don't generate it at all
+                // but generate CHANGED event because the control itself does
+                // not send us SB_ENDSCROLL for whatever reason when mouse
+                // wheel is used
+                scrollEvent = wxEVT_SCROLL_CHANGED;
+            }
             break;
 
         case SB_ENDSCROLL:
