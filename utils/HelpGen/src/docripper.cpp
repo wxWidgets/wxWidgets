@@ -164,7 +164,7 @@ RipperDocGen::~RipperDocGen()
     delete mpFileBinderCtx;
 }
 
-void RipperDocGen::AppendComments( spContext& fromContext, string& str )
+void RipperDocGen::AppendComments( spContext& fromContext, wxString& str )
 {
     if ( !fromContext.HasComments() ) return;
 
@@ -206,11 +206,11 @@ void RipperDocGen::AppendComments( spContext& fromContext, string& str )
                      ( str[n] == 10 && str[n+1] == 10 )
                    )
                 {
-                    str.insert( n + 1, "<p>" ); // FIXME:: quick-hack
+                    str.insert( n + 1, _T("<p>") ); // FIXME:: quick-hack
                     len += 3;
                 }
             }
-            str[n] = ' ';
+            str[n] = _T(' ');
         }
     str += mTags[TAG_PARAGRAPH].end;
 }
@@ -222,7 +222,7 @@ void RipperDocGen::AppendMulitilineStr( wxString& st, wxString& mlStr )
     st += mTags[TAG_FIXED_FONT].end;
 }
 
-void RipperDocGen::AppendHighlightedSource( string& st, string source )
+void RipperDocGen::AppendHighlightedSource( wxString& st, wxString source )
 {
     // FIXME:: below should not be fixed :)
     char buf[1024*32];

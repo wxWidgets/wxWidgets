@@ -84,11 +84,11 @@ protected:
 
 protected:
     // helpers
-    void AppendComments( spContext& fromContext, string& str );
+    void AppendComments( spContext& fromContext, wxString& str );
 
     void AppendMulitilineStr( wxString& st, wxString& mlStr );
 
-    void AppendHighlightedSource( string& st, string source );
+    void AppendHighlightedSource( wxString& st, wxString source );
 
     // returns true, if no comments found in the context,
     // plus, creates dummy(empty) section, and puts a
