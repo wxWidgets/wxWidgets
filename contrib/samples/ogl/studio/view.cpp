@@ -309,8 +309,6 @@ void csDiagramView::OnCopyUpdate(wxUpdateUIEvent& event)
 
 void csDiagramView::OnPasteUpdate(wxUpdateUIEvent& event)
 {
-    /* csDiagramDocument *doc = */ (csDiagramDocument *)GetDocument();
-
     int n = wxGetApp().GetDiagramClipboard().GetCount();
 
     event.Enable( (n > 0) );
