@@ -59,6 +59,7 @@ public:
 
 protected:
 
+    virtual WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd);
     wxSize DoGetBestSize() const;
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 

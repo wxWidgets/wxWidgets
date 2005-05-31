@@ -344,4 +344,16 @@ WXDWORD wxScrollBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
+WXHBRUSH wxScrollBar::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
+{
+    HDC hdc = (HDC)pDC;
+    if ( m_hasFgCol )
+    {
+        ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+    }
+
+    WXHBRUSH hbr = 0;
+    return hbr;
+}
+
 #endif // wxUSE_SCROLLBAR
