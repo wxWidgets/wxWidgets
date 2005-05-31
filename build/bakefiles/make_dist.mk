@@ -622,22 +622,34 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/image/smile.xpm $(DISTDIR)/samples/image
 
 	mkdir $(DISTDIR)/samples/internat
+	mkdir $(DISTDIR)/samples/internat/bg
+	mkdir $(DISTDIR)/samples/internat/cs
 	mkdir $(DISTDIR)/samples/internat/de
 	mkdir $(DISTDIR)/samples/internat/fr
-	mkdir $(DISTDIR)/samples/internat/ju
+	mkdir $(DISTDIR)/samples/internat/ja
+	mkdir $(DISTDIR)/samples/internat/ka
+	mkdir $(DISTDIR)/samples/internat/pl
 	mkdir $(DISTDIR)/samples/internat/ru
 	cp $(SAMPDIR)/internat/Makefile.in $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/makefile.unx $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/*.cpp $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/*.xpm $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/*.txt $(DISTDIR)/samples/internat
-	cp $(SAMPDIR)/internat/fr/*.mo $(DISTDIR)/samples/internat/fr
+	cp $(SAMPDIR)/internat/bg/*.mo $(DISTDIR)/samples/internat/bg
+	cp $(SAMPDIR)/internat/cs/*.mo $(DISTDIR)/samples/internat/cs
 	cp $(SAMPDIR)/internat/de/*.mo $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/fr/*.mo $(DISTDIR)/samples/internat/fr
 	cp $(SAMPDIR)/internat/ja/*.mo $(DISTDIR)/samples/internat/ja
+	cp $(SAMPDIR)/internat/ka/*.mo $(DISTDIR)/samples/internat/ka
+	cp $(SAMPDIR)/internat/pl/*.mo $(DISTDIR)/samples/internat/pl
 	cp $(SAMPDIR)/internat/ru/*.mo $(DISTDIR)/samples/internat/ru
-	cp $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
+	cp $(SAMPDIR)/internat/bg/*.po $(DISTDIR)/samples/internat/bg
+	cp $(SAMPDIR)/internat/cs/*.po $(DISTDIR)/samples/internat/cs
 	cp $(SAMPDIR)/internat/de/*.po $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
 	cp $(SAMPDIR)/internat/ja/*.po $(DISTDIR)/samples/internat/ja
+	cp $(SAMPDIR)/internat/ka/*.po $(DISTDIR)/samples/internat/ka
+	cp $(SAMPDIR)/internat/pl/*.po $(DISTDIR)/samples/internat/pl
 	cp $(SAMPDIR)/internat/ru/*.po $(DISTDIR)/samples/internat/ru
 
 	mkdir $(DISTDIR)/samples/ipc
