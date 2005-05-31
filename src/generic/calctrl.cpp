@@ -755,9 +755,9 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
         height += m_spinYear->GetBestSize().y;
 
 
-	wxCoord w2= m_comboMonth->GetBestSize().x + HORZ_MARGIN + GetCharWidth()*6;
-	if (width < w2)
-	  width=w2;
+        wxCoord w2 = m_comboMonth->GetBestSize().x + HORZ_MARGIN + GetCharWidth()*6;
+        if (width < w2)
+            width = w2;
     }
 
     if ( !HasFlag(wxBORDER_NONE) )
@@ -840,12 +840,11 @@ void wxCalendarCtrl::RecalcGeometry()
     wxClientDC dc(this);
 
     dc.SetFont(GetFont());
-    int day = 10;
 
     // determine the column width (weekday names are not necessarily wider
     // than the numbers (in some languages), so let's not assume that they are)
     m_widthCol = 0;
-    for ( day = 10; day <= 31; day++)
+    for ( int day = 10; day <= 31; day++)
     {
         wxCoord width;
         dc.GetTextExtent(wxString::Format(wxT("%d"), day), &width, &m_heightRow);
@@ -1783,4 +1782,3 @@ wxCalendarCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
 }
 
 #endif // wxUSE_CALENDARCTRL
-
