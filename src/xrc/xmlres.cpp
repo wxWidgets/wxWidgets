@@ -1455,8 +1455,18 @@ static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = -2)
     return (*rec_var)->id;
 }
 
+static void AddStdXRCID_Records();
+
 /*static*/ int wxXmlResource::GetXRCID(const wxChar *str_id)
 {
+    static bool s_stdIDsAdded = false;
+
+    if ( !s_stdIDsAdded )
+    {
+        s_stdIDsAdded = true;
+        AddStdXRCID_Records();
+    }
+
     return XRCID_Lookup(str_id);
 }
 
@@ -1601,7 +1611,6 @@ public:
     wxXmlResourceModule() {}
     bool OnInit()
     {
-        AddStdXRCID_Records();
         wxXmlResource::AddSubclassFactory(new wxXmlSubclassFactoryCXX);
         return true;
     }
