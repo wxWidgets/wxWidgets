@@ -63,6 +63,7 @@ alpha channel, and accum buffer. Other implementations may support them.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxGLCanvas::wxGLCanvas}\label{wxglcanvasconstr}
 
 \func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id = -1}, \param{const wxPoint\&}{ pos},
@@ -110,11 +111,13 @@ and so on.
 \docparam{palette}{If the window has the palette, it should by pass this value.
 Note: palette and WX\_GL\_RGBA are mutually exclusive.}
 
+
 \membersection{wxGLCanvas::GetContext}\label{wxglcanvasgetcontext}
 
 \func{wxGLContext*}{GetContext}{\void}
 
 Obtains the context that is associated with this canvas.
+
 
 \membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrent}
 
@@ -125,11 +128,15 @@ Each canvas contains an OpenGL device context that has been created during
 the creation of this window. So this call sets the current device context
 as the target device context for OpenGL operations.
 
+Note that this function may only be called after the window has been shown.
+
+
 \membersection{wxGLCanvas::SetColour}\label{wxglcanvassetcolour}
 
 \func{void}{SetColour}{\param{const char*}{ colour}}
 
 Sets the current colour for this window, using the wxWidgets colour database to find a named colour.
+
 
 \membersection{wxGLCanvas::SwapBuffers}\label{wxglcanvasswapbuffers}
 
