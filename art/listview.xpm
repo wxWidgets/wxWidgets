@@ -7,7 +7,7 @@ static char *listview_xpm[] = {
 "X c #000084",
 "o c #848484",
 /* pixels */
-"                "
+"                ",
 " .............. ",
 " .XXX.......... ",
 " .XXX.  o   o . ",
