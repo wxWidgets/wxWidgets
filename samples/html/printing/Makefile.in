@@ -37,7 +37,7 @@ SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 
 DESTDIR = 
 WX_RELEASE = 2.6
-WX_VERSION = $(WX_RELEASE).0
+WX_VERSION = $(WX_RELEASE).1
 LIBDIRNAME = $(top_builddir)lib
 PRINTING_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -180,7 +180,7 @@ printing.app/Contents/PkgInfo: printing$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 data: 
 	@mkdir -p .
 	@for f in logo6.gif test.htm; do \
-	if test ! -f ./$$f ; \
+	if test ! -e ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

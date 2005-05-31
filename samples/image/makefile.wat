@@ -246,7 +246,7 @@ $(OBJS)\image.exe :  $(IMAGE_OBJECTS) $(OBJS)\image_image.res
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse.tif horse.xpm horse.cur horse.ico horse3.ani smile.xbm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse_ag.pnm horse_rg.pnm horse.tif horse.xpm horse.cur horse.ico horse3.ani smile.xbm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\image_image.obj :  .AUTODEPEND .\image.cpp
 	$(CXX) -zq -fo=$^@ $(IMAGE_CXXFLAGS) $<

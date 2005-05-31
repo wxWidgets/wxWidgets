@@ -36,7 +36,7 @@ SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 
 DESTDIR = 
 WX_RELEASE = 2.6
-WX_VERSION = $(WX_RELEASE).0
+WX_VERSION = $(WX_RELEASE).1
 LIBDIRNAME = $(top_builddir)lib
 INTERNAT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -175,7 +175,7 @@ internat.app/Contents/PkgInfo: internat$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 bg: 
 	@mkdir -p ./bg
 	@for f in internat.po internat.mo; do \
-	if test ! -f ./bg/$$f ; \
+	if test ! -e ./bg/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/bg/$$f -newer ./bg/$$f -print` ; \
 	fi; \
@@ -187,7 +187,7 @@ bg:
 cs: 
 	@mkdir -p ./cs
 	@for f in internat.po internat.mo; do \
-	if test ! -f ./cs/$$f ; \
+	if test ! -e ./cs/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/cs/$$f -newer ./cs/$$f -print` ; \
 	fi; \
@@ -199,7 +199,7 @@ cs:
 de: 
 	@mkdir -p ./de
 	@for f in internat.po internat.mo; do \
-	if test ! -f ./de/$$f ; \
+	if test ! -e ./de/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/de/$$f -newer ./de/$$f -print` ; \
 	fi; \
@@ -211,7 +211,7 @@ de:
 fr: 
 	@mkdir -p ./fr
 	@for f in internat.po internat.mo; do \
-	if test ! -f ./fr/$$f ; \
+	if test ! -e ./fr/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/fr/$$f -newer ./fr/$$f -print` ; \
 	fi; \
@@ -223,7 +223,7 @@ fr:
 ja: 
 	@mkdir -p ./ja
 	@for f in internat.po internat.mo; do \
-	if test ! -f ./ja/$$f ; \
+	if test ! -e ./ja/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/ja/$$f -newer ./ja/$$f -print` ; \
 	fi; \
@@ -235,7 +235,7 @@ ja:
 ka: 
 	@mkdir -p ./ka
 	@for f in internat.po internat.mo; do \
-	if test ! -f ./ka/$$f ; \
+	if test ! -e ./ka/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/ka/$$f -newer ./ka/$$f -print` ; \
 	fi; \
@@ -247,7 +247,7 @@ ka:
 pl: 
 	@mkdir -p ./pl
 	@for f in internat.po internat.mo; do \
-	if test ! -f ./pl/$$f ; \
+	if test ! -e ./pl/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/pl/$$f -newer ./pl/$$f -print` ; \
 	fi; \
@@ -259,7 +259,7 @@ pl:
 ru: 
 	@mkdir -p ./ru
 	@for f in internat.po internat.mo; do \
-	if test ! -f ./ru/$$f ; \
+	if test ! -e ./ru/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/ru/$$f -newer ./ru/$$f -print` ; \
 	fi; \

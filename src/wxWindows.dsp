@@ -3399,10 +3399,6 @@ SOURCE=..\include\wx\msw\glcanvas.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\gnuwin32\winresrc.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\gsockmsw.h
 # End Source File
 # Begin Source File
@@ -3416,6 +3412,10 @@ SOURCE=..\include\wx\msw\helpchm.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\helpwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\htmlhelp.h
 # End Source File
 # Begin Source File
 
@@ -3615,6 +3615,10 @@ SOURCE=..\include\wx\msw\stattext.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\stdpaths.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\tabctrl.h
 # End Source File
 # Begin Source File
@@ -3656,6 +3660,10 @@ SOURCE=..\include\wx\msw\treectrl.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\uxtheme.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\uxthemep.h
 # End Source File
 # Begin Source File
 

@@ -7489,6 +7489,10 @@ SOURCE=..\..\include\wx\msw\helpwin.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\htmlhelp.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\icon.h
 # End Source File
 # Begin Source File
@@ -7690,6 +7694,10 @@ SOURCE=..\..\include\wx\msw\ole\uuid.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\uxtheme.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\uxthemep.h
 # End Source File
 # Begin Source File
 

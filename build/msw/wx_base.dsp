@@ -1045,6 +1045,10 @@ SOURCE=..\..\include\wx\msw\stackwalk.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\stdpaths.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\winundef.h
 # End Source File
 # Begin Source File
