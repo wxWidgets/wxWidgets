@@ -1,13 +1,13 @@
 /* XPM */
 static char *listview_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"16 16 4 1",
+"16 15 4 1",
 "  c Black",
 ". c #FFFFFF",
 "X c #000084",
 "o c #848484",
 /* pixels */
-"                ",
+"                "
 " .............. ",
 " .XXX.......... ",
 " .XXX.  o   o . ",
@@ -21,6 +21,5 @@ static char *listview_xpm[] = {
 " .............. ",
 " .XXX.......... ",
 " .XXX. o    o . ",
-" .XXX.......... ",
-"                "
+" .XXX.......... "
 };
