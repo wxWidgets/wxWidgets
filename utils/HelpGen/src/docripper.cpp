@@ -312,9 +312,9 @@ void RipperDocGen::LinkSuperClassRefs()
         ScriptSection* pClSect = (ScriptSection*)cl.GetUserData();
         ScriptSection* pSuperSect = pClSect->GetSubsection("Derived from");
 
-        for( size_t n = 0; n != cl.mSuperClassNames.size(); ++n )
+        for( size_t n = 0; n != cl.m_SuperClassNames.size(); ++n )
         {
-            string& superClName = cl.mSuperClassNames[n];
+            wxString& superClName = cl.m_SuperClassNames[n];
 
             spClass* pFound = NULL;
 

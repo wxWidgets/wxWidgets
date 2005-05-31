@@ -643,8 +643,8 @@ void spPreprocessorLine::DumpThis(const wxString& indent) const
 void spClass::DumpThis(const wxString& indent) const
 {
     wxString base;
-    for ( StrListT::const_iterator i = mSuperClassNames.begin();
-          i != mSuperClassNames.end();
+    for ( StrListT::const_iterator i = m_SuperClassNames.begin();
+          i != m_SuperClassNames.end();
           i++ ) {
         if ( !base.empty() )
             base += ", ";

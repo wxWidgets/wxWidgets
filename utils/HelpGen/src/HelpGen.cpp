@@ -1105,7 +1105,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     // derived from section
     wxString derived = "\\wxheading{Derived from}\n\n";
 
-    const StrListT& baseClasses = cl.mSuperClassNames;
+    const StrListT& baseClasses = cl.m_SuperClassNames;
     if ( baseClasses.size() == 0 ) {
         derived << "No base class";
     }
@@ -2197,6 +2197,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.43  2005/05/31 15:42:43  ABX
+   More warning and error fixes (work in progress with Tinderbox).
+
    Revision 1.42  2005/05/31 15:32:49  ABX
    More warning and error fixes (work in progress with Tinderbox).
 

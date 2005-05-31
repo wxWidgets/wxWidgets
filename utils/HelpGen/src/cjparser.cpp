@@ -2156,7 +2156,7 @@ void CJSourceParser::AddClassNode( char*& cur )
 
         if ( *tok != ':' && *cur != ':' )
 
-            pClass->mSuperClassNames.push_back( string( cur, len ) );
+            pClass->m_SuperClassNames.push_back( string( cur, len ) );
 
     } while(1);
 
@@ -2165,9 +2165,9 @@ void CJSourceParser::AddClassNode( char*& cur )
         int tmpLn;
         store_line_no( tmpLn );
 
-        while ( pClass->mSuperClassNames.size() )
+        while ( pClass->m_SuperClassNames.size() )
 
-            pClass->mSuperClassNames.erase( &pClass->mSuperClassNames[0] );
+            pClass->m_SuperClassNames.erase( &pClass->m_SuperClassNames[0] );
 
         char* tok = cur;
 

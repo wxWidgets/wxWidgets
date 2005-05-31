@@ -133,7 +133,7 @@ class spComment;
     // list of parameters
     typedef vector<spParameter*> MParamListT;
     // string list
-    typedef vector<string>     StrListT;
+    typedef vector<wxString>   StrListT;
 
 #else
 
@@ -143,7 +143,7 @@ class spComment;
     typedef WXSTL_VECTOR_SHALLOW_COPY(spContextPtrT)   MMemberListT;
     typedef WXSTL_VECTOR_SHALLOW_COPY(spCommentPtrT)   MCommentListT;
     typedef WXSTL_VECTOR_SHALLOW_COPY(spParameterPtrT) MParamListT;
-    typedef WXSTL_VECTOR_SHALLOW_COPY(string)          StrListT;
+    typedef WXSTL_VECTOR_SHALLOW_COPY(wxString)        StrListT;
 
 #endif
 // base class for all visitors of source code contents
@@ -623,7 +623,7 @@ class spClass : public spContext
 {
 public:
     // list of superclasses/interfaces
-    StrListT     mSuperClassNames;
+    StrListT     m_SuperClassNames;
 
     // see SP_CLASS_TYPES enumeration
     int          mClassSubType;
