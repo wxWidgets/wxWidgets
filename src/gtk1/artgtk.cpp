@@ -160,8 +160,10 @@ static GtkIconSize FindClosestIconSize(const wxSize& size)
         s_sizes[5].icon = GTK_ICON_SIZE_DIALOG;
         for (size_t i = 0; i < NUM_SIZES; i++)
         {
-            gtk_icon_size_lookup(s_sizes[i].icon,
-                                 &s_sizes[i].x, &s_sizes[i].y);
+            gtk_icon_size_lookup_for_settings(
+                              gtk_settings_get_for_screen(gdk_screen_get_default()),
+                              s_sizes[i].icon,
+                              &s_sizes[i].x, &s_sizes[i].y);
         }
         s_sizesInitialized = true;
     }
