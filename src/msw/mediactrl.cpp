@@ -1075,13 +1075,20 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     //
     // Connect Events
     //
-//TODO:  Greg Hazel reports problems with this... but win2k seems fine on mine...
-//    m_ctrl->Connect(m_ctrl->GetId(), wxEVT_ERASE_BACKGROUND, 
-//        wxEraseEventHandler(wxAMMediaEvtHandler::OnEraseBackground),
-//        NULL, (wxEvtHandler*) this);
-    m_ctrl->Connect(m_ctrl->GetId(), wxEVT_PAINT, 
-        wxPaintEventHandler(wxAMMediaEvtHandler::OnPaint),
+    //TODO:  Greg Hazel reports problems with this... but win2k seems fine on mine...
+    //-------------------------------------------------------------------------------
+    // My problem with this was only with a previous patch, probably the third rewrite
+    // fixed it as a side-effect. In fact, the erase background style of drawing not 
+    // only works now, but is much better than paint-based updates (the paint event 
+    // handler flickers if the wxMediaCtrl shares a sizer with another child window, 
+    // or is on a notebook)
+    //  - Greg Hazel
+    m_ctrl->Connect(m_ctrl->GetId(), wxEVT_ERASE_BACKGROUND, 
+        wxEraseEventHandler(wxAMMediaEvtHandler::OnEraseBackground),
         NULL, (wxEvtHandler*) this);
+    //m_ctrl->Connect(m_ctrl->GetId(), wxEVT_PAINT, 
+    //    wxPaintEventHandler(wxAMMediaEvtHandler::OnPaint),
+    //    NULL, (wxEvtHandler*) this);
 
     //
     // As noted below, we need to catch the Top Level Window's
@@ -1492,6 +1499,16 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
         srcRect.top = 0; srcRect.left = 0;
         srcRect.bottom = m_bestSize.y; srcRect.right = m_bestSize.x;
 
+        //it happens.
+        if (w < 0)
+        {
+            w = 0;
+        }
+        if (h < 0)
+        {
+            h = 0;
+        }
+
         //position in window client coordinates to display and stretch to
         destRect.top = 0; destRect.left = 0;
         destRect.bottom = h; destRect.right = w;
@@ -1589,22 +1606,22 @@ wxThread::ExitCode wxAMMediaThread::Entry()
 //---------------------------------------------------------------------------
 void wxAMMediaBackend::OnStop()
 {
-                //send the event to our child
-                wxMediaEvent theEvent(wxEVT_MEDIA_STOP, m_ctrl->GetId());
-                m_ctrl->ProcessEvent(theEvent);
+    //send the event to our child
+    wxMediaEvent theEvent(wxEVT_MEDIA_STOP, m_ctrl->GetId());
+    m_ctrl->ProcessEvent(theEvent);
 
-                //if the user didn't veto it, stop the stream
-                if (theEvent.IsAllowed())
-                {
-                    //Interestingly enough, DirectShow does not actually stop
-                    //the filters - even when it reaches the end!
-                    wxVERIFY( Stop() );
+    //if the user didn't veto it, stop the stream
+    if (theEvent.IsAllowed())
+    {
+        //Interestingly enough, DirectShow does not actually stop
+        //the filters - even when it reaches the end!
+        wxVERIFY( Stop() );
 
-                    //send the event to our child
-                    wxMediaEvent theEvent(wxEVT_MEDIA_FINISHED,
-                                          m_ctrl->GetId());
-                    m_ctrl->ProcessEvent(theEvent);
-                }
+        //send the event to our child
+        wxMediaEvent theEvent(wxEVT_MEDIA_FINISHED,
+                              m_ctrl->GetId());
+        m_ctrl->ProcessEvent(theEvent);
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -1620,14 +1637,16 @@ void wxAMMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
         //TODO: Use wxClientDC?
         HDC hdc = ::GetDC((HWND)pThis->m_ctrl->GetHandle());
         if( pThis->m_pVMC->RepaintVideo((HWND)pThis->m_ctrl->GetHandle(), 
-                                                hdc)  != 0 )
+                                        hdc)  != 0 )
         {
             wxASSERT(false);
-    }
+        }
         ::ReleaseDC((HWND)pThis->m_ctrl->GetHandle(), hdc);
     }
     else
+    {
         evt.Skip();
+    }
 }
 
 //---------------------------------------------------------------------------

@@ -291,7 +291,7 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(400,400))
 {
     //
     //  Create Menus
@@ -842,11 +842,13 @@ MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
     wxPanel(theBook, wxID_ANY), m_nLoops(0), m_bLoop(false)
 {
     //
-    //  Create and attach the first/main sizer
+    //  Create and attach the sizer
     //
-    wxBoxSizer* vertsizer = new wxBoxSizer(wxVERTICAL);
-    this->SetSizer(vertsizer);
+    wxFlexGridSizer* sizer = new wxFlexGridSizer(2, 1, 0, 0);
+    this->SetSizer(sizer);
     this->SetAutoLayout(true);
+    sizer->AddGrowableRow(0);
+    sizer->AddGrowableCol(0);
 
     //
     //  Create our media control
@@ -858,7 +860,7 @@ MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
     wxASSERT_MSG(bOK, wxT("Could not create media control!"));
     wxUnusedVar(bOK);
 
-    vertsizer->Add(m_mediactrl, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    sizer->Add(m_mediactrl, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5);
 
     //
     //  Create our slider
@@ -868,20 +870,7 @@ MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
                             0, //end
                             wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
-    vertsizer->Add(m_slider, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);
-
-
-    //
-    //  Create the second sizer which will position things
-    //  vertically -
-    //
-    //  -------Menu----------
-    //  [m_mediactrl]
-    //
-    //  [m_slider]
-    //
-    wxBoxSizer* horzsizer = new wxBoxSizer(wxHORIZONTAL);
-    vertsizer->Add(horzsizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    sizer->Add(m_slider, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);
 
     //
     // Slider events
