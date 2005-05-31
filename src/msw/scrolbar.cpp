@@ -344,16 +344,13 @@ WXDWORD wxScrollBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-WXHBRUSH wxScrollBar::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
+WXHBRUSH wxScrollBar::MSWControlColor(WXHDC pDC, WXHWND hWnd)
 {
-    HDC hdc = (HDC)pDC;
-    if ( m_hasFgCol )
-    {
-        ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-    }
-
-    WXHBRUSH hbr = 0;
-    return hbr;
+    // unless we have an explicitly set bg colour, use default (gradient under
+    // XP) brush instead of GetBackgroundColour() one as the base class would
+    //
+    // note that fg colour isn't used for a scrollbar
+    return UseBgCol() ? wxControl::MSWControlColor(pDC, hWnd) : NULL;
 }
 
 #endif // wxUSE_SCROLLBAR
