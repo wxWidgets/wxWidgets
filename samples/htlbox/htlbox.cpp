@@ -37,6 +37,7 @@
     #include "wx/textctrl.h"
 
     #include "wx/dc.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/colordlg.h"
