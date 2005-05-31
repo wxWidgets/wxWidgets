@@ -180,7 +180,7 @@ widget.app/Contents/PkgInfo: widget$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.p
 data: 
 	@mkdir -p .
 	@for f in start.htm; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

@@ -183,7 +183,7 @@ splash.app/Contents/PkgInfo: splash$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.p
 data: 
 	@mkdir -p .
 	@for f in splash.png press.mpg; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

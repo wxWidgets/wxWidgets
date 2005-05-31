@@ -175,7 +175,7 @@ internat.app/Contents/PkgInfo: internat$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 bg: 
 	@mkdir -p ./bg
 	@for f in internat.po internat.mo; do \
-	if test ! -e ./bg/$$f ; \
+	if test ! -f ./bg/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/bg/$$f -newer ./bg/$$f -print` ; \
 	fi; \
@@ -187,7 +187,7 @@ bg:
 cs: 
 	@mkdir -p ./cs
 	@for f in internat.po internat.mo; do \
-	if test ! -e ./cs/$$f ; \
+	if test ! -f ./cs/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/cs/$$f -newer ./cs/$$f -print` ; \
 	fi; \
@@ -199,7 +199,7 @@ cs:
 de: 
 	@mkdir -p ./de
 	@for f in internat.po internat.mo; do \
-	if test ! -e ./de/$$f ; \
+	if test ! -f ./de/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/de/$$f -newer ./de/$$f -print` ; \
 	fi; \
@@ -211,7 +211,7 @@ de:
 fr: 
 	@mkdir -p ./fr
 	@for f in internat.po internat.mo; do \
-	if test ! -e ./fr/$$f ; \
+	if test ! -f ./fr/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/fr/$$f -newer ./fr/$$f -print` ; \
 	fi; \
@@ -223,7 +223,7 @@ fr:
 ja: 
 	@mkdir -p ./ja
 	@for f in internat.po internat.mo; do \
-	if test ! -e ./ja/$$f ; \
+	if test ! -f ./ja/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/ja/$$f -newer ./ja/$$f -print` ; \
 	fi; \
@@ -235,7 +235,7 @@ ja:
 ka: 
 	@mkdir -p ./ka
 	@for f in internat.po internat.mo; do \
-	if test ! -e ./ka/$$f ; \
+	if test ! -f ./ka/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/ka/$$f -newer ./ka/$$f -print` ; \
 	fi; \
@@ -247,7 +247,7 @@ ka:
 pl: 
 	@mkdir -p ./pl
 	@for f in internat.po internat.mo; do \
-	if test ! -e ./pl/$$f ; \
+	if test ! -f ./pl/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/pl/$$f -newer ./pl/$$f -print` ; \
 	fi; \
@@ -259,7 +259,7 @@ pl:
 ru: 
 	@mkdir -p ./ru
 	@for f in internat.po internat.mo; do \
-	if test ! -e ./ru/$$f ; \
+	if test ! -f ./ru/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/ru/$$f -newer ./ru/$$f -print` ; \
 	fi; \

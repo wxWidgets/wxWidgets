@@ -181,7 +181,7 @@ test.app/Contents/PkgInfo: test$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist
 data: 
 	@mkdir -p .
 	@for f in f.html fft.html imagemap.htm imagemap.png pic.png pic2.bmp tables.htm test.htm listtest.htm i18n.gif 8859_2.htm cp1250.htm regres.htm; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

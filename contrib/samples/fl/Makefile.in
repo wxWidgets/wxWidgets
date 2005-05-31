@@ -408,7 +408,7 @@ fl_sample3.app/Contents/PkgInfo: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/carbo
 data_files: 
 	@mkdir -p ./bitmaps
 	@for f in bookmarks.bmp class_icon.bmp class_icon1.bmp copy.bmp cut.bmp file_icon.bmp folder_icon.bmp help_icon.bmp new.bmp nextmark.bmp open.bmp paste.bmp prevmark.bmp res_icon.bmp save.bmp saveall.bmp search.bmp start95_dp.bmp start95_pr.bmp tile.bmp; do \
-	if test ! -e ./bitmaps/$$f ; \
+	if test ! -f ./bitmaps/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/bitmaps/$$f -newer ./bitmaps/$$f -print` ; \
 	fi; \

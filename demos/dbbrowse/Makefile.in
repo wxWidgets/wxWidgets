@@ -199,7 +199,7 @@ dbbrowse.app/Contents/PkgInfo: $(__dbbrowse___depname) $(top_srcdir)/src/mac/car
 data_help_std: 
 	@mkdir -p ./help.std
 	@for f in compiler.htm dbbrowse.hhc dbbrowse.hhk dbbrowse.hhp dbbrowse.htm getcol.htm getcolsh.htm icons.htm picgrams.htm problems.htm remstar.htm sample.htm startprm.htm todo.htm wxdb.htm wxtable.htm; do \
-	if test ! -e ./help.std/$$f ; \
+	if test ! -f ./help.std/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/help.std/$$f -newer ./help.std/$$f -print` ; \
 	fi; \
@@ -211,7 +211,7 @@ data_help_std:
 data_help_png: 
 	@mkdir -p ./help.png
 	@for f in col.png d_closed.png d_open.png dsn.png dsnclose.png dsnopen.png f_closed.png f_open.png gnu.png gtk.png imbau.png kde.png key.png keyf.png linux.png logo.png motif.png msvc.png odbc.png pgmctrl.png redh.png remstar.png server.png suse.png tab.png view.png winnt.png wins.png; do \
-	if test ! -e ./help.png/$$f ; \
+	if test ! -f ./help.png/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/help.png/$$f -newer ./help.png/$$f -print` ; \
 	fi; \

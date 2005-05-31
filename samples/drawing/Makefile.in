@@ -175,7 +175,7 @@ drawing.app/Contents/PkgInfo: drawing$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info
 data: 
 	@mkdir -p .
 	@for f in pat4.bmp pat35.bmp pat36.bmp image.bmp mask.bmp; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

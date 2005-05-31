@@ -178,7 +178,7 @@ help.app/Contents/PkgInfo: help$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist
 data: 
 	@mkdir -p ./helpfiles
 	@for f in Index.hhk another.hhc another.hhp another.htm book1.htm book2.htm contents.hhc main.htm page2-b.htm testing.hhp; do \
-	if test ! -e ./helpfiles/$$f ; \
+	if test ! -f ./helpfiles/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/helpfiles/$$f -newer ./helpfiles/$$f -print` ; \
 	fi; \

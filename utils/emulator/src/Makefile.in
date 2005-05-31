@@ -144,7 +144,7 @@ wxemulator$(EXEEXT): $(WXEMULATOR_OBJECTS) $(__wxemulator___win32rc)
 data: 
 	@mkdir -p .
 	@for f in default.wxe ipaq.wxe bluegradient.jpg ipaq01.jpg; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \
