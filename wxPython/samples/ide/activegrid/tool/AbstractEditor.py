@@ -48,7 +48,16 @@ class CanvasView(wx.lib.docview.View):
         self._pt2 = None
         self._needEraseLasso = False
         self._propShape = None
+        self._maxWidth = 2000
+        self._maxHeight = 16000
 
+
+    def OnDraw(self, dc):
+        """ for Print Preview and Print """
+        dc.BeginDrawing()
+        self._canvas.Redraw(dc)
+        dc.EndDrawing()
+        
 
     def OnCreate(self, doc, flags):
         frame = wx.GetApp().CreateDocumentFrame(self, doc, flags)
@@ -130,9 +139,7 @@ class CanvasView(wx.lib.docview.View):
         wx.EVT_KILL_FOCUS(self._canvas, self.OnKillFocus)
         wx.EVT_SET_FOCUS(self._canvas, self.OnFocus)
 
-        maxWidth = 2000
-        maxHeight = 16000
-        self._canvas.SetScrollbars(20, 20, maxWidth / 20, maxHeight / 20)
+        self._canvas.SetScrollbars(20, 20, self._maxWidth / 20, self._maxHeight / 20)
         
         self._canvas.SetBackgroundColour(wx.WHITE)
         self._diagram = ogl.Diagram()
@@ -654,7 +661,16 @@ class EditorCanvasShapeEvtHandler(ogl.ShapeEvtHandler):
         self._view.SetSelection(model, keys == self.SHIFT_KEY or keys == self.CONTROL_KEY)
 
 
+    def OnMovePre(self, dc, x, y, oldX, oldY, display):
+        """ Prevent objects from being dragged outside of viewable area """
+        if (x > self._view._maxWidth) or (y > self._view._maxHeight):
+            return False
+
+        return ogl.ShapeEvtHandler.OnMovePre(self, dc, x, y, oldX, oldY, display)
+
+
     def OnMovePost(self, dc, x, y, oldX, oldY, display):
+        """ Update the model's record of where the shape should be.  Also enable redo/undo.  """
         if x == oldX and y == oldY:
             return
         if not self._view.GetDocument():

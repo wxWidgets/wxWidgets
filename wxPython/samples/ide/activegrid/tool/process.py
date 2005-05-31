@@ -1924,7 +1924,7 @@ class IOBuffer:
 
         self.__buf = ''
         # A state change is defined as the buffer being closed or a
-        # write occurring.
+        # write occuring.
         if mutex is not None:
             self._mutex = mutex
         else:

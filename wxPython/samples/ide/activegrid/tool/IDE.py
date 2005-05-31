@@ -79,8 +79,6 @@ class IDEApplication(wx.lib.pydocview.DocApp):
         import PHPEditor
         import wx.lib.ogl as ogl
         import DebuggerService
-        import atexit
-        atexit.register(DebuggerService.DebuggerService.KillAllRunningProcesses)
         import AboutDialog
         import SVNService
                     
@@ -108,6 +106,19 @@ class IDEApplication(wx.lib.pydocview.DocApp):
 
         docManager = wx.lib.docview.DocManager(flags = self.GetDefaultDocManagerFlags())
         self.SetDocumentManager(docManager)
+
+        defaultTemplate = wx.lib.docview.DocTemplate(docManager,
+                _("Any"),
+                "*.*",
+                _("Any"),
+                _(".txt"),
+                _("Text Document"),
+                _("Text View"),
+                STCTextEditor.TextDocument,
+                STCTextEditor.TextView,
+                wx.lib.docview.TEMPLATE_INVISIBLE,
+                icon = STCTextEditor.getTextIcon())
+        docManager.AssociateTemplate(defaultTemplate)
 
         if not ACTIVEGRID_BASE_IDE:
             dplTemplate = DeploymentService.DeploymentTemplate(docManager,

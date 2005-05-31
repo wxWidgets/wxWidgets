@@ -56,6 +56,10 @@ def CreateDirectoryControl( parent, fileLabel, dirLabel, fileExtension, starting
         if nameControl.GetValue().find(' ') != -1:
             wx.MessageBox(_("Please provide a filename that does not contains spaces."), _("Spaces in Filename"))            
             return False
+        if not os.path.exists(dirControl.GetValue()):
+            wx.MessageBox(_("That directory does not exist. Please choose an existing directory."), _("Provide a Valid Directory"))            
+            return False
+        
         filePath = os.path.join(dirControl.GetValue(), MakeNameEndInExtension(nameControl.GetValue(), "." + fileExtension))
         if os.path.exists(filePath):
             if allowOverwriteOnPrompt:

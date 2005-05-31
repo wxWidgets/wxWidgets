@@ -49,6 +49,11 @@ class PythonDocument(CodeEditor.CodeDocument):
 class PythonView(CodeEditor.CodeView):
 
 
+    def GetCtrlClass(self):
+        """ Used in split window to instantiate new instances """
+        return PythonCtrl
+
+
     def ProcessUpdateUIEvent(self, event):
         if not self.GetCtrl():
             return False
@@ -60,11 +65,6 @@ class PythonView(CodeEditor.CodeView):
             return True
             
         return CodeEditor.CodeView.ProcessUpdateUIEvent(self, event)
-
-
-    def GetCtrlClass(self):
-        """ Used in split window to instantiate new instances """
-        return PythonCtrl
 
 
     def OnActivateView(self, activate, activeView, deactiveView):
@@ -345,8 +345,8 @@ class PythonService(CodeEditor.CodeService):
 class PythonCtrl(CodeEditor.CodeCtrl):
 
 
-    def __init__(self, parent, ID = -1, style = wx.NO_FULL_REPAINT_ON_RESIZE):
-        CodeEditor.CodeCtrl.__init__(self, parent, ID, style)
+    def __init__(self, parent, id=-1, style=wx.NO_FULL_REPAINT_ON_RESIZE):
+        CodeEditor.CodeCtrl.__init__(self, parent, id, style)
         self.SetProperty("tab.timmy.whinge.level", "1")
         self.SetProperty("fold.comment.python", "1")
         self.SetProperty("fold.quotes.python", "1")
@@ -516,6 +516,7 @@ class PythonCtrl(CodeEditor.CodeCtrl):
                 if doExtraIndent or len(textNoTrailingSpaces) and textNoTrailingSpaces[-1] == ':':
                     spaces = spaces + ' ' * self.GetIndent()
             self.AddText('\n' + spaces)
+        self.EnsureCaretVisible()
 
 
     # Callback for tokenizer in self.DoIndent

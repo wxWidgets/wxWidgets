@@ -633,10 +633,8 @@ class CodeCtrl(STCTextEditor.TextCtrl):
     BREAKPOINT_MARKER_MASK = 0x2
     
             
-    def __init__(self, parent, ID = -1, style = wx.NO_FULL_REPAINT_ON_RESIZE):
-        if ID == -1:
-            ID = wx.NewId()
-        STCTextEditor.TextCtrl.__init__(self, parent, ID, style)
+    def __init__(self, parent, id=-1, style = wx.NO_FULL_REPAINT_ON_RESIZE):
+        STCTextEditor.TextCtrl.__init__(self, parent, id, style)
         
         self.UsePopUp(False)
         self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
@@ -672,10 +670,10 @@ class CodeCtrl(STCTextEditor.TextCtrl):
         if _WINDOWS:  # should test to see if menu item exists, if it does, add this workaround
             self.CmdKeyClear(wx.stc.STC_KEY_TAB, 0)  # menu item "Indent Lines" from CodeService.InstallControls() generates another INDENT_LINES_ID event, so we'll explicitly disable the tab processing in the editor
 
-        wx.stc.EVT_STC_MARGINCLICK(self, ID, self.OnMarginClick)
+        wx.stc.EVT_STC_MARGINCLICK(self, self.GetId(), self.OnMarginClick)
         wx.EVT_KEY_DOWN(self, self.OnKeyPressed)
         if self.GetMatchingBraces(): 
-            wx.stc.EVT_STC_UPDATEUI(self, ID, self.OnUpdateUI)
+            wx.stc.EVT_STC_UPDATEUI(self, self.GetId(), self.OnUpdateUI)
 
         self.StyleClearAll()
         self.UpdateStyles()
@@ -720,7 +718,8 @@ class CodeCtrl(STCTextEditor.TextCtrl):
                 item = menuBar.FindItemById(itemID)
                 if item:
                     menu.Append(itemID, item.GetLabel())
-
+                    wx.EVT_MENU(self, itemID, self.DSProcessEvent)  # wxHack: for customized right mouse menu doesn't work with new DynamicSashWindow
+                    wx.EVT_UPDATE_UI(self, itemID, self.DSProcessUpdateUIEvent)  # wxHack: for customized right mouse menu doesn't work with new DynamicSashWindow
         return menu
                 
 
@@ -834,6 +833,7 @@ class CodeCtrl(STCTextEditor.TextCtrl):
 
     def DoIndent(self):
         self.AddText('\n')
+        self.EnsureCaretVisible()
         # Need to do a default one for all languges
 
 

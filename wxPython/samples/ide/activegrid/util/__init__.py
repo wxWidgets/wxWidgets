@@ -21,8 +21,9 @@ def _registerMainModuleDir():
         if not os.path.isabs(utilModuleDir):
             utilModuleDir = os.path.join(os.getcwd(), utilModuleDir)
         mainModuleDir = os.path.normpath(os.path.join(utilModuleDir, os.path.join(os.path.pardir, os.path.pardir)))
+        if mainModuleDir.endswith('.zip'):
+            mainModuleDir = os.path.dirname(mainModuleDir) # Get rid of library.zip
     else:
         mainModuleDir = os.path.dirname(sys.executable)
 
 _registerMainModuleDir()
-

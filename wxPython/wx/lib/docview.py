@@ -435,6 +435,7 @@ class Document(wx.EvtHandler):
             msgTitle = _("File Error")
 
         backupFilename = None
+        fileObject = None
         try:
             # if current file exists, move it to a safe place temporarily
             if os.path.exists(filename):
@@ -457,10 +458,18 @@ class Document(wx.EvtHandler):
             fileObject = file(filename, 'w')
             self.SaveObject(fileObject)
             fileObject.close()
-
+            fileObject = None
+            
             if backupFilename:
                 os.remove(backupFilename)
         except:
+            # for debugging purposes
+            import traceback
+            traceback.print_exc()
+
+            if fileObject:
+                fileObject.close()  # file is still open, close it, need to do this before removal 
+
             # save failed, restore old file
             if backupFilename:
                 os.remove(filename)
@@ -501,7 +510,16 @@ class Document(wx.EvtHandler):
         fileObject = file(filename, 'r')
         try:
             self.LoadObject(fileObject)
+            fileObject.close()
+            fileObject = None
         except:
+            # for debugging purposes
+            import traceback
+            traceback.print_exc()
+
+            if fileObject:
+                fileObject.close()  # file is still open, close it 
+
             wx.MessageBox("Could not open '%s'.  %s" % (FileNameFromPath(filename), sys.exc_value),
                           msgTitle,
                           wx.OK | wx.ICON_EXCLAMATION,
@@ -945,7 +963,7 @@ class View(wx.EvtHandler):
 
         Override to return an instance of a class other than wxDocPrintout.
         """
-        return DocPrintout(self)
+        return DocPrintout(self, self.GetDocument().GetPrintableName())
 
 
     def GetFrame(self):
@@ -1229,6 +1247,10 @@ class DocTemplate(wx.Object):
         Returns True if the path's extension matches one of this template's
         file filter extensions.
         """
+##        print "*** path", path
+##        if "*.*" in self.GetFileFilter():
+##            return True
+##            
         ext = FindExtension(path)
         if not ext: return False
         return ext in self.GetFileFilter()
@@ -1450,9 +1472,14 @@ class DocManager(wx.EvtHandler):
 
         printout = view.OnCreatePrintout()
         if printout:
-            pdd = wx.PrintDialogData()
+            if not hasattr(self, "printData"):
+                self.printData = wx.PrintData()
+                self.printData.SetPaperId(wx.PAPER_LETTER)
+            self.printData.SetPrintMode(wx.PRINT_MODE_PRINTER)
+                
+            pdd = wx.PrintDialogData(self.printData)
             printer = wx.Printer(pdd)
-            printer.Print(view.GetFrame(), printout) # , True)
+            printer.Print(view.GetFrame(), printout)
 
 
     def OnPrintSetup(self, event):
@@ -1465,11 +1492,21 @@ class DocManager(wx.EvtHandler):
         else:
             parentWin = wx.GetApp().GetTopWindow()
 
-        data = wx.PrintDialogData()
+        if not hasattr(self, "printData"):
+            self.printData = wx.PrintData()
+            self.printData.SetPaperId(wx.PAPER_LETTER)
+            
+        data = wx.PrintDialogData(self.printData)
         printDialog = wx.PrintDialog(parentWin, data)
         printDialog.GetPrintDialogData().SetSetupDialog(True)
         printDialog.ShowModal()
-        # TODO: Confirm that we don't have to remember PrintDialogData
+        
+        # this makes a copy of the wx.PrintData instead of just saving
+        # a reference to the one inside the PrintDialogData that will
+        # be destroyed when the dialog is destroyed
+        self.printData = wx.PrintData(printDialog.GetPrintDialogData().GetPrintData())
+        
+        printDialog.Destroy()
 
 
     def OnPreview(self, event):
@@ -1483,13 +1520,22 @@ class DocManager(wx.EvtHandler):
 
         printout = view.OnCreatePrintout()
         if printout:
+            if not hasattr(self, "printData"):
+                self.printData = wx.PrintData()
+                self.printData.SetPaperId(wx.PAPER_LETTER)
+            self.printData.SetPrintMode(wx.PRINT_MODE_PREVIEW)
+                
+            data = wx.PrintDialogData(self.printData)
             # Pass two printout objects: for preview, and possible printing.
-            preview = wx.PrintPreview(printout, view.OnCreatePrintout())
+            preview = wx.PrintPreview(printout, view.OnCreatePrintout(), data)
+            if not preview.Ok():
+                wx.MessageBox(_("Unable to display print preview."))
+                return
             # wxWindows source doesn't use base frame's pos, size, and icon, but did it this way so it would work like MS Office etc.
             mimicFrame =  wx.GetApp().GetTopWindow()
             frame = wx.PreviewFrame(preview, mimicFrame, _("Print Preview"), mimicFrame.GetPosition(), mimicFrame.GetSize())
             frame.SetIcon(mimicFrame.GetIcon())
-            frame.SetTitle(mimicFrame.GetTitle() + _(" - Preview"))
+            frame.SetTitle(_("%s - %s - Preview") % (mimicFrame.GetTitle(), view.GetDocument().GetPrintableName()))
             frame.Initialize()
             frame.Show(True)
 
@@ -1575,7 +1621,7 @@ class DocManager(wx.EvtHandler):
         if doc and doc.GetCommandProcessor():
             doc.GetCommandProcessor().SetMenuStrings()
         else:
-            event.SetText(_("Undo") + '\t' + _('Ctrl+Z'))
+            event.SetText(_("&Undo\tCtrl+Z"))
 
 
     def OnUpdateRedo(self, event):
@@ -1587,7 +1633,7 @@ class DocManager(wx.EvtHandler):
         if doc and doc.GetCommandProcessor():
             doc.GetCommandProcessor().SetMenuStrings()
         else:
-            event.SetText(_("Redo") + '\t' + _('Ctrl+Y'))
+            event.SetText(_("&Redo\tCtrl+Y"))
 
 
     def OnUpdatePrint(self, event):
@@ -1800,9 +1846,9 @@ class DocManager(wx.EvtHandler):
             temp, path = self.SelectDocumentPath(templates, path, flags)
 
         # Existing document
-        if self.GetFlags() & DOC_OPEN_ONCE:
+        if path and self.GetFlags() & DOC_OPEN_ONCE:
             for document in self._docs:
-                if document.GetFilename() == path:
+                if document.GetFilename() and os.path.normcase(document.GetFilename()) == os.path.normcase(path):
                     """ check for file modification outside of application """
                     if os.path.exists(path) and os.path.getmtime(path) != document.GetDocumentModificationDate():
                         msgTitle = wx.GetApp().GetAppName()
@@ -2034,11 +2080,17 @@ class DocManager(wx.EvtHandler):
         Given a path, try to find template that matches the extension. This is
         only an approximate method of finding a template for creating a
         document.
+        
+        Note this wxPython verson looks for and returns a default template if no specific template is found.
         """
+        default = None
         for temp in self._templates:
             if temp.FileMatchesTemplate(path):
                 return temp
-        return None
+                
+            if "*.*" in temp.GetFileFilter():
+                default = temp
+        return default
 
 
     def FindSuitableParent(self):
@@ -2077,7 +2129,7 @@ class DocManager(wx.EvtHandler):
                         allfilter = allfilter + _(';')
                     descr = descr + temp.GetDescription() + _(" (") + temp.GetFileFilter() + _(") |") + temp.GetFileFilter()  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
                     allfilter = allfilter + temp.GetFileFilter()
-            descr = _("All") + _(" (") + allfilter + _(") |") + allfilter + _('|') + descr  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
+            descr = _("All (%s)|%s|%s|Any (*.*) | *.*") %  (allfilter, allfilter, descr)  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
         else:
             descr = _("*.*")
 
@@ -2790,7 +2842,7 @@ class DocPrintout(wx.Printout):
         """
         Constructor.
         """
-        wx.Printout.__init__(self)
+        wx.Printout.__init__(self, title)
         self._printoutView = view
 
 
@@ -3058,15 +3110,15 @@ class CommandProcessor(wx.Object):
             else:
                 redoAccel = ''
             if undoCommand and undoItem and undoCommand.CanUndo():
-                undoItem.SetText(_("Undo ") + undoCommand.GetName() + undoAccel)
+                undoItem.SetText(_("&Undo ") + undoCommand.GetName() + undoAccel)
             #elif undoCommand and not undoCommand.CanUndo():
             #    undoItem.SetText(_("Can't Undo") + undoAccel)
             else:
-                undoItem.SetText(_("Undo" + undoAccel))
+                undoItem.SetText(_("&Undo" + undoAccel))
             if redoCommand and redoItem:
-                redoItem.SetText(_("Redo ") + redoCommand.GetName() + redoAccel)
+                redoItem.SetText(_("&Redo ") + redoCommand.GetName() + redoAccel)
             else:
-                redoItem.SetText(_("Redo") + redoAccel)
+                redoItem.SetText(_("&Redo") + redoAccel)
 
 
     def CanUndo(self):

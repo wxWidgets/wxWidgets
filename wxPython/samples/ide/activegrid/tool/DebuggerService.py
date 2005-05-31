@@ -41,6 +41,7 @@ import pickle
 import DebuggerHarness
 import traceback
 import StringIO
+
 if wx.Platform == '__WXMSW__':
     try:
         import win32api
@@ -72,7 +73,12 @@ class OutputReaderThread(threading.Thread):
         self._lineCount = 0
         self._accumulate = accumulate
         self._callbackOnExit = callbackOnExit
-         
+        self.setDaemon(True)
+    
+    def __del__(self):
+        # See comment on DebugCommandUI.StopExecution
+        self._keepGoing = False
+             
     def run(self):
         file = self._file
         start = time.time()
@@ -83,7 +89,7 @@ class OutputReaderThread(threading.Thread):
                 text = file.readline()
                 if text == '' or text == None:
                     self._keepGoing = False
-                elif not self._accumulate:
+                elif not self._accumulate and self._keepGoing:
                     self._callback_function(text)
                 else:
                     # Should use a buffer? StringIO?
@@ -91,11 +97,11 @@ class OutputReaderThread(threading.Thread):
                 # Seems as though the read blocks if we got an error, so, to be
                 # sure that at least some of the exception gets printed, always 
                 # send the first hundred lines back as they come in.
-                if self._lineCount < 100:    
+                if self._lineCount < 100 and self._keepGoing:    
                     self._callback_function(output)
                     self._lineCount += 1
                     output = "" 
-                elif time.time() - start > 0.25:
+                elif time.time() - start > 0.25 and self._keepGoing:
                     try:
                         self._callback_function(output) 
                     except wx._core.PyDeadObjectError:
@@ -103,8 +109,8 @@ class OutputReaderThread(threading.Thread):
                         self._keepGoing = False
                     start = time.time()
                     output = "" 
-            except TypeError:
-                pass
+            #except TypeError:
+            #    pass
             except:
                 tp, val, tb = sys.exc_info()
                 print "Exception in OutputReaderThread.run():", tp, val
@@ -118,7 +124,7 @@ class OutputReaderThread(threading.Thread):
         
     def AskToStop(self):
         self._keepGoing = False
-        
+                
 import  wx.lib.newevent
 (UpdateTextEvent, EVT_UPDATE_STDTEXT) = wx.lib.newevent.NewEvent()
 (UpdateErrorEvent, EVT_UPDATE_ERRTEXT) = wx.lib.newevent.NewEvent()
@@ -165,7 +171,6 @@ class Executor:
         self._stdOutReader = None
         self._stdErrReader = None
         self._process = None
-        DebuggerService.executors.append(self)
         
     def OutCall(self, text):
         evt = UpdateTextEvent(value = text)
@@ -180,8 +185,6 @@ class Executor:
             startIn = str(os.getcwd())
         startIn = os.path.abspath(startIn)
         command = self._cmd + ' ' + arguments
-        #stdinput = process.IOBuffer()
-        #self._process = process.ProcessProxy(command, mode='b', cwd=startIn, stdin=stdinput)
         self._process = process.ProcessOpen(command, mode='b', cwd=startIn, env=environment)
         # Kick off threads to read stdout and stderr and write them
         # to our text control. 
@@ -189,35 +192,46 @@ class Executor:
         self._stdOutReader.start()
         self._stdErrReader = OutputReaderThread(self._process.stderr, self._stdErrCallback, accumulate=False)
         self._stdErrReader.start()
-                
-    
+                        
     def DoStopExecution(self):
+        # See comment on DebugCommandUI.StopExecution
         if(self._process != None):
-            self._process.kill()
-            self._process.close()
-            self._process = None
-        if(self._stdOutReader != None):
             self._stdOutReader.AskToStop()
-        if(self._stdErrReader != None):
             self._stdErrReader.AskToStop()
-        DebuggerService.executors.remove(self)
+            try:
+                self._process.kill(gracePeriod=2.0)
+            except:
+                pass
+            self._process = None
         
 class RunCommandUI(wx.Panel):
+    runners = []
+    
+    def ShutdownAllRunners():
+        # See comment on DebugCommandUI.StopExecution
+        for runner in RunCommandUI.runners:
+            try:
+                runner.StopExecution(None)
+            except wx._core.PyDeadObjectError:
+                pass
+        RunCommandUI.runners = []    
+    ShutdownAllRunners = staticmethod(ShutdownAllRunners)
     
     def __init__(self, parent, id, fileName):
         wx.Panel.__init__(self, parent, id)
         self._noteBook = parent
         
+        threading._VERBOSE = _VERBOSE
+        
         self.KILL_PROCESS_ID = wx.NewId()
         self.CLOSE_TAB_ID = wx.NewId()
         
-        self.Bind(wx.EVT_END_PROCESS, self.OnProcessEnded)
         
         # GUI Initialization follows
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         self._tb = tb = wx.ToolBar(self,  -1, wx.DefaultPosition, (30,1000), wx.TB_VERTICAL| wx.TB_FLAT, "Runner" )
         tb.SetToolBitmapSize((16,16))
-        sizer.Add(tb, 0, wx.EXPAND |wx.ALIGN_LEFT|wx.ALL, 1)
+        sizer.Add(tb, 0, wx.EXPAND|wx.ALIGN_LEFT|wx.ALL, 1)
 
         close_bmp = getCloseBitmap()
         tb.AddSimpleTool( self.CLOSE_TAB_ID, close_bmp, _('Close Window'))
@@ -245,12 +259,16 @@ class RunCommandUI(wx.Panel):
         self.SetSizer(sizer)
         sizer.Fit(self)
         
+        self._stopped = False
         # Executor initialization
         self._executor = Executor(fileName, self, callbackOnExit=self.ExecutorFinished)
         self.Bind(EVT_UPDATE_STDTEXT, self.AppendText)
         self.Bind(EVT_UPDATE_ERRTEXT, self.AppendErrorText)
         
+        RunCommandUI.runners.append(self)
+        
     def __del__(self):
+        # See comment on DebugCommandUI.StopExecution
         self._executor.DoStopExecution()
                  
     def Execute(self, initialArgs, startIn, environment):
@@ -267,9 +285,11 @@ class RunCommandUI(wx.Panel):
                 break
            
     def StopExecution(self):
-        self.Unbind(EVT_UPDATE_STDTEXT)
-        self.Unbind(EVT_UPDATE_ERRTEXT)
-        self._executor.DoStopExecution()
+        if not self._stopped:
+            self._stopped = True
+            self.Unbind(EVT_UPDATE_STDTEXT)
+            self.Unbind(EVT_UPDATE_ERRTEXT)
+            self._executor.DoStopExecution()
         
     def AppendText(self, event):
         self._textCtrl.SetReadOnly(False)
@@ -295,10 +315,10 @@ class RunCommandUI(wx.Panel):
         id = event.GetId()
         
         if id == self.KILL_PROCESS_ID:
-            self._executor.DoStopExecution()
+            self.StopExecution()
             
         elif id == self.CLOSE_TAB_ID:
-            self._executor.DoStopExecution()
+            self.StopExecution()
             index = self._noteBook.GetSelection()
             self._noteBook.GetPage(index).Show(False)
             self._noteBook.RemovePage(index)
@@ -349,8 +369,6 @@ class RunCommandUI(wx.Panel):
                 
         foundView.GetCtrl().MarkerAdd(lineNum -1, CodeEditor.CodeCtrl.CURRENT_LINE_MARKER_NUM)
 
-    def OnProcessEnded(self, evt):
-        self._executor.DoStopExecution()
 
 DEFAULT_PORT = 32032
 DEFAULT_HOST = 'localhost' 
@@ -374,9 +392,13 @@ class DebugCommandUI(wx.Panel):
     DebuggerRunning = staticmethod(DebuggerRunning)
     
     def ShutdownAllDebuggers():
+        # See comment on DebugCommandUI.StopExecution
         for debugger in DebugCommandUI.debuggers:
-            debugger.StopExecution(None)
-            
+            try:
+                debugger.StopExecution(None)
+            except wx._core.PyDeadObjectError:
+                pass
+        DebugCommandUI.debuggers = []    
     ShutdownAllDebuggers = staticmethod(ShutdownAllDebuggers)
     
     def GetAvailablePort():
@@ -549,9 +571,8 @@ class DebugCommandUI(wx.Panel):
         self.framesTab.PopulateBPList()
         
     def __del__(self):
-        if self in DebugCommandUI.debuggers:
-            DebugCommandUI.debuggers.remove(self)
-        
+        # See comment on DebugCommandUI.StopExecution
+        self.StopExecution(None)        
         
     def DisableWhileDebuggerRunning(self):
         self._tb.EnableTool(self.STEP_ID, False)
@@ -655,23 +676,42 @@ class DebugCommandUI(wx.Panel):
         
                        
     def StopExecution(self, event):
-        self._stopped = True
-        self.DisableAfterStop()
-        try:
-            self._callback.ServerClose()
-        except:
-            pass 
-        try:
-            if self._executor:
-                self._executor.DoStopExecution()
-                self._executor = None
-        except:
-            pass
-        self.DeleteCurrentLineMarkers()
-        DebugCommandUI.ReturnPortToPool(self._debuggerPort)
-        DebugCommandUI.ReturnPortToPool(self._guiPort)
-        DebugCommandUI.ReturnPortToPool(self._debuggerBreakPort)
+        # This is a general comment on shutdown for the running and debugged processes. Basically, the
+        # current state of this is the result of trial and error coding. The common problems were memory
+        # access violations and threads that would not exit. Making the OutputReaderThreads daemons seems
+        # to have side-stepped the hung thread issue. Being very careful not to touch things after calling
+        # process.py:ProcessOpen.kill() also seems to have fixed the memory access violations, but if there
+        # were more ugliness discovered I would not be surprised. If anyone has any help/advice, please send
+        # it on to mfryer@activegrid.com.
+        if not self._stopped:
+            self._stopped = True
+            try:
+                self.DisableAfterStop()
+            except wx._core.PyDeadObjectError:
+                pass
+            try:
+                self._callback.ShutdownServer()
+            except:
+                tp,val,tb = sys.exc_info()
+                traceback.print_exception(tp, val, tb)
 
+            try:
+                self.DeleteCurrentLineMarkers()
+            except:
+                pass
+            try:
+                DebugCommandUI.ReturnPortToPool(self._debuggerPort)
+                DebugCommandUI.ReturnPortToPool(self._guiPort)
+                DebugCommandUI.ReturnPortToPool(self._debuggerBreakPort)
+            except:
+                pass
+            try:
+                if self._executor:
+                    self._executor.DoStopExecution()
+                    self._executor = None
+            except:
+                tp,val,tb = sys.exc_info()
+                traceback.print_exception(tp, val, tb)                
     def StopAndRemoveUI(self, event):
         self.StopExecution(None)
         if self in DebugCommandUI.debuggers:
@@ -695,7 +735,7 @@ class DebugCommandUI(wx.Panel):
         self.framesTab.AppendErrorText(event.value)
         
     def OnClearOutput(self, event):
-        self.framesTab.ClearOutput()
+        self.framesTab.ClearOutput(None)
 
     def SwitchToOutputTab(self):
         self.framesTab.SwitchToOutputTab()
@@ -899,10 +939,10 @@ class FramesUI(wx.SplitterWindow):
         self._notebook.Hide()
         sizer3.Add(self._notebook, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
         self.consoleTab = self.MakeConsoleTab(self._notebook, wx.NewId())
-        #self.inspectConsoleTab = self.MakeInspectConsoleTab(self._notebook, wx.NewId())
+        self.inspectConsoleTab = self.MakeInspectConsoleTab(self._notebook, wx.NewId())
         self.breakPointsTab = self.MakeBreakPointsTab(self._notebook, wx.NewId())
         self._notebook.AddPage(self.consoleTab, "Output")
-        #self._notebook.AddPage(self.inspectConsoleTab, "Interact")
+        self._notebook.AddPage(self.inspectConsoleTab, "Interact")
         self._notebook.AddPage(self.breakPointsTab, "Break Points")
 
         self.SetMinimumPaneSize(20)
@@ -936,23 +976,74 @@ class FramesUI(wx.SplitterWindow):
         return panel
         
     def MakeInspectConsoleTab(self, parent, id):
-        def OnEnterPressed(event):
-            print "Enter text was %s" % event.GetString()
-        def OnText(event):
-            print "Command was %s" % event.GetString()
+        self.command_list = []
+        self.command_index = 0
+        def ExecuteCommand(command):
+            if not len(self.command_list) or not command == self.command_list[len(self.command_list) -1]:
+                self.command_list.append(command)
+                self.command_index = len(self.command_list) - 1
+            retval = self._ui._callback._debuggerServer.execute_in_frame(self._framesChoiceCtrl.GetStringSelection(), command)
+            self._interCtrl.AddText("\n" + str(retval))
+            self._interCtrl.ScrollToLine(self._interCtrl.GetLineCount())
+            # Refresh the tree view in case this command resulted in changes there. TODO: Need to reopen tree items.
+            self.PopulateTreeFromFrameMessage(self._framesChoiceCtrl.GetStringSelection())
+
+        def ReplaceLastLine(command):
+            line = self._interCtrl.GetLineCount() - 1
+            self._interCtrl.GotoLine(line)
+            start = self._interCtrl.GetCurrentPos()
+            self._interCtrl.SetTargetStart(start)
+            end = self._interCtrl.GetLineEndPosition(line)
+            self._interCtrl.SetTargetEnd(end)
+            self._interCtrl.ReplaceTarget(">>> " + command)
+            self._interCtrl.GotoLine(line)
+            self._interCtrl.SetSelectionStart(self._interCtrl.GetLineEndPosition(line))
             
-        panel = wx.Panel(parent, id)
-        try:
+        def OnKeyPressed(event):
+            key = event.KeyCode()
+            if key == wx.WXK_DELETE or key == wx.WXK_BACK:
+                if self._interCtrl.GetLine(self._interCtrl.GetCurrentLine()) == ">>> ":
+                    return
+            elif key == wx.WXK_RETURN:
+                command = self._interCtrl.GetLine(self._interCtrl.GetCurrentLine())[4:]
+                ExecuteCommand(command)             
+                self._interCtrl.AddText("\n>>> ")
+                return
+            elif key == wx.WXK_UP:
+                if not len(self.command_list):
+                    return
+                ReplaceLastLine(self.command_list[self.command_index])
+                if self.command_index  == 0:
+                    self.command_index  = len(self.command_list) - 1
+                else:
+                    self.command_index = self.command_index - 1
+                return
+            elif key == wx.WXK_DOWN:
+                if not len(self.command_list):
+                    return
+                if self.command_index  < len(self.command_list) - 1:
+                    self.command_index = self.command_index + 1
+                else:
+                    self.command_index = 0
+                ReplaceLastLine(self.command_list[self.command_index])                        
+                return
+            event.Skip()
+
+        try:    
+            panel = wx.Panel(parent, id)
             sizer = wx.BoxSizer(wx.HORIZONTAL)
-            self._ictextCtrl = wx.TextCtrl(panel, wx.NewId(), style=wx.TE_MULTILINE|wx.TE_RICH|wx.HSCROLL)
-            sizer.Add(self._ictextCtrl, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 2)
-            self._ictextCtrl.Bind(wx.EVT_TEXT_ENTER, OnEnterPressed)
-            self._ictextCtrl.Bind(wx.EVT_TEXT, OnText)
+            self._interCtrl = STCTextEditor.TextCtrl(panel, wx.NewId())
+            sizer.Add(self._interCtrl, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 2)
+            self._interCtrl.SetViewLineNumbers(False)
             if wx.Platform == '__WXMSW__':
                 font = "Courier New"
             else:
                 font = "Courier"
-            self._ictextCtrl.SetDefaultStyle(wx.TextAttr(font=wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.NORMAL, faceName = font)))
+            self._interCtrl.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.NORMAL, faceName = font))
+            self._interCtrl.SetFontColor(wx.BLACK)
+            self._interCtrl.StyleClearAll()
+            wx.EVT_KEY_DOWN(self._interCtrl, OnKeyPressed)
+            self._interCtrl.AddText(">>> ")
             panel.SetSizer(sizer)
         except:
             tp, val, tb = sys.exc_info()
@@ -1066,6 +1157,7 @@ class FramesUI(wx.SplitterWindow):
         tree = self._treeCtrl  
         root = self._root   
         tree.DeleteChildren(root)
+        self._interCtrl.Enable(False)
    
         #tree.Hide()
         
@@ -1088,6 +1180,8 @@ class FramesUI(wx.SplitterWindow):
         
     def LoadFramesListXML(self, framesXML):
         wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
+        self._interCtrl.Enable(True)
+
         try:
             domDoc = parseString(framesXML)
             list = self._framesChoiceCtrl
@@ -1103,6 +1197,7 @@ class FramesUI(wx.SplitterWindow):
                 frame_count += 1
             index = len(self._stack) - 1
             list.SetSelection(index) 
+
             node = self._stack[index]
             self.currentItem = index
             self.PopulateTreeFromFrameNode(node)
@@ -1121,13 +1216,20 @@ class FramesUI(wx.SplitterWindow):
 
         
     def ListItemSelected(self, event):
-        message = event.GetString()
+        self.PopulateTreeFromFrameMessage(event.GetString())
+        self.OnSyncFrame(None)
+        
+    def PopulateTreeFromFrameMessage(self, message):    
         index = 0
         for node in self._stack:
             if node.getAttribute("message") == message:
+                binType = self._ui._callback._debuggerServer.request_frame_document(message)
+                xmldoc = bz2.decompress(binType.data)
+                domDoc = parseString(xmldoc)
+                nodeList = domDoc.getElementsByTagName('frame')
                 self.currentItem = index
-                self.PopulateTreeFromFrameNode(node)
-                self.OnSyncFrame(None)
+                if len(nodeList):
+                    self.PopulateTreeFromFrameNode(nodeList[0])
                 return
             index = index + 1
                         
@@ -1146,7 +1248,8 @@ class FramesUI(wx.SplitterWindow):
             if not firstChild:
                 firstChild = treeNode
         tree.Expand(root)
-        tree.Expand(firstChild)
+        if firstChild:
+            tree.Expand(firstChild)
         self._p2.FitInside()
         
     def IntrospectCallback(self, event):
@@ -1252,7 +1355,13 @@ class DebuggerView(Service.ServiceView):
     
     def OnToolClicked(self, event):
         self.GetFrame().ProcessEvent(event)
-    
+        
+    def ProcessUpdateUIEvent(self, event):
+        return False
+        
+    def ProcessEvent(self, event):
+        return False
+
     #------------------------------------------------------------------------------
     # Class methods
     #-----------------------------------------------------------------------------
@@ -1396,9 +1505,9 @@ class DebuggerCallback:
     def start(self):
         self._serverHandlerThread.start()
     
-    def ServerClose(self):
-        rbt = RequestBreakThread(self._breakServer, kill=True)
-        rbt.start()
+    def ShutdownServer(self):
+        #rbt = RequestBreakThread(self._breakServer, kill=True)
+        #rbt.start()
         self.setWaiting(False)
         if self._serverHandlerThread:
             self._serverHandlerThread.AskToStop()
@@ -1410,29 +1519,21 @@ class DebuggerCallback:
                 
     def SingleStep(self):
         self._debuggerUI.DisableWhileDebuggerRunning()
-        #dot = DebuggerOperationThread(self._debuggerServer.set_step)
-        #dot.start()
         self._debuggerServer.set_step() # Figure out where to set allowNone
         self.waitForRPC()
 
     def Next(self):
         self._debuggerUI.DisableWhileDebuggerRunning()
-        #dot = DebuggerOperationThread(self._debuggerServer.set_next)
-        #dot.start()
         self._debuggerServer.set_next()
         self.waitForRPC()
         
     def Continue(self):
         self._debuggerUI.DisableWhileDebuggerRunning()
-        #dot = DebuggerOperationThread(self._debuggerServer.set_continue)
-        #dot.start()
         self._debuggerServer.set_continue()
         self.waitForRPC()
         
     def Return(self):
         self._debuggerUI.DisableWhileDebuggerRunning()
-        #dot = DebuggerOperationThread(self._debuggerServer.set_return)
-        #dot.start()
         self._debuggerServer.set_return()
         self.waitForRPC()
         
@@ -1498,7 +1599,6 @@ class DebuggerCallback:
         if _VERBOSE: print "+"*40
         
 class DebuggerService(Service.Service):
-    executors = []
 
     #----------------------------------------------------------------------------
     # Constants
@@ -1509,11 +1609,6 @@ class DebuggerService(Service.Service):
     DEBUG_ID = wx.NewId()
     DEBUG_WEBSERVER_ID = wx.NewId()
 
-    def KillAllRunningProcesses():
-        execs = DebuggerService.executors
-        for executor in execs:
-            executor.DoStopExecution()
-    KillAllRunningProcesses = staticmethod(KillAllRunningProcesses)
             
     def ComparePaths(first, second):
         one = DebuggerService.ExpandPath(first)
@@ -1530,7 +1625,8 @@ class DebuggerService(Service.Service):
             try:
                 return win32api.GetLongPathName(path)
             except:
-                print "Cannot get long path for %s" % path
+                if _VERBOSE:
+                    print "Cannot get long path for %s" % path
                 
         return path
         
@@ -1755,6 +1851,7 @@ class DebuggerService(Service.Service):
 
     def OnExit(self):
         DebugCommandUI.ShutdownAllDebuggers()
+        RunCommandUI.ShutdownAllRunners()
         
     def OnRunProject(self, event):
         if _WINDOWS and not _PYWIN32_INSTALLED:
@@ -2010,9 +2107,6 @@ class CommandPropertiesDialog(wx.Dialog):
             self._lastStartIn = str(os.getcwd())
         self._startEntry = wx.TextCtrl(self, -1, self._lastStartIn)
         self._startEntry.SetToolTipString(self._lastStartIn)
-        def TextChanged2(event):
-            self._startEntry.SetToolTipString(event.GetString())
-        self.Bind(wx.EVT_TEXT, TextChanged2, self._startEntry)
 
         flexGridSizer.Add(self._startEntry, 1, wx.EXPAND)
         self._findDir = wx.Button(self, -1, _("Browse..."))
@@ -2240,19 +2334,20 @@ def getBreakIcon():
     return wx.IconFromBitmap(getBreakBitmap())
 
 #----------------------------------------------------------------------
+
 def getClearOutputData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\xb4IDAT8\x8d\xa5\x92\xdd\r\x03!\x0c\x83\xbf\xa0n\xd4\x9d\xda5\xb81\
-\xbaS\xbb\x12\xee\x03?\xe5\x08\xe5N\xba\xbc Db\xec\xd8p\xb1l\xb8\xa7\x83\xfe\
-\xb0\x02H\x92F\xc0_\xa3\x99$\x99\x99\xedznc\xe36\x81\x88\x98"\xb2\x02\xa2\
-\x1e\xc4Q\x9aUD\x161\xcd\xde\x1c\x83\x15\x084)\x8d\xc5)\x06\xab\xaaZ\x92\xee\
-\xce\x11W\xdbGD\x0cIT\x06\xe7\x00\xdeY\xfe\xcc\x89\x06\xf0\xf2\x99\x00\xe0\
-\x91\x7f\xab\x83\xed\xa4\xc8\xafK\x0c\xcf\x92\x83\x99\x8d\xe3p\xef\xe4\xa1\
-\x0b\xe57j\xc8:\x06\t\x08\x87.H\xb2n\xa8\xc9\xa9\x12vQ\xfeG"\xe3\xacw\x00\
-\x10$M\xd3\x86_\xf0\xe5\xfc\xb4\xfa\x02\xcb\x13j\x10\xc5\xd7\x92D\x00\x00\
-\x00\x00IEND\xaeB`\x82' 
+\x00\x00\xb7IDAT8\x8d\xa5\x93\xdd\x11\xc3 \x0c\x83%`\xa3\xee\xd4\xaeA\xc6\
+\xe8N\xedF%\xea\x03\t\x81\xf0\x97\xbb\xf8%G\xce\xfe\x90eC\x1a\x8b;\xe1\xf2\
+\x83\xd6\xa0Q2\x8de\xf5oW\xa05H\xea\xd7\x93\x84$\x18\xeb\n\x88;\'.\xd5\x1d\
+\x80\x07\xe1\xa1\x1d\xa2\x1cbF\x92\x0f\x80\xe0\xd1 \xb7\x14\x8c \x00*\x15\
+\x97\x14\x8c\x8246\x1a\xf8\x98\'/\xdf\xd8Jn\xe65\xc0\xa7\x90_L"\x01\xde\x9d\
+\xda\xa7\x92\xfb\xc5w\xdf\t\x07\xc4\x05ym{\xd0\x1a\xe3\xb9xS\x81\x04\x18\x05\
+\xc9\x04\xc9a\x00Dc9\x9d\x82\xa4\xbc\xe8P\xb2\xb5P\xac\xf2\x0c\xd4\xf5\x00\
+\x88>\xac\xe17\x84\xe4\xb9G\x8b7\x9f\xf3\x1fsUl^\x7f\xe7y\x0f\x00\x00\x00\
+\x00IEND\xaeB`\x82' 
 
 def getClearOutputBitmap():
     return BitmapFromImage(getClearOutputImage())
@@ -2295,13 +2390,15 @@ def getContinueData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\x9eIDAT8\x8d\xbd\x92\xd1\r\x83@\x0cC\xed\x8a\x11X\xac\x1b\xddF,\xd6\
-\x11\x90\xdc\x0f\x9a\x93s)\x14Z\xa9\x91\x10\n\x97\xbc\xd89\x80?\x84\x1a\xa4\
-\x83\xfc\x1c$\x1e)7\xdf<Y0\xaf\x0b\xe6\xf5\x1d\xa1\xb5\x13C\x03 !\xaa\xfd\
-\xed\n:mr\xc0\x1d\x8f\xc9\x9a!\t$\xe5\xd3I\xe2\xe5B$\x99\x00[\x01\xe8\xc5\
-\xd9G\xfaN`\xd8\x81I\xed\x8c\xb19\x94\x8d\xcbL\x00;t\xcf\x9fwPh\xdb\x0e\xe8\
-\xd3,\x17\x8b\xc7\x9d\xbb>\x8a \xec5\x94\tc\xc4\x12\xab\x94\xeb\x7fkWr\xc9B%\
-\xfc\xd2\xfcM<\x01\xf6tn\x12O3c\xe6\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x00\xcdIDAT8\x8d\xa5\x93\xd1\r\xc20\x0cD\xef\xec,\xc0b\x88\x8d`$\x06Cb\
+\x81\xc6\xc7GI\xeb\x94RZq?U"\xdby\xe7SIs\xfc#\xfbU\xa0\xa8\xba\xc6\xa0og\xee\
+!P\xd4y\x80\x04\xf3\xc2U\x82{\x9ct\x8f\x93\xb0\xa2\xdbm\xf5\xba\'h\xcdg=`\
+\xeeTT\xd1\xc6o& \t\x9a\x13\x00J\x9ev\xb1\'\xa3~\x14+\xbfN\x12\x92\x00@\xe6\
+\x85\xdd\x00\x000w\xe6\xe2\xde\xc7|\xdf\x08\xba\x1d(\xaa2n+\xca\xcd\x8d,\xea\
+\x98\xc4\x07\x01\x00D\x1dd^\xa8\xa8j\x9ew\xed`\xa9\x16\x99\xde\xa6G\x8b\xd3Y\
+\xe6\x85]\n\r\x7f\x99\xf5\x96Jnlz#\xab\xdb\xc1\x17\x19\xb0XV\xc2\xdf\xa3)\
+\x85<\xe4\x88\x85.F\x9a\xf3H3\xb0\xf3g\xda\xd2\x0b\xc5_|\x17\xe8\xf5R\xd6\
+\x00\x00\x00\x00IEND\xaeB`\x82' 
 
 def getContinueBitmap():
     return BitmapFromImage(getContinueImage())
@@ -2361,12 +2458,12 @@ def getStepInIcon():
 #----------------------------------------------------------------------
 def getStopData():
     return \
-"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00FIDAT8\x8d\xed\x91\xc1\t\xc00\x0c\x03O!\x0b\xa9\xfb\xef\xa6\xfcB\xa1\
-N\t\xf4Wr\xa0\x8f\xb1\x0f\x81\xe1\x97\xe4-\xb6}_V%\xc8\xc2, \t\x92\xe6]\xfbZ\
-\xf7\x08\xa0W\xc3\xea5\xdb\rl_IX\xe5\xf0d\x00\xfa\x8d#\x7f\xc4\xf7'\xab\x00\
-\x00\x00\x00IEND\xaeB`\x82" 
+\x00\x00QIDAT8\x8d\xdd\x93A\n\xc00\x08\x04g\xb5\xff\x7fq\x13sn\xda&\x01\x0b\
+\xa5]\xf0"\xec(.J\xe6dd)\xf7\x13\x80\xadoD-12\xc8\\\xd3\r\xe2\xa6\x00j\xd9\
+\x0f\x03\xde\xbf\xc1\x0f\x00\xa7\x18\x01t\xd5\\\x05\xc8\\}T#\xe9\xfb\xbf\x90\
+\x064\xd8\\\x12\x1fQM\xf5\xd9\x00\x00\x00\x00IEND\xaeB`\x82' 
 
 def getStopBitmap():
     return BitmapFromImage(getStopImage())

@@ -11,6 +11,7 @@
 #----------------------------------------------------------------------------
 
 import wx
+import os
 import os.path
 import ProjectEditor
 import MessageService
@@ -31,7 +32,7 @@ _ = wx.GetTranslation
 # Constants
 #----------------------------------------------------------------------------
 SVN_CONFIG_DIR = "SVNConfigDir"
-SVN_REPOSITORY_URL = "SVNRepositoryURL"
+SVN_REPOSITORY_URL = "SVNRepositoryURLs"
 
 SPACE = 10
 HALF_SPACE = 5
@@ -42,13 +43,15 @@ HALF_SPACE = 5
 #----------------------------------------------------------------------------
 
 class SVNService(wx.lib.pydocview.DocService):
+    SVN_UPDATE_ALL_ID = wx.NewId()
     SVN_UPDATE_ID = wx.NewId()
     SVN_CHECKIN_ID = wx.NewId()
+    SVN_CHECKIN_ALL_ID = wx.NewId()
     SVN_CHECKOUT_ID = wx.NewId()
     SVN_REVERT_ID = wx.NewId()
     SVN_ADD_ID = wx.NewId()
     SVN_DELETE_ID = wx.NewId()
-    SVN_COMMAND_LIST = [SVN_UPDATE_ID, SVN_CHECKIN_ID, SVN_CHECKOUT_ID, SVN_REVERT_ID, SVN_ADD_ID, SVN_DELETE_ID]
+    SVN_COMMAND_LIST = [SVN_UPDATE_ALL_ID, SVN_CHECKIN_ALL_ID, SVN_UPDATE_ID, SVN_CHECKIN_ID, SVN_CHECKOUT_ID, SVN_REVERT_ID, SVN_ADD_ID, SVN_DELETE_ID]
 
 
     def __init__(self):
@@ -57,13 +60,14 @@ class SVNService(wx.lib.pydocview.DocService):
         global SVN_INSTALLED
         if SVN_INSTALLED:
             config = wx.ConfigBase_Get()
+            
             configDir = config.Read(SVN_CONFIG_DIR, "")
-
             self._client = pysvn.Client(configDir)
             try:
                 self._defaultURL = self._client.info('.').url
             except:
                 pass
+                
             self._client.callback_cancel = self.IfCancel
             self._client.callback_notify = self.UpdateStatus
             self._client.callback_get_log_message = self.GetLogMessage
@@ -274,6 +278,12 @@ class SVNService(wx.lib.pydocview.DocService):
 
         menu.AppendSeparator()
 
+        wx.EVT_MENU(frame, SVNService.SVN_UPDATE_ALL_ID, self.ProcessEvent)
+        wx.EVT_UPDATE_UI(frame, SVNService.SVN_UPDATE_ALL_ID, self.ProcessUpdateUIEvent)
+        menu.Append(SVNService.SVN_UPDATE_ALL_ID, _("SVN Update All in Project"), _("Update all files in a project from Subversion"))
+        wx.EVT_MENU(frame, SVNService.SVN_CHECKIN_ALL_ID, self.ProcessEvent)
+        wx.EVT_UPDATE_UI(frame, SVNService.SVN_CHECKIN_ALL_ID, self.ProcessUpdateUIEvent)
+        menu.Append(SVNService.SVN_CHECKIN_ALL_ID, _("SVN Commit All in Project..."), _("Commit all files changes in a project to Subversion"))
         wx.EVT_MENU(frame, SVNService.SVN_UPDATE_ID, self.ProcessEvent)
         wx.EVT_UPDATE_UI(frame, SVNService.SVN_UPDATE_ID, self.ProcessUpdateUIEvent)
         menu.Append(SVNService.SVN_UPDATE_ID, _("SVN Update"), _("Update file from Subversion"))
@@ -309,9 +319,10 @@ class SVNService(wx.lib.pydocview.DocService):
 
 
         if id == SVNService.SVN_UPDATE_ID:
-            filenames = self.GetCurrentDocuments()
-
             wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
+            
+            filenames = self.GetCurrentDocuments()[:]
+            filenames.sort(self.BasenameCaseInsensitiveCompare)
 
             messageService = wx.GetApp().GetService(MessageService.MessageService)
             messageService.ShowWindow()
@@ -355,9 +366,174 @@ class SVNService(wx.lib.pydocview.DocService):
             wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 
             return True
+            
+        elif id == SVNService.SVN_UPDATE_ALL_ID:
+            wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
+
+            messageService = wx.GetApp().GetService(MessageService.MessageService)
+            messageService.ShowWindow()
+
+            view = messageService.GetView()
+            view.ClearLines()
+            view.AddLines(_("SVN Update:\n"))
+            
+            projects = self.GetCurrentProjects()
+            for project in projects:
+                openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
+                for doc in openDocs:
+                    if doc.GetFilename() == project:
+                        filenames = doc.GetFiles()[:]  # make a copy and sort it.
+                        filenames.sort(self.BasenameCaseInsensitiveCompare)
+
+                        for filename in filenames:
+                            view.AddLines("%s\n" % filename)
+                            try:
+                                status = self._client.update(filename)
+                
+                                if status.number > 0:
+                                    view.AddLines(_("Updated to revision %s\n") % status.number)
+            
+                                    openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
+                                    for doc in openDocs:
+                                        if doc.GetFilename() == filename:
+                                            yesNoMsg = wx.MessageDialog(wx.GetApp().GetTopWindow(),
+                                                                     _("Updated file '%s' is currently open.  Close it?") % os.path.basename(filename),
+                                                                     _("Close File"),
+                                                                     wx.YES_NO|wx.CANCEL|wx.ICON_QUESTION)
+                                            status = yesNoMsg.ShowModal()
+                                            if status == wx.ID_YES:
+                                                doc.DeleteAllViews()
+                                            elif status == wx.ID_NO:
+                                                pass
+                                            else: # elif status == wx.CANCEL:
+                                                wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
+                                                return True
+                                            break
+                                else:
+                                    view.AddLines(_("Update failed.\n"))
+                
+                            except pysvn.ClientError, e:
+                                view.AddLines("%s\n" % str(e))
+                                wx.MessageBox(str(e), _("SVN Update"), wx.OK | wx.ICON_EXCLAMATION)
+                            except:
+                                extype, ex, tb = sys.exc_info()
+                                view.AddLines("Update failed: (%s) %s\n" % (extype, str(ex)))
+                                for line in traceback.format_tb(tb):
+                                    view.AddLines(line)
+                
+                                wx.MessageBox(_("Update failed."), _("SVN Update"), wx.OK | wx.ICON_EXCLAMATION)
+
+            wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
+            return True
+
+        elif id == SVNService.SVN_CHECKIN_ALL_ID:
+            filenames = []
+            projects = self.GetCurrentProjects()
+            for project in projects:
+                openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
+                for doc in openDocs:
+                    if doc.GetFilename() == project:
+                        for filename in doc.GetFiles():
+                            if filename not in filenames:
+                                filenames.append(filename)
+            filenames.sort(self.BasenameCaseInsensitiveCompare)
+
+            # ask user if dirty files should be saved first
+            openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
+            for filename in filenames:
+                for doc in openDocs:
+                    if doc.GetFilename() == filename and doc.IsModified():
+                        yesNoMsg = wx.MessageDialog(wx.GetApp().GetTopWindow(),
+                                                 _("'%s' has unsaved modifications.  Save it before commit?") % os.path.basename(filename),
+                                                 _("SVN Commit"),
+                                                 wx.YES_NO|wx.CANCEL|wx.ICON_QUESTION)
+                        status = yesNoMsg.ShowModal()
+                        if status == wx.ID_YES:
+                            doc.Save()
+                        elif status == wx.ID_NO:
+                            pass
+                        else: # elif status == wx.CANCEL:
+                            return True
+                        break
+
+            shortFilenames = []
+            for i, filename in enumerate(filenames):
+                shortFilename = os.path.basename(filename)
+                shortFilenames.append(shortFilename)
+
+            dlg = wx.Dialog(wx.GetApp().GetTopWindow(), -1, _("SVN Commit"))
+
+            sizer = wx.BoxSizer(wx.VERTICAL)
+            sizer.Add(wx.StaticText(dlg, -1, _("Comment:")), 0, wx.ALIGN_CENTER_VERTICAL)
+            commentText = wx.TextCtrl(dlg, -1, size=(250,-1), style=wx.TE_MULTILINE)
+            sizer.Add(commentText, 1, wx.EXPAND|wx.TOP, HALF_SPACE)
+
+            sizer.Add(wx.StaticText(dlg, -1, _("Files:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP, SPACE)
+            fileList = wx.CheckListBox(dlg, -1, choices = shortFilenames)
+            for i in range(fileList.GetCount()):
+                fileList.Check(i, True)
+            sizer.Add(fileList, 0, wx.EXPAND|wx.TOP, HALF_SPACE)
+
+            buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+            okBtn = wx.Button(dlg, wx.ID_OK)
+            okBtn.SetDefault()
+            buttonSizer.Add(okBtn, 0, wx.RIGHT, HALF_SPACE)
+            buttonSizer.Add(wx.Button(dlg, wx.ID_CANCEL), 0)
+
+            contentSizer = wx.BoxSizer(wx.VERTICAL)
+            contentSizer.Add(sizer, 0, wx.ALL, SPACE)
+            contentSizer.Add(buttonSizer, 0, wx.ALL|wx.ALIGN_RIGHT, SPACE)
+
+            dlg.SetSizer(contentSizer)
+            dlg.Fit()
+            dlg.Layout()
+
+            if dlg.ShowModal() == wx.ID_OK:
+                wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
+
+                messageService = wx.GetApp().GetService(MessageService.MessageService)
+                messageService.ShowWindow()
+
+                view = messageService.GetView()
+                view.ClearLines()
+                view.AddLines(_("SVN Commit:\n"))
+
+                try:
+                    selFilenames = []
+                    for i in range(fileList.GetCount()):
+                        if fileList.IsChecked(i):
+                            selFilenames.append(filenames[i])
+                            view.AddLines("%s\n" % filenames[i])
+                        
+                    if len(selFilenames):
+                        comment = commentText.GetValue()
+                        status = self._client.checkin(selFilenames, comment)
+
+                        if status is None:
+                            view.AddLines(_("Nothing to commit.\n"))
+                        elif status.number > 0:
+                            view.AddLines(_("Committed as revision %s.\n") % status.number)
+                        else:
+                            view.AddLines(_("Commit failed.\n"))
+
+                except pysvn.ClientError, e:
+                    view.AddLines("%s\n" % str(e))
+                    wx.MessageBox(str(e), _("SVN Commit"), wx.OK | wx.ICON_EXCLAMATION)
+                except:
+                    extype, ex, tb = sys.exc_info()
+                    view.AddLines("Commit failed: (%s) %s\n" % (extype, str(ex)))
+                    for line in traceback.format_tb(tb):
+                        view.AddLines(line)
+                    wx.MessageBox(_("Commit failed."), _("SVN Commit"), wx.OK | wx.ICON_EXCLAMATION)
+
+                wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
+            dlg.Destroy()
+            return True
+
 
         elif id == SVNService.SVN_CHECKIN_ID:
-            filenames = self.GetCurrentDocuments()
+            filenames = self.GetCurrentDocuments()[:]
+            filenames.sort(self.BasenameCaseInsensitiveCompare)            
 
             # ask user if dirty files should be saved first
             openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
@@ -459,9 +635,14 @@ class SVNService(wx.lib.pydocview.DocService):
 
             gridSizer = wx.FlexGridSizer(cols = 2, hgap = 5, vgap = 5)
             gridSizer.Add(wx.StaticText(dlg, -1, _("Repository URL:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, HALF_SPACE)
-            svnURLText = wx.TextCtrl(dlg, -1, svnUrl, size = (200, -1))
-            svnURLText.SetToolTipString(svnUrl)
-            gridSizer.Add(svnURLText, 0)
+            svnUrlList = ReadSvnUrlList()
+            svnURLCombobox = wx.ComboBox(dlg, -1, size=(200, -1), choices=svnUrlList, style=wx.CB_DROPDOWN)
+            if len(svnUrlList):
+                svnURLCombobox.SetToolTipString(svnUrlList[0])
+                svnURLCombobox.SetStringSelection(svnUrlList[0])
+            else:
+                svnURLCombobox.SetToolTipString(_("Set Repository URL"))
+            gridSizer.Add(svnURLCombobox, 0)
 
             gridSizer.Add(wx.StaticText(dlg, -1, _("Checkout to dir:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, HALF_SPACE)
             localPath = wx.TextCtrl(dlg, -1, size = (200, -1))
@@ -502,6 +683,8 @@ class SVNService(wx.lib.pydocview.DocService):
 
             if dlg.ShowModal() == wx.ID_OK:
                 wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
+                
+                WriteSvnUrlList(svnURLCombobox)
 
                 messageService = wx.GetApp().GetService(MessageService.MessageService)
                 messageService.ShowWindow()
@@ -510,7 +693,7 @@ class SVNService(wx.lib.pydocview.DocService):
                 view.ClearLines()
                 view.AddLines(_("SVN Checkout:\n"))
 
-                svnUrl = svnURLText.GetValue()
+                svnUrl = svnURLCombobox.GetValue()
                 toLocation = localPath.GetValue()
                 try:
                     self._client.checkout(svnUrl, toLocation)
@@ -651,7 +834,29 @@ class SVNService(wx.lib.pydocview.DocService):
             event.Enable(True)
             return True
 
+        elif (id == SVNService.SVN_UPDATE_ALL_ID
+        or id == SVNService.SVN_CHECKIN_ALL_ID):
+            if self.GetCurrentProjects():
+                event.Enable(True)
+            else:
+                event.Enable(False)
+            return True
+
         return False
+
+
+    def GetCurrentProjects(self):
+        projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
+        if projectService:
+            projView = projectService.GetView()
+
+            if projView.HasFocus():
+                filenames = projView.GetSelectedProjects()
+                if len(filenames):
+                    return filenames
+                else:
+                    return None
+        return None
 
 
     def GetCurrentDocuments(self):
@@ -676,6 +881,17 @@ class SVNService(wx.lib.pydocview.DocService):
         return filenames
 
 
+    def BasenameCaseInsensitiveCompare(self, s1, s2):
+        s1L = os.path.basename(s1).lower()
+        s2L = os.path.basename(s2).lower()
+        if s1L == s2L:
+            return 0
+        elif s1L < s2L:
+            return -1
+        else:
+            return 1
+
+
 class SVNOptionsPanel(wx.Panel):
 
 
@@ -683,8 +899,6 @@ class SVNOptionsPanel(wx.Panel):
         wx.Panel.__init__(self, parent, id)
 
         config = wx.ConfigBase_Get()
-        svnService = wx.GetApp().GetService(SVNService)
-        svnUrl = config.Read(SVN_REPOSITORY_URL, svnService._defaultURL)
         configDir = config.Read(SVN_CONFIG_DIR, "")
 
         borderSizer = wx.BoxSizer(wx.VERTICAL)
@@ -718,10 +932,42 @@ class SVNOptionsPanel(wx.Panel):
         hsizer.Add(findDirButton, 0, wx.LEFT, HALF_SPACE)
         sizer.Add(hsizer, 0)
 
+
+        svnUrlList = ReadSvnUrlList()
         sizer.Add(wx.StaticText(self, -1, _("SVN URL:")), 0, wx.ALIGN_CENTER_VERTICAL)
-        self._svnURLText = wx.TextCtrl(self, -1, svnUrl, size = (200, -1))
-        self._svnURLText.SetToolTipString(svnUrl)
-        sizer.Add(self._svnURLText, 0)
+        self._svnURLCombobox = wx.ComboBox(self, -1, size=(200, -1), choices=svnUrlList, style=wx.CB_DROPDOWN)
+        if len(svnUrlList):
+            self._svnURLCombobox.SetToolTipString(svnUrlList[0])
+            self._svnURLCombobox.SetStringSelection(svnUrlList[0])
+        else:
+            self._svnURLCombobox.SetToolTipString(_("Set Repository URL"))
+        sizer.Add(self._svnURLCombobox, 0)
+
+
+        sizer.Add(wx.StaticText(self, -1, _("SVN_SSH:")), 0, wx.ALIGN_CENTER_VERTICAL)
+        svnSSH = os.getenv("SVN_SSH")
+        if not svnSSH or svnSSH == "":
+            self._svnSSH = wx.TextCtrl(self, -1, size = (200, -1))
+        else:
+            self._svnSSH = wx.TextCtrl(self, -1, svnSSH, size = (200, -1))
+        self._svnSSH.SetToolTipString(_("Override SVN_SSH environment variable temporarily."))
+        
+        findSSHButton = wx.Button(self, -1, _("Browse..."))
+
+        def OnBrowseFileButton(event):
+            dirDlg = wx.FileDialog(self, _("Choose a file:"), style=wx.OPEN|wx.CHANGE_DIR)
+            if dirDlg.ShowModal() == wx.ID_OK:
+                self._svnSSH.SetValue(dirDlg.GetPath())
+                self._svnSSH.SetToolTipString(self._svnSSH.GetValue())
+                self._svnSSH.SetInsertionPointEnd()
+            dirDlg.Destroy()
+        wx.EVT_BUTTON(findSSHButton, -1, OnBrowseFileButton)
+
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer.Add(self._svnSSH, 1, wx.EXPAND)
+        hsizer.Add(findSSHButton, 0, wx.LEFT, HALF_SPACE)
+        sizer.Add(hsizer, 0)
+
 
         borderSizer.Add(sizer, 0, wx.ALL, SPACE)
         self.SetSizer(borderSizer)
@@ -731,6 +977,43 @@ class SVNOptionsPanel(wx.Panel):
 
     def OnOK(self, optionsDialog):
         config = wx.ConfigBase_Get()
+        
         config.Write(SVN_CONFIG_DIR, self._svnConfigDir.GetValue())
-        config.Write(SVN_REPOSITORY_URL, self._svnURLText.GetValue())
+        
+        WriteSvnUrlList(self._svnURLCombobox)
+        
+        os.environ["SVN_SSH"] = self._svnSSH.GetValue()
+        
+
+def ReadSvnUrlList():
+    """ Read in list of SNV repository URLs.  First in list is the last one path used. """
+    config = wx.ConfigBase_Get()
+    urlStringList = config.Read(SVN_REPOSITORY_URL)
+    if len(urlStringList):
+        urlList = eval(urlStringList)
+    else:
+        urlList = []
+    if len(urlList) == 0:
+        svnService = wx.GetApp().GetService(SVNService)
+        if svnService and hasattr(svnService, "_defaultURL"):
+            urlList.append(svnService._defaultURL)
+    return urlList
+
+
+def WriteSvnUrlList(comboBox):
+    """ Save out list of SVN repository URLs from combobox.  Put on top the current selection.  Only save out first 10 from the list """
+    urlList = []
+    
+    url = comboBox.GetValue()
+    if len(url):
+        urlList.append(url)
+        
+    for i in range(min(comboBox.GetCount(), 10)):
+        url = comboBox.GetString(i)
+        if url not in urlList:
+            urlList.append(url)
+
+    config = wx.ConfigBase_Get()
+    config.Write(SVN_REPOSITORY_URL, urlList.__repr__())
+
 

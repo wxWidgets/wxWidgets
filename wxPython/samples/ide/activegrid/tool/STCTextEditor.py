@@ -47,27 +47,16 @@ TEXT_STATUS_BAR_ID = wx.NewId()
 class TextDocument(wx.lib.docview.Document):
 
 
-    def OnSaveDocument(self, filename):
+    def SaveObject(self, fileObject):
         view = self.GetFirstView()
-        docFile = file(self._documentFile, "w")
-        docFile.write(view.GetValue())
-        docFile.close()
-        self.Modify(False)
-        self.SetDocumentModificationDate()
-        self.SetDocumentSaved(True)
+        fileObject.write(view.GetValue())
         return True
+        
 
-
-    def OnOpenDocument(self, filename):
+    def LoadObject(self, fileObject):
         view = self.GetFirstView()
-        docFile = file(self._documentFile, 'r')
-        data = docFile.read()
+        data = fileObject.read()
         view.SetValue(data)
-        self.SetFilename(filename, True)
-        self.Modify(False)
-        self.SetDocumentModificationDate()
-        self.UpdateAllViews()
-        self._savedYet = True
         return True
 
 
@@ -90,12 +79,6 @@ class TextDocument(wx.lib.docview.Document):
         # Don't create a command processor, it has its own
         pass
 
-# Use this to override MultiClient.Select to prevent yellow background.
-def MultiClientSelectBGNotYellow(a):
-        a.GetParent().multiView.UnSelect()
-        a.selected = True
-        #a.SetBackgroundColour(wx.Colour(255,255,0)) # Yellow
-        a.Refresh()
 
 class TextView(wx.lib.docview.View):
     MARKER_NUM = 0
@@ -110,39 +93,32 @@ class TextView(wx.lib.docview.View):
         self._textEditor = None
         self._markerCount = 0
         self._commandProcessor = None
-        self._multiSash = None
+        self._dynSash = None
 
 
     def GetCtrlClass(self):
+        """ Used in split window to instantiate new instances """
         return TextCtrl
-
-
-    def GetCtrl(self):
-        # look for active one first
-        self._textEditor = self._GetActiveCtrl(self._multiSash)
-        if self._textEditor == None:  # it is possible none are active
-            # look for any existing one
-            self._textEditor = self._FindCtrl(self._multiSash)
-        return self._textEditor
         
 
-##    def GetCtrls(self, parent = None):
-##        """ Walk through the MultiSash windows and find all Ctrls """
-##        controls = []
-##        if isinstance(parent, self.GetCtrlClass()):
-##            return [parent]
-##        if hasattr(parent, "GetChildren"):
-##            for child in parent.GetChildren():
-##                controls = controls + self.GetCtrls(child)
-##        return controls
+    def GetCtrl(self):
+        return self._textEditor
+
+
+    def SetCtrl(self, ctrl):
+        self._textEditor = ctrl
+                
+
+    def OnCreatePrintout(self):
+        """ for Print Preview and Print """
+        return TextPrintout(self, self.GetDocument().GetPrintableName())
 
             
     def OnCreate(self, doc, flags):
         frame = wx.GetApp().CreateDocumentFrame(self, doc, flags, style = wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
-        wx.lib.multisash.MultiClient.Select = MultiClientSelectBGNotYellow
-        self._multiSash = wx.lib.multisash.MultiSash(frame, -1)
-        self._multiSash.SetDefaultChildClass(self.GetCtrlClass()) # wxBug:  MultiSash instantiates the first TextCtrl with this call
-        self._textEditor = self.GetCtrl()  # wxBug: grab the TextCtrl from the MultiSash datastructure
+        self._dynSash = wx.gizmos.DynamicSashWindow(frame, -1, style=wx.CLIP_CHILDREN)
+        self._dynSash._view = self
+        self._textEditor = self.GetCtrlClass()(self._dynSash, -1, style=wx.NO_BORDER)
         self._CreateSizer(frame)
         self.Activate()
         frame.Show(True)
@@ -150,33 +126,9 @@ class TextView(wx.lib.docview.View):
         return True
 
 
-    def _GetActiveCtrl(self, parent):
-        """ Walk through the MultiSash windows and find the active Control """
-        if isinstance(parent, wx.lib.multisash.MultiClient) and parent.selected:
-            return parent.child
-        if hasattr(parent, "GetChildren"):
-            for child in parent.GetChildren():
-                found = self._GetActiveCtrl(child)
-                if found:
-                    return found
-        return None
-
-
-    def _FindCtrl(self, parent):
-        """ Walk through the MultiSash windows and find the first TextCtrl """
-        if isinstance(parent, self.GetCtrlClass()):
-            return parent
-        if hasattr(parent, "GetChildren"):
-            for child in parent.GetChildren():
-                found = self._FindCtrl(child)
-                if found:
-                    return found
-        return None
-
-
     def _CreateSizer(self, frame):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(self._multiSash, 1, wx.EXPAND)
+        sizer.Add(self._dynSash, 1, wx.EXPAND)
         frame.SetSizer(sizer)
         frame.SetAutoLayout(True)
 
@@ -300,12 +252,12 @@ class TextView(wx.lib.docview.View):
 
         id = event.GetId()
         if id == wx.ID_UNDO:
-             event.Enable(self.GetCtrl().CanUndo())
-             event.SetText(_("Undo") + '\t' + _('Ctrl+Z'))
-             return True
+            event.Enable(self.GetCtrl().CanUndo())
+            event.SetText(_("&Undo\tCtrl+Z"))  # replace menu string
+            return True
         elif id == wx.ID_REDO:
             event.Enable(self.GetCtrl().CanRedo())
-            event.SetText(_("Redo") + '\t' + _('Ctrl+Y'))
+            event.SetText(_("&Redo\tCtrl+Y"))  # replace menu string
             return True
         elif (id == wx.ID_CUT
         or id == wx.ID_COPY
@@ -586,6 +538,7 @@ class TextView(wx.lib.docview.View):
     def GetLine(self, lineNum):
         return self.GetCtrl().GetLine(lineNum-1)  # line numbering for editor is 0 based, we are 1 based.
 
+
     def MarkerDefine(self):
         """ This must be called after the texteditor is instantiated """
         self.GetCtrl().MarkerDefine(TextView.MARKER_NUM, wx.stc.STC_MARK_CIRCLE, wx.BLACK, wx.BLUE)
@@ -600,6 +553,7 @@ class TextView(wx.lib.docview.View):
         else:
             self.GetCtrl().MarkerAdd(lineNum, marker_index)
             self._markerCount += 1
+
 
     def MarkerAdd(self, lineNum = -1, marker_index=MARKER_NUM, mask=MARKER_MASK):
         if lineNum == -1:
@@ -959,10 +913,14 @@ class TextOptionsPanel(wx.Panel):
 
 class TextCtrl(wx.stc.StyledTextCtrl):
 
-    def __init__(self, parent, ID = -1, style = wx.NO_FULL_REPAINT_ON_RESIZE):
-        if ID == -1:
-            ID = wx.NewId()
-        wx.stc.StyledTextCtrl.__init__(self, parent, ID, style = style)
+    def __init__(self, parent, id=-1, style=wx.NO_FULL_REPAINT_ON_RESIZE):
+        wx.stc.StyledTextCtrl.__init__(self, parent, id, style=style)
+
+        if isinstance(parent, wx.gizmos.DynamicSashWindow):
+            self._dynSash = parent
+            self.SetupDSScrollBars()
+            self.Bind(wx.gizmos.EVT_DYNAMIC_SASH_SPLIT, self.OnDSSplit)
+            self.Bind(wx.gizmos.EVT_DYNAMIC_SASH_UNIFY, self.OnDSUnify)
 
         self._font = None
         self._fontColor = None
@@ -975,6 +933,8 @@ class TextCtrl(wx.stc.StyledTextCtrl):
         self.CmdKeyAssign(wx.stc.STC_KEY_NEXT, wx.stc.STC_SCMOD_CTRL, wx.stc.STC_CMD_ZOOMOUT)
         self.Bind(wx.stc.EVT_STC_ZOOM, self.OnUpdateLineNumberMarginWidth)  # auto update line num width on zoom
         wx.EVT_KEY_DOWN(self, self.OnKeyPressed)
+        wx.EVT_KILL_FOCUS(self, self.OnKillFocus)
+        wx.EVT_SET_FOCUS(self, self.OnFocus)
         self.SetMargins(0,0)
 
         self.SetUseTabs(0)
@@ -998,21 +958,23 @@ class TextCtrl(wx.stc.StyledTextCtrl):
         self.SetFontColor(color)
         self.MarkerDefineDefault()
 
-        # for multisash initialization
-        if isinstance(parent, wx.lib.multisash.MultiClient):
-            while parent.GetParent():
-                parent = parent.GetParent()
-                if hasattr(parent, "GetView"):
-                    break
-            if hasattr(parent, "GetView"):
-                textEditor = parent.GetView()._textEditor
-                if textEditor:
-                    doc = textEditor.GetDocPointer()
-                    if doc:
-                        self.SetDocPointer(doc)
+
+    def OnFocus(self, event):
+        self.SetSelBackground(1, "BLUE")
+        self.SetSelForeground(1, "WHITE")
+        if hasattr(self, "_dynSash"):
+            self._dynSash._view.SetCtrl(self)
+        event.Skip()
 
 
+    def OnKillFocus(self, event):
+        self.SetSelBackground(0, "BLUE")
+        self.SetSelForeground(0, "WHITE")
+        self.SetSelBackground(1, "#C0C0C0")
+        # Don't set foreground color, use syntax highlighted default colors.
+        event.Skip()
         
+
     def SetViewDefaults(self, configPrefix = "Text", hasWordWrap = True, hasTabs = False):
         config = wx.ConfigBase_Get()
         self.SetViewWhiteSpace(config.ReadInt(configPrefix + "EditorViewWhitespace", False))
@@ -1030,7 +992,6 @@ class TextCtrl(wx.stc.StyledTextCtrl):
             self.SetUseTabs(True)
             self.SetIndent(4)
             self.SetTabWidth(4)
-
 
         
     def GetDefaultFont(self):
@@ -1064,6 +1025,7 @@ class TextCtrl(wx.stc.StyledTextCtrl):
     def GetFont(self):
         return self._font
         
+
     def SetFont(self, font):
         self._font = font
         self.StyleSetFont(wx.stc.STC_STYLE_DEFAULT, self._font)
@@ -1201,6 +1163,160 @@ class TextCtrl(wx.stc.StyledTextCtrl):
             self.SetWrapMode(wx.stc.STC_WRAP_WORD)
         else:
             self.SetWrapMode(wx.stc.STC_WRAP_NONE)
+
+
+    #----------------------------------------------------------------------------
+    # DynamicSashWindow methods
+    #----------------------------------------------------------------------------
+
+    def SetupDSScrollBars(self):
+        # hook the scrollbars provided by the wxDynamicSashWindow
+        # to this view
+        v_bar = self._dynSash.GetVScrollBar(self)
+        h_bar = self._dynSash.GetHScrollBar(self)
+        v_bar.Bind(wx.EVT_SCROLL, self.OnDSSBScroll)
+        h_bar.Bind(wx.EVT_SCROLL, self.OnDSSBScroll)
+        v_bar.Bind(wx.EVT_SET_FOCUS, self.OnDSSBFocus)
+        h_bar.Bind(wx.EVT_SET_FOCUS, self.OnDSSBFocus)
+
+        # And set the wxStyledText to use these scrollbars instead
+        # of its built-in ones.
+        self.SetVScrollBar(v_bar)
+        self.SetHScrollBar(h_bar)
+
+
+    def OnDSSplit(self, evt):
+        newCtrl = self._dynSash._view.GetCtrlClass()(self._dynSash, -1, style=wx.NO_BORDER)
+        newCtrl.SetDocPointer(self.GetDocPointer())     # use the same document
+        self.SetupDSScrollBars()
+        if self == self._dynSash._view.GetCtrl():  # originally had focus
+            wx.CallAfter(self.SetFocus)  # do this to set colors correctly.  wxBug:  for some reason, if we don't do a CallAfter, it immediately calls OnKillFocus right after our SetFocus.
+
+
+    def OnDSUnify(self, evt):
+        self.SetupDSScrollBars()
+        self.SetFocus()  # do this to set colors correctly
+
+
+    def OnDSSBScroll(self, evt):
+        # redirect the scroll events from the _dynSash's scrollbars to the STC
+        self.GetEventHandler().ProcessEvent(evt)
+
+
+    def OnDSSBFocus(self, evt):
+        # when the scrollbar gets the focus move it back to the STC
+        self.SetFocus()
+
+
+    def DSProcessEvent(self, event):
+        # wxHack: Needed for customized right mouse click menu items.        
+        if hasattr(self, "_dynSash"):
+            if event.GetId() == wx.ID_SELECTALL:
+                # force focus so that select all occurs in the window user right clicked on.
+                self.SetFocus()
+
+            return self._dynSash._view.ProcessEvent(event)
+        return False
+
+
+    def DSProcessUpdateUIEvent(self, event):
+        # wxHack: Needed for customized right mouse click menu items.        
+        if hasattr(self, "_dynSash"):
+            id = event.GetId()
+            if (id == wx.ID_SELECTALL  # allow select all even in non-active window, then force focus to it, see above ProcessEvent
+            or id == wx.ID_UNDO
+            or id == wx.ID_REDO):
+                pass  # allow these actions even in non-active window
+            else:  # disallow events in non-active windows.  Cut/Copy/Paste/Delete is too confusing user experience.
+                if self._dynSash._view.GetCtrl() != self:
+                     event.Enable(False)
+                     return True
+
+            return self._dynSash._view.ProcessUpdateUIEvent(event)
+        return False
+
+
+class TextPrintout(wx.lib.docview.DocPrintout):
+    """ for Print Preview and Print """
+    
+
+    def OnPreparePrinting(self):
+        """ initialization """
+        dc = self.GetDC()
+
+        ppiScreenX, ppiScreenY = self.GetPPIScreen()
+        ppiPrinterX, ppiPrinterY = self.GetPPIPrinter()
+        scaleX = float(ppiPrinterX)/ppiScreenX
+        scaleY = float(ppiPrinterY)/ppiScreenY
+
+        pageWidth, pageHeight = self.GetPageSizePixels()
+        self._scaleFactorX = scaleX/pageWidth
+        self._scaleFactorY = scaleY/pageHeight
+
+        w, h = dc.GetSize()
+        overallScaleX = self._scaleFactorX * w
+        overallScaleY = self._scaleFactorY * h
+        
+        txtCtrl = self._printoutView.GetCtrl()
+        font, color = txtCtrl.GetFontAndColorFromConfig()
+
+        self._margin = 40
+        self._fontHeight = font.GetPointSize() + 1
+        self._pageLines = int((h/overallScaleY - (2 * self._margin))/self._fontHeight)
+        self._maxLines = txtCtrl.GetLineCount()
+        self._numPages, remainder = divmod(self._maxLines, self._pageLines)
+        if remainder != 0:
+            self._numPages += 1
+
+        spaces = 1
+        lineNum = self._maxLines
+        while lineNum >= 10:
+            lineNum = lineNum/10
+            spaces += 1
+        self._printFormat = "%%0%sd: %%s" % spaces
+
+
+    def OnPrintPage(self, page):
+        """ Prints the given page of the view """
+        dc = self.GetDC()
+        
+        txtCtrl = self._printoutView.GetCtrl()
+        font, color = txtCtrl.GetFontAndColorFromConfig()
+        dc.SetFont(font)
+        
+        w, h = dc.GetSize()
+        dc.SetUserScale(self._scaleFactorX * w, self._scaleFactorY * h)
+        
+        dc.BeginDrawing()
+        
+        dc.DrawText("%s - page %s" % (self.GetTitle(), page), self._margin, self._margin/2)
+
+        startY = self._margin
+        startLine = (page - 1) * self._pageLines
+        endLine = min((startLine + self._pageLines), self._maxLines)
+        for i in range(startLine, endLine):
+            text = txtCtrl.GetLine(i).rstrip()
+            startY += self._fontHeight
+            if txtCtrl.GetViewLineNumbers():
+                dc.DrawText(self._printFormat % (i+1, text), self._margin, startY)
+            else:
+                dc.DrawText(text, self._margin, startY)
+                
+        dc.EndDrawing()
+
+        return True
+
+
+    def HasPage(self, pageNum):
+        return pageNum <= self._numPages
+
+
+    def GetPageInfo(self):
+        minPage = 1
+        maxPage = self._numPages
+        selPageFrom = 1
+        selPageTo = self._numPages
+        return (minPage, maxPage, selPageFrom, selPageTo)
 
         
 #----------------------------------------------------------------------------

@@ -62,8 +62,8 @@ class PerlService(CodeEditor.CodeService):
 class PerlCtrl(CodeEditor.CodeCtrl):
 
 
-    def __init__(self, parent, ID = -1, style = wx.NO_FULL_REPAINT_ON_RESIZE):
-        CodeEditor.CodeCtrl.__init__(self, parent, ID, style)
+    def __init__(self, parent, id=-1, style=wx.NO_FULL_REPAINT_ON_RESIZE):
+        CodeEditor.CodeCtrl.__init__(self, parent, id, style)
         self.SetLexer(wx.stc.STC_LEX_PERL)
         self.SetKeyWords(0, string.join(PERLKEYWORDS))
 

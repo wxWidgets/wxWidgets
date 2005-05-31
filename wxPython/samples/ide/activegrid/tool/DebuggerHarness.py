@@ -22,6 +22,8 @@ import inspect
 from xml.dom.minidom import getDOMImplementation
 import atexit
 import pickle
+import cStringIO
+import bz2
 
 if sys.platform.startswith("win"):
     import win32api
@@ -107,7 +109,7 @@ class Adb(bdb.Bdb):
             exc_type_name = exc_type
         else: 
             exc_type_name = exc_type.__name__
-        message = "Exception occurred: " + repr(exc_type_name) + " See locals.__exception__ for details."
+        message = "Exception occured: " + repr(exc_type_name) + " See locals.__exception__ for details."
         traceback.print_exception(exc_type, exc_value, exc_traceback)
         self._harness.interaction(message, frame, message)
 
@@ -189,8 +191,7 @@ class Adb(bdb.Bdb):
         return ""
                 
     def stop_here(self, frame):
-        if( self._userBreak ):
-            self._userBreak = False
+        if self._userBreak:
             return True
         
 
@@ -270,6 +271,7 @@ class BreakListenerThread(threading.Thread):
             if _VERBOSE: print "Before calling server close on breakpoint server"
             self._server.server_close()
             if _VERBOSE: print "Calling server close on breakpoint server"
+            self._server = None
                            
         
 class DebuggerHarness(object):
@@ -312,8 +314,11 @@ class DebuggerHarness(object):
         self._server.register_function(self.clear_breakpoint)
         self._server.register_function(self.set_all_breakpoints)
         self._server.register_function(self.attempt_introspection)
+        self._server.register_function(self.execute_in_frame)
         self._server.register_function(self.add_watch)
+        self._server.register_function(self.request_frame_document)
         
+        self.frame_stack = []
         self.message_frame_dict = {}
         self.introspection_list = []
         atexit.register(self.do_exit)
@@ -364,7 +369,28 @@ class DebuggerHarness(object):
                 tp, val, tb = sys.exc_info()
                 return self.get_exception_document(tp, val, tb) 
         return ""
-                
+        
+    def execute_in_frame(self, frame_message, command):
+        frame = self.message_frame_dict[frame_message]
+        output = cStringIO.StringIO()
+        out = sys.stdout
+        err = sys.stderr
+        sys.stdout = output
+        sys.stderr = output
+        try:
+            exec command in frame.f_globals, frame.f_locals
+            return output.getvalue()
+            sys.stdout = out
+            sys.stderr = err        
+        except:
+            sys.stdout = out
+            sys.stderr = err        
+
+            tp, val, tb = sys.exc_info()           
+            output = cStringIO.StringIO()
+            traceback.print_exception(tp, val, tb, file=output)
+            return output.getvalue()   
+               
     def attempt_introspection(self, frame_message, chain):
         try:
             frame = self.message_frame_dict[frame_message]
@@ -608,22 +634,27 @@ class DebuggerHarness(object):
             
         
     def getFrameXML(self, base_frame):
-        doc = getDOMImplementation().createDocument(None, "stack", None)
-        top_element = doc.documentElement
 
-        stack = []
+        self.frame_stack = []
         frame = base_frame
         while frame is not None:
             if((frame.f_code.co_filename.count('DebuggerHarness.py') == 0) or _DEBUG_DEBUGGER):
-                stack.append(frame)
+                self.frame_stack.append(frame)
             frame = frame.f_back
-        stack.reverse()
+        self.frame_stack.reverse()
         self.message_frame_dict = {}
-        for f in stack:
-            self.addFrame(f,top_element, doc)
+        doc = getDOMImplementation().createDocument(None, "stack", None)
+        top_element = doc.documentElement
+        numberFrames = len(self.frame_stack)
+        for index in range(numberFrames):
+            frame = self.frame_stack[index]
+            message = self._adb.frame2message(frame)
+            # We include globals and locals only for the last frame as an optimization for cases
+            # where there are a lot of frames.
+            self.addFrame(frame, top_element, doc, includeContent=(index == numberFrames - 1))
         return doc.toxml()
         
-    def addFrame(self, frame, root_element, document):
+    def addFrame(self, frame, root_element, document, includeContent=False):
         frameNode = document.createElement('frame')
         root_element.appendChild(frameNode)
         
@@ -633,11 +664,19 @@ class DebuggerHarness(object):
         frameNode.setAttribute('line', str(frame.f_lineno))
         message = self._adb.frame2message(frame)
         frameNode.setAttribute('message', message)
-        #print "Frame: %s %s %s" %(message, frame.f_lineno, filename)
         self.message_frame_dict[message] = frame
-        self.addDict(frameNode, "locals", frame.f_locals, document, 2)        
-        self.addNode(frameNode, "globals", frame.f_globals,  document)
-                    
+        if includeContent:
+            self.addDict(frameNode, "locals", frame.f_locals, document, 2)        
+            self.addNode(frameNode, "globals", frame.f_globals,  document)
+            
+    def request_frame_document(self, message):
+        frame = self.message_frame_dict[message]  
+        doc = getDOMImplementation().createDocument(None, "stack", None)
+        top_element = doc.documentElement
+        if frame:
+            self.addFrame(frame, top_element, doc, includeContent=True)
+        return xmlrpclib.Binary(bz2.compress(doc.toxml()))
+            
     def getRepr(self, varName, globals, locals):
         try:
             return repr(eval(varName, globals, locals))
@@ -647,23 +686,25 @@ class DebuggerHarness(object):
    
     def saferepr(self, thing):
         try:
-            return repr(thing)
+            try:
+                return repr(thing)
+            except:
+                return str(type(thing))
         except:
             tp, val, tb = sys.exc_info()
-            traceback.print_exception(tp, val, tb)
+            #traceback.print_exception(tp, val, tb)
             return repr(val)
                     
     # The debugger calls this method when it reaches a breakpoint.
     def interaction(self, message, frame, info):
         if _VERBOSE:
             print 'hit debug side interaction'
-        self._userBreak = False
+        self._adb._userBreak = False
 
         self._currentFrame = frame
         done = False
         while not done:
             try:
-                import bz2
                 xml = self.getFrameXML(frame)
                 arg = xmlrpclib.Binary(bz2.compress(xml))
                 if _VERBOSE:

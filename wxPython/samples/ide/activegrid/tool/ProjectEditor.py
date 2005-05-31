@@ -20,7 +20,7 @@ from wxPython.lib.rcsizer import RowColSizer
 import time
 import Service
 import sys
-import activegrid.util.xmlmarshaller
+import activegrid.util.objutils
 import UICommon
 import Wizard
 import SVNService
@@ -47,18 +47,12 @@ HALF_SPACE = 5
 #----------------------------------------------------------------------------
 # XML Marshalling Methods
 #----------------------------------------------------------------------------
-LOCAL_TYPE_MAPPING = { "projectmodel"   : "activegrid.tool.ProjectEditor.ProjectModel", }
-
 
 def load(fileObject):
-    xml = fileObject.read()
-    projectModel = activegrid.util.xmlmarshaller.unmarshal(xml, knownTypes=LOCAL_TYPE_MAPPING)
-    return projectModel
-
+    return activegrid.util.objutils.defaultLoad(fileObject)
 
 def save(fileObject, projectModel):
-    xml = activegrid.util.xmlmarshaller.marshal(projectModel, prettyPrint=True, knownTypes=LOCAL_TYPE_MAPPING)
-    fileObject.write(xml)
+    activegrid.util.objutils.defaultSave(fileObject, projectModel, prettyPrint=True)
 
 
 #----------------------------------------------------------------------------
@@ -72,6 +66,9 @@ class ProjectModel:
 
     def __init__(self):
         self._files = []
+        
+    def initialize(self):
+        pass
      
    
 class ProjectDocument(wx.lib.docview.Document):
@@ -143,8 +140,6 @@ class ProjectDocument(wx.lib.docview.Document):
             if path.startswith("."):  # relative to project file
                 curPath = os.path.dirname(self.GetFilename())
                 path = os.path.normpath(os.path.join(curPath, path))
-            elif not ACTIVEGRID_BASE_IDE:
-                print "Warning: absolute path '%s' found in project file, this may affect deployment" % path
             newFilePaths.append(path)
         return newFilePaths
 
@@ -229,7 +224,7 @@ class ProjectDocument(wx.lib.docview.Document):
             if isProject:
                 documents = self.GetDocumentManager().GetDocuments()
                 for document in documents:
-                    if document.GetFilename() == oldFile:  # If the renamed document is open, update it
+                    if os.path.normcase(document.GetFilename()) == os.path.normcase(oldFile):  # If the renamed document is open, update it
                         document.SetFilename(newFile)
                         document.SetTitle(wx.lib.docview.FileNameFromPath(newFile))
                         document.UpdateAllViews(hint = ("rename", document, newFile))
@@ -238,7 +233,7 @@ class ProjectDocument(wx.lib.docview.Document):
                 self.AddFile(newFile)
                 documents = self.GetDocumentManager().GetDocuments()
                 for document in documents:
-                    if document.GetFilename() == oldFile:  # If the renamed document is open, update it
+                    if os.path.normcase(document.GetFilename()) == os.path.normcase(oldFile):  # If the renamed document is open, update it
                         document.SetFilename(newFile, notifyViews = True)
                         document.UpdateAllViews(hint = ("rename", document, newFile))
             return True
@@ -293,7 +288,7 @@ class NewProjectWizard(Wizard.BaseWizard):
                 # What if the document is already open and we're overwriting it?
                 documents = docManager.GetDocuments()
                 for document in documents:
-                    if document.GetFilename() == self._fullProjectPath:  # If the renamed document is open, update it
+                    if os.path.normcase(document.GetFilename()) == os.path.normcase(self._fullProjectPath):  # If the renamed document is open, update it
                         document.DeleteAllViews()
                         break
                 os.remove(self._fullProjectPath)
@@ -848,9 +843,11 @@ class ProjectView(wx.lib.docview.View):
         or id == ProjectService.RENAME_ID
         or id == ProjectService.ADD_FILES_TO_PROJECT_ID
         or id == ProjectService.ADD_ALL_FILES_TO_PROJECT_ID
-        or id == wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID
-        or id == ProjectService.DELETE_FILE_ID):
+        or id == wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID):
             event.Enable(self._HasSelection())
+            return True
+        elif id == ProjectService.DELETE_FILE_ID:
+            event.Enable(len(self.GetSelectedFiles()) > 0)
             return True
         elif id == ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID:
             event.Enable(False)
@@ -866,6 +863,10 @@ class ProjectView(wx.lib.docview.View):
         or id == ProjectService.OPEN_SELECTION_ID):
             event.Enable(self._HasFilesSelected())
             return True
+        elif (id == wx.ID_PREVIEW
+        or id == wx.ID_PRINT):
+            event.Enable(False)
+            return True            
         else:
             return False
 
@@ -921,6 +922,16 @@ class ProjectView(wx.lib.docview.View):
             filename = self._GetItemFile(item)
             if filename and filename not in filenames:
                 filenames.append(filename)
+        return filenames
+
+
+    def GetSelectedProjects(self):
+        filenames = []
+        for item in self._treeCtrl.GetSelections():
+            if self._IsItemProject(item):
+                filename = self._treeCtrl.GetLongFilename(item)
+                if filename and filename not in filenames:
+                    filenames.append(filename)
         return filenames
 
 
@@ -981,8 +992,7 @@ class ProjectView(wx.lib.docview.View):
                         allfilter = allfilter + _(';')
                     descr = descr + temp.GetDescription() + _(" (") + temp.GetFileFilter() + _(") |") + temp.GetFileFilter()  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
                     allfilter = allfilter + temp.GetFileFilter()
-            descr = _("All") + _(" (") + allfilter + _(") |") + allfilter + _('|') + descr  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
-            descr = descr + _("|") + _("Any (*.*) | *.*")
+            descr = _("All (%s)|%s|%s|Any (*.*) | *.*") %  (allfilter, allfilter, descr)  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
         else:
             descr = _("*.*")
             
@@ -1203,8 +1213,10 @@ class ProjectView(wx.lib.docview.View):
             itemIDs = [wx.ID_CLOSE, wx.ID_SAVE, wx.ID_SAVEAS, None]
         menuBar = self._GetParentFrame().GetMenuBar()
         itemIDs = itemIDs + [ProjectService.ADD_FILES_TO_PROJECT_ID, ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, ProjectService.REMOVE_FROM_PROJECT]
+        svnIDs = [SVNService.SVNService.SVN_UPDATE_ID, SVNService.SVNService.SVN_CHECKIN_ID, SVNService.SVNService.SVN_REVERT_ID]
         if SVN_INSTALLED:
             itemIDs = itemIDs + [None, SVNService.SVNService.SVN_UPDATE_ID, SVNService.SVNService.SVN_CHECKIN_ID, SVNService.SVNService.SVN_REVERT_ID]
+        globalIDs = [wx.ID_UNDO, wx.ID_REDO, wx.ID_CLOSE, wx.ID_SAVE, wx.ID_SAVEAS]
         itemIDs = itemIDs + [None, wx.ID_UNDO, wx.ID_REDO, None, wx.ID_CUT, wx.ID_COPY, wx.ID_PASTE, wx.ID_CLEAR, None, wx.ID_SELECTALL, ProjectService.RENAME_ID, ProjectService.DELETE_FILE_ID, None, wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID]
         for itemID in itemIDs:
             if not itemID:
@@ -1218,8 +1230,16 @@ class ProjectView(wx.lib.docview.View):
                     wx.EVT_MENU(self._GetParentFrame(), ProjectService.REMOVE_FROM_PROJECT, self.OnClear)
                     wx.EVT_UPDATE_UI(self._GetParentFrame(), ProjectService.REMOVE_FROM_PROJECT, self._GetParentFrame().ProcessUpdateUIEvent)
                 else:
+                    svnService = wx.GetApp().GetService(SVNService.SVNService)
                     item = menuBar.FindItemById(itemID)
                     if item:
+                        if itemID in svnIDs:
+                            if SVN_INSTALLED and svnService:
+                                wx.EVT_MENU(self._GetParentFrame(), itemID, svnService.ProcessEvent)
+                        elif itemID in globalIDs:
+                            pass
+                        else:
+                            wx.EVT_MENU(self._treeCtrl, itemID, self.ProcessEvent)
                         menu.Append(itemID, item.GetLabel())
         self._treeCtrl.PopupMenu(menu, wx.Point(event.GetX(), event.GetY()))
         menu.Destroy()
@@ -1824,9 +1844,43 @@ class ProjectService(Service.Service):
 
     def ProcessEventBeforeWindows(self, event):
         id = event.GetId()
+        
         if id == wx.ID_CLOSE_ALL:
             self.OnFileCloseAll(event)
             return True
+            
+        elif id == wx.ID_CLOSE:
+            document = self.GetDocumentManager().GetCurrentDocument()
+            if document and document.GetDocumentTemplate().GetDocumentType() == ProjectDocument:
+                self.OnProjectClose(event)
+                return True
+            else:
+                return False
+        return False
+
+
+    def ProcessUpdateUIEventBeforeWindows(self, event):
+        id = event.GetId()
+        
+        if id == wx.ID_CLOSE_ALL:
+            for document in self.GetDocumentManager().GetDocuments():
+                if document.GetDocumentTemplate().GetDocumentType() != ProjectDocument:
+                    event.Enable(True)
+                    return True
+                    
+            event.Enable(False)
+            return True
+            
+        elif id == wx.ID_CLOSE:
+            document = self.GetDocumentManager().GetCurrentDocument()
+            if document and document.GetDocumentTemplate().GetDocumentType() == ProjectDocument:
+                projectFilenames = self.GetView().GetSelectedProjects()
+                if projectFilenames and len(projectFilenames):
+                    event.Enable(True)
+                else:
+                    event.Enable(False)
+                return True
+                
         return False
 
 
@@ -2053,6 +2107,14 @@ class ProjectService(Service.Service):
         file = self.GetDocumentManager().GetCurrentDocument().GetFilename()
         projects[res].GetCommandProcessor().Submit(ProjectAddFilesCommand(projects[res], [file]))
         self.GetView().Activate(True)  # after add, should put focus on project editor
+
+
+    def OnProjectClose(self, event):
+        projectFilenames = self.GetView().GetSelectedProjects()
+        for filename in projectFilenames:
+            doc = self.FindProjectByFile(filename)
+            if doc:
+                self.GetDocumentManager().CloseDocument(doc, False)
 
 
     def OnFileCloseAll(self, event):

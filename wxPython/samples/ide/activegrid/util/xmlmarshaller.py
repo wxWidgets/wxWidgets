@@ -195,6 +195,8 @@ def _objectfactory(objname, objargs=None, xsname=None):
     try:
         if __builtin__.__dict__.has_key(objname):
             module = __builtin__
+        elif knownGlobalModule:
+            module = knownGlobalModule
         else:
             if modulename:
                 module = __import__(modulename)
@@ -431,12 +433,13 @@ def _getXmlValue(pythonValue):
     else:
         return str(pythonValue)
 
-def unmarshal(xmlstr, knownTypes=None):
-    global knownGlobalTypes
+def unmarshal(xmlstr, knownTypes=None, knownModule=None):
+    global knownGlobalTypes, knownGlobalModule
     if (knownTypes == None):
         knownGlobalTypes = {}
     else:
         knownGlobalTypes = knownTypes
+    knownGlobalModule = knownModule
     objectfactory = XMLObjectFactory()
     xml.sax.parseString(xmlstr, objectfactory)
     return objectfactory.getRootObject()

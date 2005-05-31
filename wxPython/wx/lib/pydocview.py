@@ -295,7 +295,7 @@ class DocMDIParentFrameMixIn:
 
         config = wx.ConfigBase_Get()
         if config.ReadInt("MDIFrameMaximized", False):
-            # wxBug: On maximize, statusbar leaves a residual that needs to be refreshed, happens even when user does it
+            # wxBug: On maximize, statusbar leaves a residual that needs to be refereshed, happens even when user does it
             self.Maximize()
 
         self.CreateEmbeddedWindows(embeddedWindows)
@@ -1603,7 +1603,7 @@ class DocApp(wx.PySimpleApp):
             args = pickle.loads(data)
             for arg in args:
                 if arg[0] != '/' and arg[0] != '-' and os.path.exists(arg):
-                    self.GetDocumentManager().CreateDocument(arg, wx.lib.docview.DOC_SILENT)
+                    self.GetDocumentManager().CreateDocument(os.path.normpath(arg), wx.lib.docview.DOC_SILENT)
             
             # force display of running app
             topWindow = wx.GetApp().GetTopWindow()
@@ -1624,7 +1624,7 @@ class DocApp(wx.PySimpleApp):
         args = sys.argv[1:]
         for arg in args:
             if arg[0] != '/' and arg[0] != '-' and os.path.exists(arg):
-                self.GetDocumentManager().CreateDocument(arg, wx.lib.docview.DOC_SILENT)
+                self.GetDocumentManager().CreateDocument(os.path.normpath(arg), wx.lib.docview.DOC_SILENT)
 
 
     def GetDocumentManager(self):
