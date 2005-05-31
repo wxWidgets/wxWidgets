@@ -1743,6 +1743,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             case HDN_GETDISPINFOW:
                 {
+/* CVS HEAD decided to fix this bug by always returning tue, so do the same
+   CE 31 may 05
                     LPNMHDDISPINFOW info = (LPNMHDDISPINFOW) lParam;
                     // This is a fix for a strange bug under XP.
                     // Normally, info->iItem is a valid index, but
@@ -1752,7 +1754,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // there's a GPF in Windows.
                     // By returning TRUE here, we avoid further processing
                     // of this strange message.
-                    if ( info->iItem >= GetColumnCount() )
+                    if ( info->iItem >= GetColumnCount() ) */
                         return TRUE;
                 }
                 // fall through
