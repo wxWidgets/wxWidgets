@@ -215,7 +215,7 @@ void RipperDocGen::AppendComments( spContext& fromContext, string& str )
     str += mTags[TAG_PARAGRAPH].end;
 }
 
-void RipperDocGen::AppendMulitilineStr( string& st, string& mlStr )
+void RipperDocGen::AppendMulitilineStr( wxString& st, wxString& mlStr )
 {
     st = mTags[TAG_FIXED_FONT].start;
     st += mlStr;

@@ -86,7 +86,7 @@ protected:
     // helpers
     void AppendComments( spContext& fromContext, string& str );
 
-    void AppendMulitilineStr( string& st, string& mlStr );
+    void AppendMulitilineStr( wxString& st, wxString& mlStr );
 
     void AppendHighlightedSource( string& st, string source );
 
