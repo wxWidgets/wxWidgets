@@ -567,6 +567,8 @@ auto-merge for MDI in case this will be necessary
 
 wxMenuBar* wxMenuBar::s_macInstalledMenuBar = NULL ;
 wxMenuBar* wxMenuBar::s_macCommonMenuBar = NULL ;
+bool     wxMenuBar::s_macAutoWindowMenu = true ;
+WXHMENU  wxMenuBar::s_macWindowMenuHandle = NULL ;
 
 void wxMenuBar::Init()
 {
@@ -774,6 +776,14 @@ void wxMenuBar::MacInstallMenuBar()
             SetMenuItemRefCon(GetMenuHandle( kwxMacAppleMenuId ) , 1 , (UInt32)aboutMenuItem ) ;
             UMASetMenuItemShortcut( GetMenuHandle( kwxMacAppleMenuId ) , 1 , entry ) ;
         }
+    }
+    if ( GetAutoWindowMenu() )
+    {
+        if ( MacGetWindowMenuHMenu() == NULL )
+        {
+            CreateStandardWindowMenu( 0 , (MenuHandle*) &s_macWindowMenuHandle ) ;
+        }
+        InsertMenu( (MenuHandle) MacGetWindowMenuHMenu() , 0 ) ;
     }
     ::DrawMenuBar() ;
     s_macInstalledMenuBar = this;

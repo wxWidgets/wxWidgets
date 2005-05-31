@@ -1109,6 +1109,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     else if ( HasFlag( wxCAPTION ) )
     {
         wclass = kDocumentWindowClass ;
+        attr |= kWindowInWindowMenuAttribute ;
     }
 #if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
     else if ( HasFlag( wxFRAME_DRAWER ) )
