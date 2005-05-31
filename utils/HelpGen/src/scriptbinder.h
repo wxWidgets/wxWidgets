@@ -368,7 +368,7 @@ public:
     // or from "pFromSection" if it's not NULL.
 
     // fopenOptions arg. is string passed to fopen() method,
-    // returns true, if saving was successfull
+    // returns true, if saving was successful
 
     virtual bool SaveDocument( const char*    fname,
                                const char*    fopenOptions = "w",

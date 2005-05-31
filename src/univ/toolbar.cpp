@@ -591,7 +591,7 @@ void wxToolBar::DoDraw(wxControlRenderer *renderer)
 
         if (tool->IsSeparator() && !HasFlag(wxTB_FLAT))
         {
-            // Draw seperators only in flat mode
+            // Draw separators only in flat mode
             continue;
         }
 

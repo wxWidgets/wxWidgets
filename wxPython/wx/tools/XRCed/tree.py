@@ -622,7 +622,7 @@ class XML_Tree(wxTreeCtrl):
         g.panel.SetData(xxx)
         # Update tools
         g.tools.UpdateUI()
-        # Hightlighting is done in OnIdle
+        # Highlighting is done in OnIdle
         self.pendingHighLight = self.selection
 
     # Check if item is in testWin subtree
@@ -648,7 +648,7 @@ class XML_Tree(wxTreeCtrl):
         obj, pos = self.FindNodeObject(item), self.FindNodePos(item)
         size = obj.GetSize()
         # Highlight
-        # Nagative positions are not working wuite well
+        # Negative positions are not working quite well
         if g.testWin.highLight:
             g.testWin.highLight.Replace(pos, size)
         else:
@@ -670,7 +670,7 @@ class XML_Tree(wxTreeCtrl):
         if g.testWin:     # Reset old
             self.SetItemBold(g.testWin.item, False)
         self.CreateTestWin(item)
-        # Maybe an error occured, so we need to test
+        # Maybe an error occurred, so we need to test
         if g.testWin: self.SetItemBold(g.testWin.item)
 
     # Double-click on Linux

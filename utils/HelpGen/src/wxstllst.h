@@ -24,7 +24,7 @@
 #include <limits.h>
 #include <new.h>
 
-// VERSION:: 0.2 (copy-constructor/adign-op added)
+// VERSION:: 0.2 (copy-constructor/assign-op added)
 
 // FOR NOW:: class-member operators "new" and "delete"
 //           are ignored by list class, memory allocated 

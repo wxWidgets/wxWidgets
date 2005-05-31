@@ -96,7 +96,7 @@ public:
     virtual void GetResultString(string& result, MarkupTagsT tags);
 
     // returns vector of block descriptors, see SPBlockListT definition
-    // (block descriptors can be used for fast custom hightlighted text generation)
+    // (block descriptors can be used for fast custom highlighted text generation)
 
     SPBlockListT& GetBlocks();
 

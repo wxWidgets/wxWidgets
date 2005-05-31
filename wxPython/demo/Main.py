@@ -937,7 +937,7 @@ class DemoErrorPanel(wx.Panel):
         self.box = wx.BoxSizer(wx.VERTICAL)
 
         # Main Label
-        self.box.Add(wx.StaticText(self, -1, "An error has occured while trying to run the demo")
+        self.box.Add(wx.StaticText(self, -1, "An error has occurred while trying to run the demo")
                      , 0, wx.ALIGN_CENTER | wx.TOP, 10)
 
         # Exception Information
@@ -1404,7 +1404,7 @@ class wxPythonDemo(wx.Frame):
         
         # o The RunTest() for all samples must now return a window that can
         #   be palced in a tab in the main notebook.
-        # o If an error occurs (or has occured before) an error tab is created.
+        # o If an error occurs (or has occurred before) an error tab is created.
         
         if module is not None:
             wx.LogMessage("Running demo module...")

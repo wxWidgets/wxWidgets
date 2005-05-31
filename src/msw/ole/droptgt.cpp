@@ -260,7 +260,7 @@ STDMETHODIMP wxIDropTarget::DragLeave()
 // Returns : S_OK
 // Params  : [in] IDataObject *pIDataSource     the data to paste
 //           [in] DWORD        grfKeyState      kbd & mouse state
-//           [in] POINTL       pt               where the drop occured?
+//           [in] POINTL       pt               where the drop occurred?
 //           [ouy]DWORD       *pdwEffect        operation effect
 // Notes   :
 STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,

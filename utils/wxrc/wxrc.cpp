@@ -205,7 +205,7 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_OPTION, _T("n"), _T("function"),  _T("C++/Python function name (with -c or -p) [InitXmlResource]"), (wxCmdLineParamType)0, 0 },
         { wxCMD_LINE_OPTION, _T("o"), _T("output"),  _T("output file [resource.xrs/cpp]"), (wxCmdLineParamType)0, 0 },
 #if 0 // not yet implemented
-        { wxCMD_LINE_OPTION, _T("l"), _T("list-of-handlers"),  _T("output list of neccessary handlers to this file"), (wxCmdLineParamType)0, 0 },
+        { wxCMD_LINE_OPTION, _T("l"), _T("list-of-handlers"),  _T("output list of necessary handlers to this file"), (wxCmdLineParamType)0, 0 },
 #endif
         { wxCMD_LINE_PARAM,  NULL, NULL, _T("input file(s)"),
               wxCMD_LINE_VAL_STRING,

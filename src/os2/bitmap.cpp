@@ -194,7 +194,7 @@ wxBitmap::wxBitmap(
         //
         // We assume that it is in XBM format which is not quite the same as
         // the format CreateBitmap() wants because the order of bytes in the
-        // line is inversed!
+        // line is reversed!
         //
         const size_t                nBytesPerLine = (nWidth + 7) / 8;
         const size_t                nPadding = nBytesPerLine % 2;

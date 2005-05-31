@@ -107,7 +107,7 @@ class Adb(bdb.Bdb):
             exc_type_name = exc_type
         else: 
             exc_type_name = exc_type.__name__
-        message = "Exception occured: " + repr(exc_type_name) + " See locals.__exception__ for details."
+        message = "Exception occurred: " + repr(exc_type_name) + " See locals.__exception__ for details."
         traceback.print_exception(exc_type, exc_value, exc_traceback)
         self._harness.interaction(message, frame, message)
 

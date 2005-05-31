@@ -216,7 +216,7 @@ TIFFClientOpen(
 	 * The 'L', 'B', and 'H' flags are intended for applications
 	 * that can optimize operations on data by using a particular
 	 * bit order.  By default the library returns data in MSB2LSB
-	 * bit order for compatibiltiy with older versions of this
+	 * bit order for compatibility with older versions of this
 	 * library.  Returning data in the bit order of the native cpu
 	 * makes the most sense but also requires applications to check
 	 * the value of the FillOrder tag; something they probabyl do

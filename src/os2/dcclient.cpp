@@ -180,7 +180,7 @@ void wxWindowDC::InitDC()
     SetFont(*pFont);
     delete pFont;
     //
-    // OS/2 default vertical character allignment needs to match the other OS's
+    // OS/2 default vertical character alignment needs to match the other OS's
     //
     ::GpiSetTextAlignment((HPS)GetHPS(), TA_NORMAL_HORIZ, TA_BOTTOM);
 

@@ -79,8 +79,8 @@ class wxMetalRenderer : public wxDelegateRenderer
         Arrow_Normal,
         Arrow_Disabled,
         Arrow_Pressed,
-        Arrow_Inversed,
-        Arrow_InversedDisabled,
+        Arrow_Inverted,
+        Arrow_InvertedDisabled,
         Arrow_StateMax
     };
 public:
@@ -366,31 +366,31 @@ wxMetalRenderer::wxMetalRenderer(wxRenderer *renderer, wxColourScheme *scheme)
 
         }
 
-        // create the inversed bitmap but only for the right arrow as we only
+        // create the inverted bitmap but only for the right arrow as we only
         // use it for the menus
         if ( n == Arrow_Right )
         {
-            m_bmpArrows[Arrow_Inversed][n].Create(w, h);
-            dcInverse.SelectObject(m_bmpArrows[Arrow_Inversed][n]);
+            m_bmpArrows[Arrow_Inverted][n].Create(w, h);
+            dcInverse.SelectObject(m_bmpArrows[Arrow_Inverted][n]);
             dcInverse.Clear();
             dcInverse.Blit(0, 0, w, h,
                           &dcNormal, 0, 0,
                           wxXOR);
             dcInverse.SelectObject(wxNullBitmap);
 
-            mask = new wxMask(m_bmpArrows[Arrow_Inversed][n], *wxBLACK);
-            m_bmpArrows[Arrow_Inversed][n].SetMask(mask);
+            mask = new wxMask(m_bmpArrows[Arrow_Inverted][n], *wxBLACK);
+            m_bmpArrows[Arrow_Inverted][n].SetMask(mask);
 
-            m_bmpArrows[Arrow_InversedDisabled][n].Create(w, h);
-            dcInverse.SelectObject(m_bmpArrows[Arrow_InversedDisabled][n]);
+            m_bmpArrows[Arrow_InvertedDisabled][n].Create(w, h);
+            dcInverse.SelectObject(m_bmpArrows[Arrow_InvertedDisabled][n]);
             dcInverse.Clear();
             dcInverse.Blit(0, 0, w, h,
                           &dcDisabled, 0, 0,
                           wxXOR);
             dcInverse.SelectObject(wxNullBitmap);
 
-            mask = new wxMask(m_bmpArrows[Arrow_InversedDisabled][n], *wxBLACK);
-            m_bmpArrows[Arrow_InversedDisabled][n].SetMask(mask);
+            mask = new wxMask(m_bmpArrows[Arrow_InvertedDisabled][n], *wxBLACK);
+            m_bmpArrows[Arrow_InvertedDisabled][n].SetMask(mask);
         }
 
         dcNormal.SelectObject(wxNullBitmap);

@@ -343,7 +343,7 @@ public:
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
     // other operations: return True if there were no errors or False if there
-    // were some unreckognized entries (the good entries are always read anyhow)
+    // were some unrecognized entries (the good entries are always read anyhow)
     //
 
     // read in additional file (the standard ones are read automatically)

@@ -198,7 +198,7 @@ void wxSetIconsX11( WXDisplay* display, WXWindow window,
 //     implements, KDE will support it from version 3.2. At toolkits level,
 //     GTK+ >= 2.1.2 uses it as the only method of making windows fullscreen
 //     (that's why wxGTK will *not* switch to using gtk_window_fullscreen
-//     unless it has better compatiblity with older WMs).
+//     unless it has better compatibility with older WMs).
 //
 //     
 //     This is what wxWidgets does in wxSetFullScreenStateX11:
@@ -408,7 +408,7 @@ static void wxSetKDEFullscreen(Display *display, Window rootWnd,
         lng = 1;
     }
 
-    // it is neccessary to unmap the window, otherwise kwin will ignore us:
+    // it is necessary to unmap the window, otherwise kwin will ignore us:
     XSync(display, False);
     
     bool wasMapped = IsMapped(display, w);
@@ -435,12 +435,12 @@ static void wxSetKDEFullscreen(Display *display, Window rootWnd,
 
     if (!fullscreen)
     {
-        // NB: like many other WMs, kwin ignores first request for window
+        // NB: like many other WMs, kwin ignores the first request for a window
         //     position change after the window was mapped. This additional
         //     move+resize event will ensure that the window is restored in
-        //     exactly same position as before it was made fullscreen (because
-        //     wxTopLevelWindow::ShowFullScreen will call SetSize, thus
-        //     setting the position for second time).
+	//     exactly the same position as before it was made fullscreen
+	//     (because wxTopLevelWindow::ShowFullScreen will call SetSize, thus
+        //     setting the position for the second time).
         XMoveResizeWindow(display, w,
                           origRect->x, origRect->y,
                           origRect->width, origRect->height);

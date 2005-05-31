@@ -295,7 +295,7 @@ class DocMDIParentFrameMixIn:
 
         config = wx.ConfigBase_Get()
         if config.ReadInt("MDIFrameMaximized", False):
-            # wxBug: On maximize, statusbar leaves a residual that needs to be refereshed, happens even when user does it
+            # wxBug: On maximize, statusbar leaves a residual that needs to be refreshed, happens even when user does it
             self.Maximize()
 
         self.CreateEmbeddedWindows(embeddedWindows)

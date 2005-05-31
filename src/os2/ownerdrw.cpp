@@ -77,8 +77,8 @@ bool wxOwnerDrawn::OnMeasureItem(
 
     //
     // If we have a valid accel string, then pad out
-    // the menu string so the menu and accel string are not
-    // placed ontop of eachother.
+    // the menu string so that the menu and accel string are not
+    // placed on top of each other.
     if (!m_strAccel.empty() )
     {
         sStr.Pad(sStr.Length()%8);
@@ -92,7 +92,7 @@ bool wxOwnerDrawn::OnMeasureItem(
     if (!m_strAccel.IsEmpty())
     {
         //
-        // Measure the accelerator string, and add it's width to
+        // Measure the accelerator string, and add its width to
         // the total item width, plus 16 (Accelerators are right justified,
         // with the right edge of the text rectangle 16 pixels left of
         // the right edge of the menu)
@@ -108,8 +108,8 @@ bool wxOwnerDrawn::OnMeasureItem(
     }
 
     //
-    // Add space at the end of the menu for the submenu expansion arrow
-    // this will also allow offsetting the accel string from the right edge
+    // Add space at the end of the menu for the submenu expansion arrow.
+    // This will also allow offsetting the accel string from the right edge
     //
     *pWidth = (size_t)(*pWidth + GetDefaultMarginWidth() * 1.5);
 
@@ -210,7 +210,7 @@ bool wxOwnerDrawn::OnDrawItem(
     }
 
     //
-    // Base on the status of the menu item pick the right colors
+    // Based on the status of the menu item, pick the right colors
     //
     if (eStatus & wxODSelected)
     {
@@ -291,14 +291,14 @@ bool wxOwnerDrawn::OnDrawItem(
     //
     // Unfortunately, unlike Win32, PM has no owner drawn specific text
     // drawing methods like ::DrawState that can cleanly handle accel
-    // pneumonics and deal, automatically, with various states, so we have
+    // mnemonics and deal, automatically, with various states, so we have
     // to handle them ourselves. Notice Win32 can't handle \t in ownerdrawn
-    // strings either.  We cannot handle mneumonics either.  We display
-    // it, though, in hopes we can figure it out some day.
+    // strings either.  We cannot handle mnemonics either.  We display
+    // them, though, in the hope we can figure them out some day.
     //
 
     //
-    // Display main text and accel text separately to allign better
+    // Display main text and accel text separately to align better
     //
     wxString                        sTgt = wxT("\t");
     wxString                        sFullString = m_strName; // need to save the original text
@@ -307,7 +307,7 @@ bool wxOwnerDrawn::OnDrawItem(
     size_t                          nWidth;
     size_t                          nCharWidth;
     size_t                          nHeight;
-    bool                            bFoundMneumonic = FALSE;
+    bool                            bFoundMnemonic = FALSE;
     bool                            bFoundAccel = FALSE;
 
     //
@@ -322,7 +322,7 @@ bool wxOwnerDrawn::OnDrawItem(
     }
 
     //
-    // Deal with the mneumonic character
+    // Deal with the mnemonic character
     //
     sTgt = wxT("~");
     nIndex = sFullString.Find(sTgt.c_str());
@@ -330,7 +330,7 @@ bool wxOwnerDrawn::OnDrawItem(
     {
         wxString                    sTmp = sFullString;
 
-        bFoundMneumonic = TRUE;
+        bFoundMnemonic = TRUE;
         sTmp.Remove(nIndex);
         rDC.GetTextExtent( sTmp
                           ,(long *)&nWidth
@@ -353,10 +353,10 @@ bool wxOwnerDrawn::OnDrawItem(
                       ,sFullString.length()
                       ,(PCH)sFullString.c_str()
                      );
-    if (bFoundMneumonic)
+    if (bFoundMnemonic)
     {
         //
-        // Underline the mneumonic -- still won't work, but at least it "looks" right
+        // Underline the mnemonic -- still won't work, but at least it "looks" right
         //
         wxPen                       vPen;
         POINTL                      vPntEnd = {nX + nWidth + nCharWidth - 3, rRect.y + 2}; //CharWidth is bit wide

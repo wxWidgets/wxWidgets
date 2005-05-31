@@ -1075,7 +1075,7 @@ class FoldPanelBar(wx.Panel):
               it is resized.  Very handy for sizer items, buttons and
               text boxes.
 
-            * FPB_ALIGN_LEFT: Alligns left instead of fitting the
+            * FPB_ALIGN_LEFT: Aligns left instead of fitting the
               width of the child window to be added. Use either this
               one or FPB_ALIGN_WIDTH.
 

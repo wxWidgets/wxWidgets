@@ -1387,7 +1387,7 @@ void wxDC::DoDrawBitmap(
                     lColor = m_textBackgroundColour.GetPixel();
 
                 //
-                // Bitmap must be ina double-word alligned address so we may
+                // Bitmap must be in a double-word aligned address so we may
                 // have some padding to worry about
                 //
                 if (nLineBoundary > 0)

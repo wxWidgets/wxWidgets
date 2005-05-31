@@ -100,7 +100,7 @@ class Frame(wxFrame):
 
         # Load our own resources
         self.res = wxXmlResource('')
-        # !!! Blocking of assert failure occuring in older unicode builds
+        # !!! Blocking of assert failure occurring in older unicode builds
         try:
             self.res.Load(os.path.join(basePath, 'xrced.xrc'))
         except wx._core.PyAssertionError:

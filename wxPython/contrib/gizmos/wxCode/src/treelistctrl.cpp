@@ -1398,7 +1398,7 @@ void wxTreeListHeaderWindow::OnMouse( wxMouseEvent &event )
         // end of the current column
         int xpos = 0;
 
-        // find the column where this event occured
+        // find the column where this event occurred
         int countCol = GetColumnCount();
         for (int col = 0; col < countCol; col++)
         {

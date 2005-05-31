@@ -256,7 +256,7 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize,
                                int range, int pageSize,
                                bool refresh)
 {
-    // we only refresh everythign when the range changes, thumb position
+    // we only refresh everything when the range changes, thumb position
     // changes are handled in OnIdle
     bool needsRefresh = (range != m_range) ||
                         (thumbSize != m_thumbSize) ||

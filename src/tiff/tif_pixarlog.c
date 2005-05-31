@@ -43,7 +43,7 @@
  * input is assumed to be unsigned linear color values that represent
  * the range 0-1.  In the case of IEEE values, the 0-1 range is assumed to
  * be the normal linear color range, in addition over 1 values are
- * accepted up to a value of about 25.0 to encode "hot" hightlights and such.
+ * accepted up to a value of about 25.0 to encode "hot" highlights and such.
  * The encoding is lossless for 8-bit values, slightly lossy for the
  * other bit depths.  The actual color precision should be better
  * than the human eye can perceive with extra room to allow for

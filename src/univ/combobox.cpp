@@ -576,7 +576,7 @@ void wxComboListBox::OnSelect(wxCommandEvent& event)
         event2.SetId(m_combo->GetId());
         m_combo->ProcessEvent(event2);
     }
-    //else: ignore the events resultign from just moving the mouse initially
+    //else: ignore the events resulting from just moving the mouse initially
 }
 
 void wxComboListBox::OnShow()
@@ -614,7 +614,7 @@ void wxComboListBox::OnMouseMove(wxMouseEvent& event)
     // while a wxComboListBox is shown, it always has capture, so if it doesn't
     // we're about to go away anyhow (normally this shouldn't happen at all,
     // but I don't put assert here as it just might do on other platforms and
-    // it doesn't break anythign anyhow)
+    // it doesn't break anything anyhow)
     if ( this == wxWindow::GetCapture() )
     {
         if ( HitTest(event.GetPosition()) == wxHT_WINDOW_INSIDE )

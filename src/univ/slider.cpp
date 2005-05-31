@@ -22,9 +22,9 @@
    or right.
 
    What we really need is probably a more fine grain control on labels, i.e. we
-   should be able to select if we show nothign at all, the current value only
+   should be able to select if we show nothing at all, the current value only
    or the value and the limits - the current approach is just that of the
-   greatest common denominator.
+   lowest common denominator.
 
    TODO:
 
