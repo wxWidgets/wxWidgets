@@ -59,15 +59,16 @@ protected:
 
     void InsertBookmarkSorted( BookmarkListT& lst, spBookmark& mark );
 
-    void DoAppendSourceFragment( string& source,
-                                 string& result,
-                                 size_t  pos, size_t len );
+    void DoAppendSourceFragment( wxString& source,
+                                 wxString& result,
+                                 size_t    pos,
+                                 size_t len );
 
     void GenerateContextBody( spContext& ctx,
-                              string&    source,
-                              string&    result,
-                              size_t& lastSavedPos,
-                              size_t& lastKnownPos );
+                              wxString&  source,
+                              wxString&  result,
+                              size_t&    lastSavedPos,
+                              size_t&    lastKnownPos );
 
 public:
 

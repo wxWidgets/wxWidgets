@@ -92,8 +92,8 @@ void spInterFileContext::InsertBookmarkSorted( BookmarkListT& lst, spBookmark& m
     lst.push_back( mark );
 }
 
-void spInterFileContext::DoAppendSourceFragment( string& source,
-                                                 string& result,
+void spInterFileContext::DoAppendSourceFragment( wxString& source,
+                                                 wxString& result,
                                                  size_t  pos, size_t len )
 {
     mFiltered.erase( mFiltered.begin(), mFiltered.end() );
@@ -132,8 +132,8 @@ void spInterFileContext::DoAppendSourceFragment( string& source,
 }
 
 void spInterFileContext::GenerateContextBody( spContext& ctx,
-                                              string&    source,
-                                              string&    result,
+                                              wxString&  source,
+                                              wxString&  result,
                                               size_t&    lastSavedPos,
                                               size_t&    lastKnownPos )
 {
