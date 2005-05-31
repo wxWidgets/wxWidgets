@@ -701,7 +701,7 @@ class spFile : public spContext
 public:
     // since file name cannot be determined from
     // source code, filling in this field is optional
-    string mFileName;
+    wxString m_FileName;
 
 public:
     virtual int GetContextType() const { return SP_CTX_FILE; }

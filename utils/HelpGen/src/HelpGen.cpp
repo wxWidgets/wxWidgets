@@ -750,7 +750,7 @@ int main(int argc, char **argv)
                          header.c_str());
         }
         else if ( mode == Mode_Dump ) {
-            ((spFile *)ctxTop)->mFileName = header;
+            ((spFile *)ctxTop)->m_FileName = header;
             visitor.VisitAll(*ctxTop);
             visitor.EndVisit();
         }
@@ -902,7 +902,7 @@ void HelpGenVisitor::CloseClass()
                 wxString section(m_arrayFuncDocs[n].text);
 
                 // Strip leading whitespace
-                int pos = section.Find("\\membersection");
+                int pos = section.Find(_T("\\membersection"));
                 if (pos > -1)
                 {
                     section = section.Mid(pos);
@@ -953,7 +953,7 @@ void HelpGenVisitor::EndVisit()
 
 void HelpGenVisitor::VisitFile( spFile& file )
 {
-    m_fileHeader = file.mFileName;
+    m_fileHeader = file.m_FileName;
     wxLogVerbose("%s: started generating docs for classes from file '%s'...",
                  GetCurrentTimeFormatted("%H:%M:%S"), m_fileHeader.c_str());
 }
@@ -1295,13 +1295,19 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
         m_classname.c_str(), funcname.c_str(),
         MakeLabel(m_classname, funcname).c_str());
 
+    wxString constStr;
+    if(op.mIsConstant) constStr = _T("const");
+
+    wxString virtualStr;
+    if(op.mIsVirtual) virtualStr = _T("virtual ");
+
     wxString func;
-    func.Printf("\n"
-                      "\\%sfunc{%s%s}{%s}{",
-                      op.mIsConstant ? "const" : "",
-                      op.mIsVirtual ? "virtual " : "",
-                      op.m_RetType.c_str(),
-                      funcname.c_str());
+    func.Printf(_T("\n")
+                _T("\\%sfunc{%s%s}{%s}{"),
+                constStr.c_str(),
+                virtualStr.c_str(),
+                op.m_RetType.c_str(),
+                funcname.c_str());
     m_textFunc += func;
 }
 
@@ -1829,21 +1835,29 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                 const MethodInfo& method = *(methods[index]);
 
                 bool isVirtual = ctxMethod->mIsVirtual;
-                if ( isVirtual != method.HasFlag(MethodInfo::Virtual) ) {
+                if ( isVirtual != method.HasFlag(MethodInfo::Virtual) )
+                {
+                    wxString virtualStr;
+                    if(isVirtual)virtualStr = _T("not ");
+
                     wxLogWarning("'%s::%s' is incorrectly documented as %s"
                                  "virtual.",
                                  nameClass.c_str(),
                                  nameMethod.c_str(),
-                                 isVirtual ? "not " : "");
+                                 virtualStr.c_str());
                 }
 
                 bool isConst = ctxMethod->mIsConstant;
-                if ( isConst != method.HasFlag(MethodInfo::Const) ) {
+                if ( isConst != method.HasFlag(MethodInfo::Const) )
+                {
+                    wxString constStr;
+                    if(isConst)constStr = _T("not ");
+
                     wxLogWarning("'%s::%s' is incorrectly documented as %s"
                                  "constant.",
                                  nameClass.c_str(),
                                  nameMethod.c_str(),
-                                 isConst ? "not " : "");
+                                 constStr.c_str());
                 }
 
                 // check that the params match
@@ -2197,6 +2211,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.44  2005/05/31 17:47:45  ABX
+   More warning and error fixes (work in progress with Tinderbox).
+
    Revision 1.43  2005/05/31 15:42:43  ABX
    More warning and error fixes (work in progress with Tinderbox).
 

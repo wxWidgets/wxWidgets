@@ -606,10 +606,14 @@ void spOperation::DumpThis(const wxString& indent) const
         protection = "global";
     }
 
+    wxString constStr,virtualStr;
+    if(mIsConstant) constStr = _T("const ");
+    if(mIsVirtual) virtualStr = _T("virtual ");
+
     wxLogDebug("%s%s%s%s function named '%s::%s' of type '%s'",
                indent.c_str(),
-               mIsConstant ? "const " : "",
-               mIsVirtual ? "virtual " : "",
+               constStr.c_str(),
+               virtualStr.c_str(),
                protection.c_str(),
                mScope.c_str(), m_Name.c_str(), m_RetType.c_str());
 }
@@ -700,7 +704,7 @@ void spTypeDef::DumpThis(const wxString& indent) const
 void spFile::DumpThis(const wxString& indent) const
 {
     wxLogDebug("%sfile '%s'",
-               indent.c_str(), mFileName.c_str());
+               indent.c_str(), m_FileName.c_str());
 }
 
 #endif // __WXDEBUG__

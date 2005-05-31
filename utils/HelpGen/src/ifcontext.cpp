@@ -33,11 +33,11 @@
 
 /***** Implementation for class spInterFileContext *****/
 
-size_t spInterFileContext::GetFileNo( const string& fname )
+size_t spInterFileContext::GetFileNo( const wxString& fname )
 {
-    for ( size_t i = 0; i != mFiles.size(); ++i )
+    for ( size_t i = 0; i != m_Files.size(); ++i )
     {
-        if ( fname == mFiles[i] )
+        if ( fname == m_Files[i] )
             return i;
     }
 
@@ -51,9 +51,9 @@ size_t spInterFileContext::GetFileNoOfContext( spContext& ctx )
     spContext* pCtx = ctx.GetEnclosingContext( SP_CTX_FILE );
 
     // DBG:: outer-file context should be present
-    wxASSERT( pCtx && pCtx->GetType() == SP_CTX_FILE ); 
+    wxASSERT( pCtx && pCtx->GetType() == SP_CTX_FILE );
 
-    return GetFileNo( ((spFile*)pCtx)->mFileName );
+    return GetFileNo( ((spFile*)pCtx)->m_FileName );
 }
 
 /*** public interface ***/
@@ -64,10 +64,10 @@ spInterFileContext::spInterFileContext()
 spInterFileContext::~spInterFileContext()
 {}
 
-void spInterFileContext::AddFile( const string& fname, const string& content )
+void spInterFileContext::AddFile( const wxString& fname, const wxString& content )
 {
-    mFiles.push_back( fname );
-    mContents.push_back( content );
+    m_Files.push_back( fname );
+    m_Contents.push_back( content );
 }
 
 void spInterFileContext::RemoveContext( spContext& ctx )
@@ -92,8 +92,8 @@ void spInterFileContext::InsertBookmarkSorted( BookmarkListT& lst, spBookmark& m
     lst.push_back( mark );
 }
 
-void spInterFileContext::DoAppendSourceFragment( string& source, 
-                                                 string& result, 
+void spInterFileContext::DoAppendSourceFragment( string& source,
+                                                 string& result,
                                                  size_t  pos, size_t len )
 {
     mFiltered.erase( mFiltered.begin(), mFiltered.end() );
@@ -104,7 +104,7 @@ void spInterFileContext::DoAppendSourceFragment( string& source,
     {
         spBookmark& mark = mDeletionMarks[i];
 
-        if ( mark.mFileNo == mCurFileNo && 
+        if ( mark.mFileNo == mCurFileNo &&
              mark.mFrom >= pos && mark.mFrom < pos + len )
 
         InsertBookmarkSorted( mFiltered, mark );
@@ -131,9 +131,9 @@ void spInterFileContext::DoAppendSourceFragment( string& source,
     result.append( source, cur, ( pos + len ) - cur );
 }
 
-void spInterFileContext::GenerateContextBody( spContext& ctx, 
+void spInterFileContext::GenerateContextBody( spContext& ctx,
                                               string&    source,
-                                              string&    result, 
+                                              string&    result,
                                               size_t&    lastSavedPos,
                                               size_t&    lastKnownPos )
 {
@@ -145,7 +145,7 @@ void spInterFileContext::GenerateContextBody( spContext& ctx,
         // add fragment accumulated before this context
 
         DoAppendSourceFragment( source, result,
-                                size_t(lastSavedPos), 
+                                size_t(lastSavedPos),
                                 size_t(lastKnownPos - lastSavedPos) );
 
         // add context body
@@ -187,10 +187,10 @@ void spInterFileContext::GenerateContextBody( spContext& ctx,
             // append the reminder space after children of the context
 
             DoAppendSourceFragment( result, source,
-                                    size_t(lastSavedPos), 
+                                    size_t(lastSavedPos),
                                     size_t(lastKnownPos - lastSavedPos) );
 
-            // add footer 
+            // add footer
             result += ctx.GetFooterOfVirtualContextBody();
 
             lastKnownPos = ctx.mSrcOffset + ctx.mContextLength;
@@ -210,13 +210,13 @@ void spInterFileContext::GenrateContents()
 
     for( size_t f = 0; f != lst.size(); ++f )
     {
-        string& fname = ((spFile*)lst[f])->mFileName;
+        wxString& fname = ((spFile*)lst[f])->m_FileName;
 
         size_t fileNo = GetFileNo( fname );
 
-        string& source = mContents[ fileNo ];
+        wxString& source = m_Contents[ fileNo ];
 
-        string result;
+        wxString result;
 
         size_t lastKnownPos = 0, // the begining of the file is always "known"
                lastSavedPos = 0;
@@ -227,17 +227,17 @@ void spInterFileContext::GenrateContents()
 
         // the end of file is always known
 
-        lastKnownPos = mContents[ fileNo ].length();
+        lastKnownPos = m_Contents[ fileNo ].length();
 
-        // append the reminder 
+        // append the reminder
 
         DoAppendSourceFragment( source, result,
-                                size_t(lastSavedPos), 
+                                size_t(lastSavedPos),
                                 size_t(lastKnownPos - lastSavedPos) );
 
         // replace original contnet with newly generated one
 
-        mContents[ fileNo ] = result;
+        m_Contents[ fileNo ] = result;
     }
 }
 
@@ -249,13 +249,13 @@ void spInterFileContext::ParseContents( SourceParserPlugin* pPlugin )
 
     mParser.SetPlugin( pPlugin );
 
-    for( size_t i = 0; i != mFiles.size(); ++i )
+    for( size_t i = 0; i != m_Files.size(); ++i )
     {
-        char* s = (char*)(mContents[i].c_str());
+        wxChar* s = (char*)(m_Contents[i].c_str());
 
-        spFile* pFCtx = mParser.Parse( s, s + mContents[i].length() );
+        spFile* pFCtx = mParser.Parse( s, s + m_Contents[i].length() );
 
-        pFCtx->mFileName = mFiles[i];
+        pFCtx->m_FileName = m_Files[i];
 
         AddMember( pFCtx );
     }
@@ -263,13 +263,13 @@ void spInterFileContext::ParseContents( SourceParserPlugin* pPlugin )
 
 void spInterFileContext::WriteToFiles()
 {
-    for( size_t i = 0; i != mFiles.size(); ++i )
+    for( size_t i = 0; i != m_Files.size(); ++i )
     {
-        FILE* fp = fopen( mFiles[i].c_str(), "w+t" );
+        FILE* fp = fopen( m_Files[i].c_str(), "w+t" );
 
         if ( fp != NULL )
         {
-            fwrite( mContents[i].c_str(), sizeof(char), mContents[i].length(), fp );
+            fwrite( m_Contents[i].c_str(), sizeof(char), m_Contents[i].length(), fp );
 
             fclose( fp );
         }
@@ -280,7 +280,7 @@ wxString spInterFileContext::GetBody( spContext* pCtx )
 {
     wxASSERT( pCtx->PositionIsKnown() ); // DBG:: should be checked by-user code
 
-    wxString& source = mContents[ GetFileNoOfContext( *pCtx ) ];
+    wxString& source = m_Contents[ GetFileNoOfContext( *pCtx ) ];
 
     return wxString( source.c_str() + pCtx->mSrcOffset, pCtx->mContextLength );
 }
@@ -291,7 +291,7 @@ wxString spInterFileContext::GetHeader( spContext* pCtx )
 
     wxASSERT( pCtx->mHeaderLength != -1 ); // DBG:: -/-
 
-    wxString& source = mContents[ GetFileNoOfContext( *pCtx ) ];
+    wxString& source = m_Contents[ GetFileNoOfContext( *pCtx ) ];
 
     return wxString( source.c_str() + pCtx->mSrcOffset, pCtx->mHeaderLength );
 }

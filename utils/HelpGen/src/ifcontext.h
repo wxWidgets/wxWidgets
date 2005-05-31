@@ -55,31 +55,31 @@ protected:
 protected:
 
     size_t GetFileNoOfContext( spContext& ctx );
-    size_t GetFileNo( const string& fname );
+    size_t GetFileNo( const wxString& fname );
 
     void InsertBookmarkSorted( BookmarkListT& lst, spBookmark& mark );
 
-    void DoAppendSourceFragment( string& source, 
-                                 string& result, 
+    void DoAppendSourceFragment( string& source,
+                                 string& result,
                                  size_t  pos, size_t len );
 
-    void GenerateContextBody( spContext& ctx, 
+    void GenerateContextBody( spContext& ctx,
                               string&    source,
-                              string&    result, 
+                              string&    result,
                               size_t& lastSavedPos,
                               size_t& lastKnownPos );
 
 public:
 
-    StrListT       mFiles;
-    StrListT       mContents;
+    StrListT       m_Files;
+    StrListT       m_Contents;
 
 public:
 
     spInterFileContext();
     ~spInterFileContext();
 
-    void AddFile( const string& fname, const string& content );
+    void AddFile( const wxString& fname, const wxString& content );
 
     void RemoveContext( spContext& ctx );
 
