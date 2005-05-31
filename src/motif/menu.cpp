@@ -81,7 +81,7 @@ void wxMenu::Init()
     m_topLevelMenu  = (wxMenu*) NULL;
     m_ownedByMenuBar = false;
 
-    if ( !!m_title )
+    if ( !m_title.empty() )
     {
         Append(-3, m_title) ;
         AppendSeparator() ;
@@ -211,12 +211,12 @@ void wxMenuBar::Init()
 
 wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxArrayString& titles, long WXUNUSED(style))
 {
-    wxASSERT( size_t(n) == titles.GetCount() );
+    wxASSERT( n == titles.GetCount() );
 
     Init();
 
     m_titles = titles;
-    for ( int i = 0; i < n; i++ )
+    for ( size_t i = 0; i < n; i++ )
         m_menus.Append(menus[i]);
 }
 
