@@ -14,10 +14,6 @@
 wxStandardPaths returns the standard locations in the file system and should be
 used by applications to find their data files in a portable way.
 
-Please note that this is not a real class because object of this type are never
-created but more a namespace containing the class methods which are all static,
-so to use wxStandardPaths simply call its methods directly.
-
 In the description of the methods below, the example return values are given
 for the Unix, Windows and Mac OS X systems, however please note that these are
 just the examples and the actual values may differ. For example, under Windows:
@@ -55,9 +51,16 @@ No base class
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
+\membersection{wxStandardPaths::Get}\label{wxstandardpathsget}
+
+\func{static wxStandardPaths\&}{Get}{\void}
+
+Returns reference to the unique global standard paths object.
+
+
 \membersection{wxStandardPaths::GetConfigDir}\label{wxstandardpathsgetconfigdir}
 
-\func{static wxString}{GetConfigDir}{\void}
+\func{wxString}{GetConfigDir}{\void}
 
 Return the directory containing the system config files.
 
@@ -75,7 +78,7 @@ Example return values:
 
 \membersection{wxStandardPaths::GetDataDir}\label{wxstandardpathsgetdatadir}
 
-\func{static wxString}{GetDataDir}{\void}
+\func{wxString}{GetDataDir}{\void}
 
 Return the location of the applications global, i.e. not user-specific,
 data files.
@@ -94,7 +97,7 @@ Example return values:
 
 \membersection{wxStandardPaths::GetInstallPrefix}\label{wxstandardpathsgetinstallprefix}
 
-\func{static wxString}{GetInstallPrefix}{\void}
+\func{wxString}{GetInstallPrefix}{\void}
 
 \textbf{Note: } This function is only available under Unix.
 
@@ -109,7 +112,7 @@ now) and finally returns the default \texttt{/usr/local} value if it failed.
 
 \membersection{wxStandardPaths::GetLocalDataDir}\label{wxstandardpathsgetlocaldatadir}
 
-\func{static wxString}{GetLocalDataDir}{\void}
+\func{wxString}{GetLocalDataDir}{\void}
 
 Return the location for application data files which are host-specific and
 can't, or shouldn't, be shared with the other machines.
@@ -120,7 +123,7 @@ under Unix where it returns \texttt{/etc/\textit{appname}}.
 
 \membersection{wxStandardPaths::GetPluginsDir}\label{wxstandardpathsgetpluginsdir}
 
-\func{static wxString}{GetPluginsDir}{\void}
+\func{wxString}{GetPluginsDir}{\void}
 
 Return the directory where the loadable modules (plugins) live.
 
@@ -138,7 +141,7 @@ Example return values:
 
 \membersection{wxStandardPaths::GetUserConfigDir}\label{wxstandardpathsgetuserconfigdir}
 
-\func{static wxString}{GetUserConfigDir}{\void}
+\func{wxString}{GetUserConfigDir}{\void}
 
 Return the directory for the user config files:
 \begin{itemize}
@@ -154,7 +157,7 @@ more appropriate.
 
 \membersection{wxStandardPaths::GetUserDataDir}\label{wxstandardpathsgetuserdatadir}
 
-\func{static wxString}{GetUserDataDir}{\void}
+\func{wxString}{GetUserDataDir}{\void}
 
 Return the directory for the user-dependent application data files:
 \begin{itemize}
@@ -166,7 +169,7 @@ Return the directory for the user-dependent application data files:
 
 \membersection{wxStandardPaths::GetUserLocalDataDir}\label{wxstandardpathsgetuserlocaldatadir}
 
-\func{static wxString}{GetUserLocalDataDir}{\void}
+\func{wxString}{GetUserLocalDataDir}{\void}
 
 Return the directory for user data files which shouldn't be shared with
 the other machines.
@@ -178,7 +181,7 @@ all platforms except Windows where it returns
 
 \membersection{wxStandardPaths::SetInstallPrefix}\label{wxstandardpathssetinstallprefix}
 
-\func{static void}{SetInstallPrefix}{\param{const wxString\& }{prefix}}
+\func{void}{SetInstallPrefix}{\param{const wxString\& }{prefix}}
 
 \textbf{Note:} This function is only available under Unix.
 
