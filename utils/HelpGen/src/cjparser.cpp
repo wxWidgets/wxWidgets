@@ -992,7 +992,7 @@ spFile* CJSourceParser::Parse( char* start, char* end )
     mIsTemplate   = 0;
     mNestingLevel = 0;
 
-    cur = start;
+    m_cur = start;
 
     mpStart = start;
     mpEnd   = end;
@@ -1008,11 +1008,11 @@ spFile* CJSourceParser::Parse( char* start, char* end )
 
     do
     {
-        if ( !get_next_token( cur ) )
+        if ( !get_next_token( m_cur ) )
             // end of source reached
             return pTopCtx;
 
-        if ( memcmp( cur, "ScriptSection( const string&",
+        if ( memcmp( m_cur, "ScriptSection( const string&",
                      strlen( "ScriptSection( const string&" )
                    ) == 0
             )
@@ -1021,35 +1021,35 @@ spFile* CJSourceParser::Parse( char* start, char* end )
             // ++o;
         }
 
-        switch (*cur)
+        switch (*m_cur)
         {
             case '#' :
                 {
-                    AddMacroNode( cur );
+                    AddMacroNode( m_cur );
                     continue;
                 }
 
             case ':' :
                 {
-                    skip_token( cur );
+                    skip_token( m_cur );
                     continue;
                 }
 
             case ';' :
                 {
-                    skip_token( cur );
+                    skip_token( m_cur );
                     continue;
                 }
 
             case ')' :
                 {
-                    skip_token( cur );
+                    skip_token( m_cur );
                     continue;
                 }
 
             case '=' :
                 {
-                    skip_token( cur );
+                    skip_token( m_cur );
                     continue;
                 }
 
@@ -1057,24 +1057,24 @@ spFile* CJSourceParser::Parse( char* start, char* end )
         }
 
         // 'const' is a part of the return type, not a keyword here
-        if ( strncmp(cur, "const", 5) != 0 && is_keyword( cur ) )
+        if ( strncmp(m_cur, "const", 5) != 0 && is_keyword( m_cur ) )
         {
             // parses, token, if token identifies
             // the container context (e.g. class/namespace)
             // the corresponding context object is created
             // and set as current context
 
-            ParseKeyword( cur );
+            ParseKeyword( m_cur );
             continue;
         }
 
-        if ( *cur >= '0' && *cur <= '9' )
+        if ( *m_cur >= _T('0') && *m_cur <= _T('9') )
         {
-            skip_token( cur );
+            skip_token( m_cur );
             continue;
         }
 
-        if ( *cur == '}' )
+        if ( *m_cur == _T('}') )
         {
             if ( mCurCtxType != SP_CTX_CLASS )
             {
@@ -1083,13 +1083,13 @@ spFile* CJSourceParser::Parse( char* start, char* end )
                 // DBG:: unexpected closing-bracket found
                 //ASSERT(0);
 
-                skip_token( cur ); // just skip it
+                skip_token( m_cur ); // just skip it
                 continue;
             }
 
             if ( mpCurCtx->GetType() == SP_CTX_CLASS )
             {
-                int curOfs = ( (cur+1) - _gSrcStart );
+                int curOfs = ( (m_cur+1) - _gSrcStart );
 
                 mpCurCtx->mContextLength = ( curOfs - mpCurCtx->mSrcOffset );
             }
@@ -1113,21 +1113,21 @@ spFile* CJSourceParser::Parse( char* start, char* end )
                 mIsTemplate = 0;
             }
 
-            skip_token( cur );
+            skip_token( m_cur );
             continue;
         }
 
         bool isAMacro = false;
 
-        if ( is_function( cur, isAMacro ) )
+        if ( is_function( m_cur, isAMacro ) )
         {
             if ( isAMacro )
             {
-                skip_token( cur );
+                skip_token( m_cur );
                 continue;
             }
 
-            char* savedPos = cur;
+            char* savedPos = m_cur;
 
             int tmpLnNo;
             store_line_no( tmpLnNo );
@@ -1135,17 +1135,17 @@ spFile* CJSourceParser::Parse( char* start, char* end )
 
             isAMacro = false;
 
-            if ( !ParseNameAndRetVal( cur, isAMacro ) )
+            if ( !ParseNameAndRetVal( m_cur, isAMacro ) )
             {
                 if ( !isAMacro )
                 {
-                    cur = savedPos;
-                    SkipFunction( cur );
+                    m_cur = savedPos;
+                    SkipFunction( m_cur );
                 }
                 continue;
             }
 
-            if ( !ParseArguments( cur ) )
+            if ( !ParseArguments( m_cur ) )
             {
                 // failure while parsing arguments,
                 // remove enclosing operation context
@@ -1154,8 +1154,8 @@ spFile* CJSourceParser::Parse( char* start, char* end )
                 mpCurCtx = mpCurCtx->GetOutterContext();
                 mpCurCtx->RemoveChild( pFailed );
 
-                skip_to_eol( cur );
-                //cur = savedPos;
+                skip_to_eol( m_cur );
+                //m_cur = savedPos;
             }
             else
             {
@@ -1163,7 +1163,7 @@ spFile* CJSourceParser::Parse( char* start, char* end )
 
                 clear_commets_queue();
 
-                SkipFunctionBody( cur );
+                SkipFunctionBody( m_cur );
 
                 mpCurCtx = mpCurCtx->GetOutterContext();
 
@@ -1180,11 +1180,11 @@ spFile* CJSourceParser::Parse( char* start, char* end )
             {
                 // non-class members are ignored
 
-                skip_token( cur ); // skip the end of statement
+                skip_token( m_cur ); // skip the end of statement
                 continue;
             }
 
-            ParseMemberVar( cur );
+            ParseMemberVar( m_cur );
         }
 
     } while( 1 );
@@ -1196,7 +1196,7 @@ void CJSourceParser::AttachComments( spContext& ctx, wxChar* cur )
 
     MCommentListT& lst = ctx.GetCommentList();
 
-    char* prevComEnd = 0;
+    wxChar* prevComEnd = 0;
 
     int tmpLnNo;
     store_line_no( tmpLnNo );
@@ -1209,32 +1209,31 @@ void CJSourceParser::AttachComments( spContext& ctx, wxChar* cur )
         lst.push_back( pComment );
 
         // find the end of comment
-        char* start = _gCommentsQueue[i];
+        wxChar* start = _gCommentsQueue[i];
 
-        pComment->mIsMultiline = ( *(start+1) == '*' );
+        pComment->mIsMultiline = ( *(start+1) == _T('*') );
 
         // first comment in the queue and multiline
         // comments are always treated as a begining
         // of the new paragraph in the comment text
 
         if ( i == 0 )
-
+        {
             pComment->mStartsPar = true;
-        else
-        if ( pComment->mIsMultiline )
-
+        }
+        else if ( pComment->mIsMultiline )
+        {
             pComment->mStartsPar = true;
+        }
         else
         {
             // find out wheather there is a new-line
             // between to adjecent comments
 
-
-            char* prevLine = start;
+            wxChar* prevLine = start;
             skip_to_prev_line(prevLine);
 
             if ( prevLine >= prevComEnd )
-
                 pComment->mStartsPar = true;
             else
                 pComment->mStartsPar = false;
@@ -1242,7 +1241,6 @@ void CJSourceParser::AttachComments( spContext& ctx, wxChar* cur )
 
         prevComEnd = set_comment_text( pComment->m_Text, start );
     }
-
 
     // attach comments which are at the end of the line
     // of the given context (if any)
@@ -1255,7 +1253,7 @@ void CJSourceParser::AttachComments( spContext& ctx, wxChar* cur )
         set_comment_text( pComment->m_Text, cur );
 
         pComment->mStartsPar = 1;
-        pComment->mIsMultiline = ( *(cur+1) == '*' );
+        pComment->mIsMultiline = ( *(cur+1) == _T('*') );
 
         // mark this comment, so that it would not
         // get in the comments list of the next context

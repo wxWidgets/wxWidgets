@@ -49,7 +49,7 @@ static KeywordT __gKeyWords[] =
     { "for", 1 },
     { "FOR", 1 },
     { "For", 1 },
-    
+
     { "next", 1 },
     { "Next", 1 },
     { "NEXT", 1 },
@@ -65,7 +65,7 @@ static KeywordT __gKeyWords[] =
     { "else", 1 },
     { "Else", 1 },
     { "ELSE", 1 },
-        
+
     { "do", 1 },
     { "Do", 1 },
     { "DO", 1 },
@@ -316,7 +316,7 @@ static KeywordT __gKeyWords[] =
     { "new", 2 },
     { "New", 2 },
     { "NEW", 2 },
-    
+
     { "delete", 2 },
     { "inline", 2 },
 
@@ -324,7 +324,7 @@ static KeywordT __gKeyWords[] =
 
     { "Inherited", 2 },
     { "Inherited", 2 },
-    
+
     { "final", 2 },
     { "implements", 2 },
     { "super", 2 },
@@ -347,7 +347,7 @@ static KeywordT __gKeyWords[] =
     { "COBOL",     2 },
     { "ADA",       2 },
     { "LISP",      2 },
-    
+
     // just for fun...
     { "life",        2 },
     { "sucks",       2 },
@@ -415,7 +415,7 @@ void check_keyword_map( int WXUNUSED(keywordMapNr) )
                     KeywordMapT::value_type( (char*)&__gKeyWords[i],
                                              (char*)&__gKeyWords[i]
                                            )
-                                  );    
+                                  );
     }
 }
 
@@ -547,7 +547,7 @@ static void heighlight_syntax( char* str,   int strLen,
                      continue;
                  }
             }
-            
+
             NEXT_CHAR;
         }
 
@@ -563,7 +563,7 @@ static void heighlight_syntax( char* str,   int strLen,
                 while ( cur != end && is_alpha(*cur) ) ++cur;
 
                 int wordRank;
-                
+
                 if ( (wordRank = get_rank( start, cur )) > 0 )
                 {
                     STORE_RANGE;
@@ -605,7 +605,7 @@ void SourcePainter::ProcessSource( char* src, int srcLen )
     heighlight_syntax( src, srcLen, mBlocks, mIsInComment );
 
     if ( mCollectResultsOn )
-    
+
         mResultStr += string( src, srcLen );
 }
 
@@ -622,7 +622,7 @@ void SourcePainter::Init(bool assembleResultString)
     mCommentIsMultiline = 0;
     mCollectResultsOn   = assembleResultString;
 
-    mResultStr = "";
+    mResultStr = wxEmptyString;
 
     mBlocks.erase( mBlocks.begin(), mBlocks.end() );
 }
@@ -635,12 +635,12 @@ static int rank_tags_map[] =
     TAG_GREEN_FONT
 };
 
-void SourcePainter::GetResultString(string& result, MarkupTagsT tags)
+void SourcePainter::GetResultString(wxString& result, MarkupTagsT tags)
 {
     // this method works, only if results of processing
     // are collected
     // ASSERT( mCollectResultsOn );
-      result = "";
+    result = wxEmptyString;
 
     unsigned pos = 0;
 
@@ -654,8 +654,9 @@ void SourcePainter::GetResultString(string& result, MarkupTagsT tags)
         result += tags[ rank_tags_map[rank] ].start;
 
         for( unsigned n = 0; n != len; ++n )
-        
+        {
             result += mResultStr[(unsigned int)(pos+n)];
+        }
 
         pos += len;
 

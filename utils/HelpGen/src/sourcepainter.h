@@ -93,7 +93,7 @@ public:
     // generates string of highlighted source for the scipting
     // language given by "tags" argument
 
-    virtual void GetResultString(string& result, MarkupTagsT tags);
+    virtual void GetResultString(wxString& result, MarkupTagsT tags);
 
     // returns vector of block descriptors, see SPBlockListT definition
     // (block descriptors can be used for fast custom highlighted text generation)

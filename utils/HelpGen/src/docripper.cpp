@@ -117,14 +117,14 @@ RipperDocGen::RipperDocGen()
       mpCurClassSect(0)
 {
     // topIndex is not referenced
-    mpTopIdx        = new ScriptSection( "Source Code Contents"       , "", &mTopTempl       , 0          );
-    mpClassIdx      = new ScriptSection( "Classes Reference"          , "", &mContentIdxTempl, &mRefTempl );
-    mpEnumIdx       = new ScriptSection( "Enumerations  Reference"    , "", &mContentIdxTempl,  &mRefTempl );
-    mpTypeDefIdx    = new ScriptSection( "Type Definitions Reference" , "", &mContentIdxTempl, &mRefTempl );
-    mpMacroIdx      = new ScriptSection( "Macros Reference"           , "", &mContentIdxTempl, &mRefTempl );
-    mpGlobalVarsIdx = new ScriptSection( "Global Variables Reference" , "", &mContentIdxTempl, &mRefTempl );
-    mpGlobalFuncIdx = new ScriptSection( "Global Functions  Reference", "", &mContentIdxTempl, &mRefTempl );
-    mpConstIdx      = new ScriptSection( "Constants  Reference"       , "", &mContentIdxTempl, &mRefTempl );
+    mpTopIdx        = new ScriptSection( "Source Code Contents"       , wxEmptyString, &mTopTempl       , 0          );
+    mpClassIdx      = new ScriptSection( "Classes Reference"          , wxEmptyString, &mContentIdxTempl, &mRefTempl );
+    mpEnumIdx       = new ScriptSection( "Enumerations  Reference"    , wxEmptyString, &mContentIdxTempl,  &mRefTempl );
+    mpTypeDefIdx    = new ScriptSection( "Type Definitions Reference" , wxEmptyString, &mContentIdxTempl, &mRefTempl );
+    mpMacroIdx      = new ScriptSection( "Macros Reference"           , wxEmptyString, &mContentIdxTempl, &mRefTempl );
+    mpGlobalVarsIdx = new ScriptSection( "Global Variables Reference" , wxEmptyString, &mContentIdxTempl, &mRefTempl );
+    mpGlobalFuncIdx = new ScriptSection( "Global Functions  Reference", wxEmptyString, &mContentIdxTempl, &mRefTempl );
+    mpConstIdx      = new ScriptSection( "Constants  Reference"       , wxEmptyString, &mContentIdxTempl, &mRefTempl );
 
     // assemble top index
     mpTopIdx->AddSection( mpClassIdx     , 1 );
@@ -225,12 +225,12 @@ void RipperDocGen::AppendMulitilineStr( wxString& st, wxString& mlStr )
 void RipperDocGen::AppendHighlightedSource( wxString& st, wxString source )
 {
     // FIXME:: below should not be fixed :)
-    char buf[1024*32];
+    wxChar buf[1024*32];
 
     // DBG:::
 //    ASSERT( source.length() + 1 < sizeof(buf) );
 
-    strcpy( buf, source.c_str() );
+    wxStrcpy( buf, source.c_str() );
 
     // highlight things
     mSrcPainter.Init();
@@ -243,7 +243,7 @@ bool RipperDocGen::CheckIfUncommented( spContext& ctx, ScriptSection& toSect )
     if ( ctx.HasComments() ) return 0;
 
     toSect.AddReference(
-        new ScriptSection( GetScopedName( ctx ), "", 0, &mDeadRefTempl )
+        new ScriptSection( GetScopedName( ctx ), wxEmptyString, 0, &mDeadRefTempl )
     );
 
     return 1;
@@ -330,7 +330,7 @@ void RipperDocGen::LinkSuperClassRefs()
             if ( !pFound )
             {
                 ScriptSection* pNotFound =
-                    new ScriptSection( superClName, "", 0, &mDeadRefTempl );
+                    new ScriptSection( superClName, wxEmptyString, 0, &mDeadRefTempl );
 
                 pSuperSect->AddReference( pNotFound );
             }
@@ -366,7 +366,7 @@ void RipperDocGen::ProcessFile( const char* sourceFile )
 void RipperDocGen::VisitEnumeration( spEnumeration& en )
 {
     // FOR NOW:: do not reference "nameless" enums
-    if ( en.GetName() == "" ) return;
+    if ( en.GetName().empty() ) return;
 
     if ( CheckIfUncommented( en, *mpEnumIdx ) )
         return;
@@ -466,20 +466,20 @@ void RipperDocGen::VisitClass( spClass& cl )
     // to the section where this class is represented
     cl.SetUserData( mpCurClassSect );
 
-    ScriptSection* pSuper    = new ScriptSection( "Derived from"    ,"", &mOutLine1Templ,0, 1 );
+    ScriptSection* pSuper    = new ScriptSection( "Derived from"       ,wxEmptyString, &mOutLine1Templ,0, 1 );
 
-    ScriptSection* pPublic    = new ScriptSection( "Public members"    ,"", &mOutLineTempl,0, 1 );
-    ScriptSection* pProtected = new ScriptSection( "Protected members" ,"", &mOutLineTempl,0, 1 );
-    ScriptSection* pPrivate   = new ScriptSection( "Private members"   ,"", &mOutLineTempl,0, 1 );
+    ScriptSection* pPublic    = new ScriptSection( "Public members"    ,wxEmptyString, &mOutLineTempl,0, 1 );
+    ScriptSection* pProtected = new ScriptSection( "Protected members" ,wxEmptyString, &mOutLineTempl,0, 1 );
+    ScriptSection* pPrivate   = new ScriptSection( "Private members"   ,wxEmptyString, &mOutLineTempl,0, 1 );
 
-    pPublic->AddSection( new ScriptSection( "Operations", "", &mOutLine1Templ, 0, 1 ) );
-    pPublic->AddSection( new ScriptSection( "Attributes", "", &mOutLine1Templ, 0, 1 ) );
+    pPublic->AddSection( new ScriptSection( "Operations", wxEmptyString, &mOutLine1Templ, 0, 1 ) );
+    pPublic->AddSection( new ScriptSection( "Attributes", wxEmptyString, &mOutLine1Templ, 0, 1 ) );
 
-    pProtected->AddSection( new ScriptSection( "Operations", "", &mOutLine1Templ, 0, 1 ) );
-    pProtected->AddSection( new ScriptSection( "Attributes", "", &mOutLine1Templ, 0, 1 ) );
+    pProtected->AddSection( new ScriptSection( "Operations", wxEmptyString, &mOutLine1Templ, 0, 1 ) );
+    pProtected->AddSection( new ScriptSection( "Attributes", wxEmptyString, &mOutLine1Templ, 0, 1 ) );
 
-    pPrivate->AddSection( new ScriptSection( "Operations", "", &mOutLine1Templ, 0, 1 ) );
-    pPrivate->AddSection( new ScriptSection( "Attributes", "", &mOutLine1Templ, 0, 1 ) );
+    pPrivate->AddSection( new ScriptSection( "Operations", wxEmptyString, &mOutLine1Templ, 0, 1 ) );
+    pPrivate->AddSection( new ScriptSection( "Attributes", wxEmptyString, &mOutLine1Templ, 0, 1 ) );
 
     mpCurClassSect->AddSection( pSuper    );
     mpCurClassSect->AddSection( pPublic    );

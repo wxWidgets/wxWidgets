@@ -34,17 +34,17 @@ class CJSourceParser : public SourceParserBase
 {
 protected:
     // begining of the full-text area of the source file
-    char* mpStart;
+    wxChar* mpStart;
 
     // points to first character after the end
     // of teh full-text area
-    char* mpEnd;
+    wxChar* mpEnd;
 
     // current "privacy level"
     int   mCurVis;
 
     // current parsing position int full-text area
-    char*  cur;
+    wxChar*  m_cur;
 
     // about the current class
     bool   mIsVirtual;
