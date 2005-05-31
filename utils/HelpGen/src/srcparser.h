@@ -233,23 +233,23 @@ public:
 class spComment
 {
 public:
-    wxString m_Text;
-    bool     mIsMultiline; // multiline comments ar those with /**/'s
+    wxString  m_Text;
+    bool      mIsMultiline; // multiline comments ar those with /**/'s
 
     // true, if these was an empty empty
     // line above single line comment
 
-    bool     mStartsPar;
+    bool      mStartsPar;
 
 public:
 
-    bool     IsMultiline() const;
-    bool     StartsParagraph() const;
+    bool      IsMultiline() const;
+    bool      StartsParagraph() const;
 
-    string&  GetText();
+    wxString& GetText();
 
     // contstant version of GetText()
-    string   GetText() const;
+    wxString  GetText() const;
 };
 
 // abstract base class for common (to most languages) code
@@ -369,9 +369,9 @@ public:
     // can be overriden by top-level context classes
     // to find-out ot the source-fragment of this
     // context using it's position information
-    virtual string GetBody( spContext* pCtx = NULL );
+    virtual wxString GetBody( spContext* pCtx = NULL );
 
-    virtual string GetHeader( spContext* pCtx = NULL );
+    virtual wxString GetHeader( spContext* pCtx = NULL );
 
     // true, if there is at least one entry
     // in the comment list of this context
@@ -503,7 +503,7 @@ public:
     wxString m_Type;
 
     // "stringified" initial value
-    string mInitVal;
+    wxString m_InitVal;
 
 public:
     virtual int GetContextType() const { return SP_CTX_PARAMETER; }
@@ -524,7 +524,7 @@ public:
     wxString m_Type;
 
     // it's initial value
-    string mInitVal;
+    wxString m_InitVal;
 
     // constantness
     bool   mIsConstant;
@@ -580,7 +580,7 @@ public:
     // the default implementation outputs name in
     // C++/Java syntax
 
-    virtual string GetFullName(MarkupTagsT tags);
+    virtual wxString GetFullName(MarkupTagsT tags);
 
     virtual int GetContextType() const { return SP_CTX_OPERATION; }
 
@@ -609,7 +609,7 @@ public:
 
     virtual int GetStatementType() const { return mDefType; }
 
-    string CPP_GetIncludedFileNeme() const;
+    wxString CPP_GetIncludedFileNeme() const;
 
     virtual void AcceptVisitor( spVisitor& visitor )
         { visitor.VisitPreprocessorLine( *this ); }

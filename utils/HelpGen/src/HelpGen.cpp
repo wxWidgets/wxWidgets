@@ -241,7 +241,7 @@ public:
     // return true if we ignore this class entirely
     bool IgnoreClass(const wxString& classname) const
     {
-        IgnoreListEntry ignore(classname, _T(""));
+        IgnoreListEntry ignore(classname, wxEmptyString);
 
         return m_ignore.Index(&ignore) != wxNOT_FOUND;
     }
@@ -757,7 +757,7 @@ int main(int argc, char **argv)
 
 #ifdef __WXDEBUG__
         if ( 0 && ctxTop )
-            ctxTop->Dump("");
+            ctxTop->Dump(wxEmptyString);
 #endif // __WXDEBUG__
     }
 
@@ -813,7 +813,7 @@ void HelpGenVisitor::Reset()
     m_funcName =
     m_textFunc =
     m_textStoredTypedefs =
-    m_textStoredFunctionComment = "";
+    m_textStoredFunctionComment = wxEmptyString;
 
     m_arrayFuncDocs.Empty();
 
@@ -1318,7 +1318,7 @@ void HelpGenVisitor::VisitParameter( spParameter& param )
     }
 
     m_textFunc << "\\param{" << param.m_Type << " }{" << param.GetName();
-    wxString defvalue = param.mInitVal;
+    wxString defvalue = param.m_InitVal;
     if ( !defvalue.empty() ) {
         m_textFunc << " = " << defvalue;
     }
@@ -1897,14 +1897,14 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                             continue;
                         }
 
-                        if ( param.GetDefValue() != ctxParam->mInitVal.c_str() ) {
+                        if ( param.GetDefValue() != ctxParam->m_InitVal.c_str() ) {
                             wxLogWarning("Default value of parameter '%s' of "
                                          "'%s::%s' should be '%s' and not "
                                          "'%s'.",
                                          ctxParam->m_Name.c_str(),
                                          nameClass.c_str(),
                                          nameMethod.c_str(),
-                                         ctxParam->mInitVal.c_str(),
+                                         ctxParam->m_InitVal.c_str(),
                                          param.GetDefValue().c_str());
                         }
                     }
@@ -2022,7 +2022,7 @@ bool IgnoreNamesHandler::AddNamesFromFile(const wxString& filename)
                 }
                 else {
                     // entire class
-                    m_ignore.Add(new IgnoreListEntry(line, ""));
+                    m_ignore.Add(new IgnoreListEntry(line, wxEmptyString));
                 }
             }
             //else: comment
@@ -2197,6 +2197,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.42  2005/05/31 15:32:49  ABX
+   More warning and error fixes (work in progress with Tinderbox).
+
    Revision 1.41  2005/05/30 13:06:15  ABX
    More warning and error fixes (work in progress with Tinderbox).
 

@@ -6,7 +6,7 @@
 // Created:     27/12/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleskandars Gluchovas
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __IFCONTEXT_G__
@@ -18,24 +18,24 @@
 class spBookmark
 {
 public:
-	size_t mFrom;
-	size_t mLen;
-	size_t mFileNo;
+    size_t mFrom;
+    size_t mLen;
+    size_t mFileNo;
 
-	inline spBookmark() {}
+    inline spBookmark() {}
 
-	inline spBookmark( int from, int len, int fileNo )
-		: mFrom( from ), mLen( len ), mFileNo( fileNo )
-	{}
+    inline spBookmark( int from, int len, int fileNo )
+        : mFrom( from ), mLen( len ), mFileNo( fileNo )
+    {}
 };
 
 #if defined( wxUSE_TEMPLATE_STL )
 
-	typedef vector<spBookmark) BookmarkListT
+    typedef vector<spBookmark) BookmarkListT
 
 #else
 
-	typedef WXSTL_VECTOR_SHALLOW_COPY(spBookmark) BookmarkListT;
+    typedef WXSTL_VECTOR_SHALLOW_COPY(spBookmark) BookmarkListT;
 
 #endif
 
@@ -44,56 +44,56 @@ class spInterFileContext : public spContext
 {
 protected:
 
-	BookmarkListT  mDeletionMarks;
+    BookmarkListT  mDeletionMarks;
 
-	BookmarkListT  mFiltered;
+    BookmarkListT  mFiltered;
 
-	size_t         mCurFileNo;
+    size_t         mCurFileNo;
 
-	CJSourceParser mParser;
+    CJSourceParser mParser;
 
 protected:
 
-	size_t GetFileNoOfContext( spContext& ctx );
-	size_t GetFileNo( const string& fname );
+    size_t GetFileNoOfContext( spContext& ctx );
+    size_t GetFileNo( const string& fname );
 
-	void InsertBookmarkSorted( BookmarkListT& lst, spBookmark& mark );
+    void InsertBookmarkSorted( BookmarkListT& lst, spBookmark& mark );
 
-	void DoAppendSourceFragment( string& source, 
-								 string& result, 
-						         size_t  pos, size_t len );
+    void DoAppendSourceFragment( string& source, 
+                                 string& result, 
+                                 size_t  pos, size_t len );
 
-	void GenerateContextBody( spContext& ctx, 
-							  string&    source,
-							  string&    result, 
-							  size_t& lastSavedPos,
-							  size_t& lastKnownPos );
-
-public:
-
-	StrListT       mFiles;
-	StrListT       mContents;
+    void GenerateContextBody( spContext& ctx, 
+                              string&    source,
+                              string&    result, 
+                              size_t& lastSavedPos,
+                              size_t& lastKnownPos );
 
 public:
 
-	spInterFileContext();
-	~spInterFileContext();
+    StrListT       mFiles;
+    StrListT       mContents;
 
-	void AddFile( const string& fname, const string& content );
+public:
 
-	void RemoveContext( spContext& ctx );
+    spInterFileContext();
+    ~spInterFileContext();
 
-	void GenrateContents();
+    void AddFile( const string& fname, const string& content );
 
-	void ParseContents( SourceParserPlugin* pPlugin = NULL );
+    void RemoveContext( spContext& ctx );
 
-	void WriteToFiles();
+    void GenrateContents();
 
-	// overriden method of the base class (finds out the source fragment)
+    void ParseContents( SourceParserPlugin* pPlugin = NULL );
 
-	virtual string GetBody( spContext* pCtx = NULL );
+    void WriteToFiles();
 
-	virtual string GetHeader( spContext* pCtx = NULL );
+    // overriden method of the base class (finds out the source fragment)
+
+    virtual wxString GetBody( spContext* pCtx = NULL );
+
+    virtual wxString GetHeader( spContext* pCtx = NULL );
 };
 
 

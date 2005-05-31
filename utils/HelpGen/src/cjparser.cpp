@@ -1734,7 +1734,7 @@ bool CJSourceParser::ParseArguments( char*& cur )
                 continue;
             }
 
-            pPar->mInitVal = string( blocks[nameBlock], blockSizes[nameBlock] );
+            pPar->m_InitVal = wxString( blocks[nameBlock], blockSizes[nameBlock] );
 
             nameBlock = nameBlock - 2; // skip '=' token and default value block
             typeBlock = nameBlock - 1;
@@ -1880,12 +1880,11 @@ void CJSourceParser::ParseMemberVar( char*& cur )
         // if comma, than variable list continues
         // otherwise the variable type reached - stop
 
-        if ( *cur == '=' )
+        if ( *cur == _T('=') )
         {
             // yes, we've mistaken, it was not a identifier,
             // but it's default value
-            pAttr->mInitVal =
-                pAttr->m_Name;
+            pAttr->m_InitVal = pAttr->m_Name;
 
             // skip default value and '=' symbol
             skip_next_token_back( cur );

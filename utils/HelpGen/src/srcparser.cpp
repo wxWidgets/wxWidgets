@@ -260,26 +260,23 @@ void spContext::SetVirtualContextBody( const string& body,
     mIsVirtualContext   = true;
 }
 
-string spContext::GetBody( spContext* pCtx )
+wxString spContext::GetBody( spContext* pCtx )
 {
     if ( ( pCtx == NULL || pCtx == this ) && mIsVirtualContext )
-
         return mVirtualContextBody;
 
     if ( GetParent() )
-
         return GetParent()->GetBody( ( pCtx != NULL ) ? pCtx : this );
     else
-        return ""; // source-fragment cannot be found
+        return wxEmptyString; // source-fragment cannot be found
 }
 
-string spContext::GetHeader( spContext* pCtx )
+wxString spContext::GetHeader( spContext* pCtx )
 {
     if ( GetParent() )
-
         return GetParent()->GetHeader( ( pCtx != NULL ) ? pCtx : this );
     else
-        return ""; // source-fragment cannot be found
+        return wxEmptyString; // source-fragment cannot be found
 }
 
 bool spContext::IsFirstOccurence()
@@ -421,12 +418,12 @@ spOperation::spOperation()
     mHasDefinition = false;
 }
 
-string spOperation::GetFullName(MarkupTagsT tags)
+wxString spOperation::GetFullName(MarkupTagsT tags)
 {
-    string txt = tags[TAG_BOLD].start + m_RetType;
-    txt += " ";
+    wxString txt = tags[TAG_BOLD].start + m_RetType;
+    txt += _T(" ");
     txt += m_Name;
-    txt += "( ";
+    txt += _T("( ");
     txt += tags[TAG_BOLD].end;
 
     for( size_t i = 0; i != mMembers.size(); ++i )
@@ -437,7 +434,7 @@ string spOperation::GetFullName(MarkupTagsT tags)
         spParameter& param = *((spParameter*)mMembers[i]);
 
         if ( i != 0 )
-            txt += ", ";
+            txt += _T(", ");
 
         txt += tags[TAG_BOLD].start;
 
@@ -446,15 +443,15 @@ string spOperation::GetFullName(MarkupTagsT tags)
         txt += tags[TAG_BOLD].end;
         txt += tags[TAG_ITALIC].start;
 
-        txt += " ";
+        txt += _T(" ");
         txt += param.m_Name;
 
-        if ( param.mInitVal != "" )
+        if ( !param.m_InitVal.empty() )
         {
-            txt += " = ";
+            txt += _T(" = ");
             txt += tags[TAG_BOLD].start;
 
-            txt += param.mInitVal;
+            txt += param.m_InitVal;
 
             txt += tags[TAG_BOLD].end;
         }
@@ -473,13 +470,13 @@ string spOperation::GetFullName(MarkupTagsT tags)
 
 /***** Implemenentation for class spPreprocessorLine *****/
 
-string spPreprocessorLine::CPP_GetIncludedFileNeme() const
+wxString spPreprocessorLine::CPP_GetIncludedFileNeme() const
 {
     wxASSERT( GetStatementType() == SP_PREP_DEF_INCLUDE_FILE );
 
     size_t i = 0;
 
-    while( i < m_Line.length() && m_Line[i] != '"' && m_Line[i] != '<' )
+    while( i < m_Line.length() && m_Line[i] != _T('"') && m_Line[i] != _T('<') )
 
         ++i;
 
@@ -487,19 +484,19 @@ string spPreprocessorLine::CPP_GetIncludedFileNeme() const
 
     size_t start = i;
 
-    while( i < m_Line.length() && m_Line[i] != '"' && m_Line[i] != '>' )
+    while( i < m_Line.length() && m_Line[i] != _T('"') && m_Line[i] != _T('>') )
 
         ++i;
 
     if ( start < m_Line.length() )
     {
-        string fname;
+        wxString fname;
         fname.append( m_Line, start, ( i - start ) );
 
         return fname;
     }
     else
-        return ""; // syntax error probably
+        return wxEmptyString; // syntax error probably
 }
 
 
