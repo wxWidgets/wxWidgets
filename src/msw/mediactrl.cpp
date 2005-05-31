@@ -1639,10 +1639,13 @@ void wxAMMediaEvtHandler::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxAMMediaBackend* pThis = (wxAMMediaBackend*) this;
     wxPaintDC dc(pThis->m_ctrl);
-    if( pThis->m_pVMC->RepaintVideo((HWND)pThis->m_ctrl->GetHandle(), 
-                                            (HDC)dc.GetHDC())  != 0 )
+    if( pThis->m_pVMC )
     {
-        wxASSERT(false);
+        if( pThis->m_pVMC->RepaintVideo((HWND)pThis->m_ctrl->GetHandle(), 
+                                                (HDC)dc.GetHDC())  != 0 )
+        {
+            wxASSERT(false);
+        }
     }
 }
 
