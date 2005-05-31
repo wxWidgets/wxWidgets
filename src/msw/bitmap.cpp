@@ -1639,7 +1639,23 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         return 0;
     }
 
-    wxMask *mask = bmp.GetMask();
+    wxMask* mask;
+    wxBitmap newbmp;
+    if ( bmp.HasAlpha() )
+    {
+        // Convert alpha to a mask.  NOTE: It would be better to actually put
+        // the alpha into the icon instead of making a mask, but I don't have
+        // time to figure that out today.
+        wxImage img = bmp.ConvertToImage();
+        img.ConvertAlphaToMask();
+        newbmp = wxBitmap(img);
+        mask = newbmp.GetMask();
+    }
+    else
+    {
+        mask = bmp.GetMask();
+    }
+    
     if ( !mask )
     {
         // we must have a mask for an icon, so even if it's probably incorrect,
@@ -1676,7 +1692,7 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
 
     HICON hicon = ::CreateIconIndirect(&iconInfo);
 
-    if ( !bmp.GetMask() )
+    if ( !bmp.GetMask() && !bmp.HasAlpha() )
     {
         // we created the mask, now delete it
         delete mask;
