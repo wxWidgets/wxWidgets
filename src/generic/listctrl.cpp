@@ -3010,11 +3010,11 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             HighlightAll( false );
             ReverseHighlight(m_lineSelectSingleOnUp);
         }
-        else if (m_lastOnSame)
+        if (m_lastOnSame)
         {
             if ((current == m_current) &&
                 (hitResult == wxLIST_HITTEST_ONITEMLABEL) &&
-                HasFlag(wxLC_EDIT_LABELS)  )
+                HasFlag(wxLC_EDIT_LABELS) )
             {
                 m_renameTimer->Start( 100, true );
             }
@@ -3057,6 +3057,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         m_lineLastClicked = current;
 
         size_t oldCurrent = m_current;
+        bool oldWasSelected = IsHighlighted(m_current);
+
         bool cmdModifierDown = event.CmdDown();
         if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
         {
@@ -3110,7 +3112,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
 
         // forceClick is only set if the previous click was on another item
-        m_lastOnSame = !forceClick && (m_current == oldCurrent);
+        m_lastOnSame = !forceClick && (m_current == oldCurrent) && oldWasSelected;
     }
 }
 
