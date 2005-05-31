@@ -729,7 +729,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
                 params.pid = (DWORD)pid;
 
                 // EnumWindows() has nice semantics: it returns 0 if it found
-                // something or if an error occured and non zero if it
+                // something or if an error occurred and non zero if it
                 // enumerated all the window
                 if ( !::EnumWindows(wxEnumFindByPidProc, (LPARAM)&params) )
                 {
@@ -738,7 +738,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
                     {
                         // tell the app to close
                         //
-                        // NB: this is the harshest way, the app won't have
+                        // NB: this is the harshest way, the app won't have an
                         //     opportunity to save any files, for example, but
                         //     this is probably what we want here. If not we
                         //     can also use SendMesageTimeout(WM_CLOSE)
@@ -1478,7 +1478,7 @@ extern long wxCharsetToCodepage(const wxChar *name)
   Windows class unregistration).
 
   pclassname is a pointer to a caller stored classname, which must initially be
-  NULL. classname is the desired wndclass classname. If function succesfully
+  NULL. classname is the desired wndclass classname. If function successfully
   registers the class, pclassname will be set to classname.
  */
 extern "C" WXDLLIMPEXP_BASE HWND

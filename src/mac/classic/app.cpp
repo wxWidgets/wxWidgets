@@ -389,7 +389,7 @@ MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 
 // due to the rather low-level event API of wxWidgets, we cannot use RunApplicationEventLoop
 // but have to use ReceiveNextEvent dealing with events manually, therefore we also have
-// deal with clicks in the menu bar explicitely
+// to deal with clicks in the menu bar explicitly
 
 pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
 

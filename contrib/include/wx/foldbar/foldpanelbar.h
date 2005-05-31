@@ -96,7 +96,7 @@ WX_DEFINE_ARRAY_PTR(wxFoldPanelItem *, wxFoldPanelItemArray);
 
     This control is easy to use. Simply create it as a child for a panel or sash window, and populate panels with
     wxFoldPanelBar::AddFoldPanel(). Then use the wxFoldPanelBar::AddFoldPanelWindow() to add wxWindow derived controls
-    to the current fold panel. Use wxFoldPanelBar::AddFoldPanelSeperator() to put separators between the groups of
+    to the current fold panel. Use wxFoldPanelBar::AddFoldPanelSeparator() to put separators between the groups of
     controls that need a visual separator to group them together. After all is constructed, the user can fold
     the panels by doubleclicking on the bar or single click on the arrow, which will indicate the collapsed or
     expanded state.
@@ -125,12 +125,12 @@ private:
     void RefreshPanelsFrom(wxFoldPanelItem *item);
 
     /** Returns the length of the panels that are expanded and collapsed. This is useful to determine
-        quickly what size is used to display, and what is left at the bottom (right) to allign
+        quickly what size is used to display, and what is left at the bottom (right) to align
         the collapsed panels. */
     int GetPanelsLength(int &collapsed, int &expanded);
 
     /** Reposition all the collapsed panels to the bottom. When it is not possible to
-        allign them to the bottom, stick them behind the visible panels. The Rect holds the
+        align them to the bottom, stick them behind the visible panels. The Rect holds the
         slack area left between last repositioned panel and the bottom panels. This needs to
         get a refresh */
     wxRect RepositionCollapsedToBottom();
@@ -167,9 +167,9 @@ public:
 
     /** Adds a wxWindow derived class to the referenced wxFoldPanel. IMPORTANT: Make the to be created window,
         child of the wxFoldPanel. See example that follows. The flags to be used are:
-        - wxFPB_ALIGN_WIDTH: Which means the wxWindow to be added will be alligned to fit the width of the
+        - wxFPB_ALIGN_WIDTH: Which means the wxWindow to be added will be aligned to fit the width of the
           wxFoldPanel when it is resized. Very handy for sizer items, buttons and text boxes.
-        - wxFPB_ALIGN_LEFT: Alligns left instead of fitting the width of the child window to be added. Use either
+        - wxFPB_ALIGN_LEFT: Aligns left instead of fitting the width of the child window to be added. Use either
           this one or wxFPB_ALIGN_WIDTH.
 
         The wxWindow to be added can be slightly indented from left and right so it is more visibly placed
@@ -196,7 +196,7 @@ public:
             // color and also the indents and width alligning like a control.
             m_pnl->AddFoldPanelSeperator(item);
 
-            // now add a text ctrl. Also very easy. Allign this on width so that when the control gets wider
+            // now add a text ctrl. Also very easy. Align this on width so that when the control gets wider
             // the text control also sizes along.
             m_pnl->AddFoldPanelWindow(item, new wxTextCtrl(item.GetParent(), wxID_ANY, wxT("Comment")), wxFPB_ALIGN_WIDTH, wxFPB_DEFAULT_SPACING, 20);
 
@@ -206,8 +206,8 @@ public:
                            int Spacing = wxFPB_DEFAULT_SPACING, int leftSpacing = wxFPB_DEFAULT_LEFTSPACING,
                            int rightSpacing = wxFPB_DEFAULT_RIGHTSPACING);
 
-    /** Adds a seperator line to the current wxFoldPanel. The seperator is a simple line which is drawn and is no
-        real component. It can be used to seperate groups of controls which belong to eachother. The colour is
+    /** Adds a separator line to the current wxFoldPanel. The separator is a simple line which is drawn and is no
+        real component. It can be used to separate groups of controls which belong to each other. The colour is
         adjustable, and it takes the same ySpacing, leftSpacing and rightSpacing as AddFoldPanelWindow(). */
     int AddFoldPanelSeperator(const wxFoldPanel &panel, const wxColour &color = wxColour(167,167,167),
                            int Spacing = wxFPB_DEFAULT_SPACING, int leftSpacing = wxFPB_DEFAULT_LEFTLINESPACING,

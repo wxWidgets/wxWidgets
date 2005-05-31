@@ -401,7 +401,7 @@ void wxPrinterDC::DoDrawBitmap(const wxBitmap& bmp,
     if ( !(::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHDIB) ||
             !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, x, y) )
     {
-        // no support for StretchDIBits() or an error occured if we got here
+        // no support for StretchDIBits() or an error occurred if we got here
         wxMemoryDC memDC;
         memDC.SelectObject(bmp);
 

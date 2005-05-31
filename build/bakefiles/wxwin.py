@@ -109,11 +109,11 @@ def getVersion():
         major = minor = release = None
         for l in lines:
             if not l.startswith('#define'): continue
-            splitted = l.strip().split()
-            if splitted[0] != '#define': continue
-            if len(splitted) < 3: continue
-            name = splitted[1]
-            value = splitted[2]
+            splitline = l.strip().split()
+            if splitline[0] != '#define': continue
+            if len(splitline) < 3: continue
+            name = splitline[1]
+            value = splitline[2]
             if value == None: continue
             if name == 'wxMAJOR_VERSION': major = int(value)
             if name == 'wxMINOR_VERSION': minor = int(value)

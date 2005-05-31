@@ -352,7 +352,7 @@ int wxFoldPanelBar::GetPanelsLength(int &collapsed, int &expanded)
     int value = 0;
 
     // assumed here that all the panels that are expanded
-    // are positioned after eachother from 0,0 to end.
+    // are positioned after each other from 0,0 to end.
 
     for(size_t j = 0; j < m_panels.GetCount(); j++)
     {

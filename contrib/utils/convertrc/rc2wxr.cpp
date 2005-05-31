@@ -399,7 +399,7 @@ wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],
 
 
 
-bool rc2wxr::Seperator(int ch)
+bool rc2wxr::Separator(int ch)
 
 {
 
@@ -513,7 +513,7 @@ return tok;
 
 
 
-while (Seperator(ch))
+while (Separator(ch))
 
 {
 
@@ -541,7 +541,7 @@ m_done=true;
 
 
 
-while (!Seperator(ch))
+while (!Separator(ch))
 
 {
 

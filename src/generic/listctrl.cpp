@@ -1928,7 +1928,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
         // end of the current column
         int xpos = 0;
 
-        // find the column where this event occured
+        // find the column where this event occurred
         int col,
             countCol = m_owner->GetColumnCount();
         for (col = 0; col < countCol; col++)
@@ -3024,7 +3024,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     }
     else
     {
-        // This is neccessary , because after a DnD operation in
+        // This is necessary, because after a DnD operation in
         // from and to ourself, the up event is swallowed by the
         // DnD code. So on next non-up event (which means here and
         // now) m_lineSelectSingleOnUp should be reset.

@@ -30,7 +30,7 @@ private:
     void ParseStaticText();
     void ParseTextCtrl();
     void ParsePushButton();
-    bool Seperator(int ch);
+    bool Separator(int ch);
     void ParseGroupBox();
     void ReadRect(int & x, int & y, int & width, int & height);
     wxString GetToken();

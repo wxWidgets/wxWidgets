@@ -669,7 +669,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
 
     // Added by JACS to demonstrate bizarre behaviour.
     // With a size of 70, we get a missing red RHS,
-    // and the hight is too small, so we get yellow
+    // and the height is too small, so we get yellow
     // showing. With a size of 40, it draws as expected:
     // it just shows a white rectangle with red outline.
     int totalWidth = 70;

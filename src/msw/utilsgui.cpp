@@ -267,7 +267,7 @@ bool wxColourDisplay()
     return true;
 #else
     // this function is called from wxDC ctor so it is called a *lot* of times
-    // hence we optimize it a bit but doign the check only once
+    // hence we optimize it a bit but doing the check only once
     //
     // this should be MT safe as only the GUI thread (holding the GUI mutex)
     // can call us

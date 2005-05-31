@@ -378,7 +378,7 @@ public:
              const wxChar *szShort = (const wxChar *) NULL,      // dir prefix (for msg files)
              const wxChar *szLocale = (const wxChar *) NULL,     // locale (for setlocale)
              bool bLoadDefault = true,                           // preload wxstd.mo?
-             bool bConvertEncoding = false)                      // convert Win<->Unix if neccessary?
+             bool bConvertEncoding = false)                      // convert Win<->Unix if necessary?
         {
             DoCommonInit();
 
@@ -407,7 +407,7 @@ public:
         // restores old locale
     ~wxLocale();
 
-    // Try to get user's (or OS's) prefered language setting.
+    // Try to get user's (or OS's) preferred language setting.
     // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
     static int GetSystemLanguage();
 

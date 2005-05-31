@@ -94,7 +94,7 @@ msgstr  "\n"
 
 #: ../browsedb.cpp:117
 msgid   "\n"
-        "-E-> BrowserDB::OnStartDB() : DB CONNECTION ERROR : A problem occured while trying to get a connection to the data source"
+        "-E-> BrowserDB::OnStartDB() : DB CONNECTION ERROR : A problem occurred while trying to get a connection to the data source"
 msgstr  "\n"
         "-E-> BrowserDB::OnStartDB() : DB VERBINDUNGSFEHLER : Verbindungsaufbau zur Datenquelle nicht möglich"
 
@@ -300,7 +300,7 @@ msgid   "-E-> unknown Format(%d) - sql(%d)"
 msgstr  "-E-> unbekannte Format(%d) - sql(%d)"
 
 #: ../pgmctrl.cpp:165
-msgid   "-E-> wxConfigBase.p_ProgramCfg->DeleteAll() was not succesfull !"
+msgid   "-E-> wxConfigBase.p_ProgramCfg->DeleteAll() was not successful !"
 msgstr  "-E-> wxConfigBase.p_ProgramCfg->DeleteAll() war nicht Erfolgreich !"
 
 #: ../pgmctrl.cpp:149
@@ -365,7 +365,7 @@ msgid   "-I-> PgmCtrl::OnSelChanged - %s"
 msgstr  "-I-> PgmCtrl::OnSelChanged - %s"
 
 #: ../pgmctrl.cpp:163
-msgid   "-I-> wxConfigBase.p_ProgramCfg->DeleteAll() was succesfull."
+msgid   "-I-> wxConfigBase.p_ProgramCfg->DeleteAll() was successful."
 msgstr  "-I-> wxConfigBase.p_ProgramCfg->DeleteAll() war Erfolgreich !"
 
 #: ../dbbrowse.cpp:115 ../dbbrowse.cpp:175

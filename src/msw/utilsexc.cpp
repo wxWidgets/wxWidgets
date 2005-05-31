@@ -385,7 +385,7 @@ bool wxPipeInputStream::CanRead() const
             wxLogLastError(_T("PeekNamedPipe"));
         }
 
-        // don't try to continue reading from a pipe if an error occured or if
+        // don't try to continue reading from a pipe if an error occurred or if
         // it had been closed
         ::CloseHandle(m_hInput);
 
@@ -417,7 +417,7 @@ size_t wxPipeInputStream::OnSysRead(void *buffer, size_t len)
                         : wxSTREAM_READ_ERROR;
     }
 
-    // bytesRead is set to 0, as desired, if an error occured
+    // bytesRead is set to 0, as desired, if an error occurred
     return bytesRead;
 }
 

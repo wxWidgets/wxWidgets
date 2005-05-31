@@ -290,7 +290,7 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
   //
   // Connect(addr, false) will issue a nonblocking connection request
   // and return immediately. If the return value is true, then the
-  // connection has been already succesfully established. If it is
+  // connection has been already successfully established. If it is
   // false, you must wait for the request to complete, either with
   // WaitOnConnect() or by watching wxSOCKET_CONNECTION / LOST
   // events (please read the documentation).

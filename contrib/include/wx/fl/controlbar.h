@@ -888,7 +888,7 @@ class cbBarInfo : public wxObject
 {
     DECLARE_DYNAMIC_CLASS( cbBarInfo )
 public:
-    // textual name, by which this bar is refered in layout-customization dialogs
+    // textual name, by which this bar is referred in layout-customization dialogs
     wxString      mName;
 
     // stores bar's bounds in pane's coordinates

@@ -106,7 +106,7 @@ public:
     virtual ~wxIDataObject();
 
     // normally, wxDataObject controls our lifetime (i.e. we're deleted when it
-    // is), but in some cases, the situation is inversed, that is we delete it
+    // is), but in some cases, the situation is reversed, that is we delete it
     // when this object is deleted - setting this flag enables such logic
     void SetDeleteFlag() { m_mustDelete = true; }
 
@@ -500,7 +500,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                             // we suppose that the size precedes the data
                             pBuf = m_pDataObject->GetSizeFromBuffer( pBuf, &size, format );
                             if (! format.IsStandard() ) {
-                                // see GetData for coresponding increment
+                                // see GetData for corresponding increment
                                 size -= m_pDataObject->GetBufferOffset( format  );
                             }
                         }

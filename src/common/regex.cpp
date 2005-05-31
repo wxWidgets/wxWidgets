@@ -296,7 +296,7 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
             return true;
 
         default:
-            // an error occured
+            // an error occurred
             wxLogError(_("Failed to match '%s' in regular expression: %s"),
                        str, GetErrorMsg(rc, !conv).c_str());
             // fall through

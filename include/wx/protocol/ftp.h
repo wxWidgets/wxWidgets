@@ -129,7 +129,7 @@ protected:
                          const wxString& arg = wxEmptyString);
 
     // get the server reply, return the first character of the reply code,
-    // '1'..'5' for normal FTP replies, 0 (*not* '0') if an error occured
+    // '1'..'5' for normal FTP replies, 0 (*not* '0') if an error occurred
     char GetResult();
 
     // check that the result is equal to expected value

@@ -129,7 +129,7 @@ protected:
                  *m_subMenu;        // our sub menu or NULL
     wxString      m_text,           // label of the item
                   m_help;           // the help string for the item
-    wxItemKind    m_kind;           // seperator/normal/check/radio item?
+    wxItemKind    m_kind;           // separator/normal/check/radio item?
     bool          m_isChecked;      // is checked?
     bool          m_isEnabled;      // is enabled?
 

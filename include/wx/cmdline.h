@@ -174,7 +174,7 @@ public:
 
     // parse the command line, return 0 if ok, -1 if "-h" or "--help" option
     // was encountered and the help message was given or a positive value if a
-    // syntax error occured
+    // syntax error occurred
     //
     // if showUsage is true, Usage() is called in case of syntax error or if
     // help was requested

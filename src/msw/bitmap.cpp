@@ -337,7 +337,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
 #endif
     if ( !refData->m_hasAlpha )
     {
-        // the mask returned by GetIconInfo() is inversed compared to the usual
+        // the mask returned by GetIconInfo() is inverted compared to the usual
         // wxWin convention
         refData->SetMask(wxInvertMask(iconInfo.hbmMask, w, h));
     }
@@ -435,7 +435,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     {
         // we assume that it is in XBM format which is not quite the same as
         // the format CreateBitmap() wants because the order of bytes in the
-        // line is inversed!
+        // line is reversed!
         const size_t bytesPerLine = (width + 7) / 8;
         const size_t padding = bytesPerLine % 2;
         const size_t len = height * ( padding + bytesPerLine );

@@ -359,7 +359,7 @@ END_DECLARE_EVENT_TYPES()
 #define EVT_TREE_BEGIN_DRAG(id, fn) wx__DECLARE_TREEEVT(BEGIN_DRAG, id, fn)
 #define EVT_TREE_BEGIN_RDRAG(id, fn) wx__DECLARE_TREEEVT(BEGIN_RDRAG, id, fn)
 
-// GetItem() is the item on which the drop occured (if any) and GetPoint() the
+// GetItem() is the item on which the drop occurred (if any) and GetPoint() the
 // current mouse coords
 #define EVT_TREE_END_DRAG(id, fn) wx__DECLARE_TREEEVT(END_DRAG, id, fn)
 

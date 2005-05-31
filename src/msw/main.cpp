@@ -93,7 +93,7 @@ extern int wxEntryReal(int& argc, wxChar **argv);
 #endif // __VISUALC__/!__VISUALC__
 
 // ----------------------------------------------------------------------------
-// wrapper wxEntry catching all Win32 exceptions occuring in a wx program
+// wrapper wxEntry catching all Win32 exceptions occurring in a wx program
 // ----------------------------------------------------------------------------
 
 // wrap real wxEntry in a try-except block to be able to call

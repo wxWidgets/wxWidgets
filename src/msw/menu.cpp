@@ -646,7 +646,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
     if ( id != (WXWORD)idMenuTitle )
     {
         // get the checked status of the command: notice that menuState is the
-        // old state of the menu, so the test for MF_CHECKED must be inversed
+        // old state of the menu, so the test for MF_CHECKED must be inverted
         UINT menuState = ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND);
         SendEvent(id, !(menuState & MF_CHECKED));
     }

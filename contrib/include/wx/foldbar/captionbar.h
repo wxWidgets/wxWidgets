@@ -24,7 +24,7 @@
 
 #define wxFPB_EXTRA_X 10
 #define wxFPB_EXTRA_Y 4
-#define wxFPB_BMP_RIGHTSPACE 2    // pixels of the bmp to be alligned from the right filled with space
+#define wxFPB_BMP_RIGHTSPACE 2    // pixels of the bmp to be aligned from the right filled with space
 
 enum
 {

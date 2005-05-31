@@ -1117,13 +1117,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
         /*if( AMGetErrorText(hrdsv, szError, MAX_ERROR_TEXT_LEN) == 0)*/ \
         /*{*/ \
             /*wxFAIL_MSG( wxString::Format(wxT("DirectShow error \"%s\" ")*/\
-                                         /*wxT("occured at line %i in ")*/ \
+                                         /*wxT("occurred at line %i in ")*/ \
                                          /*wxT("mediactrl.cpp"),*/ \
                                             /*szError, __LINE__) );*/ \
         /*}*/ \
         /*else*/ \
             wxFAIL_MSG( wxString::Format(wxT("Unknown error (%i) ") \
-                                         wxT("occured at") \
+                                         wxT("occurred at") \
                                          wxT(" line %i in mediactrl.cpp."), \
                                          (int)hrdsv, __LINE__) ); \
     } \
@@ -1193,7 +1193,7 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // By default wxWindow(s) is created with a border -
     // so we need to get rid of those, and create with
     // wxCLIP_CHILDREN, so that if the driver/backend
-    // is a child window, it refereshes properly
+    // is a child window, it refreshes properly
     //
     if ( !ctrl->wxControl::Create(parent, id, pos, size,
                             (style & ~wxBORDER_MASK) | wxBORDER_NONE | wxCLIP_CHILDREN,
@@ -1838,7 +1838,7 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
     //
     //Here, if the parent of the control has a sizer - we
     //tell it to recalculate the size of this control since
-    //the user opened a seperate media file
+    //the user opened a separate media file
     //
     m_ctrl->InvalidateBestSize();
     m_ctrl->GetParent()->Layout();
@@ -2264,7 +2264,7 @@ wxQTMediaBackend::~wxQTMediaBackend()
 
     if(m_lib.IsOk())
     {
-        //Note that ExitMovies() is not neccessary, but
+        //Note that ExitMovies() is not necessary, but
         //the docs are fuzzy on whether or not TerminateQTML is
         m_lib.ExitMovies();
         m_lib.TerminateQTML();
@@ -2441,7 +2441,7 @@ void wxQTMediaBackend::FinishLoad()
     //
     //Here, if the parent of the control has a sizer - we
     //tell it to recalculate the size of this control since
-    //the user opened a seperate media file
+    //the user opened a separate media file
     //
     m_ctrl->InvalidateBestSize();
     m_ctrl->GetParent()->Layout();

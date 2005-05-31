@@ -1899,7 +1899,7 @@ enum
     wxTOOL_RIGHT
 };
 
-/*  the values of the format constants should be the same as correspondign */
+/*  the values of the format constants should be the same as corresponding */
 /*  CF_XXX constants in Windows API */
 enum wxDataFormatId
 {

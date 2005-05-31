@@ -15,7 +15,7 @@ class AutoComplete {
 	char stopChars[256];
 	char fillUpChars[256];
 	char separator;
-	char typesep; // Type seperator
+	char typesep; // Type separator
 
 public:
 	bool ignoreCase;
@@ -50,7 +50,7 @@ public:
 	void SetSeparator(char separator_);
 	char GetSeparator();
 
-	/// The typesep character is used for seperating the word from the type
+	/// The typesep character is used for separating the word from the type
 	void SetTypesep(char separator_);
 	char GetTypesep();
 

@@ -2410,7 +2410,7 @@ protected:
     // NB: This method is intentionally *not* inside wxUSE_VALIDATORS!
     //     It is part of wxBase which doesn't use validators and the code
     //     is compiled out when building wxBase w/o GUI classes, which affects
-    //     binary compatiblity and wxBase library can't be used by GUI
+    //     binary compatibility and wxBase library can't be used by GUI
     //     ports.
     virtual bool TryValidator(wxEvent& WXUNUSED(event)) { return false; }
 

@@ -153,7 +153,7 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
 
 // the (most common) native bitmap format without alpha support
 #if defined(__WXMSW__)
-    // under MSW the RGB components are inversed, they're in BGR order
+    // under MSW the RGB components are reversed, they're in BGR order
     typedef wxPixelFormat<unsigned char, 24, 2, 1, 0> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3

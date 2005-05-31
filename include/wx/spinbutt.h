@@ -39,7 +39,7 @@
 class WXDLLEXPORT wxSpinButtonBase : public wxControl
 {
 public:
-    // ctor intiializes the range with the default (0..100) values
+    // ctor initializes the range with the default (0..100) values
     wxSpinButtonBase() { m_min = 0; m_max = 100; }
 
     // accessors

@@ -509,7 +509,7 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
                     /* loop until a valid y coordinate has been
                     found, Or if the maximum number of passes has
                     been reached, exit the loop, and stop image
-                    decoding (At this point the image is succesfully
+                    decoding (At this point the image is successfully
                     decoded).
                     If we don't loop, but merely set y to some other
                     value, that new value might still be invalid depending

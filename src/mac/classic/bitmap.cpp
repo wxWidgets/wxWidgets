@@ -168,7 +168,7 @@ OSErr SetupCIconHandlePixMap( CIconHandle icon , short depth , Rect  *bounds , C
     else
         newColors = nil;
 
-    /* If no errors occured, return a handle to the new off-screen PixMap */
+    /* If no errors occurred, return a handle to the new off-screen PixMap */
     if (error != noErr)
         {
         if (newColors != nil)

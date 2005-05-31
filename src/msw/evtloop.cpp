@@ -116,7 +116,7 @@ bool wxEventLoop::PreProcessMessage(WXMSG *msg)
     HWND hwnd = msg->hwnd;
     wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
 
-    // this may happen if the event occured in a standard modeless dialog (the
+    // this may happen if the event occurred in a standard modeless dialog (the
     // only example of which I know of is the find/replace dialog) - then call
     // IsDialogMessage() to make TAB navigation in it work
     if ( !wndThis )

@@ -111,7 +111,7 @@ is allowed to register new object handlers within XRC and extend it to accept
 new <object> classes (and therefore different <object>'s child nodes).
 
 <object_ref> node is identical to <object>, except that it does _not_ have
-"class" property and has additional required property "ref". It's concept is
+"class" property and has additional required property "ref". Its concept is
 similar to Unix symlinks: value of the "ref" property is equal to the value of
 "name" property of some existing node (called referred node) in the resources
 (not necessary top-level).  Referred node's "class" property and all subnodes

@@ -500,7 +500,7 @@ void wxWindowBase::Centre(int direction)
     // to take into account the taskbar. And the Mac menu bar at top.
     wxRect clientrect = wxGetClientDisplayRect();
 
-    // NB: in wxMSW, negative position may not neccessary mean "out of screen",
+    // NB: in wxMSW, negative position may not necessarily mean "out of screen",
     //     but it may mean that the window is placed on other than the main
     //     display. Therefore we only make sure centered window is on the main display
     //     if the parent is at least partially present here.

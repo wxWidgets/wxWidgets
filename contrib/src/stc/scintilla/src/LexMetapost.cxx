@@ -160,8 +160,8 @@ static void ColouriseMETAPOSTDoc(
 	int currentInterface = CheckMETAPOSTInterface(startPos,length,styler,defaultInterface) ;
 
 	// 0  no keyword highlighting
-	// 1  metapost keyword hightlighting
-	// 2+ metafun keyword hightlighting
+	// 1  metapost keyword highlighting
+	// 2+ metafun keyword highlighting
 
 	int extraInterface = 0 ;
 

@@ -387,7 +387,7 @@ bool wxFTP::SetTransferMode(TransferMode transferMode)
         return false;
     }
 
-    // If we get here the operation has been succesfully completed
+    // If we get here the operation has been successfully completed
     // Set the status-member
     m_currentTransfermode = transferMode;
 

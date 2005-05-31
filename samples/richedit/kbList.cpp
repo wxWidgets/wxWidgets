@@ -6,6 +6,10 @@
  * $Id$          *
  *                                                                  *
  * $Log$
+ * Revision 1.4  2005/05/31 09:19:38  JS
+ * Typo correction patch [ 1208110 ] Lots of typo corrections
+ * Olly Betts
+ *
  * Revision 1.3  2004/08/06 17:27:18  ABX
  * Deleting void is undefined.
  *
@@ -27,7 +31,7 @@
  *    always failed, must mkdir("~/.M") first)
  * 2) "redesign" of "Folder properties" dialog and bug corrected, small change to
  *    MInputBox (it was too wide)
- * 3) bug in ProvFC when it didn't reckognize the books as being in the correct
+ * 3) bug in ProvFC when it didn't recognize the books as being in the correct
  *    format (=> messages "can't reopen book") corrected
  * 4) I tried to enhance MDialog_About(), but it didn't really work... oh well,
  *    I've never said I was an artist

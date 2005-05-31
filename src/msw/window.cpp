@@ -820,7 +820,7 @@ inline int GetScrollPosition(HWND hWnd, int wOrient)
                           wOrient,
                           &scrollInfo) )
     {
-        // Not neccessarily an error, if there are no scrollbars yet.
+        // Not necessarily an error, if there are no scrollbars yet.
         // wxLogLastError(_T("GetScrollInfo"));
     }
     return scrollInfo.nPos;
@@ -5047,7 +5047,7 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
                                                               : SB_VERT,
                                   &scrollInfo) )
             {
-                // Not neccessarily an error, if there are no scrollbars yet.
+                // Not necessarily an error, if there are no scrollbars yet.
                 // wxLogLastError(_T("GetScrollInfo"));
             }
 

@@ -24,7 +24,7 @@ struct _EXCEPTION_POINTERS;
 
 enum
 {
-    // we always report where the crash occured
+    // we always report where the crash occurred
     wxCRASH_REPORT_LOCATION = 0,
 
     // if this flag is given, the call stack is dumped

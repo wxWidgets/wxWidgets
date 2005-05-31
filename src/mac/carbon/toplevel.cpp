@@ -1197,7 +1197,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     if ( m_macUsesCompositing )
     {
         // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of 
-        // the content view, so we have to retrieve it explicitely
+        // the content view, so we have to retrieve it explicitly
         HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowContentID , 
             m_peer->GetControlRefAddr() ) ;
         if ( !m_peer->Ok() )

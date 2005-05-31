@@ -673,7 +673,7 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
     if ( inWindowRef )
     {
 //        bool isHighlighted = IsWindowHighlited( inWindowRef ) ;
-//        if ( inActivate != isHightlited )
+//        if ( inActivate != isHighlighted )
         GrafPtr port ;
         GetPort( &port ) ;
         SetPortWindowPort( inWindowRef ) ;

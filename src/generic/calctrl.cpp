@@ -1233,13 +1233,13 @@ void wxCalendarCtrl::HighlightRange(wxPaintDC* pDC, const wxDateTime& fromdate, 
             if ( ( (tw - fw) == 1 ) && ( td < fd ) )
             {
                 // special case: interval 7 days or less not in same week
-                // split in two seperate intervals
+                // split in two separate intervals
                 wxDateTime tfd = fromdate + wxDateSpan::Days(7-fd);
                 wxDateTime ftd = tfd + wxDateSpan::Day();
 #if DEBUG_PAINT
-                wxLogDebug("Highlight: Seperate segments");
+                wxLogDebug("Highlight: Separate segments");
 #endif
-                // draw seperately
+                // draw separately
                 HighlightRange(pDC, fromdate, tfd, pPen, pBrush);
                 HighlightRange(pDC, ftd, todate, pPen, pBrush);
             }

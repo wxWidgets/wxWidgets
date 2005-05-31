@@ -729,7 +729,7 @@ void wxHtmlContainerCell::Layout(int w)
             } while (nextCell && !nextCell->IsLinebreakAllowed());
         }
 
-        // force new line if occured:
+        // force new line if occurred:
         if ((cell == NULL) ||
             (xpos + nextWordWidth > s_width && cell->IsLinebreakAllowed()))
         {

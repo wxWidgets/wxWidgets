@@ -85,7 +85,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxMSWSystemMenuFontModule)
 };
 
-// these static variables are by the wxMSWSystemMenuFontModule object
+// these static variables are from the wxMSWSystemMenuFontModule object
 // and reflect the system settings returned by the Win32 API's
 // SystemParametersInfo() call.
 
@@ -159,8 +159,8 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
   wxString str = wxStripMenuCodes(m_strName);
 
   // if we have a valid accel string, then pad out
-  // the menu string so the menu and accel string are not
-  // placed ontop of eachother.
+  // the menu string so that the menu and accel string are not
+  // placed on top of each other.
   if ( !m_strAccel.empty() )
    {
        str.Pad(str.Length()%8);
@@ -279,7 +279,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   int xText = rc.x + margin + 1;
 
 
-  // using native API because it reckognizes '&'
+  // using native API because it recognizes '&'
   int nPrevMode = SetBkMode(hdc, TRANSPARENT);
   HBRUSH hbr = CreateSolidBrush(colBack),
          hPrevBrush = (HBRUSH)SelectObject(hdc, hbr);
@@ -322,7 +322,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
               (((st & wxODHidePrefix) && !wxMSWSystemMenuFontModule::ms_showCues) ? 512 : 0)); // 512 == DSS_HIDEPREFIX
 
   // ::SetTextAlign(hdc, TA_RIGHT) doesn't work with DSS_DISABLED or DSS_MONO
-  // as last parameter in DrawState() (at least with Windows98). So we have
+  // as the last parameter in DrawState() (at least with Windows98). So we have
   // to take care of right alignment ourselves.
   if ( !m_strAccel.empty() )
   {
@@ -394,7 +394,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
       int nBmpWidth = bmp.GetWidth(),
           nBmpHeight = bmp.GetHeight();
 
-      // there should be enough place!
+      // there should be enough space!
       wxASSERT((nBmpWidth <= rc.GetWidth()) && (nBmpHeight <= rc.GetHeight()));
 
       int heightDiff = m_nHeight - nBmpHeight;

@@ -235,7 +235,7 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
     frame->pDoc->p_Splitter           = frame->p_Splitter;
     frame->pDoc->p_Splitter->pDoc     = frame->pDoc;       // ControlBase: saving the Sash
     //---------------------------------------------------------------------------------------
-    //-- Problem : GetClientSize(Width,Hight) are not the same as the values given in the ---
+    //-- Problem : GetClientSize(Width,Height) are not the same as the values given in the ---
     //--            construction of the Frame.                                            ---
     //-- Solved  : GetClientSize is called here and the difference is noted. When the     ---
     //--           Window is closed the diff. is added to the result of GetClientSize.    ---

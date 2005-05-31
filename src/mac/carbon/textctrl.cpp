@@ -653,7 +653,7 @@ void wxTextCtrl::WriteText(const wxString& str)
     if ( !wxIsMainThread() )
     {
         // unfortunately CW 8 is not able to correctly deduce the template types, so we have
-        // to instantiate explicitely
+        // to instantiate explicitly
         wxMacMPRemoteGUICall<wxTextCtrl,wxString>( this , &wxTextCtrl::WriteText , str ) ;
         return ;
     }

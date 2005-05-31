@@ -183,8 +183,8 @@ void wxPathList::AddEnvList (const wxString& envVariable)
         path such as "C:\Program Files" would be split into 2 paths:
         "C:\Program" and "Files"
         */
-//        wxT(" ;"); // Don't seperate with colon in DOS (used for drive)
-        wxT(";"); // Don't seperate with colon in DOS (used for drive)
+//        wxT(" ;"); // Don't separate with colon in DOS (used for drive)
+        wxT(";"); // Don't separate with colon in DOS (used for drive)
 #else
         wxT(" :;");
 #endif

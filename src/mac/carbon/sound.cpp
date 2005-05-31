@@ -92,7 +92,7 @@ public:
         DisposeMovie(m_movie);
         Stop();
 
-        //Note that ExitMovies() is not neccessary, but
+        //Note that ExitMovies() is not necessary, but
         //the docs are fuzzy on whether or not TerminateQTML is
         ExitMovies();
 

@@ -152,7 +152,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 #endif // __SMARTPHONE__/!__SMARTPHONE__
 
     // 1) dir ctrl
-    m_dirCtrl = NULL; // this is neccessary, event handler called from
+    m_dirCtrl = NULL; // this is necessary, event handler called from
                       // wxGenericDirCtrl would crash otherwise!
     long dirStyle = wxDIRCTRL_DIR_ONLY | wxDEFAULT_CONTROL_BORDER;
 

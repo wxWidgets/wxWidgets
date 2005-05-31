@@ -125,7 +125,7 @@ public:
   bool IsOpened() const { return m_fd != fd_invalid; }
     // is end of file reached?
   bool Eof() const;
-    // has an error occured?
+    // has an error occurred?
   bool Error() const { return m_error; }
     // type such as disk or pipe
   wxFileKind GetKind() const { return wxGetFileKind(m_fd); }

@@ -505,7 +505,7 @@ HRASCONN wxDialUpManagerMSW::FindActiveConnection()
         }
         else
         {
-            // an error occured
+            // an error occurred
             wxLogError(_("Cannot find active dialup connection: %s"),
                        GetErrorString(dwRet).c_str());
             return 0;

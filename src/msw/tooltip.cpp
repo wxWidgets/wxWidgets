@@ -141,7 +141,7 @@ LRESULT APIENTRY wxToolTipWndProc(HWND hwndTT,
     {
         LPPOINT ppt = (LPPOINT)lParam;
 
-        // the window on which event occured
+        // the window on which event occurred
         HWND hwnd = ::WindowFromPoint(*ppt);
 
         OutputDebugString("TTM_WINDOWFROMPOINT: ");

@@ -79,7 +79,7 @@ public:
     // program startup
     virtual bool OnInit();
 
-    // 2nd-level exception handling: we get all the exceptions occuring in any
+    // 2nd-level exception handling: we get all the exceptions occurring in any
     // event handler here
     virtual bool OnExceptionInMainLoop();
 

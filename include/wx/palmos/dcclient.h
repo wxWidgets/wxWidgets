@@ -46,7 +46,7 @@ public:
     wxWindowDC(wxWindow *win);
 
 protected:
-    // intiialize the newly created DC
+    // initialize the newly created DC
     void InitDC();
 
     // override some base class virtuals

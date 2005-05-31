@@ -1,6 +1,5 @@
 utils/HelpGen/src/*.h
 utils/HelpGen/src/*.cpp
-utils/HelpGen/src/*.def
 utils/HelpGen/src/*.rc
 utils/HelpGen/src/makefile*
 utils/HelpGen/src/*.bkl
@@ -26,7 +25,6 @@ utils/emulator/src/*.sty
 utils/emulator/src/*.ini
 utils/emulator/src/*.bmp
 utils/emulator/src/*.ico
-utils/emulator/src/*.def
 utils/emulator/src/*.rc
 utils/emulator/src/*.wxe
 utils/emulator/src/*.jpg
@@ -36,7 +34,6 @@ utils/emulator/docs/*.jpg
 
 utils/helpview/src/*.h
 utils/helpview/src/*.cpp
-utils/helpview/src/*.def
 utils/helpview/src/*.rc
 utils/helpview/src/makefile*
 utils/helpview/src/*.xbm
@@ -51,7 +48,6 @@ utils/helpview/src/bitmaps/*.xpm
 
 utils/configtool/src/*.h
 utils/configtool/src/*.cpp
-utils/configtool/src/*.def
 utils/configtool/src/*.rc
 utils/configtool/src/makefile*
 utils/configtool/src/*.xbm

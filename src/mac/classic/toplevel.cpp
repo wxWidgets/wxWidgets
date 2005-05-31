@@ -950,7 +950,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent(
             if ( abs( localwhere.h - gs_lastWhere.h ) < 3 && abs( localwhere.v - gs_lastWhere.v ) < 3 )
             {
                 // This is not right if the second mouse down
-                // event occured in a differen window. We
+                // event occurred in a different window. We
                 // correct this in MacDispatchMouseEvent.
                 if ( controlDown )
                     event.SetEventType(wxEVT_RIGHT_DCLICK ) ;

@@ -1730,7 +1730,7 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
     {
         default:
         case wxDragError:
-            wxLogError(wxT("An error occured during drag and drop operation"));
+            wxLogError(wxT("An error occurred during drag and drop operation"));
             break;
 
         case wxDragNone:

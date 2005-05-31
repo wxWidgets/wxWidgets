@@ -965,10 +965,10 @@ void wxHtmlHelpFrame::CreateContents()
     const int MAX_ROOTS = 64;
     wxTreeItemId roots[MAX_ROOTS];
     // VS: this array holds information about whether we've set item icon at
-    //     given level. This is neccessary because m_Data has flat structure
+    //     given level. This is necessary because m_Data has a flat structure
     //     and there's no way of recognizing if some item has subitems or not.
     //     We set the icon later: when we find an item with level=n, we know
-    //     that the last item with level=n-1 was folder with subitems, so we
+    //     that the last item with level=n-1 was afolder with subitems, so we
     //     set its icon accordingly
     bool imaged[MAX_ROOTS];
     m_ContentsBox->DeleteAllItems();
@@ -984,9 +984,9 @@ void wxHtmlHelpFrame::CreateContents()
         {
             if (m_hfStyle & wxHF_MERGE_BOOKS)
                 // VS: we don't want book nodes, books' content should
-                //    appear under tree's root. This line will create "fake"
+                //    appear under tree's root. This line will create a "fake"
                 //    record about book node so that the rest of this look
-                //    will believe there really _is_ book node and will
+                //    will believe there really _is_ a book node and will
                 //    behave correctly.
                 roots[1] = roots[0];
             else
@@ -1010,7 +1010,7 @@ void wxHtmlHelpFrame::CreateContents()
         m_PagesHash->Put(it->GetFullPath(),
                          new wxHtmlHelpHashData(i, roots[it->level + 1]));
 
-        // Set the icon for the node one level up in the hiearachy,
+        // Set the icon for the node one level up in the hierarchy,
         // unless already done (see comment above imaged[] declaration)
         if (!imaged[it->level])
         {

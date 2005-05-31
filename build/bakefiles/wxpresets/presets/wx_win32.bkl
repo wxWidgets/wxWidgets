@@ -34,7 +34,7 @@ FIXME: this template has (at least) the following bugs:
     <!--    In MSVC these are the different build                   -->
     <!--    configurations you can have (in the build menu),        -->
     <!--    and in autoconf is enabled with enable-xxx=xx.          -->
-    <!--    For other compilers a seperate configuration            -->
+    <!--    For other compilers a separate configuration            -->
     <!--    file is created (such as config.gcc on gcc)             -->
     <!--    which has several options a user can modify.            -->
     <!--                                                            -->
@@ -155,7 +155,7 @@ FIXME: this template has (at least) the following bugs:
     <!--                                                            -->
     <!--    The "base class" of all our build targets               -->
     <!--    This links with the appropriate native                  -->
-    <!--    libraries required by the platform, the libaries        -->
+    <!--    libraries required by the platform, the libraries       -->
     <!--    we want for our stuff, and the wxWindows libs.          -->
 
 

@@ -224,7 +224,7 @@ wxQTMediaBackend::~wxQTMediaBackend()
     if(m_timer)
         Cleanup();
 
-    //Note that ExitMovies() is not neccessary...
+    //Note that ExitMovies() is not necessary...
     ExitMovies();
 }
 
@@ -467,7 +467,7 @@ void wxQTMediaBackend::FinishLoad()
     //
     //Here, if the parent of the control has a sizer - we
     //tell it to recalculate the size of this control since
-    //the user opened a seperate media file
+    //the user opened a separate media file
     //
     m_ctrl->InvalidateBestSize();
     m_ctrl->GetParent()->Layout();

@@ -134,9 +134,9 @@ void wxStackFrame::OnParam(PSYMBOL_INFO pSymInfo)
 
     // if symbol information is corrupted and we crash, the exception is going
     // to be ignored when we're called from WalkFromException() because of the
-    // except handler there returning EXCEPTION_CONTINUE_EXECUTION, but we'd be
-    // left in an inconsistent state, so deal with it explicitely here (even if
-    // normally we should never crash, of course...)
+    // exception handler there returning EXCEPTION_CONTINUE_EXECUTION, but we'd
+    // be left in an inconsistent state, so deal with it explicitly here (even
+    // if normally we should never crash, of course...)
 #ifdef _CPPUNWIND
     try
 #else

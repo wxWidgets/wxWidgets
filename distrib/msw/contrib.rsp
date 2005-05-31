@@ -63,7 +63,6 @@ contrib/include/wx/animate/*.h
 
 contrib/samples/animate/*.cpp
 contrib/samples/animate/*.h
-contrib/samples/animate/*.def
 contrib/samples/animate/makefile*
 contrib/samples/animate/*.xbm
 contrib/samples/animate/*.xpm
@@ -86,7 +85,6 @@ contrib/include/wx/applet/*.rc
 
 contrib/samples/applet/*.cpp
 contrib/samples/applet/*.h
-contrib/samples/applet/*.def
 contrib/samples/applet/makefile*
 contrib/samples/applet/*.xbm
 contrib/samples/applet/*.xpm
@@ -106,7 +104,6 @@ contrib/include/wx/deprecated/*.h
 
 contrib/samples/deprecated/proplist/*.cpp
 contrib/samples/deprecated/proplist/*.h
-contrib/samples/deprecated/proplist/*.def
 contrib/samples/deprecated/proplist/makefile*
 contrib/samples/deprecated/proplist/*.xbm
 contrib/samples/deprecated/proplist/*.xpm
@@ -121,7 +118,6 @@ contrib/samples/deprecated/proplist/*.bkl
 
 contrib/samples/deprecated/resource/*.cpp
 contrib/samples/deprecated/resource/*.h
-contrib/samples/deprecated/resource/*.def
 contrib/samples/deprecated/resource/makefile*
 contrib/samples/deprecated/resource/*.xbm
 contrib/samples/deprecated/resource/*.xpm
@@ -136,7 +132,6 @@ contrib/samples/deprecated/resource/*.bkl
 
 contrib/samples/deprecated/treelay/*.cpp
 contrib/samples/deprecated/treelay/*.h
-contrib/samples/deprecated/treelay/*.def
 contrib/samples/deprecated/treelay/makefile*
 contrib/samples/deprecated/treelay/*.xbm
 contrib/samples/deprecated/treelay/*.xpm
@@ -159,7 +154,6 @@ contrib/samples/fl/bitmaps/*.bmp
 contrib/samples/fl/bitmaps/*.xpm
 contrib/samples/fl/*.cpp
 contrib/samples/fl/*.h
-contrib/samples/fl/*.def
 contrib/samples/fl/*.xbm
 contrib/samples/fl/*.xpm
 contrib/samples/fl/*.txt
@@ -178,7 +172,6 @@ contrib/include/wx/gizmos/*.h
 
 contrib/samples/gizmos/dynsash/*.cpp
 contrib/samples/gizmos/dynsash/*.h
-contrib/samples/gizmos/dynsash/*.def
 contrib/samples/gizmos/dynsash/makefile*
 contrib/samples/gizmos/dynsash/*.xbm
 contrib/samples/gizmos/dynsash/*.xpm
@@ -192,7 +185,6 @@ contrib/samples/gizmos/dynsash/*.bkl
 
 contrib/samples/gizmos/dynsash_switch/*.cpp
 contrib/samples/gizmos/dynsash_switch/*.h
-contrib/samples/gizmos/dynsash_switch/*.def
 contrib/samples/gizmos/dynsash_switch/makefile*
 contrib/samples/gizmos/dynsash_switch/*.xbm
 contrib/samples/gizmos/dynsash_switch/*.xpm
@@ -206,7 +198,6 @@ contrib/samples/gizmos/dynsash_switch/*.bkl
 
 contrib/samples/gizmos/editlbox/*.cpp
 contrib/samples/gizmos/editlbox/*.h
-contrib/samples/gizmos/editlbox/*.def
 contrib/samples/gizmos/editlbox/makefile*
 contrib/samples/gizmos/editlbox/*.xbm
 contrib/samples/gizmos/editlbox/*.xpm
@@ -220,7 +211,6 @@ contrib/samples/gizmos/editlbox/*.bkl
 
 contrib/samples/gizmos/led/*.cpp
 contrib/samples/gizmos/led/*.h
-contrib/samples/gizmos/led/*.def
 contrib/samples/gizmos/led/makefile*
 contrib/samples/gizmos/led/*.xbm
 contrib/samples/gizmos/led/*.xpm
@@ -234,7 +224,6 @@ contrib/samples/gizmos/led/*.bkl
 
 contrib/samples/gizmos/multicell/*.cpp
 contrib/samples/gizmos/multicell/*.h
-contrib/samples/gizmos/multicell/*.def
 contrib/samples/gizmos/multicell/makefile*
 contrib/samples/gizmos/multicell/*.xbm
 contrib/samples/gizmos/multicell/*.xpm
@@ -248,7 +237,6 @@ contrib/samples/gizmos/multicell/*.bkl
 
 contrib/samples/gizmos/splittree/*.cpp
 contrib/samples/gizmos/splittree/*.h
-contrib/samples/gizmos/splittree/*.def
 contrib/samples/gizmos/splittree/makefile*
 contrib/samples/gizmos/splittree/*.xbm
 contrib/samples/gizmos/splittree/*.xpm
@@ -269,7 +257,6 @@ contrib/include/wx/plot/*.rc
 
 contrib/samples/plot/*.cpp
 contrib/samples/plot/*.h
-contrib/samples/plot/*.def
 contrib/samples/plot/makefile*
 contrib/samples/plot/*.xbm
 contrib/samples/plot/*.xpm

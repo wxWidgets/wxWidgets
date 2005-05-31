@@ -426,7 +426,7 @@ void wxDynamicToolBar::SizeToolWindows()
                 info.mRect.height = mSepartorSize;
             }
 
-            // Do we need to set a new size to a seperator object?
+            // Do we need to set a new size to a separator object?
             if ( info.mpToolWnd )
             {
                 info.mpToolWnd->SetSize( info.mRect.x,

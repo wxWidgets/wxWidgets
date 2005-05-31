@@ -11,7 +11,7 @@
 
 // VC++ IDE predefines _DEBUG and _UNICODE for the new projects itself, but
 // the other symbols (WXUSINGDLL, __WXUNIVERSAL__, ...) should be defined
-// explicitely!
+// explicitly!
 
 #ifdef _MSC_VER
     #ifdef _UNICODE

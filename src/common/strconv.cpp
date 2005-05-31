@@ -270,9 +270,9 @@ const wxWCharBuffer wxMBConv::cMB2WC(const char *szString, size_t nStringLen, si
         }
 
         //Increment to next (sub)string
-        //Note that we have to use strlen here instead of nLen
-        //here because XX2XX gives us the size of the output buffer,
-        //not neccessarly the length of the string
+        //Note that we have to use strlen instead of nLen here
+        //because XX2XX gives us the size of the output buffer,
+        //which is not necessarily the length of the string
         szPos += strlen(szPos) + 1;
     }
 
@@ -332,9 +332,9 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *szString, size_t nStringLen, 
         }
 
         //Increment to next (sub)string
-        //Note that we have to use wxWcslen here instead of nLen
-        //here because XX2XX gives us the size of the output buffer,
-        //not neccessarly the length of the string
+        //Note that we have to use wxWcslen instead of nLen here
+        //because XX2XX gives us the size of the output buffer,
+        //which is not necessarily the length of the string
         szPos += wxWcslen(szPos) + 1;
     }
 

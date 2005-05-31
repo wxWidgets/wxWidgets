@@ -1231,7 +1231,7 @@ void ShowException(LPOLESTR szMember, HRESULT hr, EXCEPINFO *pexcep, unsigned in
             break;
 
         default:
-            wsprintf(szBuf, L"%s: Unknown error occured.", szMember);
+            wsprintf(szBuf, L"%s: Unknown error occurred.", szMember);
             break;
     }
 

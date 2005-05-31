@@ -491,7 +491,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 
     wxPoint pos = event.GetPosition();
 
-    // scrollbar on which the click occured
+    // scrollbar on which the click occurred
     wxWindow *sbar = NULL;
 
     wxWindow *win = (wxWindow *)event.GetEventObject();

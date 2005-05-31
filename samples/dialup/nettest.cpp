@@ -272,7 +272,7 @@ void MyFrame::OnHangUp(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxGetApp().GetDialer()->HangUp() )
     {
-        wxLogStatus(this, wxT("Connection was succesfully terminated."));
+        wxLogStatus(this, wxT("Connection was successfully terminated."));
     }
     else
     {

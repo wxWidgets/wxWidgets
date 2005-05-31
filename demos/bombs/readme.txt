@@ -7,7 +7,7 @@ under MSWindows 3.1+. Later the rules of the game will be explained for
 the lucky ones of you that have never used Windows.
 
 2. Installation
-If you are reading this file, I suppose you have succesfully unpacked the
+If you are reading this file, I suppose you have successfully unpacked the
 files in a directory of your hard disk :-). You should already have
 installed wxWin on your system.
 Now you have to modify makefile.bcc

@@ -1150,7 +1150,7 @@ public:
         return wxTimeSpan(*this).Multiply(n);
     }
 
-        // return this timespan with inversed sign
+        // return this timespan with opposite sign
     wxTimeSpan Negate() const { return wxTimeSpan(-GetValue()); }
         // negate the value of the timespan
     wxTimeSpan& Neg() { m_diff = -GetValue(); return *this; }

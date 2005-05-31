@@ -23,7 +23,7 @@ public:
     //
     // under some systems (currently only Linux) the program directory can be
     // determined automatically but for portable programs you should always set
-    // it explicitely
+    // it explicitly
     void SetInstallPrefix(const wxString& prefix);
 
     // get the program installation prefix

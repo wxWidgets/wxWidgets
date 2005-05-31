@@ -166,9 +166,9 @@ void PgmCtrl::OnSelChanged(wxMouseEvent& WXUNUSED(event))
         if (Temp1 == _T("wxConfigBase Delete"))
         {
             if (p_ProgramCfg->DeleteAll()) // Default Diretory for wxFileSelector
-                Temp0 = _("-I-> wxConfigBase.p_ProgramCfg->DeleteAll() was succesfull.");
+                Temp0 = _("-I-> wxConfigBase.p_ProgramCfg->DeleteAll() was successful.");
             else
-                Temp0 = _("-E-> wxConfigBase.p_ProgramCfg->DeleteAll() was not succesfull !");
+                Temp0 = _("-E-> wxConfigBase.p_ProgramCfg->DeleteAll() was not successful !");
             wxBell();     // Ding_a_Ling
             Treffer++;
         }

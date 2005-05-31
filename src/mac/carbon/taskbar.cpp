@@ -281,7 +281,7 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
                                         theItem->GetId(), //id
                                         theItem->GetText(), //text label
                                         theItem->GetHelp(), //status bar help string
-                                        theItem->GetKind(), //menu flags - checkable, seperator, etc.
+                                        theItem->GetKind(), //menu flags - checkable, separator, etc.
                                         theItem->GetSubMenu() //submenu
                                         ));
         theNode = theNode->GetNext();

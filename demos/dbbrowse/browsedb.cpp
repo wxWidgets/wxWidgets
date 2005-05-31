@@ -57,7 +57,7 @@ wxChar *GetExtendedDBErrorMsg(wxChar *ErrFile, int ErrLine)
     msg.Append (_T("\nODBC errors:\n"));
     // msg += _T("\n");
     /* Scan through each database connection displaying
-    * any ODBC errors that have occured. */
+    * any ODBC errors that have occurred. */
     wxDbList *pDbList;
     for (pDbList = PtrBegDbList; pDbList; pDbList = pDbList->PtrNext)
     {

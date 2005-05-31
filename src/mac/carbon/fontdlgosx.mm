@@ -265,7 +265,7 @@ int wxFontDialog::ShowModal()
     //
     //	So we set up delegates for both the color and font panels,
     //  and the if the font panel opens the color panel, we 
-    //  stop the modal loop, and start a seperate modal loop for
+    //  stop the modal loop, and start a separate modal loop for
     //  the color panel until the color panel closes, switching
     //  back to the font panel modal loop once it does close.
     //

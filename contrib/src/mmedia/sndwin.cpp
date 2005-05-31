@@ -382,7 +382,7 @@ wxSoundInfoHeader *wxSoundStreamWin::AllocHeader(int mode)
 // AllocHeaders() allocates WXSOUND_MAX_QUEUE (= 128) blocks for an operation
 // queue. It uses AllocHeader() for each element.
 //
-// Once it has allocated all blocks, it returns true and if an error occured
+// Once it has allocated all blocks, it returns true and if an error occurred
 // it returns false.
 // -------------------------------------------------------------------------
 bool wxSoundStreamWin::AllocHeaders(int mode)

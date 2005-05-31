@@ -226,7 +226,7 @@ private:
     // the currently default encoding: by default, it's the default system
     // encoding, but may be changed by the application using
     // SetDefaultEncoding() to make all subsequent fonts created without
-    // specifing encoding parameter using this encoding
+    // specifying encoding parameter using this encoding
     static wxFontEncoding ms_encodingDefault;
 };
 

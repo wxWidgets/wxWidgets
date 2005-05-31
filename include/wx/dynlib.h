@@ -249,7 +249,7 @@ public:
 
     // return all modules/shared libraries in the address space of this process
     //
-    // returns an empty array if not implemented or an error occured
+    // returns an empty array if not implemented or an error occurred
     static wxDynamicLibraryDetailsArray ListLoaded();
 
     // return platform-specific name of dynamic library with proper extension

@@ -79,7 +79,7 @@ extern wxApp *DatabaseDemoApp;
 
 /*
  * This function will return the exact string(s) from the database engine
- * indicating all error conditions which have just occured during the
+ * indicating all error conditions which have just occurred during the
  * last call to the database engine.
  *
  * This demo uses the returned string by displaying it in a wxMessageBox.  The

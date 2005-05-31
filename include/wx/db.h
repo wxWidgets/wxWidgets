@@ -789,7 +789,7 @@ wxDbGetDataSource(HENV henv, wxChar *Dsn, SWORD DsnMaxLength, wxChar *DsDesc,
 // Change this to 0 to remove use of all deprecated functions
 #if wxODBC_BACKWARD_COMPATABILITY
 //#################################################################################
-//############### DEPRECATED functions for backward compatability #################
+//############### DEPRECATED functions for backward compatibility #################
 //#################################################################################
 
 // Backward compability structures/classes.  This will eventually go away

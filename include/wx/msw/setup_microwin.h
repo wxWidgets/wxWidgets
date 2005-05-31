@@ -825,7 +825,7 @@
 #define wxODBC_FWD_ONLY_CURSORS	 1
 
 // Default is 0.  Set to 1 to use the deprecated classes, enum types, function,
-// member variables.  With a setting of 1, full backward compatability with the
+// member variables.  With a setting of 1, full backward compatibility with the
 // 2.0.x release is possible. It is STRONGLY recommended that this be set to 0,
 // as future development will be done only on the non-deprecated
 // functions/classes/member variables/etc.

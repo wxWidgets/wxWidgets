@@ -1122,7 +1122,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
     SetSize(wxDefaultCoord, size.y);
 
 #ifdef __WXGTK__
-    // VS: this is neccessary in order to force frame redraw under
+    // VS: this is necessary in order to force frame redraw under
     // WindowMaker or fvwm2 (and probably other broken WMs).
     // Otherwise, detailed list wouldn't be displayed.
     Show();

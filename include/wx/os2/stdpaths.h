@@ -24,7 +24,7 @@ public:
     // The program directory can be determined automatically from argv[0],
     // this function is automatically called from application initialisation.
     // If you override the initialisation routine, you should call it
-    // explicitely yourself.
+    // explicitly yourself.
     static void SetInstallPrefix(const wxString& prefix);
 
     // get the program installation prefix

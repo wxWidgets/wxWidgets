@@ -2290,7 +2290,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         case LVN_ENDLABELEDITA:
         case LVN_ENDLABELEDITW:
-            // logic here is inversed compared to all the other messages
+            // logic here is inverted compared to all the other messages
             *result = event.IsAllowed();
 
             // don't keep a stale wxTextCtrl around

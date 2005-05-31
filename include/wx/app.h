@@ -263,7 +263,7 @@ public:
     // version does the normal processing (i.e. shows the usual assert failure
     // dialog box)
     //
-    // the arguments are the place where the assert occured, the text of the
+    // the arguments are the place where the assert occurred, the text of the
     // assert itself and the user-specified message
 #ifdef __WXDEBUG__
     virtual void OnAssert(const wxChar *file,

@@ -121,13 +121,13 @@ public:
     };
 
     // resize the element, whatever it is. A separator or
-    // line will be always alligned by width or hight
+    // line will be always aligned by width or height
     // depending on orientation of the whole panel
 
     void ResizeItem(int size, bool vertical) {
         if(m_flags & wxFPB_ALIGN_WIDTH)
         {
-            // allign by taking full width
+            // align by taking full width
             int mySize = size - m_leftSpacing - m_rightSpacing;
 
             if(mySize < 0)
@@ -185,7 +185,7 @@ public:
     virtual ~wxFoldPanelItem();
 
     /** Add a window item to the list of items on this panel. The flags are wxFPB_ALIGN_LEFT for a non sizing
-        window element, and wxFPB_ALIGN_WIDTH for a width alligned item. The ySpacing parameter reserves a number
+        window element, and wxFPB_ALIGN_WIDTH for a width aligned item. The ySpacing parameter reserves a number
         of pixels before the window element, and leftSpacing is an indent. rightSpacing is only relevant when the
         style wxFPB_ALIGN_WIDTH is chosen. */
     void AddWindow(wxWindow *window, int flags, int ySpacing, int leftSpacing, int rightSpacing);

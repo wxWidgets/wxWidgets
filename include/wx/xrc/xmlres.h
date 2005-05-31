@@ -310,7 +310,7 @@ public:
     // Creates an object (menu, dialog, control, ...) from an XML node.
     // Should check for validity.
     // parent is a higher-level object (usually window, dialog or panel)
-    // that is often neccessary to create the resource.
+    // that is often necessary to create the resource.
     // If instance is non-NULL it should not create a new instance via 'new' but
     // should rather use this one, and call its Create method.
     wxObject *CreateResource(wxXmlNode *node, wxObject *parent,

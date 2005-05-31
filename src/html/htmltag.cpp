@@ -458,7 +458,7 @@ bool wxHtmlTag::GetParamAsInt(const wxString& par, int *clr) const
 
 wxString wxHtmlTag::GetAllParams() const
 {
-    // VS: this function is for backward compatiblity only,
+    // VS: this function is for backward compatibility only,
     //     never used by wxHTML
     wxString s;
     size_t cnt = m_ParamNames.GetCount();

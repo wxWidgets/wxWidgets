@@ -320,7 +320,7 @@ public:
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
     // other operations: return true if there were no errors or false if there
-    // were some unreckognized entries (the good entries are always read anyhow)
+    // were some unrecognized entries (the good entries are always read anyhow)
     //
     // FIXME: These ought to be private ??
 

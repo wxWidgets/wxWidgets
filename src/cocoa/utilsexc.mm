@@ -159,21 +159,21 @@ long wxExecute(const wxString& command,
     NSArray* theQuoteArguments = 
         [wxNSStringWithWxString(command) componentsSeparatedByString:@"\""];
         
-    NSMutableArray* theSeperatedArguments = 
+    NSMutableArray* theSeparatedArguments = 
         [NSMutableArray arrayWithCapacity:10];
         
     for (unsigned i = 0; i < [theQuoteArguments count]; ++i)
     {
-        [theSeperatedArguments addObjectsFromArray:
+        [theSeparatedArguments addObjectsFromArray:
             [[theQuoteArguments objectAtIndex:i] componentsSeparatedByString:@" "]
         ];
         
         if(++i < [theQuoteArguments count])
-            [theSeperatedArguments addObject:[theQuoteArguments objectAtIndex:i]];
+            [theSeparatedArguments addObject:[theQuoteArguments objectAtIndex:i]];
     }
     
-    [theTask setLaunchPath:[theSeperatedArguments objectAtIndex:0]];
-    [theTask setArguments:theSeperatedArguments];
+    [theTask setLaunchPath:[theSeparatedArguments objectAtIndex:0]];
+    [theTask setArguments:theSeparatedArguments];
     [theTask launch];
     
     if(sync & wxEXEC_ASYNC)

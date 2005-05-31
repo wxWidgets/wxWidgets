@@ -1792,7 +1792,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
          (langFull.Len() == LEN_FULL && langFull[LEN_LANG] == wxT('_')) )
     {
         // 0. Make sure the lang is according to latest ISO 639
-        //    (this is neccessary because glibc uses iw and in instead
+        //    (this is necessary because glibc uses iw and in instead
         //    of he and id respectively).
 
         // the language itself (second part is the dialect/sublang)

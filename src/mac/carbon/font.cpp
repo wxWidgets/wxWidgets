@@ -129,7 +129,7 @@ public:
     
     // ATSU Font Information
     
-    // this is splitted into an ATSU font id that may
+    // this is split into an ATSU font id that may
     // contain some styles (special bold fonts etc) and
     // these are the additional qd styles that are not
     // included in the ATSU font id

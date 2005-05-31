@@ -342,7 +342,7 @@ void rc2xml::ParsePushButton(wxString phrase, wxString varname)
 }
 
 
-bool rc2xml::Seperator(int ch)
+bool rc2xml::Separator(int ch)
 {
 //if ((ch==' ')|(ch==',')|(ch==13)|(ch==10)|(ch=='|')|(ch=='\t'))
     if ((ch==' ')|(ch==',')|(ch==13)|(ch==10)|(ch=='\t'))
@@ -387,7 +387,7 @@ bool rc2xml::ReadRect(int & x, int & y, int & width, int & height)
     return ret; // check for more parameters
 }
 
-wxString rc2xml::GetToken(bool *listseperator)
+wxString rc2xml::GetToken(bool *listseparator)
 {
     wxString token=wxEmptyString;
 
@@ -405,7 +405,7 @@ wxString rc2xml::GetToken(bool *listseperator)
     return token;
     }
 
-    while (Seperator(ch))
+    while (Separator(ch))
     {
     ReadChar(ch);
     if (m_done)
@@ -418,7 +418,7 @@ wxString rc2xml::GetToken(bool *listseperator)
     }
 
 
-    while (!Seperator(ch))
+    while (!Separator(ch))
     {
     token += (char)ch;
     ReadChar(ch);
@@ -427,8 +427,8 @@ wxString rc2xml::GetToken(bool *listseperator)
     if (ch == EOF)
         m_done = true;
 
-    if (listseperator)
-      *listseperator = (ch == ',');
+    if (listseparator)
+      *listseparator = (ch == ',');
     return token;
 }
 

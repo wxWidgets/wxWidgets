@@ -56,7 +56,7 @@ wxZlibInputStream::wxZlibInputStream(wxInputStream& stream, int flags)
   m_pos = 0;
 
 #if WXWIN_COMPATIBILITY_2_4
-  // treat compatibilty mode as auto
+  // treat compatibility mode as auto
   m_24compatibilty = flags == wxZLIB_24COMPATIBLE;
   if (m_24compatibilty)
     flags = wxZLIB_AUTO;

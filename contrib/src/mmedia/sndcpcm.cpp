@@ -377,7 +377,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
     if (m_prebuffer)
         delete[] m_prebuffer;
 
-    // We try to minimize the need of dynamic memory allocation by preallocating a buffer. But
+    // We try to minimize the need for dynamic memory allocation by preallocating a buffer. But
     // to be sure it will be efficient we minimize the best size.
     if (m_multiplier_in < m_multiplier_out) {
         m_prebuffer_size = (wxUint32)(m_sndio->GetBestSize() *

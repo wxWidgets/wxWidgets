@@ -373,7 +373,7 @@ void wxDCBase::DoDrawSpline( wxList *points )
 
 
 // Each element of the widths array will be the width of the string up to and
-// including the coresponding character in text.  This is the generic
+// including the corresponding character in text.  This is the generic
 // implementation, the port-specific classes should do this with native APIs
 // if available and if faster.  Note: pango_layout_index_to_pos is much slower
 // than calling GetTextExtent!!

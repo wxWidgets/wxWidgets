@@ -476,7 +476,7 @@ void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
         PFD_DRAW_TO_WINDOW |
         PFD_DOUBLEBUFFER,        /* support double-buffering */
         PFD_TYPE_RGBA,            /* color type */
-        16,                /* prefered color depth */
+        16,                /* preferred color depth */
         0, 0, 0, 0, 0, 0,        /* color bits (ignored) */
         0,                /* no alpha buffer */
         0,                /* alpha bits (ignored) */
@@ -785,7 +785,7 @@ bool wxGLApp::InitGLVisual(int *attribList)
         PFD_DRAW_TO_WINDOW |
         PFD_DOUBLEBUFFER,        /* support double-buffering */
         PFD_TYPE_RGBA,            /* color type */
-        16,                /* prefered color depth */
+        16,                /* preferred color depth */
         0, 0, 0, 0, 0, 0,        /* color bits (ignored) */
         0,                /* no alpha buffer */
         0,                /* alpha bits (ignored) */

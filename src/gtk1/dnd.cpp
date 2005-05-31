@@ -402,14 +402,14 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
     {
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnData returned TRUE") );
 
-        /* tell GTK that data transfer was successfull */
+        /* tell GTK that data transfer was successful */
         gtk_drag_finish( context, TRUE, FALSE, time );
     }
     else
     {
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnData returned FALSE") );
 
-        /* tell GTK that data transfer was not successfull */
+        /* tell GTK that data transfer was not successful */
         gtk_drag_finish( context, FALSE, FALSE, time );
     }
 

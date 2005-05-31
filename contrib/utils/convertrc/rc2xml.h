@@ -62,10 +62,10 @@ protected:
     void ParseRadioButton(wxString phrase,wxString varname);
     void ParseCheckBox(wxString phrase,wxString varname);
     void ParsePushButton(wxString phrase, wxString varname);
-    bool Seperator(int ch);
+    bool Separator(int ch);
     void ParseGroupBox(wxString phrase, wxString varname);
     bool ReadRect(int & x, int & y, int & width, int & height);
-    wxString GetToken(bool *listseperator = 0);
+    wxString GetToken(bool *listseparator = 0);
     wxString GetQuoteField();
     wxString GetStringQuote();
     void ReadChar(int &ch);

@@ -2055,7 +2055,7 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 }
 
 /* GSocket_GetError:
- *  Returns the last error occured for this socket. Note that successful
+ *  Returns the last error which occurred for this socket. Note that successful
  *  operations do not clear this back to GSOCK_NOERROR, so use it only
  *  after an error.
  */
@@ -2080,7 +2080,7 @@ GSocketError GSocket_GetError(GSocket *socket)
  *   assume that it can write since the first OUTPUT event, and no more
  *   OUTPUT events will be generated unless an error occurs.
  * GSOCK_CONNECTION:
- *   Connection succesfully established, for client sockets, or incoming
+ *   Connection successfully established, for client sockets, or incoming
  *   client connection, for server sockets. Wait for this event (also watch
  *   out for GSOCK_LOST) after you issue a nonblocking GSocket_Connect() call.
  * GSOCK_LOST:

@@ -941,7 +941,7 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
         s_pfnFlashWindowEx = (FlashWindowEx_t)
                                 dllUser32.GetSymbol(_T("FlashWindowEx"));
 
-        // we can safely unload user32.dll here, it's goign to remain loaded as
+        // we can safely unload user32.dll here, it's going to remain loaded as
         // long as the program is running anyhow
     }
 

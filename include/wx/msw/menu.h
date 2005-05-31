@@ -201,7 +201,7 @@ public:
     // get the accel table for all the menus
     const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }
 
-    // update the accel table (must be called after adding/deletign a menu)
+    // update the accel table (must be called after adding/deleting a menu)
     void RebuildAccelTable();
 #endif // wxUSE_ACCEL
 

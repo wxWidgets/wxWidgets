@@ -17,7 +17,7 @@
 //
 // To use this sample, simply select Open File from the file menu,
 // select the file you want to play - and MediaPlayer will play the file in a
-// new notebook page, showing video if neccessary.
+// new notebook page, showing video if necessary.
 //
 // You can select one of the menu options, or move the slider around
 // to manipulate what is playing.

@@ -1369,7 +1369,12 @@ SettingsDialog::SettingsDialog(wxWindow* win)
 {
     SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
 
-    Create(win, -1, _("Preferences"), wxDefaultPosition, wxDefaultSize);
+    Create(win, -1, _("Preferences"), wxDefaultPosition, wxDefaultSize,
+        wxDEFAULT_DIALOG_STYLE
+#ifndef __WXWINCE__
+        |wxRESIZE_BORDER
+#endif        
+    );
     CreateButtons(wxOK|wxCANCEL|wxHELP);
 
     wxBookCtrlBase* notebook = GetBookCtrl();

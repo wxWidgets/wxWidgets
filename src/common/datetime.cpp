@@ -2309,12 +2309,12 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                     // find the YEAR which is a year in the strftime() range (1970
                     // - 2038) whose Jan 1 falls on the same week day as the Jan 1
                     // of the real year. Then make a copy of the format and
-                    // replace all occurences of YEAR in it with some unique
+                    // replace all occurrences of YEAR in it with some unique
                     // string not appearing anywhere else in it, then use
                     // strftime() to format the date in year YEAR and then replace
                     // YEAR back by the real year and the unique replacement
-                    // string back with YEAR. Notice that "all occurences of YEAR"
-                    // means all occurences of 4 digit as well as 2 digit form!
+                    // string back with YEAR. Notice that "all occurrences of YEAR"
+                    // means all occurrences of 4 digit as well as 2 digit form!
                     //
                     // the bugs: we assume that neither of %c nor %x contains any
                     // fields which may change between the YEAR and real year. For
@@ -2372,8 +2372,8 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                         strYear.Printf(_T("%d"), year);
                         strYear2.Printf(_T("%d"), year % 100);
 
-                        // find two strings not occuring in format (this is surely
-                        // not optimal way of doing it... improvements welcome!)
+                        // find two strings not occurring in format (this is surely
+                        // not the optimal way of doing it... improvements welcome!)
                         wxString fmt = format;
                         wxString replacement = (wxChar)-1;
                         while ( fmt.Find(replacement) != wxNOT_FOUND )
@@ -2387,7 +2387,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                             replacement << (wxChar)-2;
                         }
 
-                        // replace all occurences of year with it
+                        // replace all occurrences of year with it
                         bool wasReplaced = fmt.Replace(strYear, replacement) > 0;
                         if ( !wasReplaced )
                             wasReplaced = fmt.Replace(strYear2, replacement2) > 0;
@@ -2414,14 +2414,14 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                                                                   : _T("%x"),
                                                     &tmAdjusted);
 
-                        // now replace the occurence of 1999 with the real year
+                        // now replace the occurrence of 1999 with the real year
                         wxString strYearReal, strYearReal2;
                         strYearReal.Printf(_T("%04d"), yearReal);
                         strYearReal2.Printf(_T("%02d"), yearReal % 100);
                         str.Replace(strYear, strYearReal);
                         str.Replace(strYear2, strYearReal2);
 
-                        // and replace back all occurences of replacement string
+                        // and replace back all occurrences of replacement string
                         if ( wasReplaced )
                         {
                             str.Replace(replacement2, strYear2);

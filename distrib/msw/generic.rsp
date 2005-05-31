@@ -166,7 +166,6 @@ utils/configure.in
 
 utils/hhp2cached/*.h
 utils/hhp2cached/*.cpp
-utils/hhp2cached/*.def
 utils/hhp2cached/*.rc
 utils/hhp2cached/makefile*
 utils/hhp2cached/*.bkl
@@ -184,7 +183,6 @@ samples/*.xpm
 
 samples/access/*.cpp
 samples/access/*.h
-samples/access/*.def
 samples/access/makefile*
 samples/access/*.xbm
 samples/access/*.xpm
@@ -195,7 +193,6 @@ samples/access/*.bkl
 
 samples/artprov/*.cpp
 samples/artprov/*.h
-samples/artprov/*.def
 samples/artprov/makefile*
 samples/artprov/*.xbm
 samples/artprov/*.xpm
@@ -211,7 +208,6 @@ samples/calendar/*.cpp
 samples/calendar/*.h
 samples/calendar/makefile*
 samples/calendar/*.rc
-samples/calendar/*.def
 samples/calendar/*.ico
 samples/calendar/*.xpm
 samples/calendar/*.txt
@@ -222,7 +218,6 @@ samples/caret/*.cpp
 samples/caret/*.h
 samples/caret/makefile*
 samples/caret/*.rc
-samples/caret/*.def
 samples/caret/*.bmp
 samples/caret/*.xpm
 samples/caret/*.xbm
@@ -234,7 +229,6 @@ samples/caret/*.bkl
 
 samples/checklst/*.cpp
 samples/checklst/*.h
-samples/checklst/*.def
 samples/checklst/*.rc
 samples/checklst/*.txt
 samples/checklst/makefile*
@@ -247,7 +241,6 @@ samples/checklst/*.bkl
 
 samples/config/*.cpp
 samples/config/*.h
-samples/config/*.def
 samples/config/makefile*
 samples/config/*.xbm
 samples/config/*.xpm
@@ -264,7 +257,6 @@ samples/console/*.cpp
 samples/console/*.h
 samples/console/makefile*
 samples/console/*.rc
-samples/console/*.def
 samples/console/*.bmp
 samples/console/*.xpm
 samples/console/*.xbm
@@ -276,7 +268,6 @@ samples/console/*.bkl
 
 samples/controls/*.cpp
 samples/controls/*.h
-samples/controls/*.def
 samples/controls/makefile*
 samples/controls/*.xbm
 samples/controls/*.xpm
@@ -293,7 +284,6 @@ samples/dialup/*.cpp
 samples/dialup/*.h
 samples/dialup/makefile*
 samples/dialup/*.rc
-samples/dialup/*.def
 samples/dialup/*.bmp
 samples/dialup/*.xpm
 samples/dialup/*.xbm
@@ -307,7 +297,6 @@ samples/display/*.cpp
 samples/display/*.h
 samples/display/makefile*
 samples/display/*.rc
-samples/display/*.def
 samples/display/*.bmp
 samples/display/*.xpm
 samples/display/*.xbm
@@ -319,7 +308,6 @@ samples/display/*.bkl
 
 samples/db/*.cpp
 samples/db/*.h
-samples/db/*.def
 samples/db/makefile*
 samples/db/*.xbm
 samples/db/*.xpm
@@ -333,7 +321,6 @@ samples/db/*.bkl
 
 samples/debugrpt/*.cpp
 samples/debugrpt/*.h
-samples/debugrpt/*.def
 samples/debugrpt/makefile*
 samples/debugrpt/*.xbm
 samples/debugrpt/*.xpm
@@ -349,7 +336,6 @@ samples/dnd/*.h
 samples/dnd/makefile*
 samples/dnd/*.rc
 samples/dnd/*.wxr
-samples/dnd/*.def
 samples/dnd/*.bmp
 samples/dnd/*.xbm
 samples/dnd/*.xpm
@@ -364,7 +350,6 @@ samples/drawing/*.cpp
 samples/drawing/*.h
 samples/drawing/makefile*
 samples/drawing/*.rc
-samples/drawing/*.def
 samples/drawing/*.bmp
 samples/drawing/*.xpm
 samples/drawing/*.xbm
@@ -376,7 +361,6 @@ samples/drawing/*.bkl
 
 samples/dialogs/*.h
 samples/dialogs/*.cpp
-samples/dialogs/*.def
 samples/dialogs/*.rc
 samples/dialogs/makefile*
 samples/dialogs/*.xbm
@@ -389,7 +373,6 @@ samples/dialogs/*.bkl
 
 samples/docview/*.h
 samples/docview/*.cpp
-samples/docview/*.def
 samples/docview/*.rc
 samples/docview/makefile*
 samples/docview/*.xbm
@@ -403,7 +386,6 @@ samples/docview/*.r
 
 samples/docvwmdi/*.h
 samples/docvwmdi/*.cpp
-samples/docvwmdi/*.def
 samples/docvwmdi/*.rc
 samples/docvwmdi/makefile*
 samples/docvwmdi/*.xbm
@@ -418,7 +400,6 @@ samples/dragimag/*.cpp
 samples/dragimag/*.h
 samples/dragimag/makefile*
 samples/dragimag/*.rc
-samples/dragimag/*.def
 samples/dragimag/*.ico
 samples/dragimag/*.xpm
 samples/dragimag/*.png
@@ -428,7 +409,6 @@ samples/dragimag/*.bkl
 
 samples/dynamic/*.cpp
 samples/dynamic/*.h
-samples/dynamic/*.def
 samples/dynamic/makefile*
 samples/dynamic/*.xbm
 samples/dynamic/*.xpm
@@ -442,7 +422,6 @@ samples/dynamic/*.bkl
 
 samples/erase/*.cpp
 samples/erase/*.h
-samples/erase/*.def
 samples/erase/makefile*
 samples/erase/*.xbm
 samples/erase/*.xpm
@@ -456,7 +435,6 @@ samples/erase/*.bkl
 
 samples/event/*.cpp
 samples/event/*.h
-samples/event/*.def
 samples/event/*.rc
 samples/event/*.inf
 samples/event/*.txt
@@ -472,7 +450,6 @@ samples/except/*.cpp
 samples/except/*.h
 samples/except/makefile*
 samples/except/*.rc
-samples/except/*.def
 samples/except/*.ico
 samples/except/*.xpm
 samples/except/*.txt
@@ -483,7 +460,6 @@ samples/exec/*.cpp
 samples/exec/*.h
 samples/exec/makefile*
 samples/exec/*.rc
-samples/exec/*.def
 samples/exec/*.ico
 samples/exec/*.xpm
 samples/exec/*.txt
@@ -494,7 +470,6 @@ samples/font/*.cpp
 samples/font/*.h
 samples/font/makefile*
 samples/font/*.rc
-samples/font/*.def
 samples/font/*.bmp
 samples/font/*.xpm
 samples/font/*.xbm
@@ -506,7 +481,6 @@ samples/font/*.bkl
 
 samples/grid/*.cpp
 samples/grid/*.h
-samples/grid/*.def
 samples/grid/*.rc
 samples/grid/*.txt
 samples/grid/makefile*
@@ -519,7 +493,6 @@ samples/grid/*.bkl
 
 samples/help/*.cpp
 samples/help/*.h
-samples/help/*.def
 samples/help/makefile*
 samples/help/*.xbm
 samples/help/*.xpm
@@ -551,7 +524,6 @@ samples/help/*.bkl
 
 samples/htlbox/*.cpp
 samples/htlbox/*.h
-samples/htlbox/*.def
 samples/htlbox/makefile*
 samples/htlbox/*.xpm
 samples/htlbox/*.ico
@@ -567,7 +539,6 @@ samples/html/about/*.cpp
 samples/html/about/*.h
 samples/html/about/makefile*
 samples/html/about/*.rc
-samples/html/about/*.def
 samples/html/about/*.bmp
 samples/html/about/*.xpm
 samples/html/about/*.xbm
@@ -583,7 +554,6 @@ samples/html/help/*.cpp
 samples/html/help/*.h
 samples/html/help/makefile*
 samples/html/help/*.rc
-samples/html/help/*.def
 samples/html/help/*.bmp
 samples/html/help/*.xpm
 samples/html/help/*.xbm
@@ -601,7 +571,6 @@ samples/html/htmlctrl/*.cpp
 samples/html/htmlctrl/*.h
 samples/html/htmlctrl/makefile*
 samples/html/htmlctrl/*.rc
-samples/html/htmlctrl/*.def
 samples/html/htmlctrl/*.bmp
 samples/html/htmlctrl/*.xpm
 samples/html/htmlctrl/*.xbm
@@ -616,7 +585,6 @@ samples/html/printing/*.h
 samples/html/printing/makefile*
 samples/html/printing/*.rc
 samples/html/printing/*.pro
-samples/html/printing/*.def
 samples/html/printing/*.bmp
 samples/html/printing/*.xpm
 samples/html/printing/*.xbm
@@ -630,7 +598,6 @@ samples/html/test/*.cpp
 samples/html/test/*.h
 samples/html/test/makefile*
 samples/html/test/*.rc
-samples/html/test/*.def
 samples/html/test/*.bmp
 samples/html/test/*.xpm
 samples/html/test/*.xbm
@@ -646,7 +613,6 @@ samples/html/virtual/*.cpp
 samples/html/virtual/*.h
 samples/html/virtual/makefile*
 samples/html/virtual/*.rc
-samples/html/virtual/*.def
 samples/html/virtual/*.bmp
 samples/html/virtual/*.xpm
 samples/html/virtual/*.xbm
@@ -661,7 +627,6 @@ samples/html/widget/*.cpp
 samples/html/widget/*.h
 samples/html/widget/makefile*
 samples/html/widget/*.rc
-samples/html/widget/*.def
 samples/html/widget/*.bmp
 samples/html/widget/*.xpm
 samples/html/widget/*.xbm
@@ -676,7 +641,6 @@ samples/html/zip/*.cpp
 samples/html/zip/*.h
 samples/html/zip/makefile*
 samples/html/zip/*.rc
-samples/html/zip/*.def
 samples/html/zip/*.bmp
 samples/html/zip/*.xpm
 samples/html/zip/*.xbm
@@ -692,7 +656,6 @@ samples/html/helpview/*.cpp
 samples/html/helpview/*.h
 samples/html/helpview/makefile*
 samples/html/helpview/*.rc
-samples/html/helpview/*.def
 samples/html/helpview/*.bmp
 samples/html/helpview/*.xpm
 samples/html/helpview/*.xbm
@@ -709,7 +672,6 @@ samples/image/*.cpp
 samples/image/*.h
 samples/image/makefile*
 samples/image/*.rc
-samples/image/*.def
 samples/image/*.bmp
 samples/image/*.xpm
 samples/image/*.xbm
@@ -728,7 +690,6 @@ samples/image/*.bkl
 
 samples/internat/*.cpp
 samples/internat/*.h
-samples/internat/*.def
 samples/internat/*.rc
 samples/internat/*.txt
 samples/internat/makefile*
@@ -773,7 +734,6 @@ samples/ipc/server.dos
 samples/ipc/client.g95
 samples/ipc/server.g95
 samples/ipc/*.rc
-samples/ipc/*.def
 samples/ipc/*.bmp
 samples/ipc/*.xpm
 samples/ipc/*.xbm
@@ -785,7 +745,6 @@ samples/ipc/*.bkl
 
 samples/joytest/*.h
 samples/joytest/*.cpp
-samples/joytest/*.def
 samples/joytest/*.rc
 samples/joytest/makefile.*
 samples/joytest/*.txt
@@ -796,7 +755,6 @@ samples/joytest/*.bkl
 
 samples/keyboard/*.cpp
 samples/keyboard/*.h
-samples/keyboard/*.def
 samples/keyboard/*.rc
 samples/keyboard/*.txt
 samples/keyboard/makefile*
@@ -809,7 +767,6 @@ samples/keyboard/*.bkl
 
 samples/layout/*.cpp
 samples/layout/*.h
-samples/layout/*.def
 samples/layout/makefile*
 samples/layout/*.xbm
 samples/layout/*.xpm
@@ -821,7 +778,6 @@ samples/layout/*.bkl
 
 samples/listbox/*.cpp
 samples/listbox/*.h
-samples/listbox/*.def
 samples/listbox/*.rc
 samples/listbox/*.txt
 samples/listbox/makefile*
@@ -830,7 +786,6 @@ samples/listbox/*.bkl
 
 samples/listctrl/*.cpp
 samples/listctrl/*.h
-samples/listctrl/*.def
 samples/listctrl/*.rc
 samples/listctrl/*.txt
 samples/listctrl/makefile*
@@ -847,7 +802,6 @@ samples/listctrl/*.bkl
 
 samples/mdi/*.cpp
 samples/mdi/*.h
-samples/mdi/*.def
 samples/mdi/makefile*
 samples/mdi/*.xbm
 samples/mdi/*.xpm
@@ -862,7 +816,6 @@ samples/mdi/*.bkl
 
 samples/mediaplayer/*.cpp
 samples/mediaplayer/*.h
-samples/mediaplayer/*.def
 samples/mediaplayer/makefile*
 samples/mediaplayer/*.xbm
 samples/mediaplayer/*.xpm
@@ -874,7 +827,6 @@ samples/menu/*.cpp
 samples/menu/*.h
 samples/menu/makefile*
 samples/menu/*.rc
-samples/menu/*.def
 samples/menu/*.bmp
 samples/menu/*.xpm
 samples/menu/*.xbm
@@ -886,7 +838,6 @@ samples/menu/*.bkl
 
 samples/memcheck/*.h
 samples/memcheck/*.cpp
-samples/memcheck/*.def
 samples/memcheck/*.rc
 samples/memcheck/makefile*
 samples/memcheck/*.xbm
@@ -899,7 +850,6 @@ samples/memcheck/*.bkl
 
 samples/minimal/*.cpp
 samples/minimal/*.h
-samples/minimal/*.def
 samples/minimal/makefile*
 samples/minimal/*.xbm
 samples/minimal/*.xpm
@@ -911,7 +861,6 @@ samples/minimal/*.r
 
 samples/minifram/*.h
 samples/minifram/*.cpp
-samples/minifram/*.def
 samples/minifram/*.rc
 samples/minifram/makefile*
 samples/minifram/*.xbm
@@ -940,7 +889,6 @@ samples/mobile/*.bkl
 
 samples/multimon/*.h
 samples/multimon/*.cpp
-samples/multimon/*.def
 samples/multimon/*.rc
 samples/multimon/makefile*
 samples/multimon/*.xbm
@@ -955,7 +903,6 @@ samples/notebook/*.cpp
 samples/notebook/*.h
 samples/notebook/makefile*
 samples/notebook/*.rc
-samples/notebook/*.def
 samples/notebook/*.bmp
 samples/notebook/*.xbm
 samples/notebook/*.xpm
@@ -966,7 +913,6 @@ samples/notebook/*.bkl
 
 samples/odbc/*.h
 samples/odbc/*.cpp
-samples/odbc/*.def
 samples/odbc/*.rc
 samples/odbc/makefile*
 samples/odbc/*.inf
@@ -1030,7 +976,6 @@ samples/popup/*.cpp
 samples/popup/*.h
 samples/popup/makefile*
 samples/popup/*.rc
-samples/popup/*.def
 samples/popup/*.bmp
 samples/popup/*.xpm
 samples/popup/*.ico
@@ -1041,7 +986,6 @@ samples/popup/*.bkl
 
 samples/printing/*.cpp
 samples/printing/*.h
-samples/printing/*.def
 samples/printing/makefile*
 samples/printing/*.xbm
 samples/printing/*.xpm
@@ -1055,7 +999,6 @@ samples/printing/*.bkl
 
 samples/propsize/*.cpp
 samples/propsize/*.h
-samples/propsize/*.def
 samples/propsize/makefile*
 samples/propsize/*.xbm
 samples/propsize/*.xpm
@@ -1067,7 +1010,6 @@ samples/propsize/*.bkl
 
 samples/render/*.cpp
 samples/render/*.h
-samples/render/*.def
 samples/render/makefile*
 samples/render/*.xbm
 samples/render/*.xpm
@@ -1079,7 +1021,6 @@ samples/render/*.bkl
 
 samples/richedit/*.cpp
 samples/richedit/*.h
-samples/richedit/*.def
 samples/richedit/makefile*
 samples/richedit/*.xbm
 samples/richedit/*.xpm
@@ -1095,17 +1036,15 @@ samples/rotate/*.cpp
 samples/rotate/*.h
 samples/rotate/makefile*
 samples/rotate/*.rc
-samples/rotate/*.def
 samples/rotate/*.ico
 samples/rotate/*.xpm
 samples/rotate/*.txt
-samples/rotate/*.bmp
+samples/rotate/*.png
 samples/rotate/*.pro
 samples/rotate/*.bkl
 
 samples/sashtest/*.cpp
 samples/sashtest/*.h
-samples/sashtest/*.def
 samples/sashtest/*.rc
 samples/sashtest/*.txt
 samples/sashtest/makefile*
@@ -1119,7 +1058,6 @@ samples/scroll/*.cpp
 samples/scroll/*.h
 samples/scroll/makefile*
 samples/scroll/*.rc
-samples/scroll/*.def
 samples/scroll/*.bmp
 samples/scroll/*.xpm
 samples/scroll/*.xbm
@@ -1133,7 +1071,6 @@ samples/scrollsub/*.cpp
 samples/scrollsub/*.h
 samples/scrollsub/makefile*
 samples/scrollsub/*.rc
-samples/scrollsub/*.def
 samples/scrollsub/*.bmp
 samples/scrollsub/*.xpm
 samples/scrollsub/*.xbm
@@ -1147,7 +1084,6 @@ samples/shaped/*.cpp
 samples/shaped/*.h
 samples/shaped/makefile*
 samples/shaped/*.rc
-samples/shaped/*.def
 samples/shaped/*.bmp
 samples/shaped/*.xpm
 samples/shaped/*.xbm
@@ -1159,7 +1095,6 @@ samples/shaped/*.bkl
 
 samples/splash/*.h
 samples/splash/*.cpp
-samples/splash/*.def
 samples/splash/*.rc
 samples/splash/makefile*
 samples/splash/*.xbm
@@ -1174,7 +1109,6 @@ samples/splash/*.bkl
 
 samples/splitter/*.cpp
 samples/splitter/*.h
-samples/splitter/*.def
 samples/splitter/*.rc
 samples/splitter/*.txt
 samples/splitter/makefile*
@@ -1187,7 +1121,6 @@ samples/splitter/*.bkl
 
 samples/sockets/*.cpp
 samples/sockets/*.h
-samples/sockets/*.def
 samples/sockets/makefile*
 samples/sockets/client.wat
 samples/sockets/server.wat
@@ -1212,7 +1145,6 @@ samples/sound/*.cpp
 samples/sound/*.h
 samples/sound/makefile*
 samples/sound/*.rc
-samples/sound/*.def
 samples/sound/*.ico
 samples/sound/*.xpm
 samples/sound/*.bmp
@@ -1224,7 +1156,6 @@ samples/statbar/*.cpp
 samples/statbar/*.h
 samples/statbar/makefile*
 samples/statbar/*.rc
-samples/statbar/*.def
 samples/statbar/*.ico
 samples/statbar/*.xpm
 samples/statbar/*.bmp
@@ -1236,7 +1167,6 @@ samples/taskbar/*.cpp
 samples/taskbar/*.h
 samples/taskbar/makefile.*
 samples/taskbar/*.rc
-samples/taskbar/*.def
 samples/taskbar/*.bmp
 samples/taskbar/*.ico
 samples/taskbar/*.txt
@@ -1246,7 +1176,6 @@ samples/text/*.cpp
 samples/text/*.h
 samples/text/makefile*
 samples/text/*.rc
-samples/text/*.def
 samples/text/*.bmp
 samples/text/*.xpm
 samples/text/*.xbm
@@ -1260,7 +1189,6 @@ samples/thread/*.cpp
 samples/thread/*.h
 samples/thread/makefile*
 samples/thread/*.rc
-samples/thread/*.def
 samples/thread/*.bmp
 samples/thread/*.xpm
 samples/thread/*.xbm
@@ -1272,7 +1200,6 @@ samples/thread/*.bkl
 
 samples/typetest/*.cpp
 samples/typetest/*.h
-samples/typetest/*.def
 samples/typetest/*.rc
 samples/typetest/*.txt
 samples/typetest/makefile*
@@ -1284,7 +1211,6 @@ samples/typetest/*.bkl
 
 samples/toolbar/*.cpp
 samples/toolbar/*.h
-samples/toolbar/*.def
 samples/toolbar/makefile*
 samples/toolbar/*.txt
 samples/toolbar/*.xbm
@@ -1300,7 +1226,6 @@ samples/toolbar/*.bkl
 
 samples/treectrl/*.cpp
 samples/treectrl/*.h
-samples/treectrl/*.def
 samples/treectrl/*.rc
 samples/treectrl/*.txt
 samples/treectrl/makefile*
@@ -1317,7 +1242,6 @@ samples/treectrl/*.bkl
 
 samples/validate/*.cpp
 samples/validate/*.h
-samples/validate/*.def
 samples/validate/*.rc
 samples/validate/*.inf
 samples/validate/*.txt
@@ -1339,7 +1263,6 @@ samples/widgets/*.cpp
 samples/widgets/*.h
 samples/widgets/makefile*
 samples/widgets/*.rc
-samples/widgets/*.def
 samples/widgets/*.ico
 samples/widgets/*.xpm
 samples/widgets/*.txt
@@ -1352,7 +1275,6 @@ samples/wizard/*.cpp
 samples/wizard/*.h
 samples/wizard/makefile*
 samples/wizard/*.rc
-samples/wizard/*.def
 samples/wizard/*.bmp
 samples/wizard/*.xpm
 samples/wizard/*.xbm
@@ -1367,7 +1289,6 @@ demos/makefile*
 
 demos/bombs/*.cpp
 demos/bombs/*.h
-demos/bombs/*.def
 demos/bombs/makefile*
 demos/bombs/*.xbm
 demos/bombs/*.xpm
@@ -1382,7 +1303,6 @@ demos/forty/*.cpp
 demos/forty/*.h
 demos/forty/makefile*
 demos/forty/*.rc
-demos/forty/*.def
 demos/forty/*.bmp
 demos/forty/*.xpm
 demos/forty/*.xbm
@@ -1396,7 +1316,6 @@ demos/forty/*.htm
 
 demos/fractal/*.cpp
 demos/fractal/*.h
-demos/fractal/*.def
 demos/fractal/makefile*
 demos/fractal/*.xbm
 demos/fractal/*.xpm
@@ -1410,7 +1329,6 @@ demos/life/*.inc
 demos/life/*.h
 demos/life/makefile*
 demos/life/*.rc
-demos/life/*.def
 demos/life/*.ico
 demos/life/*.xpm
 demos/life/*.txt
@@ -1422,7 +1340,6 @@ demos/life/*.bkl
 
 demos/poem/*.cpp
 demos/poem/*.h
-demos/poem/*.def
 demos/poem/*.rc
 demos/poem/*.inf
 demos/poem/*.txt
@@ -1437,7 +1354,6 @@ demos/poem/*.bkl
 
 demos/dbbrowse/*.cpp
 demos/dbbrowse/*.h
-demos/dbbrowse/*.def
 demos/dbbrowse/*.rc
 demos/dbbrowse/*.inf
 demos/dbbrowse/*.txt

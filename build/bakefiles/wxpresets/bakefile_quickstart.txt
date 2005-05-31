@@ -149,7 +149,7 @@ built. In Bakefile, you specify the target by creating a tag named with the
 target type. The possible names for targets are:
 
     exe         create an executable file
-    dll         create a shared libary
+    dll         create a shared library
     lib         create a static library
     module      create a library that is loaded at runtime (i.e. a plugin)
 

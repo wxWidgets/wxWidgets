@@ -75,7 +75,7 @@ wxString wxStandardPathsBase::AppendAppName(const wxString& dir)
 {
     wxString subdir(dir);
 
-    // empty string indicates that an error has occured, don't touch it then
+    // empty string indicates that an error has occurred, don't touch it then
     if ( !subdir.empty() )
     {
         const wxString appname = wxTheApp->GetAppName();

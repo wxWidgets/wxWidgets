@@ -223,7 +223,7 @@ public:
 protected:
     // do read up to size bytes of data into the provided buffer
     //
-    // this method should return 0 if EOF has been reached or an error occured
+    // this method should return 0 if EOF has been reached or an error occurred
     // (m_lasterror should be set accordingly as well) or the number of bytes
     // read
     virtual size_t OnSysRead(void *buffer, size_t size) = 0;

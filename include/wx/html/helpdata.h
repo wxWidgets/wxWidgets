@@ -153,8 +153,8 @@ private:
 };
 
 
-// State information of a search action. I'd have prefered to make this a nested
-// class inside wxHtmlHelpData, but that's against coding standards :-(
+// State information of a search action. I'd have preferred to make this a
+// nested class inside wxHtmlHelpData, but that's against coding standards :-(
 // Never construct this class yourself, obtain a copy from
 // wxHtmlHelpData::PrepareKeywordSearch(const wxString& key)
 class WXDLLIMPEXP_HTML wxHtmlSearchStatus

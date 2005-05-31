@@ -203,7 +203,7 @@ bool wxImageList::Replace(int index,
                                 GetHbitmapOf(bitmap), hbmpMask) != 0;
     if ( !ok )
     {
-        wxLogLastError(wxT("ImageList_Add()"));
+        wxLogLastError(wxT("ImageList_Replace()"));
     }
 
     ::DeleteObject(hbmpMask);

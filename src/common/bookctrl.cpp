@@ -128,7 +128,7 @@ wxSize wxBookCtrlBase::DoGetBestSize() const
             bestSize.y = childBestSize.y;
     }
 
-    // convert display area to window area, adding the size neccessary for the
+    // convert display area to window area, adding the size necessary for the
     // tabs
     wxSize best = CalcSizeFromPage(bestSize);
     CacheBestSize(best);

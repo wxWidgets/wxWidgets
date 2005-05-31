@@ -89,7 +89,7 @@ public:
     // Set HTML page and display it. !! source is HTML document itself,
     // it is NOT address/filename of HTML document. If you want to
     // specify document location, use LoadPage() istead
-    // Return value : false if an error occured, true otherwise
+    // Return value : false if an error occurred, true otherwise
     bool SetPage(const wxString& source);
 
     // Append to current page

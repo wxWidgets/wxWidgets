@@ -2995,7 +2995,7 @@ static void TestVCardRead()
 
         wxPrintf(_T("Full name from wxVCard API: %s\n"), value.c_str());
 
-        // now show how to deal with multiply occuring properties
+        // now show how to deal with multiply occurring properties
         DumpVCardAddresses(vcard);
         DumpVCardPhoneNumbers(vcard);
 
