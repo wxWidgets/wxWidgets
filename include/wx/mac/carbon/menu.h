@@ -153,17 +153,24 @@ public:
     // call this function to update it (m_menuBarFrame should be !NULL)
     void Refresh(bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL);
 
-  void MacInstallMenuBar() ;
-  static wxMenuBar* MacGetInstalledMenuBar() { return s_macInstalledMenuBar ; }
-  static void MacSetCommonMenuBar(wxMenuBar* menubar) { s_macCommonMenuBar=menubar; }
-  static wxMenuBar* MacGetCommonMenuBar() { return s_macCommonMenuBar; }
+    static void SetAutoWindowMenu( bool enable ) { s_macAutoWindowMenu = enable ; }
+    static bool GetAutoWindowMenu() { return s_macAutoWindowMenu ; }
 
+    void MacInstallMenuBar() ;
+    static wxMenuBar* MacGetInstalledMenuBar() { return s_macInstalledMenuBar ; }
+    static void MacSetCommonMenuBar(wxMenuBar* menubar) { s_macCommonMenuBar=menubar; }
+    static wxMenuBar* MacGetCommonMenuBar() { return s_macCommonMenuBar; }
+
+
+    static WXHMENU MacGetWindowMenuHMenu() { return s_macWindowMenuHandle ; }
 protected:
     // common part of all ctors
     void Init();
     wxWindow        *m_invokingWindow;
 
-    wxArrayString m_titles;
+    wxArrayString   m_titles;
+    static bool     s_macAutoWindowMenu ;
+    static WXHMENU  s_macWindowMenuHandle ;
 
 private:
   static wxMenuBar*            s_macInstalledMenuBar ;
