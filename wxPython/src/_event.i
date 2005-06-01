@@ -113,7 +113,9 @@ wxEventType wxNewEventType();
 %constant wxEventType wxEVT_SCROLL_PAGEDOWN;
 %constant wxEventType wxEVT_SCROLL_THUMBTRACK;
 %constant wxEventType wxEVT_SCROLL_THUMBRELEASE;
-%constant wxEventType wxEVT_SCROLL_ENDSCROLL;
+%constant wxEventType wxEVT_SCROLL_CHANGED;
+%pythoncode { wxEVT_SCROLL_ENDSCROLL = wxEVT_SCROLL_CHANGED }
+
 
 // Scroll events from wxWindow
 %constant wxEventType wxEVT_SCROLLWIN_TOP;
@@ -282,7 +284,7 @@ EVT_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP,
                                wxEVT_SCROLL_PAGEDOWN, 
                                wxEVT_SCROLL_THUMBTRACK, 
                                wxEVT_SCROLL_THUMBRELEASE, 
-                               wxEVT_SCROLL_ENDSCROLL,
+                               wxEVT_SCROLL_CHANGED,
                                ])
 
 EVT_SCROLL_TOP = wx.PyEventBinder( wxEVT_SCROLL_TOP )
@@ -293,8 +295,9 @@ EVT_SCROLL_PAGEUP = wx.PyEventBinder( wxEVT_SCROLL_PAGEUP )
 EVT_SCROLL_PAGEDOWN = wx.PyEventBinder( wxEVT_SCROLL_PAGEDOWN )
 EVT_SCROLL_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK )
 EVT_SCROLL_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLL_THUMBRELEASE )
-EVT_SCROLL_ENDSCROLL = wx.PyEventBinder( wxEVT_SCROLL_ENDSCROLL )
-
+EVT_SCROLL_CHANGED = wx.PyEventBinder( wxEVT_SCROLL_CHANGED )
+EVT_SCROLL_ENDSCROLL = EVT_SCROLL_CHANGED
+     
 %# Scrolling from wx.Slider and wx.ScrollBar, with an id
 EVT_COMMAND_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP, 
                                        wxEVT_SCROLL_BOTTOM, 
@@ -304,7 +307,7 @@ EVT_COMMAND_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP,
                                        wxEVT_SCROLL_PAGEDOWN, 
                                        wxEVT_SCROLL_THUMBTRACK, 
                                        wxEVT_SCROLL_THUMBRELEASE,
-                                       wxEVT_SCROLL_ENDSCROLL,
+                                       wxEVT_SCROLL_CHANGED,
                                        ], 1)
 
 EVT_COMMAND_SCROLL_TOP = wx.PyEventBinder( wxEVT_SCROLL_TOP, 1)
@@ -315,7 +318,8 @@ EVT_COMMAND_SCROLL_PAGEUP = wx.PyEventBinder( wxEVT_SCROLL_PAGEUP, 1)
 EVT_COMMAND_SCROLL_PAGEDOWN = wx.PyEventBinder( wxEVT_SCROLL_PAGEDOWN, 1)
 EVT_COMMAND_SCROLL_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK, 1)
 EVT_COMMAND_SCROLL_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLL_THUMBRELEASE, 1)
-EVT_COMMAND_SCROLL_ENDSCROLL = wx.PyEventBinder( wxEVT_SCROLL_ENDSCROLL, 1)
+EVT_COMMAND_SCROLL_CHANGED = wx.PyEventBinder( wxEVT_SCROLL_CHANGED, 1)
+EVT_COMMAND_SCROLL_ENDSCROLL = EVT_COMMAND_SCROLL_CHANGED
 
 EVT_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_BUTTON_CLICKED, 1)
 EVT_CHECKBOX = wx.PyEventBinder( wxEVT_COMMAND_CHECKBOX_CLICKED, 1)
