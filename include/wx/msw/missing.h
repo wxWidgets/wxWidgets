@@ -15,6 +15,11 @@
  * The following are required for VC++ 6.
  */
 
+// Needed by cursor.cpp
+#ifndef IDC_HAND
+    #define IDC_HAND MAKEINTRESOURCE(32649)
+#endif
+
 // Needed by strconv.cpp
 #ifndef WC_NO_BEST_FIT_CHARS
     #define WC_NO_BEST_FIT_CHARS 0x400
