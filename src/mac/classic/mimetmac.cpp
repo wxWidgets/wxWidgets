@@ -48,23 +48,23 @@ class WXDLLEXPORT wxIcon;
 
 bool wxFileTypeImpl::SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int index)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxFileTypeImpl::GetCommand(wxString *command, const char *verb) const
 {
-    return FALSE;
+    return false;
 }
 
 // @@ this function is half implemented
 bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
@@ -72,35 +72,35 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
     if ( m_strFileType.Length() > 0 )
     {
         *mimeType = m_strFileType ;
-        return TRUE ;
+        return true ;
     }
     else
-    return FALSE;
+    return false;
 }
 
 bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
 {
     wxString s;
-    
+
     if (GetMimeType(&s))
     {
         mimeTypes.Clear();
         mimeTypes.Add(s);
-        return TRUE;
+        return true;
     }
-    else 
-        return FALSE;
+    else
+        return false;
 }
 
 bool wxFileTypeImpl::GetIcon(wxIconLocation *WXUNUSED(icon)) const
 {
     // no such file type or no value or incorrect icon entry
-    return FALSE;
+    return false;
 }
 
 bool wxFileTypeImpl::GetDescription(wxString *desc) const
 {
-    return FALSE;
+    return false;
 }
 
 size_t
@@ -223,6 +223,6 @@ wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 bool
 wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
 {
-    return FALSE;
+    return false;
 }
 

@@ -1213,7 +1213,7 @@ public:
     int GetValue()
     {
         int nOut;
-        CFNumberGetValue( m_cfnRef,	
+        CFNumberGetValue( m_cfnRef,
                           kCFNumberIntType,
                           &nOut
                         );
@@ -1462,7 +1462,7 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
             wxCFDictionary cfdInfo;
             bool bInfoOpenSuccess = false;
             wxFile indictfile;
-            if(indictfile.Open(sInfoPath, wxFile::read));
+            if(indictfile.Open(sInfoPath, wxFile::read))
             {
                 CFIndex cfiBufLen = (CFIndex) indictfile.Length();
                 const UInt8* pBuffer = new UInt8[cfiBufLen];
@@ -1805,7 +1805,7 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
             wxCFDictionary cfdInfo;
             bool bInfoOpenSuccess = false;
             wxFile indictfile;
-            if(indictfile.Open(sInfoPath, wxFile::read));
+            if(indictfile.Open(sInfoPath, wxFile::read))
             {
                 CFIndex cfiBufLen = (CFIndex) indictfile.Length();
                 const UInt8* pBuffer = new UInt8[cfiBufLen];
