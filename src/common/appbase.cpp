@@ -70,6 +70,9 @@
 #ifdef __WXDEBUG__
     #ifdef wxUSE_STACKWALKER
         #include "wx/stackwalk.h"
+        #ifdef __WXMSW__
+            #include "wx/msw/debughlp.h"
+        #endif
     #endif // wxUSE_STACKWALKER
 #endif // __WXDEBUG__
 
@@ -707,35 +710,14 @@ bool DoShowAssertDialog(const wxString& msg)
     return false;
 }
 
-// show the assert modal dialog
-static
-void ShowAssertDialog(const wxChar *szFile,
-                      int nLine,
-                      const wxChar *szCond,
-                      const wxChar *szMsg,
-                      wxAppTraits *traits)
+static wxString GetAssertStackTrace()
 {
-    // this variable can be set to true to suppress "assert failure" messages
-    static bool s_bNoAsserts = false;
+    wxString stackTrace;
 
-    wxString msg;
-    msg.reserve(2048);
+    // check that we can get the stack trace before trying to do it
+    if ( !wxDbgHelpDLL::Init() )
+        return stackTrace;
 
-    // make life easier for people using VC++ IDE by using this format: like
-    // this, clicking on the message will take us immediately to the place of
-    // the failed assert
-    msg.Printf(wxT("%s(%d): assert \"%s\" failed"), szFile, nLine, szCond);
-
-    if ( szMsg )
-    {
-        msg << _T(": ") << szMsg;
-    }
-    else // no message given
-    {
-        msg << _T('.');
-    }
-
-#if wxUSE_STACKWALKER
     class StackDump : public wxStackWalker
     {
     public:
@@ -779,23 +761,52 @@ void ShowAssertDialog(const wxChar *szFile,
 
     StackDump dump;
     dump.Walk(5); // don't show OnAssert() call itself
-    wxString stackTrace = dump.GetStackTrace();
+    stackTrace = dump.GetStackTrace();
 
     // don't show more than maxLines or we could get a dialog too tall to be
     // shown on screen: 20 should be ok everywhere as even with 15 pixel high
     // characters it is still only 300 pixels...
-    const int maxLines = 20;
-    int count = stackTrace.Freq(wxT('\n'));
-    if (count > maxLines)
+    static const int maxLines = 20;
+    const int count = stackTrace.Freq(wxT('\n'));
+    for ( int i = 0; i < count - maxLines; i++ )
+        stackTrace = stackTrace.BeforeLast(wxT('\n'));
+
+    return stackTrace;
+}
+
+// show the assert modal dialog
+static
+void ShowAssertDialog(const wxChar *szFile,
+                      int nLine,
+                      const wxChar *szCond,
+                      const wxChar *szMsg,
+                      wxAppTraits *traits)
+{
+    // this variable can be set to true to suppress "assert failure" messages
+    static bool s_bNoAsserts = false;
+
+    wxString msg;
+    msg.reserve(2048);
+
+    // make life easier for people using VC++ IDE by using this format: like
+    // this, clicking on the message will take us immediately to the place of
+    // the failed assert
+    msg.Printf(wxT("%s(%d): assert \"%s\" failed"), szFile, nLine, szCond);
+
+    if ( szMsg )
     {
-        int i;
-        for (i = 0; i < count - maxLines; i++)
-            stackTrace = stackTrace.BeforeLast(wxT('\n'));
+        msg << _T(": ") << szMsg;
     }
+    else // no message given
+    {
+        msg << _T('.');
+    }
+
+#if wxUSE_STACKWALKER
+    const wxString stackTrace = GetAssertStackTrace();
     if ( !stackTrace.empty() )
     {
-        msg << _T("\n\nCall stack:\n")
-            << stackTrace;
+        msg << _T("\n\nCall stack:\n") << stackTrace;
     }
 #endif // wxUSE_STACKWALKER
 
