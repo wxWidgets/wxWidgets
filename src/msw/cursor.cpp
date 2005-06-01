@@ -40,7 +40,9 @@
 
 #include "wx/module.h"
 #include "wx/image.h"
+
 #include "wx/msw/private.h"
+#include "wx/msw/missing.h" // IDC_HAND
 
 // define functions missing in MicroWin
 #ifdef __WXMICROWIN__
