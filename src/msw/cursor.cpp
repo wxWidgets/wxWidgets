@@ -311,10 +311,15 @@ wxCursor::wxCursor(int idCursor)
         { false, _T("WXCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
         { false, _T("WXCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
         {  true, IDC_ARROW                   }, // WXCURSOR_CHAR
+        
         // Displays as an I-beam on XP, so use a cursor file
 //        {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
         {  false, _T("WXCURSOR_CROSS")       }, // WXCURSOR_CROSS
-        { false, _T("WXCURSOR_HAND")         }, // wxCURSOR_HAND
+
+        // See special handling below for wxCURSOR_HAND
+//        { false, _T("WXCURSOR_HAND")         }, // wxCURSOR_HAND
+        {  true, IDC_HAND                    }, // wxCURSOR_HAND
+        
         {  true, IDC_IBEAM                   }, // WXCURSOR_IBEAM
         {  true, IDC_ARROW                   }, // WXCURSOR_LEFT_BUTTON
         { false, _T("WXCURSOR_MAGNIFIER")    }, // wxCURSOR_MAGNIFIER
@@ -347,18 +352,25 @@ wxCursor::wxCursor(int idCursor)
                  _T("invalid cursor id in wxCursor() ctor") );
 
     const StdCursor& stdCursor = stdCursors[idCursor];
+    bool deleteLater = !stdCursor.isStd;
 
     HCURSOR hcursor = ::LoadCursor(stdCursor.isStd ? NULL : wxGetInstance(),
                                    stdCursor.name);
 
+    // IDC_HAND may not be available on some versions of Windows.
+    if ( !hcursor && idCursor == wxCURSOR_HAND)
+    {
+        hcursor = ::LoadCursor(wxGetInstance(), _T("WXCURSOR_HAND"));
+        deleteLater = true;
+    }
+    
     if ( !hcursor )
     {
         wxLogLastError(_T("LoadCursor"));
     }
     else
     {
-        m_refData = new wxCursorRefData(hcursor,
-                                        !stdCursor.isStd /* delete it later */);
+        m_refData = new wxCursorRefData(hcursor, deleteLater);
     }
 }
 
