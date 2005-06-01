@@ -696,6 +696,7 @@ public:
     bool HasEditor() const { return m_editor != NULL; }
     bool HasReadWriteMode() const { return m_isReadOnly != Unset; }
     bool HasOverflowMode() const { return m_overflow != UnsetOverflow; }
+    bool HasSize() const { return m_sizeRows != 1 || m_sizeCols != 1; }
 
     const wxColour& GetTextColour() const;
     const wxColour& GetBackgroundColour() const;

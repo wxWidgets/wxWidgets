@@ -2142,8 +2142,8 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
         mergefrom->GetAlignment( &hAlign, &vAlign);
         SetAlignment(hAlign, vAlign);
     }
-
-    mergefrom->GetSize( &m_sizeRows, &m_sizeCols );
+    if ( !HasSize() && mergefrom->HasSize() )
+        mergefrom->GetSize( &m_sizeRows, &m_sizeCols );
 
     // Directly access member functions as GetRender/Editor don't just return
     // m_renderer/m_editor
@@ -2913,6 +2913,7 @@ wxGridCellAttr *wxGridTableBase::GetAttr(int row, int col, wxGridCellAttr::wxAtt
     else
         return (wxGridCellAttr *)NULL;
 }
+
 
 void wxGridTableBase::SetAttr(wxGridCellAttr* attr, int row, int col)
 {
