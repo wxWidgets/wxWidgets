@@ -220,6 +220,7 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip)
     {
         wxLogError(_("Failed to get stack backtrace:\n%s"),
                    wxDbgHelpDLL::GetErrorMessage().c_str());
+        return;
     }
 
     // according to MSDN, the first parameter should be just a unique value and
