@@ -875,7 +875,7 @@ wxEVT_SCROLL_PAGEUP = wx._core.wxEVT_SCROLL_PAGEUP
 wxEVT_SCROLL_PAGEDOWN = wx._core.wxEVT_SCROLL_PAGEDOWN
 wxEVT_SCROLL_THUMBTRACK = wx._core.wxEVT_SCROLL_THUMBTRACK
 wxEVT_SCROLL_THUMBRELEASE = wx._core.wxEVT_SCROLL_THUMBRELEASE
-wxEVT_SCROLL_ENDSCROLL = wx._core.wxEVT_SCROLL_ENDSCROLL
+wxEVT_SCROLL_CHANGED = wx._core.wxEVT_SCROLL_CHANGED
 wxEVT_SCROLLWIN_TOP = wx._core.wxEVT_SCROLLWIN_TOP
 wxEVT_SCROLLWIN_BOTTOM = wx._core.wxEVT_SCROLLWIN_BOTTOM
 wxEVT_SCROLLWIN_LINEUP = wx._core.wxEVT_SCROLLWIN_LINEUP
@@ -1098,6 +1098,8 @@ wxMenu = wx._core.Menu
 wxMenuPtr = wx._core.MenuPtr
 wxMenuBar = wx._core.MenuBar
 wxMenuBarPtr = wx._core.MenuBarPtr
+wxMenuBar_SetAutoWindowMenu = wx._core.MenuBar_SetAutoWindowMenu
+wxMenuBar_GetAutoWindowMenu = wx._core.MenuBar_GetAutoWindowMenu
 wxMenuItem = wx._core.MenuItem
 wxMenuItemPtr = wx._core.MenuItemPtr
 wxMenuItem_GetLabelFromText = wx._core.MenuItem_GetLabelFromText
@@ -1205,6 +1207,7 @@ wxDLG_SZE = wx._core.DLG_SZE
 wxPyAssertionError = wx._core.PyAssertionError
 wxMemoryFSHandler_AddFile = wx._core.MemoryFSHandler_AddFile
 wxInitAllImageHandlers = wx._core.InitAllImageHandlers
+wxEVT_SCROLL_ENDSCROLL = wx._core.wxEVT_SCROLL_ENDSCROLL
 
 
 d = globals()

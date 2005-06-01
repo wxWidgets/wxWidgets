@@ -42,9 +42,10 @@ PyAssertionError
 MemoryFSHandler_AddFile
 InitAllImageHandlers
 
+wxEVT_SCROLL_ENDSCROLL
 
 # With the * on the end these will cause code to be added that 
-# will scan for other names in the source module tha have the
+# will scan for other names in the source module that have the
 # given prefix and will put a reference in the local module.
 EVT*
 WXK*

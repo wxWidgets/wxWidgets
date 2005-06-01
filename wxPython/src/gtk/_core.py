@@ -3589,7 +3589,8 @@ wxEVT_SCROLL_PAGEUP = _core_.wxEVT_SCROLL_PAGEUP
 wxEVT_SCROLL_PAGEDOWN = _core_.wxEVT_SCROLL_PAGEDOWN
 wxEVT_SCROLL_THUMBTRACK = _core_.wxEVT_SCROLL_THUMBTRACK
 wxEVT_SCROLL_THUMBRELEASE = _core_.wxEVT_SCROLL_THUMBRELEASE
-wxEVT_SCROLL_ENDSCROLL = _core_.wxEVT_SCROLL_ENDSCROLL
+wxEVT_SCROLL_CHANGED = _core_.wxEVT_SCROLL_CHANGED
+wxEVT_SCROLL_ENDSCROLL = wxEVT_SCROLL_CHANGED 
 wxEVT_SCROLLWIN_TOP = _core_.wxEVT_SCROLLWIN_TOP
 wxEVT_SCROLLWIN_BOTTOM = _core_.wxEVT_SCROLLWIN_BOTTOM
 wxEVT_SCROLLWIN_LINEUP = _core_.wxEVT_SCROLLWIN_LINEUP
@@ -3745,7 +3746,7 @@ EVT_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP,
                                wxEVT_SCROLL_PAGEDOWN, 
                                wxEVT_SCROLL_THUMBTRACK, 
                                wxEVT_SCROLL_THUMBRELEASE, 
-                               wxEVT_SCROLL_ENDSCROLL,
+                               wxEVT_SCROLL_CHANGED,
                                ])
 
 EVT_SCROLL_TOP = wx.PyEventBinder( wxEVT_SCROLL_TOP )
@@ -3756,8 +3757,9 @@ EVT_SCROLL_PAGEUP = wx.PyEventBinder( wxEVT_SCROLL_PAGEUP )
 EVT_SCROLL_PAGEDOWN = wx.PyEventBinder( wxEVT_SCROLL_PAGEDOWN )
 EVT_SCROLL_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK )
 EVT_SCROLL_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLL_THUMBRELEASE )
-EVT_SCROLL_ENDSCROLL = wx.PyEventBinder( wxEVT_SCROLL_ENDSCROLL )
-
+EVT_SCROLL_CHANGED = wx.PyEventBinder( wxEVT_SCROLL_CHANGED )
+EVT_SCROLL_ENDSCROLL = EVT_SCROLL_CHANGED
+     
 # Scrolling from wx.Slider and wx.ScrollBar, with an id
 EVT_COMMAND_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP, 
                                        wxEVT_SCROLL_BOTTOM, 
@@ -3767,7 +3769,7 @@ EVT_COMMAND_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP,
                                        wxEVT_SCROLL_PAGEDOWN, 
                                        wxEVT_SCROLL_THUMBTRACK, 
                                        wxEVT_SCROLL_THUMBRELEASE,
-                                       wxEVT_SCROLL_ENDSCROLL,
+                                       wxEVT_SCROLL_CHANGED,
                                        ], 1)
 
 EVT_COMMAND_SCROLL_TOP = wx.PyEventBinder( wxEVT_SCROLL_TOP, 1)
@@ -3778,7 +3780,8 @@ EVT_COMMAND_SCROLL_PAGEUP = wx.PyEventBinder( wxEVT_SCROLL_PAGEUP, 1)
 EVT_COMMAND_SCROLL_PAGEDOWN = wx.PyEventBinder( wxEVT_SCROLL_PAGEDOWN, 1)
 EVT_COMMAND_SCROLL_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK, 1)
 EVT_COMMAND_SCROLL_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLL_THUMBRELEASE, 1)
-EVT_COMMAND_SCROLL_ENDSCROLL = wx.PyEventBinder( wxEVT_SCROLL_ENDSCROLL, 1)
+EVT_COMMAND_SCROLL_CHANGED = wx.PyEventBinder( wxEVT_SCROLL_CHANGED, 1)
+EVT_COMMAND_SCROLL_ENDSCROLL = EVT_COMMAND_SCROLL_CHANGED
 
 EVT_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_BUTTON_CLICKED, 1)
 EVT_CHECKBOX = wx.PyEventBinder( wxEVT_COMMAND_CHECKBOX_CLICKED, 1)
@@ -10544,6 +10547,16 @@ class MenuBar(Window):
         """Detach(self)"""
         return _core_.MenuBar_Detach(*args, **kwargs)
 
+    def SetAutoWindowMenu(*args, **kwargs):
+        """SetAutoWindowMenu(bool enable)"""
+        return _core_.MenuBar_SetAutoWindowMenu(*args, **kwargs)
+
+    SetAutoWindowMenu = staticmethod(SetAutoWindowMenu)
+    def GetAutoWindowMenu(*args, **kwargs):
+        """GetAutoWindowMenu() -> bool"""
+        return _core_.MenuBar_GetAutoWindowMenu(*args, **kwargs)
+
+    GetAutoWindowMenu = staticmethod(GetAutoWindowMenu)
 
 class MenuBarPtr(MenuBar):
     def __init__(self, this):
@@ -10551,6 +10564,14 @@ class MenuBarPtr(MenuBar):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MenuBar
 _core_.MenuBar_swigregister(MenuBarPtr)
+
+def MenuBar_SetAutoWindowMenu(*args, **kwargs):
+    """MenuBar_SetAutoWindowMenu(bool enable)"""
+    return _core_.MenuBar_SetAutoWindowMenu(*args, **kwargs)
+
+def MenuBar_GetAutoWindowMenu(*args, **kwargs):
+    """MenuBar_GetAutoWindowMenu() -> bool"""
+    return _core_.MenuBar_GetAutoWindowMenu(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
