@@ -51,6 +51,30 @@ AC_DEFUN([AM_OPTIONS_WXCONFIG],
                 wx_config_exec_prefix="$withval", wx_config_exec_prefix="")
 ])
 
+dnl Helper macro for checking if wx version is at least $1.$2.$3, set's
+dnl wx_ver_ok=yes if it is:
+AC_DEFUN([_WX_PRIVATE_CHECK_VERSION],
+[
+    wx_ver_ok=""
+    if test "x$WX_VERSION" != x ; then
+      if test $wx_config_major_version -gt $1; then
+        wx_ver_ok=yes
+      else
+        if test $wx_config_major_version -eq $1; then
+           if test $wx_config_minor_version -gt $2; then
+              wx_ver_ok=yes
+           else
+              if test $wx_config_minor_version -eq $2; then
+                 if test $wx_config_micro_version -ge $3; then
+                    wx_ver_ok=yes
+                 fi
+              fi
+           fi
+        fi
+      fi
+    fi
+])
+
 dnl ---------------------------------------------------------------------------
 dnl AM_PATH_WXCONFIG(VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl                  [, WX-LIBS [, ADDITIONAL-WX-CONFIG-FLAGS]]]])
@@ -138,24 +162,9 @@ AC_DEFUN([AM_PATH_WXCONFIG],
     wx_requested_micro_version=`echo $min_wx_version | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
-    wx_ver_ok=""
-    if test "x$WX_VERSION" != x ; then
-      if test $wx_config_major_version -gt $wx_requested_major_version; then
-        wx_ver_ok=yes
-      else
-        if test $wx_config_major_version -eq $wx_requested_major_version; then
-           if test $wx_config_minor_version -gt $wx_requested_minor_version; then
-              wx_ver_ok=yes
-           else
-              if test $wx_config_minor_version -eq $wx_requested_minor_version; then
-                 if test $wx_config_micro_version -ge $wx_requested_micro_version; then
-                    wx_ver_ok=yes
-                 fi
-              fi
-           fi
-        fi
-      fi
-    fi
+    _WX_PRIVATE_CHECK_VERSION([$wx_requested_major_version],
+                              [$wx_requested_minor_version],
+                              [$wx_requested_micro_version])
 
     if test -n "$wx_ver_ok"; then
 
@@ -248,4 +257,89 @@ AC_DEFUN([AM_PATH_WXCONFIG],
   AC_SUBST(WX_LIBS)
   AC_SUBST(WX_LIBS_STATIC)
   AC_SUBST(WX_VERSION)
+])
+
+dnl ---------------------------------------------------------------------------
+dnl Get information on the wxrc program for making C++, Python and xrs
+dnl resource files.
+dnl
+dnl     AC_ARG_ENABLE(...)
+dnl     AC_ARG_WITH(...)
+dnl        ...
+dnl     AM_OPTIONS_WXCONFIG
+dnl     AM_OPTIONS_WXRC
+dnl        ...
+dnl     AM_PATH_WXCONFIG(2.6.0, wxWin=1)
+dnl     if test "$wxWin" != 1; then
+dnl        AC_MSG_ERROR([
+dnl                wxWidgets must be installed on your system
+dnl                but wx-config script couldn't be found.
+dnl
+dnl                Please check that wx-config is in path, the directory
+dnl                where wxWidgets libraries are installed (returned by
+dnl                'wx-config --libs' command) is in LD_LIBRARY_PATH or
+dnl                equivalent variable and wxWidgets version is 2.6.0 or above.
+dnl        ])
+dnl     fi
+dnl
+dnl     AM_PATH_WXRC([HAVE_WXRC=1], [HAVE_WXRC=0])
+dnl     if test "x$HAVE_WXRC" != x1; then
+dnl         AC_MSG_ERROR([
+dnl                The wxrc program was not installed or not found.
+dnl     
+dnl                Please check the wxWidgets installation.
+dnl         ])
+dnl     fi
+dnl
+dnl     CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
+dnl     CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
+dnl     CFLAGS="$CFLAGS $WX_CFLAGS_ONLY"
+dnl
+dnl     LDFLAGS="$LDFLAGS $WX_LIBS"
+dnl ---------------------------------------------------------------------------
+
+
+
+dnl ---------------------------------------------------------------------------
+dnl AM_PATH_WXRC([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl
+dnl Test for wxWidgets' wxrc program for creating either C++, Python or XRS
+dnl resources.  The variable WXRC will be set and substituted in the configure
+dnl script and Makefiles.
+dnl
+dnl Example use:
+dnl   AM_PATH_WXRC([wxrc=1], [wxrc=0])
+dnl ---------------------------------------------------------------------------
+
+dnl
+dnl wxrc program from the wx-config script
+dnl
+AC_DEFUN([AM_PATH_WXRC],
+[
+  AC_ARG_VAR([WXRC], [Path to wxWidget's wxrc resource compiler])
+    
+  if test "x$WX_CONFIG_NAME" = x; then
+    AC_MSG_ERROR([The wxrc tests must run after wxWidgets test.])
+  else
+    
+    AC_MSG_CHECKING([for wxrc])
+    
+    if test "x$WXRC" = x ; then
+      dnl wx-config --utility is a new addition to wxWidgets:
+      _WX_PRIVATE_CHECK_VERSION(2,5,3)
+      if test -n "$wx_ver_ok"; then
+        WXRC=`$WX_CONFIG_WITH_ARGS --utility=wxrc`
+      fi
+    fi
+
+    if test "x$WXRC" = x ; then
+      AC_MSG_RESULT([not found])
+      ifelse([$2], , :, [$2])
+    else
+      AC_MSG_RESULT([$WXRC])
+      ifelse([$1], , :, [$1])
+    fi
+    
+    AC_SUBST(WXRC)
+  fi
 ])
