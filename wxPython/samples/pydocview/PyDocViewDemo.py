@@ -27,14 +27,15 @@ _ = wx.GetTranslation
 
 class TextEditorApplication(pydocview.DocApp):
 
-
+    SPLASH = "splash.png"
+    
     def OnInit(self):
         # Call the super - this is important!!!
         pydocview.DocApp.OnInit(self)
 
         # Show the splash dialog while everything is loading up
-        if os.path.exists("splash.png"):
-            self.ShowSplash("splash.png")
+        if os.path.exists(TextEditorApplication.SPLASH):
+            self.ShowSplash(TextEditorApplication.SPLASH)
 
         # Set the name and the icon
         self.SetAppName(_("wxPython PyDocView Demo"))
@@ -63,8 +64,8 @@ class TextEditorApplication(pydocview.DocApp):
         optionsService        = self.InstallService(pydocview.DocOptionsService(supportedModes=wx.lib.docview.DOC_MDI))
         windowMenuService     = self.InstallService(pydocview.WindowMenuService())
         filePropertiesService = self.InstallService(pydocview.FilePropertiesService())
-        if os.path.exists("splash.jpg"):
-            aboutService      = self.InstallService(pydocview.AboutService(image=wx.Image("splash.jpg")))
+        if os.path.exists(TextEditorApplication.SPLASH):
+            aboutService      = self.InstallService(pydocview.AboutService(image=wx.Image(TextEditorApplication.SPLASH)))
         else:
             aboutService      = self.InstallService(pydocview.AboutService())
             
@@ -82,7 +83,7 @@ class TextEditorApplication(pydocview.DocApp):
             textTemplate.CreateDocument('', docview.DOC_NEW).OnNewDocument()
 
         # Close the splash dialog
-        if os.path.exists("splash.jpg"):
+        if os.path.exists(TextEditorApplication.SPLASH):
             self.CloseSplash()
         
         # Show the tips dialog
