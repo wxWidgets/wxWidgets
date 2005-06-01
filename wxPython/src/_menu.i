@@ -299,6 +299,16 @@ public:
 
     // called before deleting the menubar normally
     virtual void Detach();
+
+#ifdef __WXMAC__
+    static void SetAutoWindowMenu( bool enable );
+    static bool GetAutoWindowMenu();
+#else
+    %extend {
+        static void SetAutoWindowMenu( bool enable ) {}
+        static bool GetAutoWindowMenu() { return false; }
+    }
+#endif
 };
 
 //---------------------------------------------------------------------------
