@@ -62,7 +62,7 @@ static void ColouriseNncrontabDoc(unsigned int startPos, int length, int, WordLi
 					state = SCE_NNCRONTAB_TASK;
 					styler.ColourTo(i,SCE_NNCRONTAB_TASK);
 				}
-				  else if( ch == '\\' && (styler.SafeGetCharAt(i+1) == ' ' || 
+				  else if( ch == '\\' && (styler.SafeGetCharAt(i+1) == ' ' ||
 										 styler.SafeGetCharAt(i+1) == '\t')) {
 					// signals the start of an extended comment...
 					state = SCE_NNCRONTAB_COMMENT;
@@ -208,4 +208,11 @@ static void ColouriseNncrontabDoc(unsigned int startPos, int length, int, WordLi
 	delete []buffer;
 }
 
-LexerModule lmNncrontab(SCLEX_NNCRONTAB, ColouriseNncrontabDoc, "nncrontab");
+static const char * const cronWordListDesc[] = {
+	"Section keywords and Forth words",
+	"nnCrontab keywords",
+	"Modifiers",
+	0
+};
+
+LexerModule lmNncrontab(SCLEX_NNCRONTAB, ColouriseNncrontabDoc, "nncrontab", 0, cronWordListDesc);

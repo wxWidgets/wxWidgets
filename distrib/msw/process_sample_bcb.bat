@@ -1,5 +1,5 @@
 @echo off
-if "%WXWIN%=="" goto nowxdir
+if "%WXWIN%"=="" goto nowxdir
 if "%1"=="" goto bad
 if not exist %1.cpp goto nocpp
 find /c "BIDE" %1.cpp

@@ -35,6 +35,7 @@
     #include "wx/msgdlg.h"
     #include "wx/dialog.h"
     #include "wx/filedlg.h"
+    #include "wx/filefn.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
@@ -50,6 +51,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "wx/filename.h"
 #include "wx/tokenzr.h"
 
 #ifndef OFN_EXPLORER
@@ -61,7 +63,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __WIN32__
-# define wxMAXPATH   4096
+# define wxMAXPATH   65534
 #else
 # define wxMAXPATH   1024
 #endif
@@ -197,9 +199,13 @@ wxString wxFileSelectorEx(const wxChar *title,
     return filename;
 }
 
-wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
-        const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
-        long style, const wxPoint& WXUNUSED(pos))
+wxFileDialog::wxFileDialog(wxWindow *parent,
+                           const wxString& message,
+                           const wxString& defaultDir,
+                           const wxString& defaultFileName,
+                           const wxString& wildCard,
+                           long style,
+                           const wxPoint& WXUNUSED(pos))
 {
     m_message = message;
     m_dialogStyle = style;
@@ -224,8 +230,19 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
     size_t count = m_fileNames.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        paths.Add(dir + m_fileNames[n]);
+        if (wxFileName(m_fileNames[n]).IsAbsolute())
+            paths.Add(m_fileNames[n]);
+        else
+            paths.Add(dir + m_fileNames[n]);
     }
+}
+
+void wxFileDialog::SetPath(const wxString& path)
+{
+    wxString ext;
+    wxSplitPath(path, &m_dir, &m_fileName, &ext);
+    if ( !ext.empty() )
+        m_fileName << _T('.') << ext;
 }
 
 int wxFileDialog::ShowModal()
@@ -441,6 +458,7 @@ int wxFileDialog::ShowModal()
             if ( m_dir.Last() != _T('\\') )
                 dir += _T('\\');
 
+            m_filterIndex = (int)of.nFilterIndex - 1;
             m_fileNames.Sort();
             m_path = dir + m_fileName;
         }

@@ -79,6 +79,9 @@ protected:
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray);
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
 
 struct wxHtmlContentsItem
 {
@@ -92,24 +95,28 @@ struct wxHtmlContentsItem
     wxString GetFullPath() const { return m_Book->GetFullPath(m_Page); }
 };
 
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
+
 //------------------------------------------------------------------------------
-// wxSearchEngine
+// wxHtmlSearchEngine
 //                  This class takes input streams and scans them for occurence
 //                  of keyword(s)
 //------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSearchEngine : public wxObject
+class WXDLLEXPORT wxHtmlSearchEngine : public wxObject
 {
 public:
-    wxSearchEngine() : wxObject() {m_Keyword = NULL; }
-    ~wxSearchEngine() {if (m_Keyword) delete[] m_Keyword; }
+    wxHtmlSearchEngine() : wxObject() {m_Keyword = NULL; }
+    ~wxHtmlSearchEngine() {if (m_Keyword) delete[] m_Keyword; }
 
     // Sets the keyword we will be searching for
     virtual void LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only);
 
     // Scans the stream for the keyword.
     // Returns TRUE if the stream contains keyword, fALSE otherwise
-    virtual bool Scan(wxInputStream *stream);
+    virtual bool Scan(const wxFSFile& file);
 
 private:
     wxChar *m_Keyword;
@@ -139,7 +146,7 @@ public:
 
 private:
     wxHtmlHelpData* m_Data;
-    wxSearchEngine m_Engine;
+    wxHtmlSearchEngine m_Engine;
     wxString m_Keyword, m_Name;
     wxChar *m_LastPage;
     wxHtmlContentsItem* m_ContentsItem;

@@ -35,16 +35,18 @@ Assign DC instance to the renderer.
 (Many dimensions in HTML are given in pixels -- e.g. image sizes. 300x300 image would be only one
 inch wide on typical printer. With pixel\_scale = 3.0 it would be 3 inches.)
 
-\wxheading{Parameters}
+\membersection{wxHtmlDCRenderer::SetFonts}\label{wxhtmldcrenderersetfonts}
 
-\docparam{maxwidth}{width of the area (on this DC) that is equivalent to the screen's width, 
-in pixels (you should set it to page width minus margins). 
+\func{void}{SetFonts}{\param{wxString }{normal\_face}, \param{wxString }{fixed\_face}, \param{const int }{*sizes = NULL}}
 
-{\bf Note:} In the current implementation
-the screen width is always 800 pixels: it gives best results and ensures (almost) same printed outputs
-across platforms and differently configured desktops.}
+Sets fonts. See \helpref{wxHtmlWindow::SetFonts}{wxhtmlwindowsetfonts} for
+detailed description.
 
 See also \helpref{SetSize}{wxhtmldcrenderersetsize}.
+
+\wxheading{Note}
+
+This method was added in wxWidgets 2.4.1.
 
 \membersection{wxHtmlDCRenderer::SetSize}\label{wxhtmldcrenderersetsize}
 

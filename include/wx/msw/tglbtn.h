@@ -7,7 +7,7 @@
 // Created:     08.02.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Johnny C. Norris II
-// License:     Rocketeer license
+// License:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TOGGLEBUTTON_H_

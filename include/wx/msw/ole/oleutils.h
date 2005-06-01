@@ -73,7 +73,7 @@ public:
     wxAutoULong(ULONG value = 0) : m_Value(value) { }
 
     operator ULONG&() { return m_Value; }
-    ULONG& operator=(ULONG value) { return m_Value = value; }
+    ULONG& operator=(ULONG value) { m_Value = value; return m_Value;  }
     
     wxAutoULong& operator++() { ++m_Value; return *this; }
     const wxAutoULong operator++( int ) { wxAutoULong temp = *this; ++m_Value; return temp; }
@@ -135,7 +135,7 @@ private:
   {                                                                           \
     wxLogRelease(_T(#classname), m_cRef);                                     \
                                                                               \
-    if ( --m_cRef == 0 ) {                                                    \
+    if ( --m_cRef == wxAutoULong(0) ) {                                                    \
       delete this;                                                            \
       return 0;                                                               \
     }                                                                         \

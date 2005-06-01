@@ -144,14 +144,14 @@ int wxSpinButton::NormalizeValue(int value) const
     if ( value > m_max )
     {
         if ( GetWindowStyleFlag() & wxSP_WRAP )
-            value = m_min + (value - m_max) % (m_max - m_min);
+            value = m_min + (value - m_max - 1) % (m_max - m_min + 1);
         else
             value = m_max;
     }
     else if ( value < m_min )
     {
         if ( GetWindowStyleFlag() & wxSP_WRAP )
-            value = m_max - (m_min - value) % (m_max - m_min);
+            value = m_max - (m_min - value - 1) % (m_max - m_min + 1);
         else
             value = m_min;
     }

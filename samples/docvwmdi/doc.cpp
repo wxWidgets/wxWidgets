@@ -49,14 +49,14 @@ wxSTD ostream& DrawingDocument::SaveObject(wxSTD ostream& stream)
   wxDocument::SaveObject(stream);
   
   wxInt32 n = doodleSegments.Number();
-  stream << n << '\n';
+  stream << n << _T('\n');
   
   wxNode *node = doodleSegments.First();
   while (node)
   {
     DoodleSegment *segment = (DoodleSegment *)node->Data();
     segment->SaveObject(stream);
-    stream << '\n';
+    stream << _T('\n');
     
     node = node->Next();
   }
@@ -71,14 +71,14 @@ wxOutputStream& DrawingDocument::SaveObject(wxOutputStream& stream)
   wxTextOutputStream text_stream( stream );
 
   wxInt32 n = doodleSegments.Number();
-  text_stream << n << '\n';
+  text_stream << n << _T('\n');
   
   wxNode *node = doodleSegments.First();
   while (node)
   {
     DoodleSegment *segment = (DoodleSegment *)node->Data();
     segment->SaveObject(stream);
-    text_stream << '\n';
+    text_stream << _T('\n');
     
     node = node->Next();
   }
@@ -155,16 +155,16 @@ DoodleSegment::~DoodleSegment(void)
 wxSTD ostream& DoodleSegment::SaveObject(wxSTD ostream& stream)
 {
   wxInt32 n = lines.Number();
-  stream << n << '\n';
+  stream << n << _T('\n');
   
   wxNode *node = lines.First();
   while (node)
   {
     DoodleLine *line = (DoodleLine *)node->Data();
-    stream << line->x1 << " " << 
-                   line->y1 << " " << 
-           line->x2 << " " << 
-           line->y2 << "\n";
+    stream << line->x1 << _T(" ") << 
+                   line->y1 << _T(" ") << 
+           line->x2 << _T(" ") << 
+           line->y2 << _T("\n");
     node = node->Next();
   }
 
@@ -176,16 +176,16 @@ wxOutputStream &DoodleSegment::SaveObject(wxOutputStream& stream)
   wxTextOutputStream text_stream( stream );
 
   wxInt32 n = lines.Number();
-  text_stream << n << '\n';
+  text_stream << n << _T('\n');
   
   wxNode *node = lines.First();
   while (node)
   {
     DoodleLine *line = (DoodleLine *)node->Data();
-    text_stream << line->x1 << " " << 
-                   line->y1 << " " << 
-           line->x2 << " " << 
-           line->y2 << "\n";
+    text_stream << line->x1 << _T(" ") << 
+                   line->y1 << _T(" ") << 
+           line->x2 << _T(" ") << 
+           line->y2 << _T("\n");
     node = node->Next();
   }
 

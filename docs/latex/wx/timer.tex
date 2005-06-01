@@ -20,6 +20,8 @@ In any case, you must start the timer with \helpref{Start}{wxtimerstart}
 after constructing it before it actually starts sending notifications. It can
 be stopped later with \helpref{Stop}{wxtimerstop}.
 
+{\bf NB:} note that timer can only be used from the main thread currently.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
@@ -53,7 +55,7 @@ Creates a timer and associates it with {\it owner}. Please see
 
 Destructor. Stops the timer if it is running.
 
-\membersection{wxTimer::GetInterval}{wxtimergetinterval}
+\membersection{wxTimer::GetInterval}\label{wxtimergetinterval}
 
 \constfunc{int}{GetInterval}{\void}
 

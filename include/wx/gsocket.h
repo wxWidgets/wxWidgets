@@ -1,10 +1,12 @@
 /* -------------------------------------------------------------------------
- * Project: GSocket (Generic Socket)
- * Name:    gsocket.h
- * Author:  Guilhem Lavaux
- *          Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
- * Purpose: GSocket include file (system independent)
- * CVSID:   $Id$
+ * Project:     GSocket (Generic Socket)
+ * Name:        gsocket.h
+ * Author:      Guilhem Lavaux
+ *              Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
+ * Copyright:   (c) Guilhem Lavaux
+ * Licence:     wxWindows Licence
+ * Purpose:     GSocket include file (system independent)
+ * CVSID:       $Id$
  * -------------------------------------------------------------------------
  */
 

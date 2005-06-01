@@ -140,12 +140,12 @@ class BoldProcessor : public wxHtmlProcessor
      wxFileSystem::AddHandler(new wxInternetFSHandler);
 #endif
 
-      SetVendorName("wxWindows");
-      SetAppName("wxHtmlTest"); 
+      SetVendorName(wxT("wxWindows"));
+      SetAppName(wxT("wxHtmlTest")); 
       // the following call to wxConfig::Get will use it to create an object...
 
     // Create the main application window
-      MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
+      MyFrame *frame = new MyFrame(_("wxHtmlWindow testing application"),
          wxPoint(50, 50), wxSize(640, 480));
    
     // Show it and tell the application that it's our main window
@@ -167,25 +167,26 @@ class BoldProcessor : public wxHtmlProcessor
 
 // frame constructor
    MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-   : wxFrame((wxFrame *)NULL, -1, title, pos, size, wxDEFAULT_FRAME_STYLE, "html_test_app")
+   : wxFrame((wxFrame *)NULL, -1, title, pos, size, wxDEFAULT_FRAME_STYLE, 
+             wxT("html_test_app"))
    {
     // create a menu bar
       wxMenu *menuFile = new wxMenu;
       wxMenu *menuNav = new wxMenu;
 
-      menuFile->Append(Minimal_PageOpen, "&Open HTML page...");
+      menuFile->Append(Minimal_PageOpen, _("&Open HTML page..."));
       menuFile->AppendSeparator();
-      menuFile->Append(Minimal_Processor, "&Remove bold attribute", "", TRUE);
+      menuFile->Append(Minimal_Processor, _("&Remove bold attribute"), wxT(""), TRUE);
       
       menuFile->AppendSeparator();
-      menuFile->Append(Minimal_Quit, "&Close frame");
-      menuNav->Append(Minimal_Back, "Go &BACK");
-      menuNav->Append(Minimal_Forward, "Go &FORWARD");
+      menuFile->Append(Minimal_Quit, _("&Close frame"));
+      menuNav->Append(Minimal_Back, _("Go &BACK"));
+      menuNav->Append(Minimal_Forward, _("Go &FORWARD"));
 
     // now append the freshly created menu to the menu bar...
       wxMenuBar *menuBar = new wxMenuBar;
-      menuBar->Append(menuFile, "&File");
-      menuBar->Append(menuNav, "&Navigate");
+      menuBar->Append(menuFile, _("&File"));
+      menuBar->Append(menuNav, _("&Navigate"));
 
     // ... and attach this menu bar to the frame
       SetMenuBar(menuBar);
@@ -195,10 +196,10 @@ class BoldProcessor : public wxHtmlProcessor
       m_Processor = new BoldProcessor;
       m_Processor->Enable(FALSE);
       m_Html = new wxHtmlWindow(this);
-      m_Html->SetRelatedFrame(this, "HTML : %s");
+      m_Html->SetRelatedFrame(this, _("HTML : %s"));
       m_Html->SetRelatedStatusBar(0);
       m_Html->ReadCustomization(wxConfig::Get());
-      m_Html->LoadPage("test.htm");
+      m_Html->LoadPage(wxT("test.htm"));
       m_Html->AddProcessor(m_Processor);
    }
 
@@ -215,19 +216,19 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPageOpen(wxCommandEvent& WXUNUSED(event))
 {
-  wxString p = wxFileSelector(wxT("Open HTML document"), wxT(""), wxT(""), wxT(""), wxT("HTML files|*.htm"));
+  wxString p = wxFileSelector(_("Open HTML document"), wxT(""), wxT(""), wxT(""), wxT("HTML files|*.htm"));
   if (p != wxEmptyString)
     m_Html -> LoadPage(p);
 }
 
 void MyFrame::OnBack(wxCommandEvent& WXUNUSED(event))
 {
-if (!m_Html -> HistoryBack()) wxMessageBox("You reached prehistory era!");
+if (!m_Html -> HistoryBack()) wxMessageBox(_("You reached prehistory era!"));
 }
 
 void MyFrame::OnForward(wxCommandEvent& WXUNUSED(event))
 {
-if (!m_Html -> HistoryForward()) wxMessageBox("No more items in history!");
+if (!m_Html -> HistoryForward()) wxMessageBox(_("No more items in history!"));
 }
 
 void MyFrame::OnProcessor(wxCommandEvent& WXUNUSED(event))

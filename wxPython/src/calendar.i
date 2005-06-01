@@ -114,7 +114,7 @@ class wxCalendarEvent : public wxCommandEvent
 public:
     wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type);
 
-    const wxDateTime& GetDate() const;
+    const wxDateTime GetDate() const;
     wxDateTime::WeekDay GetWeekDay() const;
 
 };

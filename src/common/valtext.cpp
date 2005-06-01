@@ -206,6 +206,15 @@ bool wxTextValidator::TransferToWindow(void)
     if( !CheckValidator() )
         return FALSE;
 
+    // The two lines below have been commented because they would trigger
+    // an 'unreachable code' warning with MSVC6 in Win32 Release build. The
+    // CheckValidator() call above has a wxCHECK() for m_stringValue. If
+    // m_stringValue is NULL CheckValidator() returns false and this code
+    // is never reached.
+
+    //if ( !m_stringValue )
+    //    return TRUE;
+
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
     control->SetValue(* m_stringValue) ;
 
@@ -217,6 +226,15 @@ bool wxTextValidator::TransferFromWindow(void)
 {
     if( !CheckValidator() )
         return FALSE;
+
+    // The two lines below have been commented because they would trigger
+    // an 'unreachable code' warning with MSVC6 in Win32 Release build. The
+    // CheckValidator() call above has a wxCHECK() for m_stringValue. If
+    // m_stringValue is NULL CheckValidator() returns false and this code
+    // is never reached.
+
+    //if ( !m_stringValue )
+    //    return TRUE;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
     * m_stringValue = control->GetValue() ;
@@ -303,8 +321,7 @@ static bool wxIsNumeric(const wxString& val)
     {
         // Allow for "," (French) as well as "." -- in future we should
         // use wxSystemSettings or other to do better localisation
-        if ((!isdigit(val[i])) && (val[i] != '.') && (val[i] != ','))
-          if(!((i == 0) && (val[i] == '-')))
+        if ((!isdigit(val[i])) && (val[i] != '.') && (val[i] != ',') && (val[i] != wxT('e')) && (val[i] != wxT('E')) && (val[i] != wxT('+')) && (val[i] != wxT('-')))
             return FALSE;
     }
     return TRUE;

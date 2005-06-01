@@ -36,7 +36,7 @@ enum
     wxTOPLEVEL_BUTTON_MAXIMIZE = 0x02000000,
     wxTOPLEVEL_BUTTON_ICONIZE =  0x04000000,
     wxTOPLEVEL_BUTTON_RESTORE  = 0x08000000,
-    wxTOPLEVEL_BUTTON_HELP     = 0x10000000,
+    wxTOPLEVEL_BUTTON_HELP     = 0x10000000
 };
 
 // frame hit test return values:
@@ -143,7 +143,7 @@ public:
     virtual int GetMinWidth() const;
     virtual int GetMinHeight() const;
 
-    virtual bool ProvidesBackground() { return TRUE; }
+    virtual bool ProvidesBackground() const { return TRUE; }
     
 protected:
     // handle titlebar button click event

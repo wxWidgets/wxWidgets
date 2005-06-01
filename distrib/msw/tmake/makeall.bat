@@ -4,6 +4,7 @@ rem Purpose:   create wxWindows makefiles for all compilers
 rem Author:    Vadim Zeitlin
 rem Created:   14.07.99
 rem Copyright: (c) 1999 Vadim Zeitlin
+rem Licence:   wxWindows licence
 rem Version:   $Id$
 rem
 rem Makefile to create the makefiles for all compilers from the templates using
@@ -48,7 +49,6 @@ echo Generating for Visual C++ 4.0...
 %TM% -t vc wxwin.pro -o %WXDIR%\src\msw\makefile.vc
 echo Generating for Borland C++ (32 bits)...
 %TM% -t b32 wxwin.pro -o %WXDIR%\src\msw\makefile.b32
-%TM% -t b32univ wxwin.pro -o %WXDIR%\src\msw\makeuniv.b32
 %TM% -t b32base wxwin.pro -o %WXDIR%\src\msw\makebase.b32
 echo Generating for Visual C++ 1.52...
 %TM% -t dos wxwin.pro -o %WXDIR%\src\msw\makefile.dos

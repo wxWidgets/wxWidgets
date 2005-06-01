@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/dragimag.h
+// Purpose:     wxDragImage base header
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// Copyright:   (c) Julian Smart
+// RCS-ID:      $Id$
+// Licence:     wxWindows Licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_DRAGIMAG_H_BASE_
 #define _WX_DRAGIMAG_H_BASE_
 
@@ -8,7 +19,7 @@ class WXDLLEXPORT wxMemoryDC;
 class WXDLLEXPORT wxDC;
 
 #if defined(__WXMSW__)
-#ifdef __WIN16__
+#if defined(__WIN16__)  || defined(__WXUNIVERSAL__)
 #include "wx/generic/dragimgg.h"
 #define wxDragImage wxGenericDragImage
 #define sm_classwxDragImage sm_classwxGenericDragImage

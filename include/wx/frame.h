@@ -86,8 +86,10 @@ public:
     virtual wxMenuBar *GetMenuBar() const { return m_frameMenuBar; }
 #endif // wxUSE_MENUS
 
+#ifdef WXWIN_COMPATIBILITY_2_2
     // call this to simulate a menu command
     bool Command(int id) { return ProcessCommand(id); }
+#endif // WXWIN_COMPATIBILITY_2_2
 
     // process menu command: returns TRUE if processed
     bool ProcessCommand(int id);

@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/minifram.h
+// Purpose:     wxMiniFrame base header
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// Copyright:   (c) Julian Smart
+// RCS-ID:      $Id$
+// Licence:     wxWindows Licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_MINIFRAM_H_BASE_
 #define _WX_MINIFRAMH_BASE_
 

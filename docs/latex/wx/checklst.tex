@@ -3,9 +3,12 @@
 A checklistbox is like a listbox, but allows items to be checked or unchecked.
 
 This class is currently implemented under Windows and GTK. When using this
-class under Windows wxWindows must be compiled with USE\_OWNER\_DRAWN set to 1.
+class under Windows wxWidgets must be compiled with USE\_OWNER\_DRAWN set to 1.
 
 Only the new functions for this class are documented; see also \helpref{wxListBox}{wxlistbox}.
+
+Please note that wxCheckListBox uses client data in its implementation,
+and therefore this is not available to the application.
 
 \wxheading{Derived from}
 
@@ -89,7 +92,8 @@ Destructor, destroying the list box.
 
 \func{void}{Check}{\param{int }{item}, \param{bool}{ check = TRUE}}
 
-Checks the given item.
+Checks the given item. Note that calling this method doesn't result in
+wxEVT\_COMMAND\_CHECKLISTBOX\_TOGGLE being emitted.
 
 \wxheading{Parameters}
 

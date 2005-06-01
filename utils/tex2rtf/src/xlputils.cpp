@@ -1195,7 +1195,7 @@ bool XLPGo(void)
     fclose(Subsubsections); Subsubsections = NULL;
     fclose(Index); Index = NULL;
 
-    if (FileExists(ContentsName)) wxRemoveFile(ContentsName);
+    if (wxFileExists(ContentsName)) wxRemoveFile(ContentsName);
 
     if (!wxRenameFile(TmpContentsName, ContentsName))
     {

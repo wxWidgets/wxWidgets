@@ -844,9 +844,6 @@ WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSE
 
     wxColour colBack = GetBackgroundColour();
 
-    if (!IsEnabled())
-        colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-
     ::SetBkColor(hdc, wxColourToRGB(colBack));
     ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
 
@@ -884,7 +881,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
         case WM_NOTIFY:
             {
                 NMHDR* hdr = (NMHDR *)lParam;
-                if ( (int)hdr->code == TTN_NEEDTEXT )
+                if ( hdr->code == TTN_NEEDTEXT )
                 {
                     wxRadioBox *radiobox = (wxRadioBox *)
                         ::GetWindowLong(hwnd, GWL_USERDATA);

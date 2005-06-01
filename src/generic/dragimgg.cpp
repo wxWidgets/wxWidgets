@@ -139,12 +139,12 @@ bool wxGenericDragImage::Create(const wxString& str, const wxCursor& cursor)
     dc.SetFont(wxNullFont);
 
     wxMemoryDC dc2;
-    dc2.SetFont(font);
 
     // Sometimes GetTextExtent isn't accurate enough, so make it longer
     wxBitmap bitmap((int) ((w+2) * 1.5), (int) h+2);
     dc2.SelectObject(bitmap);
 
+    dc2.SetFont(font);
     dc2.SetBackground(* wxWHITE_BRUSH);
     dc2.Clear();
     dc2.SetBackgroundMode(wxTRANSPARENT);

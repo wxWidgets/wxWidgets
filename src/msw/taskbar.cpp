@@ -39,12 +39,6 @@
 #include "wx/msw/taskbar.h"
 #include "wx/msw/private.h"
 
-#ifndef __TWIN32__
-    #ifdef __GNUWIN32_OLD__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
-#endif
-
 #ifdef __SALFORDC__
     #include <shellapi.h>
 #endif
@@ -180,7 +174,7 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
     wxGetMousePosition(&x, &y);
 
     // is wxFrame the best window type to use???
-    win = new wxFrame(NULL, -1, "", wxPoint(x,y), wxSize(-1,-1), 0);
+    win = new wxFrame(NULL, -1, wxEmptyString, wxPoint(x,y), wxSize(-1,-1), 0);
     win->PushEventHandler(this);
 
     // Remove from record of top-level windows, or will confuse wxWindows

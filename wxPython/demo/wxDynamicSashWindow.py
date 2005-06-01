@@ -89,6 +89,10 @@ class SimpleView(wxPanel):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
+    if wxPlatform == "__WXMAC__":
+        wxMessageBox("This demo currently fails on the Mac. The problem is being looked into...", "Sorry")
+        return
+
     if 1:
         win = wxDynamicSashWindow(nb, -1, style = 0
                                   | wxCLIP_CHILDREN
@@ -149,3 +153,10 @@ You will need to set the scrollbars' event handler at three times:
 </ul>
 </body></html>
 """
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

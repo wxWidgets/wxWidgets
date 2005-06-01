@@ -1,7 +1,7 @@
-\chapter{Porting from wxWindows 1.xx}\label{porting}
+\chapter{Porting from wxWidgets 1.xx}\label{porting}
 
 This addendum gives guidelines and tips for porting applications from
-version 1.xx of wxWindows to version 2.0.
+version 1.xx of wxWidgets to version 2.0.
 
 The first section offers tips for writing 1.xx applications in a way to
 minimize porting time. The following sections detail the changes and
@@ -9,7 +9,7 @@ how you can modify your application to be 2.0-compliant.
 
 You may be worrying that porting to 2.0 will be a lot of work,
 particularly if you have only recently started using 1.xx. In fact,
-the wxWindows 2.0 API has far more in common with 1.xx than it has differences.
+the wxWidgets 2.0 API has far more in common with 1.xx than it has differences.
 The main challenges are using the new event system, doing without the default
 panel item layout, and the lack of automatic labels in some controls.
 
@@ -18,7 +18,7 @@ and will be supported by the user community for some time. And when you have
 changed to 2.0, we hope that you will appreciate the benefits in terms
 of greater flexibility, better user interface aesthetics, improved C++ conformance,
 improved compilation speed, and many other enhancements. The revised architecture
-of 2.0 will ensure that wxWindows can continue to evolve for the foreseeable
+of 2.0 will ensure that wxWidgets can continue to evolve for the foreseeable
 future.
 
 {\it Please note that this document is a work in progress.}
@@ -53,7 +53,7 @@ be 32-bit integers in 2.0.
 they are going.
 \item {\bf Using member callbacks} called from global callback functions will make the transition
 easier - see the FAQ
-for some notes on using member functions for callbacks. wxWindows 2.0 will banish global
+for some notes on using member functions for callbacks. wxWidgets 2.0 will banish global
 callback functions (and OnMenuCommand), and nearly all event handling will be done by functions taking a single event argument.
 So in future you will have code like:
 
@@ -70,13 +70,13 @@ You may find that writing the extra code to call a member function isn't worth i
 but the option is there.
 \item {\bf Use wxString wherever possible.} 2.0 replaces char * with wxString
 in most cases, and if you use wxString to receive strings returned from
-wxWindows functions (except when you need to save the pointer if deallocation is required), there should
+wxWidgets functions (except when you need to save the pointer if deallocation is required), there should
 be no conversion problems later on.
 \item Be aware that under Windows, {\bf font sizes will change} to match standard Windows
 font sizes (for example, a 12-point font will appear bigger than before). Write your application
 to be flexible where fonts are concerned.
 Don't rely on fonts being similarly-sized across platforms, as they were (by chance) between
-Windows and X under wxWindows 1.66. Yes, this is not easy... but I think it is better to conform to the
+Windows and X under wxWidgets 1.66. Yes, this is not easy... but I think it is better to conform to the
 standards of each platform, and currently the size difference makes it difficult to
 conform to Windows UI standards. You may eventually wish to build in a global 'fudge-factor' to compensate
 for size differences. The old font sizing will still be available via wx\_setup.h, so do not panic...
@@ -85,18 +85,18 @@ wxPropertyFormView can be used in a wxForm-like way, except that you specify a p
 or dialog; or you can use a wxPropertyListView to show attributes in a scrolling list - you don't even need
 to lay panel items out.
 
-Because wxForm uses a number of features to be dropped in wxWindows 2.0, it cannot be
+Because wxForm uses a number of features to be dropped in wxWidgets 2.0, it cannot be
 supported in the future, at least in its present state.
 \item {\bf When creating a wxListBox}, put the wxLB\_SINGLE, wxLB\_MULTIPLE, wxLB\_EXTENDED styles in the window style parameter, and put
 zero in the {\it multiple} parameter. The {\it multiple} parameter will be removed in 2.0.
 \item {\bf For MDI applications}, don't reply on MDI being run-time-switchable in the way that the
-MDI sample is. In wxWindows 2.0, MDI functionality is separated into distinct classes.
+MDI sample is. In wxWidgets 2.0, MDI functionality is separated into distinct classes.
 \end{itemize}
 
 \section{The new event system}\label{portingeventsystem}
 
-The way that events are handled has been radically changed in wxWindows 2.0. Please
-read the topic `Event handling overview' in the wxWindows 2.0 manual for background
+The way that events are handled has been radically changed in wxWidgets 2.0. Please
+read the topic `Event handling overview' in the wxWidgets 2.0 manual for background
 on this.
 
 \subsection{Callbacks}
@@ -218,14 +218,14 @@ wxGroupBox is renamed wxStaticBox.
 
 \wxheading{wxForm}
 
-Note that wxForm is no longer supported in wxWindows 2.0. Consider using the wxPropertyFormView class
+Note that wxForm is no longer supported in wxWidgets 2.0. Consider using the wxPropertyFormView class
 instead, which takes standard dialogs and panels and associates controls with property objects.
 You may also find that the new validation method, combined with dialog resources, is easier
 and more flexible than using wxForm.
 
 \section{Device contexts and painting}\label{portingdc}
 
-In wxWindows 2.0, device contexts are used for drawing into, as per 1.xx, but the way
+In wxWidgets 2.0, device contexts are used for drawing into, as per 1.xx, but the way
 they are accessed and constructed is a bit different.
 
 You no longer use {\bf GetDC} to access device contexts for panels, dialogs and canvases.
@@ -254,8 +254,8 @@ this should not normally require you to change your code if the syntax is otherw
 same. This is because C++ will automatically convert a char* or const char* to a wxString by virtue
 of appropriate wxString constructors.
 
-However, when a wxString is returned from a function in wxWindows 2.0 where a char* was
-returned in wxWindows 1.xx, your application will need to be changed. Usually you can
+However, when a wxString is returned from a function in wxWidgets 2.0 where a char* was
+returned in wxWidgets 1.xx, your application will need to be changed. Usually you can
 simplify your application's allocation and deallocation of memory for the returned string,
 and simply assign the result to a wxString object. For example, replace this:
 
@@ -293,7 +293,7 @@ Try to use the {\bf const} keyword in your own code where possible.
 
 \section{Backward compatibility}\label{portingcompat}
 
-Some wxWindows 1.xx functionality has been left to ease the transition to 2.0. This functionality
+Some wxWidgets 1.xx functionality has been left to ease the transition to 2.0. This functionality
 (usually) only works if you compile with WXWIN\_COMPATIBILITY set to 1 in setup.h.
 
 Mostly this defines old names to be the new names (e.g. wxRectangle is defined to be wxRect).

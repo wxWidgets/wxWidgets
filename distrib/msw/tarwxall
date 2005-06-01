@@ -103,6 +103,7 @@ $1/distrib/msw/namedown include/wx/os2/*.H
 $1/distrib/msw/namedown src/os2/*.CPP src/os2/*.I
 
 cd ..
+
 rm -f wxAll-${WXVER}.tar
 $TAR cf $2/wxAll-${WXVER}.tar wxWindows-${WXVER}/*
 rm -f -r wxWindows-${WXVER}

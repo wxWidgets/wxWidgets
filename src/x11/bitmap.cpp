@@ -91,7 +91,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
 
     m_display = bitmap.GetDisplay();
 
-    wxImage image( bitmap );
+    wxImage image = bitmap.ConvertToImage();
     if (!image.Ok()) return FALSE;
     
     m_display = bitmap.GetDisplay();
@@ -1022,7 +1022,7 @@ bool wxBitmap::SaveFile( const wxString &name, int type, wxPalette *WXUNUSED(pal
 
     // Try to save the bitmap via wxImage handlers:
     {
-        wxImage image( *this );
+        wxImage image(this->ConvertToImage()) ;
         if (image.Ok()) return image.SaveFile( name, type );
     }
 
@@ -1111,7 +1111,7 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
     {
         wxImage image;
         if (!image.LoadFile( name, type )) return FALSE;
-        if (image.Ok()) *this = image.ConvertToBitmap();
+        if (image.Ok()) *this = wxBitmap(image);
         else return FALSE;
     }
 

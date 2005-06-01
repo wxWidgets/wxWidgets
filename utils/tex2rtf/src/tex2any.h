@@ -173,6 +173,10 @@ int GetCurrentColumn(void);         // number of characters on current line
 char *ConvertCase(char *s);         // Convert case, according to upperCaseNames setting.
 extern wxPathList TexPathList;      // Path list, can be used for file searching.
 
+#if !WXWIN_COMPATIBILITY_2
+extern bool StringMatch(const wxChar *one, const wxChar *two, bool subString = TRUE, bool exact = FALSE);
+#endif
+
 // Define a variable value from the .ini file
 char *RegisterSetting(char *settingName, char *settingValue, bool interactive = TRUE);
 

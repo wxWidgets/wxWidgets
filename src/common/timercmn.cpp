@@ -36,6 +36,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/thread.h"
 #endif
 
 #include "wx/timer.h"
@@ -131,6 +132,13 @@ void wxTimerBase::Notify()
 
 bool wxTimerBase::Start(int milliseconds, bool oneShot)
 {
+    // under MSW timers only work when they're started from the main thread so
+    // let the caller know about it
+#if wxUSE_THREADS
+    wxASSERT_MSG( wxThread::IsMain(),
+                  _T("timer can only be started from the main thread") );
+#endif // wxUSE_THREADS
+
     if ( IsRunning() )
     {
         // not stopping the already running timer might work for some
@@ -159,8 +167,9 @@ bool wxTimerBase::Start(int milliseconds, bool oneShot)
 
 void wxStopWatch::Start(long t)
 {
-    m_t0 = wxGetLocalTimeMillis() - t;
+    m_t0 = wxGetLocalTimeMillis() - (wxLongLong)t;
     m_pause = 0;
+    m_pauseCount = 0;
 }
 
 long wxStopWatch::GetElapsedTime() const
@@ -320,7 +329,7 @@ wxLongLong wxGetLocalTimeMillis()
     if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )
     {
         val *= tp.tv_sec;
-        return (val + (tp.tv_usec / 1000));
+        return (val + (wxLongLong)(tp.tv_usec / 1000));
     }
     else
     {
@@ -337,20 +346,24 @@ wxLongLong wxGetLocalTimeMillis()
     return (val + tp.millitm);
 #elif defined(__WXMAC__)
     
-    UInt64 gMilliAtStart = 0 ;
-    Nanoseconds upTime = AbsoluteToNanoseconds( UpTime() ) ;
+    static UInt64 gMilliAtStart = 0;
+
+    Nanoseconds upTime = AbsoluteToNanoseconds( UpTime() );
+
     if ( gMilliAtStart == 0 )
     {
-        time_t start = time(NULL) ;
-        gMilliAtStart = ((UInt64) start) * 1000L ;
+        time_t start = time(NULL);
+        gMilliAtStart = ((UInt64) start) * 1000000L;
         gMilliAtStart -= upTime.lo / 1000 ;
-        gMilliAtStart -= ( ( (UInt64) upTime.hi ) << 32 ) / 1000 ;
+        gMilliAtStart -= ( ( (UInt64) upTime.hi ) << 32 ) / (1000 * 1000);
     }
-    UInt64 millival = gMilliAtStart ;
-    millival += upTime.lo / 1000 ;
-    millival += ( ( (UInt64) upTime.hi ) << 32 ) / 1000 ;
-    val = millival ;
-    return val ;
+
+    UInt64 millival = gMilliAtStart;
+    millival += upTime.lo / (1000 * 1000);
+    millival += ( ( (UInt64) upTime.hi ) << 32 ) / (1000 * 1000);
+    val = millival;
+
+    return val;
 #else // no gettimeofday() nor ftime()
     // We use wxGetLocalTime() to get the seconds since
     // 00:00:00 Jan 1st 1970 and then whatever is available

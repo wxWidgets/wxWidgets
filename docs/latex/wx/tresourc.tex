@@ -1,6 +1,6 @@
-\section{The wxWindows resource system}\label{resourceformats}
+\section{The wxWidgets resource system}\label{resourceformats}
 
-wxWindows has an optional {\it resource file} facility,
+wxWidgets has an optional {\it resource file} facility,
 which allows separation of dialog, menu, bitmap and icon specifications
 from the application code.
 
@@ -8,25 +8,25 @@ from the application code.
 However it is still available if wxUSE\_RESOURCES is enabled.
 
 The format is similar in principle to the Windows resource file (whose ASCII form is
-suffixed .RC and whose binary form is suffixed .RES). The wxWindows resource
+suffixed .RC and whose binary form is suffixed .RES). The wxWidgets resource
 file is currently ASCII-only, suffixed .WXR. Note that under Windows,
 the .WXR file does not {\it replace} the native Windows resource file,
 it merely supplements it. There is no existing native resource format in X
 (except for the defaults file, which has limited expressive power).
 
 For details of functions for manipulating resource files and loading
-user interface elements, see \helpref{wxWindows resource functions}{resourcefuncs}.
+user interface elements, see \helpref{wxWidgets resource functions}{resourcefuncs}.
 
 You can use Dialog Editor to create resource files. Unfortunately neither
-Dialog Editor nor the .WXR format currently cover all wxWindows controls;
+Dialog Editor nor the .WXR format currently cover all wxWidgets controls;
 some are missing, such as wxSpinCtrl, wxSpinButton, wxListCtrl, wxTreeCtrl and others.
 
-Note that in later versions of wxWindows, this resource format will be replaced
+Note that in later versions of wxWidgets, this resource format will be replaced
 by XML specifications that can also include sizers.
 
 \subsection{The format of a .WXR file}
 
-A wxWindows resource file may look a little odd at first. It is C++
+A wxWidgets resource file may look a little odd at first. It is C++
 compatible, comprising mostly of static string variable declarations with
 wxExpr syntax within the string.
 
@@ -34,7 +34,7 @@ Here's a sample .WXR file:
 
 \begin{verbatim}
 /*
- * wxWindows Resource File
+ * wxWidgets Resource File
  *
  */
 
@@ -110,17 +110,17 @@ get all your resources into one variable if you want to.
 {\bf ::wxResourceParseData} parses the contents of the resource, ready for use
 by functions such as {\bf ::wxResourceCreateBitmap} and {\bf wxPanel::LoadFromResource}.
 
-If a wxWindows resource object (such as a bitmap resource) refers to a
+If a wxWidgets resource object (such as a bitmap resource) refers to a
 C++ data structure, such as static XPM data, a further call ({\bf ::wxResourceRegisterBitmapData}) needs
 to be made on initialization to tell
-wxWindows about this data. The wxWindows resource object will refer to a
+wxWidgets about this data. The wxWidgets resource object will refer to a
 string identifier, such as `project\_data' in the example file above.
 This identifier will be looked up in a table to get the C++ static data
 to use for the bitmap or icon.
 
 In the C++ fragment below, the WXR resource file is included,
 and appropriate resource initialization is carried out in {\bf OnInit}.
-Note that at this stage, no actual wxWindows dialogs, menus, bitmaps or
+Note that at this stage, no actual wxWidgets dialogs, menus, bitmaps or
 icons are created; their `templates' are merely being set up for later
 use.
 
@@ -165,7 +165,7 @@ The following code shows a dialog:
   {
     wxTextCtrl *text = (wxTextCtrl *)wxFindWindowByName("text3", dialog);
     if (text)
-      text->SetValue("wxWindows resource demo");
+      text->SetValue("wxWidgets resource demo");
     dialog->ShowModal();
   }
   dialog->Destroy();
@@ -253,14 +253,14 @@ item specification is itself a list comprising:
 
 If the menu item specification is the empty list ([]), this is interpreted as a menu separator.
 
-If further (optional) information is associated with each menu item in a future release of wxWindows,
+If further (optional) information is associated with each menu item in a future release of wxWidgets,
 it will be placed after the help string and before the optional pulldown menu specifications.
 
 Note that the menu item identifier must be an integer if the resource is being
 included as C++ code and then parsed on initialisation. Unfortunately,\rtfsp
 \#define substitution is not performed inside strings, and
 therefore the program cannot know the mapping. However, if the .WXR file
-is being loaded dynamically, wxWindows will attempt to replace string
+is being loaded dynamically, wxWidgets will attempt to replace string
 identifiers with \#defined integers, because it is able to parse
 the included \#defines.
 
@@ -306,8 +306,8 @@ choice has a number of advantages:
 \item Since it is C++ compatible, it can be included into an application's source code,
 eliminating the problems associated with distributing a separate resource file
 with the executable. However, it can also be loaded dynamically from a file, which will be required
-for non-C++ programs that use wxWindows.
-\item No extra binary file format and separate converter need be maintained for the wxWindows project
+for non-C++ programs that use wxWidgets.
+\item No extra binary file format and separate converter need be maintained for the wxWidgets project
 (although others are welcome to add the equivalent of the Windows `rc' resource
 parser and a binary format).
 \item It would be difficult to append a binary resource component onto an executable
@@ -322,7 +322,7 @@ The disadvantages of the approach include:
 \begin{itemize}\itemsep=0pt
 \item Parsing adds a small execution overhead to program initialization.
 \item Under 16-bit Windows especially, global data is at a premium.
-Using a .RC resource table for some wxWindows resource data may be a partial solution,
+Using a .RC resource table for some wxWidgets resource data may be a partial solution,
 although .RC strings are limited to 255 characters.
 \item Without a resource preprocessor, it is not possible to substitute integers
 for identifiers (so menu identifiers have to be written as integers in the resource

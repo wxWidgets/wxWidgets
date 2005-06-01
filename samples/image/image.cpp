@@ -60,12 +60,14 @@ public:
     wxBitmap  *my_horse_ico16;
     wxBitmap  *my_horse_ico;
     wxBitmap  *my_horse_cur;
+    wxBitmap  *my_horse_ani;
 
     wxBitmap  *my_smile_xbm;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
 
     int xH, yH ;
+    int m_ani_images ;
 
 protected:
     wxBitmap m_bmpSmileXpm;
@@ -264,10 +266,13 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_horse_ico16 = (wxBitmap*) NULL;
     my_horse_ico = (wxBitmap*) NULL;
     my_horse_cur = (wxBitmap*) NULL;
+    my_horse_ani = (wxBitmap*) NULL;
 
     my_smile_xbm = (wxBitmap*) NULL;
     my_square = (wxBitmap*) NULL;
     my_anti = (wxBitmap*) NULL;
+
+    m_ani_images = 0 ;
 
     SetBackgroundColour(* wxWHITE);
 
@@ -285,9 +290,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     // try to find the directory with our images
     wxString dir;
     if ( wxFile::Exists(wxT("./horse.png")) )
-        dir = "./";
+        dir = wxT("./");
     else if ( wxFile::Exists(wxT("../horse.png")) )
-        dir = "../";
+        dir = wxT("../");
     else
         wxLogWarning(wxT("Can't find image files in either '.' or '..'!"));
 
@@ -322,7 +327,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #if wxUSE_GIF
     image.Destroy();
 
-    if ( !image.LoadFile( dir + wxString("horse.gif")))
+    if ( !image.LoadFile( dir + _T("horse.gif" )) )
         wxLogError(wxT("Can't load GIF image"));
     else
         my_horse_gif = new wxBitmap( image );
@@ -417,6 +422,27 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         xH = 30 + image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X) ;
         yH = 2420 + image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y) ;
     }
+
+    m_ani_images = wxImage::GetImageCount ( dir + _T("horse3.ani"), wxBITMAP_TYPE_ANI );
+    if (m_ani_images==0)
+        wxLogError(wxT("No ANI-format images found"));
+    else
+        my_horse_ani = new wxBitmap [m_ani_images];
+    int i ;
+    for (i=0; i < m_ani_images; i++)
+    {
+        image.Destroy();
+        if (!image.LoadFile( dir + _T("horse3.ani"), wxBITMAP_TYPE_ANI, i ))
+        {
+            wxString tmp = wxT("Can't load image number ");
+            tmp << i ;
+            wxLogError(tmp);
+        }
+        else    
+            my_horse_ani [i] = wxBitmap( image );
+    }
+    
+    
 #endif
 
     image.Destroy();
@@ -454,6 +480,7 @@ MyCanvas::~MyCanvas()
     delete my_horse_ico16;
     delete my_horse_ico;
     delete my_horse_cur;
+    delete [] my_horse_ani;
     delete my_smile_xbm;
     delete my_square;
     delete my_anti;
@@ -527,21 +554,21 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextForeground( _T("GREEN") );
         dc.SetTextBackground( _T("RED") );
         dc.DrawBitmap( *my_smile_xbm, 30, 2010 );
-
+        
         dc.SetTextForeground( wxT("BLACK") );
         dc.DrawText( _T("After wxImage conversion"), 150, 1975 );
         dc.DrawText( _T("(red on white)"), 150, 1990 );
         dc.SetTextForeground( wxT("RED") );
-        wxImage i = my_smile_xbm->ConvertToImage();
-        i.SetMaskColour( 255, 255, 255 );
-        i.Replace( 0, 0, 0,
+        wxImage img = my_smile_xbm->ConvertToImage();
+        img.SetMaskColour( 255, 255, 255 );
+        img.Replace( 0, 0, 0,
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( wxBitmap(i), 150, 2010, TRUE );
+        wxBitmap bmp( img );
+        dc.DrawBitmap( bmp, 150, 2010, TRUE );
         dc.SetTextForeground( wxT("BLACK") );
     }
-
 
     wxBitmap mono( 60,50,1 );
     wxMemoryDC memdc;
@@ -550,7 +577,10 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     memdc.SetBrush( *wxWHITE_BRUSH );
     memdc.DrawRectangle( 0,0,60,50 );
     memdc.SetTextForeground( *wxBLACK );
+#ifndef __WXGTK20__
+    // I cannot convince GTK2 to draw into mono bitmaps
     memdc.DrawText( _T("Hi!"), 5, 5 );
+#endif
     memdc.SetBrush( *wxBLACK_BRUSH );
     memdc.DrawRectangle( 33,5,20,20 );
     memdc.SetPen( *wxRED_PEN );
@@ -564,7 +594,6 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextForeground( wxT("RED") );
         dc.SetTextBackground( wxT("GREEN") );
         dc.DrawBitmap( mono, 30, 2130 );
-
         dc.SetTextForeground( wxT("BLACK") );
         dc.DrawText( _T("After wxImage conversion"), 150, 2095 );
         dc.DrawText( _T("(red on white)"), 150, 2110 );
@@ -579,17 +608,41 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextForeground( wxT("BLACK") );
     }
 
-    dc.DrawText(_T("XPM bitmap"), 30, 2230);
+    // For testing transparency
+    dc.SetBrush( *wxRED_BRUSH );
+    dc.DrawRectangle( 20, 2220, 560, 68 );
+    
+    dc.DrawText(_T("XPM bitmap"), 30, 2230 );
     if ( m_bmpSmileXpm.Ok() )
-    {
         dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, TRUE);
-    }
 
-    dc.DrawText(_T("XPM icon"), 150, 2230);
+    dc.DrawText(_T("XPM icon"), 110, 2230 );
     if ( m_iconSmileXpm.Ok() )
-    {
-        dc.DrawIcon(m_iconSmileXpm, 150, 2250);
-    }
+        dc.DrawIcon(m_iconSmileXpm, 110, 2250);
+    
+    // testing icon -> bitmap conversion    
+    wxBitmap to_blit( m_iconSmileXpm );
+
+    dc.DrawText( _T("SubBitmap"), 170, 2230 );
+    wxBitmap sub = to_blit.GetSubBitmap( wxRect(0,0,15,15) );
+    dc.DrawBitmap( sub, 170, 2250, TRUE );
+
+    dc.DrawText( _T("Enlarged"), 250, 2230 );
+    dc.SetUserScale( 1.5, 1.5 );
+    dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5), TRUE );
+    dc.SetUserScale( 2, 2 );
+    dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2), TRUE );
+    dc.SetUserScale( 1.0, 1.0 );
+    
+    dc.DrawText( _T("Blit"), 400, 2230);
+    wxMemoryDC blit_dc;
+    blit_dc.SelectObject( to_blit );
+    dc.Blit( 400, 2250, to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+    dc.SetUserScale( 1.5, 1.5 );
+    dc.Blit( (int)(450/1.5), (int)(2250/1.5), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+    dc.SetUserScale( 2, 2 );
+    dc.Blit( (int)(500/2), (int)(2250/2), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+    dc.SetUserScale( 1.0, 1.0 );
 
     dc.DrawText( _T("ICO handler (1st image)"), 30, 2290 );
     if (my_horse_ico32 && my_horse_ico32->Ok())
@@ -611,6 +664,13 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawLine (xH-10,yH,xH+10,yH);
         dc.DrawLine (xH,yH-10,xH,yH+10);
     }
+    dc.DrawText( _T("ANI handler"), 230, 2390 );
+    int i ;
+    for (i=0; i < m_ani_images; i ++)
+        if (my_horse_ani[i].Ok())
+        {
+            dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, TRUE );
+        }
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -768,6 +828,7 @@ bool MyApp::OnInit()
 #if wxUSE_ICO_CUR
   wxImage::AddHandler( new wxICOHandler );
   wxImage::AddHandler( new wxCURHandler );
+  wxImage::AddHandler( new wxANIHandler );
 #endif
 
   wxFrame *frame = new MyFrame();

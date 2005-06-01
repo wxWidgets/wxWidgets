@@ -508,7 +508,7 @@ bool wxBitmap::SaveFile(
 
 
 // ----------------------------------------------------------------------------
-// wxImage-wxBitmap convertion
+// wxImage-wxBitmap conversion
 // ----------------------------------------------------------------------------
 
 bool wxBitmap::CreateFromImage (

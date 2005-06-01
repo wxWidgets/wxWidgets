@@ -191,24 +191,19 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     if ( !width || !height )
         return TRUE;
 
-    GdkRectangle rect;
-    rect.x = x;
-    rect.y = y;
-    rect.width = width;
-    rect.height = height;
-
-    if (!m_refData)
+    if ( !m_refData )
     {
-        m_refData = new wxRegionRefData();
-#ifdef __WXGTK20__
-        M_REGIONDATA->m_region = gdk_region_rectangle( &rect );
-#else
-        M_REGIONDATA->m_region = gdk_region_union_with_rect(wxGdkRegion(), &rect);
-#endif
+        InitRect(x, y, width, height);
     }
     else
     {
         AllocExclusive();
+
+        GdkRectangle rect;
+        rect.x = x;
+        rect.y = y;
+        rect.width = width;
+        rect.height = height;
 
 #ifdef __WXGTK20__
         gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
@@ -274,16 +269,11 @@ bool wxRegion::Intersect( const wxRegion& region )
 
     if (!m_refData)
     {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
+        // intersecting with invalid region doesn't make sense
+        return FALSE;
+    }
 
-        // leave here
-        return TRUE;
-    }
-    else
-    {
-        AllocExclusive();
-    }
+    AllocExclusive();
 
 #ifdef __WXGTK20__
     gdk_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
@@ -315,13 +305,11 @@ bool wxRegion::Subtract( const wxRegion& region )
 
     if (!m_refData)
     {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
+        // subtracting from an invalid region doesn't make sense
+        return FALSE;
     }
-    else
-    {
-        AllocExclusive();
-    }
+
+    AllocExclusive();
 
 #ifdef __WXGTK20__
     gdk_region_subtract( M_REGIONDATA->m_region, region.GetRegion() );
@@ -353,13 +341,10 @@ bool wxRegion::Xor( const wxRegion& region )
 
     if (!m_refData)
     {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
+        return FALSE;
     }
-    else
-    {
-        AllocExclusive();
-    }
+
+    AllocExclusive();
 
 #ifdef __WXGTK20__
     gdk_region_xor( M_REGIONDATA->m_region, region.GetRegion() );
@@ -368,6 +353,18 @@ bool wxRegion::Xor( const wxRegion& region )
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
 #endif
+
+    return TRUE;
+}
+
+bool wxRegion::Offset( wxCoord x, wxCoord y )
+{
+    if (!m_refData)
+        return FALSE;
+
+    AllocExclusive();
+
+    gdk_region_offset( M_REGIONDATA->m_region, x, y );
 
     return TRUE;
 }
@@ -401,18 +398,6 @@ wxRect wxRegion::GetBox() const
     wxCoord x, y, w, h;
     GetBox( x, y, w, h );
     return wxRect( x, y, w, h );
-}
-
-bool wxRegion::Offset( wxCoord x, wxCoord y )
-{
-    if (!m_refData)
-        return FALSE;
-
-    AllocExclusive();
-
-    gdk_region_offset( M_REGIONDATA->m_region, x, y );
-
-    return TRUE;
 }
 
 bool wxRegion::Empty() const
@@ -495,7 +480,7 @@ struct _XRegion {
     _XBox *rects, extents;
 };
 
-#endif
+#endif // GTK+ 1.x
 
 class wxRIRefData: public wxObjectRefData
 {
@@ -592,42 +577,48 @@ bool wxRegionIterator::HaveRects() const
     return m_current < ((wxRIRefData*)m_refData)->m_numRects;
 }
 
-wxRegionIterator::operator bool () const
+wxRegionIterator& wxRegionIterator::operator ++ ()
 {
-    return HaveRects();
+    if (HaveRects())
+        ++m_current;
+
+    return *this;
 }
 
-void wxRegionIterator::operator ++ ()
+wxRegionIterator wxRegionIterator::operator ++ (int)
 {
-    if (HaveRects()) ++m_current;
-}
+    wxRegionIterator tmp = *this;
+    if (HaveRects())
+        ++m_current;
 
-void wxRegionIterator::operator ++ (int)
-{
-    if (HaveRects()) ++m_current;
+    return tmp;
 }
 
 wxCoord wxRegionIterator::GetX() const
 {
-    if( !HaveRects() ) return 0;
+    wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
+
     return ((wxRIRefData*)m_refData)->m_rects[m_current].x;
 }
 
 wxCoord wxRegionIterator::GetY() const
 {
-    if( !HaveRects() ) return 0;
+    wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
+
     return ((wxRIRefData*)m_refData)->m_rects[m_current].y;
 }
 
 wxCoord wxRegionIterator::GetW() const
 {
-    if( !HaveRects() ) return -1;
+    wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
+
     return ((wxRIRefData*)m_refData)->m_rects[m_current].width;
 }
 
 wxCoord wxRegionIterator::GetH() const
 {
-    if( !HaveRects() ) return -1;
+    wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
+
     return ((wxRIRefData*)m_refData)->m_rects[m_current].height;
 }
 

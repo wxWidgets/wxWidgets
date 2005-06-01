@@ -204,7 +204,8 @@ static const char *wxPostScriptHeaderColourImage = "\
   } ifelse          %% end of 'false' case\n\
 ";
 
-#ifndef __WXGTK20__
+#if wxUSE_PANGO
+#else
 static char wxPostScriptHeaderReencodeISO1[] =
     "\n/reencodeISO {\n"
 "dup dup findfont dup length dict begin\n"
@@ -253,7 +254,7 @@ static char wxPostScriptHeaderReencodeISO2[] =
 
 IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 
-float wxPostScriptDC::ms_PSScaleFactor = 10.0;
+float wxPostScriptDC::ms_PSScaleFactor = 1.0;
 
 void wxPostScriptDC::SetResolution(int ppi)
 {
@@ -886,7 +887,8 @@ void wxPostScriptDC::SetFont( const wxFont& font )
 
     m_font = font;
 
-#ifndef __WXGTK20__
+#if wxUSE_PANGO
+#else
     int Style = m_font.GetStyle();
     int Weight = m_font.GetWeight();
 
@@ -1117,13 +1119,18 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
     }
 }
 
-#ifdef __WXGTK20__
+#if wxUSE_PANGO
 
 #define PANGO_ENABLE_ENGINE
 
+#ifdef __WXGTK20__
 #include "wx/gtk/private.h"
-#include "wx/fontutil.h"
 #include "gtk/gtk.h"
+#else
+#include "wx/x11/private.h"
+#endif
+
+#include "wx/fontutil.h"
 #include <pango/pangoft2.h>
 #include <freetype/ftglyph.h>
 
@@ -1194,8 +1201,8 @@ void draw_bezier_outline(FILE *file,
 			 FT_UInt glyph_index,
 			 int pos_x,
 			 int pos_y,
-             int scale_x,
-             int scale_y )
+             double scale_x,
+             double scale_y )
 {
   FT_Int load_flags = FT_LOAD_NO_BITMAP;
   FT_Glyph glyph;
@@ -1213,16 +1220,20 @@ void draw_bezier_outline(FILE *file,
 
   fprintf(file, "gsave\n");
   fprintf(file, "%d %d translate\n", pos_x, pos_y );
-  // FT2 scales outlines to 26.6 pixels so the code below
-  // should read 26600 instead of the 60000.
-  fprintf(file, "%d 60000 div %d 60000 div scale\n", scale_x, scale_y );
-  fprintf(file, "0 0 0 setrgbcolor\n");
+  
+  // We have to replace the "," from the German
+  // locale with the Englich "." for PostScript
+  char buf[100];
+  sprintf(buf, "%.8f %.8f scale\n", scale_x, scale_y );
+  for (size_t i = 0; i < strlen(buf); i++)
+     if (buf[i] == ',') buf[i] = '.';
+  fprintf(file, buf);
 
   FT_Load_Glyph(face, glyph_index, load_flags);
   FT_Get_Glyph (face->glyph, &glyph);
   FT_Outline_Decompose (&(((FT_OutlineGlyph)glyph)->outline),
                         &outlinefunc, &outline_info);
-  fprintf(file, "closepath fill grestore \n");
+  fprintf(file, "closepath fill grestore\n");
   
   FT_Done_Glyph (glyph);
 }
@@ -1232,78 +1243,6 @@ void draw_bezier_outline(FILE *file,
 void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
-
-#ifdef __WXGTK20__
-    int dpi = GetResolution();
-    dpi = 300;
-    PangoContext *context = pango_ft2_get_context ( dpi, dpi );
-
-    pango_context_set_language (context, pango_language_from_string ("en_US"));
-    pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
-
-    pango_context_set_font_description (context, m_font.GetNativeFontInfo()->description );
-
-    PangoLayout *layout = pango_layout_new (context);
-#if wxUSE_UNICODE
-    wxCharBuffer buffer = wxConvUTF8.cWC2MB( text );
-#else
-    wxCharBuffer buffer = wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) );
-#endif
-	pango_layout_set_text( layout, (const char*) buffer, strlen(buffer) );
-
-    PangoRectangle rect;
-    pango_layout_get_extents(layout, NULL, &rect);
-    
-    int xx = x * PANGO_SCALE;
-    int yy = y * PANGO_SCALE + (rect.height*2/3);
-    
-    int scale_x = LogicalToDeviceXRel( 1000 );
-    int scale_y = LogicalToDeviceYRel( 1000 );
-    
-    // Loop over lines in layout
-    int num_lines = pango_layout_get_line_count( layout );
-    for (int i = 0; i < num_lines; i++)
-    {
-        PangoLayoutLine *line = pango_layout_get_line( layout, i );
-        
-        // Loop over runs in line
-        GSList *runs_list = line->runs;
-        while (runs_list)
-        {
-            PangoLayoutRun *run = (PangoLayoutRun*) runs_list->data;
-            PangoItem *item = run->item;
-            PangoGlyphString *glyphs = run->glyphs;
-            PangoAnalysis *analysis = &item->analysis;
-            PangoFont *font = analysis->font;
-            FT_Face ft_face = pango_ft2_font_get_face(font);
-            
-            int num_glyphs = glyphs->num_glyphs;
-            for (int glyph_idx = 0; glyph_idx < num_glyphs; glyph_idx++)
-            {
-                PangoGlyphGeometry geometry = glyphs->glyphs[glyph_idx].geometry;
-                int pos_x = xx + geometry.x_offset;
-                int pos_y = yy - geometry.y_offset;
-                xx += geometry.width;
-                
-                draw_bezier_outline( m_pstream, ft_face,
-			      (FT_UInt)(glyphs->glyphs[glyph_idx].glyph),
-			      LogicalToDeviceX( pos_x / PANGO_SCALE ), 
-                  LogicalToDeviceY( pos_y / PANGO_SCALE ),
-                  scale_x, scale_y );
-            }
-            runs_list = runs_list->next;
-        }
-	}
-
-    g_object_unref( G_OBJECT( layout ) );
-#else
-    wxCoord text_w, text_h, text_descent;
-
-    GetTextExtent(text, &text_w, &text_h, &text_descent);
-
-    // VZ: this seems to be unnecessary, so taking it out for now, if it
-    //     doesn't create any problems, remove this comment entirely
-    //SetFont( m_font );
 
     if (m_textForegroundColour.Ok())
     {
@@ -1344,6 +1283,90 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
             m_currentGreen = green;
         }
     }
+
+#if wxUSE_PANGO
+    int ps_dpi = 72;
+    int pango_dpi = 600;
+    PangoContext *context = pango_ft2_get_context ( pango_dpi, pango_dpi );
+    
+    double scale = (double)pango_dpi / (double)ps_dpi;
+    scale /= m_userScaleY;
+
+    pango_context_set_language (context, pango_language_from_string ("en_US"));
+    pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
+
+    pango_context_set_font_description (context, m_font.GetNativeFontInfo()->description );
+
+    PangoLayout *layout = pango_layout_new (context);
+#if wxUSE_UNICODE
+    wxCharBuffer buffer = wxConvUTF8.cWC2MB( text );
+#else
+    wxCharBuffer buffer = wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) );
+#endif
+	pango_layout_set_text( layout, (const char*) buffer, strlen(buffer) );
+    
+    fprintf( m_pstream, "%%%% %s\n", (const char*)buffer );
+
+    PangoRectangle rect;
+    pango_layout_get_extents(layout, NULL, &rect);
+    
+    int xx = LogicalToDeviceX( x );
+    int yy = LogicalToDeviceY( y );
+    
+    int xxx = xx * PANGO_SCALE;
+    int yyy = yy * PANGO_SCALE - (int)(rect.height * 0.66 / scale);  // Move down by estimated baseline. HACK.
+
+#define ps_kludge_factor 2.8
+
+    // Loop over lines in layout
+    int num_lines = pango_layout_get_line_count( layout );
+    for (int i = 0; i < num_lines; i++)
+    {
+        PangoLayoutLine *line = pango_layout_get_line( layout, i );
+        
+        // width of glyphs already printed
+        int all_width = 0;
+        
+        // Loop over runs in line
+        GSList *runs_list = line->runs;
+        while (runs_list)
+        {
+            PangoLayoutRun *run = (PangoLayoutRun*) runs_list->data;
+            PangoItem *item = run->item;
+            PangoGlyphString *glyphs = run->glyphs;
+            PangoAnalysis *analysis = &item->analysis;
+            PangoFont *font = analysis->font;
+            FT_Face ft_face = pango_ft2_font_get_face(font);
+            
+            int num_glyphs = glyphs->num_glyphs;
+            for (int glyph_idx = 0; glyph_idx < num_glyphs; glyph_idx++)
+            {
+                PangoGlyphGeometry geometry = glyphs->glyphs[glyph_idx].geometry;
+                int pos_x = xxx + (int)((double)(all_width+geometry.x_offset) / scale);
+                int pos_y = yyy + (int)((double)geometry.y_offset / scale );
+                all_width += geometry.width;
+                
+                draw_bezier_outline( m_pstream, ft_face,
+			      (FT_UInt)(glyphs->glyphs[glyph_idx].glyph),
+			      pos_x / PANGO_SCALE, 
+                  pos_y / PANGO_SCALE,
+                  1.0/(ps_kludge_factor * scale * 26.6), 
+                  1.0/(ps_kludge_factor * scale * 26.6) );
+            }
+            runs_list = runs_list->next;
+        }
+	}
+
+    g_object_unref( G_OBJECT( layout ) );
+    g_object_unref( G_OBJECT( context ) );
+#else
+    wxCoord text_w, text_h, text_descent;
+
+    GetTextExtent(text, &text_w, &text_h, &text_descent);
+
+    // VZ: this seems to be unnecessary, so taking it out for now, if it
+    //     doesn't create any problems, remove this comment entirely
+    //SetFont( m_font );
 
     int size = m_font.GetPointSize();
 
@@ -1699,9 +1722,9 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 {
     wxCHECK_MSG( m_ok, FALSE, wxT("invalid postscript dc") );
 
-    if (m_printData.GetFilename() == "")
+    if (m_printData.GetFilename() == wxT(""))
     {
-        wxString filename = wxGetTempFileName("ps");
+        wxString filename = wxGetTempFileName( wxT("ps") );
         m_printData.SetFilename(filename);
     }
 
@@ -1754,7 +1777,8 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     fprintf( m_pstream, wxPostScriptHeaderEllipse );
     fprintf( m_pstream, wxPostScriptHeaderEllipticArc );
     fprintf( m_pstream, wxPostScriptHeaderColourImage );
-#ifndef __WXGTK20__
+#if wxUSE_PANGO
+#else
     fprintf( m_pstream, wxPostScriptHeaderReencodeISO1 );
     fprintf( m_pstream, wxPostScriptHeaderReencodeISO2 );
 #endif
@@ -1861,6 +1885,8 @@ void wxPostScriptDC::EndDoc ()
     {
         wxString command;
         command += m_printData.GetPrinterCommand();
+        command += wxT(" ");
+        command += m_printData.GetPrinterOptions();
         command += wxT(" ");
         command += m_printData.GetFilename();
 
@@ -1969,12 +1995,18 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     {
         if (x) (*x) = 0;
         if (y) (*y) = 0;
+        if (descent) (*descent) = 0;
+        if (externalLeading) (*externalLeading) = 0;
         return;
     }
     
-#ifdef __WXGTK20__
-    int dpi = GetResolution();
-    PangoContext *context = pango_ft2_get_context ( dpi, dpi );
+#if wxUSE_PANGO
+    int wx_dpi = GetResolution();
+    int pango_dpi = 600;
+    PangoContext *context = pango_ft2_get_context ( pango_dpi, pango_dpi );
+    
+    double scale = pango_dpi / wx_dpi;
+    scale /= m_userScaleY;
     
     pango_context_set_language (context, pango_language_from_string ("en_US"));
     pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
@@ -1984,20 +2016,19 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     PangoFontDescription *desc = fontToUse->GetNativeFontInfo()->description;
     pango_layout_set_font_description(layout, desc);
 #if wxUSE_UNICODE
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
-        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
 #else
-        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
 #endif
+    pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
  
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
     
-    if (x) (*x) = (wxCoord) ( m_scaleX * rect.width / PANGO_SCALE );
-    if (y) (*y) = (wxCoord) ( m_scaleY * rect.height / PANGO_SCALE );
+    if (x) (*x) = (wxCoord) ( rect.width / PANGO_SCALE / scale );
+    if (y) (*y) = (wxCoord) ( rect.height / PANGO_SCALE / scale );
     if (descent)
     {
         // Do something about metrics here
@@ -2093,40 +2124,40 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         lastStyle =  Style;
         lastWeight = Weight;
 
-        const char *name = NULL;
+        const wxChar *name = NULL;
 
         switch (Family)
         {
             case wxMODERN:
             case wxTELETYPE:
             {
-                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "CourBoO.afm";
-                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "CourBo.afm";
-                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "CourO.afm";
-                else name = "Cour.afm";
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = wxT("CourBoO.afm");
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = wxT("CourBo.afm");
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = wxT("CourO.afm");
+                else name = wxT("Cour.afm");
                 break;
             }
             case wxROMAN:
             {
-                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "TimesBoO.afm";
-                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "TimesBo.afm";
-                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "TimesO.afm";
-                else name = "TimesRo.afm";
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = wxT("TimesBoO.afm");
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = wxT("TimesBo.afm");
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = wxT("TimesO.afm");
+                else name = wxT("TimesRo.afm");
                 break;
             }
             case wxSCRIPT:
             {
-                name = "Zapf.afm";
+                name = wxT("Zapf.afm");
                 Style = wxNORMAL;
                 Weight = wxNORMAL;
             }
             case wxSWISS:
             default:
             {
-                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "HelvBoO.afm";
-                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "HelvBo.afm";
-                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "HelvO.afm";
-                else name = "Helv.afm";
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = wxT("HelvBoO.afm");
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = wxT("HelvBo.afm");
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = wxT("HelvO.afm");
+                else name = wxT("Helv.afm");
                 break;
             }
         }
@@ -2260,12 +2291,12 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
            /  the correct way would be to map the character names
            /  like 'adieresis' to corresp. positions of ISOEnc and read
            /  these values from AFM files, too. Maybe later ... */
-        lastWidths[196] = lastWidths['A'];  // Ä
-        lastWidths[228] = lastWidths['a'];  // ä
-        lastWidths[214] = lastWidths['O'];  // Ö
-        lastWidths[246] = lastWidths['o'];  // ö
-        lastWidths[220] = lastWidths['U'];  // Ü
-        lastWidths[252] = lastWidths['u'];  // ü
+        lastWidths[196] = lastWidths[(int)'A'];  // Ä
+        lastWidths[228] = lastWidths[(int)'a'];  // ä
+        lastWidths[214] = lastWidths[(int)'O'];  // Ö
+        lastWidths[246] = lastWidths[(int)'o'];  // ö
+        lastWidths[220] = lastWidths[(int)'U'];  // Ü
+        lastWidths[252] = lastWidths[(int)'u'];  // ü
         lastWidths[223] = lastWidths[251];  // ß
 
         /* JC: calculate UnderlineThickness/UnderlinePosition */
@@ -2292,7 +2323,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         if(lastWidths[*p]== INT_MIN)
         {
             wxLogDebug(wxT("GetTextExtent: undefined width for character '%c' (%d)"), *p,*p);
-            sum += lastWidths[' ']; /* assume space */
+            sum += lastWidths[(int)' ']; /* assume space */
         }
         else
         {

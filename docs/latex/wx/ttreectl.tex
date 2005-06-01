@@ -6,7 +6,8 @@ The tree control displays its items in a tree like structure. Each item has its
 own (optional) icon and a label. An item may be either collapsed (meaning that
 its children are not visible) or expanded (meaning that its children are
 shown). Each item in the tree is identified by its {\it itemId} which is of
-opaque data type {\it wxTreeItemId}.
+opaque data type {\it wxTreeItemId}. You can test whether an item is valid
+by calling wxTreeItemId::IsOk.
 
 The items text and image may be retrieved and changed with 
 \helpref{GetItemText}{wxtreectrlgetitemtext}/\helpref{SetItemText}{wxtreectrlsetitemtext} 

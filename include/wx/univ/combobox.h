@@ -160,6 +160,10 @@ public:
     virtual bool Enable(bool enable = TRUE);
     virtual bool Show(bool show = TRUE);
 
+#if wxUSE_TOOLTIPS
+    virtual void DoSetToolTip( wxToolTip *tip );
+#endif // wxUSE_TOOLTIPS
+
 protected:
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestClientSize() const;

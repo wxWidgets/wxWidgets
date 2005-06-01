@@ -4,12 +4,14 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 buttonDefs = {
-    814 : ('GridSimple',      'Simple wxGrid, catching all events'),
-    815 : ('GridStdEdRend',   'wxGrid showing Editors and Renderers'),
-    818 : ('GridHugeTable',   'A wxGrid with a HUGE table (100 MILLION cells!)'),
-    817 : ('GridCustTable',   'wxGrid using a custom Table, with non-string data'),
-    819 : ('GridEnterHandler','Remapping keys to behave differently'),
-    820 : ('GridCustEditor',  'Shows how to create a custom Cell Editor'),
+    814 : ('GridSimple',      ' Simple wxGrid, catching all events '),
+    815 : ('GridStdEdRend',   ' wxGrid showing Editors and Renderers '),
+    818 : ('GridHugeTable',   ' A wxGrid with a HUGE table (100 MILLION cells!) '),
+    817 : ('GridCustTable',   ' wxGrid using a custom Table, with non-string data '),
+    819 : ('GridEnterHandler',' Remapping keys to behave differently '),
+    820 : ('GridCustEditor',  ' Shows how to create a custom Cell Editor '),
+    821 : ('GridDragable',    ' A wxGrid with dragable rows and columns '),
+    822 : ('GridDragAndDrop', 'Shows how to make a grid a drop target for files'),
     }
 
 
@@ -25,10 +27,10 @@ class ButtonPanel(wxPanel):
         for k in keys:
             text = buttonDefs[k][1]
             btn = wxButton(self, k, text)
-            box.Add(btn, 0, wxALIGN_CENTER|wxALL, 15)
+            box.Add(btn, 0, wxALIGN_CENTER|wxALL, 10)
             EVT_BUTTON(self, k, self.OnButton)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(box)
 
 
@@ -36,7 +38,7 @@ class ButtonPanel(wxPanel):
         modName = buttonDefs[evt.GetId()][0]
         module = __import__(modName)
         frame = module.TestFrame(None, self.log)
-        frame.Show(true)
+        frame.Show(True)
 
 
 #---------------------------------------------------------------------------
@@ -93,9 +95,6 @@ changes how the ENTER key works, moving the current cell left to right
 and wrapping around to the next row when needed.
 </ol>
 <p>
-You can also look at the <a href="data/grid.i">SWIG interface
-file</a> used to generate the grid module for a lot more clues as to
-how things work.
 
 """
 

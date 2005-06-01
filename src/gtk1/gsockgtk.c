@@ -1,8 +1,10 @@
 /* -------------------------------------------------------------------------
- * Project: GSocket (Generic Socket) for WX
- * Name:    gsockgtk.c
- * Purpose: GSocket: GTK part
- * CVSID:   $Id$
+ * Project:     GSocket (Generic Socket) for WX
+ * Name:        gsockgtk.c
+ * Copyright:   (c) Guilhem Lavaux
+ * Licence:     wxWindows Licence
+ * Purpose:     GSocket: GTK part
+ * CVSID:       $Id$
  * -------------------------------------------------------------------------
  */
 #include "wx/setup.h"

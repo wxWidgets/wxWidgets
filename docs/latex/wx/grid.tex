@@ -12,7 +12,7 @@ examples of simple and more complex applications, explains the
 relationship between the various grid classes and has a summary of the
 keyboard shortcuts and mouse functions provided by wxGrid.
 
-wxGrid has been greatly expanded and redesigned for wxWindows 2.2
+wxGrid has been greatly expanded and redesigned for wxWidgets 2.2
 onwards. If you have been using the old wxGrid class you will probably
 want to have a look at the \helpref{wxGrid classes overview}{gridoverview} to see
 how things have changed. The new grid classes are reasonably backward-compatible
@@ -40,27 +40,34 @@ There are presently no specific window styles for wxGrid.
 
 The event handler for the following functions takes a 
  \helpref{wxGridSizeEvent}{wxgridsizeevent} parameter.
+The ...\_CMD\_... variants also take a window identifier.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_GRID\_COL\_SIZE(func)}}{The user resized a column by dragging it. Processes a wxEVT\_GRID\_COL\_SIZE.}
 \twocolitem{{\bf EVT\_GRID\_ROW\_SIZE(func)}}{The user resized a row by dragging it. Processes a wxEVT\_GRID\_ROW\_SIZE.}
+\twocolitem{{\bf EVT\_GRID\_CMD\_COL\_SIZE(func)}}{The user resized a column by dragging it; variant taking a window identifier. Processes a wxEVT\_GRID\_COL\_SIZE.}
+\twocolitem{{\bf EVT\_GRID\_CMD\_ROW\_SIZE(func)}}{The user resized a row by dragging it; variant taking a window identifier. Processes a wxEVT\_GRID\_ROW\_SIZE.}
 \end{twocollist}%
 
 The event handler for the following functions takes a 
  \helpref{wxGridRangeSelectEvent}{wxgridrangeselectevent} parameter.
+The ...\_CMD\_... variant also takes a window identifier.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_GRID\_RANGE\_SELECT(func)}}{The user selected a group of contiguous cells. Processes a wxEVT\_GRID\_RANGE\_SELECT.}
+\twocolitem{{\bf EVT\_GRID\_CMD\_RANGE\_SELECT(id, func)}}{The user selected a group of contiguous cells; variant taking a window identifier. Processes a wxEVT\_GRID\_RANGE\_SELECT.}
 \end{twocollist}%
 
 The event handler for the following functions takes a 
  \helpref{wxGridEditorCreatedEvent}{wxgrideditorcreatedevent} parameter.
+The ...\_CMD\_... variant also takes a window identifier.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_GRID\_EDITOR\_CREATED(func)}}{The editor for a cell was created. Processes a wxEVT\_GRID\_EDITOR\_CREATED.}
+\twocolitem{{\bf EVT\_GRID\_CMD\_EDITOR\_CREATED(id, func)}}{The editor for a cell was created; variant taking a window identifier. Processes a wxEVT\_GRID\_EDITOR\_CREATED.}
 \end{twocollist}%
 
 \wxheading{See also}
@@ -462,8 +469,8 @@ and the \helpref{wxGrid overview}{gridoverview} for more information.
 
 Sets the arguments to the current column label alignment values.
 
-Horizontal alignment will be one of wxLEFT, wxCENTRE or wxRIGHT. \\
-Vertical alignment will be one of wxTOP, wxCENTRE or wxBOTTOM.
+Horizontal alignment will be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT.\\
+Vertical alignment will be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
 \perlnote{This method takes no parameters and
 returns a 2-element list {\tt ( horiz, vert )}.}
@@ -1071,6 +1078,26 @@ for this to have any effect.
 
 Sets the minimal width for the specified column. This should normally be called when creating the grid
 because it will not resize a column that is already narrower than the minimal width.
+The width argument must be higher than the minimimal acceptable column width, see
+\helpref{wxGrid::GetColMinimalAcceptableWidth}{wxgridgetcolminimalacceptablewidth}.
+
+\membersection{wxGrid::SetColMinimalAcceptableWidth}\label{wxgridsetcolminimalacceptablewidth}
+
+\func{void}{SetColMinimalAcceptableWidth}{\param{int }{width}}
+
+This modifies the minimum column width that can be handled correctly. Specifying a low value here
+allows smaller grid cells to be dealt with correctly. Specifying a value here which is much smaller
+than the actual minimum size will incur a performance penalty in the functions which perform
+grid cell index lookup on the basis of screen coordinates.
+This should normally be called when creating the grid because it will not resize existing columns
+with sizes smaller than the value specified here. 
+
+\membersection{wxGrid::GetColMinimalAcceptableWidth}\label{wxgridgetcolminimalacceptablewidth}
+
+\func{int}{GetColMinimalAcceptableWidth}{}
+
+This returns the value of the lowest column width that can be handled correctly. See
+member \helpref{SetColMinimalAcceptableWidth}{wxgridsetcolminimalacceptablewidth} for details.
 
 \membersection{wxGrid::SetColSize}\label{wxgridsetcolsize}
 
@@ -1214,10 +1241,30 @@ for this to have any effect.
 
 \membersection{wxGrid::SetRowMinimalHeight}\label{wxgridsetrowminimalheight}
 
-\func{void}{SetRowMinimalHeight}{\param{int }{row}, \param{int }{width}}
+\func{void}{SetRowMinimalHeight}{\param{int }{row}, \param{int }{height}}
 
 Sets the minimal height for the specified row. This should normally be called when creating the grid
 because it will not resize a row that is already shorter than the minimal height.
+The height argument must be higher than the minimimal acceptable row height, see
+\helpref{wxGrid::GetRowMinimalAcceptableHeight}{wxgridgetrowminimalacceptableheight}.
+
+\membersection{wxGrid::SetRowMinimalAcceptableHeight}\label{wxgridsetrowminimalacceptableheight}
+
+\func{void}{SetRowMinimalAcceptableHeight}{\param{int }{height}}
+
+This modifies the minimum row width that can be handled correctly. Specifying a low value here
+allows smaller grid cells to be dealt with correctly. Specifying a value here which is much smaller
+than the actual minimum size will incur a performance penalty in the functions which perform
+grid cell index lookup on the basis of screen coordinates.
+This should normally be called when creating the grid because it will not resize existing rows
+with sizes smaller than the value specified here. 
+
+\membersection{wxGrid::GetRowMinimalAcceptableHeight}\label{wxgridgetrowminimalacceptableheight}
+
+\func{int}{GetRowMinimalAcceptableHeight}{}
+
+This returns the value of the lowest row width that can be handled correctly. See
+member \helpref{SetRowMinimalAcceptableHeight}{wxgridsetrowminimalacceptableheight} for details.
 
 \membersection{wxGrid::SetRowSize}\label{wxgridsetrowsize}
 

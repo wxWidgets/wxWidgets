@@ -37,11 +37,11 @@
  *
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapShape, wxShape)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapShape, wxRectangleShape)
 
 wxBitmapShape::wxBitmapShape():wxRectangleShape(100.0, 50.0)
 {
-  m_filename = "";
+  m_filename = wxEmptyString;
 }
 
 wxBitmapShape::~wxBitmapShape()
@@ -52,13 +52,11 @@ void wxBitmapShape::OnDraw(wxDC& dc)
 {
   if (!m_bitmap.Ok())
     return;
-    
-  wxMemoryDC tempDC;
-  tempDC.SelectObject(m_bitmap);
+
   double x, y;
   x = WXROUND(m_xpos - m_bitmap.GetWidth() / 2.0);
   y = WXROUND(m_ypos - m_bitmap.GetHeight() / 2.0);
-  dc.Blit((long) x, (long) y, m_bitmap.GetWidth(), m_bitmap.GetHeight(), &tempDC, 0, 0);
+  dc.DrawBitmap(m_bitmap, x, y, true);
 }
 
 void wxBitmapShape::SetSize(double w, double h, bool recursive)
@@ -76,7 +74,7 @@ void wxBitmapShape::SetSize(double w, double h, bool recursive)
   SetDefaultRegionSize();
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxBitmapShape::WriteAttributes(wxExpr *clause)
 {
   // Can't really save the bitmap; so instantiate the bitmap

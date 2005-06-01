@@ -180,7 +180,7 @@ public:
 
     // forward some of base class virtuals to wxGDIImageRefData
     bool FreeResource(bool force = FALSE);
-    virtual WXHANDLE GetResourceHandle();
+    virtual WXHANDLE GetResourceHandle() const;
 
 protected:
     // create the data for the derived class here

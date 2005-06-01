@@ -55,6 +55,8 @@ void Indicator::Draw(Surface *surface, PRectangle &rc) {
 	} else if (style == INDIC_STRIKE) {
 		surface->MoveTo(rc.left, rc.top - 4);
 		surface->LineTo(rc.right, rc.top - 4);
+	} else if (style == INDIC_HIDDEN) {
+		// Draw nothing
 	} else {	// Either INDIC_PLAIN or unknown
 		surface->MoveTo(rc.left, ymid);
 		surface->LineTo(rc.right, ymid);

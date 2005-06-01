@@ -39,10 +39,6 @@
     #include <ctype.h>
 #endif
 
-#ifdef __EMX__
-    #include <std.h>
-#endif
-
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
    // problem in VACPP V4 with including stdlib.h multiple times
    // strconv includes it anyway
@@ -190,12 +186,19 @@ struct WXDLLEXPORT wxStringData
   // lock/unlock
   void  Lock()   { if ( !IsEmpty() ) nRefs++;                    }
 
-  // VC++ will refuse to inline this function but profiling shows that it
-  // is wrong
+  // VC++ will refuse to inline Unlock but profiling shows that it is wrong
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
   __forceinline
 #endif
+  // VC++ free must take place in same DLL as allocation when using non dll
+  // run-time library (e.g. Multithreaded instead of Multithreaded DLL)
+#if defined(__VISUALC__) && defined(_MT) && !defined(_DLL)
+  void  Unlock() { if ( !IsEmpty() && --nRefs == 0) Free();  }
+  // we must not inline deallocation since allocation is not inlined
+  void  Free();
+#else
   void  Unlock() { if ( !IsEmpty() && --nRefs == 0) free(this);  }
+#endif
 
   // if we had taken control over string memory (GetWriteBuf), it's
   // intentionally put in invalid state
@@ -314,7 +317,7 @@ public:
     // from multibyte string
     // (NB: nLength is right now number of Unicode characters, not
     //  characters in psz! So try not to use it yet!)
-  wxString(const char *psz, wxMBConv& conv = wxConvLibc, size_t nLength = wxSTRING_MAXLEN);
+  wxString(const char *psz, wxMBConv& conv, size_t nLength = wxSTRING_MAXLEN);
     // from wxWCharBuffer (i.e. return from wxGetString)
   wxString(const wxWCharBuffer& psz)
     { InitWith(psz, 0, wxSTRING_MAXLEN); }
@@ -461,14 +464,16 @@ public:
     // the behaviour of these functions with the strings containing anything
     // else than 7 bit ASCII characters is undefined, use at your own risk.
 #if wxUSE_UNICODE
-    static wxString FromAscii(const char *ascii);
+    static wxString FromAscii(const char *ascii);  // string
+    static wxString FromAscii(const char ascii);   // char
     const wxCharBuffer ToAscii() const;
 #else // ANSI
     static wxString FromAscii(const char *ascii) { return wxString( ascii ); }
+    static wxString FromAscii(const char ascii) { return wxString( ascii ); }
     const char *ToAscii() const { return c_str(); }
 #endif // Unicode/!Unicode
 
-    // conversions with (possible) format convertions: have to return a
+    // conversions with (possible) format conversions: have to return a
     // buffer with temporary data
     //
     // the functions defined (in either Unicode or ANSI) mode are mb_str() to
@@ -833,7 +838,7 @@ public:
     // returns true if the string is empty
   bool empty() const { return IsEmpty(); }
     // inform string about planned change in size
-  void reserve(size_t size) { Alloc(size); }
+  void reserve(size_t sz) { Alloc(sz); }
 
   // lib.string.access
     // return the character at position n

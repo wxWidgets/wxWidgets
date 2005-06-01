@@ -43,7 +43,7 @@
 // ----------------------------------------------------------------------------
 
 // we put our data in HKLM\SOFTWARE_KEY\appname
-#define SOFTWARE_KEY    wxString("Software\\")
+#define SOFTWARE_KEY    wxString(wxT("Software\\"))
 
 // ----------------------------------------------------------------------------
 // global functions
@@ -696,7 +696,7 @@ bool wxRegConfig::DeleteEntry(const wxString& value, bool WXUNUSED(bGroupIfEmpty
 
     if ( m_keyLocal.IsEmpty() ) {
       wxString strKey = GetPath().AfterLast(wxCONFIG_PATH_SEPARATOR);
-      SetPath("..");  // changes m_keyLocal
+      SetPath(_T(".."));  // changes m_keyLocal
       return LocalKey().DeleteKey(strKey);
     }
   }

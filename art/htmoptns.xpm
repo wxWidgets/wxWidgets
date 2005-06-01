@@ -1,6 +1,6 @@
 /* XPM */
 static char * htmoptns_xpm[] = {
-"16 16 2 1",
+"16 15 2 1",
 " 	c None",
 ".	c #000000",
 "                ",
@@ -17,5 +17,4 @@ static char * htmoptns_xpm[] = {
 "  .       ...   ",
 " ..       ...   ",
 " ....   ....... ",
-"                ",
 "                "};

@@ -439,11 +439,13 @@ void MyFrame::OnButtonAddPage( wxCommandEvent& WXUNUSED(event) )
     static size_t s_pageAdded = 0;
 
     wxPanel *panel = new wxPanel( m_notebook, -1 );
-    (void) new wxButton( panel, -1, wxT("Button"),
+    (void) new wxButton( panel, -1, wxT("Frist button"),
         wxPoint(10, 10), wxSize(-1, -1) );
+    (void) new wxButton( panel, -1, wxT("Second button"),
+        wxPoint(50, 100), wxSize(-1, -1) );
 
     m_notebook->AddPage(panel, wxString::Format(ADDED_PAGE_NAME wxT("%u"),
-        ++s_pageAdded), FALSE, m_notebook->GetIconIndex() );
+        ++s_pageAdded), TRUE, m_notebook->GetIconIndex() );
 }
 
 void MyFrame::OnButtonInsertPage( wxCommandEvent& WXUNUSED(event) )

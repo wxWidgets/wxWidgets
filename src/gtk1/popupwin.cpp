@@ -160,7 +160,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     m_needParent = FALSE;
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
-        !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, "popup" ))
+        !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("popup") ))
     {
         wxFAIL_MSG( wxT("wxPopupWindow creation failed") );
         return FALSE;

@@ -1,0 +1,43 @@
+#
+# File:		Makefile for the widgets sample
+# Author:	Vadim Zeitlin
+# Copyright:	(c) 2002 wxWindows team
+#
+# This makefile requires a Unix version of wxWindows
+# to be installed on your system. This is most often
+# done typing "make install" when using the complete
+# sources of wxWindows or by installing the two
+# RPM packages wxGTK.XXX.rpm and wxGTK-devel.XXX.rpm
+# under Linux.
+#
+
+CXX = $(shell wx-config --cxx)
+
+PROGRAM = widgets
+
+OBJECTS = $(PROGRAM).o \
+		button.o \
+		combobox.o \
+		gauge.o \
+		listbox.o \
+		notebook.o \
+		radiobox.o \
+		slider.o \
+		spinbtn.o \
+		static.o \
+		textctrl.o
+
+# implementation
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CXX) -c `wx-config --cxxflags` -o $@ $<
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS)
+	$(CXX) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+
+clean: 
+	rm -f *.o $(PROGRAM)

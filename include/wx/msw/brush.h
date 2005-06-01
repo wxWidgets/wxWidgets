@@ -50,8 +50,8 @@ public:
 
     bool Ok() const { return m_refData != NULL; }
 
-    // create (if necessary) and return the HBRUSH for this brush
-    WXHBRUSH GetResourceHandle() const;
+    // return the HBRUSH for this brush
+    virtual WXHANDLE GetResourceHandle() const;
 
 protected:
     virtual wxObjectRefData *CreateRefData() const;

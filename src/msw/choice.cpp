@@ -193,9 +193,31 @@ int wxChoice::FindString(const wxString& s) const
 
 void wxChoice::SetString(int n, const wxString& s)
 {
-    wxCHECK_RET( (n>=0)&&(n<GetCount()), wxT("invalid item index in wxChoice::SetString") );
-    SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
-    SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LONG)s.c_str() );
+    wxCHECK_RET( n >= 0 && n < GetCount(),
+                 wxT("invalid item index in wxChoice::SetString") );
+
+    // we have to delete and add back the string as there is no way to change a
+    // string in place
+
+    // we need to preserve the client data
+    void *data;
+    if ( m_clientDataItemsType != wxClientData_None )
+    {
+        data = DoGetItemClientData(n);
+    }
+    else // no client data
+    {
+        data = NULL;
+    }
+
+    ::SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
+    ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LPARAM)s.c_str() );
+
+    if ( data )
+    {
+        DoSetItemClientData(n, data);
+    }
+    //else: it's already NULL by default
 }
 
 wxString wxChoice::GetString(int n) const
@@ -228,7 +250,8 @@ wxString wxChoice::GetString(int n) const
 
 void wxChoice::DoSetItemClientData( int n, void* clientData )
 {
-    if ( SendMessage(GetHwnd(), CB_SETITEMDATA, n, (LPARAM)clientData) == CB_ERR )
+    if ( ::SendMessage(GetHwnd(), CB_SETITEMDATA,
+                       n, (LPARAM)clientData) == CB_ERR )
     {
         wxLogLastError(wxT("CB_SETITEMDATA"));
     }
@@ -277,7 +300,19 @@ void wxChoice::DoMoveWindow(int x, int y, int width, int height)
     if ( width < 0 )
         return;
 
+    // To work around a Windows bug (see "Bug in Windows Combobox" thread in Google Groups)
+    // we have to reset the selection if it was accidentally selected in the size.
+    DWORD oldSelStart = 0;
+    DWORD oldSelEnd = 0;
+    DWORD newSelStart = 0;
+    DWORD newSelEnd = 0;
+
     wxControl::DoMoveWindow(x, y, width, height);
+
+    if (oldSelStart != newSelStart || oldSelEnd != newSelEnd)
+    {
+        ::SendMessage(GetHwnd(), CB_SETEDITSEL, (WPARAM) 0, (LPARAM) MAKELPARAM(oldSelStart, oldSelEnd));
+    }
 }
 
 void wxChoice::DoSetSize(int x, int y,
@@ -290,7 +325,21 @@ void wxChoice::DoSetSize(int x, int y,
     // the _displayed_ size (NOT the drop down menu size) so
     // setting-getting-setting size would not work.
 
+    // To work around a Windows bug (see "Bug in Windows Combobox" thread in Google Groups)
+    // we have to reset the selection if it was accidentally selected in the size.
+    DWORD oldSelStart = 0;
+    DWORD oldSelEnd = 0;
+    DWORD newSelStart = 0;
+    DWORD newSelEnd = 0;
+
+    ::SendMessage(GetHwnd(), CB_GETEDITSEL, (WPARAM) & oldSelStart, (LPARAM) & oldSelEnd);
+
     wxControl::DoSetSize(x, y, width, -1, sizeFlags);
+
+    if (oldSelStart != newSelStart || oldSelEnd != newSelEnd)
+    {
+        ::SendMessage(GetHwnd(), CB_SETEDITSEL, (WPARAM) 0, (LPARAM) MAKELPARAM(oldSelStart, oldSelEnd));
+    }
 }
 
 wxSize wxChoice::DoGetBestSize() const

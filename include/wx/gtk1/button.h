@@ -65,6 +65,7 @@ public:
     // --------------
 
     void ApplyWidgetStyle();
+    bool IsOwnGtkWindow( GdkWindow *window );
 
 protected:
     virtual wxSize DoGetBestSize() const;

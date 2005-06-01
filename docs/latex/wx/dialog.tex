@@ -51,10 +51,10 @@ below:
     }
 \end{verbatim}
 
-A dialog may be loaded from a wxWindows resource file (extension {\tt wxr}),
+A dialog may be loaded from a wxWidgets resource file (extension {\tt wxr}),
 which may itself be created by Dialog Editor. For details, see 
-\helpref{The wxWindows resource system}{resourceformats}, 
-\helpref{wxWindows resource functions}{resourcefuncs} 
+\helpref{The wxWidgets resource system}{resourceformats}, 
+\helpref{wxWidgets resource functions}{resourcefuncs} 
 and the resource sample.
 
 An application can define an \helpref{wxCloseEvent}{wxcloseevent} handler for
@@ -65,7 +65,7 @@ the dialog to respond to system close events.
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxCAPTION}}{Puts a caption on the dialog box.}
-\twocolitem{\windowstyle{wxDEFAULT\_DIALOG\_STYLE}}{Equivalent to a combination of wxCAPTION, wxSYSTEM\_MENU and wxTHICK\_FRAME}
+\twocolitem{\windowstyle{wxDEFAULT\_DIALOG\_STYLE}}{Equivalent to a combination of wxCAPTION and wxSYSTEM\_MENU (the latter is not used under Unix)}
 \twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Display a resizeable frame around the window.}
 \twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Display a system menu.}
 \twocolitem{\windowstyle{wxTHICK\_FRAME}}{Display a thick frame around the window.}
@@ -78,7 +78,7 @@ with {\tt NULL} parent window will be given the
 style to prevent this from happening and create a really orphan dialog (note
 that this is not recommended for modal dialogs).}
 \twocolitem{\windowstyle{wxDIALOG\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
-caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
+caption. When pressed, Windows will go into a context-sensitive help mode and wxWidgets will send
 a wxEVT\_HELP event if the user clicked on an application window. {\it Note}\ that this is an extended
 style and must be set by calling \helpref{SetExtraStyle}{wxwindowsetextrastyle} before Create is called (two-step construction).}
 \end{twocollist}
@@ -120,10 +120,10 @@ Constructor.
 \docparam{title}{The title of the dialog.}
 
 \docparam{pos}{The dialog position. A value of (-1, -1) indicates a default position, chosen by
-either the windowing system or wxWindows, depending on platform.}
+either the windowing system or wxWidgets, depending on platform.}
 
 \docparam{size}{The dialog size. A value of (-1, -1) indicates a default size, chosen by
-either the windowing system or wxWindows, depending on platform.}
+either the windowing system or wxWidgets, depending on platform.}
 
 \docparam{style}{The window style. See \helpref{wxDialog}{wxdialog}.}
 

@@ -1,7 +1,7 @@
 
 from wxPython.wx import *
 from wxPython.stc import *
-
+import images
 import keyword
 
 #----------------------------------------------------------------------
@@ -37,6 +37,9 @@ else:
 #----------------------------------------------------------------------
 
 class PythonSTC(wxStyledTextCtrl):
+
+    fold_symbols = 2
+    
     def __init__(self, parent, ID):
         wxStyledTextCtrl.__init__(self, parent, ID,
                                   style = wxNO_FULL_REPAINT_ON_RESIZE)
@@ -45,14 +48,15 @@ class PythonSTC(wxStyledTextCtrl):
         self.CmdKeyAssign(ord('N'), wxSTC_SCMOD_CTRL, wxSTC_CMD_ZOOMOUT)
 
         self.SetLexer(wxSTC_LEX_PYTHON)
-        self.SetKeyWords(0, string.join(keyword.kwlist))
+        self.SetKeyWords(0, " ".join(keyword.kwlist))
 
         self.SetProperty("fold", "1")
         self.SetProperty("tab.timmy.whinge.level", "1")
         self.SetMargins(0,0)
 
-        self.SetViewWhiteSpace(false)
-        #self.SetBufferedDraw(false)
+        self.SetViewWhiteSpace(False)
+        #self.SetBufferedDraw(False)
+        #self.SetViewEOL(True)
 
         self.SetEdgeMode(wxSTC_EDGE_BACKGROUND)
         self.SetEdgeColumn(78)
@@ -61,56 +65,80 @@ class PythonSTC(wxStyledTextCtrl):
         #self.SetFoldFlags(16)  ###  WHAT IS THIS VALUE?  WHAT ARE THE OTHER FLAGS?  DOES IT MATTER?
         self.SetMarginType(2, wxSTC_MARGIN_SYMBOL)
         self.SetMarginMask(2, wxSTC_MASK_FOLDERS)
-        self.SetMarginSensitive(2, true)
+        self.SetMarginSensitive(2, True)
         self.SetMarginWidth(2, 12)
 
-        if 0: # simple folder marks, like the old version
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDER, wxSTC_MARK_ARROW, "navy", "navy")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_ARROWDOWN, "navy", "navy")
-            # Set these to an invisible mark
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BACKGROUND, "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_BACKGROUND, "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_BACKGROUND, "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_BACKGROUND, "white", "black")
 
-        else: # more involved "outlining" folder marks
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_BOXPLUSCONNECTED,  "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUSCONNECTED, "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNER,  "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNER,  "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,    "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_BOXPLUS,  "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_BOXMINUS, "white", "black")
+        if self.fold_symbols == 0:
+            # Arrow pointing right for contracted folders, arrow pointing down for expanded
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_ARROWDOWN, "black", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_ARROW,     "black", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY,     "black", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY,     "black", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_EMPTY,     "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_EMPTY,     "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY,     "white", "black");
+            
+        elif self.fold_symbols == 1:
+            # Plus for contracted folders, minus for expanded
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_MINUS, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_PLUS,  "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_EMPTY, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_EMPTY, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY, "white", "black");
+
+	elif self.fold_symbols == 2:
+            # Like a flattened tree control using circular headers and curved joins
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_CIRCLEMINUS,          "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_CIRCLEPLUS,           "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,                "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNERCURVE,         "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_CIRCLEPLUSCONNECTED,  "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_CIRCLEMINUSCONNECTED, "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNERCURVE,         "white", "#404040");
+
+        elif self.fold_symbols == 3:
+            # Like a flattened tree control using square headers
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_BOXMINUS,          "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_BOXPLUS,           "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,             "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNER,           "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_BOXPLUSCONNECTED,  "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUSCONNECTED, "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNER,           "white", "#808080")
 
 
         EVT_STC_UPDATEUI(self,    ID, self.OnUpdateUI)
         EVT_STC_MARGINCLICK(self, ID, self.OnMarginClick)
+        EVT_KEY_DOWN(self, self.OnKeyPressed)
 
 
         # Make some styles,  The lexer defines what each style is used for, we
         # just have to define what each style looks like.  This set is adapted from
         # Scintilla sample property files.
 
-        self.StyleClearAll()
-
         # Global default styles for all languages
         self.StyleSetSpec(wxSTC_STYLE_DEFAULT,     "face:%(helv)s,size:%(size)d" % faces)
+        self.StyleClearAll()  # Reset all to be like the default
+
         self.StyleSetSpec(wxSTC_STYLE_LINENUMBER,  "back:#C0C0C0,face:%(helv)s,size:%(size2)d" % faces)
         self.StyleSetSpec(wxSTC_STYLE_CONTROLCHAR, "face:%(other)s" % faces)
         self.StyleSetSpec(wxSTC_STYLE_BRACELIGHT,  "fore:#FFFFFF,back:#0000FF,bold")
         self.StyleSetSpec(wxSTC_STYLE_BRACEBAD,    "fore:#000000,back:#FF0000,bold")
 
         # Python styles
-        # White space
-        self.StyleSetSpec(wxSTC_P_DEFAULT, "fore:#808080,face:%(helv)s,size:%(size)d" % faces)
-        # Comment
+        # Default 
+        self.StyleSetSpec(wxSTC_P_DEFAULT, "fore:#000000,face:%(helv)s,size:%(size)d" % faces)
+        # Comments
         self.StyleSetSpec(wxSTC_P_COMMENTLINE, "fore:#007F00,face:%(other)s,size:%(size)d" % faces)
         # Number
         self.StyleSetSpec(wxSTC_P_NUMBER, "fore:#007F7F,size:%(size)d" % faces)
         # String
-        self.StyleSetSpec(wxSTC_P_STRING, "fore:#7F007F,italic,face:%(times)s,size:%(size)d" % faces)
+        self.StyleSetSpec(wxSTC_P_STRING, "fore:#7F007F,face:%(helv)s,size:%(size)d" % faces)
         # Single quoted string
-        self.StyleSetSpec(wxSTC_P_CHARACTER, "fore:#7F007F,italic,face:%(times)s,size:%(size)d" % faces)
+        self.StyleSetSpec(wxSTC_P_CHARACTER, "fore:#7F007F,face:%(helv)s,size:%(size)d" % faces)
         # Keyword
         self.StyleSetSpec(wxSTC_P_WORD, "fore:#00007F,bold,size:%(size)d" % faces)
         # Triple quotes
@@ -124,16 +152,21 @@ class PythonSTC(wxStyledTextCtrl):
         # Operators
         self.StyleSetSpec(wxSTC_P_OPERATOR, "bold,size:%(size)d" % faces)
         # Identifiers
-        self.StyleSetSpec(wxSTC_P_IDENTIFIER, "fore:#808080,face:%(helv)s,size:%(size)d" % faces)
+        self.StyleSetSpec(wxSTC_P_IDENTIFIER, "fore:#000000,face:%(helv)s,size:%(size)d" % faces)
         # Comment-blocks
         self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F,size:%(size)d" % faces)
         # End of line where string is not closed
         self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eol,size:%(size)d" % faces)
 
-
         self.SetCaretForeground("BLUE")
 
-        EVT_KEY_DOWN(self, self.OnKeyPressed)
+
+        # register some images for use in the AutoComplete box.
+        self.RegisterImage(1, images.getSmilesBitmap())
+        self.RegisterImage(2, images.getFile1Bitmap())
+        self.RegisterImage(3, images.getCopy2Bitmap())
+
+
 
 
     def OnKeyPressed(self, event):
@@ -145,29 +178,36 @@ class PythonSTC(wxStyledTextCtrl):
             # Tips
             if event.ShiftDown():
                 self.CallTipSetBackground("yellow")
-                self.CallTipShow(pos, 'param1, param2')
+                self.CallTipShow(pos, 'lots of of text: blah, blah, blah\n\n'
+                                 'show some suff, maybe parameters..\n\n'
+                                 'fubar(param1, param2)')
             # Code completion
             else:
                 #lst = []
                 #for x in range(50000):
                 #    lst.append('%05d' % x)
-                #st = string.join(lst)
+                #st = " ".join(lst)
                 #print len(st)
                 #self.AutoCompShow(0, st)
 
                 kw = keyword.kwlist[:]
-                kw.append("zzzzzz")
-                kw.append("aaaaa")
-                kw.append("__init__")
-                kw.append("zzaaaaa")
-                kw.append("zzbaaaa")
+                kw.append("zzzzzz?2")
+                kw.append("aaaaa?2")
+                kw.append("__init__?3")
+                kw.append("zzaaaaa?2")
+                kw.append("zzbaaaa?2")
                 kw.append("this_is_a_longer_value")
-                kw.append("this_is_a_much_much_much_much_much_much_much_longer_value")
+                #kw.append("this_is_a_much_much_much_much_much_much_much_longer_value")
 
                 kw.sort()  # Python sorts are case sensitive
-                self.AutoCompSetIgnoreCase(false)  # so this needs to match
+                self.AutoCompSetIgnoreCase(False)  # so this needs to match
 
-                self.AutoCompShow(0, string.join(kw))
+                # Images are specified with a appended "?type"
+                for i in range(len(kw)):
+                    if kw[i] in keyword.kwlist:
+                        kw[i] = kw[i] + "?1"
+
+                self.AutoCompShow(0, " ".join(kw))
         else:
             event.Skip()
 
@@ -175,7 +215,7 @@ class PythonSTC(wxStyledTextCtrl):
     def OnUpdateUI(self, evt):
         # check for matching braces
         braceAtCaret = -1
-	braceOpposite = -1
+        braceOpposite = -1
         charBefore = None
         caretPos = self.GetCurrentPos()
         if caretPos > 0:
@@ -201,9 +241,9 @@ class PythonSTC(wxStyledTextCtrl):
         else:
             self.BraceHighlight(braceAtCaret, braceOpposite)
             #pt = self.PointFromPosition(braceOpposite)
-            #self.Refresh(true, wxRect(pt.x, pt.y, 5,5))
+            #self.Refresh(True, wxRect(pt.x, pt.y, 5,5))
             #print pt
-            #self.Refresh(false)
+            #self.Refresh(False)
 
 
     def OnMarginClick(self, evt):
@@ -215,22 +255,22 @@ class PythonSTC(wxStyledTextCtrl):
                 lineClicked = self.LineFromPosition(evt.GetPosition())
                 if self.GetFoldLevel(lineClicked) & wxSTC_FOLDLEVELHEADERFLAG:
                     if evt.GetShift():
-                        self.SetFoldExpanded(lineClicked, true)
-                        self.Expand(lineClicked, true, true, 1)
+                        self.SetFoldExpanded(lineClicked, True)
+                        self.Expand(lineClicked, True, True, 1)
                     elif evt.GetControl():
                         if self.GetFoldExpanded(lineClicked):
-                            self.SetFoldExpanded(lineClicked, false)
-                            self.Expand(lineClicked, false, true, 0)
+                            self.SetFoldExpanded(lineClicked, False)
+                            self.Expand(lineClicked, False, True, 0)
                         else:
-                            self.SetFoldExpanded(lineClicked, true)
-                            self.Expand(lineClicked, true, true, 100)
+                            self.SetFoldExpanded(lineClicked, True)
+                            self.Expand(lineClicked, True, True, 100)
                     else:
                         self.ToggleFold(lineClicked)
 
 
     def FoldAll(self):
         lineCount = self.GetLineCount()
-        expanding = true
+        expanding = True
 
         # find out if we are folding or unfolding
         for lineNum in range(lineCount):
@@ -245,12 +285,12 @@ class PythonSTC(wxStyledTextCtrl):
                (level & wxSTC_FOLDLEVELNUMBERMASK) == wxSTC_FOLDLEVELBASE:
 
                 if expanding:
-                    self.SetFoldExpanded(lineNum, true)
-                    lineNum = self.Expand(lineNum, true)
+                    self.SetFoldExpanded(lineNum, True)
+                    lineNum = self.Expand(lineNum, True)
                     lineNum = lineNum - 1
                 else:
                     lastChild = self.GetLastChild(lineNum, -1)
-                    self.SetFoldExpanded(lineNum, false)
+                    self.SetFoldExpanded(lineNum, False)
                     if lastChild > lineNum:
                         self.HideLines(lineNum+1, lastChild)
 
@@ -258,9 +298,9 @@ class PythonSTC(wxStyledTextCtrl):
 
 
 
-    def Expand(self, line, doExpand, force=false, visLevels=0, level=-1):
+    def Expand(self, line, doExpand, force=False, visLevels=0, level=-1):
         lastChild = self.GetLastChild(line, level)
-	line = line + 1
+        line = line + 1
         while line <= lastChild:
             if force:
                 if visLevels > 0:
@@ -277,16 +317,16 @@ class PythonSTC(wxStyledTextCtrl):
             if level & wxSTC_FOLDLEVELHEADERFLAG:
                 if force:
                     if visLevels > 1:
-                        self.SetFoldExpanded(line, true)
+                        self.SetFoldExpanded(line, True)
                     else:
-                        self.SetFoldExpanded(line, false)
+                        self.SetFoldExpanded(line, False)
                     line = self.Expand(line, doExpand, force, visLevels-1)
 
                 else:
                     if doExpand and self.GetFoldExpanded(line):
-                        line = self.Expand(line, true, force, visLevels-1)
+                        line = self.Expand(line, True, force, visLevels-1)
                     else:
-                        line = self.Expand(line, false, force, visLevels-1)
+                        line = self.Expand(line, False, force, visLevels-1)
             else:
                 line = line + 1;
 
@@ -306,7 +346,7 @@ def runTest(frame, nb, log):
         s = wxBoxSizer(wxHORIZONTAL)
         s.Add(ed, 1, wxEXPAND)
         p.SetSizer(s)
-        p.SetAutoLayout(true)
+        p.SetAutoLayout(True)
 
 
     ed.SetText(demoText + open('Main.py').read())

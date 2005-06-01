@@ -45,13 +45,27 @@
 
 #include "wx/msw/private.h"
 
-#if ((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
-    #include "wx/msw/gnuwin32/extra.h"
-#else
-    #include <commctrl.h>
-#endif
+#include <commctrl.h>
 
 #include "wx/msw/missing.h"
+
+
+// ----------------------------------------------------------------------------
+// private globals (yuck!)
+// ----------------------------------------------------------------------------
+
+// Some versions of comctl32.dll don't do what MSDN says it should and still
+// sends LVN_DELETEITEM after LVN_DELETEALLITEMS has returned TRUE.  This flag
+// will be used to enable us to ignore the LVN_DELETEITEM message in these cases.
+// Also note that sometimes when there are large numbers of items in the listctrl
+// and items have attribute data then when the data is being deleted a
+// LVN_ITEMCHANGING message can be sent that will have a bogus value, causing a
+// memory fault.  This flag will also be used to ignore those change messages.
+//
+// 2.5 will have a better fix that avoids the use of a global.  It was unavoidable
+// for 2.4.x because of binary compatibility concerns.
+static bool gs_ignoreChangeDeleteItem = FALSE;
+
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -104,10 +118,19 @@ public:
 private:
     wxMB2WXbuf *m_buf;
 
-#else
+#else // !wxUSE_UNICODE
     wxLV_ITEM(LV_ITEMW &item)
     {
         m_item = new LV_ITEM((LV_ITEM&)item);
+
+        // the code below doesn't compile without wxUSE_WCHAR_T and as I don't
+        // know if it's useful to have it at all (do we ever get Unicode
+        // notifications in ANSI mode? I don't think so...) I'm not going to
+        // write alternative implementation right now
+        //
+        // but if it is indeed used, we should simply directly use
+        // ::WideCharToMultiByte() here
+#if wxUSE_WCHAR_T
         if ( (item.mask & LVIF_TEXT) && item.pszText )
         {
 #ifdef __WXWINE__
@@ -119,12 +142,13 @@ private:
             m_item->pszText = (wxChar*)m_buf->data();
         }
         else
+#endif // wxUSE_WCHAR_T
             m_buf = NULL;
     }
     wxLV_ITEM(LV_ITEMA &item) : m_buf(NULL), m_item(&item) {}
 private:
     wxWC2WXbuf *m_buf;
-#endif
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     LV_ITEM *m_item;
 };
@@ -277,11 +301,6 @@ bool wxListCtrl::Create(wxWindow *parent,
     DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
                    LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
 
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        wstyle |= WS_CLIPSIBLINGS;
-
-    if ( wxStyleHasBorder(m_windowStyle) )
-        wstyle |= WS_BORDER;
     m_baseStyle = wstyle;
 
     if ( !DoCreateControl(x, y, width, height) )
@@ -297,16 +316,12 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 {
     DWORD wstyle = m_baseStyle;
 
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
-
-    // Even with extended styles, need to combine with WS_BORDER
-    // for them to look right.
-    if ( want3D )
-        wstyle |= WS_BORDER;
+    WXDWORD exStyle = 0;
+    WXDWORD standardStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
     long oldStyle = 0; // Dummy
     wstyle |= ConvertToMSWStyle(oldStyle, m_windowStyle);
+    wstyle |= standardStyle;
 
     // Create the ListView control.
     m_hWnd = (WXHWND)CreateWindowEx(exStyle,
@@ -378,12 +393,14 @@ void wxListCtrl::FreeAllInternalData()
 
 wxListCtrl::~wxListCtrl()
 {
+    gs_ignoreChangeDeleteItem = TRUE;
     FreeAllInternalData();
+    gs_ignoreChangeDeleteItem = FALSE;
 
     if ( m_textCtrl )
     {
-        m_textCtrl->SetHWND(0);
         m_textCtrl->UnsubclassWin();
+        m_textCtrl->SetHWND(0);
         delete m_textCtrl;
         m_textCtrl = NULL;
     }
@@ -915,7 +932,7 @@ wxString wxListCtrl::GetItemText(long item) const
     info.m_itemId = item;
 
     if (!GetItem(info))
-        return wxString("");
+        return wxEmptyString;
     return info.m_text;
 }
 
@@ -1223,7 +1240,11 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
-    return ListView_DeleteAllItems(GetHwnd()) != 0;
+    gs_ignoreChangeDeleteItem = TRUE;
+    FreeAllInternalData();
+    bool rval = ListView_DeleteAllItems(GetHwnd()) != 0;
+    gs_ignoreChangeDeleteItem = FALSE;
+    return rval;
 }
 
 // Deletes all items
@@ -1270,19 +1291,32 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 
     // ListView_EditLabel requires that the list has focus.
     SetFocus();
-    WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
 
-    if (m_textCtrl)
+    WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
+    if ( !hWnd )
     {
-        m_textCtrl->SetHWND(0);
+        // failed to start editing
+        return NULL;
+    }
+
+    // [re]create the text control wrapping the HWND we got
+    if ( m_textCtrl )
+    {
         m_textCtrl->UnsubclassWin();
+        m_textCtrl->SetHWND(0);
         delete m_textCtrl;
     }
 
-    m_textCtrl = (wxTextCtrl*) textControlClass->CreateObject();
+    m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
     m_textCtrl->SetHWND(hWnd);
     m_textCtrl->SubclassWin(hWnd);
     m_textCtrl->SetParent(this);
+
+    // we must disallow TABbing away from the control while the edit contol is
+    // shown because this leaves it in some strange state (just try removing
+    // this line and then pressing TAB while editing an item in  listctrl
+    // inside a panel)
+    m_textCtrl->SetWindowStyle(m_textCtrl->GetWindowStyle() | wxTE_PROCESS_TAB);
 
     return m_textCtrl;
 }
@@ -1474,22 +1508,9 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
         lvCol.cx = 80;
     }
 
-    // when we insert a column which can contain an image, we must specify this
-    // flag right now as doing it later in SetColumn() has no effect
-    //
-    // we use LVCFMT_BITMAP_ON_RIGHT by default because without it there is no
-    // way to dynamically set/clear the bitmap as the column without a bitmap
-    // on the left looks ugly (there is a hole)
-    //
-    // unfortunately with my version of comctl32.dll (5.80), the left column
-    // image is always on the left and it seems that it's a "feature" - I
-    // didn't find any way to work around it in any case
-    if ( lvCol.mask & LVCF_IMAGE )
-    {
-        lvCol.mask |= LVCF_FMT;
-        lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT;
-    }
-
+    // NB: this is wrong, according to the docs we should return the index of
+    //     the new column and not a bool, but don't change it in 2.4 branch
+    //     as it's an incompatible change risking to break people's code
     bool success = ListView_InsertColumn(GetHwnd(), col, &lvCol) != -1;
     if ( success )
     {
@@ -1522,14 +1543,18 @@ long wxListCtrl::InsertColumn(long col,
     return InsertColumn(col, item);
 }
 
-// Scrolls the list control. If in icon, small icon or report view mode,
-// x specifies the number of pixels to scroll. If in list view mode, x
-// specifies the number of columns to scroll.
-// If in icon, small icon or list view mode, y specifies the number of pixels
-// to scroll. If in report view mode, y specifies the number of lines to scroll.
+// scroll the control by the given number of pixels (exception: in list view,
+// dx is interpreted as number of columns)
 bool wxListCtrl::ScrollList(int dx, int dy)
 {
-    return (ListView_Scroll(GetHwnd(), dx, dy) != 0);
+    if ( !ListView_Scroll(GetHwnd(), dx, dy) )
+    {
+        wxLogDebug(_T("ListView_Scroll(%d, %d) failed"), dx, dy);
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // Sort items.
@@ -1613,6 +1638,7 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
         return FALSE;
 }
 
+
 bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     // prepare the event
@@ -1623,7 +1649,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     wxEventType eventType = wxEVT_NULL;
 
-    NMHDR *nmhdr = (NMHDR *)lParam;
+   NMHDR *nmhdr = (NMHDR *)lParam;
 
     // if your compiler is as broken as this, you should really change it: this
     // code is needed for normal operation! #ifdef below is only useful for
@@ -1649,6 +1675,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // work around is to simply catch both versions and hope that it
             // works (why should this message exist in ANSI and Unicode is
             // beyond me as it doesn't deal with strings at all...)
+            //
+            // note that fr HDN_TRACK another possibility could be to use
+            // HDN_ITEMCHANGING but it is sent even after HDN_ENDTRACK and when
+            // something other than the item width changes so we'd have to
+            // filter out the unwanted events then
             case HDN_BEGINTRACKA:
             case HDN_BEGINTRACKW:
                 eventType = wxEVT_COMMAND_LIST_COL_BEGIN_DRAG;
@@ -1664,6 +1695,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case HDN_ENDTRACKW:
                 if ( eventType == wxEVT_NULL )
                     eventType = wxEVT_COMMAND_LIST_COL_END_DRAG;
+
+                event.m_item.m_width = nmHDR->pitem->cxy;
                 event.m_col = nmHDR->iItem;
                 break;
 
@@ -1708,19 +1741,59 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
+            case HDN_GETDISPINFOW:
+                {
+/* CVS HEAD decided to fix this bug by always returning tue, so do the same
+   CE 31 may 05
+                    LPNMHDDISPINFOW info = (LPNMHDDISPINFOW) lParam;
+                    // This is a fix for a strange bug under XP.
+                    // Normally, info->iItem is a valid index, but
+                    // sometimes this is a silly (large) number
+                    // and when we return FALSE via wxControl::MSWOnNotify
+                    // to indicate that it hasn't yet been processed,
+                    // there's a GPF in Windows.
+                    // By returning TRUE here, we avoid further processing
+                    // of this strange message.
+                    if ( info->iItem >= GetColumnCount() ) */
+                        return TRUE;
+                }
+                // fall through
+
             default:
                 return wxControl::MSWOnNotify(idCtrl, lParam, result);
         }
     }
     else
 #endif // defined(HDN_BEGINTRACKA)
-        if ( nmhdr->hwndFrom == GetHwnd() )
+    if ( nmhdr->hwndFrom == GetHwnd() )
     {
         // almost all messages use NM_LISTVIEW
         NM_LISTVIEW *nmLV = (NM_LISTVIEW *)nmhdr;
 
-        // this is true for almost all events
-        event.m_item.m_data = nmLV->lParam;
+        const int iItem = nmLV->iItem;
+
+
+        // FreeAllInternalData will cause LVN_ITEMCHANG* messages, which can be
+        // ignored for efficiency.  It is done here because the internal data is in the
+        // process of being deleted so we don't want to try and access it below.
+        if ( gs_ignoreChangeDeleteItem &&
+             ( (nmLV->hdr.code == LVN_ITEMCHANGED) || (nmLV->hdr.code == LVN_ITEMCHANGING)))
+        {
+            return TRUE;
+        }
+
+
+        // If we have a valid item then check if there is a data value
+        // associated with it and put it in the event.
+        if ( iItem >= 0 && iItem < GetItemCount() )
+        {
+            wxListItemInternalData *internaldata =
+                wxGetInternalData(GetHwnd(), iItem);
+
+            if ( internaldata )
+                event.m_item.m_data = internaldata->lParam;
+        }
+
 
         switch ( nmhdr->code )
         {
@@ -1734,7 +1807,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     eventType = wxEVT_COMMAND_LIST_BEGIN_DRAG;
                 }
 
-                event.m_itemIndex = nmLV->iItem;
+                event.m_itemIndex = iItem;
                 event.m_pointDrag.x = nmLV->ptAction.x;
                 event.m_pointDrag.y = nmLV->ptAction.y;
                 break;
@@ -1765,7 +1838,19 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     wxConvertFromMSWListItem(NULL, event.m_item, item);
                     if ( ((LV_ITEM)item).pszText == NULL ||
                          ((LV_ITEM)item).iItem == -1 )
+                    {
+                        // don't keep a stale wxTextCtrl around
+                        if ( m_textCtrl )
+                        {
+                            // EDIT control will be deleted by the list control itself so
+                            // prevent us from deleting it as well
+                            m_textCtrl->UnsubclassWin();
+                            m_textCtrl->SetHWND(0);
+                            delete m_textCtrl;
+                            m_textCtrl = NULL;
+                        }
                         return FALSE;
+                    }
 
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
@@ -1777,7 +1862,19 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     wxConvertFromMSWListItem(NULL, event.m_item, item);
                     if ( ((LV_ITEM)item).pszText == NULL ||
                          ((LV_ITEM)item).iItem == -1 )
+                    {
+                        // don't keep a stale wxTextCtrl around
+                        if ( m_textCtrl )
+                        {
+                            // EDIT control will be deleted by the list control itself so
+                            // prevent us from deleting it as well
+                            m_textCtrl->UnsubclassWin();
+                            m_textCtrl->SetHWND(0);
+                            delete m_textCtrl;
+                            m_textCtrl = NULL;
+                        }
                         return FALSE;
+                    }
 
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
@@ -1795,10 +1892,13 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case LVN_DELETEITEM:
+                if ( gs_ignoreChangeDeleteItem )
+                    return FALSE;
+
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
-                event.m_itemIndex = nmLV->iItem;
+                event.m_itemIndex = iItem;
                 // delete the assoicated internal data
-                wxDeleteInternalData(this, nmLV->iItem);
+                wxDeleteInternalData(this, iItem);
                 break;
 
             case LVN_SETDISPINFO:
@@ -1811,25 +1911,33 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             case LVN_INSERTITEM:
                 eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
-                event.m_itemIndex = nmLV->iItem;
+                event.m_itemIndex = iItem;
                 break;
 
             case LVN_ITEMCHANGED:
                 // we translate this catch all message into more interesting
                 // (and more easy to process) wxWindows events
 
-                // first of all, we deal with the state change events only
-                if ( nmLV->uChanged & LVIF_STATE )
+                // first of all, we deal with the state change events only and
+                // only for valid items (item == -1 for the virtual list
+                // control)
+                if ( nmLV->uChanged & LVIF_STATE && iItem != -1 )
                 {
                     // temp vars for readability
                     const UINT stOld = nmLV->uOldState;
                     const UINT stNew = nmLV->uNewState;
 
+                    event.m_item.SetId(iItem);
+                    event.m_item.SetMask(wxLIST_MASK_TEXT |
+                                         wxLIST_MASK_IMAGE |
+                                         wxLIST_MASK_DATA);
+                    GetItem(event.m_item);
+
                     // has the focus changed?
                     if ( !(stOld & LVIS_FOCUSED) && (stNew & LVIS_FOCUSED) )
                     {
                         eventType = wxEVT_COMMAND_LIST_ITEM_FOCUSED;
-                        event.m_itemIndex = nmLV->iItem;
+                        event.m_itemIndex = iItem;
                     }
 
                     if ( (stNew & LVIS_SELECTED) != (stOld & LVIS_SELECTED) )
@@ -1846,7 +1954,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         {
                             // then need to set m_itemIndex as it wasn't done
                             // above
-                            event.m_itemIndex = nmLV->iItem;
+                            event.m_itemIndex = iItem;
                         }
 
                         eventType = stNew & LVIS_SELECTED
@@ -1914,16 +2022,16 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
                 // if it happened on an item (and not on empty place)
-                if ( nmLV->iItem == -1 )
+                if ( iItem == -1 )
                 {
                     // not on item
                     return FALSE;
                 }
 
                 eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
-                event.m_itemIndex = nmLV->iItem;
-                event.m_item.m_text = GetItemText(nmLV->iItem);
-                event.m_item.m_data = GetItemData(nmLV->iItem);
+                event.m_itemIndex = iItem;
+                event.m_item.m_text = GetItemText(iItem);
+                event.m_item.m_data = GetItemData(iItem);
                 break;
 
             case NM_RCLICK:
@@ -2030,8 +2138,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     event.SetEventType(eventType);
 
-    if ( !GetEventHandler()->ProcessEvent(event) )
-        return FALSE;
+    bool processed = GetEventHandler()->ProcessEvent(event);
 
     // post processing
     // ---------------
@@ -2051,12 +2158,24 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // logic here is inversed compared to all the other messages
             *result = event.IsAllowed();
 
+            // don't keep a stale wxTextCtrl around
+            if ( m_textCtrl )
+            {
+                // EDIT control will be deleted by the list control itself so
+                // prevent us from deleting it as well
+                m_textCtrl->UnsubclassWin();
+                m_textCtrl->SetHWND(0);
+                delete m_textCtrl;
+                m_textCtrl = NULL;
+            }
+
             return TRUE;
     }
 
-    *result = !event.IsAllowed();
+    if ( processed )
+        *result = !event.IsAllowed();
 
-    return TRUE;
+    return processed;
 }
 
 #if defined(_WIN32_IE) && _WIN32_IE >= 0x300
@@ -2226,7 +2345,7 @@ wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) cons
 {
     // this is a pure virtual function, in fact - which is not really pure
     // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( _T("not supposed to be called") );
+    wxFAIL_MSG( _T("wxListCtrl::OnGetItemText not supposed to be called") );
 
     return wxEmptyString;
 }
@@ -2234,7 +2353,7 @@ wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) cons
 int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
     // same as above
-    wxFAIL_MSG( _T("not supposed to be called") );
+    wxFAIL_MSG( _T("wxListCtrl::OnGetItemImage not supposed to be called") );
 
     return -1;
 }
@@ -2252,7 +2371,7 @@ void wxListCtrl::SetItemCount(long count)
 {
     wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
 
-    if ( !::SendMessage(GetHwnd(), LVM_SETITEMCOUNT, (WPARAM)count, 0) )
+    if ( !::SendMessage(GetHwnd(), LVM_SETITEMCOUNT, (WPARAM)count, LVSICF_NOSCROLL) )
     {
         wxLogLastError(_T("ListView_SetItemCount"));
     }
@@ -2318,13 +2437,13 @@ static void wxDeleteInternalData(wxListCtrl* ctl, long itemId)
     wxListItemInternalData *data = wxGetInternalData(ctl, itemId);
     if (data)
     {
-        delete data;
         LV_ITEM item;
         memset(&item, 0, sizeof(item));
         item.iItem = itemId;
         item.mask = LVIF_PARAM;
         item.lParam = (LPARAM) 0;
         ListView_SetItem((HWND)ctl->GetHWND(), &item);
+        delete data;
     }
 }
 
@@ -2524,7 +2643,17 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
     {
         if ( wxTheApp->GetComCtl32Version() >= 470 )
         {
-            lvCol.mask |= LVCF_IMAGE;
+            lvCol.mask |= LVCF_IMAGE | LVCF_FMT;
+
+            // we use LVCFMT_BITMAP_ON_RIGHT because thei mages on the right
+            // seem to be generally nicer than on the left and the generic
+            // version only draws them on the right (we don't have a flag to
+            // specify the image location anyhow)
+            //
+            // we don't use LVCFMT_COL_HAS_IMAGES because it doesn't seem to
+            // make any difference in my tests -- but maybe we should?
+            lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
+
             lvCol.iImage = item.m_image;
         }
         //else: it doesn't support item images anyhow

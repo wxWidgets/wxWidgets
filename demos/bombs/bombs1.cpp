@@ -33,15 +33,15 @@
 /*---------------------------------------------------------------------*/
 void BombsCanvasClass::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
 { int x,y,xmax,ymax;
-  char buf[2];
+  wxChar buf[2];
   long chw, chh;
 
-  wxColour *wxBlack = wxTheColourDatabase->FindColour("BLACK");
-  wxColour *wxWhite = wxTheColourDatabase->FindColour("WHITE");
-  wxColour *wxRed = wxTheColourDatabase->FindColour("RED");
-  wxColour *wxBlue = wxTheColourDatabase->FindColour("BLUE");
-  wxColour *wxGrey = wxTheColourDatabase->FindColour("LIGHT GREY");
-  wxColour *wxGreen = wxTheColourDatabase->FindColour("GREEN");
+  wxColour *wxBlack = wxTheColourDatabase->FindColour(_T("BLACK"));
+  wxColour *wxWhite = wxTheColourDatabase->FindColour(_T("WHITE"));
+  wxColour *wxRed = wxTheColourDatabase->FindColour(_T("RED"));
+  wxColour *wxBlue = wxTheColourDatabase->FindColour(_T("BLUE"));
+  wxColour *wxGrey = wxTheColourDatabase->FindColour(_T("LIGHT GREY"));
+  wxColour *wxGreen = wxTheColourDatabase->FindColour(_T("GREEN"));
 
   wxPen *blackPen = wxThePenList->FindOrCreatePen(*wxBlack, 1, wxSOLID);
   wxPen *redPen = wxThePenList->FindOrCreatePen(*wxRed, 1, wxSOLID);
@@ -64,7 +64,7 @@ void BombsCanvasClass::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
   wxFont font= BOMBS_FONT;
   dc->SetFont(font); 
 
-  buf[1]='\0';
+  buf[1]=_T('\0');
   for(x=xc1; x<=xc2; x++)
     for(y=yc1; y<=yc2; y++)
       { if (wxGetApp().Game.IsMarked(x,y))
@@ -72,7 +72,7 @@ void BombsCanvasClass::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
             dc->SetBrush(* greyBrush);
             dc->DrawRectangle( x*x_cell*X_UNIT, y*y_cell*Y_UNIT,
                                x_cell*X_UNIT+1, y_cell*Y_UNIT+1);
-            *buf='M';
+            *buf=_T('M');
             if (!wxGetApp().Game.IsHidden(x,y) && wxGetApp().Game.IsBomb(x,y))
               dc->SetTextForeground(*wxBlue);
             else
@@ -102,7 +102,7 @@ void BombsCanvasClass::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
             dc->SetBrush(* redBrush);
             dc->DrawRectangle( x*x_cell*X_UNIT, y*y_cell*Y_UNIT,
                                x_cell*X_UNIT+1, y_cell*Y_UNIT+1);
-            *buf='B';
+            *buf=_T('B');
             dc->SetTextForeground(* wxBlack);
             dc->SetTextBackground(* wxRed);
             dc->GetTextExtent(buf, &chw, &chh);
@@ -123,11 +123,11 @@ void BombsCanvasClass::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
             dc->SetBrush(* whiteBrush);
             dc->DrawRectangle( x*x_cell*X_UNIT, y*y_cell*Y_UNIT,
                                x_cell*X_UNIT+1, y_cell*Y_UNIT+1);
-            *buf = (wxGetApp().Game.Get(x,y) & BG_MASK) + '0';
+            *buf = (wxGetApp().Game.Get(x,y) & BG_MASK) + _T('0');
             dc->GetTextExtent(buf, &chw, &chh);
             switch(*buf)
-              { case '0': dc->SetTextForeground(* wxGreen); break;
-                case '1': dc->SetTextForeground(* wxBlue); break;
+              { case _T('0'): dc->SetTextForeground(* wxGreen); break;
+                case _T('1'): dc->SetTextForeground(* wxBlue); break;
                 default:  dc->SetTextForeground(* wxBlack); break;
               }
             dc->SetTextBackground(* wxWhite);
@@ -140,9 +140,10 @@ void BombsCanvasClass::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
   dc->SetFont(wxNullFont);
 
   if (wxGetApp().BombsFrame)
-    { char buf[80];
-      sprintf(buf, "%d bombs  %d remaining cells",
-              wxGetApp().Game.GetBombs(), wxGetApp().Game.GetRemainingCells());
+    { wxString buf;
+      buf.Printf(_T("%d bombs  %d remaining cells"),
+                 wxGetApp().Game.GetBombs(),
+                 wxGetApp().Game.GetRemainingCells());
       wxGetApp().BombsFrame->SetStatusText(buf, 0);
     }
 }
@@ -172,7 +173,7 @@ void BombsCanvasClass::Uncover(int x, int y)
   if (wxGetApp().Game.IsBomb(x,y) || wxGetApp().Game.GetRemainingCells()==0)
     { wxBell();
       if (!wxGetApp().Game.IsBomb(x,y))
-       { wxMessageBox("Nice! You found all the bombs!", "wxWin Bombs",
+       { wxMessageBox(_T("Nice! You found all the bombs!"), _T("wxWin Bombs"),
                       wxOK|wxCENTRE, wxGetApp().BombsFrame);
        }
       else // x,y is a bomb

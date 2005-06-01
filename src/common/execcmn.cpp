@@ -81,7 +81,7 @@ inline void wxStreamTempInputBuffer::Init(wxPipeInputStream *stream)
 
 void wxStreamTempInputBuffer::Update()
 {
-    if ( m_stream && m_stream->IsAvailable() )
+    if ( m_stream && m_stream->CanRead() )
     {
         // realloc in blocks of 4Kb: this is the default (and minimal) buffer
         // size of the Unix pipes so it should be the optimal step
@@ -109,25 +109,6 @@ wxStreamTempInputBuffer::~wxStreamTempInputBuffer()
         m_stream->Ungetch(m_buffer, m_size);
         free(m_buffer);
     }
-}
-
-// ----------------------------------------------------------------------------
-// platform-dependent parts of wxProcess implementation included
-// ----------------------------------------------------------------------------
-
-bool wxProcess::IsInputOpened() const
-{
-    return m_inputStream && ((wxPipeInputStream *)m_inputStream)->IsOpened();
-}
-
-bool wxProcess::IsInputAvailable() const
-{
-    return m_inputStream && ((wxPipeInputStream *)m_inputStream)->IsAvailable();
-}
-
-bool wxProcess::IsErrorAvailable() const
-{
-    return m_errorStream && ((wxPipeInputStream *)m_errorStream)->IsAvailable();
 }
 
 #endif // _WX_WXEXEC_CPP_

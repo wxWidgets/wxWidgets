@@ -8,7 +8,7 @@ text = """\
 Right-click on the panel to get a menu.  This menu will be managed by
 a wxFileHistory object and so the files you select will automatically
 be added to the end of the menu and will be selectable the next time
-the menu is viewed.  The filename selcted, either via the Open menu
+the menu is viewed.  The filename selected, either via the Open menu
 item, or from the history, will be displayed in the log window below.
 """
 
@@ -37,7 +37,7 @@ class TestPanel(wxPanel):
         box.Add(t, 0, wxCENTER|wxALL, 5)
 
         self.SetSizer(box)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
         # Make a menu
         self.menu = m = wxMenu()
@@ -46,10 +46,10 @@ class TestPanel(wxPanel):
         m.Append(wxID_CLOSE,   "&Close")
         m.Append(wxID_SAVE,    "&Save")
         m.Append(wxID_SAVEAS,  "Save &as...")
-        m.Enable(wxID_NEW, false)
-        m.Enable(wxID_CLOSE, false)
-        m.Enable(wxID_SAVE, false)
-        m.Enable(wxID_SAVEAS, false)
+        m.Enable(wxID_NEW, False)
+        m.Enable(wxID_CLOSE, False)
+        m.Enable(wxID_SAVE, False)
+        m.Enable(wxID_SAVEAS, False)
 
         # and a file history
         self.filehistory = wxFileHistory()

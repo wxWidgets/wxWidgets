@@ -2,7 +2,7 @@
  * to make it work with configure?
  */
 
-#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(_MSC_VER) || defined(__BORLANDC__) || defined (__DMC__)
 #include "jconfig.vc"
 #else
 

@@ -12,6 +12,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+#if !wxUSE_PRINTING_ARCHITECTURE
+#error wxPython requires the wx printing architecture to be enabled
+#endif
 
 class wxPyPrintout : public wxPrintout {
 public:

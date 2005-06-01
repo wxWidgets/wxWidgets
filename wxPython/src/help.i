@@ -105,8 +105,8 @@ public:
 
     // Virtuals...
     wxString GetHelp(const wxWindow *window);
-    bool ShowHelp(wxWindowBase *window);
-    void AddHelp(wxWindowBase *window, const wxString& text);
+    bool ShowHelp(wxWindow *window);
+    void AddHelp(wxWindow *window, const wxString& text);
     %name(AddHelpById)void AddHelp(wxWindowID id, const wxString& text);
 
     %addmethods { void Destroy() { delete self; } }

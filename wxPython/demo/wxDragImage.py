@@ -9,14 +9,14 @@ class DragShape:
     def __init__(self, bmp):
         self.bmp = bmp
         self.pos = wxPoint(0,0)
-        self.shown = true
+        self.shown = True
         self.text = None
-        self.fullscreen = false
+        self.fullscreen = False
 
 
     def HitTest(self, pt):
         rect = self.GetRect()
-        return rect.Inside(pt.x, pt.y)
+        return rect.InsideXY(pt.x, pt.y)
 
 
     def GetRect(self):
@@ -31,11 +31,11 @@ class DragShape:
 
             dc.Blit(self.pos.x, self.pos.y,
                     self.bmp.GetWidth(), self.bmp.GetHeight(),
-                    memDC, 0, 0, op, true)
+                    memDC, 0, 0, op, True)
 
-            return true
+            return True
         else:
-            return false
+            return False
 
 
 
@@ -58,7 +58,7 @@ class DragCanvas(wxScrolledWindow):
         bmp = images.getTestStarBitmap()
         shape = DragShape(bmp)
         shape.pos = wxPoint(5, 5)
-        shape.fullscreen = true
+        shape.fullscreen = True
         self.shapes.append(shape)
 
 
@@ -83,17 +83,10 @@ class DragCanvas(wxScrolledWindow):
         shape.text = "Some dragging text"
         self.shapes.append(shape)
 
-
-        # Make some shapes from some playing card images.
-        x = 200
-        for card in ['_01c_', '_12h_', '_13d_', '_10s_']:
-            bmpFunc = getattr(images, "get%sBitmap" % card)
-            bmp = bmpFunc()
-            shape = DragShape(bmp)
-            shape.pos = wxPoint(x, 5)
-            self.shapes.append(shape)
-            x = x + 80
-
+        bmp = images.getTheKidBitmap()
+        shape = DragShape(bmp)
+        shape.pos = wxPoint(200, 5)
+        self.shapes.append(shape)
 
         EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
         EVT_PAINT(self, self.OnPaint)
@@ -185,7 +178,7 @@ class DragCanvas(wxScrolledWindow):
 
         # reposition and draw the shape
         self.dragShape.pos = self.dragShape.pos + evt.GetPosition() - self.dragStartPos
-        self.dragShape.shown = true
+        self.dragShape.shown = True
         self.dragShape.Draw(dc)
         self.dragShape = None
 
@@ -194,7 +187,7 @@ class DragCanvas(wxScrolledWindow):
         if not self.dragShape or not evt.Dragging() or not evt.LeftIsDown():
             return
 
-        # if we have a shape, but havn't started dragging yet
+        # if we have a shape, but haven't started dragging yet
         if self.dragShape and not self.dragImage:
 
             # only start the drag after having moved a couple pixels
@@ -207,7 +200,7 @@ class DragCanvas(wxScrolledWindow):
 
             # erase the shape since it will be drawn independently now
             dc = wxClientDC(self)
-            self.dragShape.shown = false
+            self.dragShape.shown = False
             self.EraseShape(self.dragShape, dc)
 
 
@@ -228,16 +221,16 @@ class DragCanvas(wxScrolledWindow):
         # if we have shape and image then move it, posibly highlighting another shape.
         elif self.dragShape and self.dragImage:
             onShape = self.FindShape(evt.GetPosition())
-            unhiliteOld = false
-            hiliteNew = false
+            unhiliteOld = False
+            hiliteNew = False
 
             # figure out what to hilite and what to unhilite
             if self.hiliteShape:
                 if onShape is None or self.hiliteShape is not onShape:
-                    unhiliteOld = true
+                    unhiliteOld = True
 
             if onShape and onShape is not self.hiliteShape and onShape.shown:
-                hiliteNew = TRUE
+                hiliteNew = True
 
             # if needed, hide the drag image so we can update the window
             if unhiliteOld or hiliteNew:
@@ -274,3 +267,10 @@ def runTest(frame, nb, log):
 
 overview = """\
 """
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

@@ -22,6 +22,10 @@
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
 
+#ifdef __BORLANDC__
+#   pragma option -w-inl
+#endif
+
 // ----------------------------------------------------------------------------
 // wxRadioBoxBase is not a normal base class, but rather a mix-in because the
 // real wxRadioBox derives from different classes on different platforms: for
@@ -93,6 +97,10 @@ public:
     void SetLabel(int n, const wxString& label) { SetString(n, label); }
 #endif // WXWIN_COMPATIBILITY_2_2
 };
+
+#ifdef __BORLANDC__
+#   pragma option -w.inl
+#endif
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/radiobox.h"

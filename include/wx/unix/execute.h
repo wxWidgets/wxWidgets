@@ -29,4 +29,9 @@ extern void wxHandleProcessTermination(wxEndProcessData *proc_data);
 // child process. The return valus is port-specific.
 extern int wxAddProcessCallback(wxEndProcessData *proc_data, int fd);
 
+#if defined(__DARWIN__) && defined(__WXMAC__)
+// For ports (e.g. DARWIN) which can add callbacks based on the pid
+extern int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid);
+#endif
+
 #endif // _WX_UNIX_EXECUTE_H

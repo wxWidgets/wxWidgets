@@ -31,12 +31,6 @@
 #undef new
 #endif
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#endif
-
 #include <ctype.h>
 #include <math.h>
 
@@ -77,17 +71,17 @@ wxLineShape::wxLineShape()
   // and make the three line regions.
   ClearRegions();
   wxShapeRegion *newRegion = new wxShapeRegion;
-  newRegion->SetName("Middle");
+  newRegion->SetName(wxT("Middle"));
   newRegion->SetSize(150, 50);
   m_regions.Append((wxObject *)newRegion);
 
   newRegion = new wxShapeRegion;
-  newRegion->SetName("Start");
+  newRegion->SetName(wxT("Start"));
   newRegion->SetSize(150, 50);
   m_regions.Append((wxObject *)newRegion);
 
   newRegion = new wxShapeRegion;
-  newRegion->SetName("End");
+  newRegion->SetName(wxT("End"));
   newRegion->SetSize(150, 50);
   m_regions.Append((wxObject *)newRegion);
 
@@ -234,7 +228,7 @@ void wxLineShape::FormatText(wxDC& dc, const wxString& s, int i)
   node = string_list->First();
   while (node)
   {
-    char *s = (char *)node->Data();
+    wxChar *s = (wxChar *)node->Data();
     wxShapeTextLine *line = new wxShapeTextLine(0.0, 0.0, s);
     region->GetFormattedText().Append((wxObject *)line);
     node = node->Next();
@@ -513,22 +507,23 @@ bool wxLineShape::HitTest(double x, double y, int *attachment, double *distance)
     wxRealPoint *point1 = (wxRealPoint *)node->Data();
     wxRealPoint *point2 = (wxRealPoint *)node->Next()->Data();
 
-    // Allow for inaccurate mousing or vert/horiz lines
+    // For inaccurate mousing allow 8 pixel corridor
     int extra = 4;
-    double left = wxMin(point1->x, point2->x) - extra;
-    double right = wxMax(point1->x, point2->x) + extra;
 
-    double bottom = wxMin(point1->y, point2->y) - extra;
-    double top = wxMax(point1->y, point2->y) + extra;
-
-    if ((x > left && x < right && y > bottom && y < top) || inLabelRegion)
+    double dx = point2->x - point1->x;
+    double dy = point2->y - point1->y;
+    double seg_len = sqrt(dx*dx+dy*dy);
+    double distance_from_seg =
+      seg_len*((x-point1->x)*dy-(y-point1->y)*dx)/(dy*dy+dx*dx);
+    double distance_from_prev =
+      seg_len*((y-point1->y)*dy+(x-point1->x)*dx)/(dy*dy+dx*dx);
+    
+    if ((fabs(distance_from_seg) < extra &&
+         distance_from_prev >= 0 && distance_from_prev <= seg_len)
+        || inLabelRegion)
     {
-      // Work out distance from centre of line
-      double centre_x = (double)(left + (right - left)/2.0);
-      double centre_y = (double)(bottom + (top - bottom)/2.0);
-
       *attachment = 0;
-      *distance = (double)sqrt((centre_x - x)*(centre_x - x) + (centre_y - y)*(centre_y - y));
+      *distance = distance_from_seg;
       return TRUE;
     }
 
@@ -754,7 +749,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
 
       dc.SetPen(* m_pen);
       if (arrow->_GetType() == ARROW_HOLLOW_CIRCLE)
-        dc.SetBrush(* g_oglWhiteBackgroundBrush);
+        dc.SetBrush(GetBackgroundBrush());
       else
         dc.SetBrush(* m_brush);
 
@@ -1373,7 +1368,7 @@ void wxLineShape::ResetControlPoints()
   }
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxLineShape::WriteAttributes(wxExpr *clause)
 {
   wxShape::WriteAttributes(clause);
@@ -2340,7 +2335,7 @@ wxRealPoint *wxLineShape::GetNextControlPoint(wxShape *nodeObject)
     return (wxRealPoint *)node->Data();
   }
   else
-    return FALSE;
+    return NULL;
 }
 
 /*

@@ -33,7 +33,7 @@
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/msw/missing.h"
+#include "wx/msw/htmlhelp.h"
 
 // ----------------------------------------------------------------------------
 // utility functions to manage the loading/unloading
@@ -42,10 +42,10 @@
 
 #ifndef UNICODE
     typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCSTR, UINT, DWORD );
-    #define HTMLHELP_NAME "HtmlHelpA"
+    #define HTMLHELP_NAME wxT("HtmlHelpA")
 #else // ANSI
     typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCWSTR, UINT, DWORD );
-    #define HTMLHELP_NAME "HtmlHelpW"
+    #define HTMLHELP_NAME wxT("HtmlHelpW")
 #endif
 
 // dll symbol handle
@@ -80,9 +80,8 @@ static void UnloadHtmlHelpLibrary()
 {
     if ( gs_htmlHelp )
     {
-        wxPluginManager::UnloadLibrary( _T("HHCTRL.OCX") );
-
-        gs_htmlHelp = 0;
+        if (wxPluginManager::UnloadLibrary( _T("HHCTRL.OCX") ))
+            gs_htmlHelp = 0;
     }
 }
 
@@ -243,6 +242,7 @@ wxString wxCHMHelpController::GetValidFilename(const wxString& file) const
 
 wxCHMHelpController::~wxCHMHelpController()
 {
+    gs_htmlHelp(GetSuitableHWND(), 0, HH_CLOSE_ALL, 0L);
     UnloadHtmlHelpLibrary();
 }
 

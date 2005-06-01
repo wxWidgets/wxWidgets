@@ -1,7 +1,20 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/printdlg.h
+// Purpose:     Base header for print dialogs
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows Licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_PRINTDLG_H_BASE_
 #define _WX_PRINTDLG_H_BASE_
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+#include "wx/generic/prntdlgg.h"
+#elif defined(__WXMSW__)
 #include "wx/msw/printdlg.h"
 #elif defined(__WXMOTIF__)
 #include "wx/generic/prntdlgg.h"
@@ -19,7 +32,7 @@
 #include "wx/generic/prntdlgg.h"
 #endif
 
-#if !defined(__WXMSW__) && !defined(__WXMAC__)
+#if defined(__WXUNIVERSAL__) || (!defined(__WXMSW__) && !defined(__WXMAC__))
 #define wxPrintDialog wxGenericPrintDialog
 #define sm_classwxPrintDialog sm_classwxGenericPrintDialog
 

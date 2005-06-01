@@ -29,11 +29,11 @@ extern "C" {
 typedef struct 
 {
 //  gint do_init;         /* true if initgl not yet called */
-  int do_init;
-  lwObject *lwobject;   /* lightwave object mesh */
-  float beginx,beginy;  /* position of mouse */
-  float quat[4];        /* orientation of object */
-  float zoom;           /* field of view in degrees */
+    int do_init;
+    lwObject *lwobject;   /* lightwave object mesh */
+    float beginx,beginy;  /* position of mouse */
+    float quat[4];        /* orientation of object */
+    float zoom;           /* field of view in degrees */
 } mesh_info;
 
 
@@ -46,6 +46,7 @@ public:
 
 /* Define a new frame type */
 class TestGLCanvas;
+
 class MyFrame: public wxFrame
 {
 public:
@@ -53,30 +54,35 @@ public:
         long style = wxDEFAULT_FRAME_STYLE);
 
     void OnExit(wxCommandEvent& event);
-public:
+    
+    void SetCanvas( TestGLCanvas *canvas )    { m_canvas = canvas; }
+    TestGLCanvas *GetCanvas()                 { return m_canvas; }
+    
+private:
     TestGLCanvas*    m_canvas;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 class TestGLCanvas: public wxGLCanvas
 {
- public:
-   TestGLCanvas(wxWindow *parent, const wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-      const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "TestGLCanvas");
-   ~TestGLCanvas(void);
+public:
+    TestGLCanvas(wxWindow *parent, const wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = wxT("TestGLCanvas"));
+    ~TestGLCanvas(void);
 
-   void OnPaint(wxPaintEvent& event);
-   void OnSize(wxSizeEvent& event);
-   void OnEraseBackground(wxEraseEvent& event);
-   void LoadLWO( const wxString &filename);
-   void OnMouse( wxMouseEvent& event );
-   void InitGL(void);
+    void OnPaint(wxPaintEvent& event);
+    void OnSize(wxSizeEvent& event);
+    void OnEraseBackground(wxEraseEvent& event);
+    void LoadLWO( const wxString &filename);
+    void OnMouse( wxMouseEvent& event );
+    void InitGL(void);
    
-   mesh_info  info;
-   bool       block;
+    mesh_info  info;
+    bool       block;
 
-DECLARE_EVENT_TABLE()
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

@@ -9,13 +9,13 @@ top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 
 scintilla_dir = $(top_srcdir)/contrib/src/stc/scintilla
-libsrc_dir = contrib/src/stc@PATH_IFS@$(scintilla_dir)/src
+libsrc_dir = contrib/src/stc/scintilla/src:$(top_srcdir)/contrib/src/stc
 
-TARGET_LIBNAME=libstc
+TARGET_LIBNAME=lib@WX_LIBRARY_BASENAME@_stc-@WX_RELEASE@
 
-LIBVERSION_CURRENT=1
-LIBVERSION_REVISION=0
-LIBVERSION_AGE=0
+LIBVERSION_CURRENT=@WX_CURRENT@
+LIBVERSION_REVISION=@WX_REVISION@
+LIBVERSION_AGE=@WX_AGE@
 
 HEADER_PATH=$(top_srcdir)/contrib/include/wx
 HEADER_SUBDIR=stc
@@ -30,28 +30,39 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
         Document.o	        \
 	DocumentAccessor.o	\
         Editor.o		\
+	ExternalLexer.o		\
         Indicator.o	        \
         KeyMap.o		\
         KeyWords.o	        \
 	LexAVE.o		\
+	LexAda.o		\
+	LexAsm.o		\
 	LexBaan.o		\
 	LexBullant.o		\
 	LexMatlab.o		\
-	LexAda.o		\
 	LexCPP.o		\
 	LexConf.o		\
 	LexCrontab.o		\
+	LexCSS.o		\
 	LexEiffel.o		\
+	LexEScript.o		\
+	LexFortran.o		\
 	LexHTML.o		\
 	LexLisp.o		\
+	LexLout.o		\
 	LexLua.o		\
 	LexOthers.o		\
+	LexPOV.o		\
 	LexPascal.o		\
 	LexPerl.o		\
 	LexPython.o		\
 	LexRuby.o		\
 	LexSQL.o		\
 	LexVB.o			\
+        LexMMIXAL.o		\
+        LexNsis.o		\
+        LexPS.o			\
+        LexScriptol.o		\
         LineMarker.o	    	\
         PropSet.o	        \
 	RESearch.o		\
@@ -61,6 +72,8 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
 	UniConversion.o		\
         ViewStyle.o		\
 	WindowAccessor.o	\
+	XPM.o			\
+
 
 DEPFILES=$(OBJECTS:.o=.d)
 

@@ -617,7 +617,7 @@ void wxListBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
     event.SetString( item->GetString( n ) );
 
     int x = -1;
-    if( cbs->event->type == ButtonRelease )
+    if( NULL != cbs->event && cbs->event->type == ButtonRelease )
     {
         XButtonEvent* evt = (XButtonEvent*)cbs->event;
 

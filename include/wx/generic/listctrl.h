@@ -72,7 +72,7 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = "listctrl" )
+                const wxString &name = wxT("listctrl") )
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -84,7 +84,7 @@ public:
                  const wxSize &size = wxDefaultSize,
                  long style = wxLC_ICON,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString &name = "listctrl" );
+                 const wxString &name = wxT("listctrl") );
 
     bool GetColumn( int col, wxListItem& item ) const;
     bool SetColumn( int col, wxListItem& item );
@@ -246,7 +246,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString &name = "listctrl" )
+               const wxString &name = wxT("listctrl") )
     : wxGenericListCtrl(parent, id, pos, size, style, validator, name)
     {
     }
