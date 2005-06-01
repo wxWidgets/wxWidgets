@@ -2785,6 +2785,8 @@ static PyObject *wxMenu_GetMenuItems(wxMenu *self){
             wxMenuItemList& list = self->GetMenuItems();
             return wxPy_ConvertList(&list);
         }
+static void MenuBar_SetAutoWindowMenu(bool enable){}
+static bool MenuBar_GetAutoWindowMenu(){ return false; }
  static const wxString wxPyControlNameStr(wxControlNameStr); 
 static int wxItemContainer_Append(wxItemContainer *self,wxString const &item,PyObject *clientData=NULL){
             if (clientData) {
@@ -35983,6 +35985,57 @@ static PyObject *_wrap_MenuBar_Detach(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
+static PyObject *_wrap_MenuBar_SetAutoWindowMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    bool arg1 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "enable", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuBar_SetAutoWindowMenu",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (bool)(SWIG_As_bool(obj0)); 
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        MenuBar_SetAutoWindowMenu(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuBar_GetAutoWindowMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    bool result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":MenuBar_GetAutoWindowMenu",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)MenuBar_GetAutoWindowMenu();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * MenuBar_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -46415,6 +46468,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MenuBar_IsAttached", (PyCFunction) _wrap_MenuBar_IsAttached, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuBar_Attach", (PyCFunction) _wrap_MenuBar_Attach, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuBar_Detach", (PyCFunction) _wrap_MenuBar_Detach, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuBar_SetAutoWindowMenu", (PyCFunction) _wrap_MenuBar_SetAutoWindowMenu, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuBar_GetAutoWindowMenu", (PyCFunction) _wrap_MenuBar_GetAutoWindowMenu, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuBar_swigregister", MenuBar_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_MenuItem", (PyCFunction) _wrap_new_MenuItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_GetMenu", (PyCFunction) _wrap_MenuItem_GetMenu, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -49943,7 +49998,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d, "wxEVT_SCROLL_PAGEDOWN", PyInt_FromLong(wxEVT_SCROLL_PAGEDOWN));
     PyDict_SetItemString(d, "wxEVT_SCROLL_THUMBTRACK", PyInt_FromLong(wxEVT_SCROLL_THUMBTRACK));
     PyDict_SetItemString(d, "wxEVT_SCROLL_THUMBRELEASE", PyInt_FromLong(wxEVT_SCROLL_THUMBRELEASE));
-    PyDict_SetItemString(d, "wxEVT_SCROLL_ENDSCROLL", PyInt_FromLong(wxEVT_SCROLL_ENDSCROLL));
+    PyDict_SetItemString(d, "wxEVT_SCROLL_CHANGED", PyInt_FromLong(wxEVT_SCROLL_CHANGED));
     PyDict_SetItemString(d, "wxEVT_SCROLLWIN_TOP", PyInt_FromLong(wxEVT_SCROLLWIN_TOP));
     PyDict_SetItemString(d, "wxEVT_SCROLLWIN_BOTTOM", PyInt_FromLong(wxEVT_SCROLLWIN_BOTTOM));
     PyDict_SetItemString(d, "wxEVT_SCROLLWIN_LINEUP", PyInt_FromLong(wxEVT_SCROLLWIN_LINEUP));
