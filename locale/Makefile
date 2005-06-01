@@ -16,7 +16,7 @@ XGETTEXT=xgettext
 XARGS=xargs
 
 # common xgettext args: C++ syntax, use the specified macro names as markers
-XGETTEXT_ARGS=-C -k_ -kwxGetTranslation -kwxTRANSLATE -s -j
+XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -s -j
 
 # implicit rules
 %.mo: %.po
@@ -42,7 +42,7 @@ allmo:
 force-update:
 	$(RM) wxstd.po
 
-# print out the percentage of the trsnalted strings
+# print out the percentage of the translated strings
 stats: FORCE
 	@for i in $(WX_LINGUAS); do \
 		x=`$(MSGFMT) -o /dev/null "$$i.po" 2>&1 | sed -e 's/[,\.]//g' \

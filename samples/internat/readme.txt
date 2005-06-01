@@ -44,14 +44,18 @@ A. First of all, you will need the GNU gettext tools (see the next question).
 
    # generate the .po file for the program itself
    # see `xgettext --help' for options, "-C" is important!
-   xgettext -C -n -k_ -o internat.po ../internat.cpp
+   xgettext -C -n -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -o internat.po ../internat.cpp
    
-   # .po file for wxWindows might be generated in the same way, but for now just
-   # take this one...
-   cp ../wxstd.po .
+   # .po file for wxWindows might be generated in the same way. An already 
+   # generated wxstd.po as well as translations for some languages can be 
+   # found in the locale directory.
+   cp ../../locale/<language>.po ./wxstd.po
+   - or -
+   cp ../../locale/wxstd.po .
 
    # now edit the files and do translate strings (this isn't done by gettext)
-   # you can use another editor if you wish :-)
+   # you can use another editor if you wish :-) No need to edit wxstd.po if you
+   # already got a translated one.
    vi internat.po wxstd.po
 
    # create the message catalog files
@@ -60,7 +64,7 @@ A. First of all, you will need the GNU gettext tools (see the next question).
 
    # run the sample to test it
    cd ..
-   ./internat <language> <langid>
+   ./internat <language> 
 
 Q. How to get the gettext tools?
 A. For Unix, you should be able to get the source distribution of any GNU mirror

@@ -8,6 +8,7 @@ wxWidgets Change Log - For more verbose changes, see the manual
 All:
 
 - Added wxLaunchDefaultBrowser.
+- Added wxPLURAL() macro in addition to _() (Jonas Rydberg)
 
 All (GUI):
 

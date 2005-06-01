@@ -251,6 +251,7 @@ the corresponding topic.
 \helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw}\\
 \helpref{wx\_static\_cast}{wxstaticcastraw}\\
 \helpref{\_}{underscore}\\
+\helpref{wxPLURAL}{wxplural}\\
 \helpref{\_T}{underscoret}
 
 
@@ -1504,16 +1505,26 @@ as wxGetTranslation.
 
 The second form is used when retrieving translation of string that has
 different singular and plural form in English or different plural forms in some
-other language. It takes two extra arguments: \arg{str}
-parameter must contain the singular form of the string to be converted.
-It is also used as the key for the search in the catalog.
-The \arg{strPlural} parameter is the plural form (in English).
-The parameter \arg{n} is used to determine the plural form.  If no
-message catalog is found \arg{str} is returned if `n == 1',
+other language. It takes two extra arguments: as above, \arg{str} 
+parameter must contain the singular form of the string to be converted and
+is used as the key for the search in the catalog. The \arg{strPlural} parameter
+is the plural form (in English). The parameter \arg{n} is used to determine the
+plural form.  If no message catalog is found \arg{str} is returned if `n == 1',
 otherwise \arg{strPlural}.
-See \urlref{GNU gettext manual}{http://www.gnu.org/manual/gettext/html\_chapter/gettext\_10.html\#SEC150} for additional information on plural forms handling.
+
+See \urlref{GNU gettext manual}{http://www.gnu.org/manual/gettext/html\_chapter/gettext\_10.html\#SEC150} 
+for additional information on plural forms handling. For a shorter alternative
+see the \helpref{wxPLURAL()}{wxplural} macro.
 
 Both versions call \helpref{wxLocale::GetString}{wxlocalegetstring}.
+
+Note that this function is not suitable for literal strings in Unicode
+builds, since you the literal strings must be enclosed into 
+\helpref{\_T()}{underscoret} or \helpref{wxT}{wxt} macro which makes them
+unrecognised by \texttt{xgettext}, and so they are not extracted to the message
+catalog. Instead, use the \helpref{\_()}{underscore} and 
+\helpref{wxPLURAL}{wxplural} macro for all literal strings.
+
 
 \membersection{::wxIsEmpty}\label{wxisempty}
 
@@ -1686,6 +1697,14 @@ function, so it marks the message for the extraction by {\tt xgettext} just as
 the string for the current locale during execution.
 
 Don't confuse this macro with \helpref{\_T()}{underscoret}!
+
+
+\membersection{wxPLURAL}\label{wxplural}
+
+\func{const wxChar *}{wxPLURAL}{\param{const char *}{sing}, \param{const char *}{plur}, \param{size\_t}{n}}
+
+This macro is identical to \helpref{\_()}{underscore} but for the plural variant
+of \helpref{wxGetTranslation}{wxgettranslation}.
 
 
 \membersection{\_T}\label{underscoret}
