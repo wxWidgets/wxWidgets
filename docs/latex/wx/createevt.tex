@@ -1,0 +1,39 @@
+\section{\class{wxWindowCreateEvent}}\label{wxwindowcreateevent}
+
+This event is sent just after the actual window associated with a wxWindow object
+has been created. Since it is derived from wxCommandEvent, the event propagates up
+the window hierarchy.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process a window creation event, use this event handler macro to direct input to a member
+function that takes a wxWindowCreateEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_WINDOW\_CREATE(func)}}{Process a wxEVT\_CREATE event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview},\rtfsp
+\helpref{wxWindowDestroyEvent}{wxwindowdestroyevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxWindowCreateEvent::wxWindowCreateEvent}\label{wxwindowcreateeventctor}
+
+\func{}{wxWindowCreateEvent}{\param{wxWindow* }{win = NULL}}
+
+Constructor.
+
