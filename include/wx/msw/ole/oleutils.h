@@ -73,7 +73,7 @@ public:
     wxAutoULong(ULONG value = 0) : m_Value(value) { }
 
     operator ULONG&() { return m_Value; }
-    const ULONG& operator=(ULONG value) { return m_Value = value; }
+    ULONG& operator=(ULONG value) { m_Value = value; return m_Value;  }
     
     wxAutoULong& operator++() { ++m_Value; return *this; }
     const wxAutoULong operator++( int ) { wxAutoULong temp = *this; ++m_Value; return temp; }
