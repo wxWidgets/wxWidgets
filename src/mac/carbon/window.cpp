@@ -218,16 +218,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
                     if ( thisWindow->GetPeer()->IsCompositing() == false )
                     {
-/*
-                        if ( thisWindow->GetPeer()->IsRootControl() == false )
-                        {
-                            GetControlBounds( thisWindow->GetPeer()->GetControlRef() , &controlBounds ) ;
-                        }
-                        else
-                        {
-                            thisWindow->GetPeer()->GetRect( &controlBounds ) ;
-                        }
-*/ 
                         allocatedRgn = NewRgn() ;
                         CopyRgn( updateRgn , allocatedRgn ) ;
                         OffsetRgn( allocatedRgn , -controlBounds.left , -controlBounds.top ) ;
