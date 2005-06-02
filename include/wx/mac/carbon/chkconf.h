@@ -16,13 +16,14 @@
  * disable the settings which don't work for some compilers
  */
 
-/*
- * wxUSE_DEBUG_NEW_ALWAYS doesn't work with CodeWarrior
- */
-
 #if defined(__MWERKS__)
     #undef wxUSE_DEBUG_NEW_ALWAYS
     #define wxUSE_DEBUG_NEW_ALWAYS      0
+
+    /* DS: Fixes compilation when wxUSE_FATAL_EXCEPTION is 1 */
+    #ifndef wxTYPE_SA_HANDLER
+        #define wxTYPE_SA_HANDLER int
+    #endif
 #endif
 
 /*
@@ -30,7 +31,7 @@
  */
 
 #ifndef wxMAC_USE_CORE_GRAPHICS
-#define wxMAC_USE_CORE_GRAPHICS 0
+    #define wxMAC_USE_CORE_GRAPHICS 0
 #endif
 
 #endif
