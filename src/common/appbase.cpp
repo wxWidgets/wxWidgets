@@ -714,10 +714,12 @@ static wxString GetAssertStackTrace()
 {
     wxString stackTrace;
 
+#ifdef __WXMSW__
     // check that we can get the stack trace before trying to do it
     if ( !wxDbgHelpDLL::Init() )
         return stackTrace;
-
+#endif
+    
     class StackDump : public wxStackWalker
     {
     public:
