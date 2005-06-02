@@ -757,7 +757,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
             rect = wxDisplay(dpy).GetGeometry();
         }
         else // fall back to the main desktop
-#else // wxUSE_DISPLAY
+#endif // wxUSE_DISPLAY
         {
             // resize to the size of the desktop
             wxCopyRECTToRect(wxGetWindowRect(::GetDesktopWindow()), rect);
@@ -768,7 +768,6 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
             rect.y       = 0;
 #endif
         }
-#endif // wxUSE_DISPLAY
 
         SetSize(rect);
 
