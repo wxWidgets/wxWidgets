@@ -141,7 +141,6 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/xml
 	mkdir $(DISTDIR)/include/wx/xrc
 	cp $(INCDIR)/wx/*.h $(DISTDIR)/include/wx
-	cp $(INCDIR)/wx/*.inl $(DISTDIR)/include/wx
 	cp $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
 	cp $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
 	cp $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
@@ -787,7 +786,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/printing/*.cpp $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.h $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.xpm $(DISTDIR)/samples/printing
-	cp $(SAMPDIR)/printing/*.xbm $(DISTDIR)/samples/printing
 
 #	mkdir $(DISTDIR)/samples/resource
 #	cp $(SAMPDIR)/resource/Makefile.in $(DISTDIR)/samples/resource
