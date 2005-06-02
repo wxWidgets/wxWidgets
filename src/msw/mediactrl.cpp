@@ -578,6 +578,7 @@ public:
     IMediaControl* m_pMC;
     IMediaEvent* m_pME;
     IMediaPosition* m_pMS;
+    bool m_bVideo;
     
     wxAMMediaThread* m_pThread;
 
@@ -1238,6 +1239,11 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
         wxASSERT(false);
     }
 
+    if(m_bestSize.x == 0 && m_bestSize.y == 0)
+        m_bVideo = false;
+    else
+        m_bVideo = true;
+
     //
     // Force the parent window of this control to recalculate
     // the size of this if sizers are being used
@@ -1491,7 +1497,7 @@ wxSize wxAMMediaBackend::GetVideoSize() const
 void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), 
                             int w, int h)
 {
-    if(m_pVMC)
+    if(m_pVMC && m_bVideo)
     {
         RECT srcRect, destRect;
         
@@ -1632,7 +1638,7 @@ void wxAMMediaBackend::OnStop()
 void wxAMMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
 {
     wxAMMediaBackend* pThis = (wxAMMediaBackend*) this;
-    if(pThis->m_pVMC)
+    if(pThis->m_pVMC && pThis->m_bVideo)
     {
         //TODO: Use wxClientDC?
         HDC hdc = ::GetDC((HWND)pThis->m_ctrl->GetHandle());
@@ -1658,7 +1664,7 @@ void wxAMMediaEvtHandler::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxAMMediaBackend* pThis = (wxAMMediaBackend*) this;
     wxPaintDC dc(pThis->m_ctrl);
-    if( pThis->m_pVMC )
+    if( pThis->m_pVMC && pThis->m_bVideo)
     {
         if( pThis->m_pVMC->RepaintVideo((HWND)pThis->m_ctrl->GetHandle(), 
                                                 (HDC)dc.GetHDC())  != 0 )
