@@ -376,13 +376,18 @@ static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
 static wxString CallStrftime(const wxChar *format, const tm* tm)
 {
     wxChar buf[4096];
+    // Create temp wxString here to work around mingw/cygwin bug 1046059
+    // http://sourceforge.net/tracker/?func=detail&atid=102435&aid=1046059&group_id=2435
+    wxString s;
+
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, tm) )
     {
         // buffer is too small?
         wxFAIL_MSG(_T("strftime() failed"));
     }
 
-    return wxString(buf);
+    s = buf;
+    return s;
 }
 #endif
 
