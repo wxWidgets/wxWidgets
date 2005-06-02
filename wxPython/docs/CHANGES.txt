@@ -21,13 +21,19 @@ attributes are merged, e.g., if it is already set to a non-default
 value in the current GridCellAttr object then don't merge from the
 other.
 
-wxGTK: fix for unset attributes in the wx.KeyEvent for EVT_CHAR
-events.
-
 wx.lib.evtmgr: Fixed to use wx._core._wxPyDeadObject
 
 wx.lib.gridmovers: Don't scroll when the mouse is dragged outside of
 the grid, unless the mouse is kept in motion.
+
+wxMSW:  Applied patch #1213290 incorrect logic in
+wx.TopLevelWindow.ShowFullScreen.
+
+Applied patch #1213066 correct device names for Joystick in Linux.
+
+wxGTK: Applied patch #1207162 wx.TextCtrl.SetStyle fix for overlapping
+calls. 
+
 
 
 
