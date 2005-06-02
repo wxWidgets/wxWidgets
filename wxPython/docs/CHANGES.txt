@@ -1,6 +1,36 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.6.1.0
+-------
+
+wx.ListCtrl: patch #1210352, fixes editing in generic wx.ListCtrl with
+wx.LC_EDIT_LABELS.
+
+Applied patch #208286, MediaCtrl DirectShow rewrite.
+
+DocView patches from Morgan Hua: bug fixes, and additional SVN
+commands, also added a default template that uses the text editor for
+any unknown file type.
+
+wxMSW: Use the system IDC_HAND cursor for wx.CURSOR_HAND and only fallback
+to the strange wxWidgets version if the system one is not available.
+
+wx.grid.Grid: Merge the cell size attribute the same way that other
+attributes are merged, e.g., if it is already set to a non-default
+value in the current GridCellAttr object then don't merge from the
+other.
+
+wxGTK: fix for unset attributes in the wx.KeyEvent for EVT_CHAR
+events.
+
+wx.lib.evtmgr: Fixed to use wx._core._wxPyDeadObject
+
+wx.lib.gridmovers: Don't scroll when the mouse is dragged outside of
+the grid, unless the mouse is kept in motion.
+
+
+
 
 2.6.0.1
 -------
