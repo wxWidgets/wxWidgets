@@ -51,6 +51,24 @@ extern wxWindowGTK *g_delayedFocus;
 // ----------------------------------------------------------------------------
 
 #ifdef __WXGTK20__
+extern "C" {
+static void wxGtkOnRemoveTag(GtkTextBuffer *buffer,
+                             GtkTextTag *tag,
+                             GtkTextIter *start,
+                             GtkTextIter *end,
+                             gpointer user_data)
+{
+    gchar *name;
+    g_object_get (tag, "name", &name, NULL);
+
+    if (!name || strncmp(name, "WX", 2)) // anonymous tag or not starting with "WX"
+        g_signal_stop_emission_by_name(buffer, "remove_tag");
+
+    g_free(name);
+}
+}
+
+extern "C" {
 static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
                                        const wxTextAttr& attr,
                                        GtkTextIter *start,
@@ -58,6 +76,11 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
 {
     static gchar buf[1024];
     GtkTextTag *tag;
+
+    gulong remove_handler_id = g_signal_connect( text_buffer, "remove_tag",
+                                                 G_CALLBACK(wxGtkOnRemoveTag), NULL);
+    gtk_text_buffer_remove_all_tags(text_buffer, start, end);
+    g_signal_handler_disconnect( text_buffer, remove_handler_id );
 
     if (attr.HasFont())
     {
@@ -101,7 +124,9 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
         gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
     }
 }
+}
 
+extern "C" {
 static void wxGtkTextInsert(GtkWidget *text,
                             GtkTextBuffer *text_buffer,
                             const wxTextAttr& attr,
@@ -120,7 +145,9 @@ static void wxGtkTextInsert(GtkWidget *text,
 
     wxGtkTextApplyTagsFromAttr(text_buffer, attr, &start, &iter);
 }
+}
 #else
+extern "C" {
 static void wxGtkTextInsert(GtkWidget *text,
                             const wxTextAttr& attr,
                             const char *txt,
@@ -137,6 +164,7 @@ static void wxGtkTextInsert(GtkWidget *text,
                         : NULL;
 
     gtk_text_insert( GTK_TEXT(text), font, colFg, colBg, txt, len );
+}
 }
 #endif // GTK 1.x
 
@@ -264,7 +292,7 @@ au_check_word( GtkTextIter *s, GtkTextIter *e )
 
     GtkTextIter start = *s, end = *e;
     GtkTextBuffer *buffer = gtk_text_iter_get_buffer(s);
-    
+
     // Get our special link tag
     GtkTextTag *tag = gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(buffer), "wxUrl");
 
@@ -912,7 +940,7 @@ void wxTextCtrl::SetValue( const wxString &value )
             // what else can we do? at least don't crash...
             return;
         }
-        
+
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
 
 #else
