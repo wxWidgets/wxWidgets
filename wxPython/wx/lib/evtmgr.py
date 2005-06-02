@@ -274,7 +274,7 @@ class EventManager:
 
 
     def __isDeadWxObject(self, anObject):
-        return isinstance(anObject, wx._wxPyDeadObject)
+        return isinstance(anObject, wx._core._wxPyDeadObject)
 
 
     def __isDeadTopic(self, aTopic):
