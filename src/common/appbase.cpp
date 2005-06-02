@@ -710,6 +710,7 @@ bool DoShowAssertDialog(const wxString& msg)
     return false;
 }
 
+#if wxUSE_STACKWALKER
 static wxString GetAssertStackTrace()
 {
     wxString stackTrace;
@@ -775,6 +776,7 @@ static wxString GetAssertStackTrace()
 
     return stackTrace;
 }
+#endif // wxUSE_STACKWALKER
 
 // show the assert modal dialog
 static
