@@ -252,7 +252,9 @@ class GridColMover(wx.EvtHandler):
 
     def OnMouseMove(self,evt):
         if self.isDragging:
-            if abs(self.startX - evt.m_x) >= 3:
+            if abs(self.startX - evt.m_x) >= 3 \
+                   and abs(evt.m_x - self.lastX) >= 3:
+                self.lastX = evt.m_x 
                 self.didMove = True
                 sx,y = self.grid.GetViewStart()
                 w,h = self.lwin.GetClientSize()
@@ -288,10 +290,9 @@ class GridColMover(wx.EvtHandler):
                 self.colWin.DisplayAt(px,y)
                 return
 
-        evt.Skip()
 
     def OnPress(self,evt):
-        self.startX = evt.m_x
+        self.startX = self.lastX = evt.m_x
         sx = self.grid.GetViewStart()[0] * self.ux
         sx -= self.grid._rlSize
         px,py = self.lwin.ClientToScreenXY(evt.m_x,evt.m_y)
@@ -373,7 +374,9 @@ class GridRowMover(wx.EvtHandler):
 
     def OnMouseMove(self,evt):
         if self.isDragging:
-            if abs(self.startY - evt.m_y) >= 3:
+            if abs(self.startY - evt.m_y) >= 3 \
+                   and abs(evt.m_y - self.lastY) >= 3:
+                self.lastY = evt.m_y
                 self.didMove = True
                 x,sy = self.grid.GetViewStart()
                 w,h = self.lwin.GetClientSizeTuple()
@@ -412,10 +415,9 @@ class GridRowMover(wx.EvtHandler):
                 self.rowWin.DisplayAt(x,py)
                 return
 
-        evt.Skip()
 
     def OnPress(self,evt):
-        self.startY = evt.m_y
+        self.startY = self.lastY = evt.m_y
         sy = self.grid.GetViewStart()[1] * self.uy
         sy -= self.grid._clSize
         px,py = self.lwin.ClientToScreenXY(evt.m_x,evt.m_y)
