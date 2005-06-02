@@ -38,7 +38,7 @@ if test "$WXFOUND" != 1; then
     ])
 fi
 
-AC_BAKEFILE
+AC_BAKEFILE([m4_include(autoconf_inc.m4)])
 
 
 AC_CONFIG_FILES([
