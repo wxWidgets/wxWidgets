@@ -45,7 +45,6 @@
 
 #if defined(__WXMSW__)
   #include  "wx/msw/wrapwin.h"  // includes windows.h for MessageBox()
-  #include  "wx/msw/debughlp.h"  // includes windows.h for MessageBox()
 #endif
 
 #if wxUSE_FONTMAP
@@ -69,7 +68,7 @@
 #endif // __WXMAC__
 
 #ifdef __WXDEBUG__
-    #ifdef wxUSE_STACKWALKER
+    #if wxUSE_STACKWALKER
         #include "wx/stackwalk.h"
         #ifdef __WXMSW__
             #include "wx/msw/debughlp.h"
