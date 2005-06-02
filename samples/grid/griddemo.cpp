@@ -4,7 +4,7 @@
 // Author:      Michael Bedward
 // Modified by:
 // RCS-ID:      $Id$
-// Copyright:   (c) Michael Bedward, Julian Smart
+// Copyright:   (c) Michael Bedward, Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -935,8 +935,7 @@ void GridFrame::OnEditorHidden( wxGridEvent& ev )
 void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
 {
     (void)wxMessageBox( _T("\n\nwxGrid demo \n\n")
-                        _T("Michael Bedward \n")
-                        _T("mbedward@ozemail.com.au \n\n"),
+                        _T("Michael Bedward, Julian Small, Vadim Zeitlin"),
                         _T("About"),
                         wxOK );
 }
@@ -1197,10 +1196,13 @@ wxString BugsGridTable::GetValue( int row, int col )
     switch ( col )
     {
         case Col_Id:
+            return wxString::Format(_T("%d"), gd.id);
+
         case Col_Priority:
+            return wxString::Format(_T("%d"), gd.prio);
+
         case Col_Opened:
-            wxFAIL_MSG(_T("unexpected column"));
-            break;
+            return gd.opened ? _T("1") : _T("0");
 
         case Col_Severity:
             return severities[gd.severity];
@@ -1258,7 +1260,10 @@ void BugsGridTable::SetValue( int row, int col, const wxString& value )
     }
 }
 
-bool BugsGridTable::CanGetValueAs( int WXUNUSED(row), int col, const wxString& typeName )
+bool
+BugsGridTable::CanGetValueAs(int WXUNUSED(row),
+                             int col,
+                             const wxString& typeName)
 {
     if ( typeName == wxGRID_VALUE_STRING )
     {
