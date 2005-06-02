@@ -140,6 +140,7 @@ if [ -z "${skipcopy}" ]; then
 	    cp -Rpf --link ${wxdir}/$d ${tarver} #> /dev/null 2>&1
 	fi
     done
+
 #     # and tex2rtf too
 #     mkdir ${tarver}/utils
 #     cp -Rpf --link ${wxdir}/utils/tex2rtf ${tarver}/utils
@@ -242,7 +243,7 @@ if [ -z "${skiprpm}" ]; then
 	rpmbuild -bs \
 	    --define "_topdir ${rpmtop}" \
 	    --define "_tmppath ${builddir}" \
-	    --define "pyver ${pyver}" \
+	    --define "release 1" \
 	    ${distdir}/wxPython.spec
 	if [ "$?" != "0" ]; then
 	    echo "*** RPM failure, exiting."
