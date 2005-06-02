@@ -16,7 +16,12 @@ All (GUI):
 - Radio in menus do not send menu event for selections of already selected item.
 - Fixed wrong positioning of marks and enumerations in lists of wxHTML.
 - wxImage::Rotate90 respects alpha channel.
-- Added wxEVT_SCROLL_CHANGED as synonym for wxEVT_SCROLL_ENDSCROLL
+- Added wxEVT_SCROLL_CHANGED as synonym for wxEVT_SCROLL_ENDSCROLL.
+- Replaced artwork for some cursors, icons and toolbar buttons.
+- Fixed sizing problem in generic wxCalendarCtrl for short day abbreviations.
+- Fixed wxWindow::DoGetBestSize to keep original best size.
+- PNM now supports ASCII and raw grey formats.
+- wxGrid focus and edit key improvements.
 
 wxMSW:
 
@@ -28,6 +33,7 @@ wxMSW:
   by refreshing parent when the radio box moves.
 - Added ability set the system option "msw.staticbox.optimized-paint" to 0 to
   allow a panel to paint graphics around controls within a static box.
+- Refresh exposed areas when resizing, using WM_WINDOWPOSCHANGED.
 - Worked around an apparent bug in deferred window positioning (moving a
   window from (x, y) to (a, b) and back to (x, y) misses the last step) by
   checking window positions against corresponding sizer state, if any.
@@ -35,16 +41,33 @@ wxMSW:
 - Fixed wxFileName::GetLongPath() to behave correctly during the first call too.
 - Fixed alpha blitting to take into account source position.
 - Setting foreground colour for wxCheckBox now works when using XP themes too.
+- wxStaticBox label can use custom foreground colour.
 - Now uses newer font MS Shell Dlg 2 if possible.
 - Compiles again with WIN64.
 - Winelib compilation now works.
 - When converting a wxIcon to a bitmap check if the icon has an alpha
   channel and set the bitmap to use it.
 - wxSlider now also sends wxEVT_SCROLL_CHANGED when using mouse wheel
+- Miscellaneous wxMediaCtrl improvements.
+- wxTopLevelWindow::ShowFullScreen logic error fixed.
+- Fixed wxScrollBar background colour bug.
+- Fixed problems with paper sizes being ignored.
+- wxNotebook refresh problem fixed.
+- DDE fixed for Unicode.
+- Fixed ownerdrawn multiline buttons.
+- wxCheckListBox item background fixed.
+- Fixed some wxRegKey bugs.
+
+wxWinCE:
+
+- Fixed wxFileName::CreateTempFileName.
 
 wxGTK:
 
 - Added support for wxSTAY_ON_TOP (GTK 2.4+).
+- Fixed wxTextCtrl::SetStyle for overlapping calls.
+- Fixed scrollbar border colour.
+- Added bitmap support in menus.
 
 wxMac:
 
@@ -52,6 +75,20 @@ wxMac:
   .app extension and are the ones that reside in the Applications folder).
 - Fixed a bug in wxGetKeyState where shift and some other keys were returning an
   incorrect state.
+- Fixed toolbar colour bug on Tiger.
+- Fixed visual problems caused by removal of About menu item.
+- Window menu now added automatically.
+- Configure fixed for wxBase compilation.
+- Modified function key support fixed.
+- wxTopLevelWindow::Maximize improvements.
+
+wxX11:
+
+- Menu problems fixed.
+- wxScrolledWindow scrolls any child windows.
+- Fixed a font memory leak.
+- Multiple wxTimers now work correctly.
+
 
 2.6.0
 -----
