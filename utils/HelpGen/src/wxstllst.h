@@ -6,7 +6,7 @@
 // Created:     27/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleskandars Gluchovas
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WXSTLLST_G__
@@ -27,7 +27,7 @@
 // VERSION:: 0.2 (copy-constructor/assign-op added)
 
 // FOR NOW:: class-member operators "new" and "delete"
-//           are ignored by list class, memory allocated 
+//           are ignored by list class, memory allocated
 //           and freed using global operators
 
 typedef int Type;
@@ -40,50 +40,50 @@ typedef int Type;
 {\
 public:\
 \
-	typedef Type			  value_type;\
-	typedef value_type*	      pointer;\
-	typedef const value_type* const_pointer;\
-	typedef value_type&       reference;\
-	typedef const value_type& const_reference;\
-	typedef size_t			  size_type;\
-	typedef ptrdiff_t		  difference_type;\
+    typedef Type              value_type;\
+    typedef value_type*       pointer;\
+    typedef const value_type* const_pointer;\
+    typedef value_type&       reference;\
+    typedef const value_type& const_reference;\
+    typedef size_t            size_type;\
+    typedef ptrdiff_t         difference_type;\
 \
 protected:\
-	struct list_node\
-	{\
-		list_node* mpNext;\
-		list_node* mpPrev;\
-		value_type mData;\
-	};\
+    struct list_node\
+    {\
+        list_node* mpNext;\
+        list_node* mpPrev;\
+        value_type mData;\
+    };\
 \
-	typedef list_node* node_ref_type;\
+    typedef list_node* node_ref_type;\
 \
-	node_ref_type mpFreeListHead;\
-	node_ref_type mpTerminator;\
-	size_type     mSize;\
+    node_ref_type mpFreeListHead;\
+    node_ref_type mpTerminator;\
+    size_type     m_Size;\
 \
-	inline node_ref_type AllocNode() \
-	{ \
-		if ( mpFreeListHead ) \
-		{\
-			node_ref_type pFreeNode = mpFreeListHead;\
-			mpFreeListHead = mpFreeListHead->mpPrev;\
+    inline node_ref_type AllocNode() \
+    { \
+        if ( mpFreeListHead ) \
+        {\
+            node_ref_type pFreeNode = mpFreeListHead;\
+            mpFreeListHead = mpFreeListHead->mpPrev;\
 \
-			return pFreeNode;\
-		}\
-		else\
-		{\
-			char* pHeapBlock = new char[sizeof(list_node)];\
+            return pFreeNode;\
+        }\
+        else\
+        {\
+            char* pHeapBlock = new char[sizeof(list_node)];\
 \
-			return (node_ref_type)pHeapBlock;\
-		}\
-	}\
+            return (node_ref_type)pHeapBlock;\
+       }\
+    }\
 \
-	inline void DestroyFreeList()\
-	{\
-		while ( mpFreeListHead )\
-		{\
-			node_ref_type tmp = mpFreeListHead;\
+    inline void DestroyFreeList()\
+    {\
+        while ( mpFreeListHead )\
+        {\
+            node_ref_type tmp = mpFreeListHead;\
 			mpFreeListHead = mpFreeListHead->mpPrev;\
 \
 			delete [](char*)tmp;\
@@ -318,7 +318,7 @@ public:\
 \
     inline listClass()\
 			: mpFreeListHead( 0 ),\
-			  mSize(0)\
+			  m_Size(0)\
 	{\
 		mpTerminator = AllocNode();\
 		mpTerminator->mpPrev = mpTerminator->mpNext = mpTerminator;\
@@ -347,7 +347,7 @@ public:\
 \
 	inline listClass(const_iterator first, const_iterator last)\
 			: mpFreeListHead( 0 ),\
-			  mSize(0)\
+			  m_Size(0)\
 	\
 		{ while( first != last ) push_back( *first++ ); }\
 \
@@ -384,9 +384,9 @@ public:\
 	inline const_reverse_iterator  rend() const\
 		{ return const_reverse_iterator(mpTerminator); }\
 \
-	inline int empty() const { return (mSize == 0); }\
+	inline int empty() const { return (m_Size == 0); }\
 \
-	inline size_type size() const { return mSize; }\
+	inline size_type size() const { return m_Size; }\
 \
 	inline size_type max_size() const { return UINT_MAX/sizeof(list_node); }\
 \
@@ -415,7 +415,7 @@ public:\
 \
 		new (&pNew->mData) value_type(x);\
 \
-		++mSize;\
+		++m_Size;\
 \
 		return iterator(pNew);\
 	}\
@@ -441,8 +441,8 @@ public:\
 		other.mpTerminator->mpNext = \
 			other.mpTerminator->mpPrev = other.mpTerminator;\
 \
-		mSize += other.mSize;\
-		other.mSize = 0;\
+		m_Size += other.m_Size;\
+		other.m_Size = 0;\
 	}\
 \
 	inline void splice( iterator position, listClass& other, iterator first, iterator last )\
@@ -457,8 +457,8 @@ public:\
 			++sz;\
 		}\
 \
-		mSize += sz;\
-		other.mSize -= sz;\
+		m_Size += sz;\
+		other.m_Size -= sz;\
 \
 		node_ref_type pPos   = position.mpNode;\
 		node_ref_type pFirst = first.mpNode;\
@@ -502,7 +502,7 @@ public:\
 \
 			firstNode = next;\
 \
-			--mSize;\
+			--m_Size;\
 		}\
 	}\
 \
@@ -518,13 +518,13 @@ public:\
 \
 	void sort()\
 	{\
-		if ( mSize < 2 ) return;\
+		if ( m_Size < 2 ) return;\
 \
 		iterator from = begin();\
 		iterator other_end = end();\
 		--other_end;\
 \
-		for( size_type i = 0; i != mSize; ++i )\
+		for( size_type i = 0; i != m_Size; ++i )\
 		{\
 			size_type nSwaps = 0;\
 \

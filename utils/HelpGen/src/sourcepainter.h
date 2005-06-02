@@ -32,13 +32,6 @@
     #include "wxstlvec.h"
     #include "wx/string.h"
 
-    #if wxUSE_STD_STRING
-        using std::string;
-    #else
-        // FIXME:: dirty!
-        #define  string wxString
-    #endif
-
     typedef WXSTL_VECTOR_SHALLOW_COPY(int) SPBlockListT;
 
 #endif
@@ -63,7 +56,7 @@
 class SourcePainter
 {
 protected:
-    string          mResultStr;
+    wxString        mResultStr;
     SPBlockListT    mBlocks;
     bool            mCollectResultsOn;
 

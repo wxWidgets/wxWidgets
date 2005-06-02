@@ -606,7 +606,7 @@ void SourcePainter::ProcessSource( char* src, int srcLen )
 
     if ( mCollectResultsOn )
 
-        mResultStr += string( src, srcLen );
+        mResultStr += wxString( src, srcLen );
 }
 
 void SourcePainter::SetState( bool isInComment,

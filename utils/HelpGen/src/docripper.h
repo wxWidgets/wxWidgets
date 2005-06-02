@@ -80,7 +80,7 @@ protected:
     spContext*     mpFileBinderCtx;
 
     // script tags set up from usesr code
-    MarkupTagsT    mTags;
+    MarkupTagsT    m_Tags;
 
 protected:
     // helpers

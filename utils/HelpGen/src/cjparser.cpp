@@ -644,9 +644,9 @@ static inline void skip_next_token_back( char*& cur )
     ++cur; // position after the trailing charcter of the prev token
 }
 
-static string get_token_str( char* cur )
+static wxString get_token_str( char* cur )
 {
-    return string( cur, get_token_len( cur ) );
+    return wxString( cur, get_token_len( cur ) );
 }
 
 // skips token or whole expression which may have
@@ -1327,7 +1327,7 @@ void CJSourceParser::AddMacroNode( wxChar*& cur )
             skip_token( cur );
             get_next_token( cur );
 
-            string condition = get_token_str( cur );
+            wxString condition = get_token_str( cur );
 
             // currently, everything except '0' is true
             if ( condition == _T("0") ) {
@@ -1595,7 +1595,7 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
         skip_next_token_back( cur );
         skip_token_back( cur );
 
-        string lastToken = get_token_str( cur );
+        wxString lastToken = get_token_str( cur );
         if ( lastToken == "operator" ) {
             lastToken += pOp->m_Name;
             pOp->m_Name = lastToken;
@@ -1608,7 +1608,7 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
     else if ( pOp->m_Name == "operator" ) {
         skip_token( cur );
         get_next_token( cur );
-        string oper = get_token_str( cur );
+        wxString oper = get_token_str( cur );
 
         pOp->m_Name += oper;
     }
@@ -1618,11 +1618,11 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
 
     if ( cur >= start )
     {
-        string rettype = string( start, size_t( cur-start ) );
+        wxString rettype = wxString( start, size_t( cur-start ) );
         // FIXME just for now...
-        string::size_type pos = 0;
-        string toerase("WXDLLEXPORT ");
-        while((pos = rettype.find(toerase, pos)) != string::npos)
+        wxString::size_type pos = 0;
+        wxString toerase("WXDLLEXPORT ");
+        while((pos = rettype.find(toerase, pos)) != wxString::npos)
             rettype.erase(pos, toerase.length());
         pOp->m_RetType = rettype;
     }
@@ -1744,14 +1744,14 @@ bool CJSourceParser::ParseArguments( char*& cur )
         AttachComments( *pPar, blocks[nameBlock] );
 
         // retrieve argument name
-        pPar->m_Name = string( blocks[nameBlock], blockSizes[nameBlock] );
+        pPar->m_Name = wxString( blocks[nameBlock], blockSizes[nameBlock] );
 
         // retreive argument type
 
         size_t len = blockSizes[ typeBlock ];
         len = size_t ( (blocks[ typeBlock ] + len) - blocks[ 0 ] );
 
-        pPar->m_Type = string( blocks[0], len );
+        pPar->m_Type = wxString( blocks[0], len );
 
         arrange_indirection_tokens_between( pPar->m_Type, pPar->m_Name );
 
@@ -1834,7 +1834,7 @@ void CJSourceParser::ParseMemberVar( char*& cur )
 
     bool firstMember = true;
 
-    string type;
+    wxString type;
 
     // jump to the end of statement
     // and start collecting same-type varibles
@@ -2026,7 +2026,7 @@ void CJSourceParser::AddClassNode( char*& cur )
 {
     char* ctxStart = cur;
 
-    string classkeyword = get_token_str( cur );
+    wxString classkeyword = get_token_str( cur );
 
     skip_token( cur ); // skip 'class' keyword
     if ( !get_next_token( cur ) ) return;
@@ -2156,7 +2156,7 @@ void CJSourceParser::AddClassNode( char*& cur )
 
         if ( *tok != ':' && *cur != ':' )
 
-            pClass->m_SuperClassNames.push_back( string( cur, len ) );
+            pClass->m_SuperClassNames.push_back( wxString( cur, len ) );
 
     } while(1);
 

@@ -48,14 +48,14 @@ static size_t log2(size_t nr)
 /***** Implementation for class ScriptStream *****/
 
 ScriptStream::ScriptStream()
-    : mpBuf(0),
-      mSize(0),
-      mCapacity(0)
+    : m_pBuf(0),
+      m_Size(0),
+      m_Capacity(0)
 {}
 
 ScriptStream::~ScriptStream()
 {
-    if ( mpBuf ) delete mpBuf;
+    if ( m_pBuf ) delete m_pBuf;
 }
 
 void ScriptStream::WriteBytes( const void* srcBuf, size_t count )
@@ -63,28 +63,28 @@ void ScriptStream::WriteBytes( const void* srcBuf, size_t count )
     if ( !count ) return;
 
     // increase the capacity if necessary
-    if ( mSize + count > mCapacity )
+    if ( m_Size + count > m_Capacity )
     {
-        mCapacity =
-            (  0x2 << (log2( mSize + count ) + 1 ) );
+        m_Capacity =
+            (  0x2 << (log2( m_Size + count ) + 1 ) );
 
-        if ( mCapacity < 128 ) mCapacity = 128;
+        if ( m_Capacity < 128 ) m_Capacity = 128;
 
-        char* oldBuf = mpBuf;
+        char* oldBuf = m_pBuf;
 
-        mpBuf = new char[mCapacity];
+        m_pBuf = new char[m_Capacity];
 
         if ( oldBuf )
         {
-            memcpy( mpBuf, oldBuf, mSize );
+            memcpy( m_pBuf, oldBuf, m_Size );
             delete oldBuf;
         }
     }
 
     // append new data
-    memcpy( &mpBuf[mSize], srcBuf, count );
+    memcpy( &m_pBuf[m_Size], srcBuf, count );
 
-    mSize += count;
+    m_Size += count;
 }
 
 ScriptStream& ScriptStream::operator<<( const char* str )
@@ -94,7 +94,7 @@ ScriptStream& ScriptStream::operator<<( const char* str )
     return *this;
 }
 
-ScriptStream& ScriptStream::operator<<( const string& str )
+ScriptStream& ScriptStream::operator<<( const wxString& str )
 {
     if ( str.length() < 512 )
     {
@@ -127,29 +127,29 @@ void ScriptStream::endl()
 
 /***** Implementation for class ScriptTemplate *****/
 
-ScriptTemplate::ScriptTemplate( const string& templateText )
+ScriptTemplate::ScriptTemplate( const wxString& templateText )
 {
-    string tmp = templateText;
+    wxString tmp = templateText;
 
-    mTText = (char*)malloc( tmp.length() + 1 );
+    m_TText = (char*)malloc( tmp.length() + 1 );
 
-    strcpy( mTText, tmp.c_str() );
+    strcpy( m_TText, tmp.c_str() );
 }
 
 ScriptTemplate::~ScriptTemplate()
 {
-    for( size_t i = 0; i != mVars.size(); ++i )
+    for( size_t i = 0; i != m_Vars.size(); ++i )
 
-        delete mVars[i];
+        delete m_Vars[i];
 
-    free( mTText );
+    free( m_TText );
 }
 
 bool ScriptTemplate::HasVar( const char* name )
 {
-    for( size_t i = 0; i != mVars.size(); ++i )
+    for( size_t i = 0; i != m_Vars.size(); ++i )
 
-        if ( strcmp( mVars[i]->m_Name, name ) == 0 )
+        if ( strcmp( m_Vars[i]->m_Name, name ) == 0 )
 
             return 1;
 
@@ -158,17 +158,17 @@ bool ScriptTemplate::HasVar( const char* name )
 
 void ScriptTemplate::AddStringVar ( const char* name, int ofs )
 {
-    mVars.push_back( new TVarInfo( name, ofs, TVAR_STRING ) );
+    m_Vars.push_back( new TVarInfo( name, ofs, TVAR_STRING ) );
 }
 
 void ScriptTemplate::AddIntegerVar( const char* name, int ofs )
 {
-    mVars.push_back( new TVarInfo( name, ofs, TVAR_INTEGER ) );
+    m_Vars.push_back( new TVarInfo( name, ofs, TVAR_INTEGER ) );
 }
 
 void ScriptTemplate::AddDoubleVar ( const char* name, int ofs )
 {
-    mVars.push_back( new TVarInfo( name, ofs, TVAR_DOUBLE ) );
+    m_Vars.push_back( new TVarInfo( name, ofs, TVAR_DOUBLE ) );
 }
 
 void ScriptTemplate::AddObjectRefArray( const char*     name,
@@ -179,11 +179,11 @@ void ScriptTemplate::AddObjectRefArray( const char*     name,
 {
     TArrayInfo* pInfo = new TArrayInfo( name );
 
-    mVars.push_back( pInfo );
+    m_Vars.push_back( pInfo );
 
-    pInfo->mRefOfs         = ofsRefToFirstObj;
-    pInfo->mSizeIntOfs     = ofsObjSizeInt;
-    pInfo->mObjRefTemplOfs = ofsObjRefTempl;
+    pInfo->m_RefOfs         = ofsRefToFirstObj;
+    pInfo->m_SizeIntOfs     = ofsObjSizeInt;
+    pInfo->m_ObjRefTemplOfs = ofsObjRefTempl;
 }
 
 inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
@@ -196,7 +196,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
     {
         case TVAR_INTEGER :
             {
-                sprintf(buf, "%d",*( (int*) ((char*)dataObj + pInfo->mOfs) ) );
+                sprintf(buf, "%d",*( (int*) ((char*)dataObj + pInfo->m_Ofs) ) );
 
                 stm.WriteBytes( buf, strlen(buf ) );
                 break;
@@ -204,15 +204,15 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
 
         case TVAR_STRING :
             {
-                string& str = *( (string*) ((char*)dataObj+pInfo->mOfs) );
+                wxString& str = *( (wxString*) ((char*)dataObj+pInfo->m_Ofs) );
 
                 const char* cs = str.c_str();
 #ifdef DEBUG_WEIRED_OFFSETS
                 cout << "DBG:: cs address is " << (int)cs << endl;
                 cout << "DBG:: str address is " << (int)(&str) << endl;
                 cout << "DBG:: dataObj points to " << (int)dataObj << endl;
-                cout << "DBG:: pInfo->mOfs value is " << (int)pInfo->mOfs << endl;
-                cout << "DBG:: d+pInfo->mOfs is " << (int)((char*)dataObj + pInfo->mOfs) << endl;
+                cout << "DBG:: pInfo->m_Ofs value is " << (int)pInfo->m_Ofs << endl;
+                cout << "DBG:: d+pInfo->m_Ofs is " << (int)((char*)dataObj + pInfo->m_Ofs) << endl;
                 cout << "DBG:: pInfo->m_Name is " << pInfo->m_Name << endl;
                 cout << "DBG:: pInfo->m_Type is " << pInfo->m_Type << endl;
                 cout << "DBG:: end of dump. " << endl;
@@ -226,7 +226,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
         case TVAR_DOUBLE :
             {
                 sprintf( buf, "%f",
-                         *( (double*)( (char*)dataObj+pInfo->mOfs)  ) );
+                         *( (double*)( (char*)dataObj+pInfo->m_Ofs)  ) );
 
                 stm.WriteBytes( buf, strlen(buf ) );
                 break;
@@ -236,7 +236,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
             {
                 TArrayInfo& info = *((TArrayInfo*)pInfo);
 
-                int sz = *((int*) ( (char*)dataObj+info.mSizeIntOfs ));
+                int sz = *((int*) ( (char*)dataObj+info.m_SizeIntOfs ));
                 if ( !sz )
                 {
                     // DBG::
@@ -245,14 +245,14 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
                     break;
                 }
 
-                int*   array = *((int**)( (char*)dataObj+info.mRefOfs ));
+                int*   array = *((int**)( (char*)dataObj+info.m_RefOfs ));
 
                 ScriptTemplate* pRefTempl;
 
                 for( int i = 0; i != sz; ++i )
                 {
                     pRefTempl =
-                        *((ScriptTemplate**)((char*)(array[i])+info.mObjRefTemplOfs));
+                        *((ScriptTemplate**)((char*)(array[i])+info.m_ObjRefTemplOfs));
 
                     pRefTempl->PrintScript( (void*)array[i], stm );
                 }
@@ -266,7 +266,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
 
 void ScriptTemplate::PrintScript( void* dataObj, ScriptStream& stm )
 {
-    char* cur   = mTText;
+    char* cur   = m_TText;
 
     // template parsing loop
     do
@@ -292,14 +292,14 @@ void ScriptTemplate::PrintScript( void* dataObj, ScriptStream& stm )
 
         // look up variable
 
-        size_t sz = mVars.size();
+        size_t sz = m_Vars.size();
         // bool found = false;
 
         for( size_t i = 0; i != sz; ++i )
         {
-            if ( strcmp( mVars[i]->m_Name, start ) == 0 )
+            if ( strcmp( m_Vars[i]->m_Name, start ) == 0 )
             {
-                PrintVar( mVars[i], dataObj, stm );
+                PrintVar( m_Vars[i], dataObj, stm );
 
                 *cur = ')';    // remove terminating zero
                 ++cur;
@@ -317,7 +317,7 @@ void ScriptTemplate::PrintScript( void* dataObj, ScriptStream& stm )
 
 /***** implementation for class ScriptSection *****/
 
-int ScriptSection::mIdCounter = 0;
+int ScriptSection::m_IdCounter = 0;
 
 ScriptSection::ScriptSection( const wxString& name,
                               const wxString& body,
@@ -326,54 +326,54 @@ ScriptSection::ScriptSection( const wxString& name,
                               bool            autoHide,
                               bool            sorted
                             )
-    : mpParent ( NULL ),
+    : m_pParent  ( NULL ),
 
-      m_Name   ( name ),
-      mBody    ( body ),
+      m_Name     ( name ),
+      m_Body     ( body ),
 
-      mAutoHide( autoHide ),
-      mSortOn  ( sorted ),
+      m_AutoHide ( autoHide ),
+      m_SortOn   ( sorted ),
 
-      mpSectTempl( pSectionTemplate ),
-      mpRefTempl ( pReferenceTemplate ),
+      m_pSectTempl( pSectionTemplate ),
+      m_pRefTempl ( pReferenceTemplate ),
 
-      mRefCount( 0 ),
-      mArrSize( 0 )
+      m_RefCount( 0 ),
+      m_ArrSize( 0 )
 {
     // generate GUID
 
     wxChar buf[32];
-    wxSprintf( buf, _T("%d"), ++mIdCounter );
-    mId = buf;
+    wxSprintf( buf, _T("%d"), ++m_IdCounter );
+    m_Id = buf;
 }
 
 ScriptSection::~ScriptSection()
 {
-    SectListT lst = mSubsections;
+    SectListT lst = m_Subsections;
 
-    while( mSubsections.size() )
+    while( m_Subsections.size() )
 
-        mSubsections[0]->RemoveRef();
+        m_Subsections[0]->RemoveRef();
 
-    for( size_t i = 0; i != mReferences.size(); ++i )
+    for( size_t i = 0; i != m_References.size(); ++i )
 
-        mReferences[i]->RemoveRef();
+        m_References[i]->RemoveRef();
 }
 
 void ScriptSection::AddRef()
 {
-    ++mRefCount;
+    ++m_RefCount;
 }
 
 void ScriptSection::RemoveRef()
 {
-    if ( !mRefCount || !(--mRefCount) )
+    if ( !m_RefCount || !(--m_RefCount) )
     {
-        if (mpParent)
+        if (m_pParent)
         {
             // remove ourselves from parent's list
 
-            SectListT& lst = mpParent->mSubsections;
+            SectListT& lst = m_pParent->m_Subsections;
             for( size_t i = 0; i != lst.size(); ++i )
 
                 if ( lst[i] == this )
@@ -404,21 +404,21 @@ ScriptSection* ScriptSection::GetSubsection( const char* name )
 
     buf[cur] = '\0';
 
-    size_t sz = mSubsections.size();
+    size_t sz = m_Subsections.size();
 
     for( size_t i = 0; i != sz; ++i )
     {
         // DBG::
-        //ScriptSection& sect = *mSubsections[i];
+        //ScriptSection& sect = *m_Subsections[i];
 
-        if ( mSubsections[i]->m_Name == buf )
+        if ( m_Subsections[i]->m_Name == buf )
         {
             if ( name[cur] == '/' )
 
                 // search recursivelly
-                return mSubsections[i]->GetSubsection( &name[cur+1] );
+                return m_Subsections[i]->GetSubsection( &name[cur+1] );
             else
-                return mSubsections[i];
+                return m_Subsections[i];
         }
     }
 
@@ -429,14 +429,14 @@ void ScriptSection::AddSection( ScriptSection* pSection,
                                 bool addToReferencesToo
                               )
 {
-    mSubsections.push_back( pSection );
+    m_Subsections.push_back( pSection );
 
     pSection->AddRef();
 
     // can add section to multiple containers
-    // ASSERT( pSection->mpParent == 0 );
+    // ASSERT( pSection->m_pParent == 0 );
 
-    pSection->mpParent = this;
+    pSection->m_pParent = this;
 
     if ( addToReferencesToo )
 
@@ -445,19 +445,19 @@ void ScriptSection::AddSection( ScriptSection* pSection,
 
 void ScriptSection::AddReference( ScriptSection* pReferredSection )
 {
-    mReferences.push_back( pReferredSection );
+    m_References.push_back( pReferredSection );
 
     pReferredSection->AddRef();
 
     // set up mandatory fields used by ScriptTemplate
-    mArrSize  = mReferences.size();
-    if ( mArrSize )
-        mRefFirst = (void*)&mReferences[0];
+    m_ArrSize  = m_References.size();
+    if ( m_ArrSize )
+        m_RefFirst = (void*)&m_References[0];
 }
 
 SectListT& ScriptSection::GetSubsections()
 {
-    return mSubsections;
+    return m_Subsections;
 }
 
 // static method:
@@ -469,12 +469,12 @@ void ScriptSection::RegisterTemplate( ScriptTemplate& sectionTempalte )
     // obtaining offsets of member vars
 
     GET_VAR_OFS( ScriptSection, m_Name,    &nameOfs    )
-    GET_VAR_OFS( ScriptSection, mBody,     &bodyOfs    )
-    GET_VAR_OFS( ScriptSection, mId,       &idOfs      )
-    GET_VAR_OFS( ScriptSection, mRefFirst, &arrRefOfs  )
-    GET_VAR_OFS( ScriptSection, mArrSize,  &arrSizeOfs )
+    GET_VAR_OFS( ScriptSection, m_Body,    &bodyOfs    )
+    GET_VAR_OFS( ScriptSection, m_Id,      &idOfs      )
+    GET_VAR_OFS( ScriptSection, m_RefFirst,&arrRefOfs  )
+    GET_VAR_OFS( ScriptSection, m_ArrSize, &arrSizeOfs )
 
-    GET_VAR_OFS( ScriptSection, mpRefTempl, &refTemplOfs )
+    GET_VAR_OFS( ScriptSection, m_pRefTempl, &refTemplOfs )
 
     // registering member variables with given script template
 
@@ -491,28 +491,28 @@ void ScriptSection::Print( ScriptStream& stm )
     // TBD:: sorting
 
     // print out this content first
-    if ( mpSectTempl )
+    if ( m_pSectTempl )
 
-        mpSectTempl->PrintScript( this, stm );
+        m_pSectTempl->PrintScript( this, stm );
 
     // attach contents subsections at the end of this content
 
-    for( size_t i = 0; i != mSubsections.size(); ++i )
+    for( size_t i = 0; i != m_Subsections.size(); ++i )
 
-        mSubsections[i]->Print( stm );
+        m_Subsections[i]->Print( stm );
 }
 
 void ScriptSection::DoRemoveEmptySections(int& nRemoved, SectListT& removedLst)
 {
-    for( size_t i = 0; i != mSubsections.size(); ++i )
+    for( size_t i = 0; i != m_Subsections.size(); ++i )
     {
-        ScriptSection& sect = *mSubsections[i];
+        ScriptSection& sect = *m_Subsections[i];
 
         sect.DoRemoveEmptySections( nRemoved, removedLst );
 
-        if (sect.mAutoHide )
+        if (sect.m_AutoHide )
 
-            if ( sect.mReferences.size() == 0 )
+            if ( sect.m_References.size() == 0 )
             {
                 bool found = false;
                 for( size_t k = 0; k != removedLst.size(); ++k )
@@ -539,24 +539,24 @@ void ScriptSection::DoRemoveDeadLinks( SectListT& removedLst)
 {
     size_t dsz = removedLst.size();
 
-    for( size_t i = 0; i != mSubsections.size(); ++i )
+    for( size_t i = 0; i != m_Subsections.size(); ++i )
     {
-        mSubsections[i]->DoRemoveDeadLinks( removedLst );
+        m_Subsections[i]->DoRemoveDeadLinks( removedLst );
     }
 
-    for( size_t n = 0; n != mReferences.size(); ++n )
+    for( size_t n = 0; n != m_References.size(); ++n )
     {
         for( size_t k = 0; k != dsz; ++k )
 
-            if ( removedLst[k] == mReferences[n] )
+            if ( removedLst[k] == m_References[n] )
             {
-                mReferences.erase( &mReferences[n] );
+                m_References.erase( &m_References[n] );
                 --n;
 
                 // set up mandatory fields used by ScriptTemplate
-                mArrSize  = mReferences.size();
-                if ( mArrSize )
-                    mRefFirst = (void*)&mReferences[0];
+                m_ArrSize  = m_References.size();
+                if ( m_ArrSize )
+                    m_RefFirst = (void*)&m_References[0];
 
                 break;
             }

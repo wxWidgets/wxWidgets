@@ -149,7 +149,7 @@ RipperDocGen::RipperDocGen()
     mpFileBinderCtx = new spFile();
 
     // the default script is HTML
-    mTags = get_HTML_markup_tags();
+    m_Tags = get_HTML_markup_tags();
 
     mpParser = 0; // no default parser!
 }
@@ -170,8 +170,8 @@ void RipperDocGen::AppendComments( spContext& fromContext, wxString& str )
 
     size_t start = str.length();
 
-    str += mTags[TAG_BOLD].end;
-    str += mTags[TAG_PARAGRAPH].start;
+    str += m_Tags[TAG_BOLD].end;
+    str += m_Tags[TAG_PARAGRAPH].start;
 
     MCommentListT& lst = fromContext.GetCommentList();
 
@@ -182,7 +182,7 @@ void RipperDocGen::AppendComments( spContext& fromContext, wxString& str )
 
             if ( lst[i]->StartsParagraph() )
             {
-                str += mTags[TAG_PARAGRAPH].start;
+                str += m_Tags[TAG_PARAGRAPH].start;
             }
 
         str += lst[i]->m_Text;
@@ -212,14 +212,14 @@ void RipperDocGen::AppendComments( spContext& fromContext, wxString& str )
             }
             str[n] = _T(' ');
         }
-    str += mTags[TAG_PARAGRAPH].end;
+    str += m_Tags[TAG_PARAGRAPH].end;
 }
 
 void RipperDocGen::AppendMulitilineStr( wxString& st, wxString& mlStr )
 {
-    st = mTags[TAG_FIXED_FONT].start;
+    st = m_Tags[TAG_FIXED_FONT].start;
     st += mlStr;
-    st += mTags[TAG_FIXED_FONT].end;
+    st += m_Tags[TAG_FIXED_FONT].end;
 }
 
 void RipperDocGen::AppendHighlightedSource( wxString& st, wxString source )
@@ -235,7 +235,7 @@ void RipperDocGen::AppendHighlightedSource( wxString& st, wxString source )
     // highlight things
     mSrcPainter.Init();
     mSrcPainter.ProcessSource( buf, strlen(buf) );
-    mSrcPainter.GetResultString( st, mTags );
+    mSrcPainter.GetResultString( st, m_Tags );
 }
 
 bool RipperDocGen::CheckIfUncommented( spContext& ctx, ScriptSection& toSect )
@@ -269,7 +269,7 @@ wxString RipperDocGen::GetScopedName( spContext& ofCtx )
 void RipperDocGen::AddToCurrentClass( ScriptSection* pSection, spContext& ctx,
                                       const char* subSectionName )
 {
-    string sName;
+    wxString sName;
 
     if ( ctx.mVisibility == SP_VIS_PROTECTED )
         sName = "Protected members/";
@@ -372,11 +372,11 @@ void RipperDocGen::VisitEnumeration( spEnumeration& en )
         return;
 
     wxString body;
-    body += mTags[TAG_BOLD].start;
+    body += m_Tags[TAG_BOLD].start;
 
     AppendMulitilineStr( body, en.m_EnumContent );
 
-    body += mTags[TAG_BOLD].end;
+    body += m_Tags[TAG_BOLD].end;
 
     wxString line;
     AppendHighlightedSource( line, body );
@@ -395,17 +395,17 @@ void RipperDocGen::VisitTypeDef( spTypeDef& td )
         return;
 
     wxString body;
-    body += mTags[TAG_BOLD].start;
+    body += m_Tags[TAG_BOLD].start;
     body += "typdef ";
-    body += mTags[TAG_BOLD].end;
+    body += m_Tags[TAG_BOLD].end;
 
     AppendMulitilineStr( body, td.m_OriginalType );
     body += td.m_OriginalType;
     body += ' ';
 
-    body += mTags[TAG_BOLD].start;
+    body += m_Tags[TAG_BOLD].start;
     body += td.GetName();
-    body += mTags[TAG_BOLD].end;
+    body += m_Tags[TAG_BOLD].end;
 
     wxString line;
     AppendHighlightedSource( line, body );
@@ -427,14 +427,14 @@ void RipperDocGen::VisitPreprocessorLine( spPreprocessorLine& pd )
         return;
 
     wxString body;
-    body += mTags[TAG_FIXED_FONT].start;
+    body += m_Tags[TAG_FIXED_FONT].start;
 
     wxString coloredLine = pd.m_Line;
     AppendHighlightedSource( coloredLine, pd.m_Line );
 
     AppendMulitilineStr( body, coloredLine );
 
-    body += mTags[TAG_FIXED_FONT].end;
+    body += m_Tags[TAG_FIXED_FONT].end;
 
     AppendComments( pd, body );
 
@@ -492,14 +492,14 @@ void RipperDocGen::VisitClass( spClass& cl )
 void RipperDocGen::VisitAttribute( spAttribute& attr )
 {
     wxString body;
-    body += mTags[TAG_BOLD].start;
+    body += m_Tags[TAG_BOLD].start;
     body += attr.m_Type;
-    body += mTags[TAG_BOLD].end;
+    body += m_Tags[TAG_BOLD].end;
 
-    body += mTags[TAG_ITALIC].start;
+    body += m_Tags[TAG_ITALIC].start;
     body += ' ';
     body += attr.GetName();
-    body += mTags[TAG_ITALIC].end;
+    body += m_Tags[TAG_ITALIC].end;
 
     wxString line;
     AppendHighlightedSource( line, body );
@@ -527,7 +527,7 @@ void RipperDocGen::VisitOperation( spOperation& op )
 {
     wxString body;
 
-    AppendHighlightedSource( body, op.GetFullName(mTags) );
+    AppendHighlightedSource( body, op.GetFullName(m_Tags) );
 
     AppendComments( op, body );
 

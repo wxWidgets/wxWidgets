@@ -30,13 +30,6 @@
     #include "wx/string.h"
     #include "wxstlvec.h"
 
-    #if wxUSE_STD_STRING
-        using std::string;
-    #else
-        // FOR NOW:: quick n' dirty:
-        #define  string wxString
-    #endif
-
 #endif
 
 #include "markup.h" // markup tags used in spOperator::GetFullName()
@@ -132,7 +125,7 @@ class spComment;
     typedef vector<spComment*> MCommentListT;
     // list of parameters
     typedef vector<spParameter*> MParamListT;
-    // string list
+    // wxString list
     typedef vector<wxString>   StrListT;
 
 #else
@@ -266,7 +259,7 @@ protected:
     MMemberListT   mMembers;
 
     // NULL, if this is top-most context
-    spContext*    mpParent;
+    spContext*    m_pParent;
 
     // points to context object, where the this context
     // was originally declared, meaning that this object
@@ -318,8 +311,8 @@ public:
     bool         mVirtualContextHasChildren;
 
     // body of the context in case (mIsVirtual == true)
-    string       mVirtualContextBody;
-    string       mVittualContextFooter;
+    wxString     mVirtualContextBody;
+    wxString     mVittualContextFooter;
 
     // e.g. can be used by documentation generator to store
     // reference to section object
@@ -359,12 +352,12 @@ public:
 
     bool VitualContextHasChildren();
 
-    void SetVirtualContextBody( const string& body,
+    void SetVirtualContextBody( const wxString& body,
                                 bool  hasChildren = false,
-                                const string& footer = wxEmptyString );
+                                const wxString& footer = wxEmptyString );
 
-    string GetVirtualContextBody();
-    string GetFooterOfVirtualContextBody();
+    wxString GetVirtualContextBody();
+    wxString GetFooterOfVirtualContextBody();
 
     // can be overriden by top-level context classes
     // to find-out ot the source-fragment of this
@@ -398,7 +391,7 @@ public:
     spContext* GetOutterContext();
 
     // perhaps more intuitive alias for `GetOutterContext()'
-    inline spContext* GetParent() { return mpParent; }
+    inline spContext* GetParent() { return m_pParent; }
 
     bool HasOutterContext();
 
@@ -415,7 +408,7 @@ public:
     // and it's children. Children's children are not
     // searched recursivelly if searchSubMembers is false
 
-    spContext* FindContext( const string& identifier,
+    spContext* FindContext( const wxString& identifier,
                             int   contextType      = SP_CTX_ANY,
                             bool  searchSubMembers = true
                           );
@@ -560,7 +553,7 @@ public:
     // scope if any (e.g. MyClass::MyFunction(), scope stirng is "MyClass" )
     // usually found along with implementation of the method, which is now skipped
 
-    string      mScope;
+    wxString    mScope;
 
 public:
     spOperation();
@@ -632,7 +625,7 @@ public:
     int          mInheritanceType;
 
     // valid if mClassSubType is SP_CLTYPE_TEMPLATE_CLASS
-    string       mTemplateTypes;
+    wxString     mTemplateTypes;
 
     // true, if it's and interface of abstract base class
     bool         mIsAbstract;

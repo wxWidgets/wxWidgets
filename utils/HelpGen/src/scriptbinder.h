@@ -28,13 +28,6 @@
     #include "wxstlvec.h"
     #include "wx/string.h"
 
-    #if wxUSE_STD_STRING
-        using std::string;
-    #else
-        // FIXME:: dirty!
-        typedef wxString string;
-    #endif
-
 #endif
 
 #ifndef ASSERT
@@ -49,9 +42,9 @@
 class ScriptStream
 {
 protected:
-    char*  mpBuf;
-    size_t mSize;
-    size_t mCapacity;
+    char*  m_pBuf;
+    size_t m_Size;
+    size_t m_Capacity;
 public:
     ScriptStream();
     ~ScriptStream();
@@ -59,16 +52,16 @@ public:
     void WriteBytes( const void* srcBuf, size_t count );
 
     ScriptStream& operator<<( const char* str );
-    ScriptStream& operator<<( const string& str );
+    ScriptStream& operator<<( const wxString& str );
     ScriptStream& operator<<( char ch );
 
     void endl();
 
-    inline char*  GetBuf() { return mpBuf; }
-    inline size_t GetBufSize() { return mSize; }
+    inline char*  GetBuf() { return m_pBuf; }
+    inline size_t GetBufSize() { return m_Size; }
 
     // clears current contents of the stream
-    void Reset() { mSize = 0; }
+    void Reset() { m_Size = 0; }
 };
 
 
@@ -91,21 +84,21 @@ struct TVarInfo
 public:
     const char*     m_Name;
     int             m_Type;
-    int             mOfs;
+    int             m_Ofs;
 
     TVarInfo( const char* name, int ofs, int varType )
         : m_Name(name),
           m_Type( varType ),
-          mOfs( ofs )
+          m_Ofs( ofs )
     {}
 };
 
 struct TArrayInfo : public TVarInfo
 {
 public:
-    int mRefOfs;
-    int mSizeIntOfs;
-    int mObjRefTemplOfs;
+    int m_RefOfs;
+    int m_SizeIntOfs;
+    int m_ObjRefTemplOfs;
 
     TArrayInfo( const char* name )
         : TVarInfo( name, 0, TVAR_REF_ARRAY )
@@ -163,18 +156,18 @@ class ScriptSection;
 class ScriptTemplate
 {
 protected:
-    // do not use string object here - parsing of
+    // do not use wxString object here - parsing of
     // C string can be much faster (in debug v.)
-    char*     mTText;
+    char*     m_TText;
 
-    TVarListT mVars;
+    TVarListT m_Vars;
 
     inline void PrintVar( TVarInfo*     pInfo,
                           void*         dataObj,
                           ScriptStream& stm );
 
 public:
-    ScriptTemplate( const string& templateText );
+    ScriptTemplate( const wxString& templateText );
     virtual ~ScriptTemplate();
 
     bool HasVar( const char* name );
@@ -215,34 +208,34 @@ protected:
     // the below there members are registered to ScriptTemplate,
     // GUID within the section tree (numeric)
 
-    ScriptSection*  mpParent;
-    string          mId;   // $(ID)
-    string          m_Name;// $(NAME)
-    string          mBody; // $(BODY)
+    ScriptSection*  m_pParent;
+    wxString        m_Id;   // $(ID)
+    wxString        m_Name;// $(NAME)
+    wxString        m_Body; // $(BODY)
 
     // NULL, if this section is not aggregated anywhere
 
-    SectListT       mSubsections; // aggregated sectons
-    SectListT       mReferences;  // registered as $(REFLIST)
+    SectListT       m_Subsections; // aggregated sectons
+    SectListT       m_References;  // registered as $(REFLIST)
 
-    bool            mAutoHide;  // see autoHide arg, in constructor
-    bool            mSortOn;    // true, if sort subsectons by naem
+    bool            m_AutoHide;  // see autoHide arg, in constructor
+    bool            m_SortOn;    // true, if sort subsectons by naem
 
     // tempalte for this section
-    ScriptTemplate* mpSectTempl;
+    ScriptTemplate* m_pSectTempl;
 
     // template used for links (or references) to this section
-    ScriptTemplate* mpRefTempl;
+    ScriptTemplate* m_pRefTempl;
 
     // do not call destructor of this object,
     // call RemoveRef() instead
-    int             mRefCount;
+    int             m_RefCount;
 
-    static int      mIdCounter;  // generator of GUIDs
+    static int      m_IdCounter;  // generator of GUIDs
 
     // fields registered and used by ScriptTemplate object
-    void*           mRefFirst;
-    int             mArrSize;
+    void*           m_RefFirst;
+    int             m_ArrSize;
 
 protected:
     virtual void AddRef();
@@ -320,7 +313,7 @@ public:
 class DocGeneratorBase
 {
 protected:
-    MarkupTagsT    mTags;
+    MarkupTagsT    m_Tags;
 
     // override this method to do some post processing
     // after generation of document, or even write some
@@ -343,14 +336,14 @@ protected:
 public:
 
     DocGeneratorBase()
-        : mTags(0) // no defaul script
+        : m_Tags(0) // no defaul script
     {}
 
     // dectrouctors of polymorphic classes SHOULD be virtual
     virtual ~DocGeneratorBase() {}
 
     // returns tags, being used for specific target script
-    MarkupTagsT GetScriptMarkupTags() { return mTags; }
+    MarkupTagsT GetScriptMarkupTags() { return m_Tags; }
 
     // sets tag array for specific script
 
@@ -361,7 +354,7 @@ public:
     //        to generator's tamplates, to match the specific script
 
     virtual void SetScriptMarkupTags( MarkupTagsT tags )
-        { mTags = tags; }
+        { m_Tags = tags; }
 
     // seves document to file starting from the root-node of
     // the document (provided by GetTopSection() method),

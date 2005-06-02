@@ -123,7 +123,7 @@ wxString spComment::GetText() const
 
 spContext::spContext()
 
-    : mpParent        ( NULL ),
+    : m_pParent        ( NULL ),
       mpFirstOccurence( NULL ),
       mAlreadySorted  ( false ),
 
@@ -231,14 +231,14 @@ bool spContext::VitualContextHasChildren()
     return mVirtualContextHasChildren;
 }
 
-string spContext::GetVirtualContextBody()
+wxString spContext::GetVirtualContextBody()
 {
     wxASSERT( mIsVirtualContext );
 
     return mVirtualContextBody;
 }
 
-string spContext::GetFooterOfVirtualContextBody()
+wxString spContext::GetFooterOfVirtualContextBody()
 {
     wxASSERT( mIsVirtualContext );
 
@@ -246,9 +246,9 @@ string spContext::GetFooterOfVirtualContextBody()
 }
 
 
-void spContext::SetVirtualContextBody( const string& body,
-                                       bool          hasChildren,
-                                       const string& footer )
+void spContext::SetVirtualContextBody( const wxString& body,
+                                       bool            hasChildren,
+                                       const wxString& footer )
 {
     mVirtualContextHasChildren = hasChildren;
 
@@ -297,7 +297,7 @@ void spContext::AddMember( spContext* pMember )
 {
     mMembers.push_back( pMember );
 
-    pMember->mpParent = this;
+    pMember->m_pParent = this;
 }
 
 void spContext::AddComment( spComment* pComment )
@@ -310,7 +310,7 @@ MMemberListT& spContext::GetMembers()
     return mMembers;
 }
 
-spContext* spContext::FindContext( const string& identifier,
+spContext* spContext::FindContext( const wxString& identifier,
                                    int   contextType,
                                    bool  searchSubMembers
                                  )
@@ -339,8 +339,8 @@ spContext* spContext::FindContext( const string& identifier,
 
 void spContext::RemoveThisContext()
 {
-    if ( mpParent )
-        mpParent->RemoveChild( this );
+    if ( m_pParent )
+        m_pParent->RemoveChild( this );
     else
         // context should have a parent
         wxFAIL_MSG("Context should have a parent");
@@ -348,12 +348,12 @@ void spContext::RemoveThisContext()
 
 spContext* spContext::GetOutterContext()
 {
-    return mpParent;
+    return m_pParent;
 }
 
 bool spContext::HasOutterContext()
 {
-    return ( mpParent != 0 );
+    return ( m_pParent != 0 );
 }
 
 bool spContext::IsInFile()
@@ -379,25 +379,25 @@ bool spContext::IsInOperation()
 spClass& spContext::GetClass()
 {
     wxASSERT( GetOutterContext()->GetType() == SP_CTX_CLASS );
-    return *((spClass*)mpParent );
+    return *((spClass*)m_pParent );
 }
 
 spFile& spContext::GetFile()
 {
     wxASSERT( GetOutterContext()->GetType() == SP_CTX_FILE );
-    return *((spFile*)mpParent );
+    return *((spFile*)m_pParent );
 }
 
 spNameSpace& spContext::GetNameSpace()
 {
     wxASSERT( GetOutterContext()->GetType() == SP_CTX_NAMESPACE );
-    return *((spNameSpace*)mpParent );
+    return *((spNameSpace*)m_pParent );
 }
 
 spOperation& spContext::GetOperation()
 {
     wxASSERT( GetOutterContext()->GetType() == SP_CTX_OPERATION );
-    return *((spOperation*)mpParent );
+    return *((spOperation*)m_pParent );
 }
 
 /***** Implementation for class spClass *****/
