@@ -240,27 +240,30 @@ private:
 class wxGridCellEditorEvtHandler : public wxEvtHandler
 {
 public:
-    wxGridCellEditorEvtHandler()
-        : m_grid(0), m_editor(0)
-        { }
     wxGridCellEditorEvtHandler(wxGrid* grid, wxGridCellEditor* editor)
-        : m_grid(grid), m_editor(editor)
-        { }
+        : m_grid(grid),
+          m_editor(editor)
+    {
+    }
 
+    void OnKillFocus(wxFocusEvent& event);
     void OnKeyDown(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
 
 private:
     wxGrid*             m_grid;
     wxGridCellEditor*   m_editor;
-    DECLARE_DYNAMIC_CLASS(wxGridCellEditorEvtHandler)
+
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxGridCellEditorEvtHandler)
     DECLARE_NO_COPY_CLASS(wxGridCellEditorEvtHandler)
 };
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxGridCellEditorEvtHandler, wxEvtHandler )
+IMPLEMENT_ABSTRACT_CLASS(wxGridCellEditorEvtHandler, wxEvtHandler)
+
 BEGIN_EVENT_TABLE( wxGridCellEditorEvtHandler, wxEvtHandler )
+    EVT_KILL_FOCUS( wxGridCellEditorEvtHandler::OnKillFocus )
     EVT_KEY_DOWN( wxGridCellEditorEvtHandler::OnKeyDown )
     EVT_CHAR( wxGridCellEditorEvtHandler::OnChar )
 END_EVENT_TABLE()
@@ -1519,6 +1522,14 @@ wxString wxGridCellChoiceEditor::GetValue() const
 // ----------------------------------------------------------------------------
 // wxGridCellEditorEvtHandler
 // ----------------------------------------------------------------------------
+
+void wxGridCellEditorEvtHandler::OnKillFocus(wxFocusEvent& event)
+{
+    // accept changes
+    m_grid->DisableCellEditControl();
+
+    event.Skip();
+}
 
 void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
 {
