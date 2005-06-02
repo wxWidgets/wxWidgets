@@ -157,6 +157,9 @@ Source: "scripts\xrced";                    DestDir: "{code:GetPythonDir}\Script
 
 Source: "distrib\README.win32.txt";         DestDir: "{app}\%(PKGDIR)s\docs";  Flags: isreadme; Components: core
 Source: "licence\*.txt";                    DestDir: "{app}\%(PKGDIR)s\docs\licence"; Components: core
+Source: "docs\CHANGES.*";                   DestDir: "{app}\%(PKGDIR)s\docs"; Components: core
+Source: "docs\MigrationGuide.*";            DestDir: "{app}\%(PKGDIR)s\docs"; Components: core
+Source: "docs\default.css";                 DestDir: "{app}\%(PKGDIR)s\docs"; Components: core
 
 
 
