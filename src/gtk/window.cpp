@@ -2931,6 +2931,11 @@ void wxWindowGTK::PostCreation()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
 
+#ifdef __WXGTK20__
+    // Create input method handler
+    m_imData = new wxGtkIMData;
+#endif
+
     if (m_wxwindow)
     {
         if (!m_noExpose)
@@ -2957,9 +2962,6 @@ void wxWindowGTK::PostCreation()
         }
 
 #ifdef __WXGTK20__
-        // Create input method handler
-        m_imData = new wxGtkIMData;
-
         // Cannot handle drawing preedited text yet
         gtk_im_context_set_use_preedit( m_imData->context, FALSE );
 
