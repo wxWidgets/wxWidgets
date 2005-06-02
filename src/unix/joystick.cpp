@@ -183,9 +183,16 @@ wxJoystick::wxJoystick(int joystick)
 {
     wxString dev_name;
 
-     // Assume it's the same device name on all Linux systems ...
+     // old /dev structure
     dev_name.Printf( wxT("/dev/js%d"), (joystick == wxJOYSTICK1) ? 0 : 1);
     m_device = open(dev_name.fn_str(), O_RDONLY);
+
+    // new /dev structure with "input" subdirectory
+    if (m_device == -1)
+    {
+        dev_name.Printf( wxT("/dev/input/js%d"), (joystick == wxJOYSTICK1) ? 0 : 1);
+        m_device = open(dev_name.fn_str(), O_RDONLY);             
+    }
 
     if (m_device != -1)
     {
