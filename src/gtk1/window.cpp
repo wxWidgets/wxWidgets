@@ -1165,6 +1165,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     wxKeyEvent event( wxEVT_KEY_DOWN );
     bool ret = false;
     bool return_after_IM = false;
+    win->m_imData->lastKeyEvent = gdk_event;
 
     if( wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
