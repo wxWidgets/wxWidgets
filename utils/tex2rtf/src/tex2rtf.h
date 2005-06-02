@@ -114,7 +114,7 @@ class ItemizeStruc: public wxObject
 };
 
 // ID for the menu quit command
-#define TEX_QUIT 1
+#define TEX_QUIT wxID_EXIT
 #define TEX_GO   2
 
 #define TEX_SET_INPUT   3
@@ -135,7 +135,7 @@ class ItemizeStruc: public wxObject
 #define TEX_OPTIONS_SYNTAX_CHECKING 14
 
 #define TEX_HELP        15
-#define TEX_ABOUT       16
+#define TEX_ABOUT       wxID_ABOUT
 #define TEX_SAVE_FILE   17
 
 extern TexChunk *currentMember;
