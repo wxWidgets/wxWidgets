@@ -133,7 +133,6 @@ public:
         ID_SELCOLS,
         ID_SET_CELL_FG_COLOUR,
         ID_SET_CELL_BG_COLOUR,
-        ID_ABOUT,
         ID_VTABLE,
         ID_BUGS_TABLE,
         ID_SMALL_GRID,

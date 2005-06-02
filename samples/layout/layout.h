@@ -84,10 +84,10 @@ private:
 // controls and menu constants
 enum
 {
-    LAYOUT_QUIT = 100,
-    LAYOUT_ABOUT,
-    LAYOUT_TEST_SIZER,
-    LAYOUT_TEST_NB_SIZER,
-    LAYOUT_TEST_GB_SIZER
+    LAYOUT_QUIT = wxID_EXIT,
+    LAYOUT_ABOUT = wxID_ABOUT,
+    LAYOUT_TEST_SIZER = 101,
+    LAYOUT_TEST_NB_SIZER = 102,
+    LAYOUT_TEST_GB_SIZE = 103
 };
 

@@ -134,7 +134,8 @@ private:
 // ID for the menu commands
 enum
 {
-    THREAD_QUIT          = 1,
+    THREAD_QUIT  = wxID_EXIT,
+    THREAD_ABOUT = wxID_ABOUT,
     THREAD_TEXT          = 101,
     THREAD_CLEAR,
     THREAD_START_THREAD  = 201,
@@ -148,7 +149,6 @@ enum
     THREAD_EXEC_THREAD,
 
     THREAD_SHOWCPUS,
-    THREAD_ABOUT,
 
     WORKER_EVENT    // this one gets sent from the worker thread
 };

@@ -63,11 +63,11 @@ class MyChild: public wxMDIChildFrame
 DECLARE_EVENT_TABLE()
 };
 
-#define SASHTEST_QUIT        1
+#define SASHTEST_QUIT        wxID_EXIT
 #define SASHTEST_NEW_WINDOW  2
 #define SASHTEST_REFRESH     3
 #define SASHTEST_CHILD_QUIT  4
-#define SASHTEST_ABOUT       5
+#define SASHTEST_ABOUT       wxID_ABOUT
 #define SASHTEST_TOGGLE_WINDOW 6
 
 #define ID_WINDOW_TOP       100

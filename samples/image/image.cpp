@@ -898,10 +898,10 @@ void MyCanvas::CreateAntiAliasedBitmap()
 
 enum
 {
-    ID_QUIT  = 108,
-    ID_ABOUT,
-    ID_NEW,
-    ID_SHOWRAW
+    ID_QUIT  = wxID_EXIT,
+    ID_ABOUT = wxID_ABOUT,
+    ID_NEW = 100,
+    ID_SHOWRAW = 101
 };
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )

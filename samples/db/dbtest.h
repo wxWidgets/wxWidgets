@@ -26,9 +26,9 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 #if wxUSE_GRID
 #define FILE_DBGRID_TABLE     130
 #endif
-#define FILE_EXIT             199
+#define FILE_EXIT             wxID_EXIT
 #define EDIT_PARAMETERS       200
-#define HELP_ABOUT            300
+#define HELP_ABOUT            wxID_ABOUT
 
 // this seems to be missing, Robert Roebling (?)
 #ifndef MAX_PATH

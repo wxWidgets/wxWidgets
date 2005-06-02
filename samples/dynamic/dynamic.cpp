@@ -46,9 +46,9 @@ class MyFrame: public wxFrame
 };
 
 // ID for the menu commands
-#define DYNAMIC_QUIT   1
+#define DYNAMIC_QUIT   wxID_EXIT
 #define DYNAMIC_TEXT   101
-#define DYNAMIC_ABOUT   102
+#define DYNAMIC_ABOUT  wxID_ABOUT
 
 // Create a new application object
 IMPLEMENT_APP  (MyApp)

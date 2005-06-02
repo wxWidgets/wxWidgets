@@ -99,7 +99,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
 
-    EVT_MENU( ID_ABOUT, GridFrame::About )
+    EVT_MENU( wxID_ABOUT, GridFrame::About )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
@@ -215,7 +215,7 @@ GridFrame::GridFrame()
 
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append( ID_ABOUT, _T("&About wxGrid demo") );
+    helpMenu->Append( wxID_ABOUT, _T("&About wxGrid demo") );
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( fileMenu, _T("&File") );

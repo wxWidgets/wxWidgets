@@ -368,9 +368,9 @@ IMPLEMENT_APP(MyApp)
 
 enum
 {
-    CONTROLS_QUIT   = 100,
-    CONTROLS_TEXT,
-    CONTROLS_ABOUT,
+    CONTROLS_QUIT   = wxID_EXIT,
+    CONTROLS_ABOUT = wxID_ABOUT,
+    CONTROLS_TEXT = 100,
     CONTROLS_CLEAR_LOG,
 
     // tooltip menu

@@ -374,9 +374,9 @@ void MyCanvas::ScrollWindow( int dx, int dy, const wxRect *rect )
 
 // MyFrame
 
-const int ID_QUIT  = 108;
+const int ID_QUIT  = wxID_EXIT;
 const int ID_FULL  = 109;
-const int ID_ABOUT = 110;
+const int ID_ABOUT = wxID_ABOUT;
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 

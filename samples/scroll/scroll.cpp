@@ -475,10 +475,10 @@ void MyAutoScrollWindow::OnResizeClick( wxCommandEvent &WXUNUSED( event ) )
 // MyFrame
 // ----------------------------------------------------------------------------
 
-const long ID_QUIT       = wxNewId();
-const long ID_ABOUT      = wxNewId();
-const long ID_DELETE_ALL = wxNewId();
-const long ID_INSERT_NEW = wxNewId();
+const long ID_QUIT       = wxID_EXIT;
+const long ID_ABOUT      = wxID_ABOUT;
+const long ID_DELETE_ALL = 100;
+const long ID_INSERT_NEW = 101;
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 

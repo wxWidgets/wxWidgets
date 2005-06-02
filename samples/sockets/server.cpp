@@ -96,11 +96,11 @@ private:
 enum
 {
   // menu items
-  SERVER_QUIT = 1000,
-  SERVER_ABOUT,
+  SERVER_QUIT = wxID_EXIT,
+  SERVER_ABOUT = wxID_ABOUT,
 
   // id for sockets
-  SERVER_ID,
+  SERVER_ID = 100,
   SOCKET_ID
 };
 

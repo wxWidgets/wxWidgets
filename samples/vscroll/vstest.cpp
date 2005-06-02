@@ -174,7 +174,7 @@ END_EVENT_TABLE()
 enum
 {
     // menu items
-    VScroll_Quit = 1,
+    VScroll_Quit = wxID_EXIT,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac

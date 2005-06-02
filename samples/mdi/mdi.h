@@ -79,12 +79,12 @@ public:
 // menu items ids
 enum
 {
-    MDI_QUIT = 100,
-    MDI_NEW_WINDOW,
+    MDI_QUIT = wxID_EXIT,
+    MDI_NEW_WINDOW = 101,
     MDI_REFRESH,
     MDI_CHANGE_TITLE,
     MDI_CHANGE_POSITION,
     MDI_CHANGE_SIZE,
     MDI_CHILD_QUIT,
-    MDI_ABOUT
+    MDI_ABOUT = wxID_ABOUT
 };
