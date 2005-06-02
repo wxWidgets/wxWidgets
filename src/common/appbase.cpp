@@ -45,6 +45,7 @@
 
 #if defined(__WXMSW__)
   #include  "wx/msw/wrapwin.h"  // includes windows.h for MessageBox()
+  #include  "wx/msw/debughlp.h"  // includes windows.h for MessageBox()
 #endif
 
 #if wxUSE_FONTMAP
@@ -715,7 +716,7 @@ static wxString GetAssertStackTrace()
 {
     wxString stackTrace;
 
-#ifdef __WXMSW__
+#if wxUSE_DBGHELP
     // check that we can get the stack trace before trying to do it
     if ( !wxDbgHelpDLL::Init() )
         return stackTrace;
