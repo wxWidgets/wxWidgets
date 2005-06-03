@@ -1227,6 +1227,8 @@ public:
     void ReadCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
     void WriteCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
     wxHtmlHelpFrame* GetFrame();
+
+    %pythoncode { def Destroy(self): pass }
 };
 
 
