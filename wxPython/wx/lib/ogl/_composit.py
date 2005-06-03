@@ -133,7 +133,7 @@ class Constraint(object):
         self._ySpacing = 0.0
 
         self._constraintType = type
-        self._constraintingObject = constraining
+        self._constrainingObject = constraining
 
         self._constraintId = 0
         self._constraintName = "noname"
@@ -158,13 +158,13 @@ class Constraint(object):
 
     def Evaluate(self):
         """Evaluate this constraint and return TRUE if anything changed."""
-        maxWidth, maxHeight = self._constraintingObject.GetBoundingBoxMax()
-        minWidth, minHeight = self._constraintingObject.GetBoundingBoxMin()
-        x = self._constraintingObject.GetX()
-        y = self._constraintingObject.GetY()
+        maxWidth, maxHeight = self._constrainingObject.GetBoundingBoxMax()
+        minWidth, minHeight = self._constrainingObject.GetBoundingBoxMin()
+        x = self._constrainingObject.GetX()
+        y = self._constrainingObject.GetY()
 
-        dc = wx.ClientDC(self._constraintingObject.GetCanvas())
-        self._constraintingObject.GetCanvas().PrepareDC(dc)
+        dc = wx.ClientDC(self._constrainingObject.GetCanvas())
+        self._constrainingObject.GetCanvas().PrepareDC(dc)
 
         if self._constraintType == CONSTRAINT_CENTRED_VERTICALLY:
             n = len(self._constrainedObjects)
