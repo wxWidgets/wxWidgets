@@ -1754,6 +1754,7 @@ class HtmlHelpController(_core.Object):
         """GetFrame(self) -> HtmlHelpFrame"""
         return _html.HtmlHelpController_GetFrame(*args, **kwargs)
 
+    def Destroy(self): pass 
 
 class HtmlHelpControllerPtr(HtmlHelpController):
     def __init__(self, this):
