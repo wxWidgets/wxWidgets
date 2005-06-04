@@ -1098,12 +1098,13 @@ bool wxFileConfig::DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso)
   if ( !m_pCurrentGroup->DeleteEntry(path.Name()) )
     return false;
 
+  SetDirty();
+
   if ( bGroupIfEmptyAlso && m_pCurrentGroup->IsEmpty() ) {
     if ( m_pCurrentGroup != m_pRootGroup ) {
       wxFileConfigGroup *pGroup = m_pCurrentGroup;
       SetPath(wxT(".."));  // changes m_pCurrentGroup!
-      if ( m_pCurrentGroup->DeleteSubgroupByName(pGroup->Name()) )
-          SetDirty();
+      m_pCurrentGroup->DeleteSubgroupByName(pGroup->Name());
     }
     //else: never delete the root group
   }
