@@ -5462,30 +5462,39 @@ dnl ---------------------------------------------------------------------------
 dnl Joystick support
 dnl ---------------------------------------------------------------------------
 
-if test "$wxUSE_GUI" = "yes"; then
-     dnl under MSW we always have joystick support
-     if test "$wxUSE_JOYSTICK" = "yes"; then
-         
-        dnl joystick support is only for Linux 2.1.x or greater
-        if test "$TOOLKIT" != "MAC" -a "$TOOLKIT" != "COCOA" -a "$TOOLKIT" != "MSW"; then
-            AC_CHECK_HEADERS(linux/joystick.h)
-            if test "$ac_cv_header_linux_joystick_h" != "yes"; then
-                wxUSE_JOYSTICK=no
-                AC_MSG_WARN(Joystick not supported by this system... disabled)
-            fi
-        else
-           dnl mac only available on darwin
-           if test "$USE_DARWIN" != 1 -a "$TOOLKIT" != "MSW"; then
-                wxUSE_JOYSTICK=no
-                AC_MSG_WARN(Joystick not supported by this system... disabled)           
-           fi            
+if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
+    wxUSE_JOYSTICK=no
+
+    dnl under MSW we always have joystick support
+    if test "$TOOLKIT" = "MSW"; then
+        wxUSE_JOYSTICK=yes
+
+    dnl mac only available on darwin
+    elif test "$TOOLKIT" = "MAC" -o "$TOOLKIT" = "COCOA"; then
+        if test "$USE_DARWIN" = 1; then
+            dnl check for a bug in the headers, some have bad setEventCallout
+            AC_MSG_CHECKING([headers have declarations needed for joystick support])
+            AC_LANG_PUSH(C++)
+            AC_TRY_COMPILE( [ #include <IOKit/hid/IOHIDLib.h> ],
+                            [ IOHIDQueueInterface *qi = NULL;
+                              IOHIDCallbackFunction cb = NULL;
+                              qi->setEventCallout(NULL, cb, NULL, NULL); ],
+                            [ wxUSE_JOYSTICK=yes ]
+                          )
+            AC_LANG_POP
+            AC_MSG_RESULT($wxUSE_JOYSTICK)
         fi
 
+    dnl joystick support is only for Linux 2.1.x or greater
+    else
+        AC_CHECK_HEADERS(linux/joystick.h, wxUSE_JOYSTICK=yes)
+    fi
 
-        if test "$wxUSE_JOYSTICK" = "yes"; then
-            AC_DEFINE(wxUSE_JOYSTICK)
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
-        fi
+    if test "$wxUSE_JOYSTICK" = "yes"; then
+        AC_DEFINE(wxUSE_JOYSTICK)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
+    else
+        AC_MSG_WARN(Joystick not supported by this system... disabled)           
     fi
 fi
 

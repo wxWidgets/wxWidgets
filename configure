@@ -38694,10 +38694,80 @@ _ACEOF
 fi
 
 
-if test "$wxUSE_GUI" = "yes"; then
-          if test "$wxUSE_JOYSTICK" = "yes"; then
+if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
+    wxUSE_JOYSTICK=no
 
-                if test "$TOOLKIT" != "MAC" -a "$TOOLKIT" != "COCOA" -a "$TOOLKIT" != "MSW"; then
+        if test "$TOOLKIT" = "MSW"; then
+        wxUSE_JOYSTICK=yes
+
+        elif test "$TOOLKIT" = "MAC" -o "$TOOLKIT" = "COCOA"; then
+        if test "$USE_DARWIN" = 1; then
+                        echo "$as_me:$LINENO: checking headers have declarations needed for joystick support" >&5
+echo $ECHO_N "checking headers have declarations needed for joystick support... $ECHO_C" >&6
+            ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+            cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+ #include <IOKit/hid/IOHIDLib.h>
+int
+main ()
+{
+ IOHIDQueueInterface *qi = NULL;
+                              IOHIDCallbackFunction cb = NULL;
+                              qi->setEventCallout(NULL, cb, NULL, NULL);
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+   wxUSE_JOYSTICK=yes
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+            ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+            echo "$as_me:$LINENO: result: $wxUSE_JOYSTICK" >&5
+echo "${ECHO_T}$wxUSE_JOYSTICK" >&6
+        fi
+
+        else
 
 for ac_header in linux/joystick.h
 do
@@ -38843,32 +38913,22 @@ if test `eval echo '${'$as_ac_Header'}'` = yes; then
   cat >>confdefs.h <<_ACEOF
 #define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
-
+ wxUSE_JOYSTICK=yes
 fi
 
 done
 
-            if test "$ac_cv_header_linux_joystick_h" != "yes"; then
-                wxUSE_JOYSTICK=no
-                { echo "$as_me:$LINENO: WARNING: Joystick not supported by this system... disabled" >&5
-echo "$as_me: WARNING: Joystick not supported by this system... disabled" >&2;}
-            fi
-        else
-                      if test "$USE_DARWIN" != 1 -a "$TOOLKIT" != "MSW"; then
-                wxUSE_JOYSTICK=no
-                { echo "$as_me:$LINENO: WARNING: Joystick not supported by this system... disabled" >&5
-echo "$as_me: WARNING: Joystick not supported by this system... disabled" >&2;}
-           fi
-        fi
+    fi
 
-
-        if test "$wxUSE_JOYSTICK" = "yes"; then
-            cat >>confdefs.h <<\_ACEOF
+    if test "$wxUSE_JOYSTICK" = "yes"; then
+        cat >>confdefs.h <<\_ACEOF
 #define wxUSE_JOYSTICK 1
 _ACEOF
 
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
-        fi
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
+    else
+        { echo "$as_me:$LINENO: WARNING: Joystick not supported by this system... disabled" >&5
+echo "$as_me: WARNING: Joystick not supported by this system... disabled" >&2;}
     fi
 fi
 
