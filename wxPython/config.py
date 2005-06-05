@@ -40,7 +40,7 @@ VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 6
 VER_RELEASE      = 1
 VER_SUBREL       = 0      # wxPython release num for x.y.z release of wxWidgets
-VER_FLAGS        = "pre"     # release flags, such as prerelease or RC num, etc.
+VER_FLAGS        = ""     # release flags, such as prerelease or RC num, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -752,6 +752,7 @@ elif os.name == 'posix':
     # uncomment this block to add the right flags to the link step and build
     # again.
     ## if os.uname()[0] == 'SunOS':
+    ##     import commands
     ##     libs.append('gcc')
     ##     libdirs.append(commands.getoutput("gcc -print-search-dirs | grep '^install' | awk '{print $2}'")[:-1])
 

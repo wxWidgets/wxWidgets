@@ -95,6 +95,8 @@ if [ $skiplinux != yes ]; then
 	ssh root@$host "/sbin/halt"
 	sleep 10
     fi
+    sleep 30
+
+    echo "Done!"
 fi
 
-sleep 30

@@ -37,5 +37,8 @@ if [ $skiposx != yes ]; then
     echo "Fetching the results..."
     scp "root@$host:$OSX_BUILD/wxPython*-osx*"  $STAGING_DIR
     ssh root@$host "rm $OSX_BUILD/wxPython*-osx*"
+
+    echo "Done!"
+    sleep 1
 fi
 

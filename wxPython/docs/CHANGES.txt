@@ -3,6 +3,7 @@ Recent Changes for wxPython
 
 2.6.1.0
 -------
+* 4-June-2005
 
 wx.ListCtrl: patch #1210352, fixes editing in generic wx.ListCtrl with
 wx.LC_EDIT_LABELS.
@@ -34,6 +35,8 @@ Applied patch #1213066 correct device names for Joystick in Linux.
 wxGTK: Applied patch #1207162 wx.TextCtrl.SetStyle fix for overlapping
 calls. 
 
+wx.FileConfig: fixed DeleteEntry to set the dirty flag properly so the
+change will get written at the next flush.
 
 
 

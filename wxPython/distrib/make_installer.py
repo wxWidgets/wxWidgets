@@ -514,6 +514,20 @@ Type: files; Name: "{app}\samples\wx_examples\hello\*.pyo";
 Type: files; Name: "{app}\samples\wxProject\*.pyc";
 Type: files; Name: "{app}\samples\wxProject\*.pyo";
 
+Type: files; Name: "{app}\samples\ide\*.pyc";
+Type: files; Name: "{app}\samples\ide\activegrid\*.pyc";
+Type: files; Name: "{app}\samples\ide\activegrid\tool\*.pyc";
+Type: files; Name: "{app}\samples\ide\activegrid\util\*.pyc";
+Type: files; Name: "{app}\samples\ide\*.pyo";
+Type: files; Name: "{app}\samples\ide\activegrid\*.pyo";
+Type: files; Name: "{app}\samples\ide\activegrid\tool\*.pyo";
+Type: files; Name: "{app}\samples\ide\activegrid\util\*.pyo";
+
+Type: files; Name: "{app}\samples\docview\*.pyc";
+Type: files; Name: "{app}\samples\pydocview\*.pyc";
+Type: files; Name: "{app}\samples\docview\*.pyo";
+Type: files; Name: "{app}\samples\pydocview\*.pyo";
+
 
 '''
 
