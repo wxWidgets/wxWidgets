@@ -288,11 +288,31 @@ private:
 // "trivial" derivations of wxLog
 // ----------------------------------------------------------------------------
 
+// log everything to a buffer
+class WXDLLIMPEXP_BASE wxLogBuffer : public wxLog
+{
+public:
+    wxLogBuffer() { }
+
+    // get the string contents with all messages logged
+    const wxString& GetBuffer() const { return m_str; }
+
+    // show the buffer contents to the user in the best possible way (this uses
+    // wxMessageOutputMessageBox) and clear it
+    virtual void Flush();
+
+protected:
+    virtual void DoLogString(const wxChar *szString, time_t t);
+
+private:
+    wxString m_str;
+
+    DECLARE_NO_COPY_CLASS(wxLogBuffer)
+};
+
 // log everything to a "FILE *", stderr by default
 class WXDLLIMPEXP_BASE wxLogStderr : public wxLog
 {
-    DECLARE_NO_COPY_CLASS(wxLogStderr)
-
 public:
     // redirect log output to a FILE
     wxLogStderr(FILE *fp = (FILE *) NULL);
@@ -302,6 +322,8 @@ protected:
     virtual void DoLogString(const wxChar *szString, time_t t);
 
     FILE *m_fp;
+
+    DECLARE_NO_COPY_CLASS(wxLogStderr)
 };
 
 #if wxUSE_STD_IOSTREAM

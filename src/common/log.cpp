@@ -523,6 +523,22 @@ void wxLog::Flush()
 }
 
 // ----------------------------------------------------------------------------
+// wxLogBuffer implementation
+// ----------------------------------------------------------------------------
+
+void wxLogBuffer::Flush()
+{
+    wxMessageOutputBest out;
+    out.Printf(_T("%s"), m_str.c_str());
+    m_str.clear();
+}
+
+void wxLogBuffer::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+{
+    m_str << szString << _T("\n");
+}
+
+// ----------------------------------------------------------------------------
 // wxLogStderr class implementation
 // ----------------------------------------------------------------------------
 
