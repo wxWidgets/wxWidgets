@@ -495,6 +495,46 @@ AC_DEFUN([WX_VERSIONED_SYMBOLS],
   fi
 ])
 
+dnl Based on autoconf _AC_LANG_COMPILER_GNU
+dnl _AC_BAKEFILE_LANG_COMPILER(NAME, LANG, SYMBOL, IF-YES, IF-NO)
+AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER],
+[
+    AC_LANG_PUSH($2)
+    AC_CACHE_CHECK(
+        [whether we are using the $1 $2 compiler],
+        [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3],
+        [AC_TRY_COMPILE(
+            [],
+            [
+             #ifndef $3
+                choke me
+             #endif
+            ],
+            [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3=yes],
+            [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3=no]
+         )
+        ]
+    )
+    AC_LANG_POP($2)
+    if test "x$bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3" = "xyes"; then
+        :; $4
+    else
+        :; $5
+    fi
+])
+
+dnl Loosely based on autoconf AC_PROG_CC
+AC_DEFUN([AC_BAKEFILE_PROG_SUNCC],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Sun, C, __SUNPRO_C, SUNCC=yes)
+])
+
+dnl Loosely based on autoconf AC_PROG_CC
+AC_DEFUN([AC_BAKEFILE_PROG_SUNCXX],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Sun, C++, __SUNPRO_CC, SUNCXX=yes)
+])
+
 
 dnl ===========================================================================
 dnl "3rd party" macros included here because they are not widely available
@@ -844,6 +884,7 @@ AC_DEFUN([AC_BAKEFILE_PROG_CC],
     fi
     AC_BAKEFILE_PROG_MWCC
     AC_BAKEFILE_PROG_XLCC
+    AC_BAKEFILE_PROG_SUNCC
 ])
 
 AC_DEFUN([AC_BAKEFILE_PROG_CXX],
@@ -857,6 +898,7 @@ AC_DEFUN([AC_BAKEFILE_PROG_CXX],
     fi
     AC_BAKEFILE_PROG_MWCXX
     AC_BAKEFILE_PROG_XLCXX
+    AC_BAKEFILE_PROG_SUNCXX
 ])
 
 
@@ -2001,6 +2043,11 @@ AC_DEFUN([AC_BAKEFILE_DEPS],
         DEPS_TRACKING=1
         DEPSFLAG_MWCC="-MM"
         AC_MSG_RESULT([mwcc])
+    elif test "x$SUNCC" = "xyes"; then
+        DEPSMODE=suncc
+        DEPS_TRACKING=1
+        DEPSFLAG_SUNCC="-xM1"
+        AC_MSG_RESULT([suncc])
     else
         AC_MSG_RESULT([none])
     fi
@@ -2695,6 +2742,7 @@ DEPSMODE=${DEPSMODE}
 DEPSDIR=.deps
 DEPSFLAG_GCC="${DEPSFLAG_GCC}"
 DEPSFLAG_MWCC="${DEPSFLAG_MWCC}"
+DEPSFLAG_SUNCC="${DEPSFLAG_SUNCC}"
 
 mkdir -p ${D}DEPSDIR
 
@@ -2756,6 +2804,28 @@ elif test ${D}DEPSMODE = mwcc ; then
         prevarg="${D}arg"
     done
     ${D}* ${D}DEPSFLAG_MWCC >${D}{DEPSDIR}/${D}{objfile}.d
+    exit 0
+elif test ${D}DEPSMODE = suncc; then
+    ${D}* || exit
+    # Run compiler again with deps flag and redirect into the dep file.
+    # It doesn't work if the '-o FILE' option is used, but without it the
+    # dependency file will contain the wrong name for the object. So it is
+    # removed from the command line, and the dep file is fixed with sed.
+    cmd=""
+    while test ${D}# -gt 0; do
+        case "${D}1" in
+            -o )
+                shift
+                objfile=${D}1
+            ;;
+            * )
+                eval arg${D}#=\\${D}1
+                cmd="${D}cmd \\${D}arg${D}#"
+            ;;
+        esac
+        shift
+    done
+    eval "${D}cmd ${D}DEPSFLAG_SUNCC" | sed "s|.*:|${D}objfile:|" >${D}{DEPSDIR}/${D}{objfile}.d
     exit 0
 else
     ${D}*
