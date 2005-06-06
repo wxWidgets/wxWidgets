@@ -737,14 +737,26 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 
     // get error message from system
     LPVOID lpMsgBuf;
-    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-            NULL, nErrCode,
+    if ( ::FormatMessage
+         (
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+            NULL,
+            nErrCode,
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
             (LPTSTR)&lpMsgBuf,
-            0, NULL);
+            0,
+            NULL
+         ) == 0 )
+    {
+        // if this happens, something is seriously wrong, so don't use _() here
+        // for safety
+        wxSprintf(s_szBuf, _T("unknown error %lx"), nErrCode);
+		return s_szBuf;
+    }
+
 
     // copy it to our buffer and free memory
-    // Crashes on SmartPhone
+    // Crashes on SmartPhone (FIXME)
 #if !defined(__SMARTPHONE__) /* of WinCE */
      if( lpMsgBuf != 0 ) {
         wxStrncpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
