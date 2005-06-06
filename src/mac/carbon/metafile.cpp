@@ -87,7 +87,7 @@ wxMetaFile::wxMetaFile(const wxString& file)
     m_refData = new wxMetafileRefData;
 
     M_METAFILEDATA->m_metafile = 0;
-    wxASSERT_MSG( file.IsEmpty() , wxT("no file based metafile support yet") ) ;
+    wxASSERT_MSG( file.empty() , wxT("no file based metafile support yet") ) ;
 /*
     if (!file.IsNull() && (file.Cmp("") == 0))
         M_METAFILEDATA->m_metafile = (WXHANDLE) GetMetaFile(file);
@@ -98,23 +98,25 @@ wxMetaFile::~wxMetaFile()
 {
 }
 
-bool wxMetaFile::Ok() const 
-{ 
-    return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); 
+bool wxMetaFile::Ok() const
+{
+    return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0));
 }
 
-WXHMETAFILE wxMetaFile::GetHMETAFILE() const 
-{ 
-    return (WXHMETAFILE) M_METAFILEDATA->m_metafile; 
+WXHMETAFILE wxMetaFile::GetHMETAFILE() const
+{
+    return (WXHMETAFILE) M_METAFILEDATA->m_metafile;
 }
 
 bool wxMetaFile::SetClipboard(int width, int height)
 {
+    bool success = true;
+
 #if wxUSE_DRAG_AND_DROP
     //TODO finishi this port , we need the data obj first
     if (!m_refData)
-        return FALSE;
-    
+        return false;
+
     bool alreadyOpen=wxTheClipboard->IsOpened() ;
     if (!alreadyOpen)
     {
@@ -123,18 +125,18 @@ bool wxMetaFile::SetClipboard(int width, int height)
     }
     wxDataObject *data =
         new wxMetafileDataObject( *this) ;
-    bool success = wxTheClipboard->SetData(data);
-    if (!alreadyOpen) 
+    success = wxTheClipboard->SetData(data);
+    if (!alreadyOpen)
         wxTheClipboard->Close();
-    return (bool) success;
 #endif
-    return TRUE ;
+
+    return success;
 }
 
 void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
 {
     UnRef() ;
-    
+
     m_refData = new wxMetafileRefData;
 
     M_METAFILEDATA->m_metafile = (PicHandle) mf;
@@ -158,18 +160,18 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
 bool wxMetaFile::Play(wxDC *dc)
 {
     if (!m_refData)
-        return FALSE;
-    
+        return false;
+
     if (!dc->Ok() )
-        return FALSE;
-        
+        return false;
+
     {
 #if wxMAC_USE_CORE_GRAPHICS
         QDPictRef cgPictRef = M_METAFILEDATA->m_qdPictRef ;
         CGContextRef cg = ((wxMacCGContext*)(dc->GetGraphicContext()))->GetNativeContext() ;
         CGRect bounds = QDPictGetBounds( cgPictRef ) ;
 
-        CGContextSaveGState(cg);    
+        CGContextSaveGState(cg);
         CGContextTranslateCTM(cg, 0 , bounds.size.width );
         CGContextScaleCTM(cg, 1, -1);
         QDPictDrawToCGContext( cg , bounds , cgPictRef ) ;
@@ -180,7 +182,7 @@ bool wxMetaFile::Play(wxDC *dc)
         DrawPicture( pict , &(**pict).picFrame ) ;
 #endif
     }
-    return TRUE;
+    return true;
 }
 
 wxSize wxMetaFile::GetSize() const
@@ -210,21 +212,21 @@ wxMetaFileDC::wxMetaFileDC(const wxString& filename ,
                     const wxString& WXUNUSED(description) )
 {
     wxASSERT_MSG( width == 0 || height == 0 , _T("no arbitration of metafilesize supported") ) ;
-    wxASSERT_MSG( filename.IsEmpty() , _T("no file based metafile support yet")) ;
-    
+    wxASSERT_MSG( filename.empty() , _T("no file based metafile support yet")) ;
+
     m_metaFile = new wxMetaFile(filename) ;
 #if wxMAC_USE_CORE_GRAPHICS
 #else
     Rect r={0,0,height,width} ;
-    
+
     RectRgn( (RgnHandle) m_macBoundaryClipRgn , &r ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
 
     m_metaFile->SetHMETAFILE( (WXHMETAFILE) OpenPicture( &r ) ) ;
-    ::GetPort( (GrafPtr*) &m_macPort ) ;    
-    m_ok = TRUE ;
+    ::GetPort( (GrafPtr*) &m_macPort ) ;
+    m_ok = true ;
 #endif
-    SetMapMode(wxMM_TEXT); 
+    SetMapMode(wxMM_TEXT);
 }
 
 wxMetaFileDC::~wxMetaFileDC()

@@ -690,7 +690,7 @@ bool wxMenuBase::SendEvent(int id, int checked)
     bool processed = false;
 
     // Try the menu's event handler
-    if ( !processed )
+    // if ( !processed )
     {
         wxEvtHandler *handler = GetEventHandler();
         if ( handler )

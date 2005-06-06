@@ -883,7 +883,7 @@ void wxTextCtrl::CalculateScrollbar()
 
 wxString wxTextCtrl::GetValue() const
 {
-    wxCHECK_MSG( m_text != NULL, wxT(""), wxT("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, wxEmptyString, wxT("invalid text ctrl") );
 
     wxString tmp;
     if (m_windowStyle & wxTE_MULTILINE)
@@ -1071,7 +1071,7 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
 
         if (text)
         {
-            wxString buf(wxT(""));
+            wxString buf;
             long i;
             int currentLine = 0;
             for (i = 0; currentLine != lineNo && text[i]; i++ )
@@ -1725,7 +1725,7 @@ bool wxTextCtrl::IsModified() const
 
 void wxTextCtrl::Clear()
 {
-    SetValue( wxT("") );
+    SetValue( wxEmptyString );
 }
 
 void wxTextCtrl::OnChar( wxKeyEvent &key_event )
@@ -1896,6 +1896,7 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
             // nothing to do
             return true;
         }
+
 #ifdef __WXGTK20__
         gint l = gtk_text_buffer_get_char_count( m_buffer );
 
@@ -1912,8 +1913,6 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
         wxTextAttr attr = wxTextAttr::Combine(style, m_defaultStyle, this);
 
         wxGtkTextApplyTagsFromAttr( m_buffer, attr, &starti, &endi );
-
-        return true;
 #else
         // VERY dirty way to do that - removes the required text and re-adds it
         // with styling (FIXME)
@@ -1931,14 +1930,14 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
         gtk_editable_delete_text( GTK_EDITABLE(m_text), start, end );
         gtk_editable_set_position( GTK_EDITABLE(m_text), start );
 
-#if wxUSE_UNICODE
+    #if wxUSE_UNICODE
         wxWX2MBbuf buf = tmp.mbc_str();
         const char *txt = buf;
         size_t txtlen = strlen(buf);
-#else
+    #else
         const char *txt = tmp;
         size_t txtlen = tmp.length();
-#endif
+    #endif
 
         // use the attributes from style which are set in it and fall back
         // first to the default style and then to the text control default
@@ -1952,13 +1951,13 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
         gtk_editable_set_position( GTK_EDITABLE(m_text), old_pos ); */
         SetInsertionPoint( old_pos );
 #endif
+
         return true;
     }
-    else // singe line
-    {
-        // cannot do this for GTK+'s Entry widget
-        return false;
-    }
+
+    // else single line
+    // cannot do this for GTK+'s Entry widget
+    return false;
 }
 
 void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)

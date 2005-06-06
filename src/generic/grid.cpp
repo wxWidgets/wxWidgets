@@ -571,7 +571,7 @@ bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
     // through in that case.
     if ((ctrl || alt) && !(ctrl && alt))
         return false;
-    
+
 #if wxUSE_UNICODE
     int key = event.GetUnicodeKey();
     bool keyOk = true;
@@ -588,7 +588,7 @@ bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
     return keyOk;
 #else // !wxUSE_UNICODE
     int key = event.GetKeyCode();
-    if (key <= 255) 
+    if (key <= 255)
         return true;
     return false;
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
@@ -752,7 +752,7 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
     wxTextCtrl* tc = Text();
     wxChar ch;
     long pos;
-    
+
 #if wxUSE_UNICODE
     ch = event.GetUnicodeKey();
     if (ch <= 127)
@@ -1106,7 +1106,7 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
     tmpbuf[0] = (char) keycode;
     tmpbuf[1] = '\0';
     wxString strbuf(tmpbuf, *wxConvCurrent);
-#if wxUSE_INTL        
+#if wxUSE_INTL
     bool is_decimal_point = ( strbuf ==
        wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER) );
 #else
@@ -1184,14 +1184,14 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
         tmpbuf[0] = (char) keycode;
         tmpbuf[1] = '\0';
         wxString strbuf(tmpbuf, *wxConvCurrent);
-#if wxUSE_INTL        
+#if wxUSE_INTL
         bool is_decimal_point =
             ( strbuf == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
                                           wxLOCALE_CAT_NUMBER) );
 #else
         bool is_decimal_point = ( strbuf == _T(".") );
 #endif
-        if ( (keycode < 128) && 
+        if ( (keycode < 128) &&
              (wxIsdigit(keycode) || tolower(keycode) == 'e' ||
               is_decimal_point || keycode == '+' || keycode == '-') )
             return true;
@@ -1375,11 +1375,11 @@ void wxGridCellBoolEditor::StartingKey(wxKeyEvent& event)
         case WXK_SPACE:
             CBox()->SetValue(!CBox()->GetValue());
             break;
-            
+
         case '+':
             CBox()->SetValue(true);
             break;
-                
+
         case '-':
             CBox()->SetValue(false);
             break;
@@ -1468,7 +1468,7 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     {
         // find the right position, or default to the first if not found
         int pos = Combo()->FindString(m_startValue);
-        if (pos == -1)
+        if (pos == wxNOT_FOUND)
             pos = 0;
         Combo()->SetSelection(pos);
     }
@@ -3783,7 +3783,7 @@ void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
 {
     if (event.ButtonDown(wxMOUSE_BTN_LEFT) && FindFocus() != this)
         SetFocus();
-    
+
     m_owner->ProcessGridCellMouseEvent( event );
 }
 
@@ -4905,6 +4905,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                 break;
 
                 case WXGRID_CURSOR_SELECT_ROW:
+                {
                     if ( (row = YToRow( y )) >= 0 )
                     {
                         if ( m_selection )
@@ -4916,6 +4917,8 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                                                     event.MetaDown() );
                         }
                     }
+                }
+                break;
 
                 // default label to suppress warnings about "enumeration value
                 // 'xxx' not handled in switch
@@ -5127,6 +5130,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 break;
 
                 case WXGRID_CURSOR_SELECT_COL:
+                {
                     if ( (col = XToCol( x )) >= 0 )
                     {
                         if ( m_selection )
@@ -5138,6 +5142,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                                                     event.MetaDown() );
                         }
                     }
+                }
+                break;
 
                 // default label to suppress warnings about "enumeration value
                 // 'xxx' not handled in switch

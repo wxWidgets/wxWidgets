@@ -395,7 +395,7 @@ void wxSizerItem::DeleteWindows()
             m_window->Destroy();
             //Putting this after the switch will result in a spacer
             //not being deleted properly on destruction
-            m_kind = Item_None; 
+            m_kind = Item_None;
             break;
 
         case Item_Sizer:
@@ -1053,23 +1053,19 @@ bool wxSizer::IsShown( size_t index ) const
 //---------------------------------------------------------------------------
 
 wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
-    : m_rows( rows )
+    : m_rows( ( cols == 0 && rows == 0 ) ? 1 : rows )
     , m_cols( cols )
     , m_vgap( vgap )
     , m_hgap( hgap )
 {
-    if (m_rows == 0 && m_cols == 0)
-        m_rows = 1;
 }
 
 wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
-    : m_rows( 0 )
+    : m_rows( cols == 0 ? 1 : 0 )
     , m_cols( cols )
     , m_vgap( vgap )
     , m_hgap( hgap )
 {
-    if (m_rows == 0 && m_cols == 0)
-        m_rows = 1;
 }
 
 int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
@@ -1892,7 +1888,7 @@ void wxStdDialogButtonSizer::Realize()
             Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonHelp->ConvertDialogToPixels(wxSize(2, 0)).x);
 #else
         // GTK+1 and any other platform
-        
+
         // Add(0, 0, 0, wxLEFT, 5); // Not sure what this was for but it unbalances the dialog
         if (m_buttonHelp)
             Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonHelp->ConvertDialogToPixels(wxSize(4, 0)).x);

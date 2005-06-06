@@ -475,7 +475,7 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
         // We must finish regardless of success, otherwise we'll get
         // focus problems:
         Finish();
-        
+
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
     }
@@ -2279,12 +2279,14 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         wxColour colBg;
         if ( attr && attr->HasBackgroundColour() )
-	{
-	    drawItemBackground = true;
+        {
+            drawItemBackground = true;
             colBg = attr->GetBackgroundColour();
-	}
+        }
         else
+        {
             colBg = m_backgroundColour;
+        }
         dc.SetBrush(wxBrush(colBg, wxSOLID));
     }
 
@@ -3246,7 +3248,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         {
             // this facilitates multiple-item drag-and-drop
 
-            if (item && HasFlag(wxTR_MULTIPLE))
+            if ( /* item && */ HasFlag(wxTR_MULTIPLE))
             {
                 wxArrayTreeItemIds selections;
                 size_t count = GetSelections(selections);

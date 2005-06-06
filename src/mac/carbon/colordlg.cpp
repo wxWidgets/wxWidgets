@@ -46,27 +46,23 @@ wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
 bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
     m_dialogParent = parent;
-  
+
     if (data)
         m_colourData = *data;
-    return TRUE;
+    return true;
 }
 
 int wxColourDialog::ShowModal()
 {
     Point where ;
     RGBColor currentColor = *((RGBColor*)m_colourData.m_dataColour.GetPixel()) , newColor ;
-    
+
     where.h = where.v = -1;
 
     if (GetColor( where, "\pSelect a new palette color.", &currentColor, &newColor ))
     {
         m_colourData.m_dataColour.Set( (WXCOLORREF*) &newColor ) ;
         return wxID_OK;
-    }
-    else
-    {
-        return wxID_CANCEL;
     }
 
     return wxID_CANCEL;
