@@ -89,6 +89,26 @@ wxMessageOutput* wxMessageOutput::Set(wxMessageOutput* msgout)
 }
 
 // ----------------------------------------------------------------------------
+// wxMessageOutputBest
+// ----------------------------------------------------------------------------
+
+void wxMessageOutputBest::Printf(const wxChar* format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    wxString out;
+
+    out.PrintfV(format, args);
+    va_end(args);
+
+#ifdef __WINDOWS__
+    ::MessageBox(NULL, out, _T("wxWidgets"), MB_ICONINFORMATION | MB_OK);
+#else // !__WINDOWS__
+    fprintf(stderr, "%s", (const char*) out.mb_str());
+#endif // __WINDOWS__/!__WINDOWS__
+}
+
+// ----------------------------------------------------------------------------
 // wxMessageOutputStderr
 // ----------------------------------------------------------------------------
 
