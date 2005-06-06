@@ -952,15 +952,6 @@
 #   endif
 #endif /* wxUSE_TEXTFILE */
 
-#if wxUSE_UNICODE_MSLU && !wxUSE_UNICODE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_UNICODE_MSLU requires wxUSE_UNICODE"
-#   else
-#       undef wxUSE_UNICODE
-#       define wxUSE_UNICODE 1
-#   endif
-#endif /* wxUSE_UNICODE_MSLU */
-
 #if wxUSE_XML && !wxUSE_WCHAR_T
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_XML requires wxUSE_WCHAR_T"
@@ -968,7 +959,7 @@
 #       undef wxUSE_XML
 #       define wxUSE_XML 0
 #   endif
-#endif /* wxUSE_UNICODE_MSLU */
+#endif /* wxUSE_XML */
 
 #if !wxUSE_DYNLIB_CLASS
 #   if wxUSE_DYNAMIC_LOADER
