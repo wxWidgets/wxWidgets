@@ -3322,8 +3322,11 @@ dynamically. The same as DECLARE\_ABSTRACT\_CLASS.
 
 \func{}{DECLARE\_DYNAMIC\_CLASS}{className}
 
-Used inside a class declaration to declare that the objects of this class should be dynamically
-creatable from run-time type information.
+Used inside a class declaration to make the class known to wxWidgets RTTI
+system and also declare that the objects of this class should be dynamically
+creatable from run-time type information. Notice that this implies that the
+class should have a default constructor, if this is not the case consider using 
+\helpref{DECLARE\_CLASS}{declareclass}.
 
 Example:
 
