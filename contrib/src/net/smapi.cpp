@@ -29,7 +29,15 @@
 #include "wx/string.h"
 #include "wx/msw/private.h"
 
+// mapi.h in Cygwin's include directory isn't a full implementation and is
+// not sufficient for this lib. However recent versions of Cygwin also
+// have another mapi.h in include/w32api which can be used.
+//
+#ifdef __CYGWIN__
+#include <w32api/mapi.h>
+#else
 #include <mapi.h>
+#endif
 
 #include "wx/net/smapi.h"
 
