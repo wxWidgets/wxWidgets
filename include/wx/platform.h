@@ -561,7 +561,7 @@
 #endif
 
 #if defined (__WXMAC__)
-#    ifndef WORDS_BIGENDIAN && ( !defined(__MACH__) || ( defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ ) )
+#    if !defined(WORDS_BIGENDIAN) && ( !defined(__MACH__) || ( defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ ) )
 #        define WORDS_BIGENDIAN 1
 #    endif
 #endif
