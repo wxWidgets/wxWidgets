@@ -84,7 +84,9 @@
 #define SOCKLEN_T socklen_t
 #define STDC_HEADERS 1
 #define TARGET_CARBON 1
+#if __BIG_ENDIAN__
 #define WORDS_BIGENDIAN 1
+#endif
 #define WXWIN_COMPATIBILITY_2_4 1
 #define WXWIN_OS_DESCRIPTION "Darwin 7.3.0 Power Macintosh"
 #define WX_GMTOFF_IN_TM 1
