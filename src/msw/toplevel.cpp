@@ -927,10 +927,12 @@ bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
 
 void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 {
-    // check if we can use FlashWindowEx(): unfortunately an explicit test for
-    // FLASHW_STOP, for example, doesn't work because MSVC6 headers do #define
-    // it but don't provide FlashWindowEx() declaration
-#if (WINVER >= 0x0500 && (defined FLASHW_STOP))
+    // check if we can use FlashWindowEx(): unfortunately a simple test for
+    // FLASHW_STOP doesn't work because MSVC6 headers do #define it but don't
+    // provide FlashWindowEx() declaration, so try to detect whether we have
+    // real headers for WINVER 0x0500 by checking for existence of a symbol not
+    // declated in MSVC6 header
+#if defined(FLASHW_STOP) && defined(VK_XBUTTON1)
     // available in the headers, check if it is supported by the system
     typedef BOOL (WINAPI *FlashWindowEx_t)(FLASHWINFO *pfwi);
     FlashWindowEx_t s_pfnFlashWindowEx = NULL;
