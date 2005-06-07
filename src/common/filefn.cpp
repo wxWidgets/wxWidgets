@@ -189,7 +189,7 @@ void wxPathList::AddEnvList (const wxString& envVariable)
         wxT(" :;");
 #endif
 
-    wxString val ;    
+    wxString val ;
     if (wxGetEnv (WXSTRINGCAST envVariable, &val))
     {
         wxChar *s = MYcopystring (val);
@@ -360,17 +360,17 @@ wxIsAbsolutePath (const wxString& filename)
 
 void wxStripExtension(wxChar *buffer)
 {
-  int len = wxStrlen(buffer);
-  int i = len-1;
-  while (i > 0)
-  {
-    if (buffer[i] == wxT('.'))
+    int len = wxStrlen(buffer);
+    int i = len-1;
+    while (i > 0)
     {
-      buffer[i] = 0;
-      break;
+        if (buffer[i] == wxT('.'))
+        {
+            buffer[i] = 0;
+            break;
+        }
+        i --;
     }
-    i --;
-  }
 }
 
 void wxStripExtension(wxString& buffer)
@@ -959,39 +959,38 @@ wxUnix2DosFilename (wxChar *WXUNUSED(s) )
 bool
 wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& file3)
 {
-  wxString outfile;
-  if ( !wxGetTempFileName( wxT("cat"), outfile) )
-      return false;
+#if wxUSE_FILE
 
-  FILE *fp1 wxDUMMY_INITIALIZE(NULL);
-  FILE *fp2 = NULL;
-  FILE *fp3 = NULL;
-  // Open the inputs and outputs
-  if ((fp1 = wxFopen ( file1, wxT("rb"))) == NULL ||
-      (fp2 = wxFopen ( file2, wxT("rb"))) == NULL ||
-      (fp3 = wxFopen ( outfile, wxT("wb"))) == NULL)
+    wxFile in1(file1), in2(file2);
+    wxTempFile out(file3);
+
+    if ( !in1.IsOpened() || !in2.IsOpened() || !out.IsOpened() )
+        return false;
+
+    ssize_t ofs;
+    unsigned char buf[1024];
+
+    for( int i=0; i<2; i++)
     {
-      if (fp1)
-        fclose (fp1);
-      if (fp2)
-        fclose (fp2);
-      if (fp3)
-        fclose (fp3);
-      return false;
+        wxFile *in = i==0 ? &in1 : &in2;
+        do{
+            if ( (ofs = in->Read(buf,WXSIZEOF(buf))) == wxInvalidOffset ) return false;
+            if ( ofs > 0 )
+                if ( !out.Write(buf,ofs) )
+                    return false;
+        } while ( ofs == (ssize_t)WXSIZEOF(buf) );
     }
 
-  int ch;
-  while ((ch = getc (fp1)) != EOF)
-    (void) putc (ch, fp3);
-  fclose (fp1);
+    return out.Commit();
 
-  while ((ch = getc (fp2)) != EOF)
-    (void) putc (ch, fp3);
-  fclose (fp2);
+#else
 
-  fclose (fp3);
-  bool result = wxRenameFile(outfile, file3);
-  return result;
+    wxUnusedVar(file1);
+    wxUnusedVar(file2);
+    wxUnusedVar(file3);
+    return false;
+
+#endif
 }
 
 // Copy files
