@@ -22,6 +22,15 @@
     #define NOMINMAX
 #endif // NOMINMAX
 
+// before including windows.h, define version macros at (currently) maximal
+// values because we do all our checks at run-time anyhow
+#ifndef _WIN32_WINNT
+    #define _WIN32_WINNT 0x0600
+#endif
+#ifndef WINVER
+    #define WINVER 0x0600
+#endif
+
 #include <windows.h>
 
 #ifdef __WXWINCE__
