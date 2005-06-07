@@ -29,10 +29,6 @@
 #include <stdlib.h>
 #include <string.h> // for memmove
 
-#ifndef max
-  #define max(a, b)   (((a) > (b)) ? (a) : (b))
-#endif
-
 // we cast the value to long from which we cast it to void * in IndexForInsert:
 // this can't work if the pointers are not big enough
 wxCOMPILE_TIME_ASSERT( sizeof(wxUIntPtr) <= sizeof(void *),

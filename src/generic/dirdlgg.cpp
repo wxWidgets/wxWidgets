@@ -47,8 +47,6 @@
 
 static const int ID_DIRCTRL = 1000;
 static const int ID_TEXTCTRL = 1001;
-static const int ID_OK = 1002;
-static const int ID_CANCEL = 1003;
 static const int ID_NEW = 1004;
 static const int ID_SHOW_HIDDEN = 1005;
 static const int ID_GO_HOME = 1006;

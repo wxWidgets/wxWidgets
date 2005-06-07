@@ -2195,8 +2195,6 @@ private:
     wxEventTableEntry& operator=(const wxEventTableEntry&);
 };
 
-class WXDLLIMPEXP_BASE wxEvtHandler;
-
 // an entry used in dynamic event table managed by wxEvtHandler::Connect()
 struct WXDLLIMPEXP_BASE wxDynamicEventTableEntry : public wxEventTableEntryBase
 {
@@ -2237,7 +2235,6 @@ struct WXDLLIMPEXP_BASE wxEventTable
 // ----------------------------------------------------------------------------
 
 WX_DEFINE_ARRAY_PTR(const wxEventTableEntry*, wxEventTableEntryPointerArray);
-class WXDLLIMPEXP_BASE wxEvtHandler;
 
 class WXDLLIMPEXP_BASE wxEventHashTable
 {

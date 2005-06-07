@@ -594,12 +594,6 @@ void wxObjectListNode::DeleteData()
 // wxStringList
 // ----------------------------------------------------------------------------
 
-static inline wxChar* MYcopystring(const wxString& s)
-{
-    wxChar* copy = new wxChar[s.length() + 1];
-    return wxStrcpy(copy, s.c_str());
-}
-
 static inline wxChar* MYcopystring(const wxChar* s)
 {
     wxChar* copy = new wxChar[wxStrlen(s) + 1];

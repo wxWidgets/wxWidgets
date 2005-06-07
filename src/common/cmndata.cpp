@@ -67,10 +67,6 @@
     IMPLEMENT_DYNAMIC_CLASS(wxFontData, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject)
 
-#ifndef DMPAPER_USER
-     #define DMPAPER_USER                256
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================

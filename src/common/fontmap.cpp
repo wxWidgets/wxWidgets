@@ -330,7 +330,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
     wxString configEntry,
              encName = GetEncodingName(encoding);
-    if ( !facename.IsEmpty() )
+    if ( !facename.empty() )
     {
         configEntry = facename + _T("_");
     }
@@ -354,13 +354,13 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     }
     else // use the info entered the last time
     {
-        if ( !fontinfo.IsEmpty() && !facename.IsEmpty() )
+        if ( !fontinfo.empty() && !facename.empty() )
         {
             // we tried to find a match with facename -- now try without it
             fontinfo = GetConfig()->Read(encName);
         }
 
-        if ( !fontinfo.IsEmpty() )
+        if ( !fontinfo.empty() )
         {
             if ( info->FromString(fontinfo) )
             {
@@ -443,7 +443,6 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
             if ( dialog.ShowModal() == wxID_OK )
             {
                 wxFontData retData = dialog.GetFontData();
-                wxFont font = retData.GetChosenFont();
 
                 *info = retData.EncodingInfo();
                 info->encoding = retData.GetEncoding();

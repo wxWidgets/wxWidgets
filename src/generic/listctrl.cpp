@@ -2243,9 +2243,6 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
                                        wxSOLID
                                     );
 
-    wxSize sz = size;
-    sz.y = 25;
-
     SetScrollbars( 0, 0, 0, 0, 0, 0 );
 
     wxVisualAttributes attr = wxGenericListCtrl::GetClassDefaultAttributes();

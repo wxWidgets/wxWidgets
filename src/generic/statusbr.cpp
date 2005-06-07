@@ -56,12 +56,11 @@ END_EVENT_TABLE()
 
 // Default status border dimensions
 #define         wxTHICK_LINE_BORDER 2
-#define         wxTHICK_LINE_WIDTH  1
 
 void wxStatusBarGeneric::Init()
 {
-  m_borderX = wxTHICK_LINE_BORDER;
-  m_borderY = wxTHICK_LINE_BORDER;
+    m_borderX = wxTHICK_LINE_BORDER;
+    m_borderY = wxTHICK_LINE_BORDER;
 }
 
 wxStatusBarGeneric::~wxStatusBarGeneric()
@@ -73,34 +72,34 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
                                 long style,
                                 const wxString& name)
 {
-  if ( !wxWindow::Create(parent, id,
-                         wxDefaultPosition, wxDefaultSize,
-                         style | wxTAB_TRAVERSAL, name) )
-      return false;
+    if ( !wxWindow::Create(parent, id,
+                           wxDefaultPosition, wxDefaultSize,
+                           style | wxTAB_TRAVERSAL, name) )
+        return false;
 
-  // The status bar should have a themed background
-  SetThemeEnabled( true );
+    // The status bar should have a themed background
+    SetThemeEnabled( true );
 
-  InitColours();
-  
+    InitColours();
+
 #ifdef __WXPM__
-  SetFont(*wxSMALL_FONT);
+    SetFont(*wxSMALL_FONT);
 #endif
 
-  // Set the height according to the font and the border size
-  wxClientDC dc(this);
-  dc.SetFont(GetFont());
+    // Set the height according to the font and the border size
+    wxClientDC dc(this);
+    dc.SetFont(GetFont());
 
-  wxCoord y;
-  dc.GetTextExtent(_T("X"), NULL, &y );
+    wxCoord y;
+    dc.GetTextExtent(_T("X"), NULL, &y );
 
-  int height = (int)( (11*y)/10 + 2*GetBorderY());
+    int height = (int)( (11*y)/10 + 2*GetBorderY());
 
-  SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height);
+    SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height);
 
-  SetFieldsCount(1);
+    SetFieldsCount(1);
 
-  return true;
+    return true;
 }
 
 
@@ -213,48 +212,48 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
     }
 #endif
 
-  if (GetFont().Ok())
+    if (GetFont().Ok())
         dc.SetFont(GetFont());
 
-  dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxTRANSPARENT);
 
 #ifdef __WXPM__
-  wxColour vColor;
+    wxColour vColor;
 
-  vColor = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR);
-  ::WinFillRect(dc.m_hPS, &dc.m_vRclPaint, vColor.GetPixel());
+    vColor = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR);
+    ::WinFillRect(dc.m_hPS, &dc.m_vRclPaint, vColor.GetPixel());
 #endif
 
-  for (int i = 0; i < m_nFields; i ++)
+    for (int i = 0; i < m_nFields; i ++)
         DrawField(dc, i);
 }
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
 {
-  int leftMargin = 2;
+    int leftMargin = 2;
 
-  wxRect rect;
-  GetFieldRect(i, rect);
+    wxRect rect;
+    GetFieldRect(i, rect);
 
-  wxString text(GetStatusText(i));
+    wxString text(GetStatusText(i));
 
-  long x, y;
+    long x, y;
 
-  dc.GetTextExtent(text, &x, &y);
+    dc.GetTextExtent(text, &x, &y);
 
-  int xpos = rect.x + leftMargin;
-  int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5) ;
+    int xpos = rect.x + leftMargin;
+    int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5) ;
 
 #if defined( __WXGTK__ ) || defined(__WXMAC__)
-  xpos++;
-  ypos++;
+    xpos++;
+    ypos++;
 #endif
 
-  dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height);
+    dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height);
 
-  dc.DrawText(text, xpos, ypos);
+    dc.DrawText(text, xpos, ypos);
 
-  dc.DestroyClippingRegion();
+    dc.DestroyClippingRegion();
 }
 
 void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
@@ -471,4 +470,3 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
 }
 
 #endif // wxUSE_STATUSBAR
-

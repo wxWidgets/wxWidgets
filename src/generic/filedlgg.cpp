@@ -143,11 +143,6 @@ int wxCALLBACK wxFileDataTimeCompare( long data1, long data2, long data)
 #define IsTopMostDir(dir)   (dir.empty())
 #endif
 
-#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
-// defined in src/generic/dirctrlg.cpp
-extern bool wxIsDriveAvailable(const wxString& dirName);
-#endif
-
 // defined in src/generic/dirctrlg.cpp
 extern size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids);
 
@@ -855,7 +850,6 @@ wxFileCtrl::~wxFileCtrl()
 #define  ID_CHOICE        (wxID_FILEDLGG + 8)
 #define  ID_TEXT          (wxID_FILEDLGG + 9)
 #define  ID_LIST_CTRL     (wxID_FILEDLGG + 10)
-#define  ID_ACTIVATED     (wxID_FILEDLGG + 11)
 #define  ID_CHECK         (wxID_FILEDLGG + 12)
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericFileDialog, wxFileDialogBase)

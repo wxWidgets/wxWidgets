@@ -328,8 +328,6 @@ private:
 extern WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
 #endif
 
-class WXDLLEXPORT wxObjectListNode;
-
 // undef it to get rid of old, deprecated functions
 #define wxLIST_COMPATIBILITY
 
