@@ -528,9 +528,12 @@ void wxLog::Flush()
 
 void wxLogBuffer::Flush()
 {
-    wxMessageOutputBest out;
-    out.Printf(_T("%s"), m_str.c_str());
-    m_str.clear();
+    if ( !m_str.empty() )
+    {
+        wxMessageOutputBest out;
+        out.Printf(_T("%s"), m_str.c_str());
+        m_str.clear();
+    }
 }
 
 void wxLogBuffer::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
