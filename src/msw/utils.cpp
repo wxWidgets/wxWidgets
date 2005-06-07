@@ -1241,6 +1241,62 @@ wxToolkitInfo& wxAppTraits::GetToolkitInfo()
     return info;
 }
 
+wxWinVersion wxGetWinVersion()
+{
+    int verMaj,
+        verMin;
+    switch ( wxGetOsVersion(&verMaj, &verMin) )
+    {
+        case wxWIN95:
+            if ( verMaj == 4 )
+            {
+                switch ( verMin )
+                {
+                    case 0:
+                        return wxWinVersion_95;
+
+                    case 10:
+                        return wxWinVersion_98;
+
+                    case 90:
+                        return wxWinVersion_ME;
+                }
+            }
+            break;
+
+        case wxWINDOWS_NT:
+            switch ( verMaj )
+            {
+                case 3:
+                    return wxWinVersion_NT3;
+
+                case 4:
+                    return wxWinVersion_NT4;
+
+                case 5:
+                    switch ( verMin )
+                    {
+                        case 0:
+                            return wxWinVersion_2000;
+
+                        case 1:
+                            return wxWinVersion_XP;
+
+                        case 2:
+                            return wxWinVersion_2003;
+                    }
+                    break;
+
+                case 6:
+                    return wxWinVersion_NT6;
+            }
+            break;
+
+    }
+
+    return wxWinVersion_Unknown;
+}
+
 // ----------------------------------------------------------------------------
 // sleep functions
 // ----------------------------------------------------------------------------

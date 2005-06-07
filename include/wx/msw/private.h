@@ -701,6 +701,43 @@ inline wxString wxGetFullModuleName()
     return wxGetFullModuleName((HMODULE)wxGetInstance());
 }
 
+// return the run-time version of the OS in a format similar to
+// WINVER/_WIN32_WINNT compile-time macros:
+//
+//      0x0300      Windows NT 3.51
+//      0x0400      Windows 95, NT4
+//      0x0410      Windows 98
+//      0x0500      Windows ME, 2000
+//      0x0501      Windows XP
+//      0x0502      Windows 2003
+//      0x0600      Longhorn
+//
+// for the other Windows versions 0 is currently returned
+enum wxWinVersion
+{
+    wxWinVersion_Unknown = 0,
+
+    wxWinVersion_3 = 0x0300,
+    wxWinVersion_NT3 = wxWinVersion_3,
+
+    wxWinVersion_4 = 0x0400,
+    wxWinVersion_95 = wxWinVersion_4,
+    wxWinVersion_NT4 = wxWinVersion_4,
+    wxWinVersion_98 = 0x0410,
+
+    wxWinVersion_5 = 0x0500,
+    wxWinVersion_ME = wxWinVersion_5,
+    wxWinVersion_NT5 = wxWinVersion_5,
+    wxWinVersion_2000 = wxWinVersion_5,
+    wxWinVersion_XP = 0x0501,
+    wxWinVersion_2003 = 0x0502,
+
+    wxWinVersion_6 = 0x0600,
+    wxWinVersion_NT6 = 0x0600
+};
+
+extern wxWinVersion wxGetWinVersion();
+
 #if wxUSE_GUI
 
 // cursor stuff
