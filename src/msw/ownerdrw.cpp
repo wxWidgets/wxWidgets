@@ -103,8 +103,27 @@ IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
     #pragma warning "TODO: remove gs_menuItems hack"
 #endif
 
+// VC++ 6 gives a warning here:
+//
+//      return type for 'OwnerDrawnSet_wxImplementation_HashTable::iterator::
+//      operator ->' is 'class wxOwnerDrawn ** ' (ie; not a UDT or reference to
+//      a UDT.  Will produce errors if applied using infix notation.
+//
+// shut it down
+#ifdef __VISUALC__
+    #if __VISUALC__ <= 1300
+        #pragma warning(push)
+        #pragma warning(disable: 4284)
+        #define POP_WARNINGS
+    #endif
+#endif
+
 #include "wx/hashset.h"
 WX_DECLARE_HASH_SET(wxOwnerDrawn*, wxPointerHash, wxPointerEqual, OwnerDrawnSet);
+
+#ifdef POP_WARNINGS
+    #pragma warning(pop)
+#endif
 
 static OwnerDrawnSet gs_menuItems;
 
