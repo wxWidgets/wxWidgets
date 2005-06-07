@@ -514,6 +514,7 @@ private:
 
 #ifdef __VISUALC__
     // 'this' : used in base member initializer list (for m_commandString)
+    #pragma warning(push)
     #pragma warning(disable:4355)
 #endif
 
@@ -580,7 +581,7 @@ private:
 };
 
 #ifdef __VISUALC__
-    #pragma warning(default:4355)
+    #pragma warning(pop)
 #endif
 
 #if WXWIN_COMPATIBILITY_2_4

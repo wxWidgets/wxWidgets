@@ -32,6 +32,7 @@ extern WXDLLEXPORT_DATA(const wxChar*) wxPanelNameStr;
 
 // avoid triggering this stupid VC++ warning
 #ifdef __VISUALC__
+    #pragma warning(push)
     #pragma warning(disable:4355) // 'this' used in base member initializer list
 #endif
 
@@ -96,7 +97,7 @@ private:
 };
 
 #ifdef __VISUALC__
-    #pragma warning(default:4355)
+    #pragma warning(pop)
 #endif
 
 #endif

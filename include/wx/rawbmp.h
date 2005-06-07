@@ -73,6 +73,7 @@
 
 #ifdef __VISUALC__
     // VC++ gives an absolutely harmless warning for wxPixelData<wxBitmap> ctor
+    #pragma warning(push)
     #pragma warning(disable: 4355) // 'this' used in initializer list
 #endif
 
@@ -717,8 +718,7 @@ struct wxPixelIterator : wxPixelData<Image, PixelFormat>::Iterator
 };
 
 #ifdef __VISUALC__
-    #pragma warning(default: 4355)
-    #pragma warning(default: 4097)
+    #pragma warning(pop)
 #endif
 
 #endif // _WX_RAWBMP_H_BASE_
