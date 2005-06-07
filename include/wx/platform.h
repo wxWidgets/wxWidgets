@@ -259,9 +259,6 @@
  */
 #include "wx/setup.h"
 
-/* check the consistency of the settings in setup.h */
-#include "wx/chkconf.h"
-
 /*
    adjust the Unicode setting: wxUSE_UNICODE should be defined as 0 or 1
    and is used by wxWidgets, _UNICODE and/or UNICODE may be defined or used by
@@ -292,6 +289,15 @@
 // otherwise MSL headers bring in WIN32 dependant APIs
 #undef UNICODE
 #endif
+
+
+/*
+   check the consistency of the settings in setup.h: note that this must be
+   done after setting wxUSE_UNICODE correctly as it is used in wx/chkconf.h
+ */
+#include "wx/chkconf.h"
+
+
 /*
    some compilers don't support iostream.h any longer, while some of theme
    are not updated with <iostream> yet, so override the users setting here
