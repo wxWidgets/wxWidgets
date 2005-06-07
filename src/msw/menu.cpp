@@ -370,57 +370,117 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         id = pItem->GetId();
     }
 
-#ifdef __WXWINCE__
-    wxString strippedString;
-#endif
 
-    LPCTSTR pData;
+    // prepare to insert the item in the menu
+    wxString itemText = pItem->GetText();
+    LPCTSTR pData = NULL;
+    if ( pos == (size_t)-1 )
+    {
+        // append at the end
+        pos = ::GetMenuItemCount(GetHmenu());
+    }
 
+    BOOL ok = false;
+
+    // check if we have something more than a simple text item
 #if wxUSE_OWNER_DRAWN
-    if ( pItem->IsOwnerDrawn() ) {  // want to get {Measure|Draw}Item messages?
-        // item draws itself, pass pointer to it in data parameter
-        flags |= MF_OWNERDRAW;
-        pData = (LPCTSTR)pItem;
+    if ( pItem->IsOwnerDrawn() )
+    {
+        // is the item owner-drawn just because of the bitmap?
+        if ( pItem->GetBitmap().Ok() &&
+                !pItem->GetTextColour().Ok() &&
+                    !pItem->GetBackgroundColour().Ok() &&
+                        !pItem->GetFont().Ok() )
+        {
+            // try to use InsertMenuItem() as it's guaranteed to look correctly
+            // while our owner-drawning code is not
+
+            // first compile-time check
+#ifdef MIIM_BITMAP
+            WinStruct<MENUITEMINFO> mii;
+
+            // now run-time one: MIIM_BITMAP only works under WinME/2000+
+            if ( wxGetWinVersion() >= wxWinVersion_5 )
+            {
+                mii.fMask = MIIM_ID | MIIM_STRING | MIIM_DATA | MIIM_BITMAP;
+                mii.wID = id;
+                mii.cch = itemText.length();
+                mii.dwTypeData = wx_const_cast(wxChar *, itemText.c_str());
+
+                // we can't pass HBITMAP directly as hbmpItem for 2 reasons:
+                //  1. we can't draw it with transparency then (this is not
+                //     very important now but would be with themed menu bg)
+                //  2. worse, Windows inverses the bitmap for the selected
+                //     item and this looks downright ugly
+                //
+                // so instead draw it ourselves in MSWOnDrawItem()
+                mii.dwItemData = wx_reinterpret_cast(ULONG_PTR, pItem);
+                mii.hbmpItem = HBMMENU_CALLBACK;
+
+                ok = ::InsertMenuItem(GetHmenu(), pos, TRUE /* by pos */, &mii);
+                if ( !ok )
+                {
+                    wxLogLastError(wxT("InsertMenuItem()"));
+                }
+                else // InsertMenuItem() ok
+                {
+                    // we need to remove the extra indent which is reserved for
+                    // the checkboxes by default as it looks ugly unless check
+                    // boxes are used together with bitmaps and this is not the
+                    // case in wx API
+                    WinStruct<MENUINFO> mi;
+
+                    mi.fMask = MIM_STYLE;
+                    mi.dwStyle = MNS_CHECKORBMP;
+                    if ( !::SetMenuInfo(GetHmenu(), &mi) )
+                        wxLogLastError(_T("SetMenuInfo(MNS_NOCHECK)"));
+
+                    // tell the item that it's not really owner-drawn but only
+                    // needs to draw its bitmap, the rest is done by Windows
+                    pItem->ResetOwnerDrawn();
+                }
+            }
+#endif // MIIM_BITMAP
+        }
+
+        if ( !ok )
+        {
+            // item draws itself, pass pointer to it in data parameter
+            flags |= MF_OWNERDRAW;
+            pData = (LPCTSTR)pItem;
+        }
     }
     else
-#endif
+#endif // wxUSE_OWNER_DRAWN
     {
         // menu is just a normal string (passed in data parameter)
         flags |= MF_STRING;
 
 #ifdef __WXWINCE__
-        strippedString = wxStripMenuCodes(pItem->GetText());
-        pData = (wxChar*)strippedString.c_str();
-#else
-        pData = (wxChar*)pItem->GetText().c_str();
+        itemText = wxMenuItem::GetLabelFromText(itemText);
 #endif
+
+        pData = (wxChar*)itemText.c_str();
     }
 
-    BOOL ok;
-    if ( pos == (size_t)-1 )
-    {
-        ok = ::AppendMenu(GetHmenu(), flags, id, pData);
-    }
-    else
-    {
-        ok = ::InsertMenu(GetHmenu(), pos, flags | MF_BYPOSITION, id, pData);
-    }
-
+    // item might have been already inserted by InsertMenuItem() above
     if ( !ok )
     {
-        wxLogLastError(wxT("Insert or AppendMenu"));
+        if ( !::InsertMenu(GetHmenu(), pos, flags | MF_BYPOSITION, id, pData) )
+        {
+            wxLogLastError(wxT("InsertMenu[Item]()"));
 
-        return false;
+            return false;
+        }
     }
 
+
     // if we just appended the title, highlight it
-#ifdef __WIN32__
     if ( (int)id == idMenuTitle )
     {
         // visually select the menu title
         SetDefaultMenuItem(GetHmenu(), id);
     }
-#endif // __WIN32__
 
     // if we're already attached to the menubar, we must update it
     if ( IsAttached() && GetMenuBar()->IsAttached() )
