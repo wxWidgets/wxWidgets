@@ -35,25 +35,37 @@
 #endif
 
 /*
+ * We don't want to give an error if wxUSE_UNICODE_MSLU is enabled but
+ * wxUSE_UNICODE is not as this would make it impossible to simply set the
+ * former in wx/setup.h as then the library wouldn't compile in non-Unicode
+ * configurations, so instead simply unset it silently when it doesn't make
+ * sense.
+ */
+#if wxUSE_UNICODE_MSLU && !wxUSE_UNICODE
+#   undef wxUSE_UNICODE_MSLU
+#   define wxUSE_UNICODE_MSLU 0
+#endif
+
+/*
  * All of the settings below require SEH support (__try/__catch) and can't work
  * without it.
  */
 #if !defined(_MSC_VER) && \
     (!defined(__BORLANDC__) || __BORLANDC__ < 0x0550)
-    #undef wxUSE_ON_FATAL_EXCEPTION
-    #define wxUSE_ON_FATAL_EXCEPTION 0
+#    undef wxUSE_ON_FATAL_EXCEPTION
+#    define wxUSE_ON_FATAL_EXCEPTION 0
 
-    #undef wxUSE_CRASHREPORT
-    #define wxUSE_CRASHREPORT 0
+#    undef wxUSE_CRASHREPORT
+#    define wxUSE_CRASHREPORT 0
 
-    #undef wxUSE_STACKWALKER
-    #define wxUSE_STACKWALKER 0
+#    undef wxUSE_STACKWALKER
+#    define wxUSE_STACKWALKER 0
 #endif // compiler doesn't support SEH
 
 /* wxUSE_DEBUG_NEW_ALWAYS doesn't work with CodeWarrior */
 #if defined(__MWERKS__)
-    #undef wxUSE_DEBUG_NEW_ALWAYS
-    #define wxUSE_DEBUG_NEW_ALWAYS      0
+#    undef wxUSE_DEBUG_NEW_ALWAYS
+#    define wxUSE_DEBUG_NEW_ALWAYS      0
 #endif
 
 #if defined(__GNUWIN32__)
@@ -87,14 +99,14 @@
 #endif /* wxUSE_MFC */
 
 #if (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
-/* GnuWin32 doesn't have appropriate headers for e.g. IUnknown. */
-#undef wxUSE_DRAG_AND_DROP
-#define wxUSE_DRAG_AND_DROP 0
+    /* GnuWin32 doesn't have appropriate headers for e.g. IUnknown. */
+#   undef wxUSE_DRAG_AND_DROP
+#   define wxUSE_DRAG_AND_DROP 0
 #endif
 
 #if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
-#undef wxUSE_CHECKLISTBOX
-#define wxUSE_CHECKLISTBOX 0
+#   undef wxUSE_CHECKLISTBOX
+#   define wxUSE_CHECKLISTBOX 0
 #endif
 
 #if wxUSE_SPINCTRL
@@ -128,14 +140,13 @@
 
 /* DMC++ doesn't have definitions for date picker control, so use generic control
  */
-
 #ifdef __DMC__
-#if wxUSE_DATEPICKCTRL
-#undef wxUSE_DATEPICKCTRL_GENERIC
-#undef wxUSE_DATEPICKCTRL
-#endif
-#define wxUSE_DATEPICKCTRL 0
-#define wxUSE_DATEPICKCTRL_GENERIC 1
+#   if wxUSE_DATEPICKCTRL
+#       undef wxUSE_DATEPICKCTRL_GENERIC
+#       undef wxUSE_DATEPICKCTRL
+#   endif
+#   define wxUSE_DATEPICKCTRL 0
+#   define wxUSE_DATEPICKCTRL_GENERIC 1
 #endif
 
 #endif /* _WX_MSW_CHKCONF_H_ */
