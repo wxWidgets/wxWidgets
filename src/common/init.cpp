@@ -409,8 +409,10 @@ int wxEntryReal(int& argc, wxChar **argv)
     // library initialization
     if ( !wxEntryStart(argc, argv) )
     {
+#if wxUSE_LOG
         // flush any log messages explaining why we failed
         delete wxLog::SetActiveTarget(NULL);
+#endif
         return -1;
     }
 
