@@ -66,8 +66,6 @@
 // global variables
 // ----------------------------------------------------------------------------
 
-extern wxMenu *wxCurrentPopupMenu;
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -229,7 +227,7 @@ void wxMenu::Init()
     }
 
     // if we have a title, insert it in the beginning of the menu
-    if ( !m_title.IsEmpty() )
+    if ( !m_title.empty() )
     {
         Append(idMenuTitle, m_title);
         AppendSeparator();
@@ -633,14 +631,14 @@ size_t wxMenu::CopyAccels(wxAcceleratorEntry *accels) const
 
 void wxMenu::SetTitle(const wxString& label)
 {
-    bool hasNoTitle = m_title.IsEmpty();
+    bool hasNoTitle = m_title.empty();
     m_title = label;
 
     HMENU hMenu = GetHmenu();
 
     if ( hasNoTitle )
     {
-        if ( !label.IsEmpty() )
+        if ( !label.empty() )
         {
             if ( !::InsertMenu(hMenu, 0u, MF_BYPOSITION | MF_STRING,
                                (unsigned)idMenuTitle, m_title) ||
@@ -652,7 +650,7 @@ void wxMenu::SetTitle(const wxString& label)
     }
     else
     {
-        if ( label.IsEmpty() )
+        if ( label.empty() )
         {
             // remove the title and the separator after it
             if ( !RemoveMenu(hMenu, 0, MF_BYPOSITION) ||
@@ -689,7 +687,7 @@ void wxMenu::SetTitle(const wxString& label)
 
 #ifdef __WIN32__
     // put the title string in bold face
-    if ( !m_title.IsEmpty() )
+    if ( !m_title.empty() )
     {
         SetDefaultMenuItem(GetHmenu(), (UINT)idMenuTitle);
     }

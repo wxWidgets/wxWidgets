@@ -93,9 +93,6 @@
 // these values correspond to those used by comctl32.dll
 #define DEFAULTBITMAPX   16
 #define DEFAULTBITMAPY   15
-#define DEFAULTBUTTONX   24
-#define DEFAULTBUTTONY   24
-#define DEFAULTBARHEIGHT 27
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -256,7 +253,7 @@ bool wxToolBar::Create(wxWindow *parent,
 #if 1
         wxUxThemeEngine *p = wxUxThemeEngine::Get();
         if ( !p || !p->IsThemeActive() )
-#endif            
+#endif
         {
             DWORD dwToolbarStyle;
 
@@ -897,7 +894,7 @@ bool wxToolBar::Realize()
                                 wxToolBarToolBase *tool = nodePrev->GetData();
                                 if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
                                     break;
-                                
+
                                 if ( tool->Toggle(false) )
                                 {
                                     DoToggleTool(tool, false);
@@ -905,7 +902,7 @@ bool wxToolBar::Realize()
                                 prevButton.fsState = TBSTATE_ENABLED;
                                 nodePrev = nodePrev->GetPrevious();
                                 prevIndex--;
-                            }                            
+                            }
                         }
 
                         isRadio = true;

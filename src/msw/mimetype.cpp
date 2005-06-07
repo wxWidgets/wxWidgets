@@ -787,7 +787,6 @@ bool wxFileTypeImpl::RemoveCommand(const wxString& verb)
     wxCHECK_MSG( !m_ext.empty() && !verb.empty(), false,
                  _T("RemoveCommand() needs an extension and a verb") );
 
-    wxString  sKey = m_strFileType;
     wxRegKey rkey(wxRegKey::HKCR, GetVerbPath(verb));
 
     // if the key already doesn't exist, it's a success
