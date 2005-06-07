@@ -398,7 +398,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             WinStruct<MENUITEMINFO> mii;
 
             // now run-time one: MIIM_BITMAP only works under WinME/2000+
-            if ( wxGetWinVersion() >= wxWinVersion_5 )
+            if ( wxGetWinVersion() >= wxWinVersion_98 )
             {
                 mii.fMask = MIIM_ID | MIIM_STRING | MIIM_DATA | MIIM_BITMAP;
                 mii.wID = id;
