@@ -75,12 +75,12 @@ aStdKeys[] =
 #ifndef __WXWINCE__
   { HKEY_PERFORMANCE_DATA,  wxT("HKEY_PERFORMANCE_DATA"),  wxT("HKPD") },
 #endif
-#if WINVER >= 0x0400 && !defined(__WXWINCE__)
+#ifdef HKEY_CURRENT_CONFIG
   { HKEY_CURRENT_CONFIG,    wxT("HKEY_CURRENT_CONFIG"),    wxT("HKCC") },
-#if !defined(__GNUWIN32__) && !defined(__WXWINCE__)
+#endif
+#ifdef HKEY_DYN_DATA
   { HKEY_DYN_DATA,          wxT("HKEY_DYN_DATA"),          wxT("HKDD") }, // short name?
-#endif  //GNUWIN32
-#endif  //WINVER >= 4.0
+#endif
 };
 
 // the registry name separator (perhaps one day MS will change it to '/' ;-)
