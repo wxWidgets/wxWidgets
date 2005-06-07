@@ -40,7 +40,7 @@ public:
   wxOwnerDrawn(const wxString& str = wxEmptyString,
                bool bCheckable = false,
                bool bMenuItem = false); // FIXME kludge for colors
-  virtual ~wxOwnerDrawn() { }
+  virtual ~wxOwnerDrawn();
 
   // fix appearance
   void SetFont(const wxFont& font)
@@ -142,6 +142,13 @@ public:
   virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat);
 
 protected:
+  // return true if this is a menu item
+  bool IsMenuItem() const;
+
+  // get the font to use, whether m_font is set or not
+  wxFont GetFontToUse() const;
+
+
   wxString  m_strName,      // label for a manu item
             m_strAccel;     // the accel string ("Ctrl-F17") if any
 
