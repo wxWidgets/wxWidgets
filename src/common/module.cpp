@@ -22,8 +22,9 @@
 
 #include "wx/module.h"
 #include "wx/hash.h"
-#include "wx/listimpl.cpp"
 #include "wx/intl.h"
+#include "wx/log.h"
+#include "wx/listimpl.cpp"
 
 WX_DEFINE_LIST(wxModuleList);
 
