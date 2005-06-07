@@ -271,9 +271,14 @@ IconRef wxBitmapRefData::GetIconRef()
 
         IconFamilyHandle iconFamily = NULL ;
 
+#ifdef WORDS_BIGENDIAN
         iconFamily = (IconFamilyHandle) NewHandle(8) ;
         (**iconFamily).resourceType = kIconFamilyType ;
         (**iconFamily).resourceSize = sizeof(OSType) + sizeof(Size);
+#else
+        // test this solution on big endian as well
+        iconFamily = (IconFamilyHandle) NewHandle(0) ;
+#endif
 
         int w = GetWidth() ;
         int h = GetHeight() ;
