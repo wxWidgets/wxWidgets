@@ -102,10 +102,17 @@ void wxMessageOutputBest::Printf(const wxChar* format, ...)
     va_end(args);
 
 #ifdef __WINDOWS__
-    ::MessageBox(NULL, out, _T("wxWidgets"), MB_ICONINFORMATION | MB_OK);
-#else // !__WINDOWS__
-    fprintf(stderr, "%s", (const char*) out.mb_str());
+    // check if we're running in a console
+    HANDLE hStdErr = ::GetStdHandle(STD_ERROR_HANDLE);
+    if ( !hStdErr || hStdErr == INVALID_HANDLE_VALUE )
+    {
+        ::MessageBox(NULL, out, _T("wxWidgets"), MB_ICONINFORMATION | MB_OK);
+    }
+    else
 #endif // __WINDOWS__/!__WINDOWS__
+    {
+        fprintf(stderr, "%s", (const char*) out.mb_str());
+    }
 }
 
 // ----------------------------------------------------------------------------
