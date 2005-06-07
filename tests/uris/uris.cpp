@@ -299,8 +299,11 @@ void URITestCase::Unescaping()
     CPPUNIT_ASSERT(works2.IsSameAs(broken2));
 
 }
-
 #if TEST_URL
+
+const wxChar* pszProblemUrls[] = { wxT("http://www.csdn.net"),
+                                   wxT("http://www.163.com"),
+                                   wxT("http://www.sina.com.cn") };
 
 #include "wx/url.h"
 #include "wx/file.h"
@@ -341,6 +344,32 @@ void URITestCase::URLCompat()
     CPPUNIT_ASSERT( test.BuildURI() == wxT("file:%22myf%22ile.txt") );
     CPPUNIT_ASSERT( test.GetScheme() == wxT("file") );
     CPPUNIT_ASSERT( test.GetPath() == wxT("%22myf%22ile.txt") );
+
+    // Test problem urls (reported not to work some time ago by a user...)
+    for ( size_t i = 0; i < WXSIZEOF(pszProblemUrls); ++i )
+    {
+        wxURL urlProblem(pszProblemUrls[i]);
+        CPPUNIT_ASSERT(urlProblem.GetError() == wxURL_NOERR);
+
+        wxInputStream* is = urlProblem.GetInputStream();
+        CPPUNIT_ASSERT(is != NULL);
+
+        wxFile fOut(_T("test.html"), wxFile::write);
+        wxASSERT(fOut.IsOpened());
+
+        char buf[1001];
+        for( ;; )
+        {
+            is->Read(buf, 1000);
+            size_t n = is->LastRead();
+            if ( n == 0 )
+                break;
+            buf[n] = 0;
+            fOut.Write(buf, n);
+        }
+
+        delete is;
+    }
 }
 
 #if wxUSE_PROTOCOL_HTTP
