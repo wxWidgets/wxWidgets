@@ -48,6 +48,7 @@ private:
         CPPUNIT_TEST( BackwardsResolving );
         CPPUNIT_TEST( Assignment );
         CPPUNIT_TEST( Comparison );
+        CPPUNIT_TEST( Unescaping );
 #if TEST_URL
         CPPUNIT_TEST( URLCompat );
 #if wxUSE_PROTOCOL_HTTP
@@ -66,6 +67,7 @@ private:
     void BackwardsResolving();
     void Assignment();
     void Comparison();
+    void Unescaping();
 
 #if TEST_URL
     void URLCompat();
@@ -278,9 +280,30 @@ void URITestCase::Comparison()
     CPPUNIT_ASSERT(wxURI(wxT("http://mysite.com")) == wxURI(wxT("http://mysite.com")));
 }
 
+void URITestCase::Unescaping()
+{
+    wxString orig = wxT("http://test.com/of/file%3A%2F%2FC%3A%5Curi%5C")
+                    wxT("escaping%5Cthat%5Cseems%5Cbroken%5Csadly%5B1%5D.rss");
+
+    wxString works= wxURI(orig).BuildUnescapedURI();
+
+    CPPUNIT_ASSERT(orig.IsSameAs(works) == false);
+
+    wxString orig2 = wxT("http://test.com/of/file%3A%2F%")
+                     wxT("2FC%3A%5Curi%5Cescaping%5Cthat%5Cseems%")
+                     wxT("5Cbroken%5Csadly%5B1%5D.rss");
+
+    wxString works2 = wxURI::Unescape(orig2);
+    wxString broken2 = wxURI(orig2).BuildUnescapedURI();
+
+    CPPUNIT_ASSERT(works2.IsSameAs(broken2));
+
+}
+
 #if TEST_URL
 
 #include "wx/url.h"
+#include "wx/file.h"
 
 void URITestCase::URLCompat()
 {
@@ -327,5 +350,6 @@ void URITestCase::URLProxy()
     url.SetProxy(wxT("pserv:3122"));
 }
 #endif // wxUSE_PROTOCOL_HTTP
-#endif
+
+#endif // TEST_URL
 

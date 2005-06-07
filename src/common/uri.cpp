@@ -150,10 +150,7 @@ bool wxURI::IsEscape(const wxChar*& uri)
 {
     // pct-encoded   = "%" HEXDIG HEXDIG
     if(*uri == wxT('%') && IsHex(*(uri+1)) && IsHex(*(uri+2)))
-    {
-        uri += 3;
         return true;
-    }
     else
         return false;
 }
@@ -460,9 +457,15 @@ const wxChar* wxURI::ParseUserInfo(const wxChar* uri)
     // userinfo      = *( unreserved / pct-encoded / sub-delims / ":" )
     while(*uri && *uri != wxT('@') && *uri != wxT('/') && *uri != wxT('#') && *uri != wxT('?'))
     {
-        if(IsUnreserved(*uri) || IsEscape(uri) ||
+        if(IsUnreserved(*uri) ||
            IsSubDelim(*uri) || *uri == wxT(':'))
             m_userinfo += *uri++;
+        else if (IsEscape(uri))
+        {
+            m_userinfo += *uri++;
+            m_userinfo += *uri++;
+            m_userinfo += *uri++;
+        }
         else
             Escape(m_userinfo, *uri++);
     }
@@ -540,8 +543,14 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
         // reg-name      = *( unreserved / pct-encoded / sub-delims )
         while(*uri && *uri != wxT('/') && *uri != wxT(':') && *uri != wxT('#') && *uri != wxT('?'))
         {
-            if(IsUnreserved(*uri) || IsEscape(uri) ||  IsSubDelim(*uri))
+            if(IsUnreserved(*uri) ||  IsSubDelim(*uri))
                 m_server += *uri++;
+            else if (IsEscape(uri))
+            {
+                m_server += *uri++;
+                m_server += *uri++;
+                m_server += *uri++;
+            }
             else
                 Escape(m_server, *uri++);
         }
@@ -610,9 +619,15 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
 
         while(*uri && *uri != wxT('#') && *uri != wxT('?'))
         {
-            if( IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
+            if( IsUnreserved(*uri) || IsSubDelim(*uri) ||
                 *uri == wxT(':') || *uri == wxT('@') || *uri == wxT('/'))
                 m_path += *uri++;
+            else if (IsEscape(uri))
+            {
+                m_path += *uri++;
+                m_path += *uri++;
+                m_path += *uri++;
+            }
             else
                 Escape(m_path, *uri++);
         }
@@ -636,9 +651,15 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
             //no colon allowed
             while(*uri && *uri != wxT('#') && *uri != wxT('?'))
             {
-                if(IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
+                if(IsUnreserved(*uri) || IsSubDelim(*uri) ||
                   *uri == wxT('@') || *uri == wxT('/'))
                     m_path += *uri++;
+                else if (IsEscape(uri))
+                {
+                    m_path += *uri++;
+                    m_path += *uri++;
+                    m_path += *uri++;
+                }
                 else
                     Escape(m_path, *uri++);
             }
@@ -647,9 +668,15 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
         {
             while(*uri && *uri != wxT('#') && *uri != wxT('?'))
             {
-                if(IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
+                if(IsUnreserved(*uri) || IsSubDelim(*uri) ||
                    *uri == wxT(':') || *uri == wxT('@') || *uri == wxT('/'))
                     m_path += *uri++;
+                else if (IsEscape(uri))
+                {
+                    m_path += *uri++;
+                    m_path += *uri++;
+                    m_path += *uri++;
+                }
                 else
                     Escape(m_path, *uri++);
             }
@@ -686,9 +713,15 @@ const wxChar* wxURI::ParseQuery(const wxChar* uri)
         ++uri;
         while(*uri && *uri != wxT('#'))
         {
-            if (IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
+            if (IsUnreserved(*uri) || IsSubDelim(*uri) ||
                 *uri == wxT(':') || *uri == wxT('@') || *uri == wxT('/') || *uri == wxT('?'))
                   m_query += *uri++;
+            else if (IsEscape(uri))
+            {
+                  m_query += *uri++;
+                  m_query += *uri++;
+                  m_query += *uri++;
+            }
             else
                   Escape(m_query, *uri++);
         }
@@ -711,9 +744,15 @@ const wxChar* wxURI::ParseFragment(const wxChar* uri)
         ++uri;
         while(*uri)
         {
-            if (IsUnreserved(*uri) || IsSubDelim(*uri) || IsEscape(uri) ||
+            if (IsUnreserved(*uri) || IsSubDelim(*uri) ||
                 *uri == wxT(':') || *uri == wxT('@') || *uri == wxT('/') || *uri == wxT('?'))
                   m_fragment += *uri++;
+            else if (IsEscape(uri))
+            {
+                  m_fragment += *uri++;
+                  m_fragment += *uri++;
+                  m_fragment += *uri++;
+            }
             else
                   Escape(m_fragment, *uri++);
         }
