@@ -736,7 +736,7 @@ enum wxWinVersion
     wxWinVersion_NT6 = 0x0600
 };
 
-WXDLLEXPORT wxWinVersion wxGetWinVersion();
+WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
 
 #if wxUSE_GUI
 
