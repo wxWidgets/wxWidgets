@@ -312,15 +312,21 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
                              : GetSysColor(COLOR_MENUTEXT);
   }
 
-
-  // don't draw an edge around the bitmap, if background is white ...
-  DWORD menu_bg_color = GetSysColor(COLOR_MENU);
-  if (    ( GetRValue( menu_bg_color ) >= 0xf0 &&
-            GetGValue( menu_bg_color ) >= 0xf0 &&
-            GetBValue( menu_bg_color ) >= 0xf0 )
-    )
+  if ( IsOwnerDrawn() )
   {
-      draw_bitmap_edge = false;
+    // don't draw an edge around the bitmap, if background is white ...
+    DWORD menu_bg_color = GetSysColor(COLOR_MENU);
+    if (    ( GetRValue( menu_bg_color ) >= 0xf0 &&
+              GetGValue( menu_bg_color ) >= 0xf0 &&
+              GetBValue( menu_bg_color ) >= 0xf0 )
+      )
+    {
+        draw_bitmap_edge = false;
+    }
+  }
+  else // edge doesn't look well with default Windows drawing
+  {
+    draw_bitmap_edge = false;
   }
 
 
