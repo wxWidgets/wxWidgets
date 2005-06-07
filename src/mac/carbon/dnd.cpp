@@ -396,9 +396,7 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
     DisposeDrag(theDrag);
     gTrackingGlobals.m_currentSource = NULL ;
     
-    KeyMap keymap;
-    GetKeys(keymap);
-    bool optionDown = keymap[1] & 4;
+    bool optionDown = GetCurrentKeyModifiers() & optionKey ;
     wxDragResult dndresult = optionDown ? wxDragCopy : wxDragMove;
     return dndresult;
 }
@@ -452,9 +450,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
     GetDragAttributes(theDrag, &attributes);
     wxTopLevelWindowMac* toplevel = wxFindWinFromMacWindow( theWindow ) ; 
 
-    KeyMap keymap;
-    GetKeys(keymap);
-    bool optionDown = keymap[1] & 4;
+    bool optionDown = GetCurrentKeyModifiers() & optionKey ;
     wxDragResult result = optionDown ? wxDragCopy : wxDragMove;
 
     switch(theMessage) 
@@ -619,9 +615,7 @@ pascal OSErr wxMacWindowDragReceiveHandler(WindowPtr theWindow,
             trackingGlobals->m_currentTargetWindow->MacRootWindowToWindow( &localx , &localy ) ;
         if ( trackingGlobals->m_currentTarget->OnDrop( localx , localy ) )
         {
-            KeyMap keymap;
-            GetKeys(keymap);
-            bool optionDown = keymap[1] & 4;
+            bool optionDown = GetCurrentKeyModifiers() & optionKey ;
             wxDragResult result = optionDown ? wxDragCopy : wxDragMove;
             trackingGlobals->m_currentTarget->OnData( localx , localy , result ) ;
         }
