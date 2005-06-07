@@ -29,6 +29,7 @@
     #include "wx/filefn.h"
     #include "wx/log.h"
     #include "wx/thread.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/init.h"
