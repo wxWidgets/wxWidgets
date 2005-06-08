@@ -2169,6 +2169,8 @@ void wxWindowMac::WarpPointer (int x_pos, int y_pos)
 
 void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
 {
+	if ( MacGetTopLevelWindow() == NULL )
+		return ;
 #if TARGET_API_MAC_OSX
     if ( MacGetTopLevelWindow()->MacUsesCompositing() && (m_macBackgroundBrush.Ok() == false || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT ) )
     {
