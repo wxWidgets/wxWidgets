@@ -188,7 +188,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 #if SIZEOF_WCHAR_T == 2
         uniChar = charBuf[0] ;
 #else
-        wxMBConvUTF16BE converter ;
+        wxMBConvUTF16 converter ;
         converter.MB2WC( &uniChar , (const char*)charBuf , 1 ) ;
 #endif
         if ( dataSize > 4 )

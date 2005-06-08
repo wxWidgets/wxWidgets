@@ -1424,7 +1424,7 @@ wxString wxMacMLTEControl::GetStringValue() const
                 SetHandleSize( theText , ( actualSize + 1 ) * sizeof( UniChar ) ) ;
                 HLock( theText ) ;
                 (((UniChar*)*theText)[actualSize]) = 0 ;
-                wxMBConvUTF16BE converter ;
+                wxMBConvUTF16 converter ;
                 size_t noChars = converter.MB2WC( NULL , (const char*)*theText , 0 ) ;
                 ptr = new wxChar[noChars + 1] ;
 
@@ -1896,7 +1896,7 @@ void wxMacMLTEControl::SetTXNData( const wxString& st , TXNOffset start , TXNOff
     TXNSetData( m_txn , kTXNUnicodeTextData,  (void*)st.wc_str(), len * 2,
       start, end);
 #else
-    wxMBConvUTF16BE converter ;
+    wxMBConvUTF16 converter ;
     ByteCount byteBufferLen = converter.WC2MB( NULL , st.wc_str() , 0 ) ;
     UniChar *unibuf = (UniChar*) malloc(byteBufferLen) ;
     converter.WC2MB( (char*) unibuf , st.wc_str() , byteBufferLen ) ;

@@ -2116,7 +2116,7 @@ public:
         UniChar* szUniBuffer = (UniChar*) szUnConv;
 
 #if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16BE converter ;
+        wxMBConvUTF16 converter ;
         nBufSize = converter.WC2MB( NULL , szUnConv , 0 );
         szUniBuffer = new UniChar[ (nBufSize / sizeof(UniChar)) + 1] ;
         converter.WC2MB( (char*) szUniBuffer , szUnConv, nBufSize + sizeof(UniChar)) ;
@@ -2252,7 +2252,7 @@ public:
         // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
         // is not properly terminated we get random characters at the end
         ubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
-        wxMBConvUTF16BE converter ;
+        wxMBConvUTF16 converter ;
         res = converter.MB2WC( (buf ? buf : tbuf) , (const char*)ubuf , n ) ;
         free( ubuf ) ;
 #else
@@ -2285,7 +2285,7 @@ public:
         ByteCount byteBufferLen = n ;
         UniChar* ubuf = NULL ;
 #if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16BE converter ;
+        wxMBConvUTF16 converter ;
         size_t unicharlen = converter.WC2MB( NULL , psz , 0 ) ;
         byteInLen = unicharlen ;
         ubuf = (UniChar*) malloc( byteInLen + 2 ) ;

@@ -648,7 +648,7 @@ void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding encoding )
         m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
             (UniChar*)str.wc_str() , str.Len() );
 #else
-        wxMBConvUTF16BE converter ;
+        wxMBConvUTF16 converter ;
         size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
         UniChar *unibuf = new UniChar[ unicharlen / sizeof(UniChar) + 1 ] ;
         converter.WC2MB( (char*)unibuf , str.wc_str() , unicharlen ) ;
@@ -679,7 +679,7 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
     UniChar* unibuf = new UniChar[ cflen + 1 ] ;
     CFStringGetCharacters( m_cfs , CFRangeMake( 0 , cflen ) , (UniChar*) unibuf ) ;
     unibuf[cflen] = 0 ;
-    wxMBConvUTF16BE converter ;
+    wxMBConvUTF16 converter ;
     noChars = converter.MB2WC( NULL , (const char*)unibuf , 0 ) ;
     buf = new wxChar[ noChars + 1 ] ;
     converter.MB2WC( buf , (const char*)unibuf , noChars ) ;
