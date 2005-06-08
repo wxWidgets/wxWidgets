@@ -1931,7 +1931,7 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId, bool select)
 {
     if ( select )
     {
-        DoSelectItem(itemId);
+        DoSelectItem(itemId, !HasFlag(wxTR_MULTIPLE));
     }
     else // deselect
     {
