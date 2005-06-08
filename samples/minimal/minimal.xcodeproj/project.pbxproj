@@ -34,6 +34,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		18366F970856733800504564 /* libwx_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CA89596C04D79FED00000080 /* libwx_mac.dylib */; };
 		1842CAF5085664100032BCF7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF4085664100032BCF7 /* libz.dylib */; };
 		1842CAF6085664100032BCF7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF4085664100032BCF7 /* libz.dylib */; };
 		1842CAFB085664390032BCF7 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF7085664390032BCF7 /* AGL.framework */; };
@@ -45,7 +46,6 @@
 		1842CB01085664390032BCF7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF9085664390032BCF7 /* OpenGL.framework */; };
 		1842CB02085664390032BCF7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAFA085664390032BCF7 /* WebKit.framework */; };
 		1842CB1D08566AA50032BCF7 /* libwx_mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A0C6B502CF7C9601000133 /* libwx_mac.a */; };
-		1842CB2208566B940032BCF7 /* libwx_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CA89596C04D79FED00000080 /* libwx_mac.dylib */; };
 		4086D0E5063BBC5B00D4CD53 /* wxmac.icns in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A69A02CDB0E101000133 /* wxmac.icns */; };
 		4086D0E7063BBC5B00D4CD53 /* minimal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F591E05701FCC5DE01000133 /* minimal.cpp */; };
 		4086D0E9063BBC5B00D4CD53 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
@@ -54,7 +54,6 @@
 		4086D107063BBC5C00D4CD53 /* minimal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F591E05701FCC5DE01000133 /* minimal.cpp */; };
 		4086D109063BBC5C00D4CD53 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
 		4086D10B063BBC5C00D4CD53 /* System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA60173504D423C000000080 /* System.framework */; };
-		40ADC58E081629E80009DA36 /* libwx_macd.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = CA89578E04D706FC00000080 /* libwx_macd.dylib */; };
 		40B6DFF3063CD7B000442FB3 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 40B6DFF2063CD7B000442FB3 /* libiconv.dylib */; };
 /* End PBXBuildFile section */
 
@@ -107,7 +106,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				40ADC58E081629E80009DA36 /* libwx_macd.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,10 +117,10 @@
 		1842CAF8085664390032BCF7 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		1842CAF9085664390032BCF7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		1842CAFA085664390032BCF7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		1864B4F208566CAB00E32E9B /* minimalDynamic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimalDynamic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1864B4F408566CAB00E32E9B /* minimalStatic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimalStatic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4086D0EF063BBC5B00D4CD53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		4086D0F0063BBC5B00D4CD53 /* minimalStatic (Debug) .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "minimalStatic (Debug) .app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4086D110063BBC5C00D4CD53 /* minimalDynamic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimalDynamic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40B6DFF2063CD7B000442FB3 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<absolute>"; };
 		CA60173504D423C000000080 /* System.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = System.framework; path = /System/Library/Frameworks/System.framework; sourceTree = "<absolute>"; };
 		CA89578E04D706FC00000080 /* libwx_macd.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libwx_macd.dylib; path = ../../src/build/Development/libwx_macd.dylib; sourceTree = SOURCE_ROOT; };
@@ -161,18 +159,18 @@
 				1842CB00085664390032BCF7 /* IOKit.framework in Frameworks */,
 				1842CB01085664390032BCF7 /* OpenGL.framework in Frameworks */,
 				1842CB02085664390032BCF7 /* WebKit.framework in Frameworks */,
-				1842CB2208566B940032BCF7 /* libwx_mac.dylib in Frameworks */,
+				18366F970856733800504564 /* libwx_mac.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		195DF8C9FE9D4F0611CA2CBB /* Products */ = {
+		1864B4F608566CB300E32E9B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4086D0F0063BBC5B00D4CD53 /* minimalStatic (Debug) .app */,
-				4086D110063BBC5C00D4CD53 /* minimalDynamic.app */,
+				1864B4F208566CAB00E32E9B /* minimalDynamic.app */,
+				1864B4F408566CAB00E32E9B /* minimalStatic.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -183,8 +181,8 @@
 				20286C2AFDCF999611CA2CEA /* Sources */,
 				20286C2CFDCF999611CA2CEA /* Resources */,
 				20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */,
-				195DF8C9FE9D4F0611CA2CBB /* Products */,
 				4086D0EF063BBC5B00D4CD53 /* Info.plist */,
+				1864B4F608566CB300E32E9B /* Products */,
 			);
 			name = "¬´PROJECTNAME¬ª";
 			sourceTree = "<group>";
@@ -299,13 +297,14 @@
 			name = static;
 			productInstallPath = "$(HOME)/Applications";
 			productName = minimalStaticDebug;
-			productReference = 4086D0F0063BBC5B00D4CD53 /* minimalStatic (Debug) .app */;
+			productReference = 1864B4F408566CAB00E32E9B /* minimalStatic.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4086D102063BBC5C00D4CD53 /* dynamic */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1842CAA808565A280032BCF7 /* Build configuration list for PBXNativeTarget "dynamic" */;
 			buildPhases = (
+				1864B51608566F4100E32E9B /* ShellScript */,
 				40ADC58D081629DD0009DA36 /* CopyFiles */,
 				4086D103063BBC5C00D4CD53 /* Headers */,
 				4086D104063BBC5C00D4CD53 /* Resources */,
@@ -359,7 +358,7 @@
 			name = dynamic;
 			productInstallPath = "$(HOME)/Applications";
 			productName = minimalDynamicDebug;
-			productReference = 4086D110063BBC5C00D4CD53 /* minimalDynamic.app */;
+			productReference = 1864B4F208566CAB00E32E9B /* minimalDynamic.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -376,6 +375,7 @@
 			);
 			hasScannedForEncodings = 1;
 			mainGroup = 20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */;
+			productRefGroup = 20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */;
 			projectDirPath = "";
 			targets = (
 				4086D0E2063BBC5B00D4CD53 /* static */,
@@ -420,6 +420,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXRezBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1864B51608566F4100E32E9B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mkdir $TARGET_BUILD_DIR/$FRAMEWORKS_FOLDER_PATH\ncp ../../src/build/$CONFIGURATION/$DynamicLibName $TARGET_BUILD_DIR/$FRAMEWORKS_FOLDER_PATH";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4086D0E6063BBC5B00D4CD53 /* Sources */ = {
@@ -499,7 +515,7 @@
 					tiff,
 				);
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
-				PRODUCT_NAME = "minimalStatic $(PRODUCT_NAME) ";
+				PRODUCT_NAME = "minimalStatic$(PRODUCT_NAME)";
 				USE_SEPARATE_HEADERMAPS = YES;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -554,7 +570,7 @@
 					tiff,
 				);
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
-				PRODUCT_NAME = "minimalStatic $(PRODUCT_NAME) ";
+				PRODUCT_NAME = "minimalStatic$(PRODUCT_NAME)";
 				USE_SEPARATE_HEADERMAPS = YES;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -567,6 +583,7 @@
 		1842CAA908565A280032BCF7 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DylibName = libwx_mac.dylib;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ../../include/wx/wxprec.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -585,6 +602,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					../../src/build,
 					"$(SRCROOT)/../../src/build/Deployment",
+					"$(SRCROOT)/../../src/build/Development",
 				);
 				OTHER_CFLAGS = (
 					"-iquote",
@@ -594,7 +612,7 @@
 					"-iquote",
 					.,
 				);
-				PRODUCT_NAME = minimalDynamic;
+				PRODUCT_NAME = "minimalDynamic$(PRODUCT_NAME)";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -619,19 +637,13 @@
 					"__WXMAC_XCODE__=1",
 					"WX_PRECOMP=1",
 				);
-				HEADER_SEARCH_PATHS = (
-					../../src/build/wxWindows.build/wxDynamicDebug.build/DerivedSources/include,
-					../../include,
-					../../src/build/include,
-					.,
-					"-",
-					/usr/include,
-				);
+				HEADER_SEARCH_PATHS = /usr/include;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					../../src/build,
 					"$(SRCROOT)/../../src/build/Deployment",
+					"$(SRCROOT)/../../src/build/Development",
 				);
 				OTHER_CFLAGS = (
 					"-iquote",
@@ -641,7 +653,7 @@
 					"-iquote",
 					.,
 				);
-				PRODUCT_NAME = "minimalDynamic $(PRODUCT_NAME)";
+				PRODUCT_NAME = "minimalDynamic$(PRODUCT_NAME)";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -697,6 +709,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				DynamicLibName = libwx_macd.dylib;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -711,6 +724,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DynamicLibName = libwx_mac.dylib;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
 				LIBRARY_SEARCH_PATHS = ../../src/build/Deployment;
