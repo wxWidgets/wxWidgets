@@ -35,6 +35,7 @@
 
 /* Begin PBXBuildFile section */
 		18366F970856733800504564 /* libwx_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CA89596C04D79FED00000080 /* libwx_mac.dylib */; };
+		1841EC090857AFB500951CC4 /* libwx_macd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F5A69602CDB02701000133 /* libwx_macd.a */; };
 		1842CAF5085664100032BCF7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF4085664100032BCF7 /* libz.dylib */; };
 		1842CAF6085664100032BCF7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF4085664100032BCF7 /* libz.dylib */; };
 		1842CAFB085664390032BCF7 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF7085664390032BCF7 /* AGL.framework */; };
@@ -45,7 +46,6 @@
 		1842CB00085664390032BCF7 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF8085664390032BCF7 /* IOKit.framework */; };
 		1842CB01085664390032BCF7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF9085664390032BCF7 /* OpenGL.framework */; };
 		1842CB02085664390032BCF7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAFA085664390032BCF7 /* WebKit.framework */; };
-		1842CB1D08566AA50032BCF7 /* libwx_mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A0C6B502CF7C9601000133 /* libwx_mac.a */; };
 		4086D0E5063BBC5B00D4CD53 /* wxmac.icns in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A69A02CDB0E101000133 /* wxmac.icns */; };
 		4086D0E7063BBC5B00D4CD53 /* minimal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F591E05701FCC5DE01000133 /* minimal.cpp */; };
 		4086D0E9063BBC5B00D4CD53 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
@@ -117,8 +117,8 @@
 		1842CAF8085664390032BCF7 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		1842CAF9085664390032BCF7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		1842CAFA085664390032BCF7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
-		1864B4F208566CAB00E32E9B /* minimalDynamic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimalDynamic.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1864B4F408566CAB00E32E9B /* minimalStatic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimalStatic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1864B4F208566CAB00E32E9B /* minimalDynamic(Debug).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "minimalDynamic(Debug).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1864B4F408566CAB00E32E9B /* minimalStatic(Debug).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "minimalStatic(Debug).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4086D0EF063BBC5B00D4CD53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		40B6DFF2063CD7B000442FB3 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<absolute>"; };
@@ -144,7 +144,7 @@
 				1842CAFC085664390032BCF7 /* IOKit.framework in Frameworks */,
 				1842CAFD085664390032BCF7 /* OpenGL.framework in Frameworks */,
 				1842CAFE085664390032BCF7 /* WebKit.framework in Frameworks */,
-				1842CB1D08566AA50032BCF7 /* libwx_mac.a in Frameworks */,
+				1841EC090857AFB500951CC4 /* libwx_macd.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,8 +169,8 @@
 		1864B4F608566CB300E32E9B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1864B4F208566CAB00E32E9B /* minimalDynamic.app */,
-				1864B4F408566CAB00E32E9B /* minimalStatic.app */,
+				1864B4F208566CAB00E32E9B /* minimalDynamic(Debug).app */,
+				1864B4F408566CAB00E32E9B /* minimalStatic(Debug).app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -297,7 +297,7 @@
 			name = static;
 			productInstallPath = "$(HOME)/Applications";
 			productName = minimalStaticDebug;
-			productReference = 1864B4F408566CAB00E32E9B /* minimalStatic.app */;
+			productReference = 1864B4F408566CAB00E32E9B /* minimalStatic(Debug).app */;
 			productType = "com.apple.product-type.application";
 		};
 		4086D102063BBC5C00D4CD53 /* dynamic */ = {
@@ -358,7 +358,7 @@
 			name = dynamic;
 			productInstallPath = "$(HOME)/Applications";
 			productName = minimalDynamicDebug;
-			productReference = 1864B4F208566CAB00E32E9B /* minimalDynamic.app */;
+			productReference = 1864B4F208566CAB00E32E9B /* minimalDynamic(Debug).app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -493,7 +493,10 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../src/build/Deployment\"";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../../src/build/Deployment",
+					"$(SRCROOT)/../../src/build/Development",
+				);
 				OTHER_CFLAGS = (
 					"-iquote",
 					"${SYMROOT}/include",
@@ -522,6 +525,7 @@
 					"-Wno-four-char-constants",
 					"-Wno-unknown-pragmas",
 				);
+				ZERO_LINK = NO;
 			};
 			name = Development;
 		};
@@ -548,7 +552,10 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../src/build/Deployment\"";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../../src/build/Deployment",
+					"$(SRCROOT)/../../src/build/Development",
+				);
 				OTHER_CFLAGS = (
 					"-iquote",
 					"${SYMROOT}/include",
