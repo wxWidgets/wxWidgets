@@ -413,7 +413,7 @@ bool wxSoundSyncOnlyAdaptor::IsPlaying() const
 #if wxUSE_THREADS
     return m_status.m_playing;
 #else
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -620,7 +620,6 @@ typedef struct
     wxUint16      uiBitsPerSample;
 } WAVEFORMAT;
 
-#define MONO             1  // and stereo is 2 by wav format
 #define WAVE_FORMAT_PCM  1
 #define WAVE_INDEX       8
 #define FMT_INDEX       12
