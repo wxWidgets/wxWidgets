@@ -12,7 +12,7 @@
 #ifndef __WINE_UXTHEME_H
 #define __WINE_UXTHEME_H
 
-#include <commctrl.h>
+#include "wx/msw/wrapcctl.h"
 
 typedef HANDLE HTHEME;
 
