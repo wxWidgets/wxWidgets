@@ -1246,14 +1246,15 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
         return (wxToolBarToolBase *)NULL;
     }
 
-    // if comctl32 version < 4.71 wxToolBar95 adds dummy spacers
-#if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
+    // when TB_SETBUTTONINFO is available (both during compile- and run-time),
+    // we don't use the dummy separators hack
+#ifdef TB_SETBUTTONINFO
     if ( wxApp::GetComCtl32Version() >= 471 )
     {
         return m_tools.Item((size_t)index)->GetData();
     }
     else
-#endif
+#endif // TB_SETBUTTONINFO
     {
         return GetItemSkippingDummySpacers( m_tools, (size_t) index );
     }
