@@ -355,32 +355,32 @@ public:
     // key and value are the same
     void Put(long value, wxObject *object)
         { DoPut( value, value, object ); }
-    void Put(long hash, long value, wxObject *object)
-        { DoPut( value, hash, object ); }
+    void Put(long lhash, long value, wxObject *object)
+        { DoPut( value, lhash, object ); }
     void Put(const wxChar *value, wxObject *object)
         { DoPut( value, MakeKey( value ), object ); }
-    void Put(long hash, const wxChar *value, wxObject *object)
-        { DoPut( value, hash, object ); }
+    void Put(long lhash, const wxChar *value, wxObject *object)
+        { DoPut( value, lhash, object ); }
 
     // key and value are the same
     wxObject *Get(long value) const
         { return (wxObject*)DoGet( value, value ); }
-    wxObject *Get(long hash, long value) const
-        { return (wxObject*)DoGet( value, hash ); }
+    wxObject *Get(long lhash, long value) const
+        { return (wxObject*)DoGet( value, lhash ); }
     wxObject *Get(const wxChar *value) const
         { return (wxObject*)DoGet( value, MakeKey( value ) ); }
-    wxObject *Get(long hash, const wxChar *value) const
-        { return (wxObject*)DoGet( value, hash ); }
+    wxObject *Get(long lhash, const wxChar *value) const
+        { return (wxObject*)DoGet( value, lhash ); }
 
     // Deletes entry and returns data if found
     wxObject *Delete(long key)
         { return (wxObject*)DoDelete( key, key ); }
-    wxObject *Delete(long hash, long key)
-        { return (wxObject*)DoDelete( key, hash ); }
+    wxObject *Delete(long lhash, long key)
+        { return (wxObject*)DoDelete( key, lhash ); }
     wxObject *Delete(const wxChar *key)
         { return (wxObject*)DoDelete( key, MakeKey( key ) ); }
-    wxObject *Delete(long hash, const wxChar *key)
-        { return (wxObject*)DoDelete( key, hash ); }
+    wxObject *Delete(long lhash, const wxChar *key)
+        { return (wxObject*)DoDelete( key, lhash ); }
 
     // Construct your own integer key from a string, e.g. in case
     // you need to combine it with something
@@ -521,14 +521,14 @@ private:
         virtual ~hashclass() { Destroy(); }                                   \
                                                                               \
         void Put(long key, eltype *data) { DoPut(key, key, (void*)data); }    \
-        void Put(long hash, long key, eltype *data)                           \
-            { DoPut(key, hash, (void*)data); }                                \
+        void Put(long lhash, long key, eltype *data)                          \
+            { DoPut(key, lhash, (void*)data); }                               \
         eltype *Get(long key) const { return (eltype*)DoGet(key, key); }      \
-        eltype *Get(long hash, long key) const                                \
-            { return (eltype*)DoGet(key, hash); }                             \
+        eltype *Get(long lhash, long key) const                               \
+            { return (eltype*)DoGet(key, lhash); }                            \
         eltype *Delete(long key) { return (eltype*)DoDelete(key, key); }      \
-        eltype *Delete(long hash, long key)                                   \
-            { return (eltype*)DoDelete(key, hash); }                          \
+        eltype *Delete(long lhash, long key)                                  \
+            { return (eltype*)DoDelete(key, lhash); }                         \
     protected:                                                                \
         virtual void DoDeleteContents( wxHashTableBase_Node* node )           \
             { delete (eltype*)node->GetData(); }                              \

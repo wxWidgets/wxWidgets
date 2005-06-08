@@ -44,7 +44,7 @@ public:
     // open specified file (may fail, use IsOpened())
   wxFFile(const wxChar *filename, const wxChar *mode = _T("r"));
     // attach to (already opened) file
-  wxFFile(FILE *fp) { m_fp = fp; }
+  wxFFile(FILE *lfp) { m_fp = lfp; }
 
   // open/close
     // open a file (existing or not - the mode controls what happens)
@@ -53,8 +53,8 @@ public:
   bool Close();
 
   // assign an existing file descriptor and get it back from wxFFile object
-  void Attach(FILE *fp, const wxString& name = wxEmptyString)
-    { Close(); m_fp = fp; m_name = name; }
+  void Attach(FILE *lfp, const wxString& name = wxEmptyString)
+    { Close(); m_fp = lfp; m_name = name; }
   void Detach() { m_fp = NULL; }
   FILE *fp() const { return m_fp; }
 
