@@ -143,8 +143,6 @@ void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
 // Implement Pool of Graphic contexts. Creating them takes too much time.
 //-----------------------------------------------------------------------------
 
-#define GC_POOL_SIZE 200
-
 enum wxPoolGCType
 {
    wxGC_ERROR = 0,

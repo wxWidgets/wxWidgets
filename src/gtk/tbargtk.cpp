@@ -32,8 +32,6 @@
 #include <glib.h>
 #include "wx/gtk/private.h"
 
-extern GdkFont *GtkGetDefaultGuiFont();
-
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -271,7 +269,7 @@ wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 void wxToolBar::Init()
 {
     m_toolbar = (GtkToolbar *)NULL;
-    m_blockEvent = FALSE;
+    m_blockEvent = false;
     m_defaultWidth = 32;
     m_defaultHeight = 32;
 }
@@ -287,7 +285,7 @@ bool wxToolBar::Create( wxWindow *parent,
                         long style,
                         const wxString& name )
 {
-    m_needParent = TRUE;
+    m_needParent = true;
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInToolBar;
 
     if ( !PreCreation( parent, pos, size ) ||
@@ -295,7 +293,7 @@ bool wxToolBar::Create( wxWindow *parent,
     {
         wxFAIL_MSG( wxT("wxToolBar creation failed") );
 
-        return FALSE;
+        return false;
     }
 
 #ifdef __WXGTK20__
@@ -344,7 +342,7 @@ bool wxToolBar::Create( wxWindow *parent,
 
     PostCreation(size);
 
-    return TRUE;
+    return true;
 }
 
 void wxToolBar::GtkSetStyle()
@@ -383,13 +381,13 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
         {
             wxBitmap bitmap = tool->GetNormalBitmap();
 
-            wxCHECK_MSG( bitmap.Ok(), FALSE,
+            wxCHECK_MSG( bitmap.Ok(), false,
                          wxT("invalid bitmap for wxToolBar icon") );
 
-            wxCHECK_MSG( bitmap.GetBitmap() == NULL, FALSE,
+            wxCHECK_MSG( bitmap.GetBitmap() == NULL, false,
                          wxT("wxToolBar doesn't support GdkBitmap") );
 
-            wxCHECK_MSG( bitmap.GetPixmap() != NULL, FALSE,
+            wxCHECK_MSG( bitmap.GetPixmap() != NULL, false,
                          wxT("wxToolBar::Add needs a wxBitmap") );
 
             GtkWidget *tool_pixmap = (GtkWidget *)NULL;
@@ -410,7 +408,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                 GdkBitmap *mask = (GdkBitmap *)NULL;
                 if ( bitmap.GetMask() )
                     mask = bitmap.GetMask()->GetBitmap();
-            
+
                 tool_pixmap = gtk_pixmap_new( pixmap, mask );
                 gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
             }
@@ -452,7 +450,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                         // this is the first button in the radio button group,
                         // it will be toggled automatically by GTK so bring the
                         // internal flag in sync
-                        tool->Toggle(TRUE);
+                        tool->Toggle(true);
                     }
                 }
 
@@ -478,7 +476,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                 {
                     wxFAIL_MSG( _T("gtk_toolbar_insert_element() failed") );
 
-                    return FALSE;
+                    return false;
                 }
 
                 gtk_signal_connect( GTK_OBJECT(tool->m_item),
@@ -496,7 +494,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             gtk_toolbar_insert_space( m_toolbar, posGtk );
 
             // skip the rest
-            return TRUE;
+            return true;
 
         case wxTOOL_STYLE_CONTROL:
             gtk_toolbar_insert_widget(
@@ -516,7 +514,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     m_height = req.height + 2*m_yMargin;
     InvalidateBestSize();
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
@@ -541,7 +539,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
     }
 
     InvalidateBestSize();
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -567,11 +565,11 @@ void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
     {
         tool->SetPixmap(tool->GetBitmap());
 
-        m_blockEvent = TRUE;
+        m_blockEvent = true;
 
         gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(item), toggle );
 
-        m_blockEvent = FALSE;
+        m_blockEvent = false;
     }
 }
 

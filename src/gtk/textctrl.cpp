@@ -42,7 +42,6 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool       g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
 extern wxWindowGTK *g_delayedFocus;
 

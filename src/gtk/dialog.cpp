@@ -26,11 +26,9 @@
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
-// idle system
+// global data
 //-----------------------------------------------------------------------------
 
-extern void wxapp_install_idle_handler();
-extern bool g_isIdle;
 extern int g_openDialogs;
 
 //-----------------------------------------------------------------------------
@@ -49,9 +47,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxTopLevelWindow)
 void wxDialog::Init()
 {
     m_returnCode = 0;
-    m_sizeSet = FALSE;
-    m_modalShowing = FALSE;
-    m_themeEnabled = TRUE;
+    m_sizeSet = false;
+    m_modalShowing = false;
+    m_themeEnabled = true;
 }
 
 wxDialog::wxDialog( wxWindow *parent,
@@ -92,7 +90,7 @@ void wxDialog::OnCancel( wxCommandEvent &WXUNUSED(event) )
     else
     {
         SetReturnCode(wxID_CANCEL);
-        Show(FALSE);
+        Show(false);
     }
 }
 
@@ -107,7 +105,7 @@ void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
         else
         {
             SetReturnCode(wxID_OK);
-            Show(FALSE);
+            Show(false);
         }
     }
 }
@@ -204,12 +202,12 @@ int wxDialog::ShowModal()
     }
 
     wxBusyCursorSuspender cs; // temporarily suppress the busy cursor
-    
-    Show( TRUE );
+
+    Show( true );
 
     SetFocus();
 
-    m_modalShowing = TRUE;
+    m_modalShowing = true;
 
     g_openDialogs++;
 
@@ -232,9 +230,9 @@ void wxDialog::EndModal( int retCode )
         return;
     }
 
-    m_modalShowing = FALSE;
+    m_modalShowing = false;
 
     gtk_main_quit();
 
-    Show( FALSE );
+    Show( false );
 }
