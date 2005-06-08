@@ -394,8 +394,6 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (uint32) -1));
 
-    uint8 bitmask;
-
     unsigned char *ptr = image->GetData();
     for ( int row = 0; row < image->GetHeight(); row++ )
     {
@@ -411,7 +409,6 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                 for ( int column = 0; column < linebytes; column++ )
                 {
                     uint8 reverse = 0;
-                    bitmask = 1;
                     for ( int bp = 0; bp < 8; bp++ )
                     {
                         if ( ptr[column*24 + bp*3] > 0 )
@@ -419,8 +416,6 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                             // check only red as this is sufficient
                             reverse = reverse | 128 >> bp;
                         }
-
-                        bitmask <<= 1;
                     }
 
                     buf[column] = reverse;

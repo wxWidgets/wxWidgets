@@ -496,7 +496,6 @@ public:
     ~wxPluralFormsCalculator() {}
 
     void  init(wxPluralFormsToken::Number nplurals, wxPluralFormsNode* plural);
-    wxString getString() const;
 
 private:
     wxPluralFormsToken::Number m_nplurals;

@@ -56,11 +56,6 @@
 
 #include "wx/log.h"
 
-// No, Cygwin doesn't appear to have fnmatch.h after all.
-#if defined(HAVE_FNMATCH_H)
-    #include "fnmatch.h"
-#endif
-
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
     #include "wx/msw/mslu.h"
