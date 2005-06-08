@@ -62,6 +62,13 @@
 // other standard headers
 #include <string.h>
 
+#ifndef MNS_CHECKORBMP
+    #define MNS_CHECKORBMP 0x04000000
+#endif
+#ifndef MIM_STYLE
+    #define MIM_STYLE 0x00000010
+#endif
+
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
