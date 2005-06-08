@@ -19,6 +19,7 @@ tn0015.txt   How to add new bitmaps to wxWidgets UI elements
 tn0016.txt   How to add new files and libraries to wxWidgets build system (Bakefile)
 tn0017.txt   How to write unit tests for wxWidgets classes
 tn0018.txt   How to add a new font encoding/charset to wxWidgets
+tn0019.txt   Special notes about writing wxMSW code
 
 
 Version: $Id$
