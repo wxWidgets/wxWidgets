@@ -103,6 +103,8 @@ public:
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
 
+    DEC_PYCALLBACK_VOID_(OnInternalIdle);
+    
     PYPRIVATE;
 };
 
@@ -136,6 +138,8 @@ IMP_PYCALLBACK_BOOL_const(wxPyWindow, wxWindow, ShouldInheritColours);
 IMP_PYCALLBACK_VIZATTR_(wxPyWindow, wxWindow, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyWindow, wxWindow, HasTransparentBackground);
+
+IMP_PYCALLBACK_VOID_(wxPyWindow, wxWindow, OnInternalIdle);
 %}
 
 // And now the one for SWIG to see
@@ -192,6 +196,9 @@ public:
 
     bool base_ShouldInheritColours() const;
     wxVisualAttributes base_GetDefaultAttributes();
+
+    void base_OnInternalIdle();
+
 };
 
 //---------------------------------------------------------------------------
@@ -257,6 +264,8 @@ public:
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
 
+    DEC_PYCALLBACK_VOID_(OnInternalIdle);
+
     PYPRIVATE;
 };
 
@@ -290,6 +299,8 @@ IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, ShouldInheritColours);
 IMP_PYCALLBACK_VIZATTR_(wxPyPanel, wxPanel, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, HasTransparentBackground);
+
+IMP_PYCALLBACK_VOID_(wxPyPanel, wxPanel, OnInternalIdle);
 %}
 
 // And now the one for SWIG to see
@@ -346,6 +357,9 @@ public:
 
     bool base_ShouldInheritColours() const ;
     wxVisualAttributes base_GetDefaultAttributes();
+
+    void base_OnInternalIdle();
+
 };
 
 //---------------------------------------------------------------------------
@@ -404,6 +418,8 @@ public:
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
 
+    DEC_PYCALLBACK_VOID_(OnInternalIdle);
+
     PYPRIVATE;
 };
 
@@ -437,6 +453,8 @@ IMP_PYCALLBACK_BOOL_const(wxPyScrolledWindow, wxScrolledWindow, ShouldInheritCol
 IMP_PYCALLBACK_VIZATTR_(wxPyScrolledWindow, wxScrolledWindow, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, HasTransparentBackground);
+
+IMP_PYCALLBACK_VOID_(wxPyScrolledWindow, wxScrolledWindow, OnInternalIdle);
 %}
 
 // And now the one for SWIG to see
@@ -493,6 +511,9 @@ public:
 
     bool base_ShouldInheritColours() const;
     wxVisualAttributes base_GetDefaultAttributes();
+
+    void base_OnInternalIdle();
+
 };
 
 

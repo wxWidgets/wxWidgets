@@ -75,6 +75,8 @@ public:
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
 
+    DEC_PYCALLBACK_VOID_(OnInternalIdle);
+
     PYPRIVATE;
 };
 
@@ -108,7 +110,9 @@ IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, ShouldInheritColours);
 IMP_PYCALLBACK_VIZATTR_(wxPyControl, wxControl, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, HasTransparentBackground);
- %}
+
+IMP_PYCALLBACK_VOID_(wxPyControl, wxControl, OnInternalIdle);
+%}
 
 // And now the one for SWIG to see
 MustHaveApp(wxPyControl);
@@ -165,6 +169,9 @@ public:
 
     bool base_ShouldInheritColours() const;
     wxVisualAttributes base_GetDefaultAttributes();
+
+    void base_OnInternalIdle();
+
 };
 
 
