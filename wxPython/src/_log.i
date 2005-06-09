@@ -202,6 +202,20 @@ public:
     wxLog *GetOldLog();
 };
 
+// log everything to a buffer
+class wxLogBuffer : public wxLog
+{
+public:
+    wxLogBuffer();
+
+    // get the string contents with all messages logged
+    const wxString& GetBuffer() const { return m_str; }
+
+    // show the buffer contents to the user in the best possible way (this uses
+    // wxMessageOutputMessageBox) and clear it
+    virtual void Flush();
+};
+
 
 //---------------------------------------------------------------------------
 
