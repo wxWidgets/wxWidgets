@@ -883,6 +883,8 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
         node = node->GetNext();
     }
 
+    wxString xFontName = M_FONTDATA->m_nativeFontInfo.GetXFontName();
+    
     // not found, create a new one
     XFontStruct *font = (XFontStruct *)
                         wxLoadQueryNearestFont(pointSize,
@@ -891,7 +893,8 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
                                                M_FONTDATA->m_weight,
                                                M_FONTDATA->m_underlined,
                                                wxT(""),
-                                               M_FONTDATA->m_encoding);
+                                               M_FONTDATA->m_encoding,
+                                               & xFontName);
 
     if ( !font )
     {
