@@ -62,6 +62,10 @@
 // other standard headers
 #include <string.h>
 
+#if wxUSE_OWNER_DRAWN && defined(MIIM_BITMAP)
+    #include "wx/dynlib.h"
+#endif
+
 #ifndef MNS_CHECKORBMP
     #define MNS_CHECKORBMP 0x04000000
 #endif
@@ -435,10 +439,19 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     // case in wx API
                     WinStruct<MENUINFO> mi;
 
-                    mi.fMask = MIM_STYLE;
-                    mi.dwStyle = MNS_CHECKORBMP;
-                    if ( !::SetMenuInfo(GetHmenu(), &mi) )
-                        wxLogLastError(_T("SetMenuInfo(MNS_NOCHECK)"));
+                    // don't call SetMenuInfo() directly, this would prevent
+                    // the app from starting up under Windows 95/NT 4
+                    typedef BOOL (WINAPI *SetMenuInfo_t)(HMENU, MENUINFO *);
+
+                    wxDynamicLibrary dllUser(_T("user32"));
+                    wxDYNLIB_FUNCTION(SetMenuInfo_t, SetMenuInfo, dllUser);
+                    if ( pfnSetMenuInfo )
+                    {
+                        mi.fMask = MIM_STYLE;
+                        mi.dwStyle = MNS_CHECKORBMP;
+                        if ( !(*pfnSetMenuInfo)(GetHmenu(), &mi) )
+                            wxLogLastError(_T("SetMenuInfo(MNS_NOCHECK)"));
+                    }
 
                     // tell the item that it's not really owner-drawn but only
                     // needs to draw its bitmap, the rest is done by Windows
