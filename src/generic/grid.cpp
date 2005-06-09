@@ -242,7 +242,8 @@ class wxGridCellEditorEvtHandler : public wxEvtHandler
 public:
     wxGridCellEditorEvtHandler(wxGrid* grid, wxGridCellEditor* editor)
         : m_grid(grid),
-          m_editor(editor)
+          m_editor(editor),
+          m_inSetFocus(false)
     {
     }
 
@@ -250,10 +251,16 @@ public:
     void OnKeyDown(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
 
+    void SetInSetFocus(bool inSetFocus) { m_inSetFocus = inSetFocus; }
+
 private:
     wxGrid*             m_grid;
     wxGridCellEditor*   m_editor;
 
+    // Work around the fact that a focus kill event can be sent to
+    // a combobox within a set focus event.
+    bool                m_inSetFocus;
+    
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGridCellEditorEvtHandler)
     DECLARE_NO_COPY_CLASS(wxGridCellEditorEvtHandler)
@@ -1460,6 +1467,14 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be Created first!"));
 
+    wxGridCellEditorEvtHandler* evtHandler = NULL;
+    if (m_control)
+        evtHandler = wxDynamicCast(m_control->GetEventHandler(), wxGridCellEditorEvtHandler);
+
+    // Don't immediately end if we get a kill focus event within BeginEdit
+    if (evtHandler)
+        evtHandler->SetInSetFocus(true);
+
     m_startValue = grid->GetTable()->GetValue(row, col);
 
     if (m_allowOthers)
@@ -1474,6 +1489,9 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
     Combo()->SetInsertionPointEnd();
     Combo()->SetFocus();
+
+    if (evtHandler)
+        evtHandler->SetInSetFocus(false);
 }
 
 bool wxGridCellChoiceEditor::EndEdit(int row, int col,
@@ -1525,6 +1543,10 @@ wxString wxGridCellChoiceEditor::GetValue() const
 
 void wxGridCellEditorEvtHandler::OnKillFocus(wxFocusEvent& event)
 {
+    // Don't disable the cell if we're just starting to edit it
+    if (m_inSetFocus)
+        return;
+
     // accept changes
     m_grid->DisableCellEditControl();
 
