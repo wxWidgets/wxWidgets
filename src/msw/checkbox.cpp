@@ -457,7 +457,8 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     // to it without breaking backwards compatibility
 
     // classic Win32 version -- this can be useful when we move this into
-#ifdef __WXWINCE__
+    // wxRendererNative
+#if defined(__WXWINCE__) || !wxUSE_UXTHEME
     UINT state = DFCS_BUTTONCHECK;
     if ( !IsEnabled() )
         state |= DFCS_INACTIVE;
