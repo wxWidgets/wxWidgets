@@ -207,6 +207,7 @@
 %rename(LogGui)                             wxLogGui;
 %rename(LogWindow)                          wxLogWindow;
 %rename(LogChain)                           wxLogChain;
+%rename(LogBuffer)                          wxLogBuffer;
 %rename(SysErrorCode)                       wxSysErrorCode;
 %rename(SysErrorMsg)                        wxSysErrorMsg;
 %rename(SafeShowMessage)                    wxSafeShowMessage;
