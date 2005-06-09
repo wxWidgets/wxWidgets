@@ -1345,63 +1345,66 @@ SWIG_Python_GetTypeList() {
 #define  SWIGTYPE_p_wxDC swig_types[3] 
 #define  SWIGTYPE_p_wxMirrorDC swig_types[4] 
 #define  SWIGTYPE_p_form_ops_t swig_types[5] 
-#define  SWIGTYPE_p_wxDuplexMode swig_types[6] 
-#define  SWIGTYPE_p_wxPyFontEnumerator swig_types[7] 
-#define  SWIGTYPE_p_char swig_types[8] 
-#define  SWIGTYPE_p_wxIconLocation swig_types[9] 
-#define  SWIGTYPE_p_wxImage swig_types[10] 
-#define  SWIGTYPE_p_wxMetaFileDC swig_types[11] 
-#define  SWIGTYPE_p_wxMask swig_types[12] 
-#define  SWIGTYPE_p_wxSize swig_types[13] 
-#define  SWIGTYPE_p_wxFont swig_types[14] 
-#define  SWIGTYPE_p_wxWindow swig_types[15] 
-#define  SWIGTYPE_p_double swig_types[16] 
-#define  SWIGTYPE_p_wxMemoryDC swig_types[17] 
-#define  SWIGTYPE_p_wxFontMapper swig_types[18] 
-#define  SWIGTYPE_p_wxEffects swig_types[19] 
-#define  SWIGTYPE_p_wxNativeEncodingInfo swig_types[20] 
-#define  SWIGTYPE_p_wxPalette swig_types[21] 
-#define  SWIGTYPE_p_wxBitmap swig_types[22] 
-#define  SWIGTYPE_p_wxObject swig_types[23] 
-#define  SWIGTYPE_p_wxRegionIterator swig_types[24] 
-#define  SWIGTYPE_p_wxRect swig_types[25] 
-#define  SWIGTYPE_p_wxPaperSize swig_types[26] 
-#define  SWIGTYPE_p_wxString swig_types[27] 
-#define  SWIGTYPE_unsigned_int swig_types[28] 
-#define  SWIGTYPE_p_unsigned_int swig_types[29] 
-#define  SWIGTYPE_p_wxPrinterDC swig_types[30] 
-#define  SWIGTYPE_p_wxIconBundle swig_types[31] 
-#define  SWIGTYPE_p_wxPoint swig_types[32] 
-#define  SWIGTYPE_p_wxDash swig_types[33] 
-#define  SWIGTYPE_p_wxScreenDC swig_types[34] 
-#define  SWIGTYPE_p_wxCursor swig_types[35] 
-#define  SWIGTYPE_p_wxClientDC swig_types[36] 
-#define  SWIGTYPE_p_wxBufferedDC swig_types[37] 
-#define  SWIGTYPE_p_wxImageList swig_types[38] 
-#define  SWIGTYPE_p_unsigned_char swig_types[39] 
-#define  SWIGTYPE_p_wxGDIObject swig_types[40] 
-#define  SWIGTYPE_p_wxIcon swig_types[41] 
-#define  SWIGTYPE_p_wxLocale swig_types[42] 
-#define  SWIGTYPE_ptrdiff_t swig_types[43] 
-#define  SWIGTYPE_std__ptrdiff_t swig_types[44] 
-#define  SWIGTYPE_p_wxRegion swig_types[45] 
-#define  SWIGTYPE_p_wxConfigBase swig_types[46] 
-#define  SWIGTYPE_p_wxLanguageInfo swig_types[47] 
-#define  SWIGTYPE_p_wxWindowDC swig_types[48] 
-#define  SWIGTYPE_p_wxPrintData swig_types[49] 
-#define  SWIGTYPE_p_wxBrushList swig_types[50] 
-#define  SWIGTYPE_p_wxFontList swig_types[51] 
-#define  SWIGTYPE_p_wxPen swig_types[52] 
-#define  SWIGTYPE_p_wxBufferedPaintDC swig_types[53] 
-#define  SWIGTYPE_p_wxPaintDC swig_types[54] 
-#define  SWIGTYPE_p_wxPenList swig_types[55] 
-#define  SWIGTYPE_p_int swig_types[56] 
-#define  SWIGTYPE_p_wxMetaFile swig_types[57] 
-#define  SWIGTYPE_p_unsigned_long swig_types[58] 
-#define  SWIGTYPE_p_wxNativeFontInfo swig_types[59] 
-#define  SWIGTYPE_p_wxEncodingConverter swig_types[60] 
-#define  SWIGTYPE_p_wxColourDatabase swig_types[61] 
-static swig_type_info *swig_types[63];
+#define  SWIGTYPE_p_wxRendererVersion swig_types[6] 
+#define  SWIGTYPE_p_wxDuplexMode swig_types[7] 
+#define  SWIGTYPE_p_wxPyFontEnumerator swig_types[8] 
+#define  SWIGTYPE_p_char swig_types[9] 
+#define  SWIGTYPE_p_wxIconLocation swig_types[10] 
+#define  SWIGTYPE_p_wxImage swig_types[11] 
+#define  SWIGTYPE_p_wxMetaFileDC swig_types[12] 
+#define  SWIGTYPE_p_wxMask swig_types[13] 
+#define  SWIGTYPE_p_wxSize swig_types[14] 
+#define  SWIGTYPE_p_wxFont swig_types[15] 
+#define  SWIGTYPE_p_wxWindow swig_types[16] 
+#define  SWIGTYPE_p_double swig_types[17] 
+#define  SWIGTYPE_p_wxMemoryDC swig_types[18] 
+#define  SWIGTYPE_p_wxFontMapper swig_types[19] 
+#define  SWIGTYPE_p_wxEffects swig_types[20] 
+#define  SWIGTYPE_p_wxNativeEncodingInfo swig_types[21] 
+#define  SWIGTYPE_p_wxPalette swig_types[22] 
+#define  SWIGTYPE_p_wxBitmap swig_types[23] 
+#define  SWIGTYPE_p_wxObject swig_types[24] 
+#define  SWIGTYPE_p_wxRegionIterator swig_types[25] 
+#define  SWIGTYPE_p_wxRect swig_types[26] 
+#define  SWIGTYPE_p_wxPaperSize swig_types[27] 
+#define  SWIGTYPE_p_wxString swig_types[28] 
+#define  SWIGTYPE_unsigned_int swig_types[29] 
+#define  SWIGTYPE_p_unsigned_int swig_types[30] 
+#define  SWIGTYPE_p_wxPrinterDC swig_types[31] 
+#define  SWIGTYPE_p_wxIconBundle swig_types[32] 
+#define  SWIGTYPE_p_wxPoint swig_types[33] 
+#define  SWIGTYPE_p_wxDash swig_types[34] 
+#define  SWIGTYPE_p_wxScreenDC swig_types[35] 
+#define  SWIGTYPE_p_wxCursor swig_types[36] 
+#define  SWIGTYPE_p_wxClientDC swig_types[37] 
+#define  SWIGTYPE_p_wxBufferedDC swig_types[38] 
+#define  SWIGTYPE_p_wxImageList swig_types[39] 
+#define  SWIGTYPE_p_unsigned_char swig_types[40] 
+#define  SWIGTYPE_p_wxGDIObject swig_types[41] 
+#define  SWIGTYPE_p_wxIcon swig_types[42] 
+#define  SWIGTYPE_p_wxLocale swig_types[43] 
+#define  SWIGTYPE_ptrdiff_t swig_types[44] 
+#define  SWIGTYPE_std__ptrdiff_t swig_types[45] 
+#define  SWIGTYPE_p_wxRegion swig_types[46] 
+#define  SWIGTYPE_p_wxConfigBase swig_types[47] 
+#define  SWIGTYPE_p_wxLanguageInfo swig_types[48] 
+#define  SWIGTYPE_p_wxWindowDC swig_types[49] 
+#define  SWIGTYPE_p_wxPrintData swig_types[50] 
+#define  SWIGTYPE_p_wxBrushList swig_types[51] 
+#define  SWIGTYPE_p_wxFontList swig_types[52] 
+#define  SWIGTYPE_p_wxPen swig_types[53] 
+#define  SWIGTYPE_p_wxBufferedPaintDC swig_types[54] 
+#define  SWIGTYPE_p_wxPaintDC swig_types[55] 
+#define  SWIGTYPE_p_wxPenList swig_types[56] 
+#define  SWIGTYPE_p_int swig_types[57] 
+#define  SWIGTYPE_p_wxMetaFile swig_types[58] 
+#define  SWIGTYPE_p_wxRendererNative swig_types[59] 
+#define  SWIGTYPE_p_unsigned_long swig_types[60] 
+#define  SWIGTYPE_p_wxNativeFontInfo swig_types[61] 
+#define  SWIGTYPE_p_wxEncodingConverter swig_types[62] 
+#define  SWIGTYPE_p_wxSplitterRenderParams swig_types[63] 
+#define  SWIGTYPE_p_wxColourDatabase swig_types[64] 
+static swig_type_info *swig_types[66];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -2168,6 +2171,18 @@ static void wxColourDatabase_Append(wxColourDatabase *self,wxString const &name,
         }
 
 #include <wx/effects.h>
+
+
+#include "wx/renderer.h"
+
+
+SWIGINTERNSHORT PyObject*
+  SWIG_From_bool(bool value)
+{
+  PyObject *obj = value ? Py_True : Py_False;
+  Py_INCREF(obj);
+  return obj;
+}
 
 #ifdef __cplusplus
 extern "C" {
@@ -20802,6 +20817,801 @@ static PyObject * Effects_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static PyObject *_wrap_new_SplitterRenderParams(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    int arg2 ;
+    bool arg3 ;
+    wxSplitterRenderParams *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "widthSash_",(char *) "border_",(char *) "isSens_", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:new_SplitterRenderParams",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    {
+        arg1 = (int)(SWIG_As_int(obj0)); 
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = (bool)(SWIG_As_bool(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxSplitterRenderParams *)new wxSplitterRenderParams(arg1,arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSplitterRenderParams, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_SplitterRenderParams(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSplitterRenderParams *arg1 = (wxSplitterRenderParams *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_SplitterRenderParams",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxSplitterRenderParams, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_SplitterRenderParams_widthSash_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSplitterRenderParams *arg1 = (wxSplitterRenderParams *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SplitterRenderParams_widthSash_get",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxSplitterRenderParams, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    result = (int)(int) ((arg1)->widthSash);
+    
+    {
+        resultobj = SWIG_From_int((int)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_SplitterRenderParams_border_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSplitterRenderParams *arg1 = (wxSplitterRenderParams *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SplitterRenderParams_border_get",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxSplitterRenderParams, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    result = (int)(int) ((arg1)->border);
+    
+    {
+        resultobj = SWIG_From_int((int)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_SplitterRenderParams_isHotSensitive_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSplitterRenderParams *arg1 = (wxSplitterRenderParams *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SplitterRenderParams_isHotSensitive_get",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxSplitterRenderParams, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    result = (bool)(bool) ((arg1)->isHotSensitive);
+    
+    {
+        resultobj = SWIG_From_bool((bool)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * SplitterRenderParams_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxSplitterRenderParams, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
+static PyObject *_wrap_new_RendererVersion(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    int arg2 ;
+    wxRendererVersion *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "version_",(char *) "age_", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:new_RendererVersion",kwnames,&obj0,&obj1)) goto fail;
+    {
+        arg1 = (int)(SWIG_As_int(obj0)); 
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxRendererVersion *)new wxRendererVersion(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRendererVersion, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_RendererVersion(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererVersion *arg1 = (wxRendererVersion *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_RendererVersion",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererVersion, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererVersion_IsCompatible(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererVersion *arg1 = 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "ver", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:RendererVersion_IsCompatible",kwnames,&obj0)) goto fail;
+    {
+        SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererVersion, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(1)) SWIG_fail;
+        if (arg1 == NULL) {
+            SWIG_null_ref("wxRendererVersion");
+        }
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxRendererVersion::IsCompatible((wxRendererVersion const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererVersion_version_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererVersion *arg1 = (wxRendererVersion *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:RendererVersion_version_get",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererVersion, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    result = (int)(int) ((arg1)->version);
+    
+    {
+        resultobj = SWIG_From_int((int)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererVersion_age_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererVersion *arg1 = (wxRendererVersion *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:RendererVersion_age_get",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererVersion, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    result = (int)(int) ((arg1)->age);
+    
+    {
+        resultobj = SWIG_From_int((int)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * RendererVersion_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxRendererVersion, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
+static PyObject *_wrap_RendererNative_DrawHeaderButton(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxDC *arg3 = 0 ;
+    wxRect *arg4 = 0 ;
+    int arg5 = (int) 0 ;
+    wxRect temp4 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawHeaderButton",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(3)) SWIG_fail;
+        if (arg3 == NULL) {
+            SWIG_null_ref("wxDC");
+        }
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = &temp4;
+        if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+    }
+    if (obj4) {
+        {
+            arg5 = (int)(SWIG_As_int(obj4)); 
+            if (SWIG_arg_fail(5)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->DrawHeaderButton(arg2,*arg3,(wxRect const &)*arg4,arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_DrawTreeItemButton(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxDC *arg3 = 0 ;
+    wxRect *arg4 = 0 ;
+    int arg5 = (int) 0 ;
+    wxRect temp4 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawTreeItemButton",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(3)) SWIG_fail;
+        if (arg3 == NULL) {
+            SWIG_null_ref("wxDC");
+        }
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = &temp4;
+        if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+    }
+    if (obj4) {
+        {
+            arg5 = (int)(SWIG_As_int(obj4)); 
+            if (SWIG_arg_fail(5)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->DrawTreeItemButton(arg2,*arg3,(wxRect const &)*arg4,arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_DrawSplitterBorder(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxDC *arg3 = 0 ;
+    wxRect *arg4 = 0 ;
+    int arg5 = (int) 0 ;
+    wxRect temp4 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawSplitterBorder",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(3)) SWIG_fail;
+        if (arg3 == NULL) {
+            SWIG_null_ref("wxDC");
+        }
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = &temp4;
+        if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+    }
+    if (obj4) {
+        {
+            arg5 = (int)(SWIG_As_int(obj4)); 
+            if (SWIG_arg_fail(5)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->DrawSplitterBorder(arg2,*arg3,(wxRect const &)*arg4,arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_DrawSplitterSash(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxDC *arg3 = 0 ;
+    wxSize *arg4 = 0 ;
+    int arg5 ;
+    wxOrientation arg6 ;
+    int arg7 = (int) 0 ;
+    wxSize temp4 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
+    PyObject * obj6 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "win",(char *) "dc",(char *) "size",(char *) "position",(char *) "orient",(char *) "flags", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO|O:RendererNative_DrawSplitterSash",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(3)) SWIG_fail;
+        if (arg3 == NULL) {
+            SWIG_null_ref("wxDC");
+        }
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = &temp4;
+        if ( ! wxSize_helper(obj3, &arg4)) SWIG_fail;
+    }
+    {
+        arg5 = (int)(SWIG_As_int(obj4)); 
+        if (SWIG_arg_fail(5)) SWIG_fail;
+    }
+    {
+        arg6 = (wxOrientation)(SWIG_As_int(obj5)); 
+        if (SWIG_arg_fail(6)) SWIG_fail;
+    }
+    if (obj6) {
+        {
+            arg7 = (int)(SWIG_As_int(obj6)); 
+            if (SWIG_arg_fail(7)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->DrawSplitterSash(arg2,*arg3,(wxSize const &)*arg4,arg5,(wxOrientation )arg6,arg7);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_DrawComboBoxDropButton(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxDC *arg3 = 0 ;
+    wxRect *arg4 = 0 ;
+    int arg5 = (int) 0 ;
+    wxRect temp4 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawComboBoxDropButton",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(3)) SWIG_fail;
+        if (arg3 == NULL) {
+            SWIG_null_ref("wxDC");
+        }
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = &temp4;
+        if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+    }
+    if (obj4) {
+        {
+            arg5 = (int)(SWIG_As_int(obj4)); 
+            if (SWIG_arg_fail(5)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->DrawComboBoxDropButton(arg2,*arg3,(wxRect const &)*arg4,arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_DrawDropArrow(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    wxDC *arg3 = 0 ;
+    wxRect *arg4 = 0 ;
+    int arg5 = (int) 0 ;
+    wxRect temp4 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawDropArrow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(3)) SWIG_fail;
+        if (arg3 == NULL) {
+            SWIG_null_ref("wxDC");
+        }
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = &temp4;
+        if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+    }
+    if (obj4) {
+        {
+            arg5 = (int)(SWIG_As_int(obj4)); 
+            if (SWIG_arg_fail(5)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->DrawDropArrow(arg2,*arg3,(wxRect const &)*arg4,arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_GetSplitterParams(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    SwigValueWrapper<wxSplitterRenderParams > result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "win", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:RendererNative_GetSplitterParams",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetSplitterParams((wxWindow const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxSplitterRenderParams * resultptr;
+        resultptr = new wxSplitterRenderParams((wxSplitterRenderParams &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxSplitterRenderParams, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":RendererNative_Get",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxRendererNative &_result_ref = wxRendererNative::Get();
+            result = (wxRendererNative *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRendererNative, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_GetGeneric(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":RendererNative_GetGeneric",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxRendererNative &_result_ref = wxRendererNative::GetGeneric();
+            result = (wxRendererNative *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRendererNative, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_GetDefault(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":RendererNative_GetDefault",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxRendererNative &_result_ref = wxRendererNative::GetDefault();
+            result = (wxRendererNative *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRendererNative, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+    wxRendererNative *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "renderer", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:RendererNative_Set",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxRendererNative *)wxRendererNative::Set(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRendererNative, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RendererNative_GetVersion(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+    SwigValueWrapper<wxRendererVersion > result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:RendererNative_GetVersion",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxRendererNative const *)arg1)->GetVersion();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxRendererVersion * resultptr;
+        resultptr = new wxRendererVersion((wxRendererVersion &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRendererVersion, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * RendererNative_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxRendererNative, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_GDIObject", (PyCFunction) _wrap_new_GDIObject, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_GDIObject", (PyCFunction) _wrap_delete_GDIObject, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -21339,6 +22149,31 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Effects_DrawSunkenEdge", (PyCFunction) _wrap_Effects_DrawSunkenEdge, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Effects_TileBitmap", (PyCFunction) _wrap_Effects_TileBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Effects_swigregister", Effects_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_SplitterRenderParams", (PyCFunction) _wrap_new_SplitterRenderParams, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_SplitterRenderParams", (PyCFunction) _wrap_delete_SplitterRenderParams, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"SplitterRenderParams_widthSash_get", (PyCFunction) _wrap_SplitterRenderParams_widthSash_get, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"SplitterRenderParams_border_get", (PyCFunction) _wrap_SplitterRenderParams_border_get, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"SplitterRenderParams_isHotSensitive_get", (PyCFunction) _wrap_SplitterRenderParams_isHotSensitive_get, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"SplitterRenderParams_swigregister", SplitterRenderParams_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_RendererVersion", (PyCFunction) _wrap_new_RendererVersion, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_RendererVersion", (PyCFunction) _wrap_delete_RendererVersion, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererVersion_IsCompatible", (PyCFunction) _wrap_RendererVersion_IsCompatible, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererVersion_version_get", (PyCFunction) _wrap_RendererVersion_version_get, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererVersion_age_get", (PyCFunction) _wrap_RendererVersion_age_get, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererVersion_swigregister", RendererVersion_swigregister, METH_VARARGS, NULL},
+	 { (char *)"RendererNative_DrawHeaderButton", (PyCFunction) _wrap_RendererNative_DrawHeaderButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_DrawTreeItemButton", (PyCFunction) _wrap_RendererNative_DrawTreeItemButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_DrawSplitterBorder", (PyCFunction) _wrap_RendererNative_DrawSplitterBorder, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_DrawSplitterSash", (PyCFunction) _wrap_RendererNative_DrawSplitterSash, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_DrawComboBoxDropButton", (PyCFunction) _wrap_RendererNative_DrawComboBoxDropButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_DrawDropArrow", (PyCFunction) _wrap_RendererNative_DrawDropArrow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_GetSplitterParams", (PyCFunction) _wrap_RendererNative_GetSplitterParams, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_Get", (PyCFunction) _wrap_RendererNative_Get, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_GetGeneric", (PyCFunction) _wrap_RendererNative_GetGeneric, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_GetDefault", (PyCFunction) _wrap_RendererNative_GetDefault, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_Set", (PyCFunction) _wrap_RendererNative_Set, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_GetVersion", (PyCFunction) _wrap_RendererNative_GetVersion, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_swigregister", RendererNative_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -21747,6 +22582,7 @@ static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0
 static swig_type_info _swigt__p_wxDC[] = {{"_p_wxDC", 0, "wxDC *", 0, 0, 0, 0},{"_p_wxBufferedDC", _p_wxBufferedDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxScreenDC", _p_wxScreenDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxMirrorDC", _p_wxMirrorDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxMemoryDC", _p_wxMemoryDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxWindowDC", _p_wxWindowDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxDC", 0, 0, 0, 0, 0, 0},{"_p_wxMetaFileDC", _p_wxMetaFileDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxBufferedPaintDC", _p_wxBufferedPaintDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxClientDC", _p_wxClientDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxPaintDC", _p_wxPaintDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxPostScriptDC", _p_wxPostScriptDCTo_p_wxDC, 0, 0, 0, 0, 0},{"_p_wxPrinterDC", _p_wxPrinterDCTo_p_wxDC, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMirrorDC[] = {{"_p_wxMirrorDC", 0, "wxMirrorDC *", 0, 0, 0, 0},{"_p_wxMirrorDC", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_form_ops_t[] = {{"_p_form_ops_t", 0, "enum form_ops_t *|form_ops_t *", 0, 0, 0, 0},{"_p_form_ops_t", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxRendererVersion[] = {{"_p_wxRendererVersion", 0, "wxRendererVersion *", 0, 0, 0, 0},{"_p_wxRendererVersion", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDuplexMode[] = {{"_p_wxDuplexMode", 0, "enum wxDuplexMode *|wxDuplexMode *", 0, 0, 0, 0},{"_p_wxDuplexMode", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyFontEnumerator[] = {{"_p_wxPyFontEnumerator", 0, "wxPyFontEnumerator *", 0, 0, 0, 0},{"_p_wxPyFontEnumerator", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0, 0, 0, 0},{"_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -21799,9 +22635,11 @@ static swig_type_info _swigt__p_wxPaintDC[] = {{"_p_wxPaintDC", 0, "wxPaintDC *"
 static swig_type_info _swigt__p_wxPenList[] = {{"_p_wxPenList", 0, "wxPenList *", 0, 0, 0, 0},{"_p_wxPenList", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_int[] = {{"_p_int", 0, "int *", 0, 0, 0, 0},{"_p_int", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMetaFile[] = {{"_p_wxMetaFile", 0, "wxMetaFile *", 0, 0, 0, 0},{"_p_wxMetaFile", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxRendererNative[] = {{"_p_wxRendererNative", 0, "wxRendererNative *", 0, 0, 0, 0},{"_p_wxRendererNative", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_unsigned_long[] = {{"_p_unsigned_long", 0, "unsigned long *|wxUIntPtr *", 0, 0, 0, 0},{"_p_unsigned_long", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxNativeFontInfo[] = {{"_p_wxNativeFontInfo", 0, "wxNativeFontInfo *", 0, 0, 0, 0},{"_p_wxNativeFontInfo", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxEncodingConverter[] = {{"_p_wxEncodingConverter", 0, "wxEncodingConverter *", 0, 0, 0, 0},{"_p_wxEncodingConverter", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxSplitterRenderParams[] = {{"_p_wxSplitterRenderParams", 0, "wxSplitterRenderParams *", 0, 0, 0, 0},{"_p_wxSplitterRenderParams", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxColourDatabase[] = {{"_p_wxColourDatabase", 0, "wxColourDatabase *", 0, 0, 0, 0},{"_p_wxColourDatabase", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 
 static swig_type_info *swig_types_initial[] = {
@@ -21811,6 +22649,7 @@ _swigt__p_wxColour,
 _swigt__p_wxDC, 
 _swigt__p_wxMirrorDC, 
 _swigt__p_form_ops_t, 
+_swigt__p_wxRendererVersion, 
 _swigt__p_wxDuplexMode, 
 _swigt__p_wxPyFontEnumerator, 
 _swigt__p_char, 
@@ -21863,9 +22702,11 @@ _swigt__p_wxPaintDC,
 _swigt__p_wxPenList, 
 _swigt__p_int, 
 _swigt__p_wxMetaFile, 
+_swigt__p_wxRendererNative, 
 _swigt__p_unsigned_long, 
 _swigt__p_wxNativeFontInfo, 
 _swigt__p_wxEncodingConverter, 
+_swigt__p_wxSplitterRenderParams, 
 _swigt__p_wxColourDatabase, 
 0
 };
@@ -23413,6 +24254,51 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"ThePenList",_wrap_ThePenList_get, _wrap_ThePenList_set);
     SWIG_addvarlink(SWIG_globals,(char*)"TheBrushList",_wrap_TheBrushList_get, _wrap_TheBrushList_set);
     SWIG_addvarlink(SWIG_globals,(char*)"TheColourDatabase",_wrap_TheColourDatabase_get, _wrap_TheColourDatabase_set);
+    {
+        PyDict_SetItemString(d,"CONTROL_DISABLED", SWIG_From_int((int)(wxCONTROL_DISABLED))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_FOCUSED", SWIG_From_int((int)(wxCONTROL_FOCUSED))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_PRESSED", SWIG_From_int((int)(wxCONTROL_PRESSED))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_ISDEFAULT", SWIG_From_int((int)(wxCONTROL_ISDEFAULT))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_ISSUBMENU", SWIG_From_int((int)(wxCONTROL_ISSUBMENU))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_EXPANDED", SWIG_From_int((int)(wxCONTROL_EXPANDED))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_CURRENT", SWIG_From_int((int)(wxCONTROL_CURRENT))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_SELECTED", SWIG_From_int((int)(wxCONTROL_SELECTED))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_CHECKED", SWIG_From_int((int)(wxCONTROL_CHECKED))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_CHECKABLE", SWIG_From_int((int)(wxCONTROL_CHECKABLE))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_UNDETERMINED", SWIG_From_int((int)(wxCONTROL_UNDETERMINED))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_FLAGS_MASK", SWIG_From_int((int)(wxCONTROL_FLAGS_MASK))); 
+    }
+    {
+        PyDict_SetItemString(d,"CONTROL_DIRTY", SWIG_From_int((int)(wxCONTROL_DIRTY))); 
+    }
+    {
+        PyDict_SetItemString(d,"RendererVersion_Current_Version", SWIG_From_int((int)(wxRendererVersion::Current_Version))); 
+    }
+    {
+        PyDict_SetItemString(d,"RendererVersion_Current_Age", SWIG_From_int((int)(wxRendererVersion::Current_Age))); 
+    }
     
     // Work around a chicken/egg problem in drawlist.cpp
     wxPyDrawList_SetAPIPtr();

@@ -5108,4 +5108,303 @@ ThePenList = cvar.ThePenList
 TheBrushList = cvar.TheBrushList
 TheColourDatabase = cvar.TheColourDatabase
 
+#---------------------------------------------------------------------------
+
+CONTROL_DISABLED = _gdi_.CONTROL_DISABLED
+CONTROL_FOCUSED = _gdi_.CONTROL_FOCUSED
+CONTROL_PRESSED = _gdi_.CONTROL_PRESSED
+CONTROL_ISDEFAULT = _gdi_.CONTROL_ISDEFAULT
+CONTROL_ISSUBMENU = _gdi_.CONTROL_ISSUBMENU
+CONTROL_EXPANDED = _gdi_.CONTROL_EXPANDED
+CONTROL_CURRENT = _gdi_.CONTROL_CURRENT
+CONTROL_SELECTED = _gdi_.CONTROL_SELECTED
+CONTROL_CHECKED = _gdi_.CONTROL_CHECKED
+CONTROL_CHECKABLE = _gdi_.CONTROL_CHECKABLE
+CONTROL_UNDETERMINED = _gdi_.CONTROL_UNDETERMINED
+CONTROL_FLAGS_MASK = _gdi_.CONTROL_FLAGS_MASK
+CONTROL_DIRTY = _gdi_.CONTROL_DIRTY
+class SplitterRenderParams(object):
+    """
+    This is just a simple struct used as a return value of
+    `wx.RendererNative.GetSplitterParams` and contains some platform
+    specific metrics about splitters.
+
+        * widthSash: the width of the splitter sash.
+        * border: the width of the border of the splitter window.
+        * isHotSensitive: ``True`` if the splitter changes its
+          appearance when the mouse is over it.
+
+
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxSplitterRenderParams instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, int widthSash_, int border_, bool isSens_) -> SplitterRenderParams
+
+        This is just a simple struct used as a return value of
+        `wx.RendererNative.GetSplitterParams` and contains some platform
+        specific metrics about splitters.
+
+            * widthSash: the width of the splitter sash.
+            * border: the width of the border of the splitter window.
+            * isHotSensitive: ``True`` if the splitter changes its
+              appearance when the mouse is over it.
+
+
+        """
+        newobj = _gdi_.new_SplitterRenderParams(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_gdi_.delete_SplitterRenderParams):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    widthSash = property(_gdi_.SplitterRenderParams_widthSash_get)
+    border = property(_gdi_.SplitterRenderParams_border_get)
+    isHotSensitive = property(_gdi_.SplitterRenderParams_isHotSensitive_get)
+
+class SplitterRenderParamsPtr(SplitterRenderParams):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = SplitterRenderParams
+_gdi_.SplitterRenderParams_swigregister(SplitterRenderParamsPtr)
+
+class RendererVersion(object):
+    """
+    This simple struct represents the `wx.RendererNative` interface
+    version and is only used as the return value of
+    `wx.RendererNative.GetVersion`.
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxRendererVersion instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, int version_, int age_) -> RendererVersion
+
+        This simple struct represents the `wx.RendererNative` interface
+        version and is only used as the return value of
+        `wx.RendererNative.GetVersion`.
+        """
+        newobj = _gdi_.new_RendererVersion(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_gdi_.delete_RendererVersion):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    Current_Version = _gdi_.RendererVersion_Current_Version
+    Current_Age = _gdi_.RendererVersion_Current_Age
+    def IsCompatible(*args, **kwargs):
+        """IsCompatible(RendererVersion ver) -> bool"""
+        return _gdi_.RendererVersion_IsCompatible(*args, **kwargs)
+
+    IsCompatible = staticmethod(IsCompatible)
+    version = property(_gdi_.RendererVersion_version_get)
+    age = property(_gdi_.RendererVersion_age_get)
+
+class RendererVersionPtr(RendererVersion):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = RendererVersion
+_gdi_.RendererVersion_swigregister(RendererVersionPtr)
+
+def RendererVersion_IsCompatible(*args, **kwargs):
+    """RendererVersion_IsCompatible(RendererVersion ver) -> bool"""
+    return _gdi_.RendererVersion_IsCompatible(*args, **kwargs)
+
+class RendererNative(object):
+    """
+    One of the design principles of wxWidgets is to use the native widgets
+    on every platform in order to be as close to the native look and feel
+    on every platform.  However there are still cases when some generic
+    widgets are needed for various reasons, but it can sometimes take a
+    lot of messy work to make them conform to the native LnF.
+
+    The wx.RendererNative class is a collection of functions that have
+    platform-specific implementations for drawing certain parts of
+    genereic controls in ways that are as close to the native look as
+    possible.
+
+    """
+    def __init__(self): raise RuntimeError, "No constructor defined"
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxRendererNative instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def DrawHeaderButton(*args, **kwargs):
+        """
+        DrawHeaderButton(self, Window win, DC dc, Rect rect, int flags=0)
+
+        Draw the header control button (such as whar is used by `wx.ListCtrl`
+        in report mode.)
+        """
+        return _gdi_.RendererNative_DrawHeaderButton(*args, **kwargs)
+
+    def DrawTreeItemButton(*args, **kwargs):
+        """
+        DrawTreeItemButton(self, Window win, DC dc, Rect rect, int flags=0)
+
+        Draw the expanded/collapsed icon for a tree control item.
+        """
+        return _gdi_.RendererNative_DrawTreeItemButton(*args, **kwargs)
+
+    def DrawSplitterBorder(*args, **kwargs):
+        """
+        DrawSplitterBorder(self, Window win, DC dc, Rect rect, int flags=0)
+
+        Draw the border for a sash window: this border must be such that the
+        sash drawn by `DrawSplitterSash` blends into it well.
+        """
+        return _gdi_.RendererNative_DrawSplitterBorder(*args, **kwargs)
+
+    def DrawSplitterSash(*args, **kwargs):
+        """
+        DrawSplitterSash(self, Window win, DC dc, Size size, int position, int orient, 
+            int flags=0)
+
+        Draw a sash. The orient parameter defines whether the sash should be
+        vertical or horizontal and how the position should be interpreted.
+        """
+        return _gdi_.RendererNative_DrawSplitterSash(*args, **kwargs)
+
+    def DrawComboBoxDropButton(*args, **kwargs):
+        """
+        DrawComboBoxDropButton(self, Window win, DC dc, Rect rect, int flags=0)
+
+        Draw a button like the one used by `wx.ComboBox` to show a drop down
+        window. The usual appearance is a downwards pointing arrow.
+
+        The ``flags`` parameter may have the ``wx.CONTROL_PRESSED`` or
+        ``wx.CONTROL_CURRENT`` bits set.
+        """
+        return _gdi_.RendererNative_DrawComboBoxDropButton(*args, **kwargs)
+
+    def DrawDropArrow(*args, **kwargs):
+        """
+        DrawDropArrow(self, Window win, DC dc, Rect rect, int flags=0)
+
+        Draw a drop down arrow that is suitable for use outside a combo
+        box. Arrow will have a transparent background.
+
+        ``rect`` is not entirely filled by the arrow. Instead, you should use
+        bounding rectangle of a drop down button which arrow matches the size
+        you need. ``flags`` may have the ``wx.CONTROL_PRESSED`` or
+        ``wx.CONTROL_CURRENT`` bit set.
+        """
+        return _gdi_.RendererNative_DrawDropArrow(*args, **kwargs)
+
+    def GetSplitterParams(*args, **kwargs):
+        """
+        GetSplitterParams(self, Window win) -> SplitterRenderParams
+
+        Get the splitter parameters, see `wx.SplitterRenderParams`.
+        """
+        return _gdi_.RendererNative_GetSplitterParams(*args, **kwargs)
+
+    def Get(*args, **kwargs):
+        """
+        Get() -> RendererNative
+
+        Return the currently used renderer
+        """
+        return _gdi_.RendererNative_Get(*args, **kwargs)
+
+    Get = staticmethod(Get)
+    def GetGeneric(*args, **kwargs):
+        """
+        GetGeneric() -> RendererNative
+
+        Return the generic implementation of the renderer. Under some
+        platforms, this is the default renderer implementation, others have
+        platform-specific default renderer which can be retrieved by calling
+        `GetDefault`.
+        """
+        return _gdi_.RendererNative_GetGeneric(*args, **kwargs)
+
+    GetGeneric = staticmethod(GetGeneric)
+    def GetDefault(*args, **kwargs):
+        """
+        GetDefault() -> RendererNative
+
+        Return the default (native) implementation for this platform -- this
+        is also the one used by default but this may be changed by calling `Set`
+        in which case the return value of this method may be different from
+        the return value of `Get`.
+        """
+        return _gdi_.RendererNative_GetDefault(*args, **kwargs)
+
+    GetDefault = staticmethod(GetDefault)
+    def Set(*args, **kwargs):
+        """
+        Set(RendererNative renderer) -> RendererNative
+
+        Set the renderer to use, passing None reverts to using the default
+        renderer.  Returns the previous renderer used with Set or None.
+        """
+        return _gdi_.RendererNative_Set(*args, **kwargs)
+
+    Set = staticmethod(Set)
+    def GetVersion(*args, **kwargs):
+        """
+        GetVersion(self) -> RendererVersion
+
+        Returns the version of the renderer.  Will be used for ensuring
+        compatibility of dynamically loaded renderers.
+        """
+        return _gdi_.RendererNative_GetVersion(*args, **kwargs)
+
+
+class RendererNativePtr(RendererNative):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = RendererNative
+_gdi_.RendererNative_swigregister(RendererNativePtr)
+
+def RendererNative_Get(*args, **kwargs):
+    """
+    RendererNative_Get() -> RendererNative
+
+    Return the currently used renderer
+    """
+    return _gdi_.RendererNative_Get(*args, **kwargs)
+
+def RendererNative_GetGeneric(*args, **kwargs):
+    """
+    RendererNative_GetGeneric() -> RendererNative
+
+    Return the generic implementation of the renderer. Under some
+    platforms, this is the default renderer implementation, others have
+    platform-specific default renderer which can be retrieved by calling
+    `GetDefault`.
+    """
+    return _gdi_.RendererNative_GetGeneric(*args, **kwargs)
+
+def RendererNative_GetDefault(*args, **kwargs):
+    """
+    RendererNative_GetDefault() -> RendererNative
+
+    Return the default (native) implementation for this platform -- this
+    is also the one used by default but this may be changed by calling `Set`
+    in which case the return value of this method may be different from
+    the return value of `Get`.
+    """
+    return _gdi_.RendererNative_GetDefault(*args, **kwargs)
+
+def RendererNative_Set(*args, **kwargs):
+    """
+    RendererNative_Set(RendererNative renderer) -> RendererNative
+
+    Set the renderer to use, passing None reverts to using the default
+    renderer.  Returns the previous renderer used with Set or None.
+    """
+    return _gdi_.RendererNative_Set(*args, **kwargs)
+
 

@@ -1575,6 +1575,32 @@ class LogChainPtr(LogChain):
         self.__class__ = LogChain
 _misc_.LogChain_swigregister(LogChainPtr)
 
+class LogBuffer(Log):
+    """Proxy of C++ LogBuffer class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxLogBuffer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(self) -> LogBuffer"""
+        newobj = _misc_.new_LogBuffer(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def GetBuffer(*args, **kwargs):
+        """GetBuffer(self) -> String"""
+        return _misc_.LogBuffer_GetBuffer(*args, **kwargs)
+
+    def Flush(*args, **kwargs):
+        """Flush(self)"""
+        return _misc_.LogBuffer_Flush(*args, **kwargs)
+
+
+class LogBufferPtr(LogBuffer):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = LogBuffer
+_misc_.LogBuffer_swigregister(LogBufferPtr)
+
 
 def SysErrorCode(*args, **kwargs):
     """SysErrorCode() -> unsigned long"""
