@@ -439,13 +439,20 @@ void wxDebugReportDialog::OnOpen(wxCommandEvent& )
 
             // if we don't have place marker for file name in the command...
             wxString cmd = dlg.GetCommand();
-            if ( cmd.find(_T('%')) == wxString::npos )
+            if ( !cmd.empty() )
             {
-                // ...add it
-                cmd += _T(" \"%s\"");
+#if wxUSE_MIMETYPE
+                if ( cmd.find(_T('%')) != wxString::npos )
+                {
+                    command = wxFileType::ExpandCommand(cmd, fn.GetFullPath());
+                }
+                else // no %s nor %1
+#endif // wxUSE_MIMETYPE
+                {
+                    // append the file name to the end
+                    command << cmd << _T(" \"") << fn.GetFullPath() << _T('"');
+                }
             }
-
-            command = wxFileType::ExpandCommand(cmd, fn.GetFullPath());
         }
     }
 
