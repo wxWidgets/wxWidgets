@@ -343,9 +343,9 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
             image->HasOption(wxIMAGE_OPTION_RESOLUTIONY) )
     {
         TIFFSetField(tif, TIFFTAG_XRESOLUTION,
-                        image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX));
+                        (float)image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX));
         TIFFSetField(tif, TIFFTAG_YRESOLUTION,
-                        image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY));
+                        (float)image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY));
     }
 
     int spp = image->GetOptionInt(wxIMAGE_OPTION_SAMPLESPERPIXEL);
