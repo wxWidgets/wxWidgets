@@ -464,8 +464,10 @@ update(
     } else if (sr > -32768) {
         mag = -sr;
         state_ptr->sr[0] = base2(mag) - 0x400;
-    } else
-        state_ptr->sr[0] = short (0xFC20);
+    } else {
+        const unsigned short c = 0xFC20;
+        state_ptr->sr[0] = short(c);
+    }
 
     /* DELAY A */
     state_ptr->pk[1] = state_ptr->pk[0];
