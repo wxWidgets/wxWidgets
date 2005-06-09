@@ -186,6 +186,7 @@ swig_sources = run_swig(['gdi.i'], 'src', GENDIR, PKGDIR,
                          'src/_icon.i',
                          'src/_pen.i',
                          'src/_palette.i',
+                         'src/_renderer.i',
                          ],
                         True)
 ext = Extension('_gdi_', ['src/drawlist.cpp'] + swig_sources,

@@ -475,5 +475,21 @@
 %rename(TheBrushList)                       wxTheBrushList;
 %rename(TheColourDatabase)                  wxTheColourDatabase;
 %rename(Effects)                            wxEffects;
+%rename(CONTROL_DISABLED)                   wxCONTROL_DISABLED;
+%rename(CONTROL_FOCUSED)                    wxCONTROL_FOCUSED;
+%rename(CONTROL_PRESSED)                    wxCONTROL_PRESSED;
+%rename(CONTROL_ISDEFAULT)                  wxCONTROL_ISDEFAULT;
+%rename(CONTROL_ISSUBMENU)                  wxCONTROL_ISSUBMENU;
+%rename(CONTROL_EXPANDED)                   wxCONTROL_EXPANDED;
+%rename(CONTROL_CURRENT)                    wxCONTROL_CURRENT;
+%rename(CONTROL_SELECTED)                   wxCONTROL_SELECTED;
+%rename(CONTROL_CHECKED)                    wxCONTROL_CHECKED;
+%rename(CONTROL_CHECKABLE)                  wxCONTROL_CHECKABLE;
+%rename(CONTROL_UNDETERMINED)               wxCONTROL_UNDETERMINED;
+%rename(CONTROL_FLAGS_MASK)                 wxCONTROL_FLAGS_MASK;
+%rename(CONTROL_DIRTY)                      wxCONTROL_DIRTY;
+%rename(SplitterRenderParams)               wxSplitterRenderParams;
+%rename(RendererVersion)                    wxRendererVersion;
+%rename(RendererNative)                     wxRendererNative;
 
 #endif

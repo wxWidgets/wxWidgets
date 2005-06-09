@@ -1,6 +1,22 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.6.1.1
+-------
+
+wxMSW: Fix for bug #1211907, popup menu indenting inconsistent with
+bitmaps. 
+
+wxMac: Don't send an event for wx.RadioButton deselections, just the
+selections.  This was done to make it consistent with the other
+platforms. 
+
+Added wx.RendererNative class.
+
+
+
+
+
 2.6.1.0
 -------
 * 4-June-2005
@@ -37,6 +53,7 @@ calls.
 
 wx.FileConfig: fixed DeleteEntry to set the dirty flag properly so the
 change will get written at the next flush.
+
 
 
 
