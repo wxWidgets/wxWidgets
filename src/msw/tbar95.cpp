@@ -242,31 +242,20 @@ bool wxToolBar::Create(wxWindow *parent,
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-    // workaround for flat toolbar on Windows XP classic style
+    // workaround for flat toolbar on Windows XP classic style: we have to set
+    // the style after creating the control, doing it at creation time doesn't
+    // work
 #if wxUSE_UXTHEME
     if ( style & wxTB_FLAT )
     {
-        // Testing for an active theme appears to be unnecessary (see comments in patch 1204217).
-        // Disabling the test brings back separator lines.
-        // However, the separators can look ugly and distracting, especially between controls,
-        // so I'm restoring the test and removing the separators again - JACS
-#if 1
-        wxUxThemeEngine *p = wxUxThemeEngine::Get();
-        if ( !p || !p->IsThemeActive() )
-#endif
+        LRESULT style = ::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L);
+
+        if ( !(style & TBSTYLE_FLAT) )
         {
-            DWORD dwToolbarStyle;
-
-            dwToolbarStyle = (DWORD)::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L );
-
-            if ((dwToolbarStyle & TBSTYLE_FLAT) == 0)
-            {
-                dwToolbarStyle |= TBSTYLE_FLAT;
-                ::SendMessage(GetHwnd(), TB_SETSTYLE, 0, (LPARAM)dwToolbarStyle );
-            }
+            ::SendMessage(GetHwnd(), TB_SETSTYLE, 0, style | TBSTYLE_FLAT);
         }
     }
-#endif
+#endif // wxUSE_UXTHEME
 
     return true;
 }

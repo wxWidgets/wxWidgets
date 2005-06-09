@@ -57,6 +57,7 @@ wxMSW:
 - Fixed ownerdrawn multiline buttons.
 - wxCheckListBox item background fixed.
 - Fixed some wxRegKey bugs.
+- Separators are now correctly shown in the toolbars under Windows XP
 
 wxWinCE:
 
