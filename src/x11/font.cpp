@@ -884,6 +884,9 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     }
 
     wxString xFontName = M_FONTDATA->m_nativeFontInfo.GetXFontName();
+    if (xFontName == "-*-*-*-*-*--*-*-*-*-*-*-*-*")
+      // wxFont constructor not called with native font info parameter => take M_FONTDATA values
+      xFontName.Clear();
     
     // not found, create a new one
     XFontStruct *font = (XFontStruct *)
