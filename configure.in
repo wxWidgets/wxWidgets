@@ -4509,26 +4509,8 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                     AC_DEFINE(HAVE_PTHREAD_CANCEL),
                     AC_MSG_WARN([wxThread::Kill() will not work properly]))
 
-      dnl we don't use pthread_cleanup_push/pop() any more in the code, but I
-      dnl the code here for now in case we need it again soon; otherwise it
-      dnl should be removed in a couple of months (VZ in Sep 2003)
-      dnl
-      dnl AC_CACHE_CHECK([for pthread_cleanup_push/pop], wx_cv_func_pthread_cleanup_push,
-      dnl [
-      dnl   AC_TRY_COMPILE([#include <pthread.h>],
-      dnl                [
-      dnl                   pthread_cleanup_push(NULL, NULL);
-      dnl                   pthread_cleanup_pop(0);
-      dnl                ], [
-      dnl                   wx_cv_func_pthread_cleanup_push=yes
-      dnl                ], [
-      dnl                   wx_cv_func_pthread_cleanup_push=no
-      dnl                ])
-      dnl ])
-      dnl 
-      dnl if test "$wx_cv_func_pthread_cleanup_push" = "yes"; then
-      dnl     AC_DEFINE(HAVE_THREAD_CLEANUP_FUNCTIONS)
-      dnl fi
+      AC_CHECK_FUNC(pthread_attr_setstacksize,
+                    AC_DEFINE(HAVE_PTHREAD_ATTR_SETSTACKSIZE))
 
       dnl mutexattr_t initialization is done in quite different ways on different
       dnl platforms, so check for a few things:
