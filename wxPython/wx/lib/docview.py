@@ -1889,7 +1889,7 @@ class DocManager(wx.EvtHandler):
         return None
 
 
-    def CreateView(self, document, flags=0):
+    def CreateView(self, doc, flags=0):
         """
         Creates a new view for the given document. If more than one view is
         allowed for the document (by virtue of multiple templates mentioning
