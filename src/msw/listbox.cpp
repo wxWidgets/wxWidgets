@@ -174,6 +174,10 @@ bool wxListBox::Create(wxWindow *parent,
         return false;
     }
 
+    // Necessary to prevent scroll problems within a notebook with Windows
+    // effects enabled
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+
     // initialize the contents
     for ( int i = 0; i < n; i++ )
     {

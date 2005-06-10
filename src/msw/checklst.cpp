@@ -322,14 +322,8 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
                             long style,
                             const wxValidator& validator, const wxString& name)
 {
-    if (wxListBox::Create(parent, id, pos, size, n, choices,
-                             style | wxLB_OWNERDRAW, validator, name))
-    {
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-        return true;
-    }
-    else
-        return false;
+    return wxListBox::Create(parent, id, pos, size, n, choices,
+                             style | wxLB_OWNERDRAW, validator, name);
 }
 
 bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
@@ -338,14 +332,8 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
                             long style,
                             const wxValidator& validator, const wxString& name)
 {
-    if (wxListBox::Create(parent, id, pos, size, choices,
-                             style | wxLB_OWNERDRAW, validator, name))
-    {
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-        return true;
-    }
-    else
-        return false;
+    return wxListBox::Create(parent, id, pos, size, choices,
+                             style | wxLB_OWNERDRAW, validator, name);
 }
 
 // misc overloaded methods
