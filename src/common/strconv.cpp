@@ -40,11 +40,8 @@
 
 #if wxUSE_WCHAR_T
 
-#ifdef __WXMSW__
-    #include "wx/msw/private.h"
-#endif
-
 #ifdef __WINDOWS__
+    #include "wx/msw/private.h"
     #include "wx/msw/missing.h"
 #endif
 
@@ -360,7 +357,7 @@ size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 #ifdef __UNIX__
 
 // ----------------------------------------------------------------------------
-// wxConvBrokenFileNames 
+// wxConvBrokenFileNames
 // ----------------------------------------------------------------------------
 
 wxConvBrokenFileNames::wxConvBrokenFileNames(const wxChar *charset)

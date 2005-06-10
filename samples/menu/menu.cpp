@@ -438,8 +438,10 @@ MyFrame::MyFrame()
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_GetInfo, _T("Get menu item in&fo\tAlt-F"),
                      _T("Show the state of the last menu item"));
+#if wxUSE_TEXTDLG
     menuMenu->Append(Menu_Menu_SetLabel, _T("Set menu item label\tAlt-L"),
                      _T("Set the label of a menu item"));
+#endif
 #if wxUSE_TEXTDLG
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_FindItem, _T("Find menu item from label"),
@@ -480,7 +482,7 @@ MyFrame::MyFrame()
 
 #if USE_LOG_WINDOW
     // create the log text window
-    m_textctrl = new wxTextCtrl(this, wxID_ANY, _T(""),
+    m_textctrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE);
     m_textctrl->SetEditable(false);
@@ -679,7 +681,7 @@ void MyFrame::OnFindMenu(wxCommandEvent& WXUNUSED(event))
                      (
                         _T("Enter label to search for: "),
                         _T("Find menu"),
-                        _T(""),
+                        wxEmptyString,
                         this
                      );
 
@@ -747,7 +749,7 @@ void MyFrame::OnInsertMenuItem(wxCommandEvent& WXUNUSED(event))
 
     menu->Insert(0, wxMenuItem::New(menu, Menu_Dummy_Fourth,
                                     _T("Fourth dummy item\tCtrl-F4")));
-    menu->Insert(1, wxMenuItem::New(menu, wxID_SEPARATOR, _T("")));
+    menu->Insert(1, wxMenuItem::New(menu, wxID_SEPARATOR));
 }
 
 void MyFrame::OnEnableMenuItem(wxCommandEvent& WXUNUSED(event))
@@ -898,7 +900,7 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
                      (
                         _T("Enter label to search for: "),
                         _T("Find menu item"),
-                        _T(""),
+                        wxEmptyString,
                         this
                      );
 

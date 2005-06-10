@@ -36,7 +36,7 @@
 #include "wx/dir.h"
 #include "wx/filefn.h"          // for wxDirExists()
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/private.h"
 #endif
 

@@ -16,6 +16,10 @@
 #pragma interface "propdlg.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_BOOKCTRL
+
 class WXDLLEXPORT wxBookCtrlBase;
 
 //-----------------------------------------------------------------------------
@@ -111,6 +115,8 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxPropertySheetDialog)
     DECLARE_EVENT_TABLE()
 };
+
+#endif // wxUSE_BOOKCTRL
 
 #endif // _WX_PROPDLG_H_
 

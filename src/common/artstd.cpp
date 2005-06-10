@@ -202,8 +202,8 @@ wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
     ART(wxART_TICK_MARK,                           tick)
     ART(wxART_CROSS_MARK,                          cross)
 
-    ART(wxART_FILE_SAVE,                           filesave)  
-    ART(wxART_FILE_SAVE_AS,                        filesaveas)        
+    ART(wxART_FILE_SAVE,                           filesave)
+    ART(wxART_FILE_SAVE_AS,                        filesaveas)
     ART(wxART_COPY,                                copy)
     ART(wxART_CUT,                                 cut)
     ART(wxART_PASTE,                               paste)
@@ -214,8 +214,8 @@ wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
     ART(wxART_FIND,                                find)
     ART(wxART_FIND_AND_REPLACE,                    findrepl)
     ART(wxART_NEW,                                 new)
-       
-        
+
+
     return wxNullBitmap;
 }
 
@@ -252,6 +252,9 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
             }
         }
     }
+#else
+    wxUnusedVar(client);
+    wxUnusedVar(reqSize);
 #endif // wxUSE_IMAGE
 
     return bmp;

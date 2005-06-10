@@ -2291,7 +2291,7 @@ enum wxUpdateUI
             NASTY HACK because the gethostname in sys/unistd.h which the gnu
             stl includes and wx builds with by default clash with each other
             (windows version 2nd param is int, sys/unistd.h version is unsigned
-            int).  
+            int).
           */
 #        define gethostname gethostnameHACK
 #        include <unistd.h>
@@ -2466,7 +2466,8 @@ typedef WXWINHANDLE     WXWidget;
 #endif /* __WXPALMOS__ */
 
 
-#if defined(__WXMSW__)
+/* ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port */
+#if defined(__WIN32__)
 
 /*  the keywords needed for WinMain() declaration */
 #ifndef WXFAR
@@ -2518,12 +2519,12 @@ typedef long            WXLPARAM;
 typedef long            WXLRESULT;
 #endif
 
-#if !defined(__WIN32__) || defined(__GNUWIN32__) || defined(__WXMICROWIN__)
+#if defined(__GNUWIN32__) || defined(__WXMICROWIN__)
 typedef int             (*WXFARPROC)();
 #else
 typedef int             (__stdcall *WXFARPROC)();
 #endif
-#endif /*  __WXMSW__ */
+#endif /*  __WIN32__ */
 
 
 #if defined(__WXPM__) || defined(__EMX__)

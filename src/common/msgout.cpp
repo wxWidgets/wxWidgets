@@ -52,7 +52,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     #include "wx/msw/private.h"
 #endif
 #ifdef __WXMAC__

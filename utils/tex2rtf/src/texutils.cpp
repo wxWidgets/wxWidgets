@@ -1631,7 +1631,7 @@ void InitialiseColourTable(void)
 
 void Tex2RTFYield(bool force)
 {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     static int yieldCount = 0;
 
     if (isSync)
@@ -1646,6 +1646,8 @@ void Tex2RTFYield(bool force)
         yieldCount = 10;
     }
     yieldCount --;
+#else
+    wxUnusedVar(force);
 #endif
 }
 

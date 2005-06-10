@@ -240,7 +240,8 @@
     it always returns false in other cases.
  */
 #ifdef __cplusplus
-    #if defined(__WXMAC__) || defined(__WXMSW__)
+    /* ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port */
+    #if defined(__WXMAC__) || defined(__WIN32__)
         extern bool WXDLLIMPEXP_BASE wxIsDebuggerRunning();
     #else /*  !Mac */
         inline bool wxIsDebuggerRunning() { return false; }

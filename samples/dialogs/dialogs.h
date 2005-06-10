@@ -78,10 +78,18 @@ of MSW, MAC and OS2
 
 // Turn USE_MODAL_PRESENTATION to 0 if there is any reason for not presenting difference
 // between modal and modeless dialogs (ie. not implemented it in your port yet)
-#if defined(__SMARTPHONE__)
+#if defined(__SMARTPHONE__) || !wxUSE_BOOKCTRL
     #define USE_MODAL_PRESENTATION 0
 #else
     #define USE_MODAL_PRESENTATION 1
+#endif
+
+
+// Turn USE_SETTINGS_DIALOG to 0 if supported
+#if wxUSE_BOOKCTRL
+    #define USE_SETTINGS_DIALOG 1
+#else
+    #define USE_SETTINGS_DIALOG 0
 #endif
 
 
@@ -128,6 +136,7 @@ private:
 
 #endif // USE_MODAL_PRESENTATION
 
+#if USE_SETTINGS_DIALOG
 // Property sheet dialog
 class SettingsDialog: public wxPropertySheetDialog
 {
@@ -153,6 +162,8 @@ protected:
 
 DECLARE_EVENT_TABLE()
 };
+
+#endif // USE_SETTINGS_DIALOG
 
 // Define a new frame type
 class MyFrame: public wxFrame

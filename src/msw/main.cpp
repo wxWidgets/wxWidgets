@@ -251,7 +251,7 @@ int wxEntry(int& argc, wxChar **argv)
 
 #endif // wxUSE_BASE
 
-#if wxUSE_GUI
+#if wxUSE_GUI && defined(__WXMSW__)
 
 // ----------------------------------------------------------------------------
 // Windows-specific wxEntry
@@ -370,7 +370,7 @@ DllMain(HINSTANCE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
 
 #endif // !NOMAIN
 
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && __WXMSW__
 
 // ----------------------------------------------------------------------------
 // global HINSTANCE

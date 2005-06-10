@@ -22,6 +22,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_BOOKCTRL
+
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/sizer.h"
@@ -43,13 +45,13 @@ BEGIN_EVENT_TABLE(wxPropertySheetDialog, wxDialog)
     EVT_ACTIVATE(wxPropertySheetDialog::OnActivate)
 END_EVENT_TABLE()
 
-bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxString& title, 
+bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxString& title,
                                        const wxPoint& pos, const wxSize& sz, long style,
                                        const wxString& name)
 {
     if (!wxDialog::Create(parent, id, title, pos, sz, style|wxCLIP_CHILDREN, name))
         return false;
-    
+
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer(topSizer);
 
@@ -141,7 +143,7 @@ void wxPropertySheetDialog::OnActivate(wxActivateEvent& event)
     // of the dialog (the choicebook).
     if (event.GetActive())
     {
-        wxChoicebook* choiceBook = wxDynamicCast(GetBookCtrl(), wxChoicebook);     
+        wxChoicebook* choiceBook = wxDynamicCast(GetBookCtrl(), wxChoicebook);
         if (choiceBook)
             choiceBook->SetFocus();
     }
@@ -150,3 +152,4 @@ void wxPropertySheetDialog::OnActivate(wxActivateEvent& event)
         event.Skip();
 }
 
+#endif // wxUSE_BOOKCTRL

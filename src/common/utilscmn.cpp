@@ -533,6 +533,8 @@ long wxExecute(const wxString& command,
 
 bool wxLaunchDefaultBrowser(const wxString& url)
 {
+    bool success = true;
+
     wxString finalurl = url;
 
     //if it isn't a full url, try appending http:// to it
@@ -619,7 +621,7 @@ bool wxLaunchDefaultBrowser(const wxString& url)
         // Windows sometimes doesn't open the browser correctly when using mime
         // types, so do ShellExecute - i.e. start <url> (from James Carroll)
         nResult = (int) (*lpShellExecute)(NULL, NULL, finalurl.c_str(),
-                                                       NULL, wxT(""), SW_SHOWNORMAL);
+                                          NULL, wxT(""), SW_SHOWNORMAL);
         // Unload Shell32.dll
         ::FreeLibrary(hShellDll);
 #else
@@ -701,16 +703,16 @@ bool wxLaunchDefaultBrowser(const wxString& url)
         if ( cmd.empty() || wxExecute(cmd + wxT(" ") + finalurl) == -1)
             return false;
     }
-     
+
 
 #else // !wxUSE_MIMETYPE && !(WXMSW && wxUSE_NATIVE_CONFIG)
 
-        return false;
+    success = false;
 
 #endif
 
     //success - hopefully
-    return true;
+    return success;
 }
 
 // ----------------------------------------------------------------------------

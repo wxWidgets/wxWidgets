@@ -142,11 +142,12 @@ public:
 // include the platform-specific version of the class
 // ----------------------------------------------------------------------------
 
-// NB: test for __UNIX__ before __WXMAC__ as under Darwin we want to use the
-//     Unix code (and otherwise __UNIX__ wouldn't be defined)
+// NB:  test for __UNIX__ before __WXMAC__ as under Darwin we want to use the
+//      Unix code (and otherwise __UNIX__ wouldn't be defined)
+// ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port
 #if defined(__WXPALMOS__)
     #include "wx/palmos/apptbase.h"
-#elif defined(__WXMSW__)
+#elif defined(__WIN32__)
     #include "wx/msw/apptbase.h"
 #elif defined(__UNIX__) && !defined(__EMX__)
     #include "wx/unix/apptbase.h"
@@ -229,9 +230,10 @@ public:
 // include the platform-specific version of the classes above
 // ----------------------------------------------------------------------------
 
+// ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port
 #if defined(__WXPALMOS__)
     #include "wx/palmos/apptrait.h"
-#elif defined(__WXMSW__)
+#elif defined(__WIN32__)
     #include "wx/msw/apptrait.h"
 #elif defined(__UNIX__) && !defined(__EMX__)
     #include "wx/unix/apptrait.h"
