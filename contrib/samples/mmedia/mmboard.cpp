@@ -198,7 +198,15 @@ wxUint8 MMBoardApp::TestMultimediaCaps()
 
     caps = 0;
 
-#ifdef __UNIX__
+#ifdef __WIN32__
+    // We test the Windows sound support.
+
+    dev = new wxSoundStreamWin();
+    if (dev->GetError() == wxSOUND_NOERROR)
+        caps |= MM_SOUND_WIN;
+    delete dev;
+
+#elif defined __UNIX__
     // We now test the ESD support
 
     dev = new wxSoundStreamESD();
@@ -221,15 +229,6 @@ wxUint8 MMBoardApp::TestMultimediaCaps()
     }
 #endif
 
-#endif
-
-#ifdef __WIN32__
-    // We test the Windows sound support.
-
-    dev = new wxSoundStreamWin();
-    if (dev->GetError() == wxSOUND_NOERROR)
-        caps |= MM_SOUND_WIN;
-    delete dev;
 #endif
 
     return caps;

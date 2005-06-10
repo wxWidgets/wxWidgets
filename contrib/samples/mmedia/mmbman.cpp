@@ -355,9 +355,9 @@ MMBoardVideoFile::MMBoardVideoFile(const wxString& filename)
 {
     m_output_window = NULL;
 
-#if defined(__UNIX__)
+#if defined(__UNIX__) && !defined(__CYGWIN__)
     m_video_driver = new wxVideoXANIM(filename);
-#elif defined(__WINDOWS__) && !defined(__MINGW32__) && !defined(__WATCOMC__)
+#elif defined(__WINDOWS__) && !defined(__MINGW32__) && !defined(__WATCOMC__) && !defined(__CYGWIN__)
     // versions of Open Watcom and MinGW tested against this source does not
     // deliver "digitalv.h" required in this feature
     m_video_driver = new wxVideoWindows(filename);
@@ -510,17 +510,15 @@ DECLARE_APP(MMBoardApp)
 
 wxSoundStream *MMBoardManager::OpenSoundStream()
 {
-#ifdef __UNIX__
+#ifdef __WIN32__
+  if ((wxGetApp().m_caps & MM_SOUND_WIN) != 0)
+    return new wxSoundStreamWin();
+#elif __UNIX__
   if ((wxGetApp().m_caps & MM_SOUND_ESD) != 0)
     return new wxSoundStreamESD();
 
   if ((wxGetApp().m_caps & MM_SOUND_OSS) != 0)
     return new wxSoundStreamOSS();
-#endif
-
-#ifdef __WIN32__
-  if ((wxGetApp().m_caps & MM_SOUND_WIN) != 0)
-    return new wxSoundStreamWin();
 #endif
 
   wxMessageBox(_T("You are trying to open a multimedia but you have not devices"), _T("Error"), wxOK | wxICON_ERROR, NULL);
