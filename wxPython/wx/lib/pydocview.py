@@ -1185,7 +1185,7 @@ class DocService(wx.EvtHandler):
 
     def __init__(self):
         """Initializes the DocService."""
-        pass
+        wx.EvtHandler.__init__(self)
 
 
     def GetDocumentManager(self):
@@ -2338,6 +2338,7 @@ class AboutService(DocService):
         """
         Initializes the AboutService.
         """
+        DocService.__init__(self)
         if aboutDialog:
             self._dlg = aboutDialog
             self._image = None
@@ -2405,6 +2406,7 @@ class FilePropertiesService(DocService):
         """
         Initializes the PropertyService.
         """
+        DocService.__init__(self)
         self._customEventHandlers = []
 
 
@@ -2708,6 +2710,7 @@ class WindowMenuService(DocService):
         """
         Initializes the WindowMenu and its globals.
         """
+        DocService.__init__(self)
         self.ARRANGE_WINDOWS_ID = wx.NewId()
         self.SELECT_WINDOW_1_ID = wx.NewId()
         self.SELECT_WINDOW_2_ID = wx.NewId()
