@@ -2721,7 +2721,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$CFLAGS $wx_cv_cflags_gtk"
-            LIBS="$LIBS $wx_cv_lib_gtk"
+            LIBS="$LIBS $wx_cv_libs_gtk"
             
             AC_CHECK_FUNCS([pango_font_family_is_monospace])
             
