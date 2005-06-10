@@ -136,5 +136,14 @@ inline wxEventType GtkScrollWinTypeToWx(guint scrollType)
 wxString wxEscapeStringForPangoMarkup(const wxString& str);
 #endif
 
+// The declaration for gtk_icon_size_lookup was accidentally ifdefed out in
+// GTK+ 2.1.0 which Sun seem to have shipped with some versions of JDS
+// for Solaris 9 x86.
+#if NEED_GTK_ICON_SIZE_LOOKUP
+extern "C" gboolean gtk_icon_size_lookup  (GtkIconSize  size,
+                                           gint         *width,
+                                           gint         *height);
+#endif
+
 #endif // _WX_GTK_PRIVATE_H_
 

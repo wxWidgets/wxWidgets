@@ -24,6 +24,7 @@
 
 #include "wx/artprov.h"
 #include "wx/module.h"
+#include "wx/gtk/private.h"
 
 #include <gtk/gtk.h>
 
@@ -160,26 +161,8 @@ static GtkIconSize FindClosestIconSize(const wxSize& size)
         s_sizes[5].icon = GTK_ICON_SIZE_DIALOG;
         for (size_t i = 0; i < NUM_SIZES; i++)
         {
-#if !defined(GDK_MULTITHREAD_SAFE)
-            gtk_icon_size_lookup(
-                              s_sizes[i].icon,
-                              &s_sizes[i].x, &s_sizes[i].y);
-#else
-#if GTK_VERSION_CHECK(2,2,0)
-            if (!gtk_verson_check(2,2,0))
-                gtk_icon_size_lookup_for_settings(
-                              gtk_settings_get_for_screen(gdk_screen_get_default()),
-                              s_sizes[i].icon,
-                              &s_sizes[i].x, &s_sizes[i].y);
-            else
-#else // pre-GTK 2.2
-            {
-                // FIXME
-                gtk_icon_size_lookup(s_sizes[i].icon,
+            gtk_icon_size_lookup(s_sizes[i].icon,
                                  &s_sizes[i].x, &s_sizes[i].y);
-            }
-#endif
-#endif
         }
         s_sizesInitialized = true;
     }

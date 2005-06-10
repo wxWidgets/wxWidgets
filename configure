@@ -25789,7 +25789,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$CFLAGS $wx_cv_cflags_gtk"
-            LIBS="$LIBS $wx_cv_lib_gtk"
+            LIBS="$LIBS $wx_cv_libs_gtk"
 
 
 for ac_func in pango_font_family_is_monospace
@@ -25893,6 +25893,68 @@ _ACEOF
 fi
 done
 
+
+                                                            echo "$as_me:$LINENO: checking if gtk_icon_size_lookup is missing" >&5
+echo $ECHO_N "checking if gtk_icon_size_lookup is missing... $ECHO_C" >&6
+            cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                            #include <gtk/gtk.h>
+
+int
+main ()
+{
+
+                            void *f = gtk_icon_size_lookup;
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+                            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                            cat >>confdefs.h <<\_ACEOF
+#define NEED_GTK_ICON_SIZE_LOOKUP 1
+_ACEOF
+
+                            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
                         echo "$as_me:$LINENO: checking if GTK+ is version >= 2.4" >&5
 echo $ECHO_N "checking if GTK+ is version >= 2.4... $ECHO_C" >&6
@@ -30145,7 +30207,11 @@ if test "$cross_compiling" = "yes"; then
 fi
 
 WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
-WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+if test "${TOOLKIT_DIR}" = "os2"; then
+    WX_LIBRARY_BASENAME_GUI="wx_pm${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+else
+    WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+fi
 
 
 
@@ -35614,6 +35680,103 @@ else
 echo "$as_me: WARNING: wxThread::Kill() will not work properly" >&2;}
 fi
 
+
+      echo "$as_me:$LINENO: checking for pthread_attr_setstacksize" >&5
+echo $ECHO_N "checking for pthread_attr_setstacksize... $ECHO_C" >&6
+if test "${ac_cv_func_pthread_attr_setstacksize+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define pthread_attr_setstacksize to an innocuous variant, in case <limits.h> declares pthread_attr_setstacksize.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define pthread_attr_setstacksize innocuous_pthread_attr_setstacksize
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char pthread_attr_setstacksize (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef pthread_attr_setstacksize
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char pthread_attr_setstacksize ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_pthread_attr_setstacksize) || defined (__stub___pthread_attr_setstacksize)
+choke me
+#else
+char (*f) () = pthread_attr_setstacksize;
+#endif
+#ifdef __cplusplus
+}
+#endif
+
+int
+main ()
+{
+return f != pthread_attr_setstacksize;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_func_pthread_attr_setstacksize=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_func_pthread_attr_setstacksize=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_func_pthread_attr_setstacksize" >&5
+echo "${ECHO_T}$ac_cv_func_pthread_attr_setstacksize" >&6
+if test $ac_cv_func_pthread_attr_setstacksize = yes; then
+  cat >>confdefs.h <<\_ACEOF
+#define HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
+_ACEOF
+
+fi
 
 
 
