@@ -23,9 +23,9 @@
 #include "wx/image.h"
 #include "wx/dcmemory.h"
 #include "wx/app.h"
-#include "wx/rawbmp.h"
 
 #ifdef __WXGTK20__
+#include "wx/rawbmp.h"
     // need this to get gdk_image_new_bitmap()
     #define GDK_ENABLE_BROKEN
 #endif
