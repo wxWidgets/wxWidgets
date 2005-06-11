@@ -2207,6 +2207,8 @@ public:
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
 
+    DEC_PYCALLBACK_VOID_(OnInternalIdle);
+
     PYPRIVATE;
 };
 
@@ -2240,7 +2242,9 @@ IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, ShouldInheritColours);
 IMP_PYCALLBACK_VIZATTR_(wxPyControl, wxControl, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, HasTransparentBackground);
- 
+
+IMP_PYCALLBACK_VOID_(wxPyControl, wxControl, OnInternalIdle);
+
 
 
 static void wxHelpProvider_Destroy(wxHelpProvider *self){ delete self; }
@@ -32962,6 +32966,31 @@ static PyObject *_wrap_PyControl_base_GetDefaultAttributes(PyObject *, PyObject 
 }
 
 
+static PyObject *_wrap_PyControl_base_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyControl *arg1 = (wxPyControl *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyControl_base_OnInternalIdle",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyControl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->base_OnInternalIdle();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * PyControl_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -35695,6 +35724,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyControl_base_RemoveChild", (PyCFunction) _wrap_PyControl_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_base_ShouldInheritColours", (PyCFunction) _wrap_PyControl_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_base_GetDefaultAttributes", (PyCFunction) _wrap_PyControl_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyControl_base_OnInternalIdle", (PyCFunction) _wrap_PyControl_base_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_swigregister", PyControl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_HelpEvent", (PyCFunction) _wrap_new_HelpEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HelpEvent_GetPosition", (PyCFunction) _wrap_HelpEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL},

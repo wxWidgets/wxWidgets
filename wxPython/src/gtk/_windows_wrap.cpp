@@ -2153,6 +2153,8 @@ public:
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
 
+    DEC_PYCALLBACK_VOID_(OnInternalIdle);
+    
     PYPRIVATE;
 };
 
@@ -2186,6 +2188,8 @@ IMP_PYCALLBACK_BOOL_const(wxPyWindow, wxWindow, ShouldInheritColours);
 IMP_PYCALLBACK_VIZATTR_(wxPyWindow, wxWindow, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyWindow, wxWindow, HasTransparentBackground);
+
+IMP_PYCALLBACK_VOID_(wxPyWindow, wxWindow, OnInternalIdle);
 
  // C++ version of Python aware wxPanel
 class wxPyPanel : public wxPanel
@@ -2241,6 +2245,8 @@ public:
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
 
+    DEC_PYCALLBACK_VOID_(OnInternalIdle);
+
     PYPRIVATE;
 };
 
@@ -2274,6 +2280,8 @@ IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, ShouldInheritColours);
 IMP_PYCALLBACK_VIZATTR_(wxPyPanel, wxPanel, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, HasTransparentBackground);
+
+IMP_PYCALLBACK_VOID_(wxPyPanel, wxPanel, OnInternalIdle);
 
  // C++ version of Python aware wxScrolledWindow
 class wxPyScrolledWindow : public wxScrolledWindow
@@ -2328,6 +2336,8 @@ public:
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
 
+    DEC_PYCALLBACK_VOID_(OnInternalIdle);
+
     PYPRIVATE;
 };
 
@@ -2361,6 +2371,8 @@ IMP_PYCALLBACK_BOOL_const(wxPyScrolledWindow, wxScrolledWindow, ShouldInheritCol
 IMP_PYCALLBACK_VIZATTR_(wxPyScrolledWindow, wxScrolledWindow, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, HasTransparentBackground);
+
+IMP_PYCALLBACK_VOID_(wxPyScrolledWindow, wxScrolledWindow, OnInternalIdle);
 
 
 #include "wx/wxPython/printfw.h"
@@ -18569,6 +18581,31 @@ static PyObject *_wrap_PyWindow_base_GetDefaultAttributes(PyObject *, PyObject *
 }
 
 
+static PyObject *_wrap_PyWindow_base_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyWindow *arg1 = (wxPyWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_OnInternalIdle",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->base_OnInternalIdle();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * PyWindow_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -19438,6 +19475,31 @@ static PyObject *_wrap_PyPanel_base_GetDefaultAttributes(PyObject *, PyObject *a
 }
 
 
+static PyObject *_wrap_PyPanel_base_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyPanel *arg1 = (wxPyPanel *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_OnInternalIdle",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->base_OnInternalIdle();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * PyPanel_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -20301,6 +20363,31 @@ static PyObject *_wrap_PyScrolledWindow_base_GetDefaultAttributes(PyObject *, Py
         resultptr = new wxVisualAttributes((wxVisualAttributes &)(result));
         resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PyScrolledWindow_base_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_OnInternalIdle",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->base_OnInternalIdle();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -28190,6 +28277,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyWindow_base_RemoveChild", (PyCFunction) _wrap_PyWindow_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_base_ShouldInheritColours", (PyCFunction) _wrap_PyWindow_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_base_GetDefaultAttributes", (PyCFunction) _wrap_PyWindow_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_base_OnInternalIdle", (PyCFunction) _wrap_PyWindow_base_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_swigregister", PyWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyPanel", (PyCFunction) _wrap_new_PyPanel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PrePyPanel", (PyCFunction) _wrap_new_PrePyPanel, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28216,6 +28304,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyPanel_base_RemoveChild", (PyCFunction) _wrap_PyPanel_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_base_ShouldInheritColours", (PyCFunction) _wrap_PyPanel_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_base_GetDefaultAttributes", (PyCFunction) _wrap_PyPanel_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_base_OnInternalIdle", (PyCFunction) _wrap_PyPanel_base_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_swigregister", PyPanel_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyScrolledWindow", (PyCFunction) _wrap_new_PyScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PrePyScrolledWindow", (PyCFunction) _wrap_new_PrePyScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28242,6 +28331,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyScrolledWindow_base_RemoveChild", (PyCFunction) _wrap_PyScrolledWindow_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_base_ShouldInheritColours", (PyCFunction) _wrap_PyScrolledWindow_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_base_GetDefaultAttributes", (PyCFunction) _wrap_PyScrolledWindow_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_base_OnInternalIdle", (PyCFunction) _wrap_PyScrolledWindow_base_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_swigregister", PyScrolledWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PrintData", _wrap_new_PrintData, METH_VARARGS, NULL},
 	 { (char *)"delete_PrintData", (PyCFunction) _wrap_delete_PrintData, METH_VARARGS | METH_KEYWORDS, NULL},

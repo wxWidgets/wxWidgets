@@ -5901,6 +5901,10 @@ class PyControl(_core.Control):
         """base_GetDefaultAttributes(self) -> VisualAttributes"""
         return _controls_.PyControl_base_GetDefaultAttributes(*args, **kwargs)
 
+    def base_OnInternalIdle(*args, **kwargs):
+        """base_OnInternalIdle(self)"""
+        return _controls_.PyControl_base_OnInternalIdle(*args, **kwargs)
+
 
 class PyControlPtr(PyControl):
     def __init__(self, this):

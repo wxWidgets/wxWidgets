@@ -3629,6 +3629,10 @@ class PyWindow(_core.Window):
         """base_GetDefaultAttributes(self) -> VisualAttributes"""
         return _windows_.PyWindow_base_GetDefaultAttributes(*args, **kwargs)
 
+    def base_OnInternalIdle(*args, **kwargs):
+        """base_OnInternalIdle(self)"""
+        return _windows_.PyWindow_base_OnInternalIdle(*args, **kwargs)
+
 
 class PyWindowPtr(PyWindow):
     def __init__(self, this):
@@ -3750,6 +3754,10 @@ class PyPanel(Panel):
         """base_GetDefaultAttributes(self) -> VisualAttributes"""
         return _windows_.PyPanel_base_GetDefaultAttributes(*args, **kwargs)
 
+    def base_OnInternalIdle(*args, **kwargs):
+        """base_OnInternalIdle(self)"""
+        return _windows_.PyPanel_base_OnInternalIdle(*args, **kwargs)
+
 
 class PyPanelPtr(PyPanel):
     def __init__(self, this):
@@ -3870,6 +3878,10 @@ class PyScrolledWindow(ScrolledWindow):
     def base_GetDefaultAttributes(*args, **kwargs):
         """base_GetDefaultAttributes(self) -> VisualAttributes"""
         return _windows_.PyScrolledWindow_base_GetDefaultAttributes(*args, **kwargs)
+
+    def base_OnInternalIdle(*args, **kwargs):
+        """base_OnInternalIdle(self)"""
+        return _windows_.PyScrolledWindow_base_OnInternalIdle(*args, **kwargs)
 
 
 class PyScrolledWindowPtr(PyScrolledWindow):
