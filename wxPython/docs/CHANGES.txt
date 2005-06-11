@@ -13,6 +13,17 @@ platforms.
 
 Added wx.RendererNative class.
 
+wxMSW: Always set flat toolbar style, even under XP with themes: this
+is necessary or separators aren't shown at all.
+
+Fixes for bug #1217872, pydocview.DocService not correctly initialized
+
+Fix for bug #1217874, Error in parameter name in DocManager.CreateView
+
+Added the wx.lib.splitter module, which contains the
+MultiSplitterWindow class.  This class is much like the standard
+wx.SplitterWindow class, except it allows more than one split, so it
+can manage more than two child windows.
 
 
 

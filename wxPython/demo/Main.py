@@ -50,6 +50,7 @@ _treeList = [
         'FoldPanelBar',
         'GIFAnimationCtrl',
         'HyperLinkCtrl',
+        'MultiSplitterWindow',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -160,6 +161,7 @@ _treeList = [
         'HyperLinkCtrl',
         'IntCtrl',
         'MediaCtrl',
+        'MultiSplitterWindow',
         'MVCTree',   
         'MaskedEditControls',
         'MaskedNumCtrl',
