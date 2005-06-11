@@ -689,8 +689,7 @@ class MultiSplitterWindow(wx.PyPanel):
                                            cw - 2*border, ch - 2*border)
         else:
             if 'wxMSW' in wx.PlatformInfo:
-                for win in self._windows:
-                    win.Freeze()
+                self.Freeze()
             if self._orient == wx.HORIZONTAL:
                 x = y = border
                 h = ch - 2*border
@@ -714,8 +713,7 @@ class MultiSplitterWindow(wx.PyPanel):
                 if last > 0:
                     self._sashes[idx+1] = last
             if 'wxMSW' in wx.PlatformInfo:
-                for win in self._windows:
-                    win.Thaw()
+                self.Thaw()
                 
         self._DrawSash(wx.ClientDC(self))
         self._needUpdating = False
