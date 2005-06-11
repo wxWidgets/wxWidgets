@@ -12,20 +12,19 @@
 import __builtin__
 import sys
 from types import *
+import logging
 import xml.sax
 import xml.sax.handler
-from xml.sax import saxutils
-
-import objutils
+import xml.sax.saxutils as saxutils
+from activegrid.util.lang import *
+import activegrid.util.aglogging as aglogging
 
 MODULE_PATH = "__main__"
 
-### ToDO remove maxOccurs "unbounded" resolves to -1 hacks after bug 177 is fixed
+## ToDO remove maxOccurs "unbounded" resolves to -1 hacks after bug 177 is fixed
 
 """
-
-More documentation later, but here are some special Python attributes
-that McLane recognizes:
+Special attributes that we recognize:
 
 name: __xmlname__
 type: string
@@ -33,26 +32,26 @@ description: the name of the xml element for the marshalled object
 
 name: __xmlattributes__
 type: tuple or list
-description: the name(s) of the Python string attribute(s) to be
+description: the name(s) of the Lang string attribute(s) to be
 marshalled as xml attributes instead of nested xml elements. currently
-these can only be strings since there's not a way to get the type
+these can only be strings since there"s not a way to get the type
 information back when unmarshalling.
 
 name: __xmlexclude__
 type: tuple or list
-description: the name(s) of the python attribute(s) to skip when
+description: the name(s) of the lang attribute(s) to skip when
 marshalling.
 
 name: __xmlrename__
 type: dict
-description: describes an alternate Python <-> XML name mapping.  
+description: describes an alternate Lang <-> XML name mapping.  
 Normally the name mapping is the identity function.  __xmlrename__
-overrides that.  The keys are the Python names, the values are their
+overrides that.  The keys are the Lang names, the values are their
 associated XML names.
 
 name: __xmlflattensequence__
 type: dict, tuple, or list
-description: the name(s) of the Python sequence attribute(s) whose
+description: the name(s) of the Lang sequence attribute(s) whose
 items are to be marshalled as a series of xml elements (with an
 optional keyword argument that specifies the element name to use) as
 opposed to containing them in a separate sequence element, e.g.:
@@ -60,12 +59,12 @@ opposed to containing them in a separate sequence element, e.g.:
 myseq = (1, 2)
 <!-- normal way of marshalling -->
 <myseq>
-  <item objtype='int'>1</item>
-  <item objtype='int'>2</item>
+  <item objtype="int">1</item>
+  <item objtype="int">2</item>
 </myseq>
-<!-- with __xmlflattensequence__ set to {'myseq': 'squish'} -->
-<squish objtype='int'>1</squish>
-<squish objtype='int'>2</squish>
+<!-- with __xmlflattensequence__ set to {"myseq": "squish"} -->
+<squish objtype="int">1</squish>
+<squish objtype="int">2</squish>
 
 name: __xmlnamespaces__
 type: dict
@@ -82,10 +81,10 @@ should be used as the default namespace for the object.
 
 name: __xmlattrnamespaces__
 type: dict
-description: a dict assigning the Python object's attributes to the namespaces
+description: a dict assigning the Lang object"s attributes to the namespaces
 defined in __xmlnamespaces__.  Each item in the dict should consist of a
 prefix,attributeList combination where the key is the prefix and the value is
-a list of the Python attribute names.  e.g.:
+a list of the Lang attribute names.  e.g.:
 
 __xmlattrnamespaces__ = { "ag":["firstName", "lastName", "addressLine1", "city"] }
 
@@ -98,6 +97,14 @@ within it. e.g.
 __xmlattrgroups__ = {"name": ["firstName", "lastName"], "address": ["addressLine1", "city", "state", "zip"]}
 
 """
+
+global xmlMarshallerLogger
+xmlMarshallerLogger = logging.getLogger("activegrid.util.xmlmarshaller.marshal")
+xmlMarshallerLogger.setLevel(aglogging.LEVEL_WARN)
+# INFO  : low-level info
+# DEBUG : debugging info
+
+global knownGlobalTypes
 
 ################################################################################
 #
@@ -119,7 +126,7 @@ class UnhandledTypeException(Error):
         return "%s is not supported for marshalling." % str(self.typename)
 
 class XMLAttributeIsNotStringType(Error):
-    """Exception raised when an object's attribute is specified to be
+    """Exception raised when an object"s attribute is specified to be
     marshalled as an XML attribute of the enclosing object instead of
     a nested element.
     """
@@ -128,8 +135,11 @@ class XMLAttributeIsNotStringType(Error):
         self.typename = typename
     def __str__(self):
         return """%s was set to be marshalled as an XML attribute
-        instead of a nested element, but the object's type is %s, not
+        instead of a nested element, but the object"s type is %s, not
         string.""" % (self.attrname, self.typename)
+
+class MarshallerException(Exception):
+    pass 
 
 ################################################################################
 #
@@ -137,18 +147,21 @@ class XMLAttributeIsNotStringType(Error):
 #
 ################################################################################
 
-XMLNS = 'xmlns'
-XMLNS_PREFIX = XMLNS + ':'
+XMLNS = "xmlns"
+XMLNS_PREFIX = XMLNS + ":"
 XMLNS_PREFIX_LENGTH = len(XMLNS_PREFIX)
 
-BASETYPE_ELEMENT_NAME = 'item'
+BASETYPE_ELEMENT_NAME = "item"
+DICT_ITEM_NAME = "qqDictItem"
+DICT_ITEM_KEY_NAME = "key"
+DICT_ITEM_VALUE_NAME = "value"
 
-# This list doesn't seem to be used.
+# This list doesn"t seem to be used.
 #   Internal documentation or useless? You make the call!
-MEMBERS_TO_SKIP = ('__module__', '__doc__', '__xmlname__', '__xmlattributes__',
-                   '__xmlexclude__', '__xmlflattensequence__', '__xmlnamespaces__',
-                   '__xmldefaultnamespace__', '__xmlattrnamespaces__',
-                   '__xmlattrgroups__')
+##MEMBERS_TO_SKIP = ("__module__", "__doc__", "__xmlname__", "__xmlattributes__",
+##                   "__xmlexclude__", "__xmlflattensequence__", "__xmlnamespaces__",
+##                   "__xmldefaultnamespace__", "__xmlattrnamespaces__",
+##                   "__xmlattrgroups__")
 
 ################################################################################
 #
@@ -156,73 +169,94 @@ MEMBERS_TO_SKIP = ('__module__', '__doc__', '__xmlname__', '__xmlattributes__',
 #
 ################################################################################
 
+def setattrignorecase(object, name, value):
+    if (name not in object.__dict__):
+        namelow = name.lower()
+        for attr in object.__dict__:
+            if attr.lower() == namelow:
+                object.__dict__[attr] = value
+                return
+    object.__dict__[name] = value
+
+def getComplexType(obj):
+    if (hasattr(obj, "__xsdcomplextype__")):
+        return obj.__xsdcomplextype__
+    return None
+
 def _objectfactory(objname, objargs=None, xsname=None):
-    '''dynamically create an object based on the objname and return
-    it. look it up in the BASETYPE_ELEMENT_MAP first.
-    '''
-    # split the objname into the typename and module path,
-    # importing the module if need be.
+    "dynamically create an object based on the objname and return it."
+
     if not isinstance(objargs, list):
         objargs = [objargs]
-            
-    if (xsname):
-        try:
-            objname = knownGlobalTypes[xsname]
-        except KeyError:
-            pass
-        
-##    print "[objectfactory] creating an object of type %s and value %s, xsname=%s" % (objname, objargs, xsname)
-    objtype = objname.split('.')[-1]
-    pathlist = objname.split('.')
-    modulename = '.'.join(pathlist[0:-1])
 
+##    print "[objectfactory] xsname [%s]; objname [%s]" % (xsname, objname)
+
+    # (a) deal with tagName:knownTypes mappings
+    if (xsname != None):
+        objclass = knownGlobalTypes.get(xsname)
+        if (objclass != None):
+            if (objargs != None):
+                return objclass(*objargs)
+            else:
+                return objclass()                
+
+    # (b) next with intrinisic types
+    if objname == "str" or objname == "unicode": # don"t strip: blanks are significant
+        if len(objargs) > 0:
+            return saxutils.unescape(objargs[0]).encode()
+        else:
+            return ""
+    elif objname == "bool":
+        return not objargs[0].lower() == "false"
+    elif objname in ("float", "int", "long"):
+##        objargs = [x.strip() for x in objargs]
+        return __builtin__.__dict__[objname](*objargs)
+    elif objname == "None":
+        return None
+
+    # (c) objtype=path...module.class   
+    # split the objname into the typename and module path,
+    # importing the module if need be.
+##    print "[objectfactory] creating an object of type %s and value %s, xsname=%s" % (objname, objargs, xsname)
+    objtype = objname.split(".")[-1]
+    pathlist = objname.split(".")
+    modulename = ".".join(pathlist[0:-1])
 ##    print "[objectfactory] object [%s] %s(%r)" % (objname, objtype, objargs)
-    if objname == 'bool':
-        return not objargs[0].lower() == 'false'
-    elif objname == 'str': # don't strip strings - blanks are significant !!!
-        if len(objargs) > 0:
-            return saxutils.unescape(objargs[0]).encode()
-        else:
-            return ''
-    elif objname == 'unicode': # don't strip strings - blanks are significant !!!
-        if len(objargs) > 0:
-            return saxutils.unescape(objargs[0]).encode()
-        else:
-            return ''
-    elif objtype in ('float', 'int', 'str', 'long'):
-            objargs = [x.strip() for x in objargs]
 
     try:
-        if __builtin__.__dict__.has_key(objname):
-            module = __builtin__
-        elif knownGlobalModule:
-            module = knownGlobalModule
-        else:
-            if modulename:
-                module = __import__(modulename)
+        if modulename:
+            module = __import__(modulename)
             for name in pathlist[1:-1]:
                 module = module.__dict__[name]
+        elif __builtin__.__dict__.has_key(objname):
+            module = __builtin__
+        else:
+            raise MarshallerException("Could not find class %s" % objname)
         if objargs:
             return module.__dict__[objtype](*objargs)
         else:
-            if objtype == 'None':
-                return None
             return module.__dict__[objtype]()
     except KeyError:
-        raise KeyError("Could not find class %s" % objname)
+        raise MarshallerException("Could not find class %s" % objname)
 
 class Element:
+    
     def __init__(self, name, attrs=None):
         self.name = name
         self.attrs = attrs
-        self.content = ''
+        self.content = ""
         self.children = []
+        
     def getobjtype(self):
-        if self.attrs.has_key('objtype'):
-            return self.attrs.getValue('objtype')
-        else:
-            return 'str'
-    def toString(self):
+        objtype = self.attrs.get("objtype")
+        if (objtype == None):
+            if (len(self.children) > 0):
+                objtype = "dict"
+            else:
+                objtype = "str"
+        return objtype
+            
+    def __str__(self):
         print "    name = ", self.name, "; attrs = ", self.attrs, "number of children = ", len(self.children)
         i = -1
         for child in self.children:
@@ -237,7 +271,7 @@ class XMLObjectFactory(xml.sax.ContentHandler):
         self.elementstack = []
         xml.sax.handler.ContentHandler.__init__(self)
 
-    def toString(self):
+    def __str__(self):
         print "-----XMLObjectFactory Dump-------------------------------"
         if (self.rootelement == None):
             print "rootelement is None"
@@ -248,14 +282,14 @@ class XMLObjectFactory(xml.sax.ContentHandler):
         for e in self.elementstack:
             i = i + 1
             print "elementstack[", i, "]: "
-            e.toString()
+            str(e)
         print "-----end XMLObjectFactory--------------------------------"
         
     ## ContentHandler methods
     def startElement(self, name, attrs):
 ##        print "startElement for name: ", name
-        if name.find(':') > -1:  # Strip namespace prefixes for now until actually looking them up in xsd
-            name = name[name.index(':') + 1:]
+        if name.find(":") > -1:  # Strip namespace prefixes for now until actually looking them up in xsd
+            name = name[name.find(":") + 1:]
 ##        for attrname in attrs.getNames():
 ##            print "%s: %s" % (attrname, attrs.getValue(attrname))
         element = Element(name, attrs.copy())
@@ -263,15 +297,15 @@ class XMLObjectFactory(xml.sax.ContentHandler):
 ##        print self.elementstack
 
     def characters(self, content):
-##        print "got content: %s" % content
-        if content:
+##        print "got content: %s (%s)" % (content, type(content))
+        if (content != None):
             self.elementstack[-1].content += content
 
     def endElement(self, name):
-##        print "[endElement] name of element we're at the end of: %s" % name
+##        print "[endElement] name of element we"re at the end of: %s" % name
         xsname = name
-        if name.find(':') > -1:  # Strip namespace prefixes for now until actually looking them up in xsd
-            name = name[name.index(':') + 1:]
+        if name.find(":") > -1:  # Strip namespace prefixes for now until actually looking them up in xsd
+            name = name[name.find(":") + 1:]
         oldChildren = self.elementstack[-1].children
         element = self.elementstack.pop()
         if ((len(self.elementstack) > 1) and (self.elementstack[-1].getobjtype() == "None")):
@@ -285,29 +319,18 @@ class XMLObjectFactory(xml.sax.ContentHandler):
 ##            print "[endElement] %s: skipping a (objtype==None) end tag" % name
             return
         constructorarglist = []
-        if element.content:
+        if (len(element.content) > 0):
             strippedElementContent = element.content.strip()
-            if strippedElementContent:
+            if (len(strippedElementContent) > 0):
                 constructorarglist.append(element.content)
 ##        print "[endElement] calling objectfactory"
         obj = _objectfactory(objtype, constructorarglist, xsname)
-        complexType = None
-        if hasattr(obj, '__xsdcomplextype__'):
-            complexType = getattr(obj, '__xsdcomplextype__')
-            if (hasattr(obj, '__xmlname__') and getattr(obj, '__xmlname__') == "sequence"):
-##                print "[endElement] sequence found"
-##                self.toString()
+        complexType = getComplexType(obj)
+        if (obj != None):
+            if (hasattr(obj, "__xmlname__") and getattr(obj, "__xmlname__") == "sequence"):
                 self.elementstack[-1].children = oldChildren
-##                self.toString()
-##                print "done moving sequence stuff; returning"
                 return
-        if len(self.elementstack) > 0:
-##            print "[endElement] appending child with name: ", name, "; objtype: ", objtype
-            parentElement.children.append((name, obj))
-##            print "parentElement now has ", len(parentElement.children), " children"
-        else:
-            self.rootelement = obj
-        if element.attrs and not isinstance(obj, list):
+        if (len(element.attrs) > 0) and not isinstance(obj, list):
 ##            print "[endElement] %s: element has attrs and the obj is not a list" % name
             for attrname, attr in element.attrs.items():
                 if attrname == XMLNS or attrname.startswith(XMLNS_PREFIX):
@@ -315,77 +338,101 @@ class XMLObjectFactory(xml.sax.ContentHandler):
                         ns = attrname[XMLNS_PREFIX_LENGTH:]
                     else:
                         ns = ""
-                    if not hasattr(obj, '__xmlnamespaces__'):
+                    if not hasattr(obj, "__xmlnamespaces__"):
                         obj.__xmlnamespaces__ = {ns:attr}
                     elif ns not in obj.__xmlnamespaces__:
-                        if (hasattr(obj.__class__, '__xmlnamespaces__') 
-                           and obj.__xmlnamespaces__ is obj.__class__.__xmlnamespaces__):
-                                obj.__xmlnamespaces__ = dict(obj.__xmlnamespaces__)
+                        if (hasattr(obj.__class__, "__xmlnamespaces__") 
+                            and (obj.__xmlnamespaces__ is obj.__class__.__xmlnamespaces__)):
+                            obj.__xmlnamespaces__ = dict(obj.__xmlnamespaces__)
                         obj.__xmlnamespaces__[ns] = attr
-                elif not attrname == 'objtype':
-                    if attrname.find(':') > -1:  # Strip namespace prefixes for now until actually looking them up in xsd
-                        attrname = attrname[attrname.index(':') + 1:]
-                    if complexType:
+                elif not attrname == "objtype":
+                    if attrname.find(":") > -1:  # Strip namespace prefixes for now until actually looking them up in xsd
+                        attrname = attrname[attrname.find(":") + 1:]
+                    if (complexType != None):
                         xsdElement = complexType.findElement(attrname)
-                        if xsdElement:
+                        if (xsdElement != None):
                             type = xsdElement.type
-                            if type:
-                                type = xsdToPythonType(type)
+                            if (type != None):
+                                type = xsdToLangType(type)
                                 ### ToDO remove maxOccurs hack after bug 177 is fixed
                                 if attrname == "maxOccurs" and attr == "unbounded":
                                     attr = "-1"
                                 attr = _objectfactory(type, attr)
-                    objutils.setattrignorecase(obj, _toAttrName(obj, attrname), attr)
+                    try:
+                        setattrignorecase(obj, _toAttrName(obj, attrname), attr)
+                    except AttributeError:
+                        raise MarshallerException("Error unmarshalling attribute \"%s\" of XML element \"%s\": object type not specified or known" % (attrname, name))
 ##                    obj.__dict__[_toAttrName(obj, attrname)] = attr
         # stuff any child attributes meant to be in a sequence via the __xmlflattensequence__
         flattenDict = {}
-        if hasattr(obj, '__xmlflattensequence__'):
+        if hasattr(obj, "__xmlflattensequence__"):
+            flatten = obj.__xmlflattensequence__
 ##            print "[endElement] %s: obj has __xmlflattensequence__" % name
-            if (isinstance(obj.__xmlflattensequence__,dict)):
-##                print "[endElement]  dict with obj.__xmlflattensequence__.items: ", obj.__xmlflattensequence__.items()
-                for sequencename, xmlnametuple in obj.__xmlflattensequence__.items():
-                    for xmlname in xmlnametuple:
-##                        print "[endElement]: adding flattenDict[%s] = %s" % (xmlname, sequencename)
-                        flattenDict[xmlname] = sequencename
-            # handle __xmlflattensequence__ list/tuple (i.e. no element rename)
-            elif (isinstance(obj.__xmlflattensequence__,list) or isinstance(obj.__xmlflattensequence__,tuple)):
-                for sequencename in obj.__xmlflattensequence__:
-                    flattenDict[sequencename] = sequencename
+            if (isinstance(flatten, dict)):
+##                print "[endElement]  dict with flatten.items: ", flatten.items()
+                for sequencename, xmlnametuple in flatten.items():
+                    if (xmlnametuple == None):
+                        flattenDict[sequencename] = sequencename
+                    elif (not isinstance(xmlnametuple, (tuple, list))):
+                        flattenDict[str(xmlnametuple)] = sequencename
+                    else:
+                        for xmlname in xmlnametuple:
+    ##                        print "[endElement]: adding flattenDict[%s] = %s" % (xmlname, sequencename)
+                            flattenDict[xmlname] = sequencename
             else:
-                raise "Invalid type for __xmlflattensequence___ : it must be a dict, list, or tuple"
+                raise "Invalid type for __xmlflattensequence___ : it must be a dict"
 
-        # reattach an object's attributes to it
+        # reattach an object"s attributes to it
         for childname, child in element.children:
 ##            print "[endElement] childname is: ", childname, "; child is: ", child
-            if flattenDict.has_key(childname):
+            if (childname in flattenDict):
                 sequencename = _toAttrName(obj, flattenDict[childname])
 ##                print "[endElement] sequencename is: ", sequencename
-                try:
+                if (not hasattr(obj, sequencename)):
 ##                    print "[endElement] obj.__dict__ is: ", obj.__dict__
-                    sequencevalue = obj.__dict__[sequencename]
-                except (AttributeError, KeyError):
-                    sequencevalue = None
-                if sequencevalue == None:
-                    sequencevalue = []
-                    obj.__dict__[sequencename] = sequencevalue
+                    obj.__dict__[sequencename] = []
+                sequencevalue = getattr(obj, sequencename)
+                if (sequencevalue == None):
+                    obj.__dict__[sequencename] = []
+                    sequencevalue = getattr(obj, sequencename)
                 sequencevalue.append(child)
-            elif isinstance(obj, list):
-##                print "appended childname = ", childname
+            elif (objtype == "list"):
                 obj.append(child)
+            elif isinstance(obj, dict):
+                if (childname == DICT_ITEM_NAME):
+                    obj[child[DICT_ITEM_KEY_NAME]] = child[DICT_ITEM_VALUE_NAME]
+                else:
+                    obj[childname] = child
             else:
 ##                print "childname = %s, obj = %s, child = %s" % (childname, repr(obj), repr(child))
-                objutils.setattrignorecase(obj, _toAttrName(obj, childname), child)
-                obj.__dict__[_toAttrName(obj, childname)] = child
+                try:
+                    setattrignorecase(obj, _toAttrName(obj, childname), child)
+                except AttributeError:
+                    raise MarshallerException("Error unmarshalling child element \"%s\" of XML element \"%s\": object type not specified or known" % (childname, name))
+##                obj.__dict__[_toAttrName(obj, childname)] = child
 
-        if complexType:
+        if (complexType != None):
             for element in complexType.elements:
                 if element.default:
                     elementName = _toAttrName(obj, element.name)
                     if ((elementName not in obj.__dict__) or (obj.__dict__[elementName] == None)):
-                        pythonType = xsdToPythonType(element.type)
-                        defaultValue = _objectfactory(pythonType, element.default)
+                        langType = xsdToLangType(element.type)
+                        defaultValue = _objectfactory(langType, element.default)
                         obj.__dict__[elementName] = defaultValue
 
+        ifDefPy()
+        if (isinstance(obj, list)):
+            if ((element.attrs.has_key("mutable")) and (element.attrs.getValue("mutable") == "false")):
+                obj = tuple(obj)
+        endIfDef()
+            
+        if (len(self.elementstack) > 0):
+##            print "[endElement] appending child with name: ", name, "; objtype: ", objtype
+            parentElement.children.append((name, obj))
+##            print "parentElement now has ", len(parentElement.children), " children"
+        else:
+            self.rootelement = obj
+            
     def getRootObject(self):
         return self.rootelement
 
@@ -399,11 +446,11 @@ def _toAttrName(obj, name):
 ##        name = "_%s%s" % (obj.__class__.__name__, name)
     return name
 
-__typeMappingXsdToPython = {
+__typeMappingXsdToLang = {
     "string": "str",
     "char": "str",
     "varchar": "str",
-    "date": "str", # ToDO Need to work out how to create python date types
+    "date": "str", # ToDO Need to work out how to create lang date types
     "boolean": "bool",
     "decimal": "float", # ToDO Does python have a better fixed point type?
     "int": "int",
@@ -419,86 +466,86 @@ __typeMappingXsdToPython = {
     "double": "float",
     }    
 
-def xsdToPythonType(xsdType):
-    try:
-        return __typeMappingXsdToPython[xsdType]
-    except KeyError:
+def xsdToLangType(xsdType):
+    langType = __typeMappingXsdToLang.get(xsdType)
+    if (langType == None):
         raise Exception("Unknown xsd type %s" % xsdType)
+    return langType
 
-def _getXmlValue(pythonValue):
-    if (isinstance(pythonValue, bool)):
-        return str(pythonValue).lower()
-    elif (isinstance(pythonValue, unicode)):
-        return pythonValue.encode()
+def _getXmlValue(langValue):
+    if (isinstance(langValue, bool)):
+        return str(langValue).lower()
+    elif (isinstance(langValue, unicode)):
+        return langValue.encode()
     else:
-        return str(pythonValue)
+        return str(langValue)
 
-def unmarshal(xmlstr, knownTypes=None, knownModule=None):
-    global knownGlobalTypes, knownGlobalModule
+def unmarshal(xmlstr, knownTypes=None):
+    global knownGlobalTypes
     if (knownTypes == None):
         knownGlobalTypes = {}
     else:
         knownGlobalTypes = knownTypes
-    knownGlobalModule = knownModule
     objectfactory = XMLObjectFactory()
     xml.sax.parseString(xmlstr, objectfactory)
     return objectfactory.getRootObject()
 
 
-def marshal(obj, elementName=None, prettyPrint=False, indent=0, knownTypes=None, withEncoding=True, encoding=None):
-    xmlstr = ''.join(_marshal(obj, elementName, prettyPrint=prettyPrint, indent=indent, knownTypes=knownTypes))
-    if withEncoding:
-        if encoding is None:
-            return '<?xml version="1.0" encoding="%s"?>\n%s' % (sys.getdefaultencoding(), xmlstr)
-        else:
-            return '<?xml version="1.0" encoding="%s"?>\n%s' % (encoding, xmlstr.encode(encoding))
-    else:
+def marshal(obj, elementName=None, prettyPrint=False, indent=0, knownTypes=None, encoding=-1):
+    xmlstr = "".join(_marshal(obj, elementName, prettyPrint=prettyPrint, indent=indent, knownTypes=knownTypes))
+    if (isinstance(encoding, basestring)):
+        return '<?xml version="1.0" encoding="%s"?>\n%s' % (encoding, xmlstr.encode(encoding))
+    elif (encoding == None):
         return xmlstr
+    else:
+        return '<?xml version="1.0" encoding="%s"?>\n%s' % (sys.getdefaultencoding(), xmlstr)
 
-def _marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyPrint=False, indent=0, knownTypes=None):
+def _marshal(obj, elementName=None, nameSpacePrefix="", nameSpaces=None, prettyPrint=False, indent=0, knownTypes=None):
+    xmlMarshallerLogger.debug("--> _marshal: elementName=%s, type=%s, obj=%s" % (elementName, type(obj), str(obj)))
+    xmlString = None
     if prettyPrint or indent:
-        prefix = ' '*indent
-        newline = '\n'
+        prefix = " "*indent
+        newline = "\n"
         increment = 4
     else:
-        prefix = ''
-        newline = ''
+        prefix = ""
+        newline = ""
         increment = 0
 
-    ## Determine the XML element name. If it isn't specified in the
-    ## parameter list, look for it in the __xmlname__ Python
+    ## Determine the XML element name. If it isn"t specified in the
+    ## parameter list, look for it in the __xmlname__ Lang
     ## attribute, else use the default generic BASETYPE_ELEMENT_NAME.
     if not nameSpaces: nameSpaces = {}  # Need to do this since if the {} is a default parameter it gets shared by all calls into the function
-    nameSpaceAttrs = ''
+    nameSpaceAttrs = ""
     if knownTypes == None:
         knownTypes = {}
-    if hasattr(obj, '__xmlnamespaces__'):
-        for nameSpaceKey, nameSpaceUrl in getattr(obj, '__xmlnamespaces__').items():
-            if nameSpaceUrl in nameSpaces:
+    if hasattr(obj, "__xmlnamespaces__"):
+        for nameSpaceKey, nameSpaceUrl in getattr(obj, "__xmlnamespaces__").items():
+            if nameSpaceUrl in asDict(nameSpaces):
                 nameSpaceKey = nameSpaces[nameSpaceUrl]
             else:
-##                # TODO: Wait to do this until there is shared state for use when going through the object graph
-##                origNameSpaceKey = nameSpaceKey  # Make sure there is no key collision, ie: same key referencing two different URL's
+##                # TODO: Wait to do this until there is shared for use when going through the object graph
+##                origNameSpaceKey = nameSpaceKey  # Make sure there is no key collision, ie: same key referencing two different URL"s
 ##                i = 1
 ##                while nameSpaceKey in nameSpaces.values():
 ##                    nameSpaceKey = origNameSpaceKey + str(i)
 ##                    i += 1
                 nameSpaces[nameSpaceUrl] = nameSpaceKey
-                if nameSpaceKey == '':
+                if nameSpaceKey == "":
                     nameSpaceAttrs += ' xmlns="%s" ' % (nameSpaceUrl)
                 else:
                     nameSpaceAttrs += ' xmlns:%s="%s" ' % (nameSpaceKey, nameSpaceUrl)
         nameSpaceAttrs = nameSpaceAttrs.rstrip()
-    if hasattr(obj, '__xmldefaultnamespace__'):
-        nameSpacePrefix = getattr(obj, '__xmldefaultnamespace__') + ':'        
+    if hasattr(obj, "__xmldefaultnamespace__"):
+        nameSpacePrefix = getattr(obj, "__xmldefaultnamespace__") + ":"        
     if not elementName:
-        if hasattr(obj, '__xmlname__'):
+        if hasattr(obj, "__xmlname__"):
             elementName = nameSpacePrefix + obj.__xmlname__
         else:
             elementName = nameSpacePrefix + BASETYPE_ELEMENT_NAME
     else:
         elementName = nameSpacePrefix + elementName
-    if hasattr(obj, '__xmlsequencer__'):
+    if hasattr(obj, "__xmlsequencer__"):
         elementAdd = obj.__xmlsequencer__
     else:
         elementAdd = None
@@ -507,42 +554,41 @@ def _marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyP
     members_to_skip = []
     ## Add more members_to_skip based on ones the user has selected
     ## via the __xmlexclude__ attribute.
-    if hasattr(obj, '__xmlexclude__'):
+    if hasattr(obj, "__xmlexclude__"):
 ##        print "marshal: found __xmlexclude__"
-        members_to_skip += list(obj.__xmlexclude__)
+        members_to_skip.extend(obj.__xmlexclude__)
     # Marshal the attributes that are selected to be XML attributes.
-    objattrs = ''
-    className = obj.__class__.__name__
+    objattrs = ""
+    className = ag_className(obj)
     classNamePrefix = "_" + className
-    if hasattr(obj, '__xmlattributes__'):
+    if hasattr(obj, "__xmlattributes__"):
 ##        print "marshal: found __xmlattributes__"
         xmlattributes = obj.__xmlattributes__
-        members_to_skip += xmlattributes
+        members_to_skip.extend(xmlattributes)
         for attr in xmlattributes:
             internalAttrName = attr
+            ifDefPy()
             if (attr.startswith("__") and not attr.endswith("__")): 
                 internalAttrName = classNamePrefix + attr
+            endIfDef()
             # Fail silently if a python attribute is specified to be
             # an XML attribute but is missing.
 ##            print "marshal:   processing attribute ", internalAttrName
-            try:
-                value = obj.__dict__[internalAttrName]
-            except KeyError:
-                continue
-##                # But, check and see if it is a property first:
-##                if (objutils.hasPropertyValue(obj, attr)):
-##                    value = getattr(obj, attr)
-##                else:
-##                    continue
+            attrs = obj.__dict__
+            value = attrs.get(internalAttrName)
             xsdElement = None
-            if hasattr(obj, '__xsdcomplextype__'):
+            complexType = getComplexType(obj)
+            if (complexType != None):
 ##                print "marshal: found __xsdcomplextype__"
-                complexType = getattr(obj, '__xsdcomplextype__')
                 xsdElement = complexType.findElement(attr)
-            if xsdElement:
+            if (xsdElement != None):
                 default = xsdElement.default
-                if default == value or default == _getXmlValue(value):
-                    continue
+                if (default != None):
+                    if ((default == value) or (default == _getXmlValue(value))):
+                        continue
+                else:
+                    if (value == None):
+                        continue
             elif value == None:
                 continue
 
@@ -556,184 +602,205 @@ def _marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyP
                else:
                    value = "false"
 
-            attrNameSpacePrefix = ''
-            if hasattr(obj, '__xmlattrnamespaces__'):
+            attrNameSpacePrefix = ""
+            if hasattr(obj, "__xmlattrnamespaces__"):
 ##                print "marshal: found __xmlattrnamespaces__"
-                for nameSpaceKey, nameSpaceAttributes in getattr(obj, '__xmlattrnamespaces__').items():
-                    if nameSpaceKey == nameSpacePrefix[:-1]: # Don't need to specify attribute namespace if it is the same as it's element
+                for nameSpaceKey, nameSpaceAttributes in getattr(obj, "__xmlattrnamespaces__").iteritems():
+                    if nameSpaceKey == nameSpacePrefix[:-1]: # Don't need to specify attribute namespace if it is the same as its element
                         continue
                     if attr in nameSpaceAttributes:
-                        attrNameSpacePrefix = nameSpaceKey + ':'
+                        attrNameSpacePrefix = nameSpaceKey + ":"
                         break
-##            if attr.startswith('_'):
+##            if attr.startswith("_"):
 ##                attr = attr[1:]
-            if (hasattr(obj, "__xmlrename__") and attr in obj.__xmlrename__):
+            if (hasattr(obj, "__xmlrename__") and attr in asDict(obj.__xmlrename__)):
 ##                print "marshal: found __xmlrename__ (and its attribute)"
                 attr = obj.__xmlrename__[attr]
 
-            objattrs += ' %s%s="%s"' % (attrNameSpacePrefix, attr, value)
+            objattrs += ' %s%s="%s"' % (attrNameSpacePrefix, attr, str(value))
 ##            print "marshal:   new objattrs is: ", objattrs
 
-    if isinstance(obj, NoneType):
-        return ''
+    if (obj == None):
+        xmlString = [""]
     elif isinstance(obj, bool):
-        return ['%s<%s objtype="bool">%s</%s>%s' % (prefix, elementName, obj, elementName, newline)]
+        xmlString = ['%s<%s objtype="bool">%s</%s>%s' % (prefix, elementName, obj, elementName, newline)]
     elif isinstance(obj, int):
-        return ['''%s<%s objtype="int">%s</%s>%s''' % (prefix, elementName, str(obj), elementName, newline)]
+        xmlString = ['%s<%s objtype="int">%s</%s>%s' % (prefix, elementName, str(obj), elementName, newline)]
     elif isinstance(obj, long):
-        return ['%s<%s objtype="long">%s</%s>%s' % (prefix, elementName, str(obj), elementName, newline)]
+        xmlString = ['%s<%s objtype="long">%s</%s>%s' % (prefix, elementName, str(obj), elementName, newline)]
     elif isinstance(obj, float):
-        return ['%s<%s objtype="float">%s</%s>%s' % (prefix, elementName, str(obj), elementName, newline)]
+        xmlString = ['%s<%s objtype="float">%s</%s>%s' % (prefix, elementName, str(obj), elementName, newline)]
     elif isinstance(obj, unicode): # have to check before basestring - unicode is instance of base string
-        return ['''%s<%s>%s</%s>%s''' % (prefix, elementName, saxutils.escape(obj.encode()), elementName, newline)]
+        xmlString = ['%s<%s>%s</%s>%s' % (prefix, elementName, saxutils.escape(obj.encode()), elementName, newline)]
     elif isinstance(obj, basestring):
-        return ['''%s<%s>%s</%s>%s''' % (prefix, elementName, saxutils.escape(obj), elementName, newline)]
+        xmlString = ['%s<%s>%s</%s>%s' % (prefix, elementName, saxutils.escape(obj), elementName, newline)]
     elif isinstance(obj, list):
         if len(obj) < 1:
-            return ''
-        xmlString = ['%s<%s objtype="list">%s' % (prefix, elementName, newline)]
-        for item in obj:
-            xmlString.extend(_marshal(item, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
-        xmlString.append('%s</%s>%s' % (prefix, elementName, newline))
-        return xmlString
+            xmlString = ""
+        else:
+            xmlString = ['%s<%s objtype="list">%s' % (prefix, elementName, newline)]
+            for item in obj:
+                xmlString.extend(_marshal(item, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
+            xmlString.append("%s</%s>%s" % (prefix, elementName, newline))
     elif isinstance(obj, tuple):
         if len(obj) < 1:
-            return ''
-        xmlString = ['%s<%s objtype="list" mutable="false">%s' % (prefix, elementName, newline)]
-        for item in obj:
-            xmlString.extend(_marshal(item, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
-        xmlString.append('%s</%s>%s' % (prefix, elementName, newline))
-        return xmlString
+            xmlString = ""
+        else:
+            xmlString = ['%s<%s objtype="list" mutable="false">%s' % (prefix, elementName, newline)]
+            for item in obj:
+                xmlString.extend(_marshal(item, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
+            xmlString.append("%s</%s>%s" % (prefix, elementName, newline))
     elif isinstance(obj, dict):
         xmlString = ['%s<%s objtype="dict">%s' % (prefix, elementName, newline)]
-        subprefix = prefix + ' '*increment
+        subprefix = prefix + " "*increment
         subindent = indent + 2*increment
         for key, val in obj.iteritems():
-            xmlString.append("%s<key>%s" % (subprefix, newline))
-            xmlString.extend(_marshal(key, indent=subindent, knownTypes=knownTypes))
-            xmlString.append("%s</key>%s%s<value>%s" % (subprefix, newline, subprefix, newline))
-            xmlString.extend(_marshal(val, nameSpaces=nameSpaces, indent=subindent, knownTypes=knownTypes))
-            xmlString.append("%s</value>%s" % (subprefix, newline))
-        xmlString.append('%s</%s>%s' % (prefix, elementName, newline))
-        return xmlString
+##            if (isinstance(key, basestring) and key is legal identifier):
+##                xmlString.extend(_marshal(val, elementName=key, nameSpaces=nameSpaces, indent=subindent, knownTypes=knownTypes))
+##            else:
+            xmlString.append("%s<%s>%s" % (subprefix, DICT_ITEM_NAME, newline))
+            xmlString.extend(_marshal(key, elementName=DICT_ITEM_KEY_NAME, indent=subindent, knownTypes=knownTypes))
+            xmlString.extend(_marshal(val, elementName=DICT_ITEM_VALUE_NAME, nameSpaces=nameSpaces, indent=subindent, knownTypes=knownTypes))
+            xmlString.append("%s</%s>%s" % (subprefix, DICT_ITEM_NAME, newline))
+        xmlString.append("%s</%s>%s" % (prefix, elementName, newline))
     else:
-        moduleName = obj.__class__.__module__
-        if (moduleName == "activegrid.model.schema"):
-            xmlString = ['%s<%s%s%s' % (prefix, elementName, nameSpaceAttrs, objattrs)]
+        # Only add the objtype if the element tag is unknown to us.
+        objname = knownTypes.get(elementName)
+        if (objname != None):
+            xmlString = ["%s<%s%s%s" % (prefix, elementName, nameSpaceAttrs, objattrs)]
         else:
-            # Only add the objtype if the element tag is unknown to us.
-            try:
-                objname = knownTypes[elementName]
-                xmlString = ['%s<%s%s%s' % (prefix, elementName, nameSpaceAttrs, objattrs)]
-            except KeyError:
-                xmlString = ['%s<%s%s%s objtype="%s.%s"' % (prefix, elementName, nameSpaceAttrs, objattrs, moduleName, className)]
-##                print "UnknownTypeException: Unknown type (%s.%s) passed to marshaller" % (moduleName, className)
-        # get the member, value pairs for the object, filtering out the types we don't support
+            xmlString = ['%s<%s%s%s objtype="%s.%s"' % (prefix, elementName, nameSpaceAttrs, objattrs, obj.__class__.__module__, className)]
+        # get the member, value pairs for the object, filtering out the types we don"t support
         if (elementAdd != None):
-            prefix += increment*' '
+            prefix += increment*" "
             indent += increment
             
         xmlMemberString = []
-        if hasattr(obj, '__xmlbody__'):
+        if hasattr(obj, "__xmlbody__"):
             xmlbody = getattr(obj, obj.__xmlbody__)
             if xmlbody != None:
                 xmlMemberString.append(xmlbody)           
         else:
-            entryList = obj.__dict__.items()
-##            # Add in properties
-##            for key in obj.__class__.__dict__.iterkeys():
-##                if (key not in members_to_skip and key not in obj.__dict__
-##                    and objutils.hasPropertyValue(obj, key)):
-##                    value = getattr(obj, key)
-##                    entryList.append((key, value))
-            entryList.sort()
-            if hasattr(obj, '__xmlattrgroups__'):
-                attrGroups = obj.__xmlattrgroups__
-                if (not isinstance(attrGroups,dict)):
+            if hasattr(obj, "__xmlattrgroups__"):
+                attrGroups = obj.__xmlattrgroups__.copy()
+                if (not isinstance(attrGroups, dict)):
                     raise "__xmlattrgroups__ is not a dict, but must be"
-                for n in attrGroups:
-                    v = attrGroups[n]
-                    members_to_skip += v
+                for n in attrGroups.iterkeys():
+                    members_to_skip.extend(attrGroups[n])
             else:
                 attrGroups = {}
             # add the list of all attributes to attrGroups
-            eList = []
-            for x, z in entryList:
-                eList.append(x)
-            attrGroups['__nogroup__'] = eList
+            eList = obj.__dict__.keys()
+            eList.sort()
+            attrGroups["__nogroup__"] = eList
             
-            for eName in attrGroups:
-                eList = attrGroups[eName]
-                if (eName != '__nogroup__'):
-                    prefix += increment*' '
+            for eName, eList in attrGroups.iteritems():
+                if (eName != "__nogroup__"):
+                    prefix += increment*" "
                     indent += increment
                     xmlMemberString.append('%s<%s objtype="None">%s' % (prefix, eName, newline))
                 for name in eList:
                     value = obj.__dict__[name]
-##                    print " ", name, " = ", value
-##                    # special name handling for private "__*" attributes:
-##                    # remove the _<class-name> added by Python
-##                    if name.startswith(classNamePrefix): name = name[len(classNamePrefix):]
-                    if eName == '__nogroup__' and name in members_to_skip: continue
-                    if name.startswith('__') and name.endswith('__'): continue
-##                    idx = name.find('__')
-##                    if idx > 0:
-##                        newName = name[idx+2:]
-##                        if newName:
-##                            name = newName
-##                    print "marshal:   processing subElement ", name
+                    if eName == "__nogroup__" and name in members_to_skip: continue
+                    if name.startswith("__") and name.endswith("__"): continue
                     subElementNameSpacePrefix = nameSpacePrefix
-                    if hasattr(obj, '__xmlattrnamespaces__'):
-                        for nameSpaceKey, nameSpaceValues in getattr(obj, '__xmlattrnamespaces__').items():
+                    if hasattr(obj, "__xmlattrnamespaces__"):
+                        for nameSpaceKey, nameSpaceValues in getattr(obj, "__xmlattrnamespaces__").iteritems():
                             if name in nameSpaceValues:
-                                subElementNameSpacePrefix = nameSpaceKey + ':'
+                                subElementNameSpacePrefix = nameSpaceKey + ":"
                                 break
                     # handle sequences listed in __xmlflattensequence__
                     # specially: instead of listing the contained items inside
-                    # of a separate list, as god intended, list them inside
+                    # of a separate list, as God intended, list them inside
                     # the object containing the sequence.
-                    if hasattr(obj, '__xmlflattensequence__') and name in obj.__xmlflattensequence__ and value:
-                        try:
-                            xmlnametuple = obj.__xmlflattensequence__[name]
-                            xmlname = None
-                            if len(xmlnametuple) == 1:
-                                xmlname = xmlnametuple[0]
-                        except:
-                            xmlname = name
-##                            xmlname = name.lower()
+                    if (hasattr(obj, "__xmlflattensequence__") and (value != None) and (name in asDict(obj.__xmlflattensequence__))):
+                        xmlnametuple = obj.__xmlflattensequence__[name]
+                        if (xmlnametuple == None):
+                            xmlnametuple = [name]
+                        elif (not isinstance(xmlnametuple, (tuple,list))):
+                            xmlnametuple = [str(xmlnametuple)]
+                        xmlname = None
+                        if (len(xmlnametuple) == 1):
+                            xmlname = xmlnametuple[0]
+##                        ix = 0
                         for seqitem in value:
+##                            xmlname = xmlnametuple[ix]
+##                            ix += 1
+##                            if (ix >= len(xmlnametuple)):
+##                                ix = 0
                             xmlMemberString.extend(_marshal(seqitem, xmlname, subElementNameSpacePrefix, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
                     else:
-                        if (hasattr(obj, "__xmlrename__") and name in obj.__xmlrename__):
+                        if (hasattr(obj, "__xmlrename__") and name in asDict(obj.__xmlrename__)):
                             xmlname = obj.__xmlrename__[name]
                         else:
                             xmlname = name
-##                        if (indent > 30):
-##                            print "getting pretty deep, xmlname = ", xmlname
                         xmlMemberString.extend(_marshal(value, xmlname, subElementNameSpacePrefix, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
-                if (eName != '__nogroup__'):
-##                    print "marshal: Completing attrGroup ", eName
-                    xmlMemberString.append('%s</%s>%s' % (prefix, eName, newline))
+                if (eName != "__nogroup__"):
+                    xmlMemberString.append("%s</%s>%s" % (prefix, eName, newline))
                     prefix = prefix[:-increment]
                     indent -= increment
 
         # if we have nested elements, add them here, otherwise close the element tag immediately.
-        xmlMemberString = filter(lambda x: len(x)>0, xmlMemberString)
+        newList = []
+        for s in xmlMemberString:
+            if (len(s) > 0): newList.append(s)
+        xmlMemberString = newList
         if len(xmlMemberString) > 0:
-            xmlString.append('>')
-            if hasattr(obj, '__xmlbody__'):
+            xmlString.append(">")
+            if hasattr(obj, "__xmlbody__"):
                 xmlString.extend(xmlMemberString)
-                xmlString.append('</%s>%s' % (elementName, newline))
+                xmlString.append("</%s>%s" % (elementName, newline))
             else:
                 xmlString.append(newline)
                 if (elementAdd != None):
-                    xmlString.append('%s<%s>%s' % (prefix, elementAdd, newline))
+                    xmlString.append("%s<%s>%s" % (prefix, elementAdd, newline))
                 xmlString.extend(xmlMemberString)
                 if (elementAdd != None):
-                    xmlString.append('%s</%s>%s' % (prefix, elementAdd, newline))
+                    xmlString.append("%s</%s>%s" % (prefix, elementAdd, newline))
                     prefix = prefix[:-increment]
                     indent -= increment
-                xmlString.append('%s</%s>%s' % (prefix, elementName, newline))
+                xmlString.append("%s</%s>%s" % (prefix, elementName, newline))
         else:
-            xmlString.append('/>%s' % newline)
-        return xmlString
+            xmlString.append("/>%s" % newline)
+##        return xmlString
+    xmlMarshallerLogger.debug("<-- _marshal: %s" % str(xmlString))
+    return xmlString
+
+# A simple test, to be executed when the xmlmarshaller is run standalone
+class MarshallerPerson:
+    __xmlname__ = "person"
+    __xmlexclude__ = ["fabulousness",]
+    __xmlattributes__ = ("nonSmoker",)
+    __xmlrename__ = {"_phoneNumber": "telephone"}
+    __xmlflattensequence__ = {"favoriteWords": ("vocabulary",)}
+    __xmlattrgroups__ = {"name": ["firstName", "lastName"], "address": ["addressLine1", "city", "state", "zip"]}
+
+    def setPerson(self):
+        self.firstName = "Albert"
+        self.lastName = "Camus"
+        self.addressLine1 = "23 Absurd St."
+        self.city = "Ennui"
+        self.state = "MO"
+        self.zip = "54321"
+        self._phoneNumber = "808-303-2323"
+        self.favoriteWords = ["angst", "ennui", "existence"]
+        self.phobias = ["war", "tuberculosis", "cars"]
+        self.weight = 150
+        self.fabulousness = "tres tres"
+        self.nonSmoker = False
+
+if isMain(__name__):
+    p1 = MarshallerPerson()
+    p1.setPerson() 
+    xmlP1 = marshal(p1, prettyPrint=True, encoding="utf-8")        
+    print "\n########################"
+    print   "# testPerson test case #"
+    print   "########################"
+    print xmlP1
+    p2 = unmarshal(xmlP1)
+    xmlP2 = marshal(p2, prettyPrint=True, encoding="utf-8")
+    if xmlP1 == xmlP2:
+        print "Success: repeated marshalling yields identical results"
+    else:
+        print "Failure: repeated marshalling yields different results"
+        print xmlP2

@@ -122,6 +122,7 @@ class TextEditView(wx.lib.docview.View):
 
 
     def OnDraw(self, dc):
+        """ For Print and Print Preview """
         pass
 
 

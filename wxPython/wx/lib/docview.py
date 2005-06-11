@@ -13,6 +13,7 @@
 
 import os
 import os.path
+import shutil
 import wx
 import sys
 _ = wx.GetTranslation
@@ -436,6 +437,7 @@ class Document(wx.EvtHandler):
 
         backupFilename = None
         fileObject = None
+        copied = False
         try:
             # if current file exists, move it to a safe place temporarily
             if os.path.exists(filename):
@@ -453,7 +455,8 @@ class Document(wx.EvtHandler):
                 while os.path.exists(backupFilename):
                     i += 1
                     backupFilename = "%s.bak%s" % (filename, i)
-                os.rename(filename, backupFilename)
+                shutil.copy(filename, backupFilename)
+                copied = True
 
             fileObject = file(filename, 'w')
             self.SaveObject(fileObject)
@@ -470,11 +473,9 @@ class Document(wx.EvtHandler):
             if fileObject:
                 fileObject.close()  # file is still open, close it, need to do this before removal 
 
-            # save failed, restore old file
-            if backupFilename:
-                os.remove(filename)
-                os.rename(backupFilename, filename)
-                self.SetDocumentModificationDate()
+            # save failed, remove copied file
+            if backupFilename and copied:
+                os.remove(backupFilename)
 
             wx.MessageBox("Could not save '%s'.  %s" % (FileNameFromPath(filename), sys.exc_value),
                           msgTitle,
@@ -1247,10 +1248,6 @@ class DocTemplate(wx.Object):
         Returns True if the path's extension matches one of this template's
         file filter extensions.
         """
-##        print "*** path", path
-##        if "*.*" in self.GetFileFilter():
-##            return True
-##            
         ext = FindExtension(path)
         if not ext: return False
         return ext in self.GetFileFilter()
@@ -2793,8 +2790,10 @@ class DocMDIChildFrame(wx.MDIChildFrame):
                 self._childView.Activate(False)
                 self._childView.Destroy()
                 self._childView = None
-                if self._childDocument:
-                    self._childDocument.Destroy()  # This isn't in the wxWindows codebase but the document needs to be disposed of somehow
+                if self._childDocument:  # This isn't in the wxWindows codebase but the document needs to be disposed of somehow
+                    self._childDocument.DeleteContents()
+                    if self._childDocument.GetDocumentManager():
+                        self._childDocument.GetDocumentManager().RemoveDocument(self._childDocument)
                 self._childDocument = None
                 self.Destroy()
             else:

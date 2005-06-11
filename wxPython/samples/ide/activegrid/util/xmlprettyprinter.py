@@ -10,8 +10,7 @@
 # License:      wxWindows License
 #----------------------------------------------------------------------------
 import xml.sax
-import xml.sax.handler
-
+from activegrid.util.lang import *
 
 class XMLPrettyPrinter(xml.sax.ContentHandler):
     def __init__(self, indentationChar='    ', newlineChar='\n'):
@@ -24,7 +23,7 @@ class XMLPrettyPrinter(xml.sax.ContentHandler):
 
     ## ContentHandler methods
     def startElement(self, name, attrs):
-        indentation = self.newlineChar + (self.indentationLevel * self.indentationChar)
+        indentation = self.newlineChar + (self.indentationChar * self.indentationLevel)
         # build attribute string
         attrstring = ''
         for attr in attrs.getNames():
@@ -36,6 +35,7 @@ class XMLPrettyPrinter(xml.sax.ContentHandler):
         self.hitCharData = False
 
     def characters(self, content):
+##        print "--> characters(%s)" % content
         self.xmlOutput += content
         self.hitCharData = True
 
@@ -43,11 +43,12 @@ class XMLPrettyPrinter(xml.sax.ContentHandler):
         self.indentationLevel -= 1
         indentation = ''
         if not self.hitCharData:
-##            indentation += self.newlineChar + (self.indentationLevel * self.indentationChar)
-            indentation += self.indentationLevel * self.indentationChar
+            indentation += self.newlineChar + (self.indentationChar * self.indentationLevel)
+##            indentation += self.indentationChar * self.indentationLevel
         else:
             self.hitCharData = False
-        self.xmlOutput += '%s</%s>%s' % (indentation, self.elementStack.pop(), self.newlineChar)
+##        self.xmlOutput += '%s</%s>%s' % (indentation, self.elementStack.pop(), self.newlineChar)
+        self.xmlOutput += '%s</%s>' % (indentation, self.elementStack.pop())
 
     def getXMLString(self):
         return self.xmlOutput[1:]
@@ -57,7 +58,7 @@ def xmlprettyprint(xmlstr, spaces=4):
     xml.sax.parseString(xmlstr, xpp)
     return xpp.getXMLString()
 
-if __name__ == '__main__':
+if isMain(__name__):
     simpleTestString = """<one>some text<two anattr="booga">two's data</two></one>"""
-    print prettyprint(simpleTestString)
+    print xmlprettyprint(simpleTestString)
 

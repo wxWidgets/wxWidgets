@@ -20,10 +20,22 @@ Fixes for bug #1217872, pydocview.DocService not correctly initialized
 
 Fix for bug #1217874, Error in parameter name in DocManager.CreateView
 
+Added wrappers for the wx.RendererNative class.
+
 Added the wx.lib.splitter module, which contains the
 MultiSplitterWindow class.  This class is much like the standard
 wx.SplitterWindow class, except it allows more than one split, so it
 can manage more than two child windows.
+
+Docview and IDE patch from Morag Hua with fix for bug #1217890
+"Closing view crashes Python" plus some new features::
+
+    New feature added to the IDE is 'Extensions'.  Under
+    Tools|Options|Extensions, you can add calls to external programs.
+    For example you can add a "Notepad" extension (under windows) that
+    will exec Notepad on the currently open file.  A new "Notepad"
+    menu item will appear under the Tools menu.
+
 
 
 

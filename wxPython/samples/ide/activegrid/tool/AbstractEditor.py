@@ -86,8 +86,12 @@ class CanvasView(wx.lib.docview.View):
 
 
     def OnFocus(self, event):
-        self.SetFocus()
         self.FocusColorPropertyShape(True)
+        event.Skip()
+
+
+    def FocusOnClick(self, event):
+        self.SetFocus()
         event.Skip()
 
 
@@ -129,12 +133,12 @@ class CanvasView(wx.lib.docview.View):
         wx.EVT_KEY_DOWN(self._canvas, self.OnKeyPressed)
         
         # need this otherwise mouse clicks don't set focus to this view
-        wx.EVT_LEFT_DOWN(self._canvas, self.OnFocus)
-        wx.EVT_LEFT_DCLICK(self._canvas, self.OnFocus)
-        wx.EVT_RIGHT_DOWN(self._canvas, self.OnFocus)
-        wx.EVT_RIGHT_DCLICK(self._canvas, self.OnFocus)
-        wx.EVT_MIDDLE_DOWN(self._canvas, self.OnFocus)
-        wx.EVT_MIDDLE_DCLICK(self._canvas, self.OnFocus)
+        wx.EVT_LEFT_DOWN(self._canvas, self.FocusOnClick)
+        wx.EVT_LEFT_DCLICK(self._canvas, self.FocusOnClick)
+        wx.EVT_RIGHT_DOWN(self._canvas, self.FocusOnClick)
+        wx.EVT_RIGHT_DCLICK(self._canvas, self.FocusOnClick)
+        wx.EVT_MIDDLE_DOWN(self._canvas, self.FocusOnClick)
+        wx.EVT_MIDDLE_DCLICK(self._canvas, self.FocusOnClick)
         
         wx.EVT_KILL_FOCUS(self._canvas, self.OnKillFocus)
         wx.EVT_SET_FOCUS(self._canvas, self.OnFocus)
@@ -397,7 +401,7 @@ class CanvasView(wx.lib.docview.View):
             shape.SetBrush(brush)
         if text:
             shape.AddText(text)
-        shape.SetShadowMode(ogl.SHADOW_RIGHT)
+        shape.SetShadowMode(ogl.SHADOW_NONE)
         self._diagram.AddShape(shape)
         shape.Show(True)
         if not eventHandler:
@@ -417,9 +421,28 @@ class CanvasView(wx.lib.docview.View):
 
         if shape:
             shape.Select(False)
+            for line in shape.GetLines():
+                shape.RemoveLine(line)
+                self._diagram.RemoveShape(line)
+            for obj in self._diagram.GetShapeList():
+                for line in obj.GetLines():
+                    if self.IsShapeContained(shape, line.GetTo()) or self.IsShapeContained(shape, line.GetFrom()):
+                        obj.RemoveLine(line)
+                        self._diagram.RemoveShape(line)
+                    if line == shape:
+                        obj.RemoveLine(line)
+                    
+            shape.RemoveFromCanvas(self._canvas)
             self._diagram.RemoveShape(shape)
-            if isinstance(shape, ogl.CompositeShape):
-                shape.RemoveFromCanvas(self._canvas)
+
+
+    def IsShapeContained(self, parent, shape):
+        if parent == shape:
+            return True
+        elif shape.GetParent():
+            return self.IsShapeContained(parent, shape.GetParent())
+            
+        return False
 
 
     def UpdateShape(self, model):

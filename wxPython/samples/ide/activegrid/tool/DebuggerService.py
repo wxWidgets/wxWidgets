@@ -41,7 +41,7 @@ import pickle
 import DebuggerHarness
 import traceback
 import StringIO
-
+import UICommon
 if wx.Platform == '__WXMSW__':
     try:
         import win32api
@@ -132,8 +132,7 @@ import  wx.lib.newevent
 class Executor:
     
     def GetPythonExecutablePath():
-        config = wx.ConfigBase_Get()
-        path = config.Read("ActiveGridPythonLocation")
+        path = UICommon.GetPythonExecPath()
         if path:
             return path
         wx.MessageBox(_("To proceed I need to know the location of the python.exe you would like to use.\nTo set this, go to Tools-->Options and use the 'Python' tab to enter a value.\n"), _("Python Executable Location Unknown"))
@@ -149,24 +148,29 @@ class Executor:
         path = Executor.GetPythonExecutablePath()
         self._cmd = '"' + path + '" -u \"' + fileName + '\"'
         #Better way to do this? Quotes needed for windows file paths.
+        def spaceAndQuote(text):
+            if text.startswith("\"") and text.endswith("\""):
+                return  ' ' + text
+            else:
+                return ' \"' + text + '\"'
         if(arg1 != None):
-            self._cmd += ' \"' + arg1 + '\"'
+            self._cmd += spaceAndQuote(arg1)
         if(arg2 != None):
-            self._cmd += ' \"' + arg2 + '\"'
+            self._cmd += spaceAndQuote(arg2)
         if(arg3 != None):
-            self._cmd += ' \"' + arg3 + '\"'
+            self._cmd += spaceAndQuote(arg3)
         if(arg4 != None):
-            self._cmd += ' \"' + arg4 + '\"'
+            self._cmd += spaceAndQuote(arg4)
         if(arg5 != None):
-            self._cmd += ' \"' + arg5 + '\"'
+            self._cmd += spaceAndQuote(arg5)
         if(arg6 != None):
-            self._cmd += ' \"' + arg6 + '\"'
+            self._cmd += spaceAndQuote(arg6)
         if(arg7 != None):
-            self._cmd += ' \"' + arg7 + '\"'
+            self._cmd += spaceAndQuote(arg7)
         if(arg8 != None):
-            self._cmd += ' \"' + arg8 + '\"'
+            self._cmd += spaceAndQuote(arg8)
         if(arg9 != None):
-            self._cmd += ' \"' + arg9 + '\"'
+            self._cmd += spaceAndQuote(arg9)
         
         self._stdOutReader = None
         self._stdErrReader = None
@@ -621,7 +625,7 @@ class DebugCommandUI(wx.Panel):
         self._tb.EnableTool(self.BREAK_INTO_DEBUGGER_ID, False)
         self._tb.EnableTool(self.KILL_PROCESS_ID, False)
 
-    def SynchCurrentLine(self, filename, lineNum):
+    def SynchCurrentLine(self, filename, lineNum, noArrow=False):
         # FACTOR THIS INTO DocManager
         self.DeleteCurrentLineMarkers()
         
@@ -651,8 +655,9 @@ class DebugCommandUI(wx.Panel):
             foundView.Activate()
             foundView.GotoLine(lineNum)
             startPos = foundView.PositionFromLine(lineNum)
-                
-        foundView.GetCtrl().MarkerAdd(lineNum -1, CodeEditor.CodeCtrl.CURRENT_LINE_MARKER_NUM)
+            
+        if not noArrow:        
+            foundView.GetCtrl().MarkerAdd(lineNum -1, CodeEditor.CodeCtrl.CURRENT_LINE_MARKER_NUM)
 
     def DeleteCurrentLineMarkers(self):
         openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
@@ -803,7 +808,7 @@ class BreakpointsUI(wx.Panel):
             list = self._bpListCtrl
             fileName = list.GetItem(self.currentItem, 2).GetText()
             lineNumber = list.GetItem(self.currentItem, 1).GetText()
-            self._ui.SynchCurrentLine( fileName, int(lineNumber) )  
+            self._ui.SynchCurrentLine( fileName, int(lineNumber) , noArrow=True)  
 
     def ClearBreakPoint(self, event):
         if self.currentItem >= 0:
@@ -1810,7 +1815,7 @@ class DebuggerService(Service.Service):
         wsService = wx.GetApp().GetService(WebServerService.WebServerService)
         fileName, args = wsService.StopAndPrepareToDebug()
         try:
-            page = DebugCommandUI(Service.ServiceView.bottomTab, -1, str(fileName), self)
+            page = DebugCommandUI(Service.ServiceView.bottomTab, -1, fileName, self)
             count = Service.ServiceView.bottomTab.GetPageCount()
             Service.ServiceView.bottomTab.AddPage(page, _("Debugging: Internal WebServer"))
             Service.ServiceView.bottomTab.SetSelection(count)
@@ -2124,7 +2129,7 @@ class CommandPropertiesDialog(wx.Dialog):
         flexGridSizer.Add(self._pythonPathEntry, 1, wx.EXPAND)
         flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
         flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
-        if debugging:
+        if debugging and _WINDOWS:
             self._postpendCheckBox = wx.CheckBox(self, -1, postpendStaticText)
             checked = bool(config.ReadInt("PythonPathPostpend", 1))
             self._postpendCheckBox.SetValue(checked)

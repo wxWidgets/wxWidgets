@@ -1185,7 +1185,7 @@ class DocService(wx.EvtHandler):
 
     def __init__(self):
         """Initializes the DocService."""
-        wx.EvtHandler.__init__(self)
+        pass
 
 
     def GetDocumentManager(self):
@@ -1478,7 +1478,7 @@ class GeneralOptionsPanel(wx.Panel):
                     msgTitle = wx.GetApp().GetAppName()
                     if not msgTitle:
                         msgTitle = _("Document Options")
-                    wx.MessageBox("Document interface changes will not appear until the application is restarted.",
+                    wx.MessageBox(_("Document interface changes will not appear until the application is restarted."),
                                   msgTitle,
                                   wx.OK | wx.ICON_INFORMATION,
                                   self.GetParent())
@@ -1995,10 +1995,7 @@ class DocApp(wx.PySimpleApp):
             if isinstance(document, ChildDocument) and document.GetParentDocument() == parentDocument:
                 if document.GetFirstView().GetFrame():
                     document.GetFirstView().GetFrame().SetFocus()
-                if document.GetFirstView().OnClose(deleteWindow = False):
-                    if document.GetFirstView().GetFrame():
-                        document.GetFirstView().GetFrame().Close()  # wxBug: Need to do this for some random reason
-                else:
+                if not document.GetFirstView().OnClose():
                     return False
         return True
 
@@ -2338,7 +2335,6 @@ class AboutService(DocService):
         """
         Initializes the AboutService.
         """
-        DocService.__init__(self)
         if aboutDialog:
             self._dlg = aboutDialog
             self._image = None
@@ -2406,7 +2402,6 @@ class FilePropertiesService(DocService):
         """
         Initializes the PropertyService.
         """
-        DocService.__init__(self)
         self._customEventHandlers = []
 
 
@@ -2710,7 +2705,6 @@ class WindowMenuService(DocService):
         """
         Initializes the WindowMenu and its globals.
         """
-        DocService.__init__(self)
         self.ARRANGE_WINDOWS_ID = wx.NewId()
         self.SELECT_WINDOW_1_ID = wx.NewId()
         self.SELECT_WINDOW_2_ID = wx.NewId()

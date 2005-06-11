@@ -20,7 +20,7 @@ from wxPython.lib.rcsizer import RowColSizer
 import time
 import Service
 import sys
-import activegrid.util.objutils
+import activegrid.util.xmlutils
 import UICommon
 import Wizard
 import SVNService
@@ -49,10 +49,10 @@ HALF_SPACE = 5
 #----------------------------------------------------------------------------
 
 def load(fileObject):
-    return activegrid.util.objutils.defaultLoad(fileObject)
+    return activegrid.util.xmlutils.defaultLoad(fileObject, knownTypes={"projectmodel" : ProjectModel})
 
 def save(fileObject, projectModel):
-    activegrid.util.objutils.defaultSave(fileObject, projectModel, prettyPrint=True)
+    activegrid.util.xmlutils.defaultSave(fileObject, projectModel, prettyPrint=True, knownTypes={"projectmodel" : ProjectModel})
 
 
 #----------------------------------------------------------------------------
@@ -1055,7 +1055,8 @@ class ProjectView(wx.lib.docview.View):
             descr = template.GetDescription() + _(" (") + template.GetFileFilter() + _(")")
             choices.append(descr)
             allfilter = allfilter + template.GetFileFilter()
-        choices.insert(0, _("All (%s)") % allfilter)
+        choices.insert(0, _("All (%s)") % allfilter)  # first item
+        choices.append(_("Any (*.*)"))  # last item
         filterChoice = wx.Choice(frame, -1, size=(250, -1), choices=choices)
         filterChoice.SetSelection(0)
         filterChoice.SetToolTipString(_("Select file type filter."))
@@ -1112,7 +1113,8 @@ class ProjectView(wx.lib.docview.View):
                 paths = []
                 
                 index = filterChoice.GetSelection()
-                if index:
+                lastIndex = filterChoice.GetCount()-1
+                if index and index != lastIndex:  # if not All or Any
                     template = visibleTemplates[index-1]
 
                 # do search in files on disk
@@ -1121,7 +1123,7 @@ class ProjectView(wx.lib.docview.View):
                         break
                         
                     for name in files:
-                        if index == 0:  # all
+                        if index == 0:  # All
                             for template in visibleTemplates:
                                 if template.FileMatchesTemplate(name):
                                     filename = os.path.join(root, name)
@@ -1132,6 +1134,11 @@ class ProjectView(wx.lib.docview.View):
 
                                     paths.append(filename)
                                     break
+                        elif index == lastIndex:  # Any
+                            filename = os.path.join(root, name)
+                            # if already in project, don't add it, otherwise undo will remove it from project even though it was already in it.
+                            if not doc.IsFileInProject(filename):
+                                paths.append(filename)                    
                         else:  # use selected filter
                             if template.FileMatchesTemplate(name):
                                 filename = os.path.join(root, name)

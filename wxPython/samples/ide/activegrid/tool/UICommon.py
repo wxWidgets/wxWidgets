@@ -14,6 +14,7 @@ import os
 import os.path
 import wx
 import ProjectEditor
+import activegrid.util as utillib
 _ = wx.GetTranslation
 
 def CreateDirectoryControl( parent, fileLabel, dirLabel, fileExtension, startingName="", startingDirectory=""):
@@ -118,3 +119,10 @@ def PluralName(name):
     else:
         return name + 's'
            
+def GetPythonExecPath():
+    pythonExecPath = wx.ConfigBase_Get().Read("ActiveGridPythonLocation")
+    if not pythonExecPath:
+        pythonExecPath = utillib.pythonExecPath
+    return pythonExecPath
+    
+

@@ -81,6 +81,7 @@ class IDEApplication(wx.lib.pydocview.DocApp):
         import DebuggerService
         import AboutDialog
         import SVNService
+        import ExtensionService
                     
         if not ACTIVEGRID_BASE_IDE:
             import DataModelEditor
@@ -304,6 +305,7 @@ class IDEApplication(wx.lib.pydocview.DocApp):
             deploymentService   = self.InstallService(DeploymentService.DeploymentService())
             dataModelService    = self.InstallService(DataModelEditor.DataModelService())
             welcomeService      = self.InstallService(WelcomeService.WelcomeService())
+        extensionService        = self.InstallService(ExtensionService.ExtensionService())
         optionsService          = self.InstallService(wx.lib.pydocview.DocOptionsService(supportedModes=wx.lib.docview.DOC_MDI))
         aboutService            = self.InstallService(wx.lib.pydocview.AboutService(AboutDialog.AboutDialog))
         svnService              = self.InstallService(SVNService.SVNService())
@@ -326,6 +328,7 @@ class IDEApplication(wx.lib.pydocview.DocApp):
         optionsService.AddOptionsPanel(STCTextEditor.TextOptionsPanel)
         optionsService.AddOptionsPanel(HtmlEditor.HtmlOptionsPanel)
         optionsService.AddOptionsPanel(SVNService.SVNOptionsPanel)
+        optionsService.AddOptionsPanel(ExtensionService.ExtensionOptionsPanel)
 
         filePropertiesService.AddCustomEventHandler(projectService)
 
@@ -374,7 +377,7 @@ class IDEApplication(wx.lib.pydocview.DocApp):
             if os.path.exists(tips_path):
                 wx.CallAfter(self.ShowTip, docManager.FindSuitableParent(), wx.CreateFileTipProvider(tips_path, 0))
 
-        wx.UpdateUIEvent.SetUpdateInterval(200)  # Overhead of updating menus was too much.  Change to update every 200 milliseconds.
+        wx.UpdateUIEvent.SetUpdateInterval(400)  # Overhead of updating menus was too much.  Change to update every 400 milliseconds.
         
         return True
 

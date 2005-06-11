@@ -378,7 +378,8 @@ class DebuggerHarness(object):
         sys.stdout = output
         sys.stderr = output
         try:
-            exec command in frame.f_globals, frame.f_locals
+            code = compile(command, '<string>', 'single')
+            exec code in frame.f_globals, frame.f_locals
             return output.getvalue()
             sys.stdout = out
             sys.stderr = err        
