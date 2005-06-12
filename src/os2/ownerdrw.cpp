@@ -56,6 +56,8 @@ wxOwnerDrawn::wxOwnerDrawn(
         m_font = *wxNORMAL_FONT;
 } // end of wxOwnerDrawn::wxOwnerDrawn
 
+wxOwnerDrawn::~wxOwnerDrawn() { }
+
 size_t wxOwnerDrawn::ms_nDefaultMarginWidth = 15;
 
 size_t wxOwnerDrawn::ms_nLastMarginWidth = ms_nDefaultMarginWidth;
