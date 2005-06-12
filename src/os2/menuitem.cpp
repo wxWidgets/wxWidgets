@@ -260,7 +260,7 @@ void wxMenuItem::Enable(
                                 );
     if (!bOk)
     {
-        wxLogLastError("EnableMenuItem");
+        wxLogLastError(wxT("EnableMenuItem"));
     }
     wxMenuItemBase::Enable(bEnable);
 } // end of wxMenuItem::Enable
@@ -362,7 +362,7 @@ void wxMenuItem::Check(
     }
     if (!bOk)
     {
-        wxLogLastError("CheckMenuItem");
+        wxLogLastError(wxT("CheckMenuItem"));
     }
     wxMenuItemBase::Check(bCheck);
 } // end of wxMenuItem::Check
@@ -403,7 +403,7 @@ void wxMenuItem::SetText(
                       ,(MPARAM)&vItem
                      ))
     {
-        wxLogLastError("GetMenuState");
+        wxLogLastError(wxT("GetMenuState"));
     }
     else
     {

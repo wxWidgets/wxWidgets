@@ -428,9 +428,11 @@ const wxChar* wxGetHomeDir(
 }
 
 // Hack for OS/2
-wxChar* wxGetUserHome (
-  const wxString&                   rUser
-)
+#if wxUSE_UNICODE
+const wxMB2WXbuf wxGetUserHome( const wxString &rUser )
+#else // just for binary compatibility -- there is no 'const' here
+wxChar* wxGetUserHome ( const wxString &rUser )
+#endif
 {
     wxChar*                         zHome;
     wxString                        sUser1(rUser);
@@ -465,9 +467,15 @@ wxChar* wxGetUserHome (
         {
             wxStrcpy(wxBuffer, zHome);
             wxUnix2DosFilename(wxBuffer);
+#if wxUSE_UNICODE
+	    wxWCharBuffer retBuffer (wxBuffer);
+            delete[] wxBuffer;
+            return retBuffer;
+#else	    
             wxStrcpy(zHome, wxBuffer);
             delete[] wxBuffer;
             return zHome;
+#endif
         }
     }
     delete[] wxBuffer;

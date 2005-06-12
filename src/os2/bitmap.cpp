@@ -65,13 +65,13 @@ void wxBitmapRefData::Free()
 {
     if ( m_pSelectedInto )
     {
-        wxLogLastError("GpiDeleteBitmap(hbitmap)");
+        wxLogLastError(wxT("GpiDeleteBitmap(hbitmap)"));
     }
     if (m_hBitmap)
     {
         if (!::GpiDeleteBitmap((HBITMAP)m_hBitmap))
         {
-            wxLogLastError("GpiDeleteBitmap(hbitmap)");
+            wxLogLastError(wxT("GpiDeleteBitmap(hbitmap)"));
         }
     }
     if (m_pBitmapMask)
@@ -186,7 +186,7 @@ wxBitmap::wxBitmap(
     hPs = ::GpiCreatePS(vHabmain, hDc, &vSize, GPIA_ASSOC | PU_PELS);
     if (hPs == 0)
     {
-        wxLogLastError("GpiCreatePS Failure");
+        wxLogLastError(wxT("GpiCreatePS Failure"));
     }
 
     if (nDepth == 1)
@@ -256,7 +256,7 @@ wxBitmap::wxBitmap(
 
     if (!hBmp)
     {
-        wxLogLastError("CreateBitmap");
+        wxLogLastError(wxT("CreateBitmap"));
     }
     ::GpiDestroyPS(hPs);
     ::DevCloseDC(hDc);

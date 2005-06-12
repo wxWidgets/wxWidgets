@@ -88,7 +88,7 @@ static ULONG wxExecuteThread(
                          );
     if (ulRc != NO_ERROR)
     {
-        wxLogLastError("DosWaitChild");
+        wxLogLastError(wxT("DosWaitChild"));
     }
     delete pData;
     return 0;
@@ -195,7 +195,7 @@ long wxExecute(
                           );
     if (rc != NO_ERROR)
     {
-        wxLogLastError("CreateThread in wxExecute");
+        wxLogLastError(wxT("CreateThread in wxExecute"));
         delete pData;
 
         // the process still started up successfully...

@@ -413,7 +413,7 @@ bool wxFontRefData::Alloc(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError("CreateFont");
+        wxLogLastError(wxT("CreateFont"));
     }
 
     ::GpiSetCharSet(m_hPS, flId); // sets font for presentation space

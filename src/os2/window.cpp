@@ -3720,7 +3720,7 @@ bool wxWindowOS2::HandlePaint()
 
     if (::WinQueryUpdateRegion(GetHwnd(), hRgn) == RGN_ERROR)
     {
-         wxLogLastError("CreateRectRgn");
+         wxLogLastError(wxT("CreateRectRgn"));
          return FALSE;
     }
 

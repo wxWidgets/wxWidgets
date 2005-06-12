@@ -95,7 +95,7 @@ void wxMenu::Init()
                                       ,NULL
                                      )) == 0)
     {
-        wxLogLastError("WinLoadMenu");
+        wxLogLastError(wxT("WinLoadMenu"));
     }
     m_vMenuData.iPosition   = 0;
     m_vMenuData.afStyle     = MIS_SUBMENU | MIS_TEXT;
@@ -131,7 +131,7 @@ wxMenu::~wxMenu()
     {
         if (!::WinDestroyWindow((HWND)GetHmenu()) )
         {
-            wxLogLastError("WinDestroyWindow");
+            wxLogLastError(wxT("WinDestroyWindow"));
         }
     }
 
@@ -354,7 +354,7 @@ bool wxMenu::DoInsertOrAppend(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError(wxT("Error inserting or appending a menuitem. Error: %s\n"), sError.c_str());
-        wxLogLastError("Insert or AppendMenu");
+        wxLogLastError(wxT("Insert or AppendMenu"));
         return FALSE;
     }
     else
@@ -562,7 +562,7 @@ void wxMenu::SetTitle(
         {
             if (!::WinSetWindowText(hMenu, (PSZ)rLabel.c_str()))
             {
-                wxLogLastError("SetMenuTitle");
+                wxLogLastError(wxT("SetMenuTitle"));
             }
         }
     }
@@ -583,7 +583,7 @@ void wxMenu::SetTitle(
             //
             if (!::WinSetWindowText(hMenu, (PSZ)rLabel.c_str()))
             {
-                wxLogLastError("SetMenuTitle");
+                wxLogLastError(wxT("SetMenuTitle"));
             }
         }
     }
@@ -769,7 +769,7 @@ WXHMENU wxMenuBar::Create()
                                       ,NULL
                                      )) == 0)
     {
-        wxLogLastError("WinLoadMenu");
+        wxLogLastError(wxT("WinLoadMenu"));
     }
     else
     {
@@ -840,7 +840,7 @@ void wxMenuBar::EnableTop(
     nId = SHORT1FROMMR(::WinSendMsg((HWND)m_hMenu, MM_ITEMIDFROMPOSITION, MPFROMSHORT(nPos), (MPARAM)0));
     if (nId == MIT_ERROR)
     {
-        wxLogLastError("LogLastError");
+        wxLogLastError(wxT("LogLastError"));
         return;
     }
     ::WinSendMsg((HWND)m_hMenu, MM_SETITEMATTR, MPFROM2SHORT(nId, TRUE), MPFROM2SHORT(MIA_DISABLED, uFlag));
@@ -866,7 +866,7 @@ void wxMenuBar::SetLabelTop(
     nId = SHORT1FROMMR(::WinSendMsg((HWND)m_hMenu, MM_ITEMIDFROMPOSITION, MPFROMSHORT(nPos), (MPARAM)0));
     if (nId == MIT_ERROR)
     {
-        wxLogLastError("LogLastError");
+        wxLogLastError(wxT("LogLastError"));
         return;
     }
     if(!::WinSendMsg( (HWND)m_hMenu
@@ -875,13 +875,13 @@ void wxMenuBar::SetLabelTop(
                      ,MPARAM(&vItem)
                     ))
     {
-        wxLogLastError("QueryItem");
+        wxLogLastError(wxT("QueryItem"));
     }
     nId = vItem.id;
 
     if (::WinSendMsg(GetHmenu(), MM_SETITEMTEXT, MPFROMSHORT(nId), (MPARAM)rLabel.c_str()));
     {
-        wxLogLastError("ModifyMenu");
+        wxLogLastError(wxT("ModifyMenu"));
     }
     Refresh();
 } // end of wxMenuBar::SetLabelTop
@@ -916,7 +916,7 @@ wxMenu* wxMenuBar::Replace(
     nId = SHORT1FROMMR(::WinSendMsg((HWND)m_hMenu, MM_ITEMIDFROMPOSITION, MPFROMSHORT(nPos), (MPARAM)0));
     if (nId == MIT_ERROR)
     {
-        wxLogLastError("LogLastError");
+        wxLogLastError(wxT("LogLastError"));
         return NULL;
     }
     if (!pMenuOld)
@@ -1030,7 +1030,7 @@ wxMenu* wxMenuBar::Remove(
                                    );
     if (nId == MIT_ERROR)
     {
-        wxLogLastError("LogLastError");
+        wxLogLastError(wxT("LogLastError"));
         return NULL;
     }
     if (IsAttached())
@@ -1105,7 +1105,7 @@ void wxMenuBar::Attach(
                             ,m_vAccelTable.GetHACCEL()
                             ,(HWND)pFrame->GetFrame()
                            ))
-        wxLogLastError("WinSetAccelTable");
+        wxLogLastError(wxT("WinSetAccelTable"));
 #endif // wxUSE_ACCEL
 } // end of wxMenuBar::Attach
 

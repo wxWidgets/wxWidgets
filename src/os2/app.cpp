@@ -651,7 +651,7 @@ void wxApp::WakeUpIdle()
             //
             // Should never happen
             //
-            wxLogLastError("PostMessage(WM_NULL)");
+            wxLogLastError(wxT("PostMessage(WM_NULL)"));
         }
     }
 } // end of wxWakeUpIdle
