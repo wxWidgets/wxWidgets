@@ -167,9 +167,19 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
                 path.Printf(wxT("%c:\\"), 'A' + i);
                 name.Printf(wxT("%c:"), 'A' + i);
 
+                // Note: If _filesys is unsupported by some compilers,
+                //       we can always replace it by DosQueryFSAttach
+                char filesysname[20];
+                _filesys(name.fn_str(), filesysname, sizeof(filesysname));
+                /* FAT, LAN, HPFS, CDFS, NFS */
                 int imageId;
                 if (path == wxT("A:\\") || path == wxT("B:\\"))
                     imageId = wxFileIconsTable::floppy;
+                else if (!strcmp(filesysname, "CDFS"))
+                    imageId = wxFileIconsTable::cdrom;
+                else if (!strcmp(filesysname, "LAN") ||
+                         !strcmp(filesysname, "NFS"))
+                    imageId = wxFileIconsTable::drive;
                 else
                     imageId = wxFileIconsTable::drive;
                 paths.Add(path);
