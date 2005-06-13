@@ -2513,7 +2513,7 @@ wxMBConv *wxCSConv::DoCreate() const
 
 #if wxUSE_FONTMAP
         if ( name.empty() )
-            name = wxFontMapperBase::Get()->GetEncodingName(m_encoding);
+            name = wxFontMapperBase::GetEncodingName(m_encoding);
 #endif // wxUSE_FONTMAP
 
         wxMBConv_iconv *conv = new wxMBConv_iconv(name);

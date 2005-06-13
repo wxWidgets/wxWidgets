@@ -1294,7 +1294,7 @@ void wxDC::DoDrawBitmap(
     if (!IsKindOf(CLASSINFO(wxPrinterDC)))
     {
         HBITMAP                         hBitmap =  (HBITMAP)rBmp.GetHBITMAP();
-        HBITMAP                         hBitmapOld = NULLHANDLE;;
+        HBITMAP                         hBitmapOld = NULLHANDLE;
         POINTL                          vPoint[4];
 
         vY = OS2Y(vY,rBmp.GetHeight());

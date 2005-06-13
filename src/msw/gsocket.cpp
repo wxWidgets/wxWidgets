@@ -1420,7 +1420,7 @@ GSocketError GAddress_INET_SetHostAddress(GAddress *address,
   CHECK_ADDRESS(address, INET);
 
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
-  addr->s_addr = htonl(hostaddr);;
+  addr->s_addr = htonl(hostaddr);
 
   return GSOCK_NOERROR;
 }

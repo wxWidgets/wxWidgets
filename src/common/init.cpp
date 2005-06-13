@@ -70,8 +70,8 @@ public:
 
 // we need a special kind of auto pointer to wxApp which not only deletes the
 // pointer it holds in its dtor but also resets the global application pointer
-wxDECLARE_SCOPED_PTR(wxAppConsole, wxAppPtrBase);
-wxDEFINE_SCOPED_PTR(wxAppConsole, wxAppPtrBase);
+wxDECLARE_SCOPED_PTR(wxAppConsole, wxAppPtrBase)
+wxDEFINE_SCOPED_PTR(wxAppConsole, wxAppPtrBase)
 
 class wxAppPtr : public wxAppPtrBase
 {

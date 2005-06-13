@@ -603,7 +603,7 @@ int wxWindowsPrintDialog::ShowModal()
 
     pd->hwndOwner = 0;
 
-    if ( ret != false && (pd->hDC) )
+    if ( ret && (pd->hDC) )
     {
         wxPrinterDC *pdc = new wxPrinterDC( (WXHDC) pd->hDC );
         m_printerDC = pdc;

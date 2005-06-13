@@ -906,7 +906,7 @@ public:
     bool Exists(CFTypeRef cftKey) const
     {
         wxASSERT(IsValid());
-        return CFDictionaryContainsKey((CFDictionaryRef)m_cfmdRef, cftKey) == true;
+        return CFDictionaryContainsKey((CFDictionaryRef)m_cfmdRef, cftKey);
     }
 
     bool IsOk() const {return m_cfmdRef != NULL; }
@@ -1359,9 +1359,9 @@ void wxCFDictionary::MakeValidXML()
                 cfdCurrent.MakeValidXML();
                 Set(pKeys[i], cfdCurrent);
             }
-            else if( ( CFGetTypeID(cfRef) == CFStringGetTypeID() ||
-                       CFGetTypeID(cfRef) == CFNumberGetTypeID() ||
-                       CFGetTypeID(cfRef) == CFBooleanGetTypeID() ) == false )
+            else if ( CFGetTypeID(cfRef) != CFStringGetTypeID() &&
+                      CFGetTypeID(cfRef) != CFNumberGetTypeID() &&
+                      CFGetTypeID(cfRef) != CFBooleanGetTypeID() )
             {
                 Remove(pKeys[i]);
                 --i;
@@ -1406,9 +1406,9 @@ void wxCFArray::MakeValidXML()
                 cfdCurrent.MakeValidXML();
                 Set(i, cfdCurrent);
             }
-            else if( ( CFGetTypeID(cfRef) == CFStringGetTypeID() ||
-                       CFGetTypeID(cfRef) == CFNumberGetTypeID() ||
-                       CFGetTypeID(cfRef) == CFBooleanGetTypeID() ) == false )
+            else if ( CFGetTypeID(cfRef) != CFStringGetTypeID() &&
+                      CFGetTypeID(cfRef) != CFNumberGetTypeID() &&
+                      CFGetTypeID(cfRef) != CFBooleanGetTypeID() )
             {
                 Remove(i);
                 --i;

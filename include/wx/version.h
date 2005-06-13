@@ -42,9 +42,9 @@
   wxMAKE_VERSION_DOT_STRING(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
 
 /*  some more defines, not really sure if they're [still] useful */
-#define wxVERSION_NUMBER (wxMAJOR_VERSION * 1000) + (wxMINOR_VERSION * 100) + wxRELEASE_NUMBER
+#define wxVERSION_NUMBER ( (wxMAJOR_VERSION * 1000) + (wxMINOR_VERSION * 100) + wxRELEASE_NUMBER )
 #define wxBETA_NUMBER      0
-#define wxVERSION_FLOAT wxMAJOR_VERSION + (wxMINOR_VERSION/10.0) + (wxRELEASE_NUMBER/100.0) + (wxBETA_NUMBER/10000.0)
+#define wxVERSION_FLOAT ( wxMAJOR_VERSION + (wxMINOR_VERSION/10.0) + (wxRELEASE_NUMBER/100.0) + (wxBETA_NUMBER/10000.0) )
 
 /*  check if the current version is at least major.minor.release */
 #define wxCHECK_VERSION(major,minor,release) \
@@ -54,11 +54,11 @@
 
 /* the same but check the subrelease also */
 #define wxCHECK_VERSION_FULL(major,minor,release,subrel) \
-    wxCHECK_VERSION(major, minor, release) && \
+    (wxCHECK_VERSION(major, minor, release) && \
         ((major) != wxMAJOR_VERSION || \
             (minor) != wxMINOR_VERSION || \
                 (release) != wxRELEASE_NUMBER || \
-                    (subrel) <= wxSUBRELEASE_NUMBER)
+                    (subrel) <= wxSUBRELEASE_NUMBER))
 
 #endif /*  _WX_VERSION_H_ */
 

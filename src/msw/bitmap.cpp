@@ -324,7 +324,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
             unsigned char* pixels = dib.GetData();
             for (int idx=0; idx<w*h*4; idx+=4)
             {
-                if (pixels[idx+3] != 0) 
+                if (pixels[idx+3] != 0)
                 {
                     // If there is an alpha byte that is non-zero then set the
                     // alpha flag and bail out of the loop.
@@ -341,7 +341,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
         // wxWin convention
         refData->SetMask(wxInvertMask(iconInfo.hbmMask, w, h));
     }
-    
+
     // delete the old one now as we don't need it any more
     ::DeleteObject(iconInfo.hbmMask);
 
@@ -905,7 +905,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
             SetMask(new wxMask((WXHBITMAP)hbitmap));
         }
 
-        delete data;
+        delete[] data;
     }
 
     return true;
@@ -1250,7 +1250,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     HBITMAP hDIB;
     if ( !GetBitmapData()->m_isDIB )
     {
-        wxCHECK_MSG( !GetBitmapData()->m_dib, FALSE,
+        wxCHECK_MSG( !GetBitmapData()->m_dib, NULL,
                         _T("GetRawData() may be called only once") );
 
         wxDIB *dib = new wxDIB(*this);
@@ -1599,7 +1599,7 @@ bool wxCreateDIB(long xSize, long ySize, long bitsPerPixel,
    // this value must be 1, 4, 8 or 24 so PixelDepth can only be
    lpDIBheader->bmiHeader.biBitCount = (WORD)(bitsPerPixel);
    lpDIBheader->bmiHeader.biCompression = BI_RGB;
-   lpDIBheader->bmiHeader.biSizeImage = xSize * abs(ySize) * bitsPerPixel >> 3;
+   lpDIBheader->bmiHeader.biSizeImage = (xSize * abs(ySize) * bitsPerPixel) >> 3;
    lpDIBheader->bmiHeader.biClrUsed = 256;
 
 
@@ -1655,7 +1655,7 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
     {
         mask = bmp.GetMask();
     }
-    
+
     if ( !mask )
     {
         // we must have a mask for an icon, so even if it's probably incorrect,

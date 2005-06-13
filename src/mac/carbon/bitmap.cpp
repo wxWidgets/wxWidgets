@@ -964,7 +964,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
     int width = image.GetWidth();
     int height = image.GetHeight();
 
-    m_refData = new wxBitmapRefData( width , height , depth ) ;;
+    m_refData = new wxBitmapRefData( width , height , depth ) ;
 
     // Create picture
 

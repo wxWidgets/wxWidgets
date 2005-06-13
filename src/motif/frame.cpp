@@ -115,9 +115,9 @@ void wxFrame::Init()
 
     //// Motif-specific
     m_frameShell = (WXWidget) NULL;
-    m_mainWidget = (WXWidget) NULL;;
-    m_workArea = (WXWidget) NULL;;
-    m_clientArea = (WXWidget) NULL;;
+    m_mainWidget = (WXWidget) NULL;
+    m_workArea = (WXWidget) NULL;
+    m_clientArea = (WXWidget) NULL;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -132,7 +132,7 @@ bool wxFrame::Create(wxWindow *parent,
                                    name ) )
         return false;
 
-    m_backgroundColour = 
+    m_backgroundColour =
         wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
     m_foregroundColour = *wxBLACK;
     m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
@@ -358,7 +358,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 
 //CE found a call here with NULL y pointer
     if (x)
-        *x = xx; 
+        *x = xx;
     if (y)
         *y = yy;
 }

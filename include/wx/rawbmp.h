@@ -713,7 +713,7 @@ typedef wxPixelData<wxBitmap, wxAlphaPixelFormat> wxAlphaPixelData;
     partial template specialization then and neither VC6 nor VC7 provide it.
  */
 template < class Image, class PixelFormat = wxPixelFormatFor<Image> >
-struct wxPixelIterator : wxPixelData<Image, PixelFormat>::Iterator
+struct wxPixelIterator : public wxPixelData<Image, PixelFormat>::Iterator
 {
 };
 

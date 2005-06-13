@@ -155,14 +155,14 @@ public:
                                                 wxT(""),
                                                 wxT(""),
                                                 (const wxChar *)NULL,
-                                            wxT("BMP files (*.bmp)|*.bmp|")
-                                            wxT("PNG files (*.png)|*.png|")
-                                            wxT("JPEG files (*.jpg)|*.jpg|")
-                                            wxT("GIF files (*.gif)|*.gif|")
-                                            wxT("TIFF files (*.tif)|*.tif|")
-                                            wxT("PCX files (*.pcx)|*.pcx|")
-                                            wxT("ICO files (*.ico)|*.ico|")
-                                            wxT("CUR files (*.cur)|*.cur"),
+                                                wxT("BMP files (*.bmp)|*.bmp|")
+                                                wxT("PNG files (*.png)|*.png|")
+                                                wxT("JPEG files (*.jpg)|*.jpg|")
+                                                wxT("GIF files (*.gif)|*.gif|")
+                                                wxT("TIFF files (*.tif)|*.tif|")
+                                                wxT("PCX files (*.pcx)|*.pcx|")
+                                                wxT("ICO files (*.ico)|*.ico|")
+                                                wxT("CUR files (*.cur)|*.cur"),
                                                 wxSAVE,
                                                 this);
 
@@ -216,7 +216,7 @@ public:
                         cmap[i] = (unsigned char)i;
                     image.SetPalette(wxPalette(256, cmap, cmap, cmap));
 
-                    delete cmap;
+                    delete[] cmap;
                 }
             }
         }
@@ -697,7 +697,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawText( _T("PNM handler"), 30, 1285 );
     if (my_horse_pnm && my_horse_pnm->Ok())
         dc.DrawBitmap( *my_horse_pnm, 30, 1300 );
-    
+
     dc.DrawText( _T("PNM handler (ascii grey)"), 280, 1285 );
     if (my_horse_asciigrey_pnm && my_horse_asciigrey_pnm->Ok())
         dc.DrawBitmap( *my_horse_asciigrey_pnm, 280, 1300 );

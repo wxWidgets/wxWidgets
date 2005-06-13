@@ -88,7 +88,7 @@ void wxBitmapRefData::Free()
 // this function should be called from all wxBitmap ctors
 void wxBitmap::Init()
 {
-    m_bIsMono = FALSE;
+    m_bIsMono = false;
     //
     // True for all bitmaps created from bits, wxImages, Xpms
     //
@@ -104,7 +104,7 @@ bool wxBitmap::CopyFromIconOrCursor(
     if (!::WinQueryPointerInfo(hIcon, &SIconInfo))
     {
         wxLogLastError(wxT("WinQueryPointerInfo"));
-        return FALSE;
+        return false;
     }
     wxBitmapRefData*                pRefData = new wxBitmapRefData;
 
@@ -124,7 +124,7 @@ bool wxBitmap::CopyFromIconOrCursor(
     pMask->SetMaskBitmap(GetHBITMAP());
     SetMask(pMask);
 
-    return(TRUE);
+    return true;
 } // end of wxBitmap::CopyFromIconOrCursor
 
 bool wxBitmap::CopyFromCursor(
@@ -134,7 +134,7 @@ bool wxBitmap::CopyFromCursor(
     UnRef();
 
     if (!rCursor.Ok())
-        return(FALSE);
+        return(false);
     return(CopyFromIconOrCursor(rCursor));
 } // end of wxBitmap::CopyFromCursor
 
@@ -145,7 +145,7 @@ bool wxBitmap::CopyFromIcon(
     UnRef();
 
     if (!rIcon.Ok())
-        return(FALSE);
+        return(false);
 
     return CopyFromIconOrCursor(rIcon);
 } // end of wxBitmap::CopyFromIcon
@@ -334,7 +334,7 @@ bool wxBitmap::Create(
         HPS                         hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
 
         if (nD == 1)
-            m_bIsMono = TRUE;
+            m_bIsMono = true;
         memset(&vHeader, '\0', 16);
         vHeader.cbFix     =  16;
         vHeader.cx        = nW;
@@ -393,17 +393,17 @@ bool wxBitmap::CreateFromXpm(
 #if wxUSE_IMAGE && wxUSE_XPM
     Init();
 
-    wxCHECK_MSG(ppData != NULL, FALSE, wxT("invalid bitmap data"))
+    wxCHECK_MSG(ppData != NULL, false, wxT("invalid bitmap data"))
 
     wxXPMDecoder                    vDecoder;
     wxImage                         vImg = vDecoder.ReadData(ppData);
 
-    wxCHECK_MSG(vImg.Ok(), FALSE, wxT("invalid bitmap data"))
+    wxCHECK_MSG(vImg.Ok(), false, wxT("invalid bitmap data"))
 
     *this = wxBitmap(vImg);
-    return TRUE;
+    return true;
 #else
-    return FALSE;
+    return false;
 #endif
 } // end of wxBitmap::CreateFromXpm
 
@@ -431,7 +431,7 @@ bool wxBitmap::LoadFile(
     }
     else
     {
-        return(FALSE);
+        return false;
     }
 } // end of wxBitmap::LoadFile
 
@@ -453,7 +453,7 @@ bool wxBitmap::Create(
     {
         wxLogDebug(wxT("Failed to create bitmap: no bitmap handler for type %ld defined."), lType);
 
-        return(FALSE);
+        return false;
     }
 
     m_refData = new wxBitmapRefData;
@@ -491,7 +491,7 @@ bool wxBitmap::SaveFile(
         wxImage                     vImage = ConvertToImage();
 
         if (!vImage.Ok())
-            return(FALSE);
+            return false;
 
         return(vImage.SaveFile( rFilename
                                ,lType
@@ -509,7 +509,7 @@ bool wxBitmap::CreateFromImage (
 , int                               nDepth
 )
 {
-    wxCHECK_MSG(rImage.Ok(), FALSE, wxT("invalid image"));
+    wxCHECK_MSG(rImage.Ok(), false, wxT("invalid image"));
     m_refData = new wxBitmapRefData();
 
     int                             nSizeLimit = 1024 * 768 * 3;
@@ -546,13 +546,13 @@ bool wxBitmap::CreateFromImage (
     //
     // Set bitmap parameters
     //
-    wxCHECK_MSG(rImage.Ok(), FALSE, wxT("invalid image"));
+    wxCHECK_MSG(rImage.Ok(), false, wxT("invalid image"));
     SetWidth(nWidth);
     SetHeight(nBmpHeight);
     if (nDepth == 1)
-        m_bIsMono = TRUE;
+        m_bIsMono = true;
     else
-        m_bIsMono = FALSE;
+        m_bIsMono = false;
     if (nDepth == -1)
         nDepth = wxDisplayDepth();
     SetDepth(nDepth);
@@ -589,7 +589,7 @@ bool wxBitmap::CreateFromImage (
     if(!pucBits)
     {
         wxFAIL_MSG(wxT("could not allocate memory for DIB"));
-        return FALSE;
+        return false;
     }
     memset(pucBits, '\0', (nBytePerLine * nHeight));
 
@@ -829,7 +829,7 @@ bool wxBitmap::CreateFromImage (
     ::DevCloseDC(hDCScreen);
     ::DevCloseDC(hDC);
     free(pucBits);
-    return TRUE;
+    return true;
 } // end of wxBitmap::CreateFromImage
 
 wxImage wxBitmap::ConvertToImage() const
@@ -860,7 +860,7 @@ wxImage wxBitmap::ConvertToImage() const
     HBITMAP                         hOldBitmap;
     DEVOPENSTRUC                    vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
     SIZEL                           vSizlPage = {0,0};
-    HDC                             hDCMem = NULLHANDLE;;
+    HDC                             hDCMem = NULLHANDLE;
 
     vImage.Create( nWidth
                   ,nHeight
@@ -1044,11 +1044,11 @@ wxImage wxBitmap::ConvertToImage() const
                              ,ucGreen
                              ,ucBlue
                             );
-        vImage.SetMask(TRUE);
+        vImage.SetMask(true);
     }
     else
     {
-        vImage.SetMask(FALSE);
+        vImage.SetMask(false);
     }
 
     //
@@ -1261,7 +1261,7 @@ bool wxMask::Create(
     }
     if (!rBitmap.Ok() || rBitmap.GetDepth() != 1)
     {
-        return(FALSE);
+        return false;
     }
 
     memset(&vBmih, '\0', sizeof(BITMAPINFOHEADER2));
@@ -1292,7 +1292,7 @@ bool wxMask::Create(
     ::GpiDestroyPS(hPSDst);
     ::DevCloseDC(hDCSrc);
     ::DevCloseDC(hDCDst);
-    return(TRUE);
+    return true;
 } // end of wxMask::Create
 
 // Create a mask from a bitmap and a palette index indicating
@@ -1329,7 +1329,7 @@ bool wxMask::Create(
                           ));
         }
     }
-    return(FALSE);
+    return false;
 } // end of wxMask::Create
 
 // Create a mask from a bitmap and a colour indicating
@@ -1339,7 +1339,7 @@ bool wxMask::Create(
 , const wxColour&                   rColour
 )
 {
-    bool                            bOk = TRUE;
+    bool                            bOk = true;
     COLORREF                        vMaskColour = OS2RGB( rColour.Red()
                                                          ,rColour.Green()
                                                          ,rColour.Blue()
@@ -1359,7 +1359,7 @@ bool wxMask::Create(
     }
     if (!rBitmap.Ok())
     {
-        return(FALSE);
+        return false;
     }
 
     //
@@ -1400,7 +1400,7 @@ bool wxMask::Create(
                 //
                 // Doesn't make sense to continue
                 //
-                bOk = FALSE;
+                bOk = false;
                 break;
             }
 
@@ -1422,7 +1422,7 @@ bool wxMask::Create(
     ::GpiDestroyPS(hPSDst);
     ::DevCloseDC(hDCSrc);
     ::DevCloseDC(hDCDst);
-    return(TRUE);
+    return true;
 } // end of wxMask::Create
 
 // ----------------------------------------------------------------------------
@@ -1447,7 +1447,7 @@ bool wxBitmapHandler::Create(
                             ,nWidth
                             ,nHeight
                             ,nDepth
-                           ) : FALSE);
+                           ) : false);
 }
 
 bool wxBitmapHandler::Load(
@@ -1467,7 +1467,7 @@ bool wxBitmapHandler::Load(
                               ,lFlags
                               ,nWidth
                               ,nHeight
-                             ) : FALSE);
+                             ) : false);
 }
 
 bool wxBitmapHandler::Save(
@@ -1483,7 +1483,7 @@ bool wxBitmapHandler::Save(
     return(pBitmap ? SaveFile( pBitmap
                               ,rName
                               ,lType
-                             ) : FALSE);
+                             ) : false);
 }
 
 bool wxBitmapHandler::Create(
@@ -1495,7 +1495,7 @@ bool wxBitmapHandler::Create(
 , int                               WXUNUSED(nDepth)
 )
 {
-    return(FALSE);
+    return false;
 }
 
 bool wxBitmapHandler::LoadFile(
@@ -1506,7 +1506,7 @@ bool wxBitmapHandler::LoadFile(
 , int                               WXUNUSED(nDesiredHeight)
 )
 {
-    return(FALSE);
+    return false;
 }
 
 bool wxBitmapHandler::SaveFile(
@@ -1516,7 +1516,7 @@ bool wxBitmapHandler::SaveFile(
 , const wxPalette*                  WXUNUSED(pPalette)
 )
 {
-    return(FALSE);
+    return false;
 }
 
 // ----------------------------------------------------------------------------

@@ -215,13 +215,13 @@ public:
     // shifts
         // left shift
     wxLongLongNative operator<<(int shift) const
-        { return wxLongLongNative(m_ll << shift);; }
+        { return wxLongLongNative(m_ll << shift); }
     wxLongLongNative& operator<<=(int shift)
         { m_ll <<= shift; return *this; }
 
         // right shift
     wxLongLongNative operator>>(int shift) const
-        { return wxLongLongNative(m_ll >> shift);; }
+        { return wxLongLongNative(m_ll >> shift); }
     wxLongLongNative& operator>>=(int shift)
         { m_ll >>= shift; return *this; }
 
@@ -402,13 +402,13 @@ public:
     // shifts
         // left shift
     wxULongLongNative operator<<(int shift) const
-        { return wxULongLongNative(m_ll << shift);; }
+        { return wxULongLongNative(m_ll << shift); }
     wxULongLongNative& operator<<=(int shift)
         { m_ll <<= shift; return *this; }
 
         // right shift
     wxULongLongNative operator>>(int shift) const
-        { return wxULongLongNative(m_ll >> shift);; }
+        { return wxULongLongNative(m_ll >> shift); }
     wxULongLongNative& operator>>=(int shift)
         { m_ll >>= shift; return *this; }
 

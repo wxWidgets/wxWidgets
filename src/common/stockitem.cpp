@@ -90,7 +90,7 @@ bool wxIsStockID(wxWindowID id)
 
         default:
             return false;
-    };
+    }
 }
 
 wxString wxGetStockLabel(wxWindowID id, bool withCodes, wxString accelerator)

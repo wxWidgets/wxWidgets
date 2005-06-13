@@ -120,7 +120,7 @@ bool CIDropTarget::DragLeave()
     // Release the held object
     //
     Free();
-    return TRUE;
+    return true;
 } // end of CIDropTarget::DragLeave
 
 MRESULT CIDropTarget::DragOver ()
@@ -250,7 +250,7 @@ MRESULT CIDropTarget::Drop ()
                           ,m_pDragInfo->yDrop
                          ))
     {
-        wxDragResult                 eRc = wxDragNone;;
+        wxDragResult                 eRc = wxDragNone;
 
         //
         // And now it has the data
@@ -260,7 +260,7 @@ MRESULT CIDropTarget::Drop ()
                                 ,eRc
                                );
     }
-    //else: OnDrop() returned FALSE, no need to copy data
+    //else: OnDrop() returned false, no need to copy data
 
     //
     // Release the held object
@@ -292,12 +292,12 @@ bool wxDropTarget::GetData ()
 
     if (vFormat == wxDF_INVALID)
     {
-        return FALSE;
+        return false;
     }
     //
     // Under OS/2 we already have the data via the attached DRAGITEM's
     //
-    return TRUE;
+    return true;
 } // end of wxDropTarget::GetData
 
 wxDataFormat wxDropTarget::GetSupportedFormat (
@@ -313,7 +313,7 @@ wxDataFormat wxDropTarget::GetSupportedFormat (
     ULONG                           n;
     wxString                        sMechanism;
     wxString                        sFormat;
-    bool                            bValid = FALSE;
+    bool                            bValid = false;
 
     pFormats = ulFormats == 1 ? &vFormat :  new wxDataFormat[ulFormats];
     m_dataObject->GetAllFormats( pFormats
@@ -387,7 +387,7 @@ wxDataFormat wxDropTarget::GetSupportedFormat (
             pDragItem = ::DrgQueryDragitemPtr(pDataSource, i);
             if (::DrgVerifyRMF(pDragItem, (PSZ)sMechanism.c_str(), (PSZ)sFormat.c_str()))
             {
-                bValid = TRUE;
+                bValid = true;
                 break;
             }
         }
@@ -434,7 +434,7 @@ bool wxDropTarget::OnDrop (
 , wxCoord                           WXUNUSED(y)
 )
 {
-    return TRUE;
+    return true;
 } // end of wxDropTarget::OnDrop
 
 //-------------------------------------------------------------------------
@@ -525,11 +525,11 @@ bool wxDropSource::GiveFeedback (
             case wxDragError:
                 break;
         }
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 } // end of GuiAdvDnd_CDropSource::GiveFeedback
 

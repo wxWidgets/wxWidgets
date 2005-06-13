@@ -44,25 +44,25 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
     wxString title(_("Choose colour"));
     m_widget = gtk_color_selection_dialog_new(wxGTK_CONV(title));
-    
+
     if (parent)
         gtk_window_set_transient_for(GTK_WINDOW(m_widget),
                                      GTK_WINDOW(parent->m_widget));
-    
-    GtkColorSelection *sel = 
+
+    GtkColorSelection *sel =
         GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(m_widget)->colorsel);
     gtk_color_selection_set_has_palette(sel, true);
 
     return true;
 }
-    
+
 int wxColourDialog::ShowModal()
 {
     ColourDataToDialog();
-    
+
     gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
     gtk_widget_hide(m_widget);
-    
+
     switch (result)
     {
         default:
@@ -73,18 +73,18 @@ int wxColourDialog::ShowModal()
         case GTK_RESPONSE_DELETE_EVENT:
         case GTK_RESPONSE_CLOSE:
             return wxID_CANCEL;
-     
+
         case GTK_RESPONSE_OK:
             DialogToColourData();
             return wxID_OK;
-    };
+    }
 }
 
 void wxColourDialog::ColourDataToDialog()
 {
-    GtkColorSelection *sel = 
+    GtkColorSelection *sel =
         GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(m_widget)->colorsel);
-                
+
     if (m_data.GetColour().Ok())
     {
         gtk_color_selection_set_current_color(sel,
@@ -115,13 +115,13 @@ void wxColourDialog::ColourDataToDialog()
 
 void wxColourDialog::DialogToColourData()
 {
-    GtkColorSelection *sel = 
+    GtkColorSelection *sel =
         GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(m_widget)->colorsel);
 
     GdkColor clr;
     gtk_color_selection_get_current_color(sel, &clr);
     m_data.SetColour(wxColour(clr.red >> 8, clr.green >> 8, clr.blue >> 8));
-    
+
     // Extract custom palette:
 
     GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(sel));
@@ -140,7 +140,7 @@ void wxColourDialog::DialogToColourData()
         }
         g_free(colors);
     }
-    
+
     g_free(pal);
 }
 

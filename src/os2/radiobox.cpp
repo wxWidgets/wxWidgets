@@ -790,7 +790,7 @@ void wxRadioBox::GetPosition(
 ) const
 {
     wxWindowOS2*                    pParent = GetParent();
-    RECT                            vRect = { -1, -1, -1, -1 };;
+    RECT                            vRect = { -1, -1, -1, -1 };
     POINTL                          vPoint;
     int                             i;
 

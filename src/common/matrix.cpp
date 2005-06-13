@@ -77,7 +77,7 @@ void wxTransformMatrix::operator = (const wxTransformMatrix& mat)
 
 bool wxTransformMatrix::operator == (const wxTransformMatrix& mat)
 {
-    if (m_isIdentity==true && mat.m_isIdentity==true)
+    if (m_isIdentity && mat.m_isIdentity)
         return true;
 
     int i, j;
