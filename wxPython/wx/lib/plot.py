@@ -564,8 +564,7 @@ class PlotCanvas(wx.Window):
         """Print current plot."""
         if paper != None:
             self.print_data.SetPaperId(paper)
-        pdd = wx.PrintDialogData()
-        pdd.SetPrintData(self.print_data)
+        pdd = wx.PrintDialogData(self.print_data)
         printer = wx.Printer(pdd)
         out = PlotPrintout(self)
         print_ok = printer.Print(self.parent, out)
