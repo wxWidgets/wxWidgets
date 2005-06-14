@@ -155,7 +155,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         GtkFileChooserAction gtk_action;
         GtkWindow* gtk_parent = NULL;
         if (parent)
-            gtk_parent = GTK_WINDOW(parent->m_widget);
+            gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
         gchar* ok_btn_stock;
         if ( style & wxSAVE )
