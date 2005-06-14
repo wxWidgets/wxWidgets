@@ -635,7 +635,7 @@ was found and detached.", "");
                 "GetItem(self, item) -> wx.SizerItem",
                 "Returns the `wx.SizerItem` which holds the *item* given.  The *item*
 parameter can be either a window, a sizer, or the zero-based index of
-the item to be detached.", "");
+the item to be found.", "");
         wxSizerItem* GetItem(PyObject* item) {
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
