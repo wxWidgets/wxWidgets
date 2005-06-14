@@ -134,7 +134,6 @@ FIXME: this template has (at least) the following bugs:
     <!--    These are handy ways of dealing with the                -->
     <!--    extensions in the library names of the                  --> 
     <!--    wxWindows library.                                      -->
-    <error>WX_DEBUG=$(WX_DEBUG).</error>
     <set var="WXLIBPOSTFIX">
         <if cond="WX_DEBUG=='1' and WX_UNICODE=='1'">ud</if>
         <if cond="WX_DEBUG=='1' and WX_UNICODE=='0'">d</if>
