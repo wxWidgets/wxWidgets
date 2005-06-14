@@ -1154,7 +1154,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     else
     {
 #if GTK_CHECK_VERSION(2,2,0)
-        if (use_bitmap.HasPixbuf())
+        if (!gtk_check_version(2,2,0) && use_bitmap.HasPixbuf())
         {
             gdk_draw_pixbuf(m_window, m_penGC,
                             use_bitmap.GetPixbuf(),

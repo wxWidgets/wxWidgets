@@ -683,7 +683,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
     //     to switch to fullscreen, which is not always available. We must
     //     check if WM supports the spec and use legacy methods if it
     //     doesn't.
-    if (method == wxX11_FS_WMSPEC)
+    if ( (method == wxX11_FS_WMSPEC) && !gtk_check_version(2,2,0) )
     {
         if (show)
             gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
