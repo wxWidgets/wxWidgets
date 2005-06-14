@@ -3423,11 +3423,13 @@ void cbDockPane::DrawHorizHandle( wxDC& dc, int x, int y, int width  )
         dc.DrawLine( x,y, right, y );
     }
 
+    ++y;
     dc.SetPen( mpLayout->mDarkPen );
-    dc.DrawLine( x,y, right, ++y );
+    dc.DrawLine( x,y, right, y );
 
+    ++y;
     dc.SetPen( mpLayout->mBlackPen );
-    dc.DrawLine( x,y, right, ++y );
+    dc.DrawLine( x,y, right, y );
 }
 
 cbBarInfo* cbDockPane::GetBarInfoByWindow( wxWindow* pBarWnd )
