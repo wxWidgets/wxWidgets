@@ -566,6 +566,7 @@ protected:
     friend class FrameSite;
     friend class wxActiveXEvents;
 
+    unsigned long m_pdwRegister;
         
     typedef map<MEMBERID, int>                                  MemberIdMap;
     typedef map<wxString, int, NS_wxActiveX::less_wxStringI>    NameMap;

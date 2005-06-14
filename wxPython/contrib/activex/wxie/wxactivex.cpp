@@ -298,6 +298,9 @@ wxActiveX::~wxActiveX()
         m_oleObject->Close(OLECLOSE_NOSAVE);
         m_oleObject->SetClientSite(NULL);
     }
+
+    // Unregister object as active
+    RevokeActiveObject(m_pdwRegister, NULL);
 }
 
 void wxActiveX::CreateActiveX(REFCLSID clsid)
@@ -323,7 +326,7 @@ void wxActiveX::CreateActiveX(REFCLSID clsid)
 
     // Register object as active
     unsigned long pdwRegister;
-    hret = RegisterActiveObject(m_ActiveX, clsid, ACTIVEOBJECT_WEAK, &pdwRegister);
+    hret = RegisterActiveObject(m_ActiveX, clsid, ACTIVEOBJECT_WEAK, &m_pdwRegister);
     WXOLE_WARN(hret, "Unable to register object as active");
 
     // Get Dispatch interface
