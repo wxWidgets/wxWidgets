@@ -37,6 +37,7 @@
     #include "wx/statbox.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/sysopt.h"
@@ -462,8 +463,19 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
     if ( s.empty() )
         return;
 
+    s_tip = s;
+
+    if( wxMessageBox( _T("Test multiline tooltip text?"),
+                      _T("Widgets sample"),
+                      wxYES_NO,
+                      this
+                    ) == wxYES )
+    {
+        s = _T("#1 ") + s_tip + _T("\n") + _T("#2 ") + s_tip;
+    }
+
     WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
-    page->GetWidget()->SetToolTip(s_tip = s);
+    page->GetWidget()->SetToolTip(s);
 
     wxControl *ctrl2 = page->GetWidget2();
     if ( ctrl2 )
