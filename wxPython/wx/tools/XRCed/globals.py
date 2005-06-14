@@ -17,10 +17,9 @@ import sys
 progname = 'XRCed'
 version = '0.1.5-2'
 # Can be changed to set other default encoding different
-defaultEncoding = ''
+#defaultEncoding = ''
 # you comment above and can uncomment this:
-#import wx
-#defaultEncoding = wx.GetDefaultPyEncoding()
+defaultEncoding = wxGetDefaultPyEncoding()
 
 try:
     True

@@ -20,9 +20,14 @@ class MemoryFile:
         self.buffer = ''
     def write(self, data):
         if g.currentEncoding:
-            self.buffer += data.encode(g.currentEncoding)
+            encoding = g.currentEncoding
         else:
-            self.buffer += data.encode()
+            encoding = wxGetDefaultPyEncoding()
+        try:
+            self.buffer += data.encode(encoding)
+        except UnicodeEncodeError:
+            self.buffer += data.encode(encoding, 'xmlcharrefreplace')
+            
     def close(self):
         wxMemoryFSHandler_AddFile(self.name, self.buffer)
 

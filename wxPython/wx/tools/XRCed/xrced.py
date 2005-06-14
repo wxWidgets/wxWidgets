@@ -716,7 +716,6 @@ Homepage: http://xrced.sourceforge.net\
 
     # Simple emulation of python command line
     def OnDebugCMD(self, evt):
-        import traceback
         while 1:
             try:
                 exec raw_input('C:\> ')
@@ -1033,6 +1032,8 @@ Homepage: http://xrced.sourceforge.net\
             self.modified = False
             panel.SetModified(False)
         except:
+            inf = sys.exc_info()
+            wxLogError(traceback.format_exception(inf[0], inf[1], None)[-1])
             wxLogError('Error writing file: %s' % path)
             raise
 
