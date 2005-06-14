@@ -49,58 +49,69 @@ FIXME: this template has (at least) the following bugs:
         <if cond="FORMAT=='watcom'">%</if>
         <if cond="FORMAT!='watcom'"></if>
     </set>
-    
+   
+   
     <!-- The directory where wxWidgets is installed: -->
-    <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
-    <option name="WX_DIR" category="path">
-        <default-value>$(WX_DIR_DEFAULT)</default-value>
-        <description>
-            The directory where wxWidgets library is installed
-        </description>
-    </option>
+    <if cond="not isdefined('WX_DIR')">
+        <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
+        <option name="WX_DIR" category="path">
+            <default-value>$(WX_DIR_DEFAULT)</default-value>
+            <description>
+                The directory where wxWidgets library is installed
+            </description>
+        </option>
+    </if>
 
     <!--    This is a standard option that determines               -->
     <!--    whether the user wants to build this library as         -->
     <!--    a dll or as a static library.                           -->
-    <set var="WX_SHARED_DEFAULT" overwrite="0">0</set>
-    <option name="WX_SHARED">
-        <values>0,1</values>
-        <values-description>,DLL</values-description>
-        <default-value>$(WX_SHARED_DEFAULT)</default-value>
-        <description>
-            Use DLL build of wx library to use?
-        </description>
-    </option>
+    <if cond="not isdefined('WX_SHARED')">
+        <set var="WX_SHARED_DEFAULT" overwrite="0">0</set>
+        <option name="WX_SHARED">
+            <values>0,1</values>
+            <values-description>,DLL</values-description>
+            <default-value>$(WX_SHARED_DEFAULT)</default-value>
+            <description>
+                Use DLL build of wx library to use?
+            </description>
+        </option>
+    </if>
 
     <!-- Configuration for building the bakefile with               -->
     <!-- unicode strings or not (unicode or ansi).                  -->
-    <set var="WX_UNICODE_DEFAULT" overwrite="0">0</set>
-    <option name="WX_UNICODE">
-        <values>0,1</values>
-        <values-description>,Unicode</values-description>
-        <default-value>$(WX_UNICODE_DEFAULT)</default-value>        
-        <description>
-            Compile Unicode build of wxWidgets?
-        </description>
-    </option>
+    <if cond="not isdefined('WX_UNICODE')">
+        <set var="WX_UNICODE_DEFAULT" overwrite="0">0</set>
+        <option name="WX_UNICODE">
+            <values>0,1</values>
+            <values-description>,Unicode</values-description>
+            <default-value>$(WX_UNICODE_DEFAULT)</default-value>        
+            <description>
+                Compile Unicode build of wxWidgets?
+            </description>
+        </option>
+    </if>
 
-    <set var="WX_DEBUG_DEFAULT" overwrite="0">1</set>
-    <option name="WX_DEBUG">
-        <values>0,1</values>
-        <values-description>,Debug</values-description>
-        <default-value>$(WX_DEBUG_DEFAULT)</default-value>
-        <description>
-            Use debug build of wxWidgets (define __WXDEBUG__)?
-        </description>
-    </option>
+    <if cond="not isdefined('WX_DEBUG')">
+        <set var="WX_DEBUG_DEFAULT" overwrite="0">1</set>
+        <option name="WX_DEBUG">
+            <values>0,1</values>
+            <values-description>Release,Debug</values-description>
+            <default-value>$(WX_DEBUG_DEFAULT)</default-value>
+            <description>
+                Use debug build of wxWidgets (define __WXDEBUG__)?
+            </description>
+        </option>
+    </if>
 
-    <set var="WX_VERSION_DEFAULT" overwrite="0">26</set>
-    <option name="WX_VERSION">
-        <default-value>$(WX_VERSION_DEFAULT)</default-value>
-        <description>
-            Version of the wx library to build against.
-        </description>
-    </option>
+    <if cond="not isdefined('WX_VERSION')">
+        <set var="WX_VERSION_DEFAULT" overwrite="0">26</set>
+        <option name="WX_VERSION">
+            <default-value>$(WX_VERSION_DEFAULT)</default-value>
+            <description>
+                Version of the wx library to build against.
+            </description>
+        </option>
+    </if>
 
     <!--                     HELPER VARIABLES                       -->
     <!--                                                            -->
@@ -123,6 +134,7 @@ FIXME: this template has (at least) the following bugs:
     <!--    These are handy ways of dealing with the                -->
     <!--    extensions in the library names of the                  --> 
     <!--    wxWindows library.                                      -->
+    <error>WX_DEBUG=$(WX_DEBUG).</error>
     <set var="WXLIBPOSTFIX">
         <if cond="WX_DEBUG=='1' and WX_UNICODE=='1'">ud</if>
         <if cond="WX_DEBUG=='1' and WX_UNICODE=='0'">d</if>
