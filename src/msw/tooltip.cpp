@@ -325,11 +325,19 @@ void wxToolTip::Add(WXHWND hWnd)
                 SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
                                    0, (void *)sz.cx);
             }
+            else
 #endif // comctl32.dll >= 4.70
+            {
+                // replace the '\n's with spaces because otherwise they appear as
+                // unprintable characters in the tooltip string
+                m_text.Replace(_T("\n"), _T(" "));
+                ti.lpszText = (wxChar *)m_text.c_str(); // const_cast
 
-            // replace the '\n's with spaces because otherwise they appear as
-            // unprintable characters in the tooltip string
-            m_text.Replace(_T("\n"), _T(" "));
+                if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, 0, &ti) )
+                {
+                    wxLogDebug(_T("Failed to create the tooltip '%s'"), m_text.c_str());
+                }
+            }
         }
     }
 }
