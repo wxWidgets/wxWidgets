@@ -386,7 +386,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     if ( pos == (size_t)-1 )
     {
         // append at the end
-        pos = ::GetMenuItemCount(GetHmenu());
+        pos = GetMenuItemCount();
     }
 
     BOOL ok = false;

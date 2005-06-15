@@ -92,6 +92,21 @@ wxMessageOutput* wxMessageOutput::Set(wxMessageOutput* msgout)
 // wxMessageOutputBest
 // ----------------------------------------------------------------------------
 
+#ifdef __WINDOWS__
+
+// check if we're running in a console under Windows
+static inline bool IsInConsole()
+{
+#ifdef __WXWINCE__
+    return false;
+#else // !__WXWINCE__
+    HANDLE hStdErr = ::GetStdHandle(STD_ERROR_HANDLE);
+    return hStdErr && hStdErr != INVALID_HANDLE_VALUE;
+#endif // __WXWINCE__/!__WXWINCE__
+}
+
+#endif // __WINDOWS__
+
 void wxMessageOutputBest::Printf(const wxChar* format, ...)
 {
     va_list args;
@@ -102,9 +117,7 @@ void wxMessageOutputBest::Printf(const wxChar* format, ...)
     va_end(args);
 
 #ifdef __WINDOWS__
-    // check if we're running in a console
-    HANDLE hStdErr = ::GetStdHandle(STD_ERROR_HANDLE);
-    if ( !hStdErr || hStdErr == INVALID_HANDLE_VALUE )
+    if ( !IsInConsole() )
     {
         ::MessageBox(NULL, out, _T("wxWidgets"), MB_ICONINFORMATION | MB_OK);
     }
