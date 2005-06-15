@@ -19,6 +19,7 @@
 
 #include "wx/defs.h"
 #include "wx/string.h"
+#include "wx/pen.h"
 #include "wx/window.h"
 #include "wx/dynarray.h"
 #include "wx/fl/fldefs.h"
