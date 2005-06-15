@@ -91,10 +91,14 @@ FIXME: this template has (at least) the following bugs:
         </option>
     </if>
 
-    <if cond="not isdefined('WX_DEBUG')">
+    <set var="WX_DEBUG_VARIABLE" overwrite="0">WX_DEBUG</set>
+    <set var="WX_DEBUG_VALUE_ON">1</set>
+    <set var="WX_DEBUG_VALUE_OFF">0</set>
+    
+    <if cond="not isdefined(WX_DEBUG_VARIABLE)">
         <set var="WX_DEBUG_DEFAULT" overwrite="0">1</set>
-        <option name="WX_DEBUG">
-            <values>0,1</values>
+        <option name="$(WX_DEBUG_VARIABLE)">
+            <values>$(WX_DEBUG_VALUE_OFF),$(WX_DEBUG_VALUE_ON)</values>
             <values-description>Release,Debug</values-description>
             <default-value>$(WX_DEBUG_DEFAULT)</default-value>
             <description>
@@ -128,24 +132,28 @@ FIXME: this template has (at least) the following bugs:
     <!--    The debug define we need with win32 compilers           -->    
     <!--    (on Linux, the wx-config program is used).              -->    
     <set var="WXDEBUG_DEFINE">        
-        <if cond="WX_DEBUG=='1'">__WXDEBUG__</if>    
+        <if cond="$(WX_DEBUG_VARIABLE)==$(WX_DEBUG_VALUE_ON)">__WXDEBUG__</if>    
     </set>
 
     <!--    These are handy ways of dealing with the                -->
     <!--    extensions in the library names of the                  --> 
     <!--    wxWindows library.                                      -->
     <set var="WXLIBPOSTFIX">
-        <if cond="WX_DEBUG=='1' and WX_UNICODE=='1'">ud</if>
-        <if cond="WX_DEBUG=='1' and WX_UNICODE=='0'">d</if>
-        <if cond="WX_DEBUG=='0' and WX_UNICODE=='1'">u</if>
+        <if cond="$(WX_DEBUG_VARIABLE)==$(WX_DEBUG_VALUE_ON) and WX_UNICODE=='1'">ud</if>
+        <if cond="$(WX_DEBUG_VARIABLE)==$(WX_DEBUG_VALUE_ON) and WX_UNICODE=='0'">d</if>
+        <if cond="$(WX_DEBUG_VARIABLE)==$(WX_DEBUG_VALUE_OFF) and WX_UNICODE=='1'">u</if>
     </set>
     <set var="WX3RDPARTYLIBPOSTFIX">
-        <if cond="WX_DEBUG=='1'">d</if>
+        <if cond="$(WX_DEBUG_VARIABLE)==$(WX_DEBUG_VALUE_ON)">d</if>
+    </set>
+
+    <set var="WXCPU">
+        <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
     </set>
 
     <set var="WXLIBPATH">
-        <if cond="WX_SHARED=='0'">$(DIRSEP)lib$(DIRSEP)$(COMPILER)_lib</if>
-        <if cond="WX_SHARED=='1'">$(DIRSEP)lib$(DIRSEP)$(COMPILER)_dll</if>
+        <if cond="WX_SHARED=='0'">$(DIRSEP)lib$(DIRSEP)$(COMPILER)$(WXCPU)_lib</if>
+        <if cond="WX_SHARED=='1'">$(DIRSEP)lib$(DIRSEP)$(COMPILER)$(WXCPU)_dll</if>
     </set>
 
     <set var="WXLIBINCLUDE">$(WXLIBPATH)$(DIRSEP)msw$(WXLIBPOSTFIX)</set>
@@ -232,7 +240,7 @@ FIXME: this template has (at least) the following bugs:
         </if>
 
         <!-- Non-borland, on the other hand...                  -->
-        <if cond="FORMAT!='borland'">
+        <if cond="FORMAT not in ['borland','msevc4prj']">
             <sys-lib>kernel32</sys-lib>
             <sys-lib>user32</sys-lib>
             <sys-lib>gdi32</sys-lib>
