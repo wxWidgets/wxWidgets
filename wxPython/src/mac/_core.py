@@ -11522,7 +11522,7 @@ class Sizer(Object):
 
         Returns the `wx.SizerItem` which holds the *item* given.  The *item*
         parameter can be either a window, a sizer, or the zero-based index of
-        the item to be detached.
+        the item to be found.
         """
         return _core_.Sizer_GetItem(*args, **kwargs)
 
