@@ -11,8 +11,6 @@ wxMac: Don't send an event for wx.RadioButton deselections, just the
 selections.  This was done to make it consistent with the other
 platforms. 
 
-Added wx.RendererNative class.
-
 wxMSW: Always set flat toolbar style, even under XP with themes: this
 is necessary or separators aren't shown at all.
 
@@ -36,6 +34,7 @@ Docview and IDE patch from Morag Hua with fix for bug #1217890
     will exec Notepad on the currently open file.  A new "Notepad"
     menu item will appear under the Tools menu.
 
+Some fixes to XRCed to make encoding errors a bit more user friendly.
 
 
 
