@@ -3241,4 +3241,18 @@ wxInt32 wxWindowMac::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENT
     return eventNotHandledErr ;
 }
 
+bool wxWindowMac::Reparent(wxWindowBase *newParentBase)
+{
+    wxWindowMac *newParent = (wxWindowMac *)newParentBase;
+    
+    if ( !wxWindowBase::Reparent(newParent) )
+        return FALSE;
+    
+    //copied from MacPostControlCreate
+    ControlRef container = (ControlRef) GetParent()->GetHandle() ;
+    wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
+    ::EmbedControl( m_peer->GetControlRef() , container ) ;
+    
+    return TRUE;
+}
 
