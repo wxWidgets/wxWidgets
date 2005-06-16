@@ -385,8 +385,9 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     LPCTSTR pData = NULL;
     if ( pos == (size_t)-1 )
     {
-        // append at the end
-        pos = GetMenuItemCount();
+        // append at the end (note that the item is already appended to
+        // internal data structures)
+        pos = GetMenuItemCount() - 1;
     }
 
     BOOL ok = false;
