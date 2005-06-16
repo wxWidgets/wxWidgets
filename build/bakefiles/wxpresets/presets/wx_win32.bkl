@@ -223,14 +223,14 @@ FIXME: this template has (at least) the following bugs:
          after __wx-libs-point: -->
     <define-tag name="__wx-syslibs" rules="exe,dll,module">
         <!-- wx 3rd party libs, always use them: -->
-        <sys-lib>wxtiff$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
-        <sys-lib>wxjpeg$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
-        <sys-lib>wxpng$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
-        <sys-lib>wxzlib$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
-        <!-- For regex we won't use the WX3RDPARTYLIBPOSTIX postfix:
+        <sys-lib cond="FORMAT!='msevc4prj'">wxtiff$(WX3RDPARTYLIBPOSTFIX)</sys-lib> 
+        <sys-lib>wxjpeg$(WX3RDPARTYLIBPOSTFIX)</sys-lib> 
+        <sys-lib>wxpng$(WX3RDPARTYLIBPOSTFIX)</sys-lib> 
+        <sys-lib>wxzlib$(WX3RDPARTYLIBPOSTFIX)</sys-lib> 
+        <!-- For regex we won't use the WX3RDPARTYLIBPOSTIX postfix: 
              unliked tiff, jpeg, png, zlib, expat, when building
              in Unicode mode, the "u" suffix is appended to regex -->
-        <sys-lib>wxregex$(WXLIBPOSTFIX)</sys-lib>
+        <sys-lib cond="FORMAT!='msevc4prj'">wxregex$(WXLIBPOSTFIX)</sys-lib> 
         <sys-lib>wxexpat$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
 
         <!-- link-in system libs that wx depends on: -->
