@@ -967,7 +967,7 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
       {
         wxNotebookPage *pPage = m_pages[sel];
         pPage->Show(true);
-        
+
         // As per bug report:
         // http://sourceforge.net/tracker/index.php?func=detail&aid=1150659&group_id=9863&atid=109863,
         // we should not set the page focus (and thereby the focus for
@@ -1102,17 +1102,17 @@ bool wxNotebook::DoDrawBackground(WXHDC hDC, wxWindow *child)
     if ( child )
         ::MapWindowPoints(GetHwnd(), GetHwndOf(child), (POINT *)&rc, 2);
 
-
-    // apparently DrawThemeBackground() modifies the rect passed to it and if we
-    // don't do these adjustments, there are some drawing artifacts which are
-    // only visible with some non default themes; so modify the rect here using
-    // the magic numbers below so that it still paints the correct area
-    rc.left   -= 2;
-    rc.top    -= 2;
-    rc.right  += 4;
-    rc.bottom += 5;
-
-
+    // we have the content area (page size), but we need to draw all of the
+    // background for it to be aligned correctly
+    wxUxThemeEngine::Get()->GetThemeBackgroundExtent
+                            (
+                                theme,
+                                (HDC) hDC,
+                                9 /* TABP_PANE */,
+                                0,
+                                &rc,
+                                &rc
+                            );
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 theme,
