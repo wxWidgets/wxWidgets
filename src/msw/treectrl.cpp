@@ -2289,6 +2289,12 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         int x = GET_X_LPARAM(lParam),
             y = GET_Y_LPARAM(lParam);
         HTREEITEM htItem = GetItemFromPoint(GetHwnd(), x, y);
+        
+        TV_HITTESTINFO tvht;
+        tvht.pt.x = x;
+        tvht.pt.y = y;
+    
+        TreeView_HitTest(GetHwnd(), &tvht);
 
         switch ( nMsg )
         {
@@ -2309,8 +2315,11 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 
 #if !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
             case WM_LBUTTONDOWN:
-                if ( htItem && isMultiple )
+                if ( htItem && isMultiple && (tvht.flags & TVHT_ONITEM) != 0 )
                 {
+                    m_htClickedItem = (WXHTREEITEM) htItem;
+                    m_ptClick = wxPoint(x, y);
+                    
                     if ( wParam & MK_CONTROL )
                     {
                         SetFocus();
@@ -2336,8 +2345,11 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                             m_htSelStart = TreeView_GetSelection(GetHwnd());
                         }
 
-                        SelectRange(GetHwnd(), HITEM(m_htSelStart), htItem,
+                        if ( m_htSelStart )
+                            SelectRange(GetHwnd(), HITEM(m_htSelStart), htItem,
                                     !(wParam & MK_CONTROL));
+                        else
+                            ::SelectItem(GetHwnd(), htItem);
 
                         ::SetFocus(GetHwnd(), htItem);
 
@@ -2347,6 +2359,8 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     {
                         // avoid doing anything if we click on the only
                         // currently selected item
+                        
+                        SetFocus();
 
                         wxArrayTreeItemIds selections;
                         size_t count = GetSelections(selections);
@@ -2359,11 +2373,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                             // otherwise, perform the deselection on mouse-up.
                             // this allows multiple drag and drop to work.
 
-                            if (IsItemSelected(GetHwnd(), htItem))
-                            {
-                                ::SetFocus(GetHwnd(), htItem);
-                            }
-                             else
+                            if (!IsItemSelected(GetHwnd(), htItem))
                             {
                                 UnselectAll();
 
@@ -2375,6 +2385,8 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                                 TreeView_SelectItem(GetHwnd(), 0);
                                 ::SelectItem(GetHwnd(), htItem);
                             }
+                            ::SetFocus(GetHwnd(), htItem);
+                            processed = true;
                         }
 
                         // reset on any click without Shift
@@ -2385,6 +2397,46 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 #endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
 
             case WM_MOUSEMOVE:
+                
+                if ( m_htClickedItem )
+                {
+                    int cx = abs(m_ptClick.x - x);
+                    int cy = abs(m_ptClick.y - y);
+
+                    if ( cx > GetSystemMetrics( SM_CXDRAG ) || cy > GetSystemMetrics( SM_CYDRAG ) )
+                    {
+                        HWND pWnd = ::GetParent( GetHwnd() );
+                        if ( pWnd )
+                        {
+                            NM_TREEVIEW tv;
+
+                            tv.hdr.hwndFrom = GetHwnd();
+                            tv.hdr.idFrom = ::GetWindowLong( GetHwnd(), GWL_ID );
+                            tv.hdr.code = TVN_BEGINDRAG;
+            
+                            tv.itemNew.hItem = HITEM(m_htClickedItem);
+                            
+                            TVITEM tviAux;
+                            ZeroMemory(&tviAux, sizeof(tviAux));
+                            tviAux.hItem = HITEM(m_htClickedItem);
+                            tviAux.mask = TVIF_STATE | TVIF_PARAM;
+                            tviAux.stateMask = 0xffffffff;
+                            TreeView_GetItem( GetHwnd(), &tviAux );
+                            
+                            tv.itemNew.state = tviAux.state;
+                            tv.itemNew.lParam = tviAux.lParam;
+            
+                            tv.ptDrag.x = x;
+                            tv.ptDrag.y = y;
+            
+                            ::SendMessage( pWnd, WM_NOTIFY, tv.hdr.idFrom, (LPARAM)&tv );
+                        }
+                        m_htClickedItem.Unset();
+                    }
+                    
+                    
+                }
+                
                 if ( m_dragImage )
                 {
                     m_dragImage->Move(wxPoint(x, y));
@@ -2413,7 +2465,10 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     {
                         UnselectAll();
                         TreeView_SelectItem(GetHwnd(), htItem);
+                        ::SelectItem(GetHwnd(), htItem);
+                        ::SetFocus(GetHwnd(), htItem);
                     }
+                    m_htClickedItem.Unset();
                 }
 
                 // fall through

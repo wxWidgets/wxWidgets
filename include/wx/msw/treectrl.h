@@ -498,7 +498,8 @@ private:
     void* m_pVirtualRoot;
 
     // the starting item for selection with Shift
-    wxTreeItemId m_htSelStart;
+    wxTreeItemId m_htSelStart, m_htClickedItem;
+    wxPoint m_ptClick;
 
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;
