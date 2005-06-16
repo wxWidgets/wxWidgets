@@ -48,9 +48,6 @@
 #        define WXEXPORT __declspec(export)
 #        define WXIMPORT __declspec(import)
 #    endif
-#elif defined(__CYGWIN__)
-#    define WXEXPORT __declspec(dllexport)
-#    define WXIMPORT __declspec(dllimport)
 #endif
 
 /* for other platforms/compilers we don't anything */

@@ -57,9 +57,9 @@
    first define Windows symbols if they're not defined on the command line: we
    can autodetect everything we need if _WIN32 is defined
  */
-#if defined(__CYGWIN__) && defined(__WINDOWS__)
-    /* for Cygwin, a build of wxMSW, or a build with -mno-cygwin is treated
-     * as a Windows build. Otherwise it is treated as a unix compiler. */
+#if defined(__CYGWIN32__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) \
+    && !defined(__WXX11__)
+    /* for Cygwin, default to wxMSW unless otherwise specified */
 #    ifndef __WXMSW__
 #        define __WXMSW__
 #    endif
@@ -499,7 +499,7 @@
    at least maj.min
  */
 #if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
-    ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) || \
+    defined( __CYGWIN__ ) || \
       (defined(__WATCOMC__) && __WATCOMC__ >= 1200) ) && \
     !defined(__DOS__) && \
     !defined(__WXMOTIF__) && \
