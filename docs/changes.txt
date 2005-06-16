@@ -9,6 +9,10 @@ wxMSW:
 
 - Fixed multiline tooltips handling.
 
+wxUniv:
+
+- Window creation now honours wxVSCROLL.
+
 2.6.1
 -----
 
