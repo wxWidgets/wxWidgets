@@ -935,7 +935,7 @@ void GridFrame::OnEditorHidden( wxGridEvent& ev )
 void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
 {
     (void)wxMessageBox( _T("\n\nwxGrid demo \n\n")
-                        _T("Michael Bedward, Julian Small, Vadim Zeitlin"),
+                        _T("Michael Bedward, Julian Smart, Vadim Zeitlin"),
                         _T("About"),
                         wxOK );
 }
