@@ -5,6 +5,10 @@ wxWidgets Change Log - For more verbose changes, see the manual
 2.6.2
 -----
 
+All:
+
+- Fixed wxScopeGuard to work with VC++, documented it
+
 wxMSW:
 
 - Fixed multiline tooltips handling.

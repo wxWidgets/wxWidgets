@@ -189,6 +189,8 @@ the corresponding topic.
 \helpref{wxNewId}{wxnewid}\\
 \helpref{wxNow}{wxnow}\\
 \helpref{wxOnAssert}{wxonassert}\\
+\helpref{wxON\_BLOCK\_EXIT}{wxonblockexit}\\
+\helpref{wxON\_BLOCK\_EXIT\_OBJ}{wxonblockexitobj}\\
 \helpref{wxOpenClipboard}{wxopenclipboard}\\
 \helpref{wxParseCommonDialogsFilter}{wxparsecommondialogsfilter}\\
 \helpref{wxDirExists}{functionwxdirexists}\\
@@ -2747,6 +2749,48 @@ Generates an integer identifier unique to this run of the program.
 \wxheading{Include files}
 
 <wx/utils.h>
+
+
+\membersection{wxON\_BLOCK\_EXIT}\label{wxonblockexit}
+
+\func{}{wxON\_BLOCK\_EXIT0}{\param{}{func}}
+\func{}{wxON\_BLOCK\_EXIT1}{\param{}{func}, \param{}{p1}}
+\func{}{wxON\_BLOCK\_EXIT2}{\param{}{func}, \param{}{p1}, \param{}{p2}}
+
+This family of macros allows to ensure that the global function \arg{func}
+with 0, 1, 2 or more parameters (up to some implementaton-defined limit) is
+executed on scope exit, whether due to a normal function return or because an
+exception has been thrown. A typical example of its usage:
+\begin{verbatim}
+    void *buf = malloc(size);
+    wxON_BLOCK_EXIT1(free, buf);
+\end{verbatim}
+
+Please see the original article by Andrei Alexandrescu and Petru Marginean
+published in December 2000 issue of \emph{C/C++ Users Journal} for more
+details.
+
+\wxheading{Include files}
+
+<wx/scopeguard.h>
+
+\wxheading{See also}
+
+\helpref{wxON\_BLOCK\_EXIT\_OBJ}{wxonblockexitobj}
+
+
+\membersection{wxON\_BLOCK\_EXIT\_OBJ}\label{wxonblockexitobj}
+
+\func{}{wxON\_BLOCK\_EXIT\_OBJ0}{\param{}{obj}, \param{}{method}}
+\func{}{wxON\_BLOCK\_EXIT\_OBJ1}{\param{}{obj}, \param{}{method}, \param{}{p1}}
+\func{}{wxON\_BLOCK\_EXIT\_OBJ2}{\param{}{obj}, \param{}{method}, \param{}{p1}, \param{}{p2}}
+
+This family of macros is similar to \helpref{wxON\_BLOCK\_EXIT}{wxonblockexit} 
+but calls a method of the given object instead of a free function.
+
+\wxheading{Include files}
+
+<wx/scopeguard.h>
 
 
 \membersection{::wxRegisterId}\label{wxregisterid}
