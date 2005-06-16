@@ -7,6 +7,8 @@
 #ifndef __WINCE_TIME_
 #define __WINCE_TIME_
 
+#ifndef _TM_DEFINED
+
 struct tm {
         int tm_sec;     /* seconds after the minute - [0,59] */
         int tm_min;     /* minutes after the hour - [0,59] */
@@ -19,6 +21,9 @@ struct tm {
         int tm_isdst;   /* daylight savings time flag */
         };
 
+extern "C"
+{
+
 struct tm * __cdecl localtime(const time_t *);
 
 time_t __cdecl time(time_t *);
@@ -29,10 +34,13 @@ struct tm * __cdecl gmtime(const time_t *);
 
 #define _tcsftime   wcsftime
 
-size_t __cdecl wcsftime(wchar_t *, size_t, const wchar_t *,
-        const struct tm *);
+size_t __cdecl wcsftime(wchar_t *, size_t, const wchar_t *, const struct tm *);
+
+}
 
 extern long timezone;
 
-#endif
+#endif // !_TM_DEFINED
+
+#endif // __WINCE_TIME_
 

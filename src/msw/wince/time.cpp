@@ -99,6 +99,9 @@ static struct tm * __cdecl common_localtime(const time_t * WXUNUSED(t), BOOL bLo
     return res;
 }
 
+extern "C"
+{
+
 ////////////////////////////////////////////////////////////////////////
 // Receive the number of seconds elapsed since midnight(00:00:00)
 // and convert a time value and corrects for the local time zone
@@ -117,6 +120,7 @@ struct tm * __cdecl gmtime(const time_t *t)
     return common_localtime(t, DO_GMTIME) ;
 }
 
+}
 
 ////////////////////////////////////////////////////////////////////////
 // Common code for conversion of struct tm into time_t   (static)
@@ -145,6 +149,8 @@ static time_t __cdecl common_tm_to_time(int day, int month, int year, int hour, 
     return prog ;
 }
 
+extern "C"
+{
 
 ////////////////////////////////////////////////////////////////////////
 // Returns the number of seconds elapsed since
@@ -183,3 +189,5 @@ size_t __cdecl wcsftime(wchar_t *, size_t, const wchar_t *, const struct tm *)
 
     return 0;
 }
+
+} // extern "C"
