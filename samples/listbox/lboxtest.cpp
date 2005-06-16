@@ -521,6 +521,7 @@ void LboxTestFrame::Reset()
 
 void LboxTestFrame::CreateLbox()
 {
+    wxWindow *parent = m_lbox->GetParent();
     int flags = 0;
     switch ( m_radioSelMode->GetSelection() )
     {
@@ -540,19 +541,16 @@ void LboxTestFrame::CreateLbox()
         flags |= wxLB_SORT;
 
     wxArrayString items;
-    if ( m_lbox )
+    int count = m_lbox->GetCount();
+    for ( int n = 0; n < count; n++ )
     {
-        int count = m_lbox->GetCount();
-        for ( int n = 0; n < count; n++ )
-        {
-            items.Add(m_lbox->GetString(n));
-        }
-
-        m_sizerLbox->Detach(m_lbox);
-        delete m_lbox;
+        items.Add(m_lbox->GetString(n));
     }
 
-    m_lbox = new wxListBox(this, wxID_ANY,
+    m_sizerLbox->Detach(m_lbox);
+    delete m_lbox;
+
+    m_lbox = new wxListBox(parent, LboxTest_Listbox,
                            wxDefaultPosition, wxDefaultSize,
                            0, NULL,
                            flags);
