@@ -4150,6 +4150,11 @@ bool wxWindowMSW::HandlePrintClient(WXHDC hDC)
     if ( IsTopLevel() || InheritsBackgroundColour() )
         return false;
 
+    // sometimes we don't want the parent to handle it at all, instead
+    // return whatever value this window wants
+    if ( !MSWShouldPropagatePrintChild() )
+        return MSWPrintChild(hDC, (wxWindow *)this);
+
     for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
     {
         if ( win->MSWPrintChild(hDC, (wxWindow *)this) )

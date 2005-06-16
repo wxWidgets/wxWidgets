@@ -151,6 +151,13 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
+    // under XP when using "transition effect for menus and tooltips" if we
+    // return true for WM_PRINTCLIENT here then it causes noticable slowdown
+    virtual bool MSWShouldPropagatePrintChild()
+    {
+        return false;
+    }
+
 #if wxUSE_OWNER_DRAWN
     // control items
     wxListBoxItemsArray m_aItems;

@@ -391,6 +391,14 @@ public:
         return false;
     }
 
+    // some controls (e.g. wxListBox) need to set the return value themselves
+    //
+    // return true to let parent handle it if we don't, false otherwise
+    virtual bool MSWShouldPropagatePrintChild()
+    {
+        return true;
+    }
+
 
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
