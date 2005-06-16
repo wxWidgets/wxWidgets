@@ -49,8 +49,8 @@ FIXME: this template has (at least) the following bugs:
         <if cond="FORMAT=='watcom'">%</if>
         <if cond="FORMAT!='watcom'"></if>
     </set>
-   
-   
+
+
     <!-- The directory where wxWidgets is installed: -->
     <if cond="not isdefined('WX_DIR')">
         <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
@@ -84,7 +84,7 @@ FIXME: this template has (at least) the following bugs:
         <option name="WX_UNICODE">
             <values>0,1</values>
             <values-description>,Unicode</values-description>
-            <default-value>$(WX_UNICODE_DEFAULT)</default-value>        
+            <default-value>$(WX_UNICODE_DEFAULT)</default-value>
             <description>
                 Compile Unicode build of wxWidgets?
             </description>
@@ -115,24 +115,24 @@ FIXME: this template has (at least) the following bugs:
 
     <!--                     HELPER VARIABLES                       -->
     <!--                                                            -->
-    
-    
+
+
     <!--    The unicode define we want.  By default bakefile        -->
     <!--    makes variables an empty string, so if unicode          -->
     <!--    is not defined $(UNICODE_DEFINE) would expand           -->
     <!--    to nothing (literally).                                 -->
     <set var="WXUNICODE_DEFINE">
         <if cond="WX_UNICODE=='1'">_UNICODE</if>
-    </set>    
-    
-    <!--    The debug define we need with win32 compilers           -->    
-    <!--    (on Linux, the wx-config program is used).              -->    
-    <set var="WXDEBUG_DEFINE">        
-        <if cond="WX_DEBUG=='1'">__WXDEBUG__</if>    
+    </set>
+
+    <!--    The debug define we need with win32 compilers           -->
+    <!--    (on Linux, the wx-config program is used).              -->
+    <set var="WXDEBUG_DEFINE">
+        <if cond="WX_DEBUG=='1'">__WXDEBUG__</if>
     </set>
 
     <!--    These are handy ways of dealing with the                -->
-    <!--    extensions in the library names of the                  --> 
+    <!--    extensions in the library names of the                  -->
     <!--    wxWindows library.                                      -->
     <set var="WXLIBPOSTFIX">
         <if cond="WX_DEBUG=='1' and WX_UNICODE=='1'">ud</if>
@@ -152,9 +152,13 @@ FIXME: this template has (at least) the following bugs:
         <if cond="WX_SHARED=='1'">$(DIRSEP)lib$(DIRSEP)$(COMPILER)$(WXCPU)_dll</if>
     </set>
 
-    <set var="WXLIBINCLUDE">$(WXLIBPATH)$(DIRSEP)msw$(WXLIBPOSTFIX)</set>
-    
-    
+    <set var="WXPORT">
+        <if cond="FORMAT=='msevc4prj'">wince</if>
+        <if cond="FORMAT!='msevc4prj'">msw</if>
+    </set>
+    <set var="WXLIBINCLUDE">$(WXLIBPATH)$(DIRSEP)$(WXPORT)$(WXLIBPOSTFIX)</set>
+
+
     <!--                        WX TEMPLATE                         -->
     <!--                                                            -->
     <!--                                                            -->
@@ -174,7 +178,7 @@ FIXME: this template has (at least) the following bugs:
     <!--    we want for our stuff, and the wxWindows libs.          -->
 
 
-    
+
     <!-- this tag is used to include wx libraries: -->
     <define-tag name="wx-lib" rules="exe,dll,module">
         <if cond="value=='base'">
@@ -184,7 +188,7 @@ FIXME: this template has (at least) the following bugs:
             <sys-lib>wxbase$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
         </if>
         <if cond="value not in ['base','net','xml']">
-            <sys-lib>wxmsw$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
+            <sys-lib>wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
         </if>
     </define-tag>
 
@@ -195,40 +199,40 @@ FIXME: this template has (at least) the following bugs:
               position="before:__wx-libs-point"/>
     <tag-info name="__wx-syslibs"
               position="after:__wx-libs-point"/>
-    
+
 
     <!-- template for static wx libraries: -->
     <template id="wx-lib">
         <!--                    MISCELLANEOUS                       -->
-        <if cond="FORMAT=='mingw'">                    
+        <if cond="FORMAT=='mingw'">
             <define>HAVE_W32API_H</define>
             <ldflags>-mthreads</ldflags>
         </if>
 
         <define>$(WXUNICODE_DEFINE)</define>
-        <define>$(WXDEBUG_DEFINE)</define>        
+        <define>$(WXDEBUG_DEFINE)</define>
         <define>__WXMSW__</define>
 
         <include>$(WX_DIR)$(WXLIBINCLUDE)</include>
         <include>$(WX_DIR)/include</include>
     </template>
-    
-    
+
+
     <!-- this ugly tag contains all sys-lib tags used by "wx" template,
          in order to make sure they are not reorder when wx-lib is moved
          after __wx-libs-point: -->
     <define-tag name="__wx-syslibs" rules="exe,dll,module">
         <!-- wx 3rd party libs, always use them: -->
-        <sys-lib>wxtiff$(WX3RDPARTYLIBPOSTFIX)</sys-lib> 
-        <sys-lib>wxjpeg$(WX3RDPARTYLIBPOSTFIX)</sys-lib> 
-        <sys-lib>wxpng$(WX3RDPARTYLIBPOSTFIX)</sys-lib> 
-        <sys-lib>wxzlib$(WX3RDPARTYLIBPOSTFIX)</sys-lib> 
-        <!-- For regex we won't use the WX3RDPARTYLIBPOSTIX postfix: 
+        <sys-lib>wxtiff$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>wxjpeg$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>wxpng$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>wxzlib$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <!-- For regex we won't use the WX3RDPARTYLIBPOSTIX postfix:
              unliked tiff, jpeg, png, zlib, expat, when building
              in Unicode mode, the "u" suffix is appended to regex -->
-        <sys-lib>wxregex$(WXLIBPOSTFIX)</sys-lib> 
+        <sys-lib>wxregex$(WXLIBPOSTFIX)</sys-lib>
         <sys-lib>wxexpat$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
-   
+
         <!-- link-in system libs that wx depends on: -->
         <!-- If on borland, we don't need to do much            -->
         <if cond="FORMAT=='borland'">
@@ -259,7 +263,7 @@ FIXME: this template has (at least) the following bugs:
             <sys-lib>oleacc</sys-lib>
         </if>
     </define-tag>
-   
+
     <!-- template for wx executables/dlls: -->
     <template id="wx" template="wx-lib">
         <lib-path>$(WX_DIR)$(WXLIBPATH)</lib-path>
