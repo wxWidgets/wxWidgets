@@ -236,7 +236,7 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
             break;
 
         case THAI_CHARSET:
-            fontEncoding = wxFONTENCODING_CP437;
+            fontEncoding = wxFONTENCODING_CP874;
             break;
 
         case SHIFTJIS_CHARSET:
