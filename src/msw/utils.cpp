@@ -34,6 +34,7 @@
 #include "wx/apptrait.h"
 #include "wx/dynlib.h"
 #include "wx/dynload.h"
+#include "wx/scopeguard.h"
 
 #include "wx/confbase.h"        // for wxExpandEnvVars()
 
@@ -685,18 +686,18 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
     {
         if ( krc )
         {
-            if ( ::GetLastError() == ERROR_ACCESS_DENIED )
-            {
-                *krc = wxKILL_ACCESS_DENIED;
-            }
-            else
-            {
-                *krc = wxKILL_NO_PROCESS;
-            }
+            // recognize wxKILL_ACCESS_DENIED as special because this doesn't
+            // mean that the process doesn't exist and this is important for
+            // wxProcess::Exists()
+            *krc = ::GetLastError() == ERROR_ACCESS_DENIED
+                        ? wxKILL_ACCESS_DENIED
+                        : wxKILL_NO_PROCESS;
         }
 
         return -1;
     }
+
+    wxON_BLOCK_EXIT1(::CloseHandle, hProcess);
 
     bool ok = true;
     switch ( sig )
@@ -720,7 +721,9 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 
         case wxSIGNONE:
             // do nothing, we just want to test for process existence
-            break;
+            if ( krc )
+                *krc = wxKILL_OK;
+            return 0;
 
         default:
             // any other signal means "terminate"
@@ -757,9 +760,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
                 else // no windows for this PID
                 {
                     if ( krc )
-                    {
                         *krc = wxKILL_ERROR;
-                    }
 
                     ok = false;
                 }
@@ -767,8 +768,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
     }
 
     // the return code
-    DWORD rc;
-
+    DWORD rc wxDUMMY_INITIALIZE(0);
     if ( ok )
     {
         // as we wait for a short time, we can use just WaitForSingleObject()
@@ -793,40 +793,23 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 
             case WAIT_TIMEOUT:
                 if ( krc )
-                {
                     *krc = wxKILL_ERROR;
-                }
 
                 rc = STILL_ACTIVE;
                 break;
         }
     }
-    else // !ok
-    {
-        // just to suppress the warnings about uninitialized variable
-        rc = 0;
-    }
 
-    ::CloseHandle(hProcess);
 
     // the return code is the same as from Unix kill(): 0 if killed
     // successfully or -1 on error
-    //
-    // be careful to interpret rc correctly: for wxSIGNONE we return success if
-    // the process exists, for all the other sig values -- if it doesn't
-    if ( ok &&
-            ((sig == wxSIGNONE) == (rc == STILL_ACTIVE)) )
-    {
-        if ( krc )
-        {
-            *krc = wxKILL_OK;
-        }
+    if ( !ok || rc == STILL_ACTIVE )
+        return -1;
 
-        return 0;
-    }
+    if ( krc )
+        *krc = wxKILL_OK;
 
-    // error
-    return -1;
+    return 0;
 }
 
 HANDLE (WINAPI *lpfCreateToolhelp32Snapshot)(DWORD,DWORD) ;
