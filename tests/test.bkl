@@ -40,6 +40,7 @@
             mbconv/mbconvtest.cpp
             regex/regextest.cpp
             regex/wxregextest.cpp
+            scopeguard/scopeguardtest.cpp
             strings/strings.cpp
             strings/stdstrings.cpp
             strings/unicode.cpp
