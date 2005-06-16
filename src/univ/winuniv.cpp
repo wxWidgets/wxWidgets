@@ -142,8 +142,8 @@ bool wxWindow::Create(wxWindow *parent,
     // when calling the base window Create().
     wxWindowBase::SetWindowStyleFlag(style);
 
-    // if we should always have a vertical scrollbar, do show it
-    if ( style & wxALWAYS_SHOW_SB )
+    // if we allow or should always have a vertical scrollbar, make it
+    if ( style & wxVSCROLL || style & wxALWAYS_SHOW_SB )
     {
 #if wxUSE_TWO_WINDOWS
         SetInsertIntoMain( true );
@@ -156,7 +156,7 @@ bool wxWindow::Create(wxWindow *parent,
 #endif
     }
 
-    // if we should always have a horizontal scrollbar, do show it
+    // if we should allow a horizontal scrollbar, make it
     if ( style & wxHSCROLL )
     {
 #if wxUSE_TWO_WINDOWS
