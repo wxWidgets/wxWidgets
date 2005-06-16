@@ -708,14 +708,16 @@ samples/internat/fr/*.mo
 samples/internat/fr/*.po
 samples/internat/de/*.mo
 samples/internat/de/*.po
-samples/internat/ru/*.mo
-samples/internat/ru/*.po
 samples/internat/ja/*.mo
 samples/internat/ja/*.po
 samples/internat/ka/*.mo
 samples/internat/ka/*.po
 samples/internat/pl/*.mo
 samples/internat/pl/*.po
+samples/internat/ru/*.mo
+samples/internat/ru/*.po
+samples/internat/sv/*.mo
+samples/internat/sv/*.po
 samples/internat/*.bkl
 
 samples/ipc/*.cpp

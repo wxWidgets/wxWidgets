@@ -130,6 +130,7 @@ bool MyApp::OnInit()
         wxLANGUAGE_BULGARIAN,
         wxLANGUAGE_CZECH,
         wxLANGUAGE_POLISH,
+        wxLANGUAGE_SWEDISH,
 #if wxUSE_UNICODE
         wxLANGUAGE_JAPANESE,
         wxLANGUAGE_GEORGIAN,
@@ -151,6 +152,7 @@ bool MyApp::OnInit()
             _T("Bulgarian"),
             _T("Czech"),
             _T("Polish"),
+            _T("Swedish"),
 #if wxUSE_UNICODE
             _T("Japanese"),
             _T("Georgian"),

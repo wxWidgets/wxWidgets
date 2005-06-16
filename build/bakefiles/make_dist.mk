@@ -629,6 +629,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/internat/ka
 	mkdir $(DISTDIR)/samples/internat/pl
 	mkdir $(DISTDIR)/samples/internat/ru
+	mkdir $(DISTDIR)/samples/internat/sv
 	cp $(SAMPDIR)/internat/Makefile.in $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/makefile.unx $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/*.cpp $(DISTDIR)/samples/internat
@@ -642,6 +643,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/internat/ka/*.mo $(DISTDIR)/samples/internat/ka
 	cp $(SAMPDIR)/internat/pl/*.mo $(DISTDIR)/samples/internat/pl
 	cp $(SAMPDIR)/internat/ru/*.mo $(DISTDIR)/samples/internat/ru
+	cp $(SAMPDIR)/internat/sv/*.mo $(DISTDIR)/samples/internat/sv
 	cp $(SAMPDIR)/internat/bg/*.po $(DISTDIR)/samples/internat/bg
 	cp $(SAMPDIR)/internat/cs/*.po $(DISTDIR)/samples/internat/cs
 	cp $(SAMPDIR)/internat/de/*.po $(DISTDIR)/samples/internat/de
@@ -650,6 +652,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/internat/ka/*.po $(DISTDIR)/samples/internat/ka
 	cp $(SAMPDIR)/internat/pl/*.po $(DISTDIR)/samples/internat/pl
 	cp $(SAMPDIR)/internat/ru/*.po $(DISTDIR)/samples/internat/ru
+	cp $(SAMPDIR)/internat/sv/*.po $(DISTDIR)/samples/internat/sv
 
 	mkdir $(DISTDIR)/samples/ipc
 	cp $(SAMPDIR)/ipc/Makefile.in $(DISTDIR)/samples/ipc
