@@ -14,7 +14,9 @@
 [INI]
 
 [Registry]
-    Root: HKCU; SubKey: Environment; ValueName: WXWIN; ValueType: string; ValueData: {app}; Flags: createvalueifdoesntexist
+    Root: HKCU; SubKey: Environment; ValueName: WXWIN; ValueType: string; ValueData: {app}; Flags: createvalueifdoesntexist uninsdeletevalue
+; if bakefile is installed, tell it where to find wx presets
+    Root: HKCU; SubKey: Environment; ValueName: BAKEFILE_PATHS; ValueType: expandsz; ValueData: %wxwin%/build/bakefiles/wxpresets; Flags: createvalueifdoesntexist uninsdeletevalue
 
 [UninstallDelete]
 
