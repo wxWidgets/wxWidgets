@@ -660,7 +660,7 @@ int wxSlider::GetLineSize() const
 
 int wxSlider::GetSelEnd() const
 {
-    return (int)::SendMessage(GetHwnd(), TBM_SETSELEND, 0, 0);
+    return (int)::SendMessage(GetHwnd(), TBM_GETSELEND, 0, 0);
 }
 
 int wxSlider::GetSelStart() const

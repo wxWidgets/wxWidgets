@@ -13,6 +13,7 @@ All:
 wxMSW:
 
 - Fixed multiline tooltips handling.
+- Fixed wxSlider::GetSelEnd() (Atilim Cetin)
 
 wxUniv:
 
