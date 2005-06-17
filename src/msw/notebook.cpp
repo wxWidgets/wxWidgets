@@ -93,6 +93,14 @@
 // the pointer to standard spin button wnd proc
 static WXFARPROC gs_wndprocNotebookSpinBtn = (WXFARPROC)NULL;
 
+// the pointer to standard tab control wnd proc
+static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL; 
+
+LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
+                                           UINT message,
+                                           WPARAM wParam,
+                                           LPARAM lParam);
+
 #endif // USE_NOTEBOOK_ANTIFLICKER
 
 // ----------------------------------------------------------------------------
@@ -285,6 +293,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
     LPCTSTR className = WC_TABCONTROL;
 
+#if USE_NOTEBOOK_ANTIFLICKER
     // SysTabCtl32 class has natively CS_HREDRAW and CS_VREDRAW enabled and it
     // causes horrible flicker when resizing notebook, so get rid of it by
     // using a class without these styles (but otherwise identical to it)
@@ -296,11 +305,14 @@ bool wxNotebook::Create(wxWindow *parent,
             // get a copy of standard class and modify it
             WNDCLASS wc;
 
-            if ( ::GetClassInfo(::GetModuleHandle(NULL), WC_TABCONTROL, &wc) )
+            if ( ::GetClassInfo(NULL, WC_TABCONTROL, &wc) )
             {
+                gs_wndprocNotebook =
+                    wx_reinterpret_cast(WXFARPROC, wc.lpfnWndProc);
                 wc.lpszClassName = wxT("_wx_SysTabCtl32");
                 wc.style &= ~(CS_HREDRAW | CS_VREDRAW);
-
+                wc.hInstance = wxGetInstance();
+                wc.lpfnWndProc = wxNotebookWndProc;
                 s_clsNotebook.Register(wc);
             }
             else
@@ -318,6 +330,7 @@ bool wxNotebook::Create(wxWindow *parent,
             className = s_clsNotebook.GetName().c_str();
         }
     }
+#endif // USE_NOTEBOOK_ANTIFLICKER
 
     if ( !CreateControl(parent, id, pos, size, style | wxTAB_TRAVERSAL,
                         wxDefaultValidator, name) )
@@ -789,6 +802,16 @@ LRESULT APIENTRY _EXPORT wxNotebookSpinBtnWndProc(HWND hwnd,
                             hwnd, message, wParam, lParam);
 }
 
+LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
+                                           UINT message,
+                                           WPARAM wParam,
+                                           LPARAM lParam)
+{
+    return ::CallWindowProc(CASTWNDPROC gs_wndprocNotebook,
+                            hwnd, message, wParam, lParam);
+}
+
+ 
 
 void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
