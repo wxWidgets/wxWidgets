@@ -2353,6 +2353,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 #endif // !__WXWINCE__
 
+#if !(defined(_WIN32_WCE) && _WIN32_WCE < 400)
         case WM_WINDOWPOSCHANGED:
             {
                 WINDOWPOS *lpPos = (WINDOWPOS *)lParam;
@@ -2377,7 +2378,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 }
             }
             break;
-
+#endif
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         case WM_ACTIVATEAPP:
             // This implicitly sends a wxEVT_ACTIVATE_APP event
