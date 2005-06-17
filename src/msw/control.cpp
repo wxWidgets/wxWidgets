@@ -139,11 +139,25 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // ... and adjust it to account for a possible parent frames toolbar
     AdjustForParentClientOrigin(x, y);
 
+    // notice the apparently unnecessary label.empty() test: without it wse get
+    // crashes when creating controls (notebook to be precise) with empty
+    // labels as for some reason Windows looks not only at first but also at
+    // the second byte of the string which is not NUL in the buffer pointed to
+    // by label.c_str() and if the buffer contains "00 cc cc cc ..." (this is
+    // what happens in debug build where 0xcc is used as uninitialized memory
+    // marker) it creates a window not with empty label but with label
+    // consisting of many Unicode (!) 0xcccc characters
+    //
+    // this is not fatal in itself, but becomes so when wxGetWindowText() is
+    // called because GetWindowTextA() overwrites ASCII buffer with Unicode (!)
+    // characters without any qualms and so crashes the program...
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         exstyle,            // extended style
                         classname,          // the kind of control to create
-                        label,              // the window name
+                        label.empty()       // the window name
+                            ? _T("\0")
+                            : label.c_str(),
                         style,              // the window style
                         x, y, w, h,         // the window position and size
                         GetHwndOf(GetParent()),  // parent
