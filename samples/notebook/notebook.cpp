@@ -24,6 +24,10 @@
 #include "wx/artprov.h"
 #include "notebook.h"
 
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+#endif
+
 IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
@@ -202,8 +206,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     m_chkShowImages = true;
     m_multi = false;
 
-    // menu of the sample
+    SetIcon(wxICON(sample));
 
+    // menu of the sample
     wxMenu *menuType = new wxMenu;
 #if wxUSE_NOTEBOOK
     menuType->AppendRadioItem(ID_BOOK_NOTEBOOK,   wxT("&Notebook\tCtrl-1"));
