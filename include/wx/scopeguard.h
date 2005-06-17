@@ -31,7 +31,7 @@ namespace wxPrivate
     // in the original implementation this was a member template function of
     // ScopeGuardImplBase but gcc 2.8 which is still used for OS/2 doesn't
     // support member templates and so we must make it global
-    template <typename ScopeGuardImpl>
+    template <class ScopeGuardImpl>
     void OnScopeExit(ScopeGuardImpl& guard)
     {
         if ( !guard.WasDismissed() )
@@ -46,7 +46,7 @@ namespace wxPrivate
     }
 
     // just to avoid the warning about unused variables
-    template <typename T>
+    template <class T>
     void Use(const T& WXUNUSED(t))
     {
     }
@@ -90,7 +90,7 @@ private:
 // wxScopeGuardImpl0: scope guard for actions without parameters
 // ----------------------------------------------------------------------------
 
-template <typename F>
+template <class F>
 class wxScopeGuardImpl0 : public wxScopeGuardImplBase
 {
 public:
@@ -111,7 +111,7 @@ protected:
     wxScopeGuardImpl0& operator=(const wxScopeGuardImpl0&);
 };
 
-template <typename F>
+template <class F>
 inline wxScopeGuardImpl0<F> wxMakeGuard(F fun)
 {
     return wxScopeGuardImpl0<F>::MakeGuard(fun);
@@ -121,7 +121,7 @@ inline wxScopeGuardImpl0<F> wxMakeGuard(F fun)
 // wxScopeGuardImpl1: scope guard for actions with 1 parameter
 // ----------------------------------------------------------------------------
 
-template <typename F, typename P1>
+template <class F, class P1>
 class wxScopeGuardImpl1 : public wxScopeGuardImplBase
 {
 public:
@@ -143,7 +143,7 @@ protected:
     wxScopeGuardImpl1& operator=(const wxScopeGuardImpl1&);
 };
 
-template <typename F, typename P1>
+template <class F, class P1>
 inline wxScopeGuardImpl1<F, P1> wxMakeGuard(F fun, P1 p1)
 {
     return wxScopeGuardImpl1<F, P1>::MakeGuard(fun, p1);
@@ -153,7 +153,7 @@ inline wxScopeGuardImpl1<F, P1> wxMakeGuard(F fun, P1 p1)
 // wxScopeGuardImpl2: scope guard for actions with 2 parameters
 // ----------------------------------------------------------------------------
 
-template <typename F, typename P1, typename P2>
+template <class F, class P1, class P2>
 class wxScopeGuardImpl2 : public wxScopeGuardImplBase
 {
 public:
@@ -176,7 +176,7 @@ protected:
     wxScopeGuardImpl2& operator=(const wxScopeGuardImpl2&);
 };
 
-template <typename F, typename P1, typename P2>
+template <class F, class P1, class P2>
 inline wxScopeGuardImpl2<F, P1, P2> wxMakeGuard(F fun, P1 p1, P2 p2)
 {
     return wxScopeGuardImpl2<F, P1, P2>::MakeGuard(fun, p1, p2);
@@ -190,7 +190,7 @@ inline wxScopeGuardImpl2<F, P1, P2> wxMakeGuard(F fun, P1 p1, P2 p2)
 // wxObjScopeGuardImpl0
 // ----------------------------------------------------------------------------
 
-template <class Obj, typename MemFun>
+template <class Obj, class MemFun>
 class wxObjScopeGuardImpl0 : public wxScopeGuardImplBase
 {
 public:
@@ -212,13 +212,13 @@ protected:
     MemFun m_memfun;
 };
 
-template <class Obj, typename MemFun>
+template <class Obj, class MemFun>
 inline wxObjScopeGuardImpl0<Obj, MemFun> wxMakeObjGuard(Obj& obj, MemFun memFun)
 {
     return wxObjScopeGuardImpl0<Obj, MemFun>::MakeObjGuard(obj, memFun);
 }
 
-template <class Obj, typename MemFun, typename P1>
+template <class Obj, class MemFun, class P1>
 class wxObjScopeGuardImpl1 : public wxScopeGuardImplBase
 {
 public:
@@ -241,14 +241,14 @@ protected:
     const P1 m_p1;
 };
 
-template <class Obj, typename MemFun, typename P1>
+template <class Obj, class MemFun, class P1>
 inline wxObjScopeGuardImpl1<Obj, MemFun, P1>
 wxMakeObjGuard(Obj& obj, MemFun memFun, P1 p1)
 {
     return wxObjScopeGuardImpl1<Obj, MemFun, P1>::MakeObjGuard(obj, memFun, p1);
 }
 
-template <class Obj, typename MemFun, typename P1, typename P2>
+template <class Obj, class MemFun, class P1, class P2>
 class wxObjScopeGuardImpl2 : public wxScopeGuardImplBase
 {
 public:
@@ -272,7 +272,7 @@ protected:
     const P2 m_p2;
 };
 
-template <class Obj, typename MemFun, typename P1, typename P2>
+template <class Obj, class MemFun, class P1, class P2>
 inline wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>
 wxMakeObjGuard(Obj& obj, MemFun memFun, P1 p1, P2 p2)
 {
@@ -333,4 +333,3 @@ typedef const wxScopeGuardImplBase& wxScopeGuard;
     wxON_BLOCK_EXIT_OBJ2_IMPL(wxGuardName, o, m, p1, p2)
 
 #endif // _WX_SCOPEGUARD_H_
-
