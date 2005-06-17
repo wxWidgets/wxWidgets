@@ -440,7 +440,8 @@ bool wxSizerItem::IsShown() const
     switch ( m_kind )
     {
         case Item_None:
-            wxFAIL_MSG( _T("uninitialized sizer item") );
+            // we may be called from CalcMin(), just return false so that we're
+            // not used
             break;
 
         case Item_Window:
