@@ -6717,61 +6717,13 @@ if test "$wxUSE_OMF" = "yes"; then
     esac
 fi
 
-dnl According to Vaclav, if NO_GCC_PRAGMA is used for any reason it needs to
-dnl be in wx-config output.  Not doing so could result in link problems.
-GCC_PRAGMA_FLAGS=""
-PCH_FLAGS=""
-dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
 if test $GCC_PCH = 1 ; then
-    GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
-    PCH_FLAGS="-DWX_PRECOMP"
-else
-    case "${host}" in
-        powerpc-*-darwin* )
-            dnl Some Apple's GCC version are broken and can't handle the
-            dnl pragmas:
-            GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
-            ;;
-        *-*-mingw32* )
-            dnl MinGW GCC versions >= 3.2 have problems with
-            dnl static member of classes derived from templates
-            dnl in combination with #pragma interface/implementation
-            dnl (the test case uses 4 files)
-            dnl ... and with exceptions handling (undefined symbols needed
-            dnl to correctly calls dtors when unwinding) as well
-            if test "$wxUSE_STL" = "yes" -o \
-                    "$wxUSE_NO_EXCEPTIONS" != "yes" -o \
-                    "$wxUSE_NO_RTTI" != "yes"; then
-               AC_MSG_CHECKING([if this MinGW version needs -DNO_GCC_PRAGMA])
-               AC_TRY_COMPILE([],
-                              [#if !(__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
-                               #error "Not GCC 3.2 or greater"
-                               #endif
-                               ],
-                              [GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
-                               AC_MSG_RESULT([yes])],
-                              [AC_MSG_RESULT([no])])
-            fi
-            ;;
-	*-pc-os2_emx | *-pc-os2-emx )
-            dnl GCC versions ported to OS/2 have similar problems with
-            dnl static member of classes in combination with STL and
-            dnl pragma interface/implementation
-            if test "$wxUSE_STL" = "yes"; then
-               AC_MSG_CHECKING([if this gcc version needs -DNO_GCC_PRAGMA])
-               AC_TRY_COMPILE([],
-                              [#if !(__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
-                               #error "Not GCC 3.2 or greater"
-                               #endif
-                               ],
-                              [GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
-                               AC_MSG_RESULT([yes])],
-                              [AC_MSG_RESULT([no])])
-            fi
-            ;;
-    esac
+    CPPFLAGS="-DWX_PRECOMP $CPPFLAGS"
 fi
-CPPFLAGS="$PCH_FLAGS $GCC_PRAGMA_FLAGS $CPPFLAGS"
+
+dnl FIXME: This is a temporary measure until the need for it is also
+dnl        removed from the headers.
+CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
 
 
 dnl for convenience, sort the samples in alphabetical order
@@ -6822,7 +6774,6 @@ AC_SUBST(WXCONFIG_INCLUDE)
 AC_SUBST(WXCONFIG_RPATH)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
 AC_SUBST(WX_LARGEFILE_FLAGS)
-AC_SUBST(GCC_PRAGMA_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS_CXX)
 AC_SUBST(EXE_LINKER)
