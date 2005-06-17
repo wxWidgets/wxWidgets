@@ -198,6 +198,10 @@
     #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
 #endif
 
+#ifndef TVITEM
+    #define TVITEM TV_ITEM
+#endif
+
 #endif
     // DMC++
 
@@ -225,4 +229,3 @@
 
 #endif
     // _WX_MISSING_H_
-
