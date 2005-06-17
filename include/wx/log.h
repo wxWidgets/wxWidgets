@@ -302,6 +302,7 @@ public:
     virtual void Flush();
 
 protected:
+    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
     virtual void DoLogString(const wxChar *szString, time_t t);
 
 private:

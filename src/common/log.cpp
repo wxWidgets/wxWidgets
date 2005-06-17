@@ -536,6 +536,30 @@ void wxLogBuffer::Flush()
     }
 }
 
+void wxLogBuffer::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
+{
+    switch ( level )
+    {
+        case wxLOG_Trace:
+        case wxLOG_Debug:
+#ifdef __WXDEBUG__
+            // don't put debug messages in the buffer, we don't want to show
+            // them to the user in a msg box, log them immediately
+            {
+                wxString str;
+                TimeStamp(&str);
+                str += szString;
+
+                wxMessageOutputDebug().Printf(_T("%s\n"), str.c_str());
+            }
+#endif // __WXDEBUG__
+            break;
+
+        default:
+            wxLog::DoLog(level, szString, t);
+    }
+}
+
 void wxLogBuffer::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     m_str << szString << _T("\n");
