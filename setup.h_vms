@@ -1004,6 +1004,9 @@
 /* Define if you have pango_font_family_is_monospace() (Pango >= 1.3.3) */
 #undef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
 
+/* Define if gtk_icon_size_lookup is missing from the GTK+ headers */
+#undef NEED_GTK_ICON_SIZE_LOOKUP
+
 /* Define if you have Pango xft support */
 #undef HAVE_PANGO_XFT
 
