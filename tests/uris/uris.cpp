@@ -377,8 +377,12 @@ void URITestCase::URLProxy()
 {
     wxURL url(wxT("http://www.asite.com/index.html"));
     url.SetProxy(wxT("pserv:3122"));
+
+    wxURL::SetDefaultProxy(wxT("fol.singnet.com.sg:8080"));
+    wxURL url2(wxT("http://server-name/path/to/file?query_data=value"));
+    wxInputStream *data = url2.GetInputStream();
+    CPPUNIT_ASSERT(data != NULL);
 }
 #endif // wxUSE_PROTOCOL_HTTP
 
 #endif // TEST_URL
-
