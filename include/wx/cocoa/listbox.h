@@ -28,7 +28,7 @@ class WXDLLEXPORT wxListBox: public wxListBoxBase, protected wxCocoaNSTableView
 // initialization
 // ------------------------------------------------------------------------
 public:
-    wxListBox() { m_cocoaItems = NULL; }
+    wxListBox() { m_cocoaItems = NULL; m_cocoaDataSource = NULL; }
     wxListBox(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
