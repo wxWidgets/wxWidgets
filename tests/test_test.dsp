@@ -525,6 +525,10 @@ SOURCE=.\regex\regextest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\scopeguard\scopeguardtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\sstream.cpp
 # End Source File
 # Begin Source File
