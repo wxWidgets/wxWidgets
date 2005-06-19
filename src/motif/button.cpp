@@ -76,7 +76,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("button",
         xmPushButtonWidgetClass,
         parentWidget,
-        wxFont::GetFontTag(), m_font.GetFontType(XtDisplay(parentWidget)),
+        wxFont::GetFontTag(), m_font.GetFontTypeC(XtDisplay(parentWidget)),
         XmNlabelString, text(),
         XmNrecomputeSize, False,
         // See comment for wxButton::SetDefault

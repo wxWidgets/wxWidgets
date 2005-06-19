@@ -108,13 +108,13 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     bool hasLabel = (!label.IsNull() && !label.IsEmpty()) ;
     if (hasLabel)
     {
-        WXFontType fontType = m_font.GetFontType( XtDisplay( parentWidget ) );
         wxString label1(wxStripMenuCodes(label));
         wxXmString text(label1);
+        Display* dpy = XtDisplay( parentWidget );
 
         m_labelWidget = (WXWidget) XtVaCreateManagedWidget ("staticboxlabel",
                 xmLabelWidgetClass, (Widget)m_mainWidget,
-                wxFont::GetFontTag(), fontType,                
+                wxFont::GetFontTag(), m_font.GetFontTypeC(dpy),
                 XmNlabelString, text(),
 #if wxCHECK_MOTIF_VERSION( 2, 0 )
                 XmNframeChildType, XmFRAME_TITLE_CHILD,

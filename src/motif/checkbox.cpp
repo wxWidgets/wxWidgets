@@ -73,7 +73,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("toggle",
         xmToggleButtonWidgetClass, parentWidget,
-        wxFont::GetFontTag(), m_font.GetFontType(XtDisplay(parentWidget)),
+        wxFont::GetFontTag(), m_font.GetFontTypeC(XtDisplay(parentWidget)),
         XmNlabelString, text(),
         XmNrecomputeSize, False,
         // XmNindicatorOn, XmINDICATOR_CHECK_BOX,

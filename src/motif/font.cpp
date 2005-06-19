@@ -46,6 +46,12 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
+#if wxCHECK_MOTIF_VERSION( 2, 0 ) && !wxCHECK_LESSTIF()
+    #define wxUSE_RENDER_TABLE 1
+#else
+    #define wxUSE_RENDER_TABLE 0
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -59,8 +65,9 @@ public:
     ~wxXFont();
 
     WXFontStructPtr     m_fontStruct;   // XFontStruct
+#if !wxUSE_RENDER_TABLE
     WXFontList          m_fontList;     // Motif XmFontList
-#if wxCHECK_MOTIF_VERSION( 2, 0 )
+#else // if wxUSE_RENDER_TABLE
     WXRenderTable       m_renderTable;  // Motif XmRenderTable
 #endif
     WXDisplay*          m_display;      // XDisplay
@@ -69,7 +76,7 @@ public:
 
 class wxFontRefData: public wxGDIRefData
 {
-friend class wxFont;
+    friend class wxFont;
 
 public:
     wxFontRefData(int size = wxDEFAULT,
@@ -127,8 +134,9 @@ protected:
 wxXFont::wxXFont()
 {
     m_fontStruct = (WXFontStructPtr) 0;
+#if !wxUSE_RENDER_TABLE
     m_fontList = (WXFontList) 0;
-#if wxCHECK_MOTIF_VERSION( 2, 0 )
+#else // if wxUSE_RENDER_TABLE
     m_renderTable = (WXRenderTable) 0;
 #endif
     m_display = (WXDisplay*) 0;
@@ -137,16 +145,20 @@ wxXFont::wxXFont()
 
 wxXFont::~wxXFont()
 {
-    XmFontList fontList = (XmFontList) m_fontList;
-    XmFontListFree (fontList);
-
-#if wxCHECK_MOTIF_VERSION( 2, 0 ) && !wxCHECK_LESSTIF()
-    XmRenderTable renderTable = (XmRenderTable) m_renderTable;
-    XmRenderTableFree (renderTable);
+#if !wxUSE_RENDER_TABLE
+    if (m_fontList)
+        XmFontListFree ((XmFontList) m_fontList);
+    m_fontList = NULL;
+#else // if wxUSE_RENDER_TABLE
+    if (m_renderTable)
+        XmRenderTableFree ((XmRenderTable) m_renderTable);
+    m_renderTable = NULL;
 #endif
 
     // TODO: why does freeing the font produce a segv???
     // Note that XFreeFont wasn't called in wxWin 1.68 either.
+    // MBN: probably some interaction with fonts being still
+    //      in use in some widgets...
     // XFontStruct* fontStruct = (XFontStruct*) m_fontStruct;
     //        XFreeFont((Display*) m_display, fontStruct);
 }
@@ -544,10 +556,10 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     f->m_fontStruct = (WXFontStructPtr)font;
     f->m_display = ( display ? display : wxGetDisplay() );
     f->m_scale = intScale;
+#if !wxUSE_RENDER_TABLE
     f->m_fontList = XmFontListCreate ((XFontStruct*) font, XmSTRING_DEFAULT_CHARSET);
     M_FONTDATA->m_fonts.Append(f);
-
-#if wxCHECK_MOTIF_VERSION( 2, 0 ) && !wxCHECK_LESSTIF()
+#else // if wxUSE_RENDER_TABLE
     XmRendition rendition;
     XmRenderTable renderTable;
     Arg args[5];
@@ -577,34 +589,52 @@ WXFontStructPtr wxFont::GetFontStruct(double scale, WXDisplay* display) const
 
 WXFontList wxFont::GetFontList(double scale, WXDisplay* display) const
 {
+#if !wxUSE_RENDER_TABLE
     wxXFont* f = GetInternalFont(scale, display);
 
     return (f ? f->m_fontList : (WXFontList) 0);
+#else
+    return NULL;
+#endif
 }
 
+ // declared in the header, can't use wxUSE_RENDER_TABLE
 #if wxCHECK_MOTIF_VERSION( 2, 0 )
 
 WXRenderTable wxFont::GetRenderTable(WXDisplay* display) const
 {
+#if wxUSE_RENDER_TABLE
     wxXFont* f = GetInternalFont(1.0, display);
 
     return (f ? f->m_renderTable : (WXFontList) 0);
+#else
+    return NULL;
+#endif
 }
 
 #endif
 
 WXFontType wxFont::GetFontType(WXDisplay* display) const
 {
-#if wxCHECK_MOTIF_VERSION( 2, 0 ) && !wxCHECK_LESSTIF()
+#if wxUSE_RENDER_TABLE
     return Ok() ? GetRenderTable(display) : NULL;
 #else
     return Ok() ? GetFontList(1.0, display) : NULL;
 #endif
 }
 
+WXFontType wxFont::GetFontTypeC(WXDisplay* display) const
+{
+#if wxUSE_RENDER_TABLE
+    return Ok() ? GetRenderTable(display) : NULL;
+#else
+    return Ok() ? XmFontListCopy( (XmFontList)GetFontList(1.0, display) ) : NULL;
+#endif
+}
+
 /*static*/ WXString wxFont::GetFontTag()
 {
-#if wxCHECK_MOTIF_VERSION( 2, 0 ) && !wxCHECK_LESSTIF()
+#if wxUSE_RENDER_TABLE
     return (WXString)XmNrenderTable;
 #else
     return (WXString)XmNfontList;

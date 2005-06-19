@@ -929,7 +929,7 @@ extern void wxDoChangeFont(WXWidget widget, wxFont& font)
 #if !wxCHECK_LESSTIF() || wxCHECK_LESSTIF_VERSION( 0, 93 )
     Widget w = (Widget)widget;
     XtVaSetValues( w,
-                   wxFont::GetFontTag(), font.GetFontType( XtDisplay(w) ),
+                   wxFont::GetFontTag(), font.GetFontTypeC( XtDisplay(w) ),
                    NULL );
 #endif
 

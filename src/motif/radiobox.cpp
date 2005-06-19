@@ -73,16 +73,15 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
         m_majorDim = majorDim ;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
+    Display* dpy = XtDisplay(parentWidget);
 
     m_mainWidget = XtVaCreateWidget ("radioboxframe",
-                                        xmFrameWidgetClass, parentWidget,
-                                        XmNresizeHeight, True,
-                                        XmNresizeWidth, True,
-                                        NULL);
+                                     xmFrameWidgetClass, parentWidget,
+                                     XmNresizeHeight, True,
+                                     XmNresizeWidth, True,
+                                     NULL);
 
     wxString label1(wxStripMenuCodes(title));
-
-    WXFontType fontType = m_font.GetFontType(XtDisplay(parentWidget));
 
     if (!label1.empty())
     {
@@ -90,26 +89,24 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
         m_labelWidget = (WXWidget)
             XtVaCreateManagedWidget( label1.c_str(),
 #if wxUSE_GADGETS
-                                       style & wxCOLOURED ? xmLabelWidgetClass
-                                                          : xmLabelGadgetClass,
-                                       (Widget)m_mainWidget,
+                style & wxCOLOURED ? xmLabelWidgetClass
+                                   : xmLabelGadgetClass,
+                (Widget)m_mainWidget,
 #else
-                                       xmLabelWidgetClass,
-                                       (Widget)m_mainWidget,
+                xmLabelWidgetClass, (Widget)m_mainWidget,
 #endif
-                                       wxFont::GetFontTag(), fontType,
-                                       XmNlabelString, text(),
+                wxFont::GetFontTag(), m_font.GetFontTypeC(dpy),
+                XmNlabelString, text(),
 // XmNframeChildType is not in Motif 1.2, nor in Lesstif,
 // if it was compiled with 1.2 compatibility
 // TODO: check this still looks OK for Motif 1.2.
 #if (XmVersion > 1200)
-                                       XmNframeChildType, XmFRAME_TITLE_CHILD,
+                XmNframeChildType, XmFRAME_TITLE_CHILD,
 #else
-                                       XmNchildType, XmFRAME_TITLE_CHILD,
+                XmNchildType, XmFRAME_TITLE_CHILD,
 #endif
-                                       XmNchildVerticalAlignment,
-                                           XmALIGNMENT_CENTER,
-                                       NULL);
+                XmNchildVerticalAlignment, XmALIGNMENT_CENTER,
+                NULL);
     }
 
     Arg args[3];
@@ -132,14 +129,15 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     {
         wxString str(wxStripMenuCodes(choices[i]));
         m_radioButtonLabels.push_back(str);
-        Widget radioItem =  XtVaCreateManagedWidget (wxConstCast(str.c_str(), char),
+        Widget radioItem =  XtVaCreateManagedWidget (
+                                wxConstCast(str.c_str(), char),
 #if wxUSE_GADGETS
-                            xmToggleButtonGadgetClass, radioBoxWidget,
+                                xmToggleButtonGadgetClass, radioBoxWidget,
 #else
-                            xmToggleButtonWidgetClass, radioBoxWidget,
+                                xmToggleButtonWidgetClass, radioBoxWidget,
 #endif
-                            wxFont::GetFontTag(), fontType,
-                                                 NULL);
+                                wxFont::GetFontTag(), m_font.GetFontTypeC(dpy),
+                                NULL);
         m_radioButtons.push_back((WXWidget)radioItem);
         XtAddCallback (radioItem, XmNvalueChangedCallback,
                        (XtCallbackProc) wxRadioBoxCallback,
@@ -356,16 +354,13 @@ void wxRadioBox::ChangeFont(bool keepOriginalSize)
 {
     wxWindow::ChangeFont(keepOriginalSize);
 
-    WXFontType fontType =
-        m_font.GetFontType(XtDisplay((Widget) GetTopWidget()));
-
     int i;
     for (i = 0; i < m_noItems; i++)
     {
         WXWidget radioButton = m_radioButtons[i];
 
         XtVaSetValues ((Widget) radioButton,
-                       wxFont::GetFontTag(), fontType,
+                       wxFont::GetFontTag(), m_font.GetFontTypeC(XtDisplay((Widget) GetTopWidget())),
                        NULL);
     }
 }

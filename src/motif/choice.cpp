@@ -459,19 +459,22 @@ void wxChoice::ChangeFont(bool keepOriginalSize)
     // back again. TODO: a better way in Motif?
     if (m_font.Ok())
     {
+        Display* dpy = XtDisplay((Widget) m_mainWidget);
         int width, height, width1, height1;
         GetSize(& width, & height);
 
-        WXFontType fontType =
-            m_font.GetFontType(XtDisplay((Widget) m_mainWidget));
         WXString fontTag = wxFont::GetFontTag();
 
-        XtVaSetValues ((Widget) m_formWidget, fontTag, fontType, NULL);
-        XtVaSetValues ((Widget) m_buttonWidget, fontTag, fontType, NULL);
+        XtVaSetValues ((Widget) m_formWidget,
+                       fontTag, m_font.GetFontTypeC(dpy),
+                       NULL);
+        XtVaSetValues ((Widget) m_buttonWidget,
+                       fontTag, m_font.GetFontTypeC(dpy),
+                       NULL);
 
         for( size_t i = 0; i < m_noStrings; ++i )
             XtVaSetValues( (Widget)m_widgetArray[i],
-                           fontTag, fontType,
+                           fontTag, m_font.GetFontTypeC(dpy),
                            NULL );
 
         GetSize(& width1, & height1);

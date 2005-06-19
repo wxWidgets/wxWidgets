@@ -661,15 +661,15 @@ void wxMenu::ChangeFont(bool keepOriginalSize)
     if (!m_font.Ok() || !m_menuWidget)
         return;
 
-    WXFontType fontType = m_font.GetFontType(XtDisplay((Widget) m_menuWidget));
+    Display* dpy = XtDisplay((Widget) m_menuWidget);
 
     XtVaSetValues ((Widget) m_menuWidget,
-                   wxFont::GetFontTag(), fontType,
+                   wxFont::GetFontTag(), m_font.GetFontTypeC(dpy),
                    NULL);
     if (m_buttonWidget)
     {
         XtVaSetValues ((Widget) m_buttonWidget,
-                       wxFont::GetFontTag(), fontType,
+                       wxFont::GetFontTag(), m_font.GetFontTypeC(dpy),
                        NULL);
     }
 
@@ -681,7 +681,7 @@ void wxMenu::ChangeFont(bool keepOriginalSize)
         if (m_menuWidget && item->GetButtonWidget() && m_font.Ok())
         {
             XtVaSetValues ((Widget) item->GetButtonWidget(),
-                           wxFont::GetFontTag(), fontType,
+                           wxFont::GetFontTag(), m_font.GetFontTypeC(dpy),
                            NULL);
         }
         if (item->GetSubMenu())

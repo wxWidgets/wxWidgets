@@ -105,6 +105,8 @@ public:
     // returns either a XmFontList or XmRendition, depending
     // on Motif version
     WXFontType GetFontType(WXDisplay* display) const;
+    // like the function above but does a copy for XmFontList
+    WXFontType GetFontTypeC(WXDisplay* display) const;
     static WXString GetFontTag();
 protected:
     virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info );

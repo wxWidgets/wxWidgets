@@ -51,18 +51,17 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     Widget borderWidget =
         (Widget) wxCreateBorderWidget( (WXWidget)parentWidget, style );
     wxXmString text( wxStripMenuCodes( label ) );
-    WXFontType fontType = m_font.GetFontType(XtDisplay(parentWidget));
 
-    m_labelWidget = XtVaCreateManagedWidget (wxConstCast(name.c_str(), char),
-                                         xmLabelWidgetClass,
-                                         borderWidget ? borderWidget : parentWidget,
-                                         wxFont::GetFontTag(), fontType,
-                                         XmNlabelString, text(),
-                                         XmNalignment,
-                     ((style & wxALIGN_RIGHT) ? XmALIGNMENT_END :
-                     ((style & wxALIGN_CENTRE) ? XmALIGNMENT_CENTER :
-                     XmALIGNMENT_BEGINNING)),
-                                         NULL);
+    m_labelWidget =
+        XtVaCreateManagedWidget (wxConstCast(name.c_str(), char),
+            xmLabelWidgetClass,
+            borderWidget ? borderWidget : parentWidget,
+            wxFont::GetFontTag(), m_font.GetFontTypeC(XtDisplay(parentWidget)),
+            XmNlabelString, text(),
+            XmNalignment, ((style & wxALIGN_RIGHT)  ? XmALIGNMENT_END :
+                          ((style & wxALIGN_CENTRE) ? XmALIGNMENT_CENTER :
+                                                      XmALIGNMENT_BEGINNING)),
+            NULL);
 
     m_mainWidget = borderWidget ? borderWidget : m_labelWidget;
 
