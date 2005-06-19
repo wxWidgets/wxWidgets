@@ -941,7 +941,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         RefreshRect(wxRect(0, rc.top, rc.left, height), false);
         RefreshRect(wxRect(0, rc.bottom, widthNbook, heightNbook - rc.bottom),
                     false);
-        RefreshRect(wxRect(rc.right, rc.top, widthNbook - rc.bottom, height),
+        RefreshRect(wxRect(rc.right, rc.top, widthNbook - rc.right, height),
                     false);
     }
 
