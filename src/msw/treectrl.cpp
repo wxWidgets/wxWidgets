@@ -2397,7 +2397,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 #endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
 
             case WM_MOUSEMOVE:
-                
+#ifndef __WXWINCE__
                 if ( m_htClickedItem )
                 {
                     int cx = abs(m_ptClick.x - x);
@@ -2433,9 +2433,8 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                         }
                         m_htClickedItem.Unset();
                     }
-                    
-                    
                 }
+#endif // __WXWINCE__
                 
                 if ( m_dragImage )
                 {
