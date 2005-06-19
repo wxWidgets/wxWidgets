@@ -20,8 +20,9 @@
     it can be included several times.
  */
 
-// VC 7.x isn't as bad as VC6 and doesn't give these warnings
-#if defined(__VISUALC__) && __VISUALC__ <= 1200
+// VC 7.x isn't as bad as VC6 and doesn't give these warnings but eVC (which
+// defines _MSC_VER as 1201) does need to be included as it's VC6-like
+#if defined(__VISUALC__) && __VISUALC__ <= 1201
     // MSVC 5 does not have this
     #if __VISUALC__ > 1100
         // we have to disable (and reenable in afterstd.h) this one because,

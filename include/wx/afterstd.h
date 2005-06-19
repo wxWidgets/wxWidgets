@@ -16,8 +16,9 @@
 #if defined(__WXMSW__)
     #include "wx/msw/winundef.h"
 #endif
-// VC 7.x isn't as bad as VC6 and doesn't give these warnings
-#if defined(__VISUALC__) && __VISUALC__ <= 1200
+
+// undo what we did in wx/beforestd.h
+#if defined(__VISUALC__) && __VISUALC__ <= 1201
     // MSVC 5 does not have this
     #if _MSC_VER > 1100
         // don't restore this one for VC6, it gives it in each try/catch which is a
