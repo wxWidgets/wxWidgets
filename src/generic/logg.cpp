@@ -88,10 +88,6 @@
 // allows to exclude the usage of wxDateTime
 static wxString TimeStamp(const wxChar *format, time_t t)
 {
-#ifdef __WXWINCE__
-    // FIXME
-    return wxEmptyString;
-#else
     wxChar buf[4096];
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, localtime(&t)) )
     {
@@ -99,7 +95,6 @@ static wxString TimeStamp(const wxChar *format, time_t t)
         wxFAIL_MSG(_T("strftime() failed"));
     }
     return wxString(buf);
-#endif
 }
 
 
