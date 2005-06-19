@@ -193,6 +193,21 @@ extern LONG APIENTRY _EXPORT
     #define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
 #endif
 
+// close the handle in the class dtor
+class AutoHANDLE
+{
+public:
+    wxEXPLICIT AutoHANDLE(HANDLE handle) : m_handle(handle) { }
+
+    bool IsOk() const { return m_handle != INVALID_HANDLE_VALUE; }
+    operator HANDLE() const { return m_handle; }
+
+    ~AutoHANDLE() { if ( IsOk() ) ::CloseHandle(m_handle); }
+
+protected:
+    HANDLE m_handle;
+};
+
 #if wxUSE_GUI
 
 #include <wx/gdicmn.h>
