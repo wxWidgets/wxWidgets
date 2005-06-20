@@ -316,8 +316,15 @@ wxAppConsole::HandleEvent(wxEvtHandler *handler,
                           wxEventFunction func,
                           wxEvent& event) const
 {
-    // by default, simply call the handler
-    (handler->*func)(event);
+    // by default, call wxApp::OnExceptionInMainLoop if an exception occurs
+    try
+    {
+        handler->DoHandleEvent(func, event);
+    }
+    catch ( ... )
+    {
+        wxConstCast(this, wxAppConsole)->OnExceptionInMainLoop();
+    }
 }
 
 bool

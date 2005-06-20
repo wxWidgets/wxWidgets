@@ -9,6 +9,8 @@ All:
 
 - Fixed wxScopeGuard to work with VC++, documented it.
 - Fixed proxy handling in wxURL.
+- Changed exceptions handling to work under wxGTK, added
+  virtual wxEvtHandler::DoHandleEvent()
 
 wxMSW:
 

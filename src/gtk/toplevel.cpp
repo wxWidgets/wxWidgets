@@ -37,6 +37,7 @@
 #include "wx/gtk/private.h"
 #include "wx/timer.h"
 #include "wx/settings.h"
+#include "wx/evtloop.h"
 
 #include <glib.h>
 #include <gdk/gdk.h>
@@ -1202,7 +1203,7 @@ void wxTopLevelWindowGTK::AddGrab()
     {
         m_grabbed = TRUE;
         gtk_grab_add( m_widget );
-        gtk_main();
+        wxEventLoop().Run();
         gtk_grab_remove( m_widget );
     }
 }

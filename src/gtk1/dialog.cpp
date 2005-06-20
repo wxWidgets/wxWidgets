@@ -18,6 +18,7 @@
 #include "wx/frame.h"
 #include "wx/app.h"
 #include "wx/cursor.h"
+#include "wx/evtloop.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -212,7 +213,9 @@ int wxDialog::ShowModal()
     g_openDialogs++;
 
     gtk_grab_add( m_widget );
-    gtk_main();
+
+    wxEventLoop().Run();
+
     gtk_grab_remove( m_widget );
 
     g_openDialogs--;

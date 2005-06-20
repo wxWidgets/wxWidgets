@@ -433,6 +433,12 @@ public:
         // Perform standard OnIdle behaviour: call from port's OnIdle
     void OnIdle(wxIdleEvent& event);
 
+#if wxUSE_EXCEPTIONS
+    virtual void HandleEvent(wxEvtHandler *handler,
+                             wxEventFunction func,
+                             wxEvent& event) const;
+#endif // wxUSE_EXCEPTIONS
+
 
     // top level window functions
     // --------------------------

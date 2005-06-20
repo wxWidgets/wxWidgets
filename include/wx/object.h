@@ -26,6 +26,10 @@
 
 class WXDLLIMPEXP_BASE wxObject;
 
+// FIXME: remove in wx-2.7:
+class WXDLLIMPEXP_BASE wxEvent;
+class WXDLLIMPEXP_BASE wxEvtHandler;
+
 #ifndef wxUSE_EXTENDED_RTTI
 #define wxUSE_EXTENDED_RTTI 0
 #endif
@@ -478,7 +482,9 @@ public:
     virtual void ReservedObjectFunc6() {}
     virtual void ReservedObjectFunc7() {}
     virtual void ReservedObjectFunc8() {}
-    virtual void ReservedObjectFunc9() {}
+    // FIXME: turn back into ReservedObjectFunc9() in wx-2.7 (see also FIXME
+    //        near the top of this file)
+    virtual void DoHandleEvent(void (wxEvtHandler::*)(wxEvent&), wxEvent&) {}
 
 protected:
     // ensure that our data is not shared with anybody else: if we have no
