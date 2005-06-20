@@ -479,9 +479,10 @@ bool wxToolMenuBar::Realize()
                 break;
         }
 
-        BOOL bRc = ::CommandBar_AddButtons( (HWND) GetHWND(), 1, buttons );
-        
-        wxASSERT_MSG( bRc, wxT("Could not add toolbar button."));
+        if ( !::CommandBar_AddButtons( (HWND) GetHWND(), 1, buttons ) )
+        {
+            wxFAIL_MSG( wxT("Could not add toolbar button."));
+        }
 
         lastWasRadio = isRadio;
     }
