@@ -47,9 +47,9 @@
 #endif
 
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-#include "wx/msw/ole/oleutils.h"
-#include <aygshell.h>
-#include "wx/msw/winundef.h"
+    #include <ole2.h>
+    #include <aygshell.h>
+    #include "wx/msw/winundef.h"
 #endif
 
 #if wxUSE_STATUSBAR
@@ -211,14 +211,14 @@ bool wxFrame::Create(wxWindow *parent,
     SetLeftMenu(wxID_EXIT, _("Done"));
 #endif
 
-#if defined(__POCKETPC__)
+#if wxUSE_ACCEL && defined(__POCKETPC__)
     // The guidelines state that Ctrl+Q should quit the app.
     // Let's define an accelerator table to send wxID_EXIT.
     wxAcceleratorEntry entries[1];
     entries[0].Set(wxACCEL_CTRL,   'Q',         wxID_EXIT);
     wxAcceleratorTable accel(1, entries);
     SetAcceleratorTable(accel);
-#endif
+#endif // wxUSE_ACCEL && __POCKETPC__
 
     return true;
 }
