@@ -69,7 +69,8 @@
 #endif // broken compilers
 
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-#include <aygshell.h>
+    #include <ole2.h>
+    #include <aygshell.h>
 #endif
 
 #if wxUSE_OLE
