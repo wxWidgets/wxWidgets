@@ -12,10 +12,6 @@
 #ifndef _WX_MSW_TOPLEVEL_H_
 #define _WX_MSW_TOPLEVEL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "toplevel.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMac
 // ----------------------------------------------------------------------------

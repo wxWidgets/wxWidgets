@@ -12,10 +12,6 @@
 
 #if wxUSE_HELP
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#   pragma interface "helphtml.h"
-#endif
-
 #include "wx/helpbase.h"
 #include "wx/frame.h"
 

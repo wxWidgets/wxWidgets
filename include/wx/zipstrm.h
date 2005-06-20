@@ -9,10 +9,6 @@
 #ifndef __ZIPSTREAM_H__
 #define __ZIPSTREAM_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "zipstrm.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 

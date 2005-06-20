@@ -11,10 +11,6 @@
 #ifndef _WX_HTMLFILT_H_
 #define _WX_HTMLFILT_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "htmlfilt.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_HTML

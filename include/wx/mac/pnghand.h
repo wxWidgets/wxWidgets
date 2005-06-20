@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "pnghand.h"
-#endif
-
 #ifndef _WX_PNGHAND_H_
 #define _WX_PNGHAND_H_
 

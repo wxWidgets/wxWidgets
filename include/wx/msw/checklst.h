@@ -12,10 +12,6 @@
 #ifndef   __CHECKLST__H_
 #define   __CHECKLST__H_
 
-#ifdef __GNUG__
-#pragma interface "checklst.h"
-#endif
-
 #if !wxUSE_OWNER_DRAWN
   #error  "wxCheckListBox class requires owner-drawn functionality."
 #endif

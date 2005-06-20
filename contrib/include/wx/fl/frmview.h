@@ -12,10 +12,6 @@
 #ifndef __FRMVIEW_G__
 #define __FRMVIEW_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "frmview.h"
-#endif
-
 #include "wx/module.h"
 
 #if 0

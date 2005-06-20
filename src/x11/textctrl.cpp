@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "textctrl.h"
-#endif
-
 #include "wx/textctrl.h"
 #include "wx/utils.h"
 #include "wx/intl.h"

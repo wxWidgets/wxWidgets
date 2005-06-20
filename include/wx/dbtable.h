@@ -21,10 +21,6 @@
 
 #include "wx/version.h"
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-  #pragma interface "dbtable.h"
-#endif
-
 #include "wx/db.h"
 
 #include "wx/variant.h"

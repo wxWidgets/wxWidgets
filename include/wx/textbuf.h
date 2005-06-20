@@ -12,10 +12,6 @@
 #ifndef _WX_TEXTBUFFER_H
 #define _WX_TEXTBUFFER_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "textbuf.h"
-#endif
-
 #include "wx/defs.h"
 
 // ----------------------------------------------------------------------------

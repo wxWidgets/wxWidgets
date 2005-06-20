@@ -14,10 +14,6 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma interface "window.h"
-#endif
-
 #include "wx/font.h"
 
 struct window_t;

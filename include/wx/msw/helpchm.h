@@ -12,10 +12,6 @@
 #ifndef _WX_HELPCHM_H_
 #define _WX_HELPCHM_H_
 
-#ifdef __GNUG__
-#pragma interface "helpchm.h"
-#endif
-
 #if wxUSE_MS_HTML_HELP
 
 #include "wx/helpbase.h"

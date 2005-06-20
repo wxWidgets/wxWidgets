@@ -11,10 +11,6 @@
 #ifndef _WX_UNIV_DIALOG_H_
 #define _WX_UNIV_DIALOG_H_
 
-#ifdef __GNUG__
-    #pragma interface "univdialog.h"
-#endif
-
 WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
 class WXDLLEXPORT wxWindowDisabler;
 class WXDLLEXPORT wxEventLoop;

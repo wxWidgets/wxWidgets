@@ -9,10 +9,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined( __GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/wx.h"
 
 // Define a new application

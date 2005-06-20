@@ -14,10 +14,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "font.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

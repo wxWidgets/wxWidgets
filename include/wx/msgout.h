@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "msgout.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/wxchar.h"
 

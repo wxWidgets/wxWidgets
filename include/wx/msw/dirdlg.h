@@ -12,10 +12,6 @@
 #ifndef _WX_DIRDLG_H_
 #define _WX_DIRDLG_H_
 
-#ifdef __GNUG__
-#pragma interface "dirdlg.h"
-#endif
-
 class WXDLLEXPORT wxDirDialog : public wxDialog
 {
 public:

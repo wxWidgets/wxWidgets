@@ -10,10 +10,6 @@
 #ifndef _WX_IMAGPNM_H_
 #define _WX_IMAGPNM_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "imagpnm.h"
-#endif
-
 #include "wx/image.h"
 
 //-----------------------------------------------------------------------------

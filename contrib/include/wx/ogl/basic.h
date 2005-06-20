@@ -12,10 +12,6 @@
 #ifndef _OGL_BASIC_H_
 #define _OGL_BASIC_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "basic.h"
-#endif
-
 #define OGL_VERSION     2.0
 
 #ifndef DEFAULT_MOUSE_TOLERANCE

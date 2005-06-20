@@ -16,10 +16,6 @@
 #ifndef __WXGRIDSEL_H__
 #define __WXGRIDSEL_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "gridsel.h"
-#endif
-
 #include "wx/grid.h"
 
 class WXDLLEXPORT wxGridSelection{

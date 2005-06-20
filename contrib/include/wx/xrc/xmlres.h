@@ -11,10 +11,6 @@
 #ifndef _WX_XMLRES_H_
 #define _WX_XMLRES_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xmlres.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/dynarray.h"

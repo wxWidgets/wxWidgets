@@ -9,10 +9,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-// #pragma interface
-#endif
-
 #ifndef __DOCSAMPLEH__
 #define __DOCSAMPLEH__
 

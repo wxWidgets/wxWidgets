@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "helpxxxx.h"
-#endif
-
 #include "wx/motif/helpxxxx.h"
 
 #include <string.h>

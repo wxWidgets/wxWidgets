@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_TEXTCTRL_H_
 #define _WX_UNIV_TEXTCTRL_H_
 
-#ifdef __GNUG__
-    #pragma interface "univtextctrl.h"
-#endif
-
 class WXDLLEXPORT wxCaret;
 class WXDLLEXPORT wxTextCtrlCommandProcessor;
 

@@ -12,10 +12,6 @@
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
 
-#ifdef __GNUG__
-    #pragma interface "frame.h"
-#endif
-
 class WXDLLEXPORT wxFrame : public wxFrameBase
 {
 public:

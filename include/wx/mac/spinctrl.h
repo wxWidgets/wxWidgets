@@ -22,10 +22,6 @@
 
 #if wxUSE_SPINBTN 
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "spinctlg.h"
-#endif
-
 class WXDLLEXPORT wxSpinButton;
 class WXDLLEXPORT wxTextCtrl;
 

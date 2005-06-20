@@ -18,10 +18,6 @@
 #ifndef __WXGRID_H__
 #define __WXGRID_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "grid.h"
-#endif
-
 #include "wx/hash.h"
 #include "wx/panel.h"
 #include "wx/scrolwin.h"

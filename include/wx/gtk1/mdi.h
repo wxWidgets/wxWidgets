@@ -11,10 +11,6 @@
 #ifndef __MDIH__
 #define __MDIH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/list.h"

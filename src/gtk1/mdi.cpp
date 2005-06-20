@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "mdi.h"
-#endif
-
 #include "wx/mdi.h"
 
 #if wxUSE_MDI_ARCHITECTURE

@@ -1,10 +1,6 @@
 #ifndef __WXBOUNDINGBOX_H__
 #define __WXBOUNDINGBOX_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "bbox.cpp"
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif

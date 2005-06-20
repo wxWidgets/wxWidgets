@@ -13,10 +13,6 @@
 #ifndef _WX_FONTENUM_H_
 #define _WX_FONTENUM_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "fontenum.h"
-#endif
-
 #include "wx/font.h"
 
 // ----------------------------------------------------------------------------

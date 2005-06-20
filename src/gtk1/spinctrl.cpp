@@ -8,10 +8,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "spinctrl.h"
-#endif
-
 #include "wx/spinctrl.h"
 
 #if wxUSE_SPINCTRL

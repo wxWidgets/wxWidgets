@@ -34,9 +34,6 @@
 // SYNOPSIS START
 // SYNOPSIS STOP
 */
-#ifdef __GNUG__
-    #pragma implementation "db.h"
-#endif
 
 #include "wx/wxprec.h"
 

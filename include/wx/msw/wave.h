@@ -12,10 +12,6 @@
 #ifndef _WX_WAVE_H_
 #define _WX_WAVE_H_
 
-#ifdef __GNUG__
-#pragma interface "wave.h"
-#endif
-
 #if wxUSE_WAVE
 
 #include "wx/object.h"

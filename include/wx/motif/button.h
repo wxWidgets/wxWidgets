@@ -12,10 +12,6 @@
 #ifndef _WX_BUTTON_H_
 #define _WX_BUTTON_H_
 
-#ifdef __GNUG__
-#pragma interface "button.h"
-#endif
-
 #include "wx/control.h"
 #include "wx/gdicmn.h"
 

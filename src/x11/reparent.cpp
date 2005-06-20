@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "reparent.h"
-#endif
-
 #include "wx/setup.h"
 
 #if !wxUSE_NANOX

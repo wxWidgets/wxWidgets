@@ -13,11 +13,6 @@
 #ifndef _WX_MICROWIN_H_
 #define _WX_MICROWIN_H_
 
-#ifdef __GNUG__
-#pragma interface "microwin.h"
-#endif
-
-
 /* Implemented by microwin.cpp */
 
 #ifdef __cplusplus

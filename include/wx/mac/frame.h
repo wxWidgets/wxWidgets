@@ -12,10 +12,6 @@
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "frame.h"
-#endif
-
 #include "wx/window.h"
 #include "wx/toolbar.h"
 #include "wx/accel.h"

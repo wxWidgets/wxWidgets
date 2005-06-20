@@ -12,10 +12,6 @@
 #ifndef _WX_ARTPROV_H_
 #define _WX_ARTPROV_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "artprov.h"
-#endif
-
 #include "wx/string.h"
 #include "wx/bitmap.h"
 #include "wx/icon.h"

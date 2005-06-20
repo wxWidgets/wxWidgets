@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma interface "listdb.h"
-#endif
-
 /*
     Contains dialog class for creating a data table lookup listbox
 */

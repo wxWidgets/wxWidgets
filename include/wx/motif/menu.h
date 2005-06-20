@@ -12,10 +12,6 @@
 #ifndef _WX_MOTIF_MENU_H_
 #define _WX_MOTIF_MENU_H_
 
-#ifdef __GNUG__
-#pragma interface "menu.h"
-#endif
-
 #include "wx/colour.h"
 #include "wx/font.h"
 

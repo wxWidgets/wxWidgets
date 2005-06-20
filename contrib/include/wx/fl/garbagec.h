@@ -12,10 +12,6 @@
 #ifndef __GARBAGEC_G__
 #define __GARBAGEC_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "garbagec.h"
-#endif
-
 #include "wx/list.h"
 #include "wx/fl/fldefs.h"
 

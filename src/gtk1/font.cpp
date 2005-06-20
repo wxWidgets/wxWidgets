@@ -15,10 +15,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "font.h"
-#endif
-
 #include "wx/font.h"
 #include "wx/fontutil.h"
 #include "wx/cmndata.h"

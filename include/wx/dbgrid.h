@@ -14,10 +14,6 @@
 #ifndef _WX_GENERIC_DBGRID_H_
 #define _WX_GENERIC_DBGRID_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "dbgrid.h"
-#endif
-
 #if wxUSE_ODBC
 #if wxUSE_NEW_GRID
 

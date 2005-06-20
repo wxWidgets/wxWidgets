@@ -10,10 +10,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "taskbar.h"
-#endif
-
 #include "wx/taskbar.h"
 
 wxTaskBarIcon::wxTaskBarIcon()

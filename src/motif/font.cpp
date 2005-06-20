@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "font.h"
-#endif
-
 #include "wx/defs.h"
 
 #ifdef __VMS

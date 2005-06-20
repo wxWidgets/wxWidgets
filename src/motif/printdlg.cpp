@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "printdlg.h"
-#endif
-
 #include "wx/object.h"
 #include "wx/motif/printdlg.h"
 #include "wx/dcprint.h"

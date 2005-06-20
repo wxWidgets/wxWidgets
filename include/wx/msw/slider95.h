@@ -12,10 +12,6 @@
 #ifndef _SLIDER95_H_
 #define _SLIDER95_H_
 
-#ifdef __GNUG__
-#pragma interface "slider95.h"
-#endif
-
 // Slider
 class WXDLLEXPORT wxSlider95 : public wxSliderBase
 {

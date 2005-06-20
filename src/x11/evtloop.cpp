@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "evtloop.h"
-#endif
-
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/evtloop.h"

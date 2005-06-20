@@ -12,10 +12,6 @@
 #ifndef _WX_DYNLIB_H__
 #define _WX_DYNLIB_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#   pragma interface "dynlib.h"
-#endif
-
 #include "wx/setup.h"
 
 #if wxUSE_DYNAMIC_LOADER

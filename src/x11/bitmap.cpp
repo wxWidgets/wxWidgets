@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "bitmap.h"
-#endif
-
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/log.h"

@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "window.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/menu.h"
 #include "wx/dc.h"

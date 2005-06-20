@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_SCRARROW_H_
 #define _WX_UNIV_SCRARROW_H_
 
-#ifdef __GNUG__
-    #pragma interface "univscrarrow.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxScrollArrows is not a control but just a class containing the common
 // functionality of scroll arrows, whether part of scrollbars, spin ctrls or

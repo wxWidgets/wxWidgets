@@ -11,10 +11,6 @@
 #ifndef _WX_XH_SCWIN_H_
 #define _WX_XH_SCWIN_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xh_scwin.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 #include "wx/defs.h"
 

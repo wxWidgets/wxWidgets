@@ -17,11 +17,6 @@
 // headers
 // --------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#  pragma implementation "server.cpp"
-#  pragma interface "server.cpp"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

@@ -7,11 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-    #pragma implementation "window.h"
-#endif
-
 #ifdef __VMS
 #define XWarpPointer XWARPPOINTER
 #endif

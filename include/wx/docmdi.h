@@ -12,10 +12,6 @@
 #ifndef _WX_DOCMDI_H_
 #define _WX_DOCMDI_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "docmdi.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_MDI_ARCHITECTURE && wxUSE_DOC_VIEW_ARCHITECTURE

@@ -12,10 +12,6 @@
 #ifndef _WX_WXCHAR_H_
 #define _WX_WXCHAR_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "wxchar.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // first deal with Unicode setting: wxUSE_UNICODE should be defined as 0 or 1
 // and is used by wxWindows, _UNICODE and/or UNICODE may be defined or used by

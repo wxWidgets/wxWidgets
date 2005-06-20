@@ -9,10 +9,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-// #pragma implementation "docview.h"
-#endif
-
 /*
 * Purpose:  Document/view architecture demo for wxWindows class library
 *           Run with no arguments for multiple top-level windows, -single

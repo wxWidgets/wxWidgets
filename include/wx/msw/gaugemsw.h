@@ -12,10 +12,6 @@
 #ifndef _GAUGEMSW_H_
 #define _GAUGEMSW_H_
 
-#ifdef __GNUG__
-#pragma interface "gaugemsw.h"
-#endif
-
 #include "wx/control.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;

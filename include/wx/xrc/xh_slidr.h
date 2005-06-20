@@ -11,10 +11,6 @@
 #ifndef _WX_XH_SLIDR_H_
 #define _WX_XH_SLIDR_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xh_slidr.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 #include "wx/defs.h"
 

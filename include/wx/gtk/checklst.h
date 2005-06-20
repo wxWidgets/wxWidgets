@@ -11,10 +11,6 @@
 #ifndef __GTKCHECKLISTH__
 #define __GTKCHECKLISTH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------

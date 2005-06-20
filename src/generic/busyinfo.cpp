@@ -6,10 +6,6 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "busyinfo.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

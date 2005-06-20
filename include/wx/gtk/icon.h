@@ -11,10 +11,6 @@
 #ifndef __GTKICONH__
 #define __GTKICONH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/bitmap.h"

@@ -12,10 +12,6 @@
 #ifndef _WX_GENERIC_FONTDLGG_H
 #define _WX_GENERIC_FONTDLGG_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "fontdlgg.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/gdicmn.h"
 #include "wx/font.h"

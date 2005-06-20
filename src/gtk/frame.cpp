@@ -15,10 +15,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "frame.h"
-#endif
-
 #include "wx/defs.h"
 
 #include "wx/dialog.h"

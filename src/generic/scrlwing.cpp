@@ -18,10 +18,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "genscrolwin.h"
-#endif
-
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif

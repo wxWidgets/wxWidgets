@@ -12,10 +12,6 @@
 #ifndef _WX_COLOUR_H_
 #define _WX_COLOUR_H_
 
-#ifdef __GNUG__
-#pragma interface "colour.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"

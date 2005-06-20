@@ -11,10 +11,6 @@
 #ifndef __WX_UNIV_TOPLEVEL_H__
 #define __WX_UNIV_TOPLEVEL_H__
 
-#ifdef __GNUG__
-    #pragma interface "univtoplevel.h"
-#endif
-
 #include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
 #include "wx/icon.h"

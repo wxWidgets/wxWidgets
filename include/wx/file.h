@@ -13,10 +13,6 @@
 #ifndef _WX_FILEH__
 #define _WX_FILEH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "file.h"
-#endif
-
 #ifndef WX_PRECOMP
   #include  "wx/string.h"
   #include  "wx/filefn.h"

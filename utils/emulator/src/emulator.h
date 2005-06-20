@@ -12,10 +12,6 @@
 #ifndef _WX_EMULATOR_H_
 #define _WX_EMULATOR_H_
 
-#ifdef __GNUG__
-    #pragma interface "emulator.h"
-#endif
-
 #define wxEMULATOR_VERSION 0.1
 
 // Information about the emulator decorations

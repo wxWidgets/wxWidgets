@@ -12,10 +12,6 @@
 #ifndef _WX_FONT_H_
 #define _WX_FONT_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "font.h"
-#endif
-
 class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 {
     friend class WXDLLEXPORT wxFont;

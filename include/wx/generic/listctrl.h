@@ -11,10 +11,6 @@
 #ifndef __LISTCTRLH_G__
 #define __LISTCTRLH_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "listctrl.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/generic/imaglist.h"

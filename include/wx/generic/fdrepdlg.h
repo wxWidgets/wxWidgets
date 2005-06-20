@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "genericfdrepdlg.h"
-#endif
-
 class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxRadioBox;
 class WXDLLEXPORT wxTextCtrl;

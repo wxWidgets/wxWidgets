@@ -12,10 +12,6 @@
 #ifndef _WX_TOKENZRH
 #define _WX_TOKENZRH
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "tokenzr.h"
-#endif
-
 #include "wx/object.h"
 #include "wx/string.h"
 

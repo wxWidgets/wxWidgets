@@ -11,11 +11,6 @@
 // Last modified: 14th May 1998 - ported to wxWindows 2.0
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

@@ -27,11 +27,6 @@ doesn't seem to be an equivalent of under wxWindows, and my quick
 hack doesn't fix. 
 */
 
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
 #include "wx/wxprec.h"
 
 #ifndef  WX_PRECOMP

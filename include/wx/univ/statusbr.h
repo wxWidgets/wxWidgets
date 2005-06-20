@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_STATUSBR_H_
 #define _WX_UNIV_STATUSBR_H_
 
-#ifdef __GNUG__
-    #pragma interface "univstatusbr.h"
-#endif
-
 #include "wx/univ/inpcons.h"
 
 // ----------------------------------------------------------------------------

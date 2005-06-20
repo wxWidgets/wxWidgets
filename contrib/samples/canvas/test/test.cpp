@@ -7,10 +7,6 @@
  *
  */
 
-#ifdef __GNUG__
-    #pragma implementation "test.cpp"
-#endif
-
 // For compilers that support precompilation
 #include "wx/wxprec.h"
 

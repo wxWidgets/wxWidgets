@@ -10,10 +10,6 @@
 #ifndef _WX_IMAGE_H_
 #define _WX_IMAGE_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "image.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/object.h"
 #include "wx/string.h"

@@ -12,10 +12,6 @@
 #ifndef _WX_MSW_TOPLEVEL_H_
 #define _WX_MSW_TOPLEVEL_H_
 
-#ifdef __GNUG__
-    #pragma interface "toplevel.h"
-#endif
-
 enum ETemplateID { kResizeableDialog = 130
                   ,kCaptionDialog
                   ,kNoCaptionDialog

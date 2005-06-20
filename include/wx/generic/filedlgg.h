@@ -12,10 +12,6 @@
 #ifndef _WX_FILEDLGG_H_
 #define _WX_FILEDLGG_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "filedlgg.h"
-#endif
-
 #include "wx/dialog.h"
 
 //-----------------------------------------------------------------------------

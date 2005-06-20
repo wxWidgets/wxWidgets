@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "timer.h"
-#endif
-
 #include "wx/timer.h"
 
 #if !USE_SHARED_LIBRARY

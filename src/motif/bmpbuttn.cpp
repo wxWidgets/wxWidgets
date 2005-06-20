@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "bmpbuttn.h"
-#endif
-
 #ifdef __VMS
 #define XtScreen XTSCREEN
 #endif

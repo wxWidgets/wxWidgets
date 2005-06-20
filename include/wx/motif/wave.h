@@ -13,10 +13,6 @@
 #ifndef _WX_WAVE_H_
 #define _WX_WAVE_H_
 
-#ifdef __GNUG__
-#pragma interface "wave.h"
-#endif
-
 #include "wx/object.h"
 
 class wxWave : public wxObject

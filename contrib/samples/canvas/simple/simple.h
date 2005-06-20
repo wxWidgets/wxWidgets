@@ -8,10 +8,6 @@
 #ifndef __simple_H__
 #define __simple_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "simple.cpp"
-#endif
-
 // Include wxWindows' headers
 
 #ifndef WX_PRECOMP

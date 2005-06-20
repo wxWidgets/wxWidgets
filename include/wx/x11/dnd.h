@@ -11,10 +11,6 @@
 #ifndef _WX_DND_H_
 #define _WX_DND_H_
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_DRAG_AND_DROP

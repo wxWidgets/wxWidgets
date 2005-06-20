@@ -12,10 +12,6 @@
 #ifndef _WX_MSW_FONTDLG_H_
 #define _WX_MSW_FONTDLG_H_
 
-#ifdef __GNUG__
-    #pragma interface "fontdlg.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxFontDialog
 // ----------------------------------------------------------------------------

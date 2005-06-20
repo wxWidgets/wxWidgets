@@ -13,10 +13,6 @@
 // wxWizard
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "wizardg.h"
-#endif
-
 class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxStaticBitmap;
 class WXDLLEXPORT wxWizardEvent;

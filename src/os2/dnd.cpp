@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "dnd.h"
-#endif
-
 #define INCL_PM
 #define INCL_DOS
 #include <os2.h>

@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "dialog.h"
-#endif
-
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #define XtWindow XTWINDOW

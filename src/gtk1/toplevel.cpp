@@ -15,10 +15,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "toplevel.h"
-#endif
-
 #ifdef __VMS
 #define XIconifyWindow XICONIFYWINDOW
 #endif

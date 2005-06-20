@@ -13,10 +13,6 @@
 #ifndef _WX_MIMETYPE_H_
 #define _WX_MIMETYPE_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "mimetypebase.h"
-#endif // __GNUG__
-
 // ----------------------------------------------------------------------------
 // headers and such
 // ----------------------------------------------------------------------------

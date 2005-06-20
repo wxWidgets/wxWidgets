@@ -11,10 +11,6 @@
 #ifndef _WX_XML_H_
 #define _WX_XML_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xml.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/object.h"

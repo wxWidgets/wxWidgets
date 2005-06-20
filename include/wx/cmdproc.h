@@ -12,10 +12,6 @@
 #ifndef _WX_CMDPROC_H_
 #define _WX_CMDPROC_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "cmdproc.h"
-#endif
-
 #include "wx/object.h"
 #include "wx/list.h"
 

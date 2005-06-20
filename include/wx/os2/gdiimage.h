@@ -16,10 +16,6 @@
 #ifndef _WX_OS2_GDIIMAGE_H_
 #define _WX_OS2_GDIIMAGE_H_
 
-#ifdef __GNUG__
-    #pragma interface "gdiimage.h"
-#endif
-
 #include "wx/gdiobj.h"          // base class
 #include "wx/gdicmn.h"          // wxBITMAP_TYPE_INVALID
 #include "wx/list.h"

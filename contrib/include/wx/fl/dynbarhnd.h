@@ -12,10 +12,6 @@
 #ifndef __DYNBARHND_G__
 #define __DYNBARHND_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "dynbarhnd.h"
-#endif
-
 #include "wx/fl/controlbar.h"
 
 #endif /* __DYNBARHND_G__ */

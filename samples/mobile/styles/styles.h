@@ -7,10 +7,6 @@
 #ifndef __styles_H__
 #define __styles_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "styles.cpp"
-#endif
-
 // Include wxWindows' headers
 
 #ifndef WX_PRECOMP

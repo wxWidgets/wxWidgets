@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "listbox.h"
-#endif
-
 #ifdef __VMS
 #define XtParent XTPARENT
 #define XtDisplay XTDISPLAY

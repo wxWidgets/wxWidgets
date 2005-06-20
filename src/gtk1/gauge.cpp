@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "gauge.h"
-#endif
-
 #include "wx/gauge.h"
 
 #if wxUSE_GAUGE

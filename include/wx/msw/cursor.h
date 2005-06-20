@@ -12,10 +12,6 @@
 #ifndef _WX_CURSOR_H_
 #define _WX_CURSOR_H_
 
-#ifdef __GNUG__
-    #pragma interface "cursor.h"
-#endif
-
 // compatible (even if incorrect) behaviour by default: derive wxCursor from
 // wxBitmap
 #ifndef wxICON_IS_BITMAP

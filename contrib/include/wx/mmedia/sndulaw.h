@@ -9,10 +9,6 @@
 #ifndef _WX_SNDULAW_H
 #define _WX_SNDULAW_H
 
-#ifdef __GNUG__
-#pragma interface "sndulaw.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/mmedia/sndcodec.h"
 #include "wx/mmedia/sndbase.h"

@@ -12,10 +12,6 @@
 #ifndef _WX_GTK_SCROLLWIN_H_
 #define _WX_GTK_SCROLLWIN_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "scrolwin.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers and constants
 // ----------------------------------------------------------------------------

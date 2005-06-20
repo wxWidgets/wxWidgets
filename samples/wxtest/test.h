@@ -8,10 +8,6 @@
 #ifndef __test_H__
 #define __test_H__
 
-#ifdef __GNUG__
-    #pragma interface "test.cpp"
-#endif
-
 // Include wxWindows' headers
 
 #ifndef WX_PRECOMP

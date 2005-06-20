@@ -12,10 +12,6 @@
 #ifndef _WX_JOYSTICK_H_
 #define _WX_JOYSTICK_H_
 
-#ifdef __GNUG__
-#pragma interface "joystick.h"
-#endif
-
 #include "wx/event.h"
 
 class WXDLLEXPORT wxJoystick: public wxObject

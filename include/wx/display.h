@@ -14,10 +14,6 @@
 
 #if wxUSE_DISPLAY
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "display.h"
-#endif
-
 class wxPoint;
 class wxRect;
 class wxString;

@@ -7,11 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "menu.h"
-#pragma implementation "menuitem.h"
-#endif
-
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/app.h"

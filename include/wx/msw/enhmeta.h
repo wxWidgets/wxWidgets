@@ -12,10 +12,6 @@
 #ifndef _WX_MSW_ENHMETA_H_
 #define _WX_MSW_ENHMETA_H_
 
-#ifdef __GNUG__
-    #pragma interface "enhmeta.h"
-#endif
-
 #include "wx/dc.h"
 
 #if wxUSE_DRAG_AND_DROP

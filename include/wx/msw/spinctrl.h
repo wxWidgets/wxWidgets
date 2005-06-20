@@ -12,10 +12,6 @@
 #ifndef _WX_MSW_SPINCTRL_H_
 #define _WX_MSW_SPINCTRL_H_
 
-#ifdef __GNUG__
-    #pragma interface "spinctrl.h"
-#endif
-
 #include "wx/spinbutt.h"    // the base class
 
 #include "wx/dynarray.h"

@@ -12,10 +12,6 @@
 #ifndef _WX_PROPFORM_H_
 #define _WX_PROPFORM_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "propform.h"
-#endif
-
 #if wxUSE_PROPSHEET
 
 #include "wx/prop.h"

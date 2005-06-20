@@ -10,10 +10,6 @@
 #ifndef __GTKMENUITEMH__
 #define __GTKMENUITEMH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/bitmap.h"
 
 //-----------------------------------------------------------------------------

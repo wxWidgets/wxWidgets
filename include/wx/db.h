@@ -34,10 +34,6 @@
 
 #include "wx/version.h"
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "db.h"
-#endif
-
 #include "wx/setup.h"
 
 #include "wx/defs.h"

@@ -13,10 +13,6 @@
 // Declarations
 // ============================================================================
 
-#ifdef __GNUG__
-#pragma implementation "uuid.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

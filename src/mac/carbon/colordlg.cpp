@@ -10,10 +10,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "colordlg.h"
-#endif
-
 #include "wx/mac/colordlg.h"
 
 #if !USE_SHARED_LIBRARY

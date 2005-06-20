@@ -12,10 +12,6 @@
 #ifndef _WX_STATBMP_H_BASE_
 #define _WX_STATBMP_H_BASE_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "statbmpbase.h"
-#endif
-
 #if wxUSE_STATBMP
 
 #include "wx/control.h"

@@ -12,10 +12,6 @@
 #ifndef _WX_GDIOBJ_H_
 #define _WX_GDIOBJ_H_
 
-#ifdef __GNUG__
-    #pragma interface "gdiobj.h"
-#endif
-
 #include "wx/object.h"  // base class
 
 // ----------------------------------------------------------------------------

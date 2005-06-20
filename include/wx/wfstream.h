@@ -12,10 +12,6 @@
 #ifndef _WX_WXFSTREAM_H__
 #define _WX_WXFSTREAM_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "wfstream.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_STREAMS && wxUSE_FILE

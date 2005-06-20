@@ -12,10 +12,6 @@
 #ifndef _WX_DIALOG_H_
 #define _WX_DIALOG_H_
 
-#ifdef __GNUG__
-    #pragma interface "dialog.h"
-#endif
-
 #include "wx/panel.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;

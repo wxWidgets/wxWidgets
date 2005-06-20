@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma interface "dbtest.h"
-#endif
-
 #include "wx/string.h"
 #include "wx/dbtable.h"
 

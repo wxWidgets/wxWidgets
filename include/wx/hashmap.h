@@ -12,10 +12,6 @@
 #ifndef _WX_HASHMAP_H_
 #define _WX_HASHMAP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "hashmap.h"
-#endif
-
 #include "wx/string.h"
 
 #include <stddef.h>             // for ptrdiff_t

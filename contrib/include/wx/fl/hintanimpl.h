@@ -12,10 +12,6 @@
 #ifndef __HINTANIMPL_G__
 #define __HINTANIMPL_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "hintanimpl.h"
-#endif
-
 #include "wx/fl/controlbar.h"
 
 #include "wx/timer.h"

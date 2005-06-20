@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_MENU_H_
 #define _WX_UNIV_MENU_H_
 
-#ifdef __GNUG__
-    #pragma interface "univmenu.h"
-#endif
-
 #if wxUSE_ACCEL
     #include "wx/accel.h"
 #endif // wxUSE_ACCEL

@@ -12,10 +12,6 @@
 #ifndef _WX_SCROLBAR_H_
 #define _WX_SCROLBAR_H_
 
-#ifdef __GNUG__
-#pragma interface "scrolbar.h"
-#endif
-
 // Scrollbar item
 class WXDLLEXPORT wxScrollBar: public wxScrollBarBase
 {

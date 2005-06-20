@@ -13,10 +13,6 @@
 #ifndef _WX_LISTBOX_H_
 #define _WX_LISTBOX_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "listbox.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // simple types
 // ----------------------------------------------------------------------------

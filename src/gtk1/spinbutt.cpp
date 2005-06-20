@@ -8,11 +8,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "spinbutt.h"
-    #pragma implementation "spinbutbase.h"
-#endif
-
 #include "wx/spinbutt.h"
 
 #if wxUSE_SPINBTN

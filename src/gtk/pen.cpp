@@ -7,11 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation "pen.h"
-#endif
-
 #include "wx/pen.h"
 
 #include <gdk/gdk.h>

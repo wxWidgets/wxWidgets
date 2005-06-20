@@ -7,11 +7,6 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation "htmlpars.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #include "wx/defs.h"

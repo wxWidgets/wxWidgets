@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "icon.h"
-#endif
-
 #include "wx/icon.h"
 
 #if !USE_SHARED_LIBRARIES

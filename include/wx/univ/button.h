@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_BUTTON_H_
 #define _WX_UNIV_BUTTON_H_
 
-#ifdef __GNUG__
-    #pragma interface "univbutton.h"
-#endif
-
 class WXDLLEXPORT wxInputHandler;
 
 #include "wx/bitmap.h"

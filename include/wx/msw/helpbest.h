@@ -12,10 +12,6 @@
 #ifndef _WX_HELPBEST_H_
 #define _WX_HELPBEST_H_
 
-#ifdef __GNUG__
-#pragma interface "helpbest.h"
-#endif
-
 #if wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__) && wxUSE_WXHTML_HELP
 
 #include "wx/helpbase.h"

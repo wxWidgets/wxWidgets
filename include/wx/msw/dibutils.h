@@ -29,10 +29,6 @@
 #ifndef SAMPLES_UTILS_H  
 #define SAMPLES_UTILS_H
 
-#ifdef __GNUG__
-#pragma interface "dibutils.h"
-#endif
-
 typedef     LPBITMAPINFOHEADER PDIB;
 typedef     HANDLE             HDIB;
 

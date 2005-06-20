@@ -12,10 +12,6 @@
 #ifndef _WX_DEFS_H_
 #define _WX_DEFS_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "defs.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // compiler and OS identification
 // ----------------------------------------------------------------------------

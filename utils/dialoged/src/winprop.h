@@ -12,10 +12,6 @@
 #ifndef _WINPROP_H_
 #define _WINPROP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "winprop.h"
-#endif
-
 #include "reseditr.h"
 
 class wxPropertyInfo;

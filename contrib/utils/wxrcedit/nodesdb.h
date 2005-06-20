@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "nodesdb.h"
-#endif
-
 #ifndef _NODESDB_H_
 #define _NODESDB_H_
 

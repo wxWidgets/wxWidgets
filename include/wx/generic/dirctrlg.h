@@ -15,10 +15,6 @@
 #ifndef _WX_DIRCTRL_H_
 #define _WX_DIRCTRL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "dirctrlg.h"
-#endif
-
 #if wxUSE_DIRDLG
 
 #include "wx/treectrl.h"

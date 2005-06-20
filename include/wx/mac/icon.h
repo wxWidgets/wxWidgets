@@ -12,10 +12,6 @@
 #ifndef _WX_ICON_H_
 #define _WX_ICON_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "icon.h"
-#endif
-
 #include "wx/bitmap.h"
 
 // Icon

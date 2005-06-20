@@ -12,10 +12,6 @@
 #ifndef _WX_CSHELPH__
 #define _WX_CSHELPH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "cshelp.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_HELP

@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "listbox.h"
-#endif
-
 #include "wx/app.h"
 #include "wx/listbox.h"
 #include "wx/button.h"

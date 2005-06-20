@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "univstatusbr.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

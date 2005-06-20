@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "utils.h"
-#endif
-
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/filefn.h"

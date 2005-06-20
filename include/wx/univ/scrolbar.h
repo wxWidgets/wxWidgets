@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_SCROLBAR_H_
 #define _WX_UNIV_SCROLBAR_H_
 
-#ifdef __GNUG__
-    #pragma interface "univscrolbar.h"
-#endif
-
 class WXDLLEXPORT wxScrollTimer;
 
 #include "wx/univ/scrarrow.h"

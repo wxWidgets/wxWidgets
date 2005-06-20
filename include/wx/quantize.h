@@ -17,10 +17,6 @@
  * For conditions of distribution and use, see the accompanying README file.
  */
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "quantize.h"
-#endif
-
 #ifndef _WX_QUANTIZE_H_
 #define _WX_QUANTIZE_H_
 

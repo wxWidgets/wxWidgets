@@ -21,10 +21,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "thread.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_THREADS

@@ -11,10 +11,6 @@
 #ifndef _WX_XH_CHOIC_H_
 #define _WX_XH_CHOIC_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xh_choic.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 class WXXMLDLLEXPORT wxChoiceXmlHandler : public wxXmlResourceHandler

@@ -14,10 +14,6 @@
 
 #if wxUSE_WAVE
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "wave.h"
-#endif
-
 #include "wx/object.h"
 
 #ifndef AUDIODEV

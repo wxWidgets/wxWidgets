@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "thread.h"
-#endif
-
 #include "wx/wx.h"
 #include "wx/module.h"
 #include "wx/thread.h"

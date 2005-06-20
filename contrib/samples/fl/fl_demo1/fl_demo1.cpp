@@ -10,10 +10,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef __GNUG__
-#pragma implementation "fl_demo1.h"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

@@ -10,10 +10,6 @@
 #ifndef _WX_ENCCONV_H_
 #define _WX_ENCCONV_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "encconv.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_FONTMAP

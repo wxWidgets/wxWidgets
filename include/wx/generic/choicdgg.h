@@ -12,10 +12,6 @@
 #ifndef __CHOICEDLGH_G__
 #define __CHOICEDLGH_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "choicdgg.h"
-#endif
-
 #include "wx/dynarray.h"
 #include "wx/dialog.h"
 

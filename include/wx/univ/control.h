@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_CONTROL_H_
 #define _WX_UNIV_CONTROL_H_
 
-#ifdef __GNUG__
-    #pragma interface "control.h"
-#endif
-
 class WXDLLEXPORT wxControlRenderer;
 class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxRenderer;

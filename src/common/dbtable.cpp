@@ -24,9 +24,6 @@
 // SYNOPSIS START
 // SYNOPSIS STOP
 */
-#ifdef __GNUG__
-    #pragma implementation "dbtable.h"
-#endif
 
 #include  "wx/wxprec.h"
 

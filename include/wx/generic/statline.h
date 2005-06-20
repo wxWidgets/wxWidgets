@@ -11,10 +11,6 @@
 #ifndef _WX_GENERIC_STATLINE_H_
 #define _WX_GENERIC_STATLINE_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "statline.h"
-#endif
-
 class wxStaticBox;
 
 // ----------------------------------------------------------------------------

@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "app.h"
-#endif
-
 #ifdef __VMS
 #include <vms_jackets.h>
 #endif

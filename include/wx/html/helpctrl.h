@@ -14,10 +14,6 @@
 
 #include "wx/defs.h"
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "helpctrl.h"
-#endif
-
 #if wxUSE_WXHTML_HELP
 
 #include "wx/html/helpfrm.h"

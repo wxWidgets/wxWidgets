@@ -12,10 +12,6 @@
 
 #if wxUSE_HELP
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#   pragma interface "wxexthlp.h"
-#endif
-
 #include "wx/generic/helphtml.h"
 
 #ifndef WXEXTHELP_DEFAULTBROWSER

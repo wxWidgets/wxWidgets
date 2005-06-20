@@ -13,10 +13,6 @@
 #ifndef _WX_FONTDLG_H_
 #define _WX_FONTDLG_H_
 
-#ifdef __GNUG__
-#pragma interface "fontdlg.h"
-#endif
-
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
 

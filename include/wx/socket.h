@@ -12,10 +12,6 @@
 #ifndef _WX_NETWORK_SOCKET_H
 #define _WX_NETWORK_SOCKET_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-  #pragma interface "socket.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_SOCKETS

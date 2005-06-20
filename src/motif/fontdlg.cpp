@@ -10,10 +10,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "fontdlg.h"
-#endif
-
 #include "wx/motif/fontdlg.h"
 #include "wx/cmndata.h"
 

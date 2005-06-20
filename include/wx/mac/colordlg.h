@@ -13,10 +13,6 @@
 #ifndef _WX_COLORDLG_H_
 #define _WX_COLORDLG_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "colordlg.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/dialog.h"
 #include "wx/cmndata.h"

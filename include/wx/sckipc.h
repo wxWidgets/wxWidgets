@@ -16,10 +16,6 @@
 #ifndef _WX_SCKIPC_H
 #define _WX_SCKIPC_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "sckipc.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_SOCKETS && wxUSE_IPC

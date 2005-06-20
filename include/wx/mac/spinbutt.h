@@ -12,10 +12,6 @@
 #ifndef _WX_SPINBUTT_H_
 #define _WX_SPINBUTT_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "spinbutt.h"
-#endif
-
 #include "wx/control.h"
 #include "wx/event.h"
 

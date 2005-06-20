@@ -12,10 +12,6 @@
 #ifndef _WX_STATBMP_H_
 #define _WX_STATBMP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "statbmp.h"
-#endif
-
 #include "wx/icon.h"
 
 class WXDLLEXPORT wxStaticBitmap: public wxStaticBitmapBase

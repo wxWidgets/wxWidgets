@@ -18,10 +18,6 @@
 #ifndef _WX_WXSTRINGH__
 #define _WX_WXSTRINGH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "string.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // conditinal compilation
 // ----------------------------------------------------------------------------

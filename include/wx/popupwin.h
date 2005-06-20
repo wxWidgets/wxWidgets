@@ -12,10 +12,6 @@
 #ifndef _WX_POPUPWIN_H_BASE_
 #define _WX_POPUPWIN_H_BASE_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "popupwinbase.h"
-#endif
-
 #include "wx/window.h"
 
 #if wxUSE_POPUPWIN

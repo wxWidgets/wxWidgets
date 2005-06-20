@@ -7,10 +7,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "gdiobj.h"
-#endif
-
 #include "wx/gdiobj.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)

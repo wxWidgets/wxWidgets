@@ -7,10 +7,6 @@
 // Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "statbmp.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_STATBMP

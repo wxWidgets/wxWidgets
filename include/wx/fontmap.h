@@ -12,10 +12,6 @@
 #ifndef _WX_FONTMAPPER_H_
 #define _WX_FONTMAPPER_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "fontmap.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------

@@ -4,10 +4,6 @@ Purpose Mainly used for calculating crossings
 Last Update 05-12-1995
 */
 
-#ifdef __GNUG__
-#pragma implementation "liner.cpp"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

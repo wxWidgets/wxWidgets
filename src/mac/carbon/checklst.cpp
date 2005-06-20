@@ -13,10 +13,6 @@
 // headers & declarations
 // ============================================================================
 
-#ifdef __GNUG__
-#pragma implementation "checklst.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_CHECKLISTBOX

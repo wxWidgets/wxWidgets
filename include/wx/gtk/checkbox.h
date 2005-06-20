@@ -10,10 +10,6 @@
 #ifndef __GTKCHECKBOXH__
 #define __GTKCHECKBOXH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 // ----------------------------------------------------------------------------
 // wxCheckBox
 // ----------------------------------------------------------------------------

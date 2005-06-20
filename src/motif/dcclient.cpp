@@ -36,10 +36,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "dcclient.h"
-#endif
-
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/window.h"

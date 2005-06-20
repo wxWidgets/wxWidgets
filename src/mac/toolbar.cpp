@@ -8,10 +8,6 @@
 // Copyright:   (c) AUTHOR
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "toolbar.h"
-#endif
-
 #include "wx/wx.h"
 
 #if wxUSE_TOOLBAR

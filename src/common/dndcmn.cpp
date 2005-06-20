@@ -12,10 +12,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "dndbase.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

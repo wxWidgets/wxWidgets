@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "dc.h"
-#endif
-
 #include "wx/dc.h"
 #include "wx/dcmemory.h"
 #include "wx/defs.h"

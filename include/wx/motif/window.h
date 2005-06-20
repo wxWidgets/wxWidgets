@@ -12,10 +12,6 @@
 #ifndef _WX_WINDOW_H_
 #define _WX_WINDOW_H_
 
-#ifdef __GNUG__
-#pragma interface "window.h"
-#endif
-
 #include "wx/region.h"
 
 // ----------------------------------------------------------------------------

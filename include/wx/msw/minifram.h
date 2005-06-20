@@ -12,10 +12,6 @@
 #ifndef _WX_MINIFRAM_H_
 #define _WX_MINIFRAM_H_
 
-#ifdef __GNUG__
-#pragma interface "minifram.h"
-#endif
-
 #include "wx/frame.h"
 
 #ifdef __WIN32__

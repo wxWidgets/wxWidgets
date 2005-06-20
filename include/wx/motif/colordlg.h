@@ -13,10 +13,6 @@
 #ifndef _WX_COLORDLG_H_
 #define _WX_COLORDLG_H_
 
-#ifdef __GNUG__
-#pragma interface "colordlg.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/dialog.h"
 #include "wx/cmndata.h"

@@ -11,10 +11,6 @@
 #ifndef __GTKDNDH__
 #define __GTKDNDH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/object.h"

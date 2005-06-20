@@ -10,10 +10,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef __GNUG__
-    #pragma implementation "dcbuffer.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

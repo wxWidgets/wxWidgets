@@ -12,10 +12,6 @@
 #ifndef   _REGISTRY_H
 #define   _REGISTRY_H
 
-#ifdef __GNUG__
-#pragma interface "registry.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // types used in this module
 // ----------------------------------------------------------------------------

@@ -14,10 +14,6 @@
 
 #if wxUSE_OWNER_DRAWN
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "ownerdrw.h"
-#endif
-
 #include "wx/bitmap.h"
 #include "wx/colour.h"
 #include "wx/font.h"

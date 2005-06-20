@@ -12,10 +12,6 @@
 #ifndef _WX_HTMLCELL_H_
 #define _WX_HTMLCELL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "htmlcell.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_HTML

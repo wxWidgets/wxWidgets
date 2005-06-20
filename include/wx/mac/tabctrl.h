@@ -12,10 +12,6 @@
 #ifndef _WX_TABCTRL_H_
 #define _WX_TABCTRL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "tabctrl.h"
-#endif
-
 class wxImageList;
 
 /*

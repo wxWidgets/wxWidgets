@@ -12,10 +12,6 @@
 #ifndef _WX_CHOICE_H_
 #define _WX_CHOICE_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "choice.h"
-#endif
-
 #include "wx/control.h"
 
   #include  "wx/dynarray.h"

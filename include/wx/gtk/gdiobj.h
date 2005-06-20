@@ -13,10 +13,6 @@
 
 #include "wx/object.h"
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 class wxGDIObject : public wxObject
 {
 public:

@@ -12,10 +12,6 @@
 #ifndef _WX_TREECTRL_H_
 #define _WX_TREECTRL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "treectrl.h"
-#endif
-
 #include "wx/textctrl.h"
 #include "wx/imaglist.h"
 

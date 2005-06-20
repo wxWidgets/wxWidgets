@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_CHOICE_H_
 #define _WX_UNIV_CHOICE_H_
 
-#ifdef __GNUG__
-    #pragma interface "univchoice.h"
-#endif
-
 #include "wx/combobox.h"
 
 // VS: This is only a *temporary* implementation, real wxChoice should not

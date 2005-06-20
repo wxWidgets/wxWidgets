@@ -12,10 +12,6 @@
 #ifndef _WX_BMPBUTTN_H_
 #define _WX_BMPBUTTN_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "bmpbuttn.h"
-#endif
-
 #include "wx/button.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;

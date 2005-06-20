@@ -12,10 +12,6 @@
 #ifndef _WX_EVTLOOP_H_
 #define _WX_EVTLOOP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "evtloop.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxEventLoop: a GUI event loop
 // ----------------------------------------------------------------------------

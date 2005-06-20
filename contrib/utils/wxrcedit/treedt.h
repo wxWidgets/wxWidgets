@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "treedt.h"
-#endif
-
 #ifndef _TREEDT_H_
 #define _TREEDT_H_
 

@@ -12,10 +12,6 @@
 #ifndef __GCUPDATESMGR_G__
 #define __GCUPDATESMGR_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "gcupdatesmgr.h"
-#endif
-
 #include "wx/fl/controlbar.h"
 #include "wx/fl/updatesmgr.h"
 

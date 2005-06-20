@@ -18,8 +18,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// no #pragma implementation "log.h" because it's already in src/common/log.cpp
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

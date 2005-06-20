@@ -11,10 +11,6 @@
 #ifndef _WX_HTMLTAG_H_
 #define _WX_HTMLTAG_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "htmltag.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_HTML

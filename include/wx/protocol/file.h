@@ -12,10 +12,6 @@
 #ifndef __WX_PROTO_FILE_H__
 #define __WX_PROTO_FILE_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "sckfile.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_PROTOCOL_FILE

@@ -12,10 +12,6 @@
 #ifndef _WX_HELPWIN_H_
 #define _WX_HELPWIN_H_
 
-#ifdef __GNUG__
-#pragma interface "helpwin.h"
-#endif
-
 #include "wx/wx.h"
 
 #if wxUSE_HELP

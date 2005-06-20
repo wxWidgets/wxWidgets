@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "glcanvas.h"
-#endif
-
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 

@@ -12,10 +12,6 @@
 #ifndef __TEXTDLGH_G__
 #define __TEXTDLGH_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "textdlgg.h"
-#endif
-
 #include "wx/defs.h"
 
 #include "wx/dialog.h"

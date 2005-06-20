@@ -11,10 +11,6 @@
 #ifndef __GTKDCMEMORYH__
 #define __GTKDCMEMORYH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 #include "wx/dcclient.h"
 

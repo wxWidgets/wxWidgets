@@ -10,10 +10,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma interface "glcanvas.h"
-#endif
-
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 

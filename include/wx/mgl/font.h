@@ -9,10 +9,6 @@
 #ifndef __WX_FONT_H__
 #define __WX_FONT_H__
 
-#ifdef __GNUG__
-    #pragma interface "font.h"
-#endif
-
 #include "wx/hash.h"
 
 // ----------------------------------------------------------------------------

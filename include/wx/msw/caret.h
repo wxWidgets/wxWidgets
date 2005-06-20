@@ -12,10 +12,6 @@
 #ifndef _WX_CARET_H_
 #define _WX_CARET_H_
 
-#ifdef __GNUG__
-    #pragma interface "caret.h"
-#endif
-
 class WXDLLEXPORT wxCaret : public wxCaretBase
 {
 public:

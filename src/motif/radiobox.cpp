@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "radiobox.h"
-#endif
-
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif

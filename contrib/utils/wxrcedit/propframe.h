@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "propframe.h"
-#endif
-
 #ifndef _PROPFRAME_H_
 #define _PROPFRAME_H_
 

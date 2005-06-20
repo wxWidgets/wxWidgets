@@ -12,10 +12,6 @@
 #ifndef _WX_CTRLSUB_H_BASE_
 #define _WX_CTRLSUB_H_BASE_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "controlwithitems.h"
-#endif
-
 #if wxUSE_CONTROLS
 
 #include "wx/control.h"      // base class

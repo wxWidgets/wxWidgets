@@ -12,10 +12,6 @@
 #ifndef _WX_PRINT_H_
 #define _WX_PRINT_H_
 
-#ifdef __GNUG__
-#pragma interface "print.h"
-#endif
-
 #include "wx/prntbase.h"
 
 /*

@@ -11,10 +11,6 @@
 #ifndef __WX_BRUSH_H__
 #define __WX_BRUSH_H__
 
-#ifdef __GNUG__
-#pragma interface "brush.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"

@@ -7,11 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation "radiobut.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_RADIOBOX

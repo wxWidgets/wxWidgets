@@ -11,10 +11,6 @@
 #ifndef __GTKRADIOBOXH__
 #define __GTKRADIOBOXH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/bitmap.h"
 
 //-----------------------------------------------------------------------------

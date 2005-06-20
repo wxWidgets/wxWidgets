@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "choicebase.h"
-#endif
-
 #if wxUSE_CHOICE
 
 #include "wx/ctrlsub.h"     // the base class

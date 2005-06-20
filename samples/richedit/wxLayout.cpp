@@ -7,10 +7,6 @@
  *
  */
 
-#ifdef __GNUG__
-#pragma implementation "wxLayout.h"
-#endif
-
 #include "wx/wxprec.h"
 #ifdef __BORLANDC__
 #  pragma hdrstop

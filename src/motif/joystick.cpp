@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "joystick.h"
-#endif
-
 // Not implemented in wxMotif
 #if 0
 

@@ -12,10 +12,6 @@
 #ifndef _WX_RADIOBUT_H_
 #define _WX_RADIOBUT_H_
 
-#ifdef __GNUG__
-#pragma interface "radiobut.h"
-#endif
-
 #include "wx/control.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxRadioButtonNameStr;

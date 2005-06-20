@@ -12,10 +12,6 @@
 #ifndef _WX_TEXTCTRL_H_
 #define _WX_TEXTCTRL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "textctrl.h"
-#endif
-
 #include "wx/control.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxTextCtrlNameStr;

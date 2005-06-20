@@ -10,10 +10,6 @@
 #ifndef __WX_DCSCREEN_H__
 #define __WX_DCSCREEN_H__
 
-#ifdef __GNUG__
-#pragma interface "dcscreen.h"
-#endif
-
 #include "wx/dcclient.h"
 
 //-----------------------------------------------------------------------------

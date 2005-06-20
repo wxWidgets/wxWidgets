@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "combobox.h"
-#endif
-
 #include "wx/combobox.h"
 #include "wx/button.h"
 #include "wx/menu.h"

@@ -12,10 +12,6 @@
 #ifndef _WX_TEXTCTRL_H_
 #define _WX_TEXTCTRL_H_
 
-#ifdef __GNUG__
-    #pragma interface "textctrl.h"
-#endif
-
 class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
 {
 public:

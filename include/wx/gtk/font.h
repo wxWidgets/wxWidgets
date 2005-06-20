@@ -10,10 +10,6 @@
 #ifndef __GTKFONTH__
 #define __GTKFONTH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface
-#endif
-
 #include "wx/hash.h"
 
 // ----------------------------------------------------------------------------

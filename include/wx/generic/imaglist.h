@@ -11,10 +11,6 @@
 #ifndef __IMAGELISTH_G__
 #define __IMAGELISTH_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "imaglist.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/gdicmn.h"
 #include "wx/bitmap.h"

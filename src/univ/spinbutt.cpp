@@ -17,11 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "spinbutt.h"
-    #pragma implementation "univspinbutt.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

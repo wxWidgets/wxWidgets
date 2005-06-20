@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "fontenum.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/dynarray.h"
 #include "wx/string.h"

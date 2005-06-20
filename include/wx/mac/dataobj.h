@@ -12,10 +12,6 @@
 #ifndef _WX_MAC_DATAOBJ_H_
 #define _WX_MAC_DATAOBJ_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "dataobj.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxDataObject is the same as wxDataObjectBase under wxGTK
 // ----------------------------------------------------------------------------

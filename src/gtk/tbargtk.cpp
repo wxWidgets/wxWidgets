@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "tbargtk.h"
-#endif
-
 #include "wx/toolbar.h"
 
 #if wxUSE_TOOLBAR_NATIVE

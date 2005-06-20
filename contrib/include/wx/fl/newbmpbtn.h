@@ -12,10 +12,6 @@
 #ifndef __NEWBMPBTN_G__
 #define __NEWBMPBTN_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "newbmpbtn.h"
-#endif
-
 #include "wx/button.h"
 #include "wx/string.h"
 #include "wx/fl/fldefs.h"

@@ -44,10 +44,6 @@ TODO: make a list of generic compiler options that each generator should recogni
 #ifndef _PROJGEN_H_
 #define _PROJGEN_H_
 
-#ifdef __GNUG__
-#pragma interface "projgen.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/hash.h"

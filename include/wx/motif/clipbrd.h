@@ -12,10 +12,6 @@
 #ifndef _WX_CLIPBRD_H_
 #define _WX_CLIPBRD_H_
 
-#ifdef __GNUG__
-#pragma interface "clipbrd.h"
-#endif
-
 #if wxUSE_CLIPBOARD
 
 #include "wx/list.h"

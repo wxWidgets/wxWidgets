@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "controlbase.h"
-#endif
-
 #if wxUSE_CONTROLS
 
 #include "wx/window.h"      // base class

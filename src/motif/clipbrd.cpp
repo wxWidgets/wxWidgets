@@ -9,11 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation
-#pragma implementation "clipbrd.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_CLIPBOARD

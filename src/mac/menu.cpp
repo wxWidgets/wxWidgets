@@ -17,11 +17,6 @@
 // wxWindows headers
 // -----------------
 
-#ifdef __GNUG__
-#pragma implementation "menu.h"
-#pragma implementation "menuitem.h"
-#endif
-
 #include "wx/app.h"
 #include "wx/menu.h"
 #include "wx/menuitem.h"

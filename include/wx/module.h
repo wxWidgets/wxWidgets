@@ -12,10 +12,6 @@
 #ifndef _WX_MODULEH__
 #define _WX_MODULEH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "module.h"
-#endif
-
 #include "wx/object.h"
 #include "wx/list.h"
 

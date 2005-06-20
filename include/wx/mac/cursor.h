@@ -12,10 +12,6 @@
 #ifndef _WX_CURSOR_H_
 #define _WX_CURSOR_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "cursor.h"
-#endif
-
 #include "wx/bitmap.h"
 
 class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData

@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "statline.h"
-#endif
-
 #include "wx/statline.h"
 
 #if wxUSE_STATLINE

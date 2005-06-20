@@ -12,10 +12,6 @@
 #ifndef   _STATBR95_H
 #define   _STATBR95_H
 
-#ifdef __GNUG__
-#pragma interface "statbr95.h"
-#endif
-
 #if wxUSE_NATIVE_STATUSBAR
 
 class WXDLLEXPORT wxStatusBar95 : public wxStatusBarBase

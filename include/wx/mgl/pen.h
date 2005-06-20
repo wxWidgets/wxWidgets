@@ -11,10 +11,6 @@
 #ifndef __WX_PEN_H__
 #define __WX_PEN_H__
 
-#ifdef __GNUG__
-#pragma interface "pen.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"

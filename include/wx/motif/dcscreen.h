@@ -12,10 +12,6 @@
 #ifndef _WX_DCSCREEN_H_
 #define _WX_DCSCREEN_H_
 
-#ifdef __GNUG__
-#pragma interface "dcscreen.h"
-#endif
-
 #include "wx/dcclient.h"
 
 class WXDLLEXPORT wxScreenDC: public wxWindowDC

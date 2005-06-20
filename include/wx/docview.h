@@ -12,10 +12,6 @@
 #ifndef _WX_DOCH__
 #define _WX_DOCH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "docview.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/list.h"
 #include "wx/cmndata.h"

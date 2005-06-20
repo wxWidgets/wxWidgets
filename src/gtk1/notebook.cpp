@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "notebook.h"
-#endif
-
 #include "wx/notebook.h"
 
 #if wxUSE_NOTEBOOK

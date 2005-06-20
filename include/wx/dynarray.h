@@ -12,10 +12,6 @@
 #ifndef   _DYNARRAY_H
 #define   _DYNARRAY_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "dynarray.h"
-#endif
-
 #include "wx/defs.h"
 
 /*

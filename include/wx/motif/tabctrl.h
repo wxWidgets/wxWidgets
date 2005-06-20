@@ -12,10 +12,6 @@
 #ifndef _WX_TABCTRL_H_
 #define _WX_TABCTRL_H_
 
-#ifdef __GNUG__
-#pragma interface "tabctrl.h"
-#endif
-
 class wxImageList;
 
 /*

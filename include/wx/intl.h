@@ -12,10 +12,6 @@
 #ifndef _WX_INTL_H_
 #define _WX_INTL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "intl.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 

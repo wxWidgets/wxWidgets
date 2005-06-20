@@ -13,10 +13,6 @@
 #ifndef _WX_UNIV_INPHAND_H_
 #define _WX_UNIV_INPHAND_H_
 
-#ifdef __GNUG__
-    #pragma interface "inphand.h"
-#endif
-
 #include "wx/univ/inpcons.h"         // for wxControlAction(s)
 
 // ----------------------------------------------------------------------------

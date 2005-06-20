@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "tipwin.h"
-#endif
-
 // For compilers that support precompilatixon, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

@@ -12,10 +12,6 @@
 #ifndef _WX_BMPBUTTN_H_
 #define _WX_BMPBUTTN_H_
 
-#ifdef __GNUG__
-#pragma interface "bmpbuttn.h"
-#endif
-
 #include "wx/button.h"
 #include "wx/bitmap.h"
 

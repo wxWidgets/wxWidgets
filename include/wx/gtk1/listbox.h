@@ -11,10 +11,6 @@
 #ifndef __GTKLISTBOXH__
 #define __GTKLISTBOXH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "listbox.h"
-#endif
-
 #include "wx/list.h"
 
 //-----------------------------------------------------------------------------

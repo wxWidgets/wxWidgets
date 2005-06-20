@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_CHECKLST_H_
 #define _WX_UNIV_CHECKLST_H_
 
-#ifdef __GNUG__
-    #pragma interface "univchecklst.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // actions
 // ----------------------------------------------------------------------------

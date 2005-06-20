@@ -10,10 +10,6 @@
 #ifndef __WX_APP_H__
 #define __WX_APP_H__
 
-#ifdef __GNUG__
-#pragma interface "app.h"
-#endif
-
 #include "wx/frame.h"
 #include "wx/icon.h"
 

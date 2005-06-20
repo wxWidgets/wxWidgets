@@ -10,10 +10,6 @@
 #ifndef _WX_HTML_H_
 #define _WX_HTML_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/html/htmldefs.h"
 #include "wx/html/htmltag.h"
 #include "wx/html/htmlcell.h"

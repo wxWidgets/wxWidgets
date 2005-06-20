@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma interface "dcclient.h"
-#endif
-
 #include "wx/dc.h"
 #include "wx/dynarray.h"
 

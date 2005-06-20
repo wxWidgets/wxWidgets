@@ -12,10 +12,6 @@
 #ifndef _WX_WINDOW_H_BASE_
 #define _WX_WINDOW_H_BASE_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "windowbase.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers which we must include here
 // ----------------------------------------------------------------------------

@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "tabctrl.h"
-#endif
-
 #include "wx/control.h"
 #include "wx/tabctrl.h"
 

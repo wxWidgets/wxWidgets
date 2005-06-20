@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "dataobj.h"
-#endif
-
 #include "wx/dataobj.h"
 #include "wx/app.h"
 #include "wx/debug.h"

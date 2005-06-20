@@ -13,10 +13,6 @@
 #ifndef _WX_FONTDLG_H_
 #define _WX_FONTDLG_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "fontdlg.h"
-#endif
-
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
 

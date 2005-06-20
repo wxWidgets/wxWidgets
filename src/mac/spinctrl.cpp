@@ -8,10 +8,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "spinctlg.h"
-#endif
-
 #include "wx/defs.h"
 
 #ifndef WX_PRECOMP

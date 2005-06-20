@@ -21,10 +21,6 @@
 #include "wx/datetime.h"
 #include "wx/date.h"
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "time.h"
-#endif
-
 class WXDLLEXPORT wxDate;
 
 typedef unsigned short hourTy;

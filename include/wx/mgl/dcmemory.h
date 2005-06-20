@@ -11,10 +11,6 @@
 #ifndef __WX_DCMEMORY_H__
 #define __WX_DCMEMORY_H__
 
-#ifdef __GNUG__
-#pragma interface "dcmemory.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/dcclient.h"
 

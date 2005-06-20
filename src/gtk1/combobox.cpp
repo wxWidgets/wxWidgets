@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "combobox.h"
-#endif
-
 #include "wx/combobox.h"
 
 #if wxUSE_COMBOBOX

@@ -12,10 +12,6 @@
 #ifndef __PROGDLGH_G__
 #define __PROGDLGH_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "progdlgg.h"
-#endif
-
 #include "wx/setup.h"
 
 #if wxUSE_PROGRESSDLG

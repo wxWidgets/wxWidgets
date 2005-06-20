@@ -9,10 +9,6 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "dialoged.h"
-#endif
-
 #ifndef dialogedh
 #define dialogedh
 

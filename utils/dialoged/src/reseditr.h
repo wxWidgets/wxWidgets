@@ -14,10 +14,6 @@
 
 #define wxDIALOG_EDITOR_VERSION 2.1
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "reseditr.h"
-#endif
-
 #include "wx/wx.h"
 #include "wx/string.h"
 #include "wx/layout.h"

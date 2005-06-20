@@ -7,11 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation "cursor.h"
-#endif
-
 #include "wx/cursor.h"
 #include "wx/utils.h"
 #include "wx/app.h"

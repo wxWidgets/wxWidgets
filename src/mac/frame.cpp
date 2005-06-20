@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "frame.h"
-#endif
-
 #include "wx/frame.h"
 #include "wx/statusbr.h"
 #include "wx/toolbar.h"

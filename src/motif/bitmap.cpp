@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "bitmap.h"
-#endif
-
 #ifdef __VMS
 #define XtParent XTPARENT
 #endif

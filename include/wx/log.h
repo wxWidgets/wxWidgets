@@ -12,10 +12,6 @@
 #ifndef   _WX_LOG_H_
 #define   _WX_LOG_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "log.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/string.h"
 

@@ -11,10 +11,6 @@
 #ifndef _WX_XH_BMP_H_
 #define _WX_XH_BMP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xh_bmp.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 

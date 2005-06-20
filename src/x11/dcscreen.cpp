@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "dcscreen.h"
-#endif
-
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/dcscreen.h"

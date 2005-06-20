@@ -9,11 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "rgncmn.h"
-#endif
-
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

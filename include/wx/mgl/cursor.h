@@ -11,10 +11,6 @@
 #ifndef __WX_CURSOR_H__
 #define __WX_CURSOR_H__
 
-#ifdef __GNUG__
-#pragma interface "cursor.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/gdicmn.h"

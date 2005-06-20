@@ -12,10 +12,6 @@
 #ifndef _WX_RESOURCEH__
 #define _WX_RESOURCEH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "resource.h"
-#endif
-
 #include "wx/setup.h"
 
 #if wxUSE_WX_RESOURCES

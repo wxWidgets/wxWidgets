@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma interface "makeproj.h"
-#endif
-
 #ifndef _MAKEPROJ_H_
 #define _MAKEPROJ_H_
 

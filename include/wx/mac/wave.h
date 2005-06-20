@@ -13,10 +13,6 @@
 #ifndef _WX_WAVE_H_
 #define _WX_WAVE_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "wave.h"
-#endif
-
 #if wxUSE_WAVE
 
 #include "wx/object.h"

@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "wave.h"
-#endif
-
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/wave.h"

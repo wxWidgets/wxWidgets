@@ -10,10 +10,6 @@
 #ifndef __GTKAPPH__
 #define __GTKAPPH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/frame.h"
 #include "wx/icon.h"
 

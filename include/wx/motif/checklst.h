@@ -13,10 +13,6 @@
 #ifndef _WX_CHECKLST_H_
 #define _WX_CHECKLST_H_
 
-#ifdef __GNUG__
-#pragma interface "checklst.h"
-#endif
-
 #include "wx/listbox.h"
 
 class wxCheckListBox : public wxCheckListBoxBase

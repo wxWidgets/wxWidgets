@@ -13,10 +13,6 @@
 // per-user file, which can be edited using a Windows-control-panel clone.
 // Also they should be documented better. Some are very MS Windows-ish.
 
-#ifdef __GNUG__
-#pragma implementation "settings.h"
-#endif
-
 #include "wx/settings.h"
 #include "wx/gdicmn.h"
 #include "wx/x11/private.h"

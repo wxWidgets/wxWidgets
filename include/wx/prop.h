@@ -12,10 +12,6 @@
 #ifndef _WX_PROP_H_
 #define _WX_PROP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "prop.h"
-#endif
-
 #if wxUSE_PROPSHEET
 
 #include "wx/defs.h"

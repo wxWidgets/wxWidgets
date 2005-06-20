@@ -8,11 +8,6 @@
 #ifndef __WXLINER_H
 #define __WXLINER_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "liner.cpp"
-#endif
-
-
 #include "wx/geometry.h"
 
 enum OUTPRODUCT {R_IS_LEFT,R_IS_ON,R_IS_RIGHT};

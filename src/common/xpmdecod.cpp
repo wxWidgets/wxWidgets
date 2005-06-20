@@ -90,10 +90,6 @@ license is as follows:
  * in this Software without prior written authorization from GROUPE BULL.
  */
 
-#ifdef __GNUG__
-#pragma implementation "xpmdecod.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

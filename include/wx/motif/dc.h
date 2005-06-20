@@ -12,10 +12,6 @@
 #ifndef _WX_DC_H_
 #define _WX_DC_H_
 
-#ifdef __GNUG__
-#pragma interface "dc.h"
-#endif
-
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/icon.h"

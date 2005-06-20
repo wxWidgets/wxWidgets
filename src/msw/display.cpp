@@ -17,10 +17,6 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "display.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

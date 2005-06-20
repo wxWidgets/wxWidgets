@@ -12,10 +12,6 @@
 #ifndef _WX_HELPBASEH__
 #define _WX_HELPBASEH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "helpbase.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_HELP

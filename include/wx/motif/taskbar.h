@@ -13,10 +13,6 @@
 #ifndef _WX_TASKBAR_H_
 #define _WX_TASKBAR_H_
 
-#ifdef __GNUG__
-#pragma interface "taskbar.h"
-#endif
-
 #include "wx/list.h"
 #include "wx/icon.h"
 

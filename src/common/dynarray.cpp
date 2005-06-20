@@ -13,10 +13,6 @@
 // headers
 // ============================================================================
 
-#ifdef __GNUG__
-#pragma implementation "dynarray.h"
-#endif
-
 #include  "wx/wxprec.h"
 
 #ifdef __BORLANDC__

@@ -11,10 +11,6 @@
 #ifndef __X11TEXTCTRLH__
 #define __X11TEXTCTRLH__
 
-#ifdef __GNUG__
-    #pragma interface "textctrl.h"
-#endif
-
 #include "wx/scrolwin.h"
 #include "wx/dynarray.h"
 #include "wx/datetime.h"

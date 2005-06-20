@@ -11,10 +11,6 @@
 
 #include "wx/setup.h"
 
-#ifdef __GNUG__
-#   pragma implementation "dialup.h"
-#endif
-
 #if wxUSE_DIALUP_MANAGER
 
 #ifndef  WX_PRECOMP

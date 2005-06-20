@@ -12,10 +12,6 @@
 #ifndef _WX_CHOICE_H_
 #define _WX_CHOICE_H_
 
-#ifdef __GNUG__
-#pragma interface "choice.h"
-#endif
-
 WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
 
 // Choice item

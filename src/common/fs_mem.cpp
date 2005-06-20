@@ -7,10 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef __GNUG__
-#pragma implementation "fs_mem.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

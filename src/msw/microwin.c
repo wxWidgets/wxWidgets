@@ -11,10 +11,6 @@
 
 */
 
-#ifdef __GNUG__
-    #pragma implementation "microwin.h"
-#endif
-
 #include "mwtypes.h"
 #include "windows.h"
 #include "wintern.h"

@@ -12,10 +12,6 @@
 #ifndef _WX_HELPVIEW_H_
 #define _WX_HELPVIEW_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "help.cpp"
-#endif
-
 #define hvVERSION 1.02
 
 // If 1, start a server to allow this to be used

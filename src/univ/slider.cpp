@@ -42,10 +42,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "univslider.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

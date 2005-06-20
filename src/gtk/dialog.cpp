@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "dialog.h"
-#endif
-
 #include "wx/dialog.h"
 #include "wx/frame.h"
 #include "wx/app.h"

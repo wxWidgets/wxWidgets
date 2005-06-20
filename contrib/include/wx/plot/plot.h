@@ -12,10 +12,6 @@
 #ifndef _WX_PLOT_H_
 #define _WX_PLOT_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "plot.h"
-#endif
-
 #include "wx/defs.h"
 
 #include "wx/scrolwin.h"

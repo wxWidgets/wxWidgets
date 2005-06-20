@@ -8,10 +8,6 @@
 // Licence:   wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "region.h"
-#endif
-
 #include "wx/region.h"
 #include "wx/gdicmn.h"
 #include "wx/mac/uma.h"

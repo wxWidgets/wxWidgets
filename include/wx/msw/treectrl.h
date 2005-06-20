@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma interface "treectrl.h"
-#endif
-
 #if wxUSE_TREECTRL
 
 #include "wx/textctrl.h"

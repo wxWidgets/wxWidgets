@@ -12,10 +12,6 @@
 #ifndef _WX_MENU_H_BASE_
 #define _WX_MENU_H_BASE_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "menubase.h"
-#endif
-
 #if wxUSE_MENUS
 
 // ----------------------------------------------------------------------------

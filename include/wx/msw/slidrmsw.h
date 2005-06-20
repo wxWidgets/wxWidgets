@@ -12,10 +12,6 @@
 #ifndef _SLIDRMSW_H_
 #define _SLIDRMSW_H_
 
-#ifdef __GNUG__
-#pragma interface "slidrmsw.h"
-#endif
-
 // Slider
 class WXDLLEXPORT wxSliderMSW : public wxSliderBase
 {

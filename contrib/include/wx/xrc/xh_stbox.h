@@ -11,10 +11,6 @@
 #ifndef _WX_XH_STBOX_H_
 #define _WX_XH_STBOX_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xh_stbox.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 

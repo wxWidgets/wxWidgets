@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "dnd.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_DRAG_AND_DROP

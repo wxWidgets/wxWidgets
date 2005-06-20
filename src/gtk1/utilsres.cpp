@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-//#ifdef __GNUG__
-//#pragma implementation "utils.h"
-//#endif
-
 #include "wx/utils.h"
 #include "wx/string.h"
 #include "wx/list.h"

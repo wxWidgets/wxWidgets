@@ -11,10 +11,6 @@
 #ifndef __GTKSTATICBOXH__
 #define __GTKSTATICBOXH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 //-----------------------------------------------------------------------------
 // wxStaticBox
 //-----------------------------------------------------------------------------

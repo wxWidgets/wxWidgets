@@ -12,10 +12,6 @@
 #ifndef __WXSIZER_H__
 #define __WXSIZER_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "sizer.h"
-#endif
-
 #include "wx/defs.h"
 
 #include "wx/window.h"

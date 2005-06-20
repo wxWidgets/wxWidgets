@@ -12,10 +12,6 @@
 #ifndef _WX_VALIDATEH__
 #define _WX_VALIDATEH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "validate.h"
-#endif
-
 #if defined(wxUSE_VALIDATORS) && !wxUSE_VALIDATORS
     // wxWindows is compiled without support for wxValidator, but we still
     // want to be able to pass wxDefaultValidator to the functions which take

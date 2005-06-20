@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "checkbox.h"
-#endif
-
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif

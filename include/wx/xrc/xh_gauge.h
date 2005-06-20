@@ -11,10 +11,6 @@
 #ifndef _WX_XH_GAUGE_H_
 #define _WX_XH_GAUGE_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xh_gauge.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_GAUGE

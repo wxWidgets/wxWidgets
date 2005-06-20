@@ -21,10 +21,6 @@
    methods)
  */
 
-#ifdef __GNUG__
-    #pragma interface "renderer.h"
-#endif
-
 #ifndef _WX_UNIV_RENDERER_H_
 #define _WX_UNIV_RENDERER_H_
 

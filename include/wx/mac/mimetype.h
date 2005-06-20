@@ -12,10 +12,6 @@
 #ifndef _MIMETYPE_IMPL_H
 #define _MIMETYPE_IMPL_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "mimetype.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/mimetype.h"
 

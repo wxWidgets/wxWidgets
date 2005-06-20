@@ -6,10 +6,6 @@
 #ifndef __WDR_test_H__
 #define __WDR_test_H__
 
-#ifdef __GNUG__
-    #pragma interface "test_wdr.cpp"
-#endif
-
 // Include wxWindows' headers
 
 #ifndef WX_PRECOMP

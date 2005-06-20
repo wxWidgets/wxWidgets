@@ -30,10 +30,6 @@
 
 /* modified by Vaclav Slavik for use as jpeglib-independent module */
 
-#ifdef __GNUG__
-#pragma implementation "quantize.h"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

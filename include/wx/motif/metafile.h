@@ -14,10 +14,6 @@
 #ifndef _WX_METAFIILE_H_
 #define _WX_METAFIILE_H_
 
-#ifdef __GNUG__
-#pragma interface "metafile.h"
-#endif
-
 #include "wx/setup.h"
 
 /*

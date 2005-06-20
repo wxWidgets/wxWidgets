@@ -10,10 +10,6 @@
 #ifndef __GTKMINIFRAMEH__
 #define __GTKMINIFRAMEH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_MINIFRAME

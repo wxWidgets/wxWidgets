@@ -9,11 +9,6 @@
 
 /* static const char sccsid[] = "%W% %G%"; */
 
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

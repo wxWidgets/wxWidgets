@@ -12,10 +12,6 @@
 #ifndef __ANTIFLICKPL_G__
 #define __ANTIFLICKPL_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "antiflickpl.h"
-#endif
-
 #include "wx/fl/controlbar.h"
 
 /*

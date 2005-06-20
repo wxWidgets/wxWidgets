@@ -12,10 +12,6 @@
 #ifndef __DRAGHINTSPL_G__
 #define __DRAGHINTSPL_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "barhintspl.h"
-#endif
-
 #include "wx/fl/controlbar.h"
 #include "wx/fl/toolwnd.h"
 

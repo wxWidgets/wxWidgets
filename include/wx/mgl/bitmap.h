@@ -10,10 +10,6 @@
 #ifndef __WX_BITMAP_H__
 #define __WX_BITMAP_H__
 
-#ifdef __GNUG__
-#pragma interface "bitmap.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"

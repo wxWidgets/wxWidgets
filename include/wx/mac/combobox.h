@@ -12,10 +12,6 @@
 #ifndef _WX_COMBOBOX_H_
 #define _WX_COMBOBOX_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "combobox.h"
-#endif
-
 #include "wx/textctrl.h"
 #include "wx/choice.h"
 

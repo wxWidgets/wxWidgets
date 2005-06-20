@@ -12,10 +12,6 @@
 #ifndef _WX_X11_TOPLEVEL_H_
 #define _WX_X11_TOPLEVEL_H_
 
-#ifdef __GNUG__
-    #pragma interface "toplevel.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowX11
 // ----------------------------------------------------------------------------

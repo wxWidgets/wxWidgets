@@ -12,10 +12,6 @@
 #ifndef _WX_CURSOR_H_
 #define _WX_CURSOR_H_
 
-#ifdef __GNUG__
-#pragma interface "cursor.h"
-#endif
-
 #include "wx/bitmap.h"
 
 #if wxUSE_IMAGE

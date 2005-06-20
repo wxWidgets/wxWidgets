@@ -12,10 +12,6 @@
 #ifndef _WX_APP_H_
 #define _WX_APP_H_
 
-#ifdef __GNUG__
-#pragma interface "app.h"
-#endif
-
 #include "wx/event.h"
 #include "wx/icon.h"
 

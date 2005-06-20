@@ -8,9 +8,6 @@
 // Copyright:   (c) Wolfram Gloger (1996, 1997); Guilhem Lavaux (1998)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-#ifdef __GNUG__
-#pragma implementation "thread.h"
-#endif
 
 #include <stdio.h>
 #include <unistd.h>

@@ -11,10 +11,6 @@
 #ifndef _WX_PNGREAD__
 #define _WX_PNGREAD__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "pngread.h"
-#endif
-
 #ifndef byte
 typedef unsigned char byte;
 #endif

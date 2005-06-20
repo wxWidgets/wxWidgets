@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "nodehnd.h"
-#endif
-
 #ifndef _NODEHND_H_
 #define _NODEHND_H_
 

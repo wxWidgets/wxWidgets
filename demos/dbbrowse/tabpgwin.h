@@ -20,10 +20,6 @@
 #ifndef __TABPGWIN_G__
 #define __TABPGWIN_G__
 
-//#ifdef __GNUG__
-//#pragma interface
-//#endif
-
 #include "wx/defs.h"
 #include "wx/window.h"
 #include "wx/string.h"

@@ -14,10 +14,6 @@
 #ifndef _WX_SPLITTREE_H_
 #define _WX_SPLITTREE_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-	#pragma interface "splittree.h"
-#endif
-
 // Set this to 1 to use generic tree control (doesn't yet work properly)
 #define USE_GENERIC_TREECTRL 0
 

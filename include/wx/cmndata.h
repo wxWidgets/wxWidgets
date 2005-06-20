@@ -12,10 +12,6 @@
 #ifndef _WX_CMNDATA_H_BASE_
 #define _WX_CMNDATA_H_BASE_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "cmndata.h"
-#endif
-
 #include "wx/window.h"
 #include "wx/font.h"
 #include "wx/colour.h"

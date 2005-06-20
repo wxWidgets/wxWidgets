@@ -117,10 +117,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "univtextctrl.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

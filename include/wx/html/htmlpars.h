@@ -11,10 +11,6 @@
 #ifndef _WX_HTMLPARS_H_
 #define _WX_HTMLPARS_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "htmlpars.h"
-#endif
-
 #include "wx/defs.h"
 #if wxUSE_HTML
 

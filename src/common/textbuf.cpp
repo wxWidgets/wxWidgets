@@ -11,10 +11,6 @@
 // headers
 // ============================================================================
 
-#ifdef __GNUG__
-    #pragma implementation "textbuf.h"
-#endif
-
 #include  "wx/wxprec.h"
 
 #ifdef __BORLANDC__

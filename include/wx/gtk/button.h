@@ -10,10 +10,6 @@
 #ifndef __GTKBUTTONH__
 #define __GTKBUTTONH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/list.h"

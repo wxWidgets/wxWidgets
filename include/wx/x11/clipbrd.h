@@ -11,10 +11,6 @@
 #ifndef __X11CLIPBOARDH__
 #define __X11CLIPBOARDH__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #if wxUSE_CLIPBOARD
 
 #include "wx/object.h"

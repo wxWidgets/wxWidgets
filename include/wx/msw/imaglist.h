@@ -12,10 +12,6 @@
 #ifndef _WX_IMAGLIST_H_
 #define _WX_IMAGLIST_H_
 
-#ifdef __GNUG__
-#pragma interface "imaglist.h"
-#endif
-
 #include "wx/bitmap.h"
 
 /*

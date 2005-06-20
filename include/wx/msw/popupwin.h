@@ -12,10 +12,6 @@
 #ifndef _WX_MSW_POPUPWIN_H_
 #define _WX_MSW_POPUPWIN_H_
 
-#ifdef __GNUG__
-    #pragma interface "popup.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxPopupWindow
 // ----------------------------------------------------------------------------

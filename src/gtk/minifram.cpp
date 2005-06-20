@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "minifram.h"
-#endif
-
 #include "wx/minifram.h"
 
 #if wxUSE_MINIFRAME

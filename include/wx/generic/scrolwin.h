@@ -12,10 +12,6 @@
 #ifndef _WX_GENERIC_SCROLLWIN_H_
 #define _WX_GENERIC_SCROLLWIN_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "genscrolwin.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers and constants
 // ----------------------------------------------------------------------------

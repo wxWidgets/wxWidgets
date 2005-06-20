@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "pe_basic.h"
-#endif
-
 #ifndef _PE_BASIC_H_
 #define _PE_BASIC_H_
 

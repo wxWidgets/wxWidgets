@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_SCRTHUMB_H_
 #define _WX_UNIV_SCRTHUMB_H_
 
-#ifdef __GNUG__
-    #pragma interface "univscrthumb.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxScrollThumb is not a control but just a class containing the common
 // functionality of scroll thumb such as used by scrollbars, sliders and maybe

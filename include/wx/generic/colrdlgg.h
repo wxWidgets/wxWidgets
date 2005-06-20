@@ -12,10 +12,6 @@
 #ifndef __COLORDLGH_G__
 #define __COLORDLGH_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "colrdlgg.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/gdicmn.h"
 #include "wx/dialog.h"

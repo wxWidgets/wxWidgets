@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_MENUITEM_H_
 #define _WX_UNIV_MENUITEM_H_
 
-#ifdef __GNUG__
-    #pragma interface "univmenuitem.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxMenuItem implements wxMenuItemBase
 // ----------------------------------------------------------------------------

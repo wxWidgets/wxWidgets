@@ -10,10 +10,6 @@
 #ifndef __GTKCHOICEH__
 #define __GTKCHOICEH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "choice.h"
-#endif
-
 //-----------------------------------------------------------------------------
 // wxChoice
 //-----------------------------------------------------------------------------

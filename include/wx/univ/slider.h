@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma interface "univslider.h"
-#endif
-
 #ifndef _WX_UNIV_SLIDER_H_
 #define _WX_UNIV_SLIDER_H_
 

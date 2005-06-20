@@ -12,10 +12,6 @@
 //              - add high level functions (RegisterOleServer, ...)
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "registry.h"
-#endif
-
 // for compilers that support precompilation, includes "wx.h".
 #include  "wx/wxprec.h"
 

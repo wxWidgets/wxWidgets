@@ -13,10 +13,6 @@
 #ifndef __WX_FTP_H__
 #define __WX_FTP_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "ftp.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_PROTOCOL_FTP

@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "editor.h"
-#endif
-
 #ifndef _EDITOR_H_
 #define _EDITOR_H_
 

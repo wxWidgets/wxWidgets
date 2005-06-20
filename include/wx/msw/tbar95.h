@@ -12,10 +12,6 @@
 #ifndef _WX_TBAR95_H_
 #define _WX_TBAR95_H_
 
-#ifdef __GNUG__
-    #pragma interface "tbar95.h"
-#endif
-
 #if wxUSE_TOOLBAR
 
 #include "wx/dynarray.h"

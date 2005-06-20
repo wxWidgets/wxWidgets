@@ -12,10 +12,6 @@
 #ifndef _WX_CONTROL_H_
 #define _WX_CONTROL_H_
 
-#ifdef __GNUG__
-    #pragma interface "control.h"
-#endif
-
 #include "wx/dynarray.h"
 
 // General item class

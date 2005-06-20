@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "dnd.h"
-#endif
-
 #include "wx/dnd.h"
 #include "wx/log.h"
 									       

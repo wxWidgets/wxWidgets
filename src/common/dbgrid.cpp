@@ -11,10 +11,6 @@
 // Branched From : dbgrid.cpp,v 1.18 2000/12/19 13:00:58
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "dbgrid.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

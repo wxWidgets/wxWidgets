@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "preview.h"
-#endif
-
 #ifndef _PREVIEW_H_
 #define _PREVIEW_H_
 

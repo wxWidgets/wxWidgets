@@ -12,10 +12,6 @@
 #ifndef _WX_ACCEL_H_
 #define _WX_ACCEL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "accel.h"
-#endif
-
 #include "wx/string.h"
 #include "wx/event.h"
 

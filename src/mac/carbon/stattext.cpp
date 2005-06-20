@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "stattext.h"
-#endif
-
 #include "wx/app.h"
 #include "wx/stattext.h"
 #include "wx/notebook.h"

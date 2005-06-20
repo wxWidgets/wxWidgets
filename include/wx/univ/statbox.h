@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_STATBOX_H_
 #define _WX_UNIV_STATBOX_H_
 
-#ifdef __GNUG__
-    #pragma interface "univstatbox.h"
-#endif
-
 class WXDLLEXPORT wxStaticBox : public wxStaticBoxBase
 {
 public:

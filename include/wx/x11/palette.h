@@ -12,10 +12,6 @@
 #ifndef _WX_PALETTE_H_
 #define _WX_PALETTE_H_
 
-#ifdef __GNUG__
-#pragma interface "palette.h"
-#endif
-
 #include "wx/gdiobj.h"
 #include "wx/list.h"
 

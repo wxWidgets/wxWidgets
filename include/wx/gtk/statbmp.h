@@ -11,10 +11,6 @@
 #ifndef __GTKSTATICBITMAPH__
 #define __GTKSTATICBITMAPH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/icon.h"
 
 //-----------------------------------------------------------------------------

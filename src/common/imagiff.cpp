@@ -12,10 +12,6 @@
 // by the author of xv, John Bradley for using the iff loading part
 // in wxWindows has been gratefully given.
 
-#ifdef __GNUG__
-#pragma implementation "imagiff.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "tbarbase.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_TOOLBAR

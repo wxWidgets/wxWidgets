@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "animate.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef    __BORLANDC__

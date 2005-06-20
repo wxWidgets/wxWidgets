@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "framebase.h"
-#endif
-
 #include "wx/toplevel.h"      // the base class
 
 // the default names for various classs

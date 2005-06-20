@@ -9,10 +9,6 @@
 #ifndef _WX_FS_MEM_H_
 #define _WX_FS_MEM_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "fs_mem.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

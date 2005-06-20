@@ -10,10 +10,6 @@
 #ifndef __CDUNIXH__
 #define __CDUNIXH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "cdunix.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"

@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "filedlg.h"
-#endif
-
 #include "wx/filedlg.h"
 #include "wx/utils.h"
 #include "wx/intl.h"

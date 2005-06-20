@@ -12,10 +12,6 @@
 #ifndef _WX_PEN_H_
 #define _WX_PEN_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "pen.h"
-#endif
-
 #include "wx/gdiobj.h"
 #include "wx/colour.h"
 #include "wx/bitmap.h"

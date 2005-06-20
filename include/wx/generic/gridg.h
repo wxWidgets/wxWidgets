@@ -14,10 +14,6 @@
 #ifndef __GRIDH_G__
 #define __GRIDH_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "gridg.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_GRID

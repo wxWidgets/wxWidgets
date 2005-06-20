@@ -12,10 +12,6 @@
 #ifndef _WX_DIALUP_H
 #define _WX_DIALUP_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "dialup.h"
-#endif
-
 #if wxUSE_DIALUP_MANAGER
 
 #include "wx/event.h"

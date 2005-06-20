@@ -13,10 +13,6 @@
 #ifndef _WX_MSGBOXDLG_H_
 #define _WX_MSGBOXDLG_H_
 
-#ifdef __GNUG__
-#pragma interface "msgdlg.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/dialog.h"
 

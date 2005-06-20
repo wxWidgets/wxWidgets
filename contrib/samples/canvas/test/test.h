@@ -11,10 +11,6 @@
 #ifndef __test_H__
 #define __test_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "test.cpp"
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif

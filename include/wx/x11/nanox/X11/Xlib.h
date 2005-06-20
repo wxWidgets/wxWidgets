@@ -5,10 +5,6 @@
 #ifndef _DUMMY_XLIBH_
 #define _DUMMY_XLIBH_
 
-#ifdef __GNUG__
-    #pragma interface "Xlib.h"
-#endif
-
 /* Move away the typedef in XtoNX.h */
 #define XFontStruct XFontStruct1
 #include <XtoNX.h>

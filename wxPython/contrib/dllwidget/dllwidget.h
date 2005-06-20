@@ -8,10 +8,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma interface "dllwidget.h"
-#endif
-
 #ifndef __DLLWIDGET_H__
 #define __DLLWIDGET_H__
 

@@ -12,10 +12,6 @@
 #ifndef _WX_PEN_H_
 #define _WX_PEN_H_
 
-#ifdef __GNUG__
-#pragma interface "pen.h"
-#endif
-
 #include "wx/gdiobj.h"
 #include "wx/colour.h"
 #include "wx/bitmap.h"

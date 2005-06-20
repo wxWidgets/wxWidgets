@@ -12,10 +12,6 @@
 #ifndef _WX_LISTBOX_H_
 #define _WX_LISTBOX_H_
 
-#ifdef __GNUG__
-#pragma interface "listbox.h"
-#endif
-
 #include "wx/ctrlsub.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;

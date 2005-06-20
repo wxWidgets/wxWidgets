@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_INPCONS_H_
 #define _WX_UNIV_INPCONS_H_
 
-#ifdef __GNUG__
-    #pragma interface "inpcons.h"
-#endif
-
 class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxWindow;
 

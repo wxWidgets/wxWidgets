@@ -11,10 +11,6 @@
 #ifndef __GTKGAUGEH__
 #define __GTKGAUGEH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_GAUGE

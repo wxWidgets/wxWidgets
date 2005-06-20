@@ -12,10 +12,6 @@
 #ifndef _WX_COMBOBOX_H_
 #define _WX_COMBOBOX_H_
 
-#ifdef __GNUG__
-    #pragma interface "combobox.h"
-#endif
-
 #include "wx/choice.h"
 
 #if wxUSE_COMBOBOX

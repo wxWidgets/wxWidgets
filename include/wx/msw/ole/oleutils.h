@@ -12,10 +12,6 @@
 #ifndef   _WX_OLEUTILS_H
 #define   _WX_OLEUTILS_H
 
-#ifdef __GNUG__
-#pragma interface "oleutils.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_NORLANDER_HEADERS

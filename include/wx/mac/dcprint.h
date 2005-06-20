@@ -12,10 +12,6 @@
 #ifndef _WX_DCPRINT_H_
 #define _WX_DCPRINT_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "dcprint.h"
-#endif
-
 #include "wx/dc.h"
 #include "wx/cmndata.h"
 

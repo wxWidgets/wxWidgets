@@ -12,10 +12,6 @@
 #ifndef __DYNTBAR_G__
 #define __DYNTBAR_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "dyntbar.h"
-#endif
-
 #include "wx/tbarbase.h"
 #include "wx/dynarray.h"
 #include "wx/fl/fldefs.h"

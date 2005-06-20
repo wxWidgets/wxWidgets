@@ -11,10 +11,6 @@
 #ifndef __GTKNOTEBOOKH__
 #define __GTKNOTEBOOKH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 //-----------------------------------------------------------------------------
 // internal class
 //-----------------------------------------------------------------------------

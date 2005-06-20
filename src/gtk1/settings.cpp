@@ -7,11 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation "settings.h"
-#endif
-
 #include "wx/settings.h"
 #include "wx/debug.h"
 #include "wx/module.h"

@@ -13,10 +13,6 @@
 #ifndef _WX_TIMER_H_BASE_
 #define _WX_TIMER_H_BASE_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "timerbase.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/object.h"
 #include "wx/longlong.h"

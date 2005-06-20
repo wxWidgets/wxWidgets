@@ -12,10 +12,6 @@
 #ifndef _WX_BITMAP_H_
 #define _WX_BITMAP_H_
 
-#ifdef __GNUG__
-    #pragma interface "bitmap.h"
-#endif
-
 #include "wx/os2/private.h"
 #include "wx/os2/gdiimage.h"
 #include "wx/gdicmn.h"

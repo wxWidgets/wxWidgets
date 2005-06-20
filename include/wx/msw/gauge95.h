@@ -12,10 +12,6 @@
 #ifndef _GAUGE95_H_
 #define _GAUGE95_H_
 
-#ifdef __GNUG__
-#pragma interface "gauge95.h"
-#endif
-
 #if wxUSE_SLIDER
 
 #include "wx/control.h"

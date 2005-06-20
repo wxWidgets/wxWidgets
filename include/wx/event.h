@@ -12,10 +12,6 @@
 #ifndef _WX_EVENTH__
 #define _WX_EVENTH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "event.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/clntdata.h"

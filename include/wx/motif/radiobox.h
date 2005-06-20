@@ -12,10 +12,6 @@
 #ifndef _WX_RADIOBOX_H_
 #define _WX_RADIOBOX_H_
 
-#ifdef __GNUG__
-#pragma interface "radiobox.h"
-#endif
-
 #include "wx/control.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxRadioBoxNameStr;

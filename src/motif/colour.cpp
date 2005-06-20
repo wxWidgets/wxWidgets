@@ -12,10 +12,6 @@
 //// TODO: make wxColour a ref-counted object,
 //// so pixel values get shared.
 
-#ifdef __GNUG__
-#pragma implementation "colour.h"
-#endif
-
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
 #include "wx/app.h"

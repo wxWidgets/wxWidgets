@@ -14,10 +14,6 @@
 #ifndef _WX_TOPLEVEL_BASE_H_
 #define _WX_TOPLEVEL_BASE_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "toplevelbase.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------

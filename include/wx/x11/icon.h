@@ -12,10 +12,6 @@
 #ifndef _WX_ICON_H_
 #define _WX_ICON_H_
 
-#ifdef __GNUG__
-#pragma interface "icon.h"
-#endif
-
 #include "wx/bitmap.h"
 
 //-----------------------------------------------------------------------------

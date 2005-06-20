@@ -12,10 +12,6 @@
 #ifndef _WX_UXTHEME_H_
 #define _WX_UXTHEME_H_
 
-#ifdef __GNUG__
-  #pragma interface "uxtheme.cpp"
-#endif
-
 #include "wx/defs.h"
 
 #include "wx/msw/uxthemep.h"

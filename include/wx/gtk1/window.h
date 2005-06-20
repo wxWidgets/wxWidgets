@@ -11,10 +11,6 @@
 #ifndef __GTKWINDOWH__
 #define __GTKWINDOWH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface
-#endif
-
 //-----------------------------------------------------------------------------
 // callback definition for inserting a window (internal)
 //-----------------------------------------------------------------------------

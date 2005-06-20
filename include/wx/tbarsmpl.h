@@ -12,10 +12,6 @@
 #ifndef _WX_TBARSMPLH__
 #define _WX_TBARSMPLH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "tbarsmpl.h"
-#endif
-
 #include "wx/tbarbase.h"
 
 #if wxUSE_TOOLBAR_SIMPLE

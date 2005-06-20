@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "gauge.h"
-#endif
-
 #ifdef __VMS__
 #include <wx/vms_x_fix.h>
 #endif

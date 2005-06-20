@@ -11,10 +11,6 @@
 #ifndef _WX_XH_CHCKL_H_
 #define _WX_XH_CHCKL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xh_chckl.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 class WXXMLDLLEXPORT wxCheckListBoxXmlHandler : public wxXmlResourceHandler

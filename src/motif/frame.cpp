@@ -17,11 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "frame.h"
-#endif
-
-
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #define XtWindow XTWINDOW

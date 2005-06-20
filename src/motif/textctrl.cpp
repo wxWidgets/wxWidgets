@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "textctrl.h"
-#endif
-
 #ifdef __VMS
 #define XtParent XTPARENT
 #endif

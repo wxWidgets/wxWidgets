@@ -12,10 +12,6 @@
 #ifndef _WX_LISTCTRL_H_
 #define _WX_LISTCTRL_H_
 
-#ifdef __GNUG__
-    #pragma interface "listctrl.h"
-#endif
-
 #if wxUSE_LISTCTRL
 
 #include "wx/control.h"

@@ -12,10 +12,6 @@
 #ifndef __GTKCOMBOBOXH__
 #define __GTKCOMBOBOXH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "combobox.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_COMBOBOX

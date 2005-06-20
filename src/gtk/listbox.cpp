@@ -7,11 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation "listbox.h"
-#endif
-
 #include "wx/listbox.h"
 
 #if wxUSE_LISTBOX

@@ -12,10 +12,6 @@
 #ifndef _STUDIO_SHAPES_H_
 #define _STUDIO_SHAPES_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-// #pragma interface
-#endif
-
 #include <wx/docview.h>
 #include <wx/string.h>
 #include <wx/wxexpr.h>

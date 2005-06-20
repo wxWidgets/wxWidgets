@@ -12,10 +12,6 @@
 #ifndef _WX_PRINTWIN_H_
 #define _WX_PRINTWIN_H_
 
-#ifdef __GNUG__
-    #pragma interface "printwin.h"
-#endif
-
 #include "wx/prntbase.h"
 
 // ---------------------------------------------------------------------------

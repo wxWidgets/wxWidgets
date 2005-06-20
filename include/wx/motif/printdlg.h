@@ -14,10 +14,6 @@
 #ifndef _WX_PRINTDLG_H_
 #define _WX_PRINTDLG_H_
 
-#ifdef __GNUG__
-#pragma interface "printdlg.h"
-#endif
-
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
 

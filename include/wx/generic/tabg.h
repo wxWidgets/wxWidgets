@@ -12,10 +12,6 @@
 #ifndef __TABGH_G__
 #define __TABGH_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "tabg.h"
-#endif
-
 #define WXTAB_VERSION   1.1
 
 #include "wx/hash.h"

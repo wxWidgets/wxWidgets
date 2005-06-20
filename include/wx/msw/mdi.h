@@ -12,10 +12,6 @@
 #ifndef _WX_MDI_H_
 #define _WX_MDI_H_
 
-#ifdef __GNUG__
-    #pragma interface "mdi.h"
-#endif
-
 #include "wx/frame.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;

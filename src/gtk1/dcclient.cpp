@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "dcclient.h"
-#endif
-
 #ifdef __VMS
 #define XCopyPlane XCOPYPLANE
 #endif

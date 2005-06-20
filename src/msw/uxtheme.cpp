@@ -16,10 +16,6 @@
  * __stdcall calling convention
  */
 
-#ifdef __GNUG__
-#pragma implementation "uxtheme.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

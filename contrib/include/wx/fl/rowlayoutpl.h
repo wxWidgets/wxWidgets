@@ -12,10 +12,6 @@
 #ifndef __ROWLAYOUTPL_G__
 #define __ROWLAYOUTPL_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "rowlayoutpl.h"
-#endif
-
 #include "wx/fl/controlbar.h"
 
 /*

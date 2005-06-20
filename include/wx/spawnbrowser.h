@@ -12,10 +12,6 @@
 #ifndef _WX_SPAWNBROWSER_H_
 #define _WX_SPAWNBROWSER_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "spawnbrowser.h"
-#endif
-
 #if wxUSE_SPAWNBROWSER
 
 // ----------------------------------------------------------------------------

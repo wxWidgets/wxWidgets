@@ -12,10 +12,6 @@
 #ifndef _WX_TBARMSW_H_
 #define _WX_TBARMSW_H_
 
-#ifdef __GNUG__
-#pragma interface "tbarmsw.h"
-#endif
-
 #if wxUSE_TOOLBAR
 
 #include "wx/tbarbase.h"

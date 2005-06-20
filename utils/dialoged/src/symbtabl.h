@@ -12,10 +12,6 @@
 #ifndef _SYMBTABL_H_
 #define _SYMBTABL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "symbtabl.h"
-#endif
-
 class wxResourceSymbolTable: public wxObject
 {
 public:

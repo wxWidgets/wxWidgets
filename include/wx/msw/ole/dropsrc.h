@@ -12,10 +12,6 @@
 #ifndef   _WX_OLEDROPSRC_H
 #define   _WX_OLEDROPSRC_H
 
-#ifdef __GNUG__
-    #pragma interface
-#endif
-
 #if !wxUSE_DRAG_AND_DROP
   #error  "You should #define wxUSE_DRAG_AND_DROP to 1 to compile this file!"
 #endif  //WX_DRAG_DROP

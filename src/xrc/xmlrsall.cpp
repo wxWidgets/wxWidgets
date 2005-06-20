@@ -8,11 +8,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
  
-// -- Already done in xmlres.cpp
-//#ifdef __GNUG__
-//#pragma implementation "xmlres.h"
-//#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "propedit.h"
-#endif
-
 #ifndef _PROPEDIT_H_
 #define _PROPEDIT_H_
 

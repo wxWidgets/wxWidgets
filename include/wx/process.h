@@ -12,10 +12,6 @@
 #ifndef _WX_PROCESSH__
 #define _WX_PROCESSH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "process.h"
-#endif
-
 #include "wx/event.h"
 
 #if wxUSE_STREAMS

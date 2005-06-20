@@ -13,10 +13,6 @@
 
 #if wxUSE_ODBC
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "odbc.h"
-#endif
-
 #ifndef _WX_ODBCH__
 #define _WX_ODBCH__
 

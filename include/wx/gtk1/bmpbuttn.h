@@ -11,10 +11,6 @@
 #ifndef __BMPBUTTONH__
 #define __BMPBUTTONH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 // ----------------------------------------------------------------------------
 // wxBitmapButton
 // ----------------------------------------------------------------------------
