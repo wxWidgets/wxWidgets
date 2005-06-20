@@ -429,6 +429,8 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 // wxLogWindow and wxLogFrame implementation
 // ----------------------------------------------------------------------------
 
+#if wxUSE_LOGWINDOW
+
 // log frame class
 // ---------------
 class wxLogFrame : public wxFrame
@@ -682,6 +684,8 @@ wxLogWindow::~wxLogWindow()
     delete m_pLogFrame;
 }
 
+#endif // wxUSE_LOGWINDOW
+
 // ----------------------------------------------------------------------------
 // wxLogDialog
 // ----------------------------------------------------------------------------
@@ -908,7 +912,7 @@ void wxLogDialog::CreateDetailsControls()
     if ( !fmt )
     {
         // default format
-        fmt = wxDefaultDateTimeFormat;
+        fmt = _T("%c");
     }
 
     size_t count = m_messages.GetCount();
@@ -994,7 +998,7 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
     if ( !fmt )
     {
         // default format
-        fmt = wxDefaultDateTimeFormat;
+        fmt = _T("%c");
     }
 
     size_t count = m_messages.GetCount();
