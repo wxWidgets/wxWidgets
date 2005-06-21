@@ -520,8 +520,6 @@ class WXDLLIMPEXP_MEDIA wxAMMediaEvtHandler : public wxEvtHandler
 {
 public:
     void OnPaint(wxPaintEvent&);
-    void OnMove(wxMoveEvent&);
-    void OnSize(wxSizeEvent&);
     void OnEraseBackground(wxEraseEvent&);
 };
 
@@ -589,6 +587,7 @@ public:
 #ifdef __WXDEBUG__
     HMODULE m_hQuartzDll;
     LPAMGETERRORTEXT m_lpAMGetErrorText;
+    wxString GetErrorString(HRESULT hrdsv);
 #endif
 
     friend class wxAMMediaThread;
@@ -941,42 +940,39 @@ IMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
 // Usual debugging macros
 //---------------------------------------------------------------------------
 #ifdef __WXDEBUG__
-#include "wx/msgdlg.h"
 #define MAX_ERROR_TEXT_LEN 160
-//
-// FIXME : Just use wxASSERT_MSG here instead of msgdlg - but
-// stackwalker still crashes win2k, so do msgdlg for now...
-//
-#define wxAMVERIFY(x) \
-{ \
-    HRESULT hrdsv = (x); \
-    if ( FAILED(hrdsv) ) \
-    { \
-        wxChar szError[MAX_ERROR_TEXT_LEN]; \
-        if( m_lpAMGetErrorText != NULL && \
-           (*m_lpAMGetErrorText)(hrdsv, szError, MAX_ERROR_TEXT_LEN) == 0) \
-        { \
-            wxMessageBox( wxString::Format(wxT("DirectShow error \"%s\" \n")\
-                                         wxT("(numeric %i)\n")\
-                                         wxT("occured at line %i in ") \
-                                         wxT("mediactrl.cpp"), \
-                                         (int)hrdsv, szError, __LINE__) ); \
-            wxASSERT(false);\
-        } \
-        else \
-        { \
-            wxMessageBox( wxString::Format(wxT("Unknown error (%i) ") \
-                                         wxT("occurred at") \
-                                         wxT(" line %i in mediactrl.cpp."), \
-                                         (int)hrdsv, __LINE__) ); \
-            wxASSERT(false);\
-        } \
-    } \
+#include "wx/log.h"             //wxLogDebug et al.
+
+//Get the error string for Active Movie
+wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
+{
+    wxChar szError[MAX_ERROR_TEXT_LEN]; 
+    if( m_lpAMGetErrorText != NULL && 
+       (*m_lpAMGetErrorText)(hrdsv, szError, MAX_ERROR_TEXT_LEN) == 0) 
+    { 
+        return wxString::Format(wxT("DirectShow error \"%s\" \n")
+                                     wxT("(numeric %i)\n")
+                                     wxT("occured at line %i in ") 
+                                     wxT("mediactrl.cpp"), 
+                                     (int)hrdsv, szError, __LINE__); 
+    } 
+    else 
+    { 
+        return wxString::Format(wxT("Unknown error (%i) ") 
+                                     wxT("occurred at") 
+                                     wxT(" line %i in mediactrl.cpp."), 
+                                     (int)hrdsv, __LINE__); 
+    } 
 }
+
+#define wxAMFAIL(x) wxFAIL_MSG(GetErrorString(x)); 
 #define wxVERIFY(x) wxASSERT((x))
+#define wxAMLOG(x) wxLogDebug(GetErrorString(x))
 #else
 #define wxAMVERIFY(x) (x)
 #define wxVERIFY(x) (x)
+#define wxAMLOG(x) 
+#define wxAMFAIL(x) 
 #endif
 
 //---------------------------------------------------------------------------
@@ -990,7 +986,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
 // Sets m_hNotifyWnd to NULL to signify that we haven't loaded anything yet
 //---------------------------------------------------------------------------
 wxAMMediaBackend::wxAMMediaBackend() : m_state(wxMEDIASTATE_STOPPED),
-m_pVMC(NULL)
+m_pMC(NULL), m_pME(NULL), m_pMS(NULL), m_pBA(NULL), m_pGB(NULL),
+m_pVMC(NULL), m_pThread(NULL)
     #ifdef __WXDEBUG__
     , m_hQuartzDll(NULL)
     #endif
@@ -1050,7 +1047,7 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     //Make sure a valid windowless video mixing interface exists
     IGraphBuilder* pGB;
-    if( CoCreateInstance(CLSID_FilgraphManager, NULL, 
+    if( ::CoCreateInstance(CLSID_FilgraphManager, NULL, 
                                   CLSCTX_INPROC_SERVER,
                                   IID_IGraphBuilder, (void**)&pGB) != 0 )
         return false;
@@ -1073,58 +1070,20 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                             validator, name) )
         return false;
 
-    m_ctrl = ctrl;
-
-    //
-    // Connect Events
-    //
-    //TODO:  Greg Hazel reports problems with this... but win2k seems fine on mine...
-    //-------------------------------------------------------------------------------
     // My problem with this was only with a previous patch, probably the third rewrite
     // fixed it as a side-effect. In fact, the erase background style of drawing not 
     // only works now, but is much better than paint-based updates (the paint event 
     // handler flickers if the wxMediaCtrl shares a sizer with another child window, 
     // or is on a notebook)
     //  - Greg Hazel
-    m_ctrl->Connect(m_ctrl->GetId(), wxEVT_ERASE_BACKGROUND, 
+    ctrl->Connect(ctrl->GetId(), wxEVT_ERASE_BACKGROUND, 
         wxEraseEventHandler(wxAMMediaEvtHandler::OnEraseBackground),
-        NULL, (wxEvtHandler*) this);
-    //m_ctrl->Connect(m_ctrl->GetId(), wxEVT_PAINT, 
-    //    wxPaintEventHandler(wxAMMediaEvtHandler::OnPaint),
-    //    NULL, (wxEvtHandler*) this);
-
-    //
-    // As noted below, we need to catch the Top Level Window's
-    // move events because they are not sent to us if the media control
-    // size remains the same but it actually moves in window coordinates
-    //
-    wxWindow* pTheTLW = m_ctrl->GetParent();
-    while( pTheTLW->GetParent() )
-        pTheTLW = pTheTLW->GetParent();
-
-    //
-    //  FIXMEHACKFIXMEHACKFIXME
-    //  This is really nasty... basically the deal is not only above
-    //  but the repainting is messed up when the parent is maximized
-    //  too, so we've got to catch all 4 events!
-    //
-    m_ctrl->Connect(m_ctrl->GetId(), wxEVT_MOVE, 
-        wxMoveEventHandler(wxAMMediaEvtHandler::OnMove),
-        NULL, (wxEvtHandler*) this);
-    m_ctrl->Connect(m_ctrl->GetId(), wxEVT_SIZE, 
-        wxSizeEventHandler(wxAMMediaEvtHandler::OnSize),
-        NULL, (wxEvtHandler*) this);
- 
-    pTheTLW->Connect(pTheTLW->GetId(), wxEVT_MOVE, 
-        wxMoveEventHandler(wxAMMediaEvtHandler::OnMove),
-        NULL, (wxEvtHandler*) this);
-    pTheTLW->Connect(pTheTLW->GetId(), wxEVT_SIZE, 
-        wxSizeEventHandler(wxAMMediaEvtHandler::OnSize),
         NULL, (wxEvtHandler*) this);
  
     //
     // done...
     //
+    m_ctrl = ctrl;
     return true;
 }
 
@@ -1137,16 +1096,20 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB, 
                                          IVMRWindowlessControl** ppVMC)
 {
+    HRESULT hr;
+
     //
     // Create and add a custom Video Mixing Render to the graph
     //
     IBaseFilter* pVMR;
-    if( CoCreateInstance(CLSID_VideoMixingRenderer, NULL, CLSCTX_INPROC_SERVER,
-                     IID_IBaseFilter, (void**)&pVMR) != 0 )
+    if( ::CoCreateInstance(CLSID_VideoMixingRenderer, NULL, 
+                CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&pVMR) != 0 )
         return false;
 
-    if ( pGB->AddFilter(pVMR, L"Video Mixing Renderer") != 0) 
+    hr = pGB->AddFilter(pVMR, L"Video Mixing Renderer");
+    if ( hr != 0) 
     {
+        wxAMLOG(hr);
         pVMR->Release();
         return false;
     }
@@ -1155,14 +1118,18 @@ bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB,
     // Set the graph to windowless mode
     //
     IVMRFilterConfig* pConfig; 
-    if( pVMR->QueryInterface(IID_IVMRFilterConfig, (void**)&pConfig) != 0 ) 
+    hr = pVMR->QueryInterface(IID_IVMRFilterConfig, (void**)&pConfig);
+    if( hr != 0 ) 
     {
+        wxAMLOG(hr);
         pVMR->Release();
         return false;
     }
 
-    if( pConfig->SetRenderingMode(2) != 0) //2 == VMRMode_Windowless
+    hr = pConfig->SetRenderingMode(2);
+    if( hr != 0) //2 == VMRMode_Windowless
     {
+        wxAMLOG(hr);
         pConfig->Release(); 
         pVMR->Release();
         return false;
@@ -1174,8 +1141,10 @@ bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB,
     // Obtain the windowless control
     //
     IVMRWindowlessControl* pVMC;
-    if( pVMR->QueryInterface(IID_IVMRWindowlessControl, (void**)&pVMC) != 0 )
+    hr = pVMR->QueryInterface(IID_IVMRWindowlessControl, (void**)&pVMC);
+    if( hr != 0 )
     {
+        wxAMLOG(hr);
         pVMR->Release(); 
         return false;
     }
@@ -1206,39 +1175,73 @@ bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB,
 //---------------------------------------------------------------------------
 bool wxAMMediaBackend::Load(const wxString& fileName)
 {
+    HRESULT hr;
+
     //if previously loaded cleanup
     if(m_pVMC)
         Cleanup();
 
     //Create interfaces - we already checked for success in CreateControl
-    CoCreateInstance(CLSID_FilgraphManager, NULL, CLSCTX_INPROC_SERVER,
+    ::CoCreateInstance(CLSID_FilgraphManager, NULL, CLSCTX_INPROC_SERVER,
                      IID_IGraphBuilder, (void**)&m_pGB);
 
 
     // Set and clip output
     SetWindowlessMode(m_pGB, &m_pVMC);
-    if( m_pVMC->SetVideoClippingWindow((HWND)m_ctrl->GetHandle()) != 0 )
+    hr = m_pVMC->SetVideoClippingWindow((HWND)m_ctrl->GetHandle());
+
+    if(hr != 0)
     {
         m_bestSize.x = m_bestSize.y = 0;
-        wxASSERT(false);
+        wxAMFAIL(hr);
+        return false;
     }
 
     //load the graph & render
     if( m_pGB->RenderFile(fileName.wc_str(wxConvLocal), NULL) != 0 )
         return false;
 
+    //
     //Get the interfaces, all of them
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IMediaEvent, (void**)&m_pME) );
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IMediaControl, (void**)&m_pMC) );
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IMediaPosition, (void**)&m_pMS) );
-    wxAMVERIFY( m_pGB->QueryInterface(IID_IBasicAudio, (void**)&m_pBA) );
+    //
+    hr = m_pGB->QueryInterface(IID_IMediaEvent, (void**)&m_pME);
+    if(FAILED(hr))
+    {
+        wxAMLOG(hr);
+        return false;
+    }
 
+    hr = m_pGB->QueryInterface(IID_IMediaControl, (void**)&m_pMC);
+    if(FAILED(hr))
+    {
+        wxAMLOG(hr);
+        return false;
+    }
+
+    hr = m_pGB->QueryInterface(IID_IMediaPosition, (void**)&m_pMS);
+    if(FAILED(hr))
+    {
+        wxAMLOG(hr);
+        return false;
+    }
+
+    hr = m_pGB->QueryInterface(IID_IBasicAudio, (void**)&m_pBA);
+    if(FAILED(hr))
+    {
+        wxAMLOG(hr);
+        //not critical
+    }
+
+    //
     // Get original video size
-    if( m_pVMC->GetNativeVideoSize((LONG*)&m_bestSize.x, (LONG*)&m_bestSize.y, 
-                                   NULL, NULL) != 0 )
+    //
+    hr = m_pVMC->GetNativeVideoSize((LONG*)&m_bestSize.x, (LONG*)&m_bestSize.y, 
+                                   NULL, NULL);
+    if(hr != 0)
     {
         m_bestSize.x = m_bestSize.y = 0;
-        wxASSERT(false);
+        wxAMFAIL(hr);
+        return false;
     }
 
     if(m_bestSize.x == 0 && m_bestSize.y == 0)
@@ -1257,11 +1260,17 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
     m_ctrl->GetParent()->Update();
     m_ctrl->SetSize(m_ctrl->GetSize());
 
+    //
+    //  Create the event thread
+    //
     m_pThread = new wxAMMediaThread;
     m_pThread->pThis = this;
     m_pThread->Create();
     m_pThread->Run();
 
+    //
+    //  done
+    //
     return true;
 }
 
@@ -1276,6 +1285,33 @@ bool wxAMMediaBackend::Load(const wxURI& location)
 {
     return Load(location.BuildUnescapedURI());
 }
+
+//---------------------------------------------------------------------------
+// wxAMMediaBackend::Cleanup
+//
+// Releases all the directshow interfaces we use
+// TODO: Maybe only create one instance of IAMMultiMediaStream and reuse it
+// rather than recreating it each time?
+//---------------------------------------------------------------------------
+void wxAMMediaBackend::Cleanup()
+{
+    // RN:  This could be a bad ptr if load failed after
+    // m_pVMC was created
+    if(m_pThread)
+    {
+        m_pThread->Delete();
+        m_pThread = NULL;
+    }
+
+    // Release and zero DirectShow interfaces
+    SAFE_RELEASE(m_pMC);
+    SAFE_RELEASE(m_pME);
+    SAFE_RELEASE(m_pMS);
+    SAFE_RELEASE(m_pBA);
+    SAFE_RELEASE(m_pGB);
+    SAFE_RELEASE(m_pVMC);
+}
+
 
 //---------------------------------------------------------------------------
 // wxAMMediaBackend::Play
@@ -1351,9 +1387,16 @@ bool wxAMMediaBackend::Stop()
 //---------------------------------------------------------------------------
 bool wxAMMediaBackend::SetPosition(wxLongLong where)
 {
-    return SUCCEEDED( m_pMS->put_CurrentPosition(
+    HRESULT hr = m_pMS->put_CurrentPosition(
                         ((LONGLONG)where.GetValue()) / 1000.0
-                                     ) );
+                                     );
+    if(FAILED(hr))
+    {
+        wxAMLOG(hr);
+        return false;
+    }
+
+    return true;
 }
 
 //---------------------------------------------------------------------------
@@ -1365,7 +1408,12 @@ bool wxAMMediaBackend::SetPosition(wxLongLong where)
 wxLongLong wxAMMediaBackend::GetPosition()
 {
     double outCur;
-    wxAMVERIFY( m_pMS->get_CurrentPosition(&outCur) );
+    HRESULT hr = m_pMS->get_CurrentPosition(&outCur);
+    if(FAILED(hr))
+    {
+        wxAMLOG(hr);
+        return 0;
+    }
 
     //h,m,s,milli - outdur is in 1 second (double)
     outCur *= 1000;
@@ -1373,18 +1421,6 @@ wxLongLong wxAMMediaBackend::GetPosition()
     ll.Assign(outCur);
 
     return ll;
-}
-
-//---------------------------------------------------------------------------
-// wxAMMediaBackend::SetVolume
-//
-// Sets the volume through the IBasicAudio interface -
-// value ranges from 0 (MAX volume) to -10000 (minimum volume).
-// -100 per decibel.
-//---------------------------------------------------------------------------
-bool wxAMMediaBackend::SetVolume(double dVolume)
-{
-    return SUCCEEDED(m_pBA->put_Volume( (long) ((dVolume-1.0) * 10000.0) ) );
 }
 
 //---------------------------------------------------------------------------
@@ -1396,10 +1432,45 @@ bool wxAMMediaBackend::SetVolume(double dVolume)
 //---------------------------------------------------------------------------
 double wxAMMediaBackend::GetVolume()
 {
-    long lVolume;
-    if ( SUCCEEDED( m_pBA->get_Volume(&lVolume) ) )
+    if(m_pBA)
+    {
+        long lVolume;
+        HRESULT hr = m_pBA->get_Volume(&lVolume);
+        if(FAILED(hr))
+        {
+            wxAMLOG(hr);
+            return 0.0;
+        }
+
         return (((double)(lVolume + 10000)) / 10000.0);
+    }
+
+    wxLogDebug(wxT("No directshow audio interface"));
     return 0.0;
+}
+
+//---------------------------------------------------------------------------
+// wxAMMediaBackend::SetVolume
+//
+// Sets the volume through the IBasicAudio interface -
+// value ranges from 0 (MAX volume) to -10000 (minimum volume).
+// -100 per decibel.
+//---------------------------------------------------------------------------
+bool wxAMMediaBackend::SetVolume(double dVolume)
+{
+    if(m_pBA)
+    {
+        HRESULT hr = m_pBA->put_Volume( (long) ((dVolume-1.0) * 10000.0) );
+        if(FAILED(hr))
+        {
+            wxAMLOG(hr);
+            return false;
+        }
+        return true;
+    }
+
+    wxLogDebug(wxT("No directshow audio interface"));
+    return false;
 }
 
 //---------------------------------------------------------------------------
@@ -1415,7 +1486,12 @@ double wxAMMediaBackend::GetVolume()
 wxLongLong wxAMMediaBackend::GetDuration()
 {
     double outDuration;
-    wxAMVERIFY( m_pMS->get_Duration(&outDuration) );
+    HRESULT hr = m_pMS->get_Duration(&outDuration);
+    if(FAILED(hr))
+    {
+        wxAMLOG(hr);
+        return 0;
+    }
 
     //h,m,s,milli - outdur is in 1 second (double)
     outDuration *= 1000;
@@ -1444,7 +1520,12 @@ wxMediaState wxAMMediaBackend::GetState()
 double wxAMMediaBackend::GetPlaybackRate()
 {
     double dRate;
-    wxAMVERIFY( m_pMS->get_Rate(&dRate) );
+    HRESULT hr = m_pMS->get_Rate(&dRate);
+    if(FAILED(hr))
+    {
+        wxAMLOG(hr);
+        return 0.0;
+    }
     return dRate;
 }
 
@@ -1456,30 +1537,15 @@ double wxAMMediaBackend::GetPlaybackRate()
 //---------------------------------------------------------------------------
 bool wxAMMediaBackend::SetPlaybackRate(double dRate)
 {
-    return m_pMS->put_Rate(dRate) == 0;
+    HRESULT hr = m_pMS->put_Rate(dRate);
+    if(FAILED(hr))
+    {
+        wxAMLOG(hr);
+        return false;
+    }
+
+    return true;
 }
-
-//---------------------------------------------------------------------------
-// wxAMMediaBackend::Cleanup
-//
-// Releases all the directshow interfaces we use
-// TODO: Maybe only create one instance of IAMMultiMediaStream and reuse it
-// rather than recreating it each time?
-//---------------------------------------------------------------------------
-void wxAMMediaBackend::Cleanup()
-{
-    m_pThread->Delete();
-    m_pThread = NULL;
-
-    // Release and zero DirectShow interfaces
-    SAFE_RELEASE(m_pMC);
-    SAFE_RELEASE(m_pME);
-    SAFE_RELEASE(m_pMS);
-    SAFE_RELEASE(m_pBA);
-    SAFE_RELEASE(m_pGB);
-    SAFE_RELEASE(m_pVMC);
-}
-
 
 //---------------------------------------------------------------------------
 // wxAMMediaBackend::GetVideoSize
@@ -1499,6 +1565,7 @@ wxSize wxAMMediaBackend::GetVideoSize() const
 void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), 
                             int w, int h)
 {
+    //don't use deferred positioning on windows
     if(m_pVMC && m_bVideo)
     {
         RECT srcRect, destRect;
@@ -1522,48 +1589,12 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
         destRect.bottom = h; destRect.right = w;
 
         //set the windowless control positions
-        if( m_pVMC->SetVideoPosition(&srcRect, &destRect) != 0 )
+        HRESULT hr = m_pVMC->SetVideoPosition(&srcRect, &destRect);
+        if(FAILED(hr))
         {
-            wxASSERT_MSG(false, wxT("Could not set video position!"));
+            wxAMLOG(hr);
         }
-
-/*
-        //oddly enough, it doesn't redraw the frame after moving...
-        //TODO: Use wxClientDC?
-        HDC hdc = ::GetDC((HWND)m_ctrl->GetHandle());
-        if( m_pVMC->RepaintVideo((HWND)m_ctrl->GetHandle(), 
-                                                hdc)  != 0 )
-        {
-            wxASSERT(false);
-        }
-        ::ReleaseDC((HWND)m_ctrl->GetHandle(), hdc);
-*/
     }
-}
-
-//---------------------------------------------------------------------------
-// wxAMMediaEvtHandler::OnMove
-//
-// Oddly enough Move isn't called on MSW when the parent moves
-// and the child (us) doesn't, so we have to do it twice I guess :(
-//---------------------------------------------------------------------------
-void wxAMMediaEvtHandler::OnMove(wxMoveEvent& evt)
-{
-    wxAMMediaBackend* pThis = (wxAMMediaBackend*) this;
-    pThis->Move(pThis->m_ctrl->GetPosition().x, 
-                pThis->m_ctrl->GetPosition().y,
-                pThis->m_ctrl->GetSize().x,
-                pThis->m_ctrl->GetSize().y );
-    evt.Skip();
-}
-void wxAMMediaEvtHandler::OnSize(wxSizeEvent& evt)
-{
-    wxAMMediaBackend* pThis = (wxAMMediaBackend*) this;
-    pThis->Move(pThis->m_ctrl->GetPosition().x, 
-                pThis->m_ctrl->GetPosition().y,
-                pThis->m_ctrl->GetSize().x,
-                pThis->m_ctrl->GetSize().y );
-    evt.Skip();
 }
 
 //---------------------------------------------------------------------------
@@ -1588,13 +1619,17 @@ wxThread::ExitCode wxAMMediaThread::Entry()
                                       (LONG_PTR *) &evParam2, 0) == 0 )
         {
             // Cleanup memory that GetEvent allocated
-            if( pThis->m_pME->FreeEventParams(evCode, evParam1, evParam2) != 0 )
+            HRESULT hr = pThis->m_pME->FreeEventParams(evCode, 
+                                                evParam1, evParam2);
+            if(hr != 0)
             {
-                wxASSERT(false);
+                //Even though this makes a messagebox this 
+                //is windows where we can do gui stuff in seperate
+                //threads :)
+                wxFAIL_MSG(pThis->GetErrorString(hr));
             }
-
             // If this is the end of the clip, notify handler
-            if(1 == evCode) //EC_COMPLETE
+            else if(1 == evCode) //EC_COMPLETE
             {
                 pThis->OnStop();
             }
@@ -1644,35 +1679,17 @@ void wxAMMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
     {
         //TODO: Use wxClientDC?
         HDC hdc = ::GetDC((HWND)pThis->m_ctrl->GetHandle());
-        if( pThis->m_pVMC->RepaintVideo((HWND)pThis->m_ctrl->GetHandle(), 
-                                        hdc)  != 0 )
+        HRESULT hr = pThis->m_pVMC->RepaintVideo((HWND)pThis->m_ctrl->GetHandle(), 
+                                        hdc);
+        if(FAILED(hr))
         {
-            wxASSERT(false);
+            wxFAIL_MSG(pThis->GetErrorString(hr));
         }
         ::ReleaseDC((HWND)pThis->m_ctrl->GetHandle(), hdc);
     }
     else
     {
         evt.Skip();
-    }
-}
-
-//---------------------------------------------------------------------------
-// wxAMMediaEvtHandler::OnPaint
-//
-// Handle redrawing
-//---------------------------------------------------------------------------
-void wxAMMediaEvtHandler::OnPaint(wxPaintEvent& WXUNUSED(evt))
-{
-    wxAMMediaBackend* pThis = (wxAMMediaBackend*) this;
-    wxPaintDC dc(pThis->m_ctrl);
-    if( pThis->m_pVMC && pThis->m_bVideo)
-    {
-        if( pThis->m_pVMC->RepaintVideo((HWND)pThis->m_ctrl->GetHandle(), 
-                                                (HDC)dc.GetHDC())  != 0 )
-        {
-            wxASSERT(false);
-        }
     }
 }
 
