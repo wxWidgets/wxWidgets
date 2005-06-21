@@ -514,7 +514,9 @@ private:
 
 #ifdef __VISUALC__
     // 'this' : used in base member initializer list (for m_commandString)
-    #pragma warning(push)
+    #if _MSC_VER > 1100
+        #pragma warning(push)
+    #endif
     #pragma warning(disable:4355)
 #endif
 
@@ -580,7 +582,7 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCommandEvent)
 };
 
-#ifdef __VISUALC__
+#if defined(__VISUALC__) && (_MSC_VER > 1100)
     #pragma warning(pop)
 #endif
 
