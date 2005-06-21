@@ -233,7 +233,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
 	-if exist $(OBJS)\notebook.exe del $(OBJS)\notebook.exe
 
-$(OBJS)\notebook.exe :  $(NOTEBOOK_OBJECTS) $(OBJS)\notebook_notebook.res
+$(OBJS)\notebook.exe :  $(NOTEBOOK_OBJECTS) $(OBJS)\notebook_sample.res
 	@%create $(OBJS)\notebook.lbc
 	@%append $(OBJS)\notebook.lbc option quiet
 	@%append $(OBJS)\notebook.lbc name $^@
@@ -241,12 +241,12 @@ $(OBJS)\notebook.exe :  $(NOTEBOOK_OBJECTS) $(OBJS)\notebook_notebook.res
 	@%append $(OBJS)\notebook.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(NOTEBOOK_OBJECTS)) do @%append $(OBJS)\notebook.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\notebook.lbc library %i
-	@%append $(OBJS)\notebook.lbc option resource=$(OBJS)\notebook_notebook.res
+	@%append $(OBJS)\notebook.lbc option resource=$(OBJS)\notebook_sample.res
 	wlink @$(OBJS)\notebook.lbc
+
+$(OBJS)\notebook_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 $(OBJS)\notebook_notebook.obj :  .AUTODEPEND .\notebook.cpp
 	$(CXX) -zq -fo=$^@ $(NOTEBOOK_CXXFLAGS) $<
-
-$(OBJS)\notebook_notebook.res :  .AUTODEPEND .\notebook.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
