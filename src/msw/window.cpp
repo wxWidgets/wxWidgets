@@ -2366,15 +2366,11 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     AutoHRGN hrgnClient(::CreateRectRgnIndirect(&rc));
                     AutoHRGN hrgnNew(::CreateRectRgn(lpPos->x,  lpPos->y,
                                                      lpPos->cx, lpPos->cy));
-                    AutoHRGN hrgn(::CreateRectRgn(0, 0, 0, 0));
 
                     // we need to invalidate any new exposed areas here
                     // to force them to repaint
-                    if ( ::CombineRgn(hrgn, hrgnNew, hrgnClient, RGN_DIFF) != NULLREGION )
-                        ::InvalidateRgn(GetHwnd(), hrgn, TRUE);
-                    if ( ::CombineRgn(hrgn, hrgnClient, hrgnNew, RGN_DIFF) != NULLREGION )
-                        ::InvalidateRgn(GetHwnd(), hrgn, TRUE);
-
+                    if ( ::CombineRgn(hrgnNew, hrgnNew, hrgnClient, RGN_DIFF) != NULLREGION )
+                        ::InvalidateRgn(GetHwnd(), hrgnNew, TRUE);
                 }
             }
             break;
