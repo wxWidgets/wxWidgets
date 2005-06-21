@@ -1081,14 +1081,6 @@ void wxEvtHandler::ClearEventLocker()
 
 #endif // wxUSE_THREADS
 
-#if wxUSE_EXCEPTIONS
-void wxEvtHandler::DoHandleEvent(wxEventFunction func, wxEvent& event)
-{
-    // by default, just call then handler
-    (this->*func)(event);
-}
-#endif // wxUSE_EXCEPTIONS
-
 void wxEvtHandler::AddPendingEvent(wxEvent& event)
 {
     // 1) Add event to list of pending events of this event handler

@@ -207,48 +207,74 @@ int wxEventLoop::Run()
     // should undo
     wxEventLoopActivator activate(&ms_activeLoop, this);
 
+    // we must ensure that OnExit() is called even if an exception is thrown
+    // from inside Dispatch() but we must call it from Exit() in normal
+    // situations because it is supposed to be called synchronously,
+    // wxModalEventLoop depends on this (so we can't just use ON_BLOCK_EXIT or
+    // something similar here)
 #if wxUSE_EXCEPTIONS
-    try
+    for ( ;; )
     {
-#endif
-        // this is the event loop itself
-        for ( ;; )
+        try
         {
-            #if wxUSE_THREADS
-                wxMutexGuiLeaveOrEnter();
-            #endif // wxUSE_THREADS
+#endif // wxUSE_EXCEPTIONS
 
-            // generate and process idle events for as long as we don't
-            // have anything else to do
-            while ( !Pending() && (wxTheApp && wxTheApp->ProcessIdle()) )
-                ;
-
-            // if the "should exit" flag is set, the loop should terminate
-            // but not before processing any remaining messages so while
-            // Pending() returns true, do process them
-            if ( m_shouldExit )
+            // this is the event loop itself
+            for ( ;; )
             {
-                while ( Pending() )
-                    Dispatch();
+                #if wxUSE_THREADS
+                    wxMutexGuiLeaveOrEnter();
+                #endif // wxUSE_THREADS
 
-                break;
+                // generate and process idle events for as long as we don't
+                // have anything else to do
+                while ( !Pending() && (wxTheApp && wxTheApp->ProcessIdle()) )
+                    ;
+
+                // if the "should exit" flag is set, the loop should terminate
+                // but not before processing any remaining messages so while
+                // Pending() returns true, do process them
+                if ( m_shouldExit )
+                {
+                    while ( Pending() )
+                        Dispatch();
+
+                    break;
+                }
+
+                // a message came or no more idle processing to do, sit in
+                // Dispatch() waiting for the next message
+                if ( !Dispatch() )
+                {
+                    // we got WM_QUIT
+                    break;
+                }
             }
 
-            // a message came or no more idle processing to do, sit in
-            // Dispatch() waiting for the next message
-            if ( !Dispatch() )
+#if wxUSE_EXCEPTIONS
+            // exit the outer loop as well
+            break;
+        }
+        catch ( ... )
+        {
+            try
             {
-                // we got WM_QUIT
-                break;
+                if ( !wxTheApp || !wxTheApp->OnExceptionInMainLoop() )
+                {
+                    OnExit();
+                    break;
+                }
+                //else: continue running the event loop
+            }
+            catch ( ... )
+            {
+                // OnException() throwed, possibly rethrowing the same
+                // exception again: very good, but we still need OnExit() to
+                // be called
+                OnExit();
+                throw;
             }
         }
-#if wxUSE_EXCEPTIONS
-    }
-    catch ( ... )
-    {
-        // we need OnExit() to be called before the event loop stops
-        OnExit();
-        throw;
     }
 #endif // wxUSE_EXCEPTIONS
 

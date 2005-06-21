@@ -46,7 +46,6 @@
 #include "wx/thread.h"
 #include "wx/utils.h"
 #include "wx/ptr_scpd.h"
-#include "wx/evtloop.h"
 
 #if defined(__WXMSW__)
     #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
@@ -467,35 +466,6 @@ void wxAppBase::OnIdle(wxIdleEvent& WXUNUSED(event))
 #endif // wxUSE_LOG
 
 }
-
-// ----------------------------------------------------------------------------
-// exception handling
-// ----------------------------------------------------------------------------
-
-#if wxUSE_EXCEPTIONS
-
-void wxAppBase::HandleEvent(wxEvtHandler *handler,
-                            wxEventFunction func,
-                            wxEvent& event) const
-{
-    // by default, call wxApp::OnExceptionInMainLoop if an exception occurs
-    try
-    {
-        handler->DoHandleEvent(func, event);
-    }
-    catch ( ... )
-    {
-        if ( !wxConstCast(this, wxAppBase)->OnExceptionInMainLoop() )
-        {
-            wxEventLoop *loop = wxEventLoop::GetActive();
-            if ( loop )
-                loop->Exit(-1);
-        }
-        //else: continue running the event loop
-    }
-}
-
-#endif // wxUSE_EXCEPTIONS
 
 // ----------------------------------------------------------------------------
 // wxGUIAppTraitsBase

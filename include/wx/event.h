@@ -2295,8 +2295,6 @@ protected:
 // wxEvtHandler: the base class for all objects handling wxWidgets events
 // ----------------------------------------------------------------------------
 
-typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
-
 class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
 {
 public:
@@ -2323,15 +2321,6 @@ public:
 #if wxUSE_THREADS
     bool ProcessThreadEvent(wxEvent& event);
 #endif
-
-#if wxUSE_EXCEPTIONS
-    // call the specified handler with the given event
-    //
-    // this method only exists to allow catching the exceptions thrown by any
-    // event handler, it would lead to an extra (useless) virtual function call
-    // if the exceptions were not used, so it doesn't even exist in that case
-    virtual void DoHandleEvent(wxEventFunction func, wxEvent& event);
-#endif // wxUSE_EXCEPTIONS
 
     // Dynamic association of a member function handler with the event handler,
     // winid and event type
@@ -2492,6 +2481,8 @@ inline void wxPostEvent(wxEvtHandler *dest, wxEvent& event)
 
     dest->AddPendingEvent(event);
 }
+
+typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 
 #define wxEventHandler(func) \
     (wxObjectEventFunction)wxStaticCastEvent(wxEventFunction, &func)
