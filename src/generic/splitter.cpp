@@ -94,6 +94,11 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
+    if (size.x >= 0)
+        m_lastSize.x = size.x;
+    if (size.y >= 0)
+        m_lastSize.y = size.y;
+    
     m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
 
     // FIXME: with this line the background is not erased at all under GTK1,
@@ -700,8 +705,8 @@ void wxSplitterWindow::SizeWindows()
             y2 = size2;
         }
 
-        GetWindow1()->SetSize(border, border, w1, h1);
         GetWindow2()->SetSize(x2, y2, w2, h2);
+        GetWindow1()->SetSize(border, border, w1, h1);
     }
 
     wxClientDC dc(this);
