@@ -1,3 +1,16 @@
+wxwindows2.4 (2.4.4) unstable; urgency=low
+
+  * Remove the (apparently long obsolete) #pragma interface goop.
+    Fixes gcc4 builds, and reduced library bloat too.  Closes: #309216
+    Especial thanks to Mart Raudsepp for taking the hard part of this one.
+  * Update de.po, thanks to Jens Seidel  Closes: #313859
+  * Really closes: #267250, a new dawn of truth in versioning is upon us.
+  * Bump library soname.  The api has changed independently to the -c2
+    transition, but this release will be held back briefly to coincide
+    nicely with that.
+
+ -- Ron Lee <ron@debian.org>  Wed, 22 Jun 2005 20:19:41 +0930
+
 wxwindows2.4 (2.4.3.1) unstable; urgency=high
 
   * This one is for Sarge.
