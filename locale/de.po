@@ -48,7 +48,7 @@ msgstr "#9 Umschlag, 3 7/8 x 8 7/8 Zoll"
 #: ../src/common/resource.cpp:2994
 #, c-format
 msgid "#define %s must be an integer."
-msgstr "#define %s muß eine ganze Zahl sein"
+msgstr "#define %s muss eine ganze Zahl sein"
 
 #: ../src/html/helpfrm.cpp:780 ../src/html/helpfrm.cpp:781
 #: ../src/html/helpfrm.cpp:1411 ../src/html/helpfrm.cpp:1441
@@ -84,19 +84,19 @@ msgstr ""
 #: ../src/common/resourc2.cpp:709 ../src/common/resource.cpp:2366
 #, c-format
 msgid "%s not a bitmap resource specification."
-msgstr "%s ist keine Bitmap-Resourcenangabe"
+msgstr "%s ist keine Bitmap-Ressourcenangabe"
 
 #: ../src/common/resourc2.cpp:860 ../src/common/resource.cpp:2520
 #, c-format
 msgid "%s not an icon resource specification."
-msgstr "%s ist keine Icon-Resourcenangabe"
+msgstr "%s ist keine Icon-Ressourcenangabe"
 
 #: ../src/common/resourc2.cpp:357 ../src/common/resourc2.cpp:1422
 #: ../src/common/resource.cpp:1877 ../src/common/resource.cpp:2006
 #: ../src/common/resource.cpp:3091
 #, c-format
 msgid "%s: ill-formed resource file syntax."
-msgstr "%s: falsch formatierte Resourcendatei-Syntax"
+msgstr "%s: falsch formatierte Ressourcendatei-Syntax"
 
 #: ../src/msw/mdi.cpp:192
 msgid "&Arrange Icons"
@@ -265,7 +265,7 @@ msgstr "'%s' sollte nur alphabetische Zeichen enthalten."
 #: ../src/common/valtext.cpp:166
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
-msgstr "'%s' sollte nur alphanumersche Zeichen enthalten."
+msgstr "'%s' sollte nur alphanumerische Zeichen enthalten."
 
 #: ../src/html/helpfrm.cpp:717
 msgid "(Help)"
@@ -284,7 +284,7 @@ msgid ""
 "whilst parsing resource."
 msgstr ""
 ", erwartete static, #include oder #define\n"
-"beim Lesen der Resource."
+"beim Lesen der Ressource."
 
 #: ../src/generic/dirctrlg.cpp:719 ../src/generic/filedlgg.cpp:965
 msgid "."
@@ -335,7 +335,6 @@ msgid "<LINK>"
 msgstr "<LINK>"
 
 #: ../src/html/helpfrm.cpp:997
-#, fuzzy
 msgid ""
 "<html><body><table><tr><td>Normal face<br>(and <u>underlined</u>. <i>Italic "
 "face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-"
@@ -349,16 +348,16 @@ msgid ""
 "+2>font size +2</font><br><font size=+3>font size +3</font><br><font size="
 "+4>font size +4</font></tt></table></body></html>"
 msgstr ""
-"<html><body>Normal<br>(and <u>Unterstrichen</u>. <i>Kursiv.</i> <b>Fett.</b> "
+"<html><body><table><tr><td>Normal<br>(und <u>Unterstrichen</u>. <i>Kursiv.</i> <b>Fett.</b> "
 "<b><i>Fett Kursiv.</i></b><br><font size=-2>font size -2</font><br><font "
 "size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font "
 "size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font "
 "size=+3>font size +3</font><br><font size=+4>font size +4</"
-"font><br><p><tt>Fixed size.<br> <b>Fett</b> <i>Kursiv</i> <b><i>Fett Kursiv "
+"font><br><td><p><tt>Fixed size.<br> <b>Fett</b> <i>Kursiv</i> <b><i>Fett Kursiv "
 "<u>Unterstrichen</u></i></b><br><font size=-2>font size -2</font><br><font "
 "size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font "
 "size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font "
-"size=+3>font size +3</font><br><font size=+4>font size +4</font></tt></"
+"size=+3>font size +3</font><br><font size=+4>font size +4</font></tt></table></"
 "body></html>"
 
 #: ../src/common/prntbase.cpp:533
@@ -395,7 +394,7 @@ msgstr "ASCII"
 
 #: ../src/html/helpfrm.cpp:328
 msgid "Add current page to bookmarks"
-msgstr "Aktuelle HTLM-Seite den Lesezeichen hinzufügen"
+msgstr "Aktuelle Seite zu Lesezeichen hinzufügen"
 
 #: ../src/generic/colrdlgg.cpp:287
 msgid "Add to custom colours"
@@ -495,7 +494,7 @@ msgstr "Baltisch (alt) (ISO-8859-4)"
 #: ../src/common/resourc2.cpp:840 ../src/common/resource.cpp:2500
 #, c-format
 msgid "Bitmap resource specification %s not found."
-msgstr "Bitmapresourceangabe %s nicht gefunden."
+msgstr "Bitmapressourceangabe %s nicht gefunden."
 
 #: ../src/generic/fontdlgg.cpp:232
 msgid "Bold"
@@ -778,7 +777,7 @@ msgstr "Kann Dateien in Verzeichnis '%s' nicht auflisten"
 #: ../contrib/src/xrc/xmlres.cpp:376
 #, fuzzy, c-format
 msgid "Cannot load resources from file '%s'."
-msgstr "Konnte Resourcedatei %s nicht finden."
+msgstr "Konnte Ressourcedatei %s nicht finden."
 
 #: ../src/html/htmlfilt.cpp:164
 #, c-format
@@ -926,7 +925,7 @@ msgstr "Kopien:"
 #: ../src/common/resource.cpp:1936
 #, c-format
 msgid "Could not find resource include file %s."
-msgstr "Konnte Resourcedatei %s nicht finden."
+msgstr "Konnte Ressourcedatei %s nicht finden."
 
 #: ../src/generic/tabg.cpp:1044
 msgid "Could not find tab for id"
@@ -1235,19 +1234,19 @@ msgstr "Executive, 7 1/4 x 10 1/2 Zoll"
 #: ../src/common/resource.cpp:1845 ../src/common/resource.cpp:1975
 #: ../src/common/resource.cpp:3059
 msgid "Expected '*' whilst parsing resource."
-msgstr "Erwartete '*' beim Lesen der Resource."
+msgstr "Erwartete '*' beim Lesen der Ressource."
 
 #: ../src/common/resourc2.cpp:342 ../src/common/resourc2.cpp:1407
 #: ../src/common/resource.cpp:1862 ../src/common/resource.cpp:1991
 #: ../src/common/resource.cpp:3076
 msgid "Expected '=' whilst parsing resource."
-msgstr "Erwartete '=' beim Lesen der Resource."
+msgstr "Erwartete '=' beim Lesen der Ressource."
 
 #: ../src/common/resourc2.cpp:312 ../src/common/resourc2.cpp:1377
 #: ../src/common/resource.cpp:1831 ../src/common/resource.cpp:1961
 #: ../src/common/resource.cpp:3045
 msgid "Expected 'char' whilst parsing resource."
-msgstr "Erwartete 'char' beim Lesen der Resource."
+msgstr "Erwartete 'char' beim Lesen der Ressource."
 
 #: ../src/common/fontmap.cpp:144
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
@@ -1313,7 +1312,7 @@ msgstr "Erstellung der Statusbar gescheitert."
 
 #: ../src/common/filename.cpp:712
 msgid "Failed to create a temporary file name"
-msgstr "Konnte keinen vorrübergehenden Dateinamen erstellen."
+msgstr "Konnte keinen vorübergehenden Dateinamen erstellen."
 
 #: ../src/msw/utilsexc.cpp:197
 msgid "Failed to create an anonymous pipe"
@@ -1383,8 +1382,8 @@ msgid ""
 "Failed to find XBM resource %s.\n"
 "Forgot to use wxResourceLoadBitmapData?"
 msgstr ""
-"Konnte XBM-Resource %s nicht finden.\n"
-"Haben sie vergessen, die wxResource 'LoadBitmapData' zu verwenden?"
+"Konnte XBM-Ressource %s nicht finden.\n"
+"Haben Sie vergessen, die wxResource 'LoadBitmapData' zu verwenden?"
 
 #: ../src/common/resourc2.cpp:959 ../src/common/resource.cpp:2619
 #, c-format
@@ -1392,8 +1391,8 @@ msgid ""
 "Failed to find XBM resource %s.\n"
 "Forgot to use wxResourceLoadIconData?"
 msgstr ""
-"Konnte XBM Resource %s nicht finden.\n"
-"Haben sie vergessen, die wxResource 'LoadIconData' zu verwenden?"
+"Konnte XBM-Ressource %s nicht finden.\n"
+"Haben Sie vergessen, die wxResource 'LoadIconData' zu verwenden?"
 
 #: ../src/common/resourc2.cpp:823 ../src/common/resource.cpp:2480
 #, c-format
@@ -1401,8 +1400,8 @@ msgid ""
 "Failed to find XPM resource %s.\n"
 "Forgot to use wxResourceLoadBitmapData?"
 msgstr ""
-"Konnte XPM-Resource %s nicht finden.\n"
-"Haben sie vergessen, die wxResource 'LoadBitmapData' zu verwenden?"
+"Konnte XPM-Ressource %s nicht finden.\n"
+"Haben Sie vergessen, die wxResource 'LoadBitmapData' zu verwenden?"
 
 #: ../src/msw/dialup.cpp:680
 #, c-format
@@ -1439,7 +1438,7 @@ msgstr "Konnte MS HTML-Hilfe nicht initialisieren."
 
 #: ../src/msw/glcanvas.cpp:716
 msgid "Failed to initialize OpenGL"
-msgstr "Konnte OpenGL nicht initialisiern"
+msgstr "Konnte OpenGL nicht initialisieren"
 
 #: ../src/unix/threadpsx.cpp:887
 msgid ""
@@ -1495,7 +1494,7 @@ msgstr "Konnte '%s' nicht für %s öffnen."
 
 #: ../src/common/filename.cpp:734
 msgid "Failed to open temporary file."
-msgstr "Konnte vorrübergehende Datei nicht öffnen."
+msgstr "Konnte vorübergehende Datei nicht öffnen."
 
 #: ../src/msw/clipbrd.cpp:107
 msgid "Failed to open the clipboard."
@@ -1581,12 +1580,12 @@ msgstr "Konnte Dateien nicht in die Zwischenablage kopieren."
 
 #: ../src/common/file.cpp:531
 msgid "Failed to set temporary file permissions"
-msgstr "Konnte die Zugriffsrechte der vorrübergehenden Datei nicht setzen"
+msgstr "Konnte die Zugriffsrechte der vorübergehenden Datei nicht setzen"
 
 #: ../src/unix/threadpsx.cpp:1241 ../src/unix/threadpsx.cpp:1252
 #, c-format
 msgid "Failed to set thread priority %d."
-msgstr "Versuch gescheitert, die Thread-Priorität %d zu setzten."
+msgstr "Versuch gescheitert, die Thread-Priorität %d zu setzen."
 
 #: ../src/common/fs_mem.cpp:167
 #, c-format
@@ -1757,7 +1756,7 @@ msgstr "Vorherige HTML-Seite zeigen"
 
 #: ../src/html/helpfrm.cpp:517
 msgid "Go forward"
-msgstr "Nächste HTLM Seite zeigen"
+msgstr "Nächste Seite zeigen"
 
 #: ../src/html/helpfrm.cpp:522
 msgid "Go one level up in document hierarchy"
@@ -1837,7 +1836,7 @@ msgstr "ICO: Schreibfehler beim Sichern."
 
 #: ../src/common/imagbmp.cpp:1009
 msgid "ICO: Image too tall for an icon."
-msgstr "ICO: Bild zu gross für ein Icon."
+msgstr "ICO: Bild zu groß für ein Icon."
 
 #: ../src/common/imagbmp.cpp:1015
 msgid "ICO: Image too wide for an icon."
@@ -1871,7 +1870,7 @@ msgstr "Icon %s nicht gefunden."
 
 #: ../src/common/resource.cpp:250
 msgid "Ill-formed resource file syntax."
-msgstr "Ungültige Syntax in 'resource file'"
+msgstr "Ungültige Syntax in der Ressource-Datei"
 
 #: ../src/generic/dirctrlg.cpp:723 ../src/generic/filedlgg.cpp:969
 msgid "Illegal directory name."
@@ -1883,7 +1882,7 @@ msgstr "Ungültige Dateiangabe"
 
 #: ../src/common/image.cpp:894
 msgid "Image and Mask have different sizes"
-msgstr "Bild und Bildmaske haben verschiedene Grössen"
+msgstr "Bild und Bildmaske haben verschiedene Größen"
 
 #: ../src/common/image.cpp:1173
 #, c-format
@@ -1937,12 +1936,12 @@ msgstr ""
 #: ../src/common/appcmn.cpp:399
 #, c-format
 msgid "Invalid display mode specification '%s'."
-msgstr "Ungütige Angabe '%s' des Displays."
+msgstr "Ungültige Angabe '%s' des Displays."
 
 #: ../src/x11/app.cpp:218
 #, c-format
 msgid "Invalid geometry specification '%s'"
-msgstr "Ungültige Angabe '%s' der Fenstergrösse"
+msgstr "Ungültige Angabe '%s' der Fenstergröße"
 
 #: ../src/unix/snglinst.cpp:280
 #, c-format
@@ -2056,7 +2055,7 @@ msgstr "Mailcap-Datei %s, Zeile %d: unvollständiger Eintrag ignoriert."
 
 #: ../src/generic/fdrepdlg.cpp:152
 msgid "Match case"
-msgstr "Gross- und Kleinschreibung beachten"
+msgstr "Groß- und Kleinschreibung beachten"
 
 #: ../src/common/fs_mem.cpp:144
 #, c-format
@@ -2104,7 +2103,7 @@ msgstr "NeuerName"
 
 #: ../src/html/helpfrm.cpp:528
 msgid "Next page"
-msgstr "Nächste HTLM Seite zeigen"
+msgstr "Nächste Seite zeigen"
 
 #: ../src/common/dlgcmn.cpp:219 ../src/mac/carbon/msgdlg.cpp:78
 #: ../src/mac/msgdlg.cpp:78 ../src/motif/msgdlg.cpp:182
@@ -2203,7 +2202,7 @@ msgstr "OK"
 
 #: ../src/html/helpfrm.cpp:536 ../src/html/helpfrm.cpp:1309
 msgid "Open HTML document"
-msgstr "Öffne HTLM Dokument"
+msgstr "Öffne HTML-Dokument"
 
 #: ../src/generic/dirctrlg.cpp:752 ../src/generic/dirdlgg.cpp:298
 #: ../src/generic/filedlgg.cpp:865 ../src/generic/filedlgg.cpp:996
@@ -2346,7 +2345,7 @@ msgstr "Vorschau:"
 
 #: ../src/html/helpfrm.cpp:525
 msgid "Previous page"
-msgstr "Vorherige HTLM-Seite zeigen"
+msgstr "Vorherige Seite zeigen"
 
 #: ../src/generic/prntdlgg.cpp:110 ../src/generic/prntdlgg.cpp:124
 msgid "Print"
@@ -2480,7 +2479,7 @@ msgstr "Verbleibende Zeit : "
 
 #: ../src/html/helpfrm.cpp:329
 msgid "Remove current page from bookmarks"
-msgstr "Aktuelle HTLM-Seite als Lesezeichen entfernen"
+msgstr "Aktuelle Seite aus Lesezeichen entfernen"
 
 #: ../src/generic/fdrepdlg.cpp:177
 msgid "Replace &all"
@@ -2492,7 +2491,7 @@ msgstr "Ersetzen durch:"
 
 #: ../contrib/src/xrc/xmlres.cpp:399
 msgid "Resource files must have same version number!"
-msgstr "Resource-datei muss Versionsnummer haben!"
+msgstr "Ressource-Datei muss Versionsnummer haben!"
 
 #: ../src/generic/prntdlgg.cpp:648
 msgid "Right margin (mm):"
@@ -2752,7 +2751,7 @@ msgstr "Der Text konnte nicht gesichert werden."
 #: ../src/common/cmdline.cpp:825
 #, c-format
 msgid "The value for the option '%s' must be specified."
-msgstr "Der Wert für die Option '%s' muß angegeben werden"
+msgstr "Der Wert für die Option '%s' muss angegeben werden"
 
 #: ../src/msw/dialup.cpp:408
 #, c-format
@@ -2829,7 +2828,7 @@ msgstr "Oberer Rand (mm):"
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr ""
 "Beim Versuch, die Datei '%s' aus dem VFS-Speicher zu entfernen, wurde "
-"festgestellt, daß sie gar nicht geladen war!"
+"festgestellt, dass sie gar nicht geladen war!"
 
 #: ../src/common/sckaddr.cpp:126
 msgid "Trying to solve a NULL hostname: giving up"
@@ -3206,7 +3205,7 @@ msgstr "Ein interner Aufruf zur 'PostMessage'-Funktion ist gescheitert. "
 
 #: ../src/msw/dde.cpp:1035
 msgid "an internal error has occurred in the DDEML."
-msgstr "Ein interne Fehler ist im DDMEL aufgetreten."
+msgstr "Ein interner Fehler ist im DDEML aufgetreten."
 
 #: ../src/msw/dde.cpp:1041
 msgid ""
@@ -3688,8 +3687,8 @@ msgstr ""
 #, fuzzy
 #~ msgid "Did you forget to include wx/os2/wx.rc in your resources?"
 #~ msgstr ""
-#~ "Dialog wurde nicht erstellt. Möglicheweise haben sie vergessen 'include "
-#~ "wx/msw/wx.rc' in ihre resource einzutragen."
+#~ "Dialog wurde nicht erstellt. Möglicherweise haben Sie vergessen 'include "
+#~ "wx/msw/wx.rc' in Ihre Ressource einzutragen."
 
 #~ msgid "Failed to create dialog. Incorrect DLGTEMPLATE?"
 #~ msgstr "Konnte Dialog nicht erstellen. Ungültiges DLGTEMPLATE?"
