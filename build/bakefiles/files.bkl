@@ -136,6 +136,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/corefoundation/cfstring.cpp
     src/mac/corefoundation/hid.cpp
     src/mac/corefoundation/stdpaths_cf.cpp
+    src/mac/corefoundation/utilsexc_base.cpp
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/mac/corefoundation/cfstring.h
