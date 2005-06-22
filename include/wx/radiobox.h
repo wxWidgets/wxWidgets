@@ -31,6 +31,9 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
 class WXDLLEXPORT wxRadioBoxBase
 {
 public:
+    // virtual dtor for pure virtual base.
+    virtual ~wxRadioBoxBase() {}
+
     // selection
     virtual void SetSelection(int n) = 0;
     virtual int GetSelection() const = 0;

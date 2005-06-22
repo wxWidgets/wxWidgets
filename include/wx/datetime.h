@@ -1296,6 +1296,9 @@ class WXDLLEXPORT wxDateTimeHolidayAuthority
 {
 friend class wxDateTimeHolidaysModule;
 public:
+    // virtual dtor for pure virtual base.
+    virtual ~wxDateTimeHolidayAuthority() {}
+
     // returns TRUE if the given date is a holiday
     static bool IsHoliday(const wxDateTime& dt);
 

@@ -48,6 +48,9 @@ enum wxDirTraverseResult
 class WXDLLEXPORT wxDirTraverser
 {
 public:
+    // virtual dtor for pure virtual base.
+    virtual ~wxDirTraverser() {}
+
     // called for each file found by wxDir::Traverse()
     //
     // return wxDIR_STOP or wxDIR_CONTINUE from here

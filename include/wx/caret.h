@@ -57,6 +57,9 @@ public:
         (void)Create(window, size);
     }
 
+    // virtual dtor for pure virtual base.
+    virtual ~wxCaretBase() {}
+
     // Create() functions - same as ctor but returns the success code
     // --------------------------------------------------------------
 
