@@ -134,7 +134,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Used on Mac OS CarbonLib, Mac OS X wxMac base, and Mac OS X darwin base -->
 <set var="BASE_COREFOUNDATION_SRC" hints="files">
     src/mac/corefoundation/cfstring.cpp
-    src/mac/corefoundation/hid.cpp
     src/mac/corefoundation/stdpaths_cf.cpp
     src/mac/corefoundation/utilsexc_base.cpp
 </set>
@@ -1737,6 +1736,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MAC_OSX_LOWLEVEL_SRC" hints="files">
     <!-- Shared wxMac and wxCocoa files -->
     src/mac/corefoundation/gsockosx.cpp
+    src/mac/corefoundation/hid.cpp
     src/mac/corefoundation/utilsexc_cf.cpp
 </set>
 
@@ -2034,6 +2034,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="COCOA_LOWLEVEL_SRC" hints="files">
     <!-- Shared wxMac and wxCocoa files -->
     src/mac/corefoundation/gsockosx.cpp
+    src/mac/corefoundation/hid.cpp
     src/mac/corefoundation/utilsexc_cf.cpp
 </set>
 <set var="COCOA_LOWLEVEL_HDR" hints="files">
