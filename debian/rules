@@ -216,10 +216,12 @@ configure-gtk-shared-stamp:
 				--cache-file=$(config_cache)		\
 				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
 				--with-gtk				\
+				--with-opengl				\
+				--with-gnomeprint			\
 				--with-zlib=sys				\
 				--with-libjpeg=sys			\
 				--with-libpng=sys			\
-				--with-libtiff=sys
+				--with-libtiff=sys			\
 	touch $@
 
 build-gtk-shared-stamp: configure-gtk-shared-stamp
@@ -236,11 +238,14 @@ configure-gtk-debug-stamp:
 				--cache-file=$(config_cache)		\
 				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
 				--with-gtk				\
-				--enable-debug				\
+				--with-opengl				\
+				--with-gnomeprint			\
 				--with-zlib=sys				\
 				--with-libjpeg=sys			\
 				--with-libpng=sys			\
-				--with-libtiff=sys
+				--with-libtiff=sys			\
+				--enable-debug				\
+				--enable-unicode
 	touch $@
 
 build-gtk-debug-stamp: configure-gtk-debug-stamp

@@ -81,7 +81,7 @@ Package: wxpython=SOV
 Architecture: any
 Section: python
 Depends: libwxgtk=SOV-python, =PY, ${shlibs:Depends}
-Suggests: wxwin=V-doc, wxwin=V-examples, =PY-xml
+Suggests: wx=V-doc, wx=V-examples, =PY-xml
 Conflicts: wxpython
 Replaces: wxpython, libwxgtk2.4-python
 Provides: wxpython
@@ -148,7 +148,7 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (documentation)
 Package: wx=V-examples
 Architecture: all
 Section: devel
-Suggests: libwxgtk=V-dev (= ${Source-Version}), wxwin=V-doc
+Suggests: libwxgtk=V-dev (= ${Source-Version}), wx=V-doc
 Description: wxWidgets Cross-platform C++ GUI toolkit (examples)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
