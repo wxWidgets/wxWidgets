@@ -155,20 +155,6 @@ to disconnect functions connected using the (static) event tables.
 \perlnote{In wxPerl this function takes 3 arguments: \texttt{id,
 lastid, type}.}
 
-\membersection{wxEvtHandler::DoHandleEvent}\label{wxevthandlerdohandleevent}
-
-\func{virtual void}{DoHandleEvent}{\param{wxEventFunction}{ func}, \param{wxEvent\& }{event}}
-
-This function simply invokes the given method \arg{func} of this
-event handler with the \arg{event} as parameter. It exists solely
-to allow to catch the C++ exceptions which could be thrown by this event
-handlers in one place: if you want to do this, override this
-function in your wxEvtHandler-derived class and add try/catch clause(s) to it.
-
-Exceptions not caught at this level propagate to
-\helpref{wxApp::HandleEvent}{wxapphandleevent} which in turn calls
-\helpref{wxApp::OnExceptionInMainLoop}{wxapponexceptioninmainloop}.
-
 \membersection{wxEvtHandler::GetClientData}\label{wxevthandlergetclientdata}
 
 \func{void* }{GetClientData}{\void}

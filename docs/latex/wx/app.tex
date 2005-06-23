@@ -197,20 +197,6 @@ different visuals, false otherwise.
 Returns the application's vendor name.
 
 
-\membersection{wxApp::HandleEvent}\label{wxapphandleevent}
-
-\constfunc{virtual void}{HandleEvent}{\param{wxEvtHandler}{ *handler}, \param{wxEventFunction}{ func}, \param{wxEvent\& }{event}}
-
-This function simply invokes the
-\helpref{DoHandleEvent}{wxevthandlerdohandleevent} method of event handler
-\arg{handler}, passing \arg{func} and \arg{event} as parameters. If an
-exception occurs, \helpref{OnExceptionInMainLoop}{wxapponexceptioninmainloop}
-is called by this function. You can override it to customize exceptions
-handling.
-
-If you want to modify this behaviour, override this function.
-
-
 \membersection{wxApp::IsActive}\label{wxappisactive}
 
 \constfunc{bool}{IsActive}{\void}
@@ -678,6 +664,18 @@ This function currently only has effect under GTK.
 \wxheading{Parameters}
 
 \docparam{flag}{If true, the app will use the best visual.}
+
+
+\membersection{wxApp::HandleEvent}\label{wxapphandleevent}
+
+\constfunc{virtual void}{HandleEvent}{\param{wxEvtHandler}{ *handler}, \param{wxEventFunction}{ func}, \param{wxEvent\& }{event}}
+
+This function simply invokes the given method \arg{func} of the specified
+event handler \arg{handler} with the \arg{event} as parameter. It exists solely
+to allow to catch the C++ exceptions which could be thrown by all event
+handlers in the application in one place: if you want to do this, override this
+function in your wxApp-derived class and add try/catch clause(s) to it.
+
 
 \membersection{wxApp::Yield}\label{wxappyield}
 
