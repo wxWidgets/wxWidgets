@@ -222,6 +222,7 @@ configure-gtk-shared-stamp:
 				--with-libjpeg=sys			\
 				--with-libpng=sys			\
 				--with-libtiff=sys			\
+				--enable-unicode
 	touch $@
 
 build-gtk-shared-stamp: configure-gtk-shared-stamp
