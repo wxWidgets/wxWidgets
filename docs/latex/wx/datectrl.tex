@@ -36,20 +36,19 @@ It is only available if \texttt{wxUSE\_DATEPICKCTRL} is set to $1$.
 
 \twocolwidtha{5cm}%
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxDP\_SPIN}}{Creates a control without month calendar
-drop down but with spin control-like arrows to change individual date
+\twocolitem{\windowstyle{wxDP\_SPIN}}{Creates a control without a month calendar
+drop down but with spin-control-like arrows to change individual date
 components. This style is not supported by the generic version.}
 \twocolitem{\windowstyle{wxDP\_DROPDOWN}}{Creates a control with a month
-calendar drop down part from which the user can select a date.}
-\twocolitem{\windowstyle{wxDP\_DEFAULT}}{Creates a control with default style
-which is the best supported for the current platform (currently wxDP\_SPIN
+calendar drop-down part from which the user can select a date.}
+\twocolitem{\windowstyle{wxDP\_DEFAULT}}{Creates a control with the style
+that is best supported for the current platform (currently wxDP\_SPIN
 under Windows and wxDP\_DROPDOWN elsewhere).}
 \twocolitem{\windowstyle{wxDP\_ALLOWNONE}}{With this style, the control allows
-the user to not enter any valid date at all. Without it -- which is by default
--- the control always has some valid date.}
+the user to not enter any valid date at all. Without it - the default - the control always has some valid date.}
 \twocolitem{\windowstyle{wxDP\_SHOWCENTURY}}{Forces display of the century in
-the default date format. Without this flas the century could be displayed or
-not depending on the default date representation in the system.}
+the default date format. Without this style the century could be displayed, or
+not, depending on the default date representation in the system.}
 \end{twocollist}
 
 \wxheading{Event handling}
@@ -128,12 +127,12 @@ special styles for this control in this version.}
 If the control had been previously limited to a range of dates using 
 \helpref{SetRange()}{wxdatepickerctrlsetrange}, returns the lower and upper
 bounds of this range. If no range is set (or only one of the bounds is set),
-the \arg{dt1} and/or \arg{dt2} are set to be invalid.
+ \arg{dt1} and/or \arg{dt2} are set to be invalid.
 
 \wxheading{Parameters}
 
 \docparam{dt1}{Pointer to the object which receives the lower range limit or
-becomes invalid if it is not set. May be \texttt{NULLL} if the caller is not
+becomes invalid if it is not set. May be \texttt{NULL} if the caller is not
 interested in lower limit}
 
 \docparam{dt2}{Same as above but for the upper limit}
