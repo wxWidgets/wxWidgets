@@ -66,10 +66,9 @@ use this style in order to get the arrows or etc., but would still like to have
 normal keyboard navigation take place, you should create and send a
 wxNavigationKeyEvent in response to the key events for Tab and
 Shift-Tab.}
-\twocolitem{\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE}}{Disables repainting
-the window completely when its size is changed - you will have to repaint the
-new window area manually if you use this style. Currently only has an effect for
-Windows.}
+\twocolitem{\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE}}{On Windows, this style used to disable repainting
+the window completely when its size is changed. Since this behaviour is now the default, the style is now obsolete
+and no longer has an effect.}
 \twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar.}
 \twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar.}
 \twocolitem{\windowstyle{wxALWAYS\_SHOW\_SB}}{If a window has scrollbars,
@@ -83,7 +82,9 @@ repainted, then children being painted over them. Windows only.}
 a complete redraw of the window whenever it is resized instead of redrawing
 just the part of the window affected by resizing. Note that this was the
 behaviour by default before 2.5.1 release and that if you experience redraw
-problems with the code which previously used to work you may want to try this.}
+problems with code which previously used to work you may want to try this.
+Currently this style applies on GTK+ 2 and Windows only, and full repainting is always
+done on other platforms.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
