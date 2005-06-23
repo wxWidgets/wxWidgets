@@ -69,28 +69,28 @@ extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 //  Basically, the way directshow works is that you tell it to render
 //  a file, and it builds and connects a bunch of filters together.
 //
-//  There are many, many ways to do this.  
+//  There are many, many ways to do this.
 //
 //  WAYS TO RENDER A FILE (URLS WORK IN DS ALSO)
 //
 //  1)  Create an instance of IGraphBuilder and call RenderFile on it
 //  2)  Create an instance of IMediaControl and call RenderFile on it
-//  3)  Create an instance of IAMMultiMediaStream, call 
+//  3)  Create an instance of IAMMultiMediaStream, call
 //      IAMMultiMediaStream::AddStream and pass an IDirectDraw instance for
-//      the video, and pass an IDirectSound(Buffer?) instance or use the 
+//      the video, and pass an IDirectSound(Buffer?) instance or use the
 //      default sound renderer, then call RenderFile or RenderMoniker
 //  4)  Create a Moniker instance for the file and create and build
 //      all of the filtergraph manually
 //
 //  Our issue here is that we can't use the default representation of 1 and 2
-//  because the IVideoWindow instance hogs a lot of the useful window 
+//  because the IVideoWindow instance hogs a lot of the useful window
 //  messages such as WM_SETCURSOR.
 //
-//  Solution #1 was to use #3 by creating a seperate IDirectDraw instance 
+//  Solution #1 was to use #3 by creating a seperate IDirectDraw instance
 //  for our window and blitting to that through a thread... unfortunately
 //  the blitting resizing is very low quality and its quite slow.
 //
-//  The current way is to use windowless rendering and have directshow 
+//  The current way is to use windowless rendering and have directshow
 //  do all the DirectDraw-style clipping to our window
 //
 //  ~~~~~~~~~~~~~~AFTER RENDERING THE FILE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,7 +98,7 @@ extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 //  When done rendering the file, we need to get several interfaces from
 //  either a IMediaControl or IGraphBuilder instance -
 //
-//  IMediaPosition - we can set the rate with this... we can also get 
+//  IMediaPosition - we can set the rate with this... we can also get
 //  positions and set positions through this with REFTIME (double) instead
 //  of the normal LONGLONG that IAMMultiMediaStream and IMediaControl use
 //
@@ -106,7 +106,7 @@ extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 //
 //  Interfaces that we don't use but might be useful one day -
 //
-//  IDirectDrawVideo - you can get this through the IFilter returned 
+//  IDirectDrawVideo - you can get this through the IFilter returned
 //  from L"Video Renderer" filter from FindFilter on the IGraphBuilder.
 //  Through this we can set the IDirectDraw instance DrawShow uses.
 //
@@ -115,7 +115,7 @@ extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 //  There are two ways we can do this -
 //  1)  Have a thread compare the current position to the end position
 //  about every 10 milliseconds
-//  2)  Have IMediaSeekingEx send a message to a windowproc or signal a 
+//  2)  Have IMediaSeekingEx send a message to a windowproc or signal a
 //  windows event
 //
 //  Note that we can do these both, I.E. if an IMediaSeekingEx interface
@@ -143,7 +143,7 @@ extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 #endif
 //---------------------------------------------------------------------------
 //  IIDS - used by CoCreateInstance and IUnknown::QueryInterface
-//  Dumped from amstream.idl, quartz.idl, direct draw and with some 
+//  Dumped from amstream.idl, quartz.idl, direct draw and with some
 //  confirmation from WINE
 //
 //  Some of these are not used but are kept here for future reference anyway
@@ -208,31 +208,31 @@ typedef struct DDCAPS* LPDDCAPS;
 
 struct DDSURFACEDESC
 {
-    DWORD               dwSize;                 
-    DWORD               dwFlags;                
-    DWORD               dwHeight;               
-    DWORD               dwWidth;                
+    DWORD               dwSize;
+    DWORD               dwFlags;
+    DWORD               dwHeight;
+    DWORD               dwWidth;
     union
     {
-        LONG            lPitch;                 
-        DWORD           dwLinearSize;           
+        LONG            lPitch;
+        DWORD           dwLinearSize;
     };
-    DWORD               dwBackBufferCount;      
+    DWORD               dwBackBufferCount;
     union
     {
-        DWORD           dwMipMapCount;          
-        DWORD           dwZBufferBitDepth;      
-        DWORD           dwRefreshRate;          
+        DWORD           dwMipMapCount;
+        DWORD           dwZBufferBitDepth;
+        DWORD           dwRefreshRate;
     };
-    DWORD               dwAlphaBitDepth;       
-    DWORD               dwReserved;            
-    LPVOID              lpSurface;              
-    DDCOLORKEY          ddckCKDestOverlay;      
-    DDCOLORKEY          ddckCKDestBlt;          
-    DDCOLORKEY          ddckCKSrcOverlay;       
-    DDCOLORKEY          ddckCKSrcBlt;           
-    DDPIXELFORMAT ddpfPixelFormat;        
-    struct DDSCAPS {DWORD dwCaps;} ddsCaps;                
+    DWORD               dwAlphaBitDepth;
+    DWORD               dwReserved;
+    LPVOID              lpSurface;
+    DDCOLORKEY          ddckCKDestOverlay;
+    DDCOLORKEY          ddckCKDestBlt;
+    DDCOLORKEY          ddckCKSrcOverlay;
+    DDCOLORKEY          ddckCKSrcBlt;
+    DDPIXELFORMAT ddpfPixelFormat;
+    struct DDSCAPS {DWORD dwCaps;} ddsCaps;
 };
 
 struct IDirectDrawClipper : public IUnknown
@@ -262,7 +262,7 @@ struct IDirectDrawSurface : public IUnknown
     STDMETHOD(GetClipper)(LPDIRECTDRAWCLIPPER*) PURE;
     STDMETHOD(GetColorKey)(DWORD, LPDDCOLORKEY) PURE;
     STDMETHOD(GetDC)(HDC *) PURE;
-    STDMETHOD(GetFlipStatus)(DWORD) PURE;    
+    STDMETHOD(GetFlipStatus)(DWORD) PURE;
     STDMETHOD(GetOverlayPosition)(LPLONG, LPLONG ) PURE;
     STDMETHOD(GetPalette)(LPDIRECTDRAWPALETTE FAR*) PURE;
     STDMETHOD(GetPixelFormat)(LPDDPIXELFORMAT) PURE;
@@ -275,7 +275,7 @@ struct IDirectDrawSurface : public IUnknown
     STDMETHOD(SetClipper)(LPDIRECTDRAWCLIPPER) PURE;
     STDMETHOD(SetColorKey)(DWORD, LPDDCOLORKEY) PURE;
     STDMETHOD(SetOverlayPosition)(LONG, LONG ) PURE;
-    STDMETHOD(SetPalette)(IUnknown*) PURE; 
+    STDMETHOD(SetPalette)(IUnknown*) PURE;
     STDMETHOD(Unlock)(LPVOID) PURE;
     STDMETHOD(UpdateOverlay)(LPRECT, LPDIRECTDRAWSURFACE,LPRECT,
                                DWORD, struct DDOVERLAYFX*) PURE;
@@ -306,9 +306,9 @@ struct IDirectDraw : public IUnknown
     STDMETHOD(SetDisplayMode)(DWORD, DWORD,DWORD, DWORD, DWORD) PURE;
     STDMETHOD(WaitForVerticalBlank)(DWORD, HANDLE ) PURE;
 };
-    
+
 //---------------------------------------------------------------------------
-//  AMMEDIA COM INTERFACES 
+//  AMMEDIA COM INTERFACES
 //---------------------------------------------------------------------------
 struct IMediaStream;
 struct IMultiMediaStream;
@@ -332,10 +332,10 @@ public:
 struct IMediaStream : public IUnknown
 {
     STDMETHOD(GetMultiMediaStream)(IMultiMediaStream **) PURE;
-    STDMETHOD(GetInformation)(GUID *, int *) PURE;    
+    STDMETHOD(GetInformation)(GUID *, int *) PURE;
     STDMETHOD(SetSameFormat)(IMediaStream *, DWORD) PURE;
     STDMETHOD(AllocateSample)(DWORD, IStreamSample **) PURE;
-    STDMETHOD(CreateSharedSample)(IStreamSample *, DWORD, 
+    STDMETHOD(CreateSharedSample)(IStreamSample *, DWORD,
                                   IStreamSample **) PURE;
     STDMETHOD(SendEndOfStream)(DWORD dwFlags) PURE;
 };
@@ -355,7 +355,7 @@ struct IDirectDrawMediaStream : public IMediaStream
 struct IMultiMediaStream : public IUnknown
 {
     STDMETHOD(GetInformation)(DWORD *, int *) PURE;
-    STDMETHOD(GetMediaStream)(REFGUID, IMediaStream **) PURE;    
+    STDMETHOD(GetMediaStream)(REFGUID, IMediaStream **) PURE;
     STDMETHOD(EnumMediaStreams)(long, IMediaStream **) PURE;
     STDMETHOD(GetState)(int *pCurrentState) PURE;
     STDMETHOD(SetState)(int NewState) PURE;
@@ -370,7 +370,7 @@ struct IAMMultiMediaStream : public IMultiMediaStream
     STDMETHOD(Initialize)(int, DWORD, IUnknown *) PURE;
     STDMETHOD(GetFilterGraph)(IUnknown **) PURE;
     STDMETHOD(GetFilter)(IUnknown **) PURE;
-    STDMETHOD(AddMediaStream)(IUnknown *, const GUID*, DWORD, 
+    STDMETHOD(AddMediaStream)(IUnknown *, const GUID*, DWORD,
                               IMediaStream **) PURE;
     STDMETHOD(OpenFile)(LPCWSTR, DWORD) PURE;
     STDMETHOD(OpenMoniker)(IBindCtx *, IMoniker *, DWORD) PURE;
@@ -448,7 +448,7 @@ struct IVMRWindowlessControl : public IUnknown
     STDMETHOD(GetNativeVideoSize)(LONG *, LONG *, LONG *, LONG *) PURE;
     STDMETHOD(GetMinIdealVideoSize)(LONG *, LONG *) PURE;
     STDMETHOD(GetMaxIdealVideoSize)(LONG *, LONG *) PURE;
-    STDMETHOD(SetVideoPosition)(const LPRECT,const LPRECT) PURE;    
+    STDMETHOD(SetVideoPosition)(const LPRECT,const LPRECT) PURE;
     STDMETHOD(GetVideoPosition)(LPRECT, LPRECT) PURE;
     STDMETHOD(GetAspectRatioMode)(DWORD *) PURE;
     STDMETHOD(SetAspectRatioMode)(DWORD) PURE;
@@ -472,13 +472,13 @@ struct IVMRFilterConfig : public IUnknown
     STDMETHOD(SetRenderingPrefs)(DWORD) PURE;
     STDMETHOD(GetRenderingPrefs)(DWORD *) PURE;
     STDMETHOD(SetRenderingMode)(DWORD) PURE;
-    STDMETHOD(GetRenderingMode)(DWORD *) PURE;  
+    STDMETHOD(GetRenderingMode)(DWORD *) PURE;
 };
-    
+
 typedef IUnknown IBaseFilter;
 typedef IUnknown IPin;
 typedef IUnknown IEnumFilters;
-typedef int AM_MEDIA_TYPE; 
+typedef int AM_MEDIA_TYPE;
 
 struct IFilterGraph : public IUnknown
 {
@@ -564,7 +564,7 @@ public:
 
     void Cleanup();
     void OnStop();
-    bool SetWindowlessMode(IGraphBuilder* pGB, 
+    bool SetWindowlessMode(IGraphBuilder* pGB,
                            IVMRWindowlessControl** ppVMC = NULL);
 
     wxControl* m_ctrl;
@@ -579,7 +579,7 @@ public:
     IMediaEvent* m_pME;
     IMediaPosition* m_pMS;
     bool m_bVideo;
-    
+
     wxAMMediaThread* m_pThread;
 
     wxSize m_bestSize;
@@ -742,7 +742,8 @@ struct TimeRecord {
 
 #define wxDL_METHOD_LOAD( lib, name, success ) \
     pfn_ ## name = (name ## Type) lib.GetSymbol( wxT(#name), &success ); \
-    if (!success) return false;
+    if (!success) { wxLog::EnableLogging(true); return false; }
+
 
 //Class that utilizes Robert Roeblings Dynamic Library Macros
 class WXDLLIMPEXP_MEDIA wxQuickTimeLibrary
@@ -828,10 +829,15 @@ bool wxQuickTimeLibrary::Initialize()
 {
     m_ok = false;
 
-    if(!m_dll.Load(wxT("qtmlClient.dll")))
-        return false;
+    wxLog::EnableLogging(false);    //Turn off the wxDynamicLibrary logging
 
-    bool bOk;
+    if(!m_dll.Load(wxT("qtmlClient.dll")))
+    {
+        wxLog::EnableLogging(true);
+        return false;
+    }
+
+    bool bOk;   //TODO:  Get rid of this, use m_ok instead (not a biggie)
 
     wxDL_METHOD_LOAD( m_dll, StartMovie, bOk );
     wxDL_METHOD_LOAD( m_dll, StopMovie, bOk );
@@ -869,6 +875,7 @@ bool wxQuickTimeLibrary::Initialize()
     wxDL_METHOD_LOAD( m_dll, GetMovieVolume, bOk );
     wxDL_METHOD_LOAD( m_dll, SetMovieVolume, bOk );
 
+    wxLog::EnableLogging(true);
     m_ok = true;
 
     return true;
@@ -946,33 +953,33 @@ IMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
 //Get the error string for Active Movie
 wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
 {
-    wxChar szError[MAX_ERROR_TEXT_LEN]; 
-    if( m_lpAMGetErrorText != NULL && 
-       (*m_lpAMGetErrorText)(hrdsv, szError, MAX_ERROR_TEXT_LEN) == 0) 
-    { 
+    wxChar szError[MAX_ERROR_TEXT_LEN];
+    if( m_lpAMGetErrorText != NULL &&
+       (*m_lpAMGetErrorText)(hrdsv, szError, MAX_ERROR_TEXT_LEN) == 0)
+    {
         return wxString::Format(wxT("DirectShow error \"%s\" \n")
                                      wxT("(numeric %i)\n")
-                                     wxT("occured at line %i in ") 
-                                     wxT("mediactrl.cpp"), 
-                                     (int)hrdsv, szError, __LINE__); 
-    } 
-    else 
-    { 
-        return wxString::Format(wxT("Unknown error (%i) ") 
-                                     wxT("occurred at") 
-                                     wxT(" line %i in mediactrl.cpp."), 
-                                     (int)hrdsv, __LINE__); 
-    } 
+                                     wxT("occured at line %i in ")
+                                     wxT("mediactrl.cpp"),
+                                     (int)hrdsv, szError, __LINE__);
+    }
+    else
+    {
+        return wxString::Format(wxT("Unknown error (%i) ")
+                                     wxT("occurred at")
+                                     wxT(" line %i in mediactrl.cpp."),
+                                     (int)hrdsv, __LINE__);
+    }
 }
 
-#define wxAMFAIL(x) wxFAIL_MSG(GetErrorString(x)); 
+#define wxAMFAIL(x) wxFAIL_MSG(GetErrorString(x));
 #define wxVERIFY(x) wxASSERT((x))
 #define wxAMLOG(x) wxLogDebug(GetErrorString(x))
 #else
 #define wxAMVERIFY(x) (x)
 #define wxVERIFY(x) (x)
-#define wxAMLOG(x) 
-#define wxAMFAIL(x) 
+#define wxAMLOG(x)
+#define wxAMFAIL(x)
 #endif
 
 //---------------------------------------------------------------------------
@@ -985,12 +992,18 @@ wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
 //
 // Sets m_hNotifyWnd to NULL to signify that we haven't loaded anything yet
 //---------------------------------------------------------------------------
-wxAMMediaBackend::wxAMMediaBackend() : m_state(wxMEDIASTATE_STOPPED),
-m_pMC(NULL), m_pME(NULL), m_pMS(NULL), m_pBA(NULL), m_pGB(NULL),
-m_pVMC(NULL), m_pThread(NULL)
-    #ifdef __WXDEBUG__
-    , m_hQuartzDll(NULL)
-    #endif
+wxAMMediaBackend::wxAMMediaBackend()
+                 :m_state(wxMEDIASTATE_STOPPED)
+                 ,m_pVMC(NULL)
+                 ,m_pGB(NULL)
+                 ,m_pBA(NULL)
+                 ,m_pMC(NULL)
+                 ,m_pME(NULL)
+                 ,m_pMS(NULL)
+                 ,m_pThread(NULL)
+#ifdef __WXDEBUG__
+                 ,m_hQuartzDll(NULL)
+#endif
 {
 }
 
@@ -1047,7 +1060,7 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     //Make sure a valid windowless video mixing interface exists
     IGraphBuilder* pGB;
-    if( ::CoCreateInstance(CLSID_FilgraphManager, NULL, 
+    if( ::CoCreateInstance(CLSID_FilgraphManager, NULL,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IGraphBuilder, (void**)&pGB) != 0 )
         return false;
@@ -1071,15 +1084,15 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
         return false;
 
     // My problem with this was only with a previous patch, probably the third rewrite
-    // fixed it as a side-effect. In fact, the erase background style of drawing not 
-    // only works now, but is much better than paint-based updates (the paint event 
-    // handler flickers if the wxMediaCtrl shares a sizer with another child window, 
+    // fixed it as a side-effect. In fact, the erase background style of drawing not
+    // only works now, but is much better than paint-based updates (the paint event
+    // handler flickers if the wxMediaCtrl shares a sizer with another child window,
     // or is on a notebook)
     //  - Greg Hazel
-    ctrl->Connect(ctrl->GetId(), wxEVT_ERASE_BACKGROUND, 
+    ctrl->Connect(ctrl->GetId(), wxEVT_ERASE_BACKGROUND,
         wxEraseEventHandler(wxAMMediaEvtHandler::OnEraseBackground),
         NULL, (wxEvtHandler*) this);
- 
+
     //
     // done...
     //
@@ -1093,7 +1106,7 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 // Adds a Video Mixing Renderer to a Filter Graph and obtains the
 // windowless control from it
 //---------------------------------------------------------------------------
-bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB, 
+bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB,
                                          IVMRWindowlessControl** ppVMC)
 {
     HRESULT hr;
@@ -1102,12 +1115,12 @@ bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB,
     // Create and add a custom Video Mixing Render to the graph
     //
     IBaseFilter* pVMR;
-    if( ::CoCreateInstance(CLSID_VideoMixingRenderer, NULL, 
+    if( ::CoCreateInstance(CLSID_VideoMixingRenderer, NULL,
                 CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&pVMR) != 0 )
         return false;
 
     hr = pGB->AddFilter(pVMR, L"Video Mixing Renderer");
-    if ( hr != 0) 
+    if ( hr != 0)
     {
         wxAMLOG(hr);
         pVMR->Release();
@@ -1117,9 +1130,9 @@ bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB,
     //
     // Set the graph to windowless mode
     //
-    IVMRFilterConfig* pConfig; 
+    IVMRFilterConfig* pConfig;
     hr = pVMR->QueryInterface(IID_IVMRFilterConfig, (void**)&pConfig);
-    if( hr != 0 ) 
+    if( hr != 0 )
     {
         wxAMLOG(hr);
         pVMR->Release();
@@ -1130,12 +1143,12 @@ bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB,
     if( hr != 0) //2 == VMRMode_Windowless
     {
         wxAMLOG(hr);
-        pConfig->Release(); 
+        pConfig->Release();
         pVMR->Release();
         return false;
     }
 
-    pConfig->Release(); 
+    pConfig->Release();
 
     //
     // Obtain the windowless control
@@ -1145,7 +1158,7 @@ bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB,
     if( hr != 0 )
     {
         wxAMLOG(hr);
-        pVMR->Release(); 
+        pVMR->Release();
         return false;
     }
 
@@ -1157,8 +1170,8 @@ bool wxAMMediaBackend::SetWindowlessMode(IGraphBuilder* pGB,
     else
         pVMC->Release();
 
-    pVMR->Release(); 
-    return true; 
+    pVMR->Release();
+    return true;
 }
 
 //---------------------------------------------------------------------------
@@ -1235,7 +1248,7 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
     //
     // Get original video size
     //
-    hr = m_pVMC->GetNativeVideoSize((LONG*)&m_bestSize.x, (LONG*)&m_bestSize.y, 
+    hr = m_pVMC->GetNativeVideoSize((LONG*)&m_bestSize.x, (LONG*)&m_bestSize.y,
                                    NULL, NULL);
     if(hr != 0)
     {
@@ -1479,7 +1492,7 @@ bool wxAMMediaBackend::SetVolume(double dVolume)
 // 1) Obtains the duration of the media from IAMMultiMediaStream
 // 2) Converts that value to our time base, and returns it
 //
-// NB: With VBR MP3 files the default DirectShow MP3 render does not 
+// NB: With VBR MP3 files the default DirectShow MP3 render does not
 // read the Xing header correctly, resulting in skewed values for duration
 // and seeking
 //---------------------------------------------------------------------------
@@ -1562,14 +1575,14 @@ wxSize wxAMMediaBackend::GetVideoSize() const
 //
 // We take care of this in our redrawing
 //---------------------------------------------------------------------------
-void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), 
+void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
                             int w, int h)
 {
     //don't use deferred positioning on windows
     if(m_pVMC && m_bVideo)
     {
         RECT srcRect, destRect;
-        
+
         //portion of video to display in window
         srcRect.top = 0; srcRect.left = 0;
         srcRect.bottom = m_bestSize.y; srcRect.right = m_bestSize.x;
@@ -1619,11 +1632,11 @@ wxThread::ExitCode wxAMMediaThread::Entry()
                                       (LONG_PTR *) &evParam2, 0) == 0 )
         {
             // Cleanup memory that GetEvent allocated
-            HRESULT hr = pThis->m_pME->FreeEventParams(evCode, 
+            HRESULT hr = pThis->m_pME->FreeEventParams(evCode,
                                                 evParam1, evParam2);
             if(hr != 0)
             {
-                //Even though this makes a messagebox this 
+                //Even though this makes a messagebox this
                 //is windows where we can do gui stuff in seperate
                 //threads :)
                 wxFAIL_MSG(pThis->GetErrorString(hr));
@@ -1679,7 +1692,7 @@ void wxAMMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
     {
         //TODO: Use wxClientDC?
         HDC hdc = ::GetDC((HWND)pThis->m_ctrl->GetHandle());
-        HRESULT hr = pThis->m_pVMC->RepaintVideo((HWND)pThis->m_ctrl->GetHandle(), 
+        HRESULT hr = pThis->m_pVMC->RepaintVideo((HWND)pThis->m_ctrl->GetHandle(),
                                         hdc);
         if(FAILED(hr))
         {
