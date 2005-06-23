@@ -54,7 +54,7 @@
     <!-- this needs to be reset to 0 on beginning of stable series and
          increment by one 1 every time binary incompatible change is made
          (i.e. preferably never) -->
-    <set var="WX_BINARY_VERSION">0</set>
+    <set var="WX_BINARY_VERSION">1</set>
     
     <set var="WXSOVERSION">
         <if cond="WX_STABLE_BRANCH=='1'">$(WX_BINARY_VERSION).0.0</if>
