@@ -215,9 +215,7 @@ wxWindowBase::wxWindowBase()
 
     // VZ: this one shouldn't exist...
     m_isBeingDeleted = false;
-    
-    // Reserved for future use
-    m_windowReserved = NULL;
+
 }
 
 // common part of window creation process
