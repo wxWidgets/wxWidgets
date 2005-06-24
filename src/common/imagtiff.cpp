@@ -141,7 +141,7 @@ TIFFwxWarningHandler(const char* module, const char* fmt, va_list ap)
 {
     if (module != NULL)
             wxLogWarning(_("tiff module: %s"), module);
-    wxLogWarning((wxChar *) fmt, ap);
+    wxVLogWarning((wxChar *) fmt, ap);
 }
 
 static void
