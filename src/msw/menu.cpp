@@ -390,6 +390,10 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         pos = GetMenuItemCount() - 1;
     }
 
+    // adjust position to account for the title, if any
+    if ( !m_title.empty() )
+        pos += 2; // for the title itself and its separator
+
     BOOL ok = false;
 
     // check if we have something more than a simple text item
