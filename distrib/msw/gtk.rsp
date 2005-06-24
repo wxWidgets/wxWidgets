@@ -11,6 +11,9 @@ include/wx/gtk/*.h
 include/wx/gtk/*.xpm
 include/wx/gtk/gnome/*.h
 
+include/wx/mac/corefoundation/*.h
+src/mac/corefoundation/*.cpp
+
 src/gtk/files.lst
 src/gtk/*.cpp
 src/gtk/*.c
