@@ -140,16 +140,28 @@ static void
 TIFFwxWarningHandler(const char* module, const char* fmt, va_list ap)
 {
     if (module != NULL)
-            wxLogWarning(_("tiff module: %s"), module);
-    wxVLogWarning((wxChar *) fmt, ap);
+        wxLogWarning(_("tiff module: %s"), wxString::FromAscii(module).c_str());
+
+    // FIXME: this is not terrible informative but better than crashing!
+#if wxUSE_UNICODE
+    wxLogWarning(_("TIFF library warning."));
+#else
+    wxVLogWarning(fmt, ap);
+#endif
 }
 
 static void
 TIFFwxErrorHandler(const char* module, const char* fmt, va_list ap)
 {
     if (module != NULL)
-            wxLogError(_("tiff module: %s"), module);
-    wxVLogError((wxChar *) fmt, ap);
+        wxLogError(_("tiff module: %s"), wxString::FromAscii(module).c_str());
+
+    // FIXME: as above
+#if wxUSE_UNICODE
+    wxLogError(_("TIFF library error."));
+#else
+    wxVLogError(fmt, ap);
+#endif
 }
 
 } // extern "C"
