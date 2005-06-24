@@ -742,7 +742,7 @@ struct TimeRecord {
 
 #define wxDL_METHOD_LOAD( lib, name, success ) \
     pfn_ ## name = (name ## Type) lib.GetSymbol( wxT(#name), &success ); \
-    if (!success) { wxLog::EnableLogging(true); return false; }
+    if (!success) { wxLog::EnableLogging(bWasLoggingEnabled); return false; }
 
 
 //Class that utilizes Robert Roeblings Dynamic Library Macros
@@ -829,11 +829,11 @@ bool wxQuickTimeLibrary::Initialize()
 {
     m_ok = false;
 
-    wxLog::EnableLogging(false);    //Turn off the wxDynamicLibrary logging
+    bool bWasLoggingEnabled = wxLog::EnableLogging(false);    //Turn off the wxDynamicLibrary logging
 
     if(!m_dll.Load(wxT("qtmlClient.dll")))
     {
-        wxLog::EnableLogging(true);
+        wxLog::EnableLogging(bWasLoggingEnabled);
         return false;
     }
 
@@ -875,7 +875,7 @@ bool wxQuickTimeLibrary::Initialize()
     wxDL_METHOD_LOAD( m_dll, GetMovieVolume, bOk );
     wxDL_METHOD_LOAD( m_dll, SetMovieVolume, bOk );
 
-    wxLog::EnableLogging(true);
+    wxLog::EnableLogging(bWasLoggingEnabled);
     m_ok = true;
 
     return true;
