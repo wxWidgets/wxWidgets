@@ -1415,6 +1415,8 @@ tests/regex/*.inc
 tests/regex/*.pl
 tests/regex/*.test
 
+tests/scopeguard/*.cpp
+
 tests/streams/*.cpp
 tests/streams/*.h
 

@@ -240,6 +240,12 @@ X11_DIST: ALL_GUI_DIST UNIV_DIST
 	cp $(X11DIR)/*.cpp $(DISTDIR)/src/x11
 	cp $(X11DIR)/*.c $(DISTDIR)/src/x11
 	cp $(X11DIR)/*.xbm $(DISTDIR)/src/x11
+	mkdir $(DISTDIR)/src/mac
+	mkdir $(DISTDIR)/src/mac/corefoundation
+	cp $(WXDIR)/src/mac/corefoundation/*.cpp $(DISTDIR)/src/mac/corefoundation
+	mkdir $(DISTDIR)/include/wx/mac
+	mkdir $(DISTDIR)/include/wx/mac/corefoundation
+	cp $(WXDIR)/include/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 

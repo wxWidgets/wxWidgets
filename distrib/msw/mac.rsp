@@ -28,6 +28,8 @@ samples/html/htmlctrl/*.bkl
 src/wxWindows.pbproj/project.pbxproj
 src/wxWindows.xcode/project.pbxproj
 
+src/wxWindows.xcodeproj/project.pbxproj
+
 src/mac/wxmac.icns
 
 src/mac/carbon/*.cpp
@@ -68,4 +70,5 @@ include/wx/mac/corefoundation/*.h
 
 samples/minimal/minimal.pbproj/project.pbxproj
 samples/minimal/minimal.xcode/project.pbxproj
+samples/minimal/minimal.xcodeproj/project.pbxproj
 

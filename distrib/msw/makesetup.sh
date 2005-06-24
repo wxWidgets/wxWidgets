@@ -25,7 +25,7 @@ PROGNAME=$0
 SCRIPTDIR=$WXWIN/distrib/msw
 WEBFILES=c:/wx2dev/wxWebSite
 # Set this to the required version
-VERSION=2.6.0
+VERSION=2.6.1
 
 . $SCRIPTDIR/setup.var
 
@@ -267,7 +267,7 @@ dospinwxall()
     fi
     cp $DESTDIR/wxWidgets-$VERSION-win.zip $DESTDIR/wxWidgets-$VERSION-all.zip
     
-    cat $APPDIR/distrib/msw/cw_mac.rsp $APPDIR/distrib/msw/vc.rsp $APPDIR/distrib/msw/x11.rsp $APPDIR/distrib/msw/cocoa.rsp $APPDIR/distrib/msw/motif.rsp $APPDIR/distrib/msw/mac.rsp $APPDIR/distrib/msw/mgl.rsp $APPDIR/distrib/msw/os2.rsp $APPDIR/distrib/msw/palmos.rsp | sort | uniq > /tmp/all.txt
+    cat $APPDIR/distrib/msw/cw_mac.rsp $APPDIR/distrib/msw/vc.rsp $APPDIR/distrib/msw/x11.rsp $APPDIR/distrib/msw/gtk.rsp $APPDIR/distrib/msw/cocoa.rsp $APPDIR/distrib/msw/motif.rsp $APPDIR/distrib/msw/mac.rsp $APPDIR/distrib/msw/mgl.rsp $APPDIR/distrib/msw/os2.rsp $APPDIR/distrib/msw/palmos.rsp | sort | uniq > /tmp/all.txt
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < /tmp/all.txt
 
     if [ -d $DESTDIR/wxWidgets-$VERSION ]; then
