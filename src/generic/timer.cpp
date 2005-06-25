@@ -47,6 +47,28 @@
 
     #define wxTimerTickFmtSpec _T("lu")
     #define wxTimerTickPrintfArg(tt) (tt)
+
+    #ifdef __DOS__
+        // Under DOS the MGL timer has a 24hr period, so consider the 12 hours
+        // before y to be 'less' and the the 12 hours after 'greater' modulo
+        // 24 hours.
+        inline bool wxTickGreaterEqual(wxTimerTick_t x, wxTimerTick_t y)
+        {
+            // _EVT_getTicks wraps at 1573040 * 55
+            const wxTimerTick_t modulus = 1573040 * 55;
+            return (2 * modulus + x - y) % modulus < modulus / 2;
+        }
+    #else
+        // If wxTimerTick_t is 32-bits then it'll wrap in around 50 days. So
+        // let the 25 days before y be 'less' and 25 days after be 'greater'.
+        inline bool wxTickGreaterEqual(wxTimerTick_t x, wxTimerTick_t y)
+        {
+            // This code assumes wxTimerTick_t is an unsigned type.
+            // Set half_modulus with top bit set and the rest zeros.
+            const wxTimerTick_t half_modulus = ~((~(wxTimerTick_t)0) >> 1);
+            return x - y < half_modulus;
+        }
+    #endif
 #else // !__WXMGL__
     #define GetMillisecondsTime wxGetLocalTimeMillis
 
@@ -59,6 +81,11 @@
         #define wxTimerTickFmtSpec _T("s")
         #define wxTimerTickPrintfArg(tt) (tt.ToString().c_str())
     #endif // wx/native long long
+
+    inline bool wxTickGreaterEqual(wxTimerTick_t x, wxTimerTick_t y)
+    {
+        return x >= y;
+    }
 #endif // __WXMGL__/!__WXMGL__
 
 // ----------------------------------------------------------------------------
@@ -145,7 +172,7 @@ void wxTimerScheduler::NotifyTimers()
 
         for ( wxTimerDesc *desc = m_timers; desc; desc = desc->next )
         {
-            if ( desc->running && desc->shotTime <= now )
+            if ( desc->running && wxTickGreaterEqual(now, desc->shotTime) )
             {
                 oneShot = desc->timer->IsOneShot();
                 RemoveTimer(desc);
