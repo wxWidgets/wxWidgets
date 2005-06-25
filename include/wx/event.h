@@ -2813,8 +2813,21 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
     EVT_COMMAND_SCROLL_THUMBRELEASE(winid, func) \
     EVT_COMMAND_SCROLL_CHANGED(winid, func)
 
-// this is the old name of this event, to be deprecated in 2.8
-#define wxEVT_SCROLL_ENDSCROLL wxEVT_SCROLL_CHANGED
+// compatibility macros for the old name, to be deprecated in 2.8
+//
+// note that simply #defines suffice for the macro names as they're only
+// present in the source code and macros are enough to maintain source
+// backwards compatibility, but that we have to ensure that we also have
+// wxEVT_SCROLL_ENDSCROLL inside the library for binary backwards compatibility
+// and this can't be done with a macro
+#if wxCHECK_VERSION(2, 7, 0)
+    // replace the line below with simply
+    //      #define wxEVT_SCROLL_ENDSCROLL wxEVT_SCROLL_CHANGED
+    // in 2.7
+    #error "Remove wxEVT_SCROLL_ENDSCROLL binary compatibility hack, not needed"
+#endif
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_SCROLL_ENDSCROLL;
+
 #define EVT_COMMAND_SCROLL_ENDSCROLL EVT_COMMAND_SCROLL_CHANGED
 #define EVT_SCROLL_ENDSCROLL EVT_SCROLL_CHANGED
 
