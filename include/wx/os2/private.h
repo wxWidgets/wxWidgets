@@ -11,8 +11,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_H_
-#define _WX_PRIVATE_H_
+#ifndef _WX_OS2_PRIVATE_H_
+#define _WX_OS2_PRIVATE_H_
 
 #define INCL_BASE
 #define INCL_PM
@@ -20,9 +20,7 @@
 #define INCL_WINSYS
 #define INCL_SHLERRORS
 #include <os2.h>
-#if defined (__EMX__) && !defined(USE_OS2_TOOLKIT_HEADERS) && !defined(FCF_CLOSEBUTTON)
-/* struct missing in "os2emx.h" - luckily FCF_CLOSEBUTTON was added in the
-   same version of os2emx.h as SPBCDATA type, so we can do the test above. */
+#if defined (__EMX__) && !defined(USE_OS2_TOOLKIT_HEADERS) && !defined(HAVE_SPBCDATA)
  typedef struct _SPBCDATA {
    ULONG     cbSize;       /*  Size of control block. */
    ULONG     ulTextLimit;  /*  Entryfield text limit. */
