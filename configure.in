@@ -1613,7 +1613,7 @@ case "${host}" in
           LDFLAGS="$LDFLAGS -Zsysv-signals"
       else
           if test "$wx_cv_gccversion" = "EMX3"; then
-              LIBS="$LIBS -lstdcxx"
+              LIBS="$LIBS -lstdcxx -lgcc"
               LDFLAGS="$LDFLAGS -Zsysv-signals"
           else
               LIBS="$LIBS -lstdc++"
