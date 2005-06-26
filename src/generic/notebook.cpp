@@ -304,7 +304,7 @@ bool wxNotebook::RemovePage(size_t nPage)
 // remove one page from the notebook
 wxWindow* wxNotebook::DoRemovePage(size_t nPage)
 {
-    wxCHECK( IS_VALID_PAGE(nPage), false );
+    wxCHECK( IS_VALID_PAGE(nPage), NULL );
 
     m_pages[nPage]->Show(false);
     //    m_pages[nPage]->Lower();
