@@ -18,6 +18,67 @@
 
 #include "wx/defs.h"
 #include "wx/string.h"
+#include "wx/hashmap.h"
+
+typedef int (*wxShadowObjectMethod)(void*, void*);
+WX_DECLARE_STRING_HASH_MAP( wxShadowObjectMethod, wxShadowObjectMethods );
+WX_DECLARE_STRING_HASH_MAP( void*, wxShadowObjectFields );
+
+class WXDLLIMPEXP_BASE wxShadowObject
+{
+public:
+    wxShadowObject() { }
+    
+    void AddMethod( const wxString &name, wxShadowObjectMethod method )
+    { 
+        wxShadowObjectMethods::iterator it = m_methods.find( name );
+        if (it == m_methods.end())
+            m_methods[ name ] = method;
+        else
+            it->second = method;
+    }
+    
+    bool InvokeMethod( const wxString &name, void* window, void* param, int* returnValue )
+    { 
+        wxShadowObjectMethods::iterator it = m_methods.find( name );
+        if (it == m_methods.end())
+            return false;
+        wxShadowObjectMethod method = it->second;
+        int ret = (*method)(window, param);
+        if (returnValue)
+            *returnValue = ret;
+        return true;
+    }
+    
+    void AddField( const wxString &name, void* initialValue = NULL )
+    {
+        wxShadowObjectFields::iterator it = m_fields.find( name );
+        if (it == m_fields.end())
+            m_fields[ name ] = initialValue;
+        else
+            it->second = initialValue;
+    }
+    
+    void SetField( const wxString &name, void* value )
+    {
+        wxShadowObjectFields::iterator it = m_fields.find( name );
+        if (it == m_fields.end())
+            return;
+        it->second = value;
+    }
+    
+    void* GetField( const wxString &name, void *defaultValue = NULL )
+    {
+        wxShadowObjectFields::iterator it = m_fields.find( name );
+        if (it == m_fields.end())
+            return defaultValue;
+        return it->second;
+    }
+    
+private:
+    wxShadowObjectMethods   m_methods;
+    wxShadowObjectFields    m_fields;
+};
 
 // ----------------------------------------------------------------------------
 
