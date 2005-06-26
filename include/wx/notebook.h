@@ -94,6 +94,14 @@ public:
     // On platforms that support it, get the theme page background colour, else invalid colour
     virtual wxColour GetThemeBackgroundColour() const { return wxNullColour; }
 
+
+    // Reserved for future use
+    virtual void ReservedNotebookFunc1() {}
+    virtual void ReservedNotebookFunc2() {}
+    virtual void ReservedNotebookFunc3() {}
+    virtual void ReservedNotebookFunc4() {}
+    virtual void ReservedNotebookFunc5() {}
+
 protected:
     DECLARE_NO_COPY_CLASS(wxNotebookBase)
 };

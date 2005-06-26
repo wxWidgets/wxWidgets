@@ -631,6 +631,17 @@ public:
         if (h) *h = hh;
     }
 
+    // Reserved for future use
+    virtual void ReservedDCFunc1() {}
+    virtual void ReservedDCFunc2() {}
+    virtual void ReservedDCFunc3() {}
+    virtual void ReservedDCFunc4() {}
+    virtual void ReservedDCFunc5() {}
+    virtual void ReservedDCFunc6() {}
+    virtual void ReservedDCFunc7() {}
+    virtual void ReservedDCFunc8() {}
+    virtual void ReservedDCFunc9() {}
+
 protected:
     // the pure virtual functions which should be implemented by wxDC
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,

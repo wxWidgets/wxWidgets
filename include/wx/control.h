@@ -66,6 +66,17 @@ public:
     virtual void SetLabel( const wxString &label );
     virtual bool SetFont(const wxFont& font);
 
+    // Reserved for future use
+    virtual void ReservedControlFunc1() {}
+    virtual void ReservedControlFunc2() {}
+    virtual void ReservedControlFunc3() {}
+    virtual void ReservedControlFunc4() {}
+    virtual void ReservedControlFunc5() {}
+    virtual void ReservedControlFunc6() {}
+    virtual void ReservedControlFunc7() {}
+    virtual void ReservedControlFunc8() {}
+    virtual void ReservedControlFunc9() {}
+
 protected:
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it
     // to the list of parents children
