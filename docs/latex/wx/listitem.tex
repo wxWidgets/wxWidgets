@@ -47,7 +47,8 @@ Returns the zero-based column; meaningful only in report mode.
 
 \constfunc{long}{GetData}{\void}
 
-Returns client data associated with the control.
+Returns client data associated with the control. Please note that
+client data is associated with the item and not with subitems.
 
 \membersection{wxListItem::GetFont}\label{wxlistitemgetfont}
 
@@ -144,7 +145,8 @@ Sets the zero-based column. Meaningful only in report mode.
 
 \func{void}{SetData}{\param{void* }{data}}
 
-Sets client data for the item.
+Sets client data for the item. Please note that
+client data is associated with the item and not with subitems.
 
 \membersection{wxListItem::SetFont}\label{wxlistitemsetfont}
 
