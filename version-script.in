@@ -1,3 +1,28 @@
+#
+# $Id$
+# 
+
+# Note: Remove all of the tags below except for the last one when creating
+#       new development branch.
+
+
+# public symbols added in release 2.6.2
+# (or 2.6.1, we started versioning the symbols in 2.6.2):
+
+@WX_VERSION_TAG@.2 {
+    global:
+        *wxLaunchDefaultBrowser*;
+        *wxLogBuffer*;
+        *wxMessageOutputBest*;
+        wxEVT_SCROLL_CHANGED;
+        *wxFileDialog*DoSetSize*;
+};
+
+
+# symbols available since the beginning of this branch are only given
+# generic branch tag (don't remove this!):
+
 @WX_VERSION_TAG@ {
-  *;
+    global:
+        *;
 };
