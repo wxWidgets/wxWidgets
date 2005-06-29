@@ -41,26 +41,27 @@
 #include "wx/msw/private.h"
 #include "wx/app.h"         // for GetComCtl32Version
 
+#if wxUSE_DYNLIB_CLASS
+#include "wx/dynlib.h"
+#endif
+
 wxUxThemeEngine* g_pThemeEngine = ((wxUxThemeEngine*)NULL) ;
 
 BOOL wxCanUseInitThemeEngine()
 {
-    OSVERSIONINFOEX wxuosex ;
-    memset((void*)&wxuosex, 0, sizeof(OSVERSIONINFOEX)) ;
-    wxuosex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX) ;
-    if(!GetVersionEx((LPOSVERSIONINFO)&wxuosex))
+#if wxUSE_DYNLIB_CLASS
+    //suppress errors if we don't find it -- that's expected on nonXP systems
+    wxLogNull NullLog ;
+    wxDynamicLibrary uxthemelib ( wxT("uxtheme.dll") );
+
+    if (uxthemelib.IsLoaded())
     {
-        wxuosex.dwOSVersionInfoSize = sizeof(OSVERSIONINFO) ;
-        if(!GetVersionEx((LPOSVERSIONINFO)&wxuosex))
-        {
-            return FALSE ;
-        }
-    }
-    if ((wxuosex.dwMajorVersion == 5) && (wxuosex.dwMinorVersion > 0))
-    {
+        //just discard this for 2.4 branch - code is externsively rewritten in CVS HEAD
+        uxthemelib.Unload ();
         return (wxTheApp->GetComCtl32Version() >= 600) ;
     }
     else
+#endif //wxUSE_DYNLIB_CLASS
     {
         return FALSE ;
     }
