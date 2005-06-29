@@ -28,6 +28,14 @@
 #if wxUSE_DBGHELP
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// to prevent recursion which could result from corrupted data we limit
+// ourselves to that many levels of embedded fields inside structs
+static const unsigned MAX_DUMP_DEPTH = 20;
+
+// ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
 
@@ -286,7 +294,7 @@ wxDbgHelpDLL::DumpField(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
     wxString s;
 
     // avoid infinite recursion
-    if ( level > 100 )
+    if ( level > MAX_DUMP_DEPTH )
     {
         return s;
     }
