@@ -1217,7 +1217,6 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     bool use_bitmap_method = false;
     bool is_mono = false;
 
-    // TODO: use the mask origin when drawing transparently
     if (xsrcMask == -1 && ysrcMask == -1)
     {
         xsrcMask = xsrc;
@@ -1347,6 +1346,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 GdkGC *gc = gdk_gc_new( new_mask );
                 col.pixel = 0;
                 gdk_gc_set_foreground( gc, &col );
+                gdk_gc_set_ts_origin( gc, -xsrcMask, -ysrcMask);
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, bm_ww, bm_hh );
                 col.pixel = 0;
                 gdk_gc_set_background( gc, &col );
@@ -1364,20 +1364,28 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             if (is_mono)
             {
                 if (new_mask)
+                {
                     gdk_gc_set_clip_mask( m_textGC, new_mask );
+                    gdk_gc_set_clip_origin( m_textGC, cx, cy );
+                }
                 else
+                {
                     gdk_gc_set_clip_mask( m_textGC, mask );
-                // was: gdk_gc_set_clip_origin( m_textGC, xx, yy );
-                gdk_gc_set_clip_origin( m_textGC, cx, cy );
+                    gdk_gc_set_clip_origin( m_textGC, cx-xsrcMask, cy-ysrcMask );
+                }                                
             }
             else
             {
                 if (new_mask)
+                {
                     gdk_gc_set_clip_mask( m_penGC, new_mask );
+                    gdk_gc_set_clip_origin( m_penGC, cx, cy );
+                }
                 else
+                {
                     gdk_gc_set_clip_mask( m_penGC, mask );
-                // was: gdk_gc_set_clip_origin( m_penGC, xx, yy );
-                gdk_gc_set_clip_origin( m_penGC, cx, cy );
+                    gdk_gc_set_clip_origin( m_penGC, cx-xsrcMask, cy-ysrcMask );
+                }                
             }
         }
 
