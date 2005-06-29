@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+    
+    <!-- ================================================================== -->
+    <!--                      Handling of binary compatiblity:              -->
+    <!-- ================================================================== -->
+
+    <!-- this needs to be reset to 0 on beginning of stable series and
+         increment by one 1 every time binary incompatible change is made
+         (i.e. preferably never) -->
+    <set var="WX_BINARY_VERSION">0</set>
+    
+
+
+    <!-- ================================================================== -->
+    <!--                        Library version number:                     -->
+    <!-- ================================================================== -->
+
+    <!-- extract wx version number from wx/version.h: -->
+    <set var="WXVER_MAJOR">$(wxwin.getVersionMajor())</set>
+    <set var="WXVER_MINOR">$(wxwin.getVersionMinor())</set>
+    <set var="WXVER_RELEASE">$(wxwin.getVersionRelease())</set>
+
+
+
+    <!-- ================================================================== -->
+    <!--                          Derived variables:                        -->
+    <!-- ================================================================== -->
+
+    <!-- set misc helper variables: -->
+
+    <set var="WX_RELEASE" make_var="1">
+        $(WXVER_MAJOR).$(WXVER_MINOR)
+    </set>
+    <set var="WX_RELEASE_NODOT" make_var="1">
+        $(WXVER_MAJOR)$(WXVER_MINOR)
+    </set>
+    <set var="WX_VERSION" make_var="1">
+        $(WX_RELEASE).$(WXVER_RELEASE)
+    </set>
+    <set var="WX_VERSION_NODOT" make_var="1">
+        $(WX_RELEASE_NODOT)$(WXVER_RELEASE)
+    </set>
+
+    <set var="WX_STABLE_BRANCH">$(int(int(WXVER_MINOR) % 2 == 0))</set>
+    
+    <set var="WXSOVERSION">
+        <if cond="WX_STABLE_BRANCH=='1'">$(WX_BINARY_VERSION).0.0</if>
+        <if cond="WX_STABLE_BRANCH=='0'">$(WXVER_RELEASE).0.0</if>
+    </set>
+    <set var="WXMACVERSION">$(WX_VERSION)</set>
+    <set var="WXWIN32DLLVERSION">
+        <if cond="WX_STABLE_BRANCH=='1'">$(WX_RELEASE_NODOT)</if>
+        <if cond="WX_STABLE_BRANCH=='0'">$(WX_VERSION_NODOT)</if>
+    </set>
+
+</makefile>
