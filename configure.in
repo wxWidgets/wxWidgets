@@ -6697,10 +6697,23 @@ dnl According to Vaclav, if NO_GCC_PRAGMA is used for any reason it needs to
 dnl be in wx-config output.  Not doing so could result in link problems.
 GCC_PRAGMA_FLAGS=""
 PCH_FLAGS=""
-dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
+
+dnl Find out if we have to define WX_PRECOMP:
 if test $GCC_PCH = 1 ; then
-    GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
     PCH_FLAGS="-DWX_PRECOMP"
+fi
+
+dnl Find out if we have to define NO_GCC_PRAGMA
+if test "$GCC" = yes; then
+    AC_MSG_CHECKING([if this GCC version is >= 4.0 and needs -DNO_GCC_PRAGMA])
+    AC_TRY_COMPILE([],
+        [#if (__GNUC__ < 4)
+         #error "Not GCC 4.0 or greater"
+         #endif
+        ],
+        [GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
+         AC_MSG_RESULT([yes])],
+        [AC_MSG_RESULT([no])])
 else
     case "${host}" in
         powerpc-*-darwin* )
@@ -6729,7 +6742,7 @@ else
                               [AC_MSG_RESULT([no])])
             fi
             ;;
-	*-pc-os2_emx | *-pc-os2-emx )
+        *-pc-os2_emx | *-pc-os2-emx )
             dnl GCC versions ported to OS/2 have similar problems with
             dnl static member of classes in combination with STL and
             dnl pragma interface/implementation
