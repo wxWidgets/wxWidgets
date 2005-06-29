@@ -119,6 +119,31 @@
     #define CFM_BACKCOLOR 0x04000000
 #endif
 
+#ifndef HANGUL_CHARSET
+    #define HANGUL_CHARSET 129
+#endif
+
+#ifndef CCM_SETUNICODEFORMAT
+    #define CCM_SETUNICODEFORMAT 8197
+#endif
+
+// ----------------------------------------------------------------------------
+// Tree control
+// ----------------------------------------------------------------------------
+
+#ifndef TV_FIRST
+    #define TV_FIRST                0x1100
+#endif
+
+#ifndef TVS_FULLROWSELECT
+    #define TVS_FULLROWSELECT       0x1000
+#endif
+
+#ifndef TVM_SETBKCOLOR
+    #define TVM_SETBKCOLOR          (TV_FIRST + 29)
+    #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
+#endif
+
  /*
   * The following are required for BC++ 5.5 (none at present.)
   */
@@ -128,10 +153,6 @@
   */
 
 #ifdef __DMC__
-
-#ifndef CCM_SETUNICODEFORMAT
-    #define CCM_SETUNICODEFORMAT 8197
-#endif
 
 #ifdef __DMC__
     #ifndef _TrackMouseEvent
@@ -181,21 +202,8 @@
     #define TVIS_FOCUSED            0x0001
 #endif
 
-#ifndef TV_FIRST
-    #define TV_FIRST                0x1100
-#endif
-
 #ifndef TVS_CHECKBOXES
     #define TVS_CHECKBOXES          0x0100
-#endif
-
-#ifndef TVS_FULLROWSELECT
-    #define TVS_FULLROWSELECT       0x1000
-#endif
-
-#ifndef TVM_SETBKCOLOR
-    #define TVM_SETBKCOLOR          (TV_FIRST + 29)
-    #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
 #endif
 
 #ifndef TVITEM
