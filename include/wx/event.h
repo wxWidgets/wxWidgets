@@ -219,7 +219,9 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_SCROLL_PAGEDOWN, 305)
     DECLARE_EVENT_TYPE(wxEVT_SCROLL_THUMBTRACK, 306)
     DECLARE_EVENT_TYPE(wxEVT_SCROLL_THUMBRELEASE, 307)
+#if wxABI_VERSION >= 20601
     DECLARE_EVENT_TYPE(wxEVT_SCROLL_CHANGED, 308)
+#endif
 
         // Scroll events from wxWindow
     DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_TOP, 320)
@@ -2778,7 +2780,12 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 #define EVT_SCROLL_PAGEDOWN(func) wx__DECLARE_EVT0(wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler(func))
 #define EVT_SCROLL_THUMBTRACK(func) wx__DECLARE_EVT0(wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler(func))
 #define EVT_SCROLL_THUMBRELEASE(func) wx__DECLARE_EVT0(wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(func))
+#if wxABI_VERSION >= 20601
 #define EVT_SCROLL_CHANGED(func) wx__DECLARE_EVT0(wxEVT_SCROLL_CHANGED, wxScrollEventHandler(func))
+#define wx__EVT_SCROLL_CHANGED(func) EVT_SCROLL_CHANGED(func)
+#else
+#define wx__EVT_SCROLL_CHANGED(func)
+#endif
 
 #define EVT_SCROLL(func) \
     EVT_SCROLL_TOP(func) \
@@ -2789,7 +2796,7 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
     EVT_SCROLL_PAGEDOWN(func) \
     EVT_SCROLL_THUMBTRACK(func) \
     EVT_SCROLL_THUMBRELEASE(func) \
-    EVT_SCROLL_CHANGED(func)
+    wx__EVT_SCROLL_CHANGED(func)
 
 // Scrolling from wxSlider and wxScrollBar, with an id
 #define EVT_COMMAND_SCROLL_TOP(winid, func) wx__DECLARE_EVT1(wxEVT_SCROLL_TOP, winid, wxScrollEventHandler(func))
@@ -2800,7 +2807,12 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 #define EVT_COMMAND_SCROLL_PAGEDOWN(winid, func) wx__DECLARE_EVT1(wxEVT_SCROLL_PAGEDOWN, winid, wxScrollEventHandler(func))
 #define EVT_COMMAND_SCROLL_THUMBTRACK(winid, func) wx__DECLARE_EVT1(wxEVT_SCROLL_THUMBTRACK, winid, wxScrollEventHandler(func))
 #define EVT_COMMAND_SCROLL_THUMBRELEASE(winid, func) wx__DECLARE_EVT1(wxEVT_SCROLL_THUMBRELEASE, winid, wxScrollEventHandler(func))
+#if wxABI_VERSION >= 20601
 #define EVT_COMMAND_SCROLL_CHANGED(winid, func) wx__DECLARE_EVT1(wxEVT_SCROLL_CHANGED, winid, wxScrollEventHandler(func))
+#define wx__EVT_COMMAND_SCROLL_CHANGED(winid, func) EVT_COMMAND_SCROLL_CHANGED(winid, func)
+#else
+#define wx__EVT_COMMAND_SCROLL_CHANGED(winid, func)
+#endif
 
 #define EVT_COMMAND_SCROLL(winid, func) \
     EVT_COMMAND_SCROLL_TOP(winid, func) \
@@ -2811,7 +2823,7 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
     EVT_COMMAND_SCROLL_PAGEDOWN(winid, func) \
     EVT_COMMAND_SCROLL_THUMBTRACK(winid, func) \
     EVT_COMMAND_SCROLL_THUMBRELEASE(winid, func) \
-    EVT_COMMAND_SCROLL_CHANGED(winid, func)
+    wx__EVT_COMMAND_SCROLL_CHANGED(winid, func)
 
 // compatibility macros for the old name, to be deprecated in 2.8
 //
@@ -2820,9 +2832,11 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 // backwards compatibility, but that we have to ensure that we also have
 // wxEVT_SCROLL_ENDSCROLL inside the library for binary backwards compatibility
 // and this is done in event.cpp
+#if wxABI_VERSION >= 20601
 #define wxEVT_SCROLL_ENDSCROLL wxEVT_SCROLL_CHANGED
 #define EVT_COMMAND_SCROLL_ENDSCROLL EVT_COMMAND_SCROLL_CHANGED
 #define EVT_SCROLL_ENDSCROLL EVT_SCROLL_CHANGED
+#endif
 
 // Convenience macros for commonly-used commands
 #define EVT_CHECKBOX(winid, func) wx__DECLARE_EVT1(wxEVT_COMMAND_CHECKBOX_CLICKED, winid, wxCommandEventHandler(func))
