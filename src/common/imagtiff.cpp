@@ -137,7 +137,9 @@ _tiffUnmapProc(thandle_t WXUNUSED(handle),
 }
 
 static void
-TIFFwxWarningHandler(const char* module, const char* fmt, va_list ap)
+TIFFwxWarningHandler(const char* module,
+                     const char* WXUNUSED_IN_UNICODE(fmt),
+                     va_list WXUNUSED_IN_UNICODE(ap))
 {
     if (module != NULL)
         wxLogWarning(_("tiff module: %s"), wxString::FromAscii(module).c_str());
@@ -151,7 +153,9 @@ TIFFwxWarningHandler(const char* module, const char* fmt, va_list ap)
 }
 
 static void
-TIFFwxErrorHandler(const char* module, const char* fmt, va_list ap)
+TIFFwxErrorHandler(const char* module,
+                   const char* WXUNUSED_IN_UNICODE(fmt),
+                   va_list WXUNUSED_IN_UNICODE(ap))
 {
     if (module != NULL)
         wxLogError(_("tiff module: %s"), wxString::FromAscii(module).c_str());

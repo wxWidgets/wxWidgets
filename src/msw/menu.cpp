@@ -89,7 +89,8 @@ static const int idMenuTitle = -3;
 // ----------------------------------------------------------------------------
 
 // make the given menu item default
-static void SetDefaultMenuItem(HMENU hmenu, UINT id)
+static void SetDefaultMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
+                               UINT WXUNUSED_IN_WINCE(id))
 {
 #ifndef __WXWINCE__
     MENUITEMINFO mii;
@@ -102,9 +103,6 @@ static void SetDefaultMenuItem(HMENU hmenu, UINT id)
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
     }
-#else
-    wxUnusedVar(hmenu);
-    wxUnusedVar(id);
 #endif
 }
 

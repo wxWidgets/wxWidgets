@@ -167,7 +167,7 @@ void wxPathList::Add (const wxString& path)
 }
 
 // Add paths e.g. from the PATH environment variable
-void wxPathList::AddEnvList (const wxString& envVariable)
+void wxPathList::AddEnvList (const wxString& WXUNUSED_IN_WINCE(envVariable))
 {
     // No environment variables on WinCE
 #ifndef __WXWINCE__
@@ -209,9 +209,7 @@ void wxPathList::AddEnvList (const wxString& envVariable)
 
         delete [] s;
     }
-#else // __WXWINCE__
-    wxUnusedVar(envVariable);
-#endif // !__WXWINCE__/__WXWINCE__
+#endif // !__WXWINCE__
 }
 
 // Given a full filename (with path), ensure that that file can
@@ -652,7 +650,9 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
    The call wxExpandPath can convert these back!
  */
 wxChar *
-wxContractPath (const wxString& filename, const wxString& envname, const wxString& user)
+wxContractPath (const wxString& filename,
+                const wxString& WXUNUSED_IN_WINCE(envname),
+                const wxString& user)
 {
   static wxChar dest[_MAXPATHLEN];
 
@@ -678,8 +678,6 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
         wxStrcat (tcp, wxT("}"));
         wxStrcat (tcp, wxFileFunctionsBuffer);
     }
-#else
-  wxUnusedVar(envname);
 #endif
 
   // Handle User's home (ignore root homes!)
@@ -1641,7 +1639,9 @@ time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 // Returns 0 if none or if there's a problem.
 // filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpeg"
 
-int WXDLLEXPORT wxParseCommonDialogsFilter(const wxString& filterStr, wxArrayString& descriptions, wxArrayString& filters)
+int WXDLLEXPORT wxParseCommonDialogsFilter(const wxString& filterStr,
+                                           wxArrayString& descriptions,
+                                           wxArrayString& filters)
 {
     descriptions.Clear();
     filters.Clear();

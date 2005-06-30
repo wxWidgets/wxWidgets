@@ -122,12 +122,11 @@ static const wxChar eUSERNAME[]  = wxT("UserName");
 // ----------------------------------------------------------------------------
 
 // Get hostname only (without domain name)
-bool wxGetHostName(wxChar *buf, int maxSize)
+bool wxGetHostName(wxChar *WXUNUSED_IN_WINCE(buf),
+                   int WXUNUSED_IN_WINCE(maxSize))
 {
 #if defined(__WXWINCE__)
     // TODO-CE
-    wxUnusedVar(buf);
-    wxUnusedVar(maxSize);
     return false;
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
@@ -237,12 +236,11 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 }
 
 // Get user ID e.g. jacs
-bool wxGetUserId(wxChar *buf, int maxSize)
+bool wxGetUserId(wxChar *WXUNUSED_IN_WINCE(buf),
+                 int WXUNUSED_IN_WINCE(maxSize))
 {
 #if defined(__WXWINCE__)
     // TODO-CE
-    wxUnusedVar(buf);
-    wxUnusedVar(maxSize);
     return false;
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     DWORD nSize = maxSize;
@@ -280,12 +278,11 @@ bool wxGetUserId(wxChar *buf, int maxSize)
 }
 
 // Get user name e.g. Julian Smart
-bool wxGetUserName(wxChar *buf, int maxSize)
+bool wxGetUserName(wxChar *WXUNUSED_IN_WINCE(buf),
+                   int WXUNUSED_IN_WINCE(maxSize))
 {
 #if defined(__WXWINCE__)
     // TODO-CE
-    wxUnusedVar(buf);
-    wxUnusedVar(maxSize);
     return false;
 #elif defined(USE_NET_API)
     CHAR szUserName[256];
@@ -467,13 +464,12 @@ wxChar *wxGetUserHome(const wxString& WXUNUSED(user))
     return (wxChar *)wxGetHomeDir(&s_home);
 }
 
-bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
+bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
+                    wxLongLong *WXUNUSED_IN_WINCE(pTotal),
+                    wxLongLong *WXUNUSED_IN_WINCE(pFree))
 {
 #ifdef __WXWINCE__
     // TODO-CE
-    wxUnusedVar(path);
-    wxUnusedVar(pTotal);
-    wxUnusedVar(pFree);
     return false;
 #else
     if ( path.empty() )
@@ -583,12 +579,11 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 // env vars
 // ----------------------------------------------------------------------------
 
-bool wxGetEnv(const wxString& var, wxString *value)
+bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
+              wxString *WXUNUSED_IN_WINCE(value))
 {
 #ifdef __WXWINCE__
     // no environment variables under CE
-    wxUnusedVar(var);
-    wxUnusedVar(value);
     return false;
 #else // Win32
     // first get the size of the buffer
@@ -609,11 +604,15 @@ bool wxGetEnv(const wxString& var, wxString *value)
 #endif // WinCE/32
 }
 
-bool wxSetEnv(const wxString& var, const wxChar *value)
+bool wxSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
+              const wxChar *WXUNUSED_IN_WINCE(value))
 {
     // some compilers have putenv() or _putenv() or _wputenv() but it's better
     // to always use Win32 function directly instead of dealing with them
-#if defined(__WIN32__) && !defined(__WXWINCE__)
+#ifdef __WXWINCE__
+    // no environment variables under CE
+    return false;
+#else
     if ( !::SetEnvironmentVariable(var, value) )
     {
         wxLogLastError(_T("SetEnvironmentVariable"));
@@ -622,11 +621,6 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
     }
 
     return true;
-#else // no way to set env vars
-    // no environment variables under CE
-    wxUnusedVar(var);
-    wxUnusedVar(value);
-    return false;
 #endif
 }
 
@@ -946,11 +940,10 @@ bool wxShell(const wxString& command)
 }
 
 // Shutdown or reboot the PC
-bool wxShutdown(wxShutdownFlags wFlags)
+bool wxShutdown(wxShutdownFlags WXUNUSED_IN_WINCE(wFlags))
 {
 #ifdef __WXWINCE__
     // TODO-CE
-    wxUnusedVar(wFlags);
     return false;
 #elif defined(__WIN32__)
     bool bOK = true;

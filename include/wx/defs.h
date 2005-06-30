@@ -515,6 +515,20 @@ typedef int wxWindowID;
     #define WXUNUSED_UNLESS_DEBUG(param)  WXUNUSED(param)
 #endif
 
+/*  some arguments are not used in unicode mode */
+#if wxUSE_UNICODE
+    #define WXUNUSED_IN_UNICODE(param)  WXUNUSED(param)
+#else
+    #define WXUNUSED_IN_UNICODE(param)  param
+#endif
+
+/*  some arguments are not used in WinCE build */
+#ifdef __WXWINCE__
+    #define WXUNUSED_IN_WINCE(param)  WXUNUSED(param)
+#else
+    #define WXUNUSED_IN_WINCE(param)  param
+#endif
+
 /*  some compilers give warning about a possibly unused variable if it is */
 /*  initialized in both branches of if/else and shut up if it is initialized */
 /*  when declared, but other compilers then give warnings about unused variable */
