@@ -28,6 +28,19 @@
 /*  nothing to update below this line when updating the version */
 /*  ---------------------------------------------------------------------------- */
 
+/* Users can pre-define wxABI_VERSION to a lower value in their
+ * makefile/project settings to compile code that will be binary compatible
+ * with earlier versions of the ABI within the same minor version (between
+ * minor versions binary compatibility breaks anyway). The default is the
+ * version of wxWidgets being used. A single number with two decimal digits
+ * for each component, e.g. 20601 for 2.6.1 */
+#ifndef wxABI_VERSION
+#define wxABI_VERSION ( \
+            wxMAJOR_VERSION * 10000 + \
+            wxMINOR_VERSION * 100 + \
+            wxRELEASE_NUMBER )
+#endif
+
 /*  helpers for wxVERSION_NUM_XXX */
 #define wxSTRINGIZE(x)  #x
 #define wxMAKE_VERSION_STRING(x, y, z) \

@@ -9,6 +9,13 @@
 // License:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
+// wxABI_VERSION can be defined when compiling applications but it should be
+// left undefined when compiling the library itself, it is then set to the 
+// library's current version in version.h
+#ifdef wxABI_VERSION
+#error "wxABI_VERSION should not be defined when compiling the library"
+#endif
+
 // ============================================================================
 // declarations
 // ============================================================================
