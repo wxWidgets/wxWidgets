@@ -5,7 +5,7 @@
 # Updated:
 # Copyright:
 #
-# Makefile : Builds wxMMedia library for 32-bit BC++
+# Makefile : Builds wxSTC library for 32-bit BC++
 
 # N.B. use:
 # make -f makefile.b32 stc.cfg
@@ -96,6 +96,8 @@ OBJECTS = \
 
 
 STCCPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) @$(STCCFG)
+
+all: default
 
 default: $(STCCFG) $(LIBTARGET)
 
