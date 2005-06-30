@@ -14,7 +14,7 @@
 import sys
 import math
 
-from _basic import Shape, ShapeRegion, ControlPoint, RectangleShape
+from _basic import Shape, ShapeRegion, ShapeTextLine, ControlPoint, RectangleShape
 from _oglmisc import *
 
 # Line alignment flags
