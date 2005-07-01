@@ -962,7 +962,7 @@ wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
                                      wxT("(numeric %i)\n")
                                      wxT("occured at line %i in ")
                                      wxT("mediactrl.cpp"),
-                                     szError, (int)hrdsv, szError, __LINE__);
+                                     szError, (int)hrdsv, __LINE__);
     }
     else
     {
