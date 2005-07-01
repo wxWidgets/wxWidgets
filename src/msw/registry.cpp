@@ -894,70 +894,71 @@ bool wxRegKey::QueryValue(const wxChar *szValue, wxMemoryBuffer& buffer) const
 
 bool wxRegKey::QueryValue(const wxChar *szValue,
                           wxString& strValue,
-                          bool raw) const
+                          bool WXUNUSED_IN_WINCE(raw)) const
 {
-  if ( CONST_CAST Open(Read) ) {
+    if ( CONST_CAST Open(Read) )
+    {
 
-      // first get the type and size of the data
-      DWORD dwType, dwSize;
-      m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
-                                      &dwType, NULL, &dwSize);
-      if ( m_dwLastError == ERROR_SUCCESS ) {
-        if ( !dwSize ) {
-            // must treat this case specially as GetWriteBuf() doesn't like
-            // being called with 0 size
-            strValue.Empty();
-        }
-        else {
-            m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
-                                            WXSTRINGCAST szValue,
-                                            RESERVED,
-                                            &dwType,
-                                            (RegString)(wxChar*)wxStringBuffer(strValue, dwSize),
-                                            &dwSize);
-
-            // expand the var expansions in the string unless disabled
-#ifndef __WXWINCE__
-            if ( (dwType == REG_EXPAND_SZ) && !raw )
+        // first get the type and size of the data
+        DWORD dwType, dwSize;
+        m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
+                                        &dwType, NULL, &dwSize);
+        if ( m_dwLastError == ERROR_SUCCESS )
+        {
+            if ( !dwSize )
             {
-                DWORD dwExpSize = ::ExpandEnvironmentStrings(strValue, NULL, 0);
-                bool ok = dwExpSize != 0;
-                if ( ok )
-                {
-                    wxString strExpValue;
-                    ok = ::ExpandEnvironmentStrings
-                           (
-                            strValue,
-                            wxStringBuffer(strExpValue, dwExpSize),
-                            dwExpSize
-                           ) != 0;
-                    strValue = strExpValue;
-                }
-
-                if ( !ok )
-                {
-                    wxLogLastError(_T("ExpandEnvironmentStrings"));
-                }
+                // must treat this case specially as GetWriteBuf() doesn't like
+                // being called with 0 size
+                strValue.Empty();
             }
-#else
-  wxUnusedVar(raw);
+            else
+            {
+                m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
+                                                WXSTRINGCAST szValue,
+                                                RESERVED,
+                                                &dwType,
+                                                (RegString)(wxChar*)wxStringBuffer(strValue, dwSize),
+                                                &dwSize);
+
+                // expand the var expansions in the string unless disabled
+#ifndef __WXWINCE__
+                if ( (dwType == REG_EXPAND_SZ) && !raw )
+                {
+                    DWORD dwExpSize = ::ExpandEnvironmentStrings(strValue, NULL, 0);
+                    bool ok = dwExpSize != 0;
+                    if ( ok )
+                    {
+                        wxString strExpValue;
+                        ok = ::ExpandEnvironmentStrings(strValue,
+                                                        wxStringBuffer(strExpValue, dwExpSize),
+                                                        dwExpSize
+                                                        ) != 0;
+                        strValue = strExpValue;
+                    }
+
+                    if ( !ok )
+                    {
+                        wxLogLastError(_T("ExpandEnvironmentStrings"));
+                    }
+                }
 #endif
-            // __WXWINCE__
+                // __WXWINCE__
+            }
+
+            if ( m_dwLastError == ERROR_SUCCESS )
+            {
+                // check that it was the right type
+                wxASSERT_MSG( !IsNumericValue(szValue),
+                              wxT("Type mismatch in wxRegKey::QueryValue().") );
+
+              return true;
+            }
         }
+    }
 
-        if ( m_dwLastError == ERROR_SUCCESS ) {
-          // check that it was the right type
-          wxASSERT_MSG( !IsNumericValue(szValue),
-                        wxT("Type mismatch in wxRegKey::QueryValue().") );
-
-          return true;
-        }
-      }
-  }
-
-  wxLogSysError(m_dwLastError, _("Can't read value of '%s'"),
-                GetFullName(this, szValue));
-  return false;
+    wxLogSysError(m_dwLastError, _("Can't read value of '%s'"),
+                  GetFullName(this, szValue));
+    return false;
 }
 
 bool wxRegKey::SetValue(const wxChar *szValue, const wxString& strValue)

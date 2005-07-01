@@ -979,7 +979,8 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 // wxFileDataObject
 // ----------------------------------------------------------------------------
 
-bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
+bool wxFileDataObject::SetData(size_t WXUNUSED(size),
+                               const void *WXUNUSED_IN_WINCE(pData))
 {
 #ifndef __WXWINCE__
     m_filenames.Empty();
@@ -1015,7 +1016,6 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
 
     return true;
 #else
-    wxUnusedVar(pData);
     return false;
 #endif
 }
@@ -1055,7 +1055,7 @@ size_t wxFileDataObject::GetDataSize() const
 #endif
 }
 
-bool wxFileDataObject::GetDataHere(void *pData) const
+bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
 {
 #ifndef __WXWINCE__
     // pData points to an externally allocated memory block
@@ -1095,7 +1095,6 @@ bool wxFileDataObject::GetDataHere(void *pData) const
 
     return true;
 #else
-    wxUnusedVar(pData);
     return false;
 #endif
 }

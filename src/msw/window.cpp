@@ -1060,7 +1060,8 @@ void wxWindowMSW::DissociateHandle()
 }
 
 
-bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
+bool wxCheckWindowWndProc(WXHWND hWnd,
+                          WXFARPROC WXUNUSED_IN_WINCE(wndProc))
 {
     // Unicows note: the code below works, but only because WNDCLASS contains
     // original window handler rather that the unicows fake one. This may not
@@ -1072,8 +1073,6 @@ bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
     // On WinCE (at least), the wndproc comparison doesn't work,
     // so have to use something like this.
 #ifdef __WXWINCE__
-    wxUnusedVar(wndProc);
-
     extern       wxChar *wxCanvasClassName;
     extern       wxChar *wxCanvasClassNameNR;
     extern const wxChar *wxMDIFrameClassName;
@@ -1418,14 +1417,12 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 
 // old style file-manager drag&drop support: we retain the old-style
 // DragAcceptFiles in parallel with SetDropTarget.
-void wxWindowMSW::DragAcceptFiles(bool accept)
+void wxWindowMSW::DragAcceptFiles(bool WXUNUSED_IN_WINCE(accept))
 {
-#if !defined(__WXWINCE__)
+#ifndef __WXWINCE__
     HWND hWnd = GetHwnd();
     if ( hWnd )
         ::DragAcceptFiles(hWnd, (BOOL)accept);
-#else
-    wxUnusedVar(accept);
 #endif
 }
 
@@ -3355,7 +3352,8 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 // window creation/destruction
 // ---------------------------------------------------------------------------
 
-bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
+bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT WXUNUSED_IN_WINCE(cs),
+                               bool *mayCreate)
 {
     // VZ: why is this commented out for WinCE? If it doesn't support
     //     WS_EX_CONTROLPARENT at all it should be somehow handled globally,
@@ -3363,8 +3361,6 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
 #ifndef __WXWINCE__
     if ( ((CREATESTRUCT *)cs)->dwExStyle & WS_EX_CONTROLPARENT )
         EnsureParentHasControlParentStyle(GetParent());
-#else
-    wxUnusedVar(cs);
 #endif // !__WXWINCE__
 
     // TODO: should generate this event from WM_NCCREATE
@@ -4311,10 +4307,9 @@ bool wxWindowMSW::HandleSizing(wxRect& rect)
     return rc;
 }
 
-bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)
+bool wxWindowMSW::HandleGetMinMaxInfo(void *WXUNUSED_IN_WINCE(mmInfo))
 {
 #ifdef __WXWINCE__
-    wxUnusedVar(mmInfo);
     return false;
 #else
     MINMAXINFO *info = (MINMAXINFO *)mmInfo;
@@ -4831,7 +4826,8 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
     return false;
 }
 
-int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
+int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
+                                WXLPARAM WXUNUSED_IN_WINCE(lParam))
 {
     // FIXME: implement GetMenuItemCount for WinCE, possibly
     // in terms of GetMenuItemInfo
@@ -4889,9 +4885,6 @@ int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
             wxLogLastError(_T("GetMenuItemInfo"));
         }
     }
-#else
-    wxUnusedVar(chAccel);
-    wxUnusedVar(lParam);
 #endif
     return wxNOT_FOUND;
 }

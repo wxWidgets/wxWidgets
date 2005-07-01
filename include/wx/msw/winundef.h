@@ -338,10 +338,9 @@
 
 #ifdef IsMaximized
     #undef IsMaximized
-    inline BOOL IsMaximized(HWND hwnd)
+    inline BOOL IsMaximized(HWND WXUNUSED_IN_WINCE(hwnd))
     {
 #ifdef __WXWINCE__
-        wxUnusedVar(hwnd);
         return FALSE;
 #else
         return IsZoomed(hwnd);
@@ -353,10 +352,9 @@
 
 #ifdef GetFirstChild
     #undef GetFirstChild
-    inline HWND GetFirstChild(HWND hwnd)
+    inline HWND GetFirstChild(HWND WXUNUSED_IN_WINCE(hwnd))
     {
 #ifdef __WXWINCE__
-        wxUnusedVar(hwnd);
         return 0;
 #else
         return GetTopWindow(hwnd);

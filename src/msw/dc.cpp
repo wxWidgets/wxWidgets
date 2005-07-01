@@ -170,15 +170,14 @@ private:
 class StretchBltModeChanger
 {
 public:
-    StretchBltModeChanger(HDC hdc, int mode)
+    StretchBltModeChanger(HDC hdc,
+                          int WXUNUSED_IN_WINCE(mode))
         : m_hdc(hdc)
     {
 #ifndef __WXWINCE__
         m_modeOld = ::SetStretchBltMode(m_hdc, mode);
         if ( !m_modeOld )
             wxLogLastError(_T("SetStretchBltMode"));
-#else
-        wxUnusedVar(mode);
 #endif
     }
 
@@ -560,16 +559,14 @@ void wxDC::Clear()
 #endif
 }
 
-bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
+bool wxDC::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
+                       wxCoord WXUNUSED_IN_WINCE(y),
+                       const wxColour& WXUNUSED_IN_WINCE(col),
+                       int WXUNUSED_IN_WINCE(style))
 {
 #ifdef __WXWINCE__
-    wxUnusedVar(x);
-    wxUnusedVar(y);
-    wxUnusedVar(col);
-    wxUnusedVar(style);
     return false;
 #else
-
     WXMICROWIN_CHECK_HDC_RET(false)
 
     bool success = (0 != ::ExtFloodFill(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
@@ -758,7 +755,11 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
     CalcBoundingBox(x, y);
 }
 
-void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
+void wxDC::DoDrawPolygon(int n,
+                         wxPoint points[],
+                         wxCoord xoffset,
+                         wxCoord yoffset,
+                         int WXUNUSED_IN_WINCE(fillStyle))
 {
     WXMICROWIN_CHECK_HDC
 
@@ -778,8 +779,6 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
         }
 #ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-#else
-        wxUnusedVar(fillStyle);
 #endif
         (void)Polygon(GetHdc(), cpoints, n);
 #ifndef __WXWINCE__
@@ -1780,7 +1779,8 @@ void wxDC::SetUserScale(double x, double y)
     this->SetMapMode(m_mappingMode);
 }
 
-void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
+void wxDC::SetAxisOrientation(bool WXUNUSED_IN_WINCE(xLeftRight),
+                              bool WXUNUSED_IN_WINCE(yBottomUp))
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1795,9 +1795,6 @@ void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
 
         SetMapMode(m_mappingMode);
     }
-#else
-    wxUnusedVar(xLeftRight);
-    wxUnusedVar(yBottomUp);
 #endif
 }
 
@@ -2494,7 +2491,7 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst, int w, int h, int srcX, int srcY, c
     {
         wxAlphaPixelData::Iterator pDstRowStart = pDst,
                                    pSrcRowStart = pSrc;
-                                   
+
         for ( int x = 0; x < w; x++ )
         {
             // note that source bitmap uses premultiplied alpha (as required by

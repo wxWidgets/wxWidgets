@@ -278,10 +278,9 @@ bool wxIsDriveAvailable(const wxString& dirName)
 
 #elif defined(__WINDOWS__) || defined(__OS2__)
 
-int setdrive(int drive)
+int setdrive(int WXUNUSED_IN_WINCE(drive))
 {
 #ifdef __WXWINCE__
-    wxUnusedVar(drive);
     return 0;
 #elif defined(__GNUWIN32__) && \
     (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
@@ -311,10 +310,9 @@ int setdrive(int drive)
 #endif // !GNUWIN32
 }
 
-bool wxIsDriveAvailable(const wxString& dirName)
+bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
 {
 #ifdef __WXWINCE__
-    wxUnusedVar(dirName);
     return false;
 #else
 #ifdef __WIN32__

@@ -40,13 +40,12 @@
 #include "wx/msw/missing.h"
 
 // Set Unicode format for a common control
-inline void wxSetCCUnicodeFormat(HWND hwnd)
+inline void wxSetCCUnicodeFormat(HWND WXUNUSED_IN_WINCE(hwnd))
 {
 #ifndef __WXWINCE__
     ::SendMessage(hwnd, CCM_SETUNICODEFORMAT, wxUSE_UNICODE, 0);
 #else // !__WXWINCE__
     // here it should be already in Unicode anyhow
-    wxUnusedVar(hwnd);
 #endif // __WXWINCE__/!__WXWINCE__
 }
 
