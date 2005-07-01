@@ -209,6 +209,10 @@ private:
   // the same as SetPath("/")
   void SetRootPath();
 
+  // real SetPath() implementation, returns true if path could be set or false
+  // if path doesn't exist and createMissingComponents == false
+  bool DoSetPath(const wxString& strPath, bool createMissingComponents);
+
   // set/test the dirty flag
   void SetDirty() { m_isDirty = true; }
   void ResetDirty() { m_isDirty = false; }

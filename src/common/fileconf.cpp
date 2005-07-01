@@ -746,13 +746,14 @@ void wxFileConfig::SetRootPath()
   m_pCurrentGroup = m_pRootGroup;
 }
 
-void wxFileConfig::SetPath(const wxString& strPath)
+bool
+wxFileConfig::DoSetPath(const wxString& strPath, bool createMissingComponents)
 {
   wxArrayString aParts;
 
   if ( strPath.empty() ) {
     SetRootPath();
-    return;
+    return true;
   }
 
   if ( strPath[0] == wxCONFIG_PATH_SEPARATOR ) {
@@ -772,7 +773,13 @@ void wxFileConfig::SetPath(const wxString& strPath)
   for ( n = 0; n < aParts.Count(); n++ ) {
     wxFileConfigGroup *pNextGroup = m_pCurrentGroup->FindSubgroup(aParts[n]);
     if ( pNextGroup == NULL )
+    {
+      if ( !createMissingComponents )
+        return false;
+
       pNextGroup = m_pCurrentGroup->AddSubgroup(aParts[n]);
+    }
+
     m_pCurrentGroup = pNextGroup;
   }
 
@@ -781,6 +788,13 @@ void wxFileConfig::SetPath(const wxString& strPath)
   for ( n = 0; n < aParts.Count(); n++ ) {
     m_strPath << wxCONFIG_PATH_SEPARATOR << aParts[n];
   }
+
+  return true;
+}
+
+void wxFileConfig::SetPath(const wxString& strPath)
+{
+  DoSetPath(strPath, true /* create missing path components */);
 }
 
 // ----------------------------------------------------------------------------
@@ -857,10 +871,20 @@ size_t wxFileConfig::GetNumberOfGroups(bool bRecursive) const
 
 bool wxFileConfig::HasGroup(const wxString& strName) const
 {
-  wxConfigPathChanger path(this, strName);
+  // special case: DoSetPath("") does work as it's equivalent to DoSetPath("/")
+  // but there is no group with empty name so treat this separately
+  if ( strName.empty() )
+    return false;
 
-  wxFileConfigGroup *pGroup = m_pCurrentGroup->FindSubgroup(path.Name());
-  return pGroup != NULL;
+  const wxString pathOld = GetPath();
+
+  wxFileConfig *self = wx_const_cast(wxFileConfig *, this);
+  const bool
+    rc = self->DoSetPath(strName, false /* don't create missing components */);
+
+  self->SetPath(pathOld);
+
+  return rc;
 }
 
 bool wxFileConfig::HasEntry(const wxString& strName) const
