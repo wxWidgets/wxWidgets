@@ -588,6 +588,10 @@ HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
 
 wxPalette *wxDIB::CreatePalette() const
 {
+    // GetDIBColorTable not available in eVC3
+#if defined(_WIN32_WCE) && _WIN32_WCE < 400
+    return NULL;
+#else
     wxCHECK_MSG( m_handle, NULL, _T("wxDIB::CreatePalette(): invalid object") );
 
     DIBSECTION ds;
@@ -655,6 +659,7 @@ wxPalette *wxDIB::CreatePalette() const
     palette->SetHPALETTE((WXHPALETTE)hPalette);
 
     return palette;
+#endif
 }
 
 #endif // wxUSE_PALETTE
