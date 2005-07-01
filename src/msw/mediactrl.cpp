@@ -39,6 +39,7 @@
 #if wxUSE_MEDIACTRL
 
 #include "wx/dcclient.h"
+#include "wx/thread.h"
 
 //---------------------------------------------------------------------------
 // Externals (somewhere in src/msw/app.cpp)
@@ -961,7 +962,7 @@ wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
                                      wxT("(numeric %i)\n")
                                      wxT("occured at line %i in ")
                                      wxT("mediactrl.cpp"),
-                                     (int)hrdsv, szError, __LINE__);
+                                     szError, (int)hrdsv, szError, __LINE__);
     }
     else
     {
