@@ -230,7 +230,7 @@ private:
 };
 
 // Convert variants
-class WXDLLEXPORT wxVariant;
+class WXDLLIMPEXP_BASE wxVariant;
 
 bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant) ;
 bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant) ;
