@@ -472,12 +472,6 @@
 #   include "wx/msw/wince/libraries.h"
 #endif
 
-/* Force inclusion of main PalmOS header: */
-#ifdef __WXPALMOS__
-#   include <PalmOS.h>
-#   undef Abs
-#endif
-
 /*
    This macro can be used to test the gcc version and can be used like this:
 

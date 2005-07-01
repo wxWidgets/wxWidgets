@@ -50,6 +50,9 @@
 #include "wx/slider.h"
 #include "wx/datectrl.h"
 
+#include <Window.h>
+#include <Form.h>
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -59,6 +62,8 @@ extern const wxChar *wxCanvasClassName;
 
 // Pointer to the currently active frame for the form event handler.
 wxTopLevelWindowPalm* ActiveParentFrame;
+
+static Boolean FrameFormHandleEvent(EventType *event);
 
 // ============================================================================
 // wxTopLevelWindowPalm implementation
@@ -130,9 +135,9 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
     if(FrameForm==NULL)
         return false;
 
-    FrmSetEventHandler(FrameForm,FrameFormHandleEvent);
+    FrmSetEventHandler((FormType *)FrameForm,FrameFormHandleEvent);
 
-    FrmSetActiveForm(FrameForm);
+    FrmSetActiveForm((FormType *)FrameForm);
 
     ActiveParentFrame=this;
 
@@ -149,10 +154,10 @@ wxTopLevelWindowPalm::~wxTopLevelWindowPalm()
 
 WXWINHANDLE wxTopLevelWindowPalm::GetWinHandle() const
 {
-    FormType *form = GetForm();
+    FormType *form = (FormType *)GetForm();
     if(form)
         return FrmGetWindowHandle(form);
-    return 0;
+    return NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -165,7 +170,7 @@ void wxTopLevelWindowPalm::DoShowWindow(int nShowCmd)
 
 bool wxTopLevelWindowPalm::Show(bool show)
 {
-    FrmDrawForm(FrameForm);
+    FrmDrawForm((FormType *)FrameForm);
 
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
@@ -203,7 +208,7 @@ void wxTopLevelWindowPalm::Restore()
 void wxTopLevelWindowPalm::DoGetSize( int *width, int *height ) const
 {
     RectangleType rect;
-    FrmGetFormBounds( GetForm() , &rect );
+    FrmGetFormBounds( (FormType *)GetForm() , &rect );
     if(width)
         *width = rect.extent.x;
     if(height)
@@ -236,7 +241,7 @@ bool wxTopLevelWindowPalm::EnableCloseButton(bool enable)
     return false;
 }
 
-FormType *wxTopLevelWindowPalm::GetForm() const
+WXFORMPTR wxTopLevelWindowPalm::GetForm() const
 {
     return FrmGetActiveForm();
 }
@@ -250,9 +255,10 @@ bool wxTopLevelWindowPalm::SetShape(const wxRegion& region)
 // wxTopLevelWindow native event handling
 // ----------------------------------------------------------------------------
 
-bool wxTopLevelWindowPalm::HandleControlSelect(EventType* event)
+bool wxTopLevelWindowPalm::HandleControlSelect(WXEVENTPTR event)
 {
-    int id = event->data.ctlSelect.controlID;
+    const EventType *palmEvent = (EventType *)event;
+    const int id = palmEvent->data.ctlSelect.controlID;
 
     wxWindow* win = FindWindowById(id,this);
     if(win==NULL)
@@ -297,11 +303,12 @@ bool wxTopLevelWindowPalm::HandleControlSelect(EventType* event)
     return false;
 }
 
-bool wxTopLevelWindowPalm::HandleControlRepeat(EventType* event)
+bool wxTopLevelWindowPalm::HandleControlRepeat(WXEVENTPTR event)
 {
-    int id = event->data.ctlRepeat.controlID;
+    const EventType *palmEvent = (EventType *)event;
+    const int id = palmEvent->data.ctlRepeat.controlID;
 
-    wxWindow* win = FindWindowById(id,this);
+    wxWindow* win = FindWindowById(id, this);
     if(win==NULL)
         return false;
 
@@ -314,10 +321,11 @@ bool wxTopLevelWindowPalm::HandleControlRepeat(EventType* event)
     return false;
 }
 
-bool wxTopLevelWindowPalm::HandleSize(EventType* event)
+bool wxTopLevelWindowPalm::HandleSize(WXEVENTPTR event)
 {
-    wxSize newSize(event->data.winResized.newBounds.extent.x,
-                   event->data.winResized.newBounds.extent.y);
+    const EventType *palmEvent = (EventType *)event;
+    wxSize newSize(palmEvent->data.winResized.newBounds.extent.x,
+                   palmEvent->data.winResized.newBounds.extent.y);
     wxSizeEvent eventWx(newSize,GetId());
     eventWx.SetEventObject(this);
     return GetEventHandler()->ProcessEvent(eventWx);
@@ -341,7 +349,7 @@ void wxTopLevelWindowPalm::OnActivate(wxActivateEvent& event)
  * finds a better solution, please let me know.  My email address is
  * wbo@freeshell.org
  */
-static Boolean FrameFormHandleEvent(EventType* event)
+static Boolean FrameFormHandleEvent(EventType *event)
 {
     // frame and tlw point to the same object but they are for convenience
     // of calling proper structure withiout later dynamic typcasting

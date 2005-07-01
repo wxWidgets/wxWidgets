@@ -37,11 +37,11 @@ public:
     void Resume();
     virtual bool Show( bool show = true );
 
-    Boolean Callback(PrgCallbackData *data);
+    Boolean Callback(/*PrgCallbackData */ void *data);
 
 private:
 
-    ProgressType *m_prgFrame;
+    /*ProgressType*/ void *m_prgFrame;
     wxString m_msg;
     int m_max,m_cur;
     bool m_canSkip;

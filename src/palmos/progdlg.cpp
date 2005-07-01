@@ -29,6 +29,9 @@
 #include "wx/progdlg.h"
 #include "wx/msgdlg.h"
 
+#include <Progress.h>
+#include <SysEvtMgr.h>
+
 IMPLEMENT_CLASS(wxProgressDialog, wxDialog)
 
 static Boolean wxProgressCallback(PrgCallbackData *data)
@@ -65,7 +68,7 @@ wxProgressDialog::~wxProgressDialog()
 {
     if(m_prgFrame)
     {
-        PrgStopDialog(m_prgFrame, false);
+        PrgStopDialog((ProgressType *)m_prgFrame, false);
         m_prgFrame = NULL;
     }
 }
@@ -80,17 +83,18 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 
     EventType event;
 
+    ProgressType *prg = (ProgressType *)m_prgFrame;
     do
     {
         EvtGetEvent(&event, 0);
-        Boolean handled = PrgHandleEvent(m_prgFrame, &event);
-        if (!PrgHandleEvent(m_prgFrame, &event))
-            if( PrgUserCancel(m_prgFrame) )
+        Boolean handled = PrgHandleEvent(prg, &event);
+        if (!PrgHandleEvent(prg, &event))
+            if( PrgUserCancel(prg) )
                 return false;
     }
     while(event.eType != sysEventNilEvent);
 
-    PrgUpdateDialog(m_prgFrame, 0, 0, "", true);
+    PrgUpdateDialog(prg, 0, 0, "", true);
 
     m_activeSkip = m_canSkip && true;
 
@@ -106,14 +110,15 @@ bool wxProgressDialog::Show(bool show)
     return false;
 }
 
-Boolean wxProgressDialog::Callback(PrgCallbackData *data)
+Boolean wxProgressDialog::Callback(void *data)
 {
-    strncpy( data->textP, m_msg.ToAscii() , data->textLen - 1 );
-    data->textChanged = true;
-    data->displaySkipBtn = m_canSkip;
-    data->barMaxValue = (uint32_t)m_max;
-    data->barCurValue = (uint32_t)m_cur;
-    data->delay = (m_max == m_cur);
+    PrgCallbackData *palmData = (PrgCallbackData *)data;
+    strncpy( palmData->textP, m_msg.ToAscii() , palmData->textLen - 1 );
+    palmData->textChanged = true;
+    palmData->displaySkipBtn = m_canSkip;
+    palmData->barMaxValue = (uint32_t)m_max;
+    palmData->barCurValue = (uint32_t)m_cur;
+    palmData->delay = (m_max == m_cur);
 
     return true;
 }

@@ -211,11 +211,11 @@ public:
 
 protected:
     // the window handle
-    WinHandle m_handle;
-    FormType *FrameForm;
+    WXWINHANDLE m_handle;
+    WXFORMPTR FrameForm;
 
-    FormType *GetFormPtr();
-    void SetFormPtr(FormType *FormPtr);
+    WXFORMPTR GetFormPtr();
+    void SetFormPtr(WXFORMPTR FormPtr);
 
     // additional (Palm specific) flags
     bool                  m_mouseInWindow:1;

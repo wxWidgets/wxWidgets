@@ -28,6 +28,9 @@
     #include "wx/msgdlg.h"
 #endif
 
+#include <Loader.h>
+#include <Form.h>
+
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
 wxMessageDialog::wxMessageDialog(wxWindow *parent,

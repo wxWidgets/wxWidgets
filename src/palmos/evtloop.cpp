@@ -50,6 +50,11 @@
     WX_DEFINE_OBJARRAY(wxMsgArray);
 #endif // wxUSE_THREADS
 
+#include <Event.h>
+#include <SystemMgr.h>
+#include <Menu.h>
+#include <Form.h>
+
 // ----------------------------------------------------------------------------
 // helper class
 // ----------------------------------------------------------------------------

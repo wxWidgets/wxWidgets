@@ -57,6 +57,9 @@
     #include "wx/univ/colschem.h"
 #endif // __WXUNIVERSAL__
 
+#include <Event.h>
+#include <Form.h>
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -211,15 +214,16 @@ bool wxFrame::HandleMenuOpen()
     return true;
 }
 
-bool wxFrame::HandleMenuSelect(EventType* event)
+bool wxFrame::HandleMenuSelect(WXEVENTPTR event)
 {
-    int ItemID = event->data.menu.itemID;
+    const EventType *palmEvent = (EventType *)event;
+    const int ItemID = palmEvent->data.menu.itemID;
 
     if (!m_frameMenuBar)
         return false;
 
-    int item=m_frameMenuBar->ProcessCommand(ItemID);
-    if(item==-1)
+    const int item = m_frameMenuBar->ProcessCommand(ItemID);
+    if (item==-1)
         return false;
 
     wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, item);
@@ -289,7 +293,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
           Y = 0;
     while ( Y < maxY )
     {
-        if(!FrmPointInTitle(GetForm(),X,Y))
+        if(!FrmPointInTitle((FormType*)GetForm(),X,Y))
             return wxPoint(X,Y+1);
         Y++;
     }

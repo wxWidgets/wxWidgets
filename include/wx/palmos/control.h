@@ -74,8 +74,8 @@ public:
 
 protected:
     // regardless how deeply we are in wxWidgets hierarchy always get correct form
-    FormType* GetParentForm() const;
-    FormType* GetObjectFormIndex(uint16_t& index) const;
+    WXFORMPTR GetParentForm() const;
+    WXFORMPTR GetObjectFormIndex(uint16_t& index) const;
     void* GetObjectPtr() const;
 
     // choose the default border for this window
@@ -105,7 +105,7 @@ protected:
     // size parameter (style parameter is not needed because m_windowStyle is
     // supposed to had been already set and so is used instead when this
     // function is called)
-    bool PalmCreateControl(ControlStyleType style,
+    bool PalmCreateControl(int palmStyle,
                            const wxString& label,
                            const wxPoint& pos,
                            const wxSize& size,
@@ -117,7 +117,7 @@ protected:
                          const wxSize& size,
                          bool editable,
                          bool underlined,
-                         JustificationType justification);
+                         int justification);
     inline bool IsPalmField() const { return m_palmField; }
 
     // this is a helper for the derived class GetClassDefaultAttributes()
@@ -148,8 +148,8 @@ private:
     // common part of all ctors
     void Init();
 
-    virtual void DoGetBounds( RectangleType &rect ) const;
-    virtual void DoSetBounds( RectangleType &rect );
+    virtual void DoGetBounds( WXRECTANGLEPTR rect ) const;
+    virtual void DoSetBounds( WXRECTANGLEPTR rect );
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxControl)
     DECLARE_EVENT_TABLE()

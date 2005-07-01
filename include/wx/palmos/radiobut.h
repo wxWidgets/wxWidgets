@@ -66,7 +66,7 @@ private:
     uint8_t m_groupID;
 
     // pushButtonCtl or checkboxCtl
-    ControlStyleType m_radioStyle;
+    int m_radioStyle;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioButton)
 };
 

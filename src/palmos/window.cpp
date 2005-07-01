@@ -85,6 +85,8 @@
 #include "wx/listctrl.h"
 #include "wx/window.h"
 
+#include <Window.h>
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -272,13 +274,13 @@ bool wxWindowPalm::Create(wxWindow *parent,
     return true;
 }
 
-FormType *wxWindowPalm::GetFormPtr()
+WXFORMPTR wxWindowPalm::GetFormPtr()
 {
     return FrameForm;
 }
-void wxWindowPalm::SetFormPtr(FormType *FormPtr)
+void wxWindowPalm::SetFormPtr(WXFORMPTR FormPtr)
 {
-    FrameForm=FormPtr;
+    FrameForm = FormPtr;
 }
 
 // ---------------------------------------------------------------------------
@@ -442,7 +444,7 @@ void wxWindowPalm::Thaw()
 
 void wxWindowPalm::Refresh(bool eraseBack, const wxRect *rect)
 {
-    WinHandle handle = GetWinHandle();
+    WinHandle handle = (WinHandle)GetWinHandle();
     if(handle)
     {
         if(rect)

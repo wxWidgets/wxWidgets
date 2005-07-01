@@ -76,7 +76,7 @@ public:
 
     // send a notification event, return true if processed
     bool SendUpdatedEvent();
-    bool SendScrollEvent(EventType* event);
+    bool SendScrollEvent(WXEVENTPTR event);
 
 protected:
 

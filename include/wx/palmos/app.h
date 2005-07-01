@@ -93,16 +93,21 @@ extern int WXDLLEXPORT
 wxEntry();
 
 #define IMPLEMENT_WXWIN_MAIN                                              \
+                                                                          \
+    extern "C" {                                                          \
+                                                                          \
     uint32_t PilotMain(uint16_t cmd, MemPtr cmdPBP, uint16_t launchFlags) \
     {                                                                     \
         switch (cmd) {                                                    \
-            case sysAppLaunchCmdNormalLaunch:                             \
+            case 0 /* sysAppLaunchCmdNormalLaunch */ :                    \
                 wxEntry();                                                \
                 break;                                                    \
             default:                                                      \
                 break;                                                    \
         }                                                                 \
-        return errNone;                                                   \
+        return 0 /* errNone */ ;                                          \
+    }                                                                     \
+                                                                          \
     }
 
 #endif // _WX_APP_H_

@@ -46,6 +46,10 @@
 #include "wx/radiobut.h"
 #include "wx/slider.h"
 
+#include <Control.h>
+#include <Form.h>
+#include <StatusBar.h>
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -78,7 +82,7 @@ wxControl::~wxControl()
     DestroyChildren();
 
     uint16_t index;
-    FormType* form = GetObjectFormIndex(index);
+    FormType* form = (FormType*)GetObjectFormIndex(index);
     if(form!=NULL && index!=frmInvalidObjectId)
     {
         FrmRemoveObject((FormType **)&form,index);
@@ -107,13 +111,13 @@ bool wxControl::Create(wxWindow *parent,
     return true;
 }
 
-bool wxControl::PalmCreateControl(ControlStyleType style,
+bool wxControl::PalmCreateControl(int style,
                                   const wxString& label,
                                   const wxPoint& pos,
                                   const wxSize& size,
                                   uint8_t groupID)
 {
-    FormType* form = GetParentForm();
+    FormType* form = (FormType*)GetParentForm();
     if(form==NULL)
         return false;
 
@@ -135,7 +139,7 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
     ControlType *control = CtlNewControl(
                                (void **)&form,
                                GetId(),
-                               style,
+                               (ControlStyleType)style,
                                wxEmptyString,
                                x,
                                y,
@@ -162,9 +166,9 @@ bool wxControl::PalmCreateField(const wxString& label,
                                 const wxSize& size,
                                 bool editable,
                                 bool underlined,
-                                JustificationType justification)
+                                int justification)
 {
-    FormType* form = GetParentForm();
+    FormType* form = (FormType*)GetParentForm();
     if(form==NULL)
         return false;
 
@@ -190,7 +194,7 @@ bool wxControl::PalmCreateField(const wxString& label,
                            underlined,
                            false,
                            false,
-                           justification,
+                           (JustificationType)justification,
                            false,
                            false,
                            false
@@ -211,7 +215,7 @@ bool wxControl::PalmCreateField(const wxString& label,
 // various accessors
 // ----------------------------------------------------------------------------
 
-FormType* wxControl::GetParentForm() const
+WXFORMPTR wxControl::GetParentForm() const
 {
     wxWindow* parentTLW = GetParent();
     while ( parentTLW && !parentTLW->IsTopLevel() )
@@ -224,9 +228,9 @@ FormType* wxControl::GetParentForm() const
     return tlw->GetForm();
 }
 
-FormType* wxControl::GetObjectFormIndex(uint16_t& index) const
+WXFORMPTR wxControl::GetObjectFormIndex(uint16_t& index) const
 {
-    FormType* form = GetParentForm();
+    FormType* form = (FormType* )GetParentForm();
     if(form!=NULL)
         index = FrmGetObjectIndex(form, GetId());
     else
@@ -237,7 +241,7 @@ FormType* wxControl::GetObjectFormIndex(uint16_t& index) const
 void* wxControl::GetObjectPtr() const
 {
     uint16_t index;
-    FormType* form = GetObjectFormIndex(index);
+    FormType* form = (FormType*)GetObjectFormIndex(index);
     if(form==NULL || index==frmInvalidObjectId)return NULL;
     return FrmGetObjectPtr(form,index);
 }
@@ -252,7 +256,7 @@ wxBorder wxControl::GetDefaultBorder() const
 
 void wxControl::SetIntValue(int val)
 {
-    FormType* form = GetParentForm();
+    FormType* form = (FormType*)GetParentForm();
     if(form==NULL)
         return;
     uint16_t index = FrmGetObjectIndex(form, GetId());
@@ -268,7 +272,7 @@ void wxControl::SetBoolValue(bool val)
 
 bool wxControl::GetBoolValue() const
 {
-    FormType* form = GetParentForm();
+    FormType* form = (FormType*)GetParentForm();
     if(form==NULL)
         return false;
     uint16_t index = FrmGetObjectIndex(form, GetId());
@@ -282,26 +286,30 @@ wxSize wxControl::DoGetBestSize() const
     return wxSize(16, 16);
 }
 
-void wxControl::DoGetBounds( RectangleType &rect ) const
+void wxControl::DoGetBounds( WXRECTANGLEPTR rect ) const
 {
-    FormType* form = GetParentForm();
+    if(rect==NULL)
+        return;
+    FormType* form = (FormType*)GetParentForm();
     if(form==NULL)
         return;
     uint16_t index = FrmGetObjectIndex(form,GetId());
     if(index==frmInvalidObjectId)
         return;
-    FrmGetObjectBounds(form,index,&rect);
+    FrmGetObjectBounds(form,index,(RectangleType*)rect);
 }
 
-void wxControl::DoSetBounds( RectangleType &rect )
+void wxControl::DoSetBounds( WXRECTANGLEPTR rect )
 {
-    FormType* form = GetParentForm();
+    if(rect==NULL)
+        return;
+    FormType* form = (FormType*)GetParentForm();
     if(form==NULL)
         return;
     uint16_t index = FrmGetObjectIndex(form,GetId());
     if(index==frmInvalidObjectId)
         return;
-    FrmSetObjectBounds(form,index,&rect);
+    FrmSetObjectBounds(form,index,(RectangleType*)rect);
 }
 
 void wxControl::DoGetPosition( int *x, int *y ) const
@@ -310,7 +318,7 @@ void wxControl::DoGetPosition( int *x, int *y ) const
     AdjustForParentClientOrigin(ox, oy);
 
     RectangleType rect;
-    DoGetBounds(rect);
+    DoGetBounds(&rect);
 
     if(x)
         *x = rect.topLeft.x - ox;
@@ -321,7 +329,7 @@ void wxControl::DoGetPosition( int *x, int *y ) const
 void wxControl::DoGetSize( int *width, int *height ) const
 {
     RectangleType rect;
-    DoGetBounds(rect);
+    DoGetBounds(&rect);
 
     if(width)
         *width = rect.extent.x;
@@ -337,7 +345,7 @@ void wxControl::DoMoveWindow(int x, int y, int width, int height)
     rect.topLeft.y = y;
     rect.extent.x = width;
     rect.extent.y = height;
-    DoSetBounds(rect);
+    DoSetBounds(&rect);
     GetParent()->Refresh(true, &area);
 }
 
@@ -367,7 +375,7 @@ bool wxControl::IsShown() const
 
 bool wxControl::Show( bool show )
 {
-    FormType* form = GetParentForm();
+    FormType* form = (FormType*)GetParentForm();
     if(form==NULL)
         return false;
     uint16_t index = FrmGetObjectIndex(form,GetId());

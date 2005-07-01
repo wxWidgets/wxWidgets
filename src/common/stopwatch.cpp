@@ -83,6 +83,12 @@
     #include <DriverServices.h>
 #endif
 
+#ifdef __WXPALMOS__
+    #include <DateTime.h>
+    #include <TimeMgr.h>
+    #include <SystemMgr.h>
+#endif
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------

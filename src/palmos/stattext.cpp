@@ -30,6 +30,8 @@
 
 #include "wx/stattext.h"
 
+#include <Field.h>
+
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxStaticTextStyle )
 

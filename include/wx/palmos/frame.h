@@ -70,7 +70,7 @@ public:
 
 #if wxUSE_MENUS_NATIVE
     bool HandleMenuOpen();
-    bool HandleMenuSelect(EventType* event);
+    bool HandleMenuSelect(WXEVENTPTR event);
 #endif // wxUSE_MENUS_NATIVE
 
 protected:

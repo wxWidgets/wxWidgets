@@ -45,6 +45,11 @@
     #include "wx/msw/wrapwin.h"
 #endif
 
+// include all PalmOS headers at once
+#ifdef __WXPALMOS__
+#   include <PalmOS.h>
+#endif
+
 // include the most common wx headers
 #include "wx/wx.h"
 

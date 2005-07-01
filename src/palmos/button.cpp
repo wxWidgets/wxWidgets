@@ -44,6 +44,9 @@
 
 #include "wx/stockitem.h"
 
+#include <Control.h>
+#include <Form.h>
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -198,7 +201,7 @@ wxSize wxButtonBase::GetDefaultSize()
 
 void wxButton::SetDefault()
 {
-    FormType* form = GetParentForm();
+    FormType* form = (FormType* )GetParentForm();
     if(form==NULL)
         return;
     FrmSetDefaultButtonID(form,GetId());

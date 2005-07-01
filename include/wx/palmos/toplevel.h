@@ -82,12 +82,12 @@ public:
     wxWindow *GetLastFocus() const { return m_winLastFocused; }
 
     // interface to native frame structure
-    FormType *GetForm() const;
+    WXFORMPTR GetForm() const;
 
     // handle native events
-    bool HandleControlSelect(EventType* event);
-    bool HandleControlRepeat(EventType* event);
-    bool HandleSize(EventType* event);
+    bool HandleControlSelect(WXEVENTPTR event);
+    bool HandleControlRepeat(WXEVENTPTR event);
+    bool HandleSize(WXEVENTPTR event);
 
     virtual WXWINHANDLE GetWinHandle() const;
 
@@ -124,8 +124,6 @@ protected:
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowPalm)
 };
-
-static Boolean FrameFormHandleEvent(EventType* pEvent);
 
 #endif // _WX_PALMOS_TOPLEVEL_H_
 

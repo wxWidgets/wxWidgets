@@ -39,7 +39,8 @@
 #include "wx/arrstr.h"
 #include "wx/volume.h"
 
-#include "VFSMgr.h"
+#include <VFSMgr.h>
+#include <PalmTypesCompatibility.h>
 
 #if wxUSE_BASE
 

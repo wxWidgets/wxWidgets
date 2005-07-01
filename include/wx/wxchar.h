@@ -21,7 +21,7 @@
 #include "wx/defs.h"        /* for wxUSE_UNICODE */
 
 #if defined(HAVE_STRTOK_R) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
-    char	*strtok_r(char *, const char *, char **);
+    char *strtok_r(char *, const char *, char **);
 #endif
 
 /* check whether we have wchar_t and which size it is if we do */
@@ -127,7 +127,9 @@
     #define wxHAVE_TCHAR_SUPPORT
 #elif defined(__DMC__)
     #define wxHAVE_TCHAR_SUPPORT
-#elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 ) && !defined(__WXPALMOS__)
+#elif defined(__WXPALMOS__)
+    #include <stddef.h>
+#elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 )
     #define wxHAVE_TCHAR_SUPPORT
     #include <stddef.h>
     #include <string.h>
@@ -387,7 +389,7 @@
     /* time.h functions */
     #define  wxAsctime   _tasctime
     #define  wxCtime     _tctime
-    
+
     #define wxMbstowcs mbstowcs
     #define wxWcstombs wcstombs
 #else /* !TCHAR-aware compilers */

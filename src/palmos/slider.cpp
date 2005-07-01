@@ -30,6 +30,9 @@
 
 #include "wx/toplevel.h"
 
+#include <Form.h>
+#include <Control.h>
+
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxSliderStyle )
 
@@ -123,7 +126,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if(!wxControl::Create(parent, id, pos, size, style, validator, name))
         return false;
 
-    FormType* form = GetParentForm();
+    FormType* form = (FormType*)GetParentForm();
     if(form==NULL)
         return false;
 
@@ -324,10 +327,10 @@ bool wxSlider::SendUpdatedEvent()
     return handled;
 }
 
-bool wxSlider::SendScrollEvent(EventType* event)
+bool wxSlider::SendScrollEvent(WXEVENTPTR event)
 {
-    wxEventType scrollEvent;
-    int newPos = ValueInvertOrNot(event->data.ctlRepeat.value);
+    const EventType* palmEvent = (EventType*)event;
+    int newPos = ValueInvertOrNot(palmEvent->data.ctlRepeat.value);
     if ( newPos == m_oldPos )
     {
         // nothing changed since last event

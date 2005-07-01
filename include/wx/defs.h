@@ -653,6 +653,10 @@ enum {  wxDefaultCoord = -1 };
 /*  define fixed length types */
 /*  ---------------------------------------------------------------------------- */
 
+#if defined(__WXPALMOS__) || defined(__MINGW32__)
+    #include <sys/types.h>
+#endif
+
 /*  chars are always one byte (by definition), shorts are always two (in */
 /*  practice) */
 
@@ -952,7 +956,6 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 /* Make sure ssize_t is defined (a signed type the same size as size_t) */
 /* HAVE_SSIZE_T should be defined for compiliers that already have it */
 #ifdef __MINGW32__
-    #include <sys/types.h>
     #if defined(_SSIZE_T_) && !defined(HAVE_SSIZE_T)
         #define HAVE_SSIZE_T
     #endif
@@ -2452,6 +2455,7 @@ typedef WX_NSView WXWidget; /*  wxWidgets BASE definition */
 
 #if defined(__WXPALMOS__)
 
+typedef void *          WXHWND;
 typedef void *          WXHANDLE;
 typedef void *          WXHICON;
 typedef void *          WXHFONT;
@@ -2474,8 +2478,12 @@ typedef unsigned short  WXWORD;
 typedef unsigned long   WXCOLORREF;
 typedef struct tagMSG   WXMSG;
 
-typedef WinHandle       WXWINHANDLE;
+typedef WXHWND          WXWINHANDLE; /* WinHandle of PalmOS */
 typedef WXWINHANDLE     WXWidget;
+
+typedef void *          WXFORMPTR;
+typedef void *          WXEVENTPTR;
+typedef void *          WXRECTANGLEPTR;
 
 #endif /* __WXPALMOS__ */
 

@@ -39,6 +39,7 @@
 #include <MemoryMgr.h>
 #include <DLServer.h>
 #include <SoundMgr.h>
+#include <SysUtils.h>
 
 // ============================================================================
 // implementation
