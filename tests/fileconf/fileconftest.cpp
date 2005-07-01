@@ -247,10 +247,11 @@ void FileConfigTestCase::HasGroup()
     CPPUNIT_ASSERT( fc.HasGroup(_T("root/group1")) );
     CPPUNIT_ASSERT( fc.HasGroup(_T("root/group1/subgroup")) );
     CPPUNIT_ASSERT( fc.HasGroup(_T("root/group2")) );
-    CPPUNIT_ASSERT( !fc.HasGroup(_T("foot")) );
     CPPUNIT_ASSERT( !fc.HasGroup(_T("")) );
     CPPUNIT_ASSERT( !fc.HasGroup(_T("root/group")) );
     CPPUNIT_ASSERT( !fc.HasGroup(_T("root//subgroup")) );
+    CPPUNIT_ASSERT( !fc.HasGroup(_T("foot/subgroup")) );
+    CPPUNIT_ASSERT( !fc.HasGroup(_T("foot")) );
 }
 
 void FileConfigTestCase::Save()
