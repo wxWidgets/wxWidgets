@@ -884,6 +884,8 @@ void MyListCtrl::OnFocused(wxListEvent& event)
 
 void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
+    long item;
+
     switch ( event.GetKeyCode() )
     {
         case 'c': // colorize
@@ -907,35 +909,45 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 
         case 'n': // next
         case 'N':
+            item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
+            if ( item++ == GetItemCount() - 1 )
             {
-                long item = GetNextItem(-1,
-                                        wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-                if ( item++ == GetItemCount() - 1 )
+                item = 0;
+            }
+
+            wxLogMessage(_T("Focusing item %ld"), item);
+
+            SetItemState(item, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+            EnsureVisible(item);
+            break;
+
+        case 'r': // show bounding Rect
+        case 'R':
+            {
+                item = event.GetIndex();
+                wxRect r;
+                if ( !GetItemRect(item, r) )
                 {
-                    item = 0;
+                    wxLogError(_T("Failed to retrieve rect of item %ld"), item);
+                    break;
                 }
 
-                wxLogMessage(_T("Focusing item %ld"), item);
-
-                SetItemState(item, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
-                EnsureVisible(item);
+                wxLogMessage(_T("Bounding rect of item %ld is (%d, %d)-(%d, %d)"),
+                             item, r.x, r.y, r.x + r.width, r.y + r.height);
             }
             break;
 
         case WXK_DELETE:
+            item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+            while ( item != -1 )
             {
-                long item = GetNextItem(-1,
-                                        wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-                while ( item != -1 )
-                {
-                    DeleteItem(item);
+                DeleteItem(item);
 
-                    wxLogMessage(_T("Item %ld deleted"), item);
+                wxLogMessage(_T("Item %ld deleted"), item);
 
-                    // -1 because the indices were shifted by DeleteItem()
-                    item = GetNextItem(item - 1,
-                                       wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-                }
+                // -1 because the indices were shifted by DeleteItem()
+                item = GetNextItem(item - 1,
+                                   wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
             }
             break;
 
