@@ -1692,15 +1692,12 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         RECT rectClient;
         ::GetClientRect(GetHwnd(), &rectClient);
 
-        // if the size is already ok, stop here (rectClient.left = top = 0)
+        // if the size is already ok, stop here (NB: rectClient.left = top = 0)
         if ( (rectClient.right == width || width == wxDefaultCoord) &&
              (rectClient.bottom == height || height == wxDefaultCoord) )
         {
             break;
         }
-
-        int widthClient = width,
-            heightClient = height;
 
         // Find the difference between the entire window (title bar and all)
         // and the client area; add this to the new client size to move the
@@ -1708,12 +1705,8 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         RECT rectWin;
         ::GetWindowRect(GetHwnd(), &rectWin);
 
-        widthClient += rectWin.right - rectWin.left - rectClient.right;
-        heightClient += rectWin.bottom - rectWin.top - rectClient.bottom;
-
-        POINT point;
-        point.x = rectWin.left;
-        point.y = rectWin.top;
+        const int widthWin = rectWin.right - rectWin.left,
+                  heightWin = rectWin.bottom - rectWin.top;
 
         // MoveWindow positions the child windows relative to the parent, so
         // adjust if necessary
@@ -1722,11 +1715,21 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
             wxWindow *parent = GetParent();
             if ( parent )
             {
-                ::ScreenToClient(GetHwndOf(parent), &point);
+                ::ScreenToClient(GetHwndOf(parent), (POINT *)&rectWin);
             }
         }
 
-        DoMoveWindow(point.x, point.y, widthClient, heightClient);
+        // don't call DoMoveWindow() because we want to move window immediately
+        // and not defer it here
+        if ( !::MoveWindow(GetHwnd(),
+                           rectWin.left,
+                           rectWin.top,
+                           width + widthWin - rectClient.right,
+                           height + heightWin - rectClient.bottom,
+                           TRUE) )
+        {
+            wxLogLastError(_T("MoveWindow"));
+        }
     }
 }
 
