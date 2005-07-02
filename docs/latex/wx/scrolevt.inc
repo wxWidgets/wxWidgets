@@ -11,7 +11,7 @@ the macros behave exactly the same.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_SCROLL(func)}}{Process all scroll events.}
 \twocolitem{{\bf EVT\_SCROLL\_TOP(func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-top events (minimum position).}
-\twocolitem{{\bf EVT\_SCROLL\_BOTTOM(func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-bottom events (maximum position).}
+\twocolitem{{\bf EVT\_SCROLL\_BOTTOM(func)}}{Process wxEVT\_SCROLL\_BOTTOM scroll-to-bottom events (maximum position).}
 \twocolitem{{\bf EVT\_SCROLL\_LINEUP(func)}}{Process wxEVT\_SCROLL\_LINEUP line up events.}
 \twocolitem{{\bf EVT\_SCROLL\_LINEDOWN(func)}}{Process wxEVT\_SCROLL\_LINEDOWN line down events.}
 \twocolitem{{\bf EVT\_SCROLL\_PAGEUP(func)}}{Process wxEVT\_SCROLL\_PAGEUP page up events.}
@@ -22,7 +22,7 @@ sent as the user drags the thumbtrack).}
 \twocolitem{{\bf EVT\_SCROLL\_CHANGED(func)}}{Process wxEVT\_SCROLL\_CHANGED end of scrolling events (MSW only).}
 \twocolitem{{\bf EVT\_COMMAND\_SCROLL(id, func)}}{Process all scroll events.}
 \twocolitem{{\bf EVT\_COMMAND\_SCROLL\_TOP(id, func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-top events (minimum position).}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLL\_BOTTOM(id, func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-bottom events (maximum position).}
+\twocolitem{{\bf EVT\_COMMAND\_SCROLL\_BOTTOM(id, func)}}{Process wxEVT\_SCROLL\_BOTTOM scroll-to-bottom events (maximum position).}
 \twocolitem{{\bf EVT\_COMMAND\_SCROLL\_LINEUP(id, func)}}{Process wxEVT\_SCROLL\_LINEUP line up events.}
 \twocolitem{{\bf EVT\_COMMAND\_SCROLL\_LINEDOWN(id, func)}}{Process wxEVT\_SCROLL\_LINEDOWN line down events.}
 \twocolitem{{\bf EVT\_COMMAND\_SCROLL\_PAGEUP(id, func)}}{Process wxEVT\_SCROLL\_PAGEUP page up events.}
