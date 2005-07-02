@@ -235,6 +235,12 @@ void wxListbook::OnSize(wxSizeEvent& event)
             break;
     }
 
+    // arrange the icons before calling SetClientSize(), otherwise it wouldn't
+    // account for the scrollbars the list control might need and, at least
+    // under MSW, we'd finish with an ugly looking list control with both
+    // vertical and horizontal scrollbar (with one of them being added because
+    // the other one is not accounted for in client size computations)
+    m_list->Arrange();
     m_list->Move(posList.x, posList.y);
     m_list->SetClientSize(sizeList.x, sizeList.y);
 
@@ -276,7 +282,7 @@ void wxListbook::OnSize(wxSizeEvent& event)
         wxWindow *page = m_pages[m_selection];
         wxCHECK_RET( page, _T("NULL page in wxListbook?") );
         page->SetSize(GetPageRect());
-        }
+    }
 }
 
 wxSize wxListbook::CalcSizeFromPage(const wxSize& sizePage) const
