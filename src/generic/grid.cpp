@@ -7863,7 +7863,13 @@ void wxGrid::HideCellEditControl()
         editor->Show( false );
         editor->DecRef();
         attr->DecRef();
-        m_gridWin->SetFocus();
+
+        // if the focus moved completely outside this application, set it to
+        // ourselves so that it's not "lost" when the user switches back to
+        // this app
+        if ( !FindFocus() )
+            m_gridWin->SetFocus();
+
         // refresh whole row to the right
         wxRect rect( CellToRect(row, col) );
         CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y );
