@@ -208,7 +208,9 @@ void wxClipboard::Clear()
 
     for( wxDataIdToDataObjectList::compatibility_iterator node2 = m_idToObject.GetFirst();
          node2; node2 = node2->GetNext() )
-        delete node->GetData();
+    {
+        delete node2->GetData();
+    }
     m_idToObject.Clear();
 }
 
