@@ -556,9 +556,11 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     f->m_fontStruct = (WXFontStructPtr)font;
     f->m_display = ( display ? display : wxGetDisplay() );
     f->m_scale = intScale;
+    
+    M_FONTDATA->m_fonts.Append(f);
+
 #if !wxUSE_RENDER_TABLE
     f->m_fontList = XmFontListCreate ((XFontStruct*) font, XmSTRING_DEFAULT_CHARSET);
-    M_FONTDATA->m_fonts.Append(f);
 #else // if wxUSE_RENDER_TABLE
     XmRendition rendition;
     XmRenderTable renderTable;
