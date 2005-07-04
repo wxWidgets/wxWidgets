@@ -1319,6 +1319,12 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
                 continue;
             }
 
+            if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Window")) )
+            {
+               success = true;
+               break;
+            } 
+
             if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Help")) )
             {
                 success = TRUE;
