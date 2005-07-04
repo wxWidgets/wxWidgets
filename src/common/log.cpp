@@ -550,7 +550,8 @@ void wxLogBuffer::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                 TimeStamp(&str);
                 str += szString;
 
-                wxMessageOutputDebug().Printf(_T("%s\n"), str.c_str());
+                wxMessageOutputDebug dbgout;
+                dbgout.Printf(_T("%s\n"), str.c_str());
             }
 #endif // __WXDEBUG__
             break;
@@ -794,7 +795,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
         // if this happens, something is seriously wrong, so don't use _() here
         // for safety
         wxSprintf(s_szBuf, _T("unknown error %lx"), nErrCode);
-		return s_szBuf;
+        return s_szBuf;
     }
 
 
