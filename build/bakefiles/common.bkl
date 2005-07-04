@@ -520,7 +520,9 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <dllname>$(WXDLLNAME)</dllname>
         <version>$(WX_VERSION)</version>
         <so_version>$(WXSOVERSION)</so_version>
-        <mac_version>$(WXMACVERSION)</mac_version>
+    
+        <!-- FIXME: until libtool scheme is implemented in bakefile -->
+        <ldflags cond="FORMAT=='autoconf'">$(WXMACVERSION_CMD)</ldflags>
 
         <!-- version info resources: -->
         <if cond="FORMAT not in ['rpmspec','wx24dsp']"> <!-- FIXME: fix for bkl-0.1.7 only, remove the cond later -->

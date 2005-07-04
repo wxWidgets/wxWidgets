@@ -7,11 +7,32 @@
     <!--                      Handling of binary compatiblity:              -->
     <!-- ================================================================== -->
 
-    <!-- this needs to be reset to 0 on beginning of stable series and
-         increment by one 1 every time binary incompatible change is made
-         (i.e. preferably never) -->
-    <set var="WX_BINARY_VERSION">0</set>
-    
+    <!--
+       We use libtool CURRENT:REVISION:AGE versioning scheme. Quoting libtool
+       documentation on how to handle the values:
+        
+       1. Start with version information of `0:0:0' for each libtool library.
+     
+       2. Update the version information only immediately before a public
+          release of your software.  More frequent updates are unnecessary,
+          and only guarantee that the current interface number gets larger
+          faster.
+     
+       3. If the library source code has changed at all since the last
+          update, then increment REVISION (`C:R:A' becomes `C:r+1:A').
+     
+       4. If any interfaces have been added, removed, or changed since the
+          last update, increment CURRENT, and set REVISION to 0.
+     
+       5. If any interfaces have been added since the last public release,
+          then increment AGE.
+     
+       6. If any interfaces have been removed since the last public release,
+          then set AGE to 0.
+    -->
+    <set var="WX_CURRENT">2</set>
+    <set var="WX_REVISION">0</set>
+    <set var="WX_AGE">2</set>
 
 
     <!-- ================================================================== -->
@@ -45,12 +66,23 @@
     </set>
 
     <set var="WX_STABLE_BRANCH">$(int(int(WXVER_MINOR) % 2 == 0))</set>
-    
+
+    <!-- in unstable branch, binary compat. changes with every release, check
+         for it: -->
+    <if cond="WX_STABLE_BRANCH=='0' and int(WX_CURRENT)!=int(WXVER_RELEASE)">
+        <error>Forgot to update WX_CURRENT/WX_REVISION/WX_AGE?</error>
+    </if>
     <set var="WXSOVERSION">
-        <if cond="WX_STABLE_BRANCH=='1'">$(WX_BINARY_VERSION).0.0</if>
-        <if cond="WX_STABLE_BRANCH=='0'">$(WXVER_RELEASE).0.0</if>
+        $(int(WX_CURRENT)-int(WX_AGE)).$(WX_AGE).$(WX_REVISION)
     </set>
-    <set var="WXMACVERSION">$(WX_VERSION)</set>
+
+    <!-- FIXME: until libtool scheme is implemented in bakefile -->
+    <set var="WXMACVERSION_CMD">
+        <if cond="PLATFORM_MACOSX=='1'">
+            -compatibility_version $(WX_AGE).0 -current_version $(WX_AGE).$(WX_REVISION)
+        </if>
+    </set>
+
     <set var="WXWIN32DLLVERSION">
         <if cond="WX_STABLE_BRANCH=='1'">$(WX_RELEASE_NODOT)</if>
         <if cond="WX_STABLE_BRANCH=='0'">$(WX_VERSION_NODOT)</if>
