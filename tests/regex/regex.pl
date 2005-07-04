@@ -39,26 +39,26 @@ sub quotecxx {
                 "\013" => "v", '"' => '"', "\\" => "\\" );
 
     # working around lack of 'use encoding'
-    $_ = pack "U0C*", unpack "C*", $_;
-    use utf8;
+    if (!$utf) {
+        $_ = pack "U0C*", unpack "C*", $_;
+        use utf8;
+    }
 
     s/[\000-\037"\\\177-\x{ffff}]/
         if ($esc{$&}) {
             "\\$esc{$&}";
-        } elsif (ord($&) > 0x9f) {
-            if ($utf) {
-                $&;
-            } else {
-                sprintf "\\u%04x", ord($&);
-            }
+        } elsif (ord($&) > 0x9f && !$utf) {
+            sprintf "\\u%04x", ord($&);
         } else {
             sprintf "\\%03o", ord($&);
         }
     /ge;
 
     # working around lack of 'use encoding'
-    no utf8;
-    $_ = pack "C*", unpack "C*", $_;
+    if (!$utf) {
+        no utf8;
+        $_ = pack "C*", unpack "C*", $_;
+    }
 
     return ($utf ? '"' : 'L"') . $_ . '"'
 }
