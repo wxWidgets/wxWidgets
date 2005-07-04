@@ -52,14 +52,18 @@ For example:
     wxFFileOutputStream out(_T("test.zip"));
     wxZipOutputStream zip(out);
     wxTextOutputStream txt(zip);
+    wxString sep(wxFileName::GetPathSeparator());
 
     zip.PutNextEntry(_T("entry1.txt"));
-    txt << _T("Some text for entry1\n");
+    txt << _T("Some text for entry1.txt\n");
 
-    zip.PutNextEntry(_T("entry2.txt"));
-    txt << _T("Some text for entry2\n");
+    zip.PutNextEntry(_T("subdir") + sep + _T("entry2.txt"));
+    txt << _T("Some text for subdir/entry2.txt\n");
 
 \end{verbatim}
+
+The name of each entry can be a full path, which makes it possible to
+store entries in subdirectories.
 
 
 \subsection{Extracting an archive}\label{wxarcextract}
