@@ -233,13 +233,6 @@ wxString wxTextCtrl::GetValue() const
     return res;
 }
 
-wxString wxTextCtrl::GetRange(long from, long to) const
-{
-    wxString str;
-
-    return str;
-}
-
 void wxTextCtrl::SetValue(const wxString& value)
 {
 }

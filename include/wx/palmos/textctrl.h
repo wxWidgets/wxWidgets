@@ -51,8 +51,6 @@ public:
     virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
 
-    virtual wxString GetRange(long from, long to) const;
-
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
     virtual int GetNumberOfLines() const;
