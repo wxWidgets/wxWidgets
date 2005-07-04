@@ -1397,32 +1397,33 @@ const wxCharBuffer wxString::ToAscii() const
 // extract string of length nCount starting at nFirst
 wxString wxString::Mid(size_t nFirst, size_t nCount) const
 {
-  size_t nLen = length();
+    size_t nLen = length();
 
-  // default value of nCount is npos and means "till the end"
-  if ( nCount == npos )
-  {
-    nCount = nLen - nFirst;
-  }
+    // default value of nCount is npos and means "till the end"
+    if ( nCount == npos )
+    {
+        nCount = nLen - nFirst;
+    }
 
-  // out-of-bounds requests return sensible things
-  if ( nFirst + nCount > nLen )
-  {
-    nCount = nLen - nFirst;
-  }
+    // out-of-bounds requests return sensible things
+    if ( nFirst + nCount > nLen )
+    {
+        nCount = nLen - nFirst;
+    }
 
-  if ( nFirst > nLen )
-  {
-    // AllocCopy() will return empty string
-    nCount = 0;
-  }
+    if ( nFirst > nLen )
+    {
+        // AllocCopy() will return empty string
+        return wxEmptyString;
+    }
 
-  wxString dest(*this, nFirst, nCount);
-  if ( dest.length() != nCount ) {
-      wxFAIL_MSG( _T("out of memory in wxString::Mid") );
-  }
+    wxString dest(*this, nFirst, nCount);
+    if ( dest.length() != nCount )
+    {
+        wxFAIL_MSG( _T("out of memory in wxString::Mid") );
+    }
 
-  return dest;
+    return dest;
 }
 
 // check that the string starts with prefix and return the rest of the string
