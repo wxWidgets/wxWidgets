@@ -1351,8 +1351,11 @@ wxFileConfigGroup::~wxFileConfigGroup()
 
 void wxFileConfigGroup::SetLine(wxFileConfigLineList *pLine)
 {
-    // shouldn't be called twice unless we are resetting the line
-    wxASSERT( m_pLine == 0 || pLine == 0 );
+    // for a normal (i.e. not root) group this method shouldn't be called twice
+    // unless we are resetting the line
+    wxASSERT_MSG( !m_pParent || !m_pLine || !pLine,
+                   _T("changing line for a non-root group?") );
+
     m_pLine = pLine;
 }
 
