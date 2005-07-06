@@ -241,7 +241,8 @@ void wxListbook::OnSize(wxSizeEvent& event)
     // vertical and horizontal scrollbar (with one of them being added because
     // the other one is not accounted for in client size computations)
     m_list->Arrange();
-    m_list->Move(posList.x, posList.y);
+    if ( m_list->GetPosition() != posList )
+        m_list->Move(posList.x, posList.y);
     m_list->SetClientSize(sizeList.x, sizeList.y);
 
 #if wxUSE_LINE_IN_LISTBOOK
