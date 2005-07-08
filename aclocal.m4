@@ -64,7 +64,7 @@ AC_DEFUN([WX_PATH_FIND_LIBRARIES],
 ac_find_libraries=
 for ac_dir in $1 /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/lib$2.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
