@@ -22406,6 +22406,50 @@ SEARCH_INCLUDE="\
 
 SEARCH_LIB="/usr/lib /usr/lib32 /usr/lib64 /usr/X11R6/lib64 `echo "$SEARCH_INCLUDE" | sed s/include/lib/g`"
 
+if test "$build" != "$host" -a "$GCC" = yes; then
+                    if cross_root=`$CC -print-prog-name=ld 2>/dev/null`; then
+        cross_root=`dirname $cross_root`
+        cross_root=`dirname $cross_root`
+
+                        SEARCH_LIB=`for x in $SEARCH_LIB; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
+        SEARCH_INCLUDE=`for x in $SEARCH_INCLUDE; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
+
+                if test -z "$PKG_CONFIG_PATH"; then
+            PKG_CONFIG_PATH="$cross_root/local/lib/pkgconfig:$cross_root/lib/pkgconfig"
+            export PKG_CONFIG_PATH
+        fi
+
+                                if test -z "$x_includes" -o "$x_includes" = NONE; then
+
+ac_find_includes=
+for ac_dir in $SEARCH_INCLUDE /usr/include;
+  do
+    if test -f "$ac_dir/X11/Intrinsic.h"; then
+      ac_find_includes=$ac_dir
+      break
+    fi
+  done
+
+            x_includes=$ac_find_includes
+        fi
+        if test -z "$x_libraries" -o "$x_libraries" = NONE; then
+
+ac_find_libraries=
+for ac_dir in $SEARCH_LIB /usr/lib;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXt.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+            x_libraries=$ac_find_libraries
+        fi
+    fi
+fi
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -26220,7 +26264,7 @@ echo $ECHO_N "checking for gpewidget library... $ECHO_C" >&6
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libgpewidget.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
@@ -28330,7 +28374,7 @@ echo $ECHO_N "checking for Motif/Lesstif library... $ECHO_C" >&6
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXm.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
@@ -28597,7 +28641,7 @@ echo $ECHO_N "checking for Xpm library... $ECHO_C" >&6
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXpm.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
@@ -29384,7 +29428,7 @@ echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXinerama.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
@@ -29415,7 +29459,7 @@ echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
@@ -29762,7 +29806,7 @@ echo $ECHO_N "checking for -lGL... $ECHO_C" >&6
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGL.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
@@ -29793,7 +29837,7 @@ echo $ECHO_N "checking for -lGLU... $ECHO_C" >&6
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGLU.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
@@ -29836,7 +29880,7 @@ echo $ECHO_N "checking for -lMesaGL... $ECHO_C" >&6
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libMesaGL.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
@@ -40840,7 +40884,7 @@ echo $ECHO_N "checking for gstplay 0.8... $ECHO_C" >&6
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB /usr/lib;
   do
-    for ac_extension in a so sl dylib; do
+    for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libgstplay-0.8.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2

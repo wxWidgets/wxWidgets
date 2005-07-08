@@ -2115,6 +2115,41 @@ dnl also put 64 bit versions for Linux on AMD, they must come before the usual
 dnl locations or 64 bit compilation failed
 SEARCH_LIB="/usr/lib /usr/lib32 /usr/lib64 /usr/X11R6/lib64 `echo "$SEARCH_INCLUDE" | sed s/include/lib/g`"
 
+dnl Cross compiling with gcc?
+if test "$build" != "$host" -a "$GCC" = yes; then
+    dnl for gcc cross-compilers "$CC -print-prog-name=ld" prints the path to
+    dnl the linker. Stripping off the trailing '/bin/ld' gives us a candiate
+    dnl for a 'root' below which libraries and headers for the target system
+    dnl might be installed.
+    if cross_root=`$CC -print-prog-name=ld 2>/dev/null`; then
+        cross_root=`dirname $cross_root`
+        cross_root=`dirname $cross_root`
+
+        dnl substitute this candiate root for '^/usr' in the search lists,
+        dnl strip out any that don't start '^/usr'.
+        SEARCH_LIB=`for x in $SEARCH_LIB; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
+        SEARCH_INCLUDE=`for x in $SEARCH_INCLUDE; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
+
+        dnl also have pkg-config search for *.pc files under this 'root'
+        if test -z "$PKG_CONFIG_PATH"; then
+            PKG_CONFIG_PATH="$cross_root/local/lib/pkgconfig:$cross_root/lib/pkgconfig"
+            export PKG_CONFIG_PATH
+        fi
+
+        dnl AC_PATH_XTRA doesn't work currently unless -x-includes and
+        dnl -x-libraries are given on the command line. So if they are not
+        dnl set then set them here to plausible defaults.
+        if test -z "$x_includes" -o "$x_includes" = NONE; then
+            WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, X11/Intrinsic.h)
+            x_includes=$ac_find_includes
+        fi
+        if test -z "$x_libraries" -o "$x_libraries" = NONE; then
+            WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xt)
+            x_libraries=$ac_find_libraries
+        fi
+    fi
+fi
+
 dnl ------------------------------------------------------------------------
 dnl Check for libraries
 dnl ------------------------------------------------------------------------
