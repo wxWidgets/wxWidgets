@@ -676,7 +676,7 @@ bool wxTopLevelWindowMSW::IsMaximized() const
 #ifdef __WXWINCE__
     return false;
 #else
-    return ::IsZoomed(GetHwnd()) != 0;
+    return m_maximizeOnShow || ::IsZoomed(GetHwnd()) != 0;
 #endif
 }
 
