@@ -668,6 +668,14 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
         // we can't maximize the hidden frame because it shows it as well, so
         // just remember that we should do it later in this case
         m_maximizeOnShow = maximize;
+
+        // after calling Maximize() the client code expects to get the frame
+        // "real" size and doesn't want to know that, because of implementation
+        // details, the frame isn't really maximized yet but will be only once
+        // it's shown, so return our size as it will be then in this case
+
+        // we don't know which display we're on yet so use the default one
+        SetSize(wxGetClientDisplayRect().GetSize());
     }
 }
 
