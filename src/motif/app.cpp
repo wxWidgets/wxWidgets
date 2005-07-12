@@ -38,7 +38,6 @@
 #pragma message disable nosimpint
 #endif
 #include <Xm/Xm.h>
-#include <Xm/Label.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
@@ -307,9 +306,9 @@ WXWidget wxCreateTopLevelWidget( WXDisplay* display )
 
 WXWidget wxCreateTopLevelRealizedWidget( WXDisplay* display )
 {
-    Widget rTlw = XtVaCreateWidget( "dummy_widget", xmLabelWidgetClass,
+    Widget rTlw = XtVaCreateWidget( "dummy_widget", topLevelShellWidgetClass,
                                     (Widget)wxTheApp->GetTopLevelWidget(),
-                                    NULL);
+                                     NULL, 0 );
     XtSetMappedWhenManaged( rTlw, False );
     XtRealizeWidget( rTlw );
 
