@@ -82,6 +82,9 @@
 // ID name to help new users emphasize this point which is often overlooked
 // when starting out with wxWidgets.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(XRCID("unload_resource_menuitem"), MyFrame::OnUnloadResourceMenuCommand)
+    EVT_MENU(XRCID("reload_resource_menuitem"), MyFrame::OnReloadResourceMenuCommand)
+    EVT_MENU(XRCID("exit_tool_or_menuitem"),  MyFrame::OnExitToolOrMenuCommand)
     EVT_MENU(XRCID("exit_tool_or_menuitem"),  MyFrame::OnExitToolOrMenuCommand)
     EVT_MENU(XRCID("non_derived_dialog_tool_or_menuitem"), MyFrame::OnNonDerivedDialogToolOrMenuCommand)
     EVT_MENU(XRCID("derived_tool_or_menuitem"), MyFrame::OnDerivedDialogToolOrMenuCommand)
@@ -136,6 +139,23 @@ MyFrame::MyFrame(wxWindow* parent)
 // Private methods
 //-----------------------------------------------------------------------------
 
+void MyFrame::OnUnloadResourceMenuCommand(wxCommandEvent& WXUNUSED(event))
+{
+    if ( wxXmlResource::Get()->Unload(wxT("rc/basicdlg.xrc")) )
+        wxLogMessage(_T("Basic dialog resource has now been unloaded, you ")
+                     _T("won't be able to use it before loading it again"));
+    else
+        wxLogWarning(_T("Failed to unload basic dialog resource"));
+}
+
+void MyFrame::OnReloadResourceMenuCommand(wxCommandEvent& WXUNUSED(event))
+{
+    if ( wxXmlResource::Get()->Load(wxT("rc/basicdlg.xrc")) )
+        wxLogStatus(_T("Basic dialog resource has been loaded."));
+    else
+        wxLogError(_T("Failed to load basic dialog resource"));
+}
+
 void MyFrame::OnExitToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     // true is to force the frame to close.
@@ -148,9 +168,8 @@ void MyFrame::OnNonDerivedDialogToolOrMenuCommand(wxCommandEvent& WXUNUSED(event
     wxDialog dlg;
     // "non_derived_dialog" is the name of the wxDialog XRC node that should
     // be loaded.
-    wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("non_derived_dialog"));
-    dlg.ShowModal();
-
+    if ( wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("non_derived_dialog")) )
+        dlg.ShowModal();
 }
 
 

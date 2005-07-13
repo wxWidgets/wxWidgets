@@ -7,6 +7,14 @@
     <object class="wxMenu" name="file_tool_or_menuitem">
         <label>_File</label>
         <style>wxMENU_TEAROFF</style>
+        <object class="wxMenuItem" name="unload_resource_menuitem">
+            <label>_Unload resource\tCtrl-U</label>
+            <help>Unload basic dialog resource</help>
+        </object>
+        <object class="wxMenuItem" name="reload_resource_menuitem">
+            <label>_Reload resource\tCtrl-R</label>
+            <help>Reload basic dialog resource</help>
+        </object>
         <object class="wxMenuItem" name="exit_tool_or_menuitem">
             <label>E_xit\tAlt-X</label>
             <help>Exit this application</help>
