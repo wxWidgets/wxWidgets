@@ -241,11 +241,10 @@ class xxxObject:
                     self.params[tag] = xxxParamBitmap(node)
                 else:                   # simple parameter
                     self.params[tag] = xxxParam(node)
-            else:
-                pass
-                # Remove all other nodes
-#                element.removeChild(node)
-#                node.unlink()
+            elif node.nodeType == minidom.Node.TEXT_NODE and node.data.isspace():
+                # Remove empty text nodes
+                element.removeChild(node)
+                node.unlink()
 
         # Check that all required params are set
         for param in self.required:
@@ -397,19 +396,21 @@ class xxxFrame(xxxContainer):
               'tooltip']
 
 class xxxTool(xxxObject):
-    allParams = ['bitmap', 'bitmap2', 'toggle', 'tooltip', 'longhelp', 'label']
+    allParams = ['bitmap', 'bitmap2', 'radio', 'toggle', 'tooltip', 'longhelp', 'label']
     required = ['bitmap']
-    paramDict = {'bitmap2': ParamBitmap, 'toggle': ParamBool}
+    paramDict = {'bitmap2': ParamBitmap, 'radio': ParamBool, 'toggle': ParamBool}
     hasStyle = False
 
 class xxxToolBar(xxxContainer):
-    allParams = ['bitmapsize', 'margins', 'packing', 'separation',
+    allParams = ['bitmapsize', 'margins', 'packing', 'separation', 'dontattachtoframe',
                  'pos', 'size', 'style']
     hasStyle = False
     paramDict = {'bitmapsize': ParamPosSize, 'margins': ParamPosSize,
                  'packing': ParamInt, 'separation': ParamInt,
-                 'style': ParamNonGenericStyle}
-    winStyles = ['wxTB_FLAT', 'wxTB_DOCKABLE', 'wxTB_VERTICAL', 'wxTB_HORIZONTAL', 'wxTB_TEXT']
+                 'dontattachtoframe': ParamBool, 'style': ParamNonGenericStyle}
+    winStyles = ['wxTB_FLAT', 'wxTB_DOCKABLE', 'wxTB_VERTICAL', 'wxTB_HORIZONTAL',
+                 'wxTB_3DBUTTONS','wxTB_TEXT', 'wxTB_NOICONS', 'wxTB_NODIVIDER',
+                 'wxTB_NOALIGN', 'wxTB_HORZ_LAYOUT', 'wxTB_HORZ_TEXT']
 
 class xxxWizard(xxxContainer):
     allParams = ['title', 'bitmap', 'pos']
