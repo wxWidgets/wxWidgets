@@ -32,6 +32,7 @@ enum wxXmlResourceFlags
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxXmlResource::wxXmlResource}\label{wxxmlresourcector}
 
 \func{}{wxXmlResource}{\param{const wxString\& }{filemask}, \param{int }{flags = wxXRC\_USE\_LOCALE}}
@@ -55,11 +56,13 @@ wxXRC\_NO\_SUBCLASSING: subclass property of object nodes will be ignored
 XRC files from being reloaded from disk in case they have been modified there
 since being last loaded (may slightly speed up loading them).}
 
+
 \membersection{wxXmlResource::\destruct{wxXmlResource}}\label{wxxmlresourcedtor}
 
 \func{}{\destruct{wxXmlResource}}{\void}
 
 Destructor.
+
 
 \membersection{wxXmlResource::AddHandler}\label{wxxmlresourceaddhandler}
 
@@ -71,6 +74,7 @@ wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. The XML resource compiler
 (wxxrc) can create include file that contains initialization code for
 all controls used within the resource.
 
+
 \membersection{wxXmlResource::AttachUnknownControl}\label{wxxmlresourceattachunknowncontrol}
 
 \func{bool}{AttachUnknownControl}{\param{const wxString\& }{name}, \param{wxWindow* }{control}, \param{wxWindow* }{parent = NULL}}
@@ -78,11 +82,13 @@ all controls used within the resource.
 Attaches an unknown control to the given panel/window/dialog.
 Unknown controls are used in conjunction with <object class="unknown">.
 
+
 \membersection{wxXmlResource::ClearHandlers}\label{wxxmlresourceclearhandlers}
 
 \func{void}{ClearHandlers}{\void}
 
 Removes all handlers.
+
 
 \membersection{wxXmlResource::CompareVersion}\label{wxxmlresourcecompareversion}
 
@@ -91,11 +97,13 @@ Removes all handlers.
 Compares the XRC version to the argument. Returns -1 if the XRC version
 is less than the argument, +1 if greater, and 0 if they equal.
 
+
 \membersection{wxXmlResource::Get}\label{wxxmlresourceget}
 
 \func{wxXmlResource*}{Get}{\void}
 
 Gets the global resources object or creates one if none exists.
+
 
 \membersection{wxXmlResource::GetFlags}\label{wxxmlresourcegetflags}
 
@@ -103,11 +111,13 @@ Gets the global resources object or creates one if none exists.
 
 Returns flags, which may be a bitlist of wxXRC\_USE\_LOCALE and wxXRC\_NO\_SUBCLASSING.
 
+
 \membersection{wxXmlResource::GetVersion}\label{wxxmlresourcegetversion}
 
 \constfunc{long}{GetVersion}{\void}
 
 Returns version information (a.b.c.d = d+ 256*c + 256\textasciicircum2*b + 256\textasciitilde3*a).
+
 
 \membersection{wxXmlResource::GetXRCID}\label{wxxmlresourcegetxmlid}
 
@@ -117,6 +127,7 @@ Returns a numeric ID that is equivalent to the string ID used in an XML
 resource. To be used in event tables.
 The macro {\tt XRCID(name)} is provided for convenience.
 
+
 \membersection{wxXmlResource::InitAllHandlers}\label{wxxmlresourceinitallhandlers}
 
 \func{void}{InitAllHandlers}{\void}
@@ -125,6 +136,7 @@ Initializes handlers for all supported controls/windows. This will
 make the executable quite big because it forces linking against
 most of the wxWidgets library.
 
+
 \membersection{wxXmlResource::Load}\label{wxxmlresourceload}
 
 \func{bool}{Load}{\param{const wxString\& }{filemask}}
@@ -132,11 +144,13 @@ most of the wxWidgets library.
 Loads resources from XML files that match given filemask.
 This method understands VFS (see filesys.h).
 
+
 \membersection{wxXmlResource::LoadBitmap}\label{wxxmlresourceloadbitmap}
 
 \func{wxBitmap}{LoadBitmap}{\param{const wxString\& }{name}}
 
 Loads a bitmap resource from a file.
+
 
 \membersection{wxXmlResource::LoadDialog}\label{wxxmlresourceloaddialog}
 
@@ -159,11 +173,13 @@ Example:
   dlg->ShowModal();
 \end{verbatim}
 
+
 \membersection{wxXmlResource::LoadFrame}\label{wxxmlresourceloadframe}
 
 \func{bool}{LoadFrame}{\param{wxFrame* }{frame}, \param{wxWindow* }{parent}, \param{const wxString\& }{name}}
 
 Loads a frame.
+
 
 \membersection{wxXmlResource::LoadIcon}\label{wxxmlresourceloadicon}
 
@@ -171,11 +187,13 @@ Loads a frame.
 
 Loads an icon resource from a file.
 
+
 \membersection{wxXmlResource::LoadMenu}\label{wxxmlresourceloadmenu}
 
 \func{wxMenu*}{LoadMenu}{\param{const wxString\& }{name}}
 
 Loads menu from resource. Returns NULL on failure.
+
 
 \membersection{wxXmlResource::LoadMenuBar}\label{wxxmlresourceloadmenubar}
 
@@ -186,6 +204,7 @@ Loads a menubar from resource. Returns NULL on failure.
 \func{wxMenuBar*}{LoadMenuBar}{\param{const wxString\& }{name}}
 
 Loads a menubar from resource. Returns NULL on failure.
+
 
 \membersection{wxXmlResource::LoadPanel}\label{wxxmlresourceloadpanel}
 
@@ -198,11 +217,13 @@ Loads a panel. {\it panel} points to parent window (if any).
 Loads a panel. {\it panel} points to parent window (if any). This form
 is used to finish creation of an already existing instance.
 
+
 \membersection{wxXmlResource::LoadToolBar}\label{wxxmlresourceloadtoolbar}
 
 \func{wxToolBar*}{LoadToolBar}{\param{wxWindow* }{parent}, \param{const wxString\& }{name}}
 
 Loads a toolbar.
+
 
 \membersection{wxXmlResource::Set}\label{wxxmlresourceset}
 
@@ -210,9 +231,21 @@ Loads a toolbar.
 
 Sets the global resources object and returns a pointer to the previous one (may be NULL).
 
+
 \membersection{wxXmlResource::SetFlags}\label{wxxmlresourcesetflags}
 
 \func{void}{SetFlags}{\param{int }{flags}}
 
 Sets flags (bitlist of wxXRC\_USE\_LOCALE and wxXRC\_NO\_SUBCLASSING).
+
+
+\membersection{wxXmlResource::Unload}\label{wxxmlresourceunload}
+
+\func{bool}{Unload}{\param{const wxString\& }{filename}}
+
+This function unloads a resource previously loaded by 
+\helpref{Load()}{wxxmlresourceload}.
+
+Returns \true if the resource was successfully unloaded and \false if it hasn't
+been found in the list of loaded resources.
 

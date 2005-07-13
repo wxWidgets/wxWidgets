@@ -124,6 +124,9 @@ public:
     // This method understands VFS (see filesys.h).
     bool Load(const wxString& filemask);
 
+    // Unload resource from the given XML file (wildcards not allowed)
+    bool Unload(const wxString& filename);
+
     // Initialize handlers for all supported controls/windows. This will
     // make the executable quite big because it forces linking against
     // most of the wxWidgets library.
@@ -249,6 +252,17 @@ protected:
     wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent,
                                 wxObject *instance = NULL,
                                 wxXmlResourceHandler *handlerToUse = NULL);
+
+    // Helper of Load() and Unload(): returns the URL corresponding to the
+    // given file if it's indeed a file, otherwise returns the original string
+    // unmodified
+    static wxString ConvertFileNameToURL(const wxString& filename);
+
+    // loading resources from archives is impossible without wxFileSystem
+#if wxUSE_FILESYSTEM
+    // Another helper: detect if the filename is a ZIP or XRS file
+    static bool IsArchive(const wxString& filename);
+#endif // wxUSE_FILESYSTEM
 
 private:
     long m_version;
