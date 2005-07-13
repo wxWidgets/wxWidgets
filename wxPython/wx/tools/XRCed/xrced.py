@@ -177,7 +177,7 @@ class Frame(wxFrame):
         # Create toolbar
         tb = self.CreateToolBar(wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
         tb.SetToolBitmapSize((24,24))
-        new_bmp  = wx.ArtProvider.GetBitmap(wx.ART_NEW, wx.ART_TOOLBAR)
+        new_bmp  = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR)
         open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR)
         save_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE, wx.ART_TOOLBAR)
         undo_bmp = wx.ArtProvider.GetBitmap(wx.ART_UNDO, wx.ART_TOOLBAR)
