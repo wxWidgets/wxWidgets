@@ -361,7 +361,7 @@ class Frame(wxFrame):
         if evt.GetId() == wxID_SAVEAS or not self.dataFile:
             if self.dataFile: defaultName = ''
             else: defaultName = 'UNTITLED.xrc'
-            dirname = os.path.dirname(self.dataFile)
+            dirname = os.path.abspath(os.path.dirname(self.dataFile))
             dlg = wxFileDialog(self, 'Save As', dirname, defaultName, '*.xrc',
                                wxSAVE | wxOVERWRITE_PROMPT | wxCHANGE_DIR)
             if dlg.ShowModal() == wxID_OK:
@@ -456,7 +456,8 @@ class Frame(wxFrame):
             if parent.__class__ != xxxMainNode: error = True
         elif x.__class__ == xxxToolBar:
             # Toolbar can be top-level of child of panel or frame
-            if parent.__class__ not in [xxxMainNode, xxxPanel, xxxFrame]: error = True
+            if parent.__class__ not in [xxxMainNode, xxxPanel, xxxFrame] and \
+               not parent.isSizer: error = True
         elif x.__class__ == xxxPanel and parent.__class__ == xxxMainNode:
             pass
         elif x.__class__ == xxxSpacer:
