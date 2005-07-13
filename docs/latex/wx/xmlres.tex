@@ -19,13 +19,14 @@ See \helpref{XML-based resource system overview}{xrcoverview} for details.
 
 <wx/xrc/xmlres.h>
 
-\wxheading{Data structures}
+\wxheading{Constants}
 
 \begin{verbatim}
 enum wxXmlResourceFlags
 {
     wxXRC_USE_LOCALE     = 1,
-    wxXRC_NO_SUBCLASSING = 2
+    wxXRC_NO_SUBCLASSING = 2,
+    wxXRC_NO_RELOADING   = 4
 };
 \end{verbatim}
 
@@ -50,7 +51,9 @@ Constructor.
 
 \docparam{flags}{wxXRC\_USE\_LOCALE: translatable strings will be translated via \_().
 wxXRC\_NO\_SUBCLASSING: subclass property of object nodes will be ignored
-(useful for previews in XRC editors).}
+(useful for previews in XRC editors). wxXRC\_NO\_RELOADING will prevent the
+XRC files from being reloaded from disk in case they have been modified there
+since being last loaded (may slightly speed up loading them).}
 
 \membersection{wxXmlResource::\destruct{wxXmlResource}}\label{wxxmlresourcedtor}
 

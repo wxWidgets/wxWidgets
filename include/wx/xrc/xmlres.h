@@ -104,6 +104,9 @@ public:
     //        wxXRC_NO_SUBCLASSING
     //              subclass property of object nodes will be ignored
     //              (useful for previews in XRC editors)
+    //        wxXRC_NO_RELOADING
+    //              don't check the modification time of the XRC files and
+    //              reload them if they have changed on disk
     wxXmlResource(int flags = wxXRC_USE_LOCALE);
 
     // Constructor.
