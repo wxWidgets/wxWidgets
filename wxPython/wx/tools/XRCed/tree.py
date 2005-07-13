@@ -584,6 +584,9 @@ class XML_Tree(wxTreeCtrl):
         # Top-level sizer? return window's sizer
         if xxx.isSizer and isinstance(parentWin, wxWindow):
             return parentWin.GetSizer()
+        elif isinstance(xxx.parent, xxxToolBar):
+            # How to get tool from toolbar?
+            return parentWin.GetChildren()[0]
         # Otherwise get parent's object and it's child
         child = parentWin.GetChildren()[self.ItemIndex(item)]
         # Return window or sizer for sizer items
