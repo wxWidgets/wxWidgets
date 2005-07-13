@@ -2,10 +2,11 @@
 // Name:        layout.cpp
 // Purpose:     Layout sample
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Robin Dunn, Vadim Zeitlin
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) 1998 Julian Smart
+//                  2005 Vadim Zeitlin
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -28,6 +29,7 @@
 #include "wx/gbsizer.h"
 #include "wx/statline.h"
 #include "wx/notebook.h"
+#include "wx/spinctrl.h"
 
 #include "layout.h"
 
@@ -55,6 +57,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_ABOUT, MyFrame::OnAbout)
   EVT_MENU(LAYOUT_QUIT, MyFrame::OnQuit)
 
+  EVT_MENU(LAYOUT_TEST_PROPORTIONS, MyFrame::TestProportions)
   EVT_MENU(LAYOUT_TEST_SIZER, MyFrame::TestFlexSizers)
   EVT_MENU(LAYOUT_TEST_NB_SIZER, MyFrame::TestNotebookSizers)
   EVT_MENU(LAYOUT_TEST_GB_SIZER, MyFrame::TestGridBagSizer)
@@ -69,15 +72,16 @@ MyFrame::MyFrame()
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(LAYOUT_TEST_SIZER, _T("Test wx&FlexSizer"));
-  file_menu->Append(LAYOUT_TEST_NB_SIZER, _T("&Test notebook sizers"));
-  file_menu->Append(LAYOUT_TEST_GB_SIZER, _T("Test &gridbag sizer"));
+  file_menu->Append(LAYOUT_TEST_PROPORTIONS, _T("&Proportions demo...\tF1"));
+  file_menu->Append(LAYOUT_TEST_SIZER, _T("Test wx&FlexSizer...\tF2"));
+  file_menu->Append(LAYOUT_TEST_NB_SIZER, _T("Test &notebook sizers...\tF3"));
+  file_menu->Append(LAYOUT_TEST_GB_SIZER, _T("Test &gridbag sizer...\tF4"));
 
   file_menu->AppendSeparator();
   file_menu->Append(LAYOUT_QUIT, _T("E&xit"), _T("Quit program"));
 
   wxMenu *help_menu = new wxMenu;
-  help_menu->Append(LAYOUT_ABOUT, _T("&About"), _T("About layout demo"));
+  help_menu->Append(LAYOUT_ABOUT, _T("&About"), _T("About layout demo..."));
 
   wxMenuBar *menu_bar = new wxMenuBar;
 
@@ -165,9 +169,14 @@ MyFrame::MyFrame()
   topsizer->SetSizeHints( this );
 }
 
-void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(true);
+}
+
+void MyFrame::TestProportions(wxCommandEvent& WXUNUSED(event))
+{
+    (new MyProportionsFrame(this))->Show();
 }
 
 void MyFrame::TestFlexSizers(wxCommandEvent& WXUNUSED(event) )
@@ -197,6 +206,62 @@ void MyFrame::TestGridBagSizer(wxCommandEvent& WXUNUSED(event) )
     newFrame->Show(true);
 }
 
+// ----------------------------------------------------------------------------
+// MyProportionsFrame
+// ----------------------------------------------------------------------------
+
+MyProportionsFrame::MyProportionsFrame(wxFrame *parent)
+                  : wxFrame(parent, wxID_ANY, _T("Box Sizer Proportions Demo"))
+{
+    size_t n;
+
+    // create the controls
+    wxPanel *panel = new wxPanel(this, wxID_ANY);
+    for ( n = 0; n < WXSIZEOF(m_spins); n++ )
+    {
+        m_spins[n] = new wxSpinCtrl(panel);
+        m_spins[n]->SetValue(n);
+    }
+
+    // lay them out
+    m_sizer = new wxStaticBoxSizer(wxHORIZONTAL, panel,
+                _T("Try changing elements proportions and resizing the window"));
+    for ( n = 0; n < WXSIZEOF(m_spins); n++ )
+        m_sizer->Add(m_spins[n], wxSizerFlags().Border());
+
+    // put everything together
+    panel->SetSizer(m_sizer);
+    wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->Add(panel, wxSizerFlags(1).Expand().Border());
+    UpdateProportions();
+    SetSizerAndFit(sizerTop);
+
+    // and connect the events
+    Connect(wxEVT_COMMAND_TEXT_UPDATED,
+                wxCommandEventHandler(MyProportionsFrame::OnProportionUpdated));
+    Connect(wxEVT_COMMAND_SPINCTRL_UPDATED,
+            wxSpinEventHandler(MyProportionsFrame::OnProportionChanged));
+}
+
+void MyProportionsFrame::UpdateProportions()
+{
+    for ( size_t n = 0; n < WXSIZEOF(m_spins); n++ )
+    {
+        m_sizer->GetItem(n)->SetProportion(m_spins[n]->GetValue());
+    }
+
+    m_sizer->Layout();
+}
+
+void MyProportionsFrame::OnProportionUpdated(wxCommandEvent& WXUNUSED(event))
+{
+    UpdateProportions();
+}
+
+void MyProportionsFrame::OnProportionChanged(wxSpinEvent& WXUNUSED(event))
+{
+    UpdateProportions();
+}
 
 // ----------------------------------------------------------------------------
 //  MyFlexSizerFrame

@@ -23,6 +23,7 @@ class MyFrame : public wxFrame
 public:
     MyFrame();
 
+    void TestProportions(wxCommandEvent& event);
     void TestFlexSizers(wxCommandEvent& event);
     void TestNotebookSizers(wxCommandEvent& event);
     void TestGridBagSizer(wxCommandEvent& event);
@@ -32,6 +33,22 @@ public:
 
 private:
     DECLARE_EVENT_TABLE()
+};
+
+// a frame showing the box sizer proportions
+class MyProportionsFrame : public wxFrame
+{
+public:
+    MyProportionsFrame(wxFrame *parent);
+
+protected:
+    void UpdateProportions();
+
+    void OnProportionChanged(wxSpinEvent& event);
+    void OnProportionUpdated(wxCommandEvent& event);
+
+    wxSpinCtrl *m_spins[3]; // size can be changed without changing anything else
+    wxSizer *m_sizer;
 };
 
 // a frame using flex sizers for layout
@@ -84,10 +101,11 @@ private:
 // controls and menu constants
 enum
 {
-    LAYOUT_QUIT = wxID_EXIT,
-    LAYOUT_ABOUT = wxID_ABOUT,
     LAYOUT_TEST_SIZER = 101,
-    LAYOUT_TEST_NB_SIZER = 102,
-    LAYOUT_TEST_GB_SIZER = 103
+    LAYOUT_TEST_NB_SIZER,
+    LAYOUT_TEST_GB_SIZER,
+    LAYOUT_TEST_PROPORTIONS,
+    LAYOUT_QUIT = wxID_EXIT,
+    LAYOUT_ABOUT = wxID_ABOUT
 };
 
