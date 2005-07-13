@@ -111,11 +111,11 @@ bool MyApp::OnInit()
     wxXmlResource::Get()->Load(wxT("rc/variable.xrc"));
 
     // Make an instance of your derived frame. Passing NULL (the default value
-    // of MyFrame's constructor is NULL) as the frame doesn't have a frame
-    // since it is the first window.
+    // of MyFrame's constructor is NULL) as the frame doesn't have a parent
+    // since it is the main application window.
     MyFrame *frame = new MyFrame();
 
-    // Show the frame.
+    // Show the frame as it's created initially hidden.
     frame->Show(true);
 
     // Return true to tell program to continue (false would terminate).
