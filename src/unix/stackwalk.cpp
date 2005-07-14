@@ -129,9 +129,13 @@ void wxStackFrame::OnGetName()
                     m_offset = ofs;
             }
         }
-    }
 
-    m_module.assign(syminfo, posOpen);
+        m_module.assign(syminfo, posOpen);
+    }
+    else // not in "module(funcname+offset)" format
+    {
+        m_module = syminfo;
+    }
 }
 
 void wxStackFrame::OnGetLocation()
