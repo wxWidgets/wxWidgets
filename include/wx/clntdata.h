@@ -21,8 +21,16 @@
 #include "wx/hashmap.h"
 
 typedef int (*wxShadowObjectMethod)(void*, void*);
-WX_DECLARE_STRING_HASH_MAP( wxShadowObjectMethod, wxShadowObjectMethods );
-WX_DECLARE_STRING_HASH_MAP( void*, wxShadowObjectFields );
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
+    wxShadowObjectMethod,
+    wxShadowObjectMethods,
+    class WXDLLIMPEXP_BASE
+);
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
+    void *,
+    wxShadowObjectFields,
+    class WXDLLIMPEXP_BASE
+);
 
 class WXDLLIMPEXP_BASE wxShadowObject
 {
