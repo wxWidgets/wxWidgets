@@ -596,39 +596,26 @@ bool wxDocument::DoSaveDocument(const wxString& file)
 
 bool wxDocument::DoOpenDocument(const wxString& file)
 {
-    wxString msgTitle;
-    if (!wxTheApp->GetAppName().empty())
-        msgTitle = wxTheApp->GetAppName();
-    else
-        msgTitle = wxString(_("File error"));
-
 #if wxUSE_STD_IOSTREAM
     wxSTD ifstream store(file.mb_str());
-    if (store.fail() || store.bad())
+    if (!store.fail() && !store.bad())
 #else
     wxFileInputStream store(file);
-    if (store.GetLastError() != wxSTREAM_NO_ERROR)
+    if (store.GetLastError() == wxSTREAM_NO_ERROR)
 #endif
     {
-        (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
-                           GetDocumentWindow());
-        return false;
-    }
 #if wxUSE_STD_IOSTREAM
-    LoadObject(store);
-    if ( !store && !store.eof() )
+        LoadObject(store);
+        if ( !!store || store.eof() )
 #else
-    int res = LoadObject(store).GetLastError();
-    if ((res != wxSTREAM_NO_ERROR) &&
-        (res != wxSTREAM_EOF))
+        int res = LoadObject(store).GetLastError();
+        if ( res == wxSTREAM_NO_ERROR || res == wxSTREAM_EOF )
 #endif
-    {
-        (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
-                           GetDocumentWindow());
-        return false;
+            return true;
     }
 
-    return true;
+    wxLogError(_("Sorry, could not open this file."));
+    return false;
 }
 
 
