@@ -37,6 +37,8 @@ wxFileInputStream::wxFileInputStream(const wxString& fileName)
 {
     m_file = new wxFile(fileName, wxFile::read);
     m_file_destroy = true;
+    if ( !m_file->IsOpened() )
+        m_lasterror = wxSTREAM_READ_ERROR;
 }
 
 wxFileInputStream::wxFileInputStream()
@@ -115,14 +117,7 @@ wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
     m_file_destroy = true;
 
     if (!m_file->IsOpened())
-    {
         m_lasterror = wxSTREAM_WRITE_ERROR;
-    }
-    else
-    {
-        if (m_file->Error())
-            m_lasterror = wxSTREAM_WRITE_ERROR;
-    }
 }
 
 wxFileOutputStream::wxFileOutputStream(wxFile& file)
