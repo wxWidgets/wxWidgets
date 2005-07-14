@@ -1091,12 +1091,12 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
 #else
         GtkTextIter line;
         gtk_text_buffer_get_iter_at_line(m_buffer,&line,lineNo);
-        GtkTextIter end;
-        gtk_text_buffer_get_end_iter(m_buffer,&end );
+        GtkTextIter end = line;
+        gtk_text_iter_forward_to_line_end(&end);
         gchar *text = gtk_text_buffer_get_text(m_buffer,&line,&end,TRUE);
         wxString result(wxGTK_CONV_BACK(text));
         g_free(text);
-        return result.BeforeFirst(wxT('\n'));
+        return result;
 #endif
     }
     else
