@@ -383,6 +383,17 @@ void wxDialog::EndDialog(int rc)
 // wxWin event handlers
 // ----------------------------------------------------------------------------
 
+bool wxDialog::EmulateButtonClickIfPresent(int id)
+{
+    wxButton *btn = wxDynamicCast(FindWindow(id), wxButton);
+
+    if ( !btn || !btn->IsEnabled() )
+        return false;
+
+    btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+    return true;
+}
+
 // Standard buttons
 void wxDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
@@ -447,23 +458,16 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 // sending the event, by calling SetAffirmativeId.
 bool wxDialog::DoOK()
 {
-    wxButton *btn = wxDynamicCast(FindWindow(GetAffirmativeId()), wxButton);
-
-    if ( btn && btn->IsEnabled() )
-    {
-        // If we have this button, press it
-        btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+    const int idOk = GetAffirmativeId();
+    if ( EmulateButtonClickIfPresent(idOk) )
         return true;
-    }
-    else
-    {
-        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetAffirmativeId());
-        event.SetEventObject(this);
 
-        return GetEventHandler()->ProcessEvent(event);
-    }
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetAffirmativeId());
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
 }
-#endif
+#endif // __POCKETPC__
 
 #if wxUSE_TOOLBAR && defined(__POCKETPC__)
 // create main toolbar by calling OnCreateToolBar()
@@ -486,8 +490,38 @@ wxToolBar *wxDialog::OnCreateToolBar(long style,
 #endif
 
 // ---------------------------------------------------------------------------
-// dialog window proc
+// dialog Windows messages processing
 // ---------------------------------------------------------------------------
+
+bool wxDialog::MSWProcessMessage(WXMSG* pMsg)
+{
+    const MSG * const msg = wx_reinterpret_cast(MSG *, pMsg);
+    if ( msg->message == WM_KEYDOWN && msg->wParam == VK_ESCAPE )
+    {
+        int idCancel = GetEscapeId();
+        switch ( idCancel )
+        {
+            case wxID_NONE:
+                // don't handle Esc specially at all
+                break;
+
+            case wxID_ANY:
+                // this value is special: it means translate Esc to wxID_CANCEL
+                // but if there is no such button, then fall back to wxID_OK
+                if ( EmulateButtonClickIfPresent(wxID_CANCEL) )
+                    return true;
+                idCancel = wxID_OK;
+                // fall through
+
+            default:
+                // translate Esc to button press for the button with given id
+                if ( EmulateButtonClickIfPresent(idCancel) )
+                    return true;
+        }
+    }
+
+    return wxDialogBase::MSWProcessMessage(pMsg);
+}
 
 WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {

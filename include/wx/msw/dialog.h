@@ -137,6 +137,14 @@ protected:
     // end either modal or modeless dialog
     void EndDialog(int rc);
 
+    // emulate click of a button with the given id if it's present in the dialog
+    //
+    // return true if button was "clicked" or false if we don't have it
+    bool EmulateButtonClickIfPresent(int id);
+
+    // handle Escape here
+    virtual bool MSWProcessMessage(WXMSG* pMsg);
+
 private:
     wxWindow*   m_oldFocus;
     bool        m_endModalCalled; // allow for closing within InitDialog

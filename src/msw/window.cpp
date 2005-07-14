@@ -1940,38 +1940,6 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                         bProcess = false;
                     break;
 
-                case VK_ESCAPE:
-                    {
-#if wxUSE_BUTTON
-                        wxButton *btn = wxDynamicCast(FindWindow(wxID_CANCEL),wxButton);
-
-                        // our own wxLogDialog should react to Esc
-                        // without Cancel button but this is a private class
-                        // so let's try recognize it by content
-    #if wxUSE_LOG_DIALOG
-                        if ( !btn &&
-                             wxDynamicCast(this,wxDialog) &&
-                             FindWindow(wxID_MORE) &&
-                             FindWindow(wxID_OK) &&
-                             !FindWindow(wxID_CANCEL) &&
-                             GetTitle().MakeLower().StartsWith(wxTheApp->GetAppName().c_str())
-                             )
-                            btn = wxDynamicCast(FindWindow(wxID_OK),wxButton);
-    #endif // wxUSE_LOG_DIALOG
-                        if ( btn && btn->IsEnabled() )
-                        {
-                            // if we do have a cancel button, do press it
-                            btn->MSWCommand(BN_CLICKED, 0 /* unused */);
-
-                            // we consumed the message
-                            return true;
-                        }
-#endif // wxUSE_BUTTON
-
-                        bProcess = false;
-                    }
-                    break;
-
                 case VK_RETURN:
                     {
                         if ( (lDlgCode & DLGC_WANTMESSAGE) && !bCtrlDown )
