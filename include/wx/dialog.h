@@ -50,6 +50,19 @@ public:
     void SetAffirmativeId(int affirmativeId) { m_affirmativeId = affirmativeId; }
     int GetAffirmativeId() const { return m_affirmativeId; }
 
+    // Identifier for Esc key translation
+#if wxCHECK_VERSION(2, 7, 0)
+    #error "Uncomment SetEscapeId() implementation"
+
+    // this is what we should do in 2.7: remove the "#else" part and add
+    // m_escapeId declaration and the docs for Set/GetEscapeId()
+    void SetEscapeId(int escapeId) { m_escapeId = escapeId; }
+    int GetEscapeId() const { return m_escapeId; }
+#else // 2.6
+    // just a stub for 2.6
+    int GetEscapeId() const { return wxID_ANY; }
+#endif
+
 #if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
     // splits text up at newlines and places the
     // lines into a vertical wxBoxSizer
