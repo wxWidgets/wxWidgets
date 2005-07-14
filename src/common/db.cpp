@@ -326,8 +326,7 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
         case DB_DATA_TYPE_FLOAT:
             if (decimalDigits == 0)
                 decimalDigits = 2;
-            tempStr = wxT("%");
-            tempStr.Printf(wxT("%s%d.%d"), tempStr.c_str(),columnLength, decimalDigits);
+            tempStr.Printf(wxT("%%%d.%d"), columnLength, decimalDigits);
             s_Field.Printf(wxT("%sf"), tempStr.c_str());
             break;
         case DB_DATA_TYPE_DATE:
@@ -2438,7 +2437,7 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
             GetData( 5, SQL_C_SSHORT, &iKeySeq,     0,                         &cb);
             GetData( 7, SQL_C_WXCHAR,  szFkTable,   DB_MAX_TABLE_NAME_LEN+1,   &cb);
             GetData( 8, SQL_C_WXCHAR,  szFkCol,     DB_MAX_COLUMN_NAME_LEN+1,  &cb);
-            tempStr.Printf(wxT("%s[%s] "),tempStr.c_str(),szFkTable);  // [ ] in case there is a blank in the Table name
+            tempStr << _T('[') << szFkTable << _T(']');  // [ ] in case there is a blank in the Table name
         }  // if
     }  // while
 
