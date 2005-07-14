@@ -16,6 +16,7 @@
         *wxMessageOutputBest*;
         wxEVT_SCROLL_CHANGED;
         *wxFileDialog*DoSetSize*;
+        *wxDialog*GetEscapeId*;
 };
 
 
