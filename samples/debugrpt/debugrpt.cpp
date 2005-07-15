@@ -14,14 +14,15 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/app.h"
-#include "wx/log.h"
+#include "wx/frame.h"
+#include "wx/menu.h"
+#include "wx/msgdlg.h"
+#include "wx/button.h"
+
 #include "wx/datetime.h"
 #include "wx/ffile.h"
 #include "wx/filename.h"
-#include "wx/dynlib.h"
 #include "wx/debugrpt.h"
-
-#include "wx/msgdlg.h"
 
 #if !wxUSE_DEBUGREPORT
     #error "This sample can't be built without wxUSE_DEBUGREPORT"
@@ -30,6 +31,10 @@
 #if !wxUSE_ON_FATAL_EXCEPTION
     #error "This sample can't be built without wxUSE_ON_FATAL_EXCEPTION"
 #endif // wxUSE_ON_FATAL_EXCEPTION
+
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+#endif
 
 // ----------------------------------------------------------------------------
 // custom debug reporting class
@@ -129,6 +134,35 @@ void foo(int n)
 }
 
 // ----------------------------------------------------------------------------
+// main window
+// ----------------------------------------------------------------------------
+
+enum
+{
+    DebugRpt_Quit = wxID_EXIT,
+    DebugRpt_Crash = 100,
+    DebugRpt_Current,
+    DebugRpt_Upload,
+    DebugRpt_About = wxID_ABOUT
+};
+
+class MyFrame : public wxFrame
+{
+public:
+    MyFrame();
+
+private:
+    void OnQuit(wxCommandEvent& event);
+    void OnReportForCrash(wxCommandEvent& event);
+    void OnReportForCurrent(wxCommandEvent& event);
+    void OnReportUpload(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+
+    DECLARE_NO_COPY_CLASS(MyFrame)
+    DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
 // application class
 // ----------------------------------------------------------------------------
 
@@ -139,92 +173,191 @@ void foo(int n)
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit()
-    {
-        wxHandleFatalExceptions();
+    // call wxHandleFatalExceptions here
+    MyApp();
 
-        if ( !wxApp::OnInit() )
-            return false;
+    // create our main window here
+    virtual bool OnInit();
 
-        return true;
-    }
+    // called when a crash occurs in this application
+    virtual void OnFatalException();
 
-    virtual int OnRun()
-    {
-        // a real program would be presumably be a bit harder to crash than
-        // just pressing "yes" in a dialog... but this is just an example
-        switch ( wxMessageBox
-                 (
-                    _T("Generate report for crash (or just current context)?"),
-                    _T("wxDebugReport Test"),
-                    wxYES_NO | wxCANCEL
-                 ) )
-        {
-            case wxYES:
-                // this call is going to crash
-                foo(32);
-                foo(17);
-                break;
+    // this is where we really generate the debug report
+    void GenerateReport(wxDebugReport::Context ctx);
 
-            case wxNO:
-                // example of manually generated report, this could be also
-                // used in wxApp::OnAssert()
-                GenerateReport(wxDebugReport::Context_Current);
-                break;
+    // if this function is called, we'll use MyDebugReport which would try to
+    // upload the (next) generated debug report to its URL, otherwise we just
+    // generate the debug report and leave it in a local file
+    void UploadReport(bool doIt) { m_uploadReport = doIt; }
 
-            case wxCANCEL:
-                break;
-        }
+private:
+    bool m_uploadReport;
 
-        return 0;
-    }
-
-    virtual void OnFatalException()
-    {
-        GenerateReport(wxDebugReport::Context_Exception);
-    }
-
-    void GenerateReport(wxDebugReport::Context ctx)
-    {
-        MyDebugReport report;
-
-        // add all standard files: currently this means just a minidump and an
-        // XML file with system info and stack trace
-        report.AddAll(ctx);
-
-        // you can also call report.AddFile(...) with your own log files, files
-        // created using wxRegKey::Export() and so on, here we just add a test
-        // file containing the date of the crash
-        wxFileName fn(report.GetDirectory(), _T("timestamp.my"));
-        wxFFile file(fn.GetFullPath(), _T("w"));
-        if ( file.IsOpened() )
-        {
-            wxDateTime dt = wxDateTime::Now();
-            file.Write(dt.FormatISODate() + _T(' ') + dt.FormatISOTime());
-            file.Close();
-        }
-
-        report.AddFile(fn.GetFullName(), _T("timestamp of this report"));
-
-        // can also add an existing file directly, it will be copied
-        // automatically
-#ifdef __WXMSW__
-        report.AddFile(_T("c:\\autoexec.bat"), _T("DOS startup file"));
-#else
-        report.AddFile(_T("/etc/motd"), _T("Message of the day"));
-#endif
-
-        // calling Show() is not mandatory, but is more polite
-        if ( wxDebugReportPreviewStd().Show(report) )
-        {
-            if ( report.Process() )
-            {
-                // report successfully uploaded
-            }
-        }
-        //else: user cancelled the report
-    }
+    DECLARE_NO_COPY_CLASS(MyApp)
 };
 
 IMPLEMENT_APP(MyApp)
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// MyFrame
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(DebugRpt_Quit, MyFrame::OnQuit)
+    EVT_MENU(DebugRpt_Crash, MyFrame::OnReportForCrash)
+    EVT_MENU(DebugRpt_Current, MyFrame::OnReportForCurrent)
+    EVT_MENU(DebugRpt_Upload, MyFrame::OnReportUpload)
+    EVT_MENU(DebugRpt_About, MyFrame::OnAbout)
+END_EVENT_TABLE()
+
+MyFrame::MyFrame()
+       : wxFrame(NULL, wxID_ANY, _T("wxWidgets Debug Report Sample"))
+{
+    SetIcon(wxICON(sample));
+
+    wxMenu *menuFile = new wxMenu;
+    menuFile->Append(DebugRpt_Quit, _T("E&xit\tAlt-X"));
+
+    wxMenu *menuReport = new wxMenu;
+    menuReport->Append(DebugRpt_Crash, _T("Report for &crash\tCtrl-C"),
+                       _T("Provoke a crash inside the program and create report for it"));
+    menuReport->Append(DebugRpt_Current, _T("Report for c&urrent context\tCtrl-U"),
+                       _T("Create report for the current program context"));
+    menuReport->AppendSeparator();
+    menuReport->AppendCheckItem(DebugRpt_Upload, _T("Up&load debug report"),
+                       _T("You need to configure a web server accepting debug report uploads to use this function"));
+
+    wxMenu *menuHelp = new wxMenu;
+    menuHelp->Append(DebugRpt_About, _T("&About...\tF1"));
+
+    wxMenuBar *mbar = new wxMenuBar();
+    mbar->Append(menuFile, _T("&File"));
+    mbar->Append(menuReport, _T("&Report"));
+    mbar->Append(menuHelp, _T("&Help"));
+    SetMenuBar(mbar);
+
+    CreateStatusBar();
+
+    Show();
+}
+
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
+{
+    Close(true);
+}
+
+void MyFrame::OnReportForCrash(wxCommandEvent& WXUNUSED(event))
+{
+    // this call is going to crash
+    foo(32);
+    foo(17);
+}
+
+void MyFrame::OnReportForCurrent(wxCommandEvent& WXUNUSED(event))
+{
+    // example of manually generated report, this could be also
+    // used in wxApp::OnAssert()
+    wxGetApp().GenerateReport(wxDebugReport::Context_Current);
+}
+
+void MyFrame::OnReportUpload(wxCommandEvent& event)
+{
+    wxGetApp().UploadReport(event.IsChecked());
+}
+
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+{
+    wxMessageBox
+    (
+        _T("wxDebugReport sample\n(c) 2005 Vadim Zeitlin <vadim@wxwindows.org>"),
+        _T("wxWidgets Debug Report Sample"),
+        wxOK | wxICON_INFORMATION,
+        this
+    );
+}
+
+// ----------------------------------------------------------------------------
+// MyApp
+// ----------------------------------------------------------------------------
+
+MyApp::MyApp()
+{
+    // user needs to explicitely enable this
+    m_uploadReport = false;
+
+    // call this to tell the library to call our OnFatalException()
+    wxHandleFatalExceptions();
+}
+
+bool MyApp::OnInit()
+{
+    if ( !wxApp::OnInit() )
+        return false;
+
+    new MyFrame;
+
+    return true;
+}
+
+void MyApp::OnFatalException()
+{
+    GenerateReport(wxDebugReport::Context_Exception);
+}
+
+void MyApp::GenerateReport(wxDebugReport::Context ctx)
+{
+    wxDebugReportCompress *report = m_uploadReport ? new MyDebugReport
+                                                   : new wxDebugReportCompress;
+
+    // add all standard files: currently this means just a minidump and an
+    // XML file with system info and stack trace
+    report->AddAll(ctx);
+
+    // you can also call report->AddFile(...) with your own log files, files
+    // created using wxRegKey::Export() and so on, here we just add a test
+    // file containing the date of the crash
+    wxFileName fn(report->GetDirectory(), _T("timestamp.my"));
+    wxFFile file(fn.GetFullPath(), _T("w"));
+    if ( file.IsOpened() )
+    {
+        wxDateTime dt = wxDateTime::Now();
+        file.Write(dt.FormatISODate() + _T(' ') + dt.FormatISOTime());
+        file.Close();
+    }
+
+    report->AddFile(fn.GetFullName(), _T("timestamp of this report"));
+
+    // can also add an existing file directly, it will be copied
+    // automatically
+#ifdef __WXMSW__
+    report->AddFile(_T("c:\\autoexec.bat"), _T("DOS startup file"));
+#else
+    report->AddFile(_T("/etc/motd"), _T("Message of the day"));
+#endif
+
+    // calling Show() is not mandatory, but is more polite
+    if ( wxDebugReportPreviewStd().Show(*report) )
+    {
+        if ( report->Process() )
+        {
+            if ( m_uploadReport )
+            {
+                wxLogMessage(_T("Report successfully uploaded."));
+            }
+            else
+            {
+                wxLogMessage(_T("Report generated in \"%s\"."),
+                             report->GetCompressedFileName().c_str());
+                report->Reset();
+            }
+        }
+    }
+    //else: user cancelled the report
+
+    delete report;
+}
 
