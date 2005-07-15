@@ -1,6 +1,6 @@
 #
 # $Id$
-# 
+#
 
 # Note: Remove all of the tags below except for the last one when creating
 #       new development branch.
@@ -17,6 +17,7 @@
         wxEVT_SCROLL_CHANGED;
         *wxFileDialog*DoSetSize*;
         *wxDialog*GetEscapeId*;
+        *wxWizard*FinishLayout*;
 };
 
 

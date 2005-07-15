@@ -86,8 +86,10 @@ private:
     void AddBackNextPair(wxBoxSizer *buttonRow);
     void AddButtonRow(wxBoxSizer *mainColumn);
 
+protected:
     void FinishLayout();
 
+private:
     wxSize GetManualPageSize() const;
 
     // the page size requested by user

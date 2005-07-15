@@ -49,9 +49,10 @@
 // ids for menu items
 enum
 {
-    Wizard_Quit = 100,
-    Wizard_Run,
-    Wizard_About = 1000
+    Wizard_Quit = wxID_EXIT,
+    Wizard_RunModal = wxID_HIGHEST,
+    Wizard_RunModeless,
+    Wizard_About = wxID_ABOUT
 };
 
 // ----------------------------------------------------------------------------
@@ -82,6 +83,20 @@ public:
 private:
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
+// our wizard
+// ----------------------------------------------------------------------------
+
+class MyWizard : public wxWizard
+{
+public:
+    MyWizard(wxFrame *frame);
+    void RunIt(bool modal);
+
+private:
+    wxWizardPageSimple *m_page1;
 };
 
 // ----------------------------------------------------------------------------
@@ -296,11 +311,12 @@ private:
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(Wizard_Quit,  MyFrame::OnQuit)
-    EVT_MENU(Wizard_About, MyFrame::OnAbout)
-    EVT_MENU(Wizard_Run,   MyFrame::OnRunWizard)
+    EVT_MENU(Wizard_Quit,         MyFrame::OnQuit)
+    EVT_MENU(Wizard_About,        MyFrame::OnAbout)
+    EVT_MENU(Wizard_RunModal,     MyFrame::OnRunWizard)
+    EVT_MENU(Wizard_RunModeless,  MyFrame::OnRunWizard)
 
-    EVT_WIZARD_CANCEL(wxID_ANY, MyFrame::OnWizardCancel)
+    EVT_WIZARD_CANCEL(wxID_ANY,   MyFrame::OnWizardCancel)
     EVT_WIZARD_FINISHED(wxID_ANY, MyFrame::OnWizardFinished)
 END_EVENT_TABLE()
 
@@ -329,15 +345,73 @@ bool MyApp::OnInit()
 }
 
 // ----------------------------------------------------------------------------
+// MyWizard
+// ----------------------------------------------------------------------------
+
+MyWizard::MyWizard(wxFrame *frame)
+         :wxWizard(frame,wxID_ANY,_T("Absolutely Useless Wizard"),
+                   wxBitmap(wiztest_xpm),wxDefaultPosition,
+                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+{
+    // a wizard page may be either an object of predefined class
+    m_page1 = new wxWizardPageSimple(this);
+
+    /* wxStaticText *text = */ new wxStaticText(m_page1, wxID_ANY,
+             _T("This wizard doesn't help you\nto do anything at all.\n")
+             _T("\n")
+             _T("The next pages will present you\nwith more useless controls."),
+             wxPoint(5,5)
+        );
+
+    // ... or a derived class
+    wxRadioboxPage *page3 = new wxRadioboxPage(this);
+    wxValidationPage *page4 = new wxValidationPage(this);
+
+    // set the page order using a convenience function - could also use
+    // SetNext/Prev directly as below
+    wxWizardPageSimple::Chain(page3, page4);
+
+    // this page is not a wxWizardPageSimple, so we use SetNext/Prev to insert
+    // it into the chain of pages
+    wxCheckboxPage *page2 = new wxCheckboxPage(this, m_page1, page3);
+    m_page1->SetNext(page2);
+    page3->SetPrev(page2);
+
+    // allow the wizard to size itself around the pages
+    GetPageAreaSizer()->Add(m_page1);
+}
+
+void MyWizard::RunIt(bool modal)
+{
+    if ( modal )
+    {
+        if ( RunWizard(m_page1) )
+        {
+            wxMessageBox(_T("The wizard successfully completed"), _T("That's all"),
+                         wxICON_INFORMATION | wxOK);
+        }
+
+        Destroy();
+    }
+    else
+    {
+        FinishLayout();
+        ShowPage(m_page1);
+        Show(true);
+    }
+}
+
+// ----------------------------------------------------------------------------
 // MyFrame
 // ----------------------------------------------------------------------------
 
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title,
+        :wxFrame((wxFrame *)NULL, wxID_ANY, title,
                   wxDefaultPosition, wxSize(250, 150))  // small frame
 {
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(Wizard_Run, _T("&Run wizard...\tCtrl-R"));
+    menuFile->Append(Wizard_RunModal, _T("&Run wizard modal...\tCtrl-R"));
+    menuFile->Append(Wizard_RunModeless, _T("&Run wizard modeless..."));
     menuFile->AppendSeparator();
     menuFile->Append(Wizard_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
@@ -371,56 +445,19 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  _T("About wxWizard sample"), wxOK | wxICON_INFORMATION, this);
 }
 
-void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnRunWizard(wxCommandEvent& event)
 {
-    wxWizard *wizard = new wxWizard(this, wxID_ANY,
-                    _T("Absolutely Useless Wizard"),
-                    wxBitmap(wiztest_xpm),
-                    wxDefaultPosition,
-                    wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+    MyWizard *wizard = new MyWizard(this);
 
-    // a wizard page may be either an object of predefined class
-    wxWizardPageSimple *page1 = new wxWizardPageSimple(wizard);
-
-    /* wxStaticText *text = */ new wxStaticText(page1, wxID_ANY,
-             _T("This wizard doesn't help you\nto do anything at all.\n")
-             _T("\n")
-             _T("The next pages will present you\nwith more useless controls."),
-             wxPoint(5,5)
-        );
-
-    // ... or a derived class
-    wxRadioboxPage *page3 = new wxRadioboxPage(wizard);
-    wxValidationPage *page4 = new wxValidationPage(wizard);
-
-    // set the page order using a convenience function - could also use
-    // SetNext/Prev directly as below
-    wxWizardPageSimple::Chain(page3, page4);
-
-    // this page is not a wxWizardPageSimple, so we use SetNext/Prev to insert
-    // it into the chain of pages
-    wxCheckboxPage *page2 = new wxCheckboxPage(wizard, page1, page3);
-    page1->SetNext(page2);
-    page3->SetPrev(page2);
-
-    // allow the wizard to size itself around the pages
-    wizard->GetPageAreaSizer()->Add(page1);
-
-    if ( wizard->RunWizard(page1) )
-    {
-        wxMessageBox(_T("The wizard successfully completed"), _T("That's all"),
-                     wxICON_INFORMATION | wxOK);
-    }
-
-    wizard->Destroy();
+    wizard->RunIt( event.GetId() == Wizard_RunModal );
 }
 
 void MyFrame::OnWizardFinished(wxWizardEvent& WXUNUSED(event))
 {
-    wxLogStatus(this, wxT("The wizard finished successfully."));
+    wxMessageBox(wxT("The wizard finished successfully."), wxT("Wizard notification"));
 }
 
 void MyFrame::OnWizardCancel(wxWizardEvent& WXUNUSED(event))
 {
-    wxLogStatus(this, wxT("The wizard was cancelled."));
+    wxMessageBox(wxT("The wizard was cancelled."), wxT("Wizard notification"));
 }

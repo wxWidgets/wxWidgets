@@ -480,6 +480,9 @@ void wxWizard::SetPageSize(const wxSize& size)
 
 void wxWizard::FinishLayout()
 {
+    // Set to enable wxWizardSizer::GetMaxChildSize
+    m_started = true;
+
     m_sizerBmpAndPage->Add(
         m_sizerPage,
         1, // Horizontal stretching
@@ -555,7 +558,15 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     if ( !m_page )
     {
         // terminate successfully
-        EndModal(wxID_OK);
+        if(IsModal())
+        {
+            EndModal(wxID_OK);
+        }
+        else
+        {
+            SetReturnCode(wxID_OK);
+            Hide();
+        }
 
         // and notify the user code (this is especially useful for modeless
         // wizards)
@@ -625,9 +636,6 @@ bool wxWizard::RunWizard(wxWizardPage *firstPage)
 {
     wxCHECK_MSG( firstPage, false, wxT("can't run empty wizard") );
 
-    // Set before FinishLayout to enable wxWizardSizer::GetMaxChildSize
-    m_started = true;
-
     // This cannot be done sooner, because user can change layout options
     // up to this moment
     FinishLayout();
@@ -695,7 +703,15 @@ void wxWizard::OnCancel(wxCommandEvent& WXUNUSED(eventUnused))
     if ( !win->GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
     {
         // no objections - close the dialog
-        EndModal(wxID_CANCEL);
+        if(IsModal())
+        {
+            EndModal(wxID_CANCEL);
+        }
+        else
+        {
+            SetReturnCode(wxID_CANCEL);
+            Hide();
+        }
     }
     //else: request to Cancel ignored
 }
@@ -755,14 +771,25 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
     {
         // the event will be propagated anyhow
         event.Skip();
-        return;
+    }
+    else
+    {
+        wxWindow *parent = GetParent();
+
+        if ( !parent || !parent->GetEventHandler()->ProcessEvent(event) )
+        {
+            event.Skip();
+        }
     }
 
-    wxWindow *parent = GetParent();
-
-    if ( !parent || !parent->GetEventHandler()->ProcessEvent(event) )
+    if ( !IsModal() &&
+         event.IsAllowed() &&
+         ( event.GetEventType() == wxEVT_WIZARD_FINISHED ||
+           event.GetEventType() == wxEVT_WIZARD_CANCEL
+         )
+       )
     {
-        event.Skip();
+        Destroy();
     }
 }
 
