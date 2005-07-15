@@ -85,6 +85,7 @@ private:
 // ============================================================================
 
 wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
+wxWindow *wxEventLoop::ms_winCritical = NULL;
 
 // ----------------------------------------------------------------------------
 // ctor/dtor
@@ -111,10 +112,24 @@ void wxEventLoop::ProcessMessage(WXMSG *msg)
     }
 }
 
+bool wxEventLoop::IsChildOfCriticalWindow(wxWindow *win)
+{
+    while ( win )
+    {
+        if ( win == ms_winCritical )
+            return true;
+
+        win = win->GetParent();
+    }
+
+    return false;
+}
+
 bool wxEventLoop::PreProcessMessage(WXMSG *msg)
 {
     HWND hwnd = msg->hwnd;
-    wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
+    wxWindow * const wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
+    wxWindow *wnd;
 
     // this may happen if the event occurred in a standard modeless dialog (the
     // only example of which I know of is the find/replace dialog) - then call
@@ -130,6 +145,17 @@ bool wxEventLoop::PreProcessMessage(WXMSG *msg)
         }
 
         return hwnd && ::IsDialogMessage(hwnd, msg) != 0;
+    }
+
+    if ( !AllowProcessing(wndThis) )
+    {
+        // not a child of critical window, so we eat the event but take care to
+        // stop an endless stream of WM_PAINTs which would have resulted if we
+        // didn't validate the invalidated part of the window
+        if ( msg->message == WM_PAINT )
+            ::ValidateRect(hwnd, NULL);
+
+        return true;
     }
 
 #if wxUSE_TOOLTIPS
@@ -154,8 +180,6 @@ bool wxEventLoop::PreProcessMessage(WXMSG *msg)
     }
 
     // try translations first: the accelerators override everything
-    wxWindow *wnd;
-
     for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
     {
         if ( wnd->MSWTranslateMessage((WXMSG *)msg))
