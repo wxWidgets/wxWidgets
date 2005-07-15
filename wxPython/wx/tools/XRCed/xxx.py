@@ -294,6 +294,12 @@ class xxxObject:
     def panelName(self):
         if self.subclass: return self.subclass + '(' + self.className + ')'
         else: return self.className
+    # Sets name of tree object
+    def setTreeName(self, name):
+        if self.hasChild: obj = self.child
+        else: obj = self
+        obj.name = name
+        obj.element.setAttribute('name', name)
 
 ################################################################################
 
@@ -623,6 +629,7 @@ class xxxSizer(xxxContainer):
     hasName = hasStyle = False
     paramDict = {'orient': ParamOrient}
     isSizer = True
+    itemTag = 'sizeritem'               # different for some sizers
 
 class xxxBoxSizer(xxxSizer):
     allParams = ['orient']
@@ -644,6 +651,7 @@ class xxxGridSizer(xxxSizer):
 
 class xxxStdDialogButtonSizer(xxxSizer):
     allParams = []
+    itemTag = 'button'
 
 # For repeated parameters
 class xxxParamMulti:
@@ -736,6 +744,16 @@ class xxxSizerItem(xxxChildContainer):
         # For GridBag sizer items, extra parameters added
         if isinstance(parent, xxxGridBagSizer):
             self.allParams = self.allParams + ['cellpos', 'cellspan']
+        xxxChildContainer.__init__(self, parent, element)
+        # Remove pos parameter - not needed for sizeritems
+        if 'pos' in self.child.allParams:
+            self.child.allParams = self.child.allParams[:]
+            self.child.allParams.remove('pos')
+
+class xxxSizerItemButton(xxxSizerItem):
+    allParams = []
+    paramDict = {}
+    def __init__(self, parent, element):
         xxxChildContainer.__init__(self, parent, element)
         # Remove pos parameter - not needed for sizeritems
         if 'pos' in self.child.allParams:
@@ -842,7 +860,7 @@ xxxDict = {
     'wxFlexGridSizer': xxxFlexGridSizer,
     'wxGridBagSizer': xxxGridBagSizer,
     'wxStdDialogButtonSizer': xxxStdDialogButtonSizer,
-    'sizeritem': xxxSizerItem,
+    'sizeritem': xxxSizerItem, 'button': xxxSizerItemButton,
     'spacer': xxxSpacer,
 
     'wxMenuBar': xxxMenuBar,
@@ -907,7 +925,7 @@ def MakeEmptyXXX(parent, className):
     # If parent is a sizer, we should create sizeritem object, except for spacers
     if parent:
         if parent.isSizer and className != 'spacer':
-            sizerItemElem = MakeEmptyDOM('sizeritem')
+            sizerItemElem = MakeEmptyDOM(parent.itemTag)
             sizerItemElem.appendChild(elem)
             elem = sizerItemElem
         elif isinstance(parent, xxxNotebook):

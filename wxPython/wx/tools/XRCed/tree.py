@@ -107,7 +107,19 @@ class ID_NEW:
     MENU = wxNewId()
     MENU_ITEM = wxNewId()
     SEPARATOR = wxNewId()
+
+    OK_BUTTON = wxNewId()
+    YES_BUTTON = wxNewId()
+    SAVE_BUTTON = wxNewId()
+    APPLY_BUTTON = wxNewId()
+    NO_BUTTON = wxNewId()
+    CANCEL_BUTTON = wxNewId()
+    HELP_BUTTON = wxNewId()
+    CONTEXT_HELP_BUTTON = wxNewId()
+
     LAST = wxNewId()
+
+    
 
 class PullDownMenu:
     ID_EXPAND = wxNewId()
@@ -182,6 +194,15 @@ class PullDownMenu:
             ID_NEW.STD_DIALOG_BUTTON_SIZER: 'wxStdDialogButtonSizer',
             ID_NEW.SPACER: 'spacer',
             ID_NEW.UNKNOWN: 'unknown',
+
+            ID_NEW.OK_BUTTON: 'wxButton',
+            ID_NEW.YES_BUTTON: 'wxButton',
+            ID_NEW.SAVE_BUTTON: 'wxButton',
+            ID_NEW.APPLY_BUTTON: 'wxButton',
+            ID_NEW.NO_BUTTON: 'wxButton',
+            ID_NEW.CANCEL_BUTTON: 'wxButton',
+            ID_NEW.HELP_BUTTON: 'wxButton',
+            ID_NEW.CONTEXT_HELP_BUTTON: 'wxButton',
             }
         self.topLevel = [
             (ID_NEW.PANEL, 'Panel', 'Create panel'),
@@ -304,33 +325,45 @@ class PullDownMenu:
              (ID_NEW.LIST_BOX, 'ListBox', 'Create list box'),
              ],
             ]
+        self.stdButtons = [
+            (ID_NEW.OK_BUTTON, 'OK Button', 'Create standard button'),
+            (ID_NEW.YES_BUTTON, 'YES Button', 'Create standard button'),
+            (ID_NEW.SAVE_BUTTON, 'SAVE Button',  'Create standard button'),
+            (ID_NEW.APPLY_BUTTON, 'APPLY Button',  'Create standard button'),
+            (ID_NEW.NO_BUTTON, 'NO Button',  'Create standard button'),
+            (ID_NEW.CANCEL_BUTTON, 'CANCEL Button',  'Create standard button'),
+            (ID_NEW.HELP_BUTTON, 'HELP Button',  'Create standard button'),
+            (ID_NEW.CONTEXT_HELP_BUTTON, 'CONTEXT HELP Button', 'Create standard button'),
+            ]
+        self.stdButtonIDs = {
+            ID_NEW.OK_BUTTON: ('wxID_OK', '&Ok'),
+            ID_NEW.YES_BUTTON: ('wxID_YES', '&Yes'),
+            ID_NEW.SAVE_BUTTON: ('wxID_SAVE', '&Save'),
+            ID_NEW.APPLY_BUTTON: ('wxID_APPLY', '&Apply'),
+            ID_NEW.NO_BUTTON: ('wxID_NO', '&No'),
+            ID_NEW.CANCEL_BUTTON: ('wxID_CANCEL', '&Cancel'),
+            ID_NEW.HELP_BUTTON: ('wxID_HELP', '&Help'),
+            ID_NEW.CONTEXT_HELP_BUTTON: ('wxID_CONTEXT_HELP', '&Help'),
+            }
+            
+
 
 ################################################################################
 
 # Set menu to list items.
 # Each menu command is a tuple (id, label, help)
 # submenus are lists [id, label, help, submenu]
-# and separators are any other type
-def SetMenu(m, list):
+# and separators are any other type. Shift is for making
+# alternative sets of IDs. (+1000).
+def SetMenu(m, list, shift=False):
     for l in list:
         if type(l) == types.TupleType:
+            # Shift ID
+            if shift:  l = (1000 + l[0],) + l[1:]
             apply(m.Append, l)
         elif type(l) == types.ListType:
             subMenu = wxMenu()
             SetMenu(subMenu, l[2:])
-            m.AppendMenu(wxNewId(), l[0], subMenu, l[1])
-        else:                           # separator
-            m.AppendSeparator()
-# Same, but adds 1000 to all IDs
-def SetMenu2(m, list):
-    for l in list:
-        if type(l) == types.TupleType:
-            # Shift ID
-            l = (1000 + l[0],) + l[1:]
-            apply(m.Append, l)
-        elif type(l) == types.ListType:
-            subMenu = wxMenu()
-            SetMenu2(subMenu, l[2:])
             m.AppendMenu(wxNewId(), l[0], subMenu, l[1])
         else:                           # separator
             m.AppendSeparator()
@@ -542,12 +575,12 @@ class XML_Tree(wxTreeCtrl):
         self.selection = None
         return node
     # Find position relative to the top-level window
-    def FindNodePos(self, item):
+    def FindNodePos(self, item, obj=None):
         # Root at (0,0)
         if item == g.testWin.item: return wxPoint(0, 0)
         itemParent = self.GetItemParent(item)
         # Select NB page
-        obj = self.FindNodeObject(item)
+        if not obj: obj = self.FindNodeObject(item)
         if self.GetPyData(itemParent).treeObject().__class__ == xxxNotebook:
             notebook = self.FindNodeObject(itemParent)
             # Find position
@@ -587,6 +620,12 @@ class XML_Tree(wxTreeCtrl):
         elif isinstance(xxx.parent, xxxToolBar):
             # How to get tool from toolbar?
             return parentWin.GetChildren()[0]
+        elif isinstance(xxx.parent, xxxStdDialogButtonSizer):
+            # This sizer returns non-existing children
+            for ch in parentWin.GetChildren():
+                if ch.GetWindow() and ch.GetWindow().GetName() == xxx.name:
+                    return ch.GetWindow()
+            return None
         # Otherwise get parent's object and it's child
         child = parentWin.GetChildren()[self.ItemIndex(item)]
         # Return window or sizer for sizer items
@@ -653,7 +692,9 @@ class XML_Tree(wxTreeCtrl):
             if g.testWin.highLight: g.testWin.highLight.Remove()
             return
         # Get window/sizer object
-        obj, pos = self.FindNodeObject(item), self.FindNodePos(item)
+        obj = self.FindNodeObject(item)
+        if not obj: return
+        pos = self.FindNodePos(item, obj)
         size = obj.GetSize()
         # Highlight
         # Negative positions are not working quite well
@@ -968,6 +1009,8 @@ class XML_Tree(wxTreeCtrl):
                     SetMenu(m, pullDownMenu.toolBarControls)
                 elif xxx.__class__ in [xxxMenu, xxxMenuItem]:
                     SetMenu(m, pullDownMenu.menuControls)
+                elif xxx.__class__ == xxxStdDialogButtonSizer:
+                    SetMenu(m, pullDownMenu.stdButtons)
                 else:
                     SetMenu(m, pullDownMenu.controls)
                     if xxx.__class__ == xxxNotebook:
@@ -996,19 +1039,19 @@ class XML_Tree(wxTreeCtrl):
                 if xxx.__class__ == xxxMenuBar:
                     m.Append(1000 + ID_NEW.MENU, 'Menu', 'Create menu')
                 elif xxx.__class__ in [xxxMenu, xxxMenuItem]:
-                    SetMenu2(m, pullDownMenu.menuControls)
+                    SetMenu(m, pullDownMenu.menuControls, shift=True)
                 elif xxx.__class__ == xxxToolBar and \
                          self.GetItemParent(item) == self.root:
-                    SetMenu2(m, [])
+                    SetMenu(m, [], shift=True)
                 elif xxx.__class__ in [xxxFrame, xxxDialog, xxxPanel]:
-                    SetMenu2(m, [
+                    SetMenu(m, [
                         (ID_NEW.PANEL, 'Panel', 'Create panel'),
                         (ID_NEW.DIALOG, 'Dialog', 'Create dialog'),
-                        (ID_NEW.FRAME, 'Frame', 'Create frame')])
+                        (ID_NEW.FRAME, 'Frame', 'Create frame')], shift=True)
                 elif xxx.isSizer:
-                    SetMenu2(m, pullDownMenu.sizers)
+                    SetMenu(m, pullDownMenu.sizers, shift=True)
                 else:
-                    SetMenu2(m, pullDownMenu.controls)
+                    SetMenu(m, pullDownMenu.controls, shift=True)
                 id = wxNewId()
                 menu.AppendMenu(id, 'Replace With', m)
                 if not m.GetMenuItemCount(): menu.Enable(id, False)

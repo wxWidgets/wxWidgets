@@ -498,7 +498,7 @@ class Frame(wxFrame):
         # Parent is sizer or notebook, child is not child container
         if parent.isSizer and not isChildContainer and not isinstance(xxx, xxxSpacer):
             # Create sizer item element
-            sizerItemElem = MakeEmptyDOM('sizeritem')
+            sizerItemElem = MakeEmptyDOM(parent.itemTag)
             sizerItemElem.appendChild(elem)
             elem = sizerItemElem
         elif isinstance(parent, xxxNotebook) and not isChildContainer:
@@ -764,8 +764,16 @@ Homepage: http://xrced.sourceforge.net\
         if parent.__class__ == xxxMainNode:
             cl = xxx.treeObject().__class__
             frame.maxIDs[cl] += 1
-            xxx.treeObject().name = '%s%d' % (defaultIDs[cl], frame.maxIDs[cl])
-            xxx.treeObject().element.setAttribute('name', xxx.treeObject().name)
+            xxx.setTreeName('%s%d' % (defaultIDs[cl], frame.maxIDs[cl]))
+        # And for some other standard controls
+        elif parent.__class__ == xxxStdDialogButtonSizer:
+            xxx.setTreeName(pullDownMenu.stdButtonIDs[evt.GetId()][0])
+            # We can even set label
+            obj = xxx.treeObject()
+            elem = g.tree.dom.createElement('label')
+            elem.appendChild(g.tree.dom.createTextNode(pullDownMenu.stdButtonIDs[evt.GetId()][1]))
+            obj.params['label'] = xxxParam(elem)
+            xxx.treeObject().element.appendChild(elem)
 
         # Insert new node, register undo
         elem = xxx.element
@@ -855,8 +863,7 @@ Homepage: http://xrced.sourceforge.net\
         if parent.__class__ == xxxMainNode:
             cl = xxx.treeObject().__class__
             frame.maxIDs[cl] += 1
-            xxx.treeObject().name = '%s%d' % (defaultIDs[cl], frame.maxIDs[cl])
-            xxx.treeObject().element.setAttribute('name', xxx.treeObject().name)
+            xxx.setTreeName('%s%d' % (defaultIDs[cl], frame.maxIDs[cl]))
 
         # Update panel
         g.panel.SetData(xxx)
