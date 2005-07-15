@@ -43,6 +43,10 @@
 #include "wx/filedlg.h"
 #include "wx/valtext.h"
 
+#ifdef __WXMSW__
+    #include "wx/evtloop.h"     // for SetCriticalWindow()
+#endif // __WXMSW__
+
 // ----------------------------------------------------------------------------
 // wxDumpPreviewDlg: simple class for showing ASCII preview of dump files
 // ----------------------------------------------------------------------------
@@ -483,6 +487,12 @@ bool wxDebugReportPreviewStd::Show(wxDebugReport& dbgrpt) const
         return false;
 
     wxDebugReportDialog dlg(dbgrpt);
+
+#ifdef __WXMSW__
+    // before entering the event loop (from ShowModal()), block the event
+    // handling for all other windows as this could result in more crashes
+    wxEventLoop::SetCriticalWindow(&dlg);
+#endif // __WXMSW__
 
     return dlg.ShowModal() == wxID_OK && dbgrpt.GetFilesCount() != 0;
 }
