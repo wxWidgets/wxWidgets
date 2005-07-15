@@ -1,3 +1,13 @@
+0.1.5-3
+-------
+
+xxxStdDialogButtonSizer pulldown menu with standard buttons.
+
+Some fixes for selecting tools inside toolbar with test window open
+(whole toolbar is selected).
+
+Toolbars can be added inside windows.
+
 0.1.5-2
 -------
 
