@@ -54,6 +54,7 @@
     #include "wx/ownerdrw.h"
 #endif
 
+#include "wx/evtloop.h"
 #include "wx/module.h"
 #include "wx/sysopt.h"
 
@@ -2229,7 +2230,7 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
 
     LRESULT rc;
 
-    if ( wnd )
+    if ( wnd && wxEventLoop::AllowProcessing(wnd) )
         rc = wnd->MSWWindowProc(message, wParam, lParam);
     else
         rc = ::DefWindowProc(hWnd, message, wParam, lParam);
