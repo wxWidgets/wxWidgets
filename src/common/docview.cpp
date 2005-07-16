@@ -2165,6 +2165,8 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
                 pathInMenu = m_fileHistory[i];
             }
 
+            // we need to quote '&' characters which are used for mnemonics
+            pathInMenu.Replace(_T("&"), _T("&&"));
             wxString buf;
             buf.Printf(s_MRUEntryFormat, i + 1, pathInMenu.c_str());
             wxList::compatibility_iterator node = m_fileMenus.GetFirst();
