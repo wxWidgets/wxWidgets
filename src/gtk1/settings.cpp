@@ -44,7 +44,9 @@ struct wxSystemObjects
              m_colHighlightText,
              m_colListBox,
              m_colBtnText,
-             m_colMenuItemHighlight;
+             m_colMenuItemHighlight,
+             m_colTooltip,
+             m_colTooltipText;
 
     wxFont m_fontSystem;
 };
@@ -138,6 +140,18 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
     gtk_widget_destroy( widget );
 
     return ok;
+}
+
+static void GetTooltipColors()
+{
+    GtkTooltips* tooltips = gtk_tooltips_new();
+    gtk_tooltips_force_window(tooltips);
+    gtk_widget_ensure_style(tooltips->tip_window);
+    GdkColor c = tooltips->tip_window->style->bg[GTK_STATE_NORMAL];
+    gs_objects.m_colTooltip = wxColor(c.red >> SHIFT, c.green >> SHIFT, c.blue >> SHIFT);
+    c = tooltips->tip_window->style->fg[GTK_STATE_NORMAL];
+    gs_objects.m_colTooltipText = wxColor(c.red >> SHIFT, c.green >> SHIFT, c.blue >> SHIFT);
+    gtk_object_sink(wx_reinterpret_cast(GtkObject*, tooltips));
 }
 
 wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
@@ -238,7 +252,6 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_CAPTIONTEXT:
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
         case wxSYS_COLOUR_BTNTEXT:
-        case wxSYS_COLOUR_INFOTEXT:
             if (!gs_objects.m_colBtnText.Ok())
             {
                 int red, green, blue;
@@ -258,11 +271,17 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             }
             return gs_objects.m_colBtnText;
 
-            // this (as well as wxSYS_COLOUR_INFOTEXT above) is used for
-            // tooltip windows - Robert, please change this code to use the
-            // real GTK tooltips when/if you can (TODO)
         case wxSYS_COLOUR_INFOBK:
-            return wxColour(255, 255, 225);
+            if (!gs_objects.m_colTooltip.Ok()) {
+                GetTooltipColors();
+            }
+            return gs_objects.m_colTooltip;
+
+        case wxSYS_COLOUR_INFOTEXT:
+            if (!gs_objects.m_colTooltipText.Ok()) {
+                GetTooltipColors();
+            }
+            return gs_objects.m_colTooltipText;
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
             if (!gs_objects.m_colHighlightText.Ok())
