@@ -305,6 +305,16 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
     }
     else if ( !item->IsSeparator() )
     {
+        // recurse upwards: we should only modify m_accels of the top level
+        // menus, not of the submenus as wxMenuBar doesn't look at them
+        // (alternative and arguable cleaner solution would be to recurse
+        // downwards in GetAccelCount() and CopyAccels())
+        if ( GetParent() )
+        {
+            GetParent()->UpdateAccel(item);
+            return;
+        }
+
         // find the (new) accel for this item
         wxAcceleratorEntry *accel = wxGetAccelFromString(item->GetText());
         if ( accel )
