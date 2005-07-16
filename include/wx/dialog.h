@@ -58,7 +58,7 @@ public:
     // m_escapeId declaration and the docs for Set/GetEscapeId()
     void SetEscapeId(int escapeId) { m_escapeId = escapeId; }
     int GetEscapeId() const { return m_escapeId; }
-#else // 2.6
+#elif wxABI_VERSION > 20601
     // just a stub for 2.6
     int GetEscapeId() const { return wxID_ANY; }
 #endif
