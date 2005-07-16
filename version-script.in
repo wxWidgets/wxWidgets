@@ -6,16 +6,12 @@
 #       new development branch.
 
 
-# public symbols added in release 2.6.2
-# (or 2.6.1, we started versioning the symbols in 2.6.2):
+# public symbols added in release 2.6.2:
 
 @WX_VERSION_TAG@.2 {
     global:
-        *wxLaunchDefaultBrowser*;
         *wxLogBuffer*;
         *wxMessageOutputBest*;
-        wxEVT_SCROLL_CHANGED;
-        *wxFileDialog*DoSetSize*;
         *wxDialog*GetEscapeId*;
         *wxWizard*FinishLayout*;
 };
