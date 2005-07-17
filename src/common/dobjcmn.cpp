@@ -287,7 +287,8 @@ size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
     else  // == wxDF_TEXT
     {
         wxCharBuffer buffer = wxConvLibc.cWX2MB( GetText().c_str() );
-        return strlen( (const char*) buffer ) + 1;
+        // in some cases "buffer" is null (e.g. Mac OS X)
+        return buffer ? strlen( (const char*) buffer ) + 1 : 0;
     }
 }
 
@@ -304,7 +305,9 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
     else
     {
         wxCharBuffer buffer = wxConvLibc.cWX2MB( GetText().c_str() );
-        strcpy( (char*) buf, (const char*) buffer );
+        // in some cases "buffer" is null (e.g. Mac OS X)
+        if (buffer)
+            strcpy( (char*) buf, (const char*) buffer );
     }
 
     return true;
