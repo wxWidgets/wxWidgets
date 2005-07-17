@@ -14,6 +14,9 @@
         *wxMessageOutputBest*;
         *wxDialog*GetEscapeId*;
         *wxWizard*FinishLayout*;
+        *wxXmlResource*ConvertFileNameToURL*wxString*;
+        *wxXmlResource*Unload*wxString*;
+        *wxXmlResource*IsArchive*wxString*;
 };
 
 
