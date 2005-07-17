@@ -124,8 +124,10 @@ public:
     // This method understands VFS (see filesys.h).
     bool Load(const wxString& filemask);
 
+#if wxABI_VERSION > 20601
     // Unload resource from the given XML file (wildcards not allowed)
     bool Unload(const wxString& filename);
+#endif // wxABI_VERSION
 
     // Initialize handlers for all supported controls/windows. This will
     // make the executable quite big because it forces linking against
@@ -253,6 +255,7 @@ protected:
                                 wxObject *instance = NULL,
                                 wxXmlResourceHandler *handlerToUse = NULL);
 
+#if wxABI_VERSION > 20601
     // Helper of Load() and Unload(): returns the URL corresponding to the
     // given file if it's indeed a file, otherwise returns the original string
     // unmodified
@@ -263,6 +266,8 @@ protected:
     // Another helper: detect if the filename is a ZIP or XRS file
     static bool IsArchive(const wxString& filename);
 #endif // wxUSE_FILESYSTEM
+
+#endif // wxABI_VERSION
 
 private:
     long m_version;

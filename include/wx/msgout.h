@@ -60,6 +60,8 @@ private:
 // otherwise; unlike wxMessageOutputMessageBox this class is always safe to use
 // ----------------------------------------------------------------------------
 
+#if wxABI_VERSION > 20601
+
 class WXDLLIMPEXP_BASE wxMessageOutputBest : public wxMessageOutput
 {
 public:
@@ -67,6 +69,8 @@ public:
 
     virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
+
+#endif // wxABI_VERSION
 
 // ----------------------------------------------------------------------------
 // implementation which sends output to stderr

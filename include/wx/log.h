@@ -288,6 +288,8 @@ private:
 // "trivial" derivations of wxLog
 // ----------------------------------------------------------------------------
 
+#if wxABI_VERSION > 20601
+
 // log everything to a buffer
 class WXDLLIMPEXP_BASE wxLogBuffer : public wxLog
 {
@@ -310,6 +312,8 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxLogBuffer)
 };
+
+#endif // wxABI_VERSION
 
 // log everything to a "FILE *", stderr by default
 class WXDLLIMPEXP_BASE wxLogStderr : public wxLog
