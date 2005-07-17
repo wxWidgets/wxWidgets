@@ -35,7 +35,7 @@
  * version of wxWidgets being used. A single number with two decimal digits
  * for each component, e.g. 20601 for 2.6.1 */
 #ifndef wxABI_VERSION
-#define wxABI_VERSION ( wxMAJOR_VERSION * 10000 + 9999 )
+#define wxABI_VERSION ( wxMAJOR_VERSION * 10000 + wxMINOR_VERSION * 100 + 99 )
 #endif
 
 /*  helpers for wxVERSION_NUM_XXX */
