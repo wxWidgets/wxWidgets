@@ -96,7 +96,12 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
                     if ( dataFormat.GetType() == wxDF_TEXT )
                         ((char*)data)[byteCount] = 0 ;
                     if ( dataFormat.GetType() == wxDF_UNICODETEXT )
-                        ((wxChar*)data)[byteCount/2] = 0 ;
+                    {
+                        // "data" format is UTF16, so 2 bytes = one character
+                        // wxChar size depends on platform, so just clear last 2 bytes
+                        ((char*)data)[byteCount]   = 0;
+                        ((char*)data)[byteCount+1] = 0;
+                    }
                 }
                 else
                 {
@@ -244,6 +249,8 @@ bool wxClipboard::AddData( wxDataObject *data )
         void* buf = malloc( sz + 1 ) ;
         if ( buf )
         {        
+            // empty the buffer because in some case GetDataHere does not fill buf
+            memset(buf, 0, sz+1);
             data->GetDataHere( array[i] , buf ) ;
             OSType mactype = 0 ;
             switch ( array[i].GetType() )
@@ -380,6 +387,7 @@ bool wxClipboard::GetData( wxDataObject& data )
           switch ( format.GetType() )
           {
               case wxDF_TEXT :
+              case wxDF_UNICODETEXT:
               case wxDF_OEMTEXT :
               case wxDF_BITMAP :
               case wxDF_METAFILE :
