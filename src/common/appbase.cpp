@@ -76,6 +76,13 @@
     #endif // wxUSE_STACKWALKER
 #endif // __WXDEBUG__
 
+// wxABI_VERSION can be defined when compiling applications but it should be
+// left undefined when compiling the library itself, it is then set to its
+// default value in version.h
+#if wxABI_VERSION != wxMAJOR_VERSION * 10000 + wxMINOR_VERSION * 100 + 99
+#error "wxABI_VERSION should not be defined when compiling the library"
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions prototypes
 // ----------------------------------------------------------------------------
