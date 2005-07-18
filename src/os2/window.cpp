@@ -1082,7 +1082,7 @@ WXDWORD wxWindowOS2::OS2GetStyle(
         dwStyle |= WS_CLIPSIBLINGS;
 
     return dwStyle;
-} // end of wxWindowMSW::MSWGetStyle
+} // end of wxWindowOS2::OS2GetStyle
 
 //
 // Make a Windows extended style from the given wxWidgets window style
@@ -1222,7 +1222,7 @@ void wxWindowOS2::Refresh(
             int                     height;
 
             ::WinQueryWindowRect(GetHwnd(), &vOs2Rect);
-	    height = vOs2Rect.yTop;
+            height = vOs2Rect.yTop;
             vOs2Rect.xLeft   = pRect->x;
             vOs2Rect.yTop    = height - pRect->y;
             vOs2Rect.xRight  = pRect->x + pRect->width;
@@ -1635,9 +1635,9 @@ void wxWindowOS2::DoMoveWindow(
 #if 0
     // FIXME: By my logic, the next line should be needed as it moves child
     //        windows when resizing the parent (see comment at beginning of
-    //	      function). However, this seems to cause lots of problems. At
+    //        function). However, this seems to cause lots of problems. At
     //        least, e.g. the grid sample almost works with this line
-    //        commented out but crashes badly with it. 
+    //        commented out but crashes badly with it.
     MoveChildren(nHeightDelta);
 #endif
 } // end of wxWindowOS2::DoMoveWindow
@@ -3729,8 +3729,8 @@ bool wxWindowOS2::HandlePaint()
     // region from the rectangles, to be feed into m_updateRegion.
     //
     // FIXME: This is a bad hack since OS/2 API specifies that rectangles
-    //		passed into GpiSetRegion must not have Bottom > Top,
-    //          however, at first sight, it _seems_ to work nonetheless.
+    //        passed into GpiSetRegion must not have Bottom > Top,
+    //        however, at first sight, it _seems_ to work nonetheless.
     //
     RGNRECT                     vRgnData;
     PRECTL                      pUpdateRects = NULL;
@@ -4058,11 +4058,11 @@ void wxWindowOS2::InitMouseEvent(
     rEvent.m_controlDown = ((uFlags & KC_CTRL) != 0);
     rEvent.m_altDown     = ((uFlags & KC_ALT) != 0);
     rEvent.m_leftDown    = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON1) &
-			    0x8000) != 0;
+                           0x8000) != 0;
     rEvent.m_middleDown  = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON3) &
-			    0x8000) != 0;
+                           0x8000) != 0;
     rEvent.m_rightDown   = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON2) &
-			    0x8000) != 0;
+                           0x8000) != 0;
     rEvent.SetTimestamp(s_currentMsg.time);
     rEvent.SetEventObject(this);
     rEvent.SetId(GetId());
