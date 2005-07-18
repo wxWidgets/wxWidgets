@@ -11,8 +11,9 @@
 
 /*
     Acknowledgements: this header is heavily based on (well, almost the exact
-    copy of) wxScopeGuard.h by Andrei Alexandrescu and Petru Marginean published
+    copy of) ScopeGuard.h by Andrei Alexandrescu and Petru Marginean published
     in December 2000 issue of C/C++ Users Journal.
+    http://www.cuj.com/documents/cujcexp1812alexandr/
  */
 
 #ifndef _WX_SCOPEGUARD_H_
@@ -25,6 +26,30 @@
 // ----------------------------------------------------------------------------
 // helpers
 // ----------------------------------------------------------------------------
+
+#ifdef __WATCOMC__
+
+// WATCOM-FIXME: C++ of Open Watcom 1.3 doesn't like OnScopeExit() created
+// through template so it must be workarounded with dedicated inlined macro.
+// For compatibility with Watcom compilers wxPrivate::OnScopeExit must be
+// replaced with wxPrivateOnScopeExit but in user code (for everyone who
+// doesn't care about OW compatibility) wxPrivate::OnScopeExit still works.
+
+#define wxPrivateOnScopeExit(guard)          \
+    {                                        \
+        if ( !(guard).WasDismissed() )       \
+        {                                    \
+            wxTRY                            \
+            {                                \
+                (guard).Execute();           \
+            }                                \
+            wxCATCH_ALL(;)                   \
+        }                                    \
+    }
+
+#define wxPrivateUse(n) wxUnusedVar(n)
+
+#else
 
 namespace wxPrivate
 {
@@ -51,6 +76,11 @@ namespace wxPrivate
     {
     }
 } // namespace wxPrivate
+
+#define wxPrivateOnScopeExit(n) wxPrivate::OnScopeExit(n)
+#define wxPrivateUse(n) wxPrivate::Use(n)
+
+#endif
 
 // ============================================================================
 // wxScopeGuard for functions and functors
@@ -99,7 +129,7 @@ public:
         return wxScopeGuardImpl0<F>(fun);
     }
 
-    ~wxScopeGuardImpl0() { wxPrivate::OnScopeExit(*this); }
+    ~wxScopeGuardImpl0() { wxPrivateOnScopeExit(*this); }
 
     void Execute() { m_fun(); }
 
@@ -130,7 +160,7 @@ public:
         return wxScopeGuardImpl1<F, P1>(fun, p1);
     }
 
-    ~wxScopeGuardImpl1() { wxPrivate::OnScopeExit(*this); }
+    ~wxScopeGuardImpl1() { wxPrivateOnScopeExit(* this); }
 
     void Execute() { m_fun(m_p1); }
 
@@ -162,7 +192,7 @@ public:
         return wxScopeGuardImpl2<F, P1, P2>(fun, p1, p2);
     }
 
-    ~wxScopeGuardImpl2() { wxPrivate::OnScopeExit(*this); }
+    ~wxScopeGuardImpl2() { wxPrivateOnScopeExit(*this); }
 
     void Execute() { m_fun(m_p1, m_p2); }
 
@@ -200,7 +230,7 @@ public:
         return wxObjScopeGuardImpl0<Obj, MemFun>(obj, memFun);
     }
 
-    ~wxObjScopeGuardImpl0() { wxPrivate::OnScopeExit(*this); }
+    ~wxObjScopeGuardImpl0() { wxPrivateOnScopeExit(*this); }
 
     void Execute() { (m_obj.*m_memfun)(); }
 
@@ -228,7 +258,7 @@ public:
         return wxObjScopeGuardImpl1<Obj, MemFun, P1>(obj, memFun, p1);
     }
 
-    ~wxObjScopeGuardImpl1() { wxPrivate::OnScopeExit(*this); }
+    ~wxObjScopeGuardImpl1() { wxPrivateOnScopeExit(*this); }
 
     void Execute() { (m_obj.*m_memfun)(m_p1); }
 
@@ -258,7 +288,7 @@ public:
         return wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>(obj, memFun, p1, p2);
     }
 
-    ~wxObjScopeGuardImpl2() { wxPrivate::OnScopeExit(*this); }
+    ~wxObjScopeGuardImpl2() { wxPrivateOnScopeExit(*this); }
 
     void Execute() { (m_obj.*m_memfun)(m_p1, m_p2); }
 
@@ -298,37 +328,37 @@ typedef const wxScopeGuardImplBase& wxScopeGuard;
 
 #define wxON_BLOCK_EXIT0_IMPL(n, f) \
     wxScopeGuard n = wxMakeGuard(f); \
-    wxPrivate::Use(n)
+    wxPrivateUse(n)
 #define wxON_BLOCK_EXIT0(f) \
     wxON_BLOCK_EXIT0_IMPL(wxGuardName, f)
 
 #define wxON_BLOCK_EXIT_OBJ0_IMPL(n, o, m) \
     wxScopeGuard n = wxMakeObjGuard(o, m); \
-    wxPrivate::Use(n)
+    wxPrivateUse(n)
 #define wxON_BLOCK_EXIT_OBJ0(o, m) \
     wxON_BLOCK_EXIT_OBJ0_IMPL(wxGuardName, o, m)
 
 #define wxON_BLOCK_EXIT1_IMPL(n, f, p1) \
     wxScopeGuard n = wxMakeGuard(f, p1); \
-    wxPrivate::Use(n)
+    wxPrivateUse(n)
 #define wxON_BLOCK_EXIT1(f, p1) \
     wxON_BLOCK_EXIT1_IMPL(wxGuardName, f, p1)
 
 #define wxON_BLOCK_EXIT_OBJ1_IMPL(n, o, m, p1) \
     wxScopeGuard n = wxMakeObjGuard(o, m, p1); \
-    wxPrivate::Use(n)
+    wxPrivateUse(n)
 #define wxON_BLOCK_EXIT_OBJ1(o, m, p1) \
     wxON_BLOCK_EXIT_OBJ1_IMPL(wxGuardName, o, m, p1)
 
 #define wxON_BLOCK_EXIT2_IMPL(n, f, p1, p2) \
     wxScopeGuard n = wxMakeGuard(f, p1, p2); \
-    wxPrivate::Use(n)
+    wxPrivateUse(n)
 #define wxON_BLOCK_EXIT2(f, p1, p2) \
     wxON_BLOCK_EXIT2_IMPL(wxGuardName, f, p1, p2)
 
 #define wxON_BLOCK_EXIT_OBJ2_IMPL(n, o, m, p1, p2) \
     wxScopeGuard n = wxMakeObjGuard(o, m, p1, p2); \
-    wxPrivate::Use(n)
+    wxPrivateUse(n)
 #define wxON_BLOCK_EXIT_OBJ2(o, m, p1, p2) \
     wxON_BLOCK_EXIT_OBJ2_IMPL(wxGuardName, o, m, p1, p2)
 
