@@ -825,6 +825,8 @@ static void InitToolHelp32()
     lpfProcess32First = NULL;
     lpfProcess32Next = NULL;
 
+#if wxUSE_DYNLIB_CLASS
+
     wxDynamicLibrary dllKernel(_T("kernel32.dll"), wxDL_VERBATIM);
 
     // Get procedure addresses.
@@ -841,6 +843,8 @@ static void InitToolHelp32()
 
     lpfProcess32Next =
         (Process32_t)dllKernel.RawGetSymbol(_T("Process32Next"));
+
+#endif // wxUSE_DYNLIB_CLASS
 }
 
 // By John Skiff
