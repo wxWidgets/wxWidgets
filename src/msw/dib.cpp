@@ -634,7 +634,7 @@ wxPalette *wxDIB::CreatePalette() const
     // and the colour table
     wxCharBuffer rgb(sizeof(RGBQUAD) * biClrUsed);
     RGBQUAD *pRGB = (RGBQUAD*)rgb.data();
-    SelectInHDC(hDC, m_handle);
+    SelectInHDC selectHandle(hDC, m_handle);
     ::GetDIBColorTable(hDC, 0, biClrUsed, pRGB);
     for ( DWORD i = 0; i < biClrUsed; i++, pRGB++ )
     {

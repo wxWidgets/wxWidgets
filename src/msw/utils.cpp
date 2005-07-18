@@ -806,9 +806,11 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
     return 0;
 }
 
-HANDLE (WINAPI *lpfCreateToolhelp32Snapshot)(DWORD,DWORD) ;
-BOOL (WINAPI *lpfProcess32First)(HANDLE,LPPROCESSENTRY32) ;
-BOOL (WINAPI *lpfProcess32Next)(HANDLE,LPPROCESSENTRY32) ;
+typedef HANDLE (WINAPI *CreateToolhelp32Snapshot_t)(DWORD,DWORD);
+typedef BOOL (WINAPI *Process32_t)(HANDLE,LPPROCESSENTRY32);
+
+CreateToolhelp32Snapshot_t lpfCreateToolhelp32Snapshot;
+Process32_t lpfProcess32First, lpfProcess32Next;
 
 static void InitToolHelp32()
 {
@@ -823,9 +825,7 @@ static void InitToolHelp32()
     lpfProcess32First = NULL;
     lpfProcess32Next = NULL;
 
-    HINSTANCE hInstLib = LoadLibrary( wxT("Kernel32.DLL") ) ;
-    if( hInstLib == NULL )
-        return ;
+    wxDynamicLibrary dllKernel(_T("kernel32.dll"), wxDL_VERBATIM);
 
     // Get procedure addresses.
     // We are linking to these functions of Kernel32
@@ -833,37 +833,14 @@ static void InitToolHelp32()
     // this code would fail to load under Windows NT,
     // which does not have the Toolhelp32
     // functions in the Kernel 32.
-    lpfCreateToolhelp32Snapshot=
-        (HANDLE(WINAPI *)(DWORD,DWORD))
-        GetProcAddress( hInstLib,
-#ifdef __WXWINCE__
-        wxT("CreateToolhelp32Snapshot")
-#else
-        "CreateToolhelp32Snapshot"
-#endif
-        ) ;
+    lpfCreateToolhelp32Snapshot =
+        (CreateToolhelp32Snapshot_t)dllKernel.RawGetSymbol(_T("CreateToolhelp32Snapshot"));
 
-    lpfProcess32First=
-        (BOOL(WINAPI *)(HANDLE,LPPROCESSENTRY32))
-        GetProcAddress( hInstLib,
-#ifdef __WXWINCE__
-        wxT("Process32First")
-#else
-        "Process32First"
-#endif
-        ) ;
+    lpfProcess32First =
+        (Process32_t)dllKernel.RawGetSymbol(_T("Process32First"));
 
-    lpfProcess32Next=
-        (BOOL(WINAPI *)(HANDLE,LPPROCESSENTRY32))
-        GetProcAddress( hInstLib,
-#ifdef __WXWINCE__
-        wxT("Process32Next")
-#else
-        "Process32Next"
-#endif
-        ) ;
-
-    FreeLibrary( hInstLib ) ;
+    lpfProcess32Next =
+        (Process32_t)dllKernel.RawGetSymbol(_T("Process32Next"));
 }
 
 // By John Skiff
