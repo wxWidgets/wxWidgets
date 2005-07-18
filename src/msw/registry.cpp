@@ -858,7 +858,7 @@ bool wxRegKey::SetValue(const wxChar *szValue,const wxMemoryBuffer& buffer)
 
 bool wxRegKey::QueryValue(const wxChar *szValue, wxMemoryBuffer& buffer) const
 {
-  if ( CONST_CAST Open() ) {
+  if ( CONST_CAST Open(Read) ) {
     // first get the type and size of the data
     DWORD dwType, dwSize;
     m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
