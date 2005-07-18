@@ -85,7 +85,7 @@ private:
 // ============================================================================
 
 wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
-wxWindow *wxEventLoop::ms_winCritical = NULL;
+wxWindowMSW *wxEventLoop::ms_winCritical = NULL;
 
 // ----------------------------------------------------------------------------
 // ctor/dtor
@@ -112,7 +112,7 @@ void wxEventLoop::ProcessMessage(WXMSG *msg)
     }
 }
 
-bool wxEventLoop::IsChildOfCriticalWindow(wxWindow *win)
+bool wxEventLoop::IsChildOfCriticalWindow(wxWindowMSW *win)
 {
     while ( win )
     {

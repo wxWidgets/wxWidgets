@@ -44,11 +44,11 @@ public:
     //
     // calling this function with NULL argument restores the normal event
     // handling
-    static void SetCriticalWindow(wxWindow *win) { ms_winCritical = win; }
+    static void SetCriticalWindow(wxWindowMSW *win) { ms_winCritical = win; }
 
     // return true if there is no critical window or if this window is [a child
     // of] the critical one
-    static bool AllowProcessing(wxWindow *win)
+    static bool AllowProcessing(wxWindowMSW *win)
     {
         return !ms_winCritical || IsChildOfCriticalWindow(win);
     }
@@ -56,11 +56,11 @@ public:
 protected:
     // check if the given window is a child of ms_winCritical (which must be
     // non NULL)
-    static bool IsChildOfCriticalWindow(wxWindow *win);
+    static bool IsChildOfCriticalWindow(wxWindowMSW *win);
 
 
     // critical window or NULL
-    static wxWindow *ms_winCritical;
+    static wxWindowMSW *ms_winCritical;
 
     // the loop exit code
     int m_exitcode;
