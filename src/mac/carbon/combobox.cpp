@@ -295,6 +295,9 @@ bool wxComboBox::Enable(bool enable)
     if ( !wxControl::Enable(enable) )
         return false;
 
+    if (m_text)
+        m_text->Enable(enable);
+
     return true;
 }
 
