@@ -8,18 +8,18 @@ I. Building wxPalm under Windows
 
 First, you need the freely distributable Palm OS Developer Studio available at
 
-                http://www.palmos.com/dev/dl/dl_tools/dl_pods/
+                http://www.palmos.com/dev/tools/dev_suite.html
 
-Beware, its installation takes about 350Mb (without cygwin tools which I didn't
-install as I already had them), so make sure you have enough disk space for it
-and for wxWidgets build tree (another 50Mb).
+Beware, its installation takes about 500Mb (+ 150 Mb of cygwin if not installed
+yet), so make sure you have enough disk space for it and for wxWidgets build
+tree (another 50Mb). Last tested set: PODS 1.2, SDK 6.1, wxWidgets 2.6.2.
 
 The Developer Studio is Eclipse-based and so is a GUI environment, however it
 is also possible to build Palm applications from the command line using the
 usual GNU tools. Both methods are covered below, choose one which you prefer.
 
 a) Using command line tools:
-    - If you have installed Developer Studion in a non default location (e.g.
+    - If you have installed Developer Studio in a non default location (e.g.
       d:\PalmOS), you will need to set the environment variables:
 
                 set TOOLS_DIR=D:/PalmOS/PalmOSTools/
