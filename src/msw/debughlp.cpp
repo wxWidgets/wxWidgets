@@ -404,15 +404,19 @@ wxDbgHelpDLL::DumpUDT(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
         // between GetWriteBuf() and UngetWriteBuf() calls) and assert when we
         // try to access it contents using public methods, so instead use our
         // knowledge of its internals
-        const wxChar *p = ps->data();
-        wxStringData *data = (wxStringData *)p - 1;
-        if ( ::IsBadReadPtr(data, sizeof(wxStringData)) ||
-                ::IsBadReadPtr(p, sizeof(wxChar *)*data->nAllocLength) )
+        const wxChar *p = NULL;
+        if ( !::IsBadReadPtr(ps, sizeof(wxString)) )
         {
-            p = _T("???");
+            p = ps->data();
+            wxStringData *data = (wxStringData *)p - 1;
+            if ( ::IsBadReadPtr(data, sizeof(wxStringData)) ||
+                    ::IsBadReadPtr(p, sizeof(wxChar *)*data->nAllocLength) )
+            {
+                p = NULL; // don't touch this pointer with 10 feet pole
+            }
         }
 
-        s << _T("(\"") << p << _T(")\"");
+        s << _T("(\"") << (p ? p : _T("???")) << _T(")\"");
     }
     else // any other UDT
 #endif // !wxUSE_STL
