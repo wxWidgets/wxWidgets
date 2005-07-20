@@ -399,10 +399,20 @@ wxDbgHelpDLL::DumpUDT(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
     {
         wxString *ps = (wxString *)pVariable;
 
-        // take care to use c_str() here as otherwise we might hit an assert in
-        // wxString code if it is currently locked for writing (i.e. we're
-        // between GetWriteBuf() and UngetWriteBuf() calls)
-        s << _T("(\"") << ps->c_str() << _T(")\"");
+        // we can't just dump wxString directly as it could be corrupted or
+        // invalid and it could also be locked for writing (i.e. if we're
+        // between GetWriteBuf() and UngetWriteBuf() calls) and assert when we
+        // try to access it contents using public methods, so instead use our
+        // knowledge of its internals
+        const wxChar *p = ps->data();
+        wxStringData *data = (wxStringData *)p - 1;
+        if ( ::IsBadReadPtr(data, sizeof(wxStringData)) ||
+                ::IsBadReadPtr(p, sizeof(wxChar *)*data->nAllocLength) )
+        {
+            p = _T("???");
+        }
+
+        s << _T("(\"") << p << _T(")\"");
     }
     else // any other UDT
 #endif // !wxUSE_STL
