@@ -161,12 +161,8 @@ ShapedFrame::ShapedFrame()
     m_hasShape = false;
     m_bmp = wxBitmap(_T("star.png"), wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
-#ifndef __WXMAC__
-    // On wxMac the tooltip gets clipped by the window shape, YUCK!!
-#if wxUSE_TOOLTOP
     SetToolTip(wxT("Right-click to exit"));
-#endif
-#endif
+
 #ifndef __WXGTK__
     // On wxGTK we can't do this yet because the window hasn't been created
     // yet so we wait until the EVT_WINDOW_CREATE event happens.  On wxMSW and
