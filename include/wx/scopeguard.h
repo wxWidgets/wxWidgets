@@ -336,7 +336,7 @@ typedef const wxScopeGuardImplBase& wxScopeGuard;
     wxScopeGuard n = wxMakeObjGuard(o, m); \
     wxPrivateUse(n)
 #define wxON_BLOCK_EXIT_OBJ0(o, m) \
-    wxON_BLOCK_EXIT_OBJ0_IMPL(wxGuardName, o, m)
+    wxON_BLOCK_EXIT_OBJ0_IMPL(wxGuardName, o, &m)
 
 #define wxON_BLOCK_EXIT1_IMPL(n, f, p1) \
     wxScopeGuard n = wxMakeGuard(f, p1); \
@@ -348,7 +348,7 @@ typedef const wxScopeGuardImplBase& wxScopeGuard;
     wxScopeGuard n = wxMakeObjGuard(o, m, p1); \
     wxPrivateUse(n)
 #define wxON_BLOCK_EXIT_OBJ1(o, m, p1) \
-    wxON_BLOCK_EXIT_OBJ1_IMPL(wxGuardName, o, m, p1)
+    wxON_BLOCK_EXIT_OBJ1_IMPL(wxGuardName, o, &m, p1)
 
 #define wxON_BLOCK_EXIT2_IMPL(n, f, p1, p2) \
     wxScopeGuard n = wxMakeGuard(f, p1, p2); \
@@ -360,6 +360,6 @@ typedef const wxScopeGuardImplBase& wxScopeGuard;
     wxScopeGuard n = wxMakeObjGuard(o, m, p1, p2); \
     wxPrivateUse(n)
 #define wxON_BLOCK_EXIT_OBJ2(o, m, p1, p2) \
-    wxON_BLOCK_EXIT_OBJ2_IMPL(wxGuardName, o, m, p1, p2)
+    wxON_BLOCK_EXIT_OBJ2_IMPL(wxGuardName, o, &m, p1, p2)
 
 #endif // _WX_SCOPEGUARD_H_
