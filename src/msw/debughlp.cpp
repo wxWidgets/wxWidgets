@@ -398,7 +398,11 @@ wxDbgHelpDLL::DumpUDT(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
     if ( s == _T("wxString") )
     {
         wxString *ps = (wxString *)pVariable;
-        s << _T("(\"") << *ps << _T(")\"");
+
+        // take care to use c_str() here as otherwise we might hit an assert in
+        // wxString code if it is currently locked for writing (i.e. we're
+        // between GetWriteBuf() and UngetWriteBuf() calls)
+        s << _T("(\"") << ps->c_str() << _T(")\"");
     }
     else // any other UDT
 #endif // !wxUSE_STL
