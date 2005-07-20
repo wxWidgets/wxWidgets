@@ -21,6 +21,8 @@ msgid ""
 "\n"
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
+"\n"
+"请将报告发送给程序维护人员, 谢谢!\n"
 
 #: ../src/palmos/utils.cpp:205
 msgid " "
@@ -28,7 +30,7 @@ msgstr " "
 
 #: ../src/generic/dbgrptg.cpp:293
 msgid "              Thank you and we're sorry for the inconvenience!\n"
-msgstr ""
+msgstr "              谢谢, 我们对您遇到的不便表示抱歉!\n"
 
 #: ../src/common/log.cpp:321
 #, c-format
@@ -130,161 +132,160 @@ msgstr "%s: 不良资源文件语法."
 
 #: ../src/html/helpfrm.cpp:357 ../src/html/helpfrm.cpp:359
 msgid "&About..."
-msgstr "关于[&A]"
+msgstr "关于(&A)"
 
 #: ../src/common/stockitem.cpp:153
 msgid "&Actual Size"
-msgstr "实际大小[&A]"
+msgstr "实际大小(&A)"
 
 #: ../src/common/stockitem.cpp:108
 msgid "&Apply"
-msgstr "应用[&A]"
+msgstr "应用(&A)"
 
 #: ../src/msw/mdi.cpp:190
 msgid "&Arrange Icons"
-msgstr "重排图标[&A]"
+msgstr "重排图标(&A)"
 
 #: ../src/common/stockitem.cpp:118
 msgid "&Back"
-msgstr "返回[&B]"
+msgstr "返回(&B)"
 
 #: ../src/common/stockitem.cpp:109
 msgid "&Bold"
-msgstr "粗体[&B]"
+msgstr "粗体(&B)"
 
 #: ../src/common/stockitem.cpp:110 ../src/generic/fontdlgg.cpp:363
 #: ../src/generic/fontdlgg.cpp:382 ../src/generic/wizard.cpp:418
 msgid "&Cancel"
-msgstr "取消[&C]"
+msgstr "取消(&C)"
 
 #: ../src/msw/mdi.cpp:186
 msgid "&Cascade"
-msgstr "层叠[&C]"
+msgstr "层叠(&C)"
 
 #: ../src/common/stockitem.cpp:111
 msgid "&Clear"
-msgstr "清除[&C]"
+msgstr "清除(&C)"
 
 #: ../src/common/prntbase.cpp:828 ../src/common/stockitem.cpp:112
 #: ../src/generic/logg.cpp:512 ../src/html/helpfrm.cpp:354
 msgid "&Close"
-msgstr "关闭[&C]"
+msgstr "关闭(&C)"
 
 #: ../src/common/stockitem.cpp:113 ../src/msw/textctrl.cpp:2065
 msgid "&Copy"
-msgstr "复制[&C]"
+msgstr "复制(&C)"
 
 #: ../src/generic/dbgrptg.cpp:301
 msgid "&Debug report preview:"
-msgstr ""
+msgstr "调试报告预览(&D): "
 
 #: ../src/common/stockitem.cpp:115 ../src/msw/textctrl.cpp:2067
 msgid "&Delete"
-msgstr "删除[&D]"
+msgstr "删除(&D)"
 
 #: ../src/generic/logg.cpp:718
 msgid "&Details"
-msgstr "细节[&D]"
+msgstr "细节(&D)"
 
 #: ../src/common/stockitem.cpp:119
 msgid "&Down"
-msgstr "向下[&D]"
+msgstr "向下(&D)"
 
 #: ../src/html/helpfrm.cpp:361
 msgid "&File"
-msgstr "文件[&F]"
+msgstr "文件(&F)"
 
 #: ../src/common/stockitem.cpp:116
 msgid "&Find"
-msgstr "查找[&F]"
+msgstr "查找(&F)"
 
 #: ../src/generic/wizard.cpp:606
 msgid "&Finish"
-msgstr "完成[&F]"
+msgstr "完成(&F)"
 
 #: ../src/generic/fontdlgg.cpp:273
 msgid "&Font family:"
-msgstr "字体[&F]:"
+msgstr "字体(&F):"
 
 #: ../src/common/stockitem.cpp:120
 msgid "&Forward"
-msgstr "向前[&F]"
+msgstr "向前(&F)"
 
 #: ../src/common/prntbase.cpp:863
 msgid "&Goto..."
-msgstr "跳转[&G]..."
+msgstr "跳转(&G)..."
 
 #: ../src/common/stockitem.cpp:122 ../src/generic/wizard.cpp:414
 #: ../src/generic/wizard.cpp:421 ../src/html/helpfrm.cpp:362
 msgid "&Help"
-msgstr "帮助[&H]"
+msgstr "帮助(&H)"
 
 #: ../src/common/stockitem.cpp:123
 #, fuzzy
 msgid "&Home"
-msgstr "Home[&H]"
+msgstr "Home(&H)"
 
 #: ../src/common/stockitem.cpp:125
 msgid "&Index"
-msgstr "索引[&I]"
+msgstr "索引(&I)"
 
 #: ../src/common/stockitem.cpp:126
 msgid "&Italic"
-msgstr "斜体[&I]"
+msgstr "斜体(&I)"
 
 #: ../src/generic/logg.cpp:513
 msgid "&Log"
-msgstr "日志[&L]"
+msgstr "日志(&L)"
 
 #: ../src/univ/themes/win32.cpp:4817
 msgid "&Move"
-msgstr "移动[&M]"
+msgstr "移动(&M)"
 
 #: ../src/common/stockitem.cpp:131
 msgid "&New"
-msgstr "新建[&N]"
+msgstr "新建(&N)"
 
 #: ../src/generic/mdig.cpp:117 ../src/msw/mdi.cpp:191
 msgid "&Next"
-msgstr "下一个[&N]"
+msgstr "下一个(&N)"
 
 #: ../src/generic/wizard.cpp:417 ../src/generic/wizard.cpp:608
 msgid "&Next >"
-msgstr "下一个[&N] >"
+msgstr "下一个(&N) >"
 
 #: ../src/generic/tipdlg.cpp:243
 msgid "&Next Tip"
-msgstr "下一技巧[&N]"
+msgstr "下一技巧(&N)"
 
 #: ../src/common/stockitem.cpp:132
 msgid "&No"
-msgstr "否[&N]"
+msgstr "否(&N)"
 
 #: ../src/generic/dbgrptg.cpp:323
-#, fuzzy
 msgid "&Notes:"
-msgstr "否[&N]"
+msgstr "注意(&N):"
 
 #: ../src/common/stockitem.cpp:133 ../src/generic/fontdlgg.cpp:368
 #: ../src/generic/fontdlgg.cpp:375
 msgid "&OK"
-msgstr "确认[&O]"
+msgstr "确认(&O)"
 
 #: ../src/common/stockitem.cpp:134
 msgid "&Open"
-msgstr "打开[&O]"
+msgstr "打开(&O)"
 
 #: ../src/html/helpfrm.cpp:352
 msgid "&Open..."
-msgstr "打开[&O]..."
+msgstr "打开(&O)..."
 
 #: ../src/common/stockitem.cpp:135 ../src/msw/textctrl.cpp:2066
 msgid "&Paste"
-msgstr "粘贴[&P]"
+msgstr "粘贴(&P)"
 
 #: ../src/generic/fontdlgg.cpp:324
 msgid "&Point size:"
-msgstr "字体大小(Point size)[&P]:"
+msgstr "字体大小(Point size)(&P):"
 
 #: ../src/common/stockitem.cpp:136
 msgid "&Preferences"
@@ -292,99 +293,99 @@ msgstr "偏好设置"
 
 #: ../src/generic/mdig.cpp:118 ../src/msw/mdi.cpp:192
 msgid "&Previous"
-msgstr "前页[&P]"
+msgstr "前页(&P)"
 
 #: ../src/common/stockitem.cpp:137
 msgid "&Print"
-msgstr "打印[&P]"
+msgstr "打印(&P)"
 
 #: ../src/common/prntbase.cpp:833
 msgid "&Print..."
-msgstr "打印[&P]..."
+msgstr "打印(&P)..."
 
 #: ../src/common/stockitem.cpp:139
 msgid "&Properties"
-msgstr "属性[&P]"
+msgstr "属性(&P)"
 
 #: ../src/common/stockitem.cpp:140
 msgid "&Quit"
-msgstr "退出[&Q]"
+msgstr "退出(&Q)"
 
 #: ../src/common/cmdproc.cpp:292 ../src/common/cmdproc.cpp:299
 #: ../src/common/stockitem.cpp:141 ../src/msw/textctrl.cpp:2062
 msgid "&Redo"
-msgstr "重复[&R]"
+msgstr "重复(&R)"
 
 #: ../src/common/cmdproc.cpp:288 ../src/common/cmdproc.cpp:308
 msgid "&Redo "
-msgstr "重复[&R] "
+msgstr "重复(&R) "
 
 #: ../src/generic/fdrepdlg.cpp:185
 msgid "&Replace"
-msgstr "替换[&R]"
+msgstr "替换(&R)"
 
 #: ../src/univ/themes/win32.cpp:4816
 msgid "&Restore"
-msgstr "复原[&R]"
+msgstr "复原(&R)"
 
 #: ../src/common/stockitem.cpp:145
 msgid "&Save"
-msgstr "保存[&S]"
+msgstr "保存(&S)"
 
 #: ../src/generic/logg.cpp:508
 msgid "&Save..."
-msgstr "保存[&S]..."
+msgstr "保存(&S)..."
 
 #: ../src/generic/tipdlg.cpp:238
 msgid "&Show tips at startup"
-msgstr "启动时显示技巧[&S]"
+msgstr "启动时显示技巧(&S)"
 
 #: ../src/univ/themes/win32.cpp:4819
 msgid "&Size"
-msgstr "大小[&S]"
+msgstr "大小(&S)"
 
 #: ../src/common/stockitem.cpp:147
 msgid "&Stop"
-msgstr "停止[&S]"
+msgstr "停止(&S)"
 
 #: ../src/generic/fontdlgg.cpp:284
 msgid "&Style:"
-msgstr "字体[S]:"
+msgstr "字体(&S):"
 
 #: ../src/common/stockitem.cpp:149 ../src/generic/fontdlgg.cpp:337
 msgid "&Underline"
-msgstr "下划线[&U]"
+msgstr "下划线(&U)"
 
 #: ../src/common/cmdproc.cpp:270 ../src/common/stockitem.cpp:150
 #: ../src/msw/textctrl.cpp:2061
 msgid "&Undo"
-msgstr "恢复[&U]"
+msgstr "恢复(&U)"
 
 #: ../src/common/cmdproc.cpp:264
 msgid "&Undo "
-msgstr "恢复[&U] "
+msgstr "恢复(&U) "
 
 #: ../src/common/stockitem.cpp:151
 msgid "&Unindent"
-msgstr "取消缩进[&U]"
+msgstr "取消缩进(&U)"
 
 #: ../src/common/stockitem.cpp:121
 msgid "&Up"
-msgstr "向上[&U]"
+msgstr "向上(&U)"
 
 #: ../src/generic/fontdlgg.cpp:295
 msgid "&Weight:"
-msgstr "字体粗细[&W]:"
+msgstr "字体粗细(&W):"
 
 #: ../src/generic/mdig.cpp:297 ../src/generic/mdig.cpp:313
 #: ../src/generic/mdig.cpp:317 ../src/msw/mdi.cpp:1387 ../src/msw/mdi.cpp:1394
 #: ../src/msw/mdi.cpp:1424
 msgid "&Window"
-msgstr "窗口[&W]"
+msgstr "窗口(&W)"
 
 #: ../src/common/stockitem.cpp:152
 msgid "&Yes"
-msgstr "是[&Y]"
+msgstr "是(&Y)"
 
 #: ../src/common/config.cpp:432 ../src/msw/regconf.cpp:258
 #, c-format
@@ -443,27 +444,26 @@ msgstr "(书签)"
 
 #: ../src/common/debugrpt.cpp:537
 msgid "*** A debug report has been generated\n"
-msgstr ""
+msgstr "*** 生成了一份调试报告\n"
 
 #: ../src/common/debugrpt.cpp:540
 msgid "*** And includes the following files:\n"
-msgstr ""
+msgstr "*** 且包含以下文件:\n"
 
 #: ../src/common/debugrpt.cpp:538
 #, c-format
 msgid "*** It can be found in \"%s\"\n"
-msgstr ""
+msgstr "*** 可在此找到: \"%s\"\n"
 
 #: ../contrib/src/deprecated/resource.cpp:1840
 #: ../contrib/src/deprecated/resource.cpp:1970
 #: ../contrib/src/deprecated/resource.cpp:3062
-#, fuzzy
 msgid ""
 ", expected static, #include or #define\n"
 "while parsing resource."
 msgstr ""
-", 期望 static, #include 或 #define\n"
-"同时对资源进行语法分析."
+", 在对资源进行语法分析时\n"
+", 期望如下关键字 static, #include 或 #define ."
 
 #: ../src/generic/dirctrlg.cpp:675 ../src/generic/filedlgg.cpp:747
 msgid "."
@@ -499,11 +499,11 @@ msgstr ": 未知编码"
 
 #: ../src/generic/wizard.cpp:423
 msgid "< &Back"
-msgstr "< 返回[&B]"
+msgstr "< 返回(&B)"
 
 #: ../src/common/prntbase.cpp:845
 msgid "<<"
-msgstr "<<"
+msgstr ""
 
 #: ../src/generic/filedlgg.cpp:266 ../src/generic/filedlgg.cpp:289
 msgid "<DIR>"
@@ -535,15 +535,15 @@ msgstr "<i>斜体.</i> "
 
 #: ../src/common/prntbase.cpp:851
 msgid ">>"
-msgstr ">>"
+msgstr ""
 
 #: ../src/common/prntbase.cpp:857
 msgid ">>|"
-msgstr ">>|"
+msgstr ""
 
 #: ../src/generic/dbgrptg.cpp:285
 msgid "A debug report has been generated in the directory\n"
-msgstr ""
+msgstr "产生了一份调试报告, 位于目录\n"
 
 #: ../src/common/xtixml.cpp:409
 msgid "A non empty collection must consist of 'element' nodes"
@@ -727,11 +727,11 @@ msgstr "C 纸张, 17 x 22 英寸"
 
 #: ../src/generic/logg.cpp:510
 msgid "C&lear"
-msgstr "清除[&L]"
+msgstr "清除(&L)"
 
 #: ../src/generic/fontdlgg.cpp:308
 msgid "C&olour:"
-msgstr "颜色[&o]:"
+msgstr "颜色(&o):"
 
 #: ../src/common/paper.cpp:137
 msgid "C3 Envelope, 324 x 458 mm"
@@ -802,7 +802,7 @@ msgstr "不能等候线程终止"
 
 #: ../src/common/cmdproc.cpp:266
 msgid "Can't &Undo "
-msgstr "不能恢复[&U]"
+msgstr "不能恢复(&U)"
 
 #: ../src/common/image.cpp:1763
 #, c-format
@@ -1078,9 +1078,8 @@ msgid "Cannot start thread: error writing TLS"
 msgstr "不能启动线程: 写TLS错误"
 
 #: ../src/mac/carbon/mpthread.cpp:977 ../src/mac/carbon/thread.cpp:1174
-#, fuzzy
 msgid "Cannot wait for thread termination."
-msgstr "不能等候线程终止"
+msgstr "不能等候线程终止."
 
 #: ../src/mac/carbon/mpthread.cpp:893 ../src/mac/carbon/thread.cpp:1082
 msgid "Cant create the thread event queue"
@@ -1117,7 +1116,7 @@ msgstr "选择字体"
 
 #: ../src/generic/mdig.cpp:114
 msgid "Cl&ose"
-msgstr "关闭[&o]"
+msgstr "关闭(&o)"
 
 #: ../src/generic/logg.cpp:510
 msgid "Clear the log contents"
@@ -1332,7 +1331,7 @@ msgstr "创建新目录"
 
 #: ../src/common/stockitem.cpp:114 ../src/msw/textctrl.cpp:2064
 msgid "Cu&t"
-msgstr "剪切[&t]"
+msgstr "剪切(&t)"
 
 #: ../src/generic/filedlgg.cpp:1018
 msgid "Current directory:"
@@ -1356,11 +1355,11 @@ msgstr "DIB头: 编码不能匹配颜色位数."
 
 #: ../src/common/imagbmp.cpp:883
 msgid "DIB Header: Image height > 32767 pixels for file."
-msgstr "DIB头: 对于文件，图像高度 > 32767 象素."
+msgstr "DIB头: 对于文件, 图像高度 > 32767 象素."
 
 #: ../src/common/imagbmp.cpp:877
 msgid "DIB Header: Image width > 32767 pixels for file."
-msgstr "DIB头: 对于文件，图像宽度 > 32767 象素."
+msgstr "DIB头: 对于文件, 图像宽度 > 32767 象素."
 
 #: ../src/common/imagbmp.cpp:897
 msgid "DIB Header: Unknown bitdepth in file."
@@ -1377,16 +1376,15 @@ msgstr "DL 信封, 110 x 220 毫米"
 #: ../src/generic/dbgrptg.cpp:276
 #, c-format
 msgid "Debug report \"%s\""
-msgstr ""
+msgstr "调试报告 \"%s\""
 
 #: ../src/common/debugrpt.cpp:203
-#, fuzzy
 msgid "Debug report couldn't be created."
-msgstr "目录'%s'不能被创建"
+msgstr "无法创建调试报告."
 
 #: ../src/common/debugrpt.cpp:517
 msgid "Debug report generation has failed."
-msgstr ""
+msgstr "无法生成调试报告."
 
 #: ../src/generic/fontdlgg.cpp:227
 msgid "Decorative"
@@ -1503,7 +1501,7 @@ msgstr "编辑项"
 
 #: ../src/generic/progdlgg.cpp:194
 msgid "Elapsed time : "
-msgstr "用时："
+msgstr "用时: "
 
 #: ../src/common/prntbase.cpp:799
 #, c-format
@@ -1511,19 +1509,19 @@ msgid "Enter a page number between %d and %d:"
 msgstr "输入页码范围(%d 至 %d):"
 
 #: ../src/generic/dbgrptg.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Enter command to open file \"%s\":"
-msgstr "不能打开文件 '%s'"
+msgstr "输入命令以打开文件 \"%s\":"
 
 #: ../src/generic/helpext.cpp:443
 msgid "Entries found"
 msgstr "找到的条目"
 
 #: ../src/common/config.cpp:383
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "环境变量扩展失败:  '%c' 没有出现在位置 %d / '%s'."
+msgstr "环境变量扩展失败:  '%c' 没有出现在位置 %u / '%s'."
 
 #: ../src/generic/dirctrlg.cpp:681 ../src/generic/dirctrlg.cpp:699
 #: ../src/generic/dirctrlg.cpp:710 ../src/generic/dirdlgg.cpp:344
@@ -1568,11 +1566,11 @@ msgstr "世界语 (ISO-8859-3)"
 
 #: ../src/generic/progdlgg.cpp:202
 msgid "Estimated time : "
-msgstr "预期时间："
+msgstr "预期时间: "
 
 #: ../src/generic/dbgrptg.cpp:211
 msgid "Executable files (*.exe)|*.exe|All files (*.*)|*.*||"
-msgstr ""
+msgstr "可执行文件 (*.exe)|*.exe|所有文件 (*.*)|*.*||"
 
 #: ../src/msw/utilsexc.cpp:753
 #, c-format
@@ -1643,9 +1641,9 @@ msgid "Failed to change video mode"
 msgstr "改变视频模式失败."
 
 #: ../src/common/debugrpt.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "创建目录 %s/.gnome 失败."
+msgstr "无法清除调试报告目录 \"%s\""
 
 #: ../src/common/filename.cpp:191
 msgid "Failed to close file handle"
@@ -1698,7 +1696,7 @@ msgstr "创建 MDI 父框架失败."
 
 #: ../src/msw/statbr95.cpp:112
 msgid "Failed to create a status bar."
-msgstr "创建状态条失败。"
+msgstr "创建状态条失败."
 
 #: ../src/common/filename.cpp:766
 msgid "Failed to create a temporary file name"
@@ -1718,9 +1716,9 @@ msgid "Failed to create cursor."
 msgstr "创建游标失败."
 
 #: ../src/common/debugrpt.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory \"%s\""
-msgstr "创建目录 %s/.gnome 失败."
+msgstr "无法创建目录 \"%s\""
 
 #: ../src/unix/mimetype.cpp:370
 #, c-format
@@ -1781,7 +1779,7 @@ msgstr "执行 '%s'失败\n"
 
 #: ../src/common/debugrpt.cpp:652
 msgid "Failed to execute curl, please install it in PATH."
-msgstr ""
+msgstr "无法执行curl, 请在PATH变量所指的目录中安装curl."
 
 #: ../contrib/src/deprecated/resource.cpp:2489
 #, c-format
@@ -1923,7 +1921,7 @@ msgstr "打开临时文件失败."
 
 #: ../src/msw/clipbrd.cpp:99
 msgid "Failed to open the clipboard."
-msgstr "打开剪贴板失败。"
+msgstr "打开剪贴板失败."
 
 #: ../src/msw/clipbrd.cpp:626
 msgid "Failed to put data on the clipboard"
@@ -1956,9 +1954,9 @@ msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "回忆字符集 '%s'编码失败."
 
 #: ../src/common/debugrpt.cpp:220
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove debug report file \"%s\""
-msgstr "不能删除锁文件 '%s'"
+msgstr "不能删除调试报告文件 \"%s\""
 
 #: ../src/unix/snglinst.cpp:327
 #, c-format
@@ -2068,9 +2066,9 @@ msgid "Failed to update user configuration file."
 msgstr "不能更新用户配置文件."
 
 #: ../src/common/debugrpt.cpp:665
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to upload the debug report (error code %d)."
-msgstr "创建标准\"查找/替换\"对话框失败 (错误号 %d)"
+msgstr "上传调试报告失败 (错误号 %d)."
 
 #: ../src/unix/snglinst.cpp:173
 #, c-format
@@ -2358,6 +2356,8 @@ msgid ""
 "If you have any additional information pertaining to this bug\n"
 "report, please enter it here and it will be joined to it:"
 msgstr ""
+"如果您有任何与此错误报告有关的信息, \n"
+"请在此输入, 它将会被加到错误报告中:"
 
 #: ../src/generic/dbgrptg.cpp:291
 msgid ""
@@ -2366,6 +2366,10 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
+"如果您想完全禁用调试报告, 请按"
+"\"取消\"按钮, \n"
+"但我们不建议这样做, 因为调试报告有助于改进本程序.\n"
+"在可能的情况下, 请尽量选择让程序生成调试报告.\n"
 
 #: ../src/msw/registry.cpp:1281
 #, c-format
@@ -2596,7 +2600,7 @@ msgstr "MS HTML帮助功能不存在, 因为此机器上没有安装MS HTML帮�
 
 #: ../src/univ/themes/win32.cpp:4823
 msgid "Ma&ximize"
-msgstr "最大化[&x]"
+msgstr "最大化(&x)"
 
 #: ../src/unix/mimetype.cpp:2671
 #, c-format
@@ -2622,7 +2626,7 @@ msgstr "金属主题(theme)"
 
 #: ../src/univ/themes/win32.cpp:4821
 msgid "Mi&nimize"
-msgstr "最小化[&n]"
+msgstr "最小化(&n)"
 
 #: ../src/unix/mimetype.cpp:2292
 #, c-format
@@ -2795,9 +2799,9 @@ msgid "Open HTML document"
 msgstr "打开HTML文档"
 
 #: ../src/generic/dbgrptg.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Open file \"%s\""
-msgstr "打开文件"
+msgstr "打开文件 \"%s\""
 
 #: ../src/generic/dirctrlg.cpp:710 ../src/generic/dirdlgg.cpp:344
 #: ../src/generic/filedlgg.cpp:639 ../src/generic/filedlgg.cpp:779
@@ -2990,7 +2994,7 @@ msgstr "彩色打印"
 
 #: ../src/common/stockitem.cpp:138
 msgid "Print previe&w"
-msgstr "打印预览[&w]"
+msgstr "打印预览(&w)"
 
 #: ../src/gtk/gnome/gprint.cpp:778
 msgid "Print preview"
@@ -3054,6 +3058,7 @@ msgstr "打印..."
 msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
+"处理调试报告失败, 文件被保存在目录 \"%s\" 中."
 
 #: ../src/common/log.cpp:466
 msgid "Program aborted."
@@ -3102,7 +3107,7 @@ msgid ""
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
-"正规系统操作需要注册键 '%s',\n"
+"正常的系统操作需要注册键 '%s',\n"
 "删除它将使系统进入不可用状态:\n"
 "操作终止."
 
@@ -3134,11 +3139,11 @@ msgstr "渲染器(renderer) \"%s\"的版本 %d.%d不兼容, 无法加载."
 
 #: ../src/common/stockitem.cpp:117
 msgid "Rep&lace"
-msgstr "替换[&l]"
+msgstr "替换(&l)"
 
 #: ../src/generic/fdrepdlg.cpp:188
 msgid "Replace &all"
-msgstr "全部替换[&a]"
+msgstr "全部替换(&a)"
 
 #: ../src/generic/fdrepdlg.cpp:130
 msgid "Replace with:"
@@ -3171,7 +3176,7 @@ msgstr "保存文件 %s "
 
 #: ../src/common/stockitem.cpp:146
 msgid "Save &As..."
-msgstr "另存为[&A]..."
+msgstr "另存为(&A)..."
 
 #: ../src/common/docview.cpp:305
 msgid "Save as"
@@ -3227,7 +3232,7 @@ msgstr "文件 '%s'定位错误 (stdio不支持大文件)"
 
 #: ../src/msw/textctrl.cpp:2069
 msgid "Select &All"
-msgstr "选择所有[&A]"
+msgstr "选择所有(&A)"
 
 #: ../src/common/docview.cpp:1712
 msgid "Select a document template"
@@ -3417,7 +3422,7 @@ msgid ""
 "[Cancel] if it cannot be replaced"
 msgstr ""
 "未知字符集'%s'. 选择其它字符集\n"
-"代替它，或，如果不能\n"
+"代替它; 如果不能\n"
 "被替代则选择[取消] "
 
 #: ../src/msw/ole/dataobj.cpp:164
@@ -3483,6 +3488,9 @@ msgid ""
 "private information,\n"
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
+"报告包含了以下文件. 如果这些文件含有"
+"私人信息, \n"
+"请去掉选中相应的文件, 未选中的文件就会从报告中删除.\n"
 
 #: ../src/common/cmdline.cpp:883
 #, c-format
@@ -3538,11 +3546,11 @@ msgstr "线程优先级设置被忽略."
 
 #: ../src/msw/mdi.cpp:187
 msgid "Tile &Horizontally"
-msgstr "水平排布[&H]"
+msgstr "水平排布(&H)"
 
 #: ../src/msw/mdi.cpp:188
 msgid "Tile &Vertically"
-msgstr "垂直排布[&V]"
+msgstr "垂直排布(&V)"
 
 #: ../src/common/ftp.cpp:635
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
@@ -3558,7 +3566,7 @@ msgstr "每日技巧"
 
 #: ../src/generic/tipdlg.cpp:157
 msgid "Tips not available, sorry!"
-msgstr "对不起，没有所需技巧!"
+msgstr "对不起, 没有所需技巧!"
 
 #: ../src/generic/prntdlgg.cpp:237
 msgid "To:"
@@ -3947,15 +3955,15 @@ msgstr "你不能向该项中加入新的目录."
 
 #: ../src/common/stockitem.cpp:155
 msgid "Zoom &In"
-msgstr "放大[&I]"
+msgstr "放大(&I)"
 
 #: ../src/common/stockitem.cpp:156
 msgid "Zoom &Out"
-msgstr "缩小[&O]"
+msgstr "缩小(&O)"
 
 #: ../src/common/stockitem.cpp:154
 msgid "Zoom to &Fit"
-msgstr "缩放以适应窗口[&F]"
+msgstr "缩放以适应窗口(&F)"
 
 #: ../src/common/docview.cpp:2146
 msgid "[EMPTY]"
@@ -4252,7 +4260,7 @@ msgstr "委派没有类型信息"
 
 #: ../src/common/debugrpt.cpp:502
 msgid "dump of the process state (binary)"
-msgstr ""
+msgstr "转储(dump)进程状态（二进制码）"
 
 #: ../src/common/datetime.cpp:3779
 msgid "eighteenth"
@@ -4446,7 +4454,7 @@ msgstr "内存耗尽"
 
 #: ../src/common/debugrpt.cpp:478
 msgid "process context description"
-msgstr ""
+msgstr "进程上下文描述"
 
 #: ../src/html/chm.cpp:334
 msgid "read error"
@@ -4662,18 +4670,5 @@ msgstr "zlib错误 %d"
 
 #: ../src/common/prntbase.cpp:839
 msgid "|<<"
-msgstr "|<<"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Cannot wait on thread to exit."
-#~ msgstr "不能等候线程终止."
-
-#~ msgid "Could not load Rich Edit DLL '%s'"
-#~ msgstr "不能装载 Rich Edit DLL '%s'"
-
-#~ msgid "ZIP handler currently supports only local files!"
-#~ msgstr "ZIP处理程序目前只支持本地文件!"
-
-#~ msgid ""
-#~ "can't seek on file descriptor %d, large files support is not enabled."
-#~ msgstr "不能定位文件描述子 %d, 没有开启\"大文件支持\""
