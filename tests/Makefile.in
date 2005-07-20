@@ -60,6 +60,7 @@ TEST_OBJECTS =  \
 	test_mbconvtest.o \
 	test_regextest.o \
 	test_wxregextest.o \
+	test_scopeguardtest.o \
 	test_strings.o \
 	test_stdstrings.o \
 	test_unicode.o \
@@ -78,7 +79,7 @@ TEST_OBJECTS =  \
 TEST_ODEP =  $(___pch_testprec_test_testprec_h_gch___depname)
 TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../samples \
+	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/samples \
 	$(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(__test_gui___win32rc) \
@@ -143,7 +144,7 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_4) $(__EXCEPTIONS_DEFINE_p_4) \
 	$(__RTTI_DEFINE_p_4) $(__THREAD_DEFINE_p_4) -i $(srcdir) $(__DLLFLAG_p_4) -i \
-	$(srcdir)/../samples -i $(top_srcdir)/include -o test_gui$(EXEEXT) Carbon.r \
+	$(srcdir)/samples -i $(top_srcdir)/include -o test_gui$(EXEEXT) Carbon.r \
 	sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -239,7 +240,7 @@ test_gui.app/Contents/PkgInfo: $(__test_gui___depname) $(top_srcdir)/src/mac/car
 data: 
 	@mkdir -p .
 	@for f in testdata.fc; do \
-	if test ! -f ./$$f ; \
+	if test ! -e ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \
@@ -299,6 +300,9 @@ test_regextest.o: $(srcdir)/regex/regextest.cpp $(TEST_ODEP)
 test_wxregextest.o: $(srcdir)/regex/wxregextest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/regex/wxregextest.cpp
 
+test_scopeguardtest.o: $(srcdir)/scopeguard/scopeguardtest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/scopeguard/scopeguardtest.cpp
+
 test_strings.o: $(srcdir)/strings/strings.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/strings.cpp
 
@@ -344,8 +348,8 @@ test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp $(TEST_ODEP)
 test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/uris.cpp
 
-test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)  --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples --include-dir $(top_srcdir)/include
+test_gui_sample_rc.o: $(srcdir)/samples/sample.rc $(TEST_GUI_ODEP)
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)  --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/samples --include-dir $(top_srcdir)/include
 
 test_gui_test.o: $(srcdir)/test.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/test.cpp
