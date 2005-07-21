@@ -109,7 +109,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #if wxUSE_STREAMS
 
 #ifndef PNGLINKAGEMODE
-    #ifdef __WATCOMC__
+    #if defined(__WATCOMC__) && defined(__WXMSW__)
         // we need an explicit cdecl for Watcom, at least according to
         //
         // http://sf.net/tracker/index.php?func=detail&aid=651492&group_id=9863&atid=109863

@@ -103,7 +103,7 @@ TextElement(wxXmlNode *node, const wxChar *name, const wxString& value)
 {
     wxXmlNode *nodeChild = new wxXmlNode(wxXML_ELEMENT_NODE, name);
     node->AddChild(nodeChild);
-    nodeChild->AddChild(new wxXmlNode(wxXML_TEXT_NODE, _T(""), value));
+    nodeChild->AddChild(new wxXmlNode(wxXML_TEXT_NODE, wxEmptyString, value));
 }
 
 static inline void
@@ -690,4 +690,3 @@ bool wxDebugReportUpload::DoProcess()
 #endif // wxUSE_ZIPSTREAM
 
 #endif // wxUSE_DEBUGREPORT
-

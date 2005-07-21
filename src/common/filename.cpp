@@ -1910,6 +1910,9 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
         return true;
     }
 #else // other platform
+    wxUnusedVar(dtAccess);
+    wxUnusedVar(dtMod);
+    wxUnusedVar(dtCreate);
 #endif // platforms
 
     wxLogSysError(_("Failed to modify file times for '%s'"),
@@ -2000,6 +2003,9 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
         return true;
     }
 #else // other platform
+    wxUnusedVar(dtAccess);
+    wxUnusedVar(dtMod);
+    wxUnusedVar(dtCreate);
 #endif // platforms
 
     wxLogSysError(_("Failed to retrieve file times for '%s'"),

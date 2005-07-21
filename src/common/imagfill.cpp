@@ -62,7 +62,7 @@ static void LINKAGEMODE
 wxImageFloodFill(wxImage *image,
                  wxCoord x, wxCoord y, const wxBrush & fillBrush,
                  const wxColour& testColour, int style,
-                int LogicalFunction)
+                 int WXUNUSED(LogicalFunction))
 {
     /* A diamond flood-fill using a circular queue system.
     Each pixel surrounding the current pixel is added to
@@ -309,4 +309,3 @@ bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
 }
 
 #endif // wxUSE_IMAGE
-

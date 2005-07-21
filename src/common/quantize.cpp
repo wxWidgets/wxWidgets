@@ -77,7 +77,7 @@
 
 typedef unsigned short UINT16;
 typedef signed short INT16;
-#ifndef __WATCOMC__
+#if !(defined(__WATCOMC__) && defined(__WXMSW__))
 typedef signed int INT32;
 #endif
 
@@ -1656,4 +1656,3 @@ bool wxQuantize::Quantize(const wxImage& src,
 
 #endif
     // wxUSE_IMAGE
-

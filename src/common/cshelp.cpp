@@ -254,6 +254,8 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
  * to put the application into context help mode.
  */
 
+#ifndef __WXPM__
+
 static const char * csquery_xpm[] = {
 "12 11 2 1",
 "  c None",
@@ -269,6 +271,8 @@ static const char * csquery_xpm[] = {
 "     ..     ",
 "     ..     ",
 "            "};
+
+#endif
 
 IMPLEMENT_CLASS(wxContextHelpButton, wxBitmapButton)
 

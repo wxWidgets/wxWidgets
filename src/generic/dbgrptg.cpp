@@ -131,14 +131,21 @@ public:
     wxString m_command;
 
 private:
+
+#if wxUSE_FILEDLG
     void OnBrowse(wxCommandEvent& event);
+#endif // wxUSE_FILEDLG
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxDumpOpenExternalDlg)
 };
 
 BEGIN_EVENT_TABLE(wxDumpOpenExternalDlg, wxDialog)
+
+#if wxUSE_FILEDLG
     EVT_BUTTON(wxID_MORE, wxDumpOpenExternalDlg::OnBrowse)
+#endif
+
 END_EVENT_TABLE()
 
 
@@ -180,11 +187,16 @@ wxDumpOpenExternalDlg::wxDumpOpenExternalDlg(wxWindow *parent,
                               );
     sizerH->Add(command,
                     wxSizerFlags(1).Align(wxALIGN_CENTER_VERTICAL));
+
+#if wxUSE_FILEDLG
+
     wxButton *browse = new wxButton(this, wxID_MORE, wxT(">>"),
                                     wxDefaultPosition, wxDefaultSize,
                                     wxBU_EXACTFIT);
     sizerH->Add(browse,
                 wxSizerFlags(0).Align(wxALIGN_CENTER_VERTICAL). Border(wxLEFT));
+
+#endif // wxUSE_FILEDLG
 
     sizerTop->Add(sizerH, wxSizerFlags(0).Expand().Border());
 
@@ -204,6 +216,8 @@ wxDumpOpenExternalDlg::wxDumpOpenExternalDlg(wxWindow *parent,
     command->SetFocus();
 }
 
+#if wxUSE_FILEDLG
+
 void wxDumpOpenExternalDlg::OnBrowse(wxCommandEvent& )
 {
     wxFileName fname(m_command);
@@ -222,6 +236,7 @@ void wxDumpOpenExternalDlg::OnBrowse(wxCommandEvent& )
     }
 }
 
+#endif // wxUSE_FILEDLG
 
 // ----------------------------------------------------------------------------
 // wxDebugReportDialog: class showing debug report to the user
@@ -401,7 +416,7 @@ bool wxDebugReportDialog::TransferDataFromWindow()
 void wxDebugReportDialog::OnView(wxCommandEvent& )
 {
     const int sel = m_checklst->GetSelection();
-    wxCHECK_RET( sel != -1, _T("invalid selection in OnView()") );
+    wxCHECK_RET( sel != wxNOT_FOUND, _T("invalid selection in OnView()") );
 
     wxFileName fn(m_dbgrpt.GetDirectory(), m_files[sel]);
     wxString str;
@@ -417,7 +432,7 @@ void wxDebugReportDialog::OnView(wxCommandEvent& )
 void wxDebugReportDialog::OnOpen(wxCommandEvent& )
 {
     const int sel = m_checklst->GetSelection();
-    wxCHECK_RET( sel != -1, _T("invalid selection in OnOpen()") );
+    wxCHECK_RET( sel != wxNOT_FOUND, _T("invalid selection in OnOpen()") );
 
     wxFileName fn(m_dbgrpt.GetDirectory(), m_files[sel]);
 
@@ -498,4 +513,3 @@ bool wxDebugReportPreviewStd::Show(wxDebugReport& dbgrpt) const
 }
 
 #endif // wxUSE_DEBUGREPORT
-

@@ -362,7 +362,7 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
         case WXK_NUMPAD7:
         case WXK_NUMPAD8:
         case WXK_NUMPAD9:
-            ch = _T('0') + keycode - WXK_NUMPAD0;
+            ch = (wxChar)(_T('0') + keycode - WXK_NUMPAD0);
             break;
 
         case WXK_MULTIPLY:
@@ -523,4 +523,3 @@ wxTextCtrlBase::HitTest(const wxPoint& WXUNUSED(pt),
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED)
 
 #endif // wxUSE_TEXTCTRL/!wxUSE_TEXTCTRL
-

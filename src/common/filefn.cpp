@@ -1151,6 +1151,7 @@ bool wxMkdir(const wxString& dir, int perm)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
   #endif
 #elif defined(__OS2__)
+    wxUnusedVar(perm);
     if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
 #elif defined(__DOS__)
   #if defined(__WATCOMC__)
@@ -1228,7 +1229,7 @@ bool wxDirExists(const wxChar *pszPathName)
 
     return (ret != (DWORD)-1) && (ret & FILE_ATTRIBUTE_DIRECTORY);
 #elif defined(__OS2__)
-    return (::DosSetCurrentDir((PSZ)(WXSTRINGCAST strPath)));
+    return (bool)(::DosSetCurrentDir((PSZ)(WXSTRINGCAST strPath)));
 #else // !__WIN32__
 
     wxStructStat st;
@@ -1406,7 +1407,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
                                       ,cbuf + 3
                                       ,(PULONG)&sz
                                      );
-            cbuf[0] = 'A' + (ulDriveNum - 1);
+            cbuf[0] = char('A' + (ulDriveNum - 1));
             cbuf[1] = ':';
             cbuf[2] = '\\';
             ok = rc == 0;

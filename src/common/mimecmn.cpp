@@ -412,12 +412,16 @@ bool wxFileType::Unassociate()
 #endif
 }
 
-bool wxFileType::SetCommand(const wxString& cmd, const wxString& verb,
-bool overwriteprompt)
+bool wxFileType::SetCommand(const wxString& cmd,
+                            const wxString& verb,
+                            bool overwriteprompt)
 {
 #if defined (__WXMSW__)  || defined(__UNIX__)
     return m_impl->SetCommand(cmd, verb, overwriteprompt);
 #else
+    wxUnusedVar(cmd);
+    wxUnusedVar(verb);
+    wxUnusedVar(overwriteprompt);
     wxFAIL_MSG(_T("not implemented"));
     return false;
 #endif
@@ -437,8 +441,8 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
 #if defined (__WXMSW__) || defined(__UNIX__)
     return m_impl->SetDefaultIcon (cmd, index);
 #else
+    wxUnusedVar(index);
     wxFAIL_MSG(_T("not implemented"));
-
     return false;
 #endif
 }
@@ -506,6 +510,7 @@ wxMimeTypesManager::Associate(const wxFileTypeInfo& ftInfo)
 #if defined(__WXMSW__) || defined(__UNIX__)
     return m_impl->Associate(ftInfo);
 #else // other platforms
+    wxUnusedVar(ftInfo);
     wxFAIL_MSG( _T("not implemented") ); // TODO
     return NULL;
 #endif // platforms
