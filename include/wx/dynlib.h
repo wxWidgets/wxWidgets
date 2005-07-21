@@ -23,10 +23,8 @@
 #include "wx/string.h"
 #include "wx/dynarray.h"
 
-// FIXME: can this go in private.h or something too??
 #if defined(__WXPM__) || defined(__EMX__)
-#define INCL_DOS
-#include <os2.h>
+#include "wx/os2/private.h"
 #endif
 
 #ifdef __WXMSW__

@@ -198,7 +198,7 @@
 
  It may be used both within a function and in the global scope.
 */
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__) && defined(__cplusplus)
     /* avoid "unused symbol" warning */
     #define wxCOMPILE_TIME_ASSERT(expr, msg) \
         class wxMAKE_UNIQUE_ASSERT_NAME { \
@@ -249,4 +249,3 @@
 #endif /* __cplusplus */
 
 #endif  /*  _WX_DEBUG_H_ */
-

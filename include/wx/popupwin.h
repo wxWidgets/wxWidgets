@@ -56,17 +56,17 @@ public:
 
 
 // include the real class declaration
-#ifdef __WXMSW__
+#if defined(__WXMSW__)
     #include "wx/msw/popupwin.h"
-#elif __WXPM__
+#elif defined(__WXPM__)
     #include "wx/os2/popupwin.h"
-#elif __WXGTK__
+#elif defined(__WXGTK__)
     #include "wx/gtk/popupwin.h"
-#elif __WXX11__
+#elif defined(__WXX11__)
     #include "wx/x11/popupwin.h"
-#elif __WXMOTIF__
+#elif defined(__WXMOTIF__)
     #include "wx/motif/popupwin.h"
-#elif __WXMGL__
+#elif defined(__WXMGL__)
     #include "wx/mgl/popupwin.h"
 #else
     #error "wxPopupWindow is not supported under this platform."
@@ -131,7 +131,7 @@ protected:
     // check if the mouse needs captured or released
     void OnIdle(wxIdleEvent& event);
 #endif
-    
+
     // the child of this popup if any
     wxWindow *m_child;
 
@@ -190,4 +190,3 @@ protected:
 #endif // wxUSE_POPUPWIN
 
 #endif // _WX_POPUPWIN_H_BASE_
-

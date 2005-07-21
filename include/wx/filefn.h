@@ -49,6 +49,9 @@
 // __OS2__ and __UNIX__ are defined.
     #include <process.h>
     #include "wx/os2/private.h"
+    #ifdef __WATCOMC__
+        #include <direct.h>
+    #endif
     #include <io.h>
     #ifdef __EMX__
         #include <unistd.h>

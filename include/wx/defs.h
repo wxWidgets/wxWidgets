@@ -902,7 +902,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec _T("L")
-#elif (defined(__WATCOMC__) && (defined(__WIN32__) || defined(__DOS__)))
+#elif (defined(__WATCOMC__) && (defined(__WIN32__) || defined(__DOS__) || defined(__OS2__)))
       #define wxLongLong_t __int64
       #define wxLongLongSuffix i64
       #define wxLongLongFmtSpec _T("L")
