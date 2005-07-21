@@ -17,12 +17,12 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_OWNER_DRAWN
-  class WXDLLEXPORT wxOwnerDrawn;
+    class WXDLLEXPORT wxOwnerDrawn;
 
-  // define the array of list box items
-  #include  <wx/dynarray.h>
+    // define the array of list box items
+    #include  <wx/dynarray.h>
 
-  WX_DEFINE_EXPORTED_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
+    WX_DEFINE_EXPORTED_ARRAY_PTR(wxOwnerDrawn *, wxListBoxItemsArray);
 #endif // wxUSE_OWNER_DRAWN
 
 // forward decl for GetSelections()

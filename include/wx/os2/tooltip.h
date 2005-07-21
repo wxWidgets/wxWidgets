@@ -27,9 +27,9 @@ public:
 
     // controlling tooltip behaviour: globally change tooltip parameters
         // enable or disable the tooltips globally
-    static void Enable(bool flag) {}
+    static void Enable(bool WXUNUSED(flag)) {}
         // set the delay after which the tooltip appears
-    static void SetDelay(long milliseconds) {}
+    static void SetDelay(long WXUNUSED(milliseconds)) {}
 
     //
     // Implementation
@@ -44,4 +44,3 @@ private:
     wxString                        m_sText;           // tooltip text
     wxWindow*                       m_pWindow;         // window we're associated with
 }; // end of CLASS wxToolTip
-

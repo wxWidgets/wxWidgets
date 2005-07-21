@@ -14,6 +14,7 @@
 
 #ifdef __WATCOMC__
 
+#include <types.h>
 #include <sys/ioctl.h>
 #include <sys/select.h>
 
@@ -74,7 +75,7 @@ public:
 
     virtual bool OnInitGui(void);
 
-    virtual bool Yield(bool onlyIfNeeded = FALSE);
+    virtual bool Yield(bool onlyIfNeeded = false);
     virtual void WakeUpIdle(void);
 
     virtual void SetPrintMode(int mode) { m_nPrintMode = mode; }
@@ -120,4 +121,3 @@ protected:
 };
 #endif
     // _WX_APP_H_
-

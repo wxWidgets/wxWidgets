@@ -63,10 +63,10 @@ public:
     bool Unassociate();
 
     // set an arbitrary command, ask confirmation if it already exists and
-    // overwriteprompt is TRUE
+    // overwriteprompt is true
     bool SetCommand(const wxString& cmd,
                     const wxString& verb,
-                    bool overwriteprompt = TRUE);
+                    bool overwriteprompt = true);
 
     bool SetDefaultIcon(const wxString& cmd = wxEmptyString, int index = 0);
 
@@ -101,10 +101,10 @@ public:
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
     // these are NOPs under OS/2
-    bool ReadMailcap(const wxString& filename, bool fallback = TRUE)
-        { return TRUE; }
-    bool ReadMimeTypes(const wxString& filename)
-        { return TRUE; }
+    bool ReadMailcap(const wxString& WXUNUSED(filename), bool WXUNUSED(fallback) = true)
+        { return true; }
+    bool ReadMimeTypes(const wxString& WXUNUSED(filename))
+        { return true; }
 
     void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
 
@@ -116,4 +116,3 @@ private:
 
 #endif
   //_MIMETYPE_IMPL_H
-

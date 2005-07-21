@@ -15,7 +15,7 @@
 #include "wx/spinbutt.h"    // the base class
 #include "wx/dynarray.h"
 class WXDLLEXPORT wxSpinCtrl;
-WX_DEFINE_EXPORTED_ARRAY(wxSpinCtrl *, wxArraySpins);
+WX_DEFINE_EXPORTED_ARRAY_PTR(wxSpinCtrl *, wxArraySpins);
 
 // ----------------------------------------------------------------------------
 // Under Win32 and OS2 PM, wxSpinCtrl is a wxSpinButton with a buddy
@@ -28,7 +28,7 @@ class WXDLLEXPORT wxSpinCtrl : public wxSpinButton
 public:
     wxSpinCtrl() { }
     wxSpinCtrl( wxWindow*       pParent
-               ,wxWindowID      vId = -1
+               ,wxWindowID      vId = wxID_ANY
                ,const wxString& rsValue = wxEmptyString
                ,const wxPoint&  rPos = wxDefaultPosition
                ,const wxSize&   rSize = wxDefaultSize
@@ -44,7 +44,7 @@ public:
     virtual ~wxSpinCtrl();
 
     bool Create(wxWindow*       pParent
-               ,wxWindowID      vId = -1
+               ,wxWindowID      vId = wxID_ANY
                ,const wxString& rsValue = wxEmptyString
                ,const wxPoint&  rPos = wxDefaultPosition
                ,const wxSize&   rSize = wxDefaultSize
@@ -65,23 +65,23 @@ public:
     // implementation only from now on
     // -------------------------------
     //
-    virtual        bool Enable(bool bEnable = TRUE);
+    virtual bool Enable(bool bEnable = true);
 
-           virtual int  GetValue(void) const;
+    virtual int  GetValue(void) const;
 
-           virtual bool SetFont(const wxFont &rFont);
-           virtual void SetFocus(void);
+    virtual bool SetFont(const wxFont &rFont);
+    virtual void SetFocus(void);
+
     inline virtual void SetValue(int nVal) { wxSpinButton::SetValue(nVal); }
-                   void SetSelection( long lFrom
-                                     ,long lTo
-                                    );
 
-           virtual bool Show(bool bShow = TRUE);
+    void SetSelection(long lFrom, long lTo);
+
+    virtual bool Show(bool bShow = true);
 
     //
     // wxSpinButton doesn't accept focus, but we do
     //
-    inline virtual bool AcceptsFocus(void) const { return FALSE; }
+    inline virtual bool AcceptsFocus(void) const { return false; }
 
     //
     // Return the spinctrl object whose buddy is the given window or NULL
@@ -126,5 +126,3 @@ private:
 }; // end of CLASS wxSpinCtrl
 
 #endif // _WX_MSW_SPINCTRL_H_
-
-

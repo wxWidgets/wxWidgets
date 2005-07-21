@@ -17,7 +17,7 @@
     #include "wx/list.h"        // for "template" list classes
     #include "wx/dynarray.h"
 
-    WX_DEFINE_EXPORTED_ARRAY(wxAcceleratorEntry *, wxAcceleratorArray);
+    WX_DEFINE_EXPORTED_ARRAY_PTR(wxAcceleratorEntry *, wxAcceleratorArray);
 #endif // wxUSE_ACCEL
 
 class WXDLLEXPORT wxFrame;
@@ -139,9 +139,9 @@ private:
     void EndRadioGroup(void);
 
     //
-    // If TRUE, insert a breal before appending the next item
+    // If true, insert a breal before appending the next item
     //
-    bool                            m_bDoBreak;
+    bool m_bDoBreak;
 
     //
     // The menu handle of this menu
