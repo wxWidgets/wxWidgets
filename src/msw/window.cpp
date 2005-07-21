@@ -4575,11 +4575,14 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
 bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
 {
 #if wxUSE_MOUSEWHEEL
+    // notice that WM_MOUSEWHEEL position is in screen coords (as it's
+    // forwarded up to the parent by DefWindowProc()) and not in the client
+    // ones as all the other messages, translate them to the client coords for
+    // consistency
+    const wxPoint
+        pt = ScreenToClient(wxPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
     wxMouseEvent event(wxEVT_MOUSEWHEEL);
-    InitMouseEvent(event,
-                   GET_X_LPARAM(lParam),
-                   GET_Y_LPARAM(lParam),
-                   LOWORD(wParam));
+    InitMouseEvent(event, pt.x, pt.y, LOWORD(wParam));
     event.m_wheelRotation = (short)HIWORD(wParam);
     event.m_wheelDelta = WHEEL_DELTA;
 

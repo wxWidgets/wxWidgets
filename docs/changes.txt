@@ -22,6 +22,7 @@ wxMSW:
 - Fixed multiline tooltips handling.
 - Fixed wxSlider::GetSelEnd() (Atilim Cetin)
 - Fixed accelerators of menu items added to already attached submenus
+- Position of wxEVT_MOUSEWHEEL events is now in client, not screen, coordinates
 
 wxUniv:
 
