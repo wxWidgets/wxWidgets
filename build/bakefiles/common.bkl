@@ -236,13 +236,13 @@
     </set>
 
     <set var="RTTI_DEFINE">
-    	<if cond="USE_RTTI=='0'">wxNO_RTTI</if>
+        <if cond="USE_RTTI=='0'">wxNO_RTTI</if>
     </set>
     <set var="EXCEPTIONS_DEFINE">
-    	<if cond="USE_EXCEPTIONS=='0'">wxNO_EXCEPTIONS</if>
+        <if cond="USE_EXCEPTIONS=='0'">wxNO_EXCEPTIONS</if>
     </set>
     <set var="THREAD_DEFINE">
-    	<if cond="USE_THREADS=='0'">wxNO_THREADS</if>
+        <if cond="USE_THREADS=='0'">wxNO_THREADS</if>
     </set>
 
     <set var="DEBUG_DEFINE">
@@ -280,6 +280,10 @@
         </if>
         <define>$(NO_VC_CRTDBG)</define>
         <define>$(WIN32_WINNT)</define>
+        <if cond="FORMAT=='msevc4prj'">
+            <!-- hack to make eVC4 default project still compatible with eVC3 environment -->
+            <set var="_ldlibs">$(_ldlibs.replace('ccrtrtti.lib', ''))</set>
+        </if>
     </template>
 
     <template id="anylib">
@@ -520,7 +524,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <dllname>$(WXDLLNAME)</dllname>
         <version>$(WX_VERSION)</version>
         <so_version>$(WXSOVERSION)</so_version>
-    
+
         <!-- FIXME: until libtool scheme is implemented in bakefile -->
         <ldflags cond="FORMAT=='autoconf'">$(WXMACVERSION_CMD)</ldflags>
 

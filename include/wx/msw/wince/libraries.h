@@ -26,6 +26,10 @@
     #pragma comment(lib,"commdlg.lib")
 #endif
 
+#if (_WIN32_WCE >= 400) && !defined(wxNO_RTTI)
+    #pragma comment(lib,"ccrtrtti.lib")
+#endif
+
 #if defined(__WINCE_STANDARDSDK__)
     // DoDragDrop:
     #pragma comment(lib,"olece400.lib")
