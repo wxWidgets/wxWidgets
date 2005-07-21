@@ -29,6 +29,9 @@
         <define cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
             COMPILED_FROM_DSP
         </define>
+        <define cond="FORMAT=='watcom' and PLATFORM_OS2=='1'">
+            OS2_32
+        </define>
         <cflags-borland>-w-8004 -w-8008 -w-8012 -w-8057 -w-8066</cflags-borland>
         <sources>
             src/expat/lib/xmlparse.c

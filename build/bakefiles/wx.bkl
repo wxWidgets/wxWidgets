@@ -12,13 +12,13 @@
     </phony>
 
     <set var="BUILDING_LIB">1</set>
-    
+
     <!-- common rules, names etc. for wx: -->
     <include file="common.bkl"/>
-    
+
     <!-- list of files sorted into categories: -->
     <include file="files.bkl"/>
-    
+
     <!-- wxWidgets variant where everything is in one library: -->
     <include file="monolithic.bkl"/>
     <!-- ...and when there are multiple libraries: -->
@@ -30,21 +30,21 @@
             <if cond="MONOLITHIC=='1'">$(MSVC6PRJ_MERGED_TARGETS_MONOLIB)</if>
         </set>
     </if>
-    
+
     <!-- OpenGL canvas is built as separate library in both cases: -->
     <include file="opengl.bkl"/>
     <!-- Dynamically loadable plugins: -->
     <include file="plugins.bkl"/>
- 
+
     <!-- Samples target (not dependency of 'all'): -->
     <subproject id="samples">
         <installable>no</installable>
         <dir cond="FORMAT=='autoconf'">samples</dir>
-        <dir cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL']">../../samples</dir>
+        <dir cond="FORMAT!='autoconf' and TOOLKIT in ['PM','MSW','MGL']">../../samples</dir>
     </subproject>
-    
+
     <if cond="FORMAT=='autoconf'">
-    
+
         <!-- WXRC compiler is built by default: -->
         <!-- FIXME: this is dirty hack, better bakefile support for
              conditional and optional subprojects is needed -->
@@ -59,7 +59,7 @@
             <depends>baselib</depends>
             <depends>xmldll</depends>
             <depends>xmllib</depends>
-            
+
             <command>
                 (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) all) || true
             </command>
@@ -77,7 +77,7 @@
                 (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) install) || true
             </command>
         </action>
-    
+
         <!-- "make install": -->
 
         <data-files>
@@ -145,26 +145,27 @@
     </if>
 
 
-    <!-- copy setup.h on DOS/Windows: -->    
-    <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL']">
+    <!-- copy setup.h on DOS/OS2/Windows: -->
+    <if cond="FORMAT!='autoconf' and TOOLKIT in ['PM','MSW','MGL']">
         <mkdir id="libdir">
             <dir>$(LIBDIRNAME)</dir>
         </mkdir>
         <mkdir id="libdir_setup">
             <depends>libdir</depends>
-            <dir>$(SETUPHDIR)</dir>            
+            <dir>$(SETUPHDIR)</dir>
         </mkdir>
         <mkdir id="libdir_setup_wx">
             <depends>libdir_setup</depends>
             <dependency-of>setup_h</dependency-of>
-            <dir>$(SETUPHDIR)/wx</dir>            
+            <dir>$(SETUPHDIR)/wx</dir>
         </mkdir>
 
         <set var="SETUP_H_SUBDIR">
             <if cond="WXUNIV=='1'">univ</if>
-            <if cond="WXUNIV=='0'">$(TOOLKIT_LOWERCASE)</if>
+            <if cond="WXUNIV=='0' and TOOLKIT!='PM'">$(TOOLKIT_LOWERCASE)</if>
+            <if cond="WXUNIV=='0' and TOOLKIT=='PM'">os2</if>
         </set>
-        
+
         <copy-file-to-file-if-not-exist id="master_setup.h">
             <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup0.h</src>
             <dst>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</dst>
@@ -209,7 +210,7 @@
         <fragment format="autoconf" file="make_dist.mk"/>
 
     </if>
-        
+
     <include file="build_cfg.bkl"/>
 
 </makefile>

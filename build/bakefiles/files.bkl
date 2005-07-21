@@ -1626,6 +1626,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/ownerdrw.cpp
     src/os2/palette.cpp
     src/os2/pen.cpp
+    src/os2/popupwin.cpp
     src/os2/print.cpp
     src/os2/radiobox.cpp
     src/os2/radiobut.cpp

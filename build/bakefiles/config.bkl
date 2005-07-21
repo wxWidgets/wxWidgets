@@ -53,7 +53,7 @@
             Type of compiled binaries
         </description>
     </option>
-   
+
     <!-- FIXME: restore this once bakefile is fixed to not use
                 /Gm /GZ (incompatible with /O2) w/ debug-info -->
     <set var="DEBUG_INFO_DEFAULT">
@@ -279,7 +279,7 @@ to run the tests, include CppUnit library here.
 
 
     <!-- ================================================================== -->
-    <!--                         windows compilers                          -->
+    <!--                     windows/dos/os2 compilers                      -->
     <!-- ================================================================== -->
 
     <if cond="FORMAT!='autoconf'">
@@ -296,8 +296,10 @@ it if SHARED=1 unless you know what you are doing.
         <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->
 
         <set var="TOOLKIT" overwrite="0">
-            <if cond="FORMAT!='msevc4prj'">MSW</if>
             <if cond="FORMAT=='msevc4prj'">WINCE</if>
+            <if cond="FORMAT!='msevc4prj' and PLATFORM_WIN32=='1'">MSW</if>
+            <if cond="PLATFORM_MSDOS=='1'">DOS</if>
+            <if cond="PLATFORM_OS2=='1'">PM</if>
         </set>
         <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
         <set var="TOOLKIT_VERSION"/>
@@ -401,7 +403,7 @@ Set the version of your Mingw installation here.
     <if cond="FORMAT=='msevc4prj'">
         <set var="WXUNIV">0</set>
         <set var="UNICODE">1</set>
-	<!-- Uploading debug reports from PDAs seems impractical -->
+        <!-- Uploading debug reports from PDAs seems impractical -->
         <set var="USE_QA">0</set>
         <set var="MONOLITHIC">1</set> <!-- sic! -->
     </if>
