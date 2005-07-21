@@ -45,7 +45,8 @@ public:
     void OnDeleteButton( wxCommandEvent &event );
     void OnMoveButton( wxCommandEvent &event );
     void OnScrollWin( wxCommandEvent &event );
-    void OnMouseDown( wxMouseEvent &event );
+    void OnMouseRightDown( wxMouseEvent &event );
+    void OnMouseWheel( wxMouseEvent &event );
 
     wxButton *m_button;
 
@@ -170,12 +171,13 @@ public: // interface
     static wxRect DCNormalize(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 
 protected: // event stuff
-    DECLARE_EVENT_TABLE()
     void OnDraw(wxDC& dc);
     void OnMouseLeftDown(wxMouseEvent& event);
     void OnMouseLeftUp(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnScroll(wxScrollWinEvent& event);
+
+    DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------
@@ -234,7 +236,8 @@ IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_PAINT(                  MyCanvas::OnPaint)
-  EVT_MOUSE_EVENTS(           MyCanvas::OnMouseDown)
+  EVT_RIGHT_DOWN(             MyCanvas::OnMouseRightDown)
+  EVT_MOUSEWHEEL(             MyCanvas::OnMouseWheel)
   EVT_BUTTON( ID_QUERYPOS,    MyCanvas::OnQueryPosition)
   EVT_BUTTON( ID_ADDBUTTON,   MyCanvas::OnAddButton)
   EVT_BUTTON( ID_DELBUTTON,   MyCanvas::OnDeleteButton)
@@ -322,18 +325,25 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
 }
 
-void MyCanvas::OnMouseDown( wxMouseEvent &event )
+void MyCanvas::OnMouseRightDown( wxMouseEvent &event )
 {
-    if (event.LeftDown())
-    {
-        wxPoint pt( event.GetPosition() );
-        int x,y;
-        CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
-        wxLogMessage( wxT("Mouse down event at: %d %d, scrolled: %d %d"), pt.x, pt.y, x, y );
+    wxPoint pt( event.GetPosition() );
+    int x,y;
+    CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
+    wxLogMessage( wxT("Mouse down event at: %d %d, scrolled: %d %d"), pt.x, pt.y, x, y );
+}
 
-        if ( !event.LeftIsDown() )
-            wxLogMessage( wxT("Error: LeftIsDown() should be true if for LeftDown()") );
-    }
+void MyCanvas::OnMouseWheel( wxMouseEvent &event )
+{
+    wxPoint pt( event.GetPosition() );
+    int x,y;
+    CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
+    wxLogMessage( wxT("Mouse wheel event at: %d %d, scrolled: %d %d\n")
+                  wxT("Rotation: %d, delta = %d"),
+                  pt.x, pt.y, x, y,
+                  event.GetWheelRotation(), event.GetWheelDelta() );
+
+    event.Skip();
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
