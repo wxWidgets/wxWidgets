@@ -35,7 +35,11 @@
 // ----------------------------------------------------------------------------
 
 // check that the page index is valid
-#define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
+#define IS_VALID_PAGE(nPage) (                                \
+                               /* size_t is _always_ >= 0 */  \
+                               /* ((nPage) >= 0) && */        \
+                               ((nPage) < GetPageCount())     \
+                             )
 
 // hide the ugly cast
 #define m_hWnd    (HWND)GetHWND()
@@ -112,14 +116,12 @@ wxNotebook::wxNotebook(
 //
 // Create() function
 //
-bool wxNotebook::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxString&                   rsName
-)
+bool wxNotebook::Create( wxWindow*       pParent,
+                         wxWindowID      vId,
+                         const wxPoint&  rPos,
+                         const wxSize&   rSize,
+                         long            lStyle,
+                         const wxString& rsName )
 {
     //
     // Base init
@@ -132,7 +134,7 @@ bool wxNotebook::Create(
                        ,wxDefaultValidator
                        ,rsName
                       ))
-        return FALSE;
+        return false;
 
     //
     // Notebook, so explicitly specify 0 as last parameter
@@ -143,10 +145,10 @@ bool wxNotebook::Create(
                           ,rSize
                           ,lStyle | wxTAB_TRAVERSAL
                          ))
-        return FALSE;
+        return false;
 
     SetBackgroundColour(wxColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)));
-    return TRUE;
+    return true;
 } // end of wxNotebook::Create
 
 WXDWORD wxNotebook::OS2GetStyle (
@@ -205,9 +207,7 @@ int wxNotebook::GetRowCount() const
                             );
 } // end of wxNotebook::GetRowCount
 
-int wxNotebook::SetSelection(
-  size_t                            nPage
-)
+int wxNotebook::SetSelection( size_t nPage )
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
@@ -240,10 +240,8 @@ int wxNotebook::SetSelection(
     return nPage;
 } // end of wxNotebook::SetSelection
 
-bool wxNotebook::SetPageText(
-  size_t                            nPage
-, const wxString&                   rsStrText
-)
+bool wxNotebook::SetPageText( size_t nPage,
+                              const wxString& rsStrText )
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
     return (bool)::WinSendMsg( m_hWnd
@@ -253,9 +251,7 @@ bool wxNotebook::SetPageText(
                              );
 } // end of wxNotebook::SetPageText
 
-wxString wxNotebook::GetPageText (
-  size_t                            nPage
-) const
+wxString wxNotebook::GetPageText ( size_t nPage ) const
 {
     BOOKTEXT                        vBookText;
     wxChar                          zBuf[256];
@@ -302,9 +298,7 @@ wxString wxNotebook::GetPageText (
     return sStr;
 } // end of wxNotebook::GetPageText
 
-int wxNotebook::GetPageImage (
-  size_t                            nPage
-) const
+int wxNotebook::GetPageImage ( size_t nPage ) const
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
@@ -332,10 +326,10 @@ void wxNotebook::SetImageList (
   wxImageList*                      pImageList
 )
 {
-    // 
+    //
     // Does not really do anything yet, but at least we need to
     // update the base class.
-    // 
+    //
     wxNotebookBase::SetImageList(pImageList);
 } // end of wxNotebook::SetImageList
 
@@ -378,11 +372,9 @@ void wxNotebook::SetTabSize (
 //
 // Remove one page from the notebook, without deleting
 //
-wxNotebookPage* wxNotebook::DoRemovePage (
-  size_t                            nPage
-)
+wxNotebookPage* wxNotebook::DoRemovePage ( size_t nPage )
 {
-    wxNotebookPage*                 pPageRemoved = wxNotebookBase::DoRemovePage(nPage);
+    wxNotebookPage* pPageRemoved = wxNotebookBase::DoRemovePage(nPage);
 
     if (!pPageRemoved)
         return NULL;
@@ -463,7 +455,8 @@ bool wxNotebook::DeleteAllPages()
                  ,(MPARAM)BKA_ALL
                 );
     m_nSelection = -1;
-    return TRUE;
+
+    return true;
 } // end of wxNotebook::DeleteAllPages
 
 //
@@ -487,13 +480,11 @@ bool wxNotebook::AddPage (
 //
 // Same as AddPage() but does it at given position
 //
-bool wxNotebook::InsertPage (
-  size_t                            nPage
-, wxNotebookPage*                   pPage
-, const wxString&                   rsStrText
-, bool                              bSelect
-, int                               nImageId
-)
+bool wxNotebook::InsertPage ( size_t          nPage,
+                              wxNotebookPage* pPage,
+                              const wxString& rsStrText,
+                              bool            bSelect,
+                              int             nImageId )
 {
     ULONG                           ulApiPage;
 
@@ -585,9 +576,9 @@ bool wxNotebook::InsertPage (
     // Now set TAB dimenstions
     //
 
-    wxWindowDC                      vDC(this);
-    wxCoord                         nTextX;
-    wxCoord                         nTextY;
+    wxWindowDC vDC(this);
+    wxCoord    nTextX;
+    wxCoord    nTextY;
 
     vDC.GetTextExtent(rsStrText, &nTextX, &nTextY);
     nTextY *= 2;
@@ -604,7 +595,7 @@ bool wxNotebook::InsertPage (
     //
     // Now set any TAB text
     //
-    if (!rsStrText.IsEmpty())
+    if (!rsStrText.empty())
     {
         if (!SetPageText( nPage
                          ,rsStrText
@@ -845,12 +836,10 @@ bool wxNotebook::DoPhase (
 // ----------------------------------------------------------------------------
 // wxNotebook Windows message handlers
 // ----------------------------------------------------------------------------
-bool wxNotebook::OS2OnScroll (
-  int                               nOrientation
-, WXWORD                            wSBCode
-, WXWORD                            wPos
-, WXHWND                            wControl
-)
+bool wxNotebook::OS2OnScroll ( int    nOrientation,
+                               WXWORD wSBCode,
+                               WXWORD wPos,
+                               WXHWND wControl )
 {
     //
     // Don't generate EVT_SCROLLWIN events for the WM_SCROLLs coming from the
@@ -866,4 +855,3 @@ bool wxNotebook::OS2OnScroll (
 } // end of wxNotebook::OS2OnScroll
 
 #endif // wxUSE_NOTEBOOK
-

@@ -41,11 +41,9 @@
 // ctor
 // ----
 //
-wxOwnerDrawn::wxOwnerDrawn(
-  const wxString&                   rsStr
-, bool                              bCheckable
-, bool                              bMenuItem
-)
+wxOwnerDrawn::wxOwnerDrawn( const wxString& rsStr,
+                            bool            bCheckable,
+                            bool            WXUNUSED(bMenuItem) )
 : m_strName(rsStr)
 {
     m_bCheckable   = bCheckable;
@@ -67,15 +65,12 @@ size_t wxOwnerDrawn::ms_nLastMarginWidth = ms_nDefaultMarginWidth;
 // -------
 //
 
-bool wxOwnerDrawn::OnMeasureItem(
-  size_t*                           pWidth
-, size_t*                           pHeight
-)
+bool wxOwnerDrawn::OnMeasureItem( size_t* pWidth,
+                                  size_t* pHeight )
 {
-    wxMemoryDC                      vDC;
+    wxMemoryDC vDC;
 
-
-    wxString                        sStr = wxStripMenuCodes(m_strName);
+    wxString  sStr = wxStripMenuCodes(m_strName);
 
     //
     // If we have a valid accel string, then pad out
@@ -91,7 +86,7 @@ bool wxOwnerDrawn::OnMeasureItem(
                       ,(long *)pWidth
                       ,(long *)pHeight
                      );
-    if (!m_strAccel.IsEmpty())
+    if (!m_strAccel.empty())
     {
         //
         // Measure the accelerator string, and add its width to
@@ -168,22 +163,20 @@ bool wxOwnerDrawn::OnMeasureItem(
     if (*pHeight < m_nMinHeight)
         *pHeight = m_nMinHeight;
     m_nHeight = *pHeight;                // remember height for use in OnDrawItem
-    return TRUE;
+    return true;
 } // end of wxOwnerDrawn::OnMeasureItem
 
 // draw the item
-bool wxOwnerDrawn::OnDrawItem(
-  wxDC&                             rDC
-, const wxRect&                     rRect
-, wxODAction                        eAction
-, wxODStatus                        eStatus
-)
+bool wxOwnerDrawn::OnDrawItem( wxDC& rDC,
+                               const wxRect& rRect,
+                               wxODAction eAction,
+                               wxODStatus eStatus )
 {
     //
     // We do nothing on focus change
     //
     if (eAction == wxODFocusChanged )
-        return TRUE;
+        return true;
 
     //
     // Select the font and draw the text
@@ -302,15 +295,15 @@ bool wxOwnerDrawn::OnDrawItem(
     //
     // Display main text and accel text separately to align better
     //
-    wxString                        sTgt = wxT("\t");
-    wxString                        sFullString = m_strName; // need to save the original text
-    wxString                        sAccel;
-    int                             nIndex;
-    size_t                          nWidth;
-    size_t                          nCharWidth;
-    size_t                          nHeight;
-    bool                            bFoundMnemonic = FALSE;
-    bool                            bFoundAccel = FALSE;
+    wxString sTgt = wxT("\t");
+    wxString sFullString = m_strName; // need to save the original text
+    wxString sAccel;
+    int      nIndex;
+    size_t   nWidth;
+    size_t   nCharWidth;
+    size_t   nHeight;
+    bool     bFoundMnemonic = false;
+    bool     bFoundAccel = false;
 
     //
     // Deal with the tab, extracting the Accel text
@@ -318,7 +311,7 @@ bool wxOwnerDrawn::OnDrawItem(
     nIndex = sFullString.Find(sTgt.c_str());
     if (nIndex != -1)
     {
-        bFoundAccel = TRUE;
+        bFoundAccel = true;
         sAccel = sFullString.Mid(nIndex + 1);
         sFullString.Remove(nIndex);
     }
@@ -330,9 +323,9 @@ bool wxOwnerDrawn::OnDrawItem(
     nIndex = sFullString.Find(sTgt.c_str());
     if (nIndex != -1)
     {
-        wxString                    sTmp = sFullString;
+        wxString sTmp = sFullString;
 
-        bFoundMnemonic = TRUE;
+        bFoundMnemonic = true;
         sTmp.Remove(nIndex);
         rDC.GetTextExtent( sTmp
                           ,(long *)&nWidth
@@ -343,7 +336,7 @@ bool wxOwnerDrawn::OnDrawItem(
                           ,(long *)&nCharWidth
                           ,(long *)&nHeight
                          );
-        sFullString.Replace(sTgt.c_str(), wxEmptyString, TRUE);
+        sFullString.Replace(sTgt.c_str(), wxEmptyString, true);
     }
 
     //
@@ -426,7 +419,7 @@ bool wxOwnerDrawn::OnDrawItem(
         //
         // For uncheckable item we use only the 'checked' bitmap
         //
-        wxBitmap                    vBmp(GetBitmap(IsCheckable() ? ((eStatus & wxODChecked) != 0) : TRUE));
+        wxBitmap vBmp(GetBitmap(IsCheckable() ? ((eStatus & wxODChecked) != 0) : TRUE));
 
         if (vBmp.Ok())
         {
@@ -461,7 +454,7 @@ bool wxOwnerDrawn::OnDrawItem(
                      ,0
                      ,0
                      ,wxCOPY
-                     ,TRUE
+                     ,true
                     );
 
             if (eStatus & wxODSelected)
@@ -489,7 +482,7 @@ bool wxOwnerDrawn::OnDrawItem(
             vBmp.SetSelectedInto(NULL);
         }
     }
-    return TRUE;
+    return true;
 } // end of wxOwnerDrawn::OnDrawItem
 
 #endif //wxUSE_OWNER_DRAWN

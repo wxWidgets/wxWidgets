@@ -58,7 +58,7 @@ wxIniConfig::wxIniConfig(const wxString& strAppName,
                           localFilename, globalFilename, style)
 {
     m_strLocalFilename = localFilename;
-    if (m_strLocalFilename.IsEmpty())
+    if (m_strLocalFilename.empty())
     {
         m_strLocalFilename = GetAppName() + wxT(".ini");
     }
@@ -85,91 +85,100 @@ wxIniConfig::~wxIniConfig()
 
 void wxIniConfig::SetPath(const wxString& strPath)
 {
-  wxArrayString aParts;
+    wxArrayString aParts;
 
-  if ( strPath.IsEmpty() ) {
-    // nothing
-  }
-  else if ( strPath[(size_t) 0] == wxCONFIG_PATH_SEPARATOR ) {
-    // absolute path
-    wxSplitPath(aParts, strPath);
-  }
-  else {
-    // relative path, combine with current one
-    wxString strFullPath = GetPath();
-    strFullPath << wxCONFIG_PATH_SEPARATOR << strPath;
-    wxSplitPath(aParts, strFullPath);
-  }
-
-  size_t nPartsCount = aParts.Count();
-  m_strPath.Empty();
-  if ( nPartsCount == 0 ) {
-    // go to the root
-    m_strGroup = (wxChar*)PATH_SEP_REPLACE;
-  }
-  else {
-    // translate
-    m_strGroup = aParts[(size_t) 0];
-    for ( size_t nPart = 1; nPart < nPartsCount; nPart++ ) {
-      if ( nPart > 1 )
-        m_strPath << PATH_SEP_REPLACE;
-      m_strPath << aParts[nPart];
+    if ( strPath.empty() )
+    {
+        // nothing
     }
-  }
+    else if ( strPath[(size_t) 0] == wxCONFIG_PATH_SEPARATOR )
+    {
+        // absolute path
+        wxSplitPath(aParts, strPath);
+    }
+    else
+    {
+        // relative path, combine with current one
+        wxString strFullPath = GetPath();
+        strFullPath << wxCONFIG_PATH_SEPARATOR << strPath;
+        wxSplitPath(aParts, strFullPath);
+    }
 
-  // other functions assume that all this is true, i.e. there are no trailing
-  // underscores at the end except if the group is the root one
-  wxASSERT( (m_strPath.IsEmpty() || m_strPath.Last() != PATH_SEP_REPLACE) &&
-            (m_strGroup == wxString((wxChar)PATH_SEP_REPLACE) ||
-             m_strGroup.Last() != PATH_SEP_REPLACE) );
+    size_t nPartsCount = aParts.Count();
+    m_strPath.Empty();
+    if ( nPartsCount == 0 )
+    {
+        // go to the root
+        m_strGroup = (wxChar*)PATH_SEP_REPLACE;
+    }
+    else
+    {
+        // translate
+        m_strGroup = aParts[(size_t) 0];
+        for ( size_t nPart = 1; nPart < nPartsCount; nPart++ )
+        {
+            if ( nPart > 1 )
+                m_strPath << PATH_SEP_REPLACE;
+            m_strPath << aParts[nPart];
+        }
+    }
+
+    // other functions assume that all this is true, i.e. there are no trailing
+    // underscores at the end except if the group is the root one
+    wxASSERT( (m_strPath.empty() || m_strPath.Last() != PATH_SEP_REPLACE) &&
+              (m_strGroup == wxString((wxChar)PATH_SEP_REPLACE) ||
+               m_strGroup.Last() != PATH_SEP_REPLACE) );
 }
 
 const wxString& wxIniConfig::GetPath() const
 {
-  static wxString s_str;
+    static wxString s_str;
 
-  // always return abs path
-  s_str = wxCONFIG_PATH_SEPARATOR;
+    // always return abs path
+    s_str = wxCONFIG_PATH_SEPARATOR;
 
-  if ( m_strGroup == wxString((wxChar)PATH_SEP_REPLACE) ) {
-    // we're at the root level, nothing to do
-  }
-  else {
-    s_str << m_strGroup;
-    if ( !m_strPath.IsEmpty() )
-      s_str << wxCONFIG_PATH_SEPARATOR;
-    for ( const wxChar *p = m_strPath; *p != '\0'; p++ ) {
-      s_str << (*p == PATH_SEP_REPLACE ? wxCONFIG_PATH_SEPARATOR : *p);
+    if ( m_strGroup == wxString((wxChar)PATH_SEP_REPLACE) )
+    {
+        // we're at the root level, nothing to do
     }
-  }
+    else
+    {
+        s_str << m_strGroup;
+        if ( !m_strPath.empty() )
+            s_str << wxCONFIG_PATH_SEPARATOR;
+        for ( const wxChar *p = m_strPath; *p != '\0'; p++ )
+        {
+            s_str << (*p == PATH_SEP_REPLACE ? wxCONFIG_PATH_SEPARATOR : *p);
+      }
+    }
 
-  return s_str;
+    return s_str;
 }
 
 wxString wxIniConfig::GetPrivateKeyName(const wxString& szKey) const
 {
-  wxString strKey;
+    wxString strKey;
 
-  if ( !m_strPath.IsEmpty() )
-    strKey << m_strPath << PATH_SEP_REPLACE;
+    if ( !m_strPath.empty() )
+        strKey << m_strPath << PATH_SEP_REPLACE;
 
-  strKey << szKey;
+    strKey << szKey;
 
-  return strKey;
+    return strKey;
 }
 
 wxString wxIniConfig::GetKeyName(const wxString& szKey) const
 {
-  wxString strKey;
+    wxString strKey;
 
-  if (m_strGroup != wxString((wxChar)PATH_SEP_REPLACE))
-    strKey << m_strGroup << PATH_SEP_REPLACE;
-  if ( !m_strPath.IsEmpty() )
-    strKey << m_strPath << PATH_SEP_REPLACE;
+    if (m_strGroup != wxString((wxChar)PATH_SEP_REPLACE))
+        strKey << m_strGroup << PATH_SEP_REPLACE;
+    if ( !m_strPath.empty() )
+        strKey << m_strPath << PATH_SEP_REPLACE;
 
-  strKey << szKey;
+    strKey << szKey;
 
-  return strKey;
+    return strKey;
 }
 
 // ----------------------------------------------------------------------------
@@ -177,32 +186,32 @@ wxString wxIniConfig::GetKeyName(const wxString& szKey) const
 // ----------------------------------------------------------------------------
 
 // not implemented
-bool wxIniConfig::GetFirstGroup(wxString& str, long& lIndex) const
+bool wxIniConfig::GetFirstGroup(wxString& WXUNUSED(str), long& WXUNUSED(lIndex)) const
 {
-  wxFAIL_MSG(wxT("not implemeted"));
+    wxFAIL_MSG(wxT("not implemeted"));
 
-  return FALSE;
+    return false;
 }
 
-bool wxIniConfig::GetNextGroup (wxString& str, long& lIndex) const
+bool wxIniConfig::GetNextGroup(wxString& WXUNUSED(str), long& WXUNUSED(lIndex)) const
 {
-  wxFAIL_MSG(wxT("not implemeted"));
+    wxFAIL_MSG(wxT("not implemeted"));
 
-  return FALSE;
+    return false;
 }
 
-bool wxIniConfig::GetFirstEntry(wxString& str, long& lIndex) const
+bool wxIniConfig::GetFirstEntry(wxString& WXUNUSED(str), long& WXUNUSED(lIndex)) const
 {
-  wxFAIL_MSG(wxT("not implemeted"));
+    wxFAIL_MSG(wxT("not implemeted"));
 
-  return FALSE;
+    return false;
 }
 
-bool wxIniConfig::GetNextEntry (wxString& str, long& lIndex) const
+bool wxIniConfig::GetNextEntry(wxString& WXUNUSED(str), long& WXUNUSED(lIndex)) const
 {
-  wxFAIL_MSG(wxT("not implemeted"));
+    wxFAIL_MSG(wxT("not implemeted"));
 
-  return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -210,49 +219,49 @@ bool wxIniConfig::GetNextEntry (wxString& str, long& lIndex) const
 // ----------------------------------------------------------------------------
 
 // not implemented
-size_t wxIniConfig::GetNumberOfEntries(bool bRecursive) const
+size_t wxIniConfig::GetNumberOfEntries(bool WXUNUSED(bRecursive)) const
 {
-  wxFAIL_MSG(wxT("not implemeted"));
+    wxFAIL_MSG(wxT("not implemeted"));
 
-  return (size_t)-1;
+    return (size_t)-1;
 }
 
-size_t wxIniConfig::GetNumberOfGroups(bool bRecursive) const
+size_t wxIniConfig::GetNumberOfGroups(bool WXUNUSED(bRecursive)) const
 {
-  wxFAIL_MSG(wxT("not implemeted"));
+    wxFAIL_MSG(wxT("not implemeted"));
 
-  return (size_t)-1;
+    return (size_t)-1;
 }
 
-bool wxIniConfig::HasGroup(const wxString& strName) const
+bool wxIniConfig::HasGroup(const wxString& WXUNUSED(strName)) const
 {
-  wxFAIL_MSG(wxT("not implemeted"));
+    wxFAIL_MSG(wxT("not implemeted"));
 
-  return FALSE;
+    return false;
 }
 
-bool wxIniConfig::HasEntry(const wxString& strName) const
+bool wxIniConfig::HasEntry(const wxString& WXUNUSED(strName)) const
 {
-  wxFAIL_MSG(wxT("not implemeted"));
+    wxFAIL_MSG(wxT("not implemeted"));
 
-  return FALSE;
+    return false;
 }
 
 // is current group empty?
 bool wxIniConfig::IsEmpty() const
 {
-  char szBuf[1024];
+    char szBuf[1024];
 
 //  GetPrivateProfileString(m_strGroup, NULL, "",
 //                          szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
-  if ( !::IsEmpty(szBuf) )
-    return FALSE;
+    if ( !::IsEmpty(szBuf) )
+        return false;
 
 //  GetProfileString(m_strGroup, NULL, "", szBuf, WXSIZEOF(szBuf));
 //  if ( !::IsEmpty(szBuf) )
-    return FALSE;
+//      return false;
 
-  return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -261,29 +270,30 @@ bool wxIniConfig::IsEmpty() const
 
 bool wxIniConfig::Read(const wxString& szKey, wxString *pstr) const
 {
-  wxConfigPathChanger path(this, szKey);
-  wxString strKey = GetPrivateKeyName(path.Name());
+    wxConfigPathChanger path(this, szKey);
+    wxString strKey = GetPrivateKeyName(path.Name());
 
-  wxChar szBuf[1024]; // @@ should dynamically allocate memory...
+    wxChar szBuf[1024]; // @@ should dynamically allocate memory...
 
-  // first look in the private INI file
+    // first look in the private INI file
 
-  // NB: the lpDefault param to GetPrivateProfileString can't be NULL
+    // NB: the lpDefault param to GetPrivateProfileString can't be NULL
 //  GetPrivateProfileString(m_strGroup, strKey, "",
 //                          szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
-  if ( ::IsEmpty((PSZ)szBuf) ) {
-    // now look in win.ini
-    wxString strKey = GetKeyName(path.Name());
-//    GetProfileString(m_strGroup, strKey, "", szBuf, WXSIZEOF(szBuf));
-  }
+    if ( ::IsEmpty((PSZ)szBuf) )
+    {
+        // now look in win.ini
+        wxString strKey = GetKeyName(path.Name());
+        // GetProfileString(m_strGroup, strKey, "", szBuf, WXSIZEOF(szBuf));
+    }
 
-  if ( ::IsEmpty((PSZ)szBuf) ) {
-    return FALSE;
-  }
-  else {
+    if ( ::IsEmpty((PSZ)szBuf) )
+    {
+        return false;
+    }
+
     *pstr = szBuf ;
-    return TRUE;
-  }
+    return true;
 }
 
 bool wxIniConfig::Read(const wxString& szKey, wxString *pstr,
@@ -346,18 +356,18 @@ bool wxIniConfig::Read(const wxString& szKey, long *pl) const
   return TRUE;
 }
 
-bool wxIniConfig::Write(const wxString& szKey, const wxString& szValue)
+bool wxIniConfig::Write(const wxString& szKey, const wxString& WXUNUSED(szValue))
 {
-  wxConfigPathChanger path(this, szKey);
-  wxString strKey = GetPrivateKeyName(path.Name());
+    wxConfigPathChanger path(this, szKey);
+    wxString strKey = GetPrivateKeyName(path.Name());
 
-  bool bOk = FALSE; // = WritePrivateProfileString(m_strGroup, strKey,
+    bool bOk = false; // = WritePrivateProfileString(m_strGroup, strKey,
 //                                       szValue, m_strLocalFilename) != 0;
 
-  if ( !bOk )
-    wxLogLastError(wxT("WritePrivateProfileString"));
+    if ( !bOk )
+        wxLogLastError(wxT("WritePrivateProfileString"));
 
-  return bOk;
+    return bOk;
 }
 
 bool wxIniConfig::Write(const wxString& szKey, long lValue)
@@ -452,16 +462,16 @@ bool wxIniConfig::DeleteAll()
   return TRUE;
 }
 
-bool wxIniConfig::RenameEntry(const wxString& oldName, const wxString& newName)
+bool wxIniConfig::RenameEntry(const wxString& WXUNUSED(oldName), const wxString& WXUNUSED(newName))
 {
     // Not implemented
-    return FALSE;
+    return false;
 }
 
-bool wxIniConfig::RenameGroup(const wxString& oldName, const wxString& newName)
+bool wxIniConfig::RenameGroup(const wxString& WXUNUSED(oldName), const wxString& WXUNUSED(newName))
 {
     // Not implemented
-    return FALSE;
+    return false;
 }
 
 #endif //wxUSE_CONFIG

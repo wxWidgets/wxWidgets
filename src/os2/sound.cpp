@@ -121,22 +121,23 @@ bool wxSound::Create(int size, const wxByte* data)
   return TRUE;
 }
 
-bool wxSound::DoPlay(unsigned flags) const
+bool wxSound::DoPlay(unsigned WXUNUSED(flags)) const
 {
-  if (!IsOk())
-    return FALSE;
+    if (!IsOk())
+        return false;
+
 // TODO:
 /*
-  return ( ::PlaySound((LPCTSTR)m_waveData, NULL, SND_MEMORY |
-    SND_NODEFAULT | (async ? SND_ASYNC : SND_SYNC) | (looped ? (SND_LOOP | SND_ASYNC) : 0)) != 0 );
+    return ( ::PlaySound((LPCTSTR)m_waveData, NULL, SND_MEMORY |
+             SND_NODEFAULT | (async ? SND_ASYNC : SND_SYNC) | (looped ? (SND_LOOP | SND_ASYNC) : 0)) != 0 );
 */
-    return FALSE;
+    return false;
 }
 
 bool wxSound::Free()
 {
-  if (m_waveData)
-  {
+    if (m_waveData)
+    {
 //  HGLOBAL waveData = ::GlobalHandle(m_waveData);
 
 // TODO:
@@ -156,7 +157,6 @@ bool wxSound::Free()
       return TRUE;
     }
 */
-  }
-  return FALSE;
+    }
+    return false;
 }
-

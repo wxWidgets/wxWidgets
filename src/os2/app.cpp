@@ -56,7 +56,11 @@
 
 #endif //
 
-#ifndef __EMX__
+#if defined(__WATCOMC__)
+
+#include <tcpustd.h>
+
+#elif !defined(__EMX__)
 
 #define select(a,b,c,d,e) bsdselect(a,b,c,d,e)
 extern "C" int _System bsdselect(int,
@@ -488,8 +492,8 @@ void wxApp::OnIdle(
     if (gbInOnIdle)
         return;
 
-    gbInOnIdle = TRUE;
-    
+    gbInOnIdle = true;
+
     wxAppBase::OnIdle(rEvent);
 
 #if wxUSE_DC_CACHEING
@@ -661,10 +665,7 @@ HAB wxGetInstance()
     return vHabmain;
 }
 
-void wxSetInstance(
-  HAB                               vHab
-)
+void wxSetInstance( HAB vHab )
 {
     vHabmain = vHab;
 }
-

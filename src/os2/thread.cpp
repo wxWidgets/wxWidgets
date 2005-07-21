@@ -64,8 +64,8 @@ wxMutex*                            p_wxMainMutex;
 // OS2 substitute for Tls pointer the current parent thread object
 wxThread*                           m_pThread;    // pointer to the wxWidgets thread object
 
-// if it's FALSE, some secondary thread is holding the GUI lock
-static bool gs_bGuiOwnedByMainThread = TRUE;
+// if it's false, some secondary thread is holding the GUI lock
+static bool gs_bGuiOwnedByMainThread = true;
 
 // critical section which controls access to all GUI functions: any secondary
 // thread (i.e. except the main one) must enter this crit section before doing
@@ -79,7 +79,7 @@ static wxCriticalSection *gs_pCritsectWaitingForGui = NULL;
 static size_t gs_nWaitingForGui = 0;
 
 // are we waiting for a thread termination?
-static bool gs_bWaitingForThread = FALSE;
+static bool gs_bWaitingForThread = false;
 
 // ============================================================================
 // OS/2 implementation of thread and related classes
@@ -109,13 +109,9 @@ private:
 // (Calls to DosRequestMutexSem and DosReleaseMutexSem can be nested, but
 //  the request count for a semaphore cannot exceed 65535. If an attempt is
 //  made to exceed this number, ERROR_TOO_MANY_SEM_REQUESTS is returned.)
-wxMutexInternal::wxMutexInternal(
-  wxMutexType                       WXUNUSED(eMutexType)
-)
+wxMutexInternal::wxMutexInternal(wxMutexType WXUNUSED(eMutexType))
 {
-    APIRET                          ulrc;
-
-    ulrc = ::DosCreateMutexSem(NULL, &m_vMutex, 0L, FALSE);
+    APIRET ulrc = ::DosCreateMutexSem(NULL, &m_vMutex, 0L, FALSE);
     if (ulrc != 0)
     {
         wxLogSysError(_("Can not create mutex."));
@@ -406,7 +402,7 @@ void wxThreadInternal::OS2ThreadStart(
     if ( pThread->m_internal->GetState() == STATE_EXITED )
     {
         dwRet = (DWORD)-1;
-        bWasCancelled = TRUE;
+        bWasCancelled = true;
     }
     else // do run thread
     {
@@ -474,15 +470,14 @@ void wxThreadInternal::SetPriority(
     }
 }
 
-bool wxThreadInternal::Create(
-  wxThread*                         pThread
-, unsigned int                      uStackSize
-)
+bool wxThreadInternal::Create( wxThread* pThread,
+                               unsigned int uStackSize)
 {
-    int                          tid;
+    int tid;
 
     if (!uStackSize)
-      uStackSize = 131072;
+        uStackSize = 131072;
+
     pThread->m_critsect.Enter();
     tid = _beginthread(wxThreadInternal::OS2ThreadStart,
                              NULL, uStackSize, pThread);
@@ -490,7 +485,7 @@ bool wxThreadInternal::Create(
     {
         wxLogSysError(_("Can't create thread"));
 
-        return FALSE;
+        return false;
     }
     m_hThread = tid;
     if (m_nPriority != WXTHREAD_DEFAULT_PRIORITY)
@@ -498,30 +493,31 @@ bool wxThreadInternal::Create(
         SetPriority(m_nPriority);
     }
 
-    return(TRUE);
+    return true;
 }
 
 bool wxThreadInternal::Suspend()
 {
-    ULONG                           ulrc = ::DosSuspendThread(m_hThread);
+    ULONG ulrc = ::DosSuspendThread(m_hThread);
 
     if (ulrc != 0)
     {
         wxLogSysError(_("Can not suspend thread %lu"), m_hThread);
-        return FALSE;
+        return false;
     }
     m_eState = STATE_PAUSED;
-    return TRUE;
+
+    return true;
 }
 
 bool wxThreadInternal::Resume()
 {
-    ULONG                           ulrc = ::DosResumeThread(m_hThread);
+    ULONG ulrc = ::DosResumeThread(m_hThread);
 
     if (ulrc != 0)
     {
         wxLogSysError(_("Can not resume thread %lu"), m_hThread);
-        return FALSE;
+        return false;
     }
 
     // don't change the state from STATE_EXITED because it's special and means
@@ -532,7 +528,7 @@ bool wxThreadInternal::Resume()
         m_eState = STATE_RUNNING;
     }
 
-    return TRUE;
+    return true;
 }
 
 // static functions
@@ -546,14 +542,15 @@ wxThread *wxThread::This()
 
 bool wxThread::IsMain()
 {
-    PTIB                            ptib;
-    PPIB                            ppib;
+    PTIB ptib;
+    PPIB ppib;
 
     ::DosGetInfoBlocks(&ptib, &ppib);
 
     if (ptib->tib_ptib2->tib2_ultid == s_ulIdMainThread)
-        return TRUE;
-    return FALSE;
+        return true;
+
+    return false;
 }
 
 #ifdef Yield
@@ -694,9 +691,9 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
     // we might need to resume the thread, but we might also not need to cancel
     // it if it doesn't run yet
-    bool shouldResume = FALSE,
-         shouldCancel = TRUE,
-         isRunning = FALSE;
+    bool shouldResume = false,
+         shouldCancel = true,
+         isRunning = false;
 
     // check if the thread already started to run
     {
@@ -711,10 +708,10 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
             Resume();   // it knows about STATE_EXITED special case
 
-            shouldCancel = FALSE;
-            isRunning = TRUE;
+            shouldCancel = false;
+            isRunning = true;
 
-            // shouldResume is correctly set to FALSE here
+            // shouldResume is correctly set to false here
         }
         else
         {
@@ -726,14 +723,14 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
     if ( shouldResume )
         Resume();
 
-    TID                             hThread = m_internal->GetHandle();
+    TID hThread = m_internal->GetHandle();
 
     if ( isRunning || IsRunning())
     {
         if (IsMain())
         {
             // set flag for wxIsWaitingForThread()
-            gs_bWaitingForThread = TRUE;
+            gs_bWaitingForThread = true;
         }
 
         // ask the thread to terminate
@@ -811,7 +808,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
         if ( IsMain() )
         {
-            gs_bWaitingForThread = FALSE;
+            gs_bWaitingForThread = false;
         }
     }
 
@@ -858,9 +855,7 @@ wxThreadError wxThread::Kill()
     return wxTHREAD_NO_ERROR;
 }
 
-void wxThread::Exit(
-  ExitCode                          pStatus
-)
+void wxThread::Exit(ExitCode WXUNUSED(pStatus))
 {
     delete this;
     _endthread();
@@ -942,13 +937,13 @@ bool wxThreadModule::OnInit()
     gs_pCritsectGui = new wxCriticalSection();
     gs_pCritsectGui->Enter();
 
-    PTIB                            ptib;
-    PPIB                            ppib;
+    PTIB ptib;
+    PPIB ppib;
 
     ::DosGetInfoBlocks(&ptib, &ppib);
 
     s_ulIdMainThread = ptib->tib_ptib2->tib2_ultid;
-    return TRUE;
+    return true;
 }
 
 void wxThreadModule::OnExit()
@@ -1011,7 +1006,7 @@ void WXDLLEXPORT wxMutexGuiLeave()
 
     if ( wxThread::IsMain() )
     {
-        gs_bGuiOwnedByMainThread = FALSE;
+        gs_bGuiOwnedByMainThread = false;
     }
     else
     {
@@ -1042,7 +1037,7 @@ void WXDLLEXPORT wxMutexGuiLeaveOrEnter()
         {
             gs_pCritsectGui->Enter();
 
-            gs_bGuiOwnedByMainThread = TRUE;
+            gs_bGuiOwnedByMainThread = true;
         }
         //else: already have it, nothing to do
     }

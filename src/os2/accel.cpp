@@ -135,20 +135,19 @@ wxAcceleratorTable::wxAcceleratorTable(
             uVirt |= AF_VIRTUALKEY;
         }
 
-        bool                        bIsVirtual;
-        USHORT                      uKey = wxCharCodeWXToOS2( vaEntries[i].GetKeyCode()
-                                                             ,&bIsVirtual
-                                                            );
+        bool bIsVirtual;
+        USHORT uKey = (USHORT)wxCharCodeWXToOS2( vaEntries[i].GetKeyCode(),
+                                                 &bIsVirtual);
         if (bIsVirtual)
             uVirt = AF_CHAR | AF_VIRTUALKEY;
 
-        USHORT                      uCmd = vaEntries[i].GetCommand();
+        USHORT uCmd = (USHORT)vaEntries[i].GetCommand();
 
         pArr->aaccel[i].fs  = uVirt;
         pArr->aaccel[i].key = uKey;
         pArr->aaccel[i].cmd = uCmd;
     }
-    pArr->codepage = ::WinQueryCp(wxTheApp->m_hMq);
+    pArr->codepage = (USHORT)::WinQueryCp(wxTheApp->m_hMq);
     pArr->cAccel = (USHORT)n;
     M_ACCELDATA->m_hAccel = ::WinCreateAccelTable( vHabmain
                                                   ,pArr
@@ -158,7 +157,7 @@ wxAcceleratorTable::wxAcceleratorTable(
         //
         // If we have accelerators the top window is the frame
         //
-        wxFrame*                    pFrame = (wxFrame*)wxTheApp->GetTopWindow();
+        wxFrame* pFrame = (wxFrame*)wxTheApp->GetTopWindow();
 
         ::WinSetAccelTable( vHabmain
                            ,M_ACCELDATA->m_hAccel
@@ -210,14 +209,12 @@ bool wxAcceleratorTable::Translate(
 // function for translating labels
 // ---------------------------------------------------------------------------
 
-wxString wxPMTextToLabel(
-  const wxString&                   rsTitle
-)
+wxString wxPMTextToLabel( const wxString& rsTitle )
 {
-    wxString                        sTitle;
-    const wxChar*                   zPc;
+    wxString      sTitle;
+    const wxChar* zPc;
 
-    if (rsTitle.IsEmpty())
+    if (rsTitle.empty())
         return(sTitle);
 
     for (zPc = rsTitle.c_str(); *zPc != wxT('\0'); zPc++)
@@ -247,4 +244,3 @@ wxString wxPMTextToLabel(
     }
     return(sTitle);
 } // end of wxPMTextToLabel
-

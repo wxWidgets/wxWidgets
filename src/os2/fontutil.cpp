@@ -8,10 +8,6 @@
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
-#define DEBUG_PRINTF(NAME)   { static int raz=0; \
-  printf( #NAME " %i\n",raz); fflush(stdout);       \
-   raz++;                                        \
- }
 
 // ============================================================================
 // declarations
@@ -27,6 +23,13 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+
+#define DEBUG_PRINTF(NAME)                            \
+    {                                                 \
+        static int raz=0;                             \
+        printf( #NAME " %i\n",raz); fflush(stdout);   \
+        raz++;                                        \
+    }
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -54,9 +57,7 @@
 // convert to/from the string representation: format is
 //      encodingid;facename[;charset]
 
-bool wxNativeEncodingInfo::FromString(
-  const wxString&                   rsStr
-)
+bool wxNativeEncodingInfo::FromString( const wxString& rsStr )
 {
     wxStringTokenizer               vTokenizer(rsStr, _T(";"));
     wxString                        sEncid = vTokenizer.GetNextToken();
@@ -83,7 +84,7 @@ bool wxNativeEncodingInfo::FromString(
             return FALSE;
         }
     }
-    return TRUE;
+    return true;
 } // end of wxNativeEncodingInfo::FromString
 
 wxString wxNativeEncodingInfo::ToString() const
@@ -103,10 +104,8 @@ wxString wxNativeEncodingInfo::ToString() const
 // helper functions
 // ----------------------------------------------------------------------------
 
-bool wxGetNativeFontEncoding(
-  wxFontEncoding                    vEncoding
-, wxNativeEncodingInfo*             pInfo
-)
+bool wxGetNativeFontEncoding( wxFontEncoding vEncoding,
+                              wxNativeEncodingInfo* pInfo )
 {
     wxCHECK_MSG(pInfo, FALSE, _T("bad pointer in wxGetNativeFontEncoding") );
     if (vEncoding == wxFONTENCODING_DEFAULT)
@@ -168,7 +167,7 @@ bool wxGetNativeFontEncoding(
             pInfo->charset = 850;
             break;
     }
-    return TRUE;
+    return true;
 } // end of wxGetNativeFontEncoding
 
 wxFontEncoding wxGetFontEncFromCharSet(
@@ -223,18 +222,16 @@ wxFontEncoding wxGetFontEncFromCharSet(
     return eFontEncoding;
 } // end of wxGetNativeFontEncoding
 
-bool wxTestFontEncoding(
-  const wxNativeEncodingInfo&       rInfo
-)
+bool wxTestFontEncoding( const wxNativeEncodingInfo& rInfo )
 {
-    FATTRS                          vLogFont;
-    HPS                             hPS;
+    FATTRS vLogFont;
+    HPS    hPS;
 
     hPS = ::WinGetPS(HWND_DESKTOP);
 
     memset(&vLogFont, '\0', sizeof(FATTRS));           // all default values
     vLogFont.usRecordLength = sizeof(FATTRS);
-    vLogFont.usCodePage = rInfo.charset;
+    vLogFont.usCodePage = (USHORT)rInfo.charset;
     vLogFont.lMaxBaselineExt = 0L;                    // Outline fonts should use 0
     vLogFont.lAveCharWidth = 0L;                      // Outline fonts should use 0
     vLogFont.fsFontUse = FATTR_FONTUSE_OUTLINE |      // only outline fonts allowed
@@ -252,7 +249,7 @@ bool wxTestFontEncoding(
         return FALSE;
     }
     ::WinReleasePS(hPS);
-    return TRUE;
+    return true;
 } // end of wxTestFontEncoding
 
 // ----------------------------------------------------------------------------
@@ -297,21 +294,19 @@ void wxConvertVectorFontSize(
 
 } // end of wxConvertVectorPointSize
 
-void wxFillLogFont(
-  LOGFONT*                          pFattrs  // OS2 GPI FATTRS
-, PFACENAMEDESC                     pFaceName
-, HPS*                              phPS
-, bool*                             pbInternalPS
-, long*                             pflId
-, wxString&                         sFaceName
-, wxFont*                           pFont
-)
+void wxFillLogFont( LOGFONT*      pFattrs,  // OS2 GPI FATTRS
+                    PFACENAMEDESC pFaceName,
+                    HPS*          phPS,
+                    bool*         pbInternalPS,
+                    long*         pflId,
+                    wxString&     sFaceName,
+                    wxFont*       pFont )
 {
-    LONG                            lNumFonts = 0L;       // For system font count
-    ERRORID                         vError;               // For logging API errors
-    LONG                            lTemp = 0L;
-    bool                            bInternalPS = FALSE;  // if we have to create one
-    PFONTMETRICS                    pFM = NULL;
+    LONG         lNumFonts = 0L;       // For system font count
+    ERRORID      vError;               // For logging API errors
+    LONG         lTemp = 0L;
+    bool         bInternalPS = false;  // if we have to create one
+    PFONTMETRICS pFM = NULL;
 
     //
     // Initial house cleaning to free data buffers and ensure we have a
@@ -320,7 +315,7 @@ void wxFillLogFont(
     if (!*phPS)
     {
         *phPS = ::WinGetPS(HWND_DESKTOP);
-        bInternalPS = TRUE;
+        bInternalPS = true;
     }
 
     //
@@ -712,4 +707,3 @@ int wxGpiStrcmp(
     }
     return rc;
 }
-

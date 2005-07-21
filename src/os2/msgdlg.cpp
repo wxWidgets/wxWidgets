@@ -36,13 +36,11 @@
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
-wxMessageDialog::wxMessageDialog(
-  wxWindow*                         pParent
-, const wxString&                   rsMessage
-, const wxString&                   rsCaption
-, long                              lStyle
-, const wxPoint&                    pPos
-)
+wxMessageDialog::wxMessageDialog( wxWindow*       WXUNUSED(pParent),
+                                  const wxString& rsMessage,
+                                  const wxString& rsCaption,
+                                  long            lStyle,
+                                  const wxPoint&  WXUNUSED(pPos) )
 {
     m_sCaption     = rsCaption;
     m_sMessage     = rsMessage;
@@ -138,4 +136,3 @@ int wxMessageDialog::ShowModal()
     }
     return nAns;
 } // end of wxMessageDialog::ShowModal
-

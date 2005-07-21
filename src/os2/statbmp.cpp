@@ -69,15 +69,13 @@ static wxGDIImage* ConvertImage(
 //  wxStaticBitmap
 // ---------------------------------------------------------------------------
 
-bool wxStaticBitmap::Create(
-  wxWindow*                         pParent
-, wxWindowID                        nId
-, const wxGDIImage&                 rBitmap
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxString&                   rName
-)
+bool wxStaticBitmap::Create( wxWindow*         pParent,
+                             wxWindowID        nId,
+                             const wxGDIImage& rBitmap,
+                             const wxPoint&    rPos,
+                             const wxSize&     WXUNUSED(rSize),
+                             long              lStyle,
+                             const wxString&   rName )
 {
     ERRORID                         vError;
     wxString                        sError;
@@ -123,7 +121,7 @@ bool wxStaticBitmap::Create(
     {
         vError = ::WinGetLastError(wxGetInstance());
         sError = wxPMErrorToStr(vError);
-        return FALSE;
+        return false;
     }
     wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create static bitmap") );
     m_pImage = ConvertImage(rBitmap);
@@ -133,7 +131,7 @@ bool wxStaticBitmap::Create(
     SubclassWin(m_hWnd);
     SetSize(nX, nY, m_pImage->GetWidth(), m_pImage->GetHeight());
 
-    return(TRUE);
+    return true;
 } // end of wxStaticBitmap::Create
 
 bool wxStaticBitmap::ImageIsOk() const

@@ -107,7 +107,7 @@ void wxMenu::Init()
     //
     // If we have a title, insert it in the beginning of the menu
     //
-    if (!m_title.IsEmpty())
+    if (!m_title.empty())
     {
         Append( idMenuTitle
                ,m_title
@@ -146,7 +146,7 @@ wxMenu::~wxMenu()
 void wxMenu::Break()
 {
     // this will take effect during the next call to Append()
-    m_bDoBreak = TRUE;
+    m_bDoBreak = true;
 } // end of wxMenu::Break
 
 void wxMenu::Attach(
@@ -189,7 +189,7 @@ void wxMenu::UpdateAccel(
     }
     else if (!pItem->IsSeparator())
     {
-        // 
+        //
         // Recurse upwards: we should only modify m_accels of the top level
         // menus, not of the submenus as wxMenuBar doesn't look at them
         // (alternative and arguable cleaner solution would be to recurse
@@ -248,17 +248,15 @@ void wxMenu::UpdateAccel(
 //
 // Append a new item or submenu to the menu
 //
-bool wxMenu::DoInsertOrAppend(
-  wxMenuItem*                       pItem
-, size_t                            nPos
-)
+bool wxMenu::DoInsertOrAppend( wxMenuItem* pItem,
+                               size_t      nPos )
 {
-    wxMenu*                         pSubmenu = pItem->GetSubMenu();
-    MENUITEM&                       rItem = (pSubmenu != NULL)?pSubmenu->m_vMenuData:
-                                            pItem->m_vMenuData;
+    wxMenu*    pSubmenu = pItem->GetSubMenu();
+    MENUITEM&  rItem = (pSubmenu != NULL)?pSubmenu->m_vMenuData:
+                       pItem->m_vMenuData;
 
-    ERRORID                         vError;
-    wxString                        sError;
+    ERRORID    vError;
+    wxString   sError;
 
 #if wxUSE_ACCEL
     UpdateAccel(pItem);
@@ -289,7 +287,7 @@ bool wxMenu::DoInsertOrAppend(
     }
     else
     {
-        rItem.id = pItem->GetId();
+        rItem.id = (USHORT)pItem->GetId();
     }
 
     BYTE*                           pData=NULL;
@@ -337,7 +335,7 @@ bool wxMenu::DoInsertOrAppend(
     }
     else
     {
-        rItem.iPosition = nPos;
+        rItem.iPosition = (SHORT)nPos;
     }
 
     APIRET                          rc;
@@ -361,26 +359,25 @@ bool wxMenu::DoInsertOrAppend(
                     );
     }
 #endif
+
     if (rc == (APIRET)MIT_MEMERROR || rc == (APIRET)MIT_ERROR)
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError(wxT("Error inserting or appending a menuitem. Error: %s\n"), sError.c_str());
         wxLogLastError(wxT("Insert or AppendMenu"));
-        return FALSE;
+        return false;
     }
-    else
+
+    //
+    // If we're already attached to the menubar, we must update it
+    //
+    if (IsAttached() && GetMenuBar()->IsAttached())
     {
-        //
-        // If we're already attached to the menubar, we must update it
-        //
-        if (IsAttached() && GetMenuBar()->IsAttached())
-        {
-            GetMenuBar()->Refresh();
-        }
-        return TRUE;
+        GetMenuBar()->Refresh();
     }
-    return FALSE;
+
+    return true;
 } // end of wxMenu::DoInsertOrAppend
 
 void wxMenu::EndRadioGroup()
@@ -391,13 +388,11 @@ void wxMenu::EndRadioGroup()
     m_nStartRadioGroup = -1;
 } // end of wxMenu::EndRadioGroup
 
-wxMenuItem* wxMenu::DoAppend(
-  wxMenuItem*                       pItem
-)
+wxMenuItem* wxMenu::DoAppend( wxMenuItem* pItem )
 {
     wxCHECK_MSG( pItem, NULL, _T("NULL item in wxMenu::DoAppend") );
 
-    bool                            bCheck = FALSE;
+    bool bCheck = false;
 
     if (pItem->GetKind() == wxITEM_RADIO)
     {
@@ -419,7 +414,7 @@ wxMenuItem* wxMenu::DoAppend(
             //
             // Ensure that we have a checked item in the radio group
             //
-            bCheck = TRUE;
+            bCheck = true;
         }
         else // extend the current radio group
         {
@@ -454,7 +449,7 @@ wxMenuItem* wxMenu::DoAppend(
         //
         // Check the item initially
         //
-        pItem->Check(TRUE);
+        pItem->Check(true);
     }
     return pItem;
 } // end of wxMenu::DoAppend
@@ -560,17 +555,15 @@ size_t wxMenu::CopyAccels(
 // set wxMenu title
 // ---------------------------------------------------------------------------
 
-void wxMenu::SetTitle(
-  const wxString&                   rLabel
-)
+void wxMenu::SetTitle( const wxString& rLabel )
 {
-    bool                            bHasNoTitle = m_title.IsEmpty();
-    HWND                            hMenu = GetHmenu();
+    bool bHasNoTitle = m_title.empty();
+    HWND hMenu = GetHmenu();
 
     m_title = rLabel;
     if (bHasNoTitle)
     {
-        if (!rLabel.IsEmpty())
+        if (!rLabel.empty())
         {
             if (!::WinSetWindowText(hMenu, (PSZ)rLabel.c_str()))
             {
@@ -580,7 +573,7 @@ void wxMenu::SetTitle(
     }
     else
     {
-        if (rLabel.IsEmpty() )
+        if (rLabel.empty() )
         {
             ::WinSendMsg( GetHmenu()
                          ,MM_REMOVEITEM
@@ -785,14 +778,14 @@ WXHMENU wxMenuBar::Create()
     }
     else
     {
-        size_t                      nCount = GetMenuCount(), i;
-	wxMenuList::iterator it;
+        size_t nCount = GetMenuCount(), i;
+        wxMenuList::iterator it;
         for (i = 0, it = m_menus.begin(); i < nCount; i++, it++)
         {
-            APIRET                  rc;
-            ERRORID                 vError;
-            wxString                sError;
-            HWND                    hSubMenu;
+            APIRET   rc;
+            ERRORID  vError;
+            wxString sError;
+            HWND     hSubMenu;
 
             //
             // Set the parent and owner of the submenues to be the menubar, not the desktop
@@ -814,7 +807,7 @@ WXHMENU wxMenuBar::Create()
                 return NULLHANDLE;
             }
 
-            (*it)->m_vMenuData.iPosition = i;
+            (*it)->m_vMenuData.iPosition = (SHORT)i;
 
             rc = (APIRET)::WinSendMsg(m_hMenu, MM_INSERTITEM, (MPARAM)&(*it)->m_vMenuData, (MPARAM)m_titles[i].c_str());
             if (rc == (APIRET)MIT_MEMERROR || rc == (APIRET)MIT_ERROR)
@@ -953,27 +946,20 @@ wxMenu* wxMenuBar::Replace(
     return pMenuOld;
 } // end of wxMenuBar::Replace
 
-bool wxMenuBar::Insert(
-  size_t                            nPos
-, wxMenu*                           pMenu
-, const wxString&                   rTitle
-)
+bool wxMenuBar::Insert( size_t          nPos,
+                        wxMenu*         pMenu,
+                        const wxString& rTitle )
 {
-    wxString                        sTitle = wxPMTextToLabel(rTitle);
+    wxString sTitle = wxPMTextToLabel(rTitle);
 
-    if (!wxMenuBarBase::Insert( nPos
-                               ,pMenu
-                               ,sTitle
-                              ))
-        return FALSE;
+    if (!wxMenuBarBase::Insert( nPos, pMenu, sTitle ))
+        return false;
 
-    m_titles.Insert( sTitle
-                    ,nPos
-                   );
+    m_titles.Insert( sTitle, nPos );
 
     if (IsAttached())
     {
-        pMenu->m_vMenuData.iPosition = nPos;
+        pMenu->m_vMenuData.iPosition = (SHORT)nPos;
         ::WinSendMsg( (HWND)m_hMenu
                      ,MM_INSERTITEM
                      ,(MPARAM)&pMenu->m_vMenuData
@@ -988,7 +974,8 @@ bool wxMenuBar::Insert(
 #endif // wxUSE_ACCEL
         Refresh();
     }
-    return TRUE;
+
+    return true;
 } // end of wxMenuBar::Insert
 
 bool wxMenuBar::Append(
@@ -1194,4 +1181,3 @@ wxMenuItem* wxMenuBar::FindItem(
     }
     return pItem;
 } // end of wxMenuBar::FindItem
-

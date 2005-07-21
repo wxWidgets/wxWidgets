@@ -100,14 +100,12 @@ void wxIcon::CreateIconFromXpm(
     CopyFromBitmap(vBmp);
     if (GetHICON())
     {
-        m_bIsXpm = TRUE;
+        m_bIsXpm = true;
         m_vXpmSrc = vBmp;
     }
 } // end of wxIcon::CreateIconFromXpm
 
-void wxIcon::CopyFromBitmap(
-  const wxBitmap&                   rBmp
-)
+void wxIcon::CopyFromBitmap( const wxBitmap& rBmp )
 {
     wxMask*                         pMask = rBmp.GetMask();
     HBITMAP                         hBmp = NULLHANDLE;
@@ -236,9 +234,10 @@ void wxIcon::CopyFromBitmap(
 
     vIconInfo.hbmPointer = hBmpMask;
 
-    HICON                           hIcon = ::WinCreatePointerIndirect( HWND_DESKTOP
-                                                                       ,&vIconInfo
-                                                                      );
+#ifndef __WATCOMC__
+// FIXME: incomplete headers ???
+
+    HICON hIcon = ::WinCreatePointerIndirect( HWND_DESKTOP, &vIconInfo);
 
     if (!hIcon)
     {
@@ -253,6 +252,7 @@ void wxIcon::CopyFromBitmap(
                 ,rBmp.GetHeight()
                );
     }
+#endif
 
     if (!rBmp.GetMask())
     {
@@ -293,4 +293,3 @@ bool wxIcon::LoadFile(
     else
         return(FALSE);
 }
-

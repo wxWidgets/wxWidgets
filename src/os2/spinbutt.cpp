@@ -167,7 +167,8 @@ wxSize wxSpinButton::DoGetBestSize() const
     // 24x20 which is the size of the buttons and the borders.
     // Also we have no horizontal spin buttons.
     //
-    return (wxSize(24,20));
+    wxSize best(24,20);
+    return best;
 } // end of wxSpinButton::DoGetBestSize
 
 // ----------------------------------------------------------------------------
@@ -190,31 +191,25 @@ int wxSpinButton::GetValue() const
     return ((int)lVal);
 } // end of wxSpinButton::GetValue
 
-bool wxSpinButton::OS2OnScroll(
-  int                               nOrientation
-, WXWORD                            wParam
-, WXWORD                            wPos
-, WXHWND                            hControl
-)
+bool wxSpinButton::OS2OnScroll( int    WXUNUSED(nOrientation),
+                                WXWORD WXUNUSED(wParam),
+                                WXWORD wPos,
+                                WXHWND hControl )
 {
-    wxCHECK_MSG(hControl, FALSE, wxT("scrolling what?") )
+    wxCHECK_MSG(hControl, false, wxT("scrolling what?") )
 
-    wxSpinEvent                     vEvent( wxEVT_SCROLL_THUMBTRACK
-                                           ,m_windowId
-                                          );
-    int                             nVal = (int)wPos;    // cast is important for negative values!
+    wxSpinEvent vEvent( wxEVT_SCROLL_THUMBTRACK, m_windowId );
+    int nVal = (int)wPos;    // cast is important for negative values!
 
     vEvent.SetPosition(nVal);
     vEvent.SetEventObject(this);
     return(GetEventHandler()->ProcessEvent(vEvent));
 } // end of wxSpinButton::OS2OnScroll
 
-bool wxSpinButton::OS2Command(
-  WXUINT                            uCmd
-, WXWORD                            wId
-)
+bool wxSpinButton::OS2Command( WXUINT WXUNUSED(uCmd),
+                               WXWORD WXUNUSED(wId) )
 {
-    return FALSE;
+    return false;
 } // end of wxSpinButton::OS2Command
 
 void wxSpinButton::SetRange(

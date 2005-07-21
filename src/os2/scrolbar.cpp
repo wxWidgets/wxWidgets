@@ -97,9 +97,7 @@ bool wxScrollBar::Create (
                  ,(MPARAM)0
                  ,MPFROM2SHORT(0,1)
                 );
-    ::WinShowWindow( hScrollBar
-                    ,TRUE
-                   );
+    ::WinShowWindow( hScrollBar, TRUE );
     SetFont(*wxSMALL_FONT);
 
     m_hWnd = hScrollBar;
@@ -120,21 +118,19 @@ wxScrollBar::~wxScrollBar()
 {
 }
 
-bool wxScrollBar::OS2OnScroll (
-  int                               nOrientation
-, WXWORD                            wParam
-, WXWORD                            wPos
-, WXHWND                            hControl
-)
+bool wxScrollBar::OS2OnScroll ( int    WXUNUSED(nOrientation),
+                                WXWORD wParam,
+                                WXWORD wPos,
+                                WXHWND WXUNUSED(hControl) )
 {
-    int                             nPosition;
-    int                             nMaxPos;
-    int                             nTrackPos = wPos;
-    int                             nMinPos;
-    int                             nScrollInc;
-    wxEventType                     vScrollEvent = wxEVT_NULL;
+    int         nPosition;
+    int         nMaxPos;
+    int         nTrackPos = wPos;
+    int         nMinPos;
+    int         nScrollInc;
+    wxEventType vScrollEvent = wxEVT_NULL;
 
-    MRESULT                         vRange;
+    MRESULT     vRange;
 
     //
     // When we're dragging the scrollbar we can't use pos parameter because it
@@ -219,7 +215,7 @@ bool wxScrollBar::OS2OnScroll (
         // Don't process the event if there is no displacement,
         // unless this is a thumb release or end scroll event.
         //
-        return FALSE;
+        return false;
     }
 
     wxScrollEvent                   vEvent( vScrollEvent
@@ -232,15 +228,13 @@ bool wxScrollBar::OS2OnScroll (
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxScrollBar::OS2OnScroll
 
-void wxScrollBar::SetThumbPosition (
-  int                               nViewStart
-)
+void wxScrollBar::SetThumbPosition ( int nViewStart )
 {
     SBCDATA                        vInfo;
 
     memset(&vInfo, '\0', sizeof(SBCDATA));
     vInfo.cb       = sizeof(SBCDATA);
-    vInfo.posThumb = nViewStart;
+    vInfo.posThumb = (SHORT)nViewStart;
 
     ::WinSendMsg((HWND)GetHwnd(), WM_SETWINDOWPARAMS, (MPARAM)&vInfo, (MPARAM)NULL);
     ::WinSendMsg((HWND)GetHwnd(), SBM_SETPOS, (MPARAM)nViewStart, (MPARAM)NULL);
@@ -251,13 +245,11 @@ int wxScrollBar::GetThumbPosition() const
     return((int)(MRESULT)::WinSendMsg((HWND)GetHwnd(), SBM_QUERYPOS, (MPARAM)NULL, (MPARAM)NULL));
 } // end of wxScrollBar::GetThumbPosition
 
-void wxScrollBar::SetScrollbar (
-  int                               nPosition
-, int                               nThumbSize
-, int                               nRange
-, int                               nPageSize
-, bool                              bRefresh
-)
+void wxScrollBar::SetScrollbar ( int  nPosition,
+                                 int  nThumbSize,
+                                 int  nRange,
+                                 int  nPageSize,
+                                 bool WXUNUSED(bRefresh) )
 {
     SBCDATA                         vInfo;
     //
@@ -280,22 +272,20 @@ void wxScrollBar::SetScrollbar (
         nRange1 += (m_nPageSize - 1);
     }
     vInfo.cb = sizeof(SBCDATA);
-    vInfo.cVisible = m_nPageSize;
+    vInfo.cVisible = (SHORT)m_nPageSize;
     vInfo.posFirst = 0;
-    vInfo.posLast  = nRange1;
-    vInfo.posThumb = nPosition;
+    vInfo.posLast  = (SHORT)nRange1;
+    vInfo.posThumb = (SHORT)nPosition;
 
     ::WinSendMsg((HWND)GetHwnd(), WM_SETWINDOWPARAMS, (MPARAM)&vInfo, (MPARAM)NULL);
 } // end of wxScrollBar::SetScrollbar
 
-WXHBRUSH wxScrollBar::OnCtlColor (
-  WXHDC                             hDC
-, WXHWND                            hWnd
-, WXUINT                            uCtlColor
-, WXUINT                            uMessage
-, WXWPARAM                          wParam
-, WXLPARAM                          lParam
-)
+WXHBRUSH wxScrollBar::OnCtlColor ( WXHDC    WXUNUSED(hDC),
+                                   WXHWND   WXUNUSED(hWnd),
+                                   WXUINT   WXUNUSED(uCtlColor),
+                                   WXUINT   WXUNUSED(uMessage),
+                                   WXWPARAM WXUNUSED(wParam),
+                                   WXLPARAM WXUNUSED(lParam) )
 {
     //
     // Does nothing under OS/2
@@ -303,11 +293,8 @@ WXHBRUSH wxScrollBar::OnCtlColor (
     return 0;
 } // end of wxScrollBar::OnCtlColor
 
-void wxScrollBar::Command (
-  wxCommandEvent&                   rEvent
-)
+void wxScrollBar::Command ( wxCommandEvent& rEvent )
 {
     SetThumbPosition(rEvent.GetInt());
     ProcessCommand(rEvent);
 } // end of wxScrollBar::Command
-

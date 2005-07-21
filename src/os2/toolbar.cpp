@@ -451,7 +451,7 @@ bool wxToolBar::Realize()
     {
         wxToolBarTool*              pTool = (wxToolBarTool *)node->GetData();
 
-        if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsEmpty())
+        if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().empty())
         {
             //
             // Set the height according to the font and the border size
@@ -613,14 +613,12 @@ void wxToolBar::OnPaint (
             DrawTool(vDc, pTool);
         if (pTool->IsSeparator())
         {
-            wxPen                   vDarkGreyPen( wxColour(85, 85, 85)
-                                                 ,1
-                                                 ,wxSOLID
-                                                );
-            int                     nX;
-            int                     nY;
-            int                     nHeight = 0;
-            int                     nWidth = 0;
+            wxColour gray85(85, 85, 85);
+            wxPen vDarkGreyPen( gray85, 1, wxSOLID );
+            int nX;
+            int nY;
+            int nHeight = 0;
+            int nWidth = 0;
 
             vDc.SetPen(vDarkGreyPen);
             if (HasFlag(wxTB_TEXT))
@@ -752,7 +750,7 @@ void wxToolBar::OnMouseEvent(
                          );
             m_nCurrentTool = pTool->GetId();
             OnMouseEnter(m_nCurrentTool);
-            if (!pTool->GetShortHelp().IsEmpty())
+            if (!pTool->GetShortHelp().empty())
             {
                 if (m_pToolTip)
                     delete m_pToolTip;
@@ -828,22 +826,12 @@ void wxToolBar::DrawTool(
 , wxToolBarToolBase*                pToolBase
 )
 {
-    wxToolBarTool*                  pTool = (wxToolBarTool *)pToolBase;
-    wxPen                           vDarkGreyPen( wxColour( 85,85,85 )
-                                                 ,1
-                                                 ,wxSOLID
-                                                );
-    wxPen                           vWhitePen( wxT("WHITE")
-                                              ,1
-                                              ,wxSOLID
-                                             );
-    wxPen                           vBlackPen( wxT("BLACK")
-                                              ,1
-                                              ,wxSOLID
-                                             );
-    wxBitmap                        vBitmap = pTool->GetNormalBitmap();
-    bool                            bUseMask = FALSE;
-    wxMask*                         pMask = NULL;
+    wxToolBarTool* pTool = (wxToolBarTool *)pToolBase;
+    wxColour gray85( 85,85,85 );
+    wxPen vDarkGreyPen( gray85, 1, wxSOLID );
+    wxBitmap vBitmap = pTool->GetNormalBitmap();
+    bool bUseMask = FALSE;
+    wxMask* pMask = NULL;
 
     PrepareDC(rDc);
 
@@ -858,7 +846,7 @@ void wxToolBar::DrawTool(
         LowerTool(pTool, FALSE);
         if (!pTool->IsEnabled())
         {
-            wxColour                vColor(wxT("GREY"));
+            wxColour vColor(wxT("GREY"));
 
             rDc.SetTextForeground(vColor);
             if (!pTool->GetDisabledBitmap().Ok())
@@ -873,9 +861,7 @@ void wxToolBar::DrawTool(
         }
         else
         {
-            wxColour                vColor(wxT("BLACK"));
-
-            rDc.SetTextForeground(vColor);
+            rDc.SetTextForeground(*wxBLACK);
             rDc.DrawBitmap( vBitmap
                            ,pTool->m_vX
                            ,pTool->m_vY
@@ -918,7 +904,7 @@ void wxToolBar::DrawTool(
     }
     else
     {
-        wxColour                    vColor(wxT("GREY"));
+        wxColour vColor(wxT("GREY"));
 
         LowerTool(pTool);
         rDc.SetTextForeground(vColor);
@@ -1058,29 +1044,18 @@ void wxToolBar::SpringUpButton(
 // private helpers
 // ----------------------------------------------------------------------------
 
-void wxToolBar::LowerTool (
-  wxToolBarToolBase*                pToolBase
-, bool                              bLower
-)
+void wxToolBar::LowerTool ( wxToolBarToolBase* pToolBase,
+                            bool               bLower )
 {
     wxToolBarTool*                  pTool = (wxToolBarTool*)pToolBase;
-    wxCoord                         vX;
-    wxCoord                         vY;
-    wxCoord                         vWidth;
-    wxCoord                         vHeight;
-    wxPen                           vDarkGreyPen( wxColour(85, 85, 85)
-                                                 ,1
-                                                 ,wxSOLID
-                                                );
-    wxPen                           vWhitePen( wxT("WHITE")
-                                              ,1
-                                              ,wxSOLID
-                                             );
-    wxPen                           vClearPen( GetBackgroundColour()
-                                              ,1
-                                              ,wxSOLID
-                                             );
-    wxClientDC                      vDC(this);
+    wxCoord vX;
+    wxCoord vY;
+    wxCoord vWidth;
+    wxCoord vHeight;
+    wxColour gray85( 85,85,85 );
+    wxPen vDarkGreyPen( gray85, 1, wxSOLID );
+    wxPen vClearPen( GetBackgroundColour(), 1, wxSOLID );
+    wxClientDC vDC(this);
 
     if (!pTool)
         return;
@@ -1094,7 +1069,7 @@ void wxToolBar::LowerTool (
     if (!HasFlag(wxTB_FLAT))
         return;
 
-    if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsEmpty())
+    if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().empty())
     {
         if (pTool->GetWidth() > m_vTextX)
         {
@@ -1118,7 +1093,7 @@ void wxToolBar::LowerTool (
     }
     if (bLower)
     {
-        vDC.SetPen(vWhitePen);
+        vDC.SetPen(*wxWHITE_PEN);
         vDC.DrawLine(vX + vWidth, vY + vHeight, vX, vY + vHeight);
         vDC.DrawLine(vX + vWidth, vY, vX + vWidth, vY + vHeight);
         vDC.SetPen(vDarkGreyPen);
@@ -1135,29 +1110,18 @@ void wxToolBar::LowerTool (
     }
 } // end of WinGuiBase_CToolBarTool::LowerTool
 
-void wxToolBar::RaiseTool (
-  wxToolBarToolBase*                pToolBase
-, bool                              bRaise
-)
+void wxToolBar::RaiseTool ( wxToolBarToolBase* pToolBase,
+                            bool bRaise )
 {
-    wxToolBarTool*                  pTool = (wxToolBarTool*)pToolBase;
-    wxCoord                         vX;
-    wxCoord                         vY;
-    wxCoord                         vWidth;
-    wxCoord                         vHeight;
-    wxPen                           vDarkGreyPen( wxColour(85, 85, 85)
-                                                 ,1
-                                                 ,wxSOLID
-                                                );
-    wxPen                           vWhitePen( wxT("WHITE")
-                                              ,1
-                                              ,wxSOLID
-                                             );
-    wxPen                           vClearPen( GetBackgroundColour()
-                                              ,1
-                                              ,wxSOLID
-                                             );
-    wxClientDC                      vDC(this);
+    wxToolBarTool* pTool = (wxToolBarTool*)pToolBase;
+    wxCoord vX;
+    wxCoord vY;
+    wxCoord vWidth;
+    wxCoord vHeight;
+    wxColour gray85( 85,85,85 );
+    wxPen vDarkGreyPen( gray85, 1, wxSOLID );
+    wxPen vClearPen( GetBackgroundColour(), 1, wxSOLID );
+    wxClientDC vDC(this);
 
     if (!pTool)
         return;
@@ -1174,7 +1138,7 @@ void wxToolBar::RaiseTool (
     if (!HasFlag(wxTB_FLAT))
         return;
 
-    if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsEmpty())
+    if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().empty())
     {
         if (pTool->GetWidth() > m_vTextX)
         {
@@ -1201,7 +1165,7 @@ void wxToolBar::RaiseTool (
         vDC.SetPen(vDarkGreyPen);
         vDC.DrawLine(vX + vWidth, vY + vHeight, vX, vY + vHeight);
         vDC.DrawLine(vX + vWidth, vY, vX + vWidth, vY + vHeight);
-        vDC.SetPen(vWhitePen);
+        vDC.SetPen(*wxWHITE_PEN);
         vDC.DrawLine(vX, vY, vX + vWidth, vY);
         vDC.DrawLine(vX, vY + vHeight, vX, vY);
     }

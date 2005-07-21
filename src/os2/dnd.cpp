@@ -13,6 +13,11 @@
 #pragma implementation "dnd.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#if wxUSE_DRAG_AND_DROP
+
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
@@ -21,8 +26,6 @@
 #define INCL_PM
 #define INCL_DOS
 #include <os2.h>
-
-#if wxUSE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------
 // global

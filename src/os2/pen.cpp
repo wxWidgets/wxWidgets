@@ -156,11 +156,11 @@ bool wxPen::RealizeResource()
         }
         if (M_PENDATA->m_nStyle == wxTRANSPARENT)
         {
-            return TRUE;
+            return true;
         }
 
-        COLORREF                    vPmColour = 0L;
-        USHORT                      uLineType = wx2os2PenStyle(M_PENDATA->m_nStyle);
+        COLORREF vPmColour = 0L;
+        USHORT   uLineType = (USHORT)wx2os2PenStyle(M_PENDATA->m_nStyle);
 
         vPmColour = M_PENDATA->m_vColour.GetPixel();
 
@@ -302,9 +302,10 @@ bool wxPen::RealizeResource()
             sError = wxPMErrorToStr(vError);
             wxLogError(_T("Can't set Gpi attributes for an AREABUNDLE. Error: %s\n"), sError.c_str());
         }
-        return bOk;
+
+        return (bool)bOk;
     }
-    return FALSE;
+    return false;
 } // end of wxPen::RealizeResource
 
 WXHANDLE wxPen::GetResourceHandle()
@@ -315,16 +316,14 @@ WXHANDLE wxPen::GetResourceHandle()
         return (WXHANDLE)M_PENDATA->m_hPen;
 } // end of wxPen::GetResourceHandle
 
-bool wxPen::FreeResource(
-  bool                              bForce
-)
+bool wxPen::FreeResource( bool WXUNUSED(bForce) )
 {
     if (M_PENDATA && (M_PENDATA->m_hPen != 0))
     {
         M_PENDATA->m_hPen = 0;
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 } // end of wxPen::FreeResource
 
 bool wxPen::IsFree() const
@@ -406,10 +405,8 @@ void wxPen::SetStipple(
     RealizeResource();
 } // end of wxPen::SetStipple
 
-void wxPen::SetDashes(
-  int                               nNbDashes
-, const wxDash*                     pDash
-)
+void wxPen::SetDashes( int WXUNUSED(nNbDashes),
+                       const wxDash* WXUNUSED(pDash) )
 {
     //
     // Does nothing under OS/2
@@ -473,5 +470,3 @@ int wx2os2PenStyle(
     }
     return nPMStyle;
 } // end of wx2os2PenStyle
-
-

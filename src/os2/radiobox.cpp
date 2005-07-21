@@ -90,24 +90,22 @@ wxRadioBox::~wxRadioBox()
         delete[] m_pnRadioHeight;
 } // end of wxRadioBox::~wxRadioBox
 
-void wxRadioBox::AdjustButtons(
-  int                               nX
-, int                               nY
-, int                               nWidth
-, int                               nHeight
-, int                               nSizeFlags
-)
+void wxRadioBox::AdjustButtons( int nX,
+                                int nY,
+                                int nWidth,
+                                int nHeight,
+                                int WXUNUSED(nSizeFlags) )
 {
-    wxSize                          vMaxSize;
-    int                             nXOffset = nX;
-    int                             nYOffset = nY + nHeight;
-    int                             nCx1;
-    int                             nCy1;
-    int                             nStartX;
-    int                             nStartY;
-    int                             nMaxWidth;
-    int                             nMaxHeight;
-    wxFont                          vFont = GetFont();
+    wxSize vMaxSize;
+    int    nXOffset = nX;
+    int    nYOffset = nY + nHeight;
+    int    nCx1;
+    int    nCy1;
+    int    nStartX;
+    int    nStartY;
+    int    nMaxWidth;
+    int    nMaxHeight;
+    wxFont vFont = GetFont();
 
     wxGetCharSize( m_hWnd
                   ,&nCx1
@@ -754,10 +752,8 @@ wxSize wxRadioBox::GetMaxButtonSize() const
         if (nHeightMax < nHeight )
             nHeightMax = nHeight;
     }
-    return(wxSize( nWidthMax
-                  ,nHeightMax
-                 )
-          );
+    wxSize maxsize( nWidthMax, nHeightMax);
+    return maxsize;
 } // end of wxRadioBox::GetMaxButtonSize
 
 int wxRadioBox::GetNumHor() const
@@ -784,10 +780,8 @@ int wxRadioBox::GetNumVer() const
     }
 } // end of wxRadioBox::GetNumVer
 
-void wxRadioBox::GetPosition(
-  int*                              pnX
-, int*                              pnY
-) const
+void wxRadioBox::GetPosition( int* pnX,
+                              int* WXUNUSED(pnY) ) const
 {
     wxWindowOS2*                    pParent = GetParent();
     RECT                            vRect = { -1, -1, -1, -1 };
@@ -892,23 +886,17 @@ wxString wxRadioBox::GetStringSelection() const
     return sResult;
 } // end of wxRadioBox::GetStringSelection
 
-wxSize wxRadioBox::GetTotalButtonSize(
-  const wxSize&                     rSizeBtn
-) const
+wxSize wxRadioBox::GetTotalButtonSize( const wxSize& rSizeBtn ) const
 {
-    int                             nCx1;
-    int                             nCy1;
-    int                             nExtraHeight;
-    int                             nHeight;
-    int                             nWidth;
-    int                             nWidthLabel;
-    wxFont                          vFont = GetFont();
+    int    nCx1;
+    int    nCy1;
+    int    nExtraHeight;
+    int    nHeight;
+    int    nWidth;
+    int    nWidthLabel;
+    wxFont vFont = GetFont();
 
-    wxGetCharSize( m_hWnd
-                  ,&nCx1
-                  ,&nCy1
-                  ,&vFont
-                 );
+    wxGetCharSize( m_hWnd, &nCx1, &nCy1, &vFont );
     nExtraHeight = nCy1;
 
     nHeight = GetNumVer() * rSizeBtn.y + (2 * nCy1);
@@ -925,46 +913,37 @@ wxSize wxRadioBox::GetTotalButtonSize(
     if (nWidthLabel > nWidth)
         nWidth = nWidthLabel;
 
-    return(wxSize( nWidth
-                  ,nHeight
-                 )
-          );
+    wxSize total( nWidth, nHeight );
+    return total;
 } // end of wxRadioBox::GetTotalButtonSize
 
-WXHBRUSH wxRadioBox::OnCtlColor(
-  WXHDC                             hwinDC
-, WXHWND                            hWnd
-, WXUINT                            uCtlColor
-, WXUINT                            uMessage
-, WXWPARAM                          wParam
-, WXLPARAM                          lParam
-)
+WXHBRUSH wxRadioBox::OnCtlColor( WXHDC    hwinDC,
+                                 WXHWND   WXUNUSED(hWnd),
+                                 WXUINT   WXUNUSED(uCtlColor),
+                                 WXUINT   WXUNUSED(uMessage),
+                                 WXWPARAM WXUNUSED(wParam),
+                                 WXLPARAM WXUNUSED(lParam) )
 {
-    HPS                             hPS = (HPS)hwinDC; // pass in a PS handle in OS/2
+    HPS hPS = (HPS)hwinDC; // pass in a PS handle in OS/2
 
     if (GetParent()->GetTransparentBackground())
         ::GpiSetBackMix(hPS, BM_LEAVEALONE);
     else
         ::GpiSetBackMix(hPS, BM_OVERPAINT);
 
-    wxColour                        vColBack = GetBackgroundColour();
+    wxColour vColBack = GetBackgroundColour();
 
     ::GpiSetBackColor(hPS, vColBack.GetPixel());
     ::GpiSetColor(hPS, vColBack.GetPixel());
 
-
-    wxBrush*                        pBrush = wxTheBrushList->FindOrCreateBrush( vColBack
-                                                                               ,wxSOLID
-                                                                              );
+    wxBrush* pBrush = wxTheBrushList->FindOrCreateBrush( vColBack, wxSOLID );
     return ((WXHBRUSH)pBrush->GetResourceHandle());
 } // end of wxRadioBox::OnCtlColor
 
-bool wxRadioBox::OS2Command(
-  WXUINT                            uCmd
-, WXWORD                            wId
-)
+bool wxRadioBox::OS2Command( WXUINT uCmd,
+                             WXWORD wId)
 {
-    int                             nSelectedButton = -1;
+    int nSelectedButton = -1;
 
     if (uCmd == BN_CLICKED)
     {
@@ -1235,4 +1214,3 @@ MRESULT EXPENTRY wxRadioBoxWndProc(
                              )
            );
 } // end of wxRadioBoxWndProc
-

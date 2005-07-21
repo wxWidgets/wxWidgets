@@ -59,7 +59,7 @@ static bool gs_wxClipboardIsOpen = FALSE;
 
 bool wxOpenClipboard()
 {
-    wxCHECK_MSG( !gs_wxClipboardIsOpen, TRUE, wxT("clipboard already opened.") );
+    wxCHECK_MSG( !gs_wxClipboardIsOpen, true, wxT("clipboard already opened.") );
 // TODO:
 /*
     wxWindow *win = wxTheApp->GetTopWindow();
@@ -96,7 +96,7 @@ bool wxCloseClipboard()
         return FALSE;
     }
 */
-    return TRUE;
+    return true;
 }
 
 bool wxEmptyClipboard()
@@ -110,7 +110,7 @@ bool wxEmptyClipboard()
         return FALSE;
     }
 */
-    return TRUE;
+    return true;
 }
 
 bool wxIsClipboardOpened()
@@ -118,10 +118,10 @@ bool wxIsClipboardOpened()
   return gs_wxClipboardIsOpen;
 }
 
-bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
+bool wxIsClipboardFormatAvailable(wxDataFormat WXUNUSED(dataFormat))
 {
     // TODO: return ::IsClipboardFormatAvailable(dataFormat) != 0;
-    return FALSE;
+    return false;
 }
 
 #if 0
@@ -155,7 +155,7 @@ static bool wxSetClipboardData(wxDataObject *data)
         return FALSE;
     }
 */
-    return TRUE;
+    return true;
 }
 #endif // wxUSE_DRAG_AND_DROP
 #endif
@@ -278,7 +278,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
         return FALSE;
     }
 */
-    return TRUE;
+    return true;
 }
 
 void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
@@ -329,7 +329,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
                 wxBM->SetWidth(bm.bmWidth);
                 wxBM->SetHeight(bm.bmHeight);
                 wxBM->SetDepth(bm.bmPlanes);
-                wxBM->SetOk(TRUE);
+                wxBM->SetOk(true);
                 retval = wxBM;
                 break;
             }
@@ -471,9 +471,9 @@ bool wxClipboard::SetData( wxDataObject *data )
     if ( data )
         return AddData(data);
     else
-        return TRUE;
+        return true;
     */
-    return TRUE;
+    return true;
 }
 
 bool wxClipboard::AddData( wxDataObject *data )
@@ -556,7 +556,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             {
                 textDataObject.SetText(s);
                 delete[] s;
-                return TRUE;
+                return true;
             }
             else
                 return FALSE;
@@ -571,7 +571,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             {
                 bitmapDataObject.SetBitmap(* bitmap);
                 delete bitmap;
-                return TRUE;
+                return true;
             }
             else
                 return FALSE;
@@ -585,7 +585,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             {
                 metaFileDataObject.SetMetafile(*metaFile);
                 delete metaFile;
-                return TRUE;
+                return true;
             }
             else
                 return FALSE;
@@ -601,7 +601,7 @@ bool wxClipboard::GetData( wxDataObject& data )
                     ((wxPrivateDataObject &)data).SetData(buf, len);
                     free(buf);
 
-                    return TRUE;
+                    return true;
                 }
             }
 
@@ -615,7 +615,4 @@ bool wxClipboard::GetData( wxDataObject& data )
 #endif
 }
 
-#else
-    #error "Please turn wxUSE_CLIPBOARD on to compile this file."
 #endif // wxUSE_CLIPBOARD
-

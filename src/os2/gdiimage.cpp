@@ -163,14 +163,13 @@ protected:
                           ,int             nDesiredHeight = -1
                          ) = 0;
 private:
-    inline virtual bool Load( wxGDIImage*     pImage
-                             ,int             nId
-                             ,long            lFlags
-                             ,int             nDesiredWidth
-                             ,int             nDesiredHeight
-                            )
+    inline virtual bool Load( wxGDIImage* WXUNUSED(pImage),
+                              int         WXUNUSED(nId),
+                              long        WXUNUSED(lFlags),
+                              int         WXUNUSED(nDesiredWidth),
+                              int         WXUNUSED(nDesiredHeight) )
     {
-        return FALSE;
+        return false;
     }
 };
 
@@ -237,9 +236,7 @@ wxGDIImageHandlerList wxGDIImage::ms_handlers;
 // wxGDIImage functions forwarded to wxGDIImageRefData
 // ----------------------------------------------------------------------------
 
-bool wxGDIImage::FreeResource(
-  bool                              WXUNUSED(bForce)
-)
+bool wxGDIImage::FreeResource( bool WXUNUSED(bForce) )
 {
     if ( !IsNull() )
     {
@@ -247,7 +244,7 @@ bool wxGDIImage::FreeResource(
         GetGDIImageData()->m_hHandle = 0;
     }
 
-    return(TRUE);
+    return true;
 }
 
 WXHANDLE wxGDIImage::GetResourceHandle()
@@ -259,33 +256,27 @@ WXHANDLE wxGDIImage::GetResourceHandle()
 // wxGDIImage handler stuff
 // ----------------------------------------------------------------------------
 
-void wxGDIImage::AddHandler(
-  wxGDIImageHandler*                pHandler
-)
+void wxGDIImage::AddHandler( wxGDIImageHandler* pHandler )
 {
     ms_handlers.Append(pHandler);
 }
 
-void wxGDIImage::InsertHandler(
-  wxGDIImageHandler*                pHandler
-)
+void wxGDIImage::InsertHandler( wxGDIImageHandler* pHandler )
 {
     ms_handlers.Insert(pHandler);
 }
 
-bool wxGDIImage::RemoveHandler(
-  const wxString&                   rName
-)
+bool wxGDIImage::RemoveHandler( const wxString& rName )
 {
     wxGDIImageHandler*              pHandler = FindHandler(rName);
 
     if (pHandler)
     {
         ms_handlers.DeleteObject(pHandler);
-        return(TRUE);
+        return true;
     }
     else
-        return(FALSE);
+        return false;
 }
 
 wxGDIImageHandler* wxGDIImage::FindHandler(
@@ -369,13 +360,11 @@ void wxGDIImage::InitStandardHandlers()
 // wxBitmap handlers
 // ----------------------------------------------------------------------------
 
-bool wxBMPResourceHandler::LoadFile(
-  wxBitmap*                         pBitmap
-, int                               nId
-, long                              lFlags
-, int                               nDesiredWidth
-, int                               nDesiredHeight
-)
+bool wxBMPResourceHandler::LoadFile( wxBitmap* pBitmap,
+                                     int       nId,
+                                     long      WXUNUSED(lFlags),
+                                     int       WXUNUSED(nDesiredWidth),
+                                     int       WXUNUSED(nDesiredHeight) )
 {
     SIZEL                               vSize = {0, 0};
     DEVOPENSTRUC                        vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
@@ -405,22 +394,20 @@ bool wxBMPResourceHandler::LoadFile(
     return(pBitmap->Ok());
 } // end of wxBMPResourceHandler::LoadFile
 
-bool wxBMPFileHandler::LoadFile(
-  wxBitmap*                         pBitmap
-, const wxString&                   rName
-, HPS                               hPs
-, long                              WXUNUSED(lFlags)
-, int                               WXUNUSED(nDesiredWidth)
-, int                               WXUNUSED(nDesiredHeight)
-)
+bool wxBMPFileHandler::LoadFile( wxBitmap*       pBitmap,
+                                 const wxString& WXUNUSED(rName),
+                                 HPS             WXUNUSED(hPs),
+                                 long            WXUNUSED(lFlags),
+                                 int             WXUNUSED(nDesiredWidth),
+                                 int             WXUNUSED(nDesiredHeight) )
 {
 #if wxUSE_IMAGE_LOADING_IN_OS2
-    wxPalette*                      pPalette = NULL;
+    wxPalette* pPalette = NULL;
 
-    bool                            bSuccess = FALSE; /* wxLoadIntoBitmap( WXSTRINGCAST rName
-                                                                ,pBitmap
-                                                                ,&pPalette
-                                                               ) != 0; */
+    bool bSuccess = false; /* wxLoadIntoBitmap( WXSTRINGCAST rName
+                                               ,pBitmap
+                                               ,&pPalette
+                                              ) != 0; */
     if (bSuccess && pPalette)
     {
         pBitmap->SetPalette(*pPalette);
@@ -431,19 +418,18 @@ bool wxBMPFileHandler::LoadFile(
 
     return(bSuccess);
 #else
-    return(FALSE);
+    wxUnusedVar(pBitmap);
+    return false;
 #endif
 }
 
-bool wxBMPFileHandler::SaveFile(
-  wxBitmap*                         pBitmap
-, const wxString&                   rName
-, int                               WXUNUSED(nType)
-, const wxPalette*                  pPal
-)
+bool wxBMPFileHandler::SaveFile( wxBitmap*        pBitmap,
+                                 const wxString&  WXUNUSED(rName),
+                                 int              WXUNUSED(nType),
+                                 const wxPalette* pPal )
 {
 #if wxUSE_IMAGE_LOADING_IN_OS2
-    wxPalette*                      pActualPalette = (wxPalette *)pPal;
+    wxPalette* pActualPalette = (wxPalette *)pPal;
 
     if (!pActualPalette)
         pActualPalette = pBitmap->GetPalette();
@@ -451,9 +437,11 @@ bool wxBMPFileHandler::SaveFile(
                         ,pBitmap
                         ,pActualPalette
                        ) != 0); */
-    return(FALSE);
+    return false;
 #else
-    return(FALSE);
+    wxUnusedVar(pBitmap);
+    wxUnusedVar(pPal);
+    return false;
 #endif
 }
 
@@ -461,35 +449,29 @@ bool wxBMPFileHandler::SaveFile(
 // wxIcon handlers
 // ----------------------------------------------------------------------------
 
-bool wxICOFileHandler::LoadIcon(
-  wxIcon*                           pIcon
-, const wxString&                   rName
-, HPS                               hPs
-, long                              lFlags
-, int                               nDesiredWidth
-, int                               nDesiredHeight
-)
+bool wxICOFileHandler::LoadIcon( wxIcon*         pIcon,
+                                 const wxString& WXUNUSED(rName),
+                                 HPS             WXUNUSED(hPs),
+                                 long            WXUNUSED(lFlags),
+                                 int             WXUNUSED(nDesiredWidth),
+                                 int             WXUNUSED(nDesiredHeight) )
 {
 #if wxUSE_RESOURCE_LOADING_IN_OS2
     pIcon->UnRef();
 
-    // actual size
-    wxSize                          vSize;
-
-    return(FALSE);
+    return false;
 #else
-    return(FALSE);
+    wxUnusedVar(pIcon);
+    return false;
 #endif
 }
 
-bool wxICOResourceHandler::LoadIcon(
-  wxIcon*                           pIcon
-, const wxString&                   rName
-, HPS                               hPs
-, long                              lFlags
-, int                               WXUNUSED(nDesiredWidth)
-, int                               WXUNUSED(nDesiredHeight)
-)
+bool wxICOResourceHandler::LoadIcon( wxIcon*         pIcon,
+                                     const wxString& rName,
+                                     HPS             WXUNUSED(hPs),
+                                     long            WXUNUSED(lFlags),
+                                     int             WXUNUSED(nDesiredWidth),
+                                     int             WXUNUSED(nDesiredHeight) )
 {
     HPOINTER                        hIcon;
 
@@ -499,9 +481,7 @@ bool wxICOResourceHandler::LoadIcon(
 
     pIcon->SetSize(32, 32); // all OS/2 icons are 32 x 32
 
-
     pIcon->SetHICON((WXHICON)hIcon);
 
     return pIcon->Ok();
 } // end of wxICOResourceHandler::LoadIcon
-

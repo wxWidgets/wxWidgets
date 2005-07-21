@@ -211,14 +211,14 @@ wxBitmap::wxBitmap(
         {
             for (nCols = 0; nCols < nBytesPerLine; nCols++)
             {
-                unsigned char       ucVal = *pzSrc++;
-                unsigned char       ucReversed = 0;
-                int                 nBits;
+                unsigned char ucVal = *pzSrc++;
+                unsigned char ucReversed = 0;
+                int nBits;
 
                 for (nBits = 0; nBits < 8; nBits++)
                 {
                     ucReversed <<= 1;
-                    ucReversed |= (ucVal & 0x01);
+                    ucReversed = (unsigned char)(ucReversed | (ucVal & 0x01));
                     ucVal >>= 1;
                 }
                 *pzDst++ = ucReversed;
@@ -242,7 +242,7 @@ wxBitmap::wxBitmap(
     vHeader.cx              = (USHORT)nWidth;
     vHeader.cy              = (USHORT)nHeight;
     vHeader.cPlanes         = 1L;
-    vHeader.cBitCount       = nDepth;
+    vHeader.cBitCount       = (USHORT)nDepth;
     vHeader.usReserved      = 0;
 
     memset(&vInfo, '\0', 16);
@@ -250,7 +250,7 @@ wxBitmap::wxBitmap(
     vInfo.cx              = (USHORT)nWidth;
     vInfo.cy              = (USHORT)nHeight;
     vInfo.cPlanes         = 1L;
-    vInfo.cBitCount       = nDepth;
+    vInfo.cBitCount       = (USHORT)nDepth;
 
     HBITMAP                         hBmp = ::GpiCreateBitmap(hPs, &vHeader, CBM_INIT, (PBYTE)pzData, &vInfo);
 
@@ -369,7 +369,7 @@ bool wxBitmap::Create(
         vHeader.cx        = nW;
         vHeader.cy        = nH;
         vHeader.cPlanes   = 1;
-        vHeader.cBitCount = lBitCount;
+        vHeader.cBitCount = (USHORT)lBitCount;
 
         hBmp = ::GpiCreateBitmap( hPSScreen
                                  ,&vHeader
@@ -1181,9 +1181,7 @@ void wxBitmap::SetMask(
     GetBitmapData()->m_pBitmapMask = pMask;
 } // end of wxBitmap::SetMask
 
-wxBitmap wxBitmap::GetBitmapForDC(
-  wxDC&                             rDc
-) const
+wxBitmap wxBitmap::GetBitmapForDC(wxDC& WXUNUSED(rDc)) const
 {
     return(*this);
 } // end of wxBitmap::GetBitmapForDC
@@ -1429,18 +1427,16 @@ bool wxMask::Create(
 // wxBitmapHandler
 // ----------------------------------------------------------------------------
 
-bool wxBitmapHandler::Create(
-  wxGDIImage*                       pImage
-, void*                             pData
-, long                              lFlags
-, int                               nWidth
-, int                               nHeight
-, int                               nDepth
-)
+bool wxBitmapHandler::Create( wxGDIImage* pImage,
+                              void*       pData,
+                              long        WXUNUSED(lFlags),
+                              int         nWidth,
+                              int         nHeight,
+                              int         nDepth)
 {
-    wxBitmap*                       pBitmap = wxDynamicCast( pImage
-                                                            ,wxBitmap
-                                                           );
+    wxBitmap* pBitmap = wxDynamicCast( pImage
+                                      ,wxBitmap
+                                       );
 
     return(pBitmap ? Create( pBitmap
                             ,pData
@@ -1589,4 +1585,3 @@ HBITMAP wxInvertMask(
 
     return hBmpInvMask;
 } // end of WxWinGdi_InvertMask
-

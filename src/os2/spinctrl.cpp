@@ -117,18 +117,16 @@ wxSpinCtrl::~wxSpinCtrl()
 // construction
 // ----------------------------------------------------------------------------
 
-bool wxSpinCtrl::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsValue
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, int                               nMin
-, int                               nMax
-, int                               nInitial
-, const wxString&                   rsName
-)
+bool wxSpinCtrl::Create( wxWindow*       pParent,
+                         wxWindowID      vId,
+                         const wxString& WXUNUSED(rsValue),
+                         const wxPoint&  rPos,
+                         const wxSize&   rSize,
+                         long            lStyle,
+                         int             nMin,
+                         int             nMax,
+                         int             nInitial,
+                         const wxString& rsName )
 {
     SWP                             vSwp;
 
@@ -418,21 +416,17 @@ void wxSpinCtrl::OnSetFocus (
     rEvent.Skip();
 } // end of wxSpinCtrl::OnSetFocus
 
-bool wxSpinCtrl::ProcessTextCommand(
-  WXWORD                            wCmd
-, WXWORD                            wId
-)
+bool wxSpinCtrl::ProcessTextCommand( WXWORD wCmd,
+                                     WXWORD WXUNUSED(wId) )
 {
     switch (wCmd)
     {
         case SPBN_CHANGE:
         {
-            wxCommandEvent          vEvent( wxEVT_COMMAND_TEXT_UPDATED
-                                           ,GetId()
-                                          );
+            wxCommandEvent vEvent( wxEVT_COMMAND_TEXT_UPDATED, GetId() );
             vEvent.SetEventObject(this);
 
-            wxString                sVal = wxGetWindowText(m_hWndBuddy);
+            wxString sVal = wxGetWindowText(m_hWndBuddy);
 
             vEvent.SetString(sVal);
             vEvent.SetInt(GetValue());
@@ -442,9 +436,9 @@ bool wxSpinCtrl::ProcessTextCommand(
         case SPBN_SETFOCUS:
         case SPBN_KILLFOCUS:
         {
-            wxFocusEvent                vEvent( wCmd == EN_KILLFOCUS ? wxEVT_KILL_FOCUS : wxEVT_SET_FOCUS
-                                               ,m_windowId
-                                              );
+            wxFocusEvent vEvent( wCmd == EN_KILLFOCUS ? wxEVT_KILL_FOCUS : wxEVT_SET_FOCUS
+                                ,m_windowId
+                               );
 
             vEvent.SetEventObject(this);
             return(GetEventHandler()->ProcessEvent(vEvent));

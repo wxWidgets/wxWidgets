@@ -9,13 +9,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/combobox.h"
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/setup.h"
+    #include "wx/defs.h"
     #include "wx/settings.h"
 #endif
 
@@ -279,11 +277,9 @@ wxTextPos wxComboBox::GetLastPosition() const
     return lLineLength;
 } // end of wxComboBox::GetLastPosition
 
-void wxComboBox::Replace(
-  long                              lFrom
-, long                              lTo
-, const wxString&                   rsValue
-)
+void wxComboBox::Replace( long lFrom,
+                          long lTo,
+                          const wxString& rsValue )
 {
 #if wxUSE_CLIPBOARD
     HWND                            hWnd = GetHwnd();
@@ -307,19 +303,23 @@ void wxComboBox::Replace(
     // Paste into edit control
     //
     ::WinSendMsg(hWnd, EM_PASTE, (MPARAM)0, (MPARAM)0L);
+#else
+    wxUnusedVar(lFrom);
+    wxUnusedVar(lTo);
+    wxUnusedVar(rsValue);
 #endif
 } // end of wxComboBox::Replace
 
-void wxComboBox::Remove(
-  long                              lFrom
-, long                              lTo
-)
+void wxComboBox::Remove( long lFrom, long lTo)
 {
 #if wxUSE_CLIPBOARD
     HWND                            hWnd = GetHwnd();
 
     ::WinSendMsg(hWnd, EM_SETSEL, MPFROM2SHORT((USHORT)lFrom, (USHORT)lTo), 0);
     ::WinSendMsg(hWnd, EM_CUT, (MPARAM)0, (MPARAM)0);
+#else
+    wxUnusedVar(lFrom);
+    wxUnusedVar(lTo);
 #endif
 } // end of wxComboBox::Remove
 
@@ -401,7 +401,6 @@ bool wxComboBox::ProcessEditMsg(
                 return(HandleSetFocus((WXHWND)(HWND)wParam));
             else
                 return(HandleKillFocus((WXHWND)(HWND)wParam));
-            break;
     }
     return false;
 } // end of WinGuiBase_CComboBox::ProcessEditMsg
@@ -442,4 +441,3 @@ MRESULT EXPENTRY wxComboEditWndProc(
 
 #endif
  // wxUSE_COMBOBOX
-

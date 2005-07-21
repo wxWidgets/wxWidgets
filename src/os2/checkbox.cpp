@@ -41,18 +41,14 @@ extern void  wxAssociateWinWithHandle( HWND         hWnd
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
-bool wxCheckBox::OS2Command(
-  WXUINT                            WXUNUSED(uParam)
-, WXWORD                            WXUNUSED(wId)
-)
+bool wxCheckBox::OS2Command( WXUINT WXUNUSED(uParam),
+                             WXWORD WXUNUSED(wId) )
 {
-    wxCommandEvent                  rEvent( wxEVT_COMMAND_CHECKBOX_CLICKED
-                                           ,m_windowId
-                                          );
+    wxCommandEvent rEvent( wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
     rEvent.SetInt(GetValue());
     rEvent.SetEventObject(this);
     ProcessCommand(rEvent);
-    return TRUE;
+    return true;
 } // end of wxCheckBox::OS2Command
 
 bool wxCheckBox::Create(
@@ -128,11 +124,11 @@ wxSize wxCheckBox::DoGetBestSize() const
         nCheckSize = vDc.GetCharHeight();
     }
 
-    int                             nWidthCheckbox;
-    int                             nHeightCheckbox;
-    wxString                        sStr = wxGetWindowText(GetHWND());
+    int      nWidthCheckbox;
+    int      nHeightCheckbox;
+    wxString sStr = wxGetWindowText(GetHWND());
 
-    if (!sStr.IsEmpty())
+    if (!sStr.empty())
     {
         GetTextExtent( sStr
                       ,&nWidthCheckbox
@@ -182,16 +178,14 @@ void wxCheckBox::Command (
 // wxBitmapCheckBox
 // ----------------------------------------------------------------------------
 
-bool wxBitmapCheckBox::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxBitmap*                   pLabel
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxValidator&                rValidator
-, const wxString&                   rsName
-)
+bool wxBitmapCheckBox::Create( wxWindow*          pParent,
+                               wxWindowID         vId,
+                               const wxBitmap*    WXUNUSED(pLabel),
+                               const wxPoint&     rPos,
+                               const wxSize&      rSize,
+                               long               lStyle,
+                               const wxValidator& rValidator,
+                               const wxString&    rsName)
 {
     SetName(rsName);
 #if wxUSE_VALIDATORS
@@ -234,13 +228,10 @@ bool wxBitmapCheckBox::Create(
            );
 
     ::WinShowWindow(hButton, TRUE);
-    return TRUE;
+    return true;
 } // end of wxBitmapCheckBox::Create
 
-void wxBitmapCheckBox::SetLabel(
-  const wxBitmap&                   rBitmap
-)
+void wxBitmapCheckBox::SetLabel( const wxBitmap& WXUNUSED(rBitmap) )
 {
     wxFAIL_MSG(wxT("not implemented"));
 }  // end of wxBitmapCheckBox::SetLabel
-

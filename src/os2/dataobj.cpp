@@ -25,11 +25,13 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include "wx/intl.h"
+    #include "wx/defs.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
-#include "wx/defs.h"
 
-#include "wx/log.h"
+#if wxUSE_DATAOBJ
+
 #include "wx/dataobj.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
@@ -94,11 +96,9 @@ private:
     DRAGITEM                        m_vDragItem;
 }; // end of CLASS CIDataObject
 
-bool CIDataObject::GetData (
-  const wxDataFormat&               rFormat
-, char*                             pzBuffer
-, ULONG                             ulLen
-)
+bool CIDataObject::GetData ( const wxDataFormat& rFormat,
+                             char* pzBuffer,
+                             ULONG ulLen )
 {
     QueryGetData(rFormat);
     if (rFormat.GetType() == wxDF_INVALID)
@@ -132,7 +132,7 @@ bool CIDataObject::GetData (
                 ,pzBuffer
                 ,ulSize
                );
-    return TRUE;
+    return true;
 } // end of CIDataObject::GetData
 
 void CIDataObject::GetDataHere(
@@ -225,9 +225,7 @@ wxDataObject::~wxDataObject ()
 // wxFileDataObject
 // ----------------------------------------------------------------------------
 
-bool wxFileDataObject::GetDataHere(
-  void*                             pBuf
-) const
+bool wxFileDataObject::GetDataHere( void* pBuf ) const
 {
     wxString                        sFilenames;
 
@@ -238,7 +236,7 @@ bool wxFileDataObject::GetDataHere(
     }
 
     memcpy(pBuf, sFilenames.mbc_str(), sFilenames.Len() + 1);
-    return TRUE;
+    return true;
 }
 
 size_t wxFileDataObject::GetDataSize() const
@@ -254,18 +252,16 @@ size_t wxFileDataObject::GetDataSize() const
     return nRes + 1;
 }
 
-bool wxFileDataObject::SetData(
-  size_t                            WXUNUSED(nSize)
-, const void*                       pBuf
-)
+bool wxFileDataObject::SetData( size_t WXUNUSED(nSize),
+                                const void* pBuf )
 {
     /* TODO */
 
-    wxString                        sFile((const wxChar *)pBuf);  /* char, not wxChar */
+    wxString sFile((const wxChar *)pBuf);  /* char, not wxChar */
 
     AddFile(sFile);
 
-    return TRUE;
+    return true;
 }
 
 void wxFileDataObject::AddFile(
@@ -299,18 +295,14 @@ wxBitmapDataObject::~wxBitmapDataObject()
     Clear();
 }
 
-void wxBitmapDataObject::SetBitmap(
-  const wxBitmap&                   rBitmap
-)
+void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
 {
     ClearAll();
     wxBitmapDataObjectBase::SetBitmap(rBitmap);
     DoConvertToPng();
 }
 
-bool wxBitmapDataObject::GetDataHere(
-  void*                             pBuf
-) const
+bool wxBitmapDataObject::GetDataHere( void* pBuf ) const
 {
     if (!m_pngSize)
     {
@@ -318,7 +310,7 @@ bool wxBitmapDataObject::GetDataHere(
         return FALSE;
     }
     memcpy(pBuf, m_pngData, m_pngSize);
-    return TRUE;
+    return true;
 }
 
 bool wxBitmapDataObject::SetData(
@@ -369,3 +361,4 @@ void wxBitmapDataObject::DoConvertToPng()
 #endif
 }
 
+#endif // wxUSE_DATAOBJ

@@ -166,7 +166,6 @@ wxColour wxSystemSettingsNative::GetColour(
         case wxSYS_COLOUR_LISTBOX:
         case wxSYS_COLOUR_CAPTIONTEXT:
             return(*wxWHITE);
-            break;
 
         case wxSYS_COLOUR_WINDOWTEXT:
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
@@ -249,10 +248,8 @@ wxFont wxSystemSettingsNative::GetFont(
 }
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettingsNative::GetMetric(
-  wxSystemMetric                    index
-, wxWindow*                         WXUNUSED(win)
-)
+int wxSystemSettingsNative::GetMetric( wxSystemMetric index,
+                                       wxWindow*      WXUNUSED(win) )
 {
     switch ( index)
     {
@@ -276,12 +273,12 @@ int wxSystemSettingsNative::GetMetric(
         // TODO case wxSYS_ICONSPACING_Y:
         // TODO case wxSYS_WINDOWMIN_X:
         // TODO case wxSYS_WINDOWMIN_Y:
-        
+
         case wxSYS_SCREEN_X:
             return ::WinQuerySysValue(HWND_DESKTOP,SV_CXSCREEN);
         case wxSYS_SCREEN_Y:
             return ::WinQuerySysValue(HWND_DESKTOP,SV_CYSCREEN);
-            
+
         // TODO case wxSYS_FRAMESIZE_X:
         // TODO case wxSYS_FRAMESIZE_Y:
         // TODO case wxSYS_SMALLICON_X:
@@ -297,27 +294,20 @@ int wxSystemSettingsNative::GetMetric(
         // TODO case wxSYS_PENWINDOWS_PRESENT:
         // TODO case wxSYS_SHOW_SOUNDS:
         // TODO case wxSYS_SWAP_BUTTONS:
-            
-        default:
-            return -1;  // unsupported metric
     }
-    return 0;
+    return -1;  // unsupported metric
 }
 
-bool wxSystemSettingsNative::HasFeature(
-  wxSystemFeature                   index
-)
+bool wxSystemSettingsNative::HasFeature( wxSystemFeature index )
 {
     switch (index)
     {
         case wxSYS_CAN_ICONIZE_FRAME:
-            return TRUE;
+            return true;
 
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
-            return FALSE;
-
-        default:
-            return FALSE;
+            return false;
     }
-    return FALSE;
+
+    return false;
 }

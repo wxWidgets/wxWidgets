@@ -39,16 +39,19 @@
 
 #define PURE_32
 
-#ifndef __EMX__
-#include <upm.h>
-#include <netcons.h>
-#include <netbios.h>
+#if defined(__WATCOMC__)
+extern "C"
+{
+    #include <upm.h>
+}
+#elif !defined(__EMX__)
+    #include <upm.h>
+    #include <netcons.h>
+    #include <netbios.h>
 #endif
 
 static const wxChar WX_SECTION[] = _T("wxWidgets");
 static const wxChar eHOSTNAME[]  = _T("HostName");
-static const wxChar eUSERID[]    = _T("UserId");
-static const wxChar eUSERNAME[]  = _T("UserName");
 
 // For the following functions we SHOULD fill in support
 // for Windows-NT (which I don't know) as I assume it begin
@@ -99,41 +102,30 @@ bool wxGetHostName(
 }
 
 // Get user ID e.g. jacs
-bool wxGetUserId(
-  wxChar*                           zBuf
-, int                               nType
-)
+bool wxGetUserId(wxChar* zBuf, int nType)
 {
-#if defined(__VISAGECPP__)
-    long                            lrc;
+#if defined(__VISAGECPP__) || defined(__WATCOMC__)
     // UPM procs return 0 on success
-    lrc = U32ELOCU((unsigned char*)zBuf, (unsigned long *)&nType);
+    long lrc = U32ELOCU((PUCHAR)zBuf, (PULONG)&nType);
     if (lrc == 0) return true;
 #endif
     return false;
 }
 
-bool wxGetUserName(
-  wxChar*                           zBuf
-, int                               nMaxSize
-)
+bool wxGetUserName( wxChar* zBuf, int nMaxSize )
 {
 #ifdef USE_NET_API
-    wxGetUserId( zBuf
-                ,nMaxSize
-               );
+    wxGetUserId( zBuf, nMaxSize );
 #else
     wxStrncpy(zBuf, _T("Unknown User"), nMaxSize);
 #endif
     return true;
 }
 
-int wxKill(
-  long                              lPid
-, wxSignal                          eSig
-, wxKillError*                      peError
-, int                               flags
-)
+int wxKill(long         lPid,
+           wxSignal     WXUNUSED(eSig),
+           wxKillError* WXUNUSED(peError),
+           int          WXUNUSED(flags))
 {
     return((int)::DosKillProcess(0, (PID)lPid));
 }
@@ -198,7 +190,7 @@ bool wxShell(
 }
 
 // Shutdown or reboot the PC
-bool wxShutdown(wxShutdownFlags wFlags)
+bool wxShutdown(wxShutdownFlags WXUNUSED(wFlags))
 {
     // TODO
     return false;
@@ -275,6 +267,8 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
 
     return putenv(buf) == 0;
 #else // no way to set an env var
+    wxUnusedVar(variable);
+    wxUnusedVar(value);
     return false;
 #endif
 }
@@ -369,11 +363,11 @@ void wxBell()
 }
 
 
-void wxAppTraits::InitializeGui(unsigned long &ulHab)
+void wxAppTraits::InitializeGui(unsigned long &WXUNUSED(ulHab))
 {
 }
 
-void wxAppTraits::TerminateGui(unsigned long ulHab)
+void wxAppTraits::TerminateGui(unsigned long WXUNUSED(ulHab))
 {
 }
 
@@ -468,10 +462,10 @@ wxChar* wxGetUserHome ( const wxString &rUser )
             wxStrcpy(wxBuffer, zHome);
             wxUnix2DosFilename(wxBuffer);
 #if wxUSE_UNICODE
-	    wxWCharBuffer retBuffer (wxBuffer);
+            wxWCharBuffer retBuffer (wxBuffer);
             delete[] wxBuffer;
             return retBuffer;
-#else	    
+#else
             wxStrcpy(zHome, wxBuffer);
             delete[] wxBuffer;
             return zHome;
@@ -482,9 +476,7 @@ wxChar* wxGetUserHome ( const wxString &rUser )
     return (wxChar*)wxEmptyString; // No home known!
 }
 
-wxString WXDLLEXPORT wxPMErrorToStr(
-  ERRORID                           vError
-)
+wxString WXDLLEXPORT wxPMErrorToStr(ERRORID vError)
 {
     wxString                        sError;
 
@@ -544,7 +536,7 @@ wxString WXDLLEXPORT wxPMErrorToStr(
 // to be used by all X11 based ports.
 struct wxEndProcessData;
 
-void wxHandleProcessTermination(wxEndProcessData *proc_data)
+void wxHandleProcessTermination(wxEndProcessData *WXUNUSED(proc_data))
 {
     // For now, just do nothing. To be filled in as needed.
 }

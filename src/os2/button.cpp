@@ -41,16 +41,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 
 // Button
 
-bool wxButton::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsLbl
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxValidator&                rValidator
-, const wxString&                   rsName
-)
+bool wxButton::Create( wxWindow*          pParent,
+                       wxWindowID         vId,
+                       const wxString&    rsLbl,
+                       const wxPoint&     rPos,
+                       const wxSize&      rSize,
+                       long               lStyle,
+                       const wxValidator& rValidator,
+                       const wxString&    rsName)
 {
     wxString rsLabel(rsLbl);
     if (rsLabel.empty() && wxIsStockID(vId))
@@ -112,7 +110,7 @@ bool wxButton::Create(
             ,rSize.y
            );
     delete pButtonFont;
-    return TRUE;
+    return true;
 } // end of wxButton::Create
 
 wxButton::~wxButton()
@@ -242,12 +240,8 @@ void wxButton::SetDefault()
     //
     wxWindow*                       pWinOldDefault = pParent->SetDefaultItem(this);
 
-    SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton)
-                    ,FALSE
-                   );
-    SetDefaultStyle( this
-                    ,TRUE
-                   );
+    SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton), false);
+    SetDefaultStyle( this, true );
 } // end of wxButton::SetDefault
 
 void wxButton::SetTmpDefault()
@@ -259,12 +253,8 @@ void wxButton::SetTmpDefault()
     wxWindow*                       pWinOldDefault = pParent->GetDefaultItem();
 
     pParent->SetTmpDefaultItem(this);
-    SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton)
-                    ,FALSE
-                   );
-    SetDefaultStyle( this
-                    ,TRUE
-                   );
+    SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton), false);
+    SetDefaultStyle( this, true );
 } // end of wxButton::SetTmpDefault
 
 void wxButton::UnsetTmpDefault()
@@ -277,12 +267,8 @@ void wxButton::UnsetTmpDefault()
 
     wxWindow*                       pWinOldDefault = pParent->GetDefaultItem();
 
-    SetDefaultStyle( this
-                    ,FALSE
-                   );
-    SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton)
-                    ,TRUE
-                   );
+    SetDefaultStyle( this, false );
+    SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton), true );
 } // end of wxButton::UnsetTmpDefault
 
 void wxButton::SetDefaultStyle(
@@ -339,12 +325,9 @@ void wxButton::SetDefaultStyle(
 // event/message handlers
 // ----------------------------------------------------------------------------
 
-bool wxButton::OS2Command(
-  WXUINT                            uParam
-, WXWORD                            wId
-)
+bool wxButton::OS2Command(WXUINT uParam, WXWORD WXUNUSED(wId))
 {
-    bool                            bProcessed = FALSE;
+    bool bProcessed = false;
 
     switch (uParam)
     {
@@ -353,21 +336,20 @@ bool wxButton::OS2Command(
             bProcessed = SendClickEvent();
             break;
     }
+
     return bProcessed;
 } // end of wxButton::OS2Command
 
-WXHBRUSH wxButton::OnCtlColor(
-  WXHDC                             pDC
-, WXHWND                            pWnd
-, WXUINT                            nCtlColor
-, WXUINT                            uMessage
-, WXWPARAM                          wParam
-, WXLPARAM                          lParam
-)
+WXHBRUSH wxButton::OnCtlColor( WXHDC    WXUNUSED(pDC),
+                               WXHWND   WXUNUSED(pWnd),
+                               WXUINT   WXUNUSED(nCtlColor),
+                               WXUINT   WXUNUSED(uMessage),
+                               WXWPARAM WXUNUSED(wParam),
+                               WXLPARAM WXUNUSED(lParam) )
 {
-    wxBrush*                        pBackgroundBrush = wxTheBrushList->FindOrCreateBrush( GetBackgroundColour()
-                                                                                         ,wxSOLID
-                                                                                        );
+    wxBrush* pBackgroundBrush = wxTheBrushList->FindOrCreateBrush( GetBackgroundColour()
+                                                                  ,wxSOLID
+                                                                  );
 
     return (WXHBRUSH)pBackgroundBrush->GetResourceHandle();
 } // end of wxButton::OnCtlColor
@@ -408,11 +390,9 @@ WXDWORD wxButton::OS2GetStyle(
     return dwStyle;
 } // end of wxButton::OS2GetStyle
 
-MRESULT wxButton::WindowProc(
-  WXUINT                            uMsg
-, WXWPARAM                          wParam
-, WXLPARAM                          lParam
-)
+MRESULT wxButton::WindowProc( WXUINT   uMsg,
+                              WXWPARAM wParam,
+                              WXLPARAM lParam )
 {
     //
     // When we receive focus, we want to temporary become the default button in
@@ -455,4 +435,3 @@ MRESULT wxButton::WindowProc(
                                      ,lParam
                                     ));
 } // end of wxWindowProc
-

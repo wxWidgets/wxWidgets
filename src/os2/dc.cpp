@@ -221,7 +221,7 @@ wxDCCacheEntry* wxDC::FindBitmapInCache(
                 vBmpHdr.cx        = nWidth;
                 vBmpHdr.cy        = nHeight;
                 vBmpHdr.cPlanes   = 1;
-                vBmpHdr.cBitCount = nDepth;
+                vBmpHdr.cBitCount = (USHORT)nDepth;
 
                 pEntry->m_hBitmap = (WXHBITMAP) ::GpiCreateBitmap( hPS
                                                                   ,&vBmpHdr
@@ -244,7 +244,7 @@ wxDCCacheEntry* wxDC::FindBitmapInCache(
     vBmpHdr.cx        = nWidth;
     vBmpHdr.cy        = nHeight;
     vBmpHdr.cPlanes   = 1;
-    vBmpHdr.cBitCount = nDepth;
+    vBmpHdr.cBitCount = (USHORT)nDepth;
 
     WXHBITMAP                       hBitmap = (WXHBITMAP) ::GpiCreateBitmap( hPS
                                                                             ,&vBmpHdr
@@ -774,7 +774,10 @@ void wxDC::DoDrawArc(
     vPtlArc[0].y = vYm;
     vPtlArc[1].x = vX2;
     vPtlArc[1].y = vY2;
+#ifndef __WATCOMC__
+    // FIXME: incomplete headers ???
     ::GpiPointArc(m_hPS, vPtlArc); // Draws the arc
+#endif
     CalcBoundingBox( (wxCoord)(vXc - dRadius)
                     ,(wxCoord)(vYc - dRadius)
                    );
@@ -1291,7 +1294,9 @@ void wxDC::DoDrawBitmap(
 , bool                              bUseMask
 )
 {
+#if wxUSE_PRINTING_ARCHITECTURE
     if (!IsKindOf(CLASSINFO(wxPrinterDC)))
+#endif
     {
         HBITMAP                         hBitmap =  (HBITMAP)rBmp.GetHBITMAP();
         HBITMAP                         hBitmapOld = NULLHANDLE;
@@ -1871,9 +1876,7 @@ void wxDC::DoDrawRotatedText(
 // set GDI objects
 // ---------------------------------------------------------------------------
 
-void wxDC::DoSelectPalette(
-  bool                              bRealize
-)
+void wxDC::DoSelectPalette( bool WXUNUSED(bRealize) )
 {
     //
     // Set the old object temporarily, in case the assignment deletes an object
@@ -2166,9 +2169,7 @@ void wxDC::SetRop(
     ::GpiSetMix((HPS)hDC, lCRop);
 } // end of wxDC::SetRop
 
-bool wxDC::StartDoc(
-  const wxString&                   rsMessage
-)
+bool wxDC::StartDoc( const wxString& WXUNUSED(rsMessage) )
 {
     // We might be previewing, so return true to let it continue.
     return true;
@@ -2488,19 +2489,17 @@ wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 // bit blit
 // ---------------------------------------------------------------------------
 
-bool wxDC::DoBlit(
-  wxCoord                           vXdest
-, wxCoord                           vYdest
-, wxCoord                           vWidth
-, wxCoord                           vHeight
-, wxDC*                             pSource
-, wxCoord                           vXsrc
-, wxCoord                           vYsrc
-, int                               nRop
-, bool                              bUseMask
-, wxCoord                           vXsrcMask
-, wxCoord                           vYsrcMask
-)
+bool wxDC::DoBlit( wxCoord vXdest,
+                   wxCoord vYdest,
+                   wxCoord vWidth,
+                   wxCoord vHeight,
+                   wxDC*   pSource,
+                   wxCoord vXsrc,
+                   wxCoord vYsrc,
+                   int     nRop,
+                   bool    bUseMask,
+                   wxCoord WXUNUSED(vXsrcMask),
+                   wxCoord WXUNUSED(vYsrcMask) )
 {
     wxMask*                         pMask = NULL;
     CHARBUNDLE                      vCbnd;
@@ -2594,7 +2593,6 @@ bool wxDC::DoBlit(
         vBmpHdr.cBitCount = 24;
 
 #if wxUSE_DC_CACHEING
-        if (true)
         {
             //
             // create a temp buffer bitmap and DCs to access it and the mask
@@ -2613,9 +2611,9 @@ bool wxDC::DoBlit(
             hPSMask = pDCCacheEntry1->m_hPS;
             hDCBuffer = (HDC)pDCCacheEntry2->m_hPS;
             hBufBitmap = (HBITMAP)pBitmapCacheEntry->m_hBitmap;
+            wxUnusedVar(hDCMask);
         }
-        else
-#endif
+#else
         {
             hDCMask = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, NULLHANDLE);
             hDCBuffer = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, NULLHANDLE);
@@ -2623,6 +2621,7 @@ bool wxDC::DoBlit(
             hPSBuffer = ::GpiCreatePS(vHabmain, hDCBuffer, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
             hBufBitmap = ::GpiCreateBitmap(GetHPS(), &vBmpHdr, 0L, NULL, NULL);
         }
+#endif
 
         POINTL                          aPoint1[4] = { {0, 0}
                               ,{vWidth, vHeight}
@@ -2800,10 +2799,8 @@ void wxDC::DoGetSize(
     }
 }; // end of wxDC::DoGetSize(
 
-void wxDC::DoGetSizeMM(
-  int*                              pnWidth
-, int*                              pnHeight
-) const
+void wxDC::DoGetSizeMM( int* pnWidth,
+                        int* pnHeight ) const
 {
     LONG                            lArray[CAPS_VERTICAL_RESOLUTION];
 
@@ -2813,17 +2810,19 @@ void wxDC::DoGetSizeMM(
                       ,lArray
                      ))
     {
-        int                         nWidth;
-        int                         nHeight;
-        int                         nHorzRes;
-        int                         nVertRes;
+        if(pnWidth)
+        {
+            int nWidth = lArray[CAPS_WIDTH];
+            int nHorzRes  = lArray[CAPS_HORIZONTAL_RESOLUTION]; // returns pel/meter
+            *pnWidth  = (nHorzRes/1000) * nWidth;
+        }
 
-        nWidth    = lArray[CAPS_WIDTH];
-        nHeight   = lArray[CAPS_HEIGHT];
-        nHorzRes  = lArray[CAPS_HORIZONTAL_RESOLUTION]; // returns pel/meter
-        nVertRes  = lArray[CAPS_VERTICAL_RESOLUTION];   // returns pel/meter
-        nWidth  = (nHorzRes/1000) * nWidth;
-        nHeight = (nVertRes/1000) * nHeight;
+        if(pnHeight)
+        {
+            int nHeight   = lArray[CAPS_HEIGHT];
+            int nVertRes = lArray[CAPS_VERTICAL_RESOLUTION];   // returns pel/meter
+            *pnHeight = (nVertRes/1000) * nHeight;
+        }
     }
 }; // end of wxDC::DoGetSizeMM
 
@@ -2851,7 +2850,8 @@ wxSize wxDC::GetPPI() const
         nWidth   = (int)((nHorzRes/39.3) * nPelWidth);
         nHeight  = (int)((nVertRes/39.3) * nPelHeight);
     }
-    return (wxSize(nWidth,nHeight));
+    wxSize ppisize(nWidth, nHeight);
+    return ppisize;
 } // end of wxDC::GetPPI
 
 void wxDC::SetLogicalScale(
@@ -2862,6 +2862,3 @@ void wxDC::SetLogicalScale(
     m_logicalScaleX = dX;
     m_logicalScaleY = dY;
 }; // end of wxDC::SetLogicalScale
-
-
-

@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #ifndef WX_PRECOMP
 #include "wx/defs.h"
 #endif
@@ -43,19 +46,39 @@ bool wxWinHelpController::Initialize(const wxString& filename)
 {
     m_helpFile = filename;
     // TODO any other inits
-    return TRUE;
+    return true;
 }
 
 bool wxWinHelpController::LoadFile(const wxString& file)
 {
     m_helpFile = file;
     // TODO
-    return TRUE;
+    return true;
 }
 
 bool wxWinHelpController::DisplayContents()
 {
-    if (m_helpFile == wxT("")) return FALSE;
+    if (m_helpFile == wxT(""))
+        return false;
+
+    wxString str = m_helpFile;
+    size_t len = str.Length();
+    if (!(str[(size_t)(len-1)] == wxT('p') && str[(size_t)(len-2)] == wxT('l') && str[(size_t)(len-3)] == wxT('h') && str[(size_t)(len-4)] == wxT('.')))
+        str += wxT(".hlp");
+
+    if (wxTheApp->GetTopWindow())
+    {
+        // TODO : display the help
+        return true;
+    }
+    return FALSE;
+}
+
+bool wxWinHelpController::DisplaySection(int WXUNUSED(section))
+{
+    // Use context number
+    if (m_helpFile == wxT(""))
+        return false;
 
     wxString str = m_helpFile;
     size_t len = str.Length();
@@ -64,35 +87,19 @@ bool wxWinHelpController::DisplayContents()
 
     if (wxTheApp->GetTopWindow())
     {
-    // TODO : display the help
-     return TRUE;
+        // TODO ::
+        //  WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXT, (DWORD)section);
+        return true;
     }
-	return FALSE;
+
+    return false;
 }
 
-bool wxWinHelpController::DisplaySection(int section)
-{
-    // Use context number
-    if (m_helpFile == wxT("")) return FALSE;
-
-    wxString str = m_helpFile;
-    size_t len = str.Length();
-    if (!(str[(size_t)(len-1)] == wxT('p') && str[(size_t)(len-2)] == wxT('l') && str[(size_t)(len-3)] == wxT('h') && str[(size_t)(len-4)] == wxT('.')))
-      str += wxT(".hlp");
-
-    if (wxTheApp->GetTopWindow())
-	{
-    // TODO ::
-    //  WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXT, (DWORD)section);
-      return TRUE;
-	}
-    return FALSE;
-}
-
-bool wxWinHelpController::DisplayBlock(long block)
+bool wxWinHelpController::DisplayBlock(long WXUNUSED(block))
 {
     // Use context number -- a very rough equivalent to block id!
-    if (m_helpFile == wxT("")) return FALSE;
+    if (m_helpFile == wxT(""))
+        return false;
 
     wxString str = m_helpFile;
     size_t len = str.Length();
@@ -100,15 +107,15 @@ bool wxWinHelpController::DisplayBlock(long block)
       str += wxT(".hlp");
 
     if (wxTheApp->GetTopWindow())
-	{
-    // TODO:
-    //  WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXT, (DWORD)block);
-      return TRUE;
-	}
-    return FALSE;
+    {
+        // TODO:
+        //  WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXT, (DWORD)block);
+        return true;
+    }
+    return false;
 }
 
-bool wxWinHelpController::KeywordSearch(const wxString& k,
+bool wxWinHelpController::KeywordSearch(const wxString& WXUNUSED(k),
                                         wxHelpSearchMode WXUNUSED(mode))
 {
     if (m_helpFile == wxEmptyString) return FALSE;
@@ -122,7 +129,7 @@ bool wxWinHelpController::KeywordSearch(const wxString& k,
     {
       // TODO:
       // WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_PARTIALKEY, (DWORD)(const wxChar*) k);
-      return TRUE;
+      return true;
     }
     return FALSE;
 }
@@ -130,18 +137,17 @@ bool wxWinHelpController::KeywordSearch(const wxString& k,
 // Can't close the help window explicitly in WinHelp
 bool wxWinHelpController::Quit()
 {
-  if (wxTheApp->GetTopWindow())
-  {
-    // TODO:
-    // WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), 0, HELP_QUIT, 0L);
-    return TRUE;
-  }
-  else
-    return FALSE;
+    if (wxTheApp->GetTopWindow())
+    {
+      // TODO:
+      // WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), 0, HELP_QUIT, 0L);
+      return true;
+    }
+
+    return false;
 }
 
 void wxWinHelpController::OnQuit()
 {
 }
 #endif // wxUSE_HELP
-

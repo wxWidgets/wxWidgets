@@ -65,7 +65,7 @@ bool wxControl::Create(
 
 wxControl::~wxControl()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
 }
 
 bool wxControl::OS2CreateControl(
@@ -90,14 +90,12 @@ bool wxControl::OS2CreateControl(
                            );
 } // end of wxControl::OS2CreateControl
 
-bool wxControl::OS2CreateControl(
-  const wxChar*                     zClassname
-, WXDWORD                           dwStyle
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, const wxString&                   rsLabel
-, WXDWORD                           dwExstyle
-)
+bool wxControl::OS2CreateControl( const wxChar*   zClassname,
+                                  WXDWORD         dwStyle,
+                                  const wxPoint&  rPos,
+                                  const wxSize&   rSize,
+                                  const wxString& rsLabel,
+                                  WXDWORD         dwExstyle )
 {
     //
     // Doesn't do anything at all under OS/2
@@ -105,7 +103,7 @@ bool wxControl::OS2CreateControl(
     if (dwExstyle == (WXDWORD)-1)
     {
         dwExstyle = 0;
-	(void) OS2GetStyle(GetWindowStyle(), &dwExstyle);
+        (void) OS2GetStyle(GetWindowStyle(), &dwExstyle);
     }
     //
     // All controls should have these styles (wxWidgets creates all controls
@@ -178,7 +176,7 @@ bool wxControl::OS2CreateControl(
             ,rSize.x
             ,rSize.y
            );
-    return TRUE;
+    return true;
 } // end of wxControl::OS2CreateControl
 
 wxSize wxControl::DoGetBestSize() const
@@ -191,18 +189,16 @@ bool wxControl::ProcessCommand(wxCommandEvent& event)
     return GetEventHandler()->ProcessEvent(event);
 }
 
-WXHBRUSH wxControl::OnCtlColor(
-  WXHDC                             hWxDC
-, WXHWND                            hWnd
-, WXUINT                            uCtlColor
-, WXUINT                            uMessage
-, WXWPARAM                          wParam
-, WXLPARAM                          lParam
-)
+WXHBRUSH wxControl::OnCtlColor(WXHDC    hWxDC,
+                               WXHWND   WXUNUSED(hWnd),
+                               WXUINT   WXUNUSED(uCtlColor),
+                               WXUINT   WXUNUSED(uMessage),
+                               WXWPARAM WXUNUSED(wParam),
+                               WXLPARAM WXUNUSED(lParam))
 {
-    HPS                             hPS = (HPS)hWxDC; // pass in a PS handle in OS/2
-    wxColour                        vColFore = GetForegroundColour();
-    wxColour                        vColBack = GetBackgroundColour();
+    HPS      hPS = (HPS)hWxDC; // pass in a PS handle in OS/2
+    wxColour vColFore = GetForegroundColour();
+    wxColour vColBack = GetBackgroundColour();
 
     if (GetParent()->GetTransparentBackground())
         ::GpiSetBackMix(hPS, BM_LEAVEALONE);
@@ -212,9 +208,9 @@ WXHBRUSH wxControl::OnCtlColor(
     ::GpiSetBackColor(hPS, vColBack.GetPixel());
     ::GpiSetColor(hPS, vColFore.GetPixel());
 
-    wxBrush*                        pBrush = wxTheBrushList->FindOrCreateBrush( vColBack
-                                                                               ,wxSOLID
-                                                                              );
+    wxBrush* pBrush = wxTheBrushList->FindOrCreateBrush( vColBack
+                                                         ,wxSOLID
+                                                       );
     return (WXHBRUSH)pBrush->GetResourceHandle();
 } // end of wxControl::OnCtlColor
 
@@ -292,5 +288,3 @@ void wxFindMaxSize(
     if (nBottom < pRect->yBottom)
         pRect->yBottom = nBottom;
 } // end of wxFindMaxSize
-
-

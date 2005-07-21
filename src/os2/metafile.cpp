@@ -72,8 +72,13 @@ wxMetafile::~wxMetafile(void)
 
 bool wxMetafile::SetClipboard(int width, int height)
 {
+#if !wxUSE_CLIPBOARD
+    wxUnusedVar(width);
+    wxUnusedVar(height);
+    return false;
+#else
     if (!m_refData)
-        return FALSE;
+        return false;
 
     bool alreadyOpen=wxClipboardOpen();
     if (!alreadyOpen)
@@ -84,6 +89,7 @@ bool wxMetafile::SetClipboard(int width, int height)
     bool success = wxSetClipboardData(wxDF_METAFILE, this, width,height);
     if (!alreadyOpen) wxCloseClipboard();
     return (bool) success;
+#endif
 }
 
 bool wxMetafile::Play(wxDC *dc)
@@ -98,7 +104,7 @@ bool wxMetafile::Play(wxDC *dc)
 
     dc->EndDrawing();
 
-    return TRUE;
+    return true;
 }
 
 void wxMetafile::SetHMETAFILE(WXHANDLE mf)
@@ -154,24 +160,30 @@ wxMetafileDC::wxMetafileDC(const wxString& file)
 
 // New constructor that takes origin and extent. If you use this, don't
 // give origin/extent arguments to wxMakeMetafilePlaceable.
-wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, int yorg)
+wxMetafileDC::wxMetafileDC( const wxString& file,
+                            int WXUNUSED(xext),
+                            int WXUNUSED(yext),
+                            int WXUNUSED(xorg),
+                            int WXUNUSED(yorg) )
 {
-  m_minX = 10000;
-  m_minY = 10000;
-  m_maxX = -10000;
-  m_maxY = -10000;
-  if (file != wxT("") && wxFileExists(file)) wxRemoveFile(file);
+    m_minX = 10000;
+    m_minY = 10000;
+    m_maxX = -10000;
+    m_maxY = -10000;
+    if (file != wxT("") && wxFileExists(file))
+        wxRemoveFile(file);
+
 //  m_hDC = (WXHDC) CreateMetaFile(file);
 
-  m_ok = TRUE;
+    m_ok = true;
 
 //  ::SetWindowOrgEx((HDC) m_hDC,xorg,yorg, NULL);
 //  ::SetWindowExtEx((HDC) m_hDC,xext,yext, NULL);
 
-  // Actual Windows mapping mode, for future reference.
-  m_windowsMappingMode = wxMM_ANISOTROPIC;
+    // Actual Windows mapping mode, for future reference.
+    m_windowsMappingMode = wxMM_ANISOTROPIC;
 
-  SetMapMode(wxMM_TEXT); // NOTE: does not set HDC mapmode (this is correct)
+    SetMapMode(wxMM_TEXT); // NOTE: does not set HDC mapmode (this is correct)
 }
 
 wxMetafileDC::~wxMetafileDC(void)
@@ -179,32 +191,37 @@ wxMetafileDC::~wxMetafileDC(void)
   m_hDC = 0;
 }
 
-void wxMetafileDC::GetTextExtent(const wxString& string, long *x, long *y,
-                                 long *descent, long *externalLeading, wxFont *theFont, bool use16bit) const
+void wxMetafileDC::GetTextExtent(const wxString& WXUNUSED(string),
+                                 long *WXUNUSED(x),
+                                 long *WXUNUSED(y),
+                                 long *WXUNUSED(descent),
+                                 long *WXUNUSED(externalLeading),
+                                 wxFont *theFont,
+                                 bool WXUNUSED(use16bit) ) const
 {
-  wxFont *fontToUse = theFont;
-  if (!fontToUse)
-    fontToUse = (wxFont*) &m_font;
+    wxFont *fontToUse = theFont;
+    if (!fontToUse)
+        fontToUse = (wxFont*) &m_font;
 
-  // TODO:
+    // TODO:
 /*
-  HDC dc = GetDC(NULL);
+    HDC dc = GetDC(NULL);
 
-  SIZE sizeRect;
-  TEXTMETRIC tm;
-  GetTextExtentPoint(dc, WXSTRINGCAST string, wxStrlen(WXSTRINGCAST string), &sizeRect);
-  GetTextMetrics(dc, &tm);
+    SIZE sizeRect;
+    TEXTMETRIC tm;
+    GetTextExtentPoint(dc, WXSTRINGCAST string, wxStrlen(WXSTRINGCAST string), &sizeRect);
+    GetTextMetrics(dc, &tm);
 
-  ReleaseDC(NULL, dc);
+    ReleaseDC(NULL, dc);
 
-  if ( x )
-      *x = sizeRect.cx;
-  if ( y )
-    *y = sizeRect.cy;
-  if ( descent )
-      *descent = tm.tmDescent;
-  if ( externalLeading )
-      *externalLeading = tm.tmExternalLeading;
+    if ( x )
+        *x = sizeRect.cx;
+    if ( y )
+        *y = sizeRect.cy;
+    if ( descent )
+        *descent = tm.tmDescent;
+    if ( externalLeading )
+        *externalLeading = tm.tmExternalLeading;
 */
 }
 
@@ -283,21 +300,21 @@ struct RECT32
 };
 
 struct mfPLACEABLEHEADER {
-	DWORD	key;
-	short	hmf;
-	RECT32	bbox;
-	WORD	inch;
-	DWORD	reserved;
-	WORD	checksum;
+    DWORD  key;
+    short  hmf;
+    RECT32 bbox;
+    WORD   inch;
+    DWORD  reserved;
+    WORD   checksum;
 };
 #else
 struct mfPLACEABLEHEADER {
-	DWORD	key;
-	HANDLE	hmf;
-	RECT	bbox;
-	WORD	inch;
-	DWORD	reserved;
-	WORD	checksum;
+    DWORD  key;
+    HANDLE hmf;
+    RECT   bbox;
+    WORD   inch;
+    DWORD  reserved;
+    WORD   checksum;
 };
 #endif
 
@@ -313,106 +330,111 @@ bool wxMakeMetafilePlaceable(const wxString& filename, float scale)
   return wxMakeMetafilePlaceable(filename, 0, 0, 0, 0, scale, FALSE);
 }
 
-bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, int y2, float scale, bool useOriginAndExtent)
+bool wxMakeMetafilePlaceable(const wxString& WXUNUSED(filename),
+                             int WXUNUSED(x1),
+                             int WXUNUSED(y1),
+                             int WXUNUSED(x2),
+                             int WXUNUSED(y2),
+                             float WXUNUSED(scale),
+                             bool WXUNUSED(useOriginAndExtent))
 {
 // TODO:  the OS/2 PM/MM way to do this
 /*
-  // I'm not sure if this is the correct way of suggesting a scale
-  // to the client application, but it's the only way I can find.
-  int unitsPerInch = (int)(576/scale);
+    // I'm not sure if this is the correct way of suggesting a scale
+    // to the client application, but it's the only way I can find.
+    int unitsPerInch = (int)(576/scale);
 
-  mfPLACEABLEHEADER header;
-  header.key = 0x9AC6CDD7L;
-  header.hmf = 0;
-  header.bbox.xLeft = (int)(x1);
-  header.bbox.yTop = (int)(y1);
-  header.bbox.xRight = (int)(x2);
-  header.bbox.yBottom = (int)(y2);
-  header.inch = unitsPerInch;
-  header.reserved = 0;
+    mfPLACEABLEHEADER header;
+    header.key = 0x9AC6CDD7L;
+    header.hmf = 0;
+    header.bbox.xLeft = (int)(x1);
+    header.bbox.yTop = (int)(y1);
+    header.bbox.xRight = (int)(x2);
+    header.bbox.yBottom = (int)(y2);
+    header.inch = unitsPerInch;
+    header.reserved = 0;
 
-  // Calculate checksum
-  WORD *p;
-  mfPLACEABLEHEADER *pMFHead = &header;
-  for (p =(WORD *)pMFHead,pMFHead -> checksum = 0;
-	p < (WORD *)&pMFHead ->checksum; ++p)
-       pMFHead ->checksum ^= *p;
+    // Calculate checksum
+    WORD *p;
+    mfPLACEABLEHEADER *pMFHead = &header;
+    for (p =(WORD *)pMFHead,pMFHead -> checksum = 0; p < (WORD *)&pMFHead ->checksum; ++p)
+        pMFHead ->checksum ^= *p;
 
-  FILE *fd = fopen(filename.fn_str(), "rb");
-  if (!fd) return FALSE;
+    FILE *fd = fopen(filename.fn_str(), "rb");
+    if (!fd)
+        return FALSE;
 
-  wxChar tempFileBuf[256];
-  wxGetTempFileName(wxT("mf"), tempFileBuf);
-  FILE *fHandle = fopen(wxConvFile.cWX2MB(tempFileBuf), "wb");
-  if (!fHandle)
-    return FALSE;
-  fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);
+    wxChar tempFileBuf[256];
+    wxGetTempFileName(wxT("mf"), tempFileBuf);
+    FILE *fHandle = fopen(wxConvFile.cWX2MB(tempFileBuf), "wb");
+    if (!fHandle)
+        return FALSE;
+    fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);
 
-  // Calculate origin and extent
-  int originX = x1;
-  int originY = y1;
-  int extentX = x2 - x1;
-  int extentY = (y2 - y1);
+    // Calculate origin and extent
+    int originX = x1;
+    int originY = y1;
+    int extentX = x2 - x1;
+    int extentY = (y2 - y1);
 
-  // Read metafile header and write
-  METAHEADER metaHeader;
-  fread((void *)&metaHeader, sizeof(unsigned char), sizeof(metaHeader), fd);
+    // Read metafile header and write
+    METAHEADER metaHeader;
+    fread((void *)&metaHeader, sizeof(unsigned char), sizeof(metaHeader), fd);
 
-  if (useOriginAndExtent)
-    metaHeader.mtSize += 15;
-  else
-    metaHeader.mtSize += 5;
+    if (useOriginAndExtent)
+        metaHeader.mtSize += 15;
+    else
+        metaHeader.mtSize += 5;
 
-  fwrite((void *)&metaHeader, sizeof(unsigned char), sizeof(metaHeader), fHandle);
+    fwrite((void *)&metaHeader, sizeof(unsigned char), sizeof(metaHeader), fHandle);
 
-  // Write SetMapMode, SetWindowOrigin and SetWindowExt records
-  char modeBuffer[8];
-  char originBuffer[10];
-  char extentBuffer[10];
-  METARECORD *modeRecord = (METARECORD *)&modeBuffer;
+    // Write SetMapMode, SetWindowOrigin and SetWindowExt records
+    char modeBuffer[8];
+    char originBuffer[10];
+    char extentBuffer[10];
+    METARECORD *modeRecord = (METARECORD *)&modeBuffer;
 
-  METARECORD *originRecord = (METARECORD *)&originBuffer;
-  METARECORD *extentRecord = (METARECORD *)&extentBuffer;
+    METARECORD *originRecord = (METARECORD *)&originBuffer;
+    METARECORD *extentRecord = (METARECORD *)&extentBuffer;
 
-  modeRecord->rdSize = 4;
-  modeRecord->rdFunction = META_SETMAPMODE;
-  modeRecord->rdParm[0] = MM_ANISOTROPIC;
+    modeRecord->rdSize = 4;
+    modeRecord->rdFunction = META_SETMAPMODE;
+    modeRecord->rdParm[0] = MM_ANISOTROPIC;
 
-  originRecord->rdSize = 5;
-  originRecord->rdFunction = META_SETWINDOWORG;
-  originRecord->rdParm[0] = originY;
-  originRecord->rdParm[1] = originX;
+    originRecord->rdSize = 5;
+    originRecord->rdFunction = META_SETWINDOWORG;
+    originRecord->rdParm[0] = originY;
+    originRecord->rdParm[1] = originX;
 
-  extentRecord->rdSize = 5;
-  extentRecord->rdFunction = META_SETWINDOWEXT;
-  extentRecord->rdParm[0] = extentY;
-  extentRecord->rdParm[1] = extentX;
+    extentRecord->rdSize = 5;
+    extentRecord->rdFunction = META_SETWINDOWEXT;
+    extentRecord->rdParm[0] = extentY;
+    extentRecord->rdParm[1] = extentX;
 
-  fwrite((void *)modeBuffer, sizeof(char), 8, fHandle);
+    fwrite((void *)modeBuffer, sizeof(char), 8, fHandle);
 
-  if (useOriginAndExtent)
-  {
-    fwrite((void *)originBuffer, sizeof(char), 10, fHandle);
-    fwrite((void *)extentBuffer, sizeof(char), 10, fHandle);
-  }
-
-  int ch = -2;
-  while (ch != EOF)
-  {
-    ch = getc(fd);
-    if (ch != EOF)
+    if (useOriginAndExtent)
     {
-      putc(ch, fHandle);
+        fwrite((void *)originBuffer, sizeof(char), 10, fHandle);
+        fwrite((void *)extentBuffer, sizeof(char), 10, fHandle);
     }
-  }
-  fclose(fHandle);
-  fclose(fd);
-  wxRemoveFile(filename);
-  wxCopyFile(tempFileBuf, filename);
-  wxRemoveFile(tempFileBuf);
+
+    int ch = -2;
+    while (ch != EOF)
+    {
+        ch = getc(fd);
+        if (ch != EOF)
+        {
+            putc(ch, fHandle);
+        }
+    }
+    fclose(fHandle);
+    fclose(fd);
+    wxRemoveFile(filename);
+    wxCopyFile(tempFileBuf, filename);
+    wxRemoveFile(tempFileBuf);
 */
-  return TRUE;
+    return true;
 }
 
 #endif // wxUSE_METAFILE
-

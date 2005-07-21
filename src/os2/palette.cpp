@@ -6,7 +6,7 @@
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -68,24 +68,20 @@ wxPalette::~wxPalette()
 {
 } // end of wxPalette::~wxPalette
 
-bool wxPalette::FreeResource(
-  bool                              bForce
-)
+bool wxPalette::FreeResource( bool WXUNUSED(bForce) )
 {
     if ( M_PALETTEDATA && M_PALETTEDATA->m_hPalette)
     {
         ::GpiSelectPalette(M_PALETTEDATA->m_hPS, NULLHANDLE);
         ::GpiDeletePalette((HPAL)M_PALETTEDATA->m_hPalette);
     }
-    return TRUE;
+    return true;
 } // end of wxPalette::FreeResource
 
-bool wxPalette::Create(
-  int                               n
-, const unsigned char*              pRed
-, const unsigned char*              pGreen
-, const unsigned char*              pBlue
-)
+bool wxPalette::Create( int n,
+                        const unsigned char* pRed,
+                        const unsigned char* pGreen,
+                        const unsigned char* pBlue )
 {
     PULONG                          pualTable;
 
@@ -94,7 +90,7 @@ bool wxPalette::Create(
     m_refData = new wxPaletteRefData;
     pualTable = new ULONG[n];
     if (!pualTable)
-        return(FALSE);
+        return false;
 
     for (int i = 0; i < n; i ++)
     {
@@ -107,7 +103,7 @@ bool wxPalette::Create(
                                                                ,pualTable
                                                               );
     delete [] pualTable;
-    return TRUE;
+    return true;
 } // end of wxPalette::Create
 
 int wxPalette::GetPixel(
@@ -153,12 +149,12 @@ int wxPalette::GetPixel(
     //
     // Now loop through and find the matching entry
     //
-    ULONG                           i;
+    ULONG i;
     for (i = 0; i < ulNumEntries; i++)
     {
         if (pualTable[i] == ulRGB)
         {
-            bFound = TRUE;
+            bFound = true;
             break;
         }
     }
@@ -234,4 +230,3 @@ void wxPalette::SetPS(
     ::GpiSelectPalette(M_PALETTEDATA->m_hPS, M_PALETTEDATA->m_hPalette);
     M_PALETTEDATA->m_hPS = hPS;
 } // end of wxPalette::SetHPALETTE
-

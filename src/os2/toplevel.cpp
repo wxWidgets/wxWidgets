@@ -307,12 +307,11 @@ WXHWND wxTopLevelWindowOS2::OS2GetParent() const
     return (WXHWND)hWndParent;
 } // end of wxTopLevelWindowOS2::OS2GetParent
 
-bool wxTopLevelWindowOS2::CreateDialog(
-  ULONG                             ulDlgTemplate
-, const wxString&                   rsTitle
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-)
+
+bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
+                                        const wxString& WXUNUSED(rsTitle),
+                                        const wxPoint&  rPos,
+                                        const wxSize&   rSize )
 {
     wxWindow*                       pParent = GetParent();
 
@@ -756,7 +755,7 @@ bool wxTopLevelWindowOS2::Show(
         wxActivateEvent             vEvent(wxEVT_ACTIVATE, TRUE, m_windowId);
 
         ::WinQueryWindowPos(m_hFrame, &vSwp);
-        m_bIconized = vSwp.fl & SWP_MINIMIZE;
+        m_bIconized = ( vSwp.fl & SWP_MINIMIZE ) == SWP_MINIMIZE ;
         ::WinQueryWindowPos(m_hWnd, &m_vSwpClient);
         ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)~0, 0);
         ::WinQueryWindowPos(m_hWnd, &vSwp);
@@ -779,7 +778,7 @@ bool wxTopLevelWindowOS2::Show(
             HWND                    hWndParent = GetHwndOf(GetParent());
 
             ::WinQueryWindowPos(hWndParent, &vSwp);
-            m_bIconized = vSwp.fl & SWP_MINIMIZE;
+            m_bIconized = (vSwp.fl & SWP_MINIMIZE)==SWP_MINIMIZE;
             ::WinEnableWindow(hWndParent, TRUE);
         }
     }
@@ -813,9 +812,8 @@ void wxTopLevelWindowOS2::Maximize(
 
 bool wxTopLevelWindowOS2::IsMaximized() const
 {
-
     ::WinQueryWindowPos(m_hFrame, (PSWP)&m_vSwp);
-    return (m_vSwp.fl & SWP_MAXIMIZE);
+    return (m_vSwp.fl & SWP_MAXIMIZE) == SWP_MAXIMIZE;
 } // end of wxTopLevelWindowOS2::IsMaximized
 
 void wxTopLevelWindowOS2::Iconize(
@@ -860,17 +858,15 @@ void wxTopLevelWindowOS2::SendSizeEvent()
 // wxTopLevelWindowOS2 fullscreen
 // ----------------------------------------------------------------------------
 
-bool wxTopLevelWindowOS2::ShowFullScreen(
-  bool                              bShow
-, long                              lStyle
-)
+bool wxTopLevelWindowOS2::ShowFullScreen( bool bShow,
+                                          long lStyle )
 {
     if (bShow)
     {
         if (IsFullScreen())
-            return FALSE;
+            return false;
 
-        m_bFsIsShowing = TRUE;
+        m_bFsIsShowing = true;
         m_lFsStyle = lStyle;
 
         //
@@ -893,8 +889,8 @@ bool wxTopLevelWindowOS2::ShowFullScreen(
         //
         // Decide which window lStyle flags to turn off
         //
-        LONG                        lNewStyle = m_lFsOldWindowStyle;
-        LONG                        lOffFlags = 0;
+        LONG lNewStyle = m_lFsOldWindowStyle;
+        LONG lOffFlags = 0;
 
         if (lStyle & wxFULLSCREEN_NOBORDER)
             lOffFlags |= FCF_BORDER;
@@ -914,16 +910,14 @@ bool wxTopLevelWindowOS2::ShowFullScreen(
         //
         // Resize to the size of the desktop
         //
-        int                         nWidth;
-        int                         nHeight;
-        RECTL                       vRect = wxGetWindowRect(HWND_DESKTOP);
+        int   nWidth;
+        int   nHeight;
+        RECTL vRect = wxGetWindowRect(HWND_DESKTOP);
 
         nWidth = vRect.xRight - vRect.xLeft;
         nHeight = vRect.yTop - vRect.yBottom;
 
-        SetSize( nWidth
-                ,nHeight
-               );
+        SetSize( nWidth, nHeight );
 
         //
         // Now flush the window style cache and actually go full-screen
@@ -937,21 +931,17 @@ bool wxTopLevelWindowOS2::ShowFullScreen(
                           ,SWP_SIZE | SWP_MOVE
                          );
 
-        wxSizeEvent                 vEvent( wxSize( nWidth
-                                                   ,nHeight
-                                                  )
-                                           ,GetId()
-                                          );
-
+        wxSize full( nWidth, nHeight );
+        wxSizeEvent vEvent( full, GetId() );
         GetEventHandler()->ProcessEvent(vEvent);
-        return TRUE;
+        return true;
     }
     else
     {
         if (!IsFullScreen())
-            return FALSE;
+            return false;
 
-        m_bFsIsShowing = FALSE;
+        m_bFsIsShowing = false;
         Maximize(m_bFsIsMaximized);
         ::WinSetWindowULong( (HWND)GetHWND()
                             ,QWL_STYLE
@@ -965,7 +955,7 @@ bool wxTopLevelWindowOS2::ShowFullScreen(
                           ,m_vFsOldSize.height
                           ,SWP_SIZE | SWP_MOVE
                          );
-        return TRUE;
+        return true;
     }
 } // end of wxTopLevelWindowOS2::ShowFullScreen
 

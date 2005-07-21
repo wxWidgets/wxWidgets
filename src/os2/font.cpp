@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -16,10 +19,6 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
- #include <malloc.h>
-// For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
@@ -38,6 +37,8 @@
 #include "wx/encinfo.h"
 
 #include "wx/tokenzr.h"
+
+#include <malloc.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
@@ -260,7 +261,7 @@ protected:
               ,WXHANDLE                hPS   = 0
              );
     //
-    // If TRUE, the pointer to the actual font is temporary and SHOULD NOT BE
+    // If true, the pointer to the actual font is temporary and SHOULD NOT BE
     // DELETED by destructor
     //
     bool                            m_bTemporary;
@@ -347,13 +348,13 @@ void wxFontRefData::Init(
     m_hFont = hFont;
     m_nFontId = (int)hFont;
 
-    m_bNativeFontInfoOk = TRUE;
+    m_bNativeFontInfoOk = true;
     m_vNativeFontInfo = rInfo;
 
     if (hPS == NULLHANDLE)
     {
         m_hPS = ::WinGetPS(HWND_DESKTOP);
-        m_bInternalPS = TRUE;
+        m_bInternalPS = true;
     }
     else
         m_hPS = (HPS)hPS;
@@ -369,9 +370,7 @@ wxFontRefData::~wxFontRefData()
     Free();
 }
 
-bool wxFontRefData::Alloc(
-  wxFont*                           pFont
-)
+bool wxFontRefData::Alloc( wxFont* pFont )
 {
     wxString                        sFaceName;
     long                            flId = m_hFont;
@@ -389,7 +388,7 @@ bool wxFontRefData::Alloc(
                       ,sFaceName
                       ,pFont
                      );
-        m_bNativeFontInfoOk = TRUE;
+        m_bNativeFontInfoOk = true;
     }
     else
     {
@@ -514,7 +513,7 @@ bool wxFontRefData::Alloc(
         // Select the font into the Presentation space
         //
         ::GpiSetCharSet(m_hPS, flId); // sets font for presentation space
-    return TRUE;
+    return true;
 } // end of wxFontRefData::Alloc
 
 void wxFontRefData::Free()
@@ -741,9 +740,7 @@ void wxNativeFontInfo::SetFamily(
     }
 } // end of wxNativeFontInfo::SetFamily
 
-void wxNativeFontInfo::SetEncoding(
-  wxFontEncoding                    eEncoding
-)
+void wxNativeFontInfo::SetEncoding( wxFontEncoding eEncoding )
 {
     wxNativeEncodingInfo            vInfo;
 
@@ -771,12 +768,10 @@ void wxNativeFontInfo::SetEncoding(
             vInfo.charset = 850;
         }
     }
-    fa.usCodePage = vInfo.charset;
+    fa.usCodePage = (USHORT)vInfo.charset;
 } // end of wxNativeFontInfo::SetFaceName
 
-bool wxNativeFontInfo::FromString(
-  const wxString&                   rsStr
-)
+bool wxNativeFontInfo::FromString( const wxString& rsStr )
 {
     long                            lVal;
 
@@ -839,7 +834,7 @@ bool wxNativeFontInfo::FromString(
     if(!sToken)
         return FALSE;
     wxStrcpy((wxChar*)fa.szFacename, sToken.c_str());
-    return TRUE;
+    return true;
 } // end of wxNativeFontInfo::FromString
 
 wxString wxNativeFontInfo::ToString() const
@@ -870,17 +865,15 @@ void wxFont::Init()
 {
 } // end of wxFont::Init
 
-bool wxFont::Create(
-  const wxNativeFontInfo&           rInfo
-, WXHFONT                           hFont
-)
+bool wxFont::Create( const wxNativeFontInfo& rInfo,
+                     WXHFONT hFont )
 {
     UnRef();
     m_refData = new wxFontRefData( rInfo
                                   ,hFont
                                  );
     RealizeResource();
-    return TRUE;
+    return true;
 } // end of wxFont::Create
 
 wxFont::wxFont(
@@ -897,15 +890,13 @@ wxFont::wxFont(
 // Constructor for a font. Note that the real construction is done
 // in wxDC::SetFont, when information is available about scaling etc.
 // ----------------------------------------------------------------------------
-bool wxFont::Create(
-  int                               nPointSize
-, int                               nFamily
-, int                               nStyle
-, int                               nWeight
-, bool                              bUnderlined
-, const wxString&                   rsFaceName
-, wxFontEncoding                    vEncoding
-)
+bool wxFont::Create( int             nPointSize,
+                     int             nFamily,
+                     int             nStyle,
+                     int             nWeight,
+                     bool            bUnderlined,
+                     const wxString& rsFaceName,
+                     wxFontEncoding  vEncoding )
 {
     UnRef();
 
@@ -926,7 +917,7 @@ bool wxFont::Create(
                                   ,vEncoding
                                  );
     RealizeResource();
-    return TRUE;
+    return true;
 } // end of wxFont::Create
 
 wxFont::~wxFont()
@@ -944,21 +935,19 @@ bool wxFont::RealizeResource()
 {
     if ( GetResourceHandle() )
     {
-        return TRUE;
+        return true;
     }
     return M_FONTDATA->Alloc(this);
 } // end of wxFont::RealizeResource
 
-bool wxFont::FreeResource(
-  bool                              bForce
-)
+bool wxFont::FreeResource( bool WXUNUSED(bForce) )
 {
     if (GetResourceHandle())
     {
         M_FONTDATA->Free();
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 } // end of wxFont::FreeResource
 
 WXHANDLE wxFont::GetResourceHandle()
@@ -1167,4 +1156,3 @@ void wxFont::SetPS(
 
     RealizeResource();
 } // end of wxFont::SetPS
-

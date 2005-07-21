@@ -153,24 +153,21 @@ bool wxRadioButton::GetValue() const
     return((::WinSendMsg((HWND) GetHWND(), BM_QUERYCHECK, (MPARAM)0L, (MPARAM)0L) != 0));
 } // end of wxRadioButton::GetValue
 
-bool wxRadioButton::OS2Command(
-  WXUINT                            wParam
-, WXWORD                            wId
-)
+bool wxRadioButton::OS2Command( WXUINT wParam, WXWORD WXUNUSED(wId) )
 {
     if (wParam != BN_CLICKED)
-        return FALSE;
+        return false;
 
     if (m_bFocusJustSet)
     {
         //
         // See above: we want to ignore this event
         //
-        m_bFocusJustSet = FALSE;
+        m_bFocusJustSet = false;
     }
     else
     {
-        bool                        bIsChecked = GetValue();
+        bool bIsChecked = GetValue();
 
         if (HasFlag(wxRB_SINGLE))
         {
@@ -182,14 +179,11 @@ bool wxRadioButton::OS2Command(
             if (!bIsChecked )
                 SetValue(TRUE);
         }
-        wxCommandEvent              rEvent( wxEVT_COMMAND_RADIOBUTTON_SELECTED
-                                           ,m_windowId
-                                          );
-
+        wxCommandEvent rEvent( wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId );
         rEvent.SetEventObject(this);
         ProcessCommand(rEvent);
     }
-    return TRUE;
+    return true;
 } // end of wxRadioButton::OS2Command
 
 void wxRadioButton::SetFocus()
@@ -203,7 +197,7 @@ void wxRadioButton::SetFocus()
     //
     // to avoid this, we drop the pseudo BN_CLICKED events generated when the
     // button gains focus
-    m_bFocusJustSet = TRUE;
+    m_bFocusJustSet = true;
 
     wxControl::SetFocus();
 }

@@ -89,15 +89,13 @@ void wxDialog::Init()
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 } // end of wxDialog::Init
 
-bool wxDialog::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsTitle
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxString&                   rsName
-)
+bool wxDialog::Create( wxWindow*       pParent,
+                       wxWindowID      vId,
+                       const wxString& rsTitle,
+                       const wxPoint&  rPos,
+                       const wxSize&   rSize,
+                       long            lStyle,
+                       const wxString& rsName )
 {
     Init();
     SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
@@ -120,7 +118,8 @@ bool wxDialog::Create(
                                   ,lStyle
                                   ,rsName
                                  ))
-        return FALSE;
+        return false;
+
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     //
@@ -128,7 +127,7 @@ bool wxDialog::Create(
     //
     if (!rsTitle.IsNull())
         SetTitle(rsTitle);
-    return TRUE;
+    return true;
 } // end of wxDialog::Create
 
 // deprecated ctor
@@ -156,7 +155,7 @@ void wxDialog::SetModal(
 
 wxDialog::~wxDialog()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
 
     // this will also reenable all the other windows for a modal dialog
     Show(false);
@@ -280,7 +279,7 @@ bool wxDialog::Show(
 } // end of wxDialog::Show
 
 //
-// Replacement for Show(TRUE) for modal dialogs - returns return code
+// Replacement for Show(true) for modal dialogs - returns return code
 //
 int wxDialog::ShowModal()
 {
@@ -372,18 +371,14 @@ void wxDialog::EndDialog(int rc)
 // wxWin event handlers
 // ----------------------------------------------------------------------------
 
-void wxDialog::OnApply(
-  wxCommandEvent&                   rEvent
-)
+void wxDialog::OnApply( wxCommandEvent& WXUNUSED(rEvent) )
 {
     if (Validate())
         TransferDataFromWindow();
 } // end of wxDialog::OnApply
 
 // Standard buttons
-void wxDialog::OnOK(
-  wxCommandEvent&                   rEvent
-)
+void wxDialog::OnOK( wxCommandEvent& WXUNUSED(rEvent) )
 {
     if ( Validate() && TransferDataFromWindow() )
     {
@@ -391,16 +386,12 @@ void wxDialog::OnOK(
     }
 } // end of wxDialog::OnOK
 
-void wxDialog::OnCancel(
-  wxCommandEvent&                   rEvent
-)
+void wxDialog::OnCancel( wxCommandEvent& WXUNUSED(rEvent) )
 {
     EndDialog(wxID_CANCEL);
 } // end of wxDialog::OnCancel
 
-void wxDialog::OnCloseWindow(
-  wxCloseEvent&                     rEvent
-)
+void wxDialog::OnCloseWindow( wxCloseEvent& WXUNUSED(rEvent) )
 {
     //
     // We'll send a Cancel message by default, which may close the dialog.
@@ -427,7 +418,7 @@ void wxDialog::OnCloseWindow(
 
     closing.Append(this);
 
-    wxCommandEvent                  vCancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+    wxCommandEvent vCancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
 
     vCancelEvent.SetEventObject( this );
     GetEventHandler()->ProcessEvent(vCancelEvent); // This may close the dialog
@@ -435,9 +426,7 @@ void wxDialog::OnCloseWindow(
     closing.DeleteObject(this);
 } // end of wxDialog::OnCloseWindow
 
-void wxDialog::OnSysColourChanged(
-  wxSysColourChangedEvent&          rEvent
-)
+void wxDialog::OnSysColourChanged( wxSysColourChangedEvent& WXUNUSED(rEvent) )
 {
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     Refresh();
@@ -470,4 +459,3 @@ MRESULT wxDialog::OS2WindowProc(
                                     );
     return rc;
 } // end of wxDialog::OS2WindowProc
-

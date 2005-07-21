@@ -175,13 +175,13 @@ int wxMenuItem::GetRealId() const
 // --------------
 bool wxMenuItem::IsChecked() const
 {
-    USHORT                          uFlag = SHORT1FROMMR(::WinSendMsg( GetHMenuOf(m_parentMenu)
-                                                                      ,MM_QUERYITEMATTR
-                                                                      ,MPFROM2SHORT(GetId(), TRUE)
-                                                                      ,MPFROMSHORT(MIA_CHECKED)
-                                                                     ));
+    USHORT uFlag = SHORT1FROMMR(::WinSendMsg( GetHMenuOf(m_parentMenu)
+                                             ,MM_QUERYITEMATTR
+                                             ,MPFROM2SHORT(GetId(), TRUE)
+                                             ,MPFROMSHORT(MIA_CHECKED)
+                                            ));
 
-    return (uFlag & MIA_CHECKED);
+    return (uFlag & MIA_CHECKED) == MIA_CHECKED ;
 } // end of wxMenuItem::IsChecked
 
 wxString wxMenuItemBase::GetLabelFromText(
@@ -211,7 +211,7 @@ wxString wxMenuItemBase::GetLabelFromText(
 //
 void wxMenuItem::SetAsRadioGroupStart()
 {
-    m_bIsRadioGroupStart = TRUE;
+    m_bIsRadioGroupStart = true;
 } // end of wxMenuItem::SetAsRadioGroupStart
 
 void wxMenuItem::SetRadioGroupStart(
@@ -367,9 +367,7 @@ void wxMenuItem::Check(
     wxMenuItemBase::Check(bCheck);
 } // end of wxMenuItem::Check
 
-void wxMenuItem::SetText(
-  const wxString&                   rText
-)
+void wxMenuItem::SetText( const wxString& rText )
 {
     //
     // Don't do anything if label didn't change
@@ -393,9 +391,9 @@ void wxMenuItem::SetText(
     m_parentMenu->UpdateAccel(this);
 #endif // wxUSE_ACCEL
 
-    USHORT                          uId = GetRealId();
-    MENUITEM                        vItem;
-    USHORT                          uFlagsOld;
+    USHORT   uId = (USHORT)GetRealId();
+    MENUITEM vItem;
+    USHORT   uFlagsOld;
 
     if (!::WinSendMsg( hMenu
                       ,MM_QUERYITEM
@@ -483,4 +481,3 @@ wxMenuItem* wxMenuItemBase::New(
                           ,pSubMenu
                          );
 } // end of wxMenuItemBase::New
-

@@ -66,7 +66,7 @@ private:
     // if not empty, enum only the fonts with this facename
     wxString m_facename;
 
-    // if TRUE, enum only fixed fonts
+    // if true, enum only fixed fonts
     bool m_fixedOnly;
 };
 
@@ -109,7 +109,7 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     m_charset = info.charset;
     m_facename = info.facename;
 
-    return TRUE;
+    return true;
 }
 
 #define wxFONTENUMPROC FONTENUMPROC
@@ -153,7 +153,7 @@ bool wxFontEnumeratorHelper::OnFont(/*const LPLOGFONT lf,
         if ( tm->tmPitchAndFamily & TMPF_FIXED_PITCH )
         {
             // not a fixed pitch font
-            return TRUE;
+            return true;
         }
     }
 
@@ -162,13 +162,13 @@ bool wxFontEnumeratorHelper::OnFont(/*const LPLOGFONT lf,
         // check that we have the right encoding
         if ( lf->lfCharSet != m_charset )
         {
-            return TRUE;
+            return true;
         }
     }
 
     return m_fontEnum->OnFacename(lf->lfFaceName);
    */
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -187,14 +187,14 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
     }
     // else: no such fonts, unknown encoding
 
-    return TRUE;
+    return true;
 }
 
-bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
+bool wxFontEnumerator::EnumerateEncodings(const wxString& WXUNUSED(family))
 {
     wxFAIL_MSG(wxT("TODO"));
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------

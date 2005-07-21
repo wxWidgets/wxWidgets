@@ -81,7 +81,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 #if wxUSE_STATUSBAR
 
 #if wxUSE_NATIVE_STATUSBAR
-    bool wxFrame::m_bUseNativeStatusBar = TRUE;
+    bool wxFrame::m_bUseNativeStatusBar = true;
 #else
     bool wxFrame::m_bUseNativeStatusBar = FALSE;
 #endif
@@ -122,15 +122,13 @@ void wxFrame::Init()
 
 } // end of wxFrame::Init
 
-bool wxFrame::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsTitle
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxString&                   rsName
-)
+bool wxFrame::Create( wxWindow*       pParent,
+                      wxWindowID      vId,
+                      const wxString& rsTitle,
+                      const wxPoint&  rPos,
+                      const wxSize&   rSize,
+                      long            lStyle,
+                      const wxString& rsName )
 {
     if (!wxTopLevelWindow::Create( pParent
                                   ,vId
@@ -140,13 +138,13 @@ bool wxFrame::Create(
                                   ,lStyle
                                   ,rsName
                                  ))
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 } // end of wxFrame::Create
 
 wxFrame::~wxFrame()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
     DeleteAllBars();
 } // end of wxFrame::~wxFrame
 
@@ -476,18 +474,15 @@ void wxFrame::OnSysColourChanged(
     wxWindow::OnSysColourChanged(rEvent);
 } // end of wxFrame::OnSysColourChanged
 
-// Pass TRUE to show full screen, FALSE to restore.
-bool wxFrame::ShowFullScreen(
-  bool                              bShow
-, long                              lStyle
-)
+// Pass true to show full screen, false to restore.
+bool wxFrame::ShowFullScreen( bool bShow, long lStyle )
 {
     if (bShow)
     {
         if (IsFullScreen())
             return FALSE;
 
-        m_bFsIsShowing = TRUE;
+        m_bFsIsShowing = true;
         m_lFsStyle = lStyle;
 
 #if wxUSE_TOOLBAR
@@ -560,8 +555,8 @@ bool wxFrame::ShowFullScreen(
         //
         // Decide which window style flags to turn off
         //
-        LONG                        lNewStyle = m_lFsOldWindowStyle;
-        LONG                        lOffFlags = 0;
+        LONG lNewStyle = m_lFsOldWindowStyle;
+        LONG lOffFlags = 0;
 
         if (lStyle & wxFULLSCREEN_NOBORDER)
             lOffFlags |= FCF_BORDER;
@@ -589,9 +584,7 @@ bool wxFrame::ShowFullScreen(
         //
         nHeight = vRect.yTop - vRect.yBottom;
 
-        SetSize( nWidth
-                ,nHeight
-               );
+        SetSize( nWidth, nHeight);
 
         //
         // Now flush the window style cache and actually go full-screen
@@ -605,21 +598,18 @@ bool wxFrame::ShowFullScreen(
                           ,SWP_SIZE | SWP_SHOW
                          );
 
-        wxSizeEvent                 vEvent( wxSize( nWidth
-                                                   ,nHeight
-                                                  )
-                                           ,GetId()
-                                          );
+        wxSize sz( nWidth, nHeight );
+        wxSizeEvent vEvent( sz, GetId() );
 
         GetEventHandler()->ProcessEvent(vEvent);
-        return TRUE;
+        return true;
     }
     else
     {
         if (!IsFullScreen())
-            return FALSE;
+            return false;
 
-        m_bFsIsShowing = FALSE;
+        m_bFsIsShowing = false;
 
 #if wxUSE_TOOLBAR
         wxToolBar*                  pTheToolBar = GetToolBar();
@@ -630,7 +620,7 @@ bool wxFrame::ShowFullScreen(
         if (pTheToolBar && (m_lFsStyle & wxFULLSCREEN_NOTOOLBAR))
         {
             pTheToolBar->SetSize(-1, m_nFsToolBarHeight);
-            pTheToolBar->Show(TRUE);
+            pTheToolBar->Show(true);
         }
 #endif //wxUSE_TOOLBAR
 
@@ -775,9 +765,7 @@ void wxFrame::PositionToolBar()
 // Windows behaviour where child frames float independently of the parent one
 // on the desktop, but are iconized/restored with it
 //
-void wxFrame::IconizeChildFrames(
-  bool                              bIconize
-)
+void wxFrame::IconizeChildFrames( bool WXUNUSED(bIconize) )
 {
   // FIXME: Generic MDI does not use Frames for the Childs, so this does _not_
   //        work. Possibly, the right thing is simply to eliminate this
@@ -854,7 +842,7 @@ bool wxFrame::OS2TranslateMessage(
 // ---------------------------------------------------------------------------
 bool wxFrame::HandlePaint()
 {
-    RECTL                           vRect;
+    RECTL vRect;
 
     if (::WinQueryUpdateRect(GetHWND(), &vRect))
     {
@@ -889,15 +877,18 @@ bool wxFrame::HandlePaint()
 
                 ::WinQueryWindowRect(GetHwnd(), &vRect3);
 
+#ifndef __WATCOMC__
+// FIXME: incomplete headers ???
+
                 static const int    nIconWidth = 32;
                 static const int    nIconHeight = 32;
                 int                 nIconX = (int)((vRect3.xRight - nIconWidth)/2);
                 int                 nIconY = (int)((vRect3.yBottom + nIconHeight)/2);
 
                 ::WinDrawPointer(hPs, nIconX, nIconY, hIcon, DP_NORMAL);
+#endif
             }
             ::WinEndPaint(hPs);
-            return TRUE;
         }
         else
         {
@@ -931,18 +922,13 @@ bool wxFrame::HandlePaint()
                                   ,&vRect
                                   ,GetBackgroundColour().GetPixel()
                                  );
-                   ::WinEndPaint(hPS);
+                    ::WinEndPaint(hPS);
                 }
             }
-            return TRUE;
         }
     }
-    else
-    {
-        // nothing to paint - processed
-        return TRUE;
-    }
-    return FALSE;
+
+    return true;
 } // end of wxFrame::HandlePaint
 
 bool wxFrame::HandleSize(
@@ -983,7 +969,7 @@ bool wxFrame::HandleSize(
             //
             IconizeChildFrames(TRUE);
             (void)SendIconizeEvent();
-            m_bIconized = TRUE;
+            m_bIconized = true;
             break;
     }
 
@@ -1019,11 +1005,9 @@ bool wxFrame::HandleSize(
     return bProcessed;
 } // end of wxFrame::HandleSize
 
-bool wxFrame::HandleCommand(
-  WXWORD                            nId
-, WXWORD                            nCmd
-, WXHWND                            hControl
-)
+bool wxFrame::HandleCommand( WXWORD nId,
+                             WXWORD nCmd,
+                             WXHWND hControl )
 {
     if (hControl)
     {
@@ -1033,9 +1017,7 @@ bool wxFrame::HandleCommand(
         wxWindow*                   pWin = wxFindWinFromHandle(hControl);
 
         if (pWin)
-            return pWin->OS2Command( nCmd
-                                    ,nId
-                                   );
+            return pWin->OS2Command( nCmd, nId );
     }
 
     //
@@ -1050,19 +1032,16 @@ bool wxFrame::HandleCommand(
 
             wxCurrentPopupMenu = NULL;
 
-            return pPopupMenu->OS2Command( nCmd
-                                          ,nId
-                                         );
-            return TRUE;
+            return pPopupMenu->OS2Command( nCmd, nId );
         }
 #endif
 
         if (ProcessCommand(nId))
         {
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 } // end of wxFrame::HandleCommand
 
 bool wxFrame::HandleMenuSelect(
@@ -1343,7 +1322,7 @@ MRESULT wxFrame::OS2WindowProc(
     return (MRESULT)mRc;
 } // wxFrame::OS2WindowProc
 
-void wxFrame::SetClient(WXHWND c_Hwnd)
+void wxFrame::SetClient(WXHWND WXUNUSED(c_Hwnd))
 {
    // Duh...nothing to do under OS/2
 }
@@ -1420,4 +1399,3 @@ void wxFrame::SendSizeEvent()
                     );
     }
 }
-

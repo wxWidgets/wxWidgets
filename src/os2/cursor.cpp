@@ -97,14 +97,12 @@ wxCursor::wxCursor(
 
 } // end of wxCursor::wxCursor
 
-wxCursor::wxCursor(
-  const wxString&                   rsCursorFile
-, long                              lFlags
-, int                               nHotSpotX
-, int                               nHotSpotY
-)
+wxCursor::wxCursor( const wxString& WXUNUSED(rsCursorFile),
+                    long lFlags,
+                    int WXUNUSED(nHotSpotX),
+                    int WXUNUSED(nHotSpotY) )
 {
-    wxCursorRefData*                pRefData = new wxCursorRefData;
+    wxCursorRefData* pRefData = new wxCursorRefData;
 
     pRefData = new wxCursorRefData;
     m_refData = pRefData;
@@ -324,4 +322,3 @@ void wxSetCursor(const wxCursor& cursor)
             (*g_globalCursor) = cursor;
     }
 }
-

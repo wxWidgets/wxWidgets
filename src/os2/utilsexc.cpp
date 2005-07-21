@@ -27,9 +27,11 @@
 
 #define PURE_32
 #ifndef __EMX__
-#include <upm.h>
-#include <netcons.h>
-#include <netbios.h>
+    #include <upm.h>
+    #ifndef __WATCOMC__
+        #include <netcons.h>
+        #include <netbios.h>
+    #endif
 #endif
 
 #include <ctype.h>
@@ -64,19 +66,17 @@ public:
         DosExit(EXIT_PROCESS, 0);
     }
 
-    HWND                            hWnd;          // window to send wxWM_PROC_TERMINATED to [not used]
-    RESULTCODES                     vResultCodes;
-    wxProcess*                      pHandler;
-    ULONG                           ulExitCode;    // the exit code of the process
-    bool                            bState;        // set to FALSE when the process finishes
+    HWND         hWnd;          // window to send wxWM_PROC_TERMINATED to [not used]
+    RESULTCODES  vResultCodes;
+    wxProcess*   pHandler;
+    ULONG        ulExitCode;    // the exit code of the process
+    bool         bState;        // set to false when the process finishes
 };
 
-static ULONG wxExecuteThread(
-  wxExecuteData*                    pData
-)
+static ULONG wxExecuteThread(wxExecuteData* pData)
 {
-    ULONG                           ulRc;
-    PID                             vPidChild;
+    ULONG ulRc;
+    PID   vPidChild;
 
 //     cout << "Executing thread: " << endl;
 
@@ -96,12 +96,10 @@ static ULONG wxExecuteThread(
 
 // window procedure of a hidden window which is created just to receive
 // the notification message when a process exits
-MRESULT APIENTRY wxExecuteWindowCbk(
-  HWND                              hWnd
-, ULONG                             ulMessage
-, MPARAM                            wParam
-, MPARAM                            lParam
-)
+MRESULT APIENTRY wxExecuteWindowCbk( HWND   hWnd,
+                                     ULONG  ulMessage,
+                                     MPARAM WXUNUSED(wParam),
+                                     MPARAM lParam)
 {
     if (ulMessage == wxWM_PROC_TERMINATED)
     {
@@ -130,13 +128,11 @@ MRESULT APIENTRY wxExecuteWindowCbk(
     return 0;
 }
 
-long wxExecute(
-  const wxString&                   rCommand
-, int                               flags
-, wxProcess*                        pHandler
-)
+long wxExecute( const wxString& rCommand,
+                int flags,
+                wxProcess* pHandler)
 {
-    if (rCommand.IsEmpty())
+    if (rCommand.empty())
     {
 //         cout << "empty command in wxExecute." << endl;
         return 0;
@@ -243,10 +239,8 @@ long wxExecute(
                     );
 }
 
-bool wxGetFullHostName(
-  wxChar*                           zBuf
-, int                               nMaxSize
-)
+bool wxGetFullHostName( wxChar* zBuf,
+                        int nMaxSize)
 {
 #if wxUSE_NET_API
     char                            zServer[256];
@@ -266,9 +260,8 @@ bool wxGetFullHostName(
     strncpy(zBuf, zComputer, nMaxSize);
     zBuf[nMaxSize] = _T('\0');
 #else
+    wxUnusedVar(nMaxSize);
     strcpy((char*)zBuf, "noname");
 #endif
-    return *zBuf ? TRUE : FALSE;
-    return TRUE;
+    return *zBuf ? true : false;
 }
-
