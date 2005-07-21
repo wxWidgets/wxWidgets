@@ -4,6 +4,8 @@
 
 #ifdef COMPILED_FROM_DSP
 #include "winconfig.h"
+#elif defined(OS2_32)
+#include "os2config.h"
 #elif defined(MACOS_CLASSIC)
 #include "macconfig.h"
 #else

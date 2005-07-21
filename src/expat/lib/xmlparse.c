@@ -10,6 +10,11 @@
 #include "winconfig.h"
 #include "expat.h"
 
+#elif defined(OS2_32)
+
+#include "os2config.h"
+#include "expat.h"
+
 #elif defined(MACOS_CLASSIC)
 
 #include "macconfig.h"
@@ -4671,7 +4676,7 @@ defineAttribute(ELEMENT_TYPE *type, ATTRIBUTE_ID *attId, XML_Bool isCdata,
   if (type->nDefaultAtts == type->allocDefaultAtts) {
     if (type->allocDefaultAtts == 0) {
       type->allocDefaultAtts = 8;
-      type->defaultAtts = (DEFAULT_ATTRIBUTE *)MALLOC(type->allocDefaultAtts 
+      type->defaultAtts = (DEFAULT_ATTRIBUTE *)MALLOC(type->allocDefaultAtts
                             * sizeof(DEFAULT_ATTRIBUTE));
       if (!type->defaultAtts)
         return 0;
@@ -5535,8 +5540,8 @@ poolGrow(STRING_POOL *pool)
     int blockSize = (pool->end - pool->start)*2;
     pool->blocks = (BLOCK *)
       pool->mem->realloc_fcn(pool->blocks,
-			     (offsetof(BLOCK, s)
-			      + blockSize * sizeof(XML_Char)));
+                             (offsetof(BLOCK, s)
+                             + blockSize * sizeof(XML_Char)));
     if (pool->blocks == NULL)
       return XML_FALSE;
     pool->blocks->size = blockSize;
@@ -5552,7 +5557,7 @@ poolGrow(STRING_POOL *pool)
     else
       blockSize *= 2;
     tem = (BLOCK *)pool->mem->malloc_fcn(offsetof(BLOCK, s)
-					+ blockSize * sizeof(XML_Char));
+                                         + blockSize * sizeof(XML_Char));
     if (!tem)
       return XML_FALSE;
     tem->size = blockSize;

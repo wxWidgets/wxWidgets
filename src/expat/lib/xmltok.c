@@ -4,6 +4,8 @@
 
 #ifdef COMPILED_FROM_DSP
 #include "winconfig.h"
+#elif defined(OS2_32)
+#include "os2config.h"
 #elif defined(MACOS_CLASSIC)
 #include "macconfig.h"
 #else
@@ -1330,7 +1332,7 @@ unknown_toUtf16(const ENCODING *enc,
 ENCODING *
 XmlInitUnknownEncoding(void *mem,
                        int *table,
-                       CONVERTER convert, 
+                       CONVERTER convert,
                        void *userData)
 {
   int i;
@@ -1620,7 +1622,7 @@ initScan(const ENCODING **encodingTable,
 ENCODING *
 XmlInitUnknownEncodingNS(void *mem,
                          int *table,
-                         CONVERTER convert, 
+                         CONVERTER convert,
                          void *userData)
 {
   ENCODING *enc = XmlInitUnknownEncoding(mem, table, convert, userData);
