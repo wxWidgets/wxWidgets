@@ -1091,7 +1091,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 #ifndef __WXMICROWIN__
     // handle alpha channel, if any
     if (HasAlpha())
-    ret.UseAlpha();
+        ret.UseAlpha();
 
     // copy bitmap data
     MemoryHDC dcSrc,

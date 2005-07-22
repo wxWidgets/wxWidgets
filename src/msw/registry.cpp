@@ -710,20 +710,21 @@ bool wxRegKey::DeleteKey(const wxChar *szKey)
 
 bool wxRegKey::DeleteValue(const wxChar *szValue)
 {
-  if ( !Open() )
-    return false;
+    if ( !Open() )
+        return false;
 
     m_dwLastError = RegDeleteValue((HKEY) m_hKey, WXSTRINGCAST szValue);
 
     // deleting a value which doesn't exist is not considered an error
     if ( (m_dwLastError != ERROR_SUCCESS) &&
-         (m_dwLastError != ERROR_FILE_NOT_FOUND) ) {
-      wxLogSysError(m_dwLastError, _("Can't delete value '%s' from key '%s'"),
-                    szValue, GetName().c_str());
-      return false;
+         (m_dwLastError != ERROR_FILE_NOT_FOUND) )
+    {
+        wxLogSysError(m_dwLastError, _("Can't delete value '%s' from key '%s'"),
+                      szValue, GetName().c_str());
+        return false;
     }
 
-  return true;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -733,8 +734,8 @@ bool wxRegKey::DeleteValue(const wxChar *szValue)
 // return true if value exists
 bool wxRegKey::HasValue(const wxChar *szValue) const
 {
-  // this function should be silent, so suppress possible messages from Open()
-  wxLogNull nolog;
+    // this function should be silent, so suppress possible messages from Open()
+    wxLogNull nolog;
 
     if ( !CONST_CAST Open(Read) )
         return false;

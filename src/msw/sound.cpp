@@ -126,32 +126,32 @@ bool wxSound::DoPlay(unsigned flags) const
 
 bool wxSound::Free()
 {
-  if (m_waveData)
-  {
-#ifdef __WXWINCE__
-    HGLOBAL waveData = (HGLOBAL) m_waveData;
-#else
-    HGLOBAL waveData = GlobalHandle(m_waveData);
-#endif
-
-    if (waveData)
+    if (m_waveData)
     {
-#ifndef __WXWINCE__
-        if (m_isResource)
-        ::FreeResource(waveData);
-      else
+#ifdef __WXWINCE__
+        HGLOBAL waveData = (HGLOBAL) m_waveData;
+#else
+        HGLOBAL waveData = GlobalHandle(m_waveData);
 #endif
-      {
-        GlobalUnlock(waveData);
-        GlobalFree(waveData);
-      }
 
-      m_waveData = NULL;
-      m_waveLength = 0;
-      return true;
+        if (waveData)
+        {
+#ifndef __WXWINCE__
+            if (m_isResource)
+                ::FreeResource(waveData);
+            else
+#endif
+            {
+                GlobalUnlock(waveData);
+                GlobalFree(waveData);
+            }
+
+            m_waveData = NULL;
+            m_waveLength = 0;
+            return true;
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 /*static*/ void wxSound::Stop()

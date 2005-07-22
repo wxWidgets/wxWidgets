@@ -172,7 +172,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
                         index = wxSYS_COLOUR_MENU ;
                 }
             }
-       }
+        }
 
         if ( useDefault )
         {

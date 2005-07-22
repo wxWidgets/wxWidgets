@@ -313,7 +313,7 @@ void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
             {
                 int nCount = bar->GetMenuCount();
                 for (int n = 0; n < nCount; n++)
-                bar->GetMenu(n)->UpdateUI(source);
+                    bar->GetMenu(n)->UpdateUI(source);
             }
         }
     }
@@ -1381,7 +1381,7 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
             {
                success = true;
                break;
-            } 
+            }
 
             if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Help")) )
             {
