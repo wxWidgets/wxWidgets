@@ -166,7 +166,7 @@ public:
         if ( font.IsUsingSizeInPixels() )
             SetPixelSize(font.GetPixelSize());
         else
-        SetPointSize(font.GetPointSize());
+            SetPointSize(font.GetPointSize());
 #else
         SetPointSize(font.GetPointSize());
 #endif

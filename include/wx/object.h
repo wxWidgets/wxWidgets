@@ -409,9 +409,9 @@ public:
     virtual ~wxObject() { UnRef(); }
 
     wxObject(const wxObject& other)
-        {
-            InitFrom(other);
-        }
+    {
+        InitFrom(other);
+    }
 
     wxObject& operator=(const wxObject& other)
     {
