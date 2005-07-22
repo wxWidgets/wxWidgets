@@ -774,8 +774,9 @@ void wxDC::DoDrawArc(
     vPtlArc[0].y = vYm;
     vPtlArc[1].x = vX2;
     vPtlArc[1].y = vY2;
-#ifndef __WATCOMC__
-    // FIXME: incomplete headers ???
+#if !(defined(__WATCOMC__) && __WATCOMC__ < 1240 )
+// Open Watcom 1.3 had incomplete headers
+// that's reported and should be fixed for OW 1.4
     ::GpiPointArc(m_hPS, vPtlArc); // Draws the arc
 #endif
     CalcBoundingBox( (wxCoord)(vXc - dRadius)
@@ -2364,10 +2365,8 @@ void wxDC::SetMapMode(
     // ????
 }; // end of wxDC::SetMapMode
 
-void wxDC::SetUserScale(
-  double                            dX
-, double                            dY
-)
+void wxDC::SetUserScale( double dX,
+                         double dY )
 {
     m_userScaleX = dX;
     m_userScaleY = dY;
@@ -2375,10 +2374,8 @@ void wxDC::SetUserScale(
     SetMapMode(m_mappingMode);
 } // end of wxDC::SetUserScale
 
-void wxDC::SetAxisOrientation(
-  bool                              bXLeftRight
-, bool                              bYBottomUp
-)
+void wxDC::SetAxisOrientation( bool bXLeftRight,
+                               bool bYBottomUp )
 {
     m_signX = bXLeftRight ? 1 : -1;
     m_signY = bYBottomUp ? -1 : 1;

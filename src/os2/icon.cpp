@@ -51,33 +51,29 @@ void wxIconRefData::Free()
 // ----------------------------------------------------------------------------
 
 wxIcon::wxIcon()
-: m_bIsXpm(FALSE)
+       :m_bIsXpm(false)
 {
 }
 
-wxIcon::wxIcon(
-  const char                        WXUNUSED(bits)[]
-, int                               WXUNUSED(nWidth)
-, int                               WXUNUSED(nHeight)
-)
-: m_bIsXpm(FALSE)
+wxIcon::wxIcon( const char WXUNUSED(bits)[],
+                int        WXUNUSED(nWidth),
+                int        WXUNUSED(nHeight) )
+       :m_bIsXpm(false)
 {
 }
 
-wxIcon::wxIcon(
-  const wxString&                   rIconFile
-, long                              lFlags
-, int                               nDesiredWidth
-, int                               nDesiredHeight
-)
-: m_bIsXpm(FALSE)
+wxIcon::wxIcon( const wxString& rIconFile,
+                long            lFlags,
+                int             nDesiredWidth,
+                int             nDesiredHeight )
+       :m_bIsXpm(false)
 {
     //
     // A very poor hack, but we have to have separate icon files from windows
     // So we have a modified name where replace the last three characters
     // with os2.  Also need the extension.
     //
-    wxString                         sOs2Name = rIconFile.Mid(0, rIconFile.Length() - 3);
+    wxString sOs2Name = rIconFile.Mid(0, rIconFile.Length() - 3);
 
     sOs2Name += wxT("Os2.ico");
     LoadFile( sOs2Name
@@ -234,8 +230,9 @@ void wxIcon::CopyFromBitmap( const wxBitmap& rBmp )
 
     vIconInfo.hbmPointer = hBmpMask;
 
-#ifndef __WATCOMC__
-// FIXME: incomplete headers ???
+#if !(defined(__WATCOMC__) && __WATCOMC__ < 1240 )
+// Open Watcom 1.3 had incomplete headers
+// that's reported and should be fixed for OW 1.4
 
     HICON hIcon = ::WinCreatePointerIndirect( HWND_DESKTOP, &vIconInfo);
 
@@ -269,12 +266,10 @@ void wxIcon::CopyFromBitmap( const wxBitmap& rBmp )
     ::DevCloseDC(hDCDst);
 } // end of wxIcon::CopyFromBitmap
 
-bool wxIcon::LoadFile(
-  const wxString&                   rFilename
-, long                              lType
-, int                               nDesiredWidth
-, int                               nDesiredHeight
-)
+bool wxIcon::LoadFile( const wxString& rFilename,
+                       long lType,
+                       int nDesiredWidth,
+                       int nDesiredHeight )
 {
     HPS                             hPs = NULLHANDLE;
 
@@ -291,5 +286,5 @@ bool wxIcon::LoadFile(
                               ,nDesiredHeight
                              ));
     else
-        return(FALSE);
+        return false;
 }
