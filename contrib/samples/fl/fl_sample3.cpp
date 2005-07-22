@@ -3,7 +3,7 @@
 // Purpose:     Contrib. demo
 // Author:      Aleksandras Gluchovas
 // Modified by: Sebastian Haase (June 21, 2001)
-// Created:     24/11/98     
+// Created:     24/11/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
 // Licence:     wxWindows license
@@ -37,7 +37,7 @@
 #define ID_BUTT2 146
 
 class MyApp: public wxApp
-{ 
+{
 public:
     bool OnInit(void);
 };
@@ -47,22 +47,22 @@ class MyFrame: public wxFrame
 protected:
     wxFrameLayout* mpLayout;
     wxWindow*      mpClientWnd;
-    
+
     wxButton * my_butt;
-    
+
     wxTextCtrl* CreateTextCtrl( const wxString& value );
 public:
     MyFrame( wxWindow* parent, const wxChar *title );
     ~MyFrame();
-    
+
     void OnLoad( wxCommandEvent& event );
     void OnStore( wxCommandEvent& event );
     void OnQuit( wxCommandEvent& event );
-    
+
     void OnButt( wxCommandEvent& event );
     void OnButt2( wxCommandEvent& event );
     bool OnClose(void) { return true; }
-    
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -73,29 +73,29 @@ IMPLEMENT_APP    (MyApp)
 bool MyApp::OnInit(void)
 {
     // wxWidgets boiler-plate:
-    
+
     MyFrame *frame = new MyFrame(NULL, _("wxFrameLayout sample"));
-    
+
     wxMenu *file_menu = new wxMenu;
-    
+
     file_menu->Append( ID_LOAD,  _("&Load layout")  );
     file_menu->Append( ID_STORE, _("&Store layout")  );
     file_menu->AppendSeparator();
-    
+
     file_menu->Append( ID_QUIT, _("E&xit") );
-    
+
     wxMenuBar *menu_bar = new wxMenuBar;
-    
+
     menu_bar->Append(file_menu, _("&File"));
-    
+
 #if wxUSE_STATUSBAR
     frame->CreateStatusBar(3);
 #endif // wxUSE_STATUSBAR
     frame->SetMenuBar(menu_bar);
-    
+
     frame->Show(true);
     SetTopWindow(frame);
-    
+
     return true;
 }
 
@@ -113,74 +113,74 @@ MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
     : wxFrame( parent, wxID_ANY, title, wxDefaultPosition,
           wxSize( 700, 500 ),
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
-          wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION,
+          wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION | wxCLOSE_BOX,
           wxT("freimas") )
 {
-    
-    mpClientWnd = new wxWindow(this, wxID_ANY);    
+
+    mpClientWnd = new wxWindow(this, wxID_ANY);
     mpLayout = new wxFrameLayout( this, mpClientWnd );
-    
+
     ///  mpLayout->PushDefaultPlugins();
     ///  mpLayout->AddPlugin( CLASSINFO( cbBarHintsPlugin ) ); // facny "X"es and beveal for barso
     ///  //mpLayout->AddPlugin( CLASSINFO( cbHintAnimationPlugin ) );
-    
-    cbDimInfo sizes( 80,65,     // when docked horizontally      
-                     80,165,    // when docked vertically        
-                     180,30,    // when floated                  
+
+    cbDimInfo sizes( 80,65,     // when docked horizontally
+                     80,165,    // when docked vertically
+                     180,30,    // when floated
                      true,      // the bar is fixed-size
                      5,         // vertical gap (bar border)
                      5          // horizontal gap (bar border)
-                   ); 
-    
-    
+                   );
+
+
     // drop-in some bars
-    
+
     for( int i = 1; i <= 11; ++i )
     {
         wxChar buf[4];
         wxSprintf( buf, wxT("%d"), i );
         wxString name = wxString(wxT("Bar-"));
         name += buf;
-        
+
         sizes.mIsFixed = (i !=3); // every fifth bar is not fixed-size
-        
+
         if ( !sizes.mIsFixed ) name += wxT(" (flexible)");
-        //      mpLayout->AddBar( CreateTextCtrl(name),// bar window
+        //      mpLayout->AddBar( CreateTextCtrl(name), // bar window
         if(i != 4 && i!= 5 && i!=11) {
-            mpLayout->AddBar( new wxTextCtrl(this, wxID_ANY, name),// bar window
-                              sizes, 
-                              i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
-                              0,            // insert into 0th row (vert. position)
-                              0,            // offset from the start of row (in pixels)
-                              name          // name to refere in customization pop-ups
+            mpLayout->AddBar( new wxTextCtrl(this, wxID_ANY, name), // bar window
+                              sizes,
+                              i % MAX_PANES, // alignment ( 0-top,1-bottom, etc)
+                              0,             // insert into 0th row (vert. position)
+                              0,             // offset from the start of row (in pixels)
+                              name           // name to refere in customization pop-ups
                             );
         } else if(i==4){
-            mpLayout->AddBar( new wxTextCtrl(this, wxID_ANY, name),// bar window
-                              cbDimInfo( 100,100, 100,100, 100,100, true, 5, 5), 
-                              i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
-                              0,            // insert into 0th row (vert. position)
-                              0,            // offset from the start of row (in pixels)
-                              name          // name to refere in customization pop-ups
+            mpLayout->AddBar( new wxTextCtrl(this, wxID_ANY, name), // bar window
+                              cbDimInfo( 100,100, 100,100, 100,100, true, 5, 5),
+                              i % MAX_PANES, // alignment ( 0-top,1-bottom, etc)
+                              0,             // insert into 0th row (vert. position)
+                              0,             // offset from the start of row (in pixels)
+                              name           // name to refere in customization pop-ups
                             );
         } else if(i==5) {
             my_butt = new wxButton(this, ID_BUTT, name);
-            mpLayout->AddBar( my_butt,// bar window
-                              cbDimInfo( 100,100, 200,200, 400,400, true, 5, 5), 
-                              i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
-                              0,            // insert into 0th row (vert. position)
-                              0,            // offset from the start of row (in pixels)
-                              name          // name to refere in customization pop-ups
+            mpLayout->AddBar( my_butt,       // bar window
+                              cbDimInfo( 100,100, 200,200, 400,400, true, 5, 5),
+                              i % MAX_PANES, // alignment ( 0-top,1-bottom, etc)
+                              0,             // insert into 0th row (vert. position)
+                              0,             // offset from the start of row (in pixels)
+                              name           // name to refere in customization pop-ups
                             );
         } else if(i==11) {
             mpLayout->AddBar( new wxButton(this, ID_BUTT2, name+wxT("_2")),
-                              cbDimInfo( 100,100, 200,200, 400,400, true, 5, 5), 
-                              i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
-                              0,            // insert into 0th row (vert. position)
-                              0,            // offset from the start of row (in pixels)
-                              name          // name to refere in customization pop-ups
+                              cbDimInfo( 100,100, 200,200, 400,400, true, 5, 5),
+                              i % MAX_PANES, // alignment ( 0-top,1-bottom, etc)
+                              0,             // insert into 0th row (vert. position)
+                              0,             // offset from the start of row (in pixels)
+                              name           // name to refere in customization pop-ups
                             );
         }
-        
+
         //      mpLayout->RecalcLayout(true);
         //        Layout();
         //        Refresh();
@@ -190,17 +190,17 @@ MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
 MyFrame::~MyFrame()
 {
     // layout is not a window, should be released manually
-    if ( mpLayout ) 
+    if ( mpLayout )
         delete mpLayout;
 }
 
 wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 {
-    wxTextCtrl* pCtrl = new wxTextCtrl( this, wxID_ANY, value, 
+    wxTextCtrl* pCtrl = new wxTextCtrl( this, wxID_ANY, value,
                                 wxPoint(0,0), wxSize(1,1), wxTE_MULTILINE );
-    
+
     pCtrl->SetBackgroundColour( wxColour( 255,255,255 ) );
-    
+
     return pCtrl;
 }
 
@@ -217,38 +217,38 @@ void MyFrame::OnStore( wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
     Show( false ); // TRICK:: hide it, to avoid flickered destruction
-    
+
     Close(true);
 }
 
 void MyFrame::OnButt( wxCommandEvent& WXUNUSED(event) )
 {
     static int i =0;
-    
-    // cbBarInfo* FindBarByName( const wxString& name ); 
-    
+
+    // cbBarInfo* FindBarByName( const wxString& name );
+
     switch(i % 2) {
-    case 0: 
+    case 0:
         {
             cbBarInfo* x = mpLayout->FindBarByName(wxString(wxT("Bar-1")));
-            if(x) 
-                mpLayout->InverseVisibility(x); 
-            else    
+            if(x)
+                mpLayout->InverseVisibility(x);
+            else
                 wxBell();
             break;
         }
     case 1:
         {
             cbBarInfo* x = mpLayout->FindBarByName(wxString(wxT("Bar-6")));
-            if(x) 
+            if(x)
             {
-                if(i % 4 == 1) 
+                if(i % 4 == 1)
                 {
                     mpLayout->SetBarState(x, wxCBAR_FLOATING, true);
                     //mpLayout->RecalcLayout(true);
                     mpLayout->RepositionFloatedBar(x);
-                } 
-                else 
+                }
+                else
                 {
                     mpLayout->SetBarState(x, 0, true);
                     //mpLayout->RecalcLayout(true);
@@ -256,12 +256,12 @@ void MyFrame::OnButt( wxCommandEvent& WXUNUSED(event) )
                 }
                 //  //  //  x->mState = wxCBAR_FLOATING;
                 //  //  //  mpLayout->ApplyBarProperties(x);
-            } 
-            else 
+            }
+            else
             {
                 wxBell();
             }
-            
+
             break;
         }
     }
@@ -271,14 +271,14 @@ void MyFrame::OnButt( wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnButt2( wxCommandEvent& WXUNUSED(event) )
 {
     static int i =0;
-    
-    // cbBarInfo* FindBarByName( const wxString& name ); 
-    
+
+    // cbBarInfo* FindBarByName( const wxString& name );
+
     switch(i % 2) {
-    case 0: 
+    case 0:
         {
             cbBarInfo* x = mpLayout->FindBarByName(wxString(wxT("Bar-1")));
-            if(x) 
+            if(x)
             {
                 for(int a=0;a<MAX_BAR_STATES;a++)
                 {
@@ -288,10 +288,10 @@ void MyFrame::OnButt2( wxCommandEvent& WXUNUSED(event) )
                 x->mpBarWnd->SetSize(200,200);
                 mpLayout->SetBarState(x, wxCBAR_FLOATING, true);  // HACK !!!
                 mpLayout->SetBarState(x, 0, true);                // HACK !!!
-                wxYield();                                        // HACK !!! needed to resize BEFORE redraw 
+                wxYield();                                        // HACK !!! needed to resize BEFORE redraw
                 mpLayout->RefreshNow( true );                     // HACK !!! needed to trigger redraw
             }
-            else    
+            else
             {
                 wxBell();
             }
@@ -301,32 +301,32 @@ void MyFrame::OnButt2( wxCommandEvent& WXUNUSED(event) )
     case 1:
         {
             cbBarInfo* x = mpLayout->FindBarByName(wxString(wxT("Bar-1")));
-            if(x) 
+            if(x)
             {
-                //mpLayout->InverseVisibility(x); 
+                //mpLayout->InverseVisibility(x);
                 for(int a=0;a<MAX_BAR_STATES;a++)
                 {
-                    // see cbPaneDrawPlugin::OnSizeBarWindow( cbSizeBarWndEvent& event ) 
+                    // see cbPaneDrawPlugin::OnSizeBarWindow( cbSizeBarWndEvent& event )
                     x->mDimInfo.mSizes[a].x = 10 + 2 + 2*x->mDimInfo.mHorizGap;
                     x->mDimInfo.mSizes[a].y = 10 + 2 + 2*x->mDimInfo.mVertGap;
                 }
                 x->mpBarWnd->SetSize(10,10);
                 mpLayout->SetBarState(x, wxCBAR_FLOATING, true);  // HACK !!!
                 mpLayout->SetBarState(x, 0, true);                // HACK !!!
-                wxYield();                                        // HACK !!! needed to resize BEFORE redraw 
+                wxYield();                                        // HACK !!! needed to resize BEFORE redraw
                 mpLayout->RefreshNow( true );                     // HACK !!! needed to trigger redraw
-                
-                //  //  mpLayout->SetBarState(x, wxCBAR_FLOATING, true);
-                //  //  mpLayout->RecalcLayout(true);
-                //  //  mpLayout->RepositionFloatedBar(x);
-                //  //  mpLayout->RecalcLayout(true);
-                //  //  mpLayout->RepositionFloatedBar(x);
-                //  //  mpLayout->SetBarState(x, 0, true);
-                //  //  wxYield();
-                //  //  mpLayout->RefreshNow( true );
-                //  //  mpLayout->RecalcLayout(true);
+
+                // mpLayout->SetBarState(x, wxCBAR_FLOATING, true);
+                // mpLayout->RecalcLayout(true);
+                // mpLayout->RepositionFloatedBar(x);
+                // mpLayout->RecalcLayout(true);
+                // mpLayout->RepositionFloatedBar(x);
+                // mpLayout->SetBarState(x, 0, true);
+                // wxYield();
+                // mpLayout->RefreshNow( true );
+                // mpLayout->RecalcLayout(true);
             }
-            else    
+            else
             {
                 wxBell();
             }

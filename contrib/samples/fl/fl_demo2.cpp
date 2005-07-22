@@ -622,7 +622,7 @@ wxWindow* MyFrame::CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent )
 {
     bool isNested = (pParent != mpInternalFrm);
 
-    // check if we're craeting nested layout
+    // check if we're creating nested layout
     if ( isNested )
     {
         layout.mBorderPen.SetColour( 128,255,128 );

@@ -49,7 +49,7 @@ typedef wxPanel MyTestPanel;
 // Define a new application type
 
 class MyApp: public wxApp
-{ 
+{
 public:
     bool OnInit(void);
 };
@@ -57,59 +57,59 @@ public:
 // Define a new frame type
 
 class MyFrame: public wxFrame
-{ 
+{
 protected:
-    
+
     wxFrameLayout* mLayouts[MAX_LAYOUTS];
-    
+
     wxFrameLayout* mpNestedLayout;
     wxFrameLayout* mpAboutBoxLayout;
-    
-    int            mActiveLayoutNo;   
+
+    int            mActiveLayoutNo;
     bool           mAutoSave;
     bool           mSavedAlready;
-    
+
     // container windows:
-    
+
     wxTextCtrl*    mpClntWindow;
     wxPanel*       mpInternalFrm;
-    
+
     wxImageList    mImageList;
-    
+
     wxFrame       mAboutBox;
-    
+
     // helpers for control-creation
-    
+
     wxTextCtrl* CreateTxtCtrl ( const wxString& txt = wxT("wxTextCtrl"), wxWindow* parent = NULL  );
     wxTreeCtrl* CreateTreeCtrl( const wxString& label = wxT("TreeCtrl") );
     wxChoice*   CreateChoice  ( const wxString& txt = wxT("Choice1") );
     wxButton*   CreateButton  ( const wxString& label = wxT("wxButton"), wxWindow* pParent = NULL, long id = ID_SAY_ITSOK );
-    
+
     // helpers for layout-creation
-    
+
     void AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent );
     wxWindow* CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent );
-    
+
     void DropInSomeBars( int layoutNo );
     void CreateLayout( int layoutNo );
     void RemoveLayout( int layoutNo );
-    
+
     void InitAboutBox();
-    
+
     void ActivateLayout( int layoutNo );
-    
+
 public: /* public */
-    
+
     MyFrame( wxFrame *frame, const wxChar *title, int x, int y, int w, int h);
-    
+
     ~MyFrame();
-    
+
     void SyncMenuBarItems();
-    
+
     // event handlers
-    
+
     bool OnClose(void);
-    
+
     void OnLoad( wxCommandEvent& event );
     void OnStore( wxCommandEvent& event );
     void OnAutoSave( wxCommandEvent& event );
@@ -122,15 +122,15 @@ public: /* public */
     void OnFirst( wxCommandEvent& event );
     void OnSecond( wxCommandEvent& event );
     void OnThird( wxCommandEvent& event );
-    
+
     void OnSayItsOk( wxCommandEvent& event );
     void OnBtnYes( wxCommandEvent& event );
     void OnBtnNo( wxCommandEvent& event );
     void OnBtnEsc( wxCommandEvent& event );
-    
+
     void OnChar( wxKeyEvent& event );
-    
-    DECLARE_EVENT_TABLE()   
+
+    DECLARE_EVENT_TABLE()
 };
 
 // Define a new button type, StartButton95 (Just for fun)
@@ -138,21 +138,21 @@ public: /* public */
 class StartButton95 : public wxPanel
 {
     DECLARE_DYNAMIC_CLASS( StartButton95 )
-        
+
     bool m_bPressed;
     wxBitmap m_PBmp;
     wxBitmap m_DBmp;
-    
+
 public:
     StartButton95(void) : m_bPressed(false) {}
-    
-    StartButton95(wxWindow* parent) 
+
+    StartButton95(wxWindow* parent)
         : m_bPressed(false) { wxPanel::Create(parent,wxID_ANY); }
-    
+
     void OnMouseDown( wxMouseEvent& event );
     void OnMouseUp( wxMouseEvent& event );
     void OnPaint( wxPaintEvent& event );
-    
+
     DECLARE_EVENT_TABLE()
 };
 
