@@ -243,12 +243,12 @@ wxString wxDir::GetName() const
     wxString name;
     if ( m_data )
     {
-    name = M_DIR->GetName();
-    if ( !name.empty() && (name.Last() == _T('/')) )
-    {
-        // chop off the last (back)slash
-        name.Truncate(name.length() - 1);
-    }
+        name = M_DIR->GetName();
+        if ( !name.empty() && (name.Last() == _T('/')) )
+        {
+            // chop off the last (back)slash
+            name.Truncate(name.length() - 1);
+        }
     }
 
     return name;

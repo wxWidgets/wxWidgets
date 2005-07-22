@@ -165,7 +165,7 @@ protected:
                         event.SetEventObject(def);
                         def->Command(event);
                         return ;
-                   }
+                    }
                 }
 
                 return;
@@ -219,7 +219,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxComboBoxChoice, wxChoice)
-    EVT_CHOICE(-1, wxComboBoxChoice::OnChoice)
+    EVT_CHOICE(wxID_ANY, wxComboBoxChoice::OnChoice)
 END_EVENT_TABLE()
 
 wxComboBox::~wxComboBox()
@@ -275,13 +275,13 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
     {
         // we might not be fully constructed yet, therefore watch out...
         if ( m_choice )
-            m_choice->SetSize(0, 0 , width, -1);
+            m_choice->SetSize(0, 0 , width, wxDefaultCoord);
     }
     else
     {
         wxCoord wText = width - POPUPWIDTH - MARGIN;
         m_text->SetSize(0, 0, wText, height);
-        m_choice->SetSize(0 + wText + MARGIN, 0, POPUPWIDTH, -1);
+        m_choice->SetSize(0 + wText + MARGIN, 0, POPUPWIDTH, wxDefaultCoord);
     }
 #endif
 }
@@ -419,7 +419,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     else
     {
         m_text = new wxComboBoxText(this);
-        if ( size.y == -1 ) {
+        if ( size.y == wxDefaultCoord ) {
           csize.y = m_text->GetSize().y ;
         }
     }
@@ -846,4 +846,3 @@ wxInt32 wxComboBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
     ProcessCommand(event);
     return noErr ;
 }
-

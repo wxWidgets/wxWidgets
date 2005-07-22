@@ -2,7 +2,7 @@
 // Name:        menuitem.cpp
 // Purpose:     wxMenuItem implementation
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
@@ -43,11 +43,11 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        const wxString& text,
                        const wxString& strHelp,
                        wxItemKind kind,
-                       wxMenu *pSubMenu) 
-          : wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
+                       wxMenu *pSubMenu)
+           :wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
 {
     wxASSERT_MSG( id != 0 || pSubMenu != NULL , wxT("A MenuItem ID of Zero does not work under Mac") ) ;
-    
+
     // In other languages there is no difference in naming the Exit/Quit menu item between MacOS and Windows guidelines
     // therefore these item must not be translated
     if ( wxStripMenuCodes(m_text).Upper() ==  wxT("EXIT") )
@@ -56,32 +56,32 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
     }
 
     m_radioGroup.start = -1;
-    m_isRadioGroupStart = FALSE;
+    m_isRadioGroupStart = false;
 }
 
-wxMenuItem::~wxMenuItem() 
+wxMenuItem::~wxMenuItem()
 {
 }
 
 // change item state
 // -----------------
 
-void wxMenuItem::SetBitmap(const wxBitmap& bitmap) 
-{ 
-      m_bitmap = bitmap; 
-      UpdateItemBitmap() ;
+void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
+{
+      m_bitmap = bitmap;
+      UpdateItemBitmap();
 }
 
-void wxMenuItem::UpdateItemBitmap() 
+void wxMenuItem::UpdateItemBitmap()
 {
     if ( !m_parentMenu )
         return ;
-        
+
     MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
     MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
     if( mhandle == NULL || index == 0)
         return ;
-        
+
     if ( m_bitmap.Ok() )
     {
 #if wxUSE_BMPBUTTON
@@ -90,19 +90,19 @@ void wxMenuItem::UpdateItemBitmap()
         if ( info.contentType != kControlNoContent )
         {
             if ( info.contentType == kControlContentIconRef )
-                SetMenuItemIconHandle( mhandle , index , 
+                SetMenuItemIconHandle( mhandle , index ,
                     kMenuIconRefType , (Handle) info.u.iconRef ) ;
         }
         wxMacReleaseBitmapButton( &info ) ;
-#endif            
+#endif
     }
 }
 
-void wxMenuItem::UpdateItemStatus() 
+void wxMenuItem::UpdateItemStatus()
 {
     if ( !m_parentMenu )
         return ;
-        
+
 #if TARGET_CARBON
     if ( UMAGetSystemVersion() >= 0x1000 && GetId() == wxApp::s_macPreferencesMenuItemId)
     {
@@ -119,37 +119,37 @@ void wxMenuItem::UpdateItemStatus()
             EnableMenuCommand( NULL , kHICommandQuit ) ;
     }
 #endif
-    { 
+    {
         MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
         MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
         if( mhandle == NULL || index == 0)
             return ;
 
-          UMAEnableMenuItem( mhandle , index , m_isEnabled ) ;
-          if ( IsCheckable() && IsChecked() )
+        UMAEnableMenuItem( mhandle , index , m_isEnabled ) ;
+        if ( IsCheckable() && IsChecked() )
             ::SetItemMark( mhandle , index , 0x12 ) ; // checkmark
         else
             ::SetItemMark( mhandle , index , 0 ) ; // no mark
 
-           UMASetMenuItemText( mhandle , index , m_text , wxFont::GetDefaultEncoding() ) ; 
-           wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
+        UMASetMenuItemText( mhandle , index , m_text , wxFont::GetDefaultEncoding() ) ;
+        wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
         UMASetMenuItemShortcut( mhandle , index , entry ) ;
         delete entry ;
     }
 }
 
-void wxMenuItem::UpdateItemText() 
+void wxMenuItem::UpdateItemText()
 {
     if ( !m_parentMenu )
         return ;
-        
+
     MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
     MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
     if( mhandle == NULL || index == 0)
         return ;
 
-       UMASetMenuItemText( mhandle , index , m_text , wxFont::GetDefaultEncoding() ) ; 
-       wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
+    UMASetMenuItemText( mhandle , index , m_text , wxFont::GetDefaultEncoding() ) ;
+    wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
     UMASetMenuItemShortcut( mhandle , index , entry ) ;
     delete entry ;
 }
@@ -176,7 +176,7 @@ void wxMenuItem::Enable(bool bDoEnable)
 }
 void wxMenuItem::UncheckRadio()
 {
-    if ( m_isChecked ) 
+    if ( m_isChecked )
     {
         wxMenuItemBase::Check( false ) ;
         UpdateItemStatus() ;
@@ -187,7 +187,7 @@ void wxMenuItem::Check(bool bDoCheck)
 {
     wxCHECK_RET( IsCheckable(), wxT("only checkable items may be checked") );
 
-    if ( m_isChecked != bDoCheck ) 
+    if ( m_isChecked != bDoCheck )
     {
         if ( GetKind() == wxITEM_RADIO )
         {
@@ -195,7 +195,7 @@ void wxMenuItem::Check(bool bDoCheck)
             {
                 wxMenuItemBase::Check( bDoCheck ) ;
                 UpdateItemStatus() ;
-                
+
                 // get the index of this item in the menu
                 const wxMenuItemList& items = m_parentMenu->GetMenuItems();
                 int pos = items.IndexOf(this);
@@ -246,7 +246,7 @@ void wxMenuItem::SetText(const wxString& text)
         return;
 
     wxMenuItemBase::SetText(text);
-    
+
     UpdateItemText() ;
 }
 
@@ -255,7 +255,7 @@ void wxMenuItem::SetText(const wxString& text)
 
 void wxMenuItem::SetAsRadioGroupStart()
 {
-    m_isRadioGroupStart = TRUE;
+    m_isRadioGroupStart = true;
 }
 
 void wxMenuItem::SetRadioGroupStart(int start)

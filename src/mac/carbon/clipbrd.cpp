@@ -197,12 +197,12 @@ void wxClipboard::Clear()
 
 bool wxClipboard::Flush()
 {
-    return FALSE;
+    return false;
 }
 
 bool wxClipboard::Open()
 {
-    wxCHECK_MSG( !m_open, FALSE, wxT("clipboard already open") );
+    wxCHECK_MSG( !m_open, false, wxT("clipboard already open") );
     m_open = true ;
     return true ;
 }
@@ -214,9 +214,9 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::SetData( wxDataObject *data )
 {
-    wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
+    wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
-    wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
+    wxCHECK_MSG( data, false, wxT("data is invalid") );
 
     Clear();
     // as we can only store one wxDataObject, this is the same in this
@@ -226,9 +226,9 @@ bool wxClipboard::SetData( wxDataObject *data )
 
 bool wxClipboard::AddData( wxDataObject *data )
 {
-    wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
+    wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
-    wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
+    wxCHECK_MSG( data, false, wxT("data is invalid") );
 
     /* we can only store one wxDataObject */
     Clear();
@@ -248,7 +248,7 @@ bool wxClipboard::AddData( wxDataObject *data )
         size_t sz = data->GetDataSize( array[i] ) ;
         void* buf = malloc( sz + 1 ) ;
         if ( buf )
-        {        
+        {
             // empty the buffer because in some case GetDataHere does not fill buf
             memset(buf, 0, sz+1);
             data->GetDataHere( array[i] , buf ) ;
@@ -293,23 +293,23 @@ void wxClipboard::Close()
     wxCHECK_RET( m_open, wxT("clipboard not open") );
 
     m_open = false ;
-    
- 	// Get rid of cached object.  If this is not done copying from another application will
- 	// only work once
+
+    // Get rid of cached object.  If this is not done copying from another application will
+    // only work once
     if (m_data)
     {
         delete m_data;
         m_data = (wxDataObject*) NULL;
-    }    
-	    
+    }
+
 }
 
 bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
 {
-  if ( m_data )
-  {
-    return m_data->IsSupported( dataFormat ) ;
-  }
+    if ( m_data )
+    {
+        return m_data->IsSupported( dataFormat ) ;
+    }
 #if TARGET_CARBON
     OSStatus err = noErr;
     ScrapRef scrapRef;
@@ -324,11 +324,11 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
         {
             if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
             {
-                return TRUE ;
+                return true ;
             }
         }
     }
-    return FALSE;
+    return false;
 
 #else
     long offset ;
@@ -344,7 +344,7 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
 
 bool wxClipboard::GetData( wxDataObject& data )
 {
-    wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
+    wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
     size_t formatcount = data.GetFormatCount() + 1 ;
     wxDataFormat *array = new wxDataFormat[ formatcount  ];

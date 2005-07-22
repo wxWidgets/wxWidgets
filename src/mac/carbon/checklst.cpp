@@ -2,7 +2,7 @@
 // Name:        checklst.cpp
 // Purpose:     implementation of wxCheckListBox class
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
@@ -62,10 +62,10 @@ bool wxCheckListBox::Create(wxWindow *parent,
 }
 
 #if TARGET_API_MAC_OSX
-static pascal void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID, 
+static pascal void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID,
     DataBrowserItemNotification message, DataBrowserItemDataRef itemData)
 #else
-static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID, 
+static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID,
     DataBrowserItemNotification message)
 #endif
 {
@@ -108,100 +108,100 @@ static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrow
                 event.SetExtraLong( list->HasMultipleSelection() ? message == kDataBrowserItemSelected : TRUE );
                 wxPostEvent( list->GetEventHandler() , event ) ;
                 // direct notification is not always having the listbox GetSelection() having in synch with event
-                // list->GetEventHandler()->ProcessEvent(event) ; 
-            } 
+                // list->GetEventHandler()->ProcessEvent(event) ;
+            }
         }
     }
 }
 
 
-static pascal OSStatus ListBoxGetSetItemData(ControlRef browser, 
-    DataBrowserItemID itemID, DataBrowserPropertyID property, 
+static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
+    DataBrowserItemID itemID, DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData, Boolean changeValue)
 {
-	OSStatus err = errDataBrowserPropertyNotSupported;
-	
-	if ( ! changeValue )
-	{ 	
-    	switch (property)
-    	{
-    		
-    	    case kTextColumnId:
-    		{	
-    		    long ref = GetControlReference( browser ) ;
-    		    if ( ref )
-    		    {
-    		        wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-                    int i = itemID - 1 ;
-                    if (i >= 0 && i < list->GetCount() )
-		            {
-		                wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
-		                verify_noerr( ::SetDataBrowserItemDataText( itemData , cf ) ) ;
-		                err = noErr ;
-		            }
-    			}
-    		}	
-    		break;
-    	    case kCheckboxColumnId :
-    	    {
-    		    long ref = GetControlReference( browser ) ;
-    		    if ( ref )
-    		    {
-    		        wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-                    int i = itemID - 1 ;
-                    if (i >= 0 && i < list->GetCount() )
-		            {
-		                verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData , list->IsChecked( i ) ? kThemeButtonOn : kThemeButtonOff ) ) ;
-		                err = noErr ;
-		            }
-    			}
-    	    }
-    	    break ;
-    		case kDataBrowserItemIsEditableProperty:
-    		{	
-    		    err = ::SetDataBrowserItemDataBooleanValue(itemData, true);
-    		}	
-    		break;
+    OSStatus err = errDataBrowserPropertyNotSupported;
 
-    		default:    		
-    		break;
-    	}
-	}
-	else
-	{
-	    switch( property )
-	    {
-	        case kCheckboxColumnId :
-	        {
-     		    long ref = GetControlReference( browser ) ;
-    		    if ( ref )
-    		    {
-    		        wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
+    if ( ! changeValue )
+    {
+        switch (property)
+        {
+
+            case kTextColumnId:
+            {
+                long ref = GetControlReference( browser ) ;
+                if ( ref )
+                {
+                    wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
                     int i = itemID - 1 ;
                     if (i >= 0 && i < list->GetCount() )
-		            {
-		                // we have to change this behind the back, since Check() would be triggering another update round
+                    {
+                        wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
+                        verify_noerr( ::SetDataBrowserItemDataText( itemData , cf ) ) ;
+                        err = noErr ;
+                    }
+                }
+            }
+            break;
+            case kCheckboxColumnId :
+            {
+                long ref = GetControlReference( browser ) ;
+                if ( ref )
+                {
+                    wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
+                    int i = itemID - 1 ;
+                    if (i >= 0 && i < list->GetCount() )
+                    {
+                        verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData , list->IsChecked( i ) ? kThemeButtonOn : kThemeButtonOff ) ) ;
+                        err = noErr ;
+                    }
+                }
+            }
+            break ;
+            case kDataBrowserItemIsEditableProperty:
+            {
+                err = ::SetDataBrowserItemDataBooleanValue(itemData, true);
+            }
+            break;
+
+            default:
+            break;
+        }
+    }
+    else
+    {
+        switch( property )
+        {
+            case kCheckboxColumnId :
+            {
+                long ref = GetControlReference( browser ) ;
+                if ( ref )
+                {
+                    wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
+                    int i = itemID - 1 ;
+                    if (i >= 0 && i < list->GetCount() )
+                    {
+                        // we have to change this behind the back, since Check() would be triggering another update round
                         bool newVal = !list->IsChecked( i ) ;
-		                verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData , newVal ? kThemeButtonOn : kThemeButtonOff ) ) ;
-		                err = noErr ;
-		                list->m_checks[ i ] = newVal ;
+                        verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData , newVal ? kThemeButtonOn : kThemeButtonOff ) ) ;
+                        err = noErr ;
+                        list->m_checks[ i ] = newVal ;
 
                         wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, list->GetId());
                         event.SetInt(i);
                         event.SetEventObject(list);
                         list->GetEventHandler()->ProcessEvent(event);
-		            }
-			}
-	        
-	        }
-	        break ;
-	        
-	        default :
-	        break ;
-	    }
-	}
-	
-	return err;
+                    }
+                }
+
+            }
+            break ;
+
+            default :
+            break ;
+        }
+    }
+
+    return err;
 }
 bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
                        const wxPoint& pos,
@@ -211,11 +211,11 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
                        const wxValidator& validator,
                        const wxString& name)
 {
-    m_macIsUserPane = FALSE ;
+    m_macIsUserPane = false ;
 
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
                   _T("only one of listbox selection modes can be specified") );
-    
+
     if ( !wxListBoxBase::Create(parent, id, pos, size, style & ~(wxHSCROLL|wxVSCROLL), validator, name) )
         return false;
 
@@ -226,7 +226,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 
     m_peer = new wxMacControl(this) ;
     verify_noerr( ::CreateDataBrowserControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, kDataBrowserListView , m_peer->GetControlRefAddr() ) );
-    
+
 
     DataBrowserSelectionFlags  options = kDataBrowserDragSelect ;
     if ( style & wxLB_MULTIPLE )
@@ -241,47 +241,47 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     {
         options += kDataBrowserSelectOnlyOne ;
     }
-    verify_noerr(m_peer->SetSelectionFlags( options ) ); 
+    verify_noerr(m_peer->SetSelectionFlags( options ) );
 
     DataBrowserListViewColumnDesc columnDesc ;
     columnDesc.headerBtnDesc.titleOffset = 0;
-	columnDesc.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
-		
-	columnDesc.headerBtnDesc.btnFontStyle.flags	= 
-		kControlUseFontMask | kControlUseJustMask;
-	
-	columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlNoContent;
-	columnDesc.headerBtnDesc.btnFontStyle.just = teFlushDefault;
-	columnDesc.headerBtnDesc.btnFontStyle.font = kControlFontViewSystemFont;
-	columnDesc.headerBtnDesc.btnFontStyle.style = normal;
-	columnDesc.headerBtnDesc.titleString = NULL ; // CFSTR( "" );
+    columnDesc.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
+
+    columnDesc.headerBtnDesc.btnFontStyle.flags =
+        kControlUseFontMask | kControlUseJustMask;
+
+    columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlNoContent;
+    columnDesc.headerBtnDesc.btnFontStyle.just = teFlushDefault;
+    columnDesc.headerBtnDesc.btnFontStyle.font = kControlFontViewSystemFont;
+    columnDesc.headerBtnDesc.btnFontStyle.style = normal;
+    columnDesc.headerBtnDesc.titleString = NULL ; // CFSTR( "" );
 
     // check column
 
-	columnDesc.headerBtnDesc.minimumWidth = 30 ;
-	columnDesc.headerBtnDesc.maximumWidth = 30;
+    columnDesc.headerBtnDesc.minimumWidth = 30 ;
+    columnDesc.headerBtnDesc.maximumWidth = 30;
 
-	columnDesc.propertyDesc.propertyID = kCheckboxColumnId;
-	columnDesc.propertyDesc.propertyType = kDataBrowserCheckboxType;
-	columnDesc.propertyDesc.propertyFlags = kDataBrowserPropertyIsMutable | kDataBrowserTableViewSelectionColumn |
+    columnDesc.propertyDesc.propertyID = kCheckboxColumnId;
+    columnDesc.propertyDesc.propertyType = kDataBrowserCheckboxType;
+    columnDesc.propertyDesc.propertyFlags = kDataBrowserPropertyIsMutable | kDataBrowserTableViewSelectionColumn |
                                             kDataBrowserDefaultPropertyFlags;
-	verify_noerr( m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
+    verify_noerr( m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
 
     // text column
 
-	columnDesc.headerBtnDesc.minimumWidth = 0;
-	columnDesc.headerBtnDesc.maximumWidth = 10000;
+    columnDesc.headerBtnDesc.minimumWidth = 0;
+    columnDesc.headerBtnDesc.maximumWidth = 10000;
 
-	columnDesc.propertyDesc.propertyID = kTextColumnId;
-	columnDesc.propertyDesc.propertyType = kDataBrowserTextType;
-	columnDesc.propertyDesc.propertyFlags = kDataBrowserTableViewSelectionColumn
+    columnDesc.propertyDesc.propertyID = kTextColumnId;
+    columnDesc.propertyDesc.propertyType = kDataBrowserTextType;
+    columnDesc.propertyDesc.propertyFlags = kDataBrowserTableViewSelectionColumn
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-	 | kDataBrowserListViewTypeSelectColumn
+     | kDataBrowserListViewTypeSelectColumn
 #endif
-	  ;
+    ;
 
-	
-	verify_noerr( m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
+
+    verify_noerr( m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
 
     verify_noerr( m_peer->AutoSizeListViewColumns() ) ;
     verify_noerr( m_peer->SetHasScrollBars( false , true ) ) ;
@@ -291,12 +291,12 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     DataBrowserCallbacks callbacks ;
     callbacks.version = kDataBrowserLatestCallbacks;
     InitDataBrowserCallbacks(&callbacks);
-    callbacks.u.v1.itemDataCallback = NewDataBrowserItemDataUPP(ListBoxGetSetItemData);	
-	callbacks.u.v1.itemNotificationCallback =
+    callbacks.u.v1.itemDataCallback = NewDataBrowserItemDataUPP(ListBoxGetSetItemData);
+    callbacks.u.v1.itemNotificationCallback =
 #if TARGET_API_MAC_OSX
-	    (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(DataBrowserItemNotificationProc) ;
+        (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(DataBrowserItemNotificationProc) ;
 #else
-	    NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
+        NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
 #endif
     m_peer->SetCallbacks( &callbacks);
 
@@ -314,8 +314,8 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     }
 
     SetBestSize(size);   // Needed because it is a wxControlWithItems
-    
-    return TRUE;
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -324,7 +324,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 
 bool wxCheckListBox::IsChecked(size_t item) const
 {
-    wxCHECK_MSG( item < m_checks.GetCount(), FALSE,
+    wxCHECK_MSG( item < m_checks.GetCount(), false,
                  _T("invalid index in wxCheckListBox::IsChecked") );
 
     return m_checks[item] != 0;
@@ -362,7 +362,7 @@ int wxCheckListBox::DoAppend(const wxString& item)
     int pos = wxListBox::DoAppend(item);
 
     // the item is initially unchecked
-    m_checks.Insert(FALSE, pos);
+    m_checks.Insert(false, pos);
 
     return pos;
 }
@@ -374,7 +374,7 @@ void wxCheckListBox::DoInsertItems(const wxArrayString& items, int pos)
     size_t count = items.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        m_checks.Insert(FALSE, pos + n);
+        m_checks.Insert(false, pos + n);
     }
 }
 
@@ -386,7 +386,7 @@ void wxCheckListBox::DoSetItems(const wxArrayString& items, void **clientData)
     size_t count = items.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        m_checks.Add(FALSE);
+        m_checks.Add(false);
     }
 }
 

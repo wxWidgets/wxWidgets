@@ -6,7 +6,7 @@
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -30,46 +30,46 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    m_macIsUserPane = FALSE ;
-    
+    m_macIsUserPane = false ;
+
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
-    
+
     m_label = label ;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    
+
     m_peer = new wxMacControl(this) ;
-    verify_noerr ( CreateRadioButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
+    verify_noerr ( CreateRadioButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") ,
         0 , false /* no autotoggle */ , m_peer->GetControlRefAddr() ) );
-    
+
 
     MacPostControlCreate(pos,size) ;
 
-  m_cycle = this ;
-  
-  if (HasFlag(wxRB_GROUP))
-  {
-      AddInCycle( NULL ) ;
-  }
-  else
-  {
-    /* search backward for last group start */
-    wxRadioButton *chief = (wxRadioButton*) NULL;
-    wxWindowList::compatibility_iterator node = parent->GetChildren().GetLast();
-    while (node)
+    m_cycle = this ;
+
+    if (HasFlag(wxRB_GROUP))
     {
-      wxWindow *child = node->GetData();
-      if (child->IsKindOf( CLASSINFO( wxRadioButton ) ) )
-      {
-          chief = (wxRadioButton*) child;
-         if (child->HasFlag(wxRB_GROUP)) break;
-      }
-      node = node->GetPrevious();
+        AddInCycle( NULL ) ;
     }
-    AddInCycle( chief ) ;
-  }
-    return TRUE;
+    else
+    {
+        /* search backward for last group start */
+        wxRadioButton *chief = (wxRadioButton*) NULL;
+        wxWindowList::compatibility_iterator node = parent->GetChildren().GetLast();
+        while (node)
+        {
+            wxWindow *child = node->GetData();
+            if (child->IsKindOf( CLASSINFO( wxRadioButton ) ) )
+            {
+                chief = (wxRadioButton*) child;
+                if (child->HasFlag(wxRB_GROUP)) break;
+            }
+            node = node->GetPrevious();
+        }
+        AddInCycle( chief ) ;
+    }
+    return true;
 }
 
 void wxRadioButton::SetValue(bool val)
@@ -77,19 +77,19 @@ void wxRadioButton::SetValue(bool val)
     wxRadioButton *cycle;
     if ( m_peer->GetValue() == val )
         return ;
-        
+
     m_peer->SetValue( val ) ;
-    if (val) 
+    if (val)
     {
         cycle=this->NextInCycle();
-        if (cycle!=NULL) 
+        if (cycle!=NULL)
         {
-           while (cycle!=this) 
-           {
-               cycle->SetValue(false);
-               cycle=cycle->NextInCycle();
-           }
-       }
+            while (cycle!=this)
+            {
+                cycle->SetValue(false);
+                cycle=cycle->NextInCycle();
+            }
+        }
     }
 }
 
@@ -104,12 +104,12 @@ void wxRadioButton::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-wxInt32 wxRadioButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )  
+wxInt32 wxRadioButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
 {
     // if already set -> no action
     if ( GetValue() )
         return noErr;
-      
+
     wxRadioButton *cycle;
     cycle=this->NextInCycle();
     if (cycle!=NULL) {
@@ -133,19 +133,21 @@ wxInt32 wxRadioButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVE
 wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
 {
     wxRadioButton *next,*current;
-        
-    if (cycle==NULL) {
+
+    if (cycle==NULL)
+    {
         m_cycle=this;
         return(this);
-        }
-    else {
+    }
+    else
+    {
         current=cycle;
-          while ((next=current->m_cycle)!=cycle) 
+        while ((next=current->m_cycle)!=cycle)
             current=current->m_cycle;
-          m_cycle=cycle;
-          current->m_cycle=this;
-          return(cycle);
-      }
-}  
+        m_cycle=cycle;
+        current->m_cycle=this;
+        return(cycle);
+    }
+}
 
 #endif

@@ -1443,7 +1443,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
                      event.SetEventObject(def);
                      def->Command(event);
                      return true ;
-                }
+                 }
             }
             /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
             else if (keyval == WXK_ESCAPE || (keyval == '.' && modifiers & cmdKey ) )
