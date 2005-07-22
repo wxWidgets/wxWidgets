@@ -399,7 +399,7 @@ MyFrame::MyFrame(const wxString& title)
     //
     //  Or, you can use the new (2.5.5+) event handler
     //  conversion macros - for instance the above could
-    //  be done as 
+    //  be done as
     //  wxCommandEventHandler(MyFrame::MyHandler)
     //  pretty simple, eh?
     //
@@ -803,9 +803,10 @@ void MyFrame::OnPageChange(wxNotebookEvent& WXUNUSED(event))
 void MyTimer::Notify()
 {
     if (!m_frame->m_notebook->GetCurrentPage()) return;
-        wxMediaCtrl* m_mediactrl = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_mediactrl;
-        wxSlider* m_slider = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_slider;
-        if (!m_mediactrl) return;
+
+    wxMediaCtrl* m_mediactrl = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_mediactrl;
+    wxSlider* m_slider = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_slider;
+    if (!m_mediactrl) return;
 
     long lPosition = (long)( m_mediactrl->Tell() / 1000 );
     m_slider->SetValue(lPosition);

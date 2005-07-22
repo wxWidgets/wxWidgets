@@ -661,10 +661,12 @@ void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
     {
         grid->BeginBatch();
         for ( int n = 0; n < grid->GetNumberRows(); )
+        {
             if ( grid->IsInSelection( n , 0 ) )
                 grid->DeleteRows( n, 1 );
-        else
-            n++;
+            else
+                n++;
+        }
         grid->EndBatch();
     }
 }
@@ -676,10 +678,12 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
     {
         grid->BeginBatch();
         for ( int n = 0; n < grid->GetNumberCols(); )
+        {
             if ( grid->IsInSelection( 0 , n ) )
                 grid->DeleteCols( n, 1 );
-        else
-            n++;
+            else
+                n++;
+        }
         grid->EndBatch();
     }
 }
@@ -888,7 +892,7 @@ void GridFrame::OnCellValueChanged( wxGridEvent& ev )
 
 void GridFrame::OnCellBeginDrag( wxGridEvent& ev )
 {
-    logBuf = _T("");
+    logBuf = wxEmptyString;
     logBuf  << _T("Got request to drag cell at")
             << _T(" row ") << ev.GetRow()
             << _T(" col ") << ev.GetCol();
