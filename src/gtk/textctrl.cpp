@@ -1510,7 +1510,7 @@ long wxTextCtrl::GetInsertionPoint() const
     else
 #endif
     {
-    return (long) GET_EDITABLE_POS(m_text);
+        return (long) GET_EDITABLE_POS(m_text);
     }
 }
 
@@ -2081,7 +2081,7 @@ void wxTextCtrl::Freeze()
             gtk_widget_set_sensitive(m_widget, false);
             g_object_ref(m_buffer);
             gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), gtk_text_buffer_new(NULL));
-    }
+        }
 #else
         gtk_text_freeze(GTK_TEXT(m_text));
 #endif

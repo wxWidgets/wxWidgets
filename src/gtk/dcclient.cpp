@@ -1372,7 +1372,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 {
                     gdk_gc_set_clip_mask( m_textGC, mask );
                     gdk_gc_set_clip_origin( m_textGC, cx-xsrcMask, cy-ysrcMask );
-                }                                
+                }
             }
             else
             {
@@ -1385,7 +1385,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 {
                     gdk_gc_set_clip_mask( m_penGC, mask );
                     gdk_gc_set_clip_origin( m_penGC, cx-xsrcMask, cy-ysrcMask );
-                }                
+                }
             }
         }
 
@@ -2377,12 +2377,12 @@ void wxWindowDC::ComputeScaleAndOrigin()
     if ((m_scaleX != origScaleX || m_scaleY != origScaleY) &&
         (m_pen.Ok()))
     {
-      /* this is a bit artificial, but we need to force wxDC to think
-         the pen has changed */
-      wxPen pen = m_pen;
-      m_pen = wxNullPen;
-      SetPen( pen );
-  }
+        /* this is a bit artificial, but we need to force wxDC to think
+           the pen has changed */
+        wxPen pen = m_pen;
+        m_pen = wxNullPen;
+        SetPen( pen );
+    }
 }
 
 // Resolution in pixels per logical inch

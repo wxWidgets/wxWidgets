@@ -16,8 +16,8 @@
 
 #include "wx/dnd.h"
 #include "wx/log.h"
-									       
-									        
+
+
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/window.h"
@@ -188,7 +188,7 @@ static void target_drag_leave( GtkWidget *WXUNUSED(widget),
     drop_target->OnLeave();
 
     /* this has to be done because GDK has no "drag_enter" event */
-    drop_target->m_firstMotion = TRUE;
+    drop_target->m_firstMotion = true;
 
     /* after this, invalidate the drop_target's GdkDragContext */
     drop_target->SetDragContext( (GdkDragContext*) NULL );
@@ -287,7 +287,7 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     drop_target->SetDragContext( (GdkDragContext*) NULL );
 
     /* this has to be done because GDK has no "drag_enter" event */
-    drop_target->m_firstMotion = FALSE;
+    drop_target->m_firstMotion = false;
 
     return ret;
 }
@@ -338,7 +338,7 @@ static gboolean target_drag_drop( GtkWidget *widget,
     /* reset the block here as someone might very well
        show a dialog as a reaction to a drop and this
        wouldn't work without events */
-    g_blockEventsOnDrag = FALSE;
+    g_blockEventsOnDrag = false;
 
     bool ret = drop_target->OnDrop( x, y );
 
@@ -388,7 +388,7 @@ static gboolean target_drag_drop( GtkWidget *widget,
     drop_target->SetDragWidget( (GtkWidget*) NULL );
 
     /* this has to be done because GDK has no "drag_enter" event */
-    drop_target->m_firstMotion = TRUE;
+    drop_target->m_firstMotion = true;
 
     return ret;
 }
@@ -457,7 +457,7 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 wxDropTarget::wxDropTarget( wxDataObject *data )
             : wxDropTargetBase( data )
 {
-    m_firstMotion = TRUE;
+    m_firstMotion = true;
     m_dragContext = (GdkDragContext*) NULL;
     m_dragWidget = (GtkWidget*) NULL;
     m_dragData = (GtkSelectionData*) NULL;
@@ -482,7 +482,7 @@ wxDragResult wxDropTarget::OnDragOver( wxCoord WXUNUSED(x),
 bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
 {
     if (!m_dataObject)
-        return FALSE;
+        return false;
 
     return (GetMatchingPair() != (GdkAtom) 0);
 }
@@ -530,19 +530,19 @@ GdkAtom wxDropTarget::GetMatchingPair()
 bool wxDropTarget::GetData()
 {
     if (!m_dragData)
-        return FALSE;
+        return false;
 
     if (!m_dataObject)
-        return FALSE;
+        return false;
 
     wxDataFormat dragFormat( m_dragData->target );
 
     if (!m_dataObject->IsSupportedFormat( dragFormat ))
-        return FALSE;
+        return false;
 
     m_dataObject->SetData( dragFormat, (size_t)m_dragData->length, (const void*)m_dragData->data );
 
-    return TRUE;
+    return true;
 }
 
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
@@ -655,11 +655,11 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
     /* disable GUI threads */
 #endif
 
-                gtk_selection_data_set( selection_data,
-                                        selection_data->target,
-                                        8,   // 8-bit
-                                        d,
-                                        size );
+    gtk_selection_data_set( selection_data,
+                            selection_data->target,
+                            8,   // 8-bit
+                            d,
+                            size );
 
 #if wxUSE_THREADS
     /* enable GUI threads */
@@ -714,7 +714,7 @@ static void source_drag_end( GtkWidget          *WXUNUSED(widget),
 
     // printf( "Drag source: drag_end.\n" );
 
-    drop_source->m_waiting = FALSE;
+    drop_source->m_waiting = false;
 }
 }
 
@@ -744,7 +744,7 @@ wxDropSource::wxDropSource(wxWindow *win,
                            const wxIcon &iconMove,
                            const wxIcon &iconNone)
 {
-    m_waiting = TRUE;
+    m_waiting = true;
 
     m_iconWindow = (GtkWidget*) NULL;
 
@@ -763,7 +763,7 @@ wxDropSource::wxDropSource(wxDataObject& data,
                            const wxIcon &iconMove,
                            const wxIcon &iconNone)
 {
-    m_waiting = TRUE;
+    m_waiting = true;
 
     SetData( data );
 
@@ -859,11 +859,11 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         return wxDragNone;
 
     // disabled for now
-    g_blockEventsOnDrag = TRUE;
+    g_blockEventsOnDrag = true;
 
     RegisterWindow();
 
-    m_waiting = TRUE;
+    m_waiting = true;
 
     GtkTargetList *target_list = gtk_target_list_new( (GtkTargetEntry*) NULL, 0 );
 
@@ -933,7 +933,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     /* re-enable GUI threads */
 #endif
 
-    g_blockEventsOnDrag = FALSE;
+    g_blockEventsOnDrag = false;
 
     UnregisterWindow();
 

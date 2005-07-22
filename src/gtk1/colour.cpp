@@ -110,7 +110,7 @@ void wxColourRefData::FreeColour()
             colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] - 1;
 
             if (colMapAllocCounter[ idx ] == 0)
-            gdk_colormap_free_colors( m_colormap, &m_color, 1 );
+                gdk_colormap_free_colors( m_colormap, &m_color, 1 );
         }
     }
 }
@@ -124,7 +124,7 @@ void wxColourRefData::AllocColour( GdkColormap *cmap )
 
 #ifdef __WXGTK20__
     if ( (cmap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-	     (cmap->visual->type == GDK_VISUAL_PSEUDO_COLOR) )
+         (cmap->visual->type == GDK_VISUAL_PSEUDO_COLOR) )
 #else
     GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) cmap;
     if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
@@ -284,5 +284,3 @@ GdkColor *wxColour::GetColor() const
 
     return &M_COLDATA->m_color;
 }
-
-

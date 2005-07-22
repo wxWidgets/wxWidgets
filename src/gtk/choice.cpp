@@ -115,16 +115,16 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
                        int n, const wxString choices[],
                        long style, const wxValidator& validator, const wxString &name )
 {
-    m_needParent = TRUE;
+    m_needParent = true;
 #if (GTK_MINOR_VERSION > 0)
-    m_acceptsFocus = TRUE;
+    m_acceptsFocus = true;
 #endif
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxChoice creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_widget = gtk_option_menu_new();
@@ -153,7 +153,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
     PostCreation(size);
     SetBestSize(size); // need this too because this is a wxControlWithItems
 
-    return TRUE;
+    return true;
 }
 
 wxChoice::~wxChoice()
@@ -247,7 +247,7 @@ void wxChoice::Clear()
     {
         // destroy the data (due to Robert's idea of using wxList<wxObject>
         // and not wxList<wxClientData> we can't just say
-        // m_clientList.DeleteContents(TRUE) - this would crash!
+        // m_clientList.DeleteContents(true) - this would crash!
         wxList::compatibility_iterator node = m_clientList.GetFirst();
         while ( node )
         {
@@ -372,7 +372,7 @@ int wxChoice::FindString( const wxString &string ) const
         count++;
     }
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 int wxChoice::GetSelection() const
@@ -403,8 +403,8 @@ void wxChoice::SetString( int n, const wxString& str )
 
             wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
-            gtk_label_set_text( label, wxGTK_CONV( str ) ); 
-            
+            gtk_label_set_text( label, wxGTK_CONV( str ) );
+
             return;
         }
         child = child->next;
@@ -414,7 +414,7 @@ void wxChoice::SetString( int n, const wxString& str )
 
 wxString wxChoice::GetString( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid choice") );
+    wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid choice") );
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
     int count = 0;
@@ -444,7 +444,7 @@ wxString wxChoice::GetString( int n ) const
 
     wxFAIL_MSG( wxT("wxChoice: invalid index in GetString()") );
 
-    return wxT("");
+    return wxEmptyString;
 }
 
 int wxChoice::GetCount() const
@@ -545,9 +545,9 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, int pos, const wxString& item)
         // normal control, just append
         if (pos == (int)m_clientList.GetCount())
         {
-        gtk_menu_append( GTK_MENU(menu), menu_item );
-        m_clientList.Append( (wxObject*) NULL );
-        index = m_clientList.GetCount() - 1;
+            gtk_menu_append( GTK_MENU(menu), menu_item );
+            m_clientList.Append( (wxObject*) NULL );
+            index = m_clientList.GetCount() - 1;
         }
         else
         {
@@ -570,7 +570,7 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, int pos, const wxString& item)
     // changed, but at least after adding an item
     // it has to change. Adapted from Matt Ownby.
     InvalidateBestSize();
-    
+
     gtk_signal_connect_after( GTK_OBJECT( menu_item ), "activate",
       GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
 
@@ -643,4 +643,3 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
 
 #endif // wxUSE_CHOICE
-
