@@ -68,7 +68,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
     switch (c)
     {
-        case wxT('2'): // ASCII Grey 
+        case wxT('2'): // ASCII Grey
         case wxT('3'): // ASCII RGB
         case wxT('5'): // RAW Grey
         case wxT('6'): break;
@@ -94,14 +94,14 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     }
 
 
-    if (c=='2') // Ascii GREY 
-    {    
+    if (c=='2') // Ascii GREY
+    {
         wxUint32 value, size=width*height;
         for (wxUint32 i=0; i<size; ++i)
         {
             value=text_stream.Read32();
             *ptr++=(unsigned char)value; // R
-            *ptr++=(unsigned char)value; // G 
+            *ptr++=(unsigned char)value; // G
             *ptr++=(unsigned char)value; // B
             if ( !buf_stream )
             {
@@ -110,8 +110,8 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
             }
         }
     }
-   if (c=='3') // Ascii RBG
-      {
+    if (c=='3') // Ascii RBG
+    {
         wxUint32 value, size=3*width*height;
         for (wxUint32 i=0; i<size; ++i)
           {
@@ -126,9 +126,9 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
                 return false;
               }
           }
-      }
-   if (c=='5') // Raw GREY
-    {    
+    }
+    if (c=='5') // Raw GREY
+    {
         wxUint32 size=width*height;
         unsigned char value;
         for (wxUint32 i=0; i<size; ++i)
@@ -136,7 +136,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
             buf_stream.Read(&value,1);
             *ptr++=value; // R
             *ptr++=value; // G
-            *ptr++=value; // B 
+            *ptr++=value; // B
             if ( !buf_stream )
             {
                 if (verbose) wxLogError(_("PNM: File seems truncated."));

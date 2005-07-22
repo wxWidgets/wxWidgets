@@ -114,14 +114,14 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             else
             {
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -1;
-                
+
                 if (wxIsCDATAElement(tagBuffer))
                 {
                     // store the orig pos in case we are missing the closing
                     // tag (see below)
-                    wxInt32 old_pos = pos; 
+                    wxInt32 old_pos = pos;
                     bool foundCloseTag = false;
-                    
+
                     // find next matching tag
                     int tag_len = wxStrlen(tagBuffer);
                     while (pos < lng)
@@ -152,7 +152,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                         }
 
                         // found a match
-                        if (match_pos == tag_len) 
+                        if (match_pos == tag_len)
                         {
                             pos = pos - tag_len - 3;
                             foundCloseTag = true;
@@ -365,12 +365,12 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
         }
 
         #undef IS_WHITE
-   }
-   m_Begin = i;
+    }
+    m_Begin = i;
 
-   cache->QueryTag(pos, &m_End1, &m_End2);
-   if (m_End1 > end_pos) m_End1 = end_pos;
-   if (m_End2 > end_pos) m_End2 = end_pos;
+    cache->QueryTag(pos, &m_End1, &m_End2);
+    if (m_End1 > end_pos) m_End1 = end_pos;
+    if (m_End2 > end_pos) m_End2 = end_pos;
 }
 
 wxHtmlTag::~wxHtmlTag()

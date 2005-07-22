@@ -4,7 +4,7 @@
 // Author:      John Labenski
 // Modified by:
 // Created:     14.06.03 (extracted from src/*/filedlg.cpp)
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialogBase, wxDialog)
 
 void wxFileDialogBase::Init()
-{ 
+{
     m_filterIndex = m_dialogStyle = 0;
     m_parent = NULL;
 }
@@ -179,24 +179,24 @@ wxString wxFileSelector(const wxChar *title,
 
    // if filter is of form "All files (*)|*|..." set correct filter index
     if((wxStrlen(defaultExtension) != 0) && (filter2.Find(wxT('|')) != wxNOT_FOUND))
-            {
+    {
         int filterIndex = 0;
 
         wxArrayString descriptions, filters;
         // don't care about errors, handled already by wxFileDialog
         (void)wxParseCommonDialogsFilter(filter2, descriptions, filters);
         for (size_t n=0; n<filters.GetCount(); n++)
-                {
+        {
             if (filters[n].Contains(defaultExtension))
-                    {
+            {
                 filterIndex = n;
                         break;
-                    }
-                }
+            }
+        }
 
         if (filterIndex > 0)
             fileDialog.SetFilterIndex(filterIndex);
-        }
+    }
 
     wxString filename;
     if ( fileDialog.ShowModal() == wxID_OK )

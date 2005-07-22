@@ -261,7 +261,7 @@ wxString wxFileData::GetFileType() const
         return _("<LINK>");
     else if (IsDrive())
         return _("<DRIVE>");
-   else if (m_fileName.Find(wxT('.'), true) != wxNOT_FOUND)
+    else if (m_fileName.Find(wxT('.'), true) != wxNOT_FOUND)
         return m_fileName.AfterLast(wxT('.'));
 
     return wxEmptyString;
@@ -318,7 +318,7 @@ wxString wxFileData::GetEntry( fileListFieldType num ) const
             break;
 
         case FileList_Time:
-                if (!IsDrive())
+            if (!IsDrive())
                 s = GetModificationTime();
             break;
 
@@ -534,7 +534,7 @@ void wxFileCtrl::UpdateFiles()
 #endif // __UNIX__
             wxFileData *fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
             if (Add(fd, item) != -1)
-            item.m_itemId++;
+                item.m_itemId++;
             else
                 delete fd;
         }
@@ -563,7 +563,7 @@ void wxFileCtrl::UpdateFiles()
             {
                 wxFileData *fd = new wxFileData(dirPrefix + f, f, wxFileData::is_dir, wxFileIconsTable::folder);
                 if (Add(fd, item) != -1)
-                item.m_itemId++;
+                    item.m_itemId++;
                 else
                     delete fd;
 
@@ -581,7 +581,7 @@ void wxFileCtrl::UpdateFiles()
                 {
                     wxFileData *fd = new wxFileData(dirPrefix + f, f, wxFileData::is_file, wxFileIconsTable::file);
                     if (Add(fd, item) != -1)
-                    item.m_itemId++;
+                        item.m_itemId++;
                     else
                         delete fd;
 

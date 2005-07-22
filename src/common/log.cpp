@@ -802,7 +802,8 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     // copy it to our buffer and free memory
     // Crashes on SmartPhone (FIXME)
 #if !defined(__SMARTPHONE__) /* of WinCE */
-     if( lpMsgBuf != 0 ) {
+    if( lpMsgBuf != 0 )
+    {
         wxStrncpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
         s_szBuf[WXSIZEOF(s_szBuf) - 1] = wxT('\0');
 

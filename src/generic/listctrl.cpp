@@ -3716,8 +3716,8 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
         return;
     }
 
-     wxCHECK_RET( litem >= 0 && (size_t)litem < GetItemCount(),
-                  _T("invalid list ctrl item index in SetItem") );
+    wxCHECK_RET( litem >= 0 && (size_t)litem < GetItemCount(),
+                 _T("invalid list ctrl item index in SetItem") );
 
     size_t oldCurrent = m_current;
     size_t item = (size_t)litem;    // safe because of the check above

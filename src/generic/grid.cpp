@@ -260,7 +260,7 @@ private:
     // Work around the fact that a focus kill event can be sent to
     // a combobox within a set focus event.
     bool                m_inSetFocus;
-    
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGridCellEditorEvtHandler)
     DECLARE_NO_COPY_CLASS(wxGridCellEditorEvtHandler)
@@ -1972,21 +1972,19 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
             {
                 wxLogDebug(_T("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params.c_str());
             }
-
         }
-                tmp = params.AfterFirst(_T(','));
-                if ( !tmp.empty() )
-                {
-                    long precision;
+        tmp = params.AfterFirst(_T(','));
+        if ( !tmp.empty() )
+        {
+            long precision;
             if ( tmp.ToLong(&precision) )
-                    {
+            {
                 SetPrecision((int)precision);
-                    }
-                    else
-                    {
+            }
+            else
+            {
                 wxLogDebug(_T("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params.c_str());
-        }
-
+            }
         }
     }
 }
