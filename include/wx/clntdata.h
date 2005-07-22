@@ -20,6 +20,8 @@
 #include "wx/string.h"
 #include "wx/hashmap.h"
 
+#if wxABI_VERSION >= 20602
+
 typedef int (*wxShadowObjectMethod)(void*, void*);
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
     wxShadowObjectMethod,
@@ -87,6 +89,8 @@ private:
     wxShadowObjectMethods   m_methods;
     wxShadowObjectFields    m_fields;
 };
+
+#endif // wxABI_VERSION
 
 // ----------------------------------------------------------------------------
 

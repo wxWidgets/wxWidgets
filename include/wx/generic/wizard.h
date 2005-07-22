@@ -86,7 +86,9 @@ private:
     void AddBackNextPair(wxBoxSizer *buttonRow);
     void AddButtonRow(wxBoxSizer *mainColumn);
 
+#if wxABI_VERSION >= 20602
 protected:
+#endif
     void FinishLayout();
 
 private:
