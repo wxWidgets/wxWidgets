@@ -200,6 +200,12 @@ public:
     void SetItemBackgroundColour( long item, const wxColour &col);
     wxColour GetItemBackgroundColour( long item ) const;
 
+#if wxABI_VERSION >= 20602
+    // Font of an item.
+    void SetItemFont( long item, const wxFont &f);
+    wxFont GetItemFont( long item ) const;
+#endif
+
     // Gets the number of selected items in the list control
     int GetSelectedItemCount() const;
 

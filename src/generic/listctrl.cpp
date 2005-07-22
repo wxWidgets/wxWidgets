@@ -5094,6 +5094,22 @@ wxColour wxGenericListCtrl::GetItemBackgroundColour( long item ) const
     return info.GetBackgroundColour();
 }
 
+void wxGenericListCtrl::SetItemFont( long item, const wxFont &f )
+{
+    wxListItem info;
+    info.m_itemId = item;
+    info.SetFont( f );
+    m_mainWin->SetItem( info );
+}
+
+wxFont wxGenericListCtrl::GetItemFont( long item ) const
+{
+    wxListItem info;
+    info.m_itemId = item;
+    m_mainWin->GetItem( info );
+    return info.GetFont();
+}
+
 int wxGenericListCtrl::GetSelectedItemCount() const
 {
     return m_mainWin->GetSelectedItemCount();

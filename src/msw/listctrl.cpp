@@ -1092,6 +1092,24 @@ wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
     return col;
 }
 
+void wxListCtrl::SetItemFont( long item, const wxFont &f )
+{
+    wxListItem info;
+    info.m_itemId = item;
+    info.SetFont( f );
+    SetItem( info );
+}
+
+wxFont wxListCtrl::GetItemFont( long item ) const
+{
+    wxFont f;
+    wxListItemInternalData *data = wxGetInternalData(this, item);
+    if ( data && data->attr )
+        f = data->attr->GetFont();
+
+    return f;
+}
+
 // Gets the number of selected items in the list control
 int wxListCtrl::GetSelectedItemCount() const
 {

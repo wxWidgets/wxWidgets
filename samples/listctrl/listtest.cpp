@@ -494,6 +494,9 @@ void MyFrame::InitWithReportItems()
     m_listCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
     m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
     m_listCtrl->SetColumnWidth( 2, wxLIST_AUTOSIZE );
+
+    // test SetItemFont too
+    m_listCtrl->SetItemFont(0, *wxITALIC_FONT);
 }
 
 void MyFrame::InitWithIconItems(bool withText, bool sameIcon)

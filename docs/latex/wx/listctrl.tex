@@ -377,6 +377,13 @@ Returns the number of items in the list control.
 Gets the application-defined data associated with this item.
 
 
+\membersection{wxListCtrl::GetItemFont}\label{wxlistctrlgetitemfont}
+
+\constfunc{wxFont}{GetItemFont}{\param{long }{item}}
+
+Returns the item's font.
+
+
 \membersection{wxListCtrl::GetItemPosition}\label{wxlistctrlgetitemposition}
 
 \constfunc{bool}{GetItemPosition}{\param{long }{item}, \param{wxPoint\& }{pos}}
@@ -864,6 +871,13 @@ from $0$ to {\it count}.
 \func{bool}{SetItemData}{\param{long }{item}, \param{long }{data}}
 
 Associates application-defined data with this item.
+
+
+\membersection{wxListCtrl::SetItemFont}\label{wxlistctrlsetitemfont}
+
+\func{void}{SetItemFont}{\param{long }{item}, \param{const wxFont\& }{font}}
+
+Sets the item's font.
 
 
 \membersection{wxListCtrl::SetItemImage}\label{wxlistctrlsetitemimage}
