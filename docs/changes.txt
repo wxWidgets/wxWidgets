@@ -24,6 +24,10 @@ wxMSW:
 - Fixed accelerators of menu items added to already attached submenus
 - Position of wxEVT_MOUSEWHEEL events is now in client, not screen, coordinates
 
+wxOS2
+
+- Adjustements for building with Open Watcom C++
+
 wxUniv:
 
 - Window creation now honours wxVSCROLL.
