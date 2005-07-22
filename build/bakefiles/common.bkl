@@ -183,8 +183,10 @@
     </if>
 
     <set var="LIBTYPE_SUFFIX" make_var="1">
-        <if cond="FORMAT!='autoconf' and SHARED=='0'">lib</if>
-        <if cond="FORMAT!='autoconf' and SHARED=='1'">dll</if>
+        <if cond="FORMAT!='autoconf' and SHARED=='0' and PLATFORM_WIN32=='1'">lib</if>
+        <if cond="FORMAT!='autoconf' and SHARED=='1' and PLATFORM_WIN32=='1'">dll</if>
+        <if cond="FORMAT=='watcom' and SHARED=='0' and PLATFORM_WIN32=='0'">$(TOOLKIT_LOWERCASE)_lib</if>
+        <if cond="FORMAT=='watcom' and SHARED=='1' and PLATFORM_WIN32=='0'">$(TOOLKIT_LOWERCASE)_dll</if>
     </set>
 
     <set var="LIBDIRNAME" make_var="1">
@@ -426,8 +428,15 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
 
         <ldlibs>$(EXTRALIBS_FOR_BASE)</ldlibs>
 
+        <!-- system libraries on os2: -->
+        <if cond="FORMAT!='autoconf' and PLATFORM_OS2=='1'">
+            <if cond="FORMAT=='watcom'">
+                <sys-lib>upm32</sys-lib>
+            </if>
+        </if>
+
         <!-- system libraries on windows: -->
-        <if cond="FORMAT!='autoconf'">
+        <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
             <sys-lib>$(UNICOWS_LIB)</sys-lib>
             <if cond="FORMAT=='borland'">
                 <sys-lib>ole2w32</sys-lib>
