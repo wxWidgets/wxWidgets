@@ -269,7 +269,7 @@ The following options handle the kind of library you want to build.
                             such as Sun with gcc 2.8.X which
                             would otherwise produce segvs.
 
-    --enable-unicode        Enable Unicode support. Default for GTK+2.0
+    --enable-unicode        Enable Unicode support.
 
     --enable-profile        Add profiling info to the object
                             files. Currently broken, I think.
