@@ -37,7 +37,9 @@
 #include "wx/image.h"
 #include "wx/metafile.h"
 #include "wx/mac/private.h"
+#ifndef __DARWIN__
 #include <Scrap.h>
+#endif
 
 // ----------------------------------------------------------------------------
 // functions

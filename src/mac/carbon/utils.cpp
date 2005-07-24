@@ -50,9 +50,13 @@
 #include <Multiprocessing.h>
 #endif
 
+#ifdef __DARWIN__
+#include <Carbon/Carbon.h>
+#else
 #include <ATSUnicode.h>
 #include <TextCommon.h>
 #include <TextEncodingConverter.h>
+#endif
 #endif // wxUSE_GUI
 
 #include  "wx/mac/private.h"  // includes mac headers

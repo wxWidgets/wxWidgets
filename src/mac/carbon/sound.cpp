@@ -45,8 +45,10 @@
 
 #ifdef __WXMAC__
 #include "wx/mac/uma.h"
+#ifndef __DARWIN__
 #include <Movies.h>
 #include <Gestalt.h>
+#endif
 #endif
 
 #if defined __WXMAC__ && defined __DARWIN__/*TARGET_CARBON*/
@@ -64,7 +66,11 @@
 #include <qtml.h>
 #endif
 
+#ifndef __DARWIN__
 #include <QuickTimeComponents.h>
+#else
+#include <QuickTime/QuickTimeComponents.h>
+#endif
 
 //Time between timer calls
 #define MOVIE_DELAY 100

@@ -32,9 +32,11 @@ using namespace std ;
 #endif
 
 #include "wx/mac/private.h"
+#ifndef __DARWIN__
 #include <ATSUnicode.h>
 #include <TextCommon.h>
 #include <TextEncodingConverter.h>
+#endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 

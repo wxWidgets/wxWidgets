@@ -33,7 +33,9 @@ IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 
 #include "wx/mac/private.h"
 
+#ifndef __DARWIN__
 #include <Navigation.h>
+#endif
 
 #include "MoreFilesX.h"
 

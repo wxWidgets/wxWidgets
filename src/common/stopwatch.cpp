@@ -79,8 +79,12 @@
 #endif
 
 #ifdef __WXMAC__
+#ifndef __DARWIN__
     #include <Timer.h>
     #include <DriverServices.h>
+#else
+    #include <Carbon/Carbon.h>
+#endif
 #endif
 
 #ifdef __WXPALMOS__

@@ -14,9 +14,9 @@
 #if wxUSE_GUI
 
 #include "wx/dc.h"
-#include <MacTextEditor.h>
 
 #ifndef __DARWIN__
+#  include <MacTextEditor.h>
 #  include <Navigation.h>
 #  if defined(TARGET_CARBON)
 #    if PM_USE_SESSION_APIS

@@ -66,9 +66,13 @@
 //uma is for wxMacFSSpec
 #include "wx/mac/uma.h"
 #include "wx/timer.h"
+#ifndef __DARWIN__
 #include <Movies.h>
 #include <Gestalt.h>
 #include <QuickTimeComponents.h>    //Standard QT stuff
+#else
+#include <QuickTime/QuickTimeComponents.h>
+#endif
 
 //Determines whether version 4 of QT is installed (Pretty much for classic only)
 Boolean _wxIsQuickTime4Installed (void)

@@ -58,8 +58,10 @@
 
 // other standard headers
 #include <ctype.h>
-#include <InternetConfig.h> //For mime types
 
+#ifndef __DARWIN__
+#include <InternetConfig.h> //For mime types
+#endif
 
 /*   START CODE SAMPLE FROM TECHNOTE 1002 (http://developer.apple.com/technotes/tn/tn1002.html) */
 
@@ -389,7 +391,7 @@ wxFileTypeImpl::GetPrintCommand(wxString *printCmd,
 #if defined(__DARWIN__)
 
 //on darwin, use launch services
-#include "LaunchServices.h"
+#include <ApplicationServices/ApplicationServices.h>
 
 wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 {

@@ -24,7 +24,9 @@
 #include "wx/fontutil.h"
 
 #include "wx/mac/private.h"
+#ifndef __DARWIN__
 #include <ATSUnicode.h>
+#endif
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)

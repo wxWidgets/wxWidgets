@@ -35,7 +35,7 @@
 #include "wx/thread.h"
 
 #ifdef __WXMAC__
-#if TARGET_API_MAC_OSX
+#ifdef __DARWIN__
 #include <CoreServices/CoreServices.h>
 #else
 #include <DriverServices.h>

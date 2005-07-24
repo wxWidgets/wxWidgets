@@ -25,7 +25,9 @@
 #include "wx/arrstr.h"
 
 #include "wx/mac/uma.h"
+#ifndef __DARWIN__
 #include <Appearance.h>
+#endif
 
 // ============================================================================
 // implementation of wxCheckListBox
