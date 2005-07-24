@@ -76,7 +76,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_HIGHLIGHT:
             {
                 RGBColor hilite ;
-                LMGetHiliteRGB(&hilite) ;
+                GetThemeBrushAsColor( kThemeBrushPrimaryHighlightColor, 32, true, &hilite );
                 return wxColor( hilite.red >> 8 , hilite.green >> 8  , hilite.blue >> 8  ) ;
             }
             break ;
@@ -94,7 +94,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_HIGHLIGHTTEXT :
             {
                 RGBColor hilite ;
-                LMGetHiliteRGB(&hilite) ;
+                GetThemeBrushAsColor( kThemeBrushPrimaryHighlightColor, 32, true, &hilite );
                 if ( ( hilite.red + hilite.green + hilite.blue ) == 0 )
                         return *wxWHITE ;
                 else
