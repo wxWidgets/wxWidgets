@@ -75,9 +75,11 @@
 #include "wx/utils.h"
 
 #ifdef __WXMAC__
+#ifndef __DARWIN__
 #include <ATSUnicode.h>
 #include <TextCommon.h>
 #include <TextEncodingConverter.h>
+#endif
 
 #include  "wx/mac/private.h"  // includes mac headers
 #endif

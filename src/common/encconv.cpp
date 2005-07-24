@@ -36,10 +36,13 @@
 #endif
 
 #ifdef __WXMAC__
-    #include <ATSUnicode.h>
-    #include <TextCommon.h>
-    #include <TextEncodingConverter.h>
-
+#ifdef __DARWIN__
+#include <Carbon/Carbon.h>
+#else
+#include <ATSUnicode.h>
+#include <TextCommon.h>
+#include <TextEncodingConverter.h>
+#endif
     #include "wx/fontutil.h"
     #include "wx/mac/private.h"  // includes mac headers
 
