@@ -1,5 +1,5 @@
 %define _prefix /opt/gnome
-%define ver  2.6.1
+%define ver  2.6.2
 %define ver2 2.6
 %define rel  1
 

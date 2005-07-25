@@ -1,6 +1,6 @@
 include/wx/msw/window.h
 include/wx/msw/listbox.h
-include/src/msw/window.cpp
+src/msw/window.cpp
 include/wx/msw/notebook.h
 include/wx/msw/uxthemep.h
 src/msw/notebook.cpp
