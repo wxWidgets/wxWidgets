@@ -157,14 +157,19 @@ public:
     void OnPaste(wxCommandEvent& event);
     void OnUndo(wxCommandEvent& event);
     void OnRedo(wxCommandEvent& event);
-
+    void OnDelete(wxCommandEvent& event);
+    void OnSelectAll(wxCommandEvent& event);
+    
     void OnUpdateCut(wxUpdateUIEvent& event);
     void OnUpdateCopy(wxUpdateUIEvent& event);
     void OnUpdatePaste(wxUpdateUIEvent& event);
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
+    void OnUpdateDelete(wxUpdateUIEvent& event);
+    void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
     void OnEraseBackground(wxEraseEvent& event) ;
+    void OnContextMenu(wxContextMenuEvent& event);
 
     virtual bool MacCanFocus() const { return true ; }
     virtual bool MacSetupCursor( const wxPoint& pt ) ;
@@ -198,6 +203,8 @@ protected:
   unsigned long  m_maxLength ;
   // need to make this public because of the current implementation via callbacks
 private :
+  wxMenu  *m_privateContextMenu;
+
   DECLARE_EVENT_TABLE()
 };
 
