@@ -49,7 +49,9 @@
     #include "wx/sysopt.h"
 #endif
 
+#ifndef __DARWIN__
 #include <ToolUtils.h>
+#endif
 
 //For targeting OSX
 #include "wx/mac/private.h"
@@ -447,6 +449,9 @@ ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow , Poi
     return wxMacFindSubControl( toplevelWindow , location , rootControl , outPart ) ;
 
 }
+
+#define NEW_CAPTURE_HANDLING 1
+
 pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     wxTopLevelWindowMac* toplevelWindow = (wxTopLevelWindowMac*) data ;
@@ -464,11 +469,22 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
     wxWindow* currentMouseWindow = NULL ;
     ControlRef control = NULL ;
 
+#if NEW_CAPTURE_HANDLING
+    if ( wxApp::s_captureWindow )
+    {
+        window = (WindowRef) wxApp::s_captureWindow->MacGetTopLevelWindowRef() ;
+    }
+#endif
+    
     if ( window )
     {
         QDGlobalToLocalPoint( UMAGetWindowPort(window ) ,  &windowMouseLocation ) ;
 
-        if ( wxApp::s_captureWindow && wxApp::s_captureWindow->MacGetTopLevelWindowRef() == (WXWindow) window && windowPart == inContent )
+        if ( wxApp::s_captureWindow
+#if !NEW_CAPTURE_HANDLING
+             && wxApp::s_captureWindow->MacGetTopLevelWindowRef() == (WXWindow) window && windowPart == inContent
+#endif
+             )
         {
             currentMouseWindow = wxApp::s_captureWindow ;
         }
@@ -1556,7 +1572,10 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
     {
         wxSize sz = GetClientSize();
         wxRegion rgn(0, 0, sz.x, sz.y);
-        return SetShape(rgn);
+        if ( rgn.IsEmpty() )
+            return false ;
+        else
+            return SetShape(rgn);
     }
 
     // Make a copy of the region
