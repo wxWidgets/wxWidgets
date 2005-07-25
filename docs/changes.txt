@@ -26,7 +26,7 @@ wxMSW:
 
 wxOS2
 
-- Adjustements for building with Open Watcom C++
+- Adjustments for building with Open Watcom C++
 
 wxUniv:
 
