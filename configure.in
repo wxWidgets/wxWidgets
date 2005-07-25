@@ -5683,6 +5683,14 @@ if test "$wxUSE_IPC" = "yes"; then
     fi
 fi
 
+if test "$wxUSE_DATAOBJ" = "yes"; then
+    AC_DEFINE(wxUSE_DATAOBJ)
+else
+    AC_MSG_WARN([Clipboard and drag-and-drop require wxDataObject -- disabled])
+    wxUSE_CLIPBOARD=no
+    wxUSE_DRAG_AND_DROP=no
+fi
+
 if test "$wxUSE_CLIPBOARD" = "yes"; then
     if test "$wxUSE_MGL" = 1; then
         AC_MSG_WARN([Clipboard not yet supported under MGL... disabled])
@@ -5691,9 +5699,6 @@ if test "$wxUSE_CLIPBOARD" = "yes"; then
 
     if test "$wxUSE_CLIPBOARD" = "yes"; then
         AC_DEFINE(wxUSE_CLIPBOARD)
-
-        dnl required by clipboard code in configuration check
-        AC_DEFINE(wxUSE_DATAOBJ)
     fi
 fi
 
