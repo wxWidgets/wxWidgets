@@ -40,12 +40,11 @@
 #include "wx/button.h"
 #include "wx/toplevel.h"
 #include "wx/textctrl.h"
-#include "wx/notebook.h"
-#include "wx/tabctrl.h"
 #include "wx/settings.h"
 #include "wx/filefn.h"
 #include "wx/utils.h"
 #include "wx/sysopt.h"
+#include "wx/menu.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
   #include <alloc.h>
@@ -374,25 +373,34 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_MENU(wxID_PASTE, wxTextCtrl::OnPaste)
     EVT_MENU(wxID_UNDO, wxTextCtrl::OnUndo)
     EVT_MENU(wxID_REDO, wxTextCtrl::OnRedo)
+    EVT_MENU(wxID_CLEAR, wxTextCtrl::OnDelete)
+    EVT_MENU(wxID_SELECTALL, wxTextCtrl::OnSelectAll)
+
+    EVT_CONTEXT_MENU(wxTextCtrl::OnContextMenu)
 
     EVT_UPDATE_UI(wxID_CUT, wxTextCtrl::OnUpdateCut)
     EVT_UPDATE_UI(wxID_COPY, wxTextCtrl::OnUpdateCopy)
     EVT_UPDATE_UI(wxID_PASTE, wxTextCtrl::OnUpdatePaste)
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
+    EVT_UPDATE_UI(wxID_CLEAR, wxTextCtrl::OnUpdateDelete)
+    EVT_UPDATE_UI(wxID_SELECTALL, wxTextCtrl::OnUpdateSelectAll)
 END_EVENT_TABLE()
 
 // Text item
 void wxTextCtrl::Init()
 {
-  m_editable = true ;
-  m_dirty = false;
+    m_editable = true ;
+    m_dirty = false;
 
-  m_maxLength = TE_UNLIMITED_LENGTH ;
+    m_privateContextMenu = NULL;
+
+    m_maxLength = TE_UNLIMITED_LENGTH ;
 }
 
 wxTextCtrl::~wxTextCtrl()
 {
+    delete m_privateContextMenu;
 }
 
 
@@ -1001,6 +1009,19 @@ void wxTextCtrl::OnRedo(wxCommandEvent& WXUNUSED(event))
     Redo();
 }
 
+void wxTextCtrl::OnDelete(wxCommandEvent& WXUNUSED(event))
+{
+    long from, to;
+    GetSelection(& from, & to);
+    if (from != -1 && to != -1)
+        Remove(from, to);
+}
+
+void wxTextCtrl::OnSelectAll(wxCommandEvent& WXUNUSED(event))
+{
+    SetSelection(-1, -1);
+}
+
 void wxTextCtrl::OnUpdateCut(wxUpdateUIEvent& event)
 {
     event.Enable( CanCut() );
@@ -1024,6 +1045,40 @@ void wxTextCtrl::OnUpdateUndo(wxUpdateUIEvent& event)
 void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     event.Enable( CanRedo() );
+}
+
+void wxTextCtrl::OnUpdateDelete(wxUpdateUIEvent& event)
+{
+    long from, to;
+    GetSelection(& from, & to);
+    event.Enable(from != -1 && to != -1 && from != to && IsEditable()) ;
+}
+
+void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
+{
+    event.Enable(GetLastPosition() > 0);
+}
+
+// CS: Context Menus only work with mlte implementations or non-multiline HIViews at the moment
+
+void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
+{
+    if (m_privateContextMenu == NULL)
+    {
+        m_privateContextMenu = new wxMenu;
+        m_privateContextMenu->Append(wxID_UNDO, _("&Undo"));
+        m_privateContextMenu->Append(wxID_REDO, _("&Redo"));
+        m_privateContextMenu->AppendSeparator();
+        m_privateContextMenu->Append(wxID_CUT, _("Cu&t"));
+        m_privateContextMenu->Append(wxID_COPY, _("&Copy"));
+        m_privateContextMenu->Append(wxID_PASTE, _("&Paste"));
+        m_privateContextMenu->Append(wxID_CLEAR, _("&Delete"));
+        m_privateContextMenu->AppendSeparator();
+        m_privateContextMenu->Append(wxID_SELECTALL, _("Select &All"));
+    }
+
+    if (m_privateContextMenu != NULL)
+        PopupMenu(m_privateContextMenu);
 }
 
 bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
@@ -2238,17 +2293,18 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
         TXNSetFrameBounds( m_txn, m_txnControlBounds.top, m_txnControlBounds.left,
             wxMax( m_txnControlBounds.bottom , m_txnControlBounds.top ) ,
             wxMax( m_txnControlBounds.right , m_txnControlBounds.left ) , m_txnFrameID);
-
+#endif
         // the SetFrameBounds method unter classic sometimes does not correctly scroll a selection into sight after a
         // movement, therefore we have to force it
 
+        // according to David Surovell this problem also sometimes occurs under OSX, so we use this as well
+        
         TXNLongRect textRect ;
         TXNGetRectBounds( m_txn , NULL , NULL , &textRect ) ;
         if ( textRect.left < m_txnControlBounds.left )
         {
             TXNShowSelection( m_txn , false ) ;
         }
-#endif
     }
 }
 
@@ -2437,8 +2493,6 @@ wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxTextCtrl *wxPeer,
     m_font = wxPeer->GetFont() ;
     m_windowStyle = style ;
     Rect bounds = wxMacGetBoundsForControl( wxPeer , pos , size ) ;
-    wxString st = str ;
-    wxMacConvertNewlines10To13( &st ) ;
 
     short featurSet;
 
@@ -2454,9 +2508,13 @@ wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxTextCtrl *wxPeer,
 
     MacSetObjectVisibility( wxPeer->MacIsReallyShown() ) ;
 
-    wxMacWindowClipper clipper( m_peer ) ;
-    SetTXNData( st , kTXNStartOffset, kTXNEndOffset ) ;
-    TXNSetSelection( m_txn, 0, 0);
+    {
+        wxString st = str ;
+        wxMacConvertNewlines10To13( &st ) ;
+        wxMacWindowClipper clipper( m_peer ) ;
+        SetTXNData( st , kTXNStartOffset, kTXNEndOffset ) ;
+        TXNSetSelection( m_txn, 0, 0);
+    }
 }
 
 wxMacMLTEClassicControl::~wxMacMLTEClassicControl()
