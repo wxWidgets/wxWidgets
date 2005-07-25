@@ -15,6 +15,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/dataobj.h"
+
+#if wxUSE_DATAOBJ
+
 #include "wx/app.h"
 #include "wx/debug.h"
 #include "wx/mstream.h"
@@ -396,4 +399,4 @@ void wxBitmapDataObject::DoConvertToPng()
     image.SaveFile(mstream, wxBITMAP_TYPE_PNG);
 }
 
-
+#endif // wxUSE_DATAOBJ
