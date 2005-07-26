@@ -26,6 +26,10 @@
 #include "wx/setup.h"
 #endif
 
+#ifndef WXUNUSED
+#define WXUNUSED(x)
+#endif
+
 #if defined(__VISAGECPP__)
 /* Seems to be needed by Visual Age C++, though I don't see how it manages
    to not break on including a C++ header into a plain C source file      */
@@ -225,17 +229,17 @@ void GSocketGUIFunctionsTableNull::OnExit()
 {}
 bool GSocketGUIFunctionsTableNull::CanUseEventLoop()
 {   return false; }
-bool GSocketGUIFunctionsTableNull::Init_Socket(GSocket *socket)
+bool GSocketGUIFunctionsTableNull::Init_Socket(GSocket *WXUNUSED(socket))
 {   return true; }
-void GSocketGUIFunctionsTableNull::Destroy_Socket(GSocket *socket)
+void GSocketGUIFunctionsTableNull::Destroy_Socket(GSocket *WXUNUSED(socket))
 {}
-void GSocketGUIFunctionsTableNull::Install_Callback(GSocket *socket, GSocketEvent event)
+void GSocketGUIFunctionsTableNull::Install_Callback(GSocket *WXUNUSED(socket), GSocketEvent WXUNUSED(event))
 {}
-void GSocketGUIFunctionsTableNull::Uninstall_Callback(GSocket *socket, GSocketEvent event)
+void GSocketGUIFunctionsTableNull::Uninstall_Callback(GSocket *WXUNUSED(socket), GSocketEvent WXUNUSED(event))
 {}
-void GSocketGUIFunctionsTableNull::Enable_Events(GSocket *socket)
+void GSocketGUIFunctionsTableNull::Enable_Events(GSocket *WXUNUSED(socket))
 {}
-void GSocketGUIFunctionsTableNull::Disable_Events(GSocket *socket)
+void GSocketGUIFunctionsTableNull::Disable_Events(GSocket *WXUNUSED(socket))
 {}
 /* Global initialisers */
 

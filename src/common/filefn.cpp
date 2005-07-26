@@ -546,7 +546,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
     while ((*d++ = *s) != 0) {
 #  ifndef __WXMSW__
         if (*s == wxT('\\')) {
-            if ((*(d - 1) = *++s)) {
+            if ((*(d - 1) = *++s)!=0) {
                 s++;
                 continue;
             } else
