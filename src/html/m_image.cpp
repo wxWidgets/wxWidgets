@@ -372,9 +372,8 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
 
             if ( s )
             {
-                bool readImg = true;
-
 #if wxUSE_GIF && wxUSE_TIMER
+                bool readImg = true;
                 if ( (input->GetLocation().Matches(wxT("*.gif")) ||
                       input->GetLocation().Matches(wxT("*.GIF"))) && m_window )
                 {
