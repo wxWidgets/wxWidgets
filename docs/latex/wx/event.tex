@@ -156,10 +156,10 @@ is currently greater than $0$.
 
 Called by an event handler, it controls whether additional event
 handlers bound to this event will be called after the current event
-handler returns.  Skip(false) (the default setting) will prevent
+handler returns.  Skip(false) (the default behavior) will prevent
 additional event handlers from being called and control will be
 returned to the sender of the event immediately after the current
-handler has finished.  Skip(True) will cause the event processing
+handler has finished.  Skip(true) will cause the event processing
 system to continue searching for a handler function for this event.
 
 
