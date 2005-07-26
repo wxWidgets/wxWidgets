@@ -26,10 +26,6 @@
 #include "wx/setup.h"
 #endif
 
-#ifndef WXUNUSED
-#define WXUNUSED(x)
-#endif
-
 #if defined(__VISAGECPP__)
 /* Seems to be needed by Visual Age C++, though I don't see how it manages
    to not break on including a C++ header into a plain C source file      */
@@ -195,6 +191,9 @@ int _System soclose(int);
 #else
 #  include "gsockunx.h"
 #  include "gsocket.h"
+#  ifndef WXUNUSED
+#    define WXUNUSED(x)
+#  endif
 #endif /* __GSOCKET_STANDALONE__ */
 
 /* debugging helpers */
