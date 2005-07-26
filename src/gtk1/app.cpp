@@ -616,6 +616,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     // (1) this variable exists for the sole purpose of specifying the encoding
     //     of the filenames for GTK+ programs, so use it if it is set
     wxString encName(wxGetenv(_T("G_FILENAME_ENCODING")));
+    encName = encName.BeforeFirst(_T(','));
     if (encName == _T("@locale"))
         encName.clear();
     encName.MakeUpper();
