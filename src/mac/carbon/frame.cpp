@@ -85,6 +85,33 @@ wxFrame::~wxFrame()
     DeleteAllBars();
 }
 
+// get the origin of the client area in the client coordinates
+wxPoint wxFrame::GetClientAreaOrigin() const
+{
+    wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
+    
+#if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__)
+    wxToolBar *toolbar = GetToolBar();
+    if ( toolbar && toolbar->IsShown() )
+    {
+        int w, h;
+        toolbar->GetSize(&w, &h);
+        
+        if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
+        {
+            pt.x += w;
+        }
+        else
+        {
+#if !wxMAC_USE_NATIVE_TOOLBAR
+            pt.y += h;
+#endif
+        }
+    }
+#endif // wxUSE_TOOLBAR
+    
+    return pt;
+}
 
 bool wxFrame::Enable(bool enable)
 {
@@ -243,7 +270,10 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
         }
         else
         {
+#if wxMAC_USE_NATIVE_TOOLBAR
+            // todo verify whether HIToolBox is giving correct sizes here for the tlw
             if ( y )  *y -= h;
+#endif
         }
     }
 #endif // wxUSE_TOOLBAR
@@ -288,6 +318,23 @@ void wxFrame::DoSetClientSize(int clientwidth, int clientheight)
 
 
 #if wxUSE_TOOLBAR
+void wxFrame::SetToolBar(wxToolBar *toolbar)
+{
+    if ( m_frameToolBar == toolbar )
+        return ;
+    
+#if wxMAC_USE_NATIVE_TOOLBAR
+    if ( m_frameToolBar )
+        m_frameToolBar->MacInstallNativeToolbar(false) ;
+#endif
+    
+    m_frameToolBar = toolbar ;
+#if wxMAC_USE_NATIVE_TOOLBAR
+    if ( toolbar )
+        toolbar->MacInstallNativeToolbar( true ) ;
+#endif
+}
+
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
     if ( wxFrameBase::CreateToolBar(style, id, name) )
@@ -326,8 +373,10 @@ void wxFrame::PositionToolBar()
         }
         else
         {
+#if !wxMAC_USE_NATIVE_TOOLBAR
             // Use the 'real' position
             GetToolBar()->SetSize(tx , ty , cw , th, wxSIZE_NO_ADJUSTMENTS );
+#endif
         }
     }
 }

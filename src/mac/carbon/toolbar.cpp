@@ -18,10 +18,8 @@
 #if wxUSE_TOOLBAR
 
 #include "wx/wx.h"
-#include "wx/toolbar.h"
-#include "wx/notebook.h"
-#include "wx/tabctrl.h"
 #include "wx/bitmap.h"
+#include "wx/toolbar.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
@@ -35,10 +33,10 @@ END_EVENT_TABLE()
 #ifdef __WXMAC_OSX__
 const short kwxMacToolBarToolDefaultWidth = 16 ;
 const short kwxMacToolBarToolDefaultHeight = 16 ;
-const short kwxMacToolBarTopMargin = 4 ;
-const short kwxMacToolBarLeftMargin = 4 ;
-const short kwxMacToolBorder = 0 ;
-const short kwxMacToolSpacing = 6 ;
+const short kwxMacToolBarTopMargin = 4 ; // 1 ;      // used to be 4
+const short kwxMacToolBarLeftMargin =  4 ; //1 ;     // used to be 4
+const short kwxMacToolBorder = 0 ;                // used to be 0
+const short kwxMacToolSpacing = 6 ; // 2 ;               // used to be 6
 #else
 const short kwxMacToolBarToolDefaultWidth = 24 ;
 const short kwxMacToolBarToolDefaultHeight = 22 ;
@@ -48,9 +46,15 @@ const short kwxMacToolBorder = 4 ;
 const short kwxMacToolSpacing = 0 ;
 #endif
 
+#pragma mark -
+#pragma mark Tool Implementation
+
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
+
+// We have a dual implementation for each tool, ControlRef and HIToolbarItemRef
 
 class wxToolBarTool : public wxToolBarToolBase
 {
@@ -69,21 +73,40 @@ public:
         : wxToolBarToolBase(tbar, control)
     {
         Init() ;
+        if (control != NULL)
+            SetControlHandle( (ControlRef) control->GetHandle() ) ;
     }
     
     ~wxToolBarTool()
     {
+    	ClearControl() ;
         if ( m_controlHandle )
             DisposeControl( m_controlHandle ) ;
+#if wxMAC_USE_NATIVE_TOOLBAR
+        if ( m_toolbarItemRef )
+            CFRelease( m_toolbarItemRef ) ;
+#endif
     }
     
-    WXWidget GetControlHandle() { return (WXWidget) m_controlHandle ; }
-    void SetControlHandle( ControlRef handle ) { m_controlHandle = handle ; }
+    WXWidget GetControlHandle() 
+    { 
+        return (WXWidget) m_controlHandle ; 
+    }
+    
+    void SetControlHandle( ControlRef handle ) 
+    { 
+    	m_controlHandle = handle ; 
+    }
 
-    void SetSize(const wxSize& size) ;
     void SetPosition( const wxPoint& position ) ;
     
-    void ClearControl() { m_control = NULL ; }
+    void ClearControl() 
+    { 
+    	m_control = NULL ; 
+#if wxMAC_USE_NATIVE_TOOLBAR
+		m_toolbarItemRef = NULL ; 
+#endif   
+    }
     
     wxSize GetSize() const
     {
@@ -113,13 +136,39 @@ public:
     bool DoEnable( bool enable ) ;
     
     void UpdateToggleImage( bool toggle ) ;
+    
+#if wxMAC_USE_NATIVE_TOOLBAR    
+    void SetToolbarItemRef( HIToolbarItemRef ref ) 
+    { 
+        if ( m_controlHandle )
+            HideControl( m_controlHandle ) ;
+        if ( m_toolbarItemRef )
+            CFRelease( m_toolbarItemRef ) ;
+        m_toolbarItemRef = ref ; 
+        if ( m_toolbarItemRef )
+        {
+            HIToolbarItemSetHelpText(
+                m_toolbarItemRef, wxMacCFStringHolder( GetShortHelp() , GetToolBar()->GetFont().GetEncoding() ) ,
+                wxMacCFStringHolder( GetLongHelp() , GetToolBar()->GetFont().GetEncoding() ) ) ;
+        }
+    }
+    HIToolbarItemRef GetToolbarItemRef() const 
+    { 
+        return m_toolbarItemRef ; 
+    }
+#endif
 private :
     void Init() 
     {
         m_controlHandle = NULL ;
+#if wxMAC_USE_NATIVE_TOOLBAR
+        m_toolbarItemRef = NULL ;
+#endif
     }
     ControlRef m_controlHandle ;
-
+#if wxMAC_USE_NATIVE_TOOLBAR
+    HIToolbarItemRef m_toolbarItemRef ;
+#endif
     wxCoord     m_x;
     wxCoord     m_y;
 };
@@ -147,15 +196,19 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
         case kEventControlHit :
             {
                 wxToolBarTool* tbartool = (wxToolBarTool*)data ;
-                if ( tbartool->CanBeToggled() )
+                wxToolBar   *tbar = tbartool != NULL ? ( wxToolBar * ) ( tbartool->GetToolBar() ) : NULL ;
+                if ((tbartool != NULL) && tbartool->CanBeToggled() )
                 {
+                    bool    shouldToggle;
 #ifdef __WXMAC_OSX__
-                    ((wxToolBar*)tbartool->GetToolBar())->ToggleTool(tbartool->GetId(), !tbartool->IsToggled() );
+                    shouldToggle = !tbartool->IsToggled();
 #else
-                    ((wxToolBar*)tbartool->GetToolBar())->ToggleTool(tbartool->GetId(), GetControl32BitValue((ControlRef)tbartool->GetControlHandle()));
+                    shouldToggle = ( GetControl32BitValue((ControlRef) tbartool->GetControlHandle()) != 0 );
 #endif
+                    tbar->ToggleTool( tbartool->GetId(), shouldToggle );
                 }
-                ((wxToolBar*)tbartool->GetToolBar())->OnLeftClick( tbartool->GetId() , tbartool -> IsToggled() ) ;
+                if (tbartool != NULL)
+                    tbar->OnLeftClick( tbartool->GetId(), tbartool->IsToggled() );
                 result = noErr; 
             }
             break ;
@@ -197,6 +250,63 @@ static pascal OSStatus wxMacToolBarToolEventHandler( EventHandlerCallRef handler
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacToolBarToolEventHandler )
 
+#if wxMAC_USE_NATIVE_TOOLBAR
+
+//
+// native toolbar
+//
+
+static const EventTypeSpec toolBarEventList[] =
+{
+	{ kEventClassToolbarItem , kEventToolbarItemPerformAction } ,
+} ;
+
+static pascal OSStatus wxMacToolBarCommandEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    
+    switch( GetEventKind( event ) )
+    {
+        case kEventToolbarItemPerformAction :
+            {
+                wxToolBarTool* tbartool = (wxToolBarTool*) data ;
+                if ( tbartool != NULL )
+                {
+                    int         toolID = tbartool->GetId();
+                    wxToolBar   *tbar = ( wxToolBar * ) ( tbartool->GetToolBar() );
+                    if ( tbartool->CanBeToggled() )
+                    {
+                        tbar->ToggleTool(toolID, !tbartool->IsToggled() );
+                    }
+                    tbar->OnLeftClick( toolID , tbartool -> IsToggled() ) ;
+                    result = noErr; 
+                }
+            }
+            break ;
+        default :
+            break ;
+    }
+    return result ;
+}
+
+static pascal OSStatus wxMacToolBarEventHandler( EventHandlerCallRef handler, EventRef event, void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    switch( GetEventClass( event ) )
+    {
+        case kEventClassToolbarItem :
+            result = wxMacToolBarCommandEventHandler( handler, event, data ) ;
+            break ;
+        default :
+            break ;
+    }
+    return result ;
+}
+
+DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacToolBarEventHandler )
+
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -213,26 +323,27 @@ bool wxToolBarTool::DoEnable(bool enable)
     }
     else if ( IsButton() )
     {
-#if TARGET_API_MAC_OSX
-        if ( enable )
-            EnableControl( m_controlHandle ) ;
-        else
-            DisableControl( m_controlHandle ) ;
-#else
-        if ( enable )
-            ActivateControl( m_controlHandle ) ;
-        else
-            DeactivateControl( m_controlHandle ) ;
+#if wxMAC_USE_NATIVE_TOOLBAR    
+        if ( m_toolbarItemRef )
+            HIToolbarItemSetEnabled( m_toolbarItemRef , enable ) ;
 #endif
+
+        if ( m_controlHandle )
+        {
+#if TARGET_API_MAC_OSX
+            if ( enable )
+                EnableControl( m_controlHandle ) ;
+            else
+                DisableControl( m_controlHandle ) ;
+#else
+            if ( enable )
+                ActivateControl( m_controlHandle ) ;
+            else
+                DeactivateControl( m_controlHandle ) ;
+#endif
+        }
     }
     return true ;
-}
-void wxToolBarTool::SetSize(const wxSize& size)
-{
-    if ( IsControl() )
-    {
-        GetControl()->SetSize( size ) ;
-    }
 }
 
 void wxToolBarTool::SetPosition(const wxPoint& position)
@@ -288,6 +399,32 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
 
 void wxToolBarTool::UpdateToggleImage( bool toggle ) 
 {
+#if wxMAC_USE_NATIVE_TOOLBAR    
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4
+#define kHIToolbarItemSelected   (1 << 7)
+#endif
+
+    // FIXME: this should be a OSX v10.4 runtime check
+    if (m_toolbarItemRef != NULL)
+    {
+        OptionBits addAttrs, removeAttrs;
+        OSStatus result;
+
+        if (toggle)
+        {
+            addAttrs = kHIToolbarItemSelected;
+            removeAttrs = kHIToolbarItemNoAttributes;
+        }
+        else
+        {
+            addAttrs = kHIToolbarItemNoAttributes;
+            removeAttrs = kHIToolbarItemSelected;
+        }
+
+        result = HIToolbarItemChangeAttributes( m_toolbarItemRef, addAttrs, removeAttrs );
+    }
+#endif
 #ifdef __WXMAC_OSX__
     if ( toggle )
     {
@@ -341,6 +478,8 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
     Init();
 }
 
+#pragma mark -
+#pragma mark Toolbar Implementation
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxString& label,
@@ -366,161 +505,453 @@ void wxToolBar::Init()
     m_maxHeight = -1;
     m_defaultWidth = kwxMacToolBarToolDefaultWidth;
     m_defaultHeight = kwxMacToolBarToolDefaultHeight;
+#if wxMAC_USE_NATIVE_TOOLBAR
+    m_macHIToolbarRef = NULL ;
+    m_macUsesNativeToolbar = false ;
+#endif
 }
 
+// also for the toolbar we have the dual implementation:
+// only when MacInstallNativeToolbar is called is the native toolbar set as the window toolbar
+//
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {  
 
     if ( !wxToolBarBase::Create( parent , id , pos , size , style ) )
         return FALSE ;
-    
-    return TRUE;
+
+    OSStatus err = 0;
+
+#if wxMAC_USE_NATIVE_TOOLBAR
+    wxString labelStr;
+    labelStr.Format(wxT("%xd"), (int)this);
+    err = HIToolbarCreate( wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding() ) , 0 ,
+                    (HIToolbarRef*) &m_macHIToolbarRef  );
+
+    if (m_macHIToolbarRef != NULL)
+    {	
+        HIToolbarDisplayMode mode = kHIToolbarDisplayModeDefault ;
+        HIToolbarDisplaySize displaySize = kHIToolbarDisplaySizeSmall ;
+
+        if ( style & wxTB_NOICONS )
+            mode = kHIToolbarDisplayModeLabelOnly ;
+        else if ( style & wxTB_TEXT )
+            mode = kHIToolbarDisplayModeIconAndLabel ;
+        else
+            mode = kHIToolbarDisplayModeIconOnly ;
+
+        // FIXME: override for testing
+        mode = kHIToolbarDisplayModeIconAndLabel ;
+        displaySize = kHIToolbarDisplaySizeDefault ;
+
+        HIToolbarSetDisplayMode( (HIToolbarRef) m_macHIToolbarRef , mode ) ;
+        HIToolbarSetDisplaySize( (HIToolbarRef) m_macHIToolbarRef , displaySize ) ;
+    }
+#endif
+
+    return (err == 0);
 }
 
 wxToolBar::~wxToolBar()
 {    
-    // we must refresh the frame size when the toolbar is deleted but the frame
-    // is not - otherwise toolbar leaves a hole in the place it used to occupy
+#if wxMAC_USE_NATIVE_TOOLBAR
+    if ( m_macHIToolbarRef )
+    {
+        // if this is the installed toolbar, then deinstall it
+        if (m_macUsesNativeToolbar)
+            MacInstallNativeToolbar( false );
+
+        CFRelease( (HIToolbarRef) m_macHIToolbarRef );
+        m_macHIToolbarRef = NULL;
+    }
+#endif
 }
+
+
+bool wxToolBar::Show( bool show )
+{
+    bool bResult, ownToolbarInstalled = false;
+    WindowRef tlw = MAC_WXHWND(MacGetTopLevelWindowRef());
+    
+    bResult = (tlw != NULL);
+    if (bResult)
+    {
+#if wxMAC_USE_NATIVE_TOOLBAR
+        MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
+        if (ownToolbarInstalled)
+        {
+            bResult = (HIViewIsVisible( (HIViewRef)m_macHIToolbarRef ) != show);
+            ShowHideWindowToolbar( tlw, show, false );
+        }
+        else
+#endif
+            bResult = wxToolBarBase::Show( show );
+    }
+        
+    return bResult;
+}
+
+bool wxToolBar::IsShown() const
+{
+    bool bResult;
+
+#if wxMAC_USE_NATIVE_TOOLBAR
+    bool ownToolbarInstalled ;
+    MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
+    if (ownToolbarInstalled)
+        bResult = HIViewIsVisible( (HIViewRef)m_macHIToolbarRef );
+    else
+#endif
+        bResult = wxToolBarBase::IsShown();
+    
+    return bResult;
+}
+
+
+void wxToolBar::DoGetSize( int *width, int *height ) const
+{
+#if wxMAC_USE_NATIVE_TOOLBAR
+    Rect    boundsR;
+    bool    ownToolbarInstalled;
+    
+    MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
+    if ( ownToolbarInstalled )
+    {
+        // TODO is this really a control ?
+        GetControlBounds( (ControlRef) m_macHIToolbarRef, &boundsR );
+        if ( width != NULL )
+            *width = boundsR.right - boundsR.left;
+        if ( height != NULL )
+            *height = boundsR.bottom - boundsR.top;
+    }
+    else
+#endif
+        wxToolBarBase::DoGetSize( width, height );
+}
+
+void wxToolBar::SetWindowStyleFlag( long style ) 
+{
+    wxToolBarBase::SetWindowStyleFlag( style );
+#if wxMAC_USE_NATIVE_TOOLBAR
+    if (m_macHIToolbarRef != NULL)
+    {
+        HIToolbarDisplayMode mode = kHIToolbarDisplayModeDefault;
+
+        if ( style & wxTB_NOICONS )
+            mode = kHIToolbarDisplayModeLabelOnly;
+        else if ( style & wxTB_TEXT )
+            mode = kHIToolbarDisplayModeIconAndLabel;
+        else
+            mode = kHIToolbarDisplayModeIconOnly;
+ 
+       HIToolbarSetDisplayMode( (HIToolbarRef) m_macHIToolbarRef, mode );
+    }
+#endif
+}
+
+#if wxMAC_USE_NATIVE_TOOLBAR
+bool wxToolBar::MacWantsNativeToolbar()
+{
+    return m_macUsesNativeToolbar;
+}
+
+bool wxToolBar::MacTopLevelHasNativeToolbar(bool *ownToolbarInstalled) const
+{
+    bool bResultV = false;
+
+    if (ownToolbarInstalled != NULL)
+        *ownToolbarInstalled = false;
+
+    WindowRef tlw = MAC_WXHWND(MacGetTopLevelWindowRef());
+    if (tlw != NULL)
+    {
+        HIToolbarRef curToolbarRef = NULL;
+        OSStatus err = GetWindowToolbar( tlw, &curToolbarRef );
+        bResultV = ((err == 0) && (curToolbarRef != NULL));
+        if (bResultV && (ownToolbarInstalled != NULL))
+            *ownToolbarInstalled = (curToolbarRef == m_macHIToolbarRef);
+    }
+
+    return bResultV;
+}
+
+bool wxToolBar::MacInstallNativeToolbar(bool usesNative) 
+{
+    bool	bResult = false;
+
+    WindowRef tlw = MAC_WXHWND(MacGetTopLevelWindowRef());
+    if (tlw == NULL)
+        return bResult;
+
+    if (usesNative && (m_macHIToolbarRef == NULL))
+        return bResult;
+ 
+    if (usesNative && ((GetWindowStyleFlag() & wxTB_VERTICAL) != 0))
+        return bResult;
+ 
+    // check the existing toolbar
+    HIToolbarRef curToolbarRef = NULL;
+    OSStatus err = GetWindowToolbar( tlw, &curToolbarRef );
+    if (err != 0)
+        curToolbarRef = NULL;
+
+    m_macUsesNativeToolbar = usesNative;
+
+    if (m_macUsesNativeToolbar)
+    {
+        // only install toolbar if there isn't one installed already
+        if (curToolbarRef == NULL)
+        {
+            bResult = true;
+
+            SetWindowToolbar( tlw, (HIToolbarRef) m_macHIToolbarRef );
+            ShowHideWindowToolbar( tlw, true, false );
+            ChangeWindowAttributes( tlw, kWindowToolbarButtonAttribute, 0 );
+            SetAutomaticControlDragTrackingEnabledForWindow( tlw, true );
+            
+            // FIXME: which is best, which is necessary?
+            //
+            // m_peer->SetVisibility( false, true );
+            //
+            //
+            Rect r = { 0 , 0 , 0 , 0 };
+            //
+            //
+            m_peer->SetRect( &r );
+            //
+            // FIXME: which is best, which is necessary?
+            //
+            SetSize( wxSIZE_AUTO_WIDTH, 0 );
+            //
+            m_peer->SetVisibility( false, true );
+            wxToolBarBase::Show( false );
+        }
+    }
+    else
+    {
+        // only deinstall toolbar if this is the installed one
+        if (m_macHIToolbarRef == curToolbarRef)
+        {
+            bResult = true;
+
+            ShowHideWindowToolbar( tlw, false, false );
+            ChangeWindowAttributes( tlw, 0 , kWindowToolbarButtonAttribute );
+            SetWindowToolbar( tlw, NULL );
+            
+            // FIXME: which is best, which is necessary?
+            m_peer->SetVisibility( true, true );
+            
+            //
+            // wxToolBarBase::Show( true );
+            //
+        }
+    }
+
+    if (bResult)
+        InvalidateBestSize();
+
+// wxLogDebug( wxT("    --> [%lx] - result [%s]"), (long)this, bResult ? wxT("T") : wxT("F") );
+    return bResult;
+}
+#endif
 
 bool wxToolBar::Realize()
 {
     if (m_tools.GetCount() == 0)
         return FALSE;
 
-    int x = m_xMargin + kwxMacToolBarLeftMargin ;
-    int y = m_yMargin + kwxMacToolBarTopMargin ;
-
-    int tw, th;
-    GetSize(& tw, & th);
+    int x = m_xMargin + kwxMacToolBarLeftMargin;
+    int y = m_yMargin + kwxMacToolBarTopMargin;
     
-    int maxWidth = 0 ;
-    int maxHeight = 0 ;
+    int tw, th;
+    GetSize( &tw, &th );
+    
+    int maxWidth = 0;
+    int maxHeight = 0;
     
     int maxToolWidth = 0;
     int maxToolHeight = 0;
-
-    // Find the maximum tool width and height
-    wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
-    while ( node )
+    
+    // find the maximum tool width and height
+    wxToolBarToolsList::compatibility_iterator  node = m_tools.GetFirst();
+    while ( node != NULL )
     {
-        wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
-        wxSize sz = tool->GetSize() ;
-
-        if ( sz.x > maxToolWidth )
-            maxToolWidth = sz.x ;
-        if (sz.y> maxToolHeight)
-            maxToolHeight = sz.y;
-
+        wxToolBarTool   *tool = (wxToolBarTool *) node->GetData();
+        
+        if ( tool != NULL )
+        {
+            wxSize  sz = tool->GetSize();
+            
+            if ( sz.x > maxToolWidth )
+                maxToolWidth = sz.x;
+            if ( sz.y > maxToolHeight )
+                maxToolHeight = sz.y;
+        }
+        
         node = node->GetNext();
     }
-
-    bool lastWasRadio = FALSE;
+    
+    bool    lastIsRadio = false;
+    bool    curIsRadio = false;
+    bool    setChoiceInGroup = false;
+    
     node = m_tools.GetFirst();
-    while (node)
+    while ( node != NULL )
     {
-        wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
-        wxSize cursize = tool->GetSize() ;
+        wxToolBarTool   *tool = (wxToolBarTool *) node->GetData();
         
-        bool isRadio = FALSE;
-
-        if ( tool->IsButton() && tool->GetKind() == wxITEM_RADIO )
+        if ( tool == NULL )
         {
-            if ( !lastWasRadio )
+            node = node->GetNext();
+            continue;
+        }
+        
+        // set tool position
+        // for the moment just perform a single row/column alignment
+        wxSize  cursize = tool->GetSize();
+        if ( x + cursize.x > maxWidth )
+            maxWidth = x + cursize.x;
+        if ( y + cursize.y > maxHeight )
+            maxHeight = y + cursize.y;
+        
+        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+        {
+            int x1 = x + ( maxToolWidth - cursize.x ) / 2;
+            tool->SetPosition( wxPoint(x1, y) );
+        }
+        else
+        {
+            int y1 = y + ( maxToolHeight - cursize.y ) / 2;
+            tool->SetPosition( wxPoint(x, y1) );
+        }
+        
+        // update the item positioning state
+        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+            y += cursize.y + kwxMacToolSpacing;
+        else
+            x += cursize.x + kwxMacToolSpacing;
+        
+#if wxMAC_USE_NATIVE_TOOLBAR
+        // install in native HIToolbar
+        if ( m_macHIToolbarRef != NULL )
+        {
+            HIToolbarItemRef    hiItemRef = tool->GetToolbarItemRef();
+            if ( hiItemRef != NULL )
             {
-                if (tool->Toggle(true))
+                OSStatus    result = HIToolbarAppendItem( (HIToolbarRef) m_macHIToolbarRef, hiItemRef );
+                if ( result == 0 )
                 {
-                    DoToggleTool(tool, true);
+                    InstallEventHandler( HIObjectGetEventTarget(hiItemRef), GetwxMacToolBarEventHandlerUPP(),
+                                         GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
                 }
             }
-            else if (tool->IsToggled())
+        }
+#endif
+        
+        // update radio button (and group) state
+        lastIsRadio = curIsRadio;
+        curIsRadio = ( tool->IsButton() && (tool->GetKind() == wxITEM_RADIO) );
+        
+        if ( !curIsRadio )
+        {
+            if ( tool->IsToggled() )
+                DoToggleTool( tool, true );
+            
+            setChoiceInGroup = false;
+        }
+        else
+        {
+            if ( !lastIsRadio )
             {
-                wxToolBarToolsList::compatibility_iterator nodePrev = node->GetPrevious();
-                while ( nodePrev )
+                if ( tool->Toggle(true) )
                 {
-                    wxToolBarToolBase *tool = nodePrev->GetData();
-                    if ( !tool->IsButton() || (tool->GetKind() != wxITEM_RADIO) )
+                    DoToggleTool( tool, true );
+                    setChoiceInGroup = true;
+                }
+            }
+            else if ( tool->IsToggled() )
+            {
+                if ( tool->IsToggled() )
+                    DoToggleTool( tool, true );
+                
+                wxToolBarToolsList::compatibility_iterator  nodePrev = node->GetPrevious();
+                while ( nodePrev != NULL )
+                {
+                    wxToolBarToolBase   *toggleTool = nodePrev->GetData();
+                    if ( (toggleTool == NULL) || !toggleTool->IsButton() || (toggleTool->GetKind() != wxITEM_RADIO) )
                         break;
-                    if ( tool->Toggle(false) )
-                    {
-                        DoToggleTool(tool, false);
-                    }
+                    
+                    if ( toggleTool->Toggle(false) )
+                        DoToggleTool( toggleTool, false );
+                    
                     nodePrev = nodePrev->GetPrevious();
                 }
             }
-            isRadio = TRUE;
         }
-        else
-        {
-            isRadio = FALSE;
-        }
-        lastWasRadio = isRadio;
-
-        // for the moment we just do a single row/column alignement
-        if ( x + cursize.x > maxWidth )
-            maxWidth = x + cursize.x ;
-        if ( y + cursize.y > maxHeight )
-            maxHeight = y + cursize.y ;
-            
-        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
-        {
-            int x1 = x + (maxToolWidth - cursize.x)/2 ;
-            tool->SetPosition( wxPoint( x1 , y ) ) ;
-        }
-        else
-        {
-            int y1 = y + (maxToolHeight - cursize.y)/2 ;
-            tool->SetPosition( wxPoint( x , y1 ) ) ;
-        }    
-        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
-        {
-            y += cursize.y ;
-            y += kwxMacToolSpacing ;
-        }
-        else
-        {
-            x += cursize.x ;
-            x += kwxMacToolSpacing ;
-        }
-
+        
         node = node->GetNext();
     }
     
     if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
     {
-        if ( m_maxRows == 0 )
-        {
-            // if not set yet, only one row
-            SetRows(1);
-        }
+        // if not set yet, only one row
+        if ( m_maxRows <= 0 )
+            SetRows( 1 );
+        
         m_minWidth = maxWidth;
-        maxWidth = tw ; 
+        maxWidth = tw;
         maxHeight += m_yMargin + kwxMacToolBarTopMargin;
-        m_minHeight = m_maxHeight = maxHeight ;
+        m_minHeight = m_maxHeight = maxHeight;
     }
     else
     {
-        if ( GetToolsCount() > 0 && m_maxRows == 0 )
-        {
-            // if not set yet, have one column
-            SetRows(GetToolsCount());
-        }
+        // if not set yet, have one column
+        if ( (GetToolsCount() > 0) && (m_maxRows <= 0) )
+            SetRows( GetToolsCount() );
+        
         m_minHeight = maxHeight;
-        maxHeight = th ;
+        maxHeight = th;
         maxWidth += m_xMargin + kwxMacToolBarLeftMargin;
-        m_minWidth = m_maxWidth = maxWidth ;
+        m_minWidth = m_maxWidth = maxWidth;
     }
-    
+
+#if 0    
+    // FIXME: should this be OSX-only?
+    {
+        bool wantNativeToolbar, ownToolbarInstalled;
+
+        // attempt to install the native toolbar
+        wantNativeToolbar = ((GetWindowStyleFlag() & wxTB_VERTICAL) == 0);
+        MacInstallNativeToolbar( wantNativeToolbar );
+        (void)MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
+        if (!ownToolbarInstalled)
+        {
+           SetSize( maxWidth, maxHeight );
+           InvalidateBestSize();
+        }
+    }
+#else   
     SetSize( maxWidth, maxHeight );
     InvalidateBestSize();
-    
+#endif
     return TRUE;
 }
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
-    m_defaultWidth = size.x+kwxMacToolBorder; m_defaultHeight = size.y+kwxMacToolBorder;
+    m_defaultWidth = size.x + kwxMacToolBorder;
+    m_defaultHeight = size.y + kwxMacToolBorder;
+    
+#if wxMAC_USE_NATIVE_TOOLBAR
+    if (m_macHIToolbarRef != NULL)
+    {
+        int maxs = wxMax( size.x, size.y );
+        // TODO CHECK
+        HIToolbarDisplaySize sizeSpec = ((maxs > 16) ? kHIToolbarDisplaySizeNormal : kHIToolbarDisplaySizeSmall);
+        HIToolbarSetDisplaySize( (HIToolbarRef) m_macHIToolbarRef, sizeSpec );
+    }
+#endif
 }
 
 // The button size is bigger than the bitmap size
@@ -531,31 +962,36 @@ wxSize wxToolBar::GetToolSize() const
 
 void wxToolBar::SetRows(int nRows)
 {
-    if ( nRows == m_maxRows )
+    // avoid resizing the frame uselessly
+    if ( nRows != m_maxRows )
     {
-        // avoid resizing the frame uselessly
-        return;
+        m_maxRows = nRows;
     }
-
-    m_maxRows = nRows;
 }
 
 void wxToolBar::MacSuperChangedPosition() 
 {
-    wxWindow::MacSuperChangedPosition() ;
-    Realize() ;
+    wxWindow::MacSuperChangedPosition();
+#if wxMAC_USE_NATIVE_TOOLBAR
+    if (! m_macUsesNativeToolbar )
+#endif
+    {
+        Realize();
+    }
 }
 
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
     wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
-    while (node)
+    while ( node != NULL )
     {
         wxToolBarTool *tool = (wxToolBarTool *)node->GetData() ;
-        wxRect2DInt r( tool->GetPosition() , tool->GetSize() ) ;
-        if ( r.Contains( wxPoint( x , y ) ) )
+
+        if (tool != NULL)
         {
-            return tool;
+            wxRect2DInt r( tool->GetPosition(), tool->GetSize() );
+            if ( r.Contains( wxPoint( x, y ) ) )
+                return tool;
         }
 
         node = node->GetNext();
@@ -567,75 +1003,97 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 wxString wxToolBar::MacGetToolTipString( wxPoint &pt )
 {
     wxToolBarToolBase* tool = FindToolForPosition( pt.x , pt.y ) ;
-    if ( tool )
-    {
+    if ( tool != NULL )
         return tool->GetShortHelp() ;
-    }
+
     return wxEmptyString ;
 }
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
 {
-    ((wxToolBarTool*)t)->DoEnable( enable ) ;
+    if ( t != NULL )
+        ((wxToolBarTool*)t)->DoEnable( enable ) ;
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 {
     wxToolBarTool *tool = (wxToolBarTool *)t;
-    if ( tool->IsButton() )
-    {
-        tool->UpdateToggleImage( toggle ) ;
-    }
+    if ( ( tool != NULL ) && tool->IsButton() )
+        tool->UpdateToggleImage( toggle );
 }
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
                              wxToolBarToolBase *toolBase)
 {
-    wxToolBarTool* tool = wx_static_cast( wxToolBarTool* , toolBase ) ;
-    
-    WindowRef window = (WindowRef) MacGetTopLevelWindowRef() ;    
-    wxSize toolSize = GetToolSize() ;    
-    Rect toolrect = { 0, 0 , toolSize.y , toolSize.x } ;
-    ControlRef controlHandle = NULL ;
+    wxToolBarTool* tool = wx_static_cast( wxToolBarTool* , toolBase );
+    if (tool == NULL)
+        return false;
 
-    switch( tool->GetStyle() )
+    WindowRef window = (WindowRef) MacGetTopLevelWindowRef();
+    wxSize toolSize = GetToolSize();
+    Rect toolrect = { 0, 0 , toolSize.y , toolSize.x };
+    ControlRef controlHandle = NULL;
+    OSStatus err = 0;
+
+    switch (tool->GetStyle())
     {
         case wxTOOL_STYLE_SEPARATOR :
             {
-                wxASSERT( tool->GetControlHandle() == NULL ) ;
-                toolSize.x /= 4 ;
-                toolSize.y /= 4 ;
+                wxASSERT( tool->GetControlHandle() == NULL );
+                toolSize.x /= 4;
+                toolSize.y /= 4;
                 if ( GetWindowStyleFlag() & wxTB_VERTICAL )
-                {
-                    toolrect.bottom = toolSize.y ;
-                }
+                    toolrect.bottom = toolSize.y;
                 else
-                {
-                    toolrect.right = toolSize.x ;
-                }
+                    toolrect.right = toolSize.x;
+
         #ifdef __WXMAC_OSX__
                 // in flat style we need a visual separator
-                CreateSeparatorControl( window , &toolrect , &controlHandle ) ;
-                tool->SetControlHandle( controlHandle ) ;
+		#if wxMAC_USE_NATIVE_TOOLBAR
+                HIToolbarItemRef item;
+                err = HIToolbarItemCreate( kHIToolbarSeparatorIdentifier, kHIToolbarItemCantBeRemoved | kHIToolbarItemIsSeparator | kHIToolbarItemAllowDuplicates, &item );
+                if (err == noErr)
+                    tool->SetToolbarItemRef( item );
+		#endif
+                CreateSeparatorControl( window, &toolrect, &controlHandle );
+                tool->SetControlHandle( controlHandle );
         #endif
             }
-            break ;
+            break;
+
         case wxTOOL_STYLE_BUTTON :
             {
                 wxASSERT( tool->GetControlHandle() == NULL ) ;
                 ControlButtonContentInfo info ;
                 wxMacCreateBitmapButton( &info , tool->GetNormalBitmap()  , kControlContentIconRef ) ;
                 
-        #ifdef __WXMAC_OSX__
-                CreateIconControl( window , &toolrect , &info , false , &controlHandle ) ;
-        #else        
-                SInt16 behaviour = kControlBehaviorOffsetContents ;
-                if ( tool->CanBeToggled() )
-                    behaviour += kControlBehaviorToggles ;
-                CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
-                    0 , 0 , 0 , &controlHandle ) ;
-        #endif
-                    
+        		if ( UMAGetSystemVersion() >= 0x1000)
+	                CreateIconControl( window , &toolrect , &info , false , &controlHandle ) ;
+        		else
+        		{
+			        SInt16 behaviour = kControlBehaviorOffsetContents ;
+			        if ( tool->CanBeToggled() )
+			            behaviour += kControlBehaviorToggles ;
+			        CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
+			            0 , 0 , 0 , &controlHandle ) ;
+        		}                    
+
+#if wxMAC_USE_NATIVE_TOOLBAR
+                HIToolbarItemRef item ;
+                wxString	labelStr;
+                labelStr.Format(wxT("%xd"), (int)tool);
+                err = HIToolbarItemCreate(
+                    wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding()),
+                    kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates, &item );
+                if (err  == noErr)
+                {
+                    HIToolbarItemSetLabel( item, wxMacCFStringHolder(tool->GetLabel(), m_font.GetEncoding()) );
+                    HIToolbarItemSetIconRef( item, info.u.iconRef );
+                    HIToolbarItemSetCommandID( item, tool->GetId() );
+                    tool->SetToolbarItemRef( item );
+                }
+#endif
+
                 wxMacReleaseBitmapButton( &info ) ;
                 /*
                 SetBevelButtonTextPlacement( m_controlHandle , kControlBevelButtonPlaceBelowGraphic ) ;
@@ -643,36 +1101,77 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
                 */
                 
                 InstallControlEventHandler( (ControlRef) controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
-                    GetEventTypeCount(eventList), eventList, tool,NULL);          
+                    GetEventTypeCount(eventList), eventList, tool, NULL );
 
-                tool->SetControlHandle( controlHandle ) ;
+                tool->SetControlHandle( controlHandle );
             }
-            break ;
+            break;
+
         case wxTOOL_STYLE_CONTROL :
-            wxASSERT( tool->GetControl() != NULL ) ;
-            // right now there's nothing to do here
-            break ;
+            wxASSERT( tool->GetControl() != NULL );
+#if 0 // wxMAC_USE_NATIVE_TOOLBAR
+            // FIXME: doesn't work yet...
+            {
+                HIToolbarItemRef    item;
+                wxString            labelStr;
+                labelStr.Format( wxT("%xd"), (int) tool );
+                result = HIToolbarItemCreate( wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding()),
+                                              kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates,
+                                              &item );
+                if ( result == 0 )
+                {
+                    HIToolbarItemSetLabel( item, wxMacCFStringHolder(tool->GetLabel(), m_font.GetEncoding()) );
+                    HIToolbarItemSetCommandID( item, tool->GetId() );
+                    tool->SetToolbarItemRef( item );
+                    
+                    controlHandle = ( ControlRef ) tool->GetControlHandle();
+                    wxASSERT_MSG( controlHandle != NULL, wxT("NULL tool control") );
+                    
+                    // FIXME: is this necessary ??
+                    ::GetControlBounds( controlHandle, &toolrect );
+                    UMAMoveControl( controlHandle, -toolrect.left, -toolrect.top );
+                    
+                    // FIXME: is this necessary ??
+                    InstallControlEventHandler( controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
+                                                GetEventTypeCount(eventList), eventList, tool, NULL );
+                }
+            }
+                
+#else
+                // FIXME: right now there's nothing to do here
+#endif
+                break;
+
+        default :
+            break;
     }
  
-    if ( controlHandle )
+    if ( err == 0 )
     {
-        ControlRef container = (ControlRef) GetHandle() ;
-        wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
+        if ( controlHandle )
+        {
+            ControlRef container = (ControlRef) GetHandle();
+            wxASSERT_MSG( container != NULL, wxT("No valid mac container control") );
 
-        UMAShowControl( controlHandle ) ;
-        ::EmbedControl( controlHandle , container ) ;
+            UMAShowControl( controlHandle );
+            ::EmbedControl( controlHandle, container );
+        }
+
+        if ( tool->CanBeToggled() && tool->IsToggled() )
+            tool->UpdateToggleImage( true );
+
+        // nothing special to do here - we relayout in Realize() later
+        tool->Attach(this);
+        InvalidateBestSize();
     }
-
-    if ( tool->CanBeToggled() && tool->IsToggled() )
+    else
     {
-        tool->UpdateToggleImage( true ) ;
+        wxString    errMsg;
+        errMsg.Format( wxT("wxToolBar::DoInsertTool - failure [%ld]"), (long) err );
+        wxASSERT_MSG( false, errMsg.c_str() );
     }
-
-    // nothing special to do here - we relayout in Realize() later
-    tool->Attach(this);
-    InvalidateBestSize();
-
-    return TRUE;
+    
+    return( err == 0 );
 }
 
 void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(toggle))
@@ -705,7 +1204,7 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
         case wxTOOL_STYLE_CONTROL:
             {
                 tool->GetControl()->Destroy();
-                tool->ClearControl() ; 
+                tool->ClearControl() ;
             }
             break;
 
@@ -714,8 +1213,15 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
             if ( tool->GetControlHandle() )
             {
                 DisposeControl( (ControlRef) tool->GetControlHandle() ) ;
-                tool->SetControlHandle( (ControlRef) NULL ) ;
+#if wxMAC_USE_NATIVE_TOOLBAR
+				if ( tool->GetToolbarItemRef() )
+                	CFRelease( tool->GetToolbarItemRef() ) ;
+#endif
+                tool->ClearControl() ;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -727,13 +1233,10 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
         wxPoint pt = tool2->GetPosition() ;
 
         if ( GetWindowStyleFlag() & wxTB_VERTICAL )
-        {
             pt.y -= sz.y ;
-        }
         else
-        {
             pt.x -= sz.x ;
-        }
+
         tool2->SetPosition( pt ) ;
     }
     
@@ -743,6 +1246,14 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
 
 void wxToolBar::OnPaint(wxPaintEvent& event)
 {
+#if wxMAC_USE_NATIVE_TOOLBAR
+    if ( m_macUsesNativeToolbar )
+    {
+        event.Skip(true) ;
+        return ;
+    }
+#endif
+    
     wxPaintDC dc(this) ;
 
     int w, h ;
@@ -803,6 +1314,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
                 drawInfo.kind = kThemeBackgroundMetal ;
                 HIThemeApplyBackground( &hiToolbarrect, &drawInfo , cgContext,kHIThemeOrientationNormal) ;
             }
+
             QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
         }
         else

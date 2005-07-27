@@ -33,7 +33,6 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
 
    wxToolBar() { Init(); }
 
-
   inline wxToolBar(wxWindow *parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                    long style = wxNO_BORDER|wxTB_HORIZONTAL,
@@ -48,9 +47,14 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
             long style = wxNO_BORDER|wxTB_HORIZONTAL,
             const wxString& name = wxToolBarNameStr);
 
+    virtual void SetWindowStyleFlag(long style);
+
     // override/implement base class virtuals
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
+    virtual bool Show(bool show = true);
+    virtual bool IsShown() const;
+    virtual void DoGetSize(int *width, int *height) const;
     virtual bool Realize();
 
     virtual void SetToolBitmapSize(const wxSize& size);
@@ -64,6 +68,12 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
     void OnPaint(wxPaintEvent& event) ;
     void OnMouse(wxMouseEvent& event) ;
     virtual void MacSuperChangedPosition() ;
+
+#if wxMAC_USE_NATIVE_TOOLBAR
+    bool MacInstallNativeToolbar(bool usesNative);
+    bool MacWantsNativeToolbar();
+    bool MacTopLevelHasNativeToolbar(bool *ownToolbarInstalled) const;
+#endif
 protected:
     // common part of all ctors
     void Init();
@@ -87,6 +97,10 @@ protected:
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
     DECLARE_EVENT_TABLE()
+#if wxMAC_USE_NATIVE_TOOLBAR    
+	bool m_macUsesNativeToolbar ;
+	void* m_macHIToolbarRef ;
+#endif
 };
 
 #endif // wxUSE_TOOLBAR

@@ -1098,6 +1098,11 @@
 // Set to 0 for no libmspack
 #define wxUSE_LIBMSPACK     0
 
+// native toolbar does not support embedding controls yet, please test by setting to 1
+#define wxMAC_USE_NATIVE_TOOLBAR 0
+
+
+
 
 #endif
     // _WX_SETUP_H_
