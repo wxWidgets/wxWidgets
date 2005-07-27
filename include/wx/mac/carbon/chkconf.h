@@ -34,6 +34,14 @@
     #define wxMAC_USE_CORE_GRAPHICS 0
 #endif
 
+/*
+ * native (1) or emulated (0) toolbar
+ */
+
+#ifndef wxMAC_USE_NATIVE_TOOLBAR
+    #define wxMAC_USE_NATIVE_TOOLBAR 0
+#endif
+
 #endif
     /* _WX_MAC_CHKCONF_H_ */
 
