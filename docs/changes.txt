@@ -12,21 +12,25 @@ All:
 
 All (GUI):
 
-- Added wxXmlResource::Unload()
+- Added wxXmlResource::Unload().
 - Possibility of modeless wxWizard dialog (with presentation in sample).
-- Fixed a rare crash due to malformed HTML in wxHTML (Xavier Nodet)
+- Fixed a rare crash due to malformed HTML in wxHTML (Xavier Nodet).
 
 wxMSW:
 
-- Separators are now correctly shown in the toolbars under Windows XP
+- Separators are now correctly shown in the toolbars under Windows XP.
 - Fixed multiline tooltips handling.
-- Fixed wxSlider::GetSelEnd() (Atilim Cetin)
-- Fixed accelerators of menu items added to already attached submenus
-- Position of wxEVT_MOUSEWHEEL events is now in client, not screen, coordinates
+- Fixed wxSlider::GetSelEnd() (Atilim Cetin).
+- Fixed accelerators of menu items added to already attached submenus.
+- Position of wxEVT_MOUSEWHEEL events is now in client, not screen, coordinates.
+
+wxWinCE:
+
+- RTTI and exceptions enabled by default.
 
 wxOS2
 
-- Adjustments for building with Open Watcom C++
+- Adjustments for building with Open Watcom C++.
 
 wxUniv:
 
