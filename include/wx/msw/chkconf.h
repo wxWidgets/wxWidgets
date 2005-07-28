@@ -120,6 +120,25 @@
 #   endif
 #endif
 
+/*
+   Win64-specific checks.
+ */
+#ifdef __WIN64__
+#   if wxUSE_STACKWALKER
+        /* this is not currently supported under Win64, volunteers needed to
+           make it work */
+#       undef wxUSE_STACKWALKER
+#       define wxUSE_STACKWALKER 0
+
+#       undef wxUSE_CRASHREPORT
+#       define wxUSE_CRASHREPORT 0
+#   endif
+#endif /* __WIN64__ */
+
+
+/*
+   Compiler-specific checks.
+ */
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
     /* BC++ 4.0 can't compile JPEG library */
 #   undef wxUSE_LIBJPEG
