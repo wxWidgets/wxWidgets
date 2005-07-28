@@ -104,7 +104,7 @@ public:
     { 
     	m_control = NULL ; 
 #if wxMAC_USE_NATIVE_TOOLBAR
-		m_toolbarItemRef = NULL ; 
+        m_toolbarItemRef = NULL ; 
 #endif   
     }
     
@@ -157,6 +157,7 @@ public:
         return m_toolbarItemRef ; 
     }
 #endif
+
 private :
     void Init() 
     {
@@ -212,6 +213,7 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
                 result = noErr; 
             }
             break ;
+
 #ifdef __WXMAC_OSX__
         case kEventControlHitTest :
             {
@@ -227,6 +229,7 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
             }
             break ;
 #endif
+
         default :
             break ;
     }
@@ -242,6 +245,7 @@ static pascal OSStatus wxMacToolBarToolEventHandler( EventHandlerCallRef handler
         case kEventClassControl :
             result = wxMacToolBarToolControlEventHandler( handler, event, data ) ;
             break ;
+
         default :
             break ;
     }
@@ -283,6 +287,7 @@ static pascal OSStatus wxMacToolBarCommandEventHandler( EventHandlerCallRef hand
                 }
             }
             break ;
+
         default :
             break ;
     }
@@ -297,6 +302,7 @@ static pascal OSStatus wxMacToolBarEventHandler( EventHandlerCallRef handler, Ev
         case kEventClassToolbarItem :
             result = wxMacToolBarCommandEventHandler( handler, event, data ) ;
             break ;
+
         default :
             break ;
     }
@@ -425,6 +431,7 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         result = HIToolbarItemChangeAttributes( m_toolbarItemRef, addAttrs, removeAttrs );
     }
 #endif
+
 #ifdef __WXMAC_OSX__
     if ( toggle )
     {
@@ -516,8 +523,7 @@ void wxToolBar::Init()
 //
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
-{  
-
+{
     if ( !wxToolBarBase::Create( parent , id , pos , size , style ) )
         return FALSE ;
 
@@ -568,7 +574,6 @@ wxToolBar::~wxToolBar()
 #endif
 }
 
-
 bool wxToolBar::Show( bool show )
 {
     bool bResult, ownToolbarInstalled = false;
@@ -607,7 +612,6 @@ bool wxToolBar::IsShown() const
     
     return bResult;
 }
-
 
 void wxToolBar::DoGetSize( int *width, int *height ) const
 {
