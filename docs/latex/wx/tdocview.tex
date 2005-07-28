@@ -255,9 +255,17 @@ Although wxFileHistory is used by wxDocManager, it can be used independently. Yo
 to derive from it to allow different behaviour, such as popping up a scrolling
 list of files.
 
-By calling wxFileHistory::FileHistoryUseMenu you can associate a file menu with
-the file history, that will be used for appending the filenames. They are
-appended using menu identifiers in the range wxID\_FILE1 to wxID\_FILE9.
+By calling \helpref{wxFileHistory::UseMenu()}{wxfilehistoryusemenu} you can
+associate a file menu with the file history. The menu will then be used for
+appending filenames that are added to the history. Please notice that currently
+if the history already contained filenames when UseMenu() is called (e.g. when
+initializing a second MDI child frame), the menu is not automatically
+initialized with the existing filenames in the history and so you need to call 
+\helpref{AddFilesToMenu()}{wxfilehistoryaddfilestomenu} after UseMenu()
+explicitly in order to initialize the menu with the existing list of MRU files.
+(otherwise an assertion failure is raised in debug builds).
+The filenames are appended using menu identifiers in the range 
+\texttt{wxID\_FILE1} to \texttt{wxID\_FILE9}.
 
 In order to respond to a file load command from one of these identifiers,
 you need to handle them using an event handler, for example:
