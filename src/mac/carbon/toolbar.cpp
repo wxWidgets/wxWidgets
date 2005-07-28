@@ -525,7 +525,7 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
             long style, const wxString& name)
 {
     if ( !wxToolBarBase::Create( parent , id , pos , size , style ) )
-        return FALSE ;
+        return false ;
 
     OSStatus err = 0;
 
@@ -763,7 +763,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
 bool wxToolBar::Realize()
 {
     if (m_tools.GetCount() == 0)
-        return FALSE;
+        return false;
 
     int x = m_xMargin + kwxMacToolBarLeftMargin;
     int y = m_yMargin + kwxMacToolBarTopMargin;
@@ -939,7 +939,7 @@ bool wxToolBar::Realize()
     SetSize( maxWidth, maxHeight );
     InvalidateBestSize();
 #endif
-    return TRUE;
+    return true;
 }
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
@@ -1245,7 +1245,7 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
     }
     
     InvalidateBestSize();
-    return TRUE ;
+    return true ;
 }
 
 void wxToolBar::OnPaint(wxPaintEvent& event)
