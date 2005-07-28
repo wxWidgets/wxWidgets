@@ -947,8 +947,10 @@ bool wxDialUpManagerMSW::HangUp()
         return false;
     }
 
-    DWORD dwRet = ms_pfnRasHangUp(hRasConn);
-    if ( dwRet != 0 )
+    // note that it's not an error if the connection had been already
+    // terminated
+    const DWORD dwRet = ms_pfnRasHangUp(hRasConn);
+    if ( dwRet != 0 && dwRet != ERROR_NO_CONNECTION )
     {
         wxLogError(_("Failed to terminate the dialup connection: %s"),
                    GetErrorString(dwRet).c_str());
