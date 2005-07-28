@@ -6,20 +6,21 @@
 #       new development branch.
 
 
-# public symbols added in release 2.6.2:
+# public symbols added in release 2.6.2 (please keep in alphabetical order):
 
 @WX_VERSION_TAG@.2 {
     global:
-        *wxLogBuffer*;
-        *wxMessageOutputBest*;
         *wxDialog*GetEscapeId*;
-        *wxWizard*FinishLayout*;
-        *wxXmlResource*ConvertFileNameToURL*wxString*;
-        *wxXmlResource*Unload*wxString*;
-        *wxXmlResource*IsArchive*wxString*;
-        *wxShadowObject*;
+        *wxLogBuffer*;
         *wxGenericListCtrl*SetItemFont*wxFont*;
         *wxGenericListCtrl*GetItemFont*;
+        *wxMessageOutputBest*;
+        *wxShadowObject*;
+        *wxWizard*FinishLayout*;
+        *wxXmlResource*ConvertFileNameToURL*wxString*;
+        *wxXmlResource*IsArchive*wxString*;
+        *wxXmlResource*Unload*wxString*;
+        *wxZipFSHandler*Cleanup*;
 };
 
 

@@ -37,6 +37,7 @@ class WXDLLIMPEXP_BASE wxZipFSHandler : public wxFileSystemHandler
         virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
         virtual wxString FindFirst(const wxString& spec, int flags = 0);
         virtual wxString FindNext();
+        void Cleanup();
         ~wxZipFSHandler();
 
     private:
