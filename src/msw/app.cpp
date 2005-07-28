@@ -87,12 +87,27 @@
 #include "wx/msw/wince/missing.h"
 #endif
 
-// For DLLVER_PLATFORM_WINDOWS
-#if (!defined(__MINGW32__) || wxCHECK_W32API_VERSION( 2, 0 )) && \
-    !defined(__CYGWIN__) && !defined(__DIGITALMARS__) && !defined(__WXWINCE__) && \
-    (!defined(_MSC_VER) || (_MSC_VER > 1100))
-    #include <shlwapi.h>
-#endif
+// instead of including <shlwapi.h> which is not part of the core SDK and not
+// shipped at all with other compilers, we always define the parts of it we
+// need here ourselves
+//
+// NB: DLLVER_PLATFORM_WINDOWS will be defined if shlwapi.h had been somehow
+//     included already
+#ifndef DLLVER_PLATFORM_WINDOWS
+    // hopefully we don't need to change packing as DWORDs should be already
+    // correctly aligned
+    struct DLLVERSIONINFO
+    {
+        DWORD cbSize;
+        DWORD dwMajorVersion;                   // Major version
+        DWORD dwMinorVersion;                   // Minor version
+        DWORD dwBuildNumber;                    // Build number
+        DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
+    };
+
+    typedef HRESULT (CALLBACK* DLLGETVERSIONPROC)(DLLVERSIONINFO *);
+#endif // defined(DLLVERSIONINFO)
+
 
 // ---------------------------------------------------------------------------
 // global variables
@@ -592,21 +607,7 @@ int wxApp::GetComCtl32Version()
         // if so, then we can check for the version
         if ( dllComCtl32.IsLoaded() )
         {
-            // check is struct used by DllGetVersion() is available in the
-            // headers and define it ourselves if it isn't
-#ifndef DLLVER_PLATFORM_WINDOWS
-			struct DLLVERSIONINFO
-			{
-				DWORD cbSize;
-				DWORD dwMajorVersion;                   // Major version
-				DWORD dwMinorVersion;                   // Minor version
-				DWORD dwBuildNumber;                    // Build number
-				DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
-			};
-			typedef HRESULT (CALLBACK* DLLGETVERSIONPROC)(DLLVERSIONINFO *);
-#endif // defined(DLLVERSIONINFO)
-
-            // now check if it's available during run-time
+            // now check if the function is available during run-time
             wxDYNLIB_FUNCTION( DLLGETVERSIONPROC, DllGetVersion, dllComCtl32 );
             if ( pfnDllGetVersion )
             {
