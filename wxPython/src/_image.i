@@ -155,6 +155,31 @@ Unlike RGB data, not all images have an alpha channel and before using
 with `HasAlpha`. Note that currently only images loaded from PNG files
 with transparency information will have an alpha channel.", "");
 
+%{
+// Pull the nested class out to the top level for SWIG's sake
+#define wxImage_RGBValue wxImage::RGBValue
+#define wxImage_HSVValue wxImage::HSVValue
+%}
+ 
+class wxImage_RGBValue
+{
+public:
+    wxImage_RGBValue(byte r=0, byte g=0, byte b=0);    
+    byte red;  
+    byte green;
+    byte blue;
+};
+    
+class wxImage_HSVValue
+{
+public:
+    wxImage_HSVValue(double h=0.0, double s=0.0, double v=0.0);
+    double hue;  
+    double saturation;
+    double value;
+};
+
+
 class wxImage : public wxObject {
 public:
     %typemap(out) wxImage*;    // turn off this typemap
@@ -887,6 +912,15 @@ MustHaveApp(ConvertToMonoBitmap);
             return bitmap;
         }
     }
+
+    
+    DocDeclStr(
+        void , RotateHue(double angle),
+        "Rotates the hue of each pixel of the image. Hue is a double in the
+range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
+        
+    static wxImage_HSVValue RGBtoHSV(wxImage_RGBValue rgb);
+    static wxImage_RGBValue HSVtoRGB(wxImage_HSVValue hsv);
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
 };

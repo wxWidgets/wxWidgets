@@ -42,11 +42,6 @@
 // For memcpy
 #include <string.h>
 
-#ifdef __SALFORDC__
-    #undef FAR
-#endif
-
-
 //-----------------------------------------------------------------------------
 // wxImage
 //-----------------------------------------------------------------------------
@@ -1756,6 +1751,159 @@ wxString wxImage::GetImageExtWildcard()
     }
 
     return wxT("(") + fmts + wxT(")|") + fmts;
+}
+
+wxImage::HSVValue wxImage::RGBtoHSV(const RGBValue& rgb)
+{
+    double hue, saturation, value;
+
+    const double red = rgb.red / 255.0,
+                 green = rgb.green / 255.0,
+                 blue = rgb.blue / 255.0;
+
+    double minimumRGB = red;
+    if (green < minimumRGB)
+        minimumRGB = green;
+
+    if (blue < minimumRGB)
+        minimumRGB = blue;
+
+    double maximumRGB = red;
+    if (green > maximumRGB)
+        maximumRGB = green;
+
+    if (blue > maximumRGB)
+        maximumRGB = blue;
+
+    value = maximumRGB;
+
+    if (maximumRGB == minimumRGB)
+    {
+        // Gray has no color
+        hue = 0.0;
+        saturation = 0.0;
+    }
+    else
+    {
+        double deltaRGB = maximumRGB - minimumRGB;
+
+        saturation = deltaRGB / maximumRGB;
+
+        if ( red == maximumRGB )
+            hue = (green - blue) / deltaRGB;
+        else if (green == maximumRGB)
+            hue = 2.0 + (blue - red) / deltaRGB;
+        else
+            hue = 4.0 + (red - green) / deltaRGB;
+
+        hue = hue / 6.0;
+
+        if (hue < 0.0)
+            hue = hue + 1.0;
+    }
+
+    return HSVValue(hue, saturation, value);
+}
+
+wxImage::RGBValue wxImage::HSVtoRGB(const HSVValue& hsv)
+{
+    double red, green, blue;
+
+    if ( hsv.saturation == 0.0 )
+    {
+        red = hsv.value; //Grey
+        green = hsv.value;
+        blue = hsv.value; 
+    }
+    else
+    {
+        double hue = hsv.hue * 6.0;      // sector 0 to 5
+        int i = (int)floor(hue);
+        double f = hue - i;          // fractional part of h
+        double p = hsv.value * (1.0 - hsv.saturation);
+
+        switch (i)
+        {
+            case 0:
+                red = hsv.value;
+                green = hsv.value * (1.0 - hsv.saturation * (1.0 - f));
+                blue = p;
+                break;
+
+            case 1:
+                red = hsv.value * (1.0 - hsv.saturation * f);
+                green = hsv.value;
+                blue = p;
+                break;
+
+            case 2:
+                red = p;
+                green = hsv.value;
+                blue = hsv.value * (1.0 - hsv.saturation * (1.0 - f));
+                break;
+
+            case 3:
+                red = p;
+                green = hsv.value * (1.0 - hsv.saturation * f);
+                blue = hsv.value;
+                break;
+
+            case 4:
+                red = hsv.value * (1.0 - hsv.saturation * (1.0 - f));
+                green = p;
+                blue = hsv.value;
+                break;
+
+            default:    // case 5:
+                red = hsv.value;
+                green = p;
+                blue = hsv.value * (1.0 - hsv.saturation * f);
+                break;
+        }
+    }
+
+    return RGBValue((unsigned char)(red * 255.0),
+                    (unsigned char)(green * 255.0),
+                    (unsigned char)(blue * 255.0));
+}
+
+/*
+ * Rotates the hue of each pixel of the image. angle is a double in the range
+ * -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
+ */
+void wxImage::RotateHue(double angle)
+{
+    unsigned char *srcBytePtr;
+    unsigned char *dstBytePtr;
+    unsigned long count;
+    wxImage::HSVValue hsv;
+    wxImage::RGBValue rgb;
+
+    assert (angle >= -1.0 && angle <= 1.0);
+    count = M_IMGDATA->m_width * M_IMGDATA->m_height;
+    if (count > 0 && angle != 0.0)
+    {
+        srcBytePtr = M_IMGDATA->m_data;
+        dstBytePtr = srcBytePtr;
+        do
+        {
+            rgb.red = *srcBytePtr++;
+            rgb.green = *srcBytePtr++;
+            rgb.blue = *srcBytePtr++;
+            hsv = RGBtoHSV(rgb);
+
+            hsv.hue = hsv.hue + angle;
+            if (hsv.hue > 1.0)
+                hsv.hue = hsv.hue - 1.0;
+            else if (hsv.hue < 0.0)
+                hsv.hue = hsv.hue + 1.0;
+
+            rgb = HSVtoRGB(hsv);
+            *dstBytePtr++ = rgb.red;
+            *dstBytePtr++ = rgb.green;
+            *dstBytePtr++ = rgb.blue;
+        } while (--count != 0);
+    }
 }
 
 //-----------------------------------------------------------------------------

@@ -157,6 +157,31 @@ public:
 class WXDLLEXPORT wxImage: public wxObject
 {
 public:
+#if wxABI_VERSION >= 20602
+    // red, green and blue are 8 bit unsigned integers in the range of 0..255
+    // We use the identifier RGBValue instead of RGB, since RGB is #defined
+    class RGBValue
+    {
+    public:
+      RGBValue(unsigned char r=0, unsigned char g=0, unsigned char b=0)
+        : red(r), green(g), blue(b) {}
+        unsigned char red;  
+        unsigned char green;
+        unsigned char blue;
+    };
+
+    // hue, saturation and value are doubles in the range 0.0..1.0
+    class HSVValue
+    {
+    public:
+        HSVValue(double h=0.0, double s=0.0, double v=0.0)
+            : hue(h), saturation(s), value(v) {}
+        double hue;  
+        double saturation;
+        double value;
+    };
+#endif // wxABI_VERSION >= 2.6.2
+
     wxImage(){}
     wxImage( int width, int height, bool clear = true );
     wxImage( int width, int height, unsigned char* data, bool static_data = false );
@@ -337,6 +362,12 @@ public:
     // Returned value: # of entries in the histogram
     unsigned long ComputeHistogram( wxImageHistogram &h ) const;
 
+#if wxABI_VERSION >= 20602
+    // Rotates the hue of each pixel of the image. angle is a double in the range
+    // -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
+    void RotateHue(double angle);
+#endif // wxABI_VERSION >= 2.6.2
+
     wxImage& operator = (const wxImage& image)
     {
         if ( (*this) != image )
@@ -362,6 +393,12 @@ public:
 
     static void CleanUpHandlers();
     static void InitStandardHandlers();
+
+#if wxABI_VERSION >= 20602
+    static HSVValue RGBtoHSV(const RGBValue& rgb);
+    static RGBValue HSVtoRGB(const HSVValue& hsv);
+#endif // wxABI_VERSION >= 2.6.2
+
 
 protected:
     static wxList   sm_handlers;

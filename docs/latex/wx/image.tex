@@ -589,6 +589,26 @@ Gets the width of the image in pixels.
 \helpref{wxImage::GetHeight}{wximagegetheight}
 
 
+\membersection{HSVValue::HSVValue}\label{hsvvaluehsvvalue}
+
+\func{}{HSVValue}{\param{double }{h = 0.0}, \param{double }{s = 0.0}, \param{double }{v = 0.0}}
+
+Constructor for HSVValue, an object that contains values for hue, saturation and value which
+represent the value of a color. It is used by \helpref{wxImage::HSVtoRGB}{wximagehsvtorgb}
+and \helpref{wxImage::RGBtoHSV}{wximagergbtohsv}, which
+converts between HSV color space and RGB color space.
+
+\pythonnote{use wxImage\_HSVValue in wxPython}
+
+
+
+\membersection{wxImage::HSVtoRGB}\label{wximagehsvtorgb}
+
+\func{wxImage::RGBValue}{HSVtoRGB}{\param{const HSVValue \& }{hsv}}
+
+Converts a color in HSV color space to RGB color space.
+
+
 \membersection{wxImage::HasAlpha}\label{wximagehasalpha}
 
 \constfunc{bool}{HasAlpha}{\void}
@@ -810,6 +830,25 @@ mimetype from a file}
 Returns true if image data is present.
 
 
+\membersection{RGBValue::RGBValue}\label{rgbvaluergbvalue}
+
+\func{}{RGBValue}{\param{unsigned char }{r = 0}, \param{unsigned char }{g = 0}, \param{unsigned char }{b = 0}}
+
+Constructor for RGBValue, an object that contains values for red, green and blud which
+represent the value of a color. It is used by \helpref{wxImage::HSVtoRGB}{wximagehsvtorgb}
+and \helpref{wxImage::RGBtoHSV}{wximagergbtohsv}, which
+converts between HSV color space and RGB color space.
+
+\pythonnote{use wxImage\_RGBValue in wxPython}
+
+
+\membersection{wxImage::RGBtoHSV}\label{wximagergbtohsv}
+
+\func{wxImage::HSVValue}{RGBtoHSV}{\param{const RGBValue\& }{rgb}}
+
+Converts a color in RGB color space to HSV color space.
+
+
 \membersection{wxImage::RemoveHandler}\label{wximageremovehandler}
 
 \func{static bool}{RemoveHandler}{\param{const wxString\& }{name}}
@@ -887,6 +926,15 @@ image has a mask, then the mask colour is used for the uncovered pixels in the
 rotated image background. Else, black (rgb 0, 0, 0) will be used.
 
 Returns the rotated image, leaving this image intact.
+
+
+\membersection{wxImage::RotateHue}\label{wximagerotatehue}
+
+\func{void}{RotateHue}{\param{double}{ angle}}
+
+Rotates the hue of each pixel in the image by {\it angle}, which is a double in
+the range of -1.0 to +1.0, where -1.0 corresponds to -360 degrees and +1.0 corresponds
+to +360 degrees.
 
 
 \membersection{wxImage::Rotate90}\label{wximagerotate90}

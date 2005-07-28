@@ -84,6 +84,8 @@ public:
     wxBitmap  *my_horse_asciigrey_pnm;
     wxBitmap  *my_horse_rawgrey_pnm;
 
+    wxBitmap  *colorized_horse_jpeg;
+
     int xH, yH ;
     int m_ani_images ;
 
@@ -408,6 +410,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_horse_ico = (wxBitmap*) NULL;
     my_horse_cur = (wxBitmap*) NULL;
     my_horse_ani = (wxBitmap*) NULL;
+    colorized_horse_jpeg = (wxBitmap*) NULL;
 
     my_smile_xbm = (wxBitmap*) NULL;
     my_square = (wxBitmap*) NULL;
@@ -465,7 +468,14 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     if ( !image.LoadFile( dir + _T("horse.jpg")) )
         wxLogError(wxT("Can't load JPG image"));
     else
+    {
         my_horse_jpeg = new wxBitmap( image );
+        // Colorize by rotating green hue to red
+        wxImage::HSVValue greenHSV = wxImage::RGBtoHSV(wxImage::RGBValue(0, 255, 0));
+        wxImage::HSVValue redHSV = wxImage::RGBtoHSV(wxImage::RGBValue(255, 0, 0));
+        image.RotateHue(redHSV.hue - greenHSV.hue);
+        colorized_horse_jpeg = new wxBitmap( image );
+    }
 #endif // wxUSE_LIBJPEG
 
 #if wxUSE_GIF
@@ -644,6 +654,7 @@ MyCanvas::~MyCanvas()
     delete my_anti;
     delete my_horse_asciigrey_pnm;
     delete my_horse_rawgrey_pnm;
+    delete colorized_horse_jpeg;
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -843,6 +854,14 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, true );
         }
+#if wxUSE_LIBJPEG
+    if (colorized_horse_jpeg)
+    {
+        dc.DrawText( _T("Colorize image by rotating green hue to red"), 30, 2490 );
+        dc.DrawBitmap( *colorized_horse_jpeg, 30, 2520 );
+    }
+#endif // wxUSE_LIBJPEG
+
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -955,8 +974,8 @@ MyFrame::MyFrame()
 
   m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(10,10) );
 
-  // 500 width * 2500 height
-  m_canvas->SetScrollbars( 10, 10, 50, 250 );
+  // 500 width * 2750 height
+  m_canvas->SetScrollbars( 10, 10, 50, 275 );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )

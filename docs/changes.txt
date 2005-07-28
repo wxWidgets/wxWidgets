@@ -10,6 +10,7 @@ All:
 - Fixed wxScopeGuard to work with VC++, documented it.
 - Fixed proxy handling in wxURL.
 - Added wxZipFSHandler::Cleanup() (Stas Sergeev)
+- Added wxImage::RotateHue() and RGB <-> HSV conversions (John Anderson)
 
 All (GUI):
 
