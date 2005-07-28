@@ -313,11 +313,14 @@ public:
 
     void OnPaint(wxPaintEvent& event);
     void OnChar(wxKeyEvent &event);
-
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 private:
+#if wxUSE_MOUSEWHEEL
+    void OnMouseWheel(wxMouseEvent& event);
+#endif // wxUSE_MOUSEWHEEL
+
     wxPrintPreviewBase* m_printPreview;
 
     DECLARE_CLASS(wxPreviewCanvas)

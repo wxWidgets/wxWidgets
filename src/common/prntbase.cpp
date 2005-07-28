@@ -567,6 +567,9 @@ BEGIN_EVENT_TABLE(wxPreviewCanvas, wxScrolledWindow)
     EVT_PAINT(wxPreviewCanvas::OnPaint)
     EVT_CHAR(wxPreviewCanvas::OnChar)
     EVT_SYS_COLOUR_CHANGED(wxPreviewCanvas::OnSysColourChanged)
+#if wxUSE_MOUSEWHEEL
+    EVT_MOUSEWHEEL(wxPreviewCanvas::OnMouseWheel)
+#endif
 END_EVENT_TABLE()
 
 // VZ: the current code doesn't refresh properly without
@@ -668,6 +671,50 @@ void wxPreviewCanvas::OnChar(wxKeyEvent &event)
             event.Skip();
     }
 }
+
+#if wxUSE_MOUSEWHEEL
+
+void wxPreviewCanvas::OnMouseWheel(wxMouseEvent& event)
+{
+    wxPreviewControlBar *
+        controlBar = wxStaticCast(GetParent(), wxPreviewFrame)->GetControlBar();
+
+    if ( controlBar )
+    {
+        if ( event.ControlDown() && event.GetWheelRotation() != 0 )
+        {
+            int currentZoom = controlBar->GetZoomControl();
+
+            int delta;
+            if ( currentZoom < 100 )
+                delta = 5;
+            else if ( currentZoom <= 120 )
+                delta = 10;
+            else
+                delta = 50;
+
+            if ( event.GetWheelRotation() > 0 )
+                delta = -delta;
+
+            int newZoom = currentZoom + delta;
+            if ( newZoom < 10 )
+                newZoom = 10;
+            if ( newZoom > 200 )
+                newZoom = 200;
+            if ( newZoom != currentZoom )
+            {
+                controlBar->SetZoomControl(newZoom);
+                m_printPreview->SetZoom(newZoom);
+                Refresh();
+            }
+            return;
+        }
+    }
+
+    event.Skip();
+}
+
+#endif // wxUSE_MOUSEWHEEL
 
 //----------------------------------------------------------------------------
 // wxPreviewControlBar
