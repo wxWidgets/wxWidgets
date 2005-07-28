@@ -2828,7 +2828,8 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
             //
             // we don't use LVCFMT_COL_HAS_IMAGES because it doesn't seem to
             // make any difference in my tests -- but maybe we should?
-            lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
+            if ( item.m_image != -1 )
+                lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
 
             lvCol.iImage = item.m_image;
         }
