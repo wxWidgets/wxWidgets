@@ -26,7 +26,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "ogl"=..\..\..\..\build\msw\wx_ogl.dsp - Package Owner=<4>
+Project: "ogl"=..\..\..\build\ogl\ogl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -38,7 +38,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "deprecated"=..\..\..\..\build\msw\wx_deprecated.dsp - Package Owner=<4>
+Project: "deprecated"=..\..\..\build\deprecated\deprecated.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -26,7 +26,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "gizmos"=..\..\..\..\build\msw\wx_gizmos.dsp - Package Owner=<4>
+Project: "gizmos"=..\..\..\build\gizmos\gizmos.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

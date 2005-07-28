@@ -23,7 +23,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "plot"=..\..\..\build\msw\wx_plot.dsp - Package Owner=<4>
+Project: "plot"=..\..\build\plot\plot.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

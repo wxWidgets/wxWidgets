@@ -23,7 +23,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "mmedia"=..\..\..\build\msw\wx_mmedia.dsp - Package Owner=<4>
+Project: "mmedia"=..\..\build\mmedia\mmedia.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

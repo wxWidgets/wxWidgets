@@ -23,7 +23,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "stc"=..\..\..\build\msw\wx_stc.dsp - Package Owner=<4>
+Project: "stc"=..\..\build\stc\stc.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

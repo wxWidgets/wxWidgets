@@ -23,7 +23,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "svg"=..\..\..\build\msw\wx_svg.dsp - Package Owner=<4>
+Project: "svg"=..\..\build\svg\svg.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

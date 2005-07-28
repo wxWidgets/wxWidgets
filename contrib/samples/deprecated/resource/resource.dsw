@@ -23,7 +23,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "deprecated"=..\..\..\..\build\msw\wx_deprecated.dsp - Package Owner=<4>
+Project: "deprecated"=..\..\..\build\deprecated\deprecated.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

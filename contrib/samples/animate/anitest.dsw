@@ -23,7 +23,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "animate"=..\..\..\build\msw\wx_animate.dsp - Package Owner=<4>
+Project: "animate"=..\..\build\animate\animate.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
