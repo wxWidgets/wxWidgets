@@ -29,6 +29,10 @@ wxWinCE:
 
 - RTTI and exceptions enabled by default.
 
+wxGTK:
+
+- ShowFullScreen() shows the window if it was still hidden (rpedroso)
+
 wxOS2
 
 - Adjustments for building with Open Watcom C++.
@@ -37,6 +41,7 @@ wxUniv:
 
 - Window creation now honours wxVSCROLL.
 - Standalone scrollbars generate events of correct type (Jochen Roemmler)
+
 
 2.6.1
 -----

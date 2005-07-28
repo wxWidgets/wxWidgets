@@ -690,8 +690,6 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
             gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
         else
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
-
-        return true;
     }
     else
 #endif // GTK+ >= 2.2.0
@@ -732,7 +730,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
                                     (WXWindow)GDK_WINDOW_XWINDOW(window),
                                     show, &m_fsSaveFrame, method);
         }
-        else
+        else // hide
         {
             if (method != wxX11_FS_WMSPEC)
             {
@@ -752,6 +750,11 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
                     m_fsSaveFrame.width, m_fsSaveFrame.height);
         }
     }
+
+    // documented behaviour is to show the window if it's still hidden when
+    // showing it full screen
+    if ( show && !IsShown() )
+        Show();
 
     return true;
 }
