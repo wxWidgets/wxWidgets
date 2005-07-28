@@ -28,9 +28,7 @@
 #include <ATSUnicode.h>
 #endif
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-#endif
 
 class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 {

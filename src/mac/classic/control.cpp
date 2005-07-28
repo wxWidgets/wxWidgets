@@ -31,14 +31,12 @@
 #include "wx/sizer.h"
 #include "wx/stattext.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxWindow)
     EVT_MOUSE_EVENTS( wxControl::OnMouseEvent ) 
     EVT_PAINT( wxControl::OnPaint ) 
 END_EVENT_TABLE()
-#endif
 
 #include "wx/mac/uma.h"
 #include "wx/mac/private.h"

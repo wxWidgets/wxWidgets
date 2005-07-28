@@ -29,9 +29,7 @@
 #include "wx/mac/uma.h"
 #include "wx/mac/private/print.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
-#endif
 
 class wxNativePrinterDC
 {

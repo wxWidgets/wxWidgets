@@ -32,9 +32,8 @@ using namespace std ;
 #include <TextCommon.h>
 #include <TextEncodingConverter.h>
 #include <FixMath.h>
-#if !USE_SHARED_LIBRARY
+
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
-#endif
 
 //-----------------------------------------------------------------------------
 // constants

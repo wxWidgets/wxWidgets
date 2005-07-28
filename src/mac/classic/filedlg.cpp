@@ -26,9 +26,7 @@
   #include "PLStringFuncs.h"
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
-#endif
 
 // begin wxmac
 

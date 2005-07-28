@@ -23,9 +23,7 @@
 #import <AppKit/NSImage.h>
 #include "wx/cocoa/string.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
-#endif
 
 typedef struct tagClassicCursor
 {

@@ -27,7 +27,6 @@ wxList wxModalDialogs;
 //wxList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList wxPendingDelete;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
 BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
@@ -41,8 +40,6 @@ BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
 
   EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
-
-#endif
 
 void wxDialog::Init()
 {

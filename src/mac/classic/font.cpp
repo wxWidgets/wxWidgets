@@ -25,9 +25,7 @@
 #include "wx/mac/private.h"
 #include <ATSUnicode.h>
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-#endif
 
 class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 {

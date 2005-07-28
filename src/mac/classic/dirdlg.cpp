@@ -28,9 +28,7 @@
   #include <Navigation.h>
 #endif
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
-#endif
 
 wxDirDialog::wxDirDialog(wxWindow *parent,
                          const wxString& message,

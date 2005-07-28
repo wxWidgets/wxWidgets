@@ -23,7 +23,6 @@
 
 extern wxWindowList wxModelessWindows;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
@@ -36,8 +35,6 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
   EVT_SCROLL(wxMDIClientWindow::OnScroll)
 END_EVENT_TABLE()
-
-#endif
 
 static const int IDM_WINDOWTILE  = 4001;
 static const int IDM_WINDOWTILEHOR  = 4001;

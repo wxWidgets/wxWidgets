@@ -19,9 +19,7 @@
 #include "wx/panel.h"
 #include "wx/stockitem.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-#endif
 
 #include "wx/mac/uma.h"
 // Button

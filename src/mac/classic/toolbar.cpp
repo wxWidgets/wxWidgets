@@ -22,14 +22,12 @@
 #include "wx/tabctrl.h"
 #include "wx/bitmap.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS( wxToolBar::OnMouse ) 
     EVT_PAINT( wxToolBar::OnPaint ) 
 END_EVENT_TABLE()
-#endif
 
 #include "wx/mac/uma.h"
 #include "wx/geometry.h"

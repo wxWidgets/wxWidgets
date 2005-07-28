@@ -23,14 +23,12 @@
 
 #include "wx/utils.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxListBox, wxControl)
     EVT_SIZE( wxListBox::OnSize )
     EVT_CHAR( wxListBox::OnChar )
 END_EVENT_TABLE()
-#endif
 
 #include "wx/mac/uma.h"
 

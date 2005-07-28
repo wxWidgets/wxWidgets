@@ -23,9 +23,7 @@
 
 #include "wx/mac/private.h"
 
-#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
-#endif
 
 const short kwxCursorBullseye = 10 ;
 const short kwxCursorBlank = 11 ;

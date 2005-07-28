@@ -55,9 +55,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
-#endif
 
 // ----------------------------------------------------------------------------
 // private functions

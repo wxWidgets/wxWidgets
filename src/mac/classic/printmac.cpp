@@ -42,10 +42,8 @@
 
 #include <stdlib.h>
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxMacPrinter, wxPrinterBase)
 IMPLEMENT_CLASS(wxMacPrintPreview, wxPrintPreviewBase)
-#endif
 
 #if TARGET_CARBON
 
