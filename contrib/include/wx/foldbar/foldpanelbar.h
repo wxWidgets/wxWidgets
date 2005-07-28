@@ -87,7 +87,7 @@ public:
 };
 
 #include <wx/dynarray.h>
-WX_DEFINE_ARRAY_PTR(wxFoldPanelItem *, wxFoldPanelItemArray);
+WX_DEFINE_ARRAY_WITH_DECL_PTR(wxFoldPanelItem *, wxFoldPanelItemArray, class WXDLLIMPEXP_FOLDBAR);
 
 /** \class wxFoldPanelBar
     The wxFoldPanelBar is a class which can maintain a list of collapsable panels. Once a panel is collapsed, only
@@ -105,7 +105,7 @@ WX_DEFINE_ARRAY_PTR(wxFoldPanelItem *, wxFoldPanelItemArray);
 class WXDLLIMPEXP_FOLDBAR wxFoldPanelBar: public wxPanel
 {
 private:
-    DECLARE_CLASS( wxFoldPanelBar )
+    DECLARE_DYNAMIC_CLASS( wxFoldPanelBar )
     DECLARE_EVENT_TABLE()
 
     wxImageList *m_images;

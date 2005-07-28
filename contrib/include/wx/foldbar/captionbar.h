@@ -52,7 +52,7 @@ enum
     applied to the wxCaptionBar in question, meaning it will be created using the default internals. When setting i.e
     the color, font or panel style, these styles become active to be used.
 */
-class wxCaptionBarStyle
+class WXDLLIMPEXP_FOLDBAR wxCaptionBarStyle
 {
 private:
     // boolean flags for default transparency on styles

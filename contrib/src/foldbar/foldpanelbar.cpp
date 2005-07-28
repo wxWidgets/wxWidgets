@@ -30,7 +30,7 @@
 // wxFoldPanelBar
 //----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS( wxFoldPanelBar, wxPanel )
+IMPLEMENT_DYNAMIC_CLASS( wxFoldPanelBar, wxPanel )
 
 BEGIN_EVENT_TABLE(wxFoldPanelBar,wxPanel)
     EVT_SIZE(wxFoldPanelBar::OnSizePanel)
@@ -39,13 +39,18 @@ BEGIN_EVENT_TABLE(wxFoldPanelBar,wxPanel)
 END_EVENT_TABLE()
 
 wxFoldPanelBar::wxFoldPanelBar()
+    : wxPanel()
+    , m_foldPanel(NULL)
+    , m_bottomPanel(NULL)
+    , m_controlCreated(false)
 {
 
 }
 
 wxFoldPanelBar::wxFoldPanelBar( wxWindow *parent, wxWindowID id, const wxPoint &position,
                                 const wxSize& size, long style, long extraStyle)
-    : m_foldPanel(NULL)
+    : wxPanel()
+    , m_foldPanel(NULL)
     , m_bottomPanel(NULL)
     , m_controlCreated(false)
 {

@@ -146,7 +146,7 @@ public:
 };
 
 #include <wx/dynarray.h>
-WX_DECLARE_OBJARRAY(wxFoldWindowItem, wxFoldWindowItemArray);
+WX_DECLARE_OBJARRAY_WITH_DECL(wxFoldWindowItem, wxFoldWindowItemArray, class WXDLLIMPEXP_FOLDBAR);
 
 #ifndef _NO_DOXYGEN_
 
