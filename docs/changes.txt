@@ -36,6 +36,7 @@ wxWinCE:
 wxGTK:
 
 - ShowFullScreen() shows the window if it was still hidden (rpedroso)
+- Implemented wxTopLevelWindow::RequestUserAttention() (Mart Raudsepp)
 
 wxOS2
 

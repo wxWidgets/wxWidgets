@@ -80,6 +80,47 @@ static wxTopLevelWindowGTK *g_lastActiveFrame = (wxTopLevelWindowGTK*) NULL;
 static int g_sendActivateEvent = -1;
 
 //-----------------------------------------------------------------------------
+// RequestUserAttention related functions
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void wxgtk_window_set_urgency_hint (GtkWindow *win,
+                                           gboolean setting)
+{
+    wxASSERT_MSG( GTK_WIDGET_REALIZED(win), wxT("wxgtk_window_set_urgency_hint: GdkWindow not realized") );
+    GdkWindow *window = GTK_WIDGET(win)->window;
+    XWMHints *wm_hints;
+
+    wm_hints = XGetWMHints(GDK_WINDOW_XDISPLAY(window), GDK_WINDOW_XWINDOW(window));
+
+    if (!wm_hints)
+        wm_hints = XAllocWMHints();
+
+    if (setting)
+        wm_hints->flags |= XUrgencyHint;
+    else
+        wm_hints->flags &= ~XUrgencyHint;
+
+    XSetWMHints(GDK_WINDOW_XDISPLAY(window), GDK_WINDOW_XWINDOW(window), wm_hints);
+    XFree(wm_hints);
+}
+
+static gint gtk_frame_urgency_timer_callback( GtkWidget *win )
+{
+#if __WXGTK20__ && GTK_CHECK_VERSION(2,7,0)
+    if(!gtk_check_version(2,7,0))
+        gtk_window_set_urgency_hint(GTK_WINDOW( win ), FALSE);
+    else
+#endif
+        wxgtk_window_set_urgency_hint(GTK_WINDOW( win ), FALSE);
+
+    //BCI: argument from GtkWidget* to wxTopLevelWindowGTK* && win->m_urgency_hint = -2;
+    gtk_object_set_data(GTK_OBJECT(win), "m_urgency_hint", GINT_TO_POINTER(-2));
+    return FALSE;
+}
+}
+
+//-----------------------------------------------------------------------------
 // "focus_in_event"
 //-----------------------------------------------------------------------------
 
@@ -109,6 +150,31 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
     g_lastActiveFrame = g_activeFrame;
 
     // wxPrintf( wxT("active: %s\n"), win->GetTitle().c_str() );
+
+    // MR: wxRequestUserAttention related block
+    //BCI: switch(win->m_urgency_hint)
+    switch( GPOINTER_TO_INT(gtk_object_get_data( GTK_OBJECT(widget), "m_urgency_hint") ) )
+    {
+        default:
+            //BCI:
+            gtk_timeout_remove( GPOINTER_TO_INT(gtk_object_get_data( GTK_OBJECT(widget), "m_urgency_hint") ) );
+            // no break, fallthrough to remove hint too
+        case -1:
+#if __WXGTK20__ && GTK_CHECK_VERSION(2,7,0)
+            if(!gtk_check_version(2,7,0))
+                gtk_window_set_urgency_hint(GTK_WINDOW( widget ), FALSE);
+            else
+#endif
+            {
+                wxgtk_window_set_urgency_hint(GTK_WINDOW( widget ), FALSE);
+            }
+
+            //BCI: win->m_urgency_hint = -2;
+            gtk_object_set_data( GTK_OBJECT(widget), "m_urgency_hint", GINT_TO_POINTER(-2) );
+            break;
+
+        case -2: break;
+    }
 
     wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), g_activeFrame);
     wxActivateEvent event(wxEVT_ACTIVATE, true, g_activeFrame->GetId());
@@ -420,6 +486,13 @@ void wxTopLevelWindowGTK::Init()
     m_themeEnabled = true;
     m_gdkDecor = m_gdkFunc = 0;
     m_grabbed = false;
+
+    //BCI: header wx/gtk/toplevel.h:
+    // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
+    // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
+    // int m_urgency_hint;
+
+    //BCI: m_urgency_hint = -2;
 }
 
 bool wxTopLevelWindowGTK::Create( wxWindow *parent,
@@ -492,6 +565,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 #endif
         }
     }
+
+    // BCI:
+    gtk_object_set_data( GTK_OBJECT(m_widget), "m_urgency_hint", GINT_TO_POINTER(-2) );
 
     wxWindow *topParent = wxGetTopLevelParent(m_parent);
     if (topParent && (((GTK_IS_WINDOW(topParent->m_widget)) &&
@@ -1265,4 +1341,51 @@ bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
 bool wxTopLevelWindowGTK::IsActive()
 {
     return (this == (wxTopLevelWindowGTK*)g_activeFrame);
+}
+
+void wxTopLevelWindowGTK::RequestUserAttention(int flags)
+{
+    bool new_hint_value = false;
+
+    // FIXME: This is a workaround to focus handling problem
+    // If RequestUserAttention is called for example right after a wxSleep, OnInternalIdle hasn't
+    // yet been processed, and the internal focus system is not up to date yet.
+    // wxYieldIfNeeded ensures the processing of it, but can have unwanted side effects - MR
+    ::wxYieldIfNeeded();
+
+    /*BCI:
+    if(m_urgency_hint >= 0)
+        gtk_timeout_remove(m_urgency_hint);
+    */
+    int urgency_hint = GPOINTER_TO_INT( gtk_object_get_data( GTK_OBJECT(m_widget), "m_urgency_hint") );
+    if(urgency_hint >= 0)
+        gtk_timeout_remove(urgency_hint);
+    //BCI: END
+
+    //BCI: m_urgency_hint = -2;
+    gtk_object_set_data( GTK_OBJECT(m_widget), "m_urgency_hint", GINT_TO_POINTER(-2));
+
+    if( GTK_WIDGET_REALIZED(m_widget) && !IsActive() )
+    {
+        new_hint_value = true;
+
+        if (flags & wxUSER_ATTENTION_INFO)
+        {
+            //BCI: m_urgency_hint = gtk_timeout_add(5000, (GtkFunction)gtk_frame_urgency_timer_callback, this);
+            gtk_object_set_data( GTK_OBJECT(m_widget), "m_urgency_hint",
+                                 GINT_TO_POINTER( gtk_timeout_add(5000,
+                                         (GtkFunction)gtk_frame_urgency_timer_callback,
+                                         m_widget) ) );
+        } else {
+            //BCI: m_urgency_hint = -1;
+            gtk_object_set_data( GTK_OBJECT(m_widget), "m_urgency_hint", GINT_TO_POINTER(-1) );
+        }
+    }
+
+#if __WXGTK20__ && GTK_CHECK_VERSION(2,7,0)
+    if(!gtk_check_version(2,7,0))
+        gtk_window_set_urgency_hint(GTK_WINDOW( m_widget ), new_hint_value);
+    else
+#endif
+        wxgtk_window_set_urgency_hint(GTK_WINDOW( m_widget ), new_hint_value);
 }

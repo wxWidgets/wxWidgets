@@ -62,6 +62,8 @@ public:
 
     virtual bool SetShape(const wxRegion& region);
 
+    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
+
     virtual bool Show(bool show = TRUE);
 
     virtual void Raise();
