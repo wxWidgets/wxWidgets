@@ -52,6 +52,7 @@ IMPLEMENT_CLASS(wxMediaCtrl, wxControl);
 IMPLEMENT_CLASS(wxMediaBackend, wxObject);
 IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent);
 DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED);
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_LOADED);
 DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -281,6 +282,8 @@ wxMediaCtrl::~wxMediaCtrl()
 //---------------------------------------------------------------------------
 // wxMediaCtrl::Load (file version)
 // wxMediaCtrl::Load (URL version)
+// wxMediaCtrl::Load (URL & Proxy version)
+// wxMediaCtrl::Load (wxInputStream version)
 //
 // Here we call load of the backend - keeping
 // track of whether it was successful or not - which
@@ -300,6 +303,13 @@ bool wxMediaCtrl::Load(const wxURI& location)
     return false;
 }
 
+bool wxMediaCtrl::Load(const wxURI& location, const wxURI& proxy)
+{
+    if(m_imp)
+        return (m_bLoaded = m_imp->Load(location, proxy));
+    return false;
+}
+
 //---------------------------------------------------------------------------
 // wxMediaCtrl::Play
 // wxMediaCtrl::Pause
@@ -313,6 +323,9 @@ bool wxMediaCtrl::Load(const wxURI& location)
 // wxMediaCtrl::DoGetBestSize
 // wxMediaCtrl::SetVolume
 // wxMediaCtrl::GetVolume
+// wxMediaCtrl::ShowInterface
+// wxMediaCtrl::GetDownloadProgress
+// wxMediaCtrl::GetDownloadTotal
 //
 // 1) Check to see whether the backend exists and is loading
 // 2) Call the backend's version of the method, returning success
@@ -416,6 +429,27 @@ bool wxMediaCtrl::SetVolume(double dVolume)
     if(m_imp && m_bLoaded)
         return m_imp->SetVolume(dVolume);
     return false;
+}
+
+bool wxMediaCtrl::ShowPlayerControls(wxMediaCtrlPlayerControls flags) 
+{
+    if(m_imp)
+        return m_imp->ShowPlayerControls(flags);
+    return false;
+}
+
+wxFileOffset wxMediaCtrl::GetDownloadProgress()
+{
+    if(m_imp && m_bLoaded)
+        return (wxFileOffset) m_imp->GetDownloadProgress().ToLong();
+    return wxInvalidOffset;
+}
+
+wxFileOffset wxMediaCtrl::GetDownloadTotal()
+{
+    if(m_imp && m_bLoaded)
+        return (wxFileOffset) m_imp->GetDownloadTotal().ToLong();
+    return wxInvalidOffset;
 }
 
 //---------------------------------------------------------------------------

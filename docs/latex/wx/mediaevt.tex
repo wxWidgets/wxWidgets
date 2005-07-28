@@ -25,6 +25,7 @@ Event \helpref{wxMediaCtrl}{wxmediactrl} uses.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_MEDIA\_LOADED(func)}}{Sent when a media has loaded enough data that it can start playing.}
 \twocolitem{{\bf EVT\_MEDIA\_STOP(func)}}{
 Triggerred right before the media stops.  You can Veto this event to prevent it from stopping, causing it to continue playing - even if it has reached that end of the media. }
 \twocolitem{{\bf EVT\_MEDIA\_FINISHED(func)}}{Sent when a media has finished playing in a \helpref{wxMediaCtrl}{wxmediactrl}.  Note that if you connect to this event and don't skip it, it will override the looping behaviour of the media control.}

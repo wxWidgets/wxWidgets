@@ -9,6 +9,8 @@ All:
 
 - Fixed wxScopeGuard to work with VC++, documented it.
 - Fixed proxy handling in wxURL.
+- Added wxEVT_MEDIA_LOADED event for wxMediaCtrl
+- Added new methods to wxMediaCtrl (wxURI version of Load, ShowPlayerControls)
 - Added wxZipFSHandler::Cleanup() (Stas Sergeev)
 - Added wxImage::RotateHue() and RGB <-> HSV conversions (John Anderson)
 

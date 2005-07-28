@@ -39,8 +39,9 @@ realm of licensing restrictions).
 
 For general operation, all you need to do is call 
 \helpref{wxMediaCtrl::Load}{wxmediactrlload} to load the file
-you want to render, then call \helpref{wxMediaCtrl::Play}{wxmediactrlplay} 
-to show the video/audio of the media.
+you want to render, catch the EVT\_MEDIA\_LOADED event,
+and then call \helpref{wxMediaCtrl::Play}{wxmediactrlplay} 
+to show the video/audio of the media in that event.
 
 More complex operations are generally more heavily dependant on the
 capabilities of the backend.  For example, QuickTime cannot set
@@ -102,7 +103,7 @@ Use ActiveMovie/DirectShow.  Requires wxUSE\_DIRECTSHOW to be
 enabled, requires linkage with the static library strmiids.lib,
 and is available on Windows Only.}
 \twocolitem{{\bf wxMEDIABACKEND\_QUICKTIME}}{
-Use QuickTime.  Windows and Mac Only. WARNING: On Mac Systems lower than OSX 10.2 this defaults to emulating window positioning and suffers from several bugs, including not working correctly embedded in a wxNotebook. }
+Use QuickTime.  Windows and Mac Only. NOTE: On Mac Systems lower than OSX 10.2 this defaults to emulating window positioning and suffers from several bugs, including not working correctly embedded in a wxNotebook. }
 \twocolitem{{\bf wxMEDIABACKEND\_MCI}}{
 Use Media Command Interface.  Windows Only. }
 \twocolitem{{\bf wxMEDIABACKEND\_GSTREAMER}}{
@@ -206,6 +207,13 @@ Obtains the state the playback of the movie is in -
 
 Loads the file that \tt{fileName} refers to.  Returns false if loading fails.
 
+
+\membersection{wxMediaCtrl::Load}\label{wxmediactrlloaduri}
+
+\func{bool}{Load}{\param{const wxURI\& }{location}}
+
+Loads the url that \tt{location} refers to.  Returns false if loading fails.  
+
 \membersection{wxMediaCtrl::Pause}\label{wxmediactrlpause}
 
 \func{bool}{Pause}{\void}
@@ -222,7 +230,7 @@ Resumes playback of the movie.
 
 \membersection{wxMediaCtrl::Seek}\label{wxmediactrlsetposition}
 
-\func{wxFileOffset}{SetPosition}{\param{wxFileOffset }{where}, \param{wxSeekMode }{mode}}
+\func{wxFileOffset}{Seek}{\param{wxFileOffset }{where}, \param{wxSeekMode }{mode}}
 
 Seeks to a position within the movie.
 
@@ -235,3 +243,45 @@ Stops the media.
 
 See \helpref{Operation}{operationwxmediactrl} for an overview of how stopping works.
 
+
+\membersection{wxMediaCtrl::SetVolume}\label{wxmediactrlsetvolume}
+
+\func{bool}{SetVolume}{\param{double }{dVolume}}
+
+Sets the volume of the media from a 0.0 to 1.0 range.
+
+
+\membersection{wxMediaCtrl::GetVolume}\label{wxmediactrlgetvolume}
+
+\func{double}{GetVolume}{\void}
+
+Gets the volume of the media from a 0.0 to 1.0 range.
+
+
+\membersection{wxMediaCtrl::GetPlaybackRate}\label{wxmediactrlgetplaybackrate}
+
+\func{double}{GetPlaybackrate}{\void}
+
+Gets the playback rate of the media; for example 2.0 is double speed.
+Not implemented on MCI or GStreamer.
+
+
+\membersection{wxMediaCtrl::SetPlaybackRate}\label{wxmediactrlsetplaybackrate}
+
+\func{bool}{SetPlaybackrate}{\param{double }{dVolume}}
+
+Sets the rate that the media plays; for example 0.5 is half speed.
+
+
+\membersection{wxMediaCtrl::ShowPlayerControls}\label{wxmediactrlshowplayercontrols}
+
+\func{bool}{ShowPlayerControls}{\param{wxMediaCtrlPlayerControls }{flags}}
+
+Normally, when you use wxMediaCtrl it is just a window for the video to 
+play in.  However, platforms generally have their own media player interface,
+like quicktime has a bar below the video with a slider etc..  If you want that native 
+interface instead of making your own use this function.  There are several options
+for the flags parameter, however you can look at the mediactrl header for these. 
+The two general flags are wxMEDIACTRLPLAYERCONTROLS\_NONE which turns off the 
+native interface, and wxMEDIACTRLPLAYERCONTROLS\_DEFAULT which lets wxMediaCtrl
+decide what native controls on the interface.

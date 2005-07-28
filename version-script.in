@@ -11,12 +11,15 @@
 @WX_VERSION_TAG@.2 {
     global:
         *wxDialog*GetEscapeId*;
-        *wxLogBuffer*;
+        *wxEVT_MEDIA_LOADED*;
         *wxGenericListCtrl*SetItemFont*wxFont*;
         *wxGenericListCtrl*GetItemFont*;
         *wxImage*HSVValue*;
         *wxImage*RGBValue*;
         *wxImage*RotateHue*;
+        *wxLogBuffer*;
+        *wxMediaCtrl*Load*wxURI*wxURI*;
+        *wxMediaCtrl*ShowPlayerControls*wxMediaPlayerControls*;
         *wxMessageOutputBest*;
         *wxShadowObject*;
         *wxWizard*FinishLayout*;

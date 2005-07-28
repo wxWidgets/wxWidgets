@@ -118,6 +118,9 @@ public:
     virtual double GetPlaybackRate();
     virtual bool SetPlaybackRate(double dRate);
 
+    virtual double GetVolume();
+    virtual bool SetVolume(double);
+
     void Cleanup();
     void FinishLoad();
 
@@ -477,6 +480,11 @@ void wxQTMediaBackend::FinishLoad()
     m_ctrl->GetParent()->Layout();
     m_ctrl->GetParent()->Refresh();
     m_ctrl->GetParent()->Update();
+
+    //send loaded event
+    wxMediaEvent theEvent(wxEVT_MEDIA_LOADED,
+                            m_ctrl->GetId());
+    m_ctrl->AddPendingEvent(theEvent);
 }
 
 //---------------------------------------------------------------------------
@@ -580,6 +588,53 @@ wxLongLong wxQTMediaBackend::GetPosition()
 }
 
 //---------------------------------------------------------------------------
+// wxQTMediaBackend::GetVolume
+//
+// Gets the volume through GetMovieVolume - which returns a 16 bit short -
+//
+// +--------+--------+
+// +   (1)  +   (2)  +
+// +--------+--------+
+//
+// (1) first 8 bits are value before decimal
+// (2) second 8 bits are value after decimal
+//
+// Volume ranges from -1.0 (gain but no sound), 0 (no sound and no gain) to
+// 1 (full gain and sound)
+//---------------------------------------------------------------------------
+double wxQTMediaBackend::GetVolume()
+{
+    short sVolume = GetMovieVolume(m_movie);
+
+    if(sVolume & (128 << 8)) //negative - no sound
+        return 0.0;
+
+    return (sVolume & (127 << 8)) ? 1.0 : ((double)(sVolume & 255)) / 255.0;
+}
+
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::SetVolume
+//
+// Sets the volume through SetMovieVolume - which takes a 16 bit short -
+//
+// +--------+--------+
+// +   (1)  +   (2)  +
+// +--------+--------+
+//
+// (1) first 8 bits are value before decimal
+// (2) second 8 bits are value after decimal
+//
+// Volume ranges from -1.0 (gain but no sound), 0 (no sound and no gain) to
+// 1 (full gain and sound)
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::SetVolume(double dVolume)
+{
+    short sVolume = (short) (dVolume >= .9999 ? 1 << 8 : (dVolume * 255) );
+    SetMovieVolume(m_movie, sVolume);
+    return true;
+}
+ 
+ //---------------------------------------------------------------------------
 // wxQTMediaBackend::GetDuration
 //
 // Calls GetMovieDuration

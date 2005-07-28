@@ -58,10 +58,23 @@ enum wxMediaState
     wxMEDIASTATE_PLAYING
 };
 
+enum wxMediaCtrlPlayerControls
+{
+    wxMEDIACTRLPLAYERCONTROLS_NONE           =   0,
+    //Step controls like fastfoward, step one frame etc.
+    wxMEDIACTRLPLAYERCONTROLS_STEP           =   1 << 0,
+    //Volume controls like the speaker icon, volume slider, etc.
+    wxMEDIACTRLPLAYERCONTROLS_VOLUME         =   1 << 1,
+    wxMEDIACTRLPLAYERCONTROLS_DEFAULT        =
+                    wxMEDIACTRLPLAYERCONTROLS_STEP |
+                    wxMEDIACTRLPLAYERCONTROLS_VOLUME
+};
+
 #define wxMEDIABACKEND_DIRECTSHOW   wxT("wxAMMediaBackend")
 #define wxMEDIABACKEND_MCI          wxT("wxMCIMediaBackend")
 #define wxMEDIABACKEND_QUICKTIME    wxT("wxQTMediaBackend")
 #define wxMEDIABACKEND_GSTREAMER    wxT("wxGStreamerMediaBackend")
+
 
 // ----------------------------------------------------------------------------
 //
@@ -158,7 +171,7 @@ public:
                 long style = 0,
                 const wxString& szBackend = wxEmptyString,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxT("mediaCtrl")); //DirectShow only
+                const wxString& name = wxT("mediaCtrl"));
 
     bool DoCreate(wxClassInfo* instance,
                 wxWindow* parent, wxWindowID winid,
@@ -174,25 +187,36 @@ public:
 
     bool Load(const wxString& fileName);
 
-
     wxMediaState GetState();
 
     wxFileOffset Seek(wxFileOffset where, wxSeekMode mode = wxFromStart);
     wxFileOffset Tell(); //FIXME: This should be const
     wxFileOffset Length(); //FIXME: This should be const
 
-    //
-    // Unofficial parts of API
-    //
-    //DirectShow/GStreamer only.  Quicktime too, but somewhat buggy...
-    bool Load(const wxURI& location);
-
+#if wxABI_VERSION >= 20601 /* 2.6.1+ only */
     double GetPlaybackRate();           //All but MCI & GStreamer
     bool SetPlaybackRate(double dRate); //All but MCI & GStreamer
+#endif
 
-    double GetVolume();                 //DirectShow only
-    bool   SetVolume(double dVolume);   //DirectShow only
+#if wxABI_VERSION >= 20602 /* 2.6.2+ only */
+    bool Load(const wxURI& location);
+    bool Load(const wxURI& location, const wxURI& proxy);
 
+    wxFileOffset GetDownloadProgress();
+    wxFileOffset GetDownloadTotal();
+
+    double GetVolume();
+    bool   SetVolume(double dVolume);
+
+    bool    ShowPlayerControls(
+        wxMediaCtrlPlayerControls flags = wxMEDIACTRLPLAYERCONTROLS_DEFAULT);
+
+    //helpers for the wxPython people
+    bool LoadURI(const wxString& fileName)
+    {   return Load(wxURI(fileName));       }
+    bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy)
+    {   return Load(wxURI(fileName), wxURI(proxy));       }
+#endif
 protected:
     static wxClassInfo* NextBackend();
 
@@ -202,10 +226,7 @@ protected:
 
     //FIXME:  This is nasty... find a better way to work around
     //inheritance issues
-#ifdef __WXMAC__
-    friend class wxQTMediaBackend;
-#endif
-#ifdef __WXCOCOA__
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
     friend class wxQTMediaBackend;
 #endif
     class wxMediaBackend* m_imp;
@@ -218,7 +239,13 @@ protected:
 //
 // wxMediaBackend
 //
-// Currently an internal class - API stability not guaranteed.
+// Derive from this and use standard wxWidgets RTTI
+// (DECLARE_DYNAMIC_CLASS and IMPLEMENT_CLASS) to make a backend
+// for wxMediaCtrl.  Backends are searched alphabetically -
+// the one with the earliest letter is tried first.
+//
+// Note that this is currently not API or ABI compatable -
+// so statically link or make the client compile on-site.
 //
 // ----------------------------------------------------------------------------
 
@@ -278,11 +305,21 @@ public:
     virtual bool SetVolume(double WXUNUSED(dVolume))
     {   return false;                   }
 
-    virtual void RESERVED3() {}
-    virtual void RESERVED4() {}
-    virtual void RESERVED5() {}
-    virtual void RESERVED6() {}
-    virtual void RESERVED7() {}
+    virtual bool Load(const wxURI& WXUNUSED(location),
+                      const wxURI& WXUNUSED(proxy))
+    {   return false;                   }
+
+    virtual bool   ShowPlayerControls(
+                    wxMediaCtrlPlayerControls WXUNUSED(flags))
+    {   return false;                   }
+    virtual bool   IsInterfaceShown()
+    {   return false;                   }
+
+    virtual wxLongLong GetDownloadProgress()
+    {    return 0;                      }
+    virtual wxLongLong GetDownloadTotal()
+    {    return 0;                      }
+
     virtual void RESERVED8() {}
     virtual void RESERVED9() {}
 
@@ -306,6 +343,12 @@ typedef void (wxEvtHandler::*wxMediaEventFunction)(wxMediaEvent&);
 //Macro for usage with message maps
 #define EVT_MEDIA_FINISHED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_FINISHED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 #define EVT_MEDIA_STOP(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_STOP, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
+
+#if wxABI_VERSION >= 20602 /* 2.6.2+ only */
+#   define wxMEDIA_LOADED_ID      13002
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_LOADED,     wxMEDIA_LOADED_ID)
+#   define EVT_MEDIA_LOADED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_LOADED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
+#endif
 
 // ----------------------------------------------------------------------------
 // End compilation gaurd

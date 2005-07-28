@@ -274,6 +274,8 @@ bool wxGStreamerMediaBackend::TransCapsToVideoSize(wxGStreamerMediaBackend* be, 
         gst_structure_get_int (s, "width", &be->m_videoSize.x);
         gst_structure_get_int (s, "height", &be->m_videoSize.y);
 
+        wxLogDebug(wxT("Native video size: [%i,%i]"), be->m_videoSize.x, be->m_videoSize.y);
+
         const GValue *par;
         par = gst_structure_get_value (s, "pixel-aspect-ratio");
 
@@ -288,6 +290,8 @@ bool wxGStreamerMediaBackend::TransCapsToVideoSize(wxGStreamerMediaBackend* be, 
             else
                 be->m_videoSize.y = (int) ((float) den * be->m_videoSize.y / num);
         }
+
+        wxLogDebug(wxT("Adjusted video size: [%i,%i]"), be->m_videoSize.x, be->m_videoSize.y);
 
         be->PostRecalcSize();        
         return true;
@@ -308,6 +312,7 @@ void wxGStreamerMediaBackend::PostRecalcSize()
         m_ctrl->GetParent()->Layout();
         m_ctrl->GetParent()->Refresh();
         m_ctrl->GetParent()->Update();
+        m_ctrl->SetSize(m_ctrl->GetSize());
 }
 
 //---------------------------------------------------------------------------
@@ -446,6 +451,7 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
         if ( ! GST_IS_X_OVERLAY(overlay) )
         {
 #endif
+            wxLogDebug(wxT("Could not load Gnome preferences, reverting to xvimagesink for video for gstreamer"));
             videosink = gst_element_factory_make ("xvimagesink", "videosink");
             if ( !GST_IS_OBJECT(videosink) )
                 videosink = gst_element_factory_make ("ximagesink", "videosink");
@@ -502,12 +508,17 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
 #endif 
     
     //8
-    
-    wxASSERT(gst_element_set_state (m_player,
-                GST_STATE_PAUSED)    == GST_STATE_SUCCESS);            
+	int nResult = gst_element_set_state (m_player, GST_STATE_PAUSED);
+	if(nResult != GST_STATE_SUCCESS)
+	{
+	    wxLogDebug(wxT("Could not set initial state to paused!"));
+	    return false;
+	}
 
     const GList *list = NULL;
     g_object_get (G_OBJECT (m_player), "stream-info", &list, NULL);
+
+    bool bVideoFound = false;
 
     for ( ; list != NULL; list = list->next)
     {
@@ -546,6 +557,9 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
                 G_CALLBACK(wxGStreamerMediaBackend::OnVideoCapsReady),
                 this);
             }
+
+            bVideoFound = true;
+            break;
         }//end if video
         else
         {
@@ -554,7 +568,17 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
         }
     }//end searching through info list    
 
+    if(!bVideoFound)
+    {
+        wxLogDebug(wxT("No video found for gstreamer stream"));
+    }
     m_nPausedPos = 0;
+
+    //send loaded event
+    wxMediaEvent theEvent(wxEVT_MEDIA_LOADED,
+                            m_ctrl->GetId());
+    m_ctrl->AddPendingEvent(theEvent);
+    
     return true;
 }
 
