@@ -16,6 +16,7 @@ on Windows and Unix (and uses either
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxSound::wxSound}\label{wxsoundctor}
 
 \func{}{wxSound}{\void}
@@ -24,8 +25,9 @@ Default constructor.
 
 \func{}{wxSound}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = false}}
 
-Constructs a wave object from a file or resource. Call \helpref{wxSound::IsOk}{wxsoundisok} to
-determine whether this succeeded.
+Constructs a wave object from a file or, under Windows, from a Windows
+resource. Call \helpref{wxSound::IsOk}{wxsoundisok} to determine whether this
+succeeded.
 
 \wxheading{Parameters}
 
@@ -33,11 +35,13 @@ determine whether this succeeded.
 
 \docparam{isResource}{\true if {\it fileName} is a resource, \false if it is a filename.}
 
+
 \membersection{wxSound::\destruct{wxSound}}\label{wxsounddtor}
 
 \func{}{\destruct{wxSound}}{\void}
 
 Destroys the wxSound object.
+
 
 \membersection{wxSound::Create}\label{wxsoundcreate}
 
@@ -55,17 +59,22 @@ Constructs a wave object from a file or resource.
 
 \true if the call was successful, \false otherwise.
 
+
 \membersection{wxSound::IsOk}\label{wxsoundisok}
 
 \constfunc{bool}{IsOk}{\void}
 
 Returns \true if the object contains a successfully loaded file or resource, \false otherwise.
 
+
 \membersection{wxSound::IsPlaying}\label{wxsoundisplaying}
 
 \constfunc{static bool}{IsPlaying}{\void}
 
 Returns \true if a sound is played at the moment.
+
+This method is currently not implemented under Windows.
+
 
 \membersection{wxSound::Play}\label{wxsoundplay}
 
@@ -74,7 +83,10 @@ Returns \true if a sound is played at the moment.
 \func{static bool}{Play}{\param{const wxString\& }{filename}, \param{unsigned}{ flags = wxSOUND\_ASYNC}}
 
 Plays the sound file. If another sound is playing, it will be interrupted.
-Returns \true on success, \false otherwise.
+Returns \true on success, \false otherwise. Note that in general it is possible
+to delete the object which is being asynchronously played any time after
+calling this function and the sound would continue playing, however this
+currently doesn't work under Windows for sound objects loaded from memory data.
 
 The possible values for \arg{flags} are:
 
@@ -93,6 +105,7 @@ The static form is shorthand for this code:
 \begin{verbatim}
 wxSound(filename).Play(flags);
 \end{verbatim}
+
 
 \membersection{wxSound::Stop}\label{wxsoundstop}
 
