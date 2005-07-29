@@ -132,7 +132,7 @@ wxSize wxStaticText::DoGetBestSize() const
     wxFont font(GetFont());
     if (!font.Ok())
         font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    
+
     dc.SetFont(font);
 
     wxCoord widthTextMax, heightTextTotal;
@@ -142,6 +142,37 @@ wxSize wxStaticText::DoGetBestSize() const
     if ( widthTextMax )
         widthTextMax += 2;
 #endif // __WXWINCE__
+
+    // border takes extra space
+    //
+    // TODO: this is probably not wxStaticText-specific and should be moved
+    wxCoord border;
+    switch ( GetBorder() )
+    {
+        case wxBORDER_STATIC:
+        case wxBORDER_SIMPLE:
+            border = 1;
+            break;
+
+        case wxBORDER_SUNKEN:
+            border = 2;
+            break;
+
+        case wxBORDER_RAISED:
+        case wxBORDER_DOUBLE:
+            border = 3;
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unknown border style") );
+            // fall through
+
+        case wxBORDER_NONE:
+            border = 0;
+    }
+
+    widthTextMax += 2*border;
+    heightTextTotal += 2*border;
 
     wxSize best(widthTextMax, heightTextTotal);
     CacheBestSize(best);

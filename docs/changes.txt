@@ -33,6 +33,7 @@ wxMSW:
 - Handle absence of wxListCtrl column image better (Zbigniew Zagórski)
 - Fixed asynchronous playback of large sound files in wxSound
 - Added wxDynamicLibrary::GetSymbolAorW()
+- Fixed default size of wxStaticText controls with border being too small
 
 wxWinCE:
 
