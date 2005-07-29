@@ -22,6 +22,7 @@
         *wxMediaCtrl*ShowPlayerControls*wxMediaPlayerControls*;
         *wxMessageOutputBest*;
         *wxShadowObject*;
+        *wxTopLevelWindowGTK*RequestUserAttention*int*;
         *wxWizard*FinishLayout*;
         *wxXmlResource*ConvertFileNameToURL*wxString*;
         *wxXmlResource*IsArchive*wxString*;
