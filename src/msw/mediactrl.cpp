@@ -1422,7 +1422,7 @@ public:
     HRESULT STDMETHODCALLTYPE ShowPropertyFrame(){return E_NOTIMPL;}
     //**************************IOleCommandTarget***********************
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG cCmds,
-                                OLECMD * prgCmds, OLECMDTEXT *)
+                                OLECMD prgCmds[], OLECMDTEXT *)
     {
         if (prgCmds == NULL) return E_INVALIDARG;
         for (ULONG nCmd = 0; nCmd < cCmds; nCmd++)
