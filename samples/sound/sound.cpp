@@ -29,6 +29,7 @@
 
 #include "wx/sound.h"
 #include "wx/numdlg.h"
+#include "wx/textdlg.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -66,6 +67,9 @@ public:
     void OnPlayLoop(wxCommandEvent& event);
 
     void OnSelectFile(wxCommandEvent& event);
+#ifdef __WXMSW__
+    void OnSelectResource(wxCommandEvent& event);
+#endif // __WXMSW__
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -73,8 +77,13 @@ public:
     
 
 private:
+    wxSound *CreateSound() const;
+
     wxSound*    m_sound;
     wxString    m_soundFile;
+#ifdef __WXMSW__
+    wxString    m_soundRes;
+#endif // __WXMSW__
     wxTextCtrl* m_tc;
     
     // any class wishing to process wxWidgets events must use this macro
@@ -89,13 +98,18 @@ private:
 enum
 {
     // menu items
+    Sound_SelectFile,
+#ifdef __WXMSW__
+    Sound_SelectResource,
+#endif // __WXMSW__
     Sound_Quit = wxID_EXIT,
-    Sound_About = wxID_ABOUT,
+
     Sound_PlaySync = wxID_HIGHEST + 1,
     Sound_PlayAsync,
     Sound_PlayAsyncOnStack,
     Sound_PlayLoop,
-    Sound_SelectFile
+
+    Sound_About = wxID_ABOUT
 };
 
 // ----------------------------------------------------------------------------
@@ -107,6 +121,9 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Sound_SelectFile,       MyFrame::OnSelectFile)
+#ifdef __WXMSW__
+    EVT_MENU(Sound_SelectResource,   MyFrame::OnSelectResource)
+#endif // __WXMSW__
     EVT_MENU(Sound_Quit,             MyFrame::OnQuit)
     EVT_MENU(Sound_About,            MyFrame::OnAbout)
     EVT_MENU(Sound_PlaySync,         MyFrame::OnPlaySync)
@@ -164,7 +181,10 @@ MyFrame::MyFrame(const wxString& title)
     wxMenu *helpMenu = new wxMenu;
     wxMenu *playMenu = new wxMenu;
     helpMenu->Append(Sound_About, _T("&About...\tF1"), _T("Show about dialog"));
-    menuFile->Append(Sound_SelectFile, _T("&Select WAV file\tCtrl+O"), _T("Select a new wav file to play"));
+    menuFile->Append(Sound_SelectFile, _T("Select WAV &file\tCtrl+O"), _T("Select a new wav file to play"));
+#ifdef __WXMSW__
+    menuFile->Append(Sound_SelectResource, _T("Select WAV &resource\tCtrl+R"), _T("Select a new resource to play"));
+#endif // __WXMSW__
     menuFile->Append(Sound_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
     playMenu->Append(Sound_PlaySync, _T("Play sound &synchronously\tCtrl+S"));
     playMenu->Append(Sound_PlayAsync, _T("Play sound &asynchronously\tCtrl+A"));
@@ -187,6 +207,18 @@ MyFrame::MyFrame(const wxString& title)
 }
 
 
+wxSound *MyFrame::CreateSound() const
+{
+#ifdef __WXMSW__
+    if ( !m_soundRes.empty() )
+    {
+        return new wxSound(m_soundRes, true);
+    }
+#endif // __WXMSW__
+
+    return new wxSound(m_soundFile);
+}
+
 
 void MyFrame::NotifyUsingFile(const wxString& name)
 {
@@ -207,11 +239,38 @@ void MyFrame::OnSelectFile(wxCommandEvent& WXUNUSED(event))
     if ( dlg.ShowModal() == wxID_OK )
     {
         m_soundFile = dlg.GetPath();
+#ifdef __WXMSW__
+        m_soundRes.clear();
+#endif // __WXMSW__
+
         delete m_sound;
         m_sound = NULL;
         NotifyUsingFile(m_soundFile);
     }
 }
+
+#ifdef __WXMSW__
+
+void MyFrame::OnSelectResource(wxCommandEvent& WXUNUSED(event))
+{
+    m_soundRes = wxGetTextFromUser
+                 (
+                    _T("Enter resource name:"),
+                    _T("wxWidgets Sound Sample"),
+                    _T("FromResource"),
+                    this
+                 );
+    if ( m_soundRes.empty() )
+        return;
+
+    m_soundFile.clear();
+    delete m_sound;
+    m_sound = NULL;
+
+    NotifyUsingFile(_T("Windows WAV resource"));
+}
+
+#endif // __WXMSW__
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
@@ -223,7 +282,7 @@ void MyFrame::OnPlaySync(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
     if (!m_sound)
-        m_sound = new wxSound(m_soundFile);
+        m_sound = CreateSound();
     if (m_sound->IsOk())
         m_sound->Play(wxSOUND_SYNC);
 }
@@ -232,7 +291,7 @@ void MyFrame::OnPlayAsync(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
     if (!m_sound)
-        m_sound = new wxSound(m_soundFile);
+        m_sound = CreateSound();
     if (m_sound->IsOk())
         m_sound->Play(wxSOUND_ASYNC);
 }
@@ -249,7 +308,7 @@ void MyFrame::OnPlayLoop(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
     if (!m_sound)
-        m_sound = new wxSound(m_soundFile);
+        m_sound = CreateSound();
     if (m_sound->IsOk())
         m_sound->Play(wxSOUND_ASYNC | wxSOUND_LOOP);
 }
