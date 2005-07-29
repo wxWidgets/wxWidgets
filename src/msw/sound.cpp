@@ -2,161 +2,212 @@
 // Name:        sound.cpp
 // Purpose:     wxSound
 // Author:      Julian Smart
-// Modified by:
+// Modified by: 2005-07-29: Vadim Zeitlin: redesign
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "sound.h"
+    #pragma implementation "sound.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_SOUND
 
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
-#include "wx/file.h"
 #include "wx/sound.h"
 #include "wx/msw/private.h"
 
-#include <windowsx.h>
-
 #include <mmsystem.h>
 
+// ----------------------------------------------------------------------------
+// wxSoundData
+// ----------------------------------------------------------------------------
+
+// ABC for different sound data representations
+class wxSoundData
+{
+public:
+    wxSoundData() { }
+
+    // return true if we had been successfully initialized
+    virtual bool IsOk() const = 0;
+
+    // get the flag corresponding to our content for PlaySound()
+    virtual DWORD GetSoundFlag() const = 0;
+
+    // get the data to be passed to PlaySound()
+    virtual LPCTSTR GetSoundData() const = 0;
+
+    virtual ~wxSoundData() { }
+};
+
+// class for in-memory sound data
+class wxSoundDataMemory : public wxSoundData
+{
+public:
+    // we copy the data
+    wxSoundDataMemory(int size, const wxByte *buf);
+
+    void *GetPtr() const { return m_waveDataPtr; }
+
+    virtual bool IsOk() const { return GetPtr() != NULL; }
+    virtual DWORD GetSoundFlag() const { return SND_MEMORY; }
+    virtual LPCTSTR GetSoundData() const { return (LPCTSTR)GetPtr(); }
+
+private:
+    GlobalPtr m_waveData;
+    GlobalPtrLock m_waveDataPtr;
+
+    DECLARE_NO_COPY_CLASS(wxSoundDataMemory)
+};
+
+// class for sound files and resources
+class wxSoundDataFile : public wxSoundData
+{
+public:
+    wxSoundDataFile(const wxString& filename, bool isResource);
+
+    virtual bool IsOk() const { return !m_name.empty(); }
+    virtual DWORD GetSoundFlag() const
+    {
+        return m_isResource ? SND_RESOURCE : SND_FILENAME;
+    }
+    virtual LPCTSTR GetSoundData() const { return m_name.c_str(); }
+
+private:
+    const wxString m_name;
+    const bool m_isResource;
+
+    DECLARE_NO_COPY_CLASS(wxSoundDataFile)
+};
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxSoundData-derived classes
+// ----------------------------------------------------------------------------
+
+wxSoundDataMemory::wxSoundDataMemory(int size, const wxByte *buf)
+                 : m_waveData(size),
+                   m_waveDataPtr(m_waveData)
+{
+    if ( IsOk() )
+        ::CopyMemory(m_waveDataPtr, buf, size);
+}
+
+wxSoundDataFile::wxSoundDataFile(const wxString& filename, bool isResource)
+               : m_name(filename),
+                 m_isResource(isResource)
+{
+    // check for file/resource existence?
+}
+
+// ----------------------------------------------------------------------------
+// wxSound
+// ----------------------------------------------------------------------------
+
 wxSound::wxSound()
-  : m_waveData(NULL), m_waveLength(0), m_isResource(false)
 {
+    Init();
 }
 
-wxSound::wxSound(const wxString& sFileName, bool isResource)
-  : m_waveData(NULL), m_waveLength(0), m_isResource(isResource)
+wxSound::wxSound(const wxString& filename, bool isResource)
 {
-  Create(sFileName, isResource);
+    Init();
+    Create(filename, isResource);
 }
 
-wxSound::wxSound(int size, const wxByte* data)
-  : m_waveData(NULL), m_waveLength(0), m_isResource(false)
+wxSound::wxSound(int size, const wxByte *data)
 {
-  Create(size, data);
+    Init();
+    Create(size, data);
 }
 
 wxSound::~wxSound()
 {
-  Free();
+    Free();
 }
 
-bool wxSound::Create(const wxString& fileName, bool isResource)
+void wxSound::Free()
 {
-  Free();
-
-  if (isResource)
-  {
-    m_isResource = true;
-
-    HRSRC hresInfo;
-    hresInfo = ::FindResource((HMODULE) wxhInstance, fileName, wxT("WAVE"));
-    if (!hresInfo)
-        return false;
-
-    HGLOBAL waveData = ::LoadResource((HMODULE) wxhInstance, hresInfo);
-
-    if (waveData)
+    if ( m_data )
     {
-      m_waveData= (wxByte*)::LockResource(waveData);
-      m_waveLength = (int) ::SizeofResource((HMODULE) wxhInstance, hresInfo);
+        delete m_data;
+        m_data = NULL;
     }
+}
 
-    return (m_waveData ? true : false);
-  }
-  else
-  {
-    m_isResource = false;
+bool wxSound::CheckCreatedOk()
+{
+    if ( m_data && !m_data->IsOk() )
+        Free();
 
-    wxFile fileWave;
-    if (!fileWave.Open(fileName, wxFile::read))
-        return false;
+    return m_data != NULL;
+}
 
-    m_waveLength = (int) fileWave.Length();
+bool wxSound::Create(const wxString& filename, bool isResource)
+{
+    Free();
 
-    m_waveData = (wxByte*)GlobalLock(GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
-    if (!m_waveData)
-        return false;
+    m_data = new wxSoundDataFile(filename, isResource);
 
-    fileWave.Read(m_waveData, m_waveLength);
-
-    return true;
-  }
+    return CheckCreatedOk();
 }
 
 bool wxSound::Create(int size, const wxByte* data)
 {
-  Free();
-  m_isResource = true;
-  m_waveLength=size;
-  m_waveData = (wxByte*)GlobalLock(GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
-  if (!m_waveData)
-     return false;
+    Free();
 
-  for (int i=0; i<size; i++) m_waveData[i] = data[i];
-  return true;
+    m_data = new wxSoundDataMemory(size, data);
+
+    return CheckCreatedOk();
 }
 
 bool wxSound::DoPlay(unsigned flags) const
 {
-  if (!IsOk())
-    return false;
+    if ( !IsOk() || !m_data->IsOk() )
+        return false;
 
-  return (::PlaySound((LPCTSTR)m_waveData, NULL,
-                      SND_MEMORY | SND_NODEFAULT |
-                      ((flags & wxSOUND_ASYNC) ? SND_ASYNC : SND_SYNC) |
-                      ((flags & wxSOUND_LOOP) ? (SND_LOOP | SND_ASYNC) : 0))
-          != 0);
-}
+    DWORD flagsMSW = m_data->GetSoundFlag();
+    HMODULE hmod = flagsMSW == SND_RESOURCE ? wxGetInstance() : NULL;
 
-bool wxSound::Free()
-{
-    if (m_waveData)
+    // we don't want replacement default sound
+    flagsMSW |= SND_NODEFAULT;
+
+    // NB: wxSOUND_SYNC is 0, don't test for it
+    flagsMSW |= (flags & wxSOUND_ASYNC) ? SND_ASYNC : SND_SYNC;
+    if ( flags & wxSOUND_LOOP )
     {
-#ifdef __WXWINCE__
-        HGLOBAL waveData = (HGLOBAL) m_waveData;
-#else
-        HGLOBAL waveData = GlobalHandle(m_waveData);
-#endif
-
-        if (waveData)
-        {
-#ifndef __WXWINCE__
-            if (m_isResource)
-                ::FreeResource(waveData);
-            else
-#endif
-            {
-                GlobalUnlock(waveData);
-                GlobalFree(waveData);
-            }
-
-            m_waveData = NULL;
-            m_waveLength = 0;
-            return true;
-        }
+        // looping only works with async flag
+        flagsMSW |= SND_LOOP | SND_ASYNC;
     }
-    return false;
+
+    return ::PlaySound(m_data->GetSoundData(), hmod, flagsMSW) != FALSE;
 }
 
-/*static*/ void wxSound::Stop()
+/* static */
+void wxSound::Stop()
 {
     ::PlaySound(NULL, NULL, 0);
 }
 
 #endif // wxUSE_SOUND
+
