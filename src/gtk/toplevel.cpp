@@ -107,7 +107,7 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
 
 static gint gtk_frame_urgency_timer_callback( GtkWidget *win )
 {
-#if __WXGTK20__ && GTK_CHECK_VERSION(2,7,0)
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,7,0)
     if(!gtk_check_version(2,7,0))
         gtk_window_set_urgency_hint(GTK_WINDOW( win ), FALSE);
     else
@@ -160,7 +160,7 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
             gtk_timeout_remove( GPOINTER_TO_INT(gtk_object_get_data( GTK_OBJECT(widget), "m_urgency_hint") ) );
             // no break, fallthrough to remove hint too
         case -1:
-#if __WXGTK20__ && GTK_CHECK_VERSION(2,7,0)
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,7,0)
             if(!gtk_check_version(2,7,0))
                 gtk_window_set_urgency_hint(GTK_WINDOW( widget ), FALSE);
             else
@@ -1382,7 +1382,7 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
         }
     }
 
-#if __WXGTK20__ && GTK_CHECK_VERSION(2,7,0)
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,7,0)
     if(!gtk_check_version(2,7,0))
         gtk_window_set_urgency_hint(GTK_WINDOW( m_widget ), new_hint_value);
     else
