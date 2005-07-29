@@ -538,10 +538,10 @@ private:
 // when working with global pointers (which is unfortunately still necessary
 // sometimes, e.g. for clipboard) it is important to unlock them exactly as
 // many times as we lock them which just asks for using a "smart lock" class
-class GlobalPtr
+class GlobalPtrLock
 {
 public:
-    GlobalPtr(HGLOBAL hGlobal) : m_hGlobal(hGlobal)
+    GlobalPtrLock(HGLOBAL hGlobal) : m_hGlobal(hGlobal)
     {
         m_ptr = GlobalLock(hGlobal);
         if ( !m_ptr )
@@ -550,7 +550,7 @@ public:
         }
     }
 
-    ~GlobalPtr()
+    ~GlobalPtrLock()
     {
         if ( !GlobalUnlock(m_hGlobal) )
         {
@@ -571,7 +571,7 @@ private:
     HGLOBAL m_hGlobal;
     void *m_ptr;
 
-    DECLARE_NO_COPY_CLASS(GlobalPtr)
+    DECLARE_NO_COPY_CLASS(GlobalPtrLock)
 };
 
 // register the class when it is first needed and unregister it in dtor

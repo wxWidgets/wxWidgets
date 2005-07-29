@@ -566,7 +566,7 @@ HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
         return NULL;
     }
 
-    if ( !ConvertFromBitmap((BITMAPINFO *)(void *)GlobalPtr(hDIB), hbmp) )
+    if ( !ConvertFromBitmap((BITMAPINFO *)(void *)GlobalPtrLock(hDIB), hbmp) )
     {
         // this really shouldn't happen... it worked the first time, why not
         // now?
