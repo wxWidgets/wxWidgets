@@ -45,6 +45,7 @@
 #include "wx/utils.h"
 #include "wx/sysopt.h"
 #include "wx/menu.h"
+#include "wx/intl.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
   #include <alloc.h>
