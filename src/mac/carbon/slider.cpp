@@ -59,6 +59,34 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 {
     m_macIsUserPane = false ;
 
+    // our styles are redundant: wxSL_LEFT/RIGHT imply wxSL_VERTICAL and
+    // wxSL_TOP/BOTTOM imply wxSL_HORIZONTAL, but for backwards compatibility
+    // reasons we can't really change it, instead try to infer the orientation
+    // from the flags given to us here
+    switch ( style & (wxSL_LEFT | wxSL_RIGHT | wxSL_TOP | wxSL_BOTTOM) )
+    {
+        case wxSL_LEFT:
+        case wxSL_RIGHT:
+            style |= wxSL_VERTICAL;
+            break;
+
+        case wxSL_TOP:
+        case wxSL_BOTTOM:
+            style |= wxSL_HORIZONTAL;
+            break;
+
+        case 0:
+            // no specific direction, do we have at least the orientation?
+            if ( !(style & (wxSL_HORIZONTAL | wxSL_VERTICAL)) )
+            {
+                // no, choose default
+                style |= wxSL_BOTTOM | wxSL_HORIZONTAL;
+            }
+    };
+
+    wxASSERT_MSG( !(style & wxSL_VERTICAL) | !(style & wxSL_HORIZONTAL),
+        _T("incompatible slider direction and orientation") );
+
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
@@ -91,7 +119,6 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     verify_noerr ( CreateSliderControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
         value , minValue , maxValue , kControlSliderPointsDownOrRight , tickMarks , true /* liveTracking */ ,
         GetwxMacLiveScrollbarActionProc() , m_peer->GetControlRefAddr() ) );
-
 
     if(style & wxSL_VERTICAL) {
         SetSizeHints(10, -1, 10, -1);  // Forces SetSize to use the proper width
@@ -314,23 +341,31 @@ void wxSlider::DoSetSizeHints( int minW, int minH,
 wxSize wxSlider::DoGetBestSize() const
 {
     wxSize size;
-    int textwidth, textheight;
+    int textwidth = 0;
+    int textheight = 0;
+    int mintwidth, mintheight;
+    int maxtwidth, maxtheight;
 
     if(GetWindowStyle() & wxSL_LABELS)
     {
         wxString text;
-        int ht, wd;
 
         // Get maximum text label width and height
         text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMin ) );
-        GetTextExtent(text, &textwidth, &textheight);
+        GetTextExtent(text, &mintwidth, &mintheight);
         text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
-        GetTextExtent(text, &wd, &ht);
-        if(ht > textheight) {
-            textheight = ht;
+        GetTextExtent(text, &maxtwidth, &maxtheight);
+        if(maxtheight > mintheight) {
+            textheight = maxtheight;
         }
-        if (wd > textwidth) {
-            textwidth = wd;
+        else {
+            textheight = mintheight;
+        }
+        if (maxtwidth > mintwidth) {
+            textwidth = maxtwidth;
+        }
+        else {
+            textwidth = mintwidth; 
         }
     }
 
@@ -355,10 +390,13 @@ wxSize wxSlider::DoGetBestSize() const
         else {
             size.y = wxSLIDER_DIMENSIONACROSS_ARROW;
         }
+
+        size.x = 150;
+
         if(GetWindowStyle() & wxSL_LABELS) {
             size.y += textheight + wxSLIDER_BORDERTEXT;
+            size.x += (mintwidth/2) + (maxtwidth/2);
         }
-        size.x = 150;
     }
     return size;
 }
@@ -366,7 +404,7 @@ wxSize wxSlider::DoGetBestSize() const
 void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 {
     int  xborder, yborder;
-    int  minValWidth, maxValWidth, textwidth, textheight;
+    int  minValWidth, maxValWidth, textheight;
     int  sliderBreadth;
     int width = w;
 
@@ -374,6 +412,32 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 
     if (GetWindowStyle() & wxSL_LABELS)
     {
+
+        wxString text;
+        int ht, valValWidth;
+
+        // Get maximum text label width and height
+        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMin ) );
+        GetTextExtent(text, &minValWidth, &textheight);
+        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
+        GetTextExtent(text, &maxValWidth, &ht);
+ 
+        if(ht > textheight) {
+            textheight = ht;
+        }
+
+        if(GetWindowStyle() & wxSL_HORIZONTAL)
+        {
+          if ( m_macMinimumStatic ) {
+            w-=minValWidth/2;
+            x+=minValWidth/2;
+        }
+          if ( m_macMaximumStatic ) {
+            w-=maxValWidth/2;
+          }
+        }
+
+
         //Labels have this control's parent as their parent
         //so if this control is not at 0,0 relative to the parent
         //the labels need to know the position of this control
@@ -381,20 +445,19 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
         //move the control first so we can use GetPosition()
         wxControl::DoSetSize( x, y , w , h ,sizeFlags ) ;
 
-        wxString text;
-        int ht;
-
-        // Get maximum text label width and height
-        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMin ) );
-        GetTextExtent(text, &minValWidth, &textheight);
-        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
-        GetTextExtent(text, &maxValWidth, &ht);
-        if(ht > textheight) {
-            textheight = ht;
+        // If vertical, use current value
+        if(GetWindowStyle() & wxSL_VERTICAL)
+        {
+            text.Printf(wxT("%d"), (int)m_peer->GetValue());
         }
-        textwidth = (minValWidth > maxValWidth ? minValWidth : maxValWidth);
+        // Use max so that the current value doesn't drift as centering would need to change
+        else
+        {
+            text.Printf(wxT("%d"), m_rangeMax);
+        }
 
-        xborder = textwidth + wxSLIDER_BORDERTEXT;
+        GetTextExtent(text, &valValWidth, &ht);
+
         yborder = textheight + wxSLIDER_BORDERTEXT;
 
         // Get slider breadth
@@ -410,23 +473,20 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
             h = h - yborder ;
 
             if ( m_macMinimumStatic )
-                m_macMinimumStatic->Move(GetPosition().x + sliderBreadth + wxSLIDER_BORDERTEXT,
-                GetPosition().y + h - yborder);
+                m_macMinimumStatic->Move(GetPosition().x + sliderBreadth + wxSLIDER_BORDERTEXT, GetPosition().y + h - yborder);
             if ( m_macMaximumStatic )
                 m_macMaximumStatic->Move(GetPosition().x + sliderBreadth + wxSLIDER_BORDERTEXT, GetPosition().y + 0);
             if ( m_macValueStatic )
-                m_macValueStatic->Move(GetPosition().x, GetPosition().y + h );
+                m_macValueStatic->Move(GetPosition().x + sliderBreadth + wxSLIDER_BORDERTEXT, GetPosition().y + (h/2) - (ht/2));
         }
         else
         {
-            w = w - xborder ;
             if ( m_macMinimumStatic )
-                m_macMinimumStatic->Move(GetPosition().x + 0, GetPosition().y + sliderBreadth + wxSLIDER_BORDERTEXT);
+                m_macMinimumStatic->Move(GetPosition().x, GetPosition().y + sliderBreadth + wxSLIDER_BORDERTEXT);
             if ( m_macMaximumStatic )
-                m_macMaximumStatic->Move(GetPosition().x + w - (maxValWidth/2),
-                GetPosition().y + sliderBreadth + wxSLIDER_BORDERTEXT);
+                 m_macMaximumStatic->Move(GetPosition().x + w - maxValWidth, GetPosition().y + sliderBreadth + wxSLIDER_BORDERTEXT);
             if ( m_macValueStatic )
-                m_macValueStatic->Move(GetPosition().x + w, GetPosition().y + 0);
+                m_macValueStatic->Move(GetPosition().x + (w/2) - (valValWidth/2), GetPosition().y + sliderBreadth + wxSLIDER_BORDERTEXT);
         }
     }
 
