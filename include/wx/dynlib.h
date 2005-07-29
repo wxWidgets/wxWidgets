@@ -245,6 +245,30 @@ public:
 #endif
     }
 
+#ifdef __WXMSW__
+    // this function is useful for loading functions from the standard Windows
+    // DLLs: such functions have an 'A' (in ANSI build) or 'W' (in Unicode, or
+    // wide character build) suffix if they take string parameters
+    static void *RawGetSymbolAorW(wxDllType handle, const wxString& name)
+    {
+        return RawGetSymbol
+               (
+                handle,
+                name + 
+#if wxUSE_UNICODE
+                L'W'
+#else
+                'A'
+#endif
+               );
+    }
+
+    void *GetSymbolAorW(const wxString& name) const
+    {
+        return RawGetSymbolAorW(m_handle, name);
+    }
+#endif // __WXMSW__
+
     // return all modules/shared libraries in the address space of this process
     //
     // returns an empty array if not implemented or an error occurred

@@ -32,6 +32,7 @@ wxMSW:
 - Position of wxEVT_MOUSEWHEEL events is now in client, not screen, coordinates.
 - Handle absence of wxListCtrl column image better (Zbigniew Zagórski)
 - Fixed asynchronous playback of large sound files in wxSound
+- Added wxDynamicLibrary::GetSymbolAorW()
 
 wxWinCE:
 

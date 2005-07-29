@@ -103,6 +103,19 @@ contains no such symbol.
 \helpref{wxDYNLIB\_FUNCTION}{wxdynlibfunction}
 
 
+\membersection{wxDynamicLibrary::GetSymbolAorW}\label{wxdynamiclibrarygetsymbolaorw}
+
+\constfunc{void *}{GetSymbolAorW}{\param{const wxString\& }{name}}
+
+This function is available only under Windows as it is only useful when
+dynamically loading symbols from standard Windows DLLs. Such functions have
+either \texttt{'A'} (in ANSI build) or \texttt{'W'} (in Unicode, or wide
+character build) suffix if they take string parameters. Using this function you
+can use just the base name of the function and the correct suffix is appende
+automatically depending on the current build. Otherwise, this method is
+identical to \helpref{GetSymbol}{wxdynamiclibrarygetsymbol}.
+
+
 \membersection{wxDynamicLibrary::GetProgramHandle}\label{wxdynamiclibrarygetprogramhandle}
 
 \func{static wxDllType}{GetProgramHandle}{\void}
