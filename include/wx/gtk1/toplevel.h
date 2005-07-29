@@ -62,7 +62,9 @@ public:
 
     virtual bool SetShape(const wxRegion& region);
 
+#if wxABI_VERSION >= 20602
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
+#endif
 
     virtual bool Show(bool show = TRUE);
 
