@@ -1560,11 +1560,22 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 void wxTextCtrl::SetMaxLength(unsigned long len)
 {
 #if wxUSE_RICHEDIT
-    if (IsRich())
-        ::SendMessage(GetHwnd(), EM_EXLIMITTEXT, 0, (LPARAM) (DWORD) len);
+    if ( IsRich() )
+    {
+        ::SendMessage(GetHwnd(), EM_EXLIMITTEXT, 0, len ? len : 0x7fffffff);
+    }
     else
-#endif
-    ::SendMessage(GetHwnd(), EM_LIMITTEXT, len, 0);
+#endif // wxUSE_RICHEDIT
+    {
+        if ( len >= 0xffff )
+        {
+            // this will set it to a platform-dependent maximum (much more
+            // than 64Kb under NT)
+            len = 0;
+        }
+
+        ::SendMessage(GetHwnd(), EM_LIMITTEXT, len, 0);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -1894,48 +1905,36 @@ WXHBRUSH wxTextCtrl::MSWControlColor(WXHDC hDC, WXHWND hWnd)
     return wxTextCtrlBase::MSWControlColor(hDC, hWnd);
 }
 
-bool wxTextCtrl::AdjustSpaceLimit()
+bool wxTextCtrl::HasSpaceLimit(unsigned int *len) const
 {
-    unsigned int limit = ::SendMessage(GetHwnd(), EM_GETLIMITTEXT, 0, 0);
-
     // HACK: we try to automatically extend the limit for the amount of text
     //       to allow (interactively) entering more than 64Kb of text under
     //       Win9x but we shouldn't reset the text limit which was previously
     //       set explicitly with SetMaxLength()
     //
-    //       we could solve this by storing the limit we set in wxTextCtrl but
-    //       to save space we prefer to simply test here the actual limit
-    //       value: we consider that SetMaxLength() can only be called for
-    //       values < 32Kb
-    if ( limit < 0x8000 )
-    {
-        // we've got more text than limit set by SetMaxLength()
+    //       Unfortunately there is no EM_GETLIMITTEXTSETBYUSER and so we don't
+    //       know the limit we set (if any). We could solve this by storing the
+    //       limit we set in wxTextCtrl but to save space we prefer to simply
+    //       test here the actual limit value: we consider that SetMaxLength()
+    //       can only be called for small values while EN_MAXTEXT is only sent
+    //       for large values (in practice the default limit seems to be 30000
+    //       but make it smaller just to be on the safe side)
+    *len = ::SendMessage(GetHwnd(), EM_GETLIMITTEXT, 0, 0);
+    return *len < 10001;
+
+}
+
+bool wxTextCtrl::AdjustSpaceLimit()
+{
+    unsigned int limit;
+    if ( HasSpaceLimit(&limit) )
         return false;
-    }
 
     unsigned int len = ::GetWindowTextLength(GetHwnd());
     if ( len >= limit )
     {
-        limit = len + 0x8000;    // 32Kb
-
-#if wxUSE_RICHEDIT
-        if ( IsRich() )
-        {
-            // as a nice side effect, this also allows passing limit > 64Kb
-            ::SendMessage(GetHwnd(), EM_EXLIMITTEXT, 0, limit);
-        }
-        else
-#endif // wxUSE_RICHEDIT
-        {
-            if ( limit > 0xffff )
-            {
-                // this will set it to a platform-dependent maximum (much more
-                // than 64Kb under NT)
-                limit = 0;
-            }
-
-            ::SendMessage(GetHwnd(), EM_LIMITTEXT, limit, 0);
-        }
+        // increment in 32Kb chunks
+        SetMaxLength(len + 0x8000);
     }
 
     // we changed the limit

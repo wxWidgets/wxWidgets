@@ -201,6 +201,10 @@ protected:
     // intercept WM_GETDLGCODE
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
+    // return true if this control has a user-set limit on amount of text (i.e.
+    // the limit is due to a previous call to SetMaxLength() and not built in)
+    bool HasSpaceLimit(unsigned int *len) const;
+
     // call this to increase the size limit (will do nothing if the current
     // limit is big enough)
     //
