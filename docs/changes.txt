@@ -13,6 +13,7 @@ All:
 - Added new methods to wxMediaCtrl (wxURI version of Load, ShowPlayerControls)
 - Added wxZipFSHandler::Cleanup() (Stas Sergeev)
 - Added wxImage::RotateHue() and RGB <-> HSV conversions (John Anderson)
+- Fixed compilation with IBM xlC compiler
 
 All (GUI):
 

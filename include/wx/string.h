@@ -1274,6 +1274,17 @@ public:
     { return (wxString&)wxStringBase::operator+=(ch); }
 };
 
+// IBM xlC compiler needs these operators to be declared in global scope,
+// although this shouldn't be a problem for the other compilers we prefer to
+// only do it for it in stable 2.6 branch
+#ifdef __IBMCPP__
+wxString WXDLLIMPEXP_BASE operator+(const wxString& string1,  const wxString& string2);
+wxString WXDLLIMPEXP_BASE operator+(const wxString& string, wxChar ch);
+wxString WXDLLIMPEXP_BASE operator+(wxChar ch, const wxString& string);
+wxString WXDLLIMPEXP_BASE operator+(const wxString& string, const wxChar *psz);
+wxString WXDLLIMPEXP_BASE operator+(const wxChar *psz, const wxString& string);
+#endif // __IBMCPP__
+
 // define wxArrayString, for compatibility
 #if WXWIN_COMPATIBILITY_2_4 && !wxUSE_STL
     #include "wx/arrstr.h"
