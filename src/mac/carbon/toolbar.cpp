@@ -547,8 +547,6 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
         else
             mode = kHIToolbarDisplayModeIconOnly ;
 
-        // FIXME: override for testing
-        mode = kHIToolbarDisplayModeIconAndLabel ;
         displaySize = kHIToolbarDisplaySizeDefault ;
 
         HIToolbarSetDisplayMode( (HIToolbarRef) m_macHIToolbarRef , mode ) ;
