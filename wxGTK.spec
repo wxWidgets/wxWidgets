@@ -337,6 +337,13 @@ wx/xti.h
 wx/xtistrm.h
 wx/zipstrm.h
 wx/zstream.h
+wx/unix/apptbase.h
+wx/unix/apptrait.h
+wx/unix/execute.h
+wx/unix/mimetype.h
+wx/unix/pipe.h
+wx/unix/stackwalk.h
+wx/unix/stdpaths.h
 wx/fs_inet.h
 wx/gsocket.h
 wx/protocol/file.h
@@ -348,19 +355,12 @@ wx/sckipc.h
 wx/sckstrm.h
 wx/socket.h
 wx/url.h
+wx/unix/gsockunx.h
 wx/xml/xml.h
 wx/xtixml.h
 wx/db.h
 wx/dbkeyg.h
 wx/dbtable.h
-wx/unix/apptbase.h
-wx/unix/apptrait.h
-wx/unix/execute.h
-wx/unix/gsockunx.h
-wx/unix/mimetype.h
-wx/unix/pipe.h
-wx/unix/stackwalk.h
-wx/unix/stdpaths.h
 EOF
 # --- wxBase headers list ends here ---
 cat <<EOF >wxbase-headers.paths

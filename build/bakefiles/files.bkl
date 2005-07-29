@@ -2813,8 +2813,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_SRC)</if>
     </set>
     <set var="NET_PLATFORM_HDR" hints="files">
-        <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_HDR)</if>
-        <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR) $(NET_WINCE_HDR)</if>
+        <if cond="PLATFORM_UNIX=='1' or FORMAT=='rpmspec'">$(NET_UNIX_HDR)</if>
+        <if cond="PLATFORM_WIN32=='1' and FORMAT!='rpmspec'">$(NET_WIN32_HDR) $(NET_WINCE_HDR)</if>
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_HDR)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_HDR)</if>
         <if cond="PLATFORM_MACOS=='1'">$(NET_MAC_CARBONLIB_HDR)</if>
