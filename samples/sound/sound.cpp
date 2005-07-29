@@ -98,17 +98,17 @@ private:
 enum
 {
     // menu items
-    Sound_SelectFile,
+    Sound_SelectFile = wxID_HIGHEST + 1,
 #ifdef __WXMSW__
     Sound_SelectResource,
 #endif // __WXMSW__
-    Sound_Quit = wxID_EXIT,
 
-    Sound_PlaySync = wxID_HIGHEST + 1,
+    Sound_PlaySync,
     Sound_PlayAsync,
     Sound_PlayAsyncOnStack,
     Sound_PlayLoop,
 
+    Sound_Quit = wxID_EXIT,
     Sound_About = wxID_ABOUT
 };
 
