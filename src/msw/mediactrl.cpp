@@ -44,6 +44,8 @@
 #include "wx/log.h"         //wxLogDebug
 #include "wx/math.h"        //log10 & pow
 #include "wx/msw/private.h" //user info and wndproc setting/getting
+#include "wx/dcclient.h"
+#include "wx/timer.h"
 
 //---------------------------------------------------------------------------
 // Externals (somewhere in src/msw/app.cpp and src/msw/window.cpp)
@@ -1884,6 +1886,10 @@ public:
     virtual bool Pause();
     virtual bool Stop();
 
+    virtual bool Load(const wxURI& location,
+                      const wxURI& proxy)
+    { return wxMediaBackend::Load(location, proxy); }
+
     virtual bool Load(const wxString& fileName);
     virtual bool Load(const wxURI& location);
 
@@ -2242,6 +2248,10 @@ public:
     virtual bool Play();
     virtual bool Pause();
     virtual bool Stop();
+
+    virtual bool Load(const wxURI& location,
+                      const wxURI& proxy)
+    { return wxMediaBackend::Load(location, proxy); }
 
     virtual bool Load(const wxString& fileName);
     virtual bool Load(const wxURI& location);
@@ -2990,7 +3000,7 @@ double wxAMMediaBackend::GetVolume()
 bool wxAMMediaBackend::SetVolume(double dVolume)
 {
     //pow(10.0, -80.0) to correct 0 == -INF
-    long lVolume = (2000.0 * log10(pow(10.0, -80.0)+dVolume));
+    long lVolume = (long)(2000.0 * log10(pow(10.0, -80.0)+dVolume));
     HRESULT hr = m_pAM->put_Volume( lVolume );
         if(FAILED(hr))
         {
@@ -4001,7 +4011,9 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
 // Note that in 99% of the cases this does nothing...
 // Anyway we set up the loading timer here to tell us when the movie is done
 //---------------------------------------------------------------------------
-void wxQTMediaBackend::PPRMProc (Movie theMovie, OSErr theErr, void* theRefCon)
+void wxQTMediaBackend::PPRMProc (Movie theMovie,
+                                 OSErr WXUNUSED_UNLESS_DEBUG(theErr),
+                                 void* theRefCon)
 {
     wxASSERT( theMovie );
     wxASSERT( theRefCon );
@@ -4393,10 +4405,10 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
         if(wxrect.width < 320)
             wxrect.width = 320;
 
-        rect.top = wxrect.y;
-        rect.left = wxrect.x;
-        rect.right = rect.left + wxrect.width;
-        rect.bottom = rect.top + wxrect.height;
+        rect.top = (short)wxrect.y;
+        rect.left = (short)wxrect.x;
+        rect.right = (short)(rect.left + wxrect.width);
+        rect.bottom = (short)(rect.top + wxrect.height);
 
         if(!m_pMC)
         {
