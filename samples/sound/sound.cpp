@@ -61,16 +61,18 @@ public:
     ~MyFrame() { delete m_sound; }
 
     // event handlers (these functions should _not_ be virtual)
-    void OnPlaySync(wxCommandEvent& event);
-    void OnPlayAsync(wxCommandEvent& event);
-    void OnPlayAsyncOnStack(wxCommandEvent& event);
-    void OnPlayLoop(wxCommandEvent& event);
-
     void OnSelectFile(wxCommandEvent& event);
 #ifdef __WXMSW__
     void OnSelectResource(wxCommandEvent& event);
 #endif // __WXMSW__
     void OnQuit(wxCommandEvent& event);
+
+    void OnPlaySync(wxCommandEvent& event);
+    void OnPlayAsync(wxCommandEvent& event);
+    void OnPlayAsyncOnStack(wxCommandEvent& event);
+    void OnPlayLoop(wxCommandEvent& event);
+    void OnStop(wxCommandEvent& event);
+
     void OnAbout(wxCommandEvent& event);
 
     void NotifyUsingFile(const wxString& name);
@@ -107,6 +109,7 @@ enum
     Sound_PlayAsync,
     Sound_PlayAsyncOnStack,
     Sound_PlayLoop,
+    Sound_Stop,
 
     Sound_Quit = wxID_EXIT,
     Sound_About = wxID_ABOUT
@@ -130,6 +133,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Sound_PlayAsync,        MyFrame::OnPlayAsync)
     EVT_MENU(Sound_PlayAsyncOnStack, MyFrame::OnPlayAsyncOnStack)
     EVT_MENU(Sound_PlayLoop,         MyFrame::OnPlayLoop)
+    EVT_MENU(Sound_Stop,             MyFrame::OnStop)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -190,6 +194,8 @@ MyFrame::MyFrame(const wxString& title)
     playMenu->Append(Sound_PlayAsync, _T("Play sound &asynchronously\tCtrl+A"));
     playMenu->Append(Sound_PlayAsyncOnStack, _T("Play sound asynchronously (&object on stack)\tCtrl+T"));
     playMenu->Append(Sound_PlayLoop, _T("&Loop sound\tCtrl+L"));
+    playMenu->AppendSeparator();
+    playMenu->Append(Sound_Stop, _T("&Stop playing\tCtrl-C"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -320,4 +326,9 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                 _T("Welcome to %s"), wxVERSION_STRING);
 
     wxMessageBox(msg, _T("About"), wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnStop(wxCommandEvent& WXUNUSED(event))
+{
+    wxSound::Stop();
 }
