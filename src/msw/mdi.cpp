@@ -850,6 +850,12 @@ void wxMDIChildFrame::InternalSetMenuBar()
     parent->m_parentFrameActive = false;
 }
 
+void wxMDIChildFrame::DetachMenuBar()
+{
+	RemoveWindowMenu(NULL, m_hMenu);
+	wxFrame::DetachMenuBar();
+}
+
 WXHICON wxMDIChildFrame::GetDefaultIcon() const
 {
     // we don't have any standard icons (any more)
@@ -1377,11 +1383,6 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
                 continue;
             }
 
-            if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Window")) )
-            {
-               success = true;
-               break;
-            }
 
             if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Help")) )
             {

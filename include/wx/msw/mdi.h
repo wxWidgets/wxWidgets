@@ -191,6 +191,7 @@ protected:
 private:
     bool m_needsInitialShow; // Show must be called in idle time after Creation
     bool m_needsResize; // flag which tells us to artificially resize the frame
+	virtual void DetachMenuBar() ;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMDIChildFrame)
