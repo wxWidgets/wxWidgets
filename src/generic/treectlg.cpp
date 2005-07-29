@@ -896,7 +896,8 @@ wxGenericTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
 
 void wxGenericTreeCtrl::SetWindowStyle(const long styles)
 {
-    if (!HasFlag(wxTR_HIDE_ROOT) && (styles & wxTR_HIDE_ROOT))
+    // Do not try to expand the root node if it hasn't been created yet
+    if (m_anchor && !HasFlag(wxTR_HIDE_ROOT) && (styles & wxTR_HIDE_ROOT))
     {
         // if we will hide the root, make sure children are visible
         m_anchor->SetHasPlus();
