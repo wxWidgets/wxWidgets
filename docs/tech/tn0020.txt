@@ -169,6 +169,10 @@ You can also break into your debugger or whatever program you want
 to use and check the memory layout of the class.  If it is the same
 then it is binary compatable.
 
+Also remember to look at http://www.wxwidgets.org/bincompat.html page which
+summarizes the results of testing of all the samples built against old
+libraries headers with the new library binaries under Unix.
+
 
 === EOF ===
 
