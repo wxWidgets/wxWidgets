@@ -154,7 +154,7 @@ bool wxHTTP::ParseHeaders()
     while (1)
 #endif
     {
-        m_perr = GetLine(this, line);
+        m_perr = ReadLine(this, line);
         if (m_perr != wxPROTO_NOERR)
             return false;
 
@@ -258,7 +258,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     }
 
     wxString tmp_str;
-    m_perr = GetLine(this, tmp_str);
+    m_perr = ReadLine(this, tmp_str);
     if (m_perr != wxPROTO_NOERR) {
         RestoreState();
         return false;
