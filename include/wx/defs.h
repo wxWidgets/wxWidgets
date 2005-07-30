@@ -1623,8 +1623,10 @@ enum wxBackgroundStyle
 /*  Standard menu IDs */
 enum
 {
+#if wxABI_VERSION >= 20602
     /* no id matches this one when compared to it */
     wxID_NONE = -3,
+#endif
 
     /*  id for a separator line in the menu (invalid for normal item) */
     wxID_SEPARATOR = -2,
