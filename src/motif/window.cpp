@@ -364,7 +364,7 @@ wxWindow::~wxWindow()
         g_captureWindow = NULL;
     
     m_isBeingDeleted = true;
-    
+
     // Motif-specific actions first
     WXWidget wMain = GetMainWidget();
     if ( wMain )
@@ -1436,6 +1436,8 @@ void wxWindow::DoMoveWindowIntr(int xx, int yy, int w, int h,
     }
     else
     {
+        if( xx < 0 ) xx = 0;
+        if( yy < 0 ) yy = 0;
         if( w < 1 ) w = 1;
         if( h < 1 ) h = 1;
 
@@ -1832,13 +1834,18 @@ bool wxWindow::AttachWidget (wxWindow* WXUNUSED(parent), WXWidget mainWidget,
         XtFree ((char *) ptr);
     }
 
-    if (x == -1)
-        x = 0;
-    if (y == -1)
-        y = 0;
-    SetSize (x, y, width, height);
+    SetInitialBestSize(wxSize(width, height));
 
-    return TRUE;
+    if (x != -1 || y != -1)
+    {
+        if (x == -1)
+            x = 0;
+        if (y == -1)
+            y = 0;
+        Move(x, y);
+    }
+
+    return true;
 }
 
 // Remove event handler, remove from hash table

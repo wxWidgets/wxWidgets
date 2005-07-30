@@ -196,12 +196,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
     // font
     ChangeFont(false);
 
-    wxSize best = GetBestSize();
-    if( size.x != -1 ) best.x = size.x;
-    if( size.y != -1 ) best.y = size.y;
-
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
-                  pos.x, pos.y, best.x, best.y);
+                  pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour();
 
@@ -683,7 +679,13 @@ wxSize wxDoGetSingleTextCtrlBestSize( Widget textWidget,
 wxSize wxTextCtrl::DoGetBestSize() const
 {
     if( IsSingleLine() )
-        return wxDoGetSingleTextCtrlBestSize( (Widget)m_mainWidget, this );
+    {
+        wxSize best = wxControl::DoGetBestSize();
+
+        if( best.x < 110 ) best.x = 110;
+
+        return best;
+    }
     else
         return wxWindow::DoGetBestSize();
 }
