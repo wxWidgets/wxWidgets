@@ -455,6 +455,11 @@ protected:
     // has the window been frozen by Freeze()?
     bool IsFrozen() const { return m_frozenness > 0; }
 
+    // this simply moves/resizes the given HWND which is supposed to be our
+    // sibling (this is useful for controls which are composite at MSW level
+    // and for which DoMoveWindow() is not enough)
+    void DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height);
+
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call
     // ::MoveWindow() except for composite controls which will want to arrange

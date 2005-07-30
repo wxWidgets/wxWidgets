@@ -121,8 +121,11 @@
     #define HAVE_TRACKMOUSEEVENT
 #endif // everything needed for TrackMouseEvent()
 
+// if this is set to 1, we use deferred window sizing to reduce flicker when
+// resizing complicated window hierarchies, but this can in theory result in
+// different behaviour than the old code so we keep the possibility to use it
+// by setting this to 0 (in the future this should be removed completely)
 #define USE_DEFERRED_SIZING 1
-#define USE_DEFER_BUG_WORKAROUND 1
 
 // ---------------------------------------------------------------------------
 // global variables
@@ -1486,8 +1489,8 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
         if ( parent )
             hParentWnd = GetWinHwnd(parent);
 
-        // Since we now have the absolute screen coords, if there's a parent we
-        // must subtract its top left corner
+        // Since we now have the absolute screen coords, if there's a
+        // parent we must subtract its top left corner
         if ( hParentWnd )
         {
             ::ScreenToClient(hParentWnd, &point);
@@ -1495,8 +1498,8 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
 
         if ( parent )
         {
-            // We may be faking the client origin. So a window that's really at (0,
-            // 30) may appear (to wxWin apps) to be at (0, 0).
+            // We may be faking the client origin. So a window that's
+            // really at (0, 30) may appear (to wxWin apps) to be at (0, 0).
             wxPoint pt(parent->GetClientAreaOrigin());
             point.x -= pt.x;
             point.y -= pt.y;
@@ -1541,6 +1544,42 @@ void wxWindowMSW::DoClientToScreen(int *x, int *y) const
         *y = pt.y;
 }
 
+void
+wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
+{
+#if USE_DEFERRED_SIZING
+    // if our parent had prepared a defer window handle for us, use it (unless
+    // we are a top level window)
+    wxWindowMSW * const parent = IsTopLevel() ? NULL : GetParent();
+
+    HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
+    if ( hdwp )
+    {
+        hdwp = ::DeferWindowPos(hdwp, (HWND)hwnd, NULL, x, y, width, height,
+                                SWP_NOZORDER);
+        if ( !hdwp )
+        {
+            wxLogLastError(_T("DeferWindowPos"));
+        }
+    }
+
+    if ( parent )
+    {
+        // hdwp must be updated as it may have been changed
+        parent->m_hDWP = (WXHANDLE)hdwp;
+    }
+
+    // otherwise (or if deferring failed) move the window in place immediately
+    if ( !hdwp )
+#endif // USE_DEFERRED_SIZING
+    {
+        if ( !::MoveWindow((HWND)hwnd, x, y, width, height, IsShown()) )
+        {
+            wxLogLastError(wxT("MoveWindow"));
+        }
+    }
+}
+
 void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
 {
     // TODO: is this consistent with other platforms?
@@ -1550,23 +1589,7 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     if (height < 0)
         height = 0;
 
-    // if our parent had prepared a defer window handle for us, use it (unless
-    // we are a top level window)
-    wxWindowMSW *parent = GetParent();
-
-#if USE_DEFERRED_SIZING
-    HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
-#else
-    HDWP hdwp = 0;
-#endif
-
-    wxMoveWindowDeferred(hdwp, this, GetHwnd(), x, y, width, height);
-
-#if USE_DEFERRED_SIZING
-    if ( parent )
-        // hdwp must be updated as it may have been changed
-        parent->m_hDWP = (WXHANDLE)hdwp;
-#endif
+    DoMoveSibling(m_hWnd, x, y, width, height);
 }
 
 // set the size of the window: if the dimensions are positive, just use them,
@@ -1583,26 +1606,8 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int currentX, currentY;
     int currentW, currentH;
 
-#if USE_DEFER_BUG_WORKAROUND
-    currentX = m_pendingPosition.x;
-    if (currentX == wxDefaultCoord)
-        GetPosition(&currentX, NULL);
-
-    currentY = m_pendingPosition.y;
-    if (currentY == wxDefaultCoord)
-        GetPosition(NULL, &currentY);
-
-    currentW = m_pendingSize.x;
-    if (currentW == wxDefaultCoord)
-        GetSize(&currentW, NULL);
-
-    currentH = m_pendingSize.y;
-    if (currentH == wxDefaultCoord)
-        GetSize(NULL, &currentH);
-#else
     GetPosition(&currentX, &currentY);
     GetSize(&currentW, &currentH);
-#endif
 
     // ... and don't do anything (avoiding flicker) if it's already ok
     if ( x == currentX && y == currentY &&
@@ -1652,25 +1657,8 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         }
     }
 
-#if USE_DEFER_BUG_WORKAROUND
-    // We don't actually use the hdwp here, but we need to know whether to
-    // save the pending dimensions or not.  This isn't done in DoMoveWindow
-    // (where the hdwp is used) because some controls have thier own
-    // DoMoveWindow so it is easier to catch it here.
-    wxWindowMSW *parent = GetParent();
-    HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
-    if (hdwp)
-    {
-        m_pendingPosition = wxPoint(x, y);
-        m_pendingSize = wxSize(width, height);
-    }
-    else
-    {
-        m_pendingPosition = wxDefaultPosition;
-        m_pendingSize = wxDefaultSize;
-    }
-#endif
-
+    m_pendingPosition = wxPoint(x, y);
+    m_pendingSize = wxSize(width, height);
     DoMoveWindow(x, y, width, height);
 }
 
@@ -4251,7 +4239,6 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             wxLogLastError(_T("EndDeferWindowPos"));
         }
 
-#if USE_DEFER_BUG_WORKAROUND
         // Reset our children's pending pos/size values.
         for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
               node;
@@ -4261,9 +4248,8 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             child->m_pendingPosition = wxDefaultPosition;
             child->m_pendingSize = wxDefaultSize;
         }
-#endif
     }
-#endif
+#endif // USE_DEFERRED_SIZING
 
     return processed;
 }
@@ -5999,31 +5985,6 @@ bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 #endif // wxUSE_ACCEL
 
 #endif // wxUSE_HOTKEY
-
-// Moves a window by deferred method or normal method
-bool wxMoveWindowDeferred(HDWP& hdwp, wxWindowBase* win, HWND hWnd, int x, int y, int width, int height)
-{
-    if ( hdwp )
-    {
-        hdwp = ::DeferWindowPos(hdwp, hWnd, NULL,
-                            x, y, width, height,
-                            SWP_NOZORDER);
-        if ( !hdwp )
-        {
-            wxLogLastError(_T("DeferWindowPos"));
-        }
-    }
-
-    // otherwise (or if deferring failed) move the window in place immediately
-    if ( !hdwp )
-    {
-        if ( !::MoveWindow(hWnd, x, y, width, height, win->IsShown()) )
-        {
-            wxLogLastError(wxT("MoveWindow"));
-        }
-    }
-    return hdwp != NULL;
-}
 
 // Not tested under WinCE
 #ifndef __WXWINCE__

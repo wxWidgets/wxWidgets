@@ -818,9 +818,6 @@ inline bool wxStyleHasBorder(long style)
                      wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
-// Deferred window moving
-bool wxMoveWindowDeferred(HDWP& hdwp, wxWindowBase* win, HWND hWnd, int x, int y, int width, int height);
-
 // ----------------------------------------------------------------------------
 // functions mapping HWND to wxWindow
 // ----------------------------------------------------------------------------

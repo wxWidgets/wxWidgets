@@ -40,11 +40,6 @@
 
 #include "wx/msw/subwin.h"
 
-// This is switched off because in some situations, the radiobox
-// buttons simply don't appear when deferred sizing is on.
-// Instead, refreshing on WM_MOVE seems to at least cure the droppings.
-#define USE_DEFERRED_SIZING 0
-
 #if wxUSE_TOOLTIPS
     #if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
         #include <commctrl.h>
@@ -557,17 +552,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             height = heightOld;
     }
 
-    // if our parent had prepared a defer window handle for us, use it (unless
-    // we are a top level window)
-
-#if USE_DEFERRED_SIZING
-    wxWindowMSW *parent = GetParent();
-    HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
-#else
-    HDWP hdwp = 0;
-#endif
-
-    wxMoveWindowDeferred(hdwp, this, GetHwnd(), xx, yy, width, height);
+    DoMoveWindow(xx, yy, width, height);
 
     // Now position all the buttons: the current button will be put at
     // wxPoint(x_offset, y_offset) and the new row/column will start at
@@ -664,14 +649,6 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             x_offset += widthBtn + cx1;
         }
     }
-
-#if USE_DEFERRED_SIZING
-    if (parent)
-    {
-        // hdwp must be updated as it may have been changed
-        parent->m_hDWP = (WXHANDLE)hdwp;
-    }
-#endif
 }
 
 // ----------------------------------------------------------------------------

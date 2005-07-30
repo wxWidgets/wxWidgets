@@ -42,8 +42,6 @@
     #include <commctrl.h>
 #endif
 
-#define USE_DEFERRED_SIZING 1
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -460,16 +458,6 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         return;
     }
 
-    // if our parent had prepared a defer window handle for us, use it (unless
-    // we are a top level window)
-    wxWindowMSW *parent = GetParent();
-
-#if USE_DEFERRED_SIZING
-    HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
-#else
-    HDWP hdwp = 0;
-#endif    
-
     // be careful to position the slider itself after moving the labels as
     // otherwise our GetBoundingBox(), which is called from WM_SIZE handler,
     // would return a wrong result and wrong size would be cached internally
@@ -482,21 +470,20 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 
         // position all labels: min at the top, value in the middle and max at
         // the bottom
-        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Min],
+        DoMoveSibling((HWND)(*m_labels)[SliderLabel_Min],
                      xLabel, y, wLabel, hLabel);
 
-        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Value],
+        DoMoveSibling((HWND)(*m_labels)[SliderLabel_Value],
                      xLabel, y + (height - hLabel)/2, wLabel, hLabel);
 
-        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Max],
-                     xLabel, y + height - hLabel, wLabel, hLabel);
+        DoMoveSibling((HWND)(*m_labels)[SliderLabel_Max],
+                      xLabel, y + height - hLabel, wLabel, hLabel);
 
         // position the slider itself along the left/right edge
-        wxMoveWindowDeferred(hdwp, this, GetHwnd(),
-                     HasFlag(wxSL_LEFT) ? x : x + wLabel + HGAP,
-                     y + hLabel/2,
-                     width - wLabel - HGAP,
-                     height - hLabel);
+        wxSliderBase::DoMoveWindow(HasFlag(wxSL_LEFT) ? x : x + wLabel + HGAP,
+                                   y + hLabel/2,
+                                   width - wLabel - HGAP,
+                                   height - hLabel);
     }
     else // horizontal
     {
@@ -507,30 +494,21 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 
         // position all labels: min on the left, value in the middle and max to
         // the right
-        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Min],
-                     x, yLabel, wLabel, hLabel);
+        DoMoveSibling((HWND)(*m_labels)[SliderLabel_Min],
+                      x, yLabel, wLabel, hLabel);
 
-        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Value],
-                     x + (width - wLabel)/2, yLabel, wLabel, hLabel);
+        DoMoveSibling((HWND)(*m_labels)[SliderLabel_Value],
+                      x + (width - wLabel)/2, yLabel, wLabel, hLabel);
 
-        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Max],
-                     x + width - wLabel, yLabel, wLabel, hLabel);
+        DoMoveSibling((HWND)(*m_labels)[SliderLabel_Max],
+                      x + width - wLabel, yLabel, wLabel, hLabel);
 
         // position the slider itself along the top/bottom edge
-        wxMoveWindowDeferred(hdwp, this, GetHwnd(),
-                     x,
-                     HasFlag(wxSL_TOP) ? y : y + hLabel,
-                     width,
-                     height - hLabel);
+        wxSliderBase::DoMoveWindow(x,
+                                   HasFlag(wxSL_TOP) ? y : y + hLabel,
+                                   width,
+                                   height - hLabel);
     }
-
-#if USE_DEFERRED_SIZING
-    if ( parent )
-    {
-        // hdwp must be updated as it may have been changed
-        parent->m_hDWP = (WXHANDLE)hdwp;
-    }
-#endif
 }
 
 wxSize wxSlider::DoGetBestSize() const
