@@ -759,6 +759,12 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             }
             break;
 
+        case wxFONTENCODING_EUC_JP:
+        case wxFONTENCODING_SHIFT_JIS:
+            info->xregistry = "jis*";
+            info->xencoding = "*";
+            break;
+
         case wxFONTENCODING_SYSTEM:
             info->xregistry =
             info->xencoding = wxT("*");
