@@ -102,10 +102,23 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 void wxApp::CleanUp()
 {
+    wxAppBase::CleanUp();
+
     delete wxWidgetHashTable;
     wxWidgetHashTable = NULL;
 
-    wxAppBase::CleanUp();
+    delete m_mainLoop;
+
+    for( wxPerDisplayDataMap::iterator it  = m_perDisplayData->begin(),
+                                       end = m_perDisplayData->end();
+         it != end; ++it )
+    {
+        delete it->second->m_visualInfo;
+        XtDestroyWidget( it->second->m_topLevelWidget );
+        delete it->second;
+    }
+
+    delete m_perDisplayData;
 }
 
 void wxApp::Exit()
@@ -133,19 +146,6 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
-    delete m_mainLoop;
-
-    for( wxPerDisplayDataMap::iterator it  = m_perDisplayData->begin(),
-                                       end = m_perDisplayData->end();
-         it != end; ++it )
-    {
-        delete it->second->m_visualInfo;
-        XtDestroyWidget( it->second->m_topLevelWidget );
-        delete it->second;
-    }
-
-    delete m_perDisplayData;
-
     wxApp::SetInstance(NULL);
 }
 
