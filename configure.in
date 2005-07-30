@@ -3139,6 +3139,24 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                         AC_DEFINE(__WXMOTIF20__,0)
                         AC_MSG_RESULT([not found])
                        ])
+
+        AC_MSG_CHECKING([whether Motif is Lesstif])
+        AC_TRY_COMPILE([
+                        #include <Xm/Xm.h>
+                       ],
+                       [
+                        #if !defined(LesstifVersion) || LesstifVersion <= 0
+                        #error "Not Lesstif"
+                        #endif
+                       ],
+                       [
+                        AC_DEFINE(__WXLESSTIF__,1)
+                        AC_MSG_RESULT([yes])
+                       ],
+                       [
+                        AC_DEFINE(__WXLESSTIF__,0)
+                        AC_MSG_RESULT([no])
+                       ])
         CFLAGS=$save_CFLAGS
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"

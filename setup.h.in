@@ -75,6 +75,9 @@
 /* Define this if your version of Motif is greater than 2.0 */
 #undef __WXMOTIF20__
 
+/* Define this if you are using Lesstif */
+#undef __WXLESSTIF__
+
 /*
  * Define to 1 for Unix[-like] system
  */

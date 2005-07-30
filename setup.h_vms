@@ -72,6 +72,9 @@
 /* Define this if your version of Motif is greater than 2.0 */
 /* #undef __WXMOTIF20__ */
 
+/* Define this if you are using Lesstif */
+/* #undef __WXLESSTIF__ */
+
 #ifdef __WXGTK__
 /* Define this if your version of GTK+ is greater than 1.2 */
 #define __WXGTK12__ 1
