@@ -1109,6 +1109,9 @@
 #define wxUSE_RICHEDIT2 0
 #define wxUSE_UXTHEME 0
 #define wxUSE_UXTHEME_AUTO 0
+#ifndef wxUSE_UNICODE_MSLU
+    #define wxUSE_UNICODE_MSLU 0
+#endif
 
 // ----------------------------------------------------------------------------
 // Crash debugging helpers
