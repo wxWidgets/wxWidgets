@@ -1879,7 +1879,7 @@ void wxImage::RotateHue(double angle)
     wxImage::HSVValue hsv;
     wxImage::RGBValue rgb;
 
-    assert (angle >= -1.0 && angle <= 1.0);
+    wxASSERT (angle >= -1.0 && angle <= 1.0);
     count = M_IMGDATA->m_width * M_IMGDATA->m_height;
     if (count > 0 && angle != 0.0)
     {
