@@ -21,7 +21,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/module.h"
     #include "wx/frame.h"
     #include "wx/dialog.h"
     #include "wx/log.h"
@@ -30,6 +29,7 @@
 
 #include "wx/app.h"
 #include "wx/evtloop.h"
+#include "wx/module.h"
 #include "wx/fontutil.h"
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
@@ -306,17 +306,31 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
+// Modules are cleaned up after wxApp::CleanUp(), and some modules may
+// require MGL to still be alive, e.g. the stock fonts need the fonts
+// manager. So append this module last minute in wxApp::CleanUp() to close
+// down MGL after all the other modules have been cleaned up.
+//
+struct wxMGLFinalCleanup: public wxModule
+{
+    bool OnInit() { return true; }
+
+    void OnExit()
+    {
+        delete wxTheFontsManager;
+        wxTheFontsManager = (wxFontsManager*) NULL;
+
+        wxDestroyMGL_WM();
+        MGL_exit();
+    }
+};
+
 void wxApp::CleanUp()
 {
     delete gs_rootWindow;
 
     wxAppBase::CleanUp();
 
-    // must do this after calling base class CleanUp()
-    delete wxTheFontsManager;
-    wxTheFontsManager = (wxFontsManager*) NULL;
-
-    wxDestroyMGL_WM();
-    MGL_exit();
+    wxModule::RegisterModule(new wxMGLFinalCleanup);
 }
 
