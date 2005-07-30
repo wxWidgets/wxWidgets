@@ -259,6 +259,9 @@
     <set var="UNICODE_DEFINE">
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
     </set>
+    <set var="MSLU_DEFINE">
+        <if cond="FORMAT!='autoconf' and MSLU=='1'">wxUSE_MSLU=1</if>
+    </set>
 
     <!-- fill for the specific case of the format/compiler -->
     <set var="WIN32_WINNT">
@@ -398,6 +401,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <define>$(RTTI_DEFINE)</define>
         <define>$(THREAD_DEFINE)</define>
         <define>$(UNICODE_DEFINE)</define>
+        <define>$(MSLU_DEFINE)</define>
         <!-- this include is added by configure, we need to put other
              includes before it: -->
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
