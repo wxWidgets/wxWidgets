@@ -1,4 +1,0 @@
-
-There is now a common file changes.txt for
-the entire wxWidgets library.
-

@@ -1,4 +1,0 @@
-dialogs ICON "dialogs.ico"
-
-#include "wx/msw/wx.rc"
-
