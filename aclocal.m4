@@ -1538,6 +1538,7 @@ while test ${D}# -gt 0; do
        -s|-Wl,*)
         # collect these load args
         ldargs="${D}{ldargs} ${D}1"
+        ;;
 
        -l*|-L*|-flat_namespace|-headerpad_max_install_names)
         # collect these options
