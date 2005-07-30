@@ -144,7 +144,6 @@
 
 /* --- start common options --- */
 
-
 #ifndef wxUSE_GUI
     #define wxUSE_GUI            0
 #endif
@@ -176,8 +175,6 @@
 #ifndef wxUSE_UNICODE
     #define wxUSE_UNICODE 0
 #endif
-
-#define wxUSE_UNICODE_MSLU 0
 
 #define wxUSE_WCHAR_T 0
 
@@ -277,10 +274,6 @@
 #define wxUSE_SOUND      0
 
 #define wxUSE_MEDIACTRL     0
-
-#define wxUSE_QUICKTIME     0
-
-#define wxUSE_DIRECTSHOW    0
 
 #define wxUSE_GSTREAMER    0
 
@@ -506,6 +499,8 @@
 #define wxUSE_RICHEDIT 0
 #define wxUSE_RICHEDIT2 0
 #endif
+
+#define wxUSE_UNICODE_MSLU 0
 
 /*
  * Supports bool type

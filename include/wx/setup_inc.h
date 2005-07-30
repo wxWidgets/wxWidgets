@@ -156,22 +156,6 @@
     #define wxUSE_UNICODE 0
 #endif
 
-// Set wxUSE_UNICODE_MSLU to 1 if you want to compile wxWidgets in Unicode mode
-// and be able to run compiled apps under Windows 9x as well as NT/2000/XP.
-// This setting enables use of unicows.dll from MSLU (MS Layer for Unicode, see
-// http://www.microsoft.com/globaldev/handson/dev/mslu_announce.mspx). Note
-// that you will have to modify the makefiles to include unicows.lib import
-// library as the first library (see installation instructions in install.txt
-// to learn how to do it when building the library or samples).
-//
-// If your compiler doesn't have unicows.lib, you can get a version of it at
-// http://libunicows.sourceforge.net
-//
-// Default is 0
-//
-// Recommended setting: 0 (1 if you want to deploy Unicode apps on 9x systems)
-#define wxUSE_UNICODE_MSLU 0
-
 // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
 // compiling the program in Unicode mode. More precisely, it will be possible
 // to construct wxString from a wide (Unicode) string and convert any wxString
