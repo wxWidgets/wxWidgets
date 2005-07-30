@@ -53,6 +53,21 @@
 #undef wxUSE_DEBUGREPORT
 #define wxUSE_DEBUGREPORT 0
 
+// other MSW settings not supported by CE
+#undef wxUSE_RICHEDIT
+#define wxUSE_RICHEDIT 0
+#undef wxUSE_RICHEDIT2
+#define wxUSE_RICHEDIT2 0
+
+#undef wxUSE_UXTHEME
+#define wxUSE_UXTHEME 0
+#undef wxUSE_UXTHEME_AUTO
+#define wxUSE_UXTHEME_AUTO 0
+
+#undef wxUSE_UNICODE_MSLU
+#define wxUSE_UNICODE_MSLU 0
+
+
 // Disable features which don't make sense for MS Smartphones
 // (due to pointer device usage, limited controls, file system)
 #if defined(__SMARTPHONE__)
