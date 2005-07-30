@@ -1453,17 +1453,32 @@ void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 // Get total size
 void wxWindowMSW::DoGetSize(int *x, int *y) const
 {
-    RECT rect = wxGetWindowRect(GetHwnd());
+    // if SetSize() had been called at wx level but not realized at Windows
+    // level yet (i.e. EndDeferWindowPos() not called), we still should return
+    // the new and not the old position to the other wx code
+    if ( m_pendingSize != wxDefaultSize )
+    {
+        if ( x )
+            *x = m_pendingSize.x;
+        if ( y )
+            *y = m_pendingSize.y;
+    }
+    else // use current size
+    {
+        RECT rect = wxGetWindowRect(GetHwnd());
 
-    if ( x )
-        *x = rect.right - rect.left;
-    if ( y )
-        *y = rect.bottom - rect.top;
+        if ( x )
+            *x = rect.right - rect.left;
+        if ( y )
+            *y = rect.bottom - rect.top;
+    }
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 {
+    // this is only for top level windows whose resizing is never deferred, so
+    // we can safely use the current size here
     RECT rect = wxGetClientRect(GetHwnd());
 
     if ( x )
@@ -1474,42 +1489,52 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
 {
-    RECT rect = wxGetWindowRect(GetHwnd());
-
-    POINT point;
-    point.x = rect.left;
-    point.y = rect.top;
-
-    // we do the adjustments with respect to the parent only for the "real"
-    // children, not for the dialogs/frames
-    if ( !IsTopLevel() )
+    if ( m_pendingPosition != wxDefaultPosition )
     {
-        HWND hParentWnd = 0;
-        wxWindow *parent = GetParent();
-        if ( parent )
-            hParentWnd = GetWinHwnd(parent);
-
-        // Since we now have the absolute screen coords, if there's a
-        // parent we must subtract its top left corner
-        if ( hParentWnd )
-        {
-            ::ScreenToClient(hParentWnd, &point);
-        }
-
-        if ( parent )
-        {
-            // We may be faking the client origin. So a window that's
-            // really at (0, 30) may appear (to wxWin apps) to be at (0, 0).
-            wxPoint pt(parent->GetClientAreaOrigin());
-            point.x -= pt.x;
-            point.y -= pt.y;
-        }
+        if ( x )
+            *x = m_pendingPosition.x;
+        if ( y )
+            *y = m_pendingPosition.y;
     }
+    else // use current position
+    {
+        RECT rect = wxGetWindowRect(GetHwnd());
 
-    if ( x )
-        *x = point.x;
-    if ( y )
-        *y = point.y;
+        POINT point;
+        point.x = rect.left;
+        point.y = rect.top;
+
+        // we do the adjustments with respect to the parent only for the "real"
+        // children, not for the dialogs/frames
+        if ( !IsTopLevel() )
+        {
+            HWND hParentWnd = 0;
+            wxWindow *parent = GetParent();
+            if ( parent )
+                hParentWnd = GetWinHwnd(parent);
+
+            // Since we now have the absolute screen coords, if there's a
+            // parent we must subtract its top left corner
+            if ( hParentWnd )
+            {
+                ::ScreenToClient(hParentWnd, &point);
+            }
+
+            if ( parent )
+            {
+                // We may be faking the client origin. So a window that's
+                // really at (0, 30) may appear (to wxWin apps) to be at (0, 0).
+                wxPoint pt(parent->GetClientAreaOrigin());
+                point.x -= pt.x;
+                point.y -= pt.y;
+            }
+        }
+
+        if ( x )
+            *x = point.x;
+        if ( y )
+            *y = point.y;
+    }
 }
 
 void wxWindowMSW::DoScreenToClient(int *x, int *y) const
