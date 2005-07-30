@@ -21,6 +21,12 @@
 #    endif
 #endif
 
+#if wxUSE_STACKWALKER
+    /* not supported under Mac */
+#   undef wxUSE_STACKWALKER
+#   define wxUSE_STACKWALKER 0
+#endif /* wxUSE_STACKWALKER */
+
 #ifdef __WXMAC_CLASSIC__
 #   include "wx/mac/classic/chkconf.h"
 #else
