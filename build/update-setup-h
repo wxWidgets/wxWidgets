@@ -28,7 +28,8 @@ msg()
 # file the common options are meant to be included in is the parameter)
 cat_common_options_for()
 {
-    cmd="cat include/wx/setup_inc.h"
+    # get rid of the copyright header on top of the file
+    cmd="sed '1,/^$/d' include/wx/setup_inc.h"
 
     # the file used for configure is special: we need to get rid of C++
     # comments in it because it is included by some C code and we also have to
