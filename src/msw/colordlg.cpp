@@ -31,15 +31,10 @@
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/defs.h"
-    #include "wx/bitmap.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
     #include "wx/colour.h"
     #include "wx/gdicmn.h"
     #include "wx/utils.h"
-    #include "wx/frame.h"
     #include "wx/dialog.h"
-    #include "wx/msgdlg.h"
 #endif
 
 #if wxUSE_COLOURDLG && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
