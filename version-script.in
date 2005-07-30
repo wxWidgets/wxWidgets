@@ -10,6 +10,23 @@
 
 @WX_VERSION_TAG@.2 {
     global:
+        *wxClientDataDictionary*Delete*;
+        *wxClientDataDictionary*DestroyData*;
+        *wxClientDataDictionary*Find*;
+        *wxClientDataDictionary*Get*;
+        *wxClientDataDictionary*Set*wxClientData*;
+        *wxClientDataDictionary*wxClientDataDictionary*;
+        *wxClientDataDictionaryPair*wxClientDataDictionaryPair*;
+        *wxClientDataDictionaryPairVector*at*;
+        *wxClientDataDictionaryPairVector*back*;
+        *wxClientDataDictionaryPairVector*Copy*void*;
+        *wxClientDataDictionaryPairVector*erase*;
+        *wxClientDataDictionaryPairVector*Free*void*;
+        *wxClientDataDictionaryPairVector*front*;
+        *wxClientDataDictionaryPairVector*pop_back*;
+        *wxClientDataDictionaryPairVector*push_back*wxClientDataDictionaryPair*;
+        *wxClientDataDictionaryPairVector*wxClientDataDictionaryPairVector*wxClientDataDictionaryPairVector*;
+        *wxClientDataDictionaryPairVector*wxClientDataDictionaryPairVector*;
         *wxDialog*GetEscapeId*;
         *wxEVT_MEDIA_LOADED*;
         *wxGenericListCtrl*SetItemFont*wxFont*;
@@ -23,6 +40,14 @@
         *wxMessageOutputBest*;
         *wxShadowObject*;
         *wxTopLevelWindowGTK*RequestUserAttention*;
+        *wxVectorBase*Alloc*;
+        *wxVectorBase*Append*void*;
+        *wxVectorBase*clear*;
+        *wxVectorBase*copy*wxVectorBase*;
+        *wxVectorBase*GetItem*;
+        *wxVectorBase*RemoveAt*;
+        *wxVectorBase*size*;
+        *wxVectorBase*wxVectorBase*;
         *wxWizard*FinishLayout*;
         *wxXmlResource*ConvertFileNameToURL*wxString*;
         *wxXmlResource*IsArchive*wxString*;

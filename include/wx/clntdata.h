@@ -166,8 +166,9 @@ protected:
 
 };
 
-// not Motif-specific, but currently used only under Motif
-#ifdef __WXMOTIF__
+// not Motif-specific, but currently used only under Motif,
+// compiled to make wxMotif and wxGTK base libraries compatible
+#if defined(__WXMOTIF__) || wxABI_VERSION >= 20602
 
 #include <wx/vector.h>
 
