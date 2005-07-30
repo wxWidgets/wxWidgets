@@ -28,6 +28,7 @@
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
 
+#if wxUSE_POPUPWIN
 #include "wx/popupwin.h"
 
 // ============================================================================
@@ -75,3 +76,4 @@ WXDWORD wxPopupWindow::OS2GetStyle( long lFlags,
 
     return dwStyle;
 } // end of wxPopupWindow::OS2GetStyle
+#endif
