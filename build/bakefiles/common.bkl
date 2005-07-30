@@ -260,7 +260,7 @@
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
     </set>
     <set var="MSLU_DEFINE">
-        <if cond="FORMAT!='autoconf' and MSLU=='1'">wxUSE_MSLU=1</if>
+        <if cond="FORMAT!='autoconf' and MSLU=='1'">wxUSE_UNICODE_MSLU=1</if>
     </set>
 
     <!-- fill for the specific case of the format/compiler -->
