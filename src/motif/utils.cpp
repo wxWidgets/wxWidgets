@@ -155,8 +155,11 @@ wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
     // Motif version of the libs but the X protocol
     // version!
     Display *display = wxGlobalDisplay();
-    info.versionMajor = ProtocolVersion (display);
-    info.versionMinor = ProtocolRevision (display);
+    if (display)
+    {
+        info.versionMajor = ProtocolVersion (display);
+        info.versionMinor = ProtocolRevision (display);
+    }
     info.os = wxMOTIF_X;
     return info;
 }
