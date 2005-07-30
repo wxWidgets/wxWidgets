@@ -97,6 +97,10 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
 
+#if wxUSE_INTL
+    wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
+#endif
+
     return true;
 }
 
@@ -189,6 +193,7 @@ bool wxApp::OnInitGui()
     if( !wxAppBase::OnInitGui() )
         return false;
 
+    XtSetLanguageProc(NULL, NULL, NULL);
     XtToolkitInitialize() ;
     wxTheApp->m_appContext = (WXAppContext) XtCreateApplicationContext();
     XtAppSetFallbackResources((XtAppContext) wxTheApp->m_appContext, fallbackResources);
