@@ -875,7 +875,7 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
         {
             // second round: use normal weight
             if ( round == 1 )
-        {
+            {
                 if ( testweight != wxNORMAL )
                 {
                     testweight = wxNORMAL;
@@ -904,11 +904,11 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
                 font = wxLoadQueryFont(i, family, teststyle, testweight, underlined,
                                    facename, info.xregistry, info.xencoding,
                                    xFontName);
-        }
+            }
 
-        // Search for larger size (approx.)
-        for ( i = pointSize + 10; !font && i <= max_size; i += 10 )
-        {
+            // Search for larger size (approx.)
+            for ( i = pointSize + 10; !font && i <= max_size; i += 10 )
+            {
                 font = wxLoadQueryFont(i, family, teststyle, testweight, underlined,
                                    facename, info.xregistry, info.xencoding,
                                    xFontName);
