@@ -337,17 +337,17 @@ void wxNotebook::MacSetupTabs()
     m_peer->SetMaximum( GetPageCount() ) ;
 
     wxNotebookPage *page;
-    ControlTabInfoRec info;
+    ControlTabInfoRecV1 info;
 
     const size_t countPages = GetPageCount();
     for(size_t ii = 0; ii < countPages; ii++)
     {
         page = m_pages[ii];
-        info.version = 0;
+        info.version = kControlTabInfoVersionOne;
         info.iconSuiteID = 0;
-        wxMacStringToPascal( page->GetLabel() , info.name ) ;
-        m_peer->SetData<ControlTabInfoRec>( ii+1, kControlTabInfoTag, &info ) ;
-        m_peer->SetTabEnabled( ii + 1 , true ) ;
+        wxMacCFStringHolder cflabel( page->GetLabel() , m_font.GetEncoding() ) ;
+        info.name = cflabel ;
+        m_peer->SetData<ControlTabInfoRecV1>( ii+1, kControlTabInfoTag, &info ) ;
 
         if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
         {
@@ -362,7 +362,7 @@ void wxNotebook::MacSetupTabs()
                 wxMacReleaseBitmapButton( &info ) ;
             }
         }
-
+        m_peer->SetTabEnabled( ii + 1 , true ) ;
     }
     Rect bounds;
     m_peer->GetRectInWindowCoords( &bounds ) ;
