@@ -949,9 +949,9 @@ void wxToolBar::SetToolBitmapSize(const wxSize& size)
         int maxs = wxMax( size.x, size.y );
         HIToolbarDisplaySize sizeSpec ;
         if ( maxs > 32 )
-            sizeSpec = kHIToolbarDisplaySizeLarge ;
-        else if ( maxs > 24 )
             sizeSpec = kHIToolbarDisplaySizeNormal ;
+        else if ( maxs > 24 )
+            sizeSpec = kHIToolbarDisplaySizeDefault ;
         else
             sizeSpec = kHIToolbarDisplaySizeSmall ;
             
