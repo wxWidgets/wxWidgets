@@ -547,8 +547,6 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
         else
             mode = kHIToolbarDisplayModeIconOnly ;
 
-        displaySize = kHIToolbarDisplaySizeDefault ;
-
         HIToolbarSetDisplayMode( (HIToolbarRef) m_macHIToolbarRef , mode ) ;
         HIToolbarSetDisplaySize( (HIToolbarRef) m_macHIToolbarRef , displaySize ) ;
     }
@@ -949,8 +947,14 @@ void wxToolBar::SetToolBitmapSize(const wxSize& size)
     if (m_macHIToolbarRef != NULL)
     {
         int maxs = wxMax( size.x, size.y );
-        // TODO CHECK
-        HIToolbarDisplaySize sizeSpec = ((maxs > 16) ? kHIToolbarDisplaySizeNormal : kHIToolbarDisplaySizeSmall);
+        HIToolbarDisplaySize sizeSpec ;
+        if ( maxs > 32 )
+            sizeSpec = kHIToolbarDisplaySizeLarge ;
+        else if ( maxs > 24 )
+            sizeSpec = kHIToolbarDisplaySizeNormal ;
+        else
+            sizeSpec = kHIToolbarDisplaySizeSmall ;
+            
         HIToolbarSetDisplaySize( (HIToolbarRef) m_macHIToolbarRef, sizeSpec );
     }
 #endif
