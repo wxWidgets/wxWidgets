@@ -50,57 +50,65 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
 
 int wxDirDialog::ShowModal()
 {
-    NavDialogOptions        mNavOptions;
-    NavObjectFilterUPP      mNavFilterUPP = NULL;
-    NavReplyRecord          mNavReply;
-
-    ::NavGetDefaultDialogOptions(&mNavOptions);
-
-    mNavReply.validRecord              = false;
-    mNavReply.replacing                = false;
-    mNavReply.isStationery             = false;
-    mNavReply.translationNeeded        = false;
-    mNavReply.selection.descriptorType = typeNull;
-    mNavReply.selection.dataHandle     = nil;
-    mNavReply.keyScript                = smSystemScript;
-    mNavReply.fileTranslation          = nil;
-
-    // Set default location, the location
-    //   that's displayed when the dialog
-    //   first appears
-
-    OSErr err = ::NavChooseFolder(
-                        NULL,
-                        &mNavReply,
-                        &mNavOptions,
-                        NULL,
-                        mNavFilterUPP,
-                        0L);                            // User Data
-
-    if ( (err != noErr) && (err != userCanceledErr) ) {
+    NavDialogRef dialog;
+    NavDialogCreationOptions options;
+    NavReplyRecord reply ;
+    bool disposeReply = false ;
+    OSStatus err = noErr;
+    
+    err = NavGetDefaultDialogCreationOptions(&options);
+    if (err == noErr) 
+    {
+        wxMacCFStringHolder message(m_message, m_font.GetEncoding());
+        options.message = message;
+        err = NavCreateChooseFolderDialog(&options, NULL, NULL, NULL, &dialog);
+        if (err == noErr) 
+        {        
+            err = NavDialogRun(dialog);
+            if ( err == noErr )
+            {
+                err = NavDialogGetReply(dialog, &reply);
+                disposeReply = true ;
+            }
+        }
+    }
+    
+    if ( err == noErr ) 
+    { 
+        if ( reply.validRecord )
+        {
+            FSRef folderInfo;
+            AEDesc specDesc ;
+            
+            OSErr err = ::AECoerceDesc( &reply.selection , typeFSRef, &specDesc);
+            if ( err != noErr ) 
+            {
+                m_path = wxEmptyString ;
+            }
+            else
+            {
+                folderInfo = **(FSRef**) specDesc.dataHandle;
+                m_path = wxMacFSRefToPath( &folderInfo ) ;
+                if (specDesc.dataHandle != nil) 
+                {
+                    ::AEDisposeDesc(&specDesc);
+                }            
+            }
+        }
+        else
+        {
+            err = paramErr ; // could be any error, only used for giving back wxID_CANCEL
+        }
+    }
+    
+    if ( disposeReply )
+        ::NavDisposeReply(&reply);
+    
+    // apparently cancelling shouldn't change m_path
+    if ( err != noErr && err != userCanceledErr )
         m_path = wxEmptyString ;
-        return wxID_CANCEL ;
-    }
-
-    if (mNavReply.validRecord) {        // User chose a folder
-
-        FSRef folderInfo;
-        AEDesc specDesc ;
-
-        OSErr err = ::AECoerceDesc( &mNavReply.selection , typeFSRef, &specDesc);
-        if ( err != noErr ) {
-            m_path = wxEmptyString ;
-            return wxID_CANCEL ;
-        }
-        folderInfo = **(FSRef**) specDesc.dataHandle;
-        if (specDesc.dataHandle != nil) {
-            ::AEDisposeDesc(&specDesc);
-        }
-
-        m_path = wxMacFSRefToPath( &folderInfo ) ;
-        return wxID_OK ;
-    }
-    return wxID_CANCEL;
+    
+    return (err == noErr) ? wxID_OK : wxID_CANCEL ;
 }
 
 #endif
