@@ -531,8 +531,7 @@ void MyFrame::LayoutChildren()
     int offset;
     if ( m_tbar )
     {
-        m_tbar->SetSize(wxDefaultCoord, size.y);
-        m_tbar->Move(0, 0);
+        m_tbar->SetSize(0, 0, wxDefaultCoord, size.y);
 
         offset = m_tbar->GetSize().x;
     }
