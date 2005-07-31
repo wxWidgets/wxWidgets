@@ -43,9 +43,9 @@ SOUND_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 SOUND_OBJECTS =  \
-	$(__sound___win32rc) \
 	$(__sound_os2_lib_res) \
-	sound_sound.o
+	sound_sound.o \
+	$(__sound___win32rc)
 
 ### Conditionally set variables: ###
 
@@ -84,7 +84,6 @@ SOUND_OBJECTS =  \
 COND_PLATFORM_OS2_1___sound___os2_emxbindcmd = $(NM) sound$(EXEEXT) | if grep -q \
 	pmwin.763 ; then emxbind -ep sound$(EXEEXT) ; fi
 @COND_PLATFORM_OS2_1@__sound___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___sound___os2_emxbindcmd)
-@COND_PLATFORM_WIN32_1@__sound___win32rc = sound_sample_rc.o
 @COND_PLATFORM_OS2_1@__sound_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__sound_bundle___depname = sound_bundle
@@ -100,6 +99,7 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
+@COND_PLATFORM_WIN32_1@__sound___win32rc = sound_sound_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -188,11 +188,11 @@ data:
 	esac; \
 	done
 
-sound_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
-
 sound_sound.o: $(srcdir)/sound.cpp
 	$(CXXC) -c -o $@ $(SOUND_CXXFLAGS) $(srcdir)/sound.cpp
+
+sound_sound_rc.o: $(srcdir)/sound.rc
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:
