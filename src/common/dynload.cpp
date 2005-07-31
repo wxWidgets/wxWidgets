@@ -137,11 +137,11 @@ void wxPluginLibrary::UpdateClasses()
 {
     for (wxClassInfo *info = m_after; info != m_before; info = info->m_next)
     {
-        if( info->m_className )
+        if( info->GetClassName() )
         {
             // Hash all the class names into a local table too so
             // we can quickly find the entry they correspond to.
-            (*ms_classes)[info->m_className] = this;
+            (*ms_classes)[info->GetClassName()] = this;
         }
     }
 }
@@ -154,7 +154,7 @@ void wxPluginLibrary::RestoreClasses()
 
     for(wxClassInfo *info = m_after; info != m_before; info = info->m_next)
     {
-        ms_classes->erase(ms_classes->find(info->m_className));
+        ms_classes->erase(ms_classes->find(info->GetClassName()));
     }
 }
 
