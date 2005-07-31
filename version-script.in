@@ -31,6 +31,7 @@
         *wxEVT_MEDIA_LOADED*;
         *wxGenericListCtrl*SetItemFont*wxFont*;
         *wxGenericListCtrl*GetItemFont*;
+        *wxGetTextExtent*wxFont*wxString*;
         *wxImage*HSVValue*;
         *wxImage*RGBValue*;
         *wxImage*RotateHue*;

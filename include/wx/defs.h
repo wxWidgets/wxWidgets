@@ -2677,6 +2677,7 @@ typedef void*           WXRegion;
 typedef void*           WXFont;
 typedef void*           WXImage;
 typedef void*           WXFontList;
+typedef void*           WXFontSet;
 typedef void*           WXRendition;
 typedef void*           WXRenderTable;
 typedef void*           WXFontType; /* either a XmFontList or XmRenderTable */

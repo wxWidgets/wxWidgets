@@ -36,7 +36,7 @@ class WXDLLEXPORT wxColour;
 #define wxCHECK_LESSTIF_VERSION( major, minor ) \
   ( LesstifVersion >= (major) * 1000 + (minor) )
 
-#define wxCHECK_LESSTIF() ( defined(LesstifVersion) && LesstifVersion > 0 )
+#define wxCHECK_LESSTIF() ( __WXLESSTIF__ )
 
 // ----------------------------------------------------------------------------
 // Miscellaneous functions
@@ -96,6 +96,10 @@ extern void wxDoChangeBackgroundColour(WXWidget widget,
                                        wxColour& backgroundColour,
                                        bool changeArmColour = false);
 extern void wxDoChangeFont(WXWidget widget, wxFont& font);
+extern void wxGetTextExtent(WXDisplay* display, const wxFont& font,
+                            double scale,
+                            const wxString& string, int* width, int* height,
+                            int* ascent, int* descent);
 
 #define wxNO_COLORS   0x00
 #define wxBACK_COLORS 0x01

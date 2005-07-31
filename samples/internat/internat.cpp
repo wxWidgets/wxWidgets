@@ -131,8 +131,10 @@ bool MyApp::OnInit()
         wxLANGUAGE_CZECH,
         wxLANGUAGE_POLISH,
         wxLANGUAGE_SWEDISH,
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE || defined(__WXMOTIF__)
         wxLANGUAGE_JAPANESE,
+#endif
+#if wxUSE_UNICODE
         wxLANGUAGE_GEORGIAN,
 #endif
         wxLANGUAGE_ENGLISH,
@@ -153,8 +155,10 @@ bool MyApp::OnInit()
             _T("Czech"),
             _T("Polish"),
             _T("Swedish"),
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE || defined(__WXMOTIF__)
             _T("Japanese"),
+#endif
+#if wxUSE_UNICODE
             _T("Georgian"),
 #endif
             _T("English"),

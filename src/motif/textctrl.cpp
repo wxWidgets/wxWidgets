@@ -121,25 +121,35 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
-    bool wantHorizScrolling = ((m_windowStyle & wxHSCROLL) != 0);
-
+    Bool wantHorizScroll = (m_windowStyle & wxHSCROLL) != 0 ? True : False;
     // If we don't have horizontal scrollbars, we want word wrap.
-    bool wantWordWrap = !wantHorizScrolling;
+    // OpenMotif 2.1 crashes if wantWordWrap is True in Japanese
+    // locale (and probably other multibyte locales). The check might be
+    // more precise
+#if wxCHECK_LESSTIF() || wxCHECK_MOTIF_VERSION( 2, 2 )
+    Bool wantWordWrap = wantHorizScroll == True ? False : True;
+#else
+    Bool wantWordWrap = False;
+#endif
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
-        Arg args[2];
-        XtSetArg (args[0], XmNscrollHorizontal, wantHorizScrolling ? True : False);
-        XtSetArg (args[1], XmNwordWrap, wantWordWrap ? True : False);
+        Arg args[8];
+        int count = 0;
+        XtSetArg (args[count], XmNscrollHorizontal, wantHorizScroll); ++count;
+        XtSetArg (args[count], (String) wxFont::GetFontTag(),
+                  m_font.GetFontType( XtDisplay(parentWidget) ) ); ++count;
+        XtSetArg (args[count], XmNwordWrap, wantWordWrap); ++count;
+        XtSetArg (args[count], XmNvalue, value.c_str()); ++count;    
+        XtSetArg (args[count], XmNeditable,
+                  style & wxTE_READONLY ? False : True); ++count;
+        XtSetArg (args[count], XmNeditMode, XmMULTI_LINE_EDIT ); ++count;
 
-        m_mainWidget = (WXWidget) XmCreateScrolledText(parentWidget,
-                                                       wxConstCast(name.c_str(), char),
-                                                       args, 2);
+        m_mainWidget =
+            (WXWidget) XmCreateScrolledText(parentWidget,
+                                            wxConstCast(name.c_str(), char),
+                                            args, count);
 
-        XtVaSetValues ((Widget) m_mainWidget,
-                        XmNeditable, ((style & wxTE_READONLY) ? False : True),
-                        XmNeditMode, XmMULTI_LINE_EDIT,
-                        NULL);
         XtManageChild ((Widget) m_mainWidget);
     }
     else
@@ -149,13 +159,14 @@ bool wxTextCtrl::Create(wxWindow *parent,
                                   wxConstCast(name.c_str(), char),
                                   xmTextWidgetClass,
                                   parentWidget,
+                                  wxFont::GetFontTag(), m_font.GetFontType( XtDisplay(parentWidget) ),
+                                  XmNvalue, value.c_str(),
+                                  XmNeditable, (style & wxTE_READONLY) ?
+                                      False : True,
                                   NULL
                                  );
 
-        XtVaSetValues ((Widget) m_mainWidget,
-                        XmNeditable, ((style & wxTE_READONLY) ? False : True),
-                        NULL);
-
+#if 0
         // TODO: Is this relevant? What does it do?
         int noCols = 2;
         if (!value.IsNull() && (value.Length() > (unsigned int) noCols))
@@ -163,6 +174,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         XtVaSetValues((Widget) m_mainWidget,
                       XmNcolumns, noCols,
                       NULL);
+#endif
     }
 
     // remove border if asked for
@@ -171,15 +183,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
         XtVaSetValues((Widget)m_mainWidget,
                       XmNshadowThickness, 0,
                       NULL);
-    }
-
-    if ( !value.empty() )
-    {
-        // do this instead... MB
-        //
-        XtVaSetValues( (Widget) m_mainWidget,
-                       XmNvalue, wxConstCast(value.c_str(), char),
-                       NULL);
     }
 
     // install callbacks
@@ -192,9 +195,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
     XtAddCallback((Widget) m_mainWidget, XmNfocusCallback, (XtCallbackProc)wxTextWindowGainFocusProc, (XtPointer)this);
 
     XtAddCallback((Widget) m_mainWidget, XmNlosingFocusCallback, (XtCallbackProc)wxTextWindowLoseFocusProc, (XtPointer)this);
-
-    // font
-    ChangeFont(false);
 
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, size.x, size.y);
@@ -242,21 +242,18 @@ wxString wxTextCtrl::GetValue() const
     return str;
 }
 
-void wxTextCtrl::SetValue(const wxString& value)
+void wxTextCtrl::SetValue(const wxString& text)
 {
     m_inSetValue = true;
 
-    // do this instead... MB
-    //
-    // with (at least) OpenMotif 2.1 this causes a lot of flicker
-#if 0
-    XtVaSetValues( (Widget) m_mainWidget,
-                   XmNvalue, wxConstCast(value.c_str(), char),
+    XmTextSetString ((Widget) m_mainWidget, wxConstCast(text.c_str(), char));
+    XtVaSetValues ((Widget) m_mainWidget,
+                   XmNcursorPosition, text.length(),
                    NULL);
-#endif
 
-    Clear();
-    AppendText( value );
+    SetInsertionPoint(text.length());
+    XmTextShowPosition ((Widget) m_mainWidget, text.length());
+    m_modified = TRUE;
 
     m_inSetValue = false;
 }

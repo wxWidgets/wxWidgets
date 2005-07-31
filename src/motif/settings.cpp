@@ -161,11 +161,17 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
+    int pointSize = 12;
+
+    if (   wxFont::GetDefaultEncoding() == wxFONTENCODING_SHIFT_JIS
+        || wxFont::GetDefaultEncoding() == wxFONTENCODING_EUC_JP)
+        pointSize = 15;
+
     switch (index)
     {
         case wxSYS_SYSTEM_FIXED_FONT:
         {
-            return wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, false);
+            return wxFont(pointSize, wxMODERN, wxNORMAL, wxNORMAL, false);
             break;
         }
         case wxSYS_DEVICE_DEFAULT_FONT:
@@ -173,7 +179,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEFAULT_GUI_FONT:
         default:
         {
-            return wxFont(12, wxSWISS, wxNORMAL, wxNORMAL, false);
+            return wxFont(pointSize, wxSWISS, wxNORMAL, wxNORMAL, false);
             break;
         }
     }

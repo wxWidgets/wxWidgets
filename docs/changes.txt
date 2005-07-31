@@ -43,6 +43,7 @@ wxGTK:
 
 - ShowFullScreen() shows the window if it was still hidden (rpedroso)
 - Implemented wxTopLevelWindow::RequestUserAttention() (Mart Raudsepp)
+- Base library is now binary compatible when built with wxGTK and wxMotif
 
 wxOS2
 
@@ -52,6 +53,11 @@ wxUniv:
 
 - Window creation now honours wxVSCROLL.
 - Standalone scrollbars generate events of correct type (Jochen Roemmler)
+
+wxMotif:
+
+- Base library is now binary compatible when built with wxGTK and wxMotif
+- wxMotif can now display Japanese text under Japanese locale.
 
 
 2.6.1

@@ -1464,29 +1464,24 @@ int wxWindow::GetCharHeight() const
 {
     wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
 
-    WXFontStructPtr pFontStruct = m_font.GetFontStruct(1.0, GetXDisplay());
+    int height;
+    
+    wxGetTextExtent (GetXDisplay(), m_font, 1.0,
+                     "x", NULL, &height, NULL, NULL);
 
-    int direction, ascent, descent;
-    XCharStruct overall;
-    XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
-        &descent, &overall);
-
-    //  return (overall.ascent + overall.descent);
-    return (ascent + descent);
+    return height;
 }
 
 int wxWindow::GetCharWidth() const
 {
     wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
 
-    WXFontStructPtr pFontStruct = m_font.GetFontStruct(1.0, GetXDisplay());
+    int width;
+    
+    wxGetTextExtent (GetXDisplay(), m_font, 1.0,
+                     "x", &width, NULL, NULL, NULL);
 
-    int direction, ascent, descent;
-    XCharStruct overall;
-    XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
-        &descent, &overall);
-
-    return overall.width;
+    return width;
 }
 
 void wxWindow::GetTextExtent(const wxString& string,
@@ -1494,36 +1489,14 @@ void wxWindow::GetTextExtent(const wxString& string,
                              int *descent, int *externalLeading,
                              const wxFont *theFont) const
 {
-    wxFont *fontToUse = (wxFont *)theFont;
-    if (!fontToUse)
-        fontToUse = (wxFont *) & m_font;
+    const wxFont *fontToUse = theFont ? theFont : &m_font;
 
     wxCHECK_RET( fontToUse->Ok(), "valid window font needed" );
-    
-    WXFontStructPtr pFontStruct = fontToUse->GetFontStruct(1.0, GetXDisplay());
 
-    int direction, ascent, descent2;
-    XCharStruct overall;
-    int slen = string.Len();
-
-#if 0
-    if (use16)
-        XTextExtents16((XFontStruct*) pFontStruct, (XChar2b *) (char*) (const char*) string, slen, &direction,
-        &ascent, &descent2, &overall);
-#endif
-
-    XTextExtents((XFontStruct*) pFontStruct, string, slen,
-                 &direction, &ascent, &descent2, &overall);
-
-    if ( x )
-        *x = (overall.width);
-    if ( y )
-        *y = (ascent + descent2);
-    if (descent)
-        *descent = descent2;
     if (externalLeading)
         *externalLeading = 0;
-
+    wxGetTextExtent (GetXDisplay(), *fontToUse, 1.0,
+                     string, x, y, NULL, descent);
 }
 
 // ----------------------------------------------------------------------------

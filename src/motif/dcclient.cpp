@@ -1035,7 +1035,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     int cx = 0;
     int cy = 0;
     int ascent = 0;
-    int slen;
+    int slen = text.length();
 
     // Set FillStyle, otherwise X will use current stipple!
     XGCValues gcV, gcBackingV;
@@ -1049,27 +1049,9 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         XSetFillStyle ((Display*) m_display, (GC) m_gcBacking, FillSolid);
     }
 
-    slen = strlen(text);
-
     if (m_font.Ok())
-    {
-        WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
-        int direction, descent;
-        XCharStruct overall_return;
-#if 0
-        if (use16)
-            (void)XTextExtents16((XFontStruct*) pFontStruct, (XChar2b *)(const char*) text, slen, &direction,
-            &ascent, &descent, &overall_return);
-        else
-#endif // 0
-            (void)XTextExtents((XFontStruct*) pFontStruct,
-                               wxConstCast(text.c_str(), char),
-                               slen, &direction,
-                               &ascent, &descent, &overall_return);
-
-        cx = overall_return.width;
-        cy = ascent + descent;
-    }
+        wxGetTextExtent (m_display, m_font, m_userScaleY * m_logicalScaleY,
+                         text, &cx, &cy, &ascent, NULL);
 
     // First draw a rectangle representing the text background, if a text
     // background is specified
@@ -1145,7 +1127,12 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         (XChar2b *)(char*) (const char*) text, slen);
     else
 #endif // 0
+#if wxMOTIF_NEW_FONT_HANDLING
+        XFontSet fset = (XFontSet) m_font.GetFontSet (m_userScaleY * m_logicalScaleY, m_display);
+        XmbDrawString((Display*) m_display, (Pixmap) m_pixmap, fset, (GC) m_gc, XLOG2DEV (x), YLOG2DEV (y) + ascent, text, slen);
+#else
         XDrawString((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, XLOG2DEV (x), YLOG2DEV (y) + ascent, text, slen);
+#endif
 
     if (m_window && m_window->GetBackingPixmap()) {
 #if 0
@@ -1155,9 +1142,15 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
             (XChar2b *)(char*) (const char*) text, slen);
         else
 #endif // 0
+#if wxMOTIF_NEW_FONT_HANDLING
+            XmbDrawString((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), fset, (GC) m_gcBacking,
+            XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent,
+                        wxConstCast(text.c_str(), char), slen);
+#else
             XDrawString((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
             XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent,
                         wxConstCast(text.c_str(), char), slen);
+#endif
     }
 
     // restore fill style
@@ -1208,31 +1201,10 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y,
     int cx = 0;
     int cy = 0;
     int ascent = 0;
-    int slen = text.length();
 
     if (m_font.Ok())
-    {
-        // Calculate text extent.
-        WXFontStructPtr pFontStruct =
-            m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
-        int direction, descent;
-        XCharStruct overall_return;
-#if 0
-        if (use16)
-            (void)XTextExtents16((XFontStruct*) pFontStruct,
-                                 (XChar2b *)(const char*) text,
-                                 slen, &direction,
-            &ascent, &descent, &overall_return);
-        else
-#endif // 0
-            (void)XTextExtents((XFontStruct*) pFontStruct,
-                               wxConstCast(text.c_str(), char),
-                               slen, &direction,
-                               &ascent, &descent, &overall_return);
-
-        cx = overall_return.width;
-        cy = ascent + descent;
-    }
+        wxGetTextExtent (m_display, m_font, m_userScaleY * m_logicalScaleY,
+                         text, &cx, &cy, &ascent, NULL);
 
     wxBitmap src(cx, cy);
     wxMemoryDC dc;
@@ -1340,9 +1312,7 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
-    wxFont* theFont = font;
-    if (!theFont)
-        theFont = (wxFont *)&m_font; // const_cast
+    const wxFont* theFont = font ? font : &m_font;
 
     if (!theFont->Ok())
     {
@@ -1354,33 +1324,11 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
         return;
     }
 
-    WXFontStructPtr pFontStruct = theFont->GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
+    wxGetTextExtent(m_display, *theFont, m_userScaleY * m_logicalScaleY,
+                    string, width, height, NULL, descent);
 
-    int direction, ascent, descent2;
-    XCharStruct overall;
-    int slen;
-
-#if 0
-    if (use16)
-        slen = str16len(string);
-    else
-#endif // 0
-        slen = strlen(string);
-
-#if 0
-    if (use16)
-        XTextExtents16((XFontStruct*) pFontStruct, (XChar2b *) (char*) (const char*) string, slen, &direction,
-        &ascent, &descent2, &overall);
-    else
-#endif // 0
-        XTextExtents((XFontStruct*) pFontStruct,
-                     wxConstCast(string.c_str(), char), slen, &direction,
-        &ascent, &descent2, &overall);
-
-    if (width) *width = XDEV2LOGREL (overall.width);
-    if (height) *height = YDEV2LOGREL (ascent + descent2);
-    if (descent)
-        *descent = descent2;
+    if (width) *width = XDEV2LOGREL (*width);
+    if (height) *height = YDEV2LOGREL (*height);
     if (externalLeading)
         *externalLeading = 0;
 }
@@ -1389,14 +1337,13 @@ wxCoord wxWindowDC::GetCharWidth() const
 {
     wxCHECK_MSG( Ok(), 0, "invalid dc" );
     wxCHECK_MSG( m_font.Ok(), 0, "invalid font" );
+    
+    int width;
 
-    WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY * m_logicalScaleY, m_display);
+    wxGetTextExtent (m_display, m_font, m_userScaleY * m_logicalScaleY,
+                     "x", &width, NULL, NULL, NULL);
 
-    int direction, ascent, descent;
-    XCharStruct overall;
-    XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
-        &descent, &overall);
-    return XDEV2LOGREL(overall.width);
+    return XDEV2LOGREL(width);
 }
 
 wxCoord wxWindowDC::GetCharHeight() const
@@ -1404,14 +1351,12 @@ wxCoord wxWindowDC::GetCharHeight() const
     wxCHECK_MSG( Ok(), 0, "invalid dc" );
     wxCHECK_MSG( m_font.Ok(), 0, "invalid font" );
 
-    WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
+    int height;
 
-    int direction, ascent, descent;
-    XCharStruct overall;
-    XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
-        &descent, &overall);
-    //  return XDEV2LOGREL(overall.ascent + overall.descent);
-    return XDEV2LOGREL(ascent + descent);
+    wxGetTextExtent (m_display, m_font, m_userScaleY * m_logicalScaleY,
+                     "x", NULL, &height, NULL, NULL);
+
+    return XDEV2LOGREL(height);
 }
 
 void wxWindowDC::DoGetSize( int *width, int *height ) const
@@ -1480,6 +1425,7 @@ void wxWindowDC::SetFont( const wxFont &font )
         return;
     }
 
+#if !wxMOTIF_NEW_FONT_HANDLING
     WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
 
     Font fontId = ((XFontStruct*)pFontStruct)->fid;
@@ -1487,6 +1433,7 @@ void wxWindowDC::SetFont( const wxFont &font )
 
     if (m_window && m_window->GetBackingPixmap())
         XSetFont ((Display*) m_display,(GC) m_gcBacking, fontId);
+#endif
 }
 
 void wxWindowDC::SetForegroundPixelWithLogicalFunction(int pixel)

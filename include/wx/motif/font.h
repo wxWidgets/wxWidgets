@@ -16,6 +16,10 @@
 #pragma interface "font.h"
 #endif
 
+#if __WXMOTIF20__ && !__WXLESSTIF__ && !defined(wxMOTIF_NEW_FONT_HANDLING)
+#define wxMOTIF_NEW_FONT_HANDLING 0 // safe default
+#endif
+
 class wxXFont;
 
 // Font
@@ -95,14 +99,18 @@ public:
         WXDisplay* display = NULL) const;
 
     // These two are helper functions for convenient access of the above.
+#if !wxMOTIF_NEW_FONT_HANDLING
     WXFontStructPtr GetFontStruct(double scale = 1.0,
         WXDisplay* display = NULL) const;
     WXFontList GetFontList(double scale = 1.0,
         WXDisplay* display = NULL) const;
-#if __WXMOTIF20__
+#else
+    WXFontSet GetFontSet(double scale, WXDisplay* display = NULL) const;
+#endif
+#if __WXMOTIF20__ // && !__WXLESSTIF__ for 2.7
     WXRenderTable GetRenderTable(WXDisplay* display) const;
 #endif
-    // returns either a XmFontList or XmRendition, depending
+    // returns either a XmFontList or XmRenderTable, depending
     // on Motif version
     WXFontType GetFontType(WXDisplay* display) const;
     // like the function above but does a copy for XmFontList
