@@ -1489,12 +1489,12 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
 {
+    wxWindow * const parent = GetParent();
+
+    wxPoint pos;
     if ( m_pendingPosition != wxDefaultPosition )
     {
-        if ( x )
-            *x = m_pendingPosition.x;
-        if ( y )
-            *y = m_pendingPosition.y;
+        pos = m_pendingPosition;
     }
     else // use current position
     {
@@ -1508,33 +1508,31 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
         // children, not for the dialogs/frames
         if ( !IsTopLevel() )
         {
-            HWND hParentWnd = 0;
-            wxWindow *parent = GetParent();
-            if ( parent )
-                hParentWnd = GetWinHwnd(parent);
-
             // Since we now have the absolute screen coords, if there's a
             // parent we must subtract its top left corner
-            if ( hParentWnd )
-            {
-                ::ScreenToClient(hParentWnd, &point);
-            }
-
             if ( parent )
             {
-                // We may be faking the client origin. So a window that's
-                // really at (0, 30) may appear (to wxWin apps) to be at (0, 0).
-                wxPoint pt(parent->GetClientAreaOrigin());
-                point.x -= pt.x;
-                point.y -= pt.y;
+                ::ScreenToClient(GetHwndOf(parent), &point);
             }
         }
 
-        if ( x )
-            *x = point.x;
-        if ( y )
-            *y = point.y;
+        pos.x = point.x;
+        pos.y = point.y;
     }
+
+    // we also must adjust by the client area offset: a control which is just
+    // under a toolbar could be at (0, 30) in Windows but at (0, 0) in wx
+    if ( parent && !IsTopLevel() )
+    {
+        const wxPoint pt(parent->GetClientAreaOrigin());
+        pos.x -= pt.x;
+        pos.y -= pt.y;
+    }
+
+    if ( x )
+        *x = pos.x;
+    if ( y )
+        *y = pos.y;
 }
 
 void wxWindowMSW::DoScreenToClient(int *x, int *y) const
