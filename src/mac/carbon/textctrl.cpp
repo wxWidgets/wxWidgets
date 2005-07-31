@@ -1389,6 +1389,11 @@ void wxMacUnicodeTextControl::GetSelection( long* from, long* to) const
 void wxMacUnicodeTextControl::SetSelection( long from , long to )
 {
     ControlEditTextSelectionRec sel ;
+    if ((from == -1) && (to == -1))
+    {
+        from = 0 ;
+        to = 32767 ; // sel has 16 bit signed values, max is 32767
+    }
     sel.selStart = from ;
     sel.selEnd = to ;
     SetData<ControlEditTextSelectionRec>( 0 , kControlEditTextSelectionTag, &sel ) ;
