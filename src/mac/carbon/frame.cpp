@@ -270,10 +270,9 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
         }
         else
         {
-//#if wxMAC_USE_NATIVE_TOOLBAR
-            // todo verify whether HIToolBox is giving correct sizes here for the tlw
+#if !wxMAC_USE_NATIVE_TOOLBAR
             if ( y )  *y -= h;
-//#endif
+#endif
         }
     }
 #endif // wxUSE_TOOLBAR
