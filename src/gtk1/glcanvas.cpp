@@ -401,7 +401,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     GdkColormap *colormap;
 
     // MR: This needs a fix for lower gtk+ versions too. Might need to rethink logic (FIXME)
-#if GTK_CHECK_VERSION(2,2,0)
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,2,0)
     if (!gtk_check_version(2,2,0))
     {
         wxWindow::Create( parent, id, pos, size, style, name );
@@ -456,7 +456,9 @@ bool wxGLCanvas::Create( wxWindow *parent,
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_glcanvas_size_callback), (gpointer)this );
 
+#ifdef __WXGTK20__
     if (gtk_check_version(2,2,0) != NULL)
+#endif
     {
         gtk_widget_pop_visual();
         gtk_widget_pop_colormap();
