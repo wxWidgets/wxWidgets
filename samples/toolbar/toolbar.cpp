@@ -587,7 +587,8 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        long style = GetToolBar()->GetWindowStyle();
+        long style = GetToolBar() ? GetToolBar()->GetWindowStyle()
+                                  : TOOLBAR_STYLE;
         style &= ~wxTB_HORIZONTAL;
         style |= wxTB_VERTICAL;
 
