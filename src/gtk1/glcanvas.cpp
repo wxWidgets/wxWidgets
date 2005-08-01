@@ -397,15 +397,41 @@ bool wxGLCanvas::Create( wxWindow *parent,
     m_vi = vi;  // save for later use
 
     wxCHECK_MSG( m_vi, FALSE, _T("required visual couldn't be found") );
-    GdkVisual *visual = gdkx_visual_get( vi->visualid );
-    GdkColormap *colormap = gdk_colormap_new( visual, TRUE );
+    GdkVisual *visual;
+    GdkColormap *colormap;
 
-    gtk_widget_push_colormap( colormap );
-    gtk_widget_push_visual( visual );
+    // MR: This needs a fix for lower gtk+ versions too. Might need to rethink logic (FIXME)
+#if GTK_CHECK_VERSION(2,2,0)
+    if (!gtk_check_version(2,2,0))
+    {
+        wxWindow::Create( parent, id, pos, size, style, name );
 
-    wxWindow::Create( parent, id, pos, size, style, name );
+        m_glWidget = m_wxwindow;
 
-    m_glWidget = m_wxwindow;
+        GdkScreen *screen = gtk_widget_get_screen( m_glWidget );
+        colormap = gdk_screen_get_default_colormap(screen);
+        visual = gdk_colormap_get_visual(colormap);
+
+        if (GDK_VISUAL_XVISUAL(visual)->visualid != vi->visualid)
+        {
+            visual = gdk_x11_screen_lookup_visual( screen, vi->visualid );
+            colormap = gdk_colormap_new(visual, FALSE);
+        }
+
+        gtk_widget_set_colormap( m_glWidget, colormap );
+    }
+    else
+#endif
+    {
+        visual = gdkx_visual_get( vi->visualid );
+        colormap = gdk_colormap_new( visual, TRUE );
+
+        gtk_widget_push_colormap( colormap );
+        gtk_widget_push_visual( visual );
+
+        wxWindow::Create( parent, id, pos, size, style, name );
+        m_glWidget = m_wxwindow;
+    }
 
 #ifdef __WXGTK20__
     gtk_widget_set_double_buffered( m_glWidget, FALSE );
@@ -430,8 +456,11 @@ bool wxGLCanvas::Create( wxWindow *parent,
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_glcanvas_size_callback), (gpointer)this );
 
-    gtk_widget_pop_visual();
-    gtk_widget_pop_colormap();
+    if (gtk_check_version(2,2,0) != NULL)
+    {
+        gtk_widget_pop_visual();
+        gtk_widget_pop_colormap();
+    }
 
     // if our parent window is already visible, we had been realized before we
     // connected to the "realize" signal and hence our m_glContext hasn't been
