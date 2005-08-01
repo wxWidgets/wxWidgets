@@ -50,6 +50,10 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     int style = dialog->GetStyle();
     gchar* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 
+    // gtk version numbers must be identical with the one in ctor (that calls set_do_overwrite_confirmation)
+#if GTK_CHECK_VERSION(2,7,3)
+    if(gtk_check_version(2,7,3) != NULL)
+#endif
     if ((style & wxSAVE) && (style & wxOVERWRITE_PROMPT))
     {
         if ( g_file_test(filename, G_FILE_TEST_EXISTS) )
@@ -200,6 +204,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
             gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
                 wxConvFileName->cWX2MB(defaultFileName));
+
+#if GTK_CHECK_VERSION(2,7,3)
+            if (!gtk_check_version(2,7,3))
+                gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(m_widget), TRUE);
+#endif
         }
         else
         {
