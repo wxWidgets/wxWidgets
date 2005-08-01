@@ -62,7 +62,7 @@ void wxTopLevelWindowMGL::Init()
 bool wxTopLevelWindowMGL::Create(wxWindow *parent,
                                  wxWindowID id,
                                  const wxString& title,
-                                 const wxPoint& pos,
+                                 const wxPoint& posOrig,
                                  const wxSize& sizeOrig,
                                  long style,
                                  const wxString &name)
@@ -72,14 +72,34 @@ bool wxTopLevelWindowMGL::Create(wxWindow *parent,
     wxSize size = sizeOrig;
     if ( size.x == -1 || size.y == -1 )
     {
-        wxSize sizeDpy = wxGetDisplaySize();
+        wxSize sizeDefault = GetDefaultSize();
         if ( size.x == -1 )
-            size.x = sizeDpy.x / 3;
+            size.x = sizeDefault.x;
         if ( size.y == -1 )
-            size.y = sizeDpy.y / 5;
+            size.y = sizeDefault.y;
     }
     
-    wxWindow::Create(NULL, id, pos, sizeOrig, style, name);
+    // for default positioning, centre the first top level window and
+    // cascade any addtional ones from there.
+    wxPoint pos = posOrig;
+    if ( pos.x == -1 || pos.y == -1 )
+    {
+        wxSize sizeDisplay = wxGetDisplaySize();
+        static wxPoint nextPos((sizeDisplay.x - size.x) / 2,
+                               (sizeDisplay.y - size.y) / 2);
+
+        if ( pos.x == -1 )
+            pos.x = nextPos.x;
+        if ( pos.y == -1 )
+            pos.y = nextPos.y;
+        if ( pos.x + size.x > sizeDisplay.x || pos.y + size.y > sizeDisplay.y )
+            pos = wxPoint();
+
+        const wxSize cascadeOffset(16, 20);
+        nextPos = pos + cascadeOffset;
+    }
+
+    wxWindow::Create(NULL, id, pos, size, style, name);
     SetParent(parent);
     if ( parent )
         parent->AddChild(this);
