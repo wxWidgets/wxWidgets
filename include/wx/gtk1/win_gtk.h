@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
 
@@ -54,7 +54,7 @@ struct _GtkPizza
     GtkContainer container;
     GList *children;
     GtkMyShadowType shadow_type;
-  
+
     guint width;
     guint height;
 
@@ -67,7 +67,7 @@ struct _GtkPizza
     gulong configure_serial;
     gint scroll_x;
     gint scroll_y;
-  
+
     gboolean clear_on_draw;
     gboolean use_filter;
     gboolean external_expose;
@@ -78,49 +78,49 @@ struct _GtkPizzaClass
   GtkContainerClass parent_class;
 
   void  (*set_scroll_adjustments)   (GtkPizza     *pizza,
-				     GtkAdjustment  *hadjustment,
-				     GtkAdjustment  *vadjustment);
+                                     GtkAdjustment  *hadjustment,
+                                     GtkAdjustment  *vadjustment);
 };
 
 GtkType    gtk_pizza_get_type        (void);
 GtkWidget* gtk_pizza_new             (void);
 
 void       gtk_pizza_set_shadow_type (GtkPizza          *pizza,
-				                      GtkMyShadowType    type);
-					
+                                      GtkMyShadowType    type);
+
 void       gtk_pizza_set_clear       (GtkPizza          *pizza,
-                                      gboolean           clear);		
-					
+                                      gboolean           clear);
+
 void       gtk_pizza_set_filter      (GtkPizza          *pizza,
-                                      gboolean           use);		
-					
+                                      gboolean           use);
+
 void       gtk_pizza_set_external    (GtkPizza          *pizza,
-                                      gboolean           expose);		
-					
-void       gtk_pizza_scroll          (GtkPizza          *pizza,	
+                                      gboolean           expose);
+
+void       gtk_pizza_scroll          (GtkPizza          *pizza,
                                       gint               dx,
                                       gint               dy);
 
 gint       gtk_pizza_child_resized   (GtkPizza          *pizza,
                                       GtkWidget         *widget);
-					
+
 void       gtk_pizza_put             (GtkPizza          *pizza,
                                       GtkWidget         *widget,
                                       gint               x,
                                       gint               y,
-					                  gint               width,
-					                  gint               height);
+                                      gint               width,
+                                      gint               height);
 
 void       gtk_pizza_move            (GtkPizza          *pizza,
                                       GtkWidget         *widget,
                                       gint               x,
                                       gint               y );
-					
+
 void       gtk_pizza_resize          (GtkPizza          *pizza,
                                       GtkWidget         *widget,
                                       gint               width,
                                       gint               height );
-					
+
 void       gtk_pizza_set_size        (GtkPizza          *pizza,
                                       GtkWidget         *widget,
                                       gint               x,
