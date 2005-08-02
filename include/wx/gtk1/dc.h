@@ -19,7 +19,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxDC;
+class WXDLLIMPEXP_CORE wxDC;
 
 //-----------------------------------------------------------------------------
 // constants
@@ -40,7 +40,7 @@ class wxDC;
 // wxDC
 //-----------------------------------------------------------------------------
 
-class wxDC : public wxDCBase
+class WXDLLIMPEXP_CORE wxDC : public wxDCBase
 {
 public:
     wxDC();

@@ -133,7 +133,7 @@ inline wxEventType GtkScrollWinTypeToWx(guint scrollType)
 
 #ifdef __WXGTK20__
 // Escapes string so that it is valid Pango markup XML string:
-wxString wxEscapeStringForPangoMarkup(const wxString& str);
+WXDLLIMPEXP_CORE wxString wxEscapeStringForPangoMarkup(const wxString& str);
 #endif
 
 // The declaration for gtk_icon_size_lookup was accidentally ifdefed out in

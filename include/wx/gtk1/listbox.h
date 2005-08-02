@@ -23,7 +23,7 @@ class WXDLLIMPEXP_BASE wxSortedArrayString;
 // wxListBox
 //-----------------------------------------------------------------------------
 
-class wxListBox : public wxListBoxBase
+class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
 public:
     // ctors and such

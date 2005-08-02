@@ -21,7 +21,7 @@ class WXDLLIMPEXP_BASE wxArrayString;
 // wxChoice
 //-----------------------------------------------------------------------------
 
-class wxChoice : public wxChoiceBase
+class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
 public:
     wxChoice();

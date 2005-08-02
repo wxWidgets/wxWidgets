@@ -25,13 +25,13 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxMiniFrame;
+class WXDLLIMPEXP_CORE wxMiniFrame;
 
 //-----------------------------------------------------------------------------
 // wxMiniFrame
 //-----------------------------------------------------------------------------
 
-class wxMiniFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMiniFrame: public wxFrame
 {
     DECLARE_DYNAMIC_CLASS(wxMiniFrame)
 

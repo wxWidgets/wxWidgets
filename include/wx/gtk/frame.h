@@ -19,18 +19,18 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxMDIChildFrame;
-class wxMDIClientWindow;
-class wxMenu;
-class wxMenuBar;
-class wxToolBar;
-class wxStatusBar;
+class WXDLLIMPEXP_CORE wxMDIChildFrame;
+class WXDLLIMPEXP_CORE wxMDIClientWindow;
+class WXDLLIMPEXP_CORE wxMenu;
+class WXDLLIMPEXP_CORE wxMenuBar;
+class WXDLLIMPEXP_CORE wxToolBar;
+class WXDLLIMPEXP_CORE wxStatusBar;
 
 //-----------------------------------------------------------------------------
 // wxFrame
 //-----------------------------------------------------------------------------
 
-class wxFrame : public wxFrameBase
+class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
     // construction

@@ -18,7 +18,7 @@
 // wxSlider
 // ----------------------------------------------------------------------------
 
-class wxSlider : public wxSliderBase
+class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
 {
 public:
     wxSlider() { }

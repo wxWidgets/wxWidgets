@@ -12,7 +12,7 @@
 #ifndef _WX_GTK_DATAFORM_H
 #define _WX_GTK_DATAFORM_H
 
-class wxDataFormat
+class WXDLLIMPEXP_CORE wxDataFormat
 {
 public:
     // the clipboard formats under GDK are GdkAtoms

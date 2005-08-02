@@ -19,7 +19,7 @@
 // wxTextCtrl
 //-----------------------------------------------------------------------------
 
-class wxTextCtrl: public wxTextCtrlBase
+class WXDLLIMPEXP_CORE wxTextCtrl: public wxTextCtrlBase
 {
 public:
     wxTextCtrl() { Init(); }

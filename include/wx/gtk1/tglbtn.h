@@ -19,20 +19,20 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxToggleButton;
-class wxToggleBitmapButton;
+class WXDLLIMPEXP_CORE wxToggleButton;
+class WXDLLIMPEXP_CORE wxToggleBitmapButton;
 
 //-----------------------------------------------------------------------------
 // global data
 //-----------------------------------------------------------------------------
 
-extern const wxChar *wxCheckBoxNameStr;
+extern WXDLLIMPEXP_CORE const wxChar *wxCheckBoxNameStr;
 
 //-----------------------------------------------------------------------------
 // wxToggleBitmapButton
 //-----------------------------------------------------------------------------
 
-class wxToggleBitmapButton: public wxControl
+class WXDLLIMPEXP_CORE wxToggleBitmapButton: public wxControl
 {
 public:
     // construction/destruction
@@ -88,7 +88,7 @@ private:
 // wxToggleButton
 //-----------------------------------------------------------------------------
 
-class wxToggleButton: public wxControl
+class WXDLLIMPEXP_CORE wxToggleButton: public wxControl
 {
 public:
     // construction/destruction

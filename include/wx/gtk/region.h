@@ -22,7 +22,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxRegion;
+class WXDLLIMPEXP_CORE wxRegion;
 
 //-----------------------------------------------------------------------------
 // constants
@@ -49,7 +49,7 @@ enum wxRegionOp
 // wxRegion
 // ----------------------------------------------------------------------------
 
-class wxRegion : public wxGDIObject
+class WXDLLIMPEXP_CORE wxRegion : public wxGDIObject
 {
 public:
     wxRegion() { }
@@ -162,7 +162,7 @@ private:
 // wxRegionIterator: decomposes a region into rectangles
 // ----------------------------------------------------------------------------
 
-class wxRegionIterator: public wxObject
+class WXDLLIMPEXP_CORE wxRegionIterator: public wxObject
 {
 public:
     wxRegionIterator();

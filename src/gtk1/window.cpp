@@ -4419,13 +4419,13 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 
 #if wxUSE_MENUS_NATIVE
 
-extern "C"
+extern "C" WXDLLIMPEXP_CORE
 void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
 {
     *is_waiting = FALSE;
 }
 
-void SetInvokingWindow( wxMenu *menu, wxWindow* win )
+WXDLLIMPEXP_CORE void SetInvokingWindow( wxMenu *menu, wxWindow* win )
 {
     menu->SetInvokingWindow( win );
 
@@ -4442,12 +4442,13 @@ void SetInvokingWindow( wxMenu *menu, wxWindow* win )
     }
 }
 
-extern "C" void wxPopupMenuPositionCallback( GtkMenu *menu,
-                                             gint *x, gint *y,
+extern "C" WXDLLIMPEXP_CORE
+void wxPopupMenuPositionCallback( GtkMenu *menu,
+                                  gint *x, gint *y,
 #ifdef __WXGTK20__
-                                             gboolean * WXUNUSED(whatever),
+                                  gboolean * WXUNUSED(whatever),
 #endif
-                                             gpointer user_data )
+                                  gpointer user_data )
 {
     // ensure that the menu appears entirely on screen
     GtkRequisition req;

@@ -23,14 +23,14 @@ struct wxGtkIMData;
 // callback definition for inserting a window (internal)
 //-----------------------------------------------------------------------------
 
-class wxWindowGTK;
+class WXDLLIMPEXP_CORE wxWindowGTK;
 typedef void (*wxInsertChildFunction)( wxWindowGTK*, wxWindowGTK* );
 
 //-----------------------------------------------------------------------------
 // wxWindowGTK
 //-----------------------------------------------------------------------------
 
-class wxWindowGTK : public wxWindowBase
+class WXDLLIMPEXP_CORE wxWindowGTK : public wxWindowBase
 {
 public:
     // creating the window
@@ -297,6 +297,6 @@ private:
     DECLARE_NO_COPY_CLASS(wxWindowGTK)
 };
 
-extern wxWindow *wxFindFocusedChild(wxWindowGTK *win);
+extern WXDLLIMPEXP_CORE wxWindow *wxFindFocusedChild(wxWindowGTK *win);
 
 #endif // __GTKWINDOWH__

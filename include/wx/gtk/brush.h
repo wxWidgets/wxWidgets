@@ -25,13 +25,13 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxBrush;
+class WXDLLIMPEXP_CORE wxBrush;
 
 //-----------------------------------------------------------------------------
 // wxBrush
 //-----------------------------------------------------------------------------
 
-class wxBrush: public wxBrushBase
+class WXDLLIMPEXP_CORE wxBrush: public wxBrushBase
 {
 public:
     wxBrush() { }

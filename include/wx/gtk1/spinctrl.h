@@ -25,7 +25,7 @@
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
 
-class wxSpinCtrl : public wxControl
+class WXDLLIMPEXP_CORE wxSpinCtrl : public wxControl
 {
 public:
     wxSpinCtrl() {}

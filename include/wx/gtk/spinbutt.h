@@ -19,7 +19,7 @@
 // wxSpinButton
 //-----------------------------------------------------------------------------
 
-class wxSpinButton : public wxSpinButtonBase
+class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
 public:
     wxSpinButton() { }

@@ -20,7 +20,7 @@
 // wxMenuItem
 //-----------------------------------------------------------------------------
 
-class wxMenuItem : public wxMenuItemBase
+class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
 {
 public:
     wxMenuItem(wxMenu *parentMenu = (wxMenu *)NULL,

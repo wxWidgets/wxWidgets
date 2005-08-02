@@ -28,13 +28,13 @@
 // classes
 //-------------------------------------------------------------------------
 
-class wxWindow;
+class WXDLLIMPEXP_CORE wxWindow;
 
-class wxDropTarget;
-class wxTextDropTarget;
-class wxFileDropTarget;
+class WXDLLIMPEXP_CORE wxDropTarget;
+class WXDLLIMPEXP_CORE wxTextDropTarget;
+class WXDLLIMPEXP_CORE wxFileDropTarget;
 
-class wxDropSource;
+class WXDLLIMPEXP_CORE wxDropSource;
 
 // ----------------------------------------------------------------------------
 // macros
@@ -50,7 +50,7 @@ class wxDropSource;
 // wxDropTarget
 //-------------------------------------------------------------------------
 
-class wxDropTarget: public wxDropTargetBase
+class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
 {
 public:
     wxDropTarget(wxDataObject *dataObject = (wxDataObject*) NULL );
@@ -83,7 +83,7 @@ public:
 // wxDropSource
 //-------------------------------------------------------------------------
 
-class wxDropSource: public wxDropSourceBase
+class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
     // constructor. set data later with SetData()

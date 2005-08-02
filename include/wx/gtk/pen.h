@@ -25,7 +25,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxPen;
+class WXDLLIMPEXP_CORE wxPen;
 
 #if defined(__WXGTK127__) || defined(__WXGTK20__)
 typedef    gint8 wxGTKDash;
@@ -37,7 +37,7 @@ typedef    gchar wxGTKDash;
 // wxPen
 //-----------------------------------------------------------------------------
 
-class wxPen: public wxGDIObject
+class WXDLLIMPEXP_CORE wxPen: public wxGDIObject
 {
 public:
     wxPen() { }

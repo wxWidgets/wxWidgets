@@ -27,19 +27,19 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxGauge;
+class WXDLLIMPEXP_CORE wxGauge;
 
 //-----------------------------------------------------------------------------
 // global data
 //-----------------------------------------------------------------------------
 
-extern const wxChar* wxGaugeNameStr;
+extern WXDLLIMPEXP_CORE const wxChar* wxGaugeNameStr;
 
 //-----------------------------------------------------------------------------
 // wxGaugeBox
 //-----------------------------------------------------------------------------
 
-class wxGauge: public wxControl
+class WXDLLIMPEXP_CORE wxGauge: public wxControl
 {
 public:
     wxGauge() { Init(); }

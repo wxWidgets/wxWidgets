@@ -26,20 +26,20 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxComboBox;
+class WXDLLIMPEXP_CORE wxComboBox;
 
 //-----------------------------------------------------------------------------
 // global data
 //-----------------------------------------------------------------------------
 
-extern const wxChar* wxComboBoxNameStr;
-extern const wxChar* wxEmptyString;
+extern WXDLLIMPEXP_CORE const wxChar* wxComboBoxNameStr;
+extern WXDLLIMPEXP_BASE const wxChar* wxEmptyString;
 
 //-----------------------------------------------------------------------------
 // wxComboBox
 //-----------------------------------------------------------------------------
 
-class wxComboBox : public wxControl, public wxComboBoxBase
+class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
 {
 public:
     inline wxComboBox() {}

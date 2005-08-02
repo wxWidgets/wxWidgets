@@ -19,7 +19,7 @@
 // wxStaticBox
 //-----------------------------------------------------------------------------
 
-class wxStaticBox : public wxStaticBoxBase
+class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
     wxStaticBox();

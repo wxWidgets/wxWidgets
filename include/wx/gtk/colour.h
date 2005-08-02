@@ -25,18 +25,18 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxDC;
-class wxPaintDC;
-class wxBitmap;
-class wxWindow;
+class WXDLLIMPEXP_CORE wxDC;
+class WXDLLIMPEXP_CORE wxPaintDC;
+class WXDLLIMPEXP_CORE wxBitmap;
+class WXDLLIMPEXP_CORE wxWindow;
 
-class wxColour;
+class WXDLLIMPEXP_CORE wxColour;
 
 //-----------------------------------------------------------------------------
 // wxColour
 //-----------------------------------------------------------------------------
 
-class wxColour: public wxGDIObject
+class WXDLLIMPEXP_CORE wxColour: public wxGDIObject
 {
 public:
     wxColour() { }

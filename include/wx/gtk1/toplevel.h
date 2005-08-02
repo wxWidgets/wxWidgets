@@ -20,7 +20,7 @@
 // wxTopLevelWindowGTK
 //-----------------------------------------------------------------------------
 
-class wxTopLevelWindowGTK : public wxTopLevelWindowBase
+class WXDLLIMPEXP_CORE wxTopLevelWindowGTK : public wxTopLevelWindowBase
 {
 public:
     // construction

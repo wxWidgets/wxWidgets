@@ -19,7 +19,7 @@
 // wxBitmapButton
 // ----------------------------------------------------------------------------
 
-class wxBitmapButton: public wxBitmapButtonBase
+class WXDLLIMPEXP_CORE wxBitmapButton: public wxBitmapButtonBase
 {
 public:
     wxBitmapButton() { Init(); }

@@ -25,13 +25,13 @@
 typedef long wxDataType;
 
 // fwd decl
-class  wxImageList;
+class  WXDLLIMPEXP_CORE wxImageList;
 struct wxTreeViewItem;
 
 // a callback function used for sorting tree items, it should return -1 if the
 // first item precedes the second, +1 if the second precedes the first or 0 if
 // they're equivalent
-class wxTreeItemData;
+class WXDLLIMPEXP_CORE wxTreeItemData;
 typedef int (*wxTreeItemCmpFunc)(wxTreeItemData *item1, wxTreeItemData *item2);
 
 // ----------------------------------------------------------------------------

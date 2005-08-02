@@ -21,13 +21,13 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxScrollBar;
+class WXDLLIMPEXP_CORE wxScrollBar;
 
 //-----------------------------------------------------------------------------
 // wxScrollBar
 //-----------------------------------------------------------------------------
 
-class wxScrollBar: public wxScrollBarBase
+class WXDLLIMPEXP_CORE wxScrollBar: public wxScrollBarBase
 {
 public:
     wxScrollBar()

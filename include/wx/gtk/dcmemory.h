@@ -22,13 +22,13 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxMemoryDC;
+class WXDLLIMPEXP_CORE wxMemoryDC;
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-class wxMemoryDC : public wxWindowDC
+class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC
 {
 public:
     wxMemoryDC();

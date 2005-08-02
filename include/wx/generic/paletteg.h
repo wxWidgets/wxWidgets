@@ -25,13 +25,13 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxPalette;
+class WXDLLIMPEXP_CORE wxPalette;
 
 //-----------------------------------------------------------------------------
 // wxPalette
 //-----------------------------------------------------------------------------
 
-class wxPalette: public wxPaletteBase
+class WXDLLIMPEXP_CORE wxPalette: public wxPaletteBase
 {
   DECLARE_DYNAMIC_CLASS(wxPalette)
 

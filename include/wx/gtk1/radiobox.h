@@ -21,7 +21,7 @@
 // wxRadioBox
 //-----------------------------------------------------------------------------
 
-class wxRadioBox: public wxControl
+class WXDLLIMPEXP_CORE wxRadioBox: public wxControl
 {
 public:
     wxRadioBox() { Init(); }

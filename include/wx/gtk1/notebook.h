@@ -19,7 +19,7 @@
 // internal class
 //-----------------------------------------------------------------------------
 
-class wxGtkNotebookPage;
+class WXDLLIMPEXP_CORE wxGtkNotebookPage;
 
 #include "wx/list.h"
 WX_DECLARE_LIST(wxGtkNotebookPage, wxGtkNotebookPagesList);
@@ -28,7 +28,7 @@ WX_DECLARE_LIST(wxGtkNotebookPage, wxGtkNotebookPagesList);
 // wxNotebook
 //-----------------------------------------------------------------------------
 
-class wxNotebook : public wxNotebookBase
+class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
 {
 public:
       // default for dynamic class

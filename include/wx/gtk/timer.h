@@ -19,7 +19,7 @@
 // wxTimer
 //-----------------------------------------------------------------------------
 
-class wxTimer : public wxTimerBase
+class WXDLLIMPEXP_CORE wxTimer : public wxTimerBase
 {
 public:
     wxTimer() { Init(); }

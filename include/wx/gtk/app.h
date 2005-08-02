@@ -22,14 +22,14 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxApp;
-class wxLog;
+class WXDLLIMPEXP_CORE wxApp;
+class WXDLLIMPEXP_BASE wxLog;
 
 //-----------------------------------------------------------------------------
 // wxApp
 //-----------------------------------------------------------------------------
 
-class wxApp: public wxAppBase
+class WXDLLIMPEXP_CORE wxApp: public wxAppBase
 {
 public:
     wxApp();

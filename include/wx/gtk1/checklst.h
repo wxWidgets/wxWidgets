@@ -32,7 +32,7 @@
 // wxCheckListBox
 // ----------------------------------------------------------------------------
 
-class wxCheckListBox : public wxListBox
+class WXDLLIMPEXP_CORE wxCheckListBox : public wxListBox
 {
 public:
     wxCheckListBox();

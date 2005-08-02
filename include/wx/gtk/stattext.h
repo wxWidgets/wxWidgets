@@ -24,7 +24,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxStaticText;
+class WXDLLIMPEXP_CORE wxStaticText;
 
 //-----------------------------------------------------------------------------
 // global data
@@ -34,7 +34,7 @@ class wxStaticText;
 // wxStaticText
 //-----------------------------------------------------------------------------
 
-class wxStaticText : public wxControl
+class WXDLLIMPEXP_CORE wxStaticText : public wxControl
 {
 public:
     wxStaticText();

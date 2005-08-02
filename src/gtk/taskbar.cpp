@@ -75,14 +75,15 @@ bool wxTaskBarIconAreaBase::IsProtocolSupported()
 // Pop-up menu stuff
 //-----------------------------------------------------------------------------
 
-extern "C" void gtk_pop_hide_callback( GtkWidget *widget, bool* is_waiting  );
+extern "C" WXDLLIMPEXP_CORE void gtk_pop_hide_callback( GtkWidget *widget, bool* is_waiting  );
 
-extern void SetInvokingWindow( wxMenu *menu, wxWindow* win );
+extern WXDLLIMPEXP_CORE void SetInvokingWindow( wxMenu *menu, wxWindow* win );
 
-extern "C" void wxPopupMenuPositionCallback( GtkMenu *menu,
-                                             gint *x, gint *y,
-                                             gboolean * WXUNUSED(whatever),
-                                             gpointer user_data );
+extern "C" WXDLLIMPEXP_CORE
+    void wxPopupMenuPositionCallback( GtkMenu *menu,
+                                      gint *x, gint *y,
+                                      gboolean * WXUNUSED(whatever),
+                                      gpointer user_data );
 
 #if wxUSE_MENUS_NATIVE
 bool wxTaskBarIconAreaBase::DoPopupMenu( wxMenu *menu, int x, int y )

@@ -18,7 +18,7 @@
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
-class wxCheckBox : public wxCheckBoxBase
+class WXDLLIMPEXP_CORE wxCheckBox : public wxCheckBoxBase
 {
 public:
     wxCheckBox();

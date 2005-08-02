@@ -16,13 +16,13 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxScreenDC;
+class WXDLLIMPEXP_CORE wxScreenDC;
 
 //-----------------------------------------------------------------------------
 // wxScreenDC
 //-----------------------------------------------------------------------------
 
-class wxScreenDC : public wxPaintDC
+class WXDLLIMPEXP_CORE wxScreenDC : public wxPaintDC
 {
 public:
     wxScreenDC();

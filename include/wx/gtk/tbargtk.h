@@ -20,7 +20,7 @@
 // wxToolBar
 // ----------------------------------------------------------------------------
 
-class wxToolBar : public wxToolBarBase
+class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
 public:
     // construction/destruction

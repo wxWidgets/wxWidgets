@@ -17,7 +17,7 @@
 #pragma interface
 #endif
 
-class wxGDIObject : public wxObject
+class WXDLLIMPEXP_CORE wxGDIObject : public wxObject
 {
 public:
     inline wxGDIObject() { m_visible = FALSE; };

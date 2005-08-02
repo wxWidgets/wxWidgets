@@ -23,19 +23,19 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxButton;
+class WXDLLIMPEXP_CORE wxButton;
 
 //-----------------------------------------------------------------------------
 // global data
 //-----------------------------------------------------------------------------
 
-extern const wxChar *wxButtonNameStr;
+extern WXDLLIMPEXP_CORE const wxChar *wxButtonNameStr;
 
 //-----------------------------------------------------------------------------
 // wxButton
 //-----------------------------------------------------------------------------
 
-class wxButton: public wxButtonBase
+class WXDLLIMPEXP_CORE wxButton: public wxButtonBase
 {
 public:
     wxButton();
