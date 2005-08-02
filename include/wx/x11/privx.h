@@ -26,10 +26,10 @@
 #pragma message enable nosimpint
 #endif
 
-class wxMouseEvent;
-class wxKeyEvent;
-class wxWindow;
-class wxRegion;
+class WXDLLIMPEXP_CORE wxMouseEvent;
+class WXDLLIMPEXP_CORE wxKeyEvent;
+class WXDLLIMPEXP_CORE wxWindow;
+class WXDLLIMPEXP_CORE wxRegion;
 
 // ----------------------------------------------------------------------------
 // key events related functions

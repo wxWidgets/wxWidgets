@@ -18,7 +18,7 @@
 
 #include "wx/timer.h"
 
-class wxCaret;
+class WXDLLIMPEXP_CORE wxCaret;
 
 class WXDLLEXPORT wxCaretTimer : public wxTimer
 {
@@ -30,7 +30,7 @@ private:
     wxCaret *m_caret;
 };
 
-class wxCaret : public wxCaretBase
+class WXDLLIMPEXP_CORE wxCaret : public wxCaretBase
 {
 public:
     // ctors

@@ -32,9 +32,9 @@
 #include "pango/pango.h"
 #endif
 
-class wxMouseEvent;
-class wxKeyEvent;
-class wxWindow;
+class WXDLLIMPEXP_CORE wxMouseEvent;
+class WXDLLIMPEXP_CORE wxKeyEvent;
+class WXDLLIMPEXP_CORE wxWindow;
 
 // ----------------------------------------------------------------------------
 // Some Unicode <-> UTF8 macros stolen from GTK

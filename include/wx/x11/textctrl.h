@@ -31,7 +31,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxTextCtrl;
+class WXDLLIMPEXP_CORE wxTextCtrl;
 
 //-----------------------------------------------------------------------------
 // helpers
@@ -89,7 +89,7 @@ enum wxSourceLanguage
 // wxTextCtrl
 //-----------------------------------------------------------------------------
 
-class wxTextCtrl: public wxTextCtrlBase, public wxScrollHelper
+class WXDLLIMPEXP_CORE wxTextCtrl: public wxTextCtrlBase, public wxScrollHelper
 {
 public:
     wxTextCtrl() { Init(); }

@@ -22,15 +22,15 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxBrush;
-class wxColour;
-class wxBitmap;
+class WXDLLIMPEXP_CORE wxBrush;
+class WXDLLIMPEXP_CORE wxColour;
+class WXDLLIMPEXP_CORE wxBitmap;
 
 //-----------------------------------------------------------------------------
 // wxBrush
 //-----------------------------------------------------------------------------
 
-class wxBrush: public wxBrushBase
+class WXDLLIMPEXP_CORE wxBrush: public wxBrushBase
 {
 public:
     wxBrush() { }

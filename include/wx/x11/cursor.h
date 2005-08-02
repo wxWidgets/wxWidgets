@@ -26,7 +26,7 @@
 // wxCursor
 //-----------------------------------------------------------------------------
 
-class wxCursor: public wxObject
+class WXDLLIMPEXP_CORE wxCursor: public wxObject
 {
 public:
 

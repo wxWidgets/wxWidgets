@@ -22,7 +22,7 @@
 // wxIcon
 //-----------------------------------------------------------------------------
 
-class wxIcon: public wxBitmap
+class WXDLLIMPEXP_CORE wxIcon: public wxBitmap
 {
 public:
     wxIcon();

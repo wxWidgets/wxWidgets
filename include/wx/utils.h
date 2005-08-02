@@ -90,7 +90,12 @@ wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s) );
 // ----------------------------------------------------------------------------
 
 // Sound the bell
+#if !defined __EMX__ && \
+    (defined __WXMOTIF__ || defined __WXGTK__ || defined __WXX11__)
+WXDLLIMPEXP_CORE void wxBell();
+#else
 WXDLLIMPEXP_BASE void wxBell();
+#endif
 
 // Get OS description as a user-readable string
 WXDLLIMPEXP_BASE wxString wxGetOsDescription();
@@ -523,9 +528,9 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 #endif
 
 #ifdef __X__
-    WXDisplay *wxGetDisplay();
-    bool wxSetDisplay(const wxString& display_name);
-    wxString wxGetDisplayName();
+    WXDLLIMPEXP_CORE WXDisplay *wxGetDisplay();
+    WXDLLIMPEXP_CORE bool wxSetDisplay(const wxString& display_name);
+    WXDLLIMPEXP_CORE wxString wxGetDisplayName();
 #endif // X or GTK+
 
 #ifdef __X__

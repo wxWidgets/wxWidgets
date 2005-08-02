@@ -26,12 +26,12 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxDC;
-class wxPaintDC;
-class wxBitmap;
-class wxWindow;
+class WXDLLIMPEXP_CORE wxDC;
+class WXDLLIMPEXP_CORE wxPaintDC;
+class WXDLLIMPEXP_CORE wxBitmap;
+class WXDLLIMPEXP_CORE wxWindow;
 
-class wxColour;
+class WXDLLIMPEXP_CORE wxColour;
 
 //-----------------------------------------------------------------------------
 // wxColour
