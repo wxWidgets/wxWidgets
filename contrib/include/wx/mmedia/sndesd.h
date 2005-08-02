@@ -23,7 +23,7 @@
 // ESD output class
 //
 
-class wxSoundStreamESD : public wxSoundStream {
+class WXDLLIMPEXP_MMEDIA wxSoundStreamESD : public wxSoundStream {
 public:
     wxSoundStreamESD(const wxString& hostname = wxT("localhost"));
     ~wxSoundStreamESD();

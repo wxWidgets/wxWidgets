@@ -202,10 +202,10 @@ WXDLLIMPEXP_DEPRECATED extern bool wxResourceAddIdentifier(const wxString& name,
 WXDLLIMPEXP_DEPRECATED extern int wxResourceGetIdentifier(const wxString& name, wxResourceTable *table = (wxResourceTable *) NULL);
 
 // Used to be wxWindowBase::LoadFromResource
-bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = (const wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = (const wxResourceTable *) NULL);
 
 // Used to be wxWindowBase::CreateItem
-wxControl *wxCreateItem(wxWindow* thisWindow, const wxItemResource *resource, const wxItemResource* parentResource, const wxResourceTable *table = (const wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED wxControl *wxCreateItem(wxWindow* thisWindow, const wxItemResource *resource, const wxItemResource* parentResource, const wxResourceTable *table = (const wxResourceTable *) NULL);
 
 #if defined(__WXPM__)
 #include "wx/os2/wxrsc.h"
