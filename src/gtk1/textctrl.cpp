@@ -1117,6 +1117,15 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 {
     if ( m_windowStyle & wxTE_MULTILINE )
     {
+#ifdef __WXGTK20__
+        GtkTextIter iter;
+        gtk_text_buffer_get_iter_at_offset(m_buffer, &iter, pos);
+        if (gtk_text_iter_is_end(&iter))
+            return false;
+
+        *y = gtk_text_iter_get_line(&iter);
+        *x = gtk_text_iter_get_line_offset(&iter);
+#else
         wxString text = GetValue();
 
         // cast to prevent warning. But pos really should've been unsigned.
@@ -1137,6 +1146,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
             else
                 (*x)++;
         }
+#endif
     }
     else // single line control
     {
@@ -1159,17 +1169,39 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
 {
     if (!(m_windowStyle & wxTE_MULTILINE)) return 0;
 
+#ifdef __WXGTK20__
+    GtkTextIter iter;
+    gtk_text_buffer_get_iter_at_line_offset(m_buffer, &iter, y, x);
+    return gtk_text_iter_get_offset(&iter);
+#else
     long pos=0;
     for( int i=0; i<y; i++ ) pos += GetLineLength(i) + 1; // one for '\n'
 
     pos += x;
     return pos;
+#endif
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    wxString str = GetLineText (lineNo);
-    return (int) str.Length();
+#ifdef __WXGTK20__
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        int last_line = gtk_text_buffer_get_line_count( m_buffer ) - 1;
+        if (lineNo > last_line)
+            return -1;
+
+        GtkTextIter iter;
+        gtk_text_buffer_get_iter_at_line(m_buffer, &iter, lineNo);
+        // get_chars_in_line return includes paragraph delimiters, so need to subtract 1 IF it is not the last line
+        return gtk_text_iter_get_chars_in_line(&iter) - ((lineNo == last_line) ? 0 : 1);
+    }
+    else
+#endif
+    {
+        wxString str = GetLineText (lineNo);
+        return (int) str.Length();
+    }
 }
 
 int wxTextCtrl::GetNumberOfLines() const
