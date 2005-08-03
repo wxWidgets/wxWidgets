@@ -485,7 +485,7 @@ public:
     wxZipMemory *Unique(size_t size);
 
 private:
-    ~wxZipMemory() { delete m_data; }
+    ~wxZipMemory() { delete [] m_data; }
 
     char *m_data;
     size_t m_size;
@@ -505,7 +505,7 @@ wxZipMemory *wxZipMemory::Unique(size_t size)
     }
 
     if (zm->m_capacity < size) {
-        delete zm->m_data;
+        delete [] zm->m_data;
         zm->m_data = new char[size];
         zm->m_capacity = size;
     }
