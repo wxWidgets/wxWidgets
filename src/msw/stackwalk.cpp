@@ -218,7 +218,10 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip)
 {
     if ( !wxDbgHelpDLL::Init() )
     {
-        wxLogError(_("Failed to get stack backtrace:\n%s"),
+        // don't log a user-visible error message here because the stack trace
+        // is only needed for debugging/diagnostics anyhow and we shouldn't
+        // confuse the user by complaining that we couldn't generate it
+        wxLogDebug(_T("Failed to get stack backtrace: %s"),
                    wxDbgHelpDLL::GetErrorMessage().c_str());
         return;
     }
