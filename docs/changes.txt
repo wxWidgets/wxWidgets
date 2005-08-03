@@ -43,7 +43,9 @@ wxGTK:
 
 - ShowFullScreen() shows the window if it was still hidden (rpedroso)
 - Implemented wxTopLevelWindow::RequestUserAttention() (Mart Raudsepp)
-- Base library is now binary compatible when built with wxGTK and wxMotif
+- Base library is now binary compatible when built with wxGTK and wxMotif.
+- wxTextCtrl::XYToPosition, PositionToXY and GetLineLength calls are now
+  instantaneous in case of GTK+2 multi-line controls (Mart Raudsepp)
 
 wxOS2
 
@@ -56,7 +58,7 @@ wxUniv:
 
 wxMotif:
 
-- Base library is now binary compatible when built with wxGTK and wxMotif
+- Base library is now binary compatible when built with wxGTK and wxMotif.
 - wxMotif can now display Japanese text under Japanese locale.
 
 
