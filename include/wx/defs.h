@@ -638,14 +638,7 @@ enum
 /*  ---------------------------------------------------------------------------- */
 
 /*  the type for screen and DC coordinates */
-
-#if wxUSE_COMPATIBLE_COORD_TYPES
-    /*  to ensure compatibility with 2.0, we must use long */
-    #define wxCoord long
-#else  /*  !wxUSE_COMPATIBLE_COORD_TYPES */
-        /*  other platforms we support have at least 32bit int - quite enough */
-        typedef int wxCoord;
-#endif /*  wxUSE_COMPATIBLE_COORD_TYPES/!wxUSE_COMPATIBLE_COORD_TYPES */
+typedef int wxCoord;
 
 enum {  wxDefaultCoord = -1 };
 
