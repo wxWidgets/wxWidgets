@@ -22,14 +22,14 @@ SETUPHDIR = \
 DEPRECATEDDLL_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) -W -Wall \
 	-I..\..\src\deprecated\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
 	-I..\..\src\deprecated $(CPPFLAGS) $(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) -W -Wall \
 	-I..\..\src\deprecated\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
 	-I..\..\src\deprecated $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
@@ -48,14 +48,14 @@ DEPRECATEDDLL_OBJECTS =  \
 DEPRECATEDLIB_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) -W -Wall \
 	-I..\..\src\deprecated\..\..\include -I..\..\src\deprecated $(CPPFLAGS) \
 	$(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) -W -Wall \
 	-I..\..\src\deprecated\..\..\include -I..\..\src\deprecated $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
@@ -142,6 +142,9 @@ __THREAD_DEFINE_p_1 = --define wxNO_THREADS
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_1 = --define _UNICODE
+endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_1 = --define wxUSE_UNICODE_MSLU=1
 endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
@@ -234,6 +237,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+endif
 
 
 all: $(OBJS)
@@ -267,7 +273,7 @@ $(OBJS)\deprecateddll_dummy.o: ../../src/deprecated/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\deprecateddll_version_rc.o: ../../src/deprecated/../../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/deprecated/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_gcc$(VENDORTAG)
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir ../../src/deprecated/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_gcc$(VENDORTAG)
 
 $(OBJS)\deprecateddll_prop.o: ../../src/deprecated/prop.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $(CPPDEPS) $<

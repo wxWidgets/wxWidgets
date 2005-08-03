@@ -245,7 +245,7 @@ $(OBJS)\wxedit.exe :  $(WXEDIT_OBJECTS) $(OBJS)\wxedit_sample.res
 	wlink @$(OBJS)\wxedit.lbc
 
 $(OBJS)\wxedit_sample.res :  .AUTODEPEND .\..\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $<
 
 $(OBJS)\wxedit_wxedit.obj :  .AUTODEPEND .\wxedit.cpp
 	$(CXX) -zq -fo=$^@ $(WXEDIT_CXXFLAGS) $<

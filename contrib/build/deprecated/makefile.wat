@@ -317,7 +317,7 @@ $(OBJS)\deprecateddll_dummy.obj :  .AUTODEPEND ../../src/deprecated\..\..\..\src
 	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_version.res :  .AUTODEPEND ../../src/deprecated\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\deprecated\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG) $<
 
 $(OBJS)\deprecateddll_prop.obj :  .AUTODEPEND ../../src/deprecated\prop.cpp
 	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<

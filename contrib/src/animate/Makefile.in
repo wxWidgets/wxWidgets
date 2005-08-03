@@ -247,7 +247,7 @@ distclean: clean
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_animatelib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(ANIMATELIB_CXXFLAGS)
 
 animatedll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(ANIMATEDLL_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_animate$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_animate$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
 
 animatedll_animate.o: $(srcdir)/animate.cpp $(ANIMATEDLL_ODEP)
 	$(CXXC) -c -o $@ $(ANIMATEDLL_CXXFLAGS) $(srcdir)/animate.cpp

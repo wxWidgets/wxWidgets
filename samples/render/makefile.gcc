@@ -22,18 +22,18 @@ SETUPHDIR = \
 RENDER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -W -Wall -I. \
-	$(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -W \
+	-Wall -I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 RENDER_OBJECTS =  \
 	$(OBJS)\render_sample_rc.o \
 	$(OBJS)\render_render.o
 RENDDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) \
-	-W -Wall -DWXUSINGDLL $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\..\include -I$(SETUPHDIR) -W -Wall -DWXUSINGDLL $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 RENDDLL_OBJECTS =  \
 	$(OBJS)\renddll_renddll.o
 
@@ -120,6 +120,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_1 = --define _UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_1 = --define wxUSE_UNICODE_MSLU=1
+endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
@@ -170,6 +173,9 @@ __THREAD_DEFINE_p = -DwxNO_THREADS
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
+endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_CORE_p = \
@@ -242,7 +248,7 @@ $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_RELEASE_NODOT)_gcc.d
 endif
 
 $(OBJS)\render_sample_rc.o: ./../../samples/sample.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 $(OBJS)\render_render.o: ./render.cpp
 	$(CXX) -c -o $@ $(RENDER_CXXFLAGS) $(CPPDEPS) $<

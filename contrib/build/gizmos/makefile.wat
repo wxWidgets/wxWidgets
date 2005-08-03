@@ -370,7 +370,7 @@ $(OBJS)\gizmosdll_dummy.obj :  .AUTODEPEND ../../src/gizmos\..\..\..\src\msw\dum
 	$(CXX) -zq -fo=$^@ $(GIZMOSDLL_CXXFLAGS) $<
 
 $(OBJS)\gizmosdll_version.res :  .AUTODEPEND ../../src/gizmos\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_wat$(VENDORTAG) $<
 
 $(OBJS)\gizmosdll_dynamicsash.obj :  .AUTODEPEND ../../src/gizmos\dynamicsash.cpp
 	$(CXX) -zq -fo=$^@ $(GIZMOSDLL_CXXFLAGS) $<
@@ -394,7 +394,7 @@ $(OBJS)\gizmos_xrcdll_dummy.obj :  .AUTODEPEND ../../src/gizmos\..\..\..\src\msw
 	$(CXX) -zq -fo=$^@ $(GIZMOS_XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\gizmos_xrcdll_version.res :  .AUTODEPEND ../../src/gizmos\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_wat$(VENDORTAG) $<
 
 $(OBJS)\gizmos_xrcdll_xh_statpict.obj :  .AUTODEPEND ../../src/gizmos\xh_statpict.cpp
 	$(CXX) -zq -fo=$^@ $(GIZMOS_XRCDLL_CXXFLAGS) $<

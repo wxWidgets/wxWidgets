@@ -157,7 +157,7 @@ hhp2cached_hhp2cached.o: $(srcdir)/hhp2cached.cpp
 	$(CXXC) -c -o $@ $(HHP2CACHED_CXXFLAGS) $(srcdir)/hhp2cached.cpp
 
 hhp2cached_hhp2cached_rc.o: $(srcdir)/hhp2cached.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

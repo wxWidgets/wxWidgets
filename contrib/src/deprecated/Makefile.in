@@ -277,7 +277,7 @@ distclean: clean
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_deprecatedlib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(DEPRECATEDLIB_CXXFLAGS)
 
 deprecateddll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(DEPRECATEDDLL_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
 
 deprecateddll_prop.o: $(srcdir)/prop.cpp $(DEPRECATEDDLL_ODEP)
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $(srcdir)/prop.cpp

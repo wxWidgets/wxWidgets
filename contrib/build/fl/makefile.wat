@@ -318,7 +318,7 @@ $(OBJS)\fldll_dummy.obj :  .AUTODEPEND ../../src/fl\..\..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(FLDLL_CXXFLAGS) $<
 
 $(OBJS)\fldll_version.res :  .AUTODEPEND ../../src/fl\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl_wat$(VENDORTAG) $<
 
 $(OBJS)\fldll_antiflickpl.obj :  .AUTODEPEND ../../src/fl\antiflickpl.cpp
 	$(CXX) -zq -fo=$^@ $(FLDLL_CXXFLAGS) $<

@@ -186,7 +186,7 @@ data:
 	done
 
 styles_sample_rc.o: $(srcdir)/../../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include
 
 styles_styles.o: $(srcdir)/styles.cpp
 	$(CXXC) -c -o $@ $(STYLES_CXXFLAGS) $(srcdir)/styles.cpp

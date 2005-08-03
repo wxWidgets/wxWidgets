@@ -174,7 +174,7 @@ splittree.app/Contents/PkgInfo: splittree$(EXEEXT) $(top_srcdir)/src/mac/carbon/
 @COND_PLATFORM_MACOSX_1@splittree_bundle: $(____splittree_BUNDLE_TGT_REF_DEP)
 
 splittree_sample_rc.o: $(srcdir)/../../../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include
 
 splittree_tree.o: $(srcdir)/tree.cpp
 	$(CXXC) -c -o $@ $(SPLITTREE_CXXFLAGS) $(srcdir)/tree.cpp

@@ -190,7 +190,7 @@ foldtest_test.o: $(srcdir)/test.cpp
 	$(CXXC) -c -o $@ $(FOLDTEST_CXXFLAGS) $(srcdir)/test.cpp
 
 foldtest_foldpanelbartest_rc.o: $(srcdir)/foldpanelbartest.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../../include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../../include
 
 
 # Include dependency info, if present:

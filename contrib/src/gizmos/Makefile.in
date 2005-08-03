@@ -360,7 +360,7 @@ distclean: clean
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_gizmos_xrclib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(GIZMOS_XRCLIB_CXXFLAGS)
 
 gizmosdll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(GIZMOSDLL_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
 
 gizmosdll_dynamicsash.o: $(srcdir)/dynamicsash.cpp $(GIZMOSDLL_ODEP)
 	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $(srcdir)/dynamicsash.cpp
@@ -381,7 +381,7 @@ gizmosdll_statpict.o: $(srcdir)/statpict.cpp $(GIZMOSDLL_ODEP)
 	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $(srcdir)/statpict.cpp
 
 gizmos_xrcdll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(GIZMOS_XRCDLL_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
 
 gizmos_xrcdll_xh_statpict.o: $(srcdir)/xh_statpict.cpp $(GIZMOS_XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(GIZMOS_XRCDLL_CXXFLAGS) $(srcdir)/xh_statpict.cpp

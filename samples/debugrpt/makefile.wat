@@ -255,7 +255,7 @@ $(OBJS)\debugrpt.exe :  $(DEBUGRPT_OBJECTS) $(OBJS)\debugrpt_sample.res
 	wlink @$(OBJS)\debugrpt.lbc
 
 $(OBJS)\debugrpt_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 $(OBJS)\debugrpt_debugrpt.obj :  .AUTODEPEND .\debugrpt.cpp
 	$(CXX) -zq -fo=$^@ $(DEBUGRPT_CXXFLAGS) $<

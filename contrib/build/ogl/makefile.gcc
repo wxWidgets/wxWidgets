@@ -22,10 +22,10 @@ SETUPHDIR = \
 OGLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) -W \
-	-Wall -I..\..\src\ogl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_OGL \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I..\..\src\ogl\..\..\..\include \
+	-I$(SETUPHDIR) -W -Wall -I..\..\src\ogl\..\..\include -DWXUSINGDLL \
+	-DWXMAKINGDLL_OGL $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+	$(CPPFLAGS) $(CXXFLAGS)
 OGLDLL_OBJECTS =  \
 	$(OBJS)\ogldll_dummy.o \
 	$(OBJS)\ogldll_version_rc.o \
@@ -44,9 +44,9 @@ OGLDLL_OBJECTS =  \
 OGLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) -W \
-	-Wall -I..\..\src\ogl\..\..\include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I..\..\src\ogl\..\..\..\include \
+	-I$(SETUPHDIR) -W -Wall -I..\..\src\ogl\..\..\include $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 OGLLIB_OBJECTS =  \
 	$(OBJS)\ogllib_dummy.o \
 	$(OBJS)\ogllib_basic2.o \
@@ -134,6 +134,9 @@ __THREAD_DEFINE_p_1 = --define wxNO_THREADS
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_1 = --define _UNICODE
+endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_1 = --define wxUSE_UNICODE_MSLU=1
 endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
@@ -226,6 +229,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+endif
 
 
 all: $(OBJS)
@@ -259,7 +265,7 @@ $(OBJS)\ogldll_dummy.o: ../../src/ogl/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ogldll_version_rc.o: ../../src/ogl/../../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/ogl/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_gcc$(VENDORTAG)
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir ../../src/ogl/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_gcc$(VENDORTAG)
 
 $(OBJS)\ogldll_basic2.o: ../../src/ogl/basic2.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $(CPPDEPS) $<

@@ -22,10 +22,10 @@ SETUPHDIR = \
 FLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) -W \
-	-Wall -I..\..\src\fl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_FL \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I..\..\src\fl\..\..\..\include \
+	-I$(SETUPHDIR) -W -Wall -I..\..\src\fl\..\..\include -DWXUSINGDLL \
+	-DWXMAKINGDLL_FL $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+	$(CPPFLAGS) $(CXXFLAGS)
 FLDLL_OBJECTS =  \
 	$(OBJS)\fldll_dummy.o \
 	$(OBJS)\fldll_version_rc.o \
@@ -49,9 +49,9 @@ FLDLL_OBJECTS =  \
 FLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) -W \
-	-Wall -I..\..\src\fl\..\..\include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I..\..\src\fl\..\..\..\include \
+	-I$(SETUPHDIR) -W -Wall -I..\..\src\fl\..\..\include $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 FLLIB_OBJECTS =  \
 	$(OBJS)\fllib_dummy.o \
 	$(OBJS)\fllib_antiflickpl.o \
@@ -145,6 +145,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_1 = --define _UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_1 = --define wxUSE_UNICODE_MSLU=1
+endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
@@ -236,6 +239,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+endif
 
 
 all: $(OBJS)
@@ -269,7 +275,7 @@ $(OBJS)\fldll_dummy.o: ../../src/fl/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\fldll_version_rc.o: ../../src/fl/../../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/fl/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl_gcc$(VENDORTAG)
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir ../../src/fl/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl_gcc$(VENDORTAG)
 
 $(OBJS)\fldll_antiflickpl.o: ../../src/fl/antiflickpl.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $(CPPDEPS) $<

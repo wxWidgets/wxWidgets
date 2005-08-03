@@ -178,7 +178,7 @@ dynsash_switch.app/Contents/PkgInfo: dynsash_switch$(EXEEXT) $(top_srcdir)/src/m
 @COND_PLATFORM_MACOSX_1@dynsash_switch_bundle: $(____dynsash_switch_BUNDLE_TGT_REF_DEP)
 
 dynsash_switch_sample_rc.o: $(srcdir)/../../../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include
 
 dynsash_switch_dynsash_switch.o: $(srcdir)/dynsash_switch.cpp
 	$(CXXC) -c -o $@ $(DYNSASH_SWITCH_CXXFLAGS) $(srcdir)/dynsash_switch.cpp

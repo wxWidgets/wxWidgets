@@ -188,7 +188,7 @@ rotate_rotate.o: $(srcdir)/rotate.cpp
 	$(CXXC) -c -o $@ $(ROTATE_CXXFLAGS) $(srcdir)/rotate.cpp
 
 rotate_rotate_rc.o: $(srcdir)/rotate.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

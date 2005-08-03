@@ -22,18 +22,18 @@ SETUPHDIR = \
 CLIENT_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -W -Wall -I. \
-	$(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -W \
+	-Wall -I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	$(OBJS)\client_client.o \
 	$(OBJS)\client_client_rc.o
 SERVER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -W -Wall -I. \
-	$(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -W \
+	-Wall -I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 SERVER_OBJECTS =  \
 	$(OBJS)\server_server.o \
 	$(OBJS)\server_server_rc.o
@@ -142,6 +142,12 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_0 = --define _UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_0 = --define wxUSE_UNICODE_MSLU=1
+endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
@@ -224,13 +230,13 @@ $(OBJS)\client_client.o: ./client.cpp
 	$(CXX) -c -o $@ $(CLIENT_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\client_client_rc.o: ./client.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\server_server.o: ./server.cpp
 	$(CXX) -c -o $@ $(SERVER_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\server_server_rc.o: ./server.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
 
 .PHONY: all clean
 

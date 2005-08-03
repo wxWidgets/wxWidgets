@@ -30,7 +30,7 @@ SETUPHDIR = \
 NETUTILSDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\net\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\net\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_NETUTILS -Hu \
 	-H=$(OBJS)\wxprec_netutilsdll.csm $(CPPFLAGS) $(CXXFLAGS)
@@ -42,7 +42,7 @@ NETUTILSDLL_OBJECTS =  \
 NETUTILSLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\net\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\net\..\..\include -Hu -H=$(OBJS)\wxprec_netutilslib.csm \
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -130,6 +130,9 @@ __THREAD_DEFINE_p_1 = -dwxNO_THREADS
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_1 = -d_UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_1 = -dwxUSE_UNICODE_MSLU=1
+!endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
@@ -209,6 +212,9 @@ __THREAD_DEFINE_p = -DwxNO_THREADS
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+!endif
 
 
 all: $(OBJS)
@@ -252,7 +258,7 @@ $(OBJS)\netutilsdll_dummy.obj: ../../src/net\..\..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(NETUTILSDLL_CXXFLAGS) -H $**
 
 $(OBJS)\netutilsdll_version.res: ../../src/net\..\..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i..\..\src\net\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_bcc$(VENDORTAG) $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) -i..\..\src\net\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_bcc$(VENDORTAG) $**
 
 $(OBJS)\netutilsdll_email.obj: ../../src/net\email.cpp
 	$(CXX) -q -c -P -o$@ $(NETUTILSDLL_CXXFLAGS) $**

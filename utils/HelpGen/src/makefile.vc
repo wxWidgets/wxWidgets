@@ -22,9 +22,9 @@ HELPGEN_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\HelpGen.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
-	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE /DwxUSE_GUI=0 $(__RTTIFLAG_9) \
-	$(__EXCEPTIONSFLAG_10) $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	/I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE \
+	/DwxUSE_GUI=0 $(__RTTIFLAG_9) $(__EXCEPTIONSFLAG_10) $(CPPFLAGS) $(CXXFLAGS)
 HELPGEN_OBJECTS =  \
 	$(OBJS)\HelpGen_HelpGen.obj \
 	$(OBJS)\HelpGen_cjparser.obj \
@@ -174,6 +174,9 @@ __THREAD_DEFINE_p = /DwxNO_THREADS
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = /D_UNICODE
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = /DwxUSE_UNICODE_MSLU=1
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = /DWXUSINGDLL

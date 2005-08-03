@@ -22,9 +22,10 @@ DND_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\dnd.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
-	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG_9) \
-	$(__EXCEPTIONSFLAG_10) $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	/I.\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
+	/I.\..\..\samples /DNOPCH $(__RTTIFLAG_9) $(__EXCEPTIONSFLAG_10) $(CPPFLAGS) \
+	$(CXXFLAGS)
 DND_OBJECTS =  \
 	$(OBJS)\dnd_dnd.obj \
 	$(OBJS)\dnd_dnd.res
@@ -208,6 +209,12 @@ __UNICODE_DEFINE_p = /D_UNICODE
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_1 = /d _UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = /DwxUSE_UNICODE_MSLU=1
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_1 = /d wxUSE_UNICODE_MSLU=1
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = /DWXUSINGDLL
 !endif
@@ -269,5 +276,5 @@ $(OBJS)\dnd_dnd.obj: .\dnd.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DND_CXXFLAGS) $**
 
 $(OBJS)\dnd_dnd.res: .\dnd.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH $**
 

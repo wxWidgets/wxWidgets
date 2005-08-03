@@ -30,8 +30,9 @@ SETUPHDIR = \
 DND_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) $(__THREADSFLAG_6) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) \
-	-I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH \
+	$(CPPFLAGS) $(CXXFLAGS)
 DND_OBJECTS =  \
 	$(OBJS)\dnd_dnd.obj
 
@@ -142,6 +143,12 @@ __UNICODE_DEFINE_p = -D_UNICODE
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_1 = -d_UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_1 = -dwxUSE_UNICODE_MSLU=1
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL
 !endif
@@ -218,5 +225,5 @@ $(OBJS)\dnd_dnd.obj: .\dnd.cpp
 	$(CXX) -q -c -P -o$@ $(DND_CXXFLAGS) $**
 
 $(OBJS)\dnd_dnd.res: .\dnd.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\samples -dNOPCH $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\samples -dNOPCH $**
 

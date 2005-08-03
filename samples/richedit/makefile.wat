@@ -253,7 +253,7 @@ data : .SYMBOLIC
 	for %f in (wxLayout.cpp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\richedit_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 $(OBJS)\richedit_wxLayout.obj :  .AUTODEPEND .\wxLayout.cpp
 	$(CXX) -zq -fo=$^@ $(RICHEDIT_CXXFLAGS) $<

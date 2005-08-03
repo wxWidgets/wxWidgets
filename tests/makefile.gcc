@@ -22,8 +22,8 @@ SETUPHDIR = \
 TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\include -I$(SETUPHDIR) -W -Wall -I. \
-	$(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(__RTTIFLAG) \
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I.\..\include -I$(SETUPHDIR) -W \
+	-Wall -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.o \
@@ -63,10 +63,10 @@ TEST_OBJECTS =  \
 TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\include -I$(SETUPHDIR) -W \
-	-Wall -I. $(__DLLFLAG_p) -I.\..\samples -DNOPCH $(CPPUNIT_CFLAGS) \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\include -I$(SETUPHDIR) -W -Wall -I. $(__DLLFLAG_p) -I.\..\samples \
+	-DNOPCH $(CPPUNIT_CFLAGS) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_sample_rc.o \
 	$(OBJS)\test_gui_dummy.o \
@@ -145,6 +145,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_3 = --define _UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_3 = --define wxUSE_UNICODE_MSLU=1
+endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p_3 = --define WXUSINGDLL
 endif
@@ -192,6 +195,9 @@ __THREAD_DEFINE_p = -DwxNO_THREADS
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
+endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
@@ -369,7 +375,7 @@ $(OBJS)\test_uris.o: ./uris/uris.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_sample_rc.o: ./../samples/sample.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) --include-dir ./../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../samples
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) --include-dir ./../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../samples
 
 $(OBJS)\test_gui_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<

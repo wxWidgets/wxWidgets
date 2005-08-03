@@ -178,7 +178,7 @@ dynsash.app/Contents/PkgInfo: dynsash$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info
 @COND_PLATFORM_MACOSX_1@dynsash_bundle: $(____dynsash_BUNDLE_TGT_REF_DEP)
 
 dynsash_sample_rc.o: $(srcdir)/../../../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include
 
 dynsash_dynsash.o: $(srcdir)/dynsash.cpp
 	$(CXXC) -c -o $@ $(DYNSASH_CXXFLAGS) $(srcdir)/dynsash.cpp

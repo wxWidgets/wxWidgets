@@ -30,9 +30,9 @@ SETUPHDIR = \
 TEST_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\include -I$(SETUPHDIR) -I. \
-	$(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) -Hu \
-	-H=$(OBJS)\testprec_test.csm $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
+	$(CPPUNIT_CFLAGS) -Hu -H=$(OBJS)\testprec_test.csm $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
@@ -71,9 +71,10 @@ TEST_OBJECTS =  \
 TEST_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\include -I$(SETUPHDIR) -I. \
-	$(__DLLFLAG_p) -I.\..\samples -DNOPCH $(CPPUNIT_CFLAGS) -Hu \
-	-H=$(OBJS)\testprec_test_gui.csm $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) -I.\..\samples -DNOPCH \
+	$(CPPUNIT_CFLAGS) -Hu -H=$(OBJS)\testprec_test_gui.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_dummy.obj \
 	$(OBJS)\test_gui_test.obj \
@@ -144,6 +145,9 @@ __THREAD_DEFINE_p_3 = -dwxNO_THREADS
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_3 = -d_UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_3 = -dwxUSE_UNICODE_MSLU=1
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p_3 = -dWXUSINGDLL
 !endif
@@ -201,6 +205,9 @@ __THREAD_DEFINE_p = -DwxNO_THREADS
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL
@@ -383,7 +390,7 @@ $(OBJS)\test_uris.obj: .\uris\uris.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) -i.\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_3) -i.\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) -i.\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_3) -i.\..\samples $**
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) -H $**

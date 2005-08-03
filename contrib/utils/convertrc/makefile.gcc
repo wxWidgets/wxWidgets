@@ -22,10 +22,10 @@ SETUPHDIR = \
 CONVERTRC_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
-	-I$(SETUPHDIR) -W -Wall -I. $(__DLLFLAG_p) -I.\..\..\..\samples -DNOPCH \
-	-I.\..\..\include $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\..\..\include -I$(SETUPHDIR) -W -Wall -I. $(__DLLFLAG_p) \
+	-I.\..\..\..\samples -DNOPCH -I.\..\..\include $(__RTTIFLAG_5) \
+	$(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 CONVERTRC_OBJECTS =  \
 	$(OBJS)\convertrc_convert.o \
 	$(OBJS)\convertrc_rc2wxr.o \
@@ -137,6 +137,12 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_1 = --define _UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_1 = --define wxUSE_UNICODE_MSLU=1
+endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
@@ -224,7 +230,7 @@ $(OBJS)\convertrc_wxr2xml.o: ./wxr2xml.cpp
 	$(CXX) -c -o $@ $(CONVERTRC_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\convertrc_wxconvert_rc.o: ./wxconvert.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH --include-dir ./../../include
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH --include-dir ./../../include
 
 .PHONY: all clean
 

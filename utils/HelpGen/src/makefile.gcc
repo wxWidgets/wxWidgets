@@ -22,9 +22,10 @@ SETUPHDIR = \
 HELPGEN_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
-	-I$(SETUPHDIR) -W -Wall -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 $(__RTTIFLAG_5) \
-	$(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\..\..\include -I$(SETUPHDIR) -W -Wall -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
+	$(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+	$(CXXFLAGS)
 HELPGEN_OBJECTS =  \
 	$(OBJS)\HelpGen_HelpGen.o \
 	$(OBJS)\HelpGen_cjparser.o \
@@ -115,6 +116,9 @@ __THREAD_DEFINE_p = -DwxNO_THREADS
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
+endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL

@@ -375,7 +375,7 @@ distclean: clean
 @COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
 
 stcdll_version_rc.o: $(srcdir)/../../../src/msw/version.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
 
 stcdll_PlatWX.o: $(srcdir)/PlatWX.cpp
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/PlatWX.cpp

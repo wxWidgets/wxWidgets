@@ -22,9 +22,9 @@ RENDER_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\render.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
 	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
+	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 RENDER_OBJECTS =  \
 	$(OBJS)\render_sample.res \
 	$(OBJS)\render_render.obj
@@ -34,8 +34,8 @@ RENDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_23)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	/I.\..\..\include /I$(SETUPHDIR) /W4 /DWXUSINGDLL $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__MSLU_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /W4 /DWXUSINGDLL \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 RENDDLL_OBJECTS =  \
 	$(OBJS)\renddll_renddll.obj
 
@@ -130,6 +130,9 @@ __THREAD_DEFINE_p_1 = /d wxNO_THREADS
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_1 = /d _UNICODE
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_1 = /d wxUSE_UNICODE_MSLU=1
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = /DWXUSINGDLL
@@ -246,6 +249,9 @@ __THREAD_DEFINE_p = /DwxNO_THREADS
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = /D_UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = /DwxUSE_UNICODE_MSLU=1
+!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
@@ -304,7 +310,7 @@ $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_RELEASE_NODOT)_vc.dl
 !endif
 
 $(OBJS)\render_sample.res: .\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples $**
 
 $(OBJS)\render_render.obj: .\render.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RENDER_CXXFLAGS) $**

@@ -246,7 +246,7 @@ $(OBJS)\multimon_test.exe :  $(MULTIMON_TEST_OBJECTS) $(OBJS)\multimon_test_samp
 	wlink @$(OBJS)\multimon_test.lbc
 
 $(OBJS)\multimon_test_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 $(OBJS)\multimon_test_multimon_test.obj :  .AUTODEPEND .\multimon_test.cpp
 	$(CXX) -zq -fo=$^@ $(MULTIMON_TEST_CXXFLAGS) $<

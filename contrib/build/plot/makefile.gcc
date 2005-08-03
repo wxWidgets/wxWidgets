@@ -22,7 +22,7 @@ SETUPHDIR = \
 PLOTDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\plot\..\..\..\include -I$(SETUPHDIR) -W -Wall \
 	-I..\..\src\plot\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_PLOT \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
@@ -34,7 +34,7 @@ PLOTDLL_OBJECTS =  \
 PLOTLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\plot\..\..\..\include -I$(SETUPHDIR) -W -Wall \
 	-I..\..\src\plot\..\..\include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
@@ -114,6 +114,9 @@ __THREAD_DEFINE_p_1 = --define wxNO_THREADS
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_1 = --define _UNICODE
+endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_1 = --define wxUSE_UNICODE_MSLU=1
 endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
@@ -206,6 +209,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+endif
 
 
 all: $(OBJS)
@@ -239,7 +245,7 @@ $(OBJS)\plotdll_dummy.o: ../../src/plot/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(PLOTDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\plotdll_version_rc.o: ../../src/plot/../../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/plot/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_gcc$(VENDORTAG)
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir ../../src/plot/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_gcc$(VENDORTAG)
 
 $(OBJS)\plotdll_plot.o: ../../src/plot/plot.cpp
 	$(CXX) -c -o $@ $(PLOTDLL_CXXFLAGS) $(CPPDEPS) $<

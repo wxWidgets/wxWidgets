@@ -4221,7 +4221,7 @@ $(OBJS)\monodll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_wat$(VENDORTAG) $<
 
 $(OBJS)\monodll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -7794,7 +7794,7 @@ $(OBJS)\basedll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_wat$(VENDORTAG) $<
 
 $(OBJS)\basedll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
@@ -8265,7 +8265,7 @@ $(OBJS)\netdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net_wat$(VENDORTAG) $<
 
 $(OBJS)\netdll_fs_inet.obj :  .AUTODEPEND ..\..\src\common\fs_inet.cpp
 	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
@@ -8346,7 +8346,7 @@ $(OBJS)\coredll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core_wat$(VENDORTAG) $<
 
 $(OBJS)\coredll_event.obj :  .AUTODEPEND ..\..\src\common\event.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -10817,7 +10817,7 @@ $(OBJS)\advdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv_wat$(VENDORTAG) $<
 
 $(OBJS)\advdll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
@@ -10928,7 +10928,7 @@ $(OBJS)\mediadll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mediadll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media_wat$(VENDORTAG) $<
 
 $(OBJS)\mediadll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
@@ -10949,7 +10949,7 @@ $(OBJS)\odbcdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
 
 $(OBJS)\odbcdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc_wat$(VENDORTAG) $<
 
 $(OBJS)\odbcdll_db.obj :  .AUTODEPEND ..\..\src\common\db.cpp
 	$(CXX) -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
@@ -10970,7 +10970,7 @@ $(OBJS)\dbgriddll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(DBGRIDDLL_CXXFLAGS) $<
 
 $(OBJS)\dbgriddll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid_wat$(VENDORTAG) $<
 
 $(OBJS)\dbgriddll_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
 	$(CXX) -zq -fo=$^@ $(DBGRIDDLL_CXXFLAGS) $<
@@ -10985,7 +10985,7 @@ $(OBJS)\htmldll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html_wat$(VENDORTAG) $<
 
 $(OBJS)\htmldll_helpbest.obj :  .AUTODEPEND ..\..\src\msw\helpbest.cpp
 	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
@@ -11126,7 +11126,7 @@ $(OBJS)\qadll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(QADLL_CXXFLAGS) $<
 
 $(OBJS)\qadll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa_wat$(VENDORTAG) $<
 
 $(OBJS)\qadll_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
 	$(CXX) -zq -fo=$^@ $(QADLL_CXXFLAGS) $<
@@ -11147,7 +11147,7 @@ $(OBJS)\xmldll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
 
 $(OBJS)\xmldll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml_wat$(VENDORTAG) $<
 
 $(OBJS)\xmldll_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
 	$(CXX) -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
@@ -11168,7 +11168,7 @@ $(OBJS)\xrcdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc_wat$(VENDORTAG) $<
 
 $(OBJS)\xrcdll_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
 	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
@@ -11435,7 +11435,7 @@ $(OBJS)\gldll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(GLDLL_CXXFLAGS) $<
 
 $(OBJS)\gldll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl_wat$(VENDORTAG) $<
 
 $(OBJS)\gldll_glcanvas.obj :  .AUTODEPEND ..\..\src\msw\glcanvas.cpp
 	$(CXX) -zq -fo=$^@ $(GLDLL_CXXFLAGS) $<

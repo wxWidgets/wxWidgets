@@ -421,31 +421,31 @@ fl_demo1_fl_demo1.o: $(srcdir)/fl_demo1.cpp
 	$(CXXC) -c -o $@ $(FL_DEMO1_CXXFLAGS) $(srcdir)/fl_demo1.cpp
 
 fl_demo1_fl_demo1_rc.o: $(srcdir)/fl_demo1.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)  --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)   --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 fl_demo2_fl_demo2.o: $(srcdir)/fl_demo2.cpp
 	$(CXXC) -c -o $@ $(FL_DEMO2_CXXFLAGS) $(srcdir)/fl_demo2.cpp
 
 fl_demo2_fl_demo2_rc.o: $(srcdir)/fl_demo2.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)  --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)   --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 fl_sample1_fl_sample1.o: $(srcdir)/fl_sample1.cpp
 	$(CXXC) -c -o $@ $(FL_SAMPLE1_CXXFLAGS) $(srcdir)/fl_sample1.cpp
 
 fl_sample1_fl_sample1_rc.o: $(srcdir)/fl_sample1.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)  --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)   --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 fl_sample2_fl_sample2.o: $(srcdir)/fl_sample2.cpp
 	$(CXXC) -c -o $@ $(FL_SAMPLE2_CXXFLAGS) $(srcdir)/fl_sample2.cpp
 
 fl_sample2_fl_sample2_rc.o: $(srcdir)/fl_sample2.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)  --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)   --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 fl_sample3_fl_sample3.o: $(srcdir)/fl_sample3.cpp
 	$(CXXC) -c -o $@ $(FL_SAMPLE3_CXXFLAGS) $(srcdir)/fl_sample3.cpp
 
 fl_sample3_fl_sample3_rc.o: $(srcdir)/fl_sample3.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)  --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1_3)  $(__EXCEPTIONS_DEFINE_p_1_3) $(__RTTI_DEFINE_p_1_3) $(__THREAD_DEFINE_p_1_3)   --include-dir $(srcdir) $(__DLLFLAG_p_1_3) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../include --define BMP_DIR="bitmaps/"
 
 
 # Include dependency info, if present:

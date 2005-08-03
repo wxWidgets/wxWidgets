@@ -30,9 +30,9 @@ SETUPHDIR = \
 TEX2RTF_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
-	-I$(SETUPHDIR) -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 -DNO_GUI $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 -DNO_GUI \
+	$(CPPFLAGS) $(CXXFLAGS)
 TEX2RTF_OBJECTS =  \
 	$(OBJS)\tex2rtf_tex2rtf.obj \
 	$(OBJS)\tex2rtf_tex2any.obj \
@@ -45,9 +45,9 @@ TEX2RTF_OBJECTS =  \
 TEX2RTF_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
-	-I$(SETUPHDIR) -I. $(__DLLFLAG_p) -I.\..\..\..\samples -DNOPCH $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) -I.\..\..\..\samples \
+	-DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 TEX2RTF_GUI_OBJECTS =  \
 	$(OBJS)\tex2rtf_gui_tex2rtf.obj \
 	$(OBJS)\tex2rtf_gui_tex2any.obj \
@@ -117,6 +117,9 @@ __THREAD_DEFINE_p_3 = -dwxNO_THREADS
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_3 = -d_UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_3 = -dwxUSE_UNICODE_MSLU=1
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p_3 = -dWXUSINGDLL
 !endif
@@ -178,6 +181,9 @@ __THREAD_DEFINE_p = -DwxNO_THREADS
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL
@@ -278,7 +284,7 @@ $(OBJS)\tex2rtf_table.obj: .\table.cpp
 	$(CXX) -q -c -P -o$@ $(TEX2RTF_CXXFLAGS) $**
 
 $(OBJS)\tex2rtf_gui_sample.res: .\..\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) -i.\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_3) -i.\..\..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) -i.\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_3) -i.\..\..\..\samples $**
 
 $(OBJS)\tex2rtf_gui_tex2rtf.obj: .\tex2rtf.cpp
 	$(CXX) -q -c -P -o$@ $(TEX2RTF_GUI_CXXFLAGS) $**

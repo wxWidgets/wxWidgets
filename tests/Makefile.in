@@ -349,7 +349,7 @@ test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/uris.cpp
 
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)  --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples --include-dir $(top_srcdir)/include
 
 test_gui_test.o: $(srcdir)/test.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/test.cpp

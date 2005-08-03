@@ -210,7 +210,7 @@ render.app/Contents/PkgInfo: render$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.p
 @COND_SHARED_1@	$(INSTALL_PROGRAM) $(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE) $(DESTDIR)$(PLUGINS_INST_DIR)
 
 render_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
 
 render_render.o: $(srcdir)/render.cpp
 	$(CXXC) -c -o $@ $(RENDER_CXXFLAGS) $(srcdir)/render.cpp

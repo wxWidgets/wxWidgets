@@ -324,7 +324,7 @@ $(OBJS)\mmediadll_dummy.obj :  .AUTODEPEND ../../src/mmedia\..\..\..\src\msw\dum
 	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_version.res :  .AUTODEPEND ../../src/mmedia\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG) $<
 
 $(OBJS)\mmediadll_cdwin.obj :  .AUTODEPEND ../../src/mmedia\cdwin.cpp
 	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<

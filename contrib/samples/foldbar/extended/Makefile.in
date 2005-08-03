@@ -182,7 +182,7 @@ extended_extended.o: $(srcdir)/extended.cpp
 	$(CXXC) -c -o $@ $(EXTENDED_CXXFLAGS) $(srcdir)/extended.cpp
 
 extended_extended_rc.o: $(srcdir)/extended.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../../include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples --include-dir $(top_srcdir)/include --include-dir $(srcdir)/../../../include
 
 
 # Include dependency info, if present:

@@ -234,13 +234,13 @@ client_client.o: $(srcdir)/client.cpp
 	$(CXXC) -c -o $@ $(CLIENT_CXXFLAGS) $(srcdir)/client.cpp
 
 client_client_rc.o: $(srcdir)/client.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)  $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6)  --include-dir $(srcdir) $(__DLLFLAG_p_6) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)  $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6)   --include-dir $(srcdir) $(__DLLFLAG_p_6) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
 
 server_server.o: $(srcdir)/server.cpp
 	$(CXXC) -c -o $@ $(SERVER_CXXFLAGS) $(srcdir)/server.cpp
 
 server_server_rc.o: $(srcdir)/server.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)  $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6)  --include-dir $(srcdir) $(__DLLFLAG_p_6) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)  $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6)   --include-dir $(srcdir) $(__DLLFLAG_p_6) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

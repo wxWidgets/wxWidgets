@@ -22,9 +22,9 @@ CLIENT_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\client.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
 	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
+	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	$(OBJS)\client_client.obj \
 	$(OBJS)\client_client.res
@@ -32,9 +32,9 @@ SERVER_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\server.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
 	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
+	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 SERVER_OBJECTS =  \
 	$(OBJS)\server_server.obj \
 	$(OBJS)\server_server.res
@@ -224,6 +224,12 @@ __UNICODE_DEFINE_p = /D_UNICODE
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_0 = /d _UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = /DwxUSE_UNICODE_MSLU=1
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_0 = /d wxUSE_UNICODE_MSLU=1
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = /DWXUSINGDLL
 !endif
@@ -293,11 +299,11 @@ $(OBJS)\client_client.obj: .\client.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CLIENT_CXXFLAGS) $**
 
 $(OBJS)\client_client.res: .\client.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_0) /d _WINDOWS /i .\..\..\samples /d NOPCH $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_0) /d _WINDOWS /i .\..\..\samples /d NOPCH $**
 
 $(OBJS)\server_server.obj: .\server.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(SERVER_CXXFLAGS) $**
 
 $(OBJS)\server_server.res: .\server.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_0) /d _WINDOWS /i .\..\..\samples /d NOPCH $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) /i .\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_0) /d _WINDOWS /i .\..\..\samples /d NOPCH $**
 

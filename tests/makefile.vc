@@ -22,9 +22,10 @@ TEST_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(OBJS)\test.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
 	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) \
-	/D_CONSOLE /DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	/Yu"testprec.h" /Fp"$(OBJS)\testprec_test.pch" $(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) /I.\..\include /I$(SETUPHDIR) /W4 \
+	/I. $(__DLLFLAG_p) /D_CONSOLE /DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) /Yu"testprec.h" /Fp"$(OBJS)\testprec_test.pch" \
+	$(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
@@ -64,10 +65,10 @@ TEST_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_23)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\test_gui.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\include /I$(SETUPHDIR) /W4 \
-	/I. $(__DLLFLAG_p) /I.\..\samples /DNOPCH $(CPPUNIT_CFLAGS) /D_CONSOLE \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"testprec.h" \
-	/Fp"$(OBJS)\testprec_test_gui.pch" $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	/I.\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /I.\..\samples /DNOPCH \
+	$(CPPUNIT_CFLAGS) /D_CONSOLE $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	/Yu"testprec.h" /Fp"$(OBJS)\testprec_test_gui.pch" $(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_sample.res \
 	$(OBJS)\test_gui_dummy.obj \
@@ -168,6 +169,9 @@ __THREAD_DEFINE_p_3 = /d wxNO_THREADS
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_3 = /d _UNICODE
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_3 = /d wxUSE_UNICODE_MSLU=1
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p_3 = /d WXUSINGDLL
@@ -274,6 +278,9 @@ __THREAD_DEFINE_p = /DwxNO_THREADS
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = /D_UNICODE
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = /DwxUSE_UNICODE_MSLU=1
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = /DWXUSINGDLL
@@ -438,7 +445,7 @@ $(OBJS)\test_uris.obj: .\uris\uris.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_17_p_1) $(__NO_VC_CRTDBG_p_3)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) /i .\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_3) /i .\..\samples $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_17_p_1) $(__NO_VC_CRTDBG_p_3)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) /i .\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_3) /i .\..\samples $**
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) /Yctestprec.h $**

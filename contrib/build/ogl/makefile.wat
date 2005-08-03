@@ -308,7 +308,7 @@ $(OBJS)\ogldll_dummy.obj :  .AUTODEPEND ../../src/ogl\..\..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(OGLDLL_CXXFLAGS) $<
 
 $(OBJS)\ogldll_version.res :  .AUTODEPEND ../../src/ogl\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\ogl\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\ogl\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_wat$(VENDORTAG) $<
 
 $(OBJS)\ogldll_basic2.obj :  .AUTODEPEND ../../src/ogl\basic2.cpp
 	$(CXX) -zq -fo=$^@ $(OGLDLL_CXXFLAGS) $<

@@ -251,7 +251,7 @@ distclean: clean
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_netutilslib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(NETUTILSLIB_CXXFLAGS)
 
 netutilsdll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(NETUTILSDLL_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
 
 netutilsdll_email.o: $(srcdir)/email.cpp $(NETUTILSDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $(srcdir)/email.cpp

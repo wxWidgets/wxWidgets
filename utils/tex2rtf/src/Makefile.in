@@ -214,7 +214,7 @@ tex2rtf_table.o: $(srcdir)/table.cpp
 	$(CXXC) -c -o $@ $(TEX2RTF_CXXFLAGS) $(srcdir)/table.cpp
 
 tex2rtf_gui_sample_rc.o: $(srcdir)/../../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)  --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../../../samples --include-dir $(top_srcdir)/include
 
 tex2rtf_gui_tex2rtf.o: $(srcdir)/tex2rtf.cpp
 	$(CXXC) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $(srcdir)/tex2rtf.cpp

@@ -30,7 +30,7 @@ SETUPHDIR = \
 OGLDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\ogl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_OGL -Hu \
 	-H=$(OBJS)\wxprec_ogldll.csm $(CPPFLAGS) $(CXXFLAGS)
@@ -51,7 +51,7 @@ OGLDLL_OBJECTS =  \
 OGLLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\ogl\..\..\include -Hu -H=$(OBJS)\wxprec_ogllib.csm $(CPPFLAGS) \
 	$(CXXFLAGS)
@@ -148,6 +148,9 @@ __THREAD_DEFINE_p_1 = -dwxNO_THREADS
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_1 = -d_UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_1 = -dwxUSE_UNICODE_MSLU=1
+!endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
@@ -227,6 +230,9 @@ __THREAD_DEFINE_p = -DwxNO_THREADS
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+!endif
 
 
 all: $(OBJS)
@@ -270,7 +276,7 @@ $(OBJS)\ogldll_dummy.obj: ../../src/ogl\..\..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(OGLDLL_CXXFLAGS) -H $**
 
 $(OBJS)\ogldll_version.res: ../../src/ogl\..\..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i..\..\src\ogl\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_bcc$(VENDORTAG) $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) -i..\..\src\ogl\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_bcc$(VENDORTAG) $**
 
 $(OBJS)\ogldll_basic2.obj: ../../src/ogl\basic2.cpp
 	$(CXX) -q -c -P -o$@ $(OGLDLL_CXXFLAGS) $**

@@ -30,15 +30,17 @@ SETUPHDIR = \
 CLIENT_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) \
-	-I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH \
+	$(CPPFLAGS) $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	$(OBJS)\client_client.obj
 SERVER_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) \
-	-I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH \
+	$(CPPFLAGS) $(CXXFLAGS)
 SERVER_OBJECTS =  \
 	$(OBJS)\server_server.obj
 
@@ -149,6 +151,12 @@ __UNICODE_DEFINE_p = -D_UNICODE
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_0 = -d_UNICODE
 !endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_0 = -dwxUSE_UNICODE_MSLU=1
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL
 !endif
@@ -236,11 +244,11 @@ $(OBJS)\client_client.obj: .\client.cpp
 	$(CXX) -q -c -P -o$@ $(CLIENT_CXXFLAGS) $**
 
 $(OBJS)\client_client.res: .\client.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH $**
 
 $(OBJS)\server_server.obj: .\server.cpp
 	$(CXX) -q -c -P -o$@ $(SERVER_CXXFLAGS) $**
 
 $(OBJS)\server_server.res: .\server.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH $**
 

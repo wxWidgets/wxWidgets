@@ -30,8 +30,9 @@ SETUPHDIR = \
 HELPGEN_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) $(__THREADSFLAG_6) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
-	-I$(SETUPHDIR) -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I.\..\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
+	$(CPPFLAGS) $(CXXFLAGS)
 HELPGEN_OBJECTS =  \
 	$(OBJS)\HelpGen_HelpGen.obj \
 	$(OBJS)\HelpGen_cjparser.obj \
@@ -127,6 +128,9 @@ __THREAD_DEFINE_p = -DwxNO_THREADS
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL

@@ -22,7 +22,7 @@ SETUPHDIR = \
 MMEDIADLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) -W -Wall \
 	-I..\..\src\mmedia\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_MMEDIA \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
@@ -53,7 +53,7 @@ MMEDIADLL_OBJECTS =  \
 MMEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	-I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) -W -Wall \
 	-I..\..\src\mmedia\..\..\include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
@@ -153,6 +153,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_1 = --define _UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_1 = --define wxUSE_UNICODE_MSLU=1
+endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
@@ -244,6 +247,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
 endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
+endif
 
 
 all: $(OBJS)
@@ -277,7 +283,7 @@ $(OBJS)\mmediadll_dummy.o: ../../src/mmedia/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\mmediadll_version_rc.o: ../../src/mmedia/../../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ../../src/mmedia/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_gcc$(VENDORTAG)
+	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir ../../src/mmedia/../../../include --include-dir $(SETUPHDIR) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_gcc$(VENDORTAG)
 
 $(OBJS)\mmediadll_cdwin.o: ../../src/mmedia/cdwin.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $(CPPDEPS) $<

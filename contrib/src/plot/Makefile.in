@@ -246,7 +246,7 @@ distclean: clean
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_plotlib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(PLOTLIB_CXXFLAGS)
 
 plotdll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(PLOTDLL_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
 
 plotdll_plot.o: $(srcdir)/plot.cpp $(PLOTDLL_ODEP)
 	$(CXXC) -c -o $@ $(PLOTDLL_CXXFLAGS) $(srcdir)/plot.cpp
