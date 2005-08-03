@@ -78,9 +78,12 @@ typedef int wxEventType;
 //     change the switch()es to if()s
 //
 // if these are real problems for you, define WXWIN_COMPATIBILITY_EVENT_TYPES
-// to get 100% old behaviour, however you won't be able to use the libraries
-// using the new dynamic event type allocation in such case, so avoid it if
-// possible.
+// as 1 to get 100% old behaviour, however you won't be able to use the
+// libraries using the new dynamic event type allocation in such case, so avoid
+// it if possible.
+#ifndef WXWIN_COMPATIBILITY_EVENT_TYPES
+    #define WXWIN_COMPATIBILITY_EVENT_TYPES 0
+#endif
 
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
 
