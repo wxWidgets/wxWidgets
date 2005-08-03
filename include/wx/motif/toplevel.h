@@ -16,7 +16,7 @@
     #pragma interface "toplevel.h"
 #endif
 
-class wxTopLevelWindowMotif : public wxTopLevelWindowBase
+class WXDLLIMPEXP_CORE wxTopLevelWindowMotif : public wxTopLevelWindowBase
 {
 public:
     wxTopLevelWindowMotif() { Init(); }

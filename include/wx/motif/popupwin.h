@@ -20,7 +20,7 @@
 // wxPopupWindow
 // ----------------------------------------------------------------------------
 
-class wxPopupWindow : public wxPopupWindowBase
+class WXDLLIMPEXP_CORE wxPopupWindow : public wxPopupWindowBase
 {
 public:
     wxPopupWindow() { Init(); }

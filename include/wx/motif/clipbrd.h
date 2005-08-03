@@ -18,7 +18,7 @@
 
 #if wxUSE_CLIPBOARD
 
-class wxDataObject;
+class WXDLLIMPEXP_CORE wxDataObject;
 struct wxDataIdToDataObject;
 
 #include "wx/list.h"
@@ -41,7 +41,7 @@ bool WXDLLEXPORT wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatN
 // wxClipboard
 //-----------------------------------------------------------------------------
 
-class wxClipboard : public wxClipboardBase
+class WXDLLIMPEXP_CORE wxClipboard : public wxClipboardBase
 {
 public:
     wxClipboard();

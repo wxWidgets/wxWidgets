@@ -12,7 +12,7 @@
 #ifndef _WX_MOTIF_DATAFORM_H
 #define _WX_MOTIF_DATAFORM_H
 
-class wxDataFormat
+class WXDLLIMPEXP_CORE wxDataFormat
 {
 public:
     // the clipboard formats under Xt are Atoms

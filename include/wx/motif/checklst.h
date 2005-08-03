@@ -19,7 +19,7 @@
 
 #include "wx/listbox.h"
 
-class wxCheckListBox : public wxCheckListBoxBase
+class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {
     DECLARE_DYNAMIC_CLASS(wxCheckListBox)
         

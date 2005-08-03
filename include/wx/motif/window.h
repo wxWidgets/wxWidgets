@@ -22,7 +22,7 @@
 // wxWindow class for Motif - see also wxWindowBase
 // ----------------------------------------------------------------------------
 
-class wxWindow : public wxWindowBase
+class WXDLLIMPEXP_CORE wxWindow : public wxWindowBase
 {
     friend class WXDLLEXPORT wxDC;
     friend class WXDLLEXPORT wxWindowDC;

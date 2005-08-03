@@ -19,7 +19,7 @@
 // wxBitmapDataObject is a specialization of wxDataObject for bitmaps
 // ----------------------------------------------------------------------------
 
-class wxBitmapDataObject : public wxBitmapDataObjectBase
+class WXDLLIMPEXP_CORE wxBitmapDataObject : public wxBitmapDataObjectBase
 {
 public:
     // ctors
