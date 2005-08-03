@@ -19,7 +19,7 @@
     Codewarrior doesn't define any Windows symbols until some headers
     are included
 */
-#if __MWERKS__
+#ifdef __MWERKS__
 #    include <stddef.h>
 #endif
 
