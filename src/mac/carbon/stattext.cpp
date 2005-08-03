@@ -101,7 +101,8 @@ void wxStaticText::SetLabel(const wxString& st )
         SetSize( GetBestSize() ) ;
     }
     Refresh() ;
-    Update() ;
+    // we shouldn't need forced updates
+    // Update() ;
 }
 
 bool wxStaticText::SetFont(const wxFont& font)
