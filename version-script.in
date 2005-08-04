@@ -50,6 +50,9 @@
         *wxVectorBase*size*;
         *wxVectorBase*wxVectorBase*;
         *wxWizard*FinishLayout*;
+        *wxWizardPage*TransferDataFromWindow*;
+        *wxWizardPage*TransferDataToWindow*;
+        *wxWizardPage*Validate*;
         *wxXmlResource*ConvertFileNameToURL*wxString*;
         *wxXmlResource*IsArchive*wxString*;
         *wxXmlResource*Unload*wxString*;
