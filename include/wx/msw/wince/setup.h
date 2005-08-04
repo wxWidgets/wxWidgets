@@ -252,13 +252,8 @@
 // Use standard C++ streams if 1. If 0, use wxWin streams implementation only.
 #define wxUSE_STD_IOSTREAM  0
 
-<<<<<<< setup.h
-// Enable converion to  standard C++ string if 1.
-#define wxUSE_STD_STRING  1
-=======
 // Enable conversion to standard C++ string if 1.
 #define wxUSE_STD_STRING  0
->>>>>>> 1.62
 
 // ----------------------------------------------------------------------------
 // non GUI features selection
@@ -484,7 +479,6 @@
 // Recommended setting: 1 if you have the QT SDK installed and you need it, else 0
 #define wxUSE_QUICKTIME     0
 
-<<<<<<< setup.h
 // Use DirectShow (requires linkage to strmiids.lib)
 //
 // Default is 0
@@ -492,8 +486,6 @@
 // Recommended setting: 1 if the DirectX 7 SDK is installed (highly recommended), else 0
 #define wxUSE_DIRECTSHOW    0
 
-=======
->>>>>>> 1.62
 // Use GStreamer for Unix (req a lot of dependancies)
 //
 // Default is 0
