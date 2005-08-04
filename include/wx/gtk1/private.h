@@ -139,7 +139,7 @@ WXDLLIMPEXP_CORE wxString wxEscapeStringForPangoMarkup(const wxString& str);
 // The declaration for gtk_icon_size_lookup was accidentally ifdefed out in
 // GTK+ 2.1.0 which Sun seem to have shipped with some versions of JDS
 // for Solaris 9 x86.
-#if NEED_GTK_ICON_SIZE_LOOKUP
+#ifdef NEED_GTK_ICON_SIZE_LOOKUP
 extern "C" gboolean gtk_icon_size_lookup  (GtkIconSize  size,
                                            gint         *width,
                                            gint         *height);
