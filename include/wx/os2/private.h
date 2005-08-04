@@ -131,16 +131,6 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 typedef MRESULT (APIENTRY * WndProcCast) (HWND, ULONG, MPARAM, MPARAM);
 #define CASTWNDPROC (WndProcCast)
 
-#if wxUSE_ITSY_BITSY
-    #define IBS_HORZCAPTION    0x4000L
-    #define IBS_VERTCAPTION    0x8000L
-
-    UINT    APIENTRY ibGetCaptionSize( HWND hWnd  ) ;
-    UINT    APIENTRY ibSetCaptionSize( HWND hWnd, UINT nSize ) ;
-    MRESULT APIENTRY ibDefWindowProc( HWND hWnd, ULONG ulMsg, MPARAM wParam, MPARAM lParam ) ;
-    VOID    APIENTRY ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
-#endif // wxUSE_ITSY_BITSY
-
 /*
  * Decide what window classes we're going to use
  * for this combination of CTl3D/FAFA settings

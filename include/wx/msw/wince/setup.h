@@ -1131,7 +1131,6 @@
 // obsolete MSW settings, don't change
 // ----------------------------------------------------------------------------
 
-#define wxUSE_ITSY_BITSY 0
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
 
 #endif // _WX_SETUP_H_

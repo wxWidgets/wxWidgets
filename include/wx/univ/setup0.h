@@ -1126,15 +1126,6 @@
     #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
 #endif
 
-// Define as 1 to use Microsoft's ItsyBitsy small title bar library, for
-// wxMiniFrame. This setting is only used for Win3.1; Win9x and NT use native
-// miniframes support instead.
-//
-// Default is 0 for (most) Win32 (systems), 1 for Win16
-//
-// Recommended setting: 0
-#define wxUSE_ITSY_BITSY 0
-
 // Set this to 1 to use RICHEDIT controls for wxTextCtrl with style wxTE_RICH
 // which allows to put more than ~32Kb of text in it even under Win9x (NT
 // doesn't have such limitation).

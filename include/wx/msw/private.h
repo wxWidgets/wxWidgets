@@ -108,16 +108,6 @@ extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
 #endif
 #endif
 
-#if wxUSE_ITSY_BITSY
-    #define IBS_HORZCAPTION    0x4000L
-    #define IBS_VERTCAPTION    0x8000L
-
-    UINT    WINAPI ibGetCaptionSize( HWND hWnd  ) ;
-    UINT    WINAPI ibSetCaptionSize( HWND hWnd, UINT nSize ) ;
-    LRESULT WINAPI ibDefWindowProc( HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam ) ;
-    VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
-#endif // wxUSE_ITSY_BITSY
-
 /*
  * Decide what window classes we're going to use
  * for this combination of CTl3D/FAFA settings
