@@ -3692,7 +3692,8 @@ void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     int client_width = 0;
     GetClientSize( &client_width, &client_height );
 
-#if __WXGTK__
+    // VZ: any reason for this ifdef? (FIXME)
+#ifdef __WXGTK__
     wxRect rect;
     rect.SetX( 1 );
     rect.SetY( 1 );
@@ -3700,7 +3701,7 @@ void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     rect.SetHeight( client_height - 2 );
 
     wxRendererNative::Get().DrawHeaderButton( this, dc, rect, 0 );
-#else
+#else // !__WXGTK__
     dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW),1, wxSOLID) );
     dc.DrawLine( client_width-1, client_height-1, client_width-1, 0 );
     dc.DrawLine( client_width-1, client_height-1, 0, client_height-1 );
@@ -3710,7 +3711,7 @@ void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     dc.SetPen( *wxWHITE_PEN );
     dc.DrawLine( 1, 1, client_width-1, 1 );
     dc.DrawLine( 1, 1, 1, client_height-1 );
-#endif
+#endif // __WXGTK__/!__WXGTK__
 }
 
 
