@@ -89,6 +89,12 @@
 
 #endif /* __GNUWIN32__ */
 
+/* wxUSE_MFC is not defined when using configure as it doesn't make sense for
+   gcc or mingw32 anyhow */
+#ifndef wxUSE_MFC
+    #define wxUSE_MFC 0
+#endif /* !defined(wxUSE_MFC) */
+
 /* MFC duplicates these operators */
 #if wxUSE_MFC
 #   undef  wxUSE_GLOBAL_MEMORY_OPERATORS
