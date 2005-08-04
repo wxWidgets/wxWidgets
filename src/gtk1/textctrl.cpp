@@ -55,12 +55,13 @@ static void wxGtkOnRemoveTag(GtkTextBuffer *buffer,
                              GtkTextTag *tag,
                              GtkTextIter *start,
                              GtkTextIter *end,
-                             gpointer user_data)
+                             char *prefix)
 {
     gchar *name;
     g_object_get (tag, "name", &name, NULL);
 
-    if (!name || strncmp(name, "WX", 2)) // anonymous tag or not starting with "WX"
+    if (!name || strncmp(name, prefix, strlen(prefix)))
+        // anonymous tag or not starting with prefix - don't remove
         g_signal_stop_emission_by_name(buffer, "remove_tag");
 
     g_free(name);
@@ -77,7 +78,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
     GtkTextTag *tag;
 
     gulong remove_handler_id = g_signal_connect( text_buffer, "remove_tag",
-                                                 G_CALLBACK(wxGtkOnRemoveTag), NULL);
+            G_CALLBACK(wxGtkOnRemoveTag), gpointer("WX"));
     gtk_text_buffer_remove_all_tags(text_buffer, start, end);
     g_signal_handler_disconnect( text_buffer, remove_handler_id );
 
@@ -121,6 +122,44 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
             tag = gtk_text_buffer_create_tag( text_buffer, buf,
                                               "background-gdk", colBg, NULL );
         gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+    }
+
+    if (attr.HasAlignment())
+    {
+        GtkTextIter para_start, para_end = *end;
+        gtk_text_buffer_get_iter_at_line( text_buffer,
+                                          &para_start,
+                                          gtk_text_iter_get_line(start) );
+        gtk_text_iter_forward_line(&para_end);
+
+        remove_handler_id = g_signal_connect( text_buffer, "remove_tag",
+                                              G_CALLBACK(wxGtkOnRemoveTag),
+                                              gpointer("WXALIGNMENT"));
+        gtk_text_buffer_remove_all_tags( text_buffer, &para_start, &para_end );
+        g_signal_handler_disconnect( text_buffer, remove_handler_id );
+
+        GtkJustification align;
+        switch (attr.GetAlignment())
+        {
+            default:
+                align = GTK_JUSTIFY_LEFT;
+                break;
+            case wxTEXT_ALIGNMENT_RIGHT:
+                align = GTK_JUSTIFY_RIGHT;
+                break;
+            case wxTEXT_ALIGNMENT_CENTER:
+                align = GTK_JUSTIFY_CENTER;
+                break;
+            // gtk+ doesn't support justify as of gtk+-2.7.4
+        }
+
+        g_snprintf(buf, sizeof(buf), "WXALIGNMENT %d", align);
+        tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                         buf );
+        if (!tag)
+            tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                              "justification", align, NULL );
+        gtk_text_buffer_apply_tag( text_buffer, tag, &para_start, &para_end );
     }
 }
 }
