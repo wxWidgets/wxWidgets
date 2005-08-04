@@ -1070,7 +1070,9 @@ Returns the directory part of the filename.
 
 \membersection{::wxUnix2DosFilename}\label{wxunix2dosfilename}
 
-\func{void}{wxUnix2DosFilename}{\param{const wxString\& }{s}}
+\func{void}{wxUnix2DosFilename}{\param{wxChar *}{s}}
+
+This function is deprecated, use \helpref{wxFileName}{wxfilename} instead.
 
 Converts a Unix to a DOS filename by replacing forward
 slashes with backslashes.
