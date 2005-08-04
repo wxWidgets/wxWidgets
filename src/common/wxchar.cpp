@@ -1578,7 +1578,7 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 // missing C RTL functions
 // ----------------------------------------------------------------------------
 
-#if wxNEED_STRDUP
+#ifdef wxNEED_STRDUP
 
 char *strdup(const char *s)
 {
