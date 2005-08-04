@@ -473,10 +473,6 @@ void wxApp::CleanUp()
     wxSetKeyboardHook(false);
 #endif
 
-#if wxUSE_PENWINDOWS
-    wxCleanUpPenWin();
-#endif
-
     wxOleUninitialize();
 
     // for an EXE the classes are unregistered when it terminates but DLL may
