@@ -1698,10 +1698,6 @@ fi
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
 
-if test "x$ac_cv_header_fnmatch_h" = "xyes"; then
-    AC_CHECK_FUNCS(fnmatch)
-fi
-
 dnl defines HAVE_LANGINFO_H (GNU libc locale parameters)
 AC_CHECK_HEADERS(langinfo.h)
 
@@ -2733,7 +2729,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             save_LIBS="$LIBS"
             CFLAGS="$CFLAGS $wx_cv_cflags_gtk"
             LIBS="$LIBS $wx_cv_libs_gtk"
-            
+
             AC_CHECK_FUNCS([pango_font_family_is_monospace])
 
             dnl gtk_icon_size_lookup is not available in the GTK+ headers
@@ -2754,7 +2750,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                             AC_DEFINE(NEED_GTK_ICON_SIZE_LOOKUP)
                             AC_MSG_RESULT([yes])
                            ])
-            
+
             dnl test if we have at least GTK+ 2.4:
             AC_MSG_CHECKING([if GTK+ is version >= 2.4])
             AC_TRY_COMPILE([
@@ -2772,7 +2768,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                            [
                             AC_MSG_RESULT([no])
                            ])
-            
+
             CFLAGS="$save_CFLAGS"
             LIBS="$save_LIBS"
         else
@@ -3558,7 +3554,7 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-linux* | *-*-gnu* )
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
         WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
-	;;
+        ;;
 
       *-*-solaris2* )
         if test "$GCC" = yes ; then
@@ -3977,6 +3973,13 @@ fi
 
 AC_LANG_RESTORE
 
+if test "x$ac_cv_header_fnmatch_h" = "xyes"; then
+    AC_CHECK_FUNCS(fnmatch)
+fi
+
+if test "$wxUSE_FILE" = "yes"; then
+    AC_CHECK_FUNCS(fsync)
+fi
 
 
 dnl the following tests are for Unix(like) systems only
@@ -4515,6 +4518,28 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
     dnl do other tests only if we are using threads
     if test "$wxUSE_THREADS" = "yes" ; then
       AC_CHECK_FUNCS(thr_setconcurrency)
+
+      dnl can't use AC_CHECK_FUNCS for this one as it's usually a macro and so
+      dnl wouldn't be found by it
+      AC_CACHE_CHECK([for pthread_cleanup_push/pop], wx_cv_func_pthread_cleanup,
+      [
+        AC_TRY_COMPILE([#include <pthread.h>
+               void ThreadCleanupFunc(void *p);
+            ],
+            [
+                void *p;
+                pthread_cleanup_push(ThreadCleanupFunc, p);
+                pthread_cleanup_pop(0);
+            ], [
+               wx_cv_func_pthread_cleanup=yes
+            ], [
+               wx_cv_func_pthread_cleanup=no
+            ]
+        )
+      ])
+      if test "x$wx_cv_func_pthread_cleanup" = "xyes"; then
+        AC_DEFINE(wxHAVE_PTHREAD_CLEANUP)
+      fi
 
       AC_CHECK_HEADERS(sched.h)
       if test "$ac_cv_header_sched_h" = "yes"; then
@@ -6540,10 +6565,8 @@ INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
 dnl C/C++ compiler options used to compile wxWidgets
 if test "$GXX" = yes ; then
     dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
-    CWARNINGS="-Wall" 
+    CWARNINGS="-Wall -Wundef"
     CXXWARNINGS="$CWARNINGS -Wno-ctor-dtor-privacy" 
-    dnl should enable this one day...
-    dnl CXXWARNINGS="-Wall -Werror"
 fi
 
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
@@ -6552,7 +6575,7 @@ dnl remove the extra white space from the cc/c++/ld options
 CPPFLAGS=`echo $WXDEBUG_DEFINE $INCLUDES $CPPFLAGS`
 CFLAGS=`echo $CODE_GEN_FLAGS $EXTRA_CFLAGS $CFLAGS $CWARNINGS`
 CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXWARNINGS`
-    
+
 if test "x$MWCC" = "xyes"; then
     dnl Correct MW 8.3 to be more similar to GCC.  In particular we
     dnl must use <regex.h> from system not our local copy on OS X,
