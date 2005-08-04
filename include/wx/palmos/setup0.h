@@ -1087,9 +1087,6 @@
 // NB: all settings in this section are obsolete and should not be used/changed
 //     at all, they will disappear
 
-// Set to 1 to use PenWindows
-#define wxUSE_PENWINDOWS             0
-
 // Define 1 to use bitmap messages.
 #define wxUSE_BITMAP_MESSAGE         0
 

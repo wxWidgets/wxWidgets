@@ -308,10 +308,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     RegisterWindowClasses();
 
-#if wxUSE_PENWINDOWS
-    wxRegisterPenWin();
-#endif
-
     wxWinHandleHash = new wxWinHashTable(wxKEY_INTEGER, 100);
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)

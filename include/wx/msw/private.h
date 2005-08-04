@@ -108,12 +108,6 @@ extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
 #endif
 #endif
 
-#if wxUSE_PENWIN
-    WXDLLEXPORT void wxRegisterPenWin();
-    WXDLLEXPORT void wxCleanUpPenWin();
-    WXDLLEXPORT void wxEnablePenAppHooks (bool hook);
-#endif // wxUSE_PENWIN
-
 #if wxUSE_ITSY_BITSY
     #define IBS_HORZCAPTION    0x4000L
     #define IBS_VERTCAPTION    0x8000L
