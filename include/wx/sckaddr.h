@@ -114,6 +114,12 @@ private:
   wxString m_origHostname;
 };
 
+
+// the IPv6 code probably doesn't work, untested -- set to 1 at your own risk
+#ifndef wxUSE_IPV6
+    #define wxUSE_IPV6 0
+#endif
+
 #if wxUSE_IPV6
 
 // Experimental Only:
