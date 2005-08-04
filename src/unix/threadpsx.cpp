@@ -591,10 +591,10 @@ wxSemaError wxSemaphoreInternal::Post()
 extern "C"
 {
 
-#if HAVE_THREAD_CLEANUP_FUNCTIONS
+#ifdef wxHAVE_PTHREAD_CLEANUP
     // thread exit function
     void wxPthreadCleanup(void *ptr);
-#endif // HAVE_THREAD_CLEANUP_FUNCTIONS
+#endif // wxHAVE_PTHREAD_CLEANUP
 
 void *wxPthreadStart(void *ptr);
 
@@ -671,10 +671,10 @@ public:
         m_isDetached = TRUE;
     }
 
-#if HAVE_THREAD_CLEANUP_FUNCTIONS
+#ifdef wxHAVE_PTHREAD_CLEANUP
     // this is used by wxPthreadCleanup() only
     static void Cleanup(wxThread *thread);
-#endif // HAVE_THREAD_CLEANUP_FUNCTIONS
+#endif // wxHAVE_PTHREAD_CLEANUP
 
 private:
     pthread_t     m_threadId;   // id of the thread
@@ -735,11 +735,11 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
     // block!
     bool dontRunAtAll;
 
-#if HAVE_THREAD_CLEANUP_FUNCTIONS
+#ifdef wxHAVE_PTHREAD_CLEANUP
     // install the cleanup handler which will be called if the thread is
     // cancelled
     pthread_cleanup_push(wxPthreadCleanup, thread);
-#endif // HAVE_THREAD_CLEANUP_FUNCTIONS
+#endif // wxHAVE_PTHREAD_CLEANUP
 
     // wait for the semaphore to be posted from Run()
     pthread->m_semRun.Wait();
@@ -779,10 +779,10 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
     // NB: at least under Linux, pthread_cleanup_push/pop are macros and pop
     //     contains the matching '}' for the '{' in push, so they must be used
     //     in the same block!
-#if HAVE_THREAD_CLEANUP_FUNCTIONS
+#ifdef wxHAVE_PTHREAD_CLEANUP
     // remove the cleanup handler without executing it
     pthread_cleanup_pop(FALSE);
-#endif // HAVE_THREAD_CLEANUP_FUNCTIONS
+#endif // wxHAVE_PTHREAD_CLEANUP
 
     if ( dontRunAtAll )
     {
@@ -802,7 +802,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
     }
 }
 
-#if HAVE_THREAD_CLEANUP_FUNCTIONS
+#ifdef wxHAVE_PTHREAD_CLEANUP
 
 // this handler is called when the thread is cancelled
 extern "C" void wxPthreadCleanup(void *ptr)
@@ -825,7 +825,7 @@ void wxThreadInternal::Cleanup(wxThread *thread)
     thread->Exit(EXITCODE_CANCELLED);
 }
 
-#endif // HAVE_THREAD_CLEANUP_FUNCTIONS
+#endif // wxHAVE_PTHREAD_CLEANUP
 
 // ----------------------------------------------------------------------------
 // wxThreadInternal
@@ -1435,14 +1435,14 @@ wxThreadError wxThread::Kill()
             {
                 // if we use cleanup function, this will be done from
                 // wxPthreadCleanup()
-#if !HAVE_THREAD_CLEANUP_FUNCTIONS
+#ifndef wxHAVE_PTHREAD_CLEANUP
                 ScheduleThreadForDeletion();
 
                 // don't call OnExit() here, it can only be called in the
                 // threads context and we're in the context of another thread
 
                 DeleteThread(this);
-#endif // HAVE_THREAD_CLEANUP_FUNCTIONS
+#endif // wxHAVE_PTHREAD_CLEANUP
             }
             else
             {
