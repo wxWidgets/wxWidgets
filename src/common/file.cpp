@@ -335,7 +335,7 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 bool wxFile::Flush()
 {
     if ( IsOpened() ) {
-#if defined(__VISUALC__) || HAVE_FSYNC
+#if defined(__VISUALC__) || defined(HAVE_FSYNC)
         if ( wxFsync(m_fd) == -1 )
         {
             wxLogSysError(_("can't flush file descriptor %d"), m_fd);
