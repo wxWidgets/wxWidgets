@@ -1139,9 +1139,13 @@ WX_ARG_ENABLE(mousewheel,  [  --enable-mousewheel     use mousewheel], wxUSE_MOU
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
 WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
 WX_ARG_ENABLE(joystick,    [  --enable-joystick       use wxJoystick], wxUSE_JOYSTICK)
-WX_ARG_ENABLE(metafile,    [  --enable-metafiles      use wxMetaFile (Windows only)], wxUSE_METAFILE)
+WX_ARG_ENABLE(metafile,    [  --enable-metafiles      use wxMetaFile (Win32 only)], wxUSE_METAFILE)
 WX_ARG_ENABLE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 WX_ARG_ENABLE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
+
+if test "$wxUSE_MSW" = "1"; then
+    WX_ARG_ENABLE(dccache, [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -6096,6 +6100,10 @@ dnl please keep the settings below in alphabetical order
 if test "$wxUSE_ACCESSIBILITY" = "yes"; then
     AC_DEFINE(wxUSE_ACCESSIBILITY)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+fi
+
+if test "$wxUSE_DC_CACHEING" = "yes"; then
+    AC_DEFINE(wxUSE_DC_CACHEING)
 fi
 
 if test "$wxUSE_DRAGIMAGE" = "yes"; then

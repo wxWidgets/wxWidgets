@@ -1029,9 +1029,10 @@ Optional Features:
   --enable-validators     use wxValidator and derived classes
   --enable-busyinfo       use wxBusyInfo
   --enable-joystick       use wxJoystick
-  --enable-metafiles      use wxMetaFile (Windows only)
+  --enable-metafiles      use wxMetaFile (Win32 only)
   --enable-dragimage      use wxDragImage
   --enable-accessibility  enable accessibility support
+  --enable-dccache        cache temporary wxDC objects (Win32 only)
   --enable-palette        use wxPalette class
   --enable-image          use wxImage class
   --enable-gif            use gif images (GIF file format)
@@ -10043,6 +10044,50 @@ echo "${ECHO_T}yes" >&6
 echo "${ECHO_T}no" >&6
           fi
 
+
+if test "$wxUSE_MSW" = "1"; then
+
+	  enablestring=
+          echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dccache" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-dccache... $ECHO_C" >&6
+          no_cache=0
+          # Check whether --enable-dccache or --disable-dccache was given.
+if test "${enable_dccache+set}" = set; then
+  enableval="$enable_dccache"
+
+                          if test "$enableval" = yes; then
+                            ac_cv_use_dccache='wxUSE_DC_CACHEING=yes'
+                          else
+                            ac_cv_use_dccache='wxUSE_DC_CACHEING=no'
+                          fi
+
+else
+
+                          LINE=`grep "wxUSE_DC_CACHEING" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_dccache='wxUSE_DC_CACHEING='$DEFAULT_wxUSE_DC_CACHEING
+
+fi;
+
+          eval "$ac_cv_use_dccache"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_dccache >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_DC_CACHEING" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+fi
 
 
 
@@ -40266,6 +40311,13 @@ if test "$wxUSE_ACCESSIBILITY" = "yes"; then
 _ACEOF
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+fi
+
+if test "$wxUSE_DC_CACHEING" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_DC_CACHEING 1
+_ACEOF
+
 fi
 
 if test "$wxUSE_DRAGIMAGE" = "yes"; then
