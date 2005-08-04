@@ -62,7 +62,8 @@
 #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(NMLVFINDITEM)
     #define HAVE_NMLVFINDITEM 1
 #elif defined(__DMC__) || defined(NM_FINDITEM)
-    #define HAVE_NM_FINDITEM 1
+    #define HAVE_NMLVFINDITEM 1
+    #define NMLVFINDITEM NM_FINDITEM
 #endif
 
 // ----------------------------------------------------------------------------
@@ -2160,7 +2161,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
-#if HAVE_NMLVFINDITEM || HAVE_NM_FINDITEM
+#ifdef HAVE_NMLVFINDITEM
             case LVN_ODFINDITEM:
                 // this message is only used with the virtual list control but
                 // even there we don't want to always use it: in a control with
@@ -2169,11 +2170,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // application waiting while it performs linear search
                 if ( IsVirtual() && GetItemCount() <= 1000 )
                 {
-#if HAVE_NMLVFINDITEM
                     NMLVFINDITEM* pFindInfo = (NMLVFINDITEM*)lParam;
-#else
-                    NM_FINDITEM* pFindInfo = (NM_FINDITEM*)lParam;
-#endif
 
                     // no match by default
                     *result = -1;
@@ -2234,7 +2231,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     processed = false;
                 }
                 break;
-#endif // HAVE_NMLVFINDITEM || HAVE_NM_FINDITEM
+#endif // HAVE_NMLVFINDITEM
 
             case LVN_GETDISPINFO:
                 if ( IsVirtual() )
