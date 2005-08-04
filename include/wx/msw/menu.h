@@ -69,17 +69,6 @@ public:
 
     virtual void SetTitle(const wxString& title);
 
-    // deprecated functions
-#if wxUSE_MENU_CALLBACK
-    wxMenu(const wxString& title, const wxFunction func)
-        : wxMenuBase(title)
-    {
-        Init();
-
-        Callback(func);
-    }
-#endif // wxUSE_MENU_CALLBACK
-
     // implementation only from now on
     // -------------------------------
 
