@@ -29,7 +29,8 @@
 
 // use this version if we're explicitly requested to do it or if it's the only
 // one we have
-#if wxUSE_DATEPICKCTRL_GENERIC || !defined(wxHAS_NATIVE_DATEPICKCTRL)
+#if !defined(wxHAS_NATIVE_DATEPICKCTRL) || \
+        (defined(wxUSE_DATEPICKCTRL_GENERIC) && wxUSE_DATEPICKCTRL_GENERIC)
 
 #ifndef WX_PRECOMP
     #include "wx/bmpbuttn.h"
