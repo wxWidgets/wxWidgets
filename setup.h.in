@@ -602,6 +602,10 @@
  */
 #define wxHAVE_LIB_XPM 0
 /*
+ * Define if you have pthread_cleanup_push/pop()
+ */
+#undef wxHAVE_PTHREAD_CLEANUP
+/*
  * Use consistent PostScript fonts for AFM and printing (!)
  */
 #define wxUSE_NORMALIZED_PS_FONTS 0
@@ -716,6 +720,9 @@
 /* Define if you have gettimeofday() */
 #undef HAVE_GETTIMEOFDAY
 
+/* Define if fsync() is available */
+#undef HAVE_FSYNC
+
 /* Define if you have ftime() */
 #undef HAVE_FTIME
 
@@ -760,9 +767,6 @@
 
 /* Define if you have all functions to set thread priority */
 #undef HAVE_THREAD_PRIORITY_FUNCTIONS
-
-/* Define if you can specify exit functions to a thread */
-#undef HAVE_THREAD_CLEANUP_FUNCTIONS
 
 /* Define if you have timegm() function */
 #undef HAVE_TIMEGM
