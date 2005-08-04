@@ -65,7 +65,7 @@ using namespace std ;
 size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
   // assume that we have mbsrtowcs() too if we have wcsrtombs()
-#if HAVE_WCSRTOMBS
+#ifdef HAVE_WCSRTOMBS
   mbstate_t mbstate;
   memset(&mbstate, 0, sizeof(mbstate_t));
 #endif
@@ -91,7 +91,7 @@ size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 
 size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 {
-#if HAVE_WCSRTOMBS
+#ifdef HAVE_WCSRTOMBS
   mbstate_t mbstate;
   memset(&mbstate, 0, sizeof(mbstate_t));
 #endif
@@ -102,14 +102,14 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
       if (n) *buf = '\0';
       return 0;
     }
-#if HAVE_WCSRTOMBS
+#ifdef HAVE_WCSRTOMBS
     return wcsrtombs(buf, &pwz, n, &mbstate);
 #else
     return wxWcstombs(buf, pwz, n);
 #endif
   }
 
-#if HAVE_WCSRTOMBS
+#ifdef HAVE_WCSRTOMBS
   return wcsrtombs((char *) NULL, &pwz, 0, &mbstate);
 #else
   return wxWcstombs((char *) NULL, pwz, 0);
