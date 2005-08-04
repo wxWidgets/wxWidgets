@@ -23,7 +23,7 @@
 // this can be defined to put a static line as separator between the list
 // control and the page area; but I think it finally looks better without it so
 // it is not enabled by default
-//#define wxUSE_LINE_IN_LISTBOOK 1
+#define wxUSE_LINE_IN_LISTBOOK 0
 
 #if !wxUSE_STATLINE
     #undef wxUSE_LINE_IN_LISTBOOK
