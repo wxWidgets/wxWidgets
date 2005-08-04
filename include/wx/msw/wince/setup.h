@@ -33,7 +33,7 @@
 // Default is 0
 //
 // Recommended setting: 0 (please update your code)
-#define WXWIN_COMPATIBILITY_2_2 0
+#define WXWIN_COMPATIBILITY_2_2 1
 
 // This setting determines the compatibility with 2.4 API: set it to 0 to
 // flag all cases of using deprecated functions.
@@ -120,7 +120,7 @@
 // Default is 1
 //
 // Recommended setting: 1 if your compiler supports it.
-#define wxUSE_ON_FATAL_EXCEPTION 1
+#define wxUSE_ON_FATAL_EXCEPTION 0
 
 // Set this to 1 to be able to generate a human-readable (unlike
 // machine-readable minidump created by wxCrashReport::Generate()) stack back
@@ -188,7 +188,7 @@
 //
 // Recommended setting: depends on whether you intend to use C++ exceptions
 //                      in your own code (1 if you do, 0 if you don't)
-#define wxUSE_EXCEPTIONS    1
+#define wxUSE_EXCEPTIONS    0
 
 // Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
 //
@@ -837,15 +837,15 @@
 #define wxUSE_MDI 1
 
 // Set to 0 to disable document/view architecture
-#define wxUSE_DOC_VIEW_ARCHITECTURE 0
+#define wxUSE_DOC_VIEW_ARCHITECTURE 1
 
 // Set to 0 to disable MDI document/view architecture
 //
 // Requires wxUSE_MDI && wxUSE_DOC_VIEW_ARCHITECTURE
-#define wxUSE_MDI_ARCHITECTURE    0
+#define wxUSE_MDI_ARCHITECTURE    1
 
 // Set to 0 to disable print/preview architecture code
-#define wxUSE_PRINTING_ARCHITECTURE  0
+#define wxUSE_PRINTING_ARCHITECTURE  1
 
 // wxHTML sublibrary allows to display HTML in wxWindow programs and much,
 // much more.
@@ -1016,16 +1016,16 @@
 #define wxUSE_LIBJPEG       1
 
 // Set to 1 for TIFF format support (requires libtiff)
-#define wxUSE_LIBTIFF       0
+#define wxUSE_LIBTIFF       1
 
 // Set to 1 for GIF format support
-#define wxUSE_GIF           0
+#define wxUSE_GIF           1
 
 // Set to 1 for PNM format support
-#define wxUSE_PNM           0
+#define wxUSE_PNM           1
 
 // Set to 1 for PCX format support
-#define wxUSE_PCX           0
+#define wxUSE_PCX           1
 
 // Set to 1 for IFF format support (Amiga format)
 #define wxUSE_IFF           0
