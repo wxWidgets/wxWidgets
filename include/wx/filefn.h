@@ -329,7 +329,7 @@ enum wxFileKind
     #define   wxWrite      ::write
     #define   wxLseek      lseek
     #define   wxSeek       lseek
-    #define   wxFsync      commit
+    #define   wxFsync      fsync
     #define   wxEof        eof
 
     #define   wxMkDir      mkdir
