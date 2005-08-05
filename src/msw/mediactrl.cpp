@@ -78,7 +78,7 @@ LRESULT WXDLLIMPEXP_CORE APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
 // common backend base class used by all other backends
 // ----------------------------------------------------------------------------
 
-class wxMediaBackendCommonBase : public wxMediaBackend
+class WXDLLIMPEXP_MEDIA wxMediaBackendCommonBase : public wxMediaBackend
 {
 public:
     // add a pending wxMediaEvent of the given type
