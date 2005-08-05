@@ -1775,13 +1775,6 @@ void wxActiveX::OnKillFocus(wxFocusEvent& event)
 
 typedef BOOL (WINAPI* LPAMGETERRORTEXT)(HRESULT, wxChar *, DWORD);
 
-//cludgy workaround for wx events.  slots would be nice :)
-class WXDLLIMPEXP_MEDIA wxAMMediaEvtHandler : public wxEvtHandler
-{
-public:
-    void OnEraseBackground(wxEraseEvent&);
-};
-
 class WXDLLIMPEXP_MEDIA wxAMMediaBackend : public wxMediaBackend
 {
 public:
@@ -2222,13 +2215,6 @@ bool wxQuickTimeLibrary::Initialize()
     return true;
 }
 
-//cludgy workaround for wx events.  slots would be nice :)
-class WXDLLIMPEXP_MEDIA wxQTMediaEvtHandler : public wxEvtHandler
-{
-public:
-    void OnEraseBackground(wxEraseEvent&);
-};
-
 class WXDLLIMPEXP_MEDIA wxQTMediaBackend : public wxMediaBackend
 {
 public:
@@ -2291,6 +2277,20 @@ public:
     ComponentInstance m_pMC;        //Movie Controller
 
     DECLARE_DYNAMIC_CLASS(wxQTMediaBackend)
+};
+
+// helper to hijack background erasing for the QT window
+class WXDLLIMPEXP_MEDIA wxQTMediaEvtHandler : public wxEvtHandler
+{
+public:
+    wxQTMediaEvtHandler(wxQTMediaBackend *qtb) { m_qtb = qtb; }
+
+    void OnEraseBackground(wxEraseEvent& event);
+
+private:
+    wxQTMediaBackend *m_qtb;
+
+    DECLARE_NO_COPY_CLASS(wxQTMediaEvtHandler)
 };
 
 
@@ -2673,16 +2673,9 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     //by default with AM only 0.5
     wxAMMediaBackend::SetVolume(1.0);
 
-    // My problem with this was only with a previous patch, probably the
-    // third rewrite fixed it as a side-effect. In fact, the erase
-    // background style of drawing not only works now, but is much better
-    // than paint-based updates (the paint event handler flickers if the
-    // wxMediaCtrl shares a sizer with another child window, or is on a
-    // notebook)
-    //  - Greg Hazel
-    m_ctrl->Connect(m_ctrl->GetId(), wxEVT_ERASE_BACKGROUND,
-        wxEraseEventHandler(wxAMMediaEvtHandler::OnEraseBackground),
-        NULL, (wxEvtHandler*) this);
+    // don't erase the background of our control window so that resizing is a
+    // bit smoother
+    m_ctrl->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
     // success
     return true;
@@ -3148,16 +3141,6 @@ wxSize wxAMMediaBackend::GetVideoSize() const
 //---------------------------------------------------------------------------
 void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
                             int WXUNUSED(w), int WXUNUSED(h))
-{
-}
-
-//---------------------------------------------------------------------------
-// wxAMMediaEvtHandler::OnEraseBackground
-//
-// Tell WX not to erase the background of our control window
-// so that resizing is a bit smoother
-//---------------------------------------------------------------------------
-void wxAMMediaEvtHandler::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 {
 }
 
@@ -3884,6 +3867,9 @@ wxQTMediaBackend::~wxQTMediaBackend()
         //    m_pMC = NULL;
         }
 
+        // destroy wxQTMediaEvtHandler we pushed on it
+        m_ctrl->PopEventHandler(true);
+
         m_lib.DestroyPortAssociation(
             (CGrafPtr)m_lib.GetNativeWindowPort(m_ctrl->GetHWND()));
 
@@ -3942,9 +3928,7 @@ bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     //Part of a suggestion from Greg Hazel to repaint
     //movie when idle
-    m_ctrl->Connect(m_ctrl->GetId(), wxEVT_ERASE_BACKGROUND,
-        wxEraseEventHandler(wxQTMediaEvtHandler::OnEraseBackground),
-        NULL, (wxEvtHandler*) this);
+    m_ctrl->PushEventHandler(new wxQTMediaEvtHandler(this));
 
     // done
     return true;
@@ -4546,27 +4530,28 @@ void wxQTMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int w, int h)
 //---------------------------------------------------------------------------
 void wxQTMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
 {
-    wxQTMediaBackend* qtb = (wxQTMediaBackend*)this;
-    wxQuickTimeLibrary* m_pLib = &(qtb->m_lib);
+    wxQuickTimeLibrary& m_pLib = m_qtb->m_lib;
 
-    if(qtb->m_pMC)
+    if ( m_qtb->m_pMC )
     {
         //repaint movie controller
-        m_pLib->MCDoAction(qtb->m_pMC, 2 /*mcActionDraw*/,
-            m_pLib->GetNativeWindowPort(qtb->m_ctrl->GetHWND())
+        m_pLib.MCDoAction(m_qtb->m_pMC, 2 /*mcActionDraw*/,
+            m_pLib.GetNativeWindowPort(m_qtb->m_ctrl->GetHWND())
                            );
     }
-    else if(qtb->m_movie)
+    else if(m_qtb->m_movie)
     {
-        CGrafPtr port = (CGrafPtr)m_pLib->GetNativeWindowPort
-        (qtb->m_ctrl->GetHWND());
+        CGrafPtr port = (CGrafPtr)m_pLib.GetNativeWindowPort
+        (m_qtb->m_ctrl->GetHWND());
 
-        m_pLib->BeginUpdate(port);
-        m_pLib->UpdateMovie(qtb->m_movie);
-        wxASSERT(m_pLib->GetMoviesError() == noErr);
-        m_pLib->EndUpdate(port);
+        m_pLib.BeginUpdate(port);
+        m_pLib.UpdateMovie(m_qtb->m_movie);
+        wxASSERT(m_pLib.GetMoviesError() == noErr);
+        m_pLib.EndUpdate(port);
     }
 
+    // VZ: this doesn't make sense: why should we erase the background after
+    //     taking the trouble to do whatever we did above? (FIXME)
     evt.Skip(); //repaint with window background (TODO: maybe !m_movie?)
 }
 
