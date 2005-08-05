@@ -30,12 +30,24 @@
         #endif
 
         #ifdef _DEBUG
-            #pragma comment(lib,"wxexpatd")
-            #pragma comment(lib,"wxjpegd")
-            #pragma comment(lib,"wxpngd")
-            #pragma comment(lib,"wxregexud")
-            #pragma comment(lib,"wxtiffd")
-            #pragma comment(lib,"wxzlibd")
+            #if wxUSE_XML
+                #pragma comment(lib,"wxexpatd")
+            #endif
+            #if wxUSE_LIBJPEG
+                #pragma comment(lib,"wxjpegd")
+            #endif
+            #if wxUSE_LIBPNG
+                #pragma comment(lib,"wxpngd")
+            #endif
+            #if wxUSE_REGEX
+                #pragma comment(lib,"wxregexud")
+            #endif
+            #if wxUSE_LIBTIFF
+                #pragma comment(lib,"wxtiffd")
+            #endif
+            #if wxUSE_ZLIB
+                #pragma comment(lib,"wxzlibd")
+            #endif
             #pragma comment(lib,"wxbase26ud")
             #pragma comment(lib,"wxbase26ud_net")
             #pragma comment(lib,"wxbase26ud_xml")
@@ -45,12 +57,24 @@
             #pragma comment(lib,"wxmsw26ud_qa")
             #pragma comment(lib,"wxmsw26ud_xrc")
         #else // release
-            #pragma comment(lib,"wxexpat")
-            #pragma comment(lib,"wxjpeg")
-            #pragma comment(lib,"wxpng")
-            #pragma comment(lib,"wxregexu")
-            #pragma comment(lib,"wxtiff")
-            #pragma comment(lib,"wxzlib")
+            #if wxUSE_XML
+                #pragma comment(lib,"wxexpat")
+            #endif
+            #if wxUSE_LIBJPEG
+                #pragma comment(lib,"wxjpeg")
+            #endif
+            #if wxUSE_LIBPNG
+                #pragma comment(lib,"wxpng")
+            #endif
+            #if wxUSE_REGEX
+                #pragma comment(lib,"wxregexu")
+            #endif
+            #if wxUSE_LIBTIFF
+                #pragma comment(lib,"wxtiff")
+            #endif
+            #if wxUSE_ZLIB
+                #pragma comment(lib,"wxzlib")
+            #endif
             #pragma comment(lib,"wxbase26u")
             #pragma comment(lib,"wxbase26u_net")
             #pragma comment(lib,"wxbase26u_xml")
@@ -76,12 +100,24 @@
         #endif // shared/static
 
         #ifdef _DEBUG
-            #pragma comment(lib,"wxexpatd")
-            #pragma comment(lib,"wxjpegd")
-            #pragma comment(lib,"wxpngd")
-            #pragma comment(lib,"wxregexd")
-            #pragma comment(lib,"wxtiffd")
-            #pragma comment(lib,"wxzlibd")
+            #if wxUSE_XML
+                #pragma comment(lib,"wxexpatd")
+            #endif
+            #if wxUSE_LIBJPEG
+                #pragma comment(lib,"wxjpegd")
+            #endif
+            #if wxUSE_LIBPNG
+                #pragma comment(lib,"wxpngd")
+            #endif
+            #if wxUSE_REGEX
+                #pragma comment(lib,"wxregexud")
+            #endif
+            #if wxUSE_LIBTIFF
+                #pragma comment(lib,"wxtiffd")
+            #endif
+            #if wxUSE_ZLIB
+                #pragma comment(lib,"wxzlibd")
+            #endif
             #pragma comment(lib,"wxbase26d")
             #pragma comment(lib,"wxbase26d_net")
             #pragma comment(lib,"wxbase26d_xml")
@@ -91,12 +127,24 @@
             #pragma comment(lib,"wxmsw26d_qa")
             #pragma comment(lib,"wxmsw26d_xrc")
         #else // release
-            #pragma comment(lib,"wxexpat")
-            #pragma comment(lib,"wxjpeg")
-            #pragma comment(lib,"wxpng")
-            #pragma comment(lib,"wxregex")
-            #pragma comment(lib,"wxtiff")
-            #pragma comment(lib,"wxzlib")
+            #if wxUSE_XML
+                #pragma comment(lib,"wxexpat")
+            #endif
+            #if wxUSE_LIBJPEG
+                #pragma comment(lib,"wxjpeg")
+            #endif
+            #if wxUSE_LIBPNG
+                #pragma comment(lib,"wxpng")
+            #endif
+            #if wxUSE_REGEX
+                #pragma comment(lib,"wxregexu")
+            #endif
+            #if wxUSE_LIBTIFF
+                #pragma comment(lib,"wxtiff")
+            #endif
+            #if wxUSE_ZLIB
+                #pragma comment(lib,"wxzlib")
+            #endif
             #pragma comment(lib,"wxbase26")
             #pragma comment(lib,"wxbase26_net")
             #pragma comment(lib,"wxbase26_xml")
