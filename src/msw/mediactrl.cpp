@@ -56,6 +56,7 @@
 #include "wx/msw/private.h" //user info and wndproc setting/getting
 #include "wx/dcclient.h"
 #include "wx/timer.h"
+#include "wx/dynlib.h"
 
 //---------------------------------------------------------------------------
 // Externals (somewhere in src/msw/app.cpp and src/msw/window.cpp)
