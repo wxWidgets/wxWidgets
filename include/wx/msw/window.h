@@ -458,7 +458,10 @@ protected:
     // this simply moves/resizes the given HWND which is supposed to be our
     // sibling (this is useful for controls which are composite at MSW level
     // and for which DoMoveWindow() is not enough)
-    void DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height);
+    //
+    // returns true if the window move was deferred, false if it was moved
+    // immediately (no error return)
+    bool DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height);
 
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call

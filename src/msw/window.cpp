@@ -1567,7 +1567,7 @@ void wxWindowMSW::DoClientToScreen(int *x, int *y) const
         *y = pt.y;
 }
 
-void
+bool
 wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
 {
 #if USE_DEFERRED_SIZING
@@ -1592,15 +1592,23 @@ wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
         parent->m_hDWP = (WXHANDLE)hdwp;
     }
 
-    // otherwise (or if deferring failed) move the window in place immediately
-    if ( !hdwp )
-#endif // USE_DEFERRED_SIZING
+    if ( hdwp )
     {
-        if ( !::MoveWindow((HWND)hwnd, x, y, width, height, IsShown()) )
-        {
-            wxLogLastError(wxT("MoveWindow"));
-        }
+        // did deferred move, remember new coordinates of the window as they're
+        // different from what Windows would return for it
+        return true;
     }
+
+    // otherwise (or if deferring failed) move the window in place immediately
+#endif // USE_DEFERRED_SIZING
+    if ( !::MoveWindow((HWND)hwnd, x, y, width, height, IsShown()) )
+    {
+        wxLogLastError(wxT("MoveWindow"));
+    }
+
+    // if USE_DEFERRED_SIZING, indicates that we didn't use deferred move,
+    // ignored otherwise
+    return false;
 }
 
 void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
@@ -1612,7 +1620,13 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     if (height < 0)
         height = 0;
 
-    DoMoveSibling(m_hWnd, x, y, width, height);
+    if ( DoMoveSibling(m_hWnd, x, y, width, height) )
+    {
+#if USE_DEFERRED_SIZING
+        m_pendingPosition = wxPoint(x, y);
+        m_pendingSize = wxSize(width, height);
+#endif // USE_DEFERRED_SIZING
+    }
 }
 
 // set the size of the window: if the dimensions are positive, just use them,
@@ -1680,8 +1694,6 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         }
     }
 
-    m_pendingPosition = wxPoint(x, y);
-    m_pendingSize = wxSize(width, height);
     DoMoveWindow(x, y, width, height);
 }
 
