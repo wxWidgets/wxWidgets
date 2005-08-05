@@ -9,6 +9,16 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+   FIXME FIXME FIXME:
+    - extract different backends in different files (better yet, make backends
+      dynamically loadable...), they have nothing to do with each other and
+      this file is huge and also separate the standard contents from our code
+      itself
+    - extract ~1000 lines of wxActiveX code in its own file, why does it have
+      to be here??
+ */
+
 //===========================================================================
 //  DECLARATIONS
 //===========================================================================
@@ -1866,11 +1876,12 @@ public:
     IMediaPlayer* m_pMP;
     wxTimer* m_pTimer;
     wxSize m_bestSize;
+
 #ifdef __WXDEBUG__
-    HMODULE m_hQuartzDll;
+    wxDynamicLibrary m_dllQuartz;
     LPAMGETERRORTEXT m_lpAMGetErrorText;
     wxString GetErrorString(HRESULT hrdsv);
-#endif
+#endif // __WXDEBUG__
 
     DECLARE_DYNAMIC_CLASS(wxAMMediaBackend)
 };
@@ -2599,9 +2610,6 @@ wxAMMediaBackend::wxAMMediaBackend()
                   m_pAM(NULL),
                   m_pMP(NULL),
                   m_pTimer(NULL)
-#ifdef __WXDEBUG__
-                 ,m_hQuartzDll(NULL)
-#endif
 {
 }
 
@@ -2621,10 +2629,6 @@ wxAMMediaBackend::~wxAMMediaBackend()
         if(m_pMP)
             m_pMP->Release();
     }
-#ifdef __WXDEBUG__
-    if(m_hQuartzDll)
-        ::FreeLibrary(m_hQuartzDll);
-#endif
 }
 
 //---------------------------------------------------------------------------
@@ -2652,26 +2656,13 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // First get the AMGetErrorText procedure in debug
     // mode for more meaningful messages
 #ifdef __WXDEBUG__
-    m_hQuartzDll = ::LoadLibrary(wxT("quartz.dll"));
-    if(m_hQuartzDll)
+    if ( m_dllQuartz.Load(_T("quartz.dll"), wxDL_VERBATIM) )
     {
-            m_lpAMGetErrorText = (LPAMGETERRORTEXT) ::GetProcAddress(
-                m_hQuartzDll,
-            wxString::Format(wxT("AMGetErrorText%s"),
-
-#if wxUSE_UNICODE
-            wxT("W")
-#else
-            wxT("A")
-#endif
-#ifdef __WXWINCE__
-                             )
-#else
-                             ).mb_str(wxConvLocal)
-#endif
-                             );
+        m_lpAMGetErrorText = (LPAMGETERRORTEXT)
+                                m_dllQuartz.GetSymbolAorW(wxT("AMGetErrorText"));
     }
-#endif
+#endif // __WXDEBUG__
+
     // Now determine which (if any) media player interface is
     // available - IMediaPlayer or IActiveMovie
     if( ::CoCreateInstance(CLSID_MediaPlayer, NULL,
@@ -2681,7 +2672,7 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
         if( ::CoCreateInstance(CLSID_ActiveMovie, NULL,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IActiveMovie, (void**)&m_pAM) != 0 )
-        return false;
+            return false;
         m_pAM->QueryInterface(IID_IMediaPlayer, (void**)&m_pMP);
     }
     else
