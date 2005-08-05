@@ -322,6 +322,8 @@ protected:
 
 #if WXWIN_COMPATIBILITY_2_2 && wxUSE_DYNAMIC_LOADER
 
+#include "wx/object.h"
+
 /*
     wxDllLoader is a class providing an interface similar to unix's dlopen().
     It is used by wxDynamicLibrary wxLibrary and manages the actual loading of
