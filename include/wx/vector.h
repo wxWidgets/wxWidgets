@@ -48,7 +48,7 @@ protected:
 
     const void *GetItem(size_type idx) const
     {
-        wxASSERT(idx >= 0 && idx < m_size);
+        wxASSERT(idx < m_size);
         return m_objects[idx];
     }
 
@@ -61,7 +61,7 @@ protected:
 
     void RemoveAt(size_type idx)
     {
-        wxASSERT(idx >= 0 && idx < m_size);
+        wxASSERT(idx < m_size);
         Free(m_objects[idx]);
         if (idx < m_size - 1)
             memcpy(
@@ -143,7 +143,7 @@ private:\
     }\
 public:\
     cls() {}\
-    cls(const cls& c)\
+    cls(const cls& c) : wxVectorBase()\
     {\
         wxCHECK2(copy(c), return);\
     }\
