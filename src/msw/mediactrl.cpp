@@ -4518,23 +4518,27 @@ void wxQTMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
 
     if ( m_qtb->m_pMC )
     {
-        //repaint movie controller
+        // repaint movie controller
         m_pLib.MCDoAction(m_qtb->m_pMC, 2 /*mcActionDraw*/,
                             m_pLib.GetNativeWindowPort(m_hwnd));
     }
-    else if(m_qtb->m_movie)
+    else // no movie controller
     {
-        CGrafPtr port = (CGrafPtr)m_pLib.GetNativeWindowPort(m_hwnd);
+        if ( m_qtb->m_movie )
+        {
+            CGrafPtr port = (CGrafPtr)m_pLib.GetNativeWindowPort(m_hwnd);
 
-        m_pLib.BeginUpdate(port);
-        m_pLib.UpdateMovie(m_qtb->m_movie);
-        wxASSERT(m_pLib.GetMoviesError() == noErr);
-        m_pLib.EndUpdate(port);
+            m_pLib.BeginUpdate(port);
+            m_pLib.UpdateMovie(m_qtb->m_movie);
+            wxASSERT(m_pLib.GetMoviesError() == noErr);
+            m_pLib.EndUpdate(port);
+        }
+        else // no movie
+        {
+            // let the system repaint the window
+            evt.Skip();
+        }
     }
-
-    // VZ: this doesn't make sense: why should we erase the background after
-    //     taking the trouble to do whatever we did above? (FIXME)
-    evt.Skip(); //repaint with window background (TODO: maybe !m_movie?)
 }
 
 //---------------------------------------------------------------------------
