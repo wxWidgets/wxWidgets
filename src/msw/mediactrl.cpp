@@ -1779,7 +1779,6 @@ typedef BOOL (WINAPI* LPAMGETERRORTEXT)(HRESULT, wxChar *, DWORD);
 class WXDLLIMPEXP_MEDIA wxAMMediaEvtHandler : public wxEvtHandler
 {
 public:
-    void OnPaint(wxPaintEvent&);
     void OnEraseBackground(wxEraseEvent&);
 };
 
@@ -2227,7 +2226,6 @@ bool wxQuickTimeLibrary::Initialize()
 class WXDLLIMPEXP_MEDIA wxQTMediaEvtHandler : public wxEvtHandler
 {
 public:
-    void OnPaint(wxPaintEvent&);
     void OnEraseBackground(wxEraseEvent&);
 };
 
