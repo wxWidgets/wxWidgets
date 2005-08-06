@@ -18,7 +18,7 @@ First steps
 
 - Download SciTech MGL library (version 5.0) from http://www.scitechsoft.com.
   The downloads page is here (you need MGL version 5.0beta7 or newer):
-  http://www.scitechsoft.com/products/embedded/mgl_home.html
+  http://scitechsoft.com/products/dev/mgl_download/mgl_down.html
   
   Install MGL according to provided instructions. In particular, make sure that
   MGL_ROOT and NUCLEUS_PATH environment variables are set before attempting to
@@ -154,6 +154,92 @@ OpenSourced by SciTech, check out http://www.openwatcom.org).
 
        !include $(WXDIR)\src\mgl\makeprog.wat
 
+
+Compilation notes for MGL 5.1
+-----------------------------
+
+The mvis library doesn't compile with current versions of gcc. However wxMGL
+does not use this part of MGL, so it can be taken out of the compile, e.g.:
+
+--- scitech/src/makefile.orig	2004-04-15 20:36:32.000000000 +0100
++++ scitech/src/makefile	2005-04-26 01:50:12.000000000 +0100
+@@ -88,7 +88,7 @@
+ 
+ # Target to build libraries for one compiler for SciTech MGL Graphics Library
+ 
+-all_mgl:    $(T_PM) $(T_GCONSOLE) $(T_SNAP) $(T_TECH) $(T_MVIS) $(T_FIXED) \
++all_mgl:    $(T_PM) $(T_GCONSOLE) $(T_SNAP) $(T_TECH) $(T_FIXED) \
+             $(T_GM) $(T_GLUT) $(T_MGL)
+     @$(ECHO) =============================================================================
+     @$(ECHO) DONE: Single compiler MGL build completed successfully!
+
+The dos version of _lztimer.asm can't be assembled by the GNU assember. A
+newer version is available from Scitech, a patch between the version in MGL
+5.1 and the newer version is included below:
+
+--- scitech/src/pm/dos/_lztimer.asm.orig	2004-04-15 20:36:33.000000000 +0100
++++ scitech/src/pm/dos/_lztimer.asm	2005-04-26 18:39:57.000000000 +0100
+@@ -4,11 +4,11 @@
+ ;*
+ ;*  ========================================================================
+ ;*
+-;*   Copyright (C) 1991-2002 SciTech Software, Inc. All rights reserved.
++;*   Copyright (C) 1991-2004 SciTech Software, Inc. All rights reserved.
+ ;*
+ ;*   This file may be distributed and/or modified under the terms of the
+-;*   GNU Lesser General Public License version 2.1 as published by the Free
+-;*   Software Foundation and appearing in the file LICENSE.LGPL included
++;*   GNU General Public License version 2.0 as published by the Free
++;*   Software Foundation and appearing in the file LICENSE.GPL included
+ ;*   in the packaging of this file.
+ ;*
+ ;*   Licensees holding a valid Commercial License for this product from
+@@ -288,8 +288,8 @@
+ ; Convert the BIOS time to microseconds
+ 
+ @@CalcBIOSTime:
+-        mov     ax,[WORD EndBIOSCount]
+-        sub     ax,[WORD StartBIOSCount]
++        mov     ax,[EndBIOSCount]
++        sub     ax,[StartBIOSCount]
+         mov     dx,54925            ; Number of microseconds each
+                                     ;  BIOS count represents.
+         mul     dx
+@@ -352,17 +352,17 @@
+ ; See if more than an hour passed during timing. If so, notify the user.
+ 
+ @@CheckForHour:
+-        mov     ax,[WORD StartBIOSCount+2]
+-        cmp     ax,[WORD EndBIOSCount+2]
++        mov     ax,[StartBIOSCount+2]
++        cmp     ax,[EndBIOSCount+2]
+         jz      @@CalcBIOSTime      ; Hour count didn't change, so
+                                     ;  everything is fine
+ 
+         inc     ax
+-        cmp     ax,[WORD EndBIOSCount+2]
++        cmp     ax,[EndBIOSCount+2]
+         jnz     @@TestTooLong       ; Two hour boundaries passed, so the
+                                     ;  results are no good
+-        mov     ax,[WORD EndBIOSCount]
+-        cmp     ax,[WORD StartBIOSCount]
++        mov     ax,[EndBIOSCount]
++        cmp     ax,[StartBIOSCount]
+         jb      @@CalcBIOSTime      ; a single hour boundary passed. That's
+                                     ; OK, so long as the total time wasn't
+                                     ; more than an hour.
+@@ -384,8 +384,8 @@
+ ; Convert the BIOS time to microseconds
+ 
+ @@CalcBIOSTime:
+-        mov     ax,[WORD EndBIOSCount]
+-        sub     ax,[WORD StartBIOSCount]
++        mov     ax,[EndBIOSCount]
++        sub     ax,[StartBIOSCount]
+         mov     dx,54925            ; Number of microseconds each
+                                     ;  BIOS count represents.
+         mul     dx
+     
 
 Bug reports
 -----------
