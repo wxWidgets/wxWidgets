@@ -408,6 +408,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/platform.h
     wx/process.h
     wx/ptr_scpd.h
+    wx/recguard.h
     wx/regex.h
     wx/scopeguard.h
     wx/snglinst.h
