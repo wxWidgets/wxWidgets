@@ -110,7 +110,7 @@
                 #pragma comment(lib,"wxpngd")
             #endif
             #if wxUSE_REGEX
-                #pragma comment(lib,"wxregexud")
+                #pragma comment(lib,"wxregexd")
             #endif
             #if wxUSE_LIBTIFF
                 #pragma comment(lib,"wxtiffd")
@@ -137,7 +137,7 @@
                 #pragma comment(lib,"wxpng")
             #endif
             #if wxUSE_REGEX
-                #pragma comment(lib,"wxregexu")
+                #pragma comment(lib,"wxregex")
             #endif
             #if wxUSE_LIBTIFF
                 #pragma comment(lib,"wxtiff")
