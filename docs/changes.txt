@@ -14,6 +14,7 @@ All:
 - Added wxZipFSHandler::Cleanup() (Stas Sergeev)
 - Added wxImage::RotateHue() and RGB <-> HSV conversions (John Anderson)
 - Fixed compilation with IBM xlC compiler
+- wxABI_VERSION, see 'Backward Compatibility' in the manual.
 
 All (GUI):
 
@@ -21,6 +22,8 @@ All (GUI):
 - Possibility of modeless wxWizard dialog (with presentation in sample).
 - Fixed a rare crash due to malformed HTML in wxHTML (Xavier Nodet).
 - Ctrl+mouse wheel changes zoom factor in print preview (Zbigniew Zagórski)
+- Cross-compile now supported for wxGTK, wxX11 and wxMotif.
+- Cygwin compilation of wxX11, wxGTK and wxMotif now supported.
 
 wxMSW:
 
@@ -62,6 +65,10 @@ wxMotif:
 
 - Base library is now binary compatible when built with wxGTK and wxMotif.
 - wxMotif can now display Japanese text under Japanese locale.
+
+wxMGL:
+- Fixed crash on exit.
+- Fixed drawing problems when windows are resized.
 
 
 2.6.1
