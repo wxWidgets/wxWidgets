@@ -345,6 +345,11 @@ bool wxNotebook::Create(wxWindow *parent,
     {
         SetBackgroundColour(GetThemeBackgroundColour());
     }
+    else // use themed background by default
+    {
+        // create backing store
+        UpdateBgBrush();
+    }
 #endif // wxUSE_UXTHEME
 
     // Undocumented hack to get flat notebook style
