@@ -26,26 +26,16 @@ install instructions just do (in the base dir):
 > su <type root password>
 > make install
 > ldconfig
-> exit
+[if you get "ldconfig: command not found", try using "/sbin/ldconfig"]
 
-Afterwards you can continue with:
-
-> make
-> su <type root password>
-> make install
-> ldconfig
-> exit
-
-(If you don't do the 'make install' part, you can still
-use the libraries from the buildgtk directory, but they
-will not be available to other users.)
+If you don't do the 'make install' part, you can still use the libraries from
+the buildgtk directory, but they may not be available to other users.
 
 If you want to remove wxWidgets on Unix you can do this:
 
 > su <type root password>
 > make uninstall
 > ldconfig
-> exit
 
 Note that by default, GTK+ 2.X is used. GTK+ 1.2 can be specified
 with --with-gtk=1.
