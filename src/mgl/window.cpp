@@ -939,7 +939,33 @@ void wxWindowMGL::DoGetClientSize(int *x, int *y) const
 
 void wxWindowMGL::DoMoveWindow(int x, int y, int width, int height)
 {
-    MGL_wmSetWindowPosition(GetHandle(), x, y, width, height);
+    wxRect rcClient(GetClientRect());
+
+    MGL_wmSetWindowPosition(m_wnd, x, y, width, height);
+
+    // When the origin or a window stays fixed but the height or width
+    // changes, invalidate the old and new non-client areas
+    if ( !HasFlag(wxFULL_REPAINT_ON_RESIZE) &&
+         m_wnd->x == x && m_wnd->y == y &&
+         rcClient.Intersect(GetClientRect()) != wxRect(0, 0, width, height) )
+    {
+        wxRegion rgn(0, 0, width, height);
+        rgn.Subtract(rcClient);
+
+        // This should work I think, but doesn't seem to:
+        //MGL_wmInvalidateWindowRegion(m_wnd, rgn.GetMGLRegion().rgnPointer());
+
+        // Use MGL_wmInvalidateWindowRect instead:
+        for (wxRegionIterator it(rgn); it; it++)
+        {
+            rect_t rc;
+            rc.left = it.GetX();
+            rc.top = it.GetY();
+            rc.right = rc.left + it.GetW();
+            rc.bottom = rc.top + it.GetH();
+            MGL_wmInvalidateWindowRect(m_wnd, &rc);
+        }
+    }
 }
 
 // set the size of the window: if the dimensions are positive, just use them,
