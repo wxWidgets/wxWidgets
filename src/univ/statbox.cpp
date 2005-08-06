@@ -55,6 +55,9 @@ bool wxStaticBox::Create(wxWindow *parent,
                          long style,
                          const wxString &name)
 {
+    // FIXME refresh just the right/bottom parts affected in OnSize
+    style |= wxFULL_REPAINT_ON_RESIZE;
+
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
 
