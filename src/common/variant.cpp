@@ -2038,9 +2038,9 @@ bool wxVariant::Convert(bool* value) const
     {
         wxString val(((wxVariantDataString*)GetData())->GetValue());
         val.MakeLower();
-        if (val == wxT("true") || val == wxT("yes"))
+        if (val == wxT("true") || val == wxT("yes") || val == wxT('1') )
             *value = true;
-        else if (val == wxT("false") || val == wxT("no"))
+        else if (val == wxT("false") || val == wxT("no") || val == wxT('0') )
             *value = false;
         else
             return false;
