@@ -405,6 +405,7 @@ Set the version of your Mingw installation here.
         <set var="UNICODE">1</set>
         <!-- Uploading debug reports from PDAs seems impractical -->
         <set var="USE_QA">0</set>
+        <set var="MONOLITHIC">1</set> <!-- sic! -->
         <!-- RTTI and exceptions need separate cccrtti.lib with eVC4 -->
         <set var="USE_RTTI">0</set>
         <set var="USE_EXCEPTIONS">0</set>
