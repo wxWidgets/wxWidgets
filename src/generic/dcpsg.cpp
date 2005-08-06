@@ -40,6 +40,7 @@
 #include "wx/paper.h"
 #include "wx/filefn.h"
 #include "wx/math.h"
+#include "wx/stdpaths.h"
 
 #ifdef __WXMSW__
 
@@ -1962,22 +1963,39 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
         FILE *afmFile = NULL;
 
+        // Get the directory of the AFM files
+        wxString afmName;
+
+        // VZ: I don't know if the cast always works under Unix but it clearly
+        //     never does under Windows where the pointer is
+        //     wxWindowsPrintNativeData and so calling GetFontMetricPath() on
+        //     it just crashes
+#ifndef __WIN32__
         wxPostScriptPrintNativeData *data =
             (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
 
-        // Get the directory of the AFM files
-        wxString afmName;
         if (!data->GetFontMetricPath().empty())
         {
             afmName = data->GetFontMetricPath();
             afmName << wxFILE_SEP_PATH << name;
-            afmFile = wxFopen(afmName,wxT("r"));
+        }
+#endif // __WIN32__
+
+        if ( !afmName.empty() )
+            afmFile = wxFopen(afmName, wxT("r"));
+
+        if ( !afmFile )
+        {
         }
 
-#if defined(__UNIX__) && !defined(__VMS__)
-        if (afmFile==NULL)
+        if ( !afmFile )
         {
+#if defined(__UNIX__) && !defined(__VMS__)
            afmName = wxGetDataDir();
+#else // !__UNIX__
+           afmName = wxStandardPaths::Get().GetDataDir();
+#endif // __UNIX__/!__UNIX__
+
            afmName <<  wxFILE_SEP_PATH
 #if defined(__LINUX__) || defined(__FREEBSD__)
                    << wxT("gs_afm") << wxFILE_SEP_PATH
@@ -1987,7 +2005,6 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                    << name;
            afmFile = wxFopen(afmName,wxT("r"));
         }
-#endif
 
         /* 2. open and process the file
            /  a short explanation of the AFM format:
