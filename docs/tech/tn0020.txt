@@ -60,7 +60,7 @@ The layout of wxABI_VERSION is as follows:
 
 where
 
- 20    60      2
+ 2     06     02
 Major Minor Release
 
 I.E. it corresponds to the wxWidgets release in {1}.
@@ -137,24 +137,94 @@ For ld/libtool we use sun-style version scripts.  Basically
 anything which fits the conditions of being ifed via wxABI_VERSION
 needs to go here also.
 
+See 'info ld scripts version' on a GNU system, it's online here:
+http://www.gnu.org/software/binutils/manual/ld-2.9.1/html_node/ld_25.html
+
+Or see chapter 5 of the 'Linker and Libraries Guide' for Solaris, available
+online here:
+http://docsun.cites.uiuc.edu/sun_docs/C/solaris_9/SUNWdev/LLM/p1.html
+
 The file has the layout as follows:
 
 @WX_VERSION_TAG@.X
 
 Where X is the current Release as mentioned earlier, i.e. 2.  This
 is following by an opening bracket "{", followed by "global:",
-followed by the added symbols, then followed by "}", and then
+followed by patterns matching added symbols, then followed by "}", and then
 the file is either followed by earlier Releases or ended by 
 a @WX_VERSION_TAG@ block without the period or Release.
 
-Added symbols have the form
-*CLASSNAME*METHODNAME*PARAM1*PARAM2*...
+The patterns used to specify added symbols are globbing patters and can
+contain wildcards such as '*'.
 
-Where CLASSNAME is the name of the class or blank (along with
-omitted *) in the case of a global function.  METHODNAME is the name
-of the class method or global function.  This is followed by another
-star "*" and then the type of each subsequent parameter for the function,
-such as *wxString etc..
+For example for a new class member such as:
+    wxFont wxGenericListCtrl::GetItemFont( long item ) const;
+
+the mangled symbol might be:
+    _ZNK17wxGenericListCtrl11GetItemFontEl
+
+so a line like this could be added to version-script.in:
+    *wxGenericListCtrl*GetItemFont*;
+
+Allow for the fact that the name mangling is going to vary from compiler to
+complier.
+
+When adding a class you can match all the symbols it adds with a single
+pattern, so long as that pattern is not likely to also match other symbols.
+For example for wxLogBuffer a line like this:
+    *wxLogBuffer*;
+
+
+5.5. Checking the version information in libraries and programs
+---------------------------------------------------------------
+
+On Sun there is a tool for this, see pvs(1). On GNU you can use objdump, below
+are some examples.
+
+To see what versions of each library a program (or library) depends on:
+
+$ objdump -p widgets | sed -ne '/Version References/,/^$/p'
+Version References:
+  required from libgcc_s.so.1:
+    0x0b792650 0x00 10 GCC_3.0
+  required from libwx_based-2.6.so.0:
+    0x0cca2546 0x00 07 WXD_2.6
+  required from libstdc++.so.6:
+    0x056bafd3 0x00 09 CXXABI_1.3
+    0x08922974 0x00 06 GLIBCXX_3.4
+  required from libwx_gtk2d_core-2.6.so.0:
+    0x0a2545d2 0x00 08 WXD_2.6.2
+    0x0cca2546 0x00 05 WXD_2.6
+  required from libc.so.6:
+    0x09691a75 0x00 04 GLIBC_2.2.5
+
+To see what WXD_2.6.2 symbols a program uses:
+
+$ objdump -T widgets | grep 'WXD_2\.6\.2'
+0000000000000000 g    DO *ABS*  0000000000000000  WXD_2.6.2   WXD_2.6.2
+00000000004126d8      DF *UND*  0000000000000177  WXD_2.6.2   _ZN19wxTopLevelWindowGTK20RequestUserAttentionEi
+
+To see what WXD_2.6.2 symbols a library defines:
+
+$ objdump -T libwx_based-2.6.so | grep 'WXD_2\.6\.2' | grep -v 'UND\|ABS'
+0000000000259a10  w   DO .data  0000000000000018  WXD_2.6.2   _ZTI19wxMessageOutputBest
+00000000002599e0  w   DO .data  0000000000000028  WXD_2.6.2   _ZTV19wxMessageOutputBest
+000000000010a98e  w   DF .text  000000000000003e  WXD_2.6.2   _ZN19wxMessageOutputBestD0Ev
+0000000000114efb  w   DO .rodata        000000000000000e  WXD_2.6.2   _ZTS11wxLogBuffer
+0000000000255590  w   DO .data  0000000000000018  WXD_2.6.2   _ZTI11wxLogBuffer
+000000000011b550  w   DO .rodata        0000000000000016  WXD_2.6.2   _ZTS19wxMessageOutputBest
+00000000000bfcc8 g    DF .text  00000000000000dd  WXD_2.6.2   _ZN11wxLogBuffer5DoLogEmPKcl
+000000000010a3a6 g    DF .text  0000000000000153  WXD_2.6.2   _ZN19wxMessageOutputBest6PrintfEPKcz
+00000000000c0b22  w   DF .text  000000000000004b  WXD_2.6.2   _ZN11wxLogBufferD0Ev
+00000000000bfc3e g    DF .text  0000000000000089  WXD_2.6.2   _ZN11wxLogBuffer5FlushEv
+00000000000c0ad6  w   DF .text  000000000000004b  WXD_2.6.2   _ZN11wxLogBufferD1Ev
+00000000000b1130  w   DF .text  0000000000000036  WXD_2.6.2   _ZN11wxLogBufferC1Ev
+00000000000c095c  w   DF .text  0000000000000029  WXD_2.6.2   _ZN19wxMessageOutputBestC1Ev
+00000000000c08e8  w   DF .text  000000000000003e  WXD_2.6.2   _ZN19wxMessageOutputBestD1Ev
+00000000002554c0  w   DO .data  0000000000000038  WXD_2.6.2   _ZTV11wxLogBuffer
+00000000000bfda6 g    DF .text  0000000000000036  WXD_2.6.2   _ZN11wxLogBuffer11DoLogStringEPKcl
+00000000000abe10 g    DF .text  0000000000000088  WXD_2.6.2   _ZN14wxZipFSHandler7CleanupEv
+
 
 6. Testing binary compatability between releases
 ------------------------------------------------
