@@ -145,7 +145,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     SetInitialFrameRect(pos,sizeInstance);
 #else
     m_macIsUserPane = false;
-	wxControl::Create(parent, winID, pos, size, style , validator , name);
+    wxControl::Create(parent, winID, pos, size, style , validator , name);
     m_peer = new wxMacControl(this);
     WebInitForCarbon();
     HIWebViewCreate( m_peer->GetControlRefAddr() );
@@ -155,7 +155,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     HIViewSetVisible( m_peer->GetControlRef(), true );
     [m_webView setHidden:false];
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-	if ( UMAGetSystemVersion() >= 0x1030 )
+    if ( UMAGetSystemVersion() >= 0x1030 )
     HIViewChangeFeatures( m_peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
 #endif
 #endif
@@ -262,132 +262,130 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     // This is a nasty hack because WebKit seems to lose its position when it is embedded
     // in a control that is not itself the content view for a TLW.
-	// I put it in OnSize because these calcs are not perfect, and in fact are basically 
-	// guesses based on reverse engineering, so it's best to give people the option of
-	// overriding OnSize with their own calcs if need be.
-	// I also left some test debugging print statements as a convenience if a(nother)
-	// problem crops up.
-	
-	// Let's hope that Tiger fixes this mess...
-	
-	int x, y; 
-	x = 0;
-	y = 0;
-	
-	bool isParentTopLevel = true;
-			
-	wxWindow* parent = GetParent();
-	
-	wxWindow* tlw = MacGetTopLevelWindow();
-	
-	// This must be the case that Apple tested with, because well, in this one case
-	// we don't need to do anything! It just works. ;)
-	if (parent == tlw){
-		return;
-	}
-					
-	while(parent != NULL)
-	{
-		if ( parent->IsKindOf( CLASSINFO( wxSplitterWindow ) ) && GetParent()->IsKindOf( CLASSINFO( wxSplitterWindow ) ) ){
-				// When parent is not a wxSplitterWindow, we can rely on it's GetPosition() to give us the correct
-				// coordinates, but when the parent is a wxSplitterWindow, we need to manually calculate 
-				// the sash position of it and any parent wxSplitterWindows into the webkit's position.
-				wxSplitterWindow* splitter;
-				splitter = dynamic_cast<wxSplitterWindow*>(parent);
-				if (splitter->GetSplitMode() == wxSPLIT_HORIZONTAL){
-					if (splitter->GetPosition().y > 0)
-						y += splitter->GetPosition().y;
-					
-					if (splitter->GetSashSize() > 0)
-						y += splitter->GetSashSize();
-						
-					if (splitter->GetSashPosition() > 0)
-						y += splitter->GetSashPosition();
-				}
-				else{
-					if (splitter->GetPosition().x > 0)
-						x += splitter->GetPosition().x;
-					
-					if (splitter->GetSashSize() > 0)
-						x += splitter->GetSashSize();
-						
-					if (splitter->GetSashPosition() > 0)
-						x += splitter->GetSashPosition();
-				}
-		}
-		else{
-			if (!parent->IsTopLevel()) {
-				//printf("Parent: %s\n", parent->GetClassInfo()->GetClassName());
-				int plusx = 0;
-				plusx = parent->GetClientAreaOrigin().x + parent->GetPosition().x; 
-				if (plusx > 0){
-					x += plusx; 
-					//printf("Parent: %s Added x: %d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().x + parent->GetPosition().x);
-				}
-				
-				int plusy = 0;
-				plusy = parent->GetClientAreaOrigin().y + parent->GetPosition().y;
-				if (plusy > 0){
-					y += plusy; 
-					//printf("Parent: %s Added y: %d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().y + parent->GetPosition().y);
-				}
-				else{
-					//printf("Parent: %s Origin: %d Position:%d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().y, parent->GetPosition().y);
-				}
-				
-			}
-			else{
-				// 
-				x += parent->GetClientAreaOrigin().x;
-				// calculate the title bar height (26 pixels) into the top offset.
-				// This becomes important later when we must flip the y coordinate
-				// to convert to Cocoa's coordinate system.
-				y += parent->GetClientAreaOrigin().y += 26;
-				//printf("x: %d, y:%d\n", x, y);
-			}
-			//we still need to add the y, because we have to convert/flip coordinates for Cocoa
+    // I put it in OnSize because these calcs are not perfect, and in fact are basically
+    // guesses based on reverse engineering, so it's best to give people the option of
+    // overriding OnSize with their own calcs if need be.
+    // I also left some test debugging print statements as a convenience if a(nother)
+    // problem crops up.
 
-			if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )  ){
-				//Not sure why calcs are off in this one scenario...
-				y -= 4;
-				//printf("x: %d, y:%d\n", x, y);
-			}
-			
-			if (parent->IsKindOf( CLASSINFO( wxPanel ) ) ){
-				// Another strange case. Adding a wxPanel to the parent heirarchy
-				// causes wxWebKitCtrl's Cocoa y origin to be 4 pixels off 
-				// for some reason, even if the panel has a position and origin of 0. 
-				// This corrects that. Man, I wish I could debug Carbon/HIWebView!! ;)
-				y -= 4;
-			}
-		}
+    // Let's hope that Tiger fixes this mess...
 
-		parent = parent->GetParent();
-	}
+    int x, y;
+    x = 0;
+    y = 0;
 
-	// Tried using MacWindowToRootWindow both for wxWebKitCtrl and its parent,
-	// but coordinates were off by a significant amount.
-	// Am leaving the code here if anyone wants to play with it.
-	
-	//int x2, y2 = 0;
-	//if (GetParent())
-	//	GetParent()->MacWindowToRootWindow(&x2, &y2);
-	//printf("x = %d, y = %d\n", x, y);
-	//printf("x2 = %d, y2 = %d\n", x2, y2);
-	//x = x2;
-	//y = y2;
-	
-	if (tlw){
-		//flip the y coordinate to convert to Cocoa coordinates
-		//printf("tlw y: %d, y: %d\n", tlw->GetSize().y, (GetSize().y + y));
-		y = tlw->GetSize().y - ((GetSize().y) + y);
-	}
-			
-	//printf("Added to bounds x=%d, y=%d\n", x, y);
-	NSRect bounds = [m_webView frame];
-	bounds.origin.x = x;
-	bounds.origin.y = y;
-	[m_webView setFrame:bounds];
+    wxWindow* parent = GetParent();
+
+    wxWindow* tlw = MacGetTopLevelWindow();
+
+    // This must be the case that Apple tested with, because well, in this one case
+    // we don't need to do anything! It just works. ;)
+    if (parent == tlw){
+        return;
+    }
+
+    while(parent != NULL)
+    {
+        if ( parent->IsKindOf( CLASSINFO( wxSplitterWindow ) ) && GetParent()->IsKindOf( CLASSINFO( wxSplitterWindow ) ) ){
+                // When parent is not a wxSplitterWindow, we can rely on it's GetPosition() to give us the correct
+                // coordinates, but when the parent is a wxSplitterWindow, we need to manually calculate
+                // the sash position of it and any parent wxSplitterWindows into the webkit's position.
+                wxSplitterWindow* splitter;
+                splitter = dynamic_cast<wxSplitterWindow*>(parent);
+                if (splitter->GetSplitMode() == wxSPLIT_HORIZONTAL){
+                    if (splitter->GetPosition().y > 0)
+                        y += splitter->GetPosition().y;
+
+                    if (splitter->GetSashSize() > 0)
+                        y += splitter->GetSashSize();
+
+                    if (splitter->GetSashPosition() > 0)
+                        y += splitter->GetSashPosition();
+                }
+                else{
+                    if (splitter->GetPosition().x > 0)
+                        x += splitter->GetPosition().x;
+
+                    if (splitter->GetSashSize() > 0)
+                        x += splitter->GetSashSize();
+
+                    if (splitter->GetSashPosition() > 0)
+                        x += splitter->GetSashPosition();
+                }
+        }
+        else{
+            if (!parent->IsTopLevel()) {
+                //printf("Parent: %s\n", parent->GetClassInfo()->GetClassName());
+                int plusx = 0;
+                plusx = parent->GetClientAreaOrigin().x + parent->GetPosition().x;
+                if (plusx > 0){
+                    x += plusx;
+                    //printf("Parent: %s Added x: %d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().x + parent->GetPosition().x);
+                }
+
+                int plusy = 0;
+                plusy = parent->GetClientAreaOrigin().y + parent->GetPosition().y;
+                if (plusy > 0){
+                    y += plusy;
+                    //printf("Parent: %s Added y: %d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().y + parent->GetPosition().y);
+                }
+                else{
+                    //printf("Parent: %s Origin: %d Position:%d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().y, parent->GetPosition().y);
+                }
+
+            }
+            else{
+                //
+                x += parent->GetClientAreaOrigin().x;
+                // calculate the title bar height (26 pixels) into the top offset.
+                // This becomes important later when we must flip the y coordinate
+                // to convert to Cocoa's coordinate system.
+                y += parent->GetClientAreaOrigin().y += 26;
+                //printf("x: %d, y:%d\n", x, y);
+            }
+            //we still need to add the y, because we have to convert/flip coordinates for Cocoa
+
+            if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )  ){
+                //Not sure why calcs are off in this one scenario...
+                y -= 4;
+                //printf("x: %d, y:%d\n", x, y);
+            }
+
+            if (parent->IsKindOf( CLASSINFO( wxPanel ) ) ){
+                // Another strange case. Adding a wxPanel to the parent heirarchy
+                // causes wxWebKitCtrl's Cocoa y origin to be 4 pixels off
+                // for some reason, even if the panel has a position and origin of 0.
+                // This corrects that. Man, I wish I could debug Carbon/HIWebView!! ;)
+                y -= 4;
+            }
+        }
+
+        parent = parent->GetParent();
+    }
+
+    // Tried using MacWindowToRootWindow both for wxWebKitCtrl and its parent,
+    // but coordinates were off by a significant amount.
+    // Am leaving the code here if anyone wants to play with it.
+
+    //int x2, y2 = 0;
+    //if (GetParent())
+    //    GetParent()->MacWindowToRootWindow(&x2, &y2);
+    //printf("x = %d, y = %d\n", x, y);
+    //printf("x2 = %d, y2 = %d\n", x2, y2);
+    //x = x2;
+    //y = y2;
+
+    if (tlw){
+        //flip the y coordinate to convert to Cocoa coordinates
+        //printf("tlw y: %d, y: %d\n", tlw->GetSize().y, (GetSize().y + y));
+        y = tlw->GetSize().y - ((GetSize().y) + y);
+    }
+
+    //printf("Added to bounds x=%d, y=%d\n", x, y);
+    NSRect bounds = [m_webView frame];
+    bounds.origin.x = x;
+    bounds.origin.y = y;
+    [m_webView setFrame:bounds];
 
     //printf("Carbon position x=%d, y=%d\n", GetPosition().x, GetPosition().y);
     if (IsShown())
