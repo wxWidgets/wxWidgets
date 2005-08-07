@@ -1896,6 +1896,12 @@ AC_CXX_STATIC_CAST
 dnl we don't use HAVE_DYNAMIC_CAST anywhere right now...
 dnl AC_CXX_DYNAMIC_CAST
 
+dnl With Sun CC, temporaries have block scope by default. This flag is needed
+dnl to get the expression scope behaviour that conforms to the standard.
+if test "x$SUNCXX" = xyes; then
+    CXXFLAGS="$CXXFLAGS -features=tmplife"
+fi
+
 dnl check for std::string or std::wstring
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     AC_LANG_PUSH(C++)
