@@ -53,12 +53,6 @@
 #define wxKERNCHECK(arg, msg) wxFORCECHECK_MSG(arg != KERN_SUCCESS, msg)
 #define wxSCHECK(arg, msg) wxFORCECHECK_MSG(arg != S_OK, msg)
 
-#ifdef __WXDEBUG___
-#    define wxVERIFY(arg)    wxASSERT(arg)
-#else
-#    define wxVERIFY(arg)    arg
-#endif
-
 /*
 void CFShowTypeIDDescription(CFTypeRef pData)
 {
@@ -92,13 +86,15 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
     //Dictionary that will hold first
     //the matching dictionary for determining which kind of devices we want,
     //then later some registry properties from an iterator (see below)
-    CFMutableDictionaryRef pDictionary;
-
-    //Create a dictionary
+    //
     //The call to IOServiceMatching filters down the
     //the services we want to hid services (and also eats the
     //dictionary up for us (consumes one reference))
-    wxVERIFY((pDictionary = IOServiceMatching(kIOHIDDeviceKey)) != NULL );
+    CFMutableDictionaryRef pDictionary = IOServiceMatching(kIOHIDDeviceKey);
+    wxCHECK_MSG( pDictionary, false,
+                    _T("IOServiceMatching(kIOHIDDeviceKey) failed") );
+
+    wxASSERT( pDictionary );
 
     //Here we'll filter down the services to what we want
     if (nType != -1)
@@ -128,8 +124,16 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
         if(--nDev != 0)
             continue;
 
-        wxVERIFY(IORegistryEntryCreateCFProperties(pObject, &pDictionary,
-                                            kCFAllocatorDefault, kNilOptions) == KERN_SUCCESS);
+        if ( IORegistryEntryCreateCFProperties
+             (
+                pObject,
+                &pDictionary,
+                kCFAllocatorDefault,
+                kNilOptions
+             ) != KERN_SUCCESS )
+        {
+            wxLogDebug(_T("IORegistryEntryCreateCFProperties failed"));
+        }
 
         //Just for sanity :)
         wxASSERT(CFGetTypeID(CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey))) == CFStringGetTypeID());
@@ -187,7 +191,8 @@ USB Product Name
         (*ppPlugin)->Release(ppPlugin);
 
         //open the HID interface...
-        wxVERIFY((*m_ppDevice)->open(m_ppDevice, 0) == S_OK);
+        if ( (*m_ppDevice)->open(m_ppDevice, 0) != S_OK )
+            wxLogDebug(_T("HID device: open failed"));
 
         //
         //Now the hard part - in order to scan things we need "cookies" -
@@ -216,13 +221,9 @@ int wxHIDDevice::GetCount (int nClass, int nType)
     //Dictionary that will hold first
     //the matching dictionary for determining which kind of devices we want,
     //then later some registry properties from an iterator (see below)
-    CFMutableDictionaryRef pDictionary;
-
-    //Create a dictionary
-    //The call to IOServiceMatching filters down the
-    //the services we want to hid services (and also eats the
-    //dictionary up for us (consumes one reference))
-    wxVERIFY((pDictionary = IOServiceMatching(kIOHIDDeviceKey)) != NULL );
+    CFMutableDictionaryRef pDictionary = IOServiceMatching(kIOHIDDeviceKey);
+    wxCHECK_MSG( pDictionary, 0,
+                    _T("IOServiceMatching(kIOHIDDeviceKey) failed") );
 
     //Here we'll filter down the services to what we want
     if (nType != -1)
@@ -244,7 +245,7 @@ int wxHIDDevice::GetCount (int nClass, int nType)
     io_iterator_t pIterator;
     wxIOCHECK(IOServiceGetMatchingServices(m_pPort, pDictionary, &pIterator), "No Matching HID Services");
 
-    if(pIterator == NULL)
+    if ( !pIterator )
         return 0;
 
     //Now we iterate through them
@@ -274,8 +275,10 @@ void wxHIDDevice::AddCookie(CFTypeRef Data, int i)
 
 void wxHIDDevice::AddCookieInQueue(CFTypeRef Data, int i)
 {
+    //3rd Param flags (none yet)
     AddCookie(Data, i);
-    wxVERIFY((*m_ppQueue)->addElement(m_ppQueue, m_pCookies[i], 0) == S_OK);//3rd Param flags (none yet)
+    if ( (*m_ppQueue)->addElement(m_ppQueue, m_pCookies[i], 0) != S_OK )
+        wxLogDebug(_T("HID device: adding element failed"));
 }
 
 void wxHIDDevice::InitCookies(size_t dwSize, bool bQueue)
@@ -284,8 +287,18 @@ void wxHIDDevice::InitCookies(size_t dwSize, bool bQueue)
     if (bQueue)
     {
         wxASSERT( m_ppQueue == NULL);
-        wxVERIFY(  (m_ppQueue = (*m_ppDevice)->allocQueue(m_ppDevice)) != NULL);
-        wxVERIFY(  (*m_ppQueue)->create(m_ppQueue, 0, 512) == S_OK); //Param 2, flags, none yet
+        m_ppQueue = (*m_ppDevice)->allocQueue(m_ppDevice);
+        if ( !m_ppQueue )
+        {
+            wxLogDebug(_T("HID device: allocQueue failed"));
+            return;
+        }
+
+        //Param 2, flags, none yet
+        if ( (*m_ppQueue)->create(m_ppQueue, 0, 512) != S_OK )
+        {
+            wxLogDebug(_T("HID device: create failed"));
+        }
     }
 }
 
