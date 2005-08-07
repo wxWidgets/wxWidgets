@@ -146,7 +146,7 @@ void wxBitmapRefData::Init()
     m_pictHandle = NULL ;
     m_hBitmap = NULL ;
     m_hMaskBitmap = NULL;
-    m_maskBytesPerRow = NULL ;
+    m_maskBytesPerRow = 0 ;
 
     m_rawAccessCount = 0 ;
     m_hasAlpha = false;
