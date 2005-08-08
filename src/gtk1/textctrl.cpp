@@ -1210,8 +1210,14 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
 
 #ifdef __WXGTK20__
     GtkTextIter iter;
-    gtk_text_buffer_get_iter_at_line_offset(m_buffer, &iter, y, x);
-    return gtk_text_iter_get_offset(&iter);
+    if (y >= gtk_text_buffer_get_line_count (m_buffer))
+        return -1;
+
+    gtk_text_buffer_get_iter_at_line(m_buffer, &iter, y);
+    if (x >= gtk_text_iter_get_chars_in_line (&iter))
+        return -1;
+
+    return gtk_text_iter_get_offset(&iter) + x;
 #else
     long pos=0;
     for( int i=0; i<y; i++ ) pos += GetLineLength(i) + 1; // one for '\n'
