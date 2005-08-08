@@ -18,8 +18,8 @@
             dialogs.cpp
             csprint.cpp
         </sources>
-        <wx-lib>ogl</wx-lib>
-        <wx-lib>deprecated</wx-lib>
+        <contrib-lib>ogl</contrib-lib>
+        <contrib-lib>deprecated</contrib-lib>
         <wx-lib>adv</wx-lib>
         <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>

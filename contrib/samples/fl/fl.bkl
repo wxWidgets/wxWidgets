@@ -9,7 +9,7 @@
         <define>BMP_DIR="bitmaps/"</define>
         <sources>$(id).cpp</sources>
         <win32-res>$(id).rc</win32-res>
-        <wx-lib>fl</wx-lib>
+        <contrib-lib>fl</contrib-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </template>

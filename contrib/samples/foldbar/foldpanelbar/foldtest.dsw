@@ -23,7 +23,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "foldbar"=..\..\..\build\foldbar\foldbar.dsp - Package Owner=<4>
+Project: "foldbar"=..\..\..\..\contrib\build\foldbar\foldbar.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

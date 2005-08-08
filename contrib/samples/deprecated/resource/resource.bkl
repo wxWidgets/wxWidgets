@@ -9,7 +9,7 @@
         <sources>
             resource.cpp
         </sources>
-        <wx-lib>deprecated</wx-lib>
+        <contrib-lib>deprecated</contrib-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>resource.rc</win32-res>

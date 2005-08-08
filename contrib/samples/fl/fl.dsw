@@ -107,7 +107,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "fl"=..\..\build\fl\fl.dsp - Package Owner=<4>
+Project: "fl"=..\..\..\contrib\build\fl\fl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

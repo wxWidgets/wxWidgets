@@ -35,4 +35,16 @@
         <srcdir>$(CONTRIB_HDR_DIR)</srcdir>
         <install-to>$(INCLUDEDIR)/wx-$(WX_RELEASE)$(WX_FLAVOUR)</install-to>
     </template>
+
+    <!-- Link against one contrib library. Value must be literal! -->
+    <define-tag name="contrib-lib" rules="exe,dll,module">
+        <sys-lib>$(wxwin.libToLink(value))</sys-lib>
+        <ldlibs>$(wxwin.extraLdflags(value))</ldlibs>
+        <if cond="IS_MSVC_PRJ=='1' and MONOLITHIC=='0'">
+            <depends-on-dsp>
+                $(wxwin.makeContribDspDependency(value))
+            </depends-on-dsp>
+        </if>
+    </define-tag>
+
 </makefile>

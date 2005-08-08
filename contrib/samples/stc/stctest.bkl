@@ -10,7 +10,7 @@
 	    edit.cpp
 	    prefs.cpp
         </sources>
-        <wx-lib>stc</wx-lib>
+        <contrib-lib>stc</contrib-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>

@@ -151,3 +151,7 @@ def headersOnly(files):
 def makeDspDependency(lib):
     """Returns suitable entry for <depends-on-dsp> for main libs."""
     return '%s:$(nativePaths(WXTOPDIR))build\\msw\\wx_%s.dsp' % (lib,lib)
+
+def makeContribDspDependency(lib):
+    """Returns suitable entry for <depends-on-dsp> for contrib libs."""
+    return '%s:$(nativePaths(WXTOPDIR))contrib\\build\\%s\\%s.dsp' % (lib,lib,lib)

@@ -11,7 +11,7 @@
             layouttest.cpp
             test.cpp
         </sources>
-        <wx-lib>foldbar</wx-lib>
+        <contrib-lib>foldbar</contrib-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>foldpanelbartest.rc</win32-res>

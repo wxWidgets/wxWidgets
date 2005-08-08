@@ -8,7 +8,7 @@
         <sources>
             anitest.cpp
         </sources>
-        <wx-lib>animate</wx-lib>
+        <contrib-lib>animate</contrib-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>anitest.rc</win32-res>

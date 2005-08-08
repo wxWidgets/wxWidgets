@@ -23,7 +23,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "plot"=..\..\build\plot\plot.dsp - Package Owner=<4>
+Project: "plot"=..\..\..\contrib\build\plot\plot.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
