@@ -302,6 +302,7 @@ wx/object.h
 wx/platform.h
 wx/process.h
 wx/ptr_scpd.h
+wx/recguard.h
 wx/regex.h
 wx/scopeguard.h
 wx/snglinst.h

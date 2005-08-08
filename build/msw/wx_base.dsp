@@ -1337,6 +1337,10 @@ SOURCE=..\..\include\wx\ptr_scpd.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\recguard.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\regex.h
 # End Source File
 # Begin Source File

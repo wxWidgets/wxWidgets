@@ -2687,6 +2687,10 @@ SOURCE=..\include\wx\rawbmp.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\recguard.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\regex.h
 # End Source File
 # Begin Source File
