@@ -23,15 +23,6 @@
 #include  "wx/dynarray.h"
 #include  "wx/arrstr.h"
 
-#if wxUSE_OWNER_DRAWN
-  class WXDLLEXPORT wxOwnerDrawn;
-
-  // define the array of list box items
-  #include  "wx/dynarray.h"
-
-  WX_DEFINE_EXPORTED_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
-#endif // wxUSE_OWNER_DRAWN
-
 // forward decl for GetSelections()
 class wxArrayInt;
 
@@ -86,7 +77,7 @@ public:
 
     virtual ~wxListBox();
     virtual void Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL);
-    
+
     // implement base class pure virtuals
     virtual void Clear();
     virtual void Delete(int n);
@@ -114,21 +105,9 @@ public:
     virtual void       DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
 
     // wxCheckListBox support
-#if wxUSE_OWNER_DRAWN
-    // plug-in for derived classes
-    virtual wxOwnerDrawn *CreateItem(size_t n);
-
-    // allows to get the item and use SetXXX functions to set it's appearance
-    wxOwnerDrawn *GetItem(size_t n) const { return m_aItems[n]; }
-
-    // get the index of the given item
-    int GetItemIndex(wxOwnerDrawn *item) const { return m_aItems.Index(item); }
-#endif // wxUSE_OWNER_DRAWN
-
-    
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // Windows callbacks
 #ifndef __WXMAC_OSX__
     void OnChar(wxKeyEvent& event);
@@ -137,10 +116,10 @@ public:
     void*           m_macList ;
     wxArrayString   m_stringArray ;
     wxListDataArray m_dataArray ;
-    
+
     // as we are getting the same events for human and API selection we have to suppress
     // events in the latter case
-    bool			MacIsSelectionSuppressed() const { return m_suppressSelection ; } 
+    bool            MacIsSelectionSuppressed() const { return m_suppressSelection ; }
 protected:
     void            MacDelete( int n ) ;
     void            MacInsert( int n , const wxString& item) ;
@@ -153,10 +132,10 @@ protected:
     int             MacGetSelections(wxArrayInt& aSelections) const ;
     bool            MacIsSelected( int n ) const ;
     void            MacScrollTo( int n ) ;
-    bool			MacSuppressSelection( bool suppress ) ;
+    bool            MacSuppressSelection( bool suppress ) ;
 
     // free memory (common part of Clear() and dtor)
-    // prevent collision with some BSD definitions of macro Free()   
+    // prevent collision with some BSD definitions of macro Free()
     void FreeData();
 
     int m_noItems;
@@ -167,15 +146,9 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
-#if wxUSE_OWNER_DRAWN
-    // control items
-    wxListBoxItemsArray m_aItems;
-#endif
-
 private:
     DECLARE_DYNAMIC_CLASS(wxListBox)
     DECLARE_EVENT_TABLE()
 };
 
-#endif
-    // _WX_LISTBOX_H_
+#endif // _WX_LISTBOX_H_

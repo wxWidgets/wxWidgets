@@ -106,37 +106,37 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     DataBrowserItemID itemID, DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData, Boolean changeValue)
 {
-	OSStatus err = errDataBrowserPropertyNotSupported;
+    OSStatus err = errDataBrowserPropertyNotSupported;
 
-	if ( ! changeValue )
-	{
-    	switch (property)
-    	{
+    if ( ! changeValue )
+    {
+        switch (property)
+        {
 
-    	    case kTextColumnId:
-    		{
-    		    long ref = GetControlReference( browser ) ;
-    		    if ( ref )
-    		    {
-    		        wxListBox* list = wxDynamicCast( (wxObject*) ref , wxListBox ) ;
+            case kTextColumnId:
+            {
+                long ref = GetControlReference( browser ) ;
+                if ( ref )
+                {
+                    wxListBox* list = wxDynamicCast( (wxObject*) ref , wxListBox ) ;
                     int i = itemID - 1 ;
                     if (i >= 0 && i < list->GetCount() )
-		            {
-		                wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
-		                verify_noerr( ::SetDataBrowserItemDataText( itemData , cf ) ) ;
-		                err = noErr ;
-		            }
-    			}
-    		}
-    		break;
+                    {
+                        wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
+                        verify_noerr( ::SetDataBrowserItemDataText( itemData , cf ) ) ;
+                        err = noErr ;
+                    }
+                }
+            }
+            break;
 
-    		default:
+            default:
 
-    		break;
-    	}
-	}
+            break;
+        }
+    }
 
-	return err;
+    return err;
 }
 
 static pascal void ListBoxDrawProc( ControlRef browser , DataBrowserItemID item , DataBrowserPropertyID property ,
@@ -147,10 +147,10 @@ static pascal void ListBoxDrawProc( ControlRef browser , DataBrowserItemID item 
     long        systemVersion;
 
     cfString  = CFStringCreateWithFormat( NULL, NULL, CFSTR("Row %d"), item );
-  
+
     ThemeDrawingState themeState ;
     GetThemeDrawingState( &themeState ) ;
-  
+
     if ( itemState == kDataBrowserItemIsSelected )      //  In this sample we handle the "selected" state, all others fall through to our "active" state
     {
         Gestalt( gestaltSystemVersion, &systemVersion );
@@ -163,7 +163,7 @@ static pascal void ListBoxDrawProc( ControlRef browser , DataBrowserItemID item 
         SetThemeDrawingState( themeState , false ) ;
     }
     DrawThemeTextBox( cfString, kThemeApplicationFont, kThemeStateActive, true, itemRect, teFlushDefault, NULL );
-    if ( cfString != NULL )  
+    if ( cfString != NULL )
         CFRelease( cfString );
     SetThemeDrawingState( themeState , true ) ;
 }
@@ -229,58 +229,58 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         options += kDataBrowserSelectOnlyOne ;
     }
     verify_noerr(m_peer->SetSelectionFlags( options ) );
-    
+
     if ( gDataBrowserItemDataUPP == NULL ) gDataBrowserItemDataUPP = NewDataBrowserItemDataUPP(ListBoxGetSetItemData) ;
     if ( gDataBrowserItemNotificationUPP == NULL )
-    { 
-        gDataBrowserItemNotificationUPP = 
+    {
+        gDataBrowserItemNotificationUPP =
 #if TARGET_API_MAC_OSX
-	        (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(DataBrowserItemNotificationProc) ;
+            (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(DataBrowserItemNotificationProc) ;
 #else
-	        NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
+            NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
 #endif
-    }    
+    }
     if ( gDataBrowserDrawItemUPP == NULL ) gDataBrowserDrawItemUPP = NewDataBrowserDrawItemUPP(ListBoxDrawProc) ;
 
     DataBrowserCallbacks callbacks ;
     InitializeDataBrowserCallbacks( &callbacks , kDataBrowserLatestCallbacks ) ;
 
     callbacks.u.v1.itemDataCallback = gDataBrowserItemDataUPP;
-	callbacks.u.v1.itemNotificationCallback = gDataBrowserItemNotificationUPP;
+    callbacks.u.v1.itemNotificationCallback = gDataBrowserItemNotificationUPP;
     m_peer->SetCallbacks( &callbacks);
 
     DataBrowserCustomCallbacks customCallbacks ;
-    InitializeDataBrowserCustomCallbacks( &customCallbacks , kDataBrowserLatestCustomCallbacks ) ; 
-   
+    InitializeDataBrowserCustomCallbacks( &customCallbacks , kDataBrowserLatestCustomCallbacks ) ;
+
     customCallbacks.u.v1.drawItemCallback = gDataBrowserDrawItemUPP ;
-   
-    SetDataBrowserCustomCallbacks( m_peer->GetControlRef() , &customCallbacks ) ;    
-    
+
+    SetDataBrowserCustomCallbacks( m_peer->GetControlRef() , &customCallbacks ) ;
+
     DataBrowserListViewColumnDesc columnDesc ;
     columnDesc.headerBtnDesc.titleOffset = 0;
-	columnDesc.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
+    columnDesc.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
 
-	columnDesc.headerBtnDesc.btnFontStyle.flags	=
-		kControlUseFontMask | kControlUseJustMask;
+    columnDesc.headerBtnDesc.btnFontStyle.flags    =
+        kControlUseFontMask | kControlUseJustMask;
 
-	columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlNoContent;
-	columnDesc.headerBtnDesc.btnFontStyle.just = teFlushDefault;
-	columnDesc.headerBtnDesc.minimumWidth = 0;
-	columnDesc.headerBtnDesc.maximumWidth = 10000;
+    columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlNoContent;
+    columnDesc.headerBtnDesc.btnFontStyle.just = teFlushDefault;
+    columnDesc.headerBtnDesc.minimumWidth = 0;
+    columnDesc.headerBtnDesc.maximumWidth = 10000;
 
-	columnDesc.headerBtnDesc.btnFontStyle.font = kControlFontViewSystemFont;
-	columnDesc.headerBtnDesc.btnFontStyle.style = normal;
-	columnDesc.headerBtnDesc.titleString = NULL ; // CFSTR( "" );
+    columnDesc.headerBtnDesc.btnFontStyle.font = kControlFontViewSystemFont;
+    columnDesc.headerBtnDesc.btnFontStyle.style = normal;
+    columnDesc.headerBtnDesc.titleString = NULL ; // CFSTR( "" );
 
-	columnDesc.propertyDesc.propertyID = kTextColumnId;
-	columnDesc.propertyDesc.propertyType = kDataBrowserTextType ; // kDataBrowserCustomType;
-	columnDesc.propertyDesc.propertyFlags =
+    columnDesc.propertyDesc.propertyID = kTextColumnId;
+    columnDesc.propertyDesc.propertyType = kDataBrowserTextType ; // kDataBrowserCustomType;
+    columnDesc.propertyDesc.propertyFlags =
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-	 kDataBrowserListViewTypeSelectColumn |
+     kDataBrowserListViewTypeSelectColumn |
 #endif
-	 kDataBrowserTableViewSelectionColumn ;
+     kDataBrowserTableViewSelectionColumn ;
 
-	verify_noerr(m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
+    verify_noerr(m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
     verify_noerr(m_peer->AutoSizeListViewColumns() ) ;
     verify_noerr(m_peer->SetHasScrollBars(false , true ) ) ;
     verify_noerr(m_peer->SetTableViewHiliteStyle(kDataBrowserTableViewFillHilite  ) ) ;
@@ -317,19 +317,6 @@ wxListBox::~wxListBox()
 
 void wxListBox::FreeData()
 {
-#if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW )
-    {
-        size_t uiCount = m_aItems.Count();
-        while ( uiCount-- != 0 ) {
-            delete m_aItems[uiCount];
-            m_aItems[uiCount] = NULL;
-        }
-
-        m_aItems.Clear();
-    }
-    else
-#endif // wxUSE_OWNER_DRAWN
     if ( HasClientObjectData() )
     {
         for ( size_t n = 0; n < (size_t)m_noItems; n++ )
@@ -356,15 +343,10 @@ void wxListBox::Delete(int N)
     wxCHECK_RET( N >= 0 && N < m_noItems,
                  wxT("invalid index in wxListBox::Delete") );
 
-#if wxUSE_OWNER_DRAWN
-    delete m_aItems[N];
-    m_aItems.RemoveAt(N);
-#else // !wxUSE_OWNER_DRAWN
     if ( HasClientObjectData() )
     {
         delete GetClientObject(N);
     }
-#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
     m_stringArray.RemoveAt( N ) ;
     m_dataArray.RemoveAt( N ) ;
     m_noItems --;
@@ -395,35 +377,11 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
     {
         if ( clientData )
         {
-#if wxUSE_OWNER_DRAWN
-            wxASSERT_MSG(clientData[i] == NULL,
-                wxT("Can't use client data with owner-drawn listboxes"));
-#else // !wxUSE_OWNER_DRAWN
             Append( choices[i] , clientData[i] ) ;
-#endif
         }
         else
             Append( choices[i] ) ;
     }
-
-#if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW ) {
-        // first delete old items
-        size_t ui = m_aItems.Count();
-        while ( ui-- != 0 ) {
-            delete m_aItems[ui];
-            m_aItems[ui] = NULL;
-        }
-        m_aItems.Empty();
-
-        // then create new ones
-        for ( ui = 0; ui < (size_t)m_noItems; ui++ ) {
-            wxOwnerDrawn *pNewItem = CreateItem(ui);
-            pNewItem->SetName(choices[ui]);
-            m_aItems.Add(pNewItem);
-        }
-    }
-#endif // wxUSE_OWNER_DRAWN
 }
 
 int wxListBox::FindString(const wxString& s) const
@@ -438,7 +396,7 @@ int wxListBox::FindString(const wxString& s) const
 
         for ( int i = 0 ; i < m_noItems ; ++ i )
         {
-        	wxMacStringToPascal( m_stringArray[i].Left( len ) , s1 ) ;
+            wxMacStringToPascal( m_stringArray[i].Left( len ) , s1 ) ;
 
             if ( EqualString( s1 , s2 , false , false ) )
                 return i ;
@@ -463,7 +421,7 @@ int wxListBox::FindString(const wxString& s) const
 
         for ( int i = 0 ; i < m_noItems ; ++ i )
         {
-        	wxMacStringToPascal( m_stringArray[i] , s1 ) ;
+            wxMacStringToPascal( m_stringArray[i] , s1 ) ;
 
             if ( EqualString( s1 , s2 , false , false ) )
                 return i ;
@@ -518,14 +476,6 @@ void wxListBox::DoSetItemClientData(int N, void *Client_data)
     wxCHECK_RET( N >= 0 && N < m_noItems,
         wxT("invalid index in wxListBox::SetClientData") );
 
-#if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW )
-    {
-        // client data must be pointer to wxOwnerDrawn, otherwise we would crash
-        // in OnMeasure/OnDraw.
-        wxFAIL_MSG(wxT("Can't use client data with owner-drawn listboxes"));
-    }
-#endif // wxUSE_OWNER_DRAWN
     wxASSERT_MSG( m_dataArray.GetCount() >= (size_t) N , wxT("invalid client_data array") ) ;
 
     if ( m_dataArray.GetCount() > (size_t) N )
@@ -655,27 +605,6 @@ void wxListBox::Refresh(bool eraseBack, const wxRect *rect)
     wxControl::Refresh( eraseBack , rect ) ;
 }
 
-#if wxUSE_OWNER_DRAWN
-
-class wxListBoxItem : public wxOwnerDrawn
-{
-public:
-    wxListBoxItem(const wxString& str = "");
-};
-
-wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
-{
-    // no bitmaps/checkmarks
-    SetMarginWidth(0);
-}
-
-wxOwnerDrawn *wxListBox::CreateItem(size_t n)
-{
-    return new wxListBoxItem();
-}
-
-#endif  //USE_OWNER_DRAWN
-
 
 // Some custom controls depend on this
 /* static */ wxVisualAttributes
@@ -777,9 +706,9 @@ void wxListBox::MacSetSelection( int n , bool select )
 
 bool  wxListBox::MacSuppressSelection( bool suppress )
 {
-	bool former = m_suppressSelection ;
-	m_suppressSelection = suppress ;
-	return former ;
+    bool former = m_suppressSelection ;
+    m_suppressSelection = suppress ;
+    return former ;
 }
 
 bool wxListBox::MacIsSelected( int n ) const
@@ -865,14 +794,14 @@ void wxListBox::OnChar(wxKeyEvent& event)
     /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
     else if (event.GetKeyCode() == WXK_ESCAPE || (event.GetKeyCode() == '.' && event.MetaDown() ) )
     {
-    	// FIXME: look in ancestors, not just parent.
+        // FIXME: look in ancestors, not just parent.
         wxWindow* win = GetParent()->FindWindow( wxID_CANCEL ) ;
         if (win)
         {
-        	wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
-        	new_event.SetEventObject( win );
-        	win->GetEventHandler()->ProcessEvent( new_event );
-      	}
+            wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+            new_event.SetEventObject( win );
+            win->GetEventHandler()->ProcessEvent( new_event );
+          }
     }
     else if ( event.GetKeyCode() == WXK_TAB )
     {
