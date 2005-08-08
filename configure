@@ -21286,6 +21286,10 @@ _ACEOF
 fi
 
 
+if test "x$SUNCXX" = xyes; then
+    CXXFLAGS="$CXXFLAGS -features=tmplife"
+fi
+
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
