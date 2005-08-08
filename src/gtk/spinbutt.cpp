@@ -73,22 +73,22 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
     {
         /* program has vetoed */
         win->m_adjust->value = win->m_oldPos;
-        
+
         gtk_signal_disconnect_by_func( GTK_OBJECT (win->m_adjust),
-                        (GtkSignalFunc) gtk_spinbutt_callback,
-                        (gpointer) win );
-        
+                                       (GtkSignalFunc) gtk_spinbutt_callback,
+                                       (gpointer) win );
+
         gtk_signal_emit_by_name( GTK_OBJECT(win->m_adjust), "value_changed" );
 
         gtk_signal_connect( GTK_OBJECT (win->m_adjust),
-                        "value_changed",
-                        (GtkSignalFunc) gtk_spinbutt_callback,
-                        (gpointer) win );
+                            "value_changed",
+                            (GtkSignalFunc) gtk_spinbutt_callback,
+                            (gpointer) win );
         return;
     }
-    
+
     win->m_oldPos = win->m_adjust->value;
-    
+
     /* always send a thumbtrack event */
     if (command != wxEVT_SCROLL_THUMBTRACK)
     {
@@ -131,7 +131,7 @@ bool wxSpinButton::Create(wxWindow *parent,
         !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxXX creation failed") );
-	    return FALSE;
+        return FALSE;
     }
 
     m_oldPos = 0.0;
@@ -206,7 +206,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     m_adjust->upper = fmax;
 
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
-    
+
     // these two calls are required due to some bug in GTK
     Refresh();
     SetFocus();

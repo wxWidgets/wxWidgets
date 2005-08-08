@@ -53,9 +53,9 @@ static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPo
     if (child != widget)
     {
         while (child)
-	    {
-	        if (child == widget)
-	            return FALSE;
+        {
+            if (child == widget)
+                return FALSE;
             child = child->parent;
         }
     }
@@ -142,11 +142,11 @@ gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
 static void wxInsertChildInDialog( wxPopupWindow* parent, wxWindow* child )
 {
     gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                     GTK_WIDGET(child->m_widget),
-                     child->m_x,
-                     child->m_y,
-                     child->m_width,
-                     child->m_height );
+                   GTK_WIDGET(child->m_widget),
+                   child->m_x,
+                   child->m_y,
+                   child->m_width,
+                   child->m_height );
 
     if (parent->HasFlag(wxTAB_TRAVERSAL))
     {
@@ -183,7 +183,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
 
     // Unlike windows, top level windows are created hidden by default.
     m_isShown = false;
-    
+
     // All dialogs should really have this style
     m_windowStyle |= wxTAB_TRAVERSAL;
 
@@ -220,7 +220,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
 
     gtk_signal_connect (GTK_OBJECT(m_widget), "button_press_event",
         GTK_SIGNAL_FUNC(gtk_popup_button_press), (gpointer)this );
-        
+
     return TRUE;
 }
 
@@ -360,9 +360,9 @@ bool wxPopupWindow::Show( bool show )
 
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
-    
+
     bool ret = wxWindow::Show( show );
-    
+
     return ret;
 }
 

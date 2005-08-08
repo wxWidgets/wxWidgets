@@ -73,7 +73,7 @@ public:
         m_page = (GtkNotebookPage *) NULL;
         m_box = (GtkWidget *) NULL;
     }
-    
+
     wxString           m_text;
     int                m_image;
     GtkNotebookPage   *m_page;
@@ -199,7 +199,7 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
 
     if (!notebook->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
-    
+
     /* win is a control: tab can be propagated up */
     if ((gdk_event->keyval == GDK_Left) || (gdk_event->keyval == GDK_Right))
     {
@@ -219,10 +219,10 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
         {
             return FALSE;
         }
-    
+
         // m_selection = page;
         gtk_notebook_set_page( GTK_NOTEBOOK(widget), page );
-        
+
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
         return TRUE;
     }
@@ -241,7 +241,7 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
         /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
         event.SetDirection( (gdk_event->keyval == GDK_Tab) );
         /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
-        event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) || 
+        event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) ||
                                (gdk_event->keyval == GDK_Left) || (gdk_event->keyval == GDK_Right) );
         event.SetCurrentFocus( notebook );
 
@@ -710,8 +710,8 @@ bool wxNotebook::InsertPage( size_t position,
     {
         gtk_widget_modify_style(GTK_WIDGET(nb_page->m_label), style);
         gtk_rc_style_unref(style);
-    }    
-    
+    }
+
     /* show the label */
     gtk_widget_show( GTK_WIDGET(nb_page->m_label) );
     if (select && (m_pagesData.GetCount() > 1))
@@ -722,7 +722,7 @@ bool wxNotebook::InsertPage( size_t position,
             SetSelection( GetPageCount()-1 );
         else
 #endif
-	    SetSelection( position );
+            SetSelection( position );
     }
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page",
