@@ -91,7 +91,7 @@ void FontMapperTestCase::NamesAndDesc()
 
     static const wxChar *descriptions[] =
     {
-        // some vali charsets
+        // some valid charsets
         _T("Default encoding"                  ),
         _T("Western European (ISO-8859-1)"     ),
         _T("Indian (ISO-8859-12)"              ),

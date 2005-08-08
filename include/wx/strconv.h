@@ -166,7 +166,7 @@ public:
 };
 
 // ----------------------------------------------------------------------------
-// wxMBConvUCS4LE (for conversion using UTF32 Little Endian encoding)
+// wxMBConvUTF32LE (for conversion using UTF32 Little Endian encoding)
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxMBConvUTF32LE : public wxMBConv
@@ -177,7 +177,7 @@ public:
 };
 
 // ----------------------------------------------------------------------------
-// wxMBConvUCS4BE (for conversion using UTF32 Big Endian encoding)
+// wxMBConvUTF32BE (for conversion using UTF32 Big Endian encoding)
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxMBConvUTF32BE : public wxMBConv
