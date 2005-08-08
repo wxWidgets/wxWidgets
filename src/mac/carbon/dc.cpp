@@ -26,9 +26,11 @@
 #include "wx/image.h"
 #include "wx/log.h"
 
-#if __MSL__ >= 0x6000
-namespace std {}
-using namespace std ;
+#ifdef __MSL__
+    #if __MSL__ >= 0x6000
+        namespace std {}
+        using namespace std ;
+    #endif
 #endif
 
 #include "wx/mac/private.h"
