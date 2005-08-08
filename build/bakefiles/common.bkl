@@ -332,28 +332,53 @@
         </if>
     </define-tag>
 
-    <define-tag name="msvc-copy-setup-h" rules="dll,lib">
-        <if cond="FORMAT=='msevc4prj'">
-            <msvc-headers>wx/msw/wince/setup.h</msvc-headers>
-            <set var="vc_setup_h">wince\setup.h</set>
-            <set var="vc_setup_h_rule">wince_setup_h</set>
-        </if>
-        <if cond="FORMAT!='msevc4prj'">
-            <msvc-headers>wx/msw/setup.h</msvc-headers>
-            <set var="vc_setup_h">setup.h</set>
-            <set var="vc_setup_h_rule">setup_h</set>
-        </if>
+    <set var="msvc_copy_setup_h_script">
         <if cond="IS_MSVC_PRJ">
-            <set var="_custom_build_files" append="1">
-                include\wx\msw\$(vc_setup_h)
-            </set>
-            <set var="_custom_build_include_wx_msw_$(vc_setup_h_rule)">
 Creating $(SETUPHDIR)\wx\setup.h
-InputPath=..\include\wx\msw\$(vc_setup_h)
+InputPath=..\include\wx\%s
 
 "$(SETUPHDIR)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
 $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
+        </if>
+    </set>
+
+    <define-tag name="msvc-headers-setup-h" rules="dll,lib">
+        <if cond="IS_MSVC_PRJ">
+            <msvc-headers>
+                $(addPrefixToList('wx/', value))
+            </msvc-headers>
+            <set var="_custom_build_files" append="1">
+                $(nativePaths(addPrefixToList('include/wx/', value)))
             </set>
+        </if>
+    </define-tag>
+
+    <define-tag name="msvc-copy-setup-h" rules="dll,lib">
+        <if cond="IS_MSVC_PRJ">
+            <if cond="FORMAT=='msevc4prj'">
+                <msvc-headers-setup-h>
+                    msw/wince/setup.h
+                </msvc-headers-setup-h>
+                <set var="_custom_build_include_wx_msw_wince_setup_h">
+                    $(msvc_copy_setup_h_script % 'msw\wince\setup.h')
+                </set>
+            </if>
+            <if cond="FORMAT!='msevc4prj'">
+                <msvc-headers-setup-h>
+                    msw/setup.h
+                    univ/setup.h
+                </msvc-headers-setup-h>
+                <set var="_custom_build_include_wx_msw_setup_h">
+                    <if cond="WXUNIV=='0'">
+                        $(msvc_copy_setup_h_script % 'msw\setup.h')
+                    </if>
+                </set>
+                <set var="_custom_build_include_wx_univ_setup_h">
+                    <if cond="WXUNIV=='1'">
+                        $(msvc_copy_setup_h_script % 'univ\setup.h')
+                    </if>
+                </set>
+            </if>
         </if>
     </define-tag>
 

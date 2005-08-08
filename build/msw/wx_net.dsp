@@ -577,12 +577,12 @@ SOURCE=..\..\src\msw\version.rc
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\setup.h
+SOURCE=..\..\include\wx\univ\setup.h
 
 !IF  "$(CFG)" == "net - Win32 DLL Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\include\wx\univ\setup.h
 
 "..\..\lib\vc_dll\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivu\wx\setup.h
@@ -592,7 +592,7 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "net - Win32 DLL Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\include\wx\univ\setup.h
 
 "..\..\lib\vc_dll\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivud\wx\setup.h
@@ -602,7 +602,7 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "net - Win32 DLL Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\include\wx\univ\setup.h
 
 "..\..\lib\vc_dll\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswuniv\wx\setup.h
@@ -612,10 +612,129 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "net - Win32 DLL Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\include\wx\univ\setup.h
 
 "..\..\lib\vc_dll\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivd\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 DLL Unicode Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 DLL Unicode Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 DLL Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 DLL Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 Universal Unicode Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h
+InputPath=..\include\wx\univ\setup.h
+
+"..\..\lib\vc_lib\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 Universal Unicode Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h
+InputPath=..\include\wx\univ\setup.h
+
+"..\..\lib\vc_lib\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 Universal Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\setup.h
+InputPath=..\include\wx\univ\setup.h
+
+"..\..\lib\vc_lib\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswuniv\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 Universal Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\setup.h
+InputPath=..\include\wx\univ\setup.h
+
+"..\..\lib\vc_lib\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivd\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 Unicode Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 Unicode Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\setup.h
+
+!IF  "$(CFG)" == "net - Win32 DLL Universal Unicode Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 DLL Universal Unicode Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 DLL Universal Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "net - Win32 DLL Universal Debug"
+
+# Begin Custom Build - 
 
 # End Custom Build
 
@@ -661,41 +780,25 @@ InputPath=..\include\wx\msw\setup.h
 
 !ELSEIF  "$(CFG)" == "net - Win32 Universal Unicode Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivu\wx\setup.h
+# Begin Custom Build - 
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "net - Win32 Universal Unicode Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivud\wx\setup.h
+# Begin Custom Build - 
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "net - Win32 Universal Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswuniv\wx\setup.h
+# Begin Custom Build - 
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "net - Win32 Universal Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivd\wx\setup.h
+# Begin Custom Build - 
 
 # End Custom Build
 
