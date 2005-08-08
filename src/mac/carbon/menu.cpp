@@ -49,34 +49,6 @@ const short kwxMacAppleMenuId = 1 ;
 
 // Find an item given the Macintosh Menu Reference
 
-#if KEY_wxList_DEPRECATED
-wxList wxWinMacMenuList(wxKEY_INTEGER);
-wxMenu *wxFindMenuFromMacMenu(MenuRef inMenuRef)
-{
-    wxNode *node = wxWinMacMenuList.Find((long)inMenuRef);
-    if (!node)
-        return NULL;
-    return (wxMenu *)node->GetData();
-}
-
-void wxAssociateMenuWithMacMenu(MenuRef inMenuRef, wxMenu *menu) ;
-void wxAssociateMenuWithMacMenu(MenuRef inMenuRef, wxMenu *menu)
-{
-    // adding NULL MenuRef is (first) surely a result of an error and
-    // (secondly) breaks menu command processing
-    wxCHECK_RET( inMenuRef != (MenuRef) NULL, wxT("attempt to add a NULL MenuRef to menu list") );
-
-    if ( !wxWinMacMenuList.Find((long)inMenuRef) )
-        wxWinMacMenuList.Append((long)inMenuRef, menu);
-}
-
-void wxRemoveMacMenuAssociation(wxMenu *menu) ;
-void wxRemoveMacMenuAssociation(wxMenu *menu)
-{
-    wxWinMacMenuList.DeleteObject(menu);
-}
-#else
-
 WX_DECLARE_HASH_MAP(MenuRef, wxMenu*, wxPointerHash, wxPointerEqual, MacMenuMap);
 
 static MacMenuMap wxWinMacMenuList;
@@ -112,7 +84,6 @@ void wxRemoveMacMenuAssociation(wxMenu *menu)
         }
     }
 }
-#endif // deprecated wxList
 
 // ============================================================================
 // implementation

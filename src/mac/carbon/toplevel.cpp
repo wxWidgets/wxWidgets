@@ -819,34 +819,6 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacTopLevelEventHandler )
 
 // Find an item given the Macintosh Window Reference
 
-#if KEY_wxList_DEPRECATED
-wxList wxWinMacWindowList(wxKEY_INTEGER);
-wxTopLevelWindowMac *wxFindWinFromMacWindow(WindowRef inWindowRef)
-{
-    wxNode *node = wxWinMacWindowList.Find((long)inWindowRef);
-    if (!node)
-        return NULL;
-    return (wxTopLevelWindowMac *)node->GetData();
-}
-
-void wxAssociateWinWithMacWindow(WindowRef inWindowRef, wxTopLevelWindowMac *win) ;
-void wxAssociateWinWithMacWindow(WindowRef inWindowRef, wxTopLevelWindowMac *win)
-{
-    // adding NULL WindowRef is (first) surely a result of an error and
-    // (secondly) breaks menu command processing
-    wxCHECK_RET( inWindowRef != (WindowRef) NULL, wxT("attempt to add a NULL WindowRef to window list") );
-
-    if ( !wxWinMacWindowList.Find((long)inWindowRef) )
-        wxWinMacWindowList.Append((long)inWindowRef, win);
-}
-
-void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win) ;
-void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win)
-{
-    wxWinMacWindowList.DeleteObject(win);
-}
-#else
-
 WX_DECLARE_HASH_MAP(WindowRef, wxTopLevelWindowMac*, wxPointerHash, wxPointerEqual, MacWindowMap);
 
 static MacWindowMap wxWinMacWindowList;
@@ -881,7 +853,6 @@ void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win)
         }
     }
 }
-#endif // deprecated wxList
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMac creation

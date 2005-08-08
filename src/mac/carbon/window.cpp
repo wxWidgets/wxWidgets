@@ -628,35 +628,6 @@ wxMAC_DEFINE_PROC_GETTER( ControlActionUPP , wxMacLiveScrollbarActionProc ) ;
 // implementation
 // ===========================================================================
 
-#if KEY_wxList_DEPRECATED
-wxList wxWinMacControlList(wxKEY_INTEGER);
-
-wxWindow *wxFindControlFromMacControl(ControlRef inControl )
-{
-    wxNode *node = wxWinMacControlList.Find((long)inControl);
-    if (!node)
-        return NULL;
-    return (wxControl *)node->GetData();
-}
-
-void wxAssociateControlWithMacControl(ControlRef inControl, wxWindow *control)
-{
-    // adding NULL ControlRef is (first) surely a result of an error and
-    // (secondly) breaks native event processing
-    wxCHECK_RET( inControl != (ControlRef) NULL, wxT("attempt to add a NULL WindowRef to window list") );
-
-    if ( !wxWinMacControlList.Find((long)inControl) )
-        wxWinMacControlList.Append((long)inControl, control);
-}
-
-void wxRemoveMacControlAssociation(wxWindow *control)
-{
-    // remove all associations pointing to us
-    while ( wxWinMacControlList.DeleteObject(control) )
-        {}
-}
-#else
-
 WX_DECLARE_HASH_MAP(ControlRef, wxWindow*, wxPointerHash, wxPointerEqual, MacControlMap);
 
 static MacControlMap wxWinMacControlList;
@@ -699,7 +670,6 @@ void wxRemoveMacControlAssociation(wxWindow *control)
         }
     }
 }
-#endif // deprecated wxList
 
 // ----------------------------------------------------------------------------
  // constructors and such
