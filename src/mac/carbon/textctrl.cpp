@@ -2767,7 +2767,8 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
     wxString st = str ;
     wxMacConvertNewlines10To13( &st ) ;
 
-    HIRect hr = { bounds.left , bounds.top , bounds.right - bounds.left , bounds.bottom- bounds.top } ;
+    HIRect hr = { { bounds.left , bounds.top} ,
+                  { bounds.right - bounds.left , bounds.bottom - bounds.top} } ;
 
     m_scrollView = NULL ;
     TXNFrameOptions frameOptions = FrameOptionsFromWXStyle( style ) ;
