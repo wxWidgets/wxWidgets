@@ -1346,6 +1346,18 @@ private:
     static bool ms_wcNeedsSwap;
 };
 
+// make the constructor available for unit testing
+WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_iconv( const wxChar* name )
+{
+    wxMBConv_iconv* result = new wxMBConv_iconv( name );
+    if ( !result->IsOk() )
+    {
+        delete result;
+        return 0;
+    }
+    return result;
+}
+
 const char *wxMBConv_iconv::ms_wcCharsetName = NULL;
 bool wxMBConv_iconv::ms_wcNeedsSwap = false;
 
@@ -2404,6 +2416,18 @@ public:
 
     DECLARE_NO_COPY_CLASS(wxMBConv_wxwin)
 };
+
+// make the constructors available for unit testing
+WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_wxwin( const wxChar* name )
+{
+    wxMBConv_wxwin* result = new wxMBConv_wxwin( name );
+    if ( !result->IsOk() )
+    {
+        delete result;
+        return 0;
+    }
+    return result;
+}
 
 #endif // wxUSE_FONTMAP
 
