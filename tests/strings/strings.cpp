@@ -222,6 +222,21 @@ void StringTestCase::Conversion()
 #endif
 }
 
+// in case wcscmp is missing
+//
+static int wx_wcscmp(const wchar_t *s1, const wchar_t *s2)
+{
+    for (;;) {
+        if (*s1 != *s2)
+            return *s1 - *s2;
+        if (*s1 == 0)
+            break;
+        s1++;
+        s2++;
+    }
+    return 0;
+}
+
 void
 StringTestCase::DoTestConversion(const char *s,
                                  const wchar_t *ws,
@@ -240,7 +255,7 @@ StringTestCase::DoTestConversion(const char *s,
         wxWCharBuffer wbuf(wxString(s).wc_str(conv));
 
         if ( ws )
-            CPPUNIT_ASSERT( wcscmp(wbuf, ws) == 0 );
+            CPPUNIT_ASSERT( wx_wcscmp(wbuf, ws) == 0 );
         else
             CPPUNIT_ASSERT( !*wbuf );
     }

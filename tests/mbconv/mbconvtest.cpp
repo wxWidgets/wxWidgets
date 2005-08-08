@@ -201,6 +201,28 @@ void MBConvTestCase::UTF8Octal(const char *charSequence,
     UTF8(charSequence, NULL, wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
 }
 
+// in case wcscpy is missing
+//
+static wchar_t *wx_wcscpy(wchar_t *dest, const wchar_t *src)
+{
+    wchar_t *d = dest; 
+    while ((*d++ = *src++) != 0)
+        ;
+    return dest;
+}
+
+// in case wcscat is missing
+//
+static wchar_t *wx_wcscat(wchar_t *dest, const wchar_t *src)
+{
+    wchar_t *d = dest; 
+    while (*d)
+        d++;
+    while ((*d++ = *src++) != 0)
+        ;
+    return dest;
+}
+
 // include the option in the error messages so it's possible to see which
 // test failed
 #define UTF8ASSERT(expr) CPPUNIT_ASSERT_MESSAGE(#expr + errmsg,  expr)
@@ -240,11 +262,11 @@ void MBConvTestCase::UTF8(const char *charSequence,
         wxASSERT(result < BUFSIZE);
 
         wchar_t expected[BUFSIZE];
-        wcscpy(expected, wideSequence);
-        wcscat(expected, L"ABC");
-        wcscat(expected, wideSequence);
-        wcscat(expected, L"XYZ");
-        wcscat(expected, wideSequence);
+        wx_wcscpy(expected, wideSequence);
+        wx_wcscat(expected, L"ABC");
+        wx_wcscat(expected, wideSequence);
+        wx_wcscat(expected, L"XYZ");
+        wx_wcscat(expected, wideSequence);
 
         UTF8ASSERT(wcscmp(widechars, expected) == 0);
         UTF8ASSERT(wcslen(widechars) == result);
