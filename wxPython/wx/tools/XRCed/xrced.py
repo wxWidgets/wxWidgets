@@ -20,7 +20,6 @@ Options:
     -v          output version info and exit
 """
 
-
 from globals import *
 import os, sys, getopt, re, traceback, tempfile, shutil
 
@@ -56,6 +55,8 @@ Consult README file for the details.</HTML>
 defaultIDs = {xxxPanel:'PANEL', xxxDialog:'DIALOG', xxxFrame:'FRAME',
               xxxMenuBar:'MENUBAR', xxxMenu:'MENU', xxxToolBar:'TOOLBAR',
               xxxWizard:'WIZARD'}
+
+defaultName = 'UNTITLED.xrc'
 
 ################################################################################
 
@@ -242,6 +243,7 @@ class Frame(wxFrame):
         EVT_MENU(self, self.ID_README, self.OnReadme)
 
         # Update events
+        EVT_UPDATE_UI(self, wxID_SAVE, self.OnUpdateUI)
         EVT_UPDATE_UI(self, wxID_CUT, self.OnUpdateUI)
         EVT_UPDATE_UI(self, wxID_COPY, self.OnUpdateUI)
         EVT_UPDATE_UI(self, wxID_PASTE, self.OnUpdateUI)
@@ -279,7 +281,7 @@ class Frame(wxFrame):
 
         # !!! frame styles are broken
         # Miniframe for not embedded mode
-        miniFrame = wxFrame(self, -1, 'Properties Panel',
+        miniFrame = wxFrame(self, -1, 'Properties & Style',
                             (conf.panelX, conf.panelY),
                             (conf.panelWidth, conf.panelHeight))
         self.miniFrame = miniFrame
@@ -359,10 +361,10 @@ class Frame(wxFrame):
 
     def OnSaveOrSaveAs(self, evt):
         if evt.GetId() == wxID_SAVEAS or not self.dataFile:
-            if self.dataFile: defaultName = ''
-            else: defaultName = 'UNTITLED.xrc'
+            if self.dataFile: name = ''
+            else: name = defaultName
             dirname = os.path.abspath(os.path.dirname(self.dataFile))
-            dlg = wxFileDialog(self, 'Save As', dirname, defaultName, '*.xrc',
+            dlg = wxFileDialog(self, 'Save As', dirname, name, '*.xrc',
                                wxSAVE | wxOVERWRITE_PROMPT | wxCHANGE_DIR)
             if dlg.ShowModal() == wxID_OK:
                 path = dlg.GetPath()
@@ -521,7 +523,7 @@ class Frame(wxFrame):
                 tree.pendingHighLight = newItem
             else:
                 tree.pendingHighLight = None
-        self.modified = True
+        self.SetModified()
         self.SetStatusText('Pasted')
 
     def OnCutDelete(self, evt):
@@ -555,9 +557,12 @@ class Frame(wxFrame):
             if self.clipboard: self.clipboard.unlink()
             self.clipboard = elem.cloneNode(True)
         tree.pendingHighLight = None
-        tree.Unselect()
+        tree.UnselectAll()
+        tree.selection = None
+        # Update tools
+        g.tools.UpdateUI()
         panel.Clear()
-        self.modified = True
+        self.SetModified()
         self.SetStatusText(status)
 
     def OnSubclass(self, evt):
@@ -570,10 +575,9 @@ class Frame(wxFrame):
             subclass = dlg.GetValue()
             if subclass:
                 elem.setAttribute('subclass', subclass)
-                self.modified = True
             elif elem.hasAttribute('subclass'):
                 elem.removeAttribute('subclass')
-                self.modified = True
+            self.SetModified()
             xxx.subclass = elem.getAttribute('subclass')
             tree.SetItemText(selected, xxx.treeName())
             panel.pages[0].box.SetLabel(xxx.panelName())
@@ -756,9 +760,15 @@ Homepage: http://xrced.sourceforge.net\
         parent = tree.GetPyData(parentLeaf)
         if parent.hasChild: parent = parent.child
 
-        # Create element
-        className = pullDownMenu.createMap[evt.GetId()]
-        xxx = MakeEmptyXXX(parent, className)
+        # Create object_ref?
+        if evt.GetId() == ID_NEW.REF:
+            ref = wxGetTextFromUser('Create reference to:', 'Create reference')
+            if not ref: return
+            xxx = MakeEmptyRefXXX(parent, ref)
+        else:
+            # Create empty element
+            className = pullDownMenu.createMap[evt.GetId()]
+            xxx = MakeEmptyXXX(parent, className)
 
         # Set default name for top-level windows
         if parent.__class__ == xxxMainNode:
@@ -792,7 +802,8 @@ Homepage: http://xrced.sourceforge.net\
             else:
                 tree.pendingHighLight = None
         tree.SetFocus()
-        self.modified = True
+        self.SetModified()
+
 
     # Replace one object with another
     def OnReplace(self, evt):
@@ -879,7 +890,7 @@ Homepage: http://xrced.sourceforge.net\
             else:
                 tree.pendingHighLight = None
         tree.SetFocus()
-        self.modified = True
+        self.SetModified()
 
     # Expand/collapse subtree
     def OnExpand(self, evt):
@@ -901,6 +912,8 @@ Homepage: http://xrced.sourceforge.net\
     def OnUpdateUI(self, evt):
         if evt.GetId() in [wxID_CUT, wxID_COPY, self.ID_DELETE]:
             evt.Enable(tree.selection is not None and tree.selection != tree.root)
+        elif evt.GetId() == wxID_SAVE:
+            evt.Enable(self.modified)
         elif evt.GetId() in [wxID_PASTE, self.ID_TOOL_PASTE]:
             evt.Enable((self.clipboard and tree.selection) != None)
         elif evt.GetId() == self.ID_TEST:
@@ -956,18 +969,26 @@ Homepage: http://xrced.sourceforge.net\
             self.clipboard.unlink()
             self.clipboard = None
         undoMan.Clear()
-        self.modified = False
+        self.SetModified(False)
         tree.Clear()
         panel.Clear()
         if g.testWin:
             g.testWin.Destroy()
             g.testWin = None
-        self.SetTitle(progname)
         # Numbers for new controls
         self.maxIDs = {}
         self.maxIDs[xxxPanel] = self.maxIDs[xxxDialog] = self.maxIDs[xxxFrame] = \
         self.maxIDs[xxxMenuBar] = self.maxIDs[xxxMenu] = self.maxIDs[xxxToolBar] = \
         self.maxIDs[xxxWizard] = 0
+
+    def SetModified(self, state=True):
+        self.modified = state
+        name = os.path.basename(self.dataFile)
+        if not name: name = defaultName
+        if state:
+            self.SetTitle(progname + ': ' + name + ' *')
+        else:
+            self.SetTitle(progname + ': ' + name)
 
     def Open(self, path):
         if not os.path.exists(path):
@@ -1037,7 +1058,7 @@ Homepage: http://xrced.sourceforge.net\
             f.close()
             self.domCopy.unlink()
             self.domCopy = None
-            self.modified = False
+            self.SetModified(False)
             panel.SetModified(False)
         except:
             inf = sys.exc_info()
@@ -1057,7 +1078,7 @@ Homepage: http://xrced.sourceforge.net\
             # If save was successful, modified flag is unset
             if not self.modified: return True
         elif say == wxID_NO:
-            self.modified = False
+            self.SetModified(False)
             panel.SetModified(False)
             return True
         return False
