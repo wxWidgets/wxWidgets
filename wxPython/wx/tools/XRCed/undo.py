@@ -20,13 +20,13 @@ class UndoManager:
         undoObj = self.undo.pop()
         undoObj.undo()
         self.redo.append(undoObj)
-        g.frame.modified = True
+        g.frame.SetModified()
         g.frame.SetStatusText('Undone')
     def Redo(self):
         undoObj = self.redo.pop()
         undoObj.redo()
         self.undo.append(undoObj)
-        g.frame.modified = True
+        g.frame.SetModified()
         g.frame.SetStatusText('Redone')
     def Clear(self):
         for i in self.undo: i.destroy()

@@ -1,3 +1,12 @@
+0.1.6-1
+-------
+
+New (experimental ;) ) feature: support for "object_ref" tag, for
+creating references to named objects (see tn0014.txt). "reference..." 
+menu command creates new object_ref node. Properties of the top-level
+object can be overriden, but overriding child controls is not working
+as expected (maybe a bug in wx).
+
 0.1.5-3
 -------
 

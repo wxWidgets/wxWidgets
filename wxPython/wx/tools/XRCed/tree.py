@@ -117,6 +117,8 @@ class ID_NEW:
     HELP_BUTTON = wxNewId()
     CONTEXT_HELP_BUTTON = wxNewId()
 
+    REF = wxNewId()
+
     LAST = wxNewId()
 
     
@@ -403,7 +405,7 @@ class HighLightBox:
 
 class XML_Tree(wxTreeCtrl):
     def __init__(self, parent, id):
-        wxTreeCtrl.__init__(self, parent, id, style = wxTR_HAS_BUTTONS)
+        wxTreeCtrl.__init__(self, parent, id, style = wxTR_HAS_BUTTONS | wxTR_MULTIPLE)
         self.SetBackgroundColour(wxColour(224, 248, 224))
         # Register events
         EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
@@ -448,11 +450,6 @@ class XML_Tree(wxTreeCtrl):
         EVT_KEY_UP(self, g.tools.OnKeyUp)
         EVT_ENTER_WINDOW(self, g.tools.OnMouse)
         EVT_LEAVE_WINDOW(self, g.tools.OnMouse)
-
-    def Unselect(self):
-        self.selection = None
-        wxTreeCtrl.Unselect(self)
-        g.tools.UpdateUI()
 
     def ExpandAll(self, item):
         if self.ItemHasChildren(item):
@@ -516,7 +513,7 @@ class XML_Tree(wxTreeCtrl):
         self.Unselect()
 
     # Add tree item for given parent item if node is DOM element node with
-    # 'object' tag. xxxParent is parent xxx object
+    # object/object_ref tag. xxxParent is parent xxx object
     def AddNode(self, itemParent, xxxParent, node):
         # Set item data to current node
         try:
@@ -529,6 +526,9 @@ class XML_Tree(wxTreeCtrl):
         item = self.AppendItem(itemParent, treeObj.treeName(),
                                image=treeObj.treeImage(),
                                data=wxTreeItemData(xxx))
+        # Different color for references
+        if treeObj.ref:
+            self.SetItemTextColour(item, 'DarkGreen')
         # Try to find children objects
         if treeObj.hasChildren:
             nodes = treeObj.element.childNodes[:]
@@ -556,6 +556,8 @@ class XML_Tree(wxTreeCtrl):
             parent.element.appendChild(elem)
             newItem = self.AppendItem(itemParent, xxx.treeName(), image=xxx.treeImage(),
                                       data=wxTreeItemData(xxx))
+        # Different color for references
+        if xxx.treeObject().ref:  self.SetItemTextColour(newItem, 'DarkGreen')
         # Add children items
         if xxx.hasChildren:
             treeObj = xxx.treeObject()
@@ -619,7 +621,7 @@ class XML_Tree(wxTreeCtrl):
             return parentWin.GetSizer()
         elif isinstance(xxx.parent, xxxToolBar):
             # How to get tool from toolbar?
-            return parentWin.GetChildren()[0]
+            return parentWin
         elif isinstance(xxx.parent, xxxStdDialogButtonSizer):
             # This sizer returns non-existing children
             for ch in parentWin.GetChildren():
@@ -784,13 +786,7 @@ class XML_Tree(wxTreeCtrl):
             pos = g.testWinPos
         # Save in memory FS
         memFile = MemoryFile('xxx.xrc')
-        # Create partial XML file - faster for big files
-
-        dom = MyDocument()
-        mainNode = dom.createElement('resource')
-        dom.appendChild(mainNode)
-
-        # Remove temporarily from old parent
+        # Create memory XML file
         elem = xxx.element
         # Change window id to _XRCED_T_W. This gives some name for
         # unnamed windows, and for named gives the possibility to
@@ -806,14 +802,11 @@ class XML_Tree(wxTreeCtrl):
             elem.setAttribute('class', 'wxPanel')
         parent = elem.parentNode
         next = elem.nextSibling
-        parent.replaceChild(self.dummyNode, elem)
-        # Append to new DOM, write it
-        mainNode.appendChild(elem)
-        dom.writexml(memFile, encoding=self.rootObj.params['encoding'].value())
+        encd = self.rootObj.params['encoding'].value()
+        if not encd: encd = None
+        self.dom.writexml(open('ttt.xrc','w'), encoding=encd)
+        self.dom.writexml(memFile, encoding=encd)
         # Put back in place
-        mainNode.removeChild(elem)
-        dom.unlink()
-        parent.replaceChild(elem, self.dummyNode)
         # Remove temporary name or restore changed
         if not xxx.name:
             elem.removeAttribute('name')
@@ -998,6 +991,8 @@ class XML_Tree(wxTreeCtrl):
                 needInsert = self.NeedInsert(item)
             if item == self.root or needInsert and self.GetItemParent(item) == self.root:
                 SetMenu(m, pullDownMenu.topLevel)
+                m.AppendSeparator()
+                m.Append(ID_NEW.REF, 'reference...', 'Create object_ref node')
             else:
                 xxx = self.GetPyData(item).treeObject()
                 # Check parent for possible child nodes if inserting sibling
@@ -1017,6 +1012,8 @@ class XML_Tree(wxTreeCtrl):
                         m.Enable(m.FindItem('sizer'), False)
                     elif not (xxx.isSizer or xxx.parent and xxx.parent.isSizer):
                         m.Enable(ID_NEW.SPACER, False)
+                m.AppendSeparator()
+                m.Append(ID_NEW.REF, 'reference...', 'Create object_ref node')
             # Select correct label for create menu
             if not needInsert:
                 if self.shift:
@@ -1056,7 +1053,7 @@ class XML_Tree(wxTreeCtrl):
                 menu.AppendMenu(id, 'Replace With', m)
                 if not m.GetMenuItemCount(): menu.Enable(id, False)
                 menu.Append(pullDownMenu.ID_SUBCLASS, 'Subclass...',
-                            'Set subclass property')
+                            'Set "subclass" property')
             menu.AppendSeparator()
             # Not using standart IDs because we don't want to show shortcuts
             menu.Append(wxID_CUT, 'Cut', 'Cut to the clipboard')
@@ -1089,5 +1086,5 @@ class XML_Tree(wxTreeCtrl):
         if isinstance(xxx, xxxBoxSizer):
             self.SetItemImage(item, xxx.treeImage())
         # Set global modified state
-        g.frame.modified = True
+        g.frame.SetModified()
 

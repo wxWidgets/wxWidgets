@@ -208,12 +208,24 @@ class xxxObject:
     #image = -1
     # Construct a new xxx object from DOM element
     # parent is parent xxx object (or None if none), element is DOM element object
-    def __init__(self, parent, element):
+    def __init__(self, parent, element, refElem=None):
         self.parent = parent
         self.element = element
+        self.refElem = refElem
         self.undo = None
-        # Get attributes
-        self.className = element.getAttribute('class')
+        # Reference are dereferenced
+        if element.tagName == 'object_ref':
+            # Find original object
+            self.ref = element.getAttribute('ref')
+            if refElem:
+                self.className = self.refElem.getAttribute('class')
+            else:
+                self.className = 'xxxUnknown'
+            self.required = []
+        else:
+            # Get attributes
+            self.ref = None
+            self.className = element.getAttribute('class')
         self.subclass = element.getAttribute('subclass')
         if self.hasName: self.name = element.getAttribute('name')
         # Set parameters (text element children)
@@ -222,9 +234,9 @@ class xxxObject:
         for node in nodes:
             if node.nodeType == minidom.Node.ELEMENT_NODE:
                 tag = node.tagName
-                if tag == 'object':
+                if tag in ['object', 'object_ref']:
                     continue            # do nothing for object children here
-                if tag not in self.allParams and tag not in self.styles:
+                elif tag not in self.allParams and tag not in self.styles:
                     print 'WARNING: unknown parameter for %s: %s' % \
                           (self.className, tag)
                 elif tag in self.specials:
@@ -292,14 +304,42 @@ class xxxObject:
         return className
     # Class name or subclass
     def panelName(self):
-        if self.subclass: return self.subclass + '(' + self.className + ')'
-        else: return self.className
+        if self.subclass: name = self.subclass + '(' + self.className + ')'
+        name = self.className
+        if self.ref: name = 'ref: ' + self.ref + ', ' + name
+        return name
     # Sets name of tree object
     def setTreeName(self, name):
         if self.hasChild: obj = self.child
         else: obj = self
         obj.name = name
         obj.element.setAttribute('name', name)
+
+# Imitation of FindResource/DoFindResource from xmlres.cpp
+def DoFindResource(parent, name, classname, recursive):
+    for n in parent.childNodes:
+        if n.nodeType == minidom.Node.ELEMENT_NODE and \
+               n.tagName in ['object', 'object_ref'] and \
+               n.getAttribute('name') == name:
+            cls = n.getAttribute('class')
+            if not classname or cls == classname:  return n
+            if not cls or n.tagName == 'object_ref':
+                refName = n.getAttribute('ref')
+                if not refName:  continue
+                refNode = FindResource(refName)
+                if refName and refNode.getAttribute('class') == classname:
+                    return n
+    if recursive:
+        for n in parent.childNodes:
+            if n.nodeType == minidom.Node.ELEMENT_NODE and \
+                   n.tagName in ['object', 'object_ref']:
+                found = DoFindResource(n, name, classname, True)
+                if found:  return found
+def FindResource(name, classname='', recursive=True):
+    found = DoFindResource(g.tree.mainNode, name, classname, recursive)
+    if found:  return found
+    wxLogError('XRC resource "%s" not found!' % name)
+                
 
 ################################################################################
 
@@ -717,13 +757,13 @@ class xxxGridBagSizer(xxxSizer):
 class xxxChildContainer(xxxObject):
     hasName = hasStyle = False
     hasChild = True
-    def __init__(self, parent, element):
-        xxxObject.__init__(self, parent, element)
+    def __init__(self, parent, element, refElem=None):
+        xxxObject.__init__(self, parent, element, refElem)
         # Must have one child with 'object' tag, but we don't check it
         nodes = element.childNodes[:]   # create copy
         for node in nodes:
             if node.nodeType == minidom.Node.ELEMENT_NODE:
-                if node.tagName == 'object':
+                if node.tagName in ['object', 'object_ref']:
                     # Create new xxx object for child node
                     self.child = MakeXXXFromDOM(self, node)
                     self.child.parent = parent
@@ -740,11 +780,11 @@ class xxxSizerItem(xxxChildContainer):
     allParams = ['option', 'flag', 'border', 'minsize', 'ratio']
     paramDict = {'option': ParamInt, 'minsize': ParamPosSize, 'ratio': ParamPosSize}
     #default = {'cellspan': '1,1'}
-    def __init__(self, parent, element):
+    def __init__(self, parent, element, refElem=None):
         # For GridBag sizer items, extra parameters added
         if isinstance(parent, xxxGridBagSizer):
             self.allParams = self.allParams + ['cellpos', 'cellspan']
-        xxxChildContainer.__init__(self, parent, element)
+        xxxChildContainer.__init__(self, parent, element, refElem)
         # Remove pos parameter - not needed for sizeritems
         if 'pos' in self.child.allParams:
             self.child.allParams = self.child.allParams[:]
@@ -753,8 +793,8 @@ class xxxSizerItem(xxxChildContainer):
 class xxxSizerItemButton(xxxSizerItem):
     allParams = []
     paramDict = {}
-    def __init__(self, parent, element):
-        xxxChildContainer.__init__(self, parent, element)
+    def __init__(self, parent, element, refElem=None):
+        xxxChildContainer.__init__(self, parent, element, refElem=None)
         # Remove pos parameter - not needed for sizeritems
         if 'pos' in self.child.allParams:
             self.child.allParams = self.child.allParams[:]
@@ -764,8 +804,8 @@ class xxxNotebookPage(xxxChildContainer):
     allParams = ['label', 'selected']
     paramDict = {'selected': ParamBool}
     required = ['label']
-    def __init__(self, parent, element):
-        xxxChildContainer.__init__(self, parent, element)
+    def __init__(self, parent, element, refElem=None):
+        xxxChildContainer.__init__(self, parent, element, refElem)
         # pos and size dont matter for notebookpages
         if 'pos' in self.child.allParams:
             self.child.allParams = self.child.allParams[:]
@@ -888,17 +928,25 @@ for cl in xxxDict.values():
 
 # Test for object elements
 def IsObject(node):
-    return node.nodeType == minidom.Node.ELEMENT_NODE and node.tagName == 'object'
+    return node.nodeType == minidom.Node.ELEMENT_NODE and node.tagName in ['object', 'object_ref']
 
 # Make XXX object from some DOM object, selecting correct class
 def MakeXXXFromDOM(parent, element):
+    if element.tagName == 'object_ref':
+        ref = element.getAttribute('ref')
+        refElem = FindResource(ref)
+        if refElem: cls = refElem.getAttribute('class')
+        else: return xxxUnknown(parent, element)
+    else:
+        refElem = None
+        cls = element.getAttribute('class')
     try:
-        klass = xxxDict[element.getAttribute('class')]
+        klass = xxxDict[cls]
     except KeyError:
         # If we encounter a weird class, use unknown template
         print 'WARNING: unsupported class:', element.getAttribute('class')
         klass = xxxUnknown
-    return klass(parent, element)
+    return klass(parent, element, refElem)
 
 # Make empty DOM element
 def MakeEmptyDOM(className):
@@ -925,6 +973,29 @@ def MakeEmptyXXX(parent, className):
     # If parent is a sizer, we should create sizeritem object, except for spacers
     if parent:
         if parent.isSizer and className != 'spacer':
+            sizerItemElem = MakeEmptyDOM(parent.itemTag)
+            sizerItemElem.appendChild(elem)
+            elem = sizerItemElem
+        elif isinstance(parent, xxxNotebook):
+            pageElem = MakeEmptyDOM('notebookpage')
+            pageElem.appendChild(elem)
+            elem = pageElem
+    # Now just make object
+    return MakeXXXFromDOM(parent, elem)
+
+# Make empty DOM element for reference
+def MakeEmptyRefDOM(ref):
+    elem = g.tree.dom.createElement('object_ref')
+    elem.setAttribute('ref', ref)
+    return elem
+
+# Make empty XXX object
+def MakeEmptyRefXXX(parent, ref):
+    # Make corresponding DOM object first
+    elem = MakeEmptyRefDOM(ref)
+    # If parent is a sizer, we should create sizeritem object, except for spacers
+    if parent:
+        if parent.isSizer:
             sizerItemElem = MakeEmptyDOM(parent.itemTag)
             sizerItemElem.appendChild(elem)
             elem = sizerItemElem
