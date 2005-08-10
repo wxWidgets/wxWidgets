@@ -972,7 +972,7 @@ class XML_Tree(wxTreeCtrl):
 
     # Override to use like single-selection tree
     def GetSelection(self):
-        self.GetSelections(self)[:1]
+        return self.selection
     def SelectItem(self, item):
         self.UnselectAll()
         self.ChangeSelection(item)
