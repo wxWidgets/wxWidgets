@@ -162,13 +162,27 @@ ANSI strings (a notable exception is the entire Win32 API which accepts either
 Unicode or ANSI strings and which thus makes it unnecessary to ever perform
 any conversions in the program). GTK 2.0 only accepts UTF-8 strings.
 
-To get a ANSI string from a wxString, you may use the 
+To get an ANSI string from a wxString, you may use the 
 mb\_str() function which always returns an ANSI
 string (independently of the mode - while the usual 
 \helpref{c\_str()}{wxstringcstr} returns a pointer to the internal
 representation which is either ASCII or Unicode). More rarely used, but still
 useful, is wc\_str() function which always returns
 the Unicode string.
+
+Sometimes it is also necessary to go from ANSI strings to wxStrings.  
+In this case, you can use the converter-constructor, as follows:
+ 
+\begin{verbatim}
+   const char* ascii_str = "Some text";
+   wxString str(ascii_str, wxConvUTF8);
+\end{verbatim}
+
+This code also compiles fine under a non-Unicode build of wxWidgets,
+but in that case the converter is ignored.
+
+For more information about converters and Unicode see
+the \helpref{wxMBConv classes overview}{mbconvclasses}.
 
 % TODO describe fn_str(), wx_str(), wxCharBuf classes, ...
 
