@@ -67,7 +67,6 @@ class wxPopupWindowHandler : public wxEvtHandler
 {
 public:
     wxPopupWindowHandler(wxPopupTransientWindow *popup) : m_popup(popup) {}
-    ~wxPopupWindowHandler();
 
 protected:
     // event handlers
@@ -84,7 +83,6 @@ class wxPopupFocusHandler : public wxEvtHandler
 {
 public:
     wxPopupFocusHandler(wxPopupTransientWindow *popup) : m_popup(popup) {}
-    ~wxPopupFocusHandler();
 
 protected:
     void OnKillFocus(wxFocusEvent& event);
@@ -274,16 +272,6 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 
         m_focus->PushEventHandler(m_handlerFocus);
     }
-
-    // catch destroy events, if you close a program with a popup shown in MSW
-    // you get a segfault if m_child or m_focus are deleted before this is
-    m_child->Connect(wxEVT_DESTROY,
-                     wxWindowDestroyEventHandler(wxPopupTransientWindow::OnDestroy),
-                     NULL, this);
-    if (m_focus)
-        m_focus->Connect(wxEVT_DESTROY,
-                         wxWindowDestroyEventHandler(wxPopupTransientWindow::OnDestroy),
-                         NULL, this);
 }
 
 bool wxPopupTransientWindow::Show( bool show )
@@ -380,14 +368,6 @@ bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
     return false;
 }
 
-void wxPopupTransientWindow::OnDestroy(wxWindowDestroyEvent& event)
-{
-    if (event.GetEventObject() == m_child)
-        m_child = NULL;
-    if (event.GetEventObject() == m_focus)
-        m_focus = NULL;
-}
-
 #ifdef __WXMSW__
 void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
 {
@@ -474,11 +454,6 @@ void wxPopupComboWindow::OnKeyDown(wxKeyEvent& event)
 // ----------------------------------------------------------------------------
 // wxPopupWindowHandler
 // ----------------------------------------------------------------------------
-wxPopupWindowHandler::~wxPopupWindowHandler()
-{
-    if (m_popup && (m_popup->m_handlerPopup == this))
-        m_popup->m_handlerPopup = NULL;
-}
 
 void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 {
@@ -567,11 +542,6 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 // ----------------------------------------------------------------------------
 // wxPopupFocusHandler
 // ----------------------------------------------------------------------------
-wxPopupFocusHandler::~wxPopupFocusHandler()
-{
-    if (m_popup && (m_popup->m_handlerFocus == this))
-        m_popup->m_handlerFocus = NULL;
-}
 
 void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 {
