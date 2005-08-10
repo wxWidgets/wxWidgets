@@ -187,6 +187,7 @@ inline int Stricmp(const char *psz1, const char *psz2)
     // we don't need an extra ctor from std::string when copy ctor already does
     // the work
     #undef wxUSE_STD_STRING
+    #define wxUSE_STD_STRING 0
 
     #if (defined(__GNUG__) && (__GNUG__ < 3)) || \
         (defined(_MSC_VER) && (_MSC_VER <= 1200))
