@@ -129,6 +129,13 @@ MyFrame::MyFrame()
     m_plot->SetUnitsPerValue( 0.01 );
 //    m_plot->SetScrollOnThumbRelease( true );
 
+    //Add a blue, 16pt chart title
+    wxString titleText( _T("The Chart Title") );
+    wxFont titleFont( *wxNORMAL_FONT );
+    titleFont.SetPointSize( 16 );
+    wxColour titleColour( *wxBLUE );
+    m_plot->AddChartTitle( titleText, titleFont, titleColour );
+
     m_plot->Add( new MyPlotCurve( 0,  -1.5, 1.5 ) );
     m_plot->Add( new MyPlotCurve( 50, -1.5, 1.5 ) );
     wxPlotOnOffCurve *oo = new wxPlotOnOffCurve( 10 );

@@ -29,6 +29,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/dcclient.h"
+#include "wx/stattext.h"
 #endif
 
 #include "wx/plot/plot.h"
@@ -112,6 +113,7 @@ wxPlotEvent::wxPlotEvent( wxEventType commandType, int id )
 IMPLEMENT_ABSTRACT_CLASS(wxPlotCurve, wxObject)
 
 wxPlotCurve::wxPlotCurve( int offsetY, double startY, double endY )
+: m_penNormal(*wxGREY_PEN), m_penSelected(*wxBLACK_PEN)
 {
     m_offsetY = offsetY;
     m_startY = startY;
@@ -415,9 +417,9 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxPlotCurve *curve = (wxPlotCurve*) node->GetData();
 
             if (curve == m_owner->GetCurrentCurve())
-                dc.SetPen( *wxBLACK_PEN );
+                dc.SetPen( curve->GetPenSelected() );
             else
-                dc.SetPen( *wxGREY_PEN );
+                dc.SetPen( curve->GetPenNormal() );
 
             DrawCurve( &dc, curve, update_x-1, update_x+update_width+2 );
 
@@ -709,7 +711,8 @@ BEGIN_EVENT_TABLE(wxPlotWindow, wxScrolledWindow)
 END_EVENT_TABLE()
 
 wxPlotWindow::wxPlotWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, int flag )
-        : wxScrolledWindow( parent, id, pos, size, flag, _T("plotcanvas") )
+        : wxScrolledWindow( parent, id, pos, size, flag, _T("plotcanvas") ),
+          m_titleStaticText( NULL )
 {
     m_xUnitsPerValue = 1.0;
     m_xZoom = 1.0;
@@ -745,6 +748,11 @@ wxPlotWindow::wxPlotWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos,
 
     wxBoxSizer *plotsizer = new wxBoxSizer( wxHORIZONTAL );
 
+    //Add sizer to hold the title and plot.
+    //Title to be added later.
+    m_plotAndTitleSizer = new wxBoxSizer( wxVERTICAL );
+    m_plotAndTitleSizer->Add( plotsizer, 1, wxEXPAND | wxTOP, 10 );
+
     if ((GetWindowStyleFlag() & wxPLOT_Y_AXIS) != 0)
     {
         m_yaxis = new wxPlotYAxisArea( this );
@@ -775,7 +783,7 @@ wxPlotWindow::wxPlotWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos,
         m_xaxis = (wxPlotXAxisArea*) NULL;
     }
 
-    mainsizer->Add( plotsizer, 1, wxEXPAND );
+    mainsizer->Add( m_plotAndTitleSizer, 1, wxEXPAND );
 
     SetAutoLayout( true );
     SetSizer( mainsizer );
@@ -981,10 +989,45 @@ void wxPlotWindow::ResetScrollbar()
                    (int)(((max*m_xZoom)/wxPLOT_SCROLL_STEP)+1), 0 );
 }
 
+void wxPlotWindow::AddChartTitle(const wxString& title, wxFont font,
+                                 wxColour colour)
+{
+    m_title = title;
+    m_titleFont = font;
+    m_titleColour = colour;
+    DrawChartTitle();
+}
+
+void wxPlotWindow::DrawChartTitle()
+{
+    if(m_title.size() != 0)
+    {
+        //If it is already added, remove child and delete
+        if(m_titleStaticText)
+        {
+            RemoveChild( m_titleStaticText );
+            m_titleStaticText->Destroy();
+        }
+
+        //Create the text control and set the font, colour
+        m_titleStaticText = new wxStaticText( this, -1, m_title );
+        m_titleStaticText->SetFont( m_titleFont );
+        m_titleStaticText->SetForegroundColour( m_titleColour );
+
+        //Create a sizer for the title. Prepend it to the Plot + Title sizer.
+        wxBoxSizer* titleSizer = new wxBoxSizer( wxHORIZONTAL );
+        titleSizer->Add( m_titleStaticText, 0, wxALIGN_CENTER | wxALL, 10 );
+        m_plotAndTitleSizer->Prepend( titleSizer, 0, wxALIGN_CENTER_HORIZONTAL );
+
+        //Finally, force layout
+        m_plotAndTitleSizer->Layout();
+    }
+}
+
 void wxPlotWindow::RedrawXAxis()
 {
     if (m_xaxis)
-        m_xaxis->Refresh( false );
+        m_xaxis->Refresh( true );
 }
 
 void wxPlotWindow::RedrawYAxis()
@@ -1000,6 +1043,8 @@ void wxPlotWindow::RedrawEverything()
     if (m_yaxis)
         m_yaxis->Refresh( true );
     m_area->Refresh( true );
+
+    DrawChartTitle();
 }
 
 void wxPlotWindow::OnZoomIn( wxCommandEvent& WXUNUSED(event) )

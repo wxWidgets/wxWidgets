@@ -44,6 +44,7 @@ class WXDLLIMPEXP_PLOT wxPlotArea;
 class WXDLLIMPEXP_PLOT wxPlotXAxisArea;
 class WXDLLIMPEXP_PLOT wxPlotYAxisArea;
 class WXDLLIMPEXP_PLOT wxPlotWindow;
+class WXDLLIMPEXP_CORE wxStaticText;
 
 //-----------------------------------------------------------------------------
 // consts
@@ -128,21 +129,26 @@ public:
 
     void SetStartY( double startY )
         { m_startY = startY; }
-    double GetStartY()
+    double GetStartY() const
         { return m_startY; }
     void SetEndY( double endY )
         { m_endY = endY; }
-    double GetEndY()
+    double GetEndY() const
         { return m_endY; }
     void SetOffsetY( int offsetY )
        { m_offsetY = offsetY; }
-    int GetOffsetY()
+    int GetOffsetY() const
        { return m_offsetY; }
 
     void SetPenNormal( const wxPen &pen )
        { m_penNormal = pen; }
     void SetPenSelected( const wxPen &pen )
        { m_penSelected = pen; }
+
+    const wxPen& GetPenNormal() const
+       { return m_penNormal; }
+    const wxPen& GetPenSelected() const
+       { return m_penSelected; }
 
 private:
     int     m_offsetY;
@@ -358,6 +364,8 @@ public:
 
     void ResetScrollbar();
 
+    void AddChartTitle( const wxString&, wxFont = *wxNORMAL_FONT, wxColour = *wxBLACK );
+
 private:
     friend class wxPlotArea;
     friend class wxPlotXAxisArea;
@@ -376,6 +384,14 @@ private:
 
     bool               m_scrollOnThumbRelease;
     bool               m_enlargeAroundWindowCentre;
+
+    wxString           m_title;
+    wxFont             m_titleFont;
+    wxColour           m_titleColour;
+    wxStaticText*      m_titleStaticText;
+    wxBoxSizer*        m_plotAndTitleSizer;
+
+    void DrawChartTitle();
 
     DECLARE_CLASS(wxPlotWindow)
     DECLARE_EVENT_TABLE()
