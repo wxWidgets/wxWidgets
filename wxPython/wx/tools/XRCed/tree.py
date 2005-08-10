@@ -419,6 +419,7 @@ class XML_Tree(wxTreeCtrl):
         EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemExpandedCollapsed)
 
         self.selection = None
+	self.selectionChanging = False
         self.needUpdate = False
         self.pendingHighLight = None
         self.ctrl = self.shift = False
@@ -486,7 +487,7 @@ class XML_Tree(wxTreeCtrl):
         self.root = self.AddRoot('XML tree', self.rootImage,
                                  data=wxTreeItemData(self.rootObj))
         self.SetItemHasChildren(self.root)
-        self.Unselect()
+        self.UnselectAll()
         self.Expand(self.root)
 
     # Clear old data and set new
@@ -510,7 +511,7 @@ class XML_Tree(wxTreeCtrl):
                 self.mainNode.removeChild(node)
                 node.unlink()
         self.Expand(self.root)
-        self.Unselect()
+        self.UnselectAll()
 
     # Add tree item for given parent item if node is DOM element node with
     # object/object_ref tag. xxxParent is parent xxx object
@@ -641,7 +642,11 @@ class XML_Tree(wxTreeCtrl):
         return child
 
     def OnSelChanged(self, evt):
-        self.ChangeSelection(evt.GetItem())
+        if self.selectionChanging: return
+	self.selectionChanging = True
+        self.UnselectAll()
+        self.SelectItem(evt.GetItem())
+	self.selectionChanging = False
 
     def ChangeSelection(self, item):
         # Apply changes
@@ -964,6 +969,14 @@ class XML_Tree(wxTreeCtrl):
         if xxx.hasChildren and not self.GetChildrenCount(item, False):
             return False
         return not (self.IsExpanded(item) and self.GetChildrenCount(item, False))
+
+    # Override to use like single-selection tree
+    def GetSelection(self):
+        self.GetSelections(self)[:1]
+    def SelectItem(self, item):
+        self.UnselectAll()
+        self.ChangeSelection(item)
+        wxTreeCtrl.SelectItem(self, item)
 
     # Pull-down
     def OnRightDown(self, evt):

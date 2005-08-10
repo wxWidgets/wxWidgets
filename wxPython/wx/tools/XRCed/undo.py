@@ -74,7 +74,7 @@ class UndoCutDelete:
                     g.testWin.highLight.Remove()
                 g.tree.needUpdate = True
         self.elem = g.tree.RemoveLeaf(item)
-        g.tree.Unselect()
+        g.tree.UnselectAll()
         g.panel.Clear()
 
 class UndoPasteCreate:

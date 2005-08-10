@@ -1,3 +1,9 @@
+0.1.6-2
+-------
+
+wxMSW wxTreeCtrl behaviour is still different from wxGTK for
+wxTR_MULTIPLE, some fixes for this.
+
 0.1.6-1
 -------
 
