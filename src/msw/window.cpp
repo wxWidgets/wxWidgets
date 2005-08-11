@@ -1646,9 +1646,11 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     GetPosition(&currentX, &currentY);
     GetSize(&currentW, &currentH);
 
-    // ... and don't do anything (avoiding flicker) if it's already ok
+    // ... and don't do anything (avoiding flicker) if it's already ok unless
+    // we're forced to resize the window
     if ( x == currentX && y == currentY &&
-         width == currentW && height == currentH )
+         width == currentW && height == currentH &&
+            !(sizeFlags & wxSIZE_FORCE) )
     {
         return;
     }

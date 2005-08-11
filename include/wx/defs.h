@@ -1802,6 +1802,11 @@ enum wxHitTest
 /*  Don't do parent client adjustments (for implementation only) */
 #define wxSIZE_NO_ADJUSTMENTS   0x0008
 
+#if wxABI_VERSION >= 20602
+/*  Change the window position even if it seems to be already correct */
+#define wxSIZE_FORCE            0x0010
+#endif // 2.6.2+
+
 /*  ---------------------------------------------------------------------------- */
 /*  GDI descriptions */
 /*  ---------------------------------------------------------------------------- */

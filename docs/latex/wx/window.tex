@@ -3133,16 +3133,20 @@ value should be used.}
 
 \docparam{sizeFlags}{Indicates the interpretation of other parameters. It is a bit list of the following:
 
-{\bf wxSIZE\_AUTO\_WIDTH}: a -1 width value is taken to indicate
+{\bf wxSIZE\_AUTO\_WIDTH}: a $-1$ width value is taken to indicate
 a wxWidgets-supplied default width.\\
-{\bf wxSIZE\_AUTO\_HEIGHT}: a -1 height value is taken to indicate
+{\bf wxSIZE\_AUTO\_HEIGHT}: a $-1$ height value is taken to indicate
 a wxWidgets-supplied default width.\\
 {\bf wxSIZE\_AUTO}: -1 size values are taken to indicate
 a wxWidgets-supplied default size.\\
 {\bf wxSIZE\_USE\_EXISTING}: existing dimensions should be used
 if -1 values are supplied.\\
-{\bf wxSIZE\_ALLOW\_MINUS\_ONE}: allow dimensions of -1 and less to be interpreted
+{\bf wxSIZE\_ALLOW\_MINUS\_ONE}: allow dimensions of $-1$ and less to be interpreted
 as real dimensions, not default values.
+{\bf wxSIZE\_FORCE}: normally, if the position and the size of the window are
+already the same as the parameters of this function, nothing is done. but with
+this flag a window resize may be forced even in this case (supported in wx
+2.6.2 and later and only implemented for MSW and ignored elsewhere currently)
 }
 
 \wxheading{Remarks}
