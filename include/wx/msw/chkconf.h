@@ -14,6 +14,16 @@
 #ifndef _WX_MSW_CHKCONF_H_
 #define _WX_MSW_CHKCONF_H_
 
+/* ensure that MSW-specific settings are defined */
+#ifndef wxUSE_DC_CACHEING
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DC_CACHEING must be defined"
+#   else
+#       define wxUSE_DC_CACHEING 1
+#   endif
+#endif /* wxUSE_DC_CACHEING */
+
+
 /*
  * disable the settings which don't work for some compilers
  */
