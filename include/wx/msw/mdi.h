@@ -86,6 +86,7 @@ public:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     void OnSize(wxSizeEvent& event);
+    void OnIconized(wxIconizeEvent& event);
 
     bool HandleActivate(int state, bool minimized, WXHWND activate);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
@@ -102,6 +103,10 @@ protected:
 #endif // wxUSE_MENUS_NATIVE
 
     virtual WXHICON GetDefaultIcon() const;
+
+    // set the size of the MDI client window to match the frame size
+    void UpdateClientSize();
+
 
     wxMDIClientWindow *             m_clientWindow;
     wxMDIChildFrame *               m_currentChild;
@@ -191,7 +196,7 @@ protected:
 private:
     bool m_needsInitialShow; // Show must be called in idle time after Creation
     bool m_needsResize; // flag which tells us to artificially resize the frame
-	virtual void DetachMenuBar() ;
+    virtual void DetachMenuBar() ;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMDIChildFrame)

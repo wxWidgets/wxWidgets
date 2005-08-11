@@ -133,6 +133,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_SIZE(wxMDIParentFrame::OnSize)
+    EVT_ICONIZE(wxMDIParentFrame::OnIconized)
     EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -323,7 +324,7 @@ void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
     }
 }
 
-void wxMDIParentFrame::OnSize(wxSizeEvent&)
+void wxMDIParentFrame::UpdateClientSize()
 {
     if ( GetClientWindow() )
     {
@@ -331,6 +332,23 @@ void wxMDIParentFrame::OnSize(wxSizeEvent&)
         GetClientSize(&width, &height);
 
         GetClientWindow()->SetSize(0, 0, width, height);
+    }
+}
+
+void wxMDIParentFrame::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+    UpdateClientSize();
+
+    // do not call event.Skip() here, it somehow messes up MDI client window
+}
+
+void wxMDIParentFrame::OnIconized(wxIconizeEvent& event)
+{
+    event.Skip();
+
+    if ( !event.Iconized() )
+    {
+        UpdateClientSize();
     }
 }
 
@@ -852,8 +870,8 @@ void wxMDIChildFrame::InternalSetMenuBar()
 
 void wxMDIChildFrame::DetachMenuBar()
 {
-	RemoveWindowMenu(NULL, m_hMenu);
-	wxFrame::DetachMenuBar();
+    RemoveWindowMenu(NULL, m_hMenu);
+    wxFrame::DetachMenuBar();
 }
 
 WXHICON wxMDIChildFrame::GetDefaultIcon() const
@@ -1285,11 +1303,11 @@ void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeF
     // (see OGL studio sample). So check if the position is changed and if so,
     // redraw the MDI child frames.
 
-    wxPoint oldPos = GetPosition();
+    const wxPoint oldPos = GetPosition();
 
-    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
+    wxWindow::DoSetSize(x, y, width, height, sizeFlags | wxSIZE_FORCE);
 
-    wxPoint newPos = GetPosition();
+    const wxPoint newPos = GetPosition();
 
     if ((newPos.x != oldPos.x) || (newPos.y != oldPos.y))
     {
