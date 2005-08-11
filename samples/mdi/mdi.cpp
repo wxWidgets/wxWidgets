@@ -72,7 +72,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
     EVT_MENU(MDI_QUIT, MyFrame::OnQuit)
 
     EVT_CLOSE(MyFrame::OnClose)
-    EVT_ICONIZE(MyFrame::OnIconize)
     EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
 
@@ -299,12 +298,6 @@ void MyFrame::OnSize(wxSizeEvent&
 #ifdef __WXUNIVERSAL__   
     event.Skip();
 #endif
-}
-
-void MyFrame::OnIconize(wxIconizeEvent& event)
-{
-    wxSizeEvent e;
-    OnSize (e) ;
 }
 
 #if wxUSE_TOOLBAR

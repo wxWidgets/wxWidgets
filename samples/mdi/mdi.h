@@ -46,7 +46,6 @@ public:
     void InitToolBar(wxToolBar* toolBar);
 
     void OnSize(wxSizeEvent& event);
-    void OnIconize(wxIconizeEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
