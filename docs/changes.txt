@@ -25,6 +25,7 @@ All (GUI):
 - Cross-compile now supported for wxGTK, wxX11 and wxMotif.
 - Cygwin compilation of wxX11, wxGTK and wxMotif now supported.
 - Now reads "help" parameter for all windows (context help text).
+- wxWizard adapts to PDA-sized screens.
 
 wxMSW:
 
