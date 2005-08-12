@@ -61,7 +61,7 @@ commands manually, please have a look at Makefile to see what must be done.
 
 For platform specific translations, .po files such as 'locale/msw/it.po' can be
 used to provide translations that override the usual ones in 'locale/it.po'.
-The genaterated .mo files are then installed under the names such as 'wxmsw.mo'
+The generated .mo files are then installed under the names such as 'wxmsw.mo'
 alongside the generic 'wxstd.mo'.
 
 A new platform specific translation should be added to a section such as this
@@ -80,6 +80,9 @@ Author:  VZ
 Version: $Id$
 
 $Log$
+Revision 1.7  2005/08/12 15:34:01  MW
+Typo
+
 Revision 1.6  2005/08/12 15:29:47  MW
 Translate '&Help' to '&' for italian Windows only
 
