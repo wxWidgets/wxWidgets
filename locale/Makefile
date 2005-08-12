@@ -7,7 +7,7 @@
 # being called with this dir as the cwd, but if we generate this file
 # with configure an explicit path should be specified -- RL.
 
-WX_LINGUAS := `ls *.po 2> /dev/null | sed -n 's/\(wxstd\)\?\.po//p'`
+WX_LINGUAS := `ls *.po */*.po 2> /dev/null | sed -n 's/\(wxstd\)\?\.po//p'`
 
 # the programs we use (TODO: use configure to detect them)
 MSGFMT=msgfmt --verbose

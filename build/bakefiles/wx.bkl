@@ -120,6 +120,13 @@
             </linguas>
             <install-to>$(LOCALEDIR)</install-to>
         </gettext-catalogs>
+        <gettext-catalogs id="locale_msw">
+            <srcdir>$(SRCDIR)/locale/msw</srcdir>
+            <catalog-name>wxmsw</catalog-name>
+            <linguas>it</linguas>
+            <install-to>$(LOCALEDIR)</install-to>
+        </gettext-catalogs>
+                
 
         <!-- Mac OS X resources: -->
         <set var="MACOS_R">lib/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).r</set>

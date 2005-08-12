@@ -1401,8 +1401,9 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
                 continue;
             }
 
-
-            if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Help")) )
+            wxString strHelp(_("&Help"));
+            wxString strBuf(buf);
+            if ( wxStripMenuCodes(strBuf) == wxStripMenuCodes(strHelp) )
             {
                 success = true;
                 ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,

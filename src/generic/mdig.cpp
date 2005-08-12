@@ -307,7 +307,7 @@ void wxGenericMDIParentFrame::AddWindowMenu(wxMenuBar *pMenuBar)
 {
     if (pMenuBar && m_pWindowMenu)
     {
-        int pos = pMenuBar->FindMenu(_("Help"));
+        int pos = pMenuBar->FindMenu(wxStripMenuCodes(wxString(_("&Help"))));
         if (pos == wxNOT_FOUND)
         {
             pMenuBar->Append(m_pWindowMenu, _("&Window"));

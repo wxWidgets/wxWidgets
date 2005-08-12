@@ -79,6 +79,8 @@
 #include "wx/encconv.h"
 #include "wx/hashmap.h"
 #include "wx/ptr_scpd.h"
+#include "wx/app.h"
+#include "wx/apptrait.h"
 
 #if defined(__WXMAC__)
   #include  "wx/mac/private.h"  // includes mac headers
@@ -1470,7 +1472,18 @@ bool wxLocale::Init(const wxChar *szName,
   m_pMsgCat = NULL;
   bool bOk = true;
   if ( bLoadDefault )
+  {
     bOk = AddCatalog(wxT("wxstd"));
+
+    // there may be a catalog with toolkit specific overrides, it is not
+    // an error if this does not exist
+    if ( bOk && wxTheApp )
+    {
+      wxAppTraits *traits = wxTheApp->GetTraits();
+      if (traits)
+        AddCatalog(traits->GetToolkitInfo().name.BeforeFirst(wxT('/')).MakeLower());
+    }
+  }
 
   return bOk;
 }
