@@ -1417,6 +1417,8 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
 #endif
     if (HasParam(wxT("font")))
         wnd->SetFont(GetFont());
+    if (HasParam(wxT("help")))
+        wnd->SetHelpText(GetText(wxT("help")));
 }
 
 

@@ -9,11 +9,11 @@ All:
 
 - Fixed wxScopeGuard to work with VC++, documented it.
 - Fixed proxy handling in wxURL.
-- Added wxEVT_MEDIA_LOADED event for wxMediaCtrl
-- Added new methods to wxMediaCtrl (wxURI version of Load, ShowPlayerControls)
-- Added wxZipFSHandler::Cleanup() (Stas Sergeev)
-- Added wxImage::RotateHue() and RGB <-> HSV conversions (John Anderson)
-- Fixed compilation with IBM xlC compiler
+- Added wxEVT_MEDIA_LOADED event for wxMediaCtrl.
+- Added new methods to wxMediaCtrl (wxURI version of Load, ShowPlayerControls).
+- Added wxZipFSHandler::Cleanup() (Stas Sergeev).
+- Added wxImage::RotateHue() and RGB <-> HSV conversions (John Anderson).
+- Fixed compilation with IBM xlC compiler.
 - wxABI_VERSION, see 'Backward Compatibility' in the manual.
 
 All (GUI):
@@ -21,22 +21,23 @@ All (GUI):
 - Added wxXmlResource::Unload().
 - Possibility of modeless wxWizard dialog (with presentation in sample).
 - Fixed a rare crash due to malformed HTML in wxHTML (Xavier Nodet).
-- Ctrl+mouse wheel changes zoom factor in print preview (Zbigniew Zagórski)
+- Ctrl+mouse wheel changes zoom factor in print preview (Zbigniew Zagórski).
 - Cross-compile now supported for wxGTK, wxX11 and wxMotif.
 - Cygwin compilation of wxX11, wxGTK and wxMotif now supported.
+- Now reads "help" parameter for all windows (context help text).
 
 wxMSW:
 
-- wxMSW now builds with (beta of) MSVC 8 (a.k.a. 2005)
+- wxMSW now builds with (beta of) MSVC 8 (a.k.a. 2005).
 - Separators are now correctly shown in the toolbars under Windows XP.
 - Fixed multiline tooltips handling.
 - Fixed wxSlider::GetSelEnd() (Atilim Cetin).
 - Fixed accelerators of menu items added to already attached submenus.
 - Position of wxEVT_MOUSEWHEEL events is now in client, not screen, coordinates.
-- Handle absence of wxListCtrl column image better (Zbigniew Zagórski)
-- Fixed asynchronous playback of large sound files in wxSound
-- Added wxDynamicLibrary::GetSymbolAorW()
-- Fixed default size of wxStaticText controls with border being too small
+- Handle absence of wxListCtrl column image better (Zbigniew Zagórski).
+- Fixed asynchronous playback of large sound files in wxSound.
+- Added wxDynamicLibrary::GetSymbolAorW().
+- Fixed default size of wxStaticText controls with border being too small.
 
 wxWinCE:
 
@@ -44,13 +45,13 @@ wxWinCE:
 
 wxGTK:
 
-- ShowFullScreen() shows the window if it was still hidden (rpedroso)
-- Implemented wxTopLevelWindow::RequestUserAttention() (Mart Raudsepp)
+- ShowFullScreen() shows the window if it was still hidden (rpedroso).
+- Implemented wxTopLevelWindow::RequestUserAttention() (Mart Raudsepp).
 - Base library is now binary compatible when built with wxGTK and wxMotif.
 - wxTextCtrl::XYToPosition, PositionToXY and GetLineLength calls are now
-  instantaneous in case of GTK+2 multi-line controls (Mart Raudsepp)
+  instantaneous in case of GTK+2 multi-line controls (Mart Raudsepp).
 - Added support for left, centre and right text alignment attributes under
-  GTK+2 multi-line text controls (Mart Raudsepp)
+  GTK+2 multi-line text controls (Mart Raudsepp).
 
 wxOS2
 
@@ -59,7 +60,7 @@ wxOS2
 wxUniv:
 
 - Window creation now honours wxVSCROLL.
-- Standalone scrollbars generate events of correct type (Jochen Roemmler)
+- Standalone scrollbars generate events of correct type (Jochen Roemmler).
 
 wxMotif:
 
