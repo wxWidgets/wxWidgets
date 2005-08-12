@@ -347,7 +347,6 @@ class Frame(wxFrame):
         if dlg.ShowModal() == wxID_OK:
             path = dlg.GetPath()
             self.SetStatusText('Loading...')
-            wxYield()
             wxBeginBusyCursor()
             try:
                 if self.Open(path):
@@ -375,7 +374,6 @@ class Frame(wxFrame):
         else:
             path = self.dataFile
         self.SetStatusText('Saving...')
-        wxYield()
         wxBeginBusyCursor()
         try:
             try:
@@ -594,7 +592,6 @@ class Frame(wxFrame):
             sizePanel = panel.GetSize()
             panel.Reparent(self.splitter)
             self.miniFrame.GetSizer().Remove(panel)
-            wxYield()
             # Widen
             self.SetDimensions(pos.x, pos.y, size.width + sizePanel.width, size.height)
             self.splitter.SplitVertically(tree, panel, conf.sashPos)
@@ -612,7 +609,6 @@ class Frame(wxFrame):
             self.miniFrame.Show(True)
             self.miniFrame.SetDimensions(conf.panelX, conf.panelY,
                                          conf.panelWidth, conf.panelHeight)
-            wxYield()
             # Reduce width
             self.SetDimensions(pos.x, pos.y,
                                max(size.width - sizePanel.width, self.minWidth), size.height)
@@ -932,7 +928,6 @@ Homepage: http://xrced.sourceforge.net\
                     self.SetStatusText('Refreshing test window...')
                     # (re)create
                     tree.CreateTestWin(g.testWin.item)
-                    wxYield()
                     self.SetStatusText('')
                 tree.needUpdate = False
         elif tree.pendingHighLight:

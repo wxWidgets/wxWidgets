@@ -365,7 +365,7 @@ def SetMenu(m, list, shift=False):
             apply(m.Append, l)
         elif type(l) == types.ListType:
             subMenu = wxMenu()
-            SetMenu(subMenu, l[2:])
+            SetMenu(subMenu, l[2:], shift)
             m.AppendMenu(wxNewId(), l[0], subMenu, l[1])
         else:                           # separator
             m.AppendSeparator()
@@ -475,6 +475,8 @@ class XML_Tree(wxTreeCtrl):
 
     # Clear tree
     def Clear(self):
+        self.selection = None
+        self.UnselectAll()
         self.DeleteAllItems()
         # Add minimal structure
         if self.dom: self.dom.unlink()
@@ -487,11 +489,12 @@ class XML_Tree(wxTreeCtrl):
         self.root = self.AddRoot('XML tree', self.rootImage,
                                  data=wxTreeItemData(self.rootObj))
         self.SetItemHasChildren(self.root)
-        self.UnselectAll()
         self.Expand(self.root)
 
     # Clear old data and set new
     def SetData(self, dom):
+        self.selection = None
+        self.UnselectAll()
         self.DeleteAllItems()
         # Add minimal structure
         if self.dom: self.dom.unlink()
@@ -511,7 +514,6 @@ class XML_Tree(wxTreeCtrl):
                 self.mainNode.removeChild(node)
                 node.unlink()
         self.Expand(self.root)
-        self.UnselectAll()
 
     # Add tree item for given parent item if node is DOM element node with
     # object/object_ref tag. xxxParent is parent xxx object
@@ -766,7 +768,6 @@ class XML_Tree(wxTreeCtrl):
 #                return
 
         wxBeginBusyCursor()
-        wxYield()
         # Close old window, remember where it was
         highLight = None
         if testWin:

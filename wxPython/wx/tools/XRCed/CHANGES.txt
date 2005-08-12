@@ -1,3 +1,9 @@
+0.1.6-3
+-------
+
+Fix for crash when opening new file with active tree selection.
+Replacing controls bug fixed.
+
 0.1.6-2
 -------
 

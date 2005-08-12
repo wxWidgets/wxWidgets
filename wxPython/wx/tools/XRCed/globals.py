@@ -15,7 +15,7 @@ import sys
 # Global constants
 
 progname = 'XRCed'
-version = '0.1.6-2'
+version = '0.1.6-3'
 # Can be changed to set other default encoding different
 #defaultEncoding = ''
 # you comment above and can uncomment this:
