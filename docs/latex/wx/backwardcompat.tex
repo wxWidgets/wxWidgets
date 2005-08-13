@@ -8,9 +8,7 @@
 %% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Backward compatibility}\label{backwardcompatibility}
-\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
-\setfooter{\thepage}{}{}{}{}{\thepage}%
+\section{Backward compatibility}\label{backwardcompatibility}
 
 Many of the GUIs and platforms supported by wxWidgets are continuously
 evolving, and some of the new platforms wxWidgets now supports were quite
@@ -22,7 +20,7 @@ programming interface across many platforms, but also to provide an
 interface that is reasonably stable over time, to help protect its users
 from some of the uncertainty of the future.
 
-{\large {\bf The version numbering scheme}}\label{versionnumbering}
+\subsection{The version numbering scheme}\label{versionnumbering}
 
 wxWidgets version numbers can have up to four components, with trailing
 zeros sometimes omitted:
@@ -59,7 +57,7 @@ incompatibilities. Compatibility is not broken gratuitously however, so
 many applications will require no changes or only small changes to work
 with the new version.
 
-{\large {\bf Source level compatibility}}\label{sourcecompatibility}
+\subsection{Source level compatibility}\label{sourcecompatibility}
 
 Later releases from a stable branch are backward compatible with earlier
 releases from the same branch at the {\em source} level.
@@ -109,7 +107,7 @@ A program requiring one of these macros to be 1 will become
 incompatible with some future version of wxWidgets, and you should consider
 updating it.
 
-{\large {\bf Library binary compatibility}}\label{libbincompatibility}
+\subsection{Library binary compatibility}\label{libbincompatibility}
 
 For some platforms, releases from a stable branch are not only source level
 compatible but can also be {\em binary compatible}.
@@ -139,7 +137,7 @@ same ABI (Application Binary Interface). Unfortunately most different C++
 compilers do not produce code compatible with each other, and often even
 different versions of the same compiler are not compatible.
 
-{\large {\bf Application binary compatibility}}\label{appbincompatibility}
+\subsection{Application binary compatibility}\label{appbincompatibility}
 
 The most important aspect of binary compatibility is that applications
 compiled with one version of wxWidgets, e.g. {\tt 2.6.1}, continue to work
