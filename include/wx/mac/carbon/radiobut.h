@@ -31,6 +31,7 @@ public:
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
+    ~wxRadioButton();
 
     bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
@@ -47,6 +48,7 @@ public:
       virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     void Command(wxCommandEvent& event);
     wxRadioButton *AddInCycle(wxRadioButton *cycle);
+    void RemoveFromCycle();
     inline wxRadioButton *NextInCycle() {return m_cycle;}
     
   protected:

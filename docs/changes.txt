@@ -54,6 +54,12 @@ wxGTK:
 - Added support for left, centre and right text alignment attributes under
   GTK+2 multi-line text controls (Mart Raudsepp).
 
+wxMac:
+
+- Automatic menu management improved.
+- Fixed crash when wxRadioButton is deleted from a group of radio buttons,
+  due to dangling cycle pointers.
+
 wxOS2
 
 - Adjustments for building with Open Watcom C++.

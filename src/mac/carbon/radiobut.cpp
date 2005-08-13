@@ -72,6 +72,11 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
+wxRadioButton::~wxRadioButton()
+{
+    RemoveFromCycle();
+}
+
 void wxRadioButton::SetValue(bool val)
 {
     wxRadioButton *cycle;
@@ -147,6 +152,22 @@ wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
         m_cycle=cycle;
         current->m_cycle=this;
         return(cycle);
+    }
+}
+
+void wxRadioButton::RemoveFromCycle()
+{        
+    if (m_cycle==NULL || m_cycle == this)
+    {
+        return;
+    }
+    else
+    {
+        // Find the previous one and make it point to the next one
+        wxRadioButton* prev = this;
+        while (prev->m_cycle != this)
+            prev = prev->m_cycle;
+        prev->m_cycle = m_cycle;
     }
 }
 
