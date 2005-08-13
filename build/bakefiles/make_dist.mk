@@ -1025,6 +1025,11 @@ INTL_DIST:
 	cp $(INTLDIR)/Makefile $(DISTDIR)/locale
 	cp $(INTLDIR)/*.po $(DISTDIR)/locale
 	-cp $(INTLDIR)/*.mo $(DISTDIR)/locale
+	subdirs=`cd $(INTLDIR) && ls */*.po | sed 's|/.*||' | uniq`; \
+	for dir in "$$subdirs"; do                                   \
+	    mkdir $(DISTDIR)/locale/$$dir;                           \
+	    cp $(INTLDIR)/$$dir/*.[pm]o $(DISTDIR)/locale/$$dir;     \
+	done
 
 MANUAL_DIST:
 	mkdir $(DISTDIR)/docs
