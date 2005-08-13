@@ -229,6 +229,9 @@ wxFFileInputStream::wxFFileInputStream(const wxString& fileName,
 {
     m_file = new wxFFile(fileName, mode);
     m_file_destroy = true;
+
+    if (!m_file->IsOpened())
+        m_lasterror = wxSTREAM_WRITE_ERROR;
 }
 
 wxFFileInputStream::wxFFileInputStream()
