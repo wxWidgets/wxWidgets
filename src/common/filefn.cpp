@@ -1968,7 +1968,7 @@ wxFileKind wxGetFileKind(FILE *fp)
     (void)fp;
     return wxFILE_KIND_DISK;
 #else
-    return wxGetFileKind(fileno(fp));
+    return fp ? wxGetFileKind(fileno(fp)) : wxFILE_KIND_UNKNOWN;
 #endif
 }
 
