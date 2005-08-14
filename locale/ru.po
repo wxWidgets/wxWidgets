@@ -41,7 +41,7 @@ msgstr " - "
 
 #: ../src/html/htmprint.cpp:570
 msgid " Preview"
-msgstr "Предпросмотр печати"
+msgstr " Предварительный просмотр"
 
 #: ../src/common/paper.cpp:131
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -96,7 +96,7 @@ msgstr "Предупреждение %s"
 
 #: ../src/common/fldlgcmn.cpp:81
 msgid "%s files (%s)|%s"
-msgstr "Файлы (%s)|%s"
+msgstr "%s файлы (%s)|%s"
 
 #: ../src/common/msgout.cpp:189
 msgid "%s message"
@@ -200,7 +200,7 @@ msgstr "&Вперед"
 
 #: ../src/common/prntbase.cpp:863
 msgid "&Goto..."
-msgstr "&Перейти"
+msgstr "&Перейти..."
 
 #: ../src/common/stockitem.cpp:122 ../src/generic/wizard.cpp:414
 #: ../src/generic/wizard.cpp:421 ../src/html/helpfrm.cpp:362
@@ -241,7 +241,7 @@ msgstr "&Следующий >"
 
 #: ../src/generic/tipdlg.cpp:243
 msgid "&Next Tip"
-msgstr "&Следующая подсказка"
+msgstr "&Следующий совет"
 
 #: ../src/common/stockitem.cpp:132
 msgid "&No"
@@ -299,11 +299,11 @@ msgstr "Вы&ход"
 #: ../src/common/cmdproc.cpp:292 ../src/common/cmdproc.cpp:299
 #: ../src/common/stockitem.cpp:141 ../src/msw/textctrl.cpp:2062
 msgid "&Redo"
-msgstr "&Восстановить"
+msgstr "&Вернуть"
 
 #: ../src/common/cmdproc.cpp:288 ../src/common/cmdproc.cpp:308
 msgid "&Redo "
-msgstr "&Вернуть"
+msgstr "&Вернуть "
 
 #: ../src/generic/fdrepdlg.cpp:185
 msgid "&Replace"
@@ -323,7 +323,7 @@ msgstr "&Сохранить..."
 
 #: ../src/generic/tipdlg.cpp:238
 msgid "&Show tips at startup"
-msgstr "&Показывать подсказки при старте"
+msgstr "&Показывать советы при старте"
 
 #: ../src/univ/themes/win32.cpp:4819
 msgid "&Size"
@@ -424,7 +424,7 @@ msgstr "*** Отчет об отладке был сформирован\n"
 
 #: ../src/common/debugrpt.cpp:540
 msgid "*** And includes the following files:\n"
-msgstr "*** И включает сладующие файлы:\n"
+msgstr "*** И включает следующие файлы:\n"
 
 #: ../src/common/debugrpt.cpp:538
 msgid "*** It can be found in \"%s\"\n"
@@ -482,7 +482,7 @@ msgstr "<<"
 
 #: ../src/generic/filedlgg.cpp:266 ../src/generic/filedlgg.cpp:289
 msgid "<DIR>"
-msgstr "<ПАПКА>"
+msgstr "<КАТАЛОГ>"
 
 #: ../src/generic/filedlgg.cpp:270 ../src/generic/filedlgg.cpp:293
 msgid "<DRIVE>"
@@ -566,7 +566,7 @@ msgstr "AddToPropertyCollection вызвано из общего предка"
 
 #: ../include/wx/xti.h:849
 msgid "AddToPropertyCollection called w/o valid adder"
-msgstr "AddToPropertyCollection вызвано без использования верного сумматора"
+msgstr "AddToPropertyCollection вызвано без использования верного adder"
 
 #: ../src/html/helpctrl.cpp:106
 msgid "Adding book %s"
@@ -674,7 +674,7 @@ msgstr "BMP: wxImage не имеет собственного wxPalette."
 
 #: ../src/common/fmapbase.cpp:115
 msgid "Baltic (ISO-8859-13)"
-msgstr "Батийский (ISO-8859-13)"
+msgstr "Балтийский (ISO-8859-13)"
 
 #: ../src/common/fmapbase.cpp:106
 msgid "Baltic (old) (ISO-8859-4)"
@@ -730,7 +730,7 @@ msgstr "В настоящее время обработчик CHM поддерживает только локальные файлы!"
 
 #: ../src/os2/thread.cpp:121
 msgid "Can not create mutex."
-msgstr "Невозможно создать семафор."
+msgstr "Невозможно создать мутекс."
 
 #: ../src/common/filefn.cpp:1290
 msgid "Can not enumerate files '%s'"
@@ -738,7 +738,7 @@ msgstr "Не могу подсчитать количество файлов '%s'"
 
 #: ../src/msw/dir.cpp:205 ../src/unix/dir.cpp:232
 msgid "Can not enumerate files in directory '%s'"
-msgstr "Не могу подсчитать файлы в каталоге '%s'"
+msgstr "Не могу пересчитать файлы в каталоге '%s'"
 
 #: ../src/os2/thread.cpp:523
 msgid "Can not resume thread %lu"
@@ -770,7 +770,7 @@ msgstr "О&тмена невозможна "
 
 #: ../src/common/image.cpp:1763
 msgid "Can't check image format of file '%s': file does not exist."
-msgstr "Проверить формат изображения у файла '%s': файл не существует."
+msgstr "Невозможно проверить формат изображения у файла '%s': файл не существует."
 
 #: ../src/msw/registry.cpp:434
 msgid "Can't close registry key '%s'"
@@ -808,11 +808,11 @@ msgstr "Невозможно удалить значение '%s' из ключа '%s'"
 
 #: ../src/msw/registry.cpp:1061
 msgid "Can't enumerate subkeys of key '%s'"
-msgstr "Невозможно подсчитать количество подключей ключа '%s'"
+msgstr "Невозможно пересчитать подключи ключа '%s'"
 
 #: ../src/msw/registry.cpp:1016
 msgid "Can't enumerate values of key '%s'"
-msgstr "Невозможно подсчитать количество значений ключа '%s'"
+msgstr "Невозможно пересчитать значения ключа '%s'"
 
 #: ../src/msw/registry.cpp:1267
 msgid "Can't export value of unsupported type %d."
@@ -865,7 +865,7 @@ msgstr "Невозможно сохранить изображение в файл '%s': неизвестное расширение фай
 
 #: ../src/generic/logg.cpp:572 ../src/generic/logg.cpp:1021
 msgid "Can't save log contents to file."
-msgstr "Не могу сохранить содержание журнала в файл."
+msgstr "Невозможно сохранение содержания журнала в файл."
 
 #: ../src/msw/thread.cpp:550 ../src/os2/thread.cpp:473
 msgid "Can't set thread priority"
@@ -878,7 +878,7 @@ msgstr "Невозможно установить значение '%s'"
 
 #: ../src/common/zstream.cpp:316
 msgid "Can't write to deflate stream: %s"
-msgstr "невозможно записать в разжимаемый поток: %s"
+msgstr "Невозможно записать в разжимаемый поток: %s"
 
 #: ../contrib/src/deprecated/proplist.cpp:518 ../src/generic/choicdgg.cpp:291
 #: ../src/generic/dirdlgg.cpp:116 ../src/generic/numdlgg.cpp:136
@@ -925,7 +925,7 @@ msgstr "Невозможно получить официальное имя хоста"
 
 #: ../src/msw/dialup.cpp:908
 msgid "Cannot hang up - no active dialup connection."
-msgstr "Невозможно повесить трубку - нет активного подемного соединения."
+msgstr "Невозможно повесить трубку - нет активного модемного соединения."
 
 #: ../include/wx/msw/ole/oleutils.h:47
 msgid "Cannot initialize OLE"
@@ -985,7 +985,7 @@ msgstr "Невозможно разобрать координаты из '%s'."
 
 #: ../src/xrc/xmlres.cpp:1159
 msgid "Cannot parse dimension from '%s'."
-msgstr "Невозможно определить измерение из '%s'."
+msgstr "Невозможно разобрать измерение из '%s'."
 
 #: ../src/html/helpfrm.cpp:1562
 msgid "Cannot print empty page."
@@ -1017,7 +1017,7 @@ msgstr "С учетом регистра"
 
 #: ../src/common/fmapbase.cpp:116
 msgid "Celtic (ISO-8859-14)"
-msgstr "Балтийский (ISO-8859-13)"
+msgstr "Кельтский (ISO-8859-14)"
 
 #: ../src/common/stockitem.cpp:127
 msgid "Centered"
@@ -1088,11 +1088,11 @@ msgstr "Имя поля в файле конфигурации не может начинаться с '%c'."
 
 #: ../src/generic/filedlgg.cpp:1323 ../src/gtk/filedlg.cpp:64
 msgid "Confirm"
-msgstr "Подтвердить"
+msgstr "Подтвердите"
 
 #: ../src/msw/mimetype.cpp:677
 msgid "Confirm registry update"
-msgstr "Подтвердить обоновление реестра"
+msgstr "Подтвердите обновление реестра"
 
 #: ../src/html/htmlwin.cpp:386
 msgid "Connecting..."
@@ -1125,7 +1125,7 @@ msgstr "Невозможно извлечь %s в %s: %s"
 #: ../contrib/src/deprecated/resource.cpp:1830
 #: ../contrib/src/deprecated/resource.cpp:1960
 msgid "Could not find resource include file %s."
-msgstr "Невозможно найти файл включений ресурса '%s'."
+msgstr "Невозможно найти файл включений ресурса %s."
 
 #: ../src/generic/tabg.cpp:1048
 msgid "Could not find tab for id"
@@ -1167,11 +1167,11 @@ msgstr "Невозможно передать данные в окно"
 #: ../src/mac/carbon/mpthread.cpp:227 ../src/mac/carbon/mpthread.cpp:306
 #: ../src/mac/carbon/thread.cpp:414 ../src/mac/carbon/thread.cpp:495
 msgid "Could not unlock mutex"
-msgstr "Невозможно освободить mutex"
+msgstr "Невозможно освободить мутекс"
 
 #: ../src/os2/thread.cpp:154
 msgid "Couldn't acquire a mutex lock"
-msgstr "Невозможно получить блокировку mutex"
+msgstr "Невозможно получить блокировку мутекса"
 
 #: ../src/msw/dragimag.cpp:166 ../src/msw/dragimag.cpp:206
 #: ../src/msw/imaglist.cpp:158 ../src/msw/imaglist.cpp:176
@@ -1185,7 +1185,7 @@ msgstr "Невозможно создать таймер"
 
 #: ../src/mgl/cursor.cpp:135 ../src/mgl/cursor.cpp:166
 msgid "Couldn't create cursor."
-msgstr "Невозможно создать курсор"
+msgstr "Невозможно создать курсор."
 
 #: ../src/common/dynlib.cpp:199
 msgid "Couldn't find symbol '%s' in a dynamic library"
@@ -1213,7 +1213,7 @@ msgstr "Невозможно зарегистрировать формат буфера обмена '%s'."
 
 #: ../src/os2/thread.cpp:171
 msgid "Couldn't release a mutex"
-msgstr "Невозможно освободить mutex"
+msgstr "Невозможно освободить мутекс"
 
 #: ../src/msw/listctrl.cpp:735
 msgid "Couldn't retrieve information about list control item %d."
@@ -1258,7 +1258,7 @@ msgstr "Лист D, 22 x 34 дюйма"
 
 #: ../src/msw/dde.cpp:633
 msgid "DDE poke request failed"
-msgstr "Ошибка запроса записи DDE"
+msgstr "Ошибка запроса DDE poke"
 
 #: ../src/common/imagbmp.cpp:921
 msgid "DIB Header: Encoding doesn't match bitdepth."
@@ -1290,7 +1290,7 @@ msgstr "Отчет об отладке \"%s\""
 
 #: ../src/common/debugrpt.cpp:203
 msgid "Debug report couldn't be created."
-msgstr "Отчет об отладке не может быть создан"
+msgstr "Отчет об отладке не может быть создан."
 
 #: ../src/common/debugrpt.cpp:517
 msgid "Debug report generation has failed."
@@ -1326,7 +1326,7 @@ msgid ""
 "not installed on this machine. Please install it."
 msgstr ""
 "Функции набора номера недоступны из-за того, что сервис удаленного доступа (RAS) не установлен на этой машине. "
-"Пожалуйста установите его."
+"Пожалуйста, установите его."
 
 #: ../src/generic/tipdlg.cpp:246
 msgid "Did you know..."
@@ -1390,7 +1390,7 @@ msgstr "Готово"
 
 #: ../src/generic/progdlgg.cpp:433
 msgid "Done."
-msgstr "Сделано."
+msgstr "Готово."
 
 #: ../src/common/xtixml.cpp:271
 msgid "Doubly used id : %d"
@@ -1646,7 +1646,7 @@ msgstr "Не удалось очистить буфер обмена."
 
 #: ../src/unix/displayx11.cpp:201
 msgid "Failed to enumerate video modes"
-msgstr "Невозможно получить количество видео-режимов"
+msgstr "Невозможно пересчитать видео-режимы"
 
 #: ../src/msw/dde.cpp:652
 msgid "Failed to establish an advise loop with DDE server"
@@ -1866,7 +1866,7 @@ msgstr "Невозможно послать advise уведомление DDE"
 
 #: ../src/common/ftp.cpp:384
 msgid "Failed to set FTP transfer mode to %s."
-msgstr "Не удалось установить режим режим передачи FTP в %s."
+msgstr "Не удалось установить режим передачи FTP в %s."
 
 #: ../src/msw/clipbrd.cpp:379
 msgid "Failed to set clipboard data."
@@ -2074,7 +2074,7 @@ msgstr "Идти на один уровень вверх в иерархии документа"
 
 #: ../src/generic/dirdlgg.cpp:147 ../src/generic/filedlgg.cpp:997
 msgid "Go to home directory"
-msgstr "В домашний каталог"
+msgstr "В начальный каталог"
 
 #: ../src/generic/filedlgg.cpp:989
 msgid "Go to parent directory"
@@ -2211,7 +2211,7 @@ msgstr ""
 "Если вы желаете полностью отказаться от этого отчета об ошибке, выберите "
 "кнопку \"Отмена\",\n"
 "но учтите, что это может воспрепятствовать улучшению программы, так что, если\n"
-"это возможно, пожалуйста, продолжайте генерацию отчета.\n"
+"это возможно, пожалуйста продолжайте генерацию отчета.\n"
 
 #: ../src/msw/registry.cpp:1281
 msgid "Ignoring value \"%s\" of the key \"%s\"."
@@ -2283,7 +2283,7 @@ msgstr "Индекс"
 
 #: ../src/common/fmapbase.cpp:114
 msgid "Indian (ISO-8859-12)"
-msgstr "Индийский (ISO-8859-10)"
+msgstr "Индийский (ISO-8859-12)"
 
 #: ../src/common/xtistrm.cpp:704
 msgid "Internal error, illegal wxCustomTypeInfo"
@@ -2311,11 +2311,11 @@ msgstr "Неверный файл блокировки '%s'."
 
 #: ../src/common/xtistrm.cpp:365 ../src/common/xtistrm.cpp:380
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
-msgstr "Неверный или нулевой идентификатор обхекта передан в GetObjectClassInfo"
+msgstr "Неверный или нулевой идентификатор объекта передан в GetObjectClassInfo"
 
 #: ../src/common/xtistrm.cpp:395
 msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
-msgstr "Неверный или нулевой идентификатор обхекта передан в HasObjectClassInfo"
+msgstr "Неверный или нулевой идентификатор объекта передан в HasObjectClassInfo"
 
 #: ../src/common/regex.cpp:210
 msgid "Invalid regular expression '%s': %s"
@@ -2937,7 +2937,7 @@ msgstr "Удалить"
 
 #: ../src/html/helpfrm.cpp:445
 msgid "Remove current page from bookmarks"
-msgstr "Удалить текущую станицу из закладок"
+msgstr "Удалить текущую страницу из закладок"
 
 #: ../src/common/rendcmn.cpp:193
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
@@ -3004,7 +3004,7 @@ msgid ""
 "Search contents of help book(s) for all occurences of the text you typed "
 "above"
 msgstr ""
-"Поиск в содержании книг помощи всех упоминаний введенного выше \n"
+"Поиск в содержании книг помощи всех упоминаний введенного выше "
 "текста"
 
 #: ../src/generic/fdrepdlg.cpp:166
@@ -3065,7 +3065,7 @@ msgstr "Настройки..."
 
 #: ../src/msw/dialup.cpp:530
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr "Несколько активных подсоединений найдено, случайно выбираем одно."
+msgstr "Найдено несколько активных подсоединений, выбираем одно случайным образом."
 
 #: ../src/html/helpfrm.cpp:493
 msgid "Show all"
@@ -3303,8 +3303,8 @@ msgid ""
 "The version of remote access service (RAS) installed on this machine is "
 "tooold, please upgrade (the following required function is missing: %s)."
 msgstr ""
-"Версия сервиса удаленного доступа (RAS), установленного на этой машине "
-"слишком устарела, пожалуйста, обновите его (функция %s не найдена)."
+"Версия сервиса удаленного доступа (RAS), установленного на этой машине, "
+"слишком устарела; пожалуйста, обновите его (функция %s не найдена)."
 
 #: ../src/html/htmprint.cpp:601
 msgid ""
@@ -3317,7 +3317,7 @@ msgid ""
 "This system doesn't support date picker control, please upgrade your version "
 "of comctl32.dll"
 msgstr ""
-"Эта система не поддерживает элемент управления выбора даты, пожалуйста, обновите вашу версию "
+"Эта система не поддерживает элемент управления выбора даты; пожалуйста, обновите вашу версию "
 "comctl32.dll"
 
 #: ../src/msw/thread.cpp:1204
@@ -3462,7 +3462,7 @@ msgstr "32-битный юникод Little Endian (UTF-32LE)"
 
 #: ../src/common/fmapbase.cpp:133
 msgid "Unicode 7 bit (UTF-7)"
-msgstr "7-битный юникод (UTF-8)"
+msgstr "7-битный юникод (UTF-7)"
 
 #: ../src/common/fmapbase.cpp:134
 msgid "Unicode 8 bit (UTF-8)"
@@ -3474,7 +3474,7 @@ msgstr "Неизвестная ошибка DDE %08x"
 
 #: ../src/common/xtistrm.cpp:370
 msgid "Unknown Object passed to GetObjectClassInfo"
-msgstr "Неизвестный объект переда в GetObjectClassInfo"
+msgstr "Неизвестный объект передан в GetObjectClassInfo"
 
 #: ../src/unix/dlunix.cpp:275
 msgid "Unknown dynamic library error"
@@ -3540,7 +3540,7 @@ msgstr "Конфликт проверки"
 
 #: ../contrib/src/mmedia/vidbase.cpp:65
 msgid "Video Output"
-msgstr "Выдео-выход"
+msgstr "Видео-выход"
 
 #: ../src/generic/filedlgg.cpp:980
 msgid "View files as a detailed view"
@@ -4044,11 +4044,11 @@ msgstr "ошибка в формате данных"
 
 #: ../src/html/chm.cpp:332
 msgid "error opening file"
-msgstr "Ошибка открытия файла"
+msgstr "ошибка открытия файла"
 
 #: ../src/common/zipstrm.cpp:1443
 msgid "error reading zip central directory"
-msgstr "Ошибка чтения центрального каталога zip"
+msgstr "ошибка чтения центрального каталога zip"
 
 #: ../src/common/zipstrm.cpp:1521
 msgid "error reading zip local header"
@@ -4352,11 +4352,11 @@ msgstr "безымянный%d"
 
 #: ../src/common/zipstrm.cpp:1661 ../src/common/zipstrm.cpp:2031
 msgid "unsupported Zip compression method"
-msgstr "Неподдерживаемый метод сжатия Zip"
+msgstr "неподдерживаемый метод сжатия Zip"
 
 #: ../src/common/zipstrm.cpp:1142
 msgid "unsupported zip archive"
-msgstr "Неподдерживаемый zip архив."
+msgstr "неподдерживаемый zip архив"
 
 #: ../src/common/intl.cpp:1114
 msgid "using catalog '%s' from '%s'."
@@ -4385,11 +4385,11 @@ msgstr "wxSocket: неизвестное событие!"
 
 #: ../src/motif/app.cpp:210
 msgid "wxWidgets could not open display for '%s': exiting."
-msgstr "wxWidgets не смог открыть дисплей для '%s': выходим."
+msgstr "wxWidgets не смог открыть дисплей для '%s': выход."
 
 #: ../src/x11/app.cpp:176
 msgid "wxWidgets could not open display. Exiting."
-msgstr "wxWidgets не смог открыть дисплей. Выходим."
+msgstr "wxWidgets не смог открыть дисплей. Выход."
 
 #: ../src/common/datetime.cpp:3592
 msgid "yesterday"
@@ -4397,7 +4397,7 @@ msgstr "вчера"
 
 #: ../src/common/zstream.cpp:165 ../src/common/zstream.cpp:315
 msgid "zlib error %d"
-msgstr "ошибка zlib #%d"
+msgstr "ошибка zlib %d"
 
 #: ../src/common/prntbase.cpp:839
 msgid "|<<"
