@@ -57,6 +57,13 @@
 #include "wx/mac/private.h"
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// trace mask for activation tracing messages
+static const wxChar *TRACE_ACTIVATE = _T("activation");
+
+// ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
 
@@ -1244,14 +1251,16 @@ void wxTopLevelWindowMac::MacDelayedDeactivation(long timestamp)
 {
     if(s_macDeactivateWindow)
     {
-        wxLogDebug(wxT("Doing delayed deactivation of %p"),s_macDeactivateWindow);
+        wxLogTrace(TRACE_ACTIVATE,
+                   wxT("Doing delayed deactivation of %p"),
+                   s_macDeactivateWindow);
         s_macDeactivateWindow->MacActivate(timestamp, false);
     }
 }
 
 void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
 {
-    // wxLogDebug(wxT("TopLevel=%p::MacActivate"),this);
+    wxLogTrace(TRACE_ACTIVATE, wxT("TopLevel=%p::MacActivate"), this);
 
     if(s_macDeactivateWindow==this)
         s_macDeactivateWindow=NULL;
