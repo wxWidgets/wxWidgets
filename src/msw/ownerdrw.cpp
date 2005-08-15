@@ -170,7 +170,9 @@ wxOwnerDrawn::~wxOwnerDrawn()
 bool wxOwnerDrawn::IsMenuItem() const
 {
     // TODO: in 2.7, replace this with simple "return m_isMenuItem"
-    return gs_menuItems.count(this) == 1;
+
+    // some versions of mingw have problems without const_cast when wxUSE_STL=1
+    return gs_menuItems.count(wx_const_cast(wxOwnerDrawn *, this)) == 1;
 }
 
 
