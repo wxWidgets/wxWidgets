@@ -800,21 +800,25 @@ Homepage: http://xrced.sourceforge.net\
         tree.SetFocus()
         self.SetModified()
 
-
     # Replace one object with another
     def OnReplace(self, evt):
         selected = tree.selection
         xxx = tree.GetPyData(selected).treeObject()
         elem = xxx.element
         parent = elem.parentNode
-        parentXXX = xxx.parent
+        undoMan.RegisterUndo(UndoReplace(selected))
         # New class
         className = pullDownMenu.createMap[evt.GetId() - 1000]
         # Create temporary empty node (with default values)
         dummy = MakeEmptyDOM(className)
-        xxxClass = xxxDict[className]
+        if className == 'spacer' and xxx.className != 'spacer':
+            klass = xxxSpacer
+        elif xxx.className == 'spacer' and className != 'spacer':
+            klass = xxxSizerItem
+        else:
+            klass = xxxDict[className]
         # Remove non-compatible children
-        if tree.ItemHasChildren(selected) and not xxxClass.hasChildren:
+        if tree.ItemHasChildren(selected) and not klass.hasChildren:
             tree.DeleteChildren(selected)
         nodes = elem.childNodes[:]
         tags = []
@@ -823,10 +827,9 @@ Homepage: http://xrced.sourceforge.net\
             remove = False
             tag = node.tagName
             if tag == 'object':
-                if not xxxClass.hasChildren:
-                    remove = True
-            elif tag not in xxxClass.allParams and \
-                     (not xxxClass.hasStyle or tag not in xxxClass.styles):
+                if not klass.hasChildren:  remove = True
+            elif tag not in klass.allParams and \
+                     (not klass.hasStyle or tag not in klass.styles):
                 remove = True
             else:
                 tags.append(tag)
@@ -834,18 +837,37 @@ Homepage: http://xrced.sourceforge.net\
                 elem.removeChild(node)
                 node.unlink()
         
-        # Copy parameters present in dummy but not in elem
-        for node in dummy.childNodes:
-            tag = node.tagName
-            if tag not in tags:
-                elem.appendChild(node.cloneNode(True))
+        # Remove sizeritem child if spacer
+        if className == 'spacer' and xxx.className != 'spacer':
+            sizeritem = elem.parentNode
+            assert sizeritem.getAttribute('class') == 'sizeritem'
+            sizeritem.removeChild(elem)
+            elem.unlink()
+            elem = sizeritem
+            tree.GetPyData(selected).hasChild = false
+        elif xxx.className == 'spacer' and className != 'spacer':
+            # Create sizeritem element
+            assert xxx.parent.isSizer
+            elem.setAttribute('class', 'sizeritem')
+            node = MakeEmptyDOM(className)
+            elem.appendChild(node)
+            # Replace to point to new object
+            xxx = xxxSizerItem(xxx.parent, elem)
+            elem = node
+            tree.SetPyData(selected, xxx)
+            xxx = xxx.child
+        else:
+            # Copy parameters present in dummy but not in elem
+            for node in dummy.childNodes:
+                if node.tagName not in tags:  elem.appendChild(node.cloneNode(True))
         dummy.unlink()
+        
         # Change class name
-        elem.setAttribute('class', className)        
+        elem.setAttribute('class', className)
         if elem.hasAttribute('subclass'):
             elem.removeAttribute('subclass') # clear subclassing
         # Re-create xxx element
-        xxx = MakeXXXFromDOM(parentXXX, elem)
+        xxx = MakeXXXFromDOM(xxx.parent, elem)
         # Update parent in child objects
         if tree.ItemHasChildren(selected):
             i, cookie = tree.GetFirstChild(selected)
@@ -854,13 +876,14 @@ Homepage: http://xrced.sourceforge.net\
                 x.parent = xxx
                 if x.hasChild: x.child.parent = xxx
                 i, cookie = tree.GetNextChild(selected, cookie)
-    
+
         # Update tree
         if tree.GetPyData(selected).hasChild: # child container
             container = tree.GetPyData(selected)
             container.child = xxx
             container.hasChildren = xxx.hasChildren
             container.isSizer = xxx.isSizer
+            xxx = container
         else:
             tree.SetPyData(selected, xxx)
         tree.SetItemText(selected, xxx.treeName())

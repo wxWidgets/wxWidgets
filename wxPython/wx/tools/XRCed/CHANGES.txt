@@ -1,3 +1,9 @@
+0.1.6-4
+-------
+
+Fixed replacing op for sizer children and spacer objects. 
+UndoReplace is not yet implemented.
+
 0.1.6-3
 -------
 
