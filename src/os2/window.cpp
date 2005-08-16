@@ -47,7 +47,7 @@
     #include <stdio.h>
 #endif
 
-#if     wxUSE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     #include "wx/ownerdrw.h"
 #endif
 
@@ -5126,7 +5126,7 @@ const wxChar* wxGetMessageName( int nMessage )
     }
 
     static wxString s_szBuf;
-    s_szBuf.Printf(wxT("<unknown message = %d>"), message);
+    s_szBuf.Printf(wxT("<unknown message = %d>"), nMessage);
     return s_szBuf.c_str();
 
 } // end of wxGetMessageName
