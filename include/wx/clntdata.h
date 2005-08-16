@@ -180,7 +180,11 @@ struct WXDLLIMPEXP_BASE wxClientDataDictionaryPair
     wxClientData* data;
 };
 
-WX_DECLARE_VECTOR(wxClientDataDictionaryPair,wxClientDataDictionaryPairVector);
+_WX_DECLARE_VECTOR(
+    wxClientDataDictionaryPair,
+    wxClientDataDictionaryPairVector,
+    WXDLLIMPEXP_BASE
+);
 
 // this class is used internally to maintain the association between items
 // of (some subclasses of) wxControlWithItems and their client data
