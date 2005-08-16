@@ -327,7 +327,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxChoiceNameStr )
-        : wxChoice(parent, id, pos, size, n, choices, 
+        : wxChoice(parent, id, pos, size, n, choices,
                      style, validator, name) { }
 
 protected:
@@ -833,10 +833,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 #if wxUSE_SLIDER && wxUSE_GAUGE
     panel = new wxPanel(m_book);
-    
+
     wxBoxSizer *main_sizer = new wxBoxSizer( wxHORIZONTAL );
     panel->SetSizer( main_sizer );
-    
+
     wxStaticBoxSizer *gauge_sizer = new wxStaticBoxSizer( wxHORIZONTAL, panel, _T("&wxGauge and wxSlider") );
     main_sizer->Add( gauge_sizer, 0, wxALL, 5 );
     wxBoxSizer *sz = new wxBoxSizer( wxVERTICAL );
@@ -853,7 +853,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_slider->SetToolTip(_T("This is a sliding slider"));
 #endif // wxUSE_TOOLTIPS
     sz->Add( m_slider, 0, wxALL, 10 );
-    
+
     m_gaugeVert = new wxGauge( panel, wxID_ANY, 100,
                                wxDefaultPosition, wxSize(wxDefaultCoord, 90),
                                wxGA_VERTICAL | wxGA_SMOOTH | wxNO_BORDER );
@@ -1349,7 +1349,7 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
 void MyPanel::OnCombo( wxCommandEvent &event )
 {
     wxLogMessage(_T("EVT_COMBOBOX: item %d/%d (event/control), string \"%s\"/\"%s\""),
-                 event.GetInt(),
+                 (int)event.GetInt(),
                  m_combo->GetSelection(),
                  event.GetString().c_str(),
                  m_combo->GetStringSelection().c_str());
