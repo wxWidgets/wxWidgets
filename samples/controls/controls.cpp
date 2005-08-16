@@ -77,6 +77,7 @@ public:
     virtual ~MyPanel();
 
     void OnSize( wxSizeEvent& event );
+    void OnIdle( wxIdleEvent &event );
     void OnListBox( wxCommandEvent &event );
     void OnListBoxDoubleClick( wxCommandEvent &event );
     void OnListBoxButtons( wxCommandEvent &event );
@@ -481,6 +482,7 @@ const int  ID_SIZER_CHECKBIG    = 206;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
+EVT_IDLE      (                         MyPanel::OnIdle)
 EVT_BOOKCTRL_PAGE_CHANGING(ID_BOOK,     MyPanel::OnPageChanging)
 EVT_BOOKCTRL_PAGE_CHANGED(ID_BOOK,      MyPanel::OnPageChanged)
 EVT_LISTBOX   (ID_LISTBOX,              MyPanel::OnListBox)
@@ -1049,6 +1051,26 @@ void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
     if (m_text) m_text->SetSize( 2, y*2/3+2, x-4, y/3-4 );
 }
 
+void MyPanel::OnIdle(wxIdleEvent& event)
+{
+    static const int INVALID_SELECTION = -2;
+
+    static int s_selCombo = INVALID_SELECTION;
+    int sel = m_combo->GetSelection();
+    if ( sel != s_selCombo )
+    {
+        if ( s_selCombo != INVALID_SELECTION )
+        {
+            wxLogMessage(_T("EVT_IDLE: combobox selection changed from %d to %d"),
+                         s_selCombo, sel);
+        }
+
+        s_selCombo = sel;
+    }
+
+    event.Skip();
+}
+
 void MyPanel::OnPageChanging( wxBookCtrlEvent &event )
 {
     int selOld = event.GetOldSelection();
@@ -1326,20 +1348,18 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
 
 void MyPanel::OnCombo( wxCommandEvent &event )
 {
-    m_text->AppendText( _T("ComboBox event selection string is: ") );
-    m_text->AppendText( event.GetString() );
-    m_text->AppendText( _T("\n") );
-    m_text->AppendText( _T("ComboBox control selection string is: ") );
-    m_text->AppendText( m_combo->GetStringSelection() );
-    m_text->AppendText( _T("\n") );
+    wxLogMessage(_T("EVT_COMBOBOX: item %d/%d (event/control), string \"%s\"/\"%s\""),
+                 event.GetInt(),
+                 m_combo->GetSelection(),
+                 event.GetString().c_str(),
+                 m_combo->GetStringSelection().c_str());
 }
 
 void MyPanel::OnComboTextChanged(wxCommandEvent& event)
 {
-    wxString str;
-    str.Printf( wxT("Text in the combobox changed: now is '%s'."),
-                event.GetString().c_str() );
-    wxLogMessage( str.c_str() );
+    wxLogMessage(wxT("EVT_TEXT for the combobox: \"%s\" (event) or \"%s\" (control)."),
+                 event.GetString().c_str(),
+                 m_combo->GetValue().c_str());
 }
 
 void MyPanel::OnComboTextEnter(wxCommandEvent& WXUNUSED(event))
@@ -1737,10 +1757,13 @@ void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
+    SetSize(800, 600);
+#if 0
     wxBusyCursor bc;
 
     wxMessageDialog dialog(this, _T("This is a control sample"), _T("About Controls"), wxOK );
     dialog.ShowModal();
+#endif
 }
 
 void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
