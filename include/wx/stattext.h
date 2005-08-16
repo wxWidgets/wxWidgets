@@ -25,6 +25,12 @@ class WXDLLEXPORT wxStaticTextBase : public wxControl
 public:
     wxStaticTextBase() { }
 
+    // wrap the text of the control so that no line is longer than the given
+    // width (if possible: this function won't break words)
+    //
+    // NB: implemented in dlgcmn.cpp for now
+    void Wrap(int width);
+
     // overriden base virtuals
     virtual bool AcceptsFocus() const { return false; }
     virtual bool HasTransparentBackground() { return true; }

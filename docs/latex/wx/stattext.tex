@@ -36,6 +36,7 @@ See also \helpref{window styles overview}{windowstyles}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxStaticText::wxStaticText}\label{wxstatictextconstr}
 
 \func{}{wxStaticText}{\void}
@@ -68,6 +69,7 @@ Constructor, creating and showing a text control.
 
 \helpref{wxStaticText::Create}{wxstatictextcreate}
 
+
 \membersection{wxStaticText::Create}\label{wxstatictextcreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
@@ -76,11 +78,13 @@ Constructor, creating and showing a text control.
 
 Creation function, for two-step construction. For details see \helpref{wxStaticText::wxStaticText}{wxstatictextconstr}.
 
+
 \membersection{wxStaticText::GetLabel}\label{wxstatictextgetlabel}
 
 \constfunc{wxString}{GetLabel}{\void}
 
 Returns the contents of the control.
+
 
 \membersection{wxStaticText::SetLabel}\label{wxstatictextsetlabel}
 
@@ -93,3 +97,12 @@ label unless the control has wxST\_NO\_AUTORESIZE flag.
 
 \docparam{label}{The new label to set. It may contain newline characters.}
 
+
+\membersection{wxStaticText::Wrap}\label{wxstatictextwrpa}
+
+\func{void}{Wrap}{\param{int }{width}}
+
+This functions wraps the controls label so that each of its lines becomes at
+most \arg{width} pixels wide if possible (the lines are broken at words
+boundaries so it might not be the case if words are too long). If \arg{width}
+is negative, no wrapping is done.

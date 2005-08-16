@@ -18,6 +18,7 @@ All:
 
 All (GUI):
 
+- Added wxStaticText::Wrap()
 - Added wxXmlResource::Unload().
 - Possibility of modeless wxWizard dialog (with presentation in sample).
 - Fixed a rare crash due to malformed HTML in wxHTML (Xavier Nodet).
