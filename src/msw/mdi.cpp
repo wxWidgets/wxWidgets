@@ -45,6 +45,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/stockitem.h"
 #include "wx/mdi.h"
 #include "wx/msw/private.h"
 
@@ -1401,9 +1402,8 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
                 continue;
             }
 
-            wxString strHelp(_("&Help"));
             wxString strBuf(buf);
-            if ( wxStripMenuCodes(strBuf) == wxStripMenuCodes(strHelp) )
+            if ( wxStripMenuCodes(strBuf) == wxGetStockLabel(wxID_HELP,false) )
             {
                 success = true;
                 ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,

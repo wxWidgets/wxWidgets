@@ -35,6 +35,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/generic/mdig.h"
+#include "wx/stockitem.h"
 
 enum MDI_MENU_ID
 {
@@ -307,7 +308,7 @@ void wxGenericMDIParentFrame::AddWindowMenu(wxMenuBar *pMenuBar)
 {
     if (pMenuBar && m_pWindowMenu)
     {
-        int pos = pMenuBar->FindMenu(wxStripMenuCodes(wxString(_("&Help"))));
+        int pos = pMenuBar->FindMenu(wxGetStockLabel(wxID_HELP,false));
         if (pos == wxNOT_FOUND)
         {
             pMenuBar->Append(m_pWindowMenu, _("&Window"));
