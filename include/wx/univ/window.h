@@ -254,8 +254,13 @@ protected:
     bool m_isCurrent:1;
 
 #ifdef __WXMSW__
+
+#if wxABI_VERSION >= 20602
+public:
+#endif
     // override MSWWindowProc() to process WM_NCHITTEST
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
 #endif // __WXMSW__
 
 private:
