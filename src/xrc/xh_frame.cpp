@@ -53,6 +53,7 @@ wxFrameXmlHandler::wxFrameXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
     XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
     XRC_ADD_STYLE(wxFRAME_EX_METAL);
+    XRC_ADD_STYLE(wxFRAME_EX_CONTEXTHELP);
 
     AddWindowStyles();
 }
