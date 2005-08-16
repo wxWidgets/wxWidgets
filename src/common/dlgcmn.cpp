@@ -57,6 +57,9 @@ public:
     // max line width or -1 to disable wrapping
     void Wrap(wxWindow *win, const wxString& text, int widthMax);
 
+    // we don't need it, but just to avoid compiler warnings
+    virtual ~wxTextWrapper() { }
+
 protected:
     // line may be empty
     virtual void OnOutputLine(const wxString& line) = 0;
