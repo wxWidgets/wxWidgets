@@ -38,7 +38,8 @@ extern bool g_isIdle;
 //-----------------------------------------------------------------------------
 
 extern bool   g_blockEventsOnDrag;
-static int    g_SelectionBeforePopup = -2; // -2 <=> the popup is hidden
+static int    g_SelectionBeforePopup = wxID_NONE; // this means the popup is hidden
+
 //-----------------------------------------------------------------------------
 //  "changed" - typing and list item matches get changed, select-child
 //              if it doesn't match an item then just get a single changed
@@ -78,7 +79,7 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
 {
     // when the popup is hidden, throw a SELECTED event only if the combobox
     // selection changed.
-    int curSelection = combo->GetSelection();
+    int curSelection = combo->GetCurrentSelection();
     if (g_SelectionBeforePopup != curSelection)
     {
         wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
@@ -88,8 +89,8 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
         combo->GetEventHandler()->ProcessEvent( event );
     }
 
-    // reset the selection flag to an identifiable value (-2 = hidden)
-    g_SelectionBeforePopup = -2;
+    // reset the selection flag to value meaning that it is hidden
+    g_SelectionBeforePopup = wxID_NONE;
 }
 }
 
@@ -98,8 +99,7 @@ static void
 gtk_popup_show_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
 {
     // store the combobox selection value before the popup is shown
-  // if there is no selection, combo->GetSelection() returns -1
-    g_SelectionBeforePopup = combo->GetSelection();
+    g_SelectionBeforePopup = combo->GetCurrentSelection();
 }
 }
 
@@ -117,7 +117,7 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
 
     if (g_blockEventsOnDrag) return;
 
-    int curSelection = combo->GetSelection();
+    int curSelection = combo->GetCurrentSelection();
 
     if (combo->m_prevSelection == curSelection) return;
 
@@ -135,25 +135,26 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     gtk_signal_connect_after( GTK_OBJECT(GTK_COMBO(combo->GetHandle())->entry), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)combo );
 
-    // throw a SELECTED event only if the combobox popup is hidden (-2)
+    // throw a SELECTED event only if the combobox popup is hidden (wxID_NONE)
     // because when combobox popup is shown, gtk_combo_select_child_callback is
     // called each times the mouse is over an item with a pressed button so a lot
     // of SELECTED event could be generated if the user keep the mouse button down
     // and select other items ...
-    if (g_SelectionBeforePopup == -2)
+    if (g_SelectionBeforePopup == wxID_NONE)
     {
         wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
         event.SetInt( curSelection );
         event.SetString( combo->GetStringSelection() );
         event.SetEventObject( combo );
         combo->GetEventHandler()->ProcessEvent( event );
-      }
 
-    // Now send the event ourselves
-    wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
-    event2.SetString( combo->GetValue() );
-    event2.SetEventObject( combo );
-    combo->GetEventHandler()->ProcessEvent( event2 );
+        // for consistencu with the other ports, don't generate text update
+        // events while the user is browsing the combobox neither
+        wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
+        event2.SetString( combo->GetValue() );
+        event2.SetEventObject( combo );
+        combo->GetEventHandler()->ProcessEvent( event2 );
+    }
 }
 }
 
@@ -558,6 +559,14 @@ int wxComboBox::FindString( const wxString &item ) const
 }
 
 int wxComboBox::GetSelection() const
+{
+    // if the popup is currently opened, use the selection as it had been
+    // before it dropped down
+    return g_SelectionBeforePopup == wxID_NONE ? GetCurrentSelection()
+                                               : g_SelectionBeforePopup;
+}
+
+int wxComboBox::GetCurrentSelection() const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 

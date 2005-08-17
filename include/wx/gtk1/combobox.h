@@ -90,6 +90,9 @@ public:
 
     virtual int FindString( const wxString &item ) const;
     int GetSelection() const;
+#if wxABI_VERSION >= 20602
+    int GetCurrentSelection() const;
+#endif
     wxString GetString( int n ) const;
     wxString GetStringSelection() const;
     int GetCount() const;
