@@ -19,6 +19,8 @@ All:
 All (GUI):
 
 - Added wxStaticText::Wrap()
+- wxChoice and wxComboBox::GetSelection() now returns completed selection,
+  added a new GetCurrentSelection() function having the old behaviour
 - Added wxXmlResource::Unload().
 - Possibility of modeless wxWizard dialog (with presentation in sample).
 - Fixed a rare crash due to malformed HTML in wxHTML (Xavier Nodet).

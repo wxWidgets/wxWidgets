@@ -307,6 +307,17 @@ void wxChoice::Free()
 
 int wxChoice::GetSelection() const
 {
+    // if m_lastAcceptedSelection is set, it means that the dropdown is
+    // currently shown and that we want to use the last "permanent" selection
+    // instead of whatever is under the mouse pointer currently
+    //
+    // otherwise, get the selection from the control
+    return m_lastAcceptedSelection == wxID_NONE ? GetCurrentSelection()
+                                                : m_lastAcceptedSelection;
+}
+
+int wxChoice::GetCurrentSelection() const
+{
     return (int)SendMessage(GetHwnd(), CB_GETCURSEL, 0, 0);
 }
 
@@ -621,27 +632,42 @@ WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
 bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
-    if ( param != CBN_SELCHANGE)
+    switch ( param )
     {
-        // "selection changed" is the only event we're after
-        return false;
+        case CBN_DROPDOWN:
+            // we don't want to track selection using CB_GETCURSEL while the
+            // dropdown is opened
+            m_lastAcceptedSelection = GetCurrentSelection();
+            break;
+
+        case CBN_CLOSEUP:
+            // it should be safe to use CB_GETCURSEL again
+            m_lastAcceptedSelection = wxID_NONE;
+            break;
+
+        case CBN_SELCHANGE:
+            {
+                const int n = GetSelection();
+
+                wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
+                event.SetInt(n);
+                event.SetEventObject(this);
+
+                if ( n > -1 )
+                {
+                    event.SetString(GetStringSelection());
+                    if ( HasClientObjectData() )
+                        event.SetClientObject( GetClientObject(n) );
+                    else if ( HasClientUntypedData() )
+                        event.SetClientData( GetClientData(n) );
+                }
+
+                ProcessCommand(event);
+            }
+            return true;
     }
 
-    int n = GetSelection();
-    if (n > -1)
-    {
-        wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
-        event.SetInt(n);
-        event.SetEventObject(this);
-        event.SetString(GetStringSelection());
-        if ( HasClientObjectData() )
-            event.SetClientObject( GetClientObject(n) );
-        else if ( HasClientUntypedData() )
-            event.SetClientData( GetClientData(n) );
-        ProcessCommand(event);
-    }
-
-    return true;
+    return false;
 }
 
 WXHBRUSH wxChoice::MSWControlColor(WXHDC hDC, WXHWND hWnd)

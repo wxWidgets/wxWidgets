@@ -328,7 +328,7 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
     return false;
 }
 
-bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
+bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
 {
     wxString value;
     int sel = -1;
@@ -398,10 +398,14 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
                 ProcessCommand(event);
             }
             break;
+
+        default:
+            return wxChoice::MSWCommand(param, id);
     }
 
-    // there is no return value for the CBN_ notifications, so always return
-    // false from here to pass the message to DefWindowProc()
+    // let the def window proc have it by returning false, but do not pass the
+    // message we've already handled here (notably CBN_SELCHANGE) to the base
+    // class as it would generate another event for them
     return false;
 }
 

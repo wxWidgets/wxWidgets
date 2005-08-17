@@ -37,6 +37,7 @@ when an item on the list is selected.}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxChoice::wxChoice}\label{wxchoicector}
 
 \func{}{wxChoice}{\void}
@@ -87,11 +88,13 @@ a list of strings.}
 \perlnote{In wxPerl there is just an array reference in place of {\tt n}
 and {\tt choices}.}
 
+
 \membersection{wxChoice::\destruct{wxChoice}}\label{wxchoicedtor}
 
 \func{}{\destruct{wxChoice}}{\void}
 
 Destructor, destroying the choice item.
+
 
 \membersection{wxChoice::Create}\label{wxchoicecreate}
 
@@ -109,6 +112,7 @@ Destructor, destroying the choice item.
 
 Creates the choice for two-step construction. See \helpref{wxChoice::wxChoice}{wxchoicector}.
 
+
 \membersection{wxChoice::Delete}\label{wxchoicedelete}
 
 \func{void}{Delete}{\param{int }{n}}
@@ -118,6 +122,7 @@ Deletes the item with the given index from the control.
 \wxheading{Parameters}
 
 \docparam{n}{The item to delete.}
+
 
 \membersection{wxChoice::GetColumns}\label{wxchoicegetcolumns}
 
@@ -129,6 +134,23 @@ Gets the number of columns in this choice item.
 
 This is implemented for Motif only and always returns $1$ for the other
 platforms.
+
+
+\membersection{wxChoice::GetCurrentSelection}\label{wxchoicegetcurrentselection}
+
+\constfunc{int}{GetCurrentSelection}{\void}
+
+Unlike \helpref{GetSelection}{wxcontrolwithitemsgetselection} which only
+returns the accepted selection value, i.e. the selection in the control once
+the user closes the dropdown list, this function returns the current selection.
+That is, while the dropdown list is shown, it returns the currently selected
+item in it. When it is not shown, its result is the same as for the other
+function.
+
+\newsince{2.6.2} (before this version 
+\helpref{GetSelection}{wxcontrolwithitemsgetselection} itself behaved like
+this).
+
 
 \membersection{wxChoice::SetColumns}\label{wxchoicesetcolumns}
 

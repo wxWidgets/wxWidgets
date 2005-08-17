@@ -24,7 +24,7 @@ class WXDLLEXPORT wxChoice : public wxChoiceBase
 {
 public:
     // ctors
-    wxChoice() { }
+    wxChoice() { Init(); }
     virtual ~wxChoice();
 
     wxChoice(wxWindow *parent,
@@ -36,8 +36,10 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxChoiceNameStr)
     {
+        Init();
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
+
     wxChoice(wxWindow *parent,
              wxWindowID id,
              const wxPoint& pos,
@@ -47,6 +49,7 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxChoiceNameStr)
     {
+        Init();
         Create(parent, id, pos, size, choices, style, validator, name);
     }
 
@@ -75,6 +78,9 @@ public:
 
     virtual int GetCount() const;
     virtual int GetSelection() const;
+#if wxABI_VERSION >= 20602
+    virtual int GetCurrentSelection() const;
+#endif
     virtual void SetSelection(int n);
 
     virtual int FindString(const wxString& s) const;
@@ -87,6 +93,9 @@ public:
     virtual WXHBRUSH MSWControlColor(WXHDC hDC, WXHWND hWnd);
 
 protected:
+    // common part of all ctors
+    void Init() { m_lastAcceptedSelection = wxID_NONE; }
+
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoSetItemClientData( int n, void* clientData );
     virtual void* DoGetItemClientData( int n ) const;
@@ -119,6 +128,13 @@ protected:
 
     // free all memory we have (used by Clear() and dtor)
     void Free();
+
+
+    // last "completed" selection, i.e. not the transient one while the user is
+    // browsing the popup list: this is only used when != wxID_NONE which is
+    // the case while the drop down is opened
+    int m_lastAcceptedSelection;
+
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxChoice)
 };
