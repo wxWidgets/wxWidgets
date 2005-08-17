@@ -82,6 +82,7 @@ public:
   virtual int GetCount() const ;
   virtual int GetSelection() const ;
   virtual void SetSelection(int n);
+  int GetCurrentSelection() const { return GetSelection(); }
 
   virtual int FindString(const wxString& s) const;
   virtual wxString GetString(int n) const ;
