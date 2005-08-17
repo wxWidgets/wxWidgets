@@ -81,7 +81,7 @@ public:
     virtual bool SetFont( const wxFont &font );
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) ;
-    
+
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
     virtual void GetTextExtent(const wxString& string,
@@ -107,7 +107,7 @@ public:
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP
-    
+
 #ifdef __WXGTK20__
     virtual void AddChild( wxWindowBase *child );
     virtual void RemoveChild( wxWindowBase *child );
@@ -125,7 +125,7 @@ public:
 
     // Internal represention of Update()
     void GtkUpdate();
-    
+
     // For compatibility across platforms (not in event table)
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
 
@@ -142,7 +142,7 @@ public:
     // to class not by using virtual functions but by using
     // the m_insertCallback.
     void DoAddChild(wxWindowGTK *child);
-    
+
     // This methods sends wxPaintEvents to the window. It reads the
     // update region, breaks it up into rects and sends an event
     // for each rect. It is also responsible for background erase
@@ -163,12 +163,15 @@ public:
 #ifdef __WXGTK20__
     // Returns the default context which usually is anti-aliased
     PangoContext   *GtkGetPangoDefaultContext();
-    
+
     // Returns the X11 context which renders on the X11 client
     // side (which can be remote) and which usually is not
     // anti-aliased and is thus faster
+    // MR: Now returns the default pango_context for the widget as GtkGetPangoDefaultContext to
+    // not depend on libpangox - which is completely deprecated.
+    //BCI: Remove GtkGetPangoX11Context and m_x11Context completely when symbols may be removed
     PangoContext   *GtkGetPangoX11Context();
-    PangoContext   *m_x11Context;
+    PangoContext   *m_x11Context; // MR: Now unused
 #endif
 
 #if wxUSE_TOOLTIPS
@@ -262,7 +265,7 @@ public:
 
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
-    
+
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
@@ -270,14 +273,14 @@ public:
 protected:
     // common part of all ctors (not virtual because called from ctor)
     void Init();
-    
+
 #ifdef __WXGTK20__
     virtual void DoMoveInTabOrder(wxWindow *win, MoveKind move);
 
     // Copies m_children tab order to GTK focus chain:
     void RealizeTabOrder();
 #endif
-    
+
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create
     // modified GTK style with non-standard attributes. If forceStyle=true,
@@ -287,7 +290,7 @@ protected:
 
     // Overridden in many GTK widgets who have to handle subwidgets
     virtual void ApplyWidgetStyle(bool forceStyle = false);
-    
+
     // helper function to ease native widgets wrapping, called by 
     // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);

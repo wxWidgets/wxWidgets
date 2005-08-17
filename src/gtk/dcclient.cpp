@@ -1888,11 +1888,14 @@ void wxWindowDC::SetFont( const wxFont &font )
             PangoContext *oldContext = m_context;
 
             // We might want to use the X11 context for faster
-            // rendering on screen
+            // rendering on screen.
+            // MR: Lets not want to do this, as this introduces libpangox dependancy.
+#if 0
             if (m_font.GetNoAntiAliasing())
                 m_context = m_owner->GtkGetPangoX11Context();
             else
-                m_context = m_owner->GtkGetPangoDefaultContext();
+#endif
+            m_context = m_owner->GtkGetPangoDefaultContext();
 
             // If we switch back/forth between different contexts
             // we also have to create a new layout. I think so,

@@ -4279,12 +4279,10 @@ PangoContext *wxWindowGTK::GtkGetPangoDefaultContext()
     return gtk_widget_get_pango_context( m_widget );
 }
 
+// MR: Returns the same as GtkGetPangoDefaultContext until the symbol can be removed in 2.7.x
 PangoContext *wxWindowGTK::GtkGetPangoX11Context()
 {
-    if (!m_x11Context)
-        m_x11Context = pango_x_get_context( gdk_display );
-
-    return m_x11Context;
+    return gtk_widget_get_pango_context( m_widget );
 }
 #endif
 
