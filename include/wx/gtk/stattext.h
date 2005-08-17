@@ -63,6 +63,9 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
+    // see wx/stattext.h
+    void Wrap(int width);
+
     // implementation
     // --------------
 
