@@ -299,8 +299,8 @@ case "${host}" in
     DEFAULT_STD_FLAG=no
   ;;
 
-  powerpc-*-darwin* )
-    dnl PowerPC Darwin based distributions (including Mac OS X)
+  *-*-darwin* )
+    dnl Darwin based distributions (including Mac OS X)
     USE_BSD=1
     USE_DARWIN=1
     SO_SUFFIX=dylib
@@ -1440,7 +1440,7 @@ case "${host}" in
     dnl The other BSD's should probably go in here too, since this is
     dnl to workaround a strange static lib BSDism.
     dnl Mac OS X install seems to ignore -p option...
-    powerpc-*-darwin* )
+    *-*-darwin* )
         INSTALL_PROGRAM="cp -fp"
         INSTALL_DATA="cp -fp"
         ;;
@@ -1526,7 +1526,7 @@ if test "x$XLCXX" = "xyes" -a "x$USE_AIX" = "x1"; then
 fi
 
 
-dnl This case is for OS X vs. everything else
+dnl This case is for PowerPC OS X vs. everything else
 case "${host}" in
   powerpc-*-darwin* )
     AC_MSG_CHECKING([if __POWERPC__ is already defined])
@@ -1538,6 +1538,12 @@ case "${host}" in
         [AC_MSG_RESULT([no])
         AC_DEFINE(__POWERPC__)
     ])
+  ;;
+esac
+
+dnl This case is for OS X vs. everything else
+case "${host}" in
+  *-*-darwin* )
     AC_MSG_CHECKING([if CoreFoundation/CFBase.h is usable])
     AC_TRY_COMPILE([#include <CoreFoundation/CFBase.h>
 ],[],
@@ -3604,7 +3610,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
       
-      powerpc-*-darwin* )
+      *-*-darwin* )
         install_name_tool=`which install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
             SAMPLES_RPATH_POSTLINK="\$(top_builddir)change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
@@ -6815,7 +6821,7 @@ else
              AC_MSG_RESULT([yes])],
             [AC_MSG_RESULT([no])
             case "${host}" in
-                powerpc-*-darwin* )
+                *-*-darwin* )
                     dnl Some Apple's GCC version are broken and can't handle the
                     dnl pragmas:
                     GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"

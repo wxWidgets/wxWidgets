@@ -1975,7 +1975,7 @@ _ACEOF
     DEFAULT_STD_FLAG=no
   ;;
 
-  powerpc-*-darwin* )
+  *-*-darwin* )
         USE_BSD=1
     USE_DARWIN=1
     SO_SUFFIX=dylib
@@ -13263,7 +13263,7 @@ esac
 
 case "${host}" in
 
-                powerpc-*-darwin* )
+                *-*-darwin* )
         INSTALL_PROGRAM="cp -fp"
         INSTALL_DATA="cp -fp"
         ;;
@@ -13465,6 +13465,11 @@ _ACEOF
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+  ;;
+esac
+
+case "${host}" in
+  *-*-darwin* )
     echo "$as_me:$LINENO: checking if CoreFoundation/CFBase.h is usable" >&5
 echo $ECHO_N "checking if CoreFoundation/CFBase.h is usable... $ECHO_C" >&6
     cat >conftest.$ac_ext <<_ACEOF
@@ -29983,7 +29988,7 @@ rm -f conftest.err conftest.$ac_objext \
         fi
       ;;
 
-      powerpc-*-darwin* )
+      *-*-darwin* )
         install_name_tool=`which install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
             SAMPLES_RPATH_POSTLINK="\$(top_builddir)change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
@@ -44411,7 +44416,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
             case "${host}" in
-                powerpc-*-darwin* )
+                *-*-darwin* )
                                                             GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
                 ;;
                 *-*-mingw32* )
