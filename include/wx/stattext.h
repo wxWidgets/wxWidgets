@@ -25,11 +25,15 @@ class WXDLLEXPORT wxStaticTextBase : public wxControl
 public:
     wxStaticTextBase() { }
 
+    // in wxGTK wxStaticText doesn't derive from wxStaticTextBase so we have to
+    // declare this function directly in gtk header
+#ifndef __WXGTK__
     // wrap the text of the control so that no line is longer than the given
     // width (if possible: this function won't break words)
     //
     // NB: implemented in dlgcmn.cpp for now
     void Wrap(int width);
+#endif // __WXGTK__
 
     // overriden base virtuals
     virtual bool AcceptsFocus() const { return false; }

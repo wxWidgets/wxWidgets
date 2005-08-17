@@ -238,12 +238,18 @@ wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
     return wrapper.CreateSizer(text, widthMax);
 }
 
-void wxStaticTextBase::Wrap(int width)
+void
+#ifdef __WXGTK__
+wxStaticText
+#else
+wxStaticTextBase
+#endif
+::Wrap(int width)
 {
     class LabelWrapper : public wxTextWrapper
     {
     public:
-        void WrapLabel(wxStaticTextBase *text, int widthMax)
+        void WrapLabel(wxWindow *text, int widthMax)
         {
             m_text.clear();
             Wrap(text, text->GetLabel(), widthMax);
