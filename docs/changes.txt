@@ -14,7 +14,7 @@ All:
 - Added wxZipFSHandler::Cleanup() (Stas Sergeev).
 - Added wxImage::RotateHue() and RGB <-> HSV conversions (John Anderson).
 - Fixed compilation with IBM xlC compiler.
-- wxABI_VERSION, see 'Backward Compatibility' in the manual.
+- wxABI_VERSION, see 'Backward Compatibility' topic overview in the manual.
 
 All (GUI):
 
