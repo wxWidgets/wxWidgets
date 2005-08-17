@@ -1068,6 +1068,19 @@ void MyPanel::OnIdle(wxIdleEvent& event)
         s_selCombo = sel;
     }
 
+    static int s_selChoice = INVALID_SELECTION;
+    sel = m_choice->GetSelection();
+    if ( sel != s_selChoice )
+    {
+        if ( s_selChoice != INVALID_SELECTION )
+        {
+            wxLogMessage(_T("EVT_IDLE: choice selection changed from %d to %d"),
+                         s_selChoice, sel);
+        }
+
+        s_selChoice = sel;
+    }
+
     event.Skip();
 }
 
