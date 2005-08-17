@@ -259,7 +259,7 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
             *-pc-os2_emx | *-pc-os2-emx )
                 PLATFORM_OS2=1
             ;;
-            powerpc-*-darwin* )
+            *-*-darwin* )
                 PLATFORM_MAC=1
                 PLATFORM_MACOSX=1
             ;; 
@@ -421,7 +421,7 @@ AC_DEFUN([AC_BAKEFILE_SUFFIXES],
             LIBEXT=".$OS2_LIBEXT"
             dlldir="$bindir"
         ;;
-        powerpc-*-darwin* )
+        *-*-darwin* )
             SO_SUFFIX="dylib"
             SO_SUFFIX_MODULE="bundle"
         ;;
@@ -700,7 +700,7 @@ AC_DEFUN([AC_BAKEFILE_DEPS],
         DEPSMODE=gcc
         DEPS_TRACKING=1
         case "${BAKEFILE_HOST}" in
-            powerpc-*-darwin* )
+            *-*-darwin* )
                 dnl -cpp-precomp (the default) conflicts with -MMD option
                 dnl used by bk-deps (see also http://developer.apple.com/documentation/Darwin/Conceptual/PortingUnix/compiling/chapter_4_section_3.html)
                 DEPSFLAG_GCC="-no-cpp-precomp -MMD"
