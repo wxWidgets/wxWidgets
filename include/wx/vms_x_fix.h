@@ -2,9 +2,7 @@
  *                                                                         *
  * Author : Jouk Jansen (joukj@hrem.stm.tudelft.nl)                        *
  *                                                                         *
- * Last revision : 19 January 2004                                         *
- * Copyright:   (c) Jouk Jansen                                            *
- * Licence:     wxWindows licence                                          *
+ * Last revision : 11 July 2005                                            *
  *                                                                         *
  * Repair definitions of Runtime library functions when compiling with     *
  * /name=(as_is) on OpenVMS                                                *
@@ -14,7 +12,12 @@
 #ifndef VMS_X_FIX
 #define VMS_X_FIX
 
+#define decw$_select DECW$_SELECT
 #define DtSaverGetWindows DTSAVERGETWINDOWS
+#define MrmFetchWidget MRMFETCHWIDGET
+#define MrmInitialize MRMINITIALIZE
+#define MrmOpenHierarchy MRMOPENHIERARCHY
+#define MrmRegisterNames MRMREGISTERNAMES
 #define XAddExtension XADDEXTENSION
 #define XAddHosts XADDHOSTS
 #define XAllocClassHint XALLOCCLASSHINT
@@ -33,6 +36,7 @@
 #define XBitmapPad XBITMAPPAD
 #define XBlackPixel XBLACKPIXEL
 #define XBlackPixelOfScreen XBLACKPIXELOFSCREEN
+#define XCellsOfScreen XCELLSOFSCREEN
 #define XChangeActivePointerGrab XCHANGEACTIVEPOINTERGRAB
 #define XChangeGC XCHANGEGC
 #define XChangeKeyboardControl XCHANGEKEYBOARDCONTROL
@@ -72,12 +76,15 @@
 #define XDefaultColormap XDEFAULTCOLORMAP
 #define XDefaultColormapOfScreen XDEFAULTCOLORMAPOFSCREEN
 #define XDefaultDepth XDEFAULTDEPTH
+#define XDefaultDepthOfScreen XDEFAULTDEPTHOFSCREEN
 #define XDefaultGC XDEFAULTGC
 #define XDefaultRootWindow XDEFAULTROOTWINDOW
 #define XDefaultScreen XDEFAULTSCREEN
 #define XDefaultScreenOfDisplay XDEFAULTSCREENOFDISPLAY
 #define XDefaultVisual XDEFAULTVISUAL
+#define XDefaultVisualOfScreen XDEFAULTVISUALOFSCREEN
 #define XDefineCursor XDEFINECURSOR
+#define XDeleteContext XDELETECONTEXT
 #define XDeleteProperty XDELETEPROPERTY
 #define XDestroyIC XDESTROYIC
 #define XDestroyRegion XDESTROYREGION
@@ -88,8 +95,11 @@
 #define XDisplayHeight XDISPLAYHEIGHT
 #define XDisplayKeycodes XDISPLAYKEYCODES
 #define XDisplayName XDISPLAYNAME
+#define XDisplayOfIM XDISPLAYOFIM
 #define XDisplayOfScreen XDISPLAYOFSCREEN
+#define XDisplayString XDISPLAYSTRING
 #define XDisplayWidth XDISPLAYWIDTH
+#define XDoesBackingStore XDOESBACKINGSTORE
 #define XDrawArc XDRAWARC
 #define XDrawArcs XDRAWARCS
 #define XDrawImageString XDRAWIMAGESTRING
@@ -113,6 +123,7 @@
 #define XExtendedMaxRequestSize XEXTENDEDMAXREQUESTSIZE
 #define XExtentsOfFontSet XEXTENTSOFFONTSET
 #define XFetchBuffer XFETCHBUFFER
+#define XFetchBytes XFETCHBYTES
 #define XFetchName XFETCHNAME
 #define XFillArc XFILLARC
 #define XFillArcs XFILLARCS
@@ -139,6 +150,7 @@
 #define XFreePixmap XFREEPIXMAP
 #define XFreeStringList XFREESTRINGLIST
 #define XGContextFromGC XGCONTEXTFROMGC
+#define XGeometry XGEOMETRY
 #define XGetAtomName XGETATOMNAME
 #define XGetCommand XGETCOMMAND
 #define XGetDefault XGETDEFAULT
@@ -159,6 +171,7 @@
 #define XGetModifierMapping XGETMODIFIERMAPPING
 #define XGetMotionEvents XGETMOTIONEVENTS
 #define XGetNormalHints XGETNORMALHINTS
+#define XGetPointerMapping XGETPOINTERMAPPING
 #define XGetRGBColormaps XGETRGBCOLORMAPS
 #define XGetScreenSaver XGETSCREENSAVER
 #define XGetSelectionOwner XGETSELECTIONOWNER
@@ -168,6 +181,7 @@
 #define XGetVisualInfo XGETVISUALINFO
 #define XGetWMColormapWindows XGETWMCOLORMAPWINDOWS
 #define XGetWMHints XGETWMHINTS
+#define XGetWMIconName XGETWMICONNAME
 #define XGetWMName XGETWMNAME
 #define XGetWMNormalHints XGETWMNORMALHINTS
 #define XGetWindowAttributes XGETWINDOWATTRIBUTES
@@ -176,9 +190,12 @@
 #define XGrabKeyboard XGRABKEYBOARD
 #define XGrabPointer XGRABPOINTER
 #define XGrabServer XGRABSERVER
+#define XHeightMMOfScreen XHEIGHTMMOFSCREEN
 #define XHeightOfScreen XHEIGHTOFSCREEN
 #define XIconifyWindow XICONIFYWINDOW
 #define XIfEvent XIFEVENT
+#define XInitExtension XINITEXTENSION
+#define XInitImage XINITIMAGE
 #define XInstallColormap XINSTALLCOLORMAP
 #define XInternAtom XINTERNATOM
 #define XInternAtoms XINTERNATOMS
@@ -210,6 +227,7 @@
 #define XMoveResizeWindow XMOVERESIZEWINDOW
 #define XMoveWindow XMOVEWINDOW
 #define XNextEvent XNEXTEVENT
+#define XNextRequest XNEXTREQUEST
 #define XNoOp XNOOP
 #define XOffsetRegion XOFFSETREGION
 #define XOpenDevice XOPENDEVICE
@@ -224,6 +242,7 @@
 #define XPolygonRegion XPOLYGONREGION
 #define XPutBackEvent XPUTBACKEVENT
 #define XPutImage XPUTIMAGE
+#define XQLength XQLENGTH
 #define XQueryBestCursor XQUERYBESTCURSOR
 #define XQueryBestStipple XQUERYBESTSTIPPLE
 #define XQueryColor XQUERYCOLOR
@@ -246,6 +265,7 @@
 #define XResizeWindow XRESIZEWINDOW
 #define XResourceManagerString XRESOURCEMANAGERSTRING
 #define XRestackWindows XRESTACKWINDOWS
+#define XRotateBuffers XROTATEBUFFERS
 #define XRootWindow XROOTWINDOW
 #define XRootWindowOfScreen XROOTWINDOWOFSCREEN
 #define XSaveContext XSAVECONTEXT
@@ -257,6 +277,7 @@
 #define XSelectInput XSELECTINPUT
 #define XSendEvent XSENDEVENT
 #define XServerVendor XSERVERVENDOR
+#define XSetArcMode XSETARCMODE
 #define XSetBackground XSETBACKGROUND
 #define XSetClassHint XSETCLASSHINT
 #define XSetClipMask XSETCLIPMASK
@@ -282,6 +303,7 @@
 #define XSetNormalHints XSETNORMALHINTS
 #define XSetPlaneMask XSETPLANEMASK
 #define XSetRegion XSETREGION
+#define XSetRGBColormaps XSETRGBCOLORMAPS
 #define XSetScreenSaver XSETSCREENSAVER
 #define XSetSelectionOwner XSETSELECTIONOWNER
 #define XSetStandardProperties XSETSTANDARDPROPERTIES
@@ -289,6 +311,7 @@
 #define XSetStipple XSETSTIPPLE
 #define XSetSubwindowMode XSETSUBWINDOWMODE
 #define XSetTSOrigin XSETTSORIGIN
+#define XSetTextProperty XSETTEXTPROPERTY
 #define XSetTile XSETTILE
 #define XSetTransientForHint XSETTRANSIENTFORHINT
 #define XSetWMClientMachine XSETWMCLIENTMACHINE
@@ -353,10 +376,17 @@
 #define XWarpPointer XWARPPOINTER
 #define XWhitePixel XWHITEPIXEL
 #define XWhitePixelOfScreen XWHITEPIXELOFSCREEN
+#define XWidthMMOfScreen XWIDTHMMOFSCREEN
 #define XWidthOfScreen XWIDTHOFSCREEN
 #define XWindowEvent XWINDOWEVENT
 #define XWithdrawWindow XWITHDRAWWINDOW
 #define XXorRegion XXORREGION
+#define XcmsQueryColor XCMSQUERYCOLOR
+#define XdbeAllocateBackBufferName XDBEALLOCATEBACKBUFFERNAME
+#define XdbeFreeVisualInfo XDBEFREEVISUALINFO
+#define XdbeGetVisualInfo XDBEGETVISUALINFO
+#define XdbeQueryExtension XDBEQUERYEXTENSION
+#define XdbeSwapBuffers XDBESWAPBUFFERS
 #define XextAddDisplay XEXTADDDISPLAY
 #define XextFindDisplay XEXTFINDDISPLAY
 #define XextRemoveDisplay XEXTREMOVEDISPLAY
@@ -376,6 +406,9 @@
 #define XmClipboardStartCopy XMCLIPBOARDSTARTCOPY
 #define XmClipboardStartRetrieve XMCLIPBOARDSTARTRETRIEVE
 #define XmClipboardUnlock XMCLIPBOARDUNLOCK
+#define XmCommandError XMCOMMANDERROR
+#define XmCommandGetChild XMCOMMANDGETCHILD
+#define XmCommandSetValue XMCOMMANDSETVALUE
 #define XmCreateArrowButton XMCREATEARROWBUTTON
 #define XmCreateArrowButtonGadget XMCREATEARROWBUTTONGADGET
 #define XmCreateBulletinBoardDialog XMCREATEBULLETINBOARDDIALOG
@@ -394,6 +427,7 @@
 #define XmCreateInformationDialog XMCREATEINFORMATIONDIALOG
 #define XmCreateLabel XMCREATELABEL
 #define XmCreateLabelGadget XMCREATELABELGADGET
+#define XmCreateList XMCREATELIST
 #define XmCreateMainWindow XMCREATEMAINWINDOW
 #define XmCreateMenuBar XMCREATEMENUBAR
 #define XmCreateMessageBox XMCREATEMESSAGEBOX
@@ -445,6 +479,7 @@
 #define XmFontListInitFontContext XMFONTLISTINITFONTCONTEXT
 #define XmFontListNextEntry XMFONTLISTNEXTENTRY
 #define XmGetColors XMGETCOLORS
+#define XmGetColorCalculation XMGETCOLORCALCULATION
 #define XmGetFocusWidget XMGETFOCUSWIDGET
 #define XmGetMenuCursor XMGETMENUCURSOR
 #define XmGetPixmap XMGETPIXMAP
@@ -496,8 +531,10 @@
 #define XmRemoveTabGroup XMREMOVETABGROUP
 #define XmRepTypeGetId XMREPTYPEGETID
 #define XmRepTypeGetRecord XMREPTYPEGETRECORD
+#define XmRepTypeInstallTearOffModelCon XMREPTYPEINSTALLTEAROFFMODELCON
 #define XmRepTypeRegister XMREPTYPEREGISTER
 #define XmRepTypeValidValue XMREPTYPEVALIDVALUE
+#define XmScrollBarGetValues XMSCROLLBARGETVALUES
 #define XmScrollBarSetValues XMSCROLLBARSETVALUES
 #define XmScrolledWindowSetAreas XMSCROLLEDWINDOWSETAREAS
 #define XmSelectionBoxGetChild XMSELECTIONBOXGETCHILD
@@ -523,6 +560,7 @@
 #define XmStringLtoRCreate XMSTRINGLTORCREATE
 #define XmStringNConcat XMSTRINGNCONCAT
 #define XmStringSegmentCreate XMSTRINGSEGMENTCREATE
+#define XmStringSeparatorCreate XMSTRINGSEPARATORCREATE
 #define XmStringWidth XMSTRINGWIDTH
 #define XmTextClearSelection XMTEXTCLEARSELECTION
 #define XmTextCopy XMTEXTCOPY
@@ -567,6 +605,7 @@
 #define XmTextSetInsertionPosition XMTEXTSETINSERTIONPOSITION
 #define XmTextSetSelection XMTEXTSETSELECTION
 #define XmTextSetString XMTEXTSETSTRING
+#define XmTextSetTopCharacter XMTEXTSETTOPCHARACTER
 #define XmTextShowPosition XMTEXTSHOWPOSITION
 #define XmToggleButtonGadgetGetState XMTOGGLEBUTTONGADGETGETSTATE
 #define XmToggleButtonGadgetSetState XMTOGGLEBUTTONGADGETSETSTATE
@@ -590,7 +629,10 @@
 #define Xmemory_free XMEMORY_FREE
 #define Xmemory_malloc XMEMORY_MALLOC
 #define XmuClientWindow XMUCLIENTWINDOW
+#define XmuConvertStandardSelection XMUCONVERTSTANDARDSELECTION
 #define XmuCvtStringToBitmap XMUCVTSTRINGTOBITMAP
+#define XmuInternAtom XMUINTERNATOM
+#define XmuInternStrings XMUINTERNSTRINGS
 #define XmuLookupStandardColormap XMULOOKUPSTANDARDCOLORMAP
 #define XmuPrintDefaultErrorMessage XMUPRINTDEFAULTERRORMESSAGE
 #define XrmCombineDatabase XRMCOMBINEDATABASE
@@ -603,14 +645,15 @@
 #define XrmInitialize XRMINITIALIZE
 #define XrmMergeDatabases XRMMERGEDATABASES
 #define XrmParseCommand XRMPARSECOMMAND
+#define XrmPermStringToQuark XRMPERMSTRINGTOQUARK
 #define XrmPutFileDatabase XRMPUTFILEDATABASE
 #define XrmPutLineResource XRMPUTLINERESOURCE
 #define XrmPutStringResource XRMPUTSTRINGRESOURCE
+#define XrmQGetResource XRMQGETRESOURCE
 #define XrmQPutStringResource XRMQPUTSTRINGRESOURCE
 #define XrmQuarkToString XRMQUARKTOSTRING
 #define XrmSetDatabase XRMSETDATABASE
 #define XrmStringToBindingQuarkList XRMSTRINGTOBINDINGQUARKLIST
-#define XrmStringToQuark XRMSTRINGTOQUARK
 #define XrmStringToQuark XRMSTRINGTOQUARK
 #define XtAddCallback XTADDCALLBACK
 #define XtAddCallbacks XTADDCALLBACKS
@@ -618,12 +661,15 @@
 #define XtAddEventHandler XTADDEVENTHANDLER
 #define XtAddExposureToRegion XTADDEXPOSURETOREGION
 #define XtAddGrab XTADDGRAB
+#define XtAddRawEventHandler XTADDRAWEVENTHANDLER
 #define XtAllocateGC XTALLOCATEGC
 #define XtAppAddActions XTAPPADDACTIONS
 #define XtAppAddInput XTAPPADDINPUT
 #define XtAppAddTimeOut XTAPPADDTIMEOUT
 #define XtAppAddWorkProc XTAPPADDWORKPROC
 #define XtAppCreateShell XTAPPCREATESHELL
+#define XtAppError XTAPPERROR
+#define XtAppErrorMsg XTAPPERRORMSG
 #define XtAppInitialize XTAPPINITIALIZE
 #define XtAppMainLoop XTAPPMAINLOOP
 #define XtAppNextEvent XTAPPNEXTEVENT
@@ -632,36 +678,53 @@
 #define XtAppProcessEvent XTAPPPROCESSEVENT
 #define XtAppSetErrorHandler XTAPPSETERRORHANDLER
 #define XtAppSetFallbackResources XTAPPSETFALLBACKRESOURCES
+#define XtAppSetTypeConverter XTAPPSETTYPECONVERTER
 #define XtAppSetWarningHandler XTAPPSETWARNINGHANDLER
+#define XtAppWarningMsg XTAPPWARNINGMSG
 #define XtAppSetWarningMsgHandler XTAPPSETWARNINGMSGHANDLER
 #define XtAppWarning XTAPPWARNING
+#define XtAugmentTranslations XTAUGMENTTRANSLATIONS
 #define XtCallActionProc XTCALLACTIONPROC
 #define XtCallCallbackList XTCALLCALLBACKLIST
 #define XtCallCallbacks XTCALLCALLBACKS
+#define XtCallConverter XTCALLCONVERTER
+#define XtCalloc XTCALLOC 
+#ifndef NOXTDISPLAY
+#define XtClass XTCLASS
+#endif
 #define XtCloseDisplay XTCLOSEDISPLAY
 #define XtConfigureWidget XTCONFIGUREWIDGET
+#define XtConvert XTCONVERT
 #define XtConvertAndStore XTCONVERTANDSTORE
 #define XtCreateApplicationContext XTCREATEAPPLICATIONCONTEXT
 #define XtCreateManagedWidget XTCREATEMANAGEDWIDGET
 #define XtCreatePopupShell XTCREATEPOPUPSHELL
 #define XtCreateWidget XTCREATEWIDGET
+#define XtCreateWindow XTCREATEWINDOW
+#define XtCvtStringToFont XTCVTSTRINGTOFONT
 #define XtDatabase XTDATABASE
 #define XtDestroyApplicationContext XTDESTROYAPPLICATIONCONTEXT
 #define XtDestroyWidget XTDESTROYWIDGET
 #define XtDisownSelection XTDISOWNSELECTION
 #define XtDispatchEvent XTDISPATCHEVENT
+#ifndef NOXTDISPLAY
 #define XtDisplay XTDISPLAY
+#endif
 #define XtDisplayOfObject XTDISPLAYOFOBJECT
 #define XtDisplayStringConvWarning XTDISPLAYSTRINGCONVWARNING
 #define XtDisplayToApplicationContext XTDISPLAYTOAPPLICATIONCONTEXT
 #define XtError XTERROR
+#define XtErrorMsg XTERRORMSG
 #define XtFree XTFREE
 #define XtGetActionKeysym XTGETACTIONKEYSYM
 #define XtGetActionList XTGETACTIONLIST
 #define XtGetApplicationNameAndClass XTGETAPPLICATIONNAMEANDCLASS
 #define XtGetApplicationResources XTGETAPPLICATIONRESOURCES
+#define XtGetClassExtension XTGETCLASSEXTENSION
+#define XtGetConstraintResourceList XTGETCONSTRAINTRESOURCELIST
 #define XtGetGC XTGETGC
 #define XtGetMultiClickTime XTGETMULTICLICKTIME
+#define XtGetResourceList XTGETRESOURCELIST
 #define XtGetSelectionValue XTGETSELECTIONVALUE
 #define XtGetSelectionValues XTGETSELECTIONVALUES
 #define XtGetSubresources XTGETSUBRESOURCES
@@ -673,9 +736,13 @@
 #define XtInitialize XTINITIALIZE
 #define XtInitializeWidgetClass XTINITIALIZEWIDGETCLASS
 #define XtInsertEventHandler XTINSERTEVENTHANDLER
+#define XtInsertRawEventHandler XTINSERTRAWEVENTHANDLER
+#define XtInstallAccelerators XTINSTALLACCELERATORS
 #define XtIsManaged XTISMANAGED
 #define XtIsObject XTISOBJECT
+#ifndef NOXTDISPLAY
 #define XtIsRealized XTISREALIZED
+#endif
 #define XtIsSensitive XTISSENSITIVE
 #define XtIsSubclass XTISSUBCLASS
 #define XtLastTimestampProcessed XTLASTTIMESTAMPPROCESSED
@@ -689,10 +756,14 @@
 #define XtMoveWidget XTMOVEWIDGET
 #define XtName XTNAME
 #define XtNameToWidget XTNAMETOWIDGET
+#define XtOpenApplication XTOPENAPPLICATION
 #define XtOpenDisplay XTOPENDISPLAY
 #define XtOverrideTranslations XTOVERRIDETRANSLATIONS
 #define XtOwnSelection XTOWNSELECTION
+#ifndef NOXTDISPLAY
 #define XtParent XTPARENT
+#endif
+#define XtParseAcceleratorTable XTPARSEACCELERATORTABLE
 #define XtParseTranslationTable XTPARSETRANSLATIONTABLE
 #define XtPopdown XTPOPDOWN
 #define XtPopup XTPOPUP
@@ -701,6 +772,7 @@
 #define XtRealizeWidget XTREALIZEWIDGET
 #define XtRealloc XTREALLOC
 #define XtRegisterDrawable _XTREGISTERWINDOW
+#define XtRegisterGrabAction XTREGISTERGRABACTION
 #define XtReleaseGC XTRELEASEGC
 #define XtRemoveAllCallbacks XTREMOVEALLCALLBACKS
 #define XtRemoveCallback XTREMOVECALLBACK
@@ -711,13 +783,21 @@
 #define XtRemoveWorkProc XTREMOVEWORKPROC
 #define XtResizeWidget XTRESIZEWIDGET
 #define XtResolvePathname XTRESOLVEPATHNAME
+#ifndef NOXTDISPLAY
 #define XtScreen XTSCREEN
+#endif
+#define XtScreenDatabase XTSCREENDATABASE
+#define XtScreenOfObject XTSCREENOFOBJECT
+#define XtSessionReturnToken XTSESSIONRETURNTOKEN
+#define XtSetErrorHandler XTSETERRORHANDLER
 #define XtSetKeyboardFocus XTSETKEYBOARDFOCUS
+#define XtSetLanguageProc XTSETLANGUAGEPROC
 #define XtSetMappedWhenManaged XTSETMAPPEDWHENMANAGED
 #define XtSetSensitive XTSETSENSITIVE
 #define XtSetTypeConverter XTSETTYPECONVERTER
 #define XtSetValues XTSETVALUES
 #define XtShellStrings XTSHELLSTRINGS
+#define XtStringConversionWarning XTSTRINGCONVERSIONWARNING 
 #define XtStrings XTSTRINGS
 #define XtToolkitInitialize XTTOOLKITINITIALIZE
 #define XtTranslateCoords XTTRANSLATECOORDS
@@ -732,28 +812,35 @@
 #define XtVaCreateManagedWidget XTVACREATEMANAGEDWIDGET
 #define XtVaCreatePopupShell XTVACREATEPOPUPSHELL
 #define XtVaCreateWidget XTVACREATEWIDGET
+#define XtVaGetApplicationResources XTVAGETAPPLICATIONRESOURCES
 #define XtVaGetValues XTVAGETVALUES
 #define XtVaSetValues XTVASETVALUES
 #define XtWarning XTWARNING
+#define XtWarningMsg XTWARNINGMSG
 #define XtWidgetToApplicationContext XTWIDGETTOAPPLICATIONCONTEXT
+#ifndef NOXTDISPLAY
 #define XtWindow XTWINDOW
+#endif
 #define XtWindowOfObject XTWINDOWOFOBJECT
 #define XtWindowToWidget XTWINDOWTOWIDGET
+#define XwcDrawImageString XWCDRAWIMAGESTRING
 #define XwcDrawString XWCDRAWSTRING
 #define XwcFreeStringList XWCFREESTRINGLIST
 #define XwcTextEscapement XWCTEXTESCAPEMENT
 #define XwcTextExtents XWCTEXTEXTENTS
 #define XwcTextListToTextProperty XWCTEXTLISTTOTEXTPROPERTY
+#define XwcLookupString XWCLOOKUPSTRING
 #define XwcTextPropertyToTextList XWCTEXTPROPERTYTOTEXTLIST
 #define _XAllocTemp _XALLOCTEMP
 #define _XDeqAsyncHandler _XDEQASYNCHANDLER
 #define _XEatData _XEATDATA
 #define _XFlush _XFLUSH
 #define _XFreeTemp _XFREETEMP
-#define _XGetAsyncReply _XGETASYNCREPLY
+#define _XGetAsyncReply _XGETASYNCREPLY 
 #define _XInitImageFuncPtrs _XINITIMAGEFUNCPTRS
 #define _XRead _XREAD
-#define _XRegisterFilterByType _XREGISTERFILTERBYTYPE
+#define _XReadPad _XREADPAD
+#define _XRegisterFilterByType _XREGISTERFILTERBYTYPE 
 #define _XReply _XREPLY
 #define _XSend _XSEND
 #define _XUnregisterFilter _XUNREGISTERFILTER
@@ -774,6 +861,7 @@
 #define _XmGrabKeyboard _XMGRABKEYBOARD
 #define _XmGrabPointer _XMGRABPOINTER
 #define _XmInheritClass _XMINHERITCLASS
+#define _XmInputForGadget _XMINPUTFORGADGET
 #define _XmInputInGadget _XMINPUTINGADGET
 #define _XmMakeGeometryRequest _XMMAKEGEOMETRYREQUEST
 #define _XmMenuPopDown _XMMENUPOPDOWN
@@ -796,10 +884,21 @@
 #define _XmTopShadowColorDefault _XMTOPSHADOWCOLORDEFAULT
 #define _Xm_fastPtr _XM_FASTPTR
 #define _XtCheckSubclassFlag _XTCHECKSUBCLASSFLAG
+#define _XtCopyFromArg _XTCOPYFROMARG
+#define _XtCountVaList _XTCOUNTVALIST
 #define _XtInherit _XTINHERIT
 #define _XtInheritTranslations _XTINHERITTRANSLATIONS
+#define _XtIsSubclassOf _XTISSUBCLASSOF
+#define _XtVaToArgList _XTVATOARGLIST
 #define applicationShellWidgetClass APPLICATIONSHELLWIDGETCLASS
+#define cli$dcl_parse CLI$DCL_PARSE
+#define cli$get_value CLI$GET_VALUE
+#define cli$present  CLI$PRESENT
+#define compositeClassRec COMPOSITECLASSREC
 #define compositeWidgetClass COMPOSITEWIDGETCLASS
+#define constraintClassRec CONSTRAINTCLASSREC
+#define constraintWidgetClass CONSTRAINTWIDGETCLASS
+#define coreWidgetClass COREWIDGETCLASS
 #define exe$getspi EXE$GETSPI
 #define lbr$close LBR$CLOSE
 #define lbr$get_header LBR$GET_HEADER
@@ -808,6 +907,7 @@
 #define lbr$ini_control LBR$INI_CONTROL
 #define lbr$lookup_key LBR$LOOKUP_KEY
 #define lbr$open LBR$OPEN
+#define lbr$output_help LBR$OUTPUT_HELP
 #define lib$add_times LIB$ADD_TIMES
 #define lib$addx LIB$ADDX
 #define lib$create_dir LIB$CREATE_DIR
@@ -829,6 +929,7 @@
 #define lib$free_vm LIB$FREE_VM
 #define lib$get_ef LIB$GET_EF
 #define lib$get_foreign LIB$GET_FOREIGN
+#define lib$get_input LIB$GET_INPUT
 #define lib$get_users_language LIB$GET_USERS_LANGUAGE
 #define lib$get_vm LIB$GET_VM
 #define lib$get_symbol LIB$GET_SYMBOL
@@ -839,6 +940,7 @@
 #define lib$find_file_end LIB$FIND_FILE_END
 #define lib$find_image_symbol LIB$FIND_IMAGE_SYMBOL
 #define lib$mult_delta_time LIB$MULT_DELTA_TIME
+#define lib$put_output LIB$PUT_OUTPUT
 #define lib$rename_file LIB$RENAME_FILE
 #define lib$reset_vm_zone LIB$RESET_VM_ZONE
 #define lib$set_symbol LIB$SET_SYMBOL
@@ -858,6 +960,9 @@
 #define mail$send_message MAIL$SEND_MESSAGE
 #define ncs$convert NCS$CONVERT
 #define ncs$get_cf NCS$GET_CF
+#define objectClass OBJECTCLASS
+#define objectClassRec OBJECTCLASSREC
+#define overrideShellClassRec OVERRIDESHELLCLASSREC
 #define overrideShellWidgetClass OVERRIDESHELLWIDGETCLASS
 #define pthread_attr_create PTHREAD_ATTR_CREATE
 #define pthread_attr_delete PTHREAD_ATTR_DELETE
@@ -949,11 +1054,17 @@
 #define pthread_unlock_global_np PTHREAD_UNLOCK_GLOBAL_NP
 #define pthread_yield PTHREAD_YIELD
 #define pthread_yield_np PTHREAD_YIELD_NP
+#define rectObjClass RECTOBJCLASS
+#define rectObjClassRec RECTOBJCLASSREC
+#define sessionShellWidgetClass SESSIONSHELLWIDGETCLASS
 #define shellWidgetClass SHELLWIDGETCLASS
 #define shmat SHMAT
 #define shmctl SHMCTL
 #define shmdt SHMDT
 #define shmget SHMGET
+#define smg$create_key_table SMG$CREATE_KEY_TABLE
+#define smg$create_virtual_keyboard SMG$CREATE_VIRTUAL_KEYBOARD
+#define smg$read_composed_line SMG$READ_COMPOSED_LINE
 #define sys$add_ident SYS$ADD_IDENT
 #define sys$asctoid SYS$ASCTOID
 #define sys$assign SYS$ASSIGN
@@ -1035,6 +1146,9 @@
 #define transientShellWidgetClass TRANSIENTSHELLWIDGETCLASS
 #define vendorShellClassRec VENDORSHELLCLASSREC
 #define vendorShellWidgetClass VENDORSHELLWIDGETCLASS
+#define widgetClass WIDGETCLASS
+#define widgetClassRec WIDGETCLASSREC
+#define wmShellClassRec WMSHELLCLASSREC
 #define wmShellWidgetClass WMSHELLWIDGETCLASS
 #define x$soft_ast_lib_lock X$SOFT_AST_LIB_LOCK
 #define x$soft_ast_lock_depth X$SOFT_AST_LOCK_DEPTH
@@ -1044,6 +1158,7 @@
 #define xmCascadeButtonClassRec XMCASCADEBUTTONCLASSREC
 #define xmCascadeButtonGadgetClass XMCASCADEBUTTONGADGETCLASS
 #define xmCascadeButtonWidgetClass XMCASCADEBUTTONWIDGETCLASS
+#define xmCommandWidgetClass XMCOMMANDWIDGETCLASS
 #define xmDialogShellWidgetClass XMDIALOGSHELLWIDGETCLASS
 #define xmDrawingAreaWidgetClass XMDRAWINGAREAWIDGETCLASS
 #define xmDrawnButtonWidgetClass XMDRAWNBUTTONWIDGETCLASS
@@ -1079,10 +1194,10 @@
 
 #define SetReqLen(req,n,badlen) \
     if ((req->length + n) > (unsigned)65535) { \
-        n = badlen; \
-        req->length += n; \
+	    n = badlen; \
+	    req->length += n; \
     } else \
-        req->length += n
+	req->length += n
 
 #ifdef __cplusplus
 extern "C" {
