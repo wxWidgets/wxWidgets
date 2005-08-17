@@ -1872,6 +1872,12 @@ dnl problems
 if test "x$wx_largefile" = "xyes"; then
     if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
         WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
+
+        dnl we get "Large Files (ILP32) not supported in strict ANSI mode."
+        dnl #error from HP standard headers without this
+        if test "$USE_HPUX" = 1; then
+            CPPFLAGS="$CPPFLAGS -D__STDC_EXT__"
+        fi
     else
         WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
     fi
