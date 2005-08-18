@@ -3905,14 +3905,21 @@ if test "$wxUSE_WCHAR_T" = "yes"; then
         AC_DEFINE(HAVE_WCSLEN)
     fi
 
-    dnl on HP-UX aCC and g++ need this define to find mbstrtowcs() &c
-    if test "$USE_HPUX" = 1; then
+    dnl On HP-UX aCC need this define to find mbstrtowcs() &c
+    dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
+    dnl with g++'s in <cwchar> (unless -D_INCLUDE__STDC_A1_SOURCE is in the
+    dnl flags when g++ is configured, it will declare it's own).
+    if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
         CPPFLAGS="$CPPFLAGS -D_INCLUDE__STDC_A1_SOURCE "
     fi
 
-    dnl try to use wcsrtombs instead of wcstombs which is buggy in old GNU
-    dnl libc versions if possible
-    AC_CHECK_FUNCS(wcsrtombs)
+    dnl Try to use wcsrtombs instead of wcstombs which is buggy in old GNU
+    dnl libc versions if possible. AC_CHECK_FUNCS only checks it's in the
+    dnl library, not the header, so do a header check for mbstate_t first.
+    AC_CHECK_TYPES([mbstate_t],
+                   [AC_CHECK_FUNCS(wcsrtombs)],
+                   [],
+                   [#include <wchar.h>])
 else
     AC_MSG_WARN([Wide character support is unavailable])
 fi
