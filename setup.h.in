@@ -507,6 +507,8 @@
 
 #define wxUSE_DC_CACHEING 0
 
+#define wxUSE_GADGETS 0
+
 /*
  * Supports bool type
  */

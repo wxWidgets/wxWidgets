@@ -55,7 +55,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("staticBitmap",
-#if USE_GADGETS
+#if wxUSE_GADGETS
                     xmLabelGadgetClass, parentWidget,
 #else
                     xmLabelWidgetClass, parentWidget,

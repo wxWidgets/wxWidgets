@@ -259,7 +259,7 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     // subclass the window which has the focus, and not winFocus passed in or
     // otherwise everything else breaks down
     m_focus = FindFocus();
-#elif __WXGTK__
+#elif defined(__WXGTK__)
     // GTK+ catches the activate events from the popup
     // window, not the focus events from the child window
     m_focus = this;

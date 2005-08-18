@@ -189,7 +189,7 @@ wxChoice::~wxChoice()
 int wxChoice::DoAppend(const wxString& item)
 {
     Widget w = XtVaCreateManagedWidget (wxStripMenuCodes(item),
-#if USE_GADGETS
+#if wxUSE_GADGETS
         xmPushButtonGadgetClass, (Widget) m_menuWidget,
 #else
         xmPushButtonWidgetClass, (Widget) m_menuWidget,
