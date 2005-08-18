@@ -357,7 +357,10 @@ void wxNotebook::MacSetupTabs()
                 ControlButtonContentInfo info ;
 
                 wxMacCreateBitmapButton( &info , bmap ) ;
-                OSStatus err = m_peer->SetData<ControlButtonContentInfo>( ii+1,kControlTabImageContentTag, &info );
+#ifdef __WXDEBUG__
+                OSStatus err =
+#endif // __WXDEBUG__
+                    m_peer->SetData<ControlButtonContentInfo>( ii+1,kControlTabImageContentTag, &info );
                 wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
                 wxMacReleaseBitmapButton( &info ) ;
             }
