@@ -239,7 +239,7 @@ wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
 }
 
 void
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
 wxStaticText
 #else
 wxStaticTextBase
