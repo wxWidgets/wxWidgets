@@ -1106,6 +1106,28 @@ static wchar_t *wx_wcscat(wchar_t *dest, const wchar_t *src)
     return dest;
 }
 
+// in case wcscmp is missing
+//
+static int wx_wcscmp(const wchar_t *s1, const wchar_t *s2)
+{
+    while (*s1 == *s2 && *s1 != 0)
+    {
+        s1++;
+        s2++;
+    }
+    return *s1 - *s2;
+}
+
+// in case wcslen is missing
+//
+static size_t wx_wcslen(const wchar_t *s)
+{
+    const wchar_t *t = s;
+    while (*t != 0)
+        t++;
+    return t - s;
+}
+
 // include the option in the error messages so it's possible to see which
 // test failed
 #define UTF8ASSERT(expr) CPPUNIT_ASSERT_MESSAGE(#expr + errmsg,  expr)
@@ -1151,8 +1173,8 @@ void MBConvTestCase::UTF8(const char *charSequence,
         wx_wcscat(expected, L"XYZ");
         wx_wcscat(expected, wideSequence);
 
-        UTF8ASSERT(wcscmp(widechars, expected) == 0);
-        UTF8ASSERT(wcslen(widechars) == result);
+        UTF8ASSERT(wx_wcscmp(widechars, expected) == 0);
+        UTF8ASSERT(wx_wcslen(widechars) == result);
     }
     else {
         // If 'wideSequence' is NULL, then the result is expected to be
