@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                             *
- * Date : 15 March 2005                                                      *
+ * Date : 18 August 2005                                                     *
  *                                                                           *
  *****************************************************************************/
 
@@ -187,8 +187,6 @@
     #define wxUSE_UNICODE 0
 #endif
 
-#define wxUSE_UNICODE_MSLU 0
-
 #define wxUSE_WCHAR_T 1
 
 
@@ -286,10 +284,6 @@
 #define wxUSE_SOUND      1
 
 #define wxUSE_MEDIACTRL     1
-
-#define wxUSE_QUICKTIME     1
-
-#define wxUSE_DIRECTSHOW    1
 
 #define wxUSE_GSTREAMER     0
 
@@ -541,6 +535,12 @@
 #define wxUSE_RICHEDIT2 0
 #endif
 
+#define wxUSE_UNICODE_MSLU 0
+
+#define wxUSE_DC_CACHEING 1
+
+#define wxUSE_GADGETS 1
+
 /*
  * Supports bool type
  */
@@ -631,6 +631,10 @@
  * Use libXpm
  */
 #define wxHAVE_LIB_XPM 1
+/*
+ * Define if you have pthread_cleanup_push/pop()
+ */
+#define wxHAVE_PTHREAD_CLEANUP 1
 /*
  * Use consistent PostScript fonts for AFM and printing (!)
  */
@@ -758,6 +762,9 @@
 /* Define if you have gettimeofday() */
 #define HAVE_GETTIMEOFDAY
 
+/* Define if fsync() is available */
+#define HAVE_FSYNC 1
+  729
 /* Define if you have ftime() */
 #define HAVE_FTIME
 
@@ -808,9 +815,6 @@
  
 /* Define if you have all functions to set thread priority */
 #define HAVE_THREAD_PRIORITY_FUNCTIONS 1
-
-/* Define if you can specify exit functions to a thread */
-#define HAVE_THREAD_CLEANUP_FUNCTIONS 1
 
 /* Define if you have timegm() function */
 #undef HAVE_TIMEGM
