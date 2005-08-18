@@ -16,8 +16,10 @@
 #pragma interface "font.h"
 #endif
 
-#if __WXMOTIF20__ && !__WXLESSTIF__ && !defined(wxMOTIF_NEW_FONT_HANDLING)
-#define wxMOTIF_NEW_FONT_HANDLING 0 // safe default
+#if __WXMOTIF20__ && !__WXLESSTIF__
+    #define wxMOTIF_NEW_FONT_HANDLING 0 // safe default, change to 1 to enable
+#else
+    #define wxMOTIF_NEW_FONT_HANDLING 0
 #endif
 
 class wxXFont;
