@@ -565,7 +565,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacAppEventHandler )
 WXIMPORT char std::__throws_bad_alloc ;
 #endif
 
-#if __WXDEBUG__
+#ifdef __WXDEBUG__
 
 pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 options,
     const char *assertionString, const char *exceptionLabelString,
@@ -619,7 +619,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     // Mac-specific
 
-#if __WXDEBUG__
+#ifdef __WXDEBUG__
     InstallDebugAssertOutputHandler ( NewDebugAssertOutputHandlerUPP( wxMacAssertOutputHandler ) );
 #endif
     UMAInitToolbox( 4, sm_isEmbedded ) ;
