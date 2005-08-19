@@ -265,21 +265,41 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     // the first thing to do is to check if we're trying to run an Unicode
     // program under Win9x w/o MSLU emulation layer - if so, abort right now
     // as it has no chance to work and has all chances to crash
-#if wxUSE_UNICODE && !wxUSE_UNICODE_MSLU && !defined(__WXWINCE__)
+#if wxUSE_UNICODE && !defined(__WXWINCE__)
     if ( wxGetOsVersion() != wxWINDOWS_NT )
     {
+        // we need to be built with MSLU support
+#if !wxUSE_UNICODE_MSLU 
         // note that we can use MessageBoxW() as it's implemented even under
         // Win9x - OTOH, we can't use wxGetTranslation() because the file APIs
         // used by wxLocale are not
         ::MessageBox
         (
          NULL,
-         _T("This program uses Unicode and requires Windows NT/2000/XP.\nProgram aborted."),
+         _T("This program uses Unicode and requires Windows NT/2000/XP.\n\nProgram aborted."),
          _T("wxWidgets Fatal Error"),
          MB_ICONERROR | MB_OK
         );
 
         return -1;
+#endif // !wxUSE_UNICODE_MSLU
+
+        // and the MSLU DLL must also be available
+        HMODULE hmod = ::LoadLibraryA("unicows.dll");
+        if ( !hmod )
+        {
+            ::MessageBox
+            (
+             NULL,
+             _T("This program uses Unicode and requires unicows.dll to work under current operating system.\n\nPlease install unicows.dll and relaunch the program."),
+             _T("wxWidgets Fatal Error"),
+             MB_ICONERROR | MB_OK
+            );
+            return -1;
+        }
+
+        // this is not really necessary but be tidy
+        ::FreeLibrary(hmod);
     }
 #endif // wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
 
