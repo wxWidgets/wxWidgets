@@ -4008,12 +4008,10 @@ PangoContext *wxWindowGTK::GtkGetPangoDefaultContext()
     return gtk_widget_get_pango_context( m_widget );
 }
 
+// MR: Deprecated and now returns the same as GtkGetPangoDefaultContext to avoid libpangox dependancy
 PangoContext *wxWindowGTK::GtkGetPangoX11Context()
 {
-    if (!m_x11Context)
-        m_x11Context = pango_x_get_context( gdk_display );
-
-    return m_x11Context;
+    return gtk_widget_get_pango_context( m_widget );
 }
 #endif
 

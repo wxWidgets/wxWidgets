@@ -1796,13 +1796,10 @@ void wxWindowDC::SetFont( const wxFont &font )
     if (m_font.Ok())
     {
         m_fontdesc = m_font.GetNativeFontInfo()->description;
-   
+
         if (m_owner)
         {
-            if (m_font.GetNoAntiAliasing())
-                m_context = m_owner->GtkGetPangoX11Context();
-            else
-                m_context = m_owner->GtkGetPangoDefaultContext();
+            m_context = m_owner->GtkGetPangoDefaultContext();
         }
     }
 #endif
