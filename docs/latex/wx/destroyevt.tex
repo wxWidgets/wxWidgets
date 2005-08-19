@@ -1,8 +1,24 @@
 \section{\class{wxWindowDestroyEvent}}\label{wxwindowdestroyevent}
 
-This event is sent just before the actual window associated with a wxWindow object
-is destroyed. Since it is derived from wxCommandEvent, the event propagates up
-the window hierarchy.
+% Note: the original description is still here commented out in case those
+%       semantics are restored to this event.
+
+%This event is sent just before the actual window associated with a wxWindow object
+%is destroyed. Since it is derived from wxCommandEvent, the event propagates up
+%the window hierarchy.
+
+This event is sent from the wxWindow destructor wxWindow::~wxWindow() when a
+window is destroyed.
+
+When a class derived from wxWindow is destroyed its destructor will have
+already run by the time this event is sent. Therefore this event will not
+usually be received at all.
+
+To receive this event \helpref{wxEvtHandler::Connect}{wxevthandlerconnect}
+must be used (using an event table macro will not work). Since it is
+received after the destructor has run, an object should not handle its
+own wxWindowDestroyEvent, but it can be used to get notification of the
+destruction of another window.
 
 \wxheading{Derived from}
 
@@ -16,13 +32,15 @@ the window hierarchy.
 
 \wxheading{Event table macros}
 
-To process a window destruction event, use this event handler macro to direct input to a member
-function that takes a wxWindowDestroyEvent argument.
+%To process a window destruction event, use this event handler macro to direct input to a member
+%function that takes a wxWindowDestroyEvent argument.
+%
+%\twocolwidtha{7cm}
+%\begin{twocollist}\itemsep=0pt
+%\twocolitem{{\bf EVT\_WINDOW\_DESTROY(func)}}{Process a wxEVT\_DESTROY event.}
+%\end{twocollist}%
 
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_WINDOW\_DESTROY(func)}}{Process a wxEVT\_DESTROY event.}
-\end{twocollist}%
+It is not possible to receive this event using an event table macro.
 
 \wxheading{See also}
 
