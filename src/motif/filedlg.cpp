@@ -168,17 +168,31 @@ int wxFileDialog::ShowModal()
     else
         parentWidget = (Widget) wxTheApp->GetTopLevelWidget();
     // prepare the arg list
+    Display* dpy = XtDisplay(parentWidget);
     Arg args[10];
     int ac = 0;
 
-    wxComputeColours (XtDisplay(parentWidget), & m_backgroundColour,
-        (wxColour*) NULL);
+    wxComputeColours (dpy, & m_backgroundColour, (wxColour*) NULL);
 
     XtSetArg(args[ac], XmNbackground, g_itemColors[wxBACK_INDEX].pixel); ac++;
     XtSetArg(args[ac], XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel); ac++;
     XtSetArg(args[ac], XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel); ac++;
     XtSetArg(args[ac], XmNforeground, g_itemColors[wxFORE_INDEX].pixel); ac++;
 
+    wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+
+    if ( wxFont::GetFontTag() == (WXString) XmNfontList )
+    {
+        XtSetArg(args[ac], XmNbuttonFontList, font.GetFontTypeC(dpy)); ac++;
+        XtSetArg(args[ac], XmNlabelFontList, font.GetFontTypeC(dpy)); ac++;
+        XtSetArg(args[ac], XmNtextFontList, font.GetFontTypeC(dpy)); ac++;
+    }
+    else
+    {
+        XtSetArg(args[ac], XmNbuttonRenderTable, font.GetFontTypeC(dpy)); ac++;
+        XtSetArg(args[ac], XmNlabelRenderTable, font.GetFontTypeC(dpy)); ac++;
+        XtSetArg(args[ac], XmNtextRenderTable, font.GetFontTypeC(dpy)); ac++;
+    }
 
     Widget fileSel = XmCreateFileSelectionDialog(parentWidget, "file_selector", args, ac);
     XtUnmanageChild(XmFileSelectionBoxGetChild(fileSel, XmDIALOG_HELP_BUTTON));

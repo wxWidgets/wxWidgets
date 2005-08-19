@@ -43,6 +43,7 @@
 #include "wx/intl.h"
 #include "wx/msgdlg.h"
 #include "wx/motif/private.h"
+#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -161,13 +162,29 @@ int wxMessageDialog::ShowModal()
     XtSetArg(args[ac], XmNmessageString, text()); ac++;
     XtSetArg(args[ac], XmNdialogTitle, title()); ac++;
 
-    wxComputeColours (XtDisplay(wParent), & m_backgroundColour,
-        (wxColour*) NULL);
+    Display* dpy = XtDisplay(wParent);
+
+    wxComputeColours (dpy, & m_backgroundColour, (wxColour*) NULL);
 
     XtSetArg(args[ac], XmNbackground, g_itemColors[wxBACK_INDEX].pixel); ac++;
     XtSetArg(args[ac], XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel); ac++;
     XtSetArg(args[ac], XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel); ac++;
     XtSetArg(args[ac], XmNforeground, g_itemColors[wxFORE_INDEX].pixel); ac++;
+
+    wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+
+    if ( wxFont::GetFontTag() == (WXString) XmNfontList )
+    {
+        XtSetArg(args[ac], XmNbuttonFontList, font.GetFontTypeC(dpy)); ac++;
+        XtSetArg(args[ac], XmNlabelFontList, font.GetFontTypeC(dpy)); ac++;
+        XtSetArg(args[ac], XmNtextFontList, font.GetFontTypeC(dpy)); ac++;
+    }
+    else
+    {
+        XtSetArg(args[ac], XmNbuttonRenderTable, font.GetFontTypeC(dpy)); ac++;
+        XtSetArg(args[ac], XmNlabelRenderTable, font.GetFontTypeC(dpy)); ac++;
+        XtSetArg(args[ac], XmNtextRenderTable, font.GetFontTypeC(dpy)); ac++;
+    }
 
     // do create message box
 
