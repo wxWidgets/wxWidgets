@@ -89,25 +89,41 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
 {
     m_refData = new wxRegionRefData;
 
-    OpenRgn();
+    // OS X somehow does not collect the region invisibly as before, so sometimes things
+    // get drawn on screen instead of just being combined into a region, therefore we allocate a temp gworld now
+    
+	GWorldPtr	gWorld = NULL;
+	GWorldPtr	oldWorld;
+	GDHandle	oldGDHandle;
+    OSStatus    err ;
+	Rect		destRect = {0,0,1,1};
+    
+    ::GetGWorld( &oldWorld, &oldGDHandle );
+    err = ::NewGWorld( &gWorld, 32, &destRect, nil, nil, 0 );
+    if ( err == noErr )
+    {
+        ::SetGWorld( gWorld, GetGDevice() );
+        
+        OpenRgn();
 
-    wxCoord x1, x2 , y1 , y2 ;
-    x2 = x1 = points[0].x ;
-    y2 = y1 = points[0].y ;
-    ::MoveTo(x1,y1);
-    for (size_t i = 1; i < n; i++)
-    {
-        x2 = points[i].x ;
-        y2 = points[i].y ;
-        ::LineTo(x2, y2);
+        wxCoord x1, x2 , y1 , y2 ;
+        x2 = x1 = points[0].x ;
+        y2 = y1 = points[0].y ;
+        ::MoveTo(x1,y1);
+        for (size_t i = 1; i < n; i++)
+        {
+            x2 = points[i].x ;
+            y2 = points[i].y ;
+            ::LineTo(x2, y2);
+        }
+        // close the polyline if necessary
+        if ( x1 != x2 || y1 != y2 )
+        {
+            ::LineTo(x1,y1 ) ;
+        }
+        CloseRgn( M_REGION ) ;
+        ::SetGWorld( oldWorld, oldGDHandle );
     }
-    // close the polyline if necessary
-    if ( x1 != x2 || y1 != y2 )
-    {
-        ::LineTo(x1,y1 ) ;
-    }
-    ClosePoly();
-    CloseRgn( M_REGION ) ;
 }
 
 /*!
