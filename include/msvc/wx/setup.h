@@ -76,6 +76,9 @@
             #pragma comment(lib,"wxmsw26ud_html")
             #pragma comment(lib,"wxmsw26ud_qa")
             #pragma comment(lib,"wxmsw26ud_xrc")
+            #if wxUSE_MEDIACTRL
+                #pragma comment(lib,"wxmsw26ud_media")
+            #endif
         #else // release
             #if wxUSE_XML
                 #pragma comment(lib,"wxexpat")
@@ -103,6 +106,9 @@
             #pragma comment(lib,"wxmsw26u_html")
             #pragma comment(lib,"wxmsw26u_qa")
             #pragma comment(lib,"wxmsw26u_xrc")
+            #if wxUSE_MEDIACTRL
+                #pragma comment(lib,"wxmsw26u_media")
+            #endif
         #endif // debug/release
     #else // !_UNICODE
         #ifdef WXUSINGDLL
@@ -146,6 +152,9 @@
             #pragma comment(lib,"wxmsw26d_html")
             #pragma comment(lib,"wxmsw26d_qa")
             #pragma comment(lib,"wxmsw26d_xrc")
+            #if wxUSE_MEDIACTRL
+                #pragma comment(lib,"wxmsw26d_media")
+            #endif
         #else // release
             #if wxUSE_XML
                 #pragma comment(lib,"wxexpat")
@@ -173,6 +182,9 @@
             #pragma comment(lib,"wxmsw26_html")
             #pragma comment(lib,"wxmsw26_qa")
             #pragma comment(lib,"wxmsw26_xrc")
+            #if wxUSE_MEDIACTRL
+                #pragma comment(lib,"wxmsw26_media")
+            #endif
         #endif // debug/release
     #endif // _UNICODE/!_UNICODE
 #else
