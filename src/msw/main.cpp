@@ -253,6 +253,84 @@ int wxEntry(int& argc, wxChar **argv)
 
 #if wxUSE_GUI && defined(__WXMSW__)
 
+#if wxUSE_UNICODE && !defined(__WXWINCE__)
+    #define NEED_UNICODE_CHECK
+#endif
+
+#ifdef NEED_UNICODE_CHECK
+
+// check whether Unicode is available
+static bool wxIsUnicodeAvailable()
+{
+    static const wchar_t *ERROR_STRING = L"wxWidgets Fatal Error";
+
+    if ( wxGetOsVersion() != wxWINDOWS_NT )
+    {
+        // we need to be built with MSLU support
+#if !wxUSE_UNICODE_MSLU 
+        // note that we can use MessageBoxW() as it's implemented even under
+        // Win9x - OTOH, we can't use wxGetTranslation() because the file APIs
+        // used by wxLocale are not
+        ::MessageBox
+        (
+         NULL,
+         L"This program uses Unicode and requires Windows NT/2000/XP.\n"
+         L"\n"
+         L"Program aborted.",
+         ERROR_STRING,
+         MB_ICONERROR | MB_OK
+        );
+
+        return false;
+#endif // !wxUSE_UNICODE_MSLU
+
+        // and the MSLU DLL must also be available
+        HMODULE hmod = ::LoadLibraryA("unicows.dll");
+        if ( !hmod )
+        {
+            ::MessageBox
+            (
+             NULL,
+             L"This program uses Unicode and requires unicows.dll to work "
+             L"under current operating system.\n"
+             L"\n"
+             L"Please install unicows.dll and relaunch the program.",
+             ERROR_STRING,
+             MB_ICONERROR | MB_OK
+            );
+            return false;
+        }
+
+        // this is not really necessary but be tidy
+        ::FreeLibrary(hmod);
+
+        // finally do the last check: has unicows.lib initialized correctly?
+        hmod = ::LoadLibraryW(L"unicows.dll");
+        if ( !hmod )
+        {
+            ::MessageBox
+            (
+             NULL,
+             L"This program uses Unicode but is not using unicows.dll\n"
+             L"correctly and so cannot work under current operating system.\n"
+             L"Please contact the program author for an updated version.\n"
+             L"\n"
+             L"Program aborted.",
+             ERROR_STRING,
+             MB_ICONERROR | MB_OK
+            );
+
+            return false;
+        }
+
+        ::FreeLibrary(hmod);
+    }
+
+    return true;
+}
+
+#endif // NEED_UNICODE_CHECK
+
 // ----------------------------------------------------------------------------
 // Windows-specific wxEntry
 // ----------------------------------------------------------------------------
@@ -265,43 +343,10 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     // the first thing to do is to check if we're trying to run an Unicode
     // program under Win9x w/o MSLU emulation layer - if so, abort right now
     // as it has no chance to work and has all chances to crash
-#if wxUSE_UNICODE && !defined(__WXWINCE__)
-    if ( wxGetOsVersion() != wxWINDOWS_NT )
-    {
-        // we need to be built with MSLU support
-#if !wxUSE_UNICODE_MSLU 
-        // note that we can use MessageBoxW() as it's implemented even under
-        // Win9x - OTOH, we can't use wxGetTranslation() because the file APIs
-        // used by wxLocale are not
-        ::MessageBox
-        (
-         NULL,
-         _T("This program uses Unicode and requires Windows NT/2000/XP.\n\nProgram aborted."),
-         _T("wxWidgets Fatal Error"),
-         MB_ICONERROR | MB_OK
-        );
-
+#ifdef NEED_UNICODE_CHECK
+    if ( !wxIsUnicodeAvailable() )
         return -1;
-#endif // !wxUSE_UNICODE_MSLU
-
-        // and the MSLU DLL must also be available
-        HMODULE hmod = ::LoadLibraryA("unicows.dll");
-        if ( !hmod )
-        {
-            ::MessageBox
-            (
-             NULL,
-             _T("This program uses Unicode and requires unicows.dll to work under current operating system.\n\nPlease install unicows.dll and relaunch the program."),
-             _T("wxWidgets Fatal Error"),
-             MB_ICONERROR | MB_OK
-            );
-            return -1;
-        }
-
-        // this is not really necessary but be tidy
-        ::FreeLibrary(hmod);
-    }
-#endif // wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
+#endif // NEED_UNICODE_CHECK
 
 
     // remember the parameters Windows gave us
