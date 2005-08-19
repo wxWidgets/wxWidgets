@@ -764,7 +764,7 @@
 
 /* Define if fsync() is available */
 #define HAVE_FSYNC 1
-  729
+
 /* Define if you have ftime() */
 #define HAVE_FTIME
 

@@ -23,6 +23,7 @@
 #undef XtWindow
 #undef XtIsRealized
 #undef XtParent
+#undef XtClass
 #endif
 
 # include "wx/gauge.h"

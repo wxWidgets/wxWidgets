@@ -98,6 +98,7 @@
 #undef XtWindow
 #undef XtIsRealized
 #undef XtParent
+#undef XtClass
 #endif
 
 #include <X11/IntrinsicP.h>
