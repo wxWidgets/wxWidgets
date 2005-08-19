@@ -224,6 +224,10 @@ i) Add information about wxFoo to the manual ("Libraries list" section
    in libs.tex) and update docs/latex/wx/libs.dia (you need Dia for this)
    to show the dependencies of the new library.
 
+j) Also please add 4 #pragma comment(lib, "foo") (for Unicode/ANSI
+   Release/Debug combinations) to the file include/msvc/wx/setup.h and
+   add a check for WXMAKINGDLL_FOO to the test whether we're building a DLL at
+   the end of include/wx/msw/chkconf.h.
 
 === EOF ===
 
