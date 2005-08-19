@@ -15,9 +15,6 @@
 #ifndef _WX_METAFIILE_H_
 #define _WX_METAFIILE_H_
 
-#include "wx/setup.h"
-
-#if wxUSE_METAFILE
 #include "wx/dc.h"
 #include "wx/gdiobj.h"
 
@@ -195,6 +192,5 @@ private:
 };
 #endif
 
-#endif // wxUSE_METAFILE
 #endif
     // _WX_METAFIILE_H_

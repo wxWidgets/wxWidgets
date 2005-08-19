@@ -12,6 +12,10 @@
 #ifndef _WX_METAFILE_H_BASE_
 #define _WX_METAFILE_H_BASE_
 
+#include "wx/defs.h"
+
+#if wxUSE_METAFILE
+
 // provide synonyms for all metafile classes
 #define wxMetaFile wxMetafile
 #define wxMetaFileDC wxMetafileDC
@@ -50,5 +54,6 @@
     #include "wx/mac/metafile.h"
 #endif
 
+#endif // wxUSE_METAFILE
 #endif
     // _WX_METAFILE_H_BASE_

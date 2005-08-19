@@ -16,10 +16,6 @@
     #pragma interface "metafile.h"
 #endif
 
-#include "wx/setup.h"
-
-#if wxUSE_METAFILE
-
 #include "wx/dc.h"
 #include "wx/gdiobj.h"
 
@@ -168,7 +164,6 @@ protected:
 
 #endif // wxUSE_DRAG_AND_DROP
 
-#endif // wxUSE_METAFILE
 #endif
     // _WX_METAFIILE_H_
 

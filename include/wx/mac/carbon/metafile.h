@@ -15,7 +15,6 @@
 #ifndef _WX_METAFIILE_H_
 #define _WX_METAFIILE_H_
 
-#if wxUSE_METAFILE
 #include "wx/dc.h"
 #include "wx/gdiobj.h"
 
@@ -148,9 +147,6 @@ protected:
   wxMetafile   m_metafile;
 };
 #endif
-
-#endif // wxUSE_METAFILE
-
 
 #endif
     // _WX_METAFIILE_H_

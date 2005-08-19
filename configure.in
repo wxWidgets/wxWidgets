@@ -5691,6 +5691,17 @@ if test "$wxUSE_PROLOGIO" = "yes" -o  "$wxUSE_RESOURCES" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl wxMetafile availability
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_METAFILE" = "yes"; then
+    if test "$wxUSE_MSW" != 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_PM" != 1; then
+        AC_MSG_WARN([wxMetafile is not available on this system... disabled])
+        wxUSE_METAFILE=no
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl IPC: IPC, Drag'n'Drop, Clipboard, ...
 dnl ---------------------------------------------------------------------------
 
