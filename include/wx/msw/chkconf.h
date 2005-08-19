@@ -241,5 +241,46 @@
 #    endif
 #endif  /* wxUSE_DYNAMIC_LOADER */
 
+
+/*
+    Finally, although this is not really a configuration check, do it here for
+    now as we'll supplement it with a real consistency check verifying that
+    wxUSE_UNICODE_MSLU corresponds to USE_MSLU in the makefiles. But for MSVC
+    we can do even better: not just check for consistency but even link in the
+    lib ourselves if needed.
+
+    Notice that this is used for DLL wx build, as otherwise we have to do the
+    same for the main executable and not the (static) library. It is done in
+    msvc/wx/setup.h in that case.
+ */
+#if wxUSE_UNICODE_MSLU && \
+    (defined(WXMAKINGDLL) || \
+     defined(WXMAKINGDLL_NET) || \
+     defined(WXMAKINGDLL_CORE) || \
+     defined(WXMAKINGDLL_ADV) || \
+     defined(WXMAKINGDLL_ODBC) || \
+     defined(WXMAKINGDLL_DBGRID) || \
+     defined(WXMAKINGDLL_HTML) || \
+     defined(WXMAKINGDLL_GL) || \
+     defined(WXMAKINGDLL_XML) || \
+     defined(WXMAKINGDLL_XRC) || \
+     defined(WXMAKINGDLL_MEDIA))
+    // first remove all default libraries
+    #pragma comment(linker, "/nod:kernel32.lib /nod:advapi32.lib /nod:user32.lib /nod:gdi32.lib /nod:shell32.lib /nod:comdlg32.lib /nod:version.lib /nod:mpr.lib /nod:rasapi32.lib /nod:winmm.lib /nod:winspool.lib /nod:vfw32.lib /nod:secur32.lib /nod:oleacc.lib /nod:oledlg.lib /nod:sensapi.lib")
+
+    // then add unicows.lib as the first library
+    #pragma comment(lib, "unicows.lib")
+
+    // and only then re-add back all the other ones
+    #pragma comment(lib, "kernel32.lib")
+    #pragma comment(lib, "user32.lib")
+    #pragma comment(lib, "gdi32.lib")
+    #pragma comment(lib, "winspool.lib")
+    #pragma comment(lib, "comdlg32.lib")
+    #pragma comment(lib, "advapi32.lib")
+    #pragma comment(lib, "shell32.lib")
+    #pragma comment(lib, "oleacc.lib")
+#endif
+
 #endif /* _WX_MSW_CHKCONF_H_ */
 
