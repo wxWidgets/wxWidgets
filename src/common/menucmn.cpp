@@ -219,8 +219,6 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                         keyCode = WXK_SNAPSHOT;
                     else if ( current == wxT("HELP") )
                         keyCode = WXK_HELP;
-                    else if ( current == wxT("HELP") )
-                        keyCode = WXK_HELP;
                     else if ( current == wxT("ADD") )
                         keyCode = WXK_ADD;
                     else if ( current == wxT("SEPARATOR") )
