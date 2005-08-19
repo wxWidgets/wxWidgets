@@ -343,9 +343,15 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         thisWindow->GetCaret()->OnKillFocus();
                     }
         #endif // wxUSE_CARET
-                    wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
-                    event.SetEventObject(thisWindow);
-                    thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                    static bool inKillFocusEvent = false ;
+                    if ( !inKillFocusEvent )
+                    {
+                        inKillFocusEvent = true ;
+                        wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
+                        event.SetEventObject(thisWindow);
+                        thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                        inKillFocusEvent = false ;
+                    }
                 }
                 else
                 {
