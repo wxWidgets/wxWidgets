@@ -29,6 +29,26 @@
             #endif
         #endif
 
+        // if we're using MSLU, ensure that the first library we use is
+        // unicows.lib
+        #if wxUSE_UNICODE_MSLU
+            // for this, first tell linker not to use the standard libraries
+            #pragma comment(linker, "/nod:kernel32.lib /nod:advapi32.lib /nod:user32.lib /nod:gdi32.lib /nod:shell32.lib /nod:comdlg32.lib /nod:version.lib /nod:mpr.lib /nod:rasapi32.lib /nod:winmm.lib /nod:winspool.lib /nod:vfw32.lib /nod:secur32.lib /nod:oleacc.lib /nod:oledlg.lib /nod:sensapi.lib")
+
+            // then tell it to link with unicows.lib
+            #pragma comment(lib, "unicows.lib")
+
+            // and only then readd all standard libraries back
+            #pragma comment(lib, "kernel32.lib")
+            #pragma comment(lib, "user32.lib")
+            #pragma comment(lib, "gdi32.lib")
+            #pragma comment(lib, "winspool.lib")
+            #pragma comment(lib, "comdlg32.lib")
+            #pragma comment(lib, "advapi32.lib")
+            #pragma comment(lib, "shell32.lib")
+            #pragma comment(lib, "oleacc.lib")
+        #endif // wxUSE_UNICODE_MSLU
+
         #ifdef _DEBUG
             #if wxUSE_XML
                 #pragma comment(lib,"wxexpatd")
