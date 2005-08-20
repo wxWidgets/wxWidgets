@@ -42194,7 +42194,7 @@ echo "${ECHO_T}$bakefile_cv_prog_makeisgnu" >&6
             *-pc-os2_emx | *-pc-os2-emx )
                 PLATFORM_OS2=1
             ;;
-            powerpc-*-darwin* )
+            *-*-darwin* )
                 PLATFORM_MAC=1
                 PLATFORM_MACOSX=1
             ;;
@@ -42256,8 +42256,14 @@ fi;
 
     case "${BAKEFILE_HOST}" in
       *-*-darwin* )
-                        CFLAGS="$CFLAGS -fno-common"
-        CXXFLAGS="$CXXFLAGS -fno-common"
+                        if test "x$GCC" = "xyes"; then
+            CFLAGS="$CFLAGS -fno-common"
+            CXXFLAGS="$CXXFLAGS -fno-common"
+        fi
+        if test "x$XLCC" = "xyes"; then
+            CFLAGS="$CFLAGS -qnocommon"
+            CXXFLAGS="$CXXFLAGS -qnocommon"
+        fi
         ;;
 
       *-pc-os2_emx | *-pc-os2-emx )
@@ -42329,7 +42335,7 @@ fi;
             LIBEXT=".$OS2_LIBEXT"
             dlldir="$bindir"
         ;;
-        powerpc-*-darwin* )
+        *-*-darwin* )
             SO_SUFFIX="dylib"
             SO_SUFFIX_MODULE="bundle"
         ;;
@@ -42620,7 +42626,12 @@ EOF
             SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -headerpad_max_install_names -o"
         fi
 
-        PIC_FLAG="-dynamic -fPIC"
+        if test "x$GCC" == "xyes"; then
+            PIC_FLAG="-dynamic -fPIC"
+        fi
+        if test "x$XLCC" = "xyes"; then
+            PIC_FLAG="-dynamic -DPIC"
+        fi
       ;;
 
       *-*-aix* )
@@ -43255,7 +43266,7 @@ echo $ECHO_N "checking for dependency tracking method... $ECHO_C" >&6
         DEPSMODE=gcc
         DEPS_TRACKING=1
         case "${BAKEFILE_HOST}" in
-            powerpc-*-darwin* )
+            *-*-darwin* )
                                                 DEPSFLAG_GCC="-no-cpp-precomp -MMD"
             ;;
             * )
