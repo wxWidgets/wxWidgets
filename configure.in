@@ -4428,10 +4428,14 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                 THREAD_OPTS="pthreads"
                 ;;
           *-hp-hpux* )
-                dnl HP-UX aCC only gives a warning, not an error about
-                dnl -pthread but it doesn't work and we have to use -lpthread
-                dnl there
-                if test "x$GCC" != "xyes"; then
+                if test "x$GCC" = "xyes"; then
+                    dnl the correct option for gcc is -threads, at least under
+                    dnl HP-UX 11.00
+                    THREAD_OPTS="-threads"
+                fi
+                    dnl HP-UX aCC only gives a warning, not an error about
+                    dnl -pthread but it doesn't work and we have to use
+                    dnl -lpthread there
                     THREAD_OPTS=""
                 fi
                 ;;
