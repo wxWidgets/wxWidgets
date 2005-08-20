@@ -213,6 +213,7 @@ wxString wxGetOsDescription()
 wxToolkitInfo& wxAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
+    info.os = wxPALMOS;
     info.name = _T("wxBase");
     return info;
 }
