@@ -1874,9 +1874,12 @@ if test "x$wx_largefile" = "xyes"; then
         WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
 
         dnl we get "Large Files (ILP32) not supported in strict ANSI mode."
-        dnl #error from HP standard headers without this
-        if test "$USE_HPUX" = 1; then
-            CPPFLAGS="$CPPFLAGS -D__STDC_EXT__"
+        dnl #error from HP standard headers when compiling with g++ without this
+        dnl
+        dnl NB: gcc defines __STDC_EXT__=1 for C code, but not for C++, hence
+        dnl     we do this only for CXXFLAGS and not CPPFLAGS
+        if test "$USE_HPUX" = 1 -a "$GXX" = "yes"; then
+            CXXFLAGS="$CXXFLAGS -D__STDC_EXT__=1"
         fi
     else
         WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
