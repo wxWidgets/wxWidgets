@@ -11336,7 +11336,7 @@ echo "${ECHO_T}$ac_cv_c_compiler_gnu" >&6
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -11726,7 +11726,7 @@ fi
         unset ac_cv_prog_cc_g
         ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -12564,9 +12564,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -g -O2"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="$CXXFLAGS -g"
+    CXXFLAGS="-g"
   fi
 else
   if test "$GXX" = yes; then
@@ -12804,9 +12804,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -g -O2"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="$CXXFLAGS -g"
+    CXXFLAGS="-g"
   fi
 else
   if test "$GXX" = yes; then
@@ -20079,6 +20079,10 @@ fi
 if test "x$wx_largefile" = "xyes"; then
     if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
         WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
+
+                                                if test "$USE_HPUX" = 1 -a "$GXX" = "yes"; then
+            CXXFLAGS="$CXXFLAGS -D__STDC_EXT__=1"
+        fi
     else
         WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
     fi
@@ -31198,9 +31202,71 @@ _ACEOF
 
     fi
 
-        if test "$USE_HPUX" = 1; then
+                    if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
         CPPFLAGS="$CPPFLAGS -D_INCLUDE__STDC_A1_SOURCE "
     fi
+
+                echo "$as_me:$LINENO: checking for mbstate_t" >&5
+echo $ECHO_N "checking for mbstate_t... $ECHO_C" >&6
+if test "${ac_cv_type_mbstate_t+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <wchar.h>
+
+int
+main ()
+{
+if ((mbstate_t *) 0)
+  return 0;
+if (sizeof (mbstate_t))
+  return 0;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_type_mbstate_t=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_type_mbstate_t=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_type_mbstate_t" >&5
+echo "${ECHO_T}$ac_cv_type_mbstate_t" >&6
+if test $ac_cv_type_mbstate_t = yes; then
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_MBSTATE_T 1
+_ACEOF
 
 
 for ac_func in wcsrtombs
@@ -31302,6 +31368,8 @@ _ACEOF
 
 fi
 done
+
+fi
 
 else
     { echo "$as_me:$LINENO: WARNING: Wide character support is unavailable" >&5
@@ -31426,7 +31494,7 @@ if test "${wx_cv_func_vsnprintf_decl+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-            cat >conftest.$ac_ext <<_ACEOF
+                                                            cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -31435,6 +31503,12 @@ cat >>conftest.$ac_ext <<_ACEOF
 
                     #include <stdio.h>
                     #include <stdarg.h>
+                    #ifdef __MSL__
+                    #if __MSL__ >= 0x6000
+                    namespace std {}
+                    using namespace std;
+                    #endif
+                    #endif
 
 int
 main ()
@@ -31442,57 +31516,8 @@ main ()
 
                     char *buf;
                     va_list ap;
-                    vsnprintf(buf, 10u, "%s", ap);
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  wx_cv_func_vsnprintf_decl=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-
-                                                                                                                        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-                            #include <stdio.h>
-                            #include <stdarg.h>
-                            using namespace std;
-
-int
-main ()
-{
-
-                            char *buf;
-                            va_list ap;
-                            vsnprintf(buf, 10u, "%s", ap);
+                    const char *fmt = "%s";
+                    vsnprintf(buf, 10u, fmt, ap);
 
   ;
   return 0;
@@ -31525,10 +31550,6 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 wx_cv_func_vsnprintf_decl=no
-
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
@@ -34656,8 +34677,10 @@ echo "$as_me: WARNING: BeOS threads are not yet supported... disabled" >&2;}
                                 THREAD_OPTS="pthreads"
                 ;;
           *-hp-hpux* )
-                                                                if test "x$GCC" != "xyes"; then
-                    THREAD_OPTS=""
+                if test "x$GCC" = "xyes"; then
+                                                            THREAD_OPTS="-threads"
+                fi
+                                                                                THREAD_OPTS=""
                 fi
                 ;;
 
@@ -39518,6 +39541,15 @@ echo "$as_me: error: wxExpr and old-style resources are now available in contrib
 fi
 
 
+if test "$wxUSE_METAFILE" = "yes"; then
+    if test "$wxUSE_MSW" != 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_PM" != 1; then
+        { echo "$as_me:$LINENO: WARNING: wxMetafile is not available on this system... disabled" >&5
+echo "$as_me: WARNING: wxMetafile is not available on this system... disabled" >&2;}
+        wxUSE_METAFILE=no
+    fi
+fi
+
+
 if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                           -o "$wxUSE_CLIPBOARD"     = "yes" \
                           -o "$wxUSE_OLE"     = "yes" \
@@ -42162,7 +42194,7 @@ echo "${ECHO_T}$bakefile_cv_prog_makeisgnu" >&6
             *-pc-os2_emx | *-pc-os2-emx )
                 PLATFORM_OS2=1
             ;;
-            *-*-darwin* )
+            powerpc-*-darwin* )
                 PLATFORM_MAC=1
                 PLATFORM_MACOSX=1
             ;;
@@ -42224,14 +42256,8 @@ fi;
 
     case "${BAKEFILE_HOST}" in
       *-*-darwin* )
-                        if test "x$GCC" = "xyes"; then
-            CFLAGS="$CFLAGS -fno-common"
-            CXXFLAGS="$CXXFLAGS -fno-common"
-        fi
-        if test "x$XLCC" = "xyes"; then
-            CFLAGS="$CFLAGS -qnocommon"
-            CXXFLAGS="$CXXFLAGS -qnocommon"
-        fi
+                        CFLAGS="$CFLAGS -fno-common"
+        CXXFLAGS="$CXXFLAGS -fno-common"
         ;;
 
       *-pc-os2_emx | *-pc-os2-emx )
@@ -42303,7 +42329,7 @@ fi;
             LIBEXT=".$OS2_LIBEXT"
             dlldir="$bindir"
         ;;
-        *-*-darwin* )
+        powerpc-*-darwin* )
             SO_SUFFIX="dylib"
             SO_SUFFIX_MODULE="bundle"
         ;;
@@ -42594,12 +42620,7 @@ EOF
             SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -headerpad_max_install_names -o"
         fi
 
-        if test "x$GCC" == "xyes"; then
-            PIC_FLAG="-dynamic -fPIC"
-        fi
-        if test "x$XLCC" = "xyes"; then
-            PIC_FLAG="-dynamic -DPIC"
-        fi
+        PIC_FLAG="-dynamic -fPIC"
       ;;
 
       *-*-aix* )
@@ -43234,7 +43255,7 @@ echo $ECHO_N "checking for dependency tracking method... $ECHO_C" >&6
         DEPSMODE=gcc
         DEPS_TRACKING=1
         case "${BAKEFILE_HOST}" in
-            *-*-darwin* )
+            powerpc-*-darwin* )
                                                 DEPSFLAG_GCC="-no-cpp-precomp -MMD"
             ;;
             * )
