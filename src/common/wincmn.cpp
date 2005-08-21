@@ -683,11 +683,15 @@ wxSize wxWindowBase::DoGetBestSize() const
         // then, when the containing window is shrunk back (because our initial
         // best size had been used for computing the parent min size), we can't
         // be shrunk back any more because our best size is now bigger
-        if ( !GetMinSize().IsFullySpecified() )
-            wxConstCast(this, wxWindowBase)->SetMinSize(GetSize());
+        wxSize size = GetMinSize();
+        if ( !size.IsFullySpecified() )
+        {
+            size.SetDefaults(GetSize());
+            wxConstCast(this, wxWindowBase)->SetMinSize(size);
+        }
 
         // return as-is, unadjusted by the client size difference.
-        return GetMinSize();
+        return size;
     }
 
     // Add any difference between size and client size
