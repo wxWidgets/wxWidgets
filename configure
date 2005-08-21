@@ -20079,10 +20079,6 @@ fi
 if test "x$wx_largefile" = "xyes"; then
     if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
         WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
-
-                                                if test "$USE_HPUX" = 1 -a "$GXX" = "yes"; then
-            CXXFLAGS="$CXXFLAGS -D__STDC_EXT__=1"
-        fi
     else
         WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
     fi
@@ -34677,9 +34673,7 @@ echo "$as_me: WARNING: BeOS threads are not yet supported... disabled" >&2;}
                                 THREAD_OPTS="pthreads"
                 ;;
           *-hp-hpux* )
-                if test "x$GCC" = "xyes"; then
-                                                            THREAD_OPTS="-threads"
-                fi
+                if test "x$GCC" != "xyes"; then
                                                                                 THREAD_OPTS=""
                 fi
                 ;;
