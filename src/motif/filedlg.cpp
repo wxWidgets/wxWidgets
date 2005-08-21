@@ -29,6 +29,7 @@
 #include "wx/app.h"
 #include "wx/settings.h"
 #include "wx/tokenzr.h"
+#include "wx/stockitem.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -194,21 +195,43 @@ int wxFileDialog::ShowModal()
         XtSetArg(args[ac], XmNtextRenderTable, font.GetFontTypeC(dpy)); ac++;
     }
 
-    Widget fileSel = XmCreateFileSelectionDialog(parentWidget, "file_selector", args, ac);
-    XtUnmanageChild(XmFileSelectionBoxGetChild(fileSel, XmDIALOG_HELP_BUTTON));
+    Widget fileSel = XmCreateFileSelectionDialog(parentWidget,
+                                                 "file_selector", args, ac);
+#define wxFSChild( name ) \
+    XmFileSelectionBoxGetChild(fileSel, name)
 
-    Widget filterWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_FILTER_TEXT);
-    Widget selectionWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_TEXT);
-    Widget dirListWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_DIR_LIST);
-    Widget fileListWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_LIST);
+    XtUnmanageChild(wxFSChild(XmDIALOG_HELP_BUTTON));
 
-    // code using these vars disabled
-#if 0
-    Widget okWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_OK_BUTTON);
-    Widget applyWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_APPLY_BUTTON);
-    Widget cancelWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_CANCEL_BUTTON);
-#endif
+    Widget filterWidget = wxFSChild(XmDIALOG_FILTER_TEXT);
+    Widget selectionWidget = wxFSChild(XmDIALOG_TEXT);
+    Widget dirListWidget = wxFSChild(XmDIALOG_DIR_LIST);
+    Widget fileListWidget = wxFSChild(XmDIALOG_LIST);
 
+    // for changing labels
+    Widget okWidget = wxFSChild(XmDIALOG_OK_BUTTON);
+    Widget applyWidget = wxFSChild(XmDIALOG_APPLY_BUTTON);
+    Widget cancelWidget = wxFSChild(XmDIALOG_CANCEL_BUTTON);
+    Widget dirlistLabel = wxFSChild(XmDIALOG_DIR_LIST_LABEL);
+    Widget filterLabel = wxFSChild(XmDIALOG_FILTER_LABEL);
+    Widget listLabel = wxFSChild(XmDIALOG_LIST_LABEL);
+    Widget selectionLabel = wxFSChild(XmDIALOG_SELECTION_LABEL);
+
+#undef wxFSChild
+
+    // change labels
+    wxXmString btnOK( wxGetStockLabel( wxID_OK, false ) ),
+               btnCancel( wxGetStockLabel( wxID_CANCEL, false ) ),
+               btnFilter( _("Filter") ), lblFilter( _("Filter") ),
+               lblDirectories( _("Directories") ),
+               lblFiles( _("Files" ) ), lblSelection( _("Selection") );
+
+    XtVaSetValues( okWidget, XmNlabelString, btnOK(), NULL );
+    XtVaSetValues( applyWidget, XmNlabelString, btnFilter(), NULL );
+    XtVaSetValues( cancelWidget, XmNlabelString, btnCancel(), NULL );
+    XtVaSetValues( dirlistLabel, XmNlabelString, lblDirectories(), NULL );
+    XtVaSetValues( filterLabel, XmNlabelString, lblFilter(), NULL );
+    XtVaSetValues( listLabel, XmNlabelString, lblFiles(), NULL );
+    XtVaSetValues( selectionLabel, XmNlabelString, lblSelection(), NULL );
 
     Widget shell = XtParent(fileSel);
 
@@ -216,21 +239,6 @@ int wxFileDialog::ShowModal()
         XtVaSetValues(shell,
                       XmNtitle, wxConstCast(m_message.c_str(), char),
                       NULL);
-
-    wxString entirePath("");
-
-    if ((m_dir != "") && (m_fileName != ""))
-    {
-        entirePath = m_dir + wxString("/") + m_fileName;
-    }
-    else if ((m_dir != "") && (m_fileName == ""))
-    {
-        entirePath = m_dir + wxString("/");
-    }
-    else if ((m_dir == "") && (m_fileName != ""))
-    {
-        entirePath = m_fileName;
-    }
 
     if (m_wildCard != "")
     {
@@ -257,14 +265,27 @@ int wxFileDialog::ShowModal()
             NULL);
     }
 
+    wxString entirePath("");
+
+    if (m_dir != "")
+    {
+        entirePath = m_dir + wxString("/") + m_fileName;
+    }
+    else
+    {
+        entirePath = m_fileName;
+    }
+
     if (entirePath != "")
     {
         XmTextSetString(selectionWidget,
                         wxConstCast(entirePath.c_str(), char));
     }
 
-    XtAddCallback(fileSel, XmNcancelCallback, (XtCallbackProc)wxFileSelCancel, (XtPointer)NULL);
-    XtAddCallback(fileSel, XmNokCallback, (XtCallbackProc)wxFileSelOk, (XtPointer)NULL);
+    XtAddCallback(fileSel, XmNcancelCallback,
+                  (XtCallbackProc)wxFileSelCancel, (XtPointer)NULL);
+    XtAddCallback(fileSel, XmNokCallback,
+                  (XtCallbackProc)wxFileSelOk, (XtPointer)NULL);
     XtAddCallback(fileSel, XmNunmapCallback,
                   (XtCallbackProc)wxFileSelClose, (XtPointer)this);
 
@@ -272,7 +293,7 @@ int wxFileDialog::ShowModal()
     // I'm not sure about what you mean with XmVersion.
     // If this is for Motif1.1/Motif1.2, then check XmVersion>=1200
     // (Motif1.1.4 ==> XmVersion 1100 )
-    // Nevertheless, I put here a #define, so anyone can choose in (I)makefile...
+    // Nevertheless, I put here a #define, so anyone can choose in (I)makefile.
     //
 #if !DEFAULT_FILE_SELECTOR_SIZE
     int width = wxFSB_WIDTH;
@@ -283,7 +304,6 @@ int wxFileDialog::ShowModal()
         XmNresizePolicy, XmRESIZE_NONE,
         NULL);
 #endif
-    //    wxDoChangeBackgroundColour((WXWidget) fileSel, m_backgroundColour);
     wxDoChangeBackgroundColour((WXWidget) filterWidget, *wxWHITE);
     wxDoChangeBackgroundColour((WXWidget) selectionWidget, *wxWHITE);
 
@@ -307,16 +327,12 @@ int wxFileDialog::ShowModal()
     }
     XtRemoveGrab(XtParent(fileSel));
 
-    // XmUpdateDisplay((Widget) wxTheApp->GetTopLevelWidget()); // Experimental
-
-    Display* display = XtDisplay(fileSel);
-
     XtUnmapWidget(XtParent(fileSel));
     XtDestroyWidget(XtParent(fileSel));
 
     // Now process all events, because otherwise
     // this might remain on the screen
-    wxFlushEvents(display);
+    wxFlushEvents(XtDisplay(fileSel));
 
     m_path = m_fileSelectorAnswer;
     m_fileName = wxFileNameFromPath(m_fileSelectorAnswer);
