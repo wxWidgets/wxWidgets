@@ -471,6 +471,14 @@
 #    endif
 #endif
 
+/*
+   We get "Large Files (ILP32) not supported in strict ANSI mode." #error
+   from HP-UX standard headers when compiling with g++ without this:
+ */
+#if defined(__HPUX__) && !defined(__STDC_EXT__)
+#   define __STDC_EXT__ 1
+#endif
+
 /* Force linking against required libraries under Windows CE: */
 #ifdef __WXWINCE__
 #   include "wx/msw/wince/libraries.h"
