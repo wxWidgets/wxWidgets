@@ -8,6 +8,7 @@
 # with configure an explicit path should be specified -- RL.
 
 WX_LINGUAS := `ls *.po */*.po 2> /dev/null | sed -n 's/\(wxstd\)\?\.po//p'`
+WX_LINGUAS_UPDATE := `ls *.po 2> /dev/null | sed -n 's/\(wxstd\)\?\.po//p'`
 
 # the programs we use (TODO: use configure to detect them)
 MSGFMT=msgfmt --verbose
@@ -34,7 +35,7 @@ wxstd.po:
 	find ../contrib/src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
 
 allpo: force-update
-	@-for t in $(WX_LINGUAS); do $(MAKE) $$t.po; done
+	@-for t in $(WX_LINGUAS_UPDATE); do $(MAKE) $$t.po; done
 
 allmo:
 	@for t in $(WX_LINGUAS); do $(MAKE) $$t.mo; done
