@@ -789,12 +789,7 @@ bool wxFont::GetUnderlined() const
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
 
-#if wxUSE_PANGO
-    return M_FONTDATA->HasNativeFont() ? M_FONTDATA->m_nativeFontInfo.GetUnderlined()
-                                       : M_FONTDATA->m_underlined;
-#else
     return M_FONTDATA->m_underlined;
-#endif
 }
 
 wxFontEncoding wxFont::GetEncoding() const
