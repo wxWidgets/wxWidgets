@@ -170,7 +170,7 @@ protected:
 // compiled to make wxMotif and wxGTK base libraries compatible
 #if defined(__WXMOTIF__) || wxABI_VERSION >= 20602
 
-#include <wx/vector.h>
+#include "wx/vector.h"
 
 struct WXDLLIMPEXP_BASE wxClientDataDictionaryPair
 {
