@@ -830,7 +830,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
     #else /* ASCII */
         /* all versions of CodeWarrior supported by wxWidgets apparently have */
         /* both snprintf() and vsnprintf() */
-        #ifdef HAVE_SNPRINTF || defined(__MWERKS__) || defined(__WATCOMC__)
+        #if defined(HAVE_SNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
             #define wxSnprintf_     snprintf
         #endif
         #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
