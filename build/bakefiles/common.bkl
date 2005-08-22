@@ -285,9 +285,12 @@
         </if>
         <define>$(NO_VC_CRTDBG)</define>
         <define>$(WIN32_WINNT)</define>
-        <if cond="FORMAT=='msevc4prj'">
-            <!-- hack to make eVC4 default project still compatible with eVC3 environment -->
+        <if cond="FORMAT=='msevc4prj' and
+                  BAKEFILE_VERSION in ['0.1.9'] and
+                  USE_RTTI=='0'">
+            <!-- hack to make eVC4 2.6.2 project files compatible with what we had in 2.6.1 -->
             <set var="_ldlibs">$(_ldlibs.replace('ccrtrtti.lib', ''))</set>
+            <set var="_cppflags">$(_cppflags.replace('/GR', ''))</set>
         </if>
     </template>
 
