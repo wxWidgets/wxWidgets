@@ -60,21 +60,21 @@ IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 #define wxFSB_HEIGHT               500
 
 
-wxString wxFileDialog::m_fileSelectorAnswer = "";
+wxString wxFileDialog::m_fileSelectorAnswer = wxEmptyString;
 bool wxFileDialog::m_fileSelectorReturned = false;
 
 static void wxFileSelClose(Widget WXUNUSED(w),
                            void* WXUNUSED(client_data),
                            XmAnyCallbackStruct *WXUNUSED(call_data))
 {
-    wxFileDialog::m_fileSelectorAnswer = "";
+    wxFileDialog::m_fileSelectorAnswer = wxEmptyString;
     wxFileDialog::m_fileSelectorReturned = true;
 }
 
 void wxFileSelCancel( Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data),
                      XmFileSelectionBoxCallbackStruct *WXUNUSED(cbs) )
 {
-    wxFileDialog::m_fileSelectorAnswer = "";
+    wxFileDialog::m_fileSelectorAnswer = wxEmptyString;
     wxFileDialog::m_fileSelectorReturned = true;
 }
 
@@ -82,7 +82,7 @@ void wxFileSelOk(Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data), XmFileSel
 {
     char *filename = NULL;
     if (!XmStringGetLtoR(cbs->value, XmSTRING_DEFAULT_CHARSET, &filename)) {
-        wxFileDialog::m_fileSelectorAnswer = "";
+        wxFileDialog::m_fileSelectorAnswer = wxEmptyString;
         wxFileDialog::m_fileSelectorReturned = true;
     } else {
         if (filename) {
@@ -240,12 +240,12 @@ int wxFileDialog::ShowModal()
                       XmNtitle, wxConstCast(m_message.c_str(), char),
                       NULL);
 
-    if (m_wildCard != "")
+    if (!m_wildCard.empty())
     {
         // return something understandable by Motif
         wxString wildCard = ParseWildCard( m_wildCard );
         wxString filter;
-        if (m_dir != "")
+        if (!m_dir.empty())
             filter = m_dir + wxString("/") + wildCard;
         else
             filter = wildCard;
@@ -256,7 +256,7 @@ int wxFileDialog::ShowModal()
 
     // Suggested by Terry Gitnick, 16/9/97, because of change in Motif
     // file selector on Solaris 1.5.1.
-    if ( m_dir != "" )
+    if ( !m_dir.empty() )
     {
         wxXmString thePath( m_dir );
 
@@ -265,9 +265,9 @@ int wxFileDialog::ShowModal()
             NULL);
     }
 
-    wxString entirePath("");
+    wxString entirePath;
 
-    if (m_dir != "")
+    if (!m_dir.empty())
     {
         entirePath = m_dir + wxString("/") + m_fileName;
     }
@@ -276,7 +276,7 @@ int wxFileDialog::ShowModal()
         entirePath = m_fileName;
     }
 
-    if (entirePath != "")
+    if (!entirePath.empty())
     {
         XmTextSetString(selectionWidget,
                         wxConstCast(entirePath.c_str(), char));
@@ -312,7 +312,7 @@ int wxFileDialog::ShowModal()
 
     XtManageChild(fileSel);
 
-    m_fileSelectorAnswer = "";
+    m_fileSelectorAnswer = wxEmptyString;
     m_fileSelectorReturned = false;
 
     wxEndBusyCursor();
@@ -338,9 +338,8 @@ int wxFileDialog::ShowModal()
     m_fileName = wxFileNameFromPath(m_fileSelectorAnswer);
     m_dir = wxPathOnly(m_path);
 
-    if (m_fileName == "")
+    if (m_fileName.empty())
         return wxID_CANCEL;
     else
         return wxID_OK;
 }
-
