@@ -173,18 +173,15 @@ int wxMessageDialog::ShowModal()
 
     wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
-    if ( wxFont::GetFontTag() == (WXString) XmNfontList )
-    {
-        XtSetArg(args[ac], XmNbuttonFontList, font.GetFontTypeC(dpy)); ac++;
-        XtSetArg(args[ac], XmNlabelFontList, font.GetFontTypeC(dpy)); ac++;
-        XtSetArg(args[ac], XmNtextFontList, font.GetFontTypeC(dpy)); ac++;
-    }
-    else
-    {
-        XtSetArg(args[ac], XmNbuttonRenderTable, font.GetFontTypeC(dpy)); ac++;
-        XtSetArg(args[ac], XmNlabelRenderTable, font.GetFontTypeC(dpy)); ac++;
-        XtSetArg(args[ac], XmNtextRenderTable, font.GetFontTypeC(dpy)); ac++;
-    }
+#if __WXMOTIF20__ && !__WXLESSTIF__
+    XtSetArg(args[ac], XmNbuttonRenderTable, font.GetFontTypeC(dpy)); ac++;
+    XtSetArg(args[ac], XmNlabelRenderTable, font.GetFontTypeC(dpy)); ac++;
+    XtSetArg(args[ac], XmNtextRenderTable, font.GetFontTypeC(dpy)); ac++;
+#else
+    XtSetArg(args[ac], XmNbuttonFontList, font.GetFontTypeC(dpy)); ac++;
+    XtSetArg(args[ac], XmNlabelFontList, font.GetFontTypeC(dpy)); ac++;
+    XtSetArg(args[ac], XmNtextFontList, font.GetFontTypeC(dpy)); ac++;
+#endif
 
     // do create message box
 
