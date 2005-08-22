@@ -22332,7 +22332,7 @@ main ()
 {
 
                 #if (__GLIBC__ < 2) || (__GLIBC_MINOR__ < 1)
-                    #error not glibc2.1
+                not glibc 2.1
                 #endif
 
   ;
@@ -25798,7 +25798,7 @@ main ()
 {
 
                             #if !GTK_CHECK_VERSION(2,4,0)
-                            #error "Not GTK+ 2.4"
+                            Not GTK+ 2.4
                             #endif
 
   ;
@@ -28344,7 +28344,7 @@ main ()
 {
 
                         #if XmVersion < 2000
-                        #error "Not Motif 2"
+                        Not Motif 2
                         #endif
 
   ;
@@ -28411,7 +28411,7 @@ main ()
 {
 
                         #if !defined(LesstifVersion) || LesstifVersion <= 0
-                        #error "Not Lesstif"
+                        Not Lesstif
                         #endif
 
   ;
@@ -44484,7 +44484,7 @@ int
 main ()
 {
 #if (__GNUC__ < 4)
-             #error "Not GCC 4.0 or greater"
+             Not GCC 4.0 or greater
              #endif
 
   ;
@@ -44542,7 +44542,7 @@ int
 main ()
 {
 #if !(__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
-                             #error "Not GCC 3.2 or greater"
+                             Not GCC 3.2 or greater
                              #endif
 
   ;
@@ -44598,7 +44598,7 @@ int
 main ()
 {
 #if !(__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
-                             #error "Not GCC 3.2 or greater"
+                             Not GCC 3.2 or greater
                              #endif
 
   ;
