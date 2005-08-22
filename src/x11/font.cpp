@@ -202,7 +202,7 @@ void wxFontRefData::Init(int pointSize,
         case wxFONTFAMILY_TELETYPE:
            pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
            break;
-        case wxFONTFAMILY_SWISS:
+        case wxFONTFAMILY_ROMAN:
            pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
            break;
         default:
