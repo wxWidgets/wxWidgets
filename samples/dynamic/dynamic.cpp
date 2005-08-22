@@ -33,14 +33,14 @@
 
 // Define a new application type
 class MyApp: public wxApp
-{ 
+{
 public:
     bool OnInit(void);
 };
 
 // Define a new frame type
 class MyFrame: public wxFrame
-{ 
+{
 public:
     MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
 
@@ -48,14 +48,14 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnTest(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    
+
 protected:
     wxShadowObject m_shadow;
 };
 
 // Define another new frame type
 class MySecondFrame: public MyFrame
-{ 
+{
 public:
     MySecondFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
 };
@@ -76,10 +76,10 @@ bool MyApp::OnInit(void)
 
     // Show the frame
     frame->Show(true);
-     
+
     // Create the main frame window
     MySecondFrame *frame2 = new MySecondFrame(NULL, _T("Dynamic wxWidgets App"), 150, 150, 450, 340);
-    
+
     // Show the frame
     frame2->Show(true);
 
@@ -94,7 +94,7 @@ bool MyApp::OnInit(void)
 
 // Callback from wxShadowObject
 
-int cb_MyFrame_InitStatusbar( void* window, void* param )
+int cb_MyFrame_InitStatusbar( void* window, void* WXUNUSED(param) )
 {
     MyFrame *frame = (MyFrame*) window;
     frame->SetStatusText( wxT("Hello from MyFrame"), 0 );
@@ -134,7 +134,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
                     wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnTest) );
     Connect( DYNAMIC_ABOUT, wxID_ANY,
                     wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnAbout) );
-                    
+
     CreateStatusBar();
     m_shadow.AddMethod( wxT("OnTest"), &cb_MyFrame_InitStatusbar );
 }
@@ -164,7 +164,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
 // Callback from wxShadowObject
 
-int cb_MySecondFrame_InitStatusbar( void* window, void* param )
+int cb_MySecondFrame_InitStatusbar( void* window, void* WXUNUSED(param) )
 {
     MySecondFrame *frame = (MySecondFrame*) window;
     frame->SetStatusText( wxT("Hello from MySecondFrame"), 0 );
@@ -177,4 +177,3 @@ MySecondFrame::MySecondFrame(wxFrame *frame, wxChar *title, int x, int y, int w,
 {
     m_shadow.AddMethod( wxT("OnTest"), &cb_MySecondFrame_InitStatusbar );
 }
-
