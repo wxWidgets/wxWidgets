@@ -186,11 +186,25 @@ bool wxDropTarget::GetData()
             UInt16 flavors = 0 ;
             GetDragItemReferenceNumber((DragReference)m_currentDrag, index, &theItem);
             CountDragItemFlavors( (DragReference)m_currentDrag, theItem , &flavors ) ;
+            bool hasPreferredFormat = false ;
+            wxDataFormat preferredFormat = m_dataObject->GetPreferredFormat( wxDataObject::Set ) ;
+            
             for ( UInt16 flavor = 1 ; flavor <= flavors ; ++flavor )
             {
                 result = GetFlavorType((DragReference)m_currentDrag, theItem, flavor , &theType);
                 wxDataFormat format(theType) ;
-                if ( m_dataObject->IsSupportedFormat( format ) )
+                if ( preferredFormat == format )
+                {
+                    hasPreferredFormat = true ;
+                    break ;
+                }
+            }
+            
+            for ( UInt16 flavor = 1 ; flavor <= flavors ; ++flavor )
+            {
+                result = GetFlavorType((DragReference)m_currentDrag, theItem, flavor , &theType);
+                wxDataFormat format(theType) ;
+                if ( (hasPreferredFormat && format==preferredFormat) || (!hasPreferredFormat && m_dataObject->IsSupportedFormat( format )))
                 {
                     FlavorFlags theFlags;
                     result = GetFlavorFlags((DragReference)m_currentDrag, theItem, theType, &theFlags);
