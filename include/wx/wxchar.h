@@ -781,7 +781,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 /* printf() family saga */
 
 /*
-   For some systems vsnprintf() exists in the system libraries but not in the
+   For some systems [v]snprintf() exists in the system libraries but not in the
    headers, so we need to declare it ourselves to be able to use it.
  */
 #if defined(HAVE_VSNPRINTF) && !defined(HAVE_VSNPRINTF_DECL)
@@ -792,6 +792,15 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 #endif
     int vsnprintf(char *str, size_t size, const char *format, va_list ap);
 #endif /* !HAVE_VSNPRINTF_DECL */
+
+#if defined(HAVE_SNPRINTF) && !defined(HAVE_SNPRINTF_DECL)
+#ifdef __cplusplus
+    extern "C"
+#else
+    extern
+#endif
+    int snprintf(char *str, size_t size, const char *format, ...);
+#endif /* !HAVE_SNPRINTF_DECL */
 
 /*
    First of all, we always want to define safe snprintf() function to be used
@@ -820,11 +829,12 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
         #endif
     #else /* ASCII */
         /* all versions of CodeWarrior supported by wxWidgets apparently have */
-        /* vsnprintf() */
-        #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
-            /* assume we have snprintf() too if we have vsnprintf() */
-            #define wxVsnprintf_    vsnprintf
+        /* both snprintf() and vsnprintf() */
+        #ifdef HAVE_SNPRINTF || defined(__MWERKS__) || defined(__WATCOMC__)
             #define wxSnprintf_     snprintf
+        #endif
+        #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
+            #define wxVsnprintf_    vsnprintf
         #endif
     #endif
 #endif /* wxVsnprintf_ not defined yet */

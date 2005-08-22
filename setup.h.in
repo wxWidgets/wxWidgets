@@ -760,6 +760,12 @@
 /* Define if you have shl_load() */
 #undef HAVE_SHL_LOAD
 
+/* Define if you have snprintf() */
+#undef HAVE_SNPRINTF
+
+/* Define if you have snprintf() declaration in the header */
+#undef HAVE_SNPRINTF_DECL
+
 /* define if you have statfs function */
 #undef HAVE_STATFS
 
