@@ -315,13 +315,18 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
         Ptr dataPtr = new char[dataSize] ;
         m_data->GetDataHere( formats[i] , dataPtr ) ;
         OSType type = formats[i].GetFormatId() ;
-        if ( type == 'TEXT' )
+        if ( type == 'TEXT' || type == 'utxt' )
         {
-            dataSize-- ;
+            if ( dataSize > 0 )
+                dataSize-- ;
             dataPtr[ dataSize ] = 0 ;
-            wxString st( (wxChar*) dataPtr ) ;
-            wxCharBuffer buf = st.mb_str( wxConvLocal) ;
-            AddDragItemFlavor(theDrag, theItem, type , buf.data(), strlen(buf), 0);
+            if ( type == 'utxt' )
+            {
+                if ( dataSize > 0 )
+                    dataSize-- ;
+                dataPtr[ dataSize ] = 0 ;
+            }
+            AddDragItemFlavor(theDrag, theItem, type , dataPtr, dataSize, 0);      
         }
         else if (type == kDragFlavorTypeHFS )
         {
