@@ -301,7 +301,7 @@ wxDropSource::~wxDropSource()
 }
 
 
-wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
+wxDragResult wxDropSource::DoDragDrop(int flags)
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
     
@@ -416,7 +416,12 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
     gTrackingGlobals.m_currentSource = NULL ;
     
     bool optionDown = GetCurrentKeyModifiers() & optionKey ;
-    wxDragResult dndresult = optionDown ? wxDragCopy : wxDragMove;
+    wxDragResult dndresult = wxDragCopy ;
+    if ( flags != wxDrag_CopyOnly ) 
+    {
+        // on mac the option key is always the indication for copy
+        dndresult = optionDown ? wxDragCopy : wxDragMove;
+    }
     return dndresult;
 }
 
