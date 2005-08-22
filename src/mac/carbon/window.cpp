@@ -763,6 +763,7 @@ wxWindowMac::~wxWindowMac()
     {
         // in case the callback might be called during destruction
         wxRemoveMacControlAssociation( this) ;
+        ::RemoveEventHandler( (EventHandlerRef ) m_macControlEventHandler ) ;
         // we currently are not using this hook
         // ::SetControlColorProc( *m_peer , NULL ) ;
         m_peer->Dispose() ;
