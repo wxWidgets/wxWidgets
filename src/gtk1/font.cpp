@@ -747,8 +747,15 @@ int wxFont::GetFamily() const
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
 #if wxUSE_PANGO
-    return M_FONTDATA->HasNativeFont() ? M_FONTDATA->m_nativeFontInfo.GetFamily()
-                                       : M_FONTDATA->m_family;
+    int ret = M_FONTDATA->m_family;
+    if (M_FONTDATA->HasNativeFont())
+        // wxNativeFontInfo::GetFamily is expensive, must not call more than once
+        ret = M_FONTDATA->m_nativeFontInfo.GetFamily();
+
+    if (ret == wxFONTFAMILY_DEFAULT)
+        ret = M_FONTDATA->m_family;
+
+    return ret;
 #else
     return M_FONTDATA->m_family;
 #endif

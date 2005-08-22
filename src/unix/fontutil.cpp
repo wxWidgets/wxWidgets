@@ -138,43 +138,62 @@ wxString wxNativeFontInfo::GetFaceName() const
 
 wxFontFamily wxNativeFontInfo::GetFamily() const
 {
-#ifndef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
-    if (g_ascii_strcasecmp( pango_font_description_get_family( description ), "monospace" ) == 0)
-        return wxFONTFAMILY_TELETYPE;
-#else
-
-    PangoFontFamily **families;
-    PangoFontFamily  *family;
-    int n_families;
-    pango_context_list_families(
-#ifdef __WXGTK20__
-            gtk_widget_get_pango_context( wxGetRootWindow() ),
-#else
-            wxTheApp->GetPangoContext(),
-#endif
-            &families, &n_families);
-
-    for (int i = 0;i < n_families;++i)
+    wxFontFamily ret = wxFONTFAMILY_DEFAULT;
+    char *family_text = g_ascii_strdown( pango_font_description_get_family( description ), -1 );
+    // Check for some common fonts, to salvage what we can from the current win32 centric wxFont API:
+    if (strncmp( family_text, "monospace", 9 ) == 0)
+        ret = wxFONTFAMILY_TELETYPE; // begins with "Monospace"
+    else if (strncmp( family_text, "courier", 7 ) == 0)
+        ret = wxFONTFAMILY_TELETYPE; // begins with "Courier"
+#ifdef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
+    else
     {
-        if (g_ascii_strcasecmp(pango_font_family_get_name( families[i] ), pango_font_description_get_family( description )) == 0 )
+        PangoFontFamily **families;
+        PangoFontFamily  *family;
+        int n_families;
+        pango_context_list_families(
+#ifdef __WXGTK20__
+                gtk_widget_get_pango_context( wxGetRootWindow() ),
+#else
+                wxTheApp->GetPangoContext(),
+#endif
+                &families, &n_families);
+
+        for (int i = 0;i < n_families;++i)
         {
-            family = families[i];
-            break;
+            if (g_ascii_strcasecmp(pango_font_family_get_name( families[i] ), pango_font_description_get_family( description )) == 0 )
+            {
+                family = families[i];
+                break;
+            }
         }
+
+        g_free(families);
+
+        wxASSERT_MSG( family, wxT("wxNativeFontInfo::GetFamily() - No appropriate PangoFontFamily found for ::description") );
+
+        //BCI: Cache the wxFontFamily inside the class. Validate cache with
+        //BCI: g_ascii_strcasecmp(pango_font_description_get_family(description), pango_font_family_get_name(family)) == 0
+
+        if (pango_font_family_is_monospace( family ))
+            ret = wxFONTFAMILY_TELETYPE; // is deemed a monospace font by pango
     }
-
-    g_free(families);
-
-    wxASSERT_MSG( family, wxT("wxNativeFontInfo::GetFamily() - No appropriate PangoFontFamily found for ::description") );
-
-    //BCI: Cache the wxFontFamily inside the class. Validate cache with
-    //BCI: g_ascii_strcasecmp(pango_font_description_get_family(description), pango_font_family_get_name(family)) == 0
-
-    if (pango_font_family_is_monospace( family ))
-        return wxFONTFAMILY_TELETYPE;
 #endif // pango_font_family_is_monospace
 
-    return wxFONTFAMILY_SWISS;
+    if (ret == wxFONTFAMILY_DEFAULT)
+    {
+        if (strstr( family_text, "sans" ) != NULL) // checked before serif, so that "* Sans Serif" fonts are detected correctly
+            ret = wxFONTFAMILY_SWISS; // contains "Sans"
+        else if (strstr( family_text, "serif" ) != NULL)
+            ret = wxFONTFAMILY_ROMAN; // contains "Serif"
+        else if (strncmp( family_text, "times", 5 ) == 0)
+            ret = wxFONTFAMILY_ROMAN; // begins with "Times"
+        else if (strncmp( family_text, "old", 3 ) == 0)
+            ret = wxFONTFAMILY_DECORATIVE; // Begins with "Old" - "Old English", "Old Town"
+    }
+
+    free(family_text);
+    return ret;
 }
 
 wxFontEncoding wxNativeFontInfo::GetEncoding() const
