@@ -202,9 +202,9 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 }
 
 
-void wxNativeFontInfo::SetPointSize(int WXUNUSED(pointsize))
+void wxNativeFontInfo::SetPointSize(int pointsize)
 {
-    wxFAIL_MSG( _T("not implemented") );
+    pango_font_description_set_size( description, pointsize * PANGO_SCALE );
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
@@ -249,9 +249,9 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
     wxFAIL_MSG( _T("not implemented") );
 }
 
-void wxNativeFontInfo::SetFaceName(wxString WXUNUSED(facename))
+void wxNativeFontInfo::SetFaceName(wxString facename)
 {
-    wxFAIL_MSG( _T("not implemented") );
+    pango_font_description_set_family( description, wxGTK_CONV(facename) );
 }
 
 void wxNativeFontInfo::SetFamily(wxFontFamily WXUNUSED(family))

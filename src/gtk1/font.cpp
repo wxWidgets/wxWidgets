@@ -464,10 +464,7 @@ void wxFontRefData::SetPointSize(int pointSize)
     m_pointSize = pointSize;
 
 #ifdef __WXGTK20__
-    // Get native info
-    PangoFontDescription *desc = m_nativeFontInfo.description;
-
-    pango_font_description_set_size( desc, m_pointSize * PANGO_SCALE );
+    m_nativeFontInfo.SetPointSize(pointSize);
 #else
     if ( HasNativeFont() )
     {
@@ -567,7 +564,9 @@ void wxFontRefData::SetFaceName(const wxString& facename)
 {
     m_faceName = facename;
 
-#ifndef __WXGTK20__
+#ifdef __WXGTK20__
+    m_nativeFontInfo.SetFaceName(facename);
+#else
     if ( HasNativeFont() )
     {
         m_nativeFontInfo.SetXFontComponent(wxXLFD_FAMILY, facename);
