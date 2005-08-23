@@ -20,6 +20,7 @@
 #endif
 
 #include "wx/dnd.h"
+#include "wx/dataobj.h"
 #include "wx/image.h"
 #include "wx/clipbrd.h"
 #include "wx/colordlg.h"
