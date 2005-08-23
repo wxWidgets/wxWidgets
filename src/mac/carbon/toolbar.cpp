@@ -530,8 +530,7 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     OSStatus err = 0;
 
 #if wxMAC_USE_NATIVE_TOOLBAR
-    wxString labelStr;
-    labelStr.Format(wxT("%xd"), (int)this);
+    wxString labelStr = wxString::Format(wxT("%xd"), (int)this);
     err = HIToolbarCreate( wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding() ) , 0 ,
                     (HIToolbarRef*) &m_macHIToolbarRef  );
 
@@ -1087,8 +1086,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
 
 #if wxMAC_USE_NATIVE_TOOLBAR
                 HIToolbarItemRef item ;
-                wxString	labelStr;
-                labelStr.Format(wxT("%xd"), (int)tool);
+                wxString labelStr = wxString::Format(wxT("%xd"), (int)tool);
                 err = HIToolbarItemCreate(
                     wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding()),
                     kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates, &item );
@@ -1120,8 +1118,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
             // FIXME: doesn't work yet...
             {
                 HIToolbarItemRef    item;
-                wxString            labelStr;
-                labelStr.Format( wxT("%xd"), (int) tool );
+                wxString labelStr = wxString::Format( wxT("%xd"), (int) tool );
                 result = HIToolbarItemCreate( wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding()),
                                               kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates,
                                               &item );
@@ -1173,8 +1170,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
     }
     else
     {
-        wxString    errMsg;
-        errMsg.Format( wxT("wxToolBar::DoInsertTool - failure [%ld]"), (long) err );
+        wxString errMsg = wxString::Format( wxT("wxToolBar::DoInsertTool - failure [%ld]"), (long) err );
         wxASSERT_MSG( false, errMsg.c_str() );
     }
 
