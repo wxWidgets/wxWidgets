@@ -497,20 +497,20 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
 
 
             
-//            if (attributes & kDragHasLeftSenderWindow) 
             {
-//                wxPoint point(localMouse.h , localMouse.v) ;
                 wxWindow *win = NULL ;
                 ControlPartCode controlPart ;
                 ControlRef control = wxMacFindControlUnderMouse( toplevel , localMouse ,
                     theWindow , &controlPart ) ;
                 if ( control )
                     win = wxFindControlFromMacControl( control ) ;
-                // TODO toplevel->MacGetWindowFromPointSub( point , &win ) ;
+                else
+                    win = toplevel ;
+                
                 int localx , localy ;
                 localx = localMouse.h ;
                 localy = localMouse.v ;
-                //TODO : should we use client coordinates
+
                 if ( win )
                     win->MacRootWindowToWindow( &localx , &localy ) ;
                 if ( win != trackingGlobals->m_currentTargetWindow )
@@ -601,8 +601,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
                   }
                 }
                 
-          }
-            // MyTrackItemUnderMouse(localMouse, theWindow);
+            }
             break;
         case kDragTrackingLeaveWindow:
             if (trackingGlobals->m_currentTarget) 
