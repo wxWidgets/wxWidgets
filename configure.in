@@ -4159,20 +4159,22 @@ if test "$wx_cv_func_statfs" = "yes"; then
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
     AC_CACHE_CHECK(for statfs declaration, wx_cv_func_statfs_decl,
-        [
-             #if defined(__BSD__)
-             #include <sys/param.h>
-             #include <sys/mount.h>
-             #else
-             #include <sys/vfs.h>
-             #endif
-        ],
-        [
-            struct statfs fs;
-            statfs("", &fs);
-        ],
-        wx_cv_func_statfs_decl=yes,
-        wx_cv_func_statfs_decl=no
+        AC_TRY_COMPILE(
+            [
+                 #if defined(__BSD__)
+                 #include <sys/param.h>
+                 #include <sys/mount.h>
+                 #else
+                 #include <sys/vfs.h>
+                 #endif
+            ],
+            [
+                struct statfs fs;
+                statfs("", &fs);
+            ],
+            wx_cv_func_statfs_decl=yes,
+            wx_cv_func_statfs_decl=no
+        )
     )
     AC_LANG_RESTORE
 
