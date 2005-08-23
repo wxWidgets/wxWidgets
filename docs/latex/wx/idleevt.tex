@@ -1,15 +1,21 @@
 \section{\class{wxIdleEvent}}\label{wxidleevent}
 
-This class is used for idle events, which are generated when the system is idle.
+This class is used for idle events, which are generated when the system becomes
+idle. Note that, unless you do something specifically, the idle events are not
+sent if the system remains idle once it has become it, e.g. only a single idle
+event will be generated until something else resulting in more normal events
+happens and only then is the next idle event sent again. If you need to ensure
+a continuous stream of idle events, you can either use 
+\helpref{RequestMore}{wxidleeventrequestmore} method in your handler or call 
+\helpref{wxWakeUpIdle}{wxwakeupidle} periodically (for example from timer
+event), but note that both of these approaches (and especially the first one)
+increase the system load and so should be avoided if possible.
 
-By default, idle events are sent to all windows. If this is causing a significant
+By default, idle events are sent to all windows (and also 
+\helpref{wxApp}{wxapp}, as usual). If this is causing a significant
 overhead in your application, you can call \helpref{wxIdleEvent::SetMode}{wxidleeventsetmode} with
 the value wxIDLE\_PROCESS\_SPECIFIED, and set the wxWS\_EX\_PROCESS\_IDLE extra
 window style for every window which should receive idle events.
-
-The function \helpref{wxWindow::OnInternalIdle}{wxwindowoninternalidle} is
-also provided for internal purposes, and cannot be disabled. wxUpdateUIEvents
-are sent from OnInternalIdle.
 
 \wxheading{Derived from}
 
@@ -29,10 +35,6 @@ function that takes a wxIdleEvent argument.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_IDLE(func)}}{Process a wxEVT\_IDLE event.}
 \end{twocollist}%
-
-\wxheading{Remarks}
-
-Idle events can be caught by the wxApp class, or by top-level window classes.
 
 \wxheading{See also}
 
