@@ -32732,10 +32732,10 @@ cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
              #if defined(__BSD__)
-               #include <sys/param.h>
-               #include <sys/mount.h>
+             #include <sys/param.h>
+             #include <sys/mount.h>
              #else
-               #include <sys/vfs.h>
+             #include <sys/vfs.h>
              #endif
 
 int
@@ -32774,16 +32774,12 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-
-             wx_cv_func_statfs=yes
-
+  wx_cv_func_statfs=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-
-             wx_cv_func_statfs=no
-
+wx_cv_func_statfs=no
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
@@ -32793,6 +32789,44 @@ echo "$as_me:$LINENO: result: $wx_cv_func_statfs" >&5
 echo "${ECHO_T}$wx_cv_func_statfs" >&6
 
 if test "$wx_cv_func_statfs" = "yes"; then
+
+
+    ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+    echo "$as_me:$LINENO: checking for statfs declaration" >&5
+echo $ECHO_N "checking for statfs declaration... $ECHO_C" >&6
+if test "${wx_cv_func_statfs_decl+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+             #if defined(__BSD__)
+             #include <sys/param.h>
+             #include <sys/mount.h>
+             #else
+             #include <sys/vfs.h>
+             #endif
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_func_statfs_decl" >&5
+echo "${ECHO_T}$wx_cv_func_statfs_decl" >&6
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+    if test "$wx_cv_func_statfs_decl" = "yes"; then
+        cat >>confdefs.h <<\_ACEOF
+#define HAVE_STATFS_DECL 1
+_ACEOF
+
+    fi
+
     wx_cv_type_statvfs_t="struct statfs"
     cat >>confdefs.h <<\_ACEOF
 #define HAVE_STATFS 1

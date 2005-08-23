@@ -769,6 +769,9 @@
 /* define if you have statfs function */
 #undef HAVE_STATFS
 
+/* define if you have statfs prototype */
+#undef HAVE_STATFS_DECL
+
 /* define if you have statvfs function */
 #undef HAVE_STATVFS
 

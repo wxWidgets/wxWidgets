@@ -80,6 +80,11 @@
     #endif // __BSD__/!__BSD__
 
     #define wxStatfs statfs
+
+    #ifndef HAVE_STATFS_DECL
+        // some systems lack statfs() prototype in the system headers (AIX 4)
+        extern "C" int statfs(const char *path, struct statfs *buf);
+    #endif
 #endif // HAVE_STATFS
 
 #ifdef HAVE_STATVFS
