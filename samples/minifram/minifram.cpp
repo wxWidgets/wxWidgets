@@ -23,7 +23,7 @@
 #include "wx/toolbar.h"
 #include "minifram.h"
 
-#if !defined(__WXMSW__) 
+#if !defined(__WXMSW__) && !defined(__WXPM__)
 #include "mondrian.xpm"
 #endif
 #include "bitmaps/new.xpm"
@@ -195,5 +195,3 @@ void MyMainFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
     mini_frame->SendSizeEvent();
   }
 }
-
-

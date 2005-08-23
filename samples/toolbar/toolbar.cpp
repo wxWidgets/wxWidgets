@@ -25,12 +25,12 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <wx/wx.h>
+    #include "wx/wx.h"
 #endif
 
-#include <wx/toolbar.h>
-#include <wx/log.h>
-#include <wx/image.h>
+#include "wx/toolbar.h"
+#include "wx/log.h"
+#include "wx/image.h"
 
 // define this to 1 to use wxToolBarSimple instead of the native one
 #define USE_GENERIC_TBAR 0
@@ -60,8 +60,11 @@
 // resources
 // ----------------------------------------------------------------------------
 
-#if USE_XPM_BITMAPS
+#if !defined(__WXMSW__) && !defined(__WXPM__)
     #include "mondrian.xpm"
+#endif
+
+#if USE_XPM_BITMAPS
     #include "bitmaps/new.xpm"
     #include "bitmaps/open.xpm"
     #include "bitmaps/save.xpm"
@@ -363,7 +366,7 @@ void MyFrame::RecreateToolbar()
     // adding a combo to a vertical toolbar is not very smart
     if ( m_horzToolbar )
     {
-        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, _T(""), wxDefaultPosition, wxSize(200,wxDefaultCoord) );
+        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, wxSize(200,wxDefaultCoord) );
         combo->Append(_T("This"));
         combo->Append(_T("is a"));
         combo->Append(_T("combobox"));
@@ -473,16 +476,16 @@ MyFrame::MyFrame(wxFrame* parent,
 
     tbarMenu->AppendSeparator();
 
-    tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, _T("&Enable print button\tCtrl-E"), _T(""));
-    tbarMenu->Append(IDM_TOOLBAR_DELETEPRINT, _T("&Delete print button\tCtrl-D"), _T(""));
-    tbarMenu->Append(IDM_TOOLBAR_INSERTPRINT, _T("&Insert print button\tCtrl-I"), _T(""));
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, _T("Toggle &help button\tCtrl-T"), _T(""));
+    tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, _T("&Enable print button\tCtrl-E"), wxEmptyString);
+    tbarMenu->Append(IDM_TOOLBAR_DELETEPRINT, _T("&Delete print button\tCtrl-D"), wxEmptyString);
+    tbarMenu->Append(IDM_TOOLBAR_INSERTPRINT, _T("&Insert print button\tCtrl-I"), wxEmptyString);
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, _T("Toggle &help button\tCtrl-T"), wxEmptyString);
     tbarMenu->AppendSeparator();
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN1, _T("Toggle &1st radio button\tCtrl-1"), _T(""));
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN2, _T("Toggle &2nd radio button\tCtrl-2"), _T(""));
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN3, _T("Toggle &3rd radio button\tCtrl-3"), _T(""));
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN1, _T("Toggle &1st radio button\tCtrl-1"), wxEmptyString);
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN2, _T("Toggle &2nd radio button\tCtrl-2"), wxEmptyString);
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN3, _T("Toggle &3rd radio button\tCtrl-3"), wxEmptyString);
     tbarMenu->AppendSeparator();
-    tbarMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, _T("Change tool tip"), _T(""));
+    tbarMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, _T("Change tool tip"), wxEmptyString);
     tbarMenu->AppendSeparator();
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_TEXT, _T("Show &text\tAlt-T"));
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_ICONS, _T("Show &icons\tAlt-I"));
@@ -508,7 +511,7 @@ MyFrame::MyFrame(wxFrame* parent,
     // Create the toolbar
     RecreateToolbar();
 
-    m_textWindow = new wxTextCtrl(this, wxID_ANY, _T(""), wxPoint(0, 0), wxDefaultSize, wxTE_MULTILINE);
+    m_textWindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(0, 0), wxDefaultSize, wxTE_MULTILINE);
 }
 
 #if USE_GENERIC_TBAR
@@ -781,7 +784,7 @@ void MyFrame::OnToolEnter(wxCommandEvent& event)
         SetStatusText(str);
     }
     else
-        SetStatusText(_T(""));
+        SetStatusText(wxEmptyString);
 #else
     wxUnusedVar(event);
 #endif // wxUSE_STATUSBAR
@@ -795,4 +798,3 @@ void MyFrame::OnToggleRadioBtn(wxCommandEvent& event)
                             event.GetId() - IDM_TOOLBAR_TOGGLERADIOBTN1, true);
     }
 }
-

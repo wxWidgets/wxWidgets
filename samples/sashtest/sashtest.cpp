@@ -135,7 +135,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   win->SetSashVisible(wxSASH_RIGHT, true);
   win->SetExtraBorderSize(10);
 
-  wxTextCtrl* textWindow = new wxTextCtrl(win, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize,
+  wxTextCtrl* textWindow = new wxTextCtrl(win, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
         wxTE_MULTILINE|wxSUNKEN_BORDER);
 //        wxTE_MULTILINE|wxNO_BORDER);
   textWindow->SetValue(_T("A help window"));
@@ -175,8 +175,10 @@ void MyFrame::OnToggleWindow(wxCommandEvent& WXUNUSED(event))
     {
         m_leftWindow1->Show(true);
     }
+#if wxUSE_MDI_ARCHITECTURE
     wxLayoutAlgorithm layout;
     layout.LayoutMDIFrame(this);
+#endif // wxUSE_MDI_ARCHITECTURE
 }
 
 void MyFrame::OnSashDrag(wxSashEvent& event)
@@ -207,8 +209,11 @@ void MyFrame::OnSashDrag(wxSashEvent& event)
             break;
         }
     }
+
+#if wxUSE_MDI_ARCHITECTURE
     wxLayoutAlgorithm layout;
     layout.LayoutMDIFrame(this);
+#endif // wxUSE_MDI_ARCHITECTURE
 
     // Leaves bits of itself behind sometimes
     GetClientWindow()->Refresh();
@@ -286,29 +291,29 @@ MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
 // Define the repainting behaviour
 void MyCanvas::OnDraw(wxDC& dc)
 {
-  dc.SetFont(*wxSWISS_FONT);
-  dc.SetPen(*wxGREEN_PEN);
-  dc.DrawLine(0, 0, 200, 200);
-  dc.DrawLine(200, 0, 0, 200);
+    dc.SetFont(*wxSWISS_FONT);
+    dc.SetPen(*wxGREEN_PEN);
+    dc.DrawLine(0, 0, 200, 200);
+    dc.DrawLine(200, 0, 0, 200);
 
-  dc.SetBrush(*wxCYAN_BRUSH);
-  dc.SetPen(*wxRED_PEN);
-  dc.DrawRectangle(100, 100, 100, 50);
-  dc.DrawRoundedRectangle(150, 150, 100, 50, 20);
+    dc.SetBrush(*wxCYAN_BRUSH);
+    dc.SetPen(*wxRED_PEN);
+    dc.DrawRectangle(100, 100, 100, 50);
+    dc.DrawRoundedRectangle(150, 150, 100, 50, 20);
 
-  dc.DrawEllipse(250, 250, 100, 50);
+    dc.DrawEllipse(250, 250, 100, 50);
 #if wxUSE_SPLINES
-  dc.DrawSpline(50, 200, 50, 100, 200, 10);
+    dc.DrawSpline(50, 200, 50, 100, 200, 10);
 #endif // wxUSE_SPLINES
-  dc.DrawLine(50, 230, 200, 230);
-  dc.DrawText(_T("This is a test string"), 50, 230);
+    dc.DrawLine(50, 230, 200, 230);
+    dc.DrawText(_T("This is a test string"), 50, 230);
 
-  wxPoint points[3];
-  points[0].x = 200; points[0].y = 300;
-  points[1].x = 100; points[1].y = 400;
-  points[2].x = 300; points[2].y = 400;
-  
-  dc.DrawPolygon(3, points);
+    wxPoint points[3];
+    points[0].x = 200; points[0].y = 300;
+    points[1].x = 100; points[1].y = 400;
+    points[2].x = 300; points[2].y = 400;
+
+    dc.DrawPolygon(3, points);
 }
 
 // This implements a tiny doodling program! Drag the mouse using
@@ -331,8 +336,10 @@ void MyCanvas::OnEvent(wxMouseEvent& event)
 
 void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
+#if wxUSE_MDI_ARCHITECTURE
     wxLayoutAlgorithm layout;
     layout.LayoutMDIFrame(this);
+#endif // wxUSE_MDI_ARCHITECTURE
 }
 
 // Note that SASHTEST_NEW_WINDOW and SASHTEST_ABOUT commands get passed
@@ -366,4 +373,3 @@ void MyChild::OnActivate(wxActivateEvent& event)
   if (event.GetActive() && canvas)
     canvas->SetFocus();
 }
-

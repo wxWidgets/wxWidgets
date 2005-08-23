@@ -27,7 +27,7 @@
 
 #include "wx/clntdata.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXCOCOA__)
+#ifndef __WXMSW__
 #include "mondrian.xpm"
 #endif
 

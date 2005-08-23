@@ -103,7 +103,9 @@ enum
 // Event tables
 BEGIN_EVENT_TABLE(LifeFrame, wxFrame)
     EVT_MENU            (wxID_NEW,     LifeFrame::OnMenu)
+#if wxUSE_FILEDLG
     EVT_MENU            (wxID_OPEN,    LifeFrame::OnOpen)
+#endif
     EVT_MENU            (ID_SAMPLES,   LifeFrame::OnSamples)
     EVT_MENU            (wxID_ABOUT,   LifeFrame::OnMenu)
     EVT_MENU            (wxID_EXIT,    LifeFrame::OnMenu)
@@ -183,7 +185,7 @@ bool LifeApp::OnInit()
 // --------------------------------------------------------------------------
 
 // frame constructor
-LifeFrame::LifeFrame() : 
+LifeFrame::LifeFrame() :
   wxFrame( (wxFrame *) NULL, wxID_ANY, _("Life!"), wxDefaultPosition ),
   m_navigator(NULL)
 {
@@ -197,7 +199,9 @@ LifeFrame::LifeFrame() :
     wxMenu *menuHelp = new wxMenu(wxMENU_TEAROFF);
 
     menuFile->Append(wxID_NEW, wxGetStockLabel(wxID_NEW), _("Start a new game"));
+#if wxUSE_FILEDLG
     menuFile->Append(wxID_OPEN, wxGetStockLabel(wxID_OPEN), _("Open an existing Life pattern"));
+#endif
     menuFile->Append(ID_SAMPLES, _("&Sample game..."), _("Select a sample configuration"));
 #if ! (defined(__SMARTPHONE__) || defined(__POCKETPC__))
     menuFile->AppendSeparator();
@@ -252,14 +256,16 @@ LifeFrame::LifeFrame() :
 
     ADD_TOOL(wxID_NEW, tbBitmaps[0], wxGetStockLabel(wxID_NEW, false), _("Start a new game"));
 #ifndef __POCKETPC__
+#if wxUSE_FILEDLG
     ADD_TOOL(wxID_OPEN, tbBitmaps[1], wxGetStockLabel(wxID_OPEN, false), _("Open an existing Life pattern"));
+#endif // wxUSE_FILEDLG
 
     toolBar->AddSeparator();
     ADD_TOOL(wxID_ZOOM_IN, tbBitmaps[2], wxGetStockLabel(wxID_ZOOM_IN, false), _("Zoom in"));
     ADD_TOOL(wxID_ZOOM_OUT, tbBitmaps[3], wxGetStockLabel(wxID_ZOOM_OUT, false), _("Zoom out"));
     ADD_TOOL(ID_INFO, tbBitmaps[4], _("Description"), _("Show description"));
     toolBar->AddSeparator();
-#endif
+#endif // __POCKETPC__
     ADD_TOOL(ID_START, tbBitmaps[5], _("Start"), _("Start"));
     ADD_TOOL(wxID_STOP, tbBitmaps[6], wxGetStockLabel(wxID_STOP, false), _("Stop"));
 
@@ -446,6 +452,7 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
     }
 }
 
+#if wxUSE_FILEDLG
 void LifeFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
     wxFileDialog filedlg(this,
@@ -475,6 +482,7 @@ void LifeFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         }
     }
 }
+#endif
 
 void LifeFrame::OnSamples(wxCommandEvent& WXUNUSED(event))
 {
@@ -1132,5 +1140,3 @@ void LifeCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
     // do nothing. I just don't want the background to be erased, you know.
 }
-
-

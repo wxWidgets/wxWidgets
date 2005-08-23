@@ -25,9 +25,11 @@
 #include "wx/wx.h"
 #endif
 
-#ifndef __WXMSW__
+#if !defined(__WXMSW__) && !defined(__WXPM__)
     #include "mondrian.xpm"
+#endif
 
+#ifndef __WXMSW__
     #include "bitmaps/toolbrai.xpm"
     #include "bitmaps/toolchar.xpm"
     #include "bitmaps/tooldata.xpm"
@@ -95,7 +97,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
-    EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)    
+    EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
@@ -736,7 +738,7 @@ void MyListCtrl::OnColRightClick(wxListEvent& event)
     // Show popupmenu at position
     wxMenu menu(wxT("Test"));
     menu.Append(LIST_ABOUT, _T("&About"));
-    PopupMenu(&menu, event.GetPoint()); 
+    PopupMenu(&menu, event.GetPoint());
 
     wxLogMessage( wxT("OnColumnRightClick at %d."), event.GetColumn() );
 }
@@ -1035,4 +1037,3 @@ void MyListCtrl::InsertItemInReportView(int i)
     buf.Printf(_T("Item %d in column 2"), i);
     SetItem(i, 2, buf);
 }
-

@@ -41,7 +41,7 @@
 #include "forty.h"
 #include "card.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXX11__)
+#ifndef __WXMSW__
 #include "pictures.xpm"
 #include "symbols.xbm"
 #endif
@@ -565,5 +565,3 @@ void Card::DrawNullCard(wxDC& dc, int x, int y)
     dc.SetPen(*pen);
     dc.DrawRoundedRectangle(x, y, m_width, m_height, 4);
 } // Card::DrawNullCard()
-
-

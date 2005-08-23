@@ -20,7 +20,7 @@
 #include "wx/wx.h"
 #endif
 
-#ifndef __WXMSW__
+#if !defined(__WXMSW__) && !defined(__WXPM__)
     #include "mondrian.xpm"
 #endif
 
@@ -52,7 +52,7 @@ private:
 #endif // wxUSE_LOG
     void OnBrowser(wxCommandEvent& event);
     void OnPlugProvider(wxCommandEvent& event);
-    
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -156,7 +156,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(wxID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
 
-    menuFile->AppendCheckItem(ID_PlugProvider, _T("&Plug-in art provider"), _T("Enable custom art provider"));   
+    menuFile->AppendCheckItem(ID_PlugProvider, _T("&Plug-in art provider"), _T("Enable custom art provider"));
     menuFile->AppendSeparator();
 
 #if wxUSE_LOG
