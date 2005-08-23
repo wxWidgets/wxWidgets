@@ -88,7 +88,10 @@ void wxStreamTempInputBuffer::Update()
     {
         // realloc in blocks of 4Kb: this is the default (and minimal) buffer
         // size of the Unix pipes so it should be the optimal step
-        static const size_t incSize = 4096;
+        //
+        // NB: don't use "static int" in this inline function, some compilers
+        //     (e.g. IBM xlC) don't like it
+        enum { incSize = 4096 };
 
         void *buf = realloc(m_buffer, m_size + incSize);
         if ( !buf )
