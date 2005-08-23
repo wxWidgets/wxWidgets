@@ -1722,7 +1722,6 @@ wxChar *ConvertCase(wxChar *s)
   return buf;
 }
 
-#if !WXWIN_COMPATIBILITY_2
 // if substring is true, search for str1 in str2
 bool StringMatch(const wxChar *str1, const wxChar *str2, bool subString,
                  bool exact)
@@ -1742,4 +1741,3 @@ bool StringMatch(const wxChar *str1, const wxChar *str2, bool subString,
       return exact ? wxString(str2).Cmp(str1) == 0 :
                      wxString(str2).CmpNoCase(str1) == 0;
 }
-#endif
