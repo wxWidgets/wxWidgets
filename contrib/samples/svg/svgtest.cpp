@@ -187,7 +187,7 @@ bool MyApp::OnInit()
 
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 }
 
 
@@ -298,7 +298,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     // Associate the menu bar with the frame
     subframe->SetMenuBar(menu_bar);
 
-    subframe->Show(TRUE);
+    subframe->Show(true);
 }
 
 
@@ -324,12 +324,12 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
     int width = 16;
     int currentX = 5;
 
-    toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, wxT("New SVG test window"));
+    toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, wxT("New SVG test window"));
     currentX += width + 5;
-    toolBar->AddTool( MDI_SAVE, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, wxT("Save test in SVG format"));
+    toolBar->AddTool( MDI_SAVE, *bitmaps[1], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, wxT("Save test in SVG format"));
     currentX += width + 5;
     toolBar->AddSeparator();
-    toolBar->AddTool(MDI_ABOUT, *bitmaps[2], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, wxT("Help"));
+    toolBar->AddTool(MDI_ABOUT, *bitmaps[2], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, wxT("Help"));
 
     toolBar->Realize();
 
@@ -341,6 +341,7 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 
 void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
 {
+#if wxUSE_FILEDLG
     MyChild * pChild = (MyChild *)GetActiveChild ();
     if (pChild == NULL)
     {
@@ -359,6 +360,7 @@ void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
         }
     }
     return ;
+#endif // wxUSE_FILEDLG
 }
 
 
@@ -464,7 +466,7 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawText(wxT("This is a Red string"), 50, 200);
             dc.DrawRotatedText(wxT("This is a 45 deg string"), 50, 200, 45);
             dc.DrawRotatedText(wxT("This is a 90 deg string"), 50, 200, 90);
-            wF = wxFont ( 18, wxROMAN, wxITALIC, wxBOLD, FALSE, wxT("Times New Roman"));
+            wF = wxFont ( 18, wxROMAN, wxITALIC, wxBOLD, false, wxT("Times New Roman"));
             dc.SetFont(wF);
             dc.SetTextForeground (wC) ;
             dc.DrawText(wxT("This is a Times-style string"), 50, 60);
@@ -520,7 +522,7 @@ void MyCanvas::OnDraw(wxDC& dc)
             break ;
 
         case 5:
-            wF = wxFont ( 18, wxROMAN, wxITALIC, wxBOLD, FALSE, wxT("Times New Roman"));
+            wF = wxFont ( 18, wxROMAN, wxITALIC, wxBOLD, false, wxT("Times New Roman"));
             dc.SetFont(wF);
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
@@ -601,7 +603,7 @@ MyChild::~MyChild()
 
 void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 

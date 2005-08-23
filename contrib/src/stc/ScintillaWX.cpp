@@ -154,6 +154,7 @@ END_EVENT_TABLE()
 
 //----------------------------------------------------------------------
 
+#if wxUSE_DATAOBJ
 static wxTextFileType wxConvertEOLMode(int scintillaMode)
 {
     wxTextFileType type;
@@ -177,6 +178,7 @@ static wxTextFileType wxConvertEOLMode(int scintillaMode)
     }
     return type;
 }
+#endif // wxUSE_DATAOBJ
 
 
 //----------------------------------------------------------------------
@@ -439,6 +441,7 @@ void ScintillaWX::Paste() {
     pdoc->BeginUndoAction();
     ClearSelection();
 
+#if wxUSE_DATAOBJ
     wxTextDataObject data;
     bool gotData = false;
 
@@ -455,6 +458,7 @@ void ScintillaWX::Paste() {
         pdoc->InsertString(currentPos, buf, len);
         SetEmptySelection(currentPos + len);
     }
+#endif // wxUSE_DATAOBJ
 
     pdoc->EndUndoAction();
     NotifyChange();
@@ -463,16 +467,21 @@ void ScintillaWX::Paste() {
 
 
 void ScintillaWX::CopyToClipboard(const SelectionText& st) {
+#if wxUSE_CLIPBOARD
     if (wxTheClipboard->Open()) {
         wxTheClipboard->UsePrimarySelection(false);
         wxString text = wxTextBuffer::Translate(stc2wx(st.s, st.len-1));
         wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
+#else
+    wxUnusedVar(st);
+#endif // wxUSE_CLIPBOARD
 }
 
 
 bool ScintillaWX::CanPaste() {
+#if wxUSE_CLIPBOARD
     bool canPaste = false;
     bool didOpen;
 
@@ -489,6 +498,9 @@ bool ScintillaWX::CanPaste() {
         }
     }
     return canPaste;
+#else
+    return false;
+#endif // wxUSE_CLIPBOARD
 }
 
 void ScintillaWX::CreateCallTipWindow(PRectangle) {

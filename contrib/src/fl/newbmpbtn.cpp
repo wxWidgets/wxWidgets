@@ -513,7 +513,8 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 #ifdef __WXMSW__ // This is currently MSW specific
         gray_out_image_on_dc( destDc, destDim.x, destDim.y );
 #else
-        wxBrush checkerBrush( wxBitmap( (const char*)_gDisableImage,8,8) );
+        wxBitmap bmp( (const char*)_gDisableImage,8,8);
+        wxBrush checkerBrush(bmp);
         checkerBrush.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
         destDc.SetBrush( checkerBrush );
         destDc.DrawRectangle( imgPos.x, imgPos.y, srcBmp->GetWidth()+1, srcBmp->GetHeight()+1);

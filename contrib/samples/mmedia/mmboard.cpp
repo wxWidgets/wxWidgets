@@ -425,8 +425,10 @@ void MMBoardFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     }
 
     // select a file to be opened
+#if wxUSE_FILEDLG
     selected_file = wxLoadFileSelector(_T("multimedia"), _T("*"), NULL, this);
-    if (selected_file.IsNull())
+#endif // wxUSE_FILEDLG
+    if (selected_file.empty())
         return;
 
     m_opened_file = MMBoardManager::Open(selected_file);
@@ -590,4 +592,3 @@ void MMBoardFrame::OnSetPosition(wxCommandEvent& WXUNUSED(event))
 
     UpdateMMedInfo();
 }
-

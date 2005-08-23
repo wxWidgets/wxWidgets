@@ -144,8 +144,8 @@ int wxRemotelyScrolledTreeCtrl::GetScrollPos(
 {
 
 #if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
-    // this condition fixes extsitence of warning but 
-    wxScrolledWindow* scrolledWindow = 
+    // this condition fixes extsitence of warning but
+    wxScrolledWindow* scrolledWindow =
     // but GetScrolledWindow is still executed in case internally does something
 #endif
                                        GetScrolledWindow();
@@ -197,7 +197,7 @@ void wxRemotelyScrolledTreeCtrl::GetViewStart(int *x, int *y) const
 }
 
 // In case we're using the generic tree control.
-void wxRemotelyScrolledTreeCtrl::PrepareDC( 
+void wxRemotelyScrolledTreeCtrl::PrepareDC(
                                             #if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
                                                 wxDC& dc
                                             #else
@@ -232,7 +232,7 @@ void wxRemotelyScrolledTreeCtrl::ScrollToLine(int WXUNUSED(posHoriz), int posVer
 #ifdef __WXMSW__
 #if USE_GENERIC_TREECTRL
     if (!IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
-#endif
+#endif // USE_GENERIC_TREECTRL
     {
         UINT sbCode = SB_THUMBPOSITION;
         HWND vertScrollBar = 0;
@@ -240,8 +240,8 @@ void wxRemotelyScrolledTreeCtrl::ScrollToLine(int WXUNUSED(posHoriz), int posVer
     }
 #if USE_GENERIC_TREECTRL
     else
-#endif
-#endif
+#endif // USE_GENERIC_TREECTRL
+#endif // __WXMSW__
 #if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     {
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
@@ -256,7 +256,8 @@ void wxRemotelyScrolledTreeCtrl::ScrollToLine(int WXUNUSED(posHoriz), int posVer
         }
         */
     }
-#endif
+#endif // USE_GENERIC_TREECTRL || !defined(__WXMSW__)
+    wxUnusedVar(posVert);
 }
 
 void wxRemotelyScrolledTreeCtrl::OnSize(wxSizeEvent& event)
@@ -745,4 +746,3 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
 
     inOnScroll = false;
 }
-

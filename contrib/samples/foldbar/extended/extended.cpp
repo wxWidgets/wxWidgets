@@ -117,8 +117,10 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnToggleWindow(wxCommandEvent& WXUNUSED(event))
 {
     m_leftWindow1->Show(!m_leftWindow1->IsShown());
+#if wxUSE_MDI_ARCHITECTURE
     wxLayoutAlgorithm layout;
     layout.LayoutMDIFrame(this);
+#endif // wxUSE_MDI_ARCHITECTURE
 }
 
 void MyFrame::OnFoldPanelBarDrag(wxSashEvent& event)
@@ -129,8 +131,10 @@ void MyFrame::OnFoldPanelBarDrag(wxSashEvent& event)
     if(event.GetId() == ID_WINDOW_LEFT1)
         m_leftWindow1->SetDefaultSize(wxSize(event.GetDragRect().width, 1000));
 
+#if wxUSE_MDI_ARCHITECTURE
     wxLayoutAlgorithm layout;
     layout.LayoutMDIFrame(this);
+#endif // wxUSE_MDI_ARCHITECTURE
 
     // Leaves bits of itself behind sometimes
     GetClientWindow()->Refresh();
@@ -496,8 +500,10 @@ void MyCanvas::OnEvent(wxMouseEvent& event)
 
 void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
+#if wxUSE_MDI_ARCHITECTURE
     wxLayoutAlgorithm layout;
     layout.LayoutMDIFrame(this);
+#endif // wxUSE_MDI_ARCHITECTURE
 }
 
 // Note that FPBTEST_NEW_WINDOW and FPBTEST_ABOUT commands get passed
@@ -532,4 +538,3 @@ void MyChild::OnActivate(wxActivateEvent& event)
     if (event.GetActive() && canvas)
         canvas->SetFocus();
 }
-

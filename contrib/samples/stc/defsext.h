@@ -96,9 +96,12 @@ enum {
 //! global application name
 extern wxString *g_appname;
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 //! global print data, to remember settings during the session
 extern wxPrintData *g_printData;
 extern wxPageSetupData *g_pageSetupData;
 
-#endif // _WX_DEFSEXT_H_
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
+#endif // _WX_DEFSEXT_H_

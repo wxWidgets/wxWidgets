@@ -127,6 +127,7 @@ void wxMainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void wxMainFrame::OnRc2Wxr(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_FILEDLG
     wxFileDialog filed(this);
     filed.SetWildcard(_T("*.rc"));
     filed.SetStyle(wxOPEN);
@@ -144,10 +145,12 @@ void wxMainFrame::OnRc2Wxr(wxCommandEvent& WXUNUSED(event))
 
     rc2wxr convert;
     convert.Convert(wxrfile.GetPath(),filed.GetPath());
+#endif // wxUSE_FILEDLG
 }
 
 void wxMainFrame::OnWXR2XML(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_FILEDLG
     wxFileDialog f(this);
     f.SetWildcard(_T("*.wxr"));
     if (f.ShowModal()!=wxID_OK)
@@ -164,11 +167,12 @@ void wxMainFrame::OnWXR2XML(wxCommandEvent& WXUNUSED(event))
 
     wxr2xml XMLCon;
     XMLCon.Convert(f.GetPath(),xmlfile.GetPath());
-
+#endif // wxUSE_FILEDLG
 }
 
 void wxMainFrame::OnRC2XML(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_FILEDLG
     wxFileDialog f(this);
     f.SetWildcard(_T("*.rc"));
     if (f.ShowModal()!=wxID_OK)
@@ -184,7 +188,7 @@ void wxMainFrame::OnRC2XML(wxCommandEvent& WXUNUSED(event))
 
     rc2xml XMLCon;
     XMLCon.Convert(f.GetPath(),xmlfile.GetPath());
-
+#endif // wxUSE_FILEDLG
 }
 
 bool wxConvertApp::HandleCommandLine()

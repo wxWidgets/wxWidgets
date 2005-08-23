@@ -22,17 +22,17 @@
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all 'standard' wxWidgets headers)
 #ifndef WX_PRECOMP
-    #include <wx/wx.h>
+    #include "wx/wx.h"
 #endif
 
 //! wxWidgets headers
-#include <wx/config.h>   // configuration support
-#include <wx/filedlg.h>  // file dialog support
-#include <wx/filename.h> // filename support
-#include <wx/notebook.h> // notebook support
-#include <wx/settings.h> // system settings
-#include <wx/string.h>   // strings support
-#include <wx/image.h>    // images support
+#include "wx/config.h"   // configuration support
+#include "wx/filedlg.h"  // file dialog support
+#include "wx/filename.h" // filename support
+#include "wx/notebook.h" // notebook support
+#include "wx/settings.h" // system settings
+#include "wx/string.h"   // strings support
+#include "wx/image.h"    // images support
 
 //! application headers
 #include "defsext.h"     // Additional definitions
@@ -76,9 +76,13 @@ class AppBook;
 //! global application name
 wxString *g_appname = NULL;
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 //! global print data, to remember settings during the session
 wxPrintData *g_printData = (wxPrintData*) NULL;
 wxPageSetupData *g_pageSetupData = (wxPageSetupData*) NULL;
+
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 
 //----------------------------------------------------------------------------
@@ -200,9 +204,11 @@ bool App::OnInit () {
     g_appname->Append (_T("-"));
     g_appname->Append (APP_NAME);
 
+#if wxUSE_PRINTING_ARCHITECTURE
     // initialize print data and setup
     g_printData = new wxPrintData;
     g_pageSetupData = new wxPageSetupDialogData;
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
     // create application frame
     m_frame = new AppFrame (*g_appname);
@@ -220,9 +226,11 @@ int App::OnExit () {
     // delete global appname
     delete g_appname;
 
+#if wxUSE_PRINTING_ARCHITECTURE
     // delete global print data and setup
     if (g_printData) delete g_printData;
     if (g_pageSetupData) delete g_pageSetupData;
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
     return 0;
 }
@@ -339,12 +347,14 @@ void AppFrame::OnExit (wxCommandEvent &WXUNUSED(event)) {
 // file event handlers
 void AppFrame::OnFileOpen (wxCommandEvent &WXUNUSED(event)) {
     if (!m_edit) return;
+#if wxUSE_FILEDLG
     wxString fname;
-    wxFileDialog dlg (this, _T("Open file"), _T(""), _T(""), _T("Any file (*)|*"),
+    wxFileDialog dlg (this, _T("Open file"), wxEmptyString, wxEmptyString, _T("Any file (*)|*"),
                       wxOPEN | wxFILE_MUST_EXIST | wxCHANGE_DIR);
     if (dlg.ShowModal() != wxID_OK) return;
     fname = dlg.GetPath ();
     FileOpen (fname);
+#endif // wxUSE_FILEDLG
 }
 
 void AppFrame::OnFileSave (wxCommandEvent &WXUNUSED(event)) {
@@ -359,11 +369,13 @@ void AppFrame::OnFileSave (wxCommandEvent &WXUNUSED(event)) {
 
 void AppFrame::OnFileSaveAs (wxCommandEvent &WXUNUSED(event)) {
     if (!m_edit) return;
+#if wxUSE_FILEDLG
     wxString filename = wxEmptyString;
-    wxFileDialog dlg (this, _T("Save file"), _T(""), _T(""), _T("Any file (*)|*"), wxSAVE|wxOVERWRITE_PROMPT);
+    wxFileDialog dlg (this, _T("Save file"), wxEmptyString, wxEmptyString, _T("Any file (*)|*"), wxSAVE|wxOVERWRITE_PROMPT);
     if (dlg.ShowModal() != wxID_OK) return;
     filename = dlg.GetPath();
     m_edit->SaveFile (filename);
+#endif // wxUSE_FILEDLG
 }
 
 void AppFrame::OnFileClose (wxCommandEvent &WXUNUSED(event)) {
@@ -392,14 +404,17 @@ void AppFrame::OnProperties (wxCommandEvent &WXUNUSED(event)) {
 
 // print event handlers
 void AppFrame::OnPrintSetup (wxCommandEvent &WXUNUSED(event)) {
+#if wxUSE_PRINTING_ARCHITECTURE
     (*g_pageSetupData) = * g_printData;
     wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
     pageSetupDialog.ShowModal();
     (*g_printData) = pageSetupDialog.GetPageSetupData().GetPrintData();
     (*g_pageSetupData) = pageSetupDialog.GetPageSetupData();
+#endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
 void AppFrame::OnPrintPreview (wxCommandEvent &WXUNUSED(event)) {
+#if wxUSE_PRINTING_ARCHITECTURE
     wxPrintDialogData printDialogData( *g_printData);
     wxPrintPreview *preview =
         new wxPrintPreview (new EditPrint (m_edit),
@@ -418,9 +433,11 @@ void AppFrame::OnPrintPreview (wxCommandEvent &WXUNUSED(event)) {
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show(true);
+#endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
 void AppFrame::OnPrint (wxCommandEvent &WXUNUSED(event)) {
+#if wxUSE_PRINTING_ARCHITECTURE
     wxPrintDialogData printDialogData( *g_printData);
     wxPrinter printer (&printDialogData);
     EditPrint printout (m_edit);
@@ -433,6 +450,7 @@ void AppFrame::OnPrint (wxCommandEvent &WXUNUSED(event)) {
         }
     }
     (*g_printData) = printer.GetPrintDialogData().GetPrintData();
+#endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
 // edit events
@@ -441,8 +459,8 @@ void AppFrame::OnEdit (wxCommandEvent &event) {
 }
 
 // private functions
-void AppFrame::CreateMenu () {
-
+void AppFrame::CreateMenu ()
+{
     // File menu
     wxMenu *menuFile = new wxMenu;
     menuFile->Append (wxID_OPEN, _("&Open ..\tCtrl+O"));
@@ -552,10 +570,10 @@ void AppFrame::CreateMenu () {
     m_menuBar->Append (menuWindow, _("&Window"));
     m_menuBar->Append (menuHelp, _("&Help"));
     SetMenuBar (m_menuBar);
-
 }
 
-void AppFrame::FileOpen (wxString fname) {
+void AppFrame::FileOpen (wxString fname)
+{
     wxFileName w(fname); w.Normalize(); fname = w.GetFullPath();
     m_edit->LoadFile (fname);
 }
@@ -661,4 +679,3 @@ void AppAbout::OnTimerEvent (wxTimerEvent &WXUNUSED(event)) {
     m_timer = NULL;
     EndModal (wxID_OK);
 }
-

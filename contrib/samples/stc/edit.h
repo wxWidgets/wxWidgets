@@ -139,6 +139,8 @@ private:
 
 };
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 //----------------------------------------------------------------------------
 //! EditPrint
 class EditPrint: public wxPrintout {
@@ -165,5 +167,6 @@ private:
     bool PrintScaling (wxDC *dc);
 };
 
-#endif // _EDIT_H_
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
+#endif // _EDIT_H_

@@ -28,7 +28,7 @@
     #include "wx/wx.h"
 #endif
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#ifndef __WXMSW__
     #include "mondrian.xpm"
 #endif
 
@@ -45,9 +45,11 @@ IMPLEMENT_APP(MyApp)
 // ---------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(ANITEST_ABOUT, MyFrame::OnAbout)
-    EVT_MENU(ANITEST_QUIT, MyFrame::OnQuit)
-    EVT_MENU(ANITEST_OPEN, MyFrame::OnOpen)
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+    EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+#if wxUSE_FILEDLG
+    EVT_MENU(wxID_OPEN, MyFrame::OnOpen)
+#endif // wxUSE_FILEDLG
 
     EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
@@ -79,11 +81,13 @@ bool MyApp::OnInit()
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(ANITEST_OPEN, _T("&Open Animation...\tCtrl+O"), _T("Open a GIF animation"));
-    file_menu->Append(ANITEST_QUIT, _T("&Exit\tAlt+X"), _T("Quit the program"));
+#if wxUSE_FILEDLG
+    file_menu->Append(wxID_OPEN, _T("&Open Animation...\tCtrl+O"), _T("Open a GIF animation"));
+#endif // wxUSE_FILEDLG
+    file_menu->Append(wxID_EXIT, _T("&Exit\tAlt+X"), _T("Quit the program"));
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(ANITEST_ABOUT, _T("&About\tF1"));
+    help_menu->Append(wxID_ABOUT, _T("&About\tF1"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
@@ -97,11 +101,11 @@ bool MyApp::OnInit()
     frame->CreateStatusBar();
 #endif // wxUSE_STATUSBAR
 
-    frame->Show(TRUE);
+    frame->Show(true);
 
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -119,9 +123,9 @@ MyFrame::MyFrame(wxWindow *parent,
                           style | wxNO_FULL_REPAINT_ON_RESIZE)
 {
 //    m_animation = NULL;
-    m_canvas = new MyCanvas(this, wxPoint(0, 0), wxSize(-1, -1));
+    m_canvas = new MyCanvas(this, wxPoint(0, 0), wxDefaultSize);
 #if 0
-    m_player.SetDestroyAnimation(FALSE);
+    m_player.SetDestroyAnimation(false);
     m_player.SetWindow(m_canvas);
     m_player.SetPosition(wxPoint(0, 0));
 #endif
@@ -146,6 +150,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
                        _T("About Animation Demo"));
 }
 
+#if wxUSE_FILEDLG
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
     wxFileDialog dialog(this, _T("Please choose an animated GIF"),
@@ -165,6 +170,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         }
     }
 }
+#endif // wxUSE_FILEDLG
 
 
 // ---------------------------------------------------------------------------
@@ -196,4 +202,3 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 #endif
 }
-

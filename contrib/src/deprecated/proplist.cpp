@@ -1341,21 +1341,27 @@ void wxFilenameListValidator::OnEdit(wxProperty *property, wxPropertyListView *v
   if (!view->GetValueText())
     return;
 
-  wxString s = wxFileSelector(
-     m_filenameMessage.GetData(),
-     wxPathOnly(property->GetValue().StringValue()),
-     wxFileNameFromPath(property->GetValue().StringValue()),
-     NULL,
-     m_filenameWildCard.GetData(),
-     0,
-     parentWindow);
-  if ( !s.empty() )
-  {
-    property->GetValue() = s;
-    view->DisplayProperty(property);
-    view->UpdatePropertyDisplayInList(property);
-    view->OnPropertyChanged(property);
-  }
+#if wxUSE_FILEDLG
+    wxString s = wxFileSelector(
+        m_filenameMessage.GetData(),
+        wxPathOnly(property->GetValue().StringValue()),
+        wxFileNameFromPath(property->GetValue().StringValue()),
+        NULL,
+        m_filenameWildCard.GetData(),
+        0,
+        parentWindow);
+    if ( !s.empty() )
+    {
+        property->GetValue() = s;
+        view->DisplayProperty(property);
+        view->UpdatePropertyDisplayInList(property);
+        view->OnPropertyChanged(property);
+    }
+#else
+    wxUnusedVar(property);
+    wxUnusedVar(view);
+    wxUnusedVar(parentWindow);
+#endif
 }
 
 ///
@@ -1575,17 +1581,17 @@ void wxListOfStringsListValidator::OnEdit( wxProperty *property,
 
 class wxPropertyStringListEditorDialog: public wxDialog
 {
-  public:
+public:
     wxPropertyStringListEditorDialog(wxWindow *parent, const wxString& title,
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
           long windowStyle = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("stringEditorDialogBox")):
                wxDialog(parent, wxID_ANY, title, pos, size, windowStyle, name)
     {
-      m_stringList = NULL;
-      m_stringText = NULL;
-      m_listBox = NULL;
-      sm_dialogCancelled = false;
-      m_currentSelection = -1;
+        m_stringList = NULL;
+        m_stringText = NULL;
+        m_listBox = NULL;
+        sm_dialogCancelled = false;
+        m_currentSelection = -1;
     }
     ~wxPropertyStringListEditorDialog(void) {}
     void OnCloseWindow(wxCloseEvent& event);
@@ -1712,30 +1718,30 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
 
 void wxPropertyStringListEditorDialog::OnStrings(wxCommandEvent& WXUNUSED(event))
 {
-  int sel = m_listBox->GetSelection();
-  if (sel != wxNOT_FOUND)
-  {
-    m_currentSelection = sel;
+    int sel = m_listBox->GetSelection();
+    if (sel != wxNOT_FOUND)
+    {
+        m_currentSelection = sel;
 
-    ShowCurrentSelection();
-  }
+        ShowCurrentSelection();
+    }
 }
 
 void wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
-  int sel = m_listBox->GetSelection();
-  if (sel == wxNOT_FOUND)
-    return;
+    int sel = m_listBox->GetSelection();
+    if (sel == wxNOT_FOUND)
+        return;
 
-  wxNode *node = (wxNode *)m_listBox->wxListBox::GetClientData(sel);
-  if (!node)
-    return;
+    wxNode *node = (wxNode *)m_listBox->wxListBox::GetClientData(sel);
+    if (!node)
+        return;
 
-  m_listBox->Delete(sel);
-  delete[] (wxChar *)node->GetData();
-  delete node;
-  m_currentSelection = -1;
-  m_stringText->SetValue(wxEmptyString);
+    m_listBox->Delete(sel);
+    delete[] (wxChar *)node->GetData();
+    delete node;
+    m_currentSelection = -1;
+    m_stringText->SetValue(wxEmptyString);
 }
 
 void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& WXUNUSED(event))
@@ -1753,34 +1759,34 @@ void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& WXUNUSED(event))
 
 void wxPropertyStringListEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
-  SaveCurrentSelection();
-  EndModal(wxID_OK);
-  // Close(true);
-  this->Destroy();
+    SaveCurrentSelection();
+    EndModal(wxID_OK);
+//  Close(true);
+    this->Destroy();
 }
 
 void wxPropertyStringListEditorDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-  sm_dialogCancelled = true;
-  EndModal(wxID_CANCEL);
+    sm_dialogCancelled = true;
+    EndModal(wxID_CANCEL);
 //  Close(true);
-  this->Destroy();
+    this->Destroy();
 }
 
 void wxPropertyStringListEditorDialog::OnText(wxCommandEvent& event)
 {
-  if (event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER)
-  {
-    SaveCurrentSelection();
-  }
+    if (event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER)
+    {
+        SaveCurrentSelection();
+    }
 }
 
 void
 wxPropertyStringListEditorDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
-  SaveCurrentSelection();
+    SaveCurrentSelection();
 
-  Destroy();
+    Destroy();
 }
 
 void wxPropertyStringListEditorDialog::SaveCurrentSelection()
