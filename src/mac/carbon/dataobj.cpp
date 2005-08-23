@@ -99,13 +99,10 @@ void wxDataFormat::SetType(  wxDataFormatId  Type )
 
 wxString wxDataFormat::GetId() const
 {
-    // note that m_format is not a pointer to string, it *is* itself a 4
-    // character string
-    char text[5] ;
-    strncpy( text , (char*) &m_format , 4 ) ;
-    text[4] = 0 ;
+    wxCHECK_MSG( !IsStandard(), wxEmptyString ,
+                 wxT("name of predefined format cannot be retrieved") );
 
-    return wxString::FromAscii( text ) ;
+    return m_id ;
 }
 
 void wxDataFormat::SetId(  NativeFormat  format )
@@ -121,13 +118,32 @@ void wxDataFormat::SetId(  NativeFormat  format )
     else if (m_format == kDragFlavorTypeHFS )
         m_type = wxDF_FILENAME;
     else
+    {
         m_type = wxDF_PRIVATE;
+        char text[5] ;
+        strncpy( text , (char*) &format , 4 ) ;
+        text[4] = 0 ;
+        m_id = wxString::FromAscii( text ) ;
+    }
 }
 
 void wxDataFormat::SetId( const wxChar* zId )
 {
     m_type = wxDF_PRIVATE;
-    m_format = 0;// TODO: get the format gdk_atom_intern( wxMBSTRINGCAST tmp.mbc_str(), FALSE );
+    m_id = zId ;
+    m_format = 'WXPR' ;
+}
+
+bool wxDataFormat::operator==(const wxDataFormat& format) const 
+{
+    if ( IsStandard() || format.IsStandard() )
+    {
+        return ( format.m_type == m_type ) ;
+    }
+    else
+    {
+        return ( m_id == format.m_id ) ;
+    }
 }
 
 //-------------------------------------------------------------------------

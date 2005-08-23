@@ -27,10 +27,9 @@ public:
         { SetId(vFormat); return *this; }
 
     // comparison (must have both versions)
-    bool operator==(NativeFormat format) const
-        { return m_format == (NativeFormat)format; }
-    bool operator!=(NativeFormat format) const
-        { return m_format != (NativeFormat)format; }
+    bool operator==(const wxDataFormat& format) const ;
+    bool operator!=(const wxDataFormat& format) const
+        { return ! ( *this != format ); }
     bool operator==(wxDataFormatId format) const
         { return m_type == (wxDataFormatId)format; }
     bool operator!=(wxDataFormatId format) const
@@ -53,9 +52,13 @@ public:
     wxDataFormatId GetType() const { return m_type; }
     void SetType( wxDataFormatId type );
 
+    // returns true if the format is one of those defined in wxDataFormatId
+    bool IsStandard() const { return m_format > 0 && m_format < wxDF_PRIVATE; }
 private:
     wxDataFormatId   m_type;
     NativeFormat     m_format;
+    // indicates the type in case of wxDF_PRIVATE :
+    wxString         m_id ;
 };
 
 #endif // _WX_MAC_DATAFORM_H
