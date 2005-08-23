@@ -69,7 +69,10 @@ void wxStaticBitmap::OnPaint( wxPaintEvent& WXUNUSED(event) )
     wxPaintDC dc(this);
     PrepareDC(dc);
 
-    dc.DrawBitmap( m_bitmap , 0 , 0 , TRUE ) ;
+    if (m_bitmap.Ok())
+    {
+        dc.DrawBitmap( m_bitmap , 0 , 0 , TRUE ) ;
+    }
 }
 
 wxSize wxStaticBitmap::DoGetBestSize() const
