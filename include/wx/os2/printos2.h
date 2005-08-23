@@ -14,21 +14,23 @@
 
 #include "wx/prntbase.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 /*
  * Represents the printer: manages printing a wxPrintout object
  */
 
 class WXDLLEXPORT wxOS2Printer: public wxPrinterBase
 {
-  DECLARE_DYNAMIC_CLASS(wxOS2Printer)
+    DECLARE_DYNAMIC_CLASS(wxOS2Printer)
 
- public:
-  wxOS2Printer(wxPrintDialogData *data = NULL);
-  ~wxOS2Printer();
+public:
+    wxOS2Printer(wxPrintDialogData *data = NULL);
+    ~wxOS2Printer();
 
-  virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = TRUE);
-  virtual wxDC* PrintDialog(wxWindow *parent);
-  virtual bool Setup(wxWindow *parent);
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true);
+    virtual wxDC* PrintDialog(wxWindow *parent);
+    virtual bool Setup(wxWindow *parent);
 private:
 };
 
@@ -39,16 +41,18 @@ private:
 
 class WXDLLEXPORT wxOS2PrintPreview: public wxPrintPreviewBase
 {
-  DECLARE_CLASS(wxOS2PrintPreview)
+    DECLARE_CLASS(wxOS2PrintPreview)
 
- public:
-  wxOS2PrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintDialogData *data = NULL);
-  wxOS2PrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintData *data);
-  ~wxOS2PrintPreview();
+public:
+    wxOS2PrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintDialogData *data = NULL);
+    wxOS2PrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintData *data);
+    ~wxOS2PrintPreview();
 
-  virtual bool Print(bool interactive);
-  virtual void DetermineScaling();
+    virtual bool Print(bool interactive);
+    virtual void DetermineScaling();
 };
+
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 #endif
     // _WX_PRINT_H_
