@@ -122,6 +122,16 @@ ALL_DIST: distrib_clean
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
 	cp $(INCDIR)/wx/fmappriv.h $(DISTDIR)/include/wx
+	# copy wxpresets
+	mkdir $(DISTDIR)/build
+	mkdir $(DISTDIR)/build/bakefiles
+	mkdir $(DISTDIR)/build/bakefiles/wxpresets
+	mkdir $(DISTDIR)/build/bakefiles/wxpresets/presets
+	mkdir $(DISTDIR)/build/bakefiles/wxpresets/sample
+	cp $(WXDIR)/build/bakefiles/wxpresets/presets/*.bkl $(DISTDIR)/build/bakefiles/wxpresets/presets
+	cp $(WXDIR)/build/bakefiles/wxpresets/sample/minimal* $(DISTDIR)/build/bakefiles/wxpresets/sample
+	cp $(WXDIR)/build/bakefiles/wxpresets/sample/config* $(DISTDIR)/build/bakefiles/wxpresets/sample
+	cp $(WXDIR)/build/bakefiles/wxpresets/*.txt $(DISTDIR)/build/bakefiles/wxpresets
 
 # this target is the common part of distribution script for all GUI toolkits,
 # but is not used when building wxBase distribution

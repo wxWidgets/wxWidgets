@@ -85,6 +85,12 @@
             <install-to>$(DATADIR)/aclocal</install-to>
         </data-files>
 
+        <data-files>
+			<srcdir>build/bakefiles/wxpresets/presets</srcdir>
+            <files>wx.bkl wx_unix.bkl wx_win32.bkl</files>
+            <install-to>$(DATADIR)/bakefile/presets</install-to>
+        </data-files>
+
         <action id="install-wxconfig">
             <dependency-of>install</dependency-of>
             <command>
