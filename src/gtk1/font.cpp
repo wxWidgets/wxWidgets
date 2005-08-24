@@ -239,37 +239,11 @@ void wxFontRefData::InitFromNative()
     // Pango sometimes needs to have a size
     int pango_size = pango_font_description_get_size( desc );
     if (pango_size == 0)
-        pango_font_description_set_size( desc, 12 * PANGO_SCALE);
+        m_nativeFontInfo.SetPointSize(12);
 
-    m_pointSize = pango_font_description_get_size( desc ) / PANGO_SCALE;
-
-    switch (pango_font_description_get_style( desc ))
-    {
-        case PANGO_STYLE_NORMAL:
-            m_style = wxFONTSTYLE_NORMAL;
-            break;
-        case PANGO_STYLE_ITALIC:
-            m_style = wxFONTSTYLE_ITALIC;
-            break;
-        case PANGO_STYLE_OBLIQUE:
-            m_style = wxFONTSTYLE_SLANT;
-            break;
-    }
-
-    PangoWeight pango_weight = pango_font_description_get_weight( desc );
-
-    if (pango_weight >= 600)
-    {
-        m_weight = wxFONTWEIGHT_BOLD;
-    }
-    else if (pango_weight < 350)
-    {
-        m_weight = wxFONTWEIGHT_LIGHT;
-    }
-    else
-    {
-        m_weight = wxFONTWEIGHT_NORMAL;
-    }
+    m_pointSize = m_nativeFontInfo.GetPointSize();
+    m_style = m_nativeFontInfo.GetStyle();
+    m_weight = m_nativeFontInfo.GetWeight();
 
     if (m_faceName == wxT("monospace"))
     {
