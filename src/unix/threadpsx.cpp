@@ -44,7 +44,7 @@
 #include <pthread.h>
 #include <errno.h>
 #include <time.h>
-#if HAVE_SCHED_H
+#ifdef HAVE_SCHED_H
     #include <sched.h>
 #endif
 
