@@ -1872,6 +1872,37 @@ dnl problems
 if test "x$wx_largefile" = "xyes"; then
     if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
         WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
+
+        dnl We get "Large Files (ILP32) not supported in strict ANSI mode."
+        dnl #error from HP standard headers unless __STDC_EXT__ is defined.
+        dnl The compiler should define it automatically, but some old g++
+        dnl versions don't define it, so test and add it if necessary. AFAIK
+        dnl the problem only affects the C++ compiler so it is added to
+        dnl CXXFLAGS only.
+        if test "$USE_HPUX" = 1 -a "$GXX" = "yes"; then
+            AC_CACHE_CHECK(
+                [if -D__STDC_EXT__ is required],
+                wx_cv_STDC_EXT_required,
+                [
+                    AC_LANG_SAVE
+                    AC_LANG_CPLUSPLUS
+                    AC_TRY_COMPILE(
+                        [],
+                        [
+                            #ifndef __STDC_EXT__
+                                choke me
+                            #endif
+                        ],
+                        wx_cv_STDC_EXT_required=no,
+                        wx_cv_STDC_EXT_required=yes
+                    )
+                    AC_LANG_RESTORE
+                ]
+            )
+            if test "x$wx_cv_STDC_EXT_required" = "xyes"; then
+                CXXFLAGS="$CXXFLAGS -D__STDC_EXT__"
+            fi
+        fi
     else
         WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
     fi
@@ -4465,7 +4496,11 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                 THREAD_OPTS="pthreads"
                 ;;
           *-hp-hpux* )
-                if test "x$GCC" != "xyes"; then
+                if test "x$GCC" = "xyes"; then
+                    dnl g++ versions before 3.3.2 don't support -pthread.
+                    $CXX -dumpspecs | grep 'pthread:' >/dev/null ||
+                        THREAD_OPTS="" 
+                else
                     dnl HP-UX aCC only gives a warning, not an error about
                     dnl -pthread but it doesn't work and we have to use
                     dnl -lpthread there

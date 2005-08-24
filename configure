@@ -20079,6 +20079,86 @@ fi
 if test "x$wx_largefile" = "xyes"; then
     if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
         WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
+
+                                                        if test "$USE_HPUX" = 1 -a "$GXX" = "yes"; then
+            echo "$as_me:$LINENO: checking if -D__STDC_EXT__ is required" >&5
+echo $ECHO_N "checking if -D__STDC_EXT__ is required... $ECHO_C" >&6
+if test "${wx_cv_STDC_EXT_required+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+
+
+                    ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+                    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+                            #ifndef __STDC_EXT__
+                                choke me
+                            #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_STDC_EXT_required=no
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_STDC_EXT_required=yes
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+                    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_STDC_EXT_required" >&5
+echo "${ECHO_T}$wx_cv_STDC_EXT_required" >&6
+            if test "x$wx_cv_STDC_EXT_required" = "xyes"; then
+                CXXFLAGS="$CXXFLAGS -D__STDC_EXT__"
+            fi
+        fi
     else
         WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
     fi
@@ -34835,7 +34915,10 @@ echo "$as_me: WARNING: BeOS threads are not yet supported... disabled" >&2;}
                                 THREAD_OPTS="pthreads"
                 ;;
           *-hp-hpux* )
-                if test "x$GCC" != "xyes"; then
+                if test "x$GCC" = "xyes"; then
+                                        $CXX -dumpspecs | grep 'pthread:' >/dev/null ||
+                        THREAD_OPTS=""
+                else
                                                                                 THREAD_OPTS=""
                 fi
                 ;;
