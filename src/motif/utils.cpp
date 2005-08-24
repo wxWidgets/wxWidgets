@@ -928,8 +928,8 @@ void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, boo
 
 extern void wxDoChangeFont(WXWidget widget, wxFont& font)
 {
-    // Lesstif 0.87 hangs here, but 0.93 does not
-#if !wxCHECK_LESSTIF() || wxCHECK_LESSTIF_VERSION( 0, 93 )
+    // Lesstif 0.87 hangs here, but 0.93 does not; MBN: sometimes it does
+#if !wxCHECK_LESSTIF() // || wxCHECK_LESSTIF_VERSION( 0, 93 )
     Widget w = (Widget)widget;
     XtVaSetValues( w,
                    wxFont::GetFontTag(), font.GetFontTypeC( XtDisplay(w) ),

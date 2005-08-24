@@ -656,8 +656,8 @@ void wxMenu::SetForegroundColour(const wxColour& col)
 
 void wxMenu::ChangeFont(bool keepOriginalSize)
 {
-    // Lesstif 0.87 hangs here, but 0.93 does not
-#if !wxCHECK_LESSTIF() || wxCHECK_LESSTIF_VERSION( 0, 93 )
+    // Lesstif 0.87 hangs here, but 0.93 does not; MBN: sometimes it does
+#if !wxCHECK_LESSTIF() // || wxCHECK_LESSTIF_VERSION( 0, 93 )
     if (!m_font.Ok() || !m_menuWidget)
         return;
 
