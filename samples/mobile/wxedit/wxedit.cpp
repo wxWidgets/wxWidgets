@@ -66,7 +66,7 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     // Create edit control. Since it is the only
     // control in the frame, it will be resized
     // to file it out.
-    m_text = new wxTextCtrl( this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+    m_text = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 
     // Read .ini file for file history etc.
     wxConfig *conf = (wxConfig*) wxConfig::Get();
@@ -213,15 +213,16 @@ void MyFrame::OnNew( wxCommandEvent& WXUNUSED(event) )
     m_filename = wxEmptyString;
 
 #if wxUSE_STATUSBAR
-    SetStatusText( _T("") );
+    SetStatusText( wxEmptyString );
 #endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnOpen( wxCommandEvent& WXUNUSED(event) )
 {
+#if wxUSE_FILEDLG
     if (!Discard()) return;
 
-    wxFileDialog dialog( this, _T("Open text"), _T(""), _T(""),
+    wxFileDialog dialog( this, _T("Open text"), wxEmptyString, wxEmptyString,
         _T("Text file (*.txt)|*.txt|Any file (*)|*"),
         wxOPEN|wxFILE_MUST_EXIST );
     if (dialog.ShowModal() == wxID_OK)
@@ -265,6 +266,7 @@ void MyFrame::OnOpen( wxCommandEvent& WXUNUSED(event) )
         SetStatusText( m_filename );
 #endif // wxUSE_STATUSBAR
     }
+#endif // wxUSE_FILEDLG
 }
 
 void MyFrame::OnSave( wxCommandEvent& WXUNUSED(event) )
@@ -274,7 +276,8 @@ void MyFrame::OnSave( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnSaveAs( wxCommandEvent& WXUNUSED(event) )
 {
-    wxFileDialog dialog( this, _T("Open text"), _T(""), _T(""),
+#if wxUSE_FILEDLG
+    wxFileDialog dialog( this, _T("Open text"), wxEmptyString, wxEmptyString,
         _T("Text file (*.txt)|*.txt|Any file (*)|*"),
         wxSAVE|wxOVERWRITE_PROMPT );
     if (dialog.ShowModal() == wxID_OK)
@@ -286,6 +289,7 @@ void MyFrame::OnSaveAs( wxCommandEvent& WXUNUSED(event) )
         SetStatusText( m_filename );
 #endif // wxUSE_STATUSBAR
     }
+#endif // wxUSE_FILEDLG
 }
 
 void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
@@ -417,4 +421,3 @@ int MyApp::OnExit()
 {
     return 0;
 }
-

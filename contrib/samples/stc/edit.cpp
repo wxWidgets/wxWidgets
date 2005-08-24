@@ -502,8 +502,9 @@ bool Edit::InitializePrefs (const wxString &name) {
     return true;
 }
 
-bool Edit::LoadFile () {
-
+bool Edit::LoadFile ()
+{
+#if wxUSE_FILEDLG
     // get filname
     if (!m_filename) {
         wxFileDialog dlg (this, _T("Open file"), wxEmptyString, wxEmptyString,
@@ -514,6 +515,9 @@ bool Edit::LoadFile () {
 
     // load file
     return LoadFile (m_filename);
+#else
+    return false;
+#endif // wxUSE_FILEDLG
 }
 
 bool Edit::LoadFile (const wxString &filename) {
@@ -544,8 +548,9 @@ bool Edit::LoadFile (const wxString &filename) {
     return true;
 }
 
-bool Edit::SaveFile () {
-
+bool Edit::SaveFile ()
+{
+#if wxUSE_FILEDLG
     // return if no change
     if (!Modified()) return true;
 
@@ -559,6 +564,9 @@ bool Edit::SaveFile () {
 
     // save file
     return SaveFile (m_filename);
+#else
+    return false;
+#endif // wxUSE_FILEDLG
 }
 
 bool Edit::SaveFile (const wxString &filename) {
@@ -695,6 +703,8 @@ EditProperties::EditProperties (Edit *edit,
     ShowModal();
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 //----------------------------------------------------------------------------
 // EditPrint
 //----------------------------------------------------------------------------
@@ -821,3 +831,4 @@ bool EditPrint::PrintScaling (wxDC *dc){
     return true;
 }
 
+#endif // wxUSE_PRINTING_ARCHITECTURE

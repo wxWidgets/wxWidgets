@@ -77,7 +77,7 @@ public:
     void OnAbout(wxCommandEvent& event);
 
     void NotifyUsingFile(const wxString& name);
-    
+
 
 private:
     bool CreateSound(wxSound& snd) const;
@@ -90,7 +90,7 @@ private:
     bool        m_useMemory;
 
     wxTextCtrl* m_tc;
-    
+
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
@@ -981,6 +981,7 @@ void MyFrame::NotifyUsingFile(const wxString& name)
 
 void MyFrame::OnSelectFile(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_FILEDLG
     wxFileDialog dlg(this, _T("Choose a sound file"),
                      wxEmptyString, wxEmptyString,
                      _T("WAV files (*.wav)|*.wav"), wxOPEN|wxCHANGE_DIR);
@@ -996,6 +997,7 @@ void MyFrame::OnSelectFile(wxCommandEvent& WXUNUSED(event))
         m_sound = NULL;
         NotifyUsingFile(m_soundFile);
     }
+#endif // wxUSE_FILEDLG
 }
 
 #ifdef __WXMSW__

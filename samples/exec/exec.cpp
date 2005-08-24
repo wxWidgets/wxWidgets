@@ -423,7 +423,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif
 
     // create a menu bar
-    wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
     menuFile->Append(Exec_Kill, _T("&Kill process...\tCtrl-K"),
                      _T("Kill a process by PID"));
     menuFile->AppendSeparator();
@@ -456,7 +456,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     execMenu->Append(Exec_DDERequest, _T("Send DDE &request...\tCtrl-R"));
 #endif
 
-    wxMenu *helpMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
+    wxMenu *helpMenu = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
     helpMenu->Append(Exec_About, _T("&About...\tF1"), _T("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
@@ -800,8 +800,13 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
 {
     static wxString s_filename;
 
-    wxString filename = wxLoadFileSelector(_T(""), _T(""), s_filename);
-    if ( !filename )
+    wxString filename;
+
+#if wxUSE_FILEDLG
+    filename = wxLoadFileSelector(wxEmptyString, wxEmptyString, s_filename);
+#endif // wxUSE_FILEDLG
+
+    if ( filename.empty() )
         return;
 
     s_filename = filename;
@@ -817,7 +822,7 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
 
     wxString cmd;
     bool ok = ft->GetOpenCommand(&cmd,
-                                 wxFileType::MessageParameters(filename, _T("")));
+                                 wxFileType::MessageParameters(filename));
     delete ft;
     if ( !ok )
     {
@@ -865,7 +870,7 @@ void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
         return;
 
     wxDDEClient client;
-    wxConnectionBase *conn = client.MakeConnection(_T(""), m_server, m_topic);
+    wxConnectionBase *conn = client.MakeConnection(wxEmptyString, m_server, m_topic);
     if ( !conn )
     {
         wxLogError(_T("Failed to connect to the DDE server '%s'."),
@@ -891,7 +896,7 @@ void MyFrame::OnDDERequest(wxCommandEvent& WXUNUSED(event))
         return;
 
     wxDDEClient client;
-    wxConnectionBase *conn = client.MakeConnection(_T(""), m_server, m_topic);
+    wxConnectionBase *conn = client.MakeConnection(wxEmptyString, m_server, m_topic);
     if ( !conn )
     {
         wxLogError(_T("Failed to connect to the DDE server '%s'."),
@@ -1061,14 +1066,14 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
 
     wxPanel *panel = new wxPanel(this, wxID_ANY);
 
-    m_textOut = new wxTextCtrl(panel, wxID_ANY, _T(""),
+    m_textOut = new wxTextCtrl(panel, wxID_ANY, wxEmptyString,
                               wxDefaultPosition, wxDefaultSize,
                               wxTE_PROCESS_ENTER);
-    m_textIn = new wxTextCtrl(panel, wxID_ANY, _T(""),
+    m_textIn = new wxTextCtrl(panel, wxID_ANY, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize,
                                wxTE_MULTILINE | wxTE_RICH);
     m_textIn->SetEditable(false);
-    m_textErr = new wxTextCtrl(panel, wxID_ANY, _T(""),
+    m_textErr = new wxTextCtrl(panel, wxID_ANY, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize,
                                wxTE_MULTILINE | wxTE_RICH);
     m_textErr->SetEditable(false);
@@ -1098,6 +1103,7 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
 
 void MyPipeFrame::OnBtnSendFile(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_FILEDLG
     wxFileDialog filedlg(this, _T("Select file to send"));
     if ( filedlg.ShowModal() != wxID_OK )
         return;
@@ -1125,6 +1131,7 @@ void MyPipeFrame::OnBtnSendFile(wxCommandEvent& WXUNUSED(event))
 
         DoGet();
     }
+#endif // wxUSE_FILEDLG
 }
 
 void MyPipeFrame::DoGet()

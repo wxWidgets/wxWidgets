@@ -232,11 +232,13 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPageOpen(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_FILEDLG
     wxString p = wxFileSelector(_("Open HTML document"), wxEmptyString,
         wxEmptyString, wxEmptyString, wxT("HTML files|*.htm"));
 
-    if (p != wxEmptyString)
+    if (!p.empty())
         m_Html->LoadPage(p);
+#endif // wxUSE_FILEDLG
 }
 
 void MyFrame::OnBack(wxCommandEvent& WXUNUSED(event))

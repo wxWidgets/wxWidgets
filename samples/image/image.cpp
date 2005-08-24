@@ -151,11 +151,12 @@ public:
 
     void OnSave(wxMouseEvent& WXUNUSED(event))
     {
+#if wxUSE_FILEDLG
         wxImage image = m_bitmap.ConvertToImage();
 
         wxString savefilename = wxFileSelector( wxT("Save Image"),
-                                                wxT(""),
-                                                wxT(""),
+                                                wxEmptyString,
+                                                wxEmptyString,
                                                 (const wxChar *)NULL,
                                                 wxT("BMP files (*.bmp)|*.bmp|")
                                                 wxT("PNG files (*.png)|*.png|")
@@ -271,6 +272,7 @@ public:
             // (it may fail if the extension is not recognized):
             image.SaveFile(savefilename);
         }
+#endif // wxUSE_FILEDLG
     }
 
 private:
@@ -992,6 +994,7 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
 {
+#if wxUSE_FILEDLG
     wxString filename = wxFileSelector(_T("Select image file"));
     if ( !filename )
         return;
@@ -1005,6 +1008,7 @@ void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
     }
 
     (new MyImageFrame(this, wxBitmap(image)))->Show();
+#endif // wxUSE_FILEDLG
 }
 
 #ifdef wxHAVE_RAW_BITMAP
@@ -1096,4 +1100,3 @@ bool MyApp::OnInit()
 
   return true;
 }
-
