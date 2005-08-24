@@ -271,25 +271,27 @@ static WXPixmap wxGetSubPixmap( WXDisplay* xdisplay, WXPixmap xpixmap,
                                 int x, int y, int width, int height,
                                 int depth )
 {
-    int xscreen = DefaultScreen( (Display*)xdisplay );
-    Window xroot = RootWindow( (Display*)xdisplay, xscreen );
-    Visual* xvisual = DefaultVisual( xdisplay, xscreen );
+    Display * const dpy = (Display *)xdisplay;
 
-    XImage* ximage = XCreateImage( (Display*)xdisplay, xvisual, depth,
+    int xscreen = DefaultScreen( dpy );
+    Window xroot = RootWindow( dpy, xscreen );
+    Visual* xvisual = DefaultVisual( dpy, xscreen );
+
+    XImage* ximage = XCreateImage( dpy, xvisual, depth,
                                    ZPixmap, 0, 0, width, height, 32, 0 );
     ximage->data = (char*)malloc( ximage->bytes_per_line * ximage->height );
-    ximage = XGetSubImage( (Display*)xdisplay, (Pixmap)xpixmap,
+    ximage = XGetSubImage( dpy, (Pixmap)xpixmap,
                            x, y, width, height,
                            AllPlanes, ZPixmap, ximage, 0, 0 );
 
-    GC gc = XCreateGC( (Display*)xdisplay, (Pixmap)xpixmap, 0, NULL );
-    Pixmap ret = XCreatePixmap( (Display*)xdisplay, xroot,
+    GC gc = XCreateGC( dpy, (Pixmap)xpixmap, 0, NULL );
+    Pixmap ret = XCreatePixmap( dpy, xroot,
                                 width, height, depth );
 
-    XPutImage( (Display*)xdisplay, ret, gc, ximage,
+    XPutImage( dpy, ret, gc, ximage,
                0, 0, 0, 0, width, height );
     XDestroyImage( ximage );
-    XFreeGC( (Display*)xdisplay, gc );
+    XFreeGC( dpy, gc );
 
     return (WXPixmap)ret;
 }
