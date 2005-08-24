@@ -81,7 +81,7 @@ bool wxButton::Create(wxWindow *parent,
     if (label.empty() && wxIsStockID(id))
         label = wxGetStockLabel(id);
 
-    long ctrl_style = style & !wxBU_ALIGN_MASK;
+    long ctrl_style = style & ~wxBU_ALIGN_MASK;
 
     wxASSERT_MSG( (ctrl_style & wxALIGN_MASK) == 0,
                   _T("Some style conflicts with align flags") );
