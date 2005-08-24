@@ -229,14 +229,14 @@
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "wxUSE_MS_HTML_HELP requires wxUSE_DYNAMIC_LOADER."
 #        else
-#            define wxUSE_DYNAMIC_LOADER 1
+#            define wxUSE_MS_HTML_HELP 0
 #        endif
 #    endif
 #    if wxUSE_DIALUP_MANAGER
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "wxUSE_DIALUP_MANAGER requires wxUSE_DYNAMIC_LOADER."
 #        else
-#            define wxUSE_DYNAMIC_LOADER 1
+#            define wxUSE_DIALUP_MANAGER 0
 #        endif
 #    endif
 #endif  /* wxUSE_DYNAMIC_LOADER */
