@@ -21,6 +21,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_STATTEXT
+
 #include "wx/stattext.h"
 
 #ifdef __VMS__
@@ -93,7 +96,7 @@ void wxStaticText::SetLabel(const wxString& label)
         XtVaSetValues(widget,
             XmNwidth, width,
             XmNheight, height,
-            NULL);        
+            NULL);
         XtManageChild(widget);
     }
     else
@@ -104,3 +107,5 @@ void wxStaticText::SetLabel(const wxString& label)
             NULL);
     }
 }
+
+#endif // wxUSE_STATTEXT
