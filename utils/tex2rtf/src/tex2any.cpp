@@ -430,7 +430,7 @@ bool readInVerbatim = false;  // Within a verbatim, but not nec. verbatiminput
 
 unsigned long leftCurly = 0;
 unsigned long rightCurly = 0;
-static wxString currentFileName = _T("");
+static wxString currentFileName = wxEmptyString;
 
 bool read_a_line(wxChar *buf)
 {
@@ -693,7 +693,7 @@ bool read_a_line(wxChar *buf)
 
     wxString actualFile = TexPathList.FindValidPath(fileName);
     currentFileName = actualFile;
-    if (actualFile == _T(""))
+    if (actualFile.empty())
     {
       wxString errBuf;
       errBuf.Printf(_T("Could not find file: %s"),fileName);
@@ -767,7 +767,7 @@ bool read_a_line(wxChar *buf)
       return read_a_line(buf);
 
     wxString actualFile = TexPathList.FindValidPath(fileNameStr);
-    if (actualFile == _T(""))
+    if (actualFile.empty())
     {
       wxChar buf2[400];
       wxSnprintf(buf2, sizeof(buf2), _T("%s.tex"), fileNameStr.c_str());
@@ -775,7 +775,7 @@ bool read_a_line(wxChar *buf)
     }
     currentFileName = actualFile;
 
-    if (actualFile == _T(""))
+    if (actualFile.empty())
     {
       wxString errBuf;
       errBuf.Printf(_T("Could not find file: %s"),fileName);
@@ -1663,34 +1663,34 @@ int ParseMacroBody(const wxChar *WXUNUSED(macro_name), TexChunk *parent,
   return pos;
 }
 
-bool TexLoadFile(wxChar *filename)
+bool TexLoadFile(const wxString& filename)
 {
-  static wxChar *line_buffer;
-  stopRunning = false;
-  wxStrcpy(TexFileRoot, filename);
-  StripExtension(TexFileRoot);
-  wxSnprintf(TexBibName, 300, _T("%s.bb"), TexFileRoot);
-  wxSnprintf(TexTmpBibName, 300, _T("%s.bb1"), TexFileRoot);
+    static wxChar *line_buffer;
+    stopRunning = false;
+    wxStrcpy(TexFileRoot, filename);
+    StripExtension(TexFileRoot);
+    wxSnprintf(TexBibName, 300, _T("%s.bb"), TexFileRoot);
+    wxSnprintf(TexTmpBibName, 300, _T("%s.bb1"), TexFileRoot);
 
-  TexPathList.EnsureFileAccessible(filename);
+    TexPathList.EnsureFileAccessible(filename);
 
-  if (line_buffer)
-      delete line_buffer;
+    if (line_buffer)
+        delete line_buffer;
 
-  line_buffer = new wxChar[MAX_LINE_BUFFER_SIZE];
+    line_buffer = new wxChar[MAX_LINE_BUFFER_SIZE];
 
-  Inputs[0] = wxFopen(filename, _T("r"));
-  LineNumbers[0] = 1;
-  FileNames[0] = copystring(filename);
-  if (Inputs[0])
-  {
-    read_a_line(line_buffer);
-    ParseMacroBody(_T("toplevel"), TopLevel, 1, line_buffer, 0, NULL, true);
-    if (Inputs[0]) fclose(Inputs[0]);
-    return true;
-  }
+    Inputs[0] = wxFopen(filename, _T("r"));
+    LineNumbers[0] = 1;
+    FileNames[0] = copystring(filename);
+    if (Inputs[0])
+    {
+        read_a_line(line_buffer);
+        ParseMacroBody(_T("toplevel"), TopLevel, 1, line_buffer, 0, NULL, true);
+        if (Inputs[0]) fclose(Inputs[0]);
+        return true;
+    }
 
-  return false;
+    return false;
 }
 
 TexMacroDef::TexMacroDef(int the_id, const wxChar *the_name, int n, bool ig, bool forbidLevel)
@@ -3460,12 +3460,12 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         wxChar fileBuf[300];
         wxStrcpy(fileBuf, bibFile);
         wxString actualFile = TexPathList.FindValidPath(fileBuf);
-        if (actualFile == _T(""))
+        if (actualFile.empty())
         {
           wxStrcat(fileBuf, _T(".bib"));
           actualFile = TexPathList.FindValidPath(fileBuf);
         }
-        if (actualFile != _T(""))
+        if (!actualFile.empty())
         {
           if (!ReadBib((wxChar*) (const wxChar*) actualFile))
           {
@@ -3714,4 +3714,3 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
   }
   return true;
 }
-

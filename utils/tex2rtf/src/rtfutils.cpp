@@ -521,65 +521,65 @@ void OutputNumberStyle(wxChar *numberStyle)
  * Write a Windows help project file
  */
 
-bool WriteHPJ(wxChar *filename)
+bool WriteHPJ(const wxString& filename)
 {
-  wxChar hpjFilename[256];
-  wxChar helpFile[50];
-  wxChar rtfFile[50];
-  wxStrcpy(hpjFilename, filename);
-  StripExtension(hpjFilename);
-  wxStrcat(hpjFilename, _T(".hpj"));
+    wxChar hpjFilename[256];
+    wxChar helpFile[50];
+    wxChar rtfFile[50];
+    wxStrcpy(hpjFilename, filename);
+    StripExtension(hpjFilename);
+    wxStrcat(hpjFilename, _T(".hpj"));
 
-  wxStrcpy(helpFile, wxFileNameFromPath(filename));
-  StripExtension(helpFile);
-  wxStrcpy(rtfFile, helpFile);
-  wxStrcat(helpFile, _T(".hlp"));
-  wxStrcat(rtfFile, _T(".rtf"));
+    wxStrcpy(helpFile, wxFileNameFromPath(filename));
+    StripExtension(helpFile);
+    wxStrcpy(rtfFile, helpFile);
+    wxStrcat(helpFile, _T(".hlp"));
+    wxStrcat(rtfFile, _T(".rtf"));
 
-  FILE *fd = wxFopen(hpjFilename, _T("w"));
-  if (!fd)
-    return false;
+    FILE *fd = wxFopen(hpjFilename, _T("w"));
+    if (!fd)
+        return false;
 
-  wxChar *helpTitle = winHelpTitle;
-  if (!helpTitle)
-    helpTitle = _T("Untitled");
+    wxChar *helpTitle = winHelpTitle;
+    if (!helpTitle)
+        helpTitle = _T("Untitled");
 
-  wxString thePath = wxPathOnly(InputFile);
-  if (thePath.IsEmpty())
-    thePath = _T(".");
-  wxFprintf(fd, _T("[OPTIONS]\n"));
-  wxFprintf(fd, _T("BMROOT=%s ; Assume that bitmaps are where the source is\n"), thePath.c_str());
-  wxFprintf(fd, _T("TITLE=%s\n"), helpTitle);
-  wxFprintf(fd, _T("CONTENTS=Contents\n"));
+    wxString thePath = wxPathOnly(InputFile);
+    if (thePath.empty())
+        thePath = _T(".");
+    wxFprintf(fd, _T("[OPTIONS]\n"));
+    wxFprintf(fd, _T("BMROOT=%s ; Assume that bitmaps are where the source is\n"), thePath.c_str());
+    wxFprintf(fd, _T("TITLE=%s\n"), helpTitle);
+    wxFprintf(fd, _T("CONTENTS=Contents\n"));
 
-  if (winHelpVersion > 3)
-  {
-    wxFprintf(fd, _T("; COMPRESS=12 Hall Zeck ; Max compression, but needs lots of memory\n"));
-    wxFprintf(fd, _T("COMPRESS=8 Zeck\n"));
-    wxFprintf(fd, _T("LCID=0x809 0x0 0x0 ;English (British)\n"));
-    wxFprintf(fd, _T("HLP=.\\%s.hlp\n"), wxFileNameFromPath(FileRoot));
-  }
-  else
-  {
-    wxFprintf(fd, _T("COMPRESS=HIGH\n"));
-  }
-  wxFprintf(fd, _T("\n"));
-
-  if (winHelpVersion > 3)
-  {
-    wxFprintf(fd, _T("[WINDOWS]\n"));
-    wxFprintf(fd, _T("Main=\"\",(553,102,400,600),20736,(r14876671),(r12632256),f3\n"));
+    if (winHelpVersion > 3)
+    {
+        wxFprintf(fd, _T("; COMPRESS=12 Hall Zeck ; Max compression, but needs lots of memory\n"));
+        wxFprintf(fd, _T("COMPRESS=8 Zeck\n"));
+        wxFprintf(fd, _T("LCID=0x809 0x0 0x0 ;English (British)\n"));
+        wxFprintf(fd, _T("HLP=.\\%s.hlp\n"), wxFileNameFromPath(FileRoot));
+    }
+    else
+    {
+        wxFprintf(fd, _T("COMPRESS=HIGH\n"));
+    }
     wxFprintf(fd, _T("\n"));
-  }
 
-  wxFprintf(fd, _T("[FILES]\n%s\n\n"), rtfFile);
-  wxFprintf(fd, _T("[CONFIG]\n"));
-  if (useUpButton)
-    wxFprintf(fd, _T("CreateButton(\"Up\", \"&Up\", \"JumpId(`%s', `Contents')\")\n"), helpFile);
-  wxFprintf(fd, _T("BrowseButtons()\n\n"));
-  wxFprintf(fd, _T("[MAP]\n\n[BITMAPS]\n\n"));
-  fclose(fd);
-  return true;
+    if (winHelpVersion > 3)
+    {
+        wxFprintf(fd, _T("[WINDOWS]\n"));
+        wxFprintf(fd, _T("Main=\"\",(553,102,400,600),20736,(r14876671),(r12632256),f3\n"));
+        wxFprintf(fd, _T("\n"));
+    }
+
+    wxFprintf(fd, _T("[FILES]\n%s\n\n"), rtfFile);
+    wxFprintf(fd, _T("[CONFIG]\n"));
+    if (useUpButton)
+        wxFprintf(fd, _T("CreateButton(\"Up\", \"&Up\", \"JumpId(`%s', `Contents')\")\n"), helpFile);
+    wxFprintf(fd, _T("BrowseButtons()\n\n"));
+    wxFprintf(fd, _T("[MAP]\n\n[BITMAPS]\n\n"));
+    fclose(fd);
+    return true;
 }
 
 
@@ -5170,7 +5170,7 @@ bool RTFGo(void)
   inVerbatim = false;
   browseId = 0;
 
-  if (InputFile && OutputFile)
+  if (!InputFile.empty() && !OutputFile.empty())
   {
     // Do some RTF-specific transformations on all the strings,
     // recursively
@@ -5312,11 +5312,11 @@ bool RTFGo(void)
       if ((wxStrcmp(outputDirStr.c_str(),_T("")) == 0) ||  // no path specified on output file
           (wxStrcmp(cwdStr,outputDirStr.c_str()) == 0)) // paths do not match
       {
-        wxRenameFile(_T("tmp1.rtf"), OutputFile);
+          wxRenameFile(_T("tmp1.rtf"), OutputFile);
       }
       else
       {
-        wxCopyFile(_T("tmp1.rtf"), OutputFile);
+          wxCopyFile(_T("tmp1.rtf"), OutputFile);
       }
       delete [] cwdStr;
       Tex2RTFYield(true);
@@ -5342,7 +5342,7 @@ bool RTFGo(void)
       wxRemoveFile(_T("popups.rtf"));
     }
     if (winHelp && generateHPJ)
-      WriteHPJ(OutputFile);
+        WriteHPJ(OutputFile);
     return true;
   }
   return false;

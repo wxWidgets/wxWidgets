@@ -1826,7 +1826,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
 static bool CheckTypeRef()
 {
   wxString typeDecl = GetArgData();
-  if( !typeDecl.IsEmpty() ) {
+  if( !typeDecl.empty() ) {
     typeDecl.Replace(wxT("\\"),wxT(""));
     wxString label = typeDecl;
     label.Replace(wxT("const"),wxT(""));
@@ -2247,7 +2247,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       if (imageFile)
         delete[] imageFile;
       imageFile = NULL;
-      if (!f.IsEmpty())
+      if (!f.empty())
       {
         imageFile = copystring(f);
       }
@@ -3031,223 +3031,222 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
 
 bool HTMLGo(void)
 {
-  fileId = 0;
-  inVerbatim = false;
-  indentLevel = 0;
-  inTabular = false;
-  startRows = false;
-  tableVerticalLineLeft = false;
-  tableVerticalLineRight = false;
-  noColumns = 0;
+    fileId = 0;
+    inVerbatim = false;
+    indentLevel = 0;
+    inTabular = false;
+    startRows = false;
+    tableVerticalLineLeft = false;
+    tableVerticalLineRight = false;
+    noColumns = 0;
 
-  if (InputFile && OutputFile)
-  {
-    // Do some HTML-specific transformations on all the strings,
-    // recursively
-    Text2HTML(GetTopLevelChunk());
-
-    wxChar buf[300];
-    if (truncateFilenames)
-      wxSnprintf(buf, sizeof(buf), _T("%s.htm"), FileRoot);
-    else
-      wxSnprintf(buf, sizeof(buf), _T("%s_contents.html"), FileRoot);
-    if (TitlepageName) delete[] TitlepageName;
-    TitlepageName = copystring(buf);
-    Titlepage = wxFopen(buf, _T("w"));
-
-    if (truncateFilenames)
-      wxSnprintf(buf, sizeof(buf), _T("%s_fc.htm"), FileRoot);
-    else
-      wxSnprintf(buf, sizeof(buf), _T("%s_fcontents.html"), FileRoot);
-
-    contentsFrameName = copystring(buf);
-
-    Contents = wxFopen(TmpContentsName, _T("w"));
-
-    if (htmlFrameContents)
+    if (!InputFile.empty() && !OutputFile.empty())
     {
-//      FrameContents = wxFopen(TmpFrameContentsName, _T("w"));
-      FrameContents = wxFopen(contentsFrameName, _T("w"));
-      wxFprintf(FrameContents, _T("<HTML>\n<UL>\n"));
-    }
+        // Do some HTML-specific transformations on all the strings,
+        // recursively
+        Text2HTML(GetTopLevelChunk());
 
-    if (!Titlepage || !Contents)
-    {
-      OnError(_T("Cannot open output file!"));
-      return false;
-    }
-    AddTexRef(_T("contents"), wxFileNameFromPath(TitlepageName), ContentsNameString);
-
-    wxFprintf(Contents, _T("<P><P><H2>%s</H2><P><P>\n"), ContentsNameString);
-
-    wxFprintf(Contents, _T("<UL>\n"));
-
-    SetCurrentOutput(Titlepage);
-    if (htmlWorkshopFiles) HTMLWorkshopStartContents();
-    OnInform(_T("Converting..."));
-
-    TraverseDocument();
-    wxFprintf(Contents, _T("</UL>\n\n"));
-
-//    SetCurrentOutput(Titlepage);
-    fclose(Titlepage);
-
-    if (Contents)
-    {
-//      wxFprintf(Titlepage, _T("\n</BODY></HTML>\n"));
-      fclose(Contents);
-      Contents = NULL;
-    }
-
-    if (FrameContents)
-    {
-      wxFprintf(FrameContents, _T("\n</UL>\n"));
-      wxFprintf(FrameContents, _T("</HTML>\n"));
-      fclose(FrameContents);
-      FrameContents = NULL;
-    }
-
-    if (Chapters)
-    {
-      wxFprintf(Chapters, _T("\n</FONT></BODY></HTML>\n"));
-      fclose(Chapters);
-      Chapters = NULL;
-    }
-    if (Sections)
-    {
-      wxFprintf(Sections, _T("\n</FONT></BODY></HTML>\n"));
-      fclose(Sections);
-      Sections = NULL;
-    }
-    if (Subsections && !combineSubSections)
-    {
-      wxFprintf(Subsections, _T("\n</FONT></BODY></HTML>\n"));
-      fclose(Subsections);
-      Subsections = NULL;
-    }
-    if (Subsubsections && !combineSubSections)
-    {
-      wxFprintf(Subsubsections, _T("\n</FONT></BODY></HTML>\n"));
-      fclose(Subsubsections);
-      Subsubsections = NULL;
-    }
-    if ( SectionContentsFD )
-    {
-        fclose(SectionContentsFD);
-        SectionContentsFD = NULL;
-    }
-
-    // Create a temporary file for the title page header, add some info,
-    // and concat the titlepage just generated.
-    // This is necessary in order to put the title of the document
-    // at the TOP of the file within <HEAD>, even though we only find out
-    // what it is later on.
-    FILE *tmpTitle = wxFopen(_T("title.tmp"), _T("w"));
-    if (tmpTitle)
-    {
-      if (DocumentTitle)
-      {
-        SetCurrentOutput(tmpTitle);
-        HTMLHead();
-        TexOutput(_T("\n<TITLE>"));
-        TraverseChildrenFromChunk(DocumentTitle);
-        TexOutput(_T("</TITLE></HEAD>\n"));
-      }
-      else
-      {
-        SetCurrentOutput(tmpTitle);
-        HTMLHeadTo(tmpTitle);
-        if (contentsString)
-          wxFprintf(tmpTitle, _T("<TITLE>%s</TITLE></HEAD>\n\n"), contentsString);
-        else
-          wxFprintf(tmpTitle, _T("<TITLE>%s</TITLE></HEAD>\n\n"), wxFileNameFromPath(FileRoot));
-      }
-
-      // Output frame information
-      if (htmlFrameContents)
-      {
-        wxChar firstFileName[300];
+        wxChar buf[300];
         if (truncateFilenames)
-          wxSnprintf(firstFileName, sizeof(firstFileName), _T("%s1.htm"), FileRoot);
+            wxSnprintf(buf, sizeof(buf), _T("%s.htm"), FileRoot);
         else
-          wxStrcpy(firstFileName, gs_filenames[1].c_str());
+            wxSnprintf(buf, sizeof(buf), _T("%s_contents.html"), FileRoot);
+        if (TitlepageName) delete[] TitlepageName;
+        TitlepageName = copystring(buf);
+        Titlepage = wxFopen(buf, _T("w"));
 
-        wxFprintf(tmpTitle, _T("<FRAMESET COLS=\"30%%,70%%\">\n"));
+        if (truncateFilenames)
+            wxSnprintf(buf, sizeof(buf), _T("%s_fc.htm"), FileRoot);
+        else
+            wxSnprintf(buf, sizeof(buf), _T("%s_fcontents.html"), FileRoot);
 
-        wxFprintf(tmpTitle, _T("<FRAME SRC=\"%s\">\n"), ConvertCase(wxFileNameFromPath(contentsFrameName)));
-        wxFprintf(tmpTitle, _T("<FRAME SRC=\"%s\" NAME=\"mainwindow\">\n"), ConvertCase(wxFileNameFromPath(firstFileName)));
-        wxFprintf(tmpTitle, _T("</FRAMESET>\n"));
+        contentsFrameName = copystring(buf);
 
-        wxFprintf(tmpTitle, _T("<NOFRAMES>\n"));
-      }
+        Contents = wxFopen(TmpContentsName, _T("w"));
 
-      // Output <BODY...> to temporary title page
-      OutputBodyStart();
-      fflush(tmpTitle);
-
-      // Concat titlepage
-      FILE *fd = wxFopen(TitlepageName, _T("r"));
-      if (fd)
-      {
-        int ch = getc(fd);
-        while (ch != EOF)
+        if (htmlFrameContents)
         {
-          wxPutc(ch, tmpTitle);
-          ch = getc(fd);
+//          FrameContents = wxFopen(TmpFrameContentsName, _T("w"));
+            FrameContents = wxFopen(contentsFrameName, _T("w"));
+            wxFprintf(FrameContents, _T("<HTML>\n<UL>\n"));
         }
-        fclose(fd);
-      }
 
-      wxFprintf(tmpTitle, _T("\n</FONT></BODY>\n"));
+        if (!Titlepage || !Contents)
+        {
+            OnError(_T("Cannot open output file!"));
+            return false;
+        }
+        AddTexRef(_T("contents"), wxFileNameFromPath(TitlepageName), ContentsNameString);
 
-      if (htmlFrameContents)
-      {
-        wxFprintf(tmpTitle, _T("\n</NOFRAMES>\n"));
-      }
-      wxFprintf(tmpTitle, _T("\n</HTML>\n"));
+        wxFprintf(Contents, _T("<P><P><H2>%s</H2><P><P>\n"), ContentsNameString);
 
-      fclose(tmpTitle);
-      if (wxFileExists(TitlepageName)) wxRemoveFile(TitlepageName);
-      if (!wxRenameFile(_T("title.tmp"), TitlepageName))
-      {
-        wxCopyFile(_T("title.tmp"), TitlepageName);
-        wxRemoveFile(_T("title.tmp"));
-      }
+        wxFprintf(Contents, _T("<UL>\n"));
+
+        SetCurrentOutput(Titlepage);
+        if (htmlWorkshopFiles) HTMLWorkshopStartContents();
+        OnInform(_T("Converting..."));
+
+        TraverseDocument();
+        wxFprintf(Contents, _T("</UL>\n\n"));
+
+//        SetCurrentOutput(Titlepage);
+        fclose(Titlepage);
+
+        if (Contents)
+        {
+//            wxFprintf(Titlepage, _T("\n</BODY></HTML>\n"));
+            fclose(Contents);
+            Contents = NULL;
+        }
+
+        if (FrameContents)
+        {
+            wxFprintf(FrameContents, _T("\n</UL>\n"));
+            wxFprintf(FrameContents, _T("</HTML>\n"));
+            fclose(FrameContents);
+            FrameContents = NULL;
+        }
+
+        if (Chapters)
+        {
+            wxFprintf(Chapters, _T("\n</FONT></BODY></HTML>\n"));
+            fclose(Chapters);
+            Chapters = NULL;
+        }
+        if (Sections)
+        {
+            wxFprintf(Sections, _T("\n</FONT></BODY></HTML>\n"));
+            fclose(Sections);
+            Sections = NULL;
+        }
+        if (Subsections && !combineSubSections)
+        {
+            wxFprintf(Subsections, _T("\n</FONT></BODY></HTML>\n"));
+            fclose(Subsections);
+            Subsections = NULL;
+        }
+        if (Subsubsections && !combineSubSections)
+        {
+            wxFprintf(Subsubsections, _T("\n</FONT></BODY></HTML>\n"));
+            fclose(Subsubsections);
+            Subsubsections = NULL;
+        }
+        if ( SectionContentsFD )
+        {
+            fclose(SectionContentsFD);
+            SectionContentsFD = NULL;
+        }
+
+        // Create a temporary file for the title page header, add some info,
+        // and concat the titlepage just generated.
+        // This is necessary in order to put the title of the document
+        // at the TOP of the file within <HEAD>, even though we only find out
+        // what it is later on.
+        FILE *tmpTitle = wxFopen(_T("title.tmp"), _T("w"));
+        if (tmpTitle)
+        {
+            if (DocumentTitle)
+            {
+                SetCurrentOutput(tmpTitle);
+                HTMLHead();
+                TexOutput(_T("\n<TITLE>"));
+                TraverseChildrenFromChunk(DocumentTitle);
+                TexOutput(_T("</TITLE></HEAD>\n"));
+            }
+            else
+            {
+                SetCurrentOutput(tmpTitle);
+                HTMLHeadTo(tmpTitle);
+                if (contentsString)
+                    wxFprintf(tmpTitle, _T("<TITLE>%s</TITLE></HEAD>\n\n"), contentsString);
+                else
+                    wxFprintf(tmpTitle, _T("<TITLE>%s</TITLE></HEAD>\n\n"), wxFileNameFromPath(FileRoot));
+            }
+
+            // Output frame information
+            if (htmlFrameContents)
+            {
+                wxChar firstFileName[300];
+                if (truncateFilenames)
+                    wxSnprintf(firstFileName, sizeof(firstFileName), _T("%s1.htm"), FileRoot);
+                else
+                    wxStrcpy(firstFileName, gs_filenames[1].c_str());
+
+                wxFprintf(tmpTitle, _T("<FRAMESET COLS=\"30%%,70%%\">\n"));
+
+                wxFprintf(tmpTitle, _T("<FRAME SRC=\"%s\">\n"), ConvertCase(wxFileNameFromPath(contentsFrameName)));
+                wxFprintf(tmpTitle, _T("<FRAME SRC=\"%s\" NAME=\"mainwindow\">\n"), ConvertCase(wxFileNameFromPath(firstFileName)));
+                wxFprintf(tmpTitle, _T("</FRAMESET>\n"));
+
+                wxFprintf(tmpTitle, _T("<NOFRAMES>\n"));
+            }
+
+            // Output <BODY...> to temporary title page
+            OutputBodyStart();
+            fflush(tmpTitle);
+
+            // Concat titlepage
+            FILE *fd = wxFopen(TitlepageName, _T("r"));
+            if (fd)
+            {
+                int ch = getc(fd);
+                while (ch != EOF)
+                {
+                    wxPutc(ch, tmpTitle);
+                    ch = getc(fd);
+                }
+                fclose(fd);
+            }
+
+            wxFprintf(tmpTitle, _T("\n</FONT></BODY>\n"));
+
+            if (htmlFrameContents)
+            {
+                wxFprintf(tmpTitle, _T("\n</NOFRAMES>\n"));
+            }
+            wxFprintf(tmpTitle, _T("\n</HTML>\n"));
+
+            fclose(tmpTitle);
+            if (wxFileExists(TitlepageName)) wxRemoveFile(TitlepageName);
+            if (!wxRenameFile(_T("title.tmp"), TitlepageName))
+            {
+                wxCopyFile(_T("title.tmp"), TitlepageName);
+                wxRemoveFile(_T("title.tmp"));
+            }
+        }
+
+        if (lastFileName) delete[] lastFileName;
+        lastFileName = NULL;
+        if (lastTopic) delete[] lastTopic;
+        lastTopic = NULL;
+
+        if (wxFileExists(ContentsName)) wxRemoveFile(ContentsName);
+
+        if (!wxRenameFile(TmpContentsName, ContentsName))
+        {
+            wxCopyFile(TmpContentsName, ContentsName);
+            wxRemoveFile(TmpContentsName);
+        }
+
+        // Generate .htx file if requested
+        if (htmlIndex)
+        {
+            wxChar htmlIndexName[300];
+            wxSnprintf(htmlIndexName, sizeof(htmlIndexName), _T("%s.htx"), FileRoot);
+            GenerateHTMLIndexFile(htmlIndexName);
+        }
+
+        // Generate HTML Help Workshop files if requested
+        if (htmlWorkshopFiles)
+        {
+            HTMLWorkshopEndContents();
+            GenerateHTMLWorkshopFiles(FileRoot);
+        }
+
+        return true;
     }
 
-    if (lastFileName) delete[] lastFileName;
-    lastFileName = NULL;
-    if (lastTopic) delete[] lastTopic;
-    lastTopic = NULL;
-
-    if (wxFileExists(ContentsName)) wxRemoveFile(ContentsName);
-
-    if (!wxRenameFile(TmpContentsName, ContentsName))
-    {
-      wxCopyFile(TmpContentsName, ContentsName);
-      wxRemoveFile(TmpContentsName);
-    }
-
-    // Generate .htx file if requested
-    if (htmlIndex)
-    {
-      wxChar htmlIndexName[300];
-      wxSnprintf(htmlIndexName, sizeof(htmlIndexName), _T("%s.htx"), FileRoot);
-      GenerateHTMLIndexFile(htmlIndexName);
-    }
-
-    // Generate HTML Help Workshop files if requested
-    if (htmlWorkshopFiles)
-    {
-      HTMLWorkshopEndContents();
-      GenerateHTMLWorkshopFiles(FileRoot);
-    }
-
-
-    return true;
-  }
-
-  return false;
+    return false;
 }
 
 // Output .htx index file

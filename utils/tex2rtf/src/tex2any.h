@@ -20,7 +20,7 @@
  * Conversion modes
  *
  */
- 
+
 #define TEX_RTF  1
 #define TEX_XLP  2
 #define TEX_HTML 3
@@ -145,7 +145,7 @@ extern wxHashTable  MacroDefs;
 extern wxStringList IgnorableInputFiles; // Ignorable \input files, e.g. psbox.tex
 
 bool read_a_line(wxChar *buf);
-bool TexLoadFile(wxChar *filename);
+bool TexLoadFile(const wxString& filename);
 int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos,
            wxChar *environment = NULL, bool parseArgToBrace = true, TexChunk *customMacroArgs = NULL);
 int ParseMacroBody(const wxChar *macro_name, TexChunk *parent, int no_args,
@@ -328,7 +328,7 @@ extern void FakeCurrentSection(wxChar *fakeSection, bool addToContents = true);
  * Local to Tex2Any library
  *
  */
- 
+
 extern wxChar *currentArgData;
 extern bool haveArgData; // If true, we're simulating the data.
 void StartSimulateArgument(wxChar *data);
@@ -385,7 +385,7 @@ void SetFontSizes(int pointSize);
  * IF one exists. Inserts zero into buffer.
  *
  */
- 
+
 void StripExtension(wxChar *buffer);
 
 /*
@@ -408,7 +408,7 @@ class TexRef: public wxObject
  * Add a reference
  *
  */
- 
+
 void AddTexRef(wxChar *name, wxChar *file = NULL, wxChar *sectionName = NULL,
          int chapter = 0, int section = 0, int subsection = 0, int subsubsection = 0);
 
@@ -828,7 +828,7 @@ extern void InitialiseColourTable(void);
 #define ltURLREF            551
 #define ltUPPERCASE         552
 #define ltUSEPACKAGE        553
-  
+
 #define ltVDOTS             570
 #define ltVERBATIMINPUT     571
 #define ltVERBATIM          572

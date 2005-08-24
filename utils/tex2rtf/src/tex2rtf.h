@@ -150,8 +150,8 @@ extern FILE *Sections;
 extern FILE *Subsections;
 extern FILE *Subsubsections;
 
-extern wxChar *InputFile;
-extern wxChar *OutputFile;
+extern wxString InputFile;
+extern wxString OutputFile;
 extern wxChar *MacroFile;
 
 extern wxChar *FileRoot;
