@@ -177,6 +177,44 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
     }
 }
 
+class wxTextSizerWrapper : public wxTextWrapper
+{
+public:
+    wxTextSizerWrapper(wxWindow *win)
+    {
+        m_win = win;
+        m_hLine = 0;
+    }
+
+    wxSizer *CreateSizer(const wxString& text, int widthMax)
+    {
+        m_sizer = new wxBoxSizer(wxVERTICAL);
+        Wrap(m_win, text, widthMax);
+        return m_sizer;
+    }
+
+protected:
+    virtual void OnOutputLine(const wxString& line)
+    {
+        if ( !line.empty() )
+        {
+            m_sizer->Add(new wxStaticText(m_win, wxID_ANY, line));
+        }
+        else // empty line, no need to create a control for it
+        {
+            if ( !m_hLine )
+                m_hLine = m_win->GetCharHeight();
+
+            m_sizer->Add(5, m_hLine);
+        }
+    }
+
+private:
+    wxWindow *m_win;
+    wxSizer *m_sizer;
+    int m_hLine;
+};
+
 wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
 {
     // I admit that this is complete bogus, but it makes
@@ -194,49 +232,35 @@ wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
     wxString text(message);
     text.Replace(_T("&"), _T("&&"));
 
-
-    class TextSizerWrapper : public wxTextWrapper
-    {
-    public:
-        TextSizerWrapper(wxWindow *win)
-        {
-            m_win = win;
-            m_hLine = 0;
-        }
-
-        wxSizer *CreateSizer(const wxString& text, int widthMax)
-        {
-            m_sizer = new wxBoxSizer(wxVERTICAL);
-            Wrap(m_win, text, widthMax);
-            return m_sizer;
-        }
-
-    protected:
-        virtual void OnOutputLine(const wxString& line)
-        {
-            if ( !line.empty() )
-            {
-                m_sizer->Add(new wxStaticText(m_win, wxID_ANY, line));
-            }
-            else // empty line, no need to create a control for it
-            {
-                if ( !m_hLine )
-                    m_hLine = m_win->GetCharHeight();
-
-                m_sizer->Add(5, m_hLine);
-            }
-        }
-
-    private:
-        wxWindow *m_win;
-        wxSizer *m_sizer;
-        int m_hLine;
-    };
-
-    TextSizerWrapper wrapper(this);
+    wxTextSizerWrapper wrapper(this);
 
     return wrapper.CreateSizer(text, widthMax);
 }
+
+class wxLabelWrapper : public wxTextWrapper
+{
+public:
+    void WrapLabel(wxWindow *text, int widthMax)
+    {
+        m_text.clear();
+        Wrap(text, text->GetLabel(), widthMax);
+        text->SetLabel(m_text);
+    }
+
+protected:
+    virtual void OnOutputLine(const wxString& line)
+    {
+        m_text += line;
+    }
+
+    virtual void OnNewLine()
+    {
+        m_text += _T('\n');
+    }
+
+private:
+    wxString m_text;
+};
 
 void
 #if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
@@ -246,32 +270,7 @@ wxStaticTextBase
 #endif
 ::Wrap(int width)
 {
-    class LabelWrapper : public wxTextWrapper
-    {
-    public:
-        void WrapLabel(wxWindow *text, int widthMax)
-        {
-            m_text.clear();
-            Wrap(text, text->GetLabel(), widthMax);
-            text->SetLabel(m_text);
-        }
-
-    protected:
-        virtual void OnOutputLine(const wxString& line)
-        {
-            m_text += line;
-        }
-
-        virtual void OnNewLine()
-        {
-            m_text += _T('\n');
-        }
-
-    private:
-        wxString m_text;
-    };
-
-    LabelWrapper wrapper;
+    wxLabelWrapper wrapper;
     wrapper.WrapLabel(this, width);
 }
 
