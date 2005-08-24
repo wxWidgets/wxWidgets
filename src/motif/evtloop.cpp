@@ -162,11 +162,13 @@ bool wxEventLoop::Dispatch()
         ProcessXEvent( &event );
     }
     else
-#ifdef __VMS
-     XtAppProcessEvent( context, XtIMTimer|XtIMAlternateInput );
-#else
-     XtAppProcessEvent( context, XtIMTimer|XtIMAlternateInput|XtIMSignal );
+    {
+        XtAppProcessEvent( context, XtIMTimer | XtIMAlternateInput
+#ifdef XtIMSignal
+                           | XtIMSignal
 #endif
+                         );
+    }
 
     return m_impl ? m_impl->GetKeepGoing() : true;
 }
