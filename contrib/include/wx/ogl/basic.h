@@ -21,7 +21,11 @@
 #endif
 
 #if wxUSE_DEPRECATED
-#include <wx/deprecated/setup.h>
+    #include <wx/deprecated/setup.h>
+#endif
+
+#ifndef wxUSE_PROLOGIO
+    #define wxUSE_PROLOGIO 0
 #endif
 
 #define OGL_VERSION     2.0
