@@ -208,13 +208,13 @@ public:
 
 #ifdef __WXGTK20__
     wxGtkIMData         *m_imData;
-#else
-#if HAVE_XIM && !defined(__WXGTK20__)
+#else // GTK 1
+#ifdef HAVE_XIM
     // XIM support for wxWidgets
     GdkIC               *m_ic;
     GdkICAttr           *m_icattr;
-#endif
-#endif
+#endif // HAVE_XIM
+#endif // GTK 2/1
 
 #ifndef __WXGTK20__
     // The area to be cleared (and not just refreshed)
