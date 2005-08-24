@@ -29,9 +29,9 @@
 
 /*
    this global setting determines what should we do if the setting FOO
-   requires BAR and BAR is not set: we can either silently define BAR
-   (default, recommended) or give an error and abort (mainly useful for
-   developers only)
+   requires BAR and BAR is not set: we can either silently unset FOO as well
+   (do this if you're trying to build the smallest possible library) or give an
+   error and abort (default as leads to least surprizing behaviour)
  */
 #define wxABORT_ON_CONFIG_ERROR
 
