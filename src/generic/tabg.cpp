@@ -1029,6 +1029,10 @@ void wxTabView::SetBackgroundColour(const wxColour& col)
   m_backgroundBrush = wxTheBrushList->FindOrCreateBrush(col, wxSOLID);
 }
 
+// this may be called with sel = zero (which doesn't match any page)
+// when wxMotif deletes a page
+// so return the first tab...
+
 void wxTabView::SetTabSelection(int sel, bool activateTool)
 {
   if ( sel==m_tabSelection )
@@ -1036,6 +1040,7 @@ void wxTabView::SetTabSelection(int sel, bool activateTool)
 
   int oldSel = m_tabSelection;
   wxTabControl *control = FindTabControlForId(sel);
+  if (sel == 0) sel=control->GetId();
   wxTabControl *oldControl = FindTabControlForId(m_tabSelection);
 
   if (!OnTabPreActivate(sel, oldSel))
@@ -1062,6 +1067,8 @@ void wxTabView::SetTabSelection(int sel, bool activateTool)
 }
 
 // Find tab control for id
+// this may be called with zero (which doesn't match any page)
+// so return the first control...
 wxTabControl *wxTabView::FindTabControlForId(int id) const
 {
   wxTabLayerList::compatibility_iterator node1 = m_layers.GetFirst();
@@ -1072,7 +1079,7 @@ wxTabControl *wxTabView::FindTabControlForId(int id) const
     while (node2)
     {
       wxTabControl *control = (wxTabControl *)node2->GetData();
-      if (control->GetId() == id)
+      if (control->GetId() == id || id == 0)
         return control;
       node2 = node2->GetNext();
     }
