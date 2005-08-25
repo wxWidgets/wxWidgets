@@ -149,7 +149,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
     else
     {
         PangoFontFamily **families;
-        PangoFontFamily  *family;
+        PangoFontFamily  *family = NULL;
         int n_families;
         pango_context_list_families(
 #ifdef __WXGTK20__
@@ -175,7 +175,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         //BCI: Cache the wxFontFamily inside the class. Validate cache with
         //BCI: g_ascii_strcasecmp(pango_font_description_get_family(description), pango_font_family_get_name(family)) == 0
 
-        if (pango_font_family_is_monospace( family ))
+        if (family != NULL && pango_font_family_is_monospace( family ))
             ret = wxFONTFAMILY_TELETYPE; // is deemed a monospace font by pango
     }
 #endif // pango_font_family_is_monospace
