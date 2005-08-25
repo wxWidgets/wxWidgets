@@ -188,7 +188,7 @@ wxSlider::Create(wxWindow *parent,
             }
     };
 
-    wxASSERT_MSG( !(style & wxSL_VERTICAL) | !(style & wxSL_HORIZONTAL),
+    wxASSERT_MSG( !(style & wxSL_VERTICAL) || !(style & wxSL_HORIZONTAL),
                     _T("incompatible slider direction and orientation") );
 
 

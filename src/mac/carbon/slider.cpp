@@ -84,7 +84,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
             }
     };
 
-    wxASSERT_MSG( !(style & wxSL_VERTICAL) | !(style & wxSL_HORIZONTAL),
+    wxASSERT_MSG( !(style & wxSL_VERTICAL) || !(style & wxSL_HORIZONTAL),
         _T("incompatible slider direction and orientation") );
 
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
@@ -365,7 +365,7 @@ wxSize wxSlider::DoGetBestSize() const
             textwidth = maxtwidth;
         }
         else {
-            textwidth = mintwidth; 
+            textwidth = mintwidth;
         }
     }
 
@@ -421,7 +421,7 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
         GetTextExtent(text, &minValWidth, &textheight);
         text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
         GetTextExtent(text, &maxValWidth, &ht);
- 
+
         if(ht > textheight) {
             textheight = ht;
         }
