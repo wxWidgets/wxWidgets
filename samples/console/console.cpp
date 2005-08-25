@@ -85,7 +85,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_DYNLIB
+    #define TEST_DIR
 #endif
 
 // some tests are interactive, define this to run them
@@ -201,7 +201,7 @@ static void TestCmdLineConvert()
 #ifdef __UNIX__
     static const wxChar *ROOTDIR = _T("/");
     static const wxChar *TESTDIR = _T("/usr/local/share");
-#elif defined(__WXMSW__)
+#elif defined(__WXMSW__) || defined(__DOS__)
     static const wxChar *ROOTDIR = _T("c:\\");
     static const wxChar *TESTDIR = _T("d:\\");
 #else
