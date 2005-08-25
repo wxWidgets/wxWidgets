@@ -1975,7 +1975,10 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             // it
                             return false;
                         }
-                        else if ( lDlgCode & DLGC_BUTTON )
+
+                        // currently active button should get enter press even
+                        // if there is a default button elsewhere
+                        if ( lDlgCode & DLGC_DEFPUSHBUTTON )
                         {
                             // let IsDialogMessage() handle this for all
                             // buttons except the owner-drawn ones which it
@@ -1984,16 +1987,15 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             if ( (style & BS_OWNERDRAW) == BS_OWNERDRAW )
                             {
                                 // emulate the button click
-                                wxWindow *btn = wxFindWinFromHandle((WXHWND)msg->hwnd);
+                                wxWindow *
+                                    btn = wxFindWinFromHandle((WXHWND)msg->hwnd);
                                 if ( btn )
                                     btn->MSWCommand(BN_CLICKED, 0 /* unused */);
                             }
 
                             bProcess = false;
                         }
-                        // FIXME: this should be handled by
-                        //        wxNavigationKeyEvent handler and not here!
-                        else
+                        else // not a button itself
                         {
 #if wxUSE_BUTTON
                             wxButton *btn = wxDynamicCast(GetDefaultItem(),
