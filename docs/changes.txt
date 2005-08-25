@@ -43,10 +43,6 @@ wxMSW:
 - Added wxDynamicLibrary::GetSymbolAorW().
 - Fixed default size of wxStaticText controls with border being too small.
 
-wxWinCE:
-
-- RTTI and exceptions enabled by default.
-
 wxGTK:
 
 - ShowFullScreen() shows the window if it was still hidden (rpedroso).

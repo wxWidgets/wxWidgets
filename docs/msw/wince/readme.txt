@@ -87,11 +87,6 @@ To compile using the emulator on eVC++3:
   WIN32 (WCE x86 Debug) configuration, and select Pocket PC 2002 and
   Pocket PC 2002 Emulation as before.
 
-Note: since wxWidgets/CE 2.6.2 release RTTI (and exceptions) are enabled
-by default targeting eVC environment. This can lead to build problems with
-eVC3 we tried to compensate. It is possible that you still have to remove
-some compiler flags (like /EHsc) by hand after opening in IDE.
-
 To compile using the emulator on eVC++4:
 
 - Open build/wince/wx.vcw, select the
