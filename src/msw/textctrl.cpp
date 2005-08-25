@@ -358,9 +358,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                 // only give the error msg once if the DLL can't be loaded
                 static bool s_errorGiven = false; // MT ok as only used by GUI
 
-                wxLogError(_("Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"));
+                if ( !s_errorGiven )
+                {
+                    wxLogError(_("Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"));
 
-                s_errorGiven = true;
+                    s_errorGiven = true;
+                }
 
                 m_verRichEdit = 0;
             }
