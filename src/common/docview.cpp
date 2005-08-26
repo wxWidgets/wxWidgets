@@ -571,7 +571,7 @@ bool wxDocument::DoSaveDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    wxSTD ofstream store(file.mb_str());
+    wxSTD ofstream store(file.mb_str(), wxSTD ios::binary);
     if (store.fail() || store.bad())
 #else
     wxFileOutputStream store(file);
@@ -597,7 +597,7 @@ bool wxDocument::DoSaveDocument(const wxString& file)
 bool wxDocument::DoOpenDocument(const wxString& file)
 {
 #if wxUSE_STD_IOSTREAM
-    wxSTD ifstream store(file.mb_str());
+    wxSTD ifstream store(file.mb_str(), wxSTD ios::binary);
     if (!store.fail() && !store.bad())
 #else
     wxFileInputStream store(file);
