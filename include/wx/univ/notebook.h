@@ -68,7 +68,7 @@ public:
     // --------------------------------------
 
     virtual int SetSelection(size_t nPage);
-    virtual int GetSelection() const { return m_sel; }
+    virtual int GetSelection() const { return (int) m_sel; }
 
     virtual bool SetPageText(size_t nPage, const wxString& strText);
     virtual wxString GetPageText(size_t nPage) const;
