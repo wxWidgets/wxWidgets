@@ -182,6 +182,7 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
 #if wxMAC_USE_CORE_GRAPHICS
             CGContextTranslateCTM( pageContext , 0 , rPage.bottom - rPage.top ) ;
             CGContextScaleCTM( pageContext , 1 , -1 ) ;
+            CGContextSaveGState( pageContext ) ;
 #else
             dc->m_macLocalOrigin.x = (int) rPage.left;
             dc->m_macLocalOrigin.y = (int) rPage.top;
@@ -231,6 +232,10 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 
 wxPrinterDC::~wxPrinterDC(void)
 {
+#if wxMAC_USE_CORE_GRAPHICS
+    // this context was borrowed
+    ((wxMacCGContext*)(m_graphicContext))->SetNativeContext( NULL ) ;
+#endif
     delete m_nativePrinterDC ;
 }
 
