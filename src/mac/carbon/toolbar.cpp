@@ -156,6 +156,16 @@ public:
     {
         return m_toolbarItemRef ;
     }
+    
+    void SetIndex( CFIndex idx ) 
+    {
+        m_index = idx ;
+    }
+
+    CFIndex GetIndex() const 
+    {
+        return m_index ;
+    }
 #endif
 
 private :
@@ -164,11 +174,14 @@ private :
         m_controlHandle = NULL ;
 #if wxMAC_USE_NATIVE_TOOLBAR
         m_toolbarItemRef = NULL ;
+        m_index = -1 ;
 #endif
     }
     ControlRef m_controlHandle ;
 #if wxMAC_USE_NATIVE_TOOLBAR
     HIToolbarItemRef m_toolbarItemRef ;
+    // position in its toolbar, -1 means not inserted
+    CFIndex m_index ;
 #endif
     wxCoord     m_x;
     wxCoord     m_y;
@@ -280,9 +293,11 @@ static pascal OSStatus wxMacToolBarCommandEventHandler( EventHandlerCallRef hand
                     wxToolBar   *tbar = ( wxToolBar * ) ( tbartool->GetToolBar() );
                     if ( tbartool->CanBeToggled() )
                     {
-                        tbar->ToggleTool(toolID, !tbartool->IsToggled() );
+                        if ( tbar )
+                            tbar->ToggleTool(toolID, !tbartool->IsToggled() );
                     }
-                    tbar->OnLeftClick( toolID , tbartool -> IsToggled() ) ;
+                    if ( tbar )
+                        tbar->OnLeftClick( toolID , tbartool -> IsToggled() ) ;
                     result = noErr;
                 }
             }
@@ -524,7 +539,7 @@ void wxToolBar::Init()
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {
-    if ( !wxToolBarBase::Create( parent , id , pos , size , style ) )
+    if ( !wxToolBarBase::Create( parent , id , pos , size , style, wxDefaultValidator, name ) )
         return false ;
 
     OSStatus err = 0;
@@ -761,6 +776,18 @@ bool wxToolBar::Realize()
     if (m_tools.GetCount() == 0)
         return false;
 
+    OSStatus err = noErr ;
+#if wxMAC_USE_NATIVE_TOOLBAR
+    // remove all tools, no way to determine how many there are in a toolbar, so just a high number :-(
+    if ( m_macHIToolbarRef != NULL )
+    {
+        for ( CFIndex i = 0 ; i < 100 ; ++i )
+        {
+            err = HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef , i ) ;
+        }
+    }
+#endif
+    
     int x = m_xMargin + kwxMacToolBarLeftMargin;
     int y = m_yMargin + kwxMacToolBarTopMargin;
 
@@ -797,6 +824,9 @@ bool wxToolBar::Realize()
     bool    setChoiceInGroup = false;
 
     node = m_tools.GetFirst();
+    
+    CFIndex currentPosition = 0 ;
+    
     while ( node != NULL )
     {
         wxToolBarTool   *tool = (wxToolBarTool *) node->GetData();
@@ -839,9 +869,11 @@ bool wxToolBar::Realize()
             HIToolbarItemRef    hiItemRef = tool->GetToolbarItemRef();
             if ( hiItemRef != NULL )
             {
-                OSStatus    result = HIToolbarAppendItem( (HIToolbarRef) m_macHIToolbarRef, hiItemRef );
+                OSStatus result = HIToolbarInsertItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, hiItemRef , currentPosition ) ;                
                 if ( result == 0 )
                 {
+                    tool->SetIndex( currentPosition ) ;
+                    currentPosition++ ;
                     InstallEventHandler( HIObjectGetEventTarget(hiItemRef), GetwxMacToolBarEventHandlerUPP(),
                                          GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
                 }
@@ -935,6 +967,9 @@ bool wxToolBar::Realize()
     SetSize( maxWidth, maxHeight );
     InvalidateBestSize();
 #endif
+
+    SetBestFittingSize();
+
     return true;
 }
 
@@ -1094,7 +1129,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
                 {
                     HIToolbarItemSetLabel( item, wxMacCFStringHolder(tool->GetLabel(), m_font.GetEncoding()) );
                     HIToolbarItemSetIconRef( item, info.u.iconRef );
-                    HIToolbarItemSetCommandID( item, tool->GetId() );
+                    HIToolbarItemSetCommandID( item, kHIToolbarCommandPressAction );
                     tool->SetToolbarItemRef( item );
                 }
 #endif
@@ -1201,6 +1236,8 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
     wxSize sz = ((wxToolBarTool*)tool)->GetSize() ;
 
     tool->Detach();
+    
+    CFIndex removeIndex = tool->GetIndex() ;
 
     switch ( tool->GetStyle() )
     {
@@ -1217,8 +1254,11 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
             {
                 DisposeControl( (ControlRef) tool->GetControlHandle() ) ;
 #if wxMAC_USE_NATIVE_TOOLBAR
-				if ( tool->GetToolbarItemRef() )
-                	CFRelease( tool->GetToolbarItemRef() ) ;
+				if ( removeIndex != -1 && m_macHIToolbarRef )
+                {
+                	HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef , removeIndex ) ;
+                    tool->SetIndex( -1 ) ;
+                }
 #endif
                 tool->ClearControl() ;
             }
@@ -1241,6 +1281,12 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
             pt.x -= sz.x ;
 
         tool2->SetPosition( pt ) ;
+    
+#if wxMAC_USE_NATIVE_TOOLBAR
+        if ( removeIndex != -1 && tool2->GetIndex() > removeIndex )
+            tool2->SetIndex( tool2->GetIndex() - 1 ) ;
+#endif
+        
     }
 
     InvalidateBestSize();
