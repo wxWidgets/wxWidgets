@@ -34,11 +34,6 @@ using namespace std ;
 #endif
 
 #include "wx/mac/private.h"
-#include <ATSUnicode.h>
-#include <TextCommon.h>
-#include <TextEncodingConverter.h>
-#include <FixMath.h>
-#include <CGContext.h>
 
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
@@ -300,9 +295,11 @@ CGContextRef wxMacCGContext::GetNativeContext()
 
 void wxMacCGContext::SetNativeContext( CGContextRef cg ) 
 { 
-    wxASSERT( m_cgContext == NULL ) ;
+    // we allow either setting or clearing but not replacing
+    wxASSERT( m_cgContext == NULL || cg == NULL ) ;
+    if ( cg )
+        CGContextSaveGState( cg ) ;
     m_cgContext = cg ; 
-    CGContextSaveGState( m_cgContext ) ;
 }
 
 void wxMacCGContext::SetPen( const wxPen &pen )
@@ -671,8 +668,8 @@ void wxDC::DestroyClippingRegion()
     CGContextRef cgContext = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
     CGContextRestoreGState( cgContext );    
     CGContextSaveGState( cgContext );    
-    SetPen( m_pen ) ;
-    SetBrush( m_brush ) ;
+    m_graphicContext->SetPen( m_pen ) ;
+    m_graphicContext->SetBrush( m_brush ) ;
     m_clipping = FALSE;
 }
 
