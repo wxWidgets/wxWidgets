@@ -682,6 +682,7 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                  );
 
     dialog.SetDirectory(wxGetHomeDir());
+    dialog.CentreOnParent();
 
     if (dialog.ShowModal() == wxID_OK)
     {
