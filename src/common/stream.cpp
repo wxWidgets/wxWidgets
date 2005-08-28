@@ -434,7 +434,7 @@ size_t wxStreamBuffer::Read(wxStreamBuffer *dbuf)
 
     do
     {
-        nRead = Read(dbuf, WXSIZEOF(buf));
+        nRead = Read(buf, WXSIZEOF(buf));
         if ( nRead )
         {
             nRead = dbuf->Write(buf, nRead);

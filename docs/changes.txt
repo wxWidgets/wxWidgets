@@ -17,6 +17,7 @@ All:
 - wxABI_VERSION, see 'Backward Compatibility' topic overview in the manual.
 - Added wxLongLong::ToDouble()
 - Added wxDateTime::[Make]FromTimezone(), fixed several TZ-related bugs
+- Fixed bug in wxStreamBuffer::Read(wxStreamBuffer *) (Paul Cornett)
 
 All (GUI):
 
