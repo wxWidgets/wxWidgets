@@ -166,6 +166,9 @@ public:
     void AssociateHandle(WXWidget handle);
     void DissociateHandle();
 
+    // does this window have deferred position and/or size?
+    bool IsSizeDeferred() const;
+
 
     // implementation from now on
     // ==========================

@@ -1450,6 +1450,17 @@ void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 // moving and resizing
 // ---------------------------------------------------------------------------
 
+bool wxWindowMSW::IsSizeDeferred() const
+{
+#if USE_DEFERRED_SIZING
+    if ( m_pendingPosition != wxDefaultPosition ||
+         m_pendingSize     != wxDefaultSize )
+        return true;
+#endif // USE_DEFERRED_SIZING
+
+    return false;
+}
+
 // Get total size
 void wxWindowMSW::DoGetSize(int *x, int *y) const
 {
@@ -4228,7 +4239,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
                 useDefer = true;
         }
     }
-#endif
+#endif // USE_DEFERRED_SIZING
 
     // update this window size
     bool processed = false;
