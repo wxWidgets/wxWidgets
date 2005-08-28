@@ -134,6 +134,19 @@ wxLongLongWx& wxLongLongWx::Assign(double d)
     return *this;
 }
 
+double wxLongLongWx::ToDouble() const
+{
+    double d = m_hi;
+    d *= 1.0 + (double)ULONG_MAX;
+    d += m_lo;
+
+#ifdef wxLONGLONG_TEST_MODE
+    wxASSERT( d == m_ll );
+#endif // wxLONGLONG_TEST_MODE
+
+    return d;
+}
+
 wxLongLongWx wxLongLongWx::operator<<(int shift) const
 {
     wxLongLongWx ll(*this);

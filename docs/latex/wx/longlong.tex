@@ -46,17 +46,20 @@ No base class
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxLongLong::wxLongLong}\label{wxlonglongwxlonglongdef}
 
 \func{}{wxLongLong}{\void}
 
 Default constructor initializes the object to 0.
 
+
 \membersection{wxLongLong::wxLongLong}\label{wxlonglongwxlonglongll}
 
 \func{}{wxLongLong}{\param{wxLongLong\_t }{ll}}
 
 Constructor from native long long (only for compilers supporting it).
+
 
 \membersection{wxLongLong::wxLongLong}\label{wxlonglongwxlonglong}
 
@@ -65,11 +68,13 @@ Constructor from native long long (only for compilers supporting it).
 Constructor from 2 longs: the high and low part are combined into one
 wxLongLong.
 
+
 \membersection{wxLongLong::operator=}\label{wxlonglongoperatorassign}
 
 \func{wxLongLong\& operator}{operator=}{\param{wxLongLong\_t }{ll}}
 
 Assignment operator from native long long (only for compilers supporting it).
+
 
 \membersection{wxLongLong::Abs}\label{wxlonglongabs}
 
@@ -80,6 +85,7 @@ Assignment operator from native long long (only for compilers supporting it).
 Returns an absolute value of wxLongLong - either making a copy (const version)
 or modifying it in place (the second one).  Not in wxULongLong.
 
+
 \membersection{wxLongLong::Assign}\label{wxlonglongassign}
 
 \func{wxLongLong\&}{Assign}{\param{double }{d}}
@@ -88,11 +94,13 @@ This allows to convert a double value to wxLongLong type. Such conversion is
 not always possible in which case the result will be silently truncated in a
 platform-dependent way.  Not in wxULongLong.
 
+
 \membersection{wxLongLong::GetHi}\label{wxlonglonggethi}
 
 \constfunc{long}{GetHi}{\void}
 
 Returns the high 32 bits of 64 bit integer.
+
 
 \membersection{wxLongLong::GetLo}\label{wxlonglonggetlo}
 
@@ -100,11 +108,20 @@ Returns the high 32 bits of 64 bit integer.
 
 Returns the low 32 bits of 64 bit integer.
 
+
 \membersection{wxLongLong::GetValue}\label{wxlonglonggetvalue}
 
 \constfunc{wxLongLong\_t}{GetValue}{\void}
 
 Convert to native long long (only for compilers supporting it)
+
+
+\membersection{wxLongLong::ToDouble}\label{wxlonglonggetdouble}
+
+\constfunc{double}{ToDouble}{\void}
+
+Returns the value as \texttt{double}.
+
 
 \membersection{wxLongLong::ToLong}\label{wxlonglongtolong}
 
@@ -114,11 +131,13 @@ Truncate wxLongLong to long. If the conversion loses data (i.e. the wxLongLong
 value is outside the range of built-in long type), an assert will be triggered
 in debug mode.
 
+
 \membersection{wxLongLong::ToString}\label{wxlonglongtostring}
 
 \constfunc{wxString}{ToString}{\void}
 
 Returns the string representation of a wxLongLong.
+
 
 \membersection{wxLongLong::operator$+$}\label{wxlonglongoperatorplus}
 
@@ -126,11 +145,13 @@ Returns the string representation of a wxLongLong.
 
 Adds 2 wxLongLongs together and returns the result.
 
+
 \membersection{wxLongLong::operator$+=$}\label{wxlonglongoperatorplusassign}
 
 \func{wxLongLong\&}{operator+}{\param{const wxLongLong\& }{ll}}
 
 Add another wxLongLong to this one.
+
 
 \membersection{wxLongLong::operator$++$}\label{wxlonglongoperatorinc}
 
@@ -140,11 +161,13 @@ Add another wxLongLong to this one.
 
 Pre/post increment operator.
 
+
 \membersection{wxLongLong::operator$-$}\label{wxlonglongoperatorunaryminus}
 
 \constfunc{wxLongLong}{operator$-$}{\void}
 
 Returns the value of this wxLongLong with opposite sign.  Not in wxULongLong.
+
 
 \membersection{wxLongLong::operator$-$}\label{wxlonglongoperatorminus}
 
@@ -152,11 +175,13 @@ Returns the value of this wxLongLong with opposite sign.  Not in wxULongLong.
 
 Subtracts 2 wxLongLongs and returns the result.
 
+
 \membersection{wxLongLong::operator$-=$}\label{wxlonglongoperatorminusassign}
 
 \func{wxLongLong\&}{operator-}{\param{const wxLongLong\& }{ll}}
 
 Subtracts another wxLongLong from this one.
+
 
 \membersection{wxLongLong::operator$--$}\label{wxlonglongoperatordec}
 

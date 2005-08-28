@@ -15,6 +15,7 @@ All:
 - Added wxImage::RotateHue() and RGB <-> HSV conversions (John Anderson).
 - Fixed compilation with IBM xlC compiler.
 - wxABI_VERSION, see 'Backward Compatibility' topic overview in the manual.
+- Added wxLongLong::ToDouble()
 
 All (GUI):
 
