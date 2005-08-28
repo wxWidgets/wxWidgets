@@ -547,11 +547,13 @@ wxMenuItem *MyFrame::GetLastMenuItem() const
 void MyFrame::LogMenuEvent(const wxCommandEvent& event)
 {
     int id = event.GetId();
-    if ( !GetMenuBar()->FindItem(id) )
-        return;
 
     wxString msg = wxString::Format(_T("Menu command %d"), id);
-    if ( GetMenuBar()->FindItem(id)->IsCheckable() )
+
+    // catch all checkable menubar items and also the check item from the popup
+    // menu
+    wxMenuItem *item = GetMenuBar()->FindItem(id);
+    if ( (item && item->IsCheckable()) || id == Menu_Popup_ToBeChecked )
     {
         msg += wxString::Format(_T(" (the item is currently %schecked)"),
                                 event.IsChecked() ? _T("") : _T("not "));
