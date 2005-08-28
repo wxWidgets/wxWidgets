@@ -123,6 +123,7 @@ void wxButton::SetDefaultShadowThicknessAndResize()
     if( best != actual )
         SetSize( best );
 #endif
+    InvalidateBestSize();
 }
 
 
@@ -182,6 +183,19 @@ wxSize wxButton::DoGetBestSize() const
     return best;
 }
 
+wxSize wxButton::GetMinSize() const
+{
+    if( wxMotifLargeButtons() )
+        return OldGetMinSize();
+
+    return DoGetBestSize();
+}
+
+wxSize wxButton::OldGetMinSize() const
+{
+    return OldGetBestSize();
+}
+
 wxSize wxButton::OldGetBestSize() const
 {
     Dimension xmargin, ymargin, highlight, shadow, defThickness;
@@ -199,6 +213,7 @@ wxSize wxButton::OldGetBestSize() const
 
     int margin = highlight * 2 +
         ( defThickness ? ( ( shadow + defThickness ) * 4 ) : ( shadow * 2 ) );
+
     wxSize best( x + xmargin * 2 + margin,
                  y + ymargin * 2 + margin );
 

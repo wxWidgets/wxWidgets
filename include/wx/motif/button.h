@@ -49,7 +49,9 @@ public:
     // Implementation
 private:
     virtual wxSize DoGetBestSize() const;
+    virtual wxSize GetMinSize() const;
     wxSize OldGetBestSize() const;
+    wxSize OldGetMinSize() const;
     void SetDefaultShadowThicknessAndResize();
 };
 
