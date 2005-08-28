@@ -281,11 +281,6 @@ wxFrame::~wxFrame()
     if (m_frameMenuBar)
     {
         m_frameMenuBar->DestroyMenuBar();
-
-        // Hack to stop core dump on Ultrix, OSF, for some strange reason.
-#if MOTIF_MENUBAR_DELETE_FIX
-        GetMenuBar()->SetMainWidget((WXWidget) NULL);
-#endif
         delete m_frameMenuBar;
         m_frameMenuBar = NULL;
     }
