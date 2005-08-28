@@ -11,18 +11,22 @@
 #ifndef SCINTILLA_H
 #define SCINTILLA_H
 
+#ifdef PLAT_WIN
 #if PLAT_WIN
 // Return false on failure:
 bool Scintilla_RegisterClasses(void *hInstance);
 bool Scintilla_ReleaseResources();
+#endif
 #endif
 int Scintilla_LinkLexers();
 
 // Here should be placed typedefs for uptr_t, an unsigned integer type large enough to
 // hold a pointer and sptr_t, a signed integer large enough to hold a pointer.
 // May need to be changed for 64 bit platforms.
+#ifdef _MSC_VER
 #if _MSC_VER >= 1300
 #include <BaseTsd.h>
+#endif
 #endif
 #ifdef MAXULONG_PTR
 typedef ULONG_PTR uptr_t;
