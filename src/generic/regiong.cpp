@@ -28,6 +28,7 @@ struct REGION
 public:
     // Default constructor initializes nothing
     REGION() {}
+
     REGION(const wxRect& rect)
     {
         rects = &extents;
@@ -38,7 +39,11 @@ public:
         extents.y2 = rect.y + rect.height;
         size = 1;
     }
-    BoxPtr GetBox(int i) { if(i<numRects) return rects+i; else return NULL; }
+
+    BoxPtr GetBox(int i)
+    {
+        return i < numRects ? rects + i : NULL;
+    }
 
     // X.org methods
     static bool XClipBox(
@@ -159,12 +164,16 @@ protected:
 // ========================================================================
 // wxRegionRefData
 // ========================================================================
-class wxRegionRefData : public wxObjectRefData, public REGION
+
+class wxRegionRefData : public wxObjectRefData,
+                        public REGION
 {
 public:
     wxRegionRefData()
-    /* XCreateRegion */
-    {   size = 1;
+        : wxObjectRefData(),
+          REGION()
+    {
+        size = 1;
         numRects = 0;
         rects = ( BOX * )malloc( (unsigned) sizeof( BOX ));
         extents.x1 = 0;
@@ -172,10 +181,12 @@ public:
         extents.y1 = 0;
         extents.y2 = 0;
     }
+
     wxRegionRefData(const wxPoint& topLeft, const wxPoint& bottomRight)
-    :   wxObjectRefData()
-    ,   REGION()
-    {   rects = (BOX*)malloc(sizeof(BOX));
+        : wxObjectRefData(),
+          REGION()
+    {
+        rects = (BOX*)malloc(sizeof(BOX));
         size = 1;
         numRects = 1;
         extents.x1 = topLeft.x;
@@ -184,25 +195,31 @@ public:
         extents.y2 = bottomRight.y;
         *rects = extents;
     }
+
     wxRegionRefData(const wxRect& rect)
-    :   wxObjectRefData()
-    ,   REGION(rect)
-    {   rects = (BOX*)malloc(sizeof(BOX));
+        : wxObjectRefData(),
+          REGION(rect)
+    {
+        rects = (BOX*)malloc(sizeof(BOX));
         *rects = extents;
     }
+
     wxRegionRefData(const wxRegionRefData& refData)
-    :   wxObjectRefData()
-    ,   REGION()
+        : wxObjectRefData(),
+          REGION()
     {
         size = refData.size;
         numRects = refData.numRects;
         rects = (Box*)malloc(numRects*sizeof(Box));
+        memcpy(rects, refData.rects, numRects*sizeof(Box));
         extents = refData.extents;
     }
+
     ~wxRegionRefData()
     {
         free(rects);
     }
+
 private:
     // Don't allow this
     wxRegionRefData(const REGION&);
