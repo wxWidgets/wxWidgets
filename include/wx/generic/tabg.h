@@ -107,7 +107,7 @@ public:
 
   inline int GetNumberOfLayers() const { return m_layers.GetCount(); }
 #if WXWIN_COMPATIBILITY_2_4
-  inline wxList& GetLayers() { return (wxList&)m_layers; }
+  inline wxList& GetLayers() { return *(wxList *)&m_layers; }
 #else
   inline wxTabLayerList& GetLayers() { return m_layers; }
 #endif
