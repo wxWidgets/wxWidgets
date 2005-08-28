@@ -90,7 +90,7 @@ Now you only need to create an object of this class and pass it to, for example,
 \begin{verbatim}
 wxString command;
 if ( filetype->GetOpenCommand(&command,
-                              MailMessageParamaters("foo.txt", "text/plain")) )
+                              MailMessageParameters("foo.txt", "text/plain")) )
 {
     // the full command for opening the text documents is in 'command'
     // (it might be "notepad foo.txt" under Windows or "cat foo.txt" under Unix)

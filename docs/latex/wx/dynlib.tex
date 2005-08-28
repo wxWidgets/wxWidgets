@@ -45,7 +45,7 @@ Constructor. Second form calls \helpref{Load}{wxdynamiclibraryload}.
 
 \membersection{wxDynamicLibrary::CanonicalizeName}\label{wxdynamiclibrarycanonicalizename}
 
-\func{wxString}{CanonicalizeName}{\param{const wxString\& }{name}, \param{wxDynamicLibraryCategory}{ cat = wxDL\_LIBRARY}}
+\func{static wxString}{CanonicalizeName}{\param{const wxString\& }{name}, \param{wxDynamicLibraryCategory}{ cat = wxDL\_LIBRARY}}
 
 Returns the platform-specific full name for the library called \arg{name}. E.g.
 it adds a {\tt ".dll"} extension under Windows and {\tt "lib"} prefix and 
@@ -66,7 +66,7 @@ The possible values for \arg{cat} are:
 
 \membersection{wxDynamicLibrary::CanonicalizePluginName}\label{wxdynamiclibrarycanonicalizepluginname}
 
-\func{wxString}{CanonicalizePluginName}{\param{const wxString\& }{name}, \param{wxPluginCategory}{ cat = wxDL\_PLUGIN\_GUI}}
+\func{static wxString}{CanonicalizePluginName}{\param{const wxString\& }{name}, \param{wxPluginCategory}{ cat = wxDL\_PLUGIN\_GUI}}
 
 This function does the same thing as 
 \helpref{CanonicalizeName}{wxdynamiclibrarycanonicalizename} but for wxWidgets
@@ -89,6 +89,14 @@ The possible values for \arg{cat} are:
 Detaches this object from its library handle, i.e. the object will not unload
 the library any longer in its destructor but it is now the callers
 responsibility to do this using \helpref{Unload}{wxdynamiclibraryunload}.
+
+
+\membersection{wxDynamicLibrary::GetProgramHandle}\label{wxdynamiclibrarygetprogramhandle}
+
+\func{static wxDllType}{GetProgramHandle}{\void}
+
+Return a valid handle for the main program itself or \texttt{NULL} if symbols
+from the main program can't be loaded on this platform.
 
 
 \membersection{wxDynamicLibrary::GetSymbol}\label{wxdynamiclibrarygetsymbol}

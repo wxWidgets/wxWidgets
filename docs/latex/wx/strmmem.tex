@@ -26,11 +26,11 @@
 
 Initializes a new read-only memory stream which will use the specified buffer
 {\it data} of length {\it len}. The stream does not take ownership of the 
-buffer, i.e. that it will not delete in its destructor.
+buffer, i.e. the buffer will not be deleted in its destructor.
 
 \func{}{wxMemoryInputStream}{\param{const wxMemoryOutputStream&}{ stream}}
 
-Creates a new read-only memory stream, initilalizing it with the
+Creates a new read-only memory stream, initializing it with the
 data from the given output stream \arg{stream}.
 
 \membersection{wxMemoryInputStream::\destruct{wxMemoryInputStream}}\label{wxmemoryinputstreamdtor}

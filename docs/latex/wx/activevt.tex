@@ -24,17 +24,17 @@ function that takes a wxActivateEvent argument.
 \twocolitem{{\bf EVT\_HIBERNATE(func)}}{Process a hibernate event, supplying the member function.
 This event applies to wxApp only, and only on Windows SmartPhone and PocketPC. It is generated when the
 system is low on memory; the application should free up as much memory as possible, and restore
-full working when it receives a wxEVT\_ACTIVATE or wxEVT\_ACTIVATE\_APP event.}
+full working state when it receives a wxEVT\_ACTIVATE or wxEVT\_ACTIVATE\_APP event.}
 \end{twocollist}%
 
 \wxheading{Remarks}
 
-A top-level window (a dialog or frame) receives an activate event when is
+A top-level window (a dialog or frame) receives an activate event when it is
 being activated or deactivated. This is indicated visually by the title
 bar changing colour, and a subwindow gaining the keyboard focus.
 
 An application is activated or deactivated when one of its frames becomes activated,
-or a frame becomes inactivate resulting in all application frames being inactive. (Windows only)
+or a frame becomes inactivated resulting in all application frames being inactive. (Windows only)
 
 Please note that usually you should call \helpref{event.Skip()}{wxeventskip} in
 your handlers for these events as not doing so can result in strange effects.
