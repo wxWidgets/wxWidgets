@@ -45,6 +45,7 @@ wxMSW:
 - Fixed asynchronous playback of large sound files in wxSound.
 - Added wxDynamicLibrary::GetSymbolAorW().
 - Fixed default size of wxStaticText controls with border being too small.
+- Fixed bugs with wxStatusBar positioning (with or withour sizers) (Jamie Gadd)
 
 wxGTK:
 

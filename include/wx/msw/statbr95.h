@@ -68,6 +68,10 @@ protected:
     // override base class virtual
     void DoMoveWindow(int x, int y, int width, int height);
 
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
+                                    WXWPARAM wParam,
+                                    WXLPARAM lParam);
+
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBar95)
 };
