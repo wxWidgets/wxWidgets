@@ -592,7 +592,11 @@ void Window::SetCursor(Cursor curs) {
 #else
        wxCursor wc = wxCursor(cursorId) ;
 #endif
-       GETWIN(id)->SetCursor(wc);
+       if(curs != cursorLast)
+       {
+           GETWIN(id)->SetCursor(wc);
+           cursorLast = curs;
+       }
 }
 
 
