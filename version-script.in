@@ -10,6 +10,8 @@
 
 @WX_VERSION_TAG@.2 {
     global:
+        *wxChoice*GetCurrentSelection*;
+        *wxComboBox*GetCurrentSelection*;
         *wxDateTime*FromTimezone*;
         *wxDialog*GetEscapeId*;
         *wxEVT_MEDIA_LOADED*;
