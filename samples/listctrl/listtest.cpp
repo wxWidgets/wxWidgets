@@ -722,7 +722,11 @@ void MyListCtrl::SetColumnImage(int col, int image)
 void MyListCtrl::OnColClick(wxListEvent& event)
 {
     int col = event.GetColumn();
-    SetColumnImage(col, 0);
+
+    // set or unset image
+    static x = false;
+    x = !x;
+    SetColumnImage(col, x ? 0 : -1);
 
     wxLogMessage( wxT("OnColumnClick at %d."), col );
 }
