@@ -80,7 +80,7 @@ static const unsigned int DEFAULT_MAJOR_DIM = 3;
 class RadioWidgetsPage : public WidgetsPage
 {
 public:
-    RadioWidgetsPage(wxBookCtrl *book, wxImageList *imaglist);
+    RadioWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
     virtual ~RadioWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_radio; }
@@ -160,7 +160,7 @@ END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, _T("Radio"));
 
-RadioWidgetsPage::RadioWidgetsPage(wxBookCtrl *book,
+RadioWidgetsPage::RadioWidgetsPage(wxBookCtrlBase *book,
                                    wxImageList *imaglist)
                   : WidgetsPage(book)
 {

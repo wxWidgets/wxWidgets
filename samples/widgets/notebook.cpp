@@ -86,7 +86,7 @@ enum Orient
 class NotebookWidgetsPage : public WidgetsPage
 {
 public:
-    NotebookWidgetsPage(wxBookCtrl *book, wxImageList *imaglist);
+    NotebookWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
     virtual ~NotebookWidgetsPage();
 
     virtual wxControl *GetWidget() const { return m_notebook; }
@@ -192,7 +192,7 @@ END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(NotebookWidgetsPage, _T("Notebook"));
 
-NotebookWidgetsPage::NotebookWidgetsPage(wxBookCtrl *book,
+NotebookWidgetsPage::NotebookWidgetsPage(wxBookCtrlBase *book,
                                          wxImageList *imaglist)
                   : WidgetsPage(book)
 {

@@ -73,7 +73,7 @@ enum
 class SpinBtnWidgetsPage : public WidgetsPage
 {
 public:
-    SpinBtnWidgetsPage(wxBookCtrl *book, wxImageList *imaglist);
+    SpinBtnWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
     virtual ~SpinBtnWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_spinbtn; }
@@ -167,7 +167,7 @@ END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(SpinBtnWidgetsPage, _T("Spin"));
 
-SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxBookCtrl *book,
+SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxBookCtrlBase *book,
                                        wxImageList *imaglist)
                   : WidgetsPage(book)
 {

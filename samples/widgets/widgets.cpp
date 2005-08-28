@@ -125,7 +125,7 @@ private:
 #endif // USE_LOG
 
     // the book containing the test pages
-    wxBookCtrl *m_book;
+    wxBookCtrlBase *m_book;
 
     // and the image list for it
     wxImageList *m_imaglist;
@@ -290,7 +290,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     m_lboxLog = (wxListBox *)NULL;
     m_logTarget = (wxLog *)NULL;
 #endif // USE_LOG
-    m_book = (wxBookCtrl *)NULL;
+    m_book = (wxBookCtrlBase *)NULL;
     m_imaglist = (wxImageList *)NULL;
 
 #if wxUSE_MENUS
@@ -644,7 +644,7 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
 // WidgetsPage
 // ----------------------------------------------------------------------------
 
-WidgetsPage::WidgetsPage(wxBookCtrl *book)
+WidgetsPage::WidgetsPage(wxBookCtrlBase *book)
            : wxPanel(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
                      wxNO_FULL_REPAINT_ON_RESIZE |

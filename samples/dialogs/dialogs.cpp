@@ -29,6 +29,7 @@
 
 #include "wx/datetime.h"
 #include "wx/image.h"
+#include "wx/bookctrl.h"
 
 #if wxUSE_COLOURDLG
     #include "wx/colordlg.h"

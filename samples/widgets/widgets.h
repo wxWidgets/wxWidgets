@@ -13,7 +13,7 @@
 #define _WX_SAMPLE_WIDGETS_H_
 
 class WXDLLEXPORT wxCheckBox;
-class WXDLLEXPORT wxBookCtrl;
+class WXDLLEXPORT wxBookCtrlBase;
 class WXDLLEXPORT wxSizer;
 class WXDLLEXPORT wxTextCtrl;
 
@@ -37,7 +37,7 @@ class WidgetsPageInfo;
 class WidgetsPage : public wxPanel
 {
 public:
-    WidgetsPage(wxBookCtrl *book);
+    WidgetsPage(wxBookCtrlBase *book);
 
     // return the control shown by this page
     virtual wxControl *GetWidget() const = 0;
@@ -83,7 +83,7 @@ public:
 class WidgetsPageInfo
 {
 public:
-    typedef WidgetsPage *(*Constructor)(wxBookCtrl *book,
+    typedef WidgetsPage *(*Constructor)(wxBookCtrlBase *book,
                                         wxImageList *imaglist);
 
     // our ctor
@@ -117,7 +117,7 @@ private:
 
 // and this one must be inserted somewhere in the source file
 #define IMPLEMENT_WIDGETS_PAGE(classname, label)                            \
-    WidgetsPage *wxCtorFor##classname(wxBookCtrl *book,                     \
+    WidgetsPage *wxCtorFor##classname(wxBookCtrlBase *book,                 \
                                       wxImageList *imaglist)                \
         { return new classname(book, imaglist); }                           \
     WidgetsPageInfo classname::                                             \
