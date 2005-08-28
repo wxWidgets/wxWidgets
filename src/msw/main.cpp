@@ -282,8 +282,7 @@ static bool wxIsUnicodeAvailable()
         );
 
         return false;
-#endif // !wxUSE_UNICODE_MSLU
-
+#else // wxUSE_UNICODE_MSLU
         // and the MSLU DLL must also be available
         HMODULE hmod = ::LoadLibraryA("unicows.dll");
         if ( !hmod )
@@ -324,6 +323,7 @@ static bool wxIsUnicodeAvailable()
         }
 
         ::FreeLibrary(hmod);
+#endif // !wxUSE_UNICODE_MSLU
     }
 
     return true;
