@@ -126,6 +126,8 @@ public:
   virtual void SetConstraintSizes(bool recurse = true);
   virtual bool DoPhase(int nPhase);
 
+  virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
+
   // Implementation
 
   // wxNotebook on Motif uses a generic wxTabView to implement itself.

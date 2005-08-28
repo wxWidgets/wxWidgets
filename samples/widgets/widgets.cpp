@@ -327,7 +327,12 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     //style |= wxNB_NOPAGETHEME;
 
     m_book = new wxBookCtrl(m_panel, wxID_ANY, wxDefaultPosition,
-        wxDefaultSize, style);
+#ifdef __WXMOTIF__
+        wxSize(500, -1), // under Motif, height is a function of the width...
+#else
+        wxDefaultSize,
+#endif
+        style);
     InitBook();
 
 #ifndef __SMARTPHONE__

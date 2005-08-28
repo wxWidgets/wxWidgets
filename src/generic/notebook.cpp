@@ -622,6 +622,17 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event) )
         m_tabView->Draw(dc);
 }
 
+wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
+{
+    // MBN: since the total tab height is really a function of the
+    // width, this should really call
+    // GetTotalTabHeightPretendingWidthIs(), but the current
+    // implementation will suffice, provided the wxNotebook has been
+    // created with a sensible initial width.
+    return wxSize( sizePage.x + 12,
+                   sizePage.y + m_tabView->GetTotalTabHeight() + 6 + 4 );
+}
+
 wxRect wxNotebook::GetAvailableClientSize()
 {
     int cw, ch;
