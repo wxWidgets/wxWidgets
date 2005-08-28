@@ -19,6 +19,7 @@
         *wxImage*RGBValue*;
         *wxImage*RotateHue*;
         *wxLogBuffer*;
+        *wxLongLong*ToDouble*;
         *wxMediaCtrl*Load*wxURI*wxURI*;
         *wxMediaCtrl*ShowPlayerControls*wxMediaPlayerControls*;
         *wxMessageOutputBest*;
