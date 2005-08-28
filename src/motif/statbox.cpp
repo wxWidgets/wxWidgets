@@ -147,3 +147,27 @@ void wxStaticBox::SetLabel( const wxString& label )
 
     sk.Restore();
 }
+
+void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
+{
+    Dimension shadow, border;
+
+    XtVaGetValues( (Widget) GetMainWidget(),
+                   XmNshadowThickness, &shadow,
+                   XmNborderWidth, &border,
+                   NULL);
+
+    *borderOther = shadow + border;
+
+    if( GetLabelWidget() )
+    {
+        XtWidgetGeometry preferred;
+        XtQueryGeometry( (Widget) GetLabelWidget(), NULL, &preferred );
+
+        *borderTop = preferred.height;
+    }
+    else
+    {
+        *borderTop = shadow;
+    }
+}

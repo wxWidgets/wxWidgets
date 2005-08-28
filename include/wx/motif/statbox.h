@@ -50,6 +50,7 @@ public:
     virtual WXWidget GetLabelWidget() const { return m_labelWidget; }
 
     virtual void SetLabel(const wxString& label);
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 
 private:
     WXWidget  m_labelWidget;
