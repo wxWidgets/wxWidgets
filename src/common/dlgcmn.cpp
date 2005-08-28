@@ -336,8 +336,6 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
         sizer->AddButton(help);
     }
 
-    sizer->Realize();
-
     if (flags & wxNO_DEFAULT)
     {
         if (no)
@@ -359,11 +357,13 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
             yes->SetFocus();
         }
     }
-    
+
     if (flags & wxOK)
         SetAffirmativeId(wxID_OK);
     else if (flags & wxYES)
         SetAffirmativeId(wxID_YES);
+
+    sizer->Realize();
 
     return sizer;
 }
