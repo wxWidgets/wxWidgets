@@ -16,6 +16,7 @@ All:
 - Fixed compilation with IBM xlC compiler.
 - wxABI_VERSION, see 'Backward Compatibility' topic overview in the manual.
 - Added wxLongLong::ToDouble()
+- Added wxDateTime::[Make]FromTimezone(), fixed several TZ-related bugs
 
 All (GUI):
 

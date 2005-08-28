@@ -692,7 +692,7 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
 
         case wxDateTime::A_CST:
             // Central Standard Time in use in Australia = UTC + 9.5
-            m_offset = 60l*(9*60 + 30);
+            m_offset = 60l*(9*MIN_PER_HOUR + MIN_PER_HOUR/2);
             break;
 
         default:
@@ -1405,20 +1405,9 @@ wxDateTime& wxDateTime::Set(double jdn)
     // EPOCH_JDN + 0.5
     jdn -= EPOCH_JDN + 0.5;
 
-    jdn *= MILLISECONDS_PER_DAY;
+    m_time.Assign(jdn*MILLISECONDS_PER_DAY);
 
-    m_time.Assign(jdn);
-
-    // JDNs always suppose an UTC date, so bring it back to local time zone
-    // (also see GetJulianDayNumber() implementation)
-    long tzDiff = GetTimeZone();
-    if ( IsDST() == 1 )
-    {
-        // FIXME: again, we suppose that DST is always one hour
-        tzDiff -= 3600;
-    }
-
-    m_time += tzDiff*1000; // tzDiff is in seconds
+    // JDNs always are in UTC, so we don't need any adjustments for time zone
 
     return *this;
 }
@@ -1637,14 +1626,14 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
     timeOnly -= tm.msec;
     timeOnly /= 1000;               // now we have time in seconds
 
-    tm.sec = (wxDateTime_t)(timeOnly % 60);
+    tm.sec = (wxDateTime_t)(timeOnly % SEC_PER_MIN);
     timeOnly -= tm.sec;
-    timeOnly /= 60;                 // now we have time in minutes
+    timeOnly /= SEC_PER_MIN;        // now we have time in minutes
 
-    tm.min = (wxDateTime_t)(timeOnly % 60);
+    tm.min = (wxDateTime_t)(timeOnly % MIN_PER_HOUR);
     timeOnly -= tm.min;
 
-    tm.hour = (wxDateTime_t)(timeOnly / 60);
+    tm.hour = (wxDateTime_t)(timeOnly / MIN_PER_HOUR);
 
     return tm;
 }
@@ -2110,16 +2099,7 @@ wxDateTime& wxDateTime::SetToYearDay(wxDateTime::wxDateTime_t yday)
 
 double wxDateTime::GetJulianDayNumber() const
 {
-    // JDN are always expressed for the UTC dates
-    Tm tm(ToTimezone(UTC).GetTm(UTC));
-
-    double result = GetTruncatedJDN(tm.mday, tm.mon, tm.year);
-
-    // add the part GetTruncatedJDN() neglected
-    result += 0.5;
-
-    // and now add the time: 86400 sec = 1 JDN
-    return result + ((double)(60*(60*tm.hour + tm.min) + tm.sec)) / 86400;
+    return m_time.ToDouble() / MILLISECONDS_PER_DAY + EPOCH_JDN + 0.5;
 }
 
 double wxDateTime::GetRataDie() const
@@ -2162,6 +2142,21 @@ int wxDateTime::IsDST(wxDateTime::Country country) const
 }
 
 wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
+{
+    long secDiff = GetTimeZone() + tz.GetOffset();
+
+    // we need to know whether DST is or not in effect for this date unless
+    // the test disabled by the caller
+    if ( !noDST && (IsDST() == 1) )
+    {
+        // FIXME we assume that the DST is always shifted by 1 hour
+        secDiff -= 3600;
+    }
+
+    return Add(wxTimeSpan::Seconds(secDiff));
+}
+
+wxDateTime& wxDateTime::MakeFromTimezone(const TimeZone& tz, bool noDST)
 {
     long secDiff = GetTimeZone() + tz.GetOffset();
 
@@ -2771,7 +2766,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
         }
 
         // hours
-        offset = 60*(10*(*p - _T('0')) + (*(p + 1) - _T('0')));
+        offset = MIN_PER_HOUR*(10*(*p - _T('0')) + (*(p + 1) - _T('0')));
 
         p += 2;
 
@@ -2851,12 +2846,12 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
         }
 
         // make it minutes
-        offset *= 60;
+        offset *= MIN_PER_HOUR;
     }
 
-    // the spec was correct
+    // the spec was correct, construct the date from the values we found
     Set(day, mon, year, hour, min, sec);
-    MakeTimezone((wxDateTime_t)(60*offset));
+    MakeFromTimezone(offset*SEC_PER_MIN);
 
     return p;
 }

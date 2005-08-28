@@ -757,26 +757,42 @@ public:
         //      religious holidays (Easter...) or moon/solar eclipses? Some
         //      algorithms can be found in the calendar FAQ
 
-    // timezone stuff: a wxDateTime object constructed using given
-    // day/month/year/hour/min/sec values correspond to this moment in local
-    // time. Using the functions below, it may be converted to another time
-    // zone (for example, the Unix epoch is wxDateTime(1, Jan, 1970).ToGMT())
+
+    // Timezone stuff: a wxDateTime object constructed using given
+    // day/month/year/hour/min/sec values is interpreted as this moment in
+    // local time. Using the functions below, it may be converted to another
+    // time zone (e.g., the Unix epoch is wxDateTime(1, Jan, 1970).ToGMT()).
     //
-    // these functions try to handle DST internally, but there is no magical
+    // These functions try to handle DST internally, but there is no magical
     // way to know all rules for it in all countries in the world, so if the
     // program can handle it itself (or doesn't want to handle it at all for
     // whatever reason), the DST handling can be disabled with noDST.
-    //
-    // Converting to the local time zone doesn't do anything.
     // ------------------------------------------------------------------------
 
         // transform to any given timezone
     inline wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false) const;
     wxDateTime& MakeTimezone(const TimeZone& tz, bool noDST = false);
 
-        // transform to GMT/UTC
-    wxDateTime ToGMT(bool noDST = false) const { return ToTimezone(GMT0, noDST); }
-    wxDateTime& MakeGMT(bool noDST = false) { return MakeTimezone(GMT0, noDST); }
+#if wxABI_VERSION >= 20602
+        // interpret current value as being in another timezone and transform
+        // it to local one
+    inline wxDateTime FromTimezone(const TimeZone& tz, bool noDST = false) const;
+    wxDateTime& MakeFromTimezone(const TimeZone& tz, bool noDST = false);
+#endif // ABI >= 2.6.2
+
+        // transform to/from GMT/UTC
+    wxDateTime ToUTC(bool noDST = false) const { return ToTimezone(UTC, noDST); }
+    wxDateTime& MakeUTC(bool noDST = false) { return MakeTimezone(UTC, noDST); }
+
+    wxDateTime ToGMT(bool noDST = false) const { return ToUTC(noDST); }
+    wxDateTime& MakeGMT(bool noDST = false) { return MakeUTC(noDST); }
+
+#if wxABI_VERSION >= 20602
+    wxDateTime FromUTC(bool noDST = false) const
+        { return FromTimezone(UTC, noDST); }
+    wxDateTime& MakeFromUTC(bool noDST = false)
+        { return MakeFromTimezone(UTC, noDST); }
+#endif // ABI >= 2.6.2
 
         // is daylight savings time in effect at this moment according to the
         // rules of the specified country?
@@ -784,6 +800,7 @@ public:
         // Return value is > 0 if DST is in effect, 0 if it is not and -1 if
         // the information is not available (this is compatible with ANSI C)
     int IsDST(Country country = Country_Default) const;
+
 
     // accessors: many of them take the timezone parameter which indicates the
     // timezone for which to make the calculations and the default value means
@@ -1839,11 +1856,21 @@ inline wxDateTime& wxDateTime::operator+=(const wxDateSpan& diff)
 // wxDateTime and timezones
 // ----------------------------------------------------------------------------
 
-inline wxDateTime wxDateTime::ToTimezone(const wxDateTime::TimeZone& tz,
-                                         bool noDST) const
+inline wxDateTime
+wxDateTime::ToTimezone(const wxDateTime::TimeZone& tz, bool noDST) const
 {
     MODIFY_AND_RETURN( MakeTimezone(tz, noDST) );
 }
+
+#if wxABI_VERSION >= 20602
+
+inline wxDateTime
+wxDateTime::FromTimezone(const wxDateTime::TimeZone& tz, bool noDST) const
+{
+    MODIFY_AND_RETURN( MakeFromTimezone(tz, noDST) );
+}
+
+#endif // ABI >= 2.6.2
 
 // ----------------------------------------------------------------------------
 // wxTimeSpan construction

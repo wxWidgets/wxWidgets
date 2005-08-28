@@ -406,10 +406,12 @@ provided. You can construct a wxDateTime object from a
 Please see the \helpref{time zone overview}{tdatetimezones} for more
 information about time zones. Normally, these functions should be rarely used.
 
+\helpref{FromTimezone}{wxdatetimefromtimezone}\\
 \helpref{ToTimezone}{wxdatetimetotimezone}\\
 \helpref{MakeTimezone}{wxdatetimemaketimezone}\\
-\helpref{ToGMT}{wxdatetimetogmt}\\
-\helpref{MakeGMT}{wxdatetimemakegmt}\\
+\helpref{MakeFromTimezone}{wxdatetimemakefromtimezone}\\
+\helpref{ToUTC}{wxdatetimetoutc}\\
+\helpref{MakeUTC}{wxdatetimemakeutc}\\
 \helpref{GetBeginDST}{wxdatetimegetbegindst}\\
 \helpref{GetEndDST}{wxdatetimegetenddst}\\
 \helpref{IsDST}{wxdatetimeisdst}
@@ -1461,6 +1463,16 @@ year 1 is Rata Die day 1.
 %%%%%%%%%%%%%%%%%%%%%%%%%%% timezone and DST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+\membersection{wxDateTime::FromTimezone}\label{wxdatetimefromtimezone}
+
+\constfunc{wxDateTime}{FromTimezone}{\param{const TimeZone\& }{tz}, \param{bool }{noDST = false}}
+
+Transform the date from the given time zone to the local one. If {\it noDST} is 
+{\tt true}, no DST adjustments will be made.
+
+Returns the date in the local time zone.
+
+
 \membersection{wxDateTime::ToTimezone}\label{wxdatetimetotimezone}
 
 \constfunc{wxDateTime}{ToTimezone}{\param{const TimeZone\& }{tz}, \param{bool }{noDST = false}}
@@ -1479,17 +1491,25 @@ Modifies the object in place to represent the date in another time zone. If
 {\it noDST} is {\tt true}, no DST adjustments will be made.
 
 
-\membersection{wxDateTime::ToGMT}\label{wxdatetimetogmt}
+\membersection{wxDateTime::MakeFromTimezone}\label{wxdatetimemakefromtimezone}
 
-\constfunc{wxDateTime}{ToGMT}{\param{bool }{noDST = false}}
+\func{wxDateTime\&}{MakeFromTimezone}{\param{const TimeZone\& }{tz}, \param{bool }{noDST = false}}
+
+Same as \helpref{FromTimezone}{wxdatetimefromtimezone} but modifies the object
+in place.
+
+
+\membersection{wxDateTime::ToUTC}\label{wxdatetimetoutc}
+
+\constfunc{wxDateTime}{ToUTC}{\param{bool }{noDST = false}}
 
 This is the same as calling \helpref{ToTimezone}{wxdatetimetotimezone} with
 the argument {\tt GMT0}.
 
 
-\membersection{wxDateTime::MakeGMT}\label{wxdatetimemakegmt}
+\membersection{wxDateTime::MakeUTC}\label{wxdatetimemakeutc}
 
-\func{wxDateTime\&}{MakeGMT}{\param{bool }{noDST = false}}
+\func{wxDateTime\&}{MakeUTC}{\param{bool }{noDST = false}}
 
 This is the same as calling \helpref{MakeTimezone}{wxdatetimemaketimezone} with
 the argument {\tt GMT0}.
