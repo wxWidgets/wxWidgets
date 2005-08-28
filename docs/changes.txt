@@ -73,6 +73,12 @@ wxMotif:
 
 - Base library is now binary compatible when built with wxGTK and wxMotif.
 - wxMotif can now display Japanese text under Japanese locale.
+- Fixed button size in common dialogs.
+- Made wxFileDialog translatable.
+- All top level windows should now have a border unless the wxNO_BORDER
+  flag has been specified.
+- Improved wxNotebook support for sizers. It requires the wxNotebook to
+  be created with a "sensible" initial width.
 
 wxMGL:
 - Fixed crash on exit.
