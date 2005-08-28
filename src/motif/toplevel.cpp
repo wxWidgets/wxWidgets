@@ -155,6 +155,8 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
     if( XmIsMotifWMRunning( shell ) )
     {
         int decor = 0 ;
+        if( !(m_windowStyle & wxNO_BORDER) )
+            decor |= MWM_DECOR_BORDER;
         if( m_windowStyle & wxRESIZE_BORDER )
             decor |= MWM_DECOR_RESIZEH;
         if( m_windowStyle & wxSYSTEM_MENU )
