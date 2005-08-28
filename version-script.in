@@ -10,6 +10,7 @@
 
 @WX_VERSION_TAG@.2 {
     global:
+        *wxDateTime*FromTimezone*;
         *wxDialog*GetEscapeId*;
         *wxEVT_MEDIA_LOADED*;
         *wxGenericListCtrl*SetItemFont*wxFont*;
