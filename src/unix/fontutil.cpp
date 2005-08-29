@@ -145,8 +145,11 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         ret = wxFONTFAMILY_TELETYPE; // begins with "Monospace"
     else if (strncmp( family_text, "courier", 7 ) == 0)
         ret = wxFONTFAMILY_TELETYPE; // begins with "Courier"
-#ifdef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
+#if defined(__WXGTK24__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
     else
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+#endif
     {
         PangoFontFamily **families;
         PangoFontFamily  *family = NULL;
@@ -178,7 +181,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         if (family != NULL && pango_font_family_is_monospace( family ))
             ret = wxFONTFAMILY_TELETYPE; // is deemed a monospace font by pango
     }
-#endif // pango_font_family_is_monospace
+#endif // gtk24 || HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
 
     if (ret == wxFONTFAMILY_DEFAULT)
     {
