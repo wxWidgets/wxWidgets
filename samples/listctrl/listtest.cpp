@@ -724,7 +724,7 @@ void MyListCtrl::OnColClick(wxListEvent& event)
     int col = event.GetColumn();
 
     // set or unset image
-    static x = false;
+    static bool x = false;
     x = !x;
     SetColumnImage(col, x ? 0 : -1);
 
