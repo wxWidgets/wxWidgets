@@ -173,7 +173,9 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 
         g_free(families);
 
-        wxASSERT_MSG( family, wxT("wxNativeFontInfo::GetFamily() - No appropriate PangoFontFamily found for ::description") );
+        // Some gtk+ systems might query for a non-existing font from wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)
+        // on initialization, don't assert until wxSystemSettings::GetFont is checked for this - MR
+        // wxASSERT_MSG( family, wxT("wxNativeFontInfo::GetFamily() - No appropriate PangoFontFamily found for ::description") );
 
         //BCI: Cache the wxFontFamily inside the class. Validate cache with
         //BCI: g_ascii_strcasecmp(pango_font_description_get_family(description), pango_font_family_get_name(family)) == 0

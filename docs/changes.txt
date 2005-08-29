@@ -53,9 +53,10 @@ wxGTK:
 - Implemented wxTopLevelWindow::RequestUserAttention() (Mart Raudsepp).
 - Base library is now binary compatible when built with wxGTK and wxMotif.
 - wxTextCtrl::XYToPosition, PositionToXY and GetLineLength calls are now
-  instantaneous in case of GTK+2 multi-line controls (Mart Raudsepp).
+  instantaneous in case of GTK 2.x multi-line controls (Mart Raudsepp).
 - Added support for left, centre and right text alignment attributes under
   GTK+2 multi-line text controls (Mart Raudsepp).
+- Various wxFont improvements for GTK 2.x builds (Mart Raudsepp).
 
 wxMac:
 
@@ -84,8 +85,13 @@ wxMotif:
   be created with a "sensible" initial width.
 
 wxMGL:
+
 - Fixed crash on exit.
 - Fixed drawing problems when windows are resized.
+
+wxX11:
+
+- Various wxFont improvements for unicode builds (Mart Raudsepp).
 
 
 2.6.1
