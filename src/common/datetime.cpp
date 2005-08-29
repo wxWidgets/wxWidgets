@@ -2851,7 +2851,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
     // the spec was correct, construct the date from the values we found
     Set(day, mon, year, hour, min, sec);
-    MakeFromTimezone(TimeZone(offset*SEC_PER_MIN));
+    MakeFromTimezone(TimeZone((wxDateTime_t)offset*SEC_PER_MIN));
 
     return p;
 }
