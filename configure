@@ -25652,7 +25652,7 @@ rm -f conftest.err conftest.$ac_objext \
                                         wx_cv_lib_gtk=none
                 else
                                                             wx_cv_cflags_gtk=$GTK_CFLAGS
-                    wx_cv_libs_gtk=$GTK_LIBS
+                    wx_cv_libs_gtk=`echo $GTK_LIBS | sed -e 's/ -l[^ ]*cairo[^ ]*//g'`
                 fi
 
 
