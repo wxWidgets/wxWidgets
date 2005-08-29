@@ -2777,8 +2777,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CFLAGS="$CFLAGS $wx_cv_cflags_gtk"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
-            AC_CHECK_FUNCS([pango_font_family_is_monospace])
-
             dnl gtk_icon_size_lookup is not available in the GTK+ headers
             dnl that have shipped with some versions of Sun's JDS. Not using
             dnl AC_CHECK_FUNCS here since it only checks the function exists
