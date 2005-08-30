@@ -1724,19 +1724,6 @@ case "${host}" in
   ;;
 esac
 
-if test "$wxUSE_GUI" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
-        dnl defines HAVE_X11_XKBLIB_H
-        AC_CHECK_HEADERS(X11/Xlib.h)
-        AC_CHECK_HEADERS([X11/XKBlib.h], [], [], 
-                         [
-                          #if HAVE_X11_XLIB_H
-                            #include <X11/Xlib.h>
-                          #endif
-                         ])
-    fi
-fi
-
 dnl ---------------------------------------------------------------------------
 dnl Checks for compiler characteristics
 dnl ---------------------------------------------------------------------------
@@ -3376,6 +3363,20 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries included when system library is not used
 dnl ---------------------------------------------------------------------------
+
+dnl do this after test for X11 above so that we have a chance of finding Xlib.h
+if test "$wxUSE_GUI" = "yes"; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
+        dnl defines HAVE_X11_XKBLIB_H
+        AC_CHECK_HEADERS(X11/Xlib.h)
+        AC_CHECK_HEADERS([X11/XKBlib.h], [], [], 
+                         [
+                          #if HAVE_X11_XLIB_H
+                            #include <X11/Xlib.h>
+                          #endif
+                         ])
+    fi
+fi
 
 
 dnl ----------------------------------------------------------------
