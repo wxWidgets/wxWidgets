@@ -46,7 +46,7 @@ wxMSW:
 - Added wxDynamicLibrary::GetSymbolAorW().
 - Fixed default size of wxStaticText controls with border being too small.
 - Fixed bugs with wxStatusBar positioning (with or withour sizers) (Jamie Gadd)
-- Mouse events are now generated for all static controls (Jamie Gadd)
+- Mouse move events are now generated for all static controls (Jamie Gadd)
 
 wxGTK:
 
