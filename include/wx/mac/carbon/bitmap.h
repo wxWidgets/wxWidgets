@@ -110,7 +110,10 @@ public:
 
     // Copy constructors
     wxBitmap(const wxBitmap& bitmap)
-    { Ref(bitmap); }
+        : wxBitmapBase()
+    {
+        Ref(bitmap);
+    }
 
     // Initialize with raw data.
     wxBitmap(const char bits[], int width, int height, int depth = 1);

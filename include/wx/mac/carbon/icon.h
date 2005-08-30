@@ -26,7 +26,10 @@ public:
 
     // Copy constructors
     wxIcon(const wxIcon& icon)
-      { Ref(icon); }
+        : wxGDIObject()
+    {
+        Ref(icon);
+    }
 
     wxIcon(const char **data);
     wxIcon(char **data);
@@ -62,7 +65,7 @@ public:
     void SetHeight(int h);
     void SetDepth(int d);
     void SetOk(bool isOk);
-    
+
     WXHICON GetHICON() const ;
 
     DECLARE_DYNAMIC_CLASS(wxIcon)
