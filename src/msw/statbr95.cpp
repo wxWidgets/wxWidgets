@@ -349,6 +349,9 @@ wxStatusBar95::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         GetPosition(&x, &y);
         GetSize(&w, &h);
 
+        // we need real window coords and not wx client coords
+        AdjustForParentClientOrigin(x, y);
+
         lpPos->x  = x;
         lpPos->y  = y;
         lpPos->cx = w;
