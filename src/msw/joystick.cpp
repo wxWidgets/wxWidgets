@@ -28,17 +28,16 @@
     #include <mmsystem.h>
 #endif
 
-#if !defined(__WIN32__) && !defined(_MMRESULT_)
-typedef UINT MMRESULT;
-#endif
-
 // Why doesn't BC++ have joyGetPosEx?
 #if !defined(__WIN32__) || defined(__BORLANDC__)
 #define NO_JOYGETPOSEX
 #endif
 
 #include "wx/window.h"
+#include "wx/msw/registry.h"
 #include "wx/msw/joystick.h"
+
+#include <regstr.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 
@@ -299,10 +298,22 @@ int wxJoystick::GetProductId() const
 wxString wxJoystick::GetProductName() const
 {
     JOYCAPS joyCaps;
-    if (joyGetDevCaps(m_joystick, & joyCaps, sizeof(JOYCAPS)) != JOYERR_NOERROR)
+    if (joyGetDevCaps(m_joystick, &joyCaps, sizeof(joyCaps)) != JOYERR_NOERROR)
         return wxEmptyString;
-    else
-        return wxString(joyCaps.szPname);
+
+    wxRegKey key1(wxString::Format(wxT("HKEY_LOCAL_MACHINE\\%s\\%s\\%s"),
+                   REGSTR_PATH_JOYCONFIG, joyCaps.szRegKey, REGSTR_KEY_JOYCURR));
+
+    wxString str;
+    key1.QueryValue(wxString::Format(wxT("Joystick%d%s"),
+                                     m_joystick + 1, REGSTR_VAL_JOYOEMNAME),
+                    str);
+
+    wxRegKey key2(wxString::Format(wxT("HKEY_LOCAL_MACHINE\\%s\\%s"),
+                                        REGSTR_PATH_JOYOEM, str.c_str()));
+    key2.QueryValue(REGSTR_VAL_JOYOEMNAME, str);
+
+    return str;
 }
 
 int wxJoystick::GetXMin() const
