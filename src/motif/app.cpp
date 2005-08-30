@@ -180,10 +180,19 @@ void wxApp::HandlePropertyChange(WXEvent *event)
 }
 
 static char *fallbackResources[] = {
+    // better defaults for CDE under Irix
+    //
+    // TODO: do something similar for the other systems, the hardcoded defaults
+    //       below are ugly
+#ifdef __SGI__
+    "*sgiMode: True",
+    "*useSchemes: all",
+#else // !__SGI__
     "*menuBar.marginHeight: 0",
     "*menuBar.shadowThickness: 1",
     "*background: #c0c0c0",
     "*foreground: black",
+#endif // __SGI__/!__SGI__
     NULL
 };
 
