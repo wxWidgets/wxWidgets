@@ -60,11 +60,11 @@ void wxDisplaySizeMM(int *width, int *height)
     wxASSERT_MSG( g_displayDC, wxT("You must call wxApp::SetDisplayMode before using this function") );
 
     int xDPI, yDPI;
-    MGL_getDotsPerInch(&xDPI, &yDPI);    
-    
-    if ( width ) 
+    MGL_getDotsPerInch(&xDPI, &yDPI);
+
+    if ( width )
         *width = (int)((g_displayDC->sizex()+1) * 25.4 / xDPI);
-    if ( height ) 
+    if ( height )
         *height = (int)((g_displayDC->sizey()+1) * 25.4 / yDPI);
 }
 
@@ -79,7 +79,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 bool wxColourDisplay()
 {
     wxASSERT_MSG( g_displayDC, wxT("You must call wxApp::SetDisplayMode before using this function") );
-    
+
     return (wxDisplayDepth() > 1);
 }
 
@@ -88,6 +88,27 @@ int wxDisplayDepth()
     wxASSERT_MSG( g_displayDC, wxT("You must call wxApp::SetDisplayMode before using this function") );
 
     return g_displayDC->getBitsPerPixel();
+}
+
+wxString wxGetOsDescription()
+{
+    wxString osname(
+
+#if defined(__UNIX__)
+        _T("Unix")
+#elif defined(__OS2__)
+        _T("OS/2")
+#elif defined(__WIN32__)
+        _T("Windows")
+#elif defined(__DOS__)
+        _T("DOS")
+#else
+        _T("unknown")
+#endif
+
+    );
+
+    return osname;
 }
 
 #if wxUSE_GUI
