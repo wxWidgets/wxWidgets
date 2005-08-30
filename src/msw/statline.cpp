@@ -32,15 +32,6 @@
 #if wxUSE_STATLINE
 
 #include "wx/msw/private.h"
-#include "wx/log.h"
-
-#ifndef SS_SUNKEN
-    #define SS_SUNKEN 0x00001000L
-#endif
-
-#ifndef SS_NOTIFY
-    #define SS_NOTIFY 0x00000100L
-#endif
 
 // ============================================================================
 // implementation

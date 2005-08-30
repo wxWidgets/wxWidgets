@@ -188,7 +188,9 @@ WXDWORD wxStaticBitmap::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     // we use SS_CENTERIMAGE to prevent the control from resizing the bitmap to
     // fit to its size -- this is unexpected and doesn't happen in other ports
-    msStyle |= SS_CENTERIMAGE;
+    //
+    // and SS_NOTIFY is necessary to receive mouse events
+    msStyle |= SS_CENTERIMAGE | SS_NOTIFY;
 
     return msStyle;
 }
@@ -266,29 +268,6 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     rect.right  = x + w;
     rect.bottom = y + h;
     ::InvalidateRect(GetHwndOf(GetParent()), &rect, TRUE);
-}
-
-WXLRESULT wxStaticBitmap::MSWWindowProc(WXUINT nMsg,
-                                   WXWPARAM wParam,
-                                   WXLPARAM lParam)
-{
-#ifndef __WXWINCE__
-    static int s_useHTClient = -1;
-    if (s_useHTClient == -1)
-        s_useHTClient = wxSystemOptions::GetOptionInt(wxT("msw.staticbitmap.htclient"));
-    if (s_useHTClient == 1)
-    {
-        // Ensure that static items get messages. Some controls don't like this
-        // message to be intercepted (e.g. RichEdit), hence the tests.
-        // Also, this code breaks some other processing such as enter/leave tracking
-        // so it's off by default.
-        
-        if ( nMsg == WM_NCHITTEST )
-            return (long)HTCLIENT;
-    }
-#endif
-
-    return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 #endif // wxUSE_STATBMP

@@ -165,8 +165,10 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 // get the text metrics for the current font
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win);
 
+#ifdef __WXWINCE__
 // find the window for the mouse event at the specified position
-static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y); //TW:REQ:Univ
+static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y);
+#endif // __WXWINCE__
 
 // wrapper around BringWindowToTop() API
 static inline void wxBringWindowToTop(HWND hwnd)
@@ -2503,8 +2505,10 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 int x = GET_X_LPARAM(lParam),
                     y = GET_Y_LPARAM(lParam);
 
+#ifdef __WXWINCE__
                 // redirect the event to a static control if necessary by
-                // finding one under mouse
+                // finding one under mouse because under CE the static controls
+                // don't generate mouse events (even with SS_NOTIFY)
                 wxWindowMSW *win;
                 if ( GetCapture() == this )
                 {
@@ -2520,6 +2524,9 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     wxCHECK_MSG( win, 0,
                                  _T("FindWindowForMouseEvent() returned NULL") );
                 }
+#else // !__WXWINCE__
+                wxWindowMSW *win = this;
+#endif // __WXWINCE__/!__WXWINCE__
 
                 processed = win->HandleMouseEvent(message, x, y, wParam);
 
@@ -4468,6 +4475,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
 #endif // wxUSE_MOUSEEVENT_HACK
 }
 
+#ifdef __WXWINCE__
 // Windows doesn't send the mouse events to the static controls (which are
 // transparent in the sense that their WM_NCHITTEST handler returns
 // HTTRANSPARENT) at all but we want all controls to receive the mouse events
@@ -4478,7 +4486,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
 // Notice that this is not done for the mouse move events because this could
 // (would?) be too slow, but only for clicks which means that the static texts
 // still don't get move, enter nor leave events.
-static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y) //TW:REQ:Univ
+static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y)
 {
     wxCHECK_MSG( x && y, win, _T("NULL pointer in FindWindowForMouseEvent") );
 
@@ -4531,6 +4539,7 @@ static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y) //
 
     return win;
 }
+#endif // __WXWINCE__
 
 bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
 {

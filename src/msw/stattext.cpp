@@ -123,6 +123,9 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
     else
         msStyle |= SS_LEFT;
 
+    // this style is necessary to receive mouse events
+    msStyle |= SS_NOTIFY;
+
     return msStyle;
 }
 
