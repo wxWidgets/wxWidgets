@@ -329,6 +329,11 @@
              */
 #            define __SGI_CC__
 #        endif /* gcc/!gcc */
+
+        /* system headers use this symbol and not __cplusplus in some places */
+#       ifndef _LANGUAGE_C_PLUS_PLUS
+#           define _LANGUAGE_C_PLUS_PLUS
+#       endif
 #    endif  /* SGI */
 
 #    if defined(sun) || defined(__SUN__)
