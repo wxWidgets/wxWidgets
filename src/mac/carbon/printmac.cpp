@@ -274,7 +274,13 @@ void wxMacCarbonPrintData::TransferFrom( wxPrintDialogData* data )
 
     int toPage = data->GetToPage();
     if (toPage < 1)
-        toPage = data->GetFromPage();
+    {
+    	PMSetLastPage( m_macPrintSettings , kPMPrintAllPages, true ) ;
+	}
+	else
+	{
+    	PMSetLastPage( m_macPrintSettings , toPage , false ) ;
+	}
     PMSetLastPage( m_macPrintSettings , toPage , false ) ;
 }
 
