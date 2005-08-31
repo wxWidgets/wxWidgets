@@ -237,8 +237,12 @@ bool wxMDIParentFrame::Show( bool show )
     if ( show )
     {
         // TODO: check for other children
-        if(!GetToolBar())
-            Move(-10000, -10000);
+        if ( !GetToolBar() )
+        {
+            // call the base class version to just update the flag but don't
+            // really make the window visible
+            return wxFrameBase::Show();
+        }
     }
 
     if ( !wxFrame::Show(show) )
