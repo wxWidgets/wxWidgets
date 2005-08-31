@@ -22049,6 +22049,8 @@ SEARCH_INCLUDE="\
     /usr/x386/include         \
     /usr/XFree86/include/X11  \
                               \
+    /usr/pkg/include          \
+                              \
     X:/XFree86/include        \
     X:/XFree86/include/X11    \
                               \
@@ -27836,6 +27838,9 @@ echo "${ECHO_T}found in $ac_find_includes" >&6
 
             TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
         else
+            save_CFLAGS=$CFLAGS
+            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
             cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -27889,13 +27894,15 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
                     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-                    { { echo "$as_me:$LINENO: error: please set CFLAGS to contain the location of Xm/Xm.h" >&5
-echo "$as_me: error: please set CFLAGS to contain the location of Xm/Xm.h" >&2;}
+                    { { echo "$as_me:$LINENO: error: please set CPPFLAGS to contain the location of Xm/Xm.h" >&5
+echo "$as_me: error: please set CPPFLAGS to contain the location of Xm/Xm.h" >&2;}
    { (exit 1); exit 1; }; }
 
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+            CFLAGS=$save_CFLAGS
         fi
 
         if test "$COMPILED_X_PROGRAM" = 0; then

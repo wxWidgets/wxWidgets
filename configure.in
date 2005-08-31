@@ -2112,6 +2112,8 @@ SEARCH_INCLUDE="\
     /usr/x386/include         \
     /usr/XFree86/include/X11  \
                               \
+    /usr/pkg/include          \
+                              \
     X:/XFree86/include        \
     X:/XFree86/include/X11    \
                               \
@@ -3047,6 +3049,9 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
             TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
         else
+            save_CFLAGS=$CFLAGS
+            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
             AC_TRY_COMPILE(
                 [
                     #include <Xm/Xm.h>
@@ -3061,9 +3066,11 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 ],
                 [
                     AC_MSG_RESULT(no)
-                    AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
+                    AC_MSG_ERROR(please set CPPFLAGS to contain the location of Xm/Xm.h)
                 ]
             )
+
+            CFLAGS=$save_CFLAGS
         fi
 
         if test "$COMPILED_X_PROGRAM" = 0; then
