@@ -236,7 +236,12 @@ void wxClassInfo::Register()
     // and eventually die with "out of memory" - as this is quite hard to
     // detect if you're unaware of this, try to do some checks here.
     wxASSERT_MSG( sm_classTable->Get(m_className) == NULL,
-                  _T("class already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some object module(s) twice)?") );
+        wxString::Format
+        (
+            _T("Class \"%s\" already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some objecti module(s) twice)?"),
+            m_className
+        )
+    );
 
     sm_classTable->Put(m_className, (wxObject *)this);
 }
