@@ -10,6 +10,9 @@ update_from_cvs()
     (
     cd ${WORKDIR}/wxWidgets &&  cvs -z3 update -P -d
     )
+    (
+    cd ${WORKDIR}/wxGTK &&  cvs -z3 update -P 
+    )
 }
 
 
@@ -45,9 +48,10 @@ do_package()
 
 package_cvs()
 {
-    rm -f ${WORKDIR}/archives/wx-cvs-*
+    rm -f ${WORKDIR}/archives/wx-cvs-$1*
     cd ${WORKDIR}/
-    tar jcf ./archives/wx-cvs-${CURDATE}.tar.bz2 ./wxWidgets
+    ##tar --exclude=*.ds* -jcf ./archives/test.tar.bz2 ./wxGTK
+    tar --exclude=*.ds* -jcf ./archives/wx-cvs-$1-${CURDATE}.tar.bz2 ./$2
 }
 
 
@@ -71,7 +75,6 @@ find ${FTPDIR}/CVS_HEAD/files -type f -name wx-cvs\* -mtime +6 | xargs rm -rf
 cp  ${WORKDIR}/archives/wx-cvs-* ${FTPDIR}/CVS_HEAD/files
 
 rm ${FTPDIR}/CVS_HEAD/wx* ${FTPDIR}/CVS_HEAD/MD5SUM
-##there must be an easier way of doing these links...
 for f in `find ${FTPDIR}/CVS_HEAD/files -type f -name wx-cvs\* -mmin -601` ; do
        ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
 done
@@ -170,6 +173,7 @@ for f in `find ${WORKDIR}/archives/win/ -name wx\*.ZIP ` ; do
        mv $f ${WORKDIR}/archives/`basename $f | tr -d ".ZIP"`-${CURDATE}.zip
        done
 
+rm ${WORKDIR}/archives/*.exe
 for f in `find ${WORKDIR}/archives/win/ -name wx\*.EXE ` ; do       
        mv $f ${WORKDIR}/archives/`basename $f | tr -d ".EXE"`-${CURDATE}.exe
        done
@@ -179,7 +183,8 @@ for f in `find ${WORKDIR}/archives/win/ -name wx\*.EXE ` ; do
 update_from_cvs
 regenerate_makefiles
 package_makefiles
-package_cvs
+package_cvs All wxWidgets
+package_cvs Gtk wxGTK
 
 do_docs
 add_win_files
