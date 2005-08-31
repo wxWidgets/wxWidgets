@@ -16,8 +16,9 @@
     #pragma interface "textdlgg.h"
 #endif
 
-#if wxUSE_TEXTDLG
 #include "wx/defs.h"
+
+#if wxUSE_TEXTDLG
 
 #include "wx/dialog.h"
 
