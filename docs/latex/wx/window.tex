@@ -1498,8 +1498,11 @@ This is just a wrapper for \helpref{ScrollLines}{wxwindowscrolllines}$(-1)$.
 
 \func{void}{Lower}{\void}
 
-Lowers the window to the bottom of the window hierarchy if it is a managed window (dialog
-or frame).
+Lowers the window to the bottom of the window hierarchy.
+
+\wxheading{See also}
+
+\helpref{Raise}{wxwindowraise}
 
 
 \membersection{wxWindow::MakeModal}\label{wxwindowmakemodal}
@@ -2217,8 +2220,13 @@ remove the event handler.
 
 \func{void}{Raise}{\void}
 
-Raises the window to the top of the window hierarchy if it is a managed window (dialog
-or frame).
+Raises the window to the top of the window hierarchy.
+
+In current version of wxWidgets this works both for manage and child windows.
+
+\wxheading{See also}
+
+\helpref{Lower}{wxwindowlower}
 
 
 \membersection{wxWindow::Refresh}\label{wxwindowrefresh}
