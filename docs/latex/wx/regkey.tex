@@ -77,6 +77,7 @@ for(int i=0;i<nSubKeys;i++)
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxRegKey::wxRegKey}\label{wxregkeyctor}
 
 \func{}{wxRegKey}{\void}
@@ -91,11 +92,13 @@ The constructor to set the full name of the key.
 
 The constructor to set the full name of the key under a previously created parent.
 
+
 \membersection{wxRegKey::Close}\label{wxregkeyclose}
 
 \func{void}{Close}{\void}
 
 Closes the key.
+
 
 \membersection{wxRegKey::Create}\label{wxregkeycreate}
 
@@ -103,11 +106,13 @@ Closes the key.
 
 Creates the key. Will fail if the key already exists and {\it bOkIfExists} is false.
 
+
 \membersection{wxRegKey::DeleteSelf}\label{wxregkeydeleteself}
 
 \func{void}{DeleteSelf}{\void}
 
 Deletes this key and all of its subkeys and values recursively.
+
 
 \membersection{wxRegKey::DeleteKey}\label{wxregkeydeletekey}
 
@@ -115,11 +120,13 @@ Deletes this key and all of its subkeys and values recursively.
 
 Deletes the subkey with all of its subkeys/values recursively.
 
+
 \membersection{wxRegKey::DeleteValue}\label{wxregkeydeletevalue}
 
 \func{void}{DeleteValue}{\param{const wxChar *}{szKey}}
 
 Deletes the named value.
+
 
 \membersection{wxRegKey::Exists}\label{wxregkeyexists}
 
@@ -127,11 +134,13 @@ Deletes the named value.
 
 Returns true if the key exists.
 
+
 \membersection{wxRegKey::GetName}\label{wxregkeygetname}
 
 \constfunc{wxString}{GetName}{\param{bool }{bShortPrefix = true}}
 
 Gets the name of the registry key.
+
 
 \membersection{wxRegKey::GetFirstKey}\label{wxregkeygetfirstkey}
 
@@ -139,11 +148,13 @@ Gets the name of the registry key.
 
 Gets the first key.
 
+
 \membersection{wxRegKey::GetFirstValue}\label{wxregkeygetfirstvalue}
 
 \func{bool}{GetFirstValue}{\param{wxString\&}{ strValueName}, \param{long\&}{ lIndex}}
 
 Gets the first value of this key.
+
 
 \membersection{wxRegKey::GetKeyInfo}\label{wxregkeygetkeyinfo}
 
@@ -159,11 +170,13 @@ Gets information about the key.
 
 \docparam{pnValues}{The number of values.}
 
+
 \membersection{wxRegKey::GetNextKey}\label{wxregkeygetnextkey}
 
 \constfunc{bool}{GetNextKey}{\param{wxString\&}{ strKeyName}, \param{long\&}{ lIndex}}
 
 Gets the next key.
+
 
 \membersection{wxRegKey::GetNextValue}\label{wxregkeygetnextvalue}
 
@@ -171,11 +184,13 @@ Gets the next key.
 
 Gets the next key value for this key.
 
+
 \membersection{wxRegKey::HasValue}\label{wxregkeyhasvalue}
 
 \constfunc{bool}{HasValue}{\param{const wxChar *}{szValue}}
 
 Returns true if the value exists.
+
 
 \membersection{wxRegKey::HasValues}\label{wxregkeyhasvalues}
 
@@ -183,11 +198,13 @@ Returns true if the value exists.
 
 Returns true if any values exist.
 
+
 \membersection{wxRegKey::HasSubKey}\label{wxregkeyhassubkey}
 
 \constfunc{bool}{HasSubKey}{\param{const wxChar *}{szKey}}
 
 Returns true if given subkey exists.
+
 
 \membersection{wxRegKey::HasSubKeys}\label{wxregkeyhassubkeys}
 
@@ -195,11 +212,13 @@ Returns true if given subkey exists.
 
 Returns true if any subkeys exist.
 
+
 \membersection{wxRegKey::IsEmpty}\label{wxregkeyisempty}
 
 \constfunc{bool}{IsEmpty}{\void}
 
 Returns true if this key is empty, nothing under this key.
+
 
 \membersection{wxRegKey::IsOpened}\label{wxregkeyisopened}
 
@@ -207,11 +226,15 @@ Returns true if this key is empty, nothing under this key.
 
 Returns true if the key is opened.
 
+
 \membersection{wxRegKey::Open}\label{wxregkeyopen}
 
-\func{bool}{Open}{\void}
+\func{bool}{Open}{\param{AccessMode }{mode = Write}}
 
-Explicitly opens the key to be opened.
+Explicitly opens the key. This method also allows the key to be opened in
+read-only mode by passing \texttt{wxRegKey::Read} instead of default 
+\texttt{wxRegKey::Write} parameter.
+
 
 \membersection{wxRegKey::QueryValue}\label{wxregkeyqueryvalue}
 
@@ -223,17 +246,20 @@ Retrieves the string value.
 
 Retrieves the numeric value.
 
+
 \membersection{wxRegKey::Rename}\label{wxregkeyrename}
 
 \func{bool}{Rename}{\param{const wxChar *}{ szNewName}}
 
 Renames the key.
 
+
 \membersection{wxRegKey::RenameValue}\label{wxregkeyrenamevalue}
 
 \func{bool}{RenameValue}{\param{const wxChar *}{szValueOld}, \param{const wxChar *}{szValueNew}}
 
 Renames a value.
+
 
 \membersection{wxRegKey::SetValue}\label{wxregkeysetvalue}
 
