@@ -219,9 +219,7 @@ void wxMacCGContext::Clip( const wxRegion &region )
 void wxMacCGContext::StrokePath( const wxGraphicPath *p ) 
 {
     const wxMacCGPath* path = dynamic_cast< const wxMacCGPath*>( p ) ;
-    CGContextBeginPath( m_cgContext ) ;
     CGContextAddPath( m_cgContext , path->GetPath() ) ;
-    CGContextClosePath( m_cgContext ) ;
     CGContextStrokePath( m_cgContext ) ;
 }
 
@@ -236,9 +234,7 @@ void wxMacCGContext::DrawPath( const wxGraphicPath *p , int fillStyle )
         else if ( mode == kCGPathFillStroke )
             mode = kCGPathEOFillStroke ;
     }
-    CGContextBeginPath( m_cgContext ) ;
     CGContextAddPath( m_cgContext , path->GetPath() ) ;
-    CGContextClosePath( m_cgContext ) ;
     CGContextDrawPath( m_cgContext , mode ) ;
 }
 
@@ -302,6 +298,210 @@ void wxMacCGContext::SetNativeContext( CGContextRef cg )
     m_cgContext = cg ; 
 }
 
+#pragma mark -
+
+// Experimental support for dashes and patterned brushes
+// uncomment the following lines to enable it
+
+// #define _NEW_GC_DASHES_
+// #define _NEW_GC_SUPPORT_
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4
+#define kCGColorSpaceGenericRGB   CFSTR("kCGColorSpaceGenericRGB")
+#endif
+
+void EstablishPatternColorSpace(
+	CGContextRef		ctxRef,
+	bool				useMultibit,
+	bool				useFill )
+{
+	CGColorSpaceRef	baseSpace, patternSpace;
+
+	if (ctxRef == NULL)
+		return;
+
+	baseSpace = NULL;
+	patternSpace = NULL;
+
+	if (useMultibit)
+	{
+		patternSpace = CGColorSpaceCreatePattern( NULL );
+
+		if (useFill)
+			CGContextSetFillColorSpace( ctxRef, patternSpace );
+		else
+			CGContextSetStrokeColorSpace( ctxRef, patternSpace );
+	}
+	else
+	{
+		baseSpace = CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB );
+		patternSpace = CGColorSpaceCreatePattern( baseSpace );
+
+		if (useFill)
+			CGContextSetFillColorSpace( ctxRef, patternSpace );
+		else
+			CGContextSetStrokeColorSpace( ctxRef, patternSpace );
+	}
+
+	// NB: the context owns these now, and this code is finished with them
+	if (patternSpace != NULL)
+		CGColorSpaceRelease( patternSpace );
+	if (baseSpace != NULL)
+		CGColorSpaceRelease( baseSpace );
+}
+
+void ImagePatternRender(
+	void			*info,
+	CGContextRef	ctxRef )
+{
+	if (ctxRef == NULL)
+		return;
+
+	CGImageRef	imageRef = (CGImageRef)info;
+	if (imageRef != NULL)
+	{
+		CGRect	boundsR = CGRectMake( 0.0, 0.0, (float)CGImageGetWidth( imageRef ), (float)CGImageGetHeight( imageRef ) );
+		CGContextDrawImage( ctxRef, boundsR, imageRef );
+	}
+}
+
+void ImagePatternDispose(
+	void		*info )
+{
+	CGImageRef	imageRef = (CGImageRef)info;
+	if (imageRef != NULL)
+		CGImageRelease( imageRef );
+}
+
+// specifies the struct version value and the callback functions for draw and release
+static const CGPatternCallbacks sImagePatternCallback = { 0, &ImagePatternRender, &ImagePatternDispose };
+
+long CreatePatternFromBitmap(
+	CGPatternRef		*patternRef,
+	const wxBitmap	*rasterInfo,
+	bool				useMultibit )
+{
+	CGRect		boundsR;
+	CGImageRef	imageRef;
+	long			errorStatus, widthV, heightV, depthV;
+
+	if (patternRef == NULL)
+		return (-1);
+
+	*patternRef = NULL;
+	imageRef = NULL;
+	errorStatus = 0;
+
+	if ((rasterInfo == NULL) || !rasterInfo->Ok())
+		errorStatus = (-2);
+
+	if (errorStatus == 0)
+	{
+		// build a usable bounding CGRect from the wxBitmap's bounds wxRect
+		widthV = rasterInfo->GetWidth();
+		heightV = rasterInfo->GetHeight();
+		if ((widthV <= 0) || (heightV <= 0))
+			errorStatus = (-3);
+	}
+
+	if (errorStatus == 0)
+	{
+		depthV = rasterInfo->GetDepth();
+//		isColored = (depthV > 1);
+
+		// FIXME: this is often <= 0 - why???
+//		if (depthV <= 1)
+//			errorStatus = (-4);
+	}
+
+	if (errorStatus == 0)
+	{
+		imageRef = (CGImageRef)(rasterInfo->CGImageCreate());
+		if (imageRef == NULL)
+			errorStatus = (-5);
+	}
+
+	if (errorStatus == 0)
+	{
+		// FIXME: switch when this routine belongs to a DC class...
+		boundsR = CGRectMake( 0.0, 0.0, (float)widthV, (float)heightV );
+//		boundsR = CGRectMake( 0.0, 0.0, (float)XLOG2DEVREL( widthV ), (float)XLOG2DEVREL( heightV ) );
+
+		*patternRef = CGPatternCreate(
+			(void*)imageRef,
+			boundsR,
+			CGAffineTransformIdentity,
+			boundsR.size.width,
+			boundsR.size.height,
+			kCGPatternTilingNoDistortion,
+			(int)useMultibit,
+			&sImagePatternCallback );
+
+		if (*patternRef == (CGPatternRef)NULL)
+			errorStatus = (-6);
+	}
+
+	return errorStatus;
+}
+
+long CreatePatternFromDashes(
+	CGPatternRef	*patternRef,
+	const wxDash	*sourceDash,
+	int			count,
+	bool			useMultibit )
+{
+	long		errorStatus;
+
+	if (patternRef == NULL)
+		return (-1);
+
+	*patternRef = NULL;
+	if ((sourceDash == NULL) || (count <= 0))
+		return (-2);
+
+	wxBitmap		dashBits( (char*)sourceDash, 8, count, 1 );
+	errorStatus = CreatePatternFromBitmap( patternRef, &dashBits, useMultibit );
+
+	return errorStatus;
+}
+
+long CreatePatternFromBrush(
+	CGPatternRef	*patternRef,
+	const wxBrush	&sourceBrush,
+	bool			useMultibit )
+{
+	long		errorStatus;
+
+	if (patternRef == NULL)
+		return (-1);
+
+	*patternRef = NULL;
+	errorStatus = CreatePatternFromBitmap( patternRef, sourceBrush.GetStipple(), useMultibit );
+
+	return errorStatus;
+}
+
+long CreatePatternFromPen(
+	CGPatternRef	*patternRef,
+	const wxPen	&sourcePen,
+	bool			useMultibit )
+{
+	long		errorStatus;
+
+	if (patternRef == NULL)
+		return (-1);
+
+	*patternRef = NULL;
+	errorStatus = CreatePatternFromBitmap( patternRef, sourcePen.GetStipple(), useMultibit );
+
+	return errorStatus;
+}
+
+// ------------
+#pragma mark -
+
+// FIXME: the NEW_GC_SUPPORT part this routine is unfinished and needs lots of work !!
+//
 void wxMacCGContext::SetPen( const wxPen &pen )
 {
     m_pen = pen ;
@@ -325,8 +525,55 @@ void wxMacCGContext::SetPen( const wxPen &pen )
         }
         if ( stroke )
         {
+#if defined(_NEW_GC_SUPPORT_)
+            // new candidate
+            {
+                CGPatternRef  patternRef;
+                float  alphaArray[1];
+                long  result;
+                bool  hasSetPattern, useMultibit;
+
+                hasSetPattern = false;
+                useMultibit = true;
+                result = CreatePatternFromPen( &patternRef, pen, useMultibit );
+                if (result == 0)
+                {
+                    EstablishPatternColorSpace( m_cgContext, useMultibit, false );
+
+                    alphaArray[0] = 1.0;
+                    CGContextSetStrokePattern( m_cgContext, patternRef, alphaArray );
+                    CGPatternRelease( patternRef );
+
+                    hasSetPattern = true;
+
+//wxLogDebug( wxT("CreatePatternFromPen succeeded!") );
+                }
+
+                // NB: the (-2) result is from wxPen instances that don't have a stipple wxBitmap
+                if (result < (-2))
+                    wxLogDebug( wxT("CreatePatternFromPen failed: result [%ld]"), result );
+
+                if (!hasSetPattern)
+                {
+                    RGBColor col;
+
+#if 1
+                    col = MAC_WXCOLORREF( pen.GetColour().GetPixel() );
+#else
+                    GetThemeBrushAsColor( pen.MacGetTheme(), 32, true, &col );
+#endif
+
+                    CGContextSetRGBStrokeColor(
+                        m_cgContext, (float) col.red / 65536.0,
+                        (float) col.green / 65536.0, (float) col.blue / 65536.0, 1.0 );
+                }
+            }
+
+#else
+            // original implementation
             RGBColor col = MAC_WXCOLORREF( pen.GetColour().GetPixel() ) ;
             CGContextSetRGBStrokeColor( m_cgContext , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
+#endif
             
             CGLineCap cap ;
             switch( pen.GetCap() )
@@ -364,10 +611,83 @@ void wxMacCGContext::SetPen( const wxPen &pen )
             }
             CGContextSetLineJoin( m_cgContext , join ) ;
 
-            CGContextSetLineWidth( m_cgContext , pen.GetWidth() == 0 ? 0.1 :  pen.GetWidth() /* TODO * m_dc->m_scaleX */ ) ; 
+            /* TODO * m_dc->m_scaleX */
+            float penWidth = pen.GetWidth();
+            if (penWidth <= 0.0)
+                penWidth = 0.1;
+            CGContextSetLineWidth( m_cgContext , penWidth ) ; 
 
             m_mode = kCGPathStroke ;
             int count = 0 ;
+
+#if defined(_NEW_GC_DASHES_)
+            const char *dashData = NULL ;
+            char *userDashData = NULL ;
+            float  alphaArray[1];
+
+            const char dotted[] = { 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55 };
+            const char dashed[] = { 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00 };
+            const char short_dashed[] = { 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00 };
+            const char dotted_dashed[] = { 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00 };
+
+            switch (pen.GetStyle())
+            {
+                case wxSOLID:
+                    // default, undashed pen
+                    break;
+
+                case wxDOT:
+                    dashData = dotted;
+                    count = WXSIZEOF(dotted);
+                    break;
+                case wxLONG_DASH:
+                    dashData = dashed;
+                    count = WXSIZEOF(dashed);
+                    break;
+                case wxSHORT_DASH:
+                    dashData = short_dashed;
+                    count = WXSIZEOF(short_dashed);
+                    break;
+                case wxDOT_DASH:
+                    dashData = dotted_dashed;
+                    count = WXSIZEOF(dotted_dashed);
+                    break;
+                case wxUSER_DASH:
+                    count = pen.GetDashes( (wxDash**)&userDashData );
+                    dashData = userDashData;
+                    break;
+
+                default :
+                    break; 
+            }
+
+            if ((dashData != NULL) && (count > 0))
+            {
+                CGPatternRef  patternRef;
+                RGBColor col;
+                long  result;
+                bool  useMultibit;
+
+                    useMultibit = true;
+                    result = CreatePatternFromDashes( &patternRef, (const wxDash*)dashData, count, useMultibit );
+                    if (result == 0)
+                    {
+                        col = MAC_WXCOLORREF( pen.GetColour().GetPixel() );
+                        CGContextSetRGBStrokeColor(
+                            m_cgContext, (float) col.red / 65536.0,
+                            (float) col.green / 65536.0, (float) col.blue / 65536.0, 1.0 );
+
+                        EstablishPatternColorSpace( m_cgContext, useMultibit, false );
+
+                        alphaArray[0] = 1.0;
+                        CGContextSetStrokePattern( m_cgContext, patternRef, alphaArray );
+                        CGPatternRelease( patternRef );
+                    }
+ 
+                if (result != 0)
+                    wxLogDebug( wxT("CreatePatternFromDashes failed: result [%ld]"), result );
+           }
+#else
             const float *lengths = NULL ;
             float *userLengths = NULL ;
             
@@ -399,11 +719,18 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                 case wxUSER_DASH :
                     wxDash *dashes ;
                     count = pen.GetDashes( &dashes ) ;
-                    if ( count >0 )
+                    if ((dashes != NULL) && (count > 0))
                     {
                         userLengths = new float[count] ;
                         for( int i = 0 ; i < count ; ++i )
-                            userLengths[i] = dashes[i] ;
+                        {
+                            userLengths[i] = (float)dashes[i] ;
+                            if (userLengths[i] <= 0.0)
+                            {
+                                userLengths[i] = 1.0;
+//                                wxLogDebug( wxT("wxMacCGContext::SetPen - bad dash length[%d] [%.2f]"), i, (float)dashes[i] );
+                            }
+                        }
                     }
                     lengths = userLengths ;
                     break ;
@@ -411,20 +738,28 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                     break ; 
             }
 
-            CGContextSetLineDash( m_cgContext , 0 , lengths , count ) ;
-            delete[] userLengths ;
-            // we need to change the cap, otherwise everything overlaps
-            // and we get solid lines
-            if ( count > 0 )
+            if ((lengths != NULL) && (count > 0))
+            {
+                // we need to change the cap, otherwise everything overlaps
+                // and we get solid lines
+                CGContextSetLineDash( m_cgContext , 0 , lengths , count ) ;
                 CGContextSetLineCap( m_cgContext , kCGLineCapButt ) ;
+            }
+            else 
+            {
+               CGContextSetLineDash( m_cgContext , 0 , NULL , 0 ) ;
+            }
+
+            delete[] userLengths ;
+#endif
         }
         if ( fill && stroke )
         {
             m_mode = kCGPathFillStroke ;
         }
-        
     }
 }
+
 void wxMacCGContext::SetBrush( const wxBrush &brush )
 {
     m_brush = brush ;
@@ -438,16 +773,64 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
     // we can benchmark performance, should go into a setting later
     CGContextSetShouldAntialias( m_cgContext , false ) ;
 #endif
+
     if ( fill | stroke )
     {
-
         // setup brushes
         m_mode = kCGPathFill ; // just a default
 
         if ( fill )
         {
+#if defined(_NEW_GC_SUPPORT_)
+            // new candidate
+            {
+                CGPatternRef  patternRef;
+                float  alphaArray[1];
+                long  result;
+                bool  hasSetPattern, useMultibit;
+
+                hasSetPattern = false;
+                useMultibit = true;
+                result = CreatePatternFromBrush( &patternRef, brush, useMultibit );
+                if (result == 0)
+                {
+                    EstablishPatternColorSpace( m_cgContext, useMultibit, true );
+
+                    alphaArray[0] = 1.0;
+                    CGContextSetFillPattern( m_cgContext, patternRef, alphaArray );
+                    CGPatternRelease( patternRef );
+
+                    hasSetPattern = true;
+
+//wxLogDebug( wxT("CreatePatternFromBrush succeeded!") );
+                }
+
+                // NB: the (-2) result is from wxBrush instances that don't have a stipple wxBitmap
+                if (result < (-2))
+                    wxLogDebug( wxT("CreatePatternFromBrush failed: result [%ld]"), result );
+
+                if (!hasSetPattern)
+                {
+                    RGBColor col;
+
+#if 1
+                    col = MAC_WXCOLORREF( brush.GetColour().GetPixel() );
+#else
+                    GetThemeBrushAsColor( brush.MacGetTheme(), 32, true, &col );
+#endif
+
+                    CGContextSetRGBFillColor(
+                        m_cgContext, (float) col.red / 65536.0,
+                        (float) col.green / 65536.0, (float) col.blue / 65536.0, 1.0 );
+                }
+            }
+
+#else
+            // original implementation
             RGBColor col = MAC_WXCOLORREF( brush.GetColour().GetPixel() ) ;
             CGContextSetRGBFillColor( m_cgContext , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
+#endif
+
             m_mode = kCGPathFill ;
         }
         if ( stroke )
@@ -458,7 +841,6 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
         {
             m_mode = kCGPathFillStroke ;
         }
-        
     }
 }
 
@@ -921,23 +1303,6 @@ void  wxDC::DoCrossHair( wxCoord x, wxCoord y )
     CalcBoundingBox(x+w, y+h);
 }
 
-/*
-* To draw arcs properly the angles need to be converted from the WX style:
-* Angles start on the +ve X axis and go anti-clockwise (As you would draw on
-* a normal axis on paper).
-* TO
-* the Mac style:
-* Angles start on the +ve y axis and go clockwise.
-*/
-
-static double wxConvertWXangleToMACangle(double angle)
-{
-    double newAngle = 90 - angle ;
-    if ( newAngle < 0 )
-        newAngle += 360 ;
-    return newAngle ;
-}
-
 void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
                       wxCoord x2, wxCoord y2,
                       wxCoord xc, wxCoord yc )
@@ -957,33 +1322,38 @@ void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
     double dy = yy1 - yyc;
     double radius = sqrt((double)(dx*dx+dy*dy));
     wxCoord rad   = (wxCoord)radius;
-    double radius1, radius2;
+    double sa, ea;
     if (xx1 == xx2 && yy1 == yy2)
     {
-        radius1 = 0.0;
-        radius2 = 360.0;
+        sa = 0.0;
+        ea = 360.0;
     }
     else if (radius == 0.0)
     {
-        radius1 = radius2 = 0.0;
+        sa = ea = 0.0;
     }
     else
     {
-        radius1 = (xx1 - xxc == 0) ?
+        sa = (xx1 - xxc == 0) ?
             (yy1 - yyc < 0) ? 90.0 : -90.0 :
         -atan2(double(yy1-yyc), double(xx1-xxc)) * RAD2DEG;
-        radius2 = (xx2 - xxc == 0) ?
+        ea = (xx2 - xxc == 0) ?
             (yy2 - yyc < 0) ? 90.0 : -90.0 :
         -atan2(double(yy2-yyc), double(xx2-xxc)) * RAD2DEG;
     }
-    wxCoord alpha2 = wxCoord(radius2 - radius1);
-    wxCoord alpha1 = wxCoord(wxConvertWXangleToMACangle(radius1));
-    if( (xx1 > xx2) || (yy1 > yy2) ) {
-        alpha2 *= -1;
-    }
+
+    bool fill = m_brush.GetStyle() != wxTRANSPARENT ;
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
-    AddEllipticArcToPath( ctx , CGPointMake( xxc , yyc ) , rad , rad , alpha1 , alpha2 ) ;
+    CGContextSaveGState( ctx ) ;
+    CGContextTranslateCTM( ctx, xxc , yyc );
+    CGContextScaleCTM( ctx , 1 , -1 ) ;
+    if ( fill )
+        CGContextMoveToPoint( ctx , 0 , 0 ) ;
+    CGContextAddArc( ctx, 0, 0 , rad , DegToRad(sa), DegToRad(ea), 0);
+    if ( fill )
+        CGContextAddLineToPoint( ctx , 0 , 0 ) ;
+    CGContextRestoreGState( ctx ) ;
     CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
 }
 
@@ -995,10 +1365,6 @@ void  wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     if ( m_logicalFunction != wxCOPY )
         return ;
 
-    double angle = sa - ea;  // Order important Mac in opposite direction to wx
-    // we have to make sure that the filling is always counter-clockwise
-    if ( angle > 0 )
-        angle -= 360 ;
     wxCoord xx = XLOG2DEVMAC(x);
     wxCoord yy = YLOG2DEVMAC(y);
     wxCoord ww = m_signX * XLOG2DEVREL(w);
@@ -1006,11 +1372,22 @@ void  wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     // handle -ve width and/or height
     if (ww < 0) { ww = -ww; xx = xx - ww; }
     if (hh < 0) { hh = -hh; yy = yy - hh; }
-    sa = wxConvertWXangleToMACangle(sa);
+
+    bool fill = m_brush.GetStyle() != wxTRANSPARENT ;
+
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
-    AddEllipticArcToPath( ctx  , CGPointMake( xx + ww / 2 , yy + hh / 2 ) , ww / 2 , hh / 2 , sa , angle) ;
-    CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
+
+    CGContextSaveGState( ctx ) ;
+    CGContextTranslateCTM( ctx, xx + ww / 2, yy + hh / 2);
+    CGContextScaleCTM( ctx , 1 * ww / 2 , -1 * hh / 2 ) ;
+    if ( fill )
+        CGContextMoveToPoint( ctx , 0 , 0 ) ;
+    CGContextAddArc( ctx, 0, 0, 1, DegToRad(sa), DegToRad(ea), 0);
+    if ( fill )
+        CGContextAddLineToPoint( ctx , 0 , 0 ) ;
+    CGContextRestoreGState( ctx ) ;
+    CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;    
 }
 
 void  wxDC::DoDrawPoint( wxCoord x, wxCoord y )
@@ -1171,25 +1548,12 @@ void  wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
-    if ( width == height )
-    {
-        CGContextBeginPath(ctx);
-        CGContextAddArc(ctx ,
-            xx + ww / 2,
-            yy + hh / 2,
-            ww / 2,
-            0,
-            2 * M_PI,
-            0 ) ;
-        CGContextClosePath(ctx);
-
-        CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
-    }
-    else
-    {
-        AddEllipticArcToPath( ctx , CGPointMake( xx + ww / 2 , yy + hh / 2 ) , ww / 2 , hh / 2 , 0 , 360) ;
-        CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
-    }
+    CGContextSaveGState( ctx ) ;
+    CGContextTranslateCTM( ctx, xx + ww / 2, yy + hh / 2);
+    CGContextScaleCTM( ctx , ww / 2 , hh / 2 ) ;
+    CGContextAddArc( ctx, 0, 0, 1,  0 , 2*M_PI , 0);
+    CGContextRestoreGState( ctx ) ;
+    CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
 }
 
 bool  wxDC::CanDrawBitmap(void) const
@@ -1549,7 +1913,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
         
-    	for ( int pos = 0; pos < chars; pos ++ ) {
+    	for ( int pos = 0; pos < (int)chars; pos ++ ) {
 			unsigned long actualNumberOfBounds = 0;
 			ATSTrapezoid glyphBounds;
 
@@ -1598,7 +1962,7 @@ void  wxDC::Clear(void)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
                     if ( HIThemeSetFill != 0 )
                     {
-                        HIThemeSetFill( m_backgroundBrush.MacGetTheme() , NULL , cg , kHIThemeOrientationNormal ) ;
+                        HIThemeSetFill( m_backgroundBrush.MacGetTheme(), NULL, cg, kHIThemeOrientationNormal );
                         CGContextFillRect(cg, rect);
 
                     }
@@ -1606,14 +1970,15 @@ void  wxDC::Clear(void)
 #endif
                     {
         				RGBColor	color;
-        				GetThemeBrushAsColor( m_backgroundBrush.MacGetTheme() , 32, true, &color );
-        				CGContextSetRGBFillColor( cg , (float) color.red / 65536,
+                        GetThemeBrushAsColor( m_backgroundBrush.MacGetTheme(), 32, true, &color );
+                        CGContextSetRGBFillColor( cg, (float) color.red / 65536,
         						(float) color.green / 65536, (float) color.blue / 65536, 1 );
         				CGContextFillRect( cg, rect );
                     }
+
                     // reset to normal value
                     RGBColor col = MAC_WXCOLORREF( GetBrush().GetColour().GetPixel() ) ;
-                    CGContextSetRGBFillColor( cg , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
+                    CGContextSetRGBFillColor( cg, col.red / 65536.0, col.green / 65536.0, col.blue / 65536.0, 1.0 );
                 }
             break ;
             case kwxMacBrushThemeBackground :
