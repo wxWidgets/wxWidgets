@@ -281,7 +281,6 @@ void wxMacCarbonPrintData::TransferFrom( wxPrintDialogData* data )
 	{
     	PMSetLastPage( m_macPrintSettings , toPage , false ) ;
 	}
-    PMSetLastPage( m_macPrintSettings , toPage , false ) ;
 }
 
 /*
