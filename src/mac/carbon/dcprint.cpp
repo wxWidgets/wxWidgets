@@ -180,7 +180,9 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
         if ( !m_err )
         {
 #if wxMAC_USE_CORE_GRAPHICS
-            CGContextTranslateCTM( pageContext , 0 , rPage.bottom - rPage.top ) ;
+            PMRect paperRect ;
+            PMGetAdjustedPaperRect( native->m_macPageFormat , &paperRect ) ;
+            CGContextTranslateCTM( pageContext , -paperRect.left , -paperRect.top + ( rPage.bottom - rPage.top ) ) ;
             CGContextScaleCTM( pageContext , 1 , -1 ) ;
             CGContextSaveGState( pageContext ) ;
 #else
