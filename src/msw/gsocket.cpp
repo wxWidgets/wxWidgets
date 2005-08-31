@@ -84,9 +84,9 @@
 #include <stddef.h>
 #include <ctype.h>
 
-/* if we use configure for MSW SOCKLEN_T will be already defined */
-#ifndef SOCKLEN_T
-#  define SOCKLEN_T int
+/* if we use configure for MSW WX_SOCKLEN_T will be already defined */
+#ifndef WX_SOCKLEN_T
+#  define WX_SOCKLEN_T int
 #endif
 
 /* Table of GUI-related functions. We must call them indirectly because
@@ -299,7 +299,7 @@ GAddress *GSocket::GetLocal()
 {
   GAddress *address;
   struct sockaddr addr;
-  SOCKLEN_T size = sizeof(addr);
+  WX_SOCKLEN_T size = sizeof(addr);
   GSocketError err;
 
   assert(this);
@@ -411,7 +411,7 @@ GSocketError GSocket::SetServer()
   if ((bind(m_fd, m_local->m_addr, m_local->m_len) != 0) ||
       (getsockname(m_fd,
                    m_local->m_addr,
-                   (SOCKLEN_T *)&m_local->m_len) != 0) ||
+                   (WX_SOCKLEN_T *)&m_local->m_len) != 0) ||
       (listen(m_fd, 5) != 0))
   {
     Close();
@@ -438,7 +438,7 @@ GSocket *GSocket::WaitConnection()
 {
   GSocket *connection;
   struct sockaddr from;
-  SOCKLEN_T fromlen = sizeof(from);
+  WX_SOCKLEN_T fromlen = sizeof(from);
   GSocketError err;
   u_long arg = 1;
 
@@ -696,7 +696,7 @@ GSocketError GSocket::SetNonOriented()
   if ((bind(m_fd, m_local->m_addr, m_local->m_len) != 0) ||
       (getsockname(m_fd,
                    m_local->m_addr,
-                   (SOCKLEN_T *)&m_local->m_len) != 0))
+                   (WX_SOCKLEN_T *)&m_local->m_len) != 0))
   {
     Close();
     m_error = GSOCK_IOERR;
@@ -867,7 +867,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
       if (m_establishing && !m_server)
       {
         int error;
-        SOCKLEN_T len = sizeof(error);
+        WX_SOCKLEN_T len = sizeof(error);
 
         m_establishing = false;
 
@@ -1114,7 +1114,7 @@ int GSocket::Recv_Stream(char *buffer, int size)
 int GSocket::Recv_Dgram(char *buffer, int size)
 {
   struct sockaddr from;
-  SOCKLEN_T fromlen = sizeof(from);
+  WX_SOCKLEN_T fromlen = sizeof(from);
   int ret;
   GSocketError err;
 

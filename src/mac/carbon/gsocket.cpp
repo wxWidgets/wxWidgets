@@ -513,7 +513,7 @@ GSocketError GSocket::SetServer()
   if ((bind(m_endpoint, m_local->m_addr, m_local->m_len) != 0) ||
       (getsockname(m_endpoint,
                    m_local->m_addr,
-                   (SOCKLEN_T *) &m_local->m_len) != 0) ||
+                   (WX_SOCKLEN_T *) &m_local->m_len) != 0) ||
       (listen(m_endpoint, 5) != 0))
   {
     close(m_endpoint);
@@ -572,7 +572,7 @@ GSocket *GSocket::WaitConnection()
 
 // TODO
 #if 0
-  connection->m_endpoint = accept(m_endpoint, &from, (SOCKLEN_T *) &fromlen);
+  connection->m_endpoint = accept(m_endpoint, &from, (WX_SOCKLEN_T *) &fromlen);
 #endif
 
   if (connection->m_endpoint == kOTInvalidEndpointRef )
@@ -678,7 +678,7 @@ GSocketError GSocket::SetNonOriented()
   if ((bind(m_endpoint, m_local->m_addr, m_local->m_len) != 0) ||
       (getsockname(m_endpoint,
                    m_local->m_addr,
-                   (SOCKLEN_T *) &m_local->m_len) != 0))
+                   (WX_SOCKLEN_T *) &m_local->m_len) != 0))
   {
     close(m_endpoint);
     m_endpoint    = -1;
@@ -795,7 +795,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
       {
 /*
         int error;
-        SOCKLEN_T len = sizeof(error);
+        WX_SOCKLEN_T len = sizeof(error);
 
         getsockopt(m_endpoint, SOL_SOCKET, SO_ERROR, (void*) &error, &len);
 
@@ -1093,12 +1093,12 @@ int GSocket::Recv_Dgram(char *buffer, int size)
   int ret = -1;
 #if 0
   struct sockaddr from;
-  SOCKLEN_T fromlen = sizeof(from);
+  WX_SOCKLEN_T fromlen = sizeof(from);
   GSocketError err;
 
   fromlen = sizeof(from);
 
-  ret = recvfrom(m_endpoint, buffer, size, 0, &from, (SOCKLEN_T *) &fromlen);
+  ret = recvfrom(m_endpoint, buffer, size, 0, &from, (WX_SOCKLEN_T *) &fromlen);
 
   if (ret == -1)
     return -1;

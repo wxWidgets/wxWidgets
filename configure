@@ -39073,7 +39073,7 @@ echo "${ECHO_T}$wx_cv_type_getsockname3" >&6
 echo "$as_me: WARNING: Couldn't find socklen_t synonym for this system" >&2;}
         else
             cat >>confdefs.h <<_ACEOF
-#define SOCKLEN_T $wx_cv_type_getsockname3
+#define WX_SOCKLEN_T $wx_cv_type_getsockname3
 _ACEOF
 
         fi

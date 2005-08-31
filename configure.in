@@ -5541,7 +5541,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
             wxUSE_SOCKETS=no
             AC_MSG_WARN([Couldn't find socklen_t synonym for this system])
         else
-            AC_DEFINE_UNQUOTED(SOCKLEN_T, $wx_cv_type_getsockname3)
+            AC_DEFINE_UNQUOTED(WX_SOCKLEN_T, $wx_cv_type_getsockname3)
         fi
         dnl Do this again for getsockopt as it may be different
         AC_CACHE_CHECK([what is the type of the fifth argument of getsockopt],

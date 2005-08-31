@@ -114,26 +114,26 @@ int _System soclose(int);
 #endif
 #include <signal.h>
 
-#ifndef SOCKLEN_T
+#ifndef WX_SOCKLEN_T
 
 #ifdef VMS
-#  define SOCKLEN_T unsigned int
+#  define WX_SOCKLEN_T unsigned int
 #else
 #  ifdef __GLIBC__
 #    if __GLIBC__ == 2
-#      define SOCKLEN_T socklen_t
+#      define WX_SOCKLEN_T socklen_t
 #    endif
 #  elif defined(__WXMAC__)
-#    define SOCKLEN_T socklen_t
+#    define WX_SOCKLEN_T socklen_t
 #  else
-#    define SOCKLEN_T int
+#    define WX_SOCKLEN_T int
 #  endif
 #endif
 
 #endif /* SOCKLEN_T */
 
 #ifndef SOCKOPTLEN_T
-#define SOCKOPTLEN_T SOCKLEN_T
+#define SOCKOPTLEN_T WX_SOCKLEN_T
 #endif
 
 /*
@@ -414,7 +414,7 @@ GAddress *GSocket::GetLocal()
 {
   GAddress *address;
   struct sockaddr addr;
-  SOCKLEN_T size = sizeof(addr);
+  WX_SOCKLEN_T size = sizeof(addr);
   GSocketError err;
 
   assert(this);
@@ -430,7 +430,7 @@ GAddress *GSocket::GetLocal()
     return NULL;
   }
 
-  if (getsockname(m_fd, &addr, (SOCKLEN_T *) &size) < 0)
+  if (getsockname(m_fd, &addr, (WX_SOCKLEN_T *) &size) < 0)
   {
     m_error = GSOCK_IOERR;
     return NULL;
@@ -532,7 +532,7 @@ GSocketError GSocket::SetServer()
   if ((bind(m_fd, m_local->m_addr, m_local->m_len) != 0) ||
       (getsockname(m_fd,
                    m_local->m_addr,
-                   (SOCKLEN_T *) &m_local->m_len) != 0) ||
+                   (WX_SOCKLEN_T *) &m_local->m_len) != 0) ||
       (listen(m_fd, 5) != 0))
   {
     Close();
@@ -558,7 +558,7 @@ GSocketError GSocket::SetServer()
 GSocket *GSocket::WaitConnection()
 {
   struct sockaddr from;
-  SOCKLEN_T fromlen = sizeof(from);
+  WX_SOCKLEN_T fromlen = sizeof(from);
   GSocket *connection;
   GSocketError err;
   int arg = 1;
@@ -589,7 +589,7 @@ GSocket *GSocket::WaitConnection()
     return NULL;
   }
 
-  connection->m_fd = accept(m_fd, &from, (SOCKLEN_T *) &fromlen);
+  connection->m_fd = accept(m_fd, &from, (WX_SOCKLEN_T *) &fromlen);
 
   /* Reenable CONNECTION events */
   Enable(GSOCK_CONNECTION);
@@ -838,7 +838,7 @@ GSocketError GSocket::SetNonOriented()
   if ((bind(m_fd, m_local->m_addr, m_local->m_len) != 0) ||
       (getsockname(m_fd,
                    m_local->m_addr,
-                   (SOCKLEN_T *) &m_local->m_len) != 0))
+                   (WX_SOCKLEN_T *) &m_local->m_len) != 0))
   {
     Close();
     m_error = GSOCK_IOERR;
@@ -1331,7 +1331,7 @@ int GSocket::Recv_Stream(char *buffer, int size)
 int GSocket::Recv_Dgram(char *buffer, int size)
 {
   struct sockaddr from;
-  SOCKLEN_T fromlen = sizeof(from);
+  WX_SOCKLEN_T fromlen = sizeof(from);
   int ret;
   GSocketError err;
 
@@ -1339,7 +1339,7 @@ int GSocket::Recv_Dgram(char *buffer, int size)
 
   do
   {
-    ret = recvfrom(m_fd, buffer, size, 0, &from, (SOCKLEN_T *) &fromlen);
+    ret = recvfrom(m_fd, buffer, size, 0, &from, (WX_SOCKLEN_T *) &fromlen);
   } while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
 
   if (ret == -1)
