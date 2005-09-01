@@ -27,7 +27,7 @@ Cygwin is available at  http://www.cygwin.com/
 If you are using Cygwin or MinGW together with the MSYS environment, you
 can build the library using configure (see "Unix ports" and
 "Windows using configure" below). You can also
-build wxWindows without configure using native makefile, but only with
+build wxWidgets without configure using native makefile, but only with
 MinGW. Using Cygwin together with Windows makefile is no longer supported.
 
 If building with MinGW without configure:
@@ -49,18 +49,18 @@ If using configure, Unix instructions apply.
 
 c) Build instructions
 
-Assumming that you installed the wxWindows sources
-into c:\wxWindows:
+Assumming that you installed the wxWidgets sources
+into c:\wxWidgets:
 
--> Copy c:\wxWindows\include\wx\msw\setup0.h
-   to   c:\wxWindows\include\wx\msw\setup.h
--> Edit c:\wxWindows\include\wx\msw\setup.h to choose
-   the features you would like to compile wxWindows with[out].
+-> Copy c:\wxWidgets\include\wx\msw\setup0.h
+   to   c:\wxWidgets\include\wx\msw\setup.h
+-> Edit c:\wxWidgets\include\wx\msw\setup.h to choose
+   the features you would like to compile wxWidgets with[out].
 
    and std iostreams are disabled with
    #define wxUSE_STD_IOSTREAM   0
  
--> type: cd c:\wxWindows\build\msw
+-> type: cd c:\wxWidgets\build\msw
 -> type: make -f makefile.gcc  (if using GNU tools)
 or type: nmake -f makefile.vc   (if using MS VC++)
 etc.
@@ -72,7 +72,7 @@ d) Borland (including free command line tools)
    
    See docs/msw/install.txt for details; in brief:
 
--> type cd c:\wxWindows\build\msw
+-> type cd c:\wxWidgets\build\msw
 -> type make -f makefile.bcc
 
 You can customize many things in the build process, detailed description is
@@ -95,9 +95,9 @@ directory, which just calls autoconf). Note that you usually don't
 need to do this because configure is included in CVS.
 
 Set WXWIN environment variable to the base directory such
-as ~/wxWindows (this is actually not really needed).
+as ~/wxWidgets (this is actually not really needed).
 
--> type: export WXWIN=~/wxWindows
+-> type: export WXWIN=~/wxWidgets
 -> type: md mybuild
 -> type: cd mybuild
 -> type: ../configure --with-motif
@@ -116,7 +116,7 @@ yet complete).
 III) Windows using configure
 ----------------------------------------
 
-wxWindows can be built on Windows using MSYS (see
+wxWidgets can be built on Windows using MSYS (see
 http://www.mingw.org/), which is a POSIX build environment
 for Windows. With MSYS you can just ./configure && make (see also VII,
 Unix->Windows cross-compiling using configure).
@@ -128,7 +128,7 @@ IV) Classic MacOS using CodeWarrior (eg MacOS 8.x/9.x)
 ----------------------------------------
 
 Refer to the readme.txt and install.txt files in docs/mac to build
-wxWindows under Classic Mac OS using CodeWarrior.
+wxWidgets under Classic Mac OS using CodeWarrior.
 
 If you are checking out the CVS sources using cvs under Mac OS X and
 compiling under Classic Mac OS:
@@ -182,9 +182,9 @@ preferable if you write portable C(++). ]
 
 You might want to build both Unix and Windows binaries in the same source
 tree; to do this make subdirs for each e.g. unix and win32. If you've
-already build wxWindows in the main dir, do a 'make distclean' there,
+already build wxWidgets in the main dir, do a 'make distclean' there,
 otherwise configure will get confused. (In any case, read the section 'Unix
-using configure' and make sure you're able to build a native wxWindows
+using configure' and make sure you're able to build a native wxWidgets
 library; cross-compiling errors can be pretty obscure and you'll want to be
 sure that your configure setup is basically sound.)
 
