@@ -211,10 +211,10 @@ wxBatteryState wxGetBatteryState()
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 wxMemorySize wxGetFreeMemory()
 {
-    void*                           pMemptr = NULL;
-    LONG                            lSize;
-    ULONG                           lMemFlags;
-    APIRET                          rc;
+    void* pMemptr = NULL;
+    LONG  lSize;
+    ULONG lMemFlags;
+    APIRET rc;
 
     lMemFlags = PAG_FREE;
     rc = ::DosQueryMem(pMemptr, (PULONG)&lSize, &lMemFlags);
@@ -362,6 +362,28 @@ void wxBell()
     DosBeep(1000,1000); // 1kHz during 1 sec.
 }
 
+wxString wxGetOsDescription()
+{
+    wxString strVer(_T("OS/2"));
+    ULONG ulSysInfo[QSV_MAX] = {0};
+
+    if (::DosQuerySysInfo( 1L,
+                           QSV_MAX,
+                           (PVOID)ulSysInfo,
+                           sizeof(ULONG) * QSV_MAX
+                         ) == 0L )
+    {
+        wxString ver;
+        ver.Printf( _T(" ver. %d.%d rev. %c"),
+                    int(ulSysInfo[QSV_VERSION_MAJOR] / 10),
+                    int(ulSysInfo[QSV_VERSION_MINOR]),
+                    char(ulSysInfo[QSV_VERSION_REVISION])
+                  );
+        strVer += ver;
+    }
+
+    return strVer;
+}
 
 void wxAppTraits::InitializeGui(unsigned long &WXUNUSED(ulHab))
 {
@@ -428,8 +450,8 @@ const wxMB2WXbuf wxGetUserHome( const wxString &rUser )
 wxChar* wxGetUserHome ( const wxString &rUser )
 #endif
 {
-    wxChar*                         zHome;
-    wxString                        sUser1(rUser);
+    wxChar*    zHome;
+    wxString   sUser1(rUser);
 
     wxChar *wxBuffer = new wxChar[256];
 #ifndef __EMX__
@@ -451,7 +473,7 @@ wxChar* wxGetUserHome ( const wxString &rUser )
                     return *zHome ? zHome : (wxChar*)_T("\\");
             }
             if (wxStricmp(zTmp, WXSTRINGCAST sUser1) == 0)
-                sUser1 = _T("");
+                sUser1 = wxEmptyString;
         }
     }
 #endif
