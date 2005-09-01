@@ -132,6 +132,10 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 // also coordinate conversions should be moved to native matrix ops
 //-----------------------------------------------------------------------------
 
+// we always stock two context states, one at entry, to be able to preserve the
+// state we were called with, the other one after changing to HI Graphics orientation
+// (this one is used for getting back clippings etc)
+
 wxMacCGPath::wxMacCGPath()
 {
     m_path = CGPathCreateMutable() ;
@@ -174,9 +178,6 @@ CGPathRef wxMacCGPath::GetPath() const
 {
     return m_path ;
 }
-
-// we always stock two context states, one at entry, the other one after 
-// changing to HI Graphics orientation (this one is used for getting back clippings etc)
 
 wxMacCGContext::wxMacCGContext( CGrafPtr port ) 
 {
