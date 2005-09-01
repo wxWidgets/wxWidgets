@@ -776,20 +776,6 @@ bool wxToolBar::Realize()
     if (m_tools.GetCount() == 0)
         return false;
 
-#if wxMAC_USE_NATIVE_TOOLBAR
-    // remove all tools, no way to determine how many there are in a toolbar, so just a high number :-(
-    OSStatus err = noErr ;
-    if ( m_macHIToolbarRef != NULL )
-    {
-        for ( CFIndex i = 0 ; i < 100 ; ++i )
-        {
-            err = HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef , i ) ;
-        }
-    }
-
-    wxASSERT_MSG( err == noErr, _T("HIToolbarRemoveItemAtIndex failed") );
-#endif // wxMAC_USE_NATIVE_TOOLBAR
-
     int x = m_xMargin + kwxMacToolBarLeftMargin;
     int y = m_yMargin + kwxMacToolBarTopMargin;
 
@@ -829,6 +815,7 @@ bool wxToolBar::Realize()
 
 #if wxMAC_USE_NATIVE_TOOLBAR
     CFIndex currentPosition = 0 ;
+    bool insertAll = false ;
 #endif // wxMAC_USE_NATIVE_TOOLBAR
 
     while ( node != NULL )
@@ -873,14 +860,27 @@ bool wxToolBar::Realize()
             HIToolbarItemRef    hiItemRef = tool->GetToolbarItemRef();
             if ( hiItemRef != NULL )
             {
-                OSStatus result = HIToolbarInsertItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, hiItemRef , currentPosition ) ;
-                if ( result == 0 )
+                if ( tool->GetIndex() != currentPosition || insertAll == true )
                 {
+                    OSStatus err = noErr ;
+                    if ( !insertAll )
+                    {
+                        // if this is the first tool that gets newly inserted or repositioned
+                        // first remove all 'old' tools from here to the right, because of this
+                        // all following tools will have to be reinserted (insertAll). i = 100 because there's
+                        // no way to determine how many there are in a toolbar, so just a high number :-(
+                        for ( CFIndex i = 100 ; i >= currentPosition ; --i )
+                        {
+                            err = HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef , i ) ;
+                        }
+                        wxASSERT_MSG( err == noErr, _T("HIToolbarRemoveItemAtIndex failed") );
+                        insertAll = true ;
+                    }
+                    err = HIToolbarInsertItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, hiItemRef , currentPosition ) ;
+                    wxASSERT_MSG( err == noErr, _T("HIToolbarInsertItemAtIndex failed") );
                     tool->SetIndex( currentPosition ) ;
-                    currentPosition++ ;
-                    InstallEventHandler( HIObjectGetEventTarget(hiItemRef), GetwxMacToolBarEventHandlerUPP(),
-                                         GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
                 }
+                currentPosition++ ;
             }
         }
 #endif // wxMAC_USE_NATIVE_TOOLBAR
@@ -1133,6 +1133,8 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
                     kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates, &item );
                 if (err  == noErr)
                 {
+                    InstallEventHandler( HIObjectGetEventTarget(item), GetwxMacToolBarEventHandlerUPP(),
+                                         GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
                     HIToolbarItemSetLabel( item, wxMacCFStringHolder(tool->GetLabel(), m_font.GetEncoding()) );
                     HIToolbarItemSetIconRef( item, info.u.iconRef );
                     HIToolbarItemSetCommandID( item, kHIToolbarCommandPressAction );
