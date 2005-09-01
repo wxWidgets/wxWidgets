@@ -238,7 +238,7 @@ void wxClassInfo::Register()
     wxASSERT_MSG( sm_classTable->Get(m_className) == NULL,
         wxString::Format
         (
-            _T("Class \"%s\" already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some objecti module(s) twice)?"),
+            _T("Class \"%s\" already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() multiple times or linked some object file twice)?"),
             m_className
         )
     );
