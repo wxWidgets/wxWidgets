@@ -309,7 +309,7 @@ Fax3Decode2D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
  * this is <8 bytes.  We optimize the code here to reflect the
  * machine characteristics.
  */
-#if defined(__alpha) || _MIPS_SZLONG == 64 || defined(__LP64__) || defined(__arch64__)
+#if defined(__alpha) || (defined(_MIPS_SZLONG) && _MIPS_SZLONG == 64) || defined(__LP64__) || defined(__arch64__)
 #define FILL(n, cp)							    \
     switch (n) {							    \
     case 15:(cp)[14] = 0xff; case 14:(cp)[13] = 0xff; case 13: (cp)[12] = 0xff;\
