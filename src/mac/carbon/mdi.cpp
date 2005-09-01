@@ -135,8 +135,11 @@ void wxMDIParentFrame::AddChild(wxWindowBase *child)
     {
         m_currentChild = wxDynamicCast(child, wxMDIChildFrame);
 
-        if ( m_currentChild && IsShown() && ShouldBeVisible() )
+        if ( m_currentChild && IsShown() && !ShouldBeVisible() )
         {
+            // we shouldn't remain visible any more
+            wxFrame::Show(false);
+            m_shouldBeShown = true;
         }
     }
 
