@@ -323,8 +323,6 @@ bool MyApp::OnInit()
 
   if (isInteractive)
   {
-    wxChar buf[100];
-
     // Create the main frame window
     frame = new MyFrame(NULL, wxID_ANY, _T("Tex2RTF"), wxDefaultPosition, wxSize(400, 300));
 #if wxUSE_STATUSBAR
@@ -337,8 +335,9 @@ bool MyApp::OnInit()
 
     if (!InputFile.empty())
     {
-        wxSnprintf(buf, sizeof(buf), _T("Tex2RTF [%s]"), wxFileNameFromPath(InputFile));
-        frame->SetTitle(buf);
+        wxString title;
+        title.Printf( _T("Tex2RTF [%s]"), wxFileNameFromPath(InputFile).c_str());
+        frame->SetTitle(title);
     }
 
     // Make a menubar
@@ -410,24 +409,30 @@ bool MyApp::OnInit()
       ReadCustomMacros((wxChar *)path.c_str());
 
 #if wxUSE_STATUSBAR
-    wxStrcpy(buf, _T("In "));
+    wxString inStr(_T("In "));
     switch (convertMode)
     {
-      case TEX_RTF:
-        wxStrcat(buf, (winHelp) ? _T("WinHelp RTF") : _T("linear RTF"));
-        break;
-      case TEX_HTML:
-        wxStrcat(buf, _T("HTML"));
-        break;
-      case TEX_XLP:
-        wxStrcat(buf, _T("XLP"));
-        break;
-      default:
-        wxStrcat(buf, _T("unknown"));
-        break;
+        case TEX_RTF:
+            if(winHelp)
+                inStr += _T("WinHelp RTF");
+            else
+                inStr += _T("linear RTF");
+            break;
+
+        case TEX_HTML:
+            inStr += _T("HTML");
+            break;
+
+        case TEX_XLP:
+            inStr += _T("XLP");
+            break;
+
+        default:
+            inStr += _T("unknown");
+            break;
     }
-    wxStrcat(buf, _T(" mode."));
-    frame->SetStatusText(buf, 1);
+    inStr += _T(" mode.");
+    frame->SetStatusText(inStr, 1);
 #endif // wxUSE_STATUSBAR
 
     frame->Show(true);
@@ -443,7 +448,7 @@ bool MyApp::OnInit()
 
     wxString path = TexPathList.FindValidPath(MacroFile);
     if (!path.empty())
-      ReadCustomMacros((wxChar*)path.c_str());
+        ReadCustomMacros((wxChar*)path.c_str());
 
     Go();
     if (runTwice)
