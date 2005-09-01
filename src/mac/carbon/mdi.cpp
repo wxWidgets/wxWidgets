@@ -57,27 +57,27 @@ static const int wxLAST_MDI_CHILD = 4600;
 // Status border dimensions
 static const int wxTHICK_LINE_BORDER = 3;
 
+// ----------------------------------------------------------------------------
 // Parent frame
+// ----------------------------------------------------------------------------
 
-wxMDIParentFrame::wxMDIParentFrame()
+void wxMDIParentFrame::Init()
 {
     m_clientWindow = NULL;
     m_currentChild = NULL;
     m_windowMenu = (wxMenu*) NULL;
-    m_parentFrameActive = TRUE;
+    m_parentFrameActive = true;
+    m_shouldBeShown = false;
 }
 
 bool wxMDIParentFrame::Create(wxWindow *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+                              wxWindowID id,
+                              const wxString& title,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxString& name)
 {
-    m_clientWindow = NULL;
-    m_currentChild = NULL;
-    
     // this style can be used to prevent a window from having the standard MDI
     // "Window" menu
     if ( style & wxFRAME_NO_WINDOW_MENU )
@@ -98,11 +98,11 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     }
     
     wxFrame::Create( parent , id , title , pos , size , style , name ) ;
-    m_parentFrameActive = TRUE;
+    m_parentFrameActive = true;
     
     OnCreateClient();
     
-    return TRUE;
+    return true;
 }
 
 wxMDIParentFrame::~wxMDIParentFrame()
@@ -127,6 +127,58 @@ void wxMDIParentFrame::GetRectForTopLevelChildren(int *x, int *y, int *w, int *h
     if(y)
         *y = 0;
     wxDisplaySize(w,h);
+}
+
+void wxMDIParentFrame::AddChild(wxWindowBase *child)
+{
+    if ( !m_currentChild )
+    {
+        m_currentChild = wxDynamicCast(child, wxMDIChildFrame);
+
+        if ( m_currentChild && IsShown() && ShouldBeVisible() )
+        {
+        }
+    }
+
+    wxFrame::AddChild(child);
+}
+
+void wxMDIParentFrame::RemoveChild(wxWindowBase *child)
+{
+    if ( child == m_currentChild )
+    {
+        // the current child isn't active any more, try to find another one
+        m_currentChild = NULL;
+
+        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            wxMDIChildFrame *
+                childCur = wxDynamicCast(node->GetData(), wxMDIChildFrame);
+            if ( childCur != child )
+            {
+                m_currentChild = childCur;
+                break;
+            }
+        }
+    }
+
+    wxFrame::RemoveChild(child);
+
+    // if there are no more children left we need to show the frame if we
+    // hadn't shown it before because there were active children and it was
+    // useless (note that we have to do it after fully removing the child, i.e.
+    // after calling the base class RemoveChild() as otherwise we risk to touch
+    // pointer to the child being deleted)
+    if ( !m_currentChild && m_shouldBeShown && !IsShown() )
+    {
+        // we have to show it, but at least move it out of sight and make it of
+        // smallest possible size (unfortunately (0, 0) doesn't work so that it
+        // doesn't appear in expose
+        SetSize(-10000, -10000, 1, 1);
+        Show();
+    }
 }
 
 void wxMDIParentFrame::MacActivate(long timestamp, bool activating)
@@ -229,29 +281,51 @@ void wxMDIParentFrame::ActivatePrevious()
     // TODO
 }
 
+bool wxMDIParentFrame::ShouldBeVisible() const
+{
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        if ( !wxDynamicCast(node->GetData(), wxMDIChildFrame)
+#if wxUSE_STATUSBAR
+                && node->GetData() != GetStatusBar()
+#endif // wxUSE_STATUSBAR
+                    && node->GetData() != GetClientWindow() )
+        {
+            // if we have a non-MDI child, do remain visible so that it could
+            // be used
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool wxMDIParentFrame::Show( bool show )
 {
+    m_shouldBeShown = false;
+
     // don't really show the MDI frame unless it has any children other than
     // MDI children as it is pretty useless in this case
 
     if ( show )
     {
-        // TODO: check for other children
-        if ( !GetToolBar() )
+        if ( !ShouldBeVisible() && m_currentChild )
         {
-            // call the base class version to just update the flag but don't
-            // really make the window visible
-            return wxFrameBase::Show();
+            // don't make the window visible now but remember that we should
+            // have had done it
+            m_shouldBeShown = true;
+            return false;
         }
     }
 
-    if ( !wxFrame::Show(show) )
-        return false;
-
-    return true;
+    return wxFrame::Show(show);
 }
 
+// ----------------------------------------------------------------------------
 // Child frame
+// ----------------------------------------------------------------------------
 
 wxMDIChildFrame::wxMDIChildFrame()
 {
@@ -283,15 +357,11 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     wxModelessWindows.Append(this);
-    return FALSE;
+    return false;
 }
 
 wxMDIChildFrame::~wxMDIChildFrame()
 {
-    wxMDIParentFrame *mdiparent = wxDynamicCast(m_parent, wxMDIParentFrame);
-    wxASSERT(mdiparent);
-    if(mdiparent->m_currentChild == this)
-        mdiparent->m_currentChild = NULL;
     DestroyChildren();
 }
 
@@ -380,10 +450,10 @@ wxMDIClientWindow::~wxMDIClientWindow()
 bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 {
     if ( !wxWindow::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, style))
-        return FALSE;
+        return false;
     
     wxModelessWindows.Append(this);
-    return TRUE;
+    return true;
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar.
@@ -397,5 +467,5 @@ void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
 {
 }
 
-#endif
+#endif // wxUSE_MDI
 

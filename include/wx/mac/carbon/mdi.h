@@ -32,15 +32,16 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 
 public:
 
-  wxMDIParentFrame();
-  inline wxMDIParentFrame(wxWindow *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,  // Scrolling refers to client window
-           const wxString& name = wxFrameNameStr)
+  wxMDIParentFrame() { Init(); }
+  wxMDIParentFrame(wxWindow *parent,
+                   wxWindowID id,
+                   const wxString& title,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,  // Scrolling refers to client window
+                   const wxString& name = wxFrameNameStr)
   {
+      Init();
       Create(parent, id, title, pos, size, style, name);
   }
 
@@ -84,19 +85,34 @@ public:
 
   virtual bool Show( bool show = true );
 
+  // overridden base clas virtuals
+  virtual void AddChild(wxWindowBase *child);
+  virtual void RemoveChild(wxWindowBase *child);
+
 protected:
+    // common part of all ctors
+    void Init();
 
-  // TODO maybe have this member
-  wxMDIClientWindow     *m_clientWindow;
-  wxMDIChildFrame *               m_currentChild;
-    wxMenu*                         m_windowMenu;
+    // returns true if this frame has some contents and so should be visible,
+    // false if it's used solely as container for its children
+    bool ShouldBeVisible() const;
 
-    // TRUE if MDI Frame is intercepting commands, not child
+
+    // TODO maybe have this member
+    wxMDIClientWindow *m_clientWindow;
+    wxMDIChildFrame *m_currentChild;
+    wxMenu *m_windowMenu;
+
+    // true if MDI Frame is intercepting commands, not child
     bool m_parentFrameActive;
+
+    // true if the frame should be shown but is not because it is empty and
+    // useless otherwise than a container for its children
+    bool m_shouldBeShown;
 
 private:
     friend class WXDLLEXPORT wxMDIChildFrame;
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 class WXDLLEXPORT wxMDIChildFrame: public wxFrame
