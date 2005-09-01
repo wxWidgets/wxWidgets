@@ -123,7 +123,7 @@ wxChoicebook::Create(wxWindow *parent,
 wxSize wxChoicebook::GetChoiceSize() const
 {
     const wxSize sizeClient = GetClientSize(),
-                 sizeChoice = m_choice->GetBestSize();
+                 sizeChoice = m_choice->GetBestFittingSize();
 
     wxSize size;
     if ( IsVertical() )
@@ -142,7 +142,7 @@ wxSize wxChoicebook::GetChoiceSize() const
 
 wxRect wxChoicebook::GetPageRect() const
 {
-    const wxSize sizeChoice = m_choice->GetSize();
+    const wxSize sizeChoice = m_choice->GetBestFittingSize();
 
     wxPoint pt;
     wxRect rectPage(pt, GetClientSize());
@@ -207,8 +207,8 @@ void wxChoicebook::OnSize(wxSizeEvent& event)
             break;
     }
 
-    m_choice->Move(posChoice.x, posChoice.y);
-    m_choice->SetSize(sizeChoice.x, sizeChoice.y);
+    m_choice->Move(posChoice);
+    m_choice->SetSize(sizeChoice);
 
     // resize the currently shown page
     if ( m_selection != wxNOT_FOUND )
@@ -258,7 +258,7 @@ int wxChoicebook::GetPageImage(size_t WXUNUSED(n)) const
 {
     wxFAIL_MSG( _T("wxChoicebook::GetPageImage() not implemented") );
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 bool wxChoicebook::SetPageImage(size_t WXUNUSED(n), int WXUNUSED(imageId))
