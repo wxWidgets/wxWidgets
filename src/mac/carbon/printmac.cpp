@@ -262,8 +262,19 @@ void wxMacCarbonPrintData::TransferTo( wxPrintDialogData* data )
     UInt32 from , to ;
     PMGetFirstPage( m_macPrintSettings , &from ) ;
     PMGetLastPage( m_macPrintSettings , &to ) ;
-    data->SetFromPage( from ) ;
-    data->SetToPage( to ) ;
+    if ( to >= 0x7FFFFFFF ) //  due to an OS Bug we don't get back kPMPrintAllPages
+    {
+        data->SetAllPages( true ) ;
+        // This means all pages, more or less
+        data->SetFromPage(1);
+        data->SetToPage(32000);
+    }
+    else
+    {
+        data->SetFromPage( from ) ;
+        data->SetToPage( to ) ;
+        data->SetAllPages( false );
+    }
 }
 
 void wxMacCarbonPrintData::TransferFrom( wxPrintDialogData* data )
@@ -272,14 +283,13 @@ void wxMacCarbonPrintData::TransferFrom( wxPrintDialogData* data )
     PMSetCopies( m_macPrintSettings , data->GetNoCopies() , false ) ;
     PMSetFirstPage( m_macPrintSettings , data->GetFromPage() , false ) ;
 
-    int toPage = data->GetToPage();
-    if (toPage < 1)
+    if (data->GetAllPages() || data->GetFromPage() == 0)
     {
-    	PMSetLastPage( m_macPrintSettings , kPMPrintAllPages, true ) ;
+    	PMSetLastPage( m_macPrintSettings , (UInt32) kPMPrintAllPages, true ) ;
 	}
 	else
 	{
-    	PMSetLastPage( m_macPrintSettings , toPage , false ) ;
+    	PMSetLastPage( m_macPrintSettings , (UInt32) data->GetToPage() , false ) ;
 	}
 }
 
@@ -543,7 +553,7 @@ void wxMacPrintPreview::DetermineScaling(void)
     // m_previewScale = (float)((float)screenWidth/(float)printerWidth);
     // m_previewScale = m_previewScale * (float)((float)screenXRes/(float)printerXRes);
     
-    m_previewScale = 1 ;
+    m_previewScale = 1 ; 
 }
 
 #endif
