@@ -34,7 +34,7 @@ public:
     // Send a message.
     // Specify profile, or leave it to wxWidgets to find the current user name
     static bool Send(wxMailMessage& message, const wxString& profileName = wxEmptyString,
-        const wxString& sendMail = wxT("/usr/lib/sendmail -t"));
+        const wxString& sendMail = wxT("/usr/sbin/sendmail -t"));
     
 protected:
 };
