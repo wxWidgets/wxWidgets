@@ -388,7 +388,7 @@ bool wxDialog::EmulateButtonClickIfPresent(int id)
 {
     wxButton *btn = wxDynamicCast(FindWindow(id), wxButton);
 
-    if ( !btn || !btn->IsEnabled() )
+    if ( !btn || !btn->IsEnabled() || !btn->IsShown() )
         return false;
 
     btn->MSWCommand(BN_CLICKED, 0 /* unused */);
