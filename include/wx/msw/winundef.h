@@ -362,6 +362,26 @@
     }
 #endif
 
+// GetFirstSibling
+
+#ifdef GetFirstSibling
+    #undef GetFirstSibling
+    inline HWND GetFirstSibling(HWND hwnd)
+    {
+        return GetWindow(hwnd,GW_HWNDFIRST);
+    }
+#endif
+
+// GetLastSibling
+
+#ifdef GetLastSibling
+    #undef GetLastSibling
+    inline HWND GetLastSibling(HWND hwnd)
+    {
+        return GetWindow(hwnd,GW_HWNDLAST);
+    }
+#endif
+
 // GetPrevSibling
 
 #ifdef GetPrevSibling
