@@ -54,6 +54,9 @@ wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
 
 wxMemoryDC::~wxMemoryDC()
 {
+#ifdef __WXGTK20__
+    g_object_unref(m_context);
+#endif
 }
 
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
