@@ -3155,6 +3155,10 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             AC_MSG_ERROR([can't link a simple motif program])
         fi
 
+        dnl this seems to be needed under IRIX and shouldn't do any harm
+        dnl elsewhere
+        AC_CHECK_LIB(Sgm, [SgCreateList], [libsgm_link=" -lSgm"])
+
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
         AC_MSG_CHECKING([for Motif 2])
@@ -3194,7 +3198,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                        ])
         CFLAGS=$save_CFLAGS
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
     fi
