@@ -236,6 +236,7 @@
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "wxUSE_DIALUP_MANAGER requires wxUSE_DYNAMIC_LOADER."
 #        else
+#            undef wxUSE_DIALUP_MANAGER
 #            define wxUSE_DIALUP_MANAGER 0
 #        endif
 #    endif
