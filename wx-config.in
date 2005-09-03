@@ -17,7 +17,7 @@
 # Licence:     wxWindows licence
 ############################################################################
 
-# Extra^2 debug mode, for if things ever get really wierd.
+# Extra^2 debug mode, for if things ever get really weird.
 [ -z "$WXDEBUG_X" ] || set -x
 
 # We expect a posix shell, so if this is a Bourne shell,
@@ -145,7 +145,7 @@ wxconfig_input_options="prefix exec_prefix utility $wxconfig_schema"
 wxconfig_yesno_options="universal unicode debug static"
 
 # Boolean options that do something or not.
-wxconfig_flag_options="$wxconfig_yesno_options no_rpath inplace"
+wxconfig_flag_options="$wxconfig_yesno_options selected_config no_rpath inplace"
 
 
 
@@ -874,16 +874,17 @@ libdir="@libdir@"
 bindir="@bindir@"
 
 # Trivial queries we can answer now.
-[ -z "$output_option_prefix"       ] || echo $prefix
-[ -z "$output_option_exec_prefix"  ] || echo $exec_prefix
-[ -z "$output_option_release"      ] || echo "@WX_RELEASE@"
-[ -z "$output_option_version"      ] || echo "@WX_VERSION@"
-[ -z "$output_option_version_full" ] || echo "@WX_SUBVERSION@"
-[ -z "$output_option_basename"     ] || echo "@WX_LIBRARY_BASENAME_GUI@"
-[ -z "$output_option_rezflags"     ] || echo $(eval echo "@MACRESWXCONFIG@")
-[ -z "$output_option_cc"           ] || echo "@CC@"
-[ -z "$output_option_cxx"          ] || echo "@CXX@"
-[ -z "$output_option_ld"           ] || echo "@EXE_LINKER@"
+[ -z "$output_option_prefix"        ] || echo $prefix
+[ -z "$output_option_exec_prefix"   ] || echo $exec_prefix
+[ -z "$output_option_release"       ] || echo "@WX_RELEASE@"
+[ -z "$output_option_version"       ] || echo "@WX_VERSION@"
+[ -z "$output_option_version_full"  ] || echo "@WX_SUBVERSION@"
+[ -z "$output_option_basename"      ] || echo "@WX_LIBRARY_BASENAME_GUI@"
+[ -z "$output_option_rezflags"      ] || echo $(eval echo "@MACRESWXCONFIG@")
+[ -z "$output_option_cc"            ] || echo "@CC@"
+[ -z "$output_option_cxx"           ] || echo "@CXX@"
+[ -z "$output_option_ld"            ] || echo "@EXE_LINKER@"
+[ -z "$flag_option_selected_config" ] || echo "$this_config"
 
 
 # The rest are going to need a little more work.
