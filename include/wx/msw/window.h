@@ -491,6 +491,9 @@ protected:
     // the background, false otherwise (i.e. the system should erase it)
     bool DoEraseBackground(WXHDC hDC);
 
+    // generate WM_UPDATEUISTATE if it's needed for the OS we're running under
+    void MSWUpdateUIState();
+
 private:
     // common part of all ctors
     void Init();

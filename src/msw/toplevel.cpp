@@ -527,21 +527,13 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     }
 #endif
 
-    // for some reason we need to manually send ourselves this message as
-    // otherwise the mnemonics are always shown -- even if they're configured
-    // to be hidden until "Alt" is pressed in the control panel
-    //
-    // this could indicate a bug somewhere else but for now this is the only
-    // fix we have
+    // for standard dialogs the dialog manager generates WM_CHANGEUISTATE
+    // itself but for custom windows we have to do it ourselves in order to
+    // make the keyboard indicators (such as underlines for accelerators and
+    // focus rectangles) work under Win2k+
     if ( ret )
     {
-        ::SendMessage
-        (
-            GetHwnd(),
-            WM_UPDATEUISTATE,
-            MAKEWPARAM(UIS_INITIALIZE, UISF_HIDEFOCUS | UISF_HIDEACCEL),
-            0
-        );
+        MSWUpdateUIState();
     }
 
     // Note: if we include PocketPC in this test, dialogs can fail to show up,

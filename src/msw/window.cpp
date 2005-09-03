@@ -800,13 +800,36 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
     return true;
 }
 
-void wxWindowMSW::WarpPointer (int x, int y)
+void wxWindowMSW::WarpPointer(int x, int y)
 {
     ClientToScreen(&x, &y);
 
     if ( !::SetCursorPos(x, y) )
     {
         wxLogLastError(_T("SetCursorPos"));
+    }
+}
+
+void wxWindowMSW::MSWUpdateUIState()
+{
+    // WM_UPDATEUISTATE only appeared in Windows 2000 so it can do us no good
+    // to use it on older systems -- and could possibly do some harm
+    static int s_needToUpdate = -1;
+    if ( s_needToUpdate == -1 )
+    {
+        int verMaj, verMin;
+        s_needToUpdate = wxGetOsVersion(&verMaj, &verMin) == wxWINDOWS_NT &&
+                            verMaj >= 5;
+    }
+
+    if ( s_needToUpdate )
+    {
+        // NB: it doesn't seem to matter what we put in wParam, whether we
+        //     include just one UISF_XXX or both, both are affected, no idea
+        //     why
+        ::SendMessage(GetHwnd(), WM_UPDATEUISTATE,
+                        MAKEWPARAM(UIS_INITIALIZE,
+                                   UISF_HIDEFOCUS | UISF_HIDEACCEL), 0);
     }
 }
 
@@ -2061,6 +2084,12 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
                 if ( GetEventHandler()->ProcessEvent(event) )
                 {
+                    // as we don't call IsDialogMessage(), which would take of
+                    // this by default, we need to manually send this message
+                    // so that controls could change their appearance
+                    // appropriately
+                    MSWUpdateUIState();
+
                     return true;
                 }
             }

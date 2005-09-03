@@ -151,6 +151,7 @@ wxMSW:
 - Fixed ownerdrawn multiline buttons.
 - wxCheckListBox item background fixed.
 - Fixed error when trying to read a value from key not accessible for writing.
+- Fixed keyboard cue visibility issues under Windows 2000/XP
 
 wxWinCE:
 
