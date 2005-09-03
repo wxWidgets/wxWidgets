@@ -23,13 +23,10 @@
 #endif
 
 #ifndef __GSOCKET_STANDALONE__
-#include "wx/setup.h"
+#include "wx/defs.h"
 #endif
 
 #if defined(__VISAGECPP__)
-/* Seems to be needed by Visual Age C++, though I don't see how it manages
-   to not break on including a C++ header into a plain C source file      */
-#include "wx/defs.h"
 #define BSD_SELECT /* use Berkley Sockets select */
 #endif
 
