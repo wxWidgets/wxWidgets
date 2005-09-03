@@ -150,7 +150,7 @@ wxMSW:
 - DDE fixed for Unicode.
 - Fixed ownerdrawn multiline buttons.
 - wxCheckListBox item background fixed.
-- Fixed some wxRegKey bugs.
+- Fixed error when trying to read a value from key not accessible for writing.
 
 wxWinCE:
 
