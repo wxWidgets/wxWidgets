@@ -109,9 +109,10 @@ void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSock
   }
 
   if (m_id[c] != -1)
+  {
     gdk_input_remove(m_id[c]);
-
-  m_id[c] = -1;
+    m_id[c] = -1;
+  }
 }
 
 void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
