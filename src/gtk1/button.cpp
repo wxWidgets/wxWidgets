@@ -174,7 +174,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     else if (HasFlag(wxBU_BOTTOM))
         y_alignment = 1.0;
 
-#if __WXGTK24__
+#ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
     {
         gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, y_alignment);
