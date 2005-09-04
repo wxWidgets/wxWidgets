@@ -651,10 +651,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
                         GTK_SIGNAL_FUNC(gtk_frame_realized_callback), (gpointer) this );
 
-    // the only way to get the window size is to connect to this event
-    gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
-        GTK_SIGNAL_FUNC(gtk_frame_configure_callback), (gpointer)this );
-
     // map and unmap for iconized state
     gtk_signal_connect( GTK_OBJECT(m_widget), "map_event",
         GTK_SIGNAL_FUNC(gtk_frame_map_callback), (gpointer)this );
