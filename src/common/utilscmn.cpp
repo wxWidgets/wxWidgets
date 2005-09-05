@@ -553,12 +553,13 @@ bool wxLaunchDefaultBrowser(const wxString& url)
         wxRegKey keyDDE(key, wxT("DDEExec"));
         if ( keyDDE.Exists() )
         {
-            wxString ddeTopic = wxRegKey(keyDDE, wxT("topic"));
+            wxRegKey keyTopic(keyDDE, wxT("topic"));
+            wxString ddeTopic = keyTopic.QueryDefaultValue();
 
             // we only know the syntax of WWW_OpenURL DDE request
             if ( ddeTopic == wxT("WWW_OpenURL") )
             {
-                wxString ddeCmd = keyDDE;
+                wxString ddeCmd = keyDDE.QueryDefaultValue();
 
                 // this is a bit naive but should work as -1 can't appear
                 // elsewhere in the DDE topic, normally
@@ -1155,4 +1156,3 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 #endif // !wxGTK
 
 #endif // wxUSE_GUI
-
