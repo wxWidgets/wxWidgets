@@ -257,9 +257,9 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
             else
             {
                 c->SetAlignHor(wxHTML_ALIGN_RIGHT);
-                wxString mark;
-                mark.Printf(wxT("%i."), m_Numbering);
-                c->InsertCell(new wxHtmlWordCell(mark, *(m_WParser->GetDC())));
+                wxString markStr;
+                markStr.Printf(wxT("%i."), m_Numbering);
+                c->InsertCell(new wxHtmlWordCell(markStr, *(m_WParser->GetDC())));
             }
             m_WParser->CloseContainer();
 
