@@ -1084,10 +1084,10 @@ bool wxICOHandler::SaveFile(wxImage *image,
         {
             // just make a black mask all over:
             mask = image->Copy();
-            int i, j;
-            for (i = 0; i < mask.GetWidth(); i++)
+            int k, j;
+            for (k = 0; k < mask.GetWidth(); k++)
                 for (j = 0; j < mask.GetHeight(); j++)
-                    mask.SetRGB(i, j, 0, 0, 0 );
+                    mask.SetRGB(k, j, 0, 0, 0 );
         }
         // Set the formats for image and mask
         // (Windows never saves with more than 8 colors):
