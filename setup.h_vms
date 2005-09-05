@@ -414,9 +414,9 @@
 #define wxUSE_WIZARDDLG 1
 
 
-#define wxUSE_METAFILE              1
-#define wxUSE_ENH_METAFILE          1
-#define wxUSE_WIN_METAFILES_ALWAYS  1
+#define wxUSE_METAFILE              0
+#define wxUSE_ENH_METAFILE          0
+#define wxUSE_WIN_METAFILES_ALWAYS  0
 
 
 #define wxUSE_MDI 1
@@ -788,6 +788,9 @@
 
 /* Define if you have pthread_cancel */
 #define HAVE_PTHREAD_CANCEL 1
+
+/* Define if you have pthread_attr_setstacksize */
+#define HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
 
 /* Define if you have sigaction() */
 #define HAVE_SIGACTION 1
