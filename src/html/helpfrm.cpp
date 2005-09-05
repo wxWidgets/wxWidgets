@@ -258,6 +258,10 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
         m_DataCreated = true;
     }
 
+    m_ContentsPage = 0;
+    m_IndexPage = 0;
+    m_SearchPage = 0;
+
     m_ContentsBox = NULL;
     m_IndexList = NULL;
     m_IndexButton = NULL;
@@ -281,7 +285,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_Config = NULL;
     m_ConfigRoot = wxEmptyString;
 
-    m_Cfg.x = m_Cfg.y = -1;
+    m_Cfg.x = m_Cfg.y = wxDefaultCoord;
     m_Cfg.w = 700;
     m_Cfg.h = 480;
     m_Cfg.sashpos = 240;
@@ -530,7 +534,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
                                       wxDefaultPosition, wxDefaultSize,
                                       wxTE_PROCESS_ENTER);
         m_SearchChoice = new wxChoice(dummy, wxID_HTML_SEARCHCHOICE,
-                                      wxDefaultPosition, wxSize(125,-1));
+                                      wxDefaultPosition, wxSize(125,wxDefaultCoord));
         m_SearchCaseSensitive = new wxCheckBox(dummy, wxID_ANY, _("Case sensitive"));
         m_SearchWholeWords = new wxCheckBox(dummy, wxID_ANY, _("Whole words only"));
         m_SearchButton = new wxButton(dummy, wxID_HTML_SEARCHBUTTON, _("Search"));
@@ -736,7 +740,7 @@ bool wxHtmlHelpFrame::DisplayContents()
         m_Cfg.navig_on = true;
     }
 
-    m_NavigNotebook->SetSelection(0);
+    m_NavigNotebook->SetSelection(m_ContentsPage);
 
     if (m_Data->GetBookRecArray().GetCount() > 0)
     {
@@ -762,7 +766,7 @@ bool wxHtmlHelpFrame::DisplayIndex()
         m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
     }
 
-    m_NavigNotebook->SetSelection(1);
+    m_NavigNotebook->SetSelection(m_IndexPage);
 
     if (m_Data->GetBookRecArray().GetCount() > 0)
     {
@@ -1830,4 +1834,3 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
 END_EVENT_TABLE()
 
 #endif // wxUSE_WXHTML_HELP
-
