@@ -61,29 +61,31 @@ bool wxEmail::Send(wxMailMessage& message, const wxString& profileName, const wx
     return session.Send(message);
 }
 #elif defined(__UNIX__)
-bool wxEmail::Send(wxMailMessage& message, const wxString& profileName, const wxString& sendMail)
+bool
+wxEmail::Send(wxMailMessage& message,
+              const wxString& profileName,
+              const wxString& sendMail)
 {
-    wxASSERT (message.m_to.GetCount() > 0) ;
+    wxASSERT_MSG( !message.m_to.IsEmpty(), _T("no recipients to send mail to") ) ;
+
 
     // The 'from' field is optionally supplied by the app; it's not needed
     // by MAPI, and on Unix, will be guessed if not supplied.
     wxString from = message.m_from;
-    if (from.IsEmpty())
+    if ( from.empty() )
     {
         from = wxGetEmailAddress();
     }
 
-    wxASSERT (!from.IsEmpty());
-
     wxString msg;
     msg << wxT("To: ");
 
-    size_t i;
-    for (i = 0; i < message.m_to.GetCount(); i++)
+    const size_t rcptCount = message.m_to.GetCount();
+    for (size_t rcpt = 0; rcpt < rcptCount; rcpt++)
     {
-        msg << message.m_to[i];
-        if (i < message.m_to.GetCount())
+        if ( rcpt )
             msg << wxT(", ");
+        msg << message.m_to[rcpt];
     }
 
     msg << wxT("\nFrom: ") << from << wxT("\nSubject: ") << message.m_subject;
