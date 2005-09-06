@@ -245,6 +245,7 @@ SPINWXMGL=0
 SPINDOCS=0
 SPINEVERYTHING=0
 UPDATECVS=0
+SILENT=0
 
 usage()
 {
@@ -295,6 +296,7 @@ for i in "$@"; do
 	--wxmotif) SPINWXMOTIF=1 ;;
 	--all) SPINEVERYTHING=1 ;;
 	--updatecvs) UPDATECVS=1 ;;
+	--silent) SILENT=1 ;;
 	*)
 	    usage
 	    exit
@@ -306,8 +308,12 @@ echo About to make wxWidgets RPMs:
 echo   From    $WXSRC
 echo   To      $WXDEST
 echo   Version $WXVER
-echo CTRL-C if this is not correct.
-read dummy
+
+# we don't want this when batch building tarballs.
+if [ "$SILENT" = "0" ]; then
+  echo CTRL-C if this is not correct.
+  read dummy
+fi
 
 if [ "$UPDATECVS" = "1" ]; then
   doupdatecvs
