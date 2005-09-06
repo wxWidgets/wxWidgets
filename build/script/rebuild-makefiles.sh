@@ -166,6 +166,17 @@ rm ${WORKDIR}/*.con
 }
 
 
+<<<<<<< rebuild-makefiles.sh
+add_win_docs ()
+{
+### starts with wx-docs-xxx.zip
+for f in `find ${WORKDIR}/archives/win/ -name wx\* ` ; do       
+       mv $f ${WORKDIR}/archives/`basename $f | tr -d ".ZIP"`-${CURDATE}.zip
+       done
+       
+}
+
+=======
 add_win_files ()
 {
 ### starts with wx-docs-xxx.zip
@@ -180,14 +191,20 @@ for f in `find ${WORKDIR}/archives/win/ -name wx\*.EXE ` ; do
 
 }
 
+>>>>>>> 1.4
 update_from_cvs
 regenerate_makefiles
 package_makefiles
 package_cvs All wxWidgets
 package_cvs Gtk wxGTK
 
+<<<<<<< rebuild-makefiles.sh
+do_docs
+add_win_docs
+=======
 do_docs
 add_win_files
+>>>>>>> 1.4
 
 copy_files
 
