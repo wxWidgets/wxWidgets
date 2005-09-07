@@ -802,6 +802,16 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
     int snprintf(char *str, size_t size, const char *format, ...);
 #endif /* !HAVE_SNPRINTF_DECL */
 
+/* Wrapper for vsnprintf if it's 3rd parameter is non-const. Note: the
+ * same isn't done for snprintf below, the builtin wxSnprintf_ is used
+ * instead since it's already a simple wrapper */
+#ifdef HAVE_BROKEN_VSNPRINTF_DECL
+    inline int wx_fixed_vsnprintf(char *str, size_t size, const char *format, va_list ap)
+    {
+        return vsnprintf(str, size, (char*)format, ap);
+    }
+#endif
+
 /*
    First of all, we always want to define safe snprintf() function to be used
    instead of sprintf(). Some compilers already have it (or rather vsnprintf()
@@ -831,10 +841,16 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
         /* all versions of CodeWarrior supported by wxWidgets apparently have */
         /* both snprintf() and vsnprintf() */
         #if defined(HAVE_SNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
-            #define wxSnprintf_     snprintf
+            #ifndef HAVE_BROKEN_SNPRINTF_DECL
+                #define wxSnprintf_     snprintf
+            #endif
         #endif
         #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
-            #define wxVsnprintf_    vsnprintf
+            #ifndef HAVE_BROKEN_VSNPRINTF_DECL
+                #define wxVsnprintf_    vsnprintf
+            #else
+                #define wxVsnprintf_    wx_fixed_vsnprintf
+            #endif
         #endif
     #endif
 #endif /* wxVsnprintf_ not defined yet */

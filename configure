@@ -28093,6 +28093,74 @@ echo "$as_me: error: can't link a simple motif program" >&2;}
    { (exit 1); exit 1; }; }
         fi
 
+                        echo "$as_me:$LINENO: checking for SgCreateList in -lSgm" >&5
+echo $ECHO_N "checking for SgCreateList in -lSgm... $ECHO_C" >&6
+if test "${ac_cv_lib_Sgm_SgCreateList+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSgm  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char SgCreateList ();
+int
+main ()
+{
+SgCreateList ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_Sgm_SgCreateList=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_Sgm_SgCreateList=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_Sgm_SgCreateList" >&5
+echo "${ECHO_T}$ac_cv_lib_Sgm_SgCreateList" >&6
+if test $ac_cv_lib_Sgm_SgCreateList = yes; then
+  libsgm_link=" -lSgm"
+fi
+
+
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
         echo "$as_me:$LINENO: checking for Motif 2" >&5
@@ -28230,7 +28298,7 @@ fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
         CFLAGS=$save_CFLAGS
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
     fi
@@ -31498,8 +31566,7 @@ main ()
 
                     char *buf;
                     va_list ap;
-                    const char *fmt = "%s";
-                    vsnprintf(buf, 10u, fmt, ap);
+                    vsnprintf(buf, 10u, "%s", ap);
 
   ;
   return 0;
@@ -31546,6 +31613,84 @@ echo "${ECHO_T}$wx_cv_func_vsnprintf_decl" >&6
 #define HAVE_VSNPRINTF_DECL 1
 _ACEOF
 
+
+                        echo "$as_me:$LINENO: checking if vsnprintf declaration is broken" >&5
+echo $ECHO_N "checking if vsnprintf declaration is broken... $ECHO_C" >&6
+if test "${wx_cv_func_broken_vsnprintf_decl+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+                cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                        #include <stdio.h>
+                        #include <stdarg.h>
+                        #ifdef __MSL__
+                        #if __MSL__ >= 0x6000
+                        namespace std {}
+                        using namespace std;
+                        #endif
+                        #endif
+
+int
+main ()
+{
+
+                        char *buf;
+                        va_list ap;
+                        const char *fmt = "%s";
+                        vsnprintf(buf, 10u, fmt, ap);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_func_broken_vsnprintf_decl=no
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_func_broken_vsnprintf_decl=yes
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_func_broken_vsnprintf_decl" >&5
+echo "${ECHO_T}$wx_cv_func_broken_vsnprintf_decl" >&6
+
+        if test "$wx_cv_func_broken_vsnprintf_decl" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define HAVE_BROKEN_VSNPRINTF_DECL 1
+_ACEOF
+
+        fi
     fi
 fi
 
@@ -31577,8 +31722,7 @@ main ()
 {
 
                     char *buf;
-                    const char *fmt = "%s";
-                    snprintf(buf, 10u, fmt, "wx");
+                    snprintf(buf, 10u, "%s", "wx");
 
   ;
   return 0;
@@ -31625,6 +31769,83 @@ echo "${ECHO_T}$wx_cv_func_snprintf_decl" >&6
 #define HAVE_SNPRINTF_DECL 1
 _ACEOF
 
+
+                        echo "$as_me:$LINENO: checking if snprintf declaration is broken" >&5
+echo $ECHO_N "checking if snprintf declaration is broken... $ECHO_C" >&6
+if test "${wx_cv_func_broken_snprintf_decl+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+                cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                        #include <stdio.h>
+                        #include <stdarg.h>
+                        #ifdef __MSL__
+                        #if __MSL__ >= 0x6000
+                        namespace std {}
+                        using namespace std;
+                        #endif
+                        #endif
+
+int
+main ()
+{
+
+                        char *buf;
+                        const char *fmt = "%s";
+                        snprintf(buf, 10u, fmt, "wx");
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_func_broken_snprintf_decl=no
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_func_broken_snprintf_decl=yes
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_func_broken_snprintf_decl" >&5
+echo "${ECHO_T}$wx_cv_func_broken_snprintf_decl" >&6
+
+        if test "$wx_cv_func_broken_snprintf_decl" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define HAVE_BROKEN_SNPRINTF_DECL 1
+_ACEOF
+
+        fi
     fi
 fi
 

@@ -3997,8 +3997,7 @@ if test "$ac_cv_func_vsnprintf" = "yes"; then
                 [
                     char *buf;
                     va_list ap;
-                    const char *fmt = "%s";
-                    vsnprintf(buf, 10u, fmt, ap);
+                    vsnprintf(buf, 10u, "%s", ap);
                 ],
                 wx_cv_func_vsnprintf_decl=yes,
                 wx_cv_func_vsnprintf_decl=no
@@ -4008,6 +4007,37 @@ if test "$ac_cv_func_vsnprintf" = "yes"; then
 
     if test "$wx_cv_func_vsnprintf_decl" = "yes"; then
         AC_DEFINE(HAVE_VSNPRINTF_DECL)
+
+        dnl we know there is a vsnprintf declaration, but some old headers
+        dnl may have one taking a "char *" format instead of "const char *"
+        AC_CACHE_CHECK([if vsnprintf declaration is broken], wx_cv_func_broken_vsnprintf_decl,
+            [
+                AC_TRY_COMPILE(
+                    [
+                        #include <stdio.h>
+                        #include <stdarg.h>
+                        #ifdef __MSL__
+                        #if __MSL__ >= 0x6000
+                        namespace std {}
+                        using namespace std;
+                        #endif
+                        #endif
+                    ],
+                    [
+                        char *buf;
+                        va_list ap;
+                        const char *fmt = "%s";
+                        vsnprintf(buf, 10u, fmt, ap);
+                    ],
+                    wx_cv_func_broken_vsnprintf_decl=no,
+                    wx_cv_func_broken_vsnprintf_decl=yes
+                )
+            ]
+        )
+
+        if test "$wx_cv_func_broken_vsnprintf_decl" = "yes"; then
+            AC_DEFINE(HAVE_BROKEN_VSNPRINTF_DECL)
+        fi
     fi
 fi
 
@@ -4029,8 +4059,7 @@ if test "$ac_cv_func_snprintf" = "yes"; then
                 ],
                 [
                     char *buf;
-                    const char *fmt = "%s";
-                    snprintf(buf, 10u, fmt, "wx");
+                    snprintf(buf, 10u, "%s", "wx");
                 ],
                 wx_cv_func_snprintf_decl=yes,
                 wx_cv_func_snprintf_decl=no
@@ -4040,6 +4069,36 @@ if test "$ac_cv_func_snprintf" = "yes"; then
 
     if test "$wx_cv_func_snprintf_decl" = "yes"; then
         AC_DEFINE(HAVE_SNPRINTF_DECL)
+
+        dnl we know there is an snprintf declaration, but some old headers
+        dnl may have one taking a "char *" format instead of "const char *"
+        AC_CACHE_CHECK([if snprintf declaration is broken], wx_cv_func_broken_snprintf_decl,
+            [
+                AC_TRY_COMPILE(
+                    [
+                        #include <stdio.h>
+                        #include <stdarg.h>
+                        #ifdef __MSL__
+                        #if __MSL__ >= 0x6000
+                        namespace std {}
+                        using namespace std;
+                        #endif
+                        #endif
+                    ],
+                    [
+                        char *buf;
+                        const char *fmt = "%s";
+                        snprintf(buf, 10u, fmt, "wx");
+                    ],
+                    wx_cv_func_broken_snprintf_decl=no,
+                    wx_cv_func_broken_snprintf_decl=yes
+                )
+            ]
+        )
+
+        if test "$wx_cv_func_broken_snprintf_decl" = "yes"; then
+            AC_DEFINE(HAVE_BROKEN_SNPRINTF_DECL)
+        fi
     fi
 fi
 
