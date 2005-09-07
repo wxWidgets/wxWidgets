@@ -805,7 +805,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 /* Wrapper for vsnprintf if it's 3rd parameter is non-const. Note: the
  * same isn't done for snprintf below, the builtin wxSnprintf_ is used
  * instead since it's already a simple wrapper */
-#ifdef HAVE_BROKEN_VSNPRINTF_DECL
+#if defined __cplusplus && defined HAVE_BROKEN_VSNPRINTF_DECL
     inline int wx_fixed_vsnprintf(char *str, size_t size, const char *format, va_list ap)
     {
         return vsnprintf(str, size, (char*)format, ap);
@@ -846,10 +846,10 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
             #endif
         #endif
         #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
-            #ifndef HAVE_BROKEN_VSNPRINTF_DECL
-                #define wxVsnprintf_    vsnprintf
-            #else
+            #if defined __cplusplus && defined HAVE_BROKEN_VSNPRINTF_DECL
                 #define wxVsnprintf_    wx_fixed_vsnprintf
+            #else
+                #define wxVsnprintf_    vsnprintf
             #endif
         #endif
     #endif
