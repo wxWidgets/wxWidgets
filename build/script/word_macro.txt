@@ -1,17 +1,16 @@
 ' This is saved as word macros; opens a pdf and writes out a ps file using
 ' laserjet ps driver
-' Note that the input and output directories are hard coded and the output dir must exist
-
+' Note that the output dir and hardcoded printer must exist
 
 Sub wx_ps()
-
-    do_ps "C:\wx\wxWidgets\docs\pdf\", "wx"
-    do_ps "C:\wx\wxWidgets\contrib\docs\latex\svg", "svg"
-    do_ps "C:\wx\wxWidgets\contrib\docs\latex\ogl", "ogl"
-    do_ps "C:\wx\wxWidgets\contrib\docs\latex\mmedia", "mmedia"
-    do_ps "C:\wx\wxWidgets\contrib\docs\latex\gizmos", "gizmos"
-    do_ps "C:\wx\wxWidgets\contrib\docs\latex\fl", "fl"
-    do_ps "C:\wx\wxWidgets\utils\tex2rtf\docs", "tex2rtf"
+    swxWIN = Environ("WXWIN")
+    do_ps swxWIN & "\docs\pdf\", "wx"
+    do_ps swxWIN & "\contrib\docs\latex\svg", "svg"
+    do_ps swxWIN & "\contrib\docs\latex\ogl", "ogl"
+    do_ps swxWIN & "\contrib\docs\latex\mmedia", "mmedia"
+    do_ps swxWIN & "\contrib\docs\latex\gizmos", "gizmos"
+    do_ps swxWIN & "\contrib\docs\latex\fl", "fl"
+    do_ps swxWIN & "\utils\tex2rtf\docs", "tex2rtf"
 
     bye_bye
 End Sub
@@ -20,6 +19,7 @@ Sub do_ps(mydir, myfile)
 ' wx_ps Macro
 ' Macro recorded 04/05/2005 by cje2
 '
+    sDAILYIN = Environ("DAILY") & "\in\"
     ChangeFileOpenDirectory mydir
     Documents.Open FileName:=myfile & ".rtf", ConfirmConversions:=False, ReadOnly:= _
         False, AddToRecentFiles:=False, PasswordDocument:="", PasswordTemplate:= _
@@ -30,7 +30,12 @@ Sub do_ps(mydir, myfile)
         wdPrintDocumentContent, Copies:=1, Pages:="", PageType:=wdPrintAllPages, _
         Collate:=True, Background:=False, PrintToFile:=True, PrintZoomColumn:=0, _
         PrintZoomRow:=0, PrintZoomPaperWidth:=0, PrintZoomPaperHeight:=0, _
-        OutputFileName:="C:\daily\in\" & myfile & ".ps", Append:=False
+        OutputFileName:=sDAILYIN & myfile & ".ps", Append:=False
     ActiveDocument.Close SaveChanges:=wdDoNotSaveChanges
+   End Sub
 
+Sub bye_bye()
+
+Application.Quit SaveChanges:=wdDoNotSaveChanges
+    
 End Sub
