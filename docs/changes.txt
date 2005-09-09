@@ -18,6 +18,7 @@ All:
 - Added wxLongLong::ToDouble()
 - Added wxDateTime::[Make]FromTimezone(), fixed several TZ-related bugs
 - Fixed bug in wxStreamBuffer::Read(wxStreamBuffer *) (Paul Cornett)
+- Fixed wxListbook and wxChoicebook internal layout.
 
 All (GUI):
 
