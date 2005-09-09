@@ -277,6 +277,10 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
     return true;
 }
 
+#ifndef SWP_NOSENDCHANGING
+#define SWP_NOSENDCHANGING 0
+#endif
+
 void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
 {
     if ( GetParent()->IsSizeDeferred() )
@@ -342,6 +346,7 @@ void wxStatusBar95::SetStatusStyles(int n, const int styles[])
 WXLRESULT
 wxStatusBar95::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+#ifndef __WXWINCE__
     if ( nMsg == WM_WINDOWPOSCHANGING )
     {
         WINDOWPOS *lpPos = (WINDOWPOS *)lParam;
@@ -359,6 +364,7 @@ wxStatusBar95::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
         return 0;
     }
+
     if ( nMsg == WM_NCLBUTTONDOWN )
     {
         // if hit-test is on gripper then send message to TLW to begin
@@ -379,6 +385,7 @@ wxStatusBar95::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             }
         }
     }
+#endif
 
     return wxStatusBarBase::MSWWindowProc(nMsg, wParam, lParam);
 }
