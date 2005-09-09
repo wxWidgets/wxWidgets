@@ -252,7 +252,6 @@ case "${host}" in
     dnl      USE_UNIX  must be set and not USE_WIN32
     SO_SUFFIX=dll
     PROGRAM_EXT=".exe"
-    RESCOMP=windres
     DEFAULT_DEFAULT_wxUSE_MSW=1
     DEFAULT_STD_FLAG=no
   ;;
@@ -1325,7 +1324,6 @@ if test "$wxUSE_WINE" = "yes"; then
     dnl FIXME: we should do a better job of testing for these
     CC=winegcc
     CXX=wineg++
-    RESCOMP=wrc
     LDFLAGS_GUI="-mwindows"
 fi
 
@@ -1358,24 +1356,6 @@ dnl ---------------------------------------------------------------------------
 
 dnl flush the cache because checking for programs might abort
 AC_CACHE_SAVE
-
-dnl cross-compiling support: we're cross compiling if the build system is
-dnl different from the target one (assume host and target be always the same)
-if test "$build" != "$host" ; then
-    if test "$USE_WIN32" = 1 -o "$USE_DOS" = 1 -o "$USE_UNIX" = 1; then
-        CC=$host_alias-gcc
-        CXX=$host_alias-c++
-        AR=$host_alias-ar
-        RANLIB=$host_alias-ranlib
-        DLLTOOL=$host_alias-dlltool
-        RESCOMP=$host_alias-windres
-        STRIP=$host_alias-strip
-    elif test "x$CC" '!=' "x"; then
-        echo "You set CC, I assume you know what you are doing."
-    else
-        AC_MSG_ERROR($build_alias -> $host_alias cross compilation not supported yet.)
-    fi
-fi
 
 dnl C-compiler checks
 dnl   defines CC with the compiler to use
@@ -1414,7 +1394,7 @@ AC_PROG_RANLIB
 
 dnl ar command
 dnl   defines AR with the appropriate command
-AC_CHECK_PROG(AR, ar, ar)
+AC_CHECK_TOOL(AR, ar)
 if test "x$AR" = "x" ; then
     AC_MSG_ERROR([ar is needed to build wxWidgets])
 fi
@@ -1449,8 +1429,20 @@ case "${host}" in
 esac
 
 dnl strip command
-dnl   defines STRIP as strip or nothing if not found
-AC_CHECK_PROG(STRIP, strip, strip, true)
+dnl   defines STRIP as strip or nothing (true) if not found
+AC_CHECK_TOOL(STRIP, strip, true)
+
+dnl Win32 tools
+if test "$wxUSE_WINE" = "yes"; then
+    AC_CHECK_TOOL(RESCOMP, wrc)
+else
+    case "${host}" in
+    *-*-cygwin* | *-*-mingw32* )
+        AC_CHECK_TOOL(RESCOMP, windres)
+        AC_CHECK_TOOL(DLLTOOL, dlltool)
+        ;;
+    esac
+fi
 
 dnl does make support "-include" (only GNU make does AFAIK)?
 AC_CACHE_CHECK([if make is GNU make], wx_cv_prog_makeisgnu,
@@ -6957,10 +6949,6 @@ if test "$wxUSE_WINE" = "yes"; then
 fi
 
 AC_BAKEFILE([m4_include(autoconf_inc.m4)])
-
-if test "$wxUSE_WINE" = "yes"; then
-    RESCOMP=wrc
-fi
 
 if test "$wxUSE_SHARED" = "yes"; then
 
