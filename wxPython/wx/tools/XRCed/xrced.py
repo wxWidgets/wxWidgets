@@ -1071,6 +1071,10 @@ Homepage: http://xrced.sourceforge.net\
             #self.domCopy = tree.dom.cloneNode(True)
             self.domCopy = MyDocument()
             mainNode = self.domCopy.appendChild(tree.mainNode.cloneNode(True))
+            # Remove first child (test element)
+            testElem = mainNode.firstChild
+            mainNode.removeChild(testElem)
+            testElem.unlink()
             self.Indent(mainNode)
             self.domCopy.writexml(f, encoding = g.currentEncoding)
             f.close()

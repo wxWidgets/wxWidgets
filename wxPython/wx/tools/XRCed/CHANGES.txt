@@ -1,8 +1,7 @@
 0.1.6-5
 -------
 
-Testing limited to top-level objects because of references
-problem until a nice solution is found.
+Fixed testing for any element inside object tree.
 
 0.1.6-4
 -------
