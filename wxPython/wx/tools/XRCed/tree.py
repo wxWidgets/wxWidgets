@@ -719,6 +719,9 @@ class XML_Tree(wxTreeCtrl):
         if g.panel.IsModified():
             self.Apply(xxx, item)       # apply changes
         treeObj = xxx.treeObject()
+        if self.GetItemParent(item) != self.root:
+            wxLogMessage('Only top-level objects can be tested')
+            return
         if treeObj.className not in ['wxFrame', 'wxPanel', 'wxDialog',
                                      'wxMenuBar', 'wxToolBar', 'wxWizard',
                                      'wxWizardPageSimple']:
@@ -810,7 +813,6 @@ class XML_Tree(wxTreeCtrl):
         next = elem.nextSibling
         encd = self.rootObj.params['encoding'].value()
         if not encd: encd = None
-        self.dom.writexml(open('ttt.xrc','w'), encoding=encd)
         self.dom.writexml(memFile, encoding=encd)
         # Put back in place
         # Remove temporary name or restore changed

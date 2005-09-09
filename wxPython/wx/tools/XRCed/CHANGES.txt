@@ -1,3 +1,9 @@
+0.1.6-5
+-------
+
+Testing limited to top-level objects because of references
+problem until a nice solution is found.
+
 0.1.6-4
 -------
 
