@@ -966,6 +966,9 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
 
     assert(this);
 
+    if (m_fd == -1)
+        return (GSOCK_LOST_FLAG & flags);
+    
     /* Do not use a static struct, Linux can garble it */
     tv.tv_sec = m_timeout / 1000;
     tv.tv_usec = (m_timeout % 1000) * 1000;
