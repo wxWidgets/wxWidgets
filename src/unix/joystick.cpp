@@ -184,13 +184,13 @@ wxJoystick::wxJoystick(int joystick)
     wxString dev_name;
 
      // old /dev structure
-    dev_name.Printf( wxT("/dev/js%d"), (joystick == wxJOYSTICK1) ? 0 : 1);
+    dev_name.Printf( wxT("/dev/js%d"), joystick);
     m_device = open(dev_name.fn_str(), O_RDONLY);
 
     // new /dev structure with "input" subdirectory
     if (m_device == -1)
     {
-        dev_name.Printf( wxT("/dev/input/js%d"), (joystick == wxJOYSTICK1) ? 0 : 1);
+        dev_name.Printf( wxT("/dev/input/js%d"), joystick);
         m_device = open(dev_name.fn_str(), O_RDONLY);             
     }
 
@@ -295,9 +295,20 @@ int wxJoystick::GetNumberJoysticks() const
         dev_name.Printf(wxT("/dev/js%d"), j);
         fd = open(dev_name.fn_str(), O_RDONLY);
         if (fd == -1)
-            return j;
+            break;
         close(fd);
     }
+    
+    if (j == 0) {
+        for (j=0; j<4; j++) {
+            dev_name.Printf(wxT("/dev/input/js%d"), j);
+            fd = open(dev_name.fn_str(), O_RDONLY);
+            if (fd == -1)
+                return j;
+            close(fd);
+        }
+    }
+    
     return j;
 }
 
