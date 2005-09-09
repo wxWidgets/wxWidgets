@@ -52,8 +52,11 @@ long timezone ; // global variable
 ////////////////////////////////////////////////////////////////////////
 // Common code for localtime and gmtime (static)
 ////////////////////////////////////////////////////////////////////////
-static struct tm * __cdecl common_localtime(const time_t * WXUNUSED(t), BOOL bLocal)
+
+static struct tm * __cdecl common_localtime(const time_t *t, BOOL bLocal)
 {
+    wxLongLong i64;
+    FILETIME   ft;
     wxString str ;
     SYSTEMTIME SystemTime;
     TIME_ZONE_INFORMATION pTz;
@@ -68,7 +71,19 @@ static struct tm * __cdecl common_localtime(const time_t * WXUNUSED(t), BOOL bLo
         { 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
     };
 
-    ::GetLocalTime(&SystemTime) ;
+    if (!*t)
+        ::GetLocalTime(&SystemTime);
+    else
+    {
+        i64 = *t;
+        i64 = i64 * 10000000 + 116444736000000000;
+
+        ft.dwLowDateTime  = i64.GetLo();
+        ft.dwHighDateTime = i64.GetHi();
+
+        ::FileTimeToSystemTime(&ft, &SystemTime);
+    }
+
     ::GetTimeZoneInformation(&pTz);
 
     ///////////////////////////////////////////////
