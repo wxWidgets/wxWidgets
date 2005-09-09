@@ -32,10 +32,7 @@
 #if wxUSE_STATLINE
 
 #include "wx/msw/private.h"
-
-#ifndef SS_SUNKEN
-    #define SS_SUNKEN 0x00001000L
-#endif
+#include "wx/msw/missing.h"
 
 // ============================================================================
 // implementation

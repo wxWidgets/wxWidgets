@@ -119,5 +119,9 @@ bsearch(const void *key, const void *base, size_t num, size_t size,
 #define O_TEXT         0x4000  /* file mode is text (translated) */
 #define O_BINARY       0x8000  /* file mode is binary (untranslated) */
 
+#ifndef SS_SUNKEN
+    #define SS_SUNKEN 0x00001000L
+#endif
+
 #endif // _WX_CE_MISSING_H_
 
