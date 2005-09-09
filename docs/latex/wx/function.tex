@@ -2555,7 +2555,7 @@ Empties the clipboard.
 
 \membersection{::wxEnumClipboardFormats}\label{wxenumclipboardformats}
 
-\func{int}{wxEnumClipboardFormats}{\param{int}{dataFormat}}
+\func{int}{wxEnumClipboardFormats}{\param{int}{ dataFormat}}
 
 Enumerates the formats found in a list of available formats that belong
 to the clipboard. Each call to this  function specifies a known
@@ -2576,7 +2576,7 @@ wxOpenClipboard function.
 
 \membersection{::wxGetClipboardData}\label{wxgetclipboarddata}
 
-\func{wxObject *}{wxGetClipboardData}{\param{int}{dataFormat}}
+\func{wxObject *}{wxGetClipboardData}{\param{int}{ dataFormat}}
 
 Gets data from the clipboard.
 
@@ -2592,7 +2592,7 @@ The clipboard must have previously been opened for this call to succeed.
 
 \membersection{::wxGetClipboardFormatName}\label{wxgetclipboardformatname}
 
-\func{bool}{wxGetClipboardFormatName}{\param{int}{dataFormat}, \param{const wxString\& }{formatName}, \param{int}{maxCount}}
+\func{bool}{wxGetClipboardFormatName}{\param{int}{ dataFormat}, \param{const wxString\& }{formatName}, \param{int}{ maxCount}}
 
 Gets the name of a registered clipboard format, and puts it into the buffer {\it formatName} which is of maximum
 length {\it maxCount}. {\it dataFormat} must not specify a predefined clipboard format.
@@ -2600,7 +2600,7 @@ length {\it maxCount}. {\it dataFormat} must not specify a predefined clipboard 
 
 \membersection{::wxIsClipboardFormatAvailable}\label{wxisclipboardformatavailable}
 
-\func{bool}{wxIsClipboardFormatAvailable}{\param{int}{dataFormat}}
+\func{bool}{wxIsClipboardFormatAvailable}{\param{int}{ dataFormat}}
 
 Returns true if the given data format is available on the clipboard.
 
@@ -2621,7 +2621,7 @@ Registers the clipboard data format name and returns an identifier.
 
 \membersection{::wxSetClipboardData}\label{wxsetclipboarddata}
 
-\func{bool}{wxSetClipboardData}{\param{int}{dataFormat}, \param{wxObject *}{data}, \param{int}{width}, \param{int}{height}}
+\func{bool}{wxSetClipboardData}{\param{int}{ dataFormat}, \param{wxObject*}{ data}, \param{int}{ width}, \param{int}{ height}}
 
 Passes data to the clipboard.
 
@@ -2635,8 +2635,6 @@ Passes data to the clipboard.
 \end{itemize}
 
 The clipboard must have previously been opened for this call to succeed.
-
-
 
 
 \section{Miscellaneous functions}\label{miscellany}
@@ -3172,7 +3170,7 @@ allows to define unsigned 64 bit compile time constants:
 
 \membersection{wxVaCopy}\label{wxvacopy}
 
-\func{void}{wxVaCopy}{\param{va\_list }{argptrDst}, \param{va\_list}{argptrSrc}}
+\func{void}{wxVaCopy}{\param{va\_list }{argptrDst}, \param{va\_list}{ argptrSrc}}
 
 This macro is the same as the standard C99 \texttt{va\_copy} for the compilers
 which support it or its replacement for those that don't. It must be used to

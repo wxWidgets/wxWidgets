@@ -305,6 +305,24 @@ shows folders under My Documents or folders on memory cards
 a known problem for PocketPC developers, and a wxFileDialog
 replacement will need to be written.
 
+\subsubsection{Embedded Visual C++ Issues}
+
+\wxhead{Run-time type information}
+
+If you wish to use runtime type information (RTTI) with eVC++ 4, you need to download
+an extra library, {\tt ccrtrtti.lib}, and link with it. At the time of
+writing you can get it from here:
+
+\begin{verbatim}
+http://support.microsoft.com/kb/830482/en-us
+\end{verbatim}
+
+Otherwise you will get linker errors similar to this:
+
+\begin{verbatim}
+wxwince26d.lib(control.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+\end{verbatim}
+
 \subsubsection{Remaining issues}
 
 These are some of the remaining problems to be sorted out, and features
