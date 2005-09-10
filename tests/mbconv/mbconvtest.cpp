@@ -971,14 +971,16 @@ void MBConvTestCase::TestEncoder(
     // make sure the characters generated are correct
     CPPUNIT_ASSERT( 0 == memcmp( outputBuffer, multiBuffer, multiBytes ) );
 
+    size_t i;
+
     // the output buffer should be null terminated
-    for ( size_t i = multiBytes; i < multiBytes + sizeofNull; i++ )
+    for ( i = multiBytes; i < multiBytes + sizeofNull; i++ )
     {
         CPPUNIT_ASSERT( ((unsigned char*)outputBuffer.data())[i] == 0 );
     }
 
     // make sure the rest of the output buffer is untouched
-    for ( size_t i = multiBytes + sizeofNull; i < outputBufferSize; i++ )
+    for ( i = multiBytes + sizeofNull; i < outputBufferSize; i++ )
     {
         CPPUNIT_ASSERT( ((unsigned char*)outputBuffer.data())[i] == UNINITIALIZED );
     }
