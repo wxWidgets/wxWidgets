@@ -111,25 +111,75 @@ minimal.o: minimal.cpp mondrian.xpm
 Even though configure is a Unix script, you can use it to build MS-DOS version
 of the wxMGL library. There are two possible ways to achieve this: you can
 either cross-compile from Unix or compile natively. Either way you will needed
-the DJGPP port of GCC compiler freely available from http://www.djgpp.org. You will
-also need DJGPP version of SciTech MGL (this must be built using native tools).
+the DJGPP port of GCC compiler freely available from:
+    http://www.delorie.com/djgpp/getting.html
 
-Cross-compilation is very easy. It works like ordinary compilation with configure,
-you only have to specify the target:
+Scitech MGL must be compiled natively, and to do this you will need to download
+the following files (from the current/v2 and current/v2gnu directories). You
+should get the latest versions available rather than the exact versions shown
+below, they are just an example of what to look for:
+
+djdev203.zip B   1,530,778 020811 DJGPP development kit 2.03
+bnu2161b.zip B   3,483,132 050708 GNU Binutils 2.16.1 for DJGPP V2
+gcc344b.zip  B   3,772,211 050527 GNU GCC 3.4.4 for DJGPP V2
+gpp344b.zip  B   4,026,725 050527 GNU C++ Compiler 3.4.4 for DJGPP V2
+
+If you want to build wxMGL natively using the DJGPP compiler, you will have to
+install a couple of Unix utilities. I think the following is the minimum that
+will work:
+
+bsh204b.zip  B     454,308 020106 GNU Bash shell 2.04 for DJGPP V2
+fil41b.zip   B   1,738,170 030830 GNU fileutils 4.1 for DJGPP V2
+find41b.zip  B     306,826 010505 GNU findutils 4.1 for DJGPP V2
+grep24b.zip  B     254,997 000116 GNU Grep 2.4 for DJGPP V2
+mak3791b.zip B     272,798 020106 GNU Make 3.79.1 for DJGPP V2
+sed414b.zip  B     159,920 050331 GNU Sed 4.1.4 for DJGPP V2
+shl2011b.zip B   1,195,021 020419 GNU sh-utils 2.01 for DJGPP V2
+
+You'll probably also want a debugger:
+gdb611b.zip  B   1,585,648 040629 GNU GDB Debugger 6.1.1 for DJGPP V2
+
+And maybe some of these:
+faq230b.zip  B     679,865 000203 FAQ 2.30 for DJGPP v2.03
+dif281b.zip  B     402,859 040911 GNU Diffutils 2.8.1 for DJGPP V2
+gwk314b.zip  B     968,667 050321 GNU Awk 3.1.4 for DJGPP V2
+gzip135b.zip B     146,138 041215 GNU gzip 1.3.5 for DJGPP V2
+lss374b.zip  B     199,805 020405 GNU Less 374 for DJGPP V2
+pat254b.zip  B     114,250 040326 GNU Patch 2.5.4 for DJGPP V2
+tar112ab.zip B     236,427 000305 GNU Tar 1.12a for DJGPP V2
+whic211b.zip B      86,296 000911 GNU which 2.11 for DJGPP V2
+
+The system you compile on must support long file names. You can use Windows 9x
+or Windows 2000/XP or later. For example:
+
+C:\>set MGL_ROOT=c:/scitech
+C:\>set DJGPP=c:/djgpp/djgpp.env
+C:\>PATH=c:\djgpp\bin
+C:\>set PS1=\w\$
+C:\>bash
+c:/$ mkdir build
+c:/$ cd build
+c:/build$ ../wxWidgets/configure
+c:/build$ make
+c:/build$ cd samples/minimal
+c:/build/samples/minimal$ make
+
+Cross-compilation is very easy. It works like ordinary compilation with
+configure, you only have to specify the target:
 
 > ./configure --with-mgl --build=i586-linux --host=i586-pc-msdosdjgpp
 > make
 
-If you want to build wxMGL natively using DJGPP compiler, you will have to install
-a couple of Unix utilities. The easiest way to get them is to install the Cygwin
-package (available from RedHat, see http://freshmeat.net/search/?q=cygwin for exact
-URL). Cygwin contains win32 compiler, so make sure you did *not* install it! Once
-you have Cygwin utilities and DJGPP compiler in your PATH, run bash.exe and type
+For this to work, you must have installed a cross compiler on your system. Ready
+made binaries are not available for very many systems, so usually this means you
+must obtain the djgpp sources and compile them yourself.
 
-> ./configure --with-mgl
-> make
+NetBSD does have a binary package which can be installed with:
+    # pkg_add cross-i386-msdosdjgpp
 
-in wxWidgets top directory. You can build wxMGL in MS-DOS with configure, sorry.
+You can also try asking on the wx-dev mailing list. If someone else has already
+built a cross-compiler for you platform they may be willing to send you the
+binaries.
 
 
 * Building wxMGL for MS-DOS using Watcom C/C++
