@@ -53,6 +53,9 @@ private:
         CPPUNIT_TEST( CaseChanges );
         CPPUNIT_TEST( Compare );
         CPPUNIT_TEST( CompareNoCase );
+        CPPUNIT_TEST( ToLong );
+        CPPUNIT_TEST( ToULong );
+        CPPUNIT_TEST( ToDouble );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -75,6 +78,9 @@ private:
     void CaseChanges();
     void Compare();
     void CompareNoCase();
+    void ToLong();
+    void ToULong();
+    void ToDouble();
 
 #if wxUSE_WCHAR_T
     // test if converting s using the given encoding gives ws and vice versa
@@ -635,3 +641,94 @@ void StringTestCase::CompareNoCase()
     CPPUNIT_CNCNEQ_ASSERT( s1, neq3 );
 }
 
+void StringTestCase::ToLong()
+{
+    long l;
+    static const struct ToLongData
+    {
+        const wxChar *str;
+        long value;
+        bool ok;
+    } longData[] =
+    {
+        { _T("1"), 1, true },
+        { _T("0"), 0, true },
+        { _T("a"), 0, false },
+        { _T("12345"), 12345, true },
+        { _T("-1"), -1, true },
+        { _T("--1"), 0, false },
+    };
+
+    size_t n;
+    for ( n = 0; n < WXSIZEOF(longData); n++ )
+    {
+        const ToLongData& ld = longData[n];
+        CPPUNIT_ASSERT_EQUAL( ld.ok, wxString(ld.str).ToLong(&l) );
+        if ( ld.ok )
+            CPPUNIT_ASSERT_EQUAL( ld.value, l );
+    }
+}
+
+void StringTestCase::ToULong()
+{
+    unsigned long ul;
+    static const struct ToULongData
+    {
+        const wxChar *str;
+        unsigned long value;
+        bool ok;
+    } ulongData[] =
+    {
+        { _T("1"), 1, true },
+        { _T("0"), 0, true },
+        { _T("a"), 0, false },
+        { _T("12345"), 12345, true },
+        // this is surprizing but consistent with strtoul() behaviour
+        { _T("-1"), ULONG_MAX, true },
+    };
+
+    size_t n;
+    for ( n = 0; n < WXSIZEOF(ulongData); n++ )
+    {
+        const ToULongData& uld = ulongData[n];
+        CPPUNIT_ASSERT_EQUAL( uld.ok, wxString(uld.str).ToULong(&ul) );
+        if ( uld.ok )
+            CPPUNIT_ASSERT_EQUAL( uld.value, ul );
+    }
+}
+
+void StringTestCase::ToDouble()
+{
+    double d;
+    static const struct ToDoubleData
+    {
+        const wxChar *str;
+        double value;
+        bool ok;
+    } doubleData[] =
+    {
+        { _T("1"), 1, true },
+        { _T("1.23"), 1.23, true },
+        { _T(".1"), .1, true },
+        { _T("1."), 1, true },
+        { _T("1.."), 0, false },
+        { _T("0"), 0, true },
+        { _T("a"), 0, false },
+        { _T("12345"), 12345, true },
+        { _T("-1"), -1, true },
+        { _T("--1"), 0, false },
+    };
+
+    // we need to use decimal point, not comma or whatever is its value for the
+    // current locale
+    wxSetlocale(LC_ALL, _T("C"));
+
+    size_t n;
+    for ( n = 0; n < WXSIZEOF(doubleData); n++ )
+    {
+        const ToDoubleData& ld = doubleData[n];
+        CPPUNIT_ASSERT_EQUAL( ld.ok, wxString(ld.str).ToDouble(&d) );
+        if ( ld.ok )
+            CPPUNIT_ASSERT_EQUAL( ld.value, d );
+    }
+}
