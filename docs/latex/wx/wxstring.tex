@@ -1045,7 +1045,10 @@ familiar with C) results.
 Attempts to convert the string to an unsigned integer in base {\it base}.
 Returns {\tt true} on success in which case the number is stored in the
 location pointed to by {\it val} or {\tt false} if the string does not
-represent a valid number in the given base.
+represent a valid number in the given base. Please notice that this function
+behaves in the same way as the standard \texttt{strtoul()} and so it simply
+converts negative numbers to unsigned representation instead of rejecting them
+(e.g. $-1$ is returned as \texttt{ULONG\_MAX}).
 
 See \helpref{wxString::ToLong}{wxstringtolong} for the more detailed
 description of the {\it base} parameter.
