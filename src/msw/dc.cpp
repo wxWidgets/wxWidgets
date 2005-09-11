@@ -1674,6 +1674,8 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
 
     widths.Empty();
     widths.Add(0, stlen);  // fill the array with zeros
+    if (stlen == 0)
+        return true;
 
     if (!::GetTextExtentExPoint(GetHdc(),
                                 text.c_str(),           // string to check
