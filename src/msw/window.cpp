@@ -4626,6 +4626,18 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             (void)GetEventHandler()->ProcessEvent(event);
         }
     }
+#ifdef HAVE_TRACKMOUSEEVENT
+    else
+    {
+        // Check if we need to send a LEAVE event
+        // Windows doesn't send WM_MOUSELEAVE if the mouse has been captured so
+        // send it here if we are using native mouse leave tracking
+        if ( HasCapture() && !IsMouseInWindow() )
+        {
+            GenerateMouseLeave();
+        }
+    }
+#endif // HAVE_TRACKMOUSEEVENT 
 
 #if wxUSE_MOUSEEVENT_HACK
     // Window gets a click down message followed by a mouse move message even
