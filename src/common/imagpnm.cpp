@@ -172,10 +172,12 @@ bool wxPNMHandler::DoCanRead( wxInputStream& stream )
 
     if ( stream.GetC() == 'P' )
     {
-        switch (stream.GetC())
+        switch ( stream.GetC() )
         {
-            case '3':
-            case '6':
+            case '2': // ASCII Grey
+            case '3': // ASCII RGB
+            case '5': // RAW Grey
+            case '6': // RAW RGB
                 return true;
         }
     }
