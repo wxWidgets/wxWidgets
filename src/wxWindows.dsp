@@ -1435,6 +1435,10 @@ SOURCE=.\msw\ole\access.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\ole\activex.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\ole\automtn.cpp
 # End Source File
 # Begin Source File
@@ -3488,6 +3492,10 @@ SOURCE=..\include\wx\msw\notebook.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\ole\access.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\ole\activex.h
 # End Source File
 # Begin Source File
 

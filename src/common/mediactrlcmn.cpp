@@ -468,6 +468,49 @@ void wxMediaCtrl::DoMoveWindow(int x, int y, int w, int h)
         m_imp->Move(x, y, w, h);
 }
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//
+//  wxMediaBackendCommonBase
+//
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void wxMediaBackendCommonBase::NotifyMovieSizeChanged()
+{
+    // our best size changed after opening a new file
+    m_ctrl->InvalidateBestSize();
+    m_ctrl->SetSize(m_ctrl->GetSize());
+
+    // if the parent of the control has a sizer ask it to refresh our size
+    wxWindow * const parent = m_ctrl->GetParent();
+    if ( parent->GetSizer() )
+    {
+        m_ctrl->GetParent()->Layout();
+        m_ctrl->GetParent()->Refresh();
+        m_ctrl->GetParent()->Update();
+    }
+}
+
+void wxMediaBackendCommonBase::NotifyMovieLoaded()
+{
+    NotifyMovieSizeChanged();
+
+    // notify about movie being fully loaded
+    QueueEvent(wxEVT_MEDIA_LOADED);
+}
+
+bool wxMediaBackendCommonBase::SendStopEvent()
+{
+    wxMediaEvent theEvent(wxEVT_MEDIA_STOP, m_ctrl->GetId());
+
+    return !m_ctrl->ProcessEvent(theEvent) || theEvent.IsAllowed();
+}
+
+void wxMediaBackendCommonBase::QueueEvent(wxEventType evtType)
+{
+    wxMediaEvent theEvent(evtType, m_ctrl->GetId());
+    m_ctrl->AddPendingEvent(theEvent);
+}
+
 #include "wx/html/forcelnk.h"
 FORCE_LINK(basewxmediabackends);
 

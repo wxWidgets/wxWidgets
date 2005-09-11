@@ -102,6 +102,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(____ADVANCED_SRC_FILENAMES_OBJECTS) &
 	$(OBJS)\monodll_mediactrlcmn.obj &
 	$(OBJS)\monodll_mediactrl.obj &
+	$(OBJS)\monodll_activex.obj &
 	$(OBJS)\monodll_helpbest.obj &
 	$(OBJS)\monodll_helpctrl.obj &
 	$(OBJS)\monodll_helpdata.obj &
@@ -623,6 +624,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(____ADVANCED_SRC_FILENAMES_1_OBJECTS) &
 	$(OBJS)\monolib_mediactrlcmn.obj &
 	$(OBJS)\monolib_mediactrl.obj &
+	$(OBJS)\monolib_activex.obj &
 	$(OBJS)\monolib_helpbest.obj &
 	$(OBJS)\monolib_helpctrl.obj &
 	$(OBJS)\monolib_helpdata.obj &
@@ -3026,7 +3028,8 @@ MEDIADLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 MEDIADLL_OBJECTS =  &
 	$(OBJS)\mediadll_dummy.obj &
 	$(OBJS)\mediadll_mediactrlcmn.obj &
-	$(OBJS)\mediadll_mediactrl.obj
+	$(OBJS)\mediadll_mediactrl.obj &
+	$(OBJS)\mediadll_activex.obj
 MEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -3038,7 +3041,8 @@ MEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 MEDIALIB_OBJECTS =  &
 	$(OBJS)\medialib_dummy.obj &
 	$(OBJS)\medialib_mediactrlcmn.obj &
-	$(OBJS)\medialib_mediactrl.obj
+	$(OBJS)\medialib_mediactrl.obj &
+	$(OBJS)\medialib_activex.obj
 ODBCDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -4632,6 +4636,9 @@ $(OBJS)\monodll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_helpbest.obj :  .AUTODEPEND ..\..\src\msw\helpbest.cpp
@@ -6417,6 +6424,9 @@ $(OBJS)\monolib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_helpbest.obj :  .AUTODEPEND ..\..\src\msw\helpbest.cpp
@@ -10936,6 +10946,9 @@ $(OBJS)\mediadll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.c
 $(OBJS)\mediadll_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
 	$(CXX) -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
 
+$(OBJS)\mediadll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
+	$(CXX) -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
+
 $(OBJS)\medialib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
@@ -10943,6 +10956,9 @@ $(OBJS)\medialib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.c
 	$(CXX) -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\medialib_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
+	$(CXX) -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
+
+$(OBJS)\medialib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
 	$(CXX) -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\odbcdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp

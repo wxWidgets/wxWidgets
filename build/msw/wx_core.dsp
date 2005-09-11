@@ -7412,6 +7412,10 @@ SOURCE=..\..\include\wx\msw\ole\access.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\ole\activex.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\app.h
 # End Source File
 # Begin Source File

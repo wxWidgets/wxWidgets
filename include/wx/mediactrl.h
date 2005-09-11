@@ -326,6 +326,7 @@ public:
     DECLARE_DYNAMIC_CLASS(wxMediaBackend)
 };
 
+
 //Event ID to give to our events
 #define wxMEDIA_FINISHED_ID    13000
 #define wxMEDIA_STOP_ID    13001
@@ -349,6 +350,34 @@ typedef void (wxEvtHandler::*wxMediaEventFunction)(wxMediaEvent&);
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_LOADED,     wxMEDIA_LOADED_ID)
 #   define EVT_MEDIA_LOADED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_LOADED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 #endif
+
+// ----------------------------------------------------------------------------
+// common backend base class used by many other backends
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_MEDIA wxMediaBackendCommonBase : public wxMediaBackend
+{
+public:
+    // add a pending wxMediaEvent of the given type
+    void QueueEvent(wxEventType evtType);
+
+    // notify that the movie playback is finished
+    void QueueFinishEvent() { QueueEvent(wxEVT_MEDIA_FINISHED); }
+
+    // send the stop event and return true if it hasn't been vetoed
+    bool SendStopEvent();
+
+protected:
+    // call this when the movie size has changed but not because it has just
+    // been loaded (in this case, call NotifyMovieLoaded() below)
+    void NotifyMovieSizeChanged();
+
+    // call this when the movie is fully loaded
+    void NotifyMovieLoaded();
+
+
+    wxMediaCtrl *m_ctrl;      // parent control
+};
 
 // ----------------------------------------------------------------------------
 // End compilation gaurd

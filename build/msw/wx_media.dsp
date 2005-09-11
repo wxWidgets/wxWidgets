@@ -460,6 +460,10 @@ SOURCE=..\..\src\common\mediactrlcmn.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\src\msw\ole\activex.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
@@ -804,6 +808,14 @@ InputPath=..\include\wx\msw\setup.h
 
 !ENDIF
 
+# End Source File
+# End Group
+# Begin Group "MSW Headers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ole\activex.h
 # End Source File
 # End Group
 # Begin Group "Common Headers"

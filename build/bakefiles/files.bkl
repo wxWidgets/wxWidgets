@@ -2466,8 +2466,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MEDIA_MSW_SRC" hints="files">
     src/msw/mediactrl.cpp
+    src/msw/ole/activex.cpp
 </set>
 <set var="MEDIA_MSW_HDR" hints="files">
+    wx/msw/ole/activex.h
 </set>
 <!-- not built on WindowsCE: -->
 <set var="MEDIA_MSW_DESKTOP_SRC" hints="files">
