@@ -30,10 +30,10 @@ IMPLEMENT_CLASS(wxServerBase, wxObject)
 IMPLEMENT_CLASS(wxClientBase, wxObject)
 IMPLEMENT_CLASS(wxConnectionBase, wxObject)
 
-wxConnectionBase::wxConnectionBase(wxChar *buffer, int size)
+wxConnectionBase::wxConnectionBase(wxChar *buffer, int bytes)
     : m_connected(true),
       m_buffer(buffer),
-      m_buffersize(size),
+      m_buffersize(bytes),
       m_deletebufferwhendone(false)
 {
   if ( buffer == (wxChar *)NULL )
@@ -80,7 +80,10 @@ wxChar *wxConnectionBase::GetBufferAtLeast( size_t bytes )
     { // we're in charge of buffer, increase it
       if ( m_buffer )
         delete m_buffer;
-      m_buffer = new wxChar[bytes];
+      // the argument specifies **byte size**, but m_buffer is of type
+      // wxChar. Under unicode: sizeof(wxChar) > 1, so the buffer size is
+      // bytes / sizeof(wxChar) rounded upwards.
+      m_buffer = new wxChar[(bytes + sizeof(wxChar) - 1) / sizeof(wxChar)];
       m_buffersize = bytes;
       return m_buffer;
     } // user-supplied buffer, fail

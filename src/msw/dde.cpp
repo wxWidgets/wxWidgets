@@ -39,7 +39,6 @@
 #include "wx/dde.h"
 #include "wx/intl.h"
 #include "wx/hashmap.h"
-#include "wx/math.h"
 
 #include "wx/msw/private.h"
 
@@ -550,19 +549,21 @@ bool wxDDEConnection::Disconnect()
     return ok;
 }
 
-bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
+bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat WXUNUSED(format))
 {
     DWORD result;
     if (size < 0)
     {
-        size = wxStrlen(data) + 1;
+        size = (wxStrlen(data) + 1) * sizeof(wxChar);    // includes final NUL
     }
 
     bool ok = DdeClientTransaction((LPBYTE)data,
-                                    size * sizeof(wxChar),
+                                    size,
                                     GetHConv(),
                                     NULL,
-                                    format,
+// If the transaction specified by the wType parameter does not pass data or is XTYP_EXECUTE,
+// wFmt should be zero. 
+                                    0,
                                     XTYP_EXECUTE,
                                     DDE_TIMEOUT,
                                     &result) != 0;
@@ -595,7 +596,6 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
     }
 
     DWORD len = DdeGetData(returned_data, NULL, 0, 0);
-    len = (DWORD)ceil( double(len)/sizeof(wxChar) );
 
     wxChar *data = GetBufferAtLeast( len );
     wxASSERT_MSG(data != NULL,
@@ -605,7 +605,7 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
     (void) DdeFreeDataHandle(returned_data);
 
     if (size)
-        *size = len;
+        *size = (int)len;
 
     return data;
 }
@@ -615,12 +615,12 @@ bool wxDDEConnection::Poke(const wxString& item, wxChar *data, int size, wxIPCFo
     DWORD result;
     if (size < 0)
     {
-        size = wxStrlen(data) + 1;
+        size = (wxStrlen(data) + 1) * sizeof(wxChar);    // includes final NUL
     }
 
     HSZ item_atom = DDEGetAtom(item);
     bool ok = DdeClientTransaction((LPBYTE)data,
-                                   size * sizeof(wxChar),
+                                   size,
                                    GetHConv(),
                                    item_atom, format,
                                    XTYP_POKE,
@@ -680,14 +680,15 @@ bool wxDDEConnection::Advise(const wxString& item,
 {
     if (size < 0)
     {
-        size = wxStrlen(data) + 1;
+        size = (wxStrlen(data) + 1) * sizeof(wxChar);    // includes final NUL
     }
 
     HSZ item_atom = DDEGetAtom(item);
     HSZ topic_atom = DDEGetAtom(m_topicName);
     m_sendingData = data;  // mrf: potential for scope problems here?
     m_dataSize = size;
-    m_dataType = format;
+    // wxIPC_PRIVATE does not succeed, so use text instead
+    m_dataType = format == wxIPC_PRIVATE ? wxIPC_TEXT : format;
 
     bool ok = DdePostAdvise(DDEIdInst, topic_atom, item_atom) != 0;
     if ( !ok )
@@ -777,7 +778,6 @@ _DDECallback(WORD wType,
                 if (connection)
                 {
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
-                    len = (DWORD)ceil( double(len)/sizeof(wxChar) );
 
                     wxChar *data = connection->GetBufferAtLeast( len );
                     wxASSERT_MSG(data != NULL,
@@ -787,10 +787,11 @@ _DDECallback(WORD wType,
 
                     DdeFreeDataHandle(hData);
 
+// XTYP_EXECUTE cannot be used for arbitrary data, but only for text
                     if ( connection->OnExecute(connection->m_topicName,
                                                data,
                                                (int)len,
-                                               (wxIPCFormat) wFmt) )
+                                               wxIPC_TEXT ) )
                     {
                         return (DDERETURN)(DWORD)DDE_FACK;
                     }
@@ -815,11 +816,11 @@ _DDECallback(WORD wType,
                     if (data)
                     {
                         if (user_size < 0)
-                            user_size = wxStrlen((wxChar*)data) + 1;
+                            user_size = (wxStrlen((wxChar*)data) + 1) * sizeof(wxChar);    // includes final NUL
 
                         HDDEDATA handle = DdeCreateDataHandle(DDEIdInst,
                                                               (LPBYTE)data,
-                                                              user_size*sizeof(wxChar),
+                                                              user_size,
                                                               0,
                                                               hsz2,
                                                               wFmt,
@@ -839,11 +840,10 @@ _DDECallback(WORD wType,
                     wxString item_name = DDEStringFromAtom(hsz2);
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
-                    len = (DWORD)ceil( double(len) / sizeof(wxChar) );
 
                     wxChar *data = connection->GetBufferAtLeast( len );
                     wxASSERT_MSG(data != NULL,
-                                 _T("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
+                                 _T("Buffer too small in _DDECallback (XTYP_POKE)") );
 
                     DdeGetData(hData, (LPBYTE)data, len, 0);
 
@@ -903,7 +903,7 @@ _DDECallback(WORD wType,
                                     (
                                         DDEIdInst,
                                         (LPBYTE)connection->m_sendingData,
-                                        connection->m_dataSize*sizeof(wxChar),
+                                        connection->m_dataSize,
                                         0,
                                         hsz2,
                                         connection->m_dataType,
@@ -927,7 +927,6 @@ _DDECallback(WORD wType,
                     wxString item_name = DDEStringFromAtom(hsz2);
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
-                    len = (DWORD)ceil( double(len) / sizeof(wxChar) );
 
                     wxChar *data = connection->GetBufferAtLeast( len );
                     wxASSERT_MSG(data != NULL,

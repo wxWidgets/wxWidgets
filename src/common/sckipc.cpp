@@ -399,7 +399,7 @@ bool wxTCPConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
   m_codeco->Write8(format);
 
   if (size < 0)
-    size = wxStrlen(data) + 1;    // includes final NUL
+    size = (wxStrlen(data) + 1) * sizeof(wxChar);    // includes final NUL
 
   m_codeco->Write32(size);
   m_sockstrm->Write(data, size);
@@ -448,7 +448,7 @@ bool wxTCPConnection::Poke (const wxString& item, wxChar *data, int size, wxIPCF
   m_codeco->Write8(format);
 
   if (size < 0)
-    size = wxStrlen(data) + 1;    // includes final NUL
+    size = (wxStrlen(data) + 1) * sizeof(wxChar);    // includes final NUL
 
   m_codeco->Write32(size);
   m_sockstrm->Write(data, size);
@@ -504,7 +504,7 @@ bool wxTCPConnection::Advise (const wxString& item,
   m_codeco->Write8(format);
 
   if (size < 0)
-    size = wxStrlen(data) + 1;    // includes final NUL
+    size = (wxStrlen(data) + 1) * sizeof(wxChar);    // includes final NUL
 
   m_codeco->Write32(size);
   m_sockstrm->Write(data, size);
@@ -646,7 +646,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
       codeco->Write8(IPC_REQUEST_REPLY);
 
       if (user_size == -1)
-        user_size = wxStrlen(user_data) + 1;      // includes final NUL
+        user_size = (wxStrlen(user_data) + 1) * sizeof(wxChar);    // includes final NUL
 
       codeco->Write32(user_size);
       sockstrm->Write(user_data, user_size);

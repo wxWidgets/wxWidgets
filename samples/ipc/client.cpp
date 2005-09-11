@@ -2,7 +2,7 @@
 // Name:        client.cpp
 // Purpose:     DDE sample: client
 // Author:      Julian Smart
-// Modified by:
+// Modified by:    Jurgen Doornik
 // Created:     25/01/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -30,12 +30,13 @@
 
 // Settings common to both executables: determines whether
 // we're using TCP/IP or real DDE.
-#include "ddesetup.h"
+#include "ipcsetup.h"
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "mondrian.xpm"
 #endif
 
+#include "wx/datetime.h"
 #include "client.h"
 
 // ----------------------------------------------------------------------------
@@ -45,20 +46,23 @@
 IMPLEMENT_APP(MyApp)
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(CLIENT_QUIT, MyFrame::OnExit)
-    EVT_MENU(CLIENT_EXECUTE, MyFrame::OnExecute)
-    EVT_MENU(CLIENT_POKE, MyFrame::OnPoke)
-    EVT_MENU(CLIENT_REQUEST, MyFrame::OnRequest)
+    EVT_MENU(wxID_EXIT, MyFrame::OnExit)
+    EVT_CLOSE( MyFrame::OnClose )
+    EVT_BUTTON( ID_START,       MyFrame::OnStart )
+    EVT_CHOICE( ID_SERVERNAME,  MyFrame::OnServername )
+    EVT_CHOICE( ID_HOSTNAME,    MyFrame::OnHostname )
+    EVT_CHOICE( ID_TOPIC,       MyFrame::OnTopic )
+    EVT_BUTTON( ID_DISCONNECT,  MyFrame::OnDisconnect )
+    EVT_BUTTON( ID_STARTADVISE, MyFrame::OnStartAdvise )
+    EVT_BUTTON( ID_STOPADVISE,  MyFrame::OnStopAdvise )
+    EVT_BUTTON( ID_POKE,        MyFrame::OnPoke )
+    EVT_BUTTON( ID_EXECUTE,     MyFrame::OnExecute )
+    EVT_BUTTON( ID_REQUEST,     MyFrame::OnRequest )
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
-
-wxListBox *the_list = NULL;
-
-MyConnection *the_connection = NULL;
-MyClient *my_client;
 
 // ============================================================================
 // implementation
@@ -72,66 +76,22 @@ MyClient *my_client;
 // main frame
 bool MyApp::OnInit()
 {
-    // service name (DDE classes) or port number (TCP/IP based classes)
-    wxString service = IPC_SERVICE;
-
-    // ignored under DDE, host name in TCP/IP based classes
-    wxString hostName = _T("localhost");
-
-    if (argc > 1)
-        service = argv[1];
-    if (argc > 2)
-        hostName = argv[2];
-
-    // Create a new client
-    my_client = new MyClient;
-
-    // suppress the log messages from MakeConnection()
-    {
-        wxLogNull nolog;
-        the_connection = (MyConnection *)
-            my_client->MakeConnection(hostName, service, IPC_TOPIC);
-
-        while ( !the_connection )
-        {
-            if ( wxMessageBox(_T("Failed to make connection to server.\nRetry?"),
-                              _T("Client Demo Error"),
-                              wxICON_ERROR | wxYES_NO | wxCANCEL ) != wxYES )
-            {
-                // no server
-                return false;
-            }
-
-            the_connection = (MyConnection *)my_client->MakeConnection(hostName, service, _T("IPC TEST"));
-        }
-    }
-
-    if (!the_connection->StartAdvise(IPC_ADVISE_NAME))
-        wxMessageBox(_T("StartAdvise failed"), _T("Client Demo Error"));
-
     // Create the main frame window
-    (new MyFrame(NULL, _T("Client")))->Show(true);
+    m_frame = new MyFrame(NULL, _T("Client"));
+    m_frame->Show(true);
 
     return true;
 }
 
 int MyApp::OnExit()
 {
-    // will delete the connection too
-    // Update: Seems it didn't delete the_connection, because there's a leak.
-    // Deletion is now explicitly done a few lines up.
-    // another Update: in fact it's because OnDisconnect should delete it, but
-    // it wasn't
-    delete my_client;
-
-
 
     return 0;
 }
 
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title)
-        : wxFrame(frame, wxID_ANY, title, wxDefaultPosition, wxSize(300, 200))
+        : wxFrame(frame, wxID_ANY, title, wxDefaultPosition, wxSize(400, 300))
 {
     // Give it an icon
     SetIcon(wxICON(mondrian));
@@ -139,10 +99,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(CLIENT_EXECUTE, _T("&Execute\tCtrl-E"));
-    file_menu->Append(CLIENT_REQUEST, _T("&Request\tCtrl-R"));
-    file_menu->Append(CLIENT_POKE, _T("&Poke\tCtrl-P"));
-    file_menu->Append(CLIENT_QUIT, _T("&Quit\tCtrl-Q"));
+    file_menu->Append(wxID_EXIT, _T("&Quit\tCtrl-Q"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
@@ -151,39 +108,131 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     // Associate the menu bar with the frame
     SetMenuBar(menu_bar);
 
-    // Make a listbox which shows the choices made in the server
-    the_list = new wxListBox(this, CLIENT_LISTBOX, wxPoint(5, 5));
-    the_list->Append(_T("Apple"));
-    the_list->Append(_T("Pear"));
-    the_list->Append(_T("Orange"));
-    the_list->Append(_T("Banana"));
-    the_list->Append(_T("Fruit"));
-}
+    // set a dialog background
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
 
-void MyFrame::OnExecute(wxCommandEvent& WXUNUSED(event))
-{
-    if (the_connection)
-        if (!the_connection->Execute(_T("Hello from the client!")))
-            wxMessageBox(_T("Execute failed"), _T("Client Demo Error"));
-}
-
-void MyFrame::OnPoke(wxCommandEvent& WXUNUSED(event))
-{
-    if (the_connection)
-        if (!the_connection->Poke(_T("An item"), _T("Some data to poke at the server!")))
-            wxMessageBox(_T("Poke failed"), _T("Client Demo Error"));
-}
-
-void MyFrame::OnRequest(wxCommandEvent& WXUNUSED(event))
-{
-    if (the_connection)
+    // add the controls to the frame
+    wxString strs4[] = 
     {
-        wxChar *data = the_connection->Request(_T("An item"));
-        if (data)
-            wxMessageBox(data, _T("Client: Request"), wxOK);
-        else
-            wxMessageBox(_T("Request failed"), _T("Client Demo Error"));
+        IPC_SERVICE, _T("...")
+    };
+    wxString strs5[] = 
+    {
+        IPC_HOST, _T("...")
+    };
+    wxString strs6[] = 
+    {
+        IPC_TOPIC, _T("...")
+    };
+
+    wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
+
+    wxBoxSizer *item1 = new wxBoxSizer( wxHORIZONTAL );
+
+    wxGridSizer *item2 = new wxGridSizer( 4, 0, 0 );
+
+    wxButton *item3 = new wxButton( this, ID_START, wxT("Connect to server"), wxDefaultPosition, wxDefaultSize, 0 );
+    item2->Add( item3, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    wxChoice *item5 = new wxChoice( this, ID_HOSTNAME, wxDefaultPosition, wxSize(100,-1), 2, strs5, 0 );
+    item2->Add( item5, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    wxChoice *item4 = new wxChoice( this, ID_SERVERNAME, wxDefaultPosition, wxSize(100,-1), 2, strs4, 0 );
+    item2->Add( item4, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    wxChoice *item6 = new wxChoice( this, ID_TOPIC, wxDefaultPosition, wxSize(100,-1), 2, strs6, 0 );
+    item2->Add( item6, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    wxButton *item7 = new wxButton( this, ID_DISCONNECT, wxT("Disconnect "), wxDefaultPosition, wxDefaultSize, 0 );
+    item2->Add( item7, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    wxButton *item8 = new wxButton( this, ID_STARTADVISE, wxT("StartAdvise"), wxDefaultPosition, wxDefaultSize, 0 );
+    item2->Add( item8, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    wxButton *item9 = new wxButton( this, ID_STOPADVISE, wxT("StopAdvise"), wxDefaultPosition, wxDefaultSize, 0 );
+    item2->Add( item9, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    wxButton *item10 = new wxButton( this, ID_EXECUTE, wxT("Execute"), wxDefaultPosition, wxDefaultSize, 0 );
+    item2->Add( item10, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    wxButton *item11 = new wxButton( this, ID_POKE, wxT("Poke"), wxDefaultPosition, wxDefaultSize, 0 );
+    item2->Add( item11, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    wxButton *item12 = new wxButton( this, ID_REQUEST, wxT("Request"), wxDefaultPosition, wxDefaultSize, 0 );
+    item2->Add( item12, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item1->Add( item2, 1, wxALIGN_CENTER|wxALL, 5 );
+
+    item0->Add( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    wxStaticBox *item14 = new wxStaticBox( this, -1, wxT("Client log") );
+    wxStaticBoxSizer *item13 = new wxStaticBoxSizer( item14, wxVERTICAL );
+
+    wxTextCtrl *item15 = new wxTextCtrl( this, ID_LOG, wxT(""), wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
+    item13->Add( item15, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    item0->Add( item13, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    this->SetSizer( item0 );
+    item0->SetSizeHints( this );
+
+    // status
+    m_client = NULL;
+    GetServername()->SetSelection(0);
+    GetHostname()->SetSelection(0);
+    GetTopic()->SetSelection(0);
+    wxLogTextCtrl *logWindow = new wxLogTextCtrl(GetLog());
+    delete wxLog::SetActiveTarget(logWindow);
+    wxLogMessage(_T("Click on Connect to connect to the server"));
+    Enable();
+}
+
+void MyFrame::Enable()
+{
+    GetStart()->Enable(m_client == NULL);
+    GetServername()->Enable(m_client == NULL);
+    GetHostname()->Enable(m_client == NULL);
+    GetTopic()->Enable(m_client == NULL);
+    GetDisconnect()->Enable(m_client && m_client->IsConnected() != NULL);
+    GetStartAdvise()->Enable(m_client && m_client->IsConnected() != NULL);
+    GetStopAdvise()->Enable(m_client && m_client->IsConnected() != NULL);
+    GetExecute()->Enable(m_client && m_client->IsConnected() != NULL);
+    GetPoke()->Enable(m_client && m_client->IsConnected() != NULL);
+    GetRequest()->Enable(m_client && m_client->IsConnected() != NULL);
+}
+
+void MyFrame::OnClose(wxCloseEvent& event)
+{
+    if (m_client)
+    {
+        delete m_client;
+        m_client = NULL;
     }
+    event.Skip();
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
@@ -191,31 +240,239 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
     Close();
 }
 
+void MyFrame::OnStart(wxCommandEvent& WXUNUSED(event))
+{
+    // Connect to the client
+    wxString servername = GetServername()->GetStringSelection();
+    wxString hostname = GetHostname()->GetStringSelection();
+    wxString topic = GetTopic()->GetStringSelection();
+
+    m_client = new MyClient;
+    bool retval = m_client->Connect(hostname, servername, topic);
+
+    wxLogMessage(_T("Client host=\"%s\" port=\"%s\" topic=\"%s\" %s"),
+        hostname.c_str(), servername.c_str(), topic.c_str(),
+        retval ? _T("connected") : _T("failed to connect"));
+
+    if (!retval)
+    {
+        delete m_client;
+        m_client = NULL;
+    }
+    Enable();
+}
+
+void MyFrame::OnServername( wxCommandEvent& WXUNUSED(event) )
+{
+    if (GetServername()->GetStringSelection() == _T("..."))
+    {
+        wxString s = wxGetTextFromUser(_T("Specify the name of the server"),
+            _T("Server Name"), _(""), this);
+        if (!s.IsEmpty() && s != IPC_SERVICE)
+        {
+            GetServername()->Insert(s, 0);
+            GetServername()->SetSelection(0);
+        }
+    }
+}
+
+void MyFrame::OnHostname( wxCommandEvent& WXUNUSED(event) )
+{
+    if (GetHostname()->GetStringSelection() == _T("..."))
+    {
+        wxString s = wxGetTextFromUser(_T("Specify the name of the host (ignored under DDE)"),
+            _T("Host Name"), _(""), this);
+        if (!s.IsEmpty() && s != IPC_HOST)
+        {
+            GetHostname()->Insert(s, 0);
+            GetHostname()->SetSelection(0);
+        }
+    }
+}
+
+void MyFrame::OnTopic( wxCommandEvent& WXUNUSED(event) )
+{
+    if (GetTopic()->GetStringSelection() == _T("..."))
+    {
+        wxString s = wxGetTextFromUser(_T("Specify the name of the topic"),
+            _T("Topic Name"), _(""), this);
+        if (!s.IsEmpty() && s != IPC_TOPIC)
+        {
+            GetTopic()->Insert(s, 0);
+            GetTopic()->SetSelection(0);
+        }
+    }
+}
+
+void MyFrame::OnDisconnect(wxCommandEvent& WXUNUSED(event))
+{
+    Disconnect();    
+}
+
+void MyFrame::Disconnect()
+{
+    delete m_client;    
+    m_client = NULL;
+    Enable();
+}
+
+void MyFrame::OnStartAdvise(wxCommandEvent& WXUNUSED(event))
+{
+    m_client->GetConnection()->StartAdvise(_T("something"));    
+}
+
+void MyFrame::OnStopAdvise(wxCommandEvent& WXUNUSED(event))
+{
+    m_client->GetConnection()->StopAdvise(_T("something"));    
+}
+
+void MyFrame::OnExecute(wxCommandEvent& WXUNUSED(event))
+{
+    if (m_client->IsConnected())
+    {
+        wxString s = _T("Date");
+
+        m_client->GetConnection()->Execute((wxChar *)s.c_str());
+        m_client->GetConnection()->Execute((wxChar *)s.c_str(), (s.Length() + 1) * sizeof(wxChar));
+#if wxUSE_DDE_FOR_IPC
+        wxLogMessage(_T("DDE Execute can only be used to send text strings, not arbitrary data.\nThe type argument will be ignored, text truncated, converted to Unicode and null terminated."));
+#endif
+        char bytes[3];
+        bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
+        m_client->GetConnection()->Execute((wxChar *)bytes, 3, wxIPC_PRIVATE);
+    }
+}
+
+void MyFrame::OnPoke(wxCommandEvent& WXUNUSED(event))
+{
+    if (m_client->IsConnected())
+    {
+        wxString s = wxDateTime::Now().Format();
+        m_client->GetConnection()->Poke(_T("Date"), (wxChar *)s.c_str());
+        s = wxDateTime::Now().FormatTime() + _T(" ") + wxDateTime::Now().FormatDate();
+        m_client->GetConnection()->Poke(_T("Date"), (wxChar *)s.c_str(), (s.Length() + 1) * sizeof(wxChar));
+        char bytes[3];
+        bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
+        m_client->GetConnection()->Poke(_T("bytes[3]"), (wxChar *)bytes, 3, wxIPC_PRIVATE);
+    }
+}
+
+void MyFrame::OnRequest(wxCommandEvent& WXUNUSED(event))
+{
+    if (m_client->IsConnected())
+    {
+        int size;
+        m_client->GetConnection()->Request(_T("Date"));
+        m_client->GetConnection()->Request(_T("Date+len"), &size);
+        m_client->GetConnection()->Request(_T("bytes[3]"), &size, wxIPC_PRIVATE);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// MyClient
+// ----------------------------------------------------------------------------
+MyClient::MyClient() : wxClient()
+{
+    m_connection = NULL;
+}
+
+bool MyClient::Connect(const wxString& sHost, const wxString& sService, const wxString& sTopic)
+{
+    // suppress the log messages from MakeConnection()
+    wxLogNull nolog;
+    
+    m_connection = (MyConnection *)MakeConnection(sHost, sService, sTopic);
+    return m_connection    != NULL;
+}
+
 wxConnectionBase *MyClient::OnMakeConnection()
 {
     return new MyConnection;
 }
 
-bool MyConnection::OnAdvise(const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), wxChar *data, int WXUNUSED(size), wxIPCFormat WXUNUSED(format))
+void MyClient::Disconnect()
 {
-    if (the_list)
+    if (m_connection)
     {
-        int n = the_list->FindString(data);
-        if (n > wxNOT_FOUND)
-            the_list->SetSelection(n);
+        m_connection->Disconnect();
+        delete m_connection;
+        m_connection = NULL;
+        wxGetApp().GetFrame()->Enable();
+        wxLogMessage(_T("Client disconnected from server"));
     }
+}
+
+MyClient::~MyClient()
+{
+    Disconnect();
+}
+
+// ----------------------------------------------------------------------------
+// MyConnection
+// ----------------------------------------------------------------------------
+
+void MyConnection::Log(const wxString& command, const wxString& topic,
+    const wxString& item, wxChar *data, int size, wxIPCFormat format)
+{
+    wxString s;
+    if (topic.IsEmpty() && item.IsEmpty())
+        s.Printf(_T("%s("), command);
+    else if (topic.IsEmpty())
+        s.Printf(_T("%s(item=\"%s\","), command, item);
+    else if (item.IsEmpty())
+        s.Printf(_T("%s(topic=\"%s\","), command, topic);
+    else
+        s.Printf(_T("%s(topic=\"%s\",item=\"%s\","), command, topic, item);
+
+    if (format == wxIPC_TEXT || format == wxIPC_UNICODETEXT) 
+        wxLogMessage(_T("%s\"%s\",%d)"), s, data, size);
+    else if (format == wxIPC_PRIVATE)
+    {
+        if (size == 3)
+        {
+            char *bytes = (char *)data;
+            wxLogMessage(_T("%s'%c%c%c',%d)"), s, bytes[0], bytes[1], bytes[2], size);
+        }
+        else
+            wxLogMessage(_T("%s...,%d)"), s, size);
+    }
+    else if (format == wxIPC_INVALID) 
+        wxLogMessage(_T("%s[invalid data],%d)"), s, size);
+}
+
+bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, wxChar *data,
+    int size, wxIPCFormat format)
+{
+    Log(_T("OnAdvise"), topic, item, data, size, format);
     return true;
 }
 
 bool MyConnection::OnDisconnect()
 {
-    // when connection is terminated, quit whole program
-    wxWindow *win = wxTheApp->GetTopWindow();
-    if ( win )
-        win->Destroy();
+    wxLogMessage(_T("OnDisconnect()"));
+    wxGetApp().GetFrame()->Disconnect();
+    return true;
+}
 
-    // delete self
-    the_connection = NULL;
-    return wxConnection::OnDisconnect();
+bool MyConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
+{
+    Log(_T("Execute"), _T(""), _T(""), (wxChar *)data, size, format);
+    bool retval = wxConnection::Execute(data, size, format);
+    if (!retval)
+        wxLogMessage(_T("Execute failed!"));
+    return retval;
+}
+
+wxChar *MyConnection::Request(const wxString& item, int *size, wxIPCFormat format)
+{
+    wxChar *data =  wxConnection::Request(item, size, format);
+    Log(_T("Request"), _T(""), item, data, size ? *size : -1, format);
+    return data;
+}
+
+bool MyConnection::Poke(const wxString& item, wxChar *data, int size, wxIPCFormat format)
+{
+    Log(_T("Poke"), _T(""), item, data, size, format);
+    return wxConnection::Poke(item, data, size, format);
 }
 

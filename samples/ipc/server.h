@@ -9,16 +9,26 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define ID_START         10000
+#define ID_DISCONNECT    10001
+#define ID_ADVISE         10002
+#define ID_LOG          10003
+#define ID_SERVERNAME    10004
+
 // Define a new application
 class MyServer;
+class MyConnection;
+class MyFrame;
+
 class MyApp : public wxApp
 {
 public:
     virtual bool OnInit();
     virtual int OnExit();
+    MyFrame *GetFrame() { return m_frame; };
 
-private:
-    MyServer *m_server;
+protected:
+    MyFrame        *m_frame;
 };
 
 DECLARE_APP(MyApp)
@@ -29,53 +39,65 @@ class MyFrame : public wxFrame
 public:
     MyFrame(wxFrame *frame, const wxString& title);
 
-    void OnListBoxClick(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
+    void OnClose(wxCloseEvent& event);
 
-private:
-    wxPanel *panel;
+    void Enable();
+    void Disconnect();
+
+protected:
+    wxButton* GetStart()  { return (wxButton*) FindWindow( ID_START ); }
+    wxChoice* GetServername()  { return (wxChoice*) FindWindow( ID_SERVERNAME ); }
+    wxButton* GetDisconnect()  { return (wxButton*) FindWindow( ID_DISCONNECT ); }
+    wxButton* GetAdvise()  { return (wxButton*) FindWindow( ID_ADVISE ); }
+    wxTextCtrl* GetLog()  { return (wxTextCtrl*) FindWindow( ID_LOG ); }
+
+
+    MyServer         *m_server;
+
+    void OnStart( wxCommandEvent &event );
+    void OnServerName( wxCommandEvent &event );
+    void OnDisconnect( wxCommandEvent &event );
+    void OnAdvise( wxCommandEvent &event );
 
     DECLARE_EVENT_TABLE()
 };
 
-class IPCDialogBox;
 class MyConnection : public wxConnection
 {
 public:
     MyConnection();
     ~MyConnection();
 
-    bool OnExecute(const wxString& topic, wxChar *data, int size, wxIPCFormat format);
-    wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
-    bool OnPoke(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
-    bool OnStartAdvise(const wxString& topic, const wxString& item);
-
-    IPCDialogBox *dialog;
+    virtual bool OnExecute(const wxString& topic, wxChar *data, int size, wxIPCFormat format);
+    virtual wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
+    virtual bool OnPoke(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
+    virtual bool OnStartAdvise(const wxString& topic, const wxString& item);
+    virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
+    virtual bool Advise(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
+    virtual bool OnDisconnect();
+protected:
+    void Log(const wxString& command, const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
+public:
+    wxString        m_sAdvise;
+protected:
+    wxString        m_sRequestDate;
+    char             m_achRequestBytes[3];
 };
 
 class MyServer: public wxServer
 {
 public:
+    MyServer();
+    ~MyServer();
+    void Disconnect();
+    bool IsConnected() { return m_connection != NULL; };
+    MyConnection *GetConnection() { return m_connection; };
+    void Advise();
+    bool CanAdvise() { return m_connection != NULL && !m_connection->m_sAdvise.IsEmpty(); };
     wxConnectionBase *OnAcceptConnection(const wxString& topic);
+
+protected:
+    MyConnection     *m_connection;
 };
 
-class IPCDialogBox: public wxDialog
-{
-public:
-    IPCDialogBox(wxWindow *parent,
-                 const wxString& title,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 MyConnection *the_connection);
-    ~IPCDialogBox( );
-
-    void OnQuit(wxCommandEvent& event);
-
-    MyConnection *m_connection;
-
-    DECLARE_EVENT_TABLE()
-};
-
-#define SERVER_EXIT         wxID_EXIT
-#define SERVER_LISTBOX      500
-#define SERVER_QUIT_BUTTON  501
