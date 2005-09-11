@@ -44,7 +44,7 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID winid, int range,
     // this actually makes the widgets sample work so it's better than nothing.
     if(style & wxGA_VERTICAL)
     {
-        wxLogDebug("wxGA_VERTICAL may not work correctly.  See src/cocoa/gauge.mm");
+        wxLogDebug(wxT("wxGA_VERTICAL may not work correctly.  See src/cocoa/gauge.mm"));
         [m_cocoaNSView setBoundsRotation:-90.0];
     }
 

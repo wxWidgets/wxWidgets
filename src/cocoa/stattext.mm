@@ -71,7 +71,7 @@ void wxStaticText::SetLabel(const wxString& label)
     [GetNSTextField() setStringValue:wxNSStringWithWxString(label)];
     NSRect oldFrameRect = [GetNSTextField() frame];
     NSView *superview = [GetNSTextField() superview];
-    wxLogTrace(wxTRACE_COCOA_Window_Size, "wxStaticText::SetLabel Old Position: (%d,%d)", GetPosition().x, GetPosition().y);
+    wxLogTrace(wxTRACE_COCOA_Window_Size, wxT("wxStaticText::SetLabel Old Position: (%d,%d)"), GetPosition().x, GetPosition().y);
     [GetNSTextField() sizeToFit];
     NSRect newFrameRect = [GetNSTextField() frame];
     // Ensure new size is an integer so GetSize returns valid data
@@ -83,7 +83,7 @@ void wxStaticText::SetLabel(const wxString& label)
     }
     [GetNSTextField() setFrame:newFrameRect];
     // New origin (wx coords) should always match old origin
-    wxLogTrace(wxTRACE_COCOA_Window_Size, "wxStaticText::SetLabel New Position: (%d,%d)", GetPosition().x, GetPosition().y);
+    wxLogTrace(wxTRACE_COCOA_Window_Size, wxT("wxStaticText::SetLabel New Position: (%d,%d)"), GetPosition().x, GetPosition().y);
 
     [[GetNSTextField() superview] setNeedsDisplayInRect:oldFrameRect];
     [[GetNSTextField() superview] setNeedsDisplayInRect:newFrameRect];
