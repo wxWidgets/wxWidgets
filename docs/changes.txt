@@ -33,6 +33,7 @@ All (GUI):
 - Cygwin compilation of wxX11, wxGTK and wxMotif now supported.
 - Now reads "help" parameter for all windows (context help text).
 - wxWizard adapts to PDA-sized screens.
+- Unicode fixes for IPC and a new IPC sample (Jurgen Doornik).
 
 wxMSW:
 
