@@ -654,7 +654,7 @@ bool wxNotebook::InsertPage( size_t position,
     if ( position == GetPageCount() )
         m_pagesData.Append( nb_page );
     else
-        m_pagesData.Insert( m_pagesData.Item( position ), nb_page );
+        m_pagesData.Insert( position, nb_page );
 
     m_pages.Insert(win, position);
 
