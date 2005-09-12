@@ -521,7 +521,8 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
             encoding = wxFONTENCODING_SHIFT_JIS;
         }
         else if ( cs == wxT("EUC-JP") ||
-                  cs == wxT("EUC_JP") )
+                  cs == wxT("EUC_JP") ||
+                  cs == wxT("EUCJP") )
         {
             encoding = wxFONTENCODING_EUC_JP;
         }
