@@ -157,7 +157,7 @@ void wxSpinCtrl::Init()
 bool wxSpinCtrl::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxString& value,
-                        const wxPoint& WXUNUSED(pos),
+                        const wxPoint& pos,
                         const wxSize& size,
                         long style,
                         int min,
@@ -188,6 +188,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
     SetBestSize(size);
+    Move(pos);
 
     // have to disable this window to avoid interfering it with message
     // processing to the text and the button... but pretend it is enabled to
