@@ -336,9 +336,8 @@ static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
         mounted.Sort(CompareFcn);
 
         // apply list from bottom to top to preserve indexes if removing items.
-        int iList = list.GetCount()-1;
-        int iMounted;
-        for (iMounted = mounted.GetCount()-1; iMounted >= 0 && iList >= 0; iMounted--)
+        size_t iList = list.GetCount()-1;
+        for (size_t iMounted = mounted.GetCount()-1; iMounted >= 0 && iList >= 0; iMounted--)
         {
             int compare;
             wxString all(list[iList]);
@@ -401,7 +400,7 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
     // Local and mapped drives first.
     //-------------------------------
     // Allocate the required space for the API call.
-    size_t chars = GetLogicalDriveStrings(0, 0);
+    const DWORD chars = GetLogicalDriveStrings(0, NULL);
     TCHAR* buf = new TCHAR[chars+1];
 
     // Get the list of drives.
