@@ -176,13 +176,16 @@ struct wxDataIdToDataObject
 WX_DEFINE_LIST(wxDataObjectList);
 WX_DEFINE_LIST(wxDataIdToDataObjectList);
 
+extern "C"
+{
 #if wxCHECK_LESSTIF()
 static void wxClipboardCallback( Widget widget, int* data_id,
                                  int* priv, int* reason );
-#else
+#else // Motif
 static void wxClipboardCallback( Widget widget, long* data_id,
                                  long* priv, int* reason );
-#endif
+#endif // Less/Motif
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 
