@@ -159,12 +159,11 @@ int _System soclose(int);
     #define UNMASK_SIGNAL() }
 
 #else
+    extern "C" { typedef void (*wxSigHandler)(int); }
 
     #define MASK_SIGNAL()                       \
     {                                           \
-        void (*old_handler)(int);               \
-                                                \
-        old_handler = signal(SIGPIPE, SIG_IGN);
+        wxSigHandler old_handler = signal(SIGPIPE, SIG_IGN);
 
     #define UNMASK_SIGNAL()                     \
         signal(SIGPIPE, old_handler);           \
