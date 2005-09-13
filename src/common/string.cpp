@@ -2497,7 +2497,11 @@ void wxArrayString::Sort(CompareFunction compareFunction)
   END_SORT();
 }
 
-typedef  int (wxC_CALLING_CONV * wxStringCompareFn)(const void *first, const void *second);
+extern "C"
+{
+    typedef int (wxC_CALLING_CONV * wxStringCompareFn)(const void *first,
+                                                       const void *second);
+}
 
 void wxArrayString::Sort(CompareFunction2 compareFunction)
 {
