@@ -376,14 +376,14 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
     if ( m_stream )
         m_stream->Reset();
 
-    size_t read;
+    size_t readBytes;
     if ( !HasBuffer() )
     {
         wxInputStream *inStream = GetInputStream();
 
         wxCHECK_MSG( inStream, 0, _T("should have a stream in wxStreamBuffer") );
 
-        read = inStream->OnSysRead(buffer, size);
+        readBytes = inStream->OnSysRead(buffer, size);
     }
     else // we have a buffer, use it
     {
@@ -414,13 +414,13 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
             }
         }
 
-        read = orig_size - size;
+        readBytes = orig_size - size;
     }
 
     if ( m_stream )
-        m_stream->m_lastcount = read;
+        m_stream->m_lastcount = readBytes;
 
-    return read;
+    return readBytes;
 }
 
 // this should really be called "Copy()"
@@ -1279,5 +1279,4 @@ wxOutputStream& wxEndL(wxOutputStream& stream)
     return stream.Write(eol, wxStrlen(eol));
 }
 
-#endif
-  // wxUSE_STREAMS
+#endif // wxUSE_STREAMS
