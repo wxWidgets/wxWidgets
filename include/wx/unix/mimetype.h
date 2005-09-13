@@ -18,11 +18,11 @@
 
 #include "wx/mimetype.h"
 
-#if (wxUSE_FILE && wxUSE_TEXTFILE)
+#if wxUSE_MIMETYPE
 
 class wxMimeTypeCommands;
 
-WX_DEFINE_ARRAY(wxMimeTypeCommands *, wxMimeCommandsArray);
+WX_DEFINE_ARRAY_PTR(wxMimeTypeCommands *, wxMimeCommandsArray);
 
 // this is the real wxMimeTypesManager for Unix
 class WXDLLEXPORT wxMimeTypesManagerImpl
@@ -215,9 +215,8 @@ private:
     wxArrayInt              m_index; // in the wxMimeTypesManagerImpl arrays
 };
 
-#endif
-  // wxUSE_FILE
+#endif // wxUSE_MIMETYPE
 
-#endif
-  //_MIMETYPE_IMPL_H
+#endif // _MIMETYPE_IMPL_H
+
 

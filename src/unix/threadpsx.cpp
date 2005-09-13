@@ -100,7 +100,7 @@ static void DeleteThread(wxThread *This);
 // ----------------------------------------------------------------------------
 
 // an (non owning) array of pointers to threads
-WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
+WX_DEFINE_ARRAY_PTR(wxThread *, wxArrayThread);
 
 // an entry for a thread we can wait for
 
