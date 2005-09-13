@@ -1023,7 +1023,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
         return false;
     }
 
-    int images = 1; // only generate one image
+    const int images = 1; // only generate one image
 
     // VS: This is a hack of sort - since ICO and CUR files are almost
     //     identical, we have all the meat in wxICOHandler and check for
@@ -1051,7 +1051,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
 
     // for each iamage write a description ICONDIRENTRY:
     ICONDIRENTRY icondirentry;
-    for (int i = 0; i < images; i++)
+    for (int img = 0; img < images; img++)
     {
         wxImage mask;
 
@@ -1084,10 +1084,10 @@ bool wxICOHandler::SaveFile(wxImage *image,
         {
             // just make a black mask all over:
             mask = image->Copy();
-            int k, j;
-            for (k = 0; k < mask.GetWidth(); k++)
+            int i, j;
+            for (i = 0; i < mask.GetWidth(); i++)
                 for (j = 0; j < mask.GetHeight(); j++)
-                    mask.SetRGB(k, j, 0, 0, 0 );
+                    mask.SetRGB(i, j, 0, 0, 0 );
         }
         // Set the formats for image and mask
         // (Windows never saves with more than 8 colors):
