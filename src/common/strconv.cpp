@@ -1365,7 +1365,7 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
 {
     // iconv operates with chars, not wxChars, but luckily it uses only ASCII
     // names for the charsets
-    const wxCharBuffer cname(wxString::ToAscii(name));
+    const wxCharBuffer cname(wxString(name).ToAscii());
 
     // check for charset that represents wchar_t:
     if (ms_wcCharsetName == NULL)
