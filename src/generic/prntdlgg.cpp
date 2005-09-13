@@ -448,7 +448,7 @@ wxDialog(parent, wxID_ANY, _("Print Setup"), wxPoint(0,0), wxSize(600, 600), wxD
 }
 
 /* XPM */
-static char * check_xpm[] = {
+static const char * check_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 3 1",
 /* colors */
