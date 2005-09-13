@@ -36,7 +36,6 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxChoiceNameStr)
     {
-        Init();
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
 
@@ -49,7 +48,6 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxChoiceNameStr)
     {
-        Init();
         Create(parent, id, pos, size, choices, style, validator, name);
     }
 

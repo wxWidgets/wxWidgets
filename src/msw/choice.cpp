@@ -136,6 +136,8 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
                              const wxValidator& validator,
                              const wxString& name)
 {
+    Init();
+
     // initialize wxControl
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
