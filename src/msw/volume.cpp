@@ -336,8 +336,8 @@ static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
         mounted.Sort(CompareFcn);
 
         // apply list from bottom to top to preserve indexes if removing items.
-        size_t iList = list.GetCount()-1;
-        for (size_t iMounted = mounted.GetCount()-1; iMounted >= 0 && iList >= 0; iMounted--)
+        ssize_t iList = list.GetCount()-1;
+        for (ssize_t iMounted = mounted.GetCount()-1; iMounted >= 0 && iList >= 0; iMounted--)
         {
             int compare;
             wxString all(list[iList]);
@@ -606,4 +606,3 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
 #endif // wxUSE_GUI
 
 #endif // wxUSE_FSVOLUME
-
