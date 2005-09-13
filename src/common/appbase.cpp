@@ -144,11 +144,11 @@ wxAppConsole::~wxAppConsole()
 // initilization/cleanup
 // ----------------------------------------------------------------------------
 
-bool wxAppConsole::Initialize(int& argc, wxChar **argv)
+bool wxAppConsole::Initialize(int& argcOrig, wxChar **argvOrig)
 {
     // remember the command line arguments
-    this->argc = argc;
-    this->argv = argv;
+    argc = argcOrig;
+    argv = argvOrig;
 
 #ifndef __WXPALMOS__
     if ( m_appName.empty() && argv )
