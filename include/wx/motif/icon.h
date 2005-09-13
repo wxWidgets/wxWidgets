@@ -23,17 +23,17 @@ class WXDLLEXPORT wxIcon : public wxBitmap
 {
 public:
     wxIcon();
-    
+
     // Copy constructors
     inline wxIcon(const wxIcon& icon) { Ref(icon); }
-    
+
     // Initialize with XBM data
     wxIcon(const char bits[], int width, int height);
-    
+
     // Initialize with XPM data
     wxIcon(const char **data);
     wxIcon(char **data);
-    
+
     wxIcon(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_XPM,
            int desiredWidth = -1, int desiredHeight = -1)
     {
@@ -46,15 +46,22 @@ public:
     }
 
     ~wxIcon();
-    
-    bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_XPM,
-                  int desiredWidth = -1, int desiredHeight = -1);
+
+    bool LoadFile(const wxString& name, wxBitmapType type,
+                  int desiredWidth, int desiredHeight = -1);
+
+    // unhide base class LoadFile()
+    virtual bool LoadFile(const wxString& name,
+                          wxBitmapType type = wxBITMAP_TYPE_XPM)
+    {
+        return LoadFile(name, type, -1, -1);
+    }
 
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
     // ctors, assignment operators...), but it's ok to have such function
     void CopyFromBitmap(const wxBitmap& bmp);
-    
+
     wxIcon& operator = (const wxIcon& icon)
         { if (this != &icon) Ref(icon); return *this; }
     bool operator == (const wxIcon& icon) const
