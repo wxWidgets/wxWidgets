@@ -79,20 +79,28 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
 END_EVENT_TABLE()
 
 #ifdef __WXDEBUG__
+extern "C"
+{
     typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
+}
 
-    XErrorHandlerFunc gs_pfnXErrorHandler = 0;
+XErrorHandlerFunc gs_pfnXErrorHandler = 0;
 
-    static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
-    {
-        // just forward to the default handler for now
-        return gs_pfnXErrorHandler(dpy, xevent);
-    }
+extern "C"
+{
+
+static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
+{
+    // just forward to the default handler for now
+    return gs_pfnXErrorHandler(dpy, xevent);
+}
+
+}
 #endif // __WXDEBUG__
 
-bool wxApp::Initialize(int& argc, wxChar **argv)
+bool wxApp::Initialize(int& argcOrig, wxChar **argvOrig)
 {
-    if ( !wxAppBase::Initialize(argc, argv) )
+    if ( !wxAppBase::Initialize(argcOrig, argvOrig) )
         return false;
 
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
@@ -179,19 +187,23 @@ void wxApp::HandlePropertyChange(WXEvent *event)
     XtDispatchEvent((XEvent*) event); /* let Motif do the work */
 }
 
+// some compilers (e.g. Sun CC) give warnings when treating string literals as
+// (non const) "char *" so use this macro to suppress them when we know it's ok
+#define STR(x) wx_const_cast(char *, x)
+
 static char *fallbackResources[] = {
     // better defaults for CDE under Irix
     //
     // TODO: do something similar for the other systems, the hardcoded defaults
     //       below are ugly
 #ifdef __SGI__
-    "*sgiMode: True",
-    "*useSchemes: all",
+    STR("*sgiMode: True"),
+    STR("*useSchemes: all"),
 #else // !__SGI__
-    "*menuBar.marginHeight: 0",
-    "*menuBar.shadowThickness: 1",
-    "*background: #c0c0c0",
-    "*foreground: black",
+    STR("*menuBar.marginHeight: 0"),
+    STR("*menuBar.shadowThickness: 1"),
+    STR("*background: #c0c0c0"),
+    STR("*foreground: black"),
 #endif // __SGI__/!__SGI__
     NULL
 };
@@ -233,7 +245,7 @@ bool wxApp::OnInitGui()
 
     // Add general resize proc
     XtActionsRec rec;
-    rec.string = "resize";
+    rec.string = STR("resize");
     rec.proc = (XtActionProc)wxWidgetResizeProc;
     XtAppAddActions((XtAppContext) wxTheApp->m_appContext, &rec, 1);
 
