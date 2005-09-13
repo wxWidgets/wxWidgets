@@ -1363,10 +1363,9 @@ bool wxMBConv_iconv::ms_wcNeedsSwap = false;
 
 wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
 {
-    // Do it the hard way
-    char cname[100];
-    for (size_t i = 0; i < wxStrlen(name)+1; i++)
-        cname[i] = (char) name[i];
+    // iconv operates with chars, not wxChars, but luckily it uses only ASCII
+    // names for the charsets
+    const wxString cname = wxString::ToAscii(name);
 
     // check for charset that represents wchar_t:
     if (ms_wcCharsetName == NULL)
