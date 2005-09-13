@@ -93,7 +93,8 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     * Create the popup menu
     */
     m_menuWidget = (WXWidget) XmCreatePulldownMenu ((Widget) m_formWidget,
-                                                    "choiceMenu", NULL, 0);
+                                                    wxMOTIF_STR("choiceMenu"),
+                                                    NULL, 0);
 
     if (n > 0)
     {
@@ -113,7 +114,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     XtSetArg (args[argcnt], XmNmarginHeight, 0); ++argcnt;
     XtSetArg (args[argcnt], XmNpacking, XmPACK_TIGHT); ++argcnt;
     m_buttonWidget = (WXWidget) XmCreateOptionMenu ((Widget) m_formWidget,
-                                                    "choiceButton",
+                                                    wxMOTIF_STR("choiceButton"),
                                                     args, argcnt);
 
     m_mainWidget = m_buttonWidget;

@@ -253,7 +253,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     //// drawing area, since otherwise the translations are different.
 
     // New translations for getting mouse motion feedback
-    static const String translations =
+    static const String translations = wxMOTIF_STR(
 "<Btn1Motion>: wxCanvasMotionEvent() DrawingAreaInput() ManagerGadgetButtonMotion()\n\
 <Btn2Motion>: wxCanvasMotionEvent() DrawingAreaInput() ManagerGadgetButtonMotion()\n\
 <Btn3Motion>: wxCanvasMotionEvent() DrawingAreaInput() ManagerGadgetButtonMotion()\n\
@@ -267,10 +267,10 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 <Motion>: wxCanvasMotionEvent() DrawingAreaInput()\n\
 <EnterWindow>: wxCanvasMotionEvent() DrawingAreaInput()\n\
 <LeaveWindow>: wxCanvasMotionEvent() DrawingAreaInput()\n\
-<Key>: DrawingAreaInput()";
+<Key>: DrawingAreaInput()");
 
     XtActionsRec actions[1];
-    actions[0].string = "wxCanvasMotionEvent";
+    actions[0].string = wxMOTIF_STR("wxCanvasMotionEvent");
     actions[0].proc = (XtActionProc) wxCanvasMotionEvent;
     XtAppAddActions ((XtAppContext) wxTheApp->GetAppContext(), actions, 1);
 

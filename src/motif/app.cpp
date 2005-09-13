@@ -187,23 +187,19 @@ void wxApp::HandlePropertyChange(WXEvent *event)
     XtDispatchEvent((XEvent*) event); /* let Motif do the work */
 }
 
-// some compilers (e.g. Sun CC) give warnings when treating string literals as
-// (non const) "char *" so use this macro to suppress them when we know it's ok
-#define STR(x) wx_const_cast(char *, x)
-
 static char *fallbackResources[] = {
     // better defaults for CDE under Irix
     //
     // TODO: do something similar for the other systems, the hardcoded defaults
     //       below are ugly
 #ifdef __SGI__
-    STR("*sgiMode: True"),
-    STR("*useSchemes: all"),
+    wxMOTIF_STR("*sgiMode: True"),
+    wxMOTIF_STR("*useSchemes: all"),
 #else // !__SGI__
-    STR("*menuBar.marginHeight: 0"),
-    STR("*menuBar.shadowThickness: 1"),
-    STR("*background: #c0c0c0"),
-    STR("*foreground: black"),
+    wxMOTIF_STR("*menuBar.marginHeight: 0"),
+    wxMOTIF_STR("*menuBar.shadowThickness: 1"),
+    wxMOTIF_STR("*background: #c0c0c0"),
+    wxMOTIF_STR("*foreground: black"),
 #endif // __SGI__/!__SGI__
     NULL
 };
@@ -245,7 +241,7 @@ bool wxApp::OnInitGui()
 
     // Add general resize proc
     XtActionsRec rec;
-    rec.string = STR("resize");
+    rec.string = wxMOTIF_STR("resize");
     rec.proc = (XtActionProc)wxWidgetResizeProc;
     XtAppAddActions((XtAppContext) wxTheApp->m_appContext, &rec, 1);
 

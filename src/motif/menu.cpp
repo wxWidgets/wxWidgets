@@ -369,7 +369,8 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
         return true;
     }
 
-    Widget menuBarW = XmCreateMenuBar ((Widget) parent->GetMainWidget(), "MenuBar", NULL, 0);
+    Widget menuBarW = XmCreateMenuBar ((Widget) parent->GetMainWidget(),
+                                       wxMOTIF_STR("MenuBar"), NULL, 0);
     m_mainWidget = (WXWidget) menuBarW;
 
     size_t menuCount = GetMenuCount();
@@ -483,7 +484,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
 
     if (!pullDown)
     {
-        menu = XmCreatePopupMenu ((Widget) parent, "popup", args, 2);
+        menu = XmCreatePopupMenu ((Widget) parent, wxMOTIF_STR("popup"), args, 2);
 #if 0
         XtAddCallback(menu,
             XmNunmapCallback,
@@ -494,7 +495,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
     else
     {
         char mnem = wxFindMnemonic (title);
-        menu = XmCreatePulldownMenu ((Widget) parent, "pulldown", args, 2);
+        menu = XmCreatePulldownMenu ((Widget) parent, wxMOTIF_STR("pulldown"), args, 2);
 
         wxString title2(wxStripMenuCodes(title));
         wxXmString label_str(title2);

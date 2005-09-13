@@ -761,18 +761,18 @@ wxString wxGetXEventName(XEvent& event)
 #else
     int type = event.xany.type;
     static char* event_name[] = {
-        "", "unknown(-)",                                         // 0-1
-        "KeyPress", "KeyRelease", "ButtonPress", "ButtonRelease", // 2-5
-        "MotionNotify", "EnterNotify", "LeaveNotify", "FocusIn",  // 6-9
-        "FocusOut", "KeymapNotify", "Expose", "GraphicsExpose",   // 10-13
-        "NoExpose", "VisibilityNotify", "CreateNotify",           // 14-16
-        "DestroyNotify", "UnmapNotify", "MapNotify", "MapRequest",// 17-20
-        "ReparentNotify", "ConfigureNotify", "ConfigureRequest",  // 21-23
-        "GravityNotify", "ResizeRequest", "CirculateNotify",      // 24-26
-        "CirculateRequest", "PropertyNotify", "SelectionClear",   // 27-29
-        "SelectionRequest", "SelectionNotify", "ColormapNotify",  // 30-32
-        "ClientMessage", "MappingNotify",                         // 33-34
-        "unknown(+)"};                                            // 35
+        wxMOTIF_STR(""), wxMOTIF_STR("unknown(-)"),                                         // 0-1
+        wxMOTIF_STR("KeyPress"), wxMOTIF_STR("KeyRelease"), wxMOTIF_STR("ButtonPress"), wxMOTIF_STR("ButtonRelease"), // 2-5
+        wxMOTIF_STR("MotionNotify"), wxMOTIF_STR("EnterNotify"), wxMOTIF_STR("LeaveNotify"), wxMOTIF_STR("FocusIn"),  // 6-9
+        wxMOTIF_STR("FocusOut"), wxMOTIF_STR("KeymapNotify"), wxMOTIF_STR("Expose"), wxMOTIF_STR("GraphicsExpose"),   // 10-13
+        wxMOTIF_STR("NoExpose"), wxMOTIF_STR("VisibilityNotify"), wxMOTIF_STR("CreateNotify"),           // 14-16
+        wxMOTIF_STR("DestroyNotify"), wxMOTIF_STR("UnmapNotify"), wxMOTIF_STR("MapNotify"), wxMOTIF_STR("MapRequest"),// 17-20
+        wxMOTIF_STR("ReparentNotify"), wxMOTIF_STR("ConfigureNotify"), wxMOTIF_STR("ConfigureRequest"),  // 21-23
+        wxMOTIF_STR("GravityNotify"), wxMOTIF_STR("ResizeRequest"), wxMOTIF_STR("CirculateNotify"),      // 24-26
+        wxMOTIF_STR("CirculateRequest"), wxMOTIF_STR("PropertyNotify"), wxMOTIF_STR("SelectionClear"),   // 27-29
+        wxMOTIF_STR("SelectionRequest"), wxMOTIF_STR("SelectionNotify"), wxMOTIF_STR("ColormapNotify"),  // 30-32
+        wxMOTIF_STR("ClientMessage"), wxMOTIF_STR("MappingNotify"),                         // 33-34
+        wxMOTIF_STR("unknown(+)")};                                            // 35
     type = wxMin(35, type); type = wxMax(1, type);
     wxString str(event_name[type]);
     return str;

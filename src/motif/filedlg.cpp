@@ -193,7 +193,8 @@ int wxFileDialog::ShowModal()
 #endif
 
     Widget fileSel = XmCreateFileSelectionDialog(parentWidget,
-                                                 "file_selector", args, ac);
+                                                 wxMOTIF_STR("file_selector"),
+                                                 args, ac);
 #define wxFSChild( name ) \
     XmFileSelectionBoxGetChild(fileSel, name)
 
