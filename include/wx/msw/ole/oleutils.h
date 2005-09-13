@@ -23,6 +23,7 @@
 // get IUnknown, REFIID &c
 #include <ole2.h>
 #include "wx/intl.h"
+#include "wx/log.h"
 
 // ============================================================================
 // General purpose functions and macros
@@ -253,4 +254,3 @@ inline void wxOleUninitialize() { }
 #endif // wxUSE_OLE/!wxUSE_OLE
 
 #endif  //_WX_OLEUTILS_H
-
