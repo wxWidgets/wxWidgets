@@ -54,6 +54,8 @@ public :
     
     virtual void AddLineToPoint( wxCoord x1 , wxCoord y1 ) = 0 ;
     
+    virtual void AddQuadCurveToPoint( wxCoord cx1, wxCoord cy1, wxCoord x1, wxCoord y1 ) = 0 ;
+
     virtual void AddRectangle( wxCoord x, wxCoord y, wxCoord w, wxCoord h ) = 0 ;
     
     virtual void AddCircle( wxCoord x, wxCoord y , wxCoord r ) = 0 ;
@@ -237,6 +239,9 @@ protected:
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
 
     virtual void DoDrawPoint(wxCoord x, wxCoord y);
+#if wxMAC_USE_CORE_GRAPHICS && wxUSE_SPLINES
+    virtual void DoDrawSpline(wxList *points);
+#endif
     virtual void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
 
     virtual void DoDrawArc(wxCoord x1, wxCoord y1,

@@ -157,6 +157,11 @@ void wxMacCGPath::AddLineToPoint( wxCoord x1 , wxCoord y1 )
     CGPathAddLineToPoint( m_path , NULL , x1 , y1 ) ;
 }
 
+void wxMacCGPath::AddQuadCurveToPoint( wxCoord cx1, wxCoord cy1, wxCoord x1, wxCoord y1 )
+{
+    CGPathAddQuadCurveToPoint( m_path , NULL , cx1 , cy1 , x1 , y1 );
+}
+
 void wxMacCGPath::AddRectangle( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
 {
     CGRect cgRect = { { x , y } , { w , h } } ;
@@ -1420,6 +1425,65 @@ void  wxDC::DoDrawLines(int n, wxPoint points[],
     m_graphicContext->StrokePath( path ) ;
     delete path ;
 }
+
+#if wxUSE_SPLINES
+void wxDC::DoDrawSpline(wxList *points)
+{
+    wxCHECK_RET(Ok(), wxT("Invalid DC"));
+    
+    if ( m_logicalFunction != wxCOPY )
+        return ;
+    
+    wxGraphicPath* path = m_graphicContext->CreatePath() ;
+    
+    wxList::compatibility_iterator node = points->GetFirst();
+    if (node == wxList::compatibility_iterator())
+        // empty list
+        return;
+    
+    wxPoint *p = (wxPoint *)node->GetData();
+    
+    wxCoord x1 = p->x;
+    wxCoord y1 = p->y;
+    
+    node = node->GetNext();
+    p = (wxPoint *)node->GetData();
+    
+    wxCoord x2 = p->x;
+    wxCoord y2 = p->y;
+    wxCoord cx1 = ( x1 + x2 ) / 2;
+    wxCoord cy1 = ( y1 + y2 ) / 2;
+    
+    path->MoveToPoint( XLOG2DEVMAC( x1 ) , XLOG2DEVMAC( y1 ) ) ;
+    path->AddLineToPoint( XLOG2DEVMAC( cx1 ) , XLOG2DEVMAC( cy1 ) ) ;
+    
+#if !wxUSE_STL
+    while ((node = node->GetNext()) != NULL)
+#else
+    while ((node = node->GetNext()))
+#endif // !wxUSE_STL
+    {
+        p = (wxPoint *)node->GetData();
+        x1 = x2;
+        y1 = y2;
+        x2 = p->x;
+        y2 = p->y;
+        wxCoord cx4 = (x1 + x2) / 2;
+        wxCoord cy4 = (y1 + y2) / 2;
+        
+        path->AddQuadCurveToPoint( XLOG2DEVMAC( x1 ) , XLOG2DEVMAC( y1 ) , 
+                                   XLOG2DEVMAC( cx4 ) , XLOG2DEVMAC( cy4 ) ) ;
+        
+        cx1 = cx4;
+        cy1 = cy4;
+    }
+            
+    path->AddLineToPoint( XLOG2DEVMAC( x2 ) , XLOG2DEVMAC( y2 ) ) ;
+    
+    m_graphicContext->StrokePath( path ) ;
+    delete path ;
+}
+#endif
 
 void  wxDC::DoDrawPolygon(int n, wxPoint points[],
                           wxCoord xoffset, wxCoord yoffset,
