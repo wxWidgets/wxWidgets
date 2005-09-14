@@ -185,7 +185,7 @@ int wxMessageDialog::ShowModal()
 
     // do create message box
 
-    Widget wMsgBox = (*dialogCreateFunction)(wParent, "", args, ac);
+    Widget wMsgBox = (*dialogCreateFunction)(wParent, wxMOTIF_STR(""), args, ac);
 
     wxCHECK_MSG( wMsgBox, wxID_CANCEL, "msg box creation failed" );
 

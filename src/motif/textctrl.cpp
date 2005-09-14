@@ -407,7 +407,7 @@ void wxTextCtrl::AppendText(const wxString& text)
 
 void wxTextCtrl::Clear()
 {
-    XmTextSetString ((Widget) m_mainWidget, "");
+    XmTextSetString ((Widget) m_mainWidget, wxMOTIF_STR(""));
     m_modified = false;
 }
 
@@ -661,12 +661,13 @@ wxSize wxDoGetSingleTextCtrlBestSize( Widget textWidget,
                    NULL );
 
     if( !value )
-        value = "|";
+        value = wxMOTIF_STR("|");
 
     int x, y;
     window->GetTextExtent( value, &x, &y );
 
-    if( x < 100 ) x = 100;
+    if( x < 100 )
+        x = 100;
 
     return wxSize( x + 2 * xmargin + 2 * highlight + 2 * shadow,
                    // MBN: +2 necessary: Lesstif bug or mine?
