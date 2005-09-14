@@ -599,6 +599,7 @@ public :
     //  Starts a new subpath at
     void MoveToPoint( wxCoord x1 , wxCoord y1 ) ;
     void AddLineToPoint( wxCoord x1 , wxCoord y1 ) ;
+    void AddQuadCurveToPoint( wxCoord cx1, wxCoord cy1, wxCoord x1, wxCoord y1 ) ;
     void AddRectangle( wxCoord x, wxCoord y, wxCoord w, wxCoord h ) ;
     void AddCircle( wxCoord x, wxCoord y , wxCoord r ) ;
     
