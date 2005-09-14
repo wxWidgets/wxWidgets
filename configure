@@ -11316,7 +11316,7 @@ echo "${ECHO_T}$ac_cv_c_compiler_gnu" >&6
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -11706,7 +11706,7 @@ fi
         unset ac_cv_prog_cc_g
         ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -12544,9 +12544,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -g -O2"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="$CXXFLAGS -g"
+    CXXFLAGS="-g"
   fi
 else
   if test "$GXX" = yes; then
@@ -12784,9 +12784,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -g -O2"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="$CXXFLAGS -g"
+    CXXFLAGS="-g"
   fi
 else
   if test "$GXX" = yes; then
@@ -21468,6 +21468,10 @@ fi
 
 if test "x$SUNCXX" = xyes; then
     CXXFLAGS="$CXXFLAGS -features=tmplife"
+fi
+
+if test "x$SUNCC" = xyes; then
+    CFLAGS="$CFLAGS -erroff=E_NO_EXPLICIT_TYPE_GIVEN"
 fi
 
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then

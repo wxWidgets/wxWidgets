@@ -1918,6 +1918,14 @@ if test "x$SUNCXX" = xyes; then
     CXXFLAGS="$CXXFLAGS -features=tmplife"
 fi
 
+dnl Sun X11 headers are (still, in 2005!) non-ANSI and the best they could do
+dnl was to hack their C++ compiler to accept them silently -- but C compiler
+dnl still spits out dozens of warnings for each X include file, so suppress
+dnl them
+if test "x$SUNCC" = xyes; then
+    CFLAGS="$CFLAGS -erroff=E_NO_EXPLICIT_TYPE_GIVEN"
+fi
+
 dnl check for std::string or std::wstring
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     AC_LANG_PUSH(C++)
