@@ -196,12 +196,13 @@ bool wxFrame::Create(wxWindow *parent,
     return true;
 }
 
-bool wxFrame::DoCreate( wxWindow* parent, wxWindowID id,
-                        const wxString& title,
-                        const wxPoint& pos,
-                        const wxSize& size,
-                        long style,
-                        const wxString& name )
+bool wxFrame::XmDoCreateTLW(wxWindow* parent,
+                            wxWindowID id,
+                            const wxString& title,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            long style,
+                            const wxString& name)
 {
     Widget frameShell;
 
@@ -292,11 +293,7 @@ wxFrame::~wxFrame()
     }
 
     PreDestroy();
-    DoDestroy();
-}
 
-void wxFrame::DoDestroy()
-{
     Widget frameShell = (Widget)GetShellWidget();
 
     if( frameShell )

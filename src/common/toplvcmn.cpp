@@ -46,7 +46,7 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxTopLevelWindow, wxWindow)
+IMPLEMENT_ABSTRACT_CLASS(wxTopLevelWindow, wxWindow)
 
 // ----------------------------------------------------------------------------
 // construction/destruction

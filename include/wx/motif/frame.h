@@ -117,13 +117,14 @@ private:
     virtual void DoSetClientSize(int width, int height);
 
 private:
-    virtual bool DoCreate( wxWindow* parent, wxWindowID id,
-                           const wxString& title,
-                           const wxPoint& pos,
-                           const wxSize& size,
-                           long style,
-                           const wxString& name );
-    virtual void DoDestroy();
+    virtual bool XmDoCreateTLW(wxWindow* parent,
+                               wxWindowID id,
+                               const wxString& title,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style,
+                               const wxString& name);
+
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFrame)

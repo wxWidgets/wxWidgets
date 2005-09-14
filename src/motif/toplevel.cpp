@@ -116,12 +116,12 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
 
     if ( parent )
         parent->AddChild(this);
-    
+
     wxTopLevelWindows.Append(this);
 
     m_windowId = ( id > -1 ) ? id : NewControlId();
 
-    bool retval = DoCreate( parent, id, title, pos, size, style, name );
+    bool retval = XmDoCreateTLW( parent, id, title, pos, size, style, name );
 
     if( !retval ) return false;
 
@@ -140,7 +140,7 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
     // Modified Steve Hammes for Motif 2.0
 #if (XmREVISION > 1 || XmVERSION > 1)
     XmAddWMProtocolCallback( shell, WM_DELETE_WINDOW,
-                             (XtCallbackProc)wxCloseTLWCallback, 
+                             (XtCallbackProc)wxCloseTLWCallback,
                              (XtPointer)this );
 #elif XmREVISION == 1
     XmAddWMProtocolCallback( shell, WM_DELETE_WINDOW,
@@ -187,7 +187,7 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
     }
 
     XtAddEventHandler( (Widget)GetClientWidget(),
-                       ButtonPressMask | ButtonReleaseMask | 
+                       ButtonPressMask | ButtonReleaseMask |
                        PointerMotionMask | KeyPressMask,
                        False,
                        wxTLWEventHandler,
@@ -354,7 +354,7 @@ void wxTopLevelWindowMotif::DoSetSizeHints( int minW, int minH,
     if( incW > -1 ) { XtSetArg( args[count], XmNwidthInc,  incW ); ++count; }
     if( incH > -1 ) { XtSetArg( args[count], XmNheightInc, incH ); ++count; }
 
-    XtSetValues( (Widget)GetShellWidget(), args, count ); 
+    XtSetValues( (Widget)GetShellWidget(), args, count );
 }
 
 bool wxTopLevelWindowMotif::SetShape( const wxRegion& region )

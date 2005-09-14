@@ -151,12 +151,13 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-bool wxDialog::DoCreate( wxWindow* parent, wxWindowID id,
-                         const wxString& title,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         long style,
-                         const wxString& name )
+bool wxDialog::XmDoCreateTLW(wxWindow* parent,
+                             wxWindowID id,
+                             const wxString& title,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxString& name)
 {
     Widget parentWidget = (Widget) 0;
     if( parent )
@@ -233,12 +234,8 @@ wxDialog::~wxDialog()
     }
 
     PreDestroy();
-    DoDestroy();
-}
 
-void wxDialog::DoDestroy()
-{
-    if( m_mainWidget )
+    if ( m_mainWidget )
     {
         wxDeleteWindowFromTable( (Widget)m_mainWidget );
         XtDestroyWidget( (Widget)m_mainWidget );
