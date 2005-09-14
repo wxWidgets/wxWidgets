@@ -100,9 +100,9 @@ wxAppBase::wxAppBase()
     m_exitOnFrameDelete = Later;
 }
 
-bool wxAppBase::Initialize(int& argc, wxChar **argv)
+bool wxAppBase::Initialize(int& argcOrig, wxChar **argvOrig)
 {
-    if ( !wxAppConsole::Initialize(argc, argv) )
+    if ( !wxAppConsole::Initialize(argcOrig, argvOrig) )
         return false;
 
 #if wxUSE_THREADS
