@@ -113,11 +113,16 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
     SetMessageDialogStyle(style);
 }
 
+extern "C"
+{
+    typedef Widget (*DialogCreateFunction)(Widget, String, ArgList, Cardinal);
+}
+
 int wxMessageDialog::ShowModal()
 {
-    Widget (*dialogCreateFunction)(Widget, String, ArgList, Cardinal) = NULL;
     const long style = GetMessageDialogStyle();
 
+    DialogCreateFunction dialogCreateFunction;
     if ( style & wxYES_NO )
     {
         // if we have [Yes], it must be a question
