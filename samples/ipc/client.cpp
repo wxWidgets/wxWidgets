@@ -416,28 +416,28 @@ void MyConnection::Log(const wxString& command, const wxString& topic,
 {
     wxString s;
     if (topic.IsEmpty() && item.IsEmpty())
-        s.Printf(_T("%s("), command);
+        s.Printf(_T("%s("), command.c_str());
     else if (topic.IsEmpty())
-        s.Printf(_T("%s(item=\"%s\","), command, item);
+        s.Printf(_T("%s(item=\"%s\","), command.c_str(), item.c_str());
     else if (item.IsEmpty())
-        s.Printf(_T("%s(topic=\"%s\","), command, topic);
+        s.Printf(_T("%s(topic=\"%s\","), command.c_str(), topic.c_str());
     else
-        s.Printf(_T("%s(topic=\"%s\",item=\"%s\","), command, topic, item);
+        s.Printf(_T("%s(topic=\"%s\",item=\"%s\","), command.c_str(), topic.c_str(), item.c_str());
 
     if (format == wxIPC_TEXT || format == wxIPC_UNICODETEXT) 
-        wxLogMessage(_T("%s\"%s\",%d)"), s, data, size);
+        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), data, size);
     else if (format == wxIPC_PRIVATE)
     {
         if (size == 3)
         {
             char *bytes = (char *)data;
-            wxLogMessage(_T("%s'%c%c%c',%d)"), s, bytes[0], bytes[1], bytes[2], size);
+            wxLogMessage(_T("%s'%c%c%c',%d)"), s.c_str(), bytes[0], bytes[1], bytes[2], size);
         }
         else
-            wxLogMessage(_T("%s...,%d)"), s, size);
+            wxLogMessage(_T("%s...,%d)"), s.c_str(), size);
     }
     else if (format == wxIPC_INVALID) 
-        wxLogMessage(_T("%s[invalid data],%d)"), s, size);
+        wxLogMessage(_T("%s[invalid data],%d)"), s.c_str(), size);
 }
 
 bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, wxChar *data,
