@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcps.h
+// Name:        wx/generic/dcps.h
 // Purpose:     wxPostScriptDC class
 // Author:      Julian Smart and others
 // Modified by:
@@ -66,8 +66,9 @@ public:
   void DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20);
   void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
+#if wxUSE_SPLINES
   void DoDrawSpline(wxList *points);
-
+#endif // wxUSE_SPLINES
   bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);

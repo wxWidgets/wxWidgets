@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gprint.h
+// Name:        wx/gtk/gnome/gprint.h
 // Author:      Robert Roebling
 // Purpose:     GNOME printing support
 // Created:     09/20/04
+// RCS-ID:      $Id$
 // Copyright:   Robert Roebling
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,25 +40,25 @@ class wxGnomePrintNativeData: public wxPrintNativeDataBase
 public:
     wxGnomePrintNativeData();
     virtual ~wxGnomePrintNativeData();
-    
+
     virtual bool TransferTo( wxPrintData &data );
     virtual bool TransferFrom( const wxPrintData &data );
-    
+
     virtual bool Ok() const { return true; }
-    
+
     GnomePrintConfig* GetPrintConfig() { return m_config; }
     void SetPrintJob( GnomePrintJob *job ) { m_job = job; }
     GnomePrintJob* GetPrintJob() { return m_job; }
-    
-    
+
+
 private:
     GnomePrintConfig  *m_config;
     GnomePrintJob     *m_job;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrintNativeData)
 };
-    
+
 //----------------------------------------------------------------------------
 // wxGnomePrintFactory
 //----------------------------------------------------------------------------
@@ -66,22 +67,22 @@ class wxGnomePrintFactory: public wxPrintFactory
 {
 public:
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data );
-    
-    virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
-                                                    wxPrintout *printout = NULL, 
+
+    virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
+                                                    wxPrintout *printout = NULL,
                                                     wxPrintDialogData *data = NULL );
-    virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
+    virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
                                                     wxPrintout *printout,
                                                     wxPrintData *data );
-                                                    
-    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+
+    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
                                                   wxPrintDialogData *data = NULL );
-    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
                                                   wxPrintData *data );
 
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
                                                           wxPageSetupDialogData * data = NULL );
-          
+
     virtual bool HasPrintSetupDialog();
     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
     virtual bool HasOwnPrintToFile();
@@ -89,7 +90,7 @@ public:
     virtual wxString CreatePrinterLine();
     virtual bool HasStatusLine();
     virtual wxString CreateStatusLine();
-    
+
     virtual wxPrintNativeDataBase *CreatePrintNativeData();
 };
 
@@ -109,7 +110,7 @@ public:
         { return m_printDialogData.GetPrintData(); }
     wxPrintDialogData& GetPrintDialogData()
         { return m_printDialogData; }
-        
+
     wxDC *GetPrintDC();
 
     virtual int ShowModal();
@@ -118,7 +119,7 @@ public:
     virtual bool TransferDataToWindow();
     virtual bool TransferDataFromWindow();
 
-private:    
+private:
     // Implement some base class methods to do nothing to avoid asserts and
     // GTK warnings, since this is not a real wxDialog.
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
@@ -126,10 +127,10 @@ private:
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
                               int WXUNUSED(width), int WXUNUSED(height)) {}
-                              
+
     void Init();
     wxPrintDialogData   m_printDialogData;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrintDialog)
 };
@@ -153,7 +154,7 @@ public:
     virtual bool TransferDataToWindow();
     virtual bool TransferDataFromWindow();
 
-private:    
+private:
     // Implement some base class methods to do nothing to avoid asserts and
     // GTK warnings, since this is not a real wxDialog.
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
@@ -161,9 +162,9 @@ private:
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
                               int WXUNUSED(width), int WXUNUSED(height)) {}
-                              
+
     wxPageSetupDialogData   m_pageDialogData;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxGnomePageSetupDialog)
 };
@@ -183,9 +184,9 @@ public:
                        bool prompt = true);
     virtual wxDC* PrintDialog(wxWindow *parent);
     virtual bool Setup(wxWindow *parent);
-    
+
     GnomePrintContext *GetPrintContext() { return m_gpc; }
-    
+
 private:
     GnomePrintContext *m_gpc;
     bool               m_native_preview;
@@ -204,9 +205,9 @@ class wxGnomePrintDC: public wxDC
 public:
     wxGnomePrintDC( wxGnomePrinter *printer );
     ~wxGnomePrintDC();
-    
+
     bool Ok() const;
-    
+
     virtual void BeginDrawing() {}
     virtual void EndDrawing() {}
 
@@ -223,15 +224,17 @@ public:
     void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     void DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20.0);
     void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+#if wxUSE_SPLINES
     void DoDrawSpline(wxList *points);
-    
+#endif // wxUSE_SPLINES
+
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
     void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );
     void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask = false  );
     bool CanDrawBitmap() const { return true; }
-    
+
     void DoDrawText(const wxString& text, wxCoord x, wxCoord y );
     void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
     void Clear();
@@ -240,16 +243,16 @@ public:
     void SetBrush( const wxBrush& brush );
     void SetLogicalFunction( int function );
     void SetBackground( const wxBrush& brush );
-    
+
     void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     void DestroyClippingRegion();
     void DoSetClippingRegionAsRegion( const wxRegion &WXUNUSED(clip) ) { }
-    
+
     bool StartDoc(const wxString& message);
     void EndDoc();
     void StartPage();
     void EndPage();
-    
+
     wxCoord GetCharHeight() const;
     wxCoord GetCharWidth() const;
     bool CanGetTextExtent() const { return true; }
@@ -257,37 +260,37 @@ public:
                      wxCoord *descent = (wxCoord *) NULL,
                      wxCoord *externalLeading = (wxCoord *) NULL,
                      wxFont *theFont = (wxFont *) NULL ) const;
-                     
+
     void DoGetSize(int* width, int* height) const;
     void DoGetSizeMM(int *width, int *height) const;
     wxSize GetPPI() const;
     void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
     void SetDeviceOrigin( wxCoord x, wxCoord y );
-    
+
     virtual int GetDepth() const { return 24; }
-  
+
     void SetBackgroundMode(int WXUNUSED(mode)) { }
     void SetPalette(const wxPalette& WXUNUSED(palette)) { }
-    
+
     wxPrintData& GetPrintData() { return m_printData; }
     void SetPrintData(const wxPrintData& data) { m_printData = data; }
-    
+
     static void SetResolution(int ppi);
     static int GetResolution();
 
 private:
     static float ms_PSScaleFactor;
-    
+
 private:
     PangoContext           *m_context;
     PangoLayout            *m_layout;
     PangoFontDescription   *m_fontdesc;
-    
+
     unsigned char           m_currentRed;
     unsigned char           m_currentGreen;
     unsigned char           m_currentBlue;
     wxPrintData             m_printData;
-    
+
     wxGnomePrinter         *m_printer;
     GnomePrintContext      *m_gpc;
 

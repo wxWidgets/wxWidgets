@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcpsg.cpp
+// Name:        src/generic/dcpsg.cpp
 // Purpose:     Generic wxPostScriptDC implementation
 // Author:      Julian Smart, Robert Roebling, Markus Holzhem
 // Modified by:
@@ -1385,6 +1385,7 @@ void wxPostScriptDC::SetLogicalFunction (int WXUNUSED(function))
     wxFAIL_MSG( wxT("wxPostScriptDC::SetLogicalFunction not implemented.") );
 }
 
+#if wxUSE_SPLINES
 void wxPostScriptDC::DoDrawSpline( wxList *points )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
@@ -1459,6 +1460,7 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
               wxT("stroke\n"),
             LogicalToDeviceX((wxCoord)c), LogicalToDeviceY((wxCoord)d) );
 }
+#endif // wxUSE_SPLINES
 
 wxCoord wxPostScriptDC::GetCharWidth() const
 {
