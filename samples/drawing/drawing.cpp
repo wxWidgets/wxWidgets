@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        drawing.cpp
+// Name:        samples/drawing/drawing.cpp
 // Purpose:     shows and tests wxDC features
 // Author:      Robert Roebling
 // Modified by:
@@ -64,7 +64,8 @@ enum ScreenToShow
     Show_Mask,
     Show_Ops,
     Show_Regions,
-    Show_Circles
+    Show_Circles,
+    Show_Splines
 };
 
 // ----------------------------------------------------------------------------
@@ -166,6 +167,7 @@ protected:
     void DrawWithLogicalOps(wxDC& dc);
     void DrawRegions(wxDC& dc);
     void DrawCircles(wxDC& dc);
+    void DrawSplines(wxDC& dc);
     void DrawDefault(wxDC& dc);
 
     void DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime);
@@ -189,10 +191,10 @@ private:
 enum
 {
     // menu items
-    File_Quit = 1,
-    File_About,
+    File_Quit = wxID_EXIT,
+    File_About = wxID_ABOUT,
 
-    MenuShow_First,
+    MenuShow_First = wxID_HIGHEST,
     File_ShowDefault = MenuShow_First,
     File_ShowText,
     File_ShowLines,
@@ -202,7 +204,8 @@ enum
     File_ShowOps,
     File_ShowRegions,
     File_ShowCircles,
-    MenuShow_Last = File_ShowCircles,
+    File_ShowSplines,
+    MenuShow_Last = File_ShowSplines,
 
     File_Clip,
 
@@ -885,6 +888,94 @@ void MyCanvas::DrawCircles(wxDC& dc)
     dc.DrawEllipticArc(x + 5*r, y, 2*r, r, 270, 360);
 }
 
+void MyCanvas::DrawSplines(wxDC& dc)
+{
+#if wxUSE_SPLINES
+    dc.DrawText(_T("Some splines"), 10, 5);
+
+    // values are hardcoded rather than randomly generated
+    // so the output can be compared between native
+    // implementations on platforms with different random
+    // generators
+
+    const int R = 300;
+    const wxPoint center( R + 20, R + 20 );
+    const int angles[7] = { 0, 10, 33, 77, 13, 145, 90 };
+    const int radii[5] = { 100 , 59, 85, 33, 90 };
+    const int n = 200;
+    wxPoint pts[n];
+
+    // background spline calculation
+    unsigned int radius_pos = 0;
+    unsigned int angle_pos = 0;
+    int angle = 0;
+    for ( int i = 0; i < n; i++ )
+    {
+        angle += angles[ angle_pos ];
+        int r = R * radii[ radius_pos ] / 100;
+        pts[ i ].x = center.x + (wxCoord)( r * cos( M_PI * angle / 180.0) );
+        pts[ i ].y = center.y + (wxCoord)( r * sin( M_PI * angle / 180.0) );
+
+        angle_pos++;
+        if ( angle_pos >= WXSIZEOF(angles) ) angle_pos = 0;
+
+        radius_pos++;
+        if ( radius_pos >= WXSIZEOF(radii) ) radius_pos = 0;
+    }
+
+    // background spline drawing
+    dc.SetPen(*wxRED_PEN);
+    dc.DrawSpline(WXSIZEOF(pts), pts);
+
+    // less detailed spline calculation
+    wxPoint letters[4][5];
+    // w
+    letters[0][0] = wxPoint( 0,1); //  O           O
+    letters[0][1] = wxPoint( 1,3); //   *         *
+    letters[0][2] = wxPoint( 2,2); //    *   O   *
+    letters[0][3] = wxPoint( 3,3); //     * * * *
+    letters[0][4] = wxPoint( 4,1); //      O   O
+    // x1
+    letters[1][0] = wxPoint( 5,1); //  O*O
+    letters[1][1] = wxPoint( 6,1); //     *
+    letters[1][2] = wxPoint( 7,2); //      O
+    letters[1][3] = wxPoint( 8,3); //       *
+    letters[1][4] = wxPoint( 9,3); //        O*O
+    // x2
+    letters[2][0] = wxPoint( 5,3); //        O*O
+    letters[2][1] = wxPoint( 6,3); //       *
+    letters[2][2] = wxPoint( 7,2); //      O
+    letters[2][3] = wxPoint( 8,1); //     *
+    letters[2][4] = wxPoint( 9,1); //  O*O
+    // W
+    letters[3][0] = wxPoint(10,0); //  O           O
+    letters[3][1] = wxPoint(11,3); //   *         *
+    letters[3][2] = wxPoint(12,1); //    *   O   *
+    letters[3][3] = wxPoint(13,3); //     * * * *
+    letters[3][4] = wxPoint(14,0); //      O   O
+
+    const int dx = 2 * R / letters[3][4].x;
+    const int h[4] = { -R/2, 0, R/4, R/2 };
+
+    for ( int m = 0; m < 4; m++ )
+    {
+        for ( int n = 0; n < 5; n++ )
+        {
+            letters[m][n].x = center.x - R + letters[m][n].x * dx;
+            letters[m][n].y = center.y + h[ letters[m][n].y ];
+        }
+
+        dc.SetPen( wxPen( wxT("blue"), 1, wxDOT) );
+        dc.DrawLines(5, letters[m]);
+        dc.SetPen( wxPen( wxT("black"), 4, wxSOLID) );
+        dc.DrawSpline(5, letters[m]);
+    }
+
+#else
+    dc.DrawText(_T("Splines not supported."), 10, 5);
+#endif
+}
+
 void MyCanvas::DrawRegions(wxDC& dc)
 {
     dc.DrawText(_T("You should see a red rect partly covered by a cyan one ")
@@ -985,6 +1076,10 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
             DrawCircles(dc);
             break;
 
+        case Show_Splines:
+            DrawSplines(dc);
+            break;
+
         case Show_Regions:
             DrawRegions(dc);
             break;
@@ -1071,6 +1166,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowOps, _T("&ROP screen\tF7"));
     menuFile->Append(File_ShowRegions, _T("Re&gions screen\tF8"));
     menuFile->Append(File_ShowCircles, _T("&Circles screen\tF9"));
+    menuFile->Append(File_ShowSplines, _T("&Splines screen"));
     menuFile->AppendSeparator();
     menuFile->AppendCheckItem(File_Clip, _T("&Clip\tCtrl-C"), _T("Clip/unclip drawing"));
     menuFile->AppendSeparator();
@@ -1301,4 +1397,3 @@ wxColour MyFrame::SelectColour()
     return col;
 }
 #endif // wxUSE_COLOURDLG
-
