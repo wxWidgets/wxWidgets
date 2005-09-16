@@ -33,6 +33,16 @@ build/bakefiles/wxpresets/sample/*.cpp
 build/bakefiles/wxpresets/*.bkl
 build/update-setup-h
 
+build/script/*.sh
+build/script/*.txt
+build/script/*.bat
+build/script/*.vc
+build/script/*.iss
+
+misc/scripts/makegtktags
+misc/scripts/*.sh
+misc/scripts/*.bat
+
 distrib/msw/*.rsp
 distrib/msw/*.bat
 distrib/msw/*.cpp
@@ -48,6 +58,7 @@ distrib/msw/tmake/wxwin.pro
 distrib/msw/tmake/tmake.conf
 
 locale/*.po
+locale/msw/*.po
 locale/Makefile
 
 art/*.xpm
@@ -530,6 +541,7 @@ samples/htlbox/*.ico
 samples/htlbox/*.bmp
 samples/htlbox/*.rc
 samples/htlbox/*.bkl
+samples/htlbox/results
 
 samples/html/makefile*
 samples/html/*.txt
