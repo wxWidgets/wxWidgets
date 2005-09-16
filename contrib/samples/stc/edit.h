@@ -23,7 +23,7 @@
 //! wxWidgets headers
 
 //! wxWidgets/contrib headers
-#include <wx/stc/stc.h>  // styled text control
+#include "wx/stc/stc.h"  // styled text control
 
 //! application headers
 #include "prefs.h"       // preferences

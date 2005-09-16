@@ -16,8 +16,8 @@
 //----------------------------------------------------------------------------
 
 //! wxWidgets headers
-#include <wx/print.h>    // printing support
-#include <wx/printdlg.h> // printing dialog
+#include "wx/print.h"    // printing support
+#include "wx/printdlg.h" // printing dialog
 
 
 //============================================================================

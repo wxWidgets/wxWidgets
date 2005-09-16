@@ -1,4 +1,4 @@
-    //////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // File:        prefs.h
 // Purpose:     STC test Preferences initialization
 // Maintainer:  Wyo
@@ -23,7 +23,7 @@
 //! wxWidgets headers
 
 //! wxWidgets/contrib headers
-#include <wx/stc/stc.h>  // styled text control
+#include "wx/stc/stc.h"  // styled text control
 
 //! application headers
 
@@ -150,4 +150,3 @@ extern const StyleInfo g_StylePrefs[];
 extern const int g_StylePrefsSize;
 
 #endif // _PREFS_H_
-
