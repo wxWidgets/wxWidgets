@@ -1611,7 +1611,7 @@ bool wxDb::getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
  * wxDbSqlTypeInfo is a structure that is filled in with data type information,
  */
     RETCODE retcode;
-    SDWORD  cbRet;
+    SQLLEN  cbRet;
 
     // Get information about the data type specified
     if (SQLGetTypeInfo(hstmt, fSqlType) != SQL_SUCCESS)
@@ -2249,7 +2249,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
     short colNum;
     wxChar name[DB_MAX_COLUMN_NAME_LEN+1];
     SWORD Sword;
-    SDWORD Sdword;
+    SQLLEN Sqllen;
     wxDbColInf* pColInf = new wxDbColInf[noCols];
 
     // Fill in column information (name, datatype)
@@ -2257,7 +2257,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
     {
         if (SQLColAttributes(hstmt, (UWORD)(colNum+1), SQL_COLUMN_NAME,
             name, sizeof(name),
-            &Sword, &Sdword) != SQL_SUCCESS)
+            &Sword, &Sqllen) != SQL_SUCCESS)
         {
             DispAllErrors(henv, hdbc, hstmt);
             delete[] pColInf;
@@ -2268,14 +2268,14 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
         pColInf[colNum].colName[DB_MAX_COLUMN_NAME_LEN] = 0;  // Prevent buffer overrun
 
         if (SQLColAttributes(hstmt, (UWORD)(colNum+1), SQL_COLUMN_TYPE,
-            NULL, 0, &Sword, &Sdword) != SQL_SUCCESS)
+            NULL, 0, &Sword, &Sqllen) != SQL_SUCCESS)
         {
             DispAllErrors(henv, hdbc, hstmt);
             delete[] pColInf;
             return false;
         }
 
-        switch (Sdword)
+        switch (Sqllen)
         {
 #if wxUSE_UNICODE
     #if defined(SQL_WCHAR)
@@ -2312,7 +2312,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
 #ifdef __WXDEBUG__
             default:
                 wxString errMsg;
-                errMsg.Printf(wxT("SQL Data type %ld currently not supported by wxWidgets"), (long)Sdword);
+                errMsg.Printf(wxT("SQL Data type %ld currently not supported by wxWidgets"), (long)Sqllen);
                 wxLogDebug(errMsg,wxT("ODBC DEBUG MESSAGE"));
 #endif
         }
@@ -2337,7 +2337,7 @@ bool wxDb::GetNext(void)
 
 
 /********** wxDb::GetData()  **********/
-bool wxDb::GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FAR *cbReturned)
+bool wxDb::GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SQLLEN FAR *cbReturned)
 {
     wxASSERT(pData);
     wxASSERT(cbReturned);
@@ -2367,7 +2367,7 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
     wxChar       szPkCol[DB_MAX_COLUMN_NAME_LEN+1];   /* Primary key column     */
     wxChar       szFkCol[DB_MAX_COLUMN_NAME_LEN+1];   /* Foreign key column     */
     SQLRETURN    retcode;
-    SDWORD       cb;
+    SQLLEN       cb;
     SWORD        i;
     wxString     tempStr;
     /*
@@ -2534,7 +2534,7 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
     wxDbColInf *colInf = 0;
 
     RETCODE  retcode;
-    SDWORD   cb;
+    SQLLEN   cb;
 
     wxString TableName;
 
@@ -2693,7 +2693,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, UWORD *numCols, const wx
     wxDbColInf *colInf = 0;
 
     RETCODE  retcode;
-    SDWORD   cb;
+    SQLLEN   cb;
 
     wxString TableName;
 
@@ -3306,7 +3306,7 @@ wxDbInf *wxDb::GetCatalog(const wxChar *userID)
     int      noTab = 0;     // Counter while filling table entries
     int      pass;
     RETCODE  retcode;
-    SDWORD   cb;
+    SQLLEN   cb;
     wxString tblNameSave;
 
     wxString UserID;
@@ -3417,7 +3417,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     wxASSERT(fileName.Length());
 
     RETCODE   retcode;
-    SDWORD    cb;
+    SQLLEN    cb;
     wxChar    tblName[DB_MAX_TABLE_NAME_LEN+1];
     wxString  tblNameSave;
     wxChar    colName[DB_MAX_COLUMN_NAME_LEN+1];
@@ -3614,7 +3614,7 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
     wxASSERT(tableName.Length());
 
     wxDbTablePrivilegeInfo  result;
-    SDWORD  cbRetVal;
+    SQLLEN  cbRetVal;
     RETCODE retcode;
 
     // We probably need to be able to dynamically set this based on

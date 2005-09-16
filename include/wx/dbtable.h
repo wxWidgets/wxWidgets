@@ -59,7 +59,7 @@ public:
     bool    Updateable;                         // Specifies whether this column is updateable
     bool    InsertAllowed;                      // Specifies whether this column should be included in an INSERT statement
     bool    DerivedCol;                         // Specifies whether this column is a derived value
-    SDWORD  CbValue;                            // Internal use only!!!
+    SQLLEN  CbValue;                            // Internal use only!!!
     bool    Null;                               // NOT FULLY IMPLEMENTED - Allows NULL values in Inserts and Updates
 
     wxDbColDef();

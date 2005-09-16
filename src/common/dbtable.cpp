@@ -560,7 +560,7 @@ bool wxDbTable::bindUpdateParams(void)
 /********** wxDbTable::bindCols() **********/
 bool wxDbTable::bindCols(HSTMT cursor)
 {
-    static SDWORD cb;
+    static SQLLEN cb;
 
     // Bind each column of the table to a memory address for fetching data
     UWORD i;
@@ -586,7 +586,7 @@ bool wxDbTable::getRec(UWORD fetchType)
     if (!pDb->FwdOnlyCursors())
     {
         // Fetch the NEXT, PREV, FIRST or LAST record, depending on fetchType
-        UDWORD  cRowsFetched;
+        SQLULEN cRowsFetched;
         UWORD   rowStatus;
 
         retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus);
@@ -1010,7 +1010,7 @@ void wxDbTable::BuildDeleteStmt(wxString &pSqlStmt, int typeOfDel, const wxStrin
             // e.g. DELETE FROM PARTS WHERE ROWID = '111.222.333'
             if (CanUpdateByROWID())
             {
-                SDWORD cb;
+                SQLLEN cb;
                 wxChar   rowid[wxDB_ROWID_LEN+1];
 
                 // Get the ROWID value.  If not successful retreiving the ROWID,
@@ -1227,7 +1227,7 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpdate, const wxSt
             // e.g. UPDATE PARTS SET Col1 = ?, Col2 = ? WHERE ROWID = '111.222.333'
             if (CanUpdateByROWID())
             {
-                SDWORD cb;
+                SQLLEN cb;
                 wxChar rowid[wxDB_ROWID_LEN+1];
 
                 // Get the ROWID value.  If not successful retreiving the ROWID,
@@ -2431,7 +2431,7 @@ ULONG wxDbTable::Count(const wxString &args)
 {
     ULONG count;
     wxString sqlStmt;
-    SDWORD cb;
+    SQLLEN cb;
 
     // Build a "SELECT COUNT(*) FROM queryTableName [WHERE whereClause]" SQL Statement
     sqlStmt  = wxT("SELECT COUNT(");
@@ -2522,7 +2522,7 @@ bool wxDbTable::Refresh(void)
 
     if (CanUpdateByROWID())
     {
-        SDWORD cb;
+        SQLLEN cb;
         wxChar rowid[wxDB_ROWID_LEN+1];
 
         // Get the ROWID value.  If not successful retreiving the ROWID,
