@@ -24,6 +24,7 @@ class WXDLLEXPORT wxDialogModalData;
 
 #if wxUSE_TOOLBAR && (defined(__SMARTPHONE__) || defined(__POCKETPC__))
 class WXDLLEXPORT wxToolBar;
+extern WXDLLEXPORT_DATA(const wxChar*) wxToolBarNameStr;
 #endif
 
 // Dialog boxes
@@ -63,6 +64,8 @@ public:
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
 
+
+    // we treat dialog toolbars specially under Windows CE
 #if wxUSE_TOOLBAR && defined(__POCKETPC__)
     // create main toolbar by calling OnCreateToolBar()
     virtual wxToolBar* CreateToolBar(long style = -1,
@@ -75,7 +78,8 @@ public:
 
     // get the main toolbar
     wxToolBar *GetToolBar() const { return m_dialogToolBar; }
-#endif
+#endif // wxUSE_TOOLBAR && __POCKETPC__
+
 
     // implementation only from now on
     // -------------------------------
