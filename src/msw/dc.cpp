@@ -1003,7 +1003,7 @@ void wxDC::DoDrawSpline(wxList *points)
     wxASSERT_MSG( points, wxT("NULL pointer to spline points?") );
 
     const size_t n_points = points->GetCount();
-    wxASSERT_MSG( n > 2 , wxT("incomplete list of spline points?") );
+    wxASSERT_MSG( n_points > 2 , wxT("incomplete list of spline points?") );
 
     const size_t n_bezier_points = n_points * 3 + 1;
     POINT *lppt = (POINT *)malloc(n_bezier_points*sizeof(POINT));
