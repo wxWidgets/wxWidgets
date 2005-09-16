@@ -21,6 +21,7 @@ tn0017.txt   How to write unit tests for wxWidgets classes
 tn0018.txt   How to add a new font encoding/charset to wxWidgets
 tn0019.txt   Special notes about writing wxMSW code
 tn0020.txt   Binary Compatability and wxWidgets
+tn0021.txt   How to add a new wxUSE_XXX preprocessor constant
 
 
 Version: $Id$
