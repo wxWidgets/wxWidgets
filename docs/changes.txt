@@ -50,6 +50,7 @@ wxMSW:
 - Fixed bugs with wxStatusBar positioning (with or withour sizers) (Jamie Gadd)
 - Mouse move events are now generated for all static controls (Jamie Gadd)
 - Made wxJoystick::GetProductName() more useful (John Ratliff)
+- Native spline drawing implementation (Wlodzimierz ABX Skiba).
 
 wxGTK:
 
@@ -67,6 +68,7 @@ wxMac:
 - Automatic menu management improved.
 - Fixed crash when wxRadioButton is deleted from a group of radio buttons,
   due to dangling cycle pointers.
+- Native spline drawing implementation for CoreGraphics (Robert J. Lang).
 
 wxOS2
 

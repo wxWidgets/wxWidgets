@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.h
+// Name:        wx/msw/dc.h
 // Purpose:     wxDC class
 // Author:      Julian Smart
 // Modified by:
@@ -163,6 +163,10 @@ protected:
                                         wxCoord width, wxCoord height,
                                         double radius);
     virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+
+#if wxUSE_SPLINES
+    virtual void DoDrawSpline(wxList *points);
+#endif
 
     virtual void DoCrossHair(wxCoord x, wxCoord y);
 

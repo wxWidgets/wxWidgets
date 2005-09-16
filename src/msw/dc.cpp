@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.cpp
-// Purpose:     wxDC class
+// Name:        src/msw/dc.cpp
+// Purpose:     wxDC class for MSW port
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -976,6 +976,105 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
 }
+
+#if wxUSE_SPLINES
+void wxDC::DoDrawSpline(wxList *points)
+{
+#ifdef  __WXWINCE__
+    // WinCE does not support ::PolyBezier so use generic version
+    wxDCBase::DoDrawSpline(points);
+#else
+    // quadratic b-spline to cubic bezier spline conversion
+    //
+    // quadratic spline with control points P0,P1,P2
+    // P(s) = P0*(1-s)^2 + P1*2*(1-s)*s + P2*s^2
+    //
+    // bezier spline with control points B0,B1,B2,B3
+    // B(s) = B0*(1-s)^3 + B1*3*(1-s)^2*s + B2*3*(1-s)*s^2 + B3*s^3
+    //
+    // control points of bezier spline calculated from b-spline
+    // B0 = P0
+    // B1 = (2*P1 + P0)/3
+    // B2 = (2*P1 + P2)/3
+    // B3 = P2
+
+    WXMICROWIN_CHECK_HDC
+
+    wxASSERT_MSG( points, wxT("NULL pointer to spline points?") );
+
+    const size_t n_points = points->GetCount();
+    wxASSERT_MSG( n > 2 , wxT("incomplete list of spline points?") );
+
+    const size_t n_bezier_points = n_points * 3 + 1;
+    POINT *lppt = (POINT *)malloc(n_bezier_points*sizeof(POINT));
+    size_t bezier_pos = 0;
+    wxCoord x1, y1, x2, y2, cx1, cy1, cx4, cy4;
+
+    wxList::compatibility_iterator node = points->GetFirst();
+    wxPoint *p = (wxPoint *)node->GetData();
+    lppt[ bezier_pos ].x = x1 = p->x;
+    lppt[ bezier_pos ].y = y1 = p->y;
+    bezier_pos++;
+    lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
+    bezier_pos++;
+
+    node = node->GetNext();
+    p = (wxPoint *)node->GetData();
+
+    x2 = p->x;
+    y2 = p->y;
+    cx1 = ( x1 + x2 ) / 2;
+    cy1 = ( y1 + y2 ) / 2;
+    lppt[ bezier_pos ].x = XLOG2DEV(cx1);
+    lppt[ bezier_pos ].y = YLOG2DEV(cy1);
+    bezier_pos++;
+    lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
+    bezier_pos++;
+
+#if !wxUSE_STL
+    while ((node = node->GetNext()) != NULL)
+#else
+    while ((node = node->GetNext()))
+#endif // !wxUSE_STL
+    {
+        p = (wxPoint *)node->GetData();
+        x1 = x2;
+        y1 = y2;
+        x2 = p->x;
+        y2 = p->y;
+        cx4 = (x1 + x2) / 2;
+        cy4 = (y1 + y2) / 2;
+        // B0 is B3 of previous segment
+        // B1:
+        lppt[ bezier_pos ].x = XLOG2DEV((x1*2+cx1)/3);
+        lppt[ bezier_pos ].y = YLOG2DEV((y1*2+cy1)/3);
+        bezier_pos++;
+        // B2:
+        lppt[ bezier_pos ].x = XLOG2DEV((x1*2+cx4)/3);
+        lppt[ bezier_pos ].y = YLOG2DEV((y1*2+cy4)/3);
+        bezier_pos++;
+        // B3:
+        lppt[ bezier_pos ].x = XLOG2DEV(cx4);
+        lppt[ bezier_pos ].y = YLOG2DEV(cy4);
+        bezier_pos++;
+        cx1 = cx4;
+        cy1 = cy4;
+    }
+
+    lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
+    bezier_pos++;
+    lppt[ bezier_pos ].x = XLOG2DEV(x2);
+    lppt[ bezier_pos ].y = YLOG2DEV(y2);
+    bezier_pos++;
+    lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
+    bezier_pos++;
+
+    ::PolyBezier( GetHdc(), lppt, bezier_pos );
+
+    free(lppt);
+#endif
+}
+#endif
 
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
 void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
