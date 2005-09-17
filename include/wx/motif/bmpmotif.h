@@ -44,6 +44,8 @@ private:
     void InvalidateCache();
     void CreateImageIfNeeded( WXWidget w );
 
+    WXPixmap GetPixmapFromCache(WXWidget w);
+
     struct
     {
         bool label  : 1;

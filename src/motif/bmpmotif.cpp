@@ -42,6 +42,11 @@
 
 Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 
+static inline wxCharBuffer GetCacheImageName(WXImage image)
+{
+    return wxString::Format(_T("wxBitmap_%p"), image).ToAscii();
+}
+
 wxBitmapCache::~wxBitmapCache()
 {
     if( m_display )
@@ -113,10 +118,24 @@ void wxBitmapCache::CreateImageIfNeeded( WXWidget w )
 
     if( m_image )
     {
-        char tmp[128];
-        sprintf( tmp, "Im%x", (unsigned int)ximage );
-        XmInstallImage( ximage, tmp );
+        XmInstallImage( ximage, GetCacheImageName(m_image).data() );
     }
+}
+
+WXPixmap wxBitmapCache::GetPixmapFromCache(WXWidget w)
+{
+    Widget widget = (Widget)w;
+    while( XmIsGadget( widget ) )
+        widget = XtParent( widget );
+
+    Pixel fg, bg;
+    XtVaGetValues( widget,
+                   XmNbackground, &bg,
+                   XmNforeground, &fg,
+                   NULL );
+
+    Screen* screen = DefaultScreenOfDisplay( (Display*)m_display );
+    return (WXPixmap)XmGetPixmap(screen, GetCacheImageName(m_image).data(), fg, bg);
 }
 
 WXPixmap wxBitmapCache::GetLabelPixmap( WXWidget w )
@@ -134,21 +153,7 @@ WXPixmap wxBitmapCache::GetLabelPixmap( WXWidget w )
     if( !m_image )
         return (WXPixmap)NULL;
 
-    char tmp[128];
-    sprintf( tmp, "Im%x", (unsigned int)m_image );
-
-    Pixel fg, bg;
-    Widget widget = (Widget)w;
-
-    while( XmIsGadget( widget ) )
-        widget = XtParent( widget );
-    XtVaGetValues( widget,
-                   XmNbackground, &bg,
-                   XmNforeground, &fg,
-                   NULL );
-
-    m_labelPixmap = (WXPixmap)XmGetPixmap( screen, tmp, fg, bg );
-
+    m_labelPixmap = GetPixmapFromCache(w);
     m_recalcPixmaps.label = !m_labelPixmap;
     return m_labelPixmap;
 }
@@ -168,19 +173,7 @@ WXPixmap wxBitmapCache::GetArmPixmap( WXWidget w )
     if( !m_image )
         return (WXPixmap)NULL;
 
-    char tmp[128];
-    sprintf( tmp, "Im%x", (unsigned int)m_image );
-
-    Pixel fg, bg;
-    Widget widget = (Widget) w;
-
-    XtVaGetValues( widget, XmNarmColor, &bg, NULL );
-    while( XmIsGadget( widget ) )
-        widget = XtParent( widget );
-    XtVaGetValues( widget, XmNforeground, &fg, NULL );
-
-    m_armPixmap = (WXPixmap)XmGetPixmap( screen, tmp, fg, bg );
-
+    m_armPixmap = GetPixmapFromCache(w);
     m_recalcPixmaps.arm = !m_armPixmap;
     return m_armPixmap;
 }
