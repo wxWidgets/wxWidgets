@@ -32,6 +32,7 @@
 
 #include "wx/splitter.h"
 #include "wx/renderer.h"
+#include "wx/settings.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 
