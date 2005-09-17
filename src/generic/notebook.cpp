@@ -47,7 +47,7 @@
 // ----------------------------------------------------------------------------
 
 // check that the page index is valid
-#define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
+#define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
 // ----------------------------------------------------------------------------
 // event table
