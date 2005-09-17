@@ -263,12 +263,12 @@ private:
     int                 m_height;       // height of this item
 
     // use bitfields to save size
-    int                 m_isCollapsed :1;
-    int                 m_hasHilight  :1; // same as focused
-    int                 m_hasPlus     :1; // used for item which doesn't have
+    unsigned int        m_isCollapsed :1;
+    unsigned int        m_hasHilight  :1; // same as focused
+    unsigned int        m_hasPlus     :1; // used for item which doesn't have
                                           // children but has a [+] button
-    int                 m_isBold      :1; // render the label in bold font
-    int                 m_ownsAttr    :1; // delete attribute when done
+    unsigned int        m_isBold      :1; // render the label in bold font
+    unsigned int        m_ownsAttr    :1; // delete attribute when done
 
     DECLARE_NO_COPY_CLASS(wxGenericTreeItem)
 };
