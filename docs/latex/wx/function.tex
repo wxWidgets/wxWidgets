@@ -252,6 +252,7 @@ the corresponding topic.
 \helpref{wx\_const\_cast}{wxconstcastraw}\\
 \helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw}\\
 \helpref{wx\_static\_cast}{wxstaticcastraw}\\
+\helpref{wx\_truncate\_cast}{wxtruncatecast}\\
 \helpref{\_}{underscore}\\
 \helpref{wxPLURAL}{wxplural}\\
 \helpref{\_T}{underscoret}
@@ -3663,8 +3664,20 @@ star is not appended to it.
 \wxheading{See also}
 
 \helpref{wx\_const\_cast}{wxconstcastraw},\\
-\helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw}
+\helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw},\\
+\helpref{wx\_truncate\_cast}{wxtruncatecast}
 
+
+\membersection{wx\_truncate\_cast}\label{wxtruncatecast}
+
+\func{T}{wx\_truncate\_cast}{T, x}
+
+This case doesn't correspond to any standard cast but exists solely to make
+casts which possibly result in a truncation of an integer value more readable.
+
+\wxheading{See also}
+
+\helpref{wx\_static\_cast}{wxstaticcastraw}
 
 
 \section{Log functions}\label{logfunctions}
