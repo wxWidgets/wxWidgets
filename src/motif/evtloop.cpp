@@ -387,7 +387,6 @@ bool wxDoEventLoopIteration( wxEventLoop& evtLoop )
 #include <sys/time.h>
 #include <unistd.h>
 
-static XtInputId inputId;
 static int idleFds[2] = { -1, -1 };
 
 class wxIdlePipeModule : public wxModule
@@ -478,11 +477,11 @@ bool wxAddIdleCallback()
         return false;
     
     // install input handler for wxWakeUpIdle
-    inputId = XtAppAddInput( (XtAppContext) wxTheApp->GetAppContext(),
-                             idleFds[0],
-                             (XtPointer)XtInputReadMask,
-                             wxInputCallback,
-                             NULL );
+    XtAppAddInput((XtAppContext) wxTheApp->GetAppContext(),
+                  idleFds[0],
+                  (XtPointer)XtInputReadMask,
+                  wxInputCallback,
+                  NULL);
 
     return true;
 }

@@ -276,8 +276,6 @@ bool wxToolBar::Realize()
 
     int buttonHeight = 0, buttonWidth = 0;
 
-    int currentSpacing = 0;
-
     Widget button;
     Pixmap pixmap, insensPixmap;
     wxBitmap bmp, insensBmp;
@@ -470,7 +468,6 @@ bool wxToolBar::Realize()
                 XtAddEventHandler (button, EnterWindowMask | LeaveWindowMask,
                         False, wxToolButtonPopupCallback, (XtPointer) this);
 
-                currentSpacing = 0;
                 break;
         }
 
