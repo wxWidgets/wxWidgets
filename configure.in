@@ -1926,6 +1926,20 @@ if test "x$SUNCC" = xyes; then
     CFLAGS="$CFLAGS -erroff=E_NO_EXPLICIT_TYPE_GIVEN"
 fi
 
+dnl SGI mipsPro compiler gives this warning for "conversion from pointer to
+dnl same-sized integral type" even when there is an explicit cast and as there
+dnl is no way to turn it off and there are hundreds of these warnings in wx
+dnl sources, just turn it off for now
+dnl
+dnl a better long term solution would be to use #pragma set/reset woff in
+dnl wxPtrToUInt() and use it instead of casts elsewhere
+if test "x$SGICC" = "xyes"; then
+    CFLAGS="$CFLAGS -woff 3970"
+fi
+if test "x$SGICXX" = "xyes"; then
+    CXXFLAGS="$CXXFLAGS -woff 3970"
+fi
+
 dnl check for std::string or std::wstring
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     AC_LANG_PUSH(C++)
