@@ -766,6 +766,8 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckPing()
 #ifdef __VMS
         if (wxFileExists( wxT("SYS$SYSTEM:TCPIP$PING.EXE") ))
             m_PingPath = wxT("$SYS$SYSTEM:TCPIP$PING");
+#elif defined(__SGI__)
+        m_PingPath = _T("/usr/etc/ping"); 
 #else
         if (wxFileExists( wxT("/bin/ping") ))
             m_PingPath = wxT("/bin/ping");
@@ -790,7 +792,7 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckPing()
     cmd << m_PingPath << wxT(' ');
 #if defined(__SOLARIS__) || defined (__SUNOS__)
     // nothing to add to ping command
-#elif defined(__LINUX__) || defined (__BSD__) || defined( __VMS )
+#elif defined(__LINUX__) || defined (__BSD__) || defined(__VMS) || defined(__SGI__)
     cmd << wxT("-c 1 "); // only ping once
 #elif defined(__HPUX__)
     cmd << wxT("64 1 "); // only ping once (need also specify the packet size)
