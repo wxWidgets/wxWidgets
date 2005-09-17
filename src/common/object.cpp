@@ -96,9 +96,7 @@ wxClassInfo *wxObject::GetClassInfo() const
 
 #endif // wxUSE_EXTENDED_RTTI
 
-// These are here so we can avoid 'always true/false' warnings
-// by referring to these instead of true/false
-const bool wxTrue = true;
+// this variable exists only so that we can avoid 'always true/false' warnings
 const bool wxFalse = false;
 
 // Is this object a kind of (a subclass of) 'info'?
