@@ -86,12 +86,6 @@
 #include <string.h>
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-static const int SCROLL_MARGIN = 4;
-
-// ----------------------------------------------------------------------------
 // global variables for this module
 // ----------------------------------------------------------------------------
 
@@ -1743,18 +1737,18 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
 
 bool wxAddWindowToTable(Widget w, wxWindow *win)
 {
-    wxWindow *oldItem = NULL;
-    if ((oldItem = (wxWindow *)wxWidgetHashTable->Get ((long) w)))
+    const long key = (long)w;
+    if ( wxWidgetHashTable->Get(key))
     {
         wxLogDebug("Widget table clash: new widget is %ld, %s",
-                   (long)w, win->GetClassInfo()->GetClassName());
+                   key, win->GetClassInfo()->GetClassName());
         return false;
     }
 
-    wxWidgetHashTable->Put((long) w, win);
+    wxWidgetHashTable->Put(key, win);
 
     wxLogTrace("widget", "Widget 0x%p <-> window %p (%s)",
-               (WXWidget)w, win, win->GetClassInfo()->GetClassName());
+               w, win, win->GetClassInfo()->GetClassName());
 
     return true;
 }
@@ -2157,19 +2151,15 @@ static void wxScrollBarCallback(Widget scrollbar,
 // For repainting arbitrary windows
 void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event, char *)
 {
-    Window window;
-    Display *display;
-
     wxWindow* win = wxGetWindowFromTable(w);
     if (!win)
         return;
 
-    switch(event -> type)
+    switch ( event->type )
     {
-    case Expose:
+        case Expose:
         {
-            window = (Window) win -> GetXWindow();
-            display = (Display *) win -> GetXDisplay();
+            Display *display = (Display *) win -> GetXDisplay();
 
             win->AddUpdateRect(event->xexpose.x, event->xexpose.y,
                                event->xexpose.width, event->xexpose.height);
