@@ -2088,7 +2088,7 @@ static void wxScrollBarCallback(Widget scrollbar,
                                 XmScrollBarCallbackStruct *cbs)
 {
     wxWindow *win = wxGetWindowFromTable(scrollbar);
-    wxOrientation orientation = (wxOrientation)(int)clientData;
+    wxOrientation orientation = (wxOrientation)wxPtrToUInt(clientData);
 
     wxEventType eventType = wxEVT_NULL;
     switch (cbs->reason)
