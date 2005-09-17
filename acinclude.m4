@@ -43,13 +43,12 @@ for ac_dir in $1 /usr/include;
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl call WX_PATH_FIND_LIBRARIES(search path, header name), sets ac_find_libraries
-dnl to the full name of the file that was found or leaves it empty if not found
+dnl WX_PATH_FIND_LIBRARIES helper
 dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_PATH_FIND_LIBRARIES],
+AC_DEFUN([WX_PATH_FIND_LIBRARIES_IN_PATH],
 [
-ac_find_libraries=
-for ac_dir in $1 /usr/lib;
+  ac_find_libraries=
+  for ac_dir in $1;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/lib$2.$ac_extension"; then
@@ -58,6 +57,25 @@ for ac_dir in $1 /usr/lib;
       fi
     done
   done
+])
+
+dnl ---------------------------------------------------------------------------
+dnl call WX_PATH_FIND_LIBRARIES(search path, header name), sets ac_find_libraries
+dnl to the full name of the file that was found or leaves it empty if not found
+dnl ---------------------------------------------------------------------------
+AC_DEFUN([WX_PATH_FIND_LIBRARIES],
+[
+  dnl check in default locations first:
+  dnl   - /usr/lib: standard
+  dnl   - /usr/lib32: n32 ABI on IRIX
+  dnl   - /usr/lib64: n64 ABI on IRIX
+  dnl   - /usr/lib/64: 64 bit ABI on Solaris and Linux x86-64
+  WX_PATH_FIND_LIBRARIES_IN_PATH([/usr/lib /usr/lib32 /usr/lib/64 /usr/lib64], $2)
+  if test "$ac_find_libraries" != "" ; then
+    ac_find_libraries="default location"
+  else
+    WX_PATH_FIND_LIBRARIES_IN_PATH($1, $2)
+  fi
 ])
 
 dnl ---------------------------------------------------------------------------
@@ -80,16 +98,25 @@ AC_DEFUN([WX_INCLUDE_PATH_EXIST],
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl Path to link, already defined
+dnl Usage: WX_LINK_PATH_EXIST(path, libpath)
+dnl
+dnl Set ac_path_to_link to nothing if path is already in libpath of to -Lpath
+dnl if it is not, so that libpath can be set to "$libpath$ac_path_to_link"
+dnl after calling this function
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_LINK_PATH_EXIST],
 [
-  echo "$2" | grep "\-L$1" > /dev/null
-  result=$?
-  if test $result = 0; then
+  dnl never add -L/usr/libXXX explicitely to libpath
+  if test "$1" = "default location"; then
     ac_path_to_link=""
   else
-    ac_path_to_link=" -L$1"
+    echo "$2" | grep "\-L$1" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_link=""
+    else
+      ac_path_to_link=" -L$1"
+    fi
   fi
 ])
 
