@@ -312,7 +312,7 @@ void wxGenericFontDialog::CreateWidgets()
         if (is_pda)
             colourSize.x = 100;
 
-        wxChoice* itemChoice16 = new wxChoice( this, wxID_FONT_COLOUR, wxDefaultPosition, wxDefaultSize, NUM_COLS, wxColourDialogNames, 0 );
+        wxChoice* itemChoice16 = new wxChoice( this, wxID_FONT_COLOUR, wxDefaultPosition, colourSize, NUM_COLS, wxColourDialogNames, 0 );
         itemChoice16->SetHelpText(_("The font colour."));
         if (ShowToolTips())
             itemChoice16->SetToolTip(_("The font colour."));
