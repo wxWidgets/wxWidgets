@@ -465,7 +465,11 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
         return false;
     }
 
-    wxFileOffset len = fileWave.Length();
+    wxFileOffset lenOrig = fileWave.Length();
+    if ( lenOrig == wxInvalidOffset )
+        return false;
+
+    size_t len = wx_truncate_cast(size_t, lenOrig);
     wxUint8 *data = new wxUint8[len];
     if (fileWave.Read(data, len) != len)
     {

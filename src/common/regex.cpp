@@ -316,10 +316,11 @@ bool wxRegExImpl::GetMatch(size_t *start, size_t *len, size_t index) const
 
     const regmatch_t& match = m_Matches[index];
 
+    // we need the casts because rm_so can be a 64 bit quantity
     if ( start )
-        *start = match.rm_so;
+        *start = wx_truncate_cast(size_t, match.rm_so);
     if ( len )
-        *len = match.rm_eo - match.rm_so;
+        *len = wx_truncate_cast(size_t, match.rm_eo - match.rm_so);
 
     return true;
 }

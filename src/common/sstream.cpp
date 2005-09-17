@@ -93,10 +93,11 @@ wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
             return wxInvalidOffset;
     }
 
-    if ( ofs < 0 || wx_static_cast(size_t, ofs) > m_len )
+    if ( ofs < 0 || ofs > wx_static_cast(wxFileOffset, m_len) )
         return wxInvalidOffset;
 
-    m_pos = wx_static_cast(size_t, ofs);
+    // FIXME: this can't be right
+    m_pos = wx_truncate_cast(size_t, ofs);
 
     return ofs;
 }

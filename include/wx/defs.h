@@ -292,6 +292,13 @@ typedef int wxWindowID;
     #define wx_reinterpret_cast(t, x) ((t)(x))
 #endif
 
+/*
+   This one is a wx invention: like static cast but used when we intentionally
+   truncate from a larger to smaller type, static_cast<> can't be used for it
+   as it results in warnings when using some compilers (SGI mipspro for example)
+ */
+#define wx_truncate_cast(t, x) ((t)(x))
+
 /* for consistency with wxStatic/DynamicCast defined in wx/object.h */
 #define wxConstCast(obj, className) wx_const_cast(className *, obj)
 
