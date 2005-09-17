@@ -2138,14 +2138,9 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/share/include"
 
-dnl prepend lib and lib32 for IRIX where the files in these directories should
-dnl be found before the ones in lib64 for 32bit compilation -- of course, this
-dnl probably/surely breaks 64bit compilation... IMO the only real solution is to
-dnl stop using WX_PATH_FIND_LIBRARIES() at all and use AC_CHECK_LIB() instead
-dnl
-dnl also put 64 bit versions for Linux on AMD, they must come before the usual
+dnl add 64 bit X11 libs for Linux on AMD, they must come before the usual
 dnl locations or 64 bit compilation failed
-SEARCH_LIB="/usr/lib /usr/lib32 /usr/lib64 /usr/X11R6/lib64 `echo "$SEARCH_INCLUDE" | sed s/include/lib/g`"
+SEARCH_LIB="/usr/X11R6/lib64 `echo "$SEARCH_INCLUDE" | sed s/include/lib/g`"
 
 dnl Cross compiling with gcc?
 if test "$build" != "$host" -a "$GCC" = yes; then
@@ -2839,7 +2834,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 dnl we guess its path from the prefix
                 GUI_TK_LIBRARY="-L${prefix}/lib -lgpewidget $GUI_TK_LIBRARY"
                 WXGPE=1
-                AC_MSG_RESULT(found at $ac_find_libraries)
+                AC_MSG_RESULT([found in $ac_find_libraries])
             else
                 AC_MSG_RESULT(not found)
             fi
@@ -2849,7 +2844,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl if test "$ac_find_libraries" != "" ; then
             dnl     WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
             dnl     GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lgpe"
-            dnl     AC_MSG_RESULT(found at $ac_find_libraries)
+            dnl     AC_MSG_RESULT(found in $ac_find_libraries)
             dnl else
             dnl     AC_MSG_RESULT(not found)
             dnl fi
@@ -3077,7 +3072,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             AC_MSG_CHECKING(for Motif/Lesstif library)
             WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
             if test "$ac_find_libraries" != "" ; then
-                AC_MSG_RESULT(found at $ac_find_libraries)
+                AC_MSG_RESULT(found in $ac_find_libraries)
 
                 WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
                 GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
@@ -3212,7 +3207,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             if test "$ac_find_libraries" != "" ; then
                 WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
                 GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
-                AC_MSG_RESULT(found at $ac_find_libraries)
+                AC_MSG_RESULT(found in $ac_find_libraries)
 
                 AC_CACHE_CHECK([for X11/xpm.h],
                     wx_cv_x11_xpm_h,
