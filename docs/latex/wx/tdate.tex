@@ -162,8 +162,8 @@ wxDateTime corresponding to the given date in, say, Pacific Standard Time.
 To do it, you will need to call \helpref{ToTimezone}{wxdatetimetotimezone} or 
 \helpref{MakeTimezone}{wxdatetimemaketimezone} methods to adjust the date for
 the target time zone. There are also special versions of these functions 
-\helpref{ToGMT}{wxdatetimetogmt} and \helpref{MakeGMT}{wxdatetimemakegmt} for
-the most common case - when the date should be constructed in GMT.
+\helpref{ToUTC}{wxdatetimetoutc} and \helpref{MakeUTC}{wxdatetimemakeutc} for
+the most common case - when the date should be constructed in UTC.
 
 You also can just retrieve the value for some time zone without converting the
 object to it first. For this you may pass TimeZone argument to any of the
