@@ -166,7 +166,7 @@ class WXDLLIMPEXP_ADV wxCalendarEvent : public wxDateEvent
 friend class wxCalendarCtrl;
 public:
     wxCalendarEvent() { Init(); }
-    wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type);
+    inline wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type);
 
     void SetWeekDay(const wxDateTime::WeekDay wd) { m_wday = wd; }
     wxDateTime::WeekDay GetWeekDay() const { return m_wday; }
