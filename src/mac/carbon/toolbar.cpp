@@ -597,8 +597,9 @@ bool wxToolBar::Show( bool show )
         MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
         if (ownToolbarInstalled)
         {
-            bResult = (HIViewIsVisible( (HIViewRef)m_macHIToolbarRef ) != show);
-            ShowHideWindowToolbar( tlw, show, false );
+            bResult = ( IsWindowToolbarVisible(tlw) != show);
+            if ( bResult )
+                ShowHideWindowToolbar( tlw, show, false );
         }
         else
 #endif
@@ -616,7 +617,10 @@ bool wxToolBar::IsShown() const
     bool ownToolbarInstalled ;
     MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
     if (ownToolbarInstalled)
-        bResult = HIViewIsVisible( (HIViewRef)m_macHIToolbarRef );
+    {
+        WindowRef tlw = MAC_WXHWND(MacGetTopLevelWindowRef());
+        bResult = IsWindowToolbarVisible(tlw) ;
+    }
     else
 #endif
         bResult = wxToolBarBase::IsShown();
