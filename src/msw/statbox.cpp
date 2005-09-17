@@ -282,6 +282,7 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
     RECT rc;
     ::GetWindowRect(GetHwnd(), &rc);
     HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+    bool foundThis = false;
 
     // iterate over all child windows (not just wxWindows but all windows)
     for ( HWND child = ::GetWindow(GetHwndOf(GetParent()), GW_CHILD);
@@ -299,11 +300,18 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
         str.UpperCase();
         if ( str == wxT("BUTTON") && (style & BS_GROUPBOX) == BS_GROUPBOX )
         {
-            // Don't clip any static boxes, not just this one.  This will
-            // result in flicker in overlapping static boxes, but at least
-            // they will all be drawn correctly and we shouldn't have
-            // overlapping windows anyway.
-            continue;
+            if ( child == GetHwnd() )
+                foundThis = true;
+
+            // Any static boxes below this one in the Z-order can't be clipped
+            // since if we have the case where a static box with a low Z-order
+            // is nested inside another static box with a high Z-order then the
+            // nested static box would be painted over. Doing it this way
+            // unfortunately results in flicker if the Z-order of nested static
+            // boxes is not inside (lowest) to outside (highest) but at least
+            // they are still shown.
+            if ( foundThis )
+                continue;
         }
 
         ::GetWindowRect(child, &rc);
