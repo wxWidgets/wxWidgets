@@ -2526,20 +2526,12 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
         {
             NoTransErr noTransErr;
 
-            if ( szDomain != NULL )
-            {
-                wxLogTrace(TRACE_I18N,
-                           _T("string '%s'[%lu] not found in domain '%s' for locale '%s'."),
-                           szOrigString, (unsigned long)n,
-                           szDomain, m_strLocale.c_str());
-
-            }
-            else
-            {
-                wxLogTrace(TRACE_I18N,
-                           _T("string '%s'[%lu] not found in locale '%s'."),
-                           szOrigString, (unsigned long)n, m_strLocale.c_str());
-            }
+            wxLogTrace(TRACE_I18N,
+                       _T("string \"%s\"[%ld] not found in %slocale '%s'."),
+                       szOrigString, (long)n,
+                       szDomain ? wxString::Format(_T("domain '%s' "), szDomain).c_str()
+                                : _T(""),
+                       m_strLocale.c_str());
         }
 #endif // __WXDEBUG__
 
