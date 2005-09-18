@@ -11927,6 +11927,86 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    echo "$as_me:$LINENO: checking whether we are using the SGI C compiler" >&5
+echo $ECHO_N "checking whether we are using the SGI C compiler... $ECHO_C" >&6
+if test "${bakefile_cv_c_compiler__SGI_COMPILER_VERSION+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+             #ifndef _SGI_COMPILER_VERSION
+                choke me
+             #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  bakefile_cv_c_compiler__SGI_COMPILER_VERSION=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+bakefile_cv_c_compiler__SGI_COMPILER_VERSION=no
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler__SGI_COMPILER_VERSION" >&5
+echo "${ECHO_T}$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" >&6
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+    if test "x$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" = "xyes"; then
+        :; SGICC=yes
+    else
+        :;
+    fi
+
+
+
+
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
     echo "$as_me:$LINENO: checking whether we are using the Sun C compiler" >&5
 echo $ECHO_N "checking whether we are using the Sun C compiler... $ECHO_C" >&6
 if test "${bakefile_cv_c_compiler___SUNPRO_C+set}" = set; then
@@ -12938,6 +13018,86 @@ ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+
+
+    ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+    echo "$as_me:$LINENO: checking whether we are using the SGI C++ compiler" >&5
+echo $ECHO_N "checking whether we are using the SGI C++ compiler... $ECHO_C" >&6
+if test "${bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+             #ifndef _SGI_COMPILER_VERSION
+                choke me
+             #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION=no
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION" >&5
+echo "${ECHO_T}$bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION" >&6
+    ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+    if test "x$bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION" = "xyes"; then
+        :; SGICXX=yes
+    else
+        :;
+    fi
 
 
 
@@ -21474,6 +21634,13 @@ if test "x$SUNCC" = xyes; then
     CFLAGS="$CFLAGS -erroff=E_NO_EXPLICIT_TYPE_GIVEN"
 fi
 
+if test "x$SGICC" = "xyes"; then
+    CFLAGS="$CFLAGS -woff 3970"
+fi
+if test "x$SGICXX" = "xyes"; then
+    CXXFLAGS="$CXXFLAGS -woff 3970"
+fi
+
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -22331,9 +22498,6 @@ SEARCH_INCLUDE="\
     /usr/Motif-2.1/include    \
     /usr/Motif-1.2/include    \
     /usr/include/Motif1.2     \
-    /opt/xpm/include/X11      \
-    /opt/GBxpm/include/       \
-    /opt/GBxpm/X11/include/   \
                               \
     /usr/dt/include           \
     /usr/openwin/include      \
@@ -22362,37 +22526,72 @@ SEARCH_INCLUDE="\
     /usr/local/X11/include    \
     /usr/local/include/X11    \
                               \
-    /usr/X386/include         \
-    /usr/x386/include         \
     /usr/XFree86/include/X11  \
-                              \
     /usr/pkg/include          \
-                              \
-    X:/XFree86/include        \
-    X:/XFree86/include/X11    \
-                              \
-    /usr/include/gtk          \
-    /usr/local/include/gtk    \
-    /usr/include/glib         \
-    /usr/local/include/glib   \
-                              \
-    /usr/include/qt           \
-    /usr/local/include/qt     \
-                              \
-    /usr/local/arm/3.3.2/include     \
-                              \
-    /usr/include/windows      \
-    /usr/include/wine         \
-    /usr/local/include/wine   \
-                              \
-    /usr/unsupported/include  \
-    /usr/athena/include       \
-    /usr/local/x11r5/include  \
-    /usr/lpp/Xamples/include  \
                               \
     /usr/openwin/share/include"
 
-SEARCH_LIB="/usr/lib /usr/lib32 /usr/lib64 /usr/X11R6/lib64 `echo "$SEARCH_INCLUDE" | sed s/include/lib/g`"
+echo "$as_me:$LINENO: checking for libraries directory" >&5
+echo $ECHO_N "checking for libraries directory... $ECHO_C" >&6
+if test "${wx_cv_std_libpath+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+        for d in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64; do
+            for e in a so sl dylib dll.a; do
+                libc="$d/libc.$e"
+                if test -f $libc; then
+                    save_LIBS="$LIBS"
+                    LIBS="$libc"
+                    cat >conftest.$ac_ext <<_ACEOF
+int main() { return 0; }
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_std_libpath=`echo $d | sed s@/usr/@@`
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+                    LIBS="$save_LIBS"
+                    if test "x$wx_cv_std_libpath" != "x"; then
+                        break 2
+                    fi
+                fi
+            done
+        done
+        if test "x$wx_cv_std_libpath" = "x"; then
+            wx_cv_std_libpath="lib"
+        fi
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_std_libpath" >&5
+echo "${ECHO_T}$wx_cv_std_libpath" >&6
+
+SEARCH_LIB=`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g`
 
 if test "$build" != "$host" -a "$GCC" = yes; then
                     if cross_root=`$CC -print-prog-name=ld 2>/dev/null`; then
@@ -22422,8 +22621,9 @@ for ac_dir in $SEARCH_INCLUDE /usr/include;
         fi
         if test -z "$x_libraries" -o "$x_libraries" = NONE; then
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXt.$ac_extension"; then
@@ -22432,6 +22632,24 @@ for ac_dir in $SEARCH_LIB /usr/lib;
       fi
     done
   done
+
+  if test "x$ac_find_libraries" = "x" ; then
+
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXt.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
+  fi
 
             x_libraries=$ac_find_libraries
         fi
@@ -26121,8 +26339,9 @@ fi
             echo "$as_me:$LINENO: checking for gpewidget library" >&5
 echo $ECHO_N "checking for gpewidget library... $ECHO_C" >&6
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libgpewidget.$ac_extension"; then
@@ -26132,20 +26351,42 @@ for ac_dir in $SEARCH_LIB /usr/lib;
     done
   done
 
+  if test "x$ac_find_libraries" = "x" ; then
+
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libgpewidget.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
+  fi
+
             if test "$ac_find_libraries" != "" ; then
 
-  echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
-  result=$?
-  if test $result = 0; then
+    if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
   else
-    ac_path_to_link=" -L$ac_find_libraries"
+    echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_link=""
+    else
+      ac_path_to_link=" -L$ac_find_libraries"
+    fi
   fi
 
                                                 GUI_TK_LIBRARY="-L${prefix}/lib -lgpewidget $GUI_TK_LIBRARY"
                 WXGPE=1
-                echo "$as_me:$LINENO: result: found at $ac_find_libraries" >&5
-echo "${ECHO_T}found at $ac_find_libraries" >&6
+                echo "$as_me:$LINENO: result: found in $ac_find_libraries" >&5
+echo "${ECHO_T}found in $ac_find_libraries" >&6
             else
                 echo "$as_me:$LINENO: result: not found" >&5
 echo "${ECHO_T}not found" >&6
@@ -28222,12 +28463,13 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
             CFLAGS=$save_CFLAGS
         fi
 
-        if test "$COMPILED_X_PROGRAM" = 0; then
-            echo "$as_me:$LINENO: checking for Motif/Lesstif library" >&5
+
+        echo "$as_me:$LINENO: checking for Motif/Lesstif library" >&5
 echo $ECHO_N "checking for Motif/Lesstif library... $ECHO_C" >&6
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXm.$ac_extension"; then
@@ -28237,47 +28479,70 @@ for ac_dir in $SEARCH_LIB /usr/lib;
     done
   done
 
-            if test "$ac_find_libraries" != "" ; then
-                echo "$as_me:$LINENO: result: found at $ac_find_libraries" >&5
-echo "${ECHO_T}found at $ac_find_libraries" >&6
+  if test "x$ac_find_libraries" = "x" ; then
 
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXm.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
 
-  echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
-  result=$?
-  if test $result = 0; then
-    ac_path_to_link=""
-  else
-    ac_path_to_link=" -L$ac_find_libraries"
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
   fi
 
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
-            else
-                                                                save_CFLAGS=$CFLAGS
-                CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
 
-                cat >conftest.$ac_ext <<_ACEOF
+        if test "x$ac_find_libraries" != "x" ; then
+            echo "$as_me:$LINENO: result: found in $ac_find_libraries" >&5
+echo "${ECHO_T}found in $ac_find_libraries" >&6
+
+
+    if test "$ac_find_libraries" = "default location"; then
+    ac_path_to_link=""
+  else
+    echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_link=""
+    else
+      ac_path_to_link=" -L$ac_find_libraries"
+    fi
+  fi
+
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+        else
+                                                save_CFLAGS=$CFLAGS
+            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
+            cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                        #include <Xm/Xm.h>
+                    #include <Xm/Xm.h>
 
 int
 main ()
 {
 
-                        int version;
-                        version = xmUseVersion;
+                    int version;
+                    version = xmUseVersion;
 
   ;
   return 0;
 }
 _ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
   ac_status=$?
   grep -v '^ *+' conftest.er1 >conftest.err
   rm -f conftest.er1
@@ -28290,16 +28555,16 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
+	 { ac_try='test -s conftest$ac_exeext'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
 
-                        echo "$as_me:$LINENO: result: found in default search path" >&5
+                    echo "$as_me:$LINENO: result: found in default search path" >&5
 echo "${ECHO_T}found in default search path" >&6
-                        COMPILED_X_PROGRAM=1
+                    COMPILED_X_PROGRAM=1
 
 else
   echo "$as_me: failed program was:" >&5
@@ -28314,10 +28579,10 @@ echo "$as_me: error: please set LDFLAGS to contain the location of libXm" >&2;}
 
 
 fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
 
-                CFLAGS=$save_CFLAGS
-            fi
+            CFLAGS=$save_CFLAGS
         fi
 
         echo "$as_me:$LINENO: checking if we need -lXp and/or -lSM -lICE" >&5
@@ -28480,24 +28745,28 @@ fi
 
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
         echo "$as_me:$LINENO: checking for Motif 2" >&5
 echo $ECHO_N "checking for Motif 2... $ECHO_C" >&6
-        cat >conftest.$ac_ext <<_ACEOF
+if test "${wx_cv_lib_motif2+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                        #include <Xm/Xm.h>
+                            #include <Xm/Xm.h>
 
 int
 main ()
 {
 
-                        #if XmVersion < 2000
-                        Not Motif 2
-                        #endif
+                            #if XmVersion < 2000
+                            Not Motif 2
+                            #endif
 
   ;
   return 0;
@@ -28524,47 +28793,50 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
+  wx_cv_lib_motif2="yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
 
-                        cat >>confdefs.h <<\_ACEOF
+wx_cv_lib_motif2="no"
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $wx_cv_lib_motif2" >&5
+echo "${ECHO_T}$wx_cv_lib_motif2" >&6
+        if test "$wx_cv_lib_motif2" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
 #define __WXMOTIF20__ 1
 _ACEOF
 
-                        echo "$as_me:$LINENO: result: found" >&5
-echo "${ECHO_T}found" >&6
-
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-
-                        cat >>confdefs.h <<\_ACEOF
+        else
+            cat >>confdefs.h <<\_ACEOF
 #define __WXMOTIF20__ 0
 _ACEOF
 
-                        echo "$as_me:$LINENO: result: not found" >&5
-echo "${ECHO_T}not found" >&6
-
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+        fi
 
         echo "$as_me:$LINENO: checking whether Motif is Lesstif" >&5
 echo $ECHO_N "checking whether Motif is Lesstif... $ECHO_C" >&6
-        cat >conftest.$ac_ext <<_ACEOF
+if test "${wx_cv_lib_lesstif+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                        #include <Xm/Xm.h>
+                            #include <Xm/Xm.h>
 
 int
 main ()
 {
 
-                        #if !defined(LesstifVersion) || LesstifVersion <= 0
-                        Not Lesstif
-                        #endif
+                            #if !defined(LesstifVersion) || LesstifVersion <= 0
+                            Not Lesstif
+                            #endif
 
   ;
   return 0;
@@ -28591,28 +28863,30 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-
-                        cat >>confdefs.h <<\_ACEOF
-#define __WXLESSTIF__ 1
-_ACEOF
-
-                        echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-
+  wx_cv_lib_lesstif="yes"
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
+wx_cv_lib_lesstif="no"
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-                        cat >>confdefs.h <<\_ACEOF
+fi
+echo "$as_me:$LINENO: result: $wx_cv_lib_lesstif" >&5
+echo "${ECHO_T}$wx_cv_lib_lesstif" >&6
+        if test "$wx_cv_lib_lesstif" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define __WXLESSTIF__ 1
+_ACEOF
+
+        else
+            cat >>confdefs.h <<\_ACEOF
 #define __WXLESSTIF__ 0
 _ACEOF
 
-                        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+        fi
 
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
         CFLAGS=$save_CFLAGS
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
@@ -28625,8 +28899,9 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
             echo "$as_me:$LINENO: checking for Xpm library" >&5
 echo $ECHO_N "checking for Xpm library... $ECHO_C" >&6
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXpm.$ac_extension"; then
@@ -28636,19 +28911,41 @@ for ac_dir in $SEARCH_LIB /usr/lib;
     done
   done
 
+  if test "x$ac_find_libraries" = "x" ; then
+
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXpm.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
+  fi
+
             if test "$ac_find_libraries" != "" ; then
 
-  echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
-  result=$?
-  if test $result = 0; then
+    if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
   else
-    ac_path_to_link=" -L$ac_find_libraries"
+    echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_link=""
+    else
+      ac_path_to_link=" -L$ac_find_libraries"
+    fi
   fi
 
                 GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
-                echo "$as_me:$LINENO: result: found at $ac_find_libraries" >&5
-echo "${ECHO_T}found at $ac_find_libraries" >&6
+                echo "$as_me:$LINENO: result: found in $ac_find_libraries" >&5
+echo "${ECHO_T}found in $ac_find_libraries" >&6
 
                 echo "$as_me:$LINENO: checking for X11/xpm.h" >&5
 echo $ECHO_N "checking for X11/xpm.h... $ECHO_C" >&6
@@ -29622,8 +29919,9 @@ if test "$wxUSE_DISPLAY" = "yes"; then
         echo "$as_me:$LINENO: checking for Xinerama" >&5
 echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXinerama.$ac_extension"; then
@@ -29633,14 +29931,36 @@ for ac_dir in $SEARCH_LIB /usr/lib;
     done
   done
 
+  if test "x$ac_find_libraries" = "x" ; then
+
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXinerama.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
+  fi
+
         if test "$ac_find_libraries" != "" ; then
 
-  echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
-  result=$?
-  if test $result = 0; then
+    if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
   else
-    ac_path_to_link=" -L$ac_find_libraries"
+    echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_link=""
+    else
+      ac_path_to_link=" -L$ac_find_libraries"
+    fi
   fi
 
             if test "$ac_path_to_link" != " -L/usr/lib" ; then
@@ -29653,8 +29973,9 @@ echo "${ECHO_T}yes" >&6
             echo "$as_me:$LINENO: checking for Xxf86vm extension" >&5
 echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
@@ -29663,6 +29984,24 @@ for ac_dir in $SEARCH_LIB /usr/lib;
       fi
     done
   done
+
+  if test "x$ac_find_libraries" = "x" ; then
+
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
+  fi
 
             if test "$ac_find_libraries" != "" ; then
                 echo "$as_me:$LINENO: result: yes" >&5
@@ -29997,8 +30336,9 @@ if test $ac_cv_header_GL_gl_h = yes; then
                 echo "$as_me:$LINENO: checking for -lGL" >&5
 echo $ECHO_N "checking for -lGL... $ECHO_C" >&6
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGL.$ac_extension"; then
@@ -30008,17 +30348,39 @@ for ac_dir in $SEARCH_LIB /usr/lib;
     done
   done
 
+  if test "x$ac_find_libraries" = "x" ; then
+
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libGL.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
+  fi
+
                 if test "$ac_find_libraries" != "" ; then
                     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 
 
-  echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
-  result=$?
-  if test $result = 0; then
+    if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
   else
-    ac_path_to_link=" -L$ac_find_libraries"
+    echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_link=""
+    else
+      ac_path_to_link=" -L$ac_find_libraries"
+    fi
   fi
 
                     if test "$ac_path_to_link" != " -L/usr/lib" ; then
@@ -30028,8 +30390,9 @@ echo "${ECHO_T}yes" >&6
                                                                                 echo "$as_me:$LINENO: checking for -lGLU" >&5
 echo $ECHO_N "checking for -lGLU... $ECHO_C" >&6
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGLU.$ac_extension"; then
@@ -30039,14 +30402,36 @@ for ac_dir in $SEARCH_LIB /usr/lib;
     done
   done
 
+  if test "x$ac_find_libraries" = "x" ; then
+
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libGLU.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
+  fi
+
                     if test "$ac_find_libraries" != "" ; then
 
-  echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
-  result=$?
-  if test $result = 0; then
+    if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
   else
-    ac_path_to_link=" -L$ac_find_libraries"
+    echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_link=""
+    else
+      ac_path_to_link=" -L$ac_find_libraries"
+    fi
   fi
 
                         if test "$ac_path_to_link" != " -L/usr/lib" -a \
@@ -30071,8 +30456,9 @@ echo "${ECHO_T}no" >&6
                     echo "$as_me:$LINENO: checking for -lMesaGL" >&5
 echo $ECHO_N "checking for -lMesaGL... $ECHO_C" >&6
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libMesaGL.$ac_extension"; then
@@ -30082,14 +30468,36 @@ for ac_dir in $SEARCH_LIB /usr/lib;
     done
   done
 
+  if test "x$ac_find_libraries" = "x" ; then
+
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libMesaGL.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
+  fi
+
                     if test "$ac_find_libraries" != "" ; then
 
-  echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
-  result=$?
-  if test $result = 0; then
+    if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
   else
-    ac_path_to_link=" -L$ac_find_libraries"
+    echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_link=""
+    else
+      ac_path_to_link=" -L$ac_find_libraries"
+    fi
   fi
 
                         LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
@@ -41596,8 +42004,9 @@ fi
         echo "$as_me:$LINENO: checking for gstplay 0.8" >&5
 echo $ECHO_N "checking for gstplay 0.8... $ECHO_C" >&6
 
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libgstplay-0.8.$ac_extension"; then
@@ -41606,6 +42015,24 @@ for ac_dir in $SEARCH_LIB /usr/lib;
       fi
     done
   done
+
+  if test "x$ac_find_libraries" = "x" ; then
+
+  ac_find_libraries=
+  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libgstplay-0.8.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
+  fi
 
 
         if test "$ac_find_libraries" = "" ; then
@@ -43291,7 +43718,11 @@ EOF
       ;;
 
       *-*-aix* )
-                if test "x$GCC" != "xyes"; then
+        			        if test "x$GCC" = "xyes"; then
+	    PIC_FLAG=""
+	    SHARED_LD_CC="\$(CC) -shared ${PIC_FLAG} -o"
+	    SHARED_LD_CXX="\$(CXX) -shared ${PIC_FLAG} -o"
+	else
                                     # Extract the first word of "makeC++SharedLib", so it can be a program name with args.
 set dummy makeC++SharedLib; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -43837,7 +44268,7 @@ EOF
       ;;
 
       powerpc-apple-macos* | \
-      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
+      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-k*bsd*-gnu | \
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
@@ -43879,7 +44310,7 @@ echo "$as_me: error: unknown system type $BAKEFILE_HOST." >&2;}
     SONAME_FLAG=
 
     case "${BAKEFILE_HOST}" in
-      *-*-linux* | *-*-freebsd* )
+      *-*-linux* | *-*-freebsd* | *-*-k*bsd*-gnu )
         SONAME_FLAG="-Wl,-soname,"
         USE_SOVERSION=1
         USE_SOVERLINUX=1
@@ -43916,34 +44347,37 @@ echo "$as_me: error: unknown system type $BAKEFILE_HOST." >&2;}
 
     echo "$as_me:$LINENO: checking for dependency tracking method" >&5
 echo $ECHO_N "checking for dependency tracking method... $ECHO_C" >&6
-    DEPS_TRACKING=0
+    DEPS_TRACKING=1
 
     if test "x$GCC" = "xyes"; then
         DEPSMODE=gcc
-        DEPS_TRACKING=1
         case "${BAKEFILE_HOST}" in
             *-*-darwin* )
-                                                DEPSFLAG_GCC="-no-cpp-precomp -MMD"
+                                                DEPSFLAG="-no-cpp-precomp -MMD"
             ;;
             * )
-                DEPSFLAG_GCC="-MMD"
+                DEPSFLAG="-MMD"
             ;;
         esac
         echo "$as_me:$LINENO: result: gcc" >&5
 echo "${ECHO_T}gcc" >&6
     elif test "x$MWCC" = "xyes"; then
         DEPSMODE=mwcc
-        DEPS_TRACKING=1
-        DEPSFLAG_MWCC="-MM"
+        DEPSFLAG="-MM"
         echo "$as_me:$LINENO: result: mwcc" >&5
 echo "${ECHO_T}mwcc" >&6
     elif test "x$SUNCC" = "xyes"; then
-        DEPSMODE=suncc
-        DEPS_TRACKING=1
-        DEPSFLAG_SUNCC="-xM1"
-        echo "$as_me:$LINENO: result: suncc" >&5
-echo "${ECHO_T}suncc" >&6
+        DEPSMODE=unixcc
+        DEPSFLAG="-xM1"
+        echo "$as_me:$LINENO: result: Sun cc" >&5
+echo "${ECHO_T}Sun cc" >&6
+    elif test "x$SGICC" = "xyes"; then
+        DEPSMODE=unixcc
+        DEPSFLAG="-M"
+        echo "$as_me:$LINENO: result: SGI cc" >&5
+echo "${ECHO_T}SGI cc" >&6
     else
+	DEPS_TRACKING=0
         echo "$as_me:$LINENO: result: none" >&5
 echo "${ECHO_T}none" >&6
     fi
@@ -43961,14 +44395,12 @@ cat <<EOF >bk-deps
 
 DEPSMODE=${DEPSMODE}
 DEPSDIR=.deps
-DEPSFLAG_GCC="${DEPSFLAG_GCC}"
-DEPSFLAG_MWCC="${DEPSFLAG_MWCC}"
-DEPSFLAG_SUNCC="${DEPSFLAG_SUNCC}"
+DEPSFLAG="${DEPSFLAG}"
 
 mkdir -p ${D}DEPSDIR
 
 if test ${D}DEPSMODE = gcc ; then
-    ${D}* ${D}{DEPSFLAG_GCC}
+    ${D}* ${D}{DEPSFLAG}
     status=${D}?
     if test ${D}{status} != 0 ; then
         exit ${D}{status}
@@ -44024,9 +44456,9 @@ elif test ${D}DEPSMODE = mwcc ; then
         fi
         prevarg="${D}arg"
     done
-    ${D}* ${D}DEPSFLAG_MWCC >${D}{DEPSDIR}/${D}{objfile}.d
+    ${D}* ${D}DEPSFLAG >${D}{DEPSDIR}/${D}{objfile}.d
     exit 0
-elif test ${D}DEPSMODE = suncc; then
+elif test ${D}DEPSMODE = unixcc; then
     ${D}* || exit
     # Run compiler again with deps flag and redirect into the dep file.
     # It doesn't work if the '-o FILE' option is used, but without it the
@@ -44046,7 +44478,7 @@ elif test ${D}DEPSMODE = suncc; then
         esac
         shift
     done
-    eval "${D}cmd ${D}DEPSFLAG_SUNCC" | sed "s|.*:|${D}objfile:|" >${D}{DEPSDIR}/${D}{objfile}.d
+    eval "${D}cmd ${D}DEPSFLAG" | sed "s|.*:|${D}objfile:|" >${D}{DEPSDIR}/${D}{objfile}.d
     exit 0
 else
     ${D}*
