@@ -2883,10 +2883,21 @@ wxWindowGTK::~wxWindowGTK()
     m_isBeingDeleted = true;
     m_hasVMT = false;
 
+    // destroy children before destroying this window itself
+    DestroyChildren();
+
+    // unhook focus handlers to prevent stray events being
+    // propagated to this (soon to be) dead object
+    if (m_focusWidget != NULL)
+    {
+        gtk_signal_disconnect_by_func( GTK_OBJECT(m_focusWidget),
+            (GtkSignalFunc) gtk_window_focus_in_callback, (gpointer) this );
+        gtk_signal_disconnect_by_func( GTK_OBJECT(m_focusWidget),
+            (GtkSignalFunc) gtk_window_focus_out_callback, (gpointer) this );
+    }
+
     if (m_widget)
         Show( false );
-
-    DestroyChildren();
 
 #ifdef HAVE_XIM
     if (m_ic)
