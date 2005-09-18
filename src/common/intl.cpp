@@ -1233,15 +1233,28 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 #endif // wxUSE_FONTMAP
 
 #if wxUSE_WCHAR_T
-    wxCSConv *csConv = NULL;
-    if ( !m_charset.empty() )
-        csConv = new wxCSConv(m_charset);
+    // conversion to use to convert catalog strings to the GUI encoding
+    wxMBConv *inputConv,
+             *csConv = NULL; // another ptr just to be able to delete it later
+    if ( convertEncoding )
+    {
+        if ( m_charset.empty() )
+            inputConv = wxConvCurrent;
+        else
+            inputConv =
+            csConv = new wxCSConv(m_charset);
+    }
+    else // no conversion needed
+    {
+        inputConv = NULL;
+    }
 
-    wxMBConv& inputConv = csConv ? *((wxMBConv*)csConv) : *wxConvCurrent;
-
-    wxCSConv *sourceConv = NULL;
-    if ( !msgIdCharset.empty() && (m_charset != msgIdCharset) )
-        sourceConv = new wxCSConv(msgIdCharset);
+    // conversion to apply to msgid strings before looking them up: we only
+    // need it if the msgids are neither in 7 bit ASCII nor in the same
+    // encoding as the catalog
+    wxCSConv *sourceConv = msgIdCharset.empty() || (msgIdCharset == m_charset)
+                            ? NULL
+                            : new wxCSConv(msgIdCharset);
 
 #elif wxUSE_FONTMAP
     wxASSERT_MSG( msgIdCharset == NULL,
@@ -1284,12 +1297,12 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
     {
         const char *data = StringAtOfs(m_pOrigTable, i);
 #if wxUSE_UNICODE
-        wxString msgid(data, inputConv);
-#else
+        wxString msgid(data, *inputConv);
+#else // ASCII
         wxString msgid;
 #if wxUSE_WCHAR_T
-        if ( convertEncoding && sourceConv )
-            msgid = wxString(inputConv.cMB2WC(data), *sourceConv);
+        if ( inputConv && sourceConv )
+            msgid = wxString(inputConv->cMB2WC(data), *sourceConv);
         else
 #endif
             msgid = data;
@@ -1304,10 +1317,10 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
             wxString msgstr;
 #if wxUSE_WCHAR_T
         #if wxUSE_UNICODE
-            msgstr = wxString(data + offset, inputConv);
+            msgstr = wxString(data + offset, *inputConv);
         #else
-            if ( convertEncoding )
-                msgstr = wxString(inputConv.cMB2WC(data + offset), wxConvLocal);
+            if ( inputConv )
+                msgstr = wxString(inputConv->cMB2WC(data + offset), wxConvLocal);
             else
                 msgstr = wxString(data + offset);
         #endif
