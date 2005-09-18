@@ -168,6 +168,12 @@ protected:
     int          m_currentStyle ;
     int          m_currentFill ;
     int          m_autoSetting ; // See comment in dcclient.cpp
+
+    // this is useless and should be removed, kept for now just for backwards
+    // compatibility
+#if wxCHECK_VERSION(2, 7, 0)
+    #error "Remove wxClientDC::m_oldFont"
+#endif
     WXFont       m_oldFont;
 };
 

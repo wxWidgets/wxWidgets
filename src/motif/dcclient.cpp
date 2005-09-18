@@ -199,24 +199,11 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 
     m_backgroundPixel = (int) gcvalues.background;
 
-    // Get the current Font so we can set it back later
-    XGCValues valReturn;
-    XGetGCValues((Display*) m_display, (GC) m_gc, GCFont, &valReturn);
-    m_oldFont = (WXFont) valReturn.font;
-
     SetBackground(wxBrush(m_window->GetBackgroundColour(), wxSOLID));
 }
 
 wxWindowDC::~wxWindowDC()
 {
-    if (m_gc && m_oldFont)
-    {
-        XSetFont ((Display*) m_display, (GC) m_gc, (Font) m_oldFont);
-
-        if (m_window && m_window->GetBackingPixmap())
-            XSetFont ((Display*) m_display,(GC) m_gcBacking, (Font) m_oldFont);
-    }
-
     if (m_gc)
         XFreeGC ((Display*) m_display, (GC) m_gc);
     m_gc = (WXGC) 0;
@@ -1415,13 +1402,6 @@ void wxWindowDC::SetFont( const wxFont &font )
 
     if (!m_font.Ok())
     {
-        if (m_oldFont)
-        {
-            XSetFont ((Display*) m_display, (GC) m_gc, (Font) m_oldFont);
-
-            if (m_window && m_window->GetBackingPixmap())
-                XSetFont ((Display*) m_display,(GC) m_gcBacking, (Font) m_oldFont);
-        }
         return;
     }
 
