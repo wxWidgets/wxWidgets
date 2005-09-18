@@ -801,16 +801,6 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
             event.Skip();
         }
     }
-
-    if ( !IsModal() &&
-         event.IsAllowed() &&
-         ( event.GetEventType() == wxEVT_WIZARD_FINISHED ||
-           event.GetEventType() == wxEVT_WIZARD_CANCEL
-         )
-       )
-    {
-        Destroy();
-    }
 }
 
 // ----------------------------------------------------------------------------
