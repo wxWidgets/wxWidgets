@@ -152,7 +152,7 @@ static const wxChar* gs_encodingDescs[] =
 };
 
 // and the internal names (these are not translated on purpose!)
-static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][7] =
+static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][10] =
 {
     // names from the first column are used under Linux, from the second one
     // under Solaris and IRIX and from the third one -- under AIX
@@ -178,20 +178,20 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][7] =
     { wxT( "KOI8-R" ), wxT( "KOI8-RU" ), NULL },
     { wxT( "KOI8-U" ), NULL },
 
-    { wxT( "WINDOWS-874" ), NULL },
-    { wxT( "WINDOWS-932" ), NULL },
-    { wxT( "WINDOWS-936" ), NULL },
-    { wxT( "WINDOWS-949" ), wxT( "EUC-KR" ), wxT( "eucKR" ), wxT( "euc_kr" ), NULL },
-    { wxT( "WINDOWS-950" ), NULL },
-    { wxT( "WINDOWS-1250" ), NULL },
-    { wxT( "WINDOWS-1251" ), NULL },
-    { wxT( "WINDOWS-1252" ), wxT("IBM-1252"), NULL },
-    { wxT( "WINDOWS-1253" ), NULL },
-    { wxT( "WINDOWS-1254" ), NULL },
-    { wxT( "WINDOWS-1255" ), NULL },
-    { wxT( "WINDOWS-1256" ), NULL },
-    { wxT( "WINDOWS-1257" ), NULL },
-    { wxT( "WINDOWS-437" ), NULL },
+    { wxT( "WINDOWS-874" ), wxT( "CP-874" ), NULL },
+    { wxT( "WINDOWS-932" ), wxT( "CP-932" ), NULL },
+    { wxT( "WINDOWS-936" ), wxT( "CP-936" ), NULL },
+    { wxT( "WINDOWS-949" ), wxT( "CP-949" ), wxT( "EUC-KR" ), wxT( "eucKR" ), wxT( "euc_kr" ), NULL },
+    { wxT( "WINDOWS-950" ), wxT( "CP-950" ), NULL },
+    { wxT( "WINDOWS-1250" ),wxT( "CP-1250" ), NULL },
+    { wxT( "WINDOWS-1251" ),wxT( "CP-1251" ), NULL },
+    { wxT( "WINDOWS-1252" ),wxT( "CP-1252" ), wxT("IBM-1252"), NULL },
+    { wxT( "WINDOWS-1253" ),wxT( "CP-1253" ), NULL },
+    { wxT( "WINDOWS-1254" ),wxT( "CP-1254" ), NULL },
+    { wxT( "WINDOWS-1255" ),wxT( "CP-1255" ), NULL },
+    { wxT( "WINDOWS-1256" ),wxT( "CP-1256" ), NULL },
+    { wxT( "WINDOWS-1257" ),wxT( "CP-1257" ), NULL },
+    { wxT( "WINDOWS-437" ), wxT( "CP-437" ), NULL },
 
     { wxT( "UTF-7" ), NULL },
     { wxT( "UTF-8" ), NULL },
@@ -204,14 +204,10 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][7] =
 
     { wxT( "EUC-JP" ), wxT( "eucJP" ), wxT( "euc_jp" ), wxT( "IBM-eucJP" ), NULL },
 
-    { wxT( "US-ASCII" ), wxT( "ASCII" ), wxT("ANSI_X3.4-1968"),
-#ifdef __SOLARIS__
-      wxT("646"),
-#endif
-#ifdef __HPUX__
-      wxT("roman8"),
-#endif
-      wxT( "" ), NULL },
+    // 646 is for Solaris, roman8 -- for HP-UX
+    { wxT( "US-ASCII" ), wxT( "ASCII" ), wxT("C"), wxT("POSIX"), wxT("ANSI_X3.4-1968"),
+      wxT("646"), wxT("roman8"), wxT( "" ), NULL },
+
     { wxT( "BIG5" ), NULL },
     { wxT( "shift-jis" ), wxT( "shift_jis" ), wxT( "sjis" ), NULL },
     { wxT( "GB2312" ), NULL },
@@ -714,11 +710,6 @@ wxFontEncoding wxFontMapperBase::GetEncodingFromName(const wxString& name)
             if ( name.CmpNoCase(*encName) == 0 )
                 return gs_encodings[i];
         }
-    }
-
-    if ( name == _("default") )
-    {
-        return wxFONTENCODING_DEFAULT;
     }
 
     return wxFONTENCODING_MAX;
