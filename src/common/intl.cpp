@@ -2267,35 +2267,9 @@ wxString wxLocale::GetSystemEncodingName()
 
     if ( alang )
     {
-        // 7 bit ASCII encoding has several alternative names which we should
-        // recognize to avoid warnings about unrecognized encoding on each
-        // program startup
-
-        // nl_langinfo() under Solaris returns 646 by default which stands for
-        // ISO-646, i.e. 7 bit ASCII
-        //
-        // and recent glibc call it ANSI_X3.4-1968...
-        //
-        // HP-UX uses HP-Roman8 cset which is not the same as ASCII (see RFC
-        // 1345 for its definition) but must be recognized as otherwise HP
-        // users get a warning about it on each program startup, so handle it
-        // here -- but it would be obviously better to add real supprot to it,
-        // of course!
-        if ( strcmp(alang, "646") == 0
-                || strcmp(alang, "ANSI_X3.4-1968") == 0
-#ifdef __HPUX__
-                    || strcmp(alang, "roman8") == 0
-#endif // __HPUX__
-            )
-        {
-            encname = _T("US-ASCII");
-        }
-        else
-        {
-            encname = wxString::FromAscii( alang );
-        }
+        encname = wxString::FromAscii( alang );
     }
-    else
+    else // nl_langinfo() failed
 #endif // HAVE_LANGINFO_H
     {
         // if we can't get at the character set directly, try to see if it's in
@@ -2371,16 +2345,15 @@ wxFontEncoding wxLocale::GetSystemEncoding()
 #endif
     return wxMacGetFontEncFromSystemEnc( encoding ) ;
 #elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
-    wxString encname = GetSystemEncodingName();
+    const wxString encname = GetSystemEncodingName();
     if ( !encname.empty() )
     {
-        wxFontEncoding enc = (wxFontMapperBase::Get())->
-            CharsetToEncoding(encname, false /* not interactive */);
+        wxFontEncoding enc = wxFontMapperBase::GetEncodingFromName(encname);
 
         // on some modern Linux systems (RedHat 8) the default system locale
         // is UTF8 -- but it isn't supported by wxGTK in ANSI build at all so
         // don't even try to use it in this case
-#if !wxUSE_UNICODE
+#if !wxUSE_UNICODE && defined(__WXGTK__)
         if ( enc == wxFONTENCODING_UTF8 )
         {
             // the most similar supported encoding...
@@ -2388,13 +2361,11 @@ wxFontEncoding wxLocale::GetSystemEncoding()
         }
 #endif // !wxUSE_UNICODE
 
-        // this should probably be considered as a bug in CharsetToEncoding():
-        // it shouldn't return wxFONTENCODING_DEFAULT at all - but it does it
-        // for US-ASCII charset
-        //
-        // we, OTOH, definitely shouldn't return it as it doesn't make sense at
-        // all (which encoding is it?)
-        if ( enc != wxFONTENCODING_DEFAULT )
+        // GetEncodingFromName() returns wxFONTENCODING_DEFAULT for C locale
+        // (a.k.a. US-ASCII) which is arguably a bug but keep it like this for
+        // backwards compatibility and just take care to not return
+        // wxFONTENCODING_DEFAULT from here as this surely doesn't make sense
+        if ( enc != wxFONTENCODING_MAX && enc != wxFONTENCODING_DEFAULT )
         {
             return enc;
         }
