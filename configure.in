@@ -2091,9 +2091,6 @@ SEARCH_INCLUDE="\
     /usr/Motif-2.1/include    \
     /usr/Motif-1.2/include    \
     /usr/include/Motif1.2     \
-    /opt/xpm/include/X11      \
-    /opt/GBxpm/include/       \
-    /opt/GBxpm/X11/include/   \
                               \
     /usr/dt/include           \
     /usr/openwin/include      \
@@ -2122,33 +2119,8 @@ SEARCH_INCLUDE="\
     /usr/local/X11/include    \
     /usr/local/include/X11    \
                               \
-    /usr/X386/include         \
-    /usr/x386/include         \
     /usr/XFree86/include/X11  \
-                              \
     /usr/pkg/include          \
-                              \
-    X:/XFree86/include        \
-    X:/XFree86/include/X11    \
-                              \
-    /usr/include/gtk          \
-    /usr/local/include/gtk    \
-    /usr/include/glib         \
-    /usr/local/include/glib   \
-                              \
-    /usr/include/qt           \
-    /usr/local/include/qt     \
-                              \
-    /usr/local/arm/3.3.2/include     \
-                              \
-    /usr/include/windows      \
-    /usr/include/wine         \
-    /usr/local/include/wine   \
-                              \
-    /usr/unsupported/include  \
-    /usr/athena/include       \
-    /usr/local/x11r5/include  \
-    /usr/lpp/Xamples/include  \
                               \
     /usr/openwin/share/include"
 
