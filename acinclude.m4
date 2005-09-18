@@ -60,21 +60,30 @@ AC_DEFUN([WX_PATH_FIND_LIBRARIES_IN_PATH],
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl call WX_PATH_FIND_LIBRARIES(search path, header name), sets ac_find_libraries
+dnl return list of standard library paths
+dnl ---------------------------------------------------------------------------
+dnl return all default locations:
+dnl   - /usr/lib: standard
+dnl   - /usr/lib32: n32 ABI on IRIX
+dnl   - /usr/lib64: n64 ABI on IRIX
+dnl   - /usr/lib/64: 64 bit ABI on Solaris and Linux x86-64
+dnl
+dnl NB: if any of directories in the list is not a subdir of /usr, code setting
+dnl     wx_cv_std_libpath needs to be updated
+AC_DEFUN([WX_STD_LIBPATH], [/usr/lib /usr/lib32 /usr/lib/64 /usr/lib64])
+
+dnl ---------------------------------------------------------------------------
+dnl call WX_PATH_FIND_LIBRARIES(search path, lib name), sets ac_find_libraries
 dnl to the full name of the file that was found or leaves it empty if not found
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_PATH_FIND_LIBRARIES],
 [
-  dnl check in default locations first:
-  dnl   - /usr/lib: standard
-  dnl   - /usr/lib32: n32 ABI on IRIX
-  dnl   - /usr/lib64: n64 ABI on IRIX
-  dnl   - /usr/lib/64: 64 bit ABI on Solaris and Linux x86-64
-  WX_PATH_FIND_LIBRARIES_IN_PATH([/usr/lib /usr/lib32 /usr/lib/64 /usr/lib64], $2)
-  if test "$ac_find_libraries" != "" ; then
-    ac_find_libraries="default location"
-  else
-    WX_PATH_FIND_LIBRARIES_IN_PATH($1, $2)
+  WX_PATH_FIND_LIBRARIES_IN_PATH($1, $2)
+  if test "x$ac_find_libraries" = "x" ; then
+    WX_PATH_FIND_LIBRARIES_IN_PATH(WX_STD_LIBPATH(), $2)
+    if test "x$ac_find_libraries" != "x" ; then
+      ac_find_libraries="default location"
+    fi
   fi
 ])
 

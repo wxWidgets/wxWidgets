@@ -2152,9 +2152,32 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/share/include"
 
-dnl add 64 bit X11 libs for Linux on AMD, they must come before the usual
-dnl locations or 64 bit compilation failed
-SEARCH_LIB="/usr/X11R6/lib64 `echo "$SEARCH_INCLUDE" | sed s/include/lib/g`"
+dnl try to find out the standard lib locations
+AC_CACHE_CHECK([for libraries directory],
+    wx_cv_std_libpath,
+    [
+        for d in WX_STD_LIBPATH(); do
+            for e in a so sl dylib dll.a; do
+                libc="$d/libc.$e"
+                if test -f $libc; then
+                    save_LIBS="$LIBS"
+                    LIBS="$libc"
+                    AC_LINK_IFELSE([int main() { return 0; }],
+                        wx_cv_std_libpath=`echo $d | sed s@/usr/@@`)
+                    LIBS="$save_LIBS"
+                    if test "x$wx_cv_std_libpath" != "x"; then
+                        break 2
+                    fi
+                fi
+            done
+        done
+        if test "x$wx_cv_std_libpath" = "x"; then
+            wx_cv_std_libpath="lib"
+        fi
+    ]
+)
+
+SEARCH_LIB=`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g`
 
 dnl Cross compiling with gcc?
 if test "$build" != "$host" -a "$GCC" = yes; then
@@ -3082,41 +3105,41 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CFLAGS=$save_CFLAGS
         fi
 
-        if test "$COMPILED_X_PROGRAM" = 0; then
-            AC_MSG_CHECKING(for Motif/Lesstif library)
-            WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
-            if test "$ac_find_libraries" != "" ; then
-                AC_MSG_RESULT(found in $ac_find_libraries)
 
-                WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
-            else
-                dnl it might happen that we found headers in one of the
-                dnl standard paths but the libs are elsewhere - we do need to
-                dnl try to compile a sample program then here
-                save_CFLAGS=$CFLAGS
-                CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+        AC_MSG_CHECKING(for Motif/Lesstif library)
+        WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
 
-                AC_TRY_COMPILE(
-                    [
-                        #include <Xm/Xm.h>
-                    ],
-                    [
-                        int version;
-                        version = xmUseVersion;
-                    ],
-                    [
-                        AC_MSG_RESULT(found in default search path)
-                        COMPILED_X_PROGRAM=1
-                    ],
-                    [
+        if test "x$ac_find_libraries" != "x" ; then
+            AC_MSG_RESULT(found in $ac_find_libraries)
+
+            WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+        else
+            dnl it might happen that we found headers in one of the standard
+            dnl paths but the libs are elsewhere but still in default (linker)
+            dnl path -- try to compile a test program to check for this
+            save_CFLAGS=$CFLAGS
+            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
+            AC_TRY_LINK(
+                [
+                    #include <Xm/Xm.h>
+                ],
+                [
+                    int version;
+                    version = xmUseVersion;
+                ],
+                [
+                    AC_MSG_RESULT(found in default search path)
+                    COMPILED_X_PROGRAM=1
+                ],
+                [
                         AC_MSG_RESULT(no)
                         AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
                     ]
                 )
 
-                CFLAGS=$save_CFLAGS
-            fi
+            CFLAGS=$save_CFLAGS
         fi
 
         AC_MSG_CHECKING([if we need -lXp and/or -lSM -lICE])
