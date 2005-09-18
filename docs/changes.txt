@@ -65,6 +65,10 @@ wxGTK:
 
 wxMac:
 
+- First implementation of native HIToolbar support
+- Added textCntl context menu (ported from wxMSW)
+- More CoreGraphics implementation improvements
+- Various textCntl bug fixes
 - Automatic menu management improved.
 - Fixed crash when wxRadioButton is deleted from a group of radio buttons,
   due to dangling cycle pointers.
