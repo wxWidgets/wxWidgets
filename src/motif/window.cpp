@@ -2159,12 +2159,10 @@ void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event,
     {
         case Expose:
         {
-            Display *display = (Display *) win -> GetXDisplay();
-
             win->AddUpdateRect(event->xexpose.x, event->xexpose.y,
                                event->xexpose.width, event->xexpose.height);
 
-            if (event -> xexpose.count == 0)
+            if ( event->xexpose.count == 0 )
             {
                 win->DoPaint();
             }
