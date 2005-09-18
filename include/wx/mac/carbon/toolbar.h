@@ -55,6 +55,7 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
     virtual bool Show(bool show = true);
     virtual bool IsShown() const;
     virtual void DoGetSize(int *width, int *height) const;
+    virtual wxSize DoGetBestSize() const ;
     virtual bool Realize();
 
     virtual void SetToolBitmapSize(const wxSize& size);
