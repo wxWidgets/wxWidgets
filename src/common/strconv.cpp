@@ -2599,7 +2599,7 @@ wxMBConv *wxCSConv::DoCreate() const
                 delete conv;
             }
 
-            gs_nameCache[encoding] = ""; // cache the failure
+            gs_nameCache[encoding] = _T(""); // cache the failure
         }
 #endif // wxUSE_FONTMAP
     }
