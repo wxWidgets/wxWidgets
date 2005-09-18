@@ -649,6 +649,13 @@ void wxToolBar::DoGetSize( int *width, int *height ) const
         wxToolBarBase::DoGetSize( width, height );
 }
 
+wxSize wxToolBar::DoGetBestSize() const
+{
+    int width , height ;
+    DoGetSize( &width , &height ) ;
+    return wxSize( width , height ) ;
+}
+
 void wxToolBar::SetWindowStyleFlag( long style )
 {
     wxToolBarBase::SetWindowStyleFlag( style );
