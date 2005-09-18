@@ -3165,41 +3165,44 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
-        AC_MSG_CHECKING([for Motif 2])
-        AC_TRY_COMPILE([
-                        #include <Xm/Xm.h>
-                       ],
-                       [
-                        #if XmVersion < 2000
-                        Not Motif 2
-                        #endif
-                       ],
-                       [
-                        AC_DEFINE(__WXMOTIF20__,1)
-                        AC_MSG_RESULT([found])
-                       ],
-                       [
-                        AC_DEFINE(__WXMOTIF20__,0)
-                        AC_MSG_RESULT([not found])
-                       ])
 
-        AC_MSG_CHECKING([whether Motif is Lesstif])
-        AC_TRY_COMPILE([
-                        #include <Xm/Xm.h>
-                       ],
-                       [
-                        #if !defined(LesstifVersion) || LesstifVersion <= 0
-                        Not Lesstif
-                        #endif
-                       ],
-                       [
-                        AC_DEFINE(__WXLESSTIF__,1)
-                        AC_MSG_RESULT([yes])
-                       ],
-                       [
-                        AC_DEFINE(__WXLESSTIF__,0)
-                        AC_MSG_RESULT([no])
-                       ])
+        AC_CACHE_CHECK([for Motif 2],
+            wx_cv_lib_motif2,
+            AC_TRY_COMPILE([
+                            #include <Xm/Xm.h>
+                           ],
+                           [
+                            #if XmVersion < 2000
+                            Not Motif 2
+                            #endif
+                           ],
+                           wx_cv_lib_motif2="yes",
+                           wx_cv_lib_motif2="no"))
+        if test "$wx_cv_lib_motif2" = "yes"; then
+            AC_DEFINE(__WXMOTIF20__,1)
+        else
+            AC_DEFINE(__WXMOTIF20__,0)
+        fi
+
+        AC_CACHE_CHECK([whether Motif is Lesstif],
+            wx_cv_lib_lesstif,
+            AC_TRY_COMPILE([
+                            #include <Xm/Xm.h>
+                           ],
+                           [
+                            #if !defined(LesstifVersion) || LesstifVersion <= 0
+                            Not Lesstif
+                            #endif
+                           ],
+                           wx_cv_lib_lesstif="yes",
+                           wx_cv_lib_lesstif="no")
+        )
+        if test "$wx_cv_lib_lesstif" = "yes"; then
+            AC_DEFINE(__WXLESSTIF__,1)
+        else
+            AC_DEFINE(__WXLESSTIF__,0)
+        fi
+
         CFLAGS=$save_CFLAGS
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
