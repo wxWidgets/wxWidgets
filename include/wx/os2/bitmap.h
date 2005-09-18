@@ -162,6 +162,9 @@ public:
     virtual bool LoadFile( int             nId
                           ,long            lType = wxBITMAP_TYPE_BMP_RESOURCE
                          );
+    virtual bool LoadFile( const wxString& rName
+                          ,long            lType = wxBITMAP_TYPE_XPM
+                         );
     virtual bool SaveFile( const wxString&  rName
                           ,int              lType
                           ,const wxPalette* pCmap = NULL
@@ -308,6 +311,12 @@ public:
                        );
     virtual bool LoadFile( wxBitmap*       pBitmap
                           ,int             nId
+                          ,long            lFlags
+                          ,int             nDesiredWidth
+                          ,int             nDesiredHeight
+                         );
+    virtual bool LoadFile( wxBitmap*       pBitmap
+                          ,const wxString& rName
                           ,long            lFlags
                           ,int             nDesiredWidth
                           ,int             nDesiredHeight

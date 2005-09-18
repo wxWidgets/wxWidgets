@@ -407,6 +407,34 @@ bool wxBitmap::CreateFromXpm(
 #endif
 } // end of wxBitmap::CreateFromXpm
 
+bool wxBitmap::LoadFile(const wxString& filename, long type)
+{
+    UnRef();
+
+    wxBitmapHandler *handler = wxDynamicCast(FindHandler(type), wxBitmapHandler);
+
+    if ( handler )
+    {
+        m_refData = new wxBitmapRefData;
+
+        return handler->LoadFile(this, filename, type, -1, -1);
+    }
+#if wxUSE_IMAGE
+    else // no bitmap handler found
+    {
+        wxImage image;
+        if ( image.LoadFile( filename, type ) && image.Ok() )
+        {
+            *this = wxBitmap(image);
+
+            return true;
+        }
+    }
+#endif // wxUSE_IMAGE
+
+    return false;
+}
+
 bool wxBitmap::LoadFile(
   int                               nId
 , long                              lType
@@ -1497,6 +1525,17 @@ bool wxBitmapHandler::Create(
 bool wxBitmapHandler::LoadFile(
   wxBitmap*                         WXUNUSED(pBitmap)
 , int                               WXUNUSED(nId)
+, long                              WXUNUSED(lType)
+, int                               WXUNUSED(nDesiredWidth)
+, int                               WXUNUSED(nDesiredHeight)
+)
+{
+    return false;
+}
+
+bool wxBitmapHandler::LoadFile(
+  wxBitmap*                         WXUNUSED(pBitmap)
+, const wxString&                   WXUNUSED(rName)
 , long                              WXUNUSED(lType)
 , int                               WXUNUSED(nDesiredWidth)
 , int                               WXUNUSED(nDesiredHeight)
