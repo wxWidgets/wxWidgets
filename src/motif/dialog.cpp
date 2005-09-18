@@ -295,6 +295,14 @@ bool wxDialog::Show( bool show )
 
     if (show)
     {
+        // this usually will result in TransferDataToWindow() being called
+        // which will change the controls values so do it before showing as
+        // otherwise we could have some flicker
+        InitDialog();
+    }
+
+    if (show)
+    {
         if (!wxUSE_INVISIBLE_RESIZE)
             XtMapWidget(XtParent((Widget) m_mainWidget));
         else
