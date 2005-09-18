@@ -471,7 +471,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 
     size_t len = wx_truncate_cast(size_t, lenOrig);
     wxUint8 *data = new wxUint8[len];
-    if (fileWave.Read(data, len) != len)
+    if ( fileWave.Read(data, len) != lenOrig )
     {
         wxLogError(_("Couldn't load sound data from '%s'."), fileName.c_str());
         return false;
