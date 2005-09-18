@@ -15,16 +15,16 @@ All:
 - Added wxImage::RotateHue() and RGB <-> HSV conversions (John Anderson).
 - Fixed compilation with IBM xlC compiler.
 - wxABI_VERSION, see 'Backward Compatibility' topic overview in the manual.
-- Added wxLongLong::ToDouble()
-- Added wxDateTime::[Make]FromTimezone(), fixed several TZ-related bugs
-- Fixed bug in wxStreamBuffer::Read(wxStreamBuffer *) (Paul Cornett)
+- Added wxLongLong::ToDouble().
+- Added wxDateTime::[Make]FromTimezone(), fixed several TZ-related bugs.
+- Fixed bug in wxStreamBuffer::Read(wxStreamBuffer *) (Paul Cornett).
 - Fixed wxListbook and wxChoicebook internal layout.
 
 All (GUI):
 
 - Added wxStaticText::Wrap()
 - wxChoice and wxComboBox::GetSelection() now returns completed selection,
-  added a new GetCurrentSelection() function having the old behaviour
+  added a new GetCurrentSelection() function having the old behaviour.
 - Added wxXmlResource::Unload().
 - Possibility of modeless wxWizard dialog (with presentation in sample).
 - Fixed a rare crash due to malformed HTML in wxHTML (Xavier Nodet).
@@ -47,9 +47,10 @@ wxMSW:
 - Fixed asynchronous playback of large sound files in wxSound.
 - Added wxDynamicLibrary::GetSymbolAorW().
 - Fixed default size of wxStaticText controls with border being too small.
-- Fixed bugs with wxStatusBar positioning (with or withour sizers) (Jamie Gadd)
-- Mouse move events are now generated for all static controls (Jamie Gadd)
-- Made wxJoystick::GetProductName() more useful (John Ratliff)
+- Fixed bugs with wxStatusBar positioning (with or withour sizers) (Jamie Gadd).
+- Mouse move events are now generated for all static controls (Jamie Gadd).
+- Fixed nested static box display and splitter sash on some themes (Jamie Gadd).
+- Made wxJoystick::GetProductName() more useful (John Ratliff).
 - Native spline drawing implementation (Wlodzimierz ABX Skiba).
 
 wxGTK:
@@ -62,13 +63,15 @@ wxGTK:
 - Added support for left, centre and right text alignment attributes under
   GTK+2 multi-line text controls (Mart Raudsepp).
 - Various wxFont improvements for GTK 2.x builds (Mart Raudsepp).
+- Changed order of child deletion in window destructor and
+  removed focus handlers to avoid spurious events (David Surovell).
 
 wxMac:
 
-- First implementation of native HIToolbar support
-- Added textCntl context menu (ported from wxMSW)
-- More CoreGraphics implementation improvements
-- Various textCntl bug fixes
+- First implementation of native HIToolbar support.
+- Added text control context menu (ported from wxMSW).
+- More CoreGraphics implementation improvements.
+- Various text control bug fixes.
 - Automatic menu management improved.
 - Fixed crash when wxRadioButton is deleted from a group of radio buttons,
   due to dangling cycle pointers.
