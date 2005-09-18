@@ -2509,6 +2509,15 @@ void wxCSConv::SetName(const wxChar *charset)
     }
 }
 
+#if wxUSE_FONTMAP
+#include "wx/hashmap.h"
+
+WX_DECLARE_HASH_MAP( wxFontEncoding, wxString, wxIntegerHash, wxIntegerEqual,
+                     wxEncodingNameCache );
+
+static wxEncodingNameCache gs_nameCache;
+#endif
+
 wxMBConv *wxCSConv::DoCreate() const
 {
     // check for the special case of ASCII or ISO8859-1 charset: as we have
@@ -2535,17 +2544,53 @@ wxMBConv *wxCSConv::DoCreate() const
 #endif // !wxUSE_FONTMAP
     {
         wxString name(m_name);
+        wxFontEncoding encoding(m_encoding);
+
+        if ( !name.empty() )
+        {
+            wxMBConv_iconv *conv = new wxMBConv_iconv(name);
+            if ( conv->IsOk() )
+                return conv;
+
+            delete conv;
 
 #if wxUSE_FONTMAP
-        if ( name.empty() )
-            name = wxFontMapperBase::GetEncodingName(m_encoding);
+            encoding =
+                wxFontMapperBase::Get()->CharsetToEncoding(name, false);
 #endif // wxUSE_FONTMAP
+        }
+#if wxUSE_FONTMAP
+        {
+            const wxEncodingNameCache::iterator it = gs_nameCache.find(encoding);
+            if ( it != gs_nameCache.end() )
+            {
+                if ( it->second.empty() )
+                    return NULL;
 
-        wxMBConv_iconv *conv = new wxMBConv_iconv(name);
-        if ( conv->IsOk() )
-            return conv;
+                wxMBConv_iconv *conv = new wxMBConv_iconv(it->second);
+                if ( conv->IsOk() )
+                    return conv;
 
-        delete conv;
+                delete conv;
+            }
+
+            const wxChar** names = wxFontMapperBase::GetAllEncodingNames(encoding);
+
+            for ( ; *names; ++names )
+            {
+                wxMBConv_iconv *conv = new wxMBConv_iconv(*names);
+                if ( conv->IsOk() )
+                {
+                    gs_nameCache[encoding] = *names;
+                    return conv;
+                }
+
+                delete conv;
+            }
+
+            gs_nameCache[encoding] = ""; // cache the failure
+        }
+#endif // wxUSE_FONTMAP
     }
 #endif // HAVE_ICONV
 

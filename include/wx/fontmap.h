@@ -90,9 +90,12 @@ public:
     // get the n-th supported encoding
     static wxFontEncoding GetEncoding(size_t n);
 
-    // return internal string identifier for the encoding (see also
-    // GetEncodingDescription())
+    // return canonical name of this encoding (this is a short string,
+    // GetEncodingDescription() returns a longer one)
     static wxString GetEncodingName(wxFontEncoding encoding);
+
+    // return a list of all names of this encoding (see GetEncodingName)
+    static const wxChar** GetAllEncodingNames(wxFontEncoding encoding);
 
     // return user-readable string describing the given encoding
     //

@@ -96,6 +96,10 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_UTF32BE,
     wxFONTENCODING_UTF32LE,
     wxFONTENCODING_EUC_JP,
+    wxFONTENCODING_DEFAULT,
+    wxFONTENCODING_BIG5,
+    wxFONTENCODING_SHIFT_JIS,
+    wxFONTENCODING_GB2312,
 };
 
 // the descriptions for them
@@ -141,56 +145,74 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Unicode 32 bit Big Endian (UTF-32BE)" ),
     wxTRANSLATE( "Unicode 32 bit Little Endian (UTF-32LE)" ),
     wxTRANSLATE( "Extended Unix Codepage for Japanese (EUC-JP)" ),
+    wxTRANSLATE( "US-ASCII" ),
+    wxTRANSLATE( "BIG5" ),
+    wxTRANSLATE( "SHIFT-JIS" ),
+    wxTRANSLATE( "GB-2312" ),
 };
 
 // and the internal names (these are not translated on purpose!)
-static const wxChar* gs_encodingNames[] =
+static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][7] =
 {
-    wxT( "iso-8859-1" ),
-    wxT( "iso-8859-2" ),
-    wxT( "iso-8859-3" ),
-    wxT( "iso-8859-4" ),
-    wxT( "iso-8859-5" ),
-    wxT( "iso-8859-6" ),
-    wxT( "iso-8859-7" ),
-    wxT( "iso-8859-8" ),
-    wxT( "iso-8859-9" ),
-    wxT( "iso-8859-10" ),
-    wxT( "iso-8859-11" ),
-    wxT( "iso-8859-12" ),
-    wxT( "iso-8859-13" ),
-    wxT( "iso-8859-14" ),
-    wxT( "iso-8859-15" ),
-    wxT( "koi8-r" ),
-    wxT( "koi8-u" ),
-    wxT( "windows-874" ),
-    wxT( "windows-932" ),
-    wxT( "windows-936" ),
-    wxT( "windows-949" ),
-    wxT( "windows-950" ),
-    wxT( "windows-1250" ),
-    wxT( "windows-1251" ),
-    wxT( "windows-1252" ),
-    wxT( "windows-1253" ),
-    wxT( "windows-1254" ),
-    wxT( "windows-1255" ),
-    wxT( "windows-1256" ),
-    wxT( "windows-1257" ),
-    wxT( "windows-437" ),
-    wxT( "utf-7" ),
-    wxT( "utf-8" ),
-    wxT( "utf-16" ),
-    wxT( "utf-16be" ),
-    wxT( "utf-16le" ),
-    wxT( "utf-32" ),
-    wxT( "utf-32be" ),
-    wxT( "utf-32le" ),
-    wxT( "euc-jp" ),
+    { wxT( "iso-8859-1" ), NULL },
+    { wxT( "iso-8859-2" ), NULL },
+    { wxT( "iso-8859-3" ), NULL },
+    { wxT( "iso-8859-4" ), NULL },
+    { wxT( "iso-8859-5" ), NULL },
+    { wxT( "iso-8859-6" ), NULL },
+    { wxT( "iso-8859-7" ), NULL },
+    { wxT( "iso-8859-8" ), NULL },
+    { wxT( "iso-8859-9" ), NULL },
+    { wxT( "iso-8859-10" ), NULL },
+    { wxT( "iso-8859-11" ), NULL },
+    { wxT( "iso-8859-12" ), NULL },
+    { wxT( "iso-8859-13" ), NULL },
+    { wxT( "iso-8859-14" ), NULL },
+    { wxT( "iso-8859-15" ), NULL },
+    // although koi8-ru is not strictly speaking the same as koi8-r,
+    // they are similar enough to make mapping it to koi8 better than
+    // not recognizing it at all
+    { wxT( "koi8-r" ), wxT( "koi8-ru" ), NULL },
+    { wxT( "koi8-u" ), NULL },
+    { wxT( "windows-874" ), NULL },
+    { wxT( "windows-932" ), NULL },
+    { wxT( "windows-936" ), NULL },
+    { wxT( "windows-949" ), wxT( "euc-kr" ),
+      wxT( "euckr" ), wxT( "euc_kr" ), NULL },
+    { wxT( "windows-950" ), NULL },
+    { wxT( "windows-1250" ), NULL },
+    { wxT( "windows-1251" ), NULL },
+    { wxT( "windows-1252" ), NULL },
+    { wxT( "windows-1253" ), NULL },
+    { wxT( "windows-1254" ), NULL },
+    { wxT( "windows-1255" ), NULL },
+    { wxT( "windows-1256" ), NULL },
+    { wxT( "windows-1257" ), NULL },
+    { wxT( "windows-437" ), NULL },
+    { wxT( "UTF-7" ), NULL },
+    { wxT( "UTF-8" ), NULL },
+    { wxT( "UTF-16" ), NULL },
+    { wxT( "UTF-16be" ), NULL },
+    { wxT( "UTF-16le" ), NULL },
+    { wxT( "UTF-32" ), wxT( "UCS-4" ), NULL },
+    { wxT( "UTF-32be" ), wxT( "UCS-4be" ), NULL },
+    { wxT( "UTF-32le" ), wxT( "UCS-4le" ), NULL },
+    { wxT( "euc-jp" ), wxT( "eucJP" ), wxT( "euc_jp" ), wxT( "IBM-eucJP" ), NULL },
+    { wxT( "us-ascii" ), wxT( "ascii" ), wxT("ANSI_X3.4-1968"),
+#ifdef __SOLARIS__
+      wxT("646"),
+#endif
+#ifdef __HPUX__
+      wxT("roman8"),
+#endif
+      wxT( "" ), NULL },
+    { wxT( "big5" ), NULL },
+    { wxT( "shift-jis" ), wxT( "shift_jis" ), wxT( "sjis" ), NULL },
+    { wxT( "gb2312" ), NULL },
 };
 
-wxCOMPILE_TIME_ASSERT( WXSIZEOF(gs_encodingDescs) == WXSIZEOF(gs_encodings) &&
-                       WXSIZEOF(gs_encodingNames) == WXSIZEOF(gs_encodings),
-                       EncodingsArraysNotInSync );
+wxCOMPILE_TIME_ASSERT( WXSIZEOF(gs_encodingDescs) == WXSIZEOF(gs_encodings), EncodingsArraysNotInSync );
+wxCOMPILE_TIME_ASSERT( WXSIZEOF(gs_encodingNames) == WXSIZEOF(gs_encodings), EncodingsArraysNotInSync );
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -468,82 +490,18 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
             }
         }
 
+        for ( size_t i = 0; i < WXSIZEOF(gs_encodingNames); ++i )
+        {
+            for ( const wxChar** encName = gs_encodingNames[i]; *encName; ++encName )
+            {
+                if ( cs.CmpNoCase(*encName) == 0 )
+                    return gs_encodings[i];
+            }
+        }
+
         cs.MakeUpper();
 
-        if ( cs.empty() || cs == _T("US-ASCII") )
-        {
-            encoding = wxFONTENCODING_DEFAULT;
-        }
-        else if ( cs == wxT("UTF-7") )
-        {
-            encoding = wxFONTENCODING_UTF7;
-        }
-        else if ( cs == wxT("UTF-8") )
-        {
-            encoding = wxFONTENCODING_UTF8;
-        }
-        else if ( cs == wxT("UTF-16") )
-        {
-            encoding = wxFONTENCODING_UTF16;
-        }
-        else if ( cs == wxT("UTF-16BE") )
-        {
-            encoding = wxFONTENCODING_UTF16BE;
-        }
-        else if ( cs == wxT("UTF-16LE") )
-        {
-            encoding = wxFONTENCODING_UTF16LE;
-        }
-        else if ( cs == wxT("UTF-32") || cs == wxT("UCS-4") )
-        {
-            encoding = wxFONTENCODING_UTF32;
-        }
-        else if ( cs == wxT("UTF-32BE") || cs == wxT("UCS-4BE") )
-        {
-            encoding = wxFONTENCODING_UTF32BE;
-        }
-        else if ( cs == wxT("UTF-32LE") || cs == wxT("UCS-4LE") )
-        {
-            encoding = wxFONTENCODING_UTF32LE;
-        }
-        else if ( cs == wxT("GB2312") )
-        {
-            encoding = wxFONTENCODING_GB2312;
-        }
-        else if ( cs == wxT("BIG5") )
-        {
-            encoding = wxFONTENCODING_BIG5;
-        }
-        else if ( cs == wxT("SJIS") ||
-                  cs == wxT("SHIFT_JIS") ||
-                  cs == wxT("SHIFT-JIS") )
-        {
-            encoding = wxFONTENCODING_SHIFT_JIS;
-        }
-        else if ( cs == wxT("EUC-JP") ||
-                  cs == wxT("EUC_JP") ||
-                  cs == wxT("EUCJP") )
-        {
-            encoding = wxFONTENCODING_EUC_JP;
-        }
-        else if ( cs == wxT("EUC-KR") ||
-                  cs == wxT("EUC_KR") )
-        {
-            encoding = wxFONTENCODING_CP949;
-        }
-        else if ( cs == wxT("KOI8-R") ||
-                  cs == wxT("KOI8-RU") )
-        {
-            // although koi8-ru is not strictly speaking the same as koi8-r,
-            // they are similar enough to make mapping it to koi8 better than
-            // not recognizing it at all
-            encoding = wxFONTENCODING_KOI8;
-        }
-        else if ( cs == wxT("KOI8-U") )
-        {
-            encoding = wxFONTENCODING_KOI8_U;
-        }
-        else if ( cs.Left(3) == wxT("ISO") )
+        if ( cs.Left(3) == wxT("ISO") )
         {
             // the dash is optional (or, to be exact, it is not, but
             // several brokenmails "forget" it)
@@ -712,7 +670,7 @@ wxString wxFontMapperBase::GetEncodingName(wxFontEncoding encoding)
     {
         if ( gs_encodings[i] == encoding )
         {
-            return gs_encodingNames[i];
+            return gs_encodingNames[i][0];
         }
     }
 
@@ -723,15 +681,32 @@ wxString wxFontMapperBase::GetEncodingName(wxFontEncoding encoding)
 }
 
 /* static */
+const wxChar** wxFontMapperBase::GetAllEncodingNames(wxFontEncoding encoding)
+{
+    static const wxChar* dummy[] = { NULL };
+
+    for ( size_t i = 0; i < WXSIZEOF(gs_encodingNames); i++ )
+    {
+        if ( gs_encodings[i] == encoding )
+        {
+            return gs_encodingNames[i];
+        }
+    }
+
+    return dummy;
+}
+
+/* static */
 wxFontEncoding wxFontMapperBase::GetEncodingFromName(const wxString& name)
 {
     const size_t count = WXSIZEOF(gs_encodingNames);
 
     for ( size_t i = 0; i < count; i++ )
     {
-        if ( gs_encodingNames[i] == name )
+        for ( const wxChar** encName = gs_encodingNames[i]; *encName; ++encName )
         {
-            return gs_encodings[i];
+            if ( name == *encName )
+                return gs_encodings[i];
         }
     }
 
