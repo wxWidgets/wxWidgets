@@ -107,6 +107,8 @@ static const size_t LEN_LANG = 2;
 static const size_t LEN_SUBLANG = 2;
 static const size_t LEN_FULL = LEN_LANG + 1 + LEN_SUBLANG; // 1 for '_'
 
+#define TRACE_I18N _T("i18n")
+
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
@@ -1076,13 +1078,24 @@ static wxString GetFullSearchPath(const wxChar *lang)
 bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
                             wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
 {
-  /*
-     We need to handle locales like  de_AT.iso-8859-1
-     For this we first chop off the .CHARSET specifier and ignore it.
-     FIXME: UNICODE SUPPORT: must use CHARSET specifier!
-  */
+  wxString searchPath;
 
-  wxString searchPath = GetFullSearchPath(szDirPrefix);
+#if wxUSE_FONTMAP
+  // first look for the catalog for this language and the current locale:
+  // notice that we don't use the system name for the locale as this would
+  // force us to install catalogs in different locations depending on the
+  // system but always use the canonical name
+  wxFontEncoding encSys = wxLocale::GetSystemEncoding();
+  if ( encSys != wxFONTENCODING_SYSTEM )
+  {
+    wxString fullname(szDirPrefix);
+    fullname << _T('.') << wxFontMapperBase::GetEncodingName(encSys);
+    searchPath << GetFullSearchPath(fullname) << wxPATH_SEP;
+  }
+#endif // wxUSE_FONTMAP
+
+
+  searchPath += GetFullSearchPath(szDirPrefix);
   const wxChar *sublocale = wxStrchr(szDirPrefix, wxT('_'));
   if ( sublocale )
   {
@@ -1102,17 +1115,21 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
   NoTransErr noTransErr;
   wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
                szName, searchPath.c_str());
+  wxLogTrace(TRACE_I18N, _T("Looking for \"%s.mo\" in \"%s\""),
+             szName, searchPath.c_str());
 
   wxFileName fn(szName);
   fn.SetExt(_T("mo"));
   wxString strFullName;
   if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) ) {
     wxLogVerbose(_("catalog file for domain '%s' not found."), szName);
+    wxLogTrace(TRACE_I18N, _T("Catalog \"%s.mo\" not found"), szName);
     return false;
   }
 
   // open file
   wxLogVerbose(_("using catalog '%s' from '%s'."), szName, strFullName.c_str());
+  wxLogTrace(TRACE_I18N, _T("Using catalog \"%s\"."), strFullName.c_str());
 
   wxFile fileMsg(strFullName);
   if ( !fileMsg.IsOpened() )
@@ -1200,8 +1217,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
               }
               else
               {
-                   wxLogVerbose(_("Cannot parse Plural-Forms:'%s'"),
-                          pfs.c_str());
+                   wxLogVerbose(_("Cannot parse Plural-Forms:'%s'"), pfs.c_str());
               }
           }
       }
@@ -2541,7 +2557,7 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
 
             if ( szDomain != NULL )
             {
-                wxLogTrace(_T("i18n"),
+                wxLogTrace(TRACE_I18N,
                            _T("string '%s'[%lu] not found in domain '%s' for locale '%s'."),
                            szOrigString, (unsigned long)n,
                            szDomain, m_strLocale.c_str());
@@ -2549,7 +2565,7 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
             }
             else
             {
-                wxLogTrace(_T("i18n"),
+                wxLogTrace(TRACE_I18N,
                            _T("string '%s'[%lu] not found in locale '%s'."),
                            szOrigString, (unsigned long)n, m_strLocale.c_str());
             }
