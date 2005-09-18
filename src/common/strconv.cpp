@@ -1429,10 +1429,11 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
                 // VS: we must not output an error here, since wxWidgets will safely
                 //     fall back to using wxEncodingConverter.
                 wxLogTrace(TRACE_STRCONV, wxT("Impossible to convert to/from charset '%s' with iconv, falling back to wxEncodingConverter."), name);
-                //wxLogError(
             }
         }
-        wxLogTrace(TRACE_STRCONV, wxT("wchar_t charset is '%s', needs swap: %i"), ms_wcCharsetName, ms_wcNeedsSwap);
+        wxLogTrace(TRACE_STRCONV,
+                   wxT("wchar_t charset is '%s', needs swap: %i"),
+                   ms_wcCharsetName ? ms_wcCharsetName : "<none>", ms_wcNeedsSwap);
     }
     else // we already have ms_wcCharsetName
     {
