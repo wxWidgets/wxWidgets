@@ -114,6 +114,16 @@ one.
 \helpref{wxFontMapper::Set}{wxfontmapperset}
 
 
+\membersection{wxFontMapper::GetAllEncodingNames}{\label{wxfontmappergetallencodingnames}
+
+\func{static const wxChar**}{GetAllEncodingNames}{\param{wxFontEncoding }{encoding}}
+
+Returns the array of all possible names for the given encoding. The array is
+\NULL-terminated. IF it isn't empty, the first name in it is the canonical
+encoding name, i.e. the same string as returned by 
+\helpref{GetEncodingName()}{wxfontmappergetencodingname}.
+
+
 \membersection{wxFontMapper::GetAltForEncoding}\label{wxfontmappergetaltforencoding}
 
 \func{bool}{GetAltForEncoding}{\param{wxFontEncoding }{encoding}, \param{wxNativeEncodingInfo* }{info}, \param{const wxString\& }{facename = wxEmptyString}, \param{bool }{interactive = true}}
