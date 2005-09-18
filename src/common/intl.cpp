@@ -1219,6 +1219,19 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
                                 const wxString& msgIdCharset,
                                 bool convertEncoding) const
 {
+#if wxUSE_FONTMAP
+    // determine if we need any conversion at all
+    if ( convertEncoding )
+    {
+        wxFontEncoding encCat = wxFontMapperBase::GetEncodingFromName(m_charset);
+        if ( encCat == wxLocale::GetSystemEncoding() )
+        {
+            // no need to convert
+            convertEncoding = false;
+        }
+    }
+#endif // wxUSE_FONTMAP
+
 #if wxUSE_WCHAR_T
     wxCSConv *csConv = NULL;
     if ( !m_charset.empty() )
