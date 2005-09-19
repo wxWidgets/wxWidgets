@@ -3101,6 +3101,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl path -- try to compile a test program to check for this
             save_CFLAGS=$CFLAGS
             CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            save_LIBS="$LIBS"
+            LIBS="$GUI_TK_LIBRARY -lXm -lXmu -lXext -lX11"
 
             AC_TRY_LINK(
                 [
@@ -3115,12 +3117,13 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     COMPILED_X_PROGRAM=1
                 ],
                 [
-                        AC_MSG_RESULT(no)
-                        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
-                    ]
-                )
+                    AC_MSG_RESULT(no)
+                    AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
+                ]
+            )
 
             CFLAGS=$save_CFLAGS
+            LIBS="$save_LIBS"
         fi
 
         AC_MSG_CHECKING([if we need -lXp and/or -lSM -lICE])
