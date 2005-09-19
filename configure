@@ -43718,12 +43718,19 @@ EOF
       ;;
 
       *-*-aix* )
-        			        if test "x$GCC" = "xyes"; then
-	    PIC_FLAG=""
-	    SHARED_LD_CC="\$(CC) -shared ${PIC_FLAG} -o"
-	    SHARED_LD_CXX="\$(CXX) -shared ${PIC_FLAG} -o"
+        if test "x$GCC" = "xyes"; then
+	    	    	    	    	    PIC_FLAG=""
+
+	    	    	    	    	    	    	    case "${BAKEFILE_HOST}" in
+		*-*-aix5* )
+		    LD_EXPFULL="-Wl,-bexpfull"
+		    ;;
+	    esac
+
+	    SHARED_LD_CC="\$(CC) -shared $(LD_EXPFULL) -o"
+	    SHARED_LD_CXX="\$(CXX) -shared $(LD_EXPFULL) -o"
 	else
-                                    # Extract the first word of "makeC++SharedLib", so it can be a program name with args.
+	    	                # Extract the first word of "makeC++SharedLib", so it can be a program name with args.
 set dummy makeC++SharedLib; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
@@ -43759,7 +43766,7 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-                        SHARED_LD_CC="$AIX_CC_LD -p 0 -o"
+            SHARED_LD_CC="$AIX_CC_LD -p 0 -o"
             SHARED_LD_CXX="$AIX_CXX_LD -p 0 -o"
         fi
       ;;
@@ -44434,11 +44441,7 @@ if test ${D}DEPSMODE = gcc ; then
     fi
     exit 0
 elif test ${D}DEPSMODE = mwcc ; then
-    ${D}*
-    status=${D}?
-    if test ${D}{status} != 0 ; then
-        exit ${D}{status}
-    fi
+    ${D}* || exit ${D}?
     # Run mwcc again with -MM and redirect into the dep file we want
     # NOTE: We can't use shift here because we need ${D}* to be valid
     prevarg=
@@ -44459,7 +44462,7 @@ elif test ${D}DEPSMODE = mwcc ; then
     ${D}* ${D}DEPSFLAG >${D}{DEPSDIR}/${D}{objfile}.d
     exit 0
 elif test ${D}DEPSMODE = unixcc; then
-    ${D}* || exit
+    ${D}* || exit ${D}?
     # Run compiler again with deps flag and redirect into the dep file.
     # It doesn't work if the '-o FILE' option is used, but without it the
     # dependency file will contain the wrong name for the object. So it is
