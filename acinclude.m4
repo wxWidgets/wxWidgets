@@ -43,9 +43,10 @@ for ac_dir in $1 /usr/include;
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl WX_PATH_FIND_LIBRARIES helper
+dnl call WX_PATH_FIND_LIBRARIES(search path, lib name), sets ac_find_libraries
+dnl to the full name of the file that was found or leaves it empty if not found
 dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_PATH_FIND_LIBRARIES_IN_PATH],
+AC_DEFUN([WX_PATH_FIND_LIBRARIES],
 [
   ac_find_libraries=
   for ac_dir in $1;
@@ -71,21 +72,6 @@ dnl
 dnl NB: if any of directories in the list is not a subdir of /usr, code setting
 dnl     wx_cv_std_libpath needs to be updated
 AC_DEFUN([WX_STD_LIBPATH], [/usr/lib /usr/lib32 /usr/lib/64 /usr/lib64])
-
-dnl ---------------------------------------------------------------------------
-dnl call WX_PATH_FIND_LIBRARIES(search path, lib name), sets ac_find_libraries
-dnl to the full name of the file that was found or leaves it empty if not found
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_PATH_FIND_LIBRARIES],
-[
-  WX_PATH_FIND_LIBRARIES_IN_PATH($1, $2)
-  if test "x$ac_find_libraries" = "x" ; then
-    WX_PATH_FIND_LIBRARIES_IN_PATH(WX_STD_LIBPATH(), $2)
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
-])
 
 dnl ---------------------------------------------------------------------------
 dnl Path to include, already defined
