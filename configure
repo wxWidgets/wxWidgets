@@ -22531,19 +22531,21 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/share/include"
 
-echo "$as_me:$LINENO: checking for libraries directory" >&5
+case "${host}" in
+    *-*-linux* | *-*-irix6* | *-*-solaris2* )
+        echo "$as_me:$LINENO: checking for libraries directory" >&5
 echo $ECHO_N "checking for libraries directory... $ECHO_C" >&6
 if test "${wx_cv_std_libpath+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-        for d in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64; do
-            for e in a so sl dylib dll.a; do
-                libc="$d/libc.$e"
-                if test -f $libc; then
-                    save_LIBS="$LIBS"
-                    LIBS="$libc"
-                    cat >conftest.$ac_ext <<_ACEOF
+                for d in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64; do
+                    for e in a so sl dylib dll.a; do
+                        libc="$d/libc.$e"
+                        if test -f $libc; then
+                            save_LIBS="$LIBS"
+                            LIBS="$libc"
+                            cat >conftest.$ac_ext <<_ACEOF
 int main() { return 0; }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
@@ -22575,21 +22577,27 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-                    LIBS="$save_LIBS"
-                    if test "x$wx_cv_std_libpath" != "x"; then
-                        break 2
-                    fi
+                            LIBS="$save_LIBS"
+                            if test "x$wx_cv_std_libpath" != "x"; then
+                                break 2
+                            fi
+                        fi
+                    done
+                done
+                if test "x$wx_cv_std_libpath" = "x"; then
+                    wx_cv_std_libpath="lib"
                 fi
-            done
-        done
-        if test "x$wx_cv_std_libpath" = "x"; then
-            wx_cv_std_libpath="lib"
-        fi
 
 
 fi
 echo "$as_me:$LINENO: result: $wx_cv_std_libpath" >&5
 echo "${ECHO_T}$wx_cv_std_libpath" >&6
+        ;;
+
+    *)
+        wx_cv_std_libpath="lib";
+        ;;
+esac
 
 SEARCH_LIB=`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g`
 

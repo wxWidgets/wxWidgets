@@ -2124,30 +2124,39 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/share/include"
 
-dnl try to find out the standard lib locations
-AC_CACHE_CHECK([for libraries directory],
-    wx_cv_std_libpath,
-    [
-        for d in WX_STD_LIBPATH(); do
-            for e in a so sl dylib dll.a; do
-                libc="$d/libc.$e"
-                if test -f $libc; then
-                    save_LIBS="$LIBS"
-                    LIBS="$libc"
-                    AC_LINK_IFELSE([int main() { return 0; }],
-                        wx_cv_std_libpath=`echo $d | sed s@/usr/@@`)
-                    LIBS="$save_LIBS"
-                    if test "x$wx_cv_std_libpath" != "x"; then
-                        break 2
-                    fi
+dnl try to find out the standard lib locations for the systems with multiple
+dnl ABIs
+case "${host}" in
+    *-*-linux* | *-*-irix6* | *-*-solaris2* )
+        AC_CACHE_CHECK([for libraries directory],
+            wx_cv_std_libpath,
+            [
+                for d in WX_STD_LIBPATH(); do
+                    for e in a so sl dylib dll.a; do
+                        libc="$d/libc.$e"
+                        if test -f $libc; then
+                            save_LIBS="$LIBS"
+                            LIBS="$libc"
+                            AC_LINK_IFELSE([int main() { return 0; }],
+                                wx_cv_std_libpath=`echo $d | sed s@/usr/@@`)
+                            LIBS="$save_LIBS"
+                            if test "x$wx_cv_std_libpath" != "x"; then
+                                break 2
+                            fi
+                        fi
+                    done
+                done
+                if test "x$wx_cv_std_libpath" = "x"; then
+                    wx_cv_std_libpath="lib"
                 fi
-            done
-        done
-        if test "x$wx_cv_std_libpath" = "x"; then
-            wx_cv_std_libpath="lib"
-        fi
-    ]
-)
+            ]
+        )
+        ;;
+
+    *)
+        wx_cv_std_libpath="lib";
+        ;;
+esac
 
 SEARCH_LIB=`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g`
 
