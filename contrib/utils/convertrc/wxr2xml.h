@@ -5,7 +5,7 @@
 #if !defined(WXR2XML_H)
 #define WXR2XML_H
 
-#include <wx/ffile.h>
+#include "wx/ffile.h"
 #include "wx/deprecated/setup.h"
 #include "wx/deprecated/resource.h"
 

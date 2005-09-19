@@ -10,8 +10,8 @@
 #endif
 
 #include "wx/file.h"
-#include <wx/ffile.h>
-#include <wx/list.h>
+#include "wx/ffile.h"
+#include "wx/list.h"
 
 
 class rc2xml : public wxObject
