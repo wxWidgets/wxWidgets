@@ -716,9 +716,14 @@ GSocketError GSocket::Connect(GSocketStream stream)
   /* Connect it to the peer address, with a timeout (see below) */
   ret = connect(m_fd, m_peer->m_addr, m_peer->m_len);
 
-  /* We only call Enable_Events if we know e aren't shutting down the socket */
+  /* We only call Enable_Events if we know we aren't shutting down the socket.
+   * NB: Enable_Events needs to be called whether the socket is blocking or
+   * non-blocking, it just shouldn't be called prior to knowing there is a
+   * connection _if_ blocking sockets are being used.
+   * If connect above returns 0, we are already connected and need to make the
+   * call to Enable_Events now.  
 
-  if (m_non_blocking)
+  if (m_non_blocking || ret == 0)
   {
     gs_gui_functions->Enable_Events(this);
   }
