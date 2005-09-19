@@ -79,7 +79,7 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
 
 private:
-    virtual bool XmDoCreateTLW(wxWindow* parent,
+    virtual bool DoCreate(wxWindow* parent,
                                wxWindowID id,
                                const wxString& title,
                                const wxPoint& pos,
