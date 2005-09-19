@@ -360,20 +360,32 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       ;;
 
       *-*-aix* )
-        dnl at least gcc 2.95 warns that -fPIC is ignored when compiling
-	dnl each and every file under AIX which is annoying, so don't use
-	dnl it there (it's useless as AIX runs on position-independent
-	dnl architectures only anyhow)
         if test "x$GCC" = "xyes"; then
+	    dnl at least gcc 2.95 warns that -fPIC is ignored when
+	    dnl compiling each and every file under AIX which is annoying,
+	    dnl so don't use it there (it's useless as AIX runs on
+	    dnl position-independent architectures only anyhow)
 	    PIC_FLAG=""
-	    SHARED_LD_CC="\$(CC) -shared ${PIC_FLAG} -o"
-	    SHARED_LD_CXX="\$(CXX) -shared ${PIC_FLAG} -o"
+
+	    dnl -bexpfull is needed by AIX linker to export all symbols (by
+	    dnl default it doesn't export any and even with -bexpall it
+	    dnl doesn't export all C++ support symbols, e.g. vtable
+	    dnl pointers) but it's only available starting from 5.1 (with
+	    dnl maintenance pack 2, whatever this is), see
+	    dnl http://www-128.ibm.com/developerworks/eserver/articles/gnu.html
+	    case "${BAKEFILE_HOST}" in
+		*-*-aix5* )
+		    LD_EXPFULL="-Wl,-bexpfull"
+		    ;;
+	    esac
+
+	    SHARED_LD_CC="\$(CC) -shared $(LD_EXPFULL) -o"
+	    SHARED_LD_CXX="\$(CXX) -shared $(LD_EXPFULL) -o"
 	else
-            dnl the abs path below used to be hardcoded here so I guess it must
-            dnl be some sort of standard location under AIX?
+	    dnl FIXME: makeC++SharedLib is obsolete, what should we do for
+	    dnl        recent AIX versions?
             AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
                           makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
-            dnl FIXME - what about makeCSharedLib?            
             SHARED_LD_CC="$AIX_CC_LD -p 0 -o"
             SHARED_LD_CXX="$AIX_CXX_LD -p 0 -o"
         fi
@@ -1267,11 +1279,7 @@ if test ${D}DEPSMODE = gcc ; then
     fi
     exit 0
 elif test ${D}DEPSMODE = mwcc ; then
-    ${D}*
-    status=${D}?
-    if test ${D}{status} != 0 ; then
-        exit ${D}{status}
-    fi
+    ${D}* || exit ${D}?
     # Run mwcc again with -MM and redirect into the dep file we want
     # NOTE: We can't use shift here because we need ${D}* to be valid
     prevarg=
@@ -1292,7 +1300,7 @@ elif test ${D}DEPSMODE = mwcc ; then
     ${D}* ${D}DEPSFLAG >${D}{DEPSDIR}/${D}{objfile}.d
     exit 0
 elif test ${D}DEPSMODE = unixcc; then
-    ${D}* || exit
+    ${D}* || exit ${D}?
     # Run compiler again with deps flag and redirect into the dep file.
     # It doesn't work if the '-o FILE' option is used, but without it the
     # dependency file will contain the wrong name for the object. So it is
