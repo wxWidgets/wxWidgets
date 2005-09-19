@@ -67,7 +67,6 @@ public:
     virtual bool OnInit();
 };
 
-class MyWizard;
 class MyFrame : public wxFrame
 {
 public:
@@ -81,14 +80,9 @@ public:
     void OnWizardCancel(wxWizardEvent& event);
     void OnWizardFinished(wxWizardEvent& event);
 
-    // Only required for modeless wizards, to implement destruction;
-    // if using modal wizards, you can rely on the default behaviour.
-    void OnCancel(wxCommandEvent& event);
 private:
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
-
-    MyWizard* m_wizard;
 };
 
 // ----------------------------------------------------------------------------
@@ -99,15 +93,10 @@ class MyWizard : public wxWizard
 {
 public:
     MyWizard(wxFrame *frame);
-
     void RunIt(bool modal);
-
-    // Is the wizard being invoked modally?
-    bool GetModalWizard() const { return m_isModal; }
 
 private:
     wxWizardPageSimple *m_page1;
-    bool                m_isModal;
 };
 
 // ----------------------------------------------------------------------------
@@ -329,8 +318,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_WIZARD_CANCEL(wxID_ANY,   MyFrame::OnWizardCancel)
     EVT_WIZARD_FINISHED(wxID_ANY, MyFrame::OnWizardFinished)
-
-    EVT_BUTTON(wxID_CANCEL,       MyFrame::OnCancel)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxRadioboxPage, wxWizardPageSimple)
@@ -360,14 +347,12 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 // MyWizard
 // ----------------------------------------------------------------------------
-    
+
 MyWizard::MyWizard(wxFrame *frame)
          :wxWizard(frame,wxID_ANY,_T("Absolutely Useless Wizard"),
                    wxBitmap(wiztest_xpm),wxDefaultPosition,
                    wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
-    m_isModal = false;
-
     // a wizard page may be either an object of predefined class
     m_page1 = new wxWizardPageSimple(this);
 
@@ -398,7 +383,6 @@ MyWizard::MyWizard(wxFrame *frame)
 
 void MyWizard::RunIt(bool modal)
 {
-    m_isModal = modal;
     if ( modal )
     {
         if ( RunWizard(m_page1) )
@@ -424,8 +408,6 @@ MyFrame::MyFrame(const wxString& title)
         :wxFrame((wxFrame *)NULL, wxID_ANY, title,
                   wxDefaultPosition, wxSize(250, 150))  // small frame
 {
-    m_wizard = NULL;
-    
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(Wizard_RunModal, _T("&Run wizard modal...\tCtrl-R"));
     menuFile->Append(Wizard_RunModeless, _T("&Run wizard modeless..."));
@@ -464,34 +446,17 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnRunWizard(wxCommandEvent& event)
 {
-    m_wizard = new MyWizard(this);
+    MyWizard *wizard = new MyWizard(this);
 
-    m_wizard->RunIt( event.GetId() == Wizard_RunModal );
+    wizard->RunIt( event.GetId() == Wizard_RunModal );
 }
 
 void MyFrame::OnWizardFinished(wxWizardEvent& WXUNUSED(event))
 {
-    if (!m_wizard->GetModalWizard())
-        m_wizard->Destroy();
-    m_wizard = NULL;
-
     wxMessageBox(wxT("The wizard finished successfully."), wxT("Wizard notification"));
 }
 
 void MyFrame::OnWizardCancel(wxWizardEvent& WXUNUSED(event))
 {
     wxMessageBox(wxT("The wizard was cancelled."), wxT("Wizard notification"));
-}
-
-void MyFrame::OnCancel(wxCommandEvent& WXUNUSED(event))
-{
-    // Destroy a modeless wizard here - we can't destroy it in OnWizardCancel
-    // since the wxWizard object is still in use when that event is sent.
-    
-    if (!m_wizard->GetModalWizard())
-        m_wizard->Destroy();
-    else
-        m_wizard->EndModal(wxID_CANCEL);
-    
-    m_wizard = NULL;
 }

@@ -267,6 +267,13 @@ wxSize wxWizardSizer::SiblingSize(wxSizerItem *child)
 // generic wxWizard implementation
 // ----------------------------------------------------------------------------
 
+#if wxCHECK_VERSION(2, 7, 0)
+    #error "Fix wxGTK vs. wxMSW difference other way"
+#else
+    WX_DEFINE_ARRAY_PTR(wxWizard *, wxModelessWizards);
+    wxModelessWizards modelessWizards;
+#endif
+
 void wxWizard::Init()
 {
     m_posWizard = wxDefaultPosition;
@@ -278,6 +285,7 @@ void wxWizard::Init()
     m_calledSetBorder = false;
     m_border = 0;
     m_started = false;
+    modelessWizards.Add(this);
 }
 
 bool wxWizard::Create(wxWindow *parent,
@@ -660,6 +668,8 @@ bool wxWizard::RunWizard(wxWizardPage *firstPage)
     // can't return false here because there is no old page
     (void)ShowPage(firstPage, true /* forward */);
 
+    modelessWizards.Remove(this);
+
     return ShowModal() == wxID_OK;
 }
 
@@ -800,6 +810,18 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
         {
             event.Skip();
         }
+    }
+
+    if ( !IsModal() &&
+         ( modelessWizards.Index(this) != wxNOT_FOUND ) &&
+         event.IsAllowed() &&
+         ( event.GetEventType() == wxEVT_WIZARD_FINISHED ||
+           event.GetEventType() == wxEVT_WIZARD_CANCEL
+         )
+       )
+    {
+        modelessWizards.Remove(this);
+        Destroy();
     }
 }
 
