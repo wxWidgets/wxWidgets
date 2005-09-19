@@ -196,7 +196,7 @@ bool wxFrame::Create(wxWindow *parent,
     return true;
 }
 
-bool wxFrame::XmDoCreateTLW(wxWindow* parent,
+bool wxFrame::DoCreate(wxWindow* parent,
                             wxWindowID id,
                             const wxString& title,
                             const wxPoint& pos,

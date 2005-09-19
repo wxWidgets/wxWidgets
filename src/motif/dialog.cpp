@@ -151,7 +151,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-bool wxDialog::XmDoCreateTLW(wxWindow* parent,
+bool wxDialog::DoCreate(wxWindow* parent,
                              wxWindowID id,
                              const wxString& title,
                              const wxPoint& pos,

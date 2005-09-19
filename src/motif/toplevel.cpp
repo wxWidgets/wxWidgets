@@ -121,7 +121,7 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
 
     m_windowId = ( id > -1 ) ? id : NewControlId();
 
-    bool retval = XmDoCreateTLW( parent, id, title, pos, size, style, name );
+    bool retval = DoCreate( parent, id, title, pos, size, style, name );
 
     if( !retval ) return false;
 
