@@ -22531,11 +22531,12 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/share/include"
 
-case "${host}" in
-    *-*-linux* | *-*-irix6* | *-*-solaris2* )
-        echo "$as_me:$LINENO: checking for libraries directory" >&5
+echo "$as_me:$LINENO: checking for libraries directory" >&5
 echo $ECHO_N "checking for libraries directory... $ECHO_C" >&6
-if test "${wx_cv_std_libpath+set}" = set; then
+
+case "${host}" in
+    *-*-irix6* )
+        if test "${wx_cv_std_libpath+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
@@ -22590,8 +22591,24 @@ rm -f conftest.err conftest.$ac_objext \
 
 
 fi
-echo "$as_me:$LINENO: result: $wx_cv_std_libpath" >&5
-echo "${ECHO_T}$wx_cv_std_libpath" >&6
+
+        ;;
+
+    *-*-solaris2* )
+                if test "$ac_cv_sizeof_void_p" = 8 -a -d "/usr/lib/64"; then
+            wx_cv_std_libpath="lib/64"
+        else
+            wx_cv_std_libpath="lib"
+        fi
+        ;;
+
+    *-*-linux* )
+                if test "$ac_cv_sizeof_void_p" = 8 -a \
+                -d "/usr/lib64" -a ! -h "/usr/lib64"; then
+            wx_cv_std_libpath="lib64"
+        else
+            wx_cv_std_libpath="lib"
+        fi
         ;;
 
     *)
@@ -22599,7 +22616,10 @@ echo "${ECHO_T}$wx_cv_std_libpath" >&6
         ;;
 esac
 
-SEARCH_LIB=`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g`
+echo "$as_me:$LINENO: result: $wx_cv_std_libpath" >&5
+echo "${ECHO_T}$wx_cv_std_libpath" >&6
+
+SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g` /usr/$wx_cv_std_libpath"
 
 if test "$build" != "$host" -a "$GCC" = yes; then
                     if cross_root=`$CC -print-prog-name=ld 2>/dev/null`; then
@@ -22629,7 +22649,6 @@ for ac_dir in $SEARCH_INCLUDE /usr/include;
         fi
         if test -z "$x_libraries" -o "$x_libraries" = NONE; then
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -22640,24 +22659,6 @@ for ac_dir in $SEARCH_INCLUDE /usr/include;
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libXt.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
             x_libraries=$ac_find_libraries
         fi
@@ -26347,7 +26348,6 @@ fi
             echo "$as_me:$LINENO: checking for gpewidget library" >&5
 echo $ECHO_N "checking for gpewidget library... $ECHO_C" >&6
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -26358,24 +26358,6 @@ echo $ECHO_N "checking for gpewidget library... $ECHO_C" >&6
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libgpewidget.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
             if test "$ac_find_libraries" != "" ; then
 
@@ -28475,7 +28457,6 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
         echo "$as_me:$LINENO: checking for Motif/Lesstif library" >&5
 echo $ECHO_N "checking for Motif/Lesstif library... $ECHO_C" >&6
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -28486,24 +28467,6 @@ echo $ECHO_N "checking for Motif/Lesstif library... $ECHO_C" >&6
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libXm.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
 
         if test "x$ac_find_libraries" != "x" ; then
@@ -28527,6 +28490,8 @@ echo "${ECHO_T}found in $ac_find_libraries" >&6
         else
                                                 save_CFLAGS=$CFLAGS
             CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            save_LIBS="$LIBS"
+            LIBS="$GUI_TK_LIBRARY -lXm -lXmu -lXext -lX11"
 
             cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -28579,9 +28544,9 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                        echo "$as_me:$LINENO: result: no" >&5
+                    echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-                        { { echo "$as_me:$LINENO: error: please set LDFLAGS to contain the location of libXm" >&5
+                    { { echo "$as_me:$LINENO: error: please set LDFLAGS to contain the location of libXm" >&5
 echo "$as_me: error: please set LDFLAGS to contain the location of libXm" >&2;}
    { (exit 1); exit 1; }; }
 
@@ -28591,6 +28556,7 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
             CFLAGS=$save_CFLAGS
+            LIBS="$save_LIBS"
         fi
 
         echo "$as_me:$LINENO: checking if we need -lXp and/or -lSM -lICE" >&5
@@ -28907,7 +28873,6 @@ _ACEOF
             echo "$as_me:$LINENO: checking for Xpm library" >&5
 echo $ECHO_N "checking for Xpm library... $ECHO_C" >&6
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -28918,24 +28883,6 @@ echo $ECHO_N "checking for Xpm library... $ECHO_C" >&6
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libXpm.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
             if test "$ac_find_libraries" != "" ; then
 
@@ -29927,7 +29874,6 @@ if test "$wxUSE_DISPLAY" = "yes"; then
         echo "$as_me:$LINENO: checking for Xinerama" >&5
 echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -29938,24 +29884,6 @@ echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libXinerama.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
         if test "$ac_find_libraries" != "" ; then
 
@@ -29981,7 +29909,6 @@ echo "${ECHO_T}yes" >&6
             echo "$as_me:$LINENO: checking for Xxf86vm extension" >&5
 echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -29992,24 +29919,6 @@ echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
             if test "$ac_find_libraries" != "" ; then
                 echo "$as_me:$LINENO: result: yes" >&5
@@ -30344,7 +30253,6 @@ if test $ac_cv_header_GL_gl_h = yes; then
                 echo "$as_me:$LINENO: checking for -lGL" >&5
 echo $ECHO_N "checking for -lGL... $ECHO_C" >&6
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -30355,24 +30263,6 @@ echo $ECHO_N "checking for -lGL... $ECHO_C" >&6
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libGL.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
                 if test "$ac_find_libraries" != "" ; then
                     echo "$as_me:$LINENO: result: yes" >&5
@@ -30398,7 +30288,6 @@ echo "${ECHO_T}yes" >&6
                                                                                 echo "$as_me:$LINENO: checking for -lGLU" >&5
 echo $ECHO_N "checking for -lGLU... $ECHO_C" >&6
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -30409,24 +30298,6 @@ echo $ECHO_N "checking for -lGLU... $ECHO_C" >&6
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libGLU.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
                     if test "$ac_find_libraries" != "" ; then
 
@@ -30464,7 +30335,6 @@ echo "${ECHO_T}no" >&6
                     echo "$as_me:$LINENO: checking for -lMesaGL" >&5
 echo $ECHO_N "checking for -lMesaGL... $ECHO_C" >&6
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -30475,24 +30345,6 @@ echo $ECHO_N "checking for -lMesaGL... $ECHO_C" >&6
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libMesaGL.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
                     if test "$ac_find_libraries" != "" ; then
 
@@ -42012,7 +41864,6 @@ fi
         echo "$as_me:$LINENO: checking for gstplay 0.8" >&5
 echo $ECHO_N "checking for gstplay 0.8... $ECHO_C" >&6
 
-
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB;
   do
@@ -42023,24 +41874,6 @@ echo $ECHO_N "checking for gstplay 0.8... $ECHO_C" >&6
       fi
     done
   done
-
-  if test "x$ac_find_libraries" = "x" ; then
-
-  ac_find_libraries=
-  for ac_dir in /usr/lib /usr/lib32 /usr/lib/64 /usr/lib64;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libgstplay-0.8.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-    if test "x$ac_find_libraries" != "x" ; then
-      ac_find_libraries="default location"
-    fi
-  fi
 
 
         if test "$ac_find_libraries" = "" ; then
