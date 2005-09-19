@@ -2126,9 +2126,11 @@ SEARCH_INCLUDE="\
 
 dnl try to find out the standard lib locations for the systems with multiple
 dnl ABIs
+AC_MSG_CHECKING([for libraries directory])
+
 case "${host}" in
-    *-*-linux* | *-*-irix6* | *-*-solaris2* )
-        AC_CACHE_CHECK([for libraries directory],
+    *-*-irix6* )
+        AC_CACHE_VAL(
             wx_cv_std_libpath,
             [
                 for d in WX_STD_LIBPATH(); do
@@ -2153,12 +2155,33 @@ case "${host}" in
         )
         ;;
 
+    *-*-solaris2* )
+        dnl use ../lib or ../lib/64 depending on the size of void*
+        if test "$ac_cv_sizeof_void_p" = 8 -a -d "/usr/lib/64"; then
+            wx_cv_std_libpath="lib/64"
+        else
+            wx_cv_std_libpath="lib"
+        fi
+        ;;
+
+    *-*-linux* )
+        dnl use ../lib or ../lib64 depending on the size of void*
+        if test "$ac_cv_sizeof_void_p" = 8 -a \
+                -d "/usr/lib64" -a ! -h "/usr/lib64"; then
+            wx_cv_std_libpath="lib64"
+        else
+            wx_cv_std_libpath="lib"
+        fi
+        ;;
+
     *)
         wx_cv_std_libpath="lib";
         ;;
 esac
 
-SEARCH_LIB=`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g`
+AC_MSG_RESULT($wx_cv_std_libpath)
+
+SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g` /usr/$wx_cv_std_libpath"
 
 dnl Cross compiling with gcc?
 if test "$build" != "$host" -a "$GCC" = yes; then
