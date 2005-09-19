@@ -35,8 +35,7 @@ AC_DEFUN([WX_PATH_FIND_INCLUDES],
 ac_find_includes=
 for ac_dir in $1 /usr/include;
   do
-    wx_ac_hdr="$ac_dir/$2"
-    if test -f "$wx_ac_hdr" -o -h "$wx_ac_hdr"; then
+    if test -f "$ac_dir/$2"; then
       ac_find_includes=$ac_dir
       break
     fi
@@ -53,8 +52,7 @@ AC_DEFUN([WX_PATH_FIND_LIBRARIES],
   for ac_dir in $1;
   do
     for ac_extension in a so sl dylib dll.a; do
-      wx_ac_lib="$ac_dir/lib$2.$ac_extension"
-      if test -f "$wx_ac_lib" -o -h "$wx_ac_lib"; then
+      if test -f "$ac_dir/lib$2.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
       fi
