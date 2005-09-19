@@ -379,8 +379,8 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
 		    ;;
 	    esac
 
-	    SHARED_LD_CC="\$(CC) -shared $(LD_EXPFULL) -o"
-	    SHARED_LD_CXX="\$(CXX) -shared $(LD_EXPFULL) -o"
+	    SHARED_LD_CC="\$(CC) -shared $LD_EXPFULL -o"
+	    SHARED_LD_CXX="\$(CXX) -shared $LD_EXPFULL -o"
 	else
 	    dnl FIXME: makeC++SharedLib is obsolete, what should we do for
 	    dnl        recent AIX versions?

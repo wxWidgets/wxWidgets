@@ -43727,8 +43727,8 @@ EOF
 		    ;;
 	    esac
 
-	    SHARED_LD_CC="\$(CC) -shared $(LD_EXPFULL) -o"
-	    SHARED_LD_CXX="\$(CXX) -shared $(LD_EXPFULL) -o"
+	    SHARED_LD_CC="\$(CC) -shared $LD_EXPFULL -o"
+	    SHARED_LD_CXX="\$(CXX) -shared $LD_EXPFULL -o"
 	else
 	    	                # Extract the first word of "makeC++SharedLib", so it can be a program name with args.
 set dummy makeC++SharedLib; ac_word=$2
