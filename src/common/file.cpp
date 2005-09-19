@@ -334,17 +334,18 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 // flush
 bool wxFile::Flush()
 {
-    if ( IsOpened() ) {
 #if defined(__VISUALC__) || defined(HAVE_FSYNC)
+    // fsync() only works on disk files and returns errors for pipes, don't
+    // call it then
+    if ( IsOpened() && GetKind() == wxFILE_KIND_DISK )
+    {
         if ( wxFsync(m_fd) == -1 )
         {
             wxLogSysError(_("can't flush file descriptor %d"), m_fd);
             return false;
         }
-#else // no fsync
-        // just do nothing
-#endif // fsync
     }
+#endif // fsync
 
     return true;
 }
