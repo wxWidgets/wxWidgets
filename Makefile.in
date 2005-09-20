@@ -24286,6 +24286,9 @@ ALL_DIST: distrib_clean
 	cp $(WXDIR)/build/bakefiles/wxpresets/sample/minimal* $(DISTDIR)/build/bakefiles/wxpresets/sample
 	cp $(WXDIR)/build/bakefiles/wxpresets/sample/config* $(DISTDIR)/build/bakefiles/wxpresets/sample
 	cp $(WXDIR)/build/bakefiles/wxpresets/*.txt $(DISTDIR)/build/bakefiles/wxpresets
+    # copy aclocal files
+	mkdir $(DISTDIR)/build/aclocal
+	cp $(WXDIR)/build/aclocal/*.m4 $(DISTDIR)/build/aclocal
 
 # this target is the common part of distribution script for all GUI toolkits,
 # but is not used when building wxBase distribution
