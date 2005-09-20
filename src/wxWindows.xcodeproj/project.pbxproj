@@ -822,6 +822,8 @@
 		4086CBDC063AB30000D4CD53 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
 		4086CBDD063AB30000D4CD53 /* System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5C5D3DF01FA2D0A01D0F0BA /* System.framework */; };
 		4086CBDE063AB30000D4CD53 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55E08F801FDF9CC01000133 /* libz.dylib */; };
+		4095973708E05A4A0038F824 /* utilsexc_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4095973608E05A4A0038F824 /* utilsexc_base.cpp */; };
+		4095973808E05A4A0038F824 /* utilsexc_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4095973608E05A4A0038F824 /* utilsexc_base.cpp */; };
 		40ADC34A08156AE40009DA36 /* debugrpt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ADC34908156AE40009DA36 /* debugrpt.cpp */; };
 		40ADC34D08156AE40009DA36 /* debugrpt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ADC34908156AE40009DA36 /* debugrpt.cpp */; };
 		40ADC36008156DC10009DA36 /* xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ADC35F08156DC10009DA36 /* xml.cpp */; };
@@ -1042,8 +1044,9 @@
 		4086C63B063AAD4A00D4CD53 /* regerror.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = regerror.c; sourceTree = "<group>"; };
 		4086C641063AAD4A00D4CD53 /* regexec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = regexec.c; sourceTree = "<group>"; };
 		4086C643063AAD4A00D4CD53 /* regfree.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = regfree.c; sourceTree = "<group>"; };
-		4086C8CB063AB30000D4CD53 /* libwx_mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwx_mac.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		4086CBE1063AB30000D4CD53 /* libwx_mac.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libwx_mac.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		4086C8CB063AB30000D4CD53 /* libwx_macd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwx_macd.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4086CBE1063AB30000D4CD53 /* libwx_macd.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libwx_macd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		4095973608E05A4A0038F824 /* utilsexc_base.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_base.cpp; path = mac/corefoundation/utilsexc_base.cpp; sourceTree = SOURCE_ROOT; };
 		40ADC34908156AE40009DA36 /* debugrpt.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = debugrpt.cpp; sourceTree = "<group>"; };
 		40ADC35F08156DC10009DA36 /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = xml.cpp; path = xml/xml.cpp; sourceTree = "<group>"; };
 		40ADC36508156DEB0009DA36 /* xh_bmp.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = xh_bmp.cpp; path = xrc/xh_bmp.cpp; sourceTree = "<group>"; };
@@ -1890,8 +1893,8 @@
 		034768DDFF38A45A11DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4086C8CB063AB30000D4CD53 /* libwx_mac.a */,
-				4086CBE1063AB30000D4CD53 /* libwx_mac.dylib */,
+				4086C8CB063AB30000D4CD53 /* libwx_macd.a */,
+				4086CBE1063AB30000D4CD53 /* libwx_macd.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1922,6 +1925,7 @@
 		40670A8107377A3600F7C08C /* mac/corefoundation */ = {
 			isa = PBXGroup;
 			children = (
+				4095973608E05A4A0038F824 /* utilsexc_base.cpp */,
 				40AF90B307C8A9CF006A6D3C /* hid.cpp */,
 				40AF90B407C8A9CF006A6D3C /* hidjoystick.cpp */,
 				40607C740749432A00DC0420 /* gsockosx.cpp */,
@@ -3021,7 +3025,7 @@
 			);
 			name = static;
 			productName = "wx library";
-			productReference = 4086C8CB063AB30000D4CD53 /* libwx_mac.a */;
+			productReference = 4086C8CB063AB30000D4CD53 /* libwx_macd.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		4086CA55063AB30000D4CD53 /* dynamic */ = {
@@ -3093,7 +3097,7 @@
 			);
 			name = dynamic;
 			productName = "wx library";
-			productReference = 4086CBE1063AB30000D4CD53 /* libwx_mac.dylib */;
+			productReference = 4086CBE1063AB30000D4CD53 /* libwx_macd.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -3628,6 +3632,7 @@
 				40ADC47A08160C200009DA36 /* choicbkg.cpp in Sources */,
 				40ADC47B08160C200009DA36 /* listbkg.cpp in Sources */,
 				40ADC48A08160CAD0009DA36 /* dbgrptg.cpp in Sources */,
+				4095973708E05A4A0038F824 /* utilsexc_base.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4098,6 +4103,7 @@
 				40ADC47408160C200009DA36 /* choicbkg.cpp in Sources */,
 				40ADC47508160C200009DA36 /* listbkg.cpp in Sources */,
 				40ADC48708160CAD0009DA36 /* dbgrptg.cpp in Sources */,
+				4095973808E05A4A0038F824 /* utilsexc_base.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4120,6 +4126,7 @@
 		18B5B98B08564B5D002803C9 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 2.6;
 				DYLIB_CURRENT_VERSION = 2.6.0;
 				GCC_INPUT_FILETYPE = automatic;
