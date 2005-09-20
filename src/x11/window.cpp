@@ -370,7 +370,11 @@ void wxWindowX11::SetFocus()
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
 
-    wxCHECK_RET( AcceptsFocus(), wxT("set focus on window that doesn't accept the focus") );
+    // Don't assert; we might be trying to set the focus for a panel
+    // with only static controls, so the panel returns false from AcceptsFocus.
+    // The app should be not be expected to deal with this.
+    if (!AcceptsFocus())
+        return;
 
 #if 0
     if (GetName() == "scrollBar")
