@@ -65,6 +65,7 @@ wxGTK:
 - Various wxFont improvements for GTK 2.x builds (Mart Raudsepp).
 - Changed order of child deletion in window destructor and
   removed focus handlers to avoid spurious events (David Surovell).
+- Fixed domain socket handling.
 
 wxMac:
 
@@ -76,6 +77,8 @@ wxMac:
 - Fixed crash when wxRadioButton is deleted from a group of radio buttons,
   due to dangling cycle pointers.
 - Native spline drawing implementation for CoreGraphics (Robert J. Lang).
+- Made wxDialog::IsModal meaning the same as other ports (true only when
+  showing modally).
 
 wxOS2
 
@@ -96,6 +99,8 @@ wxMotif:
   flag has been specified.
 - Improved wxNotebook support for sizers. It requires the wxNotebook to
   be created with a "sensible" initial width.
+- Made wxDialog::IsModal meaning the same as other ports (true only when
+  showing modally).
 
 wxMGL:
 
