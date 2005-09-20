@@ -812,8 +812,7 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
         }
     }
 
-    if ( !IsModal() &&
-         ( modelessWizards.Index(this) != wxNOT_FOUND ) &&
+    if ( ( modelessWizards.Index(this) != wxNOT_FOUND ) &&
          event.IsAllowed() &&
          ( event.GetEventType() == wxEVT_WIZARD_FINISHED ||
            event.GetEventType() == wxEVT_WIZARD_CANCEL
