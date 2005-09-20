@@ -139,7 +139,11 @@ wxString wxNativeFontInfo::GetFaceName() const
 wxFontFamily wxNativeFontInfo::GetFamily() const
 {
     wxFontFamily ret = wxFONTFAMILY_DEFAULT;
-    char *family_text = g_ascii_strdown( pango_font_description_get_family( description ), -1 );
+    // note: not passing -1 as the 2nd parameter to g_ascii_strdown to work
+    // around a bug in the 64-bit glib shipped with solaris 10, -1 causes it
+    // to try to allocate 2^32 bytes.
+    const char *family_name = pango_font_description_get_family( description );
+    char *family_text = g_ascii_strdown( family_name, family_name ? strlen( family_name ) : 0 );
     // Check for some common fonts, to salvage what we can from the current win32 centric wxFont API:
     if (strncmp( family_text, "monospace", 9 ) == 0)
         ret = wxFONTFAMILY_TELETYPE; // begins with "Monospace"
