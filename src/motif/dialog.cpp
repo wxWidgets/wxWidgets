@@ -370,6 +370,8 @@ void wxDialog::EndModal(int retCode)
 
     m_modalShowing = false;
     m_eventLoop->Exit();
+
+    SetModal(false);
 }
 
 // Standard buttons
