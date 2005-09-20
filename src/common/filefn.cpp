@@ -1363,10 +1363,6 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     bool needsANSI = true;
 
     #if !defined(HAVE_WGETCWD) || wxUSE_UNICODE_MSLU
-        // This is not legal code as the compiler
-        // is allowed destroy the wxCharBuffer.
-        // wxCharBuffer c_buffer(sz);
-        // char *cbuf = (char*)(const char*)c_buffer;
         char cbuf[_MAXPATHLEN];
     #endif
 
@@ -1452,7 +1448,13 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #if defined( __CYGWIN__ ) && defined( __WINDOWS__ )
         // another example of DOS/Unix mix (Cygwin)
         wxString pathUnix = buf;
+#if wxUSE_UNICODE
+        char bufA[_MAXPATHLEN];
+        cygwin_conv_to_full_win32_path(pathUnix.mb_str(wxConvFile), bufA);
+        wxConvFile.MB2WC(buf, bufA, sz);
+#else
         cygwin_conv_to_full_win32_path(pathUnix, buf);
+#endif // wxUSE_UNICODE
 #endif // __CYGWIN__
     }
 
