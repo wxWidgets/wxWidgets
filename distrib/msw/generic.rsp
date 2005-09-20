@@ -33,6 +33,8 @@ build/bakefiles/wxpresets/sample/*.cpp
 build/bakefiles/wxpresets/*.bkl
 build/update-setup-h
 
+build/aclocal/*.m4
+
 build/script/*.sh
 build/script/*.txt
 build/script/*.bat
