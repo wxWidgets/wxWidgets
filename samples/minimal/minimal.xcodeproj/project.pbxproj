@@ -36,8 +36,6 @@
 /* Begin PBXBuildFile section */
 		18366F970856733800504564 /* libwx_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CA89596C04D79FED00000080 /* libwx_mac.dylib */; };
 		1841EC090857AFB500951CC4 /* libwx_macd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F5A69602CDB02701000133 /* libwx_macd.a */; };
-		1842CAF5085664100032BCF7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF4085664100032BCF7 /* libz.dylib */; };
-		1842CAF6085664100032BCF7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF4085664100032BCF7 /* libz.dylib */; };
 		1842CAFB085664390032BCF7 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF7085664390032BCF7 /* AGL.framework */; };
 		1842CAFC085664390032BCF7 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF8085664390032BCF7 /* IOKit.framework */; };
 		1842CAFD085664390032BCF7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF9085664390032BCF7 /* OpenGL.framework */; };
@@ -54,7 +52,6 @@
 		4086D107063BBC5C00D4CD53 /* minimal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F591E05701FCC5DE01000133 /* minimal.cpp */; };
 		4086D109063BBC5C00D4CD53 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
 		4086D10B063BBC5C00D4CD53 /* System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA60173504D423C000000080 /* System.framework */; };
-		40B6DFF3063CD7B000442FB3 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 40B6DFF2063CD7B000442FB3 /* libiconv.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -112,7 +109,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1842CAF4085664100032BCF7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.1.2.2.dylib; sourceTree = "<absolute>"; };
 		1842CAF7085664390032BCF7 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		1842CAF8085664390032BCF7 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		1842CAF9085664390032BCF7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
@@ -121,7 +117,6 @@
 		1864B4F408566CAB00E32E9B /* minimalStatic(Debug).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "minimalStatic(Debug).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4086D0EF063BBC5B00D4CD53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		40B6DFF2063CD7B000442FB3 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<absolute>"; };
 		CA60173504D423C000000080 /* System.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = System.framework; path = /System/Library/Frameworks/System.framework; sourceTree = "<absolute>"; };
 		CA89578E04D706FC00000080 /* libwx_macd.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libwx_macd.dylib; path = ../../src/build/Development/libwx_macd.dylib; sourceTree = SOURCE_ROOT; };
 		CA89596C04D79FED00000080 /* libwx_mac.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libwx_mac.dylib; path = ../../src/build/Deployment/libwx_mac.dylib; sourceTree = SOURCE_ROOT; };
@@ -138,8 +133,6 @@
 			files = (
 				4086D0E9063BBC5B00D4CD53 /* Carbon.framework in Frameworks */,
 				4086D0EC063BBC5B00D4CD53 /* System.framework in Frameworks */,
-				40B6DFF3063CD7B000442FB3 /* libiconv.dylib in Frameworks */,
-				1842CAF5085664100032BCF7 /* libz.dylib in Frameworks */,
 				1842CAFB085664390032BCF7 /* AGL.framework in Frameworks */,
 				1842CAFC085664390032BCF7 /* IOKit.framework in Frameworks */,
 				1842CAFD085664390032BCF7 /* OpenGL.framework in Frameworks */,
@@ -154,7 +147,6 @@
 			files = (
 				4086D109063BBC5C00D4CD53 /* Carbon.framework in Frameworks */,
 				4086D10B063BBC5C00D4CD53 /* System.framework in Frameworks */,
-				1842CAF6085664100032BCF7 /* libz.dylib in Frameworks */,
 				1842CAFF085664390032BCF7 /* AGL.framework in Frameworks */,
 				1842CB00085664390032BCF7 /* IOKit.framework in Frameworks */,
 				1842CB01085664390032BCF7 /* OpenGL.framework in Frameworks */,
@@ -216,8 +208,6 @@
 				1842CAF8085664390032BCF7 /* IOKit.framework */,
 				1842CAF9085664390032BCF7 /* OpenGL.framework */,
 				1842CAFA085664390032BCF7 /* WebKit.framework */,
-				40B6DFF2063CD7B000442FB3 /* libiconv.dylib */,
-				1842CAF4085664100032BCF7 /* libz.dylib */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -473,6 +463,7 @@
 		1842CAA108565A280032BCF7 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ../../include/wx/wxprec.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -518,6 +509,10 @@
 					tiff,
 				);
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = (
+					"-liconv",
+					"-lz",
+				);
 				PRODUCT_NAME = "minimalStatic$(PRODUCT_NAME)";
 				USE_SEPARATE_HEADERMAPS = YES;
 				WARNING_CFLAGS = (
@@ -532,6 +527,7 @@
 		1842CAA208565A280032BCF7 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ../../include/wx/wxprec.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -577,6 +573,10 @@
 					tiff,
 				);
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = (
+					"-liconv",
+					"-lz",
+				);
 				PRODUCT_NAME = "minimalStatic$(PRODUCT_NAME)";
 				USE_SEPARATE_HEADERMAPS = YES;
 				WARNING_CFLAGS = (
@@ -619,6 +619,10 @@
 					"-iquote",
 					.,
 				);
+				OTHER_LDFLAGS = (
+					"-liconv",
+					"-lz",
+				);
 				PRODUCT_NAME = "minimalDynamic$(PRODUCT_NAME)";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -659,6 +663,10 @@
 					../../src/build/include,
 					"-iquote",
 					.,
+				);
+				OTHER_LDFLAGS = (
+					"-liconv",
+					"-lz",
 				);
 				PRODUCT_NAME = "minimalDynamic$(PRODUCT_NAME)";
 				WARNING_CFLAGS = (
