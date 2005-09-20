@@ -153,5 +153,5 @@ web site.
 
 Have fun!
 
-The wxWidgets Team, June 2005
+The wxWidgets Team, September 2005
 
