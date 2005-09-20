@@ -561,12 +561,15 @@ DECLARE_LOG_FUNCTION2(SysError, long, lErrCode);
     DECLARE_LOG_FUNCTION2(Trace, wxTraceMask, mask);
 #else   //!debug
     // these functions do nothing in release builds
+
+    // note that leaving out "fmt" in the vararg functions provokes a warning
+    // from SGI CC: "the last argument of the varargs function is unnamed"
     inline void wxVLogDebug(const wxChar *, va_list) { }
-    inline void wxLogDebug(const wxChar *, ...) { }
+    inline void wxLogDebug(const wxChar *fmt, ...) { wxUnusedVar(fmt); }
     inline void wxVLogTrace(wxTraceMask, const wxChar *, va_list) { }
-    inline void wxLogTrace(wxTraceMask, const wxChar *, ...) { }
+    inline void wxLogTrace(wxTraceMask, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
     inline void wxVLogTrace(const wxChar *, const wxChar *, va_list) { }
-    inline void wxLogTrace(const wxChar *, const wxChar *, ...) { }
+    inline void wxLogTrace(const wxChar *, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
 #endif // debug/!debug
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
