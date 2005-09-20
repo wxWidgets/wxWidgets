@@ -1,7 +1,7 @@
-Document: wx=V-manual
-Title: wxWidgets=V Programming Manual
-Author: The wxWidgets Cabal
-Abstract: This manual describes the wxWidgets=V cross-platform GUI toolkit.
+Document: wxwindows-manual
+Title: wxWindows Programming Manual
+Author: The wxWindows Cabal
+Abstract: This manual describes the wxWindows cross-platform GUI toolkit.
 Section: Apps/Programming
 
 Format: HTML

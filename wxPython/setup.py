@@ -16,7 +16,7 @@ from distutils.command.install_data import install_data
 VER_MAJOR        = 2      # The first three must match wxWindows
 VER_MINOR        = 4
 VER_RELEASE      = 4
-VER_SUBREL       = 0       # wxPython release num for x.y.z release of wxWindows
+VER_SUBREL       = 1       # wxPython release num for x.y.z release of wxWindows
 VER_FLAGS        = ""      # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
@@ -100,6 +100,24 @@ UNDEF_NDEBUG = 1   # Python 2.2 on Unix/Linux by default defines NDEBUG,
 
 NO_SCRIPTS = 0     # Don't install the tool scripts
 
+INSTALL_MULTIVERSION = 1 # Install the packages such that multiple versions
+                   # can co-exist.  When turned on the wx and wxPython
+                   # pacakges will be installed in a versioned subdir
+                   # of site-packages, and a *.pth file will be
+                   # created that adds that dir to the sys.path.  In
+                   # addition, a wxversion.py module will be installed
+                   # to site-pacakges that will allow applications to
+                   # choose a specific version if more than one are
+                   # installed.
+                   
+FLAVOUR = ""       # Optional flavour string to be appended to VERSION
+                   # in MULTIVERSION installs
+
+EP_ADD_OPTS = 1    # When doing MULTIVERSION installs the wx port and
+                   # ansi/unicode settings can optionally be added to the
+                   # subdir path used in site-packages
+                   
+                   
 WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
                    # it to pass an alternate version of wx-config or alternate
                    # flags, eg. as required by the .deb in-tree build.  By
@@ -185,6 +203,7 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN',
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS',
+	     'INSTALL_MULTIVERSION', 'EP_ADD_OPTS',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(flag) == 0:
@@ -194,7 +213,7 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
                 sys.argv[x] = ''
 
 # String options
-for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT']:
+for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT', 'FLAVOUR']:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(option) == 0:
             pos = sys.argv[x].find('=') + 1
@@ -339,6 +358,31 @@ def find_data_files(srcdir, *wildcards):
     os.path.walk(srcdir, walk_helper, (file_list, wildcards))
     return file_list
 
+
+def getExtraPath(shortVer=True, addOpts=False):
+    """Get the dirname that wxPython will be installed under."""
+
+    if shortVer:
+        # short version, just Major.Minor
+        ep = "wx-%d.%d" % (VER_MAJOR, VER_MINOR)
+        
+        # plus release if minor is odd
+        if VER_MINOR % 2 == 1:
+            ep += ".%d" % VER_RELEASE
+            
+    else:
+        # long version, full version 
+        ep = "wx-%d.%d.%d.%d" % (VER_MAJOR, VER_MINOR, VER_RELEASE, VER_SUBREL)
+
+    if addOpts:
+        port = WXPORT
+        if port == "msw": port = "win32"
+        ep += "-%s-%s" % (WXPORT, (UNICODE and 'unicode' or 'ansi'))
+        
+    if FLAVOUR:
+        ep += "-" + FLAVOUR
+
+    return ep
 
 
 #----------------------------------------------------------------------
@@ -1202,6 +1246,13 @@ DATA_FILES += find_data_files('wxPython/py', '*.txt', '*.ico', '*.css', '*.html'
 DATA_FILES += find_data_files('wx', '*.txt', '*.css', '*.html')
 
 
+if INSTALL_MULTIVERSION:
+    EXTRA_PATH = getExtraPath(addOpts=EP_ADD_OPTS)
+    open("src/wx.pth", "w").write(EXTRA_PATH)
+else:
+    EXTRA_PATH = None
+       
+
 #----------------------------------------------------------------------
 # Do the Setup/Build/Install/Whatever
 #----------------------------------------------------------------------
@@ -1242,6 +1293,8 @@ if __name__ == "__main__":
                           'wx.tools.XRCed',
                           ],
 
+              extra_path = EXTRA_PATH,
+
               ext_package = PKGDIR,
               ext_modules = wxpExtensions,
 
@@ -1254,6 +1307,33 @@ if __name__ == "__main__":
 
               )
 
+
+        if INSTALL_MULTIVERSION:
+            setup(name             = 'wxPython-common',
+                  version          = VERSION,
+                  description      = DESCRIPTION,
+                  long_description = LONG_DESCRIPTION,
+                  author           = AUTHOR,
+                  author_email     = AUTHOR_EMAIL,
+                  url              = URL,
+                  download_url     = DOWNLOAD_URL,
+                  license          = LICENSE,
+                  platforms        = PLATFORMS,
+                  classifiers      = filter(None, CLASSIFIERS.split("\n")),
+                  keywords         = KEYWORDS,
+
+                  package_dir = { '': 'wxversion' },
+                  py_modules = ['wxversion'],
+
+                  data_files = [('', ['src/wx.pth'])],
+                  
+                  options = { 'build'            : { 'build_base' : BUILD_BASE },
+                              },
+                  
+                  cmdclass = { 'install_data':    smart_install_data,
+                               },
+                  )
+            
 
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------

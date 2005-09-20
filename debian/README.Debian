@@ -35,17 +35,20 @@ libwxgtk		wxGTK runtime shared libraries
 libwxgtk-dev		extra files and static libs for building wxGTK apps
 libwxgtk-dbg		wxGTK libraries built with -g and __WXDEBUG__
 
-libwxgtk-python		Python binding to wxGTK  (from 2.2.3 onward, this
+libwxgtk-contrib	wxWin contrib runtime shared libs (built with wxGTK)
+libwxgtk-contrib-dev	extra files and static contrib libs for building apps
+
+python-wxgtk		Python binding to wxGTK  (from 2.2.3 onward, this
 			obsoletes the libwxgtk-python-contrib package as
 			all python modules are built into a single monolith)
+python-wxversion	The wxversion.py version selector, new to wxPython2.6
+python-wxtools		The ancillary tools from the wxPython distribution.
 
-wxwin-contrib		wxWin contrib runtime shared libs (built with wxGTK)
-wxwin-contrib-dev	extra files and static contrib libs for building apps
-
-wxwin-headers		common header files for building wxWindows apps
-wxwin-doc		HTML version of the wxWindows manual
-wxwin-examples		wxWindows and wxPython demos and samples (source)
-wxwin-i18n		message catalogs for native language support
+wx-common		common helper files and support applications.
+wx-headers		common header files for building wxWindows apps
+wx-doc			HTML version of the wxWindows manual
+wx-examples		wxWindows and wxPython demos and samples (source)
+wx-i18n			message catalogs for native language support
 
 
 	The following binaries can be built from the source package
@@ -66,7 +69,7 @@ libwxmsw-dev		mingw32-cross wxMSW libs.
 libwxmsw-dbg		mingw32-cross wxMSW (debug) libs.
 libwxbase-msw-dev	mingw32-cross wxBase libs.
 libwxbase-msw-dbg	mingw32-cross wxBase (debug) libs.
-wxwin-headers-msw	extra headers needed for wxMSW.
+wx-headers-msw		extra headers needed for wxMSW.
 
 	You can build all of these extra packages using the binary-cross
 	target in debian/rules.

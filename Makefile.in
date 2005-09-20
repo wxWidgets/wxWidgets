@@ -1461,6 +1461,7 @@ PYTHON_DIST:
 		wxPython/wxPython/py \
 		wxPython/wxPython/py/tests \
 		wxPython/wxPython/py/wxd \
+		wxPython/wxversion \
 		; do \
 			echo "Copying dir: $$dir..."; \
 			mkdir -p $(DISTDIR)/$$dir; \
