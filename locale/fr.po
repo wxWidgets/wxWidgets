@@ -1541,7 +1541,7 @@ msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
 "Échec de l'expansion des variables d'environnement : « %c » manquant à la "
-"position %d dans « %s »."
+"position %u dans « %s »."
 
 #: ../src/generic/dirctrlg.cpp:661 ../src/generic/dirctrlg.cpp:679
 #: ../src/generic/dirctrlg.cpp:690 ../src/generic/dirdlgg.cpp:342
