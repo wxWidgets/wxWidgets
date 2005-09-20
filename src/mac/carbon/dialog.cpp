@@ -112,7 +112,8 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
 
 bool wxDialog::IsModal() const
 {
-    return m_isModalStyle;
+    return wxModalDialogs.Find((wxDialog *)this) != NULL; // const_cast
+    //    return m_isModalStyle;
 }
 
 
@@ -135,7 +136,7 @@ bool wxDialog::Show(bool show)
         InitDialog();
     }
 
-    if ( IsModal() )
+    if ( m_isModalStyle )
     {
         if ( show )
         {
@@ -189,7 +190,7 @@ void wxDialog::DoShowModal()
 // Replacement for Show(TRUE) for modal dialogs - returns return code
 int wxDialog::ShowModal()
 {
-    if ( !IsModal() )
+    if ( !m_isModalStyle )
     {
         SetModal(TRUE);
     }
@@ -202,8 +203,9 @@ int wxDialog::ShowModal()
 //     dialogs and should work for both of them
 void wxDialog::EndModal(int retCode)
 {
-  SetReturnCode(retCode);
-  Show(FALSE);
+    SetReturnCode(retCode);
+    Show(FALSE);
+    SetModal(false);
 }
 
 // Standard buttons
