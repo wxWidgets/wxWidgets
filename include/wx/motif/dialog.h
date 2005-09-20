@@ -99,6 +99,12 @@ protected:
 
     virtual void DoSetClientSize(int width, int height);
 
+#if wxCHECK_VERSION(2,7,0)
+    #error "Remove DoDestroy(), it was only kept for binary backwards compatibility"
+#endif
+
+    virtual void DoDestroy();
+
 private:
     DECLARE_EVENT_TABLE()
 };

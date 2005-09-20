@@ -196,6 +196,10 @@ bool wxDialog::DoCreate(wxWindow* parent,
     return true;
 }
 
+void wxDialog::DoDestroy()
+{
+}
+
 void wxDialog::SetModal(bool flag)
 {
 #ifdef __VMS

@@ -266,6 +266,10 @@ bool wxFrame::DoCreate(wxWindow* parent,
     return true;
 }
 
+void wxFrame::DoDestroy()
+{
+}
+
 wxFrame::~wxFrame()
 {
     m_isBeingDeleted = true;
