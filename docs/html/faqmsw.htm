@@ -1,7 +1,8 @@
+
 <HTML>
 
 <HEAD>
-<TITLE>wxWidgets 2 for Windows FAQ</TITLE>
+<TITLE>wxWidgets for Windows FAQ</TITLE>
 </HEAD>
 
 <BODY BGCOLOR=#FFFFFF TEXT=#000000 VLINK="#00376A" LINK="#00529C" ALINK="#313063">
@@ -12,7 +13,7 @@
 <tr>
 <td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
 <font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
-<b>wxWidgets 2 for Windows FAQ</b>
+<b>wxWidgets for Windows FAQ</b>
 </font>
 </td>
 </tr>
@@ -28,10 +29,10 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#wince">What about Windows CE?</a></li>
 <li><a href="#winxp">What do I need to do for Windows XP?</a></li>
 <li><a href="#compilers">What compilers are supported?</a></li>
-<li><a href="#bestcompiler">Which is the best compiler to use with wxWidgets 2?</a></li>
+<li><a href="#bestcompiler">Which is the best compiler to use with wxWidgets?</a></li>
 <li><a href="#unicode">Is Unicode supported?</a></li>
 <li><a href="#doublebyte">Does wxWidgets support double byte fonts (Chinese/Japanese/Korean etc.)?</a></li>
-<li><a href="#dll">Can you compile wxWidgets 2 as a DLL?</a></li>
+<li><a href="#dll">Can you compile wxWidgets as a DLL?</a></li>
 <li><a href="#exesize">How can I reduce executable size?</a></li>
 <li><a href="#mfc">Is wxWidgets compatible with MFC?</a></li>
 <li><a href="#setuph">Why do I get errors about setup.h not being found?</a></li>
@@ -53,24 +54,18 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 
 <h3><a name="platforms">Which Windows platforms are supported?</a></h3>
 
-wxWidgets 2 can be used to develop and deliver applications on Windows 3.1, Win32s,
-Windows 95, Windows 98, Windows NT, Windows 2000, and Windows XP. A Windows CE
-version is being looked into (see below).<P>
+wxWidgets can be used to develop and deliver applications on Windows 95, Windows 98, Windows NT,
+Windows 2000, Windows XP, and Windows Vista. A Windows CE
+port is also available (see below).<P>
 
-wxWidgets 2 is designed to make use of WIN32 features and controls. However, unlike Microsoft,
-we have not forgotten users of 16-bit Windows. Most features
-work under Windows 3.1, including wxTreeCtrl and wxListCtrl using the generic implementation.
-However, don&#39;t expect very Windows-95-specific classes to work, such as wxTaskBarIcon. The wxRegConfig
-class doesn&#39;t work either because the Windows 3.1 registry is very simplistic. Check out the 16-bit
-makefiles to see what other files have been left out.
-<P>
-16-bit compilation is supported under Visual C++ 1.5, and Borland BC++ 4 to 5.
+16-bit compilation is only supported for wxWidgets 2.4 and previous versions,
+using Visual C++ 1.5 and Borland BC++ 4 to 5.
 <P>
 
-wxWidgets 2 for Windows will also compile on Unix with gcc using Wine from <a href="http://www.winehq.org" target=_top>WineHQ</a>.
+wxWidgets for Windows will also compile on Unix with gcc using Wine from <a href="http://www.winehq.org" target=_top>WineHQ</a>.
 The resulting executables are Unix binaries that work with the Wine Windows API emulator.<P>
 
-You can also compile wxWidgets 2 for Windows on Unix with Cygwin or Mingw32, resulting
+You can also compile wxWidgets for Windows on Unix with Cygwin or Mingw32, resulting
 in executables that will run on Windows. So in theory you could write your applications
 using wxGTK or wxMotif, then check/debug your wxWidgets for Windows
 programs with Wine, and finally produce an ix86 Windows executable using Cygwin/Mingw32,
@@ -78,9 +73,18 @@ without ever needing a copy of Microsoft Windows. See the Technical Note on the 
 
 <h3><a name="wince">What about Windows CE?</a></h3>
 
-This port is largely complete. For further information, see the <a href="http://www.wxwidgets.org/embedded.htm#wxwince">wxEmbedded</a> page.<P>
+This port supports Pocket PC 2002/2003 and MS Smartphone 2002/2003, using
+Embedded Visual C++ 3 or 4. For further information, see the wxMSW section in
+the wxWidgets Reference Manual, and also the <a href="http://www.wxwidgets.org/embedded.htm#wxwince">wxEmbedded</a> page.<P>
 
 <h3><a name="winxp">What do I need to do for Windows XP?</a></h3>
+
+From wxWidgets 2.5, the XP manifest is included in wx/msw/wx.rc and
+so your application will be themed automatically so long as you include wx.rc
+in your own .rc file.<P>
+
+For versions of wxWidgets below 2.5, you need to provide the manifest
+explicitly, as follows.<p>
 
 In the same directory as you have your executable (e.g. foo.exe) you
 put a file called foo.exe.manifest in which you have something like
@@ -119,10 +123,6 @@ line:<P>
   1 24 "winxp.manifest"
 </PRE>
 
-In wxWidgets 2.5, this will be in the wx/msw/wx.rc and
-so will happen automatically so long as you include wx.rc
-in your own .rc file.<P>
-
 For an explanation of this syntax, please see
 <a href="http://delphi.about.com/library/bluc/text/uc111601a.htm" target=_new>this
 article</a>.
@@ -130,7 +130,7 @@ article</a>.
 
 <h3><a name="compilers">What compilers are supported?</a></h3>
 
-Please see the wxWidgets 2 for Windows install.txt file for up-to-date information, but
+Please see the wxWidgets for Windows install.txt file for up-to-date information, but
 currently the following are known to work:<P>
 
 <ul>
@@ -146,9 +146,9 @@ currently the following are known to work:<P>
 <P>
 
 
-<h3><a name="bestcompiler">Which is the best compiler to use with wxWidgets 2?</a></h3>
+<h3><a name="bestcompiler">Which is the best compiler to use with wxWidgets?</a></h3>
 
-It&#39;s partly a matter of taste, but I (JACS) prefer Visual C++ since the debugger is very
+It&#39;s partly a matter of taste, but some people prefer Visual C++ since the debugger is very
 good, it&#39;s very stable, the documentation is extensive, and it generates small executables.
 Since project files are plain text, it&#39;s easy for me to generate appropriate project files
 for wxWidgets samples.<P>
@@ -170,7 +170,8 @@ Watcom C++ is a little slow and the debugger is not really up to today&#39;s sta
 
 Among the free compilers the best choice seem to be Borland C++ command line
 tools and mingw32 (port of gcc to Win32). Both of them are supported by
-wxWidgets.
+wxWidgets. However BC++ has trouble compiling large executables statically,
+so you need to dynamically link the wxWidgets libraries.<p>
 
 <h3><a name="unicode">Is Unicode supported?</a></h3>
 
@@ -181,7 +182,7 @@ href="http://www.microsoft.com/globaldev/handson/dev/mslu_announce.mspx">MSLU</a
 
 <h3><a name="doublebyte">Does wxWidgets support double byte fonts (Chinese/Japanese/Korean etc.)?</a></h3>
 
-For Japanese under Win2000, it seems that wxWidgets has no problems to work
+For Japanese under Win2000, it seems that wxWidgets has no problems working
 with double byte char sets (meaning DBCS, not Unicode). First you have to
 install Japanese support on your Win2K system and choose for ANSI translation
 <tt>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage=932</tt>
@@ -189,7 +190,7 @@ install Japanese support on your Win2K system and choose for ANSI translation
 wxWidgets applications.
 <p>
 
-<h3><a name="dll">Can you compile wxWidgets 2 as a DLL?</a></h3>
+<h3><a name="dll">Can you compile wxWidgets as a DLL?</a></h3>
 
 Yes (using the Visual C++ or Borland C++ makefile), but be aware that distributing DLLs is a thorny issue
 and you may be better off compiling statically-linked applications, unless you&#39;re
@@ -238,13 +239,13 @@ functionality using MFC.<P>
 <H3><a name="setuph">Why do I get errors about setup.h not being found?</a></H3>
 
 When you build the wxWidgets library, setup.h is copied
-from include/wx/msw/setup.h to e.g. lib/mswd/wx/setup.h (the path
+from include/wx/msw/setup.h to e.g. lib/vc_msw/mswd/wx/setup.h (the path
 depends on the configuration you&#39;re building). So you need to add
 this include path if building using the static Debug library:<P>
 
-lib/mswd<P>
+lib/vc_lib/mswd<P>
 
-or if building the static Release library, lib/msw.<P>
+or if building the static Release library, lib/vc_lib/msw.<P>
 
 See also the <a href="http://wiki.wxwidgets.org/wiki.pl?Table_Of_Contents">wxWiki Contents</a>
 for more information.<P>
@@ -323,13 +324,12 @@ Code&#39; (and no others). This will then work.<P>
 <H3><a name="makefiles">How are the wxWidgets makefiles edited under Windows?</a></H3>
 
 wxWidgets 2.5.x and above uses Bakefile to generate makefiles, which
-is described in technical note 16 under docs/tech in your distribution.
-For 2.4.x, the following explanation applies.<P>
+is described in technical note 16 under docs/tech in your distribution.<p>
 
-As of wxWidgets 2.1, there is a new system written by Vadim Zeitlin, that
+For 2.4.x, there is a system written by Vadim Zeitlin that
 generates the makefiles from templates using tmake.<P>
 
-Here are Vadim&#39;s notes:<P>
+Here are Vadim&#39;s notes on tmake:<P>
 
 <blockquote>
 To use these new makefiles, you don&#39;t need anything (but see below).
@@ -341,7 +341,7 @@ example) and regenerate the makefile using tmake.<P>
 
 tmake can be found at
 <a href="http://www.troll.no/freebies/tmake.html" target=_new>www.troll.no/freebies/tmake.html</a>.
-It&#39;s a Perl5 program and so it needs Perl (doh). There is a binary for
+It&#39;s a Perl5 program and so it needs Perl (doh). There is a binary for 
 Windows (available from the same page), but I haven&#39;t used it, so
 I don&#39;t know if it works as flawlessly as "perl tmake" does (note
 for people knowing Perl: don&#39;t try to run tmake with -w, it won&#39;t
@@ -350,7 +350,7 @@ just go to distrib/msw/tmake and type<P>
 
 <pre>tmake -t b32 wxwin.pro -o ../../src/msw/makefile.b32</pre><P>
 
-The makefiles are untested - I don&#39;t have any of Borland, Watcom or
+The makefiles are untested - I don&#39;t have any of Borland, Watcom  or
 Symantec and I don&#39;t have enough diskspace to recompile even with
 VC6 using makefiles. The new makefiles are as close as possible to the
 old ones, but not closer: in fact, there has been many strange things
@@ -457,7 +457,7 @@ First, you can use wxRegKey directly, for example:
     regKey.SetName(idName);
 
     {
-        wxLogNull dummy;
+        wxLogNull dummy; 
         if (!regKey.Create())
         {
             idName = wxT("HKEY_CURRENT_USER\\SOFTWARE\\My Company\\My Product\\Stuff\\");
@@ -542,7 +542,7 @@ slightly smaller and faster.
 But the most important thing is to use the <strong>same</strong> CRT setting for
 all components of your project.
 
-<h3><a name="#directx">Why do I get compilation erros when using wxWidgets with DirectShow?</a></h3>
+<h3><a name="#directx">Why do I get compilation errors when using wxWidgets with DirectShow?</a></h3>
 
 If you get errors when including Microsoft DirectShow or DirectDraw headers,
 the following message from Peter Whaite could help:
@@ -554,9 +554,9 @@ the following message from Peter Whaite could help:
 
 The reason for this is that __WXDEBUG__ is also used by the DXSDK (9.0
 in my case) to &#39;#pragma once&#39; the contents of
-DXSDK/Samples/C++/DirectShow/BaseClasses/wxdebug.h. So if __WXDEBUG__
+DXSDK/Samples/C++/DirectShow/BaseClasses/wxdebug.h.  So if __WXDEBUG__
 is defined, then wxdebug.h doesn&#39;t get included, and the assert macros
-don&#39;t get defined. You have to #undef __WXDEBUG__ before including the
+don&#39;t get defined.  You have to #undef __WXDEBUG__ before including the
 directshow baseclass&#39;s &lt;streams.h&gt;.
 </blockquote>
 
