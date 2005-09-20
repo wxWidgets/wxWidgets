@@ -64,6 +64,7 @@
 - (void)dealloc
 {
     [m_image release];
+    [super dealloc];
 }
 
 - (NSSize)sizeOfLabel:(BOOL)shouldTruncateLabel

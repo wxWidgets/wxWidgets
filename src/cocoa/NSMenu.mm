@@ -40,6 +40,7 @@ WX_IMPLEMENT_POSER(wxPoserNSMenu);
     wxCocoaNSMenu *menu = wxCocoaNSMenu::GetFromCocoa(self);
     if(menu)
         menu->Cocoa_dealloc();
+    [super dealloc];
 }
 
 @end // wxPoserNSMenu
