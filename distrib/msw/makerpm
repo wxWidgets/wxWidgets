@@ -507,7 +507,7 @@ if [ "$SPINWXX11" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
 fi
 
 if [ "$SPINWXGTK1" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
-  RPMBUILDARGS=
+  RPMBUILDARGS="--without gtk2"
   PLATFORM=gtk1
   dospinwxgtk
 fi
