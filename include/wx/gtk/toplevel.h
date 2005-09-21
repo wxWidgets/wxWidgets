@@ -62,9 +62,7 @@ public:
 
     virtual bool SetShape(const wxRegion& region);
 
-#if wxABI_VERSION >= 20602
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
-#endif
 
     virtual bool Show(bool show = TRUE);
 
@@ -109,6 +107,10 @@ public:
     // m_windowStyle translated to GDK's terms
     long          m_gdkFunc,
                   m_gdkDecor;
+
+    // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
+    // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
+    int m_urgency_hint;
 
 protected:
     // common part of all ctors
