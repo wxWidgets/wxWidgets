@@ -83,7 +83,17 @@ elif [ "$OSTYPE" = "darwin" ]; then
   # re-generate SWIG files
   ./b $PY_VERSION t
   
-  sudo distrib/mac/wxPythonOSX/build 2.3 panther inplace
+  PY_DOT_VER=2.3
+  if [ "$PY_VERSION" = "24" ]; then
+    PY_DOT_VER=2.4
+  fi
+  
+  UNICODE_OPT=
+  if [ "$UNICODE" = "1" ]; then
+    UNICODE_OPT=unicode
+  fi 
+  
+  sudo distrib/mac/wxPythonOSX/build $PY_DOT_VER panther inplace $UNICODE_OPT
   exit
 else
   echo "OSTYPE $OSTYPE not yet supported by this build script."
