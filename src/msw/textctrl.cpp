@@ -1776,6 +1776,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 // Insert tab since calling the default Windows handler
                 // doesn't seem to do it
                 WriteText(wxT("\t"));
+                return;
             }
             break;
     }
