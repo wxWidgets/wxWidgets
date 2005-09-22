@@ -195,10 +195,10 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][10] =
 
     { wxT( "UTF-7" ), NULL },
     { wxT( "UTF-8" ), NULL },
-    { wxT( "UTF-16" ), NULL },
-    { wxT( "UTF-16BE" ), NULL },
-    { wxT( "UTF-16LE" ), NULL },
-    { wxT( "UTF-32" ), wxT( "UCS-4" ), NULL },
+    { wxT( "UTF-16" ), wxT("UCS-2"), wxT("UCS2"), NULL },
+    { wxT( "UTF-16BE" ), wxT("UCS-2BE"), NULL },
+    { wxT( "UTF-16LE" ), wxT("UCS-2LE"), NULL },
+    { wxT( "UTF-32" ), wxT( "UCS-4" ), wxT("UCS4"), NULL },
     { wxT( "UTF-32BE" ), wxT( "UCS-4BE" ), NULL },
     { wxT( "UTF-32LE" ), wxT( "UCS-4LE" ), NULL },
 
