@@ -2,6 +2,11 @@
 
 A paint event is sent when a window's contents needs to be repainted.
 
+Please notice that in general it is impossible to change the drawing of a
+standard control (such as \helpref{wxButton}{wxbutton}) and so you shouldn't
+attempt to handle paint events for them as even if it might work on some
+platforms, this is inherently not portable and won't work everywhere.
+
 \wxheading{Derived from}
 
 \helpref{wxEvent}{wxevent}\\
