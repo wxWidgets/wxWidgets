@@ -1341,7 +1341,7 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_iconv( const wxChar* name )
     return result;
 }
 
-wxString wxMBConv_iconv::ms_wcCharsetName = NULL;
+wxString wxMBConv_iconv::ms_wcCharsetName;
 bool wxMBConv_iconv::ms_wcNeedsSwap = false;
 
 wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
@@ -1407,7 +1407,8 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
                     if (ICONV_FAILED(res, insz))
                     {
                         wxLogLastError(wxT("iconv"));
-                        wxLogError(_("Conversion to charset '%s' doesn't work."), name);
+                        wxLogError(_("Conversion to charset '%s' doesn't work."),
+                                   name.c_str());
                     }
                     else // ok, can convert to this encoding, remember it
                     {
@@ -1445,7 +1446,7 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
         {
             wxLogTrace(TRACE_STRCONV,
                        wxT("\"%s\" -> \"%s\" works but not the converse!?"),
-                       ms_wcCharsetName.c_str(), cname);
+                       ms_wcCharsetName.c_str(), cname.data());
         }
     }
 }
