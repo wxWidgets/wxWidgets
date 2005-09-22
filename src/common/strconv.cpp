@@ -1425,7 +1425,7 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
 
         wxLogTrace(TRACE_STRCONV,
                    wxT("iconv wchar_t charset is \"%s\"%s"),
-                   ms_wcCharsetName.empty() ? "<none>"
+                   ms_wcCharsetName.empty() ? _T("<none>")
                                             : ms_wcCharsetName.c_str(),
                    ms_wcNeedsSwap ? _T(" (needs swap)")
                                   : _T(""));
