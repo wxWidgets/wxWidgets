@@ -25,6 +25,7 @@ X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
 MGLDIR   = $(WXDIR)/src/mgl
 MOTIFDIR = $(WXDIR)/src/motif
+MSDOSDIR = $(WXDIR)/src/msdos
 MSWDIR   = $(WXDIR)/src/msw
 PMDIR    = $(WXDIR)/src/os2
 MACDIR   = $(WXDIR)/src/mac
@@ -205,9 +206,11 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
+	mkdir $(DISTDIR)/include/wx/msdos
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/src/unix
+	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
@@ -382,8 +385,12 @@ UNIV_DIST: ALL_GUI_DIST
 MGL_DIST: UNIV_DIST
 	cp $(WXDIR)/wxMGL.spec $(DISTDIR)
 	cp $(INCDIR)/wx/mgl/*.h $(DISTDIR)/include/wx/mgl
+	mkdir $(DISTDIR)/include/wx/msdos
+	cp $(INCDIR)/wx/msdos/*.h $(DISTDIR)/include/wx/msdos
 	cp $(SRCDIR)/mgl/make* $(DISTDIR)/src/mgl
 	cp $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
+	mkdir $(DISTDIR)/src/msdos
+	cp $(SRCDIR)/msdos/*.cpp $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 

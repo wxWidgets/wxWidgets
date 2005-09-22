@@ -215,7 +215,7 @@ WXEXPAT_OBJECTS =  \
 	wxexpat_xmlrole.o \
 	wxexpat_xmltok.o
 PLUGINS_INST_DIR = $(libdir)/wx/$(PLUGIN_VERSION0)
-ALL_BASE_HEADERS =  \
+ALL_HEADERS =  \
 	wx/afterstd.h \
 	wx/app.h \
 	wx/apptrait.h \
@@ -337,10 +337,164 @@ ALL_BASE_HEADERS =  \
 	wx/xtixml.h \
 	wx/db.h \
 	wx/dbkeyg.h \
-	wx/dbtable.h
-ALL_HEADERS =  \
-	$(ALL_BASE_HEADERS) \
+	wx/dbtable.h \
 	$(ALL_GUI_HEADERS)
+ALL_BASE_HEADERS =  \
+	wx/afterstd.h \
+	wx/app.h \
+	wx/apptrait.h \
+	wx/archive.h \
+	wx/arrimpl.cpp \
+	wx/arrstr.h \
+	wx/beforestd.h \
+	wx/buffer.h \
+	wx/build.h \
+	wx/chkconf.h \
+	wx/clntdata.h \
+	wx/cmdline.h \
+	wx/confbase.h \
+	wx/config.h \
+	wx/containr.h \
+	wx/datetime.h \
+	wx/datstrm.h \
+	wx/dde.h \
+	wx/debug.h \
+	wx/defs.h \
+	wx/dir.h \
+	wx/dlimpexp.h \
+	wx/dynarray.h \
+	wx/dynlib.h \
+	wx/dynload.h \
+	wx/encconv.h \
+	wx/event.h \
+	wx/except.h \
+	wx/features.h \
+	wx/ffile.h \
+	wx/file.h \
+	wx/fileconf.h \
+	wx/filefn.h \
+	wx/filename.h \
+	wx/filesys.h \
+	wx/fontenc.h \
+	wx/fontmap.h \
+	wx/fs_mem.h \
+	wx/fs_zip.h \
+	wx/hash.h \
+	wx/hashmap.h \
+	wx/hashset.h \
+	wx/html/forcelnk.h \
+	wx/iconloc.h \
+	wx/init.h \
+	wx/intl.h \
+	wx/iosfwrap.h \
+	wx/ioswrap.h \
+	wx/ipc.h \
+	wx/ipcbase.h \
+	wx/isql.h \
+	wx/isqlext.h \
+	wx/list.h \
+	wx/listimpl.cpp \
+	wx/log.h \
+	wx/longlong.h \
+	wx/math.h \
+	wx/memconf.h \
+	wx/memory.h \
+	wx/memtext.h \
+	wx/mimetype.h \
+	wx/module.h \
+	wx/msgout.h \
+	wx/mstream.h \
+	wx/object.h \
+	wx/platform.h \
+	wx/process.h \
+	wx/ptr_scpd.h \
+	wx/recguard.h \
+	wx/regex.h \
+	wx/scopeguard.h \
+	wx/snglinst.h \
+	wx/sstream.h \
+	wx/stack.h \
+	wx/stackwalk.h \
+	wx/stdpaths.h \
+	wx/stockitem.h \
+	wx/stopwatch.h \
+	wx/strconv.h \
+	wx/stream.h \
+	wx/string.h \
+	wx/sysopt.h \
+	wx/textbuf.h \
+	wx/textfile.h \
+	wx/thread.h \
+	wx/thrimpl.cpp \
+	wx/timer.h \
+	wx/tokenzr.h \
+	wx/txtstrm.h \
+	wx/types.h \
+	wx/uri.h \
+	wx/utils.h \
+	wx/variant.h \
+	wx/vector.h \
+	wx/version.h \
+	wx/volume.h \
+	wx/wfstream.h \
+	wx/wx.h \
+	wx/wxchar.h \
+	wx/wxprec.h \
+	wx/xti.h \
+	wx/xtistrm.h \
+	wx/zipstrm.h \
+	wx/zstream.h \
+	wx/unix/apptbase.h \
+	wx/unix/apptrait.h \
+	wx/unix/execute.h \
+	wx/unix/mimetype.h \
+	wx/unix/pipe.h \
+	wx/unix/stackwalk.h \
+	wx/unix/stdpaths.h \
+	wx/msw/apptrait.h \
+	wx/msw/apptbase.h \
+	wx/msw/chkconf.h \
+	wx/msw/crashrpt.h \
+	wx/msw/dde.h \
+	wx/msw/debughlp.h \
+	wx/msw/gccpriv.h \
+	wx/msw/mimetype.h \
+	wx/msw/stackwalk.h \
+	wx/msw/stdpaths.h \
+	wx/msw/winundef.h \
+	wx/msw/wrapcctl.h \
+	wx/msw/wrapcdlg.h \
+	wx/msw/wrapwin.h \
+	$(BASE_WINCE_HDR) \
+	$(BASE_MACOSX_HDR) \
+	wx/palmos/apptbase.h \
+	wx/palmos/apptrait.h \
+	wx/palmos/chkconf.h \
+	wx/palmos/mimetype.h \
+	wx/palmos/stdpaths.h \
+	wx/msdos/mimetype.h \
+	wx/fs_inet.h \
+	wx/gsocket.h \
+	wx/protocol/file.h \
+	wx/protocol/ftp.h \
+	wx/protocol/http.h \
+	wx/protocol/protocol.h \
+	wx/sckaddr.h \
+	wx/sckipc.h \
+	wx/sckstrm.h \
+	wx/socket.h \
+	wx/url.h \
+	wx/unix/gsockunx.h \
+	wx/msw/gsockmsw.h \
+	$(NET_WINCE_HDR) \
+	wx/unix/gsockunx.h \
+	wx/unix/gsockunx.h \
+	wx/mac/carbon/gsockmac.h \
+	wx/xml/xml.h \
+	wx/xtixml.h \
+	wx/db.h \
+	wx/dbkeyg.h \
+	wx/dbtable.h
 ALL_BASE_SOURCES =  \
 	src/common/appbase.cpp \
 	src/common/archive.cpp \
@@ -24179,6 +24333,7 @@ X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
 MGLDIR   = $(WXDIR)/src/mgl
 MOTIFDIR = $(WXDIR)/src/motif
+MSDOSDIR = $(WXDIR)/src/msdos
 MSWDIR   = $(WXDIR)/src/msw
 PMDIR    = $(WXDIR)/src/os2
 MACDIR   = $(WXDIR)/src/mac
@@ -24359,9 +24514,11 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
+	mkdir $(DISTDIR)/include/wx/msdos
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/src/unix
+	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
@@ -24536,8 +24693,12 @@ UNIV_DIST: ALL_GUI_DIST
 MGL_DIST: UNIV_DIST
 	cp $(WXDIR)/wxMGL.spec $(DISTDIR)
 	cp $(INCDIR)/wx/mgl/*.h $(DISTDIR)/include/wx/mgl
+	mkdir $(DISTDIR)/include/wx/msdos
+	cp $(INCDIR)/wx/msdos/*.h $(DISTDIR)/include/wx/msdos
 	cp $(SRCDIR)/mgl/make* $(DISTDIR)/src/mgl
 	cp $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
+	mkdir $(DISTDIR)/src/msdos
+	cp $(SRCDIR)/msdos/*.cpp $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 

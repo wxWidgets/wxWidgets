@@ -2960,17 +2960,33 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         </if>
     </set>
 
-
-    <set var="ALL_BASE_HEADERS" make_var="1" hints="files">
+    <!-- for 'make install', only the headers needed for the installed port -->
+    <set var="ALL_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
         $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
         $(XML_HDR) $(ODBC_HDR)
+        $(ALL_GUI_HEADERS)
     </set>
 
-    <set var="ALL_HEADERS" make_var="1" hints="files">
-        $(ALL_BASE_HEADERS) $(ALL_GUI_HEADERS)
+
+    <!-- used by 'make dist', should include wxBase headers for all ports -->
+    <set var="ALL_BASE_HEADERS" make_var="1" hints="files">
+        $(BASE_CMN_HDR)
+        $(BASE_UNIX_HDR)
+        $(BASE_WIN32_HDR) $(BASE_WINCE_HDR)
+        $(BASE_MACOSX_HDR)
+        $(BASE_PALMOS_HDR)
+        $(BASE_MSDOS_HDR)
+        $(NET_CMN_HDR)
+        $(NET_UNIX_HDR)
+        $(NET_WIN32_HDR) $(NET_WINCE_HDR)
+        $(NET_OS2_HDR)
+        $(NET_UNIX_HDR)
+        $(NET_MAC_CARBONLIB_HDR)
+        $(XML_HDR) $(ODBC_HDR)
     </set>
 
+    <!-- used by 'make dist', should include wxBase sources for all ports -->
     <set var="ALL_BASE_SOURCES" make_var="1" hints="files">
         $(BASE_CMN_SRC)
         $(BASE_UNIX_SRC) $(BASE_WIN32_SRC) $(BASE_WINCE_SRC)
