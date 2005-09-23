@@ -32,6 +32,8 @@ public:
     virtual wxWindow* GetWxWindow() const
     {	return NULL;	}
     virtual void Cocoa_FrameChanged(void) = 0;
+    virtual bool Cocoa_acceptsFirstMouse(bool &acceptsFirstMouse, WX_NSEvent theEvent)
+    {   return false; }
     virtual bool Cocoa_drawRect(const NSRect &rect)
     {   return false; }
     virtual bool Cocoa_mouseDown(WX_NSEvent theEvent)

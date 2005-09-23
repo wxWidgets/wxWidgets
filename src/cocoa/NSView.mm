@@ -79,6 +79,15 @@ void wxCocoaNSView::DisassociateNSView(WX_NSView cocoaNSView)
 WX_IMPLEMENT_POSER(wxPoserNSView);
 @implementation wxPoserNSView : NSView
 
+- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
+{
+    bool acceptsFirstMouse = false;
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if(!win || !win->Cocoa_acceptsFirstMouse(acceptsFirstMouse, theEvent))
+        acceptsFirstMouse = [super acceptsFirstMouse:theEvent];
+    return acceptsFirstMouse;
+}
+
 - (void)drawRect: (NSRect)rect
 {
     wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
