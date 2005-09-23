@@ -3,6 +3,16 @@
 PY_VERSION=$1
 shift
 
+unicode=no
+debug=no
+
+for flag in $*; do
+    case ${flag} in
+      debug)       debug=yes              ;;
+      unicode)     unicode=yes            ;;
+    esac
+done
+
 if [ "$WXWIN" = "" ]; then
   export WXWIN=`pwd`/../..
 fi
@@ -32,7 +42,7 @@ if [ "$OSTYPE" = "cygwin" ]; then
   # remove old build files
   rm -rf vc_msw*
   UNI=
-  if [ "$UNICODE" != "" ]; then
+  if [ $unicode = yes ]; then
       UNI=-uni
   fi
   ./.make hybrid$UNI
@@ -67,7 +77,7 @@ if [ "$OSTYPE" = "cygwin" ]; then
   if [ "$DEBUG" != "" ]; then
     DEBUG_FLAG=--debug
   fi
-  if [ "$UNICODE" != "" ]; then
+  if [ $unicode = yes ]; then
     UNICODE_FLAG="UNICODE=1"
   fi
   b $PY_VERSION h $DEBUG_FLAG $UNICODE_FLAG
@@ -89,7 +99,7 @@ elif [ "$OSTYPE" = "darwin" ]; then
   fi
   
   UNICODE_OPT=
-  if [ "$UNICODE" = "1" ]; then
+  if [ $unicode = yes ]; then
     UNICODE_OPT=unicode
   fi 
   
