@@ -179,6 +179,8 @@ void wxFrame::UpdateFrameNSView()
     if(m_frameToolBar)
     {
         NSView *tbarNSView = m_frameToolBar->GetNSViewForSuperview();
+        // If the toolbar doesn't have a superview then set it to our
+        // content view.
         if(![tbarNSView superview])
             [m_frameNSView addSubview: tbarNSView];
         // Do this after addSubView so that SetSize can work
@@ -278,14 +280,7 @@ wxToolBar* wxFrame::CreateToolBar(long style,
                                       const wxString& name)
 {
     wxAutoNSAutoreleasePool pool;
-    wxFrameBase::CreateToolBar(style,winid,name);
-    if(m_frameToolBar)
-    {
-        m_frameToolBar->CocoaRemoveFromParent();
-        m_frameToolBar->SetOwningFrame(this);
-    }
-    UpdateFrameNSView();
-    return m_frameToolBar;
+    return wxFrameBase::CreateToolBar(style,winid,name);
 }
 #endif // wxUSE_TOOLBAR
 
