@@ -10,10 +10,6 @@
 #ifndef __GTKCHOICEH__
 #define __GTKCHOICEH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "choice.h"
-#endif
-
 class WXDLLIMPEXP_BASE wxSortedArrayString;
 class WXDLLIMPEXP_BASE wxArrayString;
 

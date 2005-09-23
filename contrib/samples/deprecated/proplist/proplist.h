@@ -9,10 +9,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "proplist_sample.h"
-#endif
-
 #ifndef _PROPTEST_H_
 #define _PROPTEST_H_
 

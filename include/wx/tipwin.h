@@ -13,10 +13,6 @@
 #ifndef _WX_TIPWIN_H_
 #define _WX_TIPWIN_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "tipwin.h"
-#endif
-
 #if wxUSE_TIPWINDOW
 
 #if wxUSE_POPUPWIN

@@ -14,10 +14,6 @@
 #ifndef _WX_SASHWIN_H_G_
 #define _WX_SASHWIN_H_G_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "sashwin.h"
-#endif
-
 #if wxUSE_SASH
 
 #include "wx/defs.h"

@@ -3,10 +3,6 @@
 // Do not modify this file, all changes will be lost!
 //------------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "dialogs_wdr.cpp"
-#endif
-
 // For compilers that support precompilation
 #include "wx/wxprec.h"
 

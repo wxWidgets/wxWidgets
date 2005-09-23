@@ -17,13 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    // DO NOT use event.cpp here, it breaks statics initialization in
-    // src/common/event.cpp and nothing works at all then!
-    #pragma implementation "eventsample.cpp"
-    #pragma interface "eventsample.cpp"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

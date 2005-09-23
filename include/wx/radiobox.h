@@ -12,10 +12,6 @@
 #ifndef _WX_RADIOBOX_H_BASE_
 #define _WX_RADIOBOX_H_BASE_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "radioboxbase.h"
-#endif
-
 #if wxUSE_RADIOBOX
 
 #include "wx/ctrlsub.h"

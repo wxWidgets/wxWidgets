@@ -11,10 +11,6 @@
 #ifndef _WX_XH_MENU_H_
 #define _WX_XH_MENU_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xh_menu.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 class WXDLLIMPEXP_XRC wxMenuXmlHandler : public wxXmlResourceHandler

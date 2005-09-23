@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_STATBMP_H_
 #define _WX_UNIV_STATBMP_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univstatbmp.h"
-#endif
-
 #include "wx/bitmap.h"
 
 // ----------------------------------------------------------------------------

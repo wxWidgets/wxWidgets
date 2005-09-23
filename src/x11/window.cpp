@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "window.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/menu.h"
 #include "wx/dc.h"

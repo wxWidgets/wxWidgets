@@ -13,10 +13,6 @@
 #ifndef _WX_DRAGIMAG_H_
 #define _WX_DRAGIMAG_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "dragimag.h"
-#endif
-
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/cursor.h"

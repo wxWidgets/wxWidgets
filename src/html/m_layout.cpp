@@ -6,9 +6,6 @@
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation
-#endif
 
 #include "wx/wxprec.h"
 

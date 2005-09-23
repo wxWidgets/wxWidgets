@@ -12,10 +12,6 @@
 #ifndef _WX_SLIDER95_H_
 #define _WX_SLIDER95_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "slider95.h"
-#endif
-
 class WXDLLEXPORT wxSubwindows;
 
 // Slider

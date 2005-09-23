@@ -15,11 +15,6 @@
 //| The base class for holding piles of playing cards.          |
 //+-------------------------------------------------------------+
 
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -29,9 +24,6 @@
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
-#endif
-#ifdef __GNUG__
-#pragma implementation
 #endif
 
 #include <stdlib.h>

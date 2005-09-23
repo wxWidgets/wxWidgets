@@ -9,10 +9,6 @@
 #ifndef _WX_SNDWAV_H
 #define _WX_SNDWAV_H
 
-#ifdef __GNUG__
-#pragma interface "sndwav.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/stream.h"

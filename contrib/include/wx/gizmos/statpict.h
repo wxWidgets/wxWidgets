@@ -12,10 +12,6 @@
 #ifndef _WX_STATPICT_H_
 #define _WX_STATPICT_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "statpict.h"
-#endif
-
 #include "wx/control.h"
 
 #include "wx/icon.h"

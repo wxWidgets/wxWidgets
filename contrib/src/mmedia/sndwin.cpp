@@ -6,9 +6,6 @@
 // CVSID: $Id$
 // wxWindows licence
 // --------------------------------------------------------------------------
-#ifdef __GNUG__
-#pragma implementation "sndwin.cpp"
-#endif
 
 #include "wx/wxprec.h"
 

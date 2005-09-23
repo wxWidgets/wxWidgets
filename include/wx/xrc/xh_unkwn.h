@@ -11,10 +11,6 @@
 #ifndef _WX_XH_UNKWN_H_
 #define _WX_XH_UNKWN_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xh_unkwn.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 

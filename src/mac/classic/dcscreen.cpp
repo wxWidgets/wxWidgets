@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "dcscreen.h"
-#endif
-
 #include "wx/dcscreen.h"
 #include "wx/mac/uma.h"
 

@@ -10,10 +10,6 @@ not be used much longer.
 This code was used as a starting point for my rc2xml converter
 */
 
-#ifdef __GNUG__
-#pragma implementation "rc2wxr.h"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

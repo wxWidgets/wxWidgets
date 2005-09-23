@@ -22,10 +22,6 @@
 #ifndef _WX_XML_H_
 #define _WX_XML_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xml.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_XML

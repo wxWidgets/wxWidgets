@@ -12,10 +12,6 @@
 #ifndef _WX_STATUSBR_H_BASE_
 #define _WX_STATUSBR_H_BASE_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "statbar.h"
-#endif
-
 #include "wx/window.h"
 
 #if wxUSE_STATUSBAR

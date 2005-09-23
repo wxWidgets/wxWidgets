@@ -12,10 +12,6 @@
 #ifndef _WX_DC_H_BASE_
 #define _WX_DC_H_BASE_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dcbase.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers which we must include here
 // ----------------------------------------------------------------------------

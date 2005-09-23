@@ -12,10 +12,6 @@
 #ifndef __COLORDLG_H__
 #define __COLORDLG_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "colordlg.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/gdicmn.h"
 #include "wx/dialog.h"

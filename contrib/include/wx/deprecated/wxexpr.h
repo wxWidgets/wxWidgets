@@ -12,10 +12,6 @@
 #ifndef _WX_WXEXPRH__
 #define _WX_WXEXPRH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "wxexpr.h"
-#endif
-
 #include "wx/deprecated/setup.h"
 
 #if wxUSE_PROLOGIO

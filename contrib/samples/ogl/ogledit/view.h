@@ -12,10 +12,6 @@
 #ifndef _OGLSAMPLE_VIEW_H_
 #define _OGLSAMPLE_VIEW_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-// #pragma interface "view.h"
-#endif
-
 #include "doc.h"
 #include <wx/ogl/ogl.h>
 

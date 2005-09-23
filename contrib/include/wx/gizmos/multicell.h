@@ -15,10 +15,6 @@
 #ifndef __WX_MULTICELL_H__
 #define __WX_MULTICELL_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "multicell.h"
-#endif
-
 #include "wx/gizmos/gizmos.h"
 
 // ----------------------------------------------------------------------------

@@ -10,10 +10,6 @@
 #ifndef _WX_IMAGPCX_H_
 #define _WX_IMAGPCX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "imagpcx.h"
-#endif
-
 #include "wx/image.h"
 
 

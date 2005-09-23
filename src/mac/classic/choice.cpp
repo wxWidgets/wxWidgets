@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "choice.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_CHOICE

@@ -7,13 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKDCMEMORYH__
 #define __GTKDCMEMORYH__
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface
-#endif
 
 #include "wx/defs.h"
 #include "wx/dcclient.h"

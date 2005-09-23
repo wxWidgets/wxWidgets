@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "matrix.h"
-#endif
-
 // Note: this is intended to be used in wxDC at some point to replace
 // the current system of scaling/translation. It is not yet used.
 

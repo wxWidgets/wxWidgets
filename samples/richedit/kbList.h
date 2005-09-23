@@ -12,10 +12,6 @@
 #ifndef   KBLIST_H
 #   define   KBLIST_H
 
-#ifdef __GNUG__
-#   pragma interface "kbList.h"
-#endif
-
 #ifndef   NULL
 #   define   NULL   0
 #endif

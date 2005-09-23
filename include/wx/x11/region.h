@@ -12,10 +12,6 @@
 #ifndef _WX_REGION_H_
 #define _WX_REGION_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "region.h"
-#endif
-
 #include "wx/list.h"
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"

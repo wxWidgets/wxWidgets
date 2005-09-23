@@ -13,9 +13,6 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "confbase.h"
-#endif
 
 #include "wx/wxprec.h"
 

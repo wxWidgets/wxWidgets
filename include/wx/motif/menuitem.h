@@ -12,10 +12,6 @@
 #ifndef _WX_MOTIF_MENUITEM_H
 #define _WX_MOTIF_MENUITEM_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "menuitem.h"
-#endif
-
 #include "wx/bitmap.h"
 
 class WXDLLEXPORT wxMenuBar;

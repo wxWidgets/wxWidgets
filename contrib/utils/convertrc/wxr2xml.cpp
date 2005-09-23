@@ -11,9 +11,6 @@ How to use class:
 wxr2xml trans;
 trans->Convert("Myfile.wxr","Myfile.xml");
 */
-#ifdef __GNUG__
-#pragma implementation "wxr2xml.h"
-#endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"

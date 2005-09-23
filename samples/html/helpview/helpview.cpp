@@ -5,11 +5,6 @@
 // standalone help browser.
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma implementation "help.cpp"
-#pragma interface "help.cpp"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

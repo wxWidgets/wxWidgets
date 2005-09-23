@@ -12,10 +12,6 @@
 #ifndef   _WX_OLEDROPTGT_H
 #define   _WX_OLEDROPTGT_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "droptgt.h"
-#endif
-
 #if wxUSE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------

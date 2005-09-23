@@ -11,10 +11,6 @@
 #ifndef _WX_NOTEBOOK_H_
 #define _WX_NOTEBOOK_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "notebook.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------

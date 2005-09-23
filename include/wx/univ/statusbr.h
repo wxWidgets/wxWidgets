@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_STATUSBR_H_
 #define _WX_UNIV_STATUSBR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univstatusbr.h"
-#endif
-
 #include "wx/univ/inpcons.h"
 #include "wx/arrstr.h"
 

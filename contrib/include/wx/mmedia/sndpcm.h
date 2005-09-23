@@ -9,10 +9,6 @@
 #ifndef _WX_SNDPCM_H
 #define _WX_SNDPCM_H
 
-#ifdef __GNUG__
-#pragma interface "sndpcm.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/mmedia/defs.h"
 #include "wx/mmedia/sndbase.h"

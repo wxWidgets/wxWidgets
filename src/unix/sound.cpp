@@ -9,11 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "sound.h"
-#pragma implementation "soundbase.h"
-#endif
-
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

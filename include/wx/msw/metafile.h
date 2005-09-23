@@ -12,10 +12,6 @@
 #ifndef _WX_METAFIILE_H_
 #define _WX_METAFIILE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "metafile.h"
-#endif
-
 #include "wx/dc.h"
 #include "wx/gdiobj.h"
 

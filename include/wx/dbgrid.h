@@ -14,10 +14,6 @@
 #ifndef _WX_GENERIC_DBGRID_H_
 #define _WX_GENERIC_DBGRID_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dbgrid.h"
-#endif
-
 #if wxUSE_ODBC
 #if wxUSE_GRID
 

@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "colour.h"
-#endif
-
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
 

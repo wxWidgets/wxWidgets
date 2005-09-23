@@ -9,10 +9,6 @@
 #ifndef _WX_SNDG72X_H
 #define _WX_SNDG72X_H
 
-#ifdef __GNUG__
-#pragma interface "sndg72x.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/mmedia/defs.h"
 #include "wx/mmedia/sndbase.h"

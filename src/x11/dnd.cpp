@@ -7,10 +7,6 @@
 // Licence:   	wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "dnd.h"
-#endif
-
 #include "wx/setup.h"
 
 #if wxUSE_DRAG_AND_DROP

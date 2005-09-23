@@ -12,10 +12,6 @@
 #ifndef _WX_MOTIF_MENU_H_
 #define _WX_MOTIF_MENU_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "menu.h"
-#endif
-
 #include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/arrstr.h"

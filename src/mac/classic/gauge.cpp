@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "gauge.h"
-#endif
-
 #include "wx/gauge.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)

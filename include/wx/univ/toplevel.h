@@ -11,10 +11,6 @@
 #ifndef __WX_UNIV_TOPLEVEL_H__
 #define __WX_UNIV_TOPLEVEL_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univtoplevel.h"
-#endif
-
 #include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"
 #include "wx/icon.h"

@@ -16,10 +16,6 @@
 #ifndef _WX_MSW_GDIIMAGE_H_
 #define _WX_MSW_GDIIMAGE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "gdiimage.h"
-#endif
-
 #include "wx/gdiobj.h"          // base class
 #include "wx/gdicmn.h"          // wxBITMAP_TYPE_INVALID
 #include "wx/list.h"

@@ -12,10 +12,6 @@
 #ifndef _MMBMAN_APP_H_
 #define _MMBMAN_APP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-  #pragma interface "mmbman.h"
-#endif
-
 #include "wx/stream.h"
 #include "wx/mmedia/sndbase.h"
 

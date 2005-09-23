@@ -12,10 +12,6 @@
 #ifndef _CUSTOMPROPERTYDIALOG_H_
 #define _CUSTOMPROPERTYDIALOG_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "custompropertydialog.cpp"
-#endif
-
 /*!
  * Includes
  */

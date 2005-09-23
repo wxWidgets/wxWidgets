@@ -12,10 +12,6 @@
 #ifndef _WX_MSGBOXDLG_H_
 #define _WX_MSGBOXDLG_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "msgdlg.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/dialog.h"
 

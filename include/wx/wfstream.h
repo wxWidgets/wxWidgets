@@ -12,10 +12,6 @@
 #ifndef _WX_WXFSTREAM_H__
 #define _WX_WXFSTREAM_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "wfstream.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_STREAMS

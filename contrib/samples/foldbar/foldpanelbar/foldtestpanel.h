@@ -13,10 +13,6 @@
 #ifndef _FOLDTESTPANEL_H_
 #define _FOLDTESTPANEL_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "foldtestpanel.cpp"
-#endif
-
 /*!
  * Includes
  */

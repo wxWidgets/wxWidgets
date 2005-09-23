@@ -9,11 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "spinbutt.h"
-#pragma implementation "spinbuttbase.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #if wxUSE_SPINBTN

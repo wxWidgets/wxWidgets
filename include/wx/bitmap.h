@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "bitmapbase.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"

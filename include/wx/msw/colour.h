@@ -12,10 +12,6 @@
 #ifndef _WX_COLOUR_H_
 #define _WX_COLOUR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "colour.h"
-#endif
-
 #include "wx/object.h"
 
 // ----------------------------------------------------------------------------

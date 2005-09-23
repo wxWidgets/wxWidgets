@@ -10,10 +10,6 @@
 #ifndef WXLLIST_H
 #define WXLLIST_H
 
-#ifdef __GNUG__
-#   pragma interface "wxllist.h"
-#endif
-
 #include   "kbList.h"
 
 #include   "wx/wx.h"

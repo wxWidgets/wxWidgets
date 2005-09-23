@@ -7,14 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKTOPLEVELH__
 #define __GTKTOPLEVELH__
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "toplevel.h"
-#endif
-
 
 //-----------------------------------------------------------------------------
 // wxTopLevelWindowGTK

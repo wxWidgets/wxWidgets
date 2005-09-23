@@ -12,10 +12,6 @@
 #ifndef _WX_FONTENUM_H_
 #define _WX_FONTENUM_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "fontenum.h"
-#endif
-
 /*
  * wxFontEnumerator: for gathering font information
  */

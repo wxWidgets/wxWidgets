@@ -11,10 +11,6 @@
 #ifndef __WX_TIMER_H__
 #define __WX_TIMER_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "timer.h"
-#endif
-
 //-----------------------------------------------------------------------------
 // wxTimer
 //-----------------------------------------------------------------------------

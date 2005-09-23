@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "app.h"
-#endif
-
 #include "wx/defs.h"
 
 #include "wx/window.h"

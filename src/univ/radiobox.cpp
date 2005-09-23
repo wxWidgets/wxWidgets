@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "univradiobox.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

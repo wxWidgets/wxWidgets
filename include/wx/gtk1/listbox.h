@@ -7,13 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKLISTBOXH__
 #define __GTKLISTBOXH__
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "listbox.h"
-#endif
 
 #include "wx/list.h"
 

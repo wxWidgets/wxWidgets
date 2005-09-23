@@ -13,10 +13,6 @@
 #ifndef _WX_CHECKLST_H_
 #define _WX_CHECKLST_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "checklst.h"
-#endif
-
 #if !defined(__MWERKS__) && !defined(__UNIX__)
 typedef   unsigned int  size_t;
 #endif

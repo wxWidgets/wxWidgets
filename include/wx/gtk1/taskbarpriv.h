@@ -12,10 +12,6 @@
 #ifndef _WX_TASKBARPRIV_H_
 #define _WX_TASKBARPRIV_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "taskbarpriv.h"
-#endif
-
 #include "wx/toplevel.h"
 #include "wx/bitmap.h"
 

@@ -9,11 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-// Note: this is done in utilscmn.cpp now.
-// #pragma implementation "utils.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #include "wx/utils.h"

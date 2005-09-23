@@ -12,10 +12,6 @@
 #ifndef __SPLITTERH_G__
 #define __SPLITTERH_G__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "splitter.h"
-#endif
-
 #include "wx/window.h"                      // base class declaration
 #include "wx/containr.h"                    // wxControlContainer
 

@@ -12,10 +12,6 @@
 #ifndef _WX_GENERIC_GRIDCTRL_H_
 #define _WX_GENERIC_GRIDCTRL_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "gridctrl.h"
-#endif
-
 #if wxUSE_GRID
 
 #include "wx/grid.h"

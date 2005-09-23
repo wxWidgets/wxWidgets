@@ -12,10 +12,6 @@
 #ifndef _WX_NETWORK_ADDRESS_H
 #define _WX_NETWORK_ADDRESS_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "sckaddr.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_SOCKETS

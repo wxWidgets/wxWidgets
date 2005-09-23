@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_LISTBOX_H_
 #define _WX_UNIV_LISTBOX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univlistbox.h"
-#endif
-
 #include "wx/scrolwin.h"    // for wxScrollHelper
 #include "wx/dynarray.h"
 #include "wx/arrstr.h"

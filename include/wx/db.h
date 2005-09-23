@@ -31,10 +31,6 @@
 #define OLD_GETCOLUMNS 1
 #define EXPERIMENTAL_WXDB_FUNCTIONS 1
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "db.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 

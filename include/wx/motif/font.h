@@ -12,10 +12,6 @@
 #ifndef _WX_FONT_H_
 #define _WX_FONT_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "font.h"
-#endif
-
 #if __WXMOTIF20__ && !__WXLESSTIF__
     #define wxMOTIF_NEW_FONT_HANDLING 0 // safe default, change to 1 to enable
 #else

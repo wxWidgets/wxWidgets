@@ -19,10 +19,6 @@
 #ifndef _WX_MACCARBONHID_H_
 #define _WX_MACCARBONHID_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "hid.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 

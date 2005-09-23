@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_STATTEXT_H_
 #define _WX_UNIV_STATTEXT_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univstattext.h"
-#endif
-
 class WXDLLEXPORT wxStaticText : public wxStaticTextBase
 {
 public:

@@ -13,10 +13,6 @@
 // per-user file, which can be edited using a Windows-control-panel clone.
 // Also they should be documented better. Some are very MS Windows-ish.
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "settings.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

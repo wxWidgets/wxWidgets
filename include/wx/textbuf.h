@@ -12,10 +12,6 @@
 #ifndef _WX_TEXTBUFFER_H
 #define _WX_TEXTBUFFER_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "textbuf.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/arrstr.h"
 

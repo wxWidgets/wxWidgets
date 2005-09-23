@@ -12,10 +12,6 @@
 #ifndef _SETTINGSDIALOG_H_
 #define _SETTINGSDIALOG_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "settingsdialog.cpp"
-#endif
-
 /*!
  * Includes
  */

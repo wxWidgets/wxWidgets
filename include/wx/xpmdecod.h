@@ -10,10 +10,6 @@
 #ifndef _WX_XPMDECOD_H_
 #define _WX_XPMDECOD_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xpmdecod.h"
-#endif
-
 #include "wx/defs.h"
 
 

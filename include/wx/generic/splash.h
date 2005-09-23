@@ -9,10 +9,6 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "splash.h"
-#endif
-
 #ifndef _WX_SPLASH_H_
 #define _WX_SPLASH_H_
 

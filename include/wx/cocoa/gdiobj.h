@@ -12,10 +12,6 @@
 #ifndef _WX_GDIOBJ_H_
 #define _WX_GDIOBJ_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "gdiobj.h"
-#endif
-
 #include "wx/object.h"
 
 class WXDLLEXPORT wxGDIRefData: public wxObjectRefData {

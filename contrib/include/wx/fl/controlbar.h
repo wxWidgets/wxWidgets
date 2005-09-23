@@ -13,10 +13,6 @@
 #ifndef __CONTROLBAR_G__
 #define __CONTROLBAR_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "controlbar.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/pen.h"

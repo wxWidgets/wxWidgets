@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef    __GNUG__
-#pragma implementation "mimetype.h"
-#endif
-
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

@@ -12,10 +12,6 @@
 #ifndef _WX_DIALOG_H_BASE_
 #define _WX_DIALOG_H_BASE_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dialogbase.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/containr.h"
 #include "wx/toplevel.h"

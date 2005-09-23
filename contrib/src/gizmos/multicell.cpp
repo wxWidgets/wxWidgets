@@ -11,10 +11,6 @@
 
 // This was inspired by the gbsizer class written by Alex Andruschak
 
-#ifdef __GNUG__
-    #pragma implementation "multicell.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

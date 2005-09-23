@@ -12,10 +12,6 @@
 #ifndef _WX_MODULE_H_
 #define _WX_MODULE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "module.h"
-#endif
-
 #include "wx/object.h"
 #include "wx/list.h"
 

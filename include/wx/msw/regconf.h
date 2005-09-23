@@ -12,10 +12,6 @@
 #ifndef   _REGCONF_H
 #define   _REGCONF_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "regconf.h"
-#endif
-
 #ifndef   _REGISTRY_H
   #include "wx/msw/registry.h"
 #endif

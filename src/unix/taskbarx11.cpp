@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "taskbarx11.h"
-#endif
-
 // NB: This implementation does *not* work with every X11 window manager.
 //     Currently only GNOME 1.2 and KDE 1,2,3 methods are implemented here.
 //     Freedesktop.org's System Tray specification is implemented in

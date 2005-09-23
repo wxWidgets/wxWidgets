@@ -12,10 +12,6 @@
 #ifndef _NOTEBOOK_H
 #define _NOTEBOOK_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-  #pragma interface "notebook.h"
-#endif
-
 #if wxUSE_NOTEBOOK
 
 // ----------------------------------------------------------------------------

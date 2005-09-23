@@ -12,10 +12,6 @@
 #ifndef _OGL_BITMAP_H_
 #define _OGL_BITMAP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "bmpshape.h"
-#endif
-
 
 class WXDLLIMPEXP_OGL wxBitmapShape: public wxRectangleShape
 {

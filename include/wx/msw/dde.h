@@ -12,10 +12,6 @@
 #ifndef _WX_DDE_H_
 #define _WX_DDE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "dde.h"
-#endif
-
 #include "wx/ipcbase.h"
 
 /*

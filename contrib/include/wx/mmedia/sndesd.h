@@ -9,10 +9,6 @@
 #ifndef _WX_SNDESD_H
 #define _WX_SNDESD_H
 
-#ifdef __GNUG__
-#pragma interface "sndesd.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/mmedia/defs.h"

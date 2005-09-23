@@ -7,13 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKCURSORH__
 #define __GTKCURSORH__
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface
-#endif
 
 #include "wx/defs.h"
 #include "wx/object.h"

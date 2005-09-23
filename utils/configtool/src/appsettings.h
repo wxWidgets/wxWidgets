@@ -12,10 +12,6 @@
 #ifndef _AP_APPSETTINGS_H_
 #define _AP_APPSETTINGS_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "appsettings.cpp"
-#endif
-
 #include "wx/notebook.h"
 #include "wx/dialog.h"
 #include "wx/datetime.h"

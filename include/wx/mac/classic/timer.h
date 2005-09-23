@@ -12,10 +12,6 @@
 #ifndef _WX_TIMER_H_
 #define _WX_TIMER_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "timer.h"
-#endif
-
 #include "wx/object.h"
 #include "wx/mac/macnotfy.h"
 

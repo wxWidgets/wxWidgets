@@ -11,10 +11,6 @@
 #ifndef __GTKSPINCTRLH__
 #define __GTKSPINCTRLH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_SPINCTRL

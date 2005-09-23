@@ -10,10 +10,6 @@
 #ifndef _WX_WXZIPSTREAM_H__
 #define _WX_WXZIPSTREAM_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "zipstrm.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM

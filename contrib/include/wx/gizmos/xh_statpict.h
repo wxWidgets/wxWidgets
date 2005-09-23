@@ -11,10 +11,6 @@
 #ifndef _WX_XH_STATPICT_H
 #define _WX_XH_STATPICT_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xh_statpict.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 #include "wx/gizmos/gizmos.h"
 

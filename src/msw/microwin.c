@@ -11,10 +11,6 @@
 
 */
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "microwin.h"
-#endif
-
 #include "mwtypes.h"
 #include "windows.h"
 #include "wintern.h"

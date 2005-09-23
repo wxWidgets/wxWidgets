@@ -12,10 +12,6 @@
 #ifndef _WX_TREECTRL_H_
 #define _WX_TREECTRL_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "treectrl.h"
-#endif
-
 #include "wx/control.h"
 #include "wx/event.h"
 #include "wx/imaglist.h"

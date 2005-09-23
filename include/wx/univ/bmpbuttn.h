@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_BMPBUTTN_H_
 #define _WX_UNIV_BMPBUTTN_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univbmpbuttn.h"
-#endif
-
 class WXDLLEXPORT wxBitmapButton : public wxBitmapButtonBase
 {
 public:

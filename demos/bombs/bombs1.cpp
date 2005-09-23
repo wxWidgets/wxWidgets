@@ -14,10 +14,6 @@
  * class BombsCanvas
  */
 
-#ifdef __GNUG__
-#   pragma implementation
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

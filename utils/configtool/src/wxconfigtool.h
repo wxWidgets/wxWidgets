@@ -12,10 +12,6 @@
 #ifndef _AP_WXCONFIGTOOL_H_
 #define _AP_WXCONFIGTOOL_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "wxconfigtool.cpp"
-#endif
-
 #include "wx/docview.h"
 #include "wx/help.h"
 #include "wx/app.h"

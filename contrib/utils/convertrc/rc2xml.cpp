@@ -15,10 +15,6 @@ cross platform (wxGTK,etc)
 3.  Be able to abort incorrectly formated files without crashing
 */
 
-#ifdef __GNUG__
-#pragma implementation "rc2xml.h"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

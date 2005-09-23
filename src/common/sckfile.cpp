@@ -8,9 +8,6 @@
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "sckfile.h"
-#endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"

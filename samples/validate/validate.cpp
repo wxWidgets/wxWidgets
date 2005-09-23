@@ -15,10 +15,6 @@
 // from a text control. All validators transfer data, but not
 // all test validity, so don't be confused by the name.
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#   pragma implementation
-#endif // __GNUG__
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

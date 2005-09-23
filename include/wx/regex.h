@@ -12,10 +12,6 @@
 #ifndef _WX_REGEX_H_
 #define _WX_REGEX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "regex.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_REGEX

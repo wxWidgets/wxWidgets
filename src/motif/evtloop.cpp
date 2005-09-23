@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "evtloop.h"
-#endif
-
 #ifdef __VMS
 #define XtParent XTPARENT
 #define XtDisplay XTDISPLAY

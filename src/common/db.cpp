@@ -25,9 +25,6 @@
 // SYNOPSIS START
 // SYNOPSIS STOP
 */
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "db.h"
-#endif
 
 #include "wx/wxprec.h"
 

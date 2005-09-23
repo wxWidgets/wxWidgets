@@ -9,10 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "cursor.h"
-#endif
-
 #include "wx/cursor.h"
 #include "wx/gdicmn.h"
 #include "wx/icon.h"

@@ -12,10 +12,6 @@
 #ifndef _MMBOARD_APP_H_
 #define _MMBOARD_APP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "mmboard.h"
-#endif
-
 // for compilers that support precompilation, includes "wx/wx.h"
 #include "wx/wxprec.h"
 

@@ -12,10 +12,6 @@
 #ifndef _WX_MSW_TOPLEVEL_H_
 #define _WX_MSW_TOPLEVEL_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "toplevel.h"
-#endif
-
 #if wxUSE_SYSTEM_OPTIONS
     #define wxMAC_WINDOW_PLAIN_TRANSITION _T("mac.window-plain-transition")
 #endif

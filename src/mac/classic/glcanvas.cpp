@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "glcanvas.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)

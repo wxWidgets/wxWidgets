@@ -7,9 +7,7 @@
 // Copyright:  (C) 1997, 1998, 1999 Guilhem Lavaux
 // License:    wxWindows license
 // ---------------------------------------------------------------------------
-#ifdef __GNUG__
-#pragma implementation
-#endif
+
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP

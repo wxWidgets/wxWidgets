@@ -12,10 +12,6 @@
 #ifndef __JOYSTICKH__
 #define __JOYSTICKH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "joystick.h"
-#endif
-
 #include "wx/event.h"
 #include "wx/thread.h"
 

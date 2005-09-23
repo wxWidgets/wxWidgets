@@ -12,10 +12,6 @@
 #ifndef _WX_MAC_DATAOBJ2_H_
 #define _WX_MAC_DATAOBJ2_H_
 
-#ifdef __GNUG__
-    #pragma interface "dataobj.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject is a specialization of wxDataObject for bitmaps
 // ----------------------------------------------------------------------------

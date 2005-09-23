@@ -14,10 +14,6 @@
 #ifndef __WXGBSIZER_H__
 #define __WXGBSIZER_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "gbsizer.h"
-#endif
-
 #include "wx/sizer.h"
 
 

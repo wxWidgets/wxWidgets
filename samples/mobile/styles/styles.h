@@ -7,10 +7,6 @@
 #ifndef __styles_H__
 #define __styles_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "styles.h"
-#endif
-
 // Include wxWidgets' headers
 
 #ifndef WX_PRECOMP

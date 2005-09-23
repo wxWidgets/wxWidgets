@@ -10,10 +10,6 @@
 #ifndef __GTKDCCLIENTH__
 #define __GTKDCCLIENTH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface
-#endif
-
 #include "wx/dc.h"
 #include "wx/window.h"
 

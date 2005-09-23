@@ -12,10 +12,6 @@
 #ifndef _WX_VALTEXTH__
 #define _WX_VALTEXTH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "valtext.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_VALIDATORS && wxUSE_TEXTCTRL

@@ -8,10 +8,6 @@
 #ifndef WXLWINDOW_H
 #define WXLWINDOW_H
 
-#ifdef __GNUG__
-#   pragma interface "wxlwindow.h"
-#endif
-
 #ifndef USE_PCH
 #   include   "wx/wx.h"
 #endif

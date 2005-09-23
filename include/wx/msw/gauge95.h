@@ -12,10 +12,6 @@
 #ifndef _GAUGE95_H_
 #define _GAUGE95_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "gauge95.h"
-#endif
-
 #if wxUSE_GAUGE
 
 extern WXDLLEXPORT_DATA(const wxChar*) wxGaugeNameStr;

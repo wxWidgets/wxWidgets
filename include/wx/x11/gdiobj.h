@@ -14,10 +14,6 @@
 
 #include "wx/object.h"
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "gdiobj.h"
-#endif
-
 class WXDLLEXPORT wxGDIRefData: public wxObjectRefData {
 public:
     inline wxGDIRefData()

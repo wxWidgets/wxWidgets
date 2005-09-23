@@ -3,11 +3,6 @@
 // Purpose:     wxHtml testing example
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation "test.cpp"
-    #pragma interface "test.cpp"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

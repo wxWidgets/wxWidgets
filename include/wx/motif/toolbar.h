@@ -12,10 +12,6 @@
 #ifndef _WX_TOOLBAR_H_
 #define _WX_TOOLBAR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "toolbar.h"
-#endif
-
 class WXDLLEXPORT wxToolBar : public wxToolBarBase
 {
 public:

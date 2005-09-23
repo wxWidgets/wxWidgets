@@ -12,10 +12,6 @@
 #ifndef _WX_MOTIF_POPUPWIN_H_
 #define _WX_MOTIF_POPUPWIN_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "popup.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxPopupWindow
 // ----------------------------------------------------------------------------

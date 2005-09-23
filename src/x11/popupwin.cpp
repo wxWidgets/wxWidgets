@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "popupwin.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/log.h"
 

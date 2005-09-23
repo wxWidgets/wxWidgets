@@ -8,9 +8,6 @@
 // CVS Id: $Id$
 // License:    wxWindows license
 ////////////////////////////////////////////////////////////////////////////////
-#ifdef __GNUG__
-#pragma implementation "cdunix.h"
-#endif
 
 #include "wx/wxprec.h"
 

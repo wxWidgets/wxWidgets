@@ -21,10 +21,6 @@
  *  SYNOPSIS END
  */
 
-#ifdef __GNUG__
-#pragma implementation "dbtest.h"
-#endif
-
 #include  "wx/wxprec.h"
 
 #ifdef    __BORLANDC__

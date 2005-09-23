@@ -12,10 +12,6 @@
 #ifndef _WX_RADIOBUT_H_
 #define _WX_RADIOBUT_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "radiobut.h"
-#endif
-
 class WXDLLEXPORT wxRadioButton: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxRadioButton)

@@ -14,10 +14,6 @@
 #ifndef   _WX_CONFBASE_H_
 #define   _WX_CONFBASE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "confbase.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 

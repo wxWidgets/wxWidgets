@@ -12,10 +12,6 @@
 #ifndef _WX_ICONBNDL_H_
 #define _WX_ICONBNDL_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "iconbndl.h"
-#endif
-
 #include "wx/dynarray.h"
 // for wxSize
 #include "wx/gdicmn.h"

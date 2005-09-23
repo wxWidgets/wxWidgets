@@ -12,10 +12,6 @@
 #ifndef __ARTBROWS_H__
 #define __ARTBROWS_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "artbrows.h"
-#endif
-
 #include "wx/dialog.h"
 #include "wx/artprov.h"
 

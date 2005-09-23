@@ -11,10 +11,6 @@
 #ifndef _WX_XH_CHOIC_H_
 #define _WX_XH_CHOIC_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xh_choic.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 class WXDLLIMPEXP_XRC wxChoiceXmlHandler : public wxXmlResourceHandler

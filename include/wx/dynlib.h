@@ -12,10 +12,6 @@
 #ifndef _WX_DYNLIB_H__
 #define _WX_DYNLIB_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#   pragma interface "dynlib.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_DYNLIB_CLASS

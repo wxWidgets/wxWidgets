@@ -12,10 +12,6 @@
 #ifndef _WX_TREEBASE_H_
 #define _WX_TREEBASE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "treebase.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------

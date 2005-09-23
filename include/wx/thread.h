@@ -22,11 +22,6 @@
 
 #if wxUSE_THREADS
 
-// only for wxUSE_THREADS - otherwise we'd get undefined symbols
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "thread.h"
-#endif
-
 // Windows headers define it
 #ifdef Yield
     #undef Yield

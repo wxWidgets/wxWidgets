@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "checkbox.h"
-#endif
-
 #include "wx/defs.h"
 
 #include "wx/checkbox.h"

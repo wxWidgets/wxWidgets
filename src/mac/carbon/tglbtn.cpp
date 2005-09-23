@@ -18,10 +18,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "button.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #if wxUSE_TOGGLEBTN

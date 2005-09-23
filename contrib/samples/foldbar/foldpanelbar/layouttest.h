@@ -12,10 +12,6 @@
 #ifndef _LAYOUTTEST_H_
 #define _LAYOUTTEST_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "layouttest.cpp"
-#endif
-
 /*!
  * Includes
  */

@@ -15,10 +15,6 @@
 #ifndef _WX_DIRDLGG_H_
 #define _WX_DIRDLGG_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "dirdlgg.h"
-#endif
-
 class WXDLLEXPORT wxGenericDirCtrl;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxTreeEvent;

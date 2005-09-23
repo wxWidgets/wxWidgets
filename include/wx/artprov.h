@@ -12,10 +12,6 @@
 #ifndef _WX_ARTPROV_H_
 #define _WX_ARTPROV_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "artprov.h"
-#endif
-
 #include "wx/string.h"
 #include "wx/bitmap.h"
 #include "wx/icon.h"

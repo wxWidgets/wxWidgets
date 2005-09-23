@@ -12,11 +12,6 @@
 #ifndef _OGL_BASICP_H_
 #define _OGL_BASICP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "basicp.h"
-#endif
-
-
 #define CONTROL_POINT_SIZE       6
 
 class WXDLLIMPEXP_OGL wxShapeTextLine: public wxObject

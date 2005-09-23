@@ -10,10 +10,6 @@
 #ifndef _WX_ARCHIVE_H__
 #define _WX_ARCHIVE_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "archive.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS

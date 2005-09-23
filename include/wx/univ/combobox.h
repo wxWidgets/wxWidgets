@@ -36,10 +36,6 @@
 #ifndef _WX_UNIV_COMBOBOX_H_
 #define _WX_UNIV_COMBOBOX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univcombobox.h"
-#endif
-
 class WXDLLEXPORT wxComboControl;
 class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxPopupComboWindow;

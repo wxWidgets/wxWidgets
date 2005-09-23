@@ -12,10 +12,6 @@
 #ifndef _WX_TEXTCTRL_H_
 #define _WX_TEXTCTRL_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "textctrl.h"
-#endif
-
 #if wxUSE_SYSTEM_OPTIONS
     // set this to true if you want to use the 'classic' mlte based implementation
     // instead of the HIView based implementation in 10.3 and upwards, the former

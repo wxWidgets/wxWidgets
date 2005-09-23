@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "calctrl.h"
-#endif
-
 #ifndef _WX_GENERIC_CALCTRL_H
 #define _WX_GENERIC_CALCTRL_H
 

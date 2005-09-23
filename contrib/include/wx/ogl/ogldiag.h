@@ -12,10 +12,6 @@
 #ifndef _OGL_OGLDIAG_H_
 #define _OGL_OGLDIAG_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "ogldiag.h"
-#endif
-
 #include "wx/ogl/basic.h"
 
 #if wxUSE_PROLOGIO

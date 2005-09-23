@@ -12,10 +12,6 @@
 #ifndef _WX_DCCLIENT_H_
 #define _WX_DCCLIENT_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "dcclient.h"
-#endif
-
 #include "wx/dc.h"
 #include "wx/region.h"
 

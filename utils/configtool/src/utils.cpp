@@ -9,10 +9,6 @@
 // Licence:
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-// #pragma implementation
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

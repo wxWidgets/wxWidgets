@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "filedlg.h"
-#endif
-
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif

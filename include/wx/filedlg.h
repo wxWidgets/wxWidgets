@@ -16,10 +16,6 @@
 
 #if wxUSE_FILEDLG
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "filedlg.h"
-#endif
-
 #include "wx/dialog.h"
 #include "wx/arrstr.h"
 

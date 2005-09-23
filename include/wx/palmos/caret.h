@@ -12,10 +12,6 @@
 #ifndef _WX_CARET_H_
 #define _WX_CARET_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "caret.h"
-#endif
-
 class WXDLLEXPORT wxCaret : public wxCaretBase
 {
 public:

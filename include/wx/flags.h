@@ -12,10 +12,6 @@
 #ifndef _WX_SETH__
 #define _WX_SETH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "flags.h"
-#endif
-
 // wxBitset should be applied to an enum, then this can be used like
 // bitwise operators but keeps the type safety and information, the
 // enums must be in a sequence , their value determines the bit position

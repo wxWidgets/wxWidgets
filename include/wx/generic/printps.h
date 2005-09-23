@@ -13,10 +13,6 @@
 #ifndef __PRINTPSH__
 #define __PRINTPSH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "printps.h"
-#endif
-
 #include "wx/prntbase.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT

@@ -12,10 +12,6 @@
 #ifndef   _WX_OLEDROPSRC_H
 #define   _WX_OLEDROPSRC_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface
-#endif
-
 #if wxUSE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------

@@ -18,10 +18,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "genscrolwin.h"
-#endif
-
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif

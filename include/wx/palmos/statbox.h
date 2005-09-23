@@ -12,10 +12,6 @@
 #ifndef _WX_STATBOX_H_
 #define _WX_STATBOX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "statbox.h"
-#endif
-
 // Group box
 class WXDLLEXPORT wxStaticBox : public wxStaticBoxBase
 {

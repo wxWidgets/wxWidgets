@@ -40,10 +40,6 @@
 // SYNOPSIS STOP
 */
 
-#ifdef __GNUG__
-#pragma implementation "listdb.h"
-#endif
-
 #include  "wx/wxprec.h"
 
 #ifdef    __BORLANDC__

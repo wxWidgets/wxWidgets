@@ -12,10 +12,6 @@
 #ifndef _TREE_H_
 #define _TREE_H_
 
-#ifdef __GNUG__
-    #pragma interface "tree.h"
-#endif
-
 #include "wx/wx.h"
 #include "wx/gizmos/splittree.h"
 

@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "accel.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/accel.h"
 #include "wx/string.h"

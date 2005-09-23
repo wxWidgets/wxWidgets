@@ -12,10 +12,6 @@
 #ifndef _WX_MATRIXH__
 #define _WX_MATRIXH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "matrix.h"
-#endif
-
 //! headerfiles="matrix.h wx/object.h"
 #include "wx/object.h"
 

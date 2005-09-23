@@ -12,10 +12,6 @@
 #ifndef _WX_JOYSTICK_H_
 #define _WX_JOYSTICK_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "joystick.h"
-#endif
-
 #include "wx/event.h"
 
 class WXDLLIMPEXP_ADV wxJoystick: public wxObject

@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "memory.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -25,10 +21,6 @@
 #endif
 
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-// #pragma implementation
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/utils.h"

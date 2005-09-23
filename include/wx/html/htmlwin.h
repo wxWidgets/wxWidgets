@@ -7,13 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef _WX_HTMLWIN_H_
 #define _WX_HTMLWIN_H_
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "htmlwin.h"
-#endif
 
 #include "wx/defs.h"
 #if wxUSE_HTML

@@ -12,10 +12,6 @@
 #ifndef _WX_FONT_H_
 #define _WX_FONT_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "font.h"
-#endif
-
 class wxXFont;
 
 // Font

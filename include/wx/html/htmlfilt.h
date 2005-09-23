@@ -7,13 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef _WX_HTMLFILT_H_
 #define _WX_HTMLFILT_H_
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "htmlfilt.h"
-#endif
 
 #include "wx/defs.h"
 

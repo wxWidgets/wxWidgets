@@ -12,10 +12,6 @@
 #ifndef _WX_WXSTRCONVH__
 #define _WX_WXSTRCONVH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-  #pragma interface "strconv.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/wxchar.h"
 #include "wx/buffer.h"

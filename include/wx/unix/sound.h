@@ -16,10 +16,6 @@
 
 #if wxUSE_SOUND
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "sound.h"
-#endif
-
 #include "wx/object.h"
 
 // ----------------------------------------------------------------------------

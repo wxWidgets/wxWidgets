@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_NOTEBOOK_H_
 #define _WX_UNIV_NOTEBOOK_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univnotebook.h"
-#endif
-
 #include "wx/arrstr.h"
 
 class WXDLLEXPORT wxSpinButton;

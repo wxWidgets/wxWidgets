@@ -12,10 +12,6 @@
 #ifndef _WX_HELPWCE_H_
 #define _WX_HELPWCE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "helpwce.cpp"
-#endif
-
 #if wxUSE_HELP
 
 #include "wx/helpbase.h"

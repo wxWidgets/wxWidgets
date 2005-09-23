@@ -5,10 +5,6 @@
 #if !defined(RC2XML_H)
 #define RC2XML_H
 
-#ifdef __GNUG__
-#pragma interface "rc2xml.h"
-#endif
-
 #include "wx/file.h"
 #include "wx/ffile.h"
 #include "wx/list.h"

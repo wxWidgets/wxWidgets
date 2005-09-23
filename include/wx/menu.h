@@ -12,10 +12,6 @@
 #ifndef _WX_MENU_H_BASE_
 #define _WX_MENU_H_BASE_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "menubase.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_MENUS

@@ -19,10 +19,6 @@
 
 #if 0
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "wx/utils.h"
 
 #include "wx/process.h"

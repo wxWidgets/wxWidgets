@@ -13,10 +13,6 @@
 #ifndef _WX_OBJECTH__
 #define _WX_OBJECTH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "object.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------

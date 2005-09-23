@@ -13,10 +13,6 @@
 #ifndef _WX_FILEH__
 #define _WX_FILEH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "file.h"
-#endif
-
 #include  "wx/defs.h"
 
 #if wxUSE_FILE

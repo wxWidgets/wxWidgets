@@ -12,10 +12,6 @@
 #ifndef _LIFE_APP_H_
 #define _LIFE_APP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "life.h"
-#endif
-
 // for compilers that support precompilation, includes "wx/wx.h"
 #include "wx/wxprec.h"
 

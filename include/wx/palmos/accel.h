@@ -12,10 +12,6 @@
 #ifndef _WX_ACCEL_H_
 #define _WX_ACCEL_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "accel.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // the accel table has all accelerators for a given window or menu
 // ----------------------------------------------------------------------------

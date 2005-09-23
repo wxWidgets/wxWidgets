@@ -12,10 +12,6 @@
 #ifndef _WX_STATBMP_H_
 #define _WX_STATBMP_H_
 
-#ifdef __GNUG__
-#pragma interface "statbmp.h"
-#endif
-
 #include "wx/control.h"
 #include "wx/icon.h"
 

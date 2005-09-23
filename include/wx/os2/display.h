@@ -14,10 +14,6 @@
 
 #if wxUSE_DISPLAY
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "display.h"
-#endif
-
 class wxRect;
 class wxString;
 class wxDisplayUnixPriv;

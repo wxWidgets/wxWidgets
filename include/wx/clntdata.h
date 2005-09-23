@@ -12,10 +12,6 @@
 #ifndef _WX_CLNTDATAH__
 #define _WX_CLNTDATAH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "clntdata.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/hashmap.h"

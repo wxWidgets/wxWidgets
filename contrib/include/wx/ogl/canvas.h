@@ -12,10 +12,6 @@
 #ifndef _OGL_CANVAS_H_
 #define _OGL_CANVAS_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "canvas.h"
-#endif
-
 
 // Drag states
 #define NoDragging             0

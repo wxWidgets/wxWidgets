@@ -9,11 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-// Note: this is done in utilscmn.cpp now.
-// #pragma implementation "utils.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"

@@ -12,10 +12,6 @@
 #ifndef _WX_DCSCREEN_H_
 #define _WX_DCSCREEN_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "dcscreen.h"
-#endif
-
 #include "wx/dcclient.h"
 
 //-----------------------------------------------------------------------------

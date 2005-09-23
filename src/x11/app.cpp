@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "app.h"
-#endif
-
 #include "wx/frame.h"
 #include "wx/app.h"
 #include "wx/utils.h"

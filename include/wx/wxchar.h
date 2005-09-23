@@ -14,10 +14,6 @@
 #ifndef _WX_WXCHAR_H_
 #define _WX_WXCHAR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "wxchar.h"
-#endif
-
 #include "wx/defs.h"        /* for wxUSE_UNICODE */
 
 #if defined(HAVE_STRTOK_R) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS

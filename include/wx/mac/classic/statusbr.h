@@ -13,10 +13,6 @@
 #ifndef   _WX_STATBAR_H_
 #define   _WX_STATBAR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "statbrma.h"
-#endif
-
 class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
 {
   DECLARE_DYNAMIC_CLASS(wxStatusBarMac);

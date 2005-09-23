@@ -13,10 +13,6 @@
 #ifndef _WX_CONTAINR_H_
 #define _WX_CONTAINR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "containr.h"
-#endif
-
 class WXDLLEXPORT wxFocusEvent;
 class WXDLLEXPORT wxNavigationKeyEvent;
 class WXDLLEXPORT wxWindow;

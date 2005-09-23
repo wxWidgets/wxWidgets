@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "joystick.h"
-#endif
-
 #include "wx/setup.h"
 
 #include "wx/joystick.h"

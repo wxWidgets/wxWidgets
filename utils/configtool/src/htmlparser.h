@@ -12,10 +12,6 @@
 #ifndef _HTMLPARSER_H_
 #define _HTMLPARSER_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "htmlparser.cpp"
-#endif
-
 //#include "wx/module.h"
 #include "wx/stream.h"
 

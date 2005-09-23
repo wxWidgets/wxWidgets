@@ -11,10 +11,6 @@
 #ifndef _WX_DC_H_
 #define _WX_DC_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dc.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/region.h"
 

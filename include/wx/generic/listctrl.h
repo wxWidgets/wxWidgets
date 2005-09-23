@@ -11,10 +11,6 @@
 #ifndef __LISTCTRLH_G__
 #define __LISTCTRLH_G__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "listctrl.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #ifdef __WXMAC__

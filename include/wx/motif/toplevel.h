@@ -12,10 +12,6 @@
 #ifndef __MOTIFTOPLEVELH__
 #define __MOTIFTOPLEVELH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "toplevel.h"
-#endif
-
 class WXDLLIMPEXP_CORE wxTopLevelWindowMotif : public wxTopLevelWindowBase
 {
 public:

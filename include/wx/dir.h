@@ -12,10 +12,6 @@
 #ifndef _WX_DIR_H_
 #define _WX_DIR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dir.h"
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/string.h"
 #endif

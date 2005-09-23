@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "smapi.h"
-#endif
-
 #ifndef _WX_SMAPI_H_
 #define _WX_SMAPI_H_
 

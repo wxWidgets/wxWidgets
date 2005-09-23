@@ -9,10 +9,6 @@
 // Licence:     The wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "toolbar.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #if wxUSE_TOOLBAR

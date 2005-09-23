@@ -18,10 +18,6 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#ifdef __GNUG__
-#pragma implementation "colordlg.h"
-#endif
-
 #include "wx/mac/colordlg.h"
 #include "wx/fontdlg.h"
 

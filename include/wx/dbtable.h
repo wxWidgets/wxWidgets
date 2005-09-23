@@ -21,10 +21,6 @@
 
 #include "wx/defs.h"
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-  #pragma interface "dbtable.h"
-#endif
-
 #include "wx/db.h"
 
 #include "wx/variant.h"

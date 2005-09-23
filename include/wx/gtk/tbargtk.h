@@ -10,10 +10,6 @@
 #ifndef _WX_GTK_TBARGTK_H_
 #define _WX_GTK_TBARGTK_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "tbargtk.h"
-#endif
-
 #if wxUSE_TOOLBAR
 
 // ----------------------------------------------------------------------------

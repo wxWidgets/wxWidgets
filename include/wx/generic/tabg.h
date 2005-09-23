@@ -12,10 +12,6 @@
 #ifndef __TABGH_G__
 #define __TABGH_G__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "tabg.h"
-#endif
-
 #define WXTAB_VERSION   1.1
 
 #include "wx/hashmap.h"

@@ -13,10 +13,6 @@
 // headers, declarations, constants
 // ==========================================================================
 
-#ifdef __GNUG__
-    #pragma implementation "game.h"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 

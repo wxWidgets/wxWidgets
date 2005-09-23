@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "brush.h"
-#endif
-
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/brush.h"

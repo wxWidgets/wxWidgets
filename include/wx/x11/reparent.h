@@ -12,10 +12,6 @@
 #ifndef _WX_REPARENT_H_
 #define _WX_REPARENT_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "reparent.h"
-#endif
-
 #include "wx/window.h"
 
 /*

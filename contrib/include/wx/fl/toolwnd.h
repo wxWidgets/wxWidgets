@@ -13,10 +13,6 @@
 #ifndef __TOOLWND_G__
 #define __TOOLWND_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "toolwnd.h"
-#endif
-
 #include "wx/frame.h"
 #include "wx/dynarray.h"
 #include "wx/fl/fldefs.h"

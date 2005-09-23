@@ -10,10 +10,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "glcanvas.h"
-#endif
-
 #include "wx/setup.h"
 
 #if wxUSE_GLCANVAS

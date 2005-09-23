@@ -12,10 +12,6 @@
 #ifndef _WX_MDI_H_
 #define _WX_MDI_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "mdi.h"
-#endif
-
 /*
 New MDI scheme using tabs. We can use a wxNotebook to implement the client
 window. wxMDIChildFrame can be implemented as an XmMainWindow widget

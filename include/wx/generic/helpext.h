@@ -12,10 +12,6 @@
 
 #if wxUSE_HELP
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#   pragma interface "wxexthlp.h"
-#endif
-
 #include "wx/helpbase.h"
 
 /// Path separator.

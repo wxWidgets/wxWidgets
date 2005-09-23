@@ -12,10 +12,6 @@
 #ifndef _GENERIC_TREECTRL_H_
 #define _GENERIC_TREECTRL_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "treectlg.h"
-#endif
-
 #if wxUSE_TREECTRL
 
 #include "wx/scrolwin.h"

@@ -11,10 +11,6 @@
 #ifndef _WX_XH_STATBAR_H_
 #define _WX_XH_STATBAR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xh_statbar.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 class WXDLLIMPEXP_XRC wxStatusBarXmlHandler : public wxXmlResourceHandler

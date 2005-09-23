@@ -12,10 +12,6 @@
 #ifndef _CT_CONFIGTOOLVIEW_H_
 #define _CT_CONFIGTOOLVIEW_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "configtoolview.cpp"
-#endif
-
 #include "wx/docview.h"
 #include "wx/treectrl.h"
 #include "wx/fdrepdlg.h"

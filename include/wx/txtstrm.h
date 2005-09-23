@@ -12,10 +12,6 @@
 #ifndef _WX_TXTSTREAM_H_
 #define _WX_TXTSTREAM_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "txtstrm.h"
-#endif
-
 #include "wx/stream.h"
 
 #if wxUSE_STREAMS

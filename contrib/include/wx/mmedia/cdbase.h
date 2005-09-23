@@ -10,10 +10,6 @@
 #ifndef __CDA_base_H__
 #define __CDA_base_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "cdbase.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/mmedia/defs.h"

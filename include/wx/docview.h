@@ -12,10 +12,6 @@
 #ifndef _WX_DOCH__
 #define _WX_DOCH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "docview.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_DOC_VIEW_ARCHITECTURE

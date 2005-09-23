@@ -12,10 +12,6 @@
 #ifndef _WX_HASH_H__
 #define _WX_HASH_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "hash.h"
-#endif
-
 #include "wx/defs.h"
 
 #if !wxUSE_STL && WXWIN_COMPATIBILITY_2_4

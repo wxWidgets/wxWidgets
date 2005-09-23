@@ -11,10 +11,6 @@
 #ifndef __IMAGELISTH_G__
 #define __IMAGELISTH_G__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "imaglist.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/list.h"
 #include "wx/icon.h"

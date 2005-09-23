@@ -3,10 +3,6 @@
 #ifndef __WX_SETUP_H__
 #define __WX_SETUP_H__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 /* never undefine inline or const keywords for C++ compilation */
 #ifndef __cplusplus
 

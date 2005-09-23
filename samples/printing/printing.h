@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface
-#endif
-
 // Define a new application
 class MyApp: public wxApp
 {

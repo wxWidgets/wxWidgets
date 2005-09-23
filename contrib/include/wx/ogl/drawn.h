@@ -12,10 +12,6 @@
 #ifndef _OGL_DRAWN_H_
 #define _OGL_DRAWN_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "drawn.h"
-#endif
-
 
 #define oglMETAFLAGS_OUTLINE         1
 #define oglMETAFLAGS_ATTACHMENTS     2

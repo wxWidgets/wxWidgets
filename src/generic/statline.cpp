@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "statline.h"
-#endif
-
 #include "wx/wxprec.h"
 #if wxUSE_STATLINE
 // For compilers that support precompilation, includes "wx.h".

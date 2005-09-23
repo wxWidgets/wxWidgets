@@ -12,10 +12,6 @@
 #ifndef _WX_ACCESSBASE_H_
 #define _WX_ACCESSBASE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "accessbase.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers we have to include here
 // ----------------------------------------------------------------------------

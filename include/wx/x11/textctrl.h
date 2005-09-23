@@ -19,10 +19,6 @@
 #include "wx/univ/textctrl.h"
 #else
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "textctrl.h"
-#endif
-
 #include "wx/scrolwin.h"
 #include "wx/arrstr.h"
 #include "wx/datetime.h"

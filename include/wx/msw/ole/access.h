@@ -12,10 +12,6 @@
 #ifndef   _WX_ACCESS_H_
 #define   _WX_ACCESS_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface
-#endif
-
 #if wxUSE_ACCESSIBILITY
 
 // ----------------------------------------------------------------------------

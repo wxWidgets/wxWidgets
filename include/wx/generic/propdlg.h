@@ -12,10 +12,6 @@
 #ifndef _WX_PROPDLG_H_
 #define _WX_PROPDLG_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "propdlg.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_BOOKCTRL

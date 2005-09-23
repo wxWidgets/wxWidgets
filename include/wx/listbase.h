@@ -12,10 +12,6 @@
 #ifndef _WX_LISTBASE_H_BASE_
 #define _WX_LISTBASE_H_BASE_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-//    #pragma interface "listctrlbase.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_LISTCTRL

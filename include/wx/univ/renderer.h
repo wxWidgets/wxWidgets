@@ -25,10 +25,6 @@
    implementation of the latter or reimplement itself).
  */
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "renderer.h"
-#endif
-
 #ifndef _WX_UNIV_RENDERER_H_
 #define _WX_UNIV_RENDERER_H_
 

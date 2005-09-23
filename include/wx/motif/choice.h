@@ -12,10 +12,6 @@
 #ifndef _WX_CHOICE_H_
 #define _WX_CHOICE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "choice.h"
-#endif
-
 #include "wx/clntdata.h"
 
 #ifndef wxWIDGET_ARRAY_DEFINED

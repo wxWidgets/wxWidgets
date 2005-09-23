@@ -12,10 +12,6 @@
 #ifndef _AP_MAINFRAME_H_
 #define _AP_MAINFRAME_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "mainframe.cpp"
-#endif
-
 #include "wx/imaglist.h"
 #include "wx/docview.h"
 #include "wx/notebook.h"

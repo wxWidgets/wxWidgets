@@ -10,10 +10,6 @@
 #ifndef __INFOWIN_H__
 #define __INFOWIN_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "busyinfo.h"
-#endif
-
 #include "wx/defs.h"
 
 #include "wx/frame.h"

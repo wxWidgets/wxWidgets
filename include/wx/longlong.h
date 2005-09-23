@@ -13,10 +13,6 @@
 #ifndef _WX_LONGLONG_H
 #define _WX_LONGLONG_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "longlong.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 

@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "app.h"
-#endif
-
 #ifdef __VMS
 // vms_jackets.h should for proper working be included before anything else
 # include <vms_jackets.h>

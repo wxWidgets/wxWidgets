@@ -11,10 +11,6 @@
 #ifndef __WX_EDITLBOX_H__
 #define __WX_EDITLBOX_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "editlbox.h"
-#endif
-
 #include "wx/panel.h"
 #include "wx/gizmos/gizmos.h"
 

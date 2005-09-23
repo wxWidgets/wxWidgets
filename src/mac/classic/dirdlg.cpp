@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "dirdlg.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"

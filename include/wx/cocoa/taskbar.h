@@ -12,10 +12,6 @@
 #ifndef _WX_COCOA_TASKBAR_H__
 #define _WX_COCOA_TASKBAR_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "taskbar.h"
-#endif
-
 #include "wx/icon.h"
 
 class WXDLLEXPORT wxIcon;

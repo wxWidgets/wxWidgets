@@ -7,13 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKSCROLLBARH__
 #define __GTKSCROLLBARH__
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "scrolbar.h"
-#endif
 
 #include "wx/defs.h"
 

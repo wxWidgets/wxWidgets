@@ -12,10 +12,6 @@
 #ifndef __BARDRAGPL_G__
 #define __BARDRAGPL_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "bardragpl.h"
-#endif
-
 #include "wx/fl/controlbar.h"
 #include "wx/fl/toolwnd.h"
 

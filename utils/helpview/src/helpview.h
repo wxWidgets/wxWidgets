@@ -12,10 +12,6 @@
 #ifndef _WX_HELPVIEW_H_
 #define _WX_HELPVIEW_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "help.cpp"
-#endif
-
 #define hvVERSION 1.04
 
 #if wxUSE_IPC

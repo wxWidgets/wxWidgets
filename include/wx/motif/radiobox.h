@@ -12,10 +12,6 @@
 #ifndef _WX_MOTIF_RADIOBOX_H_
 #define _WX_MOTIF_RADIOBOX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "radiobox.h"
-#endif
-
 #ifndef wxWIDGET_ARRAY_DEFINED
     #define wxWIDGET_ARRAY_DEFINED
 

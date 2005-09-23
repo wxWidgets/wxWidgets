@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "mswfdrepdlg.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxFindReplaceDialog: dialog for searching / replacing text
 // ----------------------------------------------------------------------------

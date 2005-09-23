@@ -12,10 +12,6 @@
 #ifndef _OGL_LINES_H_
 #define _OGL_LINES_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "lines.h"
-#endif
-
 
 class WXDLLIMPEXP_OGL wxLabelShape;
 class WXDLLIMPEXP_OGL wxPseudoMetaFile;

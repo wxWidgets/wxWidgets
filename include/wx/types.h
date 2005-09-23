@@ -12,10 +12,6 @@
 #ifndef _WX_TYPESH__
 #define _WX_TYPESH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-// #pragma interface "types.h"
-#endif
-
 // Types of objects
 #define wxTYPE_ANY             0
 #define wxTYPE_OBJECT          wxTYPE_ANY

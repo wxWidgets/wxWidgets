@@ -12,10 +12,6 @@
 #ifndef _WX_GENERIC_STATUSBR_H_
 #define _WX_GENERIC_STATUSBR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "statusbr.h"
-#endif
-
 #include "wx/pen.h"
 #include "wx/font.h"
 #include "wx/statusbr.h"

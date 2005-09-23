@@ -6,10 +6,6 @@
 #ifndef __WDR_dialogs_H__
 #define __WDR_dialogs_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "dialogs_wdr.cpp"
-#endif
-
 // Include wxWindows' headers
 
 #ifndef WX_PRECOMP

@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "htmlcell.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #include "wx/defs.h"

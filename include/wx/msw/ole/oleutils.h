@@ -12,10 +12,6 @@
 #ifndef   _WX_OLEUTILS_H
 #define   _WX_OLEUTILS_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "oleutils.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_OLE

@@ -12,10 +12,6 @@
 #ifndef _OGL_DRAWNP_H_
 #define _OGL_DRAWNP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "drawnp.h"
-#endif
-
 
 /*
  * Drawing operations

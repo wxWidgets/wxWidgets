@@ -12,10 +12,6 @@
 #ifndef _WX_STOCKITEM_H_
 #define _WX_STOCKITEM_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "stockitem.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/wxchar.h"
 #include "wx/string.h"

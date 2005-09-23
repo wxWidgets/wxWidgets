@@ -12,10 +12,6 @@
 #ifndef _WX_WEBKIT_H
 #define _WX_WEBKIT_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "webkit.h"
-#endif
-
 #if wxUSE_WEBKIT
 
 #if !defined(__WXMAC__) && !defined(__WXCOCOA__)

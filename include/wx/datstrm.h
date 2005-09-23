@@ -12,10 +12,6 @@
 #ifndef _WX_DATSTREAM_H_
 #define _WX_DATSTREAM_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "datstrm.h"
-#endif
-
 #include "wx/stream.h"
 #include "wx/longlong.h"
 #include "wx/strconv.h"

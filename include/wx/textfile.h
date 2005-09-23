@@ -14,10 +14,6 @@
 #ifndef _WX_TEXTFILE_H
 #define _WX_TEXTFILE_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "textfile.h"
-#endif
-
 #include "wx/defs.h"
 
 #include "wx/textbuf.h"

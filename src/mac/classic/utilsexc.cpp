@@ -9,10 +9,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-//#pragma implementation
-#endif
-
 #include "wx/log.h"
 #include "wx/utils.h"
 #ifdef __DARWIN__

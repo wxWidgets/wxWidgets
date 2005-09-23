@@ -12,10 +12,6 @@
 #ifndef _OGL_CONSTRNT_H_
 #define _OGL_CONSTRNT_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "constrnt.h"
-#endif
-
 
 /*
  * OGL Constraints

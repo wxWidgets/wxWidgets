@@ -11,10 +11,6 @@
 #ifndef _WX_GIFDECOD_H
 #define _WX_GIFDECOD_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "gifdecod.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_STREAMS && wxUSE_GIF

@@ -12,10 +12,6 @@
 #ifndef _WX_MENU_H_
 #define _WX_MENU_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "menu.h"
-#endif
-
 #if wxUSE_ACCEL
     #include "wx/accel.h"
     #include "wx/dynarray.h"

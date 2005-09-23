@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "typetest.h"
-#endif
-
 #ifndef _WX_TYPETEST_H_
 #define _WX_TYPETEST_H_
 

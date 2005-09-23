@@ -12,10 +12,6 @@
 #ifndef _WX_EVTLOOP_H_
 #define _WX_EVTLOOP_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "evtloop.h"
-#endif
-
 #include "wx/utils.h"
 
 class WXDLLEXPORT wxEventLoop;

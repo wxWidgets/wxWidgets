@@ -6,6 +6,9 @@
  * $Id$          *
  *                                                                  *
  * $Log$
+ * Revision 1.5  2005/09/23 12:52:18  MR
+ * Nuke #pragma implementation/interface's
+ *
  * Revision 1.4  2005/05/31 09:19:38  JS
  * Typo correction patch [ 1208110 ] Lots of typo corrections
  * Olly Betts
@@ -61,10 +64,6 @@
  * added kbList, adapted MimeTypes for it, more python, new icons
  *
  *******************************************************************/
-
-#ifdef __GNUG__
-#   pragma implementation "kbList.h"
-#endif
 
 #include "wx/wxprec.h"
 

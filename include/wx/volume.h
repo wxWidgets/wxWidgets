@@ -16,10 +16,6 @@
 #ifndef _WX_FSVOLUME_H_
 #define _WX_FSVOLUME_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "fsvolume.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_FSVOLUME

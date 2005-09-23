@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "dcclient.h"
-#endif
-
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/window.h"

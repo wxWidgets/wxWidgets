@@ -12,10 +12,6 @@
 #ifndef _WX_CURSOR_H_
 #define _WX_CURSOR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "cursor.h"
-#endif
-
 #include "wx/msw/gdiimage.h"
 
 class WXDLLEXPORT wxImage;

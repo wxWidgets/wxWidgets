@@ -10,10 +10,6 @@
 #ifndef _WX_MOTIF_DATAOBJ_H_
 #define _WX_MOTIF_DATAOBJ_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "dataobj.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxDataObject is the same as wxDataObjectBase under wxMotif
 // ----------------------------------------------------------------------------

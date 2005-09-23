@@ -16,10 +16,6 @@
 #ifndef _WX_FONTUTIL_H_
 #define _WX_FONTUTIL_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "fontutil.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------

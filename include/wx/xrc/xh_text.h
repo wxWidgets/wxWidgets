@@ -11,10 +11,6 @@
 #ifndef _WX_XH_TEXT_H_
 #define _WX_XH_TEXT_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xh_text.h"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 

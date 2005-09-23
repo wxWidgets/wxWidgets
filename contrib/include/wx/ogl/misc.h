@@ -12,10 +12,6 @@
 #ifndef _OGL_MISC_H_
 #define _OGL_MISC_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "misc.h"
-#endif
-
 
 // List to use when copying objects; may need to associate elements of new objects
 // with elements of old objects, e.g. when copying constraint.s

@@ -12,10 +12,6 @@
 #ifndef _WX_XTISTRMH__
 #define _WX_XTISTRMH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xtistrm.h"
-#endif
-
 #include "wx/wx.h"
 
 #if wxUSE_EXTENDED_RTTI

@@ -12,10 +12,6 @@
 #ifndef _WX_DATAOBJ_H_BASE_
 #define _WX_DATAOBJ_H_BASE_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dataobjbase.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------

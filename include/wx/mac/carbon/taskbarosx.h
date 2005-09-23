@@ -12,10 +12,6 @@
 #ifndef _TASKBAR_H_
 #define _TASKBAR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "taskbarosx.h"
-#endif
-
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxMenu;
 

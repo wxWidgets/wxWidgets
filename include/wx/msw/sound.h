@@ -12,10 +12,6 @@
 #ifndef _WX_SOUND_H_
 #define _WX_SOUND_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "sound.h"
-#endif
-
 #if wxUSE_SOUND
 
 class WXDLLIMPEXP_ADV wxSound : public wxSoundBase

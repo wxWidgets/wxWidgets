@@ -11,10 +11,6 @@
 #ifndef __GTKDIALOGH__
 #define __GTKDIALOGH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 
 //-----------------------------------------------------------------------------

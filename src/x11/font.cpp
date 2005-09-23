@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "font.h"
-#endif
-
 #ifdef __VMS
 #pragma message disable nosimpint
 #include "wx/vms_x_fix.h"

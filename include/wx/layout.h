@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "layout.h"
-#endif
-
 #include "wx/object.h"
 
 // X stupidly defines these in X.h

@@ -12,10 +12,6 @@
 #ifndef _WX_PROTOCOL_PROTOCOL_H
 #define _WX_PROTOCOL_PROTOCOL_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_PROTOCOL

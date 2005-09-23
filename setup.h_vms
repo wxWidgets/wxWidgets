@@ -12,10 +12,6 @@
 #ifndef __WX_SETUP_H__
 #define __WX_SETUP_H__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #include <wx/vms_x_fix.h>
 
 /* never undefine inline or const keywords for C++ compilation */

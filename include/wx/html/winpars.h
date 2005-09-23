@@ -7,13 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef _WX_WINPARS_H_
 #define _WX_WINPARS_H_
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "winpars.h"
-#endif
 
 #include "wx/defs.h"
 #if wxUSE_HTML

@@ -12,10 +12,6 @@
 #ifndef _OGLSAMPLE_PALETTE_H_
 #define _OGLSAMPLE_PALETTE_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-// #pragma interface
-#endif
-
 #include <wx/wx.h>
 #include <wx/string.h>
 #include <wx/deprecated/setup.h>

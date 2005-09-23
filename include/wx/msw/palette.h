@@ -12,10 +12,6 @@
 #ifndef _WX_PALETTE_H_
 #define _WX_PALETTE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "palette.h"
-#endif
-
 #include "wx/gdiobj.h"
 
 class WXDLLEXPORT wxPalette;

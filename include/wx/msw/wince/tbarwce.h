@@ -12,10 +12,6 @@
 #ifndef _WX_BARWCE_H_
 #define _WX_BARWCE_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "tbarwce.h"
-#endif
-
 #if wxUSE_TOOLBAR
 
 #include "wx/dynarray.h"

@@ -9,10 +9,6 @@
 #ifndef _WX_SNDMSAD_H
 #define _WX_SNDMSAD_H
 
-#ifdef __GNUG__
-#pragma interface "sndmsad.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/dynarray.h"
 #include "wx/mmedia/defs.h"

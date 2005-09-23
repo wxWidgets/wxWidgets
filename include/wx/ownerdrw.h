@@ -16,10 +16,6 @@
 
 #if wxUSE_OWNER_DRAWN
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "ownerdrw.h"
-#endif
-
 #include "wx/bitmap.h"
 #include "wx/colour.h"
 #include "wx/font.h"

@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_COLSCHEM_H_
 #define _WX_UNIV_COLSCHEM_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "colschem.h"
-#endif
-
 class WXDLLEXPORT wxWindow;
 
 #include "wx/colour.h"

@@ -13,10 +13,6 @@
 #ifndef   _FILECONF_H
 #define   _FILECONF_H
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "fileconf.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_CONFIG

@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "reparent.h"
-#endif
-
 #include "wx/setup.h"
 
 #if !wxUSE_NANOX

@@ -12,10 +12,6 @@
 #ifndef _OGLSAMPLE_DOC_H_
 #define _OGLSAMPLE_DOC_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-// #pragma interface
-#endif
-
 #include <wx/docview.h>
 #include <wx/cmdproc.h>
 #include <wx/string.h>

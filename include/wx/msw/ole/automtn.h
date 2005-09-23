@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "automtn.h"
-#endif
-
 #ifndef _WX_AUTOMTN_H_
 #define _WX_AUTOMTN_H_
 

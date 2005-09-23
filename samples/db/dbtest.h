@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "dbtest.h"
-#endif
-
 #include "wx/string.h"
 #include "wx/dbtable.h"
 

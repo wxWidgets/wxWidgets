@@ -7,13 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKDNDH__
 #define __GTKDNDH__
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface
-#endif
 
 #if wxUSE_DRAG_AND_DROP
 

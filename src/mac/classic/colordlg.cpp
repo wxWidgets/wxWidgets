@@ -10,10 +10,6 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "colordlg.h"
-#endif
-
 #include "wx/mac/colordlg.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)

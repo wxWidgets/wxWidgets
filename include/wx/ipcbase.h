@@ -12,10 +12,6 @@
 #ifndef _WX_IPCBASEH__
 #define _WX_IPCBASEH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "ipcbase.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"

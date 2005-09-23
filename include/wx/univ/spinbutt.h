@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_SPINBUTT_H_
 #define _WX_UNIV_SPINBUTT_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univspinbutt.h"
-#endif
-
 #include "wx/univ/scrarrow.h"
 
 // ----------------------------------------------------------------------------

@@ -7,14 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef _WX_HTMLPREP_H_
 #define _WX_HTMLPREP_H_
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "htmlproc.h"
-// (implementation is in htmlwin.cpp, there's no htmlprep.cpp!)
-#endif
 
 #include "wx/defs.h"
 

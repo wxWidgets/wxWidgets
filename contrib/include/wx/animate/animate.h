@@ -12,10 +12,6 @@
 #ifndef _WX_ANIMATEH__
 #define _WX_ANIMATEH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "animate.h"
-#endif
-
 #include <wx/defs.h>
 #include <wx/string.h>
 #include <wx/gdicmn.h>

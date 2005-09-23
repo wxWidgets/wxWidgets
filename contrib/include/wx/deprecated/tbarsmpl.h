@@ -12,10 +12,6 @@
 #ifndef _WX_TBARSMPLH__
 #define _WX_TBARSMPLH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "tbarsmpl.h"
-#endif
-
 #include "wx/tbarbase.h"
 
 #include "wx/deprecated/setup.h"

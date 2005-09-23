@@ -12,10 +12,6 @@
 #ifndef   _WX_FILENAME_H_
 #define   _WX_FILENAME_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "filename.h"
-#endif
-
 #ifndef WX_PRECOMP
     #include  "wx/string.h"
     #include  "wx/arrstr.h"

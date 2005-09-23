@@ -12,10 +12,6 @@
 #ifndef _WX_HELPBEST_H_
 #define _WX_HELPBEST_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "helpbest.h"
-#endif
-
 #if wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__) \
     && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
 

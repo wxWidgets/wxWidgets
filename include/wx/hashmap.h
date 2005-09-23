@@ -12,10 +12,6 @@
 #ifndef _WX_HASHMAP_H_
 #define _WX_HASHMAP_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "hashmap.h"
-#endif
-
 #include "wx/string.h"
 
 #if (defined(HAVE_EXT_HASH_MAP) || defined(HAVE_HASH_MAP)) \

@@ -12,10 +12,6 @@
 #ifndef _MIMETYPE_IMPL_H
 #define _MIMETYPE_IMPL_H
 
-#ifdef    __GNUG__
-    #pragma interface "mimetype.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_MIMETYPE

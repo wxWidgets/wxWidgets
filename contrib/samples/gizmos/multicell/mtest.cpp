@@ -8,11 +8,6 @@
  * License: wxWindows licence
  */
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation
-    #pragma interface
-#endif
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

@@ -12,10 +12,6 @@
 #ifndef _WX_CHECKBOX_H_
 #define _WX_CHECKBOX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "checkbox.h"
-#endif
-
 // Checkbox item (single checkbox)
 class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
 {

@@ -12,10 +12,6 @@
 #ifndef _WX_TREELAY_H_
 #define _WX_TREELAY_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "wxtree.h"
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/object.h"
 class wxList;

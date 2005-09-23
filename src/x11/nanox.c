@@ -9,10 +9,6 @@
 
 #if wxUSE_NANOX
 
-#ifdef __GNUG__
-#pragma implementation "Xlib.h"
-#endif
-
 #include <ctype.h>
 #include <malloc.h>
 #include <string.h>

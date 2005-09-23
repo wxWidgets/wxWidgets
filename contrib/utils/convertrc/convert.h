@@ -5,10 +5,6 @@
 #if !defined(MAINFRAME_H)
 #define MAINFRAME_H
 
-#ifdef __GNUG__
-#pragma interface "convert.h"
-#endif
-
 #include "wx/wxprec.h"
 
 

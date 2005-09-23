@@ -12,10 +12,6 @@
 #ifndef _OGL_LINESP_H_
 #define _OGL_LINESP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "linesp.h"
-#endif
-
 
 class WXDLLIMPEXP_OGL wxLineShape;
 class WXDLLIMPEXP_OGL wxLineControlPoint: public wxControlPoint

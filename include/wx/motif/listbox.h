@@ -12,10 +12,6 @@
 #ifndef _WX_LISTBOX_H_
 #define _WX_LISTBOX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "listbox.h"
-#endif
-
 #include "wx/ctrlsub.h"
 #include "wx/clntdata.h"
 

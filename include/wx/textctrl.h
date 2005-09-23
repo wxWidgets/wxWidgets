@@ -16,10 +16,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "textctrlbase.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_TEXTCTRL

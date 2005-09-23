@@ -12,10 +12,6 @@
 #ifndef _WX_PAPERH__
 #define _WX_PAPERH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "paper.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/event.h"
 #include "wx/cmndata.h"

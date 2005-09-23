@@ -12,10 +12,6 @@
 #ifndef _WX_GTK_DATAOBJ2_H_
 #define _WX_GTK_DATAOBJ2_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dataobj.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject is a specialization of wxDataObject for bitmaps
 // ----------------------------------------------------------------------------

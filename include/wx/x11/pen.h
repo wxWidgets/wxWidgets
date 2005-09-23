@@ -12,10 +12,6 @@
 #ifndef _WX_PEN_H_
 #define _WX_PEN_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "pen.h"
-#endif
-
 #include "wx/gdicmn.h"
 #include "wx/gdiobj.h"
 

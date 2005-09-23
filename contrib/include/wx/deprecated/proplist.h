@@ -42,10 +42,6 @@
 #ifndef _WX_PROPLIST_H_
 #define _WX_PROPLIST_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "proplist.h"
-#endif
-
 #include "wx/deprecated/setup.h"
 
 #if wxUSE_PROPSHEET

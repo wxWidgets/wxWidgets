@@ -11,10 +11,6 @@
 #ifndef _WX_DCPSG_H_
 #define _WX_DCPSG_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "dcpsg.h"
-#endif
-
 #include "wx/dc.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE

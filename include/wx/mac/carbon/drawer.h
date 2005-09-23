@@ -15,10 +15,6 @@
 #ifndef _WX_DRAWERWINDOW_H_
 #define _WX_DRAWERWINDOW_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "drawer.h"
-#endif
-
 #include "wx/toplevel.h"
 
 //

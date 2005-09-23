@@ -12,10 +12,6 @@
 #ifndef _WX_XTIXMLH__
 #define _WX_XTIXMLH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "xtixml.h"
-#endif
-
 #include "wx/wx.h"
 
 #if wxUSE_EXTENDED_RTTI

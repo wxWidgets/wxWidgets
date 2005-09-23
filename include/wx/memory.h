@@ -12,10 +12,6 @@
 #ifndef _WX_MEMORYH__
 #define _WX_MEMORYH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "memory.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/msgout.h"

@@ -12,10 +12,6 @@
 #ifndef __NUMDLGH_G__
 #define __NUMDLGH_G__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "numdlgg.h"
-#endif
-
 #if wxUSE_NUMBERDLG
 
 #include "wx/defs.h"

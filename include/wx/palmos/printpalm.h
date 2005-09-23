@@ -12,10 +12,6 @@
 #ifndef _WX_PRINTPALM_H_
 #define _WX_PRINTPALM_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "printpalm.h"
-#endif
-
 #include "wx/prntbase.h"
 
 // ---------------------------------------------------------------------------

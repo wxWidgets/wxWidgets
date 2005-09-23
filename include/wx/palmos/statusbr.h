@@ -12,10 +12,6 @@
 #ifndef   _WX_STATUSBR_H_
 #define   _WX_STATUSBR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "statusbr.h"
-#endif
-
 #if wxUSE_NATIVE_STATUSBAR
 
 class WXDLLEXPORT wxStatusBarPalm : public wxStatusBarBase

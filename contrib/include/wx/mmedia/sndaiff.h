@@ -9,10 +9,6 @@
 #ifndef _WX_SNDAIFF_H
 #define _WX_SNDAIFF_H
 
-#ifdef __GNUG__
-#pragma interface "sndaiff.h"
-#endif
-
 #include "wx/defs.h"
 #include "wx/stream.h"
 #include "wx/mmedia/defs.h"

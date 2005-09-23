@@ -34,10 +34,6 @@ recommended; only the window manager should do this...  Also, it is
 not the functionality that wxPalette::Create() aims to provide.
  */
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "palette.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

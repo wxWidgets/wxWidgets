@@ -7,10 +7,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "dataobj.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_DATAOBJ

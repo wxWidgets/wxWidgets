@@ -9,10 +9,6 @@
 #ifndef _WX_FS_INET_H_
 #define _WX_FS_INET_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "fs_inet.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_FILESYSTEM && wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS

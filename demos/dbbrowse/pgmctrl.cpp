@@ -8,13 +8,7 @@
 // Copyright:   (c) Mark Johnson, Berlin Germany
 // Licence:     wxWindows license
 //----------------------------------------------------------------------------------------
-//-- all #ifdefs that the whole Project needs. -------------------------------------------
-//----------------------------------------------------------------------------------------
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-//----------------------------------------------------------------------------------------
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 //----------------------------------------------------------------------------------------

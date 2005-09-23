@@ -14,10 +14,6 @@
 #ifndef _WX_UNIV_WINDOW_H_
 #define _WX_UNIV_WINDOW_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univwindow.h"
-#endif
-
 #include "wx/bitmap.h"      // for m_bitmapBg
 
 class WXDLLEXPORT wxControlRenderer;

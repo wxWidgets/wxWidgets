@@ -13,10 +13,6 @@
 #ifndef _WX_HELPXXXX_H_
 #define _WX_HELPXXXX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "helpxxxx.h"
-#endif
-
 #include "wx/wx.h"
 
 #include "wx/helpbase.h"

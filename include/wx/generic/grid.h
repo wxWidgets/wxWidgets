@@ -14,10 +14,6 @@
 #ifndef __WXGRID_H__
 #define __WXGRID_H__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "grid.h"
-#endif
-
 #include "wx/hashmap.h"
 #include "wx/panel.h"
 #include "wx/scrolwin.h"

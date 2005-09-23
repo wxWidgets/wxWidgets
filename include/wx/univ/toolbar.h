@@ -12,10 +12,6 @@
 #ifndef _WX_UNIV_TOOLBAR_H_
 #define _WX_UNIV_TOOLBAR_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "univtoolbar.h"
-#endif
-
 #include "wx/button.h"      // for wxStdButtonInputHandler
 
 class WXDLLEXPORT wxToolBarTool;

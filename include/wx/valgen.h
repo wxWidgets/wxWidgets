@@ -12,10 +12,6 @@
 #ifndef _WX_VALGENH__
 #define _WX_VALGENH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "valgen.h"
-#endif
-
 #include "wx/validate.h"
 
 #if wxUSE_VALIDATORS

@@ -15,10 +15,6 @@
 #ifndef _WX_LAYWIN_H_G_
 #define _WX_LAYWIN_H_G_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "laywin.h"
-#endif
-
 #if wxUSE_SASH
     #include "wx/sashwin.h"
 #endif // wxUSE_SASH

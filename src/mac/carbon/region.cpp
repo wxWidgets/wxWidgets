@@ -8,10 +8,6 @@
 // Licence:   wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "region.h"
-#endif
-
 #include "wx/wxprec.h"
 
 #include "wx/region.h"
