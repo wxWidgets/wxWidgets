@@ -51,8 +51,8 @@ public:
   virtual bool Ok() const { return (m_refData != NULL) ; }
 
   inline wxPalette& operator = (const wxPalette& palette) { if (*this == palette) return (*this); Ref(palette); return *this; }
-  inline bool operator == (const wxPalette& palette) { return m_refData == palette.m_refData; }
-  inline bool operator != (const wxPalette& palette) { return m_refData != palette.m_refData; }
+  inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
+  inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
 
 /* TODO: implementation
   inline WXHPALETTE GetHPALETTE() const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }

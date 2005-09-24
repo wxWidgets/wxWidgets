@@ -31,8 +31,8 @@ public:
     ~wxAcceleratorTable();
     
     wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) { if (*this == accel) return (*this); Ref(accel); return *this; }
-    bool operator == (const wxAcceleratorTable& accel) { return m_refData == accel.m_refData; }
-    bool operator != (const wxAcceleratorTable& accel) { return m_refData != accel.m_refData; }
+    bool operator == (const wxAcceleratorTable& accel) const { return m_refData == accel.m_refData; }
+    bool operator != (const wxAcceleratorTable& accel) const { return m_refData != accel.m_refData; }
     
     bool Ok() const;
     

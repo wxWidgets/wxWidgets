@@ -295,8 +295,10 @@ wxSize wxSizerItem::GetMinSizeWithBorder() const
 }
 
 
-void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
+void wxSizerItem::SetDimension( const wxPoint& pos_, const wxSize& size_ )
 {
+    wxPoint pos = pos_;
+    wxSize size = size_;
     if (m_flag & wxSHAPED)
     {
         // adjust aspect ratio

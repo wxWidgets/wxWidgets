@@ -200,7 +200,7 @@ private:
   void CleanUp();
 
   // parse the whole file
-  void Parse(wxTextBuffer& buffer, bool bLocal);
+  void Parse(const wxTextBuffer& buffer, bool bLocal);
 
   // the same as SetPath("/")
   void SetRootPath();

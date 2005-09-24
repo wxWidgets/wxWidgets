@@ -1088,7 +1088,7 @@ public:
 
     wxSize GetSize() const { return m_size; }
     wxRect GetRect() const { return m_rect; }
-    void SetRect(wxRect rect) { m_rect = rect; }
+    void SetRect(const wxRect& rect) { m_rect = rect; }
 
     virtual wxEvent *Clone() const { return new wxSizeEvent(*this); }
 
@@ -1128,7 +1128,7 @@ public:
     wxPoint GetPosition() const { return m_pos; }
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
     wxRect GetRect() const { return m_rect; }
-    void SetRect(wxRect rect) { m_rect = rect; }
+    void SetRect(const wxRect& rect) { m_rect = rect; }
 
     virtual wxEvent *Clone() const { return new wxMoveEvent(*this); }
 

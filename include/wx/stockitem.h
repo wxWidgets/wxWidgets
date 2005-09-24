@@ -31,7 +31,7 @@ WXDLLEXPORT bool wxIsStockLabel(wxWindowID id, const wxString& label);
 // for wxSTOCK_OK):
 WXDLLEXPORT wxString wxGetStockLabel(wxWindowID id,
                                      bool withCodes = true,
-                                     wxString accelerator = wxEmptyString);
+                                     const wxString& accelerator = wxEmptyString);
 
 #ifdef __WXGTK20__
 // Translates stock ID to GTK+'s stock item string indentifier:

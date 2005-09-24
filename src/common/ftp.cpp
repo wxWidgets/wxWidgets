@@ -641,8 +641,8 @@ wxSocketBase *wxFTP::AcceptIfActive(wxSocketBase *sock)
     return sock;
 }
 
-wxString wxFTP::GetPortCmdArgument(wxIPV4address addrLocal,
-                                   wxIPV4address addrNew)
+wxString wxFTP::GetPortCmdArgument(const wxIPV4address& addrLocal,
+                                   const wxIPV4address& addrNew)
 {
     // Just fills in the return value with the local IP
     // address of the current socket.  Also it fill in the

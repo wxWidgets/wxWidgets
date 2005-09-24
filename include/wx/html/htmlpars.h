@@ -99,7 +99,7 @@ public:
     // handler can handle only 'myitems' (e.g. it's GetSupportedTags returns "MYITEMS")
     // you can call PushTagHandler(handler, "IT") when you find <myitems>
     // and call PopTagHandler() when you find </myitems>
-    void PushTagHandler(wxHtmlTagHandler *handler, wxString tags);
+    void PushTagHandler(wxHtmlTagHandler *handler, const wxString& tags);
 
     // Restores state before last call to PushTagHandler
     void PopTagHandler();

@@ -119,7 +119,7 @@ public:
     }
 
     // init with conversion
-    void Init(LV_ITEM_OTHER& item)
+    void Init(const LV_ITEM_OTHER& item)
     {
         // avoid unnecessary dynamic memory allocation, jjust make m_pItem
         // point to our own m_item
@@ -659,7 +659,7 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
 }
 
 // Sets information about this column
-bool wxListCtrl::SetColumn(int col, wxListItem& item)
+bool wxListCtrl::SetColumn(int col, const wxListItem& item)
 {
     LV_COLUMN lvCol;
     wxConvertToMSWListCol(col, item, lvCol);
@@ -1486,7 +1486,7 @@ long wxListCtrl::HitTest(const wxPoint& point, int& flags)
 
 // Inserts an item, returning the index of the new item if successful,
 // -1 otherwise.
-long wxListCtrl::InsertItem(wxListItem& info)
+long wxListCtrl::InsertItem(const wxListItem& info)
 {
     wxASSERT_MSG( !IsVirtual(), _T("can't be used with virtual controls") );
 
@@ -1559,7 +1559,7 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 }
 
 // For list view mode (only), inserts a column.
-long wxListCtrl::InsertColumn(long col, wxListItem& item)
+long wxListCtrl::InsertColumn(long col, const wxListItem& item)
 {
     LV_COLUMN lvCol;
     wxConvertToMSWListCol(col, item, lvCol);

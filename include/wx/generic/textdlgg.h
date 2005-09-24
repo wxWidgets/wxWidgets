@@ -47,7 +47,7 @@ public:
     wxString GetValue() const { return m_value; }
 
 #if wxUSE_VALIDATORS
-    void SetTextValidator( wxTextValidator& validator );
+    void SetTextValidator( const wxTextValidator& validator );
     void SetTextValidator( long style = wxFILTER_NONE );
     wxTextValidator* GetTextValidator() { return (wxTextValidator*)m_textctrl->GetValidator(); }
 #endif

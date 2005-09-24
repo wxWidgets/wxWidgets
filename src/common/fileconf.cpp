@@ -572,7 +572,7 @@ wxFileConfig::~wxFileConfig()
 // parse a config file
 // ----------------------------------------------------------------------------
 
-void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
+void wxFileConfig::Parse(const wxTextBuffer& buffer, bool bLocal)
 {
   const wxChar *pStart;
   const wxChar *pEnd;

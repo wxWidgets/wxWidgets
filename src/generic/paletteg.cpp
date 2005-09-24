@@ -83,12 +83,12 @@ wxPalette& wxPalette::operator = (const wxPalette& palette)
     return *this;
 }
 
-bool wxPalette::operator == (const wxPalette& palette)
+bool wxPalette::operator == (const wxPalette& palette) const
 {
     return m_refData == palette.m_refData;
 }
 
-bool wxPalette::operator != (const wxPalette& palette)
+bool wxPalette::operator != (const wxPalette& palette) const
 {
     return m_refData != palette.m_refData;
 }

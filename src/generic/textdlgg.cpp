@@ -173,7 +173,7 @@ void wxTextEntryDialog::SetTextValidator( long style )
     m_textctrl->SetValidator( validator );
 }
 
-void wxTextEntryDialog::SetTextValidator( wxTextValidator& validator )
+void wxTextEntryDialog::SetTextValidator( const wxTextValidator& validator )
 {
     m_textctrl->SetValidator( validator );
 }

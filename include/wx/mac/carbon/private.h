@@ -753,7 +753,7 @@ private :
 
 // toplevel.cpp
 
-ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, Point location , WindowRef window , ControlPartCode *outPart ) ;
+ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, const Point& location , WindowRef window , ControlPartCode *outPart ) ;
 
 #endif // wxUSE_GUI
 

@@ -49,9 +49,9 @@ public:
 
     wxBrush& operator = (const wxBrush& brush)
     { if (*this == brush) return (*this); Ref(brush); return *this; }
-    bool operator == (const wxBrush& brush)
+    bool operator == (const wxBrush& brush) const
     { return m_refData == brush.m_refData; }
-    bool operator != (const wxBrush& brush)
+    bool operator != (const wxBrush& brush) const
     { return m_refData != brush.m_refData; }
 
     wxMacBrushKind MacGetBrushKind()  const ;

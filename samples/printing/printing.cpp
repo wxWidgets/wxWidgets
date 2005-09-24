@@ -66,7 +66,7 @@ wxPageSetupData* g_pageSetupData = (wxPageSetupData*) NULL;
 IMPLEMENT_APP(MyApp)
 
 // Writes a header on a page. Margin units are in millimetres.
-bool WritePageHeader(wxPrintout *printout, wxDC *dc, wxChar *text, float mmToLogical);
+bool WritePageHeader(wxPrintout *printout, wxDC *dc, const wxChar *text, float mmToLogical);
 
 // The `main program' equivalent, creating the windows and returning the
 // main frame
@@ -578,7 +578,7 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
 }
 
 // Writes a header on a page. Margin units are in millimetres.
-bool WritePageHeader(wxPrintout *printout, wxDC *dc, wxChar *text, float mmToLogical)
+bool WritePageHeader(wxPrintout *printout, wxDC *dc, const wxChar *text, float mmToLogical)
 {
 /*
 static wxFont *headerFont = (wxFont *) NULL;

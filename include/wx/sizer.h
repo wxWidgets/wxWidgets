@@ -184,7 +184,7 @@ public:
 
     virtual wxSize GetSize() const;
     virtual wxSize CalcMin();
-    virtual void SetDimension( wxPoint pos, wxSize size );
+    virtual void SetDimension( const wxPoint& pos, const wxSize& size );
 
     wxSize GetMinSize() const
         { return m_minSize; }
@@ -406,24 +406,24 @@ public:
 
     void SetMinSize( int width, int height )
         { DoSetMinSize( width, height ); }
-    void SetMinSize( wxSize size )
+    void SetMinSize( const wxSize& size )
         { DoSetMinSize( size.x, size.y ); }
 
     // Searches recursively
     bool SetItemMinSize( wxWindow *window, int width, int height )
         { return DoSetItemMinSize( window, width, height ); }
-    bool SetItemMinSize( wxWindow *window, wxSize size )
+    bool SetItemMinSize( wxWindow *window, const wxSize& size )
         { return DoSetItemMinSize( window, size.x, size.y ); }
 
     // Searches recursively
     bool SetItemMinSize( wxSizer *sizer, int width, int height )
         { return DoSetItemMinSize( sizer, width, height ); }
-    bool SetItemMinSize( wxSizer *sizer, wxSize size )
+    bool SetItemMinSize( wxSizer *sizer, const wxSize& size )
         { return DoSetItemMinSize( sizer, size.x, size.y ); }
 
     bool SetItemMinSize( size_t index, int width, int height )
         { return DoSetItemMinSize( index, width, height ); }
-    bool SetItemMinSize( size_t index, wxSize size )
+    bool SetItemMinSize( size_t index, const wxSize& size )
         { return DoSetItemMinSize( index, size.x, size.y ); }
 
     wxSize GetSize() const

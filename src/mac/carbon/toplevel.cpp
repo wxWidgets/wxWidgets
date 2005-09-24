@@ -394,7 +394,7 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     }
 }
 
-ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, Point location , ControlRef superControl , ControlPartCode *outPart )
+ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, const Point& location , ControlRef superControl , ControlPartCode *outPart )
 {
     if ( superControl )
     {
@@ -441,7 +441,7 @@ ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, Point locat
     return NULL ;
 }
 
-ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow , Point location , WindowRef window , ControlPartCode *outPart )
+ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow , const Point& location , WindowRef window , ControlPartCode *outPart )
 {
 #if TARGET_API_MAC_OSX
     if ( UMAGetSystemVersion() >= 0x1030 && ( toplevelWindow == 0 || toplevelWindow->MacUsesCompositing() ) )

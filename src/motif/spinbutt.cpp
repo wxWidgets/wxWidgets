@@ -240,7 +240,7 @@ bool wxArrowButton::Create( wxSpinButton* parent, wxWindowID id,
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl);
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent);
 
-static void CalcSizes( wxPoint pt, wxSize sz,
+static void CalcSizes( const wxPoint& pt, const wxSize& sz,
                        wxPoint& pt1, wxSize& sz1,
                        wxPoint& pt2, wxSize& sz2,
                        bool isVertical )

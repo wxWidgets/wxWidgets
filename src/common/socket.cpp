@@ -1053,7 +1053,7 @@ wxUint32 wxSocketBase::GetPushback(void *buffer, wxUint32 size, bool peek)
 // Ctor
 // --------------------------------------------------------------------------
 
-wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
+wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
                                wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_SERVER)
 {
@@ -1260,7 +1260,7 @@ bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
 
 /* NOTE: experimental stuff - might change */
 
-wxDatagramSocket::wxDatagramSocket( wxSockAddress& addr,
+wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
                                     wxSocketFlags flags )
                 : wxSocketBase( flags, wxSOCKET_DATAGRAM )
 {
@@ -1300,7 +1300,7 @@ wxDatagramSocket& wxDatagramSocket::RecvFrom( wxSockAddress& addr,
     return (*this);
 }
 
-wxDatagramSocket& wxDatagramSocket::SendTo( wxSockAddress& addr,
+wxDatagramSocket& wxDatagramSocket::SendTo( const wxSockAddress& addr,
                                             const void* buf,
                                             wxUint32 nBytes )
 {

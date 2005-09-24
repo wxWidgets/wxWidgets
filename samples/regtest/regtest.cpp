@@ -181,7 +181,7 @@ class RegFrame : public wxFrame
 {
 public:
     // ctor & dtor
-    RegFrame(wxFrame *parent, wxChar *title, int x, int y, int w, int h);
+    RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, int h);
     virtual ~RegFrame();
 
     // callbacks
@@ -331,7 +331,7 @@ bool RegApp::OnInit()
 // RegFrame
 // ----------------------------------------------------------------------------
 
-RegFrame::RegFrame(wxFrame *parent, wxChar *title, int x, int y, int w, int h)
+RegFrame::RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, int h)
         : wxFrame(parent, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     // this reduces flicker effects

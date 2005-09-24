@@ -1644,8 +1644,8 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
 // wxGridCellStringRenderer
 // ----------------------------------------------------------------------------
 
-void wxGridCellStringRenderer::SetTextColoursAndFont(wxGrid& grid,
-                                                     wxGridCellAttr& attr,
+void wxGridCellStringRenderer::SetTextColoursAndFont(const wxGrid& grid,
+                                                     const wxGridCellAttr& attr,
                                                      wxDC& dc,
                                                      bool isSelected)
 {
@@ -1676,7 +1676,7 @@ void wxGridCellStringRenderer::SetTextColoursAndFont(wxGrid& grid,
     dc.SetFont( attr.GetFont() );
 }
 
-wxSize wxGridCellStringRenderer::DoGetBestSize(wxGridCellAttr& attr,
+wxSize wxGridCellStringRenderer::DoGetBestSize(const wxGridCellAttr& attr,
                                                wxDC& dc,
                                                const wxString& text)
 {
@@ -1797,7 +1797,7 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
 // wxGridCellNumberRenderer
 // ----------------------------------------------------------------------------
 
-wxString wxGridCellNumberRenderer::GetString(wxGrid& grid, int row, int col)
+wxString wxGridCellNumberRenderer::GetString(const wxGrid& grid, int row, int col)
 {
     wxGridTableBase *table = grid.GetTable();
     wxString text;
@@ -1863,7 +1863,7 @@ wxGridCellRenderer *wxGridCellFloatRenderer::Clone() const
     return renderer;
 }
 
-wxString wxGridCellFloatRenderer::GetString(wxGrid& grid, int row, int col)
+wxString wxGridCellFloatRenderer::GetString(const wxGrid& grid, int row, int col)
 {
     wxGridTableBase *table = grid.GetTable();
 
@@ -7563,7 +7563,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
 }
 
 
-void wxGrid::GetTextBoxSize( wxDC& dc,
+void wxGrid::GetTextBoxSize( const wxDC& dc,
                              const wxArrayString& lines,
                              long *width, long *height )
 {

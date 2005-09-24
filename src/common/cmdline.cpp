@@ -120,7 +120,7 @@ struct wxCmdLineOption
     void SetStrVal(const wxString& val)
         { Check(wxCMD_LINE_VAL_STRING); m_strVal = val; m_hasVal = true; }
 #if wxUSE_DATETIME
-    void SetDateVal(const wxDateTime val)
+    void SetDateVal(const wxDateTime& val)
         { Check(wxCMD_LINE_VAL_DATE); m_dateVal = val; m_hasVal = true; }
 #endif // wxUSE_DATETIME
 

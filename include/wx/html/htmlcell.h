@@ -333,7 +333,7 @@ protected:
 class WXDLLIMPEXP_HTML wxHtmlWordCell : public wxHtmlCell
 {
 public:
-    wxHtmlWordCell(const wxString& word, wxDC& dc);
+    wxHtmlWordCell(const wxString& word, const wxDC& dc);
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
               wxHtmlRenderingInfo& info);
     wxCursor GetCursor() const;
@@ -343,8 +343,8 @@ public:
     void SetPreviousWord(wxHtmlWordCell *cell);
 
 protected:
-    void SetSelectionPrivPos(wxDC& dc, wxHtmlSelection *s) const;
-    void Split(wxDC& dc,
+    void SetSelectionPrivPos(const wxDC& dc, wxHtmlSelection *s) const;
+    void Split(const wxDC& dc,
                const wxPoint& selFrom, const wxPoint& selTo,
                unsigned& pos1, unsigned& pos2) const;
 

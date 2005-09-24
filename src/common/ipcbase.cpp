@@ -47,7 +47,7 @@ wxConnectionBase::wxConnectionBase()
 {
 }
 
-wxConnectionBase::wxConnectionBase(wxConnectionBase& copy)
+wxConnectionBase::wxConnectionBase(const wxConnectionBase& copy)
     : wxObject(),
       m_connected(copy.m_connected),
       m_buffer(copy.m_buffer),

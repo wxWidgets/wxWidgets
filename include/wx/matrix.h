@@ -48,8 +48,8 @@ public:
     void SetValue(int col, int row, double value);
 
     void operator = (const wxTransformMatrix& mat);
-    bool operator == (const wxTransformMatrix& mat);
-    bool operator != (const wxTransformMatrix& mat);
+    bool operator == (const wxTransformMatrix& mat) const;
+    bool operator != (const wxTransformMatrix& mat) const;
 
     //multiply every element by t
     wxTransformMatrix&          operator*=(const double& t);

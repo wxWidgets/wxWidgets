@@ -213,10 +213,10 @@ public:
     bool operator==(const wxSize& sz) const { return x == sz.x && y == sz.y; }
     bool operator!=(const wxSize& sz) const { return x != sz.x || y != sz.y; }
 
-    wxSize operator+(const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }
-    wxSize operator-(const wxSize& sz) { return wxSize(x - sz.x, y - sz.y); }
-    wxSize operator/(const int i) { return wxSize(x / i, y / i); }
-    wxSize operator*(const int i) { return wxSize(x * i, y * i); }
+    wxSize operator+(const wxSize& sz) const { return wxSize(x + sz.x, y + sz.y); }
+    wxSize operator-(const wxSize& sz) const { return wxSize(x - sz.x, y - sz.y); }
+    wxSize operator/(int i) const { return wxSize(x / i, y / i); }
+    wxSize operator*(int i) const { return wxSize(x * i, y * i); }
 
     wxSize& operator+=(const wxSize& sz) { x += sz.x; y += sz.y; return *this; }
     wxSize& operator-=(const wxSize& sz) { x -= sz.x; y -= sz.y; return *this; }

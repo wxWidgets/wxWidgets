@@ -28,8 +28,8 @@
 class WXDLLIMPEXP_ADV wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
 {
 public:
-    wxGridCellDateTimeRenderer(wxString outformat = wxDefaultDateTimeFormat,
-                               wxString informat = wxDefaultDateTimeFormat);
+    wxGridCellDateTimeRenderer(const wxString& outformat = wxDefaultDateTimeFormat,
+                               const wxString& informat = wxDefaultDateTimeFormat);
 
     // draw the string right aligned
     virtual void Draw(wxGrid& grid,
@@ -50,7 +50,7 @@ public:
     virtual void SetParameters(const wxString& params);
 
 protected:
-    wxString GetString(wxGrid& grid, int row, int col);
+    wxString GetString(const wxGrid& grid, int row, int col);
 
     wxString m_iformat;
     wxString m_oformat;
@@ -85,7 +85,7 @@ public:
     virtual void SetParameters(const wxString& params);
 
 protected:
-    wxString GetString(wxGrid& grid, int row, int col);
+    wxString GetString(const wxGrid& grid, int row, int col);
 
     wxArrayString m_choices;
 };
@@ -149,7 +149,7 @@ public:
 private:
     wxArrayString GetTextLines( wxGrid& grid,
                                 wxDC& dc,
-                                wxGridCellAttr& attr,
+                                const wxGridCellAttr& attr,
                                 const wxRect& rect,
                                 int row, int col);
 

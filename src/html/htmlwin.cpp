@@ -235,7 +235,7 @@ void wxHtmlWindow::SetRelatedStatusBar(int bar)
 
 
 
-void wxHtmlWindow::SetFonts(wxString normal_face, wxString fixed_face, const int *sizes)
+void wxHtmlWindow::SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes)
 {
     wxString op = m_OpenedPage;
 

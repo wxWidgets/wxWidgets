@@ -275,7 +275,7 @@ wxObjectRefData *wxRegionGeneric::CloneRefData(const wxObjectRefData *data) cons
     return new wxRegionRefData(*(wxRegionRefData *)data);
 }
 
-bool wxRegionGeneric::operator== (const wxRegionGeneric& region)
+bool wxRegionGeneric::operator== (const wxRegionGeneric& region) const
 {
     wxASSERT(m_refData && region.m_refData);
     return REGION::XEqualRegion(M_REGIONDATA,M_REGIONDATA_OF(region));

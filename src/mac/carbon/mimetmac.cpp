@@ -968,7 +968,7 @@ public:
         }
     }
 
-    static void PrintOutType(wxString& sMessage, wxString sValue, CFTypeRef cfRef)
+    static void PrintOutType(wxString& sMessage, const wxString& sValue, CFTypeRef cfRef)
     {
             sMessage << wxT(" {");
 

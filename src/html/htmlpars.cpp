@@ -351,7 +351,7 @@ void wxHtmlParser::AddTagHandler(wxHtmlTagHandler *handler)
     handler->SetParser(this);
 }
 
-void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
+void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, const wxString& tags)
 {
     wxStringTokenizer tokenizer(tags, wxT(", "));
     wxString key;

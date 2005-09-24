@@ -49,9 +49,9 @@ public:
     {   if (*this == brush) return (*this); Ref(brush); return *this; }
 
     // comparison
-    bool operator == (const wxBrush& brush)
+    bool operator == (const wxBrush& brush) const
     {   return m_refData == brush.m_refData; }
-    bool operator != (const wxBrush& brush)
+    bool operator != (const wxBrush& brush) const
     {   return m_refData != brush.m_refData; }
 
     // accessors

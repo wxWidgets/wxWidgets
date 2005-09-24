@@ -44,8 +44,8 @@ public:
 
     bool Ok() const { return m_refData != NULL; }
 
-    bool operator == ( const wxRegionGeneric& region );
-    bool operator != ( const wxRegionGeneric& region ) { return !(*this == region); }
+    bool operator == ( const wxRegionGeneric& region ) const;
+    bool operator != ( const wxRegionGeneric& region ) const { return !(*this == region); }
 
     //# Modify region
     // Clear current region

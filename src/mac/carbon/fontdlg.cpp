@@ -60,7 +60,7 @@ wxFontDialog::~wxFontDialog()
     // empty
 }
 
-void wxFontDialog::SetData(wxFontData& fontdata)
+void wxFontDialog::SetData(const wxFontData& fontdata)
 {
     m_fontData = fontdata;
 }

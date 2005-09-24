@@ -83,7 +83,7 @@ void wxEffects::DrawSunkenEdge(wxDC& dc, const wxRect& rect, int WXUNUSED(border
     dc.SetPen(wxNullPen);
 }
 
-bool wxEffects::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
+bool wxEffects::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
 {
     static bool hiColour = (wxDisplayDepth() >= 16) ;
 

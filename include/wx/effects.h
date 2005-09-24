@@ -57,7 +57,7 @@ public:
     void DrawSunkenEdge(wxDC& dc, const wxRect& rect, int borderSize = 1);
 
     // Tile a bitmap
-    bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
+    bool TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap);
 
 protected:
     wxColour    m_highlightColour;  // Usually white

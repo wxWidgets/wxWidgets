@@ -400,8 +400,8 @@ public:                                                               \
       { reverse_iterator tmp = *this; --m_ptr; return tmp; }          \
     itor& operator--() { ++m_ptr; return *this; }                     \
     const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }\
-    bool operator ==(const itor& it) { return m_ptr == it.m_ptr; }    \
-    bool operator !=(const itor& it) { return m_ptr != it.m_ptr; }    \
+    bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }\
+    bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }\
   };                                                                  \
                                                                       \
   class const_reverse_iterator                                        \
@@ -433,8 +433,8 @@ public:                                                               \
       { itor tmp = *this; --m_ptr; return tmp; }                      \
     itor& operator--() { ++m_ptr; return *this; }                     \
     const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }\
-    bool operator ==(const itor& it) { return m_ptr == it.m_ptr; }    \
-    bool operator !=(const itor& it) { return m_ptr != it.m_ptr; }    \
+    bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }\
+    bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }\
   };                                                                  \
                                                                       \
   name(size_type n, const_reference v) { assign(n, v); }              \

@@ -138,7 +138,7 @@ protected:
     wxSocketBase *GetActivePort();
 
     // helper for GetPort()
-    wxString GetPortCmdArgument(wxIPV4address Local, wxIPV4address New);
+    wxString GetPortCmdArgument(const wxIPV4address& Local, const wxIPV4address& New);
 
     // accept connection from server in active mode, returns the same socket as
     // passed in in passive mode

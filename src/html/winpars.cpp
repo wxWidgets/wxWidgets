@@ -111,7 +111,7 @@ void wxHtmlWinParser::RemoveModule(wxHtmlTagsModule *module)
     m_Modules.DeleteObject(module);
 }
 
-void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face,
+void wxHtmlWinParser::SetFonts(const wxString& normal_face, const wxString& fixed_face,
                                const int *sizes)
 {
     static int default_sizes[7] =

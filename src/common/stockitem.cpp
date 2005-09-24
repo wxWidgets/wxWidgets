@@ -89,7 +89,7 @@ bool wxIsStockID(wxWindowID id)
     }
 }
 
-wxString wxGetStockLabel(wxWindowID id, bool withCodes, wxString accelerator)
+wxString wxGetStockLabel(wxWindowID id, bool withCodes, const wxString& accelerator)
 {
     wxString stockLabel;
 

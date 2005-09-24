@@ -87,8 +87,8 @@ public:
 
     bool Ok() const { return m_refData != NULL; }
 
-    bool operator == ( const wxRegion& region );
-    bool operator != ( const wxRegion& region ) { return !(*this == region); }
+    bool operator == ( const wxRegion& region ) const;
+    bool operator != ( const wxRegion& region ) const { return !(*this == region); }
 
     void Clear();
 

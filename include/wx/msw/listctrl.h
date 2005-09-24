@@ -120,7 +120,7 @@ public:
     bool GetColumn(int col, wxListItem& item) const;
 
     // Sets information about this column
-    bool SetColumn(int col, wxListItem& item) ;
+    bool SetColumn(int col, const wxListItem& item) ;
 
     // Gets the column width
     int GetColumnWidth(int col) const;
@@ -298,7 +298,7 @@ public:
 
     // Inserts an item, returning the index of the new item if successful,
     // -1 otherwise.
-    long InsertItem(wxListItem& info);
+    long InsertItem(const wxListItem& info);
 
     // Insert a string item
     long InsertItem(long index, const wxString& label);
@@ -310,7 +310,7 @@ public:
     long InsertItem(long index, const wxString& label, int imageIndex);
 
     // For list view mode (only), inserts a column.
-    long InsertColumn(long col, wxListItem& info);
+    long InsertColumn(long col, const wxListItem& info);
 
     long InsertColumn(long col,
                       const wxString& heading,

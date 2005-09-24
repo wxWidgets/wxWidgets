@@ -417,7 +417,7 @@ MySizerDialog::MySizerDialog(wxWindow *parent, const wxChar *title)
 #define POS(r, c)        wxGBPosition(r,c)
 #define SPAN(r, c)       wxGBSpan(r,c)
 
-wxChar* gbsDescription =_T("\
+const wxChar gbsDescription[] =_T("\
 The wxGridBagSizer is similar to the wxFlexGridSizer except the items are explicitly positioned\n\
 in a virtual cell of the layout grid, and column or row spanning is allowed.  For example, this\n\
 static text is positioned at (0,0) and it spans 7 columns.");

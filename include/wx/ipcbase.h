@@ -48,7 +48,7 @@ class WXDLLIMPEXP_BASE wxConnectionBase: public wxObject
 public:
   wxConnectionBase(wxChar *buffer, int size); // use external buffer
   wxConnectionBase(); // use internal, adaptive buffer
-  wxConnectionBase(wxConnectionBase& copy);
+  wxConnectionBase(const wxConnectionBase& copy);
   ~wxConnectionBase(void);
 
   void SetConnected( bool c ) { m_connected = c; }

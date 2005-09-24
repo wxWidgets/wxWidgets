@@ -160,7 +160,7 @@ wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
 // wxRegion comparison
 // ----------------------------------------------------------------------------
 
-bool wxRegion::operator==( const wxRegion& region )
+bool wxRegion::operator==( const wxRegion& region ) const
 {
     if (m_refData == region.m_refData) return TRUE;
 

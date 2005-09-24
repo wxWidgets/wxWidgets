@@ -33,7 +33,7 @@
 
 // Enables a grid cell to display a formated date and or time
 
-wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(wxString outformat, wxString informat)
+wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat, const wxString& informat)
 {
     m_iformat = informat;
     m_oformat = outformat;
@@ -52,7 +52,7 @@ wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
     return renderer;
 }
 
-wxString wxGridCellDateTimeRenderer::GetString(wxGrid& grid, int row, int col)
+wxString wxGridCellDateTimeRenderer::GetString(const wxGrid& grid, int row, int col)
 {
     wxGridTableBase *table = grid.GetTable();
 
@@ -142,7 +142,7 @@ wxGridCellRenderer *wxGridCellEnumRenderer::Clone() const
     return renderer;
 }
 
-wxString wxGridCellEnumRenderer::GetString(wxGrid& grid, int row, int col)
+wxString wxGridCellEnumRenderer::GetString(const wxGrid& grid, int row, int col)
 {
     wxGridTableBase *table = grid.GetTable();
     wxString text;
@@ -326,7 +326,7 @@ wxGridCellAutoWrapStringRenderer::Draw(wxGrid& grid,
 wxArrayString
 wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
                                                wxDC& dc,
-                                               wxGridCellAttr& attr,
+                                               const wxGridCellAttr& attr,
                                                const wxRect& rect,
                                                int row, int col)
 {

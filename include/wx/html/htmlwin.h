@@ -123,7 +123,7 @@ public:
 #endif // wxUSE_STATUSBAR
 
     // Sets fonts to be used when displaying HTML page.
-    void SetFonts(wxString normal_face, wxString fixed_face,
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face,
                   const int *sizes = NULL);
 
     // Sets font sizes to be relative to the given size or the system

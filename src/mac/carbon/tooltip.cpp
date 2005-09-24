@@ -31,7 +31,7 @@ class wxMacToolTip
         wxMacToolTip( ) ;
         ~wxMacToolTip() ;
         
-        void            Setup( WindowRef window  , const wxString& text , wxPoint localPosition ) ;
+        void            Setup( WindowRef window  , const wxString& text , const wxPoint& localPosition ) ;
         long            GetMark() { return m_mark ; }
         void             Draw() ;
         void            Clear() ;
@@ -184,7 +184,7 @@ wxMacToolTip::wxMacToolTip()
     m_timer = NULL ;
 }
 
-void wxMacToolTip::Setup( WindowRef win  , const wxString& text , wxPoint localPosition ) 
+void wxMacToolTip::Setup( WindowRef win  , const wxString& text , const wxPoint& localPosition ) 
 {
     m_mark++ ;
     Clear() ;

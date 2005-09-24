@@ -34,7 +34,7 @@ public:
     wxFontData& GetFontData() { return m_fontData; }
     bool IsShown() const;
     void OnPanelClose();
-    void SetData(wxFontData& data);
+    void SetData(const wxFontData& data);
 
 protected:
     wxWindow*   m_dialogParent;

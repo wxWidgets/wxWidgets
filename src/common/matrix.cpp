@@ -71,7 +71,7 @@ void wxTransformMatrix::operator = (const wxTransformMatrix& mat)
     m_isIdentity = mat.m_isIdentity;
 }
 
-bool wxTransformMatrix::operator == (const wxTransformMatrix& mat)
+bool wxTransformMatrix::operator == (const wxTransformMatrix& mat) const
 {
     if (m_isIdentity && mat.m_isIdentity)
         return true;
@@ -88,7 +88,7 @@ bool wxTransformMatrix::operator == (const wxTransformMatrix& mat)
     return true;
 }
 
-bool wxTransformMatrix::operator != (const wxTransformMatrix& mat)
+bool wxTransformMatrix::operator != (const wxTransformMatrix& mat) const
 {
     return (! ((*this) == mat));
 }

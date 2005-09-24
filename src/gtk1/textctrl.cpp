@@ -164,7 +164,7 @@ extern "C" {
 static void wxGtkTextInsert(GtkWidget *text,
                             GtkTextBuffer *text_buffer,
                             const wxTextAttr& attr,
-                            wxCharBuffer buffer)
+                            const wxCharBuffer& buffer)
 
 {
     gint start_offset;

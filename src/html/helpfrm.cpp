@@ -1187,7 +1187,7 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
 
 
 
-static void SetFontsToHtmlWin(wxHtmlWindow *win, wxString scalf, wxString fixf, int size)
+static void SetFontsToHtmlWin(wxHtmlWindow *win, const wxString& scalf, const wxString& fixf, int size)
 {
     int f_sizes[7];
     f_sizes[0] = int(size * 0.6);

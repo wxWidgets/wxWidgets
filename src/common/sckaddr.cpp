@@ -214,7 +214,7 @@ wxString wxIPV4address::IPAddress() const
         );
 }
 
-bool wxIPV4address::operator==(wxIPV4address& addr)
+bool wxIPV4address::operator==(const wxIPV4address& addr) const
 {
     if(Hostname().Cmp(addr.Hostname().c_str()) == 0 && Service() == addr.Service()) return true;
     return false;

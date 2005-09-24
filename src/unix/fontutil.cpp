@@ -254,7 +254,7 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
     wxFAIL_MSG( _T("not implemented") );
 }
 
-void wxNativeFontInfo::SetFaceName(wxString facename)
+void wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     pango_font_description_set_family( description, wxGTK_CONV(facename) );
 }
@@ -753,7 +753,7 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
     // can't do this under X
 }
 
-void wxNativeFontInfo::SetFaceName(wxString facename)
+void wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     SetXFontComponent(wxXLFD_FAMILY, facename);
 }

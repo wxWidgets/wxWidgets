@@ -362,7 +362,7 @@ public:
     void GetItem( int index, wxListItem &info );
 
     wxString GetText(int index) const;
-    void SetText( int index, const wxString s );
+    void SetText( int index, const wxString& s );
 
     wxListItemAttr *GetAttr() const;
     void SetAttr(wxListItemAttr *attr);
@@ -466,7 +466,7 @@ private:
 
     // generate and process the list event of the given type, return true if
     // it wasn't vetoed, i.e. if we should proceed
-    bool SendListEvent(wxEventType type, wxPoint pos);
+    bool SendListEvent(wxEventType type, const wxPoint& pos);
 
     DECLARE_DYNAMIC_CLASS(wxListHeaderWindow)
     DECLARE_EVENT_TABLE()
@@ -717,7 +717,7 @@ public:
     // send out a wxListEvent
     void SendNotify( size_t line,
                      wxEventType command,
-                     wxPoint point = wxDefaultPosition );
+                     const wxPoint& point = wxDefaultPosition );
 
     // override base class virtual to reset m_lineHeight when the font changes
     virtual bool SetFont(const wxFont& font)
@@ -1365,7 +1365,7 @@ wxString wxListLineData::GetText(int index) const
     return s;
 }
 
-void wxListLineData::SetText( int index, const wxString s )
+void wxListLineData::SetText( int index, const wxString& s )
 {
     wxListItemDataList::compatibility_iterator node = m_items.Item( index );
     if (node)
@@ -2009,7 +2009,7 @@ void wxListHeaderWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
     m_owner->Update();
 }
 
-bool wxListHeaderWindow::SendListEvent(wxEventType type, wxPoint pos)
+bool wxListHeaderWindow::SendListEvent(wxEventType type, const wxPoint& pos)
 {
     wxWindow *parent = GetParent();
     wxListEvent le( type, parent->GetId() );
@@ -2794,7 +2794,7 @@ void wxListMainWindow::HighlightAll( bool on )
 
 void wxListMainWindow::SendNotify( size_t line,
                                    wxEventType command,
-                                   wxPoint point )
+                                   const wxPoint& point )
 {
     wxListEvent le( command, GetParent()->GetId() );
     le.SetEventObject( GetParent() );

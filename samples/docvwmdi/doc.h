@@ -32,7 +32,7 @@ class DoodleSegment: public wxObject
   wxList lines;
 
   DoodleSegment(void){};
-  DoodleSegment(DoodleSegment& seg);
+  DoodleSegment(const DoodleSegment& seg);
   ~DoodleSegment(void);
 
   void Draw(wxDC *dc);

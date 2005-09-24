@@ -40,7 +40,7 @@ class OwnerDrawnFrame : public wxFrame
 {
 public:
     // ctor & dtor
-    OwnerDrawnFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
+    OwnerDrawnFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h);
     ~OwnerDrawnFrame(){};
 
     // notifications
@@ -202,7 +202,7 @@ void OwnerDrawnFrame::InitMenu()
 }
 
 // main frame constructor
-OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
+OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxChar *title,
                                  int x, int y, int w, int h)
          : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {

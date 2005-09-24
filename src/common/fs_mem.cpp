@@ -41,7 +41,7 @@ class MemFSHashObj : public wxObject
             InitTime();
         }
 
-        MemFSHashObj(wxMemoryOutputStream& stream)
+        MemFSHashObj(const wxMemoryOutputStream& stream)
         {
             m_Len = stream.GetSize();
             m_Data = new char[m_Len];

@@ -65,7 +65,7 @@ public:
     wxHtmlWindow *GetWindow() {return m_Window;}
 
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
-    void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = NULL);
 
     // Sets font sizes to be relative to the given size or the system
     // default size; use either specified or default font

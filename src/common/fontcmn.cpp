@@ -514,7 +514,7 @@ void wxNativeFontInfo::SetUnderlined(bool underlined_)
     underlined = underlined_;
 }
 
-void wxNativeFontInfo::SetFaceName(wxString facename_)
+void wxNativeFontInfo::SetFaceName(const wxString& facename_)
 {
     faceName = facename_;
 }
