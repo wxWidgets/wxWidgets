@@ -3048,15 +3048,18 @@ frame or dialog containing it, or {\tt NULL}.
 
 \membersection{::wxLaunchDefaultBrowser}\label{wxlaunchdefaultbrowser}
 
-\func{bool}{wxLaunchDefaultBrowser}{\param{const wxString\& }{sUrl}}
+\func{bool}{wxLaunchDefaultBrowser}{\param{const wxString\& }{url}, \param{int }{flags = $0$}}
 
-Launches the user's default browser and tells it to open the location at {\tt sUrl}.
+Open the \arg{url} in user's default browser. If \arg{flags} parameter contains 
+\texttt{wxBROWSER\_NEW\_WINDOW} flag, a new window is opened for the URL
+(currently this is only supported under Windows).
 
-Returns true if the application was successfully launched.
+Returns \true if the application was successfully launched.
 
 \wxheading{Include files}
 
 <wx/utils.h>
+
 
 \membersection{::wxLoadUserResource}\label{wxloaduserresource}
 

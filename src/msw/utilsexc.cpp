@@ -483,16 +483,16 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
 #if wxUSE_IPC
 
 // connect to the given server via DDE and ask it to execute the command
-static bool wxExecuteDDE(const wxString& ddeServer,
-                         const wxString& ddeTopic,
-                         const wxString& ddeCommand)
+bool
+wxExecuteDDE(const wxString& ddeServer,
+             const wxString& ddeTopic,
+             const wxString& ddeCommand)
 {
     bool ok wxDUMMY_INITIALIZE(false);
 
     wxDDEClient client;
-    wxConnectionBase *conn = client.MakeConnection(wxEmptyString,
-                                                   ddeServer,
-                                                   ddeTopic);
+    wxConnectionBase *
+        conn = client.MakeConnection(wxEmptyString, ddeServer, ddeTopic);
     if ( !conn )
     {
         ok = false;

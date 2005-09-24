@@ -5,6 +5,10 @@ wxWidgets Change Log - For more verbose changes, see the manual
 2.7.0
 -----
 
+All:
+
+- wxLaunchDefaultBrowser() now supports wxBROWSER_NEW_WINDOW flag
+
 wxMSW:
 
 - wxFileDialog respects absence of wxCHANGE_DIR flag under NT (Brad Anderson)

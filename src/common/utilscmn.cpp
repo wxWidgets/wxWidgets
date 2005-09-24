@@ -520,14 +520,74 @@ long wxExecute(const wxString& command,
 // Launch default browser
 // ----------------------------------------------------------------------------
 
-bool wxLaunchDefaultBrowser(const wxString& urlOrig)
+bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 {
+    wxUnusedVar(flags);
+
     // set the scheme of url to http if it does not have one
     wxString url(urlOrig);
     if ( !wxURI(url).HasScheme() )
         url.Prepend(wxT("http://"));
 
 #if defined(__WXMSW__)
+    if ( flags & wxBROWSER_NEW_WINDOW )
+    {
+        // ShellExecuteEx() opens the URL in an existing window by default so
+        // we can't use it if we need a new window
+        wxRegKey key(wxRegKey::HKCR, url.BeforeFirst(':') + _T("\\shell\\open"));
+        if ( key.Exists() )
+        {
+            wxRegKey keyDDE(key, wxT("DDEExec"));
+            if ( keyDDE.Exists() )
+            {
+                const wxString ddeTopic = wxRegKey(keyDDE, wxT("topic"));
+
+                // we only know the syntax of WWW_OpenURL DDE request for IE,
+                // optimistically assume that all other browsers are compatible
+                // with it
+                wxString ddeCmd;
+                bool ok = ddeTopic == wxT("WWW_OpenURL");
+                if ( ok )
+                {
+                    ddeCmd = keyDDE;
+                    ok = !ddeCmd.empty();
+                }
+
+                if ( ok )
+                {
+                    // for WWW_OpenURL, the index of the window to open the URL
+                    // in is -1 (meaning "current") by default, replace it with
+                    // 0 which means "new" (see KB article 160957)
+                    ok = ddeCmd.Replace(wxT("-1"), wxT("0"),
+                                        false /* only first occurence */) == 1;
+                }
+
+                if ( ok )
+                {
+                    // and also replace the parameters: the topic should
+                    // contain a placeholder for the URL
+                    ok = ddeCmd.Replace(wxT("%1"), url, false) == 1;
+                }
+
+                if ( ok )
+                {
+                    // try to send it the DDE request now but ignore the errors
+                    wxLogNull noLog;
+
+                    const wxString ddeServer = wxRegKey(keyDDE, wxT("application"));
+                    if ( wxExecuteDDE(ddeServer, ddeTopic, ddeCmd) )
+                        return true;
+
+                    // this is not necessarily an error: maybe browser is
+                    // simply not running, but no matter, in any case we're
+                    // going to launch it using ShellExecuteEx() below now and
+                    // we shouldn't try to open a new window if we open a new
+                    // browser anyhow
+                }
+            }
+        }
+    }
+
     WinStruct<SHELLEXECUTEINFO> sei;
     sei.lpFile = url.c_str();
     sei.lpVerb = _T("open");
