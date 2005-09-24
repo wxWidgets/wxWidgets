@@ -1934,7 +1934,7 @@ wxStringList& wxVariant::GetStringList() const
 void wxVariant::NullList()
 {
     SetData(new wxVariantDataList());
-};
+}
 
 // Append to list
 void wxVariant::Append(const wxVariant& value)

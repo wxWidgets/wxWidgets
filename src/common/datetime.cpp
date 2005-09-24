@@ -4280,7 +4280,7 @@ wxString wxTimeSpan::Format(const wxChar *format) const
 
 #include "wx/arrimpl.cpp"
 
-WX_DEFINE_OBJARRAY(wxDateTimeArray);
+WX_DEFINE_OBJARRAY(wxDateTimeArray)
 
 static int wxCMPFUNC_CONV
 wxDateTimeCompareFunc(wxDateTime **first, wxDateTime **second)

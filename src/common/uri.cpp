@@ -29,7 +29,7 @@
 // definitions
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxURI, wxObject);
+IMPLEMENT_CLASS(wxURI, wxObject)
 
 // ===========================================================================
 // implementation
