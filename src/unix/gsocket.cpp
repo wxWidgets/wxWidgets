@@ -869,23 +869,25 @@ int GSocket::Read(char *buffer, int size)
   Disable(GSOCK_INPUT);
 
   /* If the socket is blocking, wait for data (with a timeout) */
-  if (Input_Timeout() == GSOCK_TIMEDOUT)
-    /* We no longer return here immediately, otherwise socket events would not be re-enabled! */
+  if (Input_Timeout() == GSOCK_TIMEDOUT) {
+    m_error = GSOCK_TIMEDOUT;
+    /* Don't return here immediately, otherwise socket events would not be
+     * re-enabled! */
     ret = -1;
+  }
   else {
     /* Read the data */
     if (m_stream)
       ret = Recv_Stream(buffer, size);
     else
       ret = Recv_Dgram(buffer, size);
-  }
 
-  if (ret == -1)
-  {
-    if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
-      m_error = GSOCK_WOULDBLOCK;
-    else
-      m_error = GSOCK_IOERR;
+    if (ret == -1) {
+      if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
+        m_error = GSOCK_WOULDBLOCK;
+      else
+        m_error = GSOCK_IOERR;
+    }
   }
 
   /* Enable events again now that we are done processing */
