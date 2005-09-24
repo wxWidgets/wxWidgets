@@ -5,9 +5,14 @@ wxWidgets Change Log - For more verbose changes, see the manual
 2.7.0
 -----
 
+wxMSW:
+
+- wxFileDialog respects absence of wxCHANGE_DIR flag under NT (Brad Anderson)
+
 Unix:
 
 - NO_GCC_PRAGMA is not used any more, remove checks for it if you used it
+
 
 2.6.2
 -----
