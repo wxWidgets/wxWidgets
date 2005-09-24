@@ -251,7 +251,7 @@ public:
         m_bufdata->m_len += 1;
     }
 
-    void  AppendData(void* data, size_t len)
+    void  AppendData(const void *data, size_t len)
     {
         memcpy(GetAppendBuf(len), data, len);
         UngetAppendBuf(len);
