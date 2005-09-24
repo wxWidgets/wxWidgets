@@ -90,7 +90,7 @@
 static WXFARPROC gs_wndprocNotebookSpinBtn = (WXFARPROC)NULL;
 
 // the pointer to standard tab control wnd proc
-static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL; 
+static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL;
 
 LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
                                            UINT message,
@@ -812,8 +812,6 @@ LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
                             hwnd, message, wParam, lParam);
 }
 
- 
-
 void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
     // do nothing here
@@ -991,20 +989,17 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
       {
         wxNotebookPage *pPage = m_pages[sel];
         pPage->Show(true);
+      }
 
-        // As per bug report:
-        // http://sourceforge.net/tracker/index.php?func=detail&aid=1150659&group_id=9863&atid=109863,
-        // we should not set the page focus (and thereby the focus for
-        // a child window) since it erroneously selects radio button controls and also
-        // breaks keyboard handling for a notebook's scroll buttons. So
-        // we always focus the notebook and not the page.
+      // Changing the page should give the focus to it but, as per bug report
+      // http://sf.net/tracker/index.php?func=detail&aid=1150659&group_id=9863&atid=109863,
+      // we should not set the focus to it directly since it erroneously
+      // selects radio buttons and breaks keyboard handling for a notebook's
+      // scroll buttons. So give focus to the notebook and not the page.
+
+      // but don't do this is the notebook is hidden
+      if ( ::IsWindowVisible(GetHwnd()) )
         SetFocus();
-
-      }
-      else // no pages in the notebook, give the focus to itself
-      {
-          SetFocus();
-      }
 
       m_nSelection = sel;
   }
