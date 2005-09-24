@@ -39635,9 +39635,9 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                                                                                                                                                                        CFLAGS_OLD="$CFLAGS"
+                                                                                                                                                                        CXXFLAGS_OLD="$CXXFLAGS"
                         if test "$GCC" = yes ; then
-                            CFLAGS="$CFLAGS -Werror"
+                            CXXFLAGS="$CXXFLAGS -Werror"
                         fi
 
                         cat >conftest.$ac_ext <<_ACEOF
@@ -39742,7 +39742,7 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-                        CFLAGS="$CFLAGS_OLD"
+                        CXXFLAGS="$CXXFLAGS_OLD"
 
 
 fi
@@ -39816,9 +39816,9 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                                                                                                                                                                        CFLAGS_OLD="$CFLAGS"
+                                                                                                                                                                        CXXFLAGS_OLD="$CXXFLAGS"
                         if test "$GCC" = yes ; then
-                            CFLAGS="$CFLAGS -Werror"
+                            CXXFLAGS="$CXXFLAGS -Werror"
                         fi
 
                         cat >conftest.$ac_ext <<_ACEOF
@@ -39923,7 +39923,7 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-                        CFLAGS="$CFLAGS_OLD"
+                        CXXFLAGS="$CXXFLAGS_OLD"
 
 
 fi

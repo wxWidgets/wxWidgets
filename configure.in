@@ -5615,9 +5615,9 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                         dnl converting between incompatible pointer types, so
                         dnl try to use it to get the correct behaviour at
                         dnl least with gcc (otherwise we'd always use size_t)
-                        CFLAGS_OLD="$CFLAGS"
+                        CXXFLAGS_OLD="$CXXFLAGS"
                         if test "$GCC" = yes ; then
-                            CFLAGS="$CFLAGS -Werror"
+                            CXXFLAGS="$CXXFLAGS -Werror"
                         fi
 
                         AC_TRY_COMPILE(
@@ -5644,7 +5644,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                             )
                         )
 
-                        CFLAGS="$CFLAGS_OLD"
+                        CXXFLAGS="$CXXFLAGS_OLD"
                     ]
                 )
             ])
@@ -5676,9 +5676,9 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                         dnl converting between incompatible pointer types, so
                         dnl try to use it to get the correct behaviour at
                         dnl least with gcc (otherwise we'd always use size_t)
-                        CFLAGS_OLD="$CFLAGS"
+                        CXXFLAGS_OLD="$CXXFLAGS"
                         if test "$GCC" = yes ; then
-                            CFLAGS="$CFLAGS -Werror"
+                            CXXFLAGS="$CXXFLAGS -Werror"
                         fi
 
                         AC_TRY_COMPILE(
@@ -5705,7 +5705,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                             )
                         )
 
-                        CFLAGS="$CFLAGS_OLD"
+                        CXXFLAGS="$CXXFLAGS_OLD"
                     ]
                 )
             ])
