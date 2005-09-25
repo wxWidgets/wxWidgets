@@ -30,6 +30,7 @@
 #include "wx/stattext.h"
 #include "wx/debug.h"
 #include "wx/log.h"
+#include "wx/longlong.h"
 #include "wx/intl.h"
 #include "wx/msgdlg.h"
 #include "wx/sizer.h"
@@ -79,56 +80,83 @@
 // ----------------------------------------------------------------------------
 
 static
-int wxCALLBACK wxFileDataNameCompare( long data1, long data2, long data)
+int wxCALLBACK wxFileDataNameCompare( long data1, long data2, long sortOrder)
 {
-     wxFileData *fd1 = (wxFileData*)data1;
-     wxFileData *fd2 = (wxFileData*)data2;
-     if (fd1->GetFileName() == wxT("..")) return -data;
-     if (fd2->GetFileName() == wxT("..")) return data;
-     if (fd1->IsDir() && !fd2->IsDir()) return -data;
-     if (fd2->IsDir() && !fd1->IsDir()) return data;
-     return data*wxStrcmp( fd1->GetFileName(), fd2->GetFileName() );
+     wxFileData *fd1 = (wxFileData *)wxUIntToPtr(data1);
+     wxFileData *fd2 = (wxFileData *)wxUIntToPtr(data2);
+
+     if (fd1->GetFileName() == wxT(".."))
+         return -sortOrder;
+     if (fd2->GetFileName() == wxT(".."))
+         return sortOrder;
+     if (fd1->IsDir() && !fd2->IsDir())
+         return -sortOrder;
+     if (fd2->IsDir() && !fd1->IsDir())
+         return sortOrder;
+
+     return sortOrder*wxStrcmp( fd1->GetFileName(), fd2->GetFileName() );
 }
 
 static
-int wxCALLBACK wxFileDataSizeCompare( long data1, long data2, long data)
+int wxCALLBACK wxFileDataSizeCompare(long data1, long data2, long sortOrder)
 {
-     wxFileData *fd1 = (wxFileData*)data1;
-     wxFileData *fd2 = (wxFileData*)data2;
-     if (fd1->GetFileName() == wxT("..")) return -data;
-     if (fd2->GetFileName() == wxT("..")) return data;
-     if (fd1->IsDir() && !fd2->IsDir()) return -data;
-     if (fd2->IsDir() && !fd1->IsDir()) return data;
-     if (fd1->IsLink() && !fd2->IsLink()) return -data;
-     if (fd2->IsLink() && !fd1->IsLink()) return data;
-     return data*(fd1->GetSize() - fd2->GetSize());
+     wxFileData *fd1 = (wxFileData *)wxUIntToPtr(data1);
+     wxFileData *fd2 = (wxFileData *)wxUIntToPtr(data2);
+
+     if (fd1->GetFileName() == wxT(".."))
+         return -sortOrder;
+     if (fd2->GetFileName() == wxT(".."))
+         return sortOrder;
+     if (fd1->IsDir() && !fd2->IsDir())
+         return -sortOrder;
+     if (fd2->IsDir() && !fd1->IsDir())
+         return sortOrder;
+     if (fd1->IsLink() && !fd2->IsLink())
+         return -sortOrder;
+     if (fd2->IsLink() && !fd1->IsLink())
+         return sortOrder;
+
+     return fd1->GetSize() > fd2->GetSize() ? sortOrder : -sortOrder;
 }
 
 static
-int wxCALLBACK wxFileDataTypeCompare( long data1, long data2, long data)
+int wxCALLBACK wxFileDataTypeCompare(long data1, long data2, long sortOrder)
 {
-     wxFileData *fd1 = (wxFileData*)data1;
-     wxFileData *fd2 = (wxFileData*)data2;
-     if (fd1->GetFileName() == wxT("..")) return -data;
-     if (fd2->GetFileName() == wxT("..")) return data;
-     if (fd1->IsDir() && !fd2->IsDir()) return -data;
-     if (fd2->IsDir() && !fd1->IsDir()) return data;
-     if (fd1->IsLink() && !fd2->IsLink()) return -data;
-     if (fd2->IsLink() && !fd1->IsLink()) return data;
-     return data*wxStrcmp( fd1->GetFileType(), fd2->GetFileType() );
+     wxFileData *fd1 = (wxFileData *)wxUIntToPtr(data1);
+     wxFileData *fd2 = (wxFileData *)wxUIntToPtr(data2);
+
+     if (fd1->GetFileName() == wxT(".."))
+         return -sortOrder;
+     if (fd2->GetFileName() == wxT(".."))
+         return sortOrder;
+     if (fd1->IsDir() && !fd2->IsDir())
+         return -sortOrder;
+     if (fd2->IsDir() && !fd1->IsDir())
+         return sortOrder;
+     if (fd1->IsLink() && !fd2->IsLink())
+         return -sortOrder;
+     if (fd2->IsLink() && !fd1->IsLink())
+         return sortOrder;
+
+     return sortOrder*wxStrcmp( fd1->GetFileType(), fd2->GetFileType() );
 }
 
 static
-int wxCALLBACK wxFileDataTimeCompare( long data1, long data2, long data)
+int wxCALLBACK wxFileDataTimeCompare(long data1, long data2, long sortOrder)
 {
-     wxFileData *fd1 = (wxFileData*)data1;
-     wxFileData *fd2 = (wxFileData*)data2;
-     if (fd1->GetFileName() == wxT("..")) return -data;
-     if (fd2->GetFileName() == wxT("..")) return data;
-     if (fd1->IsDir() && !fd2->IsDir()) return -data;
-     if (fd2->IsDir() && !fd1->IsDir()) return data;
+     wxFileData *fd1 = (wxFileData *)wxUIntToPtr(data1);
+     wxFileData *fd2 = (wxFileData *)wxUIntToPtr(data2);
 
-     return fd1->GetDateTime().IsLaterThan(fd2->GetDateTime()) ? int(data) : -int(data);
+     if (fd1->GetFileName() == wxT(".."))
+         return -sortOrder;
+     if (fd2->GetFileName() == wxT(".."))
+         return sortOrder;
+     if (fd1->IsDir() && !fd2->IsDir())
+         return -sortOrder;
+     if (fd2->IsDir() && !fd1->IsDir())
+         return sortOrder;
+
+     return fd1->GetDateTime().IsLaterThan(fd2->GetDateTime()) ? sortOrder : -sortOrder;
 }
 
 #if defined(__DOS__) || defined(__WINDOWS__) || defined (__OS2__)
@@ -221,7 +249,7 @@ void wxFileData::ReadData()
         }
     }
 
-    m_size = (long)buff.st_size;
+    m_size = buff.st_size;
 
     m_dateTime = buff.st_mtime;
 
@@ -281,7 +309,8 @@ wxString wxFileData::GetHint() const
     else if (IsDrive())
         s += _("<DRIVE>");
     else // plain file
-        s += wxString::Format( _("%ld bytes"), m_size );
+        s += wxString::Format(_("%ld bytes"),
+                              wxLongLong(m_size).ToString().c_str());
 
     s += wxT(' ');
 
@@ -306,7 +335,7 @@ wxString wxFileData::GetEntry( fileListFieldType num ) const
 
         case FileList_Size:
             if (!IsDir() && !IsLink() && !IsDrive())
-                s.Printf(_T("%ld"), m_size);
+                s = wxLongLong(m_size).ToString();
             break;
 
         case FileList_Type:
@@ -792,35 +821,29 @@ void wxFileCtrl::OnListColClick( wxListEvent &event )
     SortItems(m_sort_field, m_sort_foward);
 }
 
-void wxFileCtrl::SortItems(wxFileData::fileListFieldType field, bool foward)
+void wxFileCtrl::SortItems(wxFileData::fileListFieldType field, bool forward)
 {
     m_sort_field = field;
-    m_sort_foward = foward;
-    long sort_dir = foward ? 1 : -1;
+    m_sort_foward = forward;
+    const long sort_dir = forward ? 1 : -1;
 
     switch (m_sort_field)
     {
         case wxFileData::FileList_Name :
-        {
-            wxListCtrl::SortItems((wxListCtrlCompare)wxFileDataNameCompare, sort_dir);
+            wxListCtrl::SortItems(wxFileDataNameCompare, sort_dir);
             break;
-        }
+
         case wxFileData::FileList_Size :
-        {
-             wxListCtrl::SortItems((wxListCtrlCompare)wxFileDataSizeCompare, sort_dir);
+            wxListCtrl::SortItems(wxFileDataSizeCompare, sort_dir);
             break;
-        }
+
         case wxFileData::FileList_Type :
-        {
-             wxListCtrl::SortItems((wxListCtrlCompare)wxFileDataTypeCompare, sort_dir);
-             break;
-        }
+            wxListCtrl::SortItems(wxFileDataTypeCompare, sort_dir);
+            break;
+
         case wxFileData::FileList_Time :
-        {
-             wxListCtrl::SortItems((wxListCtrlCompare)wxFileDataTimeCompare, sort_dir);
-             break;
-        }
-        default : break;
+            wxListCtrl::SortItems(wxFileDataTimeCompare, sort_dir);
+            break;
     }
 }
 
