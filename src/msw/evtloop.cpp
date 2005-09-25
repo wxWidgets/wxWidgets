@@ -45,7 +45,7 @@
 
     #include "wx/listimpl.cpp"
 
-    WX_DEFINE_LIST(wxMsgList);
+    WX_DEFINE_LIST(wxMsgList)
 #endif // wxUSE_THREADS
 
 // ----------------------------------------------------------------------------

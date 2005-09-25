@@ -48,7 +48,7 @@
 #include "wx/file.h"
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxGDIImageHandlerList);
+WX_DEFINE_LIST(wxGDIImageHandlerList)
 
 // ----------------------------------------------------------------------------
 // private classes

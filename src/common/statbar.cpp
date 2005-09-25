@@ -32,7 +32,7 @@
 #if wxUSE_STATUSBAR
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxListString);
+WX_DEFINE_LIST(wxListString)
 
 // ============================================================================
 // wxStatusBarBase implementation

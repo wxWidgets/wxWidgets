@@ -52,7 +52,7 @@ struct WXDLLEXPORT wxPaintDCInfo
 
 #include "wx/arrimpl.cpp"
 
-WX_DEFINE_OBJARRAY(wxArrayDCInfo);
+WX_DEFINE_OBJARRAY(wxArrayDCInfo)
 
 // ----------------------------------------------------------------------------
 // macros

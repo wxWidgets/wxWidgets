@@ -46,7 +46,7 @@ IMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer)
 IMPLEMENT_CLASS(wxStdDialogButtonSizer, wxBoxSizer)
 #endif
 
-WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
+WX_DEFINE_EXPORTED_LIST( wxSizerItemList )
 
 /*
     TODO PROPERTIES
