@@ -66,6 +66,9 @@ public:
     // this is app-overridable to, for example, set help and tooltip text
     virtual void DoCreateControls();
 
+protected:
+    void FinishLayout();
+
 private:
     // was the dialog really created?
     bool WasCreated() const { return m_btnPrev != NULL; }
@@ -82,12 +85,6 @@ private:
     void AddBackNextPair(wxBoxSizer *buttonRow);
     void AddButtonRow(wxBoxSizer *mainColumn);
 
-#if wxABI_VERSION >= 20602
-protected:
-#endif
-    void FinishLayout();
-
-private:
     wxSize GetManualPageSize() const;
 
     // the page size requested by user

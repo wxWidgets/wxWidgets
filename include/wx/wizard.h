@@ -76,9 +76,7 @@ public:
     // wxNullBitmap from here - the default one will be used then.
     virtual wxBitmap GetBitmap() const { return m_bitmap; }
 
-    // due to a typo in #if condition, the validation functions were disabled
-    // in 2.6.[01] releases so check for wxABI_VERSION here
-#if wxUSE_VALIDATORS && (wxABI_VERSION >= 20602)
+#if wxUSE_VALIDATORS
     // Override the base functions to allow a validator to be assigned to this page.
     virtual bool TransferDataToWindow()
     {

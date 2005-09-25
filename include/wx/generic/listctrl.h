@@ -114,10 +114,8 @@ public:
     wxColour GetItemTextColour( long item ) const;
     void SetItemBackgroundColour( long item, const wxColour &col);
     wxColour GetItemBackgroundColour( long item ) const;
-#if wxABI_VERSION >= 20602
     void SetItemFont( long item, const wxFont &f);
     wxFont GetItemFont( long item ) const;
-#endif
     int GetSelectedItemCount() const;
     wxColour GetTextColour() const;
     void SetTextColour(const wxColour& col);

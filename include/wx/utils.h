@@ -325,8 +325,6 @@ WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = true);
 
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#if wxABI_VERSION >= 20601
-
 // flags for wxLaunchDefaultBrowser
 enum
 {
@@ -335,7 +333,6 @@ enum
 
 // Launch url in the user's default internet browser
 WXDLLIMPEXP_BASE bool wxLaunchDefaultBrowser(const wxString& url, int flags = 0);
-#endif
 
 // ----------------------------------------------------------------------------
 // Environment variables

@@ -190,12 +190,9 @@ public:
     wxFileOffset Tell(); //FIXME: This should be const
     wxFileOffset Length(); //FIXME: This should be const
 
-#if wxABI_VERSION >= 20601 /* 2.6.1+ only */
     double GetPlaybackRate();           //All but MCI & GStreamer
     bool SetPlaybackRate(double dRate); //All but MCI & GStreamer
-#endif
 
-#if wxABI_VERSION >= 20602 /* 2.6.2+ only */
     bool Load(const wxURI& location);
     bool Load(const wxURI& location, const wxURI& proxy);
 
@@ -213,7 +210,7 @@ public:
     {   return Load(wxURI(fileName));       }
     bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy)
     {   return Load(wxURI(fileName), wxURI(proxy));       }
-#endif
+
 protected:
     static wxClassInfo* NextBackend();
 
@@ -327,10 +324,12 @@ public:
 //Event ID to give to our events
 #define wxMEDIA_FINISHED_ID    13000
 #define wxMEDIA_STOP_ID    13001
+#define wxMEDIA_LOADED_ID      13002
 
 //Define our event types - we need to call DEFINE_EVENT_TYPE(EVT) later
 DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_FINISHED, wxMEDIA_FINISHED_ID)
 DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_STOP,     wxMEDIA_STOP_ID)
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_LOADED,     wxMEDIA_LOADED_ID)
 
 //Function type(s) our events need
 typedef void (wxEvtHandler::*wxMediaEventFunction)(wxMediaEvent&);
@@ -341,12 +340,7 @@ typedef void (wxEvtHandler::*wxMediaEventFunction)(wxMediaEvent&);
 //Macro for usage with message maps
 #define EVT_MEDIA_FINISHED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_FINISHED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 #define EVT_MEDIA_STOP(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_STOP, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
-
-#if wxABI_VERSION >= 20602 /* 2.6.2+ only */
-#   define wxMEDIA_LOADED_ID      13002
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_LOADED,     wxMEDIA_LOADED_ID)
-#   define EVT_MEDIA_LOADED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_LOADED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
-#endif
+#define EVT_MEDIA_LOADED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_LOADED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 
 // ----------------------------------------------------------------------------
 // common backend base class used by many other backends

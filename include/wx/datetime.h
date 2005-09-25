@@ -769,12 +769,10 @@ public:
     inline wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false) const;
     wxDateTime& MakeTimezone(const TimeZone& tz, bool noDST = false);
 
-#if wxABI_VERSION >= 20602
         // interpret current value as being in another timezone and transform
         // it to local one
     inline wxDateTime FromTimezone(const TimeZone& tz, bool noDST = false) const;
     wxDateTime& MakeFromTimezone(const TimeZone& tz, bool noDST = false);
-#endif // ABI >= 2.6.2
 
         // transform to/from GMT/UTC
     wxDateTime ToUTC(bool noDST = false) const { return ToTimezone(UTC, noDST); }
@@ -783,12 +781,10 @@ public:
     wxDateTime ToGMT(bool noDST = false) const { return ToUTC(noDST); }
     wxDateTime& MakeGMT(bool noDST = false) { return MakeUTC(noDST); }
 
-#if wxABI_VERSION >= 20602
     wxDateTime FromUTC(bool noDST = false) const
         { return FromTimezone(UTC, noDST); }
     wxDateTime& MakeFromUTC(bool noDST = false)
         { return MakeFromTimezone(UTC, noDST); }
-#endif // ABI >= 2.6.2
 
         // is daylight savings time in effect at this moment according to the
         // rules of the specified country?
@@ -1858,15 +1854,11 @@ wxDateTime::ToTimezone(const wxDateTime::TimeZone& tz, bool noDST) const
     MODIFY_AND_RETURN( MakeTimezone(tz, noDST) );
 }
 
-#if wxABI_VERSION >= 20602
-
 inline wxDateTime
 wxDateTime::FromTimezone(const wxDateTime::TimeZone& tz, bool noDST) const
 {
     MODIFY_AND_RETURN( MakeFromTimezone(tz, noDST) );
 }
-
-#endif // ABI >= 2.6.2
 
 // ----------------------------------------------------------------------------
 // wxTimeSpan construction

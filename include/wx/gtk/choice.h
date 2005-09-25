@@ -66,9 +66,7 @@ public:
     void Clear();
 
     int GetSelection() const;
-#if wxABI_VERSION >= 20602
     int GetCurrentSelection() const { return GetSelection(); }
-#endif
     void SetSelection( int n );
 
     virtual int GetCount() const;

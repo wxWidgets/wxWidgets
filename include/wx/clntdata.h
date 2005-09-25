@@ -16,8 +16,6 @@
 #include "wx/string.h"
 #include "wx/hashmap.h"
 
-#if wxABI_VERSION >= 20602
-
 typedef int (*wxShadowObjectMethod)(void*, void*);
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
     wxShadowObjectMethod,
@@ -34,18 +32,18 @@ class WXDLLIMPEXP_BASE wxShadowObject
 {
 public:
     wxShadowObject() { }
-    
+
     void AddMethod( const wxString &name, wxShadowObjectMethod method )
-    { 
+    {
         wxShadowObjectMethods::iterator it = m_methods.find( name );
         if (it == m_methods.end())
             m_methods[ name ] = method;
         else
             it->second = method;
     }
-    
+
     bool InvokeMethod( const wxString &name, void* window, void* param, int* returnValue )
-    { 
+    {
         wxShadowObjectMethods::iterator it = m_methods.find( name );
         if (it == m_methods.end())
             return false;
@@ -55,7 +53,7 @@ public:
             *returnValue = ret;
         return true;
     }
-    
+
     void AddField( const wxString &name, void* initialValue = NULL )
     {
         wxShadowObjectFields::iterator it = m_fields.find( name );
@@ -64,7 +62,7 @@ public:
         else
             it->second = initialValue;
     }
-    
+
     void SetField( const wxString &name, void* value )
     {
         wxShadowObjectFields::iterator it = m_fields.find( name );
@@ -72,7 +70,7 @@ public:
             return;
         it->second = value;
     }
-    
+
     void* GetField( const wxString &name, void *defaultValue = NULL )
     {
         wxShadowObjectFields::iterator it = m_fields.find( name );
@@ -80,13 +78,12 @@ public:
             return defaultValue;
         return it->second;
     }
-    
+
 private:
     wxShadowObjectMethods   m_methods;
     wxShadowObjectFields    m_fields;
 };
 
-#endif // wxABI_VERSION
 
 // ----------------------------------------------------------------------------
 
@@ -161,10 +158,6 @@ protected:
     wxClientDataType m_clientDataType;
 
 };
-
-// not Motif-specific, but currently used only under Motif,
-// compiled to make wxMotif and wxGTK base libraries compatible
-#if defined(__WXMOTIF__) || wxABI_VERSION >= 20602
 
 #include "wx/vector.h"
 
@@ -276,8 +269,5 @@ private:
     wxClientDataDictionaryPairVector m_vec;
 };
 
-#endif // __WXMOTIF__
-
-// ----------------------------------------------------------------------------
-#endif
+#endif // _WX_CLNTDATAH__
 

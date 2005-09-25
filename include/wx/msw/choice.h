@@ -74,9 +74,7 @@ public:
 
     virtual int GetCount() const;
     virtual int GetSelection() const;
-#if wxABI_VERSION >= 20602
     virtual int GetCurrentSelection() const;
-#endif
     virtual void SetSelection(int n);
 
     virtual int FindString(const wxString& s) const;
