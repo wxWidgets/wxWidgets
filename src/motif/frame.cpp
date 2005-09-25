@@ -192,7 +192,7 @@ bool wxFrame::Create(wxWindow *parent,
     return true;
 }
 
-bool wxFrame::DoCreate(wxWindow* parent,
+bool wxFrame::XmDoCreateTLW(wxWindow* parent,
                             wxWindowID id,
                             const wxString& title,
                             const wxPoint& pos,
@@ -260,10 +260,6 @@ bool wxFrame::DoCreate(wxWindow* parent,
     wxModelessWindows.Append( this );
 
     return true;
-}
-
-void wxFrame::DoDestroy()
-{
 }
 
 wxFrame::~wxFrame()

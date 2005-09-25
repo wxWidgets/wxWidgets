@@ -113,7 +113,7 @@ private:
     virtual void DoSetClientSize(int width, int height);
 
 private:
-    virtual bool DoCreate(wxWindow* parent,
+    virtual bool XmDoCreateTLW(wxWindow* parent,
                                wxWindowID id,
                                const wxString& title,
                                const wxPoint& pos,
@@ -122,11 +122,6 @@ private:
                                const wxString& name);
 
 
-#if wxCHECK_VERSION(2,7,0)
-    #error "Remove DoDestroy(), it was only kept for binary backwards compatibility"
-#endif
-
-    virtual void DoDestroy();
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFrame)

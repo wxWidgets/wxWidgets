@@ -147,7 +147,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-bool wxDialog::DoCreate(wxWindow* parent,
+bool wxDialog::XmDoCreateTLW(wxWindow* parent,
                              wxWindowID id,
                              const wxString& title,
                              const wxPoint& pos,
@@ -190,10 +190,6 @@ bool wxDialog::DoCreate(wxWindow* parent,
     wxAddWindowToTable( (Widget)m_mainWidget, this );
 
     return true;
-}
-
-void wxDialog::DoDestroy()
-{
 }
 
 void wxDialog::SetModal(bool flag)
