@@ -781,6 +781,9 @@
 /* Define if you have strptime() */
 #undef HAVE_STRPTIME
 
+/* Define if strptime() is declared in headers */
+#undef HAVE_STRPTIME_DECL
+
 /* Define if you have all functions to set thread priority */
 #undef HAVE_THREAD_PRIORITY_FUNCTIONS
 
