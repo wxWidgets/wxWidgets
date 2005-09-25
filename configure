@@ -42716,7 +42716,7 @@ elif test "$GCC" = yes ; then
 fi
 
 if test "x$INTELCXX" = "xyes" ; then
-                                                            CXXWARNINGS="-Wall -wd279,383,444,869,981,1418,1419"
+                                                            CXXWARNINGS="-Wall -wd279,383,444,810,869,981,1418,1419"
 elif test "$GXX" = yes ; then
         CXXWARNINGS="-Wall -Wundef -Wno-ctor-dtor-privacy"
 fi

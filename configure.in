@@ -6904,7 +6904,7 @@ if test "x$INTELCXX" = "xyes" ; then
     dnl     remark #981: operands are evaluated in unspecified order
     dnl     remark #1418: external definition with no prior declaration
     dnl     remark #1419: external declaration in primary source file
-    CXXWARNINGS="-Wall -wd279,383,444,869,981,1418,1419"
+    CXXWARNINGS="-Wall -wd279,383,444,810,869,981,1418,1419"
 elif test "$GXX" = yes ; then
     dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
     CXXWARNINGS="-Wall -Wundef -Wno-ctor-dtor-privacy" 
