@@ -21,6 +21,7 @@
 #include "wx/string.h"
 #include "wx/fontenc.h"
 #include "wx/hashmap.h"
+#include "wx/math.h"
 
 // ---------------------------------------------------------------------------
 // forward declarations
@@ -269,9 +270,13 @@ public:
     wxRealPoint operator+(const wxRealPoint& pt) const { return wxRealPoint(x + pt.x, y + pt.y); }
     wxRealPoint operator-(const wxRealPoint& pt) const { return wxRealPoint(x - pt.x, y - pt.y); }
 
-    bool operator==(const wxRealPoint& pt) const { return x == pt.x && y == pt.y; }
-    bool operator!=(const wxRealPoint& pt) const { return x != pt.x || y != pt.y; }
+    bool operator==(const wxRealPoint& pt) const
+    {
+        return wxIsSameDouble(x, pt.x) && wxIsSameDouble(y, pt.y);
+    }
+    bool operator!=(const wxRealPoint& pt) const { return !(*this == pt); }
 };
+
 
 class WXDLLEXPORT wxPoint
 {

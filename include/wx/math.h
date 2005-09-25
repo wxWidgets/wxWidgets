@@ -76,5 +76,26 @@
     #define wxIsNaN(x) ((x) != (x))
 #endif
 
+#ifdef __cplusplus
+#ifdef __INTELC__
+inline bool wxIsSameDouble(double x, double y)
+{
+    // VZ: this warning, given for operators==() and !=() is not wrong, as ==
+    //     shouldn't be used with doubles, but we get too many of them and
+    //     removing these operators is probably not a good idea
+    #pragma warning(push)
+
+    // floating-point equality and inequality comparisons are unreliable
+    #pragma warning(disable: 1572)
+
+    return x == y;
+
+    #pragma warning(pop)
+}
+#else /* !__INTELC__ */
+inline bool wxIsSameDouble(double x, double y) { return x == y; }
+#endif /* __INTELC__/!__INTELC__ */
+#endif /* __cplusplus */
+
 
 #endif /* _WX_MATH_H_ */
