@@ -30,6 +30,7 @@
 #include "wx/buffer.h"
 #include "wx/ptr_scpd.h"
 #include "wx/wfstream.h"
+#include "wx/link.h"
 #include "zlib.h"
 
 // value for the 'version needed to extract' field (20 means 2.0)
@@ -77,12 +78,7 @@ enum {
 IMPLEMENT_DYNAMIC_CLASS(wxZipEntry, wxArchiveEntry)
 IMPLEMENT_DYNAMIC_CLASS(wxZipClassFactory, wxArchiveClassFactory)
 
-//FORCE_LINK_ME(zipstrm)
-int _wx_link_dummy_func_zipstrm();
-int _wx_link_dummy_func_zipstrm()
-{
-    return 1;
-}
+wxFORCE_LINK_THIS_MODULE(zipstrm)
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -168,7 +164,7 @@ wxStoredInputStream::wxStoredInputStream(wxInputStream& stream)
 
 size_t wxStoredInputStream::OnSysRead(void *buffer, size_t size)
 {
-    size_t count = wxMin(size, (size_t)(m_len - m_pos));
+    size_t count = wxMin(size, wx_truncate_cast(size_t, m_len - m_pos));
     count = m_parent_i_stream->Read(buffer, count).LastRead();
     m_pos += count;
 
@@ -1820,7 +1816,7 @@ wxFileOffset wxZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 // Output stream
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wx__ZipEntryList);
+WX_DEFINE_LIST(wx__ZipEntryList)
 
 wxZipOutputStream::wxZipOutputStream(wxOutputStream& stream,
                                      int level      /*=-1*/,

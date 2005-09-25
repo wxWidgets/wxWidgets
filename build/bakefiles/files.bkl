@@ -392,6 +392,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/ipcbase.h
     wx/isql.h
     wx/isqlext.h
+    wx/link.h
     wx/list.h
     wx/listimpl.cpp
     wx/log.h

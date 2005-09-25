@@ -40,22 +40,9 @@ See mod_*.cpp and htmlwin.cpp for example :-)
 #ifndef _WX_FORCELNK_H_
 #define _WX_FORCELNK_H_
 
-
-
-// This must be part of the module you want to force:
-#define FORCE_LINK_ME(module_name)                                    \
-                int _wx_link_dummy_func_##module_name ();             \
-                int _wx_link_dummy_func_##module_name ()              \
-                {                                                     \
-                    return 1;                                         \
-                }
-
-
-// And this must be somewhere where it certainly will be linked:
-#define FORCE_LINK(module_name)                                       \
-                extern int _wx_link_dummy_func_##module_name ();      \
-                static int _wx_link_dummy_var_##module_name =         \
-                               _wx_link_dummy_func_##module_name ();
+// compatibility defines
+#define FORCE_LINK wxFORCE_LINK_MODULE
+#define FORCE_LINK_ME wxFORCE_LINK_THIS_MODULE
 
 #define FORCE_WXHTML_MODULES() \
     FORCE_LINK(m_layout) \
