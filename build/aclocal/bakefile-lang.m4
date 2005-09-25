@@ -97,6 +97,10 @@ AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER],
     fi
 ])
 
+dnl recent versions of SGI mipsPro compiler define _SGI_COMPILER_VERSION
+dnl
+dnl NB: old versions define _COMPILER_VERSION but this could probably be
+dnl     defined by other compilers too so don't test for it to be safe
 AC_DEFUN([AC_BAKEFILE_PROG_SGICC],
 [
     _AC_BAKEFILE_LANG_COMPILER(SGI, C, _SGI_COMPILER_VERSION, SGICC=yes)
@@ -107,18 +111,27 @@ AC_DEFUN([AC_BAKEFILE_PROG_SGICXX],
     _AC_BAKEFILE_LANG_COMPILER(SGI, C++, _SGI_COMPILER_VERSION, SGICXX=yes)
 ])
 
-dnl Loosely based on autoconf AC_PROG_CC
+dnl Sun compiler defines __SUNPRO_C/__SUNPRO_CC
 AC_DEFUN([AC_BAKEFILE_PROG_SUNCC],
 [
     _AC_BAKEFILE_LANG_COMPILER(Sun, C, __SUNPRO_C, SUNCC=yes)
 ])
 
-dnl Loosely based on autoconf AC_PROG_CC
 AC_DEFUN([AC_BAKEFILE_PROG_SUNCXX],
 [
     _AC_BAKEFILE_LANG_COMPILER(Sun, C++, __SUNPRO_CC, SUNCXX=yes)
 ])
 
+dnl Intel icc compiler defines __INTEL_COMPILER for both C and C++
+AC_DEFUN([AC_BAKEFILE_PROG_INTELCC],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Intel, C, __INTEL_COMPILER, INTELCC=yes)
+])
+
+AC_DEFUN([AC_BAKEFILE_PROG_INTELCXX],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Intel, C++, __INTEL_COMPILER, INTELCXX=yes)
+])
 
 dnl ===========================================================================
 dnl macros to detect specialty compiler options
@@ -166,30 +179,37 @@ dnl ===========================================================================
 AC_DEFUN([AC_BAKEFILE_PROG_CC],
 [
     AC_PROG_CC
-    AC_BAKEFILE_METROWERKS_EXTO
-    dnl By the time we find out that we need -ext o some tests have failed.
-    if test "x$wx_cv_c_exto" '!=' "x"; then
-        unset ac_cv_prog_cc_g
-        _AC_PROG_CC_G
+    AC_BAKEFILE_PROG_INTELCC
+    dnl if we're using gcc, we can't be using any of incompatible compilers
+    if test "x$GCC" != "xyes"; then
+        AC_BAKEFILE_METROWERKS_EXTO
+        dnl By the time we find out that we need -ext o some tests have failed.
+        if test "x$wx_cv_c_exto" '!=' "x"; then
+            unset ac_cv_prog_cc_g
+            _AC_PROG_CC_G
+        fi
+        AC_BAKEFILE_PROG_MWCC
+        AC_BAKEFILE_PROG_XLCC
+        AC_BAKEFILE_PROG_SGICC
+        AC_BAKEFILE_PROG_SUNCC
     fi
-    AC_BAKEFILE_PROG_MWCC
-    AC_BAKEFILE_PROG_XLCC
-    AC_BAKEFILE_PROG_SGICC
-    AC_BAKEFILE_PROG_SUNCC
 ])
 
 AC_DEFUN([AC_BAKEFILE_PROG_CXX],
 [
     AC_PROG_CXX
-    AC_BAKEFILE_METROWERKS_EXTO
-    dnl By the time we find out that we need -ext o some tests have failed.
-    if test "x$wx_cv_cxx_exto" '!=' "x"; then
-        unset ac_cv_prog_cxx_g
-        _AC_PROG_CXX_G
+    AC_BAKEFILE_PROG_INTELCXX
+    if test "x$GXX" != "xyes"; then
+        AC_BAKEFILE_METROWERKS_EXTO
+        dnl By the time we find out that we need -ext o some tests have failed.
+        if test "x$wx_cv_cxx_exto" '!=' "x"; then
+            unset ac_cv_prog_cxx_g
+            _AC_PROG_CXX_G
+        fi
+        AC_BAKEFILE_PROG_MWCXX
+        AC_BAKEFILE_PROG_XLCXX
+        AC_BAKEFILE_PROG_SGICXX
+        AC_BAKEFILE_PROG_SUNCXX
     fi
-    AC_BAKEFILE_PROG_MWCXX
-    AC_BAKEFILE_PROG_XLCXX
-    AC_BAKEFILE_PROG_SGICXX
-    AC_BAKEFILE_PROG_SUNCXX
 ])
 
