@@ -6851,7 +6851,7 @@ INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
 dnl C/C++ compiler options used to compile wxWidgets
 dnl
 dnl check for icc before gcc as icc is also recognized as gcc
-if test "$GCC" = yes ; then
+if test "x$INTELCC" = "xyes" ; then
     dnl Warnings which can't be easily suppressed in C code are disabled:
     dnl
     dnl     remark #810: conversion from "x" to "y" may lose significant bits
@@ -6866,7 +6866,7 @@ elif test "$GCC" = yes ; then
     CWARNINGS="-Wall -Wundef"
 fi
 
-if test "$INTELCXX" = yes ; then
+if test "x$INTELCXX" = "xyes" ; then
     dnl Intel compiler gives some warnings which simply can't be worked
     dnl around or of which we have too many (810, 869) so it's impractical to
     dnl keep them enabled even if in theory it would be nice and some others

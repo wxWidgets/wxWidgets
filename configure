@@ -42626,13 +42626,13 @@ fi
 INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
 -I\${top_srcdir}/include $TOOLKIT_INCLUDE"
 
-if test "$GCC" = yes ; then
+if test "x$INTELCC" = "xyes" ; then
                                         CWARNINGS="-Wall -wd810,869,981,1418,1572,1684"
 elif test "$GCC" = yes ; then
     CWARNINGS="-Wall -Wundef"
 fi
 
-if test "$INTELCXX" = yes ; then
+if test "x$INTELCXX" = "xyes" ; then
                                                             CXXWARNINGS="-Wall -wd279,383,444,869,981,1418,1419"
 elif test "$GXX" = yes ; then
         CXXWARNINGS="-Wall -Wundef -Wno-ctor-dtor-privacy"
