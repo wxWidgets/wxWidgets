@@ -93,12 +93,6 @@ bool wxMSWSystemMenuFontModule::ms_showCues = true;
 IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
 
 
-// temporary hack to implement wxOwnerDrawn::IsMenuItem() without breaking
-// backwards compatibility
-#if wxCHECK_VERSION(2, 7, 0)
-    #pragma warning "TODO: remove gs_menuItems hack"
-#endif
-
 // VC++ 6 gives a warning here:
 //
 //      return type for 'OwnerDrawnSet_wxImplementation_HashTable::iterator::
@@ -121,8 +115,6 @@ WX_DECLARE_HASH_SET(wxOwnerDrawn*, wxPointerHash, wxPointerEqual, OwnerDrawnSet)
     #pragma warning(pop)
 #endif
 
-static OwnerDrawnSet gs_menuItems;
-
 // ============================================================================
 // implementation of wxOwnerDrawn class
 // ============================================================================
@@ -134,7 +126,7 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
                            bool bMenuItem)
             : m_strName(str)
 {
-    if (ms_nDefaultMarginWidth == 0)
+    if ( ms_nDefaultMarginWidth == 0 )
     {
        ms_nDefaultMarginWidth = ::GetSystemMetrics(SM_CXMENUCHECK) +
                                 wxSystemSettings::GetMetric(wxSYS_EDGE_X);
@@ -143,32 +135,19 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
 
     m_bCheckable   = bCheckable;
     m_bOwnerDrawn  = false;
+    m_isMenuItem   = bMenuItem;
     m_nHeight      = 0;
     m_nMarginWidth = ms_nLastMarginWidth;
     m_nMinHeight   = wxMSWSystemMenuFontModule::ms_systemMenuHeight;
-
-    m_bmpDisabled = wxNullBitmap;
-
-    // TODO: we can't add new m_isMenuItem field in 2.6, so we use this hack
-    //       with the map, but do add m_isMenuItem in 2.7
-    if ( bMenuItem )
-    {
-        gs_menuItems.insert(this);
-    }
 }
 
 wxOwnerDrawn::~wxOwnerDrawn()
 {
-    // TODO: remove this in 2.7
-    gs_menuItems.erase(this);
 }
 
 bool wxOwnerDrawn::IsMenuItem() const
 {
-    // TODO: in 2.7, replace this with simple "return m_isMenuItem"
-
-    // some versions of mingw have problems without const_cast when wxUSE_STL=1
-    return gs_menuItems.count(wx_const_cast(wxOwnerDrawn *, this)) == 1;
+    return m_isMenuItem;
 }
 
 

@@ -153,7 +153,8 @@ private:
   static size_t ms_nLastMarginWidth;    // handy for aligning all items
 
   bool      m_bCheckable,   // used only for menu or check listbox items
-            m_bOwnerDrawn;  // true if something is non standard
+            m_bOwnerDrawn,  // true if something is non standard
+            m_isMenuItem;   // true if this is a menu item
 
   wxFont    m_font;         // font to use for drawing
   wxColour  m_colText,      // color ----"---"---"----
