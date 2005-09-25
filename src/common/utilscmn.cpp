@@ -549,7 +549,7 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
                 bool ok = ddeTopic == wxT("WWW_OpenURL");
                 if ( ok )
                 {
-                    ddeCmd = keyDDE;
+                    ddeCmd = keyDDE.QueryDefaultValue();
                     ok = !ddeCmd.empty();
                 }
 
