@@ -354,7 +354,7 @@ void wxFileData::MakeItem( wxListItem &item )
         if ( dg.Ok() )
             item.SetTextColour(dg);
     }
-    item.m_data = (long)this;
+    item.m_data = wxPtrToUInt(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -639,7 +639,7 @@ void wxFileCtrl::MakeDir()
     if (id != -1)
     {
         SortItems(m_sort_field, m_sort_foward);
-        id = FindItem( 0, (long)fd );
+        id = FindItem( 0, wxPtrToUInt(fd) );
         EnsureVisible( id );
         EditLabel( id );
     }
