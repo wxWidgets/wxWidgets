@@ -81,7 +81,17 @@ wxFileTypeInfo::wxFileTypeInfo(const wxChar *mimeType,
 
     for ( ;; )
     {
+        // icc gives this warning in its own va_arg() macro, argh
+#ifdef __INTELC__
+    #pragma warning(push)
+    #pragma warning(disable: 1684)
+#endif
+
         const wxChar *ext = va_arg(argptr, const wxChar *);
+
+#ifdef __INTELC__
+    #pragma warning(pop)
+#endif
         if ( !ext )
         {
             // NULL terminates the list
