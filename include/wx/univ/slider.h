@@ -9,12 +9,12 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_UNIV_SLIDER_H_
+#define _WX_UNIV_SLIDER_H_
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "univslider.h"
 #endif
-
-#ifndef _WX_UNIV_SLIDER_H_
-#define _WX_UNIV_SLIDER_H_
 
 #include "wx/univ/scrthumb.h"
 
