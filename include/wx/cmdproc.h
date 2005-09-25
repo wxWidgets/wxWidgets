@@ -87,7 +87,8 @@ public:
 #endif // wxUSE_MENUS
 
     // command list access
-    wxList& GetCommands() const { return (wxList&) m_commands; }
+    wxList& GetCommands() { return m_commands; }
+    const wxList& GetCommands() const { return m_commands; }
     wxCommand *GetCurrentCommand() const
     {
         return (wxCommand *)(m_currentCommand ? m_currentCommand->GetData() : NULL);

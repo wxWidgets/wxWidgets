@@ -126,7 +126,8 @@ public:
 
     virtual bool AddView(wxView *view);
     virtual bool RemoveView(wxView *view);
-    wxList& GetViews() const { return (wxList&) m_documentViews; }
+    wxList& GetViews() { return m_documentViews; }
+    const wxList& GetViews() const { return m_documentViews; }
     wxView *GetFirstView() const;
 
     virtual void UpdateAllViews(wxView *sender = (wxView *) NULL, wxObject *hint = (wxObject *) NULL);
