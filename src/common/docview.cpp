@@ -2215,10 +2215,10 @@ void wxFileHistory::RemoveFileFromHistory(size_t i)
         // delete the last separator too if no more files are left
         if ( m_fileHistoryN == 1 )
         {
-            wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetLast();
-            if ( node )
+            wxMenuItemList::compatibility_iterator nodeLast = menu->GetMenuItems().GetLast();
+            if ( nodeLast )
             {
-                wxMenuItem *menuItem = node->GetData();
+                wxMenuItem *menuItem = nodeLast->GetData();
                 if ( menuItem->IsSeparator() )
                 {
                     menu->Delete(menuItem);
