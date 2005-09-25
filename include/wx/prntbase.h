@@ -95,6 +95,7 @@ public:
 
     static void SetPrintFactory( wxPrintFactory *factory );
     static wxPrintFactory *GetFactory();
+private:
     static wxPrintFactory *m_factory;
 };
 
