@@ -40,6 +40,8 @@ See mod_*.cpp and htmlwin.cpp for example :-)
 #ifndef _WX_FORCELNK_H_
 #define _WX_FORCELNK_H_
 
+#include "wx/link.h"
+
 // compatibility defines
 #define FORCE_LINK wxFORCE_LINK_MODULE
 #define FORCE_LINK_ME wxFORCE_LINK_THIS_MODULE
