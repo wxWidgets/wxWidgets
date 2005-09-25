@@ -18,7 +18,6 @@
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/dialog.h"
-#include "wx/bookctrl.h"
 
 //---------------------------------------------------------------------------
 // classes
