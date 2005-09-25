@@ -83,6 +83,8 @@ inline bool wxIsSameDouble(double x, double y)
     // VZ: this warning, given for operators==() and !=() is not wrong, as ==
     //     shouldn't be used with doubles, but we get too many of them and
     //     removing these operators is probably not a good idea
+    //
+    //     Maybe we should alway compare doubles up to some "epsilon" precision
     #pragma warning(push)
 
     // floating-point equality and inequality comparisons are unreliable
@@ -95,6 +97,8 @@ inline bool wxIsSameDouble(double x, double y)
 #else /* !__INTELC__ */
 inline bool wxIsSameDouble(double x, double y) { return x == y; }
 #endif /* __INTELC__/!__INTELC__ */
+
+inline bool wxIsNullDouble(double x) { return wxIsSameDouble(x, 0.); }
 #endif /* __cplusplus */
 
 
