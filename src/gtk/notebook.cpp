@@ -660,13 +660,7 @@ bool wxNotebook::InsertPage( size_t position,
     gtk_signal_connect( GTK_OBJECT(win->m_widget), "size_allocate",
       GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)win );
 
-#ifndef __VMS
-   // On VMS position is unsigned and thus always positive
-   if (position < 0)
-        gtk_notebook_append_page( notebook, win->m_widget, nb_page->m_box );
-    else
-#endif
-     gtk_notebook_insert_page( notebook, win->m_widget, nb_page->m_box, position );
+    gtk_notebook_insert_page( notebook, win->m_widget, nb_page->m_box, position );
 
     nb_page->m_page = (GtkNotebookPage*) g_list_last(notebook->children)->data;
 
@@ -712,13 +706,7 @@ bool wxNotebook::InsertPage( size_t position,
     gtk_widget_show( GTK_WIDGET(nb_page->m_label) );
     if (select && (m_pagesData.GetCount() > 1))
     {
-#ifndef __VMS
-   // On VMS position is unsigned and thus always positive
-        if (position < 0)
-            SetSelection( GetPageCount()-1 );
-        else
-#endif
-            SetSelection( position );
+      SetSelection( position );
     }
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page",
