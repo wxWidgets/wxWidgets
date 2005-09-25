@@ -5436,11 +5436,34 @@ fi
 
 dnl ---------------------------------------------------------------------------
 dnl time/date functions
-dnl ------------------------------------------------------------------------
+dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_DATETIME" = "yes"; then
-    dnl check for strptime
+    dnl check for strptime and for its declaration as some systems lack it
     AC_CHECK_FUNCS(strptime)
+    if test "$ac_cv_func_strptime" = "yes"; then
+        AC_CACHE_CHECK([for strptime declaration], wx_cv_func_strptime_decl,
+            [
+                AC_LANG_SAVE
+                AC_LANG_CPLUSPLUS
+                AC_TRY_COMPILE(
+                    [
+                        #include <time.h>
+                    ],
+                    [
+                        struct tm t;
+                        strptime("foo", "bar", &t);
+                    ],
+                    wx_cv_func_strptime_decl=yes,
+                    wx_cv_func_strptime_decl=no
+                )
+                AC_LANG_RESTORE
+            ]
+        )
+    fi
+    if test "$wx_cv_func_strptime_decl" = "yes"; then
+        AC_DEFINE(HAVE_STRPTIME_DECL)
+    fi
 
     dnl check for timezone variable
     dnl   doesn't exist under Darwin / Mac OS X which uses tm_gmtoff instead

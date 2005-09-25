@@ -392,9 +392,9 @@ static wxString CallStrftime(const wxChar *format, const tm* tm)
 
 #ifdef HAVE_STRPTIME
 
-// glibc2 doesn't define this in the headers unless _XOPEN_SOURCE is defined
-// which, unfortunately, wreaks havoc elsewhere
-#if defined(__GLIBC__) && (__GLIBC__ == 2)
+#if wxUSE_UNIX && !defined(HAVE_STRPTIME_DECL)
+    // configure detected that we had strptime() but not its declaration,
+    // provide it ourselves
     extern "C" char *strptime(const char *, const char *, struct tm *);
 #endif
 
