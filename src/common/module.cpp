@@ -22,6 +22,8 @@
 #include "wx/log.h"
 #include "wx/listimpl.cpp"
 
+#define TRACE_MODULE _T("module")
+
 WX_DEFINE_LIST(wxModuleList)
 
 IMPLEMENT_CLASS(wxModule, wxObject)
@@ -54,6 +56,8 @@ void wxModule::RegisterModules()
         if ( classInfo->IsKindOf(CLASSINFO(wxModule)) &&
             (classInfo != (& (wxModule::ms_classInfo))) )
         {
+            wxLogTrace(TRACE_MODULE, wxT("Registering module %s"),
+                       classInfo->GetClassName());
             wxModule* module = (wxModule *)classInfo->CreateObject();
             RegisterModule(module);
         }
@@ -93,6 +97,8 @@ void wxModule::CleanUpModules()
     wxModuleList::compatibility_iterator node;
     for ( node = m_modules.GetFirst(); node; node = node->GetNext() )
     {
+        wxLogTrace(TRACE_MODULE, wxT("Cleanup module %s"),
+                   node->GetData()->GetClassInfo()->GetClassName());
         node->GetData()->Exit();
     }
 
