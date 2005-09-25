@@ -7,7 +7,7 @@ See wx.bkl for platform-independent notes.
 
 Usage:
     Options WX_CPPFLAGS, WX_CFLAGS, WX_CXXFLAGS, WX_LIBS are defined.
-    
+
 
 Format-specific notes:
 
@@ -23,7 +23,7 @@ Format-specific notes:
     <!-- ============================================================== -->
     <!--                           Autoconf                             -->
     <!-- ============================================================== -->
-    
+
     <if cond="FORMAT=='autoconf'">
         <!-- Autoconf backend is simplicity itself thanks to wx-config... -->
         <option name="WX_CFLAGS"/>
@@ -31,7 +31,7 @@ Format-specific notes:
         <option name="WX_CPPFLAGS"/>
         <option name="WX_LIBS"/>
     </if>
-    
+
     <!-- ============================================================== -->
     <!--                   GNU makefiles for Unix                       -->
     <!-- ============================================================== -->
@@ -62,27 +62,38 @@ Format-specific notes:
              prevents bakefile from detecting it: -->
         <set var="FORMAT_OUTPUT_VARIABLES" append="1">WX_CONFIG</set>
     </if>
-    
+
     <!-- ============================================================== -->
     <!--                          Common code                           -->
     <!-- ============================================================== -->
-    
+
     <if cond="FORMAT not in ['gnu','autoconf']">
         <error>
             Don't include presets/wx_unix.bkl directly, use presets/wx.bkl.
         </error>
     </if>
-    
+
     <template id="wx-lib">
         <cxxflags>$(WX_CXXFLAGS)</cxxflags>
         <cflags>$(WX_CFLAGS)</cflags>
     </template>
 
     <template id="wx" template="wx-lib">
-        <ldlibs>$(WX_LIBS)</ldlibs>
+        <!--
+            Don't include the $(WX_LIBS) variable in linker options here since
+            it would make impossible for the user to obtain the right library
+            order when he needs to specify, *before* WX_LIBS, its own libraries
+            that depend on wxWidgets libraries; to avoid this, we include
+            $(WX_LIBS) as soon as we found the <wx-lib>base</wx-lib> tag which
+            the user should always put *after* all other wx-dependent libraries
+        -->
     </template>
 
     <!-- not used together with wx-config: -->
-    <define-tag name="wx-lib" rules="exe,dll,module"/>
+    <define-tag name="wx-lib" rules="exe,dll,module">
+        <if cond="value=='base'">
+            <ldlibs>$(WX_LIBS)</ldlibs>
+        </if>
+    </define-tag>
 
 </makefile>
