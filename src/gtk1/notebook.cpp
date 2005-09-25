@@ -79,7 +79,7 @@ public:
 
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxGtkNotebookPagesList);
+WX_DEFINE_LIST(wxGtkNotebookPagesList)
 
 
 //-----------------------------------------------------------------------------
