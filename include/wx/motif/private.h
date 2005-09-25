@@ -76,7 +76,7 @@ extern bool wxAddWindowToTable(Widget w, wxWindow *win);
 // ----------------------------------------------------------------------------
 
 // Creates a bitmap with transparent areas drawn in the given colour.
-wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour);
+wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, const wxColour& colour);
 
 // ----------------------------------------------------------------------------
 // key events related functions
@@ -101,7 +101,7 @@ extern void wxDoChangeForegroundColour(WXWidget widget,
 extern void wxDoChangeBackgroundColour(WXWidget widget,
                                        wxColour& backgroundColour,
                                        bool changeArmColour = false);
-extern void wxDoChangeFont(WXWidget widget, wxFont& font);
+extern void wxDoChangeFont(WXWidget widget, const wxFont& font);
 extern void wxGetTextExtent(WXDisplay* display, const wxFont& font,
                             double scale,
                             const wxString& string, int* width, int* height,

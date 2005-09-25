@@ -2519,9 +2519,10 @@ wxWindow *wxWindowBase::GetCapture()
 
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
-wxWindow* wxFindWindowAtPointer(const wxPoint& pt)
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 {
-    return wxFindWindowAtPoint(wxGetMousePosition());
+    pt = wxGetMousePosition();
+    return wxFindWindowAtPoint(pt);
 }
 
 // Get the current mouse position.
