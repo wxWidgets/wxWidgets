@@ -263,12 +263,9 @@ wxSize wxWizardSizer::SiblingSize(wxSizerItem *child)
 // generic wxWizard implementation
 // ----------------------------------------------------------------------------
 
-#if wxCHECK_VERSION(2, 7, 0)
-    #error "Fix wxGTK vs. wxMSW difference other way"
-#else
-    WX_DEFINE_ARRAY_PTR(wxWizard *, wxModelessWizards);
-    wxModelessWizards modelessWizards;
-#endif
+// FIXME: this is a hack
+WX_DEFINE_ARRAY_PTR(wxWizard *, wxModelessWizards);
+static wxModelessWizards modelessWizards;
 
 void wxWizard::Init()
 {

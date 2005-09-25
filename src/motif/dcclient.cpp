@@ -149,7 +149,6 @@ void wxWindowDC::Init()
     m_display = (WXDisplay*) NULL;
     m_pixmap = (WXPixmap) 0;
     m_autoSetting = 0;
-    m_oldFont = (WXFont) 0;
     m_ok = false;
     m_clipRegion = (WXRegion) 0;
 }
