@@ -2280,7 +2280,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 
         wxMessageBox(wxString::Format(
                                       _T(
-                                        "       wxWidgets Library (%s port)\nVersion %u.%u.%u%s%s, compiled at %s %s\n   Copyright (c) 1995-2005 wxWidgets team"
+                                        "       wxWidgets Library (%s port)\nVersion %d.%d.%d%s%s, compiled at %s %s\n   Copyright (c) 1995-2005 wxWidgets team"
                                         ),
                                       port.c_str(),
                                       wxMAJOR_VERSION,
