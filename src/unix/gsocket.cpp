@@ -12,10 +12,6 @@
  * -------------------------------------------------------------------------
  */
 
-/*
- * PLEASE don't put C++ comments here - this is a C source file.
- */
-
 #if defined(__WATCOMC__)
 #include "wx/wxprec.h"
 #include <errno.h>
@@ -183,6 +179,7 @@ int _System soclose(int);
 
 #ifndef __GSOCKET_STANDALONE__
 #  include "wx/unix/gsockunx.h"
+#  include "wx/unix/private.h"
 #  include "wx/gsocket.h"
 #else
 #  include "gsockunx.h"
@@ -721,9 +718,9 @@ GSocketError GSocket::Connect(GSocketStream stream)
    * non-blocking, it just shouldn't be called prior to knowing there is a
    * connection _if_ blocking sockets are being used.
    * If connect above returns 0, we are already connected and need to make the
-   * call to Enable_Events now.  
+   * call to Enable_Events now.
    */
-  
+
   if (m_non_blocking || ret == 0)
   {
     gs_gui_functions->Enable_Events(this);
@@ -975,18 +972,18 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
 
     if (m_fd == -1)
         return (GSOCK_LOST_FLAG & flags);
-    
+
     /* Do not use a static struct, Linux can garble it */
     tv.tv_sec = m_timeout / 1000;
     tv.tv_usec = (m_timeout % 1000) * 1000;
 
-    FD_ZERO(&readfds);
-    FD_ZERO(&writefds);
-    FD_ZERO(&exceptfds);
-    FD_SET(m_fd, &readfds);
+    wxFD_ZERO(&readfds);
+    wxFD_ZERO(&writefds);
+    wxFD_ZERO(&exceptfds);
+    wxFD_SET(m_fd, &readfds);
     if (flags & GSOCK_OUTPUT_FLAG || flags & GSOCK_CONNECTION_FLAG)
-      FD_SET(m_fd, &writefds);
-    FD_SET(m_fd, &exceptfds);
+      wxFD_SET(m_fd, &writefds);
+    wxFD_SET(m_fd, &exceptfds);
 
     /* Check 'sticky' CONNECTION flag first */
     result |= (GSOCK_CONNECTION_FLAG & m_detected);
@@ -1009,7 +1006,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
     }
 
     /* Check for readability */
-    if (FD_ISSET(m_fd, &readfds))
+    if (wxFD_ISSET(m_fd, &readfds))
     {
       char c;
 
@@ -1038,7 +1035,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
     }
 
     /* Check for writability */
-    if (FD_ISSET(m_fd, &writefds))
+    if (wxFD_ISSET(m_fd, &writefds))
     {
       if (m_establishing && !m_server)
       {
@@ -1069,7 +1066,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
     }
 
     /* Check for exceptions and errors (is this useful in Unices?) */
-    if (FD_ISSET(m_fd, &exceptfds))
+    if (wxFD_ISSET(m_fd, &exceptfds))
     {
       m_establishing = false;
       m_detected = GSOCK_LOST_FLAG;
@@ -1250,8 +1247,8 @@ GSocketError GSocket::Input_Timeout()
 
   if (!m_non_blocking)
   {
-    FD_ZERO(&readfds);
-    FD_SET(m_fd, &readfds);
+    wxFD_ZERO(&readfds);
+    wxFD_SET(m_fd, &readfds);
     ret = select(m_fd + 1, &readfds, NULL, NULL, &tv);
     if (ret == 0)
     {
@@ -1291,8 +1288,8 @@ GSocketError GSocket::Output_Timeout()
 
   if (!m_non_blocking)
   {
-    FD_ZERO(&writefds);
-    FD_SET(m_fd, &writefds);
+    wxFD_ZERO(&writefds);
+    wxFD_SET(m_fd, &writefds);
     ret = select(m_fd + 1, NULL, &writefds, NULL, &tv);
     if (ret == 0)
     {
@@ -1310,7 +1307,7 @@ GSocketError GSocket::Output_Timeout()
       m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
-    if ( ! FD_ISSET(m_fd, &writefds) ) {
+    if ( ! wxFD_ISSET(m_fd, &writefds) ) {
         GSocket_Debug(( "GSocket_Output_Timeout is buggy!\n" ));
     }
     else {

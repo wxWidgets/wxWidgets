@@ -967,10 +967,10 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE
 // append all element of one array to another one
 #define WX_APPEND_ARRAY(array, other)                                         \
     {                                                                         \
-        size_t count = (other).size();                                        \
-        for ( size_t n = 0; n < count; n++ )                                  \
+        size_t wxAAcnt = (other).size();                                      \
+        for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
         {                                                                     \
-            (array).push_back((other)[n]);                                    \
+            (array).push_back((other)[wxAAn]);                                \
         }                                                                     \
     }
 
@@ -982,10 +982,10 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE
 //     count on it)!
 #define WX_CLEAR_ARRAY(array)                                                 \
     {                                                                         \
-        size_t count = (array).size();                                        \
-        for ( size_t n = 0; n < count; n++ )                                  \
+        size_t wxAAcnt = (array).size();                                      \
+        for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
         {                                                                     \
-            delete (array)[n];                                                \
+            delete (array)[wxAAn];                                            \
         }                                                                     \
                                                                               \
         (array).clear();                                                      \

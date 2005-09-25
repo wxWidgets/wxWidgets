@@ -105,7 +105,7 @@
  * and a 64-bit mantissa, with no hidden bit.
  ****************************************************************/
 
-wxFloat64 ConvertFromIeeeExtended(wxInt8* bytes)
+wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes)
 {
     wxFloat64 f;
     wxInt32 expon;

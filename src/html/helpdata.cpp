@@ -462,17 +462,17 @@ bool wxHtmlHelpData::SaveCachedBook(wxHtmlBookRecord *book, wxOutputStream *f)
         }
         else
         {
-            int cnt = 0;
+            int cnt2 = 0;
             wxHtmlHelpDataItem *parent = m_index[i].parent;
             for (int j = i-1; j >= 0; j--)
             {
                 if (m_index[j].book == book && m_index[j].level > 0)
-                    cnt++;
+                    cnt2++;
                 if (&m_index[j] == parent)
                     break;
             }
-            wxASSERT(cnt > 0);
-            CacheWriteInt32(f, cnt);
+            wxASSERT(cnt2 > 0);
+            CacheWriteInt32(f, cnt2);
         }
     }
     return true;

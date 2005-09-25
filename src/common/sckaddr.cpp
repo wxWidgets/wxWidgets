@@ -205,19 +205,18 @@ wxSockAddress *wxIPV4address::Clone() const
 wxString wxIPV4address::IPAddress() const
 {
     unsigned long raw =  GAddress_INET_GetHostAddress(m_address);
-    return wxString::Format(
-        _T("%u.%u.%u.%u"),
-        (unsigned char)((raw>>24) & 0xff),
-        (unsigned char)((raw>>16) & 0xff),
-        (unsigned char)((raw>>8) & 0xff),
-        (unsigned char)(raw & 0xff)
+    return wxString::Format(_T("%lu.%lu.%lu.%lu"),
+                (raw>>24) & 0xff,
+                (raw>>16) & 0xff,
+                (raw>>8) & 0xff,
+                raw & 0xff
         );
 }
 
 bool wxIPV4address::operator==(const wxIPV4address& addr) const
 {
-    if(Hostname().Cmp(addr.Hostname().c_str()) == 0 && Service() == addr.Service()) return true;
-    return false;
+    return Hostname().Cmp(addr.Hostname().c_str()) == 0 &&
+            Service() == addr.Service();
 }
 
 #if wxUSE_IPV6

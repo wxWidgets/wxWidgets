@@ -573,7 +573,7 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
                 if ( *p == wxT('-') )
                     p++;
 
-                int value;
+                unsigned int value;
                 if ( wxSscanf(p, wxT("%u"), &value) == 1 )
                 {
                     if ( value >= 1250 )

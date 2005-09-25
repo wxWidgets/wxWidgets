@@ -52,7 +52,7 @@ public:
 };
 
 WX_DECLARE_OBJARRAY(wxHtmlTextPiece, wxHtmlTextPieces);
-WX_DEFINE_OBJARRAY(wxHtmlTextPieces);
+WX_DEFINE_OBJARRAY(wxHtmlTextPieces)
 
 class wxHtmlParserState
 {

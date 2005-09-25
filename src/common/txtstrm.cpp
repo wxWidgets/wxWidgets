@@ -348,7 +348,7 @@ void wxTextOutputStream::Write32(wxUint32 i)
 void wxTextOutputStream::Write16(wxUint16 i)
 {
     wxString str;
-    str.Printf(wxT("%u"), i);
+    str.Printf(wxT("%u"), (unsigned)i);
 
     WriteString(str);
 }
@@ -356,7 +356,7 @@ void wxTextOutputStream::Write16(wxUint16 i)
 void wxTextOutputStream::Write8(wxUint8 i)
 {
     wxString str;
-    str.Printf(wxT("%u"), i);
+    str.Printf(wxT("%u"), (unsigned)i);
 
     WriteString(str);
 }

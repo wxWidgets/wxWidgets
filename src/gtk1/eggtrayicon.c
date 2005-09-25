@@ -148,7 +148,8 @@ egg_tray_icon_get_type (void)
 	(GInstanceInitFunc) egg_tray_icon_init
       };
 
-      our_type = g_type_register_static (GTK_TYPE_PLUG, "EggTrayIcon", &our_info, 0);
+      our_type = g_type_register_static (GTK_TYPE_PLUG, "EggTrayIcon",
+                                          &our_info, (GTypeFlags)0);
     }
 
   return our_type;

@@ -239,7 +239,9 @@ wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 
 // hack: we need something to pass to gtk_menu_popup, so we store the time of
 // the last click here
+#ifndef __WXGTK20__
 static guint32 gs_timeLastClick = 0;
+#endif
 
 extern bool g_mainThreadLocked;
 
@@ -1388,9 +1390,9 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
         if ( btnCancel )
         {
-            wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-            event.SetEventObject(btnCancel);
-            ret = btnCancel->GetEventHandler()->ProcessEvent(event);
+            wxCommandEvent eventClick(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+            eventClick.SetEventObject(btnCancel);
+            ret = btnCancel->GetEventHandler()->ProcessEvent(eventClick);
         }
     }
 
@@ -1799,9 +1801,9 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     if ( !g_captureWindow )
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
+#ifndef __WXGTK20__
     gs_timeLastClick = gdk_event->time;
 
-#ifndef __WXGTK20__
     if (event_type == wxEVT_LEFT_DCLICK)
     {
         // GTK 1.2 crashes when intercepting double
@@ -1813,7 +1815,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
             return FALSE;
         }
     }
-#endif
+#endif // !__WXGTK20__
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -1958,11 +1960,11 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
             // the mouse changed window
             g_captureWindowHasMouse = hasMouse;
 
-            wxMouseEvent event(g_captureWindowHasMouse ? wxEVT_ENTER_WINDOW
-                                                       : wxEVT_LEAVE_WINDOW);
-            InitMouseEvent(win, event, gdk_event);
-            event.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event);
+            wxMouseEvent eventM(g_captureWindowHasMouse ? wxEVT_ENTER_WINDOW
+                                                        : wxEVT_LEAVE_WINDOW);
+            InitMouseEvent(win, eventM, gdk_event);
+            eventM.SetEventObject(win);
+            win->GetEventHandler()->ProcessEvent(eventM);
         }
     }
     else // no capture

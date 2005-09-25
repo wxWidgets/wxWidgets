@@ -476,6 +476,10 @@
 #    endif
 #endif
 
+#ifdef __INTEL_COMPILER
+#   define __INTELC__
+#endif
+
 /*
    We get "Large Files (ILP32) not supported in strict ANSI mode." #error
    from HP-UX standard headers when compiling with g++ without this:

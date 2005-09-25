@@ -188,7 +188,7 @@ wxPopupTransientWindow::~wxPopupTransientWindow()
 {
     if (m_handlerPopup && m_handlerPopup->GetNextHandler())
         PopHandlers();
-        
+
     wxASSERT(!m_handlerFocus || !m_handlerFocus->GetNextHandler());
     wxASSERT(!m_handlerPopup || !m_handlerPopup->GetNextHandler());
 
@@ -207,7 +207,7 @@ void wxPopupTransientWindow::PopHandlers()
             m_handlerPopup = NULL;
         }
         if (m_child->HasCapture())
-        {       
+        {
             m_child->ReleaseMouse();
         }
         m_child = NULL;
@@ -290,11 +290,11 @@ bool wxPopupTransientWindow::Show( bool show )
 
 #ifdef __WXMSW__
     if (!show && m_child && m_child->HasCapture())
-    {       
+    {
         m_child->ReleaseMouse();
     }
 #endif
-    
+
     bool ret = wxPopupWindow::Show( show );
 
 #ifdef __WXGTK__
@@ -387,10 +387,10 @@ void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
             {
                 m_child->CaptureMouse();
             }
-        }                
+        }
     }
 }
-#endif
+#endif // __WXMSW__
 
 
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
@@ -483,15 +483,15 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
                 // dismissing a tooltip shouldn't waste a click, i.e. you
                 // should be able to dismiss it and press the button with the
                 // same click, so repost this event to the window beneath us
-                wxWindow *win = wxFindWindowAtPoint(event2.GetPosition());
-                if ( win )
+                wxWindow *winUnder = wxFindWindowAtPoint(event2.GetPosition());
+                if ( winUnder )
                 {
                     // translate the event coords to the ones of the window
                     // which is going to get the event
-                    win->ScreenToClient(&event2.m_x, &event2.m_y);
+                    winUnder->ScreenToClient(&event2.m_x, &event2.m_y);
 
-                    event2.SetEventObject(win);
-                    wxPostEvent(win, event2);
+                    event2.SetEventObject(winUnder);
+                    wxPostEvent(winUnder, event2);
                 }
             }
             break;

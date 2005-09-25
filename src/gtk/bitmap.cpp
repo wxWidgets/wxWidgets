@@ -1590,7 +1590,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 #endif
 }
 
-void wxBitmap::UngetRawData(wxPixelDataBase& data)
+void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
 }
 
@@ -1621,19 +1621,36 @@ wxBitmapHandler::~wxBitmapHandler()
 {
 }
 
-bool wxBitmapHandler::Create(wxBitmap *bitmap, void *data, long type, int width, int height, int depth)
+bool wxBitmapHandler::Create(wxBitmap * WXUNUSED(bitmap),
+                             void * WXUNUSED(data),
+                             long WXUNUSED(type),
+                             int WXUNUSED(width),
+                             int WXUNUSED(height),
+                             int WXUNUSED(depth))
 {
+    wxFAIL_MSG( _T("not implemented") );
+
     return false;
 }
 
-bool wxBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-        int desiredWidth, int desiredHeight)
+bool wxBitmapHandler::LoadFile(wxBitmap * WXUNUSED(bitmap),
+                               const wxString& WXUNUSED(name),
+                               long WXUNUSED(flags),
+                               int WXUNUSED(desiredWidth),
+                               int WXUNUSED(desiredHeight))
 {
+    wxFAIL_MSG( _T("not implemented") );
+
     return false;
 }
 
-bool wxBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette)
+bool wxBitmapHandler::SaveFile(const wxBitmap * WXUNUSED(bitmap),
+                               const wxString& WXUNUSED(name),
+                               int WXUNUSED(type),
+                               const wxPalette * WXUNUSED(palette))
 {
+    wxFAIL_MSG( _T("not implemented") );
+
     return false;
 }
 

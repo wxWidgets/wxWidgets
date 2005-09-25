@@ -9742,7 +9742,7 @@ void wxGrid::SetRowMinimalAcceptableHeight( int height )
     if ( height<0 )
         return;
     m_minAcceptableRowHeight = height;
-};
+}
 
 int  wxGrid::GetColMinimalAcceptableWidth() const
 {

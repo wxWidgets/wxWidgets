@@ -45,7 +45,7 @@
     #define wxPOST_NO_WARNING_SCOPE(name)
 #else
     #define wxPRE_NO_WARNING_SCOPE(name)  do
-    #define wxPOST_NO_WARNING_SCOPE(name) while ( 0 )
+    #define wxPOST_NO_WARNING_SCOPE(name) while ( wxFalse )
 #endif
 
 #define wxCHECKED_DELETE(ptr)                                                 \

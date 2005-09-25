@@ -72,6 +72,7 @@
     #include <unistd.h>
 #endif // HAVE_POLL/!HAVE_POLL
 
+#include "wx/unix/private.h"
 #include "wx/gtk/win_gtk.h"
 
 #include <gtk/gtk.h>
@@ -306,23 +307,23 @@ int wxPoll(wxPollFd *ufds, unsigned int nfds, int timeout)
     fd_set readfds;
     fd_set writefds;
     fd_set exceptfds;
-    FD_ZERO(&readfds);
-    FD_ZERO(&writefds);
-    FD_ZERO(&exceptfds);
+    wxFD_ZERO(&readfds);
+    wxFD_ZERO(&writefds);
+    wxFD_ZERO(&exceptfds);
 
     unsigned int i;
     for ( i = 0; i < nfds; i++ )
     {
-        wxASSERT_MSG( ufds[i].fd < FD_SETSIZE, _T("fd out of range") );
+        wxASSERT_MSG( ufds[i].fd < wxFD_SETSIZE, _T("fd out of range") );
 
         if ( ufds[i].events & G_IO_IN )
-            FD_SET(ufds[i].fd, &readfds);
+            wxFD_SET(ufds[i].fd, &readfds);
 
         if ( ufds[i].events & G_IO_PRI )
-            FD_SET(ufds[i].fd, &exceptfds);
+            wxFD_SET(ufds[i].fd, &exceptfds);
 
         if ( ufds[i].events & G_IO_OUT )
-            FD_SET(ufds[i].fd, &writefds);
+            wxFD_SET(ufds[i].fd, &writefds);
 
         if ( ufds[i].fd > fdMax )
             fdMax = ufds[i].fd;
@@ -336,13 +337,13 @@ int wxPoll(wxPollFd *ufds, unsigned int nfds, int timeout)
     {
         ufds[i].revents = 0;
 
-        if ( FD_ISSET(ufds[i].fd, &readfds ) )
+        if ( wxFD_ISSET(ufds[i].fd, &readfds ) )
             ufds[i].revents |= G_IO_IN;
 
-        if ( FD_ISSET(ufds[i].fd, &exceptfds ) )
+        if ( wxFD_ISSET(ufds[i].fd, &exceptfds ) )
             ufds[i].revents |= G_IO_PRI;
 
-        if ( FD_ISSET(ufds[i].fd, &writefds ) )
+        if ( wxFD_ISSET(ufds[i].fd, &writefds ) )
             ufds[i].revents |= G_IO_OUT;
     }
 

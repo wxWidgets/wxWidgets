@@ -98,4 +98,17 @@ inline bool wxIsSameDouble(double x, double y) { return x == y; }
 #endif /* __cplusplus */
 
 
+#if wxUSE_APPLE_IEEE
+#ifdef __cplusplus
+    extern "C" {
+#endif
+    /* functions from common/extended.c */
+    extern wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes);
+    extern void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes);
+#ifdef __cplusplus
+    }
+#endif
+#endif /* wxUSE_APPLE_IEEE */
+
+
 #endif /* _WX_MATH_H_ */

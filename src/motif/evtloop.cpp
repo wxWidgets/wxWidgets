@@ -42,6 +42,7 @@
 #pragma message enable nosimpint
 #endif
 
+#include "wx/unix/private.h"
 #include "wx/motif/private.h"
 
 static bool CheckForKeyUp(XEvent* event);
@@ -424,8 +425,8 @@ static void wxInputCallback( XtPointer, int* fd, XtInputId* )
         timeout.tv_sec = 0;
         timeout.tv_usec = 0;
 
-        FD_ZERO( &in );
-        FD_SET( *fd, &in );
+        wxFD_ZERO( &in );
+        wxFD_SET( *fd, &in );
 
         if( select( *fd + 1, &in, NULL, NULL, &timeout ) <= 0 )
             break;
@@ -445,8 +446,8 @@ static void wxBreakDispatch()
     timeout.tv_sec = 0;
     timeout.tv_usec = 0;
 
-    FD_ZERO( &in );
-    FD_SET( idleFds[0], &in );
+    wxFD_ZERO( &in );
+    wxFD_SET( idleFds[0], &in );
 
     if( select( idleFds[0] + 1, &in, NULL, NULL, &timeout ) > 0 )
         return;

@@ -721,7 +721,11 @@ static wxString GetAssertStackTrace()
     protected:
         virtual void OnStackFrame(const wxStackFrame& frame)
         {
-            m_stackTrace << wxString::Format(_T("[%02d] "), frame.GetLevel());
+            m_stackTrace << wxString::Format
+                            (
+                              _T("[%02d] "),
+                              wx_truncate_cast(int, frame.GetLevel())
+                            );
 
             wxString name = frame.GetName();
             if ( !name.empty() )
@@ -730,11 +734,8 @@ static wxString GetAssertStackTrace()
             }
             else
             {
-                m_stackTrace << wxString::Format
-                                (
-                                    _T("0x%08lx"),
-                                    (unsigned long)frame.GetAddress()
-                                );
+                m_stackTrace << wxString::Format(_T("0x%08p"),
+                                                 frame.GetAddress());
             }
 
             if ( frame.HasSourceLocation() )

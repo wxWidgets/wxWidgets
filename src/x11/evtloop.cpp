@@ -27,6 +27,7 @@
 #include "wx/timer.h"
 #include "wx/hash.h"
 #include "wx/module.h"
+#include "wx/unix/private.h"
 #include "wx/x11/private.h"
 #include "X11/Xlib.h"
 
@@ -174,14 +175,14 @@ void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
 
         if (entry->m_fdInput != -1)
         {
-            FD_SET(entry->m_fdInput, readset);
+            wxFD_SET(entry->m_fdInput, readset);
             if (entry->m_fdInput > *highest)
                 * highest = entry->m_fdInput;
         }
 
         if (entry->m_fdOutput != -1)
         {
-            FD_SET(entry->m_fdOutput, writeset);
+            wxFD_SET(entry->m_fdOutput, writeset);
             if (entry->m_fdOutput > *highest)
                 * highest = entry->m_fdOutput;
         }
@@ -198,12 +199,12 @@ void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
     {
         wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
 
-        if (entry->m_fdInput != -1 && FD_ISSET(entry->m_fdInput, readset))
+        if (entry->m_fdInput != -1 && wxFD_ISSET(entry->m_fdInput, readset))
         {
             (entry->m_callbackInput) (entry->m_fdInput, entry->m_dataInput);
         }
 
-        if (entry->m_fdOutput != -1 && FD_ISSET(entry->m_fdOutput, writeset))
+        if (entry->m_fdOutput != -1 && wxFD_ISSET(entry->m_fdOutput, writeset))
         {
             (entry->m_callbackOutput) (entry->m_fdOutput, entry->m_dataOutput);
         }
@@ -455,10 +456,10 @@ bool wxEventLoop::Dispatch()
         fd_set readset;
         fd_set writeset;
         int highest = fd;
-        FD_ZERO(&readset);
-        FD_ZERO(&writeset);
+        wxFD_ZERO(&readset);
+        wxFD_ZERO(&writeset);
 
-        FD_SET(fd, &readset);
+        wxFD_SET(fd, &readset);
 
 #if wxUSE_SOCKETS
         if (wxTheSocketTable)
@@ -473,7 +474,7 @@ bool wxEventLoop::Dispatch()
         else
         {
             // An X11 event was pending, so get it
-            if (FD_ISSET( fd, &readset ))
+            if (wxFD_ISSET( fd, &readset ))
                 XNextEvent( wxGlobalDisplay(), &event );
 
 #if wxUSE_SOCKETS

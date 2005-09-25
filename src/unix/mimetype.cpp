@@ -1417,7 +1417,10 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 // could adjust the code to ask confirmation if it already exists and
 // overwriteprompt is true, but this is currently ignored as *Associate* has
 // no overwrite prompt
-bool wxFileTypeImpl::SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt /*= true*/)
+bool
+wxFileTypeImpl::SetCommand(const wxString& cmd,
+                           const wxString& verb,
+                           bool WXUNUSED(overwriteprompt))
 {
     wxArrayString strExtensions;
     wxString strDesc, strIcon;
@@ -1441,7 +1444,7 @@ bool wxFileTypeImpl::SetCommand(const wxString& cmd, const wxString& verb, bool 
 }
 
 // ignore index on the grouds that we only have one icon in a Unix file
-bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon /*= wxEmptyString*/, int /*index = 0*/)
+bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int WXUNUSED(index))
 {
     if (strIcon.empty()) return false;
     wxArrayString strExtensions;

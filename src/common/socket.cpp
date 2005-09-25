@@ -95,7 +95,7 @@ public:
 public:
   wxSocketState() : wxObject() {}
 
-    DECLARE_NO_COPY_CLASS(wxSocketState)
+  DECLARE_NO_COPY_CLASS(wxSocketState)
 };
 
 // ==========================================================================

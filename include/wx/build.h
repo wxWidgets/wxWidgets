@@ -112,13 +112,14 @@
 // Use this macro to check build options. Adding it to a file in DLL will
 // ensure that the DLL checks build options in same way IMPLEMENT_APP() does.
 #define WX_CHECK_BUILD_OPTIONS(libName)                                 \
-    static bool wxCheckBuildOptions()                                   \
+    static struct wxBuildOptionsChecker                                 \
     {                                                                   \
-        wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE,     \
-                                        libName);                       \
-        return true;                                                    \
-    }                                                                   \
-    static bool gs_buildOptionsCheck = wxCheckBuildOptions();
+        wxBuildOptionsChecker()                                         \
+        {                                                               \
+            wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, \
+                                            libName);                   \
+        }                                                               \
+    } gs_buildOptionsCheck;
 
 
 #if WXWIN_COMPATIBILITY_2_4

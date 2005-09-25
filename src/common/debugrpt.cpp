@@ -106,11 +106,15 @@ TextElement(wxXmlNode *node, const wxChar *name, const wxString& value)
     nodeChild->AddChild(new wxXmlNode(wxXML_TEXT_NODE, wxEmptyString, value));
 }
 
+#if wxUSE_CRASHREPORT && defined(__INTEL__)
+
 static inline void
 HexElement(wxXmlNode *node, const wxChar *name, unsigned long value)
 {
     TextElement(node, name, wxString::Format(_T("%08lx"), value));
 }
+
+#endif // wxUSE_CRASHREPORT
 
 #if wxUSE_STACKWALKER
 
@@ -371,7 +375,7 @@ bool wxDebugReport::DoAddLoadedModules(wxXmlNode *nodeModules)
         size_t len = 0;
         if ( info.GetAddress(&addr, &len) )
         {
-            HexProperty(nodeModule, _T("address"), (unsigned long)addr);
+            HexProperty(nodeModule, _T("address"), wxPtrToUInt(addr));
             HexProperty(nodeModule, _T("size"), len);
         }
 
@@ -397,7 +401,7 @@ bool wxDebugReport::DoAddExceptionInfo(wxXmlNode *nodeContext)
 
     HexProperty(nodeExc, _T("code"), c.code);
     nodeExc->AddProperty(_T("name"), c.GetExceptionString());
-    HexProperty(nodeExc, _T("address"), (unsigned long)c.addr);
+    HexProperty(nodeExc, _T("address"), wxPtrToUInt(c.addr));
 
 #ifdef __INTEL__
     wxXmlNode *nodeRegs = new wxXmlNode(wxXML_ELEMENT_NODE, _T("registers"));

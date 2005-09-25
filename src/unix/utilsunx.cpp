@@ -15,8 +15,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include <pwd.h>
-
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -35,6 +33,9 @@
 #include "wx/wfstream.h"
 
 #include "wx/unix/execute.h"
+#include "wx/unix/private.h"
+
+#include <pwd.h>
 
 #if wxUSE_STREAMS
 
@@ -425,8 +426,10 @@ bool wxPipeInputStream::CanRead() const
     const int fd = m_file->fd();
 
     fd_set readfds;
-    FD_ZERO(&readfds);
-    FD_SET(fd, &readfds);
+
+    wxFD_ZERO(&readfds);
+    wxFD_SET(fd, &readfds);
+
     switch ( select(fd + 1, &readfds, NULL, NULL, &tv) )
     {
         case -1:
@@ -454,13 +457,7 @@ bool wxPipeInputStream::CanRead() const
 // wxExecute: the real worker function
 // ----------------------------------------------------------------------------
 
-#ifdef __VMS
-    #pragma message disable codeunreachable
-#endif
-               
-long wxExecute(wxChar **argv,
-               int flags,
-               wxProcess *process)
+long wxExecute(wxChar **argv, int flags, wxProcess *process)
 {
     // for the sync execution, we return -1 to indicate failure, but for async
     // case we return 0 which is never a valid PID
@@ -609,7 +606,7 @@ long wxExecute(wxChar **argv,
         }
 
         execvp (*mb_argv, mb_argv);
-       
+
         fprintf(stderr, "execvp(");
         // CS changed ppc to ppc_ as ppc is not available under mac os CW Mach-O
         for ( char **ppc_ = mb_argv; *ppc_; ppc_++ )
@@ -677,12 +674,10 @@ long wxExecute(wxChar **argv,
         return traits->WaitForChild(execData);
     }
 
+#if !defined(__VMS) && !defined(__INTEL_COMPILER)
     return ERROR_RETURN_CODE;
-}
-
-#ifdef __VMS
-    #pragma message enable codeunreachable
 #endif
+}
 
 #undef ERROR_RETURN_CODE
 #undef ARGS_CLEANUP

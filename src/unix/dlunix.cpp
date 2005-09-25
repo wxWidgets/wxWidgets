@@ -293,7 +293,7 @@ public:
         wxDynamicLibraryDetails *details = new wxDynamicLibraryDetails;
         details->m_path = path;
         details->m_name = path.AfterLast(_T('/'));
-        details->m_address = wx_reinterpret_cast(void *, start);
+        details->m_address = wxUIntToPtr(start);
         details->m_length = end - start;
 
         // try to extract the library version from its name

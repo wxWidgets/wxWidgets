@@ -646,8 +646,6 @@ void wxHtmlContainerCell::Layout(int w)
        return;
     }
 
-    wxHtmlCell *cell = m_Cells,
-               *line = m_Cells;
     wxHtmlCell *nextCell;
     long xpos = 0, ypos = m_IndentTop;
     int xdelta = 0, ybasicpos = 0, ydiff;
@@ -694,6 +692,8 @@ void wxHtmlContainerCell::Layout(int w)
     s_width = m_Width - s_indent - ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
 
     // my own layouting:
+    wxHtmlCell *cell = m_Cells,
+               *line = m_Cells;
     while (cell != NULL)
     {
         switch (m_AlignVer)

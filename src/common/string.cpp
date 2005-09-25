@@ -365,8 +365,8 @@ bool wxStringBase::Alloc(size_t nLen)
     if ( pData->IsEmpty() ) {
       nLen += EXTRA_ALLOC;
 
-      wxStringData* pData = (wxStringData*)
-          malloc(sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
+      pData = (wxStringData *)
+                malloc(sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
 
       if ( pData == NULL ) {
         // allocation failure handled by caller

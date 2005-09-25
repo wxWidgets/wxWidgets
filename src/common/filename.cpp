@@ -1890,6 +1890,8 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
         }
     }
 #elif defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
+    wxUnusedVar(dtCreate);
+
     if ( !dtAccess && !dtMod )
     {
         // can't modify the creation time anyhow, don't try

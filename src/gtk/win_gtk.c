@@ -70,7 +70,7 @@ static void gtk_pizza_forall        (GtkContainer     *container,
                                      gboolean          include_internals,
                                      GtkCallback       callback,
                                      gpointer          callback_data);
-                                     
+
 static void     gtk_pizza_allocate_child     (GtkPizza      *pizza,
                                               GtkPizzaChild *child);
 static void     gtk_pizza_adjust_allocations_recurse (GtkWidget *widget,
@@ -102,7 +102,9 @@ static void  gtk_pizza_scroll_set_adjustments (GtkPizza      *pizza,
 static GtkContainerClass *pizza_parent_class = NULL;
 #endif
 
+#ifndef __WXGTK20__
 static gboolean gravity_works;
+#endif
 
 GtkType
 gtk_pizza_get_type ()
@@ -111,7 +113,7 @@ gtk_pizza_get_type ()
 
     if (!pizza_type)
     {
-    
+
 #ifdef __WXGTK20__
         static const GTypeInfo pizza_info =
         {
@@ -125,7 +127,7 @@ gtk_pizza_get_type ()
             16,             /* n_preallocs */
             (GInstanceInitFunc) gtk_pizza_init,
         };
-        pizza_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkPizza", &pizza_info, 0);
+        pizza_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkPizza", &pizza_info, (GTypeFlags)0);
 #else
         GtkTypeInfo pizza_info =
         {
@@ -404,7 +406,7 @@ gtk_pizza_move (GtkPizza     *pizza,
 
             child->x = x;
             child->y = y;
-            
+
             if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (pizza))
                 gtk_widget_queue_resize (widget);
             break;
@@ -642,7 +644,7 @@ gtk_pizza_realize (GtkWidget *widget)
     widget->style = gtk_style_attach (widget->style, widget->window);
     gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
     gtk_style_set_background (widget->style, pizza->bin_window, GTK_STATE_NORMAL );
- 
+
 /*
     gdk_window_set_back_pixmap( widget->window, NULL, FALSE );
     gdk_window_set_back_pixmap( pizza->bin_window, NULL, FALSE );
@@ -652,10 +654,10 @@ gtk_pizza_realize (GtkWidget *widget)
     /* add filters for intercepting visibility and expose events */
     gdk_window_add_filter (widget->window, gtk_pizza_main_filter, pizza);
     gdk_window_add_filter (pizza->bin_window, gtk_pizza_filter, pizza);
-#endif
 
     /* we NEED gravity or we'll give up */
     gravity_works = gdk_window_set_static_gravities (pizza->bin_window, TRUE);
+#endif // !__WXGTK20__
 
     /* cannot be done before realisation */
     children = pizza->children;
@@ -836,9 +838,9 @@ gtk_pizza_expose (GtkWidget      *widget,
 #ifdef __WXGTK20__
 
     (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, event);
-    
+
     return FALSE;
-    
+
 #else
 
     children = pizza->children;
@@ -856,9 +858,9 @@ gtk_pizza_expose (GtkWidget      *widget,
             gtk_widget_event (child->widget, (GdkEvent*) &child_event);
         }
     }
-    
+
     return TRUE;
-    
+
 #endif
 }
 
@@ -1104,7 +1106,7 @@ gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
 
     if (pizza->bin_window)
         gdk_window_scroll( pizza->bin_window, -dx, -dy );
-#else
+#else // !__WXGTK20__
     GtkWidget *widget;
     XEvent xevent;
     XID win;
@@ -1236,7 +1238,7 @@ gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
             }
         }
     }
-#endif /* __WXGTK20__ */
+#endif /* __WXGTK20__/!__WXGTK20__ */
 }
 
 

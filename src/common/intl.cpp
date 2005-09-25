@@ -1132,13 +1132,16 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
     return false;
 
   // get the file size (assume it is less than 4Gb...)
-  wxFileOffset nSize = fileMsg.Length();
-  if ( nSize == wxInvalidOffset )
+  wxFileOffset lenFile = fileMsg.Length();
+  if ( lenFile == wxInvalidOffset )
     return false;
+
+  size_t nSize = wx_truncate_cast(size_t, lenFile);
+  wxASSERT_MSG( nSize == lenFile, _T("message catalog bigger than 4GB?") );
 
   // read the whole file in memory
   m_pData = new size_t8[nSize];
-  if ( fileMsg.Read(m_pData, (size_t)nSize) != nSize ) {
+  if ( fileMsg.Read(m_pData, nSize) != nSize ) {
     wxDELETEA(m_pData);
     return false;
   }

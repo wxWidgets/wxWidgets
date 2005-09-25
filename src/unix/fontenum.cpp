@@ -43,8 +43,8 @@
 extern GtkWidget *wxGetRootWindow();
 #endif
 
-static int
-cmp_families (const void *a, const void *b)
+extern "C" int wxCMPFUNC_CONV
+wxCompareFamilies (const void *a, const void *b)
 {
   const char *a_name = pango_font_family_get_name (*(PangoFontFamily **)a);
   const char *b_name = pango_font_family_get_name (*(PangoFontFamily **)b);
@@ -77,7 +77,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
             wxTheApp->GetPangoContext(),
 #endif
             &families, &n_families );
-        qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
+        qsort (families, n_families, sizeof (PangoFontFamily *), wxCompareFamilies);
 
         for (int i=0; i<n_families; i++)
         {

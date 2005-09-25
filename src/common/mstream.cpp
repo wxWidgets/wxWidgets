@@ -50,12 +50,17 @@ wxMemoryInputStream::wxMemoryInputStream(const void *data, size_t len)
 
 wxMemoryInputStream::wxMemoryInputStream(const wxMemoryOutputStream& stream)
 {
-    ssize_t len = (ssize_t)stream.GetLength();
-    if (len == wxInvalidOffset) {
+    const wxFileOffset lenFile = stream.GetLength();
+    if ( lenFile == wxInvalidOffset )
+    {
         m_i_streambuf = NULL;
         m_lasterror = wxSTREAM_EOF;
         return;
     }
+
+    const size_t len = wx_truncate_cast(size_t, lenFile);
+    wxASSERT_MSG( len == lenFile, _T("huge files not supported") );
+
     m_i_streambuf = new wxStreamBuffer(wxStreamBuffer::read);
     m_i_streambuf->SetBufferIO(len); // create buffer
     stream.CopyTo(m_i_streambuf->GetBufferStart(), len);

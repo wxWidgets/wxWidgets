@@ -104,7 +104,7 @@ bool wxFFile::ReadAll(wxString *str, wxMBConv& conv)
     wxCHECK_MSG( str, false, wxT("invalid parameter") );
     wxCHECK_MSG( IsOpened(), false, wxT("can't read from closed file") );
     wxCHECK_MSG( Length() >= 0, false, wxT("invalid length") );
-    size_t length = (size_t)Length();
+    size_t length = wx_truncate_cast(size_t, Length());
     wxCHECK_MSG( (wxFileOffset)length == Length(), false, wxT("huge file not supported") );
 
     clearerr(m_fp);

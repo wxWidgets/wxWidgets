@@ -106,7 +106,7 @@ static gint gtk_listitem_focus_in_callback( GtkWidget *widget,
     {
         // not yet, notify it
         win->m_hasFocus = TRUE;
-        
+
         wxChildFocusEvent eventChildFocus(win);
         (void)win->GetEventHandler()->ProcessEvent(eventChildFocus);
 
@@ -247,9 +247,9 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
             for (i = 0; i < (int)listbox->GetCount(); i++)
                 if (i != sel)
                     gtk_list_unselect_item( GTK_LIST(listbox->m_list), i );
-                
+
             listbox->m_blockEvent = FALSE;
-            
+
             return false;
     }
 
@@ -310,21 +310,21 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 #endif // wxUSE_CHECKLISTBOX
 
     // Check or uncheck item with SPACE
-    if ((gdk_event->keyval == ' ') && (!ret) && 
+    if ((gdk_event->keyval == ' ') && (!ret) &&
          (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
           ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
     {
         int sel = listbox->GtkGetIndex( widget );
-        
+
         if (sel != -1)
         {
             ret = TRUE;
-            
+
             if (listbox->IsSelected( sel ))
                 gtk_list_unselect_item( listbox->m_list, sel );
             else
                 gtk_list_select_item( listbox->m_list, sel );
-            
+
             wxCommandEvent new_event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
             new_event.SetEventObject( listbox );
             wxArrayInt aSelections;
@@ -346,7 +346,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
             listbox->GetEventHandler()->ProcessEvent( new_event );
         }
     }
-    
+
     if (ret)
     {
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
@@ -435,11 +435,11 @@ gtk_listbox_realized_callback( GtkWidget *m_widget, wxListBox *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
-        
+
     GList *child = win->m_list->children;
     for (child = win->m_list->children; child != NULL; child = child->next)
         gtk_widget_show( GTK_WIDGET(child->data) );
-    
+
     return false;
 }
 }
@@ -536,7 +536,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_signal_connect( GTK_OBJECT(m_list), "realize",
                         GTK_SIGNAL_FUNC(gtk_listbox_realized_callback), (gpointer) this );
-                            
+
     if ( style & wxLB_SORT )
     {
         // this will change DoAppend() behaviour
@@ -730,7 +730,7 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
     if (GTK_WIDGET_REALIZED(m_widget))
     {
         gtk_widget_show( list_item );
-        
+
         gtk_widget_realize( list_item );
         gtk_widget_realize( GTK_BIN(list_item)->child );
 
@@ -745,8 +745,7 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
     {
         gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
         GtkBin *bin = GTK_BIN( list_item );
-        GtkWidget *label = GTK_WIDGET( bin->child );
-        gtk_widget_modify_style( label, style );
+        gtk_widget_modify_style( GTK_WIDGET( bin->child ), style );
         gtk_rc_style_unref( style );
     }
 }
@@ -1131,7 +1130,7 @@ bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
 {
     return TRUE;
 
-#if 0    
+#if 0
     if (m_widget->window == window) return TRUE;
 
     if (GTK_WIDGET(m_list)->window == window) return TRUE;
@@ -1242,7 +1241,7 @@ wxSize wxListBox::DoGetBestSize() const
     lbHeight = (cy+4) * wxMin(wxMax(GetCount(), 3), 10);
 
     wxSize best(lbWidth, lbHeight);
-    CacheBestSize(best);        
+    CacheBestSize(best);
     return best;
 }
 

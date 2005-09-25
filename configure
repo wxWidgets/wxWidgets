@@ -14043,7 +14043,6 @@ if test "x$XLCXX" = "xyes" -a "x$USE_AIX" = "x1"; then
     CXXFLAGS="$CXXFLAGS -qunique"
 fi
 
-
 case "${host}" in
   powerpc-*-darwin* )
     echo "$as_me:$LINENO: checking if __POWERPC__ is already defined" >&5
@@ -42627,9 +42626,16 @@ fi
 INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
 -I\${top_srcdir}/include $TOOLKIT_INCLUDE"
 
-if test "$GXX" = yes ; then
-        CWARNINGS="-Wall -Wundef"
-    CXXWARNINGS="$CWARNINGS -Wno-ctor-dtor-privacy"
+if test "$GCC" = yes ; then
+                                        CWARNINGS="-Wall -wd810,869,981,1418,1572,1684"
+elif test "$GCC" = yes ; then
+    CWARNINGS="-Wall -Wundef"
+fi
+
+if test "$INTELCXX" = yes ; then
+                                                            CXXWARNINGS="-Wall -wd279,383,444,869,981,1418,1419"
+elif test "$GXX" = yes ; then
+        CXXWARNINGS="-Wall -Wundef -Wno-ctor-dtor-privacy"
 fi
 
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"

@@ -88,9 +88,9 @@ void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
                         gint         width,
                         gint         height)
 {
-    g_return_if_fail (drawable != NULL);
-    g_return_if_fail (src != NULL);
-    g_return_if_fail (gc != NULL);
+    wxCHECK_RET( drawable, _T("NULL drawable in gdk_wx_draw_bitmap") );
+    wxCHECK_RET( src, _T("NULL src in gdk_wx_draw_bitmap") );
+    wxCHECK_RET( gc, _T("NULL gc in gdk_wx_draw_bitmap") );
 
 #ifdef __WXGTK20__
     gint src_width, src_height;

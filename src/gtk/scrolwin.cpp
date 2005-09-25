@@ -1021,19 +1021,19 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
     int xScroll = GetScrollPos(wxHORIZONTAL);
     if ( xScroll != xScrollOld )
     {
-        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBTRACK, xScroll,
-                               wxHORIZONTAL);
-        event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        wxScrollWinEvent eventS(wxEVT_SCROLLWIN_THUMBTRACK, xScroll,
+                                wxHORIZONTAL);
+        eventS.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(eventS);
     }
 
     int yScroll = GetScrollPos(wxVERTICAL);
     if ( yScroll != yScrollOld )
     {
-        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBTRACK, yScroll,
-                               wxVERTICAL);
-        event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        wxScrollWinEvent eventS(wxEVT_SCROLLWIN_THUMBTRACK, yScroll,
+                                wxVERTICAL);
+        eventS.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(eventS);
     }
 }
 

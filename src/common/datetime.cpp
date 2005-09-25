@@ -2373,23 +2373,23 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 
                         // find two strings not occurring in format (this is surely
                         // not the optimal way of doing it... improvements welcome!)
-                        wxString fmt = format;
+                        wxString fmt2 = format;
                         wxString replacement = (wxChar)-1;
-                        while ( fmt.Find(replacement) != wxNOT_FOUND )
+                        while ( fmt2.Find(replacement) != wxNOT_FOUND )
                         {
                             replacement << (wxChar)-1;
                         }
 
                         wxString replacement2 = (wxChar)-2;
-                        while ( fmt.Find(replacement) != wxNOT_FOUND )
+                        while ( fmt2.Find(replacement) != wxNOT_FOUND )
                         {
                             replacement << (wxChar)-2;
                         }
 
                         // replace all occurrences of year with it
-                        bool wasReplaced = fmt.Replace(strYear, replacement) > 0;
+                        bool wasReplaced = fmt2.Replace(strYear, replacement) > 0;
                         if ( !wasReplaced )
-                            wasReplaced = fmt.Replace(strYear2, replacement2) > 0;
+                            wasReplaced = fmt2.Replace(strYear2, replacement2) > 0;
 
                         // use strftime() to format the same date but in supported
                         // year

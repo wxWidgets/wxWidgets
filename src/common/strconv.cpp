@@ -686,11 +686,11 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                     {
                         if ( buf && len + 3 < n )
                         {
-                            unsigned char n = *opsz;
+                            unsigned char on = *opsz;
                             *buf++ = L'\\';
-                            *buf++ = (wchar_t)( L'0' + n / 0100 );
-                            *buf++ = (wchar_t)( L'0' + (n % 0100) / 010 );
-                            *buf++ = (wchar_t)( L'0' + n % 010 );
+                            *buf++ = (wchar_t)( L'0' + on / 0100 );
+                            *buf++ = (wchar_t)( L'0' + (on % 0100) / 010 );
+                            *buf++ = (wchar_t)( L'0' + on % 010 );
                         }
                         opsz++;
                         len += 4;
@@ -1365,10 +1365,10 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
 
         for ( ; *names; ++names )
         {
-            const wxString name(*names);
+            const wxString nameCS(*names);
 
             // first try charset with explicit bytesex info (e.g. "UCS-4LE"):
-            wxString nameXE(name);
+            wxString nameXE(nameCS);
             #ifdef WORDS_BIGENDIAN
                 nameXE += _T("BE");
             #else // little endian
@@ -1379,7 +1379,7 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
             if ( m2w == ICONV_T_INVALID )
             {
                 // try charset w/o bytesex info (e.g. "UCS4")
-                m2w = iconv_open(name.ToAscii(), cname);
+                m2w = iconv_open(nameCS.ToAscii(), cname);
 
                 // and check for bytesex ourselves:
                 if ( m2w != ICONV_T_INVALID )
@@ -1404,11 +1404,11 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
                     {
                         wxLogLastError(wxT("iconv"));
                         wxLogError(_("Conversion to charset '%s' doesn't work."),
-                                   name.c_str());
+                                   nameCS.c_str());
                     }
                     else // ok, can convert to this encoding, remember it
                     {
-                        ms_wcCharsetName = name; 
+                        ms_wcCharsetName = nameCS;
                         ms_wcNeedsSwap = wbuf[0] != (wchar_t)buf[0];
                     }
                 }
@@ -1485,8 +1485,8 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
         if (ms_wcNeedsSwap)
         {
             // convert to native endianness
-            for ( unsigned n = 0; n < res; n++ )
-                buf[n] = WC_BSWAP(buf[n]);
+            for ( unsigned i = 0; i < res; i++ )
+                buf[n] = WC_BSWAP(buf[i]);
         }
 
         // NB: iconv was given only strlen(psz) characters on input, and so
@@ -1543,8 +1543,8 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         // (doing WC_BSWAP twice on the original buffer won't help, as it
         //  could be in read-only memory, or be accessed in some other thread)
         tmpbuf = (wchar_t *)malloc(inbuf + SIZEOF_WCHAR_T);
-        for ( size_t n = 0; n < inlen; n++ )
-            tmpbuf[n] = WC_BSWAP(psz[n]);
+        for ( size_t i = 0; i < inlen; i++ )
+            tmpbuf[n] = WC_BSWAP(psz[i]);
         tmpbuf[inlen] = L'\0';
         psz = tmpbuf;
     }

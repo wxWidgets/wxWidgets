@@ -43,7 +43,7 @@ private:
 
 #include "wx/arrimpl.cpp"
 WX_DECLARE_OBJARRAY(XRCWidgetData,ArrayOfXRCWidgetData);
-WX_DEFINE_OBJARRAY(ArrayOfXRCWidgetData);
+WX_DEFINE_OBJARRAY(ArrayOfXRCWidgetData)
 
 class XRCWndClassData
 {
@@ -148,7 +148,7 @@ public:
     };
 };
 WX_DECLARE_OBJARRAY(XRCWndClassData,ArrayOfXRCWndClassData);
-WX_DEFINE_OBJARRAY(ArrayOfXRCWndClassData);
+WX_DEFINE_OBJARRAY(ArrayOfXRCWndClassData)
 
 
 class XmlResApp : public wxAppConsole
@@ -502,8 +502,9 @@ static wxString FileToCppArray(wxString filename, int num)
     wxFFile file(filename, wxT("rb"));
     wxFileOffset offset = file.Length();
     wxASSERT_MSG( offset >= 0 , wxT("Invalid file length") );
-    wxASSERT_MSG( offset == wxFileOffset(size_t(offset)) , wxT("Huge file not supported") );
-    size_t lng = (size_t)offset;
+
+    const size_t lng = wx_truncate_cast(size_t, offset);
+    wxASSERT_MSG( lng == offset, wxT("Huge file not supported") );
 
     snum.Printf(_T("%i"), num);
     output.Printf(_T("static size_t xml_res_size_") + snum + _T(" = %i;\n"), lng);
@@ -628,8 +629,9 @@ static wxString FileToPythonArray(wxString filename, int num)
     wxFFile file(filename, wxT("rb"));
     wxFileOffset offset = file.Length();
     wxASSERT_MSG( offset >= 0 , wxT("Invalid file length") );
-    wxASSERT_MSG( offset == wxFileOffset(size_t(offset)) , wxT("Huge file not supported") );
-    size_t lng = (size_t)offset;
+
+    const size_t lng = wx_truncate_cast(size_t, offset);
+    wxASSERT_MSG( offset == lng, wxT("Huge file not supported") );
 
     snum.Printf(_T("%i"), num);
     output = _T("    xml_res_file_") + snum + _T(" = '''\\\n");

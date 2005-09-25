@@ -135,10 +135,10 @@ private:
 //-----------------------------------------------------------------------------
 
 WX_DECLARE_OBJARRAY(wxHtmlHistoryItem, wxHtmlHistoryArray);
-WX_DEFINE_OBJARRAY(wxHtmlHistoryArray);
+WX_DEFINE_OBJARRAY(wxHtmlHistoryArray)
 
 WX_DECLARE_LIST(wxHtmlProcessor, wxHtmlProcessorList);
-WX_DEFINE_LIST(wxHtmlProcessorList);
+WX_DEFINE_LIST(wxHtmlProcessorList)
 
 //-----------------------------------------------------------------------------
 // wxHtmlWindow
