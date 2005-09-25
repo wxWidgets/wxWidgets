@@ -73,7 +73,7 @@ bool wxStaticBox::Create( wxWindow *parent,
     else // wxALIGN_LEFT
         xalign = 0.0;
 
-    if ( xalign )
+    if ( style & (wxALIGN_RIGHT | wxALIGN_CENTER) ) // left alignment is default
         gtk_frame_set_label_align(GTK_FRAME( m_widget ), xalign, 0.5);
 
     return TRUE;

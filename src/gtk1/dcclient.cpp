@@ -538,10 +538,10 @@ void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
         radius1 = 0.0;
         radius2 = 360.0;
     }
-    else
-    if (radius == 0.0)
+    else if ( wxIsNullDouble(radius) )
     {
-        radius1 = radius2 = 0.0;
+        radius1 =
+        radius2 = 0.0;
     }
     else
     {
@@ -1606,7 +1606,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
 void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, double angle )
 {
-    if (angle == 0.0)
+    if ( wxIsNullDouble(angle) )
     {
         DrawText(text, x, y);
         return;
@@ -2366,18 +2366,15 @@ void wxWindowDC::Destroy()
 
 void wxWindowDC::ComputeScaleAndOrigin()
 {
-    /* CMB: copy scale to see if it changes */
-    double origScaleX = m_scaleX;
-    double origScaleY = m_scaleY;
+    const wxRealPoint origScale(m_scaleX, m_scaleY);
 
     wxDC::ComputeScaleAndOrigin();
 
-    /* CMB: if scale has changed call SetPen to recalulate the line width */
-    if ((m_scaleX != origScaleX || m_scaleY != origScaleY) &&
-        (m_pen.Ok()))
+    // if scale has changed call SetPen to recalulate the line width
+    if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.Ok() )
     {
-        /* this is a bit artificial, but we need to force wxDC to think
-           the pen has changed */
+        // this is a bit artificial, but we need to force wxDC to think the pen
+        // has changed
         wxPen pen = m_pen;
         m_pen = wxNullPen;
         SetPen( pen );

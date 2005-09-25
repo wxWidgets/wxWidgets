@@ -405,9 +405,10 @@ void wxPostScriptDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         alpha1 = 0.0;
         alpha2 = 360.0;
     }
-    else if (radius == 0.0)
+    else if ( wxIsNullDouble(radius) )
     {
-        alpha1 = alpha2 = 0.0;
+        alpha1 =
+        alpha2 = 0.0;
     }
     else
     {
@@ -460,12 +461,16 @@ void wxPostScriptDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,d
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
-    if (sa>=360 || sa<=-360) sa=sa-int(sa/360)*360;
-    if (ea>=360 || ea<=-360) ea=ea-int(ea/360)*360;
-    if (sa<0) sa+=360;
-    if (ea<0) ea+=360;
+    if ( sa >= 360 || sa <= -360 )
+        sa -= int(sa/360)*360;
+    if ( ea >= 360 || ea <=- 360 )
+        ea -= int(ea/360)*360;
+    if ( sa < 0 )
+        sa += 360;
+    if ( ea < 0 )
+        ea += 360;
 
-    if (sa==ea)
+    if ( wxIsSameDouble(sa, ea) )
     {
         DrawEllipse(x,y,w,h);
         return;
@@ -1247,7 +1252,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 
 void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord y, double angle )
 {
-    if (angle == 0.0)
+    if ( wxIsNullDouble(angle) )
     {
         DoDrawText(text, x, y);
         return;

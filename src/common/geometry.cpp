@@ -202,14 +202,14 @@ void wxPoint2DInt::SetVectorAngle( wxDouble degrees )
 
 wxDouble wxPoint2DDouble::GetVectorAngle() const
 {
-    if ( m_x == 0 )
+    if ( wxIsNullDouble(m_x) )
     {
         if ( m_y >= 0 )
             return 90;
         else
             return 270;
     }
-    if ( m_y == 0 )
+    if ( wxIsNullDouble(m_y) )
     {
         if ( m_x >= 0 )
             return 0;

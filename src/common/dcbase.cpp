@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/dc.h"
+#include "wx/math.h"
 
 // bool wxDCBase::sm_cacheing = false;
 
@@ -401,15 +402,14 @@ bool wxDCBase::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths)
 {
     int totalWidth = 0;
 
-    size_t i, len = text.Length();
+    const size_t len = text.Length();
     widths.Empty();
     widths.Add(0, len);
-    int w, h;
 
     // reset the cache if font or horizontal scale have changed
-    if (!s_fontWidthCache.m_widths ||
-        (s_fontWidthCache.m_scaleX != m_scaleX) ||
-        (s_fontWidthCache.m_font != GetFont()))
+    if ( !s_fontWidthCache.m_widths ||
+         !wxIsSameDouble(s_fontWidthCache.m_scaleX, m_scaleX) ||
+         (s_fontWidthCache.m_font != GetFont()) )
     {
         s_fontWidthCache.Reset();
         s_fontWidthCache.m_font = GetFont();
@@ -418,7 +418,8 @@ bool wxDCBase::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths)
 
     // Calculate the position of each character based on the widths of
     // the previous characters
-    for (i=0; i<len; i++)
+    int w, h;
+    for ( size_t i = 0; i < len; i++ )
     {
         const wxChar c = text[i];
         unsigned int c_int = (unsigned int)c;

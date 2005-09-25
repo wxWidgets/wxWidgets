@@ -38,6 +38,7 @@
     #include "wx/combobox.h"
     #include "wx/valtext.h"
     #include "wx/intl.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/textfile.h"
@@ -1085,7 +1086,8 @@ bool wxGridCellFloatEditor::EndEdit(int row, int col,
     double value = 0.0;
     wxString text(Text()->GetValue());
 
-    if ( (text.empty() || text.ToDouble(&value)) && (value != m_valueOld) )
+    if ( (text.empty() || text.ToDouble(&value)) &&
+            !wxIsSameDouble(value, m_valueOld) )
     {
         if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_FLOAT))
             grid->GetTable()->SetValueAsDouble(row, col, value);

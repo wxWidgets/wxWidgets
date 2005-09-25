@@ -1751,29 +1751,36 @@ wxString wxImage::GetImageExtWildcard()
 
 wxImage::HSVValue wxImage::RGBtoHSV(const RGBValue& rgb)
 {
-    double hue, saturation, value;
-
     const double red = rgb.red / 255.0,
                  green = rgb.green / 255.0,
                  blue = rgb.blue / 255.0;
 
+    // find the min and max intensity (and remember which one was it for the
+    // latter)
     double minimumRGB = red;
-    if (green < minimumRGB)
+    if ( green < minimumRGB )
         minimumRGB = green;
-
-    if (blue < minimumRGB)
+    if ( blue < minimumRGB )
         minimumRGB = blue;
 
+    enum { RED, GREEN, BLUE } chMax = RED;
     double maximumRGB = red;
-    if (green > maximumRGB)
+    if ( green > maximumRGB )
+    {
+        chMax = GREEN;
         maximumRGB = green;
-
-    if (blue > maximumRGB)
+    }
+    if ( blue > maximumRGB )
+    {
+        chMax = BLUE;
         maximumRGB = blue;
+    }
 
-    value = maximumRGB;
+    const double value = maximumRGB;
 
-    if (maximumRGB == minimumRGB)
+    double hue, saturation;
+    const double deltaRGB = maximumRGB - minimumRGB;
+    if ( wxIsNullDouble(deltaRGB) )
     {
         // Gray has no color
         hue = 0.0;
@@ -1781,21 +1788,27 @@ wxImage::HSVValue wxImage::RGBtoHSV(const RGBValue& rgb)
     }
     else
     {
-        double deltaRGB = maximumRGB - minimumRGB;
+        switch ( chMax )
+        {
+            case RED:
+                hue = (green - blue) / deltaRGB;
+                break;
+
+            case GREEN:
+                hue = 2.0 + (blue - red) / deltaRGB;
+                break;
+
+            case BLUE:
+                hue = 4.0 + (red - green) / deltaRGB;
+                break;
+        }
+
+        hue /= 6.0;
+
+        if ( hue < 0.0 )
+            hue += 1.0;
 
         saturation = deltaRGB / maximumRGB;
-
-        if ( red == maximumRGB )
-            hue = (green - blue) / deltaRGB;
-        else if (green == maximumRGB)
-            hue = 2.0 + (blue - red) / deltaRGB;
-        else
-            hue = 4.0 + (red - green) / deltaRGB;
-
-        hue = hue / 6.0;
-
-        if (hue < 0.0)
-            hue = hue + 1.0;
     }
 
     return HSVValue(hue, saturation, value);
@@ -1805,13 +1818,14 @@ wxImage::RGBValue wxImage::HSVtoRGB(const HSVValue& hsv)
 {
     double red, green, blue;
 
-    if ( hsv.saturation == 0.0 )
+    if ( wxIsNullDouble(hsv.saturation) )
     {
-        red = hsv.value; //Grey
+        // Grey
+        red = hsv.value;
         green = hsv.value;
-        blue = hsv.value; 
+        blue = hsv.value;
     }
-    else
+    else // not grey
     {
         double hue = hsv.hue * 6.0;      // sector 0 to 5
         int i = (int)floor(hue);
@@ -1877,7 +1891,7 @@ void wxImage::RotateHue(double angle)
 
     wxASSERT (angle >= -1.0 && angle <= 1.0);
     count = M_IMGDATA->m_width * M_IMGDATA->m_height;
-    if (count > 0 && angle != 0.0)
+    if ( count > 0 && !wxIsNullDouble(angle) )
     {
         srcBytePtr = M_IMGDATA->m_data;
         dstBytePtr = srcBytePtr;
