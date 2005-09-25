@@ -1058,7 +1058,13 @@ wxThread::wxThread(wxThreadKind kind)
     m_isDetached = kind == wxTHREAD_DETACHED;
 }
 
-wxThreadError wxThread::Create(unsigned int WXUNUSED(stackSize))
+#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
+    #define WXUNUSED_STACKSIZE(identifier)  identifier
+#else
+    #define WXUNUSED_STACKSIZE(identifier)  WXUNUSED(identifier)
+#endif
+
+wxThreadError wxThread::Create(unsigned int WXUNUSED_STACKSIZE(stackSize))
 {
     if ( m_internal->GetState() != STATE_NEW )
     {
@@ -1069,6 +1075,11 @@ wxThreadError wxThread::Create(unsigned int WXUNUSED(stackSize))
     // set up the thread attribute: right now, we only set thread priority
     pthread_attr_t attr;
     pthread_attr_init(&attr);
+
+#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
+    if (stackSize)
+      pthread_attr_setstacksize(&attr, stackSize);
+#endif
 
 #ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
     int policy;
