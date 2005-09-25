@@ -37064,16 +37064,12 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-
-               wx_cv_type_pthread_mutexattr_t=yes
-
+  wx_cv_type_pthread_mutexattr_t=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-
-               wx_cv_type_pthread_mutexattr_t=no
-
+wx_cv_type_pthread_mutexattr_t=no
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
@@ -37087,6 +37083,71 @@ echo "${ECHO_T}$wx_cv_type_pthread_mutexattr_t" >&6
 #define HAVE_PTHREAD_MUTEXATTR_T 1
 _ACEOF
 
+
+                        echo "$as_me:$LINENO: checking for pthread_mutexattr_settype declaration" >&5
+echo $ECHO_N "checking for pthread_mutexattr_settype declaration... $ECHO_C" >&6
+if test "${wx_cv_func_pthread_mutexattr_settype_decl+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+                       cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <pthread.h>
+int
+main ()
+{
+
+                               pthread_mutexattr_t attr;
+                               pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_func_pthread_mutexattr_settype_decl=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_func_pthread_mutexattr_settype_decl=no
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_func_pthread_mutexattr_settype_decl" >&5
+echo "${ECHO_T}$wx_cv_func_pthread_mutexattr_settype_decl" >&6
+        if test "$wx_cv_func_pthread_mutexattr_settype_decl" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL 1
+_ACEOF
+
+        fi
       else
                 echo "$as_me:$LINENO: checking for PTHREAD_RECURSIVE_MUTEX_INITIALIZER" >&5
 echo $ECHO_N "checking for PTHREAD_RECURSIVE_MUTEX_INITIALIZER... $ECHO_C" >&6

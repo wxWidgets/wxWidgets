@@ -741,6 +741,9 @@
 /* Define if you have pthread_mutexattr_t and functions to work with it */
 #undef HAVE_PTHREAD_MUTEXATTR_T
 
+/* Define if you have pthread_mutexattr_settype() declaration */
+#undef HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL
+
 /* Define if you have PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP */
 #undef HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER
 

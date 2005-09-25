@@ -4842,16 +4842,31 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
             [
                pthread_mutexattr_t attr;
                pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-            ], [
-               wx_cv_type_pthread_mutexattr_t=yes
-            ], [
-               wx_cv_type_pthread_mutexattr_t=no
-            ]
+            ],
+            wx_cv_type_pthread_mutexattr_t=yes,
+            wx_cv_type_pthread_mutexattr_t=no
         )
       ])
 
       if test "$wx_cv_type_pthread_mutexattr_t" = "yes"; then
         AC_DEFINE(HAVE_PTHREAD_MUTEXATTR_T)
+
+        dnl check if we already have the declaration we need, it is not
+        dnl present in some systems' headers
+        AC_CACHE_CHECK([for pthread_mutexattr_settype declaration],
+                       wx_cv_func_pthread_mutexattr_settype_decl, [
+                       AC_TRY_COMPILE([#include <pthread.h>],
+                           [
+                               pthread_mutexattr_t attr;
+                               pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+                           ],
+                           wx_cv_func_pthread_mutexattr_settype_decl=yes,
+                           wx_cv_func_pthread_mutexattr_settype_decl=no
+                       )
+        ])
+        if test "$wx_cv_func_pthread_mutexattr_settype_decl" = "yes"; then
+            AC_DEFINE(HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL)
+        fi
       else
         dnl don't despair, there may be another way to do it
         AC_CACHE_CHECK([for PTHREAD_RECURSIVE_MUTEX_INITIALIZER],
