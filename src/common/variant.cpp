@@ -56,7 +56,7 @@ public:
     wxVariantDataList(const wxList& list);
     ~wxVariantDataList();
 
-    wxList& GetValue() const { return m_value; }
+    wxList& GetValue() { return m_value; }
     void SetValue(const wxList& value) ;
 
     virtual void Copy(wxVariantData& data);
