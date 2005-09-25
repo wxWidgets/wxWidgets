@@ -47,17 +47,8 @@ public:
     int GetAffirmativeId() const { return m_affirmativeId; }
 
     // Identifier for Esc key translation
-#if wxCHECK_VERSION(2, 7, 0)
-    #error "Uncomment SetEscapeId() implementation"
-
-    // this is what we should do in 2.7: remove the "#else" part and add
-    // m_escapeId declaration and the docs for Set/GetEscapeId()
     void SetEscapeId(int escapeId) { m_escapeId = escapeId; }
     int GetEscapeId() const { return m_escapeId; }
-#elif wxABI_VERSION > 20601
-    // just a stub for 2.6
-    int GetEscapeId() const { return wxID_ANY; }
-#endif
 
 #if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
     // splits text up at newlines and places the
@@ -77,6 +68,9 @@ protected:
 
     // The identifier for the affirmative button (usually wxID_OK)
     int m_affirmativeId;
+
+    // The identifier for cancel button (usually wxID_CANCEL)
+    int m_escapeId;
 
     DECLARE_NO_COPY_CLASS(wxDialogBase)
     DECLARE_EVENT_TABLE()
