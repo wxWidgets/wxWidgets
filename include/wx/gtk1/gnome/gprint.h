@@ -13,15 +13,13 @@
 
 // Include wxWindows' headers
 
-#ifndef WX_PRECOMP
-    #include <wx/wx.h>
-#endif
+#include "wx/defs.h"
 
 #if wxUSE_LIBGNOMEPRINT
 
 #include "wx/print.h"
-#include "wx/prntbase.h"
 #include "wx/printdlg.h"
+#include "wx/dc.h"
 
 typedef struct _GnomePrintJob GnomePrintJob;
 typedef struct _GnomePrintContext GnomePrintContext;

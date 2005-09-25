@@ -12,11 +12,8 @@
 #ifndef _WX_SPLASH_H_
 #define _WX_SPLASH_H_
 
-#ifndef WX_PRECOMP
 #include "wx/bitmap.h"
 #include "wx/timer.h"
-#endif
-
 #include "wx/frame.h"
 
 

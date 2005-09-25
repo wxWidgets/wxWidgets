@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_UNIV_RENDERER_H_
+#define _WX_UNIV_RENDERER_H_
+
 /*
    wxRenderer class is used to draw all wxWidgets controls. This is an ABC and
    the look of the application is determined by the concrete derivation of
@@ -24,9 +27,6 @@
    includes the latters functionality (which it may delegate to the generic
    implementation of the latter or reimplement itself).
  */
-
-#ifndef _WX_UNIV_RENDERER_H_
-#define _WX_UNIV_RENDERER_H_
 
 #include "wx/renderer.h"
 

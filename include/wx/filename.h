@@ -12,11 +12,6 @@
 #ifndef   _WX_FILENAME_H_
 #define   _WX_FILENAME_H_
 
-#ifndef WX_PRECOMP
-    #include  "wx/string.h"
-    #include  "wx/arrstr.h"
-#endif
-
 /*
     TODO:
 
@@ -31,6 +26,7 @@
     3. SameFileAs() function to compare inodes under Unix
  */
 
+#include "wx/arrstr.h"
 #include "wx/filefn.h"
 #include "wx/datetime.h"
 

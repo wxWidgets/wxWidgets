@@ -9,12 +9,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef __WXGRIDSEL_H__
+#define __WXGRIDSEL_H__
+
 #include "wx/defs.h"
 
 #if wxUSE_GRID
-
-#ifndef __WXGRIDSEL_H__
-#define __WXGRIDSEL_H__
 
 #include "wx/grid.h"
 
@@ -83,6 +83,6 @@ private:
     DECLARE_NO_COPY_CLASS(wxGridSelection)
 };
 
-#endif  // #ifdef __WXGRIDSEL_H__
 #endif  // #ifndef wxUSE_GRID
+#endif  // #ifdef __WXGRIDSEL_H__
 

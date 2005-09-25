@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_GENERIC_FDREPDLG_H_
+#define _WX_GENERIC_FDREPDLG_H_
+
 class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxRadioBox;
 class WXDLLEXPORT wxTextCtrl;
@@ -65,3 +68,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+#endif // _WX_GENERIC_FDREPDLG_H_

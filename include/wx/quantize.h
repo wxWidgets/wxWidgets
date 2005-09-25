@@ -9,6 +9,9 @@
 // Licence:
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_QUANTIZE_H_
+#define _WX_QUANTIZE_H_
+
 /*
  * From jquant2.c
  *
@@ -16,9 +19,6 @@
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  */
-
-#ifndef _WX_QUANTIZE_H_
-#define _WX_QUANTIZE_H_
 
 class WXDLLEXPORT wxImage;
 
