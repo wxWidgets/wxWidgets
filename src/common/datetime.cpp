@@ -3692,12 +3692,12 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
     for ( size_t n = 0; n < WXSIZEOF(literalDates); n++ )
     {
-        wxString date = wxGetTranslation(literalDates[n].str);
-        size_t len = date.length();
+        const wxString dateStr = wxGetTranslation(literalDates[n].str);
+        size_t len = dateStr.length();
         if ( wxStrlen(p) >= len )
         {
             wxString str(p, len);
-            if ( str.CmpNoCase(date) == 0 )
+            if ( str.CmpNoCase(dateStr) == 0 )
             {
                 // nothing can follow this, so stop here
                 p += len;
@@ -4322,8 +4322,8 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
 
     holidays.Clear();
 
-    size_t count = ms_authorities.size();
-    for ( size_t nAuth = 0; nAuth < count; nAuth++ )
+    const size_t countAuth = ms_authorities.size();
+    for ( size_t nAuth = 0; nAuth < countAuth; nAuth++ )
     {
         ms_authorities[nAuth]->DoGetHolidaysInRange(dtStart, dtEnd, hol);
 
