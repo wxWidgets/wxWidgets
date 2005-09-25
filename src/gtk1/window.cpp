@@ -2901,6 +2901,11 @@ wxWindowGTK::~wxWindowGTK()
         gdk_ic_attr_destroy (m_icattr);
 #endif
 
+#ifdef __WXGTK20__
+    // delete before the widgets to avoid a crash on solaris
+    delete m_imData;
+#endif
+
     if (m_wxwindow)
     {
         gtk_widget_destroy( m_wxwindow );
@@ -2912,10 +2917,6 @@ wxWindowGTK::~wxWindowGTK()
         gtk_widget_destroy( m_widget );
         m_widget = (GtkWidget*) NULL;
     }
-
-#ifdef __WXGTK20__
-    delete m_imData;
-#endif
 }
 
 bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const wxSize &size )
