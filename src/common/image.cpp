@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        image.cpp
+// Name:        src/common/image.cpp
 // Purpose:     wxImage
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -1778,7 +1778,7 @@ wxImage::HSVValue wxImage::RGBtoHSV(const RGBValue& rgb)
 
     const double value = maximumRGB;
 
-    double hue, saturation;
+    double hue = 0.0, saturation;
     const double deltaRGB = maximumRGB - minimumRGB;
     if ( wxIsNullDouble(deltaRGB) )
     {
@@ -1800,6 +1800,10 @@ wxImage::HSVValue wxImage::RGBtoHSV(const RGBValue& rgb)
 
             case BLUE:
                 hue = 4.0 + (red - green) / deltaRGB;
+                break;
+
+            default:
+                wxFAIL_MSG(wxT("hue not specified"));
                 break;
         }
 

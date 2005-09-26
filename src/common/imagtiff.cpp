@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagtiff.cpp
+// Name:        src/common/imagtiff.cpp
 // Purpose:     wxImage TIFF handler
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -53,7 +53,7 @@ static toff_t wxFileOffsetToTIFF(wxFileOffset ofs)
         return (toff_t)-1;
 
     toff_t tofs = wx_truncate_cast(toff_t, ofs);
-    wxCHECK_MSG( tofs == ofs, (toff_t)-1,
+    wxCHECK_MSG( (wxFileOffset)tofs == ofs, (toff_t)-1,
                     _T("TIFF library doesn't support large files") );
 
     return tofs;
@@ -445,7 +445,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                         if ( ptr[column*24 + bp*3] > 0 )
                         {
                             // check only red as this is sufficient
-                            reverse = reverse | 128 >> bp;
+                            reverse = (uint8)(reverse | 128 >> bp);
                         }
                     }
 
@@ -491,4 +491,3 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 #endif  // wxUSE_STREAMS
 
 #endif  // wxUSE_LIBTIFF
-

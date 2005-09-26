@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        strconv.cpp
+// Name:        src/common/strconv.cpp
 // Purpose:     Unicode conversion classes
 // Author:      Ove Kaaven, Robert Roebling, Vadim Zeitlin, Vaclav Slavik,
 //              Ryan Norton, Fredrik Roubert (UTF7)
@@ -653,7 +653,7 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                     }
 #else // !WC_UTF16
                     if (buf)
-                        *buf++ = res;
+                        *buf++ = (wchar_t)res;
                     len++;
 #endif // WC_UTF16/!WC_UTF16
                 }
@@ -674,7 +674,7 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                         len += pa;
 #else
                         if (buf)
-                            *buf++ = wxUnicodePUA + (unsigned char)*opsz;
+                            *buf++ = (wchar_t)(wxUnicodePUA + (unsigned char)*opsz);
                         opsz++;
                         len++;
 #endif
@@ -902,7 +902,7 @@ size_t wxMBConvUTF16straight::MB2WC(wchar_t *buf, const char *psz, size_t n) con
             return pa;
 
         if (buf)
-            *buf++ = cc;
+            *buf++ = (wchar_t)cc;
         len++;
         psz += pa * sizeof(wxUint16);
     }
@@ -962,7 +962,7 @@ size_t wxMBConvUTF16swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
             return pa;
 
         if (buf)
-            *buf++ = cc;
+            *buf++ = (wchar_t)cc;
 
         len++;
         psz += pa * sizeof(wxUint16);
@@ -1163,7 +1163,7 @@ size_t wxMBConvUTF32straight::MB2WC(wchar_t *buf, const char *psz, size_t n) con
     while (*(wxUint32*)psz && (!buf || len < n))
     {
         if (buf)
-            *buf++ = *(wxUint32*)psz;
+            *buf++ = (wchar_t)(*(wxUint32*)psz);
         len++;
         psz += sizeof(wxUint32);
     }
@@ -2845,5 +2845,3 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
                                 wxConvUTF8;
 
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
-
-
