@@ -201,7 +201,7 @@ static void TestCmdLineConvert()
 #ifdef __UNIX__
     static const wxChar *ROOTDIR = _T("/");
     static const wxChar *TESTDIR = _T("/usr/local/share");
-#elif defined(__WXMSW__) || defined(__DOS__)
+#elif defined(__WXMSW__) || defined(__DOS__) || defined(__OS2__)
     static const wxChar *ROOTDIR = _T("c:\\");
     static const wxChar *TESTDIR = _T("d:\\");
 #else
