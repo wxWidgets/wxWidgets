@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/wizard.cpp
+// Name:        src/generic/wizard.cpp
 // Purpose:     generic implementation of wxWizard class
 // Author:      Vadim Zeitlin
 // Modified by: Robert Cavanaugh
@@ -263,10 +263,6 @@ wxSize wxWizardSizer::SiblingSize(wxSizerItem *child)
 // generic wxWizard implementation
 // ----------------------------------------------------------------------------
 
-// FIXME: this is a hack
-WX_DEFINE_ARRAY_PTR(wxWizard *, wxModelessWizards);
-static wxModelessWizards modelessWizards;
-
 void wxWizard::Init()
 {
     m_posWizard = wxDefaultPosition;
@@ -278,7 +274,7 @@ void wxWizard::Init()
     m_calledSetBorder = false;
     m_border = 0;
     m_started = false;
-    modelessWizards.Add(this);
+    m_wasModal = false;
 }
 
 bool wxWizard::Create(wxWindow *parent,
@@ -393,7 +389,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
     // was created before the 'next' button.
 
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-    int buttonStyle = isPda ? wxBU_EXACTFIT : 0;    
+    int buttonStyle = isPda ? wxBU_EXACTFIT : 0;
 
     wxBoxSizer *buttonRow = new wxBoxSizer(wxHORIZONTAL);
 #ifdef __WXMAC__
@@ -458,10 +454,10 @@ void wxWizard::DoCreateControls()
         return;
 
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-    
+
     // Horizontal stretching, and if not PDA, border all around
     int mainColumnSizerFlags = isPda ? wxEXPAND : wxALL|wxEXPAND ;
-    
+
     // wxWindow::SetSizer will be called at end
     wxBoxSizer *windowSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -474,10 +470,10 @@ void wxWizard::DoCreateControls()
     );
 
     AddBitmapRow(mainColumn);
-    
+
     if (!isPda)
         AddStaticLine(mainColumn);
-    
+
     AddButtonRow(mainColumn);
 
     // wxWindow::SetSizer should be followed by wxWindow::Fit, but
@@ -494,7 +490,7 @@ void wxWizard::SetPageSize(const wxSize& size)
 void wxWizard::FinishLayout()
 {
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-    
+
     // Set to enable wxWizardSizer::GetMaxChildSize
     m_started = true;
 
@@ -661,7 +657,7 @@ bool wxWizard::RunWizard(wxWizardPage *firstPage)
     // can't return false here because there is no old page
     (void)ShowPage(firstPage, true /* forward */);
 
-    modelessWizards.Remove(this);
+    m_wasModal = true;
 
     return ShowModal() == wxID_OK;
 }
@@ -703,7 +699,7 @@ wxSize wxWizard::GetManualPageSize() const
         DEFAULT_PAGE_WIDTH = wxSystemSettings::GetMetric(wxSYS_SCREEN_X) / 2;
         DEFAULT_PAGE_HEIGHT = wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) / 2;
     }
-    
+
     wxSize totalPageSize(DEFAULT_PAGE_WIDTH,DEFAULT_PAGE_HEIGHT);
 
     totalPageSize.IncTo(m_sizePage);
@@ -805,14 +801,13 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
         }
     }
 
-    if ( ( modelessWizards.Index(this) != wxNOT_FOUND ) &&
+    if ( ( !m_wasModal ) &&
          event.IsAllowed() &&
          ( event.GetEventType() == wxEVT_WIZARD_FINISHED ||
            event.GetEventType() == wxEVT_WIZARD_CANCEL
          )
        )
     {
-        modelessWizards.Remove(this);
         Destroy();
     }
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/wizard.h
+// Name:        wx/generic/wizard.h
 // Purpose:     declaration of generic wxWizard class
 // Author:      Vadim Zeitlin
 // Modified by: Robert Vazan (sizers)
@@ -112,6 +112,9 @@ private:
 
     // Whether RunWizard() was called
     bool m_started;
+
+    // Whether was modal (modeless has to be destroyed on finish or cancel)
+    bool m_wasModal;
 
     // Page area sizer will be inserted here with padding
     wxBoxSizer *m_sizerBmpAndPage;
