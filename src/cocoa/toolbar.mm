@@ -221,6 +221,11 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     return true;
 }
 
+bool wxToolBar::Cocoa_acceptsFirstMouse(bool &acceptsFirstMouse, WX_NSEvent theEvent)
+{
+    acceptsFirstMouse = true; return true;
+}
+
 bool wxToolBar::Cocoa_drawRect(const NSRect &rect)
 {
     wxToolBarToolsList::compatibility_iterator node;
