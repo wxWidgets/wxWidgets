@@ -202,8 +202,6 @@ int wxDialog::ShowModal()
 
     Show( true );
 
-    SetFocus();
-
     m_modalShowing = true;
 
     g_openDialogs++;
