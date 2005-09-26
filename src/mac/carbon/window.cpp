@@ -599,7 +599,10 @@ void wxWindowMac::MacControlUserPaneActivateProc(bool activating)
 
 wxInt16 wxWindowMac::MacControlUserPaneFocusProc(wxInt16 action)
 {
-    return kControlNoPart ;
+	if ( AcceptsFocus() )
+		return 1 ;
+	else
+    	return kControlNoPart ;
 }
 
 void wxWindowMac::MacControlUserPaneBackgroundProc(void* info)
