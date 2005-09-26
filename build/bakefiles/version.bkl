@@ -2,7 +2,7 @@
 <!-- $Id$ -->
 
 <makefile>
-    
+
     <!-- ================================================================== -->
     <!--                      Handling of binary compatiblity:              -->
     <!-- ================================================================== -->
@@ -10,29 +10,30 @@
     <!--
        We use libtool CURRENT:REVISION:AGE versioning scheme. Quoting libtool
        documentation on how to handle the values:
-        
-       1. Start with version information of `0:0:0' for each libtool library.
-     
+
+       1. Start with version information of `0:0:0' for each new major.minor
+          version.
+
        2. Update the version information only immediately before a public
           release of your software.  More frequent updates are unnecessary,
           and only guarantee that the current interface number gets larger
           faster.
-     
+
        3. If the library source code has changed at all since the last
           update, then increment REVISION (`C:R:A' becomes `C:r+1:A').
-     
+
        4. If any interfaces have been added, removed, or changed since the
           last update, increment CURRENT, and set REVISION to 0.
-     
+
        5. If any interfaces have been added since the last public release,
           then increment AGE.
-     
+
        6. If any interfaces have been removed since the last public release,
           then set AGE to 0.
     -->
-    <set var="WX_CURRENT">2</set>
+    <set var="WX_CURRENT">0</set>
     <set var="WX_REVISION">0</set>
-    <set var="WX_AGE">2</set>
+    <set var="WX_AGE">0</set>
 
 
     <!-- ================================================================== -->
