@@ -276,11 +276,11 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
 
         dragRect = wxRect(x, y, newWidth, newHeight);
 
-        wxSashEvent event(GetId(), edge);
-        event.SetEventObject(this);
-        event.SetDragStatus(status);
-        event.SetDragRect(dragRect);
-        GetEventHandler()->ProcessEvent(event);
+        wxSashEvent eventSash(GetId(), edge);
+        eventSash.SetEventObject(this);
+        eventSash.SetDragStatus(status);
+        eventSash.SetDragRect(dragRect);
+        GetEventHandler()->ProcessEvent(eventSash);
     }
     else if ( event.LeftUp() )
     {

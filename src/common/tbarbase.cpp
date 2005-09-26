@@ -401,14 +401,14 @@ void wxToolBarBase::UnToggleRadioGroup(wxToolBarToolBase *tool)
     wxToolBarToolsList::compatibility_iterator nodeNext = node->GetNext();
     while ( nodeNext )
     {
-        wxToolBarToolBase *tool = nodeNext->GetData();
+        wxToolBarToolBase *toolNext = nodeNext->GetData();
 
-        if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
+        if ( !toolNext->IsButton() || toolNext->GetKind() != wxITEM_RADIO )
             break;
 
-        if ( tool->Toggle(false) )
+        if ( toolNext->Toggle(false) )
         {
-            DoToggleTool(tool, false);
+            DoToggleTool(toolNext, false);
         }
 
         nodeNext = nodeNext->GetNext();
@@ -417,14 +417,14 @@ void wxToolBarBase::UnToggleRadioGroup(wxToolBarToolBase *tool)
     wxToolBarToolsList::compatibility_iterator nodePrev = node->GetPrevious();
     while ( nodePrev )
     {
-        wxToolBarToolBase *tool = nodePrev->GetData();
+        wxToolBarToolBase *toolNext = nodePrev->GetData();
 
-        if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
+        if ( !toolNext->IsButton() || toolNext->GetKind() != wxITEM_RADIO )
             break;
 
-        if ( tool->Toggle(false) )
+        if ( toolNext->Toggle(false) )
         {
-            DoToggleTool(tool, false);
+            DoToggleTool(toolNext, false);
         }
 
         nodePrev = nodePrev->GetPrevious();

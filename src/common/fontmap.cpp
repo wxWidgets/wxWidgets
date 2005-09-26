@@ -445,9 +445,9 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
                 // remember this in the config
-                wxFontMapperPathChanger path(this,
-                                             FONTMAPPER_FONT_FROM_ENCODING_PATH);
-                if ( path.IsOk() )
+                wxFontMapperPathChanger path2(this,
+                                              FONTMAPPER_FONT_FROM_ENCODING_PATH);
+                if ( path2.IsOk() )
                 {
                     GetConfig()->Write(configEntry, info->ToString());
                 }
@@ -464,9 +464,9 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
             //
             // remember it to avoid asking the same question again later
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
-            wxFontMapperPathChanger path(this,
-                                         FONTMAPPER_FONT_FROM_ENCODING_PATH);
-            if ( path.IsOk() )
+            wxFontMapperPathChanger path2(this,
+                                          FONTMAPPER_FONT_FROM_ENCODING_PATH);
+            if ( path2.IsOk() )
             {
                 GetConfig()->Write
                              (

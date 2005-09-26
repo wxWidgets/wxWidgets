@@ -830,8 +830,6 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     // Now do the filenames -- but only if we're allowed to
     if ((GetWindowStyle() & wxDIRCTRL_DIR_ONLY) == 0)
     {
-        wxLogNull log;
-
         d.Open(dirName);
 
         if (d.IsOpened())
@@ -865,7 +863,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     size_t i;
     for (i = 0; i < dirs.Count(); i++)
     {
-        wxString eachFilename(dirs[i]);
+        eachFilename = dirs[i];
         path = dirName;
         if (!wxEndsWithPathSeparator(path))
             path += wxString(wxFILE_SEP_PATH);
@@ -894,7 +892,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     {
         for (i = 0; i < filenames.Count(); i++)
         {
-            wxString eachFilename(filenames[i]);
+            eachFilename = filenames[i];
             path = dirName;
             if (!wxEndsWithPathSeparator(path))
                 path += wxString(wxFILE_SEP_PATH);
@@ -997,48 +995,46 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
         if (id.IsOk())
             lastId = id;
     }
-    if (lastId.IsOk())
-    {
-        wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(lastId);
-        if (data->m_isDir)
-        {
-            m_treeCtrl->Expand(lastId);
-        }
-        if ((GetWindowStyle() & wxDIRCTRL_SELECT_FIRST) && data->m_isDir)
-        {
-            // Find the first file in this directory
-            wxTreeItemIdValue cookie;
-            wxTreeItemId childId = m_treeCtrl->GetFirstChild(lastId, cookie);
-            bool selectedChild = false;
-            while (childId.IsOk())
-            {
-                wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
+    if (!lastId.IsOk())
+        return false;
 
-                if (data && data->m_path != wxEmptyString && !data->m_isDir)
-                {
-                    m_treeCtrl->SelectItem(childId);
-                    m_treeCtrl->EnsureVisible(childId);
-                    selectedChild = true;
-                    break;
-                }
-                childId = m_treeCtrl->GetNextChild(lastId, cookie);
-            }
-            if (!selectedChild)
+    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(lastId);
+    if (data->m_isDir)
+    {
+        m_treeCtrl->Expand(lastId);
+    }
+    if ((GetWindowStyle() & wxDIRCTRL_SELECT_FIRST) && data->m_isDir)
+    {
+        // Find the first file in this directory
+        wxTreeItemIdValue cookie;
+        wxTreeItemId childId = m_treeCtrl->GetFirstChild(lastId, cookie);
+        bool selectedChild = false;
+        while (childId.IsOk())
+        {
+            data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
+
+            if (data && data->m_path != wxEmptyString && !data->m_isDir)
             {
-                m_treeCtrl->SelectItem(lastId);
-                m_treeCtrl->EnsureVisible(lastId);
+                m_treeCtrl->SelectItem(childId);
+                m_treeCtrl->EnsureVisible(childId);
+                selectedChild = true;
+                break;
             }
+            childId = m_treeCtrl->GetNextChild(lastId, cookie);
         }
-        else
+        if (!selectedChild)
         {
             m_treeCtrl->SelectItem(lastId);
             m_treeCtrl->EnsureVisible(lastId);
         }
-
-        return true;
     }
     else
-        return false;
+    {
+        m_treeCtrl->SelectItem(lastId);
+        m_treeCtrl->EnsureVisible(lastId);
+    }
+
+    return true;
 }
 
 wxString wxGenericDirCtrl::GetPath() const

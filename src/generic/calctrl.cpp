@@ -1414,9 +1414,9 @@ void wxCalendarCtrl::OnClick(wxMouseEvent& event)
 
         case wxCAL_HITTEST_HEADER:
             {
-                wxCalendarEvent event(this, wxEVT_CALENDAR_WEEKDAY_CLICKED);
-                event.m_wday = wday;
-                (void)GetEventHandler()->ProcessEvent(event);
+                wxCalendarEvent eventWd(this, wxEVT_CALENDAR_WEEKDAY_CLICKED);
+                eventWd.m_wday = wday;
+                (void)GetEventHandler()->ProcessEvent(eventWd);
             }
             break;
 

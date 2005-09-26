@@ -1075,7 +1075,6 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
 
-        char buffer[100];
         sprintf( buffer,
             "%.8f %.8f %.8f setrgbcolor\n",
             redPS, greenPS, bluePS );
@@ -1352,7 +1351,6 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
     {
         wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
         wxCoord w, h;
-        char buffer[100];
         GetTextExtent(text, &w, &h);
 
         sprintf( buffer,

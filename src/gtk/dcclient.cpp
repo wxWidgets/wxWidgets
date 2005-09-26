@@ -1133,15 +1133,15 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     if (is_mono)
     {
 #ifdef __WXGTK20__
-        GdkPixmap *bitmap = gdk_pixmap_new( wxGetRootWindow()->window, ww, hh, -1 );
-        GdkGC *gc = gdk_gc_new( bitmap );
+        GdkPixmap *bitmap2 = gdk_pixmap_new( wxGetRootWindow()->window, ww, hh, -1 );
+        GdkGC *gc = gdk_gc_new( bitmap2 );
         gdk_gc_set_foreground( gc, m_textForegroundColour.GetColor() );
         gdk_gc_set_background( gc, m_textBackgroundColour.GetColor() );
-        gdk_wx_draw_bitmap( bitmap, gc, use_bitmap.GetBitmap(), 0, 0, 0, 0, -1, -1 );
+        gdk_wx_draw_bitmap( bitmap2, gc, use_bitmap.GetBitmap(), 0, 0, 0, 0, -1, -1 );
 
-        gdk_draw_drawable( m_window, m_textGC, bitmap, 0, 0, xx, yy, -1, -1 );
+        gdk_draw_drawable( m_window, m_textGC, bitmap2, 0, 0, xx, yy, -1, -1 );
 
-        gdk_bitmap_unref( bitmap );
+        gdk_bitmap_unref( bitmap2 );
         gdk_gc_unref( gc );
 #else
         gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );

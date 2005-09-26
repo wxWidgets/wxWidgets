@@ -558,20 +558,20 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
 
     wxMenu* menu = node->GetData();
 
-    wxString str( wxReplaceUnderscore( label ) );
+    const wxString str( wxReplaceUnderscore( label ) );
 
     menu->SetTitle( str );
 
     if (menu->m_owner)
     {
-        GtkLabel *label = GTK_LABEL( GTK_BIN(menu->m_owner)->child );
+        GtkLabel *glabel = GTK_LABEL( GTK_BIN(menu->m_owner)->child );
 
         /* set new text */
-        gtk_label_set( label, wxGTK_CONV( str ) );
+        gtk_label_set( glabel, wxGTK_CONV( str ) );
 
         /* reparse key accel */
-        (void)gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( str ) );
-        gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
+        (void)gtk_label_parse_uline (GTK_LABEL(glabel), wxGTK_CONV( str ) );
+        gtk_accel_label_refetch( GTK_ACCEL_LABEL(glabel) );
     }
 
 }

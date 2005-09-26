@@ -29,6 +29,7 @@
 #include "wx/dcclient.h"
 #include "wx/panel.h"
 #include "wx/sizer.h"
+#include "wx/math.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
@@ -79,7 +80,7 @@ static void gtk_scrolled_window_vscroll_callback( GtkAdjustment *adjust,
     if (g_blockEventsOnDrag) return;
 
     if (!win->m_hasVMT) return;
-    
+
     win->GtkVScroll( adjust->value,
             GET_SCROLL_TYPE(GTK_SCROLLED_WINDOW(win->m_widget)->vscrollbar) );
 }
@@ -316,7 +317,7 @@ bool wxScrolledWindow::Create(wxWindow *parent,
     PostCreation();
 
     Show( TRUE );
-    
+
     return TRUE;
 }
 
@@ -397,7 +398,7 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
 {
     int xs, ys;
     GetViewStart (& xs, & ys);
-    
+
     int old_x = m_xScrollPixelsPerLine * xs;
     int old_y = m_yScrollPixelsPerLine * ys;
 
@@ -432,7 +433,7 @@ void wxScrolledWindow::AdjustScrollbars()
 
     m_targetWindow->GetClientSize( &w, &h );
     m_targetWindow->GetVirtualSize( &vw, &vh );
-    
+
     if (m_xScrollPixelsPerLine == 0)
     {
         m_hAdjust->upper = 1.0;
@@ -447,19 +448,20 @@ void wxScrolledWindow::AdjustScrollbars()
 
         // Special case. When client and virtual size are very close but
         // the client is big enough, kill scrollbar.
-        
-        if ((m_hAdjust->page_size < m_hAdjust->upper) && (w >= vw)) 
+
+        if ((m_hAdjust->page_size < m_hAdjust->upper) && (w >= vw))
             m_hAdjust->page_size += 1.0;
-        
+
         // If the scrollbar hits the right side, move the window
         // right to keep it from over extending.
 
-        if ((m_hAdjust->value != 0.0) && (m_hAdjust->value + m_hAdjust->page_size > m_hAdjust->upper))
+        if ( !wxIsNullDouble(m_hAdjust->value) &&
+                (m_hAdjust->value + m_hAdjust->page_size > m_hAdjust->upper) )
         {
             m_hAdjust->value = m_hAdjust->upper - m_hAdjust->page_size;
             if (m_hAdjust->value < 0.0)
                 m_hAdjust->value = 0.0;
-                
+
             if (GetChildren().GetCount() == 0)
                 m_xScrollPosition = (int)m_hAdjust->value; // This is enough without child windows
             else
@@ -478,18 +480,19 @@ void wxScrolledWindow::AdjustScrollbars()
         m_vAdjust->upper = (vh+m_yScrollPixelsPerLine-1) / m_yScrollPixelsPerLine;
         m_vAdjust->page_size = h / m_yScrollPixelsPerLine;
         m_vAdjust->page_increment = h / m_yScrollPixelsPerLine;
-        
-        if ((m_vAdjust->page_size < m_vAdjust->upper) && (h >= vh)) 
+
+        if ((m_vAdjust->page_size < m_vAdjust->upper) && (h >= vh))
             m_vAdjust->page_size += 1.0;
 
-        if ((m_vAdjust->value != 0.0) && (m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper))
+        if ( !wxIsNullDouble(m_vAdjust->value) &&
+                (m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper) )
         {
             m_vAdjust->value = m_vAdjust->upper - m_vAdjust->page_size;
             if (m_vAdjust->value < 0.0)
                 m_vAdjust->value = 0.0;
-                
+
             if (GetChildren().GetCount() == 0)
-                m_yScrollPosition = (int)m_vAdjust->value;  
+                m_yScrollPosition = (int)m_vAdjust->value;
             else
                 gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
         }
@@ -714,7 +717,7 @@ void wxScrolledWindow::DoCalcScrolledPosition(int x, int y, int *xx, int *yy) co
 {
     int xs, ys;
     GetViewStart (& xs, & ys);
-    
+
     if ( xx )
         *xx = x - xs * m_xScrollPixelsPerLine;
     if ( yy )
@@ -725,7 +728,7 @@ void wxScrolledWindow::DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) 
 {
     int xs, ys;
     GetViewStart (& xs, & ys);
-    
+
     if ( xx )
         *xx = x + xs * m_xScrollPixelsPerLine;
     if ( yy )
@@ -916,7 +919,7 @@ void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
     if ( m_targetWindow->GetAutoLayout() )
     {
         wxSize size = m_targetWindow->GetBestVirtualSize();
-        
+
         // This will call ::Layout() and ::AdjustScrollbars()
         SetVirtualSize( size );
     }

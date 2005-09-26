@@ -2175,20 +2175,20 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     wxRealPoint p3 = rotated_point (GetWidth(), 0, cos_angle, sin_angle, p0);
     wxRealPoint p4 = rotated_point (GetWidth(), GetHeight(), cos_angle, sin_angle, p0);
 
-    int x1 = (int) floor (wxMin (wxMin(p1.x, p2.x), wxMin(p3.x, p4.x)));
-    int y1 = (int) floor (wxMin (wxMin(p1.y, p2.y), wxMin(p3.y, p4.y)));
-    int x2 = (int) ceil (wxMax (wxMax(p1.x, p2.x), wxMax(p3.x, p4.x)));
-    int y2 = (int) ceil (wxMax (wxMax(p1.y, p2.y), wxMax(p3.y, p4.y)));
+    int x1a = (int) floor (wxMin (wxMin(p1.x, p2.x), wxMin(p3.x, p4.x)));
+    int y1a = (int) floor (wxMin (wxMin(p1.y, p2.y), wxMin(p3.y, p4.y)));
+    int x2a = (int) ceil (wxMax (wxMax(p1.x, p2.x), wxMax(p3.x, p4.x)));
+    int y2a = (int) ceil (wxMax (wxMax(p1.y, p2.y), wxMax(p3.y, p4.y)));
 
     // Create rotated image
-    wxImage rotated (x2 - x1 + 1, y2 - y1 + 1, false);
+    wxImage rotated (x2a - x1a + 1, y2a - y1a + 1, false);
     // With alpha channel
     if (has_alpha)
         rotated.SetAlpha();
 
     if (offset_after_rotation != NULL)
     {
-        *offset_after_rotation = wxPoint (x1, y1);
+        *offset_after_rotation = wxPoint (x1a, y1a);
     }
 
     // GRG: The rotated (destination) image is always accessed
@@ -2230,7 +2230,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         {
             for (x = 0; x < rotated.GetWidth(); x++)
             {
-                wxRealPoint src = rotated_point (x + x1, y + y1, cos_angle, -sin_angle, p0);
+                wxRealPoint src = rotated_point (x + x1a, y + y1a, cos_angle, -sin_angle, p0);
 
                 if (-0.25 < src.x && src.x < GetWidth() - 0.75 &&
                     -0.25 < src.y && src.y < GetHeight() - 0.75)
@@ -2238,8 +2238,6 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     // interpolate using the 4 enclosing grid-points.  Those
                     // points can be obtained using floor and ceiling of the
                     // exact coordinates of the point
-                        // C.M. 2000-02-17:  when the point is near the border, special care is required.
-
                     int x1, y1, x2, y2;
 
                     if (0 < src.x && src.x < GetWidth() - 1)
@@ -2289,10 +2287,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         *(dst++) = *p;
 
                         if (has_alpha)
-                        {
-                            unsigned char *p = alpha[y1] + x1;
-                            *(alpha_dst++) = *p;
-                        }
+                            *(alpha_dst++) = *(alpha[y1] + x1);
                     }
                     else if (d2 < gs_Epsilon)
                     {
@@ -2302,10 +2297,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         *(dst++) = *p;
 
                         if (has_alpha)
-                        {
-                            unsigned char *p = alpha[y1] + x2;
-                            *(alpha_dst++) = *p;
-                        }
+                            *(alpha_dst++) = *(alpha[y1] + x2);
                     }
                     else if (d3 < gs_Epsilon)
                     {
@@ -2315,10 +2307,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         *(dst++) = *p;
 
                         if (has_alpha)
-                        {
-                            unsigned char *p = alpha[y2] + x2;
-                            *(alpha_dst++) = *p;
-                        }
+                            *(alpha_dst++) = *(alpha[y2] + x2);
                     }
                     else if (d4 < gs_Epsilon)
                     {
@@ -2328,10 +2317,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         *(dst++) = *p;
 
                         if (has_alpha)
-                        {
-                            unsigned char *p = alpha[y2] + x1;
-                            *(alpha_dst++) = *p;
-                        }
+                            *(alpha_dst++) = *(alpha[y2] + x1);
                     }
                     else
                     {
@@ -2360,10 +2346,10 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 
                         if (has_alpha)
                         {
-                            unsigned char *v1 = alpha[y1] + (x1);
-                            unsigned char *v2 = alpha[y1] + (x2);
-                            unsigned char *v3 = alpha[y2] + (x2);
-                            unsigned char *v4 = alpha[y2] + (x1);
+                            v1 = alpha[y1] + (x1);
+                            v2 = alpha[y1] + (x2);
+                            v3 = alpha[y2] + (x2);
+                            v4 = alpha[y2] + (x1);
 
                             *(alpha_dst++) = (unsigned char)
                                 ( (w1 * *v1 + w2 * *v2 +
@@ -2390,7 +2376,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         {
             for (x = 0; x < rotated.GetWidth(); x++)
             {
-                wxRealPoint src = rotated_point (x + x1, y + y1, cos_angle, -sin_angle, p0);
+                wxRealPoint src = rotated_point (x + x1a, y + y1a, cos_angle, -sin_angle, p0);
 
                 const int xs = wxCint (src.x);      // wxCint rounds to the
                 const int ys = wxCint (src.y);      // closest integer
@@ -2404,10 +2390,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     *(dst++) = *p;
 
                     if (has_alpha)
-                    {
-                        unsigned char *p = alpha[ys] + (xs);
-                        *(alpha_dst++) = *p;
-                    }
+                        *(alpha_dst++) = *(alpha[ys] + (xs));
                 }
                 else
                 {

@@ -5021,7 +5021,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     //
     else if (event.LeftDClick() )
     {
-        int row = YToEdgeOfRow(y);
+        row = YToEdgeOfRow(y);
         if ( row < 0 )
         {
             row = YToRow(y);
@@ -5245,7 +5245,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     //
     if ( event.LeftDClick() )
     {
-        int col = XToEdgeOfCol(x);
+        col = XToEdgeOfCol(x);
         if ( col < 0 )
         {
             col = XToCol(x);
