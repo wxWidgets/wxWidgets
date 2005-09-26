@@ -17,8 +17,13 @@
 /*  the constants below must be changed with each new version */
 /*  ---------------------------------------------------------------------------- */
 
-/*  NB: this file is parsed by Perl code in tmake templates in distrib/msw/tmake */
-/*      so don't change its format too much or they could break */
+/*
+    Don't forget to update WX_CURRENT, WX_REVISION and WX_AGE in
+    build/bakefiles/version.bkl and regenerate the makefiles when you change
+    this!
+ */
+
+/*  NB: this file is parsed by automatic tools so don't change its format! */
 #define wxMAJOR_VERSION      2
 #define wxMINOR_VERSION      7
 #define wxRELEASE_NUMBER     0
