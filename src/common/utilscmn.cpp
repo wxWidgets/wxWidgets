@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utilscmn.cpp
+// Name:        src/common/utilscmn.cpp
 // Purpose:     Miscellaneous utility functions and classes
 // Author:      Julian Smart
 // Modified by:
@@ -89,6 +89,7 @@
 
 #if defined(__WXMSW__)
     #include "wx/msw/private.h"
+    #include "wx/msw/registry.h"
 #endif
 
 #if wxUSE_BASE
