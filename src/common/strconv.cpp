@@ -1365,7 +1365,7 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
         };
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
 
-        for ( ; *names; ++names )
+        for ( ; *names && ms_wcCharsetName.empty(); ++names )
         {
             const wxString nameCS(*names);
 
