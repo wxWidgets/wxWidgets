@@ -19,7 +19,7 @@
 
 // And this must be somewhere where it certainly will be linked:
 #define wxFORCE_LINK_MODULE(module_name)                              \
-                extern int _wx_link_dummy_func_##module_name ();      \
+                extern void _wx_link_dummy_func_##module_name ();     \
                 static struct wxForceLink##module_name                \
                 {                                                     \
                     wxForceLink##module_name()                        \
