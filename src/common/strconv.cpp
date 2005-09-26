@@ -1349,6 +1349,8 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
     // check for charset that represents wchar_t:
     if ( ms_wcCharsetName.empty() )
     {
+        wxLogTrace(TRACE_STRCONV, _T("Looking for wide char codeset:"));
+
 #if wxUSE_FONTMAP
         const wxChar **names = wxFontMapperBase::GetAllEncodingNames(WC_ENC);
 #else // !wxUSE_FONTMAP
@@ -1375,10 +1377,15 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
                 nameXE += _T("LE");
             #endif
 
+            wxLogTrace(TRACE_STRCONV, _T("  trying charset \"%s\""),
+                       nameXE.c_str());
+
             m2w = iconv_open(nameXE.ToAscii(), cname);
             if ( m2w == ICONV_T_INVALID )
             {
                 // try charset w/o bytesex info (e.g. "UCS4")
+                wxLogTrace(TRACE_STRCONV, _T("  trying charset \"%s\""),
+                           nameCS.c_str());
                 m2w = iconv_open(nameCS.ToAscii(), cname);
 
                 // and check for bytesex ourselves:
@@ -1584,7 +1591,6 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
     if (ICONV_FAILED(cres, inbuf))
     {
-        //VS: it is ok if iconv fails, hence trace only
         wxLogTrace(TRACE_STRCONV, wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
         return (size_t)-1;
     }
