@@ -85,6 +85,53 @@ enum
     INTERNAT_OPEN
 };
 
+// language data
+static const wxLanguage langIds[] =
+{
+    wxLANGUAGE_DEFAULT,
+    wxLANGUAGE_FRENCH,
+    wxLANGUAGE_GERMAN,
+    wxLANGUAGE_RUSSIAN,
+    wxLANGUAGE_BULGARIAN,
+    wxLANGUAGE_CZECH,
+    wxLANGUAGE_POLISH,
+    wxLANGUAGE_SWEDISH,
+#if wxUSE_UNICODE || defined(__WXMOTIF__)
+    wxLANGUAGE_JAPANESE,
+#endif
+#if wxUSE_UNICODE
+    wxLANGUAGE_GEORGIAN,
+    wxLANGUAGE_ENGLISH,
+    wxLANGUAGE_ENGLISH_US
+#endif
+};
+
+// note that it makes no sense to translate these strings, they are
+// shown before we set the locale anyhow
+const wxString langNames[] =
+{
+    _T("System default"),
+    _T("French"),
+    _T("German"),
+    _T("Russian"),
+    _T("Bulgarian"),
+    _T("Czech"),
+    _T("Polish"),
+    _T("Swedish"),
+#if wxUSE_UNICODE || defined(__WXMOTIF__)
+    _T("Japanese"),
+#endif
+#if wxUSE_UNICODE
+    _T("Georgian"),
+    _T("English"),
+    _T("English (U.S.)")
+#endif
+};
+
+// the arrays must be in sync
+wxCOMPILE_TIME_ASSERT( WXSIZEOF(langNames) == WXSIZEOF(langIds),
+                       LangArraysMismatch );
+
 // ----------------------------------------------------------------------------
 // wxWidgets macros
 // ----------------------------------------------------------------------------
@@ -121,54 +168,8 @@ bool MyApp::OnInit()
         tmp.ToLong(&lng);
     }
 
-    static const wxLanguage langIds[] =
-    {
-        wxLANGUAGE_DEFAULT,
-        wxLANGUAGE_FRENCH,
-        wxLANGUAGE_GERMAN,
-        wxLANGUAGE_RUSSIAN,
-        wxLANGUAGE_BULGARIAN,
-        wxLANGUAGE_CZECH,
-        wxLANGUAGE_POLISH,
-        wxLANGUAGE_SWEDISH,
-#if wxUSE_UNICODE || defined(__WXMOTIF__)
-        wxLANGUAGE_JAPANESE,
-#endif
-#if wxUSE_UNICODE
-        wxLANGUAGE_GEORGIAN,
-#endif
-        wxLANGUAGE_ENGLISH,
-        wxLANGUAGE_ENGLISH_US
-    };
-
     if ( lng == -1 )
     {
-        // note that it makes no sense to translate these strings, they are
-        // shown before we set the locale anyhow
-        const wxString langNames[] =
-        {
-            _T("System default"),
-            _T("French"),
-            _T("German"),
-            _T("Russian"),
-            _T("Bulgarian"),
-            _T("Czech"),
-            _T("Polish"),
-            _T("Swedish"),
-#if wxUSE_UNICODE || defined(__WXMOTIF__)
-            _T("Japanese"),
-#endif
-#if wxUSE_UNICODE
-            _T("Georgian"),
-#endif
-            _T("English"),
-            _T("English (U.S.)")
-        };
-
-        // the arrays should be in sync
-        wxCOMPILE_TIME_ASSERT( WXSIZEOF(langNames) == WXSIZEOF(langIds),
-                               LangArraysMismatch );
-
         lng = wxGetSingleChoiceIndex
               (
                 _T("Please choose language:"),
