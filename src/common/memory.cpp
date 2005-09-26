@@ -907,10 +907,11 @@ private:
 
 static MemoryCriticalSection memLocker;
 
-#endif
+#endif // USE_THREADSAFE_MEMORY_ALLOCATION
 
-#if !(defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
+
 #ifdef __WXDEBUG__
+#if !(defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
 #if wxUSE_GLOBAL_MEMORY_OPERATORS
 void * operator new (size_t size, wxChar * fileName, int lineNum)
 {
@@ -943,8 +944,8 @@ void operator delete[] (void * buf)
   wxDebugFree(buf, true);
 }
 #endif // wxUSE_ARRAY_MEMORY_OPERATORS
-#endif // !(defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
 #endif // wxUSE_GLOBAL_MEMORY_OPERATORS
+#endif // !(defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
 
 // TODO: store whether this is a vector or not.
 void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool WXUNUSED(isVect) )
