@@ -14,6 +14,7 @@
 
 #include "wx/listctrl.h"
 #include "wx/datetime.h"
+#include "wx/filefn.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -183,7 +184,7 @@ public:
     void SetNewName( const wxString &filePath, const wxString &fileName );
 
     // Get the size of the file in bytes
-    long GetSize() const { return m_size; }
+    wxFileOffset GetSize() const { return m_size; }
     // Get the type of file, either file extension or <DIR>, <LINK>, <DRIVE>
     wxString GetFileType() const;
     // get the last modification time
@@ -231,12 +232,12 @@ public:
 protected:
     wxString m_fileName;
     wxString   m_filePath;
-    long     m_size;
+    wxFileOffset m_size;
     wxDateTime m_dateTime;
     wxString m_permissions;
     int      m_type;
-    int        m_image;
-    
+    int      m_image;
+
 private:
     void Init();
 };
