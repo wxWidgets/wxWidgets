@@ -2743,8 +2743,32 @@ if test "$wxUSE_GUI" = "yes"; then
 
                 dnl detect GTK2
                 wx_cv_lib_gtk=
-                if test "x$wxGTK_VERSION" != "x1"; then
+                if test "x$wxGTK_VERSION" != "x1"
+                then
+                    dnl The gthread.pc that ships with solaris returns '-mt',
+                    dnl it's correct for Sun CC, but gcc requires '-pthreads'.
+                    dnl So disable the compile check and remove the -mt below.
+                    case "${host}" in
+                        *-*-solaris2* )
+                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
+		                enable_gtktest=no
+                            fi
+                    esac
+
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+
+                    dnl Remove the '-mt' for gcc on solaris
+                    case "${host}" in
+                        *-*-solaris2* )
+                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
+                                GTK_CFLAGS=`echo $GTK_CFLAGS | sed 's/-mt//'`
+                                GTK_LIBS=`echo $GTK_LIBS | sed 's/-mt//'`
+                            fi
+                            dnl solaris also requires -lX11 for static lib
+                            if test "$wxUSE_SHARED" != "yes"; then
+                                GTK_LIBS="$GTK_LIBS -lX11"
+                            fi
+                    esac
                 fi
 
                 dnl detect GTK1.x
