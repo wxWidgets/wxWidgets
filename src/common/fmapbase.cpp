@@ -209,7 +209,7 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][10] =
       wxT("646"), wxT("roman8"), wxT( "" ), NULL },
 
     { wxT( "BIG5" ), NULL },
-    { wxT( "shift-jis" ), wxT( "shift_jis" ), wxT( "sjis" ), NULL },
+    { wxT( "SJIS" ), wxT( "SHIFT-JIS" ), wxT( "SHIFT_JIS" ), NULL },
     { wxT( "GB2312" ), NULL },
 };
 
