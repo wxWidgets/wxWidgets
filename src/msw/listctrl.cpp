@@ -1115,9 +1115,9 @@ int wxListCtrl::GetSelectedItemCount() const
 // Gets the text colour of the listview
 wxColour wxListCtrl::GetTextColour() const
 {
-    COLORREF ref = ListView_GetTextColor(GetHwnd());
-    wxColour col(GetRValue(ref), GetGValue(ref), GetBValue(ref));
-    return col;
+    // Use GetDefaultAttributes instead of ListView_GetTextColor because
+    // the latter seems to return black all the time (instead of the theme color)
+    return GetDefaultAttributes().colFg;
 }
 
 // Sets the text colour of the listview
