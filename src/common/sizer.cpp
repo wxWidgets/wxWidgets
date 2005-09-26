@@ -20,6 +20,7 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/intl.h"
+    #include "wx/math.h"
 #endif // WX_PRECOMP
 
 #include "wx/sizer.h"
@@ -265,7 +266,7 @@ wxSize wxSizerItem::CalcMin()
 
         // if we have to preserve aspect ratio _AND_ this is
         // the first-time calculation, consider ret to be initial size
-        if ((m_flag & wxSHAPED) && !m_ratio)
+        if ( (m_flag & wxSHAPED) && wxIsNullDouble(m_ratio) )
             SetRatio(m_minSize);
     }
     else if ( IsWindow() )
