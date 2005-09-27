@@ -50,7 +50,7 @@ c) update configure.in
    Here you need to add DEFAULT_wxUSE_FOO define. It should be added in the
    block beginning after WX_ARG_CACHE_INIT line and should default to "no" for
    "if DEBUG_CONFIGURE = 1" branch (this is used for absolutely minimal builds)
-   and the same as default valye in setup_inc.h in the "else" branch.
+   and the same as default value in setup_inc.h in the "else" branch.
 
    You also need to add a WX_ARG_ENABLE (or, if new functionality can be
    reasonably described as support for a 3rd party library, WX_ARG_WITH)
