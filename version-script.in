@@ -6,39 +6,13 @@
 #       new development branch.
 
 
-# public symbols added in release 2.6.2 (please keep in alphabetical order):
-
-@WX_VERSION_TAG@.2 {
-    global:
-        *wxChoice*GetCurrentSelection*;
-        *wxComboBox*GetCurrentSelection*;
-        *wxDateTime*FromTimezone*;
-        *wxDialog*GetEscapeId*;
-        *wxEVT_MEDIA_LOADED*;
-        *wxGenericListCtrl*SetItemFont*wxFont*;
-        *wxGenericListCtrl*GetItemFont*;
-        *wxGetTextExtent*wxFont*wxString*;
-        *wxImage*HSVValue*;
-        *wxImage*RGBValue*;
-        *wxImage*RotateHue*;
-        *wxLogBuffer*;
-        *wxLongLong*ToDouble*;
-        *wxMediaCtrl*Load*wxURI*wxURI*;
-        *wxMediaCtrl*ShowPlayerControls*wxMediaPlayerControls*;
-        *wxMessageOutputBest*;
-        *wxShadowObject*;
-        *wxStaticText*Wrap*;
-        *wxTopLevelWindowGTK*RequestUserAttention*;
-        *wxWindowMSW*MSWWindowProc*;
-        *wxWizard*FinishLayout*;
-        *wxWizardPage*TransferDataFromWindow*;
-        *wxWizardPage*TransferDataToWindow*;
-        *wxWizardPage*Validate*;
-        *wxXmlResource*ConvertFileNameToURL*wxString*;
-        *wxXmlResource*IsArchive*wxString*;
-        *wxXmlResource*Unload*wxString*;
-        *wxZipFSHandler*Cleanup*;
-};
+# An example:
+#   # public symbols added in release 2.6.2 (please keep in alphabetical order):
+#   
+#   @WX_VERSION_TAG@.2 {
+#       global:
+#           *wxChoice*GetCurrentSelection*;
+#   };
 
 
 # symbols available since the beginning of this branch are only given
