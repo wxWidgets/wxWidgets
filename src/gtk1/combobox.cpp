@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        combobox.cpp
+// Name:        src/gtk/combobox.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -527,7 +527,7 @@ void wxComboBox::SetString(int n, const wxString &text)
     InvalidateBestSize();
 }
 
-int wxComboBox::FindString( const wxString &item ) const
+int wxComboBox::FindString( const wxString &item, bool bCase ) const
 {
     wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid combobox") );
 
@@ -544,7 +544,7 @@ int wxComboBox::FindString( const wxString &item ) const
 #else
         wxString str( label->label );
 #endif
-        if (item == str)
+        if (item.IsSameAs( str , bCase ) )
             return count;
 
         count++;

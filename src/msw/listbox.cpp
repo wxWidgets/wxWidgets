@@ -348,8 +348,12 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
     InvalidateBestSize();
 }
 
-int wxListBox::FindString(const wxString& s) const
+int wxListBox::FindString(const wxString& s, bool bCase) const
 {
+    // back to base class search for not native search type
+    if (bCase)
+       return wxItemContainerImmutable::FindString( s, bCase );
+
     int pos = ListBox_FindStringExact(GetHwnd(), (WPARAM)-1, s);
     if (pos == LB_ERR)
         return wxNOT_FOUND;

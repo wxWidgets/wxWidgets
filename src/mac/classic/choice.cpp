@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        choice.cpp
+// Name:        src/mac/classic/choice.cpp
 // Purpose:     wxChoice
 // Author:      Stefan Csomor
 // Modified by:
@@ -171,16 +171,6 @@ int wxChoice::GetCount() const
     return m_strings.GetCount() ;
 }
 
-int wxChoice::FindString(const wxString& s) const
-{
-    for( int i = 0 ; i < GetCount() ; i++ )
-    {
-        if ( GetString( i ).IsSameAs(s, false) )
-            return i ;
-    }
-    return wxNOT_FOUND ;
-}
-
 void wxChoice::SetString(int n, const wxString& s)
 {
     wxFAIL_MSG(wxT("wxChoice::SetString() not yet implemented"));
@@ -192,7 +182,7 @@ void wxChoice::SetString(int n, const wxString& s)
 
 wxString wxChoice::GetString(int n) const
 {
-    wxCHECK_MSG( n >= 0 && (size_t)n < m_strings.GetCount(), _T(""),
+    wxCHECK_MSG( n >= 0 && (size_t)n < m_strings.GetCount(), wxEmptyString,
                     _T("wxChoice::GetString(): invalid index") );
 
     return m_strings[n] ;

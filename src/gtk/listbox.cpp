@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listbox.cpp
+// Name:        src/gtk/listbox.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -931,7 +931,7 @@ void wxListBox::SetString( int n, const wxString &string )
 
 wxString wxListBox::GetString( int n ) const
 {
-    wxCHECK_MSG( m_list != NULL, wxT(""), wxT("invalid listbox") );
+    wxCHECK_MSG( m_list != NULL, wxEmptyString, wxT("invalid listbox") );
 
     GList *child = g_list_nth( m_list->children, n );
     if (child)
@@ -941,7 +941,7 @@ wxString wxListBox::GetString( int n ) const
 
     wxFAIL_MSG(wxT("wrong listbox index"));
 
-    return wxT("");
+    return wxEmptyString;
 }
 
 int wxListBox::GetCount() const
@@ -952,15 +952,15 @@ int wxListBox::GetCount() const
     return g_list_length(children);
 }
 
-int wxListBox::FindString( const wxString &item ) const
+int wxListBox::FindString( const wxString &item, bool bCase ) const
 {
-    wxCHECK_MSG( m_list != NULL, -1, wxT("invalid listbox") );
+    wxCHECK_MSG( m_list != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
     GList *child = m_list->children;
     int count = 0;
     while (child)
     {
-        if ( GetRealLabel(child) == item )
+        if ( item.IsSameAs( GetRealLabel(child), bCase ) )
             return count;
 
         count++;
@@ -1262,4 +1262,3 @@ wxListBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 }
 
 #endif // wxUSE_LISTBOX
-

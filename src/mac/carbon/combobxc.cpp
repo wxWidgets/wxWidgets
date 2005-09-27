@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        combobox.cpp
+// Name:        src/mac/carbon/combobox.cpp
 // Purpose:     wxComboBox class
 // Author:      Stefan Csomor
 // Modified by:
@@ -677,17 +677,17 @@ void wxComboBox::SetSelection(int n)
 #endif
 }
 
-int wxComboBox::FindString(const wxString& s) const
+int wxComboBox::FindString(const wxString& s, bool bCase) const
 {
 #if USE_HICOMBOBOX
     for( int i = 0 ; i < GetCount() ; i++ )
     {
-        if ( GetString( i ).IsSameAs(s, false) )
+        if ( GetString( i ).IsSameAs(s, bCase) )
             return i ;
     }
     return wxNOT_FOUND ;
 #else
-    return m_choice->FindString( s );
+    return m_choice->FindString( s, bCase );
 #endif
 }
 

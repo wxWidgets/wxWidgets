@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/combobox.cpp
+// Name:        src/univ/combobox.cpp
 // Purpose:     wxComboControl and wxComboBox implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -825,9 +825,9 @@ void wxComboBox::SetString(int n, const wxString& s)
     GetLBox()->SetString(n, s);
 }
 
-int wxComboBox::FindString(const wxString& s) const
+int wxComboBox::FindString(const wxString& s, bool bCase) const
 {
-    return GetLBox()->FindString(s);
+    return GetLBox()->FindString(s, bCase);
 }
 
 void wxComboBox::SetSelection(int n)

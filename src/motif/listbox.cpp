@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        listbox.cpp
+// Name:        src/motif/listbox.cpp
 // Purpose:     wxListBox
 // Author:      Julian Smart
 // Modified by:
@@ -306,8 +306,10 @@ int wxDoFindStringInList(Widget w, const wxString& s)
         return -1;
 }
 
-int wxListBox::FindString(const wxString& s) const
+int wxListBox::FindString(const wxString& s, bool bCase) const
 {
+    // FIXME: back to base class for not supported value of bCase
+
     return wxDoFindStringInList( (Widget)m_mainWidget, s );
 }
 
@@ -712,4 +714,3 @@ wxSize wxListBox::DoGetBestSize() const
 {
     return wxDoGetListBoxBestSize( (Widget)m_mainWidget, this );
 }
-

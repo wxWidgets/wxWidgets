@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/choice.mm
+// Name:        src/cocoa/choice.mm
 // Purpose:     wxChoice
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
-// RCS-ID:      $Id: 
+// Id:          $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -173,8 +173,9 @@ void wxChoice::SetString(int n, const wxString& title)
     [item setTitle:wxNSStringWithWxString(title)];
 }
 
-int wxChoice::FindString(const wxString& title) const
+int wxChoice::FindString(const wxString& title, bool bCase) const
 {
+    // FIXME: use wxItemContainerImmutable::FindString for bCase parameter
     return [(NSPopUpButton*)m_cocoaNSView indexOfItemWithTitle:
         wxNSStringWithWxString(title)];
 }
@@ -186,7 +187,7 @@ int wxChoice::GetSelection() const
 
 int wxChoice::DoAppend(const wxString& title)
 {
-    wxAutoNSAutoreleasePool pool;    
+    wxAutoNSAutoreleasePool pool;
     NSMenu *nsmenu = [(NSPopUpButton*)m_cocoaNSView menu];
     NSMenuItem *item;
     if(m_sortedStrings)

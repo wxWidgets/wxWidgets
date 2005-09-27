@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        listbox.cpp
+// Name:        src/os2/listbox.cpp
 // Purpose:     wxListBox
 // Author:      David Webster
 // Modified by:
@@ -363,30 +363,6 @@ void wxListBox::DoSetItems(
 #endif // wxUSE_OWNER_DRAWN
     ::WinShowWindow(GetHwnd(), TRUE);
 } // end of wxListBox::DoSetItems
-
-int wxListBox::FindString(
-  const wxString&                   rsString
-) const
-{
-    int                             nPos;
-    LONG                            lTextLength;
-    PSZ                             zStr;
-
-
-    for (nPos = 0; nPos < m_nNumItems; nPos++)
-    {
-        lTextLength = LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)nPos, (MPARAM)0));
-        zStr = new char[lTextLength + 1];
-        ::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXT, MPFROM2SHORT(nPos, (SHORT)lTextLength), (MPARAM)zStr);
-        if (rsString == (wxChar*)zStr)
-        {
-            delete [] zStr;
-            break;
-        }
-        delete [] zStr;
-    }
-    return nPos;
-} // end of wxListBox::FindString
 
 void wxListBox::Clear()
 {

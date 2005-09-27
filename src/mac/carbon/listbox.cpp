@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        listbox.cpp
+// Name:        src/mac/carbon/listbox.cpp
 // Purpose:     wxListBox
 // Author:      Stefan Csomor
 // Modified by:
@@ -380,9 +380,8 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
     }
 }
 
-int wxListBox::FindString(const wxString& s) const
+int wxListBox::FindString(const wxString& s, bool bCase) const
 {
-
     if ( s.Right(1) == wxT("*") )
     {
         wxString search = s.Left( s.Length() - 1 ) ;
@@ -394,7 +393,7 @@ int wxListBox::FindString(const wxString& s) const
         {
             wxMacStringToPascal( m_stringArray[i].Left( len ) , s1 ) ;
 
-            if ( EqualString( s1 , s2 , false , false ) )
+            if ( EqualString( s1 , s2 , bCase , false ) )
                 return i ;
         }
         if ( s.Left(1) == wxT("*") && s.Length() > 1 )
@@ -419,11 +418,11 @@ int wxListBox::FindString(const wxString& s) const
         {
             wxMacStringToPascal( m_stringArray[i] , s1 ) ;
 
-            if ( EqualString( s1 , s2 , false , false ) )
+            if ( EqualString( s1 , s2 , bCase , false ) )
                 return i ;
         }
     }
-    return -1;
+    return wxNOT_FOUND;
 }
 
 void wxListBox::Clear()
@@ -872,4 +871,3 @@ void wxListBox::OnChar(wxKeyEvent& event)
 #endif // !TARGET_API_MAC_OSX
 
 #endif
-

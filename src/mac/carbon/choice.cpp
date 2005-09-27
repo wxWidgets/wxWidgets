@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        choice.cpp
+// Name:        src/mac/carbon/choice.cpp
 // Purpose:     wxChoice
 // Author:      Stefan Csomor
 // Modified by:
@@ -80,7 +80,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
         m_strings = wxArrayString(1) ; // autosort
     }
 #endif
-    
+
     for ( int i = 0; i < n; i++ )
     {
         Append(choices[i]);
@@ -97,7 +97,7 @@ int wxChoice::DoAppend(const wxString& item)
 #if wxUSE_STL
     wxArrayString::iterator insertPoint;
     size_t index;
-    
+
     if (GetWindowStyle() & wxCB_SORT)
     {
         insertPoint = std::lower_bound( m_strings.begin(), m_strings.end(), item );
@@ -195,9 +195,9 @@ int wxChoice::GetCount() const
     return m_strings.GetCount() ;
 }
 
-int wxChoice::FindString(const wxString& s) const
+int wxChoice::FindString(const wxString& s, bool bCase ) const
 {
-    return m_strings.Index( s , true , false) ;
+    return m_strings.Index( s , bCase ) ;
 }
 
 void wxChoice::SetString(int n, const wxString& s)
@@ -209,7 +209,7 @@ void wxChoice::SetString(int n, const wxString& s)
 
 wxString wxChoice::GetString(int n) const
 {
-    wxCHECK_MSG( n >= 0 && (size_t)n < m_strings.GetCount(), _T(""),
+    wxCHECK_MSG( n >= 0 && (size_t)n < m_strings.GetCount(), wxEmptyString,
                     _T("wxChoice::GetString(): invalid index") );
 
     return m_strings[n] ;

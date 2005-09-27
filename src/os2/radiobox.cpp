@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobox.cpp
+// Name:        src/os2/radiobox.cpp
 // Purpose:     wxRadioBox
 // Author:      David Webster
 // Modified by:
@@ -686,18 +686,6 @@ bool wxRadioBox::Enable(
     return true;
 } // end of wxRadioBox::Enable
 
-int wxRadioBox::FindString(
-  const wxString&                   rsStr
-) const
-{
-    for (int i = 0; i < m_nNoItems; i++)
-    {
-        if (rsStr == wxGetWindowText(m_ahRadioButtons[i]) )
-            return i;
-    }
-    return wxNOT_FOUND;
-} // end of wxRadioBox::FindString
-
 int wxRadioBox::GetColumnCount() const
 {
     return GetNumHor();
@@ -708,9 +696,7 @@ int wxRadioBox::GetCount() const
     return m_nNoItems;
 } // end of wxRadioBox::GetCount
 
-wxString wxRadioBox::GetLabel(
-  int                               nItem
-) const
+wxString wxRadioBox::GetLabel(int nItem) const
 {
     wxCHECK_MSG( IsValid(nItem), wxEmptyString, wxT("invalid radiobox index") );
 
@@ -1051,11 +1037,9 @@ void wxRadioBox::SetString(
     ::WinSetWindowText((HWND)m_ahRadioButtons[nItem], (PSZ)rsLabel.c_str());
 } // end of wxRadioBox::SetString
 
-bool wxRadioBox::SetStringSelection(
-  const wxString&                   rsStr
-)
+bool wxRadioBox::SetStringSelection(const wxString& rsStr)
 {
-    int                             nSel = FindString(rsStr);
+    int nSel = FindString(rsStr);
 
     if (nSel > -1)
     {

@@ -193,11 +193,6 @@ int wxChoice::GetCount() const
     return 0;
 }
 
-int wxChoice::FindString(const wxString& s) const
-{
-    return 0;
-}
-
 void wxChoice::SetString(int n, const wxString& s)
 {
 }

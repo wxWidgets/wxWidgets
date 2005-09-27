@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        choice.cpp
+// Name:        src/gtk/choice.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -334,9 +334,9 @@ void wxChoice::Delete( int n )
     }
 }
 
-int wxChoice::FindString( const wxString &string ) const
+int wxChoice::FindString( const wxString &string, bool bCase ) const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice") );
+    wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid choice") );
 
     // If you read this code once and you think you understand
     // it, then you are very wrong. Robert Roebling.
@@ -360,7 +360,7 @@ int wxChoice::FindString( const wxString &string ) const
 #else
          wxString tmp( label->label );
 #endif
-        if (string == tmp)
+        if (string.IsSameAs( tmp, bCase ))
             return count;
 
         child = child->next;
@@ -372,7 +372,7 @@ int wxChoice::FindString( const wxString &string ) const
 
 int wxChoice::GetSelection() const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice") );
+    wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid choice") );
 
     return m_selection_hack;
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        combobox.cpp
+// Name:        src/mac/carbon/combobox.cpp
 // Purpose:     wxComboBox class
 // Author:      Stefan Csomor
 // Modified by:
@@ -85,7 +85,7 @@ protected:
         if (m_cb->GetEventHandler()->ProcessEvent(kevt))
             // If the event was handled and not skipped then we're done
             return;
-        
+
         if ( event.GetKeyCode() == WXK_RETURN )
         {
             wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_cb->GetId());
@@ -136,14 +136,14 @@ protected:
         if (! m_cb->GetEventHandler()->ProcessEvent(event))
             event.Skip();
     }
-    
+
     void OnText( wxCommandEvent& event )
     {
         event.SetEventObject(m_cb);
         event.SetId(m_cb->GetId());
         if (! m_cb->GetEventHandler()->ProcessEvent(event))
             event.Skip();
-    }        
+    }
 
 private:
     wxComboBox *m_cb;
@@ -381,7 +381,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     SetBestSize(size);   // Needed because it is a wxControlWithItems
     SetStringSelection(value);
-    
+
     return true;
 }
 
@@ -568,9 +568,9 @@ void wxComboBox::SetSelection(int n)
     }
 }
 
-int wxComboBox::FindString(const wxString& s) const
+int wxComboBox::FindString(const wxString& s, bool bCase) const
 {
-    return m_choice->FindString( s );
+    return m_choice->FindString( s, bCase );
 }
 
 wxString wxComboBox::GetString(int n) const

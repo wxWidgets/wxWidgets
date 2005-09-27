@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobox.cpp
+// Name:        src/gtk/radiobox.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -218,7 +218,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         num_of_cols = num_per_major;
         num_of_rows = m_majorDim;
     }
-    
+
     GtkRadioButton *m_radio = (GtkRadioButton*) NULL;
 
     GtkWidget *table = gtk_table_new( num_of_rows, num_of_cols, FALSE );
@@ -226,7 +226,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     gtk_table_set_row_spacings( GTK_TABLE(table), 1 );
     gtk_widget_show( table );
     gtk_container_add( GTK_CONTAINER(m_widget), table );
-    
+
     wxString label;
     GSList *radio_button_group = (GSList *) NULL;
     for (int i = 0; i < n; i++)
@@ -255,8 +255,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             int right = (i%num_of_cols) + 1;
             int top = i/num_of_cols;
             int bottom = (i/num_of_cols)+1;
-            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom, 
-                  GTK_FILL, GTK_FILL, 1, 1 ); 
+            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom,
+                  GTK_FILL, GTK_FILL, 1, 1 );
         }
         else
         {
@@ -264,8 +264,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             int right = (i/num_of_rows) + 1;
             int top = i%num_of_rows;
             int bottom = (i%num_of_rows)+1;
-            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom, 
-                  GTK_FILL, GTK_FILL, 1, 1 ); 
+            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom,
+                  GTK_FILL, GTK_FILL, 1, 1 );
         }
 
         ConnectWidget( GTK_WIDGET(m_radio) );
@@ -328,7 +328,7 @@ bool wxRadioBox::Show( bool show )
     return true;
 }
 
-int wxRadioBox::FindString( const wxString &find ) const
+int wxRadioBox::FindString( const wxString &find, bool bCase ) const
 {
     wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid radiobox") );
 
@@ -343,7 +343,7 @@ int wxRadioBox::FindString( const wxString &find ) const
 #else
         wxString str( label->label );
 #endif
-        if (find == str)
+        if (find.IsSameAs( str, bCase ))
             return count;
 
         count++;
@@ -678,4 +678,3 @@ void wxRadioBox::SetLabel( int item, const wxString& label )
 #endif // WXWIN_COMPATIBILITY_2_2
 
 #endif // wxUSE_RADIOBOX
-

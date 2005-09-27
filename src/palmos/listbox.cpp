@@ -190,11 +190,6 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 {
 }
 
-int wxListBox::FindString(const wxString& s) const
-{
-    return wxNOT_FOUND;
-}
-
 void wxListBox::Clear()
 {
 }
