@@ -250,7 +250,7 @@ protected:
     bool m_isCurrent:1;
 
 #ifdef __WXMSW__
-protected:
+public:
     // override MSWWindowProc() to process WM_NCHITTEST
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 #endif // __WXMSW__
@@ -273,4 +273,3 @@ private:
 };
 
 #endif // _WX_UNIV_WINDOW_H_
-
