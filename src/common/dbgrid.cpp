@@ -723,7 +723,7 @@ bool wxDbGridTableBase::Writeback() const
 
 #include "wx/arrimpl.cpp"
 
-WX_DEFINE_EXPORTED_OBJARRAY(keyarray);
+WX_DEFINE_EXPORTED_OBJARRAY(keyarray)
 
 #endif  // #if wxUSE_GRID
 #endif  // #if wxUSE_ODBC
