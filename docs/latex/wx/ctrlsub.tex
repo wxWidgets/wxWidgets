@@ -107,13 +107,15 @@ items in the control.
 
 \membersection{wxControlWithItems::FindString}\label{wxcontrolwithitemsfindstring}
 
-\func{int}{FindString}{\param{const wxString\& }{string}}
+\func{int}{FindString}{\param{const wxString\& }{string}, \param{bool}{ caseSensitive = false}}
 
 Finds an item whose label matches the given string.
 
 \wxheading{Parameters}
 
 \docparam{string}{String to find.}
+
+\docparam{caseSensitive}{Whether search is case sensitive (default is not).}
 
 \wxheading{Return value}
 
