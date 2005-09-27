@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        choice.h
+// Name:        wx/gtk/choice.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -70,7 +70,7 @@ public:
     void SetSelection( int n );
 
     virtual int GetCount() const;
-    int FindString( const wxString& string ) const;
+    virtual int FindString(const wxString& s, bool bCase = false) const;
     wxString GetString( int n ) const;
     void SetString( int n, const wxString& string );
 
@@ -102,8 +102,8 @@ private:
     wxSortedArrayString *m_strings;
 
 public:
-    // this circumvents a GTK+ 2.0 bug so that the selection is 
-    // invalidated properly 
+    // this circumvents a GTK+ 2.0 bug so that the selection is
+    // invalidated properly
     int m_selection_hack;
 
 private:

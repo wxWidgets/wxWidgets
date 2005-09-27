@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listbox.h
+// Name:        wx/mac/classic/listbox.h
 // Purpose:     wxListBox class
 // Author:      Stefan Csomor
 // Modified by:
@@ -82,7 +82,7 @@ public:
 
     virtual ~wxListBox();
     virtual void Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL);
-    
+
     // implement base class pure virtuals
     virtual void Clear();
     virtual void Delete(int n);
@@ -90,7 +90,7 @@ public:
     virtual int GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& s);
-    virtual int FindString(const wxString& s) const;
+    virtual int FindString(const wxString& s, bool bCase = false) const;
 
     virtual bool IsSelected(int n) const;
     virtual void DoSetSelection(int n, bool select);
@@ -153,7 +153,7 @@ protected:
     bool HasMultipleSelection() const;
 
     // free memory (common part of Clear() and dtor)
-    // prevent collision with some BSD definitions of macro Free()   
+    // prevent collision with some BSD definitions of macro Free()
     void FreeData();
 
     int m_noItems;

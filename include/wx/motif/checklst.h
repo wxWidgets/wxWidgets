@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        checklst.h
+// Name:        wx/motif/checklst.h
 // Purpose:     wxCheckListBox class - a listbox with checkable items
 //              Note: this is an optional class.
 // Author:      Julian Smart
@@ -18,14 +18,14 @@
 class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {
     DECLARE_DYNAMIC_CLASS(wxCheckListBox)
-        
+
 public:
     // ctors
     wxCheckListBox();
     wxCheckListBox(wxWindow *parent, wxWindowID id,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
-        int nStrings = 0, 
+        int nStrings = 0,
         const wxString choices[] = NULL,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
@@ -46,7 +46,7 @@ public:
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxListBoxNameStr);
-    
+
     bool Create(wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
         const wxSize& size,
@@ -54,14 +54,14 @@ public:
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxListBoxNameStr);
-    
+
     // items may be checked
     bool IsChecked(size_t uiIndex) const;
     void Check(size_t uiIndex, bool bCheck = true);
 
     // override base class functions
     virtual int DoAppend(const wxString& item);
-    virtual int FindString(const wxString& s) const;
+    virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual void SetString(int n, const wxString& s);
     virtual wxString GetString(int n) const;
 

@@ -103,8 +103,8 @@ public:
     virtual wxString GetString(int n) const
         { return m_strings->Item(n); }
     virtual void SetString(int n, const wxString& s);
-    virtual int FindString(const wxString& s) const
-        { return m_strings->Index(s); }
+    virtual int FindString(const wxString& s, bool bCase = false) const
+        { return m_strings->Index(s, bCase); }
 
     virtual bool IsSelected(int n) const
         { return m_selections.Index(n) != wxNOT_FOUND; }

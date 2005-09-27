@@ -38,10 +38,6 @@ public:
     // return the item above/below/to the left/right of the given one
     int GetNextItem(int item, wxDirection dir, long style) const;
 
-
-    // implement some of wxItemContainerImmutable functions
-    virtual int FindString(const wxString& s) const;
-
     // deprecated functions
     // --------------------
 

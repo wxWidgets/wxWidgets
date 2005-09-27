@@ -87,7 +87,7 @@ public:
     virtual int GetSelection() const;
     virtual void SetSelection(int n);
 
-    virtual int FindString(const wxString& s) const;
+    virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& s);
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobox.h
+// Name:        wx/motif/radiobox.h
 // Purpose:     wxRadioBox class
 // Author:      Julian Smart
 // Modified by:
@@ -72,7 +72,6 @@ public:
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);
 
-    int FindString(const wxString& s) const;
     void SetSelection(int N);
     int GetSelection() const;
 
@@ -123,4 +122,3 @@ private:
 };
 
 #endif // _WX_MOTIF_RADIOBOX_H_
-

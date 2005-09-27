@@ -4,9 +4,9 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_CHOICE_H__
@@ -85,7 +85,7 @@ public:
     virtual int GetCount() const;
     virtual wxString GetString(int) const;
     virtual void SetString(int, const wxString&);
-    virtual int FindString(const wxString&) const;
+    virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual int GetSelection() const;
     virtual int DoAppend(const wxString&);
     virtual int DoInsert(const wxString&, int);

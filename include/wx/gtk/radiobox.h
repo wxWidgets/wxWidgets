@@ -75,7 +75,7 @@ public:
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);
 
-    int FindString( const wxString& s) const;
+    virtual int FindString(const wxString& s, bool bCase = false) const;
     void SetSelection( int n );
     int GetSelection() const;
 

@@ -44,7 +44,22 @@ public:
     virtual wxString GetString(int n) const = 0;
     wxArrayString GetStrings() const;
     virtual void SetString(int n, const wxString& s) = 0;
-    virtual int FindString(const wxString& s) const = 0;
+
+    // finding string natively is either case sensitive or insensitive
+    // but never both so fall back to this base version for not
+    // supported search type
+    virtual int FindString(const wxString& s, bool bCase = false) const
+    {
+        int count = GetCount();
+
+        for ( int i = 0; i < count ; i ++ )
+        {
+            if (GetString(i).IsSameAs( s , bCase ))
+                return i;
+        }
+
+        return wxNOT_FOUND;
+    }
 
 
     // selection
@@ -208,4 +223,3 @@ inline int wxItemContainer::Number() const
 #endif // wxUSE_CONTROLS
 
 #endif // _WX_CTRLSUB_H_BASE_
-

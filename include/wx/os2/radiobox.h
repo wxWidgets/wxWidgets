@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobox.h
+// Name:        wx/os2/radiobox.h
 // Purpose:     wxRadioBox class
 // Author:      David Webster
 // Modified by:
@@ -99,11 +99,10 @@ public:
                 ,const wxString&      rsName = wxRadioBoxNameStr
                );
 
-    void             Command(wxCommandEvent& rEvent);
-    bool             ContainsHWND(WXHWND hWnd) const;
-    virtual bool     Enable(bool bEnable = true);
-    virtual bool     Enable(int  nItem, bool bEnable = true);
-    int              FindString(const wxString& sStr) const;
+    void Command(wxCommandEvent& rEvent);
+    bool ContainsHWND(WXHWND hWnd) const;
+    virtual bool Enable(bool bEnable = true);
+    virtual bool Enable(int  nItem, bool bEnable = true);
 
     virtual WXHBRUSH OnCtlColor( WXHDC    hDC
                                 ,WXHWND   hWnd

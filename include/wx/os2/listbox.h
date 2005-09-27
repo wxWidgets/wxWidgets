@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listbox.h
+// Name:        wx/os2/listbox.h
 // Purpose:     wxListBox class
 // Author:      David Webster
 // Modified by:
@@ -108,10 +108,7 @@ public:
 
     virtual int           GetCount(void) const;
     virtual wxString      GetString(int n) const;
-    virtual void          SetString( int             n
-                                    ,const wxString& rsString
-                                   );
-    virtual int           FindString(const wxString& rsString) const;
+    virtual void          SetString(int n, const wxString& rsString);
 
     virtual bool          IsSelected(int n) const;
     virtual void          DoSetSelection( int  n

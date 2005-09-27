@@ -26,7 +26,7 @@ class wxCocoaNSComboBox
 public:
     void AssociateNSComboBox(WX_NSComboBox cocoaNSComboBox);
     void DisassociateNSComboBox(WX_NSComboBox cocoaNSComboBox);
-    
+
     virtual void doWxEvent(int nEvent) = 0;
 };
 
@@ -110,7 +110,7 @@ public:
     virtual int GetCount() const;
     virtual wxString GetString(int) const;
     virtual void SetString(int, const wxString&);
-    virtual int FindString(const wxString&) const;
+    virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual int GetSelection() const;
     virtual int DoAppend(const wxString&);
     virtual int DoInsert(const wxString&, int);
