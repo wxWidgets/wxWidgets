@@ -461,6 +461,13 @@ class WXDLLIMPEXP_BASE wxIntegerHash
     WX_HASH_MAP_NAMESPACE::hash<unsigned int> uintHash;
     WX_HASH_MAP_NAMESPACE::hash<short> shortHash;
     WX_HASH_MAP_NAMESPACE::hash<unsigned short> ushortHash;
+
+    size_t longlongHash( wxLongLong_t x ) const
+    {
+        return longHash( wx_truncate_cast(long, x) ) ^
+               longHash( wx_truncate_cast(long, x >> (sizeof(long) * 8)) );
+    }
+
 public:
     wxIntegerHash() { }
     size_t operator()( long x ) const { return longHash( x ); }
@@ -469,6 +476,10 @@ public:
     size_t operator()( unsigned int x ) const { return uintHash( x ); }
     size_t operator()( short x ) const { return shortHash( x ); }
     size_t operator()( unsigned short x ) const { return ushortHash( x ); }
+#if defined wxLongLong_t && !defined wxLongLongIsLong
+    size_t operator()( wxLongLong_t x ) const { return longlongHash(x); }
+    size_t operator()( wxULongLong_t x ) const { return longlongHash(x); }
+#endif
 
     wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
 };
@@ -486,6 +497,10 @@ public:
     unsigned long operator()( unsigned int x ) const { return x; }
     unsigned long operator()( short x ) const { return (unsigned long)x; }
     unsigned long operator()( unsigned short x ) const { return x; }
+#if defined wxLongLong_t && !defined wxLongLongIsLong
+    wxULongLong_t operator()( wxLongLong_t x ) const { return wx_static_cast(wxULongLong_t, x); }
+    wxULongLong_t operator()( wxULongLong_t x ) const { return x; }
+#endif
 
     wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
 };
@@ -502,6 +517,10 @@ public:
     bool operator()( unsigned int a, unsigned int b ) const { return a == b; }
     bool operator()( short a, short b ) const { return a == b; }
     bool operator()( unsigned short a, unsigned short b ) const { return a == b; }
+#if defined wxLongLong_t && !defined wxLongLongIsLong
+    bool operator()( wxLongLong_t a, wxLongLong_t b ) const { return a == b; }
+    bool operator()( wxULongLong_t a, wxULongLong_t b ) const { return a == b; }
+#endif
 
     wxIntegerEqual& operator=(const wxIntegerEqual&) { return *this; }
 };
