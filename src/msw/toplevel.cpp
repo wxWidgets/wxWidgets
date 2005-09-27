@@ -529,7 +529,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     // focus rectangles) work under Win2k+
     if ( ret )
     {
-        MSWUpdateUIState();
+        MSWUpdateUIState(UIS_INITIALIZE);
     }
 
     // Note: if we include PocketPC in this test, dialogs can fail to show up,

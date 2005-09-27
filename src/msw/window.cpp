@@ -806,7 +806,7 @@ void wxWindowMSW::WarpPointer(int x, int y)
     }
 }
 
-void wxWindowMSW::MSWUpdateUIState()
+void wxWindowMSW::MSWUpdateUIState(int action)
 {
     // WM_UPDATEUISTATE only appeared in Windows 2000 so it can do us no good
     // to use it on older systems -- and could possibly do some harm
@@ -824,8 +824,7 @@ void wxWindowMSW::MSWUpdateUIState()
         //     include just one UISF_XXX or both, both are affected, no idea
         //     why
         ::SendMessage(GetHwnd(), WM_UPDATEUISTATE,
-                        MAKEWPARAM(UIS_INITIALIZE,
-                                   UISF_HIDEFOCUS | UISF_HIDEACCEL), 0);
+                      MAKEWPARAM(action, UISF_HIDEFOCUS | UISF_HIDEACCEL), 0);
     }
 }
 
@@ -2084,7 +2083,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                     // this by default, we need to manually send this message
                     // so that controls could change their appearance
                     // appropriately
-                    MSWUpdateUIState();
+                    MSWUpdateUIState(UIS_CLEAR);
 
                     return true;
                 }

@@ -39,7 +39,9 @@
 #endif
 
 // Needed by toplevel.cpp
-#ifndef UIS_INITIALIZE
+#ifndef UIS_SET
+    #define UIS_SET         1
+    #define UIS_CLEAR       2
     #define UIS_INITIALIZE  3
 #endif
 

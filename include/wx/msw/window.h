@@ -488,7 +488,9 @@ protected:
     bool DoEraseBackground(WXHDC hDC);
 
     // generate WM_UPDATEUISTATE if it's needed for the OS we're running under
-    void MSWUpdateUIState();
+    //
+    // the parameter should be one of UIS_XXX constants
+    void MSWUpdateUIState(int action);
 
 private:
     // common part of all ctors
