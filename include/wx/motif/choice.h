@@ -80,7 +80,6 @@ public:
     virtual wxClientData* DoGetItemClientObject(int n) const;
     virtual int GetSelection() const;
     virtual void Delete(int n);
-    virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual void Clear();
     virtual void SetString(int n, const wxString& s);
     virtual wxString GetString(int n) const;
