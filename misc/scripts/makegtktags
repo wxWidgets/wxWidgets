@@ -1,5 +1,5 @@
 #!/bin/sh
-ctags --c-types=+x --totals --language-force=c++ -I WXDLLEXPORT \
+ctags --totals --language-force=c++ -I WXDLLEXPORT \
 	include/wx/*.h \
 	include/wx/gtk/*.h \
 	include/wx/generic/*.h \
