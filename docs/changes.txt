@@ -2,6 +2,14 @@
 wxWidgets Change Log - For more verbose changes, see the manual
 ---------------------------------------------------------------
 
+2.6.3
+-----
+
+All:
+
+- Fixed crash when loading message catalogs in Unicode build
+
+
 2.6.2
 -----
 

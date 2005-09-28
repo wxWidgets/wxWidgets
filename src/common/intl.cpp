@@ -1260,9 +1260,14 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
             inputConv =
             csConv = new wxCSConv(m_charset);
     }
-    else // no conversion needed
+    else // no need to convert the encoding
     {
+        // we still need the conversion for Unicode build
+#if wxUSE_UNICODE
+        inputConv = wxConvCurrent;
+#else // !wxUSE_UNICODE
         inputConv = NULL;
+#endif
     }
 
     // conversion to apply to msgid strings before looking them up: we only
