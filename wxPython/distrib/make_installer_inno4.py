@@ -403,7 +403,7 @@ Source: "demo\data\*.mpg";                  DestDir: "{app}\demo\data";
 ;;Source: "demo\dllwidget\makefile.*";        DestDir: "{app}\demo\dllwidget"; 
 
 Source: "licence\*.txt";                    DestDir: "{app}\docs\licence"; 
-Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\docs"; 
+;;Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\docs"; 
 ;;Source: "%(WXDIR)s\docs\htmlhelp\ogl.chm";  DestDir: "{app}\docs"; 
 Source: "docs\README.txt";                  DestDir: "{app}\docs";  Flags: isreadme; 
 Source: "docs\*.txt";                       DestDir: "{app}\docs"; 
@@ -689,13 +689,11 @@ def main():
     if TOOLS.startswith('/cygdrive'):
         TOOLS = r"c:\TOOLS"  # temporary hack until I convert everything over to bash
     if USING_INNO4:
-        print "Hello world!"
         ISCC = os.path.join(INNO_FOLDER, "iscc.exe")
         ISCC = r'"' + ISCC + '" %s'
         os.system(ISCC % (ISSFILE))
-        #os.system(ISCC % (ISSDEMOFILE))
+        os.system(ISCC % (ISSDEMOFILE))
     else:
-        print "not found..."
         os.system(ISCC % (TOOLS, ISSFILE))
         os.system(ISCC % (TOOLS, ISSDEMOFILE))
     
