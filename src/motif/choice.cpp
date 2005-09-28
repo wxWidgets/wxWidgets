@@ -183,13 +183,25 @@ wxChoice::~wxChoice()
         m_clientDataDict.DestroyData();
 }
 
-int wxChoice::DoAppend(const wxString& item)
+static inline wxChar* MYcopystring(const wxChar* s)
 {
+    wxChar* copy = new wxChar[wxStrlen(s) + 1];
+    return wxStrcpy(copy, s);
+}
+
+int wxChoice::DoInsert(const wxString& item, int pos)
+{
+#ifndef XmNpositionIndex
+    wxCHECK_MSG( pos == GetCount(), -1, wxT("insert not implemented"));
+#endif
     Widget w = XtVaCreateManagedWidget (wxStripMenuCodes(item),
 #if wxUSE_GADGETS
         xmPushButtonGadgetClass, (Widget) m_menuWidget,
 #else
         xmPushButtonWidgetClass, (Widget) m_menuWidget,
+#endif
+#ifdef XmNpositionIndex
+        XmNpositionIndex, pos,
 #endif
         NULL);
 
@@ -198,7 +210,7 @@ int wxChoice::DoAppend(const wxString& item)
     if( m_font.Ok() )
         wxDoChangeFont( w, m_font );
 
-    m_widgetArray.Add(w);
+    m_widgetArray.Insert(w, pos);
 
     char mnem = wxFindMnemonic (item);
     if (mnem != 0)
@@ -217,18 +229,16 @@ int wxChoice::DoAppend(const wxString& item)
             XmNlabelString, text(),
             NULL);
     }
-    m_stringList.Add(item);
+    // need to ditch wxStringList for wxArrayString
+    m_stringList.Insert(pos, MYcopystring(item));
     m_noStrings ++;
 
-    return GetCount() - 1;
+    return pos;
 }
 
-int wxChoice::DoInsert(const wxString& item, int pos)
+int wxChoice::DoAppend(const wxString& item)
 {
-    wxCHECK_MSG(false, -1, wxT("insert not implemented"));
-
-//    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
-//    if (pos == GetCount()) return DoAppend(item);
+    return DoInsert(item, GetCount());
 }
 
 void wxChoice::Delete(int n)
