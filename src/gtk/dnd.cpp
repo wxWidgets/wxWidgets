@@ -507,11 +507,12 @@ GdkAtom wxDropTarget::GetMatchingPair()
     while (child)
     {
         // in GTK+ 1.x GdkAtom was a gulong, but now it's a pointer
-        GdkAtom formatAtom = (GdkAtom)
-#ifndef __WXGTK20__
-                             GPOINTER_TO_INT
+        GdkAtom formatAtom =
+#ifdef __WXGTK20__
+                             (GdkAtom)(child->data);
+#else
+                             GPOINTER_TO_INT(child->data);
 #endif
-                             (child->data);
         wxDataFormat format( formatAtom );
 
 #ifdef __WXDEBUG__
