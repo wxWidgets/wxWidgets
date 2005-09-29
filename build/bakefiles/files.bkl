@@ -2908,9 +2908,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxAdv files not used by wxUniv -->
     <set var="ADVANCED_PLATFORM_NATIVE_SRC" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_SRC)</if>
+        <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_NATIVE_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_HDR)</if>
+        <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_HDR)</if>
     </set>
 
     <set var="ADVANCED_SRC" hints="files">
