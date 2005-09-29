@@ -771,16 +771,20 @@
 #define HAVE_LOCALTIME
 
 /* Define if you have nanosleep() */
+#if __CRTL_VER >= 70320000
+#define HAVE_NANOSLEEP 1
+#else
 #undef HAVE_NANOSLEEP
+#endif
 
 /* Define if you have sched_yield */
-#undef HAVE_SCHED_YIELD
+#define HAVE_SCHED_YIELD 1
 
 /* Define if you have pthread_mutexattr_t and functions to work with it */
-#undef HAVE_PTHREAD_MUTEXATTR_T
+#define HAVE_PTHREAD_MUTEXATTR_T 1
 
 /* Define if you have pthread_mutexattr_settype() declaration */
-#undef HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL
+#define HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL 1
 
 /* Define if you have PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP */
 #undef HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER
@@ -801,16 +805,28 @@
 #define HAVE_PUTENV 1
 
 /* Define if you have the setenv function.  */
+#   if __CRTL_VER >= 70000000
+#define HAVE_SETENV 1
+#else
 #undef HAVE_SETENV
- 
+#endif
+
 /* Define if you have shl_load() */
 #undef HAVE_SHL_LOAD
 
+#if __CRTL_VER >= 70312000
+/* Define if you have snprintf() */
+#define HAVE_SNPRINTF 1
+
+/* Define if you have snprintf() declaration in the header */
+#define HAVE_SNPRINTF_DECL 1
+#else
 /* Define if you have snprintf() */
 #undef HAVE_SNPRINTF
 
 /* Define if you have snprintf() declaration in the header */
 #undef HAVE_SNPRINTF_DECL
+#endif
 
 /* Define if you have a _broken_ snprintf() declaration in the header,
  * with 'char*' for the 3rd parameter instead of 'const char*' */
@@ -837,11 +853,19 @@
 /* Define if you have timegm() function */
 #undef HAVE_TIMEGM
 
+#if __CRTL_VER >= 70312000
+/* Define if you have vsnprintf() */
+#define HAVE_VSNPRINTF 1
+
+/* Define if you have vsnprintf() declaration in the header */
+#define HAVE_VSNPRINTF_DECL 1
+#else
 /* Define if you have vsnprintf() */
 #undef HAVE_VSNPRINTF
 
 /* Define if you have vsnprintf() declaration in the header */
 #undef HAVE_VSNPRINTF_DECL
+#endif
 
 /* Define if you have a _broken_ vsnprintf() declaration in the header,
  * with 'char*' for the 3rd parameter instead of 'const char*' */
@@ -905,7 +929,7 @@
 #define HAVE_INET_ADDR 1
 
 /* Define if you have the inet_aton function.  */
-#undef HAVE_INET_ATON
+#define HAVE_INET_ATON 1
 
 /* Define if you have the mktemp function.  */
 #define HAVE_MKTEMP 1
@@ -913,20 +937,12 @@
 /* Define if you have the mkstemp function.  */
 #define HAVE_MKSTEMP 1
 
-/* Define if you have the nanosleep function.  */
-#undef HAVE_NANOSLEEP
-
-/* Define if you have the putenv function.  */
-#define HAVE_PUTENV 1
-
-/* Define if you have the setenv function.  */
-#undef HAVE_SETENV
-
-/* Define if you have the shl_load function.  */
-#undef HAVE_SHL_LOAD
-
 /* Define if you have strtok_r function. */
+#   if __CRTL_VER >= 70301000
+#define HAVE_STRTOK_R 1
+#else
 #undef HAVE_STRTOK_R
+#endif
 
 /* Define if you have thr_setconcurrency function */
 #undef HAVE_THR_SETCONCURRENCY
@@ -938,13 +954,25 @@
 #define HAVE_USLEEP 1
 
 /* Define if you have the <X11/XKBlib.h> header file.  */
+#if __CRTL_VER >= 80200000
+#define HAVE_X11_XKBLIB_H 1
+#else
 #undef HAVE_X11_XKBLIB_H
+#endif
 
 /* Define if you have the fnmatch() function */
+#if __CRTL_VER >= 70320000
+#define HAVE_FNMATCH 1
+#else
 #undef HAVE_FNMATCH
+#endif
 
 /* Define if you have the <fnmatch.h> header file.  */
+#if __CRTL_VER >= 70320000
+#define HAVE_FNMATCH_H 1
+#else
 #undef HAVE_FNMATCH_H
+#endif
 
 /* Define if you have the <iostream> header file.  */
 #undef HAVE_IOSTREAM
@@ -968,7 +996,11 @@
 #undef HAVE_WCSTR_H
 
 /* Define if you have the <wctype.h> header file.  */
+#if __CRTL_VER >= 70312000
+#define HAVE_WCTYPE_H 1
+#else
 #undef HAVE_WCTYPE_H
+#endif
 
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #define HAVE_ICONV_H 1
