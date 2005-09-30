@@ -13,10 +13,13 @@
 
 #if wxUSE_MDI
 
-#include "wx/mdi.h"
-#include "wx/menu.h"
-#include "wx/settings.h"
-#include "wx/log.h"
+#ifndef WX_PRECOMP
+    #include "wx/mdi.h"
+    #include "wx/log.h"
+    #include "wx/menu.h"
+    #include "wx/settings.h"
+    #include "wx/statusbr.h"
+#endif
 
 #include "wx/mac/private.h"
 #include "wx/mac/uma.h"
