@@ -114,18 +114,7 @@ void wxMenu::Break()
 // function appends a new item or submenu to the menu
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *pItem)
 {
-    if (m_menuWidget)
-    {
-        // this is a dynamic Append
-        pItem->CreateItem(m_menuWidget, GetMenuBar(), m_topLevelMenu);
-    }
-
-    if ( pItem->IsSubMenu() )
-    {
-        pItem->GetSubMenu()->m_topLevelMenu = m_topLevelMenu;
-    }
-
-    return wxMenuBase::DoAppend(pItem);
+    return DoInsert(GetMenuItemCount(), pItem);
 }
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
@@ -137,12 +126,22 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
 wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
-    if ( wxMenuBase::DoInsert(pos, item) )
-        return item;
+    if (m_menuWidget)
+    {
+        // this is a dynamic Append
+#ifndef XmNpositionIndex
+    wxCHECK_MSG( pos == GetMenuItemCount(), -1, wxT("insert not implemented"));
+#endif
+        item->CreateItem(m_menuWidget, GetMenuBar(), m_topLevelMenu, pos);
+    }
 
-    wxFAIL_MSG(wxT("DoInsert not implemented; or error in wxMenuBase::DoInsert"));
+    if ( item->IsSubMenu() )
+    {
+        item->GetSubMenu()->m_topLevelMenu = m_topLevelMenu;
+    }
 
-    return NULL;
+    return pos == GetMenuItemCount() ? wxMenuBase::DoAppend(item) : 
+                                       wxMenuBase::DoInsert(pos, item);
 }
 
 void wxMenu::SetTitle(const wxString& label)
@@ -267,30 +266,27 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
 
 bool wxMenuBar::Append(wxMenu * menu, const wxString& title)
 {
+    return Insert(GetMenuCount(), menu, title);
+}
+
+bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
+{
+    wxCHECK_MSG( pos <= GetMenuCount(), false, wxT("invalid position") );
     wxCHECK_MSG( menu, false, wxT("invalid menu") );
     wxCHECK_MSG( !menu->GetParent() && !menu->GetButtonWidget(), false,
                  wxT("menu already appended") );
 
     if ( m_menuBarFrame )
     {
-        WXWidget w = menu->CreateMenu(this, GetMainWidget(), menu, title, true);
+        WXWidget w = menu->CreateMenu(this, GetMainWidget(), menu,
+                                      pos, title, true);
         wxCHECK_MSG( w, false, wxT("failed to create menu") );
         menu->SetButtonWidget(w);
     }
 
-    m_titles.Add(title);
+    m_titles.Insert(title, pos);
 
-    return wxMenuBarBase::Append(menu, title);
-}
-
-bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
-{
-    if ( !wxMenuBarBase::Insert(pos, menu, title) )
-        return false;
-
-    wxFAIL_MSG(wxT("TODO"));
-
-    return false;
+    return wxMenuBarBase::Insert(pos, menu, title);
 }
 
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
@@ -373,7 +369,7 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
     {
         wxMenu *menu = GetMenu(i);
         wxString title(m_titles[i]);
-        menu->SetButtonWidget(menu->CreateMenu (this, menuBarW, menu, title, true));
+        menu->SetButtonWidget(menu->CreateMenu (this, menuBarW, menu, i, title, true));
 
         if (strcmp (wxStripMenuCodes(title), "Help") == 0)
             XtVaSetValues ((Widget) menuBarW, XmNmenuHelpWidget, (Widget) menu->GetButtonWidget(), NULL);
@@ -469,7 +465,7 @@ void wxMenu::DestroyWidgetAndDetach()
 *
 */
 
-WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topMenu, const wxString& title, bool pullDown)
+WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topMenu, size_t index, const wxString& title, bool pullDown)
 {
     Widget menu = (Widget) 0;
     Widget buttonWidget = (Widget) 0;
@@ -512,13 +508,14 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
 
     m_topLevelMenu = topMenu;
 
+    size_t i = 0;
     for ( wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
           node;
-          node = node->GetNext() )
+          node = node->GetNext(), ++i )
     {
         wxMenuItem *item = node->GetData();
 
-        item->CreateItem(menu, menuBar, topMenu);
+        item->CreateItem(menu, menuBar, topMenu, i);
     }
 
     SetBackgroundColour(m_backgroundColour);

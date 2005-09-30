@@ -44,7 +44,8 @@ public:
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
     
     // implementation from now on
-    void CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMenu);
+    void CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMenu,
+                     size_t index);
     void DestroyItem(bool full);
     
     WXWidget GetButtonWidget() const { return m_buttonWidget; }

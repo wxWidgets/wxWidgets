@@ -62,7 +62,7 @@ public:
     void HidePopup();
     
     WXWidget CreateMenu(wxMenuBar *menuBar, WXWidget parent, wxMenu *topMenu,
-        const wxString& title = wxEmptyString,
+        size_t index, const wxString& title = wxEmptyString,
         bool isPulldown = false);
     
     // For popups, need to destroy, then recreate menu for a different (or
