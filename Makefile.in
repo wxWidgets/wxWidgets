@@ -63,9 +63,10 @@ HOST_SUFFIX = @HOST_SUFFIX@
 ### Variables: ###
 
 DESTDIR = 
-WX_RELEASE = 2.6
-WX_RELEASE_NODOT = 26
-WX_VERSION = $(WX_RELEASE).2
+WX_RELEASE = 2.7
+WX_RELEASE_NODOT = 27
+WX_VERSION = $(WX_RELEASE).0
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 LIBDIRNAME = $(top_builddir)lib
 WXREGEX_CFLAGS = -D__WX$(TOOLKIT)__ $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
@@ -268,6 +269,7 @@ ALL_HEADERS =  \
 	wx/ipcbase.h \
 	wx/isql.h \
 	wx/isqlext.h \
+	wx/link.h \
 	wx/list.h \
 	wx/listimpl.cpp \
 	wx/log.h \
@@ -392,6 +394,7 @@ ALL_BASE_HEADERS =  \
 	wx/ipcbase.h \
 	wx/isql.h \
 	wx/isqlext.h \
+	wx/link.h \
 	wx/list.h \
 	wx/listimpl.cpp \
 	wx/log.h \
@@ -449,6 +452,7 @@ ALL_BASE_HEADERS =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/pipe.h \
+	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
 	wx/msw/apptrait.h \
@@ -1337,7 +1341,7 @@ LOCALE_MSW_LINGUAS =  it
 @COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_PLUGINS_0@PLUGIN_ADV_EXTRALIBS = $(EXTRALIBS_SDL)
 @COND_PLATFORM_MACOSX_1@WXMACVERSION_CMD = \
-@COND_PLATFORM_MACOSX_1@	-compatibility_version 2.0 -current_version 2.0
+@COND_PLATFORM_MACOSX_1@	-compatibility_version 0.0 -current_version 0.0
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -1350,10 +1354,10 @@ LOCALE_MSW_LINGUAS =  it
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIX = wx_base$(WXBASEPORT)
 @COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIX = \
-@COND_PLATFORM_WIN32_1@	wxbase$(WXBASEPORT)$(WX_RELEASE_NODOT)
+@COND_PLATFORM_WIN32_1@	wxbase$(WXBASEPORT)$(WX_VERSION_NODOT)
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
 @COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = \
-@COND_PLATFORM_WIN32_1@	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)
+@COND_PLATFORM_WIN32_1@	wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)
 @COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -$(WX_RELEASE)
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 COND_WXUSE_REGEX_BUILTIN___wxregex___depname = \
@@ -1401,8 +1405,8 @@ COND_WXUSE_EXPAT_BUILTIN___wxexpat___depname = \
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
-@COND_PLATFORM_UNIX_0@PLUGIN_VERSION0 = $(WX_RELEASE_NODOT)
-@COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = $(WX_RELEASE)
+@COND_PLATFORM_UNIX_0@PLUGIN_VERSION0 = $(WX_VERSION_NODOT)
+@COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = $(WX_VERSION)
 @COND_PLATFORM_UNIX_0@PLUGVERDELIM = 
 @COND_PLATFORM_UNIX_1@PLUGVERDELIM = -
 @COND_BUILD_DEBUG_UNICODE_0@PLUGINSUFFIX = d
@@ -1428,6 +1432,7 @@ COND_TOOLKIT__BASE_MACOSX_HDR =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/pipe.h \
+	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
 	wx/mac/corefoundation/cfstring.h \
@@ -1440,6 +1445,7 @@ COND_TOOLKIT_COCOA_BASE_MACOSX_HDR =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/pipe.h \
+	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
 	wx/mac/corefoundation/cfstring.h \
@@ -1452,6 +1458,7 @@ COND_TOOLKIT_GTK_BASE_MACOSX_HDR =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/pipe.h \
+	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
 	wx/mac/corefoundation/cfstring.h \
@@ -1472,6 +1479,7 @@ COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/pipe.h \
+	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
 	wx/mac/corefoundation/cfstring.h \
@@ -1484,6 +1492,7 @@ COND_TOOLKIT_X11_BASE_MACOSX_HDR =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/pipe.h \
+	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
 	wx/mac/corefoundation/cfstring.h \
@@ -1498,6 +1507,7 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/pipe.h \
+	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
@@ -2353,6 +2363,7 @@ COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_X11@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
+@COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/calctrl.h \
 	wx/dateevt.h \
@@ -4189,6 +4200,8 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS \
 @COND_TOOLKIT_MSW@	= monodll_datectrl.o
+@COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS \
+@COND_TOOLKIT_WINCE@	= monodll_datectrl.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o 
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
@@ -5656,6 +5669,8 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 \
 @COND_TOOLKIT_MSW@	= monolib_datectrl.o
+@COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 \
+@COND_TOOLKIT_WINCE@	= monolib_datectrl.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o 
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o
@@ -8590,6 +8605,8 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
 @COND_TOOLKIT_MSW@	= advdll_datectrl.o
+@COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
+@COND_TOOLKIT_WINCE@	= advdll_datectrl.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_2 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advdll_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
@@ -8633,6 +8650,8 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
 @COND_TOOLKIT_MSW@	= advlib_datectrl.o
+@COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
+@COND_TOOLKIT_WINCE@	= advlib_datectrl.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_3 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advlib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___mediadll___depname = \
@@ -9268,9 +9287,9 @@ COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@dll___targetsuf3 \
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	= \
-@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).0.2.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).0.0.0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.2.0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@dll___targetsuf3 = -0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf3 = .$(SO_SUFFIX)
 @COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p \
@@ -10738,9 +10757,6 @@ monodll_metal.o: $(srcdir)/src/univ/themes/metal.cpp $(MONODLL_ODEP)
 
 monodll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/themes/win32.cpp
-
-monodll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
 monodll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
@@ -13724,6 +13740,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1@monodll_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
 
@@ -14203,9 +14225,6 @@ monolib_metal.o: $(srcdir)/src/univ/themes/metal.cpp $(MONOLIB_ODEP)
 
 monolib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/themes/win32.cpp
-
-monolib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
 monolib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
@@ -17188,6 +17207,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_USE_GUI_1@monolib_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
@@ -23456,9 +23481,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_49)  $(__EXCEPTIONS_DEFINE_p_49) $(__RTTI_DEFINE_p_49) $(__THREAD_DEFINE_p_49)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
 
-advdll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
-
 advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
@@ -23591,8 +23613,11 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK@advdll_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
 
-advlib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
+@COND_TOOLKIT_MSW_WXUNIV_0@advdll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advdll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
 advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
@@ -23725,6 +23750,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_GTK@advlib_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_MSW_WXUNIV_0@advlib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advlib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
 mediadll_version_rc.o: $(srcdir)/src/msw/version.rc $(MEDIADLL_ODEP)
 	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_49)  $(__EXCEPTIONS_DEFINE_p_49) $(__RTTI_DEFINE_p_49) $(__THREAD_DEFINE_p_49)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
