@@ -1282,7 +1282,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     {
         GdkPixbuf *pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB,
                                            gdk_pixbuf_get_has_alpha(GetPixbuf()),
-                                           8, GetWidth(), GetHeight());
+                                           8, rect.width, rect.height);
         ret.SetPixbuf(pixbuf);
         gdk_pixbuf_copy_area(GetPixbuf(),
                              rect.x, rect.y, rect.width, rect.height,
