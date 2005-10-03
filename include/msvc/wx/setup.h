@@ -54,7 +54,9 @@
             #pragma comment(lib,"wxmsw27ud_adv")
             #pragma comment(lib,"wxmsw27ud_core")
             #pragma comment(lib,"wxmsw27ud_html")
+            #ifdef USE_QA
             #pragma comment(lib,"wxmsw27ud_qa")
+            #endif
             #pragma comment(lib,"wxmsw27ud_xrc")
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27ud_media")
@@ -84,7 +86,9 @@
             #pragma comment(lib,"wxmsw27u_adv")
             #pragma comment(lib,"wxmsw27u_core")
             #pragma comment(lib,"wxmsw27u_html")
+            #ifdef USE_QA
             #pragma comment(lib,"wxmsw27u_qa")
+            #endif
             #pragma comment(lib,"wxmsw27u_xrc")
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27u_media")
@@ -130,7 +134,9 @@
             #pragma comment(lib,"wxmsw27d_adv")
             #pragma comment(lib,"wxmsw27d_core")
             #pragma comment(lib,"wxmsw27d_html")
+            #ifdef USE_QA
             #pragma comment(lib,"wxmsw27d_qa")
+            #endif
             #pragma comment(lib,"wxmsw27d_xrc")
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27d_media")
@@ -160,7 +166,9 @@
             #pragma comment(lib,"wxmsw27_adv")
             #pragma comment(lib,"wxmsw27_core")
             #pragma comment(lib,"wxmsw27_html")
+            #ifdef USE_QA
             #pragma comment(lib,"wxmsw27_qa")
+            #endif
             #pragma comment(lib,"wxmsw27_xrc")
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27_media")
