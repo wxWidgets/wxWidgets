@@ -48,16 +48,16 @@
             #if wxUSE_ZLIB
                 #pragma comment(lib,"wxzlibd")
             #endif
-            #pragma comment(lib,"wxbase26ud")
-            #pragma comment(lib,"wxbase26ud_net")
-            #pragma comment(lib,"wxbase26ud_xml")
-            #pragma comment(lib,"wxmsw26ud_adv")
-            #pragma comment(lib,"wxmsw26ud_core")
-            #pragma comment(lib,"wxmsw26ud_html")
-            #pragma comment(lib,"wxmsw26ud_qa")
-            #pragma comment(lib,"wxmsw26ud_xrc")
+            #pragma comment(lib,"wxbase27ud")
+            #pragma comment(lib,"wxbase27ud_net")
+            #pragma comment(lib,"wxbase27ud_xml")
+            #pragma comment(lib,"wxmsw27ud_adv")
+            #pragma comment(lib,"wxmsw27ud_core")
+            #pragma comment(lib,"wxmsw27ud_html")
+            #pragma comment(lib,"wxmsw27ud_qa")
+            #pragma comment(lib,"wxmsw27ud_xrc")
             #if wxUSE_MEDIACTRL
-                #pragma comment(lib,"wxmsw26ud_media")
+                #pragma comment(lib,"wxmsw27ud_media")
             #endif
         #else // release
             #if wxUSE_XML
@@ -78,16 +78,16 @@
             #if wxUSE_ZLIB
                 #pragma comment(lib,"wxzlib")
             #endif
-            #pragma comment(lib,"wxbase26u")
-            #pragma comment(lib,"wxbase26u_net")
-            #pragma comment(lib,"wxbase26u_xml")
-            #pragma comment(lib,"wxmsw26u_adv")
-            #pragma comment(lib,"wxmsw26u_core")
-            #pragma comment(lib,"wxmsw26u_html")
-            #pragma comment(lib,"wxmsw26u_qa")
-            #pragma comment(lib,"wxmsw26u_xrc")
+            #pragma comment(lib,"wxbase27u")
+            #pragma comment(lib,"wxbase27u_net")
+            #pragma comment(lib,"wxbase27u_xml")
+            #pragma comment(lib,"wxmsw27u_adv")
+            #pragma comment(lib,"wxmsw27u_core")
+            #pragma comment(lib,"wxmsw27u_html")
+            #pragma comment(lib,"wxmsw27u_qa")
+            #pragma comment(lib,"wxmsw27u_xrc")
             #if wxUSE_MEDIACTRL
-                #pragma comment(lib,"wxmsw26u_media")
+                #pragma comment(lib,"wxmsw27u_media")
             #endif
         #endif // debug/release
     #else // !_UNICODE
@@ -124,16 +124,16 @@
             #if wxUSE_ZLIB
                 #pragma comment(lib,"wxzlibd")
             #endif
-            #pragma comment(lib,"wxbase26d")
-            #pragma comment(lib,"wxbase26d_net")
-            #pragma comment(lib,"wxbase26d_xml")
-            #pragma comment(lib,"wxmsw26d_adv")
-            #pragma comment(lib,"wxmsw26d_core")
-            #pragma comment(lib,"wxmsw26d_html")
-            #pragma comment(lib,"wxmsw26d_qa")
-            #pragma comment(lib,"wxmsw26d_xrc")
+            #pragma comment(lib,"wxbase27d")
+            #pragma comment(lib,"wxbase27d_net")
+            #pragma comment(lib,"wxbase27d_xml")
+            #pragma comment(lib,"wxmsw27d_adv")
+            #pragma comment(lib,"wxmsw27d_core")
+            #pragma comment(lib,"wxmsw27d_html")
+            #pragma comment(lib,"wxmsw27d_qa")
+            #pragma comment(lib,"wxmsw27d_xrc")
             #if wxUSE_MEDIACTRL
-                #pragma comment(lib,"wxmsw26d_media")
+                #pragma comment(lib,"wxmsw27d_media")
             #endif
         #else // release
             #if wxUSE_XML
@@ -154,16 +154,16 @@
             #if wxUSE_ZLIB
                 #pragma comment(lib,"wxzlib")
             #endif
-            #pragma comment(lib,"wxbase26")
-            #pragma comment(lib,"wxbase26_net")
-            #pragma comment(lib,"wxbase26_xml")
-            #pragma comment(lib,"wxmsw26_adv")
-            #pragma comment(lib,"wxmsw26_core")
-            #pragma comment(lib,"wxmsw26_html")
-            #pragma comment(lib,"wxmsw26_qa")
-            #pragma comment(lib,"wxmsw26_xrc")
+            #pragma comment(lib,"wxbase27")
+            #pragma comment(lib,"wxbase27_net")
+            #pragma comment(lib,"wxbase27_xml")
+            #pragma comment(lib,"wxmsw27_adv")
+            #pragma comment(lib,"wxmsw27_core")
+            #pragma comment(lib,"wxmsw27_html")
+            #pragma comment(lib,"wxmsw27_qa")
+            #pragma comment(lib,"wxmsw27_xrc")
             #if wxUSE_MEDIACTRL
-                #pragma comment(lib,"wxmsw26_media")
+                #pragma comment(lib,"wxmsw27_media")
             #endif
         #endif // debug/release
     #endif // _UNICODE/!_UNICODE
