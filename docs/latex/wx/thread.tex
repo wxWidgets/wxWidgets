@@ -84,20 +84,20 @@ stack.
 Creates a new thread. The thread object is created in the suspended state, and you
 should call \helpref{Run}{wxthreadrun} to start running it.  You may optionally
 specify the stack size to be allocated to it (Ignored on platforms that don't
-support setting it explicitly, eg. Unices without pthread_attr_setstacksize).
-If you do not specify the stack size, the system's default value is used.
+support setting it explicitly, eg. Unix system without
+\texttt{pthread\_attr\_setstacksize}). If you do not specify the stack size,
+the system's default value is used.
 
 {\bf Warning:} It is a good idea to explicitly specify a value as systems'
-default values vary from just a couple of kByte on some systems (BSD and
-OS/2 systems) to one or several MByte (Windows, Solaris, Linux). So, if you
-have a thread that requires more than just a few kBytes of memory, you will
-have mysterious problems on some platforms but not on the common ones. OTOH
-just indicating a large stack size by default will give you performance
-issues on those systems with small default stack since those typically use
-fully committed memory for the stack.
-If, on the other hand you use lots of threads (say several hundred, which
-often indicates a design flaw), virtual adress space can get tight unless
-you explicitly specify a smaller amount of thread stack space for each
+default values vary from just a couple of KB on some systems (BSD and
+OS/2 systems) to one or several MB (Windows, Solaris, Linux). So, if you
+have a thread that requires more than just a few KB of memory, you will
+have mysterious problems on some platforms but not on the common ones. On the
+other hand, just indicating a large stack size by default will give you
+performance issues on those systems with small default stack since those
+typically use fully committed memory for the stack. On the contrary, if
+use a lot of threads (say several hundred), virtual adress space can get tight
+unless you explicitly specify a smaller amount of thread stack space for each
 thread.
 
 
