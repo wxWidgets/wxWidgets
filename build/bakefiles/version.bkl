@@ -72,7 +72,8 @@
     <!-- FIXME: until libtool scheme is implemented in bakefile -->
     <set var="WXMACVERSION_CMD">
         <if cond="PLATFORM_MACOSX=='1'">
-            -compatibility_version $(WX_AGE).0 -current_version $(WX_AGE).$(WX_REVISION)
+           <!-- Version can't be 0, so add 1 to it to force it to be non null -->
+            -compatibility_version $(int(WX_AGE)+1).0 -current_version $(int(WX_AGE)+1).$(WX_REVISION)
         </if>
     </set>
 
