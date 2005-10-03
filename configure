@@ -1054,6 +1054,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --without-subdirs       don't generate makefiles for samples/demos/...
   --with-gtk[=VERSION]    use GTK+, VERSION can be 2 (default), 1 or "any"
   --with-motif            use Motif/Lesstif
   --with-mac              use Mac OS X
@@ -2565,6 +2566,48 @@ echo "${ECHO_T}no" >&6
           fi
 
 
+	  withstring=without
+          echo "$as_me:$LINENO: checking for --${withstring:-with}-subdirs" >&5
+echo $ECHO_N "checking for --${withstring:-with}-subdirs... $ECHO_C" >&6
+          no_cache=0
+
+# Check whether --with-subdirs or --without-subdirs was given.
+if test "${with_subdirs+set}" = set; then
+  withval="$with_subdirs"
+
+                        if test "$withval" = yes; then
+                          ac_cv_use_subdirs='wxWITH_SUBDIRS=yes'
+                        else
+                          ac_cv_use_subdirs='wxWITH_SUBDIRS=no'
+                        fi
+
+else
+
+                        LINE=`grep "wxWITH_SUBDIRS" ${wx_arg_cache_file}`
+                        if test "x$LINE" != x ; then
+                          eval "DEFAULT_$LINE"
+                        else
+                          no_cache=1
+                        fi
+
+                        ac_cv_use_subdirs='wxWITH_SUBDIRS='$DEFAULT_wxWITH_SUBDIRS
+
+fi;
+
+          eval "$ac_cv_use_subdirs"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_subdirs >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxWITH_SUBDIRS" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+
 if test "$wxUSE_GUI" = "yes"; then
 
 
@@ -2994,8 +3037,9 @@ echo "$as_me: error: Invalid value for --with-libxpm: should be yes, no, sys, or
           fi
 
 
-          echo "$as_me:$LINENO: checking for --with-libmspack" >&5
-echo $ECHO_N "checking for --with-libmspack... $ECHO_C" >&6
+	  withstring=
+          echo "$as_me:$LINENO: checking for --${withstring:-with}-libmspack" >&5
+echo $ECHO_N "checking for --${withstring:-with}-libmspack... $ECHO_C" >&6
           no_cache=0
 
 # Check whether --with-libmspack or --without-libmspack was given.
@@ -3035,8 +3079,9 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-          echo "$as_me:$LINENO: checking for --with-sdl" >&5
-echo $ECHO_N "checking for --with-sdl... $ECHO_C" >&6
+	  withstring=
+          echo "$as_me:$LINENO: checking for --${withstring:-with}-sdl" >&5
+echo $ECHO_N "checking for --${withstring:-with}-sdl... $ECHO_C" >&6
           no_cache=0
 
 # Check whether --with-sdl or --without-sdl was given.
@@ -3076,8 +3121,9 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-          echo "$as_me:$LINENO: checking for --with-gnomeprint" >&5
-echo $ECHO_N "checking for --with-gnomeprint... $ECHO_C" >&6
+	  withstring=
+          echo "$as_me:$LINENO: checking for --${withstring:-with}-gnomeprint" >&5
+echo $ECHO_N "checking for --${withstring:-with}-gnomeprint... $ECHO_C" >&6
           no_cache=0
 
 # Check whether --with-gnomeprint or --without-gnomeprint was given.
@@ -3117,8 +3163,9 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-          echo "$as_me:$LINENO: checking for --with-opengl" >&5
-echo $ECHO_N "checking for --with-opengl... $ECHO_C" >&6
+	  withstring=
+          echo "$as_me:$LINENO: checking for --${withstring:-with}-opengl" >&5
+echo $ECHO_N "checking for --${withstring:-with}-opengl... $ECHO_C" >&6
           no_cache=0
 
 # Check whether --with-opengl or --without-opengl was given.
@@ -3161,8 +3208,9 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-          echo "$as_me:$LINENO: checking for --with-dmalloc" >&5
-echo $ECHO_N "checking for --with-dmalloc... $ECHO_C" >&6
+	  withstring=
+          echo "$as_me:$LINENO: checking for --${withstring:-with}-dmalloc" >&5
+echo $ECHO_N "checking for --${withstring:-with}-dmalloc... $ECHO_C" >&6
           no_cache=0
 
 # Check whether --with-dmalloc or --without-dmalloc was given.
@@ -11316,7 +11364,7 @@ echo "${ECHO_T}$ac_cv_c_compiler_gnu" >&6
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -11787,7 +11835,7 @@ fi
             unset ac_cv_prog_cc_g
             ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -12706,9 +12754,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -g -O2"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="$CXXFLAGS -g"
+    CXXFLAGS="-g"
   fi
 else
   if test "$GXX" = yes; then
@@ -13027,9 +13075,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -g -O2"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="$CXXFLAGS -g"
+    CXXFLAGS="-g"
   fi
 else
   if test "$GXX" = yes; then
@@ -45777,7 +45825,7 @@ fi
 
 
 
-
+if test "$wxWITH_SUBDIRS" != "no"; then
 if test "$wxUSE_GUI" = "yes"; then
     SUBDIRS="samples demos utils contrib"
 else         SUBDIRS="samples utils"
@@ -45948,8 +45996,7 @@ for subdir in `echo $SUBDIRS`; do
         done
     fi
 done
-
-
+fi
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure

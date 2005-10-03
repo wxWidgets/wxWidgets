@@ -781,6 +781,7 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_ENABLE(gui,         [  --enable-gui            use GUI classes], wxUSE_GUI)
 WX_ARG_ENABLE(monolithic,  [  --enable-monolithic     build wxWidgets as single library], wxUSE_MONOLITHIC)
 WX_ARG_ENABLE(plugins,     [  --enable-plugins        build parts of wxWidgets as loadable components], wxUSE_PLUGINS)
+WX_ARG_WITH(subdirs,       [  --without-subdirs       don't generate makefiles for samples/demos/...], wxWITH_SUBDIRS, without)
 
 if test "$wxUSE_GUI" = "yes"; then
 
@@ -7259,7 +7260,7 @@ dnl on platforms that do not have symlinks.
 dnl AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR:include ])
 dnl AC_CONFIG_LINKS([ contrib/include ])
 
-
+if test "$wxWITH_SUBDIRS" != "no"; then
 dnl Configure samples, contrib etc. directories, but only if they are present:
 if test "$wxUSE_GUI" = "yes"; then
     SUBDIRS="samples demos utils contrib"
@@ -7316,7 +7317,7 @@ for subdir in `echo $SUBDIRS`; do
         done
     fi
 done
-
+fi dnl wxWITH_SUBDIRS
 
 AC_OUTPUT
 

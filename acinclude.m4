@@ -335,10 +335,11 @@ AC_DEFUN([WX_ARG_SYS_WITH],
         ])
 
 dnl this macro checks for a command line argument and caches the result
-dnl usage: WX_ARG_WITH(option, helpmessage, variable-name)
+dnl usage: WX_ARG_WITH(option, helpmessage, variable-name, [withstring])
 AC_DEFUN([WX_ARG_WITH],
         [
-          AC_MSG_CHECKING([for --with-$1])
+	  withstring=$4
+          AC_MSG_CHECKING([for --${withstring:-with}-$1])
           no_cache=0
           AC_ARG_WITH($1, [$2],
                       [
