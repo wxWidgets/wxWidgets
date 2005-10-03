@@ -453,7 +453,15 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
     }
     else if ( id != 0 && command.menu.menuRef != 0 && command.menu.menuItemIndex != 0 )
     {
-        GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , (UInt32*) &item ) ;
+        wxMenu* itsMenu = NULL ;
+        UInt32 refCon ;
+        GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , &refCon ) ;
+        // make sure it is one of our own menus, otherwise don't touch
+        itsMenu = wxFindMenuFromMacMenu( command.menu.menuRef ) ;
+        if ( itsMenu != NULL )
+        {
+            item = (wxMenuItem*) refCon ;
+        }
     }
 
     if ( item )
