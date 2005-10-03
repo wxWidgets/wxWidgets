@@ -123,11 +123,19 @@ protected:
 
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxTreeItemIdValue, wxArrayTreeItemIdsBase);
 
+// this is a wrapper around the array class defined above which allow to wok
+// with vaue of natural wxTreeItemId type instead of using wxTreeItemIdValue
+// and does it without any loss of efficiency
 class WXDLLEXPORT wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
 {
 public:
     void Add(const wxTreeItemId& id)
         { wxArrayTreeItemIdsBase::Add(id.m_pItem); }
+    void Insert(const wxTreeItemId& id, size_t pos)
+        { wxArrayTreeItemIdsBase::Insert(id.m_pItem, pos); }
+    wxTreeItemId Item(size_t i) const
+        { return wxTreeItemId(wxArrayTreeItemIdsBase::Item(i)); }
+    wxTreeItemId operator[](size_t i) const { return Item(i); }
 };
 
 // ----------------------------------------------------------------------------

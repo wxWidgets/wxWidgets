@@ -48,11 +48,8 @@
 // macros to hide the cast ugliness
 // --------------------------------
 
-// ptr is the real item id, i.e. wxTreeItemId::m_pItem
-#define HITEM_PTR(ptr)     (HTREEITEM)(ptr)
-
-// item here is a wxTreeItemId
-#define HITEM(item)     HITEM_PTR((item).m_pItem)
+// get HTREEITEM from wxTreeItemId
+#define HITEM(item)     ((HTREEITEM)(((item).m_pItem)))
 
 // the native control doesn't support multiple selections under MSW and we
 // have 2 ways to emulate them: either using TVS_CHECKBOXES style and let
@@ -1833,7 +1830,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
     size_t nCount = children.Count();
     for ( size_t n = 0; n < nCount; n++ )
     {
-        if ( !TreeView_DeleteItem(GetHwnd(), HITEM_PTR(children[n])) )
+        if ( !TreeView_DeleteItem(GetHwnd(), HITEM(children[n])) )
         {
             wxLogLastError(wxT("TreeView_DeleteItem"));
         }
@@ -1945,9 +1942,9 @@ void wxTreeCtrl::UnselectAll()
         for ( size_t n = 0; n < count; n++ )
         {
 #if wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-            SetItemCheck(HITEM_PTR(selections[n]), false);
+            SetItemCheck(HITEM(selections[n]), false);
 #else // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-            ::UnselectItem(GetHwnd(), HITEM_PTR(selections[n]));
+            ::UnselectItem(GetHwnd(), HITEM(selections[n]));
 #endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE/!wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
         }
 
@@ -2362,7 +2359,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                         size_t count = GetSelections(selections);
                         if ( count == 0 ||
                              count > 1 ||
-                             HITEM_PTR(selections[0]) != htItem )
+                             HITEM(selections[0]) != htItem )
                         {
                             // clear the previously selected items, if the
                             // user clicked outside of the present selection.
@@ -2504,7 +2501,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         {
             // TreeView_GetItemRect() will return false if item is not visible,
             // which may happen perfectly well
-            if ( TreeView_GetItemRect(GetHwnd(), HITEM_PTR(selections[n]),
+            if ( TreeView_GetItemRect(GetHwnd(), HITEM(selections[n]),
                                       &rect, TRUE) )
             {
                 ::InvalidateRect(GetHwnd(), &rect, FALSE);
