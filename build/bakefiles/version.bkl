@@ -8,28 +8,20 @@
     <!-- ================================================================== -->
 
     <!--
-       We use libtool CURRENT:REVISION:AGE versioning scheme. Quoting libtool
-       documentation on how to handle the values:
+       We use libtool CURRENT:REVISION:AGE versioning scheme. Here are the
+       rules for updating the values below, this should be done whenever wx
+       version (wx/version.h) changes (we abbreviate WX_CURRENT:REVISION:AGE
+       as C:R:A respectively):
 
-       1. Start with version information of `0:0:0' for each new major.minor
-          version.
+       0. Set C:R:A = 0:0:0 if major or minor version has changed.
 
-       2. Update the version information only immediately before a public
-          release of your software.  More frequent updates are unnecessary,
-          and only guarantee that the current interface number gets larger
-          faster.
+       1. If any API has been removed or otherwise changed in backwards
+          incompatible way, then change C:R:A to C+1:0:0
 
-       3. If the library source code has changed at all since the last
-          update, then increment REVISION (`C:R:A' becomes `C:r+1:A').
+       2. Else, if any API has been added, change C:R:A to C+1:0:A+1
 
-       4. If any interfaces have been added, removed, or changed since the
-          last update, increment CURRENT, and set REVISION to 0.
-
-       5. If any interfaces have been added since the last public release,
-          then increment AGE.
-
-       6. If any interfaces have been removed since the last public release,
-          then set AGE to 0.
+       3. Else, i.e. if there were no changes at all to API but only internal
+          changes, change C:R:A to C:R+1:A
     -->
     <set var="WX_CURRENT">0</set>
     <set var="WX_REVISION">0</set>
