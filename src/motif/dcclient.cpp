@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.cpp
+// Name:        src/motif/dcclient.cpp
 // Purpose:     wxClientDC class
 // Author:      Julian Smart
 // Modified by:
@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-  About pens, brushes, and the autoSetting flag:
+  About pens, brushes, and the m_autoSetting flag:
 
   Under X, pens and brushes control some of the same X drawing
   parameters.  Therefore, it is impossible to independently maintain
@@ -18,9 +18,9 @@
   the current logical function. The m_currentFill, etc. instance
   variables remember state across the brush and pen.
 
-  Since pens are used more than brushes, the autoSetting flag is used to
+  Since pens are used more than brushes, the m_autoSetting flag is used to
   indicate that a brush was recently used, and SetPen must be called to
-  reinstall the current pen's parameters. If autoSetting includes 0x2, then the
+  reinstall the current pen's parameters. If m_autoSetting includes 0x2, then the
   pens color may need to be set based on XOR.
 
   There is, unfortunately, some confusion between setting the current pen/brush
@@ -1319,7 +1319,7 @@ wxCoord wxWindowDC::GetCharWidth() const
 {
     wxCHECK_MSG( Ok(), 0, "invalid dc" );
     wxCHECK_MSG( m_font.Ok(), 0, "invalid font" );
-    
+
     int width;
 
     wxGetTextExtent (m_display, m_font, m_userScaleY * m_logicalScaleY,

@@ -398,14 +398,19 @@
        __DARWIN__ for Darwin related corrections (wxMac, wxMotif)
      */
 #elif defined(__OS2__)
+
+    /* wxOS2 vs. non wxOS2 ports on OS2 platform */
+#    ifndef __WXMOTIF__
+#        ifndef __WXOS2__
+#            define __WXOS2__
+#        endif
+#        ifndef __WXPM__
+#            define __WXPM__
+#        endif
+#    endif
+
 #    if defined(__IBMCPP__)
 #        define __VISAGEAVER__ __IBMCPP__
-#    endif
-#    ifndef __WXOS2__
-#        define __WXOS2__
-#    endif
-#    ifndef __WXPM__
-#        define __WXPM__
 #    endif
 
     /* Place other OS/2 compiler environment defines here */

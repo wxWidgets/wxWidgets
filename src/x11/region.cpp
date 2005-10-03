@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// File:      region.cpp
+// File:      src/x11/region.cpp
 // Purpose:   Region class
 // Author:    Julian Smart, Robert Roebling
 // Created:   Fri Oct 24 10:46:34 MET 1997
@@ -7,6 +7,9 @@
 // Copyright: (c) 1997 Julian Smart, Robert Roebling
 // Licence:   wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 #include "wx/region.h"
 #include "wx/gdicmn.h"
@@ -32,13 +35,13 @@ public:
     {
         m_region = NULL;
     }
-    
+
     wxRegionRefData(const wxRegionRefData& refData)
     {
         m_region = XCreateRegion();
         XUnionRegion( refData.m_region, m_region, m_region );
     }
-    
+
     ~wxRegionRefData()
     {
         if (m_region)
@@ -67,18 +70,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
 void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     XRectangle rect;
-    rect.x = x;
-    rect.y = y;
-    rect.width = w;
-    rect.height = h;
-    
+    rect.x = (short)x;
+    rect.y = (short)y;
+    rect.width = (unsigned short)w;
+    rect.height = (unsigned short)h;
+
     m_refData = new wxRegionRefData();
-    
+
     M_REGIONDATA->m_region = XCreateRegion();
     XUnionRectWithRegion( &rect, M_REGIONDATA->m_region, M_REGIONDATA->m_region );
 }
 
-wxRegion::wxRegion( size_t n, const wxPoint *points, int fillStyle )
+wxRegion::wxRegion( size_t WXUNUSED(n), const wxPoint *WXUNUSED(points), int WXUNUSED(fillStyle) )
 {
 #if 0
     XPoint *xpoints = new XPoint[n];
@@ -125,13 +128,13 @@ wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
 
 bool wxRegion::operator==( const wxRegion& region ) const
 {
-    if (m_refData == region.m_refData) return TRUE;
+    if (m_refData == region.m_refData) return true;
 
-    if (!m_refData || !region.m_refData) return FALSE;
-    
+    if (!m_refData || !region.m_refData) return false;
+
     // compare the regions themselves, not the pointers to ref data!
     return XEqualRegion( M_REGIONDATA->m_region,
-                         M_REGIONDATA_OF(region)->m_region );
+                         M_REGIONDATA_OF(region)->m_region ) == True;
 }
 
 // ----------------------------------------------------------------------------
@@ -149,14 +152,14 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     // rect results in an empty region (at least XFree 3.3.6 and 4.0 have this
     // problem)
     if ( !width || !height )
-        return TRUE;
+        return true;
 
     XRectangle rect;
-    rect.x = x;
-    rect.y = y;
-    rect.width = width;
-    rect.height = height;
-    
+    rect.x = (short)x;
+    rect.y = (short)y;
+    rect.width = (unsigned short)width;
+    rect.height = (unsigned short)height;
+
     if (!m_refData)
     {
         m_refData = new wxRegionRefData();
@@ -170,7 +173,7 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
         XUnionRectWithRegion( &rect, M_REGIONDATA->m_region, M_REGIONDATA->m_region );
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Union( const wxRect& rect )
@@ -181,7 +184,7 @@ bool wxRegion::Union( const wxRect& rect )
 bool wxRegion::Union( const wxRegion& region )
 {
     if (region.IsNull())
-        return FALSE;
+        return false;
 
     if (!m_refData)
     {
@@ -192,12 +195,12 @@ bool wxRegion::Union( const wxRegion& region )
     {
         AllocExclusive();
     }
-    
+
     XUnionRegion( M_REGIONDATA->m_region,
                   M_REGIONDATA_OF(region)->m_region,
                   M_REGIONDATA->m_region );
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -210,22 +213,22 @@ bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 bool wxRegion::Intersect( const wxRect& rect )
 {
     wxRegion reg( rect );
-    
+
     return Intersect( reg );
 }
 
 bool wxRegion::Intersect( const wxRegion& region )
 {
     if (region.IsNull())
-        return FALSE;
+        return false;
 
     if (!m_refData)
     {
         m_refData = new wxRegionRefData();
         M_REGIONDATA->m_region = XCreateRegion();
-        
-        // leave here 
-        return TRUE;
+
+        // leave here
+        return true;
     }
     else
     {
@@ -236,7 +239,7 @@ bool wxRegion::Intersect( const wxRegion& region )
                       M_REGIONDATA_OF(region)->m_region,
                       M_REGIONDATA->m_region );
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Subtract( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -254,7 +257,7 @@ bool wxRegion::Subtract( const wxRect& rect )
 bool wxRegion::Subtract( const wxRegion& region )
 {
     if (region.IsNull())
-        return FALSE;
+        return false;
 
     if (!m_refData)
     {
@@ -270,7 +273,7 @@ bool wxRegion::Subtract( const wxRegion& region )
                      M_REGIONDATA_OF(region)->m_region,
                      M_REGIONDATA->m_region );
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Xor( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -288,7 +291,7 @@ bool wxRegion::Xor( const wxRect& rect )
 bool wxRegion::Xor( const wxRegion& region )
 {
     if (region.IsNull())
-        return FALSE;
+        return false;
 
     if (!m_refData)
     {
@@ -303,8 +306,8 @@ bool wxRegion::Xor( const wxRegion& region )
     XXorRegion( M_REGIONDATA->m_region,
                 M_REGIONDATA_OF(region)->m_region,
                 M_REGIONDATA->m_region );
-                
-    return TRUE;
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -341,21 +344,21 @@ wxRect wxRegion::GetBox() const
 bool wxRegion::Offset( wxCoord x, wxCoord y )
 {
     if (!m_refData)
-        return FALSE;
+        return false;
 
     AllocExclusive();
 
     XOffsetRegion( M_REGIONDATA->m_region, x, y );
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Empty() const
 {
     if (!m_refData)
-        return TRUE;
+        return true;
 
-    return XEmptyRegion( M_REGIONDATA->m_region );
+    return XEmptyRegion( M_REGIONDATA->m_region ) == True;
 }
 
 wxRegionContain wxRegion::Contains( wxCoord x, wxCoord y ) const
@@ -446,9 +449,9 @@ void wxRIRefData::CreateRects( const wxRegion& region )
 
     m_rects = 0;
     m_numRects = 0;
-    
+
     if (region.IsEmpty()) return;
-    
+
     Region r = (Region) region.GetX11Region();
     if (r)
     {
@@ -551,4 +554,3 @@ wxRect wxRegionIterator::GetRect() const
 
     return r;
 }
-

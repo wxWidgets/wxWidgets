@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.cpp
+// Name:        src/motif/cursor.cpp
 // Purpose:     wxCursor class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -19,7 +19,7 @@
 #include "wx/window.h"
 #if wxUSE_IMAGE
 #include "wx/image.h"
-#endif									     
+#endif
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -51,7 +51,7 @@ class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
 public:
     wxCursorRefData();
     ~wxCursorRefData();
-    
+
     wxXCursorList m_cursors;  // wxXCursor objects, one per display
     wxStockCursor m_cursorId; // wxWidgets standard cursor id
 };
@@ -94,7 +94,8 @@ wxCursor::wxCursor(const wxImage & image)
     unsigned char * bits = new unsigned char [imagebitcount];
     unsigned char * maskBits = new unsigned char [imagebitcount];
 
-    int i, j, i8; unsigned char c, cMask;
+    int i, j, i8;
+    unsigned char c, cMask;
     for (i=0; i<imagebitcount; i++)
     {
         bits[i] = 0xff;
@@ -104,11 +105,11 @@ wxCursor::wxCursor(const wxImage & image)
         for (j=0; j<8; j++)
         {
             // possible overflow if we do the summation first ?
-            c = rgbBits[(i8+j)*3]/3 + rgbBits[(i8+j)*3+1]/3 + rgbBits[(i8+j)*3+2]/3;
-            //if average value is > mid grey
+            c = (unsigned char)(rgbBits[(i8+j)*3]/3 + rgbBits[(i8+j)*3+1]/3 + rgbBits[(i8+j)*3+2]/3);
+            // if average value is > mid grey
             if (c>127)
                 bits[i] = bits[i] & cMask;
-            cMask = (cMask << 1) | 1;
+            cMask = (unsigned char)((cMask << 1) | 1);
         }
     }
 
@@ -129,7 +130,7 @@ wxCursor::wxCursor(const wxImage & image)
             {
                 if (rgbBits[(i8+j)*3] != r || rgbBits[(i8+j)*3+1] != g || rgbBits[(i8+j)*3+2] != b)
                     maskBits[i] = maskBits[i] | cMask;
-                cMask = (cMask << 1);
+                cMask = (unsigned char)(cMask << 1);
             }
         }
     }
@@ -219,7 +220,7 @@ void wxCursor::Create(WXPixmap pixmap, WXPixmap mask_pixmap,
                                   (Pixmap)mask_pixmap,
                                   &foreground_color,
                                   &background_color,
-                                  hotSpotX , 
+                                  hotSpotX ,
                                   hotSpotY);
 
     if (cursor)
@@ -337,17 +338,18 @@ WXCursor wxCursor::MakeCursor(WXDisplay* display, wxStockCursor id) const
 
     switch (id)
     {
+    case wxCURSOR_CHAR:             return (WXCursor)cursor;
+
     case wxCURSOR_WAIT:             x_cur = XC_watch; break;
-    case wxCURSOR_CROSS:            x_cur = XC_crosshair; break; 
-    case wxCURSOR_CHAR:                       return (WXCursor)cursor; break;
+    case wxCURSOR_CROSS:            x_cur = XC_crosshair; break;
     case wxCURSOR_HAND:             x_cur = XC_hand1; break;
     case wxCURSOR_BULLSEYE:         x_cur = XC_target; break;
-    case wxCURSOR_PENCIL:           x_cur = XC_pencil; break; 
-    case wxCURSOR_MAGNIFIER:        x_cur = XC_sizing; break; 
-    case wxCURSOR_IBEAM:            x_cur = XC_xterm; break; 
+    case wxCURSOR_PENCIL:           x_cur = XC_pencil; break;
+    case wxCURSOR_MAGNIFIER:        x_cur = XC_sizing; break;
+    case wxCURSOR_IBEAM:            x_cur = XC_xterm; break;
     case wxCURSOR_NO_ENTRY:         x_cur = XC_pirate; break;
-    case wxCURSOR_LEFT_BUTTON:      x_cur = XC_leftbutton; break; 
-    case wxCURSOR_RIGHT_BUTTON:     x_cur = XC_rightbutton; break; 
+    case wxCURSOR_LEFT_BUTTON:      x_cur = XC_leftbutton; break;
+    case wxCURSOR_RIGHT_BUTTON:     x_cur = XC_rightbutton; break;
     case wxCURSOR_MIDDLE_BUTTON:    x_cur =  XC_middlebutton; break;
     case wxCURSOR_QUESTION_ARROW:   x_cur = XC_question_arrow; break;
     case wxCURSOR_SIZING:           x_cur = XC_sizing; break;
@@ -451,7 +453,7 @@ wxXSetBusyCursor (wxWindow * win, wxCursor * cursor)
 
     XFlush (display);
 
-    for(wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst (); node; 
+    for(wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst (); node;
         node = node->GetNext())
     {
         wxWindow *child = node->GetData ();

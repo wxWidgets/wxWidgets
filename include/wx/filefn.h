@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filefn.h
+// Name:        wx/filefn.h
 // Purpose:     File- and directory-related functions
 // Author:      Julian Smart
 // Modified by:

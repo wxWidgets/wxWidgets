@@ -297,7 +297,7 @@ static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
                        False, XA_WINDOW, &type, &format, &nwins,
                        &after, (unsigned char **)&wins);
     if ( type != XA_WINDOW || nwins <= 0 || wins[0] == None )
-       return FALSE;
+       return false;
     XFree(wins);
 
     // Query for supported features:
@@ -306,7 +306,7 @@ static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
                        False, XA_ATOM, &type, &format, &natoms,
                        &after, (unsigned char **)&atoms);
     if ( type != XA_ATOM || atoms == NULL )
-        return FALSE;
+        return false;
 
     // Lookup the feature we want:
     for (unsigned i = 0; i < natoms; i++)
@@ -314,11 +314,11 @@ static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
         if ( atoms[i] == feature )
         {
             XFree(atoms);
-            return TRUE;
+            return true;
         }
     }
     XFree(atoms);
-    return FALSE;
+    return false;
 }
 #endif
 
@@ -381,7 +381,7 @@ static bool wxKwinRunning(Display *display, Window rootWnd)
                            &type, &format, &nitems, &after,
                            (unsigned char**)&data) != Success)
     {
-        return FALSE;
+        return false;
     }
 
     bool retval = (type == KWIN_RUNNING &&
@@ -427,7 +427,7 @@ static void wxSetKDEFullscreen(Display *display, Window rootWnd,
     }
 
     XChangeProperty(display, w, _NET_WM_WINDOW_TYPE, XA_ATOM, 32,
-                    PropModeReplace, (unsigned char *) &data, lng);
+                    PropModeReplace, (unsigned char *) &data[0], lng);
     XSync(display, False);
 
     if (wasMapped)
@@ -812,8 +812,3 @@ bool wxGetKeyState(wxKeyCode key)
 }
 
 #endif // __WXX11__ || __WXGTK__ || __WXMOTIF__
-
-
-
-
-

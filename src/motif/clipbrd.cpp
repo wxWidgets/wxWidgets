@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        clipbrd.cpp
+// Name:        src/motif/clipbrd.cpp
 // Purpose:     Clipboard functionality
 // Author:      Julian Smart
 // Modified by: Mattia Barbon (added support for generic wxDataObjects)
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -191,7 +191,7 @@ wxClipboard::wxClipboard()
 
 wxClipboard::~wxClipboard()
 {
-    Clear();  
+    Clear();
 }
 
 void wxClipboard::Clear()
@@ -215,7 +215,7 @@ void wxClipboard::Clear()
 bool wxClipboard::Open()
 {
     wxCHECK_MSG( !m_open, false, "clipboard already open" );
-  
+
     m_open = true;
 
     return true;
@@ -236,10 +236,10 @@ wxDEFINE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray );
 
 #if wxCHECK_LESSTIF()
 void wxClipboardCallback( Widget xwidget, int* data_id,
-                          int* priv, int* reason )
+                          int* priv, int* WXUNUSED(reason) )
 #else
 void wxClipboardCallback( Widget xwidget, long* data_id,
-                          long* priv, int* reason )
+                          long* priv, int* WXUNUSED(reason) )
 #endif
 {
     Display* xdisplay = XtDisplay( xwidget );
@@ -326,7 +326,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 void wxClipboard::Close()
 {
     wxCHECK_RET( m_open, "clipboard not open" );
-    
+
     m_open = false;
 }
 
@@ -415,7 +415,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     size_t dfcount = data.GetFormatCount( wxDataObject::Set );
     wxDataFormatScopedArray dfarr( new wxDataFormat[dfcount] );
     data.GetAllFormats( dfarr.get(), wxDataObject::Set );
-    
+
     if( XmClipboardInquireCount( xdisplay, xwindow, &count, &max_name_length )
         == XmClipboardSuccess )
     {

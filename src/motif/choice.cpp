@@ -352,7 +352,7 @@ void wxChoice::SetColumns(int n)
 {
     if (n<1) n = 1 ;
 
-    short numColumns = n ;
+    short numColumns = (short)n ;
     Arg args[3];
 
     XtSetArg(args[0], XmNnumColumns, numColumns);

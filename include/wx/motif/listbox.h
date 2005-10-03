@@ -96,7 +96,7 @@ public:
     WXWidget GetTopWidget() const;
 
 #if wxUSE_CHECKLISTBOX
-    virtual void DoToggleItem(int item, int x) {};
+    virtual void DoToggleItem(int WXUNUSED(item), int WXUNUSED(x)) {};
 #endif
 protected:
     virtual wxSize DoGetBestSize() const;

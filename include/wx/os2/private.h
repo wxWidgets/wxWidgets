@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        private.h
+// Name:        wx/os2/private.h
 // Purpose:     Private declarations: as this header is only included by
 //              wxWidgets itself, it may contain identifiers which don't start
 //              with "wx".
@@ -22,6 +22,19 @@
 #define INCL_DOS
 #include <os2.h>
 
+#if defined(__WATCOMC__) && defined(__WXMOTIF__)
+    #include <os2def.h>
+    #define I_NEED_OS2_H
+    #include <X11/Xmd.h>
+    #ifdef __cplusplus
+    extern "C" {
+    #endif
+        #include <Xm/VendorSP.h>
+    #ifdef __cplusplus
+    }
+    #endif
+#endif
+
 #if defined (__EMX__) && !defined(USE_OS2_TOOLKIT_HEADERS) && !defined(HAVE_SPBCDATA)
 
     typedef struct _SPBCDATA {
@@ -37,6 +50,7 @@
 
 #endif
 
+#include "wx/dlimpexp.h"
 #include "wx/fontenc.h"
 
 class WXDLLEXPORT wxFont;
@@ -260,21 +274,25 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 // global data
 // ---------------------------------------------------------------------------
 
+#ifdef __WXOS2__
 // The MakeProcInstance version of the function wxSubclassedGenericControlProc
 WXDLLEXPORT_DATA(extern int) wxGenericControlSubClassProc;
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
+#endif
 
 // ---------------------------------------------------------------------------
 // global functions
 // ---------------------------------------------------------------------------
 
+#ifdef __WXOS2__
 extern "C"
 {
 WXDLLEXPORT HINSTANCE wxGetInstance();
 }
 
 WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
+#endif
 
 #include "wx/thread.h"
 static inline MRESULT MySendMsg(HWND hwnd, ULONG ulMsgid,

@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #ifdef __VMS
 #define XShapeQueryExtension XSHAPEQUERYEXTENSION
 #define XtDisplay XTDISPLAY
@@ -180,7 +183,7 @@ void wxXVisualInfo::Init( Display* dpy, XVisualInfo* vi )
     XColor* colors = (XColor*) m_visualColormap;
 
     for (int i = 0; i < m_visualColormapSize; i++)
-	    colors[i].pixel = i;
+        colors[i].pixel = i;
 
     XQueryColors( dpy, DefaultColormap(dpy, vi->screen),
                   colors, m_visualColormapSize );
@@ -222,7 +225,7 @@ void wxXVisualInfo::Init( Display* dpy, XVisualInfo* vi )
                     index |= (g >> (5 - m_visualGreenPrec)) << m_visualGreenShift;
                     index |= (b >> (5 - m_visualBluePrec)) << m_visualBlueShift;
                 }
-                m_colorCube[ (r*1024) + (g*32) + b ] = index;
+                m_colorCube[ (r*1024) + (g*32) + b ] = (unsigned char)index;
             }
         }
     }

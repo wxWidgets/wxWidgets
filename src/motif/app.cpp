@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.cpp
+// Name:        src/motif/app.cpp
 // Purpose:     wxApp
 // Author:      Julian Smart
 // Modified by:
@@ -292,8 +292,8 @@ wxXVisualInfo* wxApp::GetVisualInfo( WXDisplay* display )
     return vi;
 }
 
-static void wxTLWidgetDestroyCallback(Widget w, XtPointer clientData,
-                                      XtPointer ptr)
+static void wxTLWidgetDestroyCallback(Widget w, XtPointer WXUNUSED(clientData),
+                                      XtPointer WXUNUSED(ptr))
 {
     if( wxTheApp )
     {
@@ -322,7 +322,7 @@ WXWidget wxCreateTopLevelWidget( WXDisplay* display )
     return (WXWidget)tlw;
 }
 
-WXWidget wxCreateTopLevelRealizedWidget( WXDisplay* display )
+WXWidget wxCreateTopLevelRealizedWidget( WXDisplay* WXUNUSED(display) )
 {
     Widget rTlw = XtVaCreateWidget( "dummy_widget", topLevelShellWidgetClass,
                                     (Widget)wxTheApp->GetTopLevelWidget(),

@@ -82,7 +82,7 @@ public:
     WXGC GetGC() const { return m_gc; }
     WXGC GetBackingGC() const { return m_gcBacking; }
     WXDisplay* GetDisplay() const { return m_display; }
-    bool GetAutoSetting() const { return m_autoSetting; }
+    bool GetAutoSetting() const { return (m_autoSetting != 0); } // See comment in dcclient.cpp
     void SetAutoSetting(bool flag) { m_autoSetting = flag; }
 
 protected:

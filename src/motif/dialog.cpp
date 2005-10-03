@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dialog.cpp
+// Name:        src/motif/dialog.cpp
 // Purpose:     wxDialog class
 // Author:      Julian Smart
 // Modified by:
@@ -304,7 +304,7 @@ bool wxDialog::Show( bool show )
         else
             XtManageChild((Widget)m_mainWidget) ;
 
-        XRaiseWindow( XtDisplay( (Widget)m_mainWidget ), 
+        XRaiseWindow( XtDisplay( (Widget)m_mainWidget ),
                       XtWindow( (Widget)m_mainWidget) );
 
     }

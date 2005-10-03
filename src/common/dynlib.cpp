@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dynlib.cpp
+// Name:        src/common/dynlib.cpp
 // Purpose:     Dynamic library management
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -141,7 +141,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 /* static */
 void wxDynamicLibrary::Unload(wxDllType handle)
 {
-#if defined(__WXPM__) || defined(__EMX__)
+#if defined(__OS2__) || defined(__EMX__)
     DosFreeModule( handle );
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
     CloseConnection( (CFragConnectionID*) &handle );

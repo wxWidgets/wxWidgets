@@ -9,7 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/utils.h"
 #include "wx/brush.h"
 #include "wx/bitmap.h"
@@ -26,21 +28,21 @@ public:
     {
         m_style = 0;
     }
-    
+
     wxBrushRefData( const wxBrushRefData& data )
     {
         m_style = data.m_style;
         m_stipple = data.m_stipple;
         m_colour = data.m_colour;
     }
-    
+
     bool operator == (const wxBrushRefData& data) const
     {
         return (m_style == data.m_style &&
                 m_stipple == data.m_stipple &&
                 m_colour == data.m_colour);
     }
-    
+
     int       m_style;
     wxColour  m_colour;
     wxBitmap  m_stipple;
@@ -89,10 +91,10 @@ wxObjectRefData *wxBrush::CloneRefData(const wxObjectRefData *data) const
 
 bool wxBrush::operator == ( const wxBrush& brush ) const
 {
-    if (m_refData == brush.m_refData) return TRUE;
-    
-    if (!m_refData || !brush.m_refData) return FALSE;
-    
+    if (m_refData == brush.m_refData) return true;
+
+    if (!m_refData || !brush.m_refData) return false;
+
     return ( *(wxBrushRefData*)m_refData == *(wxBrushRefData*)brush.m_refData );
 }
 
@@ -132,28 +134,28 @@ wxBitmap *wxBrush::GetStipple() const
 void wxBrush::SetColour( const wxColour& col )
 {
     AllocExclusive();
-    
+
     M_BRUSHDATA->m_colour = col;
 }
 
 void wxBrush::SetColour( unsigned char r, unsigned char g, unsigned char b )
 {
     AllocExclusive();
-    
+
     M_BRUSHDATA->m_colour.Set( r, g, b );
 }
 
 void wxBrush::SetStyle( int style )
 {
     AllocExclusive();
-    
+
     M_BRUSHDATA->m_style = style;
 }
 
 void wxBrush::SetStipple( const wxBitmap& stipple )
 {
     AllocExclusive();
-    
+
     M_BRUSHDATA->m_stipple = stipple;
     if (M_BRUSHDATA->m_stipple.GetMask())
     {

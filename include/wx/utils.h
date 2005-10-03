@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utils.h
+// Name:        wx/utils.h
 // Purpose:     Miscellaneous utilities
 // Author:      Julian Smart
 // Modified by:
@@ -26,7 +26,9 @@ class WXDLLIMPEXP_BASE wxArrayString;
 // wxLongLong
 #include "wx/longlong.h"
 
-#ifdef __X__
+#ifdef __WATCOMC__
+    #include <direct.h>
+#elif defined(__X__)
     #include <dirent.h>
     #include <unistd.h>
 #endif

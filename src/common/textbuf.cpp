@@ -3,6 +3,7 @@
 // Purpose:     implementation of wxTextBuffer class
 // Created:     14.11.01
 // Author:      Morten Hanssen, Vadim Zeitlin
+// RCS-ID:      $Id$
 // Copyright:   (c) 1998-2001 wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -45,7 +46,7 @@ const wxTextFileType wxTextBuffer::typeDefault =
   wxTextFileType_Unix;
 #elif defined(__WXMAC__)
   wxTextFileType_Mac;
-#elif defined(__WXPM__)
+#elif defined(__OS2__)
   wxTextFileType_Os2;
 #else
   wxTextFileType_None;
@@ -283,4 +284,3 @@ bool wxTextBuffer::Write(wxTextFileType typeNew, wxMBConv& conv)
 }
 
 #endif // wxUSE_TEXTBUFFER
-

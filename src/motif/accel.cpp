@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        accel.cpp
+// Name:        src/motif/accel.cpp
 // Purpose:     wxAcceleratorTable
 // Author:      Julian Smart
 // Modified by:
@@ -112,4 +112,3 @@ bool wxAcceleratorEntry::MatchesEvent(const wxKeyEvent& event) const
         (eventShiftDown == accShiftDown) &&
         ((eventKeyCode == accKeyCode || eventKeyCode == accKeyCode2))) ;
 }
-

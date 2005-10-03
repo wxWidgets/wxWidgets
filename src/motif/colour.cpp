@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        colour.cpp
+// Name:        src/motif/colour.cpp
 // Purpose:     wxColour class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 //// TODO: make wxColour a ref-counted object,
@@ -88,9 +88,9 @@ wxColour wxColour::CreateByName(const wxString& name)
     XColor xcol;
     if ( XParseColor( dpy, (Colormap)colormap, name.mb_str(), &xcol ) )
     {
-        col.m_red = xcol.red & 0xff;
-        col.m_green = xcol.green & 0xff;
-        col.m_blue = xcol.blue & 0xff;
+        col.m_red = (unsigned char)(xcol.red & 0xff);
+        col.m_green = (unsigned char)(xcol.green & 0xff);
+        col.m_blue = (unsigned char)(xcol.blue & 0xff);
         col.m_isInit = true;
         col.m_pixel = -1;
     }
@@ -126,11 +126,11 @@ int wxColour::AllocColour(WXDisplay* display, bool realloc)
 
     XColor color;
     color.red = (unsigned short) Red ();
-    color.red |= color.red << 8;
+    color.red |= (unsigned short)(color.red << 8);
     color.green = (unsigned short) Green ();
-    color.green |= color.green << 8;
+    color.green |= (unsigned short)(color.green << 8);
     color.blue = (unsigned short) Blue ();
-    color.blue |= color.blue << 8;
+    color.blue |= (unsigned short)(color.blue << 8);
 
     color.flags = DoRed | DoGreen | DoBlue;
 
