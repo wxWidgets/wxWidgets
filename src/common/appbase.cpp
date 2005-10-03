@@ -734,8 +734,7 @@ static wxString GetAssertStackTrace()
             }
             else
             {
-                m_stackTrace << wxString::Format(_T("0x%08p"),
-                                                 frame.GetAddress());
+                m_stackTrace << wxString::Format(_T("%p"), frame.GetAddress());
             }
 
             if ( frame.HasSourceLocation() )
