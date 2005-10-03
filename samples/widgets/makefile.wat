@@ -201,7 +201,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -256,40 +256,40 @@ $(OBJS)\widgets.exe :  $(WIDGETS_OBJECTS) $(OBJS)\widgets_widgets.res
 	wlink @$(OBJS)\widgets.lbc
 
 $(OBJS)\widgets_button.obj :  .AUTODEPEND .\button.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_checkbox.obj :  .AUTODEPEND .\checkbox.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_combobox.obj :  .AUTODEPEND .\combobox.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_gauge.obj :  .AUTODEPEND .\gauge.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_listbox.obj :  .AUTODEPEND .\listbox.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_notebook.obj :  .AUTODEPEND .\notebook.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_radiobox.obj :  .AUTODEPEND .\radiobox.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_slider.obj :  .AUTODEPEND .\slider.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_spinbtn.obj :  .AUTODEPEND .\spinbtn.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_static.obj :  .AUTODEPEND .\static.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_textctrl.obj :  .AUTODEPEND .\textctrl.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_widgets.obj :  .AUTODEPEND .\widgets.cpp
-	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_widgets.res :  .AUTODEPEND .\widgets.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

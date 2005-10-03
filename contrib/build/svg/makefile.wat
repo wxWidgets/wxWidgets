@@ -79,7 +79,7 @@ EXTRALIBS_FOR_BASE =
 __svgdll___depname =
 !ifeq SHARED 1
 __svgdll___depname = &
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll
 !endif
 __DEBUGINFO_2 =
 !ifeq BUILD debug
@@ -214,7 +214,8 @@ __UNICODE_DEFINE_p = -d_UNICODE
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\svg\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -256,12 +257,12 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib
 
 !ifeq SHARED 1
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll :  $(SVGDLL_OBJECTS) $(OBJS)\svgdll_version.res
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll :  $(SVGDLL_OBJECTS) $(OBJS)\svgdll_version.res
 	@%create $(OBJS)\svgdll.lbc
 	@%append $(OBJS)\svgdll.lbc option quiet
 	@%append $(OBJS)\svgdll.lbc name $^@
@@ -270,7 +271,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(SVGDLL_OBJECTS)) do @%append $(OBJS)\svgdll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\svgdll.lbc library %i
 	@%append $(OBJS)\svgdll.lbc option resource=$(OBJS)\svgdll_version.res
-	@%append $(OBJS)\svgdll.lbc system nt_dll
+	@%append $(OBJS)\svgdll.lbc system nr_dll
 	wlink @$(OBJS)\svgdll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib +$^@
 !endif
@@ -283,17 +284,17 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 !endif
 
 $(OBJS)\svgdll_dummy.obj :  .AUTODEPEND ../../src/svg\..\..\..\src\msw\dummy.cpp
-	$(CXX) -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
 
 $(OBJS)\svgdll_version.res :  .AUTODEPEND ../../src/svg\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG) $<
 
 $(OBJS)\svgdll_dcsvg.obj :  .AUTODEPEND ../../src/svg\dcsvg.cpp
-	$(CXX) -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
 
 $(OBJS)\svglib_dummy.obj :  .AUTODEPEND ../../src/svg\..\..\..\src\msw\dummy.cpp
-	$(CXX) -zq -fo=$^@ $(SVGLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(SVGLIB_CXXFLAGS) $<
 
 $(OBJS)\svglib_dcsvg.obj :  .AUTODEPEND ../../src/svg\dcsvg.cpp
-	$(CXX) -zq -fo=$^@ $(SVGLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(SVGLIB_CXXFLAGS) $<
 

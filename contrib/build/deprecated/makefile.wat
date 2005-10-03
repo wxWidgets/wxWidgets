@@ -79,7 +79,7 @@ EXTRALIBS_FOR_BASE =
 __deprecateddll___depname =
 !ifeq SHARED 1
 __deprecateddll___depname = &
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG).dll
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG).dll
 !endif
 __DEBUGINFO_2 =
 !ifeq BUILD debug
@@ -214,7 +214,8 @@ __UNICODE_DEFINE_p = -d_UNICODE
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\deprecated\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -287,12 +288,12 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated.lib
 
 !ifeq SHARED 1
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG).dll :  $(DEPRECATEDDLL_OBJECTS) $(OBJS)\deprecateddll_version.res
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG).dll :  $(DEPRECATEDDLL_OBJECTS) $(OBJS)\deprecateddll_version.res
 	@%create $(OBJS)\deprecateddll.lbc
 	@%append $(OBJS)\deprecateddll.lbc option quiet
 	@%append $(OBJS)\deprecateddll.lbc name $^@
@@ -301,7 +302,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(DEPRECATEDDLL_OBJECTS)) do @%append $(OBJS)\deprecateddll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\deprecateddll.lbc library %i
 	@%append $(OBJS)\deprecateddll.lbc option resource=$(OBJS)\deprecateddll_version.res
-	@%append $(OBJS)\deprecateddll.lbc system nt_dll
+	@%append $(OBJS)\deprecateddll.lbc system nr_dll
 	wlink @$(OBJS)\deprecateddll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated.lib +$^@
 !endif
@@ -314,59 +315,59 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 !endif
 
 $(OBJS)\deprecateddll_dummy.obj :  .AUTODEPEND ../../src/deprecated\..\..\..\src\msw\dummy.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_version.res :  .AUTODEPEND ../../src/deprecated\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\deprecated\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\deprecated\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG) $<
 
 $(OBJS)\deprecateddll_prop.obj :  .AUTODEPEND ../../src/deprecated\prop.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_propform.obj :  .AUTODEPEND ../../src/deprecated\propform.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_proplist.obj :  .AUTODEPEND ../../src/deprecated\proplist.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_resource.obj :  .AUTODEPEND ../../src/deprecated\resource.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_tbarsmpl.obj :  .AUTODEPEND ../../src/deprecated\tbarsmpl.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_treelay.obj :  .AUTODEPEND ../../src/deprecated\treelay.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_wxexpr.obj :  .AUTODEPEND ../../src/deprecated\wxexpr.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_dosyacc.obj :  .AUTODEPEND ../../src/deprecated\dosyacc.c
-	$(CC) -zq -fo=$^@ $(DEPRECATEDDLL_CFLAGS) $<
+	$(CC) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CFLAGS) $<
 
 $(OBJS)\deprecatedlib_dummy.obj :  .AUTODEPEND ../../src/deprecated\..\..\..\src\msw\dummy.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_prop.obj :  .AUTODEPEND ../../src/deprecated\prop.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_propform.obj :  .AUTODEPEND ../../src/deprecated\propform.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_proplist.obj :  .AUTODEPEND ../../src/deprecated\proplist.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_resource.obj :  .AUTODEPEND ../../src/deprecated\resource.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_tbarsmpl.obj :  .AUTODEPEND ../../src/deprecated\tbarsmpl.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_treelay.obj :  .AUTODEPEND ../../src/deprecated\treelay.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_wxexpr.obj :  .AUTODEPEND ../../src/deprecated\wxexpr.cpp
-	$(CXX) -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_dosyacc.obj :  .AUTODEPEND ../../src/deprecated\dosyacc.c
-	$(CC) -zq -fo=$^@ $(DEPRECATEDLIB_CFLAGS) $<
+	$(CC) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CFLAGS) $<
 

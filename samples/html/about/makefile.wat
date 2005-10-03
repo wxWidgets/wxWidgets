@@ -206,7 +206,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -254,7 +254,7 @@ data_files : .SYMBOLIC
 	for %f in (about.htm logo.png) do if not exist $(OBJS)\data\%f copy .\data\%f $(OBJS)\data
 
 $(OBJS)\about_about.obj :  .AUTODEPEND .\about.cpp
-	$(CXX) -zq -fo=$^@ $(ABOUT_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(ABOUT_CXXFLAGS) $<
 
 $(OBJS)\about_about.res :  .AUTODEPEND .\about.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $<

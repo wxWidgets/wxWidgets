@@ -201,7 +201,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -281,7 +281,7 @@ sv : .SYMBOLIC
 	for %f in (internat.po internat.mo) do if not exist $(OBJS)\sv\%f copy .\sv\%f $(OBJS)\sv
 
 $(OBJS)\internat_internat.obj :  .AUTODEPEND .\internat.cpp
-	$(CXX) -zq -fo=$^@ $(INTERNAT_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(INTERNAT_CXXFLAGS) $<
 
 $(OBJS)\internat_internat.res :  .AUTODEPEND .\internat.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

@@ -79,7 +79,7 @@ EXTRALIBS_FOR_BASE =
 __mmediadll___depname =
 !ifeq SHARED 1
 __mmediadll___depname = &
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG).dll
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG).dll
 !endif
 __DEBUGINFO_2 =
 !ifeq BUILD debug
@@ -214,7 +214,8 @@ __UNICODE_DEFINE_p = -d_UNICODE
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\mmedia\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -294,12 +295,12 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia.lib
 
 !ifeq SHARED 1
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG).dll :  $(MMEDIADLL_OBJECTS) $(OBJS)\mmediadll_version.res
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG).dll :  $(MMEDIADLL_OBJECTS) $(OBJS)\mmediadll_version.res
 	@%create $(OBJS)\mmediadll.lbc
 	@%append $(OBJS)\mmediadll.lbc option quiet
 	@%append $(OBJS)\mmediadll.lbc name $^@
@@ -308,7 +309,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(MMEDIADLL_OBJECTS)) do @%append $(OBJS)\mmediadll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\mmediadll.lbc library %i
 	@%append $(OBJS)\mmediadll.lbc option resource=$(OBJS)\mmediadll_version.res
-	@%append $(OBJS)\mmediadll.lbc system nt_dll
+	@%append $(OBJS)\mmediadll.lbc system nr_dll
 	wlink @$(OBJS)\mmediadll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia.lib +$^@
 !endif
@@ -321,131 +322,131 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 !endif
 
 $(OBJS)\mmediadll_dummy.obj :  .AUTODEPEND ../../src/mmedia\..\..\..\src\msw\dummy.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_version.res :  .AUTODEPEND ../../src/mmedia\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_wat$(VENDORTAG) $<
 
 $(OBJS)\mmediadll_cdwin.obj :  .AUTODEPEND ../../src/mmedia\cdwin.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndwin.obj :  .AUTODEPEND ../../src/mmedia\sndwin.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_vidwin.obj :  .AUTODEPEND ../../src/mmedia\vidwin.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_cdbase.obj :  .AUTODEPEND ../../src/mmedia\cdbase.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_g711.obj :  .AUTODEPEND ../../src/mmedia\g711.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_g721.obj :  .AUTODEPEND ../../src/mmedia\g721.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_g723_24.obj :  .AUTODEPEND ../../src/mmedia\g723_24.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_g723_40.obj :  .AUTODEPEND ../../src/mmedia\g723_40.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_g72x.obj :  .AUTODEPEND ../../src/mmedia\g72x.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndaiff.obj :  .AUTODEPEND ../../src/mmedia\sndaiff.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndbase.obj :  .AUTODEPEND ../../src/mmedia\sndbase.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndcodec.obj :  .AUTODEPEND ../../src/mmedia\sndcodec.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndcpcm.obj :  .AUTODEPEND ../../src/mmedia\sndcpcm.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndfile.obj :  .AUTODEPEND ../../src/mmedia\sndfile.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndg72x.obj :  .AUTODEPEND ../../src/mmedia\sndg72x.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndmsad.obj :  .AUTODEPEND ../../src/mmedia\sndmsad.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndpcm.obj :  .AUTODEPEND ../../src/mmedia\sndpcm.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndulaw.obj :  .AUTODEPEND ../../src/mmedia\sndulaw.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_sndwav.obj :  .AUTODEPEND ../../src/mmedia\sndwav.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_vidbase.obj :  .AUTODEPEND ../../src/mmedia\vidbase.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_dummy.obj :  .AUTODEPEND ../../src/mmedia\..\..\..\src\msw\dummy.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_cdwin.obj :  .AUTODEPEND ../../src/mmedia\cdwin.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndwin.obj :  .AUTODEPEND ../../src/mmedia\sndwin.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_vidwin.obj :  .AUTODEPEND ../../src/mmedia\vidwin.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_cdbase.obj :  .AUTODEPEND ../../src/mmedia\cdbase.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_g711.obj :  .AUTODEPEND ../../src/mmedia\g711.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_g721.obj :  .AUTODEPEND ../../src/mmedia\g721.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_g723_24.obj :  .AUTODEPEND ../../src/mmedia\g723_24.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_g723_40.obj :  .AUTODEPEND ../../src/mmedia\g723_40.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_g72x.obj :  .AUTODEPEND ../../src/mmedia\g72x.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndaiff.obj :  .AUTODEPEND ../../src/mmedia\sndaiff.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndbase.obj :  .AUTODEPEND ../../src/mmedia\sndbase.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndcodec.obj :  .AUTODEPEND ../../src/mmedia\sndcodec.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndcpcm.obj :  .AUTODEPEND ../../src/mmedia\sndcpcm.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndfile.obj :  .AUTODEPEND ../../src/mmedia\sndfile.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndg72x.obj :  .AUTODEPEND ../../src/mmedia\sndg72x.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndmsad.obj :  .AUTODEPEND ../../src/mmedia\sndmsad.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndpcm.obj :  .AUTODEPEND ../../src/mmedia\sndpcm.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndulaw.obj :  .AUTODEPEND ../../src/mmedia\sndulaw.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_sndwav.obj :  .AUTODEPEND ../../src/mmedia\sndwav.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_vidbase.obj :  .AUTODEPEND ../../src/mmedia\vidbase.cpp
-	$(CXX) -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 

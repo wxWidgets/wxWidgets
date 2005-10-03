@@ -201,7 +201,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -245,7 +245,7 @@ $(OBJS)\statbar.exe :  $(STATBAR_OBJECTS) $(OBJS)\statbar_statbar.res
 	wlink @$(OBJS)\statbar.lbc
 
 $(OBJS)\statbar_statbar.obj :  .AUTODEPEND .\statbar.cpp
-	$(CXX) -zq -fo=$^@ $(STATBAR_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STATBAR_CXXFLAGS) $<
 
 $(OBJS)\statbar_statbar.res :  .AUTODEPEND .\statbar.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

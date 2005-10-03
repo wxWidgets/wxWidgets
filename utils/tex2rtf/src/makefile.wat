@@ -210,7 +210,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -290,53 +290,53 @@ $(OBJS)\tex2rtf_gui.exe :  $(TEX2RTF_GUI_OBJECTS) $(OBJS)\tex2rtf_gui_sample.res
 !endif
 
 $(OBJS)\tex2rtf_tex2rtf.obj :  .AUTODEPEND .\tex2rtf.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_tex2any.obj :  .AUTODEPEND .\tex2any.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_texutils.obj :  .AUTODEPEND .\texutils.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_rtfutils.obj :  .AUTODEPEND .\rtfutils.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_xlputils.obj :  .AUTODEPEND .\xlputils.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_htmlutil.obj :  .AUTODEPEND .\htmlutil.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_readshg.obj :  .AUTODEPEND .\readshg.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_table.obj :  .AUTODEPEND .\table.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_sample.res :  .AUTODEPEND .\..\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $<
 
 $(OBJS)\tex2rtf_gui_tex2rtf.obj :  .AUTODEPEND .\tex2rtf.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_tex2any.obj :  .AUTODEPEND .\tex2any.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_texutils.obj :  .AUTODEPEND .\texutils.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_rtfutils.obj :  .AUTODEPEND .\rtfutils.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_xlputils.obj :  .AUTODEPEND .\xlputils.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_htmlutil.obj :  .AUTODEPEND .\htmlutil.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_readshg.obj :  .AUTODEPEND .\readshg.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_table.obj :  .AUTODEPEND .\table.cpp
-	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 

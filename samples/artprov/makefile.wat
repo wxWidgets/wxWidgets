@@ -201,7 +201,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -246,10 +246,10 @@ $(OBJS)\arttest.exe :  $(ARTTEST_OBJECTS) $(OBJS)\arttest_arttest.res
 	wlink @$(OBJS)\arttest.lbc
 
 $(OBJS)\arttest_arttest.obj :  .AUTODEPEND .\arttest.cpp
-	$(CXX) -zq -fo=$^@ $(ARTTEST_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(ARTTEST_CXXFLAGS) $<
 
 $(OBJS)\arttest_artbrows.obj :  .AUTODEPEND .\artbrows.cpp
-	$(CXX) -zq -fo=$^@ $(ARTTEST_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(ARTTEST_CXXFLAGS) $<
 
 $(OBJS)\arttest_arttest.res :  .AUTODEPEND .\arttest.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

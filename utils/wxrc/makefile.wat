@@ -205,7 +205,7 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -251,5 +251,5 @@ $(OBJS)\wxrc.exe :  $(WXRC_OBJECTS)
 !endif
 
 $(OBJS)\wxrc_wxrc.obj :  .AUTODEPEND .\wxrc.cpp
-	$(CXX) -zq -fo=$^@ $(WXRC_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXRC_CXXFLAGS) $<
 

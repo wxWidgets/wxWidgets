@@ -201,7 +201,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -245,7 +245,7 @@ $(OBJS)\menu.exe :  $(MENU_OBJECTS) $(OBJS)\menu_menu.res
 	wlink @$(OBJS)\menu.lbc
 
 $(OBJS)\menu_menu.obj :  .AUTODEPEND .\menu.cpp
-	$(CXX) -zq -fo=$^@ $(MENU_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MENU_CXXFLAGS) $<
 
 $(OBJS)\menu_menu.res :  .AUTODEPEND .\menu.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

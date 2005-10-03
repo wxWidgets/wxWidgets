@@ -79,7 +79,7 @@ EXTRALIBS_FOR_BASE =
 __foldbardll___depname =
 !ifeq SHARED 1
 __foldbardll___depname = &
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG).dll
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG).dll
 !endif
 __DEBUGINFO_2 =
 !ifeq BUILD debug
@@ -214,7 +214,8 @@ __UNICODE_DEFINE_p = -d_UNICODE
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\foldbar\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -261,12 +262,12 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar.lib
 
 !ifeq SHARED 1
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG).dll :  $(FOLDBARDLL_OBJECTS) $(OBJS)\foldbardll_version.res
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG).dll :  $(FOLDBARDLL_OBJECTS) $(OBJS)\foldbardll_version.res
 	@%create $(OBJS)\foldbardll.lbc
 	@%append $(OBJS)\foldbardll.lbc option quiet
 	@%append $(OBJS)\foldbardll.lbc name $^@
@@ -275,7 +276,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(FOLDBARDLL_OBJECTS)) do @%append $(OBJS)\foldbardll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\foldbardll.lbc library %i
 	@%append $(OBJS)\foldbardll.lbc option resource=$(OBJS)\foldbardll_version.res
-	@%append $(OBJS)\foldbardll.lbc system nt_dll
+	@%append $(OBJS)\foldbardll.lbc system nr_dll
 	wlink @$(OBJS)\foldbardll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar.lib +$^@
 !endif
@@ -288,29 +289,29 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 !endif
 
 $(OBJS)\foldbardll_dummy.obj :  .AUTODEPEND ../../src/foldbar\..\..\..\src\msw\dummy.cpp
-	$(CXX) -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
 
 $(OBJS)\foldbardll_version.res :  .AUTODEPEND ../../src/foldbar\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\foldbar\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\foldbar\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG) $<
 
 $(OBJS)\foldbardll_captionbar.obj :  .AUTODEPEND ../../src/foldbar\captionbar.cpp
-	$(CXX) -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
 
 $(OBJS)\foldbardll_foldpanelbar.obj :  .AUTODEPEND ../../src/foldbar\foldpanelbar.cpp
-	$(CXX) -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
 
 $(OBJS)\foldbardll_foldpanelitem.obj :  .AUTODEPEND ../../src/foldbar\foldpanelitem.cpp
-	$(CXX) -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
 
 $(OBJS)\foldbarlib_dummy.obj :  .AUTODEPEND ../../src/foldbar\..\..\..\src\msw\dummy.cpp
-	$(CXX) -zq -fo=$^@ $(FOLDBARLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARLIB_CXXFLAGS) $<
 
 $(OBJS)\foldbarlib_captionbar.obj :  .AUTODEPEND ../../src/foldbar\captionbar.cpp
-	$(CXX) -zq -fo=$^@ $(FOLDBARLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARLIB_CXXFLAGS) $<
 
 $(OBJS)\foldbarlib_foldpanelbar.obj :  .AUTODEPEND ../../src/foldbar\foldpanelbar.cpp
-	$(CXX) -zq -fo=$^@ $(FOLDBARLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARLIB_CXXFLAGS) $<
 
 $(OBJS)\foldbarlib_foldpanelitem.obj :  .AUTODEPEND ../../src/foldbar\foldpanelitem.cpp
-	$(CXX) -zq -fo=$^@ $(FOLDBARLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARLIB_CXXFLAGS) $<
 

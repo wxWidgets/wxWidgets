@@ -2495,6 +2495,10 @@ SOURCE=..\include\wx\laywin.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\link.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\list.h
 # End Source File
 # Begin Source File

@@ -206,7 +206,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -258,7 +258,7 @@ data_doc : .SYMBOLIC
 	for %f in (aindex.html ClassGraph.class ClassGraphPanel.class ClassLayout.class down.gif dxxgifs.tex HIER.html HIERjava.html icon1.gif icon2.gif index.html logo.gif NavigatorButton.class USE_HELP.html wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm) do if not exist $(OBJS)\doc\%f copy .\doc\%f $(OBJS)\doc
 
 $(OBJS)\help_demo.obj :  .AUTODEPEND .\demo.cpp
-	$(CXX) -zq -fo=$^@ $(HELP_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(HELP_CXXFLAGS) $<
 
 $(OBJS)\help_demo.res :  .AUTODEPEND .\demo.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

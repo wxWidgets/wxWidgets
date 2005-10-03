@@ -211,7 +211,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -269,34 +269,34 @@ data : .SYMBOLIC
 	for %f in (studio_resources.wxr) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\studio_studio.obj :  .AUTODEPEND .\studio.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_doc.obj :  .AUTODEPEND .\doc.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_shapes.obj :  .AUTODEPEND .\shapes.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_symbols.obj :  .AUTODEPEND .\symbols.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_view.obj :  .AUTODEPEND .\view.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_cspalette.obj :  .AUTODEPEND .\cspalette.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_mainfrm.obj :  .AUTODEPEND .\mainfrm.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_project.obj :  .AUTODEPEND .\project.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_dialogs.obj :  .AUTODEPEND .\dialogs.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_csprint.obj :  .AUTODEPEND .\csprint.cpp
-	$(CXX) -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STUDIO_CXXFLAGS) $<
 
 $(OBJS)\studio_studio.res :  .AUTODEPEND .\studio.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\..\samples -dNOPCH -i=.\..\..\..\include $<

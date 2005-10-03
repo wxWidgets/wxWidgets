@@ -201,7 +201,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -247,10 +247,10 @@ $(OBJS)\mmboard.exe :  $(MMBOARD_OBJECTS) $(OBJS)\mmboard_mmboard.res
 	wlink @$(OBJS)\mmboard.lbc
 
 $(OBJS)\mmboard_mmboard.obj :  .AUTODEPEND .\mmboard.cpp
-	$(CXX) -zq -fo=$^@ $(MMBOARD_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMBOARD_CXXFLAGS) $<
 
 $(OBJS)\mmboard_mmbman.obj :  .AUTODEPEND .\mmbman.cpp
-	$(CXX) -zq -fo=$^@ $(MMBOARD_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(MMBOARD_CXXFLAGS) $<
 
 $(OBJS)\mmboard_mmboard.res :  .AUTODEPEND .\mmboard.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH -i=.\..\..\include $<

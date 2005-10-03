@@ -206,7 +206,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -254,7 +254,7 @@ data : .SYMBOLIC
 	for %f in (9000g.wav cuckoo.wav doggrowl.wav tinkalink2.wav) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\sound_sound.obj :  .AUTODEPEND .\sound.cpp
-	$(CXX) -zq -fo=$^@ $(SOUND_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(SOUND_CXXFLAGS) $<
 
 $(OBJS)\sound_sound.res :  .AUTODEPEND .\sound.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

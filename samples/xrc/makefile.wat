@@ -221,7 +221,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -272,16 +272,16 @@ data : .SYMBOLIC
 	for %f in (appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc) do if not exist $(OBJS)\rc\%f copy .\rc\%f $(OBJS)\rc
 
 $(OBJS)\xrcdemo_xrcdemo.obj :  .AUTODEPEND .\xrcdemo.cpp
-	$(CXX) -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<
 
 $(OBJS)\xrcdemo_myframe.obj :  .AUTODEPEND .\myframe.cpp
-	$(CXX) -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<
 
 $(OBJS)\xrcdemo_derivdlg.obj :  .AUTODEPEND .\derivdlg.cpp
-	$(CXX) -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<
 
 $(OBJS)\xrcdemo_custclas.obj :  .AUTODEPEND .\custclas.cpp
-	$(CXX) -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<
 
 $(OBJS)\xrcdemo_xrcdemo.res :  .AUTODEPEND .\xrcdemo.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

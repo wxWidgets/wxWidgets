@@ -201,7 +201,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -249,7 +249,7 @@ data : .SYMBOLIC
 	for %f in (pat4.bmp pat35.bmp pat36.bmp image.bmp mask.bmp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\drawing_drawing.obj :  .AUTODEPEND .\drawing.cpp
-	$(CXX) -zq -fo=$^@ $(DRAWING_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DRAWING_CXXFLAGS) $<
 
 $(OBJS)\drawing_drawing.res :  .AUTODEPEND .\drawing.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

@@ -201,7 +201,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -334,31 +334,31 @@ data_files : .SYMBOLIC
 	for %f in (bookmarks.bmp class_icon.bmp class_icon1.bmp copy.bmp cut.bmp file_icon.bmp folder_icon.bmp help_icon.bmp new.bmp nextmark.bmp open.bmp paste.bmp prevmark.bmp res_icon.bmp save.bmp saveall.bmp search.bmp start95_dp.bmp start95_pr.bmp tile.bmp) do if not exist $(OBJS)\bitmaps\%f copy .\bitmaps\%f $(OBJS)\bitmaps
 
 $(OBJS)\fl_demo1_fl_demo1.obj :  .AUTODEPEND .\fl_demo1.cpp
-	$(CXX) -zq -fo=$^@ $(FL_DEMO1_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FL_DEMO1_CXXFLAGS) $<
 
 $(OBJS)\fl_demo1_fl_demo1.res :  .AUTODEPEND .\fl_demo1.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH -i=.\..\..\include -dBMP_DIR="bitmaps/" $<
 
 $(OBJS)\fl_demo2_fl_demo2.obj :  .AUTODEPEND .\fl_demo2.cpp
-	$(CXX) -zq -fo=$^@ $(FL_DEMO2_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FL_DEMO2_CXXFLAGS) $<
 
 $(OBJS)\fl_demo2_fl_demo2.res :  .AUTODEPEND .\fl_demo2.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH -i=.\..\..\include -dBMP_DIR="bitmaps/" $<
 
 $(OBJS)\fl_sample1_fl_sample1.obj :  .AUTODEPEND .\fl_sample1.cpp
-	$(CXX) -zq -fo=$^@ $(FL_SAMPLE1_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FL_SAMPLE1_CXXFLAGS) $<
 
 $(OBJS)\fl_sample1_fl_sample1.res :  .AUTODEPEND .\fl_sample1.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH -i=.\..\..\include -dBMP_DIR="bitmaps/" $<
 
 $(OBJS)\fl_sample2_fl_sample2.obj :  .AUTODEPEND .\fl_sample2.cpp
-	$(CXX) -zq -fo=$^@ $(FL_SAMPLE2_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FL_SAMPLE2_CXXFLAGS) $<
 
 $(OBJS)\fl_sample2_fl_sample2.res :  .AUTODEPEND .\fl_sample2.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH -i=.\..\..\include -dBMP_DIR="bitmaps/" $<
 
 $(OBJS)\fl_sample3_fl_sample3.obj :  .AUTODEPEND .\fl_sample3.cpp
-	$(CXX) -zq -fo=$^@ $(FL_SAMPLE3_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(FL_SAMPLE3_CXXFLAGS) $<
 
 $(OBJS)\fl_sample3_fl_sample3.res :  .AUTODEPEND .\fl_sample3.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH -i=.\..\..\include -dBMP_DIR="bitmaps/" $<

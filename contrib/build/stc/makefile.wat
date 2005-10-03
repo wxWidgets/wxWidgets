@@ -79,7 +79,7 @@ EXTRALIBS_FOR_BASE =
 __stcdll___depname =
 !ifeq SHARED 1
 __stcdll___depname = &
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG).dll
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG).dll
 !endif
 __DEBUGINFO_2 =
 !ifeq BUILD debug
@@ -214,7 +214,8 @@ __UNICODE_DEFINE_p = -d_UNICODE
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\stc\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -396,12 +397,12 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc.lib
 
 !ifeq SHARED 1
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG).dll :  $(STCDLL_OBJECTS) $(OBJS)\stcdll_version.res
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG).dll :  $(STCDLL_OBJECTS) $(OBJS)\stcdll_version.res
 	@%create $(OBJS)\stcdll.lbc
 	@%append $(OBJS)\stcdll.lbc option quiet
 	@%append $(OBJS)\stcdll.lbc name $^@
@@ -410,7 +411,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(STCDLL_OBJECTS)) do @%append $(OBJS)\stcdll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\stcdll.lbc library %i
 	@%append $(OBJS)\stcdll.lbc option resource=$(OBJS)\stcdll_version.res
-	@%append $(OBJS)\stcdll.lbc system nt_dll
+	@%append $(OBJS)\stcdll.lbc system nr_dll
 	wlink @$(OBJS)\stcdll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc.lib +$^@
 !endif
@@ -423,431 +424,431 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 !endif
 
 $(OBJS)\stcdll_version.res :  .AUTODEPEND ../../src/stc\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG) $<
 
 $(OBJS)\stcdll_PlatWX.obj :  .AUTODEPEND ../../src/stc\PlatWX.cpp
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_ScintillaWX.obj :  .AUTODEPEND ../../src/stc\ScintillaWX.cpp
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_stc.obj :  .AUTODEPEND ../../src/stc\stc.cpp
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_AutoComplete.obj :  .AUTODEPEND ../../src/stc\scintilla\src\AutoComplete.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_CallTip.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CallTip.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_CellBuffer.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CellBuffer.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_ContractionState.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ContractionState.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_Document.obj :  .AUTODEPEND ../../src/stc\scintilla\src\Document.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_DocumentAccessor.obj :  .AUTODEPEND ../../src/stc\scintilla\src\DocumentAccessor.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_Editor.obj :  .AUTODEPEND ../../src/stc\scintilla\src\Editor.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_ExternalLexer.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ExternalLexer.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_Indicator.obj :  .AUTODEPEND ../../src/stc\scintilla\src\Indicator.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_KeyMap.obj :  .AUTODEPEND ../../src/stc\scintilla\src\KeyMap.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_KeyWords.obj :  .AUTODEPEND ../../src/stc\scintilla\src\KeyWords.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexAPDL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAPDL.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexAU3.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAU3.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexAVE.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAVE.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexAda.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAda.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexAsm.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAsm.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexAsn1.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAsn1.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexBaan.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBaan.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexBash.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBash.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexBullant.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBullant.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexCLW.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCLW.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexCPP.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCPP.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexCSS.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCSS.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexConf.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexConf.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexCrontab.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCrontab.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexEScript.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexEScript.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexEiffel.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexEiffel.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexErlang.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexErlang.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexForth.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexForth.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexFortran.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexFortran.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexGui4Cli.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexGui4Cli.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexHTML.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHTML.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexKix.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexKix.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexLisp.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexLisp.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexLout.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexLout.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexLua.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexLua.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexMMIXAL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMMIXAL.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexMPT.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMPT.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexMSSQL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMSSQL.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexMatlab.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMatlab.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexMetapost.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMetapost.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexNsis.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexNsis.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexOthers.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexOthers.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexPB.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPB.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexPOV.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPOV.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexPS.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPS.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexPascal.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPascal.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexPerl.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPerl.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexPython.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPython.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexRuby.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexRuby.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexSQL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSQL.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexScriptol.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexScriptol.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexSpecman.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSpecman.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexTeX.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexTeX.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexVB.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexVB.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexVHDL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexVHDL.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexVerilog.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexVerilog.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexYAML.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexYAML.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LineMarker.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LineMarker.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_PropSet.obj :  .AUTODEPEND ../../src/stc\scintilla\src\PropSet.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_RESearch.obj :  .AUTODEPEND ../../src/stc\scintilla\src\RESearch.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_ScintillaBase.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ScintillaBase.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_Style.obj :  .AUTODEPEND ../../src/stc\scintilla\src\Style.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_StyleContext.obj :  .AUTODEPEND ../../src/stc\scintilla\src\StyleContext.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_UniConversion.obj :  .AUTODEPEND ../../src/stc\scintilla\src\UniConversion.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_ViewStyle.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ViewStyle.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_WindowAccessor.obj :  .AUTODEPEND ../../src/stc\scintilla\src\WindowAccessor.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_XPM.obj :  .AUTODEPEND ../../src/stc\scintilla\src\XPM.cxx
-	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stclib_PlatWX.obj :  .AUTODEPEND ../../src/stc\PlatWX.cpp
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_ScintillaWX.obj :  .AUTODEPEND ../../src/stc\ScintillaWX.cpp
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_stc.obj :  .AUTODEPEND ../../src/stc\stc.cpp
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_AutoComplete.obj :  .AUTODEPEND ../../src/stc\scintilla\src\AutoComplete.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_CallTip.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CallTip.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_CellBuffer.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CellBuffer.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_ContractionState.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ContractionState.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_Document.obj :  .AUTODEPEND ../../src/stc\scintilla\src\Document.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_DocumentAccessor.obj :  .AUTODEPEND ../../src/stc\scintilla\src\DocumentAccessor.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_Editor.obj :  .AUTODEPEND ../../src/stc\scintilla\src\Editor.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_ExternalLexer.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ExternalLexer.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_Indicator.obj :  .AUTODEPEND ../../src/stc\scintilla\src\Indicator.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_KeyMap.obj :  .AUTODEPEND ../../src/stc\scintilla\src\KeyMap.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_KeyWords.obj :  .AUTODEPEND ../../src/stc\scintilla\src\KeyWords.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexAPDL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAPDL.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexAU3.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAU3.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexAVE.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAVE.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexAda.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAda.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexAsm.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAsm.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexAsn1.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexAsn1.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexBaan.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBaan.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexBash.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBash.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexBullant.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBullant.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexCLW.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCLW.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexCPP.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCPP.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexCSS.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCSS.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexConf.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexConf.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexCrontab.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCrontab.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexEScript.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexEScript.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexEiffel.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexEiffel.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexErlang.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexErlang.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexForth.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexForth.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexFortran.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexFortran.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexGui4Cli.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexGui4Cli.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexHTML.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHTML.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexKix.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexKix.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexLisp.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexLisp.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexLout.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexLout.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexLua.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexLua.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexMMIXAL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMMIXAL.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexMPT.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMPT.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexMSSQL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMSSQL.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexMatlab.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMatlab.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexMetapost.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMetapost.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexNsis.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexNsis.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexOthers.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexOthers.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexPB.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPB.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexPOV.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPOV.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexPS.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPS.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexPascal.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPascal.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexPerl.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPerl.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexPython.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPython.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexRuby.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexRuby.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexSQL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSQL.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexScriptol.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexScriptol.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexSpecman.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSpecman.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexTeX.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexTeX.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexVB.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexVB.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexVHDL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexVHDL.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexVerilog.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexVerilog.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexYAML.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexYAML.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LineMarker.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LineMarker.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_PropSet.obj :  .AUTODEPEND ../../src/stc\scintilla\src\PropSet.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_RESearch.obj :  .AUTODEPEND ../../src/stc\scintilla\src\RESearch.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_ScintillaBase.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ScintillaBase.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_Style.obj :  .AUTODEPEND ../../src/stc\scintilla\src\Style.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_StyleContext.obj :  .AUTODEPEND ../../src/stc\scintilla\src\StyleContext.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_UniConversion.obj :  .AUTODEPEND ../../src/stc\scintilla\src\UniConversion.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_ViewStyle.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ViewStyle.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_WindowAccessor.obj :  .AUTODEPEND ../../src/stc\scintilla\src\WindowAccessor.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_XPM.obj :  .AUTODEPEND ../../src/stc\scintilla\src\XPM.cxx
-	$(CXX) -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 

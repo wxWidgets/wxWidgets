@@ -216,7 +216,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -265,19 +265,19 @@ data : .SYMBOLIC
 	for %f in (tips.txt) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\dialogs_dialogs.obj :  .AUTODEPEND .\dialogs.cpp
-	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_colrdlgg.obj :  .AUTODEPEND .\..\..\src\generic\colrdlgg.cpp
-	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_dirdlgg.obj :  .AUTODEPEND .\..\..\src\generic\dirdlgg.cpp
-	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_filedlgg.obj :  .AUTODEPEND .\..\..\src\generic\filedlgg.cpp
-	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_fontdlgg.obj :  .AUTODEPEND .\..\..\src\generic\fontdlgg.cpp
-	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_dialogs.res :  .AUTODEPEND .\dialogs.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

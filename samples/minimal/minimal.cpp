@@ -162,6 +162,13 @@ MyFrame::MyFrame(const wxString& title)
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
+    wxPanel *p = new wxPanel(this);
+    new wxStaticText(p, -1, _T("Foo"), wxPoint(10, 10));
+    wxStaticText *text = new wxStaticText(p, -1, _T("This is a very, very, extremely and even more than you could have thought it long string"), wxPoint(10, 40));
+    text->Wrap(150);
+
+    (new wxTextCtrl(p, -1, _T("Hi"), wxPoint(10, 70)))->SetEditable(false);
+
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);

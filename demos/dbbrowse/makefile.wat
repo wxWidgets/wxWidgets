@@ -227,7 +227,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 26
+WX_RELEASE_NODOT = 27
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -288,28 +288,28 @@ data_help_png : .SYMBOLIC
 	for %f in (col.png d_closed.png d_open.png dsn.png dsnclose.png dsnopen.png f_closed.png f_open.png gnu.png gtk.png imbau.png kde.png key.png keyf.png linux.png logo.png motif.png msvc.png odbc.png pgmctrl.png redh.png remstar.png server.png suse.png tab.png view.png winnt.png wins.png) do if not exist $(OBJS)\help.png\%f copy .\help.png\%f $(OBJS)\help.png
 
 $(OBJS)\dbbrowse_dbbrowse.obj :  .AUTODEPEND .\dbbrowse.cpp
-	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
 $(OBJS)\dbbrowse_doc.obj :  .AUTODEPEND .\doc.cpp
-	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
 $(OBJS)\dbbrowse_pgmctrl.obj :  .AUTODEPEND .\pgmctrl.cpp
-	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
 $(OBJS)\dbbrowse_tabpgwin.obj :  .AUTODEPEND .\tabpgwin.cpp
-	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
 $(OBJS)\dbbrowse_browsedb.obj :  .AUTODEPEND .\browsedb.cpp
-	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
 $(OBJS)\dbbrowse_dbtree.obj :  .AUTODEPEND .\dbtree.cpp
-	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
 $(OBJS)\dbbrowse_dbgrid.obj :  .AUTODEPEND .\dbgrid.cpp
-	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
 $(OBJS)\dbbrowse_dlguser.obj :  .AUTODEPEND .\dlguser.cpp
-	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+	$(CXX) -bt=nt -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
 $(OBJS)\dbbrowse_dbbrowse.res :  .AUTODEPEND .\dbbrowse.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
