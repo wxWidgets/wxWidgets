@@ -103,7 +103,7 @@ ALL_DIST: distrib_clean
 	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/README $(DISTDIR)/src/zlib
-#	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
+	#cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
 	mkdir $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.h $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.c $(DISTDIR)/src/regex
@@ -133,7 +133,6 @@ ALL_DIST: distrib_clean
 	cp $(WXDIR)/build/bakefiles/wxpresets/sample/minimal* $(DISTDIR)/build/bakefiles/wxpresets/sample
 	cp $(WXDIR)/build/bakefiles/wxpresets/sample/config* $(DISTDIR)/build/bakefiles/wxpresets/sample
 	cp $(WXDIR)/build/bakefiles/wxpresets/*.txt $(DISTDIR)/build/bakefiles/wxpresets
-    # copy aclocal files
 	mkdir $(DISTDIR)/build/aclocal
 	cp $(WXDIR)/build/aclocal/*.m4 $(DISTDIR)/build/aclocal
 
@@ -322,9 +321,6 @@ MACX_DIST: ALL_GUI_DIST
 	cp $(MACDIR)/carbon/morefilex/*.h $(DISTDIR)/src/mac/carbon/morefilex
 	cp $(MACDIR)/carbon/morefilex/*.c $(DISTDIR)/src/mac/carbon/morefilex
 	cp $(MACDIR)/carbon/morefilex/*.cpp $(DISTDIR)/src/mac/carbon/morefilex
-# obsolete
-#	mkdir $(DISTDIR)/src/mac/macsock
-#	cp $(MACDIR)/macsock/*.lib $(DISTDIR)/src/mac/macsock
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 
@@ -771,7 +767,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/mobile/styles/*.cpp $(DISTDIR)/samples/mobile/styles
 	cp $(SAMPDIR)/mobile/styles/*.h $(DISTDIR)/samples/mobile/styles
 	cp $(SAMPDIR)/mobile/styles/*.jpg $(DISTDIR)/samples/mobile/styles
-    
+
 	mkdir $(DISTDIR)/samples/multimon
 	cp $(SAMPDIR)/multimon/Makefile.in $(DISTDIR)/samples/multimon
 	cp $(SAMPDIR)/multimon/makefile.unx $(DISTDIR)/samples/multimon
@@ -823,13 +819,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/printing/*.h $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.xpm $(DISTDIR)/samples/printing
 
-#	mkdir $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/Makefile.in $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/makefile.unx $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/*.cpp $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/*.h $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/*.wxr $(DISTDIR)/samples/resource
-
 	mkdir $(DISTDIR)/samples/render
 	cp $(SAMPDIR)/render/Makefile.in $(DISTDIR)/samples/render
 	cp $(SAMPDIR)/render/makefile.unx $(DISTDIR)/samples/render
@@ -849,12 +838,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/richedit/*.xpm $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/README $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/TODO $(DISTDIR)/samples/richedit
-
-#	mkdir $(DISTDIR)/samples/proplist
-#	cp $(SAMPDIR)/proplist/Makefile.in $(DISTDIR)/samples/proplist
-#	cp $(SAMPDIR)/proplist/makefile.unx $(DISTDIR)/samples/proplist
-#	cp $(SAMPDIR)/proplist/*.cpp $(DISTDIR)/samples/proplist
-#	cp $(SAMPDIR)/proplist/*.h $(DISTDIR)/samples/proplist
 
 	mkdir $(DISTDIR)/samples/propsize
 	cp $(SAMPDIR)/propsize/Makefile.in $(DISTDIR)/samples/propsize
@@ -937,12 +920,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/treectrl/*.cpp $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.h $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.xpm $(DISTDIR)/samples/treectrl
-
-#	mkdir $(DISTDIR)/samples/treelay
-#	cp $(SAMPDIR)/treelay/Makefile.in $(DISTDIR)/samples/treelay
-#	cp $(SAMPDIR)/treelay/makefile.unx $(DISTDIR)/samples/treelay
-#	cp $(SAMPDIR)/treelay/*.cpp $(DISTDIR)/samples/treelay
-#	cp $(SAMPDIR)/treelay/*.h $(DISTDIR)/samples/treelay
 
 	mkdir $(DISTDIR)/samples/typetest
 	cp $(SAMPDIR)/typetest/Makefile.in $(DISTDIR)/samples/typetest
@@ -1063,7 +1040,7 @@ MANUAL_DIST:
 	cp $(DOCDIR)/latex/wx/*.sty $(DISTDIR)/docs/latex/wx
 
 
-# Copy all the files from wxPython needed for the Debian source package, 
+# Copy all the files from wxPython needed for the Debian source package,
 # and then remove some that are not needed.
 PYTHON_DIST:
 	for dir in `grep -v '#' $(WXDIR)/wxPython/distrib/DIRLIST`; do \
