@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        brush.cpp
+// Name:        src/os2/brush.cpp
 // Purpose:     wxBrush
 // Author:      David Webster
 // Modified by:
@@ -139,7 +139,7 @@ bool wxBrush::RealizeResource()
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
             wxLogError(_T("Unable to set current color table to RGB mode. Error: %s\n"), sError.c_str());
-            return FALSE;
+            return false;
         }
 
         if (M_BRUSHDATA->m_nStyle==wxTRANSPARENT)
@@ -224,7 +224,7 @@ bool wxBrush::RealizeResource()
         }
         return bOk;
     }
-    return FALSE;
+    return false;
 } // end of wxBrush::RealizeResource
 
 WXHANDLE wxBrush::GetResourceHandle()
@@ -241,7 +241,7 @@ bool wxBrush::FreeResource( bool WXUNUSED(bForce) )
         M_BRUSHDATA->m_hBrush = 0;
         return true;
     }
-    else return FALSE;
+    else return false;
 } // end of wxBrush::FreeResource
 
 bool wxBrush::IsFree() const
@@ -266,32 +266,21 @@ void wxBrush::Unshare()
     }
 } // end of wxBrush::Unshare
 
-void wxBrush::SetColour(
-  const wxColour&                   rColour
-)
+void wxBrush::SetColour( const wxColour& rColour )
 {
     Unshare();
     M_BRUSHDATA->m_vColour = rColour;
     RealizeResource();
 }
 
-void wxBrush::SetColour(
-  unsigned char                     cRed
-, unsigned char                     cGreen
-, unsigned char                     cBlue
-)
+void wxBrush::SetColour(const unsigned char cRed, const unsigned char cGreen, const unsigned char cBlue)
 {
     Unshare();
-    M_BRUSHDATA->m_vColour.Set( cRed
-                               ,cGreen
-                               ,cBlue
-                              );
+    M_BRUSHDATA->m_vColour.Set( cRed, cGreen, cBlue );
     RealizeResource();
 } // end of wxBrush::SetColour
 
-void wxBrush::SetStyle(
-  int                               nStyle
-)
+void wxBrush::SetStyle(int nStyle)
 {
     Unshare();
     M_BRUSHDATA->m_nStyle = nStyle;

@@ -1,8 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        pen.tex
+%% Purpose:     wxPen docs
+%% Author:
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxPen}}\label{wxpen}
 
 A pen is a drawing tool for drawing outlines. It is used for drawing
 lines and painting the outline of rectangles, ellipses, etc. It has a
-colour, a width and a style. 
+colour, a width and a style.
 
 \wxheading{Derived from}
 
@@ -251,7 +262,7 @@ Sets the pen cap style, which may be one of {\bf wxCAP\_ROUND}, {\bf wxCAP\_PROJ
 
 \func{void}{SetColour}{\param{const wxString\& }{colourName}}
 
-\func{void}{SetColour}{\param{int}{ red}, \param{int}{ green}, \param{int}{ blue}}
+\func{void}{SetColour}{\param{const unsigned char}{ red}, \param{const unsigned char}{ green}, \param{const unsigned char}{ blue}}
 
 The pen's colour is changed to the given colour.
 
@@ -412,5 +423,3 @@ to the pen list, and returns it.
 \func{void}{RemovePen}{\param{wxPen*}{ pen}}
 
 Used by wxWidgets to remove a pen from the list.
-
-

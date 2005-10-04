@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/pen.h
+// Name:        wx/msw/pen.h
 // Purpose:     wxPen class
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin: fixed operator=(), ==(), !=()
@@ -102,7 +102,7 @@ public:
 
     // Override in order to recreate the pen
     void SetColour(const wxColour& col);
-    void SetColour(unsigned char r, unsigned char g, unsigned char b);
+    void SetColour(const unsigned char r, const unsigned char g, const unsigned char b);
 
     void SetWidth(int width);
     void SetStyle(int style);
@@ -138,4 +138,3 @@ private:
 };
 
 #endif // _WX_PEN_H_
-

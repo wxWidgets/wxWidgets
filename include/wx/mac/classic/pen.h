@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/pen.h
+// Name:        wx/mac/classic/pen.h
 // Purpose:     wxPen class
 // Author:      Stefan Csomor
 // Modified by:
@@ -65,7 +65,7 @@ public:
 
   // Override in order to recreate the pen
   void SetColour(const wxColour& col) ;
-  void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
+  void SetColour(const unsigned char r, const unsigned char g, const unsigned char b)  ;
 
   void SetWidth(int width)  ;
   void SetStyle(int style)  ;

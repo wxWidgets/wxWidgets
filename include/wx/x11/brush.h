@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        brush.h
+// Name:        wx/x11/brush.h
 // Purpose:     wxBrush class
 // Author:      Julian Smart, Robert Roebling
 // Modified by:
@@ -48,7 +48,7 @@ public:
     wxBitmap *GetStipple() const;
 
     void SetColour( const wxColour& col );
-    void SetColour( unsigned char r, unsigned char g, unsigned char b );
+    void SetColour( const unsigned char r, const unsigned char g, const unsigned char b );
     void SetStyle( int style );
     void SetStipple( const wxBitmap& stipple );
 

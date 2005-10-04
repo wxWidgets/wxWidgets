@@ -6,7 +6,7 @@
 // Created:     2003/08/02 (stubs from 22.03.2003)
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_PEN_H__
@@ -47,7 +47,7 @@ public:
     virtual bool Ok() const { return (m_refData != NULL) ; }
 
     void SetColour(const wxColour& col) ;
-    void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
+    void SetColour(const unsigned char r, const unsigned char g, const unsigned char b)  ;
 
     void SetWidth(int width);
     void SetStyle(int style);

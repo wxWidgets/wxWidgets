@@ -36,28 +36,28 @@ class WXDLLIMPEXP_CORE wxPen: public wxGDIObject
 {
 public:
     wxPen() { }
-    
+
     wxPen( const wxColour &colour, int width = 1, int style = wxSOLID );
     ~wxPen();
-    
+
     wxPen( const wxPen& pen )
         : wxGDIObject()
         { Ref(pen); }
     wxPen& operator = ( const wxPen& pen ) { Ref(pen); return *this; }
-    
+
     bool Ok() const { return m_refData != NULL; }
-    
+
     bool operator == ( const wxPen& pen ) const;
     bool operator != (const wxPen& pen) const { return !(*this == pen); }
 
     void SetColour( const wxColour &colour );
-    void SetColour( int red, int green, int blue );
+    void SetColour( const unsigned char red, const unsigned char green, const unsigned char blue );
     void SetCap( int capStyle );
     void SetJoin( int joinStyle );
     void SetStyle( int style );
     void SetWidth( int width );
     void SetDashes( int number_of_dashes, const wxDash *dash );
-    
+
     wxColour &GetColour() const;
     int GetCap() const;
     int GetJoin() const;
@@ -67,11 +67,11 @@ public:
     int GetDashCount() const;
     wxDash* GetDash() const;
 
-private:    
+private:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
-    
+
     DECLARE_DYNAMIC_CLASS(wxPen)
 };
 

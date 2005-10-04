@@ -72,7 +72,7 @@ wxBrush& wxBrush::operator=(const wxBrush& brush)
 
 bool wxBrush::operator==(const wxBrush& brush) const
 {
-    return FALSE;
+    return false;
 }
 
 wxObjectRefData *wxBrush::CreateRefData() const
@@ -117,7 +117,7 @@ void wxBrush::SetColour(const wxColour& col)
 {
 }
 
-void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
+void wxBrush::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
 {
 }
 
@@ -128,5 +128,3 @@ void wxBrush::SetStyle(int style)
 void wxBrush::SetStipple(const wxBitmap& stipple)
 {
 }
-
-

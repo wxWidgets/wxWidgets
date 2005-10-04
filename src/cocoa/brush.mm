@@ -6,7 +6,7 @@
 // Created:     2003/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -173,7 +173,7 @@ void wxBrush::SetColour(const wxColour& col)
     M_BRUSHDATA->SetColour(col);
 }
 
-void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
+void wxBrush::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
 {
     AllocExclusive();
     M_BRUSHDATA->SetColour(wxColour(r,g,b));
@@ -215,4 +215,3 @@ WX_NSColor wxBrush::GetNSColor()
         return [NSColor clearColor];
     return M_BRUSHDATA->GetNSColor();
 }
-

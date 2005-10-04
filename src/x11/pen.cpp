@@ -122,7 +122,7 @@ void wxPen::SetDashes( int number_of_dashes, const wxDash *dash )
     M_PENDATA->m_dash = (wxX11Dash *)dash; // TODO
 }
 
-void wxPen::SetColour( int red, int green, int blue )
+void wxPen::SetColour( const unsigned char red, const unsigned char green, const unsigned char blue )
 {
     AllocExclusive();
 

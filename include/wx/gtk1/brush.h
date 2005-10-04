@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        brush.h
+// Name:        wx/gtk/brush.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -51,7 +51,7 @@ public:
     wxBitmap *GetStipple() const;
 
     void SetColour( const wxColour& col );
-    void SetColour( unsigned char r, unsigned char g, unsigned char b );
+    void SetColour( const unsigned char r, const unsigned char g, const unsigned char b );
     void SetStyle( int style );
     void SetStipple( const wxBitmap& stipple );
 

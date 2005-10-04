@@ -40,14 +40,14 @@ public:
     bool operator != (const wxPen& pen) const;
 
     void SetColour(const wxColour &colour);
-    void SetColour(int red, int green, int blue);
+    void SetColour(const unsigned char red, const unsigned char green, const unsigned char blue);
     void SetCap(int capStyle);
     void SetJoin(int joinStyle);
     void SetStyle(int style);
     void SetWidth(int width);
     void SetDashes(int number_of_dashes, const wxDash *dash);
     void SetStipple(const wxBitmap& stipple);
-    
+
     wxColour &GetColour() const;
     int GetCap() const;
     int GetJoin() const;
@@ -57,7 +57,7 @@ public:
     int GetDashCount() const;
     wxDash* GetDash() const;
     wxBitmap *GetStipple() const;
-    
+
     bool Ok() const;
 
     // implementation:
@@ -68,7 +68,7 @@ protected:
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
-private:    
+private:
     DECLARE_DYNAMIC_CLASS(wxPen)
 };
 

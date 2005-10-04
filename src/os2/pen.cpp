@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        pen.cpp
+// Name:        src/os2/pen.cpp
 // Purpose:     wxPen
 // Author:      David Webster
 // Modified by:
@@ -152,7 +152,7 @@ bool wxPen::RealizeResource()
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
             wxLogError(_T("Unable to set current color table to RGB mode. Error: %s\n"), sError.c_str());
-            return FALSE;
+            return false;
         }
         if (M_PENDATA->m_nStyle == wxTRANSPARENT)
         {
@@ -216,7 +216,7 @@ bool wxPen::RealizeResource()
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
             wxLogError(_T("Can't set Gpi attributes for a LINEBUNDLE. Error: %s\n"), sError.c_str());
-            return FALSE;
+            return false;
         }
 
         ULONG                           flAttrMask = 0L;
@@ -346,29 +346,21 @@ void wxPen::Unshare()
     }
 } // end of wxPen::Unshare
 
-void wxPen::SetColour(
-  const wxColour&                   rColour
-)
+void wxPen::SetColour( const wxColour& rColour )
 {
     Unshare();
     M_PENDATA->m_vColour = rColour;
     RealizeResource();
 } // end of wxPen::SetColour
 
-void wxPen::SetColour(
-  unsigned char                     cRed
-, unsigned char                     cGreen
-, unsigned char                     cBlue
-)
+void wxPen::SetColour( const unsigned char cRed, const unsigned char cGreen, const unsigned char cBlue)
 {
     Unshare();
     M_PENDATA->m_vColour.Set(cRed, cGreen, cBlue);
     RealizeResource();
 } // end of wxPen::SetColour
 
-void wxPen::SetPS(
-  HPS                               hPS
-)
+void wxPen::SetPS( HPS hPS )
 {
     Unshare();
     if (M_PENDATA->m_hPen)

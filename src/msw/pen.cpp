@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/pen.cpp
+// Name:        src/msw/pen.cpp
 // Purpose:     wxPen
 // Author:      Julian Smart
 // Modified by:
@@ -305,7 +305,7 @@ void wxPen::SetColour(const wxColour& col)
     RealizeResource();
 }
 
-void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
+void wxPen::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
 {
     Unshare();
 
@@ -397,4 +397,3 @@ int wx2msPenStyle(int wx_style)
 #endif
     return PS_SOLID;
 }
-

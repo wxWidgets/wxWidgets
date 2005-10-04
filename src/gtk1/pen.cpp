@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        pen.cpp
+// Name:        src/gtk/pen.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -31,7 +31,7 @@ public:
         m_dash = (wxGTKDash*) NULL;
         m_countDashes = 0;
     }
-    
+
     wxPenRefData( const wxPenRefData& data )
         : wxObjectRefData()
     {
@@ -47,19 +47,19 @@ public:
     bool operator == (const wxPenRefData& data) const
     {
         if ( m_countDashes != data.m_countDashes )
-            return FALSE;
+            return false;
 
         if ( m_dash )
         {
             if ( !data.m_dash ||
                  memcmp(m_dash, data.m_dash, m_countDashes*sizeof(wxGTKDash)) )
             {
-                return FALSE;
+                return false;
             }
         }
         else if ( data.m_dash )
         {
-            return FALSE;
+            return false;
         }
 
 
@@ -69,7 +69,7 @@ public:
                m_capStyle == data.m_capStyle &&
                m_colour == data.m_colour;
     }
-            
+
     int        m_width;
     int        m_style;
     int        m_joinStyle;
@@ -110,60 +110,60 @@ wxObjectRefData *wxPen::CloneRefData(const wxObjectRefData *data) const
 
 bool wxPen::operator == ( const wxPen& pen ) const
 {
-    if (m_refData == pen.m_refData) return TRUE;
-    
-    if (!m_refData || !pen.m_refData) return FALSE;
-    
+    if (m_refData == pen.m_refData) return true;
+
+    if (!m_refData || !pen.m_refData) return false;
+
     return ( *(wxPenRefData*)m_refData == *(wxPenRefData*)pen.m_refData );
 }
 
 void wxPen::SetColour( const wxColour &colour )
 {
     AllocExclusive();
-    
+
     M_PENDATA->m_colour = colour;
 }
 
 void wxPen::SetDashes( int number_of_dashes, const wxDash *dash )
 {
     AllocExclusive();
-    
+
     M_PENDATA->m_countDashes = number_of_dashes;
     M_PENDATA->m_dash = (wxGTKDash *)dash;
 }
 
-void wxPen::SetColour( int red, int green, int blue )
+void wxPen::SetColour( const unsigned char red, const unsigned char green, const unsigned char blue )
 {
     AllocExclusive();
-    
+
     M_PENDATA->m_colour.Set( red, green, blue );
 }
 
 void wxPen::SetCap( int capStyle )
 {
     AllocExclusive();
-    
+
     M_PENDATA->m_capStyle = capStyle;
 }
 
 void wxPen::SetJoin( int joinStyle )
 {
     AllocExclusive();
-    
+
     M_PENDATA->m_joinStyle = joinStyle;
 }
 
 void wxPen::SetStyle( int style )
 {
     AllocExclusive();
-    
+
     M_PENDATA->m_style = style;
 }
 
 void wxPen::SetWidth( int width )
 {
     AllocExclusive();
-    
+
     M_PENDATA->m_width = width;
 }
 
@@ -217,4 +217,3 @@ wxColour &wxPen::GetColour() const
 
     return M_PENDATA->m_colour;
 }
-

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        brush.h
+// Name:        wx/os2/brush.h
 // Purpose:     wxBrush class
 // Author:      David Webster
 // Modified by:
@@ -27,11 +27,11 @@ public:
     ~wxBrushRefData();
 
 protected:
-    int                             m_nStyle;
-    wxBitmap                        m_vStipple ;
-    wxColour                        m_vColour;
-    WXHBRUSH                        m_hBrush; // in OS/2 GPI this will be the PS the pen is associated with
-    AREABUNDLE                      m_vBundle;
+    int         m_nStyle;
+    wxBitmap    m_vStipple ;
+    wxColour    m_vColour;
+    WXHBRUSH    m_hBrush; // in OS/2 GPI this will be the PS the pen is associated with
+    AREABUNDLE  m_vBundle;
 };
 
 #define M_BRUSHDATA ((wxBrushRefData *)m_refData)
@@ -43,9 +43,7 @@ class WXDLLEXPORT wxBrush: public wxBrushBase
 
 public:
     wxBrush();
-    wxBrush( const wxColour& rCol
-            ,int             nStyle = wxSOLID
-           );
+    wxBrush(const wxColour& rCol, int nStyle = wxSOLID);
     wxBrush(const wxBitmap& rStipple);
     inline wxBrush(const wxBrush& rBrush) { Ref(rBrush); }
     ~wxBrush();
@@ -55,10 +53,7 @@ public:
     inline bool operator != (const wxBrush& rBrush) const { return m_refData != rBrush.m_refData; }
 
     virtual void SetColour(const wxColour& rColour);
-    virtual void SetColour( unsigned char cRed
-                           ,unsigned char cGreen
-                           ,unsigned char cBrush
-                          );
+    virtual void SetColour(const unsigned char cRed, const unsigned char cGreen, const unsigned char cBrush);
     virtual void SetPS(HPS hPS);
     virtual void SetStyle(int nStyle)  ;
     virtual void SetStipple(const wxBitmap& rStipple);
