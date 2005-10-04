@@ -47,7 +47,7 @@ public:
     virtual bool Ok() const { return (m_refData != NULL) ; }
 
     void SetColour(const wxColour& col) ;
-    void SetColour(const unsigned char r, const unsigned char g, const unsigned char b)  ;
+    void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
 
     void SetWidth(int width);
     void SetStyle(int style);

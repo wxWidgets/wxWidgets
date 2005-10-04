@@ -353,7 +353,7 @@ void wxPen::SetColour( const wxColour& rColour )
     RealizeResource();
 } // end of wxPen::SetColour
 
-void wxPen::SetColour( const unsigned char cRed, const unsigned char cGreen, const unsigned char cBlue)
+void wxPen::SetColour( unsigned char cRed, unsigned char cGreen, unsigned char cBlue)
 {
     Unshare();
     M_PENDATA->m_vColour.Set(cRed, cGreen, cBlue);

@@ -51,7 +51,7 @@ public:
     bool operator != (const wxPen& pen) const { return !(*this == pen); }
 
     void SetColour( const wxColour &colour );
-    void SetColour( const unsigned char red, const unsigned char green, const unsigned char blue );
+    void SetColour( unsigned char red, unsigned char green, unsigned char blue );
     void SetCap( int capStyle );
     void SetJoin( int joinStyle );
     void SetStyle( int style );

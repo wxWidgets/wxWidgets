@@ -32,7 +32,7 @@ public:
     virtual ~wxBrush();
 
     virtual void SetColour(const wxColour& col);
-    virtual void SetColour(const unsigned char r, const unsigned char g, const unsigned char b);
+    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b);
     virtual void SetStyle(int style);
     virtual void SetStipple(const wxBitmap& stipple);
 

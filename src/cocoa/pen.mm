@@ -303,7 +303,7 @@ void wxPen::SetColour(const wxColour& col)
     M_PENDATA->SetColour(col);
 }
 
-void wxPen::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
+void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
     AllocExclusive();
     M_PENDATA->SetColour(wxColour(r, g, b));

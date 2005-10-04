@@ -273,7 +273,7 @@ void wxBrush::SetColour( const wxColour& rColour )
     RealizeResource();
 }
 
-void wxBrush::SetColour(const unsigned char cRed, const unsigned char cGreen, const unsigned char cBlue)
+void wxBrush::SetColour(unsigned char cRed, unsigned char cGreen, unsigned char cBlue)
 {
     Unshare();
     M_BRUSHDATA->m_vColour.Set( cRed, cGreen, cBlue );

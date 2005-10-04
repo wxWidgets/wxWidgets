@@ -314,7 +314,7 @@ void wxBrush::SetColour(const wxColour& col)
     M_BRUSHDATA->SetColour(col);
 }
 
-void wxBrush::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
+void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
     AllocExclusive();
 
