@@ -15,6 +15,17 @@ extern "C" {
 
 #include "wx/setup.h"
 
+/*
+   libtiff uses ulong_t and other things which are not defined in HP-UX headers
+   unless _INCLUDE_HPUX_SOURCE is defined and this, in turn, doesn't compile if
+   _INCLUDE_XOPEN_SOURCE is not defined, so define both of them (system headers
+   also use _INCLUDE_POSIX_SOURCE but it doesn't seem to be needed for now).
+ */
+#ifdef __hpux
+#define _INCLUDE_XOPEN_SOURCE
+#define _INCLUDE_HPUX_SOURCE
+#endif
+
 #include <sys/types.h>
 #define HOST_FILLORDER FILLORDER_LSB2MSB
 
