@@ -91,6 +91,11 @@
  * Cambridge, MA 02139, USA.
  *
  */
+/* get XmVersion definition */
+#include <Xm/Xm.h>
+
+#if (XmVersion < 2000)
+
 #ifdef __VMS
 #include <wx/vms_x_fix.h>
 #undef XtDisplay
@@ -118,8 +123,6 @@
 #include <Xm/TextF.h>
 #include <Xm/List.h>
 #include <Xm/LabelP.h>
-
-#if (XmVersion < 2000)
 
 #include <string.h>
 #include <ctype.h> /* define toupper */
