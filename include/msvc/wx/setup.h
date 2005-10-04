@@ -54,7 +54,7 @@
             #pragma comment(lib,"wxmsw27ud_adv")
             #pragma comment(lib,"wxmsw27ud_core")
             #pragma comment(lib,"wxmsw27ud_html")
-            #ifdef USE_QA
+            #if wxUSE_DEBUGREPORT
             #pragma comment(lib,"wxmsw27ud_qa")
             #endif
             #pragma comment(lib,"wxmsw27ud_xrc")
@@ -86,7 +86,7 @@
             #pragma comment(lib,"wxmsw27u_adv")
             #pragma comment(lib,"wxmsw27u_core")
             #pragma comment(lib,"wxmsw27u_html")
-            #ifdef USE_QA
+            #if wxUSE_DEBUGREPORT
             #pragma comment(lib,"wxmsw27u_qa")
             #endif
             #pragma comment(lib,"wxmsw27u_xrc")
@@ -134,7 +134,7 @@
             #pragma comment(lib,"wxmsw27d_adv")
             #pragma comment(lib,"wxmsw27d_core")
             #pragma comment(lib,"wxmsw27d_html")
-            #ifdef USE_QA
+            #if wxUSE_DEBUGREPORT
             #pragma comment(lib,"wxmsw27d_qa")
             #endif
             #pragma comment(lib,"wxmsw27d_xrc")
@@ -166,7 +166,7 @@
             #pragma comment(lib,"wxmsw27_adv")
             #pragma comment(lib,"wxmsw27_core")
             #pragma comment(lib,"wxmsw27_html")
-            #ifdef USE_QA
+            #if wxUSE_DEBUGREPORT
             #pragma comment(lib,"wxmsw27_qa")
             #endif
             #pragma comment(lib,"wxmsw27_xrc")
