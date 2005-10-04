@@ -28108,9 +28108,9 @@ fi
 
 
         if test "$no_x" = "yes"; then
-          { { echo "$as_me:$LINENO: error: X11 not found" >&5
-echo "$as_me: error: X11 not found" >&2;}
-   { (exit please use --x-includes and/or --x-libraries options); exit please use --x-includes and/or --x-libraries options; }; }
+          { { echo "$as_me:$LINENO: error: X11 not found, please use --x-includes and/or --x-libraries options (see config.log for details)" >&5
+echo "$as_me: error: X11 not found, please use --x-includes and/or --x-libraries options (see config.log for details)" >&2;}
+   { (exit 1); exit 1; }; }
         fi
 
                                 GUI_TK_LIBRARY=`echo $X_LIBS | sed 's/ -LNONE//' | sed 's/ -RNONE//'`

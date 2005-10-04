@@ -3019,7 +3019,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         AC_PATH_XTRA
 
         if test "$no_x" = "yes"; then
-          AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
+          AC_MSG_ERROR([X11 not found, please use --x-includes and/or --x-libraries options (see config.log for details)])
         fi
 
         dnl for some reason AC_PATH_XTRA seems to add -INONE and -LNONE (and
