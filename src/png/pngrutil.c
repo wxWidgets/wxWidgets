@@ -279,13 +279,13 @@ png_decompress_chunk(png_structp png_ptr, int comp_type,
 
          if (ret == Z_BUF_ERROR)
             sprintf(umsg,"Buffer error in compressed datastream in %s chunk",
-                png_ptr->chunk_name);
+                (char *)png_ptr->chunk_name);
          else if (ret == Z_DATA_ERROR)
             sprintf(umsg,"Data error in compressed datastream in %s chunk",
-                png_ptr->chunk_name);
+                (char *)png_ptr->chunk_name);
          else
             sprintf(umsg,"Incomplete compressed datastream in %s chunk",
-                png_ptr->chunk_name);
+                (char *)png_ptr->chunk_name);
          png_warning(png_ptr, umsg);
 #else
          png_warning(png_ptr,
