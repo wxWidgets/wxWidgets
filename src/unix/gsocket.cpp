@@ -882,7 +882,13 @@ int GSocket::Read(char *buffer, int size)
     else
       ret = Recv_Dgram(buffer, size);
 
-    if (ret == -1) {
+    /* If recv returned zero, then the connection is lost, and errno is not set.
+     * Otherwise, recv has returned an error (-1), in which case we have lost the
+     * socket only if errno does _not_ indicate that there may be more data to read.
+     */
+    if (ret == 0)
+      m_error = GSOCK_IOERR;
+    else if (ret == -1) {
       if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
         m_error = GSOCK_WOULDBLOCK;
       else
@@ -1026,7 +1032,12 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
           result |= GSOCK_CONNECTION_FLAG;
           m_detected |= GSOCK_CONNECTION_FLAG;
         }
-        else if ((errno != EWOULDBLOCK) && (errno != EAGAIN) && (errno != EINTR))
+        /* If recv returned zero, then the connection is lost, and errno is not set.
+         * Otherwise, recv has returned an error (-1), in which case we have lost the
+         * socket only if errno does _not_ indicate that there may be more data to read.
+         */
+        else if (num == 0 ||
+                 (errno != EWOULDBLOCK) && (errno != EAGAIN) && (errno != EINTR))
         {
           m_detected = GSOCK_LOST_FLAG;
           m_establishing = false;
