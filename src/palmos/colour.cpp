@@ -106,5 +106,8 @@ wxColour::~wxColour()
 
 void wxColour::Set(unsigned char r, unsigned char g, unsigned char b)
 {
+    m_red = r;
+    m_green = g;
+    m_blue = b;
+    m_isInit = true;
 }
-

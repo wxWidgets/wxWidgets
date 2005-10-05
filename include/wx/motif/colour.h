@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        colour.h
+// Name:        wx/motif/colour.h
 // Purpose:     wxColour class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COLOUR_H_
@@ -20,12 +20,17 @@ class WXDLLEXPORT wxColour : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxColour)
 public:
-    // ctors
+    // constructors
+    // ------------
+
     // default
     wxColour();
-    // from RGB
+
+    // from separate RGB
     wxColour( unsigned char red, unsigned char green, unsigned char blue )
         { Set(red, green, blue); }
+
+    // from packed RGB
     wxColour( unsigned long colRGB ) { Set(colRGB); }
 
     // implicit conversion from the colour name

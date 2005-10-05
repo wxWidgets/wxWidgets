@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        colour.cpp
+// Name:        src/gtk/colour.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

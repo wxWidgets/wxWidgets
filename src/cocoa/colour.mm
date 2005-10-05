@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        colour.mm
+// Name:        src/cococa/colour.mm
 // Purpose:     wxColour class
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/06/17
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -96,8 +96,7 @@ void wxColour::Set( WX_NSColor aColor )
        unless the color was actually RGB to begin with it's likely that
        these will be fairly bogus. Particulary if the color is a pattern. */
     NSColor *rgbColor = [m_cocoaNSColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-    m_red 	= (wxUint8) ([rgbColor redComponent]   * 255.0);
+    m_red   = (wxUint8) ([rgbColor redComponent]   * 255.0);
     m_green = (wxUint8) ([rgbColor greenComponent] * 255.0);
-    m_blue 	= (wxUint8) ([rgbColor blueComponent]  * 255.0);
+    m_blue  = (wxUint8) ([rgbColor blueComponent]  * 255.0);
 }
-

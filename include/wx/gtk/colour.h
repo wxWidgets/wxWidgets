@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        colour.h
+// Name:        wx/gtk/colour.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -34,10 +34,16 @@ class WXDLLIMPEXP_CORE wxColour;
 class WXDLLIMPEXP_CORE wxColour: public wxGDIObject
 {
 public:
+    // constructors
+    // ------------
+
+    // default
     wxColour() { }
 
-    // Construct from RGB
+    // from separate RGB
     wxColour( unsigned char red, unsigned char green, unsigned char blue );
+
+    // from packed RGB
     wxColour( unsigned long colRGB ) { Set(colRGB); }
 
     // Implicit conversion from the colour name

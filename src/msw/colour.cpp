@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        colour.cpp
+// Name:        src/msw/colour.cpp
 // Purpose:     wxColour class
 // Author:      Julian Smart
 // Modified by:
@@ -123,4 +123,3 @@ void wxColour::Set(unsigned char r, unsigned char g, unsigned char b)
     m_isInit = true;
     m_pixel = PALETTERGB(m_red, m_green, m_blue);
 }
-

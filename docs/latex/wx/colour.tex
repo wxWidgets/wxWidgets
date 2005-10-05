@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        colour.tex
+%% Purpose:     wxColour docs
+%% Author:
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxColour}}\label{wxcolour}
 
 A colour is an object representing a combination of Red, Green, and Blue (RGB) intensity values,
@@ -47,7 +58,7 @@ wxLIGHT\_GREY}
 
 Default constructor.
 
-\func{}{wxColour}{\param{const unsigned char}{ red}, \param{const unsigned char}{ green}, \param{const unsigned char}{ blue}}
+\func{}{wxColour}{\param{unsigned char}{ red}, \param{unsigned char}{ green}, \param{unsigned char}{ blue}}
 
 Constructs a colour from red, green and blue values.
 
@@ -125,7 +136,7 @@ Returns the red intensity.
 
 \membersection{wxColour::Set}\label{wxcolourset}
 
-\func{void}{Set}{\param{const unsigned char}{ red}, \param{const unsigned char}{ green}, \param{const unsigned char}{ blue}}
+\func{void}{Set}{\param{unsigned char}{ red}, \param{unsigned char}{ green}, \param{unsigned char}{ blue}}
 
 Sets the RGB intensity values.
 
@@ -266,12 +277,12 @@ Assignment operator for the colour data.
 
 wxWidgets maintains a database of standard RGB colours for a predefined
 set of named colours (such as ``BLACK'', ``LIGHT GREY''). The
-application may add to this set if desired by using 
+application may add to this set if desired by using
 \helpref{AddColour}{wxcolourdatabaseaddcolour} and may use it to look up
 colours by names using \helpref{Find}{wxcolourdatabasefind} or find the names
 for the standard colour suing \helpref{FindName}{wxcolourdatabasefindname}.
 
-There is one predefined instance of this class called 
+There is one predefined instance of this class called
 {\bf wxTheColourDatabase}.
 
 \wxheading{Derived from}
