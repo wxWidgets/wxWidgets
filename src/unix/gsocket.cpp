@@ -328,6 +328,9 @@ void GSocket::Shutdown()
 
   assert(this);
 
+  /* Don't allow events to fire after socket has been closed */
+  gs_gui_functions->Disable_Events(this);
+
   /* If socket has been created, shutdown it */
   if (m_fd != INVALID_SOCKET)
   {
