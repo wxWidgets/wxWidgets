@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        icon.cpp
+// Name:        src/motif/icon.cpp
 // Purpose:     wxIcon class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -57,7 +57,7 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
     UnRef();
 
     wxBitmapHandler *handler = FindHandler(type);
-    
+
     if ( handler )
         return handler->LoadFile(this, filename, type,
                                  desiredWidth, desiredHeight);

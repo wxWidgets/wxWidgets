@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        motif/evtloop.cpp
+// Name:        src/motif/evtloop.cpp
 // Purpose:     implements wxEventLoop for Motif
 // Author:      Mattia Barbon
 // Modified by:
@@ -257,7 +257,7 @@ bool CheckForAccelerator(XEvent* event)
         wxWindow* win = NULL;
 
         // Find the first wxWindow that corresponds to this event window
-        while (widget && !(win = wxGetWindowFromTable(widget)))
+        while (widget && ((win = wxGetWindowFromTable(widget))!=NULL))
             widget = XtParent(widget);
 
         if (!widget || !win)
@@ -291,7 +291,7 @@ bool CheckForKeyDown(XEvent* event)
         wxWindow* win = NULL;
 
         // Find the first wxWindow that corresponds to this event window
-        while (widget && !(win = wxGetWindowFromTable(widget)))
+        while (widget && ((win = wxGetWindowFromTable(widget))!=NULL))
             widget = XtParent(widget);
 
         if (!widget || !win)
@@ -317,7 +317,7 @@ bool CheckForKeyUp(XEvent* event)
         wxWindow* win = NULL;
 
         // Find the first wxWindow that corresponds to this event window
-        while (widget && !(win = wxGetWindowFromTable(widget)))
+        while (widget && ((win = wxGetWindowFromTable(widget))!=NULL))
                 widget = XtParent(widget);
 
         if (!widget || !win)
@@ -472,7 +472,7 @@ bool wxAddIdleCallback()
 {
     if (!wxInitIdleFds())
         return false;
-    
+
     // install input handler for wxWakeUpIdle
     XtAppAddInput((XtAppContext) wxTheApp->GetAppContext(),
                   idleFds[0],

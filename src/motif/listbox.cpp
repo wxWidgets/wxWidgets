@@ -306,7 +306,7 @@ int wxDoFindStringInList(Widget w, const wxString& s)
         return -1;
 }
 
-int wxListBox::FindString(const wxString& s, bool bCase) const
+int wxListBox::FindString(const wxString& s, bool WXUNUSED(bCase)) const
 {
     // FIXME: back to base class for not supported value of bCase
 

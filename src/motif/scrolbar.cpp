@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrolbar.cpp
+// Name:        src/motif/scrolbar.cpp
 // Purpose:     wxScrollBar
 // Author:      Julian Smart
 // Modified by:

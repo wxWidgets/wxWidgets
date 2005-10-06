@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        windows.cpp
+// Name:        src/motif/windows.cpp
 // Purpose:     wxWindow
 // Author:      Julian Smart
 // Modified by:
@@ -200,7 +200,7 @@ void wxWindow::Init()
     m_winCaptured = false;
 
     m_isShown = true;
-    
+
     m_hScrollBar =
     m_vScrollBar =
     m_borderWidget =
@@ -352,7 +352,7 @@ wxWindow::~wxWindow()
 {
     if (g_captureWindow == this)
         g_captureWindow = NULL;
-    
+
     m_isBeingDeleted = true;
 
     // Motif-specific actions first
@@ -747,12 +747,12 @@ int wxWindow::GetScrollPos(int orient) const
 int wxWindow::GetScrollRange(int orient) const
 {
     Widget scrollBar = (Widget)GetScrollbar((wxOrientation)orient);
-    // CE scintilla windows don't always have these scrollbars 
+    // CE scintilla windows don't always have these scrollbars
     // and it tends to pile up a whole bunch of asserts
     //wxCHECK_MSG( scrollBar, 0, "no such scrollbar" );
 
     int range = 0;
-    if (scrollBar) 
+    if (scrollBar)
         XtVaGetValues(scrollBar, XmNmaximum, &range, NULL);
     return range;
 }
@@ -1175,7 +1175,7 @@ void wxWindow::DoGetSize(int *x, int *y) const
                    XmNwidth, &xx,
                    XmNheight, &yy,
                    NULL );
-    if(x) *x = xx; 
+    if(x) *x = xx;
     if(y) *y = yy;
 }
 
@@ -1183,7 +1183,7 @@ void wxWindow::DoGetPosition(int *x, int *y) const
 {
     Widget widget = (Widget)
         ( m_drawingArea ?
-          ( m_borderWidget ? m_borderWidget : m_scrolledWindow ) : 
+          ( m_borderWidget ? m_borderWidget : m_scrolledWindow ) :
           GetTopWidget() );
 
     Position xx, yy;
@@ -1194,8 +1194,8 @@ void wxWindow::DoGetPosition(int *x, int *y) const
     if (GetParent())
     {
         wxPoint pt(GetParent()->GetClientAreaOrigin());
-        xx -= pt.x;
-        yy -= pt.y;
+        xx = (Position)(xx - pt.x);
+        yy = (Position)(yy - pt.y);
     }
 
     if(x) *x = xx;
@@ -1455,7 +1455,7 @@ int wxWindow::GetCharHeight() const
     wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
 
     int height;
-    
+
     wxGetTextExtent (GetXDisplay(), m_font, 1.0,
                      "x", NULL, &height, NULL, NULL);
 
@@ -1467,7 +1467,7 @@ int wxWindow::GetCharWidth() const
     wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
 
     int width;
-    
+
     wxGetTextExtent (GetXDisplay(), m_font, 1.0,
                      "x", &width, NULL, NULL, NULL);
 
@@ -1894,9 +1894,8 @@ void wxWidgetResizeProc(Widget w, XConfigureEvent *WXUNUSED(event),
 
     if (win->PreResize())
     {
-        int width, height;
-        win->GetSize(&width, &height);
-        wxSizeEvent sizeEvent(wxSize(width, height), win->GetId());
+        wxSize newSize(win->GetSize());
+        wxSizeEvent sizeEvent(newSize, win->GetId());
         sizeEvent.SetEventObject(win);
         win->GetEventHandler()->ProcessEvent(sizeEvent);
     }
@@ -2315,10 +2314,10 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
                 || (event_right_is_down (xevent)
                 && (eventType != wxEVT_RIGHT_UP)));
 
-            wxevent.m_shiftDown = xevent->xbutton.state & ShiftMask;
-            wxevent.m_controlDown = xevent->xbutton.state & ControlMask;
-            wxevent.m_altDown = xevent->xbutton.state & Mod3Mask;
-            wxevent.m_metaDown = xevent->xbutton.state & Mod1Mask;
+            wxevent.m_shiftDown = (xevent->xbutton.state & ShiftMask) == ShiftMask;
+            wxevent.m_controlDown = (xevent->xbutton.state & ControlMask) == ControlMask;
+            wxevent.m_altDown = (xevent->xbutton.state & Mod3Mask) == Mod3Mask;
+            wxevent.m_metaDown = (xevent->xbutton.state & Mod1Mask) == Mod1Mask;
 
             wxevent.SetId(win->GetId());
             wxevent.SetEventObject(win);
@@ -2364,9 +2363,8 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win,
 
             if (id > -1)
                 return true;
-            else
-                return false;
-            break;
+
+            return false;
         }
     default:
         break;
@@ -2389,9 +2387,9 @@ int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
 
     if (back)
     {
-        g_itemColors[0].red = (((long) back->Red ()) << 8);
-        g_itemColors[0].green = (((long) back->Green ()) << 8);
-        g_itemColors[0].blue = (((long) back->Blue ()) << 8);
+        g_itemColors[0].red = (unsigned short)(((long) back->Red ()) << 8);
+        g_itemColors[0].green = (unsigned short)(((long) back->Green ()) << 8);
+        g_itemColors[0].blue = (unsigned short)(((long) back->Blue ()) << 8);
         g_itemColors[0].flags = DoRed | DoGreen | DoBlue;
         if (colorProc == (XmColorProc) NULL)
         {
@@ -2409,9 +2407,9 @@ int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
     }
     if (fore)
     {
-        g_itemColors[wxFORE_INDEX].red = (((long) fore->Red ()) << 8);
-        g_itemColors[wxFORE_INDEX].green = (((long) fore->Green ()) << 8);
-        g_itemColors[wxFORE_INDEX].blue = (((long) fore->Blue ()) << 8);
+        g_itemColors[wxFORE_INDEX].red = (unsigned short)(((long) fore->Red ()) << 8);
+        g_itemColors[wxFORE_INDEX].green = (unsigned short)(((long) fore->Green ()) << 8);
+        g_itemColors[wxFORE_INDEX].blue = (unsigned short)(((long) fore->Blue ()) << 8);
         g_itemColors[wxFORE_INDEX].flags = DoRed | DoGreen | DoBlue;
         if (result == wxNO_COLORS)
             result = wxFORE_COLORS;

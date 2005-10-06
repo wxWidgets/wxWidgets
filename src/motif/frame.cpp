@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        motif/frame.cpp
+// Name:        src/motif/frame.cpp
 // Purpose:     wxFrame
 // Author:      Julian Smart
 // Modified by:
@@ -184,7 +184,8 @@ bool wxFrame::Create(wxWindow *parent,
 
     PreResize();
 
-    wxSizeEvent sizeEvent(wxSize(width, height), GetId());
+    wxSize newSize(width, height);
+    wxSizeEvent sizeEvent(newSize, GetId());
     sizeEvent.SetEventObject(this);
 
     GetEventHandler()->ProcessEvent(sizeEvent);
@@ -192,11 +193,11 @@ bool wxFrame::Create(wxWindow *parent,
     return true;
 }
 
-bool wxFrame::XmDoCreateTLW(wxWindow* parent,
-                            wxWindowID id,
-                            const wxString& title,
-                            const wxPoint& pos,
-                            const wxSize& size,
+bool wxFrame::XmDoCreateTLW(wxWindow* WXUNUSED(parent),
+                            wxWindowID WXUNUSED(id),
+                            const wxString& WXUNUSED(title),
+                            const wxPoint& WXUNUSED(pos),
+                            const wxSize& WXUNUSED(size),
                             long style,
                             const wxString& name)
 {
@@ -330,7 +331,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
     {
         int sbw, sbh;
         m_frameStatusBar->GetSize(& sbw, & sbh);
-        yy -= sbh;
+        yy = (Dimension)(yy - sbh);
     }
 #if wxUSE_TOOLBAR
     if (m_frameToolBar)
@@ -338,9 +339,9 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
         int tbw, tbh;
         m_frameToolBar->GetSize(& tbw, & tbh);
         if (m_frameToolBar->GetWindowStyleFlag() & wxTB_VERTICAL)
-            xx -= tbw;
+            xx = (Dimension)(xx - tbw);
         else
-            yy -= tbh;
+            yy = (Dimension)(yy - tbh);
     }
 #endif // wxUSE_TOOLBAR
 
@@ -385,7 +386,8 @@ void wxFrame::DoSetClientSize(int width, int height)
     }
     PreResize();
 
-    wxSizeEvent sizeEvent(wxSize(width, height), GetId());
+    wxSize newSize(width, height);
+    wxSizeEvent sizeEvent(newSize, GetId());
     sizeEvent.SetEventObject(this);
 
     GetEventHandler()->ProcessEvent(sizeEvent);

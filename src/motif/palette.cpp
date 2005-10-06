@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        palette.cpp
+// Name:        src/motif/palette.cpp
 // Purpose:     wxPalette
 // Author:      Julian Smart
 // Modified by:
@@ -147,9 +147,9 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
     pix_array_n = n;
     xcol.flags = DoRed | DoGreen | DoBlue;
     for(int i = 0; i < n; i++) {
-        xcol.red = (unsigned short)red[i] << 8;
-        xcol.green = (unsigned short)green[i] << 8;
-        xcol.blue = (unsigned short)blue[i] << 8;
+        xcol.red = (unsigned short)(red[i] << 8);
+        xcol.green = (unsigned short)(green[i] << 8);
+        xcol.blue = (unsigned short)(blue[i] << 8);
         pix_array[i] = (XAllocColor(display, cmap, &xcol) == 0) ? 0 : xcol.pixel;
     }
 
@@ -165,7 +165,9 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
     return true;
 }
 
-int wxPalette::GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const
+int wxPalette::GetPixel(const unsigned char WXUNUSED(red),
+                        const unsigned char WXUNUSED(green),
+                        const unsigned char WXUNUSED(blue)) const
 {
     if ( !m_refData )
         return false;
@@ -290,9 +292,9 @@ bool wxPalette::TransferBitmap8(unsigned char *data, unsigned long sz,
         struct rgb24 { unsigned char r, g, b; } *dptr = (struct rgb24 *)dest;
         while(sz-- > 0) {
             if((int)*data < pix_array_n) {
-                dptr->r = pix_array[*data] & 0xFF;
-                dptr->g = (pix_array[*data] >> 8) & 0xFF;
-                dptr->b = (pix_array[*data] >> 16) & 0xFF;
+                dptr->r = (unsigned char)(pix_array[*data] & 0xFF);
+                dptr->g = (unsigned char)((pix_array[*data] >> 8) & 0xFF);
+                dptr->b = (unsigned char)((pix_array[*data] >> 16) & 0xFF);
             }
             data++;
             dptr++;

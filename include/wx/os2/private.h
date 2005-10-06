@@ -26,13 +26,25 @@
     #include <os2def.h>
     #define I_NEED_OS2_H
     #include <X11/Xmd.h>
-    #ifdef __cplusplus
-    extern "C" {
+
+    // include this header from here for many of the GUI related code
+    #if wxUSE_GUI
+        extern "C" {
+            #include <Xm/VendorSP.h>
+        }
     #endif
-        #include <Xm/VendorSP.h>
-    #ifdef __cplusplus
+
+    // provide Unix-like pipe()
+    #include <types.h>
+    #include <tcpustd.h>
+    #include <sys/time.h>
+    // Use ::DosCreatePipe or ::DosCreateNPipe under OS/2
+    // for more see http://posix2.sourceforge.net/guide.html
+    inline int pipe( int WXUNUSED(filedes)[2] )
+    {
+        wxFAIL_MSG(wxT("Implement first"));
+        return -1;
     }
-    #endif
 #endif
 
 #if defined (__EMX__) && !defined(USE_OS2_TOOLKIT_HEADERS) && !defined(HAVE_SPBCDATA)

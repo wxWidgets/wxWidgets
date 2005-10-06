@@ -443,8 +443,8 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord 
 
         for (i = 0; i < n; i++)
         {
-            xpoints[i].x = XLOG2DEV (points[i].x + xoffset);
-            xpoints[i].y = YLOG2DEV (points[i].y + yoffset);
+            xpoints[i].x = (short)XLOG2DEV (points[i].x + xoffset);
+            xpoints[i].y = (short)YLOG2DEV (points[i].y + yoffset);
         }
         XDrawLines ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xpoints, n, 0);
 
@@ -452,8 +452,8 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord 
         {
             for (i = 0; i < n; i++)
             {
-                xpoints[i].x = XLOG2DEV_2 (points[i].x + xoffset);
-                xpoints[i].y = YLOG2DEV_2 (points[i].y + yoffset);
+                xpoints[i].x = (short)XLOG2DEV_2 (points[i].x + xoffset);
+                xpoints[i].y = (short)YLOG2DEV_2 (points[i].y + yoffset);
             }
             XDrawLines ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, xpoints, n, 0);
         }
@@ -471,10 +471,10 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[],
     int i;
     for (i = 0; i < n; i++)
     {
-        xpoints1[i].x = XLOG2DEV (points[i].x + xoffset);
-        xpoints1[i].y = YLOG2DEV (points[i].y + yoffset);
-        xpoints2[i].x = XLOG2DEV_2 (points[i].x + xoffset);
-        xpoints2[i].y = YLOG2DEV_2 (points[i].y + yoffset);
+        xpoints1[i].x = (short)XLOG2DEV (points[i].x + xoffset);
+        xpoints1[i].y = (short)YLOG2DEV (points[i].y + yoffset);
+        xpoints2[i].x = (short)XLOG2DEV_2 (points[i].x + xoffset);
+        xpoints2[i].y = (short)YLOG2DEV_2 (points[i].y + yoffset);
         CalcBoundingBox (points[i].x + xoffset, points[i].y + yoffset);
     }
 
@@ -1578,7 +1578,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
             {
                 int factor = scaled_width == 0 ? 1 : scaled_width;
                 for (int i = 0; i < req_nb_dash; i++)
-                    real_req_dash[i] = req_dash[i] * factor;
+                    real_req_dash[i] = (wxX11Dash)(req_dash[i] * factor);
                 XSetDashes ((Display*) m_display, (GC) m_gc, 0, real_req_dash, req_nb_dash);
 
                 if (m_window && m_window->GetBackingPixmap())
@@ -2072,10 +2072,10 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y,
     if (m_window && m_window->GetBackingPixmap())
     {
         XRectangle rects[1];
-        rects[0].x = XLOG2DEV_2(x);
-        rects[0].y = YLOG2DEV_2(y);
-        rects[0].width = XLOG2DEVREL(width);
-        rects[0].height = YLOG2DEVREL(height);
+        rects[0].x = (short)XLOG2DEV_2(x);
+        rects[0].y = (short)YLOG2DEV_2(y);
+        rects[0].width = (unsigned short)XLOG2DEVREL(width);
+        rects[0].height = (unsigned short)YLOG2DEVREL(height);
         XSetClipRectangles((Display*) m_display, (GC) m_gcBacking,
                            0, 0, rects, 1, Unsorted);
     }
@@ -2094,10 +2094,10 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion& region )
     if (m_window && m_window->GetBackingPixmap())
     {
         XRectangle rects[1];
-        rects[0].x = XLOG2DEV_2(box.x);
-        rects[0].y = YLOG2DEV_2(box.y);
-        rects[0].width = XLOG2DEVREL(box.width);
-        rects[0].height = YLOG2DEVREL(box.height);
+        rects[0].x = (short)XLOG2DEV_2(box.x);
+        rects[0].y = (short)YLOG2DEV_2(box.y);
+        rects[0].width = (unsigned short)XLOG2DEVREL(box.width);
+        rects[0].height = (unsigned short)YLOG2DEVREL(box.height);
         XSetClipRectangles((Display*) m_display, (GC) m_gcBacking,
                            0, 0, rects, 1, Unsorted);
     }

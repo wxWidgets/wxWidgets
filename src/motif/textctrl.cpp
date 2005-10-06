@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.cpp
+// Name:        src/motif/textctrl.cpp
 // Purpose:     wxTextCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -136,7 +136,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         XtSetArg (args[count], (String) wxFont::GetFontTag(),
                   m_font.GetFontType( XtDisplay(parentWidget) ) ); ++count;
         XtSetArg (args[count], XmNwordWrap, wantWordWrap); ++count;
-        XtSetArg (args[count], XmNvalue, value.c_str()); ++count;    
+        XtSetArg (args[count], XmNvalue, value.c_str()); ++count;
         XtSetArg (args[count], XmNeditable,
                   style & wxTE_READONLY ? False : True); ++count;
         XtSetArg (args[count], XmNeditMode, XmMULTI_LINE_EDIT ); ++count;
@@ -249,7 +249,7 @@ void wxTextCtrl::SetValue(const wxString& text)
 
     SetInsertionPoint(text.length());
     XmTextShowPosition ((Widget) m_mainWidget, text.length());
-    m_modified = TRUE;
+    m_modified = true;
 
     m_inSetValue = false;
 }
@@ -498,7 +498,7 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 
     if (s)
     {
-        wxString buf("");
+        wxString buf;
         long i;
         int currentLine = 0;
         for (i = 0; currentLine != lineNo && s[i]; i++ )
@@ -549,7 +549,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         textStruct->doit = True;
         if (isascii(event.m_keyCode) && (textStruct->text->length == 1))
         {
-            textStruct->text->ptr[0] = ((event.m_keyCode == WXK_RETURN) ? 10 : event.m_keyCode);
+            textStruct->text->ptr[0] = (char)((event.m_keyCode == WXK_RETURN) ? 10 : event.m_keyCode);
         }
     }
 }

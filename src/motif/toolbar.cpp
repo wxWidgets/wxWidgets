@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        motif/toolbar.cpp
+// Name:        src/motif/toolbar.cpp
 // Purpose:     wxToolBar
 // Author:      Julian Smart
 // Modified by: 13.12.99 by VZ during toolbar classes reorganization
@@ -417,7 +417,7 @@ bool wxToolBar::Realize()
                             (Pixmap)tmp.GetDrawable() :
                             tool->GetInsensPixmap();
                 }
-                
+
                 if (tool->CanBeToggled())
                 {
                     // Toggle button
@@ -492,7 +492,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
     return true;
 }
 
-bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
+bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 {
     tool->Detach();
 
@@ -516,7 +516,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
                 offset = isVertical ? size.y : size.x;
                 offset += packing;
                 break;
-            }       
+            }
             case wxTOOL_STYLE_SEPARATOR:
                 offset = isVertical ? 0 : separatorSize;
                 break;
@@ -542,14 +542,14 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
             {
             case wxTOOL_STYLE_CONTROL:
             {
-                wxPoint pos = t->GetControl()->GetPosition();
+                wxPoint location = t->GetControl()->GetPosition();
 
                 if( isVertical )
-                    pos.y -= offset;
+                    location.y -= offset;
                 else
-                    pos.x -= offset;
+                    location.x -= offset;
 
-                t->GetControl()->Move( pos );
+                t->GetControl()->Move( location );
                 break;
             }
             case wxTOOL_STYLE_SEPARATOR:
@@ -563,9 +563,9 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
                                NULL );
 
                 if( isVertical )
-                    y -= offset;
+                    y = (Dimension)(y - offset);
                 else
-                    x -= offset;
+                    x = (Dimension)(x - offset);
 
                 XtVaSetValues( t->GetButtonWidget(),
                                XmNx, x,
@@ -621,12 +621,12 @@ void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     }
 
     wxToolBarBase::DoSetSize(x, y, width, height, sizeFlags);
-  
+
     // We must refresh the frame size when the toolbar changes size
     // otherwise the toolbar can be shown incorrectly
     if ( old_width != width || old_height != height )
     {
-        // But before we send the size event check it 
+        // But before we send the size event check it
         // we have a frame that is not being deleted.
         wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
         if ( frame && !frame->IsBeingDeleted() )
@@ -754,7 +754,7 @@ void wxToolBarTimer::Notify()
 
         // Move the tooltip more or less above the button
         int yOffset = 20; // TODO: What should be really?
-        y -= yOffset;
+        y = (Position)(y - yOffset);
         if (y < yOffset) y = 0;
 
         /************************************************************/

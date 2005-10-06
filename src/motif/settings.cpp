@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        motif/settings.cpp
+// Name:        src/motif/settings.cpp
 // Purpose:     wxSettings
 // Author:      Julian Smart
 // Modified by:
@@ -41,7 +41,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
   if (NULL == but_setting_wid && wxTheApp && wxTheApp->GetTopLevelWidget())
   {
     but_setting_wid = XtVaCreateWidget("settings_button", xmPushButtonWidgetClass,
-	                                 (Widget)wxTheApp->GetTopLevelWidget(), NULL);
+                                       (Widget)wxTheApp->GetTopLevelWidget(), NULL);
   }
 
   switch (index)
@@ -70,7 +70,9 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             XtVaGetValues(but_setting_wid,
                         XtVaTypedArg, XmNbackground, XtRColor, &bg, sizeof(bg),
                         NULL);
-            return wxColor(bg.red >> 8, bg.green >> 8, bg.blue >> 8);
+            return wxColor((unsigned char)(bg.red >> 8),
+                           (unsigned char)(bg.green >> 8),
+                           (unsigned char)(bg.blue >> 8));
         }
         else
         {
@@ -113,7 +115,9 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             XtVaGetValues(but_setting_wid,
                         XtVaTypedArg, XmNforeground, XtRColor, &fg, sizeof(fg),
                         NULL);
-            return wxColor(fg.red >> 8, fg.green >> 8, fg.blue >> 8);
+            return wxColor((unsigned char)(fg.red >> 8),
+                           (unsigned char)(fg.green >> 8),
+                           (unsigned char)(fg.blue >> 8));
         }
         else
         {
@@ -133,7 +137,9 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             XtVaGetValues(but_setting_wid,
                         XtVaTypedArg, XmNbackground, XtRColor, &bg, sizeof(bg),
                         NULL);
-            return wxColor(bg.red >> 8, bg.green >> 8, bg.blue >> 8);
+            return wxColor((unsigned char)(bg.red >> 8),
+                           (unsigned char)(bg.green >> 8),
+                           (unsigned char)(bg.blue >> 8));
         }
         else
         {
@@ -163,11 +169,13 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         || wxFont::GetDefaultEncoding() == wxFONTENCODING_EUC_JP)
         pointSize = 15;
 
+    wxFont font;
+
     switch (index)
     {
         case wxSYS_SYSTEM_FIXED_FONT:
         {
-            return wxFont(pointSize, wxMODERN, wxNORMAL, wxNORMAL, false);
+            font = wxFont(pointSize, wxMODERN, wxNORMAL, wxNORMAL, false);
             break;
         }
         case wxSYS_DEVICE_DEFAULT_FONT:
@@ -175,12 +183,12 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEFAULT_GUI_FONT:
         default:
         {
-            return wxFont(pointSize, wxSWISS, wxNORMAL, wxNORMAL, false);
+            font = wxFont(pointSize, wxSWISS, wxNORMAL, wxNORMAL, false);
             break;
         }
     }
 
-    return wxFont();
+    return font;
 }
 
 // Get a system metric, e.g. scrollbar size
@@ -193,7 +201,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         case wxSYS_HSCROLL_Y:
         case wxSYS_VSCROLL_X:
             return 15;
-            
+
         case wxSYS_SCREEN_X:
             return_value = DisplayWidth( wxGlobalDisplay(), 0 );
             break;
