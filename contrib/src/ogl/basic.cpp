@@ -17,11 +17,11 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
 #if wxUSE_PROLOGIO
-#include <wx/deprecated/wxexpr.h>
+#include "wx/deprecated/wxexpr.h"
 #endif
 
 #ifdef new

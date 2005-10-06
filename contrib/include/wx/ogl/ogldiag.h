@@ -15,7 +15,7 @@
 #include "wx/ogl/basic.h"
 
 #if wxUSE_PROLOGIO
-#include <wx/deprecated/wxexpr.h>
+#include "wx/deprecated/wxexpr.h"
 #endif
 
 

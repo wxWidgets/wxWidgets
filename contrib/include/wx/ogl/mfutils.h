@@ -14,7 +14,7 @@
 #define _MFUTILS_H_
 
 
-#include <wx/metafile.h>
+#include "wx/metafile.h"
 
 #ifndef GetRValue
 #define GetRValue(rgb) ((unsigned char)(rgb))
