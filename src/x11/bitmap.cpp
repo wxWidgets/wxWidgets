@@ -1561,7 +1561,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxXBMDataHandler, wxBitmapHandler);
 
 bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *bits,
                                long WXUNUSED(flags),
-                               int width, int height, int depth)
+                               int width, int height, int WXUNUSED(depth))
 {
 #if !wxUSE_NANOX
     if (!bitmap->GetRefData())

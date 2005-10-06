@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        notebook.cpp
-// Purpose:     implementation of wxNotebook
+// Name:        src/generic/notebook.cpp
+// Purpose:     generic implementation of wxNotebook
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
@@ -215,7 +215,7 @@ int wxNotebook::GetPageImage(size_t nPage) const
     return 0;
 }
 
-bool wxNotebook::SetPageImage(size_t nPage, int nImage)
+bool wxNotebook::SetPageImage(size_t nPage, int WXUNUSED(nImage))
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
@@ -224,19 +224,19 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 }
 
 // set the size (the same for all pages)
-void wxNotebook::SetPageSize(const wxSize& size)
+void wxNotebook::SetPageSize(const wxSize& WXUNUSED(size))
 {
     // TODO
 }
 
 // set the padding between tabs (in pixels)
-void wxNotebook::SetPadding(const wxSize& padding)
+void wxNotebook::SetPadding(const wxSize& WXUNUSED(padding))
 {
     // TODO
 }
 
 // set the size of the tabs for wxNB_FIXEDWIDTH controls
-void wxNotebook::SetTabSize(const wxSize& sz)
+void wxNotebook::SetTabSize(const wxSize& WXUNUSED(sz))
 {
     // TODO
 }
@@ -381,7 +381,7 @@ bool wxNotebook::InsertPage(size_t nPage,
                             wxNotebookPage *pPage,
                             const wxString& strText,
                             bool bSelect,
-                            int imageId)
+                            int WXUNUSED(imageId))
 {
     wxASSERT( pPage != NULL );
     wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), false );

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpext.cpp
+// Name:        src/generic/helpext.cpp
 // Purpose:     an external help controller for wxWidgets
 // Author:      Karsten Ballueder
 // Modified by:
@@ -121,7 +121,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
    }
 
    return true;
-#elif  defined(__WXPM__)
+#elif  defined(__OS2__)
 
    wxString url;
    url << m_MapFile << '\\' << relativeURL.BeforeFirst('#');
