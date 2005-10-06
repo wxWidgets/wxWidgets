@@ -193,8 +193,8 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][10] =
     { wxT( "WINDOWS-1257" ),wxT( "CP-1257" ), NULL },
     { wxT( "WINDOWS-437" ), wxT( "CP-437" ), NULL },
 
-    { wxT( "UTF-7" ), NULL },
-    { wxT( "UTF-8" ), NULL },
+    { wxT( "UTF-7" ), wxT("utf7"), NULL },
+    { wxT( "UTF-8" ), wxT("utf8"), NULL },
     { wxT( "UTF-16" ), wxT("UCS-2"), wxT("UCS2"), NULL },
     { wxT( "UTF-16BE" ), wxT("UCS-2BE"), NULL },
     { wxT( "UTF-16LE" ), wxT("UCS-2LE"), NULL },
@@ -208,7 +208,7 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][10] =
     { wxT( "US-ASCII" ), wxT( "ASCII" ), wxT("C"), wxT("POSIX"), wxT("ANSI_X3.4-1968"),
       wxT("646"), wxT("roman8"), wxT( "" ), NULL },
 
-    { wxT( "BIG5" ), NULL },
+    { wxT( "BIG5" ), wxT("big5"), NULL },
     { wxT( "SJIS" ), wxT( "SHIFT-JIS" ), wxT( "SHIFT_JIS" ), NULL },
     { wxT( "GB2312" ), NULL },
 };
