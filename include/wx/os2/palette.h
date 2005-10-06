@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        palette.h
+// Name:        wx/os2/palette.h
 // Purpose:     wxPalette class
 // Author:      David Webster
 // Modified by:
@@ -50,9 +50,9 @@ public:
                 ,const unsigned char* pGreen
                 ,const unsigned char* pBlue
                );
-    int  GetPixel( const unsigned char cRed
-                  ,const unsigned char cGreen
-                  ,const unsigned char cBlue
+    int  GetPixel( unsigned char cRed
+                  ,unsigned char cGreen
+                  ,unsigned char cBlue
                  ) const;
     bool GetRGB( int            nPixel
                 ,unsigned char* pRed
@@ -77,4 +77,3 @@ public:
 
 #endif
     // _WX_PALETTE_H_
-

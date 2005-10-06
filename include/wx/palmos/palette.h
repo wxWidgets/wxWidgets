@@ -39,7 +39,7 @@ public:
   wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
   ~wxPalette(void);
   bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-  int GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const;
+  int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
   bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
 
   virtual bool Ok(void) const { return (m_refData != NULL) ; }

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        palette.h
+// Name:        wx/mgl/palette.h
 // Purpose:
 // Author:      Vaclav Slavik
 // Created:     2001/03/11
@@ -42,7 +42,7 @@ public:
     virtual bool Ok() const;
 
     bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-    int GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const;
+    int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
     bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
 
     // implementation

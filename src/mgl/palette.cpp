@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        palette.cpp
+// Name:        src/mgl/palette.cpp
 // Author:      Vaclav Slavik
 // Created:     2001/03/11
 // Id:          $Id$
@@ -27,7 +27,7 @@ class wxPaletteRefData: public wxObjectRefData
     public:
         wxPaletteRefData(void);
         ~wxPaletteRefData(void);
-    
+
         int m_count;
         palette_t *m_entries;
 };
@@ -92,13 +92,13 @@ bool wxPalette::Ok(void) const
 
 bool wxPalette::Create(int n,
                        const unsigned char *red,
-                       const unsigned char *green, 
+                       const unsigned char *green,
                        const unsigned char *blue)
 {
     UnRef();
     m_refData = new wxPaletteRefData();
-    
-    M_PALETTEDATA->m_count = n;    
+
+    M_PALETTEDATA->m_count = n;
     M_PALETTEDATA->m_entries = new palette_t[n];
 
     palette_t *e = M_PALETTEDATA->m_entries;
@@ -110,17 +110,17 @@ bool wxPalette::Create(int n,
         e->alpha = 0;
     }
 
-    return TRUE;
+    return true;
 }
 
-int wxPalette::GetPixel(const unsigned char red,
-                        const unsigned char green,
-                        const unsigned char blue) const
+int wxPalette::GetPixel(unsigned char red,
+                        unsigned char green,
+                        unsigned char blue) const
 {
-    if (!m_refData) return FALSE;
+    if (!m_refData) return wxNOT_FOUND;
 
-	int closest = 0;
-	double d,distance = 1000.0; // max. dist is 256
+    int closest = 0;
+    double d, distance = 1000.0; // max. dist is 256
 
     palette_t *e = M_PALETTEDATA->m_entries;
     for (int i = 0; i < M_PALETTEDATA->m_count; i++, e++)
@@ -132,33 +132,33 @@ int wxPalette::GetPixel(const unsigned char red,
             closest = i;
         }
     }
-	return closest;
+
+    return closest;
 }
 
-bool wxPalette::GetRGB(int pixel, 
+bool wxPalette::GetRGB(int pixel,
                        unsigned char *red,
-                       unsigned char *green, 
+                       unsigned char *green,
                        unsigned char *blue) const
 {
-    if (!m_refData) return FALSE;
-    if (pixel >= M_PALETTEDATA->m_count) return FALSE;
-    
+    if (!m_refData) return false;
+    if (pixel >= M_PALETTEDATA->m_count) return false;
+
     palette_t& p = M_PALETTEDATA->m_entries[pixel];
     if (red) *red = p.red;
     if (green) *green = p.green;
     if (blue) *blue = p.blue;
-    return TRUE;
+    return true;
 }
 
 int wxPalette::GetColoursCount() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid palette") );   
+    wxCHECK_MSG( Ok(), 0, wxT("invalid palette") );
     return M_PALETTEDATA->m_count;
 }
 
 palette_t *wxPalette::GetMGLpalette_t() const
 {
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid palette") );   
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid palette") );
     return M_PALETTEDATA->m_entries;
 }
-

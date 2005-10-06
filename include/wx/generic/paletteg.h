@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        palette.h
+// Name:        wx/generic/paletteg.h
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling and Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ class WXDLLIMPEXP_CORE wxPalette: public wxPaletteBase
     virtual bool Ok() const;
 
     bool Create( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-    int GetPixel( const unsigned char red, const unsigned char green, const unsigned char blue ) const;
+    int GetPixel( unsigned char red, unsigned char green, unsigned char blue ) const;
     bool GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const;
 
     // no data

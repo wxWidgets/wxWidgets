@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling and Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -120,11 +120,11 @@ bool wxPalette::Create(int n,
     return true;
 }
 
-int wxPalette::GetPixel( const unsigned char red,
-                         const unsigned char green,
-                         const unsigned char blue ) const
+int wxPalette::GetPixel( unsigned char red,
+                         unsigned char green,
+                         unsigned char blue ) const
 {
-    if (!m_refData) return false;
+    if (!m_refData) return wxNOT_FOUND;
 
     int closest = 0;
     double d,distance = 1000.0; // max. dist is 256
@@ -158,5 +158,3 @@ bool wxPalette::GetRGB(int pixel,
 }
 
 #endif // wxUSE_PALETTE
-
-

@@ -61,9 +61,9 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
     return false;
 }
 
-int wxPalette::GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const
+int wxPalette::GetPixel(unsigned char red, unsigned char green, unsigned char blue) const
 {
-    return 0;
+    return wxNOT_FOUND;
 }
 
 bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsigned char *blue) const
@@ -76,4 +76,3 @@ void wxPalette::SetHPALETTE(WXHPALETTE pal)
 }
 
 #endif // wxUSE_PALETTE
-

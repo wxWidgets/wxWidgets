@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        palette.cpp
+// Name:        src/x11/palette.cpp
 // Purpose:     wxPalette
 // Author:      Julian Smart
 // Modified by:
@@ -164,13 +164,13 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
     return true;
 }
 
-int wxPalette::GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const
+int wxPalette::GetPixel(unsigned char red, unsigned char green, unsigned char blue) const
 {
     if ( !m_refData )
-        return FALSE;
+        return wxNOT_FOUND;
 
     // TODO
-    return FALSE;
+    return wxNOT_FOUND;
 }
 
 bool wxPalette::GetRGB(int index, unsigned char *WXUNUSED(red), unsigned char *WXUNUSED(green), unsigned char *WXUNUSED(blue)) const
@@ -351,4 +351,3 @@ void wxPalette::PutXColormap(WXDisplay* display, WXColormap cm, bool dp)
 
     M_PALETTEDATA->m_palettes.Append(c);
 }
-
