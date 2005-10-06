@@ -182,7 +182,7 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
                    NULL );
 #else
     XmToggleButtonSetState ((Widget) m_mainWidget,
-                            (Boolean) state == wxCHK_CHECKED, True);
+                            state == wxCHK_CHECKED, True);
 #endif
 
     m_inSetValue = false;
