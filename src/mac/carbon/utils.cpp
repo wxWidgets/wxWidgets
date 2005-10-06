@@ -746,7 +746,7 @@ void wxMacWakeUp()
         {
             if ( IsEventInQueue( GetMainEventQueue() , s_wakeupEvent ) )
                 return ;
-            s_wakeupEvent.SetTime(0) ;
+            s_wakeupEvent.SetCurrentTime() ;
             err = PostEventToQueue(GetMainEventQueue(), s_wakeupEvent,
                                   kEventPriorityHigh);
         }

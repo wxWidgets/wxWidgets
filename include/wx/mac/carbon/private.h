@@ -335,9 +335,13 @@ public :
     {
         return EventTimeToTicks( GetTime() ) ;
     }
-    OSStatus SetTime( EventTime inWhen = 0 /*now*/ ) 
+    OSStatus SetCurrentTime( )
     {
-        return ::SetEventTime( m_eventRef , inWhen ? inWhen : GetCurrentEventTime() ) ;
+        return ::SetEventTime( m_eventRef , GetCurrentEventTime() ) ;
+    }
+    OSStatus SetTime( EventTime when ) 
+    {
+        return ::SetEventTime( m_eventRef , when ) ;
     }
     operator EventRef () { return m_eventRef; }
     
