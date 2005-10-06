@@ -8,6 +8,7 @@ wxWidgets Change Log - For more verbose changes, see the manual
 All:
 
 - Fixed crash when loading message catalogs in Unicode build
+- Spurious error message from wxLaunchDefaultBrowser fixed
 
 
 2.6.2
