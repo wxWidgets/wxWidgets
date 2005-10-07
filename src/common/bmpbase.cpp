@@ -77,7 +77,7 @@ wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& extension, wxBitmapTy
     {
         wxBitmapHandler *handler = (wxBitmapHandler *)node->GetData();
         if ( handler->GetExtension() == extension &&
-                    (bitmapType == -1 || handler->GetType() == bitmapType) )
+                    (bitmapType == wxBITMAP_TYPE_ANY || handler->GetType() == bitmapType) )
             return handler;
         node = node->GetNext();
     }
