@@ -1,7 +1,7 @@
 #ifndef __DCSVG_H
 #define __DCSVG_H
-#include <wx/wfstream.h>
-#include <wx/string.h>
+#include "wx/wfstream.h"
+#include "wx/string.h"
 
 #ifdef WXMAKINGDLL_SVG
     #define WXDLLIMPEXP_SVG WXEXPORT

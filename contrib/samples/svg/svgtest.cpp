@@ -36,8 +36,8 @@ USERC("svg.rc");
 #include "wx/mdi.h"
 #endif
 
-#include <wx/toolbar.h>
-#include <wx/svg/dcsvg.h>
+#include "wx/toolbar.h"
+#include "wx/svg/dcsvg.h"
 
 #include "mondrian.xpm"
 
