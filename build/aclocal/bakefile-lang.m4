@@ -187,42 +187,57 @@ fi
 dnl ===========================================================================
 dnl Macros to do all of the compiler detections as one macro
 dnl ===========================================================================
+
+dnl check for different proprietary compilers depending on target platform
+dnl _AC_BAKEFILE_PROG_COMPILER(LANG)
+AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
+[
+    AC_PROG_$1
+    AC_BAKEFILE_PROG_INTEL$1
+    dnl if we're using gcc, we can't be using any of incompatible compilers
+    if test "x$G$1" != "xyes"; then
+        if test "x$1" = "xC"; then
+            AC_BAKEFILE_METROWERKS_EXTO
+            if test "x$wx_cv_c_exto" '!=' "x"; then
+                unset ac_cv_prog_cc_g
+                _AC_PROG_CC_G
+            fi
+        fi
+
+        dnl most of these compilers are only used under well-defined OS so
+        dnl don't waste time checking for them on other ones
+        case `uname -s` in
+            AIX*)
+                AC_BAKEFILE_PROG_XL$1
+                ;;
+
+            Darwin)
+                AC_BAKEFILE_PROG_MW$1
+                AC_BAKEFILE_PROG_XL$1
+                ;;
+
+            IRIX*)
+                AC_BAKEFILE_PROG_SGI$1
+                ;;
+
+            SunOS)
+                AC_BAKEFILE_PROG_SUN$1
+                ;;
+
+            HP-UX*)
+                AC_BAKEFILE_PROG_HP$1
+                ;;
+        esac
+    fi
+])
+
 AC_DEFUN([AC_BAKEFILE_PROG_CC],
 [
-    AC_PROG_CC
-    AC_BAKEFILE_PROG_INTELCC
-    dnl if we're using gcc, we can't be using any of incompatible compilers
-    if test "x$GCC" != "xyes"; then
-        AC_BAKEFILE_METROWERKS_EXTO
-        dnl By the time we find out that we need -ext o some tests have failed.
-        if test "x$wx_cv_c_exto" '!=' "x"; then
-            unset ac_cv_prog_cc_g
-            _AC_PROG_CC_G
-        fi
-        AC_BAKEFILE_PROG_MWCC
-        AC_BAKEFILE_PROG_XLCC
-        AC_BAKEFILE_PROG_SGICC
-        AC_BAKEFILE_PROG_SUNCC
-        AC_BAKEFILE_PROG_HPCC
-    fi
+    _AC_BAKEFILE_PROG_COMPILER(CC)
 ])
 
 AC_DEFUN([AC_BAKEFILE_PROG_CXX],
 [
-    AC_PROG_CXX
-    AC_BAKEFILE_PROG_INTELCXX
-    if test "x$GXX" != "xyes"; then
-        AC_BAKEFILE_METROWERKS_EXTO
-        dnl By the time we find out that we need -ext o some tests have failed.
-        if test "x$wx_cv_cxx_exto" '!=' "x"; then
-            unset ac_cv_prog_cxx_g
-            _AC_PROG_CXX_G
-        fi
-        AC_BAKEFILE_PROG_MWCXX
-        AC_BAKEFILE_PROG_XLCXX
-        AC_BAKEFILE_PROG_SGICXX
-        AC_BAKEFILE_PROG_SUNCXX
-        AC_BAKEFILE_PROG_HPCXX
-    fi
+    _AC_BAKEFILE_PROG_COMPILER(CXX)
 ])
 
