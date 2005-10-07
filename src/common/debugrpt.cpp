@@ -80,8 +80,6 @@ protected:
     bool m_isOk;
 };
 
-#endif // wxUSE_STACKWALKER
-
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
@@ -115,8 +113,6 @@ HexElement(wxXmlNode *node, const wxChar *name, unsigned long value)
 }
 
 #endif // wxUSE_CRASHREPORT
-
-#if wxUSE_STACKWALKER
 
 // ============================================================================
 // XmlStackWalker implementation
