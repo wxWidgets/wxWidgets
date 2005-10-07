@@ -1944,6 +1944,20 @@ if test "x$SGICXX" = "xyes"; then
     CXXFLAGS="$CXXFLAGS -woff 3970"
 fi
 
+dnl HP-UX c89/aCC compiler warnings
+if test "x$HPCC" = "xyes"; then
+    dnl 2011: "unrecognized preprocessor directive": nice warning but it's given
+    dnl       even for directives inside #if which is not true (i.e. which are
+    dnl       used for other compilers/OS) and so we have no way to get rid of it
+    dnl 2450: "long long is non standard" -- yes, we know
+    CFLAGS="$CFLAGS +W 2011,2450"
+fi
+if test "x$HPCXX" = "xyes"; then
+    dnl 2340: "value copied to temporary, reference to temporary used": very
+    dnl       painful as triggered by any occurrence of user-defined conversion
+    CXXFLAGS="$CXXFLAGS +W 2340"
+fi
+
 dnl check for std::string or std::wstring
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     AC_LANG_PUSH(C++)
