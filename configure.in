@@ -134,6 +134,10 @@ case "${host}" in
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
     SO_SUFFIX=sl
     AC_DEFINE(__HPUX__)
+
+    dnl many standard declarations in HP-UX headers are only included if either
+    dnl _HPUX_SOURCE is defined, see stdsyms(5)
+    CPPFLAGS="$CPPFLAGS -D_HPUX_SOURCE"
   ;;
   *-*-linux* )
     USE_LINUX=1
@@ -7139,6 +7143,9 @@ if test $GCC_PCH = 1 ; then
     CPPFLAGS="-DWX_PRECOMP $CPPFLAGS"
 fi
 
+dnl TOOLCHAIN_DEFS are used by wx-config but should be also used for wx build
+dnl itself
+CPPFLAGS="$CPPFLAGS $TOOLCHAIN_DEFS"
 
 dnl for convenience, sort the samples in alphabetical order
 dnl
