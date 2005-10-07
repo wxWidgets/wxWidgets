@@ -133,6 +133,17 @@ AC_DEFUN([AC_BAKEFILE_PROG_INTELCXX],
     _AC_BAKEFILE_LANG_COMPILER(Intel, C++, __INTEL_COMPILER, INTELCXX=yes)
 ])
 
+dnl HP-UX aCC: see http://docs.hp.com/en/6162/preprocess.htm#macropredef
+AC_DEFUN([AC_BAKEFILE_PROG_HPCC],
+[
+    _AC_BAKEFILE_LANG_COMPILER(HP, C, __HP_cc, HPCC=yes)
+])
+
+AC_DEFUN([AC_BAKEFILE_PROG_HPCXX],
+[
+    _AC_BAKEFILE_LANG_COMPILER(HP, C++, __HP_aCC, HPCXX=yes)
+])
+
 dnl ===========================================================================
 dnl macros to detect specialty compiler options
 dnl ===========================================================================
@@ -192,6 +203,7 @@ AC_DEFUN([AC_BAKEFILE_PROG_CC],
         AC_BAKEFILE_PROG_XLCC
         AC_BAKEFILE_PROG_SGICC
         AC_BAKEFILE_PROG_SUNCC
+        AC_BAKEFILE_PROG_HPCC
     fi
 ])
 
@@ -210,6 +222,7 @@ AC_DEFUN([AC_BAKEFILE_PROG_CXX],
         AC_BAKEFILE_PROG_XLCXX
         AC_BAKEFILE_PROG_SGICXX
         AC_BAKEFILE_PROG_SUNCXX
+        AC_BAKEFILE_PROG_HPCXX
     fi
 ])
 

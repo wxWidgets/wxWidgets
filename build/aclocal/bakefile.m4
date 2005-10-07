@@ -543,8 +543,12 @@ AC_DEFUN([AC_BAKEFILE_DEPS],
         DEPSMODE=unixcc
         DEPSFLAG="-M"
         AC_MSG_RESULT([SGI cc])
+    elif test "x$HPCC" = "xyes"; then
+        DEPSMODE=unixcc
+        DEPSFLAG="+make"
+        AC_MSG_RESULT([HP cc])
     else
-	DEPS_TRACKING=0
+        DEPS_TRACKING=0
         AC_MSG_RESULT([none])
     fi
 
@@ -552,7 +556,7 @@ AC_DEFUN([AC_BAKEFILE_DEPS],
         AC_BAKEFILE_CREATE_FILE_BK_DEPS
         chmod +x bk-deps
     fi
-    
+
     AC_SUBST(DEPS_TRACKING)
 ])
 
