@@ -1206,13 +1206,13 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
             return szRet;
         }
 
-    #else //!wxUSE_UNICODE
+    #else /* !wxUSE_UNICODE */
     #   define wxTmemchr memchr
     #   define wxTmemcmp memcmp
     #   define wxTmemcpy memcpy
     #   define wxTmemmove memmove
     #   define wxTmemset memset
-    #endif
+    #endif /* wxUSE_UNICODE/!wxUSE_UNICODE */
 
 #endif /*__cplusplus*/
 
