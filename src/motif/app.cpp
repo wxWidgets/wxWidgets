@@ -122,7 +122,11 @@ void wxApp::CleanUp()
          it != end; ++it )
     {
         delete it->second->m_visualInfo;
+        // On Solaris 10 calling XtDestroyWidget on the top level widget
+        // dumps core if the locale is set to something other than "C"
+#ifndef __SUN__
         XtDestroyWidget( it->second->m_topLevelWidget );
+#endif
         delete it->second;
     }
 
