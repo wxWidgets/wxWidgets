@@ -21,8 +21,8 @@
 #define __stc_h__
 
 
-#include <wx/wx.h>
-#include <wx/dnd.h>
+#include "wx/wx.h"
+#include "wx/dnd.h"
 
 
 #ifdef WXMAKINGDLL_STC

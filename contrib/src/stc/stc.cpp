@@ -17,11 +17,11 @@
 
 #include <ctype.h>
 
-#include <wx/wx.h>
-#include <wx/tokenzr.h>
-#include <wx/mstream.h>
-#include <wx/image.h>
-#include <wx/file.h>
+#include "wx/wx.h"
+#include "wx/tokenzr.h"
+#include "wx/mstream.h"
+#include "wx/image.h"
+#include "wx/file.h"
 
 #include "wx/stc/stc.h"
 #include "ScintillaWX.h"

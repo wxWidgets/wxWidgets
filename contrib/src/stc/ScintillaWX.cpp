@@ -14,11 +14,11 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include <wx/wx.h>
-#include <wx/textbuf.h>
-#include <wx/dataobj.h>
-#include <wx/clipbrd.h>
-#include <wx/dnd.h>
+#include "wx/wx.h"
+#include "wx/textbuf.h"
+#include "wx/dataobj.h"
+#include "wx/clipbrd.h"
+#include "wx/dnd.h"
 
 #include "ScintillaWX.h"
 #include "ExternalLexer.h"
@@ -27,7 +27,7 @@
 
 #ifdef __WXMSW__
     // GetHwndOf()
-    #include <wx/msw/private.h>
+    #include "wx/msw/private.h"
 #endif
 
 //----------------------------------------------------------------------
