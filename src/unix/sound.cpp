@@ -447,7 +447,8 @@ wxSound::~wxSound()
     Free();
 }
 
-bool wxSound::Create(const wxString& fileName, bool isResource)
+bool wxSound::Create(const wxString& fileName,
+                     bool WXUNUSED_UNLESS_DEBUG(isResource))
 {
     wxASSERT_MSG( !isResource,
              _T("Loading sound from resources is only supported on Windows") );
