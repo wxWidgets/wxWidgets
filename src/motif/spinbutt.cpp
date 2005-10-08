@@ -238,8 +238,8 @@ bool wxArrowButton::Create( wxSpinButton* parent,
 // wxSpinButton
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl);
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent);
+IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
 static void CalcSizes( const wxPoint& pt, const wxSize& sz,
                        wxPoint& pt1, wxSize& sz1,
@@ -310,19 +310,12 @@ void wxSpinButton::DoMoveWindow(int x, int y, int width, int height)
     m_down->SetSize( pt2.x, pt2.y, sz2.x, sz2.y );
 }
 
-void wxSpinButton::DoSetSize(int x, int y, int width, int height,
-                             int sizeFlags)
+void wxSpinButton::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-#ifdef __VMS__
-#pragma message disable codcauunr
-#endif
-    if( sizeFlags & wxSIZE_USE_EXISTING && width == -1 )
+    if ( (sizeFlags & wxSIZE_ALLOW_MINUS_ONE) && width == -1 )
         width = GetSize().x;
-    if( sizeFlags & wxSIZE_USE_EXISTING && height == -1 )
+    if ( (sizeFlags & wxSIZE_ALLOW_MINUS_ONE) && height == -1 )
         height = GetSize().y;
-#ifdef __VMS__
-#pragma message enable codcauunr
-#endif
 
     wxControl::DoSetSize(x, y, width, height, 0);
 }
