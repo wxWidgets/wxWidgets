@@ -252,10 +252,11 @@ typedef int wxWindowID;
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
         /*  VC++ 6.0 and 5.0 have C++ casts (what about earlier versions?) */
         #define HAVE_CXX_CASTS
-    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
-          && wxCHECK_GCC_VERSION(2, 95)
-        /*  GCC 2.95 has C++ casts, what about earlier versions? */
-        #define HAVE_CXX_CASTS
+    #elif defined(__MINGW32__) || defined(__CYGWIN32__)
+        #if wxCHECK_GCC_VERSION(2, 95)
+            /*  GCC 2.95 has C++ casts, what about earlier versions? */
+            #define HAVE_CXX_CASTS
+        #endif
     #endif
 #endif /*  !HAVE_CXX_CASTS */
 
