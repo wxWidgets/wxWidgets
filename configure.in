@@ -1958,6 +1958,18 @@ if test "x$HPCXX" = "xyes"; then
     CXXFLAGS="$CXXFLAGS +W 2340"
 fi
 
+dnl DEC/Compaq/HP cxx warnings
+if test "x$COMPAQCXX" = "xyes"; then
+    dnl -w0 enables all warnings, then we disable some of them:
+    dnl basclsnondto: base class dtor non virtual (sometimes we do want this)
+    dnl unrimpret:  "end of routine block may be unreachable" is given for
+    dnl             every "if ( ) return ...; else return ...;"
+    dnl intconlosbit: "conversion to integral type of smaller size could lose
+    dnl               data" this is a useful warning but there are too many of
+    dnl               them for now
+    CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
+fi
+
 dnl check for std::string or std::wstring
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     AC_LANG_PUSH(C++)
