@@ -142,13 +142,7 @@ bool wxHTTP::ParseHeaders()
     ClearHeaders();
     m_read = true;
 
-#if defined(__VISAGECPP__)
-// VA just can't stand while(1)
-    bool bOs2var = true;
-    while(bOs2var)
-#else
-    while (1)
-#endif
+    for ( ;; )
     {
         m_perr = ReadLine(this, line);
         if (m_perr != wxPROTO_NOERR)
