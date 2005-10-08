@@ -529,7 +529,7 @@ void wxGetMousePosition( int* x, int* y )
     *x = xev.x_root;
     *y = xev.y_root;
 #endif
-};
+}
 
 // Return true if we have a colour display
 bool wxColourDisplay()

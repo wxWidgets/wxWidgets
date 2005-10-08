@@ -32,7 +32,7 @@
 #include "wx/tab.h"
 #include "wx/listimpl.cpp"
 
-WX_DEFINE_LIST(wxTabLayerList);
+WX_DEFINE_LIST(wxTabLayerList)
 
 // not defined: use old, square tab implementation (fills in tabs)
 // defined: use new, rounded tab implementation (doesn't colour in tabs)

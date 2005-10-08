@@ -410,7 +410,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxIdlePipeModule)
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxIdlePipeModule, wxModule);
+IMPLEMENT_DYNAMIC_CLASS(wxIdlePipeModule, wxModule)
 
 static void wxInputCallback( XtPointer, int* fd, XtInputId* )
 {

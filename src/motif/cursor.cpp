@@ -43,7 +43,7 @@ public:
 
 WX_DECLARE_LIST(wxXCursor, wxXCursorList);
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxXCursorList);
+WX_DEFINE_LIST(wxXCursorList)
 
 class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
 {

@@ -168,8 +168,8 @@ struct wxDataIdToDataObject
 
 #include "wx/listimpl.cpp"
 
-WX_DEFINE_LIST(wxDataObjectList);
-WX_DEFINE_LIST(wxDataIdToDataObjectList);
+WX_DEFINE_LIST(wxDataObjectList)
+WX_DEFINE_LIST(wxDataIdToDataObjectList)
 
 extern "C"
 {
@@ -231,8 +231,8 @@ bool wxClipboard::SetData( wxDataObject *data )
     return AddData( data );
 }
 
-wxDECLARE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray );
-wxDEFINE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray );
+wxDECLARE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray )
+wxDEFINE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray )
 
 #if wxCHECK_LESSTIF()
 void wxClipboardCallback( Widget xwidget, int* data_id,

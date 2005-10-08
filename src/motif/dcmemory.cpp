@@ -54,7 +54,7 @@ wxMemoryDC::wxMemoryDC(void)
     SetBrush (* wxWHITE_BRUSH);
     SetPen (* wxBLACK_PEN);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-};
+}
 
 wxMemoryDC::wxMemoryDC( wxDC* dc )
 {
@@ -80,11 +80,11 @@ wxMemoryDC::wxMemoryDC( wxDC* dc )
 
     SetBrush (* wxWHITE_BRUSH);
     SetPen (* wxBLACK_PEN);
-};
+}
 
 wxMemoryDC::~wxMemoryDC(void)
 {
-};
+}
 
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
@@ -120,7 +120,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
         m_ok = false;
         m_pixmap = (WXPixmap) 0;
     };
-};
+}
 
 void wxMemoryDC::DoGetSize( int *width, int *height ) const
 {
@@ -134,6 +134,6 @@ void wxMemoryDC::DoGetSize( int *width, int *height ) const
         if (width) (*width) = 0;
         if (height) (*height) = 0;
     };
-};
+}
 
 

@@ -26,7 +26,7 @@
 
 #include "wx/motif/private.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler);
+IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 
 WX_DECLARE_VOIDPTR_HASH_MAP(wxTimer*, wxTimerHashMap);
 

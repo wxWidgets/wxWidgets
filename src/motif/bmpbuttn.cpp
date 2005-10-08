@@ -126,13 +126,13 @@ void wxBitmapButton::SetBitmapSelected(const wxBitmap& sel)
     m_bmpSelectedOriginal = sel;
 
     DoSetBitmap();
-};
+}
 
 void wxBitmapButton::SetBitmapFocus(const wxBitmap& focus)
 {
     m_bmpFocus = focus;
     // Not used in Motif
-};
+}
 
 void wxBitmapButton::SetBitmapDisabled(const wxBitmap& disabled)
 {
@@ -140,7 +140,7 @@ void wxBitmapButton::SetBitmapDisabled(const wxBitmap& disabled)
     m_bmpDisabledOriginal = disabled;
 
     DoSetBitmap();
-};
+}
 
 void wxBitmapButton::DoSetBitmap()
 {
