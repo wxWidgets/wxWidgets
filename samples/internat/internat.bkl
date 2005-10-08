@@ -20,10 +20,11 @@
     <wx-data id="cs" template="catalog"/>
     <wx-data id="de" template="catalog"/>
     <wx-data id="fr" template="catalog"/>
-    <wx-data id="ja" template="catalog"/>
     <wx-data id="ka" template="catalog"/>
     <wx-data id="pl" template="catalog"/>
     <wx-data id="ru" template="catalog"/>
     <wx-data id="sv" template="catalog"/>
+    <wx-data id="ja" template="catalog"/>
+    <wx-data id="ja_JP.EUC-JP" template="catalog"/>
 
 </makefile>
