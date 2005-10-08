@@ -105,7 +105,6 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     m_foregroundColour = *wxBLACK;
 
     Widget dialogShell = (Widget) m_mainWidget;
-    Widget shell = XtParent(dialogShell) ;
 
     SetTitle( title );
 
@@ -131,6 +130,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     // is managed, so we manage without mapping to the screen.
     // To show, we map the shell (actually it's parent).
 #if !wxUSE_INVISIBLE_RESIZE
+    Widget shell = XtParent(dialogShell) ;
     XtVaSetValues(shell, XmNmappedWhenManaged, False, NULL);
 #endif
 
@@ -194,21 +194,10 @@ bool wxDialog::XmDoCreateTLW(wxWindow* parent,
 
 void wxDialog::SetModal(bool flag)
 {
-#ifdef __VMS
-#pragma message disable codcauunr
-#endif
    if ( flag )
-        m_windowStyle |= wxDIALOG_MODAL ;
-    else
-        if ( m_windowStyle & wxDIALOG_MODAL )
-            m_windowStyle -= wxDIALOG_MODAL ;
-
-        wxModelessWindows.DeleteObject(this);
-        if (!flag)
-            wxModelessWindows.Append(this);
-#ifdef __VMS
-#pragma message enable codcauunr
-#endif
+       wxModelessWindows.DeleteObject(this);
+   else
+       wxModelessWindows.Append(this);
 }
 
 wxDialog::~wxDialog()

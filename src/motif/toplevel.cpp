@@ -65,14 +65,7 @@ static void wxTLWEventHandler( Widget wid,
 
 void wxTopLevelWindowMotif::PreDestroy()
 {
-#ifdef __VMS
-#pragma message disable codcauunr
-#endif
-   if ( (GetWindowStyleFlag() & wxDIALOG_MODAL) != wxDIALOG_MODAL )
-        wxModelessWindows.DeleteObject(this);
-#ifdef __VMS
-#pragma message enable codcauunr
-#endif
+    wxModelessWindows.DeleteObject(this);
 
     m_icons.m_icons.Empty();
 
