@@ -773,12 +773,21 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
         }
     }
 
-    // NB: at least under Linux, pthread_cleanup_push/pop are macros and pop
-    //     contains the matching '}' for the '{' in push, so they must be used
-    //     in the same block!
+    // NB: pthread_cleanup_push/pop() are macros and pop contains the matching
+    //     '}' for the '{' in push, so they must be used in the same block!
 #ifdef wxHAVE_PTHREAD_CLEANUP
+    #ifdef __DECCXX
+        // under Tru64 we get a warning from macro expansion
+        #pragma message save
+        #pragma message disable(declbutnotref)
+    #endif
+
     // remove the cleanup handler without executing it
     pthread_cleanup_pop(FALSE);
+
+    #ifdef __DECCXX
+        #pragma message restore
+    #endif
 #endif // wxHAVE_PTHREAD_CLEANUP
 
     if ( dontRunAtAll )
@@ -1411,13 +1420,14 @@ wxThreadError wxThread::Kill()
         default:
 #ifdef HAVE_PTHREAD_CANCEL
             if ( pthread_cancel(m_internal->GetId()) != 0 )
-#endif
+#endif // HAVE_PTHREAD_CANCEL
             {
                 wxLogError(_("Failed to terminate a thread."));
 
                 return wxTHREAD_MISC_ERROR;
             }
 
+#ifdef HAVE_PTHREAD_CANCEL
             if ( m_isDetached )
             {
                 // if we use cleanup function, this will be done from
@@ -1437,6 +1447,7 @@ wxThreadError wxThread::Kill()
             }
 
             return wxTHREAD_NO_ERROR;
+#endif // HAVE_PTHREAD_CANCEL
     }
 }
 
