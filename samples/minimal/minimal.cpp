@@ -180,9 +180,15 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxString msg;
-    msg.Printf( _T("This is the About dialog of the minimal sample.\n")
-                _T("Welcome to %s"), wxVERSION_STRING);
-
-    wxMessageBox(msg, _T("About Minimal"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(wxString::Format(
+                    _T("Welcome to %s!\n")
+                    _T("\n")
+                    _T("This is the minimal wxWidgets sample\n")
+                    _T("running under %s."),
+                    wxVERSION_STRING,
+                    wxGetOsDescription().c_str()
+                 ),
+                 _T("About wxWidgets minimal sample"),
+                 wxOK | wxICON_INFORMATION,
+                 this);
 }
