@@ -1603,12 +1603,67 @@ bool wxLocale::Init(int language, int flags)
 #if defined(__OS2__)
     wxMB2WXbuf retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #elif defined(__UNIX__) && !defined(__WXMAC__)
-    if (language == wxLANGUAGE_DEFAULT)
-        locale = wxEmptyString;
-    else
+    if (language != wxLANGUAGE_DEFAULT)
         locale = info->CanonicalName;
 
     wxMB2WXbuf retloc = wxSetlocaleTryUTF(LC_ALL, locale);
+
+    const wxString langOnly = locale.Left(2);
+    if ( !retloc )
+    {
+        // Some C libraries don't like xx_YY form and require xx only
+        retloc = wxSetlocaleTryUTF(LC_ALL, langOnly);
+    }
+
+#if wxUSE_FONTMAP
+    // some systems (e.g. FreeBSD and HP-UX) don't have xx_YY aliases but
+    // require the full xx_YY.encoding form, so try using UTF-8 because this is
+    // the only thing we can do generically
+    //
+    // TODO: add encodings applicable to each language to the lang DB and try
+    //       them all in turn here
+    if ( !retloc )
+    {
+        const wxChar **names =
+            wxFontMapperBase::GetAllEncodingNames(wxFONTENCODING_UTF8);
+        while ( *names )
+        {
+            retloc = wxSetlocale(LC_ALL, locale + _T('.') + *names++);
+            if ( retloc )
+                break;
+        }
+    }
+#endif // wxUSE_FONTMAP
+
+    if ( !retloc )
+    {
+        // Some C libraries (namely glibc) still use old ISO 639,
+        // so will translate the abbrev for them
+        wxString localeAlt;
+        if ( langOnly == wxT("he") )
+            localeAlt = wxT("iw") + locale.Mid(3);
+        else if ( langOnly == wxT("id") )
+            localeAlt = wxT("in") + locale.Mid(3);
+        else if ( langOnly == wxT("yi") )
+            localeAlt = wxT("ji") + locale.Mid(3);
+        else if ( langOnly == wxT("nb") )
+            localeAlt = wxT("no_NO");
+        else if ( langOnly == wxT("nn") )
+            localeAlt = wxT("no_NY");
+
+        if ( !localeAlt.empty() )
+        {
+            retloc = wxSetlocaleTryUTF(LC_ALL, localeAlt);
+            if ( !retloc )
+                retloc = wxSetlocaleTryUTF(LC_ALL, locale.Left(2));
+        }
+    }
+
+    if ( !retloc )
+    {
+        wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
+        return false;
+    }
 
 #ifdef __AIX__
     // at least in AIX 5.2 libc is buggy and the string returned from setlocale(LC_ALL)
@@ -1622,40 +1677,6 @@ bool wxLocale::Init(int language, int flags)
         *p = _T('\0');
 #endif // __AIX__
 
-    if ( !retloc )
-    {
-        // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocaleTryUTF(LC_ALL, locale.Mid(0,2));
-    }
-    if ( !retloc )
-    {
-        // Some C libraries (namely glibc) still use old ISO 639,
-        // so will translate the abbrev for them
-        wxString mid = locale.Mid(0,2);
-        if (mid == wxT("he"))
-            locale = wxT("iw") + locale.Mid(3);
-        else if (mid == wxT("id"))
-            locale = wxT("in") + locale.Mid(3);
-        else if (mid == wxT("yi"))
-            locale = wxT("ji") + locale.Mid(3);
-        else if (mid == wxT("nb"))
-            locale = wxT("no_NO");
-        else if (mid == wxT("nn"))
-            locale = wxT("no_NY");
-
-        retloc = wxSetlocaleTryUTF(LC_ALL, locale);
-    }
-    if ( !retloc )
-    {
-        // (This time, we changed locale in previous if-branch, so try again.)
-        // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocaleTryUTF(LC_ALL, locale.Mid(0,2));
-    }
-    if ( !retloc )
-    {
-        wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
-        return false;
-    }
 #elif defined(__WIN32__)
 
     #if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
