@@ -24,9 +24,11 @@
 #include "wx/log.h"
 
 
-#if __MSL__ >= 0x6000
-#include "math.h"
-using namespace std ;
+#ifdef __MSL__
+    #if __MSL__ >= 0x6000
+        #include "math.h"
+        using namespace std ;
+    #endif
 #endif
 
 #include "wx/mac/private.h"
