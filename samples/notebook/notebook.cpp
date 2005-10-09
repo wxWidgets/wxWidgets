@@ -307,34 +307,42 @@ MyFrame::~MyFrame()
 // part is control class-specific
 #if wxUSE_NOTEBOOK
     #define CASE_NOTEBOOK(x) case Type_Notebook: x; break;
+    #define FLAG_NOTEBOOK(x) wxNB_##x
 #else
     #define CASE_NOTEBOOK(x)
-#endif
-
-#if wxUSE_CHOICEBOOK
-    #define CASE_CHOICEBOOK(x) case Type_Choicebook: x; break;
-#else
-    #define CASE_CHOICEBOOK(x)
+    #define FLAG_NOTEBOOK(x) 0
 #endif
 
 #if wxUSE_LISTBOOK
     #define CASE_LISTBOOK(x) case Type_Listbook: x; break;
+    #define FLAG_LISTBOOK(x) wxLB_##x
 #else
     #define CASE_LISTBOOK(x)
+    #define FLAG_LISTBOOK(x) 0
+#endif
+
+#if wxUSE_CHOICEBOOK
+    #define CASE_CHOICEBOOK(x) case Type_Choicebook: x; break;
+    #define FLAG_CHOICEBOOK(x) wxCHB_##x
+#else
+    #define CASE_CHOICEBOOK(x)
+    #define FLAG_CHOICEBOOK(x) 0
 #endif
 
 #if wxUSE_TREEBOOK
     #define CASE_TREEBOOK(x) case Type_Treebook: x; break;
+    #define FLAG_TREEBOOK(x) wxTBK_##x
 #else
     #define CASE_TREEBOOK(x)
+    #define FLAG_TREEBOOK(x) 0
 #endif
 
 #define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, after)                       \
     switch ( m_type )                                                         \
     {                                                                         \
         CASE_NOTEBOOK(before nb after)                                        \
-        CASE_CHOICEBOOK(before cb after)                                      \
         CASE_LISTBOOK(before lb after)                                        \
+        CASE_CHOICEBOOK(before cb after)                                      \
         CASE_TREEBOOK(before tb after)                                        \
                                                                               \
         default:                                                              \
@@ -352,8 +360,8 @@ int MyFrame::TranslateBookFlag(int nb, int lb, int chb, int tbk) const
 
 void MyFrame::RecreateBook()
 {
-#define SELECT_FLAG(flag) \
-    TranslateBookFlag(wxNB_##flag, wxCHB_##flag, wxLB_##flag, wxTBK_##flag)
+#define SELECT_FLAG(f) \
+    TranslateBookFlag(FLAG_NOTEBOOK(f), FLAG_LISTBOOK(f), FLAG_CHOICEBOOK(f), FLAG_TREEBOOK(f))
 
     int flags;
     switch ( m_orient )
@@ -390,8 +398,8 @@ void MyFrame::RecreateBook()
 
     DISPATCH_ON_TYPE(m_bookCtrl = new,
                          wxNotebook,
-                         wxChoicebook,
                          wxListbook,
+                         wxChoicebook,
                          wxTreebook,
                      (m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, flags));
 
@@ -474,8 +482,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_DELETE_CUR_PAGE, MyFrame::OnDeleteCurPage)
     EVT_MENU(ID_DELETE_LAST_PAGE, MyFrame::OnDeleteLastPage)
     EVT_MENU(ID_NEXT_PAGE, MyFrame::OnNextPage)
-    EVT_MENU(ID_ADD_SUB_PAGE, MyFrame::OnAddSubPage)
-    EVT_MENU(ID_ADD_PAGE_BEFORE, MyFrame::OnAddPageBefore)
 
     // Book controls
 #if wxUSE_NOTEBOOK
@@ -490,18 +496,18 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_CHOICEBOOK_PAGE_CHANGED(wxID_ANY, MyFrame::OnChoicebook)
     EVT_CHOICEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnChoicebook)
 #endif
-#if wxUSE_CHOICEBOOK
+#if wxUSE_TREEBOOK
     EVT_TREEBOOK_PAGE_CHANGED(wxID_ANY, MyFrame::OnTreebook)
     EVT_TREEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnTreebook)
+
+    EVT_MENU(ID_ADD_SUB_PAGE, MyFrame::OnAddSubPage)
+    EVT_MENU(ID_ADD_PAGE_BEFORE, MyFrame::OnAddPageBefore)
+    EVT_UPDATE_UI_RANGE(ID_ADD_PAGE_BEFORE, ID_ADD_SUB_PAGE,
+                            MyFrame::OnUpdateTreeMenu)
 #endif
 
     // Update title in idle time
     EVT_IDLE(MyFrame::OnIdle)
-
-#if wxUSE_TREEBOOK
-    EVT_UPDATE_UI_RANGE(ID_ADD_PAGE_BEFORE, ID_ADD_SUB_PAGE,
-                            MyFrame::OnUpdateTreeMenu)
-#endif // wxUSE_TREEBOOK
 END_EVENT_TABLE()
 
 void MyFrame::OnType(wxCommandEvent& event)
@@ -734,13 +740,6 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
             _T("wxNotebook")
         },
 #endif // wxUSE_NOTEBOOK
-#if wxUSE_CHOICEBOOK
-        {
-            wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING,
-            _T("wxChoicebook")
-        },
-#endif // wxUSE_CHOICEBOOK
 #if wxUSE_LISTBOOK
         {
             wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,
@@ -748,6 +747,13 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
             _T("wxListbook")
         },
 #endif // wxUSE_LISTBOOK
+#if wxUSE_CHOICEBOOK
+        {
+            wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,
+            wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING,
+            _T("wxChoicebook")
+        },
+#endif // wxUSE_CHOICEBOOK
 #if wxUSE_TREEBOOK
         {
             wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED,

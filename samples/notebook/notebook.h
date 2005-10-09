@@ -84,8 +84,8 @@ private:
     enum BookType
     {
         Type_Notebook,
-        Type_Choicebook,
         Type_Listbook,
+        Type_Choicebook,
         Type_Treebook,
         Type_Max
     } m_type;
