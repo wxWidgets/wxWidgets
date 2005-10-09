@@ -1131,6 +1131,10 @@ SOURCE=..\..\src\xrc\xh_tree.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\xrc\xh_treebk.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\xrc\xh_unkwn.cpp
 # End Source File
 # Begin Source File

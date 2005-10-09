@@ -1256,6 +1256,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_tglbtn.o \
 	xrcdll_xh_toolb.o \
 	xrcdll_xh_tree.o \
+	xrcdll_xh_treebk.o \
 	xrcdll_xh_unkwn.o \
 	xrcdll_xh_wizrd.o \
 	xrcdll_xmlres.o \
@@ -1305,6 +1306,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_tglbtn.o \
 	xrclib_xh_toolb.o \
 	xrclib_xh_tree.o \
+	xrclib_xh_treebk.o \
 	xrclib_xh_unkwn.o \
 	xrclib_xh_wizrd.o \
 	xrclib_xmlres.o \
@@ -2640,6 +2642,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/tooltip.h \
 	wx/toplevel.h \
 	wx/treebase.h \
+	wx/treebook.h \
 	wx/treectrl.h \
 	wx/valgen.h \
 	wx/vidmode.h \
@@ -2986,6 +2989,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_tglbtn.o \
 	monodll_xh_toolb.o \
 	monodll_xh_tree.o \
+	monodll_xh_treebk.o \
 	monodll_xh_unkwn.o \
 	monodll_xh_wizrd.o \
 	monodll_xmlres.o \
@@ -3088,6 +3092,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_treectlg.o \
+	monodll_treebkg.o \
 	monodll_vlbox.o \
 	monodll_vscroll.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
@@ -3236,6 +3241,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_treectlg.o \
+	monodll_treebkg.o \
 	monodll_vlbox.o \
 	monodll_vscroll.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
@@ -4453,6 +4459,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_tglbtn.o \
 	monolib_xh_toolb.o \
 	monolib_xh_tree.o \
+	monolib_xh_treebk.o \
 	monolib_xh_unkwn.o \
 	monolib_xh_wizrd.o \
 	monolib_xmlres.o \
@@ -4555,6 +4562,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_treectlg.o \
+	monolib_treebkg.o \
 	monolib_vlbox.o \
 	monolib_vscroll.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
@@ -4703,6 +4711,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_treectlg.o \
+	monolib_treebkg.o \
 	monolib_vlbox.o \
 	monolib_vscroll.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
@@ -6252,6 +6261,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_treectlg.o \
+	coredll_treebkg.o \
 	coredll_vlbox.o \
 	coredll_vscroll.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
@@ -6400,6 +6410,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_treectlg.o \
+	coredll_treebkg.o \
 	coredll_vlbox.o \
 	coredll_vscroll.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
@@ -7447,6 +7458,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_treectlg.o \
+	corelib_treebkg.o \
 	corelib_vlbox.o \
 	corelib_vscroll.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
@@ -7595,6 +7607,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_treectlg.o \
+	corelib_treebkg.o \
 	corelib_vlbox.o \
 	corelib_vscroll.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
@@ -10959,6 +10972,9 @@ monodll_xh_toolb.o: $(srcdir)/src/xrc/xh_toolb.cpp $(MONODLL_ODEP)
 monodll_xh_tree.o: $(srcdir)/src/xrc/xh_tree.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_tree.cpp
 
+monodll_xh_treebk.o: $(srcdir)/src/xrc/xh_treebk.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_treebk.cpp
+
 monodll_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_unkwn.cpp
 
@@ -13629,6 +13645,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_treectlg.o: $(srcdir)/src/generic/treectlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/treectlg.cpp
 
+@COND_USE_GUI_1@monodll_treebkg.o: $(srcdir)/src/generic/treebkg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/treebkg.cpp
+
 @COND_USE_GUI_1@monodll_vlbox.o: $(srcdir)/src/generic/vlbox.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/vlbox.cpp
 
@@ -14426,6 +14445,9 @@ monolib_xh_toolb.o: $(srcdir)/src/xrc/xh_toolb.cpp $(MONOLIB_ODEP)
 
 monolib_xh_tree.o: $(srcdir)/src/xrc/xh_tree.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_tree.cpp
+
+monolib_xh_treebk.o: $(srcdir)/src/xrc/xh_treebk.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_treebk.cpp
 
 monolib_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_unkwn.cpp
@@ -17096,6 +17118,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_treectlg.o: $(srcdir)/src/generic/treectlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/treectlg.cpp
+
+@COND_USE_GUI_1@monolib_treebkg.o: $(srcdir)/src/generic/treebkg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/treebkg.cpp
 
 @COND_USE_GUI_1@monolib_vlbox.o: $(srcdir)/src/generic/vlbox.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/vlbox.cpp
@@ -20964,6 +20989,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_treectlg.o: $(srcdir)/src/generic/treectlg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/treectlg.cpp
 
+@COND_USE_GUI_1@coredll_treebkg.o: $(srcdir)/src/generic/treebkg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/treebkg.cpp
+
 @COND_USE_GUI_1@coredll_vlbox.o: $(srcdir)/src/generic/vlbox.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/vlbox.cpp
 
@@ -23472,6 +23500,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_treectlg.o: $(srcdir)/src/generic/treectlg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/treectlg.cpp
 
+@COND_USE_GUI_1@corelib_treebkg.o: $(srcdir)/src/generic/treebkg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/treebkg.cpp
+
 @COND_USE_GUI_1@corelib_vlbox.o: $(srcdir)/src/generic/vlbox.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/vlbox.cpp
 
@@ -24141,6 +24172,9 @@ xrcdll_xh_toolb.o: $(srcdir)/src/xrc/xh_toolb.cpp $(XRCDLL_ODEP)
 xrcdll_xh_tree.o: $(srcdir)/src/xrc/xh_tree.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_tree.cpp
 
+xrcdll_xh_treebk.o: $(srcdir)/src/xrc/xh_treebk.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_treebk.cpp
+
 xrcdll_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_unkwn.cpp
 
@@ -24269,6 +24303,9 @@ xrclib_xh_toolb.o: $(srcdir)/src/xrc/xh_toolb.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_tree.o: $(srcdir)/src/xrc/xh_tree.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_tree.cpp
+
+xrclib_xh_treebk.o: $(srcdir)/src/xrc/xh_treebk.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_treebk.cpp
 
 xrclib_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_unkwn.cpp
@@ -24442,7 +24479,7 @@ ALL_DIST: distrib_clean
 	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/README $(DISTDIR)/src/zlib
-#	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
+	#cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
 	mkdir $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.h $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.c $(DISTDIR)/src/regex
@@ -24472,7 +24509,6 @@ ALL_DIST: distrib_clean
 	cp $(WXDIR)/build/bakefiles/wxpresets/sample/minimal* $(DISTDIR)/build/bakefiles/wxpresets/sample
 	cp $(WXDIR)/build/bakefiles/wxpresets/sample/config* $(DISTDIR)/build/bakefiles/wxpresets/sample
 	cp $(WXDIR)/build/bakefiles/wxpresets/*.txt $(DISTDIR)/build/bakefiles/wxpresets
-    # copy aclocal files
 	mkdir $(DISTDIR)/build/aclocal
 	cp $(WXDIR)/build/aclocal/*.m4 $(DISTDIR)/build/aclocal
 
@@ -24661,9 +24697,6 @@ MACX_DIST: ALL_GUI_DIST
 	cp $(MACDIR)/carbon/morefilex/*.h $(DISTDIR)/src/mac/carbon/morefilex
 	cp $(MACDIR)/carbon/morefilex/*.c $(DISTDIR)/src/mac/carbon/morefilex
 	cp $(MACDIR)/carbon/morefilex/*.cpp $(DISTDIR)/src/mac/carbon/morefilex
-# obsolete
-#	mkdir $(DISTDIR)/src/mac/macsock
-#	cp $(MACDIR)/macsock/*.lib $(DISTDIR)/src/mac/macsock
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 
@@ -25110,7 +25143,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/mobile/styles/*.cpp $(DISTDIR)/samples/mobile/styles
 	cp $(SAMPDIR)/mobile/styles/*.h $(DISTDIR)/samples/mobile/styles
 	cp $(SAMPDIR)/mobile/styles/*.jpg $(DISTDIR)/samples/mobile/styles
-    
+
 	mkdir $(DISTDIR)/samples/multimon
 	cp $(SAMPDIR)/multimon/Makefile.in $(DISTDIR)/samples/multimon
 	cp $(SAMPDIR)/multimon/makefile.unx $(DISTDIR)/samples/multimon
@@ -25162,13 +25195,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/printing/*.h $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.xpm $(DISTDIR)/samples/printing
 
-#	mkdir $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/Makefile.in $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/makefile.unx $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/*.cpp $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/*.h $(DISTDIR)/samples/resource
-#	cp $(SAMPDIR)/resource/*.wxr $(DISTDIR)/samples/resource
-
 	mkdir $(DISTDIR)/samples/render
 	cp $(SAMPDIR)/render/Makefile.in $(DISTDIR)/samples/render
 	cp $(SAMPDIR)/render/makefile.unx $(DISTDIR)/samples/render
@@ -25188,12 +25214,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/richedit/*.xpm $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/README $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/TODO $(DISTDIR)/samples/richedit
-
-#	mkdir $(DISTDIR)/samples/proplist
-#	cp $(SAMPDIR)/proplist/Makefile.in $(DISTDIR)/samples/proplist
-#	cp $(SAMPDIR)/proplist/makefile.unx $(DISTDIR)/samples/proplist
-#	cp $(SAMPDIR)/proplist/*.cpp $(DISTDIR)/samples/proplist
-#	cp $(SAMPDIR)/proplist/*.h $(DISTDIR)/samples/proplist
 
 	mkdir $(DISTDIR)/samples/propsize
 	cp $(SAMPDIR)/propsize/Makefile.in $(DISTDIR)/samples/propsize
@@ -25276,12 +25296,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/treectrl/*.cpp $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.h $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.xpm $(DISTDIR)/samples/treectrl
-
-#	mkdir $(DISTDIR)/samples/treelay
-#	cp $(SAMPDIR)/treelay/Makefile.in $(DISTDIR)/samples/treelay
-#	cp $(SAMPDIR)/treelay/makefile.unx $(DISTDIR)/samples/treelay
-#	cp $(SAMPDIR)/treelay/*.cpp $(DISTDIR)/samples/treelay
-#	cp $(SAMPDIR)/treelay/*.h $(DISTDIR)/samples/treelay
 
 	mkdir $(DISTDIR)/samples/typetest
 	cp $(SAMPDIR)/typetest/Makefile.in $(DISTDIR)/samples/typetest
@@ -25402,7 +25416,7 @@ MANUAL_DIST:
 	cp $(DOCDIR)/latex/wx/*.sty $(DISTDIR)/docs/latex/wx
 
 
-# Copy all the files from wxPython needed for the Debian source package, 
+# Copy all the files from wxPython needed for the Debian source package,
 # and then remove some that are not needed.
 PYTHON_DIST:
 	for dir in `grep -v '#' $(WXDIR)/wxPython/distrib/DIRLIST`; do \

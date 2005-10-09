@@ -916,6 +916,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_tglbtn.o \
 	$(OBJS)\xrcdll_xh_toolb.o \
 	$(OBJS)\xrcdll_xh_tree.o \
+	$(OBJS)\xrcdll_xh_treebk.o \
 	$(OBJS)\xrcdll_xh_unkwn.o \
 	$(OBJS)\xrcdll_xh_wizrd.o \
 	$(OBJS)\xrcdll_xmlres.o \
@@ -968,6 +969,7 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_tglbtn.o \
 	$(OBJS)\xrclib_xh_toolb.o \
 	$(OBJS)\xrclib_xh_tree.o \
+	$(OBJS)\xrclib_xh_treebk.o \
 	$(OBJS)\xrclib_xh_unkwn.o \
 	$(OBJS)\xrclib_xh_wizrd.o \
 	$(OBJS)\xrclib_xmlres.o \
@@ -1130,6 +1132,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xh_tglbtn.o \
 	$(OBJS)\monodll_xh_toolb.o \
 	$(OBJS)\monodll_xh_tree.o \
+	$(OBJS)\monodll_xh_treebk.o \
 	$(OBJS)\monodll_xh_unkwn.o \
 	$(OBJS)\monodll_xh_wizrd.o \
 	$(OBJS)\monodll_xmlres.o \
@@ -1328,6 +1331,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textdlgg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_treectlg.o \
+	$(OBJS)\monodll_treebkg.o \
 	$(OBJS)\monodll_vlbox.o \
 	$(OBJS)\monodll_vscroll.o
 endif
@@ -1526,6 +1530,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textdlgg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_treectlg.o \
+	$(OBJS)\monodll_treebkg.o \
 	$(OBJS)\monodll_vlbox.o \
 	$(OBJS)\monodll_vscroll.o
 endif
@@ -1648,6 +1653,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xh_tglbtn.o \
 	$(OBJS)\monolib_xh_toolb.o \
 	$(OBJS)\monolib_xh_tree.o \
+	$(OBJS)\monolib_xh_treebk.o \
 	$(OBJS)\monolib_xh_unkwn.o \
 	$(OBJS)\monolib_xh_wizrd.o \
 	$(OBJS)\monolib_xmlres.o \
@@ -1846,6 +1852,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textdlgg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_treectlg.o \
+	$(OBJS)\monolib_treebkg.o \
 	$(OBJS)\monolib_vlbox.o \
 	$(OBJS)\monolib_vscroll.o
 endif
@@ -2044,6 +2051,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textdlgg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_treectlg.o \
+	$(OBJS)\monolib_treebkg.o \
 	$(OBJS)\monolib_vlbox.o \
 	$(OBJS)\monolib_vscroll.o
 endif
@@ -2312,6 +2320,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textdlgg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_treectlg.o \
+	$(OBJS)\coredll_treebkg.o \
 	$(OBJS)\coredll_vlbox.o \
 	$(OBJS)\coredll_vscroll.o
 endif
@@ -2510,6 +2519,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textdlgg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_treectlg.o \
+	$(OBJS)\coredll_treebkg.o \
 	$(OBJS)\coredll_vlbox.o \
 	$(OBJS)\coredll_vscroll.o
 endif
@@ -2715,6 +2725,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textdlgg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_treectlg.o \
+	$(OBJS)\corelib_treebkg.o \
 	$(OBJS)\corelib_vlbox.o \
 	$(OBJS)\corelib_vscroll.o
 endif
@@ -2913,6 +2924,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textdlgg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_treectlg.o \
+	$(OBJS)\corelib_treebkg.o \
 	$(OBJS)\corelib_vlbox.o \
 	$(OBJS)\corelib_vscroll.o
 endif
@@ -4641,6 +4653,9 @@ $(OBJS)\monodll_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
 $(OBJS)\monodll_xh_tree.o: ../../src/xrc/xh_tree.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_xh_treebk.o: ../../src/xrc/xh_treebk.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5725,6 +5740,11 @@ $(OBJS)\monodll_treectlg.o: ../../src/generic/treectlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_treebkg.o: ../../src/generic/treebkg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_vlbox.o: ../../src/generic/vlbox.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -6427,6 +6447,9 @@ $(OBJS)\monolib_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xh_tree.o: ../../src/xrc/xh_tree.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_xh_treebk.o: ../../src/xrc/xh_treebk.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp
@@ -7509,6 +7532,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_treectlg.o: ../../src/generic/treectlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_treebkg.o: ../../src/generic/treebkg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9382,6 +9410,11 @@ $(OBJS)\coredll_treectlg.o: ../../src/generic/treectlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_treebkg.o: ../../src/generic/treebkg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_vlbox.o: ../../src/generic/vlbox.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10616,6 +10649,11 @@ $(OBJS)\corelib_treectlg.o: ../../src/generic/treectlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_treebkg.o: ../../src/generic/treebkg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_vlbox.o: ../../src/generic/vlbox.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11105,6 +11143,9 @@ $(OBJS)\xrcdll_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
 $(OBJS)\xrcdll_xh_tree.o: ../../src/xrc/xh_tree.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\xrcdll_xh_treebk.o: ../../src/xrc/xh_treebk.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\xrcdll_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11235,6 +11276,9 @@ $(OBJS)\xrclib_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrclib_xh_tree.o: ../../src/xrc/xh_tree.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\xrclib_xh_treebk.o: ../../src/xrc/xh_treebk.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrclib_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp

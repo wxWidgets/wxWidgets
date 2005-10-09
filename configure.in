@@ -4671,10 +4671,9 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                     $CXX -dumpspecs | grep 'pthread:' >/dev/null ||
                         THREAD_OPTS="" 
                 else
-                    dnl HP-UX aCC only gives a warning, not an error about
-                    dnl -pthread but it doesn't work and we have to use
-                    dnl -lpthread there
-                    THREAD_OPTS=""
+                    dnl HP-UX aCC (tested with version B3910B A.06.05 [Jul 25
+                    dnl 2005]) supports -mt
+                    THREAD_OPTS="-mt"
                 fi
                 ;;
 

@@ -4779,6 +4779,10 @@ SOURCE=..\..\src\generic\tipwin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\treebkg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\treectlg.cpp
 # End Source File
 # Begin Source File
@@ -8789,6 +8793,10 @@ SOURCE=..\..\include\wx\toplevel.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\treebase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\treebook.h
 # End Source File
 # Begin Source File
 

@@ -169,6 +169,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_tglbtn.obj &
 	$(OBJS)\monodll_xh_toolb.obj &
 	$(OBJS)\monodll_xh_tree.obj &
+	$(OBJS)\monodll_xh_treebk.obj &
 	$(OBJS)\monodll_xh_unkwn.obj &
 	$(OBJS)\monodll_xh_wizrd.obj &
 	$(OBJS)\monodll_xmlres.obj &
@@ -368,6 +369,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_textdlgg.obj &
 	$(OBJS)\monodll_tipwin.obj &
 	$(OBJS)\monodll_treectlg.obj &
+	$(OBJS)\monodll_treebkg.obj &
 	$(OBJS)\monodll_vlbox.obj &
 	$(OBJS)\monodll_vscroll.obj
 !endif
@@ -566,6 +568,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_textdlgg.obj &
 	$(OBJS)\monodll_tipwin.obj &
 	$(OBJS)\monodll_treectlg.obj &
+	$(OBJS)\monodll_treebkg.obj &
 	$(OBJS)\monodll_vlbox.obj &
 	$(OBJS)\monodll_vscroll.obj
 !endif
@@ -691,6 +694,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_tglbtn.obj &
 	$(OBJS)\monolib_xh_toolb.obj &
 	$(OBJS)\monolib_xh_tree.obj &
+	$(OBJS)\monolib_xh_treebk.obj &
 	$(OBJS)\monolib_xh_unkwn.obj &
 	$(OBJS)\monolib_xh_wizrd.obj &
 	$(OBJS)\monolib_xmlres.obj &
@@ -890,6 +894,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_textdlgg.obj &
 	$(OBJS)\monolib_tipwin.obj &
 	$(OBJS)\monolib_treectlg.obj &
+	$(OBJS)\monolib_treebkg.obj &
 	$(OBJS)\monolib_vlbox.obj &
 	$(OBJS)\monolib_vscroll.obj
 !endif
@@ -1088,6 +1093,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_textdlgg.obj &
 	$(OBJS)\monolib_tipwin.obj &
 	$(OBJS)\monolib_treectlg.obj &
+	$(OBJS)\monolib_treebkg.obj &
 	$(OBJS)\monolib_vlbox.obj &
 	$(OBJS)\monolib_vscroll.obj
 !endif
@@ -1363,6 +1369,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_textdlgg.obj &
 	$(OBJS)\coredll_tipwin.obj &
 	$(OBJS)\coredll_treectlg.obj &
+	$(OBJS)\coredll_treebkg.obj &
 	$(OBJS)\coredll_vlbox.obj &
 	$(OBJS)\coredll_vscroll.obj
 !endif
@@ -1561,6 +1568,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_textdlgg.obj &
 	$(OBJS)\coredll_tipwin.obj &
 	$(OBJS)\coredll_treectlg.obj &
+	$(OBJS)\coredll_treebkg.obj &
 	$(OBJS)\coredll_vlbox.obj &
 	$(OBJS)\coredll_vscroll.obj
 !endif
@@ -1768,6 +1776,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_textdlgg.obj &
 	$(OBJS)\corelib_tipwin.obj &
 	$(OBJS)\corelib_treectlg.obj &
+	$(OBJS)\corelib_treebkg.obj &
 	$(OBJS)\corelib_vlbox.obj &
 	$(OBJS)\corelib_vscroll.obj
 !endif
@@ -1966,6 +1975,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_textdlgg.obj &
 	$(OBJS)\corelib_tipwin.obj &
 	$(OBJS)\corelib_treectlg.obj &
+	$(OBJS)\corelib_treebkg.obj &
 	$(OBJS)\corelib_vlbox.obj &
 	$(OBJS)\corelib_vscroll.obj
 !endif
@@ -3251,6 +3261,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_tglbtn.obj &
 	$(OBJS)\xrcdll_xh_toolb.obj &
 	$(OBJS)\xrcdll_xh_tree.obj &
+	$(OBJS)\xrcdll_xh_treebk.obj &
 	$(OBJS)\xrcdll_xh_unkwn.obj &
 	$(OBJS)\xrcdll_xh_wizrd.obj &
 	$(OBJS)\xrcdll_xmlres.obj &
@@ -3304,6 +3315,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_tglbtn.obj &
 	$(OBJS)\xrclib_xh_toolb.obj &
 	$(OBJS)\xrclib_xh_tree.obj &
+	$(OBJS)\xrclib_xh_treebk.obj &
 	$(OBJS)\xrclib_xh_unkwn.obj &
 	$(OBJS)\xrclib_xh_wizrd.obj &
 	$(OBJS)\xrclib_xmlres.obj &
@@ -4840,6 +4852,9 @@ $(OBJS)\monodll_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
 $(OBJS)\monodll_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_treebk.obj :  .AUTODEPEND ..\..\src\xrc\xh_treebk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_xh_unkwn.obj :  .AUTODEPEND ..\..\src\xrc\xh_unkwn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -5924,6 +5939,11 @@ $(OBJS)\monodll_treectlg.obj :  .AUTODEPEND ..\..\src\generic\treectlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_treebkg.obj :  .AUTODEPEND ..\..\src\generic\treebkg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -6626,6 +6646,9 @@ $(OBJS)\monolib_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_treebk.obj :  .AUTODEPEND ..\..\src\xrc\xh_treebk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_unkwn.obj :  .AUTODEPEND ..\..\src\xrc\xh_unkwn.cpp
@@ -7708,6 +7731,11 @@ $(OBJS)\monolib_tipwin.obj :  .AUTODEPEND ..\..\src\generic\tipwin.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_treectlg.obj :  .AUTODEPEND ..\..\src\generic\treectlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_treebkg.obj :  .AUTODEPEND ..\..\src\generic\treebkg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -9581,6 +9609,11 @@ $(OBJS)\coredll_treectlg.obj :  .AUTODEPEND ..\..\src\generic\treectlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_treebkg.obj :  .AUTODEPEND ..\..\src\generic\treebkg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -10815,6 +10848,11 @@ $(OBJS)\corelib_treectlg.obj :  .AUTODEPEND ..\..\src\generic\treectlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_treebkg.obj :  .AUTODEPEND ..\..\src\generic\treebkg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -11304,6 +11342,9 @@ $(OBJS)\xrcdll_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
 $(OBJS)\xrcdll_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_treebk.obj :  .AUTODEPEND ..\..\src\xrc\xh_treebk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_unkwn.obj :  .AUTODEPEND ..\..\src\xrc\xh_unkwn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -11434,6 +11475,9 @@ $(OBJS)\xrclib_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_treebk.obj :  .AUTODEPEND ..\..\src\xrc\xh_treebk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_unkwn.obj :  .AUTODEPEND ..\..\src\xrc\xh_unkwn.cpp

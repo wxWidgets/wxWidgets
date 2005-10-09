@@ -997,6 +997,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_tglbtn.obj \
 	$(OBJS)\xrcdll_xh_toolb.obj \
 	$(OBJS)\xrcdll_xh_tree.obj \
+	$(OBJS)\xrcdll_xh_treebk.obj \
 	$(OBJS)\xrcdll_xh_unkwn.obj \
 	$(OBJS)\xrcdll_xh_wizrd.obj \
 	$(OBJS)\xrcdll_xmlres.obj \
@@ -1052,6 +1053,7 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_tglbtn.obj \
 	$(OBJS)\xrclib_xh_toolb.obj \
 	$(OBJS)\xrclib_xh_tree.obj \
+	$(OBJS)\xrclib_xh_treebk.obj \
 	$(OBJS)\xrclib_xh_unkwn.obj \
 	$(OBJS)\xrclib_xh_wizrd.obj \
 	$(OBJS)\xrclib_xmlres.obj \
@@ -1255,6 +1257,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xh_tglbtn.obj \
 	$(OBJS)\monodll_xh_toolb.obj \
 	$(OBJS)\monodll_xh_tree.obj \
+	$(OBJS)\monodll_xh_treebk.obj \
 	$(OBJS)\monodll_xh_unkwn.obj \
 	$(OBJS)\monodll_xh_wizrd.obj \
 	$(OBJS)\monodll_xmlres.obj \
@@ -1452,6 +1455,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textdlgg.obj \
 	$(OBJS)\monodll_tipwin.obj \
 	$(OBJS)\monodll_treectlg.obj \
+	$(OBJS)\monodll_treebkg.obj \
 	$(OBJS)\monodll_vlbox.obj \
 	$(OBJS)\monodll_vscroll.obj
 !endif
@@ -1648,6 +1652,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textdlgg.obj \
 	$(OBJS)\monodll_tipwin.obj \
 	$(OBJS)\monodll_treectlg.obj \
+	$(OBJS)\monodll_treebkg.obj \
 	$(OBJS)\monodll_vlbox.obj \
 	$(OBJS)\monodll_vscroll.obj
 !endif
@@ -1773,6 +1778,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xh_tglbtn.obj \
 	$(OBJS)\monolib_xh_toolb.obj \
 	$(OBJS)\monolib_xh_tree.obj \
+	$(OBJS)\monolib_xh_treebk.obj \
 	$(OBJS)\monolib_xh_unkwn.obj \
 	$(OBJS)\monolib_xh_wizrd.obj \
 	$(OBJS)\monolib_xmlres.obj \
@@ -1970,6 +1976,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textdlgg.obj \
 	$(OBJS)\monolib_tipwin.obj \
 	$(OBJS)\monolib_treectlg.obj \
+	$(OBJS)\monolib_treebkg.obj \
 	$(OBJS)\monolib_vlbox.obj \
 	$(OBJS)\monolib_vscroll.obj
 !endif
@@ -2166,6 +2173,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textdlgg.obj \
 	$(OBJS)\monolib_tipwin.obj \
 	$(OBJS)\monolib_treectlg.obj \
+	$(OBJS)\monolib_treebkg.obj \
 	$(OBJS)\monolib_vlbox.obj \
 	$(OBJS)\monolib_vscroll.obj
 !endif
@@ -2450,6 +2458,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textdlgg.obj \
 	$(OBJS)\coredll_tipwin.obj \
 	$(OBJS)\coredll_treectlg.obj \
+	$(OBJS)\coredll_treebkg.obj \
 	$(OBJS)\coredll_vlbox.obj \
 	$(OBJS)\coredll_vscroll.obj
 !endif
@@ -2646,6 +2655,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textdlgg.obj \
 	$(OBJS)\coredll_tipwin.obj \
 	$(OBJS)\coredll_treectlg.obj \
+	$(OBJS)\coredll_treebkg.obj \
 	$(OBJS)\coredll_vlbox.obj \
 	$(OBJS)\coredll_vscroll.obj
 !endif
@@ -2851,6 +2861,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textdlgg.obj \
 	$(OBJS)\corelib_tipwin.obj \
 	$(OBJS)\corelib_treectlg.obj \
+	$(OBJS)\corelib_treebkg.obj \
 	$(OBJS)\corelib_vlbox.obj \
 	$(OBJS)\corelib_vscroll.obj
 !endif
@@ -3047,6 +3058,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textdlgg.obj \
 	$(OBJS)\corelib_tipwin.obj \
 	$(OBJS)\corelib_treectlg.obj \
+	$(OBJS)\corelib_treebkg.obj \
 	$(OBJS)\corelib_vlbox.obj \
 	$(OBJS)\corelib_vscroll.obj
 !endif
@@ -4830,6 +4842,9 @@ $(OBJS)\monodll_xh_toolb.obj: ..\..\src\xrc\xh_toolb.cpp
 $(OBJS)\monodll_xh_tree.obj: ..\..\src\xrc\xh_tree.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
+$(OBJS)\monodll_xh_treebk.obj: ..\..\src\xrc\xh_treebk.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+
 $(OBJS)\monodll_xh_unkwn.obj: ..\..\src\xrc\xh_unkwn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
@@ -5814,6 +5829,11 @@ $(OBJS)\monodll_treectlg.obj: ..\..\src\generic\treectlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_treebkg.obj: ..\..\src\generic\treebkg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_vlbox.obj: ..\..\src\generic\vlbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -6516,6 +6536,9 @@ $(OBJS)\monolib_xh_toolb.obj: ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_xh_tree.obj: ..\..\src\xrc\xh_tree.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_xh_treebk.obj: ..\..\src\xrc\xh_treebk.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_xh_unkwn.obj: ..\..\src\xrc\xh_unkwn.cpp
@@ -7498,6 +7521,11 @@ $(OBJS)\monolib_tipwin.obj: ..\..\src\generic\tipwin.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_treectlg.obj: ..\..\src\generic\treectlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_treebkg.obj: ..\..\src\generic\treebkg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -9271,6 +9299,11 @@ $(OBJS)\coredll_treectlg.obj: ..\..\src\generic\treectlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_treebkg.obj: ..\..\src\generic\treebkg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_vlbox.obj: ..\..\src\generic\vlbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -10405,6 +10438,11 @@ $(OBJS)\corelib_treectlg.obj: ..\..\src\generic\treectlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_treebkg.obj: ..\..\src\generic\treebkg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_vlbox.obj: ..\..\src\generic\vlbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 !endif
@@ -10894,6 +10932,9 @@ $(OBJS)\xrcdll_xh_toolb.obj: ..\..\src\xrc\xh_toolb.cpp
 $(OBJS)\xrcdll_xh_tree.obj: ..\..\src\xrc\xh_tree.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
 
+$(OBJS)\xrcdll_xh_treebk.obj: ..\..\src\xrc\xh_treebk.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
+
 $(OBJS)\xrcdll_xh_unkwn.obj: ..\..\src\xrc\xh_unkwn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
 
@@ -11024,6 +11065,9 @@ $(OBJS)\xrclib_xh_toolb.obj: ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xh_tree.obj: ..\..\src\xrc\xh_tree.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
+
+$(OBJS)\xrclib_xh_treebk.obj: ..\..\src\xrc\xh_treebk.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xh_unkwn.obj: ..\..\src\xrc\xh_unkwn.cpp

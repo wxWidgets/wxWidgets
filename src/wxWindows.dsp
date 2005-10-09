@@ -1038,6 +1038,10 @@ SOURCE=.\generic\tipwin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\treebkg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\treectlg.cpp
 # End Source File
 # Begin Source File
@@ -1796,6 +1800,10 @@ SOURCE=.\xrc\xh_toolb.cpp
 # Begin Source File
 
 SOURCE=.\xrc\xh_tree.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_treebk.cpp
 # End Source File
 # Begin Source File
 
@@ -2920,6 +2928,10 @@ SOURCE=..\include\wx\toplevel.h
 # Begin Source File
 
 SOURCE=..\include\wx\treebase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\treebook.h
 # End Source File
 # Begin Source File
 
