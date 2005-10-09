@@ -81,7 +81,14 @@ public:
     wxSizerFlags& Border(int direction = wxALL)
     {
         // FIXME: default border size shouldn't be hardcoded
+#ifdef __SMARTPHONE__
+        // no borders by default on limited size screen
+        wxUnusedVar(direction);
+
+        return *this;
+#else
         return Border(direction, 5);
+#endif
     }
 
 
