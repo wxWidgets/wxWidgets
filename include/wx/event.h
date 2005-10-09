@@ -504,14 +504,6 @@ private:
 };
 #endif
 
-#ifdef __VISUALC__
-    // 'this' : used in base member initializer list (for m_commandString)
-    #if _MSC_VER > 1100
-        #pragma warning(push)
-    #endif
-    #pragma warning(disable:4355)
-#endif
-
 class WXDLLIMPEXP_CORE wxCommandEvent : public wxEvent
 {
 public:
@@ -573,10 +565,6 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCommandEvent)
 };
-
-#if defined(__VISUALC__) && (_MSC_VER > 1100)
-    #pragma warning(pop)
-#endif
 
 #if WXWIN_COMPATIBILITY_2_4
 inline void wxCommandEventStringHelper::operator=(const wxString &str)

@@ -65,18 +65,13 @@
 #ifdef __VISUALC__
     /*  the only "real" warning here is 4244 but there are just too many of them */
     /*  in our code... one day someone should go and fix them but until then... */
+#   pragma warning(disable:4097)    /*  typedef used as class */
 #   pragma warning(disable:4201)    /*  nonstandard extension used: nameless struct/union */
 #   pragma warning(disable:4244)    /*  conversion from double to float */
-#   pragma warning(disable:4710)    /*  function not inlined */
-#   pragma warning(disable:4097)    /*  typedef used as class */
+#   pragma warning(disable:4355)    /* 'this' used in base member initializer list */
 #   pragma warning(disable:4511)    /*  copy ctor couldn't be generated */
 #   pragma warning(disable:4512)    /*  operator=() couldn't be generated */
-#ifndef WIN32
-#   pragma warning(disable:4135)    /*  conversion between different integral types */
-#   pragma warning(disable:4769)    /*  assignment of near pointer to long integer */
-/*  This one is really annoying, since it occurs for each cast to (HANDLE)... */
-#   pragma warning(disable:4305)    /*  truncation of long to near ptr */
-#endif
+#   pragma warning(disable:4710)    /*  function not inlined */
 #endif /*  __VISUALC__ */
 
 /*  suppress some Salford C++ warnings */

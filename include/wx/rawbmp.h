@@ -71,12 +71,6 @@
     }
  */
 
-#ifdef __VISUALC__
-    // VC++ gives an absolutely harmless warning for wxPixelData<wxBitmap> ctor
-    #pragma warning(push)
-    #pragma warning(disable: 4355) // 'this' used in initializer list
-#endif
-
 /*
     Note: we do not use WXDLLEXPORT with classes in this file because VC++ has
     problems with exporting inner class defined inside a specialization of a
@@ -658,14 +652,6 @@ struct wxPixelDataOut<wxBitmap>
 };
 #endif //wxUSE_GUI
 
-#ifdef __VISUALC__
-    // typedef-name 'foo' used as synonym for class-name 'bar'
-    // (VC++ gives this warning each time wxPixelData::Base is used but it
-    //  doesn't make any sense here -- what's wrong with using typedef instead
-    //  of class, this is what it is here for!)
-    #pragma warning(disable: 4097)
-#endif // __VISUALC__
-
 template <class Image, class PixelFormat = wxPixelFormatFor<Image> >
 class wxPixelData :
     public wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>
@@ -716,10 +702,6 @@ template < class Image, class PixelFormat = wxPixelFormatFor<Image> >
 struct wxPixelIterator : public wxPixelData<Image, PixelFormat>::Iterator
 {
 };
-
-#ifdef __VISUALC__
-    #pragma warning(pop)
-#endif
 
 #endif // _WX_RAWBMP_H_BASE_
 
