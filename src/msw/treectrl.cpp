@@ -2137,6 +2137,26 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
     }
 }
 
+wxSize wxTreeCtrl::DoGetBestSize() const
+{
+    wxSize size;
+    wxRect rect;
+    for ( wxTreeItemId node = GetFirstVisibleItem();
+          node.IsOk();
+          node = GetNextVisible(node) )
+    {
+        if ( GetBoundingRect(node, rect) )
+        {
+            if ( size.x < rect.x + rect.width )
+                size.x = rect.x + rect.width;
+            if ( size.y < rect.y + rect.height )
+                size.y = rect.y + rect.height;
+        }
+    }
+
+    return size;
+}
+
 // ----------------------------------------------------------------------------
 // sorting stuff
 // ----------------------------------------------------------------------------

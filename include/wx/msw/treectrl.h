@@ -429,6 +429,9 @@ public:
     int GetState(const wxTreeItemId& node);
 
 protected:
+    virtual wxSize DoGetBestSize() const;
+
+    
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
 
