@@ -1737,6 +1737,8 @@ case "${host}" in
 #define __HPUX__ 1
 _ACEOF
 
+
+            CPPFLAGS="$CPPFLAGS -D_HPUX_SOURCE"
   ;;
   *-*-linux* )
     USE_LINUX=1
@@ -22362,6 +22364,17 @@ if test "x$SGICC" = "xyes"; then
 fi
 if test "x$SGICXX" = "xyes"; then
     CXXFLAGS="$CXXFLAGS -woff 3970"
+fi
+
+if test "x$HPCC" = "xyes"; then
+                    CFLAGS="$CFLAGS +W 2011,2450"
+fi
+if test "x$HPCXX" = "xyes"; then
+            CXXFLAGS="$CXXFLAGS +W 2340"
+fi
+
+if test "x$COMPAQCXX" = "xyes"; then
+                                CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
 fi
 
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
@@ -44270,6 +44283,9 @@ echo "${ECHO_T}$bakefile_cv_prog_icc" >&6
 
       *-*-darwin* )
 
+        SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
+        SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
+
                                 echo "$as_me:$LINENO: checking for gcc 3.1 or later" >&5
 echo $ECHO_N "checking for gcc 3.1 or later... $ECHO_C" >&6
 if test "${bakefile_cv_gcc31+set}" = set; then
@@ -44433,14 +44449,10 @@ EOF
             chmod +x shared-ld-sh
 
                         SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -headerpad_max_install_names -o"
-            SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
             SHARED_LD_CXX="$SHARED_LD_CC"
-            SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
         else
                         SHARED_LD_CC="\${CC} -dynamiclib -single_module -headerpad_max_install_names -o"
-            SHARED_LD_MODULE_CC="\${CC} -bundle -single_module -headerpad_max_install_names -o"
             SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
-            SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -headerpad_max_install_names -o"
         fi
 
         if test "x$GCC" == "xyes"; then
@@ -46239,6 +46251,7 @@ if test $GCC_PCH = 1 ; then
     CPPFLAGS="-DWX_PRECOMP $CPPFLAGS"
 fi
 
+CPPFLAGS="$CPPFLAGS $TOOLCHAIN_DEFS"
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
 
