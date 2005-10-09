@@ -857,8 +857,8 @@ WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ 
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 
-WX_ARG_ENABLE(compat22,      [  --enable-compat22       enable wxWidgets 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
-WX_ARG_ENABLE(compat24,      [  --disable-compat24      disable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, disable)
+WX_ARG_ENABLE(compat24,      [  --enable-compat24       enable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, enable)
+WX_ARG_ENABLE(compat26,      [  --disable-compat26      disable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6, disable)
 
 WX_ARG_ENABLE(rpath,         [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
@@ -5093,14 +5093,14 @@ dnl ---------------------------------------------------------------------------
 dnl compatibility level
 dnl ---------------------------------------------------------------------------
 
-if test "x$WXWIN_COMPATIBILITY_2_2" = "xyes"; then
-    AC_DEFINE(WXWIN_COMPATIBILITY_2_2)
+if test "x$WXWIN_COMPATIBILITY_2_4" = "xyes"; then
+    AC_DEFINE(WXWIN_COMPATIBILITY_2_4)
 
-    WXWIN_COMPATIBILITY_2_4="yes"
+    WXWIN_COMPATIBILITY_2_6="yes"
 fi
 
-if test "x$WXWIN_COMPATIBILITY_2_4" != "xno"; then
-    AC_DEFINE(WXWIN_COMPATIBILITY_2_4)
+if test "x$WXWIN_COMPATIBILITY_2_6" != "xno"; then
+    AC_DEFINE(WXWIN_COMPATIBILITY_2_6)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -7366,8 +7366,8 @@ echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-
 echo "  Should wxWidgets be compiled in Unicode mode?           ${wxUSE_UNICODE:-no}"
 
 echo "  What level of wxWidgets compatibility should be enabled?"
-echo "                                       wxWidgets 2.2      ${WXWIN_COMPATIBILITY_2_2:-no}"
-echo "                                       wxWidgets 2.4      ${WXWIN_COMPATIBILITY_2_4:-yes}"
+echo "                                       wxWidgets 2.4      ${WXWIN_COMPATIBILITY_2_4:-no}"
+echo "                                       wxWidgets 2.6      ${WXWIN_COMPATIBILITY_2_6:-yes}"
 
 echo "  Which libraries should wxWidgets use?"
 echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"

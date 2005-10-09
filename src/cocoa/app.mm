@@ -232,9 +232,6 @@ wxApp::wxApp()
 {
     m_topWindow = NULL;
 
-#if WXWIN_COMPATIBILITY_2_2
-    m_wantDebugOutput = TRUE;
-#endif
 #ifdef __WXDEBUG__
     m_isInAssert = FALSE;
 #endif // __WXDEBUG__

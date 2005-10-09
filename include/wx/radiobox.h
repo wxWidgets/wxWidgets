@@ -45,13 +45,6 @@ public:
     wxDEPRECATED( int GetNumberOfRowsOrCols() const );
     wxDEPRECATED( void SetNumberOfRowsOrCols(int n) );
 #endif // WXWIN_COMPATIBILITY_2_4
-
-    // for compatibility only, don't use these methods in new code!
-#if WXWIN_COMPATIBILITY_2_2
-    wxDEPRECATED( int Number() const );
-    wxDEPRECATED( wxString GetLabel(int n) const );
-    wxDEPRECATED( void SetLabel(int n, const wxString& label) );
-#endif // WXWIN_COMPATIBILITY_2_2
 };
 
 #if defined(__WXUNIVERSAL__)

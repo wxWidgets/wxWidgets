@@ -516,13 +516,4 @@ wxHtmlTag *wxHtmlTag::GetNextTag() const
     return cur->m_Next;
 }
 
-#if WXWIN_COMPATIBILITY_2_2
-
-bool wxHtmlTag::IsEnding() const
-{
-    return false;
-}
-
-#endif // WXWIN_COMPATIBILITY_2_2
-
 #endif

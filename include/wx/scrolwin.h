@@ -140,11 +140,6 @@ public:
     //        once it is fixed!
     void OnScroll(wxScrollWinEvent& event) { HandleOnScroll(event); }
 
-#if WXWIN_COMPATIBILITY_2_2
-    // Compatibility only, don't use
-    wxDEPRECATED( void ViewStart(int *x, int *y) const );
-#endif // WXWIN_COMPATIBILITY_2_2
-
 protected:
     // get pointer to our scroll rect if we use it or NULL
     const wxRect *GetScrollRect() const

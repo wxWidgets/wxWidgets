@@ -1070,40 +1070,6 @@ bool wxHandleFatalExceptions(bool doit)
 
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-// ----------------------------------------------------------------------------
-// error and debug output routines (deprecated, use wxLog)
-// ----------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_2
-
-void wxDebugMsg( const char *format, ... )
-{
-  va_list ap;
-  va_start( ap, format );
-  vfprintf( stderr, format, ap );
-  fflush( stderr );
-  va_end(ap);
-}
-
-void wxError( const wxString &msg, const wxString &title )
-{
-  wxFprintf( stderr, _("Error ") );
-  if (!title.IsNull()) wxFprintf( stderr, wxT("%s "), WXSTRINGCAST(title) );
-  if (!msg.IsNull()) wxFprintf( stderr, wxT(": %s"), WXSTRINGCAST(msg) );
-  wxFprintf( stderr, wxT(".\n") );
-}
-
-void wxFatalError( const wxString &msg, const wxString &title )
-{
-  wxFprintf( stderr, _("Error ") );
-  if (!title.IsNull()) wxFprintf( stderr, wxT("%s "), WXSTRINGCAST(title) );
-  if (!msg.IsNull()) wxFprintf( stderr, wxT(": %s"), WXSTRINGCAST(msg) );
-  wxFprintf( stderr, wxT(".\n") );
-  exit(3); // the same exit code as for abort()
-}
-
-#endif // WXWIN_COMPATIBILITY_2_2
-
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI

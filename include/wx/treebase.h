@@ -300,11 +300,6 @@ public:
     void SetToolTip(const wxString& toolTip) { m_label = toolTip; }
     wxString GetToolTip() { return m_label; }
 
-#if WXWIN_COMPATIBILITY_2_2
-    // for compatibility only, don't use
-    wxDEPRECATED( int GetCode() const);
-#endif // WXWIN_COMPATIBILITY_2_2
-
 private:
     // not all of the members are used (or initialized) for all events
     wxKeyEvent    m_evtKey;

@@ -90,13 +90,6 @@ public:
 
     int GetCount() const;
 
-    // for compatibility only, don't use these methods in new code!
-#if WXWIN_COMPATIBILITY_2_2
-    wxDEPRECATED( int Number() const );
-    wxDEPRECATED( wxString GetLabel(int n) const );
-    wxDEPRECATED( void SetLabel( int item, const wxString& label ) );
-#endif // WXWIN_COMPATIBILITY_2_2
-
     // we have to override those to avoid virtual function name hiding
     virtual wxString GetLabel() const { return wxControl::GetLabel(); }
     virtual void SetLabel( const wxString& label );

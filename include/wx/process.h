@@ -101,11 +101,6 @@ public:
                         wxInputStream *errStream);
 #endif // wxUSE_STREAMS
 
-    // for backwards compatibility only, don't use
-#if WXWIN_COMPATIBILITY_2_2
-    wxDEPRECATED( wxProcess(wxEvtHandler *parent, bool redirect) );
-#endif // WXWIN_COMPATIBILITY_2_2
-
 protected:
     void Init(wxEvtHandler *parent, int id, int flags);
 

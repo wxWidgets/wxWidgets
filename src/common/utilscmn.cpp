@@ -98,11 +98,6 @@
 // common data
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_2
-    const wxChar *wxInternalErrorStr = wxT("wxWidgets Internal Error");
-    const wxChar *wxFatalErrorStr = wxT("wxWidgets Fatal Error");
-#endif // WXWIN_COMPATIBILITY_2_2
-
 // ============================================================================
 // implementation
 // ============================================================================

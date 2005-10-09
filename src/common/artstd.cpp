@@ -20,12 +20,6 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #if WXWIN_COMPATIBILITY_2_2
-        #include "wx/app.h"
-    #endif
-#endif
-
 #include "wx/artprov.h"
 #include "wx/image.h"
 

@@ -82,11 +82,6 @@ public:
     int m_rangeMax,
         m_gaugePos;
 
-    // obsolete functions, don't use
-#if WXWIN_COMPATIBILITY_2_2
-    bool GetProgressBar() const { return true; }
-#endif // WXWIN_COMPATIBILITY_2_2
-
 protected:
     // common part of all ctors
     void Init() { m_rangeMax = m_gaugePos = 0; }

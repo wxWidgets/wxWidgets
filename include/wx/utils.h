@@ -564,21 +564,5 @@ WXDLLIMPEXP_BASE bool wxYieldIfNeeded();
 // Error message functions used by wxWidgets (deprecated, use wxLog)
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_2
-
-// Format a message on the standard error (UNIX) or the debugging
-// stream (Windows)
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxDebugMsg(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1 );
-
-// Non-fatal error (continues)
-extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxInternalErrorStr;
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr) );
-
-// Fatal error (exits)
-extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxFatalErrorStr;
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr) );
-
-#endif // WXWIN_COMPATIBILITY_2_2
-
 #endif
     // _WX_UTILSH__

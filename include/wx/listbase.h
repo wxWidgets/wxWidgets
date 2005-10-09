@@ -381,15 +381,6 @@ public:
     bool IsEditCancelled() const { return m_editCancelled; }
     void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
-#if WXWIN_COMPATIBILITY_2_2
-    // these methods don't do anything at all
-    long GetOldIndex() const { return 0; }
-    long GetOldItem() const { return 0; }
-
-    // this one is superseded by GetKeyCode()
-    int GetCode() const { return GetKeyCode(); }
-#endif // WXWIN_COMPATIBILITY_2_2
-
     virtual wxEvent *Clone() const { return new wxListEvent(*this); }
 
 //protected: -- not for backwards compatibility

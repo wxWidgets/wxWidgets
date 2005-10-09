@@ -222,16 +222,6 @@ public:
     // page to GetPageAreaSizer and 5 if you don't.
     virtual void SetBorder(int border) = 0;
 
-    // wxWizard should be created using "new wxWizard" now, not with Create()
-#if WXWIN_COMPATIBILITY_2_2
-    wxDEPRECATED( static wxWizard *Create(wxWindow *parent,
-                                          int id = wxID_ANY,
-                                          const wxString& title = wxEmptyString,
-                                          const wxBitmap& bitmap = wxNullBitmap,
-                                          const wxPoint& pos = wxDefaultPosition,
-                                          const wxSize& size = wxDefaultSize) );
-#endif // WXWIN_COMPATIBILITY_2_2
-
     // the methods below may be overridden by the derived classes to provide
     // custom logic for determining the pages order
 

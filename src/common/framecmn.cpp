@@ -568,12 +568,3 @@ void wxFrameBase::SetMenuBar(wxMenuBar *menubar)
 }
 
 #endif // wxUSE_MENUS
-
-#if WXWIN_COMPATIBILITY_2_2
-
-bool wxFrameBase::Command(int winid)
-{
-    return ProcessCommand(winid);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_2

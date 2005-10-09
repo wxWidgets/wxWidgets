@@ -300,62 +300,6 @@ void wxFlushEvents()
 //  wxYield();
 }
 
-#if WXWIN_COMPATIBILITY_2_2
-
-// Output a debug mess., in a system dependent fashion.
-void wxDebugMsg(
-  const wxChar*                     zFmt ...
-)
-{
-    va_list                         vAp;
-    static wxChar                   zBuffer[512];
-
-    if (!wxTheApp->GetWantDebugOutput())
-        return ;
-    va_start(vAp, zFmt);
-    sprintf(zBuffer, zFmt, vAp) ;
-    va_end(vAp);
-}
-
-// Non-fatal error: pop up message box and (possibly) continue
-void wxError(
-  const wxString&                   rMsg
-, const wxString&                   rTitle
-)
-{
-    wxChar *wxBuffer = new wxChar[256];
-    wxSprintf(wxBuffer, "%s\nContinue?", WXSTRINGCAST rMsg);
-    if (::WinMessageBox( HWND_DESKTOP
-                        ,NULL
-                        ,(PSZ)wxBuffer
-                        ,(PSZ)WXSTRINGCAST rTitle
-                        ,0
-                        ,MB_ICONEXCLAMATION | MB_YESNO
-                       ) == MBID_YES)
-    delete[] wxBuffer;
-    wxExit();
-}
-
-// Fatal error: pop up message box and abort
-void wxFatalError(
-  const wxString&                   rMsg
-, const wxString&                   rTitle
-)
-{
-    unsigned long                   ulRc;
-
-    ulRc = ::WinMessageBox( HWND_DESKTOP
-                           ,NULL
-                           ,WXSTRINGCAST rMsg
-                           ,WXSTRINGCAST rTitle
-                           ,0
-                           ,MB_NOICON | MB_OK
-                          );
-    DosExit(EXIT_PROCESS, ulRc);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_2
-
 // Emit a beeeeeep
 void wxBell()
 {

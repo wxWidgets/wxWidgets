@@ -3635,13 +3635,4 @@ void wxGenericTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image
 
 #endif // WXWIN_COMPATIBILITY_2_4
 
-#if WXWIN_COMPATIBILITY_2_2
-
-wxTreeItemId wxGenericTreeCtrl::GetParent(const wxTreeItemId& item) const
-{
-    return GetItemParent( item );
-}
-
-#endif  // WXWIN_COMPATIBILITY_2_2
-
 #endif // wxUSE_TREECTRL

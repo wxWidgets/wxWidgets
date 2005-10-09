@@ -658,23 +658,4 @@ wxRadioBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return attr;
 }
 
-#if WXWIN_COMPATIBILITY_2_2
-
-int wxRadioBox::Number() const
-{
-    return GetCount();
-}
-
-wxString wxRadioBox::GetLabel(int n) const
-{
-    return GetString(n);
-}
-
-void wxRadioBox::SetLabel( int item, const wxString& label )
-{
-    SetString(item, label);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_2
-
 #endif // wxUSE_RADIOBOX

@@ -42,19 +42,6 @@ enum wxStreamError
     wxSTREAM_READ_ERROR         // generic read error
 };
 
-// compatibility
-#if WXWIN_COMPATIBILITY_2_2
-    #define wxStream_NOERROR    wxSTREAM_NOERROR
-    #define wxStream_EOF        wxSTREAM_EOF
-    #define wxStream_WRITE_ERR  wxSTREAM_WRITE_ERROR
-    #define wxStream_READ_ERR   wxSTREAM_READ_ERROR
-
-    #define wxSTREAM_NO_ERR     wxSTREAM_NO_ERROR
-    #define wxSTREAM_NOERROR    wxSTREAM_NO_ERROR
-    #define wxSTREAM_WRITE_ERR  wxSTREAM_WRITE_ERROR
-    #define wxSTREAM_READ_ERR   wxSTREAM_READ_ERROR
-#endif // WXWIN_COMPATIBILITY_2_2
-
 // ============================================================================
 // base stream classes: wxInputStream and wxOutputStream
 // ============================================================================
@@ -83,13 +70,6 @@ public:
 
     // returns true if the streams supports seeking to arbitrary offsets
     virtual bool IsSeekable() const { return false; }
-
-#if WXWIN_COMPATIBILITY_2_2
-    // deprecated, for compatibility only
-    wxDEPRECATED( wxStreamError LastError() const );
-    wxDEPRECATED( size_t StreamSize() const );
-#endif // WXWIN_COMPATIBILITY_2_2
-
 
     // Reserved for future use
     virtual void ReservedStreamFunc1() {}

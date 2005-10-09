@@ -134,12 +134,6 @@ public:
     bool HasClientUntypedData() const
         { return m_clientDataItemsType == wxClientData_Void; }
 
-#if WXWIN_COMPATIBILITY_2_2
-    // compatibility - these functions are deprecated, use the new ones
-    // instead
-    wxDEPRECATED( int Number() const );
-#endif // WXWIN_COMPATIBILITY_2_2
-
 protected:
     virtual int DoAppend(const wxString& item) = 0;
     virtual int DoInsert(const wxString& item, int pos) = 0;
@@ -210,15 +204,6 @@ private:
 // ----------------------------------------------------------------------------
 // inline functions
 // ----------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_2
-
-inline int wxItemContainer::Number() const
-{
-    return GetCount();
-}
-
-#endif // WXWIN_COMPATIBILITY_2_2
 
 #endif // wxUSE_CONTROLS
 

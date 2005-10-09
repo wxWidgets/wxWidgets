@@ -813,25 +813,6 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
 }
 
 // ----------------------------------------------------------------------------
-// our public interface
-// ----------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_2
-
-/* static */
-wxWizard *wxWizardBase::Create(wxWindow *parent,
-                               int id,
-                               const wxString& title,
-                               const wxBitmap& bitmap,
-                               const wxPoint& pos,
-                               const wxSize& WXUNUSED(size))
-{
-    return new wxWizard(parent, id, title, bitmap, pos);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_2
-
-// ----------------------------------------------------------------------------
 // wxWizardEvent
 // ----------------------------------------------------------------------------
 

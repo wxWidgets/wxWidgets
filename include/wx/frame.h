@@ -173,11 +173,6 @@ public:
     // if you are hiding the help, true otherwise
     virtual void DoGiveHelp(const wxString& text, bool show);
 
-#if WXWIN_COMPATIBILITY_2_2
-    // call this to simulate a menu command
-    wxDEPRECATED( bool Command(int winid) );
-#endif // WXWIN_COMPATIBILITY_2_2
-
 protected:
     // the frame main menu/status/tool bars
     // ------------------------------------
