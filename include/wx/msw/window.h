@@ -14,17 +14,6 @@
 #define _WX_WINDOW_H_
 
 // ---------------------------------------------------------------------------
-// headers
-// ---------------------------------------------------------------------------
-
-// [at least] some version of Windows send extra mouse move messages after
-// a mouse click or a key press - to temporarily fix this problem, set the
-// define below to 1
-//
-// a better solution should be found later...
-#define wxUSE_MOUSEEVENT_HACK 0
-
-// ---------------------------------------------------------------------------
 // constants
 // ---------------------------------------------------------------------------
 
@@ -429,13 +418,6 @@ protected:
     // the size of one page for scrolling
     int                   m_xThumbSize;
     int                   m_yThumbSize;
-
-#if wxUSE_MOUSEEVENT_HACK
-    // the coordinates of the last mouse event and the type of it
-    long                  m_lastMouseX,
-                          m_lastMouseY;
-    int                   m_lastMouseEvent;
-#endif // wxUSE_MOUSEEVENT_HACK
 
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;

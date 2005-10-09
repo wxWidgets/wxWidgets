@@ -123,6 +123,14 @@
 // by setting this to 0 (in the future this should be removed completely)
 #define USE_DEFERRED_SIZING 1
 
+// set this to 1 to filter out duplicate mouse events, e.g. mouse move events
+// when mouse position didnd't change
+#ifdef __WXWINCE__
+    #define wxUSE_MOUSEEVENT_HACK 0
+#else
+    #define wxUSE_MOUSEEVENT_HACK 1
+#endif
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -140,6 +148,18 @@ extern const wxChar *wxCanvasClassName;
 // true if we had already created the std colour map, used by
 // wxGetStdColourMap() and wxWindow::OnSysColourChanged()           (FIXME-MT)
 static bool gs_hasStdCmap = false;
+
+// last mouse event information we need to filter out the duplicates
+#if wxUSE_MOUSEEVENT_HACK
+static struct
+{
+    // mouse position (in screen coordinates)
+    wxPoint pos;
+
+    // last mouse event type
+    wxEventType type;
+} gs_lastMouseEvent;
+#endif // wxUSE_MOUSEEVENT_HACK
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -461,12 +481,6 @@ void wxWindowMSW::Init()
 
     m_xThumbSize = 0;
     m_yThumbSize = 0;
-
-#if wxUSE_MOUSEEVENT_HACK
-    m_lastMouseX =
-    m_lastMouseY = -1;
-    m_lastMouseEvent = -1;
-#endif // wxUSE_MOUSEEVENT_HACK
 
     m_pendingPosition = wxDefaultPosition;
     m_pendingSize = wxDefaultSize;
@@ -4493,9 +4507,8 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.SetId(GetId());
 
 #if wxUSE_MOUSEEVENT_HACK
-    m_lastMouseX = x;
-    m_lastMouseY = y;
-    m_lastMouseEvent = event.GetEventType();
+    gs_lastMouseEvent.pos = ClientToScreen(wxPoint(x, y));
+    gs_lastMouseEvent.type = event.GetEventType();
 #endif // wxUSE_MOUSEEVENT_HACK
 }
 
@@ -4635,17 +4648,22 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
 #endif // HAVE_TRACKMOUSEEVENT 
 
 #if wxUSE_MOUSEEVENT_HACK
-    // Window gets a click down message followed by a mouse move message even
-    // if position isn't changed!  We want to discard the trailing move event
-    // if x and y are the same.
-    if ( (m_lastMouseEvent == wxEVT_RIGHT_DOWN ||
-          m_lastMouseEvent == wxEVT_LEFT_DOWN ||
-          m_lastMouseEvent == wxEVT_MIDDLE_DOWN) &&
-         (m_lastMouseX == x && m_lastMouseY == y) )
+    // Windows often generates mouse events even if mouse position hasn't
+    // changed (http://article.gmane.org/gmane.comp.lib.wxwidgets.devel/66576)
+    //
+    // Filter this out as it can result in unexpected behaviour compared to
+    // other platforms
+    if ( gs_lastMouseEvent.type == wxEVT_RIGHT_DOWN ||
+         gs_lastMouseEvent.type == wxEVT_LEFT_DOWN ||
+         gs_lastMouseEvent.type == wxEVT_MIDDLE_DOWN ||
+         gs_lastMouseEvent.type == wxEVT_MOTION )
     {
-        m_lastMouseEvent = wxEVT_MOTION;
+        if ( ClientToScreen(wxPoint(x, y)) == gs_lastMouseEvent.pos )
+        {
+            gs_lastMouseEvent.type = wxEVT_MOTION;
 
-        return false;
+            return false;
+        }
     }
 #endif // wxUSE_MOUSEEVENT_HACK
 
