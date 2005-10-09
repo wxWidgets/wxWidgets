@@ -329,6 +329,8 @@
 
 #define wxUSE_CHOICEBOOK 0
 
+#define wxUSE_TREEBOOK 0
+
 #define wxUSE_TAB_DIALOG    0
 
 #define wxUSE_GRID         0

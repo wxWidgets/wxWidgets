@@ -527,6 +527,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TOOLBAR=no
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
+  DEFAULT_wxUSE_TREEBOOK=no
   DEFAULT_wxUSE_TREECTRL=no
   DEFAULT_wxUSE_POPUPWIN=no
   DEFAULT_wxUSE_TIPWINDOW=no
@@ -723,6 +724,7 @@ else
   DEFAULT_wxUSE_TOOLBAR=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
+  DEFAULT_wxUSE_TREEBOOK=yes
   DEFAULT_wxUSE_TREECTRL=yes
   DEFAULT_wxUSE_POPUPWIN=yes
   DEFAULT_wxUSE_TIPWINDOW=yes
@@ -1025,6 +1027,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
   DEFAULT_wxUSE_TOOLTIPS=yes
+  DEFAULT_wxUSE_TREEBOOK=yes
   DEFAULT_wxUSE_TREECTRL=yes
   DEFAULT_wxUSE_POPUPWIN=yes
   DEFAULT_wxUSE_TIPWINDOW=yes
@@ -1065,6 +1068,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
   DEFAULT_wxUSE_TOOLTIPS=no
+  DEFAULT_wxUSE_TREEBOOK=no
   DEFAULT_wxUSE_TREECTRL=no
   DEFAULT_wxUSE_POPUPWIN=no
   DEFAULT_wxUSE_TIPWINDOW=no
@@ -1108,6 +1112,7 @@ WX_ARG_ENABLE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class],
 WX_ARG_ENABLE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
 WX_ARG_ENABLE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
 WX_ARG_ENABLE(tbarsmpl,    [  --enable-tbarsmpl       use wxToolBarSimple class], wxUSE_TOOLBAR_SIMPLE)
+WX_ARG_ENABLE(treebook,    [  --enable-treebook       use wxTreebook class], wxUSE_TREEBOOK)
 WX_ARG_ENABLE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
 WX_ARG_ENABLE(tipwindow,   [  --enable-tipwindow      use wxTipWindow class], wxUSE_TIPWINDOW)
 WX_ARG_ENABLE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
@@ -6391,6 +6396,11 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
             AC_DEFINE(wxUSE_TOOLTIPS)
         fi
     fi
+fi
+
+if test "$wxUSE_TREEBOOK" = "yes"; then
+    AC_DEFINE(wxUSE_TREEBOOK)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_TREECTRL" = "yes"; then

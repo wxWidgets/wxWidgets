@@ -20,6 +20,43 @@
                 <usenotebooksizer>1</usenotebooksizer>
                 <size>550,200</size>
                 <object class="notebookpage">
+                    <label>wxTreebook</label>
+                                <object class="wxTreebook" name="controls_treebook">
+                                    <size>350,280</size>
+                                    <style>wxSUNKEN_BORDER</style>
+                                    <object class="treebookpage">
+                                        <label>Page 1</label>
+                                        <depth>0</depth>
+                                        <object class="wxButton" name="controls_treebook_button1">
+                                            <size>200,180</size>
+                                            <label>Button N1</label>
+                                        </object>
+                                    </object>
+                                    <object class="treebookpage">
+                                        <label>Empty Page 2</label>
+                                        <depth>1</depth>
+                                    </object>
+                                    <object class="treebookpage">
+                                        <label>Page 3</label>
+                                        <depth>2</depth>
+                                        <object class="wxButton" name="controls_treebook_button3">
+                                            <size>200,180</size>
+                                            <label>Button N3</label>
+                                        </object>
+                                    </object>
+                                    <object class="treebookpage">
+                                        <label>Page 4</label>
+                                        <depth>1</depth>
+                                        <object class="wxButton" name="controls_treebook_button4">
+                                            <size>200,180</size>
+                                            <label>Button N4</label>
+                                        </object>
+                                    </object>
+                                </object>
+                </object>
+
+                
+                <object class="notebookpage">
                     <label>wxBitmapButton</label>
                     <object class="wxPanel" name="bitmapbutton">
                         <object class="wxFlexGridSizer">

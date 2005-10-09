@@ -627,6 +627,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/textdlgg.cpp
     src/generic/tipwin.cpp
     src/generic/treectlg.cpp
+    src/generic/treebkg.cpp
     src/generic/vlbox.cpp
     src/generic/vscroll.cpp
 </set>
@@ -793,6 +794,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tooltip.h
     wx/toplevel.h
     wx/treebase.h
+    wx/treebook.h
     wx/treectrl.h
     wx/valgen.h
     wx/vidmode.h
@@ -2610,6 +2612,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_tglbtn.cpp
     src/xrc/xh_toolb.cpp
     src/xrc/xh_tree.cpp
+    src/xrc/xh_treebk.cpp
     src/xrc/xh_unkwn.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp

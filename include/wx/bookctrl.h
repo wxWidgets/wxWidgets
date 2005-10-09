@@ -176,6 +176,13 @@ public:
     }
 
 protected:
+    // Should we accept NULL page pointers in Add/InsertPage()?
+    //
+    // Default is no but derived classes may override it if they can treat NULL
+    // pages in some sensible way (e.g. wxTreebook overrides this to allow
+    // having nodes without any associated page)
+    virtual bool AllowNullPage() const { return false; }
+
     // remove the page and return a pointer to it
     virtual wxWindow *DoRemovePage(size_t page) = 0;
 

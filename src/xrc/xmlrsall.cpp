@@ -86,6 +86,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_CHOICEBOOK
     AddHandler(new wxChoicebookXmlHandler);
 #endif
+#if wxUSE_TREEBOOK
+    AddHandler(new wxTreebookXmlHandler);
+#endif
     AddHandler(new wxTextCtrlXmlHandler);
 #if wxUSE_LISTBOX
     AddHandler(new wxListBoxXmlHandler);

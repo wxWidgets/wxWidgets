@@ -36,6 +36,7 @@
 #include "wx/xrc/xh_notbk.h"
 #include "wx/xrc/xh_listbk.h"
 #include "wx/xrc/xh_choicbk.h"
+#include "wx/xrc/xh_treebk.h"
 #include "wx/xrc/xh_text.h"
 #include "wx/xrc/xh_listb.h"
 #include "wx/xrc/xh_toolb.h"
