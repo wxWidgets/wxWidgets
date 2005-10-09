@@ -704,12 +704,23 @@ bool wxWindowMSW::Show(bool show)
         return false;
 
     HWND hWnd = GetHwnd();
-    int cshow = show ? SW_SHOW : SW_HIDE;
-    ::ShowWindow(hWnd, cshow);
 
-    if ( show && IsTopLevel() )
+    // we could be called before the underlying window is created (this is
+    // actually useful to prevent it from being initially shown), e.g.
+    //
+    //      wxFoo *foo = new wxFoo;
+    //      foo->Hide();
+    //      foo->Create(parent, ...);
+    //
+    // should work without errors
+    if ( hWnd )
     {
-        wxBringWindowToTop(hWnd);
+        ::ShowWindow(hWnd, show ? SW_SHOW : SW_HIDE);
+
+        if ( show && IsTopLevel() )
+        {
+            wxBringWindowToTop(hWnd);
+        }
     }
 
     return true;
