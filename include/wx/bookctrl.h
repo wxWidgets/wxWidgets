@@ -73,14 +73,14 @@ public:
     virtual size_t GetPageCount() const { return m_pages.size(); }
 
     // get the panel which represents the given page
-    virtual wxWindow *GetPage(size_t n) { return m_pages[n]; }
+    wxWindow *GetPage(size_t n) { return m_pages[n]; }
+    wxWindow *GetPage(size_t n) const { return m_pages[n]; }
 
     // get the current page or NULL if none
     wxWindow *GetCurrentPage() const
     {
-        int n = GetSelection();
-        return n == wxNOT_FOUND ? NULL
-                                : wx_const_cast(wxBookCtrlBase *, this)->GetPage(n);
+        const int n = GetSelection();
+        return n == wxNOT_FOUND ? NULL : GetPage(n);
     }
 
     // get the currently selected page or wxNOT_FOUND if none
@@ -190,6 +190,7 @@ protected:
 
     // Always rely on GetBestSize, which will look at all the pages
     virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
+
 
     // the array of all pages of this control
     wxArrayPages m_pages;
