@@ -1517,6 +1517,12 @@ fi dnl not GNU make
 dnl needed for making link to setup.h
 AC_PROG_LN_S
 
+dnl lndir can be used by "make dist" to save copying files
+CP_PR='cp -pR'
+AC_CHECK_PROGS(LNDIR, lndir, [$CP_PR])
+AC_SUBST(CP_PR)
+
+
 dnl ------------------------------------------------------------------------
 dnl Platform specific tests
 dnl ------------------------------------------------------------------------

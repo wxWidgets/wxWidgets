@@ -5,7 +5,7 @@
 
 ############################# Dirs #################################
 
-WXDIR = $(shell echo $(top_srcdir) | grep '^/' || echo `pwd`/$(top_srcdir) )
+WXDIR = @abs_top_srcdir@
 
 # Subordinate library possibilities
 
@@ -60,6 +60,11 @@ WXDEMOS_BZIP=wx$(TOOLKIT)-demos-$(WX_VERSION).tar.bz2
 DISTDIRNAME=@DISTDIR@-$(WX_VERSION)
 DISTDIR=./_dist_dir/$(DISTDIRNAME)
 
+########################## Tools ###############################
+
+# lndir can be used if available instead of copying
+LNDIR = @LNDIR@
+CP_PR = @CP_PR@
 
 ########################## make dist rules ###############################
 
@@ -109,8 +114,8 @@ ALL_DIST: distrib_clean
 	ln -sf $(REGEXDIR)/*.c $(DISTDIR)/src/regex
 	ln -sf $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
 	ln -sf $(REGEXDIR)/README $(DISTDIR)/src/regex
-	mkdir $(DISTDIR)/src/expat
-	lndir $(EXPATDIR) $(DISTDIR)/src/expat
+	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/src/expat
+	$(LNDIR) $(EXPATDIR) $(DISTDIR)/src/expat
 	#(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
 	mkdir $(DISTDIR)/src/iodbc
 	ln -sf $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
@@ -256,8 +261,8 @@ GTK_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/mac/corefoundation
 	ln -sf $(WXDIR)/include/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
 
-	mkdir $(DISTDIR)/contrib
-	lndir $(WXDIR)/contrib $(DISTDIR)/contrib
+	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 X11_DIST: ALL_GUI_DIST UNIV_DIST
 	ln -sf $(WXDIR)/wxX11.spec $(DISTDIR)
@@ -271,8 +276,8 @@ X11_DIST: ALL_GUI_DIST UNIV_DIST
 	mkdir $(DISTDIR)/include/wx/mac
 	mkdir $(DISTDIR)/include/wx/mac/corefoundation
 	ln -sf $(WXDIR)/include/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
-	mkdir $(DISTDIR)/contrib
-	lndir $(WXDIR)/contrib $(DISTDIR)/contrib
+	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MOTIF_DIST: ALL_GUI_DIST
 	ln -sf $(WXDIR)/wxMotif.spec $(DISTDIR)
@@ -291,8 +296,8 @@ MOTIF_DIST: ALL_GUI_DIST
 	ln -sf $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
 		$(X11INC)/bitmap.h $(X11INC)/glcanvas.h $(X11INC)/private.h $(X11INC)/region.h \
 		$(DISTDIR)/include/wx/x11
-	mkdir $(DISTDIR)/contrib
-	lndir $(WXDIR)/contrib $(DISTDIR)/contrib
+	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MACX_DIST: ALL_GUI_DIST
 	ln -sf $(INCDIR)/*.* $(DISTDIR)/include
@@ -324,8 +329,8 @@ MACX_DIST: ALL_GUI_DIST
 	ln -sf $(MACDIR)/carbon/morefilex/*.h $(DISTDIR)/src/mac/carbon/morefilex
 	ln -sf $(MACDIR)/carbon/morefilex/*.c $(DISTDIR)/src/mac/carbon/morefilex
 	ln -sf $(MACDIR)/carbon/morefilex/*.cpp $(DISTDIR)/src/mac/carbon/morefilex
-	mkdir $(DISTDIR)/contrib
-	lndir $(WXDIR)/contrib $(DISTDIR)/contrib
+	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 # TODO: Distribute some files
 COCOA_DIST: ALL_GUI_DIST
@@ -369,8 +374,8 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	ln -sf $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
 	ln -sf $(SRCDIR)/*.??? $(DISTDIR)/src
 	ln -sf $(SRCDIR)/*.?? $(DISTDIR)/src
-	mkdir $(DISTDIR)/contrib
-	lndir $(WXDIR)/contrib $(DISTDIR)/contrib
+	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 UNIV_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/univ
@@ -390,8 +395,8 @@ MGL_DIST: UNIV_DIST
 	ln -sf $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
 	mkdir $(DISTDIR)/src/msdos
 	ln -sf $(SRCDIR)/msdos/*.cpp $(DISTDIR)/src/msdos
-	mkdir $(DISTDIR)/contrib
-	lndir $(WXDIR)/contrib $(DISTDIR)/contrib
+	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 DEMOS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/demos
@@ -405,8 +410,8 @@ DEMOS_DIST: ALL_GUI_DIST
 	ln -sf $(DEMODIR)/bombs/*.xpm $(DISTDIR)/demos/bombs
 	ln -sf $(DEMODIR)/bombs/readme.txt $(DISTDIR)/demos/bombs
 
-	mkdir $(DISTDIR)/demos/dbbrowse
-	lndir $(DEMODIR)/dbbrowse $(DISTDIR)/demos/dbbrowse
+	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/demos/dbbrowse
+	$(LNDIR) $(DEMODIR)/dbbrowse $(DISTDIR)/demos/dbbrowse
 
 	mkdir $(DISTDIR)/demos/forty
 	ln -sf $(DEMODIR)/forty/Makefile.in $(DISTDIR)/demos/forty
