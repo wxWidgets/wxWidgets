@@ -1279,6 +1279,14 @@ protected:
     // same size as it would have after a call to Fit()
     virtual wxSize DoGetBestSize() const;
 
+    // called from DoGetBestSize() to convert best virtual size (returned by
+    // the window sizer) to the best size for the window itself; this is
+    // overridden at wxScrolledWindow level to clump down virtual size to real
+    virtual wxSize GetWindowSizeForVirtualSize(const wxSize& size) const
+    {
+        return size;
+    }
+
     // this is the virtual function to be overriden in any derived class which
     // wants to change how SetSize() or Move() works - it is called by all
     // versions of these functions in the base class

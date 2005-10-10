@@ -579,7 +579,7 @@ wxSize wxWindowBase::DoGetBestSize() const
 
     if ( m_windowSizer )
     {
-        best = m_windowSizer->GetMinSize();
+        best = GetWindowSizeForVirtualSize(m_windowSizer->GetMinSize());
     }
 #if wxUSE_CONSTRAINTS
     else if ( m_constraints )
