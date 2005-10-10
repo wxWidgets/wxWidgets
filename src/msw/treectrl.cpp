@@ -42,7 +42,7 @@
 #include "wx/dynarray.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
-#include "wx/msw/treectrl.h"
+#include "wx/treectrl.h"
 #include "wx/msw/dragimag.h"
 
 // macros to hide the cast ugliness
@@ -1693,7 +1693,7 @@ wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
 
 wxImageList *wxTreeCtrl::GetImageList(int) const
 {
-    return GetImageList();
+    return wxTreeCtrlBase::GetImageList();
 }
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList, int)
@@ -1955,16 +1955,6 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
     }
 }
 
-void wxTreeCtrl::UnselectItem(const wxTreeItemId& item)
-{
-    SelectItem(item, false);
-}
-
-void wxTreeCtrl::ToggleItemSelection(const wxTreeItemId& item)
-{
-    SelectItem(item, !IsSelected(item));
-}
-
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
     // no error return
@@ -2129,12 +2119,6 @@ int CALLBACK wxTreeSortHelper::Compare(LPARAM pItem1,
 
     return tree->OnCompareItems(GetIdFromData(tree, pItem1),
                                 GetIdFromData(tree, pItem2));
-}
-
-int wxTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
-                               const wxTreeItemId& item2)
-{
-    return wxStrcmp(GetItemText(item1), GetItemText(item2));
 }
 
 void wxTreeCtrl::SortChildren(const wxTreeItemId& item)

@@ -2962,7 +2962,7 @@ void wxGenericTreeCtrl::OnRenameCancelled(wxGenericTreeItem *item)
 
 void wxGenericTreeCtrl::OnRenameTimer()
 {
-    Edit( m_current );
+    EditLabel( m_current );
 }
 
 void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
