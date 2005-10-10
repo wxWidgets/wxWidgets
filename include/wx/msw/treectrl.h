@@ -147,11 +147,6 @@ public:
     virtual wxTreeItemId AddRoot(const wxString& text,
                          int image = -1, int selectedImage = -1,
                          wxTreeItemData *data = NULL);
-    virtual wxTreeItemId InsertItem(const wxTreeItemId& parent,
-                                    const wxTreeItemId& idPrevious,
-                                    const wxString& text,
-                                    int image = -1, int selectedImage = -1,
-                                    wxTreeItemData *data = NULL);
 
     virtual void Delete(const wxTreeItemId& item);
     virtual void DeleteChildren(const wxTreeItemId& item);
@@ -195,12 +190,6 @@ public:
 
         // use Expand, Collapse, CollapseAndReset or Toggle
     wxDEPRECATED( void ExpandItem(const wxTreeItemId& item, int action) );
-
-        // use AddRoot, PrependItem or AppendItem
-    wxDEPRECATED( wxTreeItemId InsertItem(const wxTreeItemId& parent,
-                            const wxString& text,
-                            int image = -1, int selImage = -1,
-                            long insertAfter = wxTREE_INSERT_LAST) );
 
         // use Set/GetImageList and Set/GetStateImageList
     wxDEPRECATED( wxImageList *GetImageList(int) const );

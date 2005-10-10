@@ -1678,19 +1678,6 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
 // for compatibility only
 #if WXWIN_COMPATIBILITY_2_4
 
-wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
-                                    const wxString& text,
-                                    int image, int selImage,
-                                    long insertAfter)
-{
-    return DoInsertAfter(parent,
-                         wxTreeItemId(wxUIntToPtr(insertAfter)),
-                         text,
-                         image,
-                         selImage,
-                         NULL);
-}
-
 wxImageList *wxTreeCtrl::GetImageList(int) const
 {
     return wxTreeCtrlBase::GetImageList();
