@@ -309,14 +309,17 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       ;;
 
       *-*-darwin* )
+        AC_BAKEFILE_CREATE_FILE_SHARED_LD_SH
+        chmod +x shared-ld-sh
+
+        SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
+        SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
+
         dnl Most apps benefit from being fully binded (its faster and static
         dnl variables initialized at startup work).
         dnl This can be done either with the exe linker flag -Wl,-bind_at_load
         dnl or with a double stage link in order to create a single module
         dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
-
-        SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
-        SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
 
         dnl If using newer dev tools then there is a -single_module flag that
         dnl we can use to do this for dylibs, otherwise we'll need to use a helper
@@ -338,9 +341,6 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
            )
         ])
         if test "$bakefile_cv_gcc31" = "no"; then
-            AC_BAKEFILE_CREATE_FILE_SHARED_LD_SH
-            chmod +x shared-ld-sh
-
             dnl Use the shared-ld-sh helper script
             SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -headerpad_max_install_names -o"
             SHARED_LD_CXX="$SHARED_LD_CC"
@@ -360,29 +360,29 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
 
       *-*-aix* )
         if test "x$GCC" = "xyes"; then
-	    dnl at least gcc 2.95 warns that -fPIC is ignored when
-	    dnl compiling each and every file under AIX which is annoying,
-	    dnl so don't use it there (it's useless as AIX runs on
-	    dnl position-independent architectures only anyhow)
-	    PIC_FLAG=""
+            dnl at least gcc 2.95 warns that -fPIC is ignored when
+            dnl compiling each and every file under AIX which is annoying,
+            dnl so don't use it there (it's useless as AIX runs on
+            dnl position-independent architectures only anyhow)
+            PIC_FLAG=""
 
-	    dnl -bexpfull is needed by AIX linker to export all symbols (by
-	    dnl default it doesn't export any and even with -bexpall it
-	    dnl doesn't export all C++ support symbols, e.g. vtable
-	    dnl pointers) but it's only available starting from 5.1 (with
-	    dnl maintenance pack 2, whatever this is), see
-	    dnl http://www-128.ibm.com/developerworks/eserver/articles/gnu.html
-	    case "${BAKEFILE_HOST}" in
-		*-*-aix5* )
-		    LD_EXPFULL="-Wl,-bexpfull"
-		    ;;
-	    esac
+            dnl -bexpfull is needed by AIX linker to export all symbols (by
+            dnl default it doesn't export any and even with -bexpall it
+            dnl doesn't export all C++ support symbols, e.g. vtable
+            dnl pointers) but it's only available starting from 5.1 (with
+            dnl maintenance pack 2, whatever this is), see
+            dnl http://www-128.ibm.com/developerworks/eserver/articles/gnu.html
+            case "${BAKEFILE_HOST}" in
+                *-*-aix5* )
+                    LD_EXPFULL="-Wl,-bexpfull"
+                    ;;
+            esac
 
-	    SHARED_LD_CC="\$(CC) -shared $LD_EXPFULL -o"
-	    SHARED_LD_CXX="\$(CXX) -shared $LD_EXPFULL -o"
-	else
-	    dnl FIXME: makeC++SharedLib is obsolete, what should we do for
-	    dnl        recent AIX versions?
+            SHARED_LD_CC="\$(CC) -shared $LD_EXPFULL -o"
+            SHARED_LD_CXX="\$(CXX) -shared $LD_EXPFULL -o"
+        else
+            dnl FIXME: makeC++SharedLib is obsolete, what should we do for
+            dnl        recent AIX versions?
             AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
                           makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
             SHARED_LD_CC="$AIX_CC_LD -p 0 -o"
@@ -403,7 +403,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
             PIC_FLAG="-KPIC"
         fi
       ;;
-      
+
       *-*-cygwin* | *-*-mingw32* )
         PIC_FLAG=""
         SHARED_LD_CC="\$(CC) -shared -o"
@@ -418,7 +418,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
         AC_BAKEFILE_CREATE_FILE_DLLAR_SH
         chmod +x dllar.sh
       ;;
-      
+
       powerpc-apple-macos* | \
       *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-k*bsd*-gnu | \
       *-*-sunos4* | \
