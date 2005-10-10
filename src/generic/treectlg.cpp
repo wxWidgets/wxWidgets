@@ -57,6 +57,9 @@ static const int NO_IMAGE = -1;
 
 static const int PIXELS_PER_UNIT = 10;
 
+// the margin between the item image and the item text
+static const int MARGIN_BETWEEN_IMAGE_AND_TEXT = 4;
+
 // -----------------------------------------------------------------------------
 // private classes
 // -----------------------------------------------------------------------------
@@ -374,7 +377,7 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
         if ( m_owner->m_imageListNormal )
         {
             m_owner->m_imageListNormal->GetSize( image, image_w, image_h );
-            image_w += 4;
+            image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
         }
         else
         {
@@ -2178,7 +2181,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         if ( m_imageListNormal )
         {
             m_imageListNormal->GetSize( image, image_w, image_h );
-            image_w += 4;
+            image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
         }
         else
         {
@@ -2868,7 +2871,7 @@ wxTreeItemId wxGenericTreeCtrl::DoHitTest(const wxPoint& point, int& flags)
 // get the bounding rectangle of the item (or of its label only)
 bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
                                         wxRect& rect,
-                                        bool WXUNUSED(textOnly)) const
+                                        bool textOnly) const
 {
     wxCHECK_MSG( item.IsOk(), false, _T("invalid item in wxGenericTreeCtrl::GetBoundingRect") );
 
@@ -2877,10 +2880,25 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
     int startX, startY;
     GetViewStart(& startX, & startY);
 
-    rect.x = i->GetX() - startX*PIXELS_PER_UNIT;
+    if ( textOnly )
+    {
+        rect.x = i->GetX() - startX*PIXELS_PER_UNIT;
+        rect.width = i->GetWidth();
+
+        if ( m_imageListNormal )
+        {
+            int image_w, image_h;
+            m_imageListNormal->GetSize( 0, image_w, image_h );
+            rect.width += image_w + MARGIN_BETWEEN_IMAGE_AND_TEXT;
+        }
+    }
+    else // the entire line
+    {
+        rect.x = 0;
+        rect.width = GetClientSize().x;
+    }
+
     rect.y = i->GetY() - startY*PIXELS_PER_UNIT;
-    rect.width = i->GetWidth();
-    //rect.height = i->GetHeight();
     rect.height = GetLineHeight(i);
 
     return true;
@@ -3352,7 +3370,7 @@ void wxGenericTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
         if ( m_imageListNormal )
         {
             m_imageListNormal->GetSize( image, image_w, image_h );
-            image_w += 4;
+            image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
         }
     }
 
@@ -3528,15 +3546,6 @@ bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
 void wxGenericTreeCtrl::OnGetToolTip( wxTreeEvent &event )
 {
     event.Veto();
-}
-
-
-wxSize wxGenericTreeCtrl::DoGetBestSize() const
-{
-    // something is better than nothing...
-    // 100x80 is what the MSW version will get from the default
-    // wxControl::DoGetBestSize
-    return wxSize(100,80);
 }
 
 
