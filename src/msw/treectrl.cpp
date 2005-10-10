@@ -606,9 +606,6 @@ bool wxTreeTraversal::Traverse(const wxTreeItemId& root, bool recursively)
 
 void wxTreeCtrl::Init()
 {
-    m_imageListNormal = NULL;
-    m_imageListState = NULL;
-    m_ownsImageListNormal = m_ownsImageListState = false;
     m_textCtrl = NULL;
     m_hasAnyAttr = false;
     m_dragImage = NULL;
@@ -772,9 +769,6 @@ wxTreeCtrl::~wxTreeCtrl()
     // delete user data to prevent memory leaks
     // also deletes hidden root node storage.
     DeleteAllItems();
-
-    if (m_ownsImageListNormal) delete m_imageListNormal;
-    if (m_ownsImageListState) delete m_imageListState;
 }
 
 // ----------------------------------------------------------------------------
@@ -833,16 +827,6 @@ void wxTreeCtrl::SetIndent(unsigned int indent)
     TreeView_SetIndent(GetHwnd(), indent);
 }
 
-wxImageList *wxTreeCtrl::GetImageList() const
-{
-    return m_imageListNormal;
-}
-
-wxImageList *wxTreeCtrl::GetStateImageList() const
-{
-    return m_imageListState;
-}
-
 void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
 {
     // no error return
@@ -865,18 +849,6 @@ void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
     if (m_ownsImageListState) delete m_imageListState;
     SetAnyImageList(m_imageListState = imageList, TVSIL_STATE);
     m_ownsImageListState = false;
-}
-
-void wxTreeCtrl::AssignImageList(wxImageList *imageList)
-{
-    SetImageList(imageList);
-    m_ownsImageListNormal = true;
-}
-
-void wxTreeCtrl::AssignStateImageList(wxImageList *imageList)
-{
-    SetStateImageList(imageList);
-    m_ownsImageListState = true;
 }
 
 size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
@@ -1629,11 +1601,11 @@ size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
 // Usual operations
 // ----------------------------------------------------------------------------
 
-wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
-                                      wxTreeItemId hInsertAfter,
-                                      const wxString& text,
-                                      int image, int selectedImage,
-                                      wxTreeItemData *data)
+wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
+                                       const wxTreeItemId& hInsertAfter,
+                                       const wxString& text,
+                                       int image, int selectedImage,
+                                       wxTreeItemData *data)
 {
     wxCHECK_MSG( parent.IsOk() || !TreeView_GetRoot(GetHwnd()),
                  wxTreeItemId(),
@@ -1711,8 +1683,12 @@ wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
                                     int image, int selImage,
                                     long insertAfter)
 {
-    return DoInsertItem(parent, wxTreeItemId((void *)insertAfter), text,
-                        image, selImage, NULL);
+    return DoInsertAfter(parent,
+                         wxTreeItemId(wxUIntToPtr(insertAfter)),
+                         text,
+                         image,
+                         selImage,
+                         NULL);
 }
 
 wxImageList *wxTreeCtrl::GetImageList(int) const
@@ -1750,59 +1726,40 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
         return TVI_ROOT;
     }
 
-    return DoInsertItem(wxTreeItemId(), wxTreeItemId(),
-                        text, image, selectedImage, data);
+    return DoInsertAfter(wxTreeItemId(), wxTreeItemId(),
+                           text, image, selectedImage, data);
 }
 
-wxTreeItemId wxTreeCtrl::PrependItem(const wxTreeItemId& parent,
-                                     const wxString& text,
-                                     int image, int selectedImage,
-                                     wxTreeItemData *data)
+wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
+                                      size_t index,
+                                      const wxString& text,
+                                      int image, int selectedImage,
+                                      wxTreeItemData *data)
 {
-    return DoInsertItem(parent, TVI_FIRST,
-                        text, image, selectedImage, data);
-}
-
-wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
-                                    const wxTreeItemId& idPrevious,
-                                    const wxString& text,
-                                    int image, int selectedImage,
-                                    wxTreeItemData *data)
-{
-    return DoInsertItem(parent, idPrevious, text, image, selectedImage, data);
-}
-
-wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
-                                    size_t index,
-                                    const wxString& text,
-                                    int image, int selectedImage,
-                                    wxTreeItemData *data)
-{
-    // find the item from index
-    wxTreeItemIdValue cookie;
-    wxTreeItemId idPrev, idCur = GetFirstChild(parent, cookie);
-    while ( index != 0 && idCur.IsOk() )
+    wxTreeItemId idPrev;
+    if ( index == (size_t)-1 )
     {
-        index--;
+        // special value: append to the end
+        idPrev = TVI_LAST;
+    }
+    else // find the item from index
+    {
+        wxTreeItemIdValue cookie;
+        wxTreeItemId idCur = GetFirstChild(parent, cookie);
+        while ( index != 0 && idCur.IsOk() )
+        {
+            index--;
 
-        idPrev = idCur;
-        idCur = GetNextChild(parent, cookie);
+            idPrev = idCur;
+            idCur = GetNextChild(parent, cookie);
+        }
+
+        // assert, not check: if the index is invalid, we will append the item
+        // to the end
+        wxASSERT_MSG( index == 0, _T("bad index in wxTreeCtrl::InsertItem") );
     }
 
-    // assert, not check: if the index is invalid, we will append the item
-    // to the end
-    wxASSERT_MSG( index == 0, _T("bad index in wxTreeCtrl::InsertItem") );
-
-    return DoInsertItem(parent, idPrev, text, image, selectedImage, data);
-}
-
-wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parent,
-                                    const wxString& text,
-                                    int image, int selectedImage,
-                                    wxTreeItemData *data)
-{
-    return DoInsertItem(parent, TVI_LAST,
-                        text, image, selectedImage, data);
+    return DoInsertAfter(parent, idPrev, text, image, selectedImage, data);
 }
 
 void wxTreeCtrl::Delete(const wxTreeItemId& item)
@@ -2080,7 +2037,7 @@ void wxTreeCtrl::DoEndEditLabel(bool discardChanges)
     DeleteTextCtrl();
 }
 
-wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
+wxTreeItemId wxTreeCtrl::DoHitTest(const wxPoint& point, int& flags)
 {
     TV_HITTESTINFO hitTestInfo;
     hitTestInfo.pt.x = (int)point.x;
@@ -2135,38 +2092,6 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
         // couldn't retrieve rect: for example, item isn't visible
         return false;
     }
-}
-
-wxSize wxTreeCtrl::DoGetBestSize() const
-{
-    wxSize size;
-
-    // this doesn't really compute the total bounding rectangle of all items
-    // but a not too bad guess of it which has the advantage of not having to
-    // examine all (potentially hundreds or thousands) items in the control
-    for ( wxTreeItemId item = GetRootItem();
-          item.IsOk();
-          item = GetLastChild(item) )
-    {
-        wxRect rect;
-
-        // last parameter is "true" to get only the dimensions of the text
-        // label, we don't want to get the entire item width as it's determined
-        // by the current size
-        if ( GetBoundingRect(item, rect, true) )
-        {
-            if ( size.x < rect.x + rect.width )
-                size.x = rect.x + rect.width;
-            if ( size.y < rect.y + rect.height )
-                size.y = rect.y + rect.height;
-        }
-    }
-
-    // need some minimal size even for empty tree
-    if ( !size.x || !size.y )
-        size = wxControl::DoGetBestSize();
-
-    return size;
 }
 
 // ----------------------------------------------------------------------------
