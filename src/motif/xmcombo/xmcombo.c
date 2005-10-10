@@ -91,12 +91,8 @@
  * Cambridge, MA 02139, USA.
  *
  */
-/* get XmVersion definition */
-#include <Xm/Xm.h>
-
-#if (XmVersion < 2000)
-
 #ifdef __VMS
+/* vms_x_fix.h should be included before any of the X11/Motif headers */
 #include <wx/vms_x_fix.h>
 #undef XtDisplay
 #undef XtScreen
@@ -105,6 +101,11 @@
 #undef XtParent
 #undef XtClass
 #endif
+
+/* get XmVersion definition */
+#include <Xm/Xm.h>
+
+#if (XmVersion < 2000)
 
 #include <X11/IntrinsicP.h>
 #include <X11/StringDefs.h>

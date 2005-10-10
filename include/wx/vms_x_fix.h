@@ -2,7 +2,7 @@
  *                                                                         *
  * Author : Jouk Jansen (joukj@hrem.stm.tudelft.nl)                        *
  *                                                                         *
- * Last revision : 11 July 2005                                            *
+ * Last revision : 7 October 2005                                          *
  *                                                                         *
  * Repair definitions of Runtime library functions when compiling with     *
  * /name=(as_is) on OpenVMS                                                *
@@ -390,6 +390,7 @@
 #define XextAddDisplay XEXTADDDISPLAY
 #define XextFindDisplay XEXTFINDDISPLAY
 #define XextRemoveDisplay XEXTREMOVEDISPLAY
+#define XkbSetDetectableAutoRepeat XKBSETDETECTABLEAUTOREPEAT
 #define XmActivateProtocol XMACTIVATEPROTOCOL
 #define XmAddProtocolCallback XMADDPROTOCOLCALLBACK
 #define XmAddProtocols XMADDPROTOCOLS
@@ -1192,12 +1193,14 @@
 #define xmToggleButtonGadgetClass XMTOGGLEBUTTONGADGETCLASS
 #define xmToggleButtonWidgetClass XMTOGGLEBUTTONWIDGETCLASS
 
-#define SetReqLen(req,n,badlen) \
+#if (__VMS_VER < 80200000) 
+# define SetReqLen(req,n,badlen) \
     if ((req->length + n) > (unsigned)65535) { \
 	    n = badlen; \
 	    req->length += n; \
     } else \
 	req->length += n
+#endif
 
 #ifdef __cplusplus
 extern "C" {
