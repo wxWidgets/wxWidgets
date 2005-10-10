@@ -106,9 +106,8 @@ wxTreebook::Create(wxWindow *parent,
                     wxDefaultPosition,
                     wxDefaultSize,
                     wxBORDER_SIMPLE |
-                    wxTR_HAS_BUTTONS |
+                    wxTR_DEFAULT_STYLE |
                     wxTR_HIDE_ROOT |
-                    wxTR_LINES_AT_ROOT |
                     wxTR_SINGLE
                  );
     m_tree->AddRoot(wxEmptyString); // label doesn't matter, it's hidden
@@ -214,6 +213,8 @@ bool wxTreebook::DoInsertPage(size_t pagePos,
 
     DoUpdateSelection(bSelect, pagePos);
 
+    m_tree->InvalidateBestSize();
+
     return true;
 }
 
@@ -263,6 +264,8 @@ bool wxTreebook::DoInsertSubPage(size_t pagePos,
 
     DoUpdateSelection(bSelect, newPos);
 
+    m_tree->InvalidateBestSize();
+
     return true;
 }
 
@@ -310,6 +313,7 @@ wxTreebookPage *wxTreebook::DoRemovePage(size_t pagePos)
 
     m_tree->DeleteChildren( pageId );
     m_tree->Delete( pageId );
+    m_tree->InvalidateBestSize();
 
     return oldPage;
 }
