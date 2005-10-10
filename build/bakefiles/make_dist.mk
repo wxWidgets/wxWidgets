@@ -114,7 +114,7 @@ ALL_DIST: distrib_clean
 	ln -sf $(REGEXDIR)/*.c $(DISTDIR)/src/regex
 	ln -sf $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
 	ln -sf $(REGEXDIR)/README $(DISTDIR)/src/regex
-	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/src/expat
+	test "$(LNDIR)" = "$(CP_PR)" || mkdir $(DISTDIR)/src/expat
 	$(LNDIR) $(EXPATDIR) $(DISTDIR)/src/expat
 	#(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
 	mkdir $(DISTDIR)/src/iodbc
@@ -261,7 +261,7 @@ GTK_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/mac/corefoundation
 	ln -sf $(WXDIR)/include/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
 
-	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	test "$(LNDIR)" = "$(CP_PR)" || mkdir $(DISTDIR)/contrib
 	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 X11_DIST: ALL_GUI_DIST UNIV_DIST
@@ -276,7 +276,7 @@ X11_DIST: ALL_GUI_DIST UNIV_DIST
 	mkdir $(DISTDIR)/include/wx/mac
 	mkdir $(DISTDIR)/include/wx/mac/corefoundation
 	ln -sf $(WXDIR)/include/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
-	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	test "$(LNDIR)" = "$(CP_PR)" || mkdir $(DISTDIR)/contrib
 	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MOTIF_DIST: ALL_GUI_DIST
@@ -296,7 +296,7 @@ MOTIF_DIST: ALL_GUI_DIST
 	ln -sf $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
 		$(X11INC)/bitmap.h $(X11INC)/glcanvas.h $(X11INC)/private.h $(X11INC)/region.h \
 		$(DISTDIR)/include/wx/x11
-	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	test "$(LNDIR)" = "$(CP_PR)" || mkdir $(DISTDIR)/contrib
 	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MACX_DIST: ALL_GUI_DIST
@@ -329,7 +329,7 @@ MACX_DIST: ALL_GUI_DIST
 	ln -sf $(MACDIR)/carbon/morefilex/*.h $(DISTDIR)/src/mac/carbon/morefilex
 	ln -sf $(MACDIR)/carbon/morefilex/*.c $(DISTDIR)/src/mac/carbon/morefilex
 	ln -sf $(MACDIR)/carbon/morefilex/*.cpp $(DISTDIR)/src/mac/carbon/morefilex
-	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	test "$(LNDIR)" = "$(CP_PR)" || mkdir $(DISTDIR)/contrib
 	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 # TODO: Distribute some files
@@ -374,7 +374,7 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	ln -sf $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
 	ln -sf $(SRCDIR)/*.??? $(DISTDIR)/src
 	ln -sf $(SRCDIR)/*.?? $(DISTDIR)/src
-	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	test "$(LNDIR)" = "$(CP_PR)" || mkdir $(DISTDIR)/contrib
 	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 UNIV_DIST: ALL_GUI_DIST
@@ -395,7 +395,7 @@ MGL_DIST: UNIV_DIST
 	ln -sf $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
 	mkdir $(DISTDIR)/src/msdos
 	ln -sf $(SRCDIR)/msdos/*.cpp $(DISTDIR)/src/msdos
-	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/contrib
+	test "$(LNDIR)" = "$(CP_PR)" || mkdir $(DISTDIR)/contrib
 	$(LNDIR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 DEMOS_DIST: ALL_GUI_DIST
@@ -410,7 +410,7 @@ DEMOS_DIST: ALL_GUI_DIST
 	ln -sf $(DEMODIR)/bombs/*.xpm $(DISTDIR)/demos/bombs
 	ln -sf $(DEMODIR)/bombs/readme.txt $(DISTDIR)/demos/bombs
 
-	test "$(LNDIR)" == "$(CP_PR)" || mkdir $(DISTDIR)/demos/dbbrowse
+	test "$(LNDIR)" = "$(CP_PR)" || mkdir $(DISTDIR)/demos/dbbrowse
 	$(LNDIR) $(DEMODIR)/dbbrowse $(DISTDIR)/demos/dbbrowse
 
 	mkdir $(DISTDIR)/demos/forty
