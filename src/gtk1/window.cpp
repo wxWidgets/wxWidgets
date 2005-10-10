@@ -4705,55 +4705,38 @@ void wxWindowGTK::SetScrollbar( int orient, int pos, int thumbVisible,
         gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
 }
 
+void wxWindowGTK::GtkUpdateScrollbar(int orient)
+{
+    GtkAdjustment *adj = orient == wxHORIZONTAL ? m_hAdjust : m_vAdjust;
+    GtkSignalFunc fn = orient == wxHORIZONTAL
+                        ? (GtkSignalFunc)gtk_window_hscroll_callback
+                        : (GtkSignalFunc)gtk_window_vscroll_callback;
+
+    gtk_signal_disconnect_by_func(GTK_OBJECT(adj), fn, (gpointer)this);
+    gtk_signal_emit_by_name(GTK_OBJECT(adj), "value_changed");
+    gtk_signal_connect(GTK_OBJECT(adj), "value_changed", fn, (gpointer)this);
+}
+
 void wxWindowGTK::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
 
-    if (orient == wxHORIZONTAL)
+    GtkAdjustment *adj = orient == wxHORIZONTAL ? m_hAdjust : m_vAdjust;
+
+    float fpos = (float)pos;
+    if (fpos > adj->upper - adj->page_size)
+        fpos = adj->upper - adj->page_size;
+    if (fpos < 0.0)
+        fpos = 0.0;
+    *(orient == wxHORIZONTAL ? &m_oldHorizontalPos : &m_oldVerticalPos) = fpos;
+
+    if (fabs(fpos-adj->value) < 0.2)
+        return;
+    adj->value = fpos;
+
+    if ( m_wxwindow->window )
     {
-        float fpos = (float)pos;
-        if (fpos > m_hAdjust->upper - m_hAdjust->page_size) fpos = m_hAdjust->upper - m_hAdjust->page_size;
-        if (fpos < 0.0) fpos = 0.0;
-        m_oldHorizontalPos = fpos;
-
-        if (fabs(fpos-m_hAdjust->value) < 0.2) return;
-        m_hAdjust->value = fpos;
-    }
-    else
-    {
-        float fpos = (float)pos;
-        if (fpos > m_vAdjust->upper - m_vAdjust->page_size) fpos = m_vAdjust->upper - m_vAdjust->page_size;
-        if (fpos < 0.0) fpos = 0.0;
-        m_oldVerticalPos = fpos;
-
-        if (fabs(fpos-m_vAdjust->value) < 0.2) return;
-        m_vAdjust->value = fpos;
-    }
-
-    if (m_wxwindow->window)
-    {
-        if (orient == wxHORIZONTAL)
-        {
-            gtk_signal_disconnect_by_func( GTK_OBJECT(m_hAdjust),
-                (GtkSignalFunc) gtk_window_hscroll_callback, (gpointer) this );
-
-            gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
-
-            gtk_signal_connect( GTK_OBJECT(m_hAdjust), "value_changed",
-                (GtkSignalFunc) gtk_window_hscroll_callback, (gpointer) this );
-        }
-        else
-        {
-            gtk_signal_disconnect_by_func( GTK_OBJECT(m_vAdjust),
-                (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
-
-            gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
-
-            gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
-                (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
-        }
     }
 }
 

@@ -173,6 +173,10 @@ public:
     virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
 
+    // Call after modifing the value of m_hAdjust or m_vAdjust to bring the
+    // scrolbar in sync (this does not generate any wx events)
+    void GtkUpdateScrollbar(int orient);
+
     // Called from GTK signales handlers. it indicates that
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
