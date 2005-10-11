@@ -27,6 +27,7 @@
 #if wxUSE_TREECTRL
 
 #include "wx/treectrl.h"
+#include "wx/imaglist.h"
 
 // ----------------------------------------------------------------------------
 // events
