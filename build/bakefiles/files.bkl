@@ -2659,6 +2659,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_tglbtn.h
     wx/xrc/xh_toolb.h
     wx/xrc/xh_tree.h
+    wx/xrc/xh_treebk.h
     wx/xrc/xh_unkwn.h
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
