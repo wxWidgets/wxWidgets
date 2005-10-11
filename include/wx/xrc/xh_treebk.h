@@ -16,7 +16,7 @@
 
 #include "wx/treebook.h"
 
-WX_DEFINE_ARRAY_INT(size_t, wxArrayTbkPageIndexes);
+WX_DEFINE_ARRAY_SIZE_T(size_t, wxArrayTbkPageIndexes);
 
 // ---------------------------------------------------------------------
 // wxTreebookXmlHandler class
