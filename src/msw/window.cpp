@@ -151,7 +151,7 @@ static bool gs_hasStdCmap = false;
 
 // last mouse event information we need to filter out the duplicates
 #if wxUSE_MOUSEEVENT_HACK
-static struct
+static struct MouseEventInfoDummy
 {
     // mouse position (in screen coordinates)
     wxPoint pos;
