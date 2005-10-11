@@ -12,12 +12,10 @@
 #ifndef _WX_SCROLWIN_H_BASE_
 #define _WX_SCROLWIN_H_BASE_
 
-#include "wx/window.h"
+#include "wx/panel.h"
 
 class WXDLLEXPORT wxScrollHelperEvtHandler;
 class WXDLLEXPORT wxTimer;
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
 // default scrolled window style: scroll in both directions
 #define wxScrolledWindowStyle (wxHSCROLL | wxVSCROLL)
