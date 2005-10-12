@@ -309,9 +309,24 @@ typedef int wxWindowID;
     }
 
     #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
-#else /* !__INTELC__ */
+
+#elif defined(__cplusplus) && defined(__VISUALC__) && __VISUALC__ >= 1310
+    template <typename T, typename X>
+    inline T wx_truncate_cast_impl(X x)
+    {
+        #pragma warning(push)
+        /* conversion from 'X' to 'T', possible loss of data */
+        #pragma warning(disable: 4267)
+
+        return x;
+
+        #pragma warning(pop)
+    }
+
+    #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
+#else
     #define wx_truncate_cast(t, x) ((t)(x))
-#endif /* __INTELC__/!__INTELC__ */
+#endif
 
 /* for consistency with wxStatic/DynamicCast defined in wx/object.h */
 #define wxConstCast(obj, className) wx_const_cast(className *, obj)
