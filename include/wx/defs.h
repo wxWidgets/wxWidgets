@@ -298,10 +298,12 @@ typedef int wxWindowID;
     inline T wx_truncate_cast_impl(X x)
     {
         #pragma warning(push)
-        /* explicit conversion of a 64-bit integral type to a smaller integral type */
-        #pragma warning(disable: 1683)
+        /* implicit conversion of a 64-bit integral type to a smaller integral type */
+        #pragma warning(disable: 1682)
+        /* conversion from "X" to "T" may lose significant bits */
+        #pragma warning(disable: 810)
 
-        return (T)x;
+        return x;
 
         #pragma warning(pop)
     }
