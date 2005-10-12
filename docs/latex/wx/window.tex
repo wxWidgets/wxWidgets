@@ -2448,14 +2448,14 @@ Physically scrolls the pixels in the window and move child windows accordingly.
 
 \docparam{dy}{Amount to scroll vertically.}
 
-\docparam{rect}{Rectangle to invalidate. If this is NULL, the whole window is invalidated. If you
-pass a rectangle corresponding to the area of the window exposed by the scroll, your painting handler
-can optimize painting by checking for the invalidated region. This parameter is ignored under GTK.}
+\docparam{rect}{Rectangle to scroll, if it is \NULL, the whole window is
+scrolled (this is always the case under wxGTK which doesn't support this
+parameter)}
 
 \wxheading{Remarks}
 
-Use this function to optimise your scrolling implementations, to minimise the area that must be
-redrawn. Note that it is rarely required to call this function from a user program.
+Note that you can often use \helpref{wxScrolledWindow}{wxscrolledwindow} 
+instead of using this function directly.
 
 
 \membersection{wxWindow::SetAcceleratorTable}\label{wxwindowsetacceleratortable}
