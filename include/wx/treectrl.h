@@ -12,7 +12,9 @@
 #ifndef _WX_TREECTRL_H_BASE_
 #define _WX_TREECTRL_H_BASE_
 
+#include "wx/control.h"
 #include "wx/treebase.h"
+#include "wx/textctrl.h" // wxTextCtrl::ms_classinfo used through CLASSINFO macro
 
 class WXDLLEXPORT wxImageList;
 
