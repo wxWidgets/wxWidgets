@@ -314,6 +314,7 @@ class Frame(wxFrame):
         EVT_CLOSE(self, self.OnCloseWindow)
         EVT_KEY_DOWN(self, tools.OnKeyDown)
         EVT_KEY_UP(self, tools.OnKeyUp)
+        EVT_ICONIZE(self, self.OnIconize)
     
     def AppendRecent(self, menu):
         # add recently used files to the menu
@@ -962,6 +963,17 @@ Homepage: http://xrced.sourceforge.net\
     # We don't let close panel window
     def OnCloseMiniFrame(self, evt):
         return
+
+    def OnIconize(self, evt):
+        conf.x, conf.y = self.GetPosition()
+        conf.width, conf.height = self.GetSize()
+        if conf.embedPanel:
+            conf.sashPos = self.splitter.GetSashPosition()
+        else:
+            conf.panelX, conf.panelY = self.miniFrame.GetPosition()
+            conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
+            self.miniFrame.Iconize()
+        evt.Skip()
 
     def OnCloseWindow(self, evt):
         if not self.AskSave(): return
