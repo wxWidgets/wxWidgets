@@ -598,7 +598,7 @@ class ParamContentCheckList(ParamContent):
         if dlg.ShowModal() == wxID_OK:
             value = []
             for i in range(dlg.list.GetCount()):
-                value.append((dlg.list.GetString(i), dlg.list.IsChecked(i)))
+                value.append((dlg.list.GetString(i), int(dlg.list.IsChecked(i))))
             # Add ignored flags
             self.SetValue(value)
             self.SetModified()
