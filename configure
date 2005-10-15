@@ -43452,6 +43452,11 @@ if test "x$INTELCXX" = "xyes" ; then
                                                             CXXWARNINGS="-Wall -wd279,383,444,810,869,981,1418,1419"
 elif test "$GXX" = yes ; then
         CXXWARNINGS="-Wall -Wundef -Wno-ctor-dtor-privacy"
+
+                    case "${host}" in
+        *-*-cygwin* | *-*-mingw32* )
+            CXXWARNINGS="$CXXWARNINGS -Wno-format"
+    esac
 fi
 
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"

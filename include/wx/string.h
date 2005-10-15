@@ -955,6 +955,14 @@ public:
       // insert an unsigned long into string
   wxString& operator<<(unsigned long ul)
     { return (*this) << Format(_T("%lu"), ul); }
+#if defined wxLongLong_t && !defined wxLongLongIsLong
+      // insert a long long if they exist and aren't longs
+  wxString& operator<<(wxLongLong_t ll)
+    { return (*this) << Format(_T("%") wxLongLongFmtSpec _T("d"), ll); }
+      // insert an unsigned long long
+  wxString& operator<<(wxULongLong_t ull)
+    { return (*this) << Format(_T("%") wxLongLongFmtSpec _T("u"), ull); }
+#endif
       // insert a float into string
   wxString& operator<<(float f)
     { return (*this) << Format(_T("%f"), f); }
