@@ -78,7 +78,7 @@
 
 #define TRACE_STRCONV _T("strconv")
 
-#ifdef SIZEOF_WCHAR_T == 2
+#if SIZEOF_WCHAR_T == 2
     #define WC_UTF16
 #endif
 
