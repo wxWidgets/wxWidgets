@@ -42,7 +42,7 @@ using std::auto_ptr;
     (__GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
 #   define WXARC_MEMBER_TEMPLATES
 #endif
-#if defined _MSC_VER && _MSC_VER >= 1310
+#if defined _MSC_VER && _MSC_VER >= 1310 && !defined __WIN64__
 #   define WXARC_MEMBER_TEMPLATES
 #endif
 #if defined __BORLANDC__ && __BORLANDC__ >= 0x530
