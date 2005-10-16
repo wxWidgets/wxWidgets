@@ -161,6 +161,8 @@
 
     <set var="DIR_SUFFIX_CPU">
         <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
+        <if cond="TARGET_CPU=='AMD64'">_amd64</if>
+        <if cond="TARGET_CPU=='IA64'">_ia64</if>
     </set>
 
     <if cond="FORMAT!='autoconf'">
@@ -272,6 +274,15 @@
         <if cond="MSLU=='1'">unicows</if>
     </set>
 
+    <set var="LINK_TARGET_CPU">
+        <if cond="TARGET_CPU=='AMD64'">/MACHINE:AMD64</if>
+        <if cond="TARGET_CPU=='IA64'">/MACHINE:IA64</if>
+    </set>
+    <set var="RES_TARGET_CPU">
+        <if cond="TARGET_CPU=='AMD64'">WX_CPU_AMD64</if>
+        <if cond="TARGET_CPU=='IA64'">WX_CPU_IA64</if>
+    </set>
+
     <template id="common_settings">
         <debug-info>$(DEBUGINFO)</debug-info>
         <debug-runtime-libs>$(DEBUGRUNTIME)</debug-runtime-libs>
@@ -291,6 +302,10 @@
             <!-- hack to make eVC4 2.6.2 project files compatible with what we had in 2.6.1 -->
             <set var="_ldlibs">$(_ldlibs.replace('ccrtrtti.lib', ''))</set>
             <set var="_cppflags">$(_cppflags.replace('/GR', ''))</set>
+        </if>
+        <if cond="FORMAT=='msvc'">
+            <ldflags>$(LINK_TARGET_CPU)</ldflags>
+            <res-define>$(RES_TARGET_CPU)</res-define>
         </if>
     </template>
 
