@@ -772,7 +772,7 @@ bool wxListBox::OS2Command(
     {
         eEvtType = wxEVT_COMMAND_LISTBOX_SELECTED;
     }
-    if (uParam == LN_ENTER)
+    else if (uParam == LN_ENTER)
     {
         eEvtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
     }
