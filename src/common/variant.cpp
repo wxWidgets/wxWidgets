@@ -706,7 +706,7 @@ bool wxVariantDataChar::Read(wxInputStream& str)
 
 bool wxVariantDataChar::Read(wxString& str)
 {
-    m_value = str.ToAscii()[0u];
+    m_value = str.ToAscii()[size_t(0)];
     return true;
 }
 
