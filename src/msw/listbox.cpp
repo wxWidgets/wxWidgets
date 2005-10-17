@@ -354,7 +354,7 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
     if (bCase)
        return wxItemContainerImmutable::FindString( s, bCase );
 
-    int pos = ListBox_FindStringExact(GetHwnd(), (WPARAM)-1, s);
+    int pos = ListBox_FindStringExact(GetHwnd(), -1, s);
     if (pos == LB_ERR)
         return wxNOT_FOUND;
     else

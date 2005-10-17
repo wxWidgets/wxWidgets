@@ -59,7 +59,7 @@ wxMemoryInputStream::wxMemoryInputStream(const wxMemoryOutputStream& stream)
     }
 
     const size_t len = wx_truncate_cast(size_t, lenFile);
-    wxASSERT_MSG( len == lenFile, _T("huge files not supported") );
+    wxASSERT_MSG( len == lenFile + size_t(0), _T("huge files not supported") );
 
     m_i_streambuf = new wxStreamBuffer(wxStreamBuffer::read);
     m_i_streambuf->SetBufferIO(len); // create buffer

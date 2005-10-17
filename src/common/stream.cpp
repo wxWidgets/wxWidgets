@@ -664,7 +664,7 @@ size_t wxStreamBase::GetSize() const
         return 0;
 
     const size_t len = wx_truncate_cast(size_t, length);
-    wxASSERT_MSG( len == length, _T("large files not supported") );
+    wxASSERT_MSG( len == length + size_t(0), _T("large files not supported") );
 
     return len;
 }

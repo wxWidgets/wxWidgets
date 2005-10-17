@@ -599,7 +599,8 @@ bool wxToolBar::Realize()
         sizeBmp.x = m_defaultWidth;
         sizeBmp.y = m_defaultHeight;
 
-        const wxCoord totalBitmapWidth = m_defaultWidth * nTools,
+        const wxCoord totalBitmapWidth  = m_defaultWidth *
+                                          wx_truncate_cast(wxCoord, nTools),
                       totalBitmapHeight = m_defaultHeight;
 
         // Create a bitmap and copy all the tool bitmaps to it

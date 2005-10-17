@@ -974,7 +974,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.DrawRectangle(0, y, GetClientSize().x, m_heightRow);
 
         bool startOnMonday = (GetWindowStyle() & wxCAL_MONDAY_FIRST) != 0;
-        for ( size_t wd = 0; wd < 7; wd++ )
+        for ( int wd = 0; wd < 7; wd++ )
         {
             size_t n;
             if ( startOnMonday )
@@ -1014,7 +1014,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         wxLogDebug("painting week %d at y = %d\n", nWeek, y);
 #endif
 
-        for ( size_t wd = 0; wd < 7; wd++ )
+        for ( int wd = 0; wd < 7; wd++ )
         {
             if ( IsDateShown(date) )
             {

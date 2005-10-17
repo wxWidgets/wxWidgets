@@ -2193,20 +2193,20 @@ void wxFileHistory::RemoveFileFromHistory(size_t i)
     wxList::compatibility_iterator node = m_fileMenus.GetFirst();
     while ( node )
     {
-         wxMenu* menu = (wxMenu*) node->GetData();
+        wxMenu* menu = (wxMenu*) node->GetData();
 
-         // shuffle filenames up
-         wxString buf;
-         for ( j = i; j < m_fileHistoryN - 1; j++ )
-         {
-             buf.Printf(s_MRUEntryFormat, j + 1, m_fileHistory[j]);
-             menu->SetLabel(m_idBase + j, buf);
-         }
+        // shuffle filenames up
+        wxString buf;
+        for ( j = i; j < m_fileHistoryN - 1; j++ )
+        {
+            buf.Printf(s_MRUEntryFormat, j + 1, m_fileHistory[j]);
+            menu->SetLabel(m_idBase + j, buf);
+        }
 
-         node = node->GetNext();
+        node = node->GetNext();
 
         // delete the last menu item which is unused now
-        wxWindowID lastItemId = m_idBase + m_fileHistoryN - 1;
+        wxWindowID lastItemId = m_idBase + wx_truncate_cast(wxWindowID, m_fileHistoryN) - 1;
         if (menu->FindItem(lastItemId))
         {
             menu->Delete(lastItemId);

@@ -1137,7 +1137,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
     return false;
 
   size_t nSize = wx_truncate_cast(size_t, lenFile);
-  wxASSERT_MSG( nSize == lenFile, _T("message catalog bigger than 4GB?") );
+  wxASSERT_MSG( nSize == lenFile + size_t(0), _T("message catalog bigger than 4GB?") );
 
   // read the whole file in memory
   m_pData = new size_t8[nSize];
@@ -1317,7 +1317,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
     (void)convertEncoding; // get rid of warnings about unused parameter
 
-    for (size_t i = 0; i < m_numStrings; i++)
+    for (size_t32 i = 0; i < m_numStrings; i++)
     {
         const char *data = StringAtOfs(m_pOrigTable, i);
 #if wxUSE_UNICODE
