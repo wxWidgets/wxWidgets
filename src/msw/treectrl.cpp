@@ -2014,7 +2014,7 @@ void wxTreeCtrl::DoEndEditLabel(bool discardChanges)
     DeleteTextCtrl();
 }
 
-wxTreeItemId wxTreeCtrl::DoHitTest(const wxPoint& point, int& flags)
+wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags)
 {
     TV_HITTESTINFO hitTestInfo;
     hitTestInfo.pt.x = (int)point.x;

@@ -351,9 +351,9 @@ public:
         // and, in the second variant, fill the flags parameter with a bitmask
         // of wxTREE_HITTEST_xxx constants.
     wxTreeItemId HitTest(const wxPoint& point)
-        { int dummy; return DoHitTest(point, dummy); }
+        { int dummy; return DoTreeHitTest(point, dummy); }
     wxTreeItemId HitTest(const wxPoint& point, int& flags)
-        { return DoHitTest(point, flags); }
+        { return DoTreeHitTest(point, flags); }
 
         // get the bounding rectangle of the item (or of its label only)
     virtual bool GetBoundingRect(const wxTreeItemId& item,
@@ -390,7 +390,8 @@ protected:
 
     // real HitTest() implementation: again, can't be called just HitTest()
     // because it's overloaded and so the non-virtual overload would be hidden
-    virtual wxTreeItemId DoHitTest(const wxPoint& point, int& flags) = 0;
+    // (and can't be called DoHitTest() because this is already in wxWindow)
+    virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) = 0;
 
 
     wxImageList *m_imageListNormal, // images for tree elements
