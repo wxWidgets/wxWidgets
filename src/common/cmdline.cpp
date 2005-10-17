@@ -241,8 +241,10 @@ void wxCmdLineParserData::SetArguments(const wxString& cmdLine)
 {
     m_arguments.clear();
 
-    m_arguments.push_back(
-        (wxTheApp && wxTheApp->argc > 0) ? wxTheApp->argv[0] : wxEmptyString);
+    if(wxTheApp && wxTheApp->argc > 0)
+        m_arguments.push_back(wxTheApp->argv[0]);
+    else
+        m_arguments.push_back(wxEmptyString);
 
     wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
 
@@ -1221,4 +1223,3 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
 
     return args;
 }
-
