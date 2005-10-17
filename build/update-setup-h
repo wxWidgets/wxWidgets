@@ -79,6 +79,9 @@ fi
 update_single_setup_h include/wx/msw/setup0.h
 update_single_setup_h include/wx/msw/wince/setup.h
 update_single_setup_h include/wx/mac/setup0.h
+update_single_setup_h include/wx/palmos/setup0.h
+update_single_setup_h include/wx/os2/setup0.h
+update_single_setup_h include/wx/motif/setup0.h
 update_single_setup_h setup.h.in
 
 exit $rc
