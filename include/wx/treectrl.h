@@ -12,6 +12,14 @@
 #ifndef _WX_TREECTRL_H_BASE_
 #define _WX_TREECTRL_H_BASE_
 
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+#include "wx/defs.h"
+
+#if wxUSE_TREECTRL
+
 #include "wx/control.h"
 #include "wx/treebase.h"
 #include "wx/textctrl.h" // wxTextCtrl::ms_classinfo used through CLASSINFO macro
@@ -391,7 +399,7 @@ protected:
                  m_ownsImageListState;
 
     // spacing between left border and the text
-    unsigned short m_spacing;
+    unsigned int m_spacing;
 
 
     DECLARE_NO_COPY_CLASS(wxTreeCtrlBase)
@@ -404,9 +412,9 @@ protected:
 #if defined(__WXUNIVERSAL__)
     #include "wx/generic/treectlg.h"
 #elif defined(__WXPALMOS__)
-        #include "wx/palmos/treectrl.h"
+    #include "wx/palmos/treectrl.h"
 #elif defined(__WXMSW__)
-        #include "wx/msw/treectrl.h"
+    #include "wx/msw/treectrl.h"
 #elif defined(__WXMOTIF__)
     #include "wx/generic/treectlg.h"
 #elif defined(__WXGTK__)
@@ -419,5 +427,6 @@ protected:
     #include "wx/generic/treectlg.h"
 #endif
 
-#endif // _WX_TREECTRL_H_BASE_
+#endif // wxUSE_TREECTRL
 
+#endif // _WX_TREECTRL_H_BASE_
