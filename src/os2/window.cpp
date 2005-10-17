@@ -410,9 +410,7 @@ bool wxWindowOS2::Create( wxWindow*       pParent,
         pParent->AddChild(this);
         hParent = GetWinHwnd(pParent);
 
-        if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
-             pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
-           )
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)))
             ulCreateFlags |= WS_CLIPSIBLINGS;
     }
 
@@ -1577,9 +1575,7 @@ void wxWindowOS2::DoMoveWindow(
         // which will cause the scrollbars to be displayed via the SetScrollbar
         // call in CWindow.
         //
-        if ( IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
-             IsKindOf(CLASSINFO(wxScrolledWindow))
-           )
+        if (IsKindOf(CLASSINFO(wxScrolledWindow)))
         {
             int                     nAdjustWidth  = 0;
             int                     nAdjustHeight = 0;
@@ -3824,14 +3820,12 @@ bool wxWindowOS2::HandleEraseBkgnd( WXHDC hDC )
     return true;
 } // end of wxWindowOS2::HandleEraseBkgnd
 
-void wxWindowOS2::OnEraseBackground(
-  wxEraseEvent&                     rEvent
-)
+void wxWindowOS2::OnEraseBackground(wxEraseEvent& rEvent)
 {
-    RECTL                           vRect;
-    HPS                             hPS = rEvent.m_dc->m_hPS;
-    APIRET                          rc;
-    LONG                            lColor = m_backgroundColour.GetPixel();
+    RECTL   vRect;
+    HPS     hPS = rEvent.GetDC()->GetHPS();
+    APIRET  rc;
+    LONG    lColor = m_backgroundColour.GetPixel();
 
     rc = ::WinQueryWindowRect(GetHwnd(), &vRect);
     rc = ::WinFillRect(hPS, &vRect, lColor);
@@ -5167,16 +5161,12 @@ static void TranslateKbdEventToMouse(
 
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
-wxWindow* wxFindWindowAtPointer(
-  wxPoint&                          WXUNUSED(rPt)
-)
+wxWindow* wxFindWindowAtPointer(wxPoint& WXUNUSED(rPt))
 {
     return wxFindWindowAtPoint(wxGetMousePosition());
 }
 
-wxWindow* wxFindWindowAtPoint(
-  const wxPoint&                    rPt
-)
+wxWindow* wxFindWindowAtPoint(const wxPoint& rPt)
 {
     POINTL                          vPt2;
 

@@ -35,7 +35,7 @@ wxCursorRefData::wxCursorRefData(void)
   m_nWidth = 32;
   m_nHeight = 32;
   m_hCursor = 0 ;
-  m_bDestroyCursor = FALSE;
+  m_bDestroyCursor = false;
 }
 
 void wxCursorRefData::Free()
@@ -53,39 +53,35 @@ wxCursor::wxCursor(void)
 {
 }
 
-wxCursor::wxCursor(
-  const char                        WXUNUSED(bits)[]
-, int                               WXUNUSED(width)
-, int                               WXUNUSED(height)
-, int                               WXUNUSED(hotSpotX)
-, int                               WXUNUSED(hotSpotY)
-, const char                        WXUNUSED(maskBits)[]
-)
+wxCursor::wxCursor(const char WXUNUSED(bits)[],
+                   int WXUNUSED(width),
+                   int WXUNUSED(height),
+                   int WXUNUSED(hotSpotX),
+                   int WXUNUSED(hotSpotY),
+                   const char WXUNUSED(maskBits)[])
 {
 }
 
-wxCursor::wxCursor(
-  const wxImage&                    rImage
-)
+wxCursor::wxCursor(const wxImage& rImage)
 {
-    wxImage                         vImage32 = rImage.Scale(32,32);
-    int                             nWidth   = vImage32.GetWidth();
-    int                             nHeight  = vImage32.GetHeight();
+    wxImage  vImage32 = rImage.Scale(32,32);
+    int      nWidth   = vImage32.GetWidth();
+    int      nHeight  = vImage32.GetHeight();
 
     //
     // Need a bitmap handle somehow
     //
-    HBITMAP                      hBitmap = wxBitmap(vImage32).GetHBITMAP();
-    int                          nHotSpotX = vImage32.GetOptionInt(wxCUR_HOTSPOT_X);
-    int                          nHotSpotY = vImage32.GetOptionInt(wxCUR_HOTSPOT_Y);
+    HBITMAP  hBitmap = wxBitmap(vImage32).GetHBITMAP();
+    int      nHotSpotX = vImage32.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+    int      nHotSpotY = vImage32.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
 
     if (nHotSpotX < 0 || nHotSpotX >= nWidth)
-            nHotSpotX = 0;
+        nHotSpotX = 0;
     if (nHotSpotY < 0 || nHotSpotY >= nHeight)
-            nHotSpotY = 0;
+        nHotSpotY = 0;
 
 
-    wxCursorRefData*                pRefData = new wxCursorRefData;
+    wxCursorRefData* pRefData = new wxCursorRefData;
 
     m_refData = pRefData;
     pRefData->m_hCursor = (WXHCURSOR) ::WinCreatePointer( HWND_DESKTOP
@@ -106,7 +102,7 @@ wxCursor::wxCursor( const wxString& WXUNUSED(rsCursorFile),
 
     pRefData = new wxCursorRefData;
     m_refData = pRefData;
-    pRefData->m_bDestroyCursor = FALSE;
+    pRefData->m_bDestroyCursor = false;
     if (lFlags == wxBITMAP_TYPE_CUR_RESOURCE)
     {
         pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
@@ -117,9 +113,7 @@ wxCursor::wxCursor( const wxString& WXUNUSED(rsCursorFile),
 } // end of wxCursor::wxCursor
 
 // Cursors by stock number
-wxCursor::wxCursor(
-  int                               nCursorType
-)
+wxCursor::wxCursor(int nCursorType)
 {
     wxCursorRefData*                pRefData = new wxCursorRefData;
 
@@ -306,7 +300,7 @@ wxCursor::wxCursor(
     //
     // No need to destroy the stock cursors
     //
-    ((wxCursorRefData *)m_refData)->m_bDestroyCursor = FALSE;
+    ((wxCursorRefData *)m_refData)->m_bDestroyCursor = false;
 } // end of wxCursor::wxCursor
 
 // Global cursor setting
