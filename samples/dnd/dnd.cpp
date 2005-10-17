@@ -522,7 +522,7 @@ public:
     virtual size_t GetFormatCount(Direction dir) const
     {
         // our custom format is supported by both GetData() and SetData()
-        ULONG nFormats = 1;
+        size_t nFormats = 1;
         if ( dir == Get )
         {
             // but the bitmap format(s) are only supported for output
