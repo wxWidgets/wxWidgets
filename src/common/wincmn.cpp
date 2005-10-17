@@ -528,9 +528,9 @@ void wxWindowBase::Centre(int direction)
 // fits the window around the children
 void wxWindowBase::Fit()
 {
-    if ( GetChildren().GetCount() > 0 )
+    if ( !GetChildren().empty() )
     {
-        SetSize(GetBestSize());
+        SetClientSize(GetBestSize());
     }
     //else: do nothing if we have no children
 }

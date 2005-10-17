@@ -15,6 +15,7 @@ All (GUI):
 - added wxDialog::SetEscapeId()
 - wxItemContainerImmutable::FindString unified (affects wxRadioBox, wxListBox,
   wxComboBox and wxChoice)
+- wxWindow::Fit() now works correctly for frames and dialogs too
 
 wxMSW:
 
