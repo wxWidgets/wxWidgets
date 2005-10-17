@@ -493,9 +493,11 @@
 #   define __STDC_EXT__ 1
 #endif
 
-/* Force linking against required libraries under Windows CE: */
+/* Force linking against required libraries under Windows: */
 #ifdef __WXWINCE__
 #   include "wx/msw/wince/libraries.h"
+#elif defined __WINDOWS__
+#   include "wx/msw/libraries.h"
 #endif
 
 /*
