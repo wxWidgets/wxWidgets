@@ -461,6 +461,10 @@ Notes:
    flagged when the program quits. You can use Cygwin gdb
    to debug MinGW executables.
 
+8. Note that gcc's precompiled headers do not work on current versions of
+   Cygwin. If your version of Cygwin is affected you will need to use the
+   --disable-precomp-headers configure option.
+
 OLD VERSIONS:
 
 - Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
@@ -545,10 +549,15 @@ Watcom C/C++:
 MinGW using native makefiles:
   > mingw32-make -f makefile.gcc BUILD=debug UNICODE=1
 
-MinGW using configure or Cygwin:
+MinGW using configure:
   > ./configure --enable-debug --enable-unicode
   (see ./configure --help on details; configure is not covered in this
   section)
+
+Cygwin using configure:
+  > ./configure --disable-precomp-headers --enable-debug --enable-unicode
+  (use --disable-precomp-headers if Cygwin doesn't support precompiled
+  headers)
 
 Brief explanation of options and possible values is in every
 build\msw\config.* file; more detailed description follows.
