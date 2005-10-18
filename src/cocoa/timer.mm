@@ -37,16 +37,6 @@
 IMPLEMENT_CLASS(wxTimer, wxTimerBase)
 
 // ========================================================================
-// wxNSTimerDelegate
-// ========================================================================
-@interface wxNSTimerDelegate : NSObject
-{
-}
-
-- (void)onNotify:(NSTimer *)theTimer;
-@end // interface wxNSTimerDelegate : NSObject
-
-// ========================================================================
 // wxNSTimerData
 // ========================================================================
 @interface wxNSTimerData : NSObject
@@ -57,6 +47,7 @@ IMPLEMENT_CLASS(wxTimer, wxTimerBase)
 - (id)init;
 - (id)initWithWxTimer:(wxTimer*)theTimer;
 - (wxTimer*)timer;
+- (void)onNotify:(NSTimer *)theTimer;
 @end // interface wxNSTimerData : NSObject
 
 @implementation wxNSTimerData : NSObject
@@ -80,21 +71,16 @@ IMPLEMENT_CLASS(wxTimer, wxTimerBase)
 {
     return m_timer;
 }
-@end 
 
-@implementation wxNSTimerDelegate : NSObject
 - (void)onNotify:(NSTimer *)theTimer
 {
-    wxNSTimerData* theData = [theTimer userInfo];
-    [theData timer]->Notify(); //wxTimerBase method
+    m_timer->Notify(); //wxTimerBase method
 }
 @end 
 
 // ----------------------------------------------------------------------------
 // wxTimer
 // ----------------------------------------------------------------------------
-
-const wxObjcAutoRefFromAlloc<struct objc_object*> wxTimer::sm_cocoaDelegate = [[wxNSTimerDelegate alloc] init];
 
 wxTimer::~wxTimer()
 {
@@ -112,14 +98,14 @@ bool wxTimer::Start(int millisecs, bool oneShot)
     
     wxAutoNSAutoreleasePool thePool;
 
-    wxNSTimerData *userInfo = [[wxNSTimerData alloc] initWithWxTimer:this];
+    wxNSTimerData *timerData = [[wxNSTimerData alloc] initWithWxTimer:this];
     m_cocoaNSTimer =     [[NSTimer 
             scheduledTimerWithTimeInterval: millisecs / 1000.0 //seconds
-            target:		wxTimer::sm_cocoaDelegate
+            target:	timerData
             selector:	@selector(onNotify:) 
-            userInfo:	userInfo
+            userInfo:	nil
             repeats:	oneShot == false] retain];
-    [userInfo release];
+    [timerData release];
                        
     return IsRunning();
 }

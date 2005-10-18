@@ -40,7 +40,6 @@ protected:
 
 private:
     WX_NSTimer m_cocoaNSTimer;
-    static const wxObjcAutoRefFromAlloc<struct objc_object *> sm_cocoaDelegate;
 
     DECLARE_ABSTRACT_CLASS(wxTimer)
 };
