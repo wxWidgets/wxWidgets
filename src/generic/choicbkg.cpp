@@ -32,17 +32,6 @@
 #include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// margin between the choice and the page
-#if defined(__WXWINCE__)
-const wxCoord MARGIN = 1;
-#else
-const wxCoord MARGIN = 5;
-#endif
-
-// ----------------------------------------------------------------------------
 // various wxWidgets macros
 // ----------------------------------------------------------------------------
 
@@ -149,19 +138,19 @@ wxRect wxChoicebook::GetPageRect() const
             // fall through
 
         case wxCHB_TOP:
-            rectPage.y = sizeChoice.y + MARGIN;
+            rectPage.y = sizeChoice.y + GetInternalBorder();
             // fall through
 
         case wxCHB_BOTTOM:
-            rectPage.height -= sizeChoice.y + MARGIN;
+            rectPage.height -= sizeChoice.y + GetInternalBorder();
             break;
 
         case wxCHB_LEFT:
-            rectPage.x = sizeChoice.x + MARGIN;
+            rectPage.x = sizeChoice.x + GetInternalBorder();
             // fall through
 
         case wxCHB_RIGHT:
-            rectPage.width -= sizeChoice.x + MARGIN;
+            rectPage.width -= sizeChoice.x + GetInternalBorder();
             break;
     }
 
@@ -217,17 +206,17 @@ void wxChoicebook::OnSize(wxSizeEvent& event)
 
 wxSize wxChoicebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
-    // we need to add the size of the choice control and the margin
+    // we need to add the size of the choice control and the border between
     const wxSize sizeChoice = GetChoiceSize();
 
     wxSize size = sizePage;
     if ( IsVertical() )
     {
-        size.y += sizeChoice.y + MARGIN;
+        size.y += sizeChoice.y + GetInternalBorder();
     }
     else // left/right aligned
     {
-        size.x += sizeChoice.x + MARGIN;
+        size.x += sizeChoice.x + GetInternalBorder();
     }
 
     return size;
@@ -346,16 +335,16 @@ wxChoicebook::InsertPage(size_t n,
 
     // some page should be selected: either this one or the first one if there
     // is still no selection
-    int selNew = -1;
+    int selNew = wxNOT_FOUND;
     if ( bSelect )
         selNew = n;
-    else if ( m_selection == -1 )
+    else if ( m_selection == wxNOT_FOUND )
         selNew = 0;
 
     if ( selNew != m_selection )
         page->Hide();
 
-    if ( selNew != -1 )
+    if ( selNew != wxNOT_FOUND )
         SetSelection(selNew);
 
     InvalidateBestSize();

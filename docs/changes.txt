@@ -16,6 +16,8 @@ All (GUI):
 - wxItemContainerImmutable::FindString unified (affects wxRadioBox, wxListBox,
   wxComboBox and wxChoice)
 - wxWindow::Fit() now works correctly for frames and dialogs too
+- added access to the border size between pages and controller in book
+  based controls (wxBookCtrlBase::Get/SetInternalBorder)
 
 wxMSW:
 

@@ -42,6 +42,12 @@ void wxBookCtrlBase::Init()
 {
     m_imageList = NULL;
     m_ownsImageList = false;
+
+#if defined(__WXWINCE__)
+    m_internalBorder = 1;
+#else
+    m_internalBorder = 5;
+#endif
 }
 
 bool
@@ -196,11 +202,10 @@ int wxBookCtrlBase::GetNextPage(bool forward) const
     }
     else // notebook is empty, no next page
     {
-        nPage = -1;
+        nPage = wxNOT_FOUND;
     }
 
     return nPage;
 }
 
 #endif // wxUSE_BOOKCTRL
-

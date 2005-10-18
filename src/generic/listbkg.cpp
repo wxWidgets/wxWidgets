@@ -33,14 +33,6 @@
 #include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// margin between the list and the page, should be bigger than wxStaticLine
-// size
-const wxCoord MARGIN = 5;
-
-// ----------------------------------------------------------------------------
 // various wxWidgets macros
 // ----------------------------------------------------------------------------
 
@@ -178,19 +170,19 @@ wxRect wxListbook::GetPageRect() const
             // fall through
 
         case wxLB_TOP:
-            rectPage.y = sizeList.y + MARGIN;
+            rectPage.y = sizeList.y + GetInternalBorder();
             // fall through
 
         case wxLB_BOTTOM:
-            rectPage.height -= sizeList.y + MARGIN;
+            rectPage.height -= sizeList.y + GetInternalBorder();
             break;
 
         case wxLB_LEFT:
-            rectPage.x = sizeList.x + MARGIN;
+            rectPage.x = sizeList.x + GetInternalBorder();
             // fall through
 
         case wxLB_RIGHT:
-            rectPage.width -= sizeList.x + MARGIN;
+            rectPage.width -= sizeList.x + GetInternalBorder();
             break;
     }
 
@@ -255,21 +247,21 @@ void wxListbook::OnSize(wxSizeEvent& event)
         {
             case wxLB_TOP:
                 rectLine.y = sizeNew.y + 1;
-                rectLine.height = MARGIN - 2;
+                rectLine.height = GetInternalBorder() - 2;
                 break;
 
             case wxLB_BOTTOM:
-                rectLine.height = MARGIN - 2;
+                rectLine.height = GetInternalBorder() - 2;
                 rectLine.y = sizeClient.y - sizeNew.y - rectLine.height;
                 break;
 
             case wxLB_LEFT:
                 rectLine.x = sizeNew.x + 1;
-                rectLine.width = MARGIN - 2;
+                rectLine.width = GetInternalBorder() - 2;
                 break;
 
             case wxLB_RIGHT:
-                rectLine.width = MARGIN - 2;
+                rectLine.width = GetInternalBorder() - 2;
                 rectLine.x = sizeClient.x - sizeNew.x - rectLine.width;
                 break;
         }
@@ -289,17 +281,17 @@ void wxListbook::OnSize(wxSizeEvent& event)
 
 wxSize wxListbook::CalcSizeFromPage(const wxSize& sizePage) const
 {
-    // we need to add the size of the list control and the margin
+    // we need to add the size of the list control and the border between
     const wxSize sizeList = GetListSize();
 
     wxSize size = sizePage;
     if ( IsVertical() )
     {
-        size.y += sizeList.y + MARGIN;
+        size.y += sizeList.y + GetInternalBorder();
     }
     else // left/right aligned
     {
-        size.x += sizeList.x + MARGIN;
+        size.x += sizeList.x + GetInternalBorder();
     }
 
     return size;
@@ -500,4 +492,3 @@ void wxListbook::OnListSelected(wxListEvent& eventList)
 }
 
 #endif // wxUSE_LISTBOOK
-
