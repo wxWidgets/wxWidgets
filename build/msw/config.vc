@@ -43,6 +43,13 @@ MSLU = 0
 # Type of compiled binaries [debug,release]
 BUILD = debug
 
+# The target processor architecture must be specified when it is not X86.
+# This does not affect the compiler output, so you still need to make sure
+# your environment is set up appropriately with the correct compiler in the
+# PATH. Rather it affects some options passed to some of the common build
+# utilities such as the resource compiler and the linker. [AMD64,IA64]
+TARGET_CPU = $(CPU)
+
 # Should debugging info be included in the executables? The default value
 # "default" means that debug info will be included if BUILD=debug
 # and not included if BUILD=release. [0,1,default]
