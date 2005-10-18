@@ -1325,10 +1325,12 @@ void wxFlexGridSizer::AdjustForFlexDirection()
         wxArrayInt& array = m_flexDirection == wxVERTICAL ? m_colWidths
                                                           : m_rowHeights;
 
-        const int count = array.GetCount();
+        const size_t count = array.GetCount();
 
         // find the largest value in this array
-        int n, largest = 0;
+        size_t n;
+        int largest = 0;
+
         for ( n = 0; n < count; ++n )
         {
             if ( array[n] > largest )
