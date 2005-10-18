@@ -216,7 +216,7 @@ BASE_DIST: ALL_DIST
 	cp $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	cp $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
-	list='$(ALL_BASE_HEADERS)'; for p in $$list; do \
+	list='$(ALL_PORTS_BASE_HEADERS)'; for p in $$list; do \
 	  cp $(WXDIR)/include/$$p $(DISTDIR)/include/$$p; \
 	done
 	list='$(ALL_BASE_SOURCES)'; for p in $$list; do \
