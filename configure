@@ -42466,6 +42466,11 @@ INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
 if test "$GXX" = yes ; then
         CWARNINGS="-Wall -Wundef"
     CXXWARNINGS="$CWARNINGS -Wno-ctor-dtor-privacy"
+
+                    case "${host}" in
+        *-*-cygwin* | *-*-mingw32* )
+            CXXWARNINGS="$CXXWARNINGS -Wno-format"
+    esac
 fi
 
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
