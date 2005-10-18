@@ -345,6 +345,9 @@ void URITestCase::URLCompat()
     CPPUNIT_ASSERT( test.GetScheme() == wxT("file") );
     CPPUNIT_ASSERT( test.GetPath() == wxT("%22myf%22ile.txt") );
 
+    // these could be put under a named registry since they take some
+    // time to complete
+#if 0
     // Test problem urls (reported not to work some time ago by a user...)
     for ( size_t i = 0; i < WXSIZEOF(pszProblemUrls); ++i )
     {
@@ -370,6 +373,7 @@ void URITestCase::URLCompat()
 
         delete is;
     }
+#endif
 }
 
 #if wxUSE_PROTOCOL_HTTP
