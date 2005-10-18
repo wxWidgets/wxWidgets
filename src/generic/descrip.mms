@@ -66,6 +66,7 @@ OBJECTS = \
 		progdlgg.obj,\
 		renderg.obj,\
 		sashwin.obj,\
+		scrlwing.obj,\
 		selstore.obj,\
 		splitter.obj,\
 		tabg.obj,\
@@ -131,11 +132,11 @@ SOURCES = \
 		vscroll.cpp
 
 .ifdef __WXMOTIF__
-OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,scrlwing.obj,spinctlg.obj
+OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,spinctlg.obj
 .else
 .ifdef __WXX11__
 OBJECTS0=,accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
-	listbkg.obj,mdig.obj,scrlwing.obj,spinctlg.obj,splash.obj,timer.obj,\
+	listbkg.obj,mdig.obj,spinctlg.obj,splash.obj,timer.obj,\
 	vlbox.obj,vscroll.obj
 .else
 OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj
