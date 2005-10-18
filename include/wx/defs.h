@@ -297,7 +297,44 @@ typedef int wxWindowID;
    truncate from a larger to smaller type, static_cast<> can't be used for it
    as it results in warnings when using some compilers (SGI mipspro for example)
  */
-#define wx_truncate_cast(t, x) ((t)(x))
+#if defined(__cplusplus) && wxABI_VERSION >= 20603
+    #if defined(__INTELC__)
+        template <typename T, typename X>
+        inline T wx_truncate_cast_impl(X x)
+        {
+            #pragma warning(push)
+            /* implicit conversion of a 64-bit integral type to a smaller integral type */
+            #pragma warning(disable: 1682)
+            /* conversion from "X" to "T" may lose significant bits */
+            #pragma warning(disable: 810)
+
+            return x;
+
+            #pragma warning(pop)
+        }
+
+        #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
+
+    #elif defined(__VISUALC__) && __VISUALC__ >= 1310
+        template <typename T, typename X>
+        inline T wx_truncate_cast_impl(X x)
+        {
+            #pragma warning(push)
+            /* conversion from 'X' to 'T', possible loss of data */
+            #pragma warning(disable: 4267)
+
+            return x;
+
+            #pragma warning(pop)
+        }
+
+        #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
+    #else
+        #define wx_truncate_cast(t, x) ((t)(x))
+    #endif
+#else  /* defined(__cplusplus) && wxABI_VERSION >= 20603 */
+    #define wx_truncate_cast(t, x) ((t)(x))
+#endif /* defined(__cplusplus) && wxABI_VERSION >= 20603 */
 
 /* for consistency with wxStatic/DynamicCast defined in wx/object.h */
 #define wxConstCast(obj, className) wx_const_cast(className *, obj)
