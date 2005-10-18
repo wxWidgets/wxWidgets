@@ -52,7 +52,7 @@ class WXDLLEXPORT wxListBox : public wxListBoxBase, public wxScrollHelper
 {
 public:
     // ctors and such
-    wxListBox() { Init(); }
+    wxListBox() : wxScrollHelper(this) { Init(); }
     wxListBox(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -61,6 +61,7 @@ public:
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = wxListBoxNameStr )
+        : wxScrollHelper(this)
     {
         Init();
 

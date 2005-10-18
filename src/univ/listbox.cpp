@@ -84,6 +84,7 @@ wxListBox::wxListBox(wxWindow *parent,
                      long style,
                      const wxValidator& validator,
                      const wxString &name)
+          :wxScrollHelper(this)
 {
     Init();
 
@@ -134,8 +135,6 @@ bool wxListBox::Create(wxWindow *parent,
     if ( !wxControl::Create(parent, id, pos, size, style,
                             validator, name) )
         return false;
-
-    SetWindow(this);
 
     m_strings = new wxArrayString;
 
