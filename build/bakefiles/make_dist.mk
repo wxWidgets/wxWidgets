@@ -223,7 +223,7 @@ BASE_DIST: ALL_DIST
 	ln -sf $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	ln -sf $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	ln -sf $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
-	list='$(ALL_BASE_HEADERS)'; for p in $$list; do \
+	list='$(ALL_PORTS_BASE_HEADERS)'; for p in $$list; do \
 	  ln -sf $(WXDIR)/include/$$p $(DISTDIR)/include/$$p; \
 	done
 	list='$(ALL_BASE_SOURCES)'; for p in $$list; do \

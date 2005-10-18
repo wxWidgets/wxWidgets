@@ -218,7 +218,7 @@
 
         <!-- add "make dist" target to autoconf: -->
         <set var="VARS_DONT_ELIMINATE" append="1">
-            ALL_BASE_HEADERS ALL_BASE_SOURCES WX_VERSION
+            ALL_PORTS_BASE_HEADERS ALL_BASE_SOURCES WX_VERSION
         </set>
         <fragment format="autoconf" file="make_dist.mk"/>
 

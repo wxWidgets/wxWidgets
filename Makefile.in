@@ -216,7 +216,7 @@ WXEXPAT_OBJECTS =  \
 	wxexpat_xmlrole.o \
 	wxexpat_xmltok.o
 PLUGINS_INST_DIR = $(libdir)/wx/$(PLUGIN_VERSION0)
-ALL_HEADERS =  \
+ALL_BASE_HEADERS =  \
 	wx/afterstd.h \
 	wx/app.h \
 	wx/apptrait.h \
@@ -339,9 +339,11 @@ ALL_HEADERS =  \
 	wx/xtixml.h \
 	wx/db.h \
 	wx/dbkeyg.h \
-	wx/dbtable.h \
+	wx/dbtable.h
+ALL_HEADERS =  \
+	$(ALL_BASE_HEADERS) \
 	$(ALL_GUI_HEADERS)
-ALL_BASE_HEADERS =  \
+ALL_PORTS_BASE_HEADERS =  \
 	wx/afterstd.h \
 	wx/app.h \
 	wx/apptrait.h \
@@ -2714,6 +2716,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_tglbtn.h \
 	wx/xrc/xh_toolb.h \
 	wx/xrc/xh_tree.h \
+	wx/xrc/xh_treebk.h \
 	wx/xrc/xh_unkwn.h \
 	wx/xrc/xh_wizrd.h \
 	wx/xrc/xmlres.h
@@ -24599,7 +24602,7 @@ BASE_DIST: ALL_DIST
 	ln -sf $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	ln -sf $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	ln -sf $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
-	list='$(ALL_BASE_HEADERS)'; for p in $$list; do \
+	list='$(ALL_PORTS_BASE_HEADERS)'; for p in $$list; do \
 	  ln -sf $(WXDIR)/include/$$p $(DISTDIR)/include/$$p; \
 	done
 	list='$(ALL_BASE_SOURCES)'; for p in $$list; do \
