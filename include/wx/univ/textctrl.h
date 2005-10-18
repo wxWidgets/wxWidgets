@@ -66,13 +66,14 @@ class WXDLLEXPORT wxTextCtrlCommandProcessor;
 // wxTextCtrl
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase, public wxScrollHelper
+class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase,
+                               public wxScrollHelper
 {
 public:
     // creation
     // --------
 
-    wxTextCtrl() { Init(); }
+    wxTextCtrl() : wxScrollHelper(this) { Init(); }
 
     wxTextCtrl(wxWindow *parent,
                wxWindowID id,
@@ -82,6 +83,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxTextCtrlNameStr)
+        : wxScrollHelper(this) 
     {
         Init();
 

@@ -635,9 +635,6 @@ void wxTextCtrl::Init()
     m_heightLine =
     m_widthAvg = -1;
 
-    // init wxScrollHelper
-    SetWindow(this);
-
     // init the undo manager
     m_cmdProcessor = new wxTextCtrlCommandProcessor(this);
 
