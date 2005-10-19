@@ -410,6 +410,8 @@
 
 #define wxUSE_GLCANVAS       0
 
+#define wxUSE_RICHTEXT       0
+
 
 #define wxUSE_CLIPBOARD     0
 

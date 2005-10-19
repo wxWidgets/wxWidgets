@@ -479,6 +479,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MENUS=no
   DEFAULT_wxUSE_MINIFRAME=no
   DEFAULT_wxUSE_HTML=no
+  DEFAULT_wxUSE_RICHTEXT=no
   DEFAULT_wxUSE_XRC=no
   DEFAULT_wxUSE_WEBKIT=no
   DEFAULT_wxUSE_FILESYSTEM=no
@@ -676,6 +677,7 @@ else
   DEFAULT_wxUSE_MENUS=yes
   DEFAULT_wxUSE_MINIFRAME=yes
   DEFAULT_wxUSE_HTML=yes
+  DEFAULT_wxUSE_RICHTEXT=yes
   DEFAULT_wxUSE_XRC=yes
   DEFAULT_wxUSE_WEBKIT=yes
   DEFAULT_wxUSE_FILESYSTEM=yes
@@ -954,6 +956,7 @@ WX_ARG_ENABLE(loggui,      [  --enable-loggui         use standard GUI logger], 
 WX_ARG_ENABLE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_LOGWINDOW)
 WX_ARG_ENABLE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_LOGDIALOG)
 WX_ARG_ENABLE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac)], wxUSE_WEBKIT)
+WX_ARG_ENABLE(html,        [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
 
 dnl ---------------------------------------------------------------------------
 dnl PostScript options
@@ -6564,6 +6567,13 @@ fi
 if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_MSLU" = "yes" ; then
   dnl Must be done this late because -lunicows must be before all the other libs
   LIBS=" -lunicows $LIBS"
+fi
+
+USE_RICHTEXT=0
+if test "$wxUSE_RICHTEXT" = "yes"; then
+    AC_DEFINE(wxUSE_RICHTEXT)
+    USE_RICHTEXT=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS richtext"
 fi
 
 dnl ---------------------------------------------------------------------------

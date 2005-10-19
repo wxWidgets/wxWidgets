@@ -2394,6 +2394,10 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/tipdlg.h \
 	wx/wave.h \
 	wx/wizard.h \
+	wx/richtext/richtextctrl.h \
+	wx/richtext/richtextbuffer.h \
+	wx/richtext/richtextstyles.h \
+	wx/richtext/richtextxml.h \
 	wx/datectrl.h \
 	$(ADVANCED_PLATFORM_HDR) \
 	$(ADVANCED_PLATFORM_NATIVE_HDR)
@@ -2424,6 +2428,10 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/tipdlg.h \
 	wx/wave.h \
 	wx/wizard.h \
+	wx/richtext/richtextctrl.h \
+	wx/richtext/richtextbuffer.h \
+	wx/richtext/richtextstyles.h \
+	wx/richtext/richtextxml.h \
 	$(ADVANCED_PLATFORM_HDR)
 @COND_WXUNIV_1@ADVANCED_HDR = $(COND_WXUNIV_1_ADVANCED_HDR)
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
@@ -4189,6 +4197,10 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_splash.o \
 	monodll_tipdlg.o \
 	monodll_wizard.o \
+	monodll_richtextctrl.o \
+	monodll_richtextbuffer.o \
+	monodll_richtextstyles.o \
+	monodll_richtextxml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS)
@@ -4205,6 +4217,10 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_splash.o \
 	monodll_tipdlg.o \
 	monodll_wizard.o \
+	monodll_richtextctrl.o \
+	monodll_richtextbuffer.o \
+	monodll_richtextstyles.o \
+	monodll_richtextxml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS \
@@ -5661,6 +5677,10 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_splash.o \
 	monolib_tipdlg.o \
 	monolib_wizard.o \
+	monolib_richtextctrl.o \
+	monolib_richtextbuffer.o \
+	monolib_richtextstyles.o \
+	monolib_richtextxml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_0) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1)
@@ -5677,6 +5697,10 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_splash.o \
 	monolib_tipdlg.o \
 	monolib_wizard.o \
+	monolib_richtextctrl.o \
+	monolib_richtextbuffer.o \
+	monolib_richtextstyles.o \
+	monolib_richtextxml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_0)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 \
@@ -8601,6 +8625,10 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_splash.o \
 	advdll_tipdlg.o \
 	advdll_wizard.o \
+	advdll_richtextctrl.o \
+	advdll_richtextbuffer.o \
+	advdll_richtextstyles.o \
+	advdll_richtextxml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_8) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2)
@@ -8617,6 +8645,10 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_splash.o \
 	advdll_tipdlg.o \
 	advdll_wizard.o \
+	advdll_richtextctrl.o \
+	advdll_richtextbuffer.o \
+	advdll_richtextstyles.o \
+	advdll_richtextxml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_8)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
@@ -8646,6 +8678,10 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_splash.o \
 	advlib_tipdlg.o \
 	advlib_wizard.o \
+	advlib_richtextctrl.o \
+	advlib_richtextbuffer.o \
+	advlib_richtextstyles.o \
+	advlib_richtextxml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_9) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3)
@@ -8662,6 +8698,10 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_splash.o \
 	advlib_tipdlg.o \
 	advlib_wizard.o \
+	advlib_richtextctrl.o \
+	advlib_richtextbuffer.o \
+	advlib_richtextstyles.o \
+	advlib_richtextxml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_9)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
@@ -13693,6 +13733,18 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
 
+@COND_USE_GUI_1@monodll_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
+
+@COND_USE_GUI_1@monodll_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
+
+@COND_USE_GUI_1@monodll_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
+
+@COND_USE_GUI_1@monodll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
@@ -17166,6 +17218,18 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
+
+@COND_USE_GUI_1@monolib_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
+
+@COND_USE_GUI_1@monolib_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
+
+@COND_USE_GUI_1@monolib_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
+
+@COND_USE_GUI_1@monolib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
@@ -23554,6 +23618,18 @@ advdll_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(ADVDLL_ODEP)
 advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
 
+advdll_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
+
+advdll_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
+
+advdll_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
+
+advdll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
+
 @COND_TOOLKIT_MSW@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
@@ -23691,6 +23767,18 @@ advlib_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(ADVLIB_ODEP)
 
 advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
+
+advlib_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
+
+advlib_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
+
+advlib_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextstyles.cpp
+
+advlib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
 @COND_TOOLKIT_MSW@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
@@ -24392,6 +24480,7 @@ SRCDIR   = $(WXDIR)/src
 GENDIR   = $(WXDIR)/src/generic
 COMMDIR  = $(WXDIR)/src/common
 HTMLDIR  = $(WXDIR)/src/html
+RICHTEXTDIR = $(WXDIR)/src/richtext
 UNIXDIR  = $(WXDIR)/src/unix
 PNGDIR   = $(WXDIR)/src/png
 JPEGDIR  = $(WXDIR)/src/jpeg
@@ -24534,6 +24623,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
 	mkdir $(DISTDIR)/include/wx/generic
 	mkdir $(DISTDIR)/include/wx/html
+	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
@@ -24542,6 +24632,7 @@ ALL_GUI_DIST: ALL_DIST
 	ln -sf $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
 	ln -sf $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
 	ln -sf $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
+	ln -sf $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
 	ln -sf $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
 	ln -sf $(INCDIR)/wx/xml/*.h $(DISTDIR)/include/wx/xml
 	ln -sf $(INCDIR)/wx/xrc/*.h $(DISTDIR)/include/wx/xrc
@@ -24554,6 +24645,7 @@ ALL_GUI_DIST: ALL_DIST
 	ln -sf $(WXDIR)/art/motif/*.xpm $(DISTDIR)/art/motif
 	mkdir $(DISTDIR)/src/generic
 	mkdir $(DISTDIR)/src/html
+	mkdir $(DISTDIR)/src/richtext
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
 	mkdir $(DISTDIR)/src/png
 	mkdir $(DISTDIR)/src/jpeg
@@ -24570,6 +24662,7 @@ ALL_GUI_DIST: ALL_DIST
 	ln -sf $(GENDIR)/*.cpp $(DISTDIR)/src/generic
 	ln -sf $(GENDIR)/*.mms $(DISTDIR)/src/generic
 	ln -sf $(HTMLDIR)/*.cpp $(DISTDIR)/src/html
+	ln -sf $(RICHTEXTDIR)/*.cpp $(DISTDIR)/src/richtext
 	ln -sf $(PNGDIR)/*.h $(DISTDIR)/src/png
 	ln -sf $(PNGDIR)/*.c $(DISTDIR)/src/png
 	ln -sf $(PNGDIR)/README $(DISTDIR)/src/png
@@ -24595,6 +24688,7 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/msdos
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
+	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/src/unix
 	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
@@ -25226,6 +25320,16 @@ SAMPLES_DIST: ALL_GUI_DIST
 	ln -sf $(SAMPDIR)/richedit/*.xpm $(DISTDIR)/samples/richedit
 	ln -sf $(SAMPDIR)/richedit/README $(DISTDIR)/samples/richedit
 	ln -sf $(SAMPDIR)/richedit/TODO $(DISTDIR)/samples/richedit
+
+	mkdir $(DISTDIR)/samples/richtext
+	mkdir $(DISTDIR)/samples/richtext/bitmaps
+	ln -sf $(SAMPDIR)/richtext/Makefile.in $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/makefile.unx $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/*.cpp $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/*.h $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/bitmaps/*.xpm $(DISTDIR)/samples/richtext/bitmaps
+	ln -sf $(SAMPDIR)/richtext/readme.txt $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/todo.txt $(DISTDIR)/samples/richtext
 
 	mkdir $(DISTDIR)/samples/propsize
 	ln -sf $(SAMPDIR)/propsize/Makefile.in $(DISTDIR)/samples/propsize

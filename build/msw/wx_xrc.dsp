@@ -959,6 +959,10 @@ SOURCE=..\..\include\wx\xrc\xh_tree.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_treebk.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_unkwn.h
 # End Source File
 # Begin Source File

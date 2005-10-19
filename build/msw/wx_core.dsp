@@ -8672,6 +8672,22 @@ SOURCE=..\..\include\wx\renderer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextbuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextstyles.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextxml.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\sashwin.h
 # End Source File
 # Begin Source File
@@ -9005,6 +9021,10 @@ SOURCE=..\..\include\wx\xrc\xh_toolb.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_tree.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_treebk.h
 # End Source File
 # Begin Source File
 

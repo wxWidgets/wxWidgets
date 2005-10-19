@@ -1643,6 +1643,22 @@ SOURCE=.\msw\window.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\richtext\richtextbuffer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\richtext\richtextctrl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\richtext\richtextstyles.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\richtext\richtextxml.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xml\xml.cpp
 # End Source File
 # Begin Source File
@@ -2716,6 +2732,22 @@ SOURCE=..\include\wx\region.h
 # Begin Source File
 
 SOURCE=..\include\wx\renderer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\richtext\richtextbuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\richtext\richtextctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\richtext\richtextstyles.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\richtext\richtextxml.h
 # End Source File
 # Begin Source File
 

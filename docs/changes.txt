@@ -11,22 +11,23 @@ All:
 
 All (GUI):
 
-- added wxTreeBook
-- added wxDialog::SetEscapeId()
+- Added wxTreeBook.
+- Added wxDialog::SetEscapeId().
 - wxItemContainerImmutable::FindString unified (affects wxRadioBox, wxListBox,
-  wxComboBox and wxChoice)
-- wxWindow::Fit() now works correctly for frames and dialogs too
-- added access to the border size between pages and controller in book
-  based controls (wxBookCtrlBase::Get/SetInternalBorder)
+  wxComboBox and wxChoice).
+- wxWindow::Fit() now works correctly for frames and dialogs too.
+- Added access to the border size between pages and controller in book
+  based controls (wxBookCtrlBase::Get/SetInternalBorder).
+- Added initial wxRichTextCtrl implementation.
 
 wxMSW:
 
-- wxFileDialog respects absence of wxCHANGE_DIR flag under NT (Brad Anderson)
-- Switching page of a hidden notebook doesn't lose focus (Jamie Gadd)
+- wxFileDialog respects absence of wxCHANGE_DIR flag under NT (Brad Anderson).
+- Switching page of a hidden notebook doesn't lose focus (Jamie Gadd).
 
 Unix:
 
-- NO_GCC_PRAGMA is not used any more, remove checks for it if you used it
+- NO_GCC_PRAGMA is not used any more, remove checks for it if you used it.
 
 
 2.6.2

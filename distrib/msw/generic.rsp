@@ -100,6 +100,8 @@ src/html/*.cpp
 src/html/*.h
 src/html/bitmaps/*.xpm
 
+src/richtext/*.cpp
+
 src/unix/*.cpp
 src/unix/*.c
 
@@ -168,6 +170,7 @@ include/wx/html/*.h
 include/wx/html/msw/*.bmp
 include/wx/html/msw/*.ico
 include/wx/html/msw/*.rc
+include/wx/richtext/*.h
 lib/dummy
 
 tools/gettext/*.*
@@ -1047,6 +1050,16 @@ samples/richedit/*.pro
 samples/richedit/*.bkl
 samples/richedit/README
 samples/richedit/TODO
+
+samples/richtext/*.cpp
+samples/richtext/*.h
+samples/richtext/makefile*
+samples/richtext/*.rc
+samples/richtext/*.pro
+samples/richtext/*.bkl
+samples/richtext/readme.txt
+samples/richtext/todo.txt
+samples/richtext/bitmaps/*.xpm
 
 samples/rotate/*.cpp
 samples/rotate/*.h

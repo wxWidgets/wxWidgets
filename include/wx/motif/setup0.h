@@ -129,7 +129,7 @@
 // Default is 1 if supported by the compiler.
 //
 // Recommended setting: 1, set to 0 if your programs never crash
-#define wxUSE_STACKWALKER 0
+#define wxUSE_STACKWALKER 1
 
 // Set this to 1 to compile in wxDebugReport class which allows you to create
 // and optionally upload to your web site a debug report consisting of back
@@ -196,11 +196,6 @@
 //
 // Recommended setting: 0 (this is still work in progress...)
 #define wxUSE_EXTENDED_RTTI 0
-
-#if defined(__BORLANDC__)
-#undef wxUSE_EXTENDED_RTTI
-#define wxUSE_EXTENDED_RTTI 1
-#endif
 
 // Set wxUSE_STL to 1 to derive wxList(Foo) and wxArray(Foo) from
 // std::list<Foo*> and std::vector<Foo*>, with a compatibility interface,
@@ -373,7 +368,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_DIALUP_MANAGER   0
+#define wxUSE_DIALUP_MANAGER   1
 
 // Compile in classes for run-time DLL loading and function calling.
 // Required by wxUSE_DIALUP_MANAGER.
@@ -420,7 +415,7 @@
 #define wxUSE_APPLE_IEEE          1
 
 // Joystick support class
-#define wxUSE_JOYSTICK            0
+#define wxUSE_JOYSTICK            1
 
 // wxFontMapper class
 #define wxUSE_FONTMAP 1
@@ -468,13 +463,13 @@
 #define wxUSE_SYSTEM_OPTIONS 1
 
 // wxSound class
-#define wxUSE_SOUND      0
+#define wxUSE_SOUND      1
 
 // Use wxMediaCtrl
 //
 // Default is 1.
 //
-// Recommended setting: 1
+// Recommended setting: 1 
 #define wxUSE_MEDIACTRL     1
 
 // Use GStreamer for Unix (req a lot of dependancies)
@@ -618,6 +613,14 @@
 // Recommended setting: 1
 #define wxUSE_CHOICEBOOK 1
 
+// wxTreebook control is similar to wxNotebook but uses wxTreeCtrl instead of
+// the tabs
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_TREEBOOK 1
+
 // wxTabDialog is a generic version of wxNotebook but it is incompatible with
 // the new class. It shouldn't be used in new code.
 //
@@ -666,11 +669,7 @@
 // Default is 0 because it isn't yet implemented on all platforms
 //
 // Recommended setting: 1 if you need it, can be safely set to 0 otherwise
-#if defined(__BORLANDC__)
-    #define wxUSE_DISPLAY       1
-#else
-    #define wxUSE_DISPLAY       0
-#endif
+#define wxUSE_DISPLAY       0
 
 // Miscellaneous geometry code: needed for Canvas library
 #define wxUSE_GEOMETRY            1
@@ -710,7 +709,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_TOOLTIPS      0
+#define wxUSE_TOOLTIPS      1
 
 // wxValidator class and related methods
 #define wxUSE_VALIDATORS 1
@@ -840,7 +839,7 @@
 #define wxUSE_MDI_ARCHITECTURE    1
 
 // Set to 0 to disable print/preview architecture code
-#define wxUSE_PRINTING_ARCHITECTURE  0
+#define wxUSE_PRINTING_ARCHITECTURE  1
 
 // wxHTML sublibrary allows to display HTML in wxWindow programs and much,
 // much more.
@@ -860,11 +859,15 @@
 // Default is 0.
 //
 // Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
-#ifdef __DMC__
 #define wxUSE_GLCANVAS       0
-#else
-#define wxUSE_GLCANVAS       1
-#endif
+
+// wxRichTextCtrl allows editing of styled text.
+//
+// Default is 1.
+//
+// Recommended setting: 1, set to 0 if you want compile a
+// smaller library.
+#define wxUSE_RICHTEXT       1
 
 // ----------------------------------------------------------------------------
 // Data transfer
@@ -892,7 +895,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_DRAG_AND_DROP 0
+#define wxUSE_DRAG_AND_DROP 1
 
 // Use wxAccessible for enhanced and customisable accessibility.
 // Depends on wxUSE_OLE.
@@ -962,7 +965,7 @@
 // that use the connection) should support forward only scrolling of cursors,
 // or both forward and backward support for backward scrolling cursors is
 // dependent on the data source as well as the ODBC driver being used.
-#define wxODBC_FWD_ONLY_CURSORS 1
+#define wxODBC_FWD_ONLY_CURSORS	 1
 
 // Default is 0.  Set to 1 to use the deprecated classes, enum types, function,
 // member variables.  With a setting of 1, full backward compatibility with the

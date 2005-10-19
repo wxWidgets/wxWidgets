@@ -1549,6 +1549,10 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
+	$(OBJS)\monodll_richtextctrl.o \
+	$(OBJS)\monodll_richtextbuffer.o \
+	$(OBJS)\monodll_richtextstyles.o \
+	$(OBJS)\monodll_richtextxml.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -1569,6 +1573,10 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
+	$(OBJS)\monodll_richtextctrl.o \
+	$(OBJS)\monodll_richtextbuffer.o \
+	$(OBJS)\monodll_richtextstyles.o \
+	$(OBJS)\monodll_richtextxml.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -2070,6 +2078,10 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
+	$(OBJS)\monolib_richtextctrl.o \
+	$(OBJS)\monolib_richtextbuffer.o \
+	$(OBJS)\monolib_richtextstyles.o \
+	$(OBJS)\monolib_richtextxml.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -2090,6 +2102,10 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
+	$(OBJS)\monolib_richtextctrl.o \
+	$(OBJS)\monolib_richtextbuffer.o \
+	$(OBJS)\monolib_richtextstyles.o \
+	$(OBJS)\monolib_richtextxml.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -2951,6 +2967,10 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_splash.o \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
+	$(OBJS)\advdll_richtextctrl.o \
+	$(OBJS)\advdll_richtextbuffer.o \
+	$(OBJS)\advdll_richtextstyles.o \
+	$(OBJS)\advdll_richtextxml.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -2971,6 +2991,10 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_splash.o \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
+	$(OBJS)\advdll_richtextctrl.o \
+	$(OBJS)\advdll_richtextbuffer.o \
+	$(OBJS)\advdll_richtextstyles.o \
+	$(OBJS)\advdll_richtextxml.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -2998,6 +3022,10 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_splash.o \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
+	$(OBJS)\advlib_richtextctrl.o \
+	$(OBJS)\advlib_richtextbuffer.o \
+	$(OBJS)\advlib_richtextstyles.o \
+	$(OBJS)\advlib_richtextxml.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -3018,6 +3046,10 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_splash.o \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
+	$(OBJS)\advlib_richtextctrl.o \
+	$(OBJS)\advlib_richtextbuffer.o \
+	$(OBJS)\advlib_richtextstyles.o \
+	$(OBJS)\advlib_richtextxml.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -5815,6 +5847,26 @@ $(OBJS)\monodll_wizard.o: ../../src/generic/wizard.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_richtextctrl.o: ../../src/richtext/richtextctrl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_richtextbuffer.o: ../../src/richtext/richtextbuffer.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_richtextstyles.o: ../../src/richtext/richtextstyles.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_richtextxml.o: ../../src/richtext/richtextxml.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7607,6 +7659,26 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_wizard.o: ../../src/generic/wizard.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_richtextctrl.o: ../../src/richtext/richtextctrl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_richtextbuffer.o: ../../src/richtext/richtextbuffer.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_richtextstyles.o: ../../src/richtext/richtextstyles.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_richtextxml.o: ../../src/richtext/richtextxml.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10708,6 +10780,18 @@ $(OBJS)\advdll_tipdlg.o: ../../src/generic/tipdlg.cpp
 $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_richtextctrl.o: ../../src/richtext/richtextctrl.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advdll_richtextbuffer.o: ../../src/richtext/richtextbuffer.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advdll_richtextstyles.o: ../../src/richtext/richtextstyles.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advdll_richtextxml.o: ../../src/richtext/richtextxml.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10760,6 +10844,18 @@ $(OBJS)\advlib_tipdlg.o: ../../src/generic/tipdlg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_richtextctrl.o: ../../src/richtext/richtextctrl.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_richtextbuffer.o: ../../src/richtext/richtextbuffer.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_richtextstyles.o: ../../src/richtext/richtextstyles.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_richtextxml.o: ../../src/richtext/richtextxml.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp

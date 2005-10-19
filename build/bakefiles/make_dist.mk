@@ -13,6 +13,7 @@ SRCDIR   = $(WXDIR)/src
 GENDIR   = $(WXDIR)/src/generic
 COMMDIR  = $(WXDIR)/src/common
 HTMLDIR  = $(WXDIR)/src/html
+RICHTEXTDIR = $(WXDIR)/src/richtext
 UNIXDIR  = $(WXDIR)/src/unix
 PNGDIR   = $(WXDIR)/src/png
 JPEGDIR  = $(WXDIR)/src/jpeg
@@ -155,6 +156,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
 	mkdir $(DISTDIR)/include/wx/generic
 	mkdir $(DISTDIR)/include/wx/html
+	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
@@ -163,6 +165,7 @@ ALL_GUI_DIST: ALL_DIST
 	ln -sf $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
 	ln -sf $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
 	ln -sf $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
+	ln -sf $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
 	ln -sf $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
 	ln -sf $(INCDIR)/wx/xml/*.h $(DISTDIR)/include/wx/xml
 	ln -sf $(INCDIR)/wx/xrc/*.h $(DISTDIR)/include/wx/xrc
@@ -175,6 +178,7 @@ ALL_GUI_DIST: ALL_DIST
 	ln -sf $(WXDIR)/art/motif/*.xpm $(DISTDIR)/art/motif
 	mkdir $(DISTDIR)/src/generic
 	mkdir $(DISTDIR)/src/html
+	mkdir $(DISTDIR)/src/richtext
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
 	mkdir $(DISTDIR)/src/png
 	mkdir $(DISTDIR)/src/jpeg
@@ -191,6 +195,7 @@ ALL_GUI_DIST: ALL_DIST
 	ln -sf $(GENDIR)/*.cpp $(DISTDIR)/src/generic
 	ln -sf $(GENDIR)/*.mms $(DISTDIR)/src/generic
 	ln -sf $(HTMLDIR)/*.cpp $(DISTDIR)/src/html
+	ln -sf $(RICHTEXTDIR)/*.cpp $(DISTDIR)/src/richtext
 	ln -sf $(PNGDIR)/*.h $(DISTDIR)/src/png
 	ln -sf $(PNGDIR)/*.c $(DISTDIR)/src/png
 	ln -sf $(PNGDIR)/README $(DISTDIR)/src/png
@@ -216,6 +221,7 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/msdos
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
+	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/src/unix
 	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
@@ -847,6 +853,16 @@ SAMPLES_DIST: ALL_GUI_DIST
 	ln -sf $(SAMPDIR)/richedit/*.xpm $(DISTDIR)/samples/richedit
 	ln -sf $(SAMPDIR)/richedit/README $(DISTDIR)/samples/richedit
 	ln -sf $(SAMPDIR)/richedit/TODO $(DISTDIR)/samples/richedit
+
+	mkdir $(DISTDIR)/samples/richtext
+	mkdir $(DISTDIR)/samples/richtext/bitmaps
+	ln -sf $(SAMPDIR)/richtext/Makefile.in $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/makefile.unx $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/*.cpp $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/*.h $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/bitmaps/*.xpm $(DISTDIR)/samples/richtext/bitmaps
+	ln -sf $(SAMPDIR)/richtext/readme.txt $(DISTDIR)/samples/richtext
+	ln -sf $(SAMPDIR)/richtext/todo.txt $(DISTDIR)/samples/richtext
 
 	mkdir $(DISTDIR)/samples/propsize
 	ln -sf $(SAMPDIR)/propsize/Makefile.in $(DISTDIR)/samples/propsize

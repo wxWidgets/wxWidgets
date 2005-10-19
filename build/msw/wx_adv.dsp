@@ -1034,6 +1034,22 @@ SOURCE=..\..\include\wx\propdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtextbuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextstyles.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtext\richtextxml.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\sashwin.h
 # End Source File
 # Begin Source File
@@ -1059,6 +1075,26 @@ SOURCE=..\..\include\wx\wave.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\wizard.h
+# End Source File
+# End Group
+# Begin Group "Source Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\richtext\richtextbuffer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\richtext\richtextctrl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\richtext\richtextstyles.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\richtext\richtextxml.cpp
 # End Source File
 # End Group
 # End Target
