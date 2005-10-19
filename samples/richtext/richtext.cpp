@@ -58,9 +58,9 @@
 #include "bitmaps/indentless.xpm"
 #include "bitmaps/indentmore.xpm"
 
-#include "richtextctrl.h"
-#include "richtextstyles.h"
-#include "richtextxml.h"
+#include "wx/richtext/richtextctrl.h"
+#include "wx/richtext/richtextstyles.h"
+#include "wx/richtext/richtextxml.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -696,7 +696,7 @@ bool MyFrame::ProcessEvent(wxEvent& event)
     return wxFrame::ProcessEvent(event);
 }
 
-void MyFrame::OnOpen(wxCommandEvent& event)
+void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
     wxString filter = wxRichTextBuffer::GetExtWildcard(false, false);
     if (!filter.IsEmpty())
@@ -734,7 +734,7 @@ void MyFrame::OnSave(wxCommandEvent& event)
     m_richTextCtrl->SaveFile();
 }
 
-void MyFrame::OnSaveAs(wxCommandEvent& event)
+void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
 {
     wxString filter = wxRichTextBuffer::GetExtWildcard(false, true);
     wxString path = wxEmptyString;
@@ -758,17 +758,17 @@ void MyFrame::OnSaveAs(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnBold(wxCommandEvent& event)
+void MyFrame::OnBold(wxCommandEvent& WXUNUSED(event))
 {
     m_richTextCtrl->ApplyBoldToSelection();
 }
 
-void MyFrame::OnItalic(wxCommandEvent& event)
+void MyFrame::OnItalic(wxCommandEvent& WXUNUSED(event))
 {
     m_richTextCtrl->ApplyItalicToSelection();
 }
 
-void MyFrame::OnUnderline(wxCommandEvent& event)
+void MyFrame::OnUnderline(wxCommandEvent& WXUNUSED(event))
 {
     m_richTextCtrl->ApplyUnderlineToSelection();
 }
@@ -789,17 +789,17 @@ void MyFrame::OnUpdateUnderline(wxUpdateUIEvent& event)
     event.Check(m_richTextCtrl->IsSelectionUnderlined());
 }
 
-void MyFrame::OnAlignLeft(wxCommandEvent& event)
+void MyFrame::OnAlignLeft(wxCommandEvent& WXUNUSED(event))
 {
     m_richTextCtrl->ApplyAlignmentToSelection(wxTEXT_ALIGNMENT_LEFT);
 }
 
-void MyFrame::OnAlignCentre(wxCommandEvent& event)
+void MyFrame::OnAlignCentre(wxCommandEvent& WXUNUSED(event))
 {
     m_richTextCtrl->ApplyAlignmentToSelection(wxTEXT_ALIGNMENT_CENTRE);
 }
 
-void MyFrame::OnAlignRight(wxCommandEvent& event)
+void MyFrame::OnAlignRight(wxCommandEvent& WXUNUSED(event))
 {
     m_richTextCtrl->ApplyAlignmentToSelection(wxTEXT_ALIGNMENT_RIGHT);
 }
@@ -819,7 +819,7 @@ void MyFrame::OnUpdateAlignRight(wxUpdateUIEvent& event)
     event.Check(m_richTextCtrl->IsSelectionAligned(wxTEXT_ALIGNMENT_RIGHT));
 }
 
-void MyFrame::OnFont(wxCommandEvent& event)
+void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
 {
     if (!m_richTextCtrl->HasSelection())
         return;
@@ -846,7 +846,7 @@ void MyFrame::OnFont(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnIndentMore(wxCommandEvent& event)
+void MyFrame::OnIndentMore(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttrEx attr;
     attr.SetFlags(wxTEXT_ATTR_LEFT_INDENT);
@@ -865,7 +865,7 @@ void MyFrame::OnIndentMore(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnIndentLess(wxCommandEvent& event)
+void MyFrame::OnIndentLess(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttrEx attr;
     attr.SetFlags(wxTEXT_ATTR_LEFT_INDENT);
@@ -886,7 +886,7 @@ void MyFrame::OnIndentLess(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnLineSpacingHalf(wxCommandEvent& event)
+void MyFrame::OnLineSpacingHalf(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttrEx attr;
     attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
@@ -905,7 +905,7 @@ void MyFrame::OnLineSpacingHalf(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnLineSpacingDouble(wxCommandEvent& event)
+void MyFrame::OnLineSpacingDouble(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttrEx attr;
     attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
@@ -924,7 +924,7 @@ void MyFrame::OnLineSpacingDouble(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnLineSpacingSingle(wxCommandEvent& event)
+void MyFrame::OnLineSpacingSingle(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttrEx attr;
     attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
@@ -943,7 +943,7 @@ void MyFrame::OnLineSpacingSingle(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnParagraphSpacingMore(wxCommandEvent& event)
+void MyFrame::OnParagraphSpacingMore(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttrEx attr;
     attr.SetFlags(wxTEXT_ATTR_PARA_SPACING_AFTER);
@@ -962,7 +962,7 @@ void MyFrame::OnParagraphSpacingMore(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnParagraphSpacingLess(wxCommandEvent& event)
+void MyFrame::OnParagraphSpacingLess(wxCommandEvent& WXUNUSED(event))
 {
     wxTextAttrEx attr;
     attr.SetFlags(wxTEXT_ATTR_PARA_SPACING_AFTER);
@@ -984,7 +984,7 @@ void MyFrame::OnParagraphSpacingLess(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnViewHTML(wxCommandEvent& event)
+void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dialog(this, wxID_ANY, _("HTML"), wxDefaultPosition, wxSize(500, 400), wxDEFAULT_DIALOG_STYLE);
 

@@ -487,7 +487,7 @@ void wxRichTextParagraphLayoutBox::Init()
 }
 
 /// Draw the item
-bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& WXUNUSED(rect), int descent, int style)
+bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style)
 {
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -498,8 +498,13 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, 
         if (child && !child->GetRange().IsOutside(range))
         {
             wxRect childRect(child->GetPosition(), child->GetCachedSize());
-
-            child->Draw(dc, child->GetRange(), selectionRange, childRect, descent, style);
+            
+            if (childRect.GetTop() > rect.GetBottom() || childRect.GetBottom() < rect.GetTop())
+            {
+                // Skip
+            }
+            else
+                child->Draw(dc, child->GetRange(), selectionRange, childRect, descent, style);
         }
 
         node = node->GetNext();

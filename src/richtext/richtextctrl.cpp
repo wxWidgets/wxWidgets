@@ -231,7 +231,7 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxRegion dirtyRegion = GetUpdateRegion();
 
-    wxRect availableSpace(wxPoint(0, 0), GetClientSize());
+    wxRect availableSpace(GetLogicalPoint(wxPoint(0, 0)), GetClientSize());
     if (GetBuffer().GetDirty())
     {
         GetBuffer().Layout(dc, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
