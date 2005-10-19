@@ -425,13 +425,13 @@ bool wxRichTextBox::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTex
 }
 
 /// Lay the item out
-bool wxRichTextBox::Layout(wxDC& dc, const wxRect& rect, int style)
+bool wxRichTextBox::Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style)
 {
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
         wxRichTextObject* child = node->GetData();
-        child->Layout(dc, rect, style);
+        child->Layout(dc, rect, affected, style);
 
         node = node->GetNext();
     }
@@ -513,7 +513,7 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, 
 }
 
 /// Lay the item out
-bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int style)
+bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style)
 {
     wxRect availableSpace(rect.x + m_leftMargin,
                           rect.y + m_topMargin,
@@ -521,20 +521,70 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
                           rect.height - m_topMargin - m_bottomMargin);
 
     int maxWidth = 0;
-
+    
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    
+    // If we know what range is affected, start laying out from that point on.
+    if (affected.GetStart() > GetRange().GetStart())
+    {
+        wxRichTextParagraph* firstParagraph = GetParagraphAtPosition(affected.GetStart());
+        if (firstParagraph)
+        {
+            wxRichTextObjectList::compatibility_iterator firstNode = m_children.Find(firstParagraph);
+            wxRichTextObjectList::compatibility_iterator previousNode = firstNode ? node->GetPrevious() : (wxRichTextObjectList::compatibility_iterator) NULL;
+            if (firstNode && previousNode)
+            {
+                wxRichTextParagraph* previousParagraph = wxDynamicCast(previousNode->GetData(), wxRichTextParagraph);
+                availableSpace.y = previousParagraph->GetPosition().y + previousParagraph->GetCachedSize().y;
+                
+                // Now we're going to start iterating from the first affected paragraph.
+                node = firstNode;
+            }
+        }
+    }
+
     while (node)
     {
         // Assume this box only contains paragraphs
 
         wxRichTextParagraph* child = wxDynamicCast(node->GetData(), wxRichTextParagraph);
         wxASSERT (child != NULL);
+        
+        if (child && !child->GetRange().IsOutside(affected))
+        {
+            child->Layout(dc, availableSpace, affected, style);
 
-        child->Layout(dc, availableSpace, style);
-
-        // Layout must set the cached size
-        availableSpace.y += child->GetCachedSize().y;
-        maxWidth = wxMax(maxWidth, child->GetCachedSize().x);
+            // Layout must set the cached size
+            availableSpace.y += child->GetCachedSize().y;
+            maxWidth = wxMax(maxWidth, child->GetCachedSize().x);
+        }
+        else
+        {
+            // We're outside the immediately affected range, so now let's just
+            // move everything up or down. This assumes that all the children have previously
+            // been laid out and have wrapped line lists associated with them.
+            // TODO: check all paragraphs before the affected range.
+            
+            int inc = availableSpace.y - child->GetPosition().y;
+            
+            while (node)
+            {
+                wxRichTextParagraph* child = wxDynamicCast(node->GetData(), wxRichTextParagraph);
+                if (child)
+                {
+                    if (child->GetLines().GetCount() == 0)
+                        child->Layout(dc, availableSpace, affected, style);
+                    else
+                        child->SetPosition(wxPoint(child->GetPosition().x, child->GetPosition().y + inc));
+                
+                    availableSpace.y += child->GetCachedSize().y;
+                    maxWidth = wxMax(maxWidth, child->GetCachedSize().x);
+                }
+                
+                node = node->GetNext();                
+            }
+            break;
+        }
 
         node = node->GetNext();
     }
@@ -1833,7 +1883,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& WXUNUSED(range),
 }
 
 /// Lay the item out
-bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
+bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style)
 {
     ClearLines();
 
@@ -1905,7 +1955,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         // can't tell the position until the size is determined. So possibly introduce
         // another layout phase.
 
-        child->Layout(dc, rect, style);
+        child->Layout(dc, rect, affected, style);
 
         // Available width depends on whether we're on the first or subsequent lines
         int availableSpaceForText = (lineCount == 0 ? availableTextSpaceFirstLine : availableTextSpaceSubsequentLines);
@@ -2829,7 +2879,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 }
 
 /// Lay the item out
-bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXUNUSED(style))
+bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), const wxRichTextRange& WXUNUSED(affected), int WXUNUSED(style))
 {
     if (GetAttributes().GetFont().Ok())
         dc.SetFont(GetAttributes().GetFont());
@@ -4002,7 +4052,7 @@ bool wxRichTextImage::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichT
 }
 
 /// Lay the item out
-bool wxRichTextImage::Layout(wxDC& WXUNUSED(dc), const wxRect& rect, int WXUNUSED(style))
+bool wxRichTextImage::Layout(wxDC& WXUNUSED(dc), const wxRect& rect, const wxRichTextRange& WXUNUSED(affected), int WXUNUSED(style))
 {
     if (!m_image.Ok())
         LoadFromBlock();

@@ -231,16 +231,17 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxRegion dirtyRegion = GetUpdateRegion();
 
-    wxRect availableSpace(GetLogicalPoint(wxPoint(0, 0)), GetClientSize());
+    wxRect drawingArea(GetLogicalPoint(wxPoint(0, 0)), GetClientSize());
+    wxRect availableSpace(wxPoint(0, 0), GetClientSize());
     if (GetBuffer().GetDirty())
     {
-        GetBuffer().Layout(dc, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
+        GetBuffer().Layout(dc, availableSpace, GetBuffer().GetRange(), wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
         GetBuffer().SetDirty(false);
         SetupScrollbars();
         PositionCaret();
     }
 
-    GetBuffer().Draw(dc, GetBuffer().GetRange(), GetSelectionRange(), availableSpace, 0 /* descent */, 0 /* flags */);
+    GetBuffer().Draw(dc, GetBuffer().GetRange(), GetSelectionRange(), drawingArea, 0 /* descent */, 0 /* flags */);
 }
 
 // Empty implementation, to prevent flicker
@@ -2217,7 +2218,7 @@ bool wxRichTextCtrl::Layout()
 
     GetBuffer().Defragment();
     GetBuffer().UpdateRanges();     // If items were deleted, ranges need recalculation
-    GetBuffer().Layout(dc, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
+    GetBuffer().Layout(dc, availableSpace, GetBuffer().GetRange(), wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
     GetBuffer().SetDirty(false);
     
     if (!IsFrozen())
