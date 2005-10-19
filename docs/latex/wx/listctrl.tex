@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        listctrl.tex
+%% Purpose:     wxListCtrl docs
+%% Author:
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxListCtrl}}\label{wxlistctrl}
 
 A list control presents lists in a number of formats: list view, report view,
@@ -646,7 +657,7 @@ method:\par
 
 \membersection{wxListCtrl::OnGetItemAttr}\label{wxlistctrlongetitemattr}
 
-\func{virtual wxListItemAttr *}{OnGetItemAttr}{\param{long }{item}}
+\constfunc{virtual wxListItemAttr *}{OnGetItemAttr}{\param{long }{item}}
 
 This function may be overloaded in the derived class for a control with
 {\tt wxLC\_VIRTUAL} style. It should return the attribute for the
@@ -987,4 +998,3 @@ parameters.}
 \perlnote{In wxPerl the comparison function must take just two parameters;
  however, you may use a closure to achieve an effect similar to the
  SortItems third parameter.}
-
