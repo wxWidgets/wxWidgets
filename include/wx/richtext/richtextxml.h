@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richeditxml.h
+// Name:        wx/richtext/richeditxml.h
 // Purpose:     XML and HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     2005-09-30
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -37,8 +37,8 @@ public:
         { }
 
 #if wxUSE_STREAMS
-    virtual bool LoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
-    virtual bool SaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
 
     /// Recursively export an object
     bool ExportXML(wxOutputStream& stream, wxMBConv* convMem, wxMBConv* convFile, wxRichTextObject& obj, int level);
@@ -84,8 +84,8 @@ public:
         { }
 
 #if wxUSE_STREAMS
-    virtual bool LoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
-    virtual bool SaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
 #endif
 
     /// Can we save using this handler?

@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextxml.cpp
+// Name:        richtext/richtextxml.cpp
 // Purpose:     XML and HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     2005-09-30
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextXMLHandler, wxRichTextFileHandler)
 
 #if wxUSE_STREAMS
-bool wxRichTextXMLHandler::LoadFile(wxRichTextBuffer *buffer, wxInputStream& stream)
+bool wxRichTextXMLHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream)
 {
     if (!stream.IsOk())
         return false;
@@ -67,7 +67,7 @@ bool wxRichTextXMLHandler::LoadFile(wxRichTextBuffer *buffer, wxInputStream& str
                     else
                         ImportXML(buffer, child);
                 }
-                
+
                 child = child->GetNext();
             }
         }
@@ -76,7 +76,7 @@ bool wxRichTextXMLHandler::LoadFile(wxRichTextBuffer *buffer, wxInputStream& str
             success = false;
         }
     }
-    
+
     delete xmlDoc;
 
     buffer->UpdateRanges();
@@ -145,7 +145,7 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
             {
                 int imageType = wxBITMAP_TYPE_PNG;
                 wxString value = node->GetPropVal(wxT("imagetype"), wxEmptyString);
-                if (!value.IsEmpty())
+                if (!value.empty())
                     imageType = wxAtoi(value);
 
                 wxString data;
@@ -163,12 +163,12 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
                             // wxLogDebug(data);
                             dataChild = dataChild->GetNext();
                         }
-                        
+
                     }
                     imageChild = imageChild->GetNext();
                 }
 
-                if (!data.IsEmpty())
+                if (!data.empty())
                 {
                     wxRichTextImage* imageObj = new wxRichTextImage(para);
                     para->AppendChild(imageObj);
@@ -192,7 +192,7 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
             ImportXML(buffer, child);
             child = child->GetNext();
         }
-    }    
+    }
 
     return true;
 }
@@ -242,7 +242,7 @@ wxString wxRichTextXMLHandler::GetNodeContent(wxXmlNode *node)
 
 wxString wxRichTextXMLHandler::GetParamValue(wxXmlNode *node, const wxString& param)
 {
-    if (param.IsEmpty())
+    if (param.empty())
         return GetNodeContent(node);
     else
         return GetNodeContent(GetParamNode(node, param));
@@ -259,9 +259,9 @@ wxString wxRichTextXMLHandler::GetText(wxXmlNode *node, const wxString& param, b
 
 // write string to output:
 inline static void OutputString(wxOutputStream& stream, const wxString& str,
-                                wxMBConv *convMem = NULL, wxMBConv *convFile = NULL)
+                                wxMBConv *WXUNUSED_IN_UNICODE(convMem) = NULL, wxMBConv *convFile = NULL)
 {
-    if (str.IsEmpty()) return;
+    if (str.empty()) return;
 #if wxUSE_UNICODE
     const wxWX2MBbuf buf(str.mb_str(convFile ? *convFile : wxConvUTF8));
     stream.Write((const char*)buf, strlen((const char*)buf));
@@ -284,7 +284,7 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
     wxString buf;
     size_t i, last, len;
     wxChar c;
-    
+
     len = str.Len();
     last = 0;
     for (i = 0; i < len; i++)
@@ -359,17 +359,14 @@ static wxString ColourToHexString(const wxColour& col)
 // Convert 6-digit hex string to a colour
 wxColour HexStringToColour(const wxString& hex)
 {
-    unsigned int r = 0;
-    unsigned int g = 0;
-    unsigned int b = 0;
-    r = wxHexToDec(hex.Mid(0, 2));
-    g = wxHexToDec(hex.Mid(2, 2));
-    b = wxHexToDec(hex.Mid(4, 2));
+    unsigned char r = (unsigned char)wxHexToDec(hex.Mid(0, 2));
+    unsigned char g = (unsigned char)wxHexToDec(hex.Mid(2, 2));
+    unsigned char b = (unsigned char)wxHexToDec(hex.Mid(4, 2));
 
     return wxColour(r, g, b);
 }
 
-bool wxRichTextXMLHandler::SaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream)
+bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream)
 {
     if (!stream.IsOk())
         return false;
@@ -383,7 +380,7 @@ bool wxRichTextXMLHandler::SaveFile(wxRichTextBuffer *buffer, wxOutputStream& st
     wxString memencoding(wxT("ISO-8859-1")) ;
 #endif
     wxString s ;
-    
+
     wxMBConv *convMem = NULL, *convFile = NULL;
 #if wxUSE_UNICODE
     convFile = new wxCSConv(fileencoding);
@@ -394,7 +391,7 @@ bool wxRichTextXMLHandler::SaveFile(wxRichTextBuffer *buffer, wxOutputStream& st
         convMem = new wxCSConv(memencoding);
     }
 #endif
-    
+
     s.Printf(wxT("<?xml version=\"%s\" encoding=\"%s\"?>\n"),
         (const wxChar*) version, (const wxChar*) fileencoding );
     OutputString(stream, s, NULL, NULL);
@@ -405,7 +402,7 @@ bool wxRichTextXMLHandler::SaveFile(wxRichTextBuffer *buffer, wxOutputStream& st
 
     OutputString(stream, wxT("\n</richtext>") , NULL, NULL);
     OutputString(stream, wxT("\n"), NULL, NULL);
-    
+
     delete convFile;
     delete convMem;
 
@@ -433,11 +430,11 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
 
         OutputIndentation(stream, indent);
         stream << wxT("<") << objectName;
-        
+
         wxString style = CreateStyle(obj.GetAttributes(), false);
-        
+
         stream << style << wxT(">");
-        
+
         wxString str = text.GetText();
         if (str.Length() > 0 && (str[0] == wxT(' ') || str[str.Length()-1] == wxT(' ')))
         {
@@ -478,15 +475,15 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
     {
         OutputIndentation(stream, indent);
         stream << wxT("<") << objectName;
-     
+
         bool isPara = false;
         if (objectName == wxT("paragraph") || objectName == wxT("paragraphlayout"))
             isPara = true;
 
         wxString style = CreateStyle(obj.GetAttributes(), isPara);
-        
+
         stream << style << wxT(">");
-        
+
         wxRichTextCompositeObject& composite = (wxRichTextCompositeObject&) obj;
         size_t i;
         for (i = 0; i < composite.GetChildCount(); i++)
@@ -527,7 +524,7 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
         str << wxT(" fontface=\"") << attr.GetFont().GetFaceName() << wxT("\"");
     }
 
-    if (!attr.GetCharacterStyleName().IsEmpty())
+    if (!attr.GetCharacterStyleName().empty())
         str << wxT(" charactertyle=\"") << wxString(attr.GetCharacterStyleName()) << wxT("\"");
 
     if (isPara)
@@ -543,7 +540,7 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
         str << wxT(" bulletnumber=\"") << (int) attr.GetBulletNumber() << wxT("\"");
         str << wxT(" bulletsymbol=\"") << wxString(attr.GetBulletSymbol()) << wxT("\"");
 
-        if (!attr.GetParagraphStyleName().IsEmpty())
+        if (!attr.GetParagraphStyleName().empty())
             str << wxT(" parstyle=\"") << wxString(attr.GetParagraphStyleName()) << wxT("\"");
     }
 
@@ -563,29 +560,29 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     fontFacename = node->GetPropVal(wxT("fontface"), wxEmptyString);
 
     wxString value = node->GetPropVal(wxT("fontfamily"), wxEmptyString);
-    if (!value.IsEmpty())
+    if (!value.empty())
         fontFamily = wxAtoi(value);
 
     value = node->GetPropVal(wxT("fontstyle"), wxEmptyString);
-    if (!value.IsEmpty())
+    if (!value.empty())
         fontStyle = wxAtoi(value);
 
     value = node->GetPropVal(wxT("fontsize"), wxEmptyString);
-    if (!value.IsEmpty())
+    if (!value.empty())
         fontSize = wxAtoi(value);
 
     value = node->GetPropVal(wxT("fontweight"), wxEmptyString);
-    if (!value.IsEmpty())
+    if (!value.empty())
         fontWeight = wxAtoi(value);
 
     value = node->GetPropVal(wxT("fontunderlined"), wxEmptyString);
-    if (!value.IsEmpty())
+    if (!value.empty())
         fontUnderlined = wxAtoi(value) != 0;
 
     attr.SetFont(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
 
     value = node->GetPropVal(wxT("textcolor"), wxEmptyString);
-    if (!value.IsEmpty())
+    if (!value.empty())
     {
         if (value[0] == wxT('#'))
             attr.SetTextColour(HexStringToColour(value.Mid(1)));
@@ -594,7 +591,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     }
 
     value = node->GetPropVal(wxT("backgroundcolor"), wxEmptyString);
-    if (!value.IsEmpty())
+    if (!value.empty())
     {
         if (value[0] == wxT('#'))
             attr.SetBackgroundColour(HexStringToColour(value.Mid(1)));
@@ -603,56 +600,56 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     }
 
     value = node->GetPropVal(wxT("characterstyle"), wxEmptyString);
-    if (!value.IsEmpty())
+    if (!value.empty())
         attr.SetCharacterStyleName(value);
 
     // Set paragraph attributes
     if (isPara)
     {
         value = node->GetPropVal(wxT("alignment"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             attr.SetAlignment((wxTextAttrAlignment) wxAtoi(value));
 
         int leftSubIndent = 0;
         int leftIndent = 0;
         value = node->GetPropVal(wxT("leftindent"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             leftIndent = wxAtoi(value);
         value = node->GetPropVal(wxT("leftsubindent"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             leftSubIndent = wxAtoi(value);
         attr.SetLeftIndent(leftIndent, leftSubIndent);
 
         value = node->GetPropVal(wxT("rightindent"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             attr.SetRightIndent(wxAtoi(value));
 
         value = node->GetPropVal(wxT("parspacingbefore"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             attr.SetParagraphSpacingBefore(wxAtoi(value));
 
         value = node->GetPropVal(wxT("parspacingafter"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             attr.SetParagraphSpacingAfter(wxAtoi(value));
 
         value = node->GetPropVal(wxT("linespacing"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             attr.SetLineSpacing(wxAtoi(value));
 
         value = node->GetPropVal(wxT("bulletstyle"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             attr.SetBulletStyle(wxAtoi(value));
 
         value = node->GetPropVal(wxT("bulletnumber"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             attr.SetBulletNumber(wxAtoi(value));
 
         value = node->GetPropVal(wxT("bulletsymbol"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             attr.SetBulletSymbol(value[0]);
 
         value = node->GetPropVal(wxT("parstyle"), wxEmptyString);
-        if (!value.IsEmpty())
+        if (!value.empty())
             attr.SetParagraphStyleName(value);
     }
 
@@ -674,7 +671,7 @@ bool wxRichTextHTMLHandler::CanHandle(const wxString& filename) const
 
 
 #if wxUSE_STREAMS
-bool wxRichTextHTMLHandler::LoadFile(wxRichTextBuffer *WXUNUSED(buffer), wxInputStream& WXUNUSED(stream))
+bool wxRichTextHTMLHandler::DoLoadFile(wxRichTextBuffer *WXUNUSED(buffer), wxInputStream& WXUNUSED(stream))
 {
     return false;
 }
@@ -683,7 +680,7 @@ bool wxRichTextHTMLHandler::LoadFile(wxRichTextBuffer *WXUNUSED(buffer), wxInput
  * We need to output only _changes_ in character formatting.
  */
 
-bool wxRichTextHTMLHandler::SaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream)
+bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream)
 {
     buffer->Defragment();
 
@@ -719,7 +716,7 @@ bool wxRichTextHTMLHandler::SaveFile(wxRichTextBuffer *buffer, wxOutputStream& s
                 }
 
                 node2 = node2->GetNext();
-            }            
+            }
 
             OutputParagraphFormatting(currentParaStyle, para->GetAttributes(), stream, false);
 
@@ -805,4 +802,3 @@ void wxRichTextHTMLHandler::OutputParagraphFormatting(const wxTextAttrEx& WXUNUS
 
 #endif
     // wxUSE_RICHTEXT
-

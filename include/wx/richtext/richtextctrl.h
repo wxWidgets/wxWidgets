@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextctrl.h
+// Name:        wx/richtext/richtextctrl.h
 // Purpose:     A rich edit control
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     2005-09-30
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ class WXDLLIMPEXP_ADV wxRichTextCtrl:
 #else
  public wxScrolledWindow
 #endif
-{    
+{
     DECLARE_CLASS( wxRichTextCtrl )
     DECLARE_EVENT_TABLE()
 
@@ -520,7 +520,7 @@ public:
     // Show a context menu for Rich Edit controls (the standard
     // EDIT control has one already)
     void OnContextMenu(wxContextMenuEvent& event);
-    
+
 // Event handlers
 
     /// Painting
@@ -568,7 +568,7 @@ public:
 
     /// Paint the background
     virtual void PaintBackground(wxDC& dc);
-    
+
     /// Recreate buffer bitmap if necessary
     virtual bool RecreateBuffer(const wxSize& size = wxDefaultSize);
 
@@ -652,7 +652,7 @@ public:
 // Data members
 private:
 
-	/// Allows nested Freeze/Thaw
+    /// Allows nested Freeze/Thaw
     int                     m_freezeCount;
 
     /// Buffer bitmap

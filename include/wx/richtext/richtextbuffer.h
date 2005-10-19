@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextbuffer.h
+// Name:        wx/richtext/richtextbuffer.h
 // Purpose:     Buffer for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     2005-09-30
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@
   it can report a partial size, so that wrapping can be implemented,
   hit test calculations performed, etc. So GetRangeSize must be implemented
   for each object.
-  
+
  */
 
 #ifndef _WX_RICHTEXTBUFFER_H_
@@ -511,7 +511,7 @@ public:
 
     /// Lay the item out at the specified position with the given size constraint.
     /// Layout must set the cached size.
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style) = 0;
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style) = 0;
 
     /// Hit-testing: returns a flag indicating hit test details, plus
     /// information about position
@@ -743,7 +743,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
@@ -782,7 +782,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
@@ -850,10 +850,10 @@ public:
     virtual wxRichTextObject* GetLeafObjectAtPosition(long position) const;
 
     /// Get the paragraph by number
-    virtual wxRichTextParagraph* GetParagraphAtLine(long paragraphNumber) const; 
+    virtual wxRichTextParagraph* GetParagraphAtLine(long paragraphNumber) const;
 
     /// Get the paragraph for a given line
-    virtual wxRichTextParagraph* GetParagraphForLine(wxRichTextLine* line) const; 
+    virtual wxRichTextParagraph* GetParagraphForLine(wxRichTextLine* line) const;
 
     /// Get the length of the paragraph
     virtual int GetParagraphLength(long paragraphNumber) const;
@@ -908,9 +908,6 @@ public:
 
     /// Copy
     void Copy(const wxRichTextParagraphLayoutBox& obj);
-
-    /// Clone
-    virtual wxRichTextObject* Clone() { return new wxRichTextParagraphLayoutBox(*this); }
 
     /// Calculate ranges
     virtual void UpdateRanges() { long end; CalculateRange(0, end); }
@@ -969,7 +966,7 @@ public:
     void Copy(const wxRichTextFragment& obj);
 
     /// Clone
-    virtual wxRichTextObject* Clone() { return new wxRichTextFragment(*this); }
+    virtual wxRichTextObject* Clone() const { return new wxRichTextFragment(*this); }
 
 protected:
 
@@ -1077,7 +1074,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
@@ -1166,7 +1163,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
@@ -1186,7 +1183,7 @@ public:
     virtual bool DeleteRange(const wxRichTextRange& range);
 
     /// Returns true if the object is empty
-    virtual bool IsEmpty() const { return m_text.IsEmpty(); }
+    virtual bool IsEmpty() const { return m_text.empty(); }
 
     /// Returns true if this object can merge itself with the given one.
     virtual bool CanMerge(wxRichTextObject* object) const;
@@ -1240,7 +1237,7 @@ public:
     // to conserve space.
     // If it's not a JPEG we can make use of 'image', already scaled, so we don't have to
     // load the image a 2nd time.
-    virtual bool MakeImageBlock(const wxString& filename, int imageType, wxImage& image, bool convertToJPEG = TRUE);
+    virtual bool MakeImageBlock(const wxString& filename, int imageType, wxImage& image, bool convertToJPEG = true);
 
     // Make an image block from the wxImage in the given
     // format.
@@ -1319,7 +1316,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
 
     /// Get the object size for the given range. Returns false if the range
     /// is invalid for this object.
@@ -1671,7 +1668,7 @@ class WXDLLIMPEXP_ADV wxRichTextCommand: public wxCommand
 public:
     // Ctor for one action
     wxRichTextCommand(const wxString& name, wxRichTextCommandId id, wxRichTextBuffer* buffer,
-        wxRichTextCtrl* ctrl, bool ignoreFirstTime = FALSE);
+        wxRichTextCtrl* ctrl, bool ignoreFirstTime = false);
 
     // Ctor for multiple actions
     wxRichTextCommand(const wxString& name);
@@ -1700,7 +1697,7 @@ class WXDLLIMPEXP_ADV wxRichTextAction: public wxObject
 {
 public:
     wxRichTextAction(wxRichTextCommand* cmd, const wxString& name, wxRichTextCommandId id, wxRichTextBuffer* buffer,
-        wxRichTextCtrl* ctrl, bool ignoreFirstTime = FALSE);
+        wxRichTextCtrl* ctrl, bool ignoreFirstTime = false);
 
     ~wxRichTextAction();
 
@@ -1771,12 +1768,14 @@ public:
         { }
 
 #if wxUSE_STREAMS
-    virtual bool LoadFile(wxRichTextBuffer *buffer, wxInputStream& stream) = 0;
-    virtual bool SaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream) = 0;
+    bool LoadFile(wxRichTextBuffer *buffer, wxInputStream& stream)
+    { return DoLoadFile(buffer, stream); }
+    bool SaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream)
+    { return DoSaveFile(buffer, stream); }
 #endif
 
-    virtual bool LoadFile(wxRichTextBuffer *buffer, const wxString& filename);
-    virtual bool SaveFile(wxRichTextBuffer *buffer, const wxString& filename);
+    bool LoadFile(wxRichTextBuffer *buffer, const wxString& filename);
+    bool SaveFile(wxRichTextBuffer *buffer, const wxString& filename);
 
     /// Can we handle this filename (if using files)? By default, checks the extension.
     virtual bool CanHandle(const wxString& filename) const;
@@ -1802,6 +1801,11 @@ public:
 
 protected:
 
+#if wxUSE_STREAMS
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream) = 0;
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream) = 0;
+#endif
+
     wxString  m_name;
     wxString  m_extension;
     int       m_type;
@@ -1821,11 +1825,6 @@ public:
         : wxRichTextFileHandler(name, ext, type)
         { }
 
-#if wxUSE_STREAMS
-    virtual bool LoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
-    virtual bool SaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
-#endif
-
     /// Can we save using this handler?
     virtual bool CanSave() const { return true; }
 
@@ -1833,6 +1832,11 @@ public:
     virtual bool CanLoad() const { return true; }
 
 protected:
+
+#if wxUSE_STREAMS
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
+#endif
 
 };
 
@@ -1865,4 +1869,3 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style);
 
 #endif
     // _WX_RICHTEXTBUFFER_H_
-
