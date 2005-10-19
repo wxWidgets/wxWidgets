@@ -235,7 +235,7 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxRect availableSpace(GetClientSize());
     if (GetBuffer().GetDirty())
     {
-        GetBuffer().Layout(dc, availableSpace, GetBuffer().GetRange(), wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
+        GetBuffer().Layout(dc, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
         GetBuffer().SetDirty(false);
         SetupScrollbars();
         PositionCaret();
@@ -2217,7 +2217,7 @@ bool wxRichTextCtrl::Layout()
 
     GetBuffer().Defragment();
     GetBuffer().UpdateRanges();     // If items were deleted, ranges need recalculation
-    GetBuffer().Layout(dc, availableSpace, GetBuffer().GetRange(), wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
+    GetBuffer().Layout(dc, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
     GetBuffer().SetDirty(false);
 
     if (!IsFrozen())

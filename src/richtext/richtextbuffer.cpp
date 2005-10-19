@@ -425,13 +425,13 @@ bool wxRichTextBox::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTex
 }
 
 /// Lay the item out
-bool wxRichTextBox::Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style)
+bool wxRichTextBox::Layout(wxDC& dc, const wxRect& rect, int style)
 {
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
         wxRichTextObject* child = node->GetData();
-        child->Layout(dc, rect, affected, style);
+        child->Layout(dc, rect, style);
 
         node = node->GetNext();
     }
@@ -480,6 +480,7 @@ void wxRichTextParagraphLayoutBox::Init()
     // For now, assume is the only box and has no initial size.
     m_range = wxRichTextRange(0, -1);
 
+    m_invalidRange.SetRange(-1, -1);
     m_leftMargin = 4;
     m_rightMargin = 4;
     m_topMargin = 4;
@@ -513,7 +514,7 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, 
 }
 
 /// Lay the item out
-bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style)
+bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int style)
 {
     wxRect availableSpace(rect.x + m_leftMargin,
                           rect.y + m_topMargin,
@@ -523,11 +524,18 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, const wx
     int maxWidth = 0;
 
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    
+    bool layoutAll = true;
+    
+    // Get invalid range, rounding to paragraph start/end.
+    wxRichTextRange invalidRange = GetInvalidRange(true);
 
-    // If we know what range is affected, start laying out from that point on.
-    if (affected.GetStart() > GetRange().GetStart())
+    if (invalidRange == wxRichTextRange(-1, -1))
+        layoutAll = true;    
+    else    // If we know what range is affected, start laying out from that point on.
+        if (invalidRange.GetStart() > GetRange().GetStart())
     {
-        wxRichTextParagraph* firstParagraph = GetParagraphAtPosition(affected.GetStart());
+        wxRichTextParagraph* firstParagraph = GetParagraphAtPosition(invalidRange.GetStart());
         if (firstParagraph)
         {
             wxRichTextObjectList::compatibility_iterator firstNode = m_children.Find(firstParagraph);
@@ -550,9 +558,9 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, const wx
         wxRichTextParagraph* child = wxDynamicCast(node->GetData(), wxRichTextParagraph);
         wxASSERT (child != NULL);
 
-        if (child && !child->GetRange().IsOutside(affected))
+        if (child && (layoutAll || !child->GetRange().IsOutside(invalidRange)))
         {
-            child->Layout(dc, availableSpace, affected, style);
+            child->Layout(dc, availableSpace, style);
 
             // Layout must set the cached size
             availableSpace.y += child->GetCachedSize().y;
@@ -573,7 +581,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, const wx
                 if (child)
                 {
                     if (child->GetLines().GetCount() == 0)
-                        child->Layout(dc, availableSpace, affected, style);
+                        child->Layout(dc, availableSpace, style);
                     else
                         child->SetPosition(wxPoint(child->GetPosition().x, child->GetPosition().y + inc));
 
@@ -592,6 +600,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, const wx
     SetCachedSize(wxSize(maxWidth, availableSpace.y));
 
     m_dirty = false;
+    m_invalidRange = wxRichTextRange(-1, -1);
 
     return true;
 }
@@ -1721,6 +1730,43 @@ void wxRichTextParagraphLayoutBox::Reset()
     AddParagraph(wxEmptyString);
 }
 
+/// Invalidate the buffer. With no argument, invalidates whole buffer.
+void wxRichTextParagraphLayoutBox::Invalidate(const wxRichTextRange& invalidRange)
+{
+    SetDirty(true);
+    
+    if (invalidRange == wxRichTextRange(-1, -1))
+    {
+        m_invalidRange = invalidRange;
+        return;
+    }
+    
+    if (invalidRange.GetStart() < m_invalidRange.GetStart())
+        m_invalidRange.SetStart(invalidRange.GetStart());
+    if (invalidRange.GetEnd() > m_invalidRange.GetEnd())
+        m_invalidRange.SetEnd(invalidRange.GetEnd());
+}
+
+/// Get invalid range, rounding to entire paragraphs if argument is true.
+wxRichTextRange wxRichTextParagraphLayoutBox::GetInvalidRange(bool wholeParagraphs) const
+{
+    if (m_invalidRange == wxRichTextRange(-1, -1))
+        return m_invalidRange;
+    
+    wxRichTextRange range = m_invalidRange;
+    
+    if (wholeParagraphs)
+    {
+        wxRichTextParagraph* para1 = GetParagraphAtPosition(range.GetStart());
+        wxRichTextParagraph* para2 = GetParagraphAtPosition(range.GetEnd());
+        if (para1)
+            range.SetStart(para1->GetRange().GetStart());
+        if (para2)
+            range.SetEnd(para2->GetRange().GetEnd());
+    }
+    return range;
+}
+
 /*!
  * wxRichTextFragment class declaration
  * This is a lind of paragraph layout box used for storing
@@ -1883,7 +1929,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& WXUNUSED(range),
 }
 
 /// Lay the item out
-bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style)
+bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 {
     ClearLines();
 
@@ -1955,7 +2001,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, const wxRichTextR
         // can't tell the position until the size is determined. So possibly introduce
         // another layout phase.
 
-        child->Layout(dc, rect, affected, style);
+        child->Layout(dc, rect, style);
 
         // Available width depends on whether we're on the first or subsequent lines
         int availableSpaceForText = (lineCount == 0 ? availableTextSpaceFirstLine : availableTextSpaceSubsequentLines);
@@ -2879,7 +2925,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 }
 
 /// Lay the item out
-bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), const wxRichTextRange& WXUNUSED(affected), int WXUNUSED(style))
+bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXUNUSED(style))
 {
     if (GetAttributes().GetFont().Ok())
         dc.SetFont(GetAttributes().GetFont());
@@ -4052,7 +4098,7 @@ bool wxRichTextImage::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichT
 }
 
 /// Lay the item out
-bool wxRichTextImage::Layout(wxDC& WXUNUSED(dc), const wxRect& rect, const wxRichTextRange& WXUNUSED(affected), int WXUNUSED(style))
+bool wxRichTextImage::Layout(wxDC& WXUNUSED(dc), const wxRect& rect, int WXUNUSED(style))
 {
     if (!m_image.Ok())
         LoadFromBlock();

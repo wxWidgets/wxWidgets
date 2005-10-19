@@ -206,6 +206,7 @@ public:
     ~wxRichTextRange() {}
 
     void operator =(const wxRichTextRange& range) { m_start = range.m_start; m_end = range.m_end; }
+    bool operator ==(const wxRichTextRange& range) const { return (m_start == range.m_start && m_end == range.m_end); }
     wxRichTextRange operator -(const wxRichTextRange& range) const { return wxRichTextRange(m_start - range.m_start, m_end - range.m_end); }
     wxRichTextRange operator +(const wxRichTextRange& range) const { return wxRichTextRange(m_start + range.m_start, m_end + range.m_end); }
 
@@ -511,7 +512,7 @@ public:
 
     /// Lay the item out at the specified position with the given size constraint.
     /// Layout must set the cached size.
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style) = 0;
+    virtual bool Layout(wxDC& dc, const wxRect& rect, int style) = 0;
 
     /// Hit-testing: returns a flag indicating hit test details, plus
     /// information about position
@@ -743,7 +744,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
@@ -782,7 +783,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
@@ -929,9 +930,18 @@ public:
     /// Get basic (overall) style
     virtual const wxTextAttrEx& GetBasicStyle() const { return m_attributes; }
 
+    /// Invalidate the buffer. With no argument, invalidates whole buffer.
+    void Invalidate(const wxRichTextRange& invalidRange = wxRichTextRange(-1, -1));
+
+    /// Get invalid range, rounding to entire paragraphs if argument is true.
+    wxRichTextRange GetInvalidRange(bool wholeParagraphs = false) const;
+
 protected:
     wxRichTextCtrl* m_ctrl;
     wxTextAttrEx    m_defaultAttributes;
+
+    /// The invalidated range that will need full layout
+    wxRichTextRange         m_invalidRange;
 };
 
 /*!
@@ -1074,7 +1084,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
@@ -1163,7 +1173,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
@@ -1316,7 +1326,7 @@ public:
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Lay the item out
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRichTextRange& affected, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
 
     /// Get the object size for the given range. Returns false if the range
     /// is invalid for this object.
