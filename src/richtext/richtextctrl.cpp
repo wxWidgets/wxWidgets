@@ -291,7 +291,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
             wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(position);
             wxRichTextLine* line = GetBuffer().GetLineAtPosition(position);
 
-            if (line && para && line->GetRange().GetStart() == position && para->GetRange().GetStart() != position)
+            if (line && para && line->GetAbsoluteRange().GetStart() == position && para->GetRange().GetStart() != position)
                 caretAtLineStart = true;
             position --;
         }
@@ -358,7 +358,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
             wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(position);
             wxRichTextLine* line = GetBuffer().GetLineAtPosition(position);
 
-            if (line && para && line->GetRange().GetStart() == position && para->GetRange().GetStart() != position)
+            if (line && para && line->GetAbsoluteRange().GetStart() == position && para->GetRange().GetStart() != position)
                 caretAtLineStart = true;
             position --;
         }
@@ -792,10 +792,12 @@ void wxRichTextCtrl::MoveCaretForward(long oldPosition)
 
         if (line)
         {
+            wxRichTextRange lineRange = line->GetAbsoluteRange();
+
             // We're at the end of a line. See whether we need to
             // stay at the same actual caret position but change visual
             // position, or not.
-            if (oldPosition == line->GetRange().GetEnd())
+            if (oldPosition == lineRange.GetEnd())
             {
                 if (m_caretAtLineStart)
                 {
@@ -835,16 +837,18 @@ void wxRichTextCtrl::MoveCaretBack(long oldPosition)
 
         if (line)
         {
+            wxRichTextRange lineRange = line->GetAbsoluteRange();
+
             // We're at the start of a line. See whether we need to
             // stay at the same actual caret position but change visual
             // position, or not.
-            if (oldPosition == line->GetRange().GetStart())
+            if (oldPosition == lineRange.GetStart())
             {
                 m_caretPosition = oldPosition-1;
                 m_caretAtLineStart = true;
                 return;
             }
-            else if (oldPosition == line->GetRange().GetEnd())
+            else if (oldPosition == lineRange.GetEnd())
             {
                 if (m_caretAtLineStart)
                 {
@@ -985,13 +989,14 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
         if (hitTest == wxRICHTEXT_HITTEST_BEFORE)
         {
             wxRichTextLine* thisLine = GetBuffer().GetLineAtPosition(newPos-1);
-            if (thisLine && (newPos-1) == thisLine->GetRange().GetEnd())
+            wxRichTextRange lineRange;
+            if (thisLine)
+                lineRange = thisLine->GetAbsoluteRange();
+
+            if (thisLine && (newPos-1) == lineRange.GetEnd())
             {
-                // if (para->GetRange().GetStart() != thisLine->GetRange().GetStart())
-                {
-                    newPos --;
-                    caretLineStart = true;
-                }
+                newPos --;
+                caretLineStart = true;
             }
             else
             {
@@ -1069,7 +1074,8 @@ bool wxRichTextCtrl::MoveToLineEnd(int flags)
 
     if (line)
     {
-        long newPos = line->GetRange().GetEnd();
+        wxRichTextRange lineRange = line->GetAbsoluteRange();
+        long newPos = lineRange.GetEnd();
         if (!ExtendSelection(m_caretPosition, newPos, flags))
             SelectNone();
 
@@ -1091,14 +1097,15 @@ bool wxRichTextCtrl::MoveToLineStart(int flags)
     wxRichTextLine* line = GetVisibleLineForCaretPosition(m_caretPosition);
     if (line)
     {
-        long newPos = line->GetRange().GetStart()-1;
+        wxRichTextRange lineRange = line->GetAbsoluteRange();
+        long newPos = lineRange.GetStart()-1;
 
         if (!ExtendSelection(m_caretPosition, newPos, flags))
             SelectNone();
 
         wxRichTextParagraph* para = GetBuffer().GetParagraphForLine(line);
 
-        SetCaretPosition(newPos, para->GetRange().GetStart() != line->GetRange().GetStart());
+        SetCaretPosition(newPos, para->GetRange().GetStart() != lineRange.GetStart());
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
@@ -1171,7 +1178,8 @@ bool wxRichTextCtrl::PageDown(int noPages, int flags)
         wxRichTextLine* newLine = GetBuffer().GetLineAtYPosition(newY);
         if (newLine)
         {
-            long pos = newLine->GetRange().GetStart()-1;
+            wxRichTextRange lineRange = newLine->GetAbsoluteRange();
+            long pos = lineRange.GetStart()-1;
             if (pos != m_caretPosition)
             {
                 wxRichTextParagraph* para = GetBuffer().GetParagraphForLine(newLine);
@@ -1179,7 +1187,7 @@ bool wxRichTextCtrl::PageDown(int noPages, int flags)
                 if (!ExtendSelection(m_caretPosition, pos, flags))
                     SelectNone();
 
-                SetCaretPosition(pos, para->GetRange().GetStart() != newLine->GetRange().GetStart());
+                SetCaretPosition(pos, para->GetRange().GetStart() != lineRange.GetStart());
                 PositionCaret();
                 SetDefaultStyleToCursorStyle();
 
@@ -1315,7 +1323,7 @@ bool wxRichTextCtrl::WordRight(int WXUNUSED(n), int flags)
 /// Sizing
 void wxRichTextCtrl::OnSize(wxSizeEvent& event)
 {
-    GetBuffer().SetDirty(true);
+    GetBuffer().Invalidate(wxRICHTEXT_ALL);
 
     RecreateBuffer();
 
@@ -2171,8 +2179,9 @@ wxRichTextLine* wxRichTextCtrl::GetVisibleLineForCaretPosition(long caretPositio
     wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(caretPosition, true);
     if (line)
     {
-        if (caretPosition == line->GetRange().GetStart()-1 &&
-            (para->GetRange().GetStart() != line->GetRange().GetStart()))
+        wxRichTextRange lineRange = line->GetAbsoluteRange();
+        if (caretPosition == lineRange.GetStart()-1 &&
+            (para->GetRange().GetStart() != lineRange.GetStart()))
         {
             if (!m_caretAtLineStart)
                 line = GetBuffer().GetLineAtPosition(caretPosition-1, true);
@@ -2204,24 +2213,27 @@ bool wxRichTextCtrl::MoveCaret(long pos, bool showAtLineStart)
 /// setting the caret position.
 bool wxRichTextCtrl::Layout()
 {
-    wxRect availableSpace(GetClientSize());
-    if (availableSpace.width == 0)
-        availableSpace.width = 10;
-    if (availableSpace.height == 0)
-        availableSpace.height = 10;
-
-    wxClientDC dc(this);
-    dc.SetFont(GetFont());
-
-    PrepareDC(dc);
-
-    GetBuffer().Defragment();
-    GetBuffer().UpdateRanges();     // If items were deleted, ranges need recalculation
-    GetBuffer().Layout(dc, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
-    GetBuffer().SetDirty(false);
-
-    if (!IsFrozen())
-        SetupScrollbars();
+    if (GetBuffer().GetDirty())
+    {
+        wxRect availableSpace(GetClientSize());
+        if (availableSpace.width == 0)
+            availableSpace.width = 10;
+        if (availableSpace.height == 0)
+            availableSpace.height = 10;
+        
+        wxClientDC dc(this);
+        dc.SetFont(GetFont());
+        
+        PrepareDC(dc);
+        
+        GetBuffer().Defragment();
+        GetBuffer().UpdateRanges();     // If items were deleted, ranges need recalculation
+        GetBuffer().Layout(dc, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
+        GetBuffer().SetDirty(false);
+        
+        if (!IsFrozen())
+            SetupScrollbars();
+    }
 
     return true;
 }

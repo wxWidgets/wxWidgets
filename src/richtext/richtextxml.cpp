@@ -257,6 +257,15 @@ wxString wxRichTextXMLHandler::GetText(wxXmlNode *node, const wxString& param, b
     return str1;
 }
 
+// For use with earlier versions of wxWidgets
+#ifndef WXUNUSED_IN_UNICODE
+#if wxUSE_UNICODE
+#define WXUNUSED_IN_UNICODE(x) WXUNUSED(x)
+#else
+#define WXUNUSED_IN_UNICODE(x) x
+#endif
+#endif
+
 // write string to output:
 inline static void OutputString(wxOutputStream& stream, const wxString& str,
                                 wxMBConv *WXUNUSED_IN_UNICODE(convMem) = NULL, wxMBConv *convFile = NULL)

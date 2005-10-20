@@ -698,13 +698,14 @@ bool MyFrame::ProcessEvent(wxEvent& event)
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
-    wxString filter = wxRichTextBuffer::GetExtWildcard(false, false);
+    wxString path = wxEmptyString;
+    wxString filename = wxEmptyString;
+    wxArrayInt fileTypes;
+
+    wxString filter = wxRichTextBuffer::GetExtWildcard(false, false, & fileTypes);
     if (!filter.IsEmpty())
         filter += wxT("|");
     filter += wxT("All files (*.*)|*.*");
-
-    wxString path = wxEmptyString;
-    wxString filename = wxEmptyString;
 
     wxFileDialog dialog(this,
         _("Choose a filename"),
@@ -719,7 +720,13 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         
         if (!path.IsEmpty())
         {
-            m_richTextCtrl->LoadFile(path);
+            int fileType = 0;
+            int filterIndex = dialog.GetFilterIndex();
+            if (filterIndex < (int) fileTypes.GetCount())
+                fileType = fileTypes[filterIndex];
+            else
+                fileType = wxRICHTEXT_TYPE_TEXT;
+            m_richTextCtrl->LoadFile(path, fileType);
         }
     }
 }

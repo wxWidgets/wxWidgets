@@ -244,6 +244,9 @@ protected:
     long m_end;
 };
 
+#define wxRICHTEXT_ALL  wxRichTextRange(-2, -2)
+#define wxRICHTEXT_NONE  wxRichTextRange(-1, -1)
+
 /*!
  * wxTextAttrEx is an extended version of wxTextAttr with more paragraph attributes.
  */
@@ -931,7 +934,7 @@ public:
     virtual const wxTextAttrEx& GetBasicStyle() const { return m_attributes; }
 
     /// Invalidate the buffer. With no argument, invalidates whole buffer.
-    void Invalidate(const wxRichTextRange& invalidRange = wxRichTextRange(-1, -1));
+    void Invalidate(const wxRichTextRange& invalidRange = wxRICHTEXT_ALL);
 
     /// Get invalid range, rounding to entire paragraphs if argument is true.
     wxRichTextRange GetInvalidRange(bool wholeParagraphs = false) const;
@@ -997,7 +1000,7 @@ public:
 // Constructors
 
     wxRichTextLine(wxRichTextParagraph* parent);
-    wxRichTextLine(const wxRichTextLine& obj) { Init(); Copy(obj); }
+    wxRichTextLine(const wxRichTextLine& obj) { Init( NULL); Copy(obj); }
     virtual ~wxRichTextLine() {}
 
 // Overrideables
@@ -1014,6 +1017,9 @@ public:
     /// Get the range
     const wxRichTextRange& GetRange() const { return m_range; }
     wxRichTextRange& GetRange() { return m_range; }
+
+    /// Get the absolute range
+    wxRichTextRange GetAbsoluteRange() const;
 
     /// Get/set the line size as calculated by Layout.
     virtual wxSize GetSize() const { return m_size; }
@@ -1036,7 +1042,7 @@ public:
 // Operations
 
     /// Initialisation
-    void Init();
+    void Init(wxRichTextParagraph* parent);
 
     /// Copy
     void Copy(const wxRichTextLine& obj);
@@ -1047,6 +1053,7 @@ public:
 protected:
 
     /// The range of the line (start position to end position)
+    /// This is relative to the parent paragraph.
     wxRichTextRange     m_range;
 
     /// Size and position measured relative to top of paragraph
@@ -1147,6 +1154,12 @@ public:
 
     /// Get the bullet text for this paragraph.
     wxString GetBulletText();
+
+    /// Allocate or reuse a line object
+    wxRichTextLine* AllocateLine(int pos);
+
+    /// Clear remaining unused line objects, if any
+    bool ClearUnusedLines(int lineCount);
 
 protected:
     /// The lines that make up the wrapped paragraph
@@ -1616,8 +1629,10 @@ public:
     /// Finds a handler by type
     static wxRichTextFileHandler *FindHandler(int imageType);
 
-    /// Gets a wildcard incorporating all visible handlers
-    static wxString GetExtWildcard(bool combine = false, bool save = false);
+    /// Gets a wildcard incorporating all visible handlers. If 'types' is present,
+    /// will be filled with the file type corresponding to each filter. This can be
+    /// used to determine the type to pass to LoadFile given a selected filter.
+    static wxString GetExtWildcard(bool combine = false, bool save = false, wxArrayInt* types = NULL);
 
     /// Clean up handlers
     static void CleanUpHandlers();
