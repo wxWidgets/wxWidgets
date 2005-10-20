@@ -1331,7 +1331,7 @@ void wxRichTextCtrl::OnSize(wxSizeEvent& event)
 }
 
 /// Set up scrollbars, e.g. after a resize
-void wxRichTextCtrl::SetupScrollbars()
+void wxRichTextCtrl::SetupScrollbars(bool atTop)
 {
     if (m_freezeCount)
         return;
@@ -1351,8 +1351,9 @@ void wxRichTextCtrl::SetupScrollbars()
 
     int unitsY = maxHeight/pixelsPerUnit;
 
-    int startX, startY;
-    GetViewStart(& startX, & startY);
+    int startX = 0, startY = 0;
+    if (!atTop)
+        GetViewStart(& startX, & startY);
 
     int maxPositionX = 0; // wxMax(sz.x - clientSize.x, 0);
     int maxPositionY = (wxMax(maxHeight - clientSize.y, 0))/pixelsPerUnit;
@@ -1413,6 +1414,7 @@ bool wxRichTextCtrl::LoadFile(const wxString& filename, int type)
     SetInsertionPoint(0);
     Layout();
     PositionCaret();
+    SetupScrollbars(true);
     Refresh();
     SendUpdateEvent();
 

@@ -561,7 +561,7 @@ public:
     virtual bool SetFont(const wxFont& font);
 
     /// Set up scrollbars, e.g. after a resize
-    virtual void SetupScrollbars();
+    virtual void SetupScrollbars(bool atTop = false);
 
     /// Keyboard navigation
     virtual bool Navigate(int keyCode, int flags);

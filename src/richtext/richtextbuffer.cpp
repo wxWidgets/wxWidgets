@@ -1949,6 +1949,8 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& WXUNUSED(range),
 /// Lay the item out
 bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 {
+    // ClearLines();
+
     // Increase the size of the paragraph due to spacing
     int spaceBeforePara = ConvertTenthsMMToPixels(dc, GetAttributes().GetParagraphSpacingBefore());
     int spaceAfterPara = ConvertTenthsMMToPixels(dc, GetAttributes().GetParagraphSpacingAfter());
@@ -4859,13 +4861,16 @@ bool wxRichTextPlainTextHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStr
     {
         int ch = stream.GetC();
 
-        if (ch == 10 && lastCh != 13)
-            str += wxT('\n');
-
-        if (ch > 0 && ch != 10)
-            str += wxChar(ch);
-
-        lastCh = ch;
+        if (!stream.Eof())
+        {
+            if (ch == 10 && lastCh != 13)
+                str += wxT('\n');
+            
+            if (ch > 0 && ch != 10)
+                str += wxChar(ch);
+            
+            lastCh = ch;
+        }
     }
 
     buffer->Clear();
