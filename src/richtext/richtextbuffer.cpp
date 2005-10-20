@@ -1502,7 +1502,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
             {
                 // We'll be using a copy of the paragraph to make style changes,
                 // not updating the buffer directly.
-                wxRichTextParagraph* newPara = NULL;
+                wxRichTextParagraph* newPara wxDUMMY_INITIALIZE(NULL);
 
                 if (haveControl && withUndo)
                 {
@@ -1527,8 +1527,8 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                     // we can start applying a different style.
                     // TODO: check that the style actually changes or is different
                     // from style outside of range
-                    wxRichTextObject* firstObject = NULL;
-                    wxRichTextObject* lastObject = NULL;
+                    wxRichTextObject* firstObject wxDUMMY_INITIALIZE(NULL);
+                    wxRichTextObject* lastObject wxDUMMY_INITIALIZE(NULL);
 
                     if (childRange.GetStart() == newPara->GetRange().GetStart())
                         firstObject = newPara->GetChildren().GetFirst()->GetData();
@@ -1596,11 +1596,13 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
 /// Get the text attributes for this position.
 bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxTextAttrEx& style) const
 {
-    wxRichTextObject* obj = NULL;
+    wxRichTextObject* obj wxDUMMY_INITIALIZE(NULL);
+
     if (style.IsParagraphStyle())
         obj = GetParagraphAtPosition(position);
     else
         obj = GetLeafObjectAtPosition(position);
+
     if (obj)
     {
         style = obj->GetAttributes();
@@ -1613,11 +1615,13 @@ bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxTextAttrEx& style) 
 /// Get the text attributes for this position.
 bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxRichTextAttr& style) const
 {
-    wxRichTextObject* obj = NULL;
+    wxRichTextObject* obj wxDUMMY_INITIALIZE(NULL);
+
     if (style.IsParagraphStyle())
         obj = GetParagraphAtPosition(position);
     else
         obj = GetLeafObjectAtPosition(position);
+
     if (obj)
     {
         style = obj->GetAttributes();
@@ -1869,7 +1873,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& WXUNUSED(range),
                     wxRichTextLine* line = m_cachedLines.GetFirst() ? (wxRichTextLine* ) m_cachedLines.GetFirst()->GetData() : (wxRichTextLine*) NULL;
 
                     wxPoint linePos;
-                    int lineHeight = 0;
+                    int lineHeight wxDUMMY_INITIALIZE(0);
                     if (line)
                     {
                         lineHeight = line->GetSize().y;
@@ -4849,12 +4853,11 @@ bool wxRichTextPlainTextHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStr
         return false;
 
     wxString str;
-    int ch = 0;
     int lastCh = 0;
 
     while (!stream.Eof())
     {
-        ch = stream.GetC();
+        int ch = stream.GetC();
 
         if (ch == 10 && lastCh != 13)
             str += wxT('\n');
