@@ -1003,6 +1003,21 @@ UTILS_DIST: ALL_GUI_DIST
 	$(LN_SF) $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
 	-$(LN_SF) $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
 
+	mkdir $(DISTDIR)/utils/configtool
+	mkdir $(DISTDIR)/utils/configtool/configs
+	mkdir $(DISTDIR)/utils/configtool/docs
+	mkdir $(DISTDIR)/utils/configtool/src
+	mkdir $(DISTDIR)/utils/configtool/src/bitmaps
+	mkdir $(DISTDIR)/utils/configtool/scripts
+	$(LN_SF) $(UTILSDIR)/configtool/*.in $(DISTDIR)/utils/configtool
+	$(LN_SF) $(UTILSDIR)/configtool/configs/*.wxs $(DISTDIR)/utils/configtool/configs
+	$(LN_SF) $(UTILSDIR)/configtool/docs/*.txt $(DISTDIR)/utils/configtool/docs
+	$(LN_SF) $(UTILSDIR)/configtool/src/*.h $(DISTDIR)/utils/configtool/src
+	$(LN_SF) $(UTILSDIR)/configtool/src/*.in $(DISTDIR)/utils/configtool/src
+	$(LN_SF) $(UTILSDIR)/configtool/src/*.cpp $(DISTDIR)/utils/configtool/src
+	$(LN_SF) $(UTILSDIR)/configtool/src/bitmaps/*.xpm $(DISTDIR)/utils/configtool/src/bitmaps
+	$(LN_SF) $(UTILSDIR)/configtool/scripts/* $(DISTDIR)/utils/configtool/scripts
+
 	mkdir $(DISTDIR)/utils/emulator
 	mkdir $(DISTDIR)/utils/emulator/src
 	mkdir $(DISTDIR)/utils/emulator/docs
@@ -1012,6 +1027,7 @@ UTILS_DIST: ALL_GUI_DIST
 	$(LN_SF) $(UTILSDIR)/emulator/src/*.cpp $(DISTDIR)/utils/emulator/src
 	$(LN_SF) $(UTILSDIR)/emulator/src/*.jpg $(DISTDIR)/utils/emulator/src
 	$(LN_SF) $(UTILSDIR)/emulator/src/*.wxe $(DISTDIR)/utils/emulator/src
+	$(LN_SF) $(UTILSDIR)/emulator/src/*.xpm $(DISTDIR)/utils/emulator/src
 	$(LN_SF) $(UTILSDIR)/emulator/docs/*.txt $(DISTDIR)/utils/emulator/docs
 	$(LN_SF) $(UTILSDIR)/emulator/docs/*.jpg $(DISTDIR)/utils/emulator/docs
 
