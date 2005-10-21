@@ -45,8 +45,8 @@ IMPROVEMENTS:
 - Improve image support: margins, resizing, storage of image as native format
   data (e.g. JPEG) so no lossiness.
 - Ensure read-only mode works.
-- Make more efficient, e.g. don't try to draw lines outside the client area;
-  don't store whole paragraph in Undo stack if just changing the paragraph's style.
+- Don't store whole paragraph in Undo stack if just changing the paragraph's style.
+- Use binary chop to find character position for (x,y).
 - Allow specification of word separators, and whether hyphenation will be done
   (language-dependent).
 

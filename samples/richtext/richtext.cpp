@@ -466,8 +466,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     toolBar->Realize();
 
-    wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxSize(100, 100), wxSP_NO_XP_THEME|wxSP_3D|wxSP_LIVE_UPDATE);
-
+    wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, GetClientSize(), wxSP_NO_XP_THEME|wxSP_3D|wxSP_LIVE_UPDATE);
 
     wxFont textFont = wxFont(12, wxROMAN, wxNORMAL, wxNORMAL);
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
@@ -483,6 +482,8 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     wxRichTextStyleListBox* styleListBox = new wxRichTextStyleListBox(splitter, wxID_ANY);
     splitter->SplitVertically(m_richTextCtrl, styleListBox, 400);
+
+    splitter->UpdateSize();
 
     styleListBox->SetStyleSheet(wxGetApp().GetStyleSheet());
     styleListBox->SetRichTextCtrl(m_richTextCtrl);

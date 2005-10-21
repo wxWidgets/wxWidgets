@@ -568,6 +568,9 @@ public:
     /// Idle-time processing
     void OnIdle(wxIdleEvent& event);
 
+    /// Scrolling
+    void OnScroll(wxScrollWinEvent& event);
+
 // Implementation
 
     /// Set font, and also default attributes
