@@ -2113,9 +2113,9 @@ static void TestScopeGuard()
     wxON_BLOCK_EXIT2(function2, 3.14, 'p');
 
     Object obj;
-    wxON_BLOCK_EXIT_OBJ0(obj, &Object::method0);
-    wxON_BLOCK_EXIT_OBJ1(obj, &Object::method1, 7);
-    wxON_BLOCK_EXIT_OBJ2(obj, &Object::method2, 2.71, 'e');
+    wxON_BLOCK_EXIT_OBJ0(obj, Object::method0);
+    wxON_BLOCK_EXIT_OBJ1(obj, Object::method1, 7);
+    wxON_BLOCK_EXIT_OBJ2(obj, Object::method2, 2.71, 'e');
 
     wxScopeGuard dismissed = wxMakeGuard(function0);
     dismissed.Dismiss();
