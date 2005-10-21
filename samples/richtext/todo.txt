@@ -10,6 +10,8 @@ BUGS:
   lengths. See wxRichTextCtrl::ExtendSelection.
 - Word forward can miss first word on line.
 - Doesn't correctly undo deletion of bulleted paragraphs.
+- Sizing doesn't restore the scroll position correctly (related
+  to the use of buffer layout optimization and OnIdle full layout.)
 
 
 IMPROVEMENTS:

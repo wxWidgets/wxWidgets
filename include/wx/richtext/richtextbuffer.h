@@ -134,6 +134,10 @@ class WXDLLIMPEXP_ADV wxTextAttrEx;
 #define wxRICHTEXT_VARIABLE_WIDTH   0x04
 #define wxRICHTEXT_VARIABLE_HEIGHT  0x08
 
+// Only lay out the part of the buffer that lies within
+// the rect passed to Layout.
+#define wxRICHTEXT_LAYOUT_SPECIFIED_RECT 0x10
+
 /*!
  * Flags returned from hit-testing
  */

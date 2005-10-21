@@ -57,6 +57,10 @@
 #define wxRICHTEXT_DEFAULT_TYPE_COLOUR wxColour(0, 0, 200)
 #define wxRICHTEXT_DEFAULT_FOCUS_RECT_COLOUR wxColour(100, 80, 80)
 #define wxRICHTEXT_DEFAULT_CARET_WIDTH 2
+// Minimum buffer size before delayed layout kicks in
+#define wxRICHTEXT_DEFAULT_DELAYED_LAYOUT_THRESHOLD 20000
+// Milliseconds before layout occurs after resize
+#define wxRICHTEXT_DEFAULT_LAYOUT_INTERVAL 50
 
 /*!
  * Forward declarations
@@ -135,6 +139,12 @@ public:
 
     /// Set filename
     void SetFilename(const wxString& filename) { m_filename = filename; }
+
+    /// Set the threshold in character positions for doing layout optimization during sizing
+    void SetDelayedLayoutThreshold(long threshold) { m_delayedLayoutThreshold = threshold; }
+
+    /// Get the threshold in character positions for doing layout optimization during sizing
+    long GetDelayedLayoutThreshold() const { return m_delayedLayoutThreshold; }
 
 // Operations
 
@@ -373,7 +383,7 @@ public:
 
     /// Layout the buffer: which we must do before certain operations, such as
     /// setting the caret position.
-    virtual bool Layout();
+    virtual bool Layout(bool onlyVisibleRect = false);
 
     /// Move the caret to the given character position
     virtual bool MoveCaret(long pos, bool showAtLineStart = false);
@@ -555,6 +565,9 @@ public:
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
 
+    /// Idle-time processing
+    void OnIdle(wxIdleEvent& event);
+
 // Implementation
 
     /// Set font, and also default attributes
@@ -633,10 +646,10 @@ public:
     bool DeleteSelectedContent(long* newPos= NULL);
 
     /// Transform logical to physical
-    wxPoint GetPhysicalPoint(const wxPoint& ptLogical);
+    wxPoint GetPhysicalPoint(const wxPoint& ptLogical) const;
 
     /// Transform physical to logical
-    wxPoint GetLogicalPoint(const wxPoint& ptPhysical);
+    wxPoint GetLogicalPoint(const wxPoint& ptPhysical) const;
 
     /// Finds the caret position for the next word. Direction
     /// is 1 (forward) or -1 (backwards).
@@ -644,6 +657,9 @@ public:
 
     /// Is the given position visible on the screen?
     bool IsPositionVisible(long pos) const;
+
+    /// Returns the first visible position in the current view
+    long GetFirstVisiblePosition() const;
 
 // Overrides
 
@@ -689,6 +705,14 @@ private:
 
     /// Start position for drag
     wxPoint                 m_dragStart;
+
+    /// Do we need full layout in idle?
+    bool                    m_fullLayoutRequired;
+    wxLongLong              m_fullLayoutTime;
+    long                    m_fullLayoutSavedPosition;
+
+    /// Threshold for doing delayed layout
+    long                    m_delayedLayoutThreshold;
 };
 
 /*!

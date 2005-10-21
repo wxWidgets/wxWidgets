@@ -516,7 +516,31 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, 
 /// Lay the item out
 bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int style)
 {
-    wxRect availableSpace(rect.x + m_leftMargin,
+    wxRect availableSpace;
+    bool formatRect = (style & wxRICHTEXT_LAYOUT_SPECIFIED_RECT) == wxRICHTEXT_LAYOUT_SPECIFIED_RECT;
+
+    // If only laying out a specific area, the passed rect has a different meaning:
+    // the visible part of the buffer.
+    if (formatRect)
+    {
+        availableSpace = wxRect(0 + m_leftMargin,
+                          0 + m_topMargin,
+                          rect.width - m_leftMargin - m_rightMargin,
+                          rect.height);
+
+        // Invalidate the part of the buffer from the first visible line
+        // to the end. If other parts of the buffer are currently invalid,
+        // then they too will be taken into account if they are above
+        // the visible point.
+        long startPos = 0;
+        wxRichTextLine* line = GetLineAtYPosition(rect.y);
+        if (line)
+            startPos = line->GetAbsoluteRange().GetStart();
+
+        Invalidate(wxRichTextRange(startPos, GetRange().GetEnd()));
+    }
+    else
+        availableSpace = wxRect(rect.x + m_leftMargin,
                           rect.y + m_topMargin,
                           rect.width - m_leftMargin - m_rightMargin,
                           rect.height - m_topMargin - m_bottomMargin);
@@ -530,7 +554,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
     // Get invalid range, rounding to paragraph start/end.
     wxRichTextRange invalidRange = GetInvalidRange(true);
 
-    if (invalidRange == wxRICHTEXT_NONE)
+    if (invalidRange == wxRICHTEXT_NONE && !formatRect)
         return true;
 
     if (invalidRange == wxRICHTEXT_ALL)
@@ -556,6 +580,9 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
         }
     }
 
+    // A way to force speedy rest-of-buffer layout (the 'else' below)
+    bool forceQuickLayout = false;
+        
     while (node)
     {
         // Assume this box only contains paragraphs
@@ -564,13 +591,19 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
         wxASSERT (child != NULL);
 
         // TODO: what if the child hasn't been laid out (e.g. involved in Undo) but still has 'old' lines
-        if (child && (layoutAll || child->GetLines().GetCount() == 0 || !child->GetRange().IsOutside(invalidRange)))
+        if (child && !forceQuickLayout && (layoutAll || child->GetLines().GetCount() == 0 || !child->GetRange().IsOutside(invalidRange)))
         {
             child->Layout(dc, availableSpace, style);
 
             // Layout must set the cached size
             availableSpace.y += child->GetCachedSize().y;
             maxWidth = wxMax(maxWidth, child->GetCachedSize().x);
+
+            // If we're just formatting the visible part of the buffer,
+            // and we're now past the bottom of the window, start quick
+            // layout.
+            if (formatRect && child->GetPosition().y > rect.GetBottom())
+                forceQuickLayout = true;
         }
         else
         {
@@ -2540,7 +2573,12 @@ wxRichTextObject* wxRichTextParagraph::SplitAt(long pos, wxRichTextObject** prev
         if (pos == child->GetRange().GetStart())
         {
             if (previousObject)
-                *previousObject = child;
+            {
+                if (node->GetPrevious())
+                    *previousObject = node->GetPrevious()->GetData();
+                else
+                    *previousObject = NULL;
+            }
 
             return child;
         }
@@ -4321,23 +4359,23 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2, i
         (attr1.GetRightIndent() != attr2.GetRightIndent()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_PARA_SPACING_AFTER) &&
+    if ((flags & wxTEXT_ATTR_PARA_SPACING_AFTER) &&
         (attr1.GetParagraphSpacingAfter() != attr2.GetParagraphSpacingAfter()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_PARA_SPACING_BEFORE) &&
+    if ((flags & wxTEXT_ATTR_PARA_SPACING_BEFORE) &&
         (attr1.GetParagraphSpacingBefore() != attr2.GetParagraphSpacingBefore()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_LINE_SPACING) &&
+    if ((flags & wxTEXT_ATTR_LINE_SPACING) &&
         (attr1.GetLineSpacing() != attr2.GetLineSpacing()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_CHARACTER_STYLE_NAME) &&
+    if ((flags & wxTEXT_ATTR_CHARACTER_STYLE_NAME) &&
         (attr1.GetCharacterStyleName() != attr2.GetCharacterStyleName()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) &&
+    if ((flags & wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) &&
         (attr1.GetParagraphStyleName() != attr2.GetParagraphStyleName()))
         return false;
 
@@ -4403,23 +4441,23 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2,
         (attr1.GetRightIndent() != attr2.GetRightIndent()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_PARA_SPACING_AFTER) &&
+    if ((flags & wxTEXT_ATTR_PARA_SPACING_AFTER) &&
         (attr1.GetParagraphSpacingAfter() != attr2.GetParagraphSpacingAfter()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_PARA_SPACING_BEFORE) &&
+    if ((flags & wxTEXT_ATTR_PARA_SPACING_BEFORE) &&
         (attr1.GetParagraphSpacingBefore() != attr2.GetParagraphSpacingBefore()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_LINE_SPACING) &&
+    if ((flags & wxTEXT_ATTR_LINE_SPACING) &&
         (attr1.GetLineSpacing() != attr2.GetLineSpacing()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_CHARACTER_STYLE_NAME) &&
+    if ((flags & wxTEXT_ATTR_CHARACTER_STYLE_NAME) &&
         (attr1.GetCharacterStyleName() != attr2.GetCharacterStyleName()))
         return false;
 
-    if ((flags && wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) &&
+    if ((flags & wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) &&
         (attr1.GetParagraphStyleName() != attr2.GetParagraphStyleName()))
         return false;
 

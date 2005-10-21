@@ -56,6 +56,7 @@ BEGIN_EVENT_TABLE( wxRichTextCtrl, wxScrolledWindow )
 #endif
     EVT_PAINT(wxRichTextCtrl::OnPaint)
     EVT_ERASE_BACKGROUND(wxRichTextCtrl::OnEraseBackground)
+    EVT_IDLE(wxRichTextCtrl::OnIdle)
     EVT_LEFT_DOWN(wxRichTextCtrl::OnLeftClick)
     EVT_MOTION(wxRichTextCtrl::OnMoveMouse)
     EVT_LEFT_UP(wxRichTextCtrl::OnLeftUp)
@@ -177,6 +178,10 @@ void wxRichTextCtrl::Init()
     m_editable = true;
     m_caretAtLineStart = false;
     m_dragging = false;
+    m_fullLayoutRequired = false;
+    m_fullLayoutTime = 0;
+    m_fullLayoutSavedPosition = 0;
+    m_delayedLayoutThreshold = wxRICHTEXT_DEFAULT_DELAYED_LAYOUT_THRESHOLD;
 }
 
 /// Call Freeze to prevent refresh
@@ -1323,10 +1328,36 @@ bool wxRichTextCtrl::WordRight(int WXUNUSED(n), int flags)
 /// Sizing
 void wxRichTextCtrl::OnSize(wxSizeEvent& event)
 {
-    GetBuffer().Invalidate(wxRICHTEXT_ALL);
+    // Only do sizing optimization for large buffers
+    if (GetBuffer().GetRange().GetEnd() > m_delayedLayoutThreshold)
+    {
+        m_fullLayoutRequired = true;
+        m_fullLayoutTime = wxGetLocalTimeMillis();
+        m_fullLayoutSavedPosition = GetFirstVisiblePosition();
+        Layout(true /* onlyVisibleRect */);
+    }
+    else
+        GetBuffer().Invalidate(wxRICHTEXT_ALL);
 
     RecreateBuffer();
 
+    event.Skip();
+}
+
+
+/// Idle-time processing
+void wxRichTextCtrl::OnIdle(wxIdleEvent& event)
+{
+    const int layoutInterval = wxRICHTEXT_DEFAULT_LAYOUT_INTERVAL;
+
+    if (m_fullLayoutRequired && (wxGetLocalTimeMillis() > (m_fullLayoutTime + layoutInterval)))
+    {
+        m_fullLayoutRequired = false;
+        m_fullLayoutTime = 0;
+        GetBuffer().Invalidate(wxRICHTEXT_ALL);
+        ShowPosition(m_fullLayoutSavedPosition);
+        Refresh();
+    }
     event.Skip();
 }
 
@@ -2119,8 +2150,8 @@ bool wxRichTextCtrl::SetFont(const wxFont& font)
     return true;
 }
 
-/// Transform logical to physical (unscrolling)
-wxPoint wxRichTextCtrl::GetPhysicalPoint(const wxPoint& ptLogical)
+/// Transform logical to physical
+wxPoint wxRichTextCtrl::GetPhysicalPoint(const wxPoint& ptLogical) const
 {
     wxPoint pt;
     CalcScrolledPosition(ptLogical.x, ptLogical.y, & pt.x, & pt.y);
@@ -2129,7 +2160,7 @@ wxPoint wxRichTextCtrl::GetPhysicalPoint(const wxPoint& ptLogical)
 }
 
 /// Transform physical to logical
-wxPoint wxRichTextCtrl::GetLogicalPoint(const wxPoint& ptPhysical)
+wxPoint wxRichTextCtrl::GetLogicalPoint(const wxPoint& ptPhysical) const
 {
     wxPoint pt;
     CalcUnscrolledPosition(ptPhysical.x, ptPhysical.y, & pt.x, & pt.y);
@@ -2213,15 +2244,22 @@ bool wxRichTextCtrl::MoveCaret(long pos, bool showAtLineStart)
 
 /// Layout the buffer: which we must do before certain operations, such as
 /// setting the caret position.
-bool wxRichTextCtrl::Layout()
+bool wxRichTextCtrl::Layout(bool onlyVisibleRect)
 {
-    if (GetBuffer().GetDirty())
+    if (GetBuffer().GetDirty() || onlyVisibleRect)
     {
         wxRect availableSpace(GetClientSize());
         if (availableSpace.width == 0)
             availableSpace.width = 10;
         if (availableSpace.height == 0)
             availableSpace.height = 10;
+
+        int flags = wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT;
+        if (onlyVisibleRect)
+        {
+            flags |= wxRICHTEXT_LAYOUT_SPECIFIED_RECT;
+            availableSpace.SetPosition(GetLogicalPoint(wxPoint(0, 0)));
+        }
         
         wxClientDC dc(this);
         dc.SetFont(GetFont());
@@ -2230,7 +2268,7 @@ bool wxRichTextCtrl::Layout()
         
         GetBuffer().Defragment();
         GetBuffer().UpdateRanges();     // If items were deleted, ranges need recalculation
-        GetBuffer().Layout(dc, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
+        GetBuffer().Layout(dc, availableSpace, flags);
         GetBuffer().SetDirty(false);
         
         if (!IsFrozen())
@@ -2354,7 +2392,7 @@ bool wxRichTextCtrl::ApplyUnderlineToSelection()
 {
     wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_FONT_UNDERLINE);
-    attr.SetFontWeight(!IsSelectionUnderlined());
+    attr.SetFontUnderlined(!IsSelectionUnderlined());
 
     if (HasSelection())
         return SetStyle(GetSelectionRange(), attr);
@@ -2413,6 +2451,16 @@ bool wxRichTextCtrl::SetDefaultStyleToCursorStyle()
     }
     else
         return false;
+}
+
+/// Returns the first visible position in the current view
+long wxRichTextCtrl::GetFirstVisiblePosition() const
+{
+    wxRichTextLine* line = GetBuffer().GetLineAtYPosition(GetLogicalPoint(wxPoint(0, 0)).y);
+    if (line)
+        return line->GetAbsoluteRange().GetStart();
+    else
+        return 0;
 }
 
 #endif
