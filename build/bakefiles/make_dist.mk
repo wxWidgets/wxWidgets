@@ -224,10 +224,20 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
+	mkdir $(DISTDIR)/include/wx/mac
+	mkdir $(DISTDIR)/include/wx/mac/carbon
+	mkdir $(DISTDIR)/include/wx/mac/corefoundation
+	mkdir $(DISTDIR)/include/wx/os2
+	mkdir $(DISTDIR)/include/wx/palmos
 	mkdir $(DISTDIR)/src/unix
+	mkdir $(DISTDIR)/src/mac
+	mkdir $(DISTDIR)/src/mac/corefoundation
+	mkdir $(DISTDIR)/src/mac/carbon
+	mkdir $(DISTDIR)/src/mac/carbon/morefilex
 	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
-	$(LN_SF) $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
+	mkdir $(DISTDIR)/src/os2
+	mkdir $(DISTDIR)/src/palmos
 	$(LN_SF) $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	$(LN_SF) $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	$(LN_SF) $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
@@ -247,6 +257,22 @@ BASE_DIST: ALL_DIST
 	$(LN_SF) $(SAMPDIR)/console/console.cpp $(DISTDIR)/samples/console
 	$(LN_SF) $(SAMPDIR)/console/console.dsp $(DISTDIR)/samples/console
 	$(LN_SF) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
+
+	mkdir $(DISTDIR)/utils
+	mkdir $(DISTDIR)/utils/HelpGen
+	mkdir $(DISTDIR)/utils/HelpGen/src
+	$(LN_SF) $(UTILSDIR)/HelpGen/Makefile.in $(DISTDIR)/utils/HelpGen
+	$(LN_SF) $(UTILSDIR)/HelpGen/src/Makefile.in $(DISTDIR)/utils/HelpGen/src
+	$(LN_SF) $(UTILSDIR)/HelpGen/src/*.h $(DISTDIR)/utils/HelpGen/src
+	$(LN_SF) $(UTILSDIR)/HelpGen/src/*.cpp $(DISTDIR)/utils/HelpGen/src
+
+	mkdir $(DISTDIR)/utils/tex2rtf
+	mkdir $(DISTDIR)/utils/tex2rtf/src
+	$(LN_SF) $(UTILSDIR)/tex2rtf/*.in $(DISTDIR)/utils/tex2rtf
+	$(LN_SF) $(UTILSDIR)/tex2rtf/src/*.h $(DISTDIR)/utils/tex2rtf/src
+	$(LN_SF) $(UTILSDIR)/tex2rtf/src/*.in $(DISTDIR)/utils/tex2rtf/src
+	$(LN_SF) $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
+	$(LN_SF) $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
 
 GTK_DIST: ALL_GUI_DIST
 	$(LN_SF) $(WXDIR)/wxGTK.spec $(DISTDIR)
