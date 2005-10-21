@@ -218,6 +218,9 @@ void wxRichTextCtrl::Clear()
 /// Painting
 void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+    if (GetCaret())
+        GetCaret()->Hide();
+
     {
         wxBufferedPaintDC dc(this, m_bufferBitmap);
         //wxLogDebug(wxT("OnPaint"));
@@ -245,6 +248,10 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         
         GetBuffer().Draw(dc, GetBuffer().GetRange(), GetSelectionRange(), drawingArea, 0 /* descent */, 0 /* flags */);
     }
+
+    if (GetCaret())
+        GetCaret()->Show();
+
     PositionCaret();
 }
 

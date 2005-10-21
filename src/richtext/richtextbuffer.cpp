@@ -3824,7 +3824,7 @@ bool wxRichTextBuffer::CopyToClipboard(const wxRichTextRange& range)
 {
     bool success = false;
     wxString text = GetTextForRange(range);
-    if (wxTheClipboard->Open())
+    if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
         success = wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
@@ -3883,7 +3883,7 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
 bool wxRichTextBuffer::CanPasteFromClipboard() const
 {
     bool canPaste = false;
-    if (wxTheClipboard->Open())
+    if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
         if (wxTheClipboard->IsSupported(wxDF_TEXT) || wxTheClipboard->IsSupported(wxDF_BITMAP))
         {
