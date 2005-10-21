@@ -486,7 +486,7 @@ This function may be used to find all selected items in the control like this:
             break;
 
         // this item is selected - do whatever is needed with it
-        wxLogMessage("Item %ld is selected."), item);
+        wxLogMessage("Item %ld is selected.", item);
     }
 \end{verbatim}
 
@@ -674,7 +674,7 @@ The base class version always returns {\tt NULL}.
 
 \membersection{wxListCtrl::OnGetItemImage}\label{wxlistctrlongetitemimage}
 
-\func{virtual int}{OnGetItemImage}{\param{long }{item}}
+\constfunc{virtual int}{OnGetItemImage}{\param{long }{item}}
 
 This function must be overloaded in the derived class for a control with
 {\tt wxLC\_VIRTUAL} style having an \helpref{image list}{wxlistctrlsetimagelist}
