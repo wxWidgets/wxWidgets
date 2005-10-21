@@ -19,6 +19,9 @@ All (GUI):
 - Added access to the border size between pages and controller in book
   based controls (wxBookCtrlBase::Get/SetInternalBorder).
 - Added initial wxRichTextCtrl implementation.
+- All book based controls (notebook, treebook etc.) share now the same
+  options for orientation (wxBK_TOP, wxBK_DEFAULT, ...) instead of duplicated
+  wxLB_TOP, wxNB_TOP, wxCHB_TOP, wxTBK_TOP.
 
 wxMSW:
 

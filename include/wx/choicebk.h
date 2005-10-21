@@ -67,29 +67,19 @@ public:
     virtual int SetSelection(size_t n);
     virtual void SetImageList(wxImageList *imageList);
 
-    // returns true if we have wxCHB_TOP or wxCHB_BOTTOM style
-    bool IsVertical() const { return HasFlag(wxCHB_BOTTOM | wxCHB_TOP); }
-
     virtual bool DeleteAllPages();
 
     // returns the choice control
-    wxChoice* GetChoiceCtrl() const { return m_choice; }
+    wxChoice* GetChoiceCtrl() const { return (wxChoice*)m_bookctrl; }
 
 protected:
     virtual wxWindow *DoRemovePage(size_t page);
 
     // get the size which the choice control should have
-    wxSize GetChoiceSize() const;
-
-    // get the page area
-    wxRect GetPageRect() const;
+    virtual wxSize GetControllerSize() const;
 
     // event handlers
-    void OnSize(wxSizeEvent& event);
     void OnChoiceSelected(wxCommandEvent& event);
-
-    // the choice control we use for showing the pages index
-    wxChoice *m_choice;
 
     // the currently selected page or wxNOT_FOUND if none
     int m_selection;
