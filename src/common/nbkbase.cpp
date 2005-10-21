@@ -45,7 +45,7 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage) const
     // default because not all ports implement this
     wxSize sizeTotal = sizePage;
 
-    if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
+    if ( HasFlag(wxBK_LEFT) || HasFlag(wxBK_RIGHT) )
     {
         sizeTotal.x += 90;
         sizeTotal.y += 10;
@@ -60,4 +60,3 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage) const
 }
 
 #endif // wxUSE_NOTEBOOK
-

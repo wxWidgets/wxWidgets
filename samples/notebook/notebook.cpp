@@ -307,34 +307,26 @@ MyFrame::~MyFrame()
 // part is control class-specific
 #if wxUSE_NOTEBOOK
     #define CASE_NOTEBOOK(x) case Type_Notebook: x; break;
-    #define FLAG_NOTEBOOK(x) wxNB_##x
 #else
     #define CASE_NOTEBOOK(x)
-    #define FLAG_NOTEBOOK(x) 0
 #endif
 
 #if wxUSE_LISTBOOK
     #define CASE_LISTBOOK(x) case Type_Listbook: x; break;
-    #define FLAG_LISTBOOK(x) wxLB_##x
 #else
     #define CASE_LISTBOOK(x)
-    #define FLAG_LISTBOOK(x) 0
 #endif
 
 #if wxUSE_CHOICEBOOK
     #define CASE_CHOICEBOOK(x) case Type_Choicebook: x; break;
-    #define FLAG_CHOICEBOOK(x) wxCHB_##x
 #else
     #define CASE_CHOICEBOOK(x)
-    #define FLAG_CHOICEBOOK(x) 0
 #endif
 
 #if wxUSE_TREEBOOK
     #define CASE_TREEBOOK(x) case Type_Treebook: x; break;
-    #define FLAG_TREEBOOK(x) wxTBK_##x
 #else
     #define CASE_TREEBOOK(x)
-    #define FLAG_TREEBOOK(x) 0
 #endif
 
 #define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, after)                       \
@@ -360,33 +352,28 @@ int MyFrame::TranslateBookFlag(int nb, int lb, int chb, int tbk) const
 
 void MyFrame::RecreateBook()
 {
-#define SELECT_FLAG(f) \
-    TranslateBookFlag(FLAG_NOTEBOOK(f), FLAG_LISTBOOK(f), FLAG_CHOICEBOOK(f), FLAG_TREEBOOK(f))
-
     int flags;
     switch ( m_orient )
     {
         case ID_ORIENT_TOP:
-            flags = SELECT_FLAG(TOP);
+            flags = wxBK_TOP;
             break;
 
         case ID_ORIENT_BOTTOM:
-            flags = SELECT_FLAG(BOTTOM);
+            flags = wxBK_BOTTOM;
             break;
 
         case ID_ORIENT_LEFT:
-            flags = SELECT_FLAG(LEFT);
+            flags = wxBK_LEFT;
             break;
 
         case ID_ORIENT_RIGHT:
-            flags = SELECT_FLAG(RIGHT);
+            flags = wxBK_RIGHT;
             break;
 
         default:
-            flags = SELECT_FLAG(DEFAULT);
+            flags = wxBK_DEFAULT;
     }
-
-#undef SELECT_FLAG
 
     if ( m_multi && m_type == Type_Notebook )
         flags |= wxNB_MULTILINE;
@@ -823,4 +810,3 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
     m_text->SetInsertionPointEnd();
 #endif
 }
-

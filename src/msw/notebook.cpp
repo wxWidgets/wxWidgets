@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/notebook.cpp
+// Name:        src/msw/notebook.cpp
 // Purpose:     implementation of wxNotebook
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -153,9 +153,11 @@ wxBEGIN_FLAGS( wxNotebookStyle )
     wxFLAGS_MEMBER(wxHSCROLL)
 
     wxFLAGS_MEMBER(wxNB_FIXEDWIDTH)
-    wxFLAGS_MEMBER(wxNB_LEFT)
-    wxFLAGS_MEMBER(wxNB_RIGHT)
-    wxFLAGS_MEMBER(wxNB_BOTTOM)
+    wxFLAGS_MEMBER(wxBK_DEFAULT)
+    wxFLAGS_MEMBER(wxBK_TOP)
+    wxFLAGS_MEMBER(wxBK_LEFT)
+    wxFLAGS_MEMBER(wxBK_RIGHT)
+    wxFLAGS_MEMBER(wxBK_BOTTOM)
     wxFLAGS_MEMBER(wxNB_NOPAGETHEME)
     wxFLAGS_MEMBER(wxNB_FLAT)
 
@@ -283,7 +285,7 @@ bool wxNotebook::Create(wxWindow *parent,
         if ( wxUxThemeEngine::GetIfActive() )
 #endif
         {
-            style &= ~(wxNB_BOTTOM | wxNB_LEFT | wxNB_RIGHT);
+            style &= ~(wxBK_BOTTOM | wxBK_LEFT | wxBK_RIGHT);
         }
     }
 
@@ -374,11 +376,11 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & wxNB_FIXEDWIDTH )
         tabStyle |= TCS_FIXEDWIDTH;
 
-    if ( style & wxNB_BOTTOM )
+    if ( style & wxBK_BOTTOM )
         tabStyle |= TCS_RIGHT;
-    else if ( style & wxNB_LEFT )
+    else if ( style & wxBK_LEFT )
         tabStyle |= TCS_VERTICAL;
-    else if ( style & wxNB_RIGHT )
+    else if ( style & wxBK_RIGHT )
         tabStyle |= TCS_VERTICAL | TCS_RIGHT;
 
     // ex style
@@ -566,7 +568,7 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
         tabSize.x = rect.right - rect.left;
         tabSize.y = rect.bottom - rect.top;
     }
-    if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
+    if ( HasFlag(wxBK_LEFT) || HasFlag(wxBK_RIGHT) )
     {
         sizeTotal.x += tabSize.x + 7;
         sizeTotal.y += 7;

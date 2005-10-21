@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/bookctrl.cpp
+// Name:        src/common/bookctrl.cpp
 // Purpose:     wxBookCtrlBase implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -35,11 +35,22 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// event table
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxBookCtrlBase, wxControl)
+
+BEGIN_EVENT_TABLE(wxBookCtrlBase, wxControl)
+    EVT_SIZE(wxBookCtrlBase::OnSize)
+END_EVENT_TABLE()
+
+// ----------------------------------------------------------------------------
 // constructors and destructors
 // ----------------------------------------------------------------------------
 
 void wxBookCtrlBase::Init()
 {
+    m_bookctrl = NULL;
     m_imageList = NULL;
     m_ownsImageList = false;
 
@@ -151,7 +162,8 @@ wxBookCtrlBase::InsertPage(size_t nPage,
                            bool WXUNUSED(bSelect),
                            int WXUNUSED(imageId))
 {
-    wxCHECK_MSG( page || AllowNullPage(), false, _T("NULL page in wxBookCtrlBase::InsertPage()") );
+    wxCHECK_MSG( page || AllowNullPage(), false,
+                 _T("NULL page in wxBookCtrlBase::InsertPage()") );
     wxCHECK_MSG( nPage <= m_pages.size(), false,
                  _T("invalid page index in wxBookCtrlBase::InsertPage()") );
 
@@ -206,6 +218,114 @@ int wxBookCtrlBase::GetNextPage(bool forward) const
     }
 
     return nPage;
+}
+
+wxRect wxBookCtrlBase::GetPageRect() const
+{
+    const wxSize size = GetControllerSize();
+
+    wxPoint pt;
+    wxRect rectPage(pt, GetClientSize());
+    switch ( GetWindowStyle() & wxBK_ALIGN_MASK )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected alignment") );
+            // fall through
+
+        case wxBK_TOP:
+            rectPage.y = size.y + GetInternalBorder();
+            // fall through
+
+        case wxBK_BOTTOM:
+            rectPage.height -= size.y + GetInternalBorder();
+            break;
+
+        case wxBK_LEFT:
+            rectPage.x = size.x + GetInternalBorder();
+            // fall through
+
+        case wxBK_RIGHT:
+            rectPage.width -= size.x + GetInternalBorder();
+            break;
+    }
+
+    return rectPage;
+}
+
+void wxBookCtrlBase::OnSize(wxSizeEvent& event)
+{
+    event.Skip();
+
+    if ( !m_bookctrl )
+    {
+        // we're not fully created yet or OnSize() should be hidden by derived class
+        return;
+    }
+
+    // resize controller and the page area to fit inside our new size
+    const wxSize sizeClient( GetClientSize() ),
+                 sizeBorder( m_bookctrl->GetSize() - m_bookctrl->GetClientSize() ),
+                 sizeCtrl( GetControllerSize() );
+
+    m_bookctrl->SetClientSize( sizeCtrl.x - sizeBorder.x, sizeCtrl.y - sizeBorder.y );
+
+    const wxSize sizeNew = m_bookctrl->GetSize();
+    wxPoint posCtrl;
+    switch ( GetWindowStyle() & wxBK_ALIGN_MASK )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected alignment") );
+            // fall through
+
+        case wxBK_TOP:
+        case wxBK_LEFT:
+            // posCtrl is already ok
+            break;
+
+        case wxBK_BOTTOM:
+            posCtrl.y = sizeClient.y - sizeNew.y;
+            break;
+
+        case wxBK_RIGHT:
+            posCtrl.x = sizeClient.x - sizeNew.x;
+            break;
+    }
+
+    if ( m_bookctrl->GetPosition() != posCtrl )
+        m_bookctrl->Move(posCtrl);
+
+    // resize the currently shown page
+    if (GetSelection() != wxNOT_FOUND )
+    {
+        wxWindow *page = m_pages[GetSelection()];
+        wxCHECK_RET( page, _T("NULL page?") );
+        page->SetSize(GetPageRect());
+    }
+}
+
+wxSize wxBookCtrlBase::GetControllerSize() const
+{
+    if(!m_bookctrl)
+        return wxSize(0,0);
+
+    const wxSize sizeClient = GetClientSize(),
+                 sizeBorder = m_bookctrl->GetSize() - m_bookctrl->GetClientSize(),
+                 sizeCtrl = m_bookctrl->GetBestSize() + sizeBorder;
+
+    wxSize size;
+
+    if ( IsVertical() )
+    {
+        size.x = sizeClient.x;
+        size.y = sizeCtrl.y;
+    }
+    else // left/right aligned
+    {
+        size.x = sizeCtrl.x;
+        size.y = sizeClient.y;
+    }
+
+    return size;
 }
 
 #endif // wxUSE_BOOKCTRL

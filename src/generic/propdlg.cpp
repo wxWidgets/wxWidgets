@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        propdlg.cpp
+// Name:        src/generic/propdlg.cpp
 // Purpose:     wxPropertySheetDialog
 // Author:      Julian Smart
 // Modified by:
@@ -110,9 +110,9 @@ wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 {
     int style = wxCLIP_CHILDREN;
 #if defined(__POCKETPC__) && wxUSE_NOTEBOOK
-    style |= wxNB_BOTTOM|wxNB_FLAT;
+    style |= wxBK_BOTTOM|wxNB_FLAT;
 #else
-    style |= wxBC_DEFAULT;
+    style |= wxBK_DEFAULT;
 #endif
     return new wxBookCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
 }

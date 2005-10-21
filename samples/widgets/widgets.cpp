@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Program:     wxWidgets Widgets Sample
-// Name:        widgets.cpp
+// Name:        samples/widgets/widgets.cpp
 // Purpose:     Sample showing most of the simple wxWidgets widgets
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
@@ -322,13 +322,13 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     // we have 2 panes: book with pages demonstrating the controls in the
     // upper one and the log window with some buttons in the lower
 
-    int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBC_DEFAULT;
+    int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBK_DEFAULT;
     // Uncomment to suppress page theme (draw in solid colour)
     //style |= wxNB_NOPAGETHEME;
 
     m_book = new wxBookCtrl(m_panel, wxID_ANY, wxDefaultPosition,
 #ifdef __WXMOTIF__
-        wxSize(500, -1), // under Motif, height is a function of the width...
+        wxSize(500, wxDefaultCoord), // under Motif, height is a function of the width...
 #else
         wxDefaultSize,
 #endif
@@ -698,4 +698,3 @@ wxCheckBox *WidgetsPage::CreateCheckBoxAndAddToSizer(wxSizer *sizer,
 
     return checkbox;
 }
-

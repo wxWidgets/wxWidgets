@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/listbkg.cpp
+// Name:        src/generic/listbkg.cpp
 // Purpose:     generic implementation of wxListbook
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -43,7 +43,7 @@
 // event table
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListbook, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListbook, wxBookCtrlBase)
 IMPLEMENT_DYNAMIC_CLASS(wxListbookEvent, wxNotifyEvent)
 
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = wxNewEventType();
@@ -65,10 +65,6 @@ END_EVENT_TABLE()
 
 void wxListbook::Init()
 {
-    m_list = NULL;
-#if wxUSE_LINE_IN_LISTBOOK
-    m_line = NULL;
-#endif // wxUSE_LINE_IN_LISTBOOK
     m_selection = wxNOT_FOUND;
 }
 
@@ -80,12 +76,12 @@ wxListbook::Create(wxWindow *parent,
                    long style,
                    const wxString& name)
 {
-    if ( (style & wxLB_ALIGN_MASK) == wxLB_DEFAULT )
+    if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
     {
 #ifdef __WXMAC__
-        style |= wxLB_TOP;
+        style |= wxBK_TOP;
 #else // !__WXMAC__
-        style |= wxLB_LEFT;
+        style |= wxBK_LEFT;
 #endif // __WXMAC__/!__WXMAC__
     }
 
@@ -98,7 +94,7 @@ wxListbook::Create(wxWindow *parent,
                             wxDefaultValidator, name) )
         return false;
 
-    m_list = new wxListView
+    m_bookctrl = new wxListView
                  (
                     this,
                     wxID_LISTBOOKLISTVIEW,
@@ -108,19 +104,8 @@ wxListbook::Create(wxWindow *parent,
                         (IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP)
                  );
 
-#if wxUSE_LINE_IN_LISTBOOK
-    m_line = new wxStaticLine
-                 (
-                    this,
-                    wxID_ANY,
-                    wxDefaultPosition,
-                    wxDefaultSize,
-                    IsVertical() ? wxLI_HORIZONTAL : wxLI_VERTICAL
-                 );
-#endif // wxUSE_LINE_IN_LISTBOOK
-
 #ifdef __WXMSW__
-    // On XP with themes enabled the GetViewRect used in GetListSize to
+    // On XP with themes enabled the GetViewRect used in GetControllerSize() to
     // determine the space needed for the list view will incorrectly return
     // (0,0,0,0) the first time.  So send a pending event so OnSize will be
     // called again after the window is ready to go.  Technically we don't
@@ -136,13 +121,14 @@ wxListbook::Create(wxWindow *parent,
 // wxListbook geometry management
 // ----------------------------------------------------------------------------
 
-wxSize wxListbook::GetListSize() const
+wxSize wxListbook::GetControllerSize() const
 {
     const wxSize sizeClient = GetClientSize(),
-                 sizeBorder = m_list->GetSize() - m_list->GetClientSize(),
-                 sizeList = m_list->GetViewRect().GetSize() + sizeBorder;
+                 sizeBorder = m_bookctrl->GetSize() - m_bookctrl->GetClientSize(),
+                 sizeList = GetListView()->GetViewRect().GetSize() + sizeBorder;
 
     wxSize size;
+
     if ( IsVertical() )
     {
         size.x = sizeClient.x;
@@ -157,132 +143,22 @@ wxSize wxListbook::GetListSize() const
     return size;
 }
 
-wxRect wxListbook::GetPageRect() const
-{
-    const wxSize sizeList = m_list->GetSize();
-
-    wxPoint pt;
-    wxRect rectPage(pt, GetClientSize());
-    switch ( GetWindowStyle() & wxLB_ALIGN_MASK )
-    {
-        default:
-            wxFAIL_MSG( _T("unexpected wxListbook alignment") );
-            // fall through
-
-        case wxLB_TOP:
-            rectPage.y = sizeList.y + GetInternalBorder();
-            // fall through
-
-        case wxLB_BOTTOM:
-            rectPage.height -= sizeList.y + GetInternalBorder();
-            break;
-
-        case wxLB_LEFT:
-            rectPage.x = sizeList.x + GetInternalBorder();
-            // fall through
-
-        case wxLB_RIGHT:
-            rectPage.width -= sizeList.x + GetInternalBorder();
-            break;
-    }
-
-    return rectPage;
-}
-
 void wxListbook::OnSize(wxSizeEvent& event)
 {
-    event.Skip();
-
-    if ( !m_list )
-    {
-        // we're not fully created yet
-        return;
-    }
-
     // arrange the icons before calling SetClientSize(), otherwise it wouldn't
     // account for the scrollbars the list control might need and, at least
     // under MSW, we'd finish with an ugly looking list control with both
     // vertical and horizontal scrollbar (with one of them being added because
     // the other one is not accounted for in client size computations)
-    m_list->Arrange();
-
-    // resize the list control and the page area to fit inside our new size
-    const wxSize sizeClient = GetClientSize(),
-                 sizeBorder = m_list->GetSize() - m_list->GetClientSize(),
-                 sizeList = GetListSize();
-
-    m_list->SetClientSize( sizeList.x - sizeBorder.x, sizeList.y - sizeBorder.y );
-
-    const wxSize sizeNew = m_list->GetSize();
-    wxPoint posList;
-    switch ( GetWindowStyle() & wxLB_ALIGN_MASK )
-    {
-        default:
-            wxFAIL_MSG( _T("unexpected wxListbook alignment") );
-            // fall through
-
-        case wxLB_TOP:
-        case wxLB_LEFT:
-            // posList is already ok
-            break;
-
-        case wxLB_BOTTOM:
-            posList.y = sizeClient.y - sizeNew.y;
-            break;
-
-        case wxLB_RIGHT:
-            posList.x = sizeClient.x - sizeNew.x;
-            break;
-    }
-
-    if ( m_list->GetPosition() != posList )
-        m_list->Move(posList);
-
-#if wxUSE_LINE_IN_LISTBOOK
-    if ( m_line )
-    {
-        wxRect rectLine(sizeClient);
-
-        switch ( GetWindowStyle() & wxLB_ALIGN_MASK )
-        {
-            case wxLB_TOP:
-                rectLine.y = sizeNew.y + 1;
-                rectLine.height = GetInternalBorder() - 2;
-                break;
-
-            case wxLB_BOTTOM:
-                rectLine.height = GetInternalBorder() - 2;
-                rectLine.y = sizeClient.y - sizeNew.y - rectLine.height;
-                break;
-
-            case wxLB_LEFT:
-                rectLine.x = sizeNew.x + 1;
-                rectLine.width = GetInternalBorder() - 2;
-                break;
-
-            case wxLB_RIGHT:
-                rectLine.width = GetInternalBorder() - 2;
-                rectLine.x = sizeClient.x - sizeNew.x - rectLine.width;
-                break;
-        }
-
-        m_line->SetSize(rectLine);
-    }
-#endif // wxUSE_LINE_IN_LISTBOOK
-
-    // resize the currently shown page
-    if (m_selection != wxNOT_FOUND )
-    {
-        wxWindow *page = m_pages[m_selection];
-        wxCHECK_RET( page, _T("NULL page in wxListbook?") );
-        page->SetSize(GetPageRect());
-    }
+    wxListView *list = GetListView();
+    if (list) list->Arrange();
+    wxBookCtrlBase::OnSize(event);
 }
 
 wxSize wxListbook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     // we need to add the size of the list control and the border between
-    const wxSize sizeList = GetListSize();
+    const wxSize sizeList = GetControllerSize();
 
     wxSize size = sizePage;
     if ( IsVertical() )
@@ -304,14 +180,14 @@ wxSize wxListbook::CalcSizeFromPage(const wxSize& sizePage) const
 
 bool wxListbook::SetPageText(size_t n, const wxString& strText)
 {
-    m_list->SetItemText(n, strText);
+    GetListView()->SetItemText(n, strText);
 
     return true;
 }
 
 wxString wxListbook::GetPageText(size_t n) const
 {
-    return m_list->GetItemText(n);
+    return GetListView()->GetItemText(n);
 }
 
 int wxListbook::GetPageImage(size_t WXUNUSED(n)) const
@@ -323,7 +199,7 @@ int wxListbook::GetPageImage(size_t WXUNUSED(n)) const
 
 bool wxListbook::SetPageImage(size_t n, int imageId)
 {
-    return m_list->SetItemImage(n, imageId);
+    return GetListView()->SetItemImage(n, imageId);
 }
 
 // ----------------------------------------------------------------------------
@@ -332,7 +208,7 @@ bool wxListbook::SetPageImage(size_t n, int imageId)
 
 void wxListbook::SetImageList(wxImageList *imageList)
 {
-    m_list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
+    GetListView()->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
 
     wxBookCtrlBase::SetImageList(imageList);
 }
@@ -370,8 +246,8 @@ int wxListbook::SetSelection(size_t n)
 
             // change m_selection now to ignore the selection change event
             m_selection = n;
-            m_list->Select(n);
-            m_list->Focus(n);
+            GetListView()->Select(n);
+            GetListView()->Focus(n);
 
             // program allows the page change
             event.SetEventType(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED);
@@ -396,7 +272,7 @@ wxListbook::InsertPage(size_t n,
     if ( !wxBookCtrlBase::InsertPage(n, page, text, bSelect, imageId) )
         return false;
 
-    m_list->InsertItem(n, text, imageId);
+    GetListView()->InsertItem(n, text, imageId);
 
     // if the inserted page is before the selected one, we must update the
     // index of the selected page
@@ -404,8 +280,8 @@ wxListbook::InsertPage(size_t n,
     {
         // one extra page added
         m_selection++;
-        m_list->Select(m_selection);
-        m_list->Focus(m_selection);
+        GetListView()->Select(m_selection);
+        GetListView()->Focus(m_selection);
     }
 
     // some page should be selected: either this one or the first one if there
@@ -423,7 +299,7 @@ wxListbook::InsertPage(size_t n,
         SetSelection(selNew);
 
     InvalidateBestSize();
-    m_list->Arrange();
+    GetListView()->Arrange();
     return true;
 }
 
@@ -434,7 +310,7 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
 
     if ( win )
     {
-        m_list->DeleteItem(page);
+        GetListView()->DeleteItem(page);
 
         if (m_selection >= (int)page)
         {
@@ -452,7 +328,7 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
                 SetSelection(sel);
         }
 
-        m_list->Arrange();
+        GetListView()->Arrange();
     }
 
     return win;
@@ -461,7 +337,7 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
 
 bool wxListbook::DeleteAllPages()
 {
-    m_list->DeleteAllItems();
+    GetListView()->DeleteAllItems();
     return wxBookCtrlBase::DeleteAllPages();
 }
 
@@ -486,8 +362,8 @@ void wxListbook::OnListSelected(wxListEvent& eventList)
     // change wasn't allowed, return to previous state
     if (m_selection != selNew)
     {
-        m_list->Select(m_selection);
-        m_list->Focus(m_selection);
+        GetListView()->Select(m_selection);
+        GetListView()->Focus(m_selection);
     }
 }
 

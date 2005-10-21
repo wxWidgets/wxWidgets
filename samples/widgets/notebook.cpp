@@ -355,19 +355,19 @@ void NotebookWidgetsPage::CreateNotebook()
             // fall through
 
         case Orient_Top:
-            flags = wxNB_TOP;
+            flags = wxBK_TOP;
             break;
 
         case Orient_Bottom:
-            flags = wxNB_BOTTOM;
+            flags = wxBK_BOTTOM;
             break;
 
         case Orient_Left:
-            flags = wxNB_LEFT;
+            flags = wxBK_LEFT;
             break;
 
         case Orient_Right:
-            flags = wxNB_RIGHT;
+            flags = wxBK_RIGHT;
             break;
     }
 
@@ -506,7 +506,7 @@ void NotebookWidgetsPage::OnUpdateUIRemoveButton(wxUpdateUIEvent& event)
 void NotebookWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( !m_chkImages->GetValue() ||
-                  m_radioOrient->GetSelection() != wxNB_TOP );
+                  m_radioOrient->GetSelection() != wxBK_TOP );
 }
 
 void NotebookWidgetsPage::OnUpdateUINumPagesText(wxUpdateUIEvent& event)
