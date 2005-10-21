@@ -1535,7 +1535,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
             {
                 // We'll be using a copy of the paragraph to make style changes,
                 // not updating the buffer directly.
-                wxRichTextParagraph* newPara wxDUMMY_INITIALIZE(NULL);
+                wxRichTextParagraph* newPara = NULL;
 
                 if (haveControl && withUndo)
                 {
@@ -1560,8 +1560,8 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                     // we can start applying a different style.
                     // TODO: check that the style actually changes or is different
                     // from style outside of range
-                    wxRichTextObject* firstObject wxDUMMY_INITIALIZE(NULL);
-                    wxRichTextObject* lastObject wxDUMMY_INITIALIZE(NULL);
+                    wxRichTextObject* firstObject = NULL;
+                    wxRichTextObject* lastObject = NULL;
 
                     if (childRange.GetStart() == newPara->GetRange().GetStart())
                         firstObject = newPara->GetChildren().GetFirst()->GetData();
@@ -1629,7 +1629,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
 /// Get the text attributes for this position.
 bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxTextAttrEx& style) const
 {
-    wxRichTextObject* obj wxDUMMY_INITIALIZE(NULL);
+    wxRichTextObject* obj = NULL;
 
     if (style.IsParagraphStyle())
         obj = GetParagraphAtPosition(position);
@@ -1648,7 +1648,7 @@ bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxTextAttrEx& style) 
 /// Get the text attributes for this position.
 bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxRichTextAttr& style) const
 {
-    wxRichTextObject* obj wxDUMMY_INITIALIZE(NULL);
+    wxRichTextObject* obj = NULL;
 
     if (style.IsParagraphStyle())
         obj = GetParagraphAtPosition(position);
@@ -1906,7 +1906,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& WXUNUSED(range),
                     wxRichTextLine* line = m_cachedLines.GetFirst() ? (wxRichTextLine* ) m_cachedLines.GetFirst()->GetData() : (wxRichTextLine*) NULL;
 
                     wxPoint linePos;
-                    int lineHeight wxDUMMY_INITIALIZE(0);
+                    int lineHeight = 0;
                     if (line)
                     {
                         lineHeight = line->GetSize().y;
