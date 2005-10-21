@@ -648,7 +648,7 @@ protected:
     wxTextAttrEx            m_attributes;
 };
 
-WX_DECLARE_EXPORTED_LIST( wxRichTextObject, wxRichTextObjectList );
+WX_DECLARE_LIST_WITH_DECL( wxRichTextObject, wxRichTextObjectList, class WXDLLIMPEXP_ADV );
 
 /*!
  * wxRichTextCompositeObject class declaration
@@ -1071,7 +1071,7 @@ protected:
     wxRichTextParagraph* m_parent;
 };
 
-WX_DECLARE_EXPORTED_LIST( wxRichTextLine, wxRichTextLineList );
+WX_DECLARE_LIST_WITH_DECL( wxRichTextLine, wxRichTextLineList , class WXDLLIMPEXP_ADV );
 
 /*!
  * wxRichTextParagraph class declaration
