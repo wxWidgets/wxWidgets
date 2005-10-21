@@ -474,7 +474,12 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 
     m_richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER);
-    m_richTextCtrl->SetFont(wxFont(12, wxROMAN, wxNORMAL, wxNORMAL));
+    wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
+
+#ifdef __WXMAC__
+    font.SetNoAntiAliasing(true);
+#endif
+    m_richTextCtrl->SetFont(font);
 
     wxRichTextStyleListBox* styleListBox = new wxRichTextStyleListBox(splitter, wxID_ANY);
     splitter->SplitVertically(m_richTextCtrl, styleListBox, 400);
