@@ -243,8 +243,8 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         GetBuffer().Layout(dc, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
         GetBuffer().SetDirty(false);
         SetupScrollbars();
-        PositionCaret();
     }
+    PositionCaret();
 
     GetBuffer().Draw(dc, GetBuffer().GetRange(), GetSelectionRange(), drawingArea, 0 /* descent */, 0 /* flags */);
 }

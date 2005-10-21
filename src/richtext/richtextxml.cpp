@@ -339,6 +339,7 @@ static wxOutputStream& operator <<(wxOutputStream& stream, const wxString& s)
     return stream;
 }
 
+#if 0
 static wxOutputStream& operator <<(wxOutputStream& stream, long l)
 {
     wxString str;
@@ -352,6 +353,7 @@ static wxOutputStream& operator <<(wxOutputStream& stream, const char c)
     str.Printf(wxT("%c"), c);
     return stream << str;
 }
+#endif
 
 // Convert a colour to a 6-digit hex string
 static wxString ColourToHexString(const wxColour& col)
