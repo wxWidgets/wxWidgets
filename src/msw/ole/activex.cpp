@@ -206,7 +206,7 @@ public:
             case DISPID_AMBIENT_SILENT:
                 V_BOOL(pVarResult)= TRUE;
                 return S_OK;
-
+#ifndef __WINE__
             case DISPID_AMBIENT_APPEARANCE:
                 pVarResult->vt = VT_BOOL;
                 pVarResult->boolVal = m_bAmbientAppearance;
@@ -241,7 +241,7 @@ public:
                 pVarResult->vt = VT_BOOL;
                 pVarResult->boolVal = m_bAmbientShowHatching;
                 break;
-
+#endif
             default:
                 return DISP_E_MEMBERNOTFOUND;
         }
