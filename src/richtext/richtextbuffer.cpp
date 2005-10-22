@@ -26,6 +26,7 @@
 
 #include "wx/filename.h"
 #include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
 #include "wx/mstream.h"
@@ -3824,7 +3825,7 @@ bool wxRichTextBuffer::SaveFile(wxOutputStream& stream, int type)
 bool wxRichTextBuffer::CopyToClipboard(const wxRichTextRange& range)
 {
     bool success = false;
-#if wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
     wxString text = GetTextForRange(range);
     if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
@@ -3841,7 +3842,7 @@ bool wxRichTextBuffer::CopyToClipboard(const wxRichTextRange& range)
 bool wxRichTextBuffer::PasteFromClipboard(long position)
 {
     bool success = false;
-#if wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
     if (CanPasteFromClipboard())
     {
         if (wxTheClipboard->Open())
@@ -3892,7 +3893,7 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
 bool wxRichTextBuffer::CanPasteFromClipboard() const
 {
     bool canPaste = false;
-#if wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
     if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
         if (wxTheClipboard->IsSupported(wxDF_TEXT) || wxTheClipboard->IsSupported(wxDF_BITMAP))
