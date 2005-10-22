@@ -174,9 +174,10 @@ bool wxRichTextCompositeObject::RemoveChild(wxRichTextObject* child, bool delete
     wxRichTextObjectList::compatibility_iterator node = m_children.Find(child);
     if (node)
     {
+        wxRichTextObject* obj = node->GetData();
+        m_children.Erase(node);
         if (deleteChild)
-            delete node->GetData();
-        delete node;
+            delete obj;
 
         return true;
     }
@@ -195,7 +196,7 @@ bool wxRichTextCompositeObject::DeleteChildren()
         child->Dereference(); // Only delete if reference count is zero
 
         node = node->GetNext();
-        delete oldNode;
+        m_children.Erase(oldNode);
     }
 
     return true;
