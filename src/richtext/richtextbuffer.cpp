@@ -548,7 +548,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
     int maxWidth = 0;
 
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
-    
+
     bool layoutAll = true;
 
     // Get invalid range, rounding to paragraph start/end.
@@ -582,7 +582,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
 
     // A way to force speedy rest-of-buffer layout (the 'else' below)
     bool forceQuickLayout = false;
-        
+
     while (node)
     {
         // Assume this box only contains paragraphs
@@ -1780,7 +1780,7 @@ void wxRichTextParagraphLayoutBox::Reset()
 void wxRichTextParagraphLayoutBox::Invalidate(const wxRichTextRange& invalidRange)
 {
     SetDirty(true);
-    
+
     if (invalidRange == wxRICHTEXT_ALL)
     {
         m_invalidRange = wxRICHTEXT_ALL;
@@ -1790,7 +1790,7 @@ void wxRichTextParagraphLayoutBox::Invalidate(const wxRichTextRange& invalidRang
     // Already invalidating everything
     if (m_invalidRange == wxRICHTEXT_ALL)
         return;
-    
+
     if ((invalidRange.GetStart() < m_invalidRange.GetStart()) || m_invalidRange.GetStart() == -1)
         m_invalidRange.SetStart(invalidRange.GetStart());
     if (invalidRange.GetEnd() > m_invalidRange.GetEnd())
@@ -1802,9 +1802,9 @@ wxRichTextRange wxRichTextParagraphLayoutBox::GetInvalidRange(bool wholeParagrap
 {
     if (m_invalidRange == wxRICHTEXT_ALL || m_invalidRange == wxRICHTEXT_NONE)
         return m_invalidRange;
-    
+
     wxRichTextRange range = m_invalidRange;
-    
+
     if (wholeParagraphs)
     {
         wxRichTextParagraph* para1 = GetParagraphAtPosition(range.GetStart());
@@ -2101,7 +2101,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 
             // Add a new line
             wxRichTextLine* line = AllocateLine(lineCount);
-            
+
             // Set relative range so we won't have to change line ranges when paragraphs are moved
             line->SetRange(wxRichTextRange(actualRange.GetStart() - GetRange().GetStart(), actualRange.GetEnd() - GetRange().GetStart()));
             line->SetPosition(currentPosition);
@@ -3823,12 +3823,16 @@ bool wxRichTextBuffer::SaveFile(wxOutputStream& stream, int type)
 bool wxRichTextBuffer::CopyToClipboard(const wxRichTextRange& range)
 {
     bool success = false;
+#if wxUSE_CLIPBOARD
     wxString text = GetTextForRange(range);
     if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
         success = wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
+#else
+    wxUnusedVar(range);
+#endif
     return success;
 }
 
@@ -3836,6 +3840,7 @@ bool wxRichTextBuffer::CopyToClipboard(const wxRichTextRange& range)
 bool wxRichTextBuffer::PasteFromClipboard(long position)
 {
     bool success = false;
+#if wxUSE_CLIPBOARD
     if (CanPasteFromClipboard())
     {
         if (wxTheClipboard->Open())
@@ -3876,6 +3881,9 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
             wxTheClipboard->Close();
         }
     }
+#else
+    wxUnusedVar(position);
+#endif
     return success;
 }
 
@@ -3883,6 +3891,7 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
 bool wxRichTextBuffer::CanPasteFromClipboard() const
 {
     bool canPaste = false;
+#if wxUSE_CLIPBOARD
     if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
         if (wxTheClipboard->IsSupported(wxDF_TEXT) || wxTheClipboard->IsSupported(wxDF_BITMAP))
@@ -3891,6 +3900,7 @@ bool wxRichTextBuffer::CanPasteFromClipboard() const
         }
         wxTheClipboard->Close();
     }
+#endif
     return canPaste;
 }
 
@@ -4906,10 +4916,10 @@ bool wxRichTextPlainTextHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStr
         {
             if (ch == 10 && lastCh != 13)
                 str += wxT('\n');
-            
+
             if (ch > 0 && ch != 10)
                 str += wxChar(ch);
-            
+
             lastCh = ch;
         }
     }
@@ -5203,4 +5213,3 @@ bool wxRichTextImageBlock::WriteBlock(const wxString& filename, unsigned char* b
 
 #endif
     // wxUSE_RICHTEXT
-
