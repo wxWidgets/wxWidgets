@@ -384,7 +384,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     fileMenu->AppendSeparator();
     fileMenu->Append(ID_VIEW_HTML, _T("&View as HTML"), _T("View HTML"));
     fileMenu->AppendSeparator();
-    fileMenu->Append(ID_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    fileMenu->Append(ID_Quit, _T("E&xit\tAlt+X"), _T("Quit this program"));
 
     wxMenu* editMenu = new wxMenu;
     editMenu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
@@ -413,7 +413,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     formatMenu->AppendCheckItem(ID_FORMAT_ALIGN_RIGHT, _("&Right Align"));
     formatMenu->AppendCheckItem(ID_FORMAT_ALIGN_CENTRE, _("&Centre"));
     formatMenu->AppendSeparator();
-    formatMenu->Append(ID_FORMAT_INDENT_MORE, _("I&ndent &More"));
+    formatMenu->Append(ID_FORMAT_INDENT_MORE, _("Indent &More"));
     formatMenu->Append(ID_FORMAT_INDENT_LESS, _("Indent &Less"));
     formatMenu->AppendSeparator();
     formatMenu->Append(ID_FORMAT_PARAGRAPH_SPACING_MORE, _("Increase Paragraph &Spacing"));
