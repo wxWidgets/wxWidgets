@@ -1565,7 +1565,9 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     XSetFont( (Display*) m_display, (GC) m_textGC, xfont->fid );
 #if !wxUSE_NANOX
-    if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
+    // This may be a test for whether the font is 16-bit, but it also
+    // seems to fail for valid 8-bit fonts too.
+    if (1) // (xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
 #endif
     {
         XDrawString( (Display*) m_display, (Window) m_window,
