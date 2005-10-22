@@ -568,7 +568,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
         if (firstParagraph)
         {
             wxRichTextObjectList::compatibility_iterator firstNode = m_children.Find(firstParagraph);
-            wxRichTextObjectList::compatibility_iterator previousNode = firstNode ? firstNode->GetPrevious() : (wxRichTextObjectList::compatibility_iterator) NULL;
+            wxRichTextObjectList::compatibility_iterator previousNode = firstNode ? firstNode->GetPrevious() : wxRichTextObjectList::compatibility_iterator();
             if (firstNode && previousNode)
             {
                 wxRichTextParagraph* previousParagraph = wxDynamicCast(previousNode->GetData(), wxRichTextParagraph);
@@ -657,8 +657,8 @@ bool wxRichTextParagraphLayoutBox::GetRangeSize(const wxRichTextRange& range, wx
 {
     wxSize sz;
 
-    wxRichTextObjectList::compatibility_iterator startPara = NULL;
-    wxRichTextObjectList::compatibility_iterator endPara = NULL;
+    wxRichTextObjectList::compatibility_iterator startPara = wxRichTextObjectList::compatibility_iterator();
+    wxRichTextObjectList::compatibility_iterator endPara = wxRichTextObjectList::compatibility_iterator();
 
     // First find the first paragraph whose starting position is within the range.
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
@@ -2229,7 +2229,7 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxRect& rect)
 bool wxRichTextParagraph::InsertText(long pos, const wxString& text)
 {
     wxRichTextObject* childToUse = NULL;
-    wxRichTextObjectList::compatibility_iterator nodeToUse = NULL;
+    wxRichTextObjectList::compatibility_iterator nodeToUse = wxRichTextObjectList::compatibility_iterator();
 
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -2640,7 +2640,7 @@ void wxRichTextParagraph::MoveToList(wxRichTextObject* obj, wxList& list)
 /// Add content back from list
 void wxRichTextParagraph::MoveFromList(wxList& list)
 {
-    for (wxNode* node = list.GetFirst(); node; node = node->GetNext())
+    for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
     {
         AppendChild((wxRichTextObject*) node->GetData());
     }
@@ -3416,7 +3416,7 @@ bool wxRichTextBuffer::EndStyle()
         return false;
     }
 
-    wxNode* node = m_attributeStack.GetLast();
+    wxList::compatibility_iterator node = m_attributeStack.GetLast();
     wxTextAttrEx* attr = (wxTextAttrEx*)node->GetData();
     m_attributeStack.Erase(node);
 
@@ -3437,7 +3437,7 @@ bool wxRichTextBuffer::EndAllStyles()
 /// Clear the style stack
 void wxRichTextBuffer::ClearStyleStack()
 {
-    for (wxNode* node = m_attributeStack.GetFirst(); node; node = node->GetNext())
+    for (wxList::compatibility_iterator node = m_attributeStack.GetFirst(); node; node = node->GetNext())
         delete (wxTextAttrEx*) node->GetData();
     m_attributeStack.Clear();
 }
@@ -3964,7 +3964,7 @@ void wxRichTextCommand::AddAction(wxRichTextAction* action)
 
 bool wxRichTextCommand::Do()
 {
-    for (wxNode* node = m_actions.GetFirst(); node; node = node->GetNext())
+    for (wxList::compatibility_iterator node = m_actions.GetFirst(); node; node = node->GetNext())
     {
         wxRichTextAction* action = (wxRichTextAction*) node->GetData();
         action->Do();
@@ -3975,7 +3975,7 @@ bool wxRichTextCommand::Do()
 
 bool wxRichTextCommand::Undo()
 {
-    for (wxNode* node = m_actions.GetLast(); node; node = node->GetPrevious())
+    for (wxList::compatibility_iterator node = m_actions.GetLast(); node; node = node->GetPrevious())
     {
         wxRichTextAction* action = (wxRichTextAction*) node->GetData();
         action->Undo();

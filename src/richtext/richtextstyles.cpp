@@ -58,11 +58,11 @@ bool wxRichTextStyleSheet::AddStyle(wxList& list, wxRichTextStyleDefinition* def
 /// Remove a style
 bool wxRichTextStyleSheet::RemoveStyle(wxList& list, wxRichTextStyleDefinition* def, bool deleteStyle)
 {
-    wxNode* node = list.Find(def);
+    wxList::compatibility_iterator node = list.Find(def);
     if (node)
     {
         wxRichTextStyleDefinition* def = (wxRichTextStyleDefinition*) node->GetData();
-        delete node;
+        list.Erase(node);
         if (deleteStyle)
             delete def;
         return true;
@@ -74,7 +74,7 @@ bool wxRichTextStyleSheet::RemoveStyle(wxList& list, wxRichTextStyleDefinition* 
 /// Find a definition by name
 wxRichTextStyleDefinition* wxRichTextStyleSheet::FindStyle(const wxList& list, const wxString& name) const
 {
-    for (wxNode* node = list.GetFirst(); node; node = node->GetNext())
+    for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
     {
         wxRichTextStyleDefinition* def = (wxRichTextStyleDefinition*) node->GetData();
         if (def->GetName().Lower() == name.Lower())
