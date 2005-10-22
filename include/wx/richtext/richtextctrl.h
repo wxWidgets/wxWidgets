@@ -383,7 +383,7 @@ public:
 
     /// Layout the buffer: which we must do before certain operations, such as
     /// setting the caret position.
-    virtual bool Layout(bool onlyVisibleRect = false);
+    virtual bool LayoutContent(bool onlyVisibleRect = false);
 
     /// Move the caret to the given character position
     virtual bool MoveCaret(long pos, bool showAtLineStart = false);
@@ -572,6 +572,10 @@ public:
     void OnScroll(wxScrollWinEvent& event);
 
 // Implementation
+
+#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
+     WX_FORWARD_TO_SCROLL_HELPER()
+#endif
 
     /// Set font, and also default attributes
     virtual bool SetFont(const wxFont& font);

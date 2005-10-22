@@ -1381,7 +1381,7 @@ void wxRichTextCtrl::OnSize(wxSizeEvent& event)
         m_fullLayoutRequired = true;
         m_fullLayoutTime = wxGetLocalTimeMillis();
         m_fullLayoutSavedPosition = GetFirstVisiblePosition();
-        Layout(true /* onlyVisibleRect */);
+        LayoutContent(true /* onlyVisibleRect */);
     }
     else
         GetBuffer().Invalidate(wxRICHTEXT_ALL);
@@ -1497,7 +1497,7 @@ bool wxRichTextCtrl::LoadFile(const wxString& filename, int type)
 
     DiscardEdits();
     SetInsertionPoint(0);
-    Layout();
+    LayoutContent();
     PositionCaret();
     SetupScrollbars(true);
     Refresh();
@@ -1763,7 +1763,7 @@ void wxRichTextCtrl::Cut()
         GetBuffer().CopyToClipboard(range);
 
         DeleteSelectedContent();
-        Layout();
+        LayoutContent();
         Refresh();
     }
 }
@@ -1915,7 +1915,7 @@ void wxRichTextCtrl::Remove(long from, long to)
         from,                           // New caret position
         this);
 
-    Layout();
+    LayoutContent();
     if (!IsFrozen())
         Refresh();
 }
@@ -2289,7 +2289,7 @@ wxRichTextLine* wxRichTextCtrl::GetVisibleLineForCaretPosition(long caretPositio
 bool wxRichTextCtrl::MoveCaret(long pos, bool showAtLineStart)
 {
     if (GetBuffer().GetDirty())
-        Layout();
+        LayoutContent();
 
     if (pos <= GetBuffer().GetRange().GetEnd())
     {
@@ -2305,7 +2305,7 @@ bool wxRichTextCtrl::MoveCaret(long pos, bool showAtLineStart)
 
 /// Layout the buffer: which we must do before certain operations, such as
 /// setting the caret position.
-bool wxRichTextCtrl::Layout(bool onlyVisibleRect)
+bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
 {
     if (GetBuffer().GetDirty() || onlyVisibleRect)
     {

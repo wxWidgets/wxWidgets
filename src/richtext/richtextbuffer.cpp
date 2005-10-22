@@ -4113,7 +4113,7 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
         m_ctrl->SetCaretPosition(caretPosition);
         if (!m_ctrl->IsFrozen())
         {
-            m_ctrl->Layout();
+            m_ctrl->LayoutContent();
             m_ctrl->PositionCaret();
             m_ctrl->Refresh();
 
