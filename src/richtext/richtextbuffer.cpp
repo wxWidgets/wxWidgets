@@ -370,7 +370,7 @@ bool wxRichTextCompositeObject::Defragment()
             if (child->CanMerge(nextChild) && child->Merge(nextChild))
             {
                 nextChild->Dereference();
-                delete node->GetNext();
+                m_children.Erase(node->GetNext());
 
                 // Don't set node -- we'll see if we can merge again with the next
                 // child.
@@ -1352,7 +1352,7 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
                             }
 
                             wxRichTextObjectList::compatibility_iterator next1 = node1->GetNext();
-                            delete node1;
+                            nextParagraph->GetChildren().Erase(node1);
 
                             node1 = next1;
                         }
@@ -3418,7 +3418,7 @@ bool wxRichTextBuffer::EndStyle()
 
     wxNode* node = m_attributeStack.GetLast();
     wxTextAttrEx* attr = (wxTextAttrEx*)node->GetData();
-    delete node;
+    m_attributeStack.Erase(node);
 
     SetDefaultStyle(*attr);
 
