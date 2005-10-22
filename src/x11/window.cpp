@@ -993,12 +993,13 @@ void wxWindowX11::DoSetSizeHints(int minW, int minH, int maxW, int maxH, int inc
 
 int wxWindowX11::GetCharHeight() const
 {
-    wxCHECK_MSG( m_font.Ok(), 0, wxT("valid window font needed") );
+    wxFont font(GetFont());
+    wxCHECK_MSG( font.Ok(), 0, wxT("valid window font needed") );
 
 #if wxUSE_UNICODE
     // There should be an easier way.
     PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
-    pango_layout_set_font_description( layout, GetFont().GetNativeFontInfo()->description );
+    pango_layout_set_font_description( layout, font.GetNativeFontInfo()->description );
     pango_layout_set_text(layout, "H", 1 );
     int w,h;
     pango_layout_get_pixel_size(layout, &w, &h);
@@ -1006,7 +1007,7 @@ int wxWindowX11::GetCharHeight() const
 
     return h;
 #else
-    WXFontStructPtr pFontStruct = m_font.GetFontStruct(1.0, wxGlobalDisplay());
+    WXFontStructPtr pFontStruct = font.GetFontStruct(1.0, wxGlobalDisplay());
 
     int direction, ascent, descent;
     XCharStruct overall;
@@ -1020,12 +1021,13 @@ int wxWindowX11::GetCharHeight() const
 
 int wxWindowX11::GetCharWidth() const
 {
-    wxCHECK_MSG( m_font.Ok(), 0, wxT("valid window font needed") );
+    wxFont font(GetFont());
+    wxCHECK_MSG( font.Ok(), 0, wxT("valid window font needed") );
 
 #if wxUSE_UNICODE
     // There should be an easier way.
     PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
-    pango_layout_set_font_description( layout, GetFont().GetNativeFontInfo()->description );
+    pango_layout_set_font_description( layout, font.GetNativeFontInfo()->description );
     pango_layout_set_text(layout, "H", 1 );
     int w,h;
     pango_layout_get_pixel_size(layout, &w, &h);
@@ -1033,7 +1035,7 @@ int wxWindowX11::GetCharWidth() const
 
     return w;
 #else
-    WXFontStructPtr pFontStruct = m_font.GetFontStruct(1.0, wxGlobalDisplay());
+    WXFontStructPtr pFontStruct = font.GetFontStruct(1.0, wxGlobalDisplay());
 
     int direction, ascent, descent;
     XCharStruct overall;
@@ -1049,7 +1051,7 @@ void wxWindowX11::GetTextExtent(const wxString& string,
                              int *descent, int *externalLeading,
                              const wxFont *theFont) const
 {
-    wxFont fontToUse = m_font;
+    wxFont fontToUse = GetFont();
     if (theFont) fontToUse = *theFont;
 
     wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
