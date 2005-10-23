@@ -400,10 +400,7 @@
 #elif defined(__OS2__)
 
     /* wxOS2 vs. non wxOS2 ports on OS2 platform */
-#    ifndef __WXMOTIF__
-#        ifndef __WXOS2__
-#            define __WXOS2__
-#        endif
+#    if !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
 #        ifndef __WXPM__
 #            define __WXPM__
 #        endif

@@ -286,7 +286,7 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 // global data
 // ---------------------------------------------------------------------------
 
-#ifdef __WXOS2__
+#ifdef __WXPM__
 // The MakeProcInstance version of the function wxSubclassedGenericControlProc
 WXDLLEXPORT_DATA(extern int) wxGenericControlSubClassProc;
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
@@ -297,7 +297,7 @@ WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 // global functions
 // ---------------------------------------------------------------------------
 
-#ifdef __WXOS2__
+#ifdef __WXPM__
 extern "C"
 {
 WXDLLEXPORT HINSTANCE wxGetInstance();
