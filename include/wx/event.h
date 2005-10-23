@@ -2889,7 +2889,7 @@ extern WXDLLIMPEXP_BASE wxList *wxPendingEvents;
 
 // Find a window with the focus, that is also a descendant of the given window.
 // This is used to determine the window to initially send commands to.
-wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
+WXDLLIMPEXP_CORE wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
 
 #endif // wxUSE_GUI
 
