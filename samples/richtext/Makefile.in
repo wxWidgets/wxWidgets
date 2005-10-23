@@ -45,9 +45,9 @@ RICHTEXT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXT_OBJECTS =  \
+	$(__richtext___win32rc) \
 	$(__richtext_os2_lib_res) \
-	richtext_richtext.o \
-	$(__richtext___win32rc)
+	richtext_richtext.o
 
 ### Conditionally set variables: ###
 
@@ -86,6 +86,7 @@ RICHTEXT_OBJECTS =  \
 COND_PLATFORM_OS2_1___richtext___os2_emxbindcmd = $(NM) richtext$(EXEEXT) | if \
 	grep -q pmwin.763 ; then emxbind -ep richtext$(EXEEXT) ; fi
 @COND_PLATFORM_OS2_1@__richtext___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___richtext___os2_emxbindcmd)
+@COND_PLATFORM_WIN32_1@__richtext___win32rc = richtext_sample_rc.o
 @COND_PLATFORM_OS2_1@__richtext_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__richtext_bundle___depname = richtext_bundle
@@ -93,22 +94,21 @@ COND_PLATFORM_OS2_1___richtext___os2_emxbindcmd = $(NM) richtext$(EXEEXT) | if \
 @COND_TOOLKIT_COCOA@	richtext.app/Contents/PkgInfo
 @COND_TOOLKIT_MAC@____richtext_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_MAC@	richtext.app/Contents/PkgInfo
-COND_MONOLITHIC_0___WXLIB_ADV_p = \
-	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__WXLIB_ADV_p = $(COND_MONOLITHIC_0___WXLIB_ADV_p)
-COND_MONOLITHIC_0___WXLIB_XML_p = \
-	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__WXLIB_XML_p = $(COND_MONOLITHIC_0___WXLIB_XML_p)
 COND_MONOLITHIC_0___WXLIB_HTML_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_HTML_p = $(COND_MONOLITHIC_0___WXLIB_HTML_p)
+COND_MONOLITHIC_0___WXLIB_ADV_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_ADV_p = $(COND_MONOLITHIC_0___WXLIB_ADV_p)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
+COND_MONOLITHIC_0___WXLIB_XML_p = \
+	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_XML_p = $(COND_MONOLITHIC_0___WXLIB_XML_p)
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__richtext___win32rc = richtext_richtext_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -157,7 +157,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 richtext$(EXEEXT): $(RICHTEXT_OBJECTS) $(__richtext___win32rc)
-	$(CXX) -o $@ $(RICHTEXT_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI)
+	$(CXX) -o $@ $(RICHTEXT_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_CORE_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI)
 	$(__richtext___mac_rezcmd)
 	$(__richtext___mac_setfilecmd)
 	$(__richtext___os2_emxbindcmd)
@@ -185,11 +185,11 @@ richtext.app/Contents/PkgInfo: richtext$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 
 @COND_PLATFORM_MACOSX_1@richtext_bundle: $(____richtext_BUNDLE_TGT_REF_DEP)
 
+richtext_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
+
 richtext_richtext.o: $(srcdir)/richtext.cpp
 	$(CXXC) -c -o $@ $(RICHTEXT_CXXFLAGS) $(srcdir)/richtext.cpp
-
-richtext_richtext_rc.o: $(srcdir)/richtext.rc
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

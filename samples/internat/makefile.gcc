@@ -200,7 +200,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\internat.exe bg cs de fr ja ka pl ru sv
+all: $(OBJS)\internat.exe bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -226,10 +226,6 @@ fr:
 	if not exist $(OBJS)\fr mkdir $(OBJS)\fr
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\fr\%%f copy .\fr\%%f $(OBJS)\fr
 
-ja: 
-	if not exist $(OBJS)\ja mkdir $(OBJS)\ja
-	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\ja\%%f copy .\ja\%%f $(OBJS)\ja
-
 ka: 
 	if not exist $(OBJS)\ka mkdir $(OBJS)\ka
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\ka\%%f copy .\ka\%%f $(OBJS)\ka
@@ -246,13 +242,21 @@ sv:
 	if not exist $(OBJS)\sv mkdir $(OBJS)\sv
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\sv\%%f copy .\sv\%%f $(OBJS)\sv
 
+ja: 
+	if not exist $(OBJS)\ja mkdir $(OBJS)\ja
+	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\ja\%%f copy .\ja\%%f $(OBJS)\ja
+
+ja_JP.EUC-JP: 
+	if not exist $(OBJS)\ja_JP.EUC-JP mkdir $(OBJS)\ja_JP.EUC-JP
+	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\ja_JP.EUC-JP\%%f copy .\ja_JP.EUC-JP\%%f $(OBJS)\ja_JP.EUC-JP
+
 $(OBJS)\internat_internat.o: ./internat.cpp
 	$(CXX) -c -o $@ $(INTERNAT_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\internat_internat_rc.o: ./internat.rc
 	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples --define NOPCH
 
-.PHONY: all clean bg cs de fr ja ka pl ru sv
+.PHONY: all clean bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
 
 
 # Dependencies tracking:

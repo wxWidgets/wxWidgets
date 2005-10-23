@@ -126,7 +126,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 
 ### Targets: ###
 
-all: internat$(EXEEXT) $(__internat_bundle___depname) bg cs de fr ja ka pl ru sv
+all: internat$(EXEEXT) $(__internat_bundle___depname) bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
 
 install: all
 
@@ -220,18 +220,6 @@ fr:
 	esac; \
 	done
 
-ja: 
-	@mkdir -p ./ja
-	@for f in internat.po internat.mo; do \
-	if test ! -f ./ja/$$f -a ! -d ./ja/$$f ; \
-	then x=yep ; \
-	else x=`find $(srcdir)/ja/$$f -newer ./ja/$$f -print` ; \
-	fi; \
-	case "$$x" in ?*) \
-	cp -pRf $(srcdir)/ja/$$f ./ja ;; \
-	esac; \
-	done
-
 ka: 
 	@mkdir -p ./ka
 	@for f in internat.po internat.mo; do \
@@ -280,6 +268,30 @@ sv:
 	esac; \
 	done
 
+ja: 
+	@mkdir -p ./ja
+	@for f in internat.po internat.mo; do \
+	if test ! -f ./ja/$$f -a ! -d ./ja/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/ja/$$f -newer ./ja/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/ja/$$f ./ja ;; \
+	esac; \
+	done
+
+ja_JP.EUC-JP: 
+	@mkdir -p ./ja_JP.EUC-JP
+	@for f in internat.po internat.mo; do \
+	if test ! -f ./ja_JP.EUC-JP/$$f -a ! -d ./ja_JP.EUC-JP/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/ja_JP.EUC-JP/$$f -newer ./ja_JP.EUC-JP/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/ja_JP.EUC-JP/$$f ./ja_JP.EUC-JP ;; \
+	esac; \
+	done
+
 internat_internat.o: $(srcdir)/internat.cpp
 	$(CXXC) -c -o $@ $(INTERNAT_CXXFLAGS) $(srcdir)/internat.cpp
 
@@ -290,4 +302,4 @@ internat_internat_rc.o: $(srcdir)/internat.rc
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean internat_bundle bg cs de fr ja ka pl ru sv
+.PHONY: all install uninstall clean distclean internat_bundle bg cs de fr ka pl ru sv ja ja_JP.EUC-JP
