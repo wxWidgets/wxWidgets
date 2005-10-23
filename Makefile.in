@@ -25143,7 +25143,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/html/help/*.cpp $(DISTDIR)/samples/html/help
 	mkdir $(DISTDIR)/samples/html/help/helpfiles
 	$(CP_P) $(SAMPDIR)/html/help/helpfiles/*.??? $(DISTDIR)/samples/html/help/helpfiles
-
 	mkdir $(DISTDIR)/samples/html/helpview
 	$(CP_P) $(SAMPDIR)/html/helpview/Makefile.in $(DISTDIR)/samples/html/helpview
 	$(CP_P) $(SAMPDIR)/html/helpview/*.cpp $(DISTDIR)/samples/html/helpview
@@ -25186,38 +25185,15 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/image/smile.xpm $(DISTDIR)/samples/image
 
 	mkdir $(DISTDIR)/samples/internat
-	mkdir $(DISTDIR)/samples/internat/bg
-	mkdir $(DISTDIR)/samples/internat/cs
-	mkdir $(DISTDIR)/samples/internat/de
-	mkdir $(DISTDIR)/samples/internat/fr
-	mkdir $(DISTDIR)/samples/internat/ja
-	mkdir $(DISTDIR)/samples/internat/ka
-	mkdir $(DISTDIR)/samples/internat/pl
-	mkdir $(DISTDIR)/samples/internat/ru
-	mkdir $(DISTDIR)/samples/internat/sv
 	$(CP_P) $(SAMPDIR)/internat/Makefile.in $(DISTDIR)/samples/internat
 	$(CP_P) $(SAMPDIR)/internat/makefile.unx $(DISTDIR)/samples/internat
 	$(CP_P) $(SAMPDIR)/internat/*.cpp $(DISTDIR)/samples/internat
 	$(CP_P) $(SAMPDIR)/internat/*.xpm $(DISTDIR)/samples/internat
 	$(CP_P) $(SAMPDIR)/internat/*.txt $(DISTDIR)/samples/internat
-	$(CP_P) $(SAMPDIR)/internat/bg/*.mo $(DISTDIR)/samples/internat/bg
-	$(CP_P) $(SAMPDIR)/internat/cs/*.mo $(DISTDIR)/samples/internat/cs
-	$(CP_P) $(SAMPDIR)/internat/de/*.mo $(DISTDIR)/samples/internat/de
-	$(CP_P) $(SAMPDIR)/internat/fr/*.mo $(DISTDIR)/samples/internat/fr
-	$(CP_P) $(SAMPDIR)/internat/ja/*.mo $(DISTDIR)/samples/internat/ja
-	$(CP_P) $(SAMPDIR)/internat/ka/*.mo $(DISTDIR)/samples/internat/ka
-	$(CP_P) $(SAMPDIR)/internat/pl/*.mo $(DISTDIR)/samples/internat/pl
-	$(CP_P) $(SAMPDIR)/internat/ru/*.mo $(DISTDIR)/samples/internat/ru
-	$(CP_P) $(SAMPDIR)/internat/sv/*.mo $(DISTDIR)/samples/internat/sv
-	$(CP_P) $(SAMPDIR)/internat/bg/*.po $(DISTDIR)/samples/internat/bg
-	$(CP_P) $(SAMPDIR)/internat/cs/*.po $(DISTDIR)/samples/internat/cs
-	$(CP_P) $(SAMPDIR)/internat/de/*.po $(DISTDIR)/samples/internat/de
-	$(CP_P) $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
-	$(CP_P) $(SAMPDIR)/internat/ja/*.po $(DISTDIR)/samples/internat/ja
-	$(CP_P) $(SAMPDIR)/internat/ka/*.po $(DISTDIR)/samples/internat/ka
-	$(CP_P) $(SAMPDIR)/internat/pl/*.po $(DISTDIR)/samples/internat/pl
-	$(CP_P) $(SAMPDIR)/internat/ru/*.po $(DISTDIR)/samples/internat/ru
-	$(CP_P) $(SAMPDIR)/internat/sv/*.po $(DISTDIR)/samples/internat/sv
+	for f in `(cd $(SAMPDIR); find internat -name '*.[mp]o' -print)`; do \
+	    mkdir -p $(DISTDIR)/samples/`dirname $$f`;  \
+	    $(CP_P) $(SAMPDIR)/$$f $(DISTDIR)/samples/$$f; \
+	done
 
 	mkdir $(DISTDIR)/samples/ipc
 	$(CP_P) $(SAMPDIR)/ipc/Makefile.in $(DISTDIR)/samples/ipc
@@ -25657,7 +25633,7 @@ distdir: @GUIDIST@
 	@# in other dist targets.
 	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
 			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
-			-print | grep -v '/samples/.*\.hh.$$' | xargs rm -rf
+			-print | egrep -v '/(samples|dbbrowse)/.*\.hh.$$' | xargs rm -rf
 
 dist: distdir
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
