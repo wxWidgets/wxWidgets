@@ -469,7 +469,7 @@ wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding e
         platform = wxPLATFORM_WINDOWS;
 #elif defined(__WXGTK__) || defined(__WXMOTIF__)
         platform = wxPLATFORM_UNIX;
-#elif defined(__WXOS2__)
+#elif defined(__WXPM__)
         platform = wxPLATFORM_OS2;
 #elif defined(__WXMAC__)
         platform = wxPLATFORM_MAC;

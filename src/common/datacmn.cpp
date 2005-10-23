@@ -148,7 +148,7 @@ WXDLLEXPORT_DATA(const wxChar *) wxFileSelectorPromptStr = wxT("Select a file");
 
 // Other default strings
 WXDLLEXPORT_DATA(const wxChar *) wxFileSelectorDefaultWildcardStr =
-#if defined(__WXMSW__) || defined(__WXOS2__)
+#if defined(__WXMSW__) || defined(__OS2__)
     wxT("*.*")
 #else // Unix/Mac
     wxT("*")
@@ -157,7 +157,7 @@ WXDLLEXPORT_DATA(const wxChar *) wxFileSelectorDefaultWildcardStr =
 WXDLLEXPORT_DATA(const wxChar *) wxDirDialogNameStr = wxT("wxDirCtrl");
 WXDLLEXPORT_DATA(const wxChar *) wxDirDialogDefaultFolderStr = wxT("/");
 
-#if defined(__WXMSW__) || defined(__WXOS2__)
+#if defined(__WXMSW__) || defined(__OS2__)
 WXDLLEXPORT_DATA(const wxChar *) wxUserResourceStr = wxT("TEXT");
 #endif
 
