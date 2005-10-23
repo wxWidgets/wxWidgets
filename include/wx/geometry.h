@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     08/05/99
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,7 @@
 #include "wx/gdicmn.h"
 #include "wx/math.h"
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXWINCE__)
     #define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )
 #elif defined( __WXMAC__ )
     #define wxMulDivInt32( a , b , c ) ( (wxInt32) ( ( (wxInt64)(a) * (wxInt64)(b) ) / (wxInt64)(c) ) )

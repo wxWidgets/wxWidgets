@@ -526,6 +526,8 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
         url.Prepend(wxT("http://"));
 
 #if defined(__WXMSW__)
+
+#if wxUSE_IPC
     if ( flags & wxBROWSER_NEW_WINDOW )
     {
         // ShellExecuteEx() opens the URL in an existing window by default so
@@ -583,6 +585,7 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
             }
         }
     }
+#endif // wxUSE_IPC
 
     WinStruct<SHELLEXECUTEINFO> sei;
     sei.lpFile = url.c_str();

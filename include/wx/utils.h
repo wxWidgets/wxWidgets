@@ -211,12 +211,12 @@ WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 wxArrayString& error,
                                 int flags = 0);
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && wxUSE_IPC
 // ask a DDE server to execute the DDE request with given parameters
 WXDLLIMPEXP_BASE bool wxExecuteDDE(const wxString& ddeServer,
                                    const wxString& ddeTopic,
                                    const wxString& ddeCommand);
-#endif // __WXMSW__
+#endif // __WXMSW__ && wxUSE_IPC
 
 enum wxSignal
 {

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/ole/activex.cpp
+// Name:        src/msw/ole/activex.cpp
 // Purpose:     wxActiveXContainer implementation
 // Author:      Ryan Norton <wxprojects@comcast.net>, Lindsay Mathieson <???>
 // Modified by:
@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/dcclient.h"
+#include "wx/geometry.h"
 #include "wx/msw/ole/activex.h"
 
 
@@ -741,7 +742,7 @@ static void PixelsToHimetric(SIZEL &sz)
     };
 
 #define HIMETRIC_INCH   2540
-#define CONVERT(x, logpixels)   MulDiv(HIMETRIC_INCH, (x), (logpixels))
+#define CONVERT(x, logpixels)   wxMulDivInt32(HIMETRIC_INCH, (x), (logpixels))
 
     sz.cx = CONVERT(sz.cx, logX);
     sz.cy = CONVERT(sz.cy, logY);
