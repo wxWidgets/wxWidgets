@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/datetime.h
+// Name:        src/common/datetime.cpp
 // Purpose:     implementation of time/date related classes
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -2843,7 +2843,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
             p += tz.length();
         }
-        
+
         // make it minutes
         offset *= MIN_PER_HOUR;
     }
