@@ -3011,6 +3011,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(BASE_MAC_SRC)
         $(BASE_OS2_SRC)
         $(BASE_MSDOS_SRC)
+        $(BASE_PALMOS_SRC)
         $(BASE_AND_GUI_CMN_SRC)
         $(BASE_AND_GUI_UNIX_SRC)
         $(BASE_AND_GUI_MAC_SRC)
