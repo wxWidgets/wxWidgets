@@ -8,6 +8,8 @@
     <exe id="sound" template="wx_sample" template_append="wx_append">
         <sources>sound.cpp</sources>
         <wx-lib>adv</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>xml</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>sound.rc</win32-res>
