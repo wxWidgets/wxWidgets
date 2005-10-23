@@ -274,7 +274,7 @@ BASE_DIST: ALL_DIST
 	$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.rc $(DISTDIR)/utils/tex2rtf/src
 	$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.xpm $(DISTDIR)/utils/tex2rtf/src
 
-GTK_DIST: ALL_GUI_DIST
+GTK_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/wxGTK.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
 	$(CP_P) $(GTKDIR)/*.h $(DISTDIR)/src/gtk
@@ -298,7 +298,7 @@ GTK_DIST: ALL_GUI_DIST
 	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
-X11_DIST: ALL_GUI_DIST UNIV_DIST
+X11_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/wxX11.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/x11/*.h $(DISTDIR)/include/wx/x11
 	$(CP_P) $(X11DIR)/*.cpp $(DISTDIR)/src/x11
@@ -370,7 +370,7 @@ MACX_DIST: ALL_GUI_DIST
 COCOA_DIST: ALL_GUI_DIST
 	$(CP_P) $(COCOADIR)/*.mm $(DISTDIR)/src/cocoa
 
-MSW_DIST: ALL_GUI_DIST
+MSW_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/wxWINE.spec $(DISTDIR)
 	mkdir $(DISTDIR)/include/wx/msw/ole
 	mkdir $(DISTDIR)/include/wx/msw/wince
