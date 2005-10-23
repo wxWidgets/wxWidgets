@@ -669,6 +669,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/html/help/*.cpp $(DISTDIR)/samples/html/help
 	mkdir $(DISTDIR)/samples/html/help/helpfiles
 	$(CP_P) $(SAMPDIR)/html/help/helpfiles/*.??? $(DISTDIR)/samples/html/help/helpfiles
+
 	mkdir $(DISTDIR)/samples/html/helpview
 	$(CP_P) $(SAMPDIR)/html/helpview/Makefile.in $(DISTDIR)/samples/html/helpview
 	$(CP_P) $(SAMPDIR)/html/helpview/*.cpp $(DISTDIR)/samples/html/helpview
@@ -1182,7 +1183,7 @@ distdir: @GUIDIST@
 	@# in other dist targets.
 	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
 			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
-			-print | xargs rm -rf
+			-print | grep -v '/samples/.*\.hh.$$' | xargs rm -rf
 
 dist: distdir
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
