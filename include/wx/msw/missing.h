@@ -34,6 +34,10 @@
     #define WM_UPDATEUISTATE    0x0128
 #endif
 
+#ifndef WM_CHANGEUISTATE
+    #define WM_CHANGEUISTATE    0x0127
+#endif
+
 #ifndef WM_PRINTCLIENT
     #define WM_PRINTCLIENT 0x318
 #endif

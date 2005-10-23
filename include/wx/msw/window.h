@@ -469,10 +469,13 @@ protected:
     // the background, false otherwise (i.e. the system should erase it)
     bool DoEraseBackground(WXHDC hDC);
 
-    // generate WM_UPDATEUISTATE if it's needed for the OS we're running under
+    // generate WM_CHANGEUISTATE if it's needed for the OS we're running under
     //
-    // the parameter should be one of UIS_XXX constants
-    void MSWUpdateUIState(int action);
+    // action should be one of the UIS_XXX constants
+    // state should be one or more of the UISF_XXX constants
+    // if action == UIS_INITIALIZE then it doesn't seem to matter what we use
+    // for state as the system will decide for us what needs to be set
+    void MSWUpdateUIState(int action, int state = 0);
 
 private:
     // common part of all ctors

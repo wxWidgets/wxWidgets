@@ -831,9 +831,9 @@ void wxWindowMSW::WarpPointer(int x, int y)
     }
 }
 
-void wxWindowMSW::MSWUpdateUIState(int action)
+void wxWindowMSW::MSWUpdateUIState(int action, int state)
 {
-    // WM_UPDATEUISTATE only appeared in Windows 2000 so it can do us no good
+    // WM_CHANGEUISTATE only appeared in Windows 2000 so it can do us no good
     // to use it on older systems -- and could possibly do some harm
     static int s_needToUpdate = -1;
     if ( s_needToUpdate == -1 )
@@ -845,11 +845,9 @@ void wxWindowMSW::MSWUpdateUIState(int action)
 
     if ( s_needToUpdate )
     {
-        // NB: it doesn't seem to matter what we put in wParam, whether we
-        //     include just one UISF_XXX or both, both are affected, no idea
-        //     why
-        ::SendMessage(GetHwnd(), WM_UPDATEUISTATE,
-                      MAKEWPARAM(action, UISF_HIDEFOCUS | UISF_HIDEACCEL), 0);
+        // we send WM_CHANGEUISTATE so if nothing needs changing then the system
+        // won't send WM_UPDATEUISTATE
+        ::SendMessage(GetHwnd(), WM_CHANGEUISTATE, MAKEWPARAM(action, state), 0);
     }
 }
 
@@ -2106,9 +2104,8 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                 {
                     // as we don't call IsDialogMessage(), which would take of
                     // this by default, we need to manually send this message
-                    // so that controls could change their appearance
-                    // appropriately
-                    MSWUpdateUIState(UIS_CLEAR);
+                    // so that controls can change their UI state if needed
+                    MSWUpdateUIState(UIS_CLEAR, UISF_HIDEFOCUS);
 
                     return true;
                 }
@@ -4656,7 +4653,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             GenerateMouseLeave();
         }
     }
-#endif // HAVE_TRACKMOUSEEVENT 
+#endif // HAVE_TRACKMOUSEEVENT
 
 #if wxUSE_MOUSEEVENT_HACK
     // Windows often generates mouse events even if mouse position hasn't
