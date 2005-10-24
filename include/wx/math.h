@@ -1,10 +1,10 @@
 /**
-* Name:        math.h
+* Name:        wx/math.h
 * Purpose:     Declarations/definitions of common math functions
 * Author:      John Labenski and others
 * Modified by:
 * Created:     02/02/03
-* RCS-ID:
+* RCS-ID:      $Id$
 * Copyright:   (c) John Labenski
 * Licence:     wxWindows licence
 */
@@ -101,6 +101,14 @@ inline bool wxIsSameDouble(double x, double y) { return x == y; }
 inline bool wxIsNullDouble(double x) { return wxIsSameDouble(x, 0.); }
 #endif /* __cplusplus */
 
+
+#if defined(__WXMSW__) && !defined(__WXWINCE__)
+    #define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )
+#elif defined( __WXMAC__ )
+    #define wxMulDivInt32( a , b , c ) ( (wxInt32) ( ( (wxInt64)(a) * (wxInt64)(b) ) / (wxInt64)(c) ) )
+#else
+    #define wxMulDivInt32( a , b , c ) ((wxInt32)((a)*(((wxDouble)b)/((wxDouble)c))))
+#endif
 
 #if wxUSE_APPLE_IEEE
 #ifdef __cplusplus

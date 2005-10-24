@@ -24,7 +24,7 @@
 #endif
 
 #include "wx/dcclient.h"
-#include "wx/geometry.h"
+#include "wx/math.h"
 #include "wx/msw/ole/activex.h"
 
 

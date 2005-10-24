@@ -20,14 +20,6 @@
 #include "wx/gdicmn.h"
 #include "wx/math.h"
 
-#if defined(__WXMSW__) && !defined(__WXWINCE__)
-    #define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )
-#elif defined( __WXMAC__ )
-    #define wxMulDivInt32( a , b , c ) ( (wxInt32) ( ( (wxInt64)(a) * (wxInt64)(b) ) / (wxInt64)(c) ) )
-#else
-    #define wxMulDivInt32( a , b , c ) ((wxInt32)((a)*(((wxDouble)b)/((wxDouble)c))))
-#endif
-
 class WXDLLIMPEXP_BASE wxDataInputStream;
 class WXDLLIMPEXP_BASE wxDataOutputStream;
 
