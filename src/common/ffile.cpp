@@ -31,6 +31,10 @@
     #include "wx/log.h"
 #endif
 
+#ifdef __WINDOWS__
+#include "wx/msw/mslu.h"
+#endif
+
 #include "wx/ffile.h"
 
 // ============================================================================
