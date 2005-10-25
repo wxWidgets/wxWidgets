@@ -253,7 +253,7 @@ bool MyApp::OnInit()
 #if wxUSE_LIBPNG
     wxImage::AddHandler( new wxPNGHandler );
 #endif
-    
+
 #if wxUSE_LIBJPEG
     wxImage::AddHandler( new wxJPEGHandler );
 #endif
@@ -297,7 +297,7 @@ void MyApp::CreateStyles()
                             wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|
                             wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER);
     normalPara->SetStyle(normalAttr);
-    
+
     m_styleSheet->AddParagraphStyle(normalPara);
 
     wxRichTextParagraphStyleDefinition* indentedPara = new wxRichTextParagraphStyleDefinition(wxT("Indented"));
@@ -308,7 +308,7 @@ void MyApp::CreateStyles()
     // We only want to affect indentation
     indentedAttr.SetFlags(wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT);
     indentedPara->SetStyle(indentedAttr);
-    
+
     m_styleSheet->AddParagraphStyle(indentedPara);
 
     wxRichTextParagraphStyleDefinition* flIndentedPara = new wxRichTextParagraphStyleDefinition(wxT("First Line Indented"));
@@ -319,7 +319,7 @@ void MyApp::CreateStyles()
     // We only want to affect indentation
     flIndentedAttr.SetFlags(wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT);
     flIndentedPara->SetStyle(flIndentedAttr);
-    
+
     m_styleSheet->AddParagraphStyle(flIndentedPara);
 
     // Character styles
@@ -332,7 +332,7 @@ void MyApp::CreateStyles()
     // We only want to affect boldness
     boldAttr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
     boldDef->SetStyle(boldAttr);
-    
+
     m_styleSheet->AddCharacterStyle(boldDef);
 
     wxRichTextCharacterStyleDefinition* italicDef = new wxRichTextCharacterStyleDefinition(wxT("Italic"));
@@ -343,7 +343,7 @@ void MyApp::CreateStyles()
     // We only want to affect italics
     italicAttr.SetFlags(wxTEXT_ATTR_FONT_ITALIC);
     italicDef->SetStyle(italicAttr);
-    
+
     m_styleSheet->AddCharacterStyle(italicDef);
 
     wxRichTextCharacterStyleDefinition* redDef = new wxRichTextCharacterStyleDefinition(wxT("Red Bold"));
@@ -355,7 +355,7 @@ void MyApp::CreateStyles()
     // We only want to affect colour, weight and face
     redAttr.SetFlags(wxTEXT_ATTR_FONT_FACE|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_TEXT_COLOUR);
     redDef->SetStyle(redAttr);
-    
+
     m_styleSheet->AddCharacterStyle(redDef);
 }
 
@@ -436,33 +436,35 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     SetMenuBar(menuBar);
 
     // create a status bar just for fun (by default with 1 pane only)
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxRichTextCtrl!"));
+#endif
 
     wxToolBar* toolBar = CreateToolBar();
 
-    toolBar->AddTool(wxID_OPEN, wxBitmap(open_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Open"));
-    toolBar->AddTool(wxID_SAVEAS, wxBitmap(save_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Save"));
+    toolBar->AddTool(wxID_OPEN, wxBitmap(open_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Open"));
+    toolBar->AddTool(wxID_SAVEAS, wxBitmap(save_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Save"));
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_CUT, wxBitmap(cut_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Cut"));
-    toolBar->AddTool(wxID_COPY, wxBitmap(copy_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Copy"));
-    toolBar->AddTool(wxID_PASTE, wxBitmap(paste_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Paste"));
+    toolBar->AddTool(wxID_CUT, wxBitmap(cut_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Cut"));
+    toolBar->AddTool(wxID_COPY, wxBitmap(copy_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Copy"));
+    toolBar->AddTool(wxID_PASTE, wxBitmap(paste_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Paste"));
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_UNDO, wxBitmap(undo_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Undo"));
-    toolBar->AddTool(wxID_REDO, wxBitmap(redo_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Redo"));
+    toolBar->AddTool(wxID_UNDO, wxBitmap(undo_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Undo"));
+    toolBar->AddTool(wxID_REDO, wxBitmap(redo_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Redo"));
     toolBar->AddSeparator();
-    toolBar->AddTool(ID_FORMAT_BOLD, wxBitmap(bold_xpm), wxNullBitmap, TRUE, -1, -1, (wxObject *) NULL, _("Bold"));
-    toolBar->AddTool(ID_FORMAT_ITALIC, wxBitmap(italic_xpm), wxNullBitmap, TRUE, -1, -1, (wxObject *) NULL, _("Italic"));
-    toolBar->AddTool(ID_FORMAT_UNDERLINE, wxBitmap(underline_xpm), wxNullBitmap, TRUE, -1, -1, (wxObject *) NULL, _("Underline"));
+    toolBar->AddTool(ID_FORMAT_BOLD, wxBitmap(bold_xpm), wxNullBitmap, true, -1, -1, (wxObject *) NULL, _("Bold"));
+    toolBar->AddTool(ID_FORMAT_ITALIC, wxBitmap(italic_xpm), wxNullBitmap, true, -1, -1, (wxObject *) NULL, _("Italic"));
+    toolBar->AddTool(ID_FORMAT_UNDERLINE, wxBitmap(underline_xpm), wxNullBitmap, true, -1, -1, (wxObject *) NULL, _("Underline"));
     toolBar->AddSeparator();
-    toolBar->AddTool(ID_FORMAT_ALIGN_LEFT, wxBitmap(alignleft_xpm), wxNullBitmap, TRUE, -1, -1, (wxObject *) NULL, _("Align Left"));
-    toolBar->AddTool(ID_FORMAT_ALIGN_CENTRE, wxBitmap(centre_xpm), wxNullBitmap, TRUE, -1, -1, (wxObject *) NULL, _("Centre"));
-    toolBar->AddTool(ID_FORMAT_ALIGN_RIGHT, wxBitmap(alignright_xpm), wxNullBitmap, TRUE, -1, -1, (wxObject *) NULL, _("Align Right"));
+    toolBar->AddTool(ID_FORMAT_ALIGN_LEFT, wxBitmap(alignleft_xpm), wxNullBitmap, true, -1, -1, (wxObject *) NULL, _("Align Left"));
+    toolBar->AddTool(ID_FORMAT_ALIGN_CENTRE, wxBitmap(centre_xpm), wxNullBitmap, true, -1, -1, (wxObject *) NULL, _("Centre"));
+    toolBar->AddTool(ID_FORMAT_ALIGN_RIGHT, wxBitmap(alignright_xpm), wxNullBitmap, true, -1, -1, (wxObject *) NULL, _("Align Right"));
     toolBar->AddSeparator();
-    toolBar->AddTool(ID_FORMAT_INDENT_LESS, wxBitmap(indentless_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Indent Less"));
-    toolBar->AddTool(ID_FORMAT_INDENT_MORE, wxBitmap(indentmore_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Indent More"));
+    toolBar->AddTool(ID_FORMAT_INDENT_LESS, wxBitmap(indentless_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Indent Less"));
+    toolBar->AddTool(ID_FORMAT_INDENT_MORE, wxBitmap(indentmore_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Indent More"));
     toolBar->AddSeparator();
-    toolBar->AddTool(ID_FORMAT_FONT, wxBitmap(font_xpm), wxNullBitmap, FALSE, -1, -1, (wxObject *) NULL, _("Font"));
+    toolBar->AddTool(ID_FORMAT_FONT, wxBitmap(font_xpm), wxNullBitmap, false, -1, -1, (wxObject *) NULL, _("Font"));
 
     toolBar->Realize();
 
@@ -680,14 +682,14 @@ bool MyFrame::ProcessEvent(wxEvent& event)
         {
             s_eventType = event.GetEventType();
             s_id = event.GetId();
-            
+
             wxWindow* focusWin = wxFindFocusDescendant(this);
             if (focusWin && focusWin->ProcessEvent(event))
             {
                 //s_command = NULL;
                 s_eventType = 0;
                 s_id = 0;
-                return TRUE;
+                return true;
             }
 
             s_eventType = 0;
@@ -695,7 +697,7 @@ bool MyFrame::ProcessEvent(wxEvent& event)
         }
         else
         {
-            return FALSE;
+            return false;
         }
     }
 
@@ -704,12 +706,12 @@ bool MyFrame::ProcessEvent(wxEvent& event)
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
-    wxString path = wxEmptyString;
-    wxString filename = wxEmptyString;
+    wxString path;
+    wxString filename;
     wxArrayInt fileTypes;
 
     wxString filter = wxRichTextBuffer::GetExtWildcard(false, false, & fileTypes);
-    if (!filter.IsEmpty())
+    if (!filter.empty())
         filter += wxT("|");
     filter += wxT("All files (*.*)|*.*");
 
@@ -723,8 +725,8 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString path = dialog.GetPath();
-        
-        if (!path.IsEmpty())
+
+        if (!path.empty())
         {
             int fileType = 0;
             int filterIndex = dialog.GetFilterIndex();
@@ -739,7 +741,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSave(wxCommandEvent& event)
 {
-    if (m_richTextCtrl->GetFilename().IsEmpty())
+    if (m_richTextCtrl->GetFilename().empty())
     {
         OnSaveAs(event);
         return;
@@ -750,8 +752,8 @@ void MyFrame::OnSave(wxCommandEvent& event)
 void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
 {
     wxString filter = wxRichTextBuffer::GetExtWildcard(false, true);
-    wxString path = wxEmptyString;
-    wxString filename = wxEmptyString;
+    wxString path;
+    wxString filename;
 
     wxFileDialog dialog(this,
         _("Choose a filename"),
@@ -763,8 +765,8 @@ void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString path = dialog.GetPath();
-        
-        if (!path.IsEmpty())
+
+        if (!path.empty())
         {
             m_richTextCtrl->SaveFile(path);
         }
@@ -893,7 +895,7 @@ void MyFrame::OnIndentLess(wxCommandEvent& WXUNUSED(event))
         {
             wxFontData fontData;
             attr.SetLeftIndent(attr.GetLeftIndent() - 100);
-            
+
             m_richTextCtrl->SetStyle(range, attr);
         }
     }
@@ -913,7 +915,7 @@ void MyFrame::OnLineSpacingHalf(wxCommandEvent& WXUNUSED(event))
         wxFontData fontData;
         attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
         attr.SetLineSpacing(15);
-            
+
         m_richTextCtrl->SetStyle(range, attr);
     }
 }
@@ -932,7 +934,7 @@ void MyFrame::OnLineSpacingDouble(wxCommandEvent& WXUNUSED(event))
         wxFontData fontData;
         attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
         attr.SetLineSpacing(20);
-            
+
         m_richTextCtrl->SetStyle(range, attr);
     }
 }
@@ -951,7 +953,7 @@ void MyFrame::OnLineSpacingSingle(wxCommandEvent& WXUNUSED(event))
         wxFontData fontData;
         attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
         attr.SetLineSpacing(0); // Can also use 10
-            
+
         m_richTextCtrl->SetStyle(range, attr);
     }
 }
@@ -990,7 +992,7 @@ void MyFrame::OnParagraphSpacingLess(wxCommandEvent& WXUNUSED(event))
         {
             wxFontData fontData;
             attr.SetParagraphSpacingAfter(attr.GetParagraphSpacingAfter() - 20);
-            
+
             attr.SetFlags(wxTEXT_ATTR_PARA_SPACING_AFTER);
             m_richTextCtrl->SetStyle(range, attr);
         }
@@ -1023,4 +1025,3 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
 
     dialog.ShowModal();
 }
-
