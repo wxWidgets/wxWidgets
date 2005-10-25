@@ -231,7 +231,7 @@ public:
     virtual void Freeze();
 
     /// Call Thaw to refresh
-    virtual void Thaw(bool refresh = true);
+    virtual void Thaw();
 
     /// Call Thaw to refresh
     virtual bool IsFrozen() const { return m_freezeCount > 0; }
@@ -584,7 +584,7 @@ public:
     virtual void SetupScrollbars(bool atTop = false);
 
     /// Keyboard navigation
-    virtual bool Navigate(int keyCode, int flags);
+    virtual bool KeyboardNavigate(int keyCode, int flags);
 
     /// Paint the background
     virtual void PaintBackground(wxDC& dc);

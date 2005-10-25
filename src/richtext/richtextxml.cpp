@@ -272,8 +272,16 @@ inline static void OutputString(wxOutputStream& stream, const wxString& str,
 {
     if (str.empty()) return;
 #if wxUSE_UNICODE
-    const wxWX2MBbuf buf(str.mb_str(convFile ? *convFile : wxConvUTF8));
-    stream.Write((const char*)buf, strlen((const char*)buf));
+    if (convFile)
+    {
+        const wxWX2MBbuf buf(str.mb_str(*convFile));
+        stream.Write((const char*)buf, strlen((const char*)buf));
+    }
+    else
+    {
+        const wxWX2MBbuf buf(str.mb_str(wxConvUTF8));
+        stream.Write((const char*)buf, strlen((const char*)buf));
+    }
 #else
     if ( convFile == NULL )
         stream.Write(str.mb_str(), str.Len());

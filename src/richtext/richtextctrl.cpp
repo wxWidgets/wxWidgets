@@ -187,11 +187,11 @@ void wxRichTextCtrl::Freeze()
 }
 
 /// Call Thaw to refresh
-void wxRichTextCtrl::Thaw(bool refresh)
+void wxRichTextCtrl::Thaw()
 {
     m_freezeCount --;
 
-    if (m_freezeCount == 0 && refresh)
+    if (m_freezeCount == 0)
     {
         SetupScrollbars();
         Refresh(false);
@@ -435,7 +435,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         event.GetKeyCode() == WXK_NEXT ||
         event.GetKeyCode() == WXK_END)
     {
-        Navigate(event.GetKeyCode(), flags);
+        KeyboardNavigate(event.GetKeyCode(), flags);
     }
     else if (event.GetKeyCode() == WXK_RETURN)
     {
@@ -584,10 +584,9 @@ Adding Shift does the above but starts/extends selection.
 
  */
 
-bool wxRichTextCtrl::Navigate(int keyCode, int flags)
+bool wxRichTextCtrl::KeyboardNavigate(int keyCode, int flags)
 {
     bool success = false;
-    Freeze();
 
     if (keyCode == WXK_RIGHT)
     {
@@ -645,8 +644,6 @@ bool wxRichTextCtrl::Navigate(int keyCode, int flags)
         ScrollIntoView(m_caretPosition, keyCode);
         SetDefaultStyleToCursorStyle();
     }
-
-    Thaw(false);
 
     return success;
 }
