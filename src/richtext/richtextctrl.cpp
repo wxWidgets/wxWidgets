@@ -194,7 +194,7 @@ void wxRichTextCtrl::Thaw(bool refresh)
     if (m_freezeCount == 0 && refresh)
     {
         SetupScrollbars();
-        Refresh();
+        Refresh(false);
     }
 }
 
@@ -210,7 +210,7 @@ void wxRichTextCtrl::Clear()
     if (m_freezeCount == 0)
     {
         SetupScrollbars();
-        Refresh();
+        Refresh(false);
     }
     SendUpdateEvent();
 }
@@ -268,7 +268,7 @@ void wxRichTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
     PositionCaret();
 
     if (!IsFrozen())
-        Refresh();
+        Refresh(false);
 }
 
 void wxRichTextCtrl::OnKillFocus(wxFocusEvent& WXUNUSED(event))
@@ -276,7 +276,7 @@ void wxRichTextCtrl::OnKillFocus(wxFocusEvent& WXUNUSED(event))
     SetCaret(NULL);
 
     if (!IsFrozen())
-        Refresh();
+        Refresh(false);
 }
 
 /// Left-click
@@ -389,7 +389,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
             SetDefaultStyleToCursorStyle();
 
             if (extendSel)
-                Refresh();
+                Refresh(false);
         }
     }
 }
@@ -939,7 +939,7 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
     else
@@ -968,7 +968,7 @@ bool wxRichTextCtrl::MoveLeft(int noPositions, int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
     else
@@ -1059,7 +1059,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
     else
@@ -1082,7 +1082,7 @@ bool wxRichTextCtrl::MoveToParagraphEnd(int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
 
@@ -1105,7 +1105,7 @@ bool wxRichTextCtrl::MoveToParagraphStart(int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
 
@@ -1130,7 +1130,7 @@ bool wxRichTextCtrl::MoveToLineEnd(int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
 
@@ -1157,7 +1157,7 @@ bool wxRichTextCtrl::MoveToLineStart(int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
 
@@ -1178,7 +1178,7 @@ bool wxRichTextCtrl::MoveHome(int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
     else
@@ -1201,7 +1201,7 @@ bool wxRichTextCtrl::MoveEnd(int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
     else
@@ -1242,7 +1242,7 @@ bool wxRichTextCtrl::PageDown(int noPages, int flags)
                 SetDefaultStyleToCursorStyle();
 
                 if (extendSel)
-                    Refresh();
+                    Refresh(false);
                 return true;
             }
         }
@@ -1341,7 +1341,7 @@ bool wxRichTextCtrl::WordLeft(int WXUNUSED(n), int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
 
@@ -1365,7 +1365,7 @@ bool wxRichTextCtrl::WordRight(int WXUNUSED(n), int flags)
         SetDefaultStyleToCursorStyle();
 
         if (extendSel)
-            Refresh();
+            Refresh(false);
         return true;
     }
 
@@ -1403,7 +1403,7 @@ void wxRichTextCtrl::OnIdle(wxIdleEvent& event)
         m_fullLayoutTime = 0;
         GetBuffer().Invalidate(wxRICHTEXT_ALL);
         ShowPosition(m_fullLayoutSavedPosition);
-        Refresh();
+        Refresh(false);
     }
     event.Skip();
 }
@@ -1500,7 +1500,7 @@ bool wxRichTextCtrl::LoadFile(const wxString& filename, int type)
     LayoutContent();
     PositionCaret();
     SetupScrollbars(true);
-    Refresh();
+    Refresh(false);
     SendUpdateEvent();
 
     if (success)
@@ -1764,7 +1764,7 @@ void wxRichTextCtrl::Cut()
 
         DeleteSelectedContent();
         LayoutContent();
-        Refresh();
+        Refresh(false);
     }
 }
 
@@ -1887,7 +1887,7 @@ void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCare
 {
     m_selectionAnchor = from;
     m_selectionRange.SetRange(from, to);
-    Refresh();
+    Refresh(false);
     PositionCaret();
 }
 
@@ -1917,7 +1917,7 @@ void wxRichTextCtrl::Remove(long from, long to)
 
     LayoutContent();
     if (!IsFrozen())
-        Refresh();
+        Refresh(false);
 }
 
 bool wxRichTextCtrl::IsModified() const

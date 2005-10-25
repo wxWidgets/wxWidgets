@@ -4115,7 +4115,7 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
         {
             m_ctrl->LayoutContent();
             m_ctrl->PositionCaret();
-            m_ctrl->Refresh();
+            m_ctrl->Refresh(false);
 
             if (sendUpdateEvent)
                 m_ctrl->SendUpdateEvent();
