@@ -460,6 +460,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/dde.h \
 	wx/msw/debughlp.h \
 	wx/msw/gccpriv.h \
+	wx/msw/libraries.h \
 	wx/msw/mimetype.h \
 	wx/msw/stackwalk.h \
 	wx/msw/stdpaths.h \
@@ -1511,6 +1512,7 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/dde.h \
 	wx/msw/debughlp.h \
 	wx/msw/gccpriv.h \
+	wx/msw/libraries.h \
 	wx/msw/mimetype.h \
 	wx/msw/stackwalk.h \
 	wx/msw/stdpaths.h \
@@ -2101,6 +2103,8 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/treectrl.h \
 	wx/msw/window.h \
 	wx/msw/wx.manifest \
+	wx/msw/amd64.manifest \
+	wx/msw/ia64.manifest \
 	wx/msw/wx.rc \
 	wx/msw/colours.bmp \
 	wx/msw/csquery.bmp \
@@ -2297,6 +2301,8 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/treectrl.h \
 	wx/msw/window.h \
 	wx/msw/wx.manifest \
+	wx/msw/amd64.manifest \
+	wx/msw/ia64.manifest \
 	wx/msw/wx.rc \
 	wx/msw/colours.bmp \
 	wx/msw/csquery.bmp \
