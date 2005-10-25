@@ -113,6 +113,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/dde.h
     wx/msw/debughlp.h
     wx/msw/gccpriv.h
+    wx/msw/libraries.h
     wx/msw/mimetype.h
     wx/msw/stackwalk.h
     wx/msw/stdpaths.h
@@ -1430,6 +1431,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <!-- Resources must be installed together with headers: -->
     wx/msw/wx.manifest
+    wx/msw/amd64.manifest
+    wx/msw/ia64.manifest
     wx/msw/wx.rc
     <!-- bitmaps -->
     wx/msw/colours.bmp
