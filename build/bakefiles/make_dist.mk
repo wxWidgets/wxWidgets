@@ -379,7 +379,7 @@ MSW_DIST: UNIV_DIST
 	$(CP_P) $(INCDIR)/wx/msw/*.ico $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/*.bmp $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
-	$(CP_P) $(INCDIR)/wx/msw/wx.manifest $(DISTDIR)/include/wx/msw
+	$(CP_P) $(INCDIR)/wx/msw/*.manifest $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
 	$(CP_P) $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
 	mkdir $(DISTDIR)/src/msw/ole
@@ -388,6 +388,8 @@ MSW_DIST: UNIV_DIST
 	$(CP_P) $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/*.rc $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
+	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
+	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	$(CP_P) $(WXDIR)/wxWINE.spec $(DISTDIR)
@@ -396,7 +398,7 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/msw/wince
 	$(CP_P) $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
-	$(CP_P) $(INCDIR)/wx/msw/wx.manifest $(DISTDIR)/include/wx/msw
+	$(CP_P) $(INCDIR)/wx/msw/*.manifest $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
 	$(CP_P) $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
 	mkdir $(DISTDIR)/src/msw
@@ -442,6 +444,8 @@ DEMOS_DIST: ALL_GUI_DIST
 	$(CP_P) $(DEMODIR)/bombs/*.cpp $(DISTDIR)/demos/bombs
 	$(CP_P) $(DEMODIR)/bombs/*.h $(DISTDIR)/demos/bombs
 	$(CP_P) $(DEMODIR)/bombs/*.xpm $(DISTDIR)/demos/bombs
+	$(CP_P) $(DEMODIR)/bombs/*.ico $(DISTDIR)/demos/bombs
+	$(CP_P) $(DEMODIR)/bombs/*.rc $(DISTDIR)/demos/bombs
 	$(CP_P) $(DEMODIR)/bombs/readme.txt $(DISTDIR)/demos/bombs
 
 	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/demos/dbbrowse; esac
@@ -455,6 +459,10 @@ DEMOS_DIST: ALL_GUI_DIST
 	$(CP_P) $(DEMODIR)/forty/*.xpm $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.xbm $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.htm $(DISTDIR)/demos/forty
+	$(CP_P) $(DEMODIR)/forty/*.bmp $(DISTDIR)/demos/forty
+	$(CP_P) $(DEMODIR)/forty/*.ico $(DISTDIR)/demos/forty
+	$(CP_P) $(DEMODIR)/forty/*.rc $(DISTDIR)/demos/forty
+	$(CP_P) $(DEMODIR)/forty/readme.txt $(DISTDIR)/demos/forty
 
 	mkdir $(DISTDIR)/demos/life
 	mkdir $(DISTDIR)/demos/life/bitmaps
@@ -465,7 +473,10 @@ DEMOS_DIST: ALL_GUI_DIST
 	$(CP_P) $(DEMODIR)/life/*.xpm $(DISTDIR)/demos/life
 	$(CP_P) $(DEMODIR)/life/*.inc $(DISTDIR)/demos/life
 	$(CP_P) $(DEMODIR)/life/*.lif $(DISTDIR)/demos/life
+	$(CP_P) $(DEMODIR)/life/*.rc $(DISTDIR)/demos/life
+	$(CP_P) $(DEMODIR)/life/*.ico $(DISTDIR)/demos/life
 	$(CP_P) $(DEMODIR)/life/bitmaps/*.xpm $(DISTDIR)/demos/life/bitmaps
+	$(CP_P) $(DEMODIR)/life/bitmaps/*.bmp $(DISTDIR)/demos/life/bitmaps
 
 	mkdir $(DISTDIR)/demos/poem
 	$(CP_P) $(DEMODIR)/poem/Makefile.in $(DISTDIR)/demos/poem
@@ -475,11 +486,15 @@ DEMOS_DIST: ALL_GUI_DIST
 	$(CP_P) $(DEMODIR)/poem/*.xpm $(DISTDIR)/demos/poem
 	$(CP_P) $(DEMODIR)/poem/*.dat $(DISTDIR)/demos/poem
 	$(CP_P) $(DEMODIR)/poem/*.txt $(DISTDIR)/demos/poem
+	$(CP_P) $(DEMODIR)/poem/*.rc $(DISTDIR)/demos/poem
+	$(CP_P) $(DEMODIR)/poem/*.ico $(DISTDIR)/demos/poem
 
 	mkdir $(DISTDIR)/demos/fractal
 	$(CP_P) $(DEMODIR)/fractal/Makefile.in $(DISTDIR)/demos/fractal
 	$(CP_P) $(DEMODIR)/fractal/makefile.unx $(DISTDIR)/demos/fractal
 	$(CP_P) $(DEMODIR)/fractal/*.cpp $(DISTDIR)/demos/fractal
+	$(CP_P) $(DEMODIR)/fractal/*.rc $(DISTDIR)/demos/fractal
+	$(CP_P) $(DEMODIR)/fractal/*.ico $(DISTDIR)/demos/fractal
 
 SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples
@@ -1079,6 +1094,9 @@ UTILS_DIST: ALL_GUI_DIST
 	$(CP_P) $(UTILSDIR)/helpview/Makefile.in $(DISTDIR)/utils/helpview
 	$(CP_P) $(UTILSDIR)/helpview/src/*.h $(DISTDIR)/utils/helpview/src
 	$(CP_P) $(UTILSDIR)/helpview/src/*.cpp $(DISTDIR)/utils/helpview/src
+	$(CP_P) $(UTILSDIR)/helpview/src/*.rc $(DISTDIR)/utils/helpview/src
+	$(CP_P) $(UTILSDIR)/helpview/src/*.ico $(DISTDIR)/utils/helpview/src
+	$(CP_P) $(UTILSDIR)/helpview/src/readme.txt $(DISTDIR)/utils/helpview/src
 	$(CP_P) $(UTILSDIR)/helpview/src/Makefile.in $(DISTDIR)/utils/helpview/src
 	$(CP_P) $(UTILSDIR)/helpview/src/test.zip $(DISTDIR)/utils/helpview/src
 	$(CP_P) $(UTILSDIR)/helpview/src/bitmaps/*.xpm $(DISTDIR)/utils/helpview/src/bitmaps
