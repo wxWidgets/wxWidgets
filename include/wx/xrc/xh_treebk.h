@@ -15,8 +15,10 @@
 #if wxUSE_TREEBOOK
 
 #include "wx/treebook.h"
+#include "wx/dynarray.h"
 
-WX_DEFINE_ARRAY_SIZE_T(size_t, wxArrayTbkPageIndexes);
+WX_DEFINE_USER_EXPORTED_ARRAY_SIZE_T(size_t, wxArrayTbkPageIndexes,
+                                     class WXDLLIMPEXP_XRC);
 
 // ---------------------------------------------------------------------
 // wxTreebookXmlHandler class
@@ -28,16 +30,17 @@ WX_DEFINE_ARRAY_SIZE_T(size_t, wxArrayTbkPageIndexes);
 // it cannot be greater than the previous page depth plus one
 class WXDLLIMPEXP_XRC wxTreebookXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxTreebookXmlHandler)
 public:
     wxTreebookXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    bool m_isInside;
-    wxTreebook * m_tbk;
+    wxTreebook *m_tbk;
     wxArrayTbkPageIndexes m_treeContext;
+    bool m_isInside;
+
+    DECLARE_DYNAMIC_CLASS(wxTreebookXmlHandler)
 };
 
 
@@ -75,7 +78,7 @@ private:
 //  ...
 //</resource>
 
-#endif
+#endif // wxUSE_TREEBOOK
 
 #endif // _WX_XH_TREEBK_H_
 
