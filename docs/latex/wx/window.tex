@@ -615,6 +615,20 @@ The search is recursive in both cases.
 \helpref{FindWindow}{wxwindowfindwindow}
 
 
+\membersection{wxWindow::FindWindowByLabel}\label{wxwindowfindwindowbylabel}
+
+\func{static wxWindow*}{FindWindowByLabel}{\param{const wxString\&}{ label}, \param{wxWindow*}{ parent = NULL}}
+
+Find a window by its label. Depending on the type of window, the label may be a window title
+or panel item label. If {\it parent} is NULL, the search will start from all top-level
+frames and dialog boxes; if non-NULL, the search will be limited to the given window hierarchy.
+The search is recursive in both cases.
+
+\wxheading{See also}
+
+\helpref{FindWindow}{wxwindowfindwindow}
+
+
 \membersection{wxWindow::FindWindowByName}\label{wxwindowfindwindowbyname}
 
 \func{static wxWindow*}{FindWindowByName}{\param{const wxString\&}{ name}, \param{wxWindow*}{ parent = NULL}}
@@ -626,20 +640,6 @@ The search is recursive in both cases.
 
 If no window with such name is found,
 \helpref{FindWindowByLabel}{wxwindowfindwindowbylabel} is called.
-
-\wxheading{See also}
-
-\helpref{FindWindow}{wxwindowfindwindow}
-
-
-\membersection{wxWindow::FindWindowByLabel}\label{wxwindowfindwindowbylabel}
-
-\func{static wxWindow*}{FindWindowByLabel}{\param{const wxString\&}{ label}, \param{wxWindow*}{ parent = NULL}}
-
-Find a window by its label. Depending on the type of window, the label may be a window title
-or panel item label. If {\it parent} is NULL, the search will start from all top-level
-frames and dialog boxes; if non-NULL, the search will be limited to the given window hierarchy.
-The search is recursive in both cases.
 
 \wxheading{See also}
 
@@ -772,13 +772,6 @@ same as the size the window would have had after calling
 \helpref{Fit}{wxwindowfit}.
 
 
-\membersection{wxWindow::GetCaret}\label{wxwindowgetcaret}
-
-\constfunc{wxCaret *}{GetCaret}{\void}
-
-Returns the \helpref{caret}{wxcaret} associated with the window.
-
-
 \membersection{wxWindow::GetCapture}\label{wxwindowgetcapture}
 
 \func{static wxWindow *}{GetCapture}{\void}
@@ -791,6 +784,13 @@ Returns the currently captured window.
 \helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse},
 \helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse},
 \helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
+
+
+\membersection{wxWindow::GetCaret}\label{wxwindowgetcaret}
+
+\constfunc{wxCaret *}{GetCaret}{\void}
+
+Returns the \helpref{caret}{wxcaret} associated with the window.
 
 
 \membersection{wxWindow::GetCharHeight}\label{wxwindowgetcharheight}
@@ -2609,6 +2609,27 @@ implements the following methods:\par
 }
 
 
+\membersection{wxWindow::SetConstraints}\label{wxwindowsetconstraints}
+
+\func{void}{SetConstraints}{\param{wxLayoutConstraints* }{constraints}}
+
+Sets the window to have the given layout constraints. The window
+will then own the object, and will take care of its deletion.
+If an existing layout constraints object is already owned by the
+window, it will be deleted.
+
+\wxheading{Parameters}
+
+\docparam{constraints}{The constraints to set. Pass NULL to disassociate and delete the window's
+constraints.}
+
+\wxheading{Remarks}
+
+You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
+the constraints automatically in OnSize; otherwise, you must override OnSize and call Layout()
+explicitly. When setting both a wxLayoutConstraints and a \helpref{wxSizer}{wxsizer}, only the
+sizer will have effect.
+
 \membersection{wxWindow::SetContainingSizer}\label{wxwindowsetcontainingsizer}
 
 \func{void}{SetContainingSizer}{\param{wxSizer* }{sizer}}
@@ -2639,89 +2660,6 @@ be reset back to default.
 \helpref{::wxSetCursor}{wxsetcursor}, \helpref{wxCursor}{wxcursor}
 
 
-\membersection{wxWindow::SetConstraints}\label{wxwindowsetconstraints}
-
-\func{void}{SetConstraints}{\param{wxLayoutConstraints* }{constraints}}
-
-Sets the window to have the given layout constraints. The window
-will then own the object, and will take care of its deletion.
-If an existing layout constraints object is already owned by the
-window, it will be deleted.
-
-\wxheading{Parameters}
-
-\docparam{constraints}{The constraints to set. Pass NULL to disassociate and delete the window's
-constraints.}
-
-\wxheading{Remarks}
-
-You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
-the constraints automatically in OnSize; otherwise, you must override OnSize and call Layout()
-explicitly. When setting both a wxLayoutConstraints and a \helpref{wxSizer}{wxsizer}, only the
-sizer will have effect.
-
-\membersection{wxWindow::SetInitialBestSize}\label{wxwindowsetinitialbestsize}
-
-\func{virtual void}{SetInitialBestSize}{\param{const wxSize\& }{size}}
-
-Sets the initial window size if none is given (i.e. at least one of the
-components of the size passed to ctor/Create() is wxDefaultCoord).
-
-\membersection{wxWindow::SetMaxSize}\label{wxwindowsetmaxsize}
-
-\func{void}{SetMaxSize}{\param{const wxSize\& }{size}}
-
-Sets the maximum size of the window, to indicate to the sizer layout mechanism
-that this is the maximum possible size.
-
-\membersection{wxWindow::SetMinSize}\label{wxwindowsetminsize}
-
-\func{void}{SetMinSize}{\param{const wxSize\& }{size}}
-
-Sets the minimum size of the window, to indicate to the sizer layout mechanism
-that this is the minimum required size. You may need to call this
-if you change the window size after construction and before adding
-to its parent sizer.
-
-\membersection{wxWindow::SetOwnBackgroundColour}\label{wxwindowsetownbackgroundcolour}
-
-\func{void}{SetOwnBackgroundColour}{\param{const wxColour\& }{colour}}
-
-Sets the background colour of the window but prevents it from being inherited
-by the children of this window.
-
-\wxheading{See also}
-
-\helpref{SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
-\helpref{InheritAttributes}{wxwindowinheritattributes}
-
-
-\membersection{wxWindow::SetOwnFont}\label{wxwindowsetownfont}
-
-\func{void}{SetOwnFont}{\param{const wxFont\& }{font}}
-
-Sets the font of the window but prevents it from being inherited by the
-children of this window.
-
-\wxheading{See also}
-
-\helpref{SetFont}{wxwindowsetfont},\rtfsp
-\helpref{InheritAttributes}{wxwindowinheritattributes}
-
-
-\membersection{wxWindow::SetOwnForegroundColour}\label{wxwindowsetownforegroundcolour}
-
-\func{void}{SetOwnForegroundColour}{\param{const wxColour\& }{colour}}
-
-Sets the foreground colour of the window but prevents it from being inherited
-by the children of this window.
-
-\wxheading{See also}
-
-\helpref{SetForegroundColour}{wxwindowsetforegroundcolour},\rtfsp
-\helpref{InheritAttributes}{wxwindowinheritattributes}
-
-
 \membersection{wxWindow::SetDropTarget}\label{wxwindowsetdroptarget}
 
 \func{void}{SetDropTarget}{\param{wxDropTarget*}{ target}}
@@ -2736,6 +2674,13 @@ If the window already has a drop target, it is deleted.
 \helpref{Drag and drop overview}{wxdndoverview}
 
 
+
+\membersection{wxWindow::SetInitialBestSize}\label{wxwindowsetinitialbestsize}
+
+\func{virtual void}{SetInitialBestSize}{\param{const wxSize\& }{size}}
+
+Sets the initial window size if none is given (i.e. at least one of the
+components of the size passed to ctor/Create() is wxDefaultCoord).
 
 \membersection{wxWindow::SetEventHandler}\label{wxwindowseteventhandler}
 
@@ -2931,6 +2876,22 @@ Sets the window's label.
 \helpref{wxWindow::GetLabel}{wxwindowgetlabel}
 
 
+\membersection{wxWindow::SetMaxSize}\label{wxwindowsetmaxsize}
+
+\func{void}{SetMaxSize}{\param{const wxSize\& }{size}}
+
+Sets the maximum size of the window, to indicate to the sizer layout mechanism
+that this is the maximum possible size.
+
+\membersection{wxWindow::SetMinSize}\label{wxwindowsetminsize}
+
+\func{void}{SetMinSize}{\param{const wxSize\& }{size}}
+
+Sets the minimum size of the window, to indicate to the sizer layout mechanism
+that this is the minimum required size. You may need to call this
+if you change the window size after construction and before adding
+to its parent sizer.
+
 \membersection{wxWindow::SetName}\label{wxwindowsetname}
 
 \func{virtual void}{SetName}{\param{const wxString\& }{name}}
@@ -2944,6 +2905,45 @@ Sets the window's name.
 \wxheading{See also}
 
 \helpref{wxWindow::GetName}{wxwindowgetname}
+
+
+\membersection{wxWindow::SetOwnBackgroundColour}\label{wxwindowsetownbackgroundcolour}
+
+\func{void}{SetOwnBackgroundColour}{\param{const wxColour\& }{colour}}
+
+Sets the background colour of the window but prevents it from being inherited
+by the children of this window.
+
+\wxheading{See also}
+
+\helpref{SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
+\helpref{InheritAttributes}{wxwindowinheritattributes}
+
+
+\membersection{wxWindow::SetOwnFont}\label{wxwindowsetownfont}
+
+\func{void}{SetOwnFont}{\param{const wxFont\& }{font}}
+
+Sets the font of the window but prevents it from being inherited by the
+children of this window.
+
+\wxheading{See also}
+
+\helpref{SetFont}{wxwindowsetfont},\rtfsp
+\helpref{InheritAttributes}{wxwindowinheritattributes}
+
+
+\membersection{wxWindow::SetOwnForegroundColour}\label{wxwindowsetownforegroundcolour}
+
+\func{void}{SetOwnForegroundColour}{\param{const wxColour\& }{colour}}
+
+Sets the foreground colour of the window but prevents it from being inherited
+by the children of this window.
+
+\wxheading{See also}
+
+\helpref{SetForegroundColour}{wxwindowsetforegroundcolour},\rtfsp
+\helpref{InheritAttributes}{wxwindowinheritattributes}
 
 
 \membersection{wxWindow::SetPalette}\label{wxwindowsetpalette}
@@ -3260,21 +3260,6 @@ The same as \helpref{SetSizer}{wxwindowsetsizer}, except it also sets the size h
 for the window based on the sizer's minimum size.
 
 
-\membersection{wxWindow::SetTitle}\label{wxwindowsettitle}
-
-\func{virtual void}{SetTitle}{\param{const wxString\& }{title}}
-
-Sets the window's title. Applicable only to frames and dialogs.
-
-\wxheading{Parameters}
-
-\docparam{title}{The window's title.}
-
-\wxheading{See also}
-
-\helpref{wxWindow::GetTitle}{wxwindowgettitle}
-
-
 \membersection{wxWindow::SetThemeEnabled}\label{wxwindowsetthemeenabled}
 
 \func{virtual void}{SetThemeEnabled}{\param{bool }{enable}}
@@ -3288,6 +3273,21 @@ defined by a user's selected theme.
 
 Dialogs, notebook pages and the status bar have this flag set to true
 by default so that the default look and feel is simulated best.
+
+
+\membersection{wxWindow::SetTitle}\label{wxwindowsettitle}
+
+\func{virtual void}{SetTitle}{\param{const wxString\& }{title}}
+
+Sets the window's title. Applicable only to frames and dialogs.
+
+\wxheading{Parameters}
+
+\docparam{title}{The window's title.}
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetTitle}{wxwindowgettitle}
 
 
 \membersection{wxWindow::SetToolTip}\label{wxwindowsettooltip}
