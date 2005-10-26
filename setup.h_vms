@@ -429,6 +429,7 @@
 
 #define wxUSE_GLCANVAS       1
 
+#define wxUSE_RICHTEXT       1
 
 #define wxUSE_CLIPBOARD     1
 
@@ -518,10 +519,8 @@
  * the common values automatically */
 #if (defined(__WIN95__) && !defined(__WXUNIVERSAL__)) || defined(__WXPM__)
 #define wxUSE_OWNER_DRAWN 1
-#endif
-
-#if defined(__WXPM__)
-#define wxUSE_OWNER_DRAWN 1
+#else
+#define wxUSE_OWNER_DRAWN 0
 #endif
 
 /* enable rich edit under Win32 */
