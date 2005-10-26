@@ -192,7 +192,8 @@ public:
     wxDEPRECATED( void ExpandItem(const wxTreeItemId& item, int action) );
 
         // use Set/GetImageList and Set/GetStateImageList
-    wxDEPRECATED( wxImageList *GetImageList(int) const );
+//    This appears to hide base class GetImageList()
+//    wxDEPRECATED( wxImageList *GetImageList(int) const );
     wxDEPRECATED( void SetImageList(wxImageList *imageList, int) );
 
     // use Set/GetItemImage directly
