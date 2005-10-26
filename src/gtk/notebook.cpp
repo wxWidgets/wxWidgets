@@ -339,11 +339,11 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
-    if (m_windowStyle & wxNB_RIGHT)
+    if (m_windowStyle & wxBK_RIGHT)
         gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_RIGHT );
-    if (m_windowStyle & wxNB_LEFT)
+    if (m_windowStyle & wxBK_LEFT)
         gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_LEFT );
-    if (m_windowStyle & wxNB_BOTTOM)
+    if (m_windowStyle & wxBK_BOTTOM)
         gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_BOTTOM );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "key_press_event",
