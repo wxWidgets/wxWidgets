@@ -22,6 +22,8 @@ All (GUI):
 - All book based controls (notebook, treebook etc.) share now the same
   options for orientation (wxBK_TOP, wxBK_DEFAULT, ...) instead of duplicated
   wxLB_TOP, wxNB_TOP, wxCHB_TOP, wxTBK_TOP.
+- Added parent window parameter to wxHelpController constructor
+  and added SetParentWindow/GetParentWindow.
 
 wxMSW:
 

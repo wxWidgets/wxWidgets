@@ -73,9 +73,14 @@ wxHelpControllerBase\\
 
 \membersection{wxHelpController::wxHelpController}\label{wxhelpcontrollerctor}
 
-\func{}{wxHelpController}{\void}
+\func{}{wxHelpController}{\param{wxWindow*}{ parentWindow = NULL}}
 
 Constructs a help instance object, but does not invoke the help viewer.
+
+If you provide a window, it will be used by some help controller classes, such as
+wxCHMHelpController, wxWinHelpController and wxHtmlHelpController, as the
+parent for the help window instead of the value of \helpref{wxApp::GetTopWindow}{wxappgettopwindow}. You can also change the parent window later with 
+\helpref{wxHelpController::SetParentWindow}{wxhelpcontrollersetparentwindow}.
 
 \membersection{wxHelpController::\destruct{wxHelpController}}\label{wxhelpcontrollerdtor}
 
@@ -184,6 +189,13 @@ and just returns NULL.
 \docparam{flags}{This defaults to wxHELP\_NETSCAPE for wxExtHelpController, indicating
 that the viewer is a variant of Netscape Navigator.}
 
+\membersection{wxHelpController::GetParentWindow}\label{wxhelpcontrollergetparentwindow}
+
+\constfunc{virtual bool}{GetParentWindow}{\void}
+
+Returns the window to be used as the parent for the help window. This window is used
+by wxCHMHelpController, wxWinHelpController and wxHtmlHelpController.
+
 \membersection{wxHelpController::KeywordSearch}\label{wxhelpcontrollerkeywordsearch}
 
 \func{virtual bool}{KeywordSearch}{\param{const wxString\& }{keyWord}, \param{wxHelpSearchMode }{mode = wxHELP\_SEARCH\_ALL}}
@@ -234,6 +246,13 @@ page title) and also the size and position of the frame if the frame is already
 open. {\it newFrameEachTime} is ignored.
 
 For all other help controllers this function has no effect.
+
+\membersection{wxHelpController::SetParentWindow}\label{wxhelpcontrollersetparentwindow}
+
+\func{virtual void}{SetParentWindow}{\param{wxWindow* }{parentWindow}}
+
+Sets the window to be used as the parent for the help window. This is used
+by wxCHMHelpController, wxWinHelpController and wxHtmlHelpController.
 
 \membersection{wxHelpController::SetViewer}\label{wxhelpcontrollersetviewer}
 

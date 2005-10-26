@@ -19,7 +19,7 @@
 class WXDLLEXPORT wxCHMHelpController : public wxHelpControllerBase
 {
 public:
-    wxCHMHelpController() { }
+    wxCHMHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) { }
     virtual ~wxCHMHelpController();
 
     // Must call this to set the filename

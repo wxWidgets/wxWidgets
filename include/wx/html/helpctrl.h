@@ -26,7 +26,7 @@ class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxE
     DECLARE_DYNAMIC_CLASS(wxHtmlHelpController)
 
 public:
-    wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE);
+    wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = NULL);
     virtual ~wxHtmlHelpController();
 
     void SetTitleFormat(const wxString& format);

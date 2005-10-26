@@ -20,8 +20,8 @@
 class WXDLLIMPEXP_HTML wxBestHelpController: public wxHelpControllerBase
 {
 public:
-    wxBestHelpController()
-        : m_helpControllerType( wxUseNone ),
+    wxBestHelpController(wxWindow* parentWindow = NULL)
+        : wxHelpControllerBase( parentWindow ), m_helpControllerType( wxUseNone ),
           m_helpController( NULL )
     {
     }
@@ -97,6 +97,12 @@ public:
         return m_helpController->GetFrameParameters( size, pos,
                                                      newFrameEachTime );
     }
+
+    /// Set the window that can optionally be used for the help window's parent.
+    virtual void SetParentWindow(wxWindow* win) { m_helpController->SetParentWindow(win); }
+
+    /// Get the window that can optionally be used for the help window's parent.
+    virtual wxWindow* GetParentWindow() const { return m_helpController->GetParentWindow(); }
 
 protected:
     // Append/change extension if necessary.

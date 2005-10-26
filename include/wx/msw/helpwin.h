@@ -23,7 +23,7 @@ class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
     DECLARE_CLASS(wxWinHelpController)
 
 public:
-    wxWinHelpController() {}
+    wxWinHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) {}
     ~wxWinHelpController() {}
 
     // Must call this to set the filename

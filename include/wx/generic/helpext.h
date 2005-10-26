@@ -55,7 +55,7 @@ class WXDLLIMPEXP_ADV wxExtHelpController : public wxHelpControllerBase
 {
 DECLARE_CLASS(wxExtHelpController)
    public:
-   wxExtHelpController();
+   wxExtHelpController(wxWindow* parentWindow = NULL);
    ~wxExtHelpController();
 
    /** Tell it which browser to use.

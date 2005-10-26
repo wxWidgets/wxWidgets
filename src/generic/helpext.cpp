@@ -70,7 +70,8 @@ IMPLEMENT_CLASS(wxExtHelpController, wxHelpControllerBase)
    and a file mapping numerical Section numbers to relative URLS.
 */
 
-wxExtHelpController::wxExtHelpController()
+wxExtHelpController::wxExtHelpController(wxWindow* parentWindow):
+    wxHelpControllerBase(parentWindow)
 {
    m_MapList = (wxList*) NULL;
    m_NumOfEntries = 0;

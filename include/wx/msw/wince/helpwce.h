@@ -19,7 +19,7 @@
 class WXDLLEXPORT wxWinceHelpController : public wxHelpControllerBase
 {
 public:
-    wxWinceHelpController() {}
+    wxWinceHelpController(wxWindow* parentWindow): wxHelpControllerBase(parentWindow) {}
     virtual ~wxWinceHelpController() {}
 
     // Must call this to set the filename
