@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        notebook.cpp
+// Name:        src/os2/notebook.cpp
 // Purpose:     implementation of wxNotebook
 // Author:      David Webster
 // Modified by:
@@ -56,7 +56,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
-    EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
+    EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, wxNotebook::OnSelChange)
     EVT_SIZE(wxNotebook::OnSize)
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
@@ -162,11 +162,11 @@ WXDWORD wxNotebook::OS2GetStyle (
 
     dwTabStyle |= WS_TABSTOP | BKS_SOLIDBIND | BKS_ROUNDEDTABS | BKS_TABTEXTCENTER | BKS_TABBEDDIALOG;
 
-    if (lStyle & wxNB_BOTTOM)
+    if (lStyle & wxBK_BOTTOM)
         dwTabStyle |= BKS_MAJORTABBOTTOM | BKS_BACKPAGESBL;
-    else if (lStyle & wxNB_RIGHT)
+    else if (lStyle & wxBK_RIGHT)
         dwTabStyle |= BKS_MAJORTABRIGHT | BKS_BACKPAGESBR;
-    else if (lStyle & wxNB_LEFT)
+    else if (lStyle & wxBK_LEFT)
         dwTabStyle |= BKS_MAJORTABLEFT | BKS_BACKPAGESTL;
     else // default to top
         dwTabStyle |= BKS_MAJORTABTOP | BKS_BACKPAGESTR;
@@ -209,7 +209,7 @@ int wxNotebook::GetRowCount() const
 
 int wxNotebook::SetSelection( size_t nPage )
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
     if (nPage != (size_t)m_nSelection)
     {
@@ -243,7 +243,7 @@ int wxNotebook::SetSelection( size_t nPage )
 bool wxNotebook::SetPageText( size_t nPage,
                               const wxString& rsStrText )
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("notebook page out of range") );
     return (bool)::WinSendMsg( m_hWnd
                               ,BKM_SETTABTEXT
                               ,MPFROMLONG((ULONG)m_alPageId[nPage])
@@ -258,7 +258,7 @@ wxString wxNotebook::GetPageText ( size_t nPage ) const
     wxString                        sStr;
     ULONG                           ulRc;
 
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxT(""), wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxEmptyString, wxT("notebook page out of range") );
 
     memset(&vBookText, '\0', sizeof(BOOKTEXT));
     vBookText.textLen = 0; // This will get the length
@@ -300,7 +300,7 @@ wxString wxNotebook::GetPageText ( size_t nPage ) const
 
 int wxNotebook::GetPageImage ( size_t nPage ) const
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
     //
     // For OS/2 just return the page
@@ -489,7 +489,7 @@ bool wxNotebook::InsertPage ( size_t          nPage,
     ULONG                           ulApiPage;
 
     wxASSERT( pPage != NULL );
-    wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE );
+    wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), false );
 
     //
     // Under OS/2 we can only insert FIRST, LAST, NEXT or PREV.  Requires
@@ -515,7 +515,7 @@ bool wxNotebook::InsertPage ( size_t          nPage,
 
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            return FALSE;
+            return false;
         }
         m_alPageId.Insert((long)ulApiPage, nPage);
     }
@@ -533,7 +533,7 @@ bool wxNotebook::InsertPage ( size_t          nPage,
 
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            return FALSE;
+            return false;
         }
         m_alPageId.Insert((long)ulApiPage, nPage);
     }
@@ -548,7 +548,7 @@ bool wxNotebook::InsertPage ( size_t          nPage,
                           ,MPFROMLONG((ULONG)m_alPageId[nPage])
                           ,MPFROMHWND(pPage->GetHWND())
                          ))
-            return FALSE;
+            return false;
     }
     //
     // If the inserted page is before the selected one, we must update the
@@ -600,7 +600,7 @@ bool wxNotebook::InsertPage ( size_t          nPage,
         if (!SetPageText( nPage
                          ,rsStrText
                         ))
-            return FALSE;
+            return false;
     }
 
     //
@@ -611,7 +611,7 @@ bool wxNotebook::InsertPage ( size_t          nPage,
         if (!SetPageImage( nPage
                           ,nImageId
                          ))
-            return FALSE;
+            return false;
     }
 
     if (pPage)
@@ -619,7 +619,7 @@ bool wxNotebook::InsertPage ( size_t          nPage,
         //
         // Don't show pages by default (we'll need to adjust their size first)
         //
-        HWND                        hWnd = GetWinHwnd(pPage);
+        HWND hWnd = GetWinHwnd(pPage);
 
         WinSetWindowULong( hWnd
                           ,QWL_STYLE
@@ -631,14 +631,14 @@ bool wxNotebook::InsertPage ( size_t          nPage,
         //
         // This updates internal flag too - otherwise it will get out of sync
         //
-        pPage->Show(FALSE);
+        pPage->Show(false);
     }
 
     //
     // Some page should be selected: either this one or the first one if there is
     // still no selection
     //
-    int                             nSelNew = -1;
+    int nSelNew = -1;
 
     if (bSelect)
         nSelNew = nPage;
@@ -650,7 +650,7 @@ bool wxNotebook::InsertPage ( size_t          nPage,
 
     InvalidateBestSize();
 
-    return TRUE;
+    return true;
 } // end of wxNotebook::InsertPage
 
 // ----------------------------------------------------------------------------
@@ -672,16 +672,16 @@ void wxNotebook::OnSelChange (
     //
     if (rEvent.GetEventObject() == this)
     {
-        int                         nPageCount = GetPageCount();
-        int                         nSel;
-        ULONG                       ulOS2Sel = (ULONG)rEvent.GetOldSelection();
-        bool                        bFound = FALSE;
+        int   nPageCount = GetPageCount();
+        int   nSel;
+        ULONG ulOS2Sel = (ULONG)rEvent.GetOldSelection();
+        bool  bFound = false;
 
         for (nSel = 0; nSel < nPageCount; nSel++)
         {
             if (ulOS2Sel == (ULONG)m_alPageId[nSel])
             {
-                bFound = TRUE;
+                bFound = true;
                 break;
             }
         }
@@ -689,17 +689,17 @@ void wxNotebook::OnSelChange (
         if (!bFound)
             return;
 
-        m_pages[nSel]->Show(FALSE);
+        m_pages[nSel]->Show(false);
 
         ulOS2Sel = (ULONG)rEvent.GetSelection();
 
-        bFound = FALSE;
+        bFound = false;
 
         for (nSel = 0; nSel < nPageCount; nSel++)
         {
             if (ulOS2Sel == (ULONG)m_alPageId[nSel])
             {
-                bFound = TRUE;
+                bFound = true;
                 break;
             }
         }
@@ -709,7 +709,7 @@ void wxNotebook::OnSelChange (
 
         wxNotebookPage*         pPage = m_pages[nSel];
 
-        pPage->Show(TRUE);
+        pPage->Show(true);
         m_nSelection = nSel;
     }
 
@@ -816,21 +816,17 @@ void wxNotebook::OnNavigationKey (
 //
 // Override these 2 functions to do nothing: everything is done in OnSize
 //
-void wxNotebook::SetConstraintSizes(
-  bool                              WXUNUSED(bRecurse)
-)
+void wxNotebook::SetConstraintSizes( bool WXUNUSED(bRecurse) )
 {
     //
     // Don't set the sizes of the pages - their correct size is not yet known
     //
-    wxControl::SetConstraintSizes(FALSE);
+    wxControl::SetConstraintSizes(false);
 } // end of wxNotebook::SetConstraintSizes
 
-bool wxNotebook::DoPhase (
-  int                               WXUNUSED(nPhase)
-)
+bool wxNotebook::DoPhase ( int WXUNUSED(nPhase) )
 {
-    return TRUE;
+    return true;
 } // end of wxNotebook::DoPhase
 
 // ----------------------------------------------------------------------------
@@ -846,7 +842,7 @@ bool wxNotebook::OS2OnScroll ( int    nOrientation,
     // up-down control
     //
     if (wControl)
-        return FALSE;
+        return false;
     return wxNotebookBase::OS2OnScroll( nOrientation
                                        ,wSBCode
                                        ,wPos
