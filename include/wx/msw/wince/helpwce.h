@@ -19,7 +19,7 @@
 class WXDLLEXPORT wxWinceHelpController : public wxHelpControllerBase
 {
 public:
-    wxWinceHelpController(wxWindow* parentWindow): wxHelpControllerBase(parentWindow) {}
+    wxWinceHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) {}
     virtual ~wxWinceHelpController() {}
 
     // Must call this to set the filename
@@ -47,10 +47,6 @@ protected:
     bool ViewURL(const wxString& topic = wxEmptyString);
 
 private:
-    // eVC4 needs default constructor, otherwise error C2512
-    // but make it hidden
-    wxWinceHelpController(): wxHelpControllerBase(NULL) {}
-
     wxString m_helpFile;
 
     DECLARE_CLASS(wxWinceHelpController)
