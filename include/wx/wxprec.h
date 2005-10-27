@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wxprec.h
+// Name:        wx/wxprec.h
 // Purpose:     Includes the appropriate files for precompiled headers
 // Author:      Julian Smart
 // Modified by:
@@ -48,6 +48,11 @@
 // include all PalmOS headers at once
 #ifdef __WXPALMOS__
 #   include <PalmOS.h>
+#endif
+
+// include <os2.h>
+#ifdef __OS2__
+#   include "wx/os2/private.h"
 #endif
 
 // include the most common wx headers

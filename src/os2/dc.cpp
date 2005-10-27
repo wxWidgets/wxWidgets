@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.cpp
+// Name:        src/os2/dc.cpp
 // Purpose:     wxDC class
 // Author:      David Webster
 // Modified by:
@@ -774,11 +774,7 @@ void wxDC::DoDrawArc(
     vPtlArc[0].y = vYm;
     vPtlArc[1].x = vX2;
     vPtlArc[1].y = vY2;
-#if !(defined(__WATCOMC__) && __WATCOMC__ < 1240 )
-// Open Watcom 1.3 had incomplete headers
-// that's reported and should be fixed for OW 1.4
     ::GpiPointArc(m_hPS, vPtlArc); // Draws the arc
-#endif
     CalcBoundingBox( (wxCoord)(vXc - dRadius)
                     ,(wxCoord)(vYc - dRadius)
                    );

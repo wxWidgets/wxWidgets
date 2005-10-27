@@ -519,7 +519,7 @@
     ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) || \
       (defined(__WATCOMC__) && __WATCOMC__ >= 1200) ) && \
     !defined(__DOS__) && \
-    !defined(__WXOS2__) && \
+    !defined(__WXPM__) && \
     !defined(__WXMOTIF__) && \
     !defined(__WXGTK__) && \
     !defined(__WXX11__) && \

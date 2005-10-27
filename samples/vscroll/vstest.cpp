@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        vscroll.cpp
+// Name:        samples/vscroll/vstest.cpp
 // Purpose:     VScroll wxWidgets sample
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -40,7 +40,7 @@
 // ----------------------------------------------------------------------------
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if !defined(__WXMSW__) && !defined(__WXOS2__)
+#if !defined(__WXMSW__) && !defined(__WXPM__)
     #include "../sample.xpm"
 #endif
 

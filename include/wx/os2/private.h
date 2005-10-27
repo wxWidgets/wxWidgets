@@ -20,7 +20,20 @@
 #define INCL_WINSYS
 #define INCL_SHLERRORS
 #define INCL_DOS
+#define INCL_WINATOM
+#define INCL_WIN
 #include <os2.h>
+
+#if defined(__WATCOMC__) && ( __WATCOMC__ < 1240 )
+    // missing in OpenWatcom 1.3 but added in 1.4
+    inline HATOMTBL APIENTRY WinQuerySystemAtomTable(VOID){return NULL;}
+    inline ULONG APIENTRY WinQueryAtomName(HATOMTBL,ATOM,PCSZ,ULONG){return 0;}
+    inline LONG APIENTRY GpiPointArc(HPS,PPOINTL){return GPI_ERROR;}
+    inline BOOL APIENTRY WinDrawPointer(HPS,LONG,LONG,HPOINTER,ULONG){return FALSE;}
+    inline HPOINTER APIENTRY WinCreatePointerIndirect(HWND,PPOINTERINFO){return NULLHANDLE;}
+    inline BOOL APIENTRY WinGetMaxPosition(HWND,PSWP){return FALSE;}
+    inline BOOL APIENTRY WinGetMinPosition(HWND,PSWP,PPOINTL){return FALSE;}
+#endif
 
 #if defined(__WATCOMC__) && defined(__WXMOTIF__)
     #include <os2def.h>

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        print.cpp
+// Name:        src/os2/print.cpp
 // Purpose:     Print framework
 // Author:      David Webster
 // Modified by:
@@ -40,13 +40,15 @@ wxOS2Printer::~wxOS2Printer()
 {
 }
 
-bool wxOS2Printer::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
+bool wxOS2Printer::Print(wxWindow *WXUNUSED(parent),
+                         wxPrintout *WXUNUSED(printout),
+                         bool WXUNUSED(prompt))
 {
     // TODO. See wxPostScriptPrinter::Print for hints.
-    return FALSE;
+    return false;
 }
 
-wxDC* wxOS2Printer::PrintDialog(wxWindow *parent)
+wxDC* wxOS2Printer::PrintDialog(wxWindow *WXUNUSED(parent))
 {
 // TODO:
 /*
@@ -56,15 +58,17 @@ wxDC* wxOS2Printer::PrintDialog(wxWindow *parent)
     return NULL;
 }
 
-bool wxOS2Printer::Setup(wxWindow *parent)
+bool wxOS2Printer::Setup(wxWindow *WXUNUSED(parent))
 {
 // TODO:
 /*
     wxPrintDialog dialog(parent, & m_printData);
-    dialog.GetPrintData().SetSetupDialog(TRUE);
+#if WXWIN_COMPATIBILITY_2_4
+    dialog.GetPrintData().SetSetupDialog(true);
+#endif
     return (dialog.ShowModal() == wxID_OK);
 */
-    return FALSE;
+    return false;
 }
 
 /*
@@ -87,13 +91,13 @@ wxOS2PrintPreview::~wxOS2PrintPreview()
 {
 }
 
-bool wxOS2PrintPreview::Print(bool interactive)
+bool wxOS2PrintPreview::Print(bool WXUNUSED(interactive))
 {
     if (!m_printPrintout)
-        return FALSE;
+        return false;
 //    wxOS2Printer printer(&m_printData);
 //    return printer.Print(m_previewFrame, m_printPrintout, interactive);
-    return FALSE;
+    return false;
 }
 
 void wxOS2PrintPreview::DetermineScaling()

@@ -1,4 +1,15 @@
-\section{Preprocesser symbols defined by wxWidgets}\label{cppconst}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        cppconst.tex
+%% Purpose:     Peprocessor symbols
+%% Author:
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Preprocessor symbols defined by wxWidgets}\label{cppconst}
 
 These are preprocessor symbols used in the wxWidgets source, grouped
 by category (and sorted by alphabetical order inside each category). All of
@@ -28,7 +39,6 @@ always tested using \texttt{#ifdef} and not \texttt{#if}.
 \twocolitem{\_\_WXMGL\_\_}{SciTech Soft MGL (\_\_WXUNIVERSAL\_\_ will be also
 defined)}
 \twocolitem{\_\_WXMSW\_\_}{Any Windows}
-\twocolitem{\_\_WXOS2\_\_}{Identical to \_\_WXPM\_\_}
 \twocolitem{\_\_WXOSX\_\_}{Any Mac OS X port (either Carbon or Cocoa)}
 \twocolitem{\_\_WXPALMOS\_\_}{PalmOS}
 \twocolitem{\_\_WXPM\_\_}{OS/2 native Presentation Manager}
@@ -52,7 +62,7 @@ summarize:
 \begin{itemize}
 \item If you want to test for all Mac platforms, classic and OS X, you
 should test both \texttt{\_\_WXMAC\_\_} and \texttt{\_\_WXCOCOA\_\_}.
-\item If you want to test for any GUI Mac port under OS X, use 
+\item If you want to test for any GUI Mac port under OS X, use
 \texttt{\_\_WXOSX\_\_}.
 \item If you want to test for any port under Mac OS X, including, for
 example, wxGTK and also wxBase, use \texttt{\_\_DARWIN\_\_} (see below).
@@ -125,9 +135,9 @@ compiler used.
 to the compiler version: $500$ is $5.0$.}
 \twocolitem{\_\_DJGPP\_\_}{DJGPP}
 \twocolitem{\_\_DIGITALMARS\_\_}{Digital Mars}
-\twocolitem{\_\_GNUG\_\_}{Gnu C++ on any platform, see also 
+\twocolitem{\_\_GNUG\_\_}{Gnu C++ on any platform, see also
 \helpref{wxCHECK\_GCC\_VERSION}{wxcheckgccversion}}
-\twocolitem{\_\_GNUWIN32\_\_}{Gnu-Win32 compiler, see also 
+\twocolitem{\_\_GNUWIN32\_\_}{Gnu-Win32 compiler, see also
 \helpref{wxCHECK\_W32API\_VERSION}{wxcheckw32apiversion}}
 \twocolitem{\_\_MINGW32\_\_}{MinGW}
 \twocolitem{\_\_MWERKS\_\_}{CodeWarrior MetroWerks compiler}
@@ -157,7 +167,7 @@ also \helpref{wxCHECK\_VERSION}{wxcheckversion}}
 this case, \texttt{wx/wxprec.h} includes \texttt{wx/wx.h} which, in turn,
 includes a number of wxWidgets headers thus making it unnecessary to include
 them explicitly. However if this is not defined, you do need to include them
-and so the usual idiom which allows to support both cases is to first include 
+and so the usual idiom which allows to support both cases is to first include
 \texttt{wx/wxprec.h} and then, inside \texttt{#ifndef WX\_PRECOMP}, individual
 headers you need.}
 \twocolitem{\_UNICODE and UNICODE}{both are defined if wxUSE\_UNICODE is set to $1$}
@@ -175,4 +185,3 @@ don't include compiler flags needed for multithreaded code generation. This
 implies that wxUSE\_THREADS is $0$ and also that other (non wx-based) threading
 packages cannot be used neither.}
 \end{twocollist}
-

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dnd.cpp
+// Name:        src/os2/dnd.cpp
 // Purpose:     wxDropTarget, wxDropSource, wxDataObject implementation
 // Author:      David Webster
 // Modified by:
@@ -440,17 +440,12 @@ bool wxDropTarget::OnDrop (
 // wxDropSource
 //-------------------------------------------------------------------------
 
-wxDropSource::wxDropSource (
-  wxWindow*                         pWin
-)
+wxDropSource::wxDropSource ( wxWindow* WXUNUSED(pWin) )
 {
     Init();
 } // end of wxDropSource::wxDropSource
 
-wxDropSource::wxDropSource (
-  wxDataObject&                     rData
-, wxWindow*                         pWin
-)
+wxDropSource::wxDropSource ( wxDataObject& rData, wxWindow* WXUNUSED(pWin) )
 {
     Init();
     SetData(rData);
@@ -548,13 +543,13 @@ void wxDropSource::Init ()
     m_vDragImage.cxOffset       = 0;
     m_vDragImage.cyOffset       = 0;
 
-    HSTR                            hStrType = ::DrgAddStrHandle(DRT_UNKNOWN);
-    HSTR                            hStrRMF;
-    HSTR                            hStrContainer;
-    wxChar                          zFormats[128];
-    wxChar                          zContainer[128];
-    USHORT                          uSize = GetDataObject()->GetDataSize(GetDataObject()->GetPreferredFormat()) + 1;
-    wxChar*                         pzBuffer = new wxChar[uSize];
+    HSTR    hStrType = ::DrgAddStrHandle(DRT_UNKNOWN);
+    HSTR    hStrRMF;
+    HSTR    hStrContainer;
+    wxChar  zFormats[128];
+    wxChar  zContainer[128];
+    USHORT  uSize = (USHORT)(GetDataObject()->GetDataSize(GetDataObject()->GetPreferredFormat()) + 1);
+    wxChar* pzBuffer = new wxChar[uSize];
 
     memset(pzBuffer, '\0', GetDataObject()->GetDataSize(GetDataObject()->GetPreferredFormat()));
     pzBuffer[GetDataObject()->GetDataSize(GetDataObject()->GetPreferredFormat())] = '\0';

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/dataobj.cpp
+// Name:        src/os2/dataobj.cpp
 // Purpose:     implementation of wx[I]DataObject class
 // Author:      David Webster
 // Modified by:
@@ -32,8 +32,7 @@
 #include "wx/mstream.h"
 #include "wx/image.h"
 
-#define INCL_DOS
-#include <os2.h>
+#include "wx/os2/private.h"
 
 // ----------------------------------------------------------------------------
 // functions
@@ -98,7 +97,7 @@ bool CIDataObject::GetData ( const wxDataFormat& rFormat,
 {
     QueryGetData(rFormat);
     if (rFormat.GetType() == wxDF_INVALID)
-        return FALSE;
+        return false;
 
     ULONG                           ulSize = m_pDataObject->GetDataSize(rFormat);
 
@@ -107,7 +106,7 @@ bool CIDataObject::GetData ( const wxDataFormat& rFormat,
         //
         // It probably means that the method is just not implemented
         //
-        return FALSE;
+        return false;
     }
     if (rFormat.GetType() == wxDF_PRIVATE)
     {
@@ -119,7 +118,7 @@ bool CIDataObject::GetData ( const wxDataFormat& rFormat,
     }
 
     if (ulSize > ulLen) // not enough room to copy
-        return FALSE;
+        return false;
 
     //
     // Copy the data
@@ -303,16 +302,13 @@ bool wxBitmapDataObject::GetDataHere( void* pBuf ) const
     if (!m_pngSize)
     {
         wxFAIL_MSG(wxT("attempt to copy empty bitmap failed"));
-        return FALSE;
+        return false;
     }
     memcpy(pBuf, m_pngData, m_pngSize);
     return true;
 }
 
-bool wxBitmapDataObject::SetData(
-  size_t                            nSize
-, const void*                       pBuf
-)
+bool wxBitmapDataObject::SetData( size_t nSize, const void* pBuf)
 {
     Clear();
     m_pngSize = nSize;
@@ -327,7 +323,7 @@ bool wxBitmapDataObject::SetData(
 
     if (!vHandler.LoadFile(&vImage, vMstream))
     {
-        return FALSE;
+        return false;
     }
 
     m_bitmap = wxBitmap(vImage);

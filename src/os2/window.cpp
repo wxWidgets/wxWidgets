@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        windows.cpp
+// Name:        src/os2/window.cpp
 // Purpose:     wxWindow
 // Author:      David Webster
 // Modified by:
@@ -1809,7 +1809,7 @@ void wxWindowOS2::GetTextExtent( const wxString& rString,
 
     hPS = ::WinGetPS(GetHwnd());
 
-    l = rString.Length();
+    l = rString.length();
     if (l > 0L)
     {
         pStr = (PCH)rString.c_str();
@@ -1817,12 +1817,12 @@ void wxWindowOS2::GetTextExtent( const wxString& rString,
         //
         // In world coordinates.
         //
-        bRc = ::GpiQueryTextBox( hPS
-                                ,l
-                                ,pStr
-                                ,TXTBOX_COUNT // return maximum information
-                                ,avPoint      // array of coordinates points
-                               );
+        bRc = ::GpiQueryTextBox( hPS,
+                                 l,
+                                 pStr,
+                                 TXTBOX_COUNT,// return maximum information
+                                 avPoint      // array of coordinates points
+                                );
         if (bRc)
         {
             vPtMin.x = avPoint[0].x;
@@ -1910,9 +1910,7 @@ bool wxWindowOS2::IsMouseInWindow() const
 // ---------------------------------------------------------------------------
 //
 #if wxUSE_MENUS_NATIVE
-bool wxWindowOS2::DoPopupMenu( wxMenu* pMenu,
-                               int nX,
-                               int nY )
+bool wxWindowOS2::DoPopupMenu( wxMenu* pMenu, int nX, int nY )
 {
     HWND hWndOwner = GetHwnd();
     HWND hWndParent = GetHwnd();
@@ -3878,25 +3876,15 @@ bool wxWindowOS2::HandleGetMinMaxInfo( PSWP pSwp )
     switch(pSwp->fl)
     {
         case SWP_MAXIMIZE:
-#if !(defined(__WATCOMC__) && __WATCOMC__ < 1240 )
-// Open Watcom 1.3 had incomplete headers
-// that's reported and should be fixed for OW 1.4
             ::WinGetMaxPosition(GetHwnd(), pSwp);
             m_maxWidth = pSwp->cx;
             m_maxHeight = pSwp->cy;
-#endif
             break;
 
         case SWP_MINIMIZE:
-#if !(defined(__WATCOMC__) && __WATCOMC__ < 1240 )
-// Open Watcom 1.3 had incomplete headers
-// that's reported and should be fixed for OW 1.4
             ::WinGetMinPosition(GetHwnd(), pSwp, &vPoint);
             m_minWidth = pSwp->cx;
             m_minHeight = pSwp->cy;
-#else
-            wxUnusedVar(vPoint);
-#endif
             break;
 
         default:
@@ -3955,7 +3943,7 @@ bool wxWindowOS2::HandleSysCommand( WXWPARAM wParam,
 // ---------------------------------------------------------------------------
 // mouse events
 // ---------------------------------------------------------------------------
-//TODO!!! check against MSW
+//TODO: check against MSW
 void wxWindowOS2::InitMouseEvent(
   wxMouseEvent&                     rEvent
 , int                               nX
@@ -5168,14 +5156,14 @@ wxWindow* wxFindWindowAtPointer(wxPoint& WXUNUSED(rPt))
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& rPt)
 {
-    POINTL                          vPt2;
+    POINTL vPt2;
 
     vPt2.x = rPt.x;
     vPt2.y = rPt.y;
 
-    HWND                            hWndHit = ::WinWindowFromPoint(HWND_DESKTOP, &vPt2, FALSE);
-    wxWindow*                       pWin = wxFindWinFromHandle((WXHWND)hWndHit) ;
-    HWND                            hWnd = hWndHit;
+    HWND      hWndHit = ::WinWindowFromPoint(HWND_DESKTOP, &vPt2, FALSE);
+    wxWindow* pWin = wxFindWinFromHandle((WXHWND)hWndHit) ;
+    HWND      hWnd = hWndHit;
 
     //
     // Try to find a window with a wxWindow associated with it
