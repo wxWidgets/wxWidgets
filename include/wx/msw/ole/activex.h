@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/activex.h
+// Name:        wx/msw/ole/activex.h
 // Purpose:     wxActiveXContainer class
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:
@@ -48,7 +48,11 @@
 //---------------------------------------------------------------------------
 #include <oleidl.h>
 #include <olectl.h>
+
+#if !defined(__WXWINCE__) || defined(__WINCE_STANDARDSDK__)
 #include <exdisp.h>
+#endif
+
 #include <docobj.h>
 
 //
@@ -182,4 +186,3 @@ protected:
 };
 
 #endif // _WX_MSW_OLE_ACTIVEXCONTAINER_H_
-
