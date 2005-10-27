@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpwce.h
+// Name:        wx/msw/wince/helpwce.h
 // Purpose:     Help system: Windows CE help implementation
 // Author:      Julian Smart
 // Modified by:
@@ -46,7 +46,11 @@ protected:
     // View topic, or just the HTML file
     bool ViewURL(const wxString& topic = wxEmptyString);
 
-protected:
+private:
+    // eVC4 needs default constructor, otherwise error C2512
+    // but make it hidden
+    wxWinceHelpController(): wxHelpControllerBase(NULL) {}
+
     wxString m_helpFile;
 
     DECLARE_CLASS(wxWinceHelpController)
@@ -56,4 +60,3 @@ protected:
 
 #endif
 // _WX_HELPWCE_H_
-
