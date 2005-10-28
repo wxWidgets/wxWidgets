@@ -16,13 +16,13 @@
   #pragma hdrstop
 #endif
 
+#if wxUSE_RICHTEXT
+
+#include "wx/richtext/richtextxml.h"
+
 #ifndef WX_PRECOMP
   #include "wx/wx.h"
 #endif
-
-#include "wx/image.h"
-
-#if wxUSE_RICHTEXT
 
 #include "wx/filename.h"
 #include "wx/clipbrd.h"
@@ -31,8 +31,6 @@
 #include "wx/module.h"
 #include "wx/txtstrm.h"
 #include "wx/xml/xml.h"
-
-#include "wx/richtext/richtextxml.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextXMLHandler, wxRichTextFileHandler)
 

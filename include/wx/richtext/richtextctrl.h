@@ -12,19 +12,21 @@
 #ifndef _WX_RICHTEXTCTRL_H_
 #define _WX_RICHTEXTCTRL_H_
 
-#include "wx/textctrl.h"
+#include "wx/richtext/richtextbuffer.h"
 
 #if wxUSE_RICHTEXT
 
 #include "wx/scrolwin.h"
 #include "wx/caret.h"
 
-#include "wx/richtext/richtextbuffer.h"
-
 #if wxCHECK_VERSION(2,7,0)
 #define wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE 0
 #else
 #define wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE 0
+#endif
+
+#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
+#include "wx/textctrl.h"
 #endif
 
 /*!

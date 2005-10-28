@@ -16,13 +16,13 @@
   #pragma hdrstop
 #endif
 
+#if wxUSE_RICHTEXT
+
+#include "wx/richtext/richtextbuffer.h"
+
 #ifndef WX_PRECOMP
   #include "wx/wx.h"
 #endif
-
-#include "wx/image.h"
-
-#if wxUSE_RICHTEXT
 
 #include "wx/filename.h"
 #include "wx/clipbrd.h"
@@ -32,7 +32,6 @@
 #include "wx/mstream.h"
 #include "wx/sstream.h"
 
-#include "wx/richtext/richtextbuffer.h"
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
 
@@ -4980,8 +4979,7 @@ void wxRichTextImageBlock::Init()
 
 void wxRichTextImageBlock::Clear()
 {
-    if (m_data)
-        delete m_data;
+    delete[] m_data;
     m_data = NULL;
     m_dataSize = 0;
     m_imageType = -1;

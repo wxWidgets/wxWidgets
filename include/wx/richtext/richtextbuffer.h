@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_RICHTEXTBUFFER_H_
+#define _WX_RICHTEXTBUFFER_H_
+
 /*
 
   Data structures
@@ -84,17 +87,17 @@
 
  */
 
-#ifndef _WX_RICHTEXTBUFFER_H_
-#define _WX_RICHTEXTBUFFER_H_
-
 /*!
  * Includes
  */
 
-#include "wx/list.h"
+#include "wx/defs.h"
 
 #if wxUSE_RICHTEXT
 
+#include "wx/list.h"
+#include "wx/textctrl.h"
+#include "wx/bitmap.h"
 #include "wx/image.h"
 #include "wx/cmdproc.h"
 #include "wx/txtstrm.h"
@@ -489,13 +492,13 @@ private:
     wxString            m_paragraphStyleName;
 };
 
-#define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT) | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR
+#define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT | wxTEXT_ATTR_BACKGROUND_COLOUR | wxTEXT_ATTR_TEXT_COLOUR)
 
-#define wxTEXT_ATTR_PARAGRAPH  wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
+#define wxTEXT_ATTR_PARAGRAPH (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
     wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
-    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL
+    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL)
 
-#define wxTEXT_ATTR_ALL wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH
+#define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 
 /*!
  * wxRichTextObject class declaration

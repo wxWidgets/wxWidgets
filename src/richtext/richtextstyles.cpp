@@ -16,20 +16,19 @@
   #pragma hdrstop
 #endif
 
+#if wxUSE_RICHTEXT
+
+#include "wx/richtext/richtextstyles.h"
+
 #ifndef WX_PRECOMP
   #include "wx/wx.h"
 #endif
-
-#include "wx/image.h"
-
-#if wxUSE_RICHTEXT
 
 #include "wx/filename.h"
 #include "wx/clipbrd.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
 
-#include "wx/richtext/richtextstyles.h"
 #include "wx/richtext/richtextctrl.h"
 
 IMPLEMENT_CLASS(wxRichTextStyleDefinition, wxObject)
