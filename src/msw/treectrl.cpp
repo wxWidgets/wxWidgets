@@ -1678,13 +1678,6 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
 // for compatibility only
 #if WXWIN_COMPATIBILITY_2_4
 
-/* This appears to hide base class GetImageList()
-wxImageList *wxTreeCtrl::GetImageList(int) const
-{
-    return wxTreeCtrlBase::GetImageList();
-}
-*/
-
 void wxTreeCtrl::SetImageList(wxImageList *imageList, int)
 {
     SetImageList(imageList);
