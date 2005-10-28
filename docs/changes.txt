@@ -29,6 +29,7 @@ wxMSW:
 
 - wxFileDialog respects absence of wxCHANGE_DIR flag under NT (Brad Anderson).
 - Switching page of a hidden notebook doesn't lose focus (Jamie Gadd).
+- Removed wxImageList *GetImageList(int) const.
 
 Unix:
 
