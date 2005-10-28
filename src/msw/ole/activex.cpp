@@ -438,7 +438,9 @@ public:
     HRESULT STDMETHODCALLTYPE LockContainer(BOOL){return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
-    #ifdef _UNICODE
+    #if defined(__WXWINCE__)
+    GetObject
+    #elif defined(_UNICODE)
     GetObjectW
     #else
     GetObjectA
