@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bmpbuttn.h
+// Name:        wx/msw/bmpbuttn.h
 // Purpose:     wxBitmapButton class
 // Author:      Julian Smart
 // Modified by:
@@ -21,8 +21,8 @@
 class WXDLLEXPORT wxBitmapButton: public wxBitmapButtonBase
 {
 public:
-    wxBitmapButton()
-        { m_marginX = m_marginY = wxDEFAULT_BUTTON_MARGIN; }
+    wxBitmapButton() { }
+
     wxBitmapButton(wxWindow *parent,
                    wxWindowID id,
                    const wxBitmap& bitmap,
