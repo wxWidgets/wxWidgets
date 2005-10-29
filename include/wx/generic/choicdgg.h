@@ -138,11 +138,18 @@ public:
 
     // implementation from now on
     void OnOK(wxCommandEvent& event);
+#ifndef __SMARTPHONE__
     void OnListBoxDClick(wxCommandEvent& event);
+#endif
+#ifdef __WXWINCE__
+    void OnJoystickButtonDown(wxJoystickEvent& event);
+#endif
 
 protected:
     int         m_selection;
     wxString    m_stringSelection;
+
+    void DoChoice();
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSingleChoiceDialog)
@@ -301,4 +308,3 @@ WXDLLEXPORT size_t wxGetMultipleChoices(wxArrayInt& selections,
                                         int height = wxCHOICE_HEIGHT);
 
 #endif // __CHOICEDLGH_G__
-

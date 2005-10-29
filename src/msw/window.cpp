@@ -2064,6 +2064,12 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             else // no default button
 #endif // wxUSE_BUTTON
                             {
+#ifdef __WXWINCE__
+                                wxJoystickEvent event(wxEVT_JOY_BUTTON_DOWN);
+                                event.SetEventObject(this);
+                                if(GetEventHandler()->ProcessEvent(event))
+                                    return true;
+#endif
                                 // this is a quick and dirty test for a text
                                 // control
                                 if ( !(lDlgCode & DLGC_HASSETSEL) )
@@ -6202,4 +6208,3 @@ void wxWindowMSW::OnInitDialog( wxInitDialogEvent& event )
     event.Skip();
 }
 #endif
-

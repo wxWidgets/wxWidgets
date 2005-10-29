@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        choicdgg.cpp
+// Name:        src/generic/choicdgg.cpp
 // Purpose:     Choice dialogs
 // Author:      Julian Smart
 // Modified by: 03.11.00: VZ to add wxArrayString and multiple sel functions
@@ -332,7 +332,12 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
 BEGIN_EVENT_TABLE(wxSingleChoiceDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxSingleChoiceDialog::OnOK)
+#ifndef __SMARTPHONE__
     EVT_LISTBOX_DCLICK(wxID_LISTBOX, wxSingleChoiceDialog::OnListBoxDClick)
+#endif
+#ifdef __WXWINCE__
+    EVT_JOY_BUTTON_DOWN(wxSingleChoiceDialog::OnJoystickButtonDown)
+#endif
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxSingleChoiceDialog, wxDialog)
@@ -407,14 +412,24 @@ void wxSingleChoiceDialog::SetSelection(int sel)
 
 void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
-    m_selection = m_listbox->GetSelection();
-    m_stringSelection = m_listbox->GetStringSelection();
-    if ( m_listbox->HasClientUntypedData() )
-        SetClientData(m_listbox->GetClientData(m_selection));
-    EndModal(wxID_OK);
+    DoChoice();
 }
 
+#ifndef __SMARTPHONE__
 void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
+{
+    DoChoice();
+}
+#endif
+
+#ifdef __WXWINCE__
+void wxSingleChoiceDialog::OnJoystickButtonDown(wxJoystickEvent& WXUNUSED(event))
+{
+    DoChoice();
+}
+#endif
+
+void wxSingleChoiceDialog::DoChoice()
 {
     m_selection = m_listbox->GetSelection();
     m_stringSelection = m_listbox->GetStringSelection();

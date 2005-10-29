@@ -31,6 +31,10 @@ wxMSW:
 - Switching page of a hidden notebook doesn't lose focus (Jamie Gadd).
 - Removed wxImageList *GetImageList(int) const.
 
+wxWinCE:
+
+- Pressing build-in joystick on WinCE phones fires wxEVT_JOY_BUTTON_DOWN event.
+
 Unix:
 
 - NO_GCC_PRAGMA is not used any more, remove checks for it if you used it.
@@ -2526,5 +2530,3 @@ At this point, the following has been achieved:
 - utils/wxprop classes working (except maybe wxPropertyFormView)
   in preparation for use in Dialog Editor.
 - GNU-WIN32 compilation verified (a month or so ago).
-
-
