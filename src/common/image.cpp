@@ -1558,7 +1558,13 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
         return false;
     }
 
-    return handler->LoadFile(this, stream, true/*verbose*/, index);
+    if (!handler->CanRead(stream))
+    {
+        wxLogError(_("Image file is not of type %d."), type);
+        return false;
+    }
+    else
+        return handler->LoadFile(this, stream, true/*verbose*/, index);
 }
 
 bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int index )
@@ -1576,7 +1582,13 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
         return false;
     }
 
-    return handler->LoadFile( this, stream, true/*verbose*/, index );
+    if (!handler->CanRead(stream))
+    {
+        wxLogError(_("Image file is not of type %s."), (const wxChar*) mimetype);
+        return false;
+    }
+    else
+        return handler->LoadFile( this, stream, true/*verbose*/, index );
 }
 
 bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
