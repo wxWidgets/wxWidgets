@@ -26,7 +26,9 @@
 IMPLEMENT_DYNAMIC_CLASS(wxTreebookXmlHandler, wxXmlResourceHandler)
 
 wxTreebookXmlHandler::wxTreebookXmlHandler()
-: wxXmlResourceHandler(), m_isInside(false), m_tbk(NULL), m_treeContext()
+                    : wxXmlResourceHandler(),
+                      m_tbk(NULL),
+                      m_isInside(false)
 {
     XRC_ADD_STYLE(wxBK_DEFAULT);
     XRC_ADD_STYLE(wxBK_TOP);
