@@ -16,7 +16,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_RICHTEXT
+#if wxUSE_RICHTEXT && wxUSE_XML
 
 #include "wx/richtext/richtextxml.h"
 
@@ -818,4 +818,4 @@ void wxRichTextHTMLHandler::OutputParagraphFormatting(const wxTextAttrEx& WXUNUS
 #endif
 
 #endif
-    // wxUSE_RICHTEXT
+    // wxUSE_RICHTEXT && wxUSE_XML

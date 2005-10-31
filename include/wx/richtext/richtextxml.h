@@ -18,7 +18,7 @@
 
 #include "wx/richtext/richtextbuffer.h"
 
-#if wxUSE_RICHTEXT
+#if wxUSE_RICHTEXT && wxUSE_XML
 
 /*!
  * wxRichTextXMLHandler
@@ -106,7 +106,7 @@ protected:
 };
 
 #endif
-    // wxUSE_RICHTEXT
+    // wxUSE_RICHTEXT && wxUSE_XML
 
 #endif
     // _WX_RICHTEXTXML_H_
