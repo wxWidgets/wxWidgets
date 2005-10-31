@@ -366,9 +366,20 @@ MACX_DIST: ALL_GUI_DIST
 	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
-# TODO: Distribute some files
 COCOA_DIST: ALL_GUI_DIST
+	$(CP_P) $(INCDIR)/wx/cocoa/*.h $(DISTDIR)/include/wx/cocoa
 	$(CP_P) $(COCOADIR)/*.mm $(DISTDIR)/src/cocoa
+	$(CP_P) $(COCOADIR)/*.cpp $(DISTDIR)/src/cocoa
+	$(CP_P) $(COCOADIR)/*.r $(DISTDIR)/src/cocoa
+	mkdir $(DISTDIR)/include/wx/mac/corefoundation
+	$(CP_P) $(INCDIR)/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
+	mkdir $(DISTDIR)/src/mac/corefoundation
+	$(CP_P) $(MACDIR)/corefoundation/*.cpp $(DISTDIR)/src/mac/corefoundation
+	mkdir $(DISTDIR)/src/mac/carbon
+	$(CP_P) $(MACDIR)/carbon/Info.plist.in $(DISTDIR)/src/mac/carbon
+	$(CP_P) $(MACDIR)/carbon/wxmac.icns $(DISTDIR)/src/mac/carbon
+	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
+	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MSW_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/wxWINE.spec $(DISTDIR)
