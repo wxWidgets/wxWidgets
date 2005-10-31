@@ -15,6 +15,11 @@
 #include "os2config.h"
 #include "expat.h"
 
+#elif defined(__MSDOS__)
+
+#include "dosconfig.h"
+#include "expat.h"
+
 #elif defined(MACOS_CLASSIC)
 
 #include "macconfig.h"

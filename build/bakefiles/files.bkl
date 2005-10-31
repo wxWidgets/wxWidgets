@@ -1544,6 +1544,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mgl/app.h
     wx/mgl/bitmap.h
     wx/mgl/brush.h
+    wx/mgl/chkconf.h
     wx/mgl/clipbrd.h
     wx/mgl/colour.h
     wx/mgl/cursor.h

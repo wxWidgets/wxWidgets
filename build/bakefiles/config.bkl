@@ -315,7 +315,7 @@ it if SHARED=1 unless you know what you are doing.
         <set var="TOOLKIT" overwrite="0">
             <if cond="FORMAT=='msevc4prj'">WINCE</if>
             <if cond="FORMAT!='msevc4prj' and PLATFORM_WIN32=='1'">MSW</if>
-            <if cond="PLATFORM_MSDOS=='1'">DOS</if>
+            <if cond="PLATFORM_MSDOS=='1'">MGL</if>
             <if cond="PLATFORM_OS2=='1'">PM</if>
         </set>
         <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
@@ -426,6 +426,11 @@ Set the version of your Mingw installation here.
         <!-- RTTI and exceptions need separate cccrtti.lib with eVC4 -->
         <set var="USE_RTTI">0</set>
         <set var="USE_EXCEPTIONS">0</set>
+    </if>
+
+    <!-- Need for wxUniv within wxMGL: -->
+    <if cond="TOOLKIT=='MGL'">
+        <set var="WXUNIV">1</set>
     </if>
 
 </makefile>

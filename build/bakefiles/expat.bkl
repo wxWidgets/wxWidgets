@@ -1,4 +1,6 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
+
 <makefile>
 
     <if cond="FORMAT=='autoconf'">
@@ -31,6 +33,9 @@
         </define>
         <define cond="FORMAT=='watcom' and PLATFORM_OS2=='1'">
             OS2_32
+        </define>
+        <define cond="FORMAT=='watcom' and PLATFORM_MSDOS=='1'">
+            __MSDOS__
         </define>
         <cflags-borland>-w-8004 -w-8008 -w-8012 -w-8057 -w-8066</cflags-borland>
         <sources>
