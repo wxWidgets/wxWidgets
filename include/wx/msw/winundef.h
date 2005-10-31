@@ -43,6 +43,40 @@
     }
 #endif
 
+// CreateFont
+
+#ifdef CreateFont
+    #undef CreateFont
+
+    inline HFONT CreateFont(int height,
+                            int width,
+                            int escapement,
+                            int orientation,
+                            int weight,
+                            DWORD italic,
+                            DWORD underline,
+                            DWORD strikeout,
+                            DWORD charset,
+                            DWORD outprecision,
+                            DWORD clipprecision,
+                            DWORD quality,
+                            DWORD family,
+                            LPCTSTR facename)
+    {
+        #ifdef _UNICODE
+            return CreateFontW(height, width, escapement, orientation,
+                               weight, italic, underline, strikeout, charset,
+                               outprecision, clipprecision, quality,
+                               family, facename);
+        #else
+            return CreateFontA(height, width, escapement, orientation,
+                               weight, italic, underline, strikeout, charset,
+                               outprecision, clipprecision, quality,
+                               family, facename);
+        #endif
+    }
+#endif // CreateFont
+
 // CreateWindow
 
 #if defined(CreateWindow)
