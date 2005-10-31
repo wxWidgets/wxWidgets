@@ -59,7 +59,7 @@ void wxBitmapToPixPattern(const wxBitmap& bitmap,
             mask->p[y] = 0;
             for (x = 0; x < 8; x++)
                 if ( dc->getPixelFast(x, y) != 0 )
-                    mask->p[y] |= 1 << (7 - x);
+                    mask->p[y] = (uchar)(mask->p[y] | (1 << (7 - x)));
         }
         dc->endPixel();
     }

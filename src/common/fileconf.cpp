@@ -287,7 +287,7 @@ wxString wxFileConfig::GetGlobalDir()
 #elif defined(__DOS__)
     // There's no such thing as global cfg dir in MS-DOS, let's return
     // current directory (FIXME_MGL?)
-    return wxT(".\\");
+    strDir = wxT(".\\");
 #elif defined(__WXWINCE__)
     strDir = wxT("\\Windows\\");
 #else // Windows
@@ -551,21 +551,21 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
 
 void wxFileConfig::CleanUp()
 {
-  delete m_pRootGroup;
+    delete m_pRootGroup;
 
-  wxFileConfigLineList *pCur = m_linesHead;
-  while ( pCur != NULL ) {
-    wxFileConfigLineList *pNext = pCur->Next();
-    delete pCur;
-    pCur = pNext;
-  }
+    wxFileConfigLineList *pCur = m_linesHead;
+    while ( pCur != NULL ) {
+        wxFileConfigLineList *pNext = pCur->Next();
+        delete pCur;
+        pCur = pNext;
+    }
 }
 
 wxFileConfig::~wxFileConfig()
 {
-  Flush();
+    Flush();
 
-  CleanUp();
+    CleanUp();
 }
 
 // ----------------------------------------------------------------------------
@@ -738,59 +738,59 @@ void wxFileConfig::Parse(const wxTextBuffer& buffer, bool bLocal)
 
 void wxFileConfig::SetRootPath()
 {
-  m_strPath.Empty();
-  m_pCurrentGroup = m_pRootGroup;
+    m_strPath.Empty();
+    m_pCurrentGroup = m_pRootGroup;
 }
 
 bool
 wxFileConfig::DoSetPath(const wxString& strPath, bool createMissingComponents)
 {
-  wxArrayString aParts;
+    wxArrayString aParts;
 
-  if ( strPath.empty() ) {
-    SetRootPath();
-    return true;
-  }
-
-  if ( strPath[0] == wxCONFIG_PATH_SEPARATOR ) {
-    // absolute path
-    wxSplitPath(aParts, strPath);
-  }
-  else {
-    // relative path, combine with current one
-    wxString strFullPath = m_strPath;
-    strFullPath << wxCONFIG_PATH_SEPARATOR << strPath;
-    wxSplitPath(aParts, strFullPath);
-  }
-
-  // change current group
-  size_t n;
-  m_pCurrentGroup = m_pRootGroup;
-  for ( n = 0; n < aParts.Count(); n++ ) {
-    wxFileConfigGroup *pNextGroup = m_pCurrentGroup->FindSubgroup(aParts[n]);
-    if ( pNextGroup == NULL )
-    {
-      if ( !createMissingComponents )
-        return false;
-
-      pNextGroup = m_pCurrentGroup->AddSubgroup(aParts[n]);
+    if ( strPath.empty() ) {
+        SetRootPath();
+        return true;
     }
 
-    m_pCurrentGroup = pNextGroup;
-  }
+    if ( strPath[0] == wxCONFIG_PATH_SEPARATOR ) {
+        // absolute path
+        wxSplitPath(aParts, strPath);
+    }
+    else {
+        // relative path, combine with current one
+        wxString strFullPath = m_strPath;
+        strFullPath << wxCONFIG_PATH_SEPARATOR << strPath;
+        wxSplitPath(aParts, strFullPath);
+    }
 
-  // recombine path parts in one variable
-  m_strPath.Empty();
-  for ( n = 0; n < aParts.Count(); n++ ) {
-    m_strPath << wxCONFIG_PATH_SEPARATOR << aParts[n];
-  }
+    // change current group
+    size_t n;
+    m_pCurrentGroup = m_pRootGroup;
+    for ( n = 0; n < aParts.Count(); n++ ) {
+        wxFileConfigGroup *pNextGroup = m_pCurrentGroup->FindSubgroup(aParts[n]);
+        if ( pNextGroup == NULL )
+        {
+            if ( !createMissingComponents )
+                return false;
 
-  return true;
+            pNextGroup = m_pCurrentGroup->AddSubgroup(aParts[n]);
+        }
+
+        m_pCurrentGroup = pNextGroup;
+    }
+
+    // recombine path parts in one variable
+    m_strPath.Empty();
+    for ( n = 0; n < aParts.Count(); n++ ) {
+        m_strPath << wxCONFIG_PATH_SEPARATOR << aParts[n];
+    }
+
+    return true;
 }
 
 void wxFileConfig::SetPath(const wxString& strPath)
 {
-  DoSetPath(strPath, true /* create missing path components */);
+    DoSetPath(strPath, true /* create missing path components */);
 }
 
 // ----------------------------------------------------------------------------
@@ -799,66 +799,66 @@ void wxFileConfig::SetPath(const wxString& strPath)
 
 bool wxFileConfig::GetFirstGroup(wxString& str, long& lIndex) const
 {
-  lIndex = 0;
-  return GetNextGroup(str, lIndex);
+    lIndex = 0;
+    return GetNextGroup(str, lIndex);
 }
 
 bool wxFileConfig::GetNextGroup (wxString& str, long& lIndex) const
 {
-  if ( size_t(lIndex) < m_pCurrentGroup->Groups().Count() ) {
-    str = m_pCurrentGroup->Groups()[(size_t)lIndex++]->Name();
-    return true;
-  }
-  else
-    return false;
+    if ( size_t(lIndex) < m_pCurrentGroup->Groups().Count() ) {
+        str = m_pCurrentGroup->Groups()[(size_t)lIndex++]->Name();
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxFileConfig::GetFirstEntry(wxString& str, long& lIndex) const
 {
-  lIndex = 0;
-  return GetNextEntry(str, lIndex);
+    lIndex = 0;
+    return GetNextEntry(str, lIndex);
 }
 
 bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex) const
 {
-  if ( size_t(lIndex) < m_pCurrentGroup->Entries().Count() ) {
-    str = m_pCurrentGroup->Entries()[(size_t)lIndex++]->Name();
-    return true;
-  }
-  else
-    return false;
+    if ( size_t(lIndex) < m_pCurrentGroup->Entries().Count() ) {
+        str = m_pCurrentGroup->Entries()[(size_t)lIndex++]->Name();
+        return true;
+    }
+    else
+        return false;
 }
 
 size_t wxFileConfig::GetNumberOfEntries(bool bRecursive) const
 {
-  size_t n = m_pCurrentGroup->Entries().Count();
-  if ( bRecursive ) {
-    wxFileConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
-    size_t nSubgroups = m_pCurrentGroup->Groups().Count();
-    for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
-      CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
-      n += GetNumberOfEntries(true);
-      CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
+    size_t n = m_pCurrentGroup->Entries().Count();
+    if ( bRecursive ) {
+        wxFileConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
+        size_t nSubgroups = m_pCurrentGroup->Groups().Count();
+        for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
+            CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
+            n += GetNumberOfEntries(true);
+            CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
+        }
     }
-  }
 
-  return n;
+    return n;
 }
 
 size_t wxFileConfig::GetNumberOfGroups(bool bRecursive) const
 {
-  size_t n = m_pCurrentGroup->Groups().Count();
-  if ( bRecursive ) {
-    wxFileConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
-    size_t nSubgroups = m_pCurrentGroup->Groups().Count();
-    for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
-      CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
-      n += GetNumberOfGroups(true);
-      CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
+    size_t n = m_pCurrentGroup->Groups().Count();
+    if ( bRecursive ) {
+        wxFileConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
+        size_t nSubgroups = m_pCurrentGroup->Groups().Count();
+        for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
+            CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
+            n += GetNumberOfGroups(true);
+            CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
+        }
     }
-  }
 
-  return n;
+    return n;
 }
 
 // ----------------------------------------------------------------------------
@@ -867,28 +867,28 @@ size_t wxFileConfig::GetNumberOfGroups(bool bRecursive) const
 
 bool wxFileConfig::HasGroup(const wxString& strName) const
 {
-  // special case: DoSetPath("") does work as it's equivalent to DoSetPath("/")
-  // but there is no group with empty name so treat this separately
-  if ( strName.empty() )
-    return false;
+    // special case: DoSetPath("") does work as it's equivalent to DoSetPath("/")
+    // but there is no group with empty name so treat this separately
+    if ( strName.empty() )
+        return false;
 
-  const wxString pathOld = GetPath();
+    const wxString pathOld = GetPath();
 
-  wxFileConfig *self = wx_const_cast(wxFileConfig *, this);
-  const bool
-    rc = self->DoSetPath(strName, false /* don't create missing components */);
+    wxFileConfig *self = wx_const_cast(wxFileConfig *, this);
+    const bool
+        rc = self->DoSetPath(strName, false /* don't create missing components */);
 
-  self->SetPath(pathOld);
+    self->SetPath(pathOld);
 
-  return rc;
+    return rc;
 }
 
 bool wxFileConfig::HasEntry(const wxString& strName) const
 {
-  wxConfigPathChanger path(this, strName);
+    wxConfigPathChanger path(this, strName);
 
-  wxFileConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
-  return pEntry != NULL;
+    wxFileConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
+    return pEntry != NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -897,16 +897,16 @@ bool wxFileConfig::HasEntry(const wxString& strName) const
 
 bool wxFileConfig::DoReadString(const wxString& key, wxString* pStr) const
 {
-  wxConfigPathChanger path(this, key);
+    wxConfigPathChanger path(this, key);
 
-  wxFileConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
-  if (pEntry == NULL) {
-    return false;
-  }
+    wxFileConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
+    if (pEntry == NULL) {
+        return false;
+    }
 
-  *pStr = pEntry->Value();
+    *pStr = pEntry->Value();
 
-  return true;
+    return true;
 }
 
 bool wxFileConfig::DoReadLong(const wxString& key, long *pl) const

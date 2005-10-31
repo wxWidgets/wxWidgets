@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.cpp
+// Name:        src/mgl/dc.cpp
 // Purpose:     wxDC class
 // Author:      Vaclav Slavik
 // Created:     2001/03/09
@@ -137,10 +137,10 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxDCBase)
 // Default constructor
 wxDC::wxDC()
 {
-    m_isMemDC = FALSE;
+    m_isMemDC = false;
     m_MGLDC = NULL;
-    m_OwnsMGLDC = FALSE;
-    m_ok = FALSE; // must call SetMGLDevCtx() before using it
+    m_OwnsMGLDC = false;
+    m_ok = false; // must call SetMGLDevCtx() before using it
 
     m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
                     (double)wxGetDisplaySizeMM().GetWidth();
@@ -152,8 +152,8 @@ wxDC::wxDC()
     m_brush = *wxWHITE_BRUSH;
     m_penOfsX = m_penOfsY = 0;
 
-    m_penSelected = m_brushSelected = FALSE;
-    m_downloadedPatterns[0] = m_downloadedPatterns[1] = FALSE;
+    m_penSelected = m_brushSelected = false;
+    m_downloadedPatterns[0] = m_downloadedPatterns[1] = false;
 
     m_mglFont = NULL;
 }
@@ -171,7 +171,7 @@ void wxDC::SetMGLDC(MGLDevCtx *mgldc, bool OwnsMGLDC)
         delete m_MGLDC;
     m_MGLDC = mgldc;
     m_OwnsMGLDC = OwnsMGLDC;
-    m_ok = TRUE;
+    m_ok = true;
 
     if ( !m_globalClippingRegion.IsNull() )
         SetClippingRegion(m_globalClippingRegion);
@@ -216,7 +216,7 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 
     m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion());
 
-    m_clipping = TRUE;
+    m_clipping = true;
     DO_SET_CLIPPING_BOX(m_currentClippingRegion)
 }
 
@@ -256,7 +256,7 @@ void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 
     m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion());
 
-    m_clipping = TRUE;
+    m_clipping = true;
     DO_SET_CLIPPING_BOX(m_currentClippingRegion)
 }
 
@@ -268,7 +268,7 @@ void wxDC::DestroyClippingRegion()
     {
         m_MGLDC->setClipRegion(m_globalClippingRegion.GetMGLRegion());
         m_currentClippingRegion = m_globalClippingRegion;
-        m_clipping = TRUE;
+        m_clipping = true;
     }
     else
     {
@@ -284,12 +284,12 @@ void wxDC::DestroyClippingRegion()
 
 bool wxDC::CanDrawBitmap() const
 {
-    return TRUE;
+    return true;
 }
 
 bool wxDC::CanGetTextExtent() const
 {
-    return TRUE;
+    return true;
 }
 
 int wxDC::GetDepth() const
@@ -329,13 +329,13 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y,
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    wxCHECK_MSG( col, FALSE, _T("NULL colour parameter in wxDC::GetPixel"));
+    wxCHECK_MSG( col, false, _T("NULL colour parameter in wxDC::GetPixel"));
 
     uchar r, g, b;
     m_MGLDC->unpackColorFast(m_MGLDC->getPixel(XLOG2DEV(x), YLOG2DEV(y)),
                              r, g, b);
     col->Set(r, g, b);
-    return TRUE;
+    return true;
 }
 
 void wxDC::DoCrossHair(wxCoord x, wxCoord y)
@@ -452,7 +452,7 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
     }
 }
 
-void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
+void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int WXUNUSED(fillStyle))
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
@@ -710,7 +710,7 @@ bool wxDC::SelectMGLFont()
         bool antialiased = (GetDepth() > 8);
 
         m_mglFont = m_font.GetMGLfont_t(scale, antialiased);
-        wxCHECK_MSG( m_mglFont, FALSE, wxT("invalid font") );
+        wxCHECK_MSG( m_mglFont, false, wxT("invalid font") );
 
         m_MGLDC->useFont(m_mglFont);
         wxLogTrace("mgl_font", "useFont(%p)", m_mglFont);
@@ -731,7 +731,7 @@ bool wxDC::SelectMGLFont()
         m_MGLDC->setTextEncoding(nativeEnc.mglEncoding);
 #endif
     }
-    return TRUE;
+    return true;
 }
 
 void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
@@ -795,7 +795,7 @@ void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
         m_MGLDC->line(x1, y1, x2, y2);
     }
 
-    m_penSelected = m_brushSelected = FALSE;
+    m_penSelected = m_brushSelected = false;
 }
 
 void wxDC::DoDrawRotatedText(const wxString& text,
@@ -937,7 +937,7 @@ void wxDC::SelectMGLFatPen(int style, int flag)
         if ( !m_downloadedPatterns[slot] )
         {
             m_MGLDC->setPenBitmapPattern(slot, pattern);
-            m_downloadedPatterns[slot] = TRUE;
+            m_downloadedPatterns[slot] = true;
         }
         m_MGLDC->usePenBitmapPattern(slot);
     }
@@ -954,7 +954,7 @@ void wxDC::SelectMGLFatPen(int style, int flag)
                 case 8:
                     for (y = 0; y < 8; y++)
                         for (x = 0; x < 8; x++)
-                            pix.b8.p[x][y] = m_MGLDC->packColorFast(
+                            pix.b8.p[x][y] = (uchar)m_MGLDC->packColorFast(
                                                         pixPattern->p[x][y][0],
                                                         pixPattern->p[x][y][1],
                                                         pixPattern->p[x][y][2]);
@@ -963,7 +963,7 @@ void wxDC::SelectMGLFatPen(int style, int flag)
                 case 16:
                     for (y = 0; y < 8; y++)
                         for (x = 0; x < 8; x++)
-                            pix.b16.p[x][y] = m_MGLDC->packColorFast(
+                            pix.b16.p[x][y] = (M_uint16)m_MGLDC->packColorFast(
                                                         pixPattern->p[x][y][0],
                                                         pixPattern->p[x][y][1],
                                                         pixPattern->p[x][y][2]);
@@ -987,7 +987,7 @@ void wxDC::SelectMGLFatPen(int style, int flag)
                     break;
             }
             m_MGLDC->setPenPixmapPattern(slot, &pix);
-            m_downloadedPatterns[slot] = TRUE;
+            m_downloadedPatterns[slot] = true;
         }
         m_MGLDC->usePenPixmapPattern(slot);
     }
@@ -1039,8 +1039,8 @@ void wxDC::SelectPen()
                 SelectMGLFatPen(wxSOLID, wxMGL_SELECT_FROM_PEN);
             break;
     }
-    m_penSelected = TRUE;
-    m_brushSelected = FALSE;
+    m_penSelected = true;
+    m_brushSelected = false;
 }
 
 void wxDC::SelectBrush()
@@ -1063,8 +1063,8 @@ void wxDC::SelectBrush()
 
     m_MGLDC->setColorRGB(fg.Red(), fg.Green(), fg.Blue());
     m_MGLDC->setBackColor(m_MGLDC->packColorFast(bg.Red(), bg.Green(), bg.Blue()));
-    m_penSelected = FALSE;
-    m_brushSelected = TRUE;
+    m_penSelected = false;
+    m_brushSelected = true;
 
     SelectMGLFatPen(m_brush.GetStyle(), wxMGL_SELECT_FROM_BRUSH);
 }
@@ -1074,8 +1074,8 @@ void wxDC::SetPen(const wxPen& pen)
     if ( !pen.Ok() ) return;
     if ( m_pen == pen ) return;
     m_pen = pen;
-    m_penSelected = FALSE;
-    m_downloadedPatterns[0] = FALSE;
+    m_penSelected = false;
+    m_downloadedPatterns[0] = false;
 }
 
 void wxDC::SetBrush(const wxBrush& brush)
@@ -1083,8 +1083,8 @@ void wxDC::SetBrush(const wxBrush& brush)
     if ( !brush.Ok() ) return;
     if ( m_brush == brush ) return;
     m_brush = brush;
-    m_brushSelected = FALSE;
-    m_downloadedPatterns[1] = FALSE;
+    m_brushSelected = false;
+    m_downloadedPatterns[1] = false;
 }
 
 void wxDC::SetPalette(const wxPalette& palette)
@@ -1179,10 +1179,10 @@ int wxDC::LogicalFunctionToMGLRop(int logFunc) const
     return (int)rop;
 }
 
-bool wxDC::StartDoc(const wxString& message)
+bool wxDC::StartDoc(const wxString& WXUNUSED(message))
 {
-    // We might be previewing, so return TRUE to let it continue.
-    return TRUE;
+    // We might be previewing, so return true to let it continue.
+    return true;
 }
 
 void wxDC::EndDoc()
@@ -1264,7 +1264,7 @@ void wxDC::ComputeScaleAndOrigin()
         m_mglFont = NULL;
     // make sure m_penOfs{X,Y} will be reevaluated before drawing:
     if ( newY != m_scaleY || newX != m_scaleX )
-        m_penSelected = FALSE;
+        m_penSelected = false;
 
     m_scaleX = newX, m_scaleY = newY;
 }
@@ -1409,8 +1409,8 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                   int rop, bool useMask,
                   wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid dc") );
-    wxCHECK_MSG( source, FALSE, wxT("invalid source dc") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid dc") );
+    wxCHECK_MSG( source, false, wxT("invalid source dc") );
 
     // transform the source DC coords to the device ones
     xsrc = source->LogicalToDeviceX(xsrc);
@@ -1450,7 +1450,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                         xx, yy, LogicalFunctionToMGLRop(rop));
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
@@ -1467,7 +1467,7 @@ void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
     // VZ: egcs 1.0.3 refuses to compile this without cast, no idea why
-    DoDrawBitmap((const wxBitmap&)icon, x, y, (bool)TRUE);
+    DoDrawBitmap((const wxBitmap&)icon, x, y, true);
 }
 
 
@@ -1553,7 +1553,7 @@ void wxDC::DoDrawSubBitmap(const wxBitmap &bmp,
         {
             temp = new MGLMemoryDC(dw, dh, GetDepth(), NULL);
             wxDC tempdc;
-            tempdc.SetMGLDC(temp, FALSE);
+            tempdc.SetMGLDC(temp, false);
             tempdc.SetPalette(m_palette);
         }
         else

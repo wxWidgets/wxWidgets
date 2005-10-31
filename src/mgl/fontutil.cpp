@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mgl/fontutil.cpp
+// Name:        src/mgl/fontutil.cpp
 // Purpose:     Font helper functions for MGL
 // Author:      Vaclav Slavik
 // Created:     2001/04/29
@@ -45,20 +45,20 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
     wxString encid = tokenizer.GetNextToken();
     long enc;
     if ( !encid.ToLong(&enc) )
-        return FALSE;
+        return false;
     encoding = (wxFontEncoding)enc;
 
     // ok even if empty
     facename = tokenizer.GetNextToken();
 
-    return TRUE;
+    return true;
 }
 
 wxString wxNativeEncodingInfo::ToString() const
 {
     wxString s;
     s << (long)encoding;
-    if ( !!facename )
+    if ( !facename.empty() )
     {
         s << _T(';') << facename;
     }
@@ -73,7 +73,7 @@ wxString wxNativeEncodingInfo::ToString() const
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
-    wxCHECK_MSG( info, FALSE, _T("bad pointer in wxGetNativeFontEncoding") );
+    wxCHECK_MSG( info, false, _T("bad pointer in wxGetNativeFontEncoding") );
 
     if ( encoding == wxFONTENCODING_DEFAULT )
     {
@@ -122,29 +122,29 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
 
         default:
             // encoding not known to MGL
-            return FALSE;
+            return false;
     }
 
     info->encoding = encoding;
 
-    return TRUE;
+    return true;
 }
 
 bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
 {
     if ( !info.facename )
-        return TRUE;
-        
+        return true;
+
     wxMGLFontFamily *family = wxTheFontsManager->GetFamily(info.facename);
     if ( !family )
-        return FALSE;
+        return false;
     if ( family->GetInfo()->fontLibType == MGL_BITMAPFONT_LIB )
         return (info.mglEncoding == MGL_ENCODING_ASCII ||
                 info.mglEncoding == MGL_ENCODING_ISO8859_1 ||
                 info.mglEncoding == MGL_ENCODING_ISO8859_15 ||
                 info.mglEncoding == MGL_ENCODING_CP1252);
     else
-        return TRUE;
+        return true;
 }
 
 
@@ -156,7 +156,7 @@ WX_DECLARE_LIST(wxMGLFontInstance, wxMGLFontInstanceList);
 WX_DEFINE_LIST(wxMGLFontInstanceList);
 WX_DEFINE_LIST(wxMGLFontFamilyList);
 
-wxMGLFontInstance::wxMGLFontInstance(wxMGLFontLibrary *fontLib, 
+wxMGLFontInstance::wxMGLFontInstance(wxMGLFontLibrary *fontLib,
                                      float pt, bool slant, bool aa)
 {
     m_fontLib = fontLib;
@@ -167,22 +167,22 @@ wxMGLFontInstance::wxMGLFontInstance(wxMGLFontLibrary *fontLib,
 
     float slantAngle = m_slant ? 15.0 : 0.0;
 
-    wxLogTrace("mgl_font", "loading instance of '%s' slant=%i pt=%0.1f aa=%i", 
+    wxLogTrace("mgl_font", "loading instance of '%s' slant=%i pt=%0.1f aa=%i",
                m_fontLib->GetMGLfont_lib_t()->name, m_slant, m_pt, m_aa);
-    m_font = MGL_loadFontInstance(m_fontLib->GetMGLfont_lib_t(), 
+    m_font = MGL_loadFontInstance(m_fontLib->GetMGLfont_lib_t(),
                                   m_pt, slantAngle, 0.0, aa);
     wxASSERT_MSG( m_font, wxT("Cannot create font instance.") );
 }
 
 wxMGLFontInstance::~wxMGLFontInstance()
 {
-    wxLogTrace("mgl_font", "unloading instance of '%s' slant=%i pt=%0.1f aa=%i", 
+    wxLogTrace("mgl_font", "unloading instance of '%s' slant=%i pt=%0.1f aa=%i",
                m_fontLib->GetMGLfont_lib_t()->name, m_slant, m_pt, m_aa);
     if ( m_font )
         MGL_unloadFontInstance(m_font);
 }
-    
-wxMGLFontLibrary::wxMGLFontLibrary(const wxString& filename, int type, 
+
+wxMGLFontLibrary::wxMGLFontLibrary(const wxString& filename, int type,
                                    wxMGLFontFamily *parentFamily)
 {
     m_family = parentFamily;
@@ -192,7 +192,7 @@ wxMGLFontLibrary::wxMGLFontLibrary(const wxString& filename, int type,
     m_fontLib = NULL;
 
     m_instances = new wxMGLFontInstanceList;
-    m_instances->DeleteContents(TRUE);
+    m_instances->DeleteContents(true);
 }
 
 wxMGLFontLibrary::~wxMGLFontLibrary()
@@ -200,7 +200,7 @@ wxMGLFontLibrary::~wxMGLFontLibrary()
     wxLogTrace("mgl_font", "font library dtor '%s'", m_fileName.mb_str());
     delete m_instances;
 }
-    
+
 void wxMGLFontLibrary::IncRef()
 {
     wxLogTrace("mgl_font", "incRef(%u) '%s'", m_refs, m_fileName.c_str());
@@ -226,14 +226,12 @@ void wxMGLFontLibrary::DecRef()
 
 static int gs_antialiasingThreshold = -1;
 
-wxMGLFontInstance *wxMGLFontLibrary::GetFontInstance(wxFont *font, 
+wxMGLFontInstance *wxMGLFontLibrary::GetFontInstance(wxFont *font,
                                                      float scale, bool aa)
 {
     wxASSERT_MSG(m_refs > 0 && m_fontLib, wxT("font library not loaded!"));
 
     wxString facename;
-    bool slant;
-    bool antialiased;
     float pt = (float)font->GetPointSize() * scale;
 
     if ( gs_antialiasingThreshold == -1 )
@@ -241,7 +239,7 @@ wxMGLFontInstance *wxMGLFontLibrary::GetFontInstance(wxFont *font,
         gs_antialiasingThreshold = 10;
 #if wxUSE_SYSTEM_OPTIONS
         if ( wxSystemOptions::HasOption(wxT("mgl.aa-threshold")) )
-            gs_antialiasingThreshold = 
+            gs_antialiasingThreshold =
                 wxSystemOptions::GetOptionInt(wxT("mgl.aa-threshold"));
         wxLogTrace("mgl_font", "AA threshold set to %i", gs_antialiasingThreshold);
 #endif
@@ -250,38 +248,38 @@ wxMGLFontInstance *wxMGLFontLibrary::GetFontInstance(wxFont *font,
     // Small characters don't look good when antialiased with the algorithm
     // that FreeType uses (mere 2x2 supersampling), so lets disable it AA
     // completely for small fonts.
-    if ( pt <= gs_antialiasingThreshold )
-        antialiased = FALSE;
-    else
-        antialiased = (m_fontLib->fontLibType == MGL_BITMAPFONT_LIB) ? FALSE : aa;
+    bool antialiased = false;
+    if (( pt > gs_antialiasingThreshold ) &&
+        ( m_fontLib->fontLibType != MGL_BITMAPFONT_LIB ) )
+        antialiased = aa;
 
-    slant = (((m_type & wxFONTFACE_ITALIC) == 0) &&
+    bool slant = (((m_type & wxFONTFACE_ITALIC) == 0) &&
              (font->GetStyle() == wxSLANT || font->GetStyle() == wxITALIC));
 
     // FIXME_MGL -- MGL does not yet support slant, although the API is there
-    slant = FALSE;
+    slant = false;
 
-    wxLogTrace("mgl_font", "requested instance of '%s' slant=%i pt=%0.1f aa=%i", 
+    wxLogTrace("mgl_font", "requested instance of '%s' slant=%i pt=%0.1f aa=%i",
                m_fileName.mb_str(), slant, pt, antialiased);
 
     wxMGLFontInstance *i;
     wxMGLFontInstanceList::Node *node;
-    
+
     for (node = m_instances->GetFirst(); node; node = node->GetNext())
     {
         i = node->GetData();
         if ( i->GetPt() == pt && i->GetSlant() == slant &&
              i->GetAA() == antialiased )
         {
-            wxLogTrace("mgl_font", "    got from cache: slant=%i pt=%0.1f aa=%i", 
+            wxLogTrace("mgl_font", "    got from cache: slant=%i pt=%0.1f aa=%i",
                        i->GetSlant(), i->GetPt(), i->GetAA());
             return i;
         }
-    }    
-    
+    }
+
     i = new wxMGLFontInstance(this, pt, slant, antialiased);
     m_instances->Append(i);
-    return i;   
+    return i;
 }
 
 
@@ -289,33 +287,33 @@ wxMGLFontFamily::wxMGLFontFamily(const font_info_t *info)
 {
     m_name = info->familyName;
     m_fontInfo = info;
-    
+
     if ( info->regularFace[0] == '\0' )
         m_fontLibs[wxFONTFACE_REGULAR] = NULL;
     else
-        m_fontLibs[wxFONTFACE_REGULAR] = 
+        m_fontLibs[wxFONTFACE_REGULAR] =
             new wxMGLFontLibrary(info->regularFace, wxFONTFACE_REGULAR, this);
-    
+
     if ( info->italicFace[0] == '\0' )
         m_fontLibs[wxFONTFACE_ITALIC] = NULL;
     else
-        m_fontLibs[wxFONTFACE_ITALIC] = 
+        m_fontLibs[wxFONTFACE_ITALIC] =
             new wxMGLFontLibrary(info->italicFace, wxFONTFACE_ITALIC, this);
-    
+
     if ( info->boldFace[0] == '\0' )
         m_fontLibs[wxFONTFACE_BOLD] = NULL;
     else
-        m_fontLibs[wxFONTFACE_BOLD] = 
+        m_fontLibs[wxFONTFACE_BOLD] =
             new wxMGLFontLibrary(info->boldFace, wxFONTFACE_BOLD, this);
-    
+
     if ( info->boldItalicFace[0] == '\0' )
         m_fontLibs[wxFONTFACE_BOLD_ITALIC] = NULL;
     else
-        m_fontLibs[wxFONTFACE_BOLD_ITALIC] = 
+        m_fontLibs[wxFONTFACE_BOLD_ITALIC] =
             new wxMGLFontLibrary(info->boldItalicFace, wxFONTFACE_BOLD_ITALIC, this);
-            
+
     wxLogTrace("mgl_font", "new family '%s' (r=%s, i=%s, b=%s, bi=%s)\n",
-               info->familyName, info->regularFace, info->italicFace, 
+               info->familyName, info->regularFace, info->italicFace,
                info->boldFace, info->boldItalicFace);
 }
 
@@ -340,8 +338,8 @@ wxMGLFontLibrary *wxFontsManager::GetFontLibrary(wxFont *font)
     wxMGLFontFamily *family;
     int type;
     wxString facename = font->GetFaceName();
-    
-    if ( !facename.IsEmpty() )
+
+    if ( !facename.empty() )
         family = GetFamily(facename);
     else
         family = NULL;
@@ -405,7 +403,7 @@ wxMGLFontLibrary *wxFontsManager::GetFontLibrary(wxFont *font)
                 break;
             }
     }
-    
+
     return family->GetLibrary(type);
 }
 
@@ -419,9 +417,9 @@ static ibool MGLAPI enum_callback(const font_info_t *info, void *cookie)
 wxFontsManager::wxFontsManager()
 {
     m_hash = new wxHashTable(wxKEY_STRING);
-    m_hash->DeleteContents(FALSE);
+    m_hash->DeleteContents(false);
     m_list = new wxMGLFontFamilyList;
-    m_list->DeleteContents(TRUE);
+    m_list->DeleteContents(true);
     MGL_enumerateFonts(enum_callback, (void*)this);
 }
 
@@ -437,7 +435,7 @@ void wxFontsManager::AddFamily(const font_info_t *info)
     m_hash->Put(f->GetName().Lower(), f);
     m_list->Append(f);
 }
-        
+
 wxMGLFontFamily *wxFontsManager::GetFamily(const wxString& name) const
 {
     return (wxMGLFontFamily*)m_hash->Get(name.Lower());

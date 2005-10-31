@@ -267,7 +267,9 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 bool wxIsDriveAvailable(const wxString& dirName)
 {
     // FIXME_MGL - this method leads to hang up under Watcom for some reason
-#ifndef __WATCOMC__
+#ifdef __WATCOMC__
+    wxUnusedVar(dirName);
+#else
     if ( dirName.Len() == 3 && dirName[1u] == wxT(':') )
     {
         wxString dirNameLower(dirName.Lower());

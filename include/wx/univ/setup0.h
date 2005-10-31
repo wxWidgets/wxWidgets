@@ -171,7 +171,7 @@
 // Default is 1
 //
 // Recommended setting: 1 for win32 else 0
-#if defined(__WIN32__)
+#if defined(__WIN32__) || defined(__WATCOMC__)
     #define wxUSE_WCHAR_T 1
 #else
     #define wxUSE_WCHAR_T 0

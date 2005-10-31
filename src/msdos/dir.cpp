@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/palmos/dir.cpp
-// Purpose:     wxDir implementation for PalmOS
-// Author:      William Osborne - minimal working wxPalmOS port
+// Name:        src/msdos/dir.cpp
+// Purpose:     wxDir implementation for DOS
+// Author:      derived from wxPalmOS code
 // Modified by:
 // Created:     10.13.04
 // RCS-ID:      $Id$
@@ -63,7 +63,7 @@
 // ----------------------------------------------------------------------------
 
 /* static */
-bool wxDir::Exists(const wxString& dir)
+bool wxDir::Exists(const wxString& WXUNUSED(dir))
 {
     return false;
 }
@@ -72,11 +72,11 @@ bool wxDir::Exists(const wxString& dir)
 // wxDir construction/destruction
 // ----------------------------------------------------------------------------
 
-wxDir::wxDir(const wxString& dirname)
+wxDir::wxDir(const wxString& WXUNUSED(dirname))
 {
 }
 
-bool wxDir::Open(const wxString& dirname)
+bool wxDir::Open(const wxString& WXUNUSED(dirname))
 {
     return false;
 }
@@ -88,9 +88,7 @@ bool wxDir::IsOpened() const
 
 wxString wxDir::GetName() const
 {
-    wxString name;
-
-    return name;
+    return wxEmptyString;
 }
 
 wxDir::~wxDir()
@@ -101,15 +99,14 @@ wxDir::~wxDir()
 // wxDir enumerating
 // ----------------------------------------------------------------------------
 
-bool wxDir::GetFirst(wxString *filename,
-                     const wxString& filespec,
-                     int flags) const
+bool wxDir::GetFirst(wxString *WXUNUSED(filename),
+                     const wxString& WXUNUSED(filespec),
+                     int WXUNUSED(flags)) const
 {
     return false;
 }
 
-bool wxDir::GetNext(wxString *filename) const
+bool wxDir::GetNext(wxString *WXUNUSED(filename)) const
 {
     return false;
 }
-

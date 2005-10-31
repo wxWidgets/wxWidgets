@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/appcmn.cpp
+// Name:        src/common/appcmn.cpp
 // Purpose:     wxAppConsole and wxAppBase methods common to all platforms
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -581,13 +581,13 @@ void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
 #elif defined(__UNIX__) || defined(__DARWIN__) || defined(__OS2__)
     #include "wx/unix/gsockunx.h"
 #elif defined(__WXMAC__)
-  #include <MacHeaders.c>
-  #define OTUNIXERRORS 1
-  #include <OpenTransport.h>
-  #include <OpenTransportProviders.h>
-  #include <OpenTptInternet.h>
+    #include <MacHeaders.c>
+    #define OTUNIXERRORS 1
+    #include <OpenTransport.h>
+    #include <OpenTransportProviders.h>
+    #include <OpenTptInternet.h>
 
-  #include "wx/mac/gsockmac.h"
+    #include "wx/mac/gsockmac.h"
 #else
     #error "Must include correct GSocket header here"
 #endif
@@ -605,4 +605,3 @@ GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
 }
 
 #endif
-

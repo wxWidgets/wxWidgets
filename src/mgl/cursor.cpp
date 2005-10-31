@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.cpp
+// Name:        src/mgl/cursor.cpp
 // Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$
@@ -109,13 +109,12 @@ wxCursor::wxCursor(int cursorId)
         case wxCURSOR_NONE:
             *this = wxNullCursor;
             return;
-            break;
 
         default:
             wxFAIL_MSG(wxT("unsupported cursor type"));
             break;
     }
-    
+
     M_CURSORDATA->m_cursor = new MGLCursor(cursorname);
 
     // if we cannot load arrow cursor, use MGL's default arrow cursor:
@@ -124,7 +123,7 @@ wxCursor::wxCursor(int cursorId)
         delete M_CURSORDATA->m_cursor;
         M_CURSORDATA->m_cursor = new MGLCursor(MGL_DEF_CURSOR);
     }
-    
+
     if ( !M_CURSORDATA->m_cursor->valid() )
     {
         wxLogError(_("Couldn't create cursor."));
@@ -133,7 +132,7 @@ wxCursor::wxCursor(int cursorId)
     else
     {
         (*gs_cursorsHash)[cursorId] = *this;
-        wxLogTrace(_T("mglcursor"), _T("cursor id %i added to cache (%s)"), 
+        wxLogTrace(_T("mglcursor"), _T("cursor id %i added to cache (%s)"),
                    cursorId, cursorname);
     }
 }
@@ -150,7 +149,7 @@ wxCursor::wxCursor(const char WXUNUSED(bits)[],
 
 wxCursor::wxCursor(const wxString& cursor_file,
                    long flags,
-                   int hotSpotX, int hotSpotY)
+                   int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY))
 {
     if ( flags == wxBITMAP_TYPE_CUR || flags == wxBITMAP_TYPE_CUR_RESOURCE )
     {
@@ -226,7 +225,7 @@ void wxSetCursor(const wxCursor& cursor)
     {
         if ( g_winMng )
             MGL_wmSetGlobalCursor(g_winMng, NULL);
-        gs_globalCursor = wxNullCursor;        
+        gs_globalCursor = wxNullCursor;
     }
 }
 
@@ -285,8 +284,8 @@ bool wxIsBusy()
 class wxCursorModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return TRUE; }
-    
+    virtual bool OnInit() { return true; }
+
     virtual void OnExit()
     {
         wxDELETE(gs_cursorsHash);

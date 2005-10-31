@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mac/mimetype.cpp
+// Name:        src/msdos/mimetype.cpp
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -43,25 +43,28 @@
 // in case we're compiling in non-GUI mode
 class WXDLLEXPORT wxIcon;
 
-bool wxFileTypeImpl::SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt)
+bool wxFileTypeImpl::SetCommand(const wxString& WXUNUSED(cmd),
+                                const wxString& WXUNUSED(verb),
+                                bool WXUNUSED(overwriteprompt))
 {
-    return FALSE;
+    return false;
 }
 
-bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int index)
+bool wxFileTypeImpl::SetDefaultIcon(const wxString& WXUNUSED(strIcon),
+                                    int WXUNUSED(index))
 {
-    return FALSE;
+    return false;
 }
 
-bool wxFileTypeImpl::GetCommand(wxString *command, const char *verb) const
+bool wxFileTypeImpl::GetCommand(wxString *WXUNUSED(command),
+                                const char *WXUNUSED(verb)) const
 {
-    return FALSE;
+    return false;
 }
 
-// @@ this function is half implemented
-bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
+bool wxFileTypeImpl::GetExtensions(wxArrayString& WXUNUSED(extensions))
 {
-    return FALSE;
+    return false;
 }
 
 bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
@@ -69,47 +72,49 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
     if ( m_strFileType.Length() > 0 )
     {
         *mimeType = m_strFileType ;
-        return TRUE ;
+        return true ;
     }
     else
-    return FALSE;
+    return false;
 }
 
 bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
 {
     wxString s;
-    
+
     if (GetMimeType(&s))
     {
         mimeTypes.Clear();
         mimeTypes.Add(s);
-        return TRUE;
+        return true;
     }
-    else 
-        return FALSE;
+    else
+        return false;
 }
 
 bool wxFileTypeImpl::GetIcon(wxIconLocation *WXUNUSED(icon)) const
 {
     // no such file type or no value or incorrect icon entry
-    return FALSE;
+    return false;
 }
 
-bool wxFileTypeImpl::GetDescription(wxString *desc) const
+bool wxFileTypeImpl::GetDescription(wxString *WXUNUSED(desc)) const
 {
-    return FALSE;
+    return false;
 }
 
 size_t
-wxFileTypeImpl::GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
-                   const wxFileType::MessageParameters& params) const
+wxFileTypeImpl::GetAllCommands(wxArrayString * WXUNUSED(verbs),
+                               wxArrayString * WXUNUSED(commands),
+                               const wxFileType::MessageParameters& WXUNUSED(params)) const
 {
     wxFAIL_MSG( _T("wxFileTypeImpl::GetAllCommands() not yet implemented") );
     return 0;
 }
 
 void
-wxMimeTypesManagerImpl::Initialize(int mailcapStyles, const wxString& extraDir)
+wxMimeTypesManagerImpl::Initialize(int WXUNUSED(mailcapStyles),
+                                   const wxString& WXUNUSED(extraDir))
 {
     wxFAIL_MSG( _T("wxMimeTypesManagerImpl::Initialize() not yet implemented") );
 }
@@ -196,12 +201,12 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& e)
 
 // MIME type -> extension -> file type
 wxFileType *
-wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
+wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& WXUNUSED(mimeType))
 {
     return NULL;
 }
 
-size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
+size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& WXUNUSED(mimetypes))
 {
     // VZ: don't know anything about this for Mac
     wxFAIL_MSG( _T("wxMimeTypesManagerImpl::EnumAllFileTypes() not yet implemented") );
@@ -210,7 +215,7 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 }
 
 wxFileType *
-wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
+wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& WXUNUSED(ftInfo))
 {
     wxFAIL_MSG( _T("wxMimeTypesManagerImpl::Associate() not yet implemented") );
 
@@ -218,9 +223,9 @@ wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 }
 
 bool
-wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
+wxMimeTypesManagerImpl::Unassociate(wxFileType *WXUNUSED(ft))
 {
-    return FALSE;
+    return false;
 }
 
 #endif // wxUSE_MIMETYPE
