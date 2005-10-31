@@ -7309,8 +7309,7 @@ AC_CONFIG_FILES([ lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}:wx-config-inplace.
 
 AC_CONFIG_FILES([ version-script Makefile ])
 
-AC_CONFIG_COMMANDS([ wx-config
-                   ],
+AC_CONFIG_COMMANDS([wx-config],
                    [ rm -f wx-config
                      ${LN_S} lib/wx/config/inplace-${TOOLCHAIN_FULLNAME} wx-config
                    ],
