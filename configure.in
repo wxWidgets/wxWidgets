@@ -2239,6 +2239,7 @@ if test "$build" != "$host" -a "$GCC" = yes; then
         dnl strip out any that don't start '^/usr'.
         SEARCH_LIB=`for x in $SEARCH_LIB; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
         SEARCH_INCLUDE=`for x in $SEARCH_INCLUDE; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
+        SEARCH_INCLUDE="$SEARCH_INCLUDE $cross_root/include"
 
         dnl also have pkg-config search for *.pc files under this 'root'
         if test -z "$PKG_CONFIG_PATH"; then
