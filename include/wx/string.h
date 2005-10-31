@@ -958,10 +958,16 @@ public:
 #if defined wxLongLong_t && !defined wxLongLongIsLong
       // insert a long long if they exist and aren't longs
   wxString& operator<<(wxLongLong_t ll)
-    { return (*this) << Format(_T("%") wxLongLongFmtSpec _T("d"), ll); }
+    {
+      const wxChar *fmt = _T("%") wxLongLongFmtSpec _T("d");
+      return (*this) << Format(fmt, ll);
+    }
       // insert an unsigned long long
   wxString& operator<<(wxULongLong_t ull)
-    { return (*this) << Format(_T("%") wxLongLongFmtSpec _T("u"), ull); }
+    {
+      const wxChar *fmt = _T("%") wxLongLongFmtSpec _T("u");
+      return (*this) << Format(fmt , ull);
+    }
 #endif
       // insert a float into string
   wxString& operator<<(float f)
