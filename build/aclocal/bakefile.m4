@@ -650,6 +650,15 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
 
     GCC_PCH=0
 
+    case ${BAKEFILE_HOST} in 
+        *-*-cygwin* )
+            dnl PCH support is broken in cygwin gcc because of unportable
+            dnl assumptions about mmap() in gcc code which make PCH generation
+            dnl fail erratically; disable PCH completely until this is fixed
+            bk_use_pch="no"
+            ;;
+    esac
+
     if test "x$bk_use_pch" = "x" -o "x$bk_use_pch" = "xyes" ; then
         if test "x$GCC" = "xyes"; then
             dnl test if we have gcc-3.4:
