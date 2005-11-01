@@ -22628,6 +22628,7 @@ if test "$build" != "$host" -a "$GCC" = yes; then
 
                         SEARCH_LIB=`for x in $SEARCH_LIB; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
         SEARCH_INCLUDE=`for x in $SEARCH_INCLUDE; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
+        SEARCH_INCLUDE="$SEARCH_INCLUDE $cross_root/include"
 
                 if test -z "$PKG_CONFIG_PATH"; then
             PKG_CONFIG_PATH="$cross_root/local/lib/pkgconfig:$cross_root/lib/pkgconfig"
@@ -42466,11 +42467,6 @@ INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
 if test "$GXX" = yes ; then
         CWARNINGS="-Wall -Wundef"
     CXXWARNINGS="$CWARNINGS -Wno-ctor-dtor-privacy"
-
-                    case "${host}" in
-        *-*-cygwin* | *-*-mingw32* )
-            CXXWARNINGS="$CXXWARNINGS -Wno-format"
-    esac
 fi
 
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
