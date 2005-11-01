@@ -272,10 +272,8 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
     topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(10,0) );
 
     // 2) list box
-    m_listbox = new wxListBox( this, wxID_LISTBOX,
-                               wxDefaultPosition, wxDefaultSize,
-                               n, choices,
-                               styleLbox );
+    m_listbox = CreateList(n,choices,styleLbox);
+
     if ( n > 0 )
         m_listbox->SetSelection(0);
 
@@ -324,6 +322,14 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
     wxCArrayString chs(choices);
     return Create(parent, message, caption, chs.GetCount(), chs.GetStrings(),
                   styleDlg, pos, styleLbox);
+}
+
+wxListBoxBase *wxAnyChoiceDialog::CreateList(int n, const wxString *choices, long styleLbox)
+{
+    return new wxListBox( this, wxID_LISTBOX,
+                          wxDefaultPosition, wxDefaultSize,
+                          n, choices,
+                          styleLbox );
 }
 
 // ----------------------------------------------------------------------------
@@ -505,5 +511,17 @@ bool wxMultiChoiceDialog::TransferDataFromWindow()
 
     return true;
 }
+
+#if wxUSE_CHECKLISTBOX
+
+wxListBoxBase *wxMultiChoiceDialog::CreateList(int n, const wxString *choices, long styleLbox)
+{
+    return new wxCheckListBox( this, wxID_LISTBOX,
+                               wxDefaultPosition, wxDefaultSize,
+                               n, choices,
+                               styleLbox );
+}
+
+#endif // wxUSE_CHECKLISTBOX
 
 #endif // wxUSE_CHOICEDLG

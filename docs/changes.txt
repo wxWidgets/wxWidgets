@@ -24,6 +24,7 @@ All (GUI):
   wxLB_TOP, wxNB_TOP, wxCHB_TOP, wxTBK_TOP.
 - Added parent window parameter to wxHelpController constructor
   and added SetParentWindow/GetParentWindow.
+- wxMultiChoiceDialog uses now wxCheckListBox if possible, wxListBox if not.
 
 wxMSW:
 

@@ -80,7 +80,11 @@ public:
                 long styleLbox = wxLB_ALWAYS_SB);
 
 protected:
-    wxListBox  *m_listbox;
+    wxListBoxBase *m_listbox;
+
+    virtual wxListBoxBase *CreateList(int n,
+                                      const wxString *choices,
+                                      long styleLbox);
 
     DECLARE_NO_COPY_CLASS(wxAnyChoiceDialog)
 };
@@ -206,6 +210,12 @@ public:
     virtual bool TransferDataFromWindow();
 
 protected:
+#if wxUSE_CHECKLISTBOX
+    virtual wxListBoxBase *CreateList(int n,
+                                      const wxString *choices,
+                                      long styleLbox);
+#endif // wxUSE_CHECKLISTBOX
+
     wxArrayInt m_selections;
 
 private:
