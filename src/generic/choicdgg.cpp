@@ -32,6 +32,7 @@
     #include "wx/dialog.h"
     #include "wx/button.h"
     #include "wx/listbox.h"
+    #include "wx/checklst.h"
     #include "wx/stattext.h"
     #include "wx/intl.h"
     #include "wx/sizer.h"
