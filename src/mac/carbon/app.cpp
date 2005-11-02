@@ -439,11 +439,23 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
 
     wxMenuItem* item = NULL ;
     MenuCommand id = command.commandID ;
-    // for items we don't really control
-    if ( id == kHICommandPreferences )
-    {
-        id = wxApp::s_macPreferencesMenuItemId ;
 
+    // for 'standard' commands
+    if ( id == kHICommandPreferences || id == kHICommandQuit || id == kHICommandAbout )
+    {
+        switch ( id )
+        {
+            case kHICommandPreferences :
+                id = wxApp::s_macPreferencesMenuItemId ;
+                break ;
+            case kHICommandQuit :
+                id = wxApp::s_macExitMenuItemId ;
+                break ;
+            case kHICommandAbout :
+                id = wxApp::s_macAboutMenuItemId ;
+                break ;
+        }
+        
         wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
         if ( mbar )
         {
@@ -453,14 +465,38 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
     }
     else if ( id != 0 && command.menu.menuRef != 0 && command.menu.menuItemIndex != 0 )
     {
-        wxMenu* itsMenu = NULL ;
-        UInt32 refCon ;
-        GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , &refCon ) ;
-        // make sure it is one of our own menus, otherwise don't touch
-        itsMenu = wxFindMenuFromMacMenu( command.menu.menuRef ) ;
-        if ( itsMenu != NULL )
+        // make sure it is one of our own menus, or of the 'synthetic' apple and help menus , otherwise don't touch
+        MenuItemIndex firstUserHelpMenuItem ;
+        static MenuHandle mh = NULL ;
+        if ( mh == NULL )
         {
-            item = (wxMenuItem*) refCon ;
+            if ( UMAGetHelpMenu( &mh , &firstUserHelpMenuItem) != noErr )
+            {
+                mh = NULL ;
+            }
+        }
+
+        // is it part of the application or the help menu, then look for the id directly
+        if ( ( GetMenuHandle( kwxMacAppleMenuId ) != NULL && command.menu.menuRef == GetMenuHandle( kwxMacAppleMenuId ) ) ||
+             ( mh != NULL && command.menu.menuRef == mh ) )
+        {
+            wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+            if ( mbar )
+            {
+                wxMenu* menu = NULL ;
+                item = mbar->FindItem( id , &menu ) ;
+            }
+        }
+        else
+        {
+            wxMenu* itsMenu = NULL ;
+            UInt32 refCon ;
+            GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , &refCon ) ;
+            itsMenu = wxFindMenuFromMacMenu( command.menu.menuRef ) ;
+            if ( itsMenu != NULL )
+            {
+                item = (wxMenuItem*) refCon ;
+            }
         }
     }
 
