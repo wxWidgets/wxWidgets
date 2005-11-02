@@ -14,6 +14,7 @@
 
 #include "wx/dynarray.h"
 #include "wx/dialog.h"
+#include "wx/listbox.h"
 
 class WXDLLEXPORT wxListBox;
 
