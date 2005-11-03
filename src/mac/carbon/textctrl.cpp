@@ -183,6 +183,7 @@ public :
     virtual void SetSelection( long from , long to ) = 0 ;
     virtual void GetSelection( long* from, long* to) const = 0 ;
     virtual void WriteText(const wxString& str) = 0 ;
+    virtual bool HasOwnContextMenu() const { return false ; }
 
     virtual void Clear() ;
     virtual bool CanUndo() const;
@@ -236,6 +237,19 @@ public :
     virtual void SetSelection( long from , long to ) ;
 
     virtual void WriteText(const wxString& str) ;
+    virtual bool HasOwnContextMenu() const 
+    { 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+        if ( UMAGetSystemVersion() >= 0x1040 )
+        {
+            TXNCommandEventSupportOptions options ;
+            TXNGetCommandEventSupport( m_txn , & options ) ;
+            return options & kTXNSupportEditCommandProcessing ;
+        }
+#endif
+        return false ;
+    }
+
     virtual void Clear() ;
 
     virtual bool CanUndo() const ;
@@ -385,7 +399,7 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 END_EVENT_TABLE()
 
 // Text item
-void wxTextCtrl::Init()
+void wxTextCtrl::Init() 
 {
     m_editable = true ;
     m_dirty = false;
@@ -1060,6 +1074,12 @@ void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 
 void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
+    if ( GetPeer()->HasOwnContextMenu() )
+    {
+        event.Skip() ;
+        return ;
+    }
+    
     if (m_privateContextMenu == NULL)
     {
         m_privateContextMenu = new wxMenu;
@@ -1643,6 +1663,21 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
     tback.bgType = kTXNBackgroundTypeRGB;
     tback.bg.color = MAC_WXCOLORREF( background.GetPixel() );
     TXNSetBackground( m_txn , &tback);
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if ( UMAGetSystemVersion() >= 0x1040 )
+    {
+        TXNCommandEventSupportOptions options ;
+        if ( TXNGetCommandEventSupport( m_txn, &options) == noErr )
+        {
+            options |= kTXNSupportEditCommandProcessing ;
+            options |= kTXNSupportSpellCheckCommandProcessing ;
+            options |= kTXNSupportFontCommandProcessing ;
+            options |= kTXNSupportFontCommandUpdating ;
+            
+            TXNSetCommandEventSupport( m_txn , options ) ;
+        }
+    }
+#endif
 }
 
 void wxMacMLTEControl::SetBackground( const wxBrush &brush )
