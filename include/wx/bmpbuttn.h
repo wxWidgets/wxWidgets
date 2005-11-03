@@ -30,9 +30,10 @@ class WXDLLEXPORT wxBitmapButtonBase : public wxButton
 {
 public:
     wxBitmapButtonBase()
-        : m_bmpNormal(), m_bmpSelected(), m_bmpFocus(), m_bmpDisabled()
-        , m_marginX(0), m_marginY(0)
-        { }
+    {
+        m_marginX =
+        m_marginY = 0;
+    }
 
     // set the bitmaps
     void SetBitmapLabel(const wxBitmap& bitmap)
@@ -43,8 +44,6 @@ public:
         { m_bmpFocus = focus; OnSetBitmap(); };
     void SetBitmapDisabled(const wxBitmap& disabled)
         { m_bmpDisabled = disabled; OnSetBitmap(); };
-    void SetLabel(const wxBitmap& bitmap)
-        { SetBitmapLabel(bitmap); }
 
     // retrieve the bitmaps
     const wxBitmap& GetBitmapLabel() const { return m_bmpNormal; }
@@ -61,6 +60,16 @@ public:
     int GetMarginX() const { return m_marginX; }
     int GetMarginY() const { return m_marginY; }
 
+    // deprecated synonym for SetBitmapLabel()
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( void SetLabel(const wxBitmap& bitmap) );
+        { SetBitmapLabel(bitmap); }
+
+    // prevent virtual function hiding
+    virtual void SetLabel(const wxString& label)
+        { wxWindowBase::SetLabel(label); }
+#endif // WXWIN_COMPATIBILITY_2_6
+
 protected:
     // function called when any of the bitmaps changes
     virtual void OnSetBitmap() { InvalidateBestSize(); Refresh(); }
@@ -75,13 +84,13 @@ protected:
     int m_marginX,
         m_marginY;
 
-private:
-    // Prevent Virtual function hiding warnings
-    void SetLabel(const wxString& rsLabel)
-        { wxWindowBase::SetLabel(rsLabel); }
 
     DECLARE_NO_COPY_CLASS(wxBitmapButtonBase)
 };
+
+#if WXWIN_COMPATIBILITY_2_6
+    inline void SetLabel(const wxBitmap& bitmap) { SetBitmapLabel(bitmap); }
+#endif // WXWIN_COMPATIBILITY_2_6
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/bmpbuttn.h"
