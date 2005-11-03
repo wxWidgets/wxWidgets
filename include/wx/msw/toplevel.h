@@ -46,6 +46,8 @@ public:
     virtual ~wxTopLevelWindowMSW();
 
     // implement base class pure virtuals
+    virtual void SetTitle( const wxString& title);
+    virtual wxString GetTitle() const;
     virtual void Maximize(bool maximize = true);
     virtual bool IsMaximized() const;
     virtual void Iconize(bool iconize = true);
@@ -166,4 +168,3 @@ protected:
 };
 
 #endif // _WX_MSW_TOPLEVEL_H_
-

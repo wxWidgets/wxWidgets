@@ -154,13 +154,16 @@ public:
     // return true if the frame is in fullscreen mode
     virtual bool IsFullScreen() const = 0;
 
-    /*
-       for now we already have them in wxWindow, but this is wrong: these
-       methods really only make sense for wxTopLevelWindow!
+#ifdef __WXMSW__
+    // FIXME: This is work in progress about moving SetTitle/GetTitle from wxWindow
+    // to wxTopLevelWindow so initially enabled in wxMSW only to observe results
+    // and continue on other platforms
 
+    // the title (or label, see below) of the window: the text which the
+    // window shows
     virtual void SetTitle(const wxString& title) = 0;
     virtual wxString GetTitle() const = 0;
-     */
+#endif
 
     // Set the shape of the window to the given region.
     // Returns true if the platform supports this feature (and the

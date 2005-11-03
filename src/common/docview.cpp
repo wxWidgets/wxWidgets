@@ -656,14 +656,18 @@ void wxView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 
 void wxView::OnChangeFilename()
 {
-    if (GetFrame() && GetDocument())
-    {
-        wxString title;
+    // GetFrame can return wxWindow rather than wxTopLevelWindow due to
+    // generic MDI implementation so use SetLabel rather than SetTitle.
+    // It should cause SetTitle() for top level windows.
+    wxWindow *win = GetFrame();
+    if (!win) return;
 
-        GetDocument()->GetPrintableName(title);
+    wxDocument *doc = GetDocument();
+    if (!doc) return;
 
-        GetFrame()->SetTitle(title);
-    }
+    wxString name;
+    doc->GetPrintableName(name);
+    win->SetLabel(name);
 }
 
 void wxView::SetDocument(wxDocument *doc)
@@ -2441,4 +2445,3 @@ bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
 #endif // wxUSE_STD_IOSTREAM/!wxUSE_STD_IOSTREAM
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
-

@@ -70,7 +70,7 @@ public:
 
     // prevent virtual function hiding
     virtual void SetLabel(const wxString& label)
-        { wxWindowBase::SetLabel(label); }
+        { wxWindow::SetLabel(label); }
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:

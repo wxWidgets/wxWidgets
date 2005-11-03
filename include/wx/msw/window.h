@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/window.h
-// Purpose:     wxWindow class
+// Purpose:     wxWindowMSW class
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin on 13.05.99: complete refont of message handling,
 //              elimination of Default(), ...
@@ -62,8 +62,8 @@ public:
                 const wxString& name = wxPanelNameStr);
 
     // implement base class pure virtuals
-    virtual void SetTitle( const wxString& title);
-    virtual wxString GetTitle() const;
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel() const;
 
     virtual void Raise();
     virtual void Lower();
@@ -557,5 +557,4 @@ WX_DECLARE_HASH(wxWindowMSW, wxWindowList, wxWinHashTable);
 
 extern wxWinHashTable *wxWinHandleHash;
 
-#endif
-    // _WX_WINDOW_H_
+#endif // _WX_WINDOW_H_

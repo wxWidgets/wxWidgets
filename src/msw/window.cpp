@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/windows.cpp
-// Purpose:     wxWindow
+// Name:        src/msw/window.cpp
+// Purpose:     wxWindowMSW
 // Author:      Julian Smart
 // Modified by: VZ on 13.05.99: no more Default(), MSWOnXXX() reorganisation
 // Created:     04/01/98
@@ -737,16 +737,6 @@ void wxWindowMSW::Lower()
 {
     ::SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0,
                    SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-}
-
-void wxWindowMSW::SetTitle( const wxString& title)
-{
-    SetWindowText(GetHwnd(), title.c_str());
-}
-
-wxString wxWindowMSW::GetTitle() const
-{
-    return wxGetWindowText(GetHWND());
 }
 
 void wxWindowMSW::DoCaptureMouse()
@@ -3550,6 +3540,20 @@ bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
     event.SetWindow(wxFindWinFromHandle(hwnd));
 
     return GetEventHandler()->ProcessEvent(event);
+}
+
+// ---------------------------------------------------------------------------
+// labels
+// ---------------------------------------------------------------------------
+
+void wxWindowMSW::SetLabel( const wxString& label)
+{
+    SetWindowText(GetHwnd(), label.c_str());
+}
+
+wxString wxWindowMSW::GetLabel() const
+{
+    return wxGetWindowText(GetHWND());
 }
 
 // ---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/toplevel.cpp
+// Name:        src/msw/toplevel.cpp
 // Purpose:     implements wxTopLevelWindow for MSW
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -205,7 +205,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     if ( style & wxMAXIMIZE_BOX )
         msflags |= WS_MAXIMIZEBOX;
 
-#ifndef __WXWINCE__    
+#ifndef __WXWINCE__
     if ( style & wxSYSTEM_MENU )
         msflags |= WS_SYSMENU;
 #endif
@@ -414,11 +414,11 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     }
 
     SubclassWin(m_hWnd);
-    
+
 #ifdef __SMARTPHONE__
     // Work around title non-display glitch
     Show(false);
-#endif    
+#endif
 
     return true;
 #endif // __WXMICROWIN__/!__WXMICROWIN__
@@ -813,6 +813,16 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
 // wxTopLevelWindowMSW misc
 // ----------------------------------------------------------------------------
 
+void wxTopLevelWindowMSW::SetTitle( const wxString& title)
+{
+    SetLabel(title);
+}
+
+wxString wxTopLevelWindowMSW::GetTitle() const
+{
+    return GetLabel();
+}
+
 void wxTopLevelWindowMSW::SetIcon(const wxIcon& icon)
 {
     SetIcons( wxIconBundle( icon ) );
@@ -1140,5 +1150,3 @@ HWND wxTLWHiddenParentModule::GetHWND()
 
     return ms_hwnd;
 }
-
-
