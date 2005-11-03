@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richedit.cpp
+// Name:        samples/richtext/richtext.cpp
 // Purpose:     wxWidgets rich text editor sample
 // Author:      Julian Smart
 // Modified by:
@@ -728,12 +728,10 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
         if (!path.empty())
         {
-            int fileType = 0;
             int filterIndex = dialog.GetFilterIndex();
-            if (filterIndex < (int) fileTypes.GetCount())
-                fileType = fileTypes[filterIndex];
-            else
-                fileType = wxRICHTEXT_TYPE_TEXT;
+            int fileType = (filterIndex < (int) fileTypes.GetCount())
+                           ? fileTypes[filterIndex]
+                           : wxRICHTEXT_TYPE_TEXT;
             m_richTextCtrl->LoadFile(path, fileType);
         }
     }
