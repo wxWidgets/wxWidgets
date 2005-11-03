@@ -154,8 +154,8 @@ public:
     // return true if the frame is in fullscreen mode
     virtual bool IsFullScreen() const = 0;
 
-#if !defined(__WXMSW__) && \
-    !defined(__WXMOTIF__)
+#if defined(__WXMSW__) || \
+    defined(__WXMOTIF__)
 
     // FIXME: This is work in progress about moving SetTitle/GetTitle from wxWindow
     // to wxTopLevelWindow so initially enabled in wxMSW only to observe results
