@@ -186,6 +186,79 @@ Note (4): to create your own IDE files, copy .dsp and .dsw
 files from an existing wxWidgets sample and adapt them, or
 visit http://wiki.wxwindows.org/wiki.pl?MSVC.
 
+Microsoft Visual C++ compilation for 64-bit Windows
+----------------------------------------------------------------
+
+Visual Studio 2005 includes 64-bit compilers, though they are not installed by
+default; you need to select them during the installation. The compilers are
+32-bit hosted and you do not need a 64-bit machine to use them, just to run the
+created executables. Visual C++ Express Edition does not include 64-bit
+compilers.
+
+64-bit compilers are also available in various SDKs, for example the .NET
+Framework SDK:
+    http://msdn.microsoft.com/netframework/programming/64bit/devtools/
+
+Using project files:
+
+ FIXME: Currently only works with wxUSE_NO_MANIFEST set to 1. Also currently
+        you can't build both 32 and 64 bit versions of the same build at the
+        same time.
+
+1. Open the VC++ 6 workspace file: build\msw\wx.dsw. Visual Studio will then
+   convert the projects to the current Visual C++ project format.
+
+2. To add 64-bit targets, go to the 'Build' menu and choose 'Configuration
+   Manager...'.  In the 'Active solution platform' drop down choose '<new>',
+   then you can choose either 'Itanium' or 'x64'.
+
+   For more detailed instructions see:
+    http://msdn2.microsoft.com/en-us/library/9yb4317s(en-us,vs.80).aspx
+
+3. To build, go to the 'Build' menu and choose 'Batch Build...'. Tick all the
+   all the 'x64|Debug' or all the 'Itanium|Debug' projects, and click 'Build'.
+
+   This will build a debug version of the static libs. The section above on
+   Visual C++ in general has more information about adjusting the settings to
+   build other configurations.
+
+4. To compile one of the samples open one of the sample projects, such as
+   samples\minimal\minimal.dsw. Visual Studio will convert the project as in
+   step 1, then add a 64-bit target as in step 2, and build.
+
+Using makefiles:
+
+1. Open a 64-bit build command prompt, for either x64 or Itanium. Change
+   directory to build\msw. Then for x64 type (note upper case):
+
+    nmake -f makefile.vc TARGET_CPU=AMD64
+
+   or for Itanium:
+
+    nmake -f makefile.vc TARGET_CPU=IA64
+
+   This will build a debug version of wxWidgets DLLs. See "Configuring the
+   build" for instruction how to build other configurations such as a release
+   build or static libraries.
+
+2. Change to the directory of one of the samples such as samples\minimal. Type
+   the same command used to build the main library, for example for x64:
+
+    nmake -f makefile.vc TARGET_CPU=AMD64
+
+Notes:
+
+The versions of the VC++ 8 compiler included with some SDKs requires an
+additional library to be linked or the following error is received.
+
+    LNK2001 unresolved external symbol __security_check_cookie
+
+If you receive this error add bufferoverflowu.lib to link, e.g.:
+
+    nmake -f makefile.vc TARGET_CPU=AMD64 LDFLAGS=bufferoverflowu.lib
+
+See http://support.microsoft.com/?id=894573 for more information.
+
 Borland C++ 5.0/5.5 compilation
 ----------------------------------------------------------------
 
