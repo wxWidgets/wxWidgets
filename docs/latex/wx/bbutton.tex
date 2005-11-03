@@ -4,6 +4,7 @@ A bitmap button is a control that contains a bitmap.
 It may be placed on a \helpref{dialog box}{wxdialog} or \helpref{panel}{wxpanel}, or indeed
 almost any other window.
 
+
 \wxheading{Derived from}
 
 \helpref{wxButton}{wxbutton}\\
@@ -12,15 +13,36 @@ almost any other window.
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
 
+
 \wxheading{Include files}
 
 <wx/bmpbuttn.h>
+
 
 \wxheading{Remarks}
 
 A bitmap button can be supplied with a single bitmap, and wxWidgets will draw
 all button states using this bitmap. If the application needs more control, additional bitmaps for
 the selected state, unpressed focused state, and greyed-out state may be supplied.
+
+
+\wxheading{Button states}
+
+This class supports bitmaps for several different states:
+
+\twocolwidtha{5cm}
+\twocolitem{\windowstyle{normal}}{This is the bitmap shown in the default state,
+it must be always valid while all the other bitmaps are optional and don't have
+to be set.}
+\twocolitem{\windowstyle{disabled}}{Bitmap shown when the button is disabled.}
+\twocolitem{\windowstyle{selected}}{Bitmap shown when the button is pushed
+(e.g. while the user keeps the mouse button pressed on it)}
+\twocolitem{\windowstyle{focus}}{Bitmap shown when the button has keyboard
+focus but is not pressed.}
+\twocolitem{\windowstyle{hover}}{Bitmap shown when the mouse is over the
+button (but it is not pressed).}
+\end{twocollist}
+
 
 \wxheading{Window styles}
 
@@ -42,6 +64,7 @@ don't have any minimal standard size by default.
 
 See also \helpref{window styles overview}{windowstyles}.
 
+
 \wxheading{Event handling}
 
 \twocolwidtha{7cm}
@@ -50,11 +73,15 @@ See also \helpref{window styles overview}{windowstyles}.
 when the button is clicked.}
 \end{twocollist}
 
+
 \wxheading{See also}
 
 \helpref{wxButton}{wxbutton}
 
+
+
 \latexignore{\rtfignore{\wxheading{Members}}}
+
 
 \membersection{wxBitmapButton::wxBitmapButton}\label{wxbitmapbuttonctor}
 
@@ -107,11 +134,13 @@ Note that the bitmap passed is smaller than the actual button created.
 
 \helpref{wxBitmapButton::Create}{wxbitmapbuttoncreate}, \helpref{wxValidator}{wxvalidator}
 
+
 \membersection{wxBitmapButton::\destruct{wxBitmapButton}}\label{wxbitmapbuttondtor}
 
 \func{}{\destruct{wxBitmapButton}}{\void}
 
 Destructor, destroying the button.
+
 
 \membersection{wxBitmapButton::Create}\label{wxbitmapbuttoncreate}
 
@@ -121,11 +150,13 @@ Destructor, destroying the button.
 
 Button creation function for two-step creation. For more details, see \helpref{wxBitmapButton::wxBitmapButton}{wxbitmapbuttonctor}.
 
+
 \membersection{wxBitmapButton::GetBitmapDisabled}\label{wxbitmapbuttongetbitmapdisabled}
 
-\constfunc{wxBitmap\&}{GetBitmapDisabled}{\void}
+\constfunc{const wxBitmap\&}{GetBitmapDisabled}{\void}
+\func{wxBitmap\&}{GetBitmapDisabled}{\void}
 
-Returns the bitmap for the disabled state.
+Returns the bitmap for the disabled state, may be invalid.
 
 \wxheading{Return value}
 
@@ -135,11 +166,13 @@ A reference to the disabled state bitmap.
 
 \helpref{wxBitmapButton::SetBitmapDisabled}{wxbitmapbuttonsetbitmapdisabled}
 
+
 \membersection{wxBitmapButton::GetBitmapFocus}\label{wxbitmapbuttongetbitmapfocus}
 
-\constfunc{wxBitmap\&}{GetBitmapFocus}{\void}
+\constfunc{const wxBitmap\&}{GetBitmapFocus}{\void}
+\func{wxBitmap\&}{GetBitmapFocus}{\void}
 
-Returns the bitmap for the focused state.
+Returns the bitmap for the focused state, may be invalid.
 
 \wxheading{Return value}
 
@@ -149,11 +182,25 @@ A reference to the focused state bitmap.
 
 \helpref{wxBitmapButton::SetBitmapFocus}{wxbitmapbuttonsetbitmapfocus}
 
+
+\membersection{wxBitmapButton::GetBitmapHover}\label{wxbitmapbuttongetbitmaphover}
+
+\constfunc{const wxBitmap\&}{GetBitmapHover}{\void}
+\func{wxBitmap\&}{GetBitmapHover}{\void}
+
+Returns the bitmap used when the mouse is over the button, may be invalid.
+
+\wxheading{See also}
+
+\helpref{wxBitmapButton::SetBitmapHover}{wxbitmapbuttonsetbitmaphover}
+
+
 \membersection{wxBitmapButton::GetBitmapLabel}\label{wxbitmapbuttongetbitmaplabel}
 
-\constfunc{wxBitmap\&}{GetBitmapLabel}{\void}
+\constfunc{const wxBitmap\&}{GetBitmapLabel}{\void}
+\func{wxBitmap\&}{GetBitmapLabel}{\void}
 
-Returns the label bitmap (the one passed to the constructor).
+Returns the label bitmap (the one passed to the constructor), always valid.
 
 \wxheading{Return value}
 
@@ -163,11 +210,13 @@ A reference to the button's label bitmap.
 
 \helpref{wxBitmapButton::SetBitmapLabel}{wxbitmapbuttonsetbitmaplabel}
 
+
 \membersection{wxBitmapButton::GetBitmapSelected}\label{wxbitmapbuttongetbitmapselected}
 
 \constfunc{wxBitmap\&}{GetBitmapSelected}{\void}
+\func{wxBitmap\&}{GetBitmapSelected}{\void}
 
-Returns the bitmap for the selected state.
+Returns the bitmap for the pushed button state, may be invalid.
 
 \wxheading{Return value}
 
@@ -176,6 +225,7 @@ A reference to the selected state bitmap.
 \wxheading{See also}
 
 \helpref{wxBitmapButton::SetBitmapSelected}{wxbitmapbuttonsetbitmapselected}
+
 
 \membersection{wxBitmapButton::SetBitmapDisabled}\label{wxbitmapbuttonsetbitmapdisabled}
 
@@ -194,6 +244,7 @@ Sets the bitmap for the disabled button appearance.
 \helpref{wxBitmapButton::SetBitmapSelected}{wxbitmapbuttonsetbitmapselected},\rtfsp
 \helpref{wxBitmapButton::SetBitmapFocus}{wxbitmapbuttonsetbitmapfocus}
 
+
 \membersection{wxBitmapButton::SetBitmapFocus}\label{wxbitmapbuttonsetbitmapfocus}
 
 \func{void}{SetBitmapFocus}{\param{const wxBitmap\& }{bitmap}}
@@ -210,6 +261,19 @@ Sets the bitmap for the button appearance when it has the keyboard focus.
 \helpref{wxBitmapButton::SetBitmapLabel}{wxbitmapbuttonsetbitmaplabel},\rtfsp
 \helpref{wxBitmapButton::SetBitmapSelected}{wxbitmapbuttonsetbitmapselected},\rtfsp
 \helpref{wxBitmapButton::SetBitmapDisabled}{wxbitmapbuttonsetbitmapdisabled}
+
+
+\membersection{wxBitmapButton::SetBitmapHover}\label{wxbitmapbuttonsetbitmaphover}
+
+\func{void}{SetBitmapHover}{\param{const wxBitmap\& }{bitmap}}
+
+Sets the bitmap to be shown when the mouse is over the button.
+
+\newsince{2.7.0} and the hover bitmap is currently only supported in wxMSW. 
+
+\wxheading{See also}
+
+\helpref{wxBitmapButton::GetBitmapHover}{wxbitmapbuttongetbitmaphover}
 
 \membersection{wxBitmapButton::SetBitmapLabel}\label{wxbitmapbuttonsetbitmaplabel}
 
@@ -229,6 +293,7 @@ if no other bitmaps are provided.
 \wxheading{See also}
 
 \helpref{wxBitmapButton::GetBitmapLabel}{wxbitmapbuttongetbitmaplabel}
+
 
 \membersection{wxBitmapButton::SetBitmapSelected}\label{wxbitmapbuttonsetbitmapselected}
 

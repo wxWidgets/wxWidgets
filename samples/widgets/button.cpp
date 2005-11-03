@@ -333,6 +333,7 @@ void ButtonWidgetsPage::CreateButton()
         bbtn->SetBitmapSelected(CreateBitmap(_T("pushed")));
         bbtn->SetBitmapFocus(CreateBitmap(_T("focused")));
         bbtn->SetBitmapDisabled(CreateBitmap(_T("disabled")));
+        bbtn->SetBitmapHover(CreateBitmap(_T("hover")));
         m_button = bbtn;
     }
     else // normal button

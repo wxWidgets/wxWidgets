@@ -44,16 +44,20 @@ public:
         { m_bmpFocus = focus; OnSetBitmap(); };
     void SetBitmapDisabled(const wxBitmap& disabled)
         { m_bmpDisabled = disabled; OnSetBitmap(); };
+    void SetBitmapHover(const wxBitmap& hover)
+        { m_bmpHover = hover; OnSetBitmap(); }
 
     // retrieve the bitmaps
     const wxBitmap& GetBitmapLabel() const { return m_bmpNormal; }
     const wxBitmap& GetBitmapSelected() const { return m_bmpSelected; }
     const wxBitmap& GetBitmapFocus() const { return m_bmpFocus; }
     const wxBitmap& GetBitmapDisabled() const { return m_bmpDisabled; }
+    const wxBitmap& GetBitmapHover() const { return m_bmpHover; }
     wxBitmap& GetBitmapLabel() { return m_bmpNormal; }
     wxBitmap& GetBitmapSelected() { return m_bmpSelected; }
     wxBitmap& GetBitmapFocus() { return m_bmpFocus; }
     wxBitmap& GetBitmapDisabled() { return m_bmpDisabled; }
+    wxBitmap& GetBitmapHover() { return m_bmpHover; }
 
     // set/get the margins around the button
     virtual void SetMargins(int x, int y) { m_marginX = x; m_marginY = y; }
@@ -78,7 +82,8 @@ protected:
     wxBitmap m_bmpNormal,
              m_bmpSelected,
              m_bmpFocus,
-             m_bmpDisabled;
+             m_bmpDisabled,
+             m_bmpHover;
 
     // the margins around the bitmap
     int m_marginX,

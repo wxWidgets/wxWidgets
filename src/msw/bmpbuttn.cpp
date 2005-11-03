@@ -87,6 +87,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
 BEGIN_EVENT_TABLE(wxBitmapButton, wxBitmapButtonBase)
     EVT_SYS_COLOUR_CHANGED(wxBitmapButton::OnSysColourChanged)
+    EVT_ENTER_WINDOW(wxBitmapButton::OnMouseEnterOrLeave)
+    EVT_LEAVE_WINDOW(wxBitmapButton::OnMouseEnterOrLeave)
 END_EVENT_TABLE()
 
 /*
@@ -121,8 +123,8 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
 
     if ( style & wxBU_AUTODRAW )
     {
-        m_marginX = wxDEFAULT_BUTTON_MARGIN;
-        m_marginY = wxDEFAULT_BUTTON_MARGIN;
+        m_marginX =
+        m_marginY = 4;
     }
 
     if (id == wxID_ANY)
@@ -194,6 +196,14 @@ void wxBitmapButton::OnSysColourChanged(wxSysColourChangedEvent& event)
     event.Skip();
 }
 
+void wxBitmapButton::OnMouseEnterOrLeave(wxMouseEvent& event)
+{
+    if ( IsEnabled() && m_bmpHover.Ok() )
+        Refresh();
+
+    event.Skip();
+}
+
 // VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN
 #define FOCUS_MARGIN 3
 
@@ -217,10 +227,12 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
 
     // choose the bitmap to use depending on the button state
-    wxBitmap* bitmap;
+    wxBitmap *bitmap;
 
     if ( isSelected && m_bmpSelected.Ok() )
         bitmap = &m_bmpSelected;
+    else if ( m_bmpHover.Ok() && IsMouseInWindow() )
+        bitmap = &m_bmpHover;
     else if ((state & ODS_FOCUS) && m_bmpFocus.Ok())
         bitmap = &m_bmpFocus;
     else if ((state & ODS_DISABLED) && m_bmpDisabled.Ok())

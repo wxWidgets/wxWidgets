@@ -25,6 +25,7 @@ All (GUI):
 - Added parent window parameter to wxHelpController constructor
   and added SetParentWindow/GetParentWindow.
 - wxMultiChoiceDialog uses now wxCheckListBox if possible, wxListBox if not.
+- Added wxBitmapButton::SetHoverBitmap()
 
 wxMSW:
 

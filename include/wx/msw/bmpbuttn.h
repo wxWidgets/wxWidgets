@@ -16,9 +16,7 @@
 #include "wx/bitmap.h"
 #include "wx/brush.h"
 
-#define wxDEFAULT_BUTTON_MARGIN 4
-
-class WXDLLEXPORT wxBitmapButton: public wxBitmapButtonBase
+class WXDLLEXPORT wxBitmapButton : public wxBitmapButtonBase
 {
 public:
     wxBitmapButton() { }
@@ -58,6 +56,9 @@ protected:
     // invalidate m_brushDisabled when system colours change
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
+    // change the currently bitmap if we have a hover one
+    void OnMouseEnterOrLeave(wxMouseEvent& event);
+
 
     // the brush we use to draw disabled buttons
     wxBrush m_brushDisabled;
@@ -67,5 +68,4 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton)
 };
 
-#endif
-    // _WX_BMPBUTTN_H_
+#endif // _WX_BMPBUTTN_H_
