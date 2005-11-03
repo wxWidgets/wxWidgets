@@ -26,6 +26,8 @@ All (GUI):
   and added SetParentWindow/GetParentWindow.
 - wxMultiChoiceDialog uses now wxCheckListBox if possible, wxListBox if not.
 - Added wxBitmapButton::SetHoverBitmap()
+- Access to titles through Get/SetTitle is available now only for top level
+  windows (wxDialog, wxFrame).
 
 wxMSW:
 

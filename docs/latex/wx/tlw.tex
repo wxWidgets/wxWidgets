@@ -11,7 +11,7 @@
 
 \section{\class{wxTopLevelWindow}}\label{wxtoplevelwindow}
 
-wxTopLevelWindow is a common base class for \helpref{wxDialog}{wxdialog} and 
+wxTopLevelWindow is a common base class for \helpref{wxDialog}{wxdialog} and
 \helpref{wxFrame}{wxframe}. It is an abstract base class meaning that you never
 work with objects of this class directly, but all of its methods are also
 applicable for the two classes above.
@@ -47,7 +47,7 @@ been previously set by \helpref{SetIcon}{wxtoplevelwindowseticon}.
 \constfunc{const wxIconBundle\&}{GetIcons}{\void}
 
 Returns all icons associated with the window, there will be none of them if
-neither \helpref{SetIcon}{wxtoplevelwindowseticon} nor 
+neither \helpref{SetIcon}{wxtoplevelwindowseticon} nor
 \helpref{SetIcons}{wxtoplevelwindowseticons} had been called before.
 
 Use \helpref{GetIcon}{wxtoplevelwindowgeticon} to get the main icon of the
@@ -64,7 +64,9 @@ window.
 
 Gets a string containing the window title.
 
-See \helpref{wxTopLevelWindow::SetTitle}{wxtoplevelwindowsettitle}.
+\wxheading{See also}
+
+\helpref{wxTopLevelWindow::SetTitle}{wxtoplevelwindowsettitle}
 
 
 \membersection{wxTopLevelWindow::IsActive}\label{wxtoplevelwindowisactive}
@@ -237,7 +239,7 @@ If the platform supports it, sets the shape of the window to that
 depicted by {\it region}.  The system will not display or
 respond to any mouse event for the pixels that lie outside of the
 region.  To reset the window to the normal rectangular shape simply
-call {\it SetShape} again with an empty region.  Returns TRUE if the
+call {\it SetShape} again with an empty region.  Returns true if the
 operation is successful.
 
 
@@ -282,4 +284,3 @@ Note that showing a window full screen also actually
 \wxheading{See also}
 
 \helpref{wxTopLevelWindow::IsFullScreen}{wxtoplevelwindowisfullscreen}
-

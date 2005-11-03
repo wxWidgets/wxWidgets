@@ -3,7 +3,7 @@
 %% Purpose:     wxWindow documentation
 %% Author:      wxWidgets Team
 %% Modified by:
-%% Created:     
+%% Created:
 %% RCS-ID:      $Id$
 %% Copyright:   (c) wxWidgets Team
 %% License:     wxWindows license
@@ -140,11 +140,11 @@ Constructs a window, which can be a child of a frame, dialog or any other non-co
 
 \docparam{id}{Window identifier. If -1, will automatically create an identifier.}
 
-\docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxWidgets
+\docparam{pos}{Window position. wxDefaultPosition indicates that wxWidgets
 should generate a default position for the window. If using the wxWindow class directly, supply
 an actual position.}
 
-\docparam{size}{Window size. wxDefaultSize is (-1, -1) which indicates that wxWidgets
+\docparam{size}{Window size. wxDefaultSize indicates that wxWidgets
 should generate a default size for the window. If no suitable size can  be found, the
 window will be sized to 20x20 pixels so that the window is visible but obviously not
 correctly sized. }
@@ -1250,17 +1250,6 @@ implements the following methods:\par
  {\tt ( x, y, descent, externalLeading )}.}
 
 
-\membersection{wxWindow::GetTitle}\label{wxwindowgettitle}
-
-\func{virtual wxString}{GetTitle}{\void}
-
-Gets the window's title. Applicable only to frames and dialogs.
-
-\wxheading{See also}
-
-\helpref{wxWindow::SetTitle}{wxwindowsettitle}
-
-
 \membersection{wxWindow::GetToolTip}\label{wxwindowgettooltip}
 
 \constfunc{wxToolTip*}{GetToolTip}{\void}
@@ -1541,7 +1530,7 @@ wxWindow::Move function, which is defined in the base wxWindow class
 as the call:
 
 \begin{verbatim}
-  SetSize(x, y, -1, -1, wxSIZE_USE_EXISTING);
+  SetSize(x, y, wxDefaultCoord, wxDefaultCoord, wxSIZE_USE_EXISTING);
 \end{verbatim}
 
 \wxheading{See also}
@@ -2236,7 +2225,7 @@ In current version of wxWidgets this works both for manage and child windows.
 Causes this window, and all of its children recursively (except under wxGTK1
 where this is not implemented), to be repainted. Note that repainting doesn't
 happen immediately but only during the next event loop iteration, if you need
-to update the window immediately you should use \helpref{Update}{wxwindowupdate} 
+to update the window immediately you should use \helpref{Update}{wxwindowupdate}
 instead.
 
 \wxheading{Parameters}
@@ -2454,7 +2443,7 @@ parameter)}
 
 \wxheading{Remarks}
 
-Note that you can often use \helpref{wxScrolledWindow}{wxscrolledwindow} 
+Note that you can often use \helpref{wxScrolledWindow}{wxscrolledwindow}
 instead of using this function directly.
 
 
@@ -3123,16 +3112,16 @@ Sets the size of the window in pixels.
 
 \wxheading{Parameters}
 
-\docparam{x}{Required x position in pixels, or -1 to indicate that the existing
+\docparam{x}{Required x position in pixels, or wxDefaultCoord to indicate that the existing
 value should be used.}
 
-\docparam{y}{Required y position in pixels, or -1 to indicate that the existing
+\docparam{y}{Required y position in pixels, or wxDefaultCoord to indicate that the existing
 value should be used.}
 
-\docparam{width}{Required width in pixels, or -1 to indicate that the existing
+\docparam{width}{Required width in pixels, or wxDefaultCoord to indicate that the existing
 value should be used.}
 
-\docparam{height}{Required height position in pixels, or -1 to indicate that the existing
+\docparam{height}{Required height position in pixels, or wxDefaultCoord to indicate that the existing
 value should be used.}
 
 \docparam{size}{\helpref{wxSize}{wxsize} object for setting the size.}
@@ -3141,15 +3130,15 @@ value should be used.}
 
 \docparam{sizeFlags}{Indicates the interpretation of other parameters. It is a bit list of the following:
 
-{\bf wxSIZE\_AUTO\_WIDTH}: a $-1$ width value is taken to indicate
+{\bf wxSIZE\_AUTO\_WIDTH}: a $wxDefaultCoord$ width value is taken to indicate
 a wxWidgets-supplied default width.\\
-{\bf wxSIZE\_AUTO\_HEIGHT}: a $-1$ height value is taken to indicate
+{\bf wxSIZE\_AUTO\_HEIGHT}: a $wxDefaultCoord$ height value is taken to indicate
 a wxWidgets-supplied default width.\\
-{\bf wxSIZE\_AUTO}: -1 size values are taken to indicate
+{\bf wxSIZE\_AUTO}: $wxDefaultCoord$ size values are taken to indicate
 a wxWidgets-supplied default size.\\
 {\bf wxSIZE\_USE\_EXISTING}: existing dimensions should be used
-if -1 values are supplied.\\
-{\bf wxSIZE\_ALLOW\_MINUS\_ONE}: allow dimensions of $-1$ and less to be interpreted
+if $wxDefaultCoord$ values are supplied.\\
+{\bf wxSIZE\_ALLOW\_MINUS\_ONE}: allow negative dimensions (ie. value of $wxDefaultCoord$) to be interpreted
 as real dimensions, not default values.
 {\bf wxSIZE\_FORCE}: normally, if the position and the size of the window are
 already the same as the parameters of this function, nothing is done. but with
@@ -3163,7 +3152,7 @@ The second form is a convenience for calling the first form with default
 x and y parameters, and must be used with non-default width and height values.
 
 The first form sets the position and optionally size, of the window.
-Parameters may be -1 to indicate either that a default should be supplied
+Parameters may be $wxDefaultCoord$ to indicate either that a default should be supplied
 by wxWidgets, or that the current value of the dimension should be used.
 
 \wxheading{See also}
@@ -3273,21 +3262,6 @@ defined by a user's selected theme.
 
 Dialogs, notebook pages and the status bar have this flag set to true
 by default so that the default look and feel is simulated best.
-
-
-\membersection{wxWindow::SetTitle}\label{wxwindowsettitle}
-
-\func{virtual void}{SetTitle}{\param{const wxString\& }{title}}
-
-Sets the window's title. Applicable only to frames and dialogs.
-
-\wxheading{Parameters}
-
-\docparam{title}{The window's title.}
-
-\wxheading{See also}
-
-\helpref{wxWindow::GetTitle}{wxwindowgettitle}
 
 
 \membersection{wxWindow::SetToolTip}\label{wxwindowsettooltip}
@@ -3593,4 +3567,3 @@ Interface Guidelines forbid moving the mouse cursor programmatically.
 \docparam{x}{The new x position for the cursor.}
 
 \docparam{y}{The new y position for the cursor.}
-

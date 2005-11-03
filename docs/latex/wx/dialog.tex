@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dialog.tex
+%% Purpose:     wxDialog documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxDialog}}\label{wxdialog}
 
 A dialog box is a window with a title bar and sometimes a system menu, which
@@ -74,7 +85,7 @@ the dialog to respond to system close events.
 \twocolitem{\windowstyle{wxNO\_3D}}{Under Windows, specifies that the child controls
 should not have 3D borders unless specified in the control.}
 \twocolitem{\windowstyle{wxDIALOG\_NO\_PARENT}}{By default, a dialog created
-with a {\tt NULL} parent window will be given the 
+with a {\tt NULL} parent window will be given the
 \helpref{application's top level window}{wxappgettopwindow} as parent. Use this
 style to prevent this from happening and create an orphan dialog. This is not recommended for modal dialogs.}
 \twocolitem{\windowstyle{wxDIALOG\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
@@ -259,13 +270,6 @@ a code to the application.
 \helpref{wxDialog::EndModal}{wxdialogendmodal}
 
 
-\membersection{wxDialog::GetTitle}\label{wxdialoggettitle}
-
-\constfunc{wxString}{GetTitle}{\void}
-
-Returns the title of the dialog box.
-
-
 \membersection{wxDialog::GetToolBar}\label{wxdialoggettoolbar}
 
 \constfunc{wxToolBar*}{GetToolBar}{\void}
@@ -441,7 +445,7 @@ See also \helpref{wxIconBundle}{wxiconbundle}.
 
 \func{void}{SetModal}{\param{const bool}{ flag}}
 
-{\bf NB:} This function is deprecated and doesn't work for all ports, just use 
+{\bf NB:} This function is deprecated and doesn't work for all ports, just use
 \helpref{ShowModal}{wxdialogshowmodal} to show a modal dialog instead.
 
 Allows the programmer to specify whether the dialog box is modal (wxDialog::Show blocks control
@@ -471,17 +475,6 @@ a code to the application. The function \helpref{wxDialog::EndModal}{wxdialogend
 
 \helpref{wxDialog::GetReturnCode}{wxdialoggetreturncode}, \helpref{wxDialog::ShowModal}{wxdialogshowmodal},\rtfsp
 \helpref{wxDialog::EndModal}{wxdialogendmodal}
-
-
-\membersection{wxDialog::SetTitle}\label{wxdialogsettitle}
-
-\func{void}{SetTitle}{\param{const wxString\& }{ title}}
-
-Sets the title of the dialog box.
-
-\wxheading{Parameters}
-
-\docparam{title}{The dialog box title.}
 
 
 \membersection{wxDialog::Show}\label{wxdialogshow}
@@ -517,4 +510,3 @@ The return value is the value set with \helpref{wxDialog::SetReturnCode}{wxdialo
 \helpref{wxDialog::EndModal}{wxdialogendmodal},\rtfsp
 \helpref{wxDialog:GetReturnCode}{wxdialoggetreturncode},\rtfsp
 \helpref{wxDialog::SetReturnCode}{wxdialogsetreturncode}
-
