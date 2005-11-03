@@ -29,6 +29,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
 
+    #include "wx/bmpbuttn.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/radiobox.h"
@@ -38,6 +39,7 @@
 
 #include "wx/artprov.h"
 #include "wx/sizer.h"
+#include "wx/dcmemory.h"
 
 #include "widgets.h"
 
@@ -96,11 +98,19 @@ protected:
     // (re)create the wxButton
     void CreateButton();
 
+    // add m_button to m_sizerButton using current value of m_chkFit
+    void AddButtonToSizer();
+
+    // helper function: create a bitmap for wxBitmapButton
+    wxBitmap CreateBitmap(const wxString& label);
+
+
     // the controls
     // ------------
 
     // the check/radio boxes for styles
-    wxCheckBox *m_chkImage,
+    wxCheckBox *m_chkBitmap,
+               *m_chkImage,
                *m_chkFit,
                *m_chkDefault;
 
@@ -146,6 +156,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxBookCtrlBase *book,
     imaglist->Add(wxBitmap(button_xpm));
 
     // init everything
+    m_chkBitmap =
     m_chkImage =
     m_chkFit =
     m_chkDefault = (wxCheckBox *)NULL;
@@ -165,6 +176,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxBookCtrlBase *book,
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
+    m_chkBitmap = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Bitmap button"));
     m_chkImage = CreateCheckBoxAndAddToSizer(sizerLeft, _T("With &image"));
     m_chkFit = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Fit exactly"));
     m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Default"));
@@ -214,25 +226,24 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxBookCtrlBase *book,
                                                      _T("Change label"),
                                                      wxID_ANY,
                                                      &m_textLabel);
+    m_textLabel->SetValue(_T("&Press me!"));
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     // right pane
-    wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
-    m_button = new wxButton(this, ButtonPage_Button, _T("&Press me!"));
-    sizerRight->Add(0, 0, 1, wxCENTRE);
-    sizerRight->Add(m_button, 1, wxCENTRE);
-    sizerRight->Add(0, 0, 1, wxCENTRE);
-    sizerRight->SetMinSize(150, 0);
-    m_sizerButton = sizerRight; // save it to modify it later
+    m_sizerButton = new wxBoxSizer(wxHORIZONTAL);
+    m_sizerButton->SetMinSize(150, 0);
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
     sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(m_sizerButton, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
     Reset();
+
+    m_button = new wxButton(this, ButtonPage_Button, _T("&Press me!"));
+    AddButtonToSizer();
 
     SetSizer(sizerTop);
 
@@ -245,6 +256,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxBookCtrlBase *book,
 
 void ButtonWidgetsPage::Reset()
 {
+    m_chkBitmap->SetValue(false);
     m_chkFit->SetValue(true);
     m_chkImage->SetValue(false);
     m_chkDefault->SetValue(false);
@@ -268,9 +280,12 @@ void ButtonWidgetsPage::CreateButton()
 
         delete m_button;
     }
-    else
+
+    if ( label.empty() )
     {
-        label = _T("&Press me!");
+        // creating for the first time or recreating a button after bitmap
+        // button
+        label = m_textLabel->GetValue();
     }
 
     int flags = 0;
@@ -311,9 +326,21 @@ void ButtonWidgetsPage::CreateButton()
             break;
     }
 
-    m_button = new wxButton(this, ButtonPage_Button, label,
-                            wxDefaultPosition, wxDefaultSize,
-                            flags);
+    if ( m_chkBitmap->GetValue() )
+    {
+        wxBitmapButton *bbtn = new wxBitmapButton(this, ButtonPage_Button,
+                                                  CreateBitmap(_T("normal")));
+        bbtn->SetBitmapSelected(CreateBitmap(_T("pushed")));
+        bbtn->SetBitmapFocus(CreateBitmap(_T("focused")));
+        bbtn->SetBitmapDisabled(CreateBitmap(_T("disabled")));
+        m_button = bbtn;
+    }
+    else // normal button
+    {
+        m_button = new wxButton(this, ButtonPage_Button, label,
+                                wxDefaultPosition, wxDefaultSize,
+                                flags);
+    }
 
 #ifdef __WXUNIVERSAL__
     if ( m_chkImage->GetValue() )
@@ -327,18 +354,23 @@ void ButtonWidgetsPage::CreateButton()
         m_button->SetDefault();
     }
 
-    if ( m_chkFit->GetValue() )
-    {
-        m_sizerButton->Add(0, 0, 1, wxCENTRE);
-        m_sizerButton->Add(m_button, 1, wxCENTRE);
-        m_sizerButton->Add(0, 0, 1, wxCENTRE);
-    }
-    else
-    {
-        m_sizerButton->Add(m_button, 1, wxGROW | wxALL, 5);
-    }
+    AddButtonToSizer();
 
     m_sizerButton->Layout();
+}
+
+void ButtonWidgetsPage::AddButtonToSizer()
+{
+    if ( m_chkFit->GetValue() )
+    {
+        m_sizerButton->AddStretchSpacer(1);
+        m_sizerButton->Add(m_button, wxSizerFlags(0).Centre().Border());
+        m_sizerButton->AddStretchSpacer(1);
+    }
+    else // take up the entire space
+    {
+        m_sizerButton->Add(m_button, wxSizerFlags(1).Expand().Border());
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -365,5 +397,26 @@ void ButtonWidgetsPage::OnButtonChangeLabel(wxCommandEvent& WXUNUSED(event))
 void ButtonWidgetsPage::OnButton(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Test button clicked."));
+}
+
+// ----------------------------------------------------------------------------
+// bitmap button stuff
+// ----------------------------------------------------------------------------
+
+wxBitmap ButtonWidgetsPage::CreateBitmap(const wxString& label)
+{
+    wxBitmap bmp(180, 70); // shouldn't hardcode but it's simpler like this
+    wxMemoryDC dc;
+    dc.SelectObject(bmp);
+    dc.SetBackground(wxBrush(*wxWHITE));
+    dc.Clear();
+    dc.SetTextForeground(*wxBLUE);
+    dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetLabel()) + _T("\n")
+                    _T("(") + label + _T(" state)"),
+                 wxArtProvider::GetBitmap(wxART_INFORMATION),
+                 wxRect(10, 10, bmp.GetWidth() - 20, bmp.GetHeight() - 20),
+                 wxALIGN_CENTRE);
+
+    return bmp;
 }
 
