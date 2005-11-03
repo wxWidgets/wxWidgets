@@ -114,6 +114,12 @@ protected:
                *m_chkFit,
                *m_chkDefault;
 
+    // more checkboxes for wxBitmapButton only
+    wxCheckBox *m_chkUseSelected,
+               *m_chkUseFocused,
+               *m_chkUseHover,
+               *m_chkUseDisabled;
+
     wxRadioBox *m_radioHAlign,
                *m_radioVAlign;
 
@@ -159,7 +165,11 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxBookCtrlBase *book,
     m_chkBitmap =
     m_chkImage =
     m_chkFit =
-    m_chkDefault = (wxCheckBox *)NULL;
+    m_chkDefault =
+    m_chkUseSelected =
+    m_chkUseFocused =
+    m_chkUseHover =
+    m_chkUseDisabled = (wxCheckBox *)NULL;
 
     m_radioHAlign =
     m_radioVAlign = (wxRadioBox *)NULL;
@@ -186,7 +196,17 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxBookCtrlBase *book,
     m_chkImage->Disable();
 #endif // !wxUniv
 
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->AddSpacer(5);
+
+    wxSizer *sizerUseLabels =
+        new wxStaticBoxSizer(wxVERTICAL, this, _T("&Use the following labels?"));
+    m_chkUseSelected = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Pushed"));
+    m_chkUseFocused = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Focused"));
+    m_chkUseHover = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Hover"));
+    m_chkUseDisabled = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Disabled"));
+    sizerLeft->Add(sizerUseLabels, wxSizerFlags().Expand().Border());
+
+    sizerLeft->AddSpacer(15);
 
     // should be in sync with enums Button[HV]Align!
     static const wxString halign[] =
@@ -239,11 +259,9 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxBookCtrlBase *book,
     sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
     sizerTop->Add(m_sizerButton, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
-    // final initializations
+    // do create the main control
     Reset();
-
-    m_button = new wxButton(this, ButtonPage_Button, _T("&Press me!"));
-    AddButtonToSizer();
+    CreateButton();
 
     SetSizer(sizerTop);
 
@@ -260,6 +278,11 @@ void ButtonWidgetsPage::Reset()
     m_chkFit->SetValue(true);
     m_chkImage->SetValue(false);
     m_chkDefault->SetValue(false);
+
+    m_chkUseSelected->SetValue(true);
+    m_chkUseFocused->SetValue(true);
+    m_chkUseHover->SetValue(true);
+    m_chkUseDisabled->SetValue(true);
 
     m_radioHAlign->SetSelection(ButtonHAlign_Centre);
     m_radioVAlign->SetSelection(ButtonVAlign_Centre);
@@ -326,14 +349,19 @@ void ButtonWidgetsPage::CreateButton()
             break;
     }
 
-    if ( m_chkBitmap->GetValue() )
+    const bool isBitmapButton = m_chkBitmap->GetValue();
+    if ( isBitmapButton )
     {
         wxBitmapButton *bbtn = new wxBitmapButton(this, ButtonPage_Button,
                                                   CreateBitmap(_T("normal")));
-        bbtn->SetBitmapSelected(CreateBitmap(_T("pushed")));
-        bbtn->SetBitmapFocus(CreateBitmap(_T("focused")));
-        bbtn->SetBitmapDisabled(CreateBitmap(_T("disabled")));
-        bbtn->SetBitmapHover(CreateBitmap(_T("hover")));
+        if ( m_chkUseSelected->GetValue() )
+            bbtn->SetBitmapSelected(CreateBitmap(_T("pushed")));
+        if ( m_chkUseFocused->GetValue() )
+            bbtn->SetBitmapFocus(CreateBitmap(_T("focused")));
+        if ( m_chkUseHover->GetValue() )
+            bbtn->SetBitmapHover(CreateBitmap(_T("hover")));
+        if ( m_chkUseDisabled->GetValue() )
+            bbtn->SetBitmapDisabled(CreateBitmap(_T("disabled")));
         m_button = bbtn;
     }
     else // normal button
@@ -342,6 +370,11 @@ void ButtonWidgetsPage::CreateButton()
                                 wxDefaultPosition, wxDefaultSize,
                                 flags);
     }
+
+    m_chkUseSelected->Enable(isBitmapButton);
+    m_chkUseFocused->Enable(isBitmapButton);
+    m_chkUseHover->Enable(isBitmapButton);
+    m_chkUseDisabled->Enable(isBitmapButton);
 
 #ifdef __WXUNIVERSAL__
     if ( m_chkImage->GetValue() )
@@ -412,7 +445,7 @@ wxBitmap ButtonWidgetsPage::CreateBitmap(const wxString& label)
     dc.SetBackground(wxBrush(*wxWHITE));
     dc.Clear();
     dc.SetTextForeground(*wxBLUE);
-    dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetLabel()) + _T("\n")
+    dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetValue()) + _T("\n")
                     _T("(") + label + _T(" state)"),
                  wxArtProvider::GetBitmap(wxART_INFORMATION),
                  wxRect(10, 10, bmp.GetWidth() - 20, bmp.GetHeight() - 20),
