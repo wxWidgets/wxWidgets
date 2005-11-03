@@ -51,7 +51,9 @@ public:
     virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
 
 protected:
+    // reimplement some base class virtuals
     virtual wxSize DoGetBestSize() const;
+    virtual void OnSetBitmap();
 
     // invalidate m_brushDisabled when system colours change
     void OnSysColourChanged(wxSysColourChangedEvent& event);

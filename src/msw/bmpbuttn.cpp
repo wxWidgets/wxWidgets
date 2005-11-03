@@ -26,6 +26,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/image.h"
+#include "wx/msw/uxtheme.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -202,6 +203,26 @@ void wxBitmapButton::OnMouseEnterOrLeave(wxMouseEvent& event)
         Refresh();
 
     event.Skip();
+}
+
+void wxBitmapButton::OnSetBitmap()
+{
+    // if the focus bitmap is specified but hover one isn't, use the focus
+    // bitmap for hovering as well if this is consistent with the current
+    // Windows version look and feel
+    //
+    // rationale: this is compatible with the old wxGTK behaviour and also
+    // makes it much easier to do "the right thing" for all platforms (some of
+    // them, such as Windows XP, have "hot" buttons while others don't)
+    if ( !m_bmpHover.Ok() &&
+            m_bmpFocus.Ok() &&
+                wxUxThemeEngine::GetIfActive() )
+    {
+        m_bmpHover = m_bmpFocus;
+    }
+
+    // this will redraw us
+    wxBitmapButtonBase::OnSetBitmap();
 }
 
 // VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN
