@@ -67,7 +67,6 @@ public:
     // deprecated synonym for SetBitmapLabel()
 #if WXWIN_COMPATIBILITY_2_6
     wxDEPRECATED( void SetLabel(const wxBitmap& bitmap) );
-        { SetBitmapLabel(bitmap); }
 
     // prevent virtual function hiding
     virtual void SetLabel(const wxString& label)
@@ -94,7 +93,10 @@ protected:
 };
 
 #if WXWIN_COMPATIBILITY_2_6
-    inline void SetLabel(const wxBitmap& bitmap) { SetBitmapLabel(bitmap); }
+inline void wxBitmapButtonBase::SetLabel(const wxBitmap& bitmap)
+{
+    SetBitmapLabel(bitmap);
+}
 #endif // WXWIN_COMPATIBILITY_2_6
 
 #if defined(__WXUNIVERSAL__)
