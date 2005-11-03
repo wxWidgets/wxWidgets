@@ -168,7 +168,9 @@ public:
     // window attributes
     // -----------------
 
-#ifndef __WXMSW__
+#if !defined(__WXMSW__) && \
+    !defined(__WXMOTIF__)
+
     // FIXME: This is work in progress about moving SetTitle/GetTitle from wxWindow
     // to wxTopLevelWindow so initially enabled in wxMSW only to observe results
     // and continue on other platforms

@@ -632,17 +632,17 @@ void wxWindow::Lower()
     XLowerWindow(XtDisplay(wTop), window);
 }
 
-void wxWindow::SetTitle(const wxString& title)
+void wxWindow::SetLabel(const wxString& label)
 {
-    XtVaSetValues((Widget)GetMainWidget(), XmNtitle, title.c_str(), NULL);
+    XtVaSetValues((Widget)GetMainWidget(), XmNtitle, label.c_str(), NULL);
 }
 
-wxString wxWindow::GetTitle() const
+wxString wxWindow::GetLabel() const
 {
-    char *title;
-    XtVaGetValues((Widget)GetMainWidget(), XmNtitle, &title, NULL);
+    char *label;
+    XtVaGetValues((Widget)GetMainWidget(), XmNtitle, &label, NULL);
 
-    return wxString(title);
+    return wxString(label);
 }
 
 void wxWindow::DoCaptureMouse()
@@ -852,7 +852,7 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
 
     // Adjusting scrollbars can resize the canvas accidentally
     if (newW != oldW || newH != oldH)
-        SetSize(-1, -1, oldW, oldH);
+        SetSize(wxDefaultCoord, wxDefaultCoord, oldW, oldH);
 }
 
 // Does a physical scroll
@@ -1065,7 +1065,7 @@ void wxWindow::DoSetToolTip(wxToolTip * WXUNUSED(tooltip))
 
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {
-    if ( x == -1 && y == -1 )
+    if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
         wxPoint mouse = ScreenToClient(wxGetMousePosition());
         x = mouse.x; y = mouse.y;
@@ -1262,7 +1262,7 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
             y = oldY;
     }
 
-    wxSize size(-1, -1);
+    wxSize size(wxDefaultSize);
     if ( width <= 0 )
     {
         if ( ( sizeFlags & wxSIZE_AUTO_WIDTH ) && !fromCtor )
@@ -2546,4 +2546,3 @@ wxPoint wxGetMousePosition()
 // ----------------------------------------------------------------------------
 
 int wxNoOptimize::ms_count = 0;
-
