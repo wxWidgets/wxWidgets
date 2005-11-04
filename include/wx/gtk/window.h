@@ -49,15 +49,15 @@ public:
     // -------------------------------------------
 
     virtual void SetLabel( const wxString &label ) {}
-    virtual wxString GetLabel() const {}
+    virtual wxString GetLabel() const { return wxEmptyString; }
 
     virtual bool Destroy();
 
     virtual void Raise();
     virtual void Lower();
 
-    virtual bool Show( bool show = TRUE );
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Show( bool show = true );
+    virtual bool Enable( bool enable = true );
 
     virtual bool IsRetained() const;
 
@@ -68,7 +68,7 @@ public:
 
     virtual void WarpPointer(int x, int y);
 
-    virtual void Refresh( bool eraseBackground = TRUE,
+    virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
     virtual void Update();
     virtual void ClearBackground();
@@ -94,8 +94,8 @@ public:
 #endif // wxUSE_MENUS_NATIVE
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
-                               int range, bool refresh = TRUE );
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
+                               int range, bool refresh = true );
+    virtual void SetScrollPos( int orient, int pos, bool refresh = true );
     virtual int GetScrollPos( int orient ) const;
     virtual int GetScrollThumb( int orient ) const;
     virtual int GetScrollRange( int orient ) const;
@@ -183,7 +183,7 @@ public:
     // Called from GTK signales handlers. it indicates that
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
-    void GtkUpdateSize() { m_sizeSet = FALSE; }
+    void GtkUpdateSize() { m_sizeSet = false; }
 
     // fix up the mouse event coords, used by wxListBox only so far
     virtual void FixUpMouseEvent(GtkWidget * WXUNUSED(widget),
@@ -191,10 +191,10 @@ public:
                                  wxCoord& WXUNUSED(y)) { }
 
     // is this window transparent for the mouse events (as wxStaticBox is)?
-    virtual bool IsTransparentForMouse() const { return FALSE; }
+    virtual bool IsTransparentForMouse() const { return false; }
 
     // is this a radiobutton (used by radiobutton code itself only)?
-    virtual bool IsRadioButton() const { return FALSE; }
+    virtual bool IsRadioButton() const { return false; }
 
     // position and size of the window
     int                  m_x, m_y;
@@ -240,7 +240,7 @@ public:
     bool                 m_acceptsFocus:1;      // true if not static
     bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
-    bool                 m_clipPaintRegion:1;   // TRUE after ScrollWindow()
+    bool                 m_clipPaintRegion:1;   // true after ScrollWindow()
 #ifdef __WXGTK20__
     bool                 m_dirtyTabOrder:1;     // tab order changed, GTK focus
                                                 // chain needs update
@@ -293,7 +293,7 @@ protected:
     // Overridden in many GTK widgets who have to handle subwidgets
     virtual void ApplyWidgetStyle(bool forceStyle = false);
 
-    // helper function to ease native widgets wrapping, called by 
+    // helper function to ease native widgets wrapping, called by
     // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
