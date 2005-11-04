@@ -155,6 +155,7 @@ public:
     virtual bool IsFullScreen() const = 0;
 
 #if defined(__WXMSW__) || \
+    defined(__WXMGL__) || \
     defined(__WXMOTIF__) || \
     defined(__WXGTK__)
 

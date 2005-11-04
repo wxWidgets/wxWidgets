@@ -169,6 +169,7 @@ public:
     // -----------------
 
 #if !defined(__WXMSW__) && \
+    !defined(__WXMGL__) && \
     !defined(__WXMOTIF__) && \
     !defined(__WXGTK__)
 

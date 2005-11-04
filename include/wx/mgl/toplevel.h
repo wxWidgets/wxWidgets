@@ -43,16 +43,16 @@ public:
     virtual ~wxTopLevelWindowMGL();
 
     // implement base class pure virtuals
-    virtual void Maximize(bool maximize = TRUE);
+    virtual void Maximize(bool maximize = true);
     virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = TRUE);
+    virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
     virtual void Restore();
 
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
     virtual void SetTitle(const wxString &title) { m_title = title; }
     virtual wxString GetTitle() const { return m_title; }
