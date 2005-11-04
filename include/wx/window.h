@@ -169,7 +169,8 @@ public:
     // -----------------
 
 #if !defined(__WXMSW__) && \
-    !defined(__WXMOTIF__)
+    !defined(__WXMOTIF__) && \
+    !defined(__WXGTK__)
 
     // FIXME: This is work in progress about moving SetTitle/GetTitle from wxWindow
     // to wxTopLevelWindow so initially enabled in wxMSW only to observe results

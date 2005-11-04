@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        toplevel.cpp
+// Name:        src/gtk/toplevel.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -371,7 +371,7 @@ gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
                           GdkEvent * WXUNUSED(event),
                           wxTopLevelWindow *win )
 {
-    win->SetIconizeState(TRUE);
+    win->SetIconizeState(true);
 }
 }
 
@@ -704,7 +704,7 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
     if (m_grabbed)
     {
-        wxASSERT_MSG( FALSE, _T("Window still grabbed"));
+        wxASSERT_MSG( false, _T("Window still grabbed"));
         RemoveGrab();
     }
 
@@ -1130,7 +1130,11 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
+    if ( title == m_title )
+        return;
+
     m_title = title;
+
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
 }
 

@@ -43,9 +43,9 @@ public:
     virtual ~wxTopLevelWindowGTK();
 
     // implement base class pure virtuals
-    virtual void Maximize(bool maximize = TRUE);
+    virtual void Maximize(bool maximize = true);
     virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = TRUE);
+    virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
     virtual void SetIcon(const wxIcon& icon);
     virtual void SetIcons(const wxIconBundle& icons);
@@ -58,7 +58,7 @@ public:
 
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
     virtual void Raise();
 
@@ -87,7 +87,6 @@ public:
     // do *not* call this to iconize the frame, this is a private function!
     void SetIconizeState(bool iconic);
 
-    wxString      m_title;
     int           m_miniEdge,
                   m_miniTitle;
     GtkWidget    *m_mainWidget;
@@ -117,6 +116,8 @@ protected:
 
     virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize( int *width, int *height ) const;
+
+    wxString      m_title;
 
     // is the frame currently iconized?
     bool m_isIconized;
