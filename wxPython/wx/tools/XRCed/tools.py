@@ -15,7 +15,7 @@ GROUPNUM = 4
 GROUP_WINDOWS, GROUP_MENUS, GROUP_SIZERS, GROUP_CONTROLS = range(GROUPNUM)
 
 # States depending on current selection and Control/Shift keys
-STATE_ROOT, STATE_MENUBAR, STATE_TOOLBAR, STATE_MENU, STATE_ELSE = range(5)
+STATE_ROOT, STATE_MENUBAR, STATE_TOOLBAR, STATE_MENU, STATE_STDDLGBTN, STATE_ELSE = range(6)
 
 # Left toolbar for GUI elements
 class Tools(wxPanel):
@@ -210,6 +210,8 @@ class Tools(wxPanel):
                 state = STATE_TOOLBAR
             elif xxx.__class__ in [xxxMenu, xxxMenuItem]:
                 state = STATE_MENU
+            elif xxx.__class__ == xxxStdDialogButtonSizer:
+                state = STATE_STDDLGBTN
             else:
                 state = STATE_ELSE
 
@@ -228,6 +230,8 @@ class Tools(wxPanel):
                                         ID_NEW.MENU_ITEM,
                                         ID_NEW.SEPARATOR ],
                                       False)
+            if state == STATE_STDDLGBTN:
+                pass                    # nothing can be added from toolbar
             elif state == STATE_MENUBAR:
                 self.EnableGroup(GROUP_MENUS)
                 self.EnableGroupItems(GROUP_MENUS,

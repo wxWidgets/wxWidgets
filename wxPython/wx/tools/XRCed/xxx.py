@@ -452,7 +452,7 @@ class xxxToolBar(xxxContainer):
                  'pos', 'size', 'style']
     hasStyle = False
     paramDict = {'bitmapsize': ParamPosSize, 'margins': ParamPosSize,
-                 'packing': ParamInt, 'separation': ParamInt,
+                 'packing': ParamUnit, 'separation': ParamUnit,
                  'dontattachtoframe': ParamBool, 'style': ParamNonGenericStyle}
     winStyles = ['wxTB_FLAT', 'wxTB_DOCKABLE', 'wxTB_VERTICAL', 'wxTB_HORIZONTAL',
                  'wxTB_3DBUTTONS','wxTB_TEXT', 'wxTB_NOICONS', 'wxTB_NODIVIDER',
@@ -519,8 +519,8 @@ class xxxSlider(xxxObject):
     allParams = ['value', 'min', 'max', 'pos', 'size', 'style',
                  'tickfreq', 'pagesize', 'linesize', 'thumb', 'tick',
                  'selmin', 'selmax']
-    paramDict = {'value': ParamInt, 'tickfreq': ParamInt, 'pagesize': ParamInt,
-                 'linesize': ParamInt, 'thumb': ParamInt, 'thumb': ParamInt,
+    paramDict = {'value': ParamInt, 'tickfreq': ParamIntNN, 'pagesize': ParamIntNN,
+                 'linesize': ParamIntNN, 'thumb': ParamUnit, 
                  'tick': ParamInt, 'selmin': ParamInt, 'selmax': ParamInt}
     required = ['value', 'min', 'max']
     winStyles = ['wxSL_HORIZONTAL', 'wxSL_VERTICAL', 'wxSL_AUTOTICKS', 'wxSL_LABELS',
@@ -529,14 +529,14 @@ class xxxSlider(xxxObject):
 
 class xxxGauge(xxxObject):
     allParams = ['range', 'pos', 'size', 'style', 'value', 'shadow', 'bezel']
-    paramDict = {'range': ParamInt, 'value': ParamInt,
-                 'shadow': ParamInt, 'bezel': ParamInt}
+    paramDict = {'range': ParamIntNN, 'value': ParamIntNN,
+                 'shadow': ParamIntNN, 'bezel': ParamIntNN}
     winStyles = ['wxGA_HORIZONTAL', 'wxGA_VERTICAL', 'wxGA_PROGRESSBAR', 'wxGA_SMOOTH']
 
 class xxxScrollBar(xxxObject):
     allParams = ['pos', 'size', 'style', 'value', 'thumbsize', 'range', 'pagesize']
-    paramDict = {'value': ParamInt, 'range': ParamInt, 'thumbsize': ParamInt,
-                 'pagesize': ParamInt}
+    paramDict = {'value': ParamIntNN, 'range': ParamIntNN, 'thumbsize': ParamIntNN,
+                 'pagesize': ParamIntNN}
     winStyles = ['wxSB_HORIZONTAL', 'wxSB_VERTICAL']
 
 class xxxListCtrl(xxxObject):
@@ -553,7 +553,7 @@ class xxxTreeCtrl(xxxObject):
 
 class xxxHtmlWindow(xxxObject):
     allParams = ['pos', 'size', 'style', 'borders', 'url', 'htmlcode']
-    paramDict = {'borders': ParamInt, 'htmlcode':ParamMultilineText}
+    paramDict = {'borders': ParamUnit, 'htmlcode':ParamMultilineText}
     winStyles = ['wxHW_SCROLLBAR_NEVER', 'wxHW_SCROLLBAR_AUTO']
 
 class xxxCalendarCtrl(xxxObject):
@@ -573,7 +573,7 @@ class xxxSplitterWindow(xxxContainer):
 
 class xxxGenericDirCtrl(xxxObject):
     allParams = ['defaultfolder', 'filter', 'defaultfilter', 'pos', 'size', 'style']
-    paramDict = {'defaultfilter': ParamInt}
+    paramDict = {'defaultfilter': ParamIntNN}
     winStyles = ['wxDIRCTRL_DIR_ONLY', 'wxDIRCTRL_3D_INTERNAL', 'wxDIRCTRL_SELECT_FIRST',
                  'wxDIRCTRL_SHOW_FILTERS', 'wxDIRCTRL_EDIT_LABELS']
 
@@ -627,7 +627,7 @@ class xxxStaticBox(xxxObject):
 
 class xxxRadioBox(xxxObject):
     allParams = ['label', 'content', 'selection', 'dimension', 'pos', 'size', 'style']
-    paramDict = {'dimension': ParamInt}
+    paramDict = {'dimension': ParamIntNN}
     required = ['label', 'content']
     default = {'content': '[]'}
     winStyles = ['wxRA_SPECIFY_ROWS', 'wxRA_SPECIFY_COLS']
@@ -845,7 +845,6 @@ class xxxSeparator(xxxObject):
 
 class xxxUnknown(xxxObject):
     allParams = ['pos', 'size', 'style']
-    paramDict = {'style': ParamNonGenericStyle}    # no generic styles
 
 ################################################################################
 

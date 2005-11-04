@@ -74,7 +74,10 @@ class ParamBinaryOr(PPanel):
         self.freeze = False
     def OnButtonChoices(self, evt):
         dlg = g.frame.res.LoadDialog(self, 'DIALOG_CHOICES')
-        listBox = XRCCTRL(dlg, 'CHECK_LIST')
+        if self.GetName() == 'flag':  dlg.SetTitle('Sizer item flags')
+        elif self.GetName() == 'style':  dlg.SetTitle('Window styles')
+        elif self.GetName() == 'exstyle':  dlg.SetTitle('Extended window styles')
+        listBox = XRCCTRL(dlg, 'CHECKLIST')
         listBox.InsertItems(self.values, 0)
         value = map(string.strip, self.text.GetValue().split('|'))
         if value == ['']: value = []
@@ -116,16 +119,67 @@ class ParamFlag(ParamBinaryOr):
     def __init__(self, parent, name):
         ParamBinaryOr.__init__(self, parent, name)
 
-class ParamStyle(ParamBinaryOr):
-    equal = {'wxALIGN_CENTER': 'wxALIGN_CENTRE'}
-    def __init__(self, parent, name):
-        self.values = g.currentXXX.winStyles + genericStyles
-        ParamBinaryOr.__init__(self, parent, name)
-
 class ParamNonGenericStyle(ParamBinaryOr):
     def __init__(self, parent, name):
         self.values = g.currentXXX.winStyles
         ParamBinaryOr.__init__(self, parent, name)
+
+class ParamStyle(ParamBinaryOr):
+    equal = {'wxALIGN_CENTER': 'wxALIGN_CENTRE'}
+    def __init__(self, parent, name):
+        ParamBinaryOr.__init__(self, parent, name)
+        self.valuesSpecific = g.currentXXX.winStyles
+        if self.valuesSpecific:         # override if using specific styles
+            # Remove duplicates
+            self.valuesGeneric = [s for s in genericStyles
+                                  if s not in self.valuesSpecific]
+            EVT_BUTTON(self, self.ID_BUTTON_CHOICES, self.OnButtonChoicesBoth)
+        else:
+            self.values = genericStyles
+    def OnButtonChoicesBoth(self, evt):
+        dlg = g.frame.res.LoadDialog(self, 'DIALOG_STYLES')
+        listBoxSpecific = XRCCTRL(dlg, 'CHECKLIST_SPECIFIC')
+        listBoxSpecific.InsertItems(self.valuesSpecific, 0)
+        listBoxGeneric = XRCCTRL(dlg, 'CHECKLIST_GENERIC')
+        listBoxGeneric.InsertItems(self.valuesGeneric, 0)
+        value = map(string.strip, self.text.GetValue().split('|'))
+        if value == ['']: value = []
+        # Set specific styles
+        value2 = []                     # collect generic and ignored here
+        for i in value:
+            try:
+                listBoxSpecific.Check(self.valuesSpecific.index(i))
+            except ValueError:
+                # Try to find equal
+                if self.equal.has_key(i):
+                    listBoxSpecific.Check(self.valuesSpecific.index(self.equal[i]))
+                else:
+                    value2.append(i)
+        ignored = []
+        # Set generic styles, collect non-standart values
+        for i in value2:
+            try:
+                listBoxGeneric.Check(self.valuesGeneric.index(i))
+            except ValueError:
+                # Try to find equal
+                if self.equal.has_key(i):
+                    listBoxGeneric.Check(self.valuesGeneric.index(self.equal[i]))
+                else:
+                    print 'WARNING: unknown flag: %s: ignored.' % i
+                    ignored.append(i)
+        if dlg.ShowModal() == wxID_OK:
+            value = [self.valuesSpecific[i]
+                     for i in range(listBoxSpecific.GetCount())
+                     if listBoxSpecific.IsChecked(i)] + \
+                     [self.valuesGeneric[i]
+                      for i in range(listBoxGeneric.GetCount())
+                      if listBoxGeneric.IsChecked(i)] + ignored
+            if value:
+                self.SetValue(reduce(lambda a,b: a+'|'+b, value))
+            else:
+                self.SetValue('')
+            self.SetModified()
+        dlg.Destroy()
 
 class ParamExStyle(ParamBinaryOr):
     def __init__(self, parent, name):
@@ -134,6 +188,7 @@ class ParamExStyle(ParamBinaryOr):
         else:
             self.values = []
         ParamBinaryOr.__init__(self, parent, name)
+        self.SetTitle('Extended window styles')
 
 class ParamColour(PPanel):
     def __init__(self, parent, name):
@@ -284,7 +339,6 @@ class ParamFont(PPanel):
                      font.GetFaceName().encode(),
                      encName
                      ]
-            # Add ignored flags
             self.SetValue(value)
             self.SetModified()
             self.textModified = False
@@ -297,7 +351,29 @@ class ParamInt(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_SPIN_CTRL = wxNewId()
         sizer = wxBoxSizer()
-        self.spin = wxSpinCtrl(self, self.ID_SPIN_CTRL, size=(50,-1))
+        self.spin = wxSpinCtrl(self, self.ID_SPIN_CTRL, size=(60,-1))
+        self.spin.SetRange(-2147483648, 2147483647) # min/max integers
+        sizer.Add(self.spin)
+        self.SetAutoLayout(True)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+        EVT_SPINCTRL(self, self.ID_SPIN_CTRL, self.OnChange)
+    def GetValue(self):
+        return str(self.spin.GetValue())
+    def SetValue(self, value):
+        self.freeze = True
+        if not value: value = 0
+        self.spin.SetValue(int(value))
+        self.freeze = False
+
+# Non-negative number
+class ParamIntNN(PPanel):
+    def __init__(self, parent, name):
+        PPanel.__init__(self, parent, name)
+        self.ID_SPIN_CTRL = wxNewId()
+        sizer = wxBoxSizer()
+        self.spin = wxSpinCtrl(self, self.ID_SPIN_CTRL, size=(60,-1))
+        self.spin.SetRange(0, 10000) # min/max integers
         sizer.Add(self.spin)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
@@ -317,12 +393,14 @@ class ParamUnit(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_SPIN_BUTTON = wxNewId()
-        sizer = wxBoxSizer()
-        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(35,-1))
+        sizer = wxBoxSizer(wxHORIZONTAL)
         self.spin = wxSpinButton(self, self.ID_SPIN_BUTTON, style = wxSP_VERTICAL, size=(-1,1))
+        textW = 60 - self.spin.GetSize()[0]
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(textW,-1))
         self.spin.SetRange(-10000, 10000)
-        sizer.Add(self.text, 0, wxEXPAND | wxRIGHT, 2)
+        sizer.Add(self.text, 0, wxEXPAND)
         sizer.Add(self.spin, 0, wxEXPAND)
+        #sizer.SetMinSize((50,-1))
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -476,10 +554,10 @@ class ContentDialog(wxDialog):
 class ContentCheckListDialog(wxDialog):
     def __init__(self, parent, value):
         pre = wxPreDialog()
-        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECK_LIST')
+        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECKLIST')
         self.this = pre.this
         self._setOORInfo(self)
-        self.list = XRCCTRL(self, 'CHECK_LIST')
+        self.list = XRCCTRL(self, 'CHECKLIST')
         # Set list items
         i = 0
         for v,ch in value:
@@ -577,7 +655,6 @@ class ParamContent(PPanel):
             value = []
             for i in range(dlg.list.GetCount()):
                 value.append(dlg.list.GetString(i))
-            # Add ignored flags
             self.SetValue(value)
             self.SetModified()
             self.textModified = False
@@ -599,7 +676,6 @@ class ParamContentCheckList(ParamContent):
             value = []
             for i in range(dlg.list.GetCount()):
                 value.append((dlg.list.GetString(i), int(dlg.list.IsChecked(i))))
-            # Add ignored flags
             self.SetValue(value)
             self.SetModified()
             self.textModified = False
@@ -622,17 +698,16 @@ class IntListDialog(wxDialog):
         self.SetAutoLayout(True)
         self.GetSizer().Fit(self)
         # Callbacks
-        self.ID_BUTTON_ADD = XRCID('BUTTON_ADD')
+        self.spinCtrl = XRCCTRL(self, 'SPIN')
+        EVT_BUTTON(self, XRCID('BUTTON_ADD'), self.OnButtonAdd)
         self.ID_BUTTON_REMOVE = XRCID('BUTTON_REMOVE')
-        EVT_BUTTON(self, self.ID_BUTTON_ADD, self.OnButtonAppend)
         EVT_BUTTON(self, self.ID_BUTTON_REMOVE, self.OnButtonRemove)
+        EVT_BUTTON(self, XRCID('BUTTON_CLEAR'), self.OnButtonClear)
         EVT_UPDATE_UI(self, self.ID_BUTTON_REMOVE, self.OnUpdateUI)
-    def OnButtonAppend(self, evt):
-        s = wxGetTextFromUser('Enter new number:', 'Add', '', self)
-        if not s: return
+    def OnButtonAdd(self, evt):
         # Check that it's unique
         try:
-            v = int(s)
+            v = self.spinCtrl.GetValue()
             s = str(v)                  # to be sure
             i = self.list.FindString(s)
             if i == -1:                 # ignore non-unique
@@ -648,6 +723,8 @@ class IntListDialog(wxDialog):
             wxLogError('List item is not an int!')
     def OnButtonRemove(self, evt):
         self.list.Delete(self.list.GetSelection())
+    def OnButtonClear(self, evt):
+        self.list.Clear()
     def OnUpdateUI(self, evt):
         if evt.GetId() == self.ID_BUTTON_REMOVE:
             evt.Enable(self.list.GetSelection() != -1)
@@ -668,7 +745,6 @@ class ParamIntList(ParamContent):
             value = []
             for i in range(dlg.list.GetCount()):
                 value.append(int(dlg.list.GetString(i)))
-            # Add ignored flags
             self.SetValue(value)
             self.SetModified()
             self.textModified = False
@@ -865,12 +941,12 @@ paramDict = {
     'style': ParamStyle, 'exstyle': ParamExStyle,
     'pos': ParamPosSize, 'size': ParamPosSize,
     'cellpos': ParamPosSize, 'cellspan': ParamPosSize,
-    'border': ParamUnit, 'cols': ParamInt, 'rows': ParamInt,
+    'border': ParamUnit, 'cols': ParamIntNN, 'rows': ParamIntNN,
     'vgap': ParamUnit, 'hgap': ParamUnit,
     'checkable': ParamBool, 'checked': ParamBool, 'radio': ParamBool,
     'accel': ParamAccel,
     'label': ParamMultilineText, 'title': ParamText, 'value': ParamText,
-    'content': ParamContent, 'selection': ParamInt,
+    'content': ParamContent, 'selection': ParamIntNN,
     'min': ParamInt, 'max': ParamInt,
     'fg': ParamColour, 'bg': ParamColour, 'font': ParamFont,
     'enabled': ParamBool, 'focused': ParamBool, 'hidden': ParamBool,
