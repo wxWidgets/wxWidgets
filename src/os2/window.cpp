@@ -574,15 +574,15 @@ void wxWindowOS2::Lower()
     ::WinSetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_ZORDER | SWP_DEACTIVATE);
 } // end of wxWindowOS2::Lower
 
-void wxWindowOS2::SetTitle( const wxString& rTitle )
+void wxWindowOS2::SetLabel( const wxString& label )
 {
-    ::WinSetWindowText(GetHwnd(), (PSZ)rTitle.c_str());
-} // end of wxWindowOS2::SetTitle
+    ::WinSetWindowText(GetHwnd(), (PSZ)label.c_str());
+} // end of wxWindowOS2::SetLabel
 
-wxString wxWindowOS2::GetTitle() const
+wxString wxWindowOS2::GetLabel() const
 {
     return wxGetWindowText(GetHWND());
-} // end of wxWindowOS2::GetTitle
+} // end of wxWindowOS2::GetLabel
 
 void wxWindowOS2::DoCaptureMouse()
 {
@@ -593,7 +593,7 @@ void wxWindowOS2::DoCaptureMouse()
         ::WinSetCapture(HWND_DESKTOP, hWnd);
         m_bWinCaptured = true;
     }
-} // end of wxWindowOS2::GetTitle
+} // end of wxWindowOS2::DoCaptureMouse
 
 void wxWindowOS2::DoReleaseMouse()
 {

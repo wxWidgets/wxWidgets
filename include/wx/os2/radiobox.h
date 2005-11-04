@@ -158,16 +158,16 @@ public:
            virtual void     SetString( int             nNum
                                       ,const wxString& rsLabel
                                      );
-           virtual bool     SetStringSelection(const wxString& rsStr);
+    virtual bool SetStringSelection(const wxString& rsStr);
 
-                   void     SetLabel( int             nItem
-                                     ,const wxString& rsLabel
-                                    );
-                   void     SetLabel( int       item
-                                     ,wxBitmap* pBitmap
-                                    );
-                   wxString GetLabel(int nItem) const;
+    virtual void SetLabel(const wxString& rsLabel)
+        { wxControl::SetLabel(rsLabel); }
+    virtual wxString GetLabel() const
+        { return wxControl::GetLabel(); }
 
+    void SetLabel( int nItem, const wxString& rsLabel );
+    void SetLabel( int item, wxBitmap* pBitmap );
+    wxString GetLabel(int nItem) const;
 
 protected:
     virtual wxSize DoGetBestSize(void) const;
@@ -177,28 +177,23 @@ protected:
                              ,int nHeight
                              ,int nSizeFlags = wxSIZE_AUTO
                             );
-    wxSize         GetMaxButtonSize(void) const;
-    wxSize         GetTotalButtonSize(const wxSize& rSizeBtn) const;
-    void           SubclassRadioButton(WXHWND hWndBtn);
+    wxSize GetMaxButtonSize(void) const;
+    wxSize GetTotalButtonSize(const wxSize& rSizeBtn) const;
+    void   SubclassRadioButton(WXHWND hWndBtn);
 
 
-    WXHWND*                         m_ahRadioButtons;
-    int                             m_nMajorDim ;
-    int*                            m_pnRadioWidth;  // for bitmaps
-    int*                            m_pnRadioHeight;
-    int                             m_nNoItems;
-    int                             m_nNoRowsOrCols;
-    int                             m_nSelectedButton;
-    int                             m_nSizeFlags;
+    WXHWND* m_ahRadioButtons;
+    int     m_nMajorDim ;
+    int*    m_pnRadioWidth;  // for bitmaps
+    int*    m_pnRadioHeight;
+    int     m_nNoItems;
+    int     m_nNoRowsOrCols;
+    int     m_nSelectedButton;
+    int     m_nSizeFlags;
 
 private:
-    inline wxString GetLabel() const
-    { return wxWindowBase::GetLabel(); }
-    inline void     SetLabel(const wxString& rsLabel)
-    { wxWindowBase::SetLabel(rsLabel); }
 
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 }; // end of wxRadioBox
 
-#endif
-    // _WX_RADIOBOX_H_
+#endif // _WX_RADIOBOX_H_

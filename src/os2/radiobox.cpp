@@ -376,16 +376,16 @@ bool wxRadioBox::Create(
     //
     // Create a dummy radio control to end the group.
     //
-    (void)::WinCreateWindow ( GetHwndOf(pParent)
-                             ,WC_BUTTON
-                             ,""
-                             ,WS_GROUP | BS_AUTORADIOBUTTON
-                             ,0, 0, 0, 0
-                             ,GetWinHwnd(pParent)
-                             ,HWND_TOP
-                             ,(HMENU)NewControlId()
-                             ,NULL
-                             ,NULL
+    (void)::WinCreateWindow ( GetHwndOf(pParent),
+                              WC_BUTTON,
+                              "",
+                              WS_GROUP | BS_AUTORADIOBUTTON,
+                              0, 0, 0, 0,
+                              GetWinHwnd(pParent),
+                              HWND_TOP,
+                              (HMENU)NewControlId(),
+                              NULL,
+                              NULL
                             );
     SetFont(*wxSMALL_FONT);
     fnWndProcRadioBox = (WXFARPROC)::WinSubclassWindow( GetHwnd()
@@ -824,10 +824,7 @@ int wxRadioBox::GetSelection() const
     return m_nSelectedButton;
 } // end of wxRadioBox::GetSelection
 
-void wxRadioBox::GetSize(
-  int*                              pnWidth
-, int*                              pnHeight
-) const
+void wxRadioBox::GetSize( int* pnWidth, int* pnHeight ) const
 {
     RECT                            vRect;
     int                             i;
@@ -891,10 +888,7 @@ wxSize wxRadioBox::GetTotalButtonSize( const wxSize& rSizeBtn ) const
     //
     // And also wide enough for its label
     //
-    GetTextExtent( GetTitle()
-                  ,&nWidthLabel
-                  ,NULL
-                 );
+    GetTextExtent( GetLabel(), &nWidthLabel, NULL );
     nWidthLabel += RADIO_SIZE;
     if (nWidthLabel > nWidth)
         nWidth = nWidthLabel;
@@ -1184,17 +1178,14 @@ MRESULT wxRadioBtnWndProc(
                             );
 } // end of wxRadioBtnWndProc
 
-MRESULT EXPENTRY wxRadioBoxWndProc(
-  HWND                              hWnd
-, UINT                              uMessage
-, MPARAM                            wParam
-, MPARAM                            lParam
-)
+MRESULT EXPENTRY wxRadioBoxWndProc( HWND hWnd,
+                                    UINT uMessage,
+                                    MPARAM wParam,
+                                    MPARAM lParam )
 {
-    return (fnWndProcRadioBox( hWnd
-                              ,(ULONG)uMessage
-                              ,(MPARAM)wParam
-                              ,(MPARAM)lParam
-                             )
+    return (fnWndProcRadioBox( hWnd,
+                               (ULONG)uMessage,
+                               (MPARAM)wParam,
+                               (MPARAM)lParam )
            );
 } // end of wxRadioBoxWndProc

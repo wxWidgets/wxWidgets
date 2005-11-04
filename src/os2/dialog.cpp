@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dialog.cpp
+// Name:        src/os2/dialog.cpp
 // Purpose:     wxDialog class
 // Author:      David Webster
 // Modified by:
@@ -83,7 +83,7 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData);
 void wxDialog::Init()
 {
     m_pOldFocus = (wxWindow *)NULL;
-    m_isShown = FALSE;
+    m_isShown = false;
     m_pWindowDisabler = (wxWindowDisabler *)NULL;
     m_modalData = NULL;
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
@@ -227,9 +227,7 @@ wxWindow *wxDialog::FindSuitableParent() const
     return parent;
 }
 
-bool wxDialog::Show(
-  bool                              bShow
-)
+bool wxDialog::Show( bool bShow )
 {
     if ( bShow == IsShown() )
         return false;
@@ -261,8 +259,9 @@ bool wxDialog::Show(
 
     wxDialogBase::Show(bShow);
 
-    if (GetTitle().c_str())
-        ::WinSetWindowText((HWND)GetHwnd(), (PSZ)GetTitle().c_str());
+    wxString title = GetTitle();
+    if (!title.empty())
+        ::WinSetWindowText((HWND)GetHwnd(), (PSZ)title.c_str());
 
     if ( bShow )
     {
@@ -322,7 +321,7 @@ int wxDialog::ShowModal()
         extern bool                     gbInOnIdle;
         bool                            bWasInOnIdle = gbInOnIdle;
 
-        gbInOnIdle = FALSE;
+        gbInOnIdle = false;
 
         // enter and run the modal loop
         {
@@ -432,14 +431,10 @@ void wxDialog::OnSysColourChanged( wxSysColourChangedEvent& WXUNUSED(rEvent) )
     Refresh();
 } // end of wxDialog::OnSysColourChanged
 
-MRESULT wxDialog::OS2WindowProc(
-  WXUINT                            uMessage
-, WXWPARAM                          wParam
-, WXLPARAM                          lParam
-)
+MRESULT wxDialog::OS2WindowProc( WXUINT uMessage, WXWPARAM wParam, WXLPARAM lParam )
 {
-    MRESULT                         rc = 0;
-    bool                            bProcessed = FALSE;
+    MRESULT  rc = 0;
+    bool     bProcessed = false;
 
     switch (uMessage)
     {

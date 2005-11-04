@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        window.h
+// Name:        wx/os2/window.h
 // Purpose:     wxWindow class
 // Author:      David Webster
 // Modified by:
@@ -90,8 +90,8 @@ public:
                );
 
     // implement base class pure virtuals
-    virtual void     SetTitle(const wxString& rTitle);
-    virtual wxString GetTitle(void) const;
+    virtual void     SetLabel(const wxString& label);
+    virtual wxString GetLabel(void) const;
     virtual void     Raise(void);
     virtual void     Lower(void);
     virtual bool     Show(bool bShow = true);
@@ -587,5 +587,4 @@ WX_DECLARE_HASH(wxWindowOS2, wxWindowList, wxWinHashTable);
 
 extern wxWinHashTable *wxWinHandleHash;
 
-#endif
-    // _WX_WINDOW_H_
+#endif // _WX_WINDOW_H_

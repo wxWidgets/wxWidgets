@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        control.h
+// Name:        wx/os2/control.h
 // Purpose:     wxControl class
 // Author:      David Webster
 // Modified by:
@@ -30,14 +30,7 @@ public:
              ,const wxString&    rsName = wxControlNameStr
             )
     {
-        Create( pParent
-               ,vId
-               ,rPos
-               ,rSize
-               ,lStyle
-               ,rValidator
-               ,rsName
-              );
+        Create( pParent, vId, rPos, rSize, lStyle, rValidator, rsName );
     }
     virtual ~wxControl();
 
@@ -51,6 +44,7 @@ public:
                );
 
     virtual void SetLabel(const wxString& rsLabel);
+    virtual wxString GetLabel() const { return m_label; }
 
     //
     // Simulates an event
@@ -70,7 +64,7 @@ public:
     //
     // For ownerdraw items
     //
-    virtual bool OS2OnDraw(WXDRAWITEMSTRUCT* WXUNUSED(pItem)) { return FALSE; };
+    virtual bool OS2OnDraw(WXDRAWITEMSTRUCT* WXUNUSED(pItem)) { return false; };
     virtual long OS2OnMeasure(WXMEASUREITEMSTRUCT* WXUNUSED(pItem)) { return 0L; };
 
     wxArrayLong&     GetSubcontrols() { return m_aSubControls; }
@@ -101,7 +95,7 @@ public:
                           ,long            lStyle
                          );
     //
-    // Create the control of the given class with the given style, returns FALSE
+    // Create the control of the given class with the given style, returns false
     // if creation failed.
     //
     bool OS2CreateControl( const wxChar*   zClassname
@@ -125,10 +119,12 @@ public:
     inline void SetYComp(const int nYComp) {m_nYComp = nYComp;}
 
 private:
-    int                             m_nXComp;
-    int                             m_nYComp;
-   DECLARE_EVENT_TABLE()
+    int m_nXComp;
+    int m_nYComp;
+
+    wxString m_label;
+
+    DECLARE_EVENT_TABLE()
 }; // end of wxControl
 
 #endif // _WX_CONTROL_H_
-

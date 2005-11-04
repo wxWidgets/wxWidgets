@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/toplevel.cpp
+// Name:        src/os2/toplevel.cpp
 // Purpose:     implements wxTopLevelWindow for OS/2
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -49,11 +49,10 @@
 // ----------------------------------------------------------------------------
 
 // the name of the default wxWidgets class
-extern void          wxAssociateWinWithHandle( HWND         hWnd
-                                              ,wxWindowOS2* pWin
-                                             );
-bool                 wxTopLevelWindowOS2::m_sbInitialized = FALSE;
-wxWindow*            wxTopLevelWindowOS2::m_spHiddenParent = NULL;
+extern void wxAssociateWinWithHandle( HWND hWnd, wxWindowOS2* pWin );
+
+bool wxTopLevelWindowOS2::m_sbInitialized = false;
+wxWindow* wxTopLevelWindowOS2::m_spHiddenParent = NULL;
 
 // ============================================================================
 // wxTopLevelWindowOS2 implementation
@@ -115,12 +114,12 @@ private:
     //
     // The HWND of the hidden parent
     //
-    static HWND                     m_shWnd;
+    static HWND m_shWnd;
 
     //
     // The class used to create it
     //
-    static const wxChar*            m_szClassName;
+    static const wxChar* m_szClassName;
     DECLARE_DYNAMIC_CLASS(wxTLWHiddenParentModule)
 }; // end of CLASS wxTLWHiddenParentModule
 
@@ -132,19 +131,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxTLWHiddenParentModule, wxModule)
 
 void wxTopLevelWindowOS2::Init()
 {
-    m_bIconized = m_bMaximizeOnShow = FALSE;
+    m_bIconized = m_bMaximizeOnShow = false;
 
     //
     // Unlike (almost?) all other windows, frames are created hidden
     //
-    m_isShown = FALSE;
+    m_isShown = false;
 
     //
     // Data to save/restore when calling ShowFullScreen
     m_lFsStyle          = 0;
     m_lFsOldWindowStyle = 0;
-    m_bFsIsMaximized    = FALSE;
-    m_bFsIsShowing      = FALSE;
+    m_bFsIsMaximized    = false;
+    m_bFsIsShowing      = false;
 
     m_hFrame    = NULLHANDLE;
     memset(&m_vSwp, 0, sizeof(SWP));
@@ -360,7 +359,7 @@ bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
 
         wxLogSysError(wxT("Can't create dialog using template '%ld'"), ulDlgTemplate);
 
-        return FALSE;
+        return false;
     }
 
     //
@@ -418,7 +417,7 @@ bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
                            ,(PVOID)&lColor
                           ))
     {
-        return FALSE;
+        return false;
     }
 
     ::WinSetWindowPos( GetHwnd()
@@ -432,29 +431,27 @@ bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
     ::WinQueryWindowPos(GetHwnd(), GetSwp());
     m_hFrame = m_hWnd;
     SubclassWin(m_hWnd);
-    return TRUE;
+    return true;
 } // end of wxTopLevelWindowOS2::CreateDialog
 
-bool wxTopLevelWindowOS2::CreateFrame(
-  const wxString&                   rsTitle
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-)
+bool wxTopLevelWindowOS2::CreateFrame( const wxString& rsTitle,
+                                       const wxPoint& rPos,
+                                       const wxSize& rSize )
 {
-    WXDWORD                         lExflags;
-    WXDWORD                         lFlags = OS2GetCreateWindowFlags(&lExflags);
-    long                            lStyle = GetWindowStyleFlag();
-    int                             nX = rPos.x;
-    int                             nY = rPos.y;
-    int                             nWidth = rSize.x;
-    int                             nHeight = rSize.y;
-    ULONG                           ulStyleFlags = 0L;
-    ERRORID                         vError;
-    wxString                        sError;
-    wxWindow*                       pParent = GetParent();
-    HWND                            hParent;
-    HWND                            hFrame;
-    HWND                            hClient;
+    WXDWORD    lExflags;
+    WXDWORD    lFlags = OS2GetCreateWindowFlags(&lExflags);
+    long       lStyle = GetWindowStyleFlag();
+    int        nX = rPos.x;
+    int        nY = rPos.y;
+    int        nWidth = rSize.x;
+    int        nHeight = rSize.y;
+    ULONG      ulStyleFlags = 0L;
+    ERRORID    vError;
+    wxString   sError;
+    wxWindow*  pParent = GetParent();
+    HWND       hParent;
+    HWND       hFrame;
+    HWND       hClient;
 
     if (pParent)
         hParent = GetHwndOf(pParent);
@@ -470,7 +467,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     // Clear the visible flag, we always call show
     //
     ulStyleFlags &= (unsigned long)~WS_VISIBLE;
-    m_bIconized = FALSE;
+    m_bIconized = false;
 
     //
     // Create the frame window:  We break ranks with other ports now
@@ -494,7 +491,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
-        return FALSE;
+        return false;
     }
 
     //
@@ -518,7 +515,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
-        return FALSE;
+        return false;
     }
 
     //
@@ -555,7 +552,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError(_T("Error sizing frame. Error: %s\n"), sError.c_str());
-        return FALSE;
+        return false;
     }
     lStyle =  ::WinQueryWindowULong( m_hWnd
                                     ,QWL_STYLE
@@ -565,7 +562,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
                         ,QWL_STYLE
                         ,lStyle
                        );
-    return TRUE;
+    return true;
 } // end of wxTopLevelWindowOS2::CreateFrame
 
 bool wxTopLevelWindowOS2::Create(
@@ -713,12 +710,10 @@ void wxTopLevelWindowOS2::DoShowWindow(
     m_bIconized = nShowCmd == SWP_MINIMIZE;
 } // end of wxTopLevelWindowOS2::DoShowWindow
 
-bool wxTopLevelWindowOS2::Show(
-  bool                              bShow
-)
+bool wxTopLevelWindowOS2::Show( bool bShow )
 {
-    int                             nShowCmd;
-    SWP                             vSwp;
+    int nShowCmd;
+    SWP vSwp;
 
     if (bShow != IsShown() )
     {
@@ -726,14 +721,14 @@ bool wxTopLevelWindowOS2::Show(
     }
     else
     {
-        return FALSE;
+        return false;
     }
     if (bShow)
     {
         if (m_bMaximizeOnShow)
         {
             nShowCmd = SWP_MAXIMIZE;
-            m_bMaximizeOnShow = FALSE;
+            m_bMaximizeOnShow = false;
         }
         else
         {
@@ -748,7 +743,7 @@ bool wxTopLevelWindowOS2::Show(
 
     if (bShow)
     {
-        wxActivateEvent             vEvent(wxEVT_ACTIVATE, TRUE, m_windowId);
+        wxActivateEvent vEvent(wxEVT_ACTIVATE, true, m_windowId);
 
         ::WinQueryWindowPos(m_hFrame, &vSwp);
         m_bIconized = ( vSwp.fl & SWP_MINIMIZE ) == SWP_MINIMIZE ;
@@ -771,14 +766,14 @@ bool wxTopLevelWindowOS2::Show(
         //
         if (GetParent())
         {
-            HWND                    hWndParent = GetHwndOf(GetParent());
+            HWND hWndParent = GetHwndOf(GetParent());
 
             ::WinQueryWindowPos(hWndParent, &vSwp);
             m_bIconized = (vSwp.fl & SWP_MINIMIZE)==SWP_MINIMIZE;
             ::WinEnableWindow(hWndParent, TRUE);
         }
     }
-    return TRUE;
+    return true;
 } // end of wxTopLevelWindowOS2::Show
 
 // ----------------------------------------------------------------------------
@@ -812,9 +807,17 @@ bool wxTopLevelWindowOS2::IsMaximized() const
     return (m_vSwp.fl & SWP_MAXIMIZE) == SWP_MAXIMIZE;
 } // end of wxTopLevelWindowOS2::IsMaximized
 
-void wxTopLevelWindowOS2::Iconize(
-  bool                              bIconize
-)
+void wxTopLevelWindowOS2::SetTitle( const wxString& title)
+{
+    SetLabel(title);
+}
+
+wxString wxTopLevelWindowOS2::GetTitle() const
+{
+    return GetLabel();
+}
+
+void wxTopLevelWindowOS2::Iconize( bool bIconize )
 {
     DoShowWindow(bIconize ? SWP_MINIMIZE : SWP_RESTORE);
 } // end of wxTopLevelWindowOS2::Iconize
@@ -824,9 +827,9 @@ bool wxTopLevelWindowOS2::IsIconized() const
     // also update the current state
     ::WinQueryWindowPos(m_hFrame, (PSWP)&m_vSwp);
     if (m_vSwp.fl & SWP_MINIMIZE)
-        ((wxTopLevelWindow*)this)->m_bIconized = TRUE;
+        ((wxTopLevelWindow*)this)->m_bIconized = true;
     else
-        ((wxTopLevelWindow*)this)->m_bIconized = FALSE;
+        ((wxTopLevelWindow*)this)->m_bIconized = false;
     return m_bIconized;
 } // end of wxTopLevelWindowOS2::IsIconized
 
@@ -992,19 +995,17 @@ void wxTopLevelWindowOS2::SetIcons(
     }
 } // end of wxTopLevelWindowOS2::SetIcon
 
-bool wxTopLevelWindowOS2::EnableCloseButton(
-  bool                              bEnable
-)
+bool wxTopLevelWindowOS2::EnableCloseButton( bool bEnable )
 {
     //
     // Get system (a.k.a. window) menu
     //
-    HMENU                           hMenu = ::WinWindowFromID(m_hFrame, FID_SYSMENU);
+    HMENU hMenu = ::WinWindowFromID(m_hFrame, FID_SYSMENU);
 
     if (!hMenu)
     {
         wxLogLastError(_T("GetSystemMenu"));
-        return FALSE;
+        return false;
     }
 
     //
@@ -1032,7 +1033,7 @@ bool wxTopLevelWindowOS2::EnableCloseButton(
                  ,(MPARAM)FCF_MENU
                  ,(MPARAM)0
                 );
-    return TRUE;
+    return true;
 } // end of wxTopLevelWindowOS2::EnableCloseButton
 
 // ============================================================================
@@ -1046,7 +1047,7 @@ bool wxTLWHiddenParentModule::OnInit()
 {
     m_shWnd = NULL;
     m_szClassName = NULL;
-    return TRUE;
+    return true;
 } // end of wxTLWHiddenParentModule::OnInit
 
 void wxTLWHiddenParentModule::OnExit()
@@ -1086,20 +1087,19 @@ HWND wxTLWHiddenParentModule::GetHWND()
                 m_szClassName = zHIDDEN_PARENT_CLASS;
             }
         }
-        m_shWnd = ::WinCreateWindow( HWND_DESKTOP
-                                    ,(PSZ)m_szClassName
-                                    ,""
-                                    ,0L
-                                    ,(LONG)0L
-                                    ,(LONG)0L
-                                    ,(LONG)0L
-                                    ,(LONG)0L
-                                    ,NULLHANDLE
-                                    ,HWND_TOP
-                                    ,0L
-                                    ,NULL
-                                    ,NULL
-                                   );
+        m_shWnd = ::WinCreateWindow( HWND_DESKTOP,
+                                     (PSZ)m_szClassName,
+                                     "",
+                                     0L,
+                                     (LONG)0L,
+                                     (LONG)0L,
+                                     (LONG)0L,
+                                     (LONG)0L,
+                                     NULLHANDLE,
+                                     HWND_TOP,
+                                     0L,
+                                     NULL,
+                                     NULL );
         if (!m_shWnd)
         {
             wxLogLastError(_T("CreateWindow(hidden TLW parent)"));

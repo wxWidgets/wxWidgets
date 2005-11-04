@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        control.cpp
+// Name:        src/os2/control.cpp
 // Purpose:     wxControl class
 // Author:      David Webster
 // Modified by:
@@ -64,18 +64,14 @@ wxControl::~wxControl()
     m_isBeingDeleted = true;
 }
 
-bool wxControl::OS2CreateControl(
-  const wxChar*                     zClassname
-, const wxString&                   rsLabel
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-)
+bool wxControl::OS2CreateControl( const wxChar* zClassname,
+                                  const wxString& rsLabel,
+                                  const wxPoint& rPos,
+                                  const wxSize& rSize,
+                                  long lStyle )
 {
-    WXDWORD                         dwExstyle;
-    WXDWORD                         dwStyle = OS2GetStyle( lStyle
-                                                          ,&dwExstyle
-                                                         );
+    WXDWORD dwExstyle;
+    WXDWORD dwStyle = OS2GetStyle( lStyle, &dwExstyle );
 
     return OS2CreateControl( zClassname
                             ,dwStyle
@@ -108,11 +104,11 @@ bool wxControl::OS2CreateControl( const wxChar*   zClassname,
     if (m_isShown )
         dwStyle |= WS_VISIBLE;
 
-    wxWindow*                       pParent = GetParent();
-    PSZ                             zClass = "";
+    wxWindow* pParent = GetParent();
+    PSZ zClass = "";
 
     if (!pParent)
-        return FALSE;
+        return false;
 
     if ((wxStrcmp(zClassname, _T("COMBOBOX"))) == 0)
         zClass = WC_COMBOBOX;
@@ -126,11 +122,12 @@ bool wxControl::OS2CreateControl( const wxChar*   zClassname,
         zClass = WC_CONTAINER;
     dwStyle |= WS_VISIBLE;
 
-    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+    m_label = rsLabel;
+    wxString label = ::wxPMTextToLabel(m_label);
 
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,(PSZ)zClass              // Window class
-                                       ,(PSZ)sLabel.c_str()      // Initial Text
+                                       ,(PSZ)label.c_str()      // Initial Text
                                        ,(ULONG)dwStyle           // Style flags
                                        ,(LONG)0                  // X pos of origin
                                        ,(LONG)0                  // Y pos of origin
@@ -149,7 +146,7 @@ bool wxControl::OS2CreateControl( const wxChar*   zClassname,
         wxLogError(wxT("Failed to create a control of class '%s'"), zClassname);
 #endif // DEBUG
 
-        return FALSE;
+        return false;
     }
     //
     // Subclass again for purposes of dialog editing mode
@@ -167,11 +164,7 @@ bool wxControl::OS2CreateControl( const wxChar*   zClassname,
 
     SetXComp(0);
     SetYComp(0);
-    SetSize( rPos.x
-            ,rPos.y
-            ,rSize.x
-            ,rSize.y
-           );
+    SetSize( rPos.x, rPos.y, rSize.x, rSize.y );
     return true;
 } // end of wxControl::OS2CreateControl
 
@@ -210,9 +203,7 @@ WXHBRUSH wxControl::OnCtlColor(WXHDC    hWxDC,
     return (WXHBRUSH)pBrush->GetResourceHandle();
 } // end of wxControl::OnCtlColor
 
-void wxControl::OnEraseBackground(
-  wxEraseEvent&                     rEvent
-)
+void wxControl::OnEraseBackground( wxEraseEvent& rEvent )
 {
     RECTL                           vRect;
     HPS                             hPS = rEvent.GetDC()->GetHPS();
@@ -223,14 +214,9 @@ void wxControl::OnEraseBackground(
     ::WinFillRect(hPS, &vRect, GetBackgroundColour().GetPixel());
 } // end of wxControl::OnEraseBackground
 
-WXDWORD wxControl::OS2GetStyle(
-  long                              lStyle
-, WXDWORD*                          pdwExstyle
-) const
+WXDWORD wxControl::OS2GetStyle( long lStyle, WXDWORD* pdwExstyle ) const
 {
-    long                            dwStyle = wxWindow::OS2GetStyle( lStyle
-                                                                    ,pdwExstyle
-                                                                   );
+    long dwStyle = wxWindow::OS2GetStyle( lStyle, pdwExstyle );
 
     if (AcceptsFocus())
     {
@@ -239,13 +225,14 @@ WXDWORD wxControl::OS2GetStyle(
     return dwStyle;
 } // end of wxControl::OS2GetStyle
 
-void wxControl::SetLabel(
-  const wxString&                   rsLabel
-)
+void wxControl::SetLabel( const wxString& rsLabel )
 {
-    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
-
-    ::WinSetWindowText(GetHwnd(), (PSZ)sLabel.c_str());
+    if(rsLabel != m_label)
+    {
+        m_label = rsLabel;
+        wxString label = ::wxPMTextToLabel(rsLabel);
+        ::WinSetWindowText(GetHwnd(), (PSZ)label.c_str());
+    }
 } // end of wxControl::SetLabel
 
 // ---------------------------------------------------------------------------
