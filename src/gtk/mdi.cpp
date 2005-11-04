@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.cpp
+// Name:        src/gtk/mdi.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -336,7 +336,7 @@ wxMDIChildFrame::~wxMDIChildFrame()
 {
     if (m_menuBar)
         delete m_menuBar;
-} 
+}
 
 bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
       wxWindowID id, const wxString& title,
@@ -457,7 +457,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 
 static void wxInsertChildInMDI( wxMDIClientWindow* parent, wxMDIChildFrame* child )
 {
-    wxString s = child->m_title;
+    wxString s = child->GetTitle();
     if (s.IsNull()) s = _("MDI child");
 
     GtkWidget *label_widget = gtk_label_new( s.mbc_str() );
@@ -503,7 +503,7 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInMDI;
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
-        !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("wxMDIClientWindow") ))
+        !CreateBase( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("wxMDIClientWindow") ))
     {
         wxFAIL_MSG( wxT("wxMDIClientWindow creation failed") );
         return false;
