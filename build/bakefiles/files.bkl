@@ -1302,7 +1302,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
     src/msw/checkbox.cpp
-    src/msw/checklst.cpp
     src/msw/choice.cpp
     src/msw/colordlg.cpp
     src/msw/combobox.cpp
@@ -1352,7 +1351,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/button.h
     wx/msw/caret.h
     wx/msw/checkbox.h
-    wx/msw/checklst.h
     wx/msw/choice.h
     wx/msw/clipbrd.h
     wx/msw/colordlg.h
@@ -1467,10 +1465,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <!-- Files used only by desktop MSW port, but *not* WindowsCE one: -->
 <set var="MSW_DESKTOP_SRC" hints="files">
+    src/msw/checklst.cpp
     src/msw/fdrepdlg.cpp
     src/msw/fontdlg.cpp
 </set>
 <set var="MSW_DESKTOP_HDR" hints="files">
+    wx/msw/checklst.h
     wx/msw/fdrepdlg.h
     wx/msw/fontdlg.h
     wx/msw/helpbest.h
@@ -1483,6 +1483,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/fontdlgg.cpp
+    src/msw/wince/checklst.cpp
     src/msw/wince/choicece.cpp
     src/msw/wince/crt.cpp
     src/msw/wince/filedlgwce.cpp
@@ -1495,6 +1496,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="WINCE_HDR" hints="files">
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
+    wx/msw/wince/checklst.h
     wx/msw/wince/choicece.h
     wx/msw/wince/helpwce.h
     wx/msw/wince/libraries.h

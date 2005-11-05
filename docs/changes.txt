@@ -38,6 +38,7 @@ wxMSW:
 wxWinCE:
 
 - Pressing build-in joystick on WinCE phones fires wxEVT_JOY_BUTTON_DOWN event.
+- Native wxCheckListBox implementation.
 
 Unix:
 
