@@ -229,6 +229,7 @@ the corresponding topic.
 \helpref{wxStricmp}{wxstricmp}\\
 \helpref{wxStringEq}{wxstringeq}\\
 \helpref{wxStringMatch}{wxstringmatch}\\
+\helpref{wxStringTokenize}{wxstringtokenize}\\
 \helpref{wxStripMenuCodes}{wxstripmenucodes}\\
 \helpref{wxStrlen}{wxstrlen}\\
 \helpref{wxSysErrorCode}{wxsyserrorcode}\\
@@ -1564,6 +1565,19 @@ This function complements the standard C function {\it strcmp()} which performs
 case-sensitive comparison.
 
 
+\membersection{::wxStringEq}\label{wxstringeq}
+
+\func{bool}{wxStringEq}{\param{const wxString\& }{s1}, \param{const wxString\& }{s2}}
+
+{\bf NB:} This function is obsolete, use \helpref{wxString}{wxstring} instead.
+
+A macro defined as:
+
+\begin{verbatim}
+#define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
+\end{verbatim}
+
+
 \membersection{::wxStringMatch}\label{wxstringmatch}
 
 \func{bool}{wxStringMatch}{\param{const wxString\& }{s1}, \param{const wxString\& }{s2},\\
@@ -1576,17 +1590,19 @@ ignoring case if {\it exact} is false. If {\it subString} is \false,
 no substring matching is done.
 
 
-\membersection{::wxStringEq}\label{wxstringeq}
+\membersection{::wxStringTokenize}\label{wxstringtokenize}
 
-\func{bool}{wxStringEq}{\param{const wxString\& }{s1}, \param{const wxString\& }{s2}}
+\func{wxArrayString}{wxStringTokenize}{\param{const wxString\& }{str},\\
+  \param{const wxString\& }{delims = wxDEFAULT\_DELIMITERS},\\
+  \param{wxStringTokenizerMode }{mode = wxTOKEN\_DEFAULT}}
 
-{\bf NB:} This function is obsolete, use \helpref{wxString}{wxstring} instead.
+This is a convenience function wrapping 
+\helpref{wxStringTokenizer}{wxstringtokenizer} which simply returns all tokens
+found in the given \arg{str} in an array.
 
-A macro defined as:
-
-\begin{verbatim}
-#define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
-\end{verbatim}
+Please see 
+\helpref{wxStringTokenizer::wxStringTokenizer}{wxstringtokenizerwxstringtokenizer} 
+for the description of the other parameters.
 
 
 \membersection{::wxStrlen}\label{wxstrlen}
