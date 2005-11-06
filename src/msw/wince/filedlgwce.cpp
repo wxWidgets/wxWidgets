@@ -114,16 +114,12 @@ int wxFileDialog::ShowModal()
         parentWindow = wxTheApp->GetTopWindow();
 
     wxString str = wxGetTextFromUser(m_message, _("File"), m_fileName, parentWindow);
-    if (str)
-    {
-        m_fileName = str;
-        m_fileNames.Add(str);
-        return wxID_OK;
-    }
-    else
-    {
+    if (str.empty())
         return wxID_CANCEL;
-    }
+
+    m_fileName = str;
+    m_fileNames.Add(str);
+    return wxID_OK;
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const

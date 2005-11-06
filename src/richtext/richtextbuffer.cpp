@@ -4870,8 +4870,8 @@ bool wxRichTextFileHandler::LoadFile(wxRichTextBuffer *buffer, const wxString& f
     wxFFileInputStream stream(filename);
     if (stream.Ok())
         return LoadFile(buffer, stream);
-    else
-        return false;
+
+    return false;
 }
 
 bool wxRichTextFileHandler::SaveFile(wxRichTextBuffer *buffer, const wxString& filename)
@@ -4879,8 +4879,8 @@ bool wxRichTextFileHandler::SaveFile(wxRichTextBuffer *buffer, const wxString& f
     wxFFileOutputStream stream(filename);
     if (stream.Ok())
         return SaveFile(buffer, stream);
-    else
-        return false;
+
+    return false;
 }
 #endif // wxUSE_STREAMS
 
