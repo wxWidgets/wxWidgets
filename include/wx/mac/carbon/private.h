@@ -375,6 +375,55 @@ private :
 
 typedef wxMacUPP<NMProcPtr,NMUPP,NewNMUPP,DisposeNMUPP> wxMacNMUPP ;
 
+template <typename refType> class wxMacCFRefHolder
+{
+public :
+    wxMacCFRefHolder()
+        : m_ref(NULL) , m_release(false) 
+    {
+    }
+    
+    wxMacCFRefHolder( refType ref , bool release = true ) 
+        : m_ref(ref) , m_release(release)
+    {
+    }
+    
+    ~wxMacCFRefHolder()
+    {
+        CFRelease( m_ref ) ;
+    }
+    
+    void Release()
+    {
+        if ( m_release && m_ref != NULL )
+            CFRelease( m_ref ) ;
+        m_ref = NULL ;
+    }
+    
+    refType Detach()
+    {
+        refType val = m_ref ;
+        m_release = false ;
+        m_ref = NULL ;
+        return val ;
+    }
+    
+    void Set( refType ref , bool release = true  )
+    {
+        Release() ;
+        m_release = release ;
+        m_ref = ref ;
+    }
+    
+    operator refType () const { return m_ref; }
+    
+private :
+    refType m_ref ;
+    bool m_release ;  
+    
+    DECLARE_NO_COPY_CLASS( wxMacCFRefHolder )
+} ;
+
 #if wxUSE_GUI
 /*
 GWorldPtr         wxMacCreateGWorld( int width , int height , int depth ) ;
