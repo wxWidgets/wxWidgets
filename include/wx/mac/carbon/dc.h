@@ -287,9 +287,11 @@ protected:
     double       m_mm_to_pix_x,m_mm_to_pix_y;
     // not yet used
     bool         m_needComputeScaleX,m_needComputeScaleY;
+#if !wxMAC_USE_CORE_GRAPHICS
     // If un-scrolled is non-zero or d.o. changes with scrolling.
     // Set using SetInternalDeviceOrigin().
     long         m_internalDeviceOriginX,m_internalDeviceOriginY;
+#endif
      // To be set by external classes such as wxScrolledWindow
      // using SetDeviceOrigin()
     long         m_externalDeviceOriginX,m_externalDeviceOriginY;
