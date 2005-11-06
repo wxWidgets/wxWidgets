@@ -222,19 +222,19 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxBufferedPaintDC dc(this, m_bufferBitmap);
         //wxLogDebug(wxT("OnPaint"));
-        
+
         PrepareDC(dc);
-        
+
         if (m_freezeCount > 0)
             return;
-        
+
         dc.SetFont(GetFont());
-        
+
         // Paint the background
         PaintBackground(dc);
-        
+
         wxRegion dirtyRegion = GetUpdateRegion();
-        
+
         wxRect drawingArea(GetLogicalPoint(wxPoint(0, 0)), GetClientSize());
         wxRect availableSpace(GetClientSize());
         if (GetBuffer().GetDirty())
@@ -243,7 +243,7 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             GetBuffer().SetDirty(false);
             SetupScrollbars();
         }
-        
+
         GetBuffer().Draw(dc, GetBuffer().GetRange(), GetSelectionRange(), drawingArea, 0 /* descent */, 0 /* flags */);
     }
 
@@ -1057,8 +1057,8 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
             Refresh(false);
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 /// Move to the end of the paragraph
@@ -1618,14 +1618,20 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
     ((wxRichTextCtrl*)this)->PrepareDC(dc);
 
     int hit = ((wxRichTextCtrl*)this)->GetBuffer().HitTest(dc, pt, *pos);
-    if (hit == wxRICHTEXT_HITTEST_BEFORE)
-        return wxTE_HT_BEFORE;
-    else if (hit == wxRICHTEXT_HITTEST_AFTER)
-        return wxTE_HT_BEYOND;
-    else if (hit == wxRICHTEXT_HITTEST_ON)
-        return wxTE_HT_ON_TEXT;
-    else
-        return wxTE_HT_UNKNOWN;
+
+    switch ( hit )
+    {
+        case wxRICHTEXT_HITTEST_BEFORE:
+            return wxTE_HT_BEFORE;
+
+        case wxRICHTEXT_HITTEST_AFTER:
+            return wxTE_HT_BEYOND;
+
+        case wxRICHTEXT_HITTEST_ON:
+            return wxTE_HT_ON_TEXT;
+    }
+
+    return wxTE_HT_UNKNOWN;
 }
 
 // ----------------------------------------------------------------------------
@@ -1695,8 +1701,8 @@ bool wxRichTextCtrl::WriteImage(const wxImage& image, int bitmapType)
     wxImage image2 = image;
     if (imageBlock.MakeImageBlock(image2, bitmapType))
         return WriteImage(imageBlock);
-    else
-        return false;
+
+    return false;
 }
 
 bool wxRichTextCtrl::WriteImage(const wxString& filename, int bitmapType)
@@ -1706,8 +1712,8 @@ bool wxRichTextCtrl::WriteImage(const wxString& filename, int bitmapType)
     wxImage image;
     if (imageBlock.MakeImageBlock(filename, bitmapType, image, false))
         return WriteImage(imageBlock);
-    else
-        return false;
+
+    return false;
 }
 
 bool wxRichTextCtrl::WriteImage(const wxRichTextImageBlock& imageBlock)
@@ -1724,9 +1730,8 @@ bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, int bitmapType)
         wxImage image = bitmap.ConvertToImage();
         if (image.Ok() && imageBlock.MakeImageBlock(image, bitmapType))
             return WriteImage(imageBlock);
-        else
-            return false;
     }
+
     return false;
 }
 
@@ -2254,8 +2259,8 @@ bool wxRichTextCtrl::GetCaretPositionForIndex(long position, wxRect& rect)
         rect = wxRect(pt, wxSize(wxRICHTEXT_DEFAULT_CARET_WIDTH, height));
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 /// Gets the line for the visible caret position. If the caret is
@@ -2316,17 +2321,17 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
             flags |= wxRICHTEXT_LAYOUT_SPECIFIED_RECT;
             availableSpace.SetPosition(GetLogicalPoint(wxPoint(0, 0)));
         }
-        
+
         wxClientDC dc(this);
         dc.SetFont(GetFont());
-        
+
         PrepareDC(dc);
-        
+
         GetBuffer().Defragment();
         GetBuffer().UpdateRanges();     // If items were deleted, ranges need recalculation
         GetBuffer().Layout(dc, availableSpace, flags);
         GetBuffer().SetDirty(false);
-        
+
         if (!IsFrozen())
             SetupScrollbars();
     }
@@ -2505,8 +2510,8 @@ bool wxRichTextCtrl::SetDefaultStyleToCursorStyle()
         SetDefaultStyle(attr);
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 /// Returns the first visible position in the current view

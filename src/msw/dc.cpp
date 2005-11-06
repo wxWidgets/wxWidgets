@@ -1757,7 +1757,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     static int maxWidth = -1;
     int fit = 0;
     SIZE sz = {0,0};
-    int stlen = text.Length();
+    int stlen = text.length();
 
     if (maxLenText == -1)
     {
@@ -2539,6 +2539,8 @@ static bool AlphaBlt(HDC hdcDst,
 
         wxLogLastError(_T("AlphaBlend"));
     }
+#else
+    wxUnusedVar(hdcSrc);
 #endif // defined(AC_SRC_OVER)
 
     // AlphaBlend() unavailable of failed: use our own (probably much slower)

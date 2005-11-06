@@ -1125,8 +1125,8 @@ bool wxCheckWindowWndProc(WXHWND hWnd,
         str == wxMDIChildFrameClassNameNoRedraw ||
         str == _T("wxTLWHiddenParent"))
         return true; // Effectively means don't subclass
-    else
-        return false;
+
+    return false;
 #else
     WNDCLASS cls;
     if ( !::GetClassInfo(wxGetInstance(), wxGetWindowClass(hWnd), &cls) )
