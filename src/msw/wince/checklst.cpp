@@ -107,6 +107,8 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     wxZeroMemory(col);
     ListView_InsertColumn(GetHwnd(), 0, &col );
 
+    ListView_SetItemCount( GetHwnd(), n );
+
     // initialize the contents
     for ( int i = 0; i < n; i++ )
     {
@@ -303,6 +305,8 @@ void wxCheckListBox::DoSetItemClientObject(int n, wxClientData* clientData)
 
 void wxCheckListBox::DoSetItems(const wxArrayString& items, void **clientData)
 {
+    ListView_SetItemCount( GetHwnd(), GetCount() + items.GetCount() );
+
     for( size_t i = 0; i < items.GetCount(); i++ )
     {
         int pos = Append(items[i]);
