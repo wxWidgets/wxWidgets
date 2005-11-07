@@ -1341,11 +1341,11 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 {
 #if defined(__WXPALMOS__)
     // TODO ?
+    if(buf && sz>0) buf[0] = _T('\0');
     return NULL;
 #elif defined(__WXWINCE__)
     // TODO
-    wxUnusedVar(buf);
-    wxUnusedVar(sz);
+    if(buf && sz>0) buf[0] = _T('\0');
     return NULL;
 #else
     if ( !buf )
