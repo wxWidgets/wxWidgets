@@ -5146,200 +5146,197 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
 
 bool RTFGo(void)
 {
-  if (stopRunning)
-      return false;
-
-  // Reset variables
-  indentLevel = 0;
-  forbidParindent = 0;
-  contentsLineSection = NULL;
-  contentsLineValue = NULL;
-  descriptionItemArg = NULL;
-  inTabular = false;
-  inTable = false;
-  inFigure = false;
-  startRows = false;
-  tableVerticalLineLeft = false;
-  tableVerticalLineRight = false;
-  noColumns = 0;
-  startedSections = false;
-  inVerbatim = false;
-  browseId = 0;
-
-  if (!InputFile.empty() && !OutputFile.empty())
-  {
-    // Do some RTF-specific transformations on all the strings,
-    // recursively
-    Text2RTF(GetTopLevelChunk());
-
-    Contents = wxFopen(TmpContentsName, _T("w"));
-    Chapters = wxFopen(_T("chapters.rtf"), _T("w"));
-    if (winHelp)
-    {
-      Sections = wxFopen(_T("sections.rtf"), _T("w"));
-      Subsections = wxFopen(_T("subsections.rtf"), _T("w"));
-      Subsubsections = wxFopen(_T("subsubsections.rtf"), _T("w"));
-      Popups = wxFopen(_T("popups.rtf"), _T("w"));
-      if (winHelpContents)
-      {
-        WinHelpContentsFile = wxFopen(WinHelpContentsFileName, _T("w"));
-        if (WinHelpContentsFile)
-          wxFprintf(WinHelpContentsFile, _T(":Base %s.hlp\n"), wxFileNameFromPath(FileRoot));
-      }
-
-      if (!Sections || !Subsections || !Subsubsections || !Popups || (winHelpContents && !WinHelpContentsFile))
-      {
-        OnError(_T("Ouch! Could not open temporary file(s) for writing."));
-        return false;
-      }
-    }
-    if (!Contents || !Chapters)
-    {
-      OnError(_T("Ouch! Could not open temporary file(s) for writing."));
-      return false;
-    }
-
-    if (winHelp)
-    {
-      wxFprintf(Chapters, _T("\n#{\\footnote Contents}\n"));
-      wxFprintf(Chapters, _T("${\\footnote Contents}\n"));
-      wxFprintf(Chapters, _T("+{\\footnote %s}\n"), GetBrowseString());
-      wxFprintf(Chapters, _T("K{\\footnote {K} %s}\n"), ContentsNameString);
-      wxFprintf(Chapters, _T("!{\\footnote DisableButton(\"Up\")}\n"));
-    }
-    if (!winHelp)
-    {
-      wxFprintf(Chapters, _T("\\titlepg\n"));
-      wxFprintf(Contents, _T("\\par\\pard\\pgnrestart\\sect\\titlepg"));
-    }
-
-    // In WinHelp, Contents title takes font of title.
-    // In linear RTF, same as chapter headings.
-    wxFprintf(Contents, _T("{\\b\\fs%d %s}\\par\\par\\pard\n\n"),
-      (winHelp ? titleFont : chapterFont)*2, ContentsNameString);
-
-    // By default, Swiss, 11 point.
-    wxFprintf(Chapters, _T("\\f2\\fs22\n"));
-
-    PushEnvironmentStyle(_T("\\f2\\fs22\\sa200"));
-
-    SetCurrentOutput(Chapters);
-
     if (stopRunning)
         return false;
 
-    OnInform(_T("Converting..."));
+    // Reset variables
+    indentLevel = 0;
+    forbidParindent = 0;
+    contentsLineSection = NULL;
+    contentsLineValue = NULL;
+    descriptionItemArg = NULL;
+    inTabular = false;
+    inTable = false;
+    inFigure = false;
+    startRows = false;
+    tableVerticalLineLeft = false;
+    tableVerticalLineRight = false;
+    noColumns = 0;
+    startedSections = false;
+    inVerbatim = false;
+    browseId = 0;
 
-    TraverseDocument();
-
-    FILE *Header = wxFopen(_T("header.rtf"), _T("w"));
-    if (!Header)
+    if (!InputFile.empty() && !OutputFile.empty())
     {
-      OnError(_T("Ouch! Could not open temporary file header.rtf for writing."));
-      return false;
+        // Do some RTF-specific transformations on all the strings,
+        // recursively
+        Text2RTF(GetTopLevelChunk());
+
+        Contents = wxFopen(TmpContentsName, _T("w"));
+        Chapters = wxFopen(_T("chapters.rtf"), _T("w"));
+        if (winHelp)
+        {
+            Sections = wxFopen(_T("sections.rtf"), _T("w"));
+            Subsections = wxFopen(_T("subsections.rtf"), _T("w"));
+            Subsubsections = wxFopen(_T("subsubsections.rtf"), _T("w"));
+            Popups = wxFopen(_T("popups.rtf"), _T("w"));
+            if (winHelpContents)
+            {
+                WinHelpContentsFile = wxFopen(WinHelpContentsFileName, _T("w"));
+                if (WinHelpContentsFile)
+                    wxFprintf(WinHelpContentsFile, _T(":Base %s.hlp\n"), wxFileNameFromPath(FileRoot));
+            }
+
+            if (!Sections || !Subsections || !Subsubsections || !Popups || (winHelpContents && !WinHelpContentsFile))
+            {
+                OnError(_T("Ouch! Could not open temporary file(s) for writing."));
+                return false;
+            }
+        }
+        if (!Contents || !Chapters)
+        {
+            OnError(_T("Ouch! Could not open temporary file(s) for writing."));
+            return false;
+        }
+
+        if (winHelp)
+        {
+            wxFprintf(Chapters, _T("\n#{\\footnote Contents}\n"));
+            wxFprintf(Chapters, _T("${\\footnote Contents}\n"));
+            wxFprintf(Chapters, _T("+{\\footnote %s}\n"), GetBrowseString());
+            wxFprintf(Chapters, _T("K{\\footnote {K} %s}\n"), ContentsNameString);
+            wxFprintf(Chapters, _T("!{\\footnote DisableButton(\"Up\")}\n"));
+        }
+        if (!winHelp)
+        {
+            wxFprintf(Chapters, _T("\\titlepg\n"));
+            wxFprintf(Contents, _T("\\par\\pard\\pgnrestart\\sect\\titlepg"));
+        }
+
+        // In WinHelp, Contents title takes font of title.
+        // In linear RTF, same as chapter headings.
+        wxFprintf(Contents, _T("{\\b\\fs%d %s}\\par\\par\\pard\n\n"),
+            (winHelp ? titleFont : chapterFont)*2, ContentsNameString);
+
+        // By default, Swiss, 11 point.
+        wxFprintf(Chapters, _T("\\f2\\fs22\n"));
+
+        PushEnvironmentStyle(_T("\\f2\\fs22\\sa200"));
+
+        SetCurrentOutput(Chapters);
+
+        if (stopRunning)
+            return false;
+
+        OnInform(_T("Converting..."));
+
+        TraverseDocument();
+
+        FILE *Header = wxFopen(_T("header.rtf"), _T("w"));
+        if (!Header)
+        {
+            OnError(_T("Ouch! Could not open temporary file header.rtf for writing."));
+            return false;
+        }
+        WriteRTFHeader(Header);
+        fclose(Header);
+
+        PopEnvironmentStyle();
+
+        Tex2RTFYield(true);
+        if (winHelp)
+        {
+//          wxFprintf(Contents, _T("\\page\n"));
+            wxFprintf(Chapters, _T("\\page\n"));
+            wxFprintf(Sections, _T("\\page\n"));
+            wxFprintf(Subsections, _T("\\page\n"));
+            wxFprintf(Subsubsections, _T("\\page\n\n"));
+            wxFprintf(Popups, _T("\\page\n}\n"));
+        }
+
+//      TexOutput(_T("\n\\info{\\doccomm Document created by Julian Smart's Tex2RTF.}\n"));
+        if (!winHelp)
+            TexOutput(_T("}\n"));
+        fclose(Contents); Contents = NULL;
+        fclose(Chapters); Chapters = NULL;
+        if (winHelp)
+        {
+            fclose(Sections); Sections = NULL;
+            fclose(Subsections); Subsections = NULL;
+            fclose(Subsubsections); Subsubsections = NULL;
+            fclose(Popups); Popups = NULL;
+            if (winHelpContents)
+            {
+                fclose(WinHelpContentsFile); WinHelpContentsFile = NULL;
+            }
+        }
+
+        if (winHelp)
+        {
+            wxConcatFiles(_T("header.rtf"), _T("chapters.rtf"), _T("tmp1.rtf"));
+            Tex2RTFYield(true);
+            wxConcatFiles(_T("tmp1.rtf"), _T("sections.rtf"), _T("tmp2.rtf"));
+            Tex2RTFYield(true);
+            wxConcatFiles(_T("tmp2.rtf"), _T("subsections.rtf"), _T("tmp3.rtf"));
+            Tex2RTFYield(true);
+            wxConcatFiles(_T("tmp3.rtf"), _T("subsubsections.rtf"), _T("tmp4.rtf"));
+            Tex2RTFYield(true);
+            wxConcatFiles(_T("tmp4.rtf"), _T("popups.rtf"), OutputFile);
+            Tex2RTFYield(true);
+
+            wxRemoveFile(_T("tmp1.rtf"));
+            wxRemoveFile(_T("tmp2.rtf"));
+            wxRemoveFile(_T("tmp3.rtf"));
+            wxRemoveFile(_T("tmp4.rtf"));
+        }
+        else
+        {
+            wxConcatFiles(_T("header.rtf"), _T("chapters.rtf"), _T("tmp1.rtf"));
+            Tex2RTFYield(true);
+            if (wxFileExists(OutputFile))
+                wxRemoveFile(OutputFile);
+
+            wxString cwdStr = wxGetCwd();
+
+            wxString outputDirStr = wxPathOnly(OutputFile);
+
+            // Determine if the temp file and the output file are in the same directory,
+            // and if they are, then just rename the temp file rather than copying
+            // it, as this is much faster when working with large (multi-megabyte files)
+            if ((outputDirStr.empty()) ||  // no path specified on output file
+                (cwdStr != outputDirStr)) // paths do not match
+            {
+                wxRenameFile(_T("tmp1.rtf"), OutputFile);
+            }
+            else
+            {
+                wxCopyFile(_T("tmp1.rtf"), OutputFile);
+            }
+            Tex2RTFYield(true);
+            wxRemoveFile(_T("tmp1.rtf"));
+        }
+
+        if (wxFileExists(ContentsName)) wxRemoveFile(ContentsName);
+
+        if (!wxRenameFile(TmpContentsName, ContentsName))
+        {
+            wxCopyFile(TmpContentsName, ContentsName);
+            wxRemoveFile(TmpContentsName);
+        }
+
+        wxRemoveFile(_T("chapters.rtf"));
+        wxRemoveFile(_T("header.rtf"));
+
+        if (winHelp)
+        {
+            wxRemoveFile(_T("sections.rtf"));
+            wxRemoveFile(_T("subsections.rtf"));
+            wxRemoveFile(_T("subsubsections.rtf"));
+            wxRemoveFile(_T("popups.rtf"));
+        }
+        if (winHelp && generateHPJ)
+            WriteHPJ(OutputFile);
+        return true;
     }
-    WriteRTFHeader(Header);
-    fclose(Header);
-
-    PopEnvironmentStyle();
-
-    Tex2RTFYield(true);
-    if (winHelp)
-    {
-//      wxFprintf(Contents, _T("\\page\n"));
-      wxFprintf(Chapters, _T("\\page\n"));
-      wxFprintf(Sections, _T("\\page\n"));
-      wxFprintf(Subsections, _T("\\page\n"));
-      wxFprintf(Subsubsections, _T("\\page\n\n"));
-      wxFprintf(Popups, _T("\\page\n}\n"));
-    }
-
-//    TexOutput(_T("\n\\info{\\doccomm Document created by Julian Smart's Tex2RTF.}\n"));
-    if (!winHelp)
-      TexOutput(_T("}\n"));
-    fclose(Contents); Contents = NULL;
-    fclose(Chapters); Chapters = NULL;
-    if (winHelp)
-    {
-      fclose(Sections); Sections = NULL;
-      fclose(Subsections); Subsections = NULL;
-      fclose(Subsubsections); Subsubsections = NULL;
-      fclose(Popups); Popups = NULL;
-      if (winHelpContents)
-      {
-        fclose(WinHelpContentsFile); WinHelpContentsFile = NULL;
-      }
-    }
-
-    if (winHelp)
-    {
-      wxConcatFiles(_T("header.rtf"), _T("chapters.rtf"), _T("tmp1.rtf"));
-      Tex2RTFYield(true);
-      wxConcatFiles(_T("tmp1.rtf"), _T("sections.rtf"), _T("tmp2.rtf"));
-      Tex2RTFYield(true);
-      wxConcatFiles(_T("tmp2.rtf"), _T("subsections.rtf"), _T("tmp3.rtf"));
-      Tex2RTFYield(true);
-      wxConcatFiles(_T("tmp3.rtf"), _T("subsubsections.rtf"), _T("tmp4.rtf"));
-      Tex2RTFYield(true);
-      wxConcatFiles(_T("tmp4.rtf"), _T("popups.rtf"), OutputFile);
-      Tex2RTFYield(true);
-
-      wxRemoveFile(_T("tmp1.rtf"));
-      wxRemoveFile(_T("tmp2.rtf"));
-      wxRemoveFile(_T("tmp3.rtf"));
-      wxRemoveFile(_T("tmp4.rtf"));
-    }
-    else
-    {
-      wxConcatFiles(_T("header.rtf"), _T("chapters.rtf"), _T("tmp1.rtf"));
-      Tex2RTFYield(true);
-      if (wxFileExists(OutputFile))
-          wxRemoveFile(OutputFile);
-
-      wxChar *cwdStr;
-      cwdStr = wxGetWorkingDirectory();
-
-      wxString outputDirStr;
-      outputDirStr = wxPathOnly(OutputFile);
-
-      // Determine if the temp file and the output file are in the same directory,
-      // and if they are, then just rename the temp file rather than copying
-      // it, as this is much faster when working with large (multi-megabyte files)
-      if ((wxStrcmp(outputDirStr.c_str(),_T("")) == 0) ||  // no path specified on output file
-          (wxStrcmp(cwdStr,outputDirStr.c_str()) == 0)) // paths do not match
-      {
-          wxRenameFile(_T("tmp1.rtf"), OutputFile);
-      }
-      else
-      {
-          wxCopyFile(_T("tmp1.rtf"), OutputFile);
-      }
-      delete [] cwdStr;
-      Tex2RTFYield(true);
-      wxRemoveFile(_T("tmp1.rtf"));
-    }
-
-    if (wxFileExists(ContentsName)) wxRemoveFile(ContentsName);
-
-    if (!wxRenameFile(TmpContentsName, ContentsName))
-    {
-      wxCopyFile(TmpContentsName, ContentsName);
-      wxRemoveFile(TmpContentsName);
-    }
-
-    wxRemoveFile(_T("chapters.rtf"));
-    wxRemoveFile(_T("header.rtf"));
-
-    if (winHelp)
-    {
-      wxRemoveFile(_T("sections.rtf"));
-      wxRemoveFile(_T("subsections.rtf"));
-      wxRemoveFile(_T("subsubsections.rtf"));
-      wxRemoveFile(_T("popups.rtf"));
-    }
-    if (winHelp && generateHPJ)
-        WriteHPJ(OutputFile);
-    return true;
-  }
-  return false;
+    return false;
 }

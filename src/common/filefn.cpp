@@ -276,8 +276,7 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
     if ( f.empty() || wxIsAbsolutePath(f) )
         return f;
 
-    wxString buf;
-    wxGetWorkingDirectory(wxStringBuffer(buf, _MAXPATHLEN), _MAXPATHLEN);
+    wxString buf = ::wxGetCwd();
 
     if ( !wxEndsWithPathSeparator(buf) )
     {
@@ -365,8 +364,8 @@ void wxStripExtension(wxChar *buffer)
 void wxStripExtension(wxString& buffer)
 {
     //RN:  Be careful about the handling the case where
-    //buffer.Length() == 0
-    for(size_t i = buffer.Length() - 1; i != wxString::npos; --i)
+    //buffer.length() == 0
+    for(size_t i = buffer.length() - 1; i != wxString::npos; --i)
     {
         if (buffer.GetChar(i) == wxT('.'))
         {
@@ -432,28 +431,38 @@ wxChar *wxRealPath (wxChar *path)
   return path;
 }
 
+wxString wxRealPath(const wxString& path)
+{
+    wxChar *buf1=MYcopystring(path);
+    wxChar *buf2=wxRealPath(buf1);
+    wxString buf(buf2);
+    delete [] buf1;
+    return buf;
+}
+
+
 // Must be destroyed
 wxChar *wxCopyAbsolutePath(const wxString& filename)
 {
-  if (filename.empty())
-    return (wxChar *) NULL;
+    if (filename.empty())
+        return (wxChar *) NULL;
 
-  if (! wxIsAbsolutePath(wxExpandPath(wxFileFunctionsBuffer, filename))) {
-    wxChar  buf[_MAXPATHLEN];
-    buf[0] = wxT('\0');
-    wxGetWorkingDirectory(buf, WXSIZEOF(buf));
-    wxChar ch = buf[wxStrlen(buf) - 1];
+    if (! wxIsAbsolutePath(wxExpandPath(wxFileFunctionsBuffer, filename)))
+    {
+        wxString buf = ::wxGetCwd();
+        wxChar ch = buf.Last();
 #ifdef __WXMSW__
-    if (ch != wxT('\\') && ch != wxT('/'))
-        wxStrcat(buf, wxT("\\"));
+        if (ch != wxT('\\') && ch != wxT('/'))
+            buf << wxT("\\");
 #else
-    if (ch != wxT('/'))
-        wxStrcat(buf, wxT("/"));
+        if (ch != wxT('/'))
+            buf << wxT("/");
 #endif
-    wxStrcat(buf, wxFileFunctionsBuffer);
-    return MYcopystring( wxRealPath(buf) );
-  }
-  return MYcopystring( wxFileFunctionsBuffer );
+        buf << wxFileFunctionsBuffer;
+        buf = wxRealPath( buf );
+        return MYcopystring( buf );
+    }
+    return MYcopystring( wxFileFunctionsBuffer );
 }
 
 /*-
@@ -790,7 +799,7 @@ wxString wxPathOnly (const wxString& path)
         // Local copy
         wxStrcpy (buf, WXSTRINGCAST path);
 
-        int l = path.Length();
+        int l = path.length();
         int i = l - 1;
 
         // Search backward for a backward or forward slash
@@ -1331,17 +1340,21 @@ wxString wxFindNextFile()
 
 
 // Get current working directory.
-// If buf is NULL, allocates space using new, else
-// copies into buf.
-wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
+// If buf is NULL, allocates space using new, else copies into buf.
+// wxGetWorkingDirectory() is obsolete, use wxGetCwd()
+// wxDoGetCwd() is their common core to be moved
+// to wxGetCwd() once wxGetWorkingDirectory() will be removed.
+// Do not expose wxDoGetCwd in headers!
+
+wxChar *wxDoGetCwd(wxChar *buf, int sz)
 {
 #if defined(__WXPALMOS__)
-    // TODO ?
+    // TODO
+    if(buf && sz>0) buf[0] = _T('\0');
     return NULL;
 #elif defined(__WXWINCE__)
     // TODO
-    wxUnusedVar(buf);
-    wxUnusedVar(sz);
+    if(buf && sz>0) buf[0] = _T('\0');
     return NULL;
 #else
     if ( !buf )
@@ -1464,13 +1477,17 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     // __WXWINCE__
 }
 
+#if WXWIN_COMPATIBILITY_2_6
+wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
+{
+    return wxDoGetCwd(buf,sz);
+}
+#endif // WXWIN_COMPATIBILITY_2_6
+
 wxString wxGetCwd()
 {
-    wxChar *buffer = new wxChar[_MAXPATHLEN];
-    wxGetWorkingDirectory(buffer, _MAXPATHLEN);
-    wxString str( buffer );
-    delete [] buffer;
-
+    wxString str;
+    wxDoGetCwd(wxStringBuffer(str, _MAXPATHLEN), _MAXPATHLEN);
     return str;
 }
 

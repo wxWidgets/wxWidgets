@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        function.tex
+%% Purpose:     Functions and macros
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \chapter{Functions}\label{functions}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}
@@ -1122,7 +1133,7 @@ Returns a string containing the current (or working) directory.
 
 \func{wxString}{wxGetWorkingDirectory}{\param{char *}{buf=NULL}, \param{int }{sz=1000}}
 
-{\bf NB:} This function is obsolete: use \helpref{wxGetCwd}{wxgetcwd} instead.
+{\bf NB:} This function is deprecated: use \helpref{wxGetCwd}{wxgetcwd} instead.
 
 Copies the current working directory into the buffer if supplied, or
 copies the working directory into new storage (which you {\emph must} delete
@@ -1514,24 +1525,24 @@ as wxGetTranslation.
 
 The second form is used when retrieving translation of string that has
 different singular and plural form in English or different plural forms in some
-other language. It takes two extra arguments: as above, \arg{str} 
+other language. It takes two extra arguments: as above, \arg{str}
 parameter must contain the singular form of the string to be converted and
 is used as the key for the search in the catalog. The \arg{strPlural} parameter
 is the plural form (in English). The parameter \arg{n} is used to determine the
 plural form.  If no message catalog is found \arg{str} is returned if `n == 1',
 otherwise \arg{strPlural}.
 
-See \urlref{GNU gettext manual}{http://www.gnu.org/manual/gettext/html\_chapter/gettext\_10.html\#SEC150} 
+See \urlref{GNU gettext manual}{http://www.gnu.org/manual/gettext/html\_chapter/gettext\_10.html\#SEC150}
 for additional information on plural forms handling. For a shorter alternative
 see the \helpref{wxPLURAL()}{wxplural} macro.
 
 Both versions call \helpref{wxLocale::GetString}{wxlocalegetstring}.
 
 Note that this function is not suitable for literal strings in Unicode
-builds, since the literal strings must be enclosed into 
+builds, since the literal strings must be enclosed into
 \helpref{\_T()}{underscoret} or \helpref{wxT}{wxt} macro which makes them
 unrecognised by \texttt{xgettext}, and so they are not extracted to the message
-catalog. Instead, use the \helpref{\_()}{underscore} and 
+catalog. Instead, use the \helpref{\_()}{underscore} and
 \helpref{wxPLURAL}{wxplural} macro for all literal strings.
 
 
@@ -1596,12 +1607,12 @@ no substring matching is done.
   \param{const wxString\& }{delims = wxDEFAULT\_DELIMITERS},\\
   \param{wxStringTokenizerMode }{mode = wxTOKEN\_DEFAULT}}
 
-This is a convenience function wrapping 
+This is a convenience function wrapping
 \helpref{wxStringTokenizer}{wxstringtokenizer} which simply returns all tokens
 found in the given \arg{str} in an array.
 
-Please see 
-\helpref{wxStringTokenizer::wxStringTokenizer}{wxstringtokenizerwxstringtokenizer} 
+Please see
+\helpref{wxStringTokenizer::wxStringTokenizer}{wxstringtokenizerwxstringtokenizer}
 for the description of the other parameters.
 
 
@@ -2805,7 +2816,7 @@ details.
 \func{}{wxON\_BLOCK\_EXIT\_OBJ1}{\param{}{obj}, \param{}{method}, \param{}{p1}}
 \func{}{wxON\_BLOCK\_EXIT\_OBJ2}{\param{}{obj}, \param{}{method}, \param{}{p1}, \param{}{p2}}
 
-This family of macros is similar to \helpref{wxON\_BLOCK\_EXIT}{wxonblockexit} 
+This family of macros is similar to \helpref{wxON\_BLOCK\_EXIT}{wxonblockexit}
 but calls a method of the given object instead of a free function.
 
 \wxheading{Include files}
@@ -3066,7 +3077,7 @@ frame or dialog containing it, or {\tt NULL}.
 
 \func{bool}{wxLaunchDefaultBrowser}{\param{const wxString\& }{url}, \param{int }{flags = $0$}}
 
-Open the \arg{url} in user's default browser. If \arg{flags} parameter contains 
+Open the \arg{url} in user's default browser. If \arg{flags} parameter contains
 \texttt{wxBROWSER\_NEW\_WINDOW} flag, a new window is opened for the URL
 (currently this is only supported under Windows).
 
@@ -3392,7 +3403,7 @@ dynamically. The same as DECLARE\_ABSTRACT\_CLASS.
 Used inside a class declaration to make the class known to wxWidgets RTTI
 system and also declare that the objects of this class should be dynamically
 creatable from run-time type information. Notice that this implies that the
-class should have a default constructor, if this is not the case consider using 
+class should have a default constructor, if this is not the case consider using
 \helpref{DECLARE\_CLASS}{declareclass}.
 
 Example:
@@ -4472,4 +4483,3 @@ Removes the variable {\it var} from the environment.
 function.
 
 Returns \true on success.
-

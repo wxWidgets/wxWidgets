@@ -238,9 +238,7 @@ bool wxExtHelpController::LoadFile(const wxString& ifile)
       file = ifile;
       if(! wxIsAbsolutePath(file))
       {
-         wxChar* f = wxGetWorkingDirectory();
-         file = f;
-         delete[] f; // wxGetWorkingDirectory returns new memory
+         file = wxGetCwd();
 #ifdef __WXMAC__
          file << ifile;
 #else
@@ -348,7 +346,7 @@ wxExtHelpController::DisplayContents()
    file << m_MapFile << WXEXTHELP_SEPARATOR << contents;
    if(file.Contains(wxT('#')))
       file = file.BeforeLast(wxT('#'));
-   if(contents.Length() && wxFileExists(file))
+   if(contents.length() && wxFileExists(file))
       rc = DisplaySection(CONTENTS_ID);
 
    // if not found, open homemade toc:
@@ -466,4 +464,3 @@ void wxExtHelpController::OnQuit()
 
 
 #endif // wxUSE_HELP
-
