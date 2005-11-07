@@ -531,7 +531,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             eventleave.SetEventType( wxEVT_LEAVE_WINDOW );
             g_MacLastWindow->ScreenToClient( &eventleave.m_x, &eventleave.m_y );
             eventleave.SetEventObject( g_MacLastWindow ) ;
-
+            wxevent.SetId( g_MacLastWindow->GetId() ) ;
 #if wxUSE_TOOLTIPS
             wxToolTip::RelayEvent( g_MacLastWindow , eventleave);
 #endif // wxUSE_TOOLTIPS
@@ -543,6 +543,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             evententer.SetEventType( wxEVT_ENTER_WINDOW );
             currentMouseWindow->ScreenToClient( &evententer.m_x, &evententer.m_y );
             evententer.SetEventObject( currentMouseWindow ) ;
+            wxevent.SetId( currentMouseWindow->GetId() ) ;
 #if wxUSE_TOOLTIPS
             wxToolTip::RelayEvent( currentMouseWindow , evententer);
 #endif // wxUSE_TOOLTIPS
@@ -567,6 +568,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
 
         wxevent.SetEventObject( currentMouseWindow ) ;
+        wxevent.SetId( currentMouseWindow->GetId() ) ;
 
         // make tooltips current
 
@@ -1270,7 +1272,7 @@ void wxTopLevelWindowMac::SetTitle(const wxString& title)
     UMASetWTitle( (WindowRef)m_macWindow , title , m_font.GetEncoding() ) ;
 }
 
-virtual wxString wxTopLevelWindowMac::GetTitle() const
+wxString wxTopLevelWindowMac::GetTitle() const
 {
     return wxWindow::GetLabel();
 }
