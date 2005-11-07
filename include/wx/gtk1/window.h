@@ -59,6 +59,8 @@ public:
     virtual bool Show( bool show = true );
     virtual bool Enable( bool enable = true );
 
+    virtual void SetWindowStyleFlag( long style );
+
     virtual bool IsRetained() const;
 
     virtual void SetFocus();

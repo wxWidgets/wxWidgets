@@ -572,7 +572,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 #endif
 
-#if GTK_CHECK_VERSION(2,4,0)
+#ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
     {
         if (style & wxSTAY_ON_TOP)
@@ -1360,4 +1360,23 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
     else
 #endif
         wxgtk_window_set_urgency_hint(GTK_WINDOW( m_widget ), new_hint_value);
+}
+
+void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
+{
+    // Store which styles were changed
+    long styleChanges = style ^ m_windowStyle;
+
+    // Process wxWindow styles. This also updates the internal variable
+    // Therefore m_windowStyle bits carry now the _new_ style values
+    wxWindow::SetWindowStyleFlag(style);
+
+    // just return for now if widget does not exist yet
+    if (!m_widget)
+        return;
+
+#ifdef __WXGTK24__
+    if ( (styleChanges & wxSTAY_ON_TOP) && !gtk_check_version(2,4,0) )
+        gtk_window_set_keep_above(GTK_WINDOW(m_widget), m_windowStyle & wxSTAY_ON_TOP);
+#endif
 }

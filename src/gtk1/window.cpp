@@ -4814,6 +4814,11 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     m_clipPaintRegion = false;
 }
 
+void wxWindowGTK::SetWindowStyleFlag( long style )
+{
+    // Updates the internal variable. NB: Now m_windowStyle bits carry the _new_ style values already
+    wxWindowBase::SetWindowStyleFlag(style);
+}
 
 // Find the wxWindow at the current mouse position, also returning the mouse
 // position.

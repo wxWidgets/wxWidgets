@@ -58,6 +58,8 @@ public:
 
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
+    virtual void SetWindowStyleFlag( long style );
+
     virtual bool Show(bool show = true);
 
     virtual void Raise();
