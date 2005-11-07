@@ -1537,23 +1537,34 @@ CMProfileRef wxMacOpenGenericProfile(void)
     return it whenever this function is called.
 */
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4
+#define kCGColorSpaceGenericRGB   CFSTR("kCGColorSpaceGenericRGB")
+#endif
+
 CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 {
-    static CGColorSpaceRef genericRGBColorSpace = NULL;
+    static wxMacCFRefHolder<CGColorSpaceRef> genericRGBColorSpace ;
 
-    if (genericRGBColorSpace == NULL)
-    {
-        CMProfileRef genericRGBProfile = wxMacOpenGenericProfile();
-
-        if (genericRGBProfile)
+	if (genericRGBColorSpace == NULL)
+	{
+        if ( UMAGetSystemVersion() >= 0x1040 )
         {
-            genericRGBColorSpace = CGColorSpaceCreateWithPlatformColorSpace(genericRGBProfile);
-            wxASSERT_MSG( genericRGBColorSpace != NULL, wxT("couldn't create the generic RGB color space") ) ;
-
-            // we opened the profile so it is up to us to close it
-            CMCloseProfile(genericRGBProfile);
+            genericRGBColorSpace.Set( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) ) ;
         }
-    }
+        else
+        {
+            CMProfileRef genericRGBProfile = wxMacOpenGenericProfile();
+        
+            if (genericRGBProfile)
+            {
+                genericRGBColorSpace.Set( CGColorSpaceCreateWithPlatformColorSpace(genericRGBProfile) ) ;
+                wxASSERT_MSG( genericRGBColorSpace != NULL, wxT("couldn't create the generic RGB color space") ) ;
+                
+                // we opened the profile so it is up to us to close it
+                CMCloseProfile(genericRGBProfile); 
+            }
+        }
+	}
     return genericRGBColorSpace;
 }
 #endif
