@@ -1379,4 +1379,10 @@ void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
     if ( (styleChanges & wxSTAY_ON_TOP) && !gtk_check_version(2,4,0) )
         gtk_window_set_keep_above(GTK_WINDOW(m_widget), m_windowStyle & wxSTAY_ON_TOP);
 #endif
+#if GTK_CHECK_VERSION(2,2,0)
+    if ( (styleChanges & wxFRAME_NO_TASKBAR) && !gtk_check_version(2,2,0) )
+    {
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(m_widget), m_windowStyle & wxFRAME_NO_TASKBAR);
+    }
+#endif
 }
