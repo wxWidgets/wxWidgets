@@ -158,6 +158,7 @@ public:
     defined(__WXMGL__) || \
     defined(__WXMOTIF__) || \
     defined(__WXPM__) || \
+    defined(__WXMAC__) || \
     defined(__WXGTK__)
 
     // FIXME: This is work in progress about moving SetTitle/GetTitle from wxWindow

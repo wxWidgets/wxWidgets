@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobox.cpp
+// Name:        src/mac/classic/radiobox.cpp
 // Purpose:     wxRadioBox
 // Author:      Stefan Csomor
 // Modified by: JS Lair (99/11/15) first implementation
@@ -526,7 +526,7 @@ wxSize wxRadioBox::DoGetBestSize() const
         totHeight = totHeight + 10; //how many exactly should this be to meet the HIG?
     }
     // handle radio box title as well
-    GetTextExtent(GetTitle(), &eachWidth, NULL);
+    GetTextExtent(GetLabel(), &eachWidth, NULL);
     eachWidth  = (int)(eachWidth + RADIO_SIZE) + 3 * charWidth ;
     if (totWidth < eachWidth)
         totWidth = eachWidth;

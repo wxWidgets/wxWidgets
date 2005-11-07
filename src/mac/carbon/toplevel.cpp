@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/toplevel.cpp
+// Name:        src/mac/carbon/toplevel.cpp
 // Purpose:     implements wxTopLevelWindow for Mac
 // Author:      Stefan Csomor
 // Modified by:
@@ -479,7 +479,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         windowPart = inContent ;
     }
 #endif
-    
+
     if ( window )
     {
         QDGlobalToLocalPoint( UMAGetWindowPort(window ) ,  &windowMouseLocation ) ;
@@ -919,7 +919,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
     SetName(name);
 
     m_windowId = id == -1 ? NewControlId() : id;
-    wxWindow::SetTitle( title ) ;
+    wxWindow::SetLabel( title ) ;
 
     MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
 
@@ -1266,8 +1266,13 @@ void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
 
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
 {
-    wxWindow::SetTitle( title ) ;
+    wxWindow::SetLabel( title ) ;
     UMASetWTitle( (WindowRef)m_macWindow , title , m_font.GetEncoding() ) ;
+}
+
+virtual wxString wxTopLevelWindowMac::GetTitle() const
+{
+    return wxWindow::GetLabel();
 }
 
 bool wxTopLevelWindowMac::Show(bool show)
@@ -1703,4 +1708,3 @@ static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 
 }
 
 // ---------------------------------------------------------------------------
-

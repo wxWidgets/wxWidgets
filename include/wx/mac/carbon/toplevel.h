@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/toplevel.h
+// Name:        wx/mac/carbon/toplevel.h
 // Purpose:     wxTopLevelWindowMac is the Mac implementation of wxTLW
 // Author:      Stefan Csomor
 // Modified by:
@@ -56,9 +56,9 @@ public:
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
     // implement base class pure virtuals
-    virtual void Maximize(bool maximize = TRUE);
+    virtual void Maximize(bool maximize = true);
     virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = TRUE);
+    virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
     virtual void SetIcon(const wxIcon& icon);
     virtual void SetIcons(const wxIconBundle& icons) { SetIcon( icons.GetIcon( -1 ) ); }
@@ -84,14 +84,16 @@ public:
     virtual void MacActivate( long timestamp , bool inIsActivating ) ;
     virtual void MacPerformUpdates() ;
 
+    virtual void SetTitle( const wxString& title);
+    virtual wxString GetTitle() const;
+
     virtual void Raise();
     virtual void Lower();
-    virtual void SetTitle( const wxString& title);
-    virtual bool Show( bool show = TRUE );
+    virtual bool Show( bool show = true );
 
     virtual void MacSetBackgroundBrush( const wxBrush &brush ) ;
 
-    bool MacUsesCompositing() { return m_macUsesCompositing; } 
+    bool MacUsesCompositing() { return m_macUsesCompositing; }
     virtual void MacInstallTopLevelWindowEventHandler() ;
 
     void MacSetMetalAppearance( bool on ) ;
@@ -137,4 +139,3 @@ private :
 extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
 
 #endif // _WX_MSW_TOPLEVEL_H_
-

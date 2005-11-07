@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        windows.cpp
+// Name:        src/mac/carbon/window.cpp
 // Purpose:     wxWindowMac
 // Author:      Stefan Csomor
 // Modified by:
@@ -431,7 +431,7 @@ static pascal OSStatus wxMacWindowServiceEventHandler( EventHandlerCallRef handl
                 val = val.Mid( from , to - from ) ;
                 ScrapRef scrapRef = cEvent.GetParameter< ScrapRef > ( kEventParamScrapRef , typeScrapRef ) ;
                 verify_noerr( ClearScrap( &scrapRef ) ) ;
-                verify_noerr( PutScrapFlavor( scrapRef , kTXNTextData , 0 , val.Length() , val.c_str() ) ) ;
+                verify_noerr( PutScrapFlavor( scrapRef , kTXNTextData , 0 , val.length() , val.c_str() ) ) ;
                 result = noErr ;
             }
             break ;
@@ -599,10 +599,10 @@ void wxWindowMac::MacControlUserPaneActivateProc(bool activating)
 
 wxInt16 wxWindowMac::MacControlUserPaneFocusProc(wxInt16 action)
 {
-	if ( AcceptsFocus() )
-		return 1 ;
-	else
-    	return kControlNoPart ;
+    if ( AcceptsFocus() )
+        return 1 ;
+    else
+        return kControlNoPart ;
 }
 
 void wxWindowMac::MacControlUserPaneBackgroundProc(void* info)
@@ -900,7 +900,7 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
     // adjust font, controlsize etc
     DoSetWindowVariant( m_windowVariant ) ;
 
-    m_peer->SetTitle( wxStripMenuCodes(m_label) ) ;
+    m_peer->SetLabel( wxStripMenuCodes(m_label) ) ;
 
     if (!m_macIsUserPane)
     {
@@ -1883,18 +1883,18 @@ void wxWindowMac::DoSetClientSize(int clientwidth, int clientheight)
     }
 }
 
-void wxWindowMac::SetTitle(const wxString& title)
+void wxWindowMac::SetLabel(const wxString& title)
 {
     m_label = wxStripMenuCodes(title) ;
 
     if ( m_peer && m_peer->Ok() )
     {
-        m_peer->SetTitle( m_label ) ;
+        m_peer->SetLabel( m_label ) ;
     }
     Refresh() ;
 }
 
-wxString wxWindowMac::GetTitle() const
+wxString wxWindowMac::GetLabel() const
 {
     return m_label ;
 }

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        window.h
+// Name:        wx/mac/carbon/window.h
 // Purpose:     wxWindowMac class
 // Author:      Stefan Csomor
 // Modified by:
@@ -29,12 +29,12 @@ class WXDLLEXPORT wxTopLevelWindowMac;
 class WXDLLEXPORT wxWindowMac: public wxWindowBase
 {
     DECLARE_DYNAMIC_CLASS(wxWindowMac)
-        
+
     friend class wxDC;
     friend class wxPaintDC;
-    
+
 public:
-    
+
     wxWindowMac()
         : m_macBackgroundBrush()
         , m_macVisibleRegion()
@@ -65,20 +65,20 @@ public:
 
 
     // implement base class pure virtuals
-    virtual void SetTitle( const wxString& title);
-    virtual wxString GetTitle() const;
+    virtual void SetLabel( const wxString& title);
+    virtual wxString GetLabel() const;
 
     virtual void Raise();
     virtual void Lower();
 
-    virtual bool Show( bool show = TRUE );
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Show( bool show = true );
+    virtual bool Enable( bool enable = true );
 
     virtual void SetFocus();
 
     virtual void WarpPointer(int x, int y);
 
-    virtual void Refresh( bool eraseBackground = TRUE,
+    virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
 
     virtual bool SetCursor( const wxCursor &cursor );
@@ -96,8 +96,8 @@ public:
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
-                               int range, bool refresh = TRUE );
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
+                               int range, bool refresh = true );
+    virtual void SetScrollPos( int orient, int pos, bool refresh = true );
     virtual int GetScrollPos( int orient ) const;
     virtual int GetScrollThumb( int orient ) const;
     virtual int GetScrollRange( int orient ) const;
@@ -123,7 +123,7 @@ public:
     void MacRootWindowToClient( int *x , int *y ) const ;
     void MacWindowToRootWindow( int *x , int *y ) const ;
     void MacRootWindowToWindow( int *x , int *y ) const ;
-    
+
     virtual wxString MacGetToolTipString( wxPoint &where ) ;
 
     // simple accessors
@@ -134,7 +134,7 @@ public:
     virtual WXWidget GetHandle() const { return (WXWidget) NULL ; }
 
     bool GetTransparentBackground() const { return m_backgroundTransparent; }
-    void SetTransparent(bool t = TRUE) { m_backgroundTransparent = t; }
+    void SetTransparent(bool t = true) { m_backgroundTransparent = t; }
 
     // event handlers
     // --------------
@@ -144,7 +144,7 @@ public:
     void OnMouseEvent( wxMouseEvent &event ) ;
 
     void MacOnScroll(wxScrollEvent&event ) ;
-    
+
     bool AcceptsFocus() const ;
 
 public:
@@ -155,16 +155,16 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
 
     wxWindowMac *FindItem(long id) const;
-    wxWindowMac *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
+    wxWindowMac *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
     // Make a Windows extended style from the given wxWidgets window style
     static WXDWORD MakeExtendedStyle(long style,
-                                     bool eliminateBorders = TRUE);
+                                     bool eliminateBorders = true);
     // Determine whether 3D effects are wanted
     WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D) const;
 
-    // MSW only: TRUE if this control is part of the main control
-    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
+    // MSW only: true if this control is part of the main control
+    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; };
 
     // Setup background and foreground colours correctly
     virtual void SetupColours();
@@ -174,21 +174,21 @@ public:
     virtual bool         MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac** outWin ) ;
     virtual void         MacRedraw( WXHRGN updatergn , long time , bool erase) ;
     virtual bool         MacCanFocus() const { return true ; }
-    
+
     virtual bool         MacDispatchMouseEvent(wxMouseEvent& event ) ;
     // this should not be overriden in classes above wxWindowMac because it is called from its destructor via DeleteChildren
     virtual void         RemoveChild( wxWindowBase *child );
     virtual void         MacPaintBorders( int left , int top ) ;
     WXWindow             MacGetRootWindow() const  ;
     wxTopLevelWindowMac* MacGetTopLevelWindow() const ;
-    
+
     virtual WXWidget     MacGetContainerForEmbedding() ;
-    
+
     virtual long         MacGetLeftBorderSize() const ;
     virtual long         MacGetRightBorderSize() const ;
     virtual long         MacGetTopBorderSize() const ;
     virtual long         MacGetBottomBorderSize() const ;
-    
+
     static long          MacRemoveBordersFromStyle( long style ) ;
     virtual void         MacSuperChangedPosition() ;
     // the absolute coordinates of this item within the toplevel window may have changed
@@ -202,7 +202,7 @@ public:
     // for compatibility
     void                 MacUpdateImmediately() { Update() ; }
     virtual bool         MacSetupCursor( const wxPoint& pt ) ;
-        
+
 //    virtual bool         MacSetPortDrawingParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindowMac* rootwin )  ;
 //    virtual void         MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;
 //    virtual void         MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
@@ -219,11 +219,11 @@ protected:
     int                  m_y ;
     int                  m_width ;
     int                  m_height ;
-    
+
     wxScrollBar*         m_hScrollBar ;
     wxScrollBar*         m_vScrollBar ;
     wxString             m_label ;
-    
+
     void                 MacCreateScrollBars( long style ) ;
     void                 MacRepositionScrollBars() ;
 
