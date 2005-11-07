@@ -2856,10 +2856,6 @@ bool wxMacMLTEHIViewControl::HasFocus() const
     return control == m_textView ;
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4
-#define kCGColorSpaceGenericRGB   CFSTR("kCGColorSpaceGenericRGB")
-#endif
-
 void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
 {
     wxMacMLTEControl::SetBackground( brush ) ;
