@@ -468,7 +468,7 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 - (void)webView:(WebView *)sender didReceiveTitle:(NSString *)title forFrame:(WebFrame *)frame
 {
     if (frame == [sender mainFrame]){
-        webKitWindow->SetTitle(wxStringWithNSString( title ));
+        webKitWindow->SetLabel(wxStringWithNSString( title ));
     }
 }
 @end
