@@ -1351,11 +1351,11 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
 #if defined(__WXPALMOS__)
     // TODO
     if(buf && sz>0) buf[0] = _T('\0');
-    return NULL;
+    return buf;
 #elif defined(__WXWINCE__)
     // TODO
     if(buf && sz>0) buf[0] = _T('\0');
-    return NULL;
+    return buf;
 #else
     if ( !buf )
     {
