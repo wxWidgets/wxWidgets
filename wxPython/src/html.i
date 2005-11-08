@@ -887,7 +887,7 @@ public:
                           const wxString& fixed_face = wxPyEmptyString);
     
     DocDeclStr(
-        void, SetTitle(const wxString& title),
+        void, SetLabel(const wxString& title),
         "", "");
 
     // Sets space between text and window borders.
