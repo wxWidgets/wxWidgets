@@ -671,7 +671,10 @@ public:
   wxString(const wxWCharBuffer& psz) : wxStringBase(psz.data()) { }
 #else // ANSI
     // from C string (for compilers using unsigned char)
-  wxString(const unsigned char* psz, size_t nLength = npos)
+  wxString(const unsigned char* psz)
+      : wxStringBase((const char*)psz) { }
+    // from part of C string (for compilers using unsigned char)
+  wxString(const unsigned char* psz, size_t nLength)
       : wxStringBase((const char*)psz, nLength) { }
 
 #if wxUSE_WCHAR_T
