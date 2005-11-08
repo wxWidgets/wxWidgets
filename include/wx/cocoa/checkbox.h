@@ -4,9 +4,9 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_CHECKBOX_H__
@@ -59,7 +59,6 @@ public:
     virtual void SetValue(bool);
     virtual bool GetValue() const;
     virtual void SetLabel(const wxString& label);
-    virtual wxString GetLabel() const { return GetTitle(); }
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState state);
     virtual wxCheckBoxState DoGet3StateValue() const;

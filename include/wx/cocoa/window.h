@@ -4,9 +4,9 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/26
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2002 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_WINDOW_H__
@@ -142,10 +142,13 @@ public:
     // Warp the pointer the given position
     virtual void WarpPointer(int x_pos, int y_pos) ;
     // Send the window a refresh event
-    virtual void Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL);
+    virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL);
     // Set/get the window's font
     virtual bool SetFont(const wxFont& f);
 //    inline virtual wxFont& GetFont() const;
+    virtual void SetLabel(const wxString& label) { SetTitle(label); }
+    virtual wxString GetLabel() const { return GetTitle(); }
+    // label handling
     // Get character size
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
@@ -155,8 +158,8 @@ public:
                              const wxFont *theFont = NULL) const;
     // Scroll stuff
     virtual void SetScrollbar(int orient, int pos, int thumbVisible,
-      int range, bool refresh = TRUE);
-    virtual void SetScrollPos(int orient, int pos, bool refresh = TRUE);
+      int range, bool refresh = true);
+    virtual void SetScrollPos(int orient, int pos, bool refresh = true);
     virtual int GetScrollPos(int orient) const;
     virtual int GetScrollThumb(int orient) const;
     virtual int GetScrollRange(int orient) const;
