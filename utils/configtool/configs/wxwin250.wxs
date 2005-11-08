@@ -978,30 +978,8 @@ Default is 0. Recommended setting: 0 (in fact the compatibility code is now very
             <setting type="bool-check">
                 <active>1</active>
                 <enabled>0</enabled>
-                <name>WXWIN_COMPATIBILITY_2</name>
-                <description>&lt;B&gt;This setting determines the compatibility with 2.0 API&lt;/B&gt;&lt;P&gt;
-
-Set it to 1 to enable it. Default is 0.&lt;P&gt;
-
-Recommended setting: 0 (please update your code instead!)
-</description>
-                <default-state>1</default-state>
-                <requires></requires>
-                <precludes></precludes>
-                <enabled-if></enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <indeterminate-if></indeterminate-if>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command>--enable-compat20</configure-command>
-                <help-topic></help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>1</active>
-                <enabled>0</enabled>
-                <name>WXWIN_COMPATIBILITY_2_2</name>
-                <description>&lt;B&gt;This setting determines the compatibility with 2.2 API&lt;/B&gt;&lt;P&gt;
+                <name>WXWIN_COMPATIBILITY_2_4</name>
+                <description>&lt;B&gt;This setting determines the compatibility with 2.4 API&lt;/B&gt;&lt;P&gt;
 
 Set it to 1 to enable it but please consider updating your code instead.&lt;P&gt;
 
@@ -1022,8 +1000,8 @@ The default is 0. Recommended setting: 0 (please update your code)
             <setting type="bool-check">
                 <active>1</active>
                 <enabled>0</enabled>
-                <name>WXWIN_COMPATIBILITY_2_4</name>
-                <description>&lt;B&gt;This setting determines the compatibility with 2.4 API&lt;/B&gt;&lt;P&gt;
+                <name>WXWIN_COMPATIBILITY_2_6</name>
+                <description>&lt;B&gt;This setting determines the compatibility with 2.6 API&lt;/B&gt;&lt;P&gt;
 
 Set it to 0 to flag all cases of using deprecated functions.&lt;P&gt;
 
