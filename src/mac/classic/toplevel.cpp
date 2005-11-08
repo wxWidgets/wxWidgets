@@ -1083,7 +1083,7 @@ void wxTopLevelWindowMac::SetTitle(const wxString& title)
     UMASetWTitle( (WindowRef)m_macWindow , title , m_font.GetEncoding() ) ;
 }
 
-virtual wxString wxTopLevelWindowMac::GetTitle() const
+wxString wxTopLevelWindowMac::GetTitle() const
 {
     return wxWindow::GetLabel();
 }
