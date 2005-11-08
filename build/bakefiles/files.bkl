@@ -1407,6 +1407,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/regconf.h
     wx/msw/region.h
     wx/msw/registry.h
+    wx/msw/rcdefs.h
     wx/msw/scrolbar.h
     wx/msw/setup0.h
     wx/msw/slider95.h

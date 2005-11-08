@@ -2880,5 +2880,32 @@ typedef struct window_t *WXWidget;
     private:                                    \
         classname& operator=(const classname&);
 
+/*  --------------------------------------------------------------------------- */
+/*  If a manifest is being automatically generated, add common controls 6 to it */
+/*  --------------------------------------------------------------------------- */
+
+#if (!defined wxUSE_NO_MANIFEST || wxUSE_NO_MANIFEST == 0 ) && \
+    ( defined _MSC_FULL_VER && _MSC_FULL_VER >= 140040130 )
+
+#define WX_CC_MANIFEST(cpu)                     \
+    "/manifestdependency:\"type='win32'         \
+     name='Microsoft.Windows.Common-Controls'   \
+     version='6.0.0.0'                          \
+     processorArchitecture='"cpu"'              \
+     publicKeyToken='6595b64144ccf1df'          \
+     language='*'\""
+
+#if defined _M_IX86
+    #pragma comment(linker, WX_CC_MANIFEST("x86"))
+#elif defined _M_X64
+    #pragma comment(linker, WX_CC_MANIFEST("amd64"))
+#elif defined _M_IA64
+    #pragma comment(linker, WX_CC_MANIFEST("ia64"))
+#else
+    #pragma comment(linker, WX_CC_MANIFEST("*"))
+#endif
+
+#endif /* !wxUSE_NO_MANIFEST && _MSC_FULL_VER >= 140040130 */
+
 #endif
     /*  _WX_DEFS_H_ */

@@ -101,9 +101,18 @@
             </command>
         </action>
 
+        <set var="RCDEFS_H">
+            <if cond="TOOLKIT=='MSW'">
+                lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx/msw/rcdefs.h
+            </if>
+        </set>
+
         <data-files>
             <srcdir>$(BUILDDIR)</srcdir>
-            <files>lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx/setup.h</files>
+            <files>
+                lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx/setup.h
+                $(RCDEFS_H)
+            </files>
             <install-to>$(LIBDIR)/wx/include/$(TOOLCHAIN_FULLNAME)/wx</install-to>
         </data-files>
 
@@ -189,6 +198,29 @@
             <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</src>
             <dst>$(SETUPHDIR)/wx/setup.h</dst>
         </copy-file-to-file-if-not-exist>
+
+    </if>
+
+
+    <!-- create rcdefs.h on Windows: -->
+    <if cond="FORMAT in ['borland','mingw','msvc','watcom']">
+
+        <mkdir id="libdir_setup_wx_msw">
+            <depends>libdir_setup_wx</depends>
+            <dir>$(SETUPHDIR)/wx/msw</dir>
+        </mkdir>
+
+        <action id="rcdefs.h">
+
+            <dependency-of>setup_h</dependency-of>
+            <depends>libdir_setup_wx_msw</depends>
+            <depends-on-file>$(SRCDIR)/include/wx/msw/genrcdefs.h</depends-on-file>
+
+            <command>
+                $(DOLLAR)(CPP) "$(SRCDIR)\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
+            </command>
+
+        </action>
 
     </if>
 

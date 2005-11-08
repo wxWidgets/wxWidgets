@@ -7291,6 +7291,23 @@ AC_PROG_MAKE_SET
 
 AC_CONFIG_HEADERS([lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in])
 
+if test "$USE_WIN32" = 1; then
+    AC_CONFIG_COMMANDS(
+        [
+            rcdefs.h
+        ],
+        [
+            mkdir -p $outdir &&
+            $CPP $infile | sed 's/^# *[1-9].*//;s/^ *//;/./,/^$/!d' > $outdir/rcdefs.h
+        ],
+        [
+            CPP="$CPP"
+            infile="$srcdir/include/wx/msw/genrcdefs.h"
+            outdir="lib/wx/include/$TOOLCHAIN_FULLNAME/wx/msw"
+        ]
+    )
+fi
+
 AC_CONFIG_FILES([ lib/wx/config/${TOOLCHAIN_FULLNAME}:wx-config.in ],
                 [ chmod +x lib/wx/config/${TOOLCHAIN_FULLNAME} ],
                 [ TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}" ])
