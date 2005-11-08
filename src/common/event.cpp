@@ -1084,7 +1084,10 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
     wxENTER_CRIT_SECT( Lock() );
 
     if ( !m_pendingEvents )
+    {
       m_pendingEvents = new wxList;
+      m_pendingEvents->DeleteContents(true);
+    }
 
     m_pendingEvents->Append(eventCopy);
 
@@ -1126,14 +1129,13 @@ void wxEvtHandler::ProcessPendingEvents()
     {
         wxEvent *event = (wxEvent *)node->GetData();
 
-        m_pendingEvents->Erase(node);
-
         wxLEAVE_CRIT_SECT( Lock() );
 
         ProcessEvent(*event);
-        delete event;
 
         wxENTER_CRIT_SECT( Lock() );
+
+        m_pendingEvents->Erase(node);
 
         if ( !--n )
             break;
