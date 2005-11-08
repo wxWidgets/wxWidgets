@@ -617,27 +617,6 @@ bool wxTopLevelWindowMSW::Show(bool show)
     if (frame && frame->GetMenuBar())
         frame->GetMenuBar()->AddAdornments(GetWindowStyleFlag());
 #endif
-
-    if ( show )
-    {
-        ::BringWindowToTop(GetHwnd());
-
-        wxActivateEvent event(wxEVT_ACTIVATE, true, m_windowId);
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(event);
-    }
-    else // hide
-    {
-        // Try to highlight the correct window (the parent)
-        if ( GetParent() )
-        {
-            HWND hWndParent = GetHwndOf(GetParent());
-            if (hWndParent)
-                ::BringWindowToTop(hWndParent);
-        }
-    }
-
-    return true;
 }
 
 // ----------------------------------------------------------------------------
