@@ -34,8 +34,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileDialogBase, wxDialog)
 
 void wxFileDialogBase::Init()
 {
-    m_filterIndex = m_dialogStyle = 0;
-    m_parent = NULL;
+    m_filterIndex =
+    m_dialogStyle = 0;
 }
 
 bool wxFileDialogBase::Create(wxWindow *parent,

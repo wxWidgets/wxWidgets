@@ -109,7 +109,6 @@ public:
 protected:
     wxString      m_message;
     long          m_dialogStyle;
-    wxWindow     *m_parent;
     wxString      m_dir;
     wxString      m_path;       // Full path
     wxString      m_fileName;
