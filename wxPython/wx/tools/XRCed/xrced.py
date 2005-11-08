@@ -21,7 +21,7 @@ Options:
 """
 
 from globals import *
-import os, sys, getopt, re, traceback, tempfile, shutil
+import os, sys, getopt, re, traceback, tempfile, shutil, cPickle
 
 # Local modules
 from tree import *                      # imports xxx which imports params
@@ -306,7 +306,6 @@ class Frame(wxFrame):
         self.SetSizer(sizer)
 
         # Initialize
-        self.clipboard = None
         self.Clear()
 
         # Other events
@@ -414,7 +413,11 @@ class Frame(wxFrame):
         selected = tree.selection
         if not selected: return         # key pressed event
         xxx = tree.GetPyData(selected)
-        self.clipboard = xxx.element.cloneNode(True)
+        wx.TheClipboard.Open()
+        data = wx.CustomDataObject('XRCED')
+        data.SetData(cPickle.dumps(xxx.element))
+        wx.TheClipboard.SetData(data)
+        wx.TheClipboard.Close()
         self.SetStatusText('Copied')
 
     def OnPaste(self, evt):
@@ -443,8 +446,16 @@ class Frame(wxFrame):
             parentLeaf = selected
         parent = tree.GetPyData(parentLeaf).treeObject()
 
-        # Create a copy of clipboard element
-        elem = self.clipboard.cloneNode(True)
+        # Create a copy of clipboard pickled element
+        wx.TheClipboard.Open()
+        data = wx.CustomDataObject('XRCED')
+        if not wx.TheClipboard.IsSupported(data.GetFormat()):
+            wx.TheClipboard.Close()
+            wx.LogError('unsupported clipboard format')
+            return
+        wx.TheClipboard.GetData(data)
+        wx.TheClipboard.Close()
+        elem = cPickle.loads(data.GetData())
         # Tempopary xxx object to test things
         xxx = MakeXXXFromDOM(parent, elem)
 
@@ -553,8 +564,11 @@ class Frame(wxFrame):
         elem = tree.RemoveLeaf(selected)
         undoMan.RegisterUndo(UndoCutDelete(index, parent, elem))
         if evt.GetId() == wxID_CUT:
-            if self.clipboard: self.clipboard.unlink()
-            self.clipboard = elem.cloneNode(True)
+            wx.TheClipboard.Open()
+            data = wx.CustomDataObject('XRCED')
+            data.SetData(cPickle.dumps(elem))
+            wx.TheClipboard.SetData(data)
+            wx.TheClipboard.Close()
         tree.pendingHighLight = None
         tree.UnselectAll()
         tree.selection = None
@@ -935,7 +949,7 @@ Homepage: http://xrced.sourceforge.net\
         elif evt.GetId() == wxID_SAVE:
             evt.Enable(self.modified)
         elif evt.GetId() in [wxID_PASTE, self.ID_TOOL_PASTE]:
-            evt.Enable((self.clipboard and tree.selection) != None)
+            evt.Enable(tree.selection is not None)
         elif evt.GetId() == self.ID_TEST:
             evt.Enable(tree.selection is not None and tree.selection != tree.root)
         elif evt.GetId() in [self.ID_LOCATE, self.ID_TOOL_LOCATE]:
@@ -995,9 +1009,6 @@ Homepage: http://xrced.sourceforge.net\
 
     def Clear(self):
         self.dataFile = ''
-        if self.clipboard:
-            self.clipboard.unlink()
-            self.clipboard = None
         undoMan.Clear()
         self.SetModified(False)
         tree.Clear()
