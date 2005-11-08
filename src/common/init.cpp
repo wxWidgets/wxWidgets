@@ -364,7 +364,10 @@ static void DoCommonPostCleanup()
     FreeConvertedArgs();
 #endif // wxUSE_UNICODE
 
-    // Note: check for memory leaks is now done via wxDebugContextDumpDelayCounter
+    // use Set(NULL) and not Get() to avoid creating a message output object on
+    // demand when we just want to delete it
+    delete wxMessageOutput::Set(NULL);
+
 #if wxUSE_LOG
     // and now delete the last logger as well
     delete wxLog::SetActiveTarget(NULL);

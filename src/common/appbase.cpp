@@ -207,10 +207,6 @@ int wxAppConsole::OnExit()
     delete wxConfigBase::Set((wxConfigBase *) NULL);
 #endif // wxUSE_CONFIG
 
-    // use Set(NULL) and not Get() to avoid creating a message output object on
-    // demand when we just want to delete it
-    delete wxMessageOutput::Set(NULL);
-
     return 0;
 }
 
