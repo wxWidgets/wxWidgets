@@ -400,6 +400,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             <msvc-headers-setup-h>
                 msw/genrcdefs.h
             </msvc-headers-setup-h>
+            <!-- FIXME: we need another way to get the compiler name -->
             <set var="VC_COMPILER">
                 <if cond="FORMAT=='msevc4prj'">$(_COMPILER)</if>
                 <if cond="FORMAT!='msevc4prj'">cl</if>
@@ -608,8 +609,8 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <if cond="FORMAT not in ['rpmspec','wx24dsp']"> <!-- FIXME: fix for bkl-0.1.7 only, remove the cond later -->
             <res-define>WXDLLNAME=$(WXDLLNAME)</res-define>
             <if cond="FORMAT=='autoconf'">
-                <res-include>$(TOP_SRCDIR)include</res-include>
                 <res-include>$(RCDEFDIR)</res-include>
+                <res-include>$(TOP_SRCDIR)include</res-include>
             </if>
         </if>
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
