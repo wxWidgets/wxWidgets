@@ -190,20 +190,16 @@ Microsoft Visual C++ compilation for 64-bit Windows
 ----------------------------------------------------------------
 
 Visual Studio 2005 includes 64-bit compilers, though they are not installed by
-default; you need to select them during the installation. The compilers are
-32-bit hosted and you do not need a 64-bit machine to use them, just to run the
-created executables. Visual C++ Express Edition does not include 64-bit
-compilers.
+default; you need to select them during the installation. Both native 64-bit
+compilers and 32-bit hosted cross compilers are included, so you do not need a
+64-bit machine to use them (though you do to run the created executables).
+Visual C++ Express Edition does not include 64-bit compilers.
 
-64-bit compilers are also available in various SDKs, for example the .NET
-Framework SDK:
+64-bit compilers are also available in various SDKs, for example
+the .NET Framework SDK:
     http://msdn.microsoft.com/netframework/programming/64bit/devtools/
 
 Using project files:
-
- FIXME: Currently only works with wxUSE_NO_MANIFEST set to 1. Also currently
-        you can't build both 32 and 64 bit versions of the same build at the
-        same time.
 
 1. Open the VC++ 6 workspace file: build\msw\wx.dsw. Visual Studio will then
    convert the projects to the current Visual C++ project format.
@@ -214,6 +210,12 @@ Using project files:
 
    For more detailed instructions see:
     http://msdn2.microsoft.com/en-us/library/9yb4317s(en-us,vs.80).aspx
+
+   Note: 64-bit targets created this way will use the build directory of the
+         corresponding 32-bit target for some files. Therefore after building
+         for one CPU it is necessary to clean the build before building the
+         equivalent target for another CPU. We've reported the problem to MS
+         so maybe this will be fixed before VS 2005 ships.
 
 3. To build, go to the 'Build' menu and choose 'Batch Build...'. Tick all the
    all the 'x64|Debug' or all the 'Itanium|Debug' projects, and click 'Build'.
