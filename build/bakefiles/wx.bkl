@@ -203,7 +203,7 @@
 
 
     <!-- create rcdefs.h on Windows: -->
-    <if cond="FORMAT in ['borland','mingw','msvc','watcom']">
+    <if cond="FORMAT in ['borland','mingw','msvc','watcom'] and TOOLKIT == 'MSW'">
 
         <mkdir id="libdir_setup_wx_msw">
             <depends>libdir_setup_wx</depends>
@@ -212,6 +212,7 @@
 
         <action id="rcdefs.h">
 
+            <is-phony>1</is-phony>
             <dependency-of>setup_h</dependency-of>
             <depends>libdir_setup_wx_msw</depends>
             <depends-on-file>$(SRCDIR)/include/wx/msw/genrcdefs.h</depends-on-file>
