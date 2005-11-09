@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        menu.cpp
+// Name:        src/msw/menu.cpp
 // Purpose:     wxMenu, wxMenuBar, wxMenuItem
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin
@@ -120,7 +120,7 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
 // implementation
 // ============================================================================
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 
 WX_DEFINE_LIST( wxMenuInfoList )
 
@@ -697,7 +697,7 @@ void wxMenu::SetTitle(const wxString& label)
             info.cbSize = sizeof(info);
             info.fMask = MIIM_TYPE;
             info.fType = MFT_STRING;
-            info.cch = m_title.Length();
+            info.cch = m_title.length();
             info.dwTypeData = (LPTSTR) m_title.c_str();
             if ( !SetMenuItemInfo(hMenu, 0, TRUE, & info) )
             {
@@ -1005,7 +1005,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     info.cbSize = sizeof(info);
     info.fMask = MIIM_TYPE;
     info.fType = MFT_STRING;
-    info.cch = label.Length();
+    info.cch = label.length();
     info.dwTypeData = (LPTSTR) label.c_str();
     if ( !SetMenuItemInfo(GetHmenu(), id, TRUE, & info) )
     {

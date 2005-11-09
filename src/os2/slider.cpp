@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider.cpp
+// Name:        src/os2/slider.cpp
 // Purpose:     wxSlider
 // Author:      David Webster
 // Modified by:
@@ -18,9 +18,9 @@
 
 #ifndef WX_PRECOMP
 #include <stdio.h>
-#include <wx/utils.h>
-#include <wx/brush.h>
-#include <wx/scrolwin.h>
+#include "wx/utils.h"
+#include "wx/brush.h"
+#include "wx/scrolwin.h"
 #endif
 
 #if wxUSE_SLIDER

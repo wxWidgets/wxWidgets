@@ -34,7 +34,7 @@
 // event table
 // ----------------------------------------------------------------------------
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 
 WX_DEFINE_LIST( wxNotebookPageInfoList ) ;
 

@@ -103,7 +103,7 @@ LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
 // event table
 // ----------------------------------------------------------------------------
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 
 WX_DEFINE_LIST( wxNotebookPageInfoList )
 
@@ -111,7 +111,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
-    EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
+    EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, wxNotebook::OnSelChange)
     EVT_SIZE(wxNotebook::OnSize)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 
@@ -229,15 +229,15 @@ const wxNotebookPageInfoList& wxNotebook::GetPageInfos() const
 // common part of all ctors
 void wxNotebook::Init()
 {
-  m_imageList = NULL;
-  m_nSelection = -1;
+    m_imageList = NULL;
+    m_nSelection = -1;
 
 #if wxUSE_UXTHEME
-  m_hbrBackground = NULL;
+    m_hbrBackground = NULL;
 #endif // wxUSE_UXTHEME
 
 #if USE_NOTEBOOK_ANTIFLICKER
-  m_hasSubclassedUpdown = false;
+    m_hasSubclassedUpdown = false;
 #endif // USE_NOTEBOOK_ANTIFLICKER
 }
 
@@ -472,12 +472,12 @@ wxString wxNotebook::GetPageText(size_t nPage) const
 
 int wxNotebook::GetPageImage(size_t nPage) const
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
   TC_ITEM tcItem;
   tcItem.mask = TCIF_IMAGE;
 
-  return TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) ? tcItem.iImage : -1;
+  return TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) ? tcItem.iImage : wxNOT_FOUND;
 }
 
 bool wxNotebook::SetPageImage(size_t nPage, int nImage)
@@ -650,19 +650,19 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-  size_t nPageCount = GetPageCount();
-  size_t nPage;
-  for ( nPage = 0; nPage < nPageCount; nPage++ )
-    delete m_pages[nPage];
+    size_t nPageCount = GetPageCount();
+    size_t nPage;
+    for ( nPage = 0; nPage < nPageCount; nPage++ )
+        delete m_pages[nPage];
 
-  m_pages.Clear();
+    m_pages.Clear();
 
-  TabCtrl_DeleteAllItems(GetHwnd());
+    TabCtrl_DeleteAllItems(GetHwnd());
 
-  m_nSelection = -1;
+    m_nSelection = -1;
 
-  InvalidateBestSize();
-  return true;
+    InvalidateBestSize();
+    return true;
 }
 
 // same as AddPage() but does it at given position

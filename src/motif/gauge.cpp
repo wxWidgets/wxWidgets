@@ -13,7 +13,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __VMS
-#include <wx/vms_x_fix.h>
+#include "wx/vms_x_fix.h"
 #undef XtDisplay
 #undef XtScreen
 #undef XtWindow
@@ -140,8 +140,8 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
 
     int x = pos.x; int y = pos.y;
     wxSize best = GetBestSize();
-    if( size.x != -1 ) best.x = size.x;
-    if( size.y != -1 ) best.y = size.y;
+    if( size.x != wxDefaultCoord ) best.x = size.x;
+    if( size.y != wxDefaultCoord ) best.y = size.y;
 
     ChangeFont(false);
 

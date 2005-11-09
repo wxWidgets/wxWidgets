@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/window.cpp
+// Name:        src/common/window.cpp
 // Purpose:     common (to all ports) wxWindow functions
 // Author:      Julian Smart, Vadim Zeitlin
 // Modified by:
@@ -2346,7 +2346,7 @@ wxAccessible* wxWindowBase::CreateAccessible()
 
 #if wxUSE_STL
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxWindowList);
 
 #else

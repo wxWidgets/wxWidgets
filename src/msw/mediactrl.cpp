@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/mediactrl.cpp
+// Name:        src/msw/mediactrl.cpp
 // Purpose:     Built-in Media Backends for Windows
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:
@@ -161,23 +161,23 @@ struct IMediaEvent : public IDispatch
 
 enum ReadyStateConstants
 {
-    amvUninitialized    = 0,
-    amvLoading    = 1,
+    amvUninitialized  = 0,
+    amvLoading        = 1,
     amvInteractive    = 3,
-    amvComplete    = 4
+    amvComplete       = 4
 };
 
 enum StateConstants
 {
     amvNotLoaded    = -1,
-    amvStopped    = 0,
-    amvPaused    = 1,
-    amvRunning    = 2
+    amvStopped      = 0,
+    amvPaused       = 1,
+    amvRunning      = 2
 };
 
 enum DisplayModeConstants
 {
-    amvTime    = 0,
+    amvTime      = 0,
     amvFrames    = 1
 };
 
@@ -1350,7 +1350,7 @@ public:
         m_hwnd = hwnd;
 
         m_qtb->m_ctrl->Connect(m_qtb->m_ctrl->GetId(),
-            wxEVT_ERASE_BACKGROUND, 
+            wxEVT_ERASE_BACKGROUND,
             wxEraseEventHandler(wxQTMediaEvtHandler::OnEraseBackground),
             NULL, this
                               );
@@ -3536,12 +3536,10 @@ void wxQTMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
 //---------------------------------------------------------------------------
 
 //in source file that contains stuff you don't directly use
-#include <wx/html/forcelnk.h>
+#include "wx/html/forcelnk.h"
 FORCE_LINK_ME(basewxmediabackends);
 
 //---------------------------------------------------------------------------
 //  End wxMediaCtrl Compilation Guard and this file
 //---------------------------------------------------------------------------
 #endif //wxUSE_MEDIACTRL
-
-

@@ -840,7 +840,7 @@ void wxCodeDepersister::SetConnect(int eventSourceObjectID,
     }
 }
 
-#include <wx/arrimpl.cpp>
+#include "wx/arrimpl.cpp"
 
 WX_DEFINE_OBJARRAY(wxxVariantArray);
 

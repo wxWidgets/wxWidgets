@@ -770,7 +770,7 @@ KeySym wxCharCodeWXToX(int id)
 // check current state of a key
 // ----------------------------------------------------------------------------
 
-#include <wx/app.h>
+#include "wx/app.h"
 
 bool wxGetKeyState(wxKeyCode key)
 {
