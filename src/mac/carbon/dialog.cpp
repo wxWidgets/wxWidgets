@@ -56,7 +56,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     // All dialogs should really have this style
     style |= wxTAB_TRAVERSAL;
 
-    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style & ~(wxYES|wxOK|wxNO|wxCANCEL) , name) )
+    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style & ~(wxYES|wxOK|wxNO /*|wxCANCEL*/) , name) )
         return FALSE;
 
     return TRUE;
