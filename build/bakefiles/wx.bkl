@@ -102,19 +102,19 @@
         </action>
 
         <set var="RCDEFS_H">
-            <if cond="TOOLKIT=='MSW'">
-                lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx/msw/rcdefs.h
-            </if>
+            <if cond="TOOLKIT=='MSW'">msw/rcdefs.h</if>
         </set>
-
-        <data-files>
-            <srcdir>$(BUILDDIR)</srcdir>
+        <headers>
+            <srcdir>
+                $(BUILDDIR)/lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx
+            </srcdir>
             <files>
-                lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx/setup.h
-                $(RCDEFS_H)
+                setup.h $(RCDEFS_H)
             </files>
-            <install-to>$(LIBDIR)/wx/include/$(TOOLCHAIN_FULLNAME)/wx</install-to>
-        </data-files>
+            <install-to>
+                $(LIBDIR)/wx/include/$(TOOLCHAIN_FULLNAME)/wx
+            </install-to>
+        </headers>
 
         <headers>
             <srcdir>$(SRCDIR)/include</srcdir>
