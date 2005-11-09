@@ -3619,6 +3619,10 @@ SOURCE=..\include\wx\msw\radiobut.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\rcdefs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\regconf.h
 # End Source File
 # Begin Source File

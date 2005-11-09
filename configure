@@ -23649,6 +23649,7 @@ if test "$build" != "$host" -a "$GCC" = yes; then
 
                         SEARCH_LIB=`for x in $SEARCH_LIB; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
         SEARCH_INCLUDE=`for x in $SEARCH_INCLUDE; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
+        SEARCH_INCLUDE="$SEARCH_INCLUDE $cross_root/include"
 
                 if test -z "$PKG_CONFIG_PATH"; then
             PKG_CONFIG_PATH="$cross_root/local/lib/pkgconfig:$cross_root/lib/pkgconfig"
@@ -43819,11 +43820,6 @@ if test "x$INTELCXX" = "xyes" ; then
                                                             CXXWARNINGS="-Wall -wd279,383,444,810,869,981,1418,1419"
 elif test "$GXX" = yes ; then
         CXXWARNINGS="-Wall -Wundef -Wno-ctor-dtor-privacy"
-
-                    case "${host}" in
-        *-*-cygwin* | *-*-mingw32* )
-            CXXWARNINGS="$CXXWARNINGS -Wno-format"
-    esac
 fi
 
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
@@ -45871,6 +45867,12 @@ fi;
 
     GCC_PCH=0
 
+    case ${BAKEFILE_HOST} in
+        *-*-cygwin* )
+                                                bk_use_pch="no"
+            ;;
+    esac
+
     if test "x$bk_use_pch" = "x" -o "x$bk_use_pch" = "xyes" ; then
         if test "x$GCC" = "xyes"; then
                         echo "$as_me:$LINENO: checking if the compiler supports precompiled headers" >&5
@@ -46825,6 +46827,13 @@ fi
           ac_config_headers="$ac_config_headers lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in"
 
 
+if test "$USE_WIN32" = 1; then
+              ac_config_commands="$ac_config_commands
+            rcdefs.h
+        "
+
+fi
+
           ac_config_files="$ac_config_files lib/wx/config/${TOOLCHAIN_FULLNAME}:wx-config.in"
 
 
@@ -46834,8 +46843,7 @@ fi
                     ac_config_files="$ac_config_files version-script Makefile"
 
 
-          ac_config_commands="$ac_config_commands  wx-config
-                   "
+          ac_config_commands="$ac_config_commands wx-config"
 
 
 
@@ -47535,6 +47543,12 @@ cat >>$CONFIG_STATUS <<_ACEOF
 # INIT-COMMANDS section.
 #
 
+
+            CPP="$CPP"
+            infile="$srcdir/include/wx/msw/genrcdefs.h"
+            outdir="lib/wx/include/$TOOLCHAIN_FULLNAME/wx/msw"
+
+
  TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}"
  TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}"
  TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}"
@@ -47555,6 +47569,7 @@ do
   "version-script" ) CONFIG_FILES="$CONFIG_FILES version-script" ;;
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "$mk" ) CONFIG_FILES="$CONFIG_FILES $mk" ;;
+  "rcdefs.h" ) CONFIG_COMMANDS="$CONFIG_COMMANDS rcdefs.h" ;;
   "wx-config" ) CONFIG_COMMANDS="$CONFIG_COMMANDS wx-config" ;;
   "lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h" ) CONFIG_HEADERS="$CONFIG_HEADERS lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
@@ -48549,6 +48564,10 @@ esac
   { echo "$as_me:$LINENO: executing $ac_dest commands" >&5
 echo "$as_me: executing $ac_dest commands" >&6;}
   case $ac_dest in
+    rcdefs.h )
+            mkdir -p $outdir &&
+            $CPP $infile | sed 's/^# *[1-9].*//;s/^ *//;/./,/^$/!d' > $outdir/rcdefs.h
+         ;;
     wx-config )  rm -f wx-config
                      ${LN_S} lib/wx/config/inplace-${TOOLCHAIN_FULLNAME} wx-config
                     ;;
