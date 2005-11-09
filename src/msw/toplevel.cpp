@@ -617,6 +617,8 @@ bool wxTopLevelWindowMSW::Show(bool show)
     if (frame && frame->GetMenuBar())
         frame->GetMenuBar()->AddAdornments(GetWindowStyleFlag());
 #endif
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
