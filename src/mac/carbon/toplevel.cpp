@@ -1208,6 +1208,16 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     // the root control level handleer
     MacInstallEventHandler( (WXWidget) m_peer->GetControlRef() ) ;
 
+#if TARGET_API_MAC_OSX
+    if ( m_macUsesCompositing && m_macWindow != NULL )
+    {
+        if ( GetExtraStyle() & wxFRAME_EX_METAL )
+            MacSetMetalAppearance( true ) ;
+    }
+#endif
+    
+    
+    
     // the frame window event handler
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     MacInstallTopLevelWindowEventHandler() ;
@@ -1384,6 +1394,23 @@ bool wxTopLevelWindowMac::IsFullScreen() const
 {
     return m_macFullScreenData != NULL ;
 }
+
+void wxTopLevelWindowMac::SetExtraStyle(long exStyle) 
+{
+    if ( GetExtraStyle() == exStyle )
+        return ;
+    
+    wxTopLevelWindowBase::SetExtraStyle( exStyle ) ;
+#if TARGET_API_MAC_OSX
+    if ( m_macUsesCompositing && m_macWindow != NULL )
+    {
+        bool metal = GetExtraStyle() & wxFRAME_EX_METAL ;
+        if ( MacGetMetalAppearance() != metal )
+            MacSetMetalAppearance( metal ) ;
+    }
+#endif
+}
+
 
 // we are still using coordinates of the content view, todo switch to structure bounds
 

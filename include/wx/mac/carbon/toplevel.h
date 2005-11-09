@@ -91,6 +91,8 @@ public:
     virtual void Lower();
     virtual bool Show( bool show = true );
 
+    virtual void SetExtraStyle(long exStyle) ;
+
     virtual void MacSetBackgroundBrush( const wxBrush &brush ) ;
 
     bool MacUsesCompositing() { return m_macUsesCompositing; }
