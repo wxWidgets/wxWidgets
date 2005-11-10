@@ -323,6 +323,70 @@ bool wxNotebook::InsertPage(size_t nPage,
     return true;
 }
 
+int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
+{
+	int				resultV = wxNOT_FOUND;
+#if TARGET_API_MAC_OSX
+	const size_t	countPages = GetPageCount();
+    
+    HIPoint hipoint= { pt.x , pt.y } ;
+    HIViewPartCode outPart = 0 ;
+    OSStatus err = HIViewGetPartHit (
+       m_peer->GetControlRef() ,
+       &hipoint ,
+       &outPart
+       );
+    
+    int max = HIViewGetMaximum( m_peer->GetControlRef() ) ;
+    if ( outPart == 0 && max > 0 )
+    {
+        // this is a hack, as unfortunately a hit on an already selected tab returns 0,
+        // so we have to go some extra miles to make sure we select something different 
+        // and try again ..
+        int val = HIViewGetValue( m_peer->GetControlRef() ) ;
+        int maxval = max ;
+        if ( max == 1 )
+        {
+            HIViewSetMaximum( m_peer->GetControlRef() , 2 ) ;
+            maxval = 2 ;
+        }
+
+        if ( val == 1 )
+            HIViewSetValue(m_peer->GetControlRef() , maxval ) ;
+        else
+            HIViewSetValue(m_peer->GetControlRef() , 1 ) ;
+                
+            err = HIViewGetPartHit (
+                                    m_peer->GetControlRef() ,
+                                    &hipoint ,
+                                    &outPart
+                                    );
+            
+        HIViewSetValue(m_peer->GetControlRef() , val ) ;
+        if ( max == 1 )
+        {
+            HIViewSetMaximum( m_peer->GetControlRef() , 1 ) ;
+        }
+    }
+    
+    if ( outPart >= 1 && outPart <= countPages )
+    {
+        resultV = outPart ;
+    }    
+#endif
+    if (flags != NULL)
+    {
+        *flags = 0;
+        
+        // we cannot differentiate better
+        if (resultV >= 1)
+            *flags |= wxNB_HITTEST_ONLABEL;
+        else
+            *flags |= wxNB_HITTEST_NOWHERE;
+    }
+    return resultV;
+}
+
 /* Added by Mark Newsam
 * When a page is added or deleted to the notebook this function updates
 * information held in the control so that it matches the order
