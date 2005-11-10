@@ -146,8 +146,8 @@ public:
     // Set/get the window's font
     virtual bool SetFont(const wxFont& f);
 //    inline virtual wxFont& GetFont() const;
-    virtual void SetLabel(const wxString& WXUNUSED(label)) { }
-    virtual wxString GetLabel() const { return wxEmptyString; }
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel() const;
     // label handling
     // Get character size
     virtual int GetCharHeight() const;
