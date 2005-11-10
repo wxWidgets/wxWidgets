@@ -2150,16 +2150,23 @@ enum wxKeyCode
     WXK_SPECIAL20
 };
 
-#if wxUSE_HOTKEY
-enum wxHotkeyModifier
+/* This enum contains bit mask constants used in wxKeyEvent */
+enum wxKeyModifier
 {
-    wxMOD_NONE = 0,
-    wxMOD_ALT = 1,
-    wxMOD_CONTROL = 2,
-    wxMOD_SHIFT = 4,
-    wxMOD_WIN = 8
-};
+    wxMOD_NONE      = 0x0000,
+    wxMOD_ALT       = 0x0001,
+    wxMOD_CONTROL   = 0x0002,
+    wxMOD_ALTGR     = wxMOD_ALT | wxMOD_CONTROL,
+    wxMOD_SHIFT     = 0x0004,
+    wxMOD_META      = 0x0008,
+    wxMOD_WIN       = wxMOD_META,
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
+    wxMOD_CMD       = wxMOD_META,
+#else
+    wxMOD_CMD       = wxMOD_CONTROL,
 #endif
+    wxMOD_ALL       = 0xffff
+};
 
 /*  Mapping modes (same values as used by Windows, don't change) */
 enum

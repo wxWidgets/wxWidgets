@@ -83,12 +83,18 @@ functions that take a wxKeyEvent argument.
 
 \member{bool}{m\_altDown}
 
+\textbf{Deprecated: } Please use \helpref{GetModifiers}{wxkeyeventgetmodifiers}
+instead!
+
 true if the Alt key is pressed down.
 
 
 \membersection{wxKeyEvent::m\_controlDown}\label{wxkeyeventmcontroldown}
 
 \member{bool}{m\_controlDown}
+
+\textbf{Deprecated: } Please use \helpref{GetModifiers}{wxkeyeventgetmodifiers}
+instead!
 
 true if control is pressed down.
 
@@ -97,12 +103,18 @@ true if control is pressed down.
 
 \member{long}{m\_keyCode}
 
+\textbf{Deprecated: } Please use \helpref{GetKeyCode}{wxkeyeventgetkeycode}
+instead!
+
 Virtual keycode. See \helpref{Keycodes}{keycodes} for a list of identifiers.
 
 
 \membersection{wxKeyEvent::m\_metaDown}\label{wxkeyeventmmetadown}
 
 \member{bool}{m\_metaDown}
+
+\textbf{Deprecated: } Please use \helpref{GetModifiers}{wxkeyeventgetmodifiers}
+instead!
 
 true if the Meta key is pressed down.
 
@@ -111,6 +123,9 @@ true if the Meta key is pressed down.
 
 \member{bool}{m\_shiftDown}
 
+\textbf{Deprecated: } Please use \helpref{GetModifiers}{wxkeyeventgetmodifiers}
+instead!
+
 true if shift is pressed down.
 
 
@@ -118,12 +133,16 @@ true if shift is pressed down.
 
 \member{int}{m\_x}
 
+\textbf{Deprecated: } Please use \helpref{GetX}{wxkeyeventgetx} instead!
+
 X position of the event.
 
 
 \membersection{wxKeyEvent::m\_y}\label{wxkeyeventmy}
 
 \member{int}{m\_y}
+
+\textbf{Deprecated: } Please use \helpref{GetY}{wxkeyeventgety} instead!
 
 Y position of the event.
 
@@ -141,18 +160,21 @@ Constructor. Currently, the only valid event types are wxEVT\_CHAR and wxEVT\_CH
 
 Returns true if the Alt key was down at the time of the key event.
 
+Notice that \helpref{GetModifiers}{wxkeyeventgetmodifiers} is easier to use
+correctly than this function so you should consider using it in new code.
+
 
 \membersection{wxKeyEvent::CmdDown}\label{wxkeyeventcmddown}
 
 \constfunc{bool}{CmdDown}{\void}
 
-"Cmd" is a pseudo key which is the same as Control for PC and Unix platforms
-but the special "Apple" (a.k.a as "Command") key under Macs: it makes often
-sense to use it instead of, say, ControlDown() because Cmd key is used for the
-same thing under Mac as Ctrl elsewhere (but Ctrl still exists, just not used
-for this purpose under Mac). So for non-Mac platforms this is the same as 
-\helpref{ControlDown()}{wxkeyeventcontroldown} and under Mac this is the same
-as \helpref{MetaDown()}{wxkeyeventmetadown}.
+\textsc{Cmd} is a pseudo key which is the same as Control for PC and Unix
+platforms but the special \textsc{Apple} (a.k.a as \textsc{Command}) key under
+Macs: it makes often sense to use it instead of, say, ControlDown() because Cmd
+key is used for the same thing under Mac as Ctrl elsewhere (but Ctrl still
+exists, just not used for this purpose under Mac). So for non-Mac platforms
+this is the same as \helpref{ControlDown()}{wxkeyeventcontroldown} and under
+Mac this is the same as \helpref{MetaDown()}{wxkeyeventmetadown}.
 
 
 \membersection{wxKeyEvent::ControlDown}\label{wxkeyeventcontroldown}
@@ -160,6 +182,9 @@ as \helpref{MetaDown()}{wxkeyeventmetadown}.
 \constfunc{bool}{ControlDown}{\void}
 
 Returns true if the control key was down at the time of the key event.
+
+Notice that \helpref{GetModifiers}{wxkeyeventgetmodifiers} is easier to use
+correctly than this function so you should consider using it in new code.
 
 
 \membersection{wxKeyEvent::GetKeyCode}\label{wxkeyeventgetkeycode}
@@ -175,6 +200,36 @@ Note that in Unicode build, the returned value is meaningful only if the
 user entered a character that can be represented in current locale's default
 charset. You can obtain the corresponding Unicode character using
 \helpref{GetUnicodeKey}{wxkeyeventgetunicodekey}.
+
+
+\membersection{wxKeyEvent::GetModifiers}\label{wxkeyeventgetmodifiers}
+
+\constfunc{int}{GetModifiers}{\void}
+
+Return the bitmask of modifier keys which were pressed when this event
+happened. See \helpref{key modifier constants}{keymodifiers} for the full list
+of modifiers.
+
+Notice that this function is easier to use correctly than, for example, 
+\helpref{ControlDown}{wxkeyeventcontroldown} because when using the latter you
+also have to remember to test that none of the other modifiers is pressed:
+
+\begin{verbatim}
+    if ( ControlDown() && !AltDown() && !ShiftDown() && !MetaDown() )
+        ... handle Ctrl-XXX ...
+\end{verbatim}
+
+and forgetting to do it can result in serious program bugs (e.g. program not
+working with European keyboard layout where \textsc{AltGr} key which is seen by
+the program as combination of \textsc{Ctrl} and \textsc{Alt} is used). On the
+other hand, you can simply write
+
+\begin{verbatim}
+    if ( GetModifiers() == wxMOD_CONTROL )
+        ... handle Ctrl-XXX ...
+\end{verbatim}
+
+with this function.
 
 
 \membersection{wxKeyEvent::GetPosition}\label{wxkeyeventgetposition}
@@ -250,10 +305,16 @@ be still processed normally).
 
 Returns true if the Meta key was down at the time of the key event.
 
+Notice that \helpref{GetModifiers}{wxkeyeventgetmodifiers} is easier to use
+correctly than this function so you should consider using it in new code.
+
 
 \membersection{wxKeyEvent::ShiftDown}\label{wxkeyeventshiftdown}
 
 \constfunc{bool}{ShiftDown}{\void}
 
 Returns true if the shift key was down at the time of the key event.
+
+Notice that \helpref{GetModifiers}{wxkeyeventgetmodifiers} is easier to use
+correctly than this function so you should consider using it in new code.
 

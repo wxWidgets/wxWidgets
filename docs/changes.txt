@@ -13,6 +13,7 @@ All:
 All (GUI):
 
 - Added wxTreeBook.
+- Added wxKeyEvent::GetModifiers()
 - Added wxDialog::SetEscapeId().
 - wxItemContainerImmutable::FindString unified (affects wxRadioBox, wxListBox,
   wxComboBox and wxChoice).
