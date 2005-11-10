@@ -32,7 +32,7 @@
     #endif
 #endif
 
-#if (defined(__WATCOMC__) && __WATCOMC__ >= 1200)
+#if wxCHECK_WATCOM_VERSION(1,0)
     #define HAVE_W32API_H
 #endif
 

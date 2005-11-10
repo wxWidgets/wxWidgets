@@ -248,9 +248,7 @@ wxTextFileType wxTextBuffer::GuessType() const
                                                     ? wxTextFileType_##t1   \
                                                     : wxTextFileType_##t2
 
-        // Watcom C++ doesn't seem to be able to handle the macro
-        // VS: Watcom 11 doesn't have a problem...
-#if !(defined(__WATCOMC__) && (__WATCOMC__ < 1100))
+#if !defined(__WATCOMC__) || wxCHECK_WATCOM_VERSION(1,4)
         if ( nDos > nUnix )
             return GREATER_OF(Dos, Mac);
         else if ( nDos < nUnix )

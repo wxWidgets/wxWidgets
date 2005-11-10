@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filefn.cpp
+// Name:        src/common/filefn.cpp
 // Purpose:     File- and directory-related functions
 // Author:      Julian Smart
 // Modified by:
@@ -1978,8 +1978,7 @@ wxFileKind wxGetFileKind(FILE *fp)
 {
     // Note: The watcom rtl dll doesn't have fileno (the static lib does).
     //       Should be fixed in version 1.4.
-#if defined(wxFILEKIND_STUB) || \
-        (defined(__WATCOMC__) && __WATCOMC__ <= 1230 && defined(__SW_BR))
+#if defined(wxFILEKIND_STUB) || wxONLY_WATCOM_EARLIER_THAN(1,4)
     (void)fp;
     return wxFILE_KIND_DISK;
 #else

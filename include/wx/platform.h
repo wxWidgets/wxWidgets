@@ -252,6 +252,21 @@
 
 
 /*
+   This macro can be used to test the Open Watcom version.
+*/
+#ifndef __WATCOMC__
+#   define wxWATCOM_VERSION(major,minor) 0
+#   define wxCHECK_WATCOM_VERSION(major,minor) 0
+#   define wxONLY_WATCOM_EARLIER_THAN(major,minor) 0
+#elif defined(__WATCOMC__) && __WATCOMC__ < 1200
+#   error "Only Open Watcom is supported in this release"
+#else
+#   define wxWATCOM_VERSION(major,minor) ( major * 100 + minor * 10 + 1100 )
+#   define wxCHECK_WATCOM_VERSION(major,minor) ( __WATCOMC__ >= wxWATCOM_VERSION(major,minor) )
+#   define wxONLY_WATCOM_EARLIER_THAN(major,minor) ( __WATCOMC__ < wxWATCOM_VERSION(major,minor) )
+#endif
+
+/*
    check the consistency of the settings in setup.h: note that this must be
    done after setting wxUSE_UNICODE correctly as it is used in wx/chkconf.h
  */
@@ -446,7 +461,7 @@
 #        define __VISUALC__ _MSC_VER
 #    elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
 #        define __BORLANDC__
-#      elif defined(__WATCOMC__)
+#    elif defined(__WATCOMC__)
 #    elif defined(__SC__)
 #        define __SYMANTECC__
 #    endif  /* compiler */
@@ -517,7 +532,7 @@
  */
 #if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) || \
-      (defined(__WATCOMC__) && __WATCOMC__ >= 1200) ) && \
+      wxCHECK_WATCOM_VERSION(1,0) ) && \
     !defined(__DOS__) && \
     !defined(__WXPM__) && \
     !defined(__WXMOTIF__) && \

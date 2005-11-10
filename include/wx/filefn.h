@@ -278,13 +278,13 @@ enum wxFileKind
     // version of struct stat as well as a wide char stat function variant.
     // This was droped since OW 1.4 "for consistency across platforms".
     #if wxHAS_HUGE_FILES
-        #if wxUSE_UNICODE && defined(__WATCOMC__) && __WATCOMC__ < 1240
+        #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
             #define   wxStructStat struct _wstati64
         #else
             #define   wxStructStat struct _stati64
         #endif
     #else
-        #if wxUSE_UNICODE && defined(__WATCOMC__) && __WATCOMC__ < 1240
+        #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
             #define   wxStructStat struct _wstat
         #else
             #define   wxStructStat struct _stat
