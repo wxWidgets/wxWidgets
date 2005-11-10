@@ -106,8 +106,15 @@ public:
     {
     }
 
+    wxListbookEvent(const wxListbookEvent& event)
+        : wxBookCtrlBaseEvent(event)
+    {
+    }
+
+    virtual wxEvent *Clone() const { return new wxListbookEvent(*this); }
+
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxListbookEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxListbookEvent)
 };
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED;
