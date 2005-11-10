@@ -105,8 +105,15 @@ public:
     {
     }
 
+    wxChoicebookEvent(const wxChoicebookEvent& event)
+        : wxBookCtrlBaseEvent(event)
+    {
+    }
+
+    virtual wxEvent *Clone() const { return new wxChoicebookEvent(*this); }
+
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxChoicebookEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxChoicebookEvent)
 };
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED;
