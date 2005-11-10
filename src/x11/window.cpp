@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        windows.cpp
+// Name:        src/x11/windows.cpp
 // Purpose:     wxWindow
 // Author:      Julian Smart
 // Modified by:
@@ -96,24 +96,24 @@ void wxWindowX11::Init()
     // X11-specific
     m_mainWindow = (WXWindow) 0;
     m_clientWindow = (WXWindow) 0;
-    m_insertIntoMain = FALSE;
-    m_updateNcArea = FALSE;
+    m_insertIntoMain = false;
+    m_updateNcArea = false;
 
-    m_winCaptured = FALSE;
-    m_needsInputFocus = FALSE;
-    m_isShown = TRUE;
+    m_winCaptured = false;
+    m_needsInputFocus = false;
+    m_isShown = true;
     m_lastTS = 0;
     m_lastButton = 0;
 }
 
 // real construction (Init() must have been called before!)
 bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
-                      const wxPoint& pos,
-                      const wxSize& size,
-                      long style,
-                      const wxString& name)
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
+    wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
 
     CreateBase(parent, id, pos, size, style, wxDefaultValidator, name);
 
@@ -148,16 +148,16 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         size2.y = 20;
 
     wxPoint pos2(pos);
-    if (pos2.x == -1)
+    if (pos2.x == wxDefaultCoord)
         pos2.x = 0;
-    if (pos2.y == -1)
+    if (pos2.y == wxDefaultCoord)
         pos2.y = 0;
 
 #if wxUSE_TWO_WINDOWS
     bool need_two_windows =
         ((( wxSUNKEN_BORDER | wxRAISED_BORDER | wxSIMPLE_BORDER | wxHSCROLL | wxVSCROLL ) & m_windowStyle) != 0);
 #else
-    bool need_two_windows = FALSE;
+    bool need_two_windows = false;
 #endif
 
 #if wxUSE_NANOX
@@ -314,7 +314,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     }
 
     // Is a subwindow, so map immediately
-    m_isShown = TRUE;
+    m_isShown = true;
 
     // Without this, the cursor may not be restored properly (e.g. in splitter
     // sample).
@@ -325,7 +325,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     // for example
     //    SetSize(pos.x, pos.y, size.x, size.y);
 
-    return TRUE;
+    return true;
 }
 
 // Destructor
@@ -336,7 +336,7 @@ wxWindowX11::~wxWindowX11()
     if (g_captureWindow == this)
         g_captureWindow = NULL;
 
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
 
     DestroyChildren();
 
@@ -385,11 +385,11 @@ void wxWindowX11::SetFocus()
         wxLogTrace( _T("focus"), _T("wxWindowX11::SetFocus: %s"), GetClassInfo()->GetClassName());
         //        XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
         XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToNone, CurrentTime );
-        m_needsInputFocus = FALSE;
+        m_needsInputFocus = false;
     }
     else
     {
-        m_needsInputFocus = TRUE;
+        m_needsInputFocus = true;
     }
 }
 
@@ -419,9 +419,9 @@ wxWindow *wxWindowBase::DoFindFocus()
 bool wxWindowX11::Enable(bool enable)
 {
     if ( !wxWindowBase::Enable(enable) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindowX11::Show(bool show)
@@ -441,7 +441,7 @@ bool wxWindowX11::Show(bool show)
         XUnmapWindow(xdisp, xwindow);
     }
 
-    return TRUE;
+    return true;
 }
 
 // Raise the window to the top of the Z order
@@ -458,11 +458,22 @@ void wxWindowX11::Lower()
         XLowerWindow( wxGlobalDisplay(), (Window) m_mainWindow );
 }
 
+void wxWindowX11::SetLabel(const wxString& WXUNUSED(label))
+{
+    // TODO
+}
+
+wxString wxWindowX11::GetLabel() const
+{
+    // TODO
+    return wxEmptyString;
+}
+
 void wxWindowX11::DoCaptureMouse()
 {
     if ((g_captureWindow != NULL) && (g_captureWindow != this))
     {
-        wxASSERT_MSG(FALSE, wxT("Trying to capture before mouse released."));
+        wxASSERT_MSG(false, wxT("Trying to capture before mouse released."));
 
         // Core dump now
         int *tmp = NULL;
@@ -502,7 +513,7 @@ void wxWindowX11::DoCaptureMouse()
             return;
         }
 
-        m_winCaptured = TRUE;
+        m_winCaptured = true;
     }
 }
 
@@ -522,7 +533,7 @@ void wxWindowX11::DoReleaseMouse()
 
     // wxLogDebug( "Ungrabbed pointer in %s", GetName().c_str() );
 
-    m_winCaptured = FALSE;
+    m_winCaptured = false;
 }
 
 bool wxWindowX11::SetFont(const wxFont& font)
@@ -530,10 +541,10 @@ bool wxWindowX11::SetFont(const wxFont& font)
     if ( !wxWindowBase::SetFont(font) )
     {
         // nothing to do
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindowX11::SetCursor(const wxCursor& cursor)
@@ -541,12 +552,12 @@ bool wxWindowX11::SetCursor(const wxCursor& cursor)
     if ( !wxWindowBase::SetCursor(cursor) )
     {
         // no change
-        return FALSE;
+        return false;
     }
 
     Window xwindow = (Window) m_clientWindow;
 
-    wxCHECK_MSG( xwindow, FALSE, wxT("invalid window") );
+    wxCHECK_MSG( xwindow, false, wxT("invalid window") );
 
     wxCursor cursorToUse;
     if (m_cursor.Ok())
@@ -558,7 +569,7 @@ bool wxWindowX11::SetCursor(const wxCursor& cursor)
 
     XDefineCursor( wxGlobalDisplay(), xwindow, xcursor );
 
-    return TRUE;
+    return true;
 }
 
 // Coordinates relative to the window
@@ -727,7 +738,7 @@ void wxWindowX11::DoSetToolTip(wxToolTip * WXUNUSED(tooltip))
 
 bool wxWindowX11::PreResize()
 {
-    return TRUE;
+    return true;
 }
 
 // Get total size
@@ -838,25 +849,25 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int new_w = attr.width;
     int new_h = attr.height;
 
-    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (x != wxDefaultCoord || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
         int yy = 0;
         AdjustForParentClientOrigin( x, yy, sizeFlags);
         new_x = x;
     }
-    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (y != wxDefaultCoord || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
         int xx = 0;
         AdjustForParentClientOrigin( xx, y, sizeFlags);
         new_y = y;
     }
-    if (width != -1)
+    if (width != wxDefaultCoord)
     {
         new_w = width;
         if (new_w <= 0)
             new_w = 20;
     }
-    if (height != -1)
+    if (height != wxDefaultCoord)
     {
         new_h = height;
         if (new_h <= 0)
@@ -1047,16 +1058,16 @@ int wxWindowX11::GetCharWidth() const
 }
 
 void wxWindowX11::GetTextExtent(const wxString& string,
-                             int *x, int *y,
-                             int *descent, int *externalLeading,
-                             const wxFont *theFont) const
+                                int *x, int *y,
+                                int *descent, int *externalLeading,
+                                const wxFont *theFont) const
 {
     wxFont fontToUse = GetFont();
     if (theFont) fontToUse = *theFont;
 
     wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
 
-    if (string.IsEmpty())
+    if (string.empty())
     {
         if (x) (*x) = 0;
         if (y) (*y) = 0;
@@ -1201,7 +1212,7 @@ void wxWindowX11::SendPaintEvents()
 {
     //    wxLogDebug("SendPaintEvents: %s (%ld)", GetClassInfo()->GetClassName(), GetId());
 
-    m_clipPaintRegion = TRUE;
+    m_clipPaintRegion = true;
 
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );
@@ -1209,7 +1220,7 @@ void wxWindowX11::SendPaintEvents()
 
     m_updateRegion.Clear();
 
-    m_clipPaintRegion = FALSE;
+    m_clipPaintRegion = false;
 }
 
 void wxWindowX11::SendNcPaintEvents()
@@ -1249,7 +1260,7 @@ void wxWindowX11::SendNcPaintEvents()
     nc_paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( nc_paint_event );
 
-    m_updateNcArea = FALSE;
+    m_updateNcArea = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1300,7 +1311,7 @@ void wxWindowX11::OnInternalIdle()
 
         // If it couldn't set the focus now, there's
         // no point in trying again.
-        m_needsInputFocus = FALSE;
+        m_needsInputFocus = false;
     }
     g_GettingFocus = NULL;
 }
@@ -1315,13 +1326,13 @@ static bool DoAddWindowToTable(wxWindowHash *hash, Window w, wxWindow *win)
     {
         wxLogDebug( wxT("Widget table clash: new widget is 0x%08x, %s"),
                     (unsigned int)w, win->GetClassInfo()->GetClassName());
-        return FALSE;
+        return false;
     }
 
     wxLogTrace( wxT("widget"), wxT("XWindow 0x%08x <-> window %p (%s)"),
                 (unsigned int) w, win, win->GetClassInfo()->GetClassName());
 
-    return TRUE;
+    return true;
 }
 
 static inline wxWindow *DoGetWindowFromTable(wxWindowHash *hash, Window w)
@@ -1478,11 +1489,11 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
                 {
                     eventType = wxEVT_RIGHT_UP;
                 }
-                else return FALSE;
+                else return false;
             }
             else
             {
-                return FALSE;
+                return false;
             }
 
             wxevent.SetEventType(eventType);
@@ -1508,10 +1519,10 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
             wxevent.SetId(win->GetId());
             wxevent.SetEventObject(win);
 
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win), XEvent *xevent, bool isAscii)
@@ -1551,7 +1562,7 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
     default:
         break;
     }
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1572,15 +1583,15 @@ bool wxWindowX11::SetBackgroundColour(const wxColour& col)
     // the background ourselves.
     // XSetWindowBackground( xdisplay, (Window) m_clientWindow, m_backgroundColour.GetPixel() );
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindowX11::SetForegroundColour(const wxColour& col)
 {
     if ( !wxWindowBase::SetForegroundColour(col) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1662,7 +1673,7 @@ bool wxWinModule::OnInit()
     g_eraseGC = XCreateGC( xdisplay, xroot, 0, NULL );
     XSetFillStyle( xdisplay, g_eraseGC, FillSolid );
 
-    return TRUE;
+    return true;
 }
 
 void wxWinModule::OnExit()
@@ -1670,5 +1681,3 @@ void wxWinModule::OnExit()
     Display *xdisplay = wxGlobalDisplay();
     XFreeGC( xdisplay, g_eraseGC );
 }
-
-

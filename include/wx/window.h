@@ -168,31 +168,11 @@ public:
     // window attributes
     // -----------------
 
-#if !defined(__WXMSW__) && \
-    !defined(__WXMGL__) && \
-    !defined(__WXMOTIF__) && \
-    !defined(__WXPM__) && \
-    !defined(__WXMAC__) && \
-    !defined(__WXCOCOA__) && \
-    !defined(__WXGTK__)
-
-    // FIXME: This is work in progress about moving SetTitle/GetTitle from wxWindow
-    // to wxTopLevelWindow so initially enabled in wxMSW only to observe results
-    // and continue on other platforms
-
-    virtual void SetTitle( const wxString& WXUNUSED(title) ) {}
-    virtual wxString GetTitle() const { return wxEmptyString; }
-
-    // label is just the same as the title (but for, e.g., buttons it
-    // makes more sense to speak about labels)
-    virtual void SetLabel(const wxString& label) { SetTitle(label); }
-    virtual wxString GetLabel() const { return GetTitle(); }
-#else
-    // label is just the same as the title (but for, e.g., buttons it
-    // makes more sense to speak about labels)
+        // label is just the same as the title (but for, e.g., buttons it
+        // makes more sense to speak about labels), title access
+        // is available from wxTLW classes only (frames, dialogs)
     virtual void SetLabel(const wxString& label) = 0;
     virtual wxString GetLabel() const = 0;
-#endif
 
         // the window name is used for ressource setting in X, it is not the
         // same as the window title/label
