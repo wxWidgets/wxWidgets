@@ -240,8 +240,15 @@ public:
     {
     }
 
+    wxTreebookEvent(const wxTreebookEvent& event)
+        : wxBookCtrlBaseEvent(event)
+    {
+    }
+
+    virtual wxEvent *Clone() const { return new wxTreebookEvent(*this); }
+
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTreebookEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTreebookEvent)
 };
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED;

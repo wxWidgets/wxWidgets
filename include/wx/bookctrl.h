@@ -249,10 +249,17 @@ public:
     wxBookCtrlBaseEvent(wxEventType commandType = wxEVT_NULL, int winid = 0,
                         int nSel = -1, int nOldSel = -1)
         : wxNotifyEvent(commandType, winid)
-        {
-            m_nSel = nSel;
-            m_nOldSel = nOldSel;
-        }
+    {
+        m_nSel = nSel;
+        m_nOldSel = nOldSel;
+    }
+
+    wxBookCtrlBaseEvent(const wxBookCtrlBaseEvent& event)
+        : wxNotifyEvent(event)
+    {
+        m_nSel = event.m_nSel;
+        m_nOldSel = event.m_nOldSel;
+    }
 
     // accessors
         // the currently selected page (-1 if none)
