@@ -47,7 +47,7 @@
 
 // defined when the regex lib uses 'char' but 'wxChar' is wide
 #if wxUSE_UNICODE && !defined(__REG_NOFRONT)
-#   define WX_NEED_CONVERT
+#   define WXREGEX_CONVERT_TO_MB
 #endif
 
 // ----------------------------------------------------------------------------
@@ -55,7 +55,7 @@
 // ----------------------------------------------------------------------------
 
 // the character type used by the regular expression engine
-#ifndef WX_NEED_CONVERT
+#ifndef WXREGEX_CONVERT_TO_MB
 typedef wxChar wxRegChar;
 #else
 typedef char wxRegChar;
@@ -142,7 +142,7 @@ wxRegExImpl::~wxRegExImpl()
 
 wxString wxRegExImpl::GetErrorMsg(int errorcode, bool badconv) const
 {
-#ifdef WX_NEED_CONVERT
+#ifdef WXREGEX_CONVERT_TO_MB
     // currently only needed when using system library in Unicode mode
     if ( badconv )
     {
@@ -347,7 +347,7 @@ int wxRegExImpl::Replace(wxString *text,
     wxCHECK_MSG( IsValid(), wxNOT_FOUND, _T("must successfully Compile() first") );
 
     // the input string
-#ifndef WX_NEED_CONVERT
+#ifndef WXREGEX_CONVERT_TO_MB
     const wxChar *textstr = text->c_str();
     size_t textlen = text->length();
 #else
@@ -462,7 +462,7 @@ int wxRegExImpl::Replace(wxString *text,
         if (result.capacity() < result.length() + start + textNew.length())
             result.reserve(2 * result.length());
 
-#ifndef WX_NEED_CONVERT
+#ifndef WXREGEX_CONVERT_TO_MB
         result.append(*text, matchStart, start);
 #else
         result.append(wxString(textstr + matchStart, *wxConvCurrent, start));
@@ -475,7 +475,7 @@ int wxRegExImpl::Replace(wxString *text,
         matchStart += len;
     }
 
-#ifndef WX_NEED_CONVERT
+#ifndef WXREGEX_CONVERT_TO_MB
     result.append(*text, matchStart, wxString::npos);
 #else
     result.append(wxString(textstr + matchStart, *wxConvCurrent));
@@ -522,7 +522,7 @@ bool wxRegEx::Matches(const wxChar *str, int flags) const
 {
     wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
-#ifndef WX_NEED_CONVERT
+#ifndef WXREGEX_CONVERT_TO_MB
     return m_impl->Matches(str, flags, wxStrlen(str));
 #else
     return m_impl->Matches(wxConvertWX2MB(str), flags, wxStrlen(str));
