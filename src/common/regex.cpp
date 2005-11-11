@@ -45,9 +45,21 @@
 #include <regex.h>
 #include "wx/regex.h"
 
+// defined when the regex lib uses 'char' but 'wxChar' is wide
+#if wxUSE_UNICODE && !defined(__REG_NOFRONT)
+#   define WX_NEED_CONVERT
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
+
+// the character type used by the regular expression engine
+#ifndef WX_NEED_CONVERT
+typedef wxChar wxRegChar;
+#else
+typedef char wxRegChar;
+#endif
 
 // the real implementation of wxRegEx
 class wxRegExImpl
@@ -62,7 +74,7 @@ public:
 
     // RE operations
     bool Compile(const wxString& expr, int flags = 0);
-    bool Matches(const wxChar *str, int flags = 0) const;
+    bool Matches(const wxRegChar *str, int flags, size_t len) const;
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
     size_t GetMatchCount() const;
     int Replace(wxString *pattern, const wxString& replacement,
@@ -130,7 +142,7 @@ wxRegExImpl::~wxRegExImpl()
 
 wxString wxRegExImpl::GetErrorMsg(int errorcode, bool badconv) const
 {
-#if wxUSE_UNICODE && !defined(__REG_NOFRONT)
+#ifdef WX_NEED_CONVERT
     // currently only needed when using system library in Unicode mode
     if ( badconv )
     {
@@ -255,7 +267,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     return IsValid();
 }
 
-bool wxRegExImpl::Matches(const wxChar *str, int flags) const
+bool wxRegExImpl::Matches(const wxRegChar *str, int flags, size_t len) const
 {
     wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
@@ -278,11 +290,9 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
 
     // do match it
 #ifdef __REG_NOFRONT
-    bool conv = true;
-    int rc = wx_re_exec(&self->m_RegEx, str, wxStrlen(str), NULL, m_nMatches, m_Matches, flagsRE);
+    int rc = wx_re_exec(&self->m_RegEx, str, len, NULL, m_nMatches, m_Matches, flagsRE);
 #else
-    const wxWX2MBbuf conv = wxConvertWX2MB(str);
-    int rc = conv ? regexec(&self->m_RegEx, conv, m_nMatches, m_Matches, flagsRE) : REG_BADPAT;
+    int rc = str ? regexec(&self->m_RegEx, str, m_nMatches, m_Matches, flagsRE) : REG_BADPAT;
 #endif
 
     switch ( rc )
@@ -293,8 +303,8 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
 
         default:
             // an error occurred
-            wxLogError(_("Failed to match '%s' in regular expression: %s"),
-                       str, GetErrorMsg(rc, !conv).c_str());
+            wxLogError(_("Failed to find match for regular expression: %s"),
+                       GetErrorMsg(rc, !str).c_str());
             // fall through
 
         case REG_NOMATCH:
@@ -336,8 +346,28 @@ int wxRegExImpl::Replace(wxString *text,
     wxCHECK_MSG( text, wxNOT_FOUND, _T("NULL text in wxRegEx::Replace") );
     wxCHECK_MSG( IsValid(), wxNOT_FOUND, _T("must successfully Compile() first") );
 
+    // the input string
+#ifndef WX_NEED_CONVERT
+    const wxChar *textstr = text->c_str();
+    size_t textlen = text->length();
+#else
+    const wxWX2MBbuf textstr = wxConvertWX2MB(*text);
+    if (!textstr)
+    {
+        wxLogError(_("Failed to find match for regular expression: %s"),
+                   GetErrorMsg(0, true).c_str());
+        return 0;
+    }
+    size_t textlen = strlen(textstr);
+    text->clear();
+#endif
+
     // the replacement text
     wxString textNew;
+
+    // the result, allow 25% extra
+    wxString result;
+    result.reserve(5 * textlen / 4);
 
     // attempt at optimization: don't iterate over the string if it doesn't
     // contain back references at all
@@ -350,10 +380,6 @@ int wxRegExImpl::Replace(wxString *text,
     }
 
     // the position where we start looking for the match
-    //
-    // NB: initial version had a nasty bug because it used a wxChar* instead of
-    //     an index but the problem is that replace() in the loop invalidates
-    //     all pointers into the string so we have to use indices instead
     size_t matchStart = 0;
 
     // number of replacement made: we won't make more than maxMatches of them
@@ -363,7 +389,9 @@ int wxRegExImpl::Replace(wxString *text,
     // note that "^" shouldn't match after the first call to Matches() so we
     // use wxRE_NOTBOL to prevent it from happening
     while ( (!maxMatches || countRepl < maxMatches) &&
-            Matches(text->c_str() + matchStart, countRepl ? wxRE_NOTBOL : 0) )
+            Matches(textstr + matchStart,
+                    countRepl ? wxRE_NOTBOL : 0,
+                    textlen - matchStart) )
     {
         // the string possibly contains back references: we need to calculate
         // the replacement text anew after each match
@@ -407,8 +435,8 @@ int wxRegExImpl::Replace(wxString *text,
                     }
                     else
                     {
-                        textNew += wxString(text->c_str() + matchStart + start,
-                                            len);
+                        textNew += wxString(textstr + matchStart + start,
+                                            *wxConvCurrent, len);
 
                         mayHaveBackrefs = true;
                     }
@@ -429,13 +457,30 @@ int wxRegExImpl::Replace(wxString *text,
             return wxNOT_FOUND;
         }
 
+        // an insurance against implementations that don't grow exponentially
+        // to ensure building the result takes linear time
+        if (result.capacity() < result.length() + start + textNew.length())
+            result.reserve(2 * result.length());
+
+#ifndef WX_NEED_CONVERT
+        result.append(*text, matchStart, start);
+#else
+        result.append(wxString(textstr + matchStart, *wxConvCurrent, start));
+#endif
         matchStart += start;
-        text->replace(matchStart, len, textNew);
+        result.append(textNew);
 
         countRepl++;
 
-        matchStart += textNew.length();
+        matchStart += len;
     }
+
+#ifndef WX_NEED_CONVERT
+    result.append(*text, matchStart, wxString::npos);
+#else
+    result.append(wxString(textstr + matchStart, *wxConvCurrent));
+#endif
+    *text = result;
 
     return countRepl;
 }
@@ -448,7 +493,6 @@ void wxRegEx::Init()
 {
     m_impl = NULL;
 }
-
 
 wxRegEx::~wxRegEx()
 {
@@ -478,7 +522,11 @@ bool wxRegEx::Matches(const wxChar *str, int flags) const
 {
     wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
-    return m_impl->Matches(str, flags);
+#ifndef WX_NEED_CONVERT
+    return m_impl->Matches(str, flags, wxStrlen(str));
+#else
+    return m_impl->Matches(wxConvertWX2MB(str), flags, wxStrlen(str));
+#endif
 }
 
 bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const
