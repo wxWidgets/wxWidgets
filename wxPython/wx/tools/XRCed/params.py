@@ -11,14 +11,10 @@ from types import *
 from wxPython.xrc import *
 
 genericStyles = [
-    'wxSIMPLE_BORDER', 'wxDOUBLE_BORDER', 'wxSUNKEN_BORDER',
+    'wxSIMPLE_BORDER', 'wxSUNKEN_BORDER', 'wxDOUBLE_BORDER',
     'wxRAISED_BORDER', 'wxSTATIC_BORDER', 'wxNO_BORDER',
-    'wxTRANSPARENT_WINDOW', 'wxTAB_TRAVERSAL', 
-    'wxWANTS_CHARS',
-    'wxNO_FULL_REPAINT_ON_RESIZE',
-    'wxVSCROLL', 'wxHSCROLL', 'wxALWAYS_SHOW_SB',
-    'wxCLIP_CHILDREN',
-    'wxFULL_REPAINT_ON_RESIZE'
+    'wxCLIP_CHILDREN', 'wxTRANSPARENT_WINDOW', 'wxWANTS_CHARS',
+    'wxNO_FULL_REPAINT_ON_RESIZE', 'wxFULL_REPAINT_ON_RESIZE'
     ]
 
 genericExStyles = [
@@ -41,7 +37,7 @@ class PPanel(wxPanel):
         # Something strange is going on with enable so we make sure...
         for w in self.GetChildren():
             w.Enable(value)
-        wxPanel.Enable(self, value)
+        #wxPanel.Enable(self, value)
     def SetModified(self):
         self.modified = True
         g.panel.SetModified(True)
@@ -108,14 +104,17 @@ class ParamBinaryOr(PPanel):
 
 class ParamFlag(ParamBinaryOr):
     values = ['wxTOP', 'wxBOTTOM', 'wxLEFT', 'wxRIGHT', 'wxALL',
-              'wxEXPAND', 'wxGROW', 'wxSHAPED', 'wxALIGN_CENTRE', 'wxALIGN_RIGHT',
-              'wxFIXED_MINSIZE',
-              'wxALIGN_BOTTOM', 'wxALIGN_CENTRE_VERTICAL',
-              'wxALIGN_CENTRE_HORIZONTAL',
+              'wxEXPAND', 'wxGROW', 'wxSHAPED', 'wxSTRETCH_NOT',
+              'wxALIGN_CENTRE', 'wxALIGN_LEFT', 'wxALIGN_RIGHT',
+              'wxALIGN_TOP', 'wxALIGN_BOTTOM', 
+              'wxALIGN_CENTRE_VERTICAL', 'wxALIGN_CENTRE_HORIZONTAL', 
+              'wxADJUST_MINSIZE', 'wxFIXED_MINSIZE'
               ]
     equal = {'wxALIGN_CENTER': 'wxALIGN_CENTRE',
              'wxALIGN_CENTER_VERTICAL': 'wxALIGN_CENTRE_VERTICAL',
-             'wxALIGN_CENTER_HORIZONTAL': 'wxALIGN_CENTRE_HORIZONTAL'}
+             'wxALIGN_CENTER_HORIZONTAL': 'wxALIGN_CENTRE_HORIZONTAL',
+             'wxUP': 'wxTOP', 'wxDOWN': 'wxBOTTOM', 'wxNORTH': 'wxTOP',
+             'wxSOUTH': 'wxBOTTOM', 'wxWEST': 'wxLEFT', 'wxEAST': 'wxRIGHT'}
     def __init__(self, parent, name):
         ParamBinaryOr.__init__(self, parent, name)
 
@@ -196,10 +195,10 @@ class ParamColour(PPanel):
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON = wxNewId()
         sizer = wxBoxSizer()
-        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(65,-1))
-        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
-        self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(20, 1))
-        sizer.Add(self.button, 0, wxGROW | wxALIGN_CENTER_VERTICAL)
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(80,-1))
+        sizer.Add(self.text, 0, wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM, 2)
+        self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(20, 20))
+        sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -269,7 +268,7 @@ class ParamFont(PPanel):
         PPanel.OnChange(self, evt)
         self.textModified = True
     def _defaultValue(self):
-        return ['12', 'default', 'normal', 'normal', '0', '', '']
+        return [`g._sysFont.GetPointSize()`, 'default', 'normal', 'normal', '0', '', '']
     def GetValue(self):
         if self.textModified:           # text has newer value
             try:
@@ -293,7 +292,7 @@ class ParamFont(PPanel):
                 self.value = self._defaultValue()
         # Make initial font
         # Default values
-        size = 12
+        size = g._sysFont.GetPointSize()
         family = wxDEFAULT
         style = weight = wxNORMAL
         underlined = 0
@@ -472,7 +471,7 @@ class ParamText(PPanel):
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(textWidth,-1))
         if textWidth == -1: option = 1
         else: option = 0
-        sizer.Add(self.text, option, wxALIGN_CENTER_VERTICAL)
+        sizer.Add(self.text, option, wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM, 2)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -951,5 +950,5 @@ paramDict = {
     'fg': ParamColour, 'bg': ParamColour, 'font': ParamFont,
     'enabled': ParamBool, 'focused': ParamBool, 'hidden': ParamBool,
     'tooltip': ParamText, 'bitmap': ParamBitmap, 'icon': ParamBitmap,
-    'encoding': ParamEncoding
+    'encoding': ParamEncoding, 'borders': ParamUnit
     }

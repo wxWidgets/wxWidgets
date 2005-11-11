@@ -1,3 +1,11 @@
+0.1.7-0
+-------
+
+Added new controls (Choicebook, Listbook, StatusBar, DatePicker), and
+completed style flags. Test window is opened for an available parent
+control if no specific view defined. Better handling of exceptions
+(highlighting does not 'stick' anymore). Tested on wxGTK 2.6.1.0.
+
 0.1.6-7
 -------
 

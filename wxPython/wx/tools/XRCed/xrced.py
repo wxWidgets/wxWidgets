@@ -54,7 +54,7 @@ Consult README file for the details.</HTML>
 
 defaultIDs = {xxxPanel:'PANEL', xxxDialog:'DIALOG', xxxFrame:'FRAME',
               xxxMenuBar:'MENUBAR', xxxMenu:'MENU', xxxToolBar:'TOOLBAR',
-              xxxWizard:'WIZARD'}
+              xxxWizard:'WIZARD', xxxBitmap:'BITMAP', xxxIcon:'ICON'}
 
 defaultName = 'UNTITLED.xrc'
 
@@ -207,8 +207,8 @@ class Frame(wxFrame):
                          'Refresh', 'Refresh view')
         tb.AddSimpleTool(self.ID_AUTO_REFRESH, images.getAutoRefreshBitmap(),
                          'Auto-refresh', 'Toggle auto-refresh mode', True)
-        if wxPlatform == '__WXGTK__':
-            tb.AddSeparator()   # otherwise auto-refresh sticks in status line
+#        if wxPlatform == '__WXGTK__':
+#            tb.AddSeparator()   # otherwise auto-refresh sticks in status line
         tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
         tb.Realize()
  
@@ -482,7 +482,8 @@ class Frame(wxFrame):
             if not parent.__class__ in [xxxMainNode, xxxMenuBar, xxxMenu]: error = True
         elif x.__class__ == xxxMenuItem:
             if not parent.__class__ in [xxxMenuBar, xxxMenu]: error = True
-        elif x.isSizer and parent.__class__ == xxxNotebook: error = True
+        elif x.isSizer and parent.__class__ in [xxxNotebook, xxxChoicebook, xxxListbook]:
+            error = True
         else:                           # normal controls can be almost anywhere
             if parent.__class__ == xxxMainNode or \
                parent.__class__ in [xxxMenuBar, xxxMenu]: error = True
@@ -497,10 +498,11 @@ class Frame(wxFrame):
         # If parent is sizer or notebook, child is of wrong class or
         # parent is normal window, child is child container then detach child.
         isChildContainer = isinstance(xxx, xxxChildContainer)
+        parentIsBook = parent.__class__ in [xxxNotebook, xxxChoicebook, xxxListbook]
         if isChildContainer and \
            ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
-            (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
-           not (parent.isSizer or isinstance(parent, xxxNotebook))):
+            (parentIsBook and not isinstance(xxx, xxxPage)) or \
+           not (parent.isSizer or parentIsBook)):
             elem.removeChild(xxx.child.element) # detach child
             elem.unlink()           # delete child container
             elem = xxx.child.element # replace
@@ -515,6 +517,14 @@ class Frame(wxFrame):
             elem = sizerItemElem
         elif isinstance(parent, xxxNotebook) and not isChildContainer:
             pageElem = MakeEmptyDOM('notebookpage')
+            pageElem.appendChild(elem)
+            elem = pageElem
+        elif isinstance(parent, xxxChoicebook) and not isChildContainer:
+            pageElem = MakeEmptyDOM('choicebookpage')
+            pageElem.appendChild(elem)
+            elem = pageElem
+        elif isinstance(parent, xxxListbook) and not isChildContainer:
+            pageElem = MakeEmptyDOM('listbookpage')
             pageElem.appendChild(elem)
             elem = pageElem
         # Insert new node, register undo
@@ -960,19 +970,28 @@ Homepage: http://xrced.sourceforge.net\
     def OnIdle(self, evt):
         if self.inIdle: return          # Recursive call protection
         self.inIdle = True
-        if tree.needUpdate:
-            if conf.autoRefresh:
-                if g.testWin:
-                    self.SetStatusText('Refreshing test window...')
-                    # (re)create
-                    tree.CreateTestWin(g.testWin.item)
-                    self.SetStatusText('')
-                tree.needUpdate = False
-        elif tree.pendingHighLight:
-            tree.HighLight(tree.pendingHighLight)
-        else:
-            evt.Skip()
-        self.inIdle = False
+        try:
+            if tree.needUpdate:
+                if conf.autoRefresh:
+                    if g.testWin:
+                        self.SetStatusText('Refreshing test window...')
+                        # (re)create
+                        tree.CreateTestWin(g.testWin.item)
+                        self.SetStatusText('')
+                    tree.needUpdate = False
+            elif tree.pendingHighLight:
+                try:
+                    tree.HighLight(tree.pendingHighLight)
+                except:
+                    # Remove highlight if any problem
+                    if g.testWin.highLight:
+                        g.testWin.highLight.Remove()
+                    tree.pendingHighLight = None
+                    raise
+            else:
+                evt.Skip()
+        finally:
+            self.inIdle = False
 
     # We don't let close panel window
     def OnCloseMiniFrame(self, evt):
@@ -1018,9 +1037,10 @@ Homepage: http://xrced.sourceforge.net\
             g.testWin = None
         # Numbers for new controls
         self.maxIDs = {}
-        self.maxIDs[xxxPanel] = self.maxIDs[xxxDialog] = self.maxIDs[xxxFrame] = \
-        self.maxIDs[xxxMenuBar] = self.maxIDs[xxxMenu] = self.maxIDs[xxxToolBar] = \
-        self.maxIDs[xxxWizard] = 0
+        for cl in [xxxPanel, xxxDialog, xxxFrame,
+                   xxxMenuBar, xxxMenu, xxxToolBar,
+                   xxxWizard, xxxBitmap, xxxIcon]:
+            self.maxIDs[cl] = 0
 
     def SetModified(self, state=True):
         self.modified = state
@@ -1138,6 +1158,11 @@ def usage():
 
 class App(wxApp):
     def OnInit(self):
+        # Check version
+        if wxVERSION[:3] < MinWxVersion:
+            wxLogWarning('''\
+This version of XRCed may not work correctly on your version of wxWindows. \
+Please upgrade wxWindows to %d.%d.%d or higher.''' % MinWxVersion)
         global debug
         # Process comand-line
         opts = args = None
