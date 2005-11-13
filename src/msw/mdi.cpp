@@ -789,7 +789,17 @@ wxMDIChildFrame::~wxMDIChildFrame()
 bool wxMDIChildFrame::Show(bool show)
 {
     m_needsInitialShow = false;
-    return wxFrame::Show(show);
+
+    if (!wxFrame::Show(show))
+        return false;
+
+    // KH: Without this call, new MDI children do not become active.
+    // This was added here after the same BringWindowToTop call was
+    // removed from wxTopLevelWindow::Show (November 2005)
+    if ( show )
+        ::BringWindowToTop(GetHwnd());
+
+    return true;
 }
 
 // Set the client size (i.e. leave the calculation of borders etc.
