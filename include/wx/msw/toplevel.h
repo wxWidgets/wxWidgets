@@ -86,6 +86,11 @@ public:
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
 #endif // __SMARTPHONE__ && __WXWINCE__
 
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    // Soft Input Panel (SIP) change notification
+    virtual bool HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam);
+#endif
+
 protected:
     // common part of all ctors
     void Init();
@@ -110,6 +115,9 @@ protected:
 
     // choose the right parent to use with CreateWindow()
     virtual WXHWND MSWGetParent() const;
+
+    // window proc for the frames
+    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     // is the window currently iconized?
     bool m_iconized;
@@ -162,6 +170,12 @@ protected:
     void ReloadButton(ButtonMenu& button, UINT menuID);
     void ReloadAllButtons();
 #endif // __SMARTPHONE__ && __WXWINCE__
+
+private:
+
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    void* m_activateInfo;
+#endif
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW)

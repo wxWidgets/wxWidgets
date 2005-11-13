@@ -69,6 +69,15 @@ Gets a string containing the window title.
 \helpref{wxTopLevelWindow::SetTitle}{wxtoplevelwindowsettitle}
 
 
+\membersection{wxTopLevelWindow::HandleSettingChange}\label{wxtoplevelwindowhandlesettingchange}
+
+\func{virtual bool}{HandleSettingChange}{\param{WXWPARAM}{ wParam}, \param{WXLPARAM}{ lParam}}
+
+Unique to the wxWinCE port. Responds to showing/hiding SIP (soft input panel) area and resize
+accordingly window accordingly. Override this if you want to avoid resinzing or do additional
+operations.
+
+
 \membersection{wxTopLevelWindow::IsActive}\label{wxtoplevelwindowisactive}
 
 \constfunc{bool}{IsActive}{\void}

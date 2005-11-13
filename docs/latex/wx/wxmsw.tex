@@ -117,8 +117,8 @@ that will do the right thing on each platform.)
 If the screen orientation changes, the windows will automatically be resized
 so no further action needs to be taken (unless you want to change the layout
 according to the orientation, which you could detect in idle time, for example).
-However, if the input panel (SIP) is shown, windows do not yet resize accordingly. This will
-be implemented soon.
+When input panel (SIP) is shown, top level windows (frames and dialogs) resize
+accordingly (see \helpref{wxTopLevelWindow::HandleSettingChange}{wxtoplevelwindowhandlesettingchange}).
 
 \subsubsection{Closing top-level windows in wxWinCE}
 

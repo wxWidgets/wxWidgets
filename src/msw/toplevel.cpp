@@ -144,6 +144,14 @@ void wxTopLevelWindowMSW::Init()
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     m_MenuBarHWND = 0;
 #endif
+
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    SHACTIVATEINFO* info = new SHACTIVATEINFO;
+    wxZeroMemory(*info);
+    info->cbSize = sizeof(SHACTIVATEINFO);
+
+    m_activateInfo = (void*) info;
+#endif
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -302,6 +310,61 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
     }
 
     return (WXHWND)hwndParent;
+}
+
+bool wxTopLevelWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
+{
+    SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
+    if (!info) return false;
+    return SHHandleWMSettingChange(GetHwnd(), wParam, lParam, info) == TRUE;
+}
+
+WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+{
+    WXLRESULT rc = 0;
+    bool processed = false;
+
+    switch ( message )
+    {
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+        case WM_ACTIVATE:
+        {
+            SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
+            if (info)
+            {
+                DWORD flags = 0;
+                if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) flags = SHA_INPUTDIALOG;
+                SHHandleWMActivate(GetHwnd(), wParam, lParam, info, flags);
+            }
+
+            // This implicitly sends a wxEVT_ACTIVATE_APP event
+            if (wxTheApp)
+                wxTheApp->SetActive(wParam != 0, FindFocus());
+
+            break;
+        }
+        case WM_SETTINGCHANGE:
+        {
+            processed = HandleSettingChange(wParam,lParam);
+            break;
+        }
+        case WM_HIBERNATE:
+        {
+            if (wxTheApp)
+            {
+                wxActivateEvent event(wxEVT_HIBERNATE, true, wxID_ANY);
+                event.SetEventObject(wxTheApp);
+                processed = wxTheApp->ProcessEvent(event);
+            }
+            break;
+        }
+#endif
+    }
+
+    if ( !processed )
+        rc = wxTopLevelWindowBase::MSWWindowProc(message, wParam, lParam);
+
+    return rc;
 }
 
 bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
@@ -550,6 +613,12 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 {
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
+    delete info;
+    m_activateInfo = NULL;
+#endif
+
     // after destroying an owned window, Windows activates the next top level
     // window in Z order but it may be different from our owner (to reproduce
     // this simply Alt-TAB to another application and back before closing the
@@ -1019,40 +1088,51 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 LONG APIENTRY _EXPORT
 wxDlgProc(HWND hDlg,
           UINT message,
-          WPARAM WXUNUSED(wParam),
-          LPARAM WXUNUSED(lParam))
+          WPARAM wParam,
+          LPARAM lParam)
 {
-    if ( message == WM_INITDIALOG )
+    switch ( message )
     {
-        // under CE, add a "Ok" button in the dialog title bar and make it full
-        // screen
-        //
-        // TODO: find the window for this HWND, and take into account
-        // wxMAXIMIZE and wxCLOSE_BOX. For now, assume both are present.
-        //
-        // Standard SDK doesn't have aygshell.dll: see
-        // include/wx/msw/wince/libraries.h
+        case WM_INITDIALOG:
+        {
+            // under CE, add a "Ok" button in the dialog title bar and make it full
+            // screen
+            //
+            // TODO: find the window for this HWND, and take into account
+            // wxMAXIMIZE and wxCLOSE_BOX. For now, assume both are present.
+            //
+            // Standard SDK doesn't have aygshell.dll: see
+            // include/wx/msw/wince/libraries.h
 #if defined(__WXWINCE__) && !defined(__WINCE_STANDARDSDK__) && !defined(__HANDHELDPC__)
-        SHINITDLGINFO shidi;
-        shidi.dwMask = SHIDIM_FLAGS;
-        shidi.dwFlags = SHIDIF_SIZEDLG // take account of the SIP or menubar
+            SHINITDLGINFO shidi;
+            shidi.dwMask = SHIDIM_FLAGS;
+            shidi.dwFlags = SHIDIF_SIZEDLG // take account of the SIP or menubar
 #ifndef __SMARTPHONE__
-                        | SHIDIF_DONEBUTTON
+                            | SHIDIF_DONEBUTTON
 #endif
                         ;
-        shidi.hDlg = hDlg;
-        SHInitDialog( &shidi );
+            shidi.hDlg = hDlg;
+            SHInitDialog( &shidi );
 #else // no SHInitDialog()
-        wxUnusedVar(hDlg);
+            wxUnusedVar(hDlg);
+#endif
+            // for WM_INITDIALOG, returning TRUE tells system to set focus to
+            // the first control in the dialog box, but as we set the focus
+            // ourselves, we return FALSE for it as well
+            return FALSE;
+        }
+
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+        case WM_SETTINGCHANGE:
+        {
+            wxTopLevelWindow *tlw = wxDynamicCast(wxGetWindowFromHWND(hDlg), wxTopLevelWindow);
+            if(tlw) return tlw->HandleSettingChange(wParam,lParam) ? TRUE : FALSE;
+        }
 #endif
     }
 
     // for almost all messages, returning FALSE means that we didn't process
     // the message
-    //
-    // for WM_INITDIALOG, returning TRUE tells system to set focus to
-    // the first control in the dialog box, but as we set the focus
-    // ourselves, we return FALSE for it as well
     return FALSE;
 }
 

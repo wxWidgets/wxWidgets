@@ -18,12 +18,12 @@ public:
     // construction
     wxFrame() { Init(); }
     wxFrame(wxWindow *parent,
-               wxWindowID id,
-               const wxString& title,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = wxDEFAULT_FRAME_STYLE,
-               const wxString& name = wxFrameNameStr)
+            wxWindowID id,
+            const wxString& title,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxDEFAULT_FRAME_STYLE,
+            const wxString& name = wxFrameNameStr)
     {
         Init();
 
@@ -149,9 +149,6 @@ private:
 #if wxUSE_TOOLTIPS
     WXHWND                m_hwndToolTip;
 #endif // tooltips
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-    void* m_activateInfo;
-#endif
 
     // used by IconizeChildFrames(), see comments there
     bool m_wasMinimized;
