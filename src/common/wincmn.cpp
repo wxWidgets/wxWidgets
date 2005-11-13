@@ -83,7 +83,7 @@
 #endif
 
 // For reporting compile- and runtime version of GTK+ in the ctrl+alt+mclick dialog.
-// The gtk includes donn't pull any other header in, at least not on my system - MR
+// The gtk includes don't pull any other headers in, at least not on my system - MR
 #ifdef __WXGTK__
     #ifdef __WXGTK20__
         #include <gtk/gtkversion.h>
