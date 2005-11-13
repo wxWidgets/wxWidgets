@@ -802,7 +802,7 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
         posRect.right = w;
         posRect.bottom = h;
 
-#if defined(__SMARTPHONE__) && defined(_WIN32_WCE) && _WIN32_WCE < 400
+#if defined(_WIN32_WCE) && _WIN32_WCE < 400
         ::InvalidateRect(m_oleObjectHWND, NULL, false);
 #else
         ::RedrawWindow(m_oleObjectHWND, NULL, NULL, RDW_INTERNALPAINT);
