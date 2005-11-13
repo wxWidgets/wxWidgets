@@ -312,12 +312,14 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
     return (WXHWND)hwndParent;
 }
 
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
 bool wxTopLevelWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
 {
     SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
     if (!info) return false;
     return SHHandleWMSettingChange(GetHwnd(), wParam, lParam, info) == TRUE;
 }
+#endif
 
 WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
