@@ -157,13 +157,13 @@ PocketPC dialogs have an OK button on the caption, and so you should generally
 not repeat an OK button on the dialog. You can add a Cancel button if necessary, but some dialogs
 simply don't offer you the choice (the guidelines recommend you offer an Undo facility
 to make up for it). When the user clicks on the OK button, your dialog will receive
-a wxID\_OK event by default. If you wish to change this, call wxDialog::SetAffirmativeId
-with the required identifier to be used. Or, override wxDialog::DoOK (return false to
+a wxID\_OK event by default. If you wish to change this, call \helpref{wxDialog::SetAffirmativeId}{wxdialogsetaffirmativeid}
+with the required identifier to be used. Or, override \helpref{wxDialog::DoOK}{wxdialogdook} (return false to
 have wxWidgets simply call Close to dismiss the dialog).
 
 Smartphone dialogs do {\it not} have an OK button on the caption, and are closed
-using one of the two menu buttons. You need to assign these using wxTopLevelWindow::SetLeftMenu
-and wxTopLevelWindow::SetRightMenu, for example:
+using one of the two menu buttons. You need to assign these using \helpref{wxTopLevelWindow::SetLeftMenu}{wxtoplevelwindowsetleftmenu}
+and \helpref{wxTopLevelWindow::SetRightMenu}{wxtoplevelwindowsetrightmenu}, for example:
 
 \begin{verbatim}
 #ifdef __SMARTPHONE__
