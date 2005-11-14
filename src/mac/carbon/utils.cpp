@@ -735,8 +735,10 @@ void wxMacWakeUp()
     if ( isSame )
     {
 #if TARGET_CARBON
-        static wxMacCarbonEvent s_wakeupEvent ;
         OSStatus err = noErr ;
+#if 0
+        // lead sometimes to race conditions, although all calls used should be thread safe ...
+        static wxMacCarbonEvent s_wakeupEvent ;
         if ( !s_wakeupEvent.IsValid() )
         {
            err = s_wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
@@ -744,12 +746,20 @@ void wxMacWakeUp()
         }
         if ( err == noErr )
         {
+            
             if ( IsEventInQueue( GetMainEventQueue() , s_wakeupEvent ) )
                 return ;
             s_wakeupEvent.SetCurrentTime() ;
             err = PostEventToQueue(GetMainEventQueue(), s_wakeupEvent,
-                                  kEventPriorityHigh);
+                                  kEventPriorityHigh );
         }
+#else
+        wxMacCarbonEvent wakeupEvent ;
+        wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
+                            kEventAttributeNone ) ;
+        err = PostEventToQueue(GetMainEventQueue(), wakeupEvent,
+                               kEventPriorityHigh );
+#endif
 #else
         PostEvent( nullEvent , 0 ) ;
 #endif
