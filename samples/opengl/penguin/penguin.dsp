@@ -468,7 +468,7 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\lw.cpp
+SOURCE=.\dxfrenderer.cpp
 # End Source File
 # Begin Source File
 

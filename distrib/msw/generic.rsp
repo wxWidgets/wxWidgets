@@ -974,7 +974,7 @@ samples/opengl/penguin/*.xbm
 samples/opengl/penguin/*.xpm
 samples/opengl/penguin/*.pro
 samples/opengl/penguin/make*.*
-samples/opengl/penguin/penguin.lwo
+samples/opengl/penguin/penguin.dxf.gz
 samples/opengl/penguin/*.bkl
 
 samples/png/*.cpp

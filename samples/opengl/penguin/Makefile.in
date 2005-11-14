@@ -52,7 +52,7 @@ PENGUIN_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 PENGUIN_OBJECTS =  \
 	$(__penguin_os2_lib_res) \
 	penguin_penguin.o \
-	penguin_lw.o \
+	penguin_dxfrenderer.o \
 	penguin_trackball.o \
 	$(__penguin___win32rc)
 
@@ -187,7 +187,7 @@ penguin.app/Contents/PkgInfo: $(__penguin___depname) $(top_srcdir)/src/mac/carbo
 
 data: 
 	@mkdir -p .
-	@for f in penguin.lwo; do \
+	@for f in penguin.dxf.gz; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
@@ -200,8 +200,8 @@ data:
 penguin_penguin.o: $(srcdir)/penguin.cpp
 	$(CXXC) -c -o $@ $(PENGUIN_CXXFLAGS) $(srcdir)/penguin.cpp
 
-penguin_lw.o: $(srcdir)/lw.cpp
-	$(CXXC) -c -o $@ $(PENGUIN_CXXFLAGS) $(srcdir)/lw.cpp
+penguin_dxfrenderer.o: $(srcdir)/dxfrenderer.cpp
+	$(CXXC) -c -o $@ $(PENGUIN_CXXFLAGS) $(srcdir)/dxfrenderer.cpp
 
 penguin_trackball.o: $(srcdir)/trackball.c
 	$(CCC) -c -o $@ $(PENGUIN_CFLAGS) $(srcdir)/trackball.c

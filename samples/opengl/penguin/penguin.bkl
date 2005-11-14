@@ -8,7 +8,7 @@
     <exe id="penguin" template="wx_sample" template_append="wx_append" cond="USE_OPENGL=='1'">
         <sources>
             penguin.cpp
-            lw.cpp
+            dxfrenderer.cpp
             trackball.c
         </sources>
         <wx-lib>gl</wx-lib>
@@ -19,7 +19,7 @@
 
     <wx-data id="data">
         <files>
-            penguin.lwo
+            penguin.dxf.gz
         </files>
     </wx-data>
 

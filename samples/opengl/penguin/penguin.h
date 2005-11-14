@@ -17,35 +17,37 @@
 #include "wx/app.h"
 #include "wx/menu.h"
 #include "wx/dcclient.h"
+#include "wx/wfstream.h"
+#if wxUSE_ZLIB
+#include "wx/zstream.h"
+#endif
 
 #include "wx/glcanvas.h"
 
 extern "C"
 {
-#include "lw.h"
 #include "trackball.h"
 }
 
-/* information needed to display lightwave mesh */
-typedef struct
+#include "dxfrenderer.h"
+
+// OpenGL view data
+struct GLData
 {
-//  gint do_init;         /* true if initgl not yet called */
-    bool do_init;
-    lwObject *lwobject;   /* lightwave object mesh */
-    float beginx,beginy;  /* position of mouse */
-    float quat[4];        /* orientation of object */
-    float zoom;           /* field of view in degrees */
-} mesh_info;
+    bool initialized;           // have OpenGL been initialized?
+    float beginx, beginy;       // position of mouse
+    float quat[4];              // orientation of object
+    float zoom;                 // field of view in degrees
+};
 
-
-/* Define a new application type */
+// Define a new application type
 class MyApp: public wxApp
 {
 public:
     bool OnInit();
 };
 
-/* Define a new frame type */
+// Define a new frame type
 class TestGLCanvas;
 
 class MyFrame: public wxFrame
@@ -54,7 +56,9 @@ public:
     MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
         const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
 
-    void OnExit(wxCommandEvent& event);
+    void OnMenuFileOpen(wxCommandEvent& event);
+    void OnMenuFileExit(wxCommandEvent& event);
+    void OnMenuHelpAbout(wxCommandEvent& event);
 
 #if wxUSE_GLCANVAS
     void SetCanvas( TestGLCanvas *canvas ) { m_canvas = canvas; }
@@ -79,17 +83,21 @@ public:
 
     ~TestGLCanvas();
 
+    void LoadDXF(const wxString& filename);
+
+protected:
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
-    void LoadLWO( const wxString &filename);
-    void OnMouse( wxMouseEvent& event );
-    void InitGL();
-
-    mesh_info  info;
-    bool       block;
+    void OnMouse(wxMouseEvent& event);
 
 private:
+    void InitGL();
+    void ResetProjectionMode();
+
+    GLData m_gldata;
+    DXFRenderer m_renderer;
+
     DECLARE_EVENT_TABLE()
 };
 

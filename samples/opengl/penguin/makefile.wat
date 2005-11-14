@@ -225,7 +225,7 @@ PENGUIN_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	$(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 PENGUIN_OBJECTS =  &
 	$(OBJS)\penguin_penguin.obj &
-	$(OBJS)\penguin_lw.obj &
+	$(OBJS)\penguin_dxfrenderer.obj &
 	$(OBJS)\penguin_trackball.obj
 
 
@@ -260,16 +260,16 @@ $(OBJS)\penguin.exe :  $(PENGUIN_OBJECTS) $(OBJS)\penguin_penguin.res
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (penguin.lwo) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (penguin.dxf.gz) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\penguin_penguin.obj :  .AUTODEPEND .\penguin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(PENGUIN_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(PENGUIN_CXXFLAGS) $<
 
-$(OBJS)\penguin_lw.obj :  .AUTODEPEND .\lw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(PENGUIN_CXXFLAGS) $<
+$(OBJS)\penguin_dxfrenderer.obj :  .AUTODEPEND .\dxfrenderer.cpp
+	$(CXX) -zq -fo=$^@ $(PENGUIN_CXXFLAGS) $<
 
 $(OBJS)\penguin_trackball.obj :  .AUTODEPEND .\trackball.c
-	$(CC) -bt=nt -zq -fo=$^@ $(PENGUIN_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(PENGUIN_CFLAGS) $<
 
 $(OBJS)\penguin_penguin.res :  .AUTODEPEND .\penguin.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $<

@@ -41,7 +41,7 @@ PENGUIN_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 PENGUIN_OBJECTS =  \
 	$(OBJS)\penguin_penguin.obj \
-	$(OBJS)\penguin_lw.obj \
+	$(OBJS)\penguin_dxfrenderer.obj \
 	$(OBJS)\penguin_trackball.obj
 
 ### Conditionally set variables: ###
@@ -232,12 +232,12 @@ $(OBJS)\penguin.exe: $(PENGUIN_OBJECTS)  $(OBJS)\penguin_penguin.res
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (penguin.lwo) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (penguin.dxf.gz) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\penguin_penguin.obj: .\penguin.cpp
 	$(CXX) -q -c -P -o$@ $(PENGUIN_CXXFLAGS) $**
 
-$(OBJS)\penguin_lw.obj: .\lw.cpp
+$(OBJS)\penguin_dxfrenderer.obj: .\dxfrenderer.cpp
 	$(CXX) -q -c -P -o$@ $(PENGUIN_CXXFLAGS) $**
 
 $(OBJS)\penguin_trackball.obj: .\trackball.c

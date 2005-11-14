@@ -34,7 +34,7 @@ PENGUIN_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 PENGUIN_OBJECTS =  \
 	$(OBJS)\penguin_penguin.o \
-	$(OBJS)\penguin_lw.o \
+	$(OBJS)\penguin_dxfrenderer.o \
 	$(OBJS)\penguin_trackball.o \
 	$(OBJS)\penguin_penguin_rc.o
 
@@ -225,12 +225,12 @@ endif
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (penguin.lwo) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (penguin.dxf.gz) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\penguin_penguin.o: ./penguin.cpp
 	$(CXX) -c -o $@ $(PENGUIN_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\penguin_lw.o: ./lw.cpp
+$(OBJS)\penguin_dxfrenderer.o: ./dxfrenderer.cpp
 	$(CXX) -c -o $@ $(PENGUIN_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\penguin_trackball.o: ./trackball.c
