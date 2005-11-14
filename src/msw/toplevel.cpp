@@ -1124,13 +1124,17 @@ wxDlgProc(HWND hDlg,
             return FALSE;
         }
 
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
         case WM_SETTINGCHANGE:
         {
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
             wxTopLevelWindow *tlw = wxDynamicCast(wxGetWindowFromHWND(hDlg), wxTopLevelWindow);
             if(tlw) return tlw->HandleSettingChange(wParam,lParam) ? TRUE : FALSE;
-        }
+#else
+            wxUnusedVar(wParam);
+            wxUnusedVar(lParam);
 #endif
+            break;
+        }
     }
 
     // for almost all messages, returning FALSE means that we didn't process
