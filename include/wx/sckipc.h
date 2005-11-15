@@ -81,6 +81,10 @@ public:
   // To enable the compressor (NOTE: not implemented!)
   void Compress(bool on);
 
+  // unhide the Execute overload from wxConnectionBase
+  virtual bool Execute(const wxString& str)
+    { return Execute(str, -1, wxIPC_TEXT); }
+
 protected:
   wxSocketBase       *m_sock;
   wxSocketStream     *m_sockstrm;
@@ -92,20 +96,11 @@ protected:
   friend class wxTCPClient;
   friend class wxTCPEventHandler;
 
-private:
-  //
-  // We're hiding an Execute method in ConnectionBase
-  //
-  virtual bool Execute(const wxString& str)
-    { return Execute(str, -1, wxIPC_TEXT); }
-
-    DECLARE_NO_COPY_CLASS(wxTCPConnection)
+  DECLARE_NO_COPY_CLASS(wxTCPConnection)
 };
 
 class WXDLLIMPEXP_NET wxTCPServer: public wxServerBase
 {
-  DECLARE_DYNAMIC_CLASS(wxTCPServer)
-
 public:
   wxTCPConnection *topLevelConnection;
 
@@ -126,13 +121,12 @@ protected:
   wxString m_filename;
 #endif // __UNIX_LIKE__
 
-    DECLARE_NO_COPY_CLASS(wxTCPServer)
+  DECLARE_NO_COPY_CLASS(wxTCPServer)
+  DECLARE_DYNAMIC_CLASS(wxTCPServer)
 };
 
 class WXDLLIMPEXP_NET wxTCPClient: public wxClientBase
 {
-  DECLARE_DYNAMIC_CLASS(wxTCPClient)
-
 public:
   wxTCPClient();
   virtual ~wxTCPClient();
@@ -146,6 +140,9 @@ public:
 
   // Callbacks to CLIENT - override at will
   virtual wxConnectionBase *OnMakeConnection();
+
+private:
+  DECLARE_DYNAMIC_CLASS(wxTCPClient)
 };
 
 #endif // wxUSE_SOCKETS && wxUSE_IPC
