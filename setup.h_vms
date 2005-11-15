@@ -1092,8 +1092,6 @@
  *  by configure.
  */
 
-#include "wx/chkconf.h"
-
 /*
     define some constants identifying wxWindows version in more details t
     just the version number
