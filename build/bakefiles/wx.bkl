@@ -212,7 +212,10 @@
 
         <action id="rcdefs.h">
 
-            <is-phony>1</is-phony>
+            <!-- Can't seem to set id to a name with a dollar sign
+                 so use __targetname as a temporary work around -->
+            <set var="__targetname">$(SETUPHDIR)\wx\msw\rcdefs.h</set>
+
             <dependency-of>setup_h</dependency-of>
             <depends>libdir_setup_wx_msw</depends>
             <depends-on-file>$(SRCDIR)/include/wx/msw/genrcdefs.h</depends-on-file>
