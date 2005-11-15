@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        list.h
+// Name:        wx/list.h
 // Purpose:     wxList, wxStringList classes
 // Author:      Julian Smart
 // Modified by: VZ at 16/11/98: WX_DECLARE_LIST() and typesafe lists added
@@ -309,7 +309,7 @@ private:
     WX_DECLARE_USER_EXPORTED_LIST(elementtype, listname, usergoo)
 
 // this macro must be inserted in your program after
-//      #include <wx/listimpl.cpp>
+//      #include "wx/listimpl.cpp"
 #define WX_DEFINE_LIST(name)    "don't forget to include listimpl.cpp!"
 
 #define WX_DEFINE_EXPORTED_LIST(name)      WX_DEFINE_LIST(name)
@@ -1064,7 +1064,7 @@ private:
     WX_DECLARE_LIST_PTR_2(elementtype, listname, wx##listname##Node, class usergoo)
 
 // this macro must be inserted in your program after
-//      #include <wx/listimpl.cpp>
+//      #include "wx/listimpl.cpp"
 #define WX_DEFINE_LIST(name)    "don't forget to include listimpl.cpp!"
 
 #define WX_DEFINE_EXPORTED_LIST(name)      WX_DEFINE_LIST(name)
@@ -1236,5 +1236,4 @@ public:
         (list).clear();                                                      \
     }
 
-#endif
-    // _WX_LISTH__
+#endif // _WX_LISTH__

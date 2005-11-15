@@ -34,15 +34,6 @@ class WXDLLIMPEXP_BASE wxObject;
 // conditional compilation
 // ----------------------------------------------------------------------------
 
-// this shouldn't be needed any longer as <wx/msw/private.h> does it but it
-// doesn't hurt neither
-#ifdef GetClassName
-#undef GetClassName
-#endif
-#ifdef GetClassInfo
-#undef GetClassInfo
-#endif
-
 class WXDLLIMPEXP_BASE wxClassInfo;
 class WXDLLIMPEXP_BASE wxHashTable;
 class WXDLLIMPEXP_BASE wxObjectRefData;
@@ -581,5 +572,4 @@ private :
     #include "wx/msw/msvcrt.h"
 #endif
 
-#endif  // _WX_OBJECTH__
-
+#endif // _WX_OBJECTH__

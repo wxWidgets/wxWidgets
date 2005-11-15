@@ -689,7 +689,7 @@ private :
     wxString m_name ;
 } ;
 
-#include <wx/dynarray.h>
+#include "wx/dynarray.h"
 
 WX_DECLARE_OBJARRAY_WITH_DECL(wxxVariant, wxxVariantArray, class WXDLLIMPEXP_BASE);
 
@@ -2076,4 +2076,4 @@ template<typename collection_t> void wxArrayCollectionToVariantArray( const coll
 }
 
 
-#endif
+#endif // _WX_XTIH__
