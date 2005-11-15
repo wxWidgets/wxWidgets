@@ -679,17 +679,20 @@ bool wxToolBar::Realize()
                         wxImage imgGreyed;
                         wxCreateGreyedImage(bmp.ConvertToImage(), imgGreyed);
 
-                        // we need to have light grey background colour for
-                        // MapBitmap() to work correctly
-                        for ( int y = 0; y < h; y++ )
+                        if (doRemap)
                         {
-                            for ( int x = 0; x < w; x++ )
+                            // we need to have light grey background colour for
+                            // MapBitmap() to work correctly
+                            for ( int y = 0; y < h; y++ )
                             {
-                                if ( imgGreyed.IsTransparent(x, y) )
-                                    imgGreyed.SetRGB(x, y,
-                                                     wxLIGHT_GREY->Red(),
-                                                     wxLIGHT_GREY->Green(),
-                                                     wxLIGHT_GREY->Blue());
+                                for ( int x = 0; x < w; x++ )
+                                {
+                                    if ( imgGreyed.IsTransparent(x, y) )
+                                        imgGreyed.SetRGB(x, y,
+                                                         wxLIGHT_GREY->Red(),
+                                                         wxLIGHT_GREY->Green(),
+                                                         wxLIGHT_GREY->Blue());
+                                }
                             }
                         }
 
@@ -697,7 +700,10 @@ bool wxToolBar::Realize()
                     }
 #endif // wxUSE_IMAGE
 
-                    MapBitmap(bmpDisabled.GetHBITMAP(), w, h);
+                    if (doRemap)
+                    {
+                        MapBitmap(bmpDisabled.GetHBITMAP(), w, h);
+                    }
 
                     m_disabledImgList->Add(bmpDisabled);
                 }
