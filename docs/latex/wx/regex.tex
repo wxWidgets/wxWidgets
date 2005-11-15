@@ -188,10 +188,21 @@ and only if {\tt wxRE\_NOSUB} was {\bf not} used.
 
 \constfunc{bool}{Matches}{\param{const wxChar* }{text}, \param{int }{flags = 0}}
 
+\constfunc{bool}{Matches}{\param{const wxChar* }{text}, \param{int }{flags}, \param{size\_t }{len}}
+
+\constfunc{bool}{Matches}{\param{const wxString\& }{text}, \param{int }{flags = 0}}
+
 Matches the precompiled regular expression against the string {\it text},
 returns {\tt true} if matches and {\tt false} otherwise.
 
-Flags may be combination of {\tt wxRE\_NOTBOL} and {\tt wxRE\_NOTEOL}.
+{\it Flags} may be combination of {\tt wxRE\_NOTBOL} and {\tt wxRE\_NOTEOL}.
+
+System regex libraries always assume the text being searched is null
+terminated and any length given is ignored.
+
+When using the built-in regex library, the first overload obtains the length
+of the string using wxStrlen, the second from the {\it len} parameter and the
+third from the length of the {\it wxString}.
 
 May only be called after successful call to \helpref{Compile()}{wxregexcompile}.
 

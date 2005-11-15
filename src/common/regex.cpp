@@ -45,9 +45,18 @@
 #include <regex.h>
 #include "wx/regex.h"
 
-// defined when the regex lib uses 'char' but 'wxChar' is wide
-#if wxUSE_UNICODE && !defined(__REG_NOFRONT)
-#   define WXREGEX_CONVERT_TO_MB
+// WXREGEX_USING_BUILTIN  defined when using the built-in regex lib
+// WXREGEX_BUILTIN_ONLY() wrap a parameter only used with the built-in regex
+// WXREGEX_CONVERT_TO_MB  indicates when the regex lib is using chars and
+//                        wxChar is wide, so conversion must be done
+#ifdef __REG_NOFRONT
+#   define WXREGEX_USING_BUILTIN
+#   define WXREGEX_BUILTIN_ONLY(x) ,x
+#else
+#   define WXREGEX_BUILTIN_ONLY(x)
+#   if wxUSE_UNICODE
+#       define WXREGEX_CONVERT_TO_MB
+#   endif
 #endif
 
 // ----------------------------------------------------------------------------
@@ -74,7 +83,8 @@ public:
 
     // RE operations
     bool Compile(const wxString& expr, int flags = 0);
-    bool Matches(const wxRegChar *str, int flags, size_t len) const;
+    bool Matches(const wxRegChar *str, int flags
+                 WXREGEX_BUILTIN_ONLY(size_t len)) const;
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
     size_t GetMatchCount() const;
     int Replace(wxString *pattern, const wxString& replacement,
@@ -205,7 +215,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
         flagsRE |= REG_NEWLINE;
 
     // compile it
-#ifdef __REG_NOFRONT
+#ifdef WXREGEX_USING_BUILTIN
     bool conv = true;
     int errorcode = wx_re_comp(&m_RegEx, expr, expr.length(), flagsRE);
 #else
@@ -267,7 +277,9 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     return IsValid();
 }
 
-bool wxRegExImpl::Matches(const wxRegChar *str, int flags, size_t len) const
+bool wxRegExImpl::Matches(const wxRegChar *str,
+                          int flags
+                          WXREGEX_BUILTIN_ONLY(size_t len)) const
 {
     wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
@@ -289,7 +301,7 @@ bool wxRegExImpl::Matches(const wxRegChar *str, int flags, size_t len) const
     }
 
     // do match it
-#ifdef __REG_NOFRONT
+#ifdef WXREGEX_USING_BUILTIN
     int rc = wx_re_exec(&self->m_RegEx, str, len, NULL, m_nMatches, m_Matches, flagsRE);
 #else
     int rc = str ? regexec(&self->m_RegEx, str, m_nMatches, m_Matches, flagsRE) : REG_BADPAT;
@@ -390,8 +402,8 @@ int wxRegExImpl::Replace(wxString *text,
     // use wxRE_NOTBOL to prevent it from happening
     while ( (!maxMatches || countRepl < maxMatches) &&
             Matches(textstr + matchStart,
-                    countRepl ? wxRE_NOTBOL : 0,
-                    textlen - matchStart) )
+                    countRepl ? wxRE_NOTBOL : 0
+                    WXREGEX_BUILTIN_ONLY(textlen - matchStart)) )
     {
         // the string possibly contains back references: we need to calculate
         // the replacement text anew after each match
@@ -518,14 +530,26 @@ bool wxRegEx::Compile(const wxString& expr, int flags)
     return true;
 }
 
+bool wxRegEx::Matches(const wxChar *str, int flags, size_t len) const
+{
+    wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
+    (void)len;
+
+#ifdef WXREGEX_CONVERT_TO_MB
+    return m_impl->Matches(wxConvertWX2MB(str), flags);
+#else
+    return m_impl->Matches(str, flags WXREGEX_BUILTIN_ONLY(len));
+#endif
+}
+
 bool wxRegEx::Matches(const wxChar *str, int flags) const
 {
     wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
-#ifndef WXREGEX_CONVERT_TO_MB
-    return m_impl->Matches(str, flags, wxStrlen(str));
+#ifdef WXREGEX_CONVERT_TO_MB
+    return m_impl->Matches(wxConvertWX2MB(str), flags);
 #else
-    return m_impl->Matches(wxConvertWX2MB(str), flags, wxStrlen(str));
+    return m_impl->Matches(str, flags WXREGEX_BUILTIN_ONLY(wxStrlen(str)));
 #endif
 }
 
