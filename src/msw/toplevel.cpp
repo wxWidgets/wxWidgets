@@ -326,9 +326,9 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
     WXLRESULT rc = 0;
     bool processed = false;
 
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     switch ( message )
     {
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
         case WM_ACTIVATE:
         {
             SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
@@ -360,8 +360,8 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
             }
             break;
         }
-#endif
     }
+#endif
 
     if ( !processed )
         rc = wxTopLevelWindowBase::MSWWindowProc(message, wParam, lParam);
