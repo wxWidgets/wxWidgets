@@ -44,7 +44,6 @@ class MyFrame: public wxFrame
 { public:
     wxTextCtrl *textWindow;
     MyFrame(wxFrame *frame, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size);
-    void OnMenuCommand(int id);
 
     void OnCloseWindow(wxCloseEvent& event);
     void OnExit(wxCommandEvent& event);

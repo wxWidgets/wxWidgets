@@ -138,7 +138,7 @@ Constructs a window, which can be a child of a frame, dialog or any other non-co
 
 \docparam{parent}{Pointer to a parent window.}
 
-\docparam{id}{Window identifier. If -1, will automatically create an identifier.}
+\docparam{id}{Window identifier. If wxID\_ANY, will automatically create an identifier.}
 
 \docparam{pos}{Window position. wxDefaultPosition indicates that wxWidgets
 should generate a default position for the window. If using the wxWindow class directly, supply
@@ -1031,7 +1031,7 @@ Returns the identifier of the window.
 \wxheading{Remarks}
 
 Each window has an integer identifier. If the application has not provided one
-(or the default Id -1) an unique identifier with a negative value will be generated.
+(or the default wxID\_ANY) an unique identifier with a negative value will be generated.
 
 \wxheading{See also}
 
@@ -1815,28 +1815,6 @@ and not navigate to the next control.
 %%
 %% \helpref{wxValidator}{wxvalidator}, \helpref{wxWindow::TransferDataToWindow}{wxwindowtransferdatatowindow}
 %%
-%% \membersection{wxWindow::OnMenuCommand}\label{wxwindowonmenucommand}
-%%
-%% \func{void}{OnMenuCommand}{\param{wxCommandEvent\& }{event}}
-%%
-%% Called when a menu command is received from a menu bar.
-%%
-%% \wxheading{Parameters}
-%%
-%% \docparam{event}{The menu command event. For more information, see \helpref{wxCommandEvent}{wxcommandevent}.}
-%%
-%% \wxheading{Remarks}
-%%
-%% A function with this name doesn't actually exist; you can choose any member function to receive
-%% menu command events, using the EVT\_COMMAND macro for individual commands or EVT\_COMMAND\_RANGE for
-%% a range of commands.
-%%
-%% \wxheading{See also}
-%%
-%% \helpref{wxCommandEvent}{wxcommandevent},\rtfsp
-%% \helpref{wxWindow::OnMenuHighlight}{wxwindowonmenuhighlight},\rtfsp
-%% \helpref{Event handling overview}{eventhandlingoverview}
-%%
 %% \membersection{wxWindow::OnMenuHighlight}\label{wxwindowonmenuhighlight}
 %%
 %% \func{void}{OnMenuHighlight}{\param{wxMenuEvent\& }{event}}
@@ -1864,7 +1842,6 @@ and not navigate to the next control.
 %% \wxheading{See also}
 %%
 %% \helpref{wxMenuEvent}{wxmenuevent},\rtfsp
-%% \helpref{wxWindow::OnMenuCommand}{wxwindowonmenucommand},\rtfsp
 %% \helpref{Event handling overview}{eventhandlingoverview}
 %%
 %%

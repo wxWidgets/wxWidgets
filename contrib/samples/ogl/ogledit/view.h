@@ -51,7 +51,7 @@ class DiagramView: public wxView
  public:
   wxFrame *frame;
   MyCanvas *canvas;
-  
+
   DiagramView(void) { canvas = NULL; frame = NULL; };
   ~DiagramView(void) {};
 
@@ -61,8 +61,6 @@ class DiagramView: public wxView
   bool OnClose(bool deleteWindow = true);
 
   wxShape *FindSelectedShape(void);
-
-//  void OnMenuCommand(int cmd);
 
   void OnCut(wxCommandEvent& event);
   void OnChangeBackgroundColour(wxCommandEvent& event);

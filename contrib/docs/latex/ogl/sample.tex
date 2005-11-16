@@ -38,10 +38,7 @@ individually. This event handler class also holds a label string.
 
 The DiagramCommand class is the key to implementing Undo/Redo. Each instance of DiagramCommand
 stores enough information about an operation (create, delete, change colour etc.) to allow
-it to carry out (or undo) its command. In DiagramView::OnMenuCommand, when the user initiates the
-command, a new DiagramCommand instance is created which is then sent to the document's
-command processor (see wxWindows manual for more information about doc/view and command
-processing).
+it to carry out (or undo) its command.
 
 Apart from menu commands, another way commands are initiated is by the user left-clicking on
 the canvas or right-dragging on a node. MyCanvas::OnLeftClick in view.cpp shows how

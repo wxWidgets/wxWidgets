@@ -1,8 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        view.tex
+%% Purpose:     wxView documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxView}}\label{wxview}
 
 The view class can be used to model the viewing and editing component of
 an application's file-based data. It is part of the document/view framework supported by wxWidgets,
-and cooperates with the \helpref{wxDocument}{wxdocument}, \helpref{wxDocTemplate}{wxdoctemplate} 
+and cooperates with the \helpref{wxDocument}{wxdocument}, \helpref{wxDocTemplate}{wxdoctemplate}
 and \helpref{wxDocManager}{wxdocmanager} classes.
 
 \wxheading{Derived from}
@@ -60,11 +71,10 @@ Destructor. Removes itself from the document's list of views.
 
 Call this from your view frame's OnActivate member to tell the framework which view is
 currently active. If your windowing system doesn't call OnActivate, you may need to
-call this function from OnMenuCommand or any place where you know the view must
+call this function from any place where you know the view must
 be active, and the framework will need to get the current view.
 
-The prepackaged view frame wxDocChildFrame calls wxView::Activate from its OnActivate member
-and from its OnMenuCommand member.
+The prepackaged view frame wxDocChildFrame calls wxView::Activate from its OnActivate member.
 
 This function calls wxView::OnActivateView.
 
@@ -199,5 +209,3 @@ between the ``Frame'' in the method name and the type of its parameter.
 \func{void}{SetViewName}{\param{const wxString\& }{name}}
 
 Sets the view type name. Should only be called by the framework.
-
-

@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        tdocview.tex
+%% Purpose:     Document/view overview
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Document/view overview}\label{docviewoverview}
 
 Classes: \helpref{wxDocument}{wxdocument}, \helpref{wxView}{wxview}, \helpref{wxDocTemplate}{wxdoctemplate},\rtfsp
@@ -125,8 +136,7 @@ See the example application in {\tt samples/docview}.
 
 To use the abstract wxView class, you need to derive a new class and override
 at least the member functions OnCreate, OnDraw, OnUpdate and OnClose. You will probably
-want to override OnMenuCommand to respond to menu commands from the frame containing the
-view.
+want to respond to menu commands from the frame containing the view.
 
 Use the macros DECLARE\_DYNAMIC\_CLASS and IMPLEMENT\_DYNAMIC\_CLASS in order
 to allow the framework to create view objects on demand. When you create
@@ -170,7 +180,7 @@ a single document template is constructed, and dialogs will be appropriately
 simplified.
 
 wxDocTemplate is part of the document/view framework supported by wxWidgets,
-and cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocument}{wxdocument} 
+and cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocument}{wxdocument}
 and \helpref{wxDocManager}{wxdocmanager} classes.
 
 See the example application in {\tt samples/docview}.
@@ -194,7 +204,7 @@ The wxDocManager class is part of the document/view framework supported by wxWid
 and cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocument}{wxdocument}\rtfsp
 and \helpref{wxDocTemplate}{wxdoctemplate} classes.
 
-A wxDocManager instance coordinates documents, views and document templates. It keeps a list of document 
+A wxDocManager instance coordinates documents, views and document templates. It keeps a list of document
 and template instances, and much functionality is routed through this object, such
 as providing selection and file dialogs. The application can use this class `as is' or
 derive a class and override some members to extend or change the functionality.
@@ -260,11 +270,11 @@ associate a file menu with the file history. The menu will then be used for
 appending filenames that are added to the history. Please notice that currently
 if the history already contained filenames when UseMenu() is called (e.g. when
 initializing a second MDI child frame), the menu is not automatically
-initialized with the existing filenames in the history and so you need to call 
+initialized with the existing filenames in the history and so you need to call
 \helpref{AddFilesToMenu()}{wxfilehistoryaddfilestomenu} after UseMenu()
 explicitly in order to initialize the menu with the existing list of MRU files.
 (otherwise an assertion failure is raised in debug builds).
-The filenames are appended using menu identifiers in the range 
+The filenames are appended using menu identifiers in the range
 \texttt{wxID\_FILE1} to \texttt{wxID\_FILE9}.
 
 In order to respond to a file load command from one of these identifiers,
@@ -285,7 +295,7 @@ void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 {
       wxString f(m_docManager->GetHistoryFile(event.GetId() - wxID_FILE1));
-      if (f != "")
+      if (!f.empty())
         (void)m_docManager->CreateDocument(f, wxDOC_SILENT);
 }
 \end{verbatim}
@@ -295,9 +305,7 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 
 To allow communication between the application's menus and the
 document/view framework, several command identifiers are predefined for you
-to use in menus. The framework recognizes them and processes them if you
-forward commands from wxFrame::OnMenuCommand (or perhaps from toolbars and
-other user interface constructs).
+to use in menus.
 
 \begin{itemize}\itemsep=0pt
 \item wxID\_OPEN (5000)
@@ -314,5 +322,3 @@ other user interface constructs).
 \item wxID\_PRINT\_SETUP (5011)
 \item wxID\_PREVIEW (5012)
 \end{itemize}
-
-

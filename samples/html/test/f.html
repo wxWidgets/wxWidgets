@@ -199,7 +199,6 @@ See also <A HREF="wx305.htm#windowstyles">window styles overview</A>.<P>
 <A HREF="#wxwindowonkillfocus">wxWindow::OnKillFocus</A><BR>
 <A HREF="#wxwindowonidle">wxWindow::OnIdle</A><BR>
 <A HREF="#wxwindowoninitdialog">wxWindow::OnInitDialog</A><BR>
-<A HREF="#wxwindowonmenucommand">wxWindow::OnMenuCommand</A><BR>
 <A HREF="#wxwindowonmenuhighlight">wxWindow::OnMenuHighlight</A><BR>
 <A HREF="#wxwindowonmouseevent">wxWindow::OnMouseEvent</A><BR>
 <A HREF="#wxwindowonmove">wxWindow::OnMove</A><BR>
@@ -1072,7 +1071,7 @@ Returns a 2-tuple,  (width, height)
 
 <TD VALIGN=TOP>
 Returns a
-4-tuple, (width, height, descent, externalLeading) 
+4-tuple, (width, height, descent, externalLeading)
 </TD></TR>
 
 
@@ -1524,25 +1523,6 @@ the validator that each control has.<P>
 <A HREF="wx255.htm#wxvalidator">wxValidator</A>, <A HREF="wx260.htm#wxwindowtransferdatatowindow">wxWindow::TransferDataToWindow</A><P>
 
 <HR>
-<A NAME="wxwindowonmenucommand"></A>
-<H3>wxWindow::OnMenuCommand</H3>
-<P>
-<B>void</B> <B>OnMenuCommand</B>(<B>wxCommandEvent&amp; </B><I>event</I>)<P>
-Called when a menu command is received from a menu bar.<P>
-<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
-<I>event</I><UL><UL>
-The menu command event. For more information, see <A HREF="wx52.htm#wxcommandevent">wxCommandEvent</A>.</UL></UL>
-<P>
-<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
-A function with this name doesn't actually exist; you can choose any member function to receive
-menu command events, using the EVT_COMMAND macro for individual commands or EVT_COMMAND_RANGE for
-a range of commands.<P>
-<B><FONT COLOR="#FF0000">See also</FONT></B><P>
-<A HREF="wx52.htm#wxcommandevent">wxCommandEvent</A>,
-<A HREF="wx260.htm#wxwindowonmenuhighlight">wxWindow::OnMenuHighlight</A>,
-<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
-
-<HR>
 <A NAME="wxwindowonmenuhighlight"></A>
 <H3>wxWindow::OnMenuHighlight</H3>
 <P>
@@ -1564,7 +1544,6 @@ This function was known as <B>OnMenuSelect</B> in earlier versions of wxWindows,
 since a selection is normally a left-click action.<P>
 <B><FONT COLOR="#FF0000">See also</FONT></B><P>
 <A HREF="wx143.htm#wxmenuevent">wxMenuEvent</A>,
-<A HREF="wx260.htm#wxwindowonmenucommand">wxWindow::OnMenuCommand</A>,
 <A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
 
 
