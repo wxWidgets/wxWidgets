@@ -765,8 +765,11 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
         else if ( eventType == ei.typeChanging )
         {
             const int idx = event.GetOldSelection();
+
+            // NB: can't use wxStaticCast here as wxBookCtrlBase is not in
+            //     wxRTTI
             const wxBookCtrlBase * const
-                book = wxStaticCast(event.GetEventObject(), wxBookCtrlBase);
+                book = wx_static_cast(wxBookCtrlBase *, event.GetEventObject());
             if ( idx != wxNOT_FOUND &&
                     book && book->GetPageText(idx) == VETO_PAGE_NAME )
             {
