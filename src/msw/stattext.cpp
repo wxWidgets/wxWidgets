@@ -135,7 +135,8 @@ wxSize wxStaticText::DoGetBestSize() const
     dc.SetFont(font);
 
     wxCoord widthTextMax, heightTextTotal;
-    dc.GetMultiLineTextExtent(GetLabel(), &widthTextMax, &heightTextTotal);
+    dc.GetMultiLineTextExtent(::wxStripMenuCodes(GetLabel()),
+        &widthTextMax, &heightTextTotal);
 
 #ifdef __WXWINCE__
     if ( widthTextMax )
