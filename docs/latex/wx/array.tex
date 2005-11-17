@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        array.tex
+%% Purpose:     wxArray
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxArray}}\label{wxarray}
 
 This section describes the so called {\it dynamic arrays}. This is a C
@@ -51,7 +62,7 @@ wxArrayDouble class is scheduled for the next release of wxWidgets).
 wxSortedArray is a wxArray variant which should be used when searching in the
 array is a frequently used operation. It requires you to define an additional
 function for comparing two elements of the array element type and always stores
-its items in the sorted order (according to this function). Thus, it is 
+its items in the sorted order (according to this function). Thus, it is
  \helpref{Index()}{wxarrayindex} function execution time is $O(log(N))$ instead of
 $O(N)$ for the usual arrays but the \helpref{Add()}{wxarrayadd} method is
 slower: it is $O(log(N))$ instead of constant time (neglecting time spent in
@@ -106,7 +117,7 @@ WX_DEFINE_OBJARRAY(ArrayOfDirectories);
 
 It is not as elegant as writing
 
-\begin{verbatim} 
+\begin{verbatim}
 typedef std::vector<MyDirectory> ArrayOfDirectories;
 \end{verbatim}
 
@@ -116,12 +127,12 @@ dumb, C++ compiler in the world.
 Things are much simpler for wxArray and wxSortedArray however: it is enough
 just to write
 
-\begin{verbatim} 
+\begin{verbatim}
 WX_DEFINE_ARRAY(int, ArrayOfDirectories);
 WX_DEFINE_SORTED_ARRAY(int, ArrayOfFiles);
 \end{verbatim}
 
-i.e. there is only one {\tt DEFINE} macro and no need for separate 
+i.e. there is only one {\tt DEFINE} macro and no need for separate
 {\tt DECLARE} one.
 
 
@@ -159,12 +170,16 @@ WX\_DEFINE\_OBJARRAY macro.
 To slightly complicate the matters even further, the operator $->$ defined by
 default for the array iterators by these macros only makes sense if the array
 element type is not a pointer itself and, although it still works, this
-provokes warnings from some compilers and to avoid them you should use the 
+provokes warnings from some compilers and to avoid them you should use the
 {\tt \_PTR} versions of the macros above. For example, to define an array of
-pointers to {\tt double} you should use.
+pointers to {\tt double} you should use:
 
-Note that the above macros are generally only useful for 
-wxObject types.  There are separate macros for declaring an array of a simple type, 
+\begin{verbatim}
+WX_DEFINE_ARRAY_PTR(double *, MyArrayOfDoublePointers);
+\end{verbatim}
+
+Note that the above macros are generally only useful for
+wxObject types.  There are separate macros for declaring an array of a simple type,
 such as an int.
 
 The following simple types are supported:\\
@@ -184,10 +199,6 @@ For example, for an integer array, you'd use one of the following variants:
 \helpref{WX\_DEFINE\_SORTED\_ARRAY\_INT}{wxdefinesortedarray}\\
 \helpref{WX\_DEFINE\_SORTED\_EXPORTED\_ARRAY\_INT}{wxdefinesortedarray}\\
 \helpref{WX\_DEFINE\_SORTED\_USER\_EXPORTED\_ARRAY\_INT}{wxdefinesortedarray}\\
-
-\begin{verbatim} 
-WX_DEFINE_ARRAY_PTR(double *, MyArrayOfDoublePointers);
-\end{verbatim}
 
 \membersection{Constructors and destructors}\label{arrayconstructorsdestructors}
 
@@ -214,7 +225,7 @@ amount, but no more than some maximal number which is defined by
 ARRAY\_MAXSIZE\_INCREMENT constant. Of course, this may lead to some memory
 being wasted (ARRAY\_MAXSIZE\_INCREMENT in the worst case, i.e. 4Kb in the
 current implementation), so the \helpref{Shrink()}{wxarrayshrink} function is
-provided to deallocate the extra memory. The \helpref{Alloc()}{wxarrayalloc} 
+provided to deallocate the extra memory. The \helpref{Alloc()}{wxarrayalloc}
 function can also be quite useful if you know in advance how many items you are
 going to put in the array and will prevent the array code from reallocating the
 memory more times than needed.
@@ -277,7 +288,7 @@ needed for exporting an array from a user DLL.
 Example:
 
 \begin{verbatim}
-WX_DEFINE_ARRAY_INT(wxArrayInt);
+WX_DEFINE_ARRAY_INT(int, wxArrayInt);
 
 class MyClass;
 WX_DEFINE_ARRAY(MyClass *, wxArrayOfMyClass);
@@ -359,10 +370,10 @@ the array class - otherwise you would get link errors.
 
 \func{}{WX\_DEFINE\_USER\_EXPORTED\_OBJARRAY}{\param{}{name}}
 
-This macro defines the methods of the array class {\it name} not defined by the 
+This macro defines the methods of the array class {\it name} not defined by the
 \helpref{WX\_DECLARE\_OBJARRAY()}{wxdeclareobjarray} macro. You must include the
 file <wx/arrimpl.cpp> before using this macro and you must have the full
-declaration of the class of array elements in scope! If you forget to do the 
+declaration of the class of array elements in scope! If you forget to do the
 first, the error will be caught by the compiler, but, unfortunately, many
 compilers will not give any warnings if you forget to do the second - but the
 objects of the class will not be copied correctly and their real destructor will
@@ -391,7 +402,7 @@ WX_DEFINE_OBJARRAY(wxArrayOfMyClass);
 
 \func{void}{WX\_APPEND\_ARRAY}{\param{wxArray\& }{array}, \param{wxArray\& }{other}}
 
-This macro may be used to append all elements of the {\it other} array to the 
+This macro may be used to append all elements of the {\it other} array to the
 {\it array}. The two arrays must be of the same type.
 
 \membersection{WX\_CLEAR\_ARRAY}\label{wxcleararray}
@@ -446,7 +457,7 @@ the array element are copied too) for wxObjArray.
 \func{}{\destruct{wxObjArray}}{\void}
 
 The wxObjArray destructor deletes all the items owned by the array. This is not
-done by wxArray and wxSortedArray versions - you may use 
+done by wxArray and wxSortedArray versions - you may use
 \helpref{WX\_CLEAR\_ARRAY}{wxcleararray} macro for this.
 
 \membersection{wxArray::Add}\label{wxarrayadd}
@@ -471,7 +482,7 @@ that you cannot append more than one pointer as reusing it would lead to
 deleting it twice (or more) and hence to a crash.
 
 You may also use \helpref{WX\_APPEND\_ARRAY}{wxappendarray} macro to append all
-elements of one array to another one but it is more efficient to use 
+elements of one array to another one but it is more efficient to use
 {\it copies} parameter and modify the elements in place later if you plan to
 append a lot of items.
 
@@ -502,7 +513,7 @@ it exists only for compatibility.
 
 \func{T *}{Detach}{\param{size\_t }{index}}
 
-Removes the element from the array, but, unlike, 
+Removes the element from the array, but, unlike,
 \helpref{Remove()}{wxarrayremove} doesn't delete it. The function returns the
 pointer to the removed element.
 
@@ -512,7 +523,7 @@ pointer to the removed element.
 
 Empties the array. For wxObjArray classes, this destroys all of the array
 elements. For wxArray and wxSortedArray this does nothing except marking the
-array of being empty - this function does not free the allocated memory, use 
+array of being empty - this function does not free the allocated memory, use
 \helpref{Clear()}{wxarrayclear} for this.
 
 \membersection{wxArray::GetCount}\label{wxarraygetcount}
@@ -595,7 +606,7 @@ Removes an element from the array by value: the first item of the
 array equal to {\it item} is removed, an assert failure will result from an
 attempt to remove an item which doesn't exist in the array.
 
-When an element is removed from wxObjArray it is deleted by the array - use 
+When an element is removed from wxObjArray it is deleted by the array - use
 \helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On the
 other hand, when an object is removed from a wxArray nothing happens - you
 should delete it manually if required:
@@ -632,7 +643,7 @@ elements of a wxArray (supposed to contain pointers).
 
 \func{void}{SetCount}{\param{size\_t }{count}, \param{T }{defval = T($0$)}}
 
-This function ensures that the number of array elements is at least 
+This function ensures that the number of array elements is at least
 {\it count}. If the array has already {\it count} or more items, nothing is
 done. Otherwise, {\tt count - GetCount()} elements are added and initialized to
 the value {\it defval}.
@@ -660,7 +671,7 @@ The notation CMPFUNC<T> should be read as if we had the following declaration:
 template int CMPFUNC(T *first, T *second);
 \end{verbatim}
 
-where {\it T} is the type of the array elements. I.e. it is a function returning 
+where {\it T} is the type of the array elements. I.e. it is a function returning
 {\it int} which is passed two arguments of type {\it T *}.
 
 Sorts the array using the specified compare function: this function should
@@ -668,4 +679,3 @@ return a negative, zero or positive value according to whether the first element
 passed to it is less than, equal to or greater than the second one.
 
 wxSortedArray doesn't have this function because it is always sorted.
-

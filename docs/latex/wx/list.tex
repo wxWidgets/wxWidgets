@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        list.tex
+%% Purpose:     wxList
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxList}}\label{wxlist}
 
 wxList classes provide linked list functionality for wxWidgets, and for an
@@ -51,7 +62,7 @@ macros):
     // also have MyList::Node type which is the type-safe version of wxNode.
     MyList list;
     MyListElement element;
-    list.Append(element);      // ok
+    list.Append(&element);     // ok
     list.Append(17);           // error: incorrect type
 
     // let's iterate over the list
@@ -66,7 +77,7 @@ macros):
 For compatibility with previous versions wxList and wxStringList classes are
 still defined, but their usage is deprecated and they will disappear in the
 future versions completely. The use of the latter is especially discouraged as
-it is not only unsafe but is also much less efficient than 
+it is not only unsafe but is also much less efficient than
 \helpref{wxArrayString}{wxarraystring} class.
 
 In the documentation of the list classes below, the template notations are
@@ -248,7 +259,7 @@ Returns the last node in the list (NULL if the list is empty).
 
 \func{int}{IndexOf}{\param{T*}{ obj }}
 
-Returns the index of {\it obj} within the list or {\tt wxNOT\_FOUND} if {\it obj} 
+Returns the index of {\it obj} within the list or {\tt wxNOT\_FOUND} if {\it obj}
 is not found in the list.
 
 \membersection{wxList::Insert}\label{wxlistinsert}
@@ -330,7 +341,7 @@ Example:
   int listcompare(const void *arg1, const void *arg2)
   {
     return(compare(**(wxString **)arg1,    // use the wxString 'compare'
-                   **(wxString **)arg2));  // function 
+                   **(wxString **)arg2));  // function
   }
 
   void main()
@@ -343,4 +354,3 @@ Example:
     list.Sort(listcompare);
   }
 \end{verbatim}
-
