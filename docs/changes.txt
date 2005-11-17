@@ -10,6 +10,10 @@ All:
 - Fixed crash when loading message catalogs in Unicode build
 - Spurious error message from wxLaunchDefaultBrowser fixed
 
+wxGTK:
+
+- Fixed problem with choice editor in wxGrid whereby the editor
+  lost focus when the combobox menu was shown.
 
 2.6.2
 -----
