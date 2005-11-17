@@ -300,7 +300,6 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
 
 void wxHtmlWinParser::AddText(const wxChar* txt)
 {
-    wxHtmlCell *c;
     size_t i = 0,
            x,
            lng = wxStrlen(txt);
@@ -338,45 +337,40 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         if (x)
         {
             temp[templen-1] = wxT(' ');
-            temp[templen] = 0;
-            templen = 0;
-#if !wxUSE_UNICODE
-            if (m_EncConv)
-                m_EncConv->Convert(temp);
-#endif
-            size_t len = wxStrlen(temp);
-            for (size_t j = 0; j < len; j++)
-                if (temp[j] == nbsp)
-                    temp[j] = wxT(' ');
-            c = new wxHtmlWordCell(temp, *(GetDC()));
-            if (m_UseLink)
-                c->SetLink(m_Link);
-            m_Container->InsertCell(c);
-            ((wxHtmlWordCell*)c)->SetPreviousWord(m_lastWordCell);
-            m_lastWordCell = (wxHtmlWordCell*)c;
+            DoAddText(temp, templen, nbsp);
             m_tmpLastWasSpace = true;
         }
     }
 
     if (templen && (templen > 1 || temp[0] != wxT(' ')))
     {
-        temp[templen] = 0;
-#if !wxUSE_UNICODE
-        if (m_EncConv)
-            m_EncConv->Convert(temp);
-#endif
-        size_t len = wxStrlen(temp);
-        for (size_t j = 0; j < len; j++)
-            if (temp[j] == nbsp)
-                temp[j] = wxT(' ');
-        c = new wxHtmlWordCell(temp, *(GetDC()));
-        if (m_UseLink)
-            c->SetLink(m_Link);
-        m_Container->InsertCell(c);
-        ((wxHtmlWordCell*)c)->SetPreviousWord(m_lastWordCell);
-        m_lastWordCell = (wxHtmlWordCell*)c;
+        DoAddText(temp, templen, nbsp);
         m_tmpLastWasSpace = false;
     }
+}
+
+void wxHtmlWinParser::DoAddText(wxChar *temp, int& templen, wxChar nbsp)
+{
+    temp[templen] = 0;
+    templen = 0;
+#if !wxUSE_UNICODE
+    if (m_EncConv)
+        m_EncConv->Convert(temp);
+#endif
+    size_t len = wxStrlen(temp);
+    for (size_t j = 0; j < len; j++)
+    {
+        if (temp[j] == nbsp)
+            temp[j] = wxT(' ');
+    }
+
+    wxHtmlCell *c = new wxHtmlWordCell(temp, *(GetDC()));
+
+    if (m_UseLink)
+        c->SetLink(m_Link);
+    m_Container->InsertCell(c);
+    ((wxHtmlWordCell*)c)->SetPreviousWord(m_lastWordCell);
+    m_lastWordCell = (wxHtmlWordCell*)c;
 }
 
 

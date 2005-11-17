@@ -133,6 +133,8 @@ protected:
     virtual void AddText(const wxChar* txt);
 
 private:
+    void DoAddText(wxChar *temp, int& templen, wxChar nbsp);
+
     bool m_tmpLastWasSpace;
     wxChar *m_tmpStrBuf;
     size_t  m_tmpStrBufSize;
