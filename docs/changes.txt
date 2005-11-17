@@ -38,6 +38,11 @@ wxMSW:
 - Switching page of a hidden notebook doesn't lose focus (Jamie Gadd).
 - Removed wxImageList *GetImageList(int) const.
 
+wxGTK:
+
+- Fixed problem with choice editor in wxGrid whereby the editor
+  lost focus when the combobox menu was shown.
+
 wxWinCE:
 
 - Pressing build-in joystick on WinCE phones fires wxEVT_JOY_BUTTON_DOWN event.
