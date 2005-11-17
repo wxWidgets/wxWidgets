@@ -99,6 +99,9 @@ private:
 public:
     wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale = 1.0);
     ~wxHtmlTableCell();
+
+    virtual void RemoveExtraSpacing(bool top, bool bottom);
+
     virtual void Layout(int w);
 
     void AddRow(const wxHtmlTag& tag);
@@ -163,6 +166,15 @@ wxHtmlTableCell::~wxHtmlTableCell()
 }
 
 
+void wxHtmlTableCell::RemoveExtraSpacing(bool WXUNUSED(top),
+                                         bool WXUNUSED(bottom))
+{
+    // Don't remove any spacing in the table -- it's always desirable,
+    // because it's part of table's definition.
+    // (If wxHtmlContainerCell::RemoveExtraSpacing() was applied to tables,
+    // then upper left cell of a table would be positioned above other cells
+    // if the table was the first element on the page.)
+}
 
 void wxHtmlTableCell::ReallocCols(int cols)
 {

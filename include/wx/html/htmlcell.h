@@ -427,7 +427,7 @@ public:
 
     // Removes indentation on top or bottom of the container (i.e. above or
     // below first/last terminal cell). For internal use only.
-    void RemoveExtraSpacing(bool top, bool bottom);
+    virtual void RemoveExtraSpacing(bool top, bool bottom);
 
     // Returns the maximum possible length of the container.
     // Call Layout at least once before using GetMaxTotalWidth()
