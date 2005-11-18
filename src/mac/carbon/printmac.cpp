@@ -150,6 +150,13 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
     // PMDuplexMode not yet accessible via API
     // PMQualityMode not yet accessible via API
     // todo paperSize
+    PMResolution res;
+    PMPrinter printer;
+    PMTag tag = kPMMaxSquareResolution;
+    PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
+    PMPrinterGetPrinterResolution(printer, tag, &res);
+    PMSetResolution((PMPageFormat) m_macPageFormat, &res);
+
     return true ;
 }
 
@@ -343,7 +350,11 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     // on the mac we have always pixels as addressing mode with 72 dpi
     
     printout->SetPPIScreen(72, 72);
-    printout->SetPPIPrinter(72, 72);
+    PMResolution res;
+    wxMacCarbonPrintData* nativeData = (wxMacCarbonPrintData*)
+          (m_printDialogData.GetPrintData().GetNativeData());
+    PMGetResolution((PMPageFormat) (nativeData->m_macPageFormat), &res);
+    printout->SetPPIPrinter(int(res.hRes), int(res.vRes));
     
     // Set printout parameters  
     printout->SetDC(dc);
