@@ -317,11 +317,11 @@ void wxWindowPalm::Lower()
 {
 }
 
-void wxWindowPalm::SetTitle( const wxString& title)
+void wxWindowPalm::SetLabel( const wxString& WXUNUSED(label))
 {
 }
 
-wxString wxWindowPalm::GetTitle() const
+wxString wxWindowPalm::GetLabel() const
 {
     return wxEmptyString;
 }
@@ -751,5 +751,3 @@ bool wxWindowPalm::UnregisterHotKey(int hotkeyId)
 }
 
 #endif // wxUSE_HOTKEY
-
-

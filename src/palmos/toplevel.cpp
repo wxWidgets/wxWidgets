@@ -224,6 +224,15 @@ bool wxTopLevelWindowPalm::ShowFullScreen(bool show, long style)
 // wxTopLevelWindowPalm misc
 // ----------------------------------------------------------------------------
 
+void wxTopLevelWindowPalm::SetTitle( const wxString& WXUNUSED(title))
+{
+}
+
+wxString wxTopLevelWindowPalm::GetTitle() const
+{
+    return wxEmptyString;
+}
+
 void wxTopLevelWindowPalm::SetIcon(const wxIcon& icon)
 {
 }
