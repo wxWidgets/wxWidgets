@@ -3082,7 +3082,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         wxTreeEvent nevent( command, GetId() );
         nevent.m_item = m_current;
         nevent.SetEventObject(this);
-        nevent.SetPoint(pt);
+        nevent.SetPoint(CalcScrolledPosition(pt));
 
         // by default the dragging is not supported, the user code must
         // explicitly allow the event for it to take place
@@ -3147,7 +3147,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         wxTreeEvent eventEndDrag(wxEVT_COMMAND_TREE_END_DRAG, GetId());
 
         eventEndDrag.m_item = item;
-        eventEndDrag.m_pointDrag = pt;
+        eventEndDrag.m_pointDrag = CalcScrolledPosition(pt);
         eventEndDrag.SetEventObject(this);
 
         (void)GetEventHandler()->ProcessEvent(eventEndDrag);
