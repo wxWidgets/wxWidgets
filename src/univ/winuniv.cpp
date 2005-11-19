@@ -339,7 +339,7 @@ bool wxWindow::DoDrawBackground(wxDC& dc)
     }
     else
     {
-        // Draw background ouselves
+        // Draw background ourselves
         EraseBackground( dc, rect );
     }
 

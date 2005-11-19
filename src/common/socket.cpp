@@ -762,7 +762,7 @@ bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
     return true;
 
   // Note that GSOCK_INPUT_LOST has to be explicitly passed to
-  // _Wait becuase of the semantics of WaitForRead: a return
+  // _Wait because of the semantics of WaitForRead: a return
   // value of true means that a GSocket_Read call will return
   // immediately, not that there is actually data to read.
 

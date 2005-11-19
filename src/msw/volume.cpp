@@ -143,7 +143,7 @@ static unsigned GetBasicFlags(const wxChar* filename)
     }
 
     //-----------------------------------------------------------------------
-    // The following will most likely will not modify anything not set above,
+    // The following most likely will not modify anything not set above,
     // and will not work at all for network shares or empty CD ROM drives.
     // But it is a good check if the Win API ever gets better about reporting
     // this information.

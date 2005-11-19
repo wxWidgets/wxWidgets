@@ -297,7 +297,7 @@ void wxFrame::PositionStatusBar()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError(_T("Error setting parent for StautsBar. Error: %s\n"), sError.c_str());
+            wxLogError(_T("Error setting parent for StatusBar. Error: %s\n"), sError.c_str());
             return;
         }
     }

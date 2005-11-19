@@ -130,7 +130,7 @@ public:
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
 
     // wxGTK-specific: called recursively by Enable,
-    // to give widgets an oppprtunity to correct their colours after they
+    // to give widgets an opportunity to correct their colours after they
     // have been changed by Enable
     virtual void OnParentEnable( bool WXUNUSED(enable) ) {}
 
@@ -153,7 +153,7 @@ public:
     // The methods below are required because many native widgets
     // are composed of several subwidgets and setting a style for
     // the widget means setting it for all subwidgets as well.
-    // also, it is nor clear, which native widget is the top
+    // also, it is not clear which native widget is the top
     // widget where (most of) the input goes. even tooltips have
     // to be applied to all subwidgets.
     virtual GtkWidget* GetConnectWidget();
@@ -182,7 +182,7 @@ public:
     // scrolbar in sync (this does not generate any wx events)
     void GtkUpdateScrollbar(int orient);
 
-    // Called from GTK signales handlers. it indicates that
+    // Called from GTK signal handlers. it indicates that
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
     void GtkUpdateSize() { m_sizeSet = false; }

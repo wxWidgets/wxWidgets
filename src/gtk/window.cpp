@@ -133,7 +133,7 @@ extern GtkContainerClass *pizza_parent_class;
 
    All windows must have a widget, with which they interact with other under-
    lying GTK widgets. It is this widget, e.g. that has to be resized etc and
-   thw wxWindow class has a member variable called m_widget which holds a
+   the wxWindow class has a member variable called m_widget which holds a
    pointer to this widget. When the window class represents a GTK native widget,
    this is (in most cases) the only GTK widget the class manages. E.g. the
    wxStaticText class handles only a GtkLabel widget a pointer to which you
@@ -173,27 +173,27 @@ extern GtkContainerClass *pizza_parent_class;
 
    III)
 
-   Singularily the most broken code in GTK is the code that is supposes to
+   Singularily the most broken code in GTK is the code that is supposed to
    inform subwindows (child windows) about new positions. Very often, duplicate
    events are sent without changes in size or position, equally often no
    events are sent at all (All this is due to a bug in the GtkContainer code
    which got fixed in GTK 1.2.6). For that reason, wxGTK completely ignores
    GTK's own system and it simply waits for size events for toplevel windows
    and then iterates down the respective size events to all window. This has
-   the disadvantage, that windows might get size events before the GTK widget
+   the disadvantage that windows might get size events before the GTK widget
    actually has the reported size. This doesn't normally pose any problem, but
-   the OpenGl drawing routines rely on correct behaviour. Therefore, I have
+   the OpenGL drawing routines rely on correct behaviour. Therefore, I have
    added the m_nativeSizeEvents flag, which is true only for the OpenGL canvas,
    i.e. the wxGLCanvas will emit a size event, when (and not before) the X11
-   window that is used for OpenGl output really has that size (as reported by
+   window that is used for OpenGL output really has that size (as reported by
    GTK).
 
    IV)
 
    If someone at some point of time feels the immense desire to have a look at,
-   change or attempt to optimse the Refresh() logic, this person will need an
-   intimate understanding of what a "draw" and what an "expose" events are and
-   what there are used for, in particular when used in connection with GTK's
+   change or attempt to optimise the Refresh() logic, this person will need an
+   intimate understanding of what "draw" and "expose" events are and what
+   they are used for, in particular when used in connection with GTK's
    own windowless widgets. Beware.
 
    V)
@@ -205,7 +205,7 @@ extern GtkContainerClass *pizza_parent_class;
    and ending with the youngest generation (speaking of parent and child windows).
    Also don't forget that cursors (like much else) are connected to GdkWindows,
    not GtkWidgets and that the "window" field of a GtkWidget might very well
-   point to the GdkWindow of the parent widget (-> "window less widget") and
+   point to the GdkWindow of the parent widget (-> "window-less widget") and
    that the two obviously have very different meanings.
 
 */
@@ -560,7 +560,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     win->GtkSendPaintEvents();
 
 
-    // Let parent window draw window less widgets
+    // Let parent window draw window-less widgets
     (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
 #else
     // This gets called immediately after an expose event
@@ -1061,7 +1061,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             }
 
             // we want to always get the same key code when the same key is
-            // pressed regardless of the state of the modifies, i.e. on a
+            // pressed regardless of the state of the modifiers, i.e. on a
             // standard US keyboard pressing '5' or '%' ('5' key with
             // Shift) should result in the same key code in OnKeyDown():
             // '5' (although OnChar() will get either '5' or '%').
@@ -1235,7 +1235,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
             const char* string = gdk_event->string;
         #endif
 
-        // Implement OnCharHook by checking ancesteror top level windows
+        // Implement OnCharHook by checking ancestor top level windows
         wxWindow *parent = win;
         while (parent && !parent->IsTopLevel())
             parent = parent->GetParent();
@@ -1313,7 +1313,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
             event.m_keyCode = key_code;
 
-            // Implement OnCharHook by checking ancesteror top level windows
+            // Implement OnCharHook by checking ancestor top level windows
             wxWindow *parent = win;
             while (parent && !parent->IsTopLevel())
                 parent = parent->GetParent();
@@ -1338,7 +1338,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     // win is a control: tab can be propagated up
     if ( !ret &&
          ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
-// VZ: testing for wxTE_PROCESS_TAB shouldn't be done here the control may
+// VZ: testing for wxTE_PROCESS_TAB shouldn't be done here - the control may
 //     have this style, yet choose not to process this particular TAB in which
 //     case TAB must still work as a navigational character
 // JS: enabling again to make consistent with other platforms
@@ -1488,7 +1488,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget,
     wxKeyEvent event( wxEVT_KEY_UP );
     if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
-        // unknown key pressed, ignore (the event would be useless anyhow
+        // unknown key pressed, ignore (the event would be useless anyhow)
         return FALSE;
     }
 
@@ -1675,7 +1675,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 */
     }
 
-    // GDK sends surplus button down event
+    // GDK sends surplus button down events
     // before a double click event. We
     // need to filter these out.
     if (gdk_event->type == GDK_BUTTON_PRESS)
@@ -1791,12 +1791,12 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 
     AdjustEventButtonState(event);
 
-    // wxListBox actually get mouse events from the item, so we need to give it
+    // wxListBox actually gets mouse events from the item, so we need to give it
     // a chance to correct this
     win->FixUpMouseEvent(widget, event.m_x, event.m_y);
 
-    // find the correct window to send the event too: it may be a different one
-    // from the one which got it at GTK+ level because some control don't have
+    // find the correct window to send the event to: it may be a different one
+    // from the one which got it at GTK+ level because some controls don't have
     // their own X window and thus cannot get any events.
     if ( !g_captureWindow )
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
@@ -4030,7 +4030,7 @@ void wxWindowGTK::Update()
     GtkUpdate();
 
     // when we call Update() we really want to update the window immediately on
-    // screen, even if itmeans flushing the entire queue and hence slowing down
+    // screen, even if it means flushing the entire queue and hence slowing down
     // everything -- but it should still be done, it's just that Update() should
     // be called very rarely
     gdk_flush();
@@ -4478,7 +4478,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     // NOTE: if you change this code, you need to update
     //       the same code in taskbar.cpp as well. This
-    //       is ugly code duplication, I know,
+    //       is ugly code duplication, I know.
 
     SetInvokingWindow( menu, this );
 

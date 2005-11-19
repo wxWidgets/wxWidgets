@@ -79,7 +79,7 @@ public:
     // remove all pages
   bool DeleteAllPages();
 
-    // adds a new page to the notebook (it will be deleted ny the notebook,
+    // adds a new page to the notebook (it will be deleted by the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
     // the same as AddPage(), but adds it at the specified position
     bool InsertPage( size_t position,

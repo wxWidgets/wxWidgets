@@ -31,7 +31,7 @@
 
 #if wxUSE_DATETIME
 
-// Enables a grid cell to display a formated date and or time
+// Enables a grid cell to display a formatted date and or time
 
 wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat, const wxString& informat)
 {

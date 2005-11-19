@@ -87,7 +87,7 @@ wxDialog::~wxDialog()
     Show(FALSE);
 }
 
-// By default, pressing escape cancels the dialog , on mac command-stop does the same thing
+// By default, pressing escape cancels the dialog; on mac command-stop does the same thing
 void wxDialog::OnCharHook(wxKeyEvent& event)
 {
     if (( event.m_keyCode == WXK_ESCAPE ||

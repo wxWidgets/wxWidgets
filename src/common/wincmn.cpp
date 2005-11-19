@@ -2520,7 +2520,7 @@ bool wxWindowBase::TryValidator(wxEvent& wxVALIDATOR_PARAM(event))
 
 bool wxWindowBase::TryParent(wxEvent& event)
 {
-    // carry on up the parent-child hierarchy if the propgation count hasn't
+    // carry on up the parent-child hierarchy if the propagation count hasn't
     // reached zero yet
     if ( event.ShouldPropagate() )
     {

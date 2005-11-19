@@ -602,7 +602,7 @@ bool wxTopLevelWindowOS2::Create(
     if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
     {
         //
-        // We have different dialog templates to allows creation of dialogs
+        // We have different dialog templates to allow creation of dialogs
         // with & without captions under OS2indows, resizeable or not (but a
         // resizeable dialog always has caption - otherwise it would look too
         // strange)

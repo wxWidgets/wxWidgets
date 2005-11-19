@@ -223,7 +223,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     // Disable GTK's broken events ...
     gtk_signal_disconnect( GTK_OBJECT(combo->entry), combo->entry_change_id );
-    // ... and add surogate handler.
+    // ... and add surrogate handler.
     combo->entry_change_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "changed",
                   (GtkSignalFunc) gtk_dummy_callback, combo);
 

@@ -220,7 +220,7 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
        get back to the initial (focused) window: as we do have this style,
        GetNextDlgTabItem() will leave this window and continue in its parent,
        but if the parent doesn't have it, it wouldn't recurse inside it later
-       on and so wouldn't have a chance of getting back to this window neither.
+       on and so wouldn't have a chance of getting back to this window either.
      */
     while ( parent && !parent->IsTopLevel() )
     {
@@ -394,7 +394,7 @@ wxWindow *wxWindowMSW::FindItem(long id) const
     wxControl *item = wxDynamicCastThis(wxControl);
     if ( item )
     {
-        // is it we or one of our "internal" children?
+        // is it us or one of our "internal" children?
         if ( item->GetId() == id
 #ifndef __WXUNIVERSAL__
                 || (item->GetSubcontrols().Index(id) != wxNOT_FOUND)
@@ -513,7 +513,7 @@ wxWindowMSW::~wxWindowMSW()
 #endif // __WXUNIVERSAL__
 
     // VS: destroy children first and _then_ detach *this from its parent.
-    //     If we'd do it the other way around, children wouldn't be able
+    //     If we did it the other way around, children wouldn't be able
     //     find their parent frame (see above).
     DestroyChildren();
 
@@ -665,7 +665,7 @@ bool wxWindowMSW::Enable(bool enable)
 
         if ( enable )
         {
-            // enable the child back unless it had been disabled before us
+            // re-enable the child unless it had been disabled before us
             if ( !m_childrenDisabled || !m_childrenDisabled->Find(child) )
                 child->Enable();
         }
@@ -1039,7 +1039,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
     }
     else
     {
-        // don't bother restoring it neither: this also makes it easy to
+        // don't bother restoring it either: this also makes it easy to
         // implement IsOfStandardClass() method which returns true for the
         // standard controls and false for the wxWidgets own windows as it can
         // simply check m_oldWndProc
@@ -1203,7 +1203,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 
     // using this flag results in very significant reduction in flicker,
     // especially with controls inside the static boxes (as the interior of the
-    // box is not redrawn twice).but sometimes results in redraw problems, so
+    // box is not redrawn twice), but sometimes results in redraw problems, so
     // optionally allow the old code to continue to use it provided a special
     // system option is turned on
     if ( !wxSystemOptions::GetOptionInt(wxT("msw.window.no-clip-children"))
@@ -1447,7 +1447,7 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 }
 #endif // wxUSE_DRAG_AND_DROP
 
-// old style file-manager drag&drop support: we retain the old-style
+// old-style file manager drag&drop support: we retain the old-style
 // DragAcceptFiles in parallel with SetDropTarget.
 void wxWindowMSW::DragAcceptFiles(bool WXUNUSED_IN_WINCE(accept))
 {
@@ -1740,7 +1740,7 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxWindowMSW::DoSetClientSize(int width, int height)
 {
-    // setting the client size is less obvious than it it could have been
+    // setting the client size is less obvious than it could have been
     // because in the result of changing the total size the window scrollbar
     // may [dis]appear and/or its menubar may [un]wrap and so the client size
     // will not be correct as the difference between the total and client size
@@ -1908,7 +1908,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 #endif
     ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
 
-    // we need to do it righ now as otherwise the events are never going to be
+    // we need to do it right now as otherwise the events are never going to be
     // sent to wxCurrentPopupMenu from HandleCommand()
     //
     // note that even eliminating (ugly) wxCurrentPopupMenu global wouldn't
@@ -2111,7 +2111,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
         {
             // ::IsDialogMessage() is broken and may sometimes hang the
             // application by going into an infinite loop, so we try to detect
-            // [some of] the situatations when this may happen and not call it
+            // [some of] the situations when this may happen and not call it
             // then
 
             // assume we can call it by default
@@ -2132,7 +2132,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 #if !defined(__WXWINCE__)
             if ( ::GetWindowLong(hwndFocus, GWL_EXSTYLE) & WS_EX_CONTROLPARENT )
             {
-                // passimistic by default
+                // pessimistic by default
                 canSafelyCallIsDlgMsg = false;
                 for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                       node;
@@ -2682,7 +2682,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             {
                 switch ( wParam )
                 {
-                    // we consider these message "not interesting" to OnChar, so
+                    // we consider these messages "not interesting" to OnChar, so
                     // just don't do anything more with them
                     case VK_SHIFT:
                     case VK_CONTROL:

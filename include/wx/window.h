@@ -956,7 +956,7 @@ public:
     void DeleteRelatedConstraints();
     void ResetConstraints();
 
-        // these methods may be overriden for special layout algorithms
+        // these methods may be overridden for special layout algorithms
     virtual void SetConstraintSizes(bool recurse = true);
     virtual bool LayoutPhase1(int *noChanges);
     virtual bool LayoutPhase2(int *noChanges);

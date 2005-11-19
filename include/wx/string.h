@@ -262,7 +262,7 @@ protected:
     // initializes the string to the empty value (must be called only from
     // ctors, use Reinit() otherwise)
   void Init() { m_pchData = (wxChar *)wxEmptyString; }
-    // initializaes the string with (a part of) C-string
+    // initializes the string with (a part of) C-string
   void InitWith(const wxChar *psz, size_t nPos = 0, size_t nLen = npos);
     // as Init, but also frees old data
   void Reinit() { GetStringData()->Unlock(); Init(); }
@@ -1075,7 +1075,7 @@ public:
         // convert to a double
     bool ToDouble(double *val) const;
 
-  // formated input/output
+  // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error
     // (take 'this' into account in attribute parameter count)
   int Printf(const wxChar *pszFormat, ...) ATTRIBUTE_PRINTF_2;
