@@ -560,7 +560,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
             const float *lengths = NULL ;
             float *userLengths = NULL ;
 
-            int dashUnit = ( penWidth < 1.0 ) ? 1.0 : penWidth;
+            const float dashUnit = penWidth < 1.0 ? 1.0 : penWidth;
   
             const float dotted[] = { dashUnit  , dashUnit + 2.0 };
             const float short_dashed[] = { 9.0 , 6.0 };
@@ -596,7 +596,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                         userLengths = new float[count] ;
                         for( int i = 0 ; i < count ; ++i )
                         {
-                            userLengths[i] = (float)dashes[i] * dashUnit ;
+                            userLengths[i] = dashes[i] * dashUnit ;
 
                             if ( i % 2 == 1 && userLengths[i] < dashUnit + 2.0 )
                                 userLengths[i] = dashUnit + 2.0 ;
