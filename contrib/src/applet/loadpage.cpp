@@ -41,10 +41,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxLoadPageEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxPageLoadedEvent, wxEvent)
 
 // Define our custom event ID for load page
-DEFINE_EVENT_TYPE(wxEVT_LOAD_PAGE);
+DEFINE_EVENT_TYPE(wxEVT_LOAD_PAGE)
 
 // Define our custom event ID for page loaded
-DEFINE_EVENT_TYPE(wxEVT_PAGE_LOADED);
+DEFINE_EVENT_TYPE(wxEVT_PAGE_LOADED)
 
 /****************************************************************************
 REMARKS:

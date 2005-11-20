@@ -1070,7 +1070,7 @@ void wxTreeListTextCtrl::OnKillFocus( wxFocusEvent &event )
 //  wxTreeListHeaderWindow
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeListHeaderWindow,wxWindow);
+IMPLEMENT_DYNAMIC_CLASS(wxTreeListHeaderWindow,wxWindow)
 
 BEGIN_EVENT_TABLE(wxTreeListHeaderWindow,wxWindow)
     EVT_ERASE_BACKGROUND  (wxTreeListHeaderWindow::OnEraseBackground)
@@ -4625,7 +4625,7 @@ void wxTreeListMainWindow::SetFocus()
 //  wxTreeListCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeListCtrl, wxControl);
+IMPLEMENT_DYNAMIC_CLASS(wxTreeListCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTreeListCtrl, wxControl)
     EVT_SIZE(wxTreeListCtrl::OnSize)

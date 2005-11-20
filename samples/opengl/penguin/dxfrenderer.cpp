@@ -40,8 +40,8 @@
 #include "dxfrenderer.h"
 
 #include <wx/listimpl.cpp>
-WX_DEFINE_LIST(DXFEntityList);
-WX_DEFINE_LIST(DXFLayerList);
+WX_DEFINE_LIST(DXFEntityList)
+WX_DEFINE_LIST(DXFLayerList)
 
 // Conversion table from AutoCAD ACI colours to RGB values
 static const struct { unsigned char r, g, b; } aci_to_rgb[256] = {

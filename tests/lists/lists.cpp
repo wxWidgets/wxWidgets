@@ -75,10 +75,10 @@ size_t Baz::ms_bars = 0;
 
 WX_DECLARE_LIST(Baz, wxListBazs);
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxListBazs);
+WX_DEFINE_LIST(wxListBazs)
 
 WX_DECLARE_LIST(int, wxListInt);
-WX_DEFINE_LIST(wxListInt);
+WX_DEFINE_LIST(wxListInt)
 
 void ListsTestCase::wxListTest()
 {

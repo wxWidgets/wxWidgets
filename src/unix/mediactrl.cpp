@@ -139,7 +139,7 @@ public:
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IMPLEMENT_DYNAMIC_CLASS(wxGStreamerMediaBackend, wxMediaBackend);
+IMPLEMENT_DYNAMIC_CLASS(wxGStreamerMediaBackend, wxMediaBackend)
 
 //---------------------------------------------------------------------------
 // wxGStreamerMediaBackend Constructor
@@ -762,6 +762,6 @@ bool wxGStreamerMediaBackend::SetPlaybackRate(double dRate)
 
 //in source file that contains stuff you don't directly use
 #include "wx/html/forcelnk.h"
-FORCE_LINK_ME(basewxmediabackends);
+FORCE_LINK_ME(basewxmediabackends)
 
 #endif //wxUSE_MEDIACTRL

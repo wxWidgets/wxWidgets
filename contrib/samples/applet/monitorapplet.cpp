@@ -36,7 +36,7 @@
 /*---------------------------- Global variables ---------------------------*/
 
 // Implement the dynamic class so it can be constructed dynamically
-IMPLEMENT_DYNAMIC_CLASS(MonitorApplet, wxApplet);
+IMPLEMENT_DYNAMIC_CLASS(MonitorApplet, wxApplet)
 
 // Event handler table.
 BEGIN_EVENT_TABLE(MonitorApplet, wxApplet)

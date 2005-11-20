@@ -272,7 +272,7 @@ WX_DECLARE_HASH(Foo, wxListFoos, wxHashFoos);
 
 #if WXWIN_COMPATIBILITY_2_4
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxListFoos);
+WX_DEFINE_LIST(wxListFoos)
 #endif
 
 void HashesTestCase::wxTypedHashTableTest()

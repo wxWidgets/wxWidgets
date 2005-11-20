@@ -1486,7 +1486,7 @@ void wxGenericFileDialog::UpdateControls()
 
 #ifdef USE_GENERIC_FILEDIALOG
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog);
+IMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog)
 
 #endif // USE_GENERIC_FILEDIALOG
 

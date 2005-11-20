@@ -65,7 +65,7 @@ static const int idMenuTitle = -3;
 
 #include "wx/listimpl.cpp"
 
-WX_DEFINE_LIST( wxMenuInfoList ) ;
+WX_DEFINE_LIST( wxMenuInfoList )
 
 #if wxUSE_EXTENDED_RTTI
 

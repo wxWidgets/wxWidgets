@@ -68,14 +68,14 @@ BEGIN_EVENT_TABLE(wxHtmlAppletWindow, wxHtmlWindow)
 END_EVENT_TABLE()
 
 // Implement the class functions for wxHtmlAppletWindow
-IMPLEMENT_CLASS(wxHtmlAppletWindow, wxHtmlWindow);
+IMPLEMENT_CLASS(wxHtmlAppletWindow, wxHtmlWindow)
 
 // Implement the dynamic class so it can be constructed dynamically
-IMPLEMENT_DYNAMIC_CLASS(VirtualData, wxObject);
+IMPLEMENT_DYNAMIC_CLASS(VirtualData, wxObject)
 	
 // Define the wxAppletList implementation
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxAppletList);
+WX_DEFINE_LIST(wxAppletList)
 
 /****************************************************************************
 REMARKS:

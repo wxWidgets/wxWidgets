@@ -37,8 +37,8 @@
 
 #include "wx/listimpl.cpp"
 
-WX_DEFINE_LIST(wxRichTextObjectList);
-WX_DEFINE_LIST(wxRichTextLineList);
+WX_DEFINE_LIST(wxRichTextObjectList)
+WX_DEFINE_LIST(wxRichTextLineList)
 
 /*!
  * wxRichTextObject

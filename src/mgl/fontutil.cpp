@@ -153,8 +153,8 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
 // ----------------------------------------------------------------------------
 
 WX_DECLARE_LIST(wxMGLFontInstance, wxMGLFontInstanceList);
-WX_DEFINE_LIST(wxMGLFontInstanceList);
-WX_DEFINE_LIST(wxMGLFontFamilyList);
+WX_DEFINE_LIST(wxMGLFontInstanceList)
+WX_DEFINE_LIST(wxMGLFontFamilyList)
 
 wxMGLFontInstance::wxMGLFontInstance(wxMGLFontLibrary *fontLib,
                                      float pt, bool slant, bool aa)

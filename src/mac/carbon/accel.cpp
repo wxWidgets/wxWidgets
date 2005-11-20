@@ -22,7 +22,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
 
 WX_DECLARE_LIST(wxAcceleratorEntry, wxAccelList);
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxAccelList);
+WX_DEFINE_LIST(wxAccelList)
 
 // ----------------------------------------------------------------------------
 // wxAccelRefData: the data used by wxAcceleratorTable

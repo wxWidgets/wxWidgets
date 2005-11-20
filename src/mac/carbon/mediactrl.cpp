@@ -201,7 +201,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxQTMediaWindowEventHandler );
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
+IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend)
 
 //Time between timer calls - this is the Apple recommondation to the TCL
 //team I believe
@@ -1160,6 +1160,6 @@ OSStatus wxQTMediaWindowEventHandler(EventHandlerCallRef inHandlerCallRef,
 
 //in source file that contains stuff you don't directly use
 #include "wx/html/forcelnk.h"
-FORCE_LINK_ME(basewxmediabackends);
+FORCE_LINK_ME(basewxmediabackends)
 
 #endif //wxUSE_MEDIACTRL
