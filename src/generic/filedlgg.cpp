@@ -1006,7 +1006,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
 
     wxBoxSizer *staticsizer = new wxBoxSizer( wxHORIZONTAL );
-    if (is_pda)
+    if (!is_pda)
         staticsizer->Add( new wxStaticText( this, wxID_ANY, _("Current directory:") ), 0, wxRIGHT, 10 );
     m_static = new wxStaticText( this, wxID_ANY, m_dir );
     staticsizer->Add( m_static, 1 );
@@ -1016,15 +1016,18 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     if ( !(m_dialogStyle & wxMULTIPLE) )
         style2 |= wxLC_SINGLE_SEL;
 
+    wxSize list_size(500,240);
+    if (is_pda) list_size = wxSize(50,80);
+
     m_list = new wxFileCtrl( this, ID_LIST_CTRL,
                              wxEmptyString, ms_lastShowHidden,
-                             wxDefaultPosition, wxSize(540,200),
+                             wxDefaultPosition, list_size,
                              style2);
 
     if (is_pda)
     {
         // PDAs have a different screen layout
-        mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
+        mainsizer->Add( m_list, 1, wxEXPAND|wxSHRINK | wxLEFT|wxRIGHT, 5 );
 
         wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
         m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
@@ -1067,9 +1070,9 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
 
     mainsizer->Fit( this );
     mainsizer->SetSizeHints( this );
-
+    
     Centre( wxBOTH );
-
+    
     m_text->SetFocus();
 
     return true;
