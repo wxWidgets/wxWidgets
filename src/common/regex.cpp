@@ -46,22 +46,83 @@
 #include "wx/regex.h"
 
 // WXREGEX_USING_BUILTIN  defined when using the built-in regex lib
-// WXREGEX_BUILTIN_ONLY() wrap a parameter only used with the built-in regex
-// WXREGEX_CONVERT_TO_MB  indicates when the regex lib is using chars and
+// WXREGEX_IF_NEED_LEN()  wrap the len parameter only used with the built-in
+//                        or GNU regex
+// WXREGEX_CONVERT_TO_MB  defined when the regex lib is using chars and
 //                        wxChar is wide, so conversion must be done
+// WXREGEX_CHAR(x)        Convert wxChar to wxRegChar
+//
 #ifdef __REG_NOFRONT
 #   define WXREGEX_USING_BUILTIN
-#   define WXREGEX_BUILTIN_ONLY(x) ,x
+#   define WXREGEX_IF_NEED_LEN(x) ,x
+#   define WXREGEX_CHAR(x) x
 #else
-#   define WXREGEX_BUILTIN_ONLY(x)
+#   ifdef HAVE_RE_SEARCH
+#       define WXREGEX_IF_NEED_LEN(x) ,x
+#   else        
+#       define WXREGEX_IF_NEED_LEN(x)
+#   endif
 #   if wxUSE_UNICODE
 #       define WXREGEX_CONVERT_TO_MB
 #   endif
+#   define WXREGEX_CHAR(x) wxConvertWX2MB(x)
 #endif
 
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
+
+#ifndef HAVE_RE_SEARCH
+
+// the array of offsets for the matches, the usual POSIX regmatch_t array.
+class wxRegExMatches
+{
+public:
+    typedef regmatch_t *match_type;
+
+    wxRegExMatches(size_t n)        { m_matches = new regmatch_t[n]; } 
+    ~wxRegExMatches()               { delete [] m_matches; }
+
+    size_t Start(size_t n) const    { return m_matches[n].rm_so; }
+    size_t End(size_t n) const      { return m_matches[n].rm_eo; }
+
+    regmatch_t *get() const         { return m_matches; }
+
+private:
+    regmatch_t *m_matches;
+};
+
+#else // HAVE_RE_SEARCH
+
+// the array of offsets for the matches, the struct used by the GNU lib
+class wxRegExMatches
+{
+public:
+    typedef re_registers *match_type;
+
+    wxRegExMatches(size_t n)
+    {
+        m_matches.num_regs = n;
+        m_matches.start = new regoff_t[n];
+        m_matches.end = new regoff_t[n];
+    }
+
+    ~wxRegExMatches()
+    {
+        delete [] m_matches.start;
+        delete [] m_matches.end;
+    }
+
+    size_t Start(size_t n) const    { return m_matches.start[n]; }
+    size_t End(size_t n) const      { return m_matches.end[n]; }
+
+    re_registers *get()             { return &m_matches; }
+
+private:
+    re_registers m_matches;
+};
+
+#endif // HAVE_RE_SEARCH
 
 // the character type used by the regular expression engine
 #ifndef WXREGEX_CONVERT_TO_MB
@@ -84,7 +145,7 @@ public:
     // RE operations
     bool Compile(const wxString& expr, int flags = 0);
     bool Matches(const wxRegChar *str, int flags
-                 WXREGEX_BUILTIN_ONLY(size_t len)) const;
+                 WXREGEX_IF_NEED_LEN(size_t len)) const;
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
     size_t GetMatchCount() const;
     int Replace(wxString *pattern, const wxString& replacement,
@@ -110,7 +171,7 @@ private:
             regfree(&m_RegEx);
         }
 
-        delete [] m_Matches;
+        delete m_Matches;
     }
 
     // free the RE if any and reinit the members
@@ -120,17 +181,17 @@ private:
         Init();
     }
 
-
     // compiled RE
-    regex_t     m_RegEx;
+    regex_t         m_RegEx;
 
     // the subexpressions data
-    regmatch_t *m_Matches;
-    size_t      m_nMatches;
+    wxRegExMatches *m_Matches;
+    size_t          m_nMatches;
 
     // true if m_RegEx is valid
-    bool        m_isCompiled;
+    bool            m_isCompiled;
 };
+
 
 // ============================================================================
 // implementation
@@ -277,9 +338,36 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     return IsValid();
 }
 
+#ifdef HAVE_RE_SEARCH
+
+// On GNU, regexec is implemented as a wrapper around re_search. re_search
+// requires a length parameter which the POSIX regexec does not have,
+// therefore regexec must do a strlen on the search text each time it is
+// called. This can drastically affect performance when matching is done in
+// a loop along a string, such as during a search and replace. Therefore if
+// re_search is detected by configure, it is used directly.
+//
+static int ReSearch(const regex_t *preg,
+                    const char *text,
+                    size_t len,
+                    re_registers *matches,
+                    int eflags)
+{
+    regex_t *pattern = wx_const_cast(regex_t*, preg);
+
+    pattern->not_bol = (eflags & REG_NOTBOL) != 0;
+    pattern->not_eol = (eflags & REG_NOTEOL) != 0;
+    pattern->regs_allocated = REGS_FIXED;
+
+    int ret = re_search(pattern, text, len, 0, len, matches);
+    return ret >= 0 ? 0 : REG_NOMATCH;
+}
+
+#endif // HAVE_RE_SEARCH
+
 bool wxRegExImpl::Matches(const wxRegChar *str,
                           int flags
-                          WXREGEX_BUILTIN_ONLY(size_t len)) const
+                          WXREGEX_IF_NEED_LEN(size_t len)) const
 {
     wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
@@ -297,14 +385,18 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
     wxRegExImpl *self = wxConstCast(this, wxRegExImpl);
     if ( !m_Matches && m_nMatches )
     {
-        self->m_Matches = new regmatch_t[m_nMatches];
+        self->m_Matches = new wxRegExMatches(m_nMatches);
     }
 
+    wxRegExMatches::match_type matches = m_Matches ? m_Matches->get() : NULL;
+
     // do match it
-#ifdef WXREGEX_USING_BUILTIN
-    int rc = wx_re_exec(&self->m_RegEx, str, len, NULL, m_nMatches, m_Matches, flagsRE);
+#if defined WXREGEX_USING_BUILTIN
+    int rc = wx_re_exec(&self->m_RegEx, str, len, NULL, m_nMatches, matches, flagsRE);
+#elif defined HAVE_RE_SEARCH
+    int rc = str ? ReSearch(&self->m_RegEx, str, len, matches, flagsRE) : REG_BADPAT;
 #else
-    int rc = str ? regexec(&self->m_RegEx, str, m_nMatches, m_Matches, flagsRE) : REG_BADPAT;
+    int rc = str ? regexec(&self->m_RegEx, str, m_nMatches, matches, flagsRE) : REG_BADPAT;
 #endif
 
     switch ( rc )
@@ -332,13 +424,10 @@ bool wxRegExImpl::GetMatch(size_t *start, size_t *len, size_t index) const
     wxCHECK_MSG( m_Matches, false, _T("must call Matches() first") );
     wxCHECK_MSG( index < m_nMatches, false, _T("invalid match index") );
 
-    const regmatch_t& match = m_Matches[index];
-
-    // we need the casts because rm_so can be a 64 bit quantity
     if ( start )
-        *start = wx_truncate_cast(size_t, match.rm_so);
+        *start = m_Matches->Start(index);
     if ( len )
-        *len = wx_truncate_cast(size_t, match.rm_eo - match.rm_so);
+        *len = m_Matches->End(index) - m_Matches->Start(index);
 
     return true;
 }
@@ -363,7 +452,7 @@ int wxRegExImpl::Replace(wxString *text,
     const wxChar *textstr = text->c_str();
     size_t textlen = text->length();
 #else
-    const wxWX2MBbuf textstr = wxConvertWX2MB(*text);
+    const wxWX2MBbuf textstr = WXREGEX_CHAR(*text);
     if (!textstr)
     {
         wxLogError(_("Failed to find match for regular expression: %s"),
@@ -403,7 +492,7 @@ int wxRegExImpl::Replace(wxString *text,
     while ( (!maxMatches || countRepl < maxMatches) &&
             Matches(textstr + matchStart,
                     countRepl ? wxRE_NOTBOL : 0
-                    WXREGEX_BUILTIN_ONLY(textlen - matchStart)) )
+                    WXREGEX_IF_NEED_LEN(textlen - matchStart)) )
     {
         // the string possibly contains back references: we need to calculate
         // the replacement text anew after each match
@@ -535,22 +624,16 @@ bool wxRegEx::Matches(const wxChar *str, int flags, size_t len) const
     wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
     (void)len;
 
-#ifdef WXREGEX_CONVERT_TO_MB
-    return m_impl->Matches(wxConvertWX2MB(str), flags);
-#else
-    return m_impl->Matches(str, flags WXREGEX_BUILTIN_ONLY(len));
-#endif
+    return m_impl->Matches(WXREGEX_CHAR(str), flags WXREGEX_IF_NEED_LEN(len));
 }
 
 bool wxRegEx::Matches(const wxChar *str, int flags) const
 {
     wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
-#ifdef WXREGEX_CONVERT_TO_MB
-    return m_impl->Matches(wxConvertWX2MB(str), flags);
-#else
-    return m_impl->Matches(str, flags WXREGEX_BUILTIN_ONLY(wxStrlen(str)));
-#endif
+    return m_impl->Matches(WXREGEX_CHAR(str),
+                           flags
+                           WXREGEX_IF_NEED_LEN(wxStrlen(str)));
 }
 
 bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const

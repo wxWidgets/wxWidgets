@@ -94,7 +94,7 @@ public:
     // true if matches and false otherwise
     //
     // flags may be combination of wxRE_NOTBOL and wxRE_NOTEOL
-    // len may be the length of text (ignored except by built-in regex lib)
+    // len may be the length of text (ignored by most system regex libs)
     //
     // may only be called after successful call to Compile()
     bool Matches(const wxChar *text, int flags = 0) const;
