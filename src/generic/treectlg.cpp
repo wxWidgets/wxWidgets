@@ -1858,8 +1858,6 @@ void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
         parent = GetItemParent( parent );
     }
 
-    EnsureVisible( itemId );
-
     // ctrl press
     if (unselect_others)
     {
@@ -1890,6 +1888,11 @@ void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
         m_current->SetHilight(select);
         RefreshLine( m_current );
     }
+
+    // This can cause idle processing to select the root
+    // if no item is selected, so it must be after the
+    // selection is set
+    EnsureVisible( itemId );
 
     event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
     GetEventHandler()->ProcessEvent( event );
