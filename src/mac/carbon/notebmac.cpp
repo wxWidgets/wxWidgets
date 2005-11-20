@@ -369,11 +369,12 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
         }
     }
     
-    if ( outPart >= 1 && outPart <= countPages )
+    if ( outPart >= 1 && (size_t)outPart <= countPages )
     {
         resultV = outPart ;
     }    
-#endif
+#endif // TARGET_API_MAC_OSX
+
     if (flags != NULL)
     {
         *flags = 0;
