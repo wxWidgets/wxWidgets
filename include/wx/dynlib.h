@@ -27,7 +27,8 @@
 #include "wx/msw/private.h"
 #endif
 
-#if defined(HAVE_DLERROR) && !defined(__EMX__)
+// note that we have our own dlerror() implementation under Darwin
+#if (defined(HAVE_DLERROR) && !defined(__EMX__)) || defined(__DARWIN__)
     #define wxHAVE_DYNLIB_ERROR
 #endif
 
