@@ -98,29 +98,6 @@
 
 static char dl_last_error[1024];
 
-static
-void TranslateError(const char *path, int number)
-{
-    unsigned int index;
-    static const char *OFIErrorStrings[] =
-    {
-        "%s(%d): Object Image Load Failure\n",
-        "%s(%d): Object Image Load Success\n",
-        "%s(%d): Not an recognisable object file\n",
-        "%s(%d): No valid architecture\n",
-        "%s(%d): Object image has an invalid format\n",
-        "%s(%d): Invalid access (permissions?)\n",
-        "%s(%d): Unknown error code from NSCreateObjectFileImageFromFile\n"
-    };
-#define NUM_OFI_ERRORS (sizeof(OFIErrorStrings) / sizeof(OFIErrorStrings[0]))
-
-    index = number;
-    if (index > NUM_OFI_ERRORS - 1) {
-        index = NUM_OFI_ERRORS - 1;
-    }
-    sprintf(dl_last_error, OFIErrorStrings[index], path, number);
-}
-
 const char *dlerror()
 {
     return dl_last_error;
@@ -131,10 +108,29 @@ void *dlopen(const char *path, int WXUNUSED(mode) /* mode is ignored */)
     NSObjectFileImage ofile;
     NSModule handle = NULL;
 
-    int dyld_result = NSCreateObjectFileImageFromFile(path, &ofile);
+    unsigned dyld_result = NSCreateObjectFileImageFromFile(path, &ofile);
     if ( dyld_result != NSObjectFileImageSuccess )
     {
         handle = NULL;
+
+        static const char *errorStrings[] =
+        {
+            "%d: Object Image Load Failure",
+            "%d: Object Image Load Success",
+            "%d: Not an recognisable object file",
+            "%d: No valid architecture",
+            "%d: Object image has an invalid format",
+            "%d: Invalid access (permissions?)",
+            "%d: Unknown error code from NSCreateObjectFileImageFromFile"
+        };
+
+        const int index = dyld_result < WXSIZEOF(errorStrings)
+                            ? dyld_result
+                            : WXSIZEOF(errorStrings) - 1;
+
+        // this call to sprintf() is safe as strings above are fixed at
+        // compile-time and are shorter than WXSIZEOF(dl_last_error)
+        sprintf(dl_last_error, errorStrings[index], dyld_result);
     }
     else
     {
@@ -145,10 +141,20 @@ void *dlopen(const char *path, int WXUNUSED(mode) /* mode is ignored */)
                     NSLINKMODULE_OPTION_BINDNOW |
                     NSLINKMODULE_OPTION_RETURN_ON_ERROR
                  );
+
+        if ( !handle )
+        {
+            NSLinkEditErrors err;
+            int code;
+            const char *filename;
+            const char *errmsg;
+
+            NSLinkEditError(&err, &code, &filename, &errmsg);
+            strncpy(dl_last_error, errmsg, WXSIZEOF(dl_last_error)-1);
+            dl_last_error[WXSIZEOF(dl_last_error)-1] = '\0';
+        }
     }
 
-    if ( !handle )
-        TranslateError(path, dyld_result);
 
     return handle;
 }
