@@ -2,6 +2,12 @@
 wxWidgets Change Log - For more verbose changes, see the manual
 ---------------------------------------------------------------
 
+INCOMPATIBLE CHANGES SINCE 2.6.x
+================================
+
+- wxFontData::GetColour() now returns a const colour
+
+
 2.7.0
 -----
 
