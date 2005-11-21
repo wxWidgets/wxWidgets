@@ -1987,10 +1987,6 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
         if ( !afmFile )
         {
-        }
-
-        if ( !afmFile )
-        {
 #if defined(__UNIX__) && !defined(__VMS__)
            afmName = wxGetDataDir();
 #else // !__UNIX__
