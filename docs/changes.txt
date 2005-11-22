@@ -49,6 +49,10 @@ wxGTK:
 - Fixed problem with choice editor in wxGrid whereby the editor
   lost focus when the combobox menu was shown.
 
+wxMac:
+
+- Fixed problem with clipboard support for custom data flavors.
+
 wxWinCE:
 
 - Pressing build-in joystick on WinCE phones fires wxEVT_JOY_BUTTON_DOWN event.
