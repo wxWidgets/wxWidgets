@@ -294,7 +294,8 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     wxString name;
     if(!key.QueryValue(wxEmptyString, name))
         return false;
-    wxStrncpy(buf, name.c_str(), maxSize);
+    wxStrncpy(buf, name.c_str(), maxSize-1);
+    buf[maxSize-1] = _T('\0');
     return true;
 #elif defined(USE_NET_API)
     CHAR szUserName[256];
