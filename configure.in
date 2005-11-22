@@ -414,7 +414,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TEXTBUFFER=no
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_SOUND=no
-  DEFAULT_wxUSE_MEDIACTRL=no  
+  DEFAULT_wxUSE_MEDIACTRL=no
   DEFAULT_wxUSE_INTL=no
   DEFAULT_wxUSE_CONFIG=no
   DEFAULT_wxUSE_FONTMAP=no
@@ -546,7 +546,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_XPM=no
   DEFAULT_wxUSE_ICO_CUR=no
   DEFAULT_wxUSE_ACCESSIBILITY=no
-  
+
   DEFAULT_wxUSE_MONOLITHIC=no
   DEFAULT_wxUSE_PLUGINS=no
   DEFAULT_wxUSE_OFFICIAL_BUILD=no
@@ -744,7 +744,7 @@ else
   DEFAULT_wxUSE_XPM=yes
   DEFAULT_wxUSE_ICO_CUR=yes
   DEFAULT_wxUSE_ACCESSIBILITY=no
-  
+
   DEFAULT_wxUSE_MONOLITHIC=no
   DEFAULT_wxUSE_PLUGINS=no
   DEFAULT_wxUSE_OFFICIAL_BUILD=no
@@ -770,7 +770,7 @@ for toolkit in `echo $ALL_TOOLKITS`; do
     has_toolkit_in_cache=1
     eval "DEFAULT_$LINE"
     eval "CACHE_$toolkit=1"
-    
+
     LINE=`grep "wx${toolkit}_VERSION=" ${wx_arg_cache_file}`
     if test "x$LINE" != "x" ; then
         eval "DEFAULT_$LINE"
@@ -1598,7 +1598,7 @@ case "${host}" in
       dnl wx_cv_gccversion = Innotek6 -> gcc-3.3.5 with Innotek libc6.
       AC_CACHE_CHECK([for gcc/libc version], wx_cv_gccversion,[
           AC_TRY_RUN(
-              dnl Check the gcc version macro.	 
+              dnl Check the gcc version macro.
               [
                   #include <stdio.h>
 
@@ -1866,7 +1866,7 @@ dnl sizeof(off_t) in different source files of the same program and linking
 dnl problems
 if test "x$wx_largefile" = "xyes"; then
     if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
-        WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
+        WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
 
         dnl We get "Large Files (ILP32) not supported in strict ANSI mode."
         dnl #error from HP standard headers unless __STDC_EXT__ is defined.
@@ -1895,18 +1895,17 @@ if test "x$wx_largefile" = "xyes"; then
                 ]
             )
             if test "x$wx_cv_STDC_EXT_required" = "xyes"; then
-                CXXFLAGS="$CXXFLAGS -D__STDC_EXT__"
+                WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -D__STDC_EXT__"
             fi
         fi
     else
-        WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
+        WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGE_FILES"
     fi
     dnl AC_FUNC_FSEEKO sets HAVE_FSEEKO and $ac_cv_sys_largefile_source
     AC_FUNC_FSEEKO
     if test "$ac_cv_sys_largefile_source" != no; then
-        WX_LARGEFILE_FLAGS="$WX_LARGEFILE_FLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
+        WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
     fi
-    CPPFLAGS="$CPPFLAGS $WX_LARGEFILE_FLAGS"
 fi
 
 dnl check for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
@@ -2048,7 +2047,7 @@ if test "$wxUSE_STD_IOSTREAM" = "yes"; then
             AC_MSG_WARN([No std::iostreams, switching to --disable-std_iostreams])
         fi
     fi
-    
+
     AC_LANG_POP
 fi
 
@@ -2064,7 +2063,7 @@ if test "$wxUSE_STL" = "yes"; then
                     #include <list>],
                     [std::vector<int> moo;
                      std::list<int> foo;
-                     std::vector<int>::iterator it = 
+                     std::vector<int>::iterator it =
                          std::find_if(moo.begin(), moo.end(),
                                       std::bind2nd(std::less<int>(), 3));],
                     [AC_MSG_RESULT([yes])],
@@ -2333,7 +2332,7 @@ dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_REGEX" != "no"; then
     AC_DEFINE(wxUSE_REGEX)
-            
+
     if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_REGEX" = "yes"; then
         AC_MSG_WARN([Defaulting to the the builtin regex library for Unicode build.])
         wxUSE_REGEX=builtin
@@ -2618,8 +2617,8 @@ if test "$wxUSE_EXPAT" != "no"; then
     wxUSE_XML=yes
     AC_DEFINE(wxUSE_EXPAT)
     AC_DEFINE(wxUSE_XML)
-    
-    if test "$wxUSE_EXPAT" = "sys" -o "$wxUSE_EXPAT" = "yes" ; then           
+
+    if test "$wxUSE_EXPAT" = "sys" -o "$wxUSE_EXPAT" = "yes" ; then
         AC_CHECK_HEADER([expat.h], [found_expat_h=1])
         if test "x$found_expat_h" = "x1"; then
             dnl Expat 1.95.6 comes with broken expat.h:
@@ -2710,7 +2709,6 @@ if test "$USE_WIN32" = 1 ; then
         *-*-cygwin* )
             dnl Cygwin doesn't include these by default
             LIBS="$LIBS -lkernel32 -luser32"
-            TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WIN95__"
     esac
 
     dnl add extra odbc libs if we have compiled in odbc
@@ -2794,7 +2792,7 @@ if test "$wxUSE_GUI" = "yes"; then
                     case "${host}" in
                         *-*-solaris2* )
                             if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-		                enable_gtktest=no
+                            enable_gtktest=no
                             fi
                     esac
 
@@ -2930,8 +2928,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         dnl test for XIM support in libgdk
         AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
-        
-        
+
+
         dnl test for external libxpm if we're configured to use it
         if test "$wxUSE_GPE" = "yes"; then
             AC_MSG_CHECKING(for gpewidget library)
@@ -3369,7 +3367,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
             AC_MSG_CHECKING([for X11/extensions/shape.h])
             AC_TRY_COMPILE([
-                            #include <X11/Xlib.h> 
+                            #include <X11/Xlib.h>
                             #include <X11/extensions/shape.h>
                            ],
                            [
@@ -3489,7 +3487,7 @@ if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
         dnl defines HAVE_X11_XKBLIB_H
         AC_CHECK_HEADERS(X11/Xlib.h)
-        AC_CHECK_HEADERS([X11/XKBlib.h], [], [], 
+        AC_CHECK_HEADERS([X11/XKBlib.h], [], [],
                          [
                           #if HAVE_X11_XLIB_H
                             #include <X11/Xlib.h>
@@ -3506,7 +3504,7 @@ dnl ----------------------------------------------------------------
 IODBC_C_SRC=""
 
 
-dnl ODBC is handled separately for MSW 
+dnl ODBC is handled separately for MSW
 if test "$TOOLKIT" != "MSW" ; then
 
     if test "$wxUSE_ODBC" = "sys" -o "$wxUSE_ODBC" = "yes" ; then
@@ -3522,7 +3520,7 @@ if test "$TOOLKIT" != "MSW" ; then
                     AC_CHECK_LIB(odbc, SQLAllocEnv, ODBC_LINK=" -lodbc")
                 ])
             ])
-        fi 
+        fi
         if test "x$ODBC_LINK" = "x" ; then
             if test "$wxUSE_ODBC" = "sys" ; then
                 AC_MSG_ERROR([system ODBC library not found! Use --with-odbc=builtin to use built-in version])
@@ -3546,7 +3544,7 @@ if test "$wxUSE_ODBC" != "no" ; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
 
     dnl is this still necessary?
-    WXODBCFLAG="-D_IODBC_"
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_IODBC_"
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -3576,7 +3574,7 @@ dnl ---------------------------------------------------------------------------
                                  [
                                   GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
                                  ],
-                                 [], 
+                                 [],
                                  [
                                       #if HAVE_X11_XLIB_H
                                         #include <X11/Xlib.h>
@@ -3585,7 +3583,7 @@ dnl ---------------------------------------------------------------------------
             else
                 AC_MSG_RESULT([no])
             fi
-        
+
         else
             AC_MSG_RESULT([no])
             AC_MSG_WARN([Xinerama not found; disabling wxDisplay])
@@ -3751,7 +3749,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                             WXCONFIG_RPATH="-Wl,-R,\$libdir"
                         ],[
                             AC_MSG_RESULT([no])
-                        ])                    
+                        ])
                 ])
             LDFLAGS="$saveLdflags"
         else
@@ -3759,7 +3757,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             WXCONFIG_RPATH="-R\$libdir"
         fi
       ;;
-      
+
       *-*-darwin* )
         install_name_tool=`which install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
@@ -3776,16 +3774,18 @@ EOF
             chmod +x change-install-names
         fi
       ;;
-      
+
       *-*-cygwin* | *-*-mingw32* )
-        TOOLCHAIN_DLL_DEFS="${TOOLCHAIN_DLL_DEFS} -DWXUSINGDLL=1"
-	;;
-      
+        dnl this one shouldn't be used for the library build so put it in a
+        dnl separate variable from WXCONFIG_CPPFLAGS
+        WXCONFIG_ONLY_CPPFLAGS="$WXCONFIG_ONLY_CPPFLAGS -DWXUSINGDLL"
+        ;;
+
       *-*-hpux* )
         SAMPLES_RPATH_FLAG="-Wl,+b,\$(top_builddir)lib"
         WXCONFIG_RPATH="-Wl,+b,\$libdir"
-	;;
-        
+        ;;
+
     esac
 
     if test $wxUSE_RPATH = "no"; then
@@ -4329,7 +4329,7 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     AC_LANG_RESTORE
 fi
 
-if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != "1" -a "$USE_UNIX" != "1"; then 
+if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != "1" -a "$USE_UNIX" != "1"; then
     AC_MSG_WARN([wxStackWalker is only available on Win32 and UNIX... disabled])
     wxUSE_STACKWALKER=no
 fi
@@ -4614,7 +4614,6 @@ dnl                          the next matching "else")
 dnl ---------------------------------------------------------------------------
 
 dnl under MSW (except mingw32) we always have thread support
-CPP_MT_FLAG=
 if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
     dnl the code below:
@@ -4677,7 +4676,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                 if test "x$GCC" = "xyes"; then
                     dnl g++ versions before 3.3.2 don't support -pthread.
                     $CXX -dumpspecs | grep 'pthread:' >/dev/null ||
-                        THREAD_OPTS="" 
+                        THREAD_OPTS=""
                 else
                     dnl HP-UX aCC (tested with version B3910B A.06.05 [Jul 25
                     dnl 2005]) supports -mt
@@ -4788,11 +4787,8 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
               THREADS_CFLAGS="$THREADS_CFLAGS $flag"
           fi
 
-          if test "x$THREADS_CFLAGS" != "x"; then
-            dnl don't add these options to CPPFLAGS as cpp might not know them
-            CFLAGS="$CFLAGS $THREADS_CFLAGS"
-            CXXFLAGS="$CXXFLAGS $THREADS_CFLAGS"
-          fi
+          dnl don't add these options to CPPFLAGS as cpp might not know them
+          WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS $THREADS_CFLAGS"
       fi
     fi
 
@@ -4954,8 +4950,7 @@ else
 
             if test "$wx_cv_cflags_mthread" = "yes"; then
                 dnl it does, use it
-                CXXFLAGS="$CXXFLAGS -mthreads"
-                TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS -mthreads"
+                WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -mthreads"
                 LDFLAGS="$LDFLAGS -mthreads"
             else
                 dnl it doesn't
@@ -4963,8 +4958,8 @@ else
             fi
         ;;
         *-pc-os2*emx )
-            CFLAGS="$CFLAGS -Zmt -D__ST_MT_ERRNO__"
-            CXXFLAGS="$CXXFLAGS -Zmt -D__ST_MT_ERRNO__"
+            WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -Zmt -D__ST_MT_ERRNO__"
+            WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -Zmt -D__ST_MT_ERRNO__"
             LDFLAGS="$LDFLAGS -Zmt"
         ;;
       esac
@@ -4981,7 +4976,7 @@ else
   if test "$ac_cv_func_strtok_r" = "yes"; then
     AC_MSG_CHECKING(if -D_REENTRANT is needed)
     if test "$NEEDS_D_REENTRANT_FOR_R_FUNCS" = 1; then
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D_REENTRANT"
+        WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_REENTRANT"
         AC_MSG_RESULT(yes)
     else
         AC_MSG_RESULT(no)
@@ -5006,26 +5001,27 @@ if test "$WXGPE" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGPE__,$WXGPE)
 fi
 
-WXDEBUG=
-
+dnl DEBUG_FLAG contains debugging options (supposed to be the same for C and C++
+dnl compilers: we'd need a separate WXDEBUG_CXX if this is ever not the case)
+DEBUG_FLAG=
 if test "$wxUSE_DEBUG_INFO" = "yes" ; then
-    WXDEBUG="-g"
+    DEBUG_FLAG="-g"
     wxUSE_OPTIMISE=no
 fi
 
 if test "$wxUSE_DEBUG_GDB" = "yes" ; then
     wxUSE_DEBUG_INFO=yes
     if test "$GCC" = yes; then
-        WXDEBUG="-ggdb"
+        DEBUG_FLAG="-ggdb"
     fi
 fi
 
 if test "$wxUSE_DEBUG_FLAG" = "yes" ; then
     AC_DEFINE(WXDEBUG)
-    WXDEBUG_DEFINE="-D__WXDEBUG__"
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D__WXDEBUG__"
 else
     if test "$wxUSE_GTK" = 1 ; then
-        WXDEBUG_DEFINE="-DGTK_NO_CHECK_CASTS"
+        CPPFLAGS="$CPPFLAGS -DGTK_NO_CHECK_CASTS"
     fi
 fi
 
@@ -5040,22 +5036,21 @@ if test "$wxUSE_DMALLOC" = "yes" ; then
     DMALLOC_LIBS="-ldmallocthcxx"
 fi
 
-PROFILE=
+dnl cc/cxx/ld option for profiling
+PROFILE_FLAG=
 if test "$wxUSE_PROFILE" = "yes" ; then
-    PROFILE=" -pg"
+    PROFILE_FLAG=" -pg"
 fi
 
-CODE_GEN_FLAGS=
-CODE_GEN_FLAGS_CXX=
 if test "$GCC" = "yes" ; then
     if test "$wxUSE_NO_RTTI" = "yes" ; then
-        CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fno-rtti"
+        WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fno-rtti"
     fi
     if test "$wxUSE_NO_EXCEPTIONS" = "yes" ; then
-        CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fno-exceptions"
+        WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fno-exceptions"
     fi
     if test "$wxUSE_PERMISSIVE" = "yes" ; then
-        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
+        WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -fpermissive"
     fi
 
     dnl Ian Brown <ian.brown@printsoft.de> reports that versions of gcc before
@@ -5071,33 +5066,27 @@ if test "$GCC" = "yes" ; then
     dnl TODO: test for the gcc version here (how?)
     case "${host}" in
       powerpc*-*-aix* )
-        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -mminimal-toc"
+        WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -mminimal-toc"
         ;;
       *-hppa* )
-        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -ffunction-sections"
+        WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -ffunction-sections"
         ;;
     esac
 fi
 
-OPTIMISE=
+dnl C/C++ compiler option for optimization (supposed to be the same for both)
+OPTIMISE_FLAG=
 if test "$wxUSE_OPTIMISE" = "no" ; then
     if test "$GCC" = yes ; then
         dnl use -O0 because compiling with it is faster than compiling with no
         dnl optimization options at all (at least with g++ 3.2)
-        OPTIMISE="-O0"
+        OPTIMISE_FLAG="-O0"
     fi
 else
     if test "$GCC" = yes ; then
-        OPTIMISE="-O2"
-
-        dnl VZ: does anybody know what does this do??
-        case "${host}" in
-            i586-*-*|i686-*-* )
-            OPTIMISE="${OPTIMISE} "
-        ;;
-        esac
+        OPTIMISE_FLAG="-O2"
     else
-        OPTIMISE="-O"
+        OPTIMISE_FLAG="-O"
     fi
 fi
 
@@ -5316,7 +5305,7 @@ if test "$wxUSE_SOUND" = "yes"; then
       fi
     fi
   fi
- 
+
   AC_DEFINE(wxUSE_SOUND)
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sound"
 fi
@@ -5324,8 +5313,8 @@ fi
 if test "$WXGTK20" = 1; then
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
         if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
-        
-                PKG_CHECK_MODULES(LIBGNOMEPRINTUI, 
+
+                PKG_CHECK_MODULES(LIBGNOMEPRINTUI,
                                   [libgnomeprintui-2.2 >= 2.8],
                     [
 dnl                     EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
@@ -5850,7 +5839,7 @@ if test "$wxUSE_PROTOCOL" = "yes"; then
     fi
 else
     if test "$wxUSE_FS_INET" = "yes"; then
-        AC_MSG_WARN([HTTP filesystem require protocol classes... disabled])   
+        AC_MSG_WARN([HTTP filesystem require protocol classes... disabled])
         wxUSE_FS_INET="no"
     fi
 fi
@@ -5905,7 +5894,7 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
         AC_DEFINE(wxUSE_JOYSTICK)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
     else
-        AC_MSG_WARN(Joystick not supported by this system... disabled)           
+        AC_MSG_WARN(Joystick not supported by this system... disabled)
     fi
 fi
 
@@ -6047,7 +6036,7 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                            [],
                            [AC_MSG_RESULT(no)],
                            [AC_MSG_RESULT(yes)
-                            CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"])
+                            WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fvtable-thunks"])
             AC_LANG_RESTORE
             LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
             if test "$wxUSE_OLE" = "yes" ; then
@@ -6678,16 +6667,16 @@ if test "$wxUSE_WIZARDDLG" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl wxMediaCtrl 
+dnl wxMediaCtrl
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_MEDIACTRL" = "yes"; then
     dnl -----------------------------------------------------------------------
-    dnl GStreamer 
+    dnl GStreamer
     dnl -----------------------------------------------------------------------
     if test "$wxUSE_GTK" = 1; then
         wxUSE_GSTREAMER="yes"
-        
+
         dnl -------------------------------------------------------------------
         dnl Test for gstreamer module from pkg-config
         dnl -------------------------------------------------------------------
@@ -6700,7 +6689,7 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
             AC_MSG_WARN([GStreamer installation not found])
             wxUSE_GSTREAMER="no"
         ])
-        
+
         dnl -------------------------------------------------------------------
         dnl Perform a check for a GStreamer element using gst-inspect
         dnl Thomas Vander Stichele <thomas at apestaart dot org>
@@ -6713,7 +6702,7 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
         if test "x$GST_INSPECT" == "x"; then
             AC_CHECK_PROG(GST_INSPECT, gst-inspect, gst-inspect, [])
         fi
-        
+
         if test "x$GST_INSPECT" != "x"; then
             AC_MSG_CHECKING(GStreamer element $1)
             if [ $GST_INSPECT $1 > /dev/null 2> /dev/null ]; then
@@ -6725,36 +6714,36 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
             fi
         fi
         ])
-        
+
         dnl -------------------------------------------------------------------
         dnl Test for x video sink (video useless without)
         dnl -------------------------------------------------------------------
-        AM_GST_ELEMENT_CHECK(xvimagesink,[], 
+        AM_GST_ELEMENT_CHECK(xvimagesink,[],
                         [
                             wxUSE_GSTREAMER="no"
                             AC_MSG_WARN([x video sink not found - cannot use GStreamer])
                         ])
-                            
+
         dnl -------------------------------------------------------------------
         dnl Check for gstplay-0.8 lib and corresponding x overlay header
-        dnl -------------------------------------------------------------------        
-        AC_CHECK_HEADER(gst/xoverlay/xoverlay.h, [], 
+        dnl -------------------------------------------------------------------
+        AC_CHECK_HEADER(gst/xoverlay/xoverlay.h, [],
                         [
                             wxUSE_GSTREAMER="no"
                             AC_MSG_WARN([xoverlay header not found, cannot use GStreamer])
                         ],
                         [#include <gst/gst.h>])
-        
+
         AC_MSG_CHECKING([for gstplay 0.8])
-        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],gstplay-0.8)           
-        
+        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],gstplay-0.8)
+
         if test "$ac_find_libraries" = "" ; then
             AC_MSG_RESULT([no])
             wxUSE_GSTREAMER="no"
         else
-            AC_MSG_RESULT([yes])        
+            AC_MSG_RESULT([yes])
         fi
-        
+
         if test "$wxUSE_GSTREAMER" = "yes"; then
             AC_DEFINE(wxUSE_GSTREAMER)
             AC_MSG_RESULT([GStreamer detection successful])
@@ -6932,15 +6921,6 @@ else
 fi
 
 
-dnl all -I options we must pass to the compiler
-dnl
-dnl note that the order is somewhat important: wxWidgets headers should
-dnl come first and the one with setup.h should be before $(top_srcdir)/include
-dnl in case the latter contains setup.h used by non-autoconf makefiles (e.g.
-dnl CodeWarrior):
-INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
--I\${top_srcdir}/include $TOOLKIT_INCLUDE"
-
 dnl C/C++ compiler options used to compile wxWidgets
 dnl
 dnl check for icc before gcc as icc is also recognized as gcc
@@ -6977,15 +6957,33 @@ if test "x$INTELCXX" = "xyes" ; then
     CXXWARNINGS="-Wall -wd279,383,444,810,869,981,1418,1419"
 elif test "$GXX" = yes ; then
     dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
-    CXXWARNINGS="-Wall -Wundef -Wno-ctor-dtor-privacy" 
+    CXXWARNINGS="-Wall -Wundef -Wno-ctor-dtor-privacy"
 fi
 
-EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
 
-dnl remove the extra white space from the cc/c++/ld options
-CPPFLAGS=`echo $WXDEBUG_DEFINE $INCLUDES $CPPFLAGS`
-CFLAGS=`echo $CODE_GEN_FLAGS $EXTRA_CFLAGS $CFLAGS $CWARNINGS`
-CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXWARNINGS`
+dnl combine everything together and remove the extra white space while doing it
+WXCONFIG_CFLAGS=`echo $WXCONFIG_CFLAGS`
+WXCONFIG_CXXFLAGS=`echo $WXCONFIG_CFLAGS $WXCONFIG_CXXFLAGS`
+
+
+dnl add -I options we use during library compilation
+dnl
+dnl note that the order is somewhat important: wxWidgets headers should
+dnl come first and the one with setup.h should be before $(top_srcdir)/include
+dnl in case the latter contains setup.h used by non-autoconf makefiles (e.g.
+dnl CodeWarrior):
+CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $CPPFLAGS \
+ -I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
+ -I\${top_srcdir}/include $TOOLKIT_INCLUDE`
+
+C_AND_CXX_FLAGS="$DEBUG_FLAG $PROFILE_FLAG $OPTIMISE_FLAG"
+CFLAGS=`echo $WXCONFIG_CFLAGS $CFLAGS $CWARNINGS $C_AND_CXX_FLAGS`
+CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $CXXFLAGS $C_AND_CXX_FLAGS`
+
+dnl now that we added WXCONFIG_CPPFLAGS to CPPFLAGS we can add the wx-config
+dnl only stuff to it
+WXCONFIG_CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $WXCONFIG_ONLY_CPPFLAGS`
+
 
 if test "x$MWCC" = "xyes"; then
     dnl Correct MW 8.3 to be more similar to GCC.  In particular we
@@ -7014,17 +7012,10 @@ fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
 fi
-    
-LDFLAGS="$LDFLAGS $PROFILE"
 
-dnl wxGTK does not need TOOLKIT includes in wx-config
-if test "$wxUSE_GTK" = 1; then
-    WXCONFIG_INCLUDE=
-else
-    WXCONFIG_INCLUDE="$TOOLKIT_INCLUDE"
-fi
+LDFLAGS="$LDFLAGS $PROFILE_FLAG"
 
-WXCONFIG_EXTRALIBS="$LIBS"
+WXCONFIG_LIBS="$LIBS"
 
 dnl wx-config must output builtin 3rd party libs in --libs in static build:
 if test "$wxUSE_REGEX" = "builtin" ; then
@@ -7050,7 +7041,7 @@ if test "$wxUSE_ZLIB" = "builtin" ; then
 fi
 
 for i in $wxconfig_3rdparty ; do
-    WXCONFIG_EXTRALIBS="-lwx${i}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_EXTRALIBS"
+    WXCONFIG_LIBS="-lwx${i}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_LIBS"
 done
 
 
@@ -7193,9 +7184,8 @@ if test $GCC_PCH = 1 ; then
     CPPFLAGS="-DWX_PRECOMP $CPPFLAGS"
 fi
 
-dnl TOOLCHAIN_DEFS are used by wx-config but should be also used for wx build
-dnl itself
-CPPFLAGS="$CPPFLAGS $TOOLCHAIN_DEFS"
+dnl TOOLCHAIN_DEFS should be used for both wx and client code
+WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS $TOOLCHAIN_DEFS"
 
 dnl for convenience, sort the samples in alphabetical order
 dnl
@@ -7217,9 +7207,6 @@ dnl global options
 AC_SUBST(WX_LIBRARY_BASENAME_NOGUI)
 AC_SUBST(WX_LIBRARY_BASENAME_GUI)
 
-dnl debugging options
-AC_SUBST(WXDEBUG_DEFINE)
-
 dnl toolkit options
 AC_SUBST(USE_GUI)
 AC_SUBST(AFMINSTALL)
@@ -7228,8 +7215,6 @@ AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLCHAIN_NAME)
 AC_SUBST(TOOLCHAIN_FULLNAME)
-AC_SUBST(TOOLCHAIN_DEFS)
-AC_SUBST(TOOLCHAIN_DLL_DEFS)
 
 dnl wx-config options
 AC_SUBST(host_alias)
@@ -7240,14 +7225,24 @@ AC_SUBST(WX_VERSION)
 AC_SUBST(WX_SUBVERSION)
 AC_SUBST(WX_CHARTYPE)
 AC_SUBST(WX_DEBUGTYPE)
-AC_SUBST(WXCONFIG_EXTRALIBS)
-AC_SUBST(WXCONFIG_INCLUDE)
+
+dnl note that in addition to the usual CPP/C/CXXFLAGS which are used for
+dnl building the library itself, we also have WXCONFIG_-prefixed variants which
+dnl are used when building the libraries using the library
+dnl
+dnl so put anything which should be used only during the library build in, e.g.
+dnl CXXFLAGS, but put everything else (by default) into WXCONFIG_CXXFLAGS
+dnl
+dnl and, finally, for some things which should be only used by wx-config but
+dnl not during the library compilation, use WXCONFIG_ONLY_CPPFLAGS which is
+dnl added to WXCONFIG_CPPFLAGS after adding the latter to CPPFLAGS
+AC_SUBST(WXCONFIG_CPPFLAGS)
+AC_SUBST(WXCONFIG_CFLAGS)
+AC_SUBST(WXCONFIG_CXXFLAGS)
+
+AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_RPATH)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
-AC_SUBST(WX_LARGEFILE_FLAGS)
-AC_SUBST(GCC_PRAGMA_FLAGS)
-AC_SUBST(CODE_GEN_FLAGS)
-AC_SUBST(CODE_GEN_FLAGS_CXX)
 AC_SUBST(EXE_LINKER)
 
 dnl distribution vars

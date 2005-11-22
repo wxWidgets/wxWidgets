@@ -946,7 +946,7 @@ fi
 # Additional configuration for individual library components.
 ldflags_gl="@LDFLAGS_GL@"
 
-ldlibs_base="@WXCONFIG_EXTRALIBS@"
+ldlibs_base="@WXCONFIG_LIBS@"
 ldlibs_core="@EXTRALIBS_GUI@"
 ldlibs_gl="@OPENGL_LIBS@"
 ldlibs_html="@EXTRALIBS_HTML@"
@@ -1143,12 +1143,12 @@ else
     _include_cppflags="-I${includedir} -I${prefix}/contrib/include"
 fi
 
-_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflags "@WXDEBUG_DEFINE@" "@TOOLCHAIN_DEFS@" "@TOOLCHAIN_DLL_DEFS@" $_gui_cppflags "@WXCONFIG_INCLUDE@" "@WX_LARGEFILE_FLAGS@" "@GCC_PRAGMA_FLAGS@")  
+_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflags "@WXCONFIG_CPPFLAGS@" $_gui_cppflags)  
 
 # now without further ado, we can answer these too.
 [ -z "$output_option_cppflags" ] || echo $_cppflags
-[ -z "$output_option_cflags"   ] || echo $_cppflags "@CODE_GEN_FLAGS@"
-[ -z "$output_option_cxxflags" ] || echo $_cppflags "@CODE_GEN_FLAGS@" "@CODE_GEN_FLAGS_CXX@"
+[ -z "$output_option_cflags"   ] || echo $_cppflags "@WXCONFIG_CFLAGS@"
+[ -z "$output_option_cxxflags" ] || echo $_cppflags "@WXCONFIG_CXXFLAGS@"
 [ -z "$output_option_gl_libs"  ] || echo $(lib_flags_for gl)
 [ -z "$output_option_linkdeps" ] || echo $link_deps
 
