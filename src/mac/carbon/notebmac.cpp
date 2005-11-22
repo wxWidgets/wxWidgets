@@ -327,7 +327,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
 {
 	int				resultV = wxNOT_FOUND;
 #if TARGET_API_MAC_OSX
-	const size_t	countPages = GetPageCount();
+	const int	countPages = GetPageCount();
     
     HIPoint hipoint= { pt.x , pt.y } ;
     HIViewPartCode outPart = 0 ;
@@ -337,35 +337,35 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
        &outPart
        );
     
-    int max = HIViewGetMaximum( m_peer->GetControlRef() ) ;
+    int max = m_peer->GetMaximum() ;
     if ( outPart == 0 && max > 0 )
     {
         // this is a hack, as unfortunately a hit on an already selected tab returns 0,
         // so we have to go some extra miles to make sure we select something different 
         // and try again ..
-        int val = HIViewGetValue( m_peer->GetControlRef() ) ;
+        int val = m_peer->GetValue() ;
         int maxval = max ;
         if ( max == 1 )
         {
-            HIViewSetMaximum( m_peer->GetControlRef() , 2 ) ;
+            m_peer->SetMaximum( 2 ) ;
             maxval = 2 ;
         }
 
         if ( val == 1 )
-            HIViewSetValue(m_peer->GetControlRef() , maxval ) ;
+            m_peer->SetValue( maxval ) ;
         else
-            HIViewSetValue(m_peer->GetControlRef() , 1 ) ;
+             m_peer->SetValue( 1 ) ;
                 
-            err = HIViewGetPartHit (
+        err = HIViewGetPartHit (
                                     m_peer->GetControlRef() ,
                                     &hipoint ,
                                     &outPart
                                     );
             
-        HIViewSetValue(m_peer->GetControlRef() , val ) ;
+        m_peer->SetValue( val ) ;
         if ( max == 1 )
         {
-            HIViewSetMaximum( m_peer->GetControlRef() , 1 ) ;
+            m_peer->SetMaximum( 1 ) ;
         }
     }
     
