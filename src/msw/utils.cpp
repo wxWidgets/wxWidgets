@@ -278,12 +278,19 @@ bool wxGetUserId(wxChar *WXUNUSED_IN_WINCE(buf),
 }
 
 // Get user name e.g. Julian Smart
-bool wxGetUserName(wxChar *WXUNUSED_IN_WINCE(buf),
-                   int WXUNUSED_IN_WINCE(maxSize))
+bool wxGetUserName(wxChar *buf, int maxSize)
 {
+    wxCHECK_MSG( buf && ( maxSize > 0 ), false,
+                    _T("empty buffer in wxGetUserName") );
 #if defined(__WXWINCE__)
-    // TODO-CE
-    return false;
+    wxRegKey key(wxRegKey::HKCU, wxT("Control Panel\\Owner\\Owner"));
+    if(!key.Open(wxRegKey::Read))
+        return false;
+    wxString name;
+    if(!key.QueryValue(wxEmptyString, name))
+        return false;
+    wxStrncpy(buf, name.c_str(), maxSize);
+    return true;
 #elif defined(USE_NET_API)
     CHAR szUserName[256];
     if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )
