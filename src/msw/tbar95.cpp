@@ -509,6 +509,12 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
 void wxToolBar::CreateDisabledImageList()
 {
+    if (m_disabledImgList != NULL)
+    {
+        delete m_disabledImgList;
+        m_disabledImgList = NULL;
+    }
+
     // as we can't use disabled image list with older versions of comctl32.dll,
     // don't even bother creating it
     if ( wxTheApp->GetComCtl32Version() >= 470 )
@@ -528,14 +534,12 @@ void wxToolBar::CreateDisabledImageList()
                                             bmpDisabled.GetMask() != NULL,
                                             GetToolsCount()
                                         );
-                return;
+                break;
             }
         }
 
         // we don't have any disabled bitmaps
     }
-
-    m_disabledImgList = NULL;
 }
 
 bool wxToolBar::Realize()
@@ -631,8 +635,6 @@ bool wxToolBar::Realize()
                 totalBitmapWidth, totalBitmapHeight);
 
             dcAllButtons.SelectObject(bitmap);
-
-
         }
 #endif // !__WXWINCE__
 
@@ -726,8 +728,6 @@ bool wxToolBar::Realize()
             // Map to system colours
             hBitmap = (HBITMAP)MapBitmap((WXHBITMAP) hBitmap,
                 totalBitmapWidth, totalBitmapHeight);
-
-
         }
 
         bool addBitmap = true;
