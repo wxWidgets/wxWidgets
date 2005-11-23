@@ -224,6 +224,7 @@
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "wxUSE_MS_HTML_HELP requires wxUSE_DYNAMIC_LOADER."
 #        else
+#            undef wxUSE_MS_HTML_HELP
 #            define wxUSE_MS_HTML_HELP 0
 #        endif
 #    endif
