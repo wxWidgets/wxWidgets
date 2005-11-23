@@ -622,6 +622,8 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/html/printing/Makefile.in $(DISTDIR)/samples/html/printing
 	cp $(SAMPDIR)/html/printing/*.cpp $(DISTDIR)/samples/html/printing
 	cp $(SAMPDIR)/html/printing/*.htm $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.gif $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.ico $(DISTDIR)/samples/html/printing
 	mkdir $(DISTDIR)/samples/html/test
 	cp $(SAMPDIR)/html/test/Makefile.in $(DISTDIR)/samples/html/test
 	cp $(SAMPDIR)/html/test/*.cpp $(DISTDIR)/samples/html/test
