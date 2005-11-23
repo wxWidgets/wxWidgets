@@ -2721,8 +2721,12 @@ if test "$USE_WIN32" = 1 ; then
     fi
     dnl We might want to abort here if wxUSE_ODBC="builtin" isn't supported on msw.
 
+    dnl This one is still used by some sample makefiles.
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
+
+    dnl This one we export to wx-config.
+    WXCONFIG_RESFLAGS="--include-dir \$includedir --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
 
     dnl install Win32-specific files in "make install"
     WIN32INSTALL=win32install
@@ -7186,6 +7190,7 @@ fi
 
 dnl TOOLCHAIN_DEFS should be used for both wx and client code
 WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS $TOOLCHAIN_DEFS"
+WXCONFIG_RESCOMP="$RESCOMP $WXCONFIG_RESFLAGS"
 
 dnl for convenience, sort the samples in alphabetical order
 dnl
@@ -7243,6 +7248,7 @@ AC_SUBST(WXCONFIG_CXXFLAGS)
 AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_RPATH)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
+AC_SUBST(WXCONFIG_RESCOMP)
 AC_SUBST(EXE_LINKER)
 
 dnl distribution vars

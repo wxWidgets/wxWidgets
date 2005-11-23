@@ -64,7 +64,7 @@ usage()
            [--list] [--host=HOST] [--toolkit=TOOLKIT] [--universal[=yes|no]]
            [--unicode[=yes|no]] [--debug[=yes|no]] [--static[=yes|no]]
            [--version[=VERSION]] [--basename] [--cc] [--cppflags] [--cflags]
-           [--cxxflags] [--rezflags] [--libs] [--cxx] [--ld] [--linkdeps]
+           [--cxxflags] [--rescomp] [--libs] [--cxx] [--ld] [--linkdeps]
            [--utility=UTIL] [LIB ...] 
 
    wx-config returns  information about  the wxWidgets libraries available
@@ -131,7 +131,7 @@ wxconfig_output_options="prefix exec_prefix
                          release version version_full
                          basename
                          cppflags cflags cxxflags
-                         rezflags
+                         rescomp
                          libs
                          linkdeps
                          cc cxx ld
@@ -880,7 +880,7 @@ bindir="@bindir@"
 [ -z "$output_option_version"       ] || echo "@WX_VERSION@"
 [ -z "$output_option_version_full"  ] || echo "@WX_SUBVERSION@"
 [ -z "$output_option_basename"      ] || echo "@WX_LIBRARY_BASENAME_GUI@"
-[ -z "$output_option_rezflags"      ] || echo $(eval echo "@MACRESWXCONFIG@")
+[ -z "$output_option_rescomp"       ] || echo "@WXCONFIG_RESCOMP@"
 [ -z "$output_option_cc"            ] || echo "@CC@"
 [ -z "$output_option_cxx"           ] || echo "@CXX@"
 [ -z "$output_option_ld"            ] || echo "@EXE_LINKER@"
