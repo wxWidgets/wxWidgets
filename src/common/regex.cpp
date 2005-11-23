@@ -45,12 +45,13 @@
 #include <regex.h>
 #include "wx/regex.h"
 
-// WXREGEX_USING_BUILTIN  defined when using the built-in regex lib
-// WXREGEX_IF_NEED_LEN()  wrap the len parameter only used with the built-in
-//                        or GNU regex
-// WXREGEX_CONVERT_TO_MB  defined when the regex lib is using chars and
-//                        wxChar is wide, so conversion must be done
-// WXREGEX_CHAR(x)        Convert wxChar to wxRegChar
+// WXREGEX_USING_BUILTIN    defined when using the built-in regex lib
+// WXREGEX_USING_RE_SEARCH  defined when using re_search in the GNU regex lib
+// WXREGEX_IF_NEED_LEN()    wrap the len parameter only used with the built-in
+//                          or GNU regex
+// WXREGEX_CONVERT_TO_MB    defined when the regex lib is using chars and
+//                          wxChar is wide, so conversion must be done
+// WXREGEX_CHAR(x)          Convert wxChar to wxRegChar
 //
 #ifdef __REG_NOFRONT
 #   define WXREGEX_USING_BUILTIN
@@ -59,6 +60,7 @@
 #else
 #   ifdef HAVE_RE_SEARCH
 #       define WXREGEX_IF_NEED_LEN(x) ,x
+#       define WXREGEX_USING_RE_SEARCH
 #   else        
 #       define WXREGEX_IF_NEED_LEN(x)
 #   endif
@@ -66,13 +68,15 @@
 #       define WXREGEX_CONVERT_TO_MB
 #   endif
 #   define WXREGEX_CHAR(x) wxConvertWX2MB(x)
+#   define wx_regfree regfree
+#   define wx_regerror regerror
 #endif
 
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
-#ifndef HAVE_RE_SEARCH
+#ifndef WXREGEX_USING_RE_SEARCH
 
 // the array of offsets for the matches, the usual POSIX regmatch_t array.
 class wxRegExMatches
@@ -92,7 +96,7 @@ private:
     regmatch_t *m_matches;
 };
 
-#else // HAVE_RE_SEARCH
+#else // WXREGEX_USING_RE_SEARCH
 
 // the array of offsets for the matches, the struct used by the GNU lib
 class wxRegExMatches
@@ -122,7 +126,7 @@ private:
     re_registers m_matches;
 };
 
-#endif // HAVE_RE_SEARCH
+#endif // WXREGEX_USING_RE_SEARCH
 
 // the character type used by the regular expression engine
 #ifndef WXREGEX_CONVERT_TO_MB
@@ -168,7 +172,7 @@ private:
     {
         if ( IsValid() )
         {
-            regfree(&m_RegEx);
+            wx_regfree(&m_RegEx);
         }
 
         delete m_Matches;
@@ -227,12 +231,12 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode, bool badconv) const
     wxString szError;
 
     // first get the string length needed
-    int len = regerror(errorcode, &m_RegEx, NULL, 0);
+    int len = wx_regerror(errorcode, &m_RegEx, NULL, 0);
     if ( len > 0 )
     {
         char* szcmbError = new char[++len];
 
-        (void)regerror(errorcode, &m_RegEx, szcmbError, len);
+        (void)wx_regerror(errorcode, &m_RegEx, szcmbError, len);
 
         szError = wxConvertMB2WX(szcmbError);
         delete [] szcmbError;
@@ -338,7 +342,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     return IsValid();
 }
 
-#ifdef HAVE_RE_SEARCH
+#ifdef WXREGEX_USING_RE_SEARCH
 
 // On GNU, regexec is implemented as a wrapper around re_search. re_search
 // requires a length parameter which the POSIX regexec does not have,
@@ -363,7 +367,7 @@ static int ReSearch(const regex_t *preg,
     return ret >= 0 ? 0 : REG_NOMATCH;
 }
 
-#endif // HAVE_RE_SEARCH
+#endif // WXREGEX_USING_RE_SEARCH
 
 bool wxRegExImpl::Matches(const wxRegChar *str,
                           int flags
@@ -393,7 +397,7 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
     // do match it
 #if defined WXREGEX_USING_BUILTIN
     int rc = wx_re_exec(&self->m_RegEx, str, len, NULL, m_nMatches, matches, flagsRE);
-#elif defined HAVE_RE_SEARCH
+#elif defined WXREGEX_USING_RE_SEARCH
     int rc = str ? ReSearch(&self->m_RegEx, str, len, matches, flagsRE) : REG_BADPAT;
 #else
     int rc = str ? regexec(&self->m_RegEx, str, m_nMatches, matches, flagsRE) : REG_BADPAT;

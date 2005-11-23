@@ -50,7 +50,7 @@ static struct rerr {
  */
 /* ARGSUSED */
 size_t				/* actual space needed (including NUL) */
-regerror(rxerrcode, preg, errbuf, errbuf_size)
+wx_regerror(rxerrcode, preg, errbuf, errbuf_size)
 int rxerrcode;			/* error code, or REG_ATOI or REG_ITOA */
 CONST regex_t *preg;		/* associated regex_t (unused at present) */
 char *errbuf;			/* result buffer (unless errbuf_size==0) */
