@@ -31,6 +31,7 @@
     #include "wx/log.h"
 #endif  //WX_PRECOMP
 
+#include "wx/msw/registry.h"
 #include "wx/apptrait.h"
 #include "wx/dynlib.h"
 #include "wx/dynload.h"
@@ -288,11 +289,12 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     wxCHECK_MSG( buf && ( maxSize > 0 ), false,
                     _T("empty buffer in wxGetUserName") );
 #if defined(__WXWINCE__)
-    wxRegKey key(wxRegKey::HKCU, wxT("Control Panel\\Owner\\Owner"));
+    wxLogNull noLog;
+    wxRegKey key(wxRegKey::HKCU, wxT("ControlPanel\\Owner"));
     if(!key.Open(wxRegKey::Read))
         return false;
     wxString name;
-    if(!key.QueryValue(wxEmptyString, name))
+    if(!key.QueryValue(wxT("Owner"),name))
         return false;
     wxStrncpy(buf, name.c_str(), maxSize-1);
     buf[maxSize-1] = _T('\0');
