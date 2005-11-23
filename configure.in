@@ -6973,8 +6973,8 @@ dnl come first and the one with setup.h should be before $(top_srcdir)/include
 dnl in case the latter contains setup.h used by non-autoconf makefiles (e.g.
 dnl CodeWarrior):
 CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $CPPFLAGS \
- -I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
- -I\${top_srcdir}/include $TOOLKIT_INCLUDE`
+ -I\\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
+ -I\\${top_srcdir}/include $TOOLKIT_INCLUDE`
 
 C_AND_CXX_FLAGS="$DEBUG_FLAG $PROFILE_FLAG $OPTIMISE_FLAG"
 CFLAGS=`echo $WXCONFIG_CFLAGS $CFLAGS $CWARNINGS $C_AND_CXX_FLAGS`
