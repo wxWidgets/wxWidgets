@@ -554,21 +554,18 @@ bool wxToolBar::Realize()
     const bool isVertical = HasFlag(wxTB_VERTICAL);
 
     bool doRemap, doRemapBg, doTransparent;
-#ifdef __WXWINCE__
-    doRemapBg = false;
-    doRemap = false;
-    doTransparent = false;
-#else
-    if (wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 2)
+    doRemapBg = doRemap = doTransparent = false;
+
+#ifndef __WXWINCE__
+    int remapValue = (-1);
+    if (wxSystemOptions::HasOption(wxT("msw.remap")))
+        remapValue = wxSystemOptions::GetOptionInt(wxT("msw.remap"));
+
+    doTransparent = (remapValue == 2);
+    if (!doTransparent)
     {
-        doRemapBg = doRemap = false;
-        doTransparent = true;
-    }
-    else
-    {   doRemap = !wxSystemOptions::HasOption(wxT("msw.remap"))
-            || wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 1;
+        doRemap = (remapValue != 0);
         doRemapBg = !doRemap;
-        doTransparent = false;
     }
 #endif
 
@@ -611,6 +608,7 @@ bool wxToolBar::Realize()
         wxMemoryDC dcAllButtons;
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
         dcAllButtons.SelectObject(bitmap);
+
 #ifdef __WXWINCE__
         dcAllButtons.SetBackground(wxBrush(wxColour(192,192,192)));
 #else
@@ -821,7 +819,6 @@ bool wxToolBar::Realize()
         {
             continue;
         }
-
 
         TBBUTTON& button = buttons[i];
 
