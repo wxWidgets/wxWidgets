@@ -706,15 +706,37 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 
     PROCESS_INFORMATION pi;
     DWORD dwFlags = CREATE_SUSPENDED;
+
 #ifndef __WXWINCE__
     dwFlags |= CREATE_DEFAULT_ERROR_MODE ;
+#else
+    wxString ModuleName;
+    wxString Arguments;
+    { int idx = command.Find( wxT(' ') );
+      if( idx >= 0 ) {
+          ModuleName = command.Left(idx);
+          Arguments = command.Mid(idx+1);
+      } else {
+          ModuleName = command;
+      }
+    }
 #endif
 
     bool ok = ::CreateProcess
                 (
+                    // WinCE requires appname to be non null 
+                    // Win32 allows for null
+#ifdef __WXWINCE__
+                 (wxChar *)
+                 ModuleName.c_str(),   // application name
+                 (wxChar *)
+                 Arguments.c_str(),   // arguments
+                 
+#else
                  NULL,              // application name (use only cmd line)
                  (wxChar *)
-                 command.c_str(),   // full command line
+                 command.c_str(),   // full command line                 
+#endif
                  NULL,              // security attributes: defaults for both
                  NULL,              //   the process and its main thread
                  redirect,          // inherit handles if we use pipes
