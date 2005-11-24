@@ -237,6 +237,7 @@ FIXME: this template has (at least) the following bugs:
         <!-- If on borland, we don't need to do much            -->
         <if cond="FORMAT=='borland'">
             <sys-lib>ole2w32</sys-lib>
+            <sys-lib>odbc32</sys-lib>
         </if>
 
         <!-- Non-borland, on the other hand...                  -->
