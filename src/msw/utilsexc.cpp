@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/utilsexec.cpp
+// Name:        src/msw/utilsexc.cpp
 // Purpose:     wxExecute implementation for MSW
 // Author:      Julian Smart
 // Modified by:
@@ -710,43 +710,33 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 #ifndef __WXWINCE__
     dwFlags |= CREATE_DEFAULT_ERROR_MODE ;
 #else
-    wxString moduleName;
-    wxString arguments;
-    int idx = command.Find( wxT(' ') );
-    if( idx >= 0 )
-    {
-        moduleName = command.Left(idx);
-        arguments = command.Mid(idx+1);
-    }
-    else
-    {
-        moduleName = command;
-    }
+    // we are assuming commands without spaces for now
+    wxString moduleName = command.BeforeFirst(wxT(' '));
+    wxString arguments = command.AfterFirst(wxT(' '));
 #endif
 
     bool ok = ::CreateProcess
                 (
-                    // WinCE requires appname to be non null 
+                    // WinCE requires appname to be non null
                     // Win32 allows for null
 #ifdef __WXWINCE__
                  (wxChar *)
-                 moduleName.c_str(),   // application name
+                 moduleName.c_str(), // application name
                  (wxChar *)
-                 arguments.c_str(),   // arguments
-                 
+                 arguments.c_str(),  // arguments
 #else
-                 NULL,              // application name (use only cmd line)
+                 NULL,               // application name (use only cmd line)
                  (wxChar *)
-                 command.c_str(),   // full command line                 
+                 command.c_str(),    // full command line
 #endif
-                 NULL,              // security attributes: defaults for both
-                 NULL,              //   the process and its main thread
-                 redirect,          // inherit handles if we use pipes
-                 dwFlags,           // process creation flags
-                 NULL,              // environment (use the same)
-                 NULL,              // current directory (use the same)
-                 &si,               // startup info (unused here)
-                 &pi                // process info
+                 NULL,               // security attributes: defaults for both
+                 NULL,               //   the process and its main thread
+                 redirect,           // inherit handles if we use pipes
+                 dwFlags,            // process creation flags
+                 NULL,               // environment (use the same)
+                 NULL,               // current directory (use the same)
+                 &si,                // startup info (unused here)
+                 &pi                 // process info
                 ) != 0;
 
 #if wxUSE_STREAMS && !defined(__WXWINCE__)
@@ -962,4 +952,3 @@ long wxExecute(wxChar **argv, int flags, wxProcess *handler)
 
     return wxExecute(command, flags, handler);
 }
-
