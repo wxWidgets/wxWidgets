@@ -710,15 +710,17 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 #ifndef __WXWINCE__
     dwFlags |= CREATE_DEFAULT_ERROR_MODE ;
 #else
-    wxString ModuleName;
-    wxString Arguments;
-    { int idx = command.Find( wxT(' ') );
-      if( idx >= 0 ) {
-          ModuleName = command.Left(idx);
-          Arguments = command.Mid(idx+1);
-      } else {
-          ModuleName = command;
-      }
+    wxString moduleName;
+    wxString arguments;
+    int idx = command.Find( wxT(' ') );
+    if( idx >= 0 )
+    {
+        moduleName = command.Left(idx);
+        arguments = command.Mid(idx+1);
+    }
+    else
+    {
+        moduleName = command;
     }
 #endif
 
@@ -728,9 +730,9 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
                     // Win32 allows for null
 #ifdef __WXWINCE__
                  (wxChar *)
-                 ModuleName.c_str(),   // application name
+                 moduleName.c_str(),   // application name
                  (wxChar *)
-                 Arguments.c_str(),   // arguments
+                 arguments.c_str(),   // arguments
                  
 #else
                  NULL,              // application name (use only cmd line)
