@@ -961,7 +961,8 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
         UpdatesCountFilter ucf(m_updatesCount);
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
-                      0, (LPARAM)valueDos.c_str());
+                      // EM_REPLACESEL takes 1 to indicate the operation should be redoable
+                      selectionOnly ? 1 : 0, (LPARAM)valueDos.c_str());
 
         if ( !ucf.GotUpdate() )
         {
