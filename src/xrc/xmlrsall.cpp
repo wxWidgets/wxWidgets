@@ -118,6 +118,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_MDI
     AddHandler(new wxMdiXmlHandler);
 #endif
+#if wxUSE_GRID
+    AddHandler( new wxGridXmlHandler);
+#endif
 }
 
 #endif // wxUSE_XRC
