@@ -61,7 +61,7 @@
 #   ifdef HAVE_RE_SEARCH
 #       define WXREGEX_IF_NEED_LEN(x) ,x
 #       define WXREGEX_USING_RE_SEARCH
-#   else        
+#   else
 #       define WXREGEX_IF_NEED_LEN(x)
 #   endif
 #   if wxUSE_UNICODE
@@ -84,11 +84,24 @@ class wxRegExMatches
 public:
     typedef regmatch_t *match_type;
 
-    wxRegExMatches(size_t n)        { m_matches = new regmatch_t[n]; } 
+    wxRegExMatches(size_t n)        { m_matches = new regmatch_t[n]; }
     ~wxRegExMatches()               { delete [] m_matches; }
 
-    size_t Start(size_t n) const    { return m_matches[n].rm_so; }
-    size_t End(size_t n) const      { return m_matches[n].rm_eo; }
+    // we just use casts here because the fields of regmatch_t struct may be 64
+    // bit but we're limited to size_t in our public API and are not going to
+    // change it because operating on strings longer than 4GB using it is
+    // absolutely impractical anyhow, but still check at least in debug
+    size_t Start(size_t n) const
+    {
+        wxASSERT_MSG( m_matches[n].rm_so < UINT_MAX, _T("regex offset overflow") );
+        return wx_truncate_cast(size_t, m_matches[n].rm_so);
+    }
+
+    size_t End(size_t n) const
+    {
+        wxASSERT_MSG( m_matches[n].rm_eo < UINT_MAX, _T("regex offset overflow") );
+        return wx_truncate_cast(size_t, m_matches[n].rm_eo);
+    }
 
     regmatch_t *get() const         { return m_matches; }
 
