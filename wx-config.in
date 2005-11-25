@@ -132,6 +132,7 @@ wxconfig_output_options="prefix exec_prefix
                          basename
                          cppflags cflags cxxflags
                          rescomp
+                         rezflags
                          libs
                          linkdeps
                          cc cxx ld
@@ -880,6 +881,8 @@ bindir="@bindir@"
 [ -z "$output_option_version"       ] || echo "@WX_VERSION@"
 [ -z "$output_option_version_full"  ] || echo "@WX_SUBVERSION@"
 [ -z "$output_option_basename"      ] || echo "@WX_LIBRARY_BASENAME_GUI@"
+# --rezflags is deprecated
+[ -z "$output_option_rezflags"      ] || echo "@WXCONFIG_POSTLINK_COMMAND@"
 [ -z "$output_option_rescomp"       ] || echo "@WXCONFIG_RESCOMP@"
 [ -z "$output_option_cc"            ] || echo "@CC@"
 [ -z "$output_option_cxx"           ] || echo "@CXX@"

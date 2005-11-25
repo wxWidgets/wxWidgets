@@ -1447,11 +1447,11 @@ AC_CHECK_TOOL(STRIP, strip, true)
 
 dnl Win32 tools
 if test "$wxUSE_WINE" = "yes"; then
-    AC_CHECK_TOOL(RESCOMP, wrc)
+    AC_CHECK_TOOL(WINDRES, wrc)
 else
     case "${host}" in
     *-*-cygwin* | *-*-mingw32* )
-        AC_CHECK_TOOL(RESCOMP, windres)
+        dnl Bakefile CVS (as of 2005-11-24) now detects windres properly
         AC_CHECK_TOOL(DLLTOOL, dlltool)
         ;;
     esac
@@ -3896,7 +3896,7 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
     dnl add the resources target for wxMac
     LIBWXMACRES="\$(top_builddir)lib/${WX_RESOURCES_MACOSX_ASCII}"
 
-    AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
+    AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
     AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
     AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
 
@@ -3905,25 +3905,24 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
     dnl resources are bundled both with shared library and applications
     dnl since the carb resource *must* be included in the application
     if test "$wxUSE_MAC" = 1; then
-        MACRESCOMP="\$(RESCOMP) -d __DARWIN__ -t APPL Carbon.r -o"
+        POSTLINK_COMMAND="\$(REZ) -d __DARWIN__ -t APPL Carbon.r -o"
 
         dnl this command is used to implement `wx-config --rezflags` and it is
         dnl eval'd there so escape any metacharacters inside
-        MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r -o"
+        WXCONFIG_POSTLINK_COMMAND="${REZ} -d __DARWIN__ -t APPL Carbon.r -o"
     else
-        MACRESCOMP="echo -n | \$(RESCOMP) -d __DARWIN__ -t APPL ${LIBWXMACRES} -o"
-        MACRESWXCONFIG="echo -n \\\| ${RESCOMP} -d __DARWIN__ -t APPL \\\${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
+        POSTLINK_COMMAND="echo -n | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES} -o"
+        WXCONFIG_POSTLINK_COMMAND="echo -n \\\| ${REZ} -d __DARWIN__ -t APPL \\\${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
     fi
 else
     dnl default value is to (silently) do nothing in the makefile
     MACSETFILE="@true"
-    MACRESWXCONFIG="@true"
+    WXCONFIG_POSTLINK_COMMAND="@true"
 
-    dnl confusingly, wxOS2 also uses MACRESCOMP in its post-link step
     if test "$wxUSE_PM" = 1; then
-        MACRESCOMP="emxbind -ep"
+        POSTLINK_COMMAND="emxbind -ep"
     else
-        MACRESCOMP="@true"
+        POSTLINK_COMMAND="@true"
     fi
 fi
 
@@ -7190,7 +7189,7 @@ fi
 
 dnl TOOLCHAIN_DEFS should be used for both wx and client code
 WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS $TOOLCHAIN_DEFS"
-WXCONFIG_RESCOMP="$RESCOMP $WXCONFIG_RESFLAGS"
+WXCONFIG_RESCOMP="$WINDRES $WXCONFIG_RESFLAGS"
 
 dnl for convenience, sort the samples in alphabetical order
 dnl
@@ -7266,7 +7265,8 @@ AC_SUBST(DMALLOC_LIBS)
 AC_SUBST(WX_VERSION_TAG)
 
 dnl additional resurces settings
-AC_SUBST(RESCOMP)
+AC_SUBST(WINDRES)
+AC_SUBST(REZ)
 AC_SUBST(RESFLAGS)
 AC_SUBST(RESPROGRAMOBJ)
 AC_SUBST(WX_RESOURCES_MACOSX_ASCII)
@@ -7275,9 +7275,9 @@ AC_SUBST(WX_RESOURCES_MACOSX_DATA)
 dnl additional for Mac OS X
 AC_SUBST(DEREZ)
 AC_SUBST(LIBWXMACRES)
-AC_SUBST(MACRESCOMP)
+AC_SUBST(POSTLINK_COMMAND)
 AC_SUBST(MACSETFILE)
-AC_SUBST(MACRESWXCONFIG)
+AC_SUBST(WXCONFIG_POSTLINK_COMMAND)
 
 dnl other tools
 AC_SUBST(GCC)

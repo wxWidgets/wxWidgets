@@ -611,26 +611,20 @@ dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([AC_BAKEFILE_RES_COMPILERS],
 [
-    RESCOMP=
-    SETFILE=
-
     case ${BAKEFILE_HOST} in 
         *-*-cygwin* | *-*-mingw32* )
             dnl Check for win32 resources compiler:
-            if test "$build" != "$host" ; then
-                RESCOMP=$host_alias-windres
-            else
-                AC_CHECK_PROG(RESCOMP, windres, windres, windres)
-            fi
+            AC_CHECK_TOOL(WINDRES, windres)
          ;;
  
       *-*-darwin* | powerpc-apple-macos* )
-            AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
+            AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
             AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
         ;;
     esac
 
-    AC_SUBST(RESCOMP)
+    AC_SUBST(WINDRES)
+    AC_SUBST(REZ)
     AC_SUBST(SETFILE)
 ])
 
