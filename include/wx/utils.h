@@ -52,16 +52,13 @@ class WXDLLIMPEXP_CORE wxPoint;
 #define wxMax(a,b)            (((a) > (b)) ? (a) : (b))
 #define wxMin(a,b)            (((a) < (b)) ? (a) : (b))
 
-// wxGetFreeMemory can return huge amount of memory on 64-bit platforms
-// define wxMemorySize according to the type which best fits your platform
-#if wxUSE_LONGLONG && defined(__WIN64__)
-    // 64 bit Windowses have sizeof(long) only 32 bit long
-    // we need to use wxLongLong to express memory sizes
-    #define wxMemorySize wxLongLong
+// wxGetFreeMemory can return huge amount of memory on 32-bit platforms as well
+// so to always use long long for its result type on all platforms which
+// support it
+#if wxUSE_LONGLONG
+    typedef wxLongLong wxMemorySize;
 #else
-    // 64 bit UNIX has sizeof(long) = 64
-    // assume 32 bit platforms cannnot return more than 32bits of
-    #define wxMemorySize long
+    typedef long wxMemorySize;
 #endif
 
 // ----------------------------------------------------------------------------
