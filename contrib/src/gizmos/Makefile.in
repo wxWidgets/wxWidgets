@@ -16,7 +16,7 @@ LIBPREFIX = @LIBPREFIX@
 SO_SUFFIX = @SO_SUFFIX@
 DLLIMP_SUFFIX = @DLLIMP_SUFFIX@
 LN_S = @LN_S@
-RESCOMP = @RESCOMP@
+WINDRES = @WINDRES@
 PIC_FLAG = @PIC_FLAG@
 SONAME_FLAG = @SONAME_FLAG@
 STRIP = @STRIP@
@@ -41,6 +41,7 @@ WX_LIB_FLAVOUR = @WX_LIB_FLAVOUR@
 TOOLKIT = @TOOLKIT@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
+TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_XML = @EXTRALIBS_XML@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
@@ -242,6 +243,8 @@ COND_SHARED_0_USE_XRC_1___gizmos_xrclib___depname = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__gizmos_0 = .0.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@__gizmos_0 = -0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__gizmos_0 = .$(SO_SUFFIX)
+@COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
+@COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -361,7 +364,7 @@ distclean: clean
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_gizmos_xrclib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(GIZMOS_XRCLIB_CXXFLAGS)
 
 gizmosdll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(GIZMOSDLL_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 gizmosdll_dynamicsash.o: $(srcdir)/dynamicsash.cpp $(GIZMOSDLL_ODEP)
 	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $(srcdir)/dynamicsash.cpp
@@ -382,7 +385,7 @@ gizmosdll_statpict.o: $(srcdir)/statpict.cpp $(GIZMOSDLL_ODEP)
 	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $(srcdir)/statpict.cpp
 
 gizmos_xrcdll_version_rc.o: $(srcdir)/../../../src/msw/version.rc $(GIZMOS_XRCDLL_ODEP)
-	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 gizmos_xrcdll_xh_statpict.o: $(srcdir)/xh_statpict.cpp $(GIZMOS_XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(GIZMOS_XRCDLL_CXXFLAGS) $(srcdir)/xh_statpict.cpp
