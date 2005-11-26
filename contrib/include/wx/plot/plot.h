@@ -14,9 +14,10 @@
 
 #include "wx/defs.h"
 
-#include "wx/scrolwin.h"
-#include "wx/event.h"
 #include "wx/dynarray.h"
+#include "wx/event.h"
+#include "wx/pen.h"
+#include "wx/scrolwin.h"
 
 #ifdef WXMAKINGDLL_PLOT
     #define WXDLLIMPEXP_PLOT WXEXPORT
@@ -284,7 +285,11 @@ class WXDLLIMPEXP_PLOT wxPlotWindow: public wxScrolledWindow
 {
 public:
     wxPlotWindow() {}
-    wxPlotWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, int flags = wxPLOT_DEFAULT );
+    wxPlotWindow(wxWindow *parent,
+                 wxWindowID id = wxID_ANY,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 int flags = wxPLOT_DEFAULT);
     ~wxPlotWindow();
 
     // curve accessors
