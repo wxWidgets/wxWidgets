@@ -2249,12 +2249,82 @@ void wxWindowBase::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
     UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
-// process Ctrl-Alt-mclick
+// methods for drawing the sizers in a visible way
+#ifdef __WXDEBUG__
+
+static void DrawSizers(wxWindowBase *win);
+
+static void DrawBorder(wxWindowBase *win, const wxRect& rect, bool fill = false)
+{
+    wxClientDC dc((wxWindow *)win);
+    dc.SetPen(*wxRED_PEN);
+    dc.SetBrush(fill ? wxBrush(*wxRED, wxCROSSDIAG_HATCH): *wxTRANSPARENT_BRUSH);
+    dc.DrawRectangle(rect.Deflate(1, 1));
+}
+
+static void DrawSizer(wxWindowBase *win, wxSizer *sizer)
+{
+    const wxSizerItemList& items = sizer->GetChildren();
+    for ( wxSizerItemList::const_iterator i = items.begin(),
+                                        end = items.end();
+          i != end;
+          ++i )
+    {
+        wxSizerItem *item = *i;
+        if ( item->IsSizer() )
+        {
+            DrawBorder(win, item->GetRect().Deflate(2));
+            DrawSizer(win, item->GetSizer());
+        }
+        else if ( item->IsSpacer() )
+        {
+            DrawBorder(win, item->GetRect().Deflate(2), true);
+        }
+        else if ( item->IsWindow() )
+        {
+            DrawSizers(item->GetWindow());
+        }
+    }
+}
+
+static void DrawSizers(wxWindowBase *win)
+{
+    wxSizer *sizer = win->GetSizer();
+    if ( sizer )
+    {
+        DrawBorder(win, win->GetClientSize());
+        DrawSizer(win, sizer);
+    }
+    else // no sizer, still recurse into the children
+    {
+        const wxWindowList& children = win->GetChildren();
+        for ( wxWindowList::const_iterator i = children.begin(),
+                                         end = children.end();
+              i != end;
+              ++i )
+        {
+            DrawSizers(*i);
+        }
+    }
+}
+
+#endif // __WXDEBUG__
+
+// process special middle clicks
 void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 {
-#if wxUSE_MSGDLG
     if ( event.ControlDown() && event.AltDown() )
     {
+#ifdef __WXDEBUG__
+        // Ctrl-Alt-Shift-mclick makes the sizers visible in debug builds
+        if ( event.ShiftDown() )
+        {
+            DrawSizers(this);
+            return;
+        }
+#endif // __WXDEBUG__
+
+#if wxUSE_MSGDLG
         // don't translate these strings
         wxString port;
 
