@@ -78,10 +78,10 @@ wxString wxGetOsDescription();
 // int wxParseCommonDialogsFilter(const wxString& wildCard, wxArrayString& descriptions, wxArrayString& filters);
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
-long wxGetFreeMemory();
+wxMemorySize wxGetFreeMemory();
 #else
 %inline %{
-    long wxGetFreeMemory()
+    wxMemorySize wxGetFreeMemory()
         { wxPyRaiseNotImplemented(); return 0; }
 %}
 #endif
