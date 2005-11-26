@@ -460,11 +460,13 @@ class WXDLLIMPEXP_BASE wxIntegerHash
     WX_HASH_MAP_NAMESPACE::hash<short> shortHash;
     WX_HASH_MAP_NAMESPACE::hash<unsigned short> ushortHash;
 
+#if defined wxLongLong_t && !defined wxLongLongIsLong
     size_t longlongHash( wxLongLong_t x ) const
     {
         return longHash( wx_truncate_cast(long, x) ) ^
                longHash( wx_truncate_cast(long, x >> (sizeof(long) * 8)) );
     }
+#endif
 
 public:
     wxIntegerHash() { }
