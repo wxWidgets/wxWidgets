@@ -53,6 +53,7 @@ class wxIDropSource : public IDropSource
 {
 public:
   wxIDropSource(wxDropSource *pDropSource);
+  virtual ~wxIDropSource() { }
 
   DECLARE_IUNKNOWN_METHODS;
 
@@ -64,7 +65,7 @@ private:
   DWORD         m_grfInitKeyState;  // button which started the d&d operation
   wxDropSource *m_pDropSource;      // pointer to C++ class we belong to
 
-    DECLARE_NO_COPY_CLASS(wxIDropSource)
+  DECLARE_NO_COPY_CLASS(wxIDropSource)
 };
 
 // ============================================================================
