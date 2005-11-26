@@ -5004,18 +5004,18 @@ if test "$WXGPE" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGPE__,$WXGPE)
 fi
 
-dnl DEBUG_FLAG contains debugging options (supposed to be the same for C and C++
-dnl compilers: we'd need a separate WXDEBUG_CXX if this is ever not the case)
-DEBUG_FLAG=
+dnl DEBUG_CFLAGS contains debugging options (supposed to be the same for C and C++
+dnl compilers: we'd need a separate DEBUG_CXXFLAGS if this is ever not the case)
+DEBUG_CFLAGS=
 if test "$wxUSE_DEBUG_INFO" = "yes" ; then
-    DEBUG_FLAG="-g"
+    DEBUG_CFLAGS="-g"
     wxUSE_OPTIMISE=no
 fi
 
 if test "$wxUSE_DEBUG_GDB" = "yes" ; then
     wxUSE_DEBUG_INFO=yes
     if test "$GCC" = yes; then
-        DEBUG_FLAG="-ggdb"
+        DEBUG_CFLAGS="-ggdb"
     fi
 fi
 
@@ -5040,9 +5040,9 @@ if test "$wxUSE_DMALLOC" = "yes" ; then
 fi
 
 dnl cc/cxx/ld option for profiling
-PROFILE_FLAG=
+PROFILE_FLAGS=
 if test "$wxUSE_PROFILE" = "yes" ; then
-    PROFILE_FLAG=" -pg"
+    PROFILE_FLAGS=" -pg"
 fi
 
 if test "$GCC" = "yes" ; then
@@ -5078,18 +5078,18 @@ if test "$GCC" = "yes" ; then
 fi
 
 dnl C/C++ compiler option for optimization (supposed to be the same for both)
-OPTIMISE_FLAG=
+OPTIMISE_CFLAGS=
 if test "$wxUSE_OPTIMISE" = "no" ; then
     if test "$GCC" = yes ; then
         dnl use -O0 because compiling with it is faster than compiling with no
         dnl optimization options at all (at least with g++ 3.2)
-        OPTIMISE_FLAG="-O0"
+        OPTIMISE_CFLAGS="-O0"
     fi
 else
     if test "$GCC" = yes ; then
-        OPTIMISE_FLAG="-O2"
+        OPTIMISE_CFLAGS="-O2"
     else
-        OPTIMISE_FLAG="-O"
+        OPTIMISE_CFLAGS="-O"
     fi
 fi
 
@@ -6979,7 +6979,7 @@ CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $CPPFLAGS \
  -I\\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
  -I\\${top_srcdir}/include $TOOLKIT_INCLUDE`
 
-C_AND_CXX_FLAGS="$DEBUG_FLAG $PROFILE_FLAG $OPTIMISE_FLAG"
+C_AND_CXX_FLAGS="$DEBUG_CFLAGS $PROFILE_FLAGS $OPTIMISE_CFLAGS"
 CFLAGS=`echo $WXCONFIG_CFLAGS $CFLAGS $CWARNINGS $C_AND_CXX_FLAGS`
 CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $CXXFLAGS $C_AND_CXX_FLAGS`
 
@@ -7016,7 +7016,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
 fi
 
-LDFLAGS="$LDFLAGS $PROFILE_FLAG"
+LDFLAGS="$LDFLAGS $PROFILE_FLAGS"
 
 WXCONFIG_LIBS="$LIBS"
 

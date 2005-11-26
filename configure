@@ -11457,7 +11457,7 @@ echo "${ECHO_T}$ac_cv_c_compiler_gnu" >&6
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -11929,7 +11929,7 @@ fi
                 unset ac_cv_prog_cc_g
                 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -13103,9 +13103,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -g -O2"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="$CXXFLAGS -g"
+    CXXFLAGS="-g"
   fi
 else
   if test "$GXX" = yes; then
@@ -13368,7 +13368,7 @@ fi
                 unset ac_cv_prog_cc_g
                 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -g"
+CFLAGS="-g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -27413,7 +27413,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -27440,7 +27440,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
   for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Intrinsic.h"; then
+  if test -r "$ac_dir/X11/Xlib.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -27454,18 +27454,18 @@ if test "$ac_x_libraries" = no; then
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-lXt $LIBS"
+  LIBS="-lX11 $LIBS"
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 int
 main ()
 {
-XtMalloc (0)
+XrmInitialize ()
   ;
   return 0;
 }
@@ -27503,7 +27503,7 @@ for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
-    if test -r $ac_dir/libXt.$ac_extension; then
+    if test -r $ac_dir/libX11.$ac_extension; then
       ac_x_libraries=$ac_dir
       break 2
     fi
@@ -37977,16 +37977,16 @@ _ACEOF
 
 fi
 
-DEBUG_FLAG=
+DEBUG_CFLAGS=
 if test "$wxUSE_DEBUG_INFO" = "yes" ; then
-    DEBUG_FLAG="-g"
+    DEBUG_CFLAGS="-g"
     wxUSE_OPTIMISE=no
 fi
 
 if test "$wxUSE_DEBUG_GDB" = "yes" ; then
     wxUSE_DEBUG_INFO=yes
     if test "$GCC" = yes; then
-        DEBUG_FLAG="-ggdb"
+        DEBUG_CFLAGS="-ggdb"
     fi
 fi
 
@@ -38022,9 +38022,9 @@ if test "$wxUSE_DMALLOC" = "yes" ; then
     DMALLOC_LIBS="-ldmallocthcxx"
 fi
 
-PROFILE_FLAG=
+PROFILE_FLAGS=
 if test "$wxUSE_PROFILE" = "yes" ; then
-    PROFILE_FLAG=" -pg"
+    PROFILE_FLAGS=" -pg"
 fi
 
 if test "$GCC" = "yes" ; then
@@ -38048,16 +38048,16 @@ if test "$GCC" = "yes" ; then
     esac
 fi
 
-OPTIMISE_FLAG=
+OPTIMISE_CFLAGS=
 if test "$wxUSE_OPTIMISE" = "no" ; then
     if test "$GCC" = yes ; then
-                        OPTIMISE_FLAG="-O0"
+                        OPTIMISE_CFLAGS="-O0"
     fi
 else
     if test "$GCC" = yes ; then
-        OPTIMISE_FLAG="-O2"
+        OPTIMISE_CFLAGS="-O2"
     else
-        OPTIMISE_FLAG="-O"
+        OPTIMISE_CFLAGS="-O"
     fi
 fi
 
@@ -43421,7 +43421,7 @@ CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $CPPFLAGS \
  -I\\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
  -I\\${top_srcdir}/include $TOOLKIT_INCLUDE`
 
-C_AND_CXX_FLAGS="$DEBUG_FLAG $PROFILE_FLAG $OPTIMISE_FLAG"
+C_AND_CXX_FLAGS="$DEBUG_CFLAGS $PROFILE_FLAGS $OPTIMISE_CFLAGS"
 CFLAGS=`echo $WXCONFIG_CFLAGS $CFLAGS $CWARNINGS $C_AND_CXX_FLAGS`
 CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $CXXFLAGS $C_AND_CXX_FLAGS`
 
@@ -43447,7 +43447,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
 fi
 
-LDFLAGS="$LDFLAGS $PROFILE_FLAG"
+LDFLAGS="$LDFLAGS $PROFILE_FLAGS"
 
 WXCONFIG_LIBS="$LIBS"
 
