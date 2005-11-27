@@ -228,20 +228,19 @@ void StringTestCase::Conversion()
 #endif
 }
 
+#if !wxUSE_UNICODE
 // in case wcscmp is missing
 //
 static int wx_wcscmp(const wchar_t *s1, const wchar_t *s2)
 {
-    for (;;) {
-        if (*s1 != *s2)
-            return *s1 - *s2;
-        if (*s1 == 0)
-            break;
+    while (*s1 == *s2 && *s1 != 0)
+    {
         s1++;
         s2++;
     }
-    return 0;
+    return *s1 - *s2;
 }
+#endif
 
 void
 StringTestCase::DoTestConversion(const char *s,
