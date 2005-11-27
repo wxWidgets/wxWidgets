@@ -108,22 +108,9 @@ void wxCheckBox::SetLabel(
 
 wxSize wxCheckBox::DoGetBestSize() const
 {
-    static int                      nCheckSize = 0;
-
-    if (!nCheckSize)
-    {
-        wxScreenDC                  vDc;
-
-        vDc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-
-        //
-        // The height of a standard button in the dialog units is 8,
-        // translate this to pixels (as one dialog unit is precisely equal to
-        // 8 character heights, it's just the char height)
-        //
-        nCheckSize = vDc.GetCharHeight();
-    }
-
+    // We should probably compute nCheckSize but it seems to be a constant
+    // independent of its label's font size and not made available by OS/2.
+    int      nCheckSize = RADIO_SIZE;
     int      nWidthCheckbox;
     int      nHeightCheckbox;
     wxString sStr = wxGetWindowText(GetHWND());
@@ -134,7 +121,7 @@ wxSize wxCheckBox::DoGetBestSize() const
                       ,&nWidthCheckbox
                       ,&nHeightCheckbox
                      );
-        nWidthCheckbox += nCheckSize + GetCharWidth();
+        nWidthCheckbox += nCheckSize;
 
         if (nHeightCheckbox < nCheckSize)
             nHeightCheckbox = nCheckSize;

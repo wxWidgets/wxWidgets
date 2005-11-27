@@ -337,7 +337,7 @@ bool wxRadioBox::Create(
 
         HWND                        hWndBtn = (WXHWND)::WinCreateWindow ( GetHwndOf(pParent)
                                                                          ,WC_BUTTON
-                                                                         ,(PSZ)asChoices[i].c_str()
+                                                                         ,::wxPMTextToLabel(asChoices[i])
                                                                          ,lStyleBtn
                                                                          ,0, 0, 0, 0
                                                                          ,GetWinHwnd(pParent)
@@ -873,23 +873,27 @@ wxSize wxRadioBox::GetTotalButtonSize( const wxSize& rSizeBtn ) const
 {
     int    nCx1;
     int    nCy1;
-    int    nExtraHeight;
     int    nHeight;
     int    nWidth;
-    int    nWidthLabel;
-    wxFont vFont = GetFont();
+    int    nWidthLabel = 0;
 
-    wxGetCharSize( m_hWnd, &nCx1, &nCy1, &vFont );
-    nExtraHeight = nCy1;
-
+    nCx1 = GetCharWidth();
+    nCy1 = GetCharHeight();
     nHeight = GetNumVer() * rSizeBtn.y + (2 * nCy1);
     nWidth  = GetNumHor() * (rSizeBtn.x + nCx1) + nCx1;
 
     //
     // And also wide enough for its label
     //
-    GetTextExtent( GetLabel(), &nWidthLabel, NULL );
-    nWidthLabel += RADIO_SIZE;
+    wxString                        sStr = wxGetWindowText(GetHwnd());
+    if (!sStr.IsEmpty())
+    {
+        GetTextExtent( sStr
+                      ,&nWidthLabel
+                      ,NULL
+                     );
+        nWidthLabel += 2*nCx1;
+    }
     if (nWidthLabel > nWidth)
         nWidth = nWidthLabel;
 

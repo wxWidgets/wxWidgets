@@ -96,16 +96,12 @@ wxSize wxStaticBox::DoGetBestSize() const
     int                             nCx;
     int                             nCy;
     int                             wBox;
-    wxFont                          vFont = GetFont();
 
-    wxGetCharSize( GetHWND()
-                  ,&nCx
-                  ,&nCy
-                  ,&vFont
-                 );
+    nCx = GetCharWidth();
+    nCy = GetCharHeight();
     GetTextExtent( wxGetWindowText(m_hWnd)
                   ,&wBox
-                  ,&nCy
+                  ,NULL
                  );
     wBox += 3 * nCx;
 
