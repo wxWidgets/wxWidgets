@@ -62,7 +62,7 @@
 
 
 /// This should never really get created
-#define   WXLLIST_TEMPFILE   "__wxllist.tmp"
+#define   WXLLIST_TEMPFILE   _T("__wxllist.tmp")
 
 #ifdef WXLAYOUT_DEBUG
 
@@ -100,7 +100,7 @@
 #define WXLO_MINIMUM_CURSOR_WIDTH   4
 
 /// Use this character to estimate a cursor size when none is available.
-#define WXLO_CURSORCHAR   "E"
+#define WXLO_CURSORCHAR   _T("E")
 /** @name Helper functions */
 //@{
 /// allows me to compare to wxPoints
@@ -1196,7 +1196,7 @@ wxLayoutLine::Layout(wxDC &dc,
                if(len < obj->GetLength())
                   str = (*(wxLayoutObjectText*)*i).GetText().substr(len,1);
                else
-                  str = _T(WXLO_CURSORCHAR);
+                  str = WXLO_CURSORCHAR;
                dc.GetTextExtent(str, &width, &height, &descent);
 
                if(cursorStyle) // set style info
@@ -1269,7 +1269,7 @@ wxLayoutLine::Layout(wxDC &dc,
    if(m_Height == 0)
    {
       CoordType width, height, descent;
-      dc.GetTextExtent(_T(WXLO_CURSORCHAR), &width, &height, &descent);
+      dc.GetTextExtent(WXLO_CURSORCHAR, &width, &height, &descent);
       m_Height = height;
       m_BaseLine = m_Height - descent;
    }
@@ -1288,7 +1288,7 @@ wxLayoutLine::Layout(wxDC &dc,
       if(cursorSize->x < WXLO_MINIMUM_CURSOR_WIDTH)
       {
          CoordType width, height, descent;
-         dc.GetTextExtent(_T(WXLO_CURSORCHAR), &width, &height, &descent);
+         dc.GetTextExtent(WXLO_CURSORCHAR, &width, &height, &descent);
          cursorSize->x = width;
          cursorSize->y = height;
       }
@@ -3300,7 +3300,7 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
       determine the correct paper size and scaling. We don't actually
       print anything on it. */
 #if defined(__WXMSW__) || defined(__WXMAC__)
-   wxPrinterDC *psdc = new wxPrinterDC(wxEmptyString,wxEmptyString,_T(WXLLIST_TEMPFILE),false);
+   wxPrinterDC *psdc = new wxPrinterDC(wxEmptyString,wxEmptyString,WXLLIST_TEMPFILE,false);
 #else
    wxPrintData data;
    data.SetFilename(WXLLIST_TEMPFILE);
@@ -3333,7 +3333,7 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
    *selPageTo = m_NumOfPages;
    psdc->EndDoc();
    delete psdc;
-   wxRemoveFile(_T(WXLLIST_TEMPFILE));
+   wxRemoveFile(WXLLIST_TEMPFILE);
 }
 
 bool wxLayoutPrintout::HasPage(int pageNum)
