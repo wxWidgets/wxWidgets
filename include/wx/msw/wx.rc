@@ -20,6 +20,8 @@
     #include "wx/msw/wince/wince.rc"
 #endif
 
+#include "wx/msw/rcdefs.h"
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // This is the MDI Window menu
@@ -92,13 +94,15 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 //
 
 #if !defined(wxUSE_NO_MANIFEST) || (wxUSE_NO_MANIFEST == 0)
+#if !defined(WX_MSC_FULL_VER) || WX_MSC_FULL_VER < 140040130
 
-#ifdef WX_CPU_AMD64
+#if defined(WX_CPU_AMD64)
 1 24 "wx/msw/amd64.manifest"
 #elif defined(WX_CPU_IA64)
 1 24 "wx/msw/ia64.manifest"
-#elif !defined(__WIN64__)
+#elif defined(WX_CPU_X86)
 1 24 "wx/msw/wx.manifest"
 #endif
 
+#endif // !defined(WX_MSC_FULL_VER) || WX_MSC_FULL_VER < 140040130
 #endif // !defined(wxUSE_NO_MANIFEST) || (wxUSE_NO_MANIFEST == 0)

@@ -5,6 +5,29 @@
 
     <set var="BUILDING_LIB" overwrite="0">0</set>
 
+    <set var="CPP_DEFAULT_VALUE">
+        <if cond="FORMAT=='borland'">
+            cpp32 -Sr -oCON
+        </if>
+        <if cond="FORMAT=='mingw'">
+            $(DOLLAR)(CC) -E
+        </if>
+        <if cond="FORMAT=='msvc'">
+            $(DOLLAR)(CC) /EP /nologo
+        </if>
+        <if cond="FORMAT=='watcom'">
+            $(DOLLAR)(CC) -p
+        </if>
+    </set>
+    <option name="CPP">
+        <default-value>
+            $(CPP_DEFAULT_VALUE)
+        </default-value>
+        <description>
+            The C preprocessor
+        </description>
+    </option>
+
     <option name="SHARED">
         <values>0,1</values>
         <values-description>,DLL</values-description>
