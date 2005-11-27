@@ -1561,7 +1561,8 @@ bool wxZipInputStream::DoOpen(wxZipEntry *entry, bool raw)
             return false;
     if (m_lasterror == wxSTREAM_READ_ERROR)
         return false;
-    wxCHECK(!IsOpened(), false);
+    if (IsOpened())
+        CloseEntry();
 
     m_raw = raw;
 
@@ -1796,7 +1797,6 @@ wxFileOffset wxZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
     else
     {
         wxZipEntry current(m_entry);
-        CloseEntry();
         if (!OpenEntry(current))
         {
             m_lasterror = wxSTREAM_READ_ERROR;
