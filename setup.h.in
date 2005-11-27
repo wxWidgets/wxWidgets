@@ -865,14 +865,44 @@
 /* Define if you have BSD flock() function. */
 #undef HAVE_FLOCK
 
+/* Define if you have a gethostbyname_r function taking 6 arguments. */
+#undef HAVE_FUNC_GETHOSTBYNAME_R_6
+
+/* Define if you have a gethostbyname_r function taking 5 arguments. */
+#undef HAVE_FUNC_GETHOSTBYNAME_R_5
+
+/* Define if you have a gethostbyname_r function taking 3 arguments. */
+#undef HAVE_FUNC_GETHOSTBYNAME_R_3
+
+/* Define if you only have a gethostbyname function */
+#undef HAVE_GETHOSTBYNAME
+
 /* Define if you have the gethostname function.  */
 #undef HAVE_GETHOSTNAME
+
+/* Define if you have a getservbyname_r function taking 6 arguments. */
+#undef HAVE_FUNC_GETSERVBYNAME_R_6
+
+/* Define if you have a getservbyname_r function taking 5 arguments. */
+#undef HAVE_FUNC_GETSERVBYNAME_R_5
+
+/* Define if you have a getservbyname_r function taking 4 arguments. */
+#undef HAVE_FUNC_GETSERVBYNAME_R_4
+
+/* Define if you only have a getservbyname function */
+#undef HAVE_GETSERVBYNAME
+
+/* Define if you have the gmtime_r function.  */
+#undef HAVE_GMTIME_R
 
 /* Define if you have the inet_addr function.  */
 #undef HAVE_INET_ADDR
 
 /* Define if you have the inet_aton function.  */
 #undef HAVE_INET_ATON
+
+/* Define if you have the localtime_r function.  */
+#undef HAVE_LOCALTIME_R
 
 /* Define if you have the mktemp function.  */
 #undef HAVE_MKTEMP
@@ -885,6 +915,9 @@
 
 /* Define if you have the putenv function.  */
 #undef HAVE_PUTENV
+
+/* Define if you have the readdir_r function.  */
+#undef HAVE_READDIR_R
 
 /* Define if you have the setenv function.  */
 #undef HAVE_SETENV

@@ -4969,6 +4969,52 @@ else
     fi
 fi
 
+AC_CHECK_FUNC(localtime_r, [ AC_DEFINE(HAVE_LOCALTIME_R) ])
+AC_SUBST(HAVE_LOCALTIME_R)
+AC_CHECK_FUNC(gmtime_r, [ AC_DEFINE(HAVE_GMTIME_R) ])
+AC_SUBST(HAVE_GMTIME_R)
+AC_CHECK_FUNC(readdir_r, [ AC_DEFINE(HAVE_READDIR_R) ])
+AC_SUBST(HAVE_READDIR_R)
+dnl By preference, use getaddrinfo which avoids thread safety issues.
+dnl If that is not available, check for gethostbyname_r/gethostbyaddr_r
+dnl and getservbyname_r
+AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO),
+    dnl no getaddrinfo, so check for gethostbyname_r and
+    dnl related functions (taken from python's configure.in)
+    dnl sigh -- gethostbyname_r is a mess; it can have 3, 5 or 6 arguments
+    [ AX_FUNC_WHICH_GETHOSTBYNAME_R
+      if test "x$ac_cv_func_which_gethostbyname_r" = "xno" -o \
+	      "x$ac_cv_func_which_gethostbyname_r" = "xunknown" ; then
+          AC_CHECK_FUNC(gethostbyname, [ AC_DEFINE(HAVE_GETHOSTBYNAME) ])
+      fi
+      AC_SUBST(HAVE_FUNC_GETHOSTBYNAME_R_6)
+      AC_SUBST(HAVE_FUNC_GETHOSTBYNAME_R_5)
+      AC_SUBST(HAVE_FUNC_GETHOSTBYNAME_R_3)
+      AC_SUBST(HAVE_GETHOSTBYNAME)
+      dnl A similar test for getservbyname_r
+      dnl I'm tempted to just not do this test which is taking much time and
+      dnl do something similar as for gethostbyaddr_r, but OTOH the macro
+      dnl doing the test already exists, so using it is easy enough.     - SN
+      AC_raf_FUNC_WHICH_GETSERVBYNAME_R
+      if test "x$ac_cv_func_which_getservbyname_r" = "xno" -o \
+	      "x$ac_cv_func_which_getservbyname_r" = "xunknown" ; then
+          AC_CHECK_FUNCS(getservbyname,[ AC_DEFINE(HAVE_GETSERVBYNAME) ])
+      fi
+      AC_SUBST(HAVE_FUNC_GETSERVBYNAME_R_6)
+      AC_SUBST(HAVE_FUNC_GETSERVBYNAME_R_5)
+      AC_SUBST(HAVE_FUNC_GETSERVBYNAME_R_4)
+      AC_SUBST(HAVE_GETSERVBYNAME)
+      dnl For gethostbyaddr_r, we currently do no separate test, instead, we
+      dnl silently assume it's available exactly if gethostbyname_r is
+      dnl available and always requires two more arguments than
+      dnl gethostbyname_r.
+      dnl (also, I'm lazy and there no m4 file that's ready for use for this
+      dnl  function, although it should be easy to rewrite the gethostbyname_r
+      dnl  check to fit this case, if it's really needed.                - SN )
+    ]
+)
+
+
 if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
 
