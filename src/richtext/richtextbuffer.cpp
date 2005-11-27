@@ -1591,8 +1591,8 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                     wxRichTextObjectList::compatibility_iterator firstNode = newPara->GetChildren().Find(firstObject);
                     wxRichTextObjectList::compatibility_iterator lastNode = newPara->GetChildren().Find(lastObject);
 
-                    wxASSERT(firstNode != NULL);
-                    wxASSERT(lastNode != NULL);
+                    wxASSERT(firstNode);
+                    wxASSERT(lastNode);
 
                     wxRichTextObjectList::compatibility_iterator node2 = firstNode;
 
@@ -3409,7 +3409,7 @@ bool wxRichTextBuffer::BeginStyle(const wxTextAttrEx& style)
 /// End the style
 bool wxRichTextBuffer::EndStyle()
 {
-    if (m_attributeStack.GetFirst() == NULL)
+    if (m_attributeStack.GetFirst())
     {
         wxLogDebug(_("Too many EndStyle calls!"));
         return false;
