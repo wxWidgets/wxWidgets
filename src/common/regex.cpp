@@ -97,13 +97,11 @@ public:
     // absolutely impractical anyhow, but still check at least in debug
     size_t Start(size_t n) const
     {
-        wxASSERT_MSG( m_matches[n].rm_so < UINT_MAX, _T("regex offset overflow") );
         return wx_truncate_cast(size_t, m_matches[n].rm_so);
     }
 
     size_t End(size_t n) const
     {
-        wxASSERT_MSG( m_matches[n].rm_eo < UINT_MAX, _T("regex offset overflow") );
         return wx_truncate_cast(size_t, m_matches[n].rm_eo);
     }
 
