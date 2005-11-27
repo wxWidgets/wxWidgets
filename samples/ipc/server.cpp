@@ -165,7 +165,7 @@ void MyFrame::Enable()
     GetStart()->Enable(m_server == NULL);
     GetServername()->Enable(m_server == NULL);
     GetAdvise()->Enable(m_server && m_server->CanAdvise());
-    GetDisconnect()->Enable(m_server && m_server->IsConnected() != NULL);
+    GetDisconnect()->Enable(m_server && m_server->IsConnected());
 }
 
 void MyFrame::OnClose(wxCloseEvent& event)

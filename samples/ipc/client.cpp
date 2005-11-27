@@ -217,12 +217,14 @@ void MyFrame::Enable()
     GetServername()->Enable(m_client == NULL);
     GetHostname()->Enable(m_client == NULL);
     GetTopic()->Enable(m_client == NULL);
-    GetDisconnect()->Enable(m_client != NULL && m_client->IsConnected());
-    GetStartAdvise()->Enable(m_client != NULL && m_client->IsConnected());
-    GetStopAdvise()->Enable(m_client != NULL && m_client->IsConnected());
-    GetExecute()->Enable(m_client != NULL && m_client->IsConnected());
-    GetPoke()->Enable(m_client != NULL && m_client->IsConnected());
-    GetRequest()->Enable(m_client != NULL && m_client->IsConnected());
+
+    const bool isConnected = m_client->IsConnected();
+    GetDisconnect()->Enable(m_client != NULL && isConnected);
+    GetStartAdvise()->Enable(m_client != NULL && isConnected);
+    GetStopAdvise()->Enable(m_client != NULL && isConnected);
+    GetExecute()->Enable(m_client != NULL && isConnected);
+    GetPoke()->Enable(m_client != NULL && isConnected);
+    GetRequest()->Enable(m_client != NULL && isConnected);
 }
 
 void MyFrame::OnClose(wxCloseEvent& event)
