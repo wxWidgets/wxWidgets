@@ -865,6 +865,9 @@
 /* Define if you have BSD flock() function. */
 #undef HAVE_FLOCK
 
+/* Define if you have getaddrinfo function. */
+#undef HAVE_GETADDRINFO
+
 /* Define if you have a gethostbyname_r function taking 6 arguments. */
 #undef HAVE_FUNC_GETHOSTBYNAME_R_6
 
