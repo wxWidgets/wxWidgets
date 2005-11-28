@@ -239,8 +239,7 @@ bool wxToolBar::Create(wxWindow *parent,
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // workaround for flat toolbar on Windows XP classic style: we have to set
-    // the style after creating the control, doing it at creation time doesn't
-    // work
+    // the style after creating the control; doing it at creation time doesn't work
 #if wxUSE_UXTHEME
     if ( style & wxTB_FLAT )
     {
@@ -300,8 +299,8 @@ void wxToolBar::Recreate()
             ::SetParent(GetHwndOf(win), GetHwnd());
     }
 
-    // only destroy the old toolbar now -- after all the children had been
-    // reparented
+    // only destroy the old toolbar now --
+    // after all the children had been reparented
     ::DestroyWindow(hwndOld);
 
     // it is for the old bitmap control and can't be used with the new one
@@ -327,14 +326,10 @@ wxToolBar::~wxToolBar()
     // is not - otherwise toolbar leaves a hole in the place it used to occupy
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if ( frame && !frame->IsBeingDeleted() )
-    {
         frame->SendSizeEvent();
-    }
 
     if ( m_hBitmap )
-    {
         ::DeleteObject((HBITMAP) m_hBitmap);
-    }
 
     delete m_disabledImgList;
 }
@@ -393,14 +388,10 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
         // incorrect background colour - and not using it still results in the
         // correct (flat) toolbar, so don't use it there
         if ( s_verComCtl > 400 && s_verComCtl < 600 )
-        {
             msStyle |= TBSTYLE_FLAT | TBSTYLE_TRANSPARENT;
-        }
 
         if ( s_verComCtl >= 470 && style & wxTB_HORZ_LAYOUT )
-        {
             msStyle |= TBSTYLE_LIST;
-        }
     }
 
     if ( style & wxTB_NODIVIDER )
@@ -451,9 +442,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
         }
 
         if ( tool2->IsControl() )
-        {
             pos += ((wxToolBarTool *)tool2)->GetSeparatorsCount() - 1;
-        }
     }
 
     // now determine the number of buttons to delete and the area taken by them
@@ -609,13 +598,13 @@ bool wxToolBar::Realize()
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
         dcAllButtons.SelectObject(bitmap);
 
-#ifdef __WXWINCE__
-        dcAllButtons.SetBackground(wxBrush(wxColour(192,192,192)));
-#else
+#ifndef __WXWINCE__
         if (doTransparent)
             dcAllButtons.SetBackground(*wxTRANSPARENT_BRUSH);
         else
-            dcAllButtons.SetBackground(*wxLIGHT_GREY_BRUSH);
+            dcAllButtons.SetBackground(wxBrush(GetBackgroundColour()));
+#else
+        dcAllButtons.SetBackground(wxBrush(wxColour(192,192,192)));
 #endif
         dcAllButtons.Clear();
 
@@ -701,9 +690,7 @@ bool wxToolBar::Realize()
 #endif // wxUSE_IMAGE
 
                     if (doRemap)
-                    {
                         MapBitmap(bmpDisabled.GetHBITMAP(), w, h);
-                    }
 
                     m_disabledImgList->Add(bmpDisabled);
                 }
@@ -885,9 +872,8 @@ bool wxToolBar::Realize()
                                     break;
 
                                 if ( tool->Toggle(false) )
-                                {
                                     DoToggleTool(tool, false);
-                                }
+
                                 prevButton.fsState = TBSTATE_ENABLED;
                                 nodePrev = nodePrev->GetPrevious();
                                 prevIndex--;
@@ -960,7 +946,6 @@ bool wxToolBar::Realize()
         }
 
         wxControl *control = tool->GetControl();
-
         wxSize size = control->GetSize();
 
         // the position of the leftmost controls corner
