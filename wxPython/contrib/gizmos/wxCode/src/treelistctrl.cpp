@@ -2459,7 +2459,7 @@ wxTreeItemId wxTreeListMainWindow::DoInsertItem(const wxTreeItemId& parentId,
 
     if ( data != NULL )
     {
-        data->SetId((long)item);
+        data->SetId((void*)item);
     }
 
     parent->Insert( item, previous );
@@ -2496,7 +2496,7 @@ wxTreeItemId wxTreeListMainWindow::AddRoot(const wxString& text,
 #endif
     if ( data != NULL )
     {
-        data->SetId((long)m_anchor);
+        data->SetId((void*)m_anchor);
     }
 
     if (!HasFlag(wxTR_MULTIPLE))
@@ -2571,7 +2571,7 @@ wxTreeItemId wxTreeListMainWindow::AppendItem(const wxTreeItemId& parentId,
 void wxTreeListMainWindow::SendDeleteEvent(wxTreeListItem *item)
 {
     wxTreeEvent event( wxEVT_COMMAND_TREE_DELETE_ITEM, m_owner->GetId() );
-    event.SetItem((long) item);
+    event.SetItem((void*)item);
     event.SetEventObject( /*this*/m_owner );
     m_owner->ProcessEvent( event );
 }
@@ -2648,7 +2648,7 @@ void wxTreeListMainWindow::Expand(const wxTreeItemId& itemId)
         return;
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_EXPANDING, m_owner->GetId() );
-    event.SetItem( (long) item );
+    event.SetItem( (void*)item );
     event.SetEventObject( /*this*/m_owner );
 
     if ( m_owner->ProcessEvent( event ) && !event.IsAllowed() )
@@ -2694,7 +2694,7 @@ void wxTreeListMainWindow::Collapse(const wxTreeItemId& itemId)
         return;
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_COLLAPSING, m_owner->GetId() );
-    event.SetItem( (long) item );
+    event.SetItem( (void*)item );
     event.SetEventObject( /*this*/m_owner );
     if ( m_owner->ProcessEvent( event ) && !event.IsAllowed() )
     {
@@ -2872,8 +2872,8 @@ void wxTreeListMainWindow::SelectItem(const wxTreeItemId& itemId,
     }
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, m_owner->GetId() );
-    event.SetItem( (long) item );
-    event.SetOldItem( (long) m_current );
+    event.SetItem( (void*)item );
+    event.SetOldItem( (void*)m_current );
     event.SetEventObject( /*this*/m_owner );
     // TODO : Here we don't send any selection mode yet !
 
@@ -2932,7 +2932,7 @@ void wxTreeListMainWindow::SelectAll(bool extended_select)
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, m_owner->GetId() );
     event.SetItem( GetRootItem() );
-    event.SetOldItem( (long) m_current );
+    event.SetOldItem( (void*) m_current );
     event.SetEventObject( /*this*/m_owner );
     // TODO : Here we don't send any selection mode yet !
 
@@ -3797,7 +3797,7 @@ void wxTreeListMainWindow::OnChar( wxKeyEvent &event )
             {
                 wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
                                    m_owner->GetId() );
-                event.SetItem( (long) m_current);
+                event.SetItem( (void*) m_current);
                 event.SetEventObject( /*this*/m_owner );
                 m_owner->GetEventHandler()->ProcessEvent( event );
             }
@@ -4068,7 +4068,7 @@ void wxTreeListMainWindow::Edit( const wxTreeItemId& item )
     m_currentEdit = (wxTreeListItem*) item.m_pItem;
 
     wxTreeEvent te( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, m_owner->GetId() );
-    te.SetItem( (long) m_currentEdit);
+    te.SetItem( (void*) m_currentEdit);
     te.SetEventObject( /*this*/m_owner );
     m_owner->GetEventHandler()->ProcessEvent( te );
 
@@ -4109,7 +4109,7 @@ void wxTreeListMainWindow::OnRenameAccept()
 {
     // TODO if the validator fails this causes a crash
     wxTreeEvent le( wxEVT_COMMAND_TREE_END_LABEL_EDIT, m_owner->GetId() );
-    le.SetItem( (long) m_currentEdit );
+    le.SetItem( (void*)m_currentEdit );
     le.SetEventObject( /*this*/m_owner );
     le.SetLabel( m_renameRes );
     m_owner->GetEventHandler()->ProcessEvent( le );
@@ -4219,7 +4219,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
                               : wxEVT_COMMAND_TREE_BEGIN_DRAG;
 
         wxTreeEvent nevent( command,/*ALB*/ m_owner->GetId() );
-        nevent.SetItem( (long) m_current);
+        nevent.SetItem( (void*)m_current);
         nevent.SetEventObject(/*this*/m_owner); // ALB
         nevent.SetPoint(pt);
 
@@ -4282,7 +4282,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
         // generate the drag end event
         wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG,/*ALB*/m_owner->GetId());
 
-        event.SetItem( (long) item );
+        event.SetItem( (void*)item );
         event.SetPoint( wxPoint(x, y) );
         event.SetEventObject(/*this*/m_owner);
 
@@ -4310,7 +4310,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
             SetFocus();
             wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
                                m_owner->GetId());
-            nevent.SetItem( (long) item );
+            nevent.SetItem( (void*)item );
             int nx, ny;
             CalcScrolledPosition(x, y, &nx, &ny);
             nevent.SetPoint( wxPoint(nx, ny));
@@ -4377,7 +4377,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
                 // send activate event first
                 wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
                                     m_owner->GetId() );
-                nevent.SetItem( (long) item );
+                nevent.SetItem( (void*)item );
                 int nx, ny;
                 CalcScrolledPosition(x, y, &nx, &ny);
                 nevent.SetPoint( wxPoint(nx, ny) );
