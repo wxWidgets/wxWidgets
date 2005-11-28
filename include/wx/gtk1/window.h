@@ -48,7 +48,7 @@ public:
     // implement base class (pure) virtual methods
     // -------------------------------------------
 
-    virtual void SetLabel( const wxString &label ) {}
+    virtual void SetLabel(const wxString& WXUNUSED(label)) { }
     virtual wxString GetLabel() const { return wxEmptyString; }
 
     virtual bool Destroy();
