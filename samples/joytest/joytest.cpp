@@ -86,7 +86,7 @@ bool MyApp::OnInit()
 
 #if wxUSE_STATUSBAR
     frame->CreateStatusBar();
-    frame->SetStatusText(wxString::Format(wxT("Device [%s] (PID:[%i] MID:[%i]) Ready... # of joysticks:[%i]"), stick.GetProductName().c_str(), stick.GetProductId(), stick.GetManufacturerId(), stick.GetNumberJoysticks()));
+    frame->SetStatusText(wxString::Format(wxT("Device [%s] (PID:[%i] MID:[%i]) Ready... # of joysticks:[%i]"), stick.GetProductName().c_str(), stick.GetProductId(), stick.GetManufacturerId(), wxJoystick::GetNumberJoysticks()));
 #endif // wxUSE_STATUSBAR
 
     frame->CenterOnScreen();

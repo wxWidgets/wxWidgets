@@ -42,7 +42,7 @@ public:
     ////////////////////////////////////////////////////////////////////////////
     
     bool IsOk() const; // Checks that the joystick is functioning
-    int GetNumberJoysticks() const ;
+    static int GetNumberJoysticks() ;
     int GetManufacturerId() const ;
     int GetProductId() const ;
     wxString GetProductName() const ;

@@ -283,7 +283,7 @@ bool wxJoystick::IsOk() const
     return (m_device != -1);
 }
 
-int wxJoystick::GetNumberJoysticks() const
+int wxJoystick::GetNumberJoysticks()
 {
     wxString dev_name;
     int fd, j;

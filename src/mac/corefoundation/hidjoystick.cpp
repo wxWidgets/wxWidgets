@@ -276,7 +276,7 @@ int wxJoystick::GetNumberAxes() const
 // is all devices with the kHIDUsage_GD_Joystick or kHIDUsage_GD_GamePad
 // identifiers.
 //---------------------------------------------------------------------------
-int wxJoystick::GetNumberJoysticks() const
+int wxJoystick::GetNumberJoysticks()
 {    
     return 
         wxHIDDevice::GetCount(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick) +
