@@ -1448,10 +1448,15 @@ AC_CHECK_TOOL(STRIP, strip, true)
 dnl Win32 tools
 if test "$wxUSE_WINE" = "yes"; then
     AC_CHECK_TOOL(WINDRES, wrc)
+    RESCOMP="$WINDRES"
 else
     case "${host}" in
     *-*-cygwin* | *-*-mingw32* )
         dnl Bakefile CVS (as of 2005-11-24) now detects windres properly
+        dnl ... maybe it does, but it does not make it available here
+        dnl anymore, so do it ourselves still.
+        AC_CHECK_TOOL(WINDRES, windres)
+        RESCOMP="$WINDRES"
         AC_CHECK_TOOL(DLLTOOL, dlltool)
         ;;
     esac
@@ -2725,8 +2730,10 @@ if test "$USE_WIN32" = 1 ; then
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
 
-    dnl This one we export to wx-config.
-    WXCONFIG_RESFLAGS="--include-dir \$includedir --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
+    dnl This lot we export to wx-config.  It must add the relevant
+    dnl include directories at the point when they can be known.
+    dnl (but are these (still) required anyway?)
+    WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
 
     dnl install Win32-specific files in "make install"
     WIN32INSTALL=win32install
@@ -3906,24 +3913,33 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
     dnl since the carb resource *must* be included in the application
     if test "$wxUSE_MAC" = 1; then
         POSTLINK_COMMAND="\$(REZ) -d __DARWIN__ -t APPL Carbon.r -o"
-
-        dnl this command is used to implement `wx-config --rezflags` and it is
-        dnl eval'd there so escape any metacharacters inside
-        WXCONFIG_POSTLINK_COMMAND="${REZ} -d __DARWIN__ -t APPL Carbon.r -o"
+        RESCOMP="$REZ"
+        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL Carbon.r -o"
     else
-        POSTLINK_COMMAND="echo -n | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES} -o"
-        WXCONFIG_POSTLINK_COMMAND="echo -n \\\| ${REZ} -d __DARWIN__ -t APPL \\\${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
+        POSTLINK_COMMAND="echo -n | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
+        RESCOMP="echo -n \| $REZ"
+        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
     fi
+
+    dnl this one for deprecated --rezflags.
+    WXCONFIG_POSTLINK_COMMAND="$RESCOMP $WXCONFIG_RESFLAGS -o"
+
 else
     dnl default value is to (silently) do nothing in the makefile
     MACSETFILE="@true"
-    WXCONFIG_POSTLINK_COMMAND="@true"
 
     if test "$wxUSE_PM" = 1; then
-        POSTLINK_COMMAND="emxbind -ep"
+        RESCOMP="emxbind"
+        WXCONFIG_RESFLAGS="-ep"
+
+        dnl Is this one really used anywhere for pm?
+        POSTLINK_COMMAND="$RESCOMP $WXCONFIG_RESFLAGS"
     else
         POSTLINK_COMMAND="@true"
     fi
+
+    dnl this one for deprecated --rezflags.
+    WXCONFIG_POSTLINK_COMMAND="$POSTLINK_COMMAND"
 fi
 
 
@@ -7223,7 +7239,6 @@ fi
 
 dnl TOOLCHAIN_DEFS should be used for both wx and client code
 WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS $TOOLCHAIN_DEFS"
-WXCONFIG_RESCOMP="$WINDRES $WXCONFIG_RESFLAGS"
 
 dnl for convenience, sort the samples in alphabetical order
 dnl
@@ -7281,7 +7296,7 @@ AC_SUBST(WXCONFIG_CXXFLAGS)
 AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_RPATH)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
-AC_SUBST(WXCONFIG_RESCOMP)
+AC_SUBST(WXCONFIG_RESFLAGS)
 AC_SUBST(EXE_LINKER)
 
 dnl distribution vars
@@ -7299,6 +7314,7 @@ AC_SUBST(DMALLOC_LIBS)
 AC_SUBST(WX_VERSION_TAG)
 
 dnl additional resurces settings
+AC_SUBST(RESCOMP)
 AC_SUBST(WINDRES)
 AC_SUBST(REZ)
 AC_SUBST(RESFLAGS)

@@ -881,13 +881,13 @@ bindir="@bindir@"
 [ -z "$output_option_version"       ] || echo "@WX_VERSION@"
 [ -z "$output_option_version_full"  ] || echo "@WX_SUBVERSION@"
 [ -z "$output_option_basename"      ] || echo "@WX_LIBRARY_BASENAME_GUI@"
-# --rezflags is deprecated
-[ -z "$output_option_rezflags"      ] || echo "@WXCONFIG_POSTLINK_COMMAND@"
-[ -z "$output_option_rescomp"       ] || echo "@WXCONFIG_RESCOMP@"
 [ -z "$output_option_cc"            ] || echo "@CC@"
 [ -z "$output_option_cxx"           ] || echo "@CXX@"
 [ -z "$output_option_ld"            ] || echo "@EXE_LINKER@"
 [ -z "$flag_option_selected_config" ] || echo "$this_config"
+
+# --rezflags is deprecated (2005/11/29)
+[ -z "$output_option_rezflags"      ] || echo "@WXCONFIG_POSTLINK_COMMAND@"
 
 
 # The rest are going to need a little more work.
@@ -1166,6 +1166,61 @@ if [ -n "$output_option_libs" ]; then
 
     echo $_ldflags "@LDFLAGS@" $_rpath $wx_libs "@DMALLOC_LIBS@"
 fi
+
+
+# Ok.  If you are still with us, congratulations.  Your reward for
+# this laudable persistence, is a behind the scenes glimpse at ...
+# our dirty laundry.  Probably not what you were hoping for huh.
+# Me neither.  Anyway, in this last pit of hell, you will find all
+# the machine or tool specific workarounds that require knowlege
+# not obtainable prior to passing this comment.  The way of madness
+# lies below this comment, lets try to keep the path to a safe exit
+# as short and sweet as we can...  our opening dilemma is:
+
+# Resource compilers.  A big wavy term that covers some pretty
+# dissimilar concepts on various platforms.  The good news is,
+# each platform has only one definition of 'resource', compiled
+# or not, and so we can abstract that neatly to return a platform
+# specific invocation of the appropriate tool.  The bad news is,
+# windres (at least) requires knowledge of the wx header files
+# location(s) that cannot be predicted reliably before the call to
+# wx-config is made.  Currently for all known resource compilers,
+# we can simply return a command and some salient configuration
+# options in response to a request for --rescomp.  So here we
+# top up the options for any tools that may require information
+# that was only just determined in the last few machine cycles,
+# then output the necessary incantation for the platform.
+#
+# Most things should already be constant by the time configure
+# has run.  Do not add anything here that is already known there.
+
+if [ -n "$output_option_rescomp" ]; then
+
+    case "@RESCOMP@" in
+      *windres|wrc)
+        # Note that with late model windres, we could just insert
+	# _include_cppflags here, but use the old notation for now
+	# as it is more universally accepted.
+        if is_installed; then
+            echo "@RESCOMP@ --include-dir" \
+                           "${includedir}/wx-@WX_RELEASE@@WX_FLAVOUR@" \
+                           "@WXCONFIG_RESFLAGS@"
+        else
+            echo "@RESCOMP@ --include-dir ${includedir}" \
+                           "--include-dir ${prefix}/contrib/include" \
+		           "@WXCONFIG_RESFLAGS@"
+        fi
+        ;;
+
+      # neither rez not emxbind have any specific needs from
+      # us, so just output what was determined by configure.
+      *)
+        echo @RESCOMP@ @WXCONFIG_RESFLAGS@
+        ;;
+    esac
+
+fi
+
 
 # And so that's it, we're done.  Have a nice build.
 
