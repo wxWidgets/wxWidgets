@@ -54,14 +54,19 @@ public:
 
     wxSizerFlags& Align(int alignment) // combination of wxAlignment values
     {
-        m_flags &= wxALL;
+        m_flags &= wxALIGN_MASK;
         m_flags |= alignment;
 
         return *this;
     }
 
+    wxSizerFlags& Expand()
+    {
+        m_flags |= wxEXPAND;
+        return *this;
+    }
+
     // some shortcuts for Align()
-    wxSizerFlags& Expand() { return Align(wxEXPAND); }
     wxSizerFlags& Centre() { return Align(wxCENTRE); }
     wxSizerFlags& Center() { return Centre(); }
     wxSizerFlags& Left() { return Align(wxALIGN_LEFT); }
