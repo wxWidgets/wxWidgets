@@ -11,10 +11,6 @@
 #ifndef _WX_XH_GRD_H_
 #define _WX_XH_GRD_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "xh_grid.cpp"
-#endif
-
 #include "wx/xrc/xmlres.h"
 
 #if wxUSE_XRC && wxUSE_GRID
