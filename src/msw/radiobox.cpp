@@ -685,6 +685,10 @@ WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
     const size_t count = GetCount();
     for ( size_t i = 0; i < count; ++i )
     {
+        // don't clip out hidden children
+        if ( !IsItemShown(i) )
+            continue;
+
         ::GetWindowRect((*m_radioButtons)[i], &rc);
         AutoHRGN hrgnchild(::CreateRectRgnIndirect(&rc));
         ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
