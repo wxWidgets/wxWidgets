@@ -1014,6 +1014,10 @@ SOURCE=..\..\include\wx\xrc\xh_gdctl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_grid.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_html.h
 # End Source File
 # Begin Source File
@@ -1187,6 +1191,61 @@ SOURCE=..\..\src\xrc\xh_gauge.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_gdctl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_grid.cpp
+
+!IF  "$(CFG)" == "xrc - Win32 DLL Universal Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 DLL Universal Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 DLL Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 DLL Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 Universal Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 Universal Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "xrc - Win32 Debug"
+
+
+!ENDIF
+
 # End Source File
 # Begin Source File
 

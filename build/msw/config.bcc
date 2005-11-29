@@ -40,6 +40,11 @@ CPPFLAGS = -a8 -g0
 LDFLAGS = 
 !endif
 
+# The C preprocessor 
+!ifndef CPP
+CPP = cpp32 -Sr -oCON
+!endif
+
 # What type of library to build? [0,1]
 !ifndef SHARED
 SHARED = 0

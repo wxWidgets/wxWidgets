@@ -9079,6 +9079,10 @@ SOURCE=..\..\include\wx\xrc\xh_gdctl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_grid.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_html.h
 # End Source File
 # Begin Source File
