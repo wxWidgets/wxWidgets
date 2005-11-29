@@ -410,7 +410,15 @@ bool wxRadioBox::Enable(int item, bool enable)
 
     BOOL ret = ::EnableWindow((*m_radioButtons)[item], enable);
 
-    return (ret == 0) == enable;
+    return (ret == 0) != enable;
+}
+
+bool wxRadioBox::IsItemEnabled(int item) const
+{
+    wxCHECK_MSG( IsValid(item), false,
+                 wxT("invalid item in wxRadioBox::Enable()") );
+
+    return ::IsWindowEnabled((*m_radioButtons)[item]) != 0;
 }
 
 // Show a specific button
@@ -421,10 +429,25 @@ bool wxRadioBox::Show(int item, bool show)
 
     BOOL ret = ::ShowWindow((*m_radioButtons)[item], show ? SW_SHOW : SW_HIDE);
 
-    bool changed = (ret != 0) == show;
-    if( changed )
+    bool changed = (ret != 0) != show;
+    if ( changed )
+    {
         InvalidateBestSize();
+    }
+
     return changed;
+}
+
+bool wxRadioBox::IsItemShown(int item) const
+{
+    wxCHECK_MSG( IsValid(item), false,
+                 wxT("invalid item in wxRadioBox::Enable()") );
+
+    // don't use IsWindowVisible() here because it would return false if the
+    // radiobox itself is hidden while we want to only return false if this
+    // button specifically is hidden
+    return (::GetWindowLong((*m_radioButtons)[item],
+                            GWL_STYLE) & WS_VISIBLE) != 0;
 }
 
 WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxRadioBox, wxStaticBox, m_radioButtons)

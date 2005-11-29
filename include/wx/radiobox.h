@@ -27,9 +27,14 @@ extern WXDLLEXPORT_DATA(const wxChar*) wxRadioBoxNameStr;
 class WXDLLEXPORT wxRadioBoxBase : public wxItemContainerImmutable
 {
 public:
-    // change the individual radio button state
+    // change/query the individual radio button state
     virtual bool Enable(int n, bool enable = true) = 0;
     virtual bool Show(int n, bool show = true) = 0;
+
+    // NB: these functions are stubbed here for now but should become pure
+    //     virtual once all ports implement them
+    virtual bool IsItemEnabled(int WXUNUSED(n)) const { return true; }
+    virtual bool IsItemShown(int WXUNUSED(n)) const { return true; }
 
     // layout parameters
     virtual int GetColumnCount() const = 0;
@@ -37,6 +42,7 @@ public:
 
     // return the item above/below/to the left/right of the given one
     int GetNextItem(int item, wxDirection dir, long style) const;
+
 
     // deprecated functions
     // --------------------

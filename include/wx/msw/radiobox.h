@@ -90,6 +90,8 @@ public:
     virtual void SetString(int n, const wxString& label);
     virtual bool Enable(int n, bool enable = true);
     virtual bool Show(int n, bool show = true);
+    virtual bool IsItemEnabled(int n) const;
+    virtual bool IsItemShown(int n) const;
     virtual int GetColumnCount() const { return GetNumHor(); }
     virtual int GetRowCount() const { return GetNumVer(); }
 

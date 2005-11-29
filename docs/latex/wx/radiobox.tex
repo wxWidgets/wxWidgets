@@ -55,6 +55,7 @@ when a radiobutton is clicked.}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxRadioBox::wxRadioBox}\label{wxradioboxctor}
 
 \func{}{wxRadioBox}{\void}
@@ -113,11 +114,13 @@ a list of strings.}
 \perlnote{In wxPerl there is just an array reference in place of {\tt n}
 and {\tt choices}.}
 
+
 \membersection{wxRadioBox::\destruct{wxRadioBox}}\label{wxradioboxdtor}
 
 \func{}{\destruct{wxRadioBox}}{\void}
 
 Destructor, destroying the radiobox item.
+
 
 \membersection{wxRadioBox::Create}\label{wxradioboxcreate}
 
@@ -137,6 +140,7 @@ Destructor, destroying the radiobox item.
 
 Creates the radiobox for two-step construction. See \helpref{wxRadioBox::wxRadioBox}{wxradioboxctor}\rtfsp
 for further details.
+
 
 \membersection{wxRadioBox::Enable}\label{wxradioboxenable}
 
@@ -168,6 +172,7 @@ individual button in the radiobox.}
 \helpref{wxWindow::Enable}{wxwindowenable}
 
 
+
 \membersection{wxRadioBox::FindString}\label{wxradioboxfindstring}
 
 \constfunc{int}{FindString}{\param{const wxString\& }{string}}
@@ -179,11 +184,13 @@ Finds a button matching the given string, returning the position if found, or
 
 \docparam{string}{The string to find.}
 
+
 \membersection{wxRadioBox::GetCount}\label{wxradioboxgetcount}
 
 \constfunc{int}{GetCount}{\void}
 
 Returns the number of items in the radiobox.
+
 
 \membersection{wxRadioBox::GetLabel}\label{wxradioboxgetlabel}
 
@@ -214,11 +221,13 @@ implements the following methods:\par
 
 Returns the zero-based position of the selected button.
 
+
 \membersection{wxRadioBox::GetStringSelection}\label{wxradioboxgetstringselection}
 
 \constfunc{wxString}{GetStringSelection}{\void}
 
 Returns the selected string.
+
 
 \membersection{wxRadioBox::GetString}\label{wxradioboxgetstring}
 
@@ -229,6 +238,32 @@ Returns the label for the button at the given position.
 \wxheading{Parameters}
 
 \docparam{n}{The zero-based button position.}
+
+
+\membersection{wxRadioBox::IsItemEnabled}\label{wxradioboxisitemenabled}
+
+\constfunc{bool}{IsItemEnabled}{\void}
+
+Returns \true if the item is enabled or \false if it was disabled using 
+\helpref{Enable(n, false)}{wxradioboxenable}.
+
+{\bf Platform note:} Currently only implemented in wxMSW and always returns
+\true in the other ports.
+
+
+\membersection{wxRadioBox::IsItemShown}\label{wxradioboxisitemshown}
+
+\constfunc{bool}{IsItemShown}{\void}
+
+Returns \true if the item is currently shown or \false if it was hidden using 
+\helpref{Show(n, false)}{wxradioboxshow}.
+
+Note that this function returns \true for an item which hadn't been hidden even
+if the entire radiobox is not currently shown.
+
+{\bf Platform note:} Currently only implemented in wxMSW and always returns
+\true in the other ports.
+
 
 \membersection{wxRadioBox::Number}\label{wxradioboxnumber}
 
@@ -241,6 +276,7 @@ code. This method is only available if wxWidgets was compiled with
 future versions.
 
 Returns the number of buttons in the radiobox.
+
 
 \membersection{wxRadioBox::SetLabel}\label{wxradioboxsetlabel}
 
@@ -263,6 +299,7 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
+
 \membersection{wxRadioBox::SetSelection}\label{wxradioboxsetselection}
 
 \func{void}{SetSelection}{\param{int}{ n}}
@@ -274,6 +311,7 @@ a wxEVT\_COMMAND\_RADIOBOX\_SELECTED event to get emitted.
 
 \docparam{n}{The zero-based button position.}
 
+
 \membersection{wxRadioBox::SetStringSelection}\label{wxradioboxsetstringselection}
 
 \func{void}{SetStringSelection}{\param{const wxString\& }{string}}
@@ -284,6 +322,7 @@ a wxEVT\_COMMAND\_RADIOBOX\_SELECTED event to get emitted.
 \wxheading{Parameters}
 
 \docparam{string}{The label of the button to select.}
+
 
 \membersection{wxRadioBox::Show}\label{wxradioboxshow}
 

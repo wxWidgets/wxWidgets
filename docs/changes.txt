@@ -37,6 +37,7 @@ All (GUI):
 - Access to titles through Get/SetTitle is available now only for top level
   windows (wxDialog, wxFrame).
 - Fixed memory leak of pending events in wxEvtHandler
+- Added wxRadioBox::IsItemEnabled/Shown()
 
 wxMSW:
 
