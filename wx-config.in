@@ -1168,16 +1168,10 @@ if [ -n "$output_option_libs" ]; then
 fi
 
 
-# Ok.  If you are still with us, congratulations.  Your reward for
-# this laudable persistence, is a behind the scenes glimpse at ...
-# our dirty laundry.  Probably not what you were hoping for huh.
-# Me neither.  Anyway, in this last pit of hell, you will find all
-# the machine or tool specific workarounds that require knowlege
-# not obtainable prior to passing this comment.  The way of madness
-# lies below this comment, lets try to keep the path to a safe exit
-# as short and sweet as we can...  our opening dilemma is:
+# Here you will find all the machine or tool specific workarounds that
+# require knowlege not obtainable prior to passing this comment.
 
-# Resource compilers.  A big wavy term that covers some pretty
+# Resource compilers.  A term that covers some pretty
 # dissimilar concepts on various platforms.  The good news is,
 # each platform has only one definition of 'resource', compiled
 # or not, and so we can abstract that neatly to return a platform
