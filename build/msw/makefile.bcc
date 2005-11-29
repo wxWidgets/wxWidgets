@@ -919,7 +919,6 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_treebk.obj \
 	$(OBJS)\xrcdll_xh_unkwn.obj \
 	$(OBJS)\xrcdll_xh_wizrd.obj \
-	$(OBJS)\xrcdll_xh_grid.obj \
 	$(OBJS)\xrcdll_xmlres.obj \
 	$(OBJS)\xrcdll_xmlrsall.obj
 XRCLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
@@ -974,7 +973,6 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_treebk.obj \
 	$(OBJS)\xrclib_xh_unkwn.obj \
 	$(OBJS)\xrclib_xh_wizrd.obj \
-	$(OBJS)\xrclib_xh_grid.obj \
 	$(OBJS)\xrclib_xmlres.obj \
 	$(OBJS)\xrclib_xmlrsall.obj
 GLDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
@@ -1131,7 +1129,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xh_treebk.obj \
 	$(OBJS)\monodll_xh_unkwn.obj \
 	$(OBJS)\monodll_xh_wizrd.obj \
-	$(OBJS)\monodll_xh_grid.obj \
 	$(OBJS)\monodll_xmlres.obj \
 	$(OBJS)\monodll_xmlrsall.obj
 !endif
@@ -1656,7 +1653,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xh_treebk.obj \
 	$(OBJS)\monolib_xh_unkwn.obj \
 	$(OBJS)\monolib_xh_wizrd.obj \
-	$(OBJS)\monolib_xh_grid.obj \
 	$(OBJS)\monolib_xmlres.obj \
 	$(OBJS)\monolib_xmlrsall.obj
 !endif
@@ -4532,6 +4528,9 @@ $(OBJS)\monodll_xh_gauge.obj: ..\..\src\xrc\xh_gauge.cpp
 $(OBJS)\monodll_xh_gdctl.obj: ..\..\src\xrc\xh_gdctl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
+$(OBJS)\monodll_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+
 $(OBJS)\monodll_xh_html.obj: ..\..\src\xrc\xh_html.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
@@ -5705,11 +5704,6 @@ $(OBJS)\monodll_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-!endif
-
 $(OBJS)\monolib_dummy.obj: ..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) -H $**
 
@@ -6251,6 +6245,9 @@ $(OBJS)\monolib_xh_gauge.obj: ..\..\src\xrc\xh_gauge.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_xh_gdctl.obj: ..\..\src\xrc\xh_gdctl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_xh_html.obj: ..\..\src\xrc\xh_html.cpp
@@ -7423,11 +7420,6 @@ $(OBJS)\monolib_taskbar.obj: ..\..\src\msw\taskbar.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_joystick.obj: ..\..\src\msw\joystick.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -10696,6 +10688,9 @@ $(OBJS)\xrcdll_xh_gauge.obj: ..\..\src\xrc\xh_gauge.cpp
 $(OBJS)\xrcdll_xh_gdctl.obj: ..\..\src\xrc\xh_gdctl.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) $**
 
+$(OBJS)\xrcdll_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
+	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) $**
+
 $(OBJS)\xrcdll_xh_html.obj: ..\..\src\xrc\xh_html.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) $**
 
@@ -10783,12 +10778,6 @@ $(OBJS)\xrcdll_xmlres.obj: ..\..\src\xrc\xmlres.cpp
 $(OBJS)\xrcdll_xmlrsall.obj: ..\..\src\xrc\xmlrsall.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) $**
 
-$(OBJS)\xrcdll_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) $**
-
-$(OBJS)\xrcdll_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) $**
-
 $(OBJS)\xrclib_dummy.obj: ..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) -H $**
 
@@ -10835,6 +10824,9 @@ $(OBJS)\xrclib_xh_gauge.obj: ..\..\src\xrc\xh_gauge.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xh_gdctl.obj: ..\..\src\xrc\xh_gdctl.cpp
+	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
+
+$(OBJS)\xrclib_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xh_html.obj: ..\..\src\xrc\xh_html.cpp
@@ -10922,12 +10914,6 @@ $(OBJS)\xrclib_xmlres.obj: ..\..\src\xrc\xmlres.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xmlrsall.obj: ..\..\src\xrc\xmlrsall.cpp
-	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
-
-$(OBJS)\xrclib_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
-
-$(OBJS)\xrclib_xh_grid.obj: ..\..\src\xrc\xh_grid.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\gldll_dummy.obj: ..\..\src\msw\dummy.cpp

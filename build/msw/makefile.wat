@@ -173,7 +173,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_treebk.obj &
 	$(OBJS)\monodll_xh_unkwn.obj &
 	$(OBJS)\monodll_xh_wizrd.obj &
-	$(OBJS)\monodll_xh_grid.obj &
 	$(OBJS)\monodll_xmlres.obj &
 	$(OBJS)\monodll_xmlrsall.obj
 !endif
@@ -708,7 +707,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_treebk.obj &
 	$(OBJS)\monolib_xh_unkwn.obj &
 	$(OBJS)\monolib_xh_wizrd.obj &
-	$(OBJS)\monolib_xh_grid.obj &
 	$(OBJS)\monolib_xmlres.obj &
 	$(OBJS)\monolib_xmlrsall.obj
 !endif
@@ -3302,7 +3300,6 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_treebk.obj &
 	$(OBJS)\xrcdll_xh_unkwn.obj &
 	$(OBJS)\xrcdll_xh_wizrd.obj &
-	$(OBJS)\xrcdll_xh_grid.obj &
 	$(OBJS)\xrcdll_xmlres.obj &
 	$(OBJS)\xrcdll_xmlrsall.obj
 XRCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
@@ -3358,7 +3355,6 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_treebk.obj &
 	$(OBJS)\xrclib_xh_unkwn.obj &
 	$(OBJS)\xrclib_xh_wizrd.obj &
-	$(OBJS)\xrclib_xh_grid.obj &
 	$(OBJS)\xrclib_xmlres.obj &
 	$(OBJS)\xrclib_xmlrsall.obj
 GLDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
@@ -3498,7 +3494,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(MONODLL_OBJECTS)) do @%append $(OBJS)\monodll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib     ) do @%append $(OBJS)\monodll.lbc library %i
 	@%append $(OBJS)\monodll.lbc option resource=$(OBJS)\monodll_version.res
-	@%append $(OBJS)\monodll.lbc system nr_dll
+	@%append $(OBJS)\monodll.lbc system nt_dll
 	wlink @$(OBJS)\monodll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib +$^@
 !endif
@@ -3524,7 +3520,7 @@ $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FL
 	@for %i in ($(BASEDLL_OBJECTS)) do @%append $(OBJS)\basedll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\basedll.lbc library %i
 	@%append $(OBJS)\basedll.lbc option resource=$(OBJS)\basedll_version.res
-	@%append $(OBJS)\basedll.lbc system nr_dll
+	@%append $(OBJS)\basedll.lbc system nt_dll
 	wlink @$(OBJS)\basedll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib +$^@
 !endif
@@ -3550,7 +3546,7 @@ $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FL
 	@for %i in ($(NETDLL_OBJECTS)) do @%append $(OBJS)\netdll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib) do @%append $(OBJS)\netdll.lbc library %i
 	@%append $(OBJS)\netdll.lbc option resource=$(OBJS)\netdll_version.res
-	@%append $(OBJS)\netdll.lbc system nr_dll
+	@%append $(OBJS)\netdll.lbc system nt_dll
 	wlink @$(OBJS)\netdll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib +$^@
 !endif
@@ -3577,7 +3573,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(COREDLL_OBJECTS)) do @%append $(OBJS)\coredll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib) do @%append $(OBJS)\coredll.lbc library %i
 	@%append $(OBJS)\coredll.lbc option resource=$(OBJS)\coredll_version.res
-	@%append $(OBJS)\coredll.lbc system nr_dll
+	@%append $(OBJS)\coredll.lbc system nt_dll
 	wlink @$(OBJS)\coredll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib +$^@
 !endif
@@ -3607,7 +3603,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(ADVDLL_OBJECTS)) do @%append $(OBJS)\advdll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib ) do @%append $(OBJS)\advdll.lbc library %i
 	@%append $(OBJS)\advdll.lbc option resource=$(OBJS)\advdll_version.res
-	@%append $(OBJS)\advdll.lbc system nr_dll
+	@%append $(OBJS)\advdll.lbc system nt_dll
 	wlink @$(OBJS)\advdll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib +$^@
 !endif
@@ -3637,7 +3633,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(MEDIADLL_OBJECTS)) do @%append $(OBJS)\mediadll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib) do @%append $(OBJS)\mediadll.lbc library %i
 	@%append $(OBJS)\mediadll.lbc option resource=$(OBJS)\mediadll_version.res
-	@%append $(OBJS)\mediadll.lbc system nr_dll
+	@%append $(OBJS)\mediadll.lbc system nt_dll
 	wlink @$(OBJS)\mediadll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib +$^@
 !endif
@@ -3667,7 +3663,7 @@ $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FL
 	@for %i in ($(ODBCDLL_OBJECTS)) do @%append $(OBJS)\odbcdll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib ) do @%append $(OBJS)\odbcdll.lbc library %i
 	@%append $(OBJS)\odbcdll.lbc option resource=$(OBJS)\odbcdll_version.res
-	@%append $(OBJS)\odbcdll.lbc system nr_dll
+	@%append $(OBJS)\odbcdll.lbc system nt_dll
 	wlink @$(OBJS)\odbcdll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.lib +$^@
 !endif
@@ -3698,7 +3694,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(DBGRIDDLL_OBJECTS)) do @%append $(OBJS)\dbgriddll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib) do @%append $(OBJS)\dbgriddll.lbc library %i
 	@%append $(OBJS)\dbgriddll.lbc option resource=$(OBJS)\dbgriddll_version.res
-	@%append $(OBJS)\dbgriddll.lbc system nr_dll
+	@%append $(OBJS)\dbgriddll.lbc system nt_dll
 	wlink @$(OBJS)\dbgriddll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.lib +$^@
 !endif
@@ -3732,7 +3728,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(HTMLDLL_OBJECTS)) do @%append $(OBJS)\htmldll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib ) do @%append $(OBJS)\htmldll.lbc library %i
 	@%append $(OBJS)\htmldll.lbc option resource=$(OBJS)\htmldll_version.res
-	@%append $(OBJS)\htmldll.lbc system nr_dll
+	@%append $(OBJS)\htmldll.lbc system nt_dll
 	wlink @$(OBJS)\htmldll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib +$^@
 !endif
@@ -3766,7 +3762,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(QADLL_OBJECTS)) do @%append $(OBJS)\qadll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib) do @%append $(OBJS)\qadll.lbc library %i
 	@%append $(OBJS)\qadll.lbc option resource=$(OBJS)\qadll_version.res
-	@%append $(OBJS)\qadll.lbc system nr_dll
+	@%append $(OBJS)\qadll.lbc system nt_dll
 	wlink @$(OBJS)\qadll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa.lib +$^@
 !endif
@@ -3798,7 +3794,7 @@ $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FL
 	@for %i in ($(XMLDLL_OBJECTS)) do @%append $(OBJS)\xmldll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib ) do @%append $(OBJS)\xmldll.lbc library %i
 	@%append $(OBJS)\xmldll.lbc option resource=$(OBJS)\xmldll_version.res
-	@%append $(OBJS)\xmldll.lbc system nr_dll
+	@%append $(OBJS)\xmldll.lbc system nt_dll
 	wlink @$(OBJS)\xmldll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib +$^@
 !endif
@@ -3825,7 +3821,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(XRCDLL_OBJECTS)) do @%append $(OBJS)\xrcdll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib) do @%append $(OBJS)\xrcdll.lbc library %i
 	@%append $(OBJS)\xrcdll.lbc option resource=$(OBJS)\xrcdll_version.res
-	@%append $(OBJS)\xrcdll.lbc system nr_dll
+	@%append $(OBJS)\xrcdll.lbc system nt_dll
 	wlink @$(OBJS)\xrcdll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.lib +$^@
 !endif
@@ -3855,7 +3851,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(GLDLL_OBJECTS)) do @%append $(OBJS)\gldll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p) opengl32.lib glu32.lib) do @%append $(OBJS)\gldll.lbc library %i
 	@%append $(OBJS)\gldll.lbc option resource=$(OBJS)\gldll_version.res
-	@%append $(OBJS)\gldll.lbc system nr_dll
+	@%append $(OBJS)\gldll.lbc system nt_dll
 	wlink @$(OBJS)\gldll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib +$^@
 !endif
@@ -3931,7712 +3927,7702 @@ build_cfg_file : .SYMBOLIC $(SETUPHDIR)
 	@echo LDFLAGS=$(LDFLAGS) >>$(BUILD_CFG_FILE)
 
 $(OBJS)\wxregex_regcomp.obj :  .AUTODEPEND ..\..\src\regex\regcomp.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXREGEX_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXREGEX_CFLAGS) $<
 
 $(OBJS)\wxregex_regexec.obj :  .AUTODEPEND ..\..\src\regex\regexec.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXREGEX_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXREGEX_CFLAGS) $<
 
 $(OBJS)\wxregex_regerror.obj :  .AUTODEPEND ..\..\src\regex\regerror.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXREGEX_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXREGEX_CFLAGS) $<
 
 $(OBJS)\wxregex_regfree.obj :  .AUTODEPEND ..\..\src\regex\regfree.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXREGEX_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXREGEX_CFLAGS) $<
 
 $(OBJS)\wxzlib_adler32.obj :  .AUTODEPEND ..\..\src\zlib\adler32.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_compress.obj :  .AUTODEPEND ..\..\src\zlib\compress.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_crc32.obj :  .AUTODEPEND ..\..\src\zlib\crc32.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_gzio.obj :  .AUTODEPEND ..\..\src\zlib\gzio.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_uncompr.obj :  .AUTODEPEND ..\..\src\zlib\uncompr.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_deflate.obj :  .AUTODEPEND ..\..\src\zlib\deflate.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_trees.obj :  .AUTODEPEND ..\..\src\zlib\trees.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_zutil.obj :  .AUTODEPEND ..\..\src\zlib\zutil.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_inflate.obj :  .AUTODEPEND ..\..\src\zlib\inflate.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_infback.obj :  .AUTODEPEND ..\..\src\zlib\infback.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_inftrees.obj :  .AUTODEPEND ..\..\src\zlib\inftrees.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_inffast.obj :  .AUTODEPEND ..\..\src\zlib\inffast.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxpng_png.obj :  .AUTODEPEND ..\..\src\png\png.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngerror.obj :  .AUTODEPEND ..\..\src\png\pngerror.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pnggccrd.obj :  .AUTODEPEND ..\..\src\png\pnggccrd.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngget.obj :  .AUTODEPEND ..\..\src\png\pngget.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngmem.obj :  .AUTODEPEND ..\..\src\png\pngmem.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngpread.obj :  .AUTODEPEND ..\..\src\png\pngpread.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngread.obj :  .AUTODEPEND ..\..\src\png\pngread.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngrio.obj :  .AUTODEPEND ..\..\src\png\pngrio.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngrtran.obj :  .AUTODEPEND ..\..\src\png\pngrtran.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngrutil.obj :  .AUTODEPEND ..\..\src\png\pngrutil.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngset.obj :  .AUTODEPEND ..\..\src\png\pngset.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngtrans.obj :  .AUTODEPEND ..\..\src\png\pngtrans.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngvcrd.obj :  .AUTODEPEND ..\..\src\png\pngvcrd.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngwio.obj :  .AUTODEPEND ..\..\src\png\pngwio.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngwrite.obj :  .AUTODEPEND ..\..\src\png\pngwrite.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngwtran.obj :  .AUTODEPEND ..\..\src\png\pngwtran.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxpng_pngwutil.obj :  .AUTODEPEND ..\..\src\png\pngwutil.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXPNG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXPNG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcomapi.obj :  .AUTODEPEND ..\..\src\jpeg\jcomapi.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jutils.obj :  .AUTODEPEND ..\..\src\jpeg\jutils.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jerror.obj :  .AUTODEPEND ..\..\src\jpeg\jerror.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jmemmgr.obj :  .AUTODEPEND ..\..\src\jpeg\jmemmgr.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jmemnobs.obj :  .AUTODEPEND ..\..\src\jpeg\jmemnobs.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcapimin.obj :  .AUTODEPEND ..\..\src\jpeg\jcapimin.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcapistd.obj :  .AUTODEPEND ..\..\src\jpeg\jcapistd.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jctrans.obj :  .AUTODEPEND ..\..\src\jpeg\jctrans.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcparam.obj :  .AUTODEPEND ..\..\src\jpeg\jcparam.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdatadst.obj :  .AUTODEPEND ..\..\src\jpeg\jdatadst.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcinit.obj :  .AUTODEPEND ..\..\src\jpeg\jcinit.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcmaster.obj :  .AUTODEPEND ..\..\src\jpeg\jcmaster.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcmarker.obj :  .AUTODEPEND ..\..\src\jpeg\jcmarker.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcmainct.obj :  .AUTODEPEND ..\..\src\jpeg\jcmainct.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcprepct.obj :  .AUTODEPEND ..\..\src\jpeg\jcprepct.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jccoefct.obj :  .AUTODEPEND ..\..\src\jpeg\jccoefct.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jccolor.obj :  .AUTODEPEND ..\..\src\jpeg\jccolor.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcsample.obj :  .AUTODEPEND ..\..\src\jpeg\jcsample.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jchuff.obj :  .AUTODEPEND ..\..\src\jpeg\jchuff.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcphuff.obj :  .AUTODEPEND ..\..\src\jpeg\jcphuff.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jcdctmgr.obj :  .AUTODEPEND ..\..\src\jpeg\jcdctmgr.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jfdctfst.obj :  .AUTODEPEND ..\..\src\jpeg\jfdctfst.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jfdctflt.obj :  .AUTODEPEND ..\..\src\jpeg\jfdctflt.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jfdctint.obj :  .AUTODEPEND ..\..\src\jpeg\jfdctint.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdapimin.obj :  .AUTODEPEND ..\..\src\jpeg\jdapimin.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdapistd.obj :  .AUTODEPEND ..\..\src\jpeg\jdapistd.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdtrans.obj :  .AUTODEPEND ..\..\src\jpeg\jdtrans.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdatasrc.obj :  .AUTODEPEND ..\..\src\jpeg\jdatasrc.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdmaster.obj :  .AUTODEPEND ..\..\src\jpeg\jdmaster.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdinput.obj :  .AUTODEPEND ..\..\src\jpeg\jdinput.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdmarker.obj :  .AUTODEPEND ..\..\src\jpeg\jdmarker.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdhuff.obj :  .AUTODEPEND ..\..\src\jpeg\jdhuff.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdphuff.obj :  .AUTODEPEND ..\..\src\jpeg\jdphuff.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdmainct.obj :  .AUTODEPEND ..\..\src\jpeg\jdmainct.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdcoefct.obj :  .AUTODEPEND ..\..\src\jpeg\jdcoefct.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdpostct.obj :  .AUTODEPEND ..\..\src\jpeg\jdpostct.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jddctmgr.obj :  .AUTODEPEND ..\..\src\jpeg\jddctmgr.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jidctfst.obj :  .AUTODEPEND ..\..\src\jpeg\jidctfst.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jidctflt.obj :  .AUTODEPEND ..\..\src\jpeg\jidctflt.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jidctint.obj :  .AUTODEPEND ..\..\src\jpeg\jidctint.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jidctred.obj :  .AUTODEPEND ..\..\src\jpeg\jidctred.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdsample.obj :  .AUTODEPEND ..\..\src\jpeg\jdsample.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdcolor.obj :  .AUTODEPEND ..\..\src\jpeg\jdcolor.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jquant1.obj :  .AUTODEPEND ..\..\src\jpeg\jquant1.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jquant2.obj :  .AUTODEPEND ..\..\src\jpeg\jquant2.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxjpeg_jdmerge.obj :  .AUTODEPEND ..\..\src\jpeg\jdmerge.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXJPEG_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_win32.obj :  .AUTODEPEND ..\..\src\tiff\tif_win32.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_aux.obj :  .AUTODEPEND ..\..\src\tiff\tif_aux.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_close.obj :  .AUTODEPEND ..\..\src\tiff\tif_close.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_codec.obj :  .AUTODEPEND ..\..\src\tiff\tif_codec.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_color.obj :  .AUTODEPEND ..\..\src\tiff\tif_color.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_compress.obj :  .AUTODEPEND ..\..\src\tiff\tif_compress.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_dir.obj :  .AUTODEPEND ..\..\src\tiff\tif_dir.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_dirinfo.obj :  .AUTODEPEND ..\..\src\tiff\tif_dirinfo.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_dirread.obj :  .AUTODEPEND ..\..\src\tiff\tif_dirread.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_dirwrite.obj :  .AUTODEPEND ..\..\src\tiff\tif_dirwrite.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_dumpmode.obj :  .AUTODEPEND ..\..\src\tiff\tif_dumpmode.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_error.obj :  .AUTODEPEND ..\..\src\tiff\tif_error.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_extension.obj :  .AUTODEPEND ..\..\src\tiff\tif_extension.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_fax3.obj :  .AUTODEPEND ..\..\src\tiff\tif_fax3.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_fax3sm.obj :  .AUTODEPEND ..\..\src\tiff\tif_fax3sm.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_getimage.obj :  .AUTODEPEND ..\..\src\tiff\tif_getimage.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_jpeg.obj :  .AUTODEPEND ..\..\src\tiff\tif_jpeg.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_flush.obj :  .AUTODEPEND ..\..\src\tiff\tif_flush.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_lzw.obj :  .AUTODEPEND ..\..\src\tiff\tif_lzw.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_luv.obj :  .AUTODEPEND ..\..\src\tiff\tif_luv.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_next.obj :  .AUTODEPEND ..\..\src\tiff\tif_next.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_open.obj :  .AUTODEPEND ..\..\src\tiff\tif_open.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_packbits.obj :  .AUTODEPEND ..\..\src\tiff\tif_packbits.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_pixarlog.obj :  .AUTODEPEND ..\..\src\tiff\tif_pixarlog.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_predict.obj :  .AUTODEPEND ..\..\src\tiff\tif_predict.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_print.obj :  .AUTODEPEND ..\..\src\tiff\tif_print.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_read.obj :  .AUTODEPEND ..\..\src\tiff\tif_read.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_swab.obj :  .AUTODEPEND ..\..\src\tiff\tif_swab.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_strip.obj :  .AUTODEPEND ..\..\src\tiff\tif_strip.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_thunder.obj :  .AUTODEPEND ..\..\src\tiff\tif_thunder.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_tile.obj :  .AUTODEPEND ..\..\src\tiff\tif_tile.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_version.obj :  .AUTODEPEND ..\..\src\tiff\tif_version.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_warning.obj :  .AUTODEPEND ..\..\src\tiff\tif_warning.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_write.obj :  .AUTODEPEND ..\..\src\tiff\tif_write.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_zip.obj :  .AUTODEPEND ..\..\src\tiff\tif_zip.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxexpat_xmlparse.obj :  .AUTODEPEND ..\..\src\expat\lib\xmlparse.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXEXPAT_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXEXPAT_CFLAGS) $<
 
 $(OBJS)\wxexpat_xmlrole.obj :  .AUTODEPEND ..\..\src\expat\lib\xmlrole.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXEXPAT_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXEXPAT_CFLAGS) $<
 
 $(OBJS)\wxexpat_xmltok.obj :  .AUTODEPEND ..\..\src\expat\lib\xmltok.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXEXPAT_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(WXEXPAT_CFLAGS) $<
 
 $(OBJS)\monodll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_wat$(VENDORTAG) $<
 
 $(OBJS)\monodll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_config.obj :  .AUTODEPEND ..\..\src\common\config.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dircmn.obj :  .AUTODEPEND ..\..\src\common\dircmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dynarray.obj :  .AUTODEPEND ..\..\src\common\dynarray.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dynlib.obj :  .AUTODEPEND ..\..\src\common\dynlib.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dynload.obj :  .AUTODEPEND ..\..\src\common\dynload.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_encconv.obj :  .AUTODEPEND ..\..\src\common\encconv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_extended.obj :  .AUTODEPEND ..\..\src\common\extended.c
-	$(CC) -bt=nt -zq -fo=$^@ $(MONODLL_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(MONODLL_CFLAGS) $<
 
 $(OBJS)\monodll_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_filefn.obj :  .AUTODEPEND ..\..\src\common\filefn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fs_zip.obj :  .AUTODEPEND ..\..\src\common\fs_zip.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_hash.obj :  .AUTODEPEND ..\..\src\common\hash.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_hashmap.obj :  .AUTODEPEND ..\..\src\common\hashmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_init.obj :  .AUTODEPEND ..\..\src\common\init.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_intl.obj :  .AUTODEPEND ..\..\src\common\intl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_ipcbase.obj :  .AUTODEPEND ..\..\src\common\ipcbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_list.obj :  .AUTODEPEND ..\..\src\common\list.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_log.obj :  .AUTODEPEND ..\..\src\common\log.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_longlong.obj :  .AUTODEPEND ..\..\src\common\longlong.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_memory.obj :  .AUTODEPEND ..\..\src\common\memory.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mimecmn.obj :  .AUTODEPEND ..\..\src\common\mimecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_module.obj :  .AUTODEPEND ..\..\src\common\module.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_process.obj :  .AUTODEPEND ..\..\src\common\process.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_regex.obj :  .AUTODEPEND ..\..\src\common\regex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stdpbase.obj :  .AUTODEPEND ..\..\src\common\stdpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_sstream.obj :  .AUTODEPEND ..\..\src\common\sstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stopwatch.obj :  .AUTODEPEND ..\..\src\common\stopwatch.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_strconv.obj :  .AUTODEPEND ..\..\src\common\strconv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stream.obj :  .AUTODEPEND ..\..\src\common\stream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_wfstream.obj :  .AUTODEPEND ..\..\src\common\wfstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_wxchar.obj :  .AUTODEPEND ..\..\src\common\wxchar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xtistrm.obj :  .AUTODEPEND ..\..\src\common\xtistrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_zipstrm.obj :  .AUTODEPEND ..\..\src\common\zipstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_zstream.obj :  .AUTODEPEND ..\..\src\common\zstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_crashrpt.obj :  .AUTODEPEND ..\..\src\msw\crashrpt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_debughlp.obj :  .AUTODEPEND ..\..\src\msw\debughlp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dde.obj :  .AUTODEPEND ..\..\src\msw\dde.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dir.obj :  .AUTODEPEND ..\..\src\msw\dir.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dlmsw.obj :  .AUTODEPEND ..\..\src\msw\dlmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mimetype.obj :  .AUTODEPEND ..\..\src\msw\mimetype.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_regconf.obj :  .AUTODEPEND ..\..\src\msw\regconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_registry.obj :  .AUTODEPEND ..\..\src\msw\registry.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_snglinst.obj :  .AUTODEPEND ..\..\src\msw\snglinst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stackwalk.obj :  .AUTODEPEND ..\..\src\msw\stackwalk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stdpaths.obj :  .AUTODEPEND ..\..\src\msw\stdpaths.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_thread.obj :  .AUTODEPEND ..\..\src\msw\thread.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_utils.obj :  .AUTODEPEND ..\..\src\msw\utils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_utilsexc.obj :  .AUTODEPEND ..\..\src\msw\utilsexc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_event.obj :  .AUTODEPEND ..\..\src\common\event.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fs_mem.obj :  .AUTODEPEND ..\..\src\common\fs_mem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fs_inet.obj :  .AUTODEPEND ..\..\src\common\fs_inet.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_ftp.obj :  .AUTODEPEND ..\..\src\common\ftp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_http.obj :  .AUTODEPEND ..\..\src\common\http.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_protocol.obj :  .AUTODEPEND ..\..\src\common\protocol.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_sckaddr.obj :  .AUTODEPEND ..\..\src\common\sckaddr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_sckfile.obj :  .AUTODEPEND ..\..\src\common\sckfile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_sckipc.obj :  .AUTODEPEND ..\..\src\common\sckipc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_sckstrm.obj :  .AUTODEPEND ..\..\src\common\sckstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_socket.obj :  .AUTODEPEND ..\..\src\common\socket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dirdlg.obj :  .AUTODEPEND ..\..\src\msw\dirdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dragimag.obj :  .AUTODEPEND ..\..\src\msw\dragimag.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mdi.obj :  .AUTODEPEND ..\..\src\msw\mdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_menuitem.obj :  .AUTODEPEND ..\..\src\msw\menuitem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_metafile.obj :  .AUTODEPEND ..\..\src\msw\metafile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_msgdlg.obj :  .AUTODEPEND ..\..\src\msw\msgdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_slider95.obj :  .AUTODEPEND ..\..\src\msw\slider95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_statbr95.obj :  .AUTODEPEND ..\..\src\msw\statbr95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fontdlg.obj :  .AUTODEPEND ..\..\src\msw\fontdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_colschem.obj :  .AUTODEPEND ..\..\src\univ\colschem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_inphand.obj :  .AUTODEPEND ..\..\src\univ\inphand.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_winuniv.obj :  .AUTODEPEND ..\..\src\univ\winuniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_gtk.obj :  .AUTODEPEND ..\..\src\univ\themes\gtk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_helpbest.obj :  .AUTODEPEND ..\..\src\msw\helpbest.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_helpctrl.obj :  .AUTODEPEND ..\..\src\html\helpctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_helpdata.obj :  .AUTODEPEND ..\..\src\html\helpdata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_helpfrm.obj :  .AUTODEPEND ..\..\src\html\helpfrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_htmlcell.obj :  .AUTODEPEND ..\..\src\html\htmlcell.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_htmlfilt.obj :  .AUTODEPEND ..\..\src\html\htmlfilt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_htmlpars.obj :  .AUTODEPEND ..\..\src\html\htmlpars.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_htmltag.obj :  .AUTODEPEND ..\..\src\html\htmltag.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_htmlwin.obj :  .AUTODEPEND ..\..\src\html\htmlwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_htmprint.obj :  .AUTODEPEND ..\..\src\html\htmprint.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_dflist.obj :  .AUTODEPEND ..\..\src\html\m_dflist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_fonts.obj :  .AUTODEPEND ..\..\src\html\m_fonts.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_hline.obj :  .AUTODEPEND ..\..\src\html\m_hline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_image.obj :  .AUTODEPEND ..\..\src\html\m_image.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_layout.obj :  .AUTODEPEND ..\..\src\html\m_layout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_links.obj :  .AUTODEPEND ..\..\src\html\m_links.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_list.obj :  .AUTODEPEND ..\..\src\html\m_list.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_pre.obj :  .AUTODEPEND ..\..\src\html\m_pre.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_style.obj :  .AUTODEPEND ..\..\src\html\m_style.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_tables.obj :  .AUTODEPEND ..\..\src\html\m_tables.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_htmllbox.obj :  .AUTODEPEND ..\..\src\generic\htmllbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_db.obj :  .AUTODEPEND ..\..\src\common\db.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dbtable.obj :  .AUTODEPEND ..\..\src\common\dbtable.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_bttn.obj :  .AUTODEPEND ..\..\src\xrc\xh_bttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_cald.obj :  .AUTODEPEND ..\..\src\xrc\xh_cald.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_chckb.obj :  .AUTODEPEND ..\..\src\xrc\xh_chckb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_chckl.obj :  .AUTODEPEND ..\..\src\xrc\xh_chckl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_choic.obj :  .AUTODEPEND ..\..\src\xrc\xh_choic.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_choicbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_choicbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_combo.obj :  .AUTODEPEND ..\..\src\xrc\xh_combo.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_datectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_datectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_gauge.obj :  .AUTODEPEND ..\..\src\xrc\xh_gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_gdctl.obj :  .AUTODEPEND ..\..\src\xrc\xh_gdctl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_html.obj :  .AUTODEPEND ..\..\src\xrc\xh_html.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_listb.obj :  .AUTODEPEND ..\..\src\xrc\xh_listb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_listbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_listbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_listc.obj :  .AUTODEPEND ..\..\src\xrc\xh_listc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_notbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_notbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_panel.obj :  .AUTODEPEND ..\..\src\xrc\xh_panel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_radbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_radbx.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_slidr.obj :  .AUTODEPEND ..\..\src\xrc\xh_slidr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_spin.obj :  .AUTODEPEND ..\..\src\xrc\xh_spin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_split.obj :  .AUTODEPEND ..\..\src\xrc\xh_split.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_statbar.obj :  .AUTODEPEND ..\..\src\xrc\xh_statbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_stbmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_stbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_stbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_stbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_stlin.obj :  .AUTODEPEND ..\..\src\xrc\xh_stlin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_sttxt.obj :  .AUTODEPEND ..\..\src\xrc\xh_sttxt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_text.obj :  .AUTODEPEND ..\..\src\xrc\xh_text.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_treebk.obj :  .AUTODEPEND ..\..\src\xrc\xh_treebk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_unkwn.obj :  .AUTODEPEND ..\..\src\xrc\xh_unkwn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_wizrd.obj :  .AUTODEPEND ..\..\src\xrc\xh_wizrd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xmlres.obj :  .AUTODEPEND ..\..\src\xrc\xmlres.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xmlrsall.obj :  .AUTODEPEND ..\..\src\xrc\xmlrsall.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_app.obj :  .AUTODEPEND ..\..\src\msw\app.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_bitmap.obj :  .AUTODEPEND ..\..\src\msw\bitmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_brush.obj :  .AUTODEPEND ..\..\src\msw\brush.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_caret.obj :  .AUTODEPEND ..\..\src\msw\caret.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_clipbrd.obj :  .AUTODEPEND ..\..\src\msw\clipbrd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_colour.obj :  .AUTODEPEND ..\..\src\msw\colour.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_cursor.obj :  .AUTODEPEND ..\..\src\msw\cursor.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_data.obj :  .AUTODEPEND ..\..\src\msw\data.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dc.obj :  .AUTODEPEND ..\..\src\msw\dc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dcclient.obj :  .AUTODEPEND ..\..\src\msw\dcclient.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dcmemory.obj :  .AUTODEPEND ..\..\src\msw\dcmemory.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dcprint.obj :  .AUTODEPEND ..\..\src\msw\dcprint.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dcscreen.obj :  .AUTODEPEND ..\..\src\msw\dcscreen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dialup.obj :  .AUTODEPEND ..\..\src\msw\dialup.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dib.obj :  .AUTODEPEND ..\..\src\msw\dib.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_display.obj :  .AUTODEPEND ..\..\src\msw\display.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_enhmeta.obj :  .AUTODEPEND ..\..\src\msw\enhmeta.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_evtloop.obj :  .AUTODEPEND ..\..\src\msw\evtloop.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_font.obj :  .AUTODEPEND ..\..\src\msw\font.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_fontenum.obj :  .AUTODEPEND ..\..\src\msw\fontenum.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_fontutil.obj :  .AUTODEPEND ..\..\src\msw\fontutil.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gdiimage.obj :  .AUTODEPEND ..\..\src\msw\gdiimage.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gdiobj.obj :  .AUTODEPEND ..\..\src\msw\gdiobj.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dataobj.obj :  .AUTODEPEND ..\..\src\msw\ole\dataobj.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dropsrc.obj :  .AUTODEPEND ..\..\src\msw\ole\dropsrc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_droptgt.obj :  .AUTODEPEND ..\..\src\msw\ole\droptgt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_pen.obj :  .AUTODEPEND ..\..\src\msw\pen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_popupwin.obj :  .AUTODEPEND ..\..\src\msw\popupwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_printdlg.obj :  .AUTODEPEND ..\..\src\msw\printdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_printwin.obj :  .AUTODEPEND ..\..\src\msw\printwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_region.obj :  .AUTODEPEND ..\..\src\msw\region.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_renderer.obj :  .AUTODEPEND ..\..\src\msw\renderer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_settings.obj :  .AUTODEPEND ..\..\src\msw\settings.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_timer.obj :  .AUTODEPEND ..\..\src\msw\timer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_tooltip.obj :  .AUTODEPEND ..\..\src\msw\tooltip.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_toplevel.obj :  .AUTODEPEND ..\..\src\msw\toplevel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_utilsgui.obj :  .AUTODEPEND ..\..\src\msw\utilsgui.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_uxtheme.obj :  .AUTODEPEND ..\..\src\msw\uxtheme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_window.obj :  .AUTODEPEND ..\..\src\msw\window.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_automtn.obj :  .AUTODEPEND ..\..\src\msw\ole\automtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_uuid.obj :  .AUTODEPEND ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_accesscmn.obj :  .AUTODEPEND ..\..\src\common\accesscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_appcmn.obj :  .AUTODEPEND ..\..\src\common\appcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_artprov.obj :  .AUTODEPEND ..\..\src\common\artprov.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_artstd.obj :  .AUTODEPEND ..\..\src\common\artstd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_choiccmn.obj :  .AUTODEPEND ..\..\src\common\choiccmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_clipcmn.obj :  .AUTODEPEND ..\..\src\common\clipcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_cmdproc.obj :  .AUTODEPEND ..\..\src\common\cmdproc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_cmndata.obj :  .AUTODEPEND ..\..\src\common\cmndata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_containr.obj :  .AUTODEPEND ..\..\src\common\containr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_cshelp.obj :  .AUTODEPEND ..\..\src\common\cshelp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_ctrlcmn.obj :  .AUTODEPEND ..\..\src\common\ctrlcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_ctrlsub.obj :  .AUTODEPEND ..\..\src\common\ctrlsub.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_datacmn.obj :  .AUTODEPEND ..\..\src\common\datacmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dndcmn.obj :  .AUTODEPEND ..\..\src\common\dndcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dobjcmn.obj :  .AUTODEPEND ..\..\src\common\dobjcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_docmdi.obj :  .AUTODEPEND ..\..\src\common\docmdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_docview.obj :  .AUTODEPEND ..\..\src\common\docview.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dpycmn.obj :  .AUTODEPEND ..\..\src\common\dpycmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dseldlg.obj :  .AUTODEPEND ..\..\src\common\dseldlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_effects.obj :  .AUTODEPEND ..\..\src\common\effects.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_fddlgcmn.obj :  .AUTODEPEND ..\..\src\common\fddlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_fldlgcmn.obj :  .AUTODEPEND ..\..\src\common\fldlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_fontcmn.obj :  .AUTODEPEND ..\..\src\common\fontcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_fontmap.obj :  .AUTODEPEND ..\..\src\common\fontmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_framecmn.obj :  .AUTODEPEND ..\..\src\common\framecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gaugecmn.obj :  .AUTODEPEND ..\..\src\common\gaugecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gbsizer.obj :  .AUTODEPEND ..\..\src\common\gbsizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gdicmn.obj :  .AUTODEPEND ..\..\src\common\gdicmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_geometry.obj :  .AUTODEPEND ..\..\src\common\geometry.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gifdecod.obj :  .AUTODEPEND ..\..\src\common\gifdecod.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_helpbase.obj :  .AUTODEPEND ..\..\src\common\helpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_iconbndl.obj :  .AUTODEPEND ..\..\src\common\iconbndl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagall.obj :  .AUTODEPEND ..\..\src\common\imagall.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagbmp.obj :  .AUTODEPEND ..\..\src\common\imagbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_image.obj :  .AUTODEPEND ..\..\src\common\image.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagfill.obj :  .AUTODEPEND ..\..\src\common\imagfill.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imaggif.obj :  .AUTODEPEND ..\..\src\common\imaggif.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagiff.obj :  .AUTODEPEND ..\..\src\common\imagiff.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagjpeg.obj :  .AUTODEPEND ..\..\src\common\imagjpeg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagpcx.obj :  .AUTODEPEND ..\..\src\common\imagpcx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagpng.obj :  .AUTODEPEND ..\..\src\common\imagpng.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagpnm.obj :  .AUTODEPEND ..\..\src\common\imagpnm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagtiff.obj :  .AUTODEPEND ..\..\src\common\imagtiff.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_imagxpm.obj :  .AUTODEPEND ..\..\src\common\imagxpm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_layout.obj :  .AUTODEPEND ..\..\src\common\layout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_lboxcmn.obj :  .AUTODEPEND ..\..\src\common\lboxcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_popupcmn.obj :  .AUTODEPEND ..\..\src\common\popupcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_prntbase.obj :  .AUTODEPEND ..\..\src\common\prntbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_rendcmn.obj :  .AUTODEPEND ..\..\src\common\rendcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_rgncmn.obj :  .AUTODEPEND ..\..\src\common\rgncmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_stockitem.obj :  .AUTODEPEND ..\..\src\common\stockitem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_tbarbase.obj :  .AUTODEPEND ..\..\src\common\tbarbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_textcmn.obj :  .AUTODEPEND ..\..\src\common\textcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_timercmn.obj :  .AUTODEPEND ..\..\src\common\timercmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_toplvcmn.obj :  .AUTODEPEND ..\..\src\common\toplvcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_treebase.obj :  .AUTODEPEND ..\..\src\common\treebase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_valgen.obj :  .AUTODEPEND ..\..\src\common\valgen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_validate.obj :  .AUTODEPEND ..\..\src\common\validate.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_xpmdecod.obj :  .AUTODEPEND ..\..\src\common\xpmdecod.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_busyinfo.obj :  .AUTODEPEND ..\..\src\generic\busyinfo.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_choicdgg.obj :  .AUTODEPEND ..\..\src\generic\choicdgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_choicbkg.obj :  .AUTODEPEND ..\..\src\generic\choicbkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dirctrlg.obj :  .AUTODEPEND ..\..\src\generic\dirctrlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_dragimgg.obj :  .AUTODEPEND ..\..\src\generic\dragimgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_listbkg.obj :  .AUTODEPEND ..\..\src\generic\listbkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_logg.obj :  .AUTODEPEND ..\..\src\generic\logg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_panelg.obj :  .AUTODEPEND ..\..\src\generic\panelg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_progdlgg.obj :  .AUTODEPEND ..\..\src\generic\progdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_renderg.obj :  .AUTODEPEND ..\..\src\generic\renderg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_scrlwing.obj :  .AUTODEPEND ..\..\src\generic\scrlwing.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_selstore.obj :  .AUTODEPEND ..\..\src\generic\selstore.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_spinctlg.obj :  .AUTODEPEND ..\..\src\generic\spinctlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_tipwin.obj :  .AUTODEPEND ..\..\src\generic\tipwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_treectlg.obj :  .AUTODEPEND ..\..\src\generic\treectlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_treebkg.obj :  .AUTODEPEND ..\..\src\generic\treebkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_datectlg.obj :  .AUTODEPEND ..\..\src\generic\datectlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_propdlg.obj :  .AUTODEPEND ..\..\src\generic\propdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 $(OBJS)\monolib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_config.obj :  .AUTODEPEND ..\..\src\common\config.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dircmn.obj :  .AUTODEPEND ..\..\src\common\dircmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dynarray.obj :  .AUTODEPEND ..\..\src\common\dynarray.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dynlib.obj :  .AUTODEPEND ..\..\src\common\dynlib.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dynload.obj :  .AUTODEPEND ..\..\src\common\dynload.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_encconv.obj :  .AUTODEPEND ..\..\src\common\encconv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_extended.obj :  .AUTODEPEND ..\..\src\common\extended.c
-	$(CC) -bt=nt -zq -fo=$^@ $(MONOLIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(MONOLIB_CFLAGS) $<
 
 $(OBJS)\monolib_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_filefn.obj :  .AUTODEPEND ..\..\src\common\filefn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fs_zip.obj :  .AUTODEPEND ..\..\src\common\fs_zip.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_hash.obj :  .AUTODEPEND ..\..\src\common\hash.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_hashmap.obj :  .AUTODEPEND ..\..\src\common\hashmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_init.obj :  .AUTODEPEND ..\..\src\common\init.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_intl.obj :  .AUTODEPEND ..\..\src\common\intl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_ipcbase.obj :  .AUTODEPEND ..\..\src\common\ipcbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_list.obj :  .AUTODEPEND ..\..\src\common\list.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_log.obj :  .AUTODEPEND ..\..\src\common\log.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_longlong.obj :  .AUTODEPEND ..\..\src\common\longlong.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_memory.obj :  .AUTODEPEND ..\..\src\common\memory.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mimecmn.obj :  .AUTODEPEND ..\..\src\common\mimecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_module.obj :  .AUTODEPEND ..\..\src\common\module.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_process.obj :  .AUTODEPEND ..\..\src\common\process.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_regex.obj :  .AUTODEPEND ..\..\src\common\regex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stdpbase.obj :  .AUTODEPEND ..\..\src\common\stdpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_sstream.obj :  .AUTODEPEND ..\..\src\common\sstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stopwatch.obj :  .AUTODEPEND ..\..\src\common\stopwatch.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_strconv.obj :  .AUTODEPEND ..\..\src\common\strconv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stream.obj :  .AUTODEPEND ..\..\src\common\stream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_wfstream.obj :  .AUTODEPEND ..\..\src\common\wfstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_wxchar.obj :  .AUTODEPEND ..\..\src\common\wxchar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xtistrm.obj :  .AUTODEPEND ..\..\src\common\xtistrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_zipstrm.obj :  .AUTODEPEND ..\..\src\common\zipstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_zstream.obj :  .AUTODEPEND ..\..\src\common\zstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_crashrpt.obj :  .AUTODEPEND ..\..\src\msw\crashrpt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_debughlp.obj :  .AUTODEPEND ..\..\src\msw\debughlp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dde.obj :  .AUTODEPEND ..\..\src\msw\dde.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dir.obj :  .AUTODEPEND ..\..\src\msw\dir.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dlmsw.obj :  .AUTODEPEND ..\..\src\msw\dlmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mimetype.obj :  .AUTODEPEND ..\..\src\msw\mimetype.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_regconf.obj :  .AUTODEPEND ..\..\src\msw\regconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_registry.obj :  .AUTODEPEND ..\..\src\msw\registry.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_snglinst.obj :  .AUTODEPEND ..\..\src\msw\snglinst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stackwalk.obj :  .AUTODEPEND ..\..\src\msw\stackwalk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stdpaths.obj :  .AUTODEPEND ..\..\src\msw\stdpaths.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_thread.obj :  .AUTODEPEND ..\..\src\msw\thread.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_utils.obj :  .AUTODEPEND ..\..\src\msw\utils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_utilsexc.obj :  .AUTODEPEND ..\..\src\msw\utilsexc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_event.obj :  .AUTODEPEND ..\..\src\common\event.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fs_mem.obj :  .AUTODEPEND ..\..\src\common\fs_mem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fs_inet.obj :  .AUTODEPEND ..\..\src\common\fs_inet.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_ftp.obj :  .AUTODEPEND ..\..\src\common\ftp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_http.obj :  .AUTODEPEND ..\..\src\common\http.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_protocol.obj :  .AUTODEPEND ..\..\src\common\protocol.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_sckaddr.obj :  .AUTODEPEND ..\..\src\common\sckaddr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_sckfile.obj :  .AUTODEPEND ..\..\src\common\sckfile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_sckipc.obj :  .AUTODEPEND ..\..\src\common\sckipc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_sckstrm.obj :  .AUTODEPEND ..\..\src\common\sckstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_socket.obj :  .AUTODEPEND ..\..\src\common\socket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dirdlg.obj :  .AUTODEPEND ..\..\src\msw\dirdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dragimag.obj :  .AUTODEPEND ..\..\src\msw\dragimag.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mdi.obj :  .AUTODEPEND ..\..\src\msw\mdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_menuitem.obj :  .AUTODEPEND ..\..\src\msw\menuitem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_metafile.obj :  .AUTODEPEND ..\..\src\msw\metafile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msgdlg.obj :  .AUTODEPEND ..\..\src\msw\msgdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_slider95.obj :  .AUTODEPEND ..\..\src\msw\slider95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_statbr95.obj :  .AUTODEPEND ..\..\src\msw\statbr95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fontdlg.obj :  .AUTODEPEND ..\..\src\msw\fontdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_colschem.obj :  .AUTODEPEND ..\..\src\univ\colschem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_inphand.obj :  .AUTODEPEND ..\..\src\univ\inphand.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_winuniv.obj :  .AUTODEPEND ..\..\src\univ\winuniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_gtk.obj :  .AUTODEPEND ..\..\src\univ\themes\gtk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_helpbest.obj :  .AUTODEPEND ..\..\src\msw\helpbest.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_helpctrl.obj :  .AUTODEPEND ..\..\src\html\helpctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_helpdata.obj :  .AUTODEPEND ..\..\src\html\helpdata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_helpfrm.obj :  .AUTODEPEND ..\..\src\html\helpfrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_htmlcell.obj :  .AUTODEPEND ..\..\src\html\htmlcell.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_htmlfilt.obj :  .AUTODEPEND ..\..\src\html\htmlfilt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_htmlpars.obj :  .AUTODEPEND ..\..\src\html\htmlpars.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_htmltag.obj :  .AUTODEPEND ..\..\src\html\htmltag.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_htmlwin.obj :  .AUTODEPEND ..\..\src\html\htmlwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_htmprint.obj :  .AUTODEPEND ..\..\src\html\htmprint.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_dflist.obj :  .AUTODEPEND ..\..\src\html\m_dflist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_fonts.obj :  .AUTODEPEND ..\..\src\html\m_fonts.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_hline.obj :  .AUTODEPEND ..\..\src\html\m_hline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_image.obj :  .AUTODEPEND ..\..\src\html\m_image.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_layout.obj :  .AUTODEPEND ..\..\src\html\m_layout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_links.obj :  .AUTODEPEND ..\..\src\html\m_links.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_list.obj :  .AUTODEPEND ..\..\src\html\m_list.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_pre.obj :  .AUTODEPEND ..\..\src\html\m_pre.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_style.obj :  .AUTODEPEND ..\..\src\html\m_style.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_tables.obj :  .AUTODEPEND ..\..\src\html\m_tables.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_htmllbox.obj :  .AUTODEPEND ..\..\src\generic\htmllbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_db.obj :  .AUTODEPEND ..\..\src\common\db.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dbtable.obj :  .AUTODEPEND ..\..\src\common\dbtable.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_bttn.obj :  .AUTODEPEND ..\..\src\xrc\xh_bttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_cald.obj :  .AUTODEPEND ..\..\src\xrc\xh_cald.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_chckb.obj :  .AUTODEPEND ..\..\src\xrc\xh_chckb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_chckl.obj :  .AUTODEPEND ..\..\src\xrc\xh_chckl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_choic.obj :  .AUTODEPEND ..\..\src\xrc\xh_choic.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_choicbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_choicbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_combo.obj :  .AUTODEPEND ..\..\src\xrc\xh_combo.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_datectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_datectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_gauge.obj :  .AUTODEPEND ..\..\src\xrc\xh_gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_gdctl.obj :  .AUTODEPEND ..\..\src\xrc\xh_gdctl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_html.obj :  .AUTODEPEND ..\..\src\xrc\xh_html.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_listb.obj :  .AUTODEPEND ..\..\src\xrc\xh_listb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_listbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_listbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_listc.obj :  .AUTODEPEND ..\..\src\xrc\xh_listc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_notbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_notbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_panel.obj :  .AUTODEPEND ..\..\src\xrc\xh_panel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_radbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_radbx.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_slidr.obj :  .AUTODEPEND ..\..\src\xrc\xh_slidr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_spin.obj :  .AUTODEPEND ..\..\src\xrc\xh_spin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_split.obj :  .AUTODEPEND ..\..\src\xrc\xh_split.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_statbar.obj :  .AUTODEPEND ..\..\src\xrc\xh_statbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_stbmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_stbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_stbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_stbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_stlin.obj :  .AUTODEPEND ..\..\src\xrc\xh_stlin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_sttxt.obj :  .AUTODEPEND ..\..\src\xrc\xh_sttxt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_text.obj :  .AUTODEPEND ..\..\src\xrc\xh_text.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_treebk.obj :  .AUTODEPEND ..\..\src\xrc\xh_treebk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_unkwn.obj :  .AUTODEPEND ..\..\src\xrc\xh_unkwn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_wizrd.obj :  .AUTODEPEND ..\..\src\xrc\xh_wizrd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xmlres.obj :  .AUTODEPEND ..\..\src\xrc\xmlres.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xmlrsall.obj :  .AUTODEPEND ..\..\src\xrc\xmlrsall.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_app.obj :  .AUTODEPEND ..\..\src\msw\app.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_bitmap.obj :  .AUTODEPEND ..\..\src\msw\bitmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_brush.obj :  .AUTODEPEND ..\..\src\msw\brush.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_caret.obj :  .AUTODEPEND ..\..\src\msw\caret.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_clipbrd.obj :  .AUTODEPEND ..\..\src\msw\clipbrd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_colour.obj :  .AUTODEPEND ..\..\src\msw\colour.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_cursor.obj :  .AUTODEPEND ..\..\src\msw\cursor.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_data.obj :  .AUTODEPEND ..\..\src\msw\data.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dc.obj :  .AUTODEPEND ..\..\src\msw\dc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dcclient.obj :  .AUTODEPEND ..\..\src\msw\dcclient.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dcmemory.obj :  .AUTODEPEND ..\..\src\msw\dcmemory.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dcprint.obj :  .AUTODEPEND ..\..\src\msw\dcprint.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dcscreen.obj :  .AUTODEPEND ..\..\src\msw\dcscreen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dialup.obj :  .AUTODEPEND ..\..\src\msw\dialup.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dib.obj :  .AUTODEPEND ..\..\src\msw\dib.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_display.obj :  .AUTODEPEND ..\..\src\msw\display.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_enhmeta.obj :  .AUTODEPEND ..\..\src\msw\enhmeta.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_evtloop.obj :  .AUTODEPEND ..\..\src\msw\evtloop.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_font.obj :  .AUTODEPEND ..\..\src\msw\font.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_fontenum.obj :  .AUTODEPEND ..\..\src\msw\fontenum.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_fontutil.obj :  .AUTODEPEND ..\..\src\msw\fontutil.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gdiimage.obj :  .AUTODEPEND ..\..\src\msw\gdiimage.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gdiobj.obj :  .AUTODEPEND ..\..\src\msw\gdiobj.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dataobj.obj :  .AUTODEPEND ..\..\src\msw\ole\dataobj.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dropsrc.obj :  .AUTODEPEND ..\..\src\msw\ole\dropsrc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_droptgt.obj :  .AUTODEPEND ..\..\src\msw\ole\droptgt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_pen.obj :  .AUTODEPEND ..\..\src\msw\pen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_popupwin.obj :  .AUTODEPEND ..\..\src\msw\popupwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_printdlg.obj :  .AUTODEPEND ..\..\src\msw\printdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_printwin.obj :  .AUTODEPEND ..\..\src\msw\printwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_region.obj :  .AUTODEPEND ..\..\src\msw\region.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_renderer.obj :  .AUTODEPEND ..\..\src\msw\renderer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_settings.obj :  .AUTODEPEND ..\..\src\msw\settings.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_timer.obj :  .AUTODEPEND ..\..\src\msw\timer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_tooltip.obj :  .AUTODEPEND ..\..\src\msw\tooltip.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_toplevel.obj :  .AUTODEPEND ..\..\src\msw\toplevel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_utilsgui.obj :  .AUTODEPEND ..\..\src\msw\utilsgui.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_uxtheme.obj :  .AUTODEPEND ..\..\src\msw\uxtheme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_window.obj :  .AUTODEPEND ..\..\src\msw\window.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_automtn.obj :  .AUTODEPEND ..\..\src\msw\ole\automtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_uuid.obj :  .AUTODEPEND ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_accesscmn.obj :  .AUTODEPEND ..\..\src\common\accesscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_appcmn.obj :  .AUTODEPEND ..\..\src\common\appcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_artprov.obj :  .AUTODEPEND ..\..\src\common\artprov.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_artstd.obj :  .AUTODEPEND ..\..\src\common\artstd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_choiccmn.obj :  .AUTODEPEND ..\..\src\common\choiccmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_clipcmn.obj :  .AUTODEPEND ..\..\src\common\clipcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_cmdproc.obj :  .AUTODEPEND ..\..\src\common\cmdproc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_cmndata.obj :  .AUTODEPEND ..\..\src\common\cmndata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_containr.obj :  .AUTODEPEND ..\..\src\common\containr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_cshelp.obj :  .AUTODEPEND ..\..\src\common\cshelp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_ctrlcmn.obj :  .AUTODEPEND ..\..\src\common\ctrlcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_ctrlsub.obj :  .AUTODEPEND ..\..\src\common\ctrlsub.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_datacmn.obj :  .AUTODEPEND ..\..\src\common\datacmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dndcmn.obj :  .AUTODEPEND ..\..\src\common\dndcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dobjcmn.obj :  .AUTODEPEND ..\..\src\common\dobjcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_docmdi.obj :  .AUTODEPEND ..\..\src\common\docmdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_docview.obj :  .AUTODEPEND ..\..\src\common\docview.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dpycmn.obj :  .AUTODEPEND ..\..\src\common\dpycmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dseldlg.obj :  .AUTODEPEND ..\..\src\common\dseldlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_effects.obj :  .AUTODEPEND ..\..\src\common\effects.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_fddlgcmn.obj :  .AUTODEPEND ..\..\src\common\fddlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_fldlgcmn.obj :  .AUTODEPEND ..\..\src\common\fldlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_fontcmn.obj :  .AUTODEPEND ..\..\src\common\fontcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_fontmap.obj :  .AUTODEPEND ..\..\src\common\fontmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_framecmn.obj :  .AUTODEPEND ..\..\src\common\framecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gaugecmn.obj :  .AUTODEPEND ..\..\src\common\gaugecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gbsizer.obj :  .AUTODEPEND ..\..\src\common\gbsizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gdicmn.obj :  .AUTODEPEND ..\..\src\common\gdicmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_geometry.obj :  .AUTODEPEND ..\..\src\common\geometry.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gifdecod.obj :  .AUTODEPEND ..\..\src\common\gifdecod.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_helpbase.obj :  .AUTODEPEND ..\..\src\common\helpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_iconbndl.obj :  .AUTODEPEND ..\..\src\common\iconbndl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagall.obj :  .AUTODEPEND ..\..\src\common\imagall.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagbmp.obj :  .AUTODEPEND ..\..\src\common\imagbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_image.obj :  .AUTODEPEND ..\..\src\common\image.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagfill.obj :  .AUTODEPEND ..\..\src\common\imagfill.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imaggif.obj :  .AUTODEPEND ..\..\src\common\imaggif.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagiff.obj :  .AUTODEPEND ..\..\src\common\imagiff.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagjpeg.obj :  .AUTODEPEND ..\..\src\common\imagjpeg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagpcx.obj :  .AUTODEPEND ..\..\src\common\imagpcx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagpng.obj :  .AUTODEPEND ..\..\src\common\imagpng.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagpnm.obj :  .AUTODEPEND ..\..\src\common\imagpnm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagtiff.obj :  .AUTODEPEND ..\..\src\common\imagtiff.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_imagxpm.obj :  .AUTODEPEND ..\..\src\common\imagxpm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_layout.obj :  .AUTODEPEND ..\..\src\common\layout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_lboxcmn.obj :  .AUTODEPEND ..\..\src\common\lboxcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_popupcmn.obj :  .AUTODEPEND ..\..\src\common\popupcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_prntbase.obj :  .AUTODEPEND ..\..\src\common\prntbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_rendcmn.obj :  .AUTODEPEND ..\..\src\common\rendcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_rgncmn.obj :  .AUTODEPEND ..\..\src\common\rgncmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_stockitem.obj :  .AUTODEPEND ..\..\src\common\stockitem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_tbarbase.obj :  .AUTODEPEND ..\..\src\common\tbarbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_textcmn.obj :  .AUTODEPEND ..\..\src\common\textcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_timercmn.obj :  .AUTODEPEND ..\..\src\common\timercmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_toplvcmn.obj :  .AUTODEPEND ..\..\src\common\toplvcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_treebase.obj :  .AUTODEPEND ..\..\src\common\treebase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_valgen.obj :  .AUTODEPEND ..\..\src\common\valgen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_validate.obj :  .AUTODEPEND ..\..\src\common\validate.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_xpmdecod.obj :  .AUTODEPEND ..\..\src\common\xpmdecod.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_busyinfo.obj :  .AUTODEPEND ..\..\src\generic\busyinfo.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_choicdgg.obj :  .AUTODEPEND ..\..\src\generic\choicdgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_choicbkg.obj :  .AUTODEPEND ..\..\src\generic\choicbkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dirctrlg.obj :  .AUTODEPEND ..\..\src\generic\dirctrlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dragimgg.obj :  .AUTODEPEND ..\..\src\generic\dragimgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_listbkg.obj :  .AUTODEPEND ..\..\src\generic\listbkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_logg.obj :  .AUTODEPEND ..\..\src\generic\logg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_panelg.obj :  .AUTODEPEND ..\..\src\generic\panelg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_progdlgg.obj :  .AUTODEPEND ..\..\src\generic\progdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_renderg.obj :  .AUTODEPEND ..\..\src\generic\renderg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_scrlwing.obj :  .AUTODEPEND ..\..\src\generic\scrlwing.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_selstore.obj :  .AUTODEPEND ..\..\src\generic\selstore.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_spinctlg.obj :  .AUTODEPEND ..\..\src\generic\spinctlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_tipwin.obj :  .AUTODEPEND ..\..\src\generic\tipwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_treectlg.obj :  .AUTODEPEND ..\..\src\generic\treectlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_treebkg.obj :  .AUTODEPEND ..\..\src\generic\treebkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_datectlg.obj :  .AUTODEPEND ..\..\src\generic\datectlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_propdlg.obj :  .AUTODEPEND ..\..\src\generic\propdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 $(OBJS)\basedll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_wat$(VENDORTAG) $<
 
 $(OBJS)\basedll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_config.obj :  .AUTODEPEND ..\..\src\common\config.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_dircmn.obj :  .AUTODEPEND ..\..\src\common\dircmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_dynarray.obj :  .AUTODEPEND ..\..\src\common\dynarray.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_dynlib.obj :  .AUTODEPEND ..\..\src\common\dynlib.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_dynload.obj :  .AUTODEPEND ..\..\src\common\dynload.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_encconv.obj :  .AUTODEPEND ..\..\src\common\encconv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_extended.obj :  .AUTODEPEND ..\..\src\common\extended.c
-	$(CC) -bt=nt -zq -fo=$^@ $(BASEDLL_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(BASEDLL_CFLAGS) $<
 
 $(OBJS)\basedll_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_filefn.obj :  .AUTODEPEND ..\..\src\common\filefn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_fs_zip.obj :  .AUTODEPEND ..\..\src\common\fs_zip.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_hash.obj :  .AUTODEPEND ..\..\src\common\hash.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_hashmap.obj :  .AUTODEPEND ..\..\src\common\hashmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_init.obj :  .AUTODEPEND ..\..\src\common\init.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_intl.obj :  .AUTODEPEND ..\..\src\common\intl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_ipcbase.obj :  .AUTODEPEND ..\..\src\common\ipcbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_list.obj :  .AUTODEPEND ..\..\src\common\list.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_log.obj :  .AUTODEPEND ..\..\src\common\log.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_longlong.obj :  .AUTODEPEND ..\..\src\common\longlong.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_memory.obj :  .AUTODEPEND ..\..\src\common\memory.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_mimecmn.obj :  .AUTODEPEND ..\..\src\common\mimecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_module.obj :  .AUTODEPEND ..\..\src\common\module.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_process.obj :  .AUTODEPEND ..\..\src\common\process.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_regex.obj :  .AUTODEPEND ..\..\src\common\regex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_stdpbase.obj :  .AUTODEPEND ..\..\src\common\stdpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_sstream.obj :  .AUTODEPEND ..\..\src\common\sstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_stopwatch.obj :  .AUTODEPEND ..\..\src\common\stopwatch.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_strconv.obj :  .AUTODEPEND ..\..\src\common\strconv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_stream.obj :  .AUTODEPEND ..\..\src\common\stream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_wfstream.obj :  .AUTODEPEND ..\..\src\common\wfstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_wxchar.obj :  .AUTODEPEND ..\..\src\common\wxchar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_xtistrm.obj :  .AUTODEPEND ..\..\src\common\xtistrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_zipstrm.obj :  .AUTODEPEND ..\..\src\common\zipstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_zstream.obj :  .AUTODEPEND ..\..\src\common\zstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_crashrpt.obj :  .AUTODEPEND ..\..\src\msw\crashrpt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_debughlp.obj :  .AUTODEPEND ..\..\src\msw\debughlp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_dde.obj :  .AUTODEPEND ..\..\src\msw\dde.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_dir.obj :  .AUTODEPEND ..\..\src\msw\dir.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_dlmsw.obj :  .AUTODEPEND ..\..\src\msw\dlmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_mimetype.obj :  .AUTODEPEND ..\..\src\msw\mimetype.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_regconf.obj :  .AUTODEPEND ..\..\src\msw\regconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_registry.obj :  .AUTODEPEND ..\..\src\msw\registry.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_snglinst.obj :  .AUTODEPEND ..\..\src\msw\snglinst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_stackwalk.obj :  .AUTODEPEND ..\..\src\msw\stackwalk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_stdpaths.obj :  .AUTODEPEND ..\..\src\msw\stdpaths.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_thread.obj :  .AUTODEPEND ..\..\src\msw\thread.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_utils.obj :  .AUTODEPEND ..\..\src\msw\utils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_utilsexc.obj :  .AUTODEPEND ..\..\src\msw\utilsexc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_event.obj :  .AUTODEPEND ..\..\src\common\event.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_fs_mem.obj :  .AUTODEPEND ..\..\src\common\fs_mem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\baselib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_config.obj :  .AUTODEPEND ..\..\src\common\config.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_dircmn.obj :  .AUTODEPEND ..\..\src\common\dircmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_dynarray.obj :  .AUTODEPEND ..\..\src\common\dynarray.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_dynlib.obj :  .AUTODEPEND ..\..\src\common\dynlib.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_dynload.obj :  .AUTODEPEND ..\..\src\common\dynload.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_encconv.obj :  .AUTODEPEND ..\..\src\common\encconv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_extended.obj :  .AUTODEPEND ..\..\src\common\extended.c
-	$(CC) -bt=nt -zq -fo=$^@ $(BASELIB_CFLAGS) $<
+	$(CC) -zq -fo=$^@ $(BASELIB_CFLAGS) $<
 
 $(OBJS)\baselib_ffile.obj :  .AUTODEPEND ..\..\src\common\ffile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_file.obj :  .AUTODEPEND ..\..\src\common\file.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_fileconf.obj :  .AUTODEPEND ..\..\src\common\fileconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_filefn.obj :  .AUTODEPEND ..\..\src\common\filefn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_filename.obj :  .AUTODEPEND ..\..\src\common\filename.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_filesys.obj :  .AUTODEPEND ..\..\src\common\filesys.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_fmapbase.obj :  .AUTODEPEND ..\..\src\common\fmapbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_fs_zip.obj :  .AUTODEPEND ..\..\src\common\fs_zip.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_hash.obj :  .AUTODEPEND ..\..\src\common\hash.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_hashmap.obj :  .AUTODEPEND ..\..\src\common\hashmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_init.obj :  .AUTODEPEND ..\..\src\common\init.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_intl.obj :  .AUTODEPEND ..\..\src\common\intl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_ipcbase.obj :  .AUTODEPEND ..\..\src\common\ipcbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_list.obj :  .AUTODEPEND ..\..\src\common\list.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_log.obj :  .AUTODEPEND ..\..\src\common\log.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_longlong.obj :  .AUTODEPEND ..\..\src\common\longlong.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_memory.obj :  .AUTODEPEND ..\..\src\common\memory.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_mimecmn.obj :  .AUTODEPEND ..\..\src\common\mimecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_module.obj :  .AUTODEPEND ..\..\src\common\module.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_process.obj :  .AUTODEPEND ..\..\src\common\process.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_regex.obj :  .AUTODEPEND ..\..\src\common\regex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_stdpbase.obj :  .AUTODEPEND ..\..\src\common\stdpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_sstream.obj :  .AUTODEPEND ..\..\src\common\sstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_stopwatch.obj :  .AUTODEPEND ..\..\src\common\stopwatch.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_strconv.obj :  .AUTODEPEND ..\..\src\common\strconv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_stream.obj :  .AUTODEPEND ..\..\src\common\stream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_sysopt.obj :  .AUTODEPEND ..\..\src\common\sysopt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_wfstream.obj :  .AUTODEPEND ..\..\src\common\wfstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_wxchar.obj :  .AUTODEPEND ..\..\src\common\wxchar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_xtistrm.obj :  .AUTODEPEND ..\..\src\common\xtistrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_zipstrm.obj :  .AUTODEPEND ..\..\src\common\zipstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_zstream.obj :  .AUTODEPEND ..\..\src\common\zstream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_crashrpt.obj :  .AUTODEPEND ..\..\src\msw\crashrpt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_debughlp.obj :  .AUTODEPEND ..\..\src\msw\debughlp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_dde.obj :  .AUTODEPEND ..\..\src\msw\dde.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_dir.obj :  .AUTODEPEND ..\..\src\msw\dir.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_dlmsw.obj :  .AUTODEPEND ..\..\src\msw\dlmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_mimetype.obj :  .AUTODEPEND ..\..\src\msw\mimetype.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_regconf.obj :  .AUTODEPEND ..\..\src\msw\regconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_registry.obj :  .AUTODEPEND ..\..\src\msw\registry.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_snglinst.obj :  .AUTODEPEND ..\..\src\msw\snglinst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_stackwalk.obj :  .AUTODEPEND ..\..\src\msw\stackwalk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_stdpaths.obj :  .AUTODEPEND ..\..\src\msw\stdpaths.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_thread.obj :  .AUTODEPEND ..\..\src\msw\thread.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_utils.obj :  .AUTODEPEND ..\..\src\msw\utils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_utilsexc.obj :  .AUTODEPEND ..\..\src\msw\utilsexc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_event.obj :  .AUTODEPEND ..\..\src\common\event.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_fs_mem.obj :  .AUTODEPEND ..\..\src\common\fs_mem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\netdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net_wat$(VENDORTAG) $<
 
 $(OBJS)\netdll_fs_inet.obj :  .AUTODEPEND ..\..\src\common\fs_inet.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_ftp.obj :  .AUTODEPEND ..\..\src\common\ftp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_http.obj :  .AUTODEPEND ..\..\src\common\http.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_protocol.obj :  .AUTODEPEND ..\..\src\common\protocol.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_sckaddr.obj :  .AUTODEPEND ..\..\src\common\sckaddr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_sckfile.obj :  .AUTODEPEND ..\..\src\common\sckfile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_sckipc.obj :  .AUTODEPEND ..\..\src\common\sckipc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_sckstrm.obj :  .AUTODEPEND ..\..\src\common\sckstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_socket.obj :  .AUTODEPEND ..\..\src\common\socket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netlib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_fs_inet.obj :  .AUTODEPEND ..\..\src\common\fs_inet.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_ftp.obj :  .AUTODEPEND ..\..\src\common\ftp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_http.obj :  .AUTODEPEND ..\..\src\common\http.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_protocol.obj :  .AUTODEPEND ..\..\src\common\protocol.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_sckaddr.obj :  .AUTODEPEND ..\..\src\common\sckaddr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_sckfile.obj :  .AUTODEPEND ..\..\src\common\sckfile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_sckipc.obj :  .AUTODEPEND ..\..\src\common\sckipc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_sckstrm.obj :  .AUTODEPEND ..\..\src\common\sckstrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_socket.obj :  .AUTODEPEND ..\..\src\common\socket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\coredll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core_wat$(VENDORTAG) $<
 
 $(OBJS)\coredll_event.obj :  .AUTODEPEND ..\..\src\common\event.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_fs_mem.obj :  .AUTODEPEND ..\..\src\common\fs_mem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_dirdlg.obj :  .AUTODEPEND ..\..\src\msw\dirdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_dragimag.obj :  .AUTODEPEND ..\..\src\msw\dragimag.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_mdi.obj :  .AUTODEPEND ..\..\src\msw\mdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_menuitem.obj :  .AUTODEPEND ..\..\src\msw\menuitem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_metafile.obj :  .AUTODEPEND ..\..\src\msw\metafile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_msgdlg.obj :  .AUTODEPEND ..\..\src\msw\msgdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_slider95.obj :  .AUTODEPEND ..\..\src\msw\slider95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_statbr95.obj :  .AUTODEPEND ..\..\src\msw\statbr95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_fontdlg.obj :  .AUTODEPEND ..\..\src\msw\fontdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_colschem.obj :  .AUTODEPEND ..\..\src\univ\colschem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_inphand.obj :  .AUTODEPEND ..\..\src\univ\inphand.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_winuniv.obj :  .AUTODEPEND ..\..\src\univ\winuniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_gtk.obj :  .AUTODEPEND ..\..\src\univ\themes\gtk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_app.obj :  .AUTODEPEND ..\..\src\msw\app.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_bitmap.obj :  .AUTODEPEND ..\..\src\msw\bitmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_brush.obj :  .AUTODEPEND ..\..\src\msw\brush.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_caret.obj :  .AUTODEPEND ..\..\src\msw\caret.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_clipbrd.obj :  .AUTODEPEND ..\..\src\msw\clipbrd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_colour.obj :  .AUTODEPEND ..\..\src\msw\colour.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_cursor.obj :  .AUTODEPEND ..\..\src\msw\cursor.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_data.obj :  .AUTODEPEND ..\..\src\msw\data.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dc.obj :  .AUTODEPEND ..\..\src\msw\dc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dcclient.obj :  .AUTODEPEND ..\..\src\msw\dcclient.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dcmemory.obj :  .AUTODEPEND ..\..\src\msw\dcmemory.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dcprint.obj :  .AUTODEPEND ..\..\src\msw\dcprint.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dcscreen.obj :  .AUTODEPEND ..\..\src\msw\dcscreen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dialup.obj :  .AUTODEPEND ..\..\src\msw\dialup.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dib.obj :  .AUTODEPEND ..\..\src\msw\dib.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_display.obj :  .AUTODEPEND ..\..\src\msw\display.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_enhmeta.obj :  .AUTODEPEND ..\..\src\msw\enhmeta.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_evtloop.obj :  .AUTODEPEND ..\..\src\msw\evtloop.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_font.obj :  .AUTODEPEND ..\..\src\msw\font.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_fontenum.obj :  .AUTODEPEND ..\..\src\msw\fontenum.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_fontutil.obj :  .AUTODEPEND ..\..\src\msw\fontutil.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gdiimage.obj :  .AUTODEPEND ..\..\src\msw\gdiimage.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gdiobj.obj :  .AUTODEPEND ..\..\src\msw\gdiobj.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dataobj.obj :  .AUTODEPEND ..\..\src\msw\ole\dataobj.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dropsrc.obj :  .AUTODEPEND ..\..\src\msw\ole\dropsrc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_droptgt.obj :  .AUTODEPEND ..\..\src\msw\ole\droptgt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_pen.obj :  .AUTODEPEND ..\..\src\msw\pen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_popupwin.obj :  .AUTODEPEND ..\..\src\msw\popupwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_printdlg.obj :  .AUTODEPEND ..\..\src\msw\printdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_printwin.obj :  .AUTODEPEND ..\..\src\msw\printwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_region.obj :  .AUTODEPEND ..\..\src\msw\region.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_renderer.obj :  .AUTODEPEND ..\..\src\msw\renderer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_settings.obj :  .AUTODEPEND ..\..\src\msw\settings.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_timer.obj :  .AUTODEPEND ..\..\src\msw\timer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_tooltip.obj :  .AUTODEPEND ..\..\src\msw\tooltip.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_toplevel.obj :  .AUTODEPEND ..\..\src\msw\toplevel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_utilsgui.obj :  .AUTODEPEND ..\..\src\msw\utilsgui.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_uxtheme.obj :  .AUTODEPEND ..\..\src\msw\uxtheme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_window.obj :  .AUTODEPEND ..\..\src\msw\window.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_automtn.obj :  .AUTODEPEND ..\..\src\msw\ole\automtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_uuid.obj :  .AUTODEPEND ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_accesscmn.obj :  .AUTODEPEND ..\..\src\common\accesscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_appcmn.obj :  .AUTODEPEND ..\..\src\common\appcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_artprov.obj :  .AUTODEPEND ..\..\src\common\artprov.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_artstd.obj :  .AUTODEPEND ..\..\src\common\artstd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_choiccmn.obj :  .AUTODEPEND ..\..\src\common\choiccmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_clipcmn.obj :  .AUTODEPEND ..\..\src\common\clipcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_cmdproc.obj :  .AUTODEPEND ..\..\src\common\cmdproc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_cmndata.obj :  .AUTODEPEND ..\..\src\common\cmndata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_containr.obj :  .AUTODEPEND ..\..\src\common\containr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_cshelp.obj :  .AUTODEPEND ..\..\src\common\cshelp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_ctrlcmn.obj :  .AUTODEPEND ..\..\src\common\ctrlcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_ctrlsub.obj :  .AUTODEPEND ..\..\src\common\ctrlsub.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_datacmn.obj :  .AUTODEPEND ..\..\src\common\datacmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dndcmn.obj :  .AUTODEPEND ..\..\src\common\dndcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dobjcmn.obj :  .AUTODEPEND ..\..\src\common\dobjcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_docmdi.obj :  .AUTODEPEND ..\..\src\common\docmdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_docview.obj :  .AUTODEPEND ..\..\src\common\docview.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dpycmn.obj :  .AUTODEPEND ..\..\src\common\dpycmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dseldlg.obj :  .AUTODEPEND ..\..\src\common\dseldlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_effects.obj :  .AUTODEPEND ..\..\src\common\effects.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_fddlgcmn.obj :  .AUTODEPEND ..\..\src\common\fddlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_fldlgcmn.obj :  .AUTODEPEND ..\..\src\common\fldlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_fontcmn.obj :  .AUTODEPEND ..\..\src\common\fontcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_fontmap.obj :  .AUTODEPEND ..\..\src\common\fontmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_framecmn.obj :  .AUTODEPEND ..\..\src\common\framecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gaugecmn.obj :  .AUTODEPEND ..\..\src\common\gaugecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gbsizer.obj :  .AUTODEPEND ..\..\src\common\gbsizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gdicmn.obj :  .AUTODEPEND ..\..\src\common\gdicmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_geometry.obj :  .AUTODEPEND ..\..\src\common\geometry.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gifdecod.obj :  .AUTODEPEND ..\..\src\common\gifdecod.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_helpbase.obj :  .AUTODEPEND ..\..\src\common\helpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_iconbndl.obj :  .AUTODEPEND ..\..\src\common\iconbndl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagall.obj :  .AUTODEPEND ..\..\src\common\imagall.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagbmp.obj :  .AUTODEPEND ..\..\src\common\imagbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_image.obj :  .AUTODEPEND ..\..\src\common\image.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagfill.obj :  .AUTODEPEND ..\..\src\common\imagfill.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imaggif.obj :  .AUTODEPEND ..\..\src\common\imaggif.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagiff.obj :  .AUTODEPEND ..\..\src\common\imagiff.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagjpeg.obj :  .AUTODEPEND ..\..\src\common\imagjpeg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagpcx.obj :  .AUTODEPEND ..\..\src\common\imagpcx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagpng.obj :  .AUTODEPEND ..\..\src\common\imagpng.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagpnm.obj :  .AUTODEPEND ..\..\src\common\imagpnm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagtiff.obj :  .AUTODEPEND ..\..\src\common\imagtiff.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_imagxpm.obj :  .AUTODEPEND ..\..\src\common\imagxpm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_layout.obj :  .AUTODEPEND ..\..\src\common\layout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_lboxcmn.obj :  .AUTODEPEND ..\..\src\common\lboxcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_popupcmn.obj :  .AUTODEPEND ..\..\src\common\popupcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_prntbase.obj :  .AUTODEPEND ..\..\src\common\prntbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_rendcmn.obj :  .AUTODEPEND ..\..\src\common\rendcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_rgncmn.obj :  .AUTODEPEND ..\..\src\common\rgncmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_stockitem.obj :  .AUTODEPEND ..\..\src\common\stockitem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_tbarbase.obj :  .AUTODEPEND ..\..\src\common\tbarbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_textcmn.obj :  .AUTODEPEND ..\..\src\common\textcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_timercmn.obj :  .AUTODEPEND ..\..\src\common\timercmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_toplvcmn.obj :  .AUTODEPEND ..\..\src\common\toplvcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_treebase.obj :  .AUTODEPEND ..\..\src\common\treebase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_valgen.obj :  .AUTODEPEND ..\..\src\common\valgen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_validate.obj :  .AUTODEPEND ..\..\src\common\validate.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_xpmdecod.obj :  .AUTODEPEND ..\..\src\common\xpmdecod.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_busyinfo.obj :  .AUTODEPEND ..\..\src\generic\busyinfo.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_choicdgg.obj :  .AUTODEPEND ..\..\src\generic\choicdgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_choicbkg.obj :  .AUTODEPEND ..\..\src\generic\choicbkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dirctrlg.obj :  .AUTODEPEND ..\..\src\generic\dirctrlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_dragimgg.obj :  .AUTODEPEND ..\..\src\generic\dragimgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_listbkg.obj :  .AUTODEPEND ..\..\src\generic\listbkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_logg.obj :  .AUTODEPEND ..\..\src\generic\logg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_panelg.obj :  .AUTODEPEND ..\..\src\generic\panelg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_progdlgg.obj :  .AUTODEPEND ..\..\src\generic\progdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_renderg.obj :  .AUTODEPEND ..\..\src\generic\renderg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_scrlwing.obj :  .AUTODEPEND ..\..\src\generic\scrlwing.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_selstore.obj :  .AUTODEPEND ..\..\src\generic\selstore.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_spinctlg.obj :  .AUTODEPEND ..\..\src\generic\spinctlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_tipwin.obj :  .AUTODEPEND ..\..\src\generic\tipwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_treectlg.obj :  .AUTODEPEND ..\..\src\generic\treectlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_treebkg.obj :  .AUTODEPEND ..\..\src\generic\treebkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
 $(OBJS)\corelib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_event.obj :  .AUTODEPEND ..\..\src\common\event.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_fs_mem.obj :  .AUTODEPEND ..\..\src\common\fs_mem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dirdlg.obj :  .AUTODEPEND ..\..\src\msw\dirdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dragimag.obj :  .AUTODEPEND ..\..\src\msw\dragimag.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_mdi.obj :  .AUTODEPEND ..\..\src\msw\mdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_menuitem.obj :  .AUTODEPEND ..\..\src\msw\menuitem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_metafile.obj :  .AUTODEPEND ..\..\src\msw\metafile.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msgdlg.obj :  .AUTODEPEND ..\..\src\msw\msgdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_slider95.obj :  .AUTODEPEND ..\..\src\msw\slider95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_statbr95.obj :  .AUTODEPEND ..\..\src\msw\statbr95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_fontdlg.obj :  .AUTODEPEND ..\..\src\msw\fontdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_colschem.obj :  .AUTODEPEND ..\..\src\univ\colschem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_inphand.obj :  .AUTODEPEND ..\..\src\univ\inphand.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_winuniv.obj :  .AUTODEPEND ..\..\src\univ\winuniv.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_gtk.obj :  .AUTODEPEND ..\..\src\univ\themes\gtk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_metal.obj :  .AUTODEPEND ..\..\src\univ\themes\metal.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_app.obj :  .AUTODEPEND ..\..\src\msw\app.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_bitmap.obj :  .AUTODEPEND ..\..\src\msw\bitmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_brush.obj :  .AUTODEPEND ..\..\src\msw\brush.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_caret.obj :  .AUTODEPEND ..\..\src\msw\caret.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_clipbrd.obj :  .AUTODEPEND ..\..\src\msw\clipbrd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_colour.obj :  .AUTODEPEND ..\..\src\msw\colour.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_cursor.obj :  .AUTODEPEND ..\..\src\msw\cursor.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_data.obj :  .AUTODEPEND ..\..\src\msw\data.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dc.obj :  .AUTODEPEND ..\..\src\msw\dc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dcclient.obj :  .AUTODEPEND ..\..\src\msw\dcclient.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dcmemory.obj :  .AUTODEPEND ..\..\src\msw\dcmemory.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dcprint.obj :  .AUTODEPEND ..\..\src\msw\dcprint.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dcscreen.obj :  .AUTODEPEND ..\..\src\msw\dcscreen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dialup.obj :  .AUTODEPEND ..\..\src\msw\dialup.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dib.obj :  .AUTODEPEND ..\..\src\msw\dib.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_display.obj :  .AUTODEPEND ..\..\src\msw\display.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_enhmeta.obj :  .AUTODEPEND ..\..\src\msw\enhmeta.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_evtloop.obj :  .AUTODEPEND ..\..\src\msw\evtloop.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_font.obj :  .AUTODEPEND ..\..\src\msw\font.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_fontenum.obj :  .AUTODEPEND ..\..\src\msw\fontenum.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_fontutil.obj :  .AUTODEPEND ..\..\src\msw\fontutil.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gdiimage.obj :  .AUTODEPEND ..\..\src\msw\gdiimage.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gdiobj.obj :  .AUTODEPEND ..\..\src\msw\gdiobj.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dataobj.obj :  .AUTODEPEND ..\..\src\msw\ole\dataobj.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dropsrc.obj :  .AUTODEPEND ..\..\src\msw\ole\dropsrc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_droptgt.obj :  .AUTODEPEND ..\..\src\msw\ole\droptgt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_pen.obj :  .AUTODEPEND ..\..\src\msw\pen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_popupwin.obj :  .AUTODEPEND ..\..\src\msw\popupwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_printdlg.obj :  .AUTODEPEND ..\..\src\msw\printdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_printwin.obj :  .AUTODEPEND ..\..\src\msw\printwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_region.obj :  .AUTODEPEND ..\..\src\msw\region.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_renderer.obj :  .AUTODEPEND ..\..\src\msw\renderer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_settings.obj :  .AUTODEPEND ..\..\src\msw\settings.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_timer.obj :  .AUTODEPEND ..\..\src\msw\timer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_tooltip.obj :  .AUTODEPEND ..\..\src\msw\tooltip.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_toplevel.obj :  .AUTODEPEND ..\..\src\msw\toplevel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_utilsgui.obj :  .AUTODEPEND ..\..\src\msw\utilsgui.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_uxtheme.obj :  .AUTODEPEND ..\..\src\msw\uxtheme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_window.obj :  .AUTODEPEND ..\..\src\msw\window.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_automtn.obj :  .AUTODEPEND ..\..\src\msw\ole\automtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_uuid.obj :  .AUTODEPEND ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_imaglist.obj :  .AUTODEPEND ..\..\src\generic\imaglist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_accesscmn.obj :  .AUTODEPEND ..\..\src\common\accesscmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_appcmn.obj :  .AUTODEPEND ..\..\src\common\appcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_artprov.obj :  .AUTODEPEND ..\..\src\common\artprov.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_artstd.obj :  .AUTODEPEND ..\..\src\common\artstd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_choiccmn.obj :  .AUTODEPEND ..\..\src\common\choiccmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_clipcmn.obj :  .AUTODEPEND ..\..\src\common\clipcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_cmdproc.obj :  .AUTODEPEND ..\..\src\common\cmdproc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_cmndata.obj :  .AUTODEPEND ..\..\src\common\cmndata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_containr.obj :  .AUTODEPEND ..\..\src\common\containr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_cshelp.obj :  .AUTODEPEND ..\..\src\common\cshelp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_ctrlcmn.obj :  .AUTODEPEND ..\..\src\common\ctrlcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_ctrlsub.obj :  .AUTODEPEND ..\..\src\common\ctrlsub.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_datacmn.obj :  .AUTODEPEND ..\..\src\common\datacmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dcbase.obj :  .AUTODEPEND ..\..\src\common\dcbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dlgcmn.obj :  .AUTODEPEND ..\..\src\common\dlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dndcmn.obj :  .AUTODEPEND ..\..\src\common\dndcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dobjcmn.obj :  .AUTODEPEND ..\..\src\common\dobjcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_docmdi.obj :  .AUTODEPEND ..\..\src\common\docmdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_docview.obj :  .AUTODEPEND ..\..\src\common\docview.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dpycmn.obj :  .AUTODEPEND ..\..\src\common\dpycmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dseldlg.obj :  .AUTODEPEND ..\..\src\common\dseldlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_effects.obj :  .AUTODEPEND ..\..\src\common\effects.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_fddlgcmn.obj :  .AUTODEPEND ..\..\src\common\fddlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_fldlgcmn.obj :  .AUTODEPEND ..\..\src\common\fldlgcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_fontcmn.obj :  .AUTODEPEND ..\..\src\common\fontcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_fontmap.obj :  .AUTODEPEND ..\..\src\common\fontmap.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_framecmn.obj :  .AUTODEPEND ..\..\src\common\framecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gaugecmn.obj :  .AUTODEPEND ..\..\src\common\gaugecmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gbsizer.obj :  .AUTODEPEND ..\..\src\common\gbsizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gdicmn.obj :  .AUTODEPEND ..\..\src\common\gdicmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_geometry.obj :  .AUTODEPEND ..\..\src\common\geometry.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gifdecod.obj :  .AUTODEPEND ..\..\src\common\gifdecod.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_helpbase.obj :  .AUTODEPEND ..\..\src\common\helpbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_iconbndl.obj :  .AUTODEPEND ..\..\src\common\iconbndl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagall.obj :  .AUTODEPEND ..\..\src\common\imagall.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagbmp.obj :  .AUTODEPEND ..\..\src\common\imagbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_image.obj :  .AUTODEPEND ..\..\src\common\image.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagfill.obj :  .AUTODEPEND ..\..\src\common\imagfill.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imaggif.obj :  .AUTODEPEND ..\..\src\common\imaggif.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagiff.obj :  .AUTODEPEND ..\..\src\common\imagiff.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagjpeg.obj :  .AUTODEPEND ..\..\src\common\imagjpeg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagpcx.obj :  .AUTODEPEND ..\..\src\common\imagpcx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagpng.obj :  .AUTODEPEND ..\..\src\common\imagpng.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagpnm.obj :  .AUTODEPEND ..\..\src\common\imagpnm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagtiff.obj :  .AUTODEPEND ..\..\src\common\imagtiff.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_imagxpm.obj :  .AUTODEPEND ..\..\src\common\imagxpm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_layout.obj :  .AUTODEPEND ..\..\src\common\layout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_lboxcmn.obj :  .AUTODEPEND ..\..\src\common\lboxcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_nbkbase.obj :  .AUTODEPEND ..\..\src\common\nbkbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_popupcmn.obj :  .AUTODEPEND ..\..\src\common\popupcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_prntbase.obj :  .AUTODEPEND ..\..\src\common\prntbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_rendcmn.obj :  .AUTODEPEND ..\..\src\common\rendcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_rgncmn.obj :  .AUTODEPEND ..\..\src\common\rgncmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_stockitem.obj :  .AUTODEPEND ..\..\src\common\stockitem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_tbarbase.obj :  .AUTODEPEND ..\..\src\common\tbarbase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_textcmn.obj :  .AUTODEPEND ..\..\src\common\textcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_timercmn.obj :  .AUTODEPEND ..\..\src\common\timercmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_toplvcmn.obj :  .AUTODEPEND ..\..\src\common\toplvcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_treebase.obj :  .AUTODEPEND ..\..\src\common\treebase.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_valgen.obj :  .AUTODEPEND ..\..\src\common\valgen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_validate.obj :  .AUTODEPEND ..\..\src\common\validate.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_xpmdecod.obj :  .AUTODEPEND ..\..\src\common\xpmdecod.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_busyinfo.obj :  .AUTODEPEND ..\..\src\generic\busyinfo.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_choicdgg.obj :  .AUTODEPEND ..\..\src\generic\choicdgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_choicbkg.obj :  .AUTODEPEND ..\..\src\generic\choicbkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dirctrlg.obj :  .AUTODEPEND ..\..\src\generic\dirctrlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dragimgg.obj :  .AUTODEPEND ..\..\src\generic\dragimgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_listbkg.obj :  .AUTODEPEND ..\..\src\generic\listbkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_logg.obj :  .AUTODEPEND ..\..\src\generic\logg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_panelg.obj :  .AUTODEPEND ..\..\src\generic\panelg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_progdlgg.obj :  .AUTODEPEND ..\..\src\generic\progdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_printps.obj :  .AUTODEPEND ..\..\src\generic\printps.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_renderg.obj :  .AUTODEPEND ..\..\src\generic\renderg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_scrlwing.obj :  .AUTODEPEND ..\..\src\generic\scrlwing.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_selstore.obj :  .AUTODEPEND ..\..\src\generic\selstore.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_spinctlg.obj :  .AUTODEPEND ..\..\src\generic\spinctlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_tipwin.obj :  .AUTODEPEND ..\..\src\generic\tipwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_treectlg.obj :  .AUTODEPEND ..\..\src\generic\treectlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_treebkg.obj :  .AUTODEPEND ..\..\src\generic\treebkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
 $(OBJS)\advdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv_wat$(VENDORTAG) $<
 
 $(OBJS)\advdll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_datectlg.obj :  .AUTODEPEND ..\..\src\generic\datectlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_propdlg.obj :  .AUTODEPEND ..\..\src\generic\propdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advlib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datectlg.obj :  .AUTODEPEND ..\..\src\generic\datectlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_propdlg.obj :  .AUTODEPEND ..\..\src\generic\propdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_sound.obj :  .AUTODEPEND ..\..\src\msw\sound.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\mediadll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mediadll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media_wat$(VENDORTAG) $<
 
 $(OBJS)\mediadll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mediadll_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mediadll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\medialib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\medialib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\medialib_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\medialib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\odbcdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
 
 $(OBJS)\odbcdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc_wat$(VENDORTAG) $<
 
 $(OBJS)\odbcdll_db.obj :  .AUTODEPEND ..\..\src\common\db.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
 
 $(OBJS)\odbcdll_dbtable.obj :  .AUTODEPEND ..\..\src\common\dbtable.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
 
 $(OBJS)\odbclib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ODBCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ODBCLIB_CXXFLAGS) $<
 
 $(OBJS)\odbclib_db.obj :  .AUTODEPEND ..\..\src\common\db.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ODBCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ODBCLIB_CXXFLAGS) $<
 
 $(OBJS)\odbclib_dbtable.obj :  .AUTODEPEND ..\..\src\common\dbtable.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ODBCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(ODBCLIB_CXXFLAGS) $<
 
 $(OBJS)\dbgriddll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(DBGRIDDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(DBGRIDDLL_CXXFLAGS) $<
 
 $(OBJS)\dbgriddll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid_wat$(VENDORTAG) $<
 
 $(OBJS)\dbgriddll_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(DBGRIDDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(DBGRIDDLL_CXXFLAGS) $<
 
 $(OBJS)\dbgridlib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(DBGRIDLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(DBGRIDLIB_CXXFLAGS) $<
 
 $(OBJS)\dbgridlib_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(DBGRIDLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(DBGRIDLIB_CXXFLAGS) $<
 
 $(OBJS)\htmldll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html_wat$(VENDORTAG) $<
 
 $(OBJS)\htmldll_helpbest.obj :  .AUTODEPEND ..\..\src\msw\helpbest.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_helpctrl.obj :  .AUTODEPEND ..\..\src\html\helpctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_helpdata.obj :  .AUTODEPEND ..\..\src\html\helpdata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_helpfrm.obj :  .AUTODEPEND ..\..\src\html\helpfrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_htmlcell.obj :  .AUTODEPEND ..\..\src\html\htmlcell.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_htmlfilt.obj :  .AUTODEPEND ..\..\src\html\htmlfilt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_htmlpars.obj :  .AUTODEPEND ..\..\src\html\htmlpars.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_htmltag.obj :  .AUTODEPEND ..\..\src\html\htmltag.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_htmlwin.obj :  .AUTODEPEND ..\..\src\html\htmlwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_htmprint.obj :  .AUTODEPEND ..\..\src\html\htmprint.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_dflist.obj :  .AUTODEPEND ..\..\src\html\m_dflist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_fonts.obj :  .AUTODEPEND ..\..\src\html\m_fonts.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_hline.obj :  .AUTODEPEND ..\..\src\html\m_hline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_image.obj :  .AUTODEPEND ..\..\src\html\m_image.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_layout.obj :  .AUTODEPEND ..\..\src\html\m_layout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_links.obj :  .AUTODEPEND ..\..\src\html\m_links.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_list.obj :  .AUTODEPEND ..\..\src\html\m_list.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_pre.obj :  .AUTODEPEND ..\..\src\html\m_pre.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_style.obj :  .AUTODEPEND ..\..\src\html\m_style.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_tables.obj :  .AUTODEPEND ..\..\src\html\m_tables.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_htmllbox.obj :  .AUTODEPEND ..\..\src\generic\htmllbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmllib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_helpbest.obj :  .AUTODEPEND ..\..\src\msw\helpbest.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_helpctrl.obj :  .AUTODEPEND ..\..\src\html\helpctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_helpdata.obj :  .AUTODEPEND ..\..\src\html\helpdata.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_helpfrm.obj :  .AUTODEPEND ..\..\src\html\helpfrm.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_htmlcell.obj :  .AUTODEPEND ..\..\src\html\htmlcell.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_htmlfilt.obj :  .AUTODEPEND ..\..\src\html\htmlfilt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_htmlpars.obj :  .AUTODEPEND ..\..\src\html\htmlpars.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_htmltag.obj :  .AUTODEPEND ..\..\src\html\htmltag.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_htmlwin.obj :  .AUTODEPEND ..\..\src\html\htmlwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_htmprint.obj :  .AUTODEPEND ..\..\src\html\htmprint.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_dflist.obj :  .AUTODEPEND ..\..\src\html\m_dflist.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_fonts.obj :  .AUTODEPEND ..\..\src\html\m_fonts.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_hline.obj :  .AUTODEPEND ..\..\src\html\m_hline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_image.obj :  .AUTODEPEND ..\..\src\html\m_image.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_layout.obj :  .AUTODEPEND ..\..\src\html\m_layout.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_links.obj :  .AUTODEPEND ..\..\src\html\m_links.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_list.obj :  .AUTODEPEND ..\..\src\html\m_list.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_pre.obj :  .AUTODEPEND ..\..\src\html\m_pre.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_style.obj :  .AUTODEPEND ..\..\src\html\m_style.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_tables.obj :  .AUTODEPEND ..\..\src\html\m_tables.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_htmllbox.obj :  .AUTODEPEND ..\..\src\generic\htmllbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\qadll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(QADLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(QADLL_CXXFLAGS) $<
 
 $(OBJS)\qadll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa_wat$(VENDORTAG) $<
 
 $(OBJS)\qadll_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(QADLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(QADLL_CXXFLAGS) $<
 
 $(OBJS)\qadll_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(QADLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(QADLL_CXXFLAGS) $<
 
 $(OBJS)\qalib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(QALIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(QALIB_CXXFLAGS) $<
 
 $(OBJS)\qalib_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(QALIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(QALIB_CXXFLAGS) $<
 
 $(OBJS)\qalib_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(QALIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(QALIB_CXXFLAGS) $<
 
 $(OBJS)\xmldll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
 
 $(OBJS)\xmldll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml_wat$(VENDORTAG) $<
 
 $(OBJS)\xmldll_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
 
 $(OBJS)\xmldll_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XMLDLL_CXXFLAGS) $<
 
 $(OBJS)\xmllib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XMLLIB_CXXFLAGS) $<
 
 $(OBJS)\xmllib_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XMLLIB_CXXFLAGS) $<
 
 $(OBJS)\xmllib_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XMLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XMLLIB_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc_wat$(VENDORTAG) $<
 
 $(OBJS)\xrcdll_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_bttn.obj :  .AUTODEPEND ..\..\src\xrc\xh_bttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_cald.obj :  .AUTODEPEND ..\..\src\xrc\xh_cald.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_chckb.obj :  .AUTODEPEND ..\..\src\xrc\xh_chckb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_chckl.obj :  .AUTODEPEND ..\..\src\xrc\xh_chckl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_choic.obj :  .AUTODEPEND ..\..\src\xrc\xh_choic.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_choicbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_choicbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_combo.obj :  .AUTODEPEND ..\..\src\xrc\xh_combo.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_datectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_datectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_gauge.obj :  .AUTODEPEND ..\..\src\xrc\xh_gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_gdctl.obj :  .AUTODEPEND ..\..\src\xrc\xh_gdctl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_html.obj :  .AUTODEPEND ..\..\src\xrc\xh_html.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_listb.obj :  .AUTODEPEND ..\..\src\xrc\xh_listb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_listbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_listbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_listc.obj :  .AUTODEPEND ..\..\src\xrc\xh_listc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_notbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_notbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_panel.obj :  .AUTODEPEND ..\..\src\xrc\xh_panel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_radbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_radbx.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_slidr.obj :  .AUTODEPEND ..\..\src\xrc\xh_slidr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_spin.obj :  .AUTODEPEND ..\..\src\xrc\xh_spin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_split.obj :  .AUTODEPEND ..\..\src\xrc\xh_split.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_statbar.obj :  .AUTODEPEND ..\..\src\xrc\xh_statbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_stbmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_stbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_stbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_stbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_stlin.obj :  .AUTODEPEND ..\..\src\xrc\xh_stlin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_sttxt.obj :  .AUTODEPEND ..\..\src\xrc\xh_sttxt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_text.obj :  .AUTODEPEND ..\..\src\xrc\xh_text.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_treebk.obj :  .AUTODEPEND ..\..\src\xrc\xh_treebk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_unkwn.obj :  .AUTODEPEND ..\..\src\xrc\xh_unkwn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_wizrd.obj :  .AUTODEPEND ..\..\src\xrc\xh_wizrd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xmlres.obj :  .AUTODEPEND ..\..\src\xrc\xmlres.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xmlrsall.obj :  .AUTODEPEND ..\..\src\xrc\xmlrsall.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
-
-$(OBJS)\xrcdll_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
-
-$(OBJS)\xrcdll_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrclib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_bmpbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmpbt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_bttn.obj :  .AUTODEPEND ..\..\src\xrc\xh_bttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_cald.obj :  .AUTODEPEND ..\..\src\xrc\xh_cald.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_chckb.obj :  .AUTODEPEND ..\..\src\xrc\xh_chckb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_chckl.obj :  .AUTODEPEND ..\..\src\xrc\xh_chckl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_choic.obj :  .AUTODEPEND ..\..\src\xrc\xh_choic.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_choicbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_choicbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_combo.obj :  .AUTODEPEND ..\..\src\xrc\xh_combo.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_datectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_datectrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_gauge.obj :  .AUTODEPEND ..\..\src\xrc\xh_gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_gdctl.obj :  .AUTODEPEND ..\..\src\xrc\xh_gdctl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_html.obj :  .AUTODEPEND ..\..\src\xrc\xh_html.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_listb.obj :  .AUTODEPEND ..\..\src\xrc\xh_listb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_listbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_listbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_listc.obj :  .AUTODEPEND ..\..\src\xrc\xh_listc.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_notbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_notbk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_panel.obj :  .AUTODEPEND ..\..\src\xrc\xh_panel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_radbt.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_radbx.obj :  .AUTODEPEND ..\..\src\xrc\xh_radbx.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_scrol.obj :  .AUTODEPEND ..\..\src\xrc\xh_scrol.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_slidr.obj :  .AUTODEPEND ..\..\src\xrc\xh_slidr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_spin.obj :  .AUTODEPEND ..\..\src\xrc\xh_spin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_split.obj :  .AUTODEPEND ..\..\src\xrc\xh_split.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_statbar.obj :  .AUTODEPEND ..\..\src\xrc\xh_statbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_stbmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_stbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_stbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_stbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_stlin.obj :  .AUTODEPEND ..\..\src\xrc\xh_stlin.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_sttxt.obj :  .AUTODEPEND ..\..\src\xrc\xh_sttxt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_text.obj :  .AUTODEPEND ..\..\src\xrc\xh_text.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_tree.obj :  .AUTODEPEND ..\..\src\xrc\xh_tree.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_treebk.obj :  .AUTODEPEND ..\..\src\xrc\xh_treebk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_unkwn.obj :  .AUTODEPEND ..\..\src\xrc\xh_unkwn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_wizrd.obj :  .AUTODEPEND ..\..\src\xrc\xh_wizrd.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xmlres.obj :  .AUTODEPEND ..\..\src\xrc\xmlres.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xmlrsall.obj :  .AUTODEPEND ..\..\src\xrc\xmlrsall.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
-
-$(OBJS)\xrclib_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
-
-$(OBJS)\xrclib_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\gldll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(GLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(GLDLL_CXXFLAGS) $<
 
 $(OBJS)\gldll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl_wat$(VENDORTAG) $<
 
 $(OBJS)\gldll_glcanvas.obj :  .AUTODEPEND ..\..\src\msw\glcanvas.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(GLDLL_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(GLDLL_CXXFLAGS) $<
 
 $(OBJS)\gllib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(GLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(GLLIB_CXXFLAGS) $<
 
 $(OBJS)\gllib_glcanvas.obj :  .AUTODEPEND ..\..\src\msw\glcanvas.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(GLLIB_CXXFLAGS) $<
+	$(CXX) -zq -fo=$^@ $(GLLIB_CXXFLAGS) $<
 

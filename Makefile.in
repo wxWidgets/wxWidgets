@@ -1271,7 +1271,6 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_treebk.o \
 	xrcdll_xh_unkwn.o \
 	xrcdll_xh_wizrd.o \
-	xrcdll_xh_grid.o \
 	xrcdll_xmlres.o \
 	xrcdll_xmlrsall.o
 XRCDLL_ODEP =  $(___pch_wxprec_xrcdll_wx_wxprec_h_gch___depname)
@@ -1323,7 +1322,6 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_treebk.o \
 	xrclib_xh_unkwn.o \
 	xrclib_xh_wizrd.o \
-	xrclib_xh_grid.o \
 	xrclib_xmlres.o \
 	xrclib_xmlrsall.o
 XRCLIB_ODEP =  $(___pch_wxprec_xrclib_wx_wxprec_h_gch___depname)
@@ -2749,7 +2747,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_treebk.h \
 	wx/xrc/xh_unkwn.h \
 	wx/xrc/xh_wizrd.h \
-	wx/xrc/xh_grid.h \
 	wx/xrc/xmlres.h
 @COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)
 COND_MONOLITHIC_1_SHARED_1___monodll___depname = \
@@ -3027,7 +3024,6 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_treebk.o \
 	monodll_xh_unkwn.o \
 	monodll_xh_wizrd.o \
-	monodll_xh_grid.o \
 	monodll_xmlres.o \
 	monodll_xmlrsall.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS)
@@ -4507,7 +4503,6 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_treebk.o \
 	monolib_xh_unkwn.o \
 	monolib_xh_wizrd.o \
-	monolib_xh_grid.o \
 	monolib_xmlres.o \
 	monolib_xmlrsall.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS_1 = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1)
@@ -10978,6 +10973,9 @@ monodll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONODLL_ODEP)
 monodll_xh_gdctl.o: $(srcdir)/src/xrc/xh_gdctl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_gdctl.cpp
 
+monodll_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
+
 monodll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_html.cpp
 
@@ -13888,9 +13886,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
-@COND_USE_GUI_1@monodll_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
-
 monolib_appbase.o: $(srcdir)/src/common/appbase.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/appbase.cpp
 
@@ -14466,6 +14461,9 @@ monolib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONOLIB_ODEP)
 
 monolib_xh_gdctl.o: $(srcdir)/src/xrc/xh_gdctl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_gdctl.cpp
+
+monolib_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
 
 monolib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_html.cpp
@@ -17376,9 +17374,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
-@COND_USE_GUI_1@monolib_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
 
 basedll_version_rc.o: $(srcdir)/src/msw/version.rc $(BASEDLL_ODEP)
 	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_49)  $(__EXCEPTIONS_DEFINE_p_49) $(__RTTI_DEFINE_p_49) $(__THREAD_DEFINE_p_49)   --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
@@ -24232,6 +24227,9 @@ xrcdll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCDLL_ODEP)
 xrcdll_xh_gdctl.o: $(srcdir)/src/xrc/xh_gdctl.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_gdctl.cpp
 
+xrcdll_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
+
 xrcdll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_html.cpp
 
@@ -24319,12 +24317,6 @@ xrcdll_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(XRCDLL_ODEP)
 xrcdll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
 
-xrcdll_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(XRCDLL_ODEP)
-	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
-
-xrcdll_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(XRCDLL_ODEP)
-	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
-
 xrclib_xh_bmpbt.o: $(srcdir)/src/xrc/xh_bmpbt.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmpbt.cpp
 
@@ -24369,6 +24361,9 @@ xrclib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_gdctl.o: $(srcdir)/src/xrc/xh_gdctl.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_gdctl.cpp
+
+xrclib_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
 
 xrclib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_html.cpp
@@ -24456,12 +24451,6 @@ xrclib_xmlres.o: $(srcdir)/src/xrc/xmlres.cpp $(XRCLIB_ODEP)
 
 xrclib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
-
-xrclib_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(XRCLIB_ODEP)
-	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
-
-xrclib_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(XRCLIB_ODEP)
-	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_grid.cpp
 
 gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
 	$(RESCOMP) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_49)  $(__EXCEPTIONS_DEFINE_p_49) $(__RTTI_DEFINE_p_49) $(__THREAD_DEFINE_p_49)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
