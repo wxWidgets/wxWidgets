@@ -1839,22 +1839,12 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 
         // vsnprintf() may return either -1 (traditional Unix behaviour) or the
         // total number of characters which would have been written if the
-        // buffer were large enough
+        // buffer were large enough (newer standards such as Unix98)
         if ( len >= 0 && len <= size )
         {
             // ok, there was enough space
             break;
         }
-
-#ifdef EOVERFLOW
-        // if the error is not due to not having enough space (it could be e.g.
-        // EILSEQ), break too -- we'd just eat all available memory uselessly
-        if ( errno != EOVERFLOW )
-        {
-            // no sense in continuing
-            break;
-        }
-#endif // EOVERFLOW
 
         // still not enough, double it again
         size *= 2;
