@@ -457,7 +457,39 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
     }
     else if ( id != 0 && command.menu.menuRef != 0 && command.menu.menuItemIndex != 0 )
     {
-        GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , (UInt32*) &item ) ;
+        // make sure it is one of our own menus, or of the 'synthetic' apple and help menus , otherwise don't touch
+        MenuItemIndex firstUserHelpMenuItem ;
+        static MenuHandle mh = NULL ;
+        if ( mh == NULL )
+        {
+            if ( UMAGetHelpMenu( &mh , &firstUserHelpMenuItem) != noErr )
+            {
+                mh = NULL ;
+            }
+        }
+        
+        // is it part of the application or the help menu, then look for the id directly
+        if ( ( GetMenuHandle( kwxMacAppleMenuId ) != NULL && command.menu.menuRef == GetMenuHandle( kwxMacAppleMenuId ) ) ||
+             ( mh != NULL && command.menu.menuRef == mh ) )
+        {
+            wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+            if ( mbar )
+            {
+                wxMenu* menu = NULL ;
+                item = mbar->FindItem( id , &menu ) ;
+            }
+        }
+        else
+        {
+            wxMenu* itsMenu = NULL ;
+            UInt32 refCon ;
+            GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , &refCon ) ;
+            itsMenu = wxFindMenuFromMacMenu( command.menu.menuRef ) ;
+            if ( itsMenu != NULL )
+            {
+                item = (wxMenuItem*) refCon ;
+            }
+        }
     }
 
     if ( item )
