@@ -3921,9 +3921,6 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
         WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
     fi
 
-    dnl this one for deprecated --rezflags.
-    WXCONFIG_POSTLINK_COMMAND="$RESCOMP $WXCONFIG_RESFLAGS -o"
-
 else
     dnl default value is to (silently) do nothing in the makefile
     MACSETFILE="@true"
@@ -3938,8 +3935,6 @@ else
         POSTLINK_COMMAND="@true"
     fi
 
-    dnl this one for deprecated --rezflags.
-    WXCONFIG_POSTLINK_COMMAND="$POSTLINK_COMMAND"
 fi
 
 
@@ -7327,7 +7322,6 @@ AC_SUBST(DEREZ)
 AC_SUBST(LIBWXMACRES)
 AC_SUBST(POSTLINK_COMMAND)
 AC_SUBST(MACSETFILE)
-AC_SUBST(WXCONFIG_POSTLINK_COMMAND)
 
 dnl other tools
 AC_SUBST(GCC)

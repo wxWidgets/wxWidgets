@@ -886,8 +886,14 @@ bindir="@bindir@"
 [ -z "$output_option_ld"            ] || echo "@EXE_LINKER@"
 [ -z "$flag_option_selected_config" ] || echo "$this_config"
 
-# --rezflags is deprecated (2005/11/29)
-[ -z "$output_option_rezflags"      ] || echo "@WXCONFIG_POSTLINK_COMMAND@"
+
+# --rezflags is deprecated and disabled (2005/11/29)
+if [ -n "$output_option_rezflags" ]; then
+    echo "@true"
+    decho "Warning: --rezflags, along with Mac OS classic resource building" \
+          "is deprecated.  You should remove this from your Makefile and" \
+	  "build .app bundles instead."
+fi
 
 
 # The rest are going to need a little more work.
@@ -1168,10 +1174,23 @@ if [ -n "$output_option_libs" ]; then
 fi
 
 
-# Here you will find all the machine or tool specific workarounds that
-# require knowlege not obtainable prior to passing this comment.
+# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#
+# Beyond here reside only machine or tool specific workarounds
+# that require knowlege not obtainable prior to this comment.
+#
+# Please.  Avoid addding things here, wx-config should avoid
+# hard coding tool specific details.  Do not use things here
+# as an example of other things that should be here,  These
+# shouldn't be here either.  This is a place of last resort
+# for interim workarounds.  I can but stress as strongly as
+# the censor will allow, there are only bad examples of things
+# that belong at this level of abstraction to follow.  It is
+# a limbo for glitches awaiting the Next Design Repair.  Ok.
+#
+# With that firmly in mind, our debut dilemma is:
 
-# Resource compilers.  A term that covers some pretty
+# Resource compilers.  An elusive term that covers some pretty
 # dissimilar concepts on various platforms.  The good news is,
 # each platform has only one definition of 'resource', compiled
 # or not, and so we can abstract that neatly to return a platform
@@ -1215,6 +1234,8 @@ if [ -n "$output_option_rescomp" ]; then
 
 fi
 
+#
+# xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 # And so that's it, we're done.  Have a nice build.
 
