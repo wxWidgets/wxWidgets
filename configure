@@ -1740,7 +1740,7 @@ case "${host}" in
 _ACEOF
 
 
-            CPPFLAGS="$CPPFLAGS -D_HPUX_SOURCE"
+            CPPFLAGS="-D_HPUX_SOURCE $CPPFLAGS"
   ;;
   *-*-linux* )
     USE_LINUX=1
@@ -14737,7 +14737,7 @@ test -n "$LNDIR" || LNDIR="cp -pR"
 
 
 if test "x$XLCXX" = "xyes" -a "x$USE_AIX" = "x1"; then
-    CXXFLAGS="$CXXFLAGS -qunique"
+    CXXFLAGS="-qunique $CXXFLAGS"
 fi
 
 case "${host}" in
@@ -14892,7 +14892,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-                        CPPFLAGS="$CPPFLAGS -D__CF_USE_FRAMEWORK_INCLUDES__"
+                        CPPFLAGS="-D__CF_USE_FRAMEWORK_INCLUDES__ $CPPFLAGS"
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
@@ -19956,7 +19956,7 @@ _ACEOF
 
 
         if test "$ac_cv_sizeof_long_long" != "0"; then
-                        CPPFLAGS="$CPPFLAGS -D_INCLUDE_LONGLONG"
+                        CPPFLAGS="-D_INCLUDE_LONGLONG $CPPFLAGS"
         fi
     ;;
     * )
@@ -22486,25 +22486,25 @@ fi
 
 
 if test "x$SUNCXX" = xyes; then
-    CXXFLAGS="$CXXFLAGS -features=tmplife"
+    CXXFLAGS="-features=tmplife $CXXFLAGS"
 fi
 
 if test "x$SUNCC" = xyes; then
-    CFLAGS="$CFLAGS -erroff=E_NO_EXPLICIT_TYPE_GIVEN"
+    CFLAGS="-erroff=E_NO_EXPLICIT_TYPE_GIVEN $CFLAGS"
 fi
 
 if test "x$SGICC" = "xyes"; then
-    CFLAGS="$CFLAGS -woff 3970"
+    CFLAGS="-woff 3970 $CFLAGS"
 fi
 if test "x$SGICXX" = "xyes"; then
-    CXXFLAGS="$CXXFLAGS -woff 3970"
+    CXXFLAGS="-woff 3970 $CXXFLAGS"
 fi
 
 if test "x$HPCC" = "xyes"; then
-                    CFLAGS="$CFLAGS +W 2011,2450"
+                    CFLAGS="+W 2011,2450 $CFLAGS"
 fi
 if test "x$HPCXX" = "xyes"; then
-            CXXFLAGS="$CXXFLAGS +W 2340"
+            CXXFLAGS="+W 2340 $CXXFLAGS"
 fi
 
 if test "x$COMPAQCXX" = "xyes"; then
@@ -26916,7 +26916,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         if test "$WXGTK20" = 1; then
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
-            CFLAGS="$CFLAGS $wx_cv_cflags_gtk"
+            CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
                                                             echo "$as_me:$LINENO: checking if gtk_icon_size_lookup is missing" >&5
@@ -28895,7 +28895,7 @@ echo "${ECHO_T}$PANGOX_LIBS" >&6
 
   if test $succeeded = yes; then
 
-                        CXXFLAGS="$CXXFLAGS $PANGOX_CFLAGS"
+                        CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
 
   else
@@ -28999,7 +28999,7 @@ echo "${ECHO_T}$PANGOFT2_LIBS" >&6
 
   if test $succeeded = yes; then
 
-                        CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
+                        CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
 
   else
@@ -29107,7 +29107,7 @@ echo "${ECHO_T}$PANGOXFT_LIBS" >&6
 #define HAVE_PANGO_XFT 1
 _ACEOF
 
-                        CXXFLAGS="$CXXFLAGS $PANGOXFT_CFLAGS"
+                        CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
 
   else
@@ -29120,7 +29120,7 @@ echo "$as_me: WARNING: pangoxft library not found, library will be compiled with
 
                 save_CFLAGS="$CFLAGS"
                 save_LIBS="$LIBS"
-                CFLAGS="$CFLAGS $PANGOX_CFLAGS"
+                CFLAGS="$PANGOX_CFLAGS $CFLAGS"
                 LIBS="$LIBS $PANGOX_LIBS"
 
 for ac_func in pango_font_family_is_monospace
@@ -29279,7 +29279,7 @@ echo "${ECHO_T}found in $ac_find_includes" >&6
             TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
         else
             save_CFLAGS=$CFLAGS
-            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
             cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -29381,7 +29381,7 @@ echo "${ECHO_T}found in $ac_find_libraries" >&6
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
         else
                                                 save_CFLAGS=$CFLAGS
-            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
             save_LIBS="$LIBS"
             LIBS="$GUI_TK_LIBRARY -lXm -lXmu -lXext -lX11"
 
@@ -29463,7 +29463,7 @@ echo $ECHO_N "checking if we need -lXp and/or -lSM -lICE... $ECHO_C" >&6
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
-                        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
                         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -29610,7 +29610,7 @@ fi
 
 
         save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
         echo "$as_me:$LINENO: checking for Motif 2" >&5
 echo $ECHO_N "checking for Motif 2... $ECHO_C" >&6
@@ -29801,7 +29801,7 @@ if test "${wx_cv_x11_xpm_h+set}" = set; then
 else
 
                         save_CFLAGS=$CFLAGS
-                        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
                         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -29948,7 +29948,7 @@ fi
 
         if test "$wxHAVE_XEXT_LIB" = 1; then
             save_CFLAGS="$CFLAGS"
-            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
             echo "$as_me:$LINENO: checking for X11/extensions/shape.h" >&5
 echo $ECHO_N "checking for X11/extensions/shape.h... $ECHO_C" >&6
@@ -30035,9 +30035,9 @@ echo "${ECHO_T}none" >&6
         fi
 
         if test "x$wxUSE_UNIX" = "xyes"; then
-            CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -I/Developer/Headers/FlatCarbon"
+            CPPFLAGS="$CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -I/Developer/Headers/FlatCarbon $CPPFLAGS"
         else
-                        CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -DTARGET_CARBON"
+                        CPPFLAGS="$CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -DTARGET_CARBON $CPPFLAGS"
         fi
 
         TOOLKIT=MAC
@@ -30999,7 +30999,7 @@ echo "${ECHO_T}found in $ac_find_includes" >&6
     fi
   fi
 
-            CPPFLAGS="$CPPFLAGS$ac_path_to_include"
+            CPPFLAGS="$ac_path_to_include $CPPFLAGS"
         fi
 
         if test "${ac_cv_header_GL_gl_h+set}" = set; then
@@ -31396,7 +31396,7 @@ echo "${ECHO_T}$wx_cv_version_script" >&6
 
       *-*-solaris2* )
         if test "$GCC" = yes ; then
-                                    CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
+                                    CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
 
                                     saveLdflags="$LDFLAGS"
             LDFLAGS="$saveLdflags -Wl,-rpath,/"
@@ -32734,7 +32734,7 @@ _ACEOF
     fi
 
                     if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
-        CPPFLAGS="$CPPFLAGS -D_INCLUDE__STDC_A1_SOURCE "
+        CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
     fi
 
                 echo "$as_me:$LINENO: checking for mbstate_t" >&5
@@ -37944,7 +37944,7 @@ if test "${wx_cv_cflags_mthread+set}" = set; then
 else
 
                     CFLAGS_OLD="$CFLAGS"
-                    CFLAGS="$CFLAGS -mthreads"
+                    CFLAGS="-mthreads $CFLAGS"
                     cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -39281,7 +39281,7 @@ _ACEOF
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D__WXDEBUG__"
 else
     if test "$wxUSE_GTK" = 1 ; then
-        CPPFLAGS="$CPPFLAGS -DGTK_NO_CHECK_CASTS"
+        CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
     fi
 fi
 
@@ -40350,7 +40350,7 @@ fi
 echo "${ECHO_T}yes" >&6
 
                     EXTRALIBS_SDL="$SDL_LIBS"
-                    CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+                    CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_LIBSDL 1
 _ACEOF
@@ -40558,7 +40558,7 @@ echo "${ECHO_T}$LIBGNOMEPRINTUI_LIBS" >&6
 
   if test $succeeded = yes; then
 
-                        CXXFLAGS="$CXXFLAGS $LIBGNOMEPRINTUI_CFLAGS"
+                        CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
                         cat >>confdefs.h <<\_ACEOF
 #define wxUSE_LIBGNOMEPRINT 1
 _ACEOF
@@ -41861,7 +41861,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
                                                                                                                                                                         CXXFLAGS_OLD="$CXXFLAGS"
                         if test "$GCC" = yes ; then
-                            CXXFLAGS="$CXXFLAGS -Werror"
+                            CXXFLAGS="-Werror $CXXFLAGS"
                         fi
 
                         cat >conftest.$ac_ext <<_ACEOF
@@ -42042,7 +42042,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
                                                                                                                                                                         CXXFLAGS_OLD="$CXXFLAGS"
                         if test "$GCC" = yes ; then
-                            CXXFLAGS="$CXXFLAGS -Werror"
+                            CXXFLAGS="-Werror $CXXFLAGS"
                         fi
 
                         cat >conftest.$ac_ext <<_ACEOF
@@ -43553,7 +43553,7 @@ fi
 if test "$wxUSE_WEBKIT" = "yes"; then
     if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
         old_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="$CPPFLAGS -x objective-c++"
+        CPPFLAGS="-x objective-c++ $CPPFLAGS"
         echo "$as_me:$LINENO: checking for WebKit/HIWebView.h" >&5
 echo $ECHO_N "checking for WebKit/HIWebView.h... $ECHO_C" >&6
 if test "${ac_cv_header_WebKit_HIWebView_h+set}" = set; then
@@ -43972,7 +43972,7 @@ echo "${ECHO_T}$GSTREAMER_LIBS" >&6
 
   if test $succeeded = yes; then
 
-            CPPFLAGS="$CPPFLAGS $GSTREAMER_CFLAGS"
+            CPPFLAGS="$GSTREAMER_CFLAGS $CPPFLAGS"
             LIBS="$LIBS $GSTREAMER_LIBS -lgstplay-0.8"
 
   else
@@ -44700,13 +44700,14 @@ WXCONFIG_CFLAGS=`echo $WXCONFIG_CFLAGS`
 WXCONFIG_CXXFLAGS=`echo $WXCONFIG_CFLAGS $WXCONFIG_CXXFLAGS`
 
 
-CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $CPPFLAGS \
+CPPFLAGS=`echo $WXCONFIG_CPPFLAGS \
  -I\\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
- -I\\${top_srcdir}/include $TOOLKIT_INCLUDE`
+ -I\\${top_srcdir}/include $TOOLKIT_INCLUDE \
+ $CPPFLAGS `
 
 C_AND_CXX_FLAGS="$DEBUG_CFLAGS $PROFILE_FLAGS $OPTIMISE_CFLAGS"
-CFLAGS=`echo $WXCONFIG_CFLAGS $CFLAGS $CWARNINGS $C_AND_CXX_FLAGS`
-CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $CXXFLAGS $C_AND_CXX_FLAGS`
+CFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $CFLAGS `
+CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $CXXFLAGS `
 
 WXCONFIG_CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $WXCONFIG_ONLY_CPPFLAGS`
 

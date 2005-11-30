@@ -137,7 +137,7 @@ case "${host}" in
 
     dnl many standard declarations in HP-UX headers are only included if either
     dnl _HPUX_SOURCE is defined, see stdsyms(5)
-    CPPFLAGS="$CPPFLAGS -D_HPUX_SOURCE"
+    CPPFLAGS="-D_HPUX_SOURCE $CPPFLAGS"
   ;;
   *-*-linux* )
     USE_LINUX=1
@@ -1536,7 +1536,7 @@ dnl ------------------------------------------------------------------------
 dnl xlC needs -qunique under AIX so that one source file can be
 dnl compiled to multiple object files and safely linked together.
 if test "x$XLCXX" = "xyes" -a "x$USE_AIX" = "x1"; then
-    CXXFLAGS="$CXXFLAGS -qunique"
+    CXXFLAGS="-qunique $CXXFLAGS"
 fi
 
 dnl This case is for PowerPC OS X vs. everything else
@@ -1569,7 +1569,7 @@ case "${host}" in
         [AC_MSG_RESULT([yes])
         dnl We must use -D so source files that don't include wx/setup.h
         dnl but do include CFBase will work.
-        CPPFLAGS="$CPPFLAGS -D__CF_USE_FRAMEWORK_INCLUDES__"],
+        CPPFLAGS="-D__CF_USE_FRAMEWORK_INCLUDES__ $CPPFLAGS"],
         [AC_MSG_FAILURE([no.  CoreFoundation not available.])]
         )
         ]
@@ -1764,7 +1764,7 @@ case "${host}" in
         AC_CHECK_SIZEOF(long long, 0)
         if test "$ac_cv_sizeof_long_long" != "0"; then
             dnl HPUX 10.20 headers need this define in order to use long long definitions
-            CPPFLAGS="$CPPFLAGS -D_INCLUDE_LONGLONG"
+            CPPFLAGS="-D_INCLUDE_LONGLONG $CPPFLAGS"
         fi
     ;;
     * )
@@ -1935,7 +1935,7 @@ dnl AC_CXX_DYNAMIC_CAST
 dnl With Sun CC, temporaries have block scope by default. This flag is needed
 dnl to get the expression scope behaviour that conforms to the standard.
 if test "x$SUNCXX" = xyes; then
-    CXXFLAGS="$CXXFLAGS -features=tmplife"
+    CXXFLAGS="-features=tmplife $CXXFLAGS"
 fi
 
 dnl Sun X11 headers are (still, in 2005!) non-ANSI and the best they could do
@@ -1943,7 +1943,7 @@ dnl was to hack their C++ compiler to accept them silently -- but C compiler
 dnl still spits out dozens of warnings for each X include file, so suppress
 dnl them
 if test "x$SUNCC" = xyes; then
-    CFLAGS="$CFLAGS -erroff=E_NO_EXPLICIT_TYPE_GIVEN"
+    CFLAGS="-erroff=E_NO_EXPLICIT_TYPE_GIVEN $CFLAGS"
 fi
 
 dnl SGI mipsPro compiler gives this warning for "conversion from pointer to
@@ -1954,10 +1954,10 @@ dnl
 dnl a better long term solution would be to use #pragma set/reset woff in
 dnl wxPtrToUInt() and use it instead of casts elsewhere
 if test "x$SGICC" = "xyes"; then
-    CFLAGS="$CFLAGS -woff 3970"
+    CFLAGS="-woff 3970 $CFLAGS"
 fi
 if test "x$SGICXX" = "xyes"; then
-    CXXFLAGS="$CXXFLAGS -woff 3970"
+    CXXFLAGS="-woff 3970 $CXXFLAGS"
 fi
 
 dnl HP-UX c89/aCC compiler warnings
@@ -1966,12 +1966,12 @@ if test "x$HPCC" = "xyes"; then
     dnl       even for directives inside #if which is not true (i.e. which are
     dnl       used for other compilers/OS) and so we have no way to get rid of it
     dnl 2450: "long long is non standard" -- yes, we know
-    CFLAGS="$CFLAGS +W 2011,2450"
+    CFLAGS="+W 2011,2450 $CFLAGS"
 fi
 if test "x$HPCXX" = "xyes"; then
     dnl 2340: "value copied to temporary, reference to temporary used": very
     dnl       painful as triggered by any occurrence of user-defined conversion
-    CXXFLAGS="$CXXFLAGS +W 2340"
+    CXXFLAGS="+W 2340 $CXXFLAGS"
 fi
 
 dnl DEC/Compaq/HP cxx warnings
@@ -2875,7 +2875,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         if test "$WXGTK20" = 1; then
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
-            CFLAGS="$CFLAGS $wx_cv_cflags_gtk"
+            CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
             dnl gtk_icon_size_lookup is not available in the GTK+ headers
@@ -3099,7 +3099,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         if test "$wxUSE_UNICODE" = "yes"; then
                 PKG_CHECK_MODULES(PANGOX, pangox,
                     [
-                        CXXFLAGS="$CXXFLAGS $PANGOX_CFLAGS"
+                        CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
                     ],
                     [
@@ -3108,7 +3108,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 )
                 PKG_CHECK_MODULES(PANGOFT2, pangoft2,
                     [
-                        CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
+                        CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
                     ],
                     [
@@ -3119,7 +3119,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 PKG_CHECK_MODULES(PANGOXFT, pangoxft,
                     [
                         AC_DEFINE(HAVE_PANGO_XFT)
-                        CXXFLAGS="$CXXFLAGS $PANGOXFT_CFLAGS"
+                        CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
                     ],
                     [
@@ -3128,7 +3128,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 )
                 save_CFLAGS="$CFLAGS"
                 save_LIBS="$LIBS"
-                CFLAGS="$CFLAGS $PANGOX_CFLAGS"
+                CFLAGS="$PANGOX_CFLAGS $CFLAGS"
                 LIBS="$LIBS $PANGOX_LIBS"
                 AC_CHECK_FUNCS([pango_font_family_is_monospace])
                 CFLAGS="$save_CFLAGS"
@@ -3162,7 +3162,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
         else
             save_CFLAGS=$CFLAGS
-            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
             AC_TRY_COMPILE(
                 [
@@ -3199,7 +3199,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl paths but the libs are elsewhere but still in default (linker)
             dnl path -- try to compile a test program to check for this
             save_CFLAGS=$CFLAGS
-            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
             save_LIBS="$LIBS"
             LIBS="$GUI_TK_LIBRARY -lXm -lXmu -lXext -lX11"
 
@@ -3236,7 +3236,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
-                        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
                         AC_TRY_LINK(
                             [
@@ -3275,7 +3275,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         AC_CHECK_LIB(Sgm, [SgCreateList], [libsgm_link=" -lSgm"])
 
         save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
         AC_CACHE_CHECK([for Motif 2],
             wx_cv_lib_motif2,
@@ -3336,7 +3336,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     wx_cv_x11_xpm_h,
                     [
                         save_CFLAGS=$CFLAGS
-                        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
                         AC_TRY_COMPILE(
                             [
@@ -3374,7 +3374,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         if test "$wxHAVE_XEXT_LIB" = 1; then
             save_CFLAGS="$CFLAGS"
-            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
             AC_MSG_CHECKING([for X11/extensions/shape.h])
             AC_TRY_COMPILE([
@@ -3411,10 +3411,10 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         fi
 
         if test "x$wxUSE_UNIX" = "xyes"; then
-            CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -I/Developer/Headers/FlatCarbon"
+            CPPFLAGS="$CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -I/Developer/Headers/FlatCarbon $CPPFLAGS"
         else
             dnl platform.h needs TARGET_CARBON before setup.h
-            CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -DTARGET_CARBON"
+            CPPFLAGS="$CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -DTARGET_CARBON $CPPFLAGS"
         fi
 
         TOOLKIT=MAC
@@ -3632,7 +3632,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
         if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found in $ac_find_includes)
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
-            CPPFLAGS="$CPPFLAGS$ac_path_to_include"
+            CPPFLAGS="$ac_path_to_include $CPPFLAGS"
         fi
 
         AC_CHECK_HEADER(GL/gl.h,
@@ -3735,7 +3735,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         if test "$GCC" = yes ; then
             dnl newer versions of gcc need -isystem to compile X headers on
             dnl Solaris (which use old style C syntax)
-            CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
+            CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
 
             dnl gcc may use Sun's ld, in which case -rpath gives a confusing
             dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
@@ -4068,7 +4068,7 @@ if test "$wxUSE_WCHAR_T" = "yes"; then
     dnl with g++'s in <cwchar> (unless -D_INCLUDE__STDC_A1_SOURCE is in the
     dnl flags when g++ is configured, it will declare it's own).
     if test "$USE_HPUX" = 1 -a "$GCC" != "yes"; then
-        CPPFLAGS="$CPPFLAGS -D_INCLUDE__STDC_A1_SOURCE "
+        CPPFLAGS="-D_INCLUDE__STDC_A1_SOURCE $CPPFLAGS"
     fi
 
     dnl Try to use wcsrtombs instead of wcstombs which is buggy in old GNU
@@ -4954,7 +4954,7 @@ else
                 wx_cv_cflags_mthread,
                 [
                     CFLAGS_OLD="$CFLAGS"
-                    CFLAGS="$CFLAGS -mthreads"
+                    CFLAGS="-mthreads $CFLAGS"
                     AC_TRY_COMPILE([], [],
                         wx_cv_cflags_mthread=yes,
                         wx_cv_cflags_mthread=no
@@ -5069,7 +5069,7 @@ if test "$wxUSE_DEBUG_FLAG" = "yes" ; then
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D__WXDEBUG__"
 else
     if test "$wxUSE_GTK" = 1 ; then
-        CPPFLAGS="$CPPFLAGS -DGTK_NO_CHECK_CASTS"
+        CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
     fi
 fi
 
@@ -5344,7 +5344,7 @@ if test "$wxUSE_SOUND" = "yes"; then
       AM_PATH_SDL([1.2.0],
                   [
                     EXTRALIBS_SDL="$SDL_LIBS"
-                    CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+                    CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                     AC_DEFINE(wxUSE_LIBSDL)
                   ],
                   [wxUSE_LIBSDL="no"])
@@ -5366,7 +5366,7 @@ if test "$WXGTK20" = 1; then
                                   [libgnomeprintui-2.2 >= 2.8],
                     [
 dnl                     EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
-                        CXXFLAGS="$CXXFLAGS $LIBGNOMEPRINTUI_CFLAGS"
+                        CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
                         AC_DEFINE(wxUSE_LIBGNOMEPRINT)
                     ],
                     [
@@ -5758,7 +5758,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                         dnl least with gcc (otherwise we'd always use size_t)
                         CXXFLAGS_OLD="$CXXFLAGS"
                         if test "$GCC" = yes ; then
-                            CXXFLAGS="$CXXFLAGS -Werror"
+                            CXXFLAGS="-Werror $CXXFLAGS"
                         fi
 
                         AC_TRY_COMPILE(
@@ -5819,7 +5819,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                         dnl least with gcc (otherwise we'd always use size_t)
                         CXXFLAGS_OLD="$CXXFLAGS"
                         if test "$GCC" = yes ; then
-                            CXXFLAGS="$CXXFLAGS -Werror"
+                            CXXFLAGS="-Werror $CXXFLAGS"
                         fi
 
                         AC_TRY_COMPILE(
@@ -6533,7 +6533,7 @@ fi
 if test "$wxUSE_WEBKIT" = "yes"; then
     if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
         old_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="$CPPFLAGS -x objective-c++"
+        CPPFLAGS="-x objective-c++ $CPPFLAGS"
         AC_CHECK_HEADER([WebKit/HIWebView.h],
                         [
                            AC_DEFINE(wxUSE_WEBKIT)
@@ -6730,7 +6730,7 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
         dnl -------------------------------------------------------------------
         PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.8,
         [
-            CPPFLAGS="$CPPFLAGS $GSTREAMER_CFLAGS"
+            CPPFLAGS="$GSTREAMER_CFLAGS $CPPFLAGS"
             LIBS="$LIBS $GSTREAMER_LIBS -lgstplay-0.8"
         ],
         [
@@ -7020,13 +7020,14 @@ dnl note that the order is somewhat important: wxWidgets headers should
 dnl come first and the one with setup.h should be before $(top_srcdir)/include
 dnl in case the latter contains setup.h used by non-autoconf makefiles (e.g.
 dnl CodeWarrior):
-CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $CPPFLAGS \
+CPPFLAGS=`echo $WXCONFIG_CPPFLAGS \
  -I\\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
- -I\\${top_srcdir}/include $TOOLKIT_INCLUDE`
+ -I\\${top_srcdir}/include $TOOLKIT_INCLUDE \
+ $CPPFLAGS `
 
 C_AND_CXX_FLAGS="$DEBUG_CFLAGS $PROFILE_FLAGS $OPTIMISE_CFLAGS"
-CFLAGS=`echo $WXCONFIG_CFLAGS $CFLAGS $CWARNINGS $C_AND_CXX_FLAGS`
-CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $CXXFLAGS $C_AND_CXX_FLAGS`
+CFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $CFLAGS `
+CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $CXXFLAGS `
 
 dnl now that we added WXCONFIG_CPPFLAGS to CPPFLAGS we can add the wx-config
 dnl only stuff to it
