@@ -39,10 +39,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifndef __WXMSW__
-#include <errno.h>
-#endif
-
 #ifdef __SALFORDC__
   #include <clib.h>
 #endif
