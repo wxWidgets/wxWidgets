@@ -1058,4 +1058,21 @@ wxString wxMenuBarBase::GetHelpString(int id) const
     return item->GetHelp();
 }
 
+void wxMenuBarBase::UpdateMenus( void )
+{
+    wxEvtHandler* source;
+    wxMenu* menu;
+    int nCount = GetMenuCount();
+    for (int n = 0; n < nCount; n++)
+    {
+        menu = GetMenu( n );
+        if (menu != NULL)
+        {
+            source = menu->GetEventHandler();
+            if (source != NULL)
+                menu->UpdateUI( source );
+        }
+    }
+}
+
 #endif // wxUSE_MENUS

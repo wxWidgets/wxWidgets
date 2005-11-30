@@ -476,6 +476,9 @@ public:
     // don't want menu bars to accept the focus by tabbing to them
     virtual bool AcceptsFocusFromKeyboard() const { return false; }
 
+    // update all menu item states in all menus
+    virtual void UpdateMenus();
+
 protected:
     // the list of all our menus
     wxMenuList m_menus;

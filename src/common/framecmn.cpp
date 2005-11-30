@@ -523,16 +523,16 @@ void wxFrameBase::SetToolBar(wxToolBar *toolbar)
 // update all menus
 void wxFrameBase::DoMenuUpdates(wxMenu* menu)
 {
-    wxEvtHandler* source = GetEventHandler();
-    wxMenuBar* bar = GetMenuBar();
-
     if (menu)
-        menu->UpdateUI(source);
-    else if ( bar != NULL )
     {
-        int nCount = bar->GetMenuCount();
-        for (int n = 0; n < nCount; n++)
-            bar->GetMenu(n)->UpdateUI(source);
+        wxEvtHandler* source = GetEventHandler();
+        menu->UpdateUI(source);
+    }
+    else
+    {
+        wxMenuBar* bar = GetMenuBar();
+        if (bar != NULL)
+            bar->UpdateMenus();
     }
 }
 
