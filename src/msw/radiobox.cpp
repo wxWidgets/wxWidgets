@@ -147,9 +147,6 @@ bool wxRadioBox::Create(wxWindow *parent,
                         const wxValidator& val,
                         const wxString& name)
 {
-    // initialize members
-    SetMajorDim(majorDim == 0 ? n : majorDim, style);
-
     // common initialization
     if ( !wxStaticBox::Create(parent, id, title, pos, size, style, name) )
         return false;
@@ -211,6 +208,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 #endif
 
+    SetMajorDim(majorDim == 0 ? n : majorDim, style);
     SetSelection(0);
     SetSize(pos.x, pos.y, size.x, size.y);
 
