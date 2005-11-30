@@ -148,6 +148,15 @@ void StringTestCase::Format()
     CPPUNIT_ASSERT( s1 == wxString::Format(_T("%03d"), 18) );
     s2.Printf(_T("Number 18: %s\n"), s1.c_str());
     CPPUNIT_ASSERT( s2 == wxString::Format(_T("Number 18: %s\n"), s1.c_str()) );
+
+    static const size_t lengths[] = { 1, 512, 1024, 1025, 2048, 4096, 4097 };
+    for ( size_t n = 0; n < WXSIZEOF(lengths); n++ )
+    {
+        const size_t len = lengths[n];
+
+        wxString s(_T('Z'), len);
+        CPPUNIT_ASSERT_EQUAL( len, wxString::Format(_T("%s"), s.c_str()).length());
+    }
 }
 
 void StringTestCase::Constructors()
