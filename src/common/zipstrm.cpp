@@ -484,6 +484,8 @@ private:
     size_t m_size;
     size_t m_capacity;
     int m_ref;
+
+    wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(wxZipMemory)
 };
 
 wxZipMemory *wxZipMemory::Unique(size_t size)
@@ -558,12 +560,14 @@ public:
     bool IsEmpty() const { return m_entries.empty(); }
 
 private:
-    typedef wx__OffsetZipEntryMap::key_type key_type;
-
     ~wxZipWeakLinks() { wxASSERT(IsEmpty()); }
+
+    typedef wx__OffsetZipEntryMap::key_type key_type;
 
     int m_ref;
     wx__OffsetZipEntryMap m_entries;
+
+    wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(wxZipWeakLinks)
 };
 
 wxZipWeakLinks *wxZipWeakLinks::AddEntry(wxZipEntry *entry, wxFileOffset key)
@@ -1170,6 +1174,8 @@ private:
 
     int m_ref;
     wxZipOutputStream *m_stream;
+
+    wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(wxZipStreamLink)
 };
 
 
