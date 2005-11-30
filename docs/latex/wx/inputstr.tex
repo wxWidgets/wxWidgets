@@ -52,15 +52,16 @@ If EOF, return value is undefined and LastRead() will return 0 and not 1.
 
 \constfunc{bool}{Eof}{\void}
 
-Returns true if the end of stream has been reached.
+Returns true after an attempt has been made to read past the end of the
+stream.
 
 \wxheading{Note}
 
-For some streams Eof() will not return true until an
-attempt has been made to read past the end of the stream.
-\helpref{LastRead()}{wxinputstreamlastread}
-should be called after each read to check that
-a non-zero number of bytes have been read.
+In wxWidgets 2.6.x and below some streams returned Eof() when the last
+byte had been read rather than when an attempt had been made to read
+past the last byte. If you want to avoid depending on one behaviour or
+the other then call \helpref{LastRead()}{wxinputstreamlastread} to
+check the number of bytes actually read.
 
 \membersection{wxInputStream::LastRead}\label{wxinputstreamlastread}
 
