@@ -101,9 +101,6 @@ public:
     virtual void SetLabel(const wxString& label);
     virtual wxString GetLabel();
 
-    virtual int GetColumnCount() const;
-    virtual int GetRowCount() const;
-
     virtual void DoGetPosition( int *x, int *y ) const;
     virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
@@ -129,10 +126,6 @@ public:
 
     void SendNotificationEvent();
 
-    // get the number of buttons per column/row
-    int GetNumVer() const;
-    int GetNumHor() const;
-
 protected:
     // we can't compute our best size before the items are added to the control
     virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
@@ -143,7 +136,6 @@ protected:
     // get the total size occupied by the radio box buttons
     wxSize GetTotalButtonSize(const wxSize& sizeBtn) const;
 
-    int               m_majorDim;
     int *             m_radioWidth;  // for bitmaps
     int *             m_radioHeight;
 

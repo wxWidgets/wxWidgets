@@ -95,7 +95,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 void wxRadioBox::Init()
 {
     m_selection = -1;
-    m_majorDim = 0;
 }
 
 wxRadioBox::wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
@@ -174,7 +173,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     Append(n, choices);
 
     // majorDim default value is 0 which means make one row/column
-    SetMajorDim(majorDim == 0 ? n : majorDim);
+    SetMajorDim(majorDim == 0 ? n : majorDim, style);
 
     if ( size == wxDefaultSize )
     {
@@ -210,26 +209,6 @@ wxRadioBox::~wxRadioBox()
 // ----------------------------------------------------------------------------
 // wxRadioBox init
 // ----------------------------------------------------------------------------
-
-void wxRadioBox::SetMajorDim(int majorDim)
-{
-    wxCHECK_RET( majorDim != 0, _T("major radiobox dimension can't be 0") );
-
-    m_majorDim = majorDim;
-
-    int minorDim = (GetCount() + m_majorDim - 1) / m_majorDim;
-
-    if ( GetWindowStyle() & wxRA_SPECIFY_COLS )
-    {
-        m_numCols = majorDim;
-        m_numRows = minorDim;
-    }
-    else // wxRA_SPECIFY_ROWS
-    {
-        m_numCols = minorDim;
-        m_numRows = majorDim;
-    }
-}
 
 void wxRadioBox::Append(int count, const wxString *choices)
 {
@@ -420,8 +399,8 @@ wxSize wxRadioBox::DoGetBestClientSize() const
 {
     wxSize sizeBtn = GetMaxButtonSize();
 
-    sizeBtn.x *= m_numCols;
-    sizeBtn.y *= m_numRows;
+    sizeBtn.x *= GetColumnCount();
+    sizeBtn.y *= GetRowCount();
 
     // add a border around all buttons
     sizeBtn.x += 2*BOX_BORDER_X;
@@ -457,7 +436,7 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
         if ( GetWindowStyle() & wxRA_TOPTOBOTTOM )
         {
             // from top to bottom
-            if ( (n + 1) % m_numRows )
+            if ( (n + 1) % GetRowCount() )
             {
                 // continue in this column
                 y += sizeBtn.y;
@@ -472,7 +451,7 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
         else // wxRA_LEFTTORIGHT: mirror the code above
         {
             // from left to right
-            if ( (n + 1) % m_numCols )
+            if ( (n + 1) % GetColumnCount() )
             {
                 // continue in this row
                 x += sizeBtn.x;

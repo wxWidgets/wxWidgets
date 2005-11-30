@@ -117,28 +117,6 @@ int wxRadioBox::GetCount() const
     return m_radios.GetCount();
 }
 
-int wxRadioBox::GetColumnCount() const
-{
-    return 0;
-}
-
-int wxRadioBox::GetRowCount() const
-{
-    return 0;
-}
-
-// returns the number of rows
-int wxRadioBox::GetNumVer() const
-{
-    return 0;
-}
-
-// returns the number of columns
-int wxRadioBox::GetNumHor() const
-{
-    return 0;
-}
-
 bool wxRadioBox::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxString& title,
@@ -152,8 +130,10 @@ bool wxRadioBox::Create(wxWindow *parent,
                         const wxString& name)
 {
     // initialize members
-    m_majorDim = majorDim == 0 ? n : wxMin(majorDim, n);
-    if(m_majorDim==0 || n==0) return false;
+    SetMajorDim(majorDim == 0 ? n : majorDim, style);
+
+    if ( GetMajorDim() == 0 || n == 0 )
+        return false;
 
     // subtype of the native palmOS radio: checkbox or push button?
     const bool use_checkbox = style & wxRA_USE_CHECKBOX;
@@ -162,12 +142,13 @@ bool wxRadioBox::Create(wxWindow *parent,
     // get default size and position for the initial placement
     m_size = size;
     m_pos = pos;
-    int minor = n / m_majorDim;
-    if(n % m_majorDim > 0) minor++;
+    int minor = n / GetMajorDim();
+    if(n % GetMajorDim() > 0)
+        minor++;
     if(m_size.x==wxDefaultCoord)
-        m_size.x=36*(use_cols?m_majorDim:minor);
+        m_size.x=36*(use_cols?GetMajorDim():minor);
     if(m_size.y==wxDefaultCoord)
-        m_size.y=12*(use_cols?minor:m_majorDim);
+        m_size.y=12*(use_cols?minor:GetMajorDim());
     if(m_pos.x==wxDefaultCoord)
         m_pos.x=0;
     if(m_pos.y==wxDefaultCoord)
@@ -181,15 +162,15 @@ bool wxRadioBox::Create(wxWindow *parent,
     int i = 0;
     for ( int j = 0; j < minor; j++ )
     {
-        for ( int k = 0; k < m_majorDim; k++ )
+        for ( int k = 0; k < GetMajorDim(); k++ )
         {
             if(i<n)
             {
                 wxPoint start, end;
-                start.x = (use_cols ? (k*m_size.x)/m_majorDim : (j*m_size.x)/minor);
-                start.y = (use_cols ? (j*m_size.y)/minor : (k*m_size.y)/m_majorDim);
-                end.x = (use_cols ? ((k+1)*m_size.x)/m_majorDim : ((j+1)*m_size.x)/minor);
-                end.y = (use_cols ? ((j+1)*m_size.y)/minor : ((k+1)*m_size.y)/m_majorDim);
+                start.x = (use_cols ? (k*m_size.x)/GetMajorDim() : (j*m_size.x)/minor);
+                start.y = (use_cols ? (j*m_size.y)/minor : (k*m_size.y)/GetMajorDim());
+                end.x = (use_cols ? ((k+1)*m_size.x)/GetMajorDim() : ((j+1)*m_size.x)/minor);
+                end.y = (use_cols ? ((j+1)*m_size.y)/minor : ((k+1)*m_size.y)/GetMajorDim());
                 wxRadioButton* rb = new wxRadioButton();
                 rb->SetGroup( id );
                 rb->Create(
@@ -258,21 +239,22 @@ void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
     const bool use_cols = HasFlag(wxRA_SPECIFY_COLS);
 
     const int n = GetCount();
-    int minor = n / m_majorDim;
-    if(n % m_majorDim > 0) minor++;
+    int minor = n / GetMajorDim();
+    if(n % GetMajorDim() > 0)
+        minor++;
 
     int i = 0;
     for ( int j = 0; j < minor; j++ )
     {
-        for ( int k = 0; k < m_majorDim; k++ )
+        for ( int k = 0; k < GetMajorDim(); k++ )
         {
             if(i<n)
             {
                 wxPoint start, end;
-                start.x = (use_cols ? (k*m_size.x)/m_majorDim : (j*m_size.x)/minor);
-                start.y = (use_cols ? (j*m_size.y)/minor : (k*m_size.y)/m_majorDim);
-                end.x = (use_cols ? ((k+1)*m_size.x)/m_majorDim : ((j+1)*m_size.x)/minor);
-                end.y = (use_cols ? ((j+1)*m_size.y)/minor : ((k+1)*m_size.y)/m_majorDim);
+                start.x = (use_cols ? (k*m_size.x)/GetMajorDim() : (j*m_size.x)/minor);
+                start.y = (use_cols ? (j*m_size.y)/minor : (k*m_size.y)/GetMajorDim());
+                end.x = (use_cols ? ((k+1)*m_size.x)/GetMajorDim() : ((j+1)*m_size.x)/minor);
+                end.y = (use_cols ? ((j+1)*m_size.y)/minor : ((k+1)*m_size.y)/GetMajorDim());
                 wxRadioButton* rb = GetRadioButton(i);
                 if(rb)
                 {

@@ -48,7 +48,6 @@ void wxRadioBox::Init()
     m_selectedButton = -1;
     m_noItems = 0;
     m_noRowsOrCols = 0;
-    m_majorDim = 0 ;
 }
 
 bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
@@ -63,10 +62,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     m_noItems = n;
     m_noRowsOrCols = majorDim;
 
-    if (majorDim==0)
-        m_majorDim = n ;
-    else
-        m_majorDim = majorDim ;
+    SetMajorDim(majorDim == 0 ? n : majorDim, style);
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
     Display* dpy = XtDisplay(parentWidget);
@@ -107,11 +103,9 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     Arg args[3];
 
-    m_majorDim = (n + m_majorDim - 1) / m_majorDim;
-
     XtSetArg (args[0], XmNorientation, ((style & wxHORIZONTAL) == wxHORIZONTAL ?
                                           XmHORIZONTAL : XmVERTICAL));
-    XtSetArg (args[1], XmNnumColumns, m_majorDim);
+    XtSetArg (args[1], XmNnumColumns, GetMajorDim());
     XtSetArg (args[2], XmNadjustLast, False);
 
     Widget radioBoxWidget =
@@ -382,23 +376,6 @@ void wxRadioBox::ChangeForegroundColour()
 
         wxDoChangeForegroundColour(radioButton, m_foregroundColour);
     }
-}
-
-static int CalcOtherDim( int items, int dim )
-{
-    return items / dim + ( items % dim ? 1 : 0 );
-}
-
-int wxRadioBox::GetRowCount() const
-{
-    return m_windowStyle & wxRA_SPECIFY_ROWS ? m_noRowsOrCols
-        : CalcOtherDim( GetCount(), m_noRowsOrCols );
-}
-
-int wxRadioBox::GetColumnCount() const
-{
-    return m_windowStyle & wxRA_SPECIFY_COLS ? m_noRowsOrCols
-        : CalcOtherDim( GetCount(), m_noRowsOrCols );
 }
 
 void wxRadioBoxCallback (Widget w, XtPointer clientData,

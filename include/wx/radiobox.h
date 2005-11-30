@@ -36,9 +36,9 @@ public:
     virtual bool IsItemEnabled(int WXUNUSED(n)) const { return true; }
     virtual bool IsItemShown(int WXUNUSED(n)) const { return true; }
 
-    // layout parameters
-    virtual int GetColumnCount() const = 0;
-    virtual int GetRowCount() const = 0;
+    // return number of columns/rows in this radiobox
+    int GetColumnCount() const { return m_numCols; }
+    int GetRowCount() const { return m_numRows; }
 
     // return the item above/below/to the left/right of the given one
     int GetNextItem(int item, wxDirection dir, long style) const;
@@ -51,6 +51,30 @@ public:
     wxDEPRECATED( int GetNumberOfRowsOrCols() const );
     wxDEPRECATED( void SetNumberOfRowsOrCols(int n) );
 #endif // WXWIN_COMPATIBILITY_2_4
+
+protected:
+    wxRadioBoxBase()
+    {
+        m_majorDim = 0;
+    }
+
+    // return the number of items in major direction (which depends on whether
+    // we have wxRA_SPECIFY_COLS or wxRA_SPECIFY_ROWS style)
+    int GetMajorDim() const { return m_majorDim; }
+
+    // sets m_majorDim and also updates m_numCols/Rows
+    //
+    // the style parameter should be the style of the radiobox itself
+    void SetMajorDim(int majorDim, long style);
+
+
+private:
+    // the number of elements in major dimension (i.e. number of columns if
+    // wxRA_SPECIFY_COLS or the number of rows if wxRA_SPECIFY_ROWS) and also
+    // the number of rows/columns calculated from it
+    int m_majorDim,
+        m_numCols,
+        m_numRows;
 };
 
 #if defined(__WXUNIVERSAL__)

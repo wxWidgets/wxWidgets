@@ -91,9 +91,6 @@ public:
     // change the individual radio button state
     virtual bool Enable(int n, bool enable = true);
     virtual bool Show(int n, bool show = true);
-    // layout parameters
-    virtual int GetColumnCount() const;
-    virtual int GetRowCount() const;
 protected:
     virtual wxSize DoGetBestSize() const;
 };

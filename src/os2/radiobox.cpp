@@ -68,7 +68,6 @@ wxRadioBox::wxRadioBox()
     m_nNoItems = 0;
     m_nNoRowsOrCols = 0;
     m_ahRadioButtons = NULL;
-    m_nMajorDim = 0;
     m_pnRadioWidth = NULL;
     m_pnRadioHeight = NULL;
 } // end of wxRadioBox::wxRadioBox
@@ -139,20 +138,20 @@ void wxRadioBox::AdjustButtons( int nX,
             //
             int                     n = i + 1;
 
-            bIsLastInTheRow = ((n % m_nMajorDim) == 0) || (n == m_nNoItems);
+            bIsLastInTheRow = ((n % GetMajorDim()) == 0) || (n == m_nNoItems);
         }
         else // winRA_SPECIFY_ROWS
         {
             //
             // Item is the last in the row if it is in the last columns
             //
-            bIsLastInTheRow = i >= (m_nNoItems/m_nMajorDim) * m_nMajorDim;
+            bIsLastInTheRow = i >= (m_nNoItems/GetMajorDim()) * GetMajorDim();
         }
 
         //
         // Is this the start of new row/column?
         //
-        if (i && (i % m_nMajorDim == 0))
+        if (i && (i % GetMajorDim() == 0))
         {
             if (m_windowStyle & wxRA_SPECIFY_ROWS)
             {
@@ -291,7 +290,7 @@ bool wxRadioBox::Create(
     m_nSelectedButton = -1;
     m_nNoItems = 0;
 
-    m_nMajorDim     = nMajorDim == 0 ? nNum : nMajorDim;
+    SetMajorDim(majorDim == 0 ? n : majorDim, lStyle);
     m_nNoRowsOrCols = nMajorDim;
 
     //
@@ -578,20 +577,20 @@ void wxRadioBox::DoSetSize(
             //
             int                  n = i + 1;
 
-            bIsLastInTheRow = ((n % m_nMajorDim) == 0) || (n == m_nNoItems);
+            bIsLastInTheRow = ((n % GetMajorDim()) == 0) || (n == m_nNoItems);
         }
         else // winRA_SPECIFY_ROWS
         {
             //
             // Item is the last in the row if it is in the last columns
             //
-            bIsLastInTheRow = i >= (m_nNoItems/m_nMajorDim) * m_nMajorDim;
+            bIsLastInTheRow = i >= (m_nNoItems/GetMajorDim()) * GetMajorDim();
         }
 
         //
         // Is this the start of new row/column?
         //
-        if (i && (i % m_nMajorDim == 0))
+        if (i && (i % GetMajorDim() == 0))
         {
             if (m_windowStyle & wxRA_SPECIFY_ROWS)
             {
@@ -686,11 +685,6 @@ bool wxRadioBox::Enable(
     return true;
 } // end of wxRadioBox::Enable
 
-int wxRadioBox::GetColumnCount() const
-{
-    return GetNumHor();
-} // end of wxRadioBox::GetColumnCount
-
 int wxRadioBox::GetCount() const
 {
     return m_nNoItems;
@@ -742,30 +736,6 @@ wxSize wxRadioBox::GetMaxButtonSize() const
     return maxsize;
 } // end of wxRadioBox::GetMaxButtonSize
 
-int wxRadioBox::GetNumHor() const
-{
-    if ( m_windowStyle & wxRA_SPECIFY_ROWS )
-    {
-        return (m_nNoItems + m_nMajorDim - 1)/m_nMajorDim;
-    }
-    else
-    {
-        return m_nMajorDim;
-    }
-} // end of wxRadioBox::GetNumHor
-
-int wxRadioBox::GetNumVer() const
-{
-    if ( m_windowStyle & wxRA_SPECIFY_ROWS )
-    {
-        return m_nMajorDim;
-    }
-    else
-    {
-        return (m_nNoItems + m_nMajorDim - 1)/m_nMajorDim;
-    }
-} // end of wxRadioBox::GetNumVer
-
 void wxRadioBox::GetPosition( int* pnX,
                               int* WXUNUSED(pnY) ) const
 {
@@ -812,11 +782,6 @@ void wxRadioBox::GetPosition( int* pnX,
     *pnX = vPoint.x;
     *pnX = vPoint.y;
 } // end of wxRadioBox::GetPosition
-
-int wxRadioBox::GetRowCount() const
-{
-    return GetNumVer();
-} // end of wxRadioBox::GetRowCount
 
 // Get single selection, for single choice list items
 int wxRadioBox::GetSelection() const
@@ -879,8 +844,8 @@ wxSize wxRadioBox::GetTotalButtonSize( const wxSize& rSizeBtn ) const
 
     nCx1 = GetCharWidth();
     nCy1 = GetCharHeight();
-    nHeight = GetNumVer() * rSizeBtn.y + (2 * nCy1);
-    nWidth  = GetNumHor() * (rSizeBtn.x + nCx1) + nCx1;
+    nHeight = GetRowCount() * rSizeBtn.y + (2 * nCy1);
+    nWidth  = GetColumnCount() * (rSizeBtn.x + nCx1) + nCx1;
 
     //
     // And also wide enough for its label

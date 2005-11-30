@@ -125,16 +125,12 @@ public:
 
 
 
-           virtual int      GetColumnCount(void) const;
            virtual int      GetCount(void) const;
     inline         int      GetNumberOfRowsOrCols(void) const { return m_nNoRowsOrCols; }
-                   int      GetNumHor(void) const;
-                   int      GetNumVer(void) const;
                    void     GetPosition( int* pnX
                                         ,int* pnY
                                        ) const;
     inline         WXHWND*  GetRadioButtons(void) const { return m_ahRadioButtons; }
-           virtual int      GetRowCount(void) const;
                    int      GetSelection(void) const;
                    void     GetSize( int* pnX
                                     ,int* pnY
@@ -183,7 +179,6 @@ protected:
 
 
     WXHWND* m_ahRadioButtons;
-    int     m_nMajorDim ;
     int*    m_pnRadioWidth;  // for bitmaps
     int*    m_pnRadioHeight;
     int     m_nNoItems;

@@ -34,6 +34,26 @@
 // implementation
 // ============================================================================
 
+void wxRadioBoxBase::SetMajorDim(int majorDim, long style)
+{
+    wxCHECK_RET( majorDim != 0, _T("major radiobox dimension can't be 0") );
+
+    m_majorDim = majorDim;
+
+    int minorDim = (GetCount() + m_majorDim - 1) / m_majorDim;
+
+    if ( style & wxRA_SPECIFY_COLS )
+    {
+        m_numCols = majorDim;
+        m_numRows = minorDim;
+    }
+    else // wxRA_SPECIFY_ROWS
+    {
+        m_numCols = minorDim;
+        m_numRows = majorDim;
+    }
+}
+
 int wxRadioBoxBase::GetNextItem(int item, wxDirection dir, long style) const
 {
     int count = GetCount(),

@@ -87,9 +87,6 @@ public:
     virtual int GetCount() const { return m_noItems; } ;
     void Command(wxCommandEvent& event);
 
-    int GetColumnCount() const;
-    int GetRowCount() const;
-
     int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
     void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
@@ -106,7 +103,6 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
-    int               m_majorDim;
     int               m_noItems;
     int               m_noRowsOrCols;
     int               m_selectedButton;

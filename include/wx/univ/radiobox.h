@@ -85,8 +85,6 @@ public:
     virtual int GetSelection() const;
 
     virtual int GetCount() const { return (int) m_buttons.GetCount(); }
-    virtual int GetColumnCount() const { return m_numCols; }
-    virtual int GetRowCount() const { return m_numRows; }
 
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
@@ -128,23 +126,11 @@ protected:
     // common part of all ctors
     void Init();
 
-    // sets m_majorDim and calculate m_numCols and m_numRows
-    void SetMajorDim(int majorDim);
-
     // calculate the max size of all buttons
     wxSize GetMaxButtonSize() const;
 
     // the currently selected radio button or -1
     int m_selection;
-
-    // the parameters defining the button layout: majorDim meaning depends on
-    // the style and is the (max) number of columns if it includes
-    // wxRA_SPECIFY_COLS and is the (max) number of rows if it includes
-    // wxRA_SPECIFY_ROWS - the number of rows and columns is calculated from
-    // it
-    int m_majorDim,
-        m_numCols,
-        m_numRows;
 
     // all radio buttons
     wxArrayRadioButtons m_buttons;
