@@ -215,7 +215,7 @@ Using project files:
          corresponding 32-bit target for some files. Therefore after building
          for one CPU it is necessary to clean the build before building the
          equivalent target for another CPU. We've reported the problem to MS
-         so maybe this will be fixed before VS 2005 ships.
+         but they say it is not possible to fix it.
 
 3. To build, go to the 'Build' menu and choose 'Batch Build...'. Tick all the
    all the 'x64|Debug' or all the 'Itanium|Debug' projects, and click 'Build'.
@@ -231,7 +231,7 @@ Using project files:
 Using makefiles:
 
 1. Open a 64-bit build command prompt, for either x64 or Itanium. Change
-   directory to build\msw. Then for x64 type (note upper case):
+   directory to build\msw. Then for x64 type:
 
     nmake -f makefile.vc TARGET_CPU=AMD64
 
