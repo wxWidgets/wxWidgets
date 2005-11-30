@@ -88,6 +88,19 @@
 #   pragma warn -inl                /*  Functions containing reserved words and certain constructs are not expanded inline */
 #endif /*  __BORLANDC__ */
 
+/*
+   g++ gives a warning when a class has private dtor if it has no friends but
+   this is a perfectly valid situation for a ref-counted class which destroys
+   itself when its ref count drops to 0, so provide a macro to suppress this
+   warning
+ */
+#ifdef __GNUG__
+#   define wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(name) \
+        friend class wxDummyFriendFor ## name;
+#else /* !g++ */
+#   define wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(name)
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  wxWidgets version and compatibility defines */
 /*  ---------------------------------------------------------------------------- */

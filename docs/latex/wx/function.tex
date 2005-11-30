@@ -243,6 +243,7 @@ the corresponding topic.
 \helpref{wxStringTokenize}{wxstringtokenize}\\
 \helpref{wxStripMenuCodes}{wxstripmenucodes}\\
 \helpref{wxStrlen}{wxstrlen}\\
+\helpref{wxSUPPRESS\_GCC\_PRIVATE\_DTOR\_WARNING}{wxsuppress\_gcc\_private\_dtor\_warning}\\
 \helpref{wxSysErrorCode}{wxsyserrorcode}\\
 \helpref{wxSysErrorMsg}{wxsyserrormsg}\\
 \helpref{wxT}{wxt}\\
@@ -3175,6 +3176,36 @@ as a keyboard shortkey in Windows and Motif) and $\backslash$t (tab in Windows).
 \wxheading{Include files}
 
 <wx/utils.h>
+
+
+\membersection{wxSUPPRESS\_GCC\_PRIVATE\_DTOR\_WARNING}{wxsuppress\_gcc\_private\_dtor\_warning}\\
+
+\func{}{wxSUPPRESS\_GCC\_PRIVATE\_DTOR\_WARNING}{\param{}{name}}
+
+GNU C++ compiler gives a warning for any class whose destructor is private
+unless it has a friend. This warning may sometimes be useful but it doesn't
+make sense for reference counted class which always delete themselves (hence
+destructor should be private) but don't necessarily have any friends, so this
+macro is provided to disable the warning in such case. The \arg{name} parameter
+should be the name of the class but is only used to construct a unique friend
+class name internally. Example of using the macro:
+
+\begin{verbatim}
+    class RefCounted
+    {
+    public:
+        RefCounted() { m_nRef = 1; }
+        void IncRef() { m_nRef++ ; }
+        void DecRef() { if ( !--m_nRef ) delete this; }
+
+    private:
+        ~RefCounted() { }
+
+        wxSUPPRESS_GCC_PRIVATE_DTOR(RefCounted)
+    };
+\end{verbatim}
+
+Notice that there should be no semicolon after this macro.
 
 
 \membersection{wxULL}\label{wxull}
