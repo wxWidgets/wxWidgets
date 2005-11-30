@@ -88,11 +88,6 @@ char wxMemoryInputStream::Peek()
     return buf[pos];
 }
 
-bool wxMemoryInputStream::Eof() const
-{
-    return !m_i_streambuf->GetBytesLeft();
-}
-
 size_t wxMemoryInputStream::OnSysRead(void *buffer, size_t nbytes)
 {
     size_t pos = m_i_streambuf->GetIntPosition();

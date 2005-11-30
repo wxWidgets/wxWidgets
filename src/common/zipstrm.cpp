@@ -169,7 +169,7 @@ size_t wxStoredInputStream::OnSysRead(void *buffer, size_t size)
     count = m_parent_i_stream->Read(buffer, count).LastRead();
     m_pos += count;
 
-    if (m_pos == m_len)
+    if (m_pos == m_len && count < size)
         m_lasterror = wxSTREAM_EOF;
     else if (!*m_parent_i_stream)
         m_lasterror = wxSTREAM_READ_ERROR;

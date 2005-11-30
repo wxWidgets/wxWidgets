@@ -27,7 +27,6 @@ public:
     wxMemoryInputStream(const wxMemoryOutputStream& stream);
     virtual ~wxMemoryInputStream();
     virtual wxFileOffset GetLength() const { return m_length; }
-    virtual bool Eof() const;
     virtual bool IsSeekable() const { return true; }
 
     char Peek();
