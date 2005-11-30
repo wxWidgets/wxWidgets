@@ -537,3 +537,5 @@ wxSize wxRadioBox::DoGetBestSize() const
 
     return wxSize(totWidth, totHeight);
 }
+
+#endif
