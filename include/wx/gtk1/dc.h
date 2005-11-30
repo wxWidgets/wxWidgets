@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.h
+// Name:        wx/gtk/dc.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -41,7 +41,9 @@ public:
     wxDC();
     ~wxDC() { }
 
+#if wxUSE_PALETTE
     void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
+#endif // wxUSE_PALETTE
 
     // Resolution in pixels per logical inch
     virtual wxSize GetPPI() const;
