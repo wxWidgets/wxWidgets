@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.cpp
+// Name:        src/msw/joystick.cpp
 // Purpose:     wxJoystick class
 // Author:      Julian Smart
 // Modified by:
@@ -20,6 +20,9 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_JOYSTICK
+
+#include "wx/joystick.h"
 #include "wx/string.h"
 #include "wx/window.h"
 #include "wx/msw/private.h"
@@ -35,7 +38,6 @@
 
 #include "wx/window.h"
 #include "wx/msw/registry.h"
-#include "wx/msw/joystick.h"
 
 #include <regstr.h>
 
@@ -622,3 +624,4 @@ bool wxJoystick::ReleaseCapture()
     return (res == JOYERR_NOERROR);
 }
 
+#endif // wxUSE_JOYSTICK
