@@ -92,6 +92,9 @@ public:
     virtual bool Enable(int n, bool enable = true);
     virtual bool Show(int n, bool show = true);
 
+    virtual bool IsItemEnabled(int n) const;
+    virtual bool IsItemShown(int n) const;
+
     // we also override the wxControl methods to avoid virtual function hiding
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);

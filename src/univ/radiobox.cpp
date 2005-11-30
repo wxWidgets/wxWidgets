@@ -304,11 +304,25 @@ bool wxRadioBox::Enable(int n, bool enable)
     return m_buttons[n]->Enable(enable);
 }
 
+bool wxRadioBox::IsItemEnabled(int n) const
+{
+    wxCHECK_MSG( IsValid(n), false, _T("invalid index in wxRadioBox::IsItemEnabled") );
+
+    return m_buttons[n]->IsEnabled();
+}
+
 bool wxRadioBox::Show(int n, bool show)
 {
     wxCHECK_MSG( IsValid(n), false, _T("invalid index in wxRadioBox::Show") );
 
     return m_buttons[n]->Show(show);
+}
+
+bool wxRadioBox::IsItemShown(int n) const
+{
+    wxCHECK_MSG( IsValid(n), false, _T("invalid index in wxRadioBox::IsItemShown") );
+
+    return m_buttons[n]->IsShown();
 }
 
 // ----------------------------------------------------------------------------
