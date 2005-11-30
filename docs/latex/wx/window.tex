@@ -809,9 +809,13 @@ Returns the average character width for this window.
 
 \membersection{wxWindow::GetChildren}\label{wxwindowgetchildren}
 
-\func{wxList\&}{GetChildren}{\void}
+\func{wxWindowList\&}{GetChildren}{\void}
 
-Returns a reference to the list of the window's children.
+\constfunc{const wxWindowList\&}{GetChildren}{\void}
+
+Returns a reference to the list of the window's children. \texttt{wxWindowList} 
+is a type-safe \helpref{wxList}{wxlist}-like class whose elements are of type
+\texttt{wxWindow *}.
 
 
 \membersection{wxWindow::GetClassDefaultAttributes}\label{wxwindowgetclassdefaultattributes}
