@@ -748,6 +748,13 @@ int wxComboBox::GetSelection() const
     return wxChoice::GetSelection();
 }
 
+void wxComboBox::Clear()
+{
+    wxChoice::Clear();
+    m_selectionOld = -1;
+    m_value.clear();
+}
+
 // ----------------------------------------------------------------------------
 // standard event handling
 // ----------------------------------------------------------------------------

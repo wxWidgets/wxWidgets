@@ -96,7 +96,7 @@ public:
     virtual int GetSelection() const;
     virtual void GetSelection(long* from, long* to) const;
     virtual void SetEditable(bool editable);
-    virtual void Clear() { wxChoice::Clear(); m_selectionOld = -1; }
+    virtual void Clear();
 
     virtual void Undo() ;
     virtual void Redo() ;
