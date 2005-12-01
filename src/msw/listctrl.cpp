@@ -1214,7 +1214,7 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
         m_imageListState = imageList;
         m_ownsImageListState = false;
     }
-    ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
+    (void) ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
 }
 
 void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
@@ -2766,7 +2766,7 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
             // pszText is not const, hence the cast
             lvItem.pszText = (wxChar *)info.m_text.c_str();
             if ( lvItem.pszText )
-                lvItem.cchTextMax = info.m_text.Length();
+                lvItem.cchTextMax = info.m_text.length();
             else
                 lvItem.cchTextMax = 0;
         }
@@ -2835,4 +2835,3 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
 }
 
 #endif // wxUSE_LISTCTRL
-

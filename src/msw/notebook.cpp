@@ -408,97 +408,97 @@ wxNotebook::~wxNotebook()
 
 size_t wxNotebook::GetPageCount() const
 {
-  // consistency check
-  wxASSERT( (int)m_pages.Count() == TabCtrl_GetItemCount(GetHwnd()) );
+    // consistency check
+    wxASSERT( (int)m_pages.Count() == TabCtrl_GetItemCount(GetHwnd()) );
 
-  return m_pages.Count();
+    return m_pages.Count();
 }
 
 int wxNotebook::GetRowCount() const
 {
-  return TabCtrl_GetRowCount(GetHwnd());
+    return TabCtrl_GetRowCount(GetHwnd());
 }
 
 int wxNotebook::SetSelection(size_t nPage)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
-  if ( int(nPage) != m_nSelection )
-  {
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
-    event.SetSelection(nPage);
-    event.SetOldSelection(m_nSelection);
-    event.SetEventObject(this);
-    if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+    if ( int(nPage) != m_nSelection )
     {
-      // program allows the page change
-      event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
-      (void)GetEventHandler()->ProcessEvent(event);
+        wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
+        event.SetSelection(nPage);
+        event.SetOldSelection(m_nSelection);
+        event.SetEventObject(this);
+        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+        {
+            // program allows the page change
+            event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
+           (void)GetEventHandler()->ProcessEvent(event);
 
-      TabCtrl_SetCurSel(GetHwnd(), nPage);
+           TabCtrl_SetCurSel(GetHwnd(), nPage);
+        }
     }
-  }
 
-  return m_nSelection;
+    return m_nSelection;
 }
 
 bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("notebook page out of range") );
 
-  TC_ITEM tcItem;
-  tcItem.mask = TCIF_TEXT;
-  tcItem.pszText = (wxChar *)strText.c_str();
+    TC_ITEM tcItem;
+    tcItem.mask = TCIF_TEXT;
+    tcItem.pszText = (wxChar *)strText.c_str();
 
-  return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
+    return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
 }
 
 wxString wxNotebook::GetPageText(size_t nPage) const
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), wxEmptyString, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxEmptyString, wxT("notebook page out of range") );
 
-  wxChar buf[256];
-  TC_ITEM tcItem;
-  tcItem.mask = TCIF_TEXT;
-  tcItem.pszText = buf;
-  tcItem.cchTextMax = WXSIZEOF(buf);
+    wxChar buf[256];
+    TC_ITEM tcItem;
+    tcItem.mask = TCIF_TEXT;
+    tcItem.pszText = buf;
+    tcItem.cchTextMax = WXSIZEOF(buf);
 
-  wxString str;
-  if ( TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) )
-    str = tcItem.pszText;
+    wxString str;
+    if ( TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) )
+        str = tcItem.pszText;
 
-  return str;
+    return str;
 }
 
 int wxNotebook::GetPageImage(size_t nPage) const
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
-  TC_ITEM tcItem;
-  tcItem.mask = TCIF_IMAGE;
+    TC_ITEM tcItem;
+    tcItem.mask = TCIF_IMAGE;
 
-  return TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) ? tcItem.iImage : wxNOT_FOUND;
+    return TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) ? tcItem.iImage : wxNOT_FOUND;
 }
 
 bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("notebook page out of range") );
 
-  TC_ITEM tcItem;
-  tcItem.mask = TCIF_IMAGE;
-  tcItem.iImage = nImage;
+    TC_ITEM tcItem;
+    tcItem.mask = TCIF_IMAGE;
+    tcItem.iImage = nImage;
 
-  return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
+    return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
 }
 
 void wxNotebook::SetImageList(wxImageList* imageList)
 {
-  wxNotebookBase::SetImageList(imageList);
+    wxNotebookBase::SetImageList(imageList);
 
-  if ( imageList )
-  {
-    TabCtrl_SetImageList(GetHwnd(), (HIMAGELIST)imageList->GetHIMAGELIST());
-  }
+    if ( imageList )
+    {
+        (void) TabCtrl_SetImageList(GetHwnd(), (HIMAGELIST)imageList->GetHIMAGELIST());
+    }
 }
 
 // ----------------------------------------------------------------------------
