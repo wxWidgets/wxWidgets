@@ -2009,7 +2009,7 @@ void  wxDC::Clear(void)
                 }
                 break ;
 
-            default
+            default:
                 break ;
         }
     }

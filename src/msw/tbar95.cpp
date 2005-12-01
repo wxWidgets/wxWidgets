@@ -544,8 +544,9 @@ bool wxToolBar::Realize()
 
 #ifndef __WXWINCE__
     int remapValue = (-1);
-    if (wxSystemOptions::HasOption(wxT("msw.remap")))
-        remapValue = wxSystemOptions::GetOptionInt(wxT("msw.remap"));
+    const wxChar *remapOptionStr = wxT("msw.remap");
+    if (wxSystemOptions::HasOption( remapOptionStr ))
+        remapValue = wxSystemOptions::GetOptionInt( remapOptionStr );
 
     doTransparent = (remapValue == 2);
     if (!doTransparent)
@@ -590,7 +591,7 @@ bool wxToolBar::Realize()
                                           wx_truncate_cast(wxCoord, nTools),
                       totalBitmapHeight = m_defaultHeight;
 
-        // Create a bitmap and copy all the tool bitmaps to it
+        // Create a bitmap and copy all the tool bitmaps into it
         wxMemoryDC dcAllButtons;
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
         dcAllButtons.SelectObject(bitmap);
