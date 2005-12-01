@@ -23,7 +23,7 @@
 #endif
 
 #if defined(__VISAGECPP__)
-#define BSD_SELECT /* use Berkley Sockets select */
+#define BSD_SELECT /* use Berkeley Sockets select */
 #endif
 
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
@@ -613,6 +613,7 @@ GSocket *GSocket::WaitConnection()
     m_error = GSOCK_MEMERR;
     return NULL;
   }
+
   err = _GAddress_translate_from(connection->m_peer, &from, fromlen);
   if (err != GSOCK_NOERROR)
   {
@@ -620,6 +621,7 @@ GSocket *GSocket::WaitConnection()
     m_error = err;
     return NULL;
   }
+
 #if defined(__EMX__) || defined(__VISAGECPP__)
   ioctl(connection->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
 #else
@@ -633,10 +635,13 @@ GSocket *GSocket::WaitConnection()
 bool GSocket::SetReusable()
 {
     /* socket must not be null, and must not be in use/already bound */
-    if (this && m_fd == INVALID_SOCKET) {
+    if (this && m_fd == INVALID_SOCKET)
+    {
         m_reusable = true;
+
         return true;
     }
+
     return false;
 }
 
@@ -725,9 +730,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
    */
 
   if (m_non_blocking || ret == 0)
-  {
     gs_gui_functions->Enable_Events(this);
-  }
 
   if (ret == -1)
   {
@@ -778,6 +781,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
      */
     Close();
     m_error = GSOCK_IOERR;
+
     return GSOCK_IOERR;
   }
 
@@ -875,7 +879,8 @@ int GSocket::Read(char *buffer, int size)
      * re-enabled! */
     ret = -1;
   }
-  else {
+  else
+  {
     /* Read the data */
     if (m_stream)
       ret = Recv_Stream(buffer, size);
@@ -888,7 +893,8 @@ int GSocket::Read(char *buffer, int size)
      */
     if (ret == 0)
       m_error = GSOCK_IOERR;
-    else if (ret == -1) {
+    else if (ret == -1)
+    {
       if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
         m_error = GSOCK_WOULDBLOCK;
       else
@@ -951,6 +957,7 @@ int GSocket::Write(const char *buffer, int size)
      * will further OUTPUT events be posted.
      */
     Enable(GSOCK_OUTPUT);
+
     return -1;
   }
 
@@ -1094,10 +1101,8 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
   }
   else
   {
-
     assert(this);
     return flags & m_detected;
-
   }
 }
 
@@ -1210,9 +1215,8 @@ GSocketError GSocket::GetSockOpt(int level, int optname,
                                 void *optval, int *optlen)
 {
     if (getsockopt(m_fd, level, optname, (char*)optval, (SOCKOPTLEN_T*)optlen) == 0)
-    {
         return GSOCK_NOERROR;
-    }
+
     return GSOCK_OPTERR;
 }
 
@@ -1220,9 +1224,8 @@ GSocketError GSocket::SetSockOpt(int level, int optname,
                                 const void *optval, int optlen)
 {
     if (setsockopt(m_fd, level, optname, (const char*)optval, optlen) == 0)
-    {
         return GSOCK_NOERROR;
-    }
+
     return GSOCK_OPTERR;
 }
 
@@ -1270,6 +1273,7 @@ GSocketError GSocket::Input_Timeout()
       m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
+
     if (ret == -1)
     {
       GSocket_Debug(( "GSocket_Input_Timeout, select returned -1\n" ));
@@ -1281,6 +1285,7 @@ GSocketError GSocket::Input_Timeout()
       return GSOCK_TIMEDOUT;
     }
   }
+
   return GSOCK_NOERROR;
 }
 
@@ -1311,6 +1316,7 @@ GSocketError GSocket::Output_Timeout()
       m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
+
     if (ret == -1)
     {
       GSocket_Debug(( "GSocket_Output_Timeout, select returned -1\n" ));
@@ -1321,10 +1327,13 @@ GSocketError GSocket::Output_Timeout()
       m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
-    if ( ! wxFD_ISSET(m_fd, &writefds) ) {
+
+    if ( ! wxFD_ISSET(m_fd, &writefds) )
+    {
         GSocket_Debug(( "GSocket_Output_Timeout is buggy!\n" ));
     }
-    else {
+    else
+    {
         GSocket_Debug(( "GSocket_Output_Timeout seems correct\n" ));
     }
   }
@@ -1342,7 +1351,9 @@ int GSocket::Recv_Stream(char *buffer, int size)
   do
   {
     ret = recv(m_fd, buffer, size, GSOCKET_MSG_NOSIGNAL);
-  } while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
+  }
+  while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
+
   return ret;
 }
 
@@ -1358,7 +1369,8 @@ int GSocket::Recv_Dgram(char *buffer, int size)
   do
   {
     ret = recvfrom(m_fd, buffer, size, 0, &from, (WX_SOCKLEN_T *) &fromlen);
-  } while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
+  }
+  while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
 
   if (ret == -1)
     return -1;
@@ -1373,6 +1385,7 @@ int GSocket::Recv_Dgram(char *buffer, int size)
       return -1;
     }
   }
+
   err = _GAddress_translate_from(m_peer, &from, fromlen);
   if (err != GSOCK_NOERROR)
   {
@@ -1394,7 +1407,8 @@ int GSocket::Send_Stream(const char *buffer, int size)
   do
   {
     ret = send(m_fd, (char *)buffer, size, GSOCKET_MSG_NOSIGNAL);
-  } while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
+  }
+  while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
 
   UNMASK_SIGNAL();
 
@@ -1425,7 +1439,8 @@ int GSocket::Send_Dgram(const char *buffer, int size)
   do
   {
     ret = sendto(m_fd, (char *)buffer, size, 0, addr, len);
-  } while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
+  }
+  while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
 
   UNMASK_SIGNAL();
 
@@ -1533,9 +1548,11 @@ void GSocket::Detected_Write()
 GSocket *GSocket_new(void)
 {
     GSocket *newsocket = new GSocket();
-    if(newsocket->IsOk())
+    if (newsocket->IsOk())
         return newsocket;
+
     delete newsocket;
+
     return NULL;
 }
 
@@ -1675,6 +1692,7 @@ GSocketError _GAddress_translate_from(GAddress *address,
     address->m_error = GSOCK_MEMERR;
     return GSOCK_MEMERR;
   }
+
   memcpy(address->m_addr, addr, len);
 
   return GSOCK_NOERROR;
@@ -1761,9 +1779,11 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
       address->m_error = GSOCK_NOHOST;
       return GSOCK_NOHOST;
     }
+
     array_addr = (struct in_addr *) *(he->h_addr_list);
     addr->s_addr = array_addr[0].s_addr;
   }
+
   return GSOCK_NOERROR;
 }
 

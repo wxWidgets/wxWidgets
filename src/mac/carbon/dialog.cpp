@@ -57,9 +57,9 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     style |= wxTAB_TRAVERSAL;
 
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style & ~(wxYES|wxOK|wxNO /*|wxCANCEL*/) , name) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 void wxDialog::SetModal(bool flag)
@@ -83,8 +83,8 @@ void wxDialog::SetModal(bool flag)
 
 wxDialog::~wxDialog()
 {
-    m_isBeingDeleted = TRUE;
-    Show(FALSE);
+    m_isBeingDeleted = true;
+    Show(false);
 }
 
 // By default, pressing escape cancels the dialog; on mac command-stop does the same thing
@@ -123,7 +123,7 @@ bool wxDialog::Show(bool show)
     if ( !wxDialogBase::Show(show) )
     {
         // nothing to do
-        return FALSE;
+        return false;
     }
 
     if ( show )
@@ -140,13 +140,13 @@ bool wxDialog::Show(bool show)
         }
         else // end of modal dialog
         {
-            // this will cause IsModalShowing() return FALSE and our local
+            // this will cause IsModalShowing() return false and our local
             // message loop will terminate
             wxModalDialogs.DeleteObject(this);
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 #if !TARGET_CARBON
@@ -183,15 +183,13 @@ void wxDialog::DoShowModal()
 }
 
 
-// Replacement for Show(TRUE) for modal dialogs - returns return code
+// Replacement for Show(true) for modal dialogs - returns return code
 int wxDialog::ShowModal()
 {
     if ( !m_isModalStyle )
-    {
-        SetModal(TRUE);
-    }
+        SetModal(true);
 
-    Show(TRUE);
+    Show(true);
     return GetReturnCode();
 }
 
@@ -200,7 +198,7 @@ int wxDialog::ShowModal()
 void wxDialog::EndModal(int retCode)
 {
     SetReturnCode(retCode);
-    Show(FALSE);
+    Show(false);
     SetModal(false);
 }
 
@@ -208,15 +206,14 @@ void wxDialog::EndModal(int retCode)
 void wxDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
   if ( Validate() && TransferDataFromWindow() )
-  {
       EndModal(wxID_OK);
-  }
 }
 
 void wxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 {
   if (Validate())
-    TransferDataFromWindow();
+      TransferDataFromWindow();
+
   // TODO probably need to disable the Apply button until things change again
 }
 
