@@ -337,7 +337,8 @@ protected: \
     /* returns NULL if not found */ \
     Node** GetNodePtr( const const_key_type& key ) const \
     { \
-        Node** node = &m_table[m_hasher( key ) % m_tableBuckets]; \
+        size_t bucket = m_hasher( key ) % m_tableBuckets; \
+        Node** node = &m_table[bucket]; \
  \
         while( *node ) \
         { \
@@ -353,7 +354,8 @@ protected: \
     /* expressing it in terms of GetNodePtr is 5-8% slower :-( */ \
     Node* GetNode( const const_key_type& key ) const \
     { \
-        Node* node = m_table[m_hasher( key ) % m_tableBuckets]; \
+        size_t bucket = m_hasher( key ) % m_tableBuckets; \
+        Node* node = m_table[bucket]; \
  \
         while( node ) \
         { \
