@@ -56,15 +56,15 @@ extern TECObjectRef s_TECNativeCToUnicode ;
 wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
     wxMacPortSaver( (GrafPtr) GetWindowPort((WindowRef) win->MacGetTopLevelWindowRef()) )
 {
-    m_newPort =(GrafPtr) GetWindowPort((WindowRef) win->MacGetTopLevelWindowRef()) ;
+    m_newPort = (GrafPtr) GetWindowPort((WindowRef) win->MacGetTopLevelWindowRef()) ;
     m_formerClip = NewRgn() ;
     m_newClip = NewRgn() ;
     GetClip( m_formerClip ) ;
-    
+
     if ( win )
     {
         // guard against half constructed objects, this just leads to a empty clip
-        if( win->GetPeer() )
+        if ( win->GetPeer() )
         {
             int x = 0 , y = 0;
             win->MacWindowToRootWindow( &x,&y ) ;
@@ -90,7 +90,7 @@ wxMacWindowStateSaver::wxMacWindowStateSaver( const wxWindow* win ) :
     wxMacWindowClipper( win )
 {
     // the port is already set at this point
-    m_newPort =(GrafPtr) GetWindowPort((WindowRef) win->MacGetTopLevelWindowRef()) ;
+    m_newPort = (GrafPtr) GetWindowPort((WindowRef) win->MacGetTopLevelWindowRef()) ;
     GetThemeDrawingState( &m_themeDrawingState ) ;
 }
 
@@ -109,6 +109,7 @@ wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
     m_dc = dc ;
 //    dc->MacSetupPort(&m_ph) ;
 }
+
 wxMacPortSetter::~wxMacPortSetter()
 {
 //    m_dc->MacCleanupPort(&m_ph) ;
@@ -210,6 +211,7 @@ wxMacCGContext::~wxMacCGContext()
         CGContextRestoreGState( m_cgContext ) ;
         CGContextRestoreGState( m_cgContext ) ;
     }
+
     if ( m_qdPort )
         CGContextRelease( m_cgContext ) ;
 }
@@ -217,7 +219,7 @@ wxMacCGContext::~wxMacCGContext()
 
 void wxMacCGContext::Clip( const wxRegion &region )
 {
-//        ClipCGContextToRegion ( m_cgContext, &bounds , (RgnHandle) dc->m_macCurrentClipRgn ) ;
+//    ClipCGContextToRegion ( m_cgContext, &bounds , (RgnHandle) dc->m_macCurrentClipRgn ) ;
 }
 
 void wxMacCGContext::StrokePath( const wxGraphicPath *p ) 
@@ -231,6 +233,7 @@ void wxMacCGContext::DrawPath( const wxGraphicPath *p , int fillStyle )
 {
     const wxMacCGPath* path = dynamic_cast< const wxMacCGPath*>( p ) ;
     CGPathDrawingMode mode = m_mode ;
+
     if ( fillStyle == wxODDEVEN_RULE )
     {
         if ( mode == kCGPathFill )
@@ -238,6 +241,7 @@ void wxMacCGContext::DrawPath( const wxGraphicPath *p , int fillStyle )
         else if ( mode == kCGPathFillStroke )
             mode = kCGPathEOFillStroke ;
     }
+
     CGContextAddPath( m_cgContext , path->GetPath() ) ;
     CGContextDrawPath( m_cgContext , mode ) ;
 }
@@ -275,7 +279,7 @@ wxGraphicPath* wxMacCGContext::CreatePath()
 
 CGContextRef wxMacCGContext::GetNativeContext() 
 { 
-    if( m_cgContext == NULL )
+    if ( m_cgContext == NULL )
     {
         Rect bounds ;
         GetPortBounds( (CGrafPtr) m_qdPort , &bounds ) ;
@@ -290,6 +294,7 @@ CGContextRef wxMacCGContext::GetNativeContext()
         SetPen( m_pen ) ;
         SetBrush( m_brush ) ;
     }
+
     return m_cgContext ; 
 }
 
@@ -309,34 +314,33 @@ void wxMacCGContext::SetNativeContext( CGContextRef cg )
 class wxMacCGPattern
 {
 public :
-    wxMacCGPattern()
-    {
-    }
-    
+    wxMacCGPattern() {}
+
     // is guaranteed to be called only with a non-Null CGContextRef
     virtual void Render( CGContextRef	ctxRef ) = 0 ;
 
     operator CGPatternRef() const { return m_patternRef ; }
+
 protected :
     virtual ~wxMacCGPattern()
     {
-        // as this is called only when our m_patternRef is been released, don't release
-        // it again
+        // as this is called only when our m_patternRef is been released;
+        // don't release it again
     }
-    
+
     static void _Render( void *info, CGContextRef ctxRef )
     {
         wxMacCGPattern* self = (wxMacCGPattern*) info ;
         if ( self && ctxRef )
             self->Render( ctxRef ) ;
     }
-    
+
     static void _Dispose( void *info )
     {
         wxMacCGPattern* self = (wxMacCGPattern*) info ;
         delete self ;
     }
-    
+
     CGPatternRef m_patternRef ;
 
     static const CGPatternCallbacks ms_Callbacks ;
@@ -357,9 +361,8 @@ public :
     ImagePattern( CGImageRef image , CGAffineTransform transform )
     {
         if ( image )
-        {
             CFRetain( image ) ;
-        }
+
         Init( image , transform ) ;
     }
     
@@ -381,12 +384,13 @@ protected :
                                             kCGPatternTilingNoDistortion, true , &wxMacCGPattern::ms_Callbacks ) ;
         }
     }
-    
+
     ~ImagePattern()
     {
         if ( m_image )
             CGImageRelease( m_image ) ;
     }
+
     CGImageRef  m_image ;
     CGRect      m_imageBounds ;
 } ;
@@ -424,7 +428,7 @@ public :
     
     virtual void Render( CGContextRef	ctxRef )
     {
-        switch( m_hatch )
+        switch ( m_hatch )
         {
             case wxBDIAGONAL_HATCH :
                 {
@@ -434,6 +438,7 @@ public :
                     StrokeLineSegments( ctxRef , pts , 2 ) ;
                 }
                 break ;
+
             case wxCROSSDIAG_HATCH :
                 {
                     CGPoint pts[] = { 
@@ -443,6 +448,7 @@ public :
                     StrokeLineSegments( ctxRef , pts , 4 ) ;
                 }
                 break ;
+
             case wxFDIAGONAL_HATCH :
                 {
                     CGPoint pts[] = { 
@@ -451,6 +457,7 @@ public :
                     StrokeLineSegments( ctxRef , pts , 2 ) ;
                 }
                 break ;
+
             case wxCROSS_HATCH :
                 {
                     CGPoint pts[] = { 
@@ -460,6 +467,7 @@ public :
                     StrokeLineSegments( ctxRef , pts , 4 ) ;
                 }
                 break ;
+
             case wxHORIZONTAL_HATCH :
                 {
                     CGPoint pts[] = { 
@@ -468,6 +476,7 @@ public :
                     StrokeLineSegments( ctxRef , pts , 2 ) ;
                 }
                 break ;
+
             case wxVERTICAL_HATCH :
                 {
                     CGPoint pts[] = { 
@@ -480,9 +489,8 @@ public :
     }
     
 protected :
-    ~HatchPattern()
-    {
-    }
+    ~HatchPattern() {}
+
     int         m_hatch ;
     CGRect      m_imageBounds ;
 } ;
@@ -508,6 +516,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
         {
             m_mode = kCGPathFill ;
         }
+
         if ( stroke )
         {
             RGBColor col = MAC_WXCOLORREF( pen.GetColour().GetPixel() ) ;
@@ -520,7 +529,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
             CGContextSetLineWidth( m_cgContext , penWidth ) ;
             
             CGLineCap cap ;
-            switch( pen.GetCap() )
+            switch ( pen.GetCap() )
             {
                 case wxCAP_ROUND :
                     cap = kCGLineCapRound ;
@@ -537,7 +546,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
             }
 
             CGLineJoin join ;
-            switch( pen.GetJoin() )
+            switch ( pen.GetJoin() )
             {
                 case wxJOIN_BEVEL :
                     join = kCGLineJoinBevel ;
@@ -568,26 +577,31 @@ void wxMacCGContext::SetPen( const wxPen &pen )
             const float dotted_dashed[] = { 9.0 , 6.0 , 3.0 , 3.0 };
 
 
-            switch( pen.GetStyle() )
+            switch ( pen.GetStyle() )
             {
                 case wxSOLID :
                     break ;
+
                 case wxDOT :
                     lengths = dotted ;
                     count = WXSIZEOF(dotted);
                     break ;
+
                 case wxLONG_DASH :
                     lengths = dashed ;
                     count = WXSIZEOF(dashed) ;
                     break ;
+
                 case wxSHORT_DASH :
                     lengths = short_dashed ;
                     count = WXSIZEOF(short_dashed) ;
                     break ;
+
                 case wxDOT_DASH :
                     lengths = dotted_dashed ;
                     count = WXSIZEOF(dotted_dashed);
                     break ;
+
                 case wxUSER_DASH :
                     wxDash *dashes ;
                     count = pen.GetDashes( &dashes ) ;
@@ -606,6 +620,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                     }
                     lengths = userLengths ;
                     break ;
+
                 case wxSTIPPLE :
                     {
                         float  alphaArray[1] = { 1.0 } ;
@@ -619,6 +634,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                         }
                     }
                     break ;
+
                 default :
                     {
                         wxMacCFRefHolder<CGColorSpaceRef> patternSpace( CGColorSpaceCreatePattern( wxMacGetGenericRGBColorSpace() ) ) ;
@@ -643,10 +659,12 @@ void wxMacCGContext::SetPen( const wxPen &pen )
             {
                CGContextSetLineDash( m_cgContext , 0 , NULL , 0 ) ;
             }
+
             CGContextSetLineCap( m_cgContext , cap ) ;
 
             delete[] userLengths ;
         }
+
         if ( fill && stroke )
         {
             m_mode = kCGPathFillStroke ;
@@ -706,14 +724,12 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
             }
             m_mode = kCGPathFill ;
         }
+
         if ( stroke )
-        {
             m_mode = kCGPathStroke ;
-        }
+
         if ( fill && stroke )
-        {
             m_mode = kCGPathFillStroke ;
-        }
     }
 }
 
@@ -737,6 +753,7 @@ void AddRoundedRectToPath(CGContextRef c, CGRect rect, float ovalWidth,
         CGContextAddRect(c, rect);
         return;
     }
+
     CGContextSaveGState(c);
     CGContextTranslateCTM(c, CGRectGetMinX(rect), CGRectGetMinY(rect));
     CGContextScaleCTM(c, ovalWidth, ovalHeight);
@@ -753,8 +770,8 @@ void AddRoundedRectToPath(CGContextRef c, CGRect rect, float ovalWidth,
 
 wxDC::wxDC()
 {
-    m_ok = FALSE;
-    m_colour = TRUE;
+    m_ok = false;
+    m_colour = true;
     m_mm_to_pix_x = mm2pt;
     m_mm_to_pix_y = mm2pt;
 
@@ -766,10 +783,10 @@ wxDC::wxDC()
     m_userScaleY = 1.0;
     m_scaleX = 1.0;
     m_scaleY = 1.0;
-    m_needComputeScaleX = FALSE;
-    m_needComputeScaleY = FALSE;
+    m_needComputeScaleX = false;
+    m_needComputeScaleY = false;
 
-    m_ok = FALSE ;
+    m_ok = false ;
     m_macPort = 0 ;
     m_macLocalOrigin.x = m_macLocalOrigin.y = 0 ;
 
@@ -782,9 +799,9 @@ wxDC::wxDC()
     m_graphicContext = NULL ;
 }
 
-wxDC::~wxDC(void)
+wxDC::~wxDC()
 {
-    if( m_macATSUIStyle )
+    if ( m_macATSUIStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUIStyle);
         m_macATSUIStyle = NULL ;
@@ -848,7 +865,7 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 
 //    SetRectRgn( (RgnHandle) m_macCurrentClipRgn , xx , yy , xx + ww , yy + hh ) ;
 //    SectRgn( (RgnHandle) m_macCurrentClipRgn , (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
-    if( m_clipping )
+    if ( m_clipping )
     {
         m_clipX1 = wxMax( m_clipX1 , xx );
         m_clipY1 = wxMax( m_clipY1 , yy );
@@ -857,7 +874,7 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     }
     else
     {
-        m_clipping = TRUE;
+        m_clipping = true;
         m_clipX1 = xx;
         m_clipY1 = yy;
         m_clipX2 = xx + ww;
@@ -875,6 +892,7 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
         DestroyClippingRegion();
         return;
     }
+
     wxCoord x, y, w, h;
     region.GetBox( x, y, w, h );
     wxCoord xx, yy, ww, hh;
@@ -898,7 +916,7 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
         }
         SectRgn( (RgnHandle) m_macCurrentClipRgn , (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
         */
-        if( m_clipping )
+        if ( m_clipping )
         {
             m_clipX1 = wxMax( m_clipX1 , xx );
             m_clipY1 = wxMax( m_clipY1 , yy );
@@ -907,7 +925,7 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
         }
         else
         {
-            m_clipping = TRUE;
+            m_clipping = true;
             m_clipX1 = xx;
             m_clipY1 = yy;
             m_clipX2 = xx + ww;
@@ -924,7 +942,7 @@ void wxDC::DestroyClippingRegion()
     CGContextSaveGState( cgContext );    
     m_graphicContext->SetPen( m_pen ) ;
     m_graphicContext->SetBrush( m_brush ) ;
-    m_clipping = FALSE;
+    m_clipping = false;
 }
 
 void wxDC::DoGetSizeMM( int* width, int* height ) const
@@ -959,24 +977,29 @@ void wxDC::SetMapMode( int mode )
     case wxMM_TWIPS:
         SetLogicalScale( twips2mm*m_mm_to_pix_x, twips2mm*m_mm_to_pix_y );
         break;
+
     case wxMM_POINTS:
         SetLogicalScale( pt2mm*m_mm_to_pix_x, pt2mm*m_mm_to_pix_y );
         break;
+
     case wxMM_METRIC:
         SetLogicalScale( m_mm_to_pix_x, m_mm_to_pix_y );
         break;
+
     case wxMM_LOMETRIC:
         SetLogicalScale( m_mm_to_pix_x/10.0, m_mm_to_pix_y/10.0 );
         break;
-    default:
+
     case wxMM_TEXT:
+    default:
         SetLogicalScale( 1.0, 1.0 );
         break;
     }
+
     if (mode != wxMM_TEXT)
     {
-        m_needComputeScaleX = TRUE;
-        m_needComputeScaleY = TRUE;
+        m_needComputeScaleX =
+        m_needComputeScaleY = true;
     }
 }
 
@@ -1036,12 +1059,14 @@ void wxDC::ComputeScaleAndOrigin()
     m_scaleY = m_logicalScaleY * m_userScaleY;
     m_deviceOriginX = m_externalDeviceOriginX;
     m_deviceOriginY = m_externalDeviceOriginY;
+
     // CMB: if scale has changed call SetPen to recalulate the line width
     if (m_scaleX != origScaleX || m_scaleY != origScaleY)
     {
         // this is a bit artificial, but we need to force wxDC to think
         // the pen has changed
         wxPen pen(GetPen());
+
         m_pen = wxNullPen;
         SetPen(pen);
     }
@@ -1066,6 +1091,7 @@ void  wxDC::SetPen( const wxPen &pen )
 {
     if ( m_pen == pen )
         return ;
+
     m_pen = pen;
     if ( m_graphicContext )
     {
@@ -1091,6 +1117,7 @@ void  wxDC::SetBrush( const wxBrush &brush )
 {
     if (m_brush == brush)
         return;
+
     m_brush = brush;
     if ( m_graphicContext )
     {
@@ -1116,6 +1143,7 @@ void  wxDC::SetBackground( const wxBrush &brush )
 {
     if (m_backgroundBrush == brush)
         return;
+    
     m_backgroundBrush = brush;
     if (!m_backgroundBrush.Ok())
         return;
@@ -1125,6 +1153,7 @@ void  wxDC::SetLogicalFunction( int function )
 {
     if (m_logicalFunction == function)
         return;
+
     m_logicalFunction = function ;
 }
 
@@ -1150,6 +1179,7 @@ bool  wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
     col->Set( colour.red   >> 8,
         colour.green >> 8,
         colour.blue  >> 8);
+
     return true ;
 }
 
@@ -1316,6 +1346,7 @@ void  wxDC::DoDrawLines(int n, wxPoint points[],
 
         path->AddLineToPoint( x2 , y2 ) ;
     }
+
     m_graphicContext->StrokePath( path ) ;
     delete path ;
 }
@@ -1403,10 +1434,10 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
 
         path->AddLineToPoint( x2 , y2 ) ;
     }
+
     if ( x1 != x2 || y1 != y2 )
-    {
         path->AddLineToPoint( x1,y1 ) ;
-    }
+
     path->CloseSubpath() ;
     m_graphicContext->DrawPath( path , fillStyle ) ;
     delete path ;
@@ -1426,6 +1457,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     // CMB: draw nothing if transformed w or h is 0
     if (ww == 0 || hh == 0)
         return;
+
     // CMB: handle -ve width and/or height
     if (ww < 0)
     {
@@ -1437,6 +1469,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         hh = -hh;
         yy = yy - hh;
     }
+
     wxGraphicPath* path = m_graphicContext->CreatePath() ;
     path->AddRectangle( xx , yy , ww , hh ) ;
     m_graphicContext->DrawPath( path ) ;
@@ -1452,7 +1485,6 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     if ( m_logicalFunction != wxCOPY )
         return ;
 
-
     if (radius < 0.0)
         radius = - radius * ((width < height) ? width : height);
     wxCoord xx = XLOG2DEVMAC(x);
@@ -1462,6 +1494,7 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     // CMB: draw nothing if transformed w or h is 0
     if (ww == 0 || hh == 0)
         return;
+
     // CMB: handle -ve width and/or height
     if (ww < 0)
     {
@@ -1473,6 +1506,7 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
         hh = -hh;
         yy = yy - hh;
     }
+
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
     AddRoundedRectToPath( ctx  , CGRectMake( xx , yy , ww , hh ) , 16 ,16  ) ;
@@ -1493,6 +1527,7 @@ void  wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     // CMB: draw nothing if transformed w or h is 0
     if (ww == 0 || hh == 0)
         return;
+
     // CMB: handle -ve width and/or height
     if (ww < 0)
     {
@@ -1527,10 +1562,12 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     wxCHECK_MSG(Ok(), false, wxT("wxDC::DoBlit Illegal dc"));
     wxCHECK_MSG(source->Ok(), false, wxT("wxDC::DoBlit  Illegal source DC"));
     if ( logical_func == wxNO_OP )
-        return TRUE ;
+        return true ;
+
     if (xsrcMask == -1 && ysrcMask == -1)
     {
-        xsrcMask = xsrc; ysrcMask = ysrc;
+        xsrcMask = xsrc;
+        ysrcMask = ysrc;
     }
 
     wxCoord yysrc = source->YLOG2DEVMAC(ysrc) ;
@@ -1575,6 +1612,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                 blit = wxNullBitmap ;
             }
         }
+
         if ( blit.Ok() )
         {
             CGContextRef cg = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
@@ -1583,7 +1621,6 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             HIViewDrawCGImage( cg , &r , image ) ;
             CGImageRelease( image ) ;
         }
-           
     }
     else
     {
@@ -1591,9 +1628,10 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
         CGContextRef cg = (wxMacCGContext*)(source->GetGraphicContext())->GetNativeContext() ;
         void *data = CGBitmapContextGetData( cg ) ;
     */
-        return FALSE ; // wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") ) ;
+        return false ; // wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") ) ;
     }
-    return TRUE;
+
+    return true;
 }
 
 void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
@@ -1603,7 +1641,6 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 
     if ( str.Length() == 0 )
         return ;
-    
     if ( m_logicalFunction != wxCOPY )
         return ;
 
@@ -1734,6 +1771,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
 
     ::ATSUDisposeTextLayout(atsuLayout);
+
 #if SIZEOF_WCHAR_T == 4
     free( ubuf ) ;
 #endif
@@ -1796,7 +1834,6 @@ void  wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *heigh
 #endif
 #endif
 
-
     status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 
@@ -1830,7 +1867,6 @@ void  wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *heigh
         MacInstallFont() ;
     }
 }
-
 
 bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
@@ -1868,26 +1904,26 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
 #endif
 #endif
 
-	OSStatus status;
+    OSStatus status;
     status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
         
-    	for ( int pos = 0; pos < (int)chars; pos ++ ) {
-			unsigned long actualNumberOfBounds = 0;
-			ATSTrapezoid glyphBounds;
+    for ( int pos = 0; pos < (int)chars; pos ++ )
+    {
+        unsigned long actualNumberOfBounds = 0;
+        ATSTrapezoid glyphBounds;
 
-			// We get a single bound, since the text should only require one. If it requires more, there is an issue
-			OSStatus result; 
-			result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1, kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
-			if (result != noErr || actualNumberOfBounds != 1 )
-			{
-				return false;
-			}
+        // We get a single bound, since the text should only require one. If it requires more, there is an issue
+        OSStatus result; 
+        result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1,
+            kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
+        if (result != noErr || actualNumberOfBounds != 1 )
+            return false;
 
-			widths[pos] = XDEV2LOGREL(FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x ));
-			//unsigned char uch = s[i];
-			
-    	}
+        widths[pos] = XDEV2LOGREL(FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x ));
+        //unsigned char uch = s[i];
+    }
+
     ::ATSUDisposeTextLayout(atsuLayout);
     return true;
 }
@@ -1928,18 +1964,19 @@ void  wxDC::Clear(void)
                     else
 #endif
                     {
-        				RGBColor	color;
+                        RGBColor	color;
                         GetThemeBrushAsColor( m_backgroundBrush.MacGetTheme(), 32, true, &color );
                         CGContextSetRGBFillColor( cg, (float) color.red / 65536,
-        						(float) color.green / 65536, (float) color.blue / 65536, 1 );
-        				CGContextFillRect( cg, rect );
+                            (float) color.green / 65536, (float) color.blue / 65536, 1 );
+                            CGContextFillRect( cg, rect );
                     }
 
                     // reset to normal value
                     RGBColor col = MAC_WXCOLORREF( GetBrush().GetColour().GetPixel() ) ;
                     CGContextSetRGBFillColor( cg, col.red / 65536.0, col.green / 65536.0, col.blue / 65536.0, 1.0 );
                 }
-            break ;
+                break ;
+
             case kwxMacBrushThemeBackground :
                 {
                     wxFAIL_MSG( wxT("There shouldn't be theme backgrounds under Quartz") ) ;
@@ -1956,23 +1993,24 @@ void  wxDC::Clear(void)
                             HIThemeApplyBackground( &rect , &drawInfo, cg ,
                                 kHIThemeOrientationNormal) ;
                     }
-                    else
 #endif
-                    {
-                    }
                 }
-            break ;
-            case kwxMacBrushColour :
-            {
-                RGBColor col = MAC_WXCOLORREF( m_backgroundBrush.GetColour().GetPixel()) ;
-                CGContextSetRGBFillColor( cg , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
-                CGContextFillRect(cg, rect);
+                break ;
 
-                // reset to normal value
-                col = MAC_WXCOLORREF( GetBrush().GetColour().GetPixel() ) ;
-                CGContextSetRGBFillColor( cg , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
-            }
-            break ;
+            case kwxMacBrushColour :
+                {
+                    RGBColor col = MAC_WXCOLORREF( m_backgroundBrush.GetColour().GetPixel()) ;
+                    CGContextSetRGBFillColor( cg , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
+                    CGContextFillRect(cg, rect);
+
+                    // reset to normal value
+                    col = MAC_WXCOLORREF( GetBrush().GetColour().GetPixel() ) ;
+                    CGContextSetRGBFillColor( cg , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
+                }
+                break ;
+
+            default
+                break ;
         }
     }
 }
@@ -1981,7 +2019,7 @@ void wxDC::MacInstallFont() const
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
 
-    if( m_macATSUIStyle )
+    if ( m_macATSUIStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUIStyle);
         m_macATSUIStyle = NULL ;
