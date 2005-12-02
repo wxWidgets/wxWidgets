@@ -1023,6 +1023,8 @@ wxEvtHandler::~wxEvtHandler()
         delete m_dynamicEvents;
     };
 
+    if (m_pendingEvents)
+        m_pendingEvents->DeleteContents(true);
     delete m_pendingEvents;
 
 #if wxUSE_THREADS
@@ -1084,10 +1086,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
     wxENTER_CRIT_SECT( Lock() );
 
     if ( !m_pendingEvents )
-    {
       m_pendingEvents = new wxList;
-      m_pendingEvents->DeleteContents(true);
-    }
 
     m_pendingEvents->Append(eventCopy);
 
@@ -1129,13 +1128,17 @@ void wxEvtHandler::ProcessPendingEvents()
     {
         wxEvent *event = (wxEvent *)node->GetData();
 
+        // It's importan we remove event from list before processing it.
+        // Else a nested event loop, for example from a modal dialog, might
+        // process the same event again.
+        m_pendingEvents->Erase(node);
+
         wxLEAVE_CRIT_SECT( Lock() );
 
         ProcessEvent(*event);
+        delete event;
 
         wxENTER_CRIT_SECT( Lock() );
-
-        m_pendingEvents->Erase(node);
 
         if ( !--n )
             break;
