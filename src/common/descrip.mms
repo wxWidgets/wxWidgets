@@ -135,6 +135,7 @@ OBJECTS1=fs_inet.obj,\
 		process.obj,\
 		protocol.obj,\
 		quantize.obj,\
+		radiocmn.obj,\
 		rendcmn.obj,\
 		sckaddr.obj,\
 		sckfile.obj,\
@@ -275,6 +276,7 @@ SOURCES = \
 		process.cpp,\
 		protocol.cpp,\
 		quantize.cpp,\
+		radiocmn.cpp,\
 		rendcmn.cpp,\
 		rgncmn.cpp,\
 		sckaddr.cpp,\
@@ -449,6 +451,7 @@ prntbase.obj : prntbase.cpp
 process.obj : process.cpp
 protocol.obj : protocol.cpp
 quantize.obj : quantize.cpp
+radiocmn.obj : radiocmn.cpp
 rendcmn.obj : rendcmn.cpp
 rgncmn.obj : rgncmn.cpp
 sckaddr.obj : sckaddr.cpp
