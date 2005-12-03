@@ -387,7 +387,7 @@ bool wxRadioBox::Enable(int item, bool enable)
 bool wxRadioBox::IsItemEnabled(int item) const
 {
     wxCHECK_MSG( IsValid(item), false,
-                 wxT("invalid item in wxRadioBox::Enable()") );
+                 wxT("invalid item in wxRadioBox::IsItemEnabled()") );
 
     return ::IsWindowEnabled((*m_radioButtons)[item]) != 0;
 }
@@ -412,7 +412,7 @@ bool wxRadioBox::Show(int item, bool show)
 bool wxRadioBox::IsItemShown(int item) const
 {
     wxCHECK_MSG( IsValid(item), false,
-                 wxT("invalid item in wxRadioBox::Enable()") );
+                 wxT("invalid item in wxRadioBox::IsItemShown()") );
 
     // don't use IsWindowVisible() here because it would return false if the
     // radiobox itself is hidden while we want to only return false if this
