@@ -135,7 +135,7 @@ void wxBitmapRefData::Init()
     m_depth = 0 ;
     m_ok = false ;
     m_bitmapMask = NULL ;
-#if wxMAC_USE_CORE_GRAPHICS
+#ifdef __WXMAC_OSX__
     m_cgImageRef = NULL ;
 #endif
     m_iconRef = NULL ;
@@ -228,7 +228,7 @@ void *wxBitmapRefData::BeginRawAccess()
     // the bitmap data may change now
     wxASSERT_MSG( m_pictHandle == NULL && m_iconRef == NULL ,
         wxT("Currently, modifing bitmaps that are used in controls already is not supported") ) ;
-#if wxMAC_USE_CORE_GRAPHICS
+#ifdef __WXMAC_OSX__
     if ( m_cgImageRef )
     {
         CGImageRelease( m_cgImageRef ) ;
@@ -592,7 +592,7 @@ void wxBitmapRefData::Free()
 {
     wxASSERT_MSG( m_rawAccessCount == 0 , wxT("Bitmap still selected when destroyed") ) ;
 
-#if wxMAC_USE_CORE_GRAPHICS
+#ifdef __WXMAC_OSX__
     if ( m_cgImageRef )
     {
         CGImageRelease( m_cgImageRef ) ;
