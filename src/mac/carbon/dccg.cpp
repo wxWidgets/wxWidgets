@@ -27,6 +27,8 @@
 #ifdef __MSL__
     #if __MSL__ >= 0x6000
         #include "math.h"
+        // in case our functions were defined outside std, we make it known all the same
+        namespace std { }  
         using namespace std ;
     #endif
 #endif
