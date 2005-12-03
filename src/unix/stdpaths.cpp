@@ -55,31 +55,33 @@ wxString wxStandardPaths::GetInstallPrefix() const
 {
     if ( m_prefix.empty() )
     {
-        wxStandardPaths *self = wx_const_cast(wxStandardPaths *, this);
+        wxStandardPaths *pathPtr = wx_const_cast(wxStandardPaths *, this);
 
 #ifdef __LINUX__
         // under Linux, we can get location of the executable
-        char buf[4096];
-        if ( readlink("/proc/self/exe", buf, WXSIZEOF(buf)) != -1 )
+        wxChar buf[4096];
+        int result;
+
+        result = readlink( wxT("/proc/self/exe"), buf, WXSIZEOF(buf) - sizeof(wxChar) );
+        if (result != -1)
         {
-            wxString exe(buf, wxConvLibc);
+            buff[result] = wxChar(0);
+            wxString exeStr( buf, wxConvLibc );
 
             // consider that we're in the last "bin" subdirectory of our prefix
-            wxString basename(wxString(wxTheApp->argv[0]).AfterLast(_T('/')));
-            size_t pos = exe.find(_T("/bin/") + basename);
-            if ( pos != wxString::npos )
-            {
-                self->m_prefix.assign(exe, 0, pos);
-            }
+            wxString basename( wxString( wxTheApp->argv[0]).AfterLast(_T('/')) );
+            size_t pos = exeStr.find( wxT("/bin/") + basename );
+            if (pos != wxString::npos)
+                pathPtr->m_prefix.assign( exeStr, 0, pos );
         }
-
-        if ( m_prefix.empty() )
 #endif // __LINUX__
+
+        if (m_prefix.empty())
         {
 #ifdef __VMS
-	   self->m_prefix = _T("/sys$system");
+	   pathPtr->m_prefix = wxT("/sys$system");
 #else
-	   self->m_prefix = _T("/usr/local");
+	   pathPtr->m_prefix = wxT("/usr/local");
 #endif
         }
     }
