@@ -62,14 +62,15 @@ wxString wxStandardPaths::GetInstallPrefix() const
         wxChar buf[4096];
         int result;
 
-        result = readlink( wxT("/proc/self/exe"), buf, WXSIZEOF(buf) - sizeof(wxChar) );
+        // FIXME: is readlink() Unicode-aware or not???
+        result = readlink( (const char*)wxT("/proc/self/exe"), buf, WXSIZEOF(buf) - sizeof(wxChar) );
         if (result != -1)
         {
-            buff[result] = wxChar(0);
+            buf[result] = wxChar(0);
             wxString exeStr( buf, wxConvLibc );
 
             // consider that we're in the last "bin" subdirectory of our prefix
-            wxString basename( wxString( wxTheApp->argv[0]).AfterLast(_T('/')) );
+            wxString basename( wxString( wxTheApp->argv[0]).AfterLast( wxChar('/')) );
             size_t pos = exeStr.find( wxT("/bin/") + basename );
             if (pos != wxString::npos)
                 pathPtr->m_prefix.assign( exeStr, 0, pos );
