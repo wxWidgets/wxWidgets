@@ -53,36 +53,35 @@ void wxStandardPaths::SetInstallPrefix(const wxString& prefix)
 
 wxString wxStandardPaths::GetInstallPrefix() const
 {
-    if (m_prefix.empty())
+    if ( m_prefix.empty() )
     {
         wxStandardPaths *pathPtr = wx_const_cast(wxStandardPaths *, this);
 
 #ifdef __LINUX__
-        // under Linux, we can get location of the executable
-        wxChar buf[4096];
-        int result;
-
-        // FIXME: is readlink() Unicode-aware or not???
-        result = readlink( (const char*)wxT("/proc/self/exe"), (char*)buf, WXSIZEOF(buf) - sizeof(wxChar) );
-        if (result != -1)
+        // under Linux, we can try to infer the prefix from the location of the
+        // executable
+        char buf[4096];
+        int result = readlink("/proc/self/exe", buf, WXSIZEOF(buf) - sizeof(char));
+        if ( result != -1 )
         {
-            buf[result] = wxChar(0);
-            wxString exeStr( buf, wxConvLibc );
+            buf[result] = '\0'; // readlink() doesn't NUL-terminate the buffer
+
+            wxString exeStr(buf, wxConvLibc);
 
             // consider that we're in the last "bin" subdirectory of our prefix
-            wxString basename( wxString(wxTheApp->argv[0]).AfterLast( wxChar('/')) );
-            size_t pos = exeStr.find( wxT("/bin/") + basename );
-            if (pos != wxString::npos)
-                pathPtr->m_prefix.assign( exeStr, 0, pos );
+            wxString basename(wxString(wxTheApp->argv[0]).AfterLast(_T('/')));
+            size_t pos = exeStr.find(wxT("/bin/") + basename);
+            if ( pos != wxString::npos )
+                pathPtr->m_prefix.assign(exeStr, 0, pos);
         }
 #endif // __LINUX__
 
-        if (m_prefix.empty())
+        if ( m_prefix.empty() )
         {
 #ifdef __VMS
-	   pathPtr->m_prefix = wxT("/sys$system");
+            pathPtr->m_prefix = wxT("/sys$system");
 #else
-	   pathPtr->m_prefix = wxT("/usr/local");
+            pathPtr->m_prefix = wxT("/usr/local");
 #endif
         }
     }
