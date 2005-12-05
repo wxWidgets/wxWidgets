@@ -882,8 +882,8 @@ void wxURI::Resolve(const wxURI& base, int flags)
                     op += 3;
             }
 
-            m_path = base.m_path.substr(0, bp - base.m_path.c_str()) +
-                    m_path.substr((op - m_path.c_str()), m_path.Length());
+            m_path = (wxString)base.m_path.substr(0, bp - base.m_path.c_str()) +
+                    (wxString)m_path.substr((op - m_path.c_str()), m_path.Length());
         }
     }
 
