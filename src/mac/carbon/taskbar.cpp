@@ -45,12 +45,14 @@ public:
     virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip) = 0;
     virtual bool RemoveIcon() = 0;
     virtual bool PopupMenu(wxMenu *menu) = 0;
-    
+
     wxMenu* CreatePopupMenu()
     { return m_parent->CreatePopupMenu(); }
-    
+
     wxTaskBarIcon*       m_parent;
     class wxTaskBarIconWindow* m_menuEventWindow;
+
+    DECLARE_NO_COPY_CLASS(wxTaskBarIconImpl)
 };
 
 //-----------------------------------------------------------------------------
@@ -431,7 +433,7 @@ bool wxDockTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     // convert the wxIcon into a wxBitmap so we can perform some
     // wxBitmap operations with it
     wxBitmap bmp( icon ) ;
-    wxASSERT( bmp.IsOK() );
+    wxASSERT( bmp.Ok() );
 
     // get the CGImageRef for the wxBitmap:
     // OSX builds only, but then the dock only exists in OSX
@@ -446,7 +448,10 @@ bool wxDockTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     if (pImage != NULL)
         CGImageRelease( pImage );
 
-    return m_iconAdded = (err == noErr);
+    bool success = (err == noErr);
+    m_iconAdded = success;
+
+    return success;
 }
 
 //-----------------------------------------------------------------------------
@@ -469,9 +474,12 @@ bool wxDockTaskBarIcon::RemoveIcon()
     // restore the old menu to the dock
     SetApplicationDockTileMenu(m_theLastMenu);
 
-    return !(m_iconAdded = !(err == noErr));
+    bool success = (err == noErr);
+    m_iconAdded = !success;
+
+    return success;
 }
-    
+
 //-----------------------------------------------------------------------------
 // wxDockTaskBarIcon::PopupMenu
 //
@@ -487,10 +495,10 @@ bool wxDockTaskBarIcon::PopupMenu(wxMenu *menu)
 
     if (m_pMenu)
         delete m_pMenu;
-    
+
     //start copy of menu
     m_pMenu = wxDeepCopyMenu(menu);
-   
+
     //finish up
     m_pMenu->SetInvokingWindow(m_menuEventWindow);
 
@@ -545,7 +553,7 @@ bool wxTaskBarIcon::IsIconInstalled() const
 bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 { return m_impl->SetIcon(icon, tooltip); }
 bool wxTaskBarIcon::RemoveIcon()
-{ return m_impl->RemoveIcon(); }    
+{ return m_impl->RemoveIcon(); }
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 { return m_impl->PopupMenu(menu); }
 
