@@ -54,7 +54,7 @@ public:
 
     wxSizerFlags& Align(int alignment) // combination of wxAlignment values
     {
-        m_flags &= wxALIGN_MASK;
+        m_flags &= !wxALIGN_MASK;
         m_flags |= alignment;
 
         return *this;
