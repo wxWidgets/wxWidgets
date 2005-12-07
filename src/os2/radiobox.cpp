@@ -290,7 +290,7 @@ bool wxRadioBox::Create(
     m_nSelectedButton = -1;
     m_nNoItems = 0;
 
-    SetMajorDim(majorDim == 0 ? n : majorDim, lStyle);
+    SetMajorDim(nMajorDim == 0 ? nNum : nMajorDim, lStyle);
     m_nNoRowsOrCols = nMajorDim;
 
     //
