@@ -83,12 +83,8 @@ bool wxRadioButton::Create( wxWindow *parent,
         return FALSE;
     }
 
-    if (HasFlag(wxRB_GROUP))
-    {
-        // start a new group
-        m_radioButtonGroup = (GSList*) NULL;
-    }
-    else
+    GSList* radioButtonGroup = NULL;
+    if (!HasFlag(wxRB_GROUP))
     {
         // search backward for last group start
         wxRadioButton *chief = (wxRadioButton*) NULL;
@@ -107,16 +103,11 @@ bool wxRadioButton::Create( wxWindow *parent,
         if (chief)
         {
             // we are part of the group started by chief
-            m_radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
-        }
-        else
-        {
-            // start a new group
-            m_radioButtonGroup = (GSList*) NULL;
+            radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
         }
     }
 
-    m_widget = gtk_radio_button_new_with_label( m_radioButtonGroup, wxGTK_CONV( label ) );
+    m_widget = gtk_radio_button_new_with_label( radioButtonGroup, wxGTK_CONV( label ) );
       
     SetLabel(label);
 
