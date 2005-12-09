@@ -85,7 +85,7 @@ public:
     // it is NOT address/filename of HTML document. If you want to
     // specify document location, use LoadPage() istead
     // Return value : false if an error occurred, true otherwise
-    bool SetPage(const wxString& source);
+    virtual bool SetPage(const wxString& source);
 
     // Append to current page
     bool AppendToPage(const wxString& source);
