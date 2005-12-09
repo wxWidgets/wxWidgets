@@ -2553,25 +2553,38 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
     // panel wants to track the window which was the last to have focus in it,
     // so we want to set ourselves as the window which last had focus
     //
-    // notice that it's also important to do it upwards the tree becaus
+    // notice that it's also important to do it upwards the tree because
     // otherwise when the top level panel gets focus, it won't set it back to
     // us, but to some other sibling
 
-    // CS:don't know if this is still needed:
+    // CS: don't know if this is still needed:
     //wxChildFocusEvent eventFocus(this);
     //(void)GetEventHandler()->ProcessEvent(eventFocus);
 
+    bool bIsFocusEvent = (event.GetEventType() == wxEVT_SET_FOCUS);
+
+    // enable this for patch 1376506
+#if 0
+    if ( bIsFocusEvent )
+          SetUserFocusWindow( GetControlOwner( GetPeer()->GetControlRef() ) );
+    else
+          SetUserFocusWindow( kUserFocusAuto );
+#endif
+
     if ( MacGetTopLevelWindow() && m_peer->NeedsFocusRect() )
     {
- #if !wxMAC_USE_CORE_GRAPHICS
+#if wxMAC_USE_CORE_GRAPHICS
+        GetParent()->Refresh() ;
+#else
         wxMacWindowStateSaver sv( this ) ;
         Rect rect ;
+
         m_peer->GetRect( &rect ) ;
         // auf den umgebenden Rahmen zurŸck
         InsetRect( &rect, -1 , -1 ) ;
 
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
-        if (top )
+        if ( top )
         {
             wxPoint pt(0,0) ;
             wxMacControl::Convert( &pt , GetParent()->m_peer , top->m_peer ) ;
@@ -2581,19 +2594,14 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
             rect.bottom += pt.y ;
         }
 
-        if ( event.GetEventType() == wxEVT_SET_FOCUS )
-            DrawThemeFocusRect( &rect , true ) ;
-        else
+        DrawThemeFocusRect( &rect , bIsFocusEvent ) ;
+        if ( !bIsFocusEvent )
         {
-            DrawThemeFocusRect( &rect , false ) ;
-
             // as this erases part of the frame we have to redraw borders
             // and because our z-ordering is not always correct (staticboxes)
             // we have to invalidate things, we cannot simple redraw
             MacInvalidateBorders() ;
         }
-#else
-        GetParent()->Refresh() ;
 #endif
     }
 
