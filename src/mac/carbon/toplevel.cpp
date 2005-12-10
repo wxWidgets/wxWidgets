@@ -1295,7 +1295,10 @@ bool wxTopLevelWindowMac::Show(bool show)
     if (show)
     {
         #if wxUSE_SYSTEM_OPTIONS //code contributed by Ryan Wilcox December 18, 2003
-        if ( (wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) ) && ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1) )
+        bool plainTransition = UMAGetSystemVersion() >= 0x1000 ;
+        if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
+            plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
+        if ( plainTransition )
         {
            ::ShowWindow( (WindowRef)m_macWindow );
         }
@@ -1313,7 +1316,10 @@ bool wxTopLevelWindowMac::Show(bool show)
     else
     {
         #if wxUSE_SYSTEM_OPTIONS
-        if ( (wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) ) && ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1) )
+        bool plainTransition = UMAGetSystemVersion() >= 0x1000 ;
+        if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
+            plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
+        if ( plainTransition )
         {
            ::HideWindow((WindowRef) m_macWindow );
         }
