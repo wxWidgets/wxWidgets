@@ -3948,7 +3948,7 @@ wxDBMS wxDb::Dbms(void)
 
     baseName[3] = 0;
     if (!wxStricmp(baseName,wxT("DB2")))
-        return((wxDBMS)(dbmsType = dbmsDBASE));
+        return((wxDBMS)(dbmsType = dbmsDB2));
 
     return((wxDBMS)(dbmsType = dbmsUNIDENTIFIED));
 
