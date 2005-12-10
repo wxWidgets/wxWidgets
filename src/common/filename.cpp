@@ -665,6 +665,8 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
             // default
             #if defined(__DOS__) || defined(__OS2__)
                 dir = _T(".");
+            #elif defined(__WXMAC__)
+                dir = wxMacFindFolder(  (short) kOnSystemDisk, kTemporaryFolderType, kCreateFolder ) ;
             #else
                 dir = _T("/tmp");
             #endif
