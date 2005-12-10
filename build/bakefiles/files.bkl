@@ -1612,6 +1612,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/dcprint.cpp
     src/os2/dcscreen.cpp
     src/os2/dialog.cpp
+    src/os2/display.cpp
     src/os2/dnd.cpp
     src/os2/evtloop.cpp
     src/os2/filedlg.cpp
@@ -1693,6 +1694,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/dcprint.h
     wx/os2/dcscreen.h
     wx/os2/dialog.h
+    wx/os2/display.h
     wx/os2/dnd.h
     wx/os2/filedlg.h
     wx/os2/font.h
