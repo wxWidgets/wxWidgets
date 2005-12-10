@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        display.cpp
+// Name:        src/msw/display.cpp
 // Purpose:     MSW Implementation of wxDisplay class
 // Author:      Royce Mitchell III
 // Modified by: VZ (resolutions enumeration/change support, DirectDraw, ...)
-//		    Ryan Norton (IsPrimary override)
+//              Ryan Norton (IsPrimary override)
 // Created:     06/21/02
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
@@ -54,9 +54,11 @@
 
 // with mingw32, we must include windows.h first and it doesn't hurt with other
 // compilers
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 
-#include <multimon.h>
+#ifndef __WXWINCE__
+    #include <multimon.h>
+#endif // !__WXWINCE__
 
 #ifdef _MSC_VER
     #pragma warning(default:4706)
@@ -325,6 +327,7 @@ wxVideoMode ConvertToVideoMode(const DEVMODE& dm)
                        dm.dmDisplayFrequency > 1 ? dm.dmDisplayFrequency : 0);
 }
 
+#ifndef __WXWINCE__
 // emulation of ChangeDisplaySettingsEx() for Win95
 LONG WINAPI ChangeDisplaySettingsExForWin95(LPCTSTR WXUNUSED(lpszDeviceName),
                                             LPDEVMODE lpDevMode,
@@ -334,6 +337,7 @@ LONG WINAPI ChangeDisplaySettingsExForWin95(LPCTSTR WXUNUSED(lpszDeviceName),
 {
     return ::ChangeDisplaySettings(lpDevMode, dwFlags);
 }
+#endif // !__WXWINCE__
 
 // ----------------------------------------------------------------------------
 // wxDisplayModule
@@ -381,7 +385,7 @@ size_t wxDisplayBase::GetCount()
     //RN: FIXME:  This is wrong - the display info array should reload after every call
     //to GetCount() - otherwise it will not be accurate.
     //The user can change the number of displays in display properties/settings
-    //after GetCount or similar is called and really mess this up...  
+    //after GetCount or similar is called and really mess this up...
     //wxASSERT_MSG( gs_displays->GetCount() == (size_t)::GetSystemMetrics(SM_CMONITORS),
     //                _T("So how many displays does this system have?") );
 
@@ -727,7 +731,11 @@ bool wxDisplay::DoChangeModeWindows(const wxVideoMode& mode)
 
         pDevMode = &dm;
 
+#ifdef __WXWINCE__
+        flags = 0;
+#else // !__WXWINCE__
         flags = CDS_FULLSCREEN;
+#endif // __WXWINCE__/!__WXWINCE__
     }
 
 
@@ -746,12 +754,14 @@ bool wxDisplay::DoChangeModeWindows(const wxVideoMode& mode)
         }
         //else: huh, no user32.dll??
 
+#ifndef __WXWINCE__
         if ( !pfnChangeDisplaySettingsEx )
         {
             // we must be under Win95 and so there is no multiple monitors
             // support anyhow
             pfnChangeDisplaySettingsEx = ChangeDisplaySettingsExForWin95;
         }
+#endif // !__WXWINCE__
     }
 
     // do change the mode

@@ -33,7 +33,7 @@
     #error "To compile this sample you must build the library with wxUSE_DISPLAY set to 1"
 #endif
 
-#include "wx/notebook.h"
+#include "wx/bookctrl.h"
 
 #include "wx/display.h"
 
@@ -86,7 +86,7 @@ private:
     wxString VideoModeToText(const wxVideoMode& mode);
 
     // GUI controls
-    wxNotebook *m_notebook;
+    wxBookCtrl *m_book;
 
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
@@ -109,13 +109,11 @@ public:
 enum
 {
     // menu items
-    Display_Quit = 1,
-
-    Display_FromPoint,
+    Display_FromPoint = wxID_HIGHEST + 1,
     Display_FullScreen,
 
     // controls
-    Display_ChangeMode = 1000,
+    Display_ChangeMode,
     Display_ResetMode,
     Display_CurrentMode,
 
@@ -123,6 +121,7 @@ enum
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
     // (where it is special and put into the "Apple" menu)
+    Display_Quit = wxID_EXIT,
     Display_About = wxID_ABOUT
 };
 
@@ -229,13 +228,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     wxPanel *panel = new wxPanel(this, wxID_ANY);
 
-    m_notebook = new wxNotebook(panel, wxID_ANY);
+    m_book = new wxBookCtrl(panel, wxID_ANY);
     const size_t count = wxDisplay::GetCount();
     for ( size_t nDpy = 0; nDpy < count; nDpy++ )
     {
         wxDisplay display(nDpy);
 
-        wxWindow *page = new wxPanel(m_notebook, wxID_ANY);
+        wxWindow *page = new wxPanel(m_book, wxID_ANY);
 
         // create 2 column flex grid sizer with growable 2nd column
         wxFlexGridSizer *sizer = new wxFlexGridSizer(2, 10, 20);
@@ -290,13 +289,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
                       0, wxALL | wxCENTRE, 5);
         page->SetSizer(sizerTop);
 
-        m_notebook->AddPage(page,
-                            wxString::Format(_T("Display %lu"),
-                                             (unsigned long)nDpy));
+        m_book->AddPage(page,
+                        wxString::Format(_T("Display %lu"),
+                                         (unsigned long)nDpy));
     }
 
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(m_notebook, 1, wxEXPAND);
+    sizer->Add(m_book, 1, wxEXPAND);
     panel->SetSizer(sizer);
     sizer->Fit(this);
     sizer->SetSizeHints(this);
@@ -352,7 +351,7 @@ void MyFrame::OnFullScreen(wxCommandEvent& event)
 
 void MyFrame::OnChangeMode(wxCommandEvent& event)
 {
-    wxDisplay dpy(m_notebook->GetSelection());
+    wxDisplay dpy(m_book->GetSelection());
 
     // you wouldn't write this in real code, would you?
     if ( !dpy.ChangeMode(((MyVideoModeClientData *)
@@ -365,7 +364,7 @@ void MyFrame::OnChangeMode(wxCommandEvent& event)
 
 void MyFrame::OnResetMode(wxCommandEvent& WXUNUSED(event))
 {
-    wxDisplay dpy(m_notebook->GetSelection());
+    wxDisplay dpy(m_book->GetSelection());
 
     dpy.ResetMode();
 }
@@ -392,9 +391,9 @@ void MyFrame::OnLeftClick(wxMouseEvent& event)
 void MyFrame::OnDisplayChanged(wxDisplayChangedEvent& event)
 {
     // update the current mode text
-    for ( size_t n = 0; n < m_notebook->GetPageCount(); n++ )
+    for ( size_t n = 0; n < m_book->GetPageCount(); n++ )
     {
-        wxStaticText *label = wxDynamicCast(m_notebook->GetPage(n)->
+        wxStaticText *label = wxDynamicCast(m_book->GetPage(n)->
                                                 FindWindow(Display_CurrentMode),
                                             wxStaticText);
         if ( label )
@@ -406,4 +405,3 @@ void MyFrame::OnDisplayChanged(wxDisplayChangedEvent& event)
 
     event.Skip();
 }
-

@@ -1076,9 +1076,6 @@
 #undef wxUSE_DRAG_AND_DROP
 #define wxUSE_DRAG_AND_DROP 0
 
-#undef wxUSE_DYNAMIC_LOADER
-#define wxUSE_DYNAMIC_LOADER 0
-
 #undef wxUSE_FSVOLUME
 #define wxUSE_FSVOLUME 0
 

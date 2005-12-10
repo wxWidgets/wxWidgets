@@ -60,6 +60,7 @@ wxWinCE:
 - Native wxCheckListBox implementation.
 - All wxTopLevelWindows resizes accordingly to SIP visibility.
 - ::wxGetUserName() implemented.
+- wxDisplay enumeration support.
 
 Unix:
 
