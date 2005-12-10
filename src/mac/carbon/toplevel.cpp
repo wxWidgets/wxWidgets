@@ -170,8 +170,8 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
     // FindFocus does not return the actual focus window,but the enclosing window
     wxWindow* focus = wxWindow::DoFindFocus();
     if ( focus == NULL )
-        return result ;
-
+        focus = (wxTopLevelWindowMac*) data ;
+    
     unsigned char charCode ;
     wxChar uniChar = 0 ;
     UInt32 keyCode ;
