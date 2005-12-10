@@ -1055,7 +1055,7 @@ void wxWindowMac::SetFocus()
         return ;
 
     // enable for patch 1376506 - perhaps? (Stefan's version)
-#if 0
+#if 1
     SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );
 #endif
 
