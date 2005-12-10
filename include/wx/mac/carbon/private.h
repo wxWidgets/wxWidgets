@@ -463,6 +463,10 @@ wxWindow *              wxFindControlFromMacControl(ControlRef inControl ) ;
 wxTopLevelWindowMac*    wxFindWinFromMacWindow( WindowRef inWindow ) ;
 wxMenu*                 wxFindMenuFromMacMenu(MenuRef inMenuRef) ;
 
+int                     wxMacCommandToId( UInt32 macCommandId ) ;
+UInt32                  wxIdToMacCommand( int wxId ) ;
+wxMenu*                 wxFindMenuFromMacCommand( const HICommand &macCommandId , wxMenuItem* &item ) ;
+
 extern wxWindow* g_MacLastWindow ;
 pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
 Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true ) ;
