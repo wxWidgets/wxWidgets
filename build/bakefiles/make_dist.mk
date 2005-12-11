@@ -960,6 +960,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/splash/*.cpp $(DISTDIR)/samples/splash
 	$(CP_P) $(SAMPDIR)/splash/*.png $(DISTDIR)/samples/splash
 	$(CP_P) $(SAMPDIR)/splash/*.mpg $(DISTDIR)/samples/splash
+	$(CP_P) $(SAMPDIR)/splash/*.xpm $(DISTDIR)/samples/splash
 
 	mkdir $(DISTDIR)/samples/splitter
 	$(CP_P) $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter
