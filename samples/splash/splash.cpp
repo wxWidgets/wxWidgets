@@ -44,6 +44,10 @@
     #include "../sample.xpm"
 #endif
 
+// for smartphone, pda and other small screens use resized embedded image
+// instead of full colour png dedicated to desktops
+#include "mobile.xpm"
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -71,6 +75,8 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+
+    bool m_isPda;
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -123,7 +129,15 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame(_T("wxSplashScreen sample application"));
 
     wxBitmap bitmap;
-    if (bitmap.LoadFile(_T("splash.png"), wxBITMAP_TYPE_PNG))
+
+    if (frame->m_isPda)
+        bitmap = wxBitmap(mobile_xpm);
+
+    bool ok = frame->m_isPda
+            ? bitmap.Ok()
+            : bitmap.LoadFile(_T("splash.png"), wxBITMAP_TYPE_PNG);
+
+    if (ok)
     {
         new wxSplashScreen(bitmap,
             wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
@@ -150,6 +164,8 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title)
        : wxFrame(NULL, wxID_ANY, title)
 {
+    m_isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+
     // set the frame icon
     SetIcon(wxICON(sample));
 
@@ -191,10 +207,19 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxBitmap bitmap;
-    if (bitmap.LoadFile(_T("splash.png"), wxBITMAP_TYPE_PNG))
+
+    if (m_isPda) bitmap = wxBitmap(mobile_xpm);
+
+    bool ok = m_isPda
+            ? bitmap.Ok()
+            : bitmap.LoadFile(_T("splash.png"), wxBITMAP_TYPE_PNG);
+
+    if (ok)
     {
         wxImage image = bitmap.ConvertToImage();
-        image.Rescale( bitmap.GetWidth()/2, bitmap.GetHeight()/2 );
+        // do not scale on already small screens
+        if (!m_isPda)
+            image.Rescale( bitmap.GetWidth()/2, bitmap.GetHeight()/2 );
         bitmap = wxBitmap(image);
         wxSplashScreen *splash = new wxSplashScreen(bitmap,
             wxSPLASH_CENTRE_ON_PARENT | wxSPLASH_NO_TIMEOUT,
@@ -205,7 +230,12 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
         wxMediaCtrl *media = new wxMediaCtrl( win, wxID_EXIT, _T("press.mpg"), wxPoint(2,2));
         media->Play();
 #else
-        wxStaticText *text = new wxStaticText( win, wxID_EXIT, _T("click somewhere\non image"), wxPoint(13,11) );
+        wxStaticText *text = new wxStaticText( win,
+                                               wxID_EXIT,
+                                               _T("click somewhere\non image"),
+                                               wxPoint(m_isPda ? 0 : 13,
+                                                       m_isPda ? 0 : 11)
+                                             );
         text->SetBackgroundColour(*wxWHITE);
         text->SetForegroundColour(*wxBLACK);
         wxFont font = text->GetFont();
