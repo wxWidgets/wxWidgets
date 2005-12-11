@@ -1237,7 +1237,13 @@ bool wxDirExists(const wxChar *pszPathName)
 
     return (ret != (DWORD)-1) && (ret & FILE_ATTRIBUTE_DIRECTORY);
 #elif defined(__OS2__)
-    return (bool)(::DosSetCurrentDir((PSZ)(WXSTRINGCAST strPath)));
+    FILESTATUS3 Info = {{0}};
+    APIRET rc = ::DosQueryPathInfo((PSZ)(WXSTRINGCAST strPath), FIL_STANDARD,
+                                   (void*) &Info, sizeof(FILESTATUS3));
+
+    return ((rc == NO_ERROR) && (Info.attrFile & FILE_DIRECTORY)) ||
+      (rc == ERROR_SHARING_VIOLATION);
+    // If we got a sharing violation, there must be something with this name.
 #else // !__WIN32__
 
     wxStructStat st;
