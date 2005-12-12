@@ -2192,6 +2192,7 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/dcprint.h \
 	wx/os2/dcscreen.h \
 	wx/os2/dialog.h \
+	wx/os2/display.h \
 	wx/os2/dnd.h \
 	wx/os2/filedlg.h \
 	wx/os2/font.h \
@@ -3869,6 +3870,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_dcprint.o \
 	monodll_dcscreen.o \
 	monodll_dialog.o \
+	monodll_display.o \
 	monodll_dnd.o \
 	monodll_evtloop.o \
 	monodll_filedlg.o \
@@ -5349,6 +5351,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_dcprint.o \
 	monolib_dcscreen.o \
 	monolib_dialog.o \
+	monolib_display.o \
 	monolib_dnd.o \
 	monolib_evtloop.o \
 	monolib_filedlg.o \
@@ -7056,6 +7059,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_dcprint.o \
 	coredll_dcscreen.o \
 	coredll_dialog.o \
+	coredll_display.o \
 	coredll_dnd.o \
 	coredll_evtloop.o \
 	coredll_filedlg.o \
@@ -8253,6 +8257,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_dcprint.o \
 	corelib_dcscreen.o \
 	corelib_dialog.o \
+	corelib_display.o \
 	corelib_dnd.o \
 	corelib_evtloop.o \
 	corelib_filedlg.o \
@@ -12260,6 +12265,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_display.o: $(srcdir)/src/cocoa/display.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/display.mm
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_display.o: $(srcdir)/src/os2/display.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/display.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_enhmeta.o: $(srcdir)/src/msw/enhmeta.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/enhmeta.cpp
 
@@ -15748,6 +15756,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_display.o: $(srcdir)/src/cocoa/display.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/display.mm
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_display.o: $(srcdir)/src/os2/display.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/display.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_enhmeta.o: $(srcdir)/src/msw/enhmeta.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/enhmeta.cpp
@@ -19661,6 +19672,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_display.o: $(srcdir)/src/cocoa/display.mm $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/display.mm
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_display.o: $(srcdir)/src/os2/display.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/display.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_enhmeta.o: $(srcdir)/src/msw/enhmeta.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/enhmeta.cpp
 
@@ -22171,6 +22185,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_display.o: $(srcdir)/src/cocoa/display.mm $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/display.mm
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_display.o: $(srcdir)/src/os2/display.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/display.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_enhmeta.o: $(srcdir)/src/msw/enhmeta.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/enhmeta.cpp
@@ -25469,6 +25486,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/splash/*.cpp $(DISTDIR)/samples/splash
 	$(CP_P) $(SAMPDIR)/splash/*.png $(DISTDIR)/samples/splash
 	$(CP_P) $(SAMPDIR)/splash/*.mpg $(DISTDIR)/samples/splash
+	$(CP_P) $(SAMPDIR)/splash/*.xpm $(DISTDIR)/samples/splash
 
 	mkdir $(DISTDIR)/samples/splitter
 	$(CP_P) $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter
