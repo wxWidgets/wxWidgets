@@ -19,6 +19,10 @@ wxWinCE:
 
 - ::wxGetUserName() implemented.
 
+wxODBC
+
+- wxDb::DBMS() was incorrectly indicating that DB2 databases were dBase databases
+
 2.6.2
 -----
 
