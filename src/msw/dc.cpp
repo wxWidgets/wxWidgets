@@ -131,10 +131,13 @@ static bool AlphaBlt(HDC hdcDst,
                      const wxBitmap& bmpSrc);
 
 #ifdef wxHAVE_RAW_BITMAP
-// our (limited) AlphaBlend() replacement
+
+// our (limited) AlphaBlend() replacement for Windows versions not providing it
 static void
-wxAlphaBlend(HDC hdcDst, int x, int y, int w, int h, int srcX, int srcY, const wxBitmap& bmp);
-#endif
+wxAlphaBlend(HDC hdcDst, int x, int y, int w, int h,
+             int srcX, int srcY, const wxBitmap& bmp);
+
+#endif // wxHAVE_RAW_BITMAP
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -2562,14 +2565,16 @@ static bool AlphaBlt(HDC hdcDst,
 #ifdef wxHAVE_RAW_BITMAP
 
 static void
-wxAlphaBlend(HDC hdcDst, int xDst, int yDst, int w, int h, int srcX, int srcY, const wxBitmap& bmpSrc)
+wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
+             int w, int h,
+             int srcX, int srcY, const wxBitmap& bmpSrc)
 {
     // get the destination DC pixels
     wxBitmap bmpDst(w, h, 32 /* force creating RGBA DIB */);
     MemoryHDC hdcMem;
     SelectInHDC select(hdcMem, GetHbitmapOf(bmpDst));
 
-    if ( !::BitBlt(hdcMem, 0, 0, w, h, hdcDst, 0, 0, SRCCOPY) )
+    if ( !::BitBlt(hdcMem, 0, 0, w, h, hdcDst, xDst, yDst, SRCCOPY) )
     {
         wxLogLastError(_T("BitBlt"));
     }
