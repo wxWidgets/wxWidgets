@@ -133,30 +133,32 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
     switch ( GetEventKind( event ) )
     {
         case kEventTextInputUnicodeForKeyEvent :
-            // this is only called when no default handler has jumped in, e.g. a wxControl on a floater window does not
-            // get its own kEventTextInputUnicodeForKeyEvent, so we reroute the event back to the control
-            wxControl* control = wxDynamicCast( focus , wxControl ) ;
-            if ( control )
             {
-                ControlRef macControl = (ControlRef) control->GetHandle() ;
-                if ( macControl )
+                // this is only called when no default handler has jumped in, e.g. a wxControl on a floater window does not
+                // get its own kEventTextInputUnicodeForKeyEvent, so we reroute the event back to the control
+                wxControl* control = wxDynamicCast( focus , wxControl ) ;
+                if ( control )
                 {
-                    ::HandleControlKey( macControl , keyCode , charCode , modifiers ) ;
-                    result = noErr ;
+                    ControlRef macControl = (ControlRef) control->GetHandle() ;
+                    if ( macControl )
+                    {
+                        ::HandleControlKey( macControl , keyCode , charCode , modifiers ) ;
+                        result = noErr ;
+                    }
                 }
-            }
 
 #if 0
-            // this may lead to double events sent to a window in case all handlers have skipped the key down event
-            UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
-            UInt32 message = (keyCode << 8) + charCode;
+                // this may lead to double events sent to a window in case all handlers have skipped the key down event
+                UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
+                UInt32 message = (keyCode << 8) + charCode;
 
-            if ( (focus != NULL) &&
-                wxTheApp->MacSendKeyDownEvent( focus , message , modifiers , when , point.h , point.v ) )
-            {
-                result = noErr ;
-            }
+                if ( (focus != NULL) &&
+                    wxTheApp->MacSendKeyDownEvent( focus , message , modifiers , when , point.h , point.v ) )
+                {
+                    result = noErr ;
+                }
 #endif
+            }
             break ;
 
         default:
