@@ -41,6 +41,7 @@
 #include "wx/app.h"
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
+
 #if wxUSE_SYSTEM_OPTIONS
     #include "wx/sysopt.h"
 #endif
@@ -49,7 +50,7 @@
 #include <ToolUtils.h>
 #endif
 
-//For targeting OSX
+// for targeting OSX
 #include "wx/mac/private.h"
 
 // ----------------------------------------------------------------------------
@@ -84,7 +85,7 @@ extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
 
 static const EventTypeSpec eventList[] =
 {
-    // TODO remove control related event like key and mouse (except for WindowLeave events)
+    // TODO: remove control related event like key and mouse (except for WindowLeave events)
 #if 1
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
 
@@ -101,8 +102,8 @@ static const EventTypeSpec eventList[] =
     { kEventClassWindow , kEventWindowBoundsChanged } ,
     { kEventClassWindow , kEventWindowClose } ,
 
-    // we have to catch these events on the toplevel window level, as controls don't get the
-    // raw mouse events anymore
+    // we have to catch these events on the toplevel window level,
+    // as controls don't get the raw mouse events anymore
 
     { kEventClassMouse , kEventMouseDown } ,
     { kEventClassMouse , kEventMouseUp } ,
@@ -114,27 +115,26 @@ static const EventTypeSpec eventList[] =
 static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
-
-    wxWindow* focus = wxWindow::FindFocus() ;
-    unsigned char charCode ;
-    UInt32 keyCode ;
-    UInt32 modifiers ;
+    wxWindow* focus ;
+    UInt32 keyCode, modifiers ;
     Point point ;
-
     EventRef rawEvent ;
+    unsigned char charCode ;
 
     GetEventParameter( event, kEventParamTextInputSendKeyboardEvent, typeEventRef, NULL, sizeof(rawEvent), NULL, &rawEvent ) ;
 
-    GetEventParameter( rawEvent, kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
+    GetEventParameter( rawEvent, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
     GetEventParameter( rawEvent, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
     GetEventParameter( rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
     GetEventParameter( rawEvent, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
 
+    focus = wxWindow::FindFocus() ;
+
     switch ( GetEventKind( event ) )
     {
         case kEventTextInputUnicodeForKeyEvent :
-            // this is only called when no default handler has jumped in, eg a wxControl on a floater window does not
-            // get its own kEventTextInputUnicodeForKeyEvent, so we route back the
+            // this is only called when no default handler has jumped in, e.g. a wxControl on a floater window does not
+            // get its own kEventTextInputUnicodeForKeyEvent, so we reroute the event back to the control
             wxControl* control = wxDynamicCast( focus , wxControl ) ;
             if ( control )
             {
@@ -151,8 +151,8 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
             UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
             UInt32 message = (keyCode << 8) + charCode;
 
-            if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent(
-                focus , message , modifiers , when , point.h , point.v ) )
+            if ( (focus != NULL) &&
+                wxTheApp->MacSendKeyDownEvent( focus , message , modifiers , when , point.h , point.v ) )
             {
                 result = noErr ;
             }
@@ -170,7 +170,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 {
     OSStatus result = eventNotHandledErr ;
     // call DoFindFocus instead of FindFocus, because for Composite Windows(like WxGenericListCtrl)
-    // FindFocus does not return the actual focus window,but the enclosing window
+    // FindFocus does not return the actual focus window, but the enclosing window
     wxWindow* focus = wxWindow::DoFindFocus();
     if ( focus == NULL )
         focus = (wxTopLevelWindowMac*) data ;
@@ -184,7 +184,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 
 #if wxUSE_UNICODE
     UInt32 dataSize = 0 ;
-    if ( GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, 0 , &dataSize , NULL ) == noErr )
+    if ( GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, 0 , &dataSize, NULL ) == noErr )
     {
         UniChar buf[2] ;
 
@@ -193,24 +193,26 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
         if ( dataSize > 4 )
             charBuf = new UniChar[ dataSize / sizeof( UniChar) ] ;
         GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
+
 #if SIZEOF_WCHAR_T == 2
         uniChar = charBuf[0] ;
 #else
         wxMBConvUTF16 converter ;
         converter.MB2WC( &uniChar , (const char*)charBuf , 1 ) ;
 #endif
+
         if ( dataSize > 4 )
             delete[] charBuf ;
     }
 #endif
 
-    GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
+    GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
     GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
     GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
     GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
 
     UInt32 message = (keyCode << 8) + charCode;
-    switch( GetEventKind( event ) )
+    switch ( GetEventKind( event ) )
     {
         case kEventRawKeyRepeat :
         case kEventRawKeyDown :
@@ -243,11 +245,13 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 event.m_controlDown = modifiers & controlKey;
                 event.m_altDown = modifiers & optionKey;
                 event.m_metaDown = modifiers & cmdKey;
+                event.m_x = point.h;
+                event.m_y = point.v;
+
 #if wxUSE_UNICODE
                 event.m_uniChar = uniChar ;
 #endif
-                event.m_x = point.h;
-                event.m_y = point.v;
+
                 event.SetTimestamp(when);
                 event.SetEventObject(focus);
 
@@ -275,6 +279,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                     event.SetEventType( ( modifiers & cmdKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
+
                 wxApp::s_lastModifiers = modifiers ;
             }
             break ;
@@ -304,8 +309,8 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     // this parameter are not given for all events
     EventMouseButton button = 0 ;
     UInt32 clickCount = 0 ;
-    cEvent.GetParameter<EventMouseButton>(kEventParamMouseButton, typeMouseButton , &button) ;
-    cEvent.GetParameter<UInt32>(kEventParamClickCount, typeUInt32 , &clickCount ) ;
+    cEvent.GetParameter<EventMouseButton>( kEventParamMouseButton, typeMouseButton , &button ) ;
+    cEvent.GetParameter<UInt32>( kEventParamClickCount, typeUInt32 , &clickCount ) ;
 
     wxevent.m_x = screenMouseLocation.h;
     wxevent.m_y = screenMouseLocation.v;
@@ -334,11 +339,11 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     else if ( lastButton )
         button = lastButton ;
 
-    // determinate the correct down state, wx does not want a 'down' for a mouseUp event, while mac delivers
-    // this button
+    // determine the correct down state, wx does not want a 'down' for a mouseUp event,
+    // while mac delivers this button
     if ( button != 0 && cEvent.GetKind() != kEventMouseUp )
     {
-        switch( button )
+        switch ( button )
         {
             case kEventMouseButtonPrimary :
                 wxevent.m_leftDown = true ;
@@ -364,7 +369,7 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
             switch ( button )
             {
                 case kEventMouseButtonPrimary :
-                    wxevent.SetEventType(clickCount > 1 ? wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN )  ;
+                    wxevent.SetEventType( clickCount > 1 ? wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN )  ;
                     break ;
 
                 case kEventMouseButtonSecondary :
@@ -372,7 +377,7 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
                     break ;
 
                 case kEventMouseButtonTertiary :
-                    wxevent.SetEventType(clickCount > 1 ? wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN ) ;
+                    wxevent.SetEventType( clickCount > 1 ? wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN ) ;
                     break ;
 
                 default:
@@ -402,7 +407,7 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
 
      case kEventMouseWheelMoved :
         {
-            wxevent.SetEventType(wxEVT_MOUSEWHEEL ) ;
+            wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
 
             // EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
             SInt32 delta = cEvent.GetParameter<SInt32>(kEventParamMouseWheelDelta, typeLongInteger) ;
@@ -414,7 +419,7 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
         break ;
 
         default :
-            wxevent.SetEventType(wxEVT_MOTION ) ;
+            wxevent.SetEventType( wxEVT_MOTION ) ;
             break ;
     }
 }
@@ -424,14 +429,16 @@ ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, const Point
     if ( superControl )
     {
         UInt16 childrenCount = 0 ;
+        ControlHandle sibling ;
+        Rect r ;
         OSStatus err = CountSubControls( superControl , &childrenCount ) ;
         if ( err == errControlIsNotEmbedder )
             return NULL ;
+
         wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") ) ;
 
         for ( UInt16 i = childrenCount ; i >=1  ; --i )
         {
-            ControlHandle sibling ;
             err = GetIndexedSubControl( superControl , i , & sibling ) ;
             if ( err == errControlIsNotEmbedder )
                 return NULL ;
@@ -439,13 +446,14 @@ ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, const Point
             wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") ) ;
             if ( IsControlVisible( sibling ) )
             {
-                Rect r ;
                 UMAGetControlBoundsInWindowCoords( sibling , &r ) ;
                 if ( MacPtInRect( location , &r ) )
                 {
                     ControlHandle child = wxMacFindSubControl( toplevelWindow , location , sibling , outPart ) ;
                     if ( child )
+                    {
                         return child ;
+                    }
                     else
                     {
                         Point testLocation = location ;
@@ -457,6 +465,7 @@ ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, const Point
                         }
 
                         *outPart = TestControl( sibling , testLocation ) ;
+
                         return sibling ;
                     }
                 }
@@ -473,10 +482,11 @@ ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow , con
     if ( UMAGetSystemVersion() >= 0x1030 && ( toplevelWindow == 0 || toplevelWindow->MacUsesCompositing() ) )
         return FindControlUnderMouse( location , window , outPart ) ;
 #endif
+
     ControlRef rootControl = NULL ;
     verify_noerr( GetRootControl( window , &rootControl ) ) ;
-    return wxMacFindSubControl( toplevelWindow , location , rootControl , outPart ) ;
 
+    return wxMacFindSubControl( toplevelWindow , location , rootControl , outPart ) ;
 }
 
 #define NEW_CAPTURE_HANDLING 1
@@ -524,7 +534,9 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             control = wxMacFindControlUnderMouse( toplevelWindow , windowMouseLocation , window , &part ) ;
             // if there is no control below the mouse position, send the event to the toplevel window itself
             if ( control == 0 )
+            {
                 currentMouseWindow = (wxWindow*) data ;
+            }
             else
             {
                 currentMouseWindow = wxFindControlFromMacControl( control ) ;
@@ -558,9 +570,11 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             g_MacLastWindow->ScreenToClient( &eventleave.m_x, &eventleave.m_y );
             eventleave.SetEventObject( g_MacLastWindow ) ;
             wxevent.SetId( g_MacLastWindow->GetId() ) ;
+
 #if wxUSE_TOOLTIPS
             wxToolTip::RelayEvent( g_MacLastWindow , eventleave);
-#endif // wxUSE_TOOLTIPS
+#endif
+
             g_MacLastWindow->GetEventHandler()->ProcessEvent(eventleave);
         }
 
@@ -571,9 +585,11 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             currentMouseWindow->ScreenToClient( &evententer.m_x, &evententer.m_y );
             evententer.SetEventObject( currentMouseWindow ) ;
             wxevent.SetId( currentMouseWindow->GetId() ) ;
+
 #if wxUSE_TOOLTIPS
-            wxToolTip::RelayEvent( currentMouseWindow , evententer);
-#endif // wxUSE_TOOLTIPS
+            wxToolTip::RelayEvent( currentMouseWindow , evententer );
+#endif
+
             currentMouseWindow->GetEventHandler()->ProcessEvent(evententer);
         }
 
@@ -600,12 +616,13 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 
         // make tooltips current
 
-    #if wxUSE_TOOLTIPS
+#if wxUSE_TOOLTIPS
         if ( wxevent.GetEventType() == wxEVT_MOTION
             || wxevent.GetEventType() == wxEVT_ENTER_WINDOW
             || wxevent.GetEventType() == wxEVT_LEAVE_WINDOW )
-            wxToolTip::RelayEvent( currentMouseWindow , wxevent);
-    #endif // wxUSE_TOOLTIPS
+            wxToolTip::RelayEvent( currentMouseWindow , wxevent );
+#endif
+
         if ( currentMouseWindow->GetEventHandler()->ProcessEvent(wxevent) )
         {
             if ((currentMouseWindowParent != NULL) &&
@@ -650,8 +667,11 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 
                     if ((currentMouseWindowParent != NULL) &&
                         (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL))
+                    {
                         currentMouseWindow = NULL;
+                    }
                 }
+
                 result = noErr ;
             }
         }
@@ -700,6 +720,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             result = noErr ;
         }
     }
+
     return result ;
 }
 
@@ -1017,15 +1038,16 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 
 void wxTopLevelWindowMac::Maximize(bool maximize)
 {
-    // TODO Check, is this still necessary
+    // TODO: check if this is still necessary
 #if 0
-    wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) m_macWindow) ) ;
-    wxMacWindowClipper clip (this);
+    wxMacPortStateHelper help( (GrafPtr)GetWindowPort( (WindowRef)m_macWindow) ) ;
+    wxMacWindowClipper clip( this );
 #endif
 
     if ( !IsWindowInStandardState( (WindowRef)m_macWindow, NULL, NULL ) )
     {
         Rect rect;
+
         GetWindowBounds((WindowRef)m_macWindow, kWindowGlobalPortRgn, &rect);
         SetWindowIdealUserState((WindowRef)m_macWindow, &rect);
         SetWindowUserState((WindowRef)m_macWindow, &rect);
@@ -1036,7 +1058,7 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
 
 bool wxTopLevelWindowMac::IsMaximized() const
 {
-    return IsWindowInStandardState(  (WindowRef)m_macWindow , NULL , NULL ) ;
+    return IsWindowInStandardState( (WindowRef)m_macWindow , NULL , NULL ) ;
 }
 
 void wxTopLevelWindowMac::Iconize(bool iconize)
@@ -1095,11 +1117,12 @@ void wxTopLevelWindowMac::MacInstallTopLevelWindowEventHandler()
         GetEventTypeCount(eventList), eventList, this, (EventHandlerRef *)&m_macEventHandler );
 }
 
-void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name )
+void  wxTopLevelWindowMac::MacCreateRealWindow(
+    const wxString& title,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxString& name )
 {
     OSStatus err = noErr ;
     SetName(name);
@@ -1220,15 +1243,15 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
 
-    // the create commands are only for content rect, so we have to set the size again as
-    // structure bounds
+    // the create commands are only for content rect,
+    // so we have to set the size again as structure bounds
     SetWindowBounds(  (WindowRef) m_macWindow , kWindowStructureRgn , &theBoundsRect ) ;
 
     wxAssociateWinWithMacWindow( (WindowRef) m_macWindow , this ) ;
     UMASetWTitle( (WindowRef) m_macWindow , title , m_font.GetEncoding() ) ;
     m_peer = new wxMacControl(this , true /*isRootControl*/) ;
-#if TARGET_API_MAC_OSX
 
+#if TARGET_API_MAC_OSX
     if ( m_macUsesCompositing )
     {
         // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of
@@ -1334,25 +1357,25 @@ bool wxTopLevelWindowMac::Show(bool show)
 
     if (show)
     {
-#if wxUSE_SYSTEM_OPTIONS // code contributed by Ryan Wilcox December 18, 2003
+#if wxUSE_SYSTEM_OPTIONS
+        // code contributed by Ryan Wilcox December 18, 2003
         bool plainTransition = UMAGetSystemVersion() >= 0x1000 ;
         if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
             plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
 
         if ( plainTransition )
-        {
            ::ShowWindow( (WindowRef)m_macWindow );
-        }
         else
-#endif
-        {
            ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowShowTransitionAction, NULL );
-        }
+#else
+
+        ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowShowTransitionAction, NULL );
+#endif
 
         ::SelectWindow( (WindowRef)m_macWindow ) ;
 
         // because apps expect a size event to occur at this moment
-        wxSizeEvent event( GetSize() , m_windowId);
+        wxSizeEvent event(GetSize() , m_windowId);
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
     }
@@ -1620,9 +1643,8 @@ void wxTopLevelWindowMac::MacPerformUpdates()
 static pascal void wxMacNMResponse( NMRecPtr ptr )
 {
     NMRemove( ptr ) ;
-    DisposePtr( (Ptr) ptr ) ;
+    DisposePtr( (Ptr)ptr ) ;
 }
-
 
 void wxTopLevelWindowMac::RequestUserAttention(int flags )
 {
@@ -1650,8 +1672,8 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
                  _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
-    // The empty region signifies that the shape should be removed from the
-    // window.
+    // The empty region signifies that the shape
+    // should be removed from the window.
     if ( region.IsEmpty() )
     {
         wxSize sz = GetClientSize();
@@ -1688,8 +1710,9 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
 static void wxShapedMacWindowGetPos(WindowRef window, Rect* inRect)
 {
     GetWindowPortBounds(window, inRect);
-    Point pt = {inRect->left, inRect->top};
-    QDLocalToGlobalPoint( GetWindowPort(window) , &pt ) ;
+    Point pt = { inRect->left, inRect->top };
+
+    QDLocalToGlobalPoint( GetWindowPort(window), &pt ) ;
     inRect->top = pt.v;
     inRect->left = pt.h;
     inRect->bottom += pt.v;
