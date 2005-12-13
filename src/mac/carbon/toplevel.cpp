@@ -123,13 +123,12 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
 
     EventRef rawEvent ;
 
-    GetEventParameter( event , kEventParamTextInputSendKeyboardEvent ,typeEventRef,NULL,sizeof(rawEvent),NULL,&rawEvent ) ;
+    GetEventParameter( event, kEventParamTextInputSendKeyboardEvent, typeEventRef, NULL, sizeof(rawEvent), NULL, &rawEvent ) ;
 
     GetEventParameter( rawEvent, kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
-    GetEventParameter( rawEvent, kEventParamKeyCode, typeUInt32, NULL,  sizeof(UInt32), NULL, &keyCode );
-       GetEventParameter( rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
-    GetEventParameter( rawEvent, kEventParamMouseLocation, typeQDPoint, NULL,
-        sizeof( Point ), NULL, &point );
+    GetEventParameter( rawEvent, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
+    GetEventParameter( rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
+    GetEventParameter( rawEvent, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
 
     switch ( GetEventKind( event ) )
     {
@@ -146,7 +145,8 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
                     result = noErr ;
                 }
             }
-            /*
+
+#if 0
             // this may lead to double events sent to a window in case all handlers have skipped the key down event
             UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
             UInt32 message = (keyCode << 8) + charCode;
@@ -156,7 +156,10 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
             {
                 result = noErr ;
             }
-            */
+#endif
+            break ;
+
+        default:
             break ;
     }
 
@@ -171,7 +174,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
     wxWindow* focus = wxWindow::DoFindFocus();
     if ( focus == NULL )
         focus = (wxTopLevelWindowMac*) data ;
-    
+
     unsigned char charCode ;
     wxChar uniChar = 0 ;
     UInt32 keyCode ;
@@ -202,10 +205,9 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 #endif
 
     GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
-    GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL,  sizeof(UInt32), NULL, &keyCode );
-       GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
-    GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL,
-        sizeof( Point ), NULL, &point );
+    GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
+    GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
+    GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
 
     UInt32 message = (keyCode << 8) + charCode;
     switch( GetEventKind( event ) )
@@ -224,6 +226,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 wxTheApp->MacSetCurrentEvent( formerEvent , formerHandler ) ;
             }
             break ;
+
         case kEventRawKeyUp :
             if ( /* focus && */ wxTheApp->MacSendKeyUpEvent(
                 focus , message , modifiers , when , point.h , point.v , uniChar ) )
@@ -231,6 +234,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 result = noErr ;
             }
             break ;
+
         case kEventRawKeyModifiersChanged :
             {
                 wxKeyEvent event(wxEVT_KEY_DOWN);
@@ -274,15 +278,18 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 wxApp::s_lastModifiers = modifiers ;
             }
             break ;
+
+        default:
+            break;
     }
 
     return result ;
 }
 
 // we don't interfere with foreign controls on our toplevel windows, therefore we always give back eventNotHandledErr
-// for windows that we didn't create (like eg Scrollbars in a databrowser) , or for controls where we did not handle the
+// for windows that we didn't create (like eg Scrollbars in a databrowser), or for controls where we did not handle the
 // mouse down at all
-
+//
 // This handler can also be called from app level where data (ie target window) may be null or a non wx window
 
 wxWindow* g_MacLastWindow = NULL ;
@@ -307,11 +314,10 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     wxevent.m_altDown = modifiers & optionKey;
     wxevent.m_metaDown = modifiers & cmdKey;
     wxevent.SetTimestamp( cEvent.GetTicks() ) ;
+
    // a control click is interpreted as a right click
     if ( button == kEventMouseButtonPrimary && (modifiers & controlKey) )
-    {
         button = kEventMouseButtonSecondary ;
-    }
 
     // otherwise we report double clicks by connecting a left click with a ctrl-left click
     if ( clickCount > 1 && button != lastButton )
@@ -337,47 +343,65 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
             case kEventMouseButtonPrimary :
                 wxevent.m_leftDown = true ;
                 break ;
+
             case kEventMouseButtonSecondary :
                 wxevent.m_rightDown = true ;
                 break ;
+
             case kEventMouseButtonTertiary :
                 wxevent.m_middleDown = true ;
                 break ;
+
+            default:
+                break ;
         }
     }
+
     // translate into wx types
     switch ( cEvent.GetKind() )
     {
         case kEventMouseDown :
-            switch( button )
+            switch ( button )
             {
                 case kEventMouseButtonPrimary :
                     wxevent.SetEventType(clickCount > 1 ? wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN )  ;
                     break ;
+
                 case kEventMouseButtonSecondary :
                     wxevent.SetEventType( clickCount > 1 ? wxEVT_RIGHT_DCLICK : wxEVT_RIGHT_DOWN ) ;
                     break ;
+
                 case kEventMouseButtonTertiary :
                     wxevent.SetEventType(clickCount > 1 ? wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN ) ;
                     break ;
+
+                default:
+                    break ;
             }
             break ;
+
         case kEventMouseUp :
-            switch( button )
+            switch ( button )
             {
                 case kEventMouseButtonPrimary :
                     wxevent.SetEventType( wxEVT_LEFT_UP )  ;
                     break ;
+
                 case kEventMouseButtonSecondary :
                     wxevent.SetEventType( wxEVT_RIGHT_UP ) ;
                     break ;
+
                 case kEventMouseButtonTertiary :
                     wxevent.SetEventType( wxEVT_MIDDLE_UP ) ;
                     break ;
+
+                default:
+                    break ;
             }
             break ;
+
      case kEventMouseWheelMoved :
-         {
+        {
             wxevent.SetEventType(wxEVT_MOUSEWHEEL ) ;
 
             // EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
@@ -386,8 +410,9 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
             wxevent.m_wheelRotation = delta;
             wxevent.m_wheelDelta = 1;
             wxevent.m_linesPerAction = 1;
-            break ;
-         }
+        }
+        break ;
+
         default :
             wxevent.SetEventType(wxEVT_MOTION ) ;
             break ;
@@ -438,6 +463,7 @@ ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, const Point
             }
         }
     }
+
     return NULL ;
 }
 
@@ -537,6 +563,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 #endif // wxUSE_TOOLTIPS
             g_MacLastWindow->GetEventHandler()->ProcessEvent(eventleave);
         }
+
         if ( currentMouseWindow )
         {
             wxMouseEvent evententer(wxevent);
@@ -549,6 +576,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 #endif // wxUSE_TOOLTIPS
             currentMouseWindow->GetEventHandler()->ProcessEvent(evententer);
         }
+
         g_MacLastWindow = currentMouseWindow ;
     }
 
@@ -560,7 +588,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             ::MenuSelect( screenMouseLocation ) ;
             result = noErr ;
         }
-    } // if ( windowPart == inMenuBar )
+    }
     else if ( currentMouseWindow )
     {
         wxWindow *currentMouseWindowParent = currentMouseWindow->GetParent();
@@ -627,6 +655,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 result = noErr ;
             }
         }
+
         if ( cEvent.GetKind() == kEventMouseUp && wxApp::s_captureWindow )
         {
             wxApp::s_captureWindow = NULL ;
@@ -638,7 +667,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         wxWindow* cursorTarget = currentMouseWindow ;
         wxPoint cursorPoint( wxevent.m_x , wxevent.m_y ) ;
 
-        while( cursorTarget && !cursorTarget->MacSetupCursor( cursorPoint ) )
+        while ( cursorTarget && !cursorTarget->MacSetupCursor( cursorPoint ) )
         {
             cursorTarget = cursorTarget->GetParent() ;
             if ( cursorTarget )
@@ -666,8 +695,8 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 clickLocation.v = (int)hiPoint.y ;
 #endif
             }
-            HandleControlClick( control , clickLocation ,
-                modifiers , (ControlActionUPP ) -1 ) ;
+
+            HandleControlClick( control , clickLocation , modifiers , (ControlActionUPP ) -1 ) ;
             result = noErr ;
         }
     }
@@ -683,7 +712,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
     // WindowRef windowRef = cEvent.GetParameter<WindowRef>(kEventParamDirectObject) ;
     wxTopLevelWindowMac* toplevelWindow = (wxTopLevelWindowMac*) data ;
 
-    switch( GetEventKind( event ) )
+    switch ( GetEventKind( event ) )
     {
         case kEventWindowActivated :
         {
@@ -693,8 +722,9 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
             wxevent.SetEventObject(toplevelWindow);
             toplevelWindow->GetEventHandler()->ProcessEvent(wxevent);
             // we still sending an eventNotHandledErr in order to allow for default processing
-            break ;
         }
+            break ;
+
         case kEventWindowDeactivated :
         {
             toplevelWindow->MacActivate(cEvent.GetTicks() , false) ;
@@ -703,21 +733,22 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
             wxevent.SetEventObject(toplevelWindow);
             toplevelWindow->GetEventHandler()->ProcessEvent(wxevent);
             // we still sending an eventNotHandledErr in order to allow for default processing
-            break ;
         }
+            break ;
+
         case kEventWindowShown :
-        {
             toplevelWindow->Refresh() ;
             result = noErr ;
             break ;
-        }
+
         case kEventWindowClose :
-                toplevelWindow->Close() ;
+            toplevelWindow->Close() ;
             result = noErr ;
             break ;
+
         case kEventWindowBoundsChanged :
         {
-            UInt32 attributes = cEvent.GetParameter<UInt32>(kEventParamAttributes,typeUInt32) ;
+            UInt32 attributes = cEvent.GetParameter<UInt32>(kEventParamAttributes, typeUInt32) ;
             Rect newRect = cEvent.GetParameter<Rect>(kEventParamCurrentBounds) ;
             wxRect r( newRect.left , newRect.top , newRect.right - newRect.left , newRect.bottom - newRect.top ) ;
             if ( attributes & kWindowBoundsChangeSizeChanged )
@@ -727,12 +758,12 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                 wxFrame *frame = wxDynamicCast( toplevelWindow , wxFrame ) ;
                 if ( frame )
                 {
-        #if wxUSE_STATUSBAR
+#if wxUSE_STATUSBAR
                     frame->PositionStatusBar();
-        #endif
-        #if wxUSE_TOOLBAR
+#endif
+#if wxUSE_TOOLBAR
                     frame->PositionToolBar();
-        #endif
+#endif
                 }
 
                 wxSizeEvent event( r.GetSize() , toplevelWindow->GetId() ) ;
@@ -741,15 +772,18 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                 toplevelWindow->GetEventHandler()->ProcessEvent(event) ;
                 toplevelWindow->wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
             }
+
             if ( attributes & kWindowBoundsChangeOriginChanged )
             {
                 wxMoveEvent event( r.GetLeftTop() , toplevelWindow->GetId() ) ;
                 event.SetEventObject( toplevelWindow ) ;
                 toplevelWindow->GetEventHandler()->ProcessEvent(event) ;
             }
+
             result = noErr ;
-            break ;
         }
+            break ;
+
         case kEventWindowBoundsChanging :
         {
             UInt32 attributes = cEvent.GetParameter<UInt32>(kEventParamAttributes,typeUInt32) ;
@@ -760,8 +794,13 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                 // all (Mac) rects are in content area coordinates, all wxRects in structure coordinates
                 int left , top , right , bottom ;
                 toplevelWindow->MacGetContentAreaInset( left , top , right , bottom ) ;
-                wxRect r( newRect.left - left  , newRect.top  - top  ,
-                    newRect.right - newRect.left + left + right  , newRect.bottom - newRect.top + top + bottom ) ;
+
+                wxRect r(
+                    newRect.left - left,
+                    newRect.top - top,
+                    newRect.right - newRect.left + left + right,
+                    newRect.bottom - newRect.top + top + bottom ) ;
+
                 // this is a EVT_SIZING not a EVT_SIZE type !
                 wxSizeEvent wxevent( r , toplevelWindow->GetId() ) ;
                 wxevent.SetEventObject( toplevelWindow ) ;
@@ -784,11 +823,13 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
             }
 
             result = noErr ;
-            break ;
         }
+            break ;
+
         default :
             break ;
     }
+
     return result ;
 }
 
@@ -801,18 +842,23 @@ pascal OSStatus wxMacTopLevelEventHandler( EventHandlerCallRef handler , EventRe
         case kEventClassKeyboard :
             result = KeyboardEventHandler( handler, event , data ) ;
             break ;
+
         case kEventClassTextInput :
             result = TextInputEventHandler( handler, event , data ) ;
             break ;
+
         case kEventClassWindow :
             result = wxMacTopLevelWindowEventHandler( handler, event , data ) ;
             break ;
+
         case kEventClassMouse :
             result = wxMacTopLevelMouseEventHandler( handler, event , data ) ;
             break ;
+
         default :
             break ;
     }
+
     return result ;
 }
 
@@ -869,23 +915,21 @@ typedef struct
 {
     wxPoint m_position ;
     wxSize m_size ;
-} FullScreenData ;
+}
+FullScreenData ;
 
 void wxTopLevelWindowMac::Init()
 {
     m_iconized =
     m_maximizeOnShow = false;
     m_macWindow = NULL ;
+
 #if TARGET_API_MAC_OSX
-    if ( UMAGetSystemVersion() >= 0x1030 )
-    {
-        m_macUsesCompositing = true;
-    }
-    else
+    m_macUsesCompositing = ( UMAGetSystemVersion() >= 0x1030 );
+#else
+    m_macUsesCompositing = false;
 #endif
-    {
-        m_macUsesCompositing = false;
-    }
+
     m_macEventHandler = NULL ;
     m_macFullScreenData = NULL ;
 }
@@ -897,11 +941,13 @@ public :
     {
         m_macWindow = windowRef ;
     }
+
     virtual ~wxMacDeferredWindowDeleter()
     {
         UMADisposeWindow( (WindowRef) m_macWindow ) ;
     }
- protected :
+
+protected :
     WindowRef m_macWindow ;
 } ;
 
@@ -918,7 +964,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 
     m_windowStyle = style;
 
-    SetName(name);
+    SetName( name );
 
     m_windowId = id == -1 ? NewControlId() : id;
     wxWindow::SetLabel( title ) ;
@@ -976,13 +1022,15 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
     wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) m_macWindow) ) ;
     wxMacWindowClipper clip (this);
 #endif
-    if ( !IsWindowInStandardState( (WindowRef)m_macWindow, NULL, NULL) )
+
+    if ( !IsWindowInStandardState( (WindowRef)m_macWindow, NULL, NULL ) )
     {
         Rect rect;
         GetWindowBounds((WindowRef)m_macWindow, kWindowGlobalPortRgn, &rect);
         SetWindowIdealUserState((WindowRef)m_macWindow, &rect);
         SetWindowUserState((WindowRef)m_macWindow, &rect);
     }
+
     ZoomWindow( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , false ) ;
 }
 
@@ -993,8 +1041,8 @@ bool wxTopLevelWindowMac::IsMaximized() const
 
 void wxTopLevelWindowMac::Iconize(bool iconize)
 {
-    if ( IsWindowCollapsable((WindowRef)m_macWindow) )
-        CollapseWindow((WindowRef)m_macWindow , iconize ) ;
+    if ( IsWindowCollapsable( (WindowRef)m_macWindow) )
+        CollapseWindow( (WindowRef)m_macWindow , iconize ) ;
 }
 
 bool wxTopLevelWindowMac::IsIconized() const
@@ -1016,7 +1064,7 @@ void wxTopLevelWindowMac::Restore()
 
 wxPoint wxTopLevelWindowMac::GetClientAreaOrigin() const
 {
-    return wxPoint(0,0) ;
+    return wxPoint(0, 0) ;
 }
 
 void wxTopLevelWindowMac::SetIcon(const wxIcon& icon)
@@ -1041,8 +1089,10 @@ void wxTopLevelWindowMac::MacInstallTopLevelWindowEventHandler()
     {
         verify_noerr( ::RemoveEventHandler( (EventHandlerRef) m_macEventHandler ) ) ;
     }
-    InstallWindowEventHandler(MAC_WXHWND(m_macWindow), GetwxMacTopLevelEventHandlerUPP(),
-        GetEventTypeCount(eventList), eventList, this, (EventHandlerRef *)&m_macEventHandler);
+
+    InstallWindowEventHandler(
+        MAC_WXHWND(m_macWindow), GetwxMacTopLevelEventHandlerUPP(),
+        GetEventTypeCount(eventList), eventList, this, (EventHandlerRef *)&m_macEventHandler );
 }
 
 void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
@@ -1057,12 +1107,10 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     m_isShown = false;
 
     // create frame.
-
-    Rect theBoundsRect;
-
     int x = (int)pos.x;
     int y = (int)pos.y;
 
+    Rect theBoundsRect;
     wxRect display = wxGetClientDisplayRect() ;
 
     if ( x == wxDefaultPosition.x )
@@ -1077,7 +1125,6 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     ::SetRect(&theBoundsRect, x, y , x + w, y + h);
 
     // translate the window attributes in the appropriate window class and attributes
-
     WindowClass wclass = 0;
     WindowAttributes attr = kWindowNoAttributes ;
     WindowGroupRef group = NULL ;
@@ -1091,10 +1138,9 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
             )
         {
             wclass = kFloatingWindowClass ;
+
             if ( HasFlag(wxTINY_CAPTION_VERT) )
-            {
                 attr |= kWindowSideTitlebarAttribute ;
-            }
         }
         else
         {
@@ -1127,33 +1173,27 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         }
     }
 
-    if ( HasFlag( wxMINIMIZE_BOX ) && wclass != kPlainWindowClass )
+    if ( wclass != kPlainWindowClass )
     {
-        attr |= kWindowCollapseBoxAttribute ;
-    }
-    if ( HasFlag( wxMAXIMIZE_BOX ) && wclass != kPlainWindowClass  )
-    {
-        attr |= kWindowFullZoomAttribute ;
-    }
-    if ( HasFlag( wxRESIZE_BORDER ) && wclass != kPlainWindowClass  )
-    {
-        attr |= kWindowResizableAttribute ;
-    }
-    if ( HasFlag( wxCLOSE_BOX) && wclass != kPlainWindowClass  )
-    {
-        attr |= kWindowCloseBoxAttribute ;
+        if ( HasFlag( wxMINIMIZE_BOX ) )
+            attr |= kWindowCollapseBoxAttribute ;
+
+        if ( HasFlag( wxMAXIMIZE_BOX ) )
+            attr |= kWindowFullZoomAttribute ;
+
+        if ( HasFlag( wxRESIZE_BORDER ) )
+            attr |= kWindowResizableAttribute ;
+
+        if ( HasFlag( wxCLOSE_BOX) )
+            attr |= kWindowCloseBoxAttribute ;
     }
 
+    // turn on live resizing (OS X only)
     if (UMAGetSystemVersion() >= 0x1000)
-    {
-        // turn on live resizing (OS X only)
         attr |= kWindowLiveResizeAttribute;
-    }
 
     if ( HasFlag(wxSTAY_ON_TOP) )
-    {
         group = GetWindowGroupOfClass(kUtilityWindowClass) ;
-    }
 
 #if TARGET_API_MAC_OSX
     if ( m_macUsesCompositing )
@@ -1205,7 +1245,8 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     {
         ::CreateRootControl( (WindowRef)m_macWindow , m_peer->GetControlRefAddr() ) ;
     }
-    // the root control level handleer
+
+    // the root control level handler
     MacInstallEventHandler( (WXWidget) m_peer->GetControlRef() ) ;
 
 #if TARGET_API_MAC_OSX
@@ -1215,9 +1256,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
             MacSetMetalAppearance( true ) ;
     }
 #endif
-    
-    
-    
+
     // the frame window event handler
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     MacInstallTopLevelWindowEventHandler() ;
@@ -1229,8 +1268,8 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     if ( HasFlag(wxFRAME_SHAPED) )
     {
         // default shape matches the window size
-        wxRegion rgn(0, 0, w, h);
-        SetShape(rgn);
+        wxRegion rgn( 0, 0, w, h );
+        SetShape( rgn );
     }
 
     wxWindowCreateEvent event(this);
@@ -1254,14 +1293,14 @@ void wxTopLevelWindowMac::Lower()
     ::SendBehind( (WindowRef)m_macWindow , NULL ) ;
 }
 
-
 void wxTopLevelWindowMac::MacDelayedDeactivation(long timestamp)
 {
-    if(s_macDeactivateWindow)
+    if (s_macDeactivateWindow)
     {
         wxLogTrace(TRACE_ACTIVATE,
                    wxT("Doing delayed deactivation of %p"),
                    s_macDeactivateWindow);
+
         s_macDeactivateWindow->MacActivate(timestamp, false);
     }
 }
@@ -1270,8 +1309,9 @@ void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
 {
     wxLogTrace(TRACE_ACTIVATE, wxT("TopLevel=%p::MacActivate"), this);
 
-    if(s_macDeactivateWindow==this)
-        s_macDeactivateWindow=NULL;
+    if (s_macDeactivateWindow == this)
+        s_macDeactivateWindow = NULL;
+
     MacDelayedDeactivation(timestamp);
     MacPropagateHiliteChanged() ;
 }
@@ -1294,28 +1334,31 @@ bool wxTopLevelWindowMac::Show(bool show)
 
     if (show)
     {
-        #if wxUSE_SYSTEM_OPTIONS //code contributed by Ryan Wilcox December 18, 2003
+#if wxUSE_SYSTEM_OPTIONS // code contributed by Ryan Wilcox December 18, 2003
         bool plainTransition = UMAGetSystemVersion() >= 0x1000 ;
         if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
             plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
+
         if ( plainTransition )
         {
            ::ShowWindow( (WindowRef)m_macWindow );
         }
         else
-        #endif
+#endif
         {
-           ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
+           ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowShowTransitionAction, NULL );
         }
+
         ::SelectWindow( (WindowRef)m_macWindow ) ;
-        // as apps expect a size event to occur at this moment
+
+        // because apps expect a size event to occur at this moment
         wxSizeEvent event( GetSize() , m_windowId);
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
     }
     else
     {
-        #if wxUSE_SYSTEM_OPTIONS
+#if wxUSE_SYSTEM_OPTIONS
         bool plainTransition = UMAGetSystemVersion() >= 0x1000 ;
         if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
             plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
@@ -1324,9 +1367,9 @@ bool wxTopLevelWindowMac::Show(bool show)
            ::HideWindow((WindowRef) m_macWindow );
         }
         else
-        #endif
+#endif
         {
-           ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowHideTransitionAction,nil);
+           ::TransitionWindow((WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowHideTransitionAction, NULL );
         }
     }
 
@@ -1348,12 +1391,11 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
         data->m_size = GetSize() ;
 
         if ( style & wxFULLSCREEN_NOMENUBAR )
-        {
-                HideMenuBar() ;
-        }
-        int left , top , right , bottom ;
+            HideMenuBar() ;
+
         wxRect client = wxGetClientDisplayRect() ;
 
+        int left , top , right , bottom ;
         int x, y, w, h ;
 
         x = client.x ;
@@ -1368,20 +1410,24 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
             y -= top ;
             h += top ;
         }
+
         if ( style & wxFULLSCREEN_NOBORDER )
         {
             x -= left ;
             w += left + right ;
             h += bottom ;
         }
+
         if ( style & wxFULLSCREEN_NOTOOLBAR )
         {
             // TODO
         }
+
         if ( style & wxFULLSCREEN_NOSTATUSBAR )
         {
             // TODO
         }
+
         SetSize( x , y , w, h ) ;
     }
     else
@@ -1390,9 +1436,11 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
         FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
         SetPosition( data->m_position ) ;
         SetSize( data->m_size ) ;
+
         delete data ;
         m_macFullScreenData = NULL ;
     }
+
     return false;
 }
 
@@ -1407,6 +1455,7 @@ void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
         return ;
     
     wxTopLevelWindowBase::SetExtraStyle( exStyle ) ;
+
 #if TARGET_API_MAC_OSX
     if ( m_macUsesCompositing && m_macWindow != NULL )
     {
@@ -1417,8 +1466,7 @@ void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
 #endif
 }
 
-
-// we are still using coordinates of the content view, todo switch to structure bounds
+// we are still using coordinates of the content view; TODO: switch to structure bounds
 
 void wxTopLevelWindowMac::MacGetContentAreaInset( int &left , int &top , int &right , int &bottom )
 {
@@ -1444,24 +1492,37 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
 void wxTopLevelWindowMac::DoGetPosition( int *x, int *y ) const
 {
     Rect bounds ;
+
     verify_noerr(GetWindowBounds((WindowRef) m_macWindow, kWindowStructureRgn , &bounds )) ;
-    if(x)   *x = bounds.left ;
-    if(y)   *y = bounds.top ;
+
+    if (x)
+       *x = bounds.left ;
+    if (y)
+       *y = bounds.top ;
 }
+
 void wxTopLevelWindowMac::DoGetSize( int *width, int *height ) const
 {
     Rect bounds ;
+
     verify_noerr(GetWindowBounds((WindowRef) m_macWindow, kWindowStructureRgn , &bounds )) ;
-    if(width)   *width = bounds.right - bounds.left ;
-    if(height)   *height = bounds.bottom - bounds.top ;
+
+    if (width)
+       *width = bounds.right - bounds.left ;
+    if (height)
+       *height = bounds.bottom - bounds.top ;
 }
 
 void wxTopLevelWindowMac::DoGetClientSize( int *width, int *height ) const
 {
     Rect bounds ;
+
     verify_noerr(GetWindowBounds((WindowRef) m_macWindow, kWindowContentRgn , &bounds )) ;
-    if(width)   *width = bounds.right - bounds.left ;
-    if(height)   *height = bounds.bottom - bounds.top ;
+
+    if (width)
+       *width = bounds.right - bounds.left ;
+    if (height)
+       *height = bounds.bottom - bounds.top ;
 }
 
 void wxTopLevelWindowMac::MacSetMetalAppearance( bool set )
@@ -1486,13 +1547,14 @@ bool wxTopLevelWindowMac::MacGetMetalAppearance() const
 
 void wxTopLevelWindowMac::MacChangeWindowAttributes( wxUint32 attributesToSet , wxUint32 attributesToClear )
 {
-    ChangeWindowAttributes ( (WindowRef) m_macWindow , attributesToSet, attributesToClear ) ;
+    ChangeWindowAttributes( (WindowRef)m_macWindow, attributesToSet, attributesToClear ) ;
 }
 
 wxUint32 wxTopLevelWindowMac::MacGetWindowAttributes() const
 {
     UInt32 attr = 0 ;
-    GetWindowAttributes((WindowRef) m_macWindow , &attr ) ;
+    GetWindowAttributes( (WindowRef) m_macWindow, &attr ) ;
+
     return attr ;
 }
 
@@ -1504,7 +1566,7 @@ void wxTopLevelWindowMac::MacPerformUpdates()
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
         // for composited windows this also triggers a redraw of all
         // invalid views in the window
-        if( UMAGetSystemVersion() >= 0x1030 )
+        if ( UMAGetSystemVersion() >= 0x1030 )
             HIWindowFlush((WindowRef) m_macWindow) ;
         else
 #endif
@@ -1520,6 +1582,7 @@ void wxTopLevelWindowMac::MacPerformUpdates()
                 currentEventClass = ::GetEventClass( currentEvent ) ;
                 currentEventKind = ::GetEventKind( currentEvent ) ;
             }
+
             if ( currentEventClass != kEventClassMenu )
             {
                 // when tracking a menu, strange redraw errors occur if we flush now, so leave..
@@ -1539,10 +1602,13 @@ void wxTopLevelWindowMac::MacPerformUpdates()
         {
             GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), updateRgn );
             UpdateControls(  (WindowRef)m_macWindow , updateRgn ) ;
+
             // if ( !EmptyRgn( updateRgn ) )
             //    MacDoRedraw( updateRgn , 0 , true) ;
+
             DisposeRgn( updateRgn );
         }
+
         EndUpdate( (WindowRef)m_macWindow ) ;
         QDFlushPortBuffer( GetWindowPort( (WindowRef)m_macWindow ) , NULL ) ;
     }
@@ -1561,8 +1627,8 @@ static pascal void wxMacNMResponse( NMRecPtr ptr )
 void wxTopLevelWindowMac::RequestUserAttention(int flags )
 {
     NMRecPtr notificationRequest = (NMRecPtr) NewPtr( sizeof( NMRec) ) ;
-    static wxMacNMUPP nmupp( wxMacNMResponse )
-     ;
+    static wxMacNMUPP nmupp( wxMacNMResponse );
+
     memset( notificationRequest , 0 , sizeof(*notificationRequest) ) ;
     notificationRequest->qType = nmType ;
     notificationRequest->nmMark = 1 ;
@@ -1570,6 +1636,7 @@ void wxTopLevelWindowMac::RequestUserAttention(int flags )
     notificationRequest->nmSound = 0 ;
     notificationRequest->nmStr = NULL ;
     notificationRequest->nmResp = nmupp ;
+
     verify_noerr( NMInstall( notificationRequest ) ) ;
 }
 
@@ -1607,8 +1674,9 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
     // Save the region so we can use it later
     SetWRefCon((WindowRef)MacGetWindowRef(), (SInt32)shapeRegion);
 
-    // Tell the window manager that the window has changed shape
+    // inform the window manager that the window has changed shape
     ReshapeCustomWindow((WindowRef)MacGetWindowRef());
+
     return true;
 }
 
@@ -1628,24 +1696,25 @@ static void wxShapedMacWindowGetPos(WindowRef window, Rect* inRect)
     inRect->right += pt.h;
 }
 
-
 static SInt32 wxShapedMacWindowGetFeatures(WindowRef window, SInt32 param)
 {
     /*------------------------------------------------------
         Define which options your custom window supports.
     --------------------------------------------------------*/
     //just enable everything for our demo
-    *(OptionBits*)param=//kWindowCanGrow|
-                        //kWindowCanZoom|
-                        //kWindowCanCollapse|
-                        //kWindowCanGetWindowRegion|
-                        //kWindowHasTitleBar|
-                        //kWindowSupportsDragHilite|
-                        kWindowCanDrawInCurrentPort|
-                        //kWindowCanMeasureTitle|
-                        kWindowWantsDisposeAtProcessDeath|
-                        kWindowSupportsGetGrowImageRegion|
-                        kWindowDefSupportsColorGrafPort;
+    *(OptionBits*)param =
+        //kWindowCanGrow |
+        //kWindowCanZoom |
+        //kWindowCanCollapse |
+        //kWindowCanGetWindowRegion |
+        //kWindowHasTitleBar |
+        //kWindowSupportsDragHilite |
+        kWindowCanDrawInCurrentPort |
+        //kWindowCanMeasureTitle |
+        kWindowWantsDisposeAtProcessDeath |
+        kWindowSupportsGetGrowImageRegion |
+        kWindowDefSupportsColorGrafPort;
+
     return 1;
 }
 
@@ -1659,7 +1728,7 @@ static void wxShapedMacWindowContentRegion(WindowRef window, RgnHandle rgn)
     if (win)
     {
         Rect r ;
-        wxShapedMacWindowGetPos(window, &r ) ;
+        wxShapedMacWindowGetPos( window, &r ) ;
         RectRgn( rgn , &r ) ;
     }
 }
@@ -1680,66 +1749,71 @@ static void wxShapedMacWindowStructureRegion(WindowRef window, RgnHandle rgn)
     }
 }
 
-
-
 static SInt32 wxShapedMacWindowGetRegion(WindowRef window, SInt32 param)
 {
-    GetWindowRegionPtr rgnRec=(GetWindowRegionPtr)param;
+    GetWindowRegionPtr rgnRec = (GetWindowRegionPtr)param;
 
-    switch(rgnRec->regionCode)
+    if (rgnRec == NULL)
+        return paramErr;
+
+    switch (rgnRec->regionCode)
     {
         case kWindowStructureRgn:
             wxShapedMacWindowStructureRegion(window, rgnRec->winRgn);
             break;
+
         case kWindowContentRgn:
             wxShapedMacWindowContentRegion(window, rgnRec->winRgn);
             break;
+
         default:
             SetEmptyRgn(rgnRec->winRgn);
-    }  //switch
+            break;
+    }
 
     return noErr;
 }
 
-
-static SInt32 wxShapedMacWindowHitTest(WindowRef window,SInt32 param)
+// Determine the region of the window which was hit
+//
+static SInt32 wxShapedMacWindowHitTest(WindowRef window, SInt32 param)
 {
-    /*------------------------------------------------------
-        Determine the region of the window which was hit
-    --------------------------------------------------------*/
     Point hitPoint;
-    static RgnHandle tempRgn=nil;
+    static RgnHandle tempRgn = NULL;
 
-    if(!tempRgn)
-        tempRgn=NewRgn();
+    if (tempRgn == NULL)
+        tempRgn = NewRgn();
 
-    SetPt(&hitPoint,LoWord(param),HiWord(param));//get the point clicked
+    // get the point clicked
+    SetPt( &hitPoint, LoWord(param), HiWord(param) );
 
-     //Mac OS 8.5 or later
+     // Mac OS 8.5 or later
     wxShapedMacWindowStructureRegion(window, tempRgn);
-    if (PtInRgn(hitPoint, tempRgn)) //in window content region?
+    if (PtInRgn( hitPoint, tempRgn )) //in window content region?
         return wInContent;
 
-    return wNoHit;//no significant area was hit.
+    // no significant area was hit
+    return wNoHit;
 }
-
 
 static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 message, SInt32 param)
 {
-    switch(message)
+    switch (message)
     {
         case kWindowMsgHitTest:
-            return wxShapedMacWindowHitTest(window,param);
+            return wxShapedMacWindowHitTest(window, param);
 
         case kWindowMsgGetFeatures:
-            return wxShapedMacWindowGetFeatures(window,param);
+            return wxShapedMacWindowGetFeatures(window, param);
 
         // kWindowMsgGetRegion is sent during CreateCustomWindow and ReshapeCustomWindow
         case kWindowMsgGetRegion:
-            return wxShapedMacWindowGetRegion(window,param);
+            return wxShapedMacWindowGetRegion(window, param);
+
+        default:
+            break;
     }
 
     return 0;
 }
 
-// ---------------------------------------------------------------------------
