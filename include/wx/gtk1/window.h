@@ -163,15 +163,6 @@ public:
 #ifdef __WXGTK20__
     // Returns the default context which usually is anti-aliased
     PangoContext   *GtkGetPangoDefaultContext();
-
-    // Returns the X11 context which renders on the X11 client
-    // side (which can be remote) and which usually is not
-    // anti-aliased and is thus faster
-    // MR: Now returns the default pango_context for the widget as GtkGetPangoDefaultContext to
-    // not depend on libpangox - which is completely deprecated.
-    //BCI: Remove GtkGetPangoX11Context and m_x11Context completely when symbols may be removed
-    PangoContext   *GtkGetPangoX11Context();
-    PangoContext   *m_x11Context; // MR: Now unused
 #endif
 
 #if wxUSE_TOOLTIPS
