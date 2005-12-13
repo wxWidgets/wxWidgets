@@ -380,7 +380,7 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
         }
     }
 
-    // In case this is a cursor, make sure the hotspot is scalled accordingly:
+    // In case this is a cursor, make sure the hotspot is scaled accordingly:
     if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) )
         image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X,
                 (GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X))/xFactor);
@@ -466,7 +466,7 @@ wxImage wxImage::Scale( int width, int height ) const
         y += y_delta;
     }
 
-    // In case this is a cursor, make sure the hotspot is scalled accordingly:
+    // In case this is a cursor, make sure the hotspot is scaled accordingly:
     if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) )
         image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X,
                 (GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X)*width)/old_width);
