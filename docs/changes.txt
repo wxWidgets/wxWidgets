@@ -61,6 +61,7 @@ wxWinCE:
 - All wxTopLevelWindows resizes accordingly to SIP visibility.
 - ::wxGetUserName() implemented.
 - wxDisplay enumeration support.
+- Fixed wxFileDialog breakage on WinCE due to incorrect structure size.
 
 Unix:
 
