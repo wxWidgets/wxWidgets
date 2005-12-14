@@ -210,7 +210,7 @@ bool wxImageList::Replace(int index,
 // Replaces a bitmap and mask from an icon.
 bool wxImageList::Replace(int i, const wxIcon& icon)
 {
-    bool ok = ImageList_ReplaceIcon(GetHImageList(), i, GetHiconOf(icon)) != 0;
+    bool ok = ImageList_ReplaceIcon(GetHImageList(), i, GetHiconOf(icon)) != -1;
     if ( !ok )
     {
         wxLogLastError(wxT("ImageList_ReplaceIcon()"));
