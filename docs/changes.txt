@@ -7,8 +7,8 @@ wxWidgets Change Log - For more verbose changes, see the manual
 
 All:
 
-- Fixed crash when loading message catalogs in Unicode build
-- Spurious error message from wxLaunchDefaultBrowser fixed
+- Fixed crash when loading message catalogs in Unicode build.
+- Spurious error message from wxLaunchDefaultBrowser fixed.
 
 wxGTK:
 
@@ -18,10 +18,12 @@ wxGTK:
 wxWinCE:
 
 - ::wxGetUserName() implemented.
+- Fixed wxFileDialog breakage on WinCE in previous version.
 
 wxODBC
 
-- wxDb::DBMS() was incorrectly indicating that DB2 databases were dBase databases
+- wxDb::DBMS() was incorrectly indicating that DB2 databases were
+  dBase databases.
 
 2.6.2
 -----
