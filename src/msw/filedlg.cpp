@@ -401,8 +401,6 @@ int wxFileDialog::ShowModal()
 #else
     DWORD errCode = CommDlgExtendedError();
 
-    DWORD errCode = CommDlgExtendedError();
-
     // GetOpenFileName will always change the current working directory on 
     // (according to MSDN) "Windows NT 4.0/2000/XP" because the flag
     // OFN_NOCHANGEDIR has no effect.  If the user did not specify wxCHANGE_DIR
