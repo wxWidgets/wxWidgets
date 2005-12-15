@@ -9,6 +9,7 @@ All:
 
 - Fixed crash when loading message catalogs in Unicode build.
 - Spurious error message from wxLaunchDefaultBrowser fixed.
+- Compilation fixes for (more strict) g++ 4.1
 
 wxGTK:
 
