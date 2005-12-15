@@ -119,7 +119,8 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     wxSize size = window->GetSize() ;
     window->MacWindowToRootWindow( &x , &y ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
-    
+    m_ok = true ;
+
 #if wxMAC_USE_CORE_GRAPHICS
     m_macLocalOriginInPort.x = x ;
     m_macLocalOriginInPort.y = y ;
@@ -153,7 +154,6 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     SetBackground(MacGetBackgroundBrush(window));
 #endif
 
-    m_ok = true ;
     SetFont( window->GetFont() ) ;
 }
 
@@ -192,7 +192,8 @@ wxClientDC::wxClientDC(wxWindow *window)
     y = origin.y ;
     window->MacWindowToRootWindow( &x , &y ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
-    
+    m_ok = true ;
+
 #if wxMAC_USE_CORE_GRAPHICS
     m_macLocalOriginInPort.x = x ;
     m_macLocalOriginInPort.y = y ;
@@ -206,8 +207,8 @@ wxClientDC::wxClientDC(wxWindow *window)
     }
     else
     {
-        // as out of order redraw is not supported under CQ, we have to create a qd port for these
-        // situations
+        // as out of order redraw is not supported under CQ,
+        // we have to create a QD port for these situations
         m_macLocalOrigin.x = x ;
         m_macLocalOrigin.y = y ;
         m_graphicContext = new wxMacCGContext( (CGrafPtr) m_macPort ) ;
@@ -224,7 +225,6 @@ wxClientDC::wxClientDC(wxWindow *window)
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn ,(RgnHandle)  m_macCurrentClipRgn ) ;
 #endif
 
-    m_ok = true ;
     SetBackground(MacGetBackgroundBrush(window));
     SetFont( window->GetFont() ) ;
 }
@@ -270,6 +270,7 @@ wxPaintDC::wxPaintDC(wxWindow *window)
     y = origin.y ;
     window->MacWindowToRootWindow( &x , &y ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
+    m_ok = true ;
 
 #if wxMAC_USE_CORE_GRAPHICS
     m_macLocalOriginInPort.x = x ;
@@ -300,7 +301,6 @@ wxPaintDC::wxPaintDC(wxWindow *window)
     SetBackground(MacGetBackgroundBrush(window));
 #endif
 
-    m_ok = true ;
     SetFont( window->GetFont() ) ;
 }
 

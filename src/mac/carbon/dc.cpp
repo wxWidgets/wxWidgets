@@ -281,7 +281,6 @@ wxDC::wxDC()
     m_needComputeScaleY = false;
     m_macPort = NULL ;
     m_macMask = NULL ;
-    m_ok = false ;
     m_macFontInstalled = false ;
     m_macBrushInstalled = false ;
     m_macPenInstalled = false ;
