@@ -2083,7 +2083,7 @@ void wxDC::MacInstallPen() const
         //        case wxSRC_AND:     // source _bitmap_ AND destination
         break ;
 
-    default;
+    default:
         break ;
     }
 
