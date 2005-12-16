@@ -21496,6 +21496,182 @@ static PyObject *_wrap_DateTime_MakeTimezone(PyObject *, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_DateTime_FromTimezone(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDateTime *arg1 = (wxDateTime *) 0 ;
+    wxDateTime::TimeZone *arg2 = 0 ;
+    bool arg3 = (bool) false ;
+    wxDateTime result;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "tz",(char *) "noDST", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:DateTime_FromTimezone",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+        temp2 = true;
+    }
+    if (obj2) {
+        {
+            arg3 = (bool)(SWIG_As_bool(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxDateTime const *)arg1)->FromTimezone((wxDateTime::TimeZone const &)*arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxDateTime * resultptr;
+        resultptr = new wxDateTime((wxDateTime &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxDateTime, 1);
+    }
+    {
+        if (temp2) delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2) delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_DateTime_MakeFromTimezone(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDateTime *arg1 = (wxDateTime *) 0 ;
+    wxDateTime::TimeZone *arg2 = 0 ;
+    bool arg3 = (bool) false ;
+    wxDateTime *result;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "tz",(char *) "noDST", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:DateTime_MakeFromTimezone",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+        temp2 = true;
+    }
+    if (obj2) {
+        {
+            arg3 = (bool)(SWIG_As_bool(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxDateTime &_result_ref = (arg1)->MakeFromTimezone((wxDateTime::TimeZone const &)*arg2,arg3);
+            result = (wxDateTime *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 0);
+    {
+        if (temp2) delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2) delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_DateTime_ToUTC(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDateTime *arg1 = (wxDateTime *) 0 ;
+    bool arg2 = (bool) false ;
+    wxDateTime result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "noDST", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DateTime_ToUTC",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (bool)(SWIG_As_bool(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxDateTime const *)arg1)->ToUTC(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxDateTime * resultptr;
+        resultptr = new wxDateTime((wxDateTime &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxDateTime, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DateTime_MakeUTC(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDateTime *arg1 = (wxDateTime *) 0 ;
+    bool arg2 = (bool) false ;
+    wxDateTime *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "noDST", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DateTime_MakeUTC",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (bool)(SWIG_As_bool(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxDateTime &_result_ref = (arg1)->MakeUTC(arg2);
+            result = (wxDateTime *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_DateTime_ToGMT(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
@@ -21518,7 +21694,7 @@ static PyObject *_wrap_DateTime_ToGMT(PyObject *, PyObject *args, PyObject *kwar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->ToGMT(arg2);
+        result = ((wxDateTime const *)arg1)->ToGMT(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -21558,6 +21734,81 @@ static PyObject *_wrap_DateTime_MakeGMT(PyObject *, PyObject *args, PyObject *kw
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
             wxDateTime &_result_ref = (arg1)->MakeGMT(arg2);
+            result = (wxDateTime *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DateTime_FromUTC(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDateTime *arg1 = (wxDateTime *) 0 ;
+    bool arg2 = (bool) false ;
+    wxDateTime result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "noDST", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DateTime_FromUTC",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (bool)(SWIG_As_bool(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxDateTime const *)arg1)->FromUTC(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxDateTime * resultptr;
+        resultptr = new wxDateTime((wxDateTime &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxDateTime, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DateTime_MakeFromUTC(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDateTime *arg1 = (wxDateTime *) 0 ;
+    bool arg2 = (bool) false ;
+    wxDateTime *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "noDST", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DateTime_MakeFromUTC",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (bool)(SWIG_As_bool(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxDateTime &_result_ref = (arg1)->MakeFromUTC(arg2);
             result = (wxDateTime *) &_result_ref;
         }
         
@@ -32177,8 +32428,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTime_GetRataDie", (PyCFunction) _wrap_DateTime_GetRataDie, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_ToTimezone", (PyCFunction) _wrap_DateTime_ToTimezone, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_MakeTimezone", (PyCFunction) _wrap_DateTime_MakeTimezone, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime_FromTimezone", (PyCFunction) _wrap_DateTime_FromTimezone, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime_MakeFromTimezone", (PyCFunction) _wrap_DateTime_MakeFromTimezone, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime_ToUTC", (PyCFunction) _wrap_DateTime_ToUTC, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime_MakeUTC", (PyCFunction) _wrap_DateTime_MakeUTC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_ToGMT", (PyCFunction) _wrap_DateTime_ToGMT, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_MakeGMT", (PyCFunction) _wrap_DateTime_MakeGMT, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime_FromUTC", (PyCFunction) _wrap_DateTime_FromUTC, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime_MakeFromUTC", (PyCFunction) _wrap_DateTime_MakeFromUTC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_IsDST", (PyCFunction) _wrap_DateTime_IsDST, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_IsValid", (PyCFunction) _wrap_DateTime_IsValid, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_GetTicks", (PyCFunction) _wrap_DateTime_GetTicks, METH_VARARGS | METH_KEYWORDS, NULL},

@@ -1350,18 +1350,19 @@ SWIG_Python_GetTypeList() {
 #define  SWIGTYPE_unsigned_int swig_types[8] 
 #define  SWIGTYPE_p_form_ops_t swig_types[9] 
 #define  SWIGTYPE_p_wxDuplexMode swig_types[10] 
-#define  SWIGTYPE_p_char swig_types[11] 
-#define  SWIGTYPE_p_wxFileOffset swig_types[12] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[13] 
-#define  SWIGTYPE_std__ptrdiff_t swig_types[14] 
-#define  SWIGTYPE_ptrdiff_t swig_types[15] 
-#define  SWIGTYPE_p_wxNotifyEvent swig_types[16] 
-#define  SWIGTYPE_p_wxControl swig_types[17] 
-#define  SWIGTYPE_p_wxMediaCtrl swig_types[18] 
-#define  SWIGTYPE_p_wxEvent swig_types[19] 
-#define  SWIGTYPE_p_wxPaperSize swig_types[20] 
-#define  SWIGTYPE_p_int swig_types[21] 
-static swig_type_info *swig_types[23];
+#define  SWIGTYPE_p_wxMediaCtrlPlayerControls swig_types[11] 
+#define  SWIGTYPE_p_char swig_types[12] 
+#define  SWIGTYPE_p_wxFileOffset swig_types[13] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[14] 
+#define  SWIGTYPE_std__ptrdiff_t swig_types[15] 
+#define  SWIGTYPE_ptrdiff_t swig_types[16] 
+#define  SWIGTYPE_p_wxNotifyEvent swig_types[17] 
+#define  SWIGTYPE_p_wxControl swig_types[18] 
+#define  SWIGTYPE_p_wxMediaCtrl swig_types[19] 
+#define  SWIGTYPE_p_wxEvent swig_types[20] 
+#define  SWIGTYPE_p_wxPaperSize swig_types[21] 
+#define  SWIGTYPE_p_int swig_types[22] 
+static swig_type_info *swig_types[24];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1388,7 +1389,15 @@ enum wxMediaState
     wxMEDIASTATE_PLAYING=0
 };
 
+enum wxMediaCtrlPlayerControls
+{
+    wxMEDIACTRLPLAYERCONTROLS_NONE,
+    wxMEDIACTRLPLAYERCONTROLS_STEP,
+    wxMEDIACTRLPLAYERCONTROLS_VOLUME,
+    wxMEDIACTRLPLAYERCONTROLS_DEFAULT
+};
 
+    
 class wxMediaEvent : public wxNotifyEvent
 {
 public:
@@ -1422,9 +1431,6 @@ public:
     bool Pause() { return false; }
     bool Stop() { return false; }
 
-    bool Load(const wxString& fileName) { return false; }
-    bool Load(const wxURI& location) { return false; }
-
     wxMediaState GetState() { return wxMEDIASTATE_STOPPED; }
 
     double GetPlaybackRate()  { return 0.0; }
@@ -1438,6 +1444,14 @@ public:
 
     double GetVolume() { return 0.0; }
     bool   SetVolume(double dVolume) { return false; }
+
+    bool    ShowPlayerControls(
+        wxMediaCtrlPlayerControls flags = wxMEDIACTRLPLAYERCONTROLS_DEFAULT)
+        { return false; }
+
+    bool Load(const wxString& fileName) { return false; }
+    bool LoadURI(const wxString& fileName) { return false; }
+    bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy) { return false; }
 };
 
 const wxEventType wxEVT_MEDIA_FINISHED = 0;
@@ -1604,9 +1618,6 @@ SWIG_Check_double(PyObject* obj)
   return SWIG_AsVal_double(obj, (double*)0);
 }
 
-static bool wxMediaCtrl_LoadFromURI(wxMediaCtrl *self,wxString const &location){
-            return self->Load(wxURI(location));
-        }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2053,156 +2064,6 @@ static PyObject *_wrap_MediaCtrl_Stop(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_MediaCtrl_GetVolume(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
-    double result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetVolume",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (double)(arg1)->GetVolume();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = SWIG_From_double((double)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_MediaCtrl_SetVolume(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
-    double arg2 ;
-    bool result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "dVolume", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_SetVolume",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (double)(SWIG_As_double(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->SetVolume(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_MediaCtrl_Load(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
-    wxString *arg2 = 0 ;
-    bool result;
-    bool temp2 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "fileName", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_Load",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->Load((wxString const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return NULL;
-}
-
-
-static PyObject *_wrap_MediaCtrl_LoadFromURI(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
-    wxString *arg2 = 0 ;
-    bool result;
-    bool temp2 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "location", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_LoadFromURI",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxMediaCtrl_LoadFromURI(arg1,(wxString const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return NULL;
-}
-
-
 static PyObject *_wrap_MediaCtrl_GetState(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
@@ -2400,6 +2261,258 @@ static PyObject *_wrap_MediaCtrl_Length(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_MediaCtrl_GetVolume(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    double result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetVolume",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (double)(arg1)->GetVolume();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_double((double)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MediaCtrl_SetVolume(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    double arg2 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dVolume", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_SetVolume",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (double)(SWIG_As_double(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->SetVolume(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MediaCtrl_ShowPlayerControls(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    wxMediaCtrlPlayerControls arg2 = (wxMediaCtrlPlayerControls) wxMEDIACTRLPLAYERCONTROLS_DEFAULT ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "flags", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:MediaCtrl_ShowPlayerControls",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (obj1) {
+        {
+            wxMediaCtrlPlayerControls * argp;
+            SWIG_Python_ConvertPtr(obj1, (void **)&argp, SWIGTYPE_p_wxMediaCtrlPlayerControls, SWIG_POINTER_EXCEPTION);
+            if (SWIG_arg_fail(2)) SWIG_fail;
+            if (argp == NULL) {
+                SWIG_null_ref("wxMediaCtrlPlayerControls");
+            }
+            if (SWIG_arg_fail(2)) SWIG_fail;
+            arg2 = *argp;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->ShowPlayerControls(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MediaCtrl_Load(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    wxString *arg2 = 0 ;
+    bool result;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "fileName", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_Load",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Load((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_MediaCtrl_LoadURI(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    wxString *arg2 = 0 ;
+    bool result;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "fileName", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_LoadURI",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->LoadURI((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_MediaCtrl_LoadURIWithProxy(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    wxString *arg2 = 0 ;
+    wxString *arg3 = 0 ;
+    bool result;
+    bool temp2 = false ;
+    bool temp3 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "fileName",(char *) "proxy", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:MediaCtrl_LoadURIWithProxy",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        arg3 = wxString_in_helper(obj2);
+        if (arg3 == NULL) SWIG_fail;
+        temp3 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->LoadURIWithProxy((wxString const &)*arg2,(wxString const &)*arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
+    {
+        if (temp3)
+        delete arg3;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    {
+        if (temp3)
+        delete arg3;
+    }
+    return NULL;
+}
+
+
 static PyObject * MediaCtrl_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -2416,16 +2529,18 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MediaCtrl_Play", (PyCFunction) _wrap_MediaCtrl_Play, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_Pause", (PyCFunction) _wrap_MediaCtrl_Pause, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_Stop", (PyCFunction) _wrap_MediaCtrl_Stop, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"MediaCtrl_GetVolume", (PyCFunction) _wrap_MediaCtrl_GetVolume, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"MediaCtrl_SetVolume", (PyCFunction) _wrap_MediaCtrl_SetVolume, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"MediaCtrl_Load", (PyCFunction) _wrap_MediaCtrl_Load, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"MediaCtrl_LoadFromURI", (PyCFunction) _wrap_MediaCtrl_LoadFromURI, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_GetState", (PyCFunction) _wrap_MediaCtrl_GetState, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_GetPlaybackRate", (PyCFunction) _wrap_MediaCtrl_GetPlaybackRate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_SetPlaybackRate", (PyCFunction) _wrap_MediaCtrl_SetPlaybackRate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_Seek", (PyCFunction) _wrap_MediaCtrl_Seek, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_Tell", (PyCFunction) _wrap_MediaCtrl_Tell, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_Length", (PyCFunction) _wrap_MediaCtrl_Length, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_GetVolume", (PyCFunction) _wrap_MediaCtrl_GetVolume, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_SetVolume", (PyCFunction) _wrap_MediaCtrl_SetVolume, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_ShowPlayerControls", (PyCFunction) _wrap_MediaCtrl_ShowPlayerControls, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_Load", (PyCFunction) _wrap_MediaCtrl_Load, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_LoadURI", (PyCFunction) _wrap_MediaCtrl_LoadURI, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_LoadURIWithProxy", (PyCFunction) _wrap_MediaCtrl_LoadURIWithProxy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_swigregister", MediaCtrl_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
@@ -2867,6 +2982,7 @@ static swig_type_info _swigt__p_unsigned_int[] = {{"_p_unsigned_int", 0, "unsign
 static swig_type_info _swigt__unsigned_int[] = {{"_unsigned_int", 0, "unsigned int|std::size_t", 0, 0, 0, 0},{"_unsigned_int", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_form_ops_t[] = {{"_p_form_ops_t", 0, "enum form_ops_t *|form_ops_t *", 0, 0, 0, 0},{"_p_form_ops_t", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDuplexMode[] = {{"_p_wxDuplexMode", 0, "enum wxDuplexMode *|wxDuplexMode *", 0, 0, 0, 0},{"_p_wxDuplexMode", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxMediaCtrlPlayerControls[] = {{"_p_wxMediaCtrlPlayerControls", 0, "wxMediaCtrlPlayerControls *", 0, 0, 0, 0},{"_p_wxMediaCtrlPlayerControls", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0, 0, 0, 0},{"_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFileOffset[] = {{"_p_wxFileOffset", 0, "wxFileOffset *", 0, 0, 0, 0},{"_p_wxFileOffset", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", 0, 0, 0, 0, 0, 0},{"_p_wxMediaCtrl", _p_wxMediaCtrlTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -2891,6 +3007,7 @@ _swigt__p_unsigned_int,
 _swigt__unsigned_int, 
 _swigt__p_form_ops_t, 
 _swigt__p_wxDuplexMode, 
+_swigt__p_wxMediaCtrlPlayerControls, 
 _swigt__p_char, 
 _swigt__p_wxFileOffset, 
 _swigt__p_wxEvtHandler, 

@@ -112,22 +112,6 @@ class MediaCtrl(_core.Control):
         """Stop(self) -> bool"""
         return _media.MediaCtrl_Stop(*args, **kwargs)
 
-    def GetVolume(*args, **kwargs):
-        """GetVolume(self) -> double"""
-        return _media.MediaCtrl_GetVolume(*args, **kwargs)
-
-    def SetVolume(*args, **kwargs):
-        """SetVolume(self, double dVolume) -> bool"""
-        return _media.MediaCtrl_SetVolume(*args, **kwargs)
-
-    def Load(*args, **kwargs):
-        """Load(self, String fileName) -> bool"""
-        return _media.MediaCtrl_Load(*args, **kwargs)
-
-    def LoadFromURI(*args, **kwargs):
-        """LoadFromURI(self, String location) -> bool"""
-        return _media.MediaCtrl_LoadFromURI(*args, **kwargs)
-
     def GetState(*args, **kwargs):
         """GetState(self) -> int"""
         return _media.MediaCtrl_GetState(*args, **kwargs)
@@ -152,6 +136,31 @@ class MediaCtrl(_core.Control):
         """Length(self) -> wxFileOffset"""
         return _media.MediaCtrl_Length(*args, **kwargs)
 
+    def GetVolume(*args, **kwargs):
+        """GetVolume(self) -> double"""
+        return _media.MediaCtrl_GetVolume(*args, **kwargs)
+
+    def SetVolume(*args, **kwargs):
+        """SetVolume(self, double dVolume) -> bool"""
+        return _media.MediaCtrl_SetVolume(*args, **kwargs)
+
+    def ShowPlayerControls(*args, **kwargs):
+        """ShowPlayerControls(self, wxMediaCtrlPlayerControls flags=wxMEDIACTRLPLAYERCONTROLS_DEFAULT) -> bool"""
+        return _media.MediaCtrl_ShowPlayerControls(*args, **kwargs)
+
+    def Load(*args, **kwargs):
+        """Load(self, String fileName) -> bool"""
+        return _media.MediaCtrl_Load(*args, **kwargs)
+
+    def LoadURI(*args, **kwargs):
+        """LoadURI(self, String fileName) -> bool"""
+        return _media.MediaCtrl_LoadURI(*args, **kwargs)
+
+    def LoadURIWithProxy(*args, **kwargs):
+        """LoadURIWithProxy(self, String fileName, String proxy) -> bool"""
+        return _media.MediaCtrl_LoadURIWithProxy(*args, **kwargs)
+
+    LoadFromURI = LoadURI 
 
 class MediaCtrlPtr(MediaCtrl):
     def __init__(self, this):

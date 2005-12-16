@@ -4049,6 +4049,34 @@ static PyObject *_wrap_Choice_Create(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
+static PyObject *_wrap_Choice_GetCurrentSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxChoice *arg1 = (wxChoice *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Choice_GetCurrentSelection",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxChoice, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxChoice const *)arg1)->GetCurrentSelection();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int((int)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Choice_GetClassDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindowVariant arg1 = (wxWindowVariant) wxWINDOW_VARIANT_NORMAL ;
@@ -4775,6 +4803,34 @@ static PyObject *_wrap_ComboBox_SetMark(PyObject *, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_GetCurrentSelection(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_GetCurrentSelection",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxComboBox, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxComboBox const *)arg1)->GetCurrentSelection();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int((int)(result)); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6654,6 +6710,37 @@ static PyObject *_wrap_StaticText_Create(PyObject *, PyObject *args, PyObject *k
         if (temp8)
         delete arg8;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StaticText_Wrap(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStaticText *arg1 = (wxStaticText *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "width", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StaticText_Wrap",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStaticText, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->Wrap(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -26333,6 +26420,83 @@ static PyObject *_wrap_ListCtrl_GetItemBackgroundColour(PyObject *, PyObject *ar
 }
 
 
+static PyObject *_wrap_ListCtrl_SetItemFont(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
+    long arg2 ;
+    wxFont *arg3 = 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item",(char *) "f", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ListCtrl_SetItemFont",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyListCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (long)(SWIG_As_long(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxFont, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(3)) SWIG_fail;
+        if (arg3 == NULL) {
+            SWIG_null_ref("wxFont");
+        }
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetItemFont(arg2,(wxFont const &)*arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ListCtrl_GetItemFont(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
+    long arg2 ;
+    wxFont result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ListCtrl_GetItemFont",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyListCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (long)(SWIG_As_long(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxPyListCtrl const *)arg1)->GetItemFont(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxFont * resultptr;
+        resultptr = new wxFont((wxFont &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxFont, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_ListCtrl_SortItems(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
@@ -34877,6 +35041,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_Choice", (PyCFunction) _wrap_new_Choice, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreChoice", (PyCFunction) _wrap_new_PreChoice, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Choice_Create", (PyCFunction) _wrap_Choice_Create, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Choice_GetCurrentSelection", (PyCFunction) _wrap_Choice_GetCurrentSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Choice_GetClassDefaultAttributes", (PyCFunction) _wrap_Choice_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Choice_swigregister", Choice_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ComboBox", (PyCFunction) _wrap_new_ComboBox, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -34893,6 +35058,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComboBox_Replace", (PyCFunction) _wrap_ComboBox_Replace, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ComboBox_SetSelection", (PyCFunction) _wrap_ComboBox_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ComboBox_SetMark", (PyCFunction) _wrap_ComboBox_SetMark, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ComboBox_GetCurrentSelection", (PyCFunction) _wrap_ComboBox_GetCurrentSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ComboBox_SetStringSelection", (PyCFunction) _wrap_ComboBox_SetStringSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ComboBox_SetString", (PyCFunction) _wrap_ComboBox_SetString, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ComboBox_SetEditable", (PyCFunction) _wrap_ComboBox_SetEditable, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -34938,6 +35104,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_StaticText", (PyCFunction) _wrap_new_StaticText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreStaticText", (PyCFunction) _wrap_new_PreStaticText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StaticText_Create", (PyCFunction) _wrap_StaticText_Create, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StaticText_Wrap", (PyCFunction) _wrap_StaticText_Wrap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StaticText_GetClassDefaultAttributes", (PyCFunction) _wrap_StaticText_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StaticText_swigregister", StaticText_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_StaticBitmap", (PyCFunction) _wrap_new_StaticBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -35478,6 +35645,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ListCtrl_GetItemTextColour", (PyCFunction) _wrap_ListCtrl_GetItemTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_ListCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_GetItemBackgroundColour", (PyCFunction) _wrap_ListCtrl_GetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ListCtrl_SetItemFont", (PyCFunction) _wrap_ListCtrl_SetItemFont, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ListCtrl_GetItemFont", (PyCFunction) _wrap_ListCtrl_GetItemFont, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_SortItems", (PyCFunction) _wrap_ListCtrl_SortItems, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_GetMainWindow", (PyCFunction) _wrap_ListCtrl_GetMainWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_GetClassDefaultAttributes", (PyCFunction) _wrap_ListCtrl_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},

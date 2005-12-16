@@ -161,6 +161,7 @@ SIZE_AUTO_HEIGHT = _core_.SIZE_AUTO_HEIGHT
 SIZE_AUTO = _core_.SIZE_AUTO
 SIZE_USE_EXISTING = _core_.SIZE_USE_EXISTING
 SIZE_ALLOW_MINUS_ONE = _core_.SIZE_ALLOW_MINUS_ONE
+SIZE_FORCE = _core_.SIZE_FORCE
 PORTRAIT = _core_.PORTRAIT
 LANDSCAPE = _core_.LANDSCAPE
 PRINT_QUALITY_HIGH = _core_.PRINT_QUALITY_HIGH
@@ -169,6 +170,7 @@ PRINT_QUALITY_LOW = _core_.PRINT_QUALITY_LOW
 PRINT_QUALITY_DRAFT = _core_.PRINT_QUALITY_DRAFT
 ID_ANY = _core_.ID_ANY
 ID_SEPARATOR = _core_.ID_SEPARATOR
+ID_NONE = _core_.ID_NONE
 ID_LOWEST = _core_.ID_LOWEST
 ID_OPEN = _core_.ID_OPEN
 ID_CLOSE = _core_.ID_CLOSE
@@ -2215,6 +2217,66 @@ def ImageHistogram_MakeKey(*args, **kwargs):
     """
     return _core_.ImageHistogram_MakeKey(*args, **kwargs)
 
+class Image_RGBValue(object):
+    """
+    An object that contains values for red, green and blue which represent
+    the value of a color. It is used by `wx.Image.HSVtoRGB` and
+    `wx.Image.RGBtoHSV`, which converts between HSV color space and RGB
+    color space.
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxImage_RGBValue instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, byte r=0, byte g=0, byte b=0) -> Image_RGBValue
+
+        Constructor.
+        """
+        newobj = _core_.new_Image_RGBValue(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    red = property(_core_.Image_RGBValue_red_get, _core_.Image_RGBValue_red_set)
+    green = property(_core_.Image_RGBValue_green_get, _core_.Image_RGBValue_green_set)
+    blue = property(_core_.Image_RGBValue_blue_get, _core_.Image_RGBValue_blue_set)
+
+class Image_RGBValuePtr(Image_RGBValue):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Image_RGBValue
+_core_.Image_RGBValue_swigregister(Image_RGBValuePtr)
+
+class Image_HSVValue(object):
+    """
+    An object that contains values for hue, saturation and value which
+    represent the value of a color.  It is used by `wx.Image.HSVtoRGB` and
+    `wx.Image.RGBtoHSV`, which +converts between HSV color space and RGB
+    color space.
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxImage_HSVValue instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, double h=0.0, double s=0.0, double v=0.0) -> Image_HSVValue
+
+        Constructor.
+        """
+        newobj = _core_.new_Image_HSVValue(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    hue = property(_core_.Image_HSVValue_hue_get, _core_.Image_HSVValue_hue_set)
+    saturation = property(_core_.Image_HSVValue_saturation_get, _core_.Image_HSVValue_saturation_set)
+    value = property(_core_.Image_HSVValue_value_get, _core_.Image_HSVValue_value_set)
+
+class Image_HSVValuePtr(Image_HSVValue):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Image_HSVValue
+_core_.Image_HSVValue_swigregister(Image_HSVValuePtr)
+
 class Image(Object):
     """
     A platform-independent image class.  An image can be created from
@@ -2892,6 +2954,33 @@ class Image(Object):
         """ConvertToMonoBitmap(self, byte red, byte green, byte blue) -> Bitmap"""
         return _core_.Image_ConvertToMonoBitmap(*args, **kwargs)
 
+    def RotateHue(*args, **kwargs):
+        """
+        RotateHue(self, double angle)
+
+        Rotates the hue of each pixel of the image. Hue is a double in the
+        range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
+        """
+        return _core_.Image_RotateHue(*args, **kwargs)
+
+    def RGBtoHSV(*args, **kwargs):
+        """
+        RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue
+
+        Converts a color in RGB color space to HSV color space.
+        """
+        return _core_.Image_RGBtoHSV(*args, **kwargs)
+
+    RGBtoHSV = staticmethod(RGBtoHSV)
+    def HSVtoRGB(*args, **kwargs):
+        """
+        HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue
+
+        Converts a color in HSV color space to RGB color space.
+        """
+        return _core_.Image_HSVtoRGB(*args, **kwargs)
+
+    HSVtoRGB = staticmethod(HSVtoRGB)
     def __nonzero__(self): return self.Ok() 
 
 class ImagePtr(Image):
@@ -3029,6 +3118,22 @@ def Image_GetImageExtWildcard(*args, **kwargs):
     dialog boxes.
     """
     return _core_.Image_GetImageExtWildcard(*args, **kwargs)
+
+def Image_RGBtoHSV(*args, **kwargs):
+    """
+    Image_RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue
+
+    Converts a color in RGB color space to HSV color space.
+    """
+    return _core_.Image_RGBtoHSV(*args, **kwargs)
+
+def Image_HSVtoRGB(*args, **kwargs):
+    """
+    Image_HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue
+
+    Converts a color in HSV color space to RGB color space.
+    """
+    return _core_.Image_HSVtoRGB(*args, **kwargs)
 
 def InitAllImageHandlers():
     """
@@ -6399,8 +6504,15 @@ _core_.WindowCreateEvent_swigregister(WindowCreateEventPtr)
 
 class WindowDestroyEvent(CommandEvent):
     """
-    The EVT_WINDOW_DESTROY event is sent right before the window is
-    destroyed.
+    The EVT_WINDOW_DESTROY event is sent from the `wx.Window` destructor
+    when the GUI window is destroyed.
+
+    When a class derived from `wx.Window` is destroyed its destructor will
+    have already run by the time this event is sent. Therefore this event
+    will not usually be received at all by the window itself.  Since it is
+    received after the destructor has run, an object should not try to
+    handle its own wx.WindowDestroyEvent, but it can be used to get
+    notification of the destruction of another window.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowDestroyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -6408,8 +6520,15 @@ class WindowDestroyEvent(CommandEvent):
         """
         __init__(self, Window win=None) -> WindowDestroyEvent
 
-        The EVT_WINDOW_DESTROY event is sent right before the window is
-        destroyed.
+        The EVT_WINDOW_DESTROY event is sent from the `wx.Window` destructor
+        when the GUI window is destroyed.
+
+        When a class derived from `wx.Window` is destroyed its destructor will
+        have already run by the time this event is sent. Therefore this event
+        will not usually be received at all by the window itself.  Since it is
+        received after the destructor has run, an object should not try to
+        handle its own wx.WindowDestroyEvent, but it can be used to get
+        notification of the destruction of another window.
         """
         newobj = _core_.new_WindowDestroyEvent(*args, **kwargs)
         self.this = newobj.this
@@ -8092,8 +8211,8 @@ class Window(EvtHandler):
         """
         Raise(self)
 
-        Raises the window to the top of the window hierarchy if it is a
-        managed window (dialog or frame).
+        Raises the window to the top of the window hierarchy.  In current
+        version of wxWidgets this works both for manage and child windows.
         """
         return _core_.Window_Raise(*args, **kwargs)
 
@@ -8101,8 +8220,8 @@ class Window(EvtHandler):
         """
         Lower(self)
 
-        Lowers the window to the bottom of the window hierarchy if it is a
-        managed window (dialog or frame).
+        Lowers the window to the bottom of the window hierarchy.  In current
+        version of wxWidgets this works both for manage and child windows.
         """
         return _core_.Window_Lower(*args, **kwargs)
 

@@ -2048,6 +2048,50 @@ static PyObject *_wrap_XmlResource_LoadFromString(PyObject *, PyObject *args, Py
 }
 
 
+static PyObject *_wrap_XmlResource_Unload(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxXmlResource *arg1 = (wxXmlResource *) 0 ;
+    wxString *arg2 = 0 ;
+    bool result;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "filename", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:XmlResource_Unload",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxXmlResource, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Unload((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
 static PyObject *_wrap_XmlResource_InitAllHandlers(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
@@ -6505,6 +6549,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_XmlResource", (PyCFunction) _wrap_delete_XmlResource, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_Load", (PyCFunction) _wrap_XmlResource_Load, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_LoadFromString", (PyCFunction) _wrap_XmlResource_LoadFromString, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"XmlResource_Unload", (PyCFunction) _wrap_XmlResource_Unload, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_InitAllHandlers", (PyCFunction) _wrap_XmlResource_InitAllHandlers, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_AddHandler", (PyCFunction) _wrap_XmlResource_AddHandler, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"XmlResource_InsertHandler", (PyCFunction) _wrap_XmlResource_InsertHandler, METH_VARARGS | METH_KEYWORDS, NULL},
