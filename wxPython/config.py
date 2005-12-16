@@ -39,8 +39,8 @@ import distutils.command.clean
 VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 6
 VER_RELEASE      = 2
-VER_SUBREL       = 0      # wxPython release num for x.y.z release of wxWidgets
-VER_FLAGS        = "pre1"  # release flags, such as prerelease or RC num, etc.
+VER_SUBREL       = 1      # wxPython release num for x.y.z release of wxWidgets
+VER_FLAGS        = "pre"  # release flags, such as prerelease or RC num, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -55,8 +55,8 @@ LONG_DESCRIPTION = """\
 wxPython is a GUI toolkit for Python that is a wrapper around the
 wxWidgets C++ GUI library.  wxPython provides a large variety of
 window types and controls, all implemented with a native look and
-feel (by using the native widgets) on the platforms it is supported
-on.
+feel (by using the native widgets) on the platforms upon which it is
+supported.
 """
 
 CLASSIFIERS      = """\
@@ -130,7 +130,7 @@ INSTALL_MULTIVERSION = 1 # Install the packages such that multiple versions
                    # created that adds that dir to the sys.path.  In
                    # addition, a wxselect.py module will be installed
                    # to site-pacakges that will allow applications to
-                   # choose a specific version if more than one are
+                   # choose a specific version if more than one is
                    # installed.
                    
 FLAVOUR = ""       # Optional flavour string to be appended to VERSION
@@ -318,7 +318,7 @@ except:
 
 def Verify_WX_CONFIG():
     """ Called below for the builds that need wx-config, if WX_CONFIG
-        is not set then determins the flags needed based on build
+        is not set then determines the flags needed based on build
         options and searches for wx-config on the PATH.  
     """
     # if WX_CONFIG hasn't been set to an explicit value then construct one.
@@ -347,7 +347,7 @@ def Verify_WX_CONFIG():
             msg("ERROR: WX_CONFIG not specified and wx-config not found on the $PATH")
             # should we exit?
 
-        # TODO:  exeucte WX_CONFIG --list and verify a matching config is found
+        # TODO:  execute WX_CONFIG --list and verify a matching config is found
         
 
 def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
@@ -393,7 +393,7 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
                     pass
 
             if force or newer(i_file, py_file) or newer(i_file, cpp_file):
-                ## we need forward slashes here even on win32
+                ## we need forward slashes here, even on win32
                 #cpp_file = opj(cpp_file) #'/'.join(cpp_file.split('\\'))
                 #i_file = opj(i_file)     #'/'.join(i_file.split('\\'))
 

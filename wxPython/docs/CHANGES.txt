@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.6.1.1
+2.6.2.1
 -------
 
 wxMSW: Fix for bug #1211907, popup menu indenting inconsistent with
@@ -14,9 +14,9 @@ platforms.
 wxMSW: Always set flat toolbar style, even under XP with themes: this
 is necessary or separators aren't shown at all.
 
-Fixes for bug #1217872, pydocview.DocService not correctly initialized
+Fixes for bug #1217872, pydocview.DocService not correctly initialized.
 
-Fix for bug #1217874, Error in parameter name in DocManager.CreateView
+Fix for bug #1217874, Error in parameter name in DocManager.CreateView.
 
 Added wrappers for the wx.RendererNative class.
 
@@ -25,7 +25,7 @@ MultiSplitterWindow class.  This class is much like the standard
 wx.SplitterWindow class, except it allows more than one split, so it
 can manage more than two child windows.
 
-Docview and IDE patch from Morag Hua with fix for bug #1217890
+Docview and IDE patch from Morgan Hua with fix for bug #1217890
 "Closing view crashes Python" plus some new features::
 
     New feature added to the IDE is 'Extensions'.  Under
@@ -36,6 +36,19 @@ Docview and IDE patch from Morag Hua with fix for bug #1217890
 
 Some fixes to XRCed to make encoding errors a bit more user friendly.
 
+XRCed changes from Roman Rolinsky:
+
+    * Added new controls (Choicebook, Listbook, StatusBar,
+      DatePicker), and completed style flags. Test window is opened
+      for an available parent control if no specific view
+      defined. Better handling of exceptions (highlighting does not
+      'stick' anymore).
+
+    * Use system clipboard for Copy/Paste.
+
+    * Improved some dialogs (window styles, growable cols). Changed
+      the range for wxSpinCtrl min/max to all integers (default 0/100
+      is not always good).
 
 
 
