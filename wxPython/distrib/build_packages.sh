@@ -1,20 +1,35 @@
 #!/bin/bash
 
-PY_VERSION=$1
-shift
-
 unicode=no
 debug=no
+reswig=no
+all=no
+
+if [ "$1" = "all" ]; then 
+  all=yes
+else
+  PY_VERSION=$1
+fi
+
+shift 
 
 for flag in $*; do
     case ${flag} in
       debug)       debug=yes              ;;
       unicode)     unicode=yes            ;;
+      reswig)      reswig=yes             ;;
     esac
 done
 
 if [ "$WXWIN" = "" ]; then
   export WXWIN=`pwd`/../..
+fi
+
+if [ $all = yes ]; then
+  $WXWIN/wxPython/distrib/build_packages.sh 23
+  $WXWIN/wxPython/distrib/build_packages.sh 23 unicode
+  $WXWIN/wxPython/distrib/build_packages.sh 24
+  $WXWIN/wxPython/distrib/build_packages.sh 24 unicode
 fi
 
 echo "wxWidgets directory is: $WXWIN"
@@ -71,7 +86,9 @@ if [ "$OSTYPE" = "cygwin" ]; then
   rm -rf wx/*.pyd
   
   # re-generate SWIG files
-  $WXWIN/wxPython/b $PY_VERSION t
+  if [ $reswig = yes ]; then
+    $WXWIN/wxPython/b $PY_VERSION t
+  fi
   
   # build the hybrid extension
   # NOTE: Win Python needs Windows-style pathnames, so we 
@@ -83,13 +100,20 @@ if [ "$OSTYPE" = "cygwin" ]; then
   
   # make the dev package
   $WXWIN/wxPython/distrib/makedev
+  $WXWIN/wxPython/distrib/makedocs
+  $WXWIN/wxPython/distrib/makedemo
   
   $TOOLS/Python$PY_VERSION/python `cygpath -d $WXWIN/wxPython/distrib/make_installer_inno4.py` $UNICODE_FLAG
 elif [ "$OSTYPE" = "darwin" ]; then
   cd $WXWIN/wxPython
   
+  if [ ! -d dist ]; then
+    mkdir dist
+  fi
   # re-generate SWIG files
-  $WXWIN/wxPython/b $PY_VERSION t
+  if [ $reswig = yes ]; then
+    $WXWIN/wxPython/b $PY_VERSION t
+  fi
   
   PY_DOT_VER=2.3
   if [ "$PY_VERSION" = "24" ]; then
@@ -101,13 +125,15 @@ elif [ "$OSTYPE" = "darwin" ]; then
     UNICODE_OPT=unicode
   fi 
   
-  sudo distrib/mac/wxPythonOSX/build $PY_DOT_VER panther inplace $UNICODE_OPT
+  #sudo $WXWIN/wxPython/distrib/makedocs
+  $WXWIN/wxPython/distrib/makedemo
+  export TARBALLDIR=$WXWIN/wxPython/dist
+  
+  distrib/mac/wxPythonOSX/build $PY_DOT_VER panther inplace $UNICODE_OPT
 else
   echo "OSTYPE $OSTYPE not yet supported by this build script."
 fi
 
-# Now make the demo and docs tarballs
-cd $WXWIN/wxPython
-$WXWIN/wxPython/distrib/makedocs
-$WXWIN/wxPython/distrib/makedemo
+# return to original dir
+cd $WXWIN/wxPython/distrib
 
