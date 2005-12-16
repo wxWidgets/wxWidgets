@@ -16,6 +16,10 @@ wxGTK:
 - Fixed problem with choice editor in wxGrid whereby the editor
   lost focus when the combobox menu was shown.
 
+wxMSW
+
+- Fixed MDI context menu problem.
+
 wxWinCE:
 
 - ::wxGetUserName() implemented.
@@ -25,6 +29,7 @@ wxODBC
 
 - wxDb::DBMS() was incorrectly indicating that DB2 databases were
   dBase databases.
+
 
 2.6.2
 -----
