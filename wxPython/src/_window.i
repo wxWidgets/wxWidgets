@@ -437,13 +437,13 @@ window's *best size* values.  Also set's the minsize for use with sizers.", "");
     
     DocDeclStr(
         virtual void , Raise(),
-        "Raises the window to the top of the window hierarchy if it is a
-managed window (dialog or frame).", "");
+        "Raises the window to the top of the window hierarchy.  In current
+version of wxWidgets this works both for manage and child windows.", "");
     
     DocDeclStr(
         virtual void , Lower(),
-        "Lowers the window to the bottom of the window hierarchy if it is a
-managed window (dialog or frame).", "");
+        "Lowers the window to the bottom of the window hierarchy.  In current
+version of wxWidgets this works both for manage and child windows.", "");
     
 
     

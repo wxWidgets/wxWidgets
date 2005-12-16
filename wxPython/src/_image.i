@@ -155,25 +155,41 @@ Unlike RGB data, not all images have an alpha channel and before using
 with `HasAlpha`. Note that currently only images loaded from PNG files
 with transparency information will have an alpha channel.", "");
 
+
 %{
 // Pull the nested class out to the top level for SWIG's sake
 #define wxImage_RGBValue wxImage::RGBValue
 #define wxImage_HSVValue wxImage::HSVValue
 %}
- 
+
+DocStr(wxImage_RGBValue,
+"An object that contains values for red, green and blue which represent
+the value of a color. It is used by `wx.Image.HSVtoRGB` and
+`wx.Image.RGBtoHSV`, which converts between HSV color space and RGB
+color space.", "");       
 class wxImage_RGBValue
 {
 public:
-    wxImage_RGBValue(byte r=0, byte g=0, byte b=0);    
+    DocCtorStr(
+        wxImage_RGBValue(byte r=0, byte g=0, byte b=0),
+        "Constructor.", "");
     byte red;  
     byte green;
     byte blue;
 };
-    
+
+
+DocStr(wxImage_HSVValue,
+"An object that contains values for hue, saturation and value which
+represent the value of a color.  It is used by `wx.Image.HSVtoRGB` and
+`wx.Image.RGBtoHSV`, which +converts between HSV color space and RGB
+color space.", "");
 class wxImage_HSVValue
 {
 public:
-    wxImage_HSVValue(double h=0.0, double s=0.0, double v=0.0);
+    DocCtorStr(
+        wxImage_HSVValue(double h=0.0, double s=0.0, double v=0.0),
+        "Constructor.", "");
     double hue;  
     double saturation;
     double value;
@@ -919,8 +935,14 @@ MustHaveApp(ConvertToMonoBitmap);
         "Rotates the hue of each pixel of the image. Hue is a double in the
 range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
         
-    static wxImage_HSVValue RGBtoHSV(wxImage_RGBValue rgb);
-    static wxImage_RGBValue HSVtoRGB(wxImage_HSVValue hsv);
+    DocDeclStr(
+        static wxImage_HSVValue , RGBtoHSV(wxImage_RGBValue rgb),
+        "Converts a color in RGB color space to HSV color space.", "");
+    
+    DocDeclStr(
+        static wxImage_RGBValue , HSVtoRGB(wxImage_HSVValue hsv),
+        "Converts a color in HSV color space to RGB color space.", "");
+    
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
 };
