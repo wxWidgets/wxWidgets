@@ -50,6 +50,9 @@ XRCed changes from Roman Rolinsky:
       the range for wxSpinCtrl min/max to all integers (default 0/100
       is not always good).
 
+Updates for wx.lib.foldpanelbar and wx.lib.hyperlink from Andrea
+Gavana.
+
 
 
 2.6.1.0
