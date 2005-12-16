@@ -545,6 +545,14 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
             return win->MSWCommand(cmd, id);
     }
 
+    if (wxCurrentPopupMenu)
+    {
+        wxMenu *popupMenu = wxCurrentPopupMenu;
+        wxCurrentPopupMenu = NULL;
+        if (popupMenu->MSWCommand(cmd, id))
+            return true;
+    }
+
     // is it one of standard MDI commands?
     WXWPARAM wParam = 0;
     WXLPARAM lParam = 0;
