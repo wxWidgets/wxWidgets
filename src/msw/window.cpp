@@ -828,7 +828,7 @@ void wxWindowMSW::MSWUpdateUIState()
         // won't send WM_UPDATEUISTATE
         ::SendMessage(GetHwnd(), WM_CHANGEUISTATE,
                       MAKEWPARAM(UIS_CLEAR, UISF_HIDEFOCUS), 0);
-    }
+    } 
 }
 
 // ---------------------------------------------------------------------------
@@ -843,15 +843,9 @@ inline int GetScrollPosition(HWND hWnd, int wOrient)
     WinStruct<SCROLLINFO> scrollInfo;
     scrollInfo.cbSize = sizeof(SCROLLINFO);
     scrollInfo.fMask = SIF_POS;
-    if ( !::GetScrollInfo(hWnd,
-                          wOrient,
-                          &scrollInfo) )
-    {
-        // Not necessarily an error, if there are no scrollbars yet.
-        // wxLogLastError(_T("GetScrollInfo"));
-    }
+    ::GetScrollInfo(hWnd, wOrient, &scrollInfo);
+
     return scrollInfo.nPos;
-//    return ::GetScrollPos(hWnd, wOrient);
 #endif
 }
 
