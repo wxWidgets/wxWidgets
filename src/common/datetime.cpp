@@ -307,15 +307,16 @@ static int GetTimeZone()
     static bool s_timezoneSet = false;
     static long gmtoffset = LONG_MAX; // invalid timezone
 
-    // ensure that the timezone variable is set by calling localtime
+    // ensure that the timezone variable is set by calling wxLocaltime_r
     if ( !s_timezoneSet )
     {
-        // just call localtime() instead of figuring out whether this system
-        // supports tzset(), _tzset() or something else
+        // just call wxLocaltime_r() instead of figuring out whether this
+        // system supports tzset(), _tzset() or something else
         time_t t = 0;
         struct tm *tm;
+        struct tm tmstruct;
 
-        tm = localtime(&t);
+        tm = wxLocaltime_r(&t, &tmstruct);
         s_timezoneSet = true;
 
         // note that GMT offset is the opposite of time zone and so to return
@@ -430,10 +431,11 @@ static void ReplaceDefaultYearMonthWithCurrent(int *year,
                                                wxDateTime::Month *month)
 {
     struct tm *tmNow = NULL;
+    struct tm tmstruct;
 
     if ( *year == wxDateTime::Inv_Year )
     {
-        tmNow = wxDateTime::GetTmNow();
+        tmNow = wxDateTime::GetTmNow(&tmstruct);
 
         *year = 1900 + tmNow->tm_year;
     }
@@ -441,7 +443,7 @@ static void ReplaceDefaultYearMonthWithCurrent(int *year,
     if ( *month == wxDateTime::Inv_Month )
     {
         if ( !tmNow )
-            tmNow = wxDateTime::GetTmNow();
+            tmNow = wxDateTime::GetTmNow(&tmstruct);
 
         *month = (wxDateTime::Month)tmNow->tm_mon;
     }
@@ -520,6 +522,13 @@ static wxDateTime::WeekDay GetWeekDayFromName(const wxString& name, int flags)
     }
 
     return wd;
+}
+
+/* static */
+struct tm *wxDateTime::GetTmNow(struct tm *tmstruct)
+{
+    time_t t = GetTimeNow();
+    return wxLocaltime_r(&t, tmstruct);
 }
 
 // scans all digits (but no more than len) and returns the resulting number
@@ -988,7 +997,8 @@ wxDateTime::Country wxDateTime::GetCountry()
     {
         // try to guess from the time zone name
         time_t t = time(NULL);
-        struct tm *tm = localtime(&t);
+        struct tm tmstruct;
+        struct tm *tm = wxLocaltime_r(&t, &tmstruct);
 
         wxString tz = CallStrftime(_T("%Z"), tm);
         if ( tz == _T("WET") || tz == _T("WEST") )
@@ -1311,9 +1321,10 @@ wxDateTime& wxDateTime::Set(wxDateTime_t hour,
                       _T("Invalid time in wxDateTime::Set()") );
 
     // get the current date from system
-    struct tm *tm = GetTmNow();
+    struct tm tmstruct;
+    struct tm *tm = GetTmNow(&tmstruct);
 
-    wxDATETIME_CHECK( tm, _T("localtime() failed") );
+    wxDATETIME_CHECK( tm, _T("wxLocaltime_r() failed") );
 
     // make a copy so it isn't clobbered by the call to mktime() below
     struct tm tm1(*tm);
@@ -1479,7 +1490,8 @@ unsigned long wxDateTime::GetAsDOS() const
 {
     unsigned long ddt;
     time_t ticks = GetTicks();
-    struct tm *tm = localtime(&ticks);
+    struct tm tmstruct;
+    struct tm *tm = wxLocaltime_r(&ticks, &tmstruct);
 
     long year = tm->tm_year;
     year -= 80;
@@ -1517,14 +1529,15 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
     if ( time != (time_t)-1 )
     {
         // use C RTL functions
+        struct tm tmstruct;
         tm *tm;
         if ( tz.GetOffset() == -GetTimeZone() )
         {
             // we are working with local time
-            tm = localtime(&time);
+            tm = wxLocaltime_r(&time, &tmstruct);
 
             // should never happen
-            wxCHECK_MSG( tm, Tm(), _T("localtime() failed") );
+            wxCHECK_MSG( tm, Tm(), _T("wxLocaltime_r() failed") );
         }
         else
         {
@@ -1536,10 +1549,10 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
             if ( time >= 0 )
 #endif
             {
-                tm = gmtime(&time);
+                tm = wxGmtime_r(&time, &tmstruct);
 
                 // should never happen
-                wxCHECK_MSG( tm, Tm(), _T("gmtime() failed") );
+                wxCHECK_MSG( tm, Tm(), _T("wxGmtime_r() failed") );
             }
             else
             {
@@ -2120,9 +2133,10 @@ int wxDateTime::IsDST(wxDateTime::Country country) const
     time_t timet = GetTicks();
     if ( timet != (time_t)-1 )
     {
-        tm *tm = localtime(&timet);
+        struct tm tmstruct;
+        tm *tm = wxLocaltime_r(&timet, &tmstruct);
 
-        wxCHECK_MSG( tm, -1, _T("localtime() failed") );
+        wxCHECK_MSG( tm, -1, _T("wxLocaltime_r() failed") );
 
         return tm->tm_isdst;
     }
@@ -2184,14 +2198,15 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
     if ( (time != (time_t)-1) && !wxStrstr(format, _T("%l")) )
     {
         // use strftime()
-        tm *tm;
+        struct tm tmstruct;
+        struct tm *tm;
         if ( tz.GetOffset() == -GetTimeZone() )
         {
             // we are working with local time
-            tm = localtime(&time);
+            tm = wxLocaltime_r(&time, &tmstruct);
 
             // should never happen
-            wxCHECK_MSG( tm, wxEmptyString, _T("localtime() failed") );
+            wxCHECK_MSG( tm, wxEmptyString, _T("wxLocaltime_r() failed") );
         }
         else
         {
@@ -2204,10 +2219,10 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
             if ( time >= 0 )
 #endif
             {
-                tm = gmtime(&time);
+                tm = wxGmtime_r(&time, &tmstruct);
 
                 // should never happen
-                wxCHECK_MSG( tm, wxEmptyString, _T("gmtime() failed") );
+                wxCHECK_MSG( tm, wxEmptyString, _T("wxGmtime_r() failed") );
             }
             else
             {

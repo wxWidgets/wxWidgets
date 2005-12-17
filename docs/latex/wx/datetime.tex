@@ -547,10 +547,21 @@ Returns the current time.
 
 \membersection{wxDateTime::GetTmNow}\label{wxdatetimegettmnow}
 
+\func{static struct tm *}{GetTmNow}{\param{struct tm *}{tm}}
+
+Returns the current time broken down, uses the buffer whose adress is
+passed to the function via {\it tm} to store the result.
+
+\membersection{wxDateTime::GetTmNow}
+
 \func{static struct tm *}{GetTmNow}{\void}
 
-Returns the current time broken down.
-
+Returns the current time broken down. Note that this function returns a
+pointer to a static buffer that's reused by calls to this function and
+certain C library functions (e.g. localtime). If there is any chance your
+code might be used in a multi-threaded application, you really should use
+the flavour of function \helpref{wxDateTime::GetTmNow}{wxdatetimegettmnow}
+taking a parameter.
 
 \membersection{wxDateTime::GetWeekDayName}\label{wxdatetimegetweekdayname}
 

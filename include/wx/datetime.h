@@ -52,6 +52,21 @@ class WXDLLIMPEXP_BASE wxDateSpan;
  *   5. wxDateTimeHolidayAuthority for Easter and other christian feasts
  */
 
+/* Two wrapper functions for thread safety */
+#ifdef HAVE_LOCALTIME_R
+#define wxLocaltime_r localtime_r
+#else
+struct tm *wxLocaltime_r(const time_t*, struct tm*)
+#warning using pseudo thread-safe wrapper for localtime to emulate localtime_r
+#endif
+
+#ifdef HAVE_GMTIME_R
+#define wxGmtime_r gmtime_r
+#else
+struct tm *wxGmtime_r(const time_t*, struct tm*)
+#warning using pseudo thread-safe wrapper for gmtime to emulate gmtime_r
+#endif
+
 /*
   The three (main) classes declared in this header represent:
 
@@ -1055,6 +1070,9 @@ public:
         return localtime(&t);
     }
 
+    // get current time using thread-safe function
+    static struct tm *GetTmNow(struct tm *tmstruct);
+
 private:
     // the current country - as it's the same for all program objects (unless
     // it runs on a _really_ big cluster system :-), this is a static member:
@@ -1537,7 +1555,8 @@ inline bool wxDateTime::IsInStdRange() const
 /* static */
 inline wxDateTime wxDateTime::Now()
 {
-    return wxDateTime(*GetTmNow());
+    struct tm tmstruct;
+    return wxDateTime(*GetTmNow(&tmstruct));
 }
 
 /* static */
