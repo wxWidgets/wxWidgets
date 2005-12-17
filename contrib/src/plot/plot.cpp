@@ -781,10 +781,7 @@ wxPlotWindow::wxPlotWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos,
 
     mainsizer->Add( m_plotAndTitleSizer, 1, wxEXPAND );
 
-    SetAutoLayout( true );
-    SetSizer( mainsizer );
-    mainsizer->Fit(this);
-    mainsizer->SetSizeHints(this);
+    SetSizerAndFit( mainsizer );
 
     SetTargetWindow( m_area );
 
