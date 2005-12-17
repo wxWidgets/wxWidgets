@@ -57,6 +57,8 @@ Fix for Bug #1283496: wxPython TheClipboard class causes problems for
 pychecker.  Ensure the app has been created before initializing
 wx.TheClipboard.
 
+Fix for Bug #1352602: FileBrowseButtonWithHistory can't type in Value.
+
 
 
 
