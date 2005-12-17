@@ -53,6 +53,11 @@ XRCed changes from Roman Rolinsky:
 Updates for wx.lib.foldpanelbar and wx.lib.hyperlink from Andrea
 Gavana.
 
+Fix for Bug #1283496: wxPython TheClipboard class causes problems for
+pychecker.  Ensure the app has been created before initializing
+wx.TheClipboard.
+
+
 
 
 2.6.1.0
