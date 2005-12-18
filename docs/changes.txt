@@ -38,6 +38,7 @@ All (GUI):
   windows (wxDialog, wxFrame).
 - Fixed memory leak of pending events in wxEvtHandler
 - Added wxRadioBox::IsItemEnabled/Shown()
+- Added space after list item number in wxHTML.
 
 wxMSW:
 
