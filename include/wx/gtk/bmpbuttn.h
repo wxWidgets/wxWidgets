@@ -44,7 +44,6 @@ public:
                 const wxString& name = wxButtonNameStr);
 
     void SetLabel( const wxString &label );
-    wxString GetLabel() const;
     virtual void SetLabel( const wxBitmap& bitmap ) { SetBitmapLabel(bitmap); }
 
     virtual void SetDefault();

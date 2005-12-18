@@ -189,13 +189,6 @@ void wxBitmapButton::SetLabel( const wxString &label )
     wxControl::SetLabel( label );
 }
 
-wxString wxBitmapButton::GetLabel() const
-{
-    wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid button") );
-
-    return wxControl::GetLabel();
-}
-
 void wxBitmapButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     if ( !BUTTON_CHILD(m_widget) )
