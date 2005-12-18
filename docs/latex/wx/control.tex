@@ -35,10 +35,20 @@ Simulates the effect of the user issuing a command to the item. See \helpref{wxC
 
 Returns the control's text.
 
+Note that the returned string contains the mnemonics (\texttt{\&} characters) if
+any.
+
 
 \membersection{wxControl::SetLabel}\label{wxcontrolsetlabel}
 
 \func{void}{SetLabel}{\param{const wxString\& }{label}}
 
 Sets the item's text.
+
+The \texttt{\&} characters in the \arg{label} are special and indicate that the
+following character is a mnemonic for this control and can be used to activate
+it from the keyboard (typically by using \textit{Alt} key in combination with
+it). To insert a literal ampersand character, you need to double it, i.e. use 
+\texttt{"\&\&"}.
+
 
