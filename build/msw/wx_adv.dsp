@@ -1241,6 +1241,10 @@ SOURCE=..\..\src\richtext\richtextctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\richtext\richtexthtml.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\richtext\richtextstyles.cpp
 # End Source File
 # Begin Source File

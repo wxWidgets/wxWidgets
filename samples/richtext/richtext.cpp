@@ -61,6 +61,7 @@
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
 #include "wx/richtext/richtextxml.h"
+#include "wx/richtext/richtexthtml.h"
 
 // ----------------------------------------------------------------------------
 // resources

@@ -31,6 +31,7 @@
 #include "wx/module.h"
 #include "wx/txtstrm.h"
 #include "wx/xml/xml.h"
+#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextXMLHandler, wxRichTextFileHandler)
 
@@ -45,7 +46,14 @@ bool wxRichTextXMLHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& s
     wxXmlDocument* xmlDoc = new wxXmlDocument;
     bool success = true;
 
-    if (!xmlDoc->Load(stream, wxT("ISO-8859-1")))
+    // This is the encoding to convert to (memory encoding rather than file encoding)
+    wxString encoding(wxT("UTF-8"));
+
+#if !wxUSE_UNICODE && wxUSE_INTL
+    encoding = wxLocale::GetSystemEncodingName();
+#endif
+
+    if (!xmlDoc->Load(stream, encoding))
     {
         success = false;
     }
@@ -122,12 +130,6 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
                             text2 = text2.Mid(1);
                         if (text2.Length() > 0 && text2[text2.Length()-1] == wxT('"'))
                             text2 = text2.Mid(0, text2.Length() - 1);
-
-                        // TODO: further entity translation
-                        text2.Replace(wxT("&lt;"), wxT("<"));
-                        text2.Replace(wxT("&gt;"), wxT(">"));
-                        text2.Replace(wxT("&amp;"), wxT("&"));
-                        text2.Replace(wxT("&quot;"), wxT("\""));
 
                         text += text2;
                     }
@@ -305,8 +307,13 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
     for (i = 0; i < len; i++)
     {
         c = str.GetChar(i);
+        
+        // Original code excluded "&amp;" but we _do_ want to convert
+        // the ampersand beginning &amp; because otherwise when read in,
+        // the original "&amp;" becomes "&".
+
         if (c == wxT('<') || c == wxT('>') || c == wxT('"') ||
-            (c == wxT('&') && (str.Mid(i+1, 4) != wxT("amp;"))))
+            (c == wxT('&') /* && (str.Mid(i+1, 4) != wxT("amp;")) */ ))
         {
             OutputString(stream, str.Mid(last, i - last), convMem, convFile);
             switch (c)
@@ -339,28 +346,6 @@ inline static void OutputIndentation(wxOutputStream& stream, int indent)
     OutputString(stream, str, NULL, NULL);
 }
 
-static wxOutputStream& operator <<(wxOutputStream& stream, const wxString& s)
-{
-    stream.Write(s, s.Length());
-    return stream;
-}
-
-#if 0
-static wxOutputStream& operator <<(wxOutputStream& stream, long l)
-{
-    wxString str;
-    str.Printf(wxT("%ld"), l);
-    return stream << str;
-}
-
-static wxOutputStream& operator <<(wxOutputStream& stream, const char c)
-{
-    wxString str;
-    str.Printf(wxT("%c"), c);
-    return stream << str;
-}
-#endif
-
 // Convert a colour to a 6-digit hex string
 static wxString ColourToHexString(const wxColour& col)
 {
@@ -374,7 +359,7 @@ static wxString ColourToHexString(const wxColour& col)
 }
 
 // Convert 6-digit hex string to a colour
-wxColour HexStringToColour(const wxString& hex)
+static wxColour HexStringToColour(const wxString& hex)
 {
     unsigned char r = (unsigned char)wxHexToDec(hex.Mid(0, 2));
     unsigned char g = (unsigned char)wxHexToDec(hex.Mid(2, 2));
@@ -389,41 +374,64 @@ bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& 
         return false;
 
     wxString version(wxT("1.0") ) ;
-#if wxUSE_UNICODE
-    wxString fileencoding(wxT("UTF-8")) ;
-    wxString memencoding(wxT("UTF-8")) ;
-#else
-    wxString fileencoding(wxT("ISO-8859-1")) ;
-    wxString memencoding(wxT("ISO-8859-1")) ;
-#endif
-    wxString s ;
 
-    wxMBConv *convMem = NULL, *convFile = NULL;
+    bool deleteConvFile = false;
+    wxString fileEncoding;
+    wxMBConv* convFile = NULL;
+
 #if wxUSE_UNICODE
-    convFile = new wxCSConv(fileencoding);
+    fileEncoding = wxT("UTF-8");
+    convFile = & wxConvUTF8;
 #else
-    if ( fileencoding != memencoding )
+    fileEncoding = wxT("ISO-8859-1");
+    convFile = & wxConvISO8859_1;
+#endif
+
+    // If SetEncoding has been called, change the output encoding.
+    if (!m_encoding.IsEmpty() && m_encoding.Lower() != fileEncoding.Lower())
     {
-        convFile = new wxCSConv(fileencoding);
-        convMem = new wxCSConv(memencoding);
+        if (m_encoding == wxT("<System>"))
+        {
+            fileEncoding = wxLocale::GetSystemEncodingName();
+        }
+        else
+        {
+            fileEncoding = m_encoding;
+        }
+
+        // GetSystemEncodingName may not have returned a name
+        if (fileEncoding.IsEmpty())
+#if wxUSE_UNICODE
+            fileEncoding = wxT("UTF-8");
+#else
+            fileEncoding = wxT("ISO-8859-1");
+#endif
+        convFile = new wxCSConv(fileEncoding);
+        deleteConvFile = true;
     }
+
+#if !wxUSE_UNICODE
+    wxMBConv* convMem = wxConvCurrent;
+#else
+    wxMBConv* convMem = NULL;
 #endif
 
+    wxString s ;
     s.Printf(wxT("<?xml version=\"%s\" encoding=\"%s\"?>\n"),
-        (const wxChar*) version, (const wxChar*) fileencoding );
+        (const wxChar*) version, (const wxChar*) fileEncoding );
     OutputString(stream, s, NULL, NULL);
     OutputString(stream, wxT("<richtext version=\"1.0.0.0\" xmlns=\"http://www.wxwidgets.org\">") , NULL, NULL);
 
     int level = 1;
-    ExportXML(stream, convMem, convFile, *buffer, level);
+    bool success = ExportXML(stream, convMem, convFile, *buffer, level);
 
     OutputString(stream, wxT("\n</richtext>") , NULL, NULL);
     OutputString(stream, wxT("\n"), NULL, NULL);
 
-    delete convFile;
-    delete convMem;
-
-    return true;
+    if (deleteConvFile)
+        delete convFile;
+    
+    return success;
 }
 
 /// Recursively export an object
@@ -446,18 +454,18 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
         wxRichTextPlainText& text = (wxRichTextPlainText&) obj;
 
         OutputIndentation(stream, indent);
-        stream << wxT("<") << objectName;
+        OutputString(stream, wxT("<") + objectName, convMem, convFile);
 
         wxString style = CreateStyle(obj.GetAttributes(), false);
 
-        stream << style << wxT(">");
+        OutputString(stream, style + wxT(">"), convMem, convFile);
 
         wxString str = text.GetText();
         if (str.Length() > 0 && (str[0] == wxT(' ') || str[str.Length()-1] == wxT(' ')))
         {
-            stream << wxT("\"");
+            OutputString(stream, wxT("\""), convMem, convFile);
             OutputStringEnt(stream, str, convMem, convFile);
-            stream << wxT("\"");
+            OutputString(stream, wxT("\""), convMem, convFile);
         }
         else
             OutputStringEnt(stream, str, convMem, convFile);
@@ -470,28 +478,28 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
             imageObj.MakeBlock();
 
         OutputIndentation(stream, indent);
-        stream << wxT("<") << objectName;
+        OutputString(stream, wxT("<") + objectName, convMem, convFile);
         if (!imageObj.GetImageBlock().Ok())
         {
             // No data
-            stream << wxT(">");
+            OutputString(stream, wxT(">"), convMem, convFile);
         }
         else
         {
-            stream << wxString::Format(wxT(" imagetype=\"%d\""), (int) imageObj.GetImageBlock().GetImageType()) << wxT(">");
+            OutputString(stream, wxString::Format(wxT(" imagetype=\"%d\">"), (int) imageObj.GetImageBlock().GetImageType()));
         }
 
         OutputIndentation(stream, indent+1);
-        stream << wxT("<data>");
+        OutputString(stream, wxT("<data>"), convMem, convFile);
 
         imageObj.GetImageBlock().WriteHex(stream);
 
-        stream << wxT("</data>");
+        OutputString(stream, wxT("</data>"), convMem, convFile);
     }
     else if (obj.IsKindOf(CLASSINFO(wxRichTextCompositeObject)))
     {
         OutputIndentation(stream, indent);
-        stream << wxT("<") << objectName;
+        OutputString(stream, wxT("<") + objectName, convMem, convFile);
 
         bool isPara = false;
         if (objectName == wxT("paragraph") || objectName == wxT("paragraphlayout"))
@@ -499,7 +507,7 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
 
         wxString style = CreateStyle(obj.GetAttributes(), isPara);
 
-        stream << style << wxT(">");
+        OutputString(stream, style + wxT(">"), convMem, convFile);
 
         wxRichTextCompositeObject& composite = (wxRichTextCompositeObject&) obj;
         size_t i;
@@ -513,7 +521,7 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
     if (objectName != wxT("text"))
         OutputIndentation(stream, indent);
 
-    stream << wxT("</") << objectName << wxT(">");
+    OutputString(stream, wxT("</") + objectName + wxT(">"), convMem, convFile);
 
     return true;
 }
@@ -674,148 +682,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
 }
 
 #endif
-
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextHTMLHandler, wxRichTextFileHandler)
-
-/// Can we handle this filename (if using files)? By default, checks the extension.
-bool wxRichTextHTMLHandler::CanHandle(const wxString& filename) const
-{
-    wxString path, file, ext;
-    wxSplitPath(filename, & path, & file, & ext);
-
-    return (ext.Lower() == wxT("html") || ext.Lower() == wxT("htm"));
-}
-
-
-#if wxUSE_STREAMS
-bool wxRichTextHTMLHandler::DoLoadFile(wxRichTextBuffer *WXUNUSED(buffer), wxInputStream& WXUNUSED(stream))
-{
-    return false;
-}
-
-/*
- * We need to output only _changes_ in character formatting.
- */
-
-bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream)
-{
-    buffer->Defragment();
-
-    wxTextOutputStream str(stream);
-
-    wxTextAttrEx currentParaStyle = buffer->GetAttributes();
-    wxTextAttrEx currentCharStyle = buffer->GetAttributes();
-
-    str << wxT("<html><head></head><body>\n");
-
-    wxRichTextObjectList::compatibility_iterator node = buffer->GetChildren().GetFirst();
-    while (node)
-    {
-        wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
-        wxASSERT (para != NULL);
-
-        if (para)
-        {
-            OutputParagraphFormatting(currentParaStyle, para->GetAttributes(), stream, true);
-
-            wxRichTextObjectList::compatibility_iterator node2 = para->GetChildren().GetFirst();
-            while (node2)
-            {
-                wxRichTextObject* obj = node2->GetData();
-                wxRichTextPlainText* textObj = wxDynamicCast(obj, wxRichTextPlainText);
-                if (textObj && !textObj->IsEmpty())
-                {
-                    OutputCharacterFormatting(currentCharStyle, obj->GetAttributes(), stream, true);
-
-                    str << textObj->GetText();
-
-                    OutputCharacterFormatting(currentCharStyle, obj->GetAttributes(), stream, false);
-                }
-
-                node2 = node2->GetNext();
-            }
-
-            OutputParagraphFormatting(currentParaStyle, para->GetAttributes(), stream, false);
-
-            str << wxT("<P>\n");
-        }
-
-        node = node->GetNext();
-    }
-
-    str << wxT("</body></html>\n");
-
-    return true;
-}
-
-/// Output character formatting
-void wxRichTextHTMLHandler::OutputCharacterFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, wxOutputStream& stream, bool start)
-{
-    wxTextOutputStream str(stream);
-
-    bool isBold = false;
-    bool isItalic = false;
-    bool isUnderline = false;
-    wxString faceName;
-
-    if (thisStyle.GetFont().Ok())
-    {
-        if (thisStyle.GetFont().GetWeight() == wxBOLD)
-            isBold = true;
-        if (thisStyle.GetFont().GetStyle() == wxITALIC)
-            isItalic = true;
-        if (thisStyle.GetFont().GetUnderlined())
-            isUnderline = true;
-
-        faceName = thisStyle.GetFont().GetFaceName();
-    }
-
-    if (start)
-    {
-        if (isBold)
-            str << wxT("<b>");
-        if (isItalic)
-            str << wxT("<i>");
-        if (isUnderline)
-            str << wxT("<u>");
-    }
-    else
-    {
-        if (isUnderline)
-            str << wxT("</u>");
-        if (isItalic)
-            str << wxT("</i>");
-        if (isBold)
-            str << wxT("</b>");
-    }
-}
-
-/// Output paragraph formatting
-void wxRichTextHTMLHandler::OutputParagraphFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, wxOutputStream& stream, bool start)
-{
-    // TODO: lists, indentation (using tables), fonts, right-align, ...
-
-    wxTextOutputStream str(stream);
-    bool isCentered = false;
-
-    if (thisStyle.GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
-    {
-        isCentered = true;
-    }
-
-    if (start)
-    {
-        if (isCentered)
-            str << wxT("<center>");
-    }
-    else
-    {
-        if (isCentered)
-            str << wxT("</center>");
-    }
-}
-
-#endif
-
+    // wxUSE_STREAMS
+    
 #endif
     // wxUSE_RICHTEXT && wxUSE_XML

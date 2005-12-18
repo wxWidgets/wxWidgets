@@ -1556,6 +1556,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_richtextbuffer.o \
 	$(OBJS)\monodll_richtextstyles.o \
 	$(OBJS)\monodll_richtextxml.o \
+	$(OBJS)\monodll_richtexthtml.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -1580,6 +1581,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_richtextbuffer.o \
 	$(OBJS)\monodll_richtextstyles.o \
 	$(OBJS)\monodll_richtextxml.o \
+	$(OBJS)\monodll_richtexthtml.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -2086,6 +2088,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_richtextbuffer.o \
 	$(OBJS)\monolib_richtextstyles.o \
 	$(OBJS)\monolib_richtextxml.o \
+	$(OBJS)\monolib_richtexthtml.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -2110,6 +2113,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_richtextbuffer.o \
 	$(OBJS)\monolib_richtextstyles.o \
 	$(OBJS)\monolib_richtextxml.o \
+	$(OBJS)\monolib_richtexthtml.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -2975,6 +2979,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_richtextbuffer.o \
 	$(OBJS)\advdll_richtextstyles.o \
 	$(OBJS)\advdll_richtextxml.o \
+	$(OBJS)\advdll_richtexthtml.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -2999,6 +3004,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_richtextbuffer.o \
 	$(OBJS)\advdll_richtextstyles.o \
 	$(OBJS)\advdll_richtextxml.o \
+	$(OBJS)\advdll_richtexthtml.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -3030,6 +3036,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_richtextbuffer.o \
 	$(OBJS)\advlib_richtextstyles.o \
 	$(OBJS)\advlib_richtextxml.o \
+	$(OBJS)\advlib_richtexthtml.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -3054,6 +3061,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_richtextbuffer.o \
 	$(OBJS)\advlib_richtextstyles.o \
 	$(OBJS)\advlib_richtextxml.o \
+	$(OBJS)\advlib_richtexthtml.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -5880,6 +5888,11 @@ $(OBJS)\monodll_richtextxml.o: ../../src/richtext/richtextxml.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_richtexthtml.o: ../../src/richtext/richtexthtml.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7695,6 +7708,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_richtextxml.o: ../../src/richtext/richtextxml.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_richtexthtml.o: ../../src/richtext/richtexthtml.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10808,6 +10826,9 @@ $(OBJS)\advdll_richtextstyles.o: ../../src/richtext/richtextstyles.cpp
 $(OBJS)\advdll_richtextxml.o: ../../src/richtext/richtextxml.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_richtexthtml.o: ../../src/richtext/richtexthtml.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10872,6 +10893,9 @@ $(OBJS)\advlib_richtextstyles.o: ../../src/richtext/richtextstyles.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_richtextxml.o: ../../src/richtext/richtextxml.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_richtexthtml.o: ../../src/richtext/richtexthtml.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp

@@ -2360,6 +2360,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/richtext/richtextbuffer.cpp
     src/richtext/richtextstyles.cpp
     src/richtext/richtextxml.cpp
+    src/richtext/richtexthtml.cpp
 </set>
 
 <set var="ADVANCED_CMN_HDR" hints="files">

@@ -4224,6 +4224,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_richtextbuffer.o \
 	monodll_richtextstyles.o \
 	monodll_richtextxml.o \
+	monodll_richtexthtml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS)
@@ -4244,6 +4245,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_richtextbuffer.o \
 	monodll_richtextstyles.o \
 	monodll_richtextxml.o \
+	monodll_richtexthtml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS \
@@ -5706,6 +5708,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_richtextbuffer.o \
 	monolib_richtextstyles.o \
 	monolib_richtextxml.o \
+	monolib_richtexthtml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_0) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1)
@@ -5726,6 +5729,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_richtextbuffer.o \
 	monolib_richtextstyles.o \
 	monolib_richtextxml.o \
+	monolib_richtexthtml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_0)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 \
@@ -8656,6 +8660,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_richtextbuffer.o \
 	advdll_richtextstyles.o \
 	advdll_richtextxml.o \
+	advdll_richtexthtml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_8) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2)
@@ -8676,6 +8681,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_richtextbuffer.o \
 	advdll_richtextstyles.o \
 	advdll_richtextxml.o \
+	advdll_richtexthtml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_8)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
@@ -8709,6 +8715,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_richtextbuffer.o \
 	advlib_richtextstyles.o \
 	advlib_richtextxml.o \
+	advlib_richtexthtml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_9) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3)
@@ -8729,6 +8736,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_richtextbuffer.o \
 	advlib_richtextstyles.o \
 	advlib_richtextxml.o \
+	advlib_richtexthtml.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_9)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
@@ -13786,6 +13794,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
+@COND_USE_GUI_1@monodll_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
@@ -17277,6 +17288,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
+
+@COND_USE_GUI_1@monolib_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
@@ -23683,6 +23697,9 @@ advdll_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(ADVDLL_ODEP
 advdll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
+advdll_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
+
 @COND_TOOLKIT_MSW@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
@@ -23832,6 +23849,9 @@ advlib_richtextstyles.o: $(srcdir)/src/richtext/richtextstyles.cpp $(ADVLIB_ODEP
 
 advlib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
+
+advlib_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/richtext/richtexthtml.cpp
 
 @COND_TOOLKIT_MSW@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp

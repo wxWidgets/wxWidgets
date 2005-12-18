@@ -1822,14 +1822,21 @@ public:
     virtual bool IsVisible() const { return m_visible; }
     virtual void SetVisible(bool visible) { m_visible = visible; }
 
+    /// The name of the nandler
     void SetName(const wxString& name) { m_name = name; }
     wxString GetName() const { return m_name; }
 
+    /// The default extension to recognise
     void SetExtension(const wxString& ext) { m_extension = ext; }
     wxString GetExtension() const { return m_extension; }
 
+    /// The handler type
     void SetType(int type) { m_type = type; }
     int GetType() const { return m_type; }
+
+    /// Encoding to use when saving a file. If empty, a suitable encoding is chosen
+    void SetEncoding(const wxString& encoding) { m_encoding = encoding; }
+    const wxString& GetEncoding() const { return m_encoding; }
 
 protected:
 
@@ -1839,6 +1846,7 @@ protected:
 #endif
 
     wxString  m_name;
+    wxString  m_encoding;
     wxString  m_extension;
     int       m_type;
     bool      m_visible;

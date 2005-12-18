@@ -593,6 +593,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_richtextbuffer.obj &
 	$(OBJS)\monodll_richtextstyles.obj &
 	$(OBJS)\monodll_richtextxml.obj &
+	$(OBJS)\monodll_richtexthtml.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_sound.obj &
 	$(OBJS)\monodll_taskbar.obj &
@@ -617,6 +618,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_richtextbuffer.obj &
 	$(OBJS)\monodll_richtextstyles.obj &
 	$(OBJS)\monodll_richtextxml.obj &
+	$(OBJS)\monodll_richtexthtml.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_sound.obj &
 	$(OBJS)\monodll_taskbar.obj &
@@ -1127,6 +1129,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_richtextbuffer.obj &
 	$(OBJS)\monolib_richtextstyles.obj &
 	$(OBJS)\monolib_richtextxml.obj &
+	$(OBJS)\monolib_richtexthtml.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_sound.obj &
 	$(OBJS)\monolib_taskbar.obj &
@@ -1151,6 +1154,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_richtextbuffer.obj &
 	$(OBJS)\monolib_richtextstyles.obj &
 	$(OBJS)\monolib_richtextxml.obj &
+	$(OBJS)\monolib_richtexthtml.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_sound.obj &
 	$(OBJS)\monolib_taskbar.obj &
@@ -2026,6 +2030,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_richtextbuffer.obj &
 	$(OBJS)\advdll_richtextstyles.obj &
 	$(OBJS)\advdll_richtextxml.obj &
+	$(OBJS)\advdll_richtexthtml.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
 	$(OBJS)\advdll_sound.obj &
 	$(OBJS)\advdll_taskbar.obj &
@@ -2050,6 +2055,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_richtextbuffer.obj &
 	$(OBJS)\advdll_richtextstyles.obj &
 	$(OBJS)\advdll_richtextxml.obj &
+	$(OBJS)\advdll_richtexthtml.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
 	$(OBJS)\advdll_sound.obj &
 	$(OBJS)\advdll_taskbar.obj &
@@ -2083,6 +2089,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_richtextbuffer.obj &
 	$(OBJS)\advlib_richtextstyles.obj &
 	$(OBJS)\advlib_richtextxml.obj &
+	$(OBJS)\advlib_richtexthtml.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
 	$(OBJS)\advlib_sound.obj &
 	$(OBJS)\advlib_taskbar.obj &
@@ -2107,6 +2114,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_richtextbuffer.obj &
 	$(OBJS)\advlib_richtextstyles.obj &
 	$(OBJS)\advlib_richtextxml.obj &
+	$(OBJS)\advlib_richtexthtml.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
 	$(OBJS)\advlib_sound.obj &
 	$(OBJS)\advlib_taskbar.obj &
@@ -6080,6 +6088,11 @@ $(OBJS)\monodll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7895,6 +7908,11 @@ $(OBJS)\monolib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextsty
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11008,6 +11026,9 @@ $(OBJS)\advdll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyl
 $(OBJS)\advdll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -11072,6 +11093,9 @@ $(OBJS)\advlib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyl
 	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
+	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
