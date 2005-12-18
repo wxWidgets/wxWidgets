@@ -130,6 +130,69 @@ static wxFileOffset QuietSeek(wxInputStream& stream, wxFileOffset pos)
 
 
 /////////////////////////////////////////////////////////////////////////////
+// Read a zip header
+
+class wxZipHeader
+{
+public:
+    wxZipHeader(wxInputStream& stream, size_t size);
+
+    inline wxUint8 Read8();
+    inline wxUint16 Read16();
+    inline wxUint32 Read32();
+
+    const char *GetData() const             { return m_data; }
+    size_t GetSize() const                  { return m_size; }
+    operator bool() const                   { return m_ok; }
+
+    size_t Seek(size_t pos)                 { m_pos = pos; return m_pos; }
+    size_t Skip(size_t size)                { m_pos += size; return m_pos; }
+
+    wxZipHeader& operator>>(wxUint8& n)     { n = Read8();  return *this; }
+    wxZipHeader& operator>>(wxUint16& n)    { n = Read16(); return *this; }
+    wxZipHeader& operator>>(wxUint32& n)    { n = Read32(); return *this; }
+
+private:
+    char m_data[64];
+    size_t m_size;
+    size_t m_pos;
+    bool m_ok;
+};
+
+wxZipHeader::wxZipHeader(wxInputStream& stream, size_t size)
+  : m_size(0),
+    m_pos(0),
+    m_ok(false)
+{
+    wxCHECK_RET(size <= sizeof(m_data), _T("buffer too small"));
+    m_size = stream.Read(m_data, size).LastRead();
+    m_ok = m_size == size;
+}
+
+wxUint8 wxZipHeader::Read8()
+{
+    wxASSERT(m_pos < m_size);
+    return *wx_reinterpret_cast(wxUint8*, m_data + m_pos++);
+}
+
+wxUint16 wxZipHeader::Read16()
+{
+    wxASSERT(m_pos + 2 <= m_size);
+    wxUint16 n = *wx_reinterpret_cast(wxUint16*, m_data + m_pos);
+    m_pos += 2;
+    return wxUINT16_SWAP_ON_BE(n);
+}
+
+wxUint32 wxZipHeader::Read32()
+{
+    wxASSERT(m_pos + 4 <= m_size);
+    wxUint32 n = *wx_reinterpret_cast(wxUint32*, m_data + m_pos);
+    m_pos += 4;
+    return wxUINT32_SWAP_ON_BE(n);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
 // Stored input stream
 // Trival decompressor for files which are 'stored' in the zip file.
 
@@ -169,10 +232,8 @@ size_t wxStoredInputStream::OnSysRead(void *buffer, size_t size)
     count = m_parent_i_stream->Read(buffer, count).LastRead();
     m_pos += count;
 
-    if (m_pos == m_len && count < size)
-        m_lasterror = wxSTREAM_EOF;
-    else if (!*m_parent_i_stream)
-        m_lasterror = wxSTREAM_READ_ERROR;
+    if (count < size)
+        m_lasterror = m_pos == m_len ? wxSTREAM_EOF : wxSTREAM_READ_ERROR;
 
     return count;
 }
@@ -295,7 +356,8 @@ wxInputStream& wxTeeInputStream::Read(void *buffer, size_t size)
 size_t wxTeeInputStream::OnSysRead(void *buffer, size_t size)
 {
     size_t count = m_parent_i_stream->Read(buffer, size).LastRead();
-    m_lasterror = m_parent_i_stream->GetLastError();
+    if (count < size)
+        m_lasterror = m_parent_i_stream->GetLastError();
     return count;
 }
 
@@ -309,6 +371,7 @@ size_t wxTeeInputStream::GetData(char *buffer, size_t size)
             wxFAIL; // we've already returned data that's now being ungot
             m_end = len;
         }
+        m_parent_i_stream->Reset();
         m_parent_i_stream->Ungetch(m_wback, m_wbacksize);
         free(m_wback);
         m_wback = NULL;
@@ -869,7 +932,9 @@ size_t wxZipEntry::ReadLocal(wxInputStream& stream, wxMBConv& conv)
     wxUint16 nameLen, extraLen;
     wxUint32 compressedSize, size, crc;
 
-    wxDataInputStream ds(stream);
+    wxZipHeader ds(stream, LOCAL_SIZE - 4);
+    if (!ds)
+        return 0;
 
     ds >> m_VersionNeeded >> m_Flags >> m_Method;
     SetDateTime(wxDateTime().SetFromDOS(ds.Read32()));
@@ -885,11 +950,16 @@ size_t wxZipEntry::ReadLocal(wxInputStream& stream, wxMBConv& conv)
         m_Size = size;
 
     SetName(ReadString(stream, nameLen, conv), wxPATH_UNIX);
+    if (stream.LastRead() != nameLen + 0u)
+        return 0;
 
     if (extraLen || GetLocalExtraLen()) {
         Unique(m_LocalExtra, extraLen);
-        if (extraLen)
+        if (extraLen) {
             stream.Read(m_LocalExtra->GetData(), extraLen);
+            if (stream.LastRead() != extraLen + 0u)
+                return 0;
+        }
     }
 
     return LOCAL_SIZE + nameLen + extraLen;
@@ -929,7 +999,9 @@ size_t wxZipEntry::ReadCentral(wxInputStream& stream, wxMBConv& conv)
 {
     wxUint16 nameLen, extraLen, commentLen;
 
-    wxDataInputStream ds(stream);
+    wxZipHeader ds(stream, CENTRAL_SIZE - 4);
+    if (!ds)
+        return 0;
 
     ds >> m_VersionMadeBy >> m_SystemMadeBy;
 
@@ -946,17 +1018,25 @@ size_t wxZipEntry::ReadCentral(wxInputStream& stream, wxMBConv& conv)
     SetOffset(ds.Read32());
 
     SetName(ReadString(stream, nameLen, conv), wxPATH_UNIX);
+    if (stream.LastRead() != nameLen + 0u)
+        return 0;
 
     if (extraLen || GetExtraLen()) {
         Unique(m_Extra, extraLen);
-        if (extraLen)
+        if (extraLen) {
             stream.Read(m_Extra->GetData(), extraLen);
+            if (stream.LastRead() != extraLen + 0u)
+                return 0;
+        }
     }
 
-    if (commentLen)
+    if (commentLen) {
         m_Comment = ReadString(stream, commentLen, conv);
-    else
+        if (stream.LastRead() != commentLen + 0u)
+            return 0;
+    } else {
         m_Comment.clear();
+    }
 
     return CENTRAL_SIZE + nameLen + extraLen + commentLen;
 }
@@ -1008,7 +1088,9 @@ size_t wxZipEntry::WriteCentral(wxOutputStream& stream, wxMBConv& conv) const
 //
 size_t wxZipEntry::ReadDescriptor(wxInputStream& stream)
 {
-    wxDataInputStream ds(stream);
+    wxZipHeader ds(stream, SUMS_SIZE);
+    if (!ds)
+        return 0;
 
     m_Crc = ds.Read32();
     m_CompressedSize = ds.Read32();
@@ -1017,22 +1099,23 @@ size_t wxZipEntry::ReadDescriptor(wxInputStream& stream)
     // if 1st value is the signature then this is probably an info-zip record
     if (m_Crc == SUMS_MAGIC)
     {
-        char buf[8];
-        stream.Read(buf, sizeof(buf));
-        wxUint32 u1 = CrackUint32(buf);
-        wxUint32 u2 = CrackUint32(buf + 4);
+        wxZipHeader buf(stream, 8);
+        wxUint32 u1 = buf.GetSize() >= 4 ? buf.Read32() : LOCAL_MAGIC;
+        wxUint32 u2 = buf.GetSize() == 8 ? buf.Read32() : 0;
 
         // look for the signature of the following record to decide which
         if ((u1 == LOCAL_MAGIC || u1 == CENTRAL_MAGIC) &&
             (u2 != LOCAL_MAGIC && u2 != CENTRAL_MAGIC))
         {
             // it's a pkzip style record after all!
-            stream.Ungetch(buf, sizeof(buf));
+            if (buf.GetSize() > 0)
+                stream.Ungetch(buf.GetData(), buf.GetSize());
         }
         else
         {
             // it's an info-zip record as expected
-            stream.Ungetch(buf + 4, sizeof(buf) - 4);
+            if (buf.GetSize() > 4)
+                stream.Ungetch(buf.GetData() + 4, buf.GetSize() - 4);
             m_Crc = wx_truncate_cast(wxUint32, m_CompressedSize);
             m_CompressedSize = m_Size;
             m_Size = u1;
@@ -1133,23 +1216,26 @@ bool wxZipEndRec::Write(wxOutputStream& stream, wxMBConv& conv) const
 
 bool wxZipEndRec::Read(wxInputStream& stream, wxMBConv& conv)
 {
-    wxDataInputStream ds(stream);
+    wxZipHeader ds(stream, END_SIZE - 4);
+    if (!ds)
+        return false;
+
     wxUint16 commentLen;
 
     ds >> m_DiskNumber >> m_StartDisk >> m_EntriesHere
        >> m_TotalEntries >> m_Size >> m_Offset >> commentLen;
 
-    if (commentLen)
+    if (commentLen) {
         m_Comment = ReadString(stream, commentLen, conv);
+        if (stream.LastRead() != commentLen + 0u)
+            return false;
+    }
 
-    if (stream.IsOk())
-        if (m_DiskNumber == 0 && m_StartDisk == 0 &&
-                m_EntriesHere == m_TotalEntries)
-            return true;
-        else
-            wxLogError(_("unsupported zip archive"));
+    if (m_DiskNumber != 0 || m_StartDisk != 0 ||
+            m_EntriesHere != m_TotalEntries)
+        wxLogWarning(_("assuming this is a multi-part zip concatenated"));
 
-    return false;
+    return true;
 }
 
 
@@ -1331,14 +1417,8 @@ bool wxZipInputStream::LoadEndRecord()
 
     // Read in the end record
     wxFileOffset endPos = m_parent_i_stream->TellI() - 4;
-    if (!endrec.Read(*m_parent_i_stream, GetConv())) {
-        if (!*m_parent_i_stream) {
-            m_lasterror = wxSTREAM_READ_ERROR;
-            return false;
-        }
-        // TODO: try this out
-        wxLogWarning(_("assuming this is a multi-part zip concatenated"));
-    }
+    if (!endrec.Read(*m_parent_i_stream, GetConv()))
+        return false;
 
     m_TotalEntries = endrec.GetTotalEntries();
     m_Comment = endrec.GetComment();
@@ -1457,12 +1537,13 @@ wxStreamError wxZipInputStream::ReadCentral()
     if (QuietSeek(*m_parent_i_stream, m_position + 4) == wxInvalidOffset)
         return wxSTREAM_READ_ERROR;
 
-    m_position += m_entry.ReadCentral(*m_parent_i_stream, GetConv());
-    if (m_parent_i_stream->GetLastError() == wxSTREAM_READ_ERROR) {
+    size_t size = m_entry.ReadCentral(*m_parent_i_stream, GetConv());
+    if (!size) {
         m_signature = 0;
         return wxSTREAM_READ_ERROR;
     }
 
+    m_position += size;
     m_signature = ReadSignature();
 
     if (m_offsetAdjustment)
@@ -1491,9 +1572,10 @@ wxStreamError wxZipInputStream::ReadLocal(bool readEndRec /*=false*/)
         if (m_weaklinks->IsEmpty() && m_streamlink == NULL)
             return wxSTREAM_EOF;
 
-        m_position += m_entry.ReadCentral(*m_parent_i_stream, GetConv());
+        size_t size = m_entry.ReadCentral(*m_parent_i_stream, GetConv());
+        m_position += size;
         m_signature = 0;
-        if (m_parent_i_stream->GetLastError() == wxSTREAM_READ_ERROR)
+        if (!size)
             return wxSTREAM_READ_ERROR;
 
         wxZipEntry *entry = m_weaklinks->GetEntry(m_entry.GetOffset());
@@ -1537,7 +1619,7 @@ wxStreamError wxZipInputStream::ReadLocal(bool readEndRec /*=false*/)
     m_entry.SetOffset(m_position);
     m_entry.SetKey(m_position);
 
-    if (m_parent_i_stream->GetLastError() == wxSTREAM_READ_ERROR) {
+    if (!m_headerSize) {
         return wxSTREAM_READ_ERROR;
     } else {
         m_TotalEntries++;
@@ -1596,7 +1678,7 @@ bool wxZipInputStream::DoOpen(wxZipEntry *entry, bool raw)
 
     if (m_parentSeekable || AtHeader()) {
         m_headerSize = m_entry.ReadLocal(*m_parent_i_stream, GetConv());
-        if (m_parentSeekable) {
+        if (m_headerSize && m_parentSeekable) {
             wxZipEntry *ref = m_weaklinks->GetEntry(m_entry.GetKey());
             if (ref) {
                 Copy(ref->m_LocalExtra, m_entry.m_LocalExtra);
@@ -1610,7 +1692,8 @@ bool wxZipInputStream::DoOpen(wxZipEntry *entry, bool raw)
         }
     }
 
-    m_lasterror = m_parent_i_stream->GetLastError();
+    if (m_headerSize)
+        m_lasterror = wxSTREAM_NO_ERROR;
     return IsOk();
 }
 
@@ -1729,7 +1812,8 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t size)
     size_t count = m_decomp->Read(buffer, size).LastRead();
     if (!m_raw)
         m_crcAccumulator = crc32(m_crcAccumulator, (Byte*)buffer, count);
-    m_lasterror = m_decomp->GetLastError();
+    if (count < size)
+        m_lasterror = m_decomp->GetLastError();
 
     if (Eof()) {
         if ((m_entry.GetFlags() & wxZIP_SUMS_FOLLOW) != 0) {
@@ -1747,16 +1831,14 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t size)
         if (!m_raw) {
             m_lasterror = wxSTREAM_READ_ERROR;
 
-            if (m_parent_i_stream->IsOk()) {
-                if (m_entry.GetSize() != TellI())
-                    wxLogError(_("reading zip stream (entry %s): bad length"),
-                               m_entry.GetName().c_str());
-                else if (m_crcAccumulator != m_entry.GetCrc())
-                    wxLogError(_("reading zip stream (entry %s): bad crc"),
-                               m_entry.GetName().c_str());
-                else
-                    m_lasterror = wxSTREAM_EOF;
-            }
+            if (m_entry.GetSize() != TellI())
+                wxLogError(_("reading zip stream (entry %s): bad length"),
+                           m_entry.GetName().c_str());
+            else if (m_crcAccumulator != m_entry.GetCrc())
+                wxLogError(_("reading zip stream (entry %s): bad crc"),
+                           m_entry.GetName().c_str());
+            else
+                m_lasterror = wxSTREAM_EOF;
         }
     }
 
