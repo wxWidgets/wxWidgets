@@ -1200,7 +1200,7 @@ wxTextPos wxMacTextControl::GetLastPosition() const
 void wxMacTextControl::Replace( long from , long to , const wxString& str )
 {
     SetSelection( from , to ) ;
-    WriteText( val) ;
+    WriteText( str) ;
 }
 
 void wxMacTextControl::Remove( long from , long to )
