@@ -869,15 +869,15 @@ class PrintTable:
         self.footer.append(set)
 
     def Preview(self):
+        data = wx.PrintDialogData(self.printData)
         printout = SetPrintout(self)
         printout2 = SetPrintout(self)
-        self.preview = wx.PrintPreview(printout, printout2, self.printData)
+        self.preview = wx.PrintPreview(printout, printout2, data)
         if not self.preview.Ok():
             wxMessageBox("There was a problem printing!", "Printing", wx.OK)
             return
 
         self.preview.SetZoom(60)        # initial zoom value
-
         frame = wx.PreviewFrame(self.preview, self.parentFrame, "Print preview")
 
         frame.Initialize()
@@ -887,14 +887,13 @@ class PrintTable:
         frame.Show(True)
 
     def Print(self):
-        pdd = wx.PrintDialogData()
-        pdd.SetPrintData(self.printData)
+        pdd = wx.PrintDialogData(self.printData)
         printer = wx.Printer(pdd)
         printout = SetPrintout(self)
         if not printer.Print(self.parentFrame, printout):
             wx.MessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wx.OK)
         else:
-            self.printData = printer.GetPrintDialogData().GetPrintData()
+            self.printData = wx.PrintData( printer.GetPrintDialogData().GetPrintData() )
         printout.Destroy()
 
     def DoDrawing(self, DC):

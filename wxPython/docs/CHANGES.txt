@@ -59,6 +59,11 @@ wx.TheClipboard.
 
 Fix for Bug #1352602: FileBrowseButtonWithHistory can't type in Value.
 
+wxHTML: Added space after list item number.
+
+wx.lib.printout:  Applied patch #1384440.
+
+
 
 
 
