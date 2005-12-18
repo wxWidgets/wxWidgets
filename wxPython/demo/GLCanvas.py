@@ -129,25 +129,25 @@ class MyCanvasBase(glcanvas.GLCanvas):
 class CubeCanvas(MyCanvasBase):
     def InitGL(self):
         # set viewing projection
-        glMatrixMode(GL_PROJECTION);
-        glFrustum(-0.5, 0.5, -0.5, 0.5, 1.0, 3.0);
+        glMatrixMode(GL_PROJECTION)
+        glFrustum(-0.5, 0.5, -0.5, 0.5, 1.0, 3.0)
 
         # position viewer
-        glMatrixMode(GL_MODELVIEW);
-        glTranslatef(0.0, 0.0, -2.0);
+        glMatrixMode(GL_MODELVIEW)
+        glTranslatef(0.0, 0.0, -2.0)
 
         # position object
-        glRotatef(self.y, 1.0, 0.0, 0.0);
-        glRotatef(self.x, 0.0, 1.0, 0.0);
+        glRotatef(self.y, 1.0, 0.0, 0.0)
+        glRotatef(self.x, 0.0, 1.0, 0.0)
 
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_LIGHTING)
+        glEnable(GL_LIGHT0)
 
 
     def OnDraw(self):
         # clear color and depth buffers
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         # draw six faces of a cube
         glBegin(GL_QUADS)
@@ -188,8 +188,8 @@ class CubeCanvas(MyCanvasBase):
         glVertex3f(-0.5, 0.5,-0.5)
         glEnd()
 
-        glRotatef((self.lasty - self.y)/100., 1.0, 0.0, 0.0);
-        glRotatef((self.lastx - self.x)/100., 0.0, 1.0, 0.0);
+        glRotatef((self.lasty - self.y)/100., 1.0, 0.0, 0.0)
+        glRotatef((self.lastx - self.x)/100., 0.0, 1.0, 0.0)
 
         self.SwapBuffers()
 
@@ -199,9 +199,9 @@ class CubeCanvas(MyCanvasBase):
 
 class ConeCanvas(MyCanvasBase):
     def InitGL( self ):
-        glMatrixMode(GL_PROJECTION);
+        glMatrixMode(GL_PROJECTION)
         # camera frustrum setup
-        glFrustum(-0.5, 0.5, -0.5, 0.5, 1.0, 3.0);
+        glFrustum(-0.5, 0.5, -0.5, 0.5, 1.0, 3.0)
         glMaterial(GL_FRONT, GL_AMBIENT, [0.2, 0.2, 0.2, 1.0])
         glMaterial(GL_FRONT, GL_DIFFUSE, [0.8, 0.8, 0.8, 1.0])
         glMaterial(GL_FRONT, GL_SPECULAR, [1.0, 0.0, 1.0, 1.0])
@@ -209,7 +209,7 @@ class ConeCanvas(MyCanvasBase):
         glLight(GL_LIGHT0, GL_AMBIENT, [0.0, 1.0, 0.0, 1.0])
         glLight(GL_LIGHT0, GL_DIFFUSE, [1.0, 1.0, 1.0, 1.0])
         glLight(GL_LIGHT0, GL_SPECULAR, [1.0, 1.0, 1.0, 1.0])
-        glLight(GL_LIGHT0, GL_POSITION, [1.0, 1.0, 1.0, 0.0]);
+        glLight(GL_LIGHT0, GL_POSITION, [1.0, 1.0, 1.0, 0.0])
         glLightModel(GL_LIGHT_MODEL_AMBIENT, [0.2, 0.2, 0.2, 1.0])
         glEnable(GL_LIGHTING)
         glEnable(GL_LIGHT0)
@@ -217,25 +217,25 @@ class ConeCanvas(MyCanvasBase):
         glEnable(GL_DEPTH_TEST)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         # position viewer
-        glMatrixMode(GL_MODELVIEW);
+        glMatrixMode(GL_MODELVIEW)
 
 
     def OnDraw(self):
         # clear color and depth buffers
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         # use a fresh transformation matrix
         glPushMatrix()
         # position object
-        glTranslate(0.0, 0.0, -2.0);
-        glRotate(30.0, 1.0, 0.0, 0.0);
-        glRotate(30.0, 0.0, 1.0, 0.0);
+        glTranslate(0.0, 0.0, -2.0)
+        glRotate(30.0, 1.0, 0.0, 0.0)
+        glRotate(30.0, 0.0, 1.0, 0.0)
 
         glTranslate(0, -1, 0)
         glRotate(250, 1, 0, 0)
         glutSolidCone(0.5, 1, 30, 5)
         glPopMatrix()
-        glRotatef((self.lasty - self.y)/100., 0.0, 0.0, 1.0);
-        glRotatef(0.0, (self.lastx - self.x)/100., 1.0, 0.0);
+        glRotatef((self.lasty - self.y)/100., 0.0, 0.0, 1.0)
+        glRotatef(0.0, (self.lastx - self.x)/100., 1.0, 0.0)
         # push into visible buffer
         self.SwapBuffers()
 
