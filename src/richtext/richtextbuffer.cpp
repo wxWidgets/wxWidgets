@@ -3409,7 +3409,7 @@ bool wxRichTextBuffer::BeginStyle(const wxTextAttrEx& style)
 /// End the style
 bool wxRichTextBuffer::EndStyle()
 {
-    if (m_attributeStack.GetFirst())
+    if (!m_attributeStack.GetFirst())
     {
         wxLogDebug(_("Too many EndStyle calls!"));
         return false;
