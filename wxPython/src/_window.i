@@ -2061,7 +2061,8 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
         WXHWND hWnd = (WXHWND)_hWnd;
         long id = wxGetWindowId(hWnd);
         wxWindow* win = new wxWindow;
-        parent->AddChild(win);
+        if (parent)
+            parent->AddChild(win);
         win->SetEventHandler(win);
         win->SetHWND(hWnd);
         win->SetId(id);

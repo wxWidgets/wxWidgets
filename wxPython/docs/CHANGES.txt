@@ -63,6 +63,11 @@ wxHTML: Added space after list item number.
 
 wx.lib.printout:  Applied patch #1384440.
 
+wxMSW:  Fix for Bug #1293225 Window_FromHWND crashes if parent is
+None. 
+
+Fix for Bug #1261669, use a wx.TE_RICH2 style for the Process demo so
+it doesn't fill up too soon.
 
 
 
