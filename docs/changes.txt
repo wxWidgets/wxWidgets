@@ -11,6 +11,10 @@ All:
 - Spurious error message from wxLaunchDefaultBrowser fixed.
 - Compilation fixes for (more strict) g++ 4.1
 
+All (GUI):
+
+- Added space after list item number in wxHTML.
+
 wxGTK:
 
 - Fixed problem with choice editor in wxGrid whereby the editor
