@@ -198,7 +198,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         return false;
     }
 
-    m_widget = gtk_frame_new( wxGTK_CONV( title ) );
+    m_widget = gtk_frame_new(NULL);
+    SetLabel(title);
 
     // majorDim may be 0 if all trailing parameters were omitted, so don't
     // assert here but just use the correct value for it
@@ -272,8 +273,6 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     }
 
     m_parent->DoAddChild( this );
-
-    SetLabel( title );
 
     PostCreation(size);
 
@@ -399,9 +398,7 @@ void wxRadioBox::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
 
-    wxControl::SetLabel( label );
-
-    gtk_frame_set_label( GTK_FRAME(m_widget), wxGTK_CONV( wxControl::GetLabel() ) );
+    GTKSetLabelForFrame(GTK_FRAME(m_widget), label);
 }
 
 void wxRadioBox::SetString( int item, const wxString& label )

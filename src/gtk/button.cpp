@@ -67,12 +67,12 @@ gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), w
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
-    
+
     int left_border = 0;
     int right_border = 0;
     int top_border = 0;
     int bottom_border = 0;
-        
+
     /* the default button has a border around it */
     if (GTK_WIDGET_CAN_DEFAULT(m_widget))
     {
@@ -97,7 +97,7 @@ gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), w
                            win->m_y-left_border,
                            win->m_width+left_border+right_border,
                            win->m_height+top_border+bottom_border );
-    }      
+    }
 
     return FALSE;
 }
@@ -129,28 +129,6 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
         wxFAIL_MSG( wxT("wxButton creation failed") );
         return FALSE;
     }
-
-/*
-    wxString label2( label );
-    for (size_t i = 0; i < label2.Len(); i++)
-    {
-        if (label2.GetChar(i) == wxT('&'))
-        label2.SetChar(i,wxT('_'));
-    }
-
-    GtkWidget *accel_label = gtk_accel_label_new( label2.mb_str() );
-    gtk_widget_show( accel_label );
-
-    m_widget = gtk_button_new();
-    gtk_container_add( GTK_CONTAINER(m_widget), accel_label );
-
-    gtk_accel_label_set_accel_widget( GTK_ACCEL_LABEL(accel_label), m_widget );
-
-    guint accel_key = gtk_label_parse_uline (GTK_LABEL(accel_label), label2.mb_str() );
-    gtk_accel_label_refetch( GTK_ACCEL_LABEL(accel_label) );
-
-    wxControl::SetLabel( label );
-*/
 
 #ifdef __WXGTK20__
     m_widget = gtk_button_new_with_mnemonic("");
@@ -193,14 +171,14 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
     gtk_signal_connect_after( GTK_OBJECT(m_widget), "style_set",
       GTK_SIGNAL_FUNC(gtk_button_style_set_callback), (gpointer*) this );
-      
+
     m_parent->DoAddChild( this );
 
     PostCreation(size);
 
     return true;
 }
-    
+
 
 void wxButton::SetDefault()
 {
@@ -208,10 +186,10 @@ void wxButton::SetDefault()
     wxCHECK_RET( parent, _T("button without parent?") );
 
     parent->SetDefaultItem(this);
-    
+
     GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
     gtk_widget_grab_default( m_widget );
-    
+
     // resize for default border
     gtk_button_style_set_callback( m_widget, NULL, this );
 }
@@ -246,7 +224,7 @@ wxSize wxButtonBase::GetDefaultSize()
 
         size.x = wxMax(minwidth, req.width);
         size.y = wxMax(minheight, req.height);
-        
+
         gtk_widget_destroy(wnd);
     }
     return size;
@@ -266,6 +244,8 @@ void wxButton::SetLabel( const wxString &lbl )
 
     wxControl::SetLabel(label);
 
+    const wxString labelGTK = GTKConvertMnemonics(label);
+
 #ifdef __WXGTK20__
     if (wxIsStockID(m_windowId) && wxIsStockLabel(m_windowId, label))
     {
@@ -278,15 +258,13 @@ void wxButton::SetLabel( const wxString &lbl )
         }
     }
 
-    wxString label2 = PrepareLabelMnemonics(label);
-    gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(label2));
+    gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
-    
+
     ApplyWidgetStyle( false );
-    
-#else
-    gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), wxGTK_CONV(GetLabel()));
-#endif
+#else // GTK+ 1
+    gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), wxGTK_CONV(labelGTK));
+#endif // GTK+ 2/1
 }
 
 bool wxButton::Enable( bool enable )
@@ -338,7 +316,7 @@ wxSize wxButton::DoGetBestSize() const
 #ifndef __WXGTK20__
     ret.x += 10;  // add a few pixels for sloppy (but common) themes
 #endif
-    
+
     if (!HasFlag(wxBU_EXACTFIT))
     {
         wxSize defaultSize = GetDefaultSize();

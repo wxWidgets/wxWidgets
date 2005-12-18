@@ -36,19 +36,19 @@ extern wxWindowGTK   *g_delayedFocus;
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static 
+static
 void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *rb )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (!rb->m_hasVMT) return;
-  
+
     if (g_blockEventsOnDrag) return;
-  
+
     if (!button->active) return;
-    
+
     if (rb->m_blockEvent) return;
-  
+
     wxCommandEvent event( wxEVT_COMMAND_RADIOBUTTON_SELECTED, rb->GetId());
     event.SetInt( rb->GetValue() );
     event.SetEventObject( rb );
@@ -61,7 +61,7 @@ void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *r
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton,wxControl)
-  
+
 bool wxRadioButton::Create( wxWindow *parent,
                             wxWindowID id,
                             const wxString& label,
@@ -73,7 +73,7 @@ bool wxRadioButton::Create( wxWindow *parent,
 {
     m_acceptsFocus = TRUE;
     m_needParent = TRUE;
-    
+
     m_blockEvent = FALSE;
 
     if (!PreCreation( parent, pos, size ) ||
@@ -108,14 +108,14 @@ bool wxRadioButton::Create( wxWindow *parent,
     }
 
     m_widget = gtk_radio_button_new_with_label( radioButtonGroup, wxGTK_CONV( label ) );
-      
+
     SetLabel(label);
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
+    gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
       GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
-       
+
     m_parent->DoAddChild( this );
-  
+
     PostCreation(size);
 
     return TRUE;
@@ -124,15 +124,8 @@ bool wxRadioButton::Create( wxWindow *parent,
 void wxRadioButton::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobutton") );
-  
-    wxControl::SetLabel( label );
-    GtkLabel *g_label = GTK_LABEL( BUTTON_CHILD(m_widget) );
-#ifdef __WXGTK20__
-    wxString label2 = PrepareLabelMnemonics( label );
-    gtk_label_set_text_with_mnemonic( g_label, wxGTK_CONV( label2 ) );
-#else
-    gtk_label_set( g_label, wxGTK_CONV( GetLabel() ) );
-#endif
+
+    GTKSetLabelForLabel(GTK_LABEL(BUTTON_CHILD(m_widget)), label);
 }
 
 void wxRadioButton::SetValue( bool val )
@@ -161,7 +154,7 @@ void wxRadioButton::SetValue( bool val )
 bool wxRadioButton::GetValue() const
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid radiobutton") );
-  
+
     return GTK_TOGGLE_BUTTON(m_widget)->active;
 }
 
@@ -169,7 +162,7 @@ bool wxRadioButton::Enable( bool enable )
 {
     if ( !wxControl::Enable( enable ) )
         return FALSE;
-  
+
     gtk_widget_set_sensitive( BUTTON_CHILD(m_widget), enable );
 
     return TRUE;
@@ -198,7 +191,7 @@ void wxRadioButton::OnInternalIdle()
        as setting the cursor in a parent window also effects the
        windows above so that checking for the current cursor is
        not possible. */
-       
+
        gdk_window_set_cursor( win, cursor.GetCursor() );
     }
 

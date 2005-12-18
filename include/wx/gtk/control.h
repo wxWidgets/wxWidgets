@@ -21,6 +21,9 @@
 
 class WXDLLIMPEXP_CORE wxControl;
 
+typedef struct _GtkLabel GtkLabel;
+typedef struct _GtkFrame GtkFrame;
+
 //-----------------------------------------------------------------------------
 // wxControl
 //-----------------------------------------------------------------------------
@@ -51,20 +54,29 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxControlNameStr);
 
-    // this function will filter out '&' characters and will put the accelerator
-    // char (the one immediately after '&') into m_chAccel (TODO not yet)
     virtual void SetLabel( const wxString &label );
     virtual wxString GetLabel() const;
-    
+
     virtual wxVisualAttributes GetDefaultAttributes() const;
 
 protected:
     virtual wxSize DoGetBestSize() const;
     void PostCreation(const wxSize& size);
 
-#ifdef __WXGTK20__
-    wxString PrepareLabelMnemonics( const wxString &label ) const;
-#endif
+    // sets the label to the given string and also sets it for the given widget
+    void GTKSetLabelForLabel(GtkLabel *w, const wxString& label);
+
+    // as GTKSetLabelForLabel() but for a GtkFrame widget
+    void GTKSetLabelForFrame(GtkFrame *w, const wxString& label);
+
+    // remove mnemonics ("&"s) from the label
+    static wxString GTKRemoveMnemonics(const wxString& label);
+
+    // converts wx label to GTK+ label, i.e. basically replace "&"s with "_"s
+    //
+    // for GTK+ 1 (which doesn't support mnemonics) this is the same as
+    // GTKRemoveMnemonics()
+    static wxString GTKConvertMnemonics(const wxString &label);
 
     // These are used by GetDefaultAttributes
     static wxVisualAttributes
@@ -89,8 +101,8 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return false; }
 
-    wxString   m_label;
-    char       m_chAccel;  // enabled to avoid breaking binary compatibility later on
+    // this field contains the label in wx format, i.e. with "&" mnemonics
+    wxString m_label;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxControl)

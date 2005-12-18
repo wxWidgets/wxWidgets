@@ -56,9 +56,8 @@ bool wxStaticBox::Create( wxWindow *parent,
         return FALSE;
     }
 
-    wxControl::SetLabel(label);
-
-    m_widget = gtk_frame_new(m_label.empty() ? (char *)NULL : (const char*) wxGTK_CONV( m_label ) );
+    m_widget = gtk_frame_new(NULL);
+    SetLabel(label);
 
     m_parent->DoAddChild( this );
 
@@ -79,12 +78,11 @@ bool wxStaticBox::Create( wxWindow *parent,
     return TRUE;
 }
 
-void wxStaticBox::SetLabel( const wxString &label )
+void wxStaticBox::SetLabel( const wxString& label )
 {
-    wxControl::SetLabel( label );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid staticbox") );
 
-    gtk_frame_set_label( GTK_FRAME( m_widget ),
-                         m_label.empty() ? (char *)NULL : (const char*) wxGTK_CONV( m_label ) );
+    GTKSetLabelForFrame(GTK_FRAME(m_widget), label);
 }
 
 void wxStaticBox::DoApplyWidgetStyle(GtkRcStyle *style)
