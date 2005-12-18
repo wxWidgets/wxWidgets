@@ -803,7 +803,8 @@ class DemoModules:
     def LoadDict(self, modID):
         if self.name != __name__:
             source = self.modules[modID][1]
-            description = self.modules[modID][3]
+            #description = self.modules[modID][3]
+            description = self.modules[modID][2]
 
             try:
                 self.modules[modID][0] = {}
