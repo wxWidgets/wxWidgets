@@ -51,6 +51,7 @@ _treeList = [
         'GIFAnimationCtrl',
         'HyperLinkCtrl',
         'MultiSplitterWindow',
+        'Throbber',
         ]),
 
     # managed windows == things with a (optional) caption you can close

@@ -78,6 +78,14 @@ Python by deriving from wx.PyImageHandler.
 
 Applied patch #1072210: generalize printout.py to allow text printing.
 
+Applied patch #1243907: Give Throbber much more flexibility by
+allowing the user to set the rest image, the direction, the current
+index, custom sequence.  Allows user to manually step through the
+sequence with Next(), Previous(), Increment(), Decrement() &
+SetCurrent(). Very handy if you have multiple throbbers that you want
+to synchronize with a single timer.
+
+
 
 
 
