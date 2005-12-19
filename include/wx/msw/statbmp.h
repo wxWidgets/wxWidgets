@@ -49,12 +49,8 @@ public:
 
     virtual void SetIcon(const wxIcon& icon) { SetImage(&icon); }
     virtual void SetBitmap(const wxBitmap& bitmap) { SetImage(&bitmap); }
-
-    // can always be used, whether we have a bitmap or an icon in reality
-    wxBitmap GetBitmap() const;
-
-    // can only be used if an icon had been originally used
-    wxIcon GetIcon() const;
+    virtual wxBitmap GetBitmap() const;
+    virtual wxIcon GetIcon() const;
 
 
 protected:

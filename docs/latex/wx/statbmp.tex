@@ -79,13 +79,28 @@ Creation function, for two-step construction. For details see \helpref{wxStaticB
 
 \membersection{wxStaticBitmap::GetBitmap}\label{wxstaticbitmapgetbitmap}
 
-\constfunc{wxBitmap\&}{GetBitmap}{\void}
+\constfunc{wxBitmap}{GetBitmap}{\void}
 
-Returns a reference to the label bitmap.
+Returns the bitmap currently used in the control. Notice that this method can
+be called even if \helpref{SetIcon}{wxstaticbitmapseticon} had been used.
 
 \wxheading{See also}
 
 \helpref{wxStaticBitmap::SetBitmap}{wxstaticbitmapsetbitmap}
+
+
+\membersection{wxStaticIcon::GetIcon}\label{wxstaticbitmapgeticon}
+
+\constfunc{wxIcon}{GetIcon}{\void}
+
+Returns the icon currently used in the control. Notice that this method can
+only be called if \helpref{SetIcon}{wxstaticbitmapseticon} had been used: an icon
+can't be retrieved from the control if a bitmap had been set (using 
+\helpref{SetBitmap}{wxstaticbitmapsetbitmap}).
+
+\wxheading{See also}
+
+\helpref{wxStaticIcon::SetIcon}{wxstaticbitmapseticon}
 
 
 \membersection{wxStaticBitmap::SetBitmap}\label{wxstaticbitmapsetbitmap}
@@ -101,4 +116,19 @@ Sets the bitmap label.
 \wxheading{See also}
 
 \helpref{wxStaticBitmap::GetBitmap}{wxstaticbitmapgetbitmap}
+
+
+\membersection{wxStaticIcon::SetIcon}\label{wxstaticbitmapseticon}
+
+\func{virtual void}{SetIcon}{\param{const wxIcon\& }{ label}}
+
+Sets the label to the given icon.
+
+\wxheading{Parameters}
+
+\docparam{label}{The new icon.}
+
+\wxheading{See also}
+
+\helpref{wxStaticIcon::GetIcon}{wxstaticbitmapgeticon}
 
