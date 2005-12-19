@@ -645,7 +645,7 @@ class DocTabbedChildFrame(wx.Panel):
         """
         Returns the frame's title.
         """
-        wx.GetApp().GetTopWindow().GetNotebookPageTitle(self)
+        return wx.GetApp().GetTopWindow().GetNotebookPageTitle(self)
 
 
     def SetTitle(self, title):
@@ -925,7 +925,7 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
         
 
     def GetNotebookPageTitle(self, panel):
-        self._notebook.GetPageText(self.GetNotebookPageIndex(panel))
+        return self._notebook.GetPageText(self.GetNotebookPageIndex(panel))
         
 
     def SetNotebookPageTitle(self, panel, title):
