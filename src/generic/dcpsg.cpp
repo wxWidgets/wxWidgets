@@ -1973,9 +1973,9 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         //     it just crashes
 #ifndef __WIN32__
         wxPostScriptPrintNativeData *data =
-            (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+            wxDynamicCast(m_printData.GetNativeData(), wxPostScriptPrintNativeData);
 
-        if (!data->GetFontMetricPath().empty())
+        if (data && !data->GetFontMetricPath().empty())
         {
             afmName = data->GetFontMetricPath();
             afmName << wxFILE_SEP_PATH << name;
