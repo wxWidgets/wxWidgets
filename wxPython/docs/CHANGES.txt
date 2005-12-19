@@ -71,6 +71,9 @@ it doesn't fill up too soon.
 
 Applied Patch #1354389: wxPython MenuItem SetBitmaps fix.
 
+Applied Patch #1239456: wxPython wx.DataObject.GetAllFormats fix.
+
+
 
 
 
