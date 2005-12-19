@@ -56,6 +56,30 @@ wxGTK:
 wxMac:
 
 - Fixed problem with clipboard support for custom data flavors.
+- Fixed focus handling for generic controls in carbon-cfm.
+- Fixed a printing crash bug, for example using File->Print and changing
+  Popup from 'Copies & Pages' to e.g. 'Layout'.
+- Improved support for help and application menu items.
+- Added default implementations for wxTextCtrl::Replace and wxTextCtrl::Remove.
+- Added support for 10.4 context menu.
+- Added support for wxFRAME_EX_METAL and wxDIALOG_EX_METAL styles.
+- Added wxNotebook::HitTest support.
+- Corrected idle wake-up.
+- Corrected wxExecute.
+- Now makes use of full printer resolution.
+- Corrected CGImage handling in wxBitmap.
+- Now uses simple hide/how transition for top-level windows.
+- Uses reasonable temporary path for wxFileName::CreateTempFileName.
+- Added support for default key handling (escape, enter, command-period) even
+  if there is no control on the frame or dialog that has the focus.
+- Fixed joystick bugs including a link error and a crash if no joysticks
+  were found.
+- Removed an errorneous assertion from wxDir.
+- Uses CoreFoundation based and thread-safe implementation for message boxes
+  under Mach-O.
+- wxBitmapButton is created as a content icon if wxBORDER_NONE is
+  specified, otherwise as a bevel button.
+- Mouse event ids set correctly (fixing problems with Connect in particular).
 
 wxWinCE:
 
