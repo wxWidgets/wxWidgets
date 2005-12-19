@@ -50,24 +50,12 @@ public:
     virtual void SetIcon(const wxIcon& icon) { SetImage(&icon); }
     virtual void SetBitmap(const wxBitmap& bitmap) { SetImage(&bitmap); }
 
-    // assert failure is provoked by an attempt to get an icon from bitmap or
-    // vice versa
-    wxIcon GetIcon() const
-    {
-        wxASSERT_MSG( m_isIcon, _T("no icon in this wxStaticBitmap") );
+    // can always be used, whether we have a bitmap or an icon in reality
+    wxBitmap GetBitmap() const;
 
-        return *(wxIcon *)m_image;
-    }
+    // can only be used if an icon had been originally used
+    wxIcon GetIcon() const;
 
-    wxBitmap GetBitmap() const
-    {
-        wxASSERT_MSG( !m_isIcon, _T("no bitmap in this wxStaticBitmap") );
-
-        return *(wxBitmap *)m_image;
-    }
-
-    // implementation only from now on
-    // -------------------------------
 
 protected:
     virtual wxBorder GetDefaultBorder() const;
