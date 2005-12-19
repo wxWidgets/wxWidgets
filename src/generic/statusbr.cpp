@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/statusbr.cpp
+// Name:        src/generic/statusbr.cpp
 // Purpose:     wxStatusBarGeneric class implementation
 // Author:      Julian Smart
 // Modified by:
@@ -351,7 +351,7 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 void wxStatusBarGeneric::InitColours()
 {
     // Shadow colours
-#if defined(__WIN95__) || defined(__WXMAC__)
+#if defined(__WXMSW__) || defined(__WXMAC__)
     wxColour mediumShadowColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW));
     m_mediumShadowPen = wxPen(mediumShadowColour, 1, wxSOLID);
 

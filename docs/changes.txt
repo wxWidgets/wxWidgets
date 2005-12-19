@@ -46,6 +46,7 @@ wxMSW:
 - Switching page of a hidden notebook doesn't lose focus (Jamie Gadd).
 - Removed wxImageList *GetImageList(int) const.
 - Fixed MDI context menu problem.
+- Removed __WIN95__ define
 
 wxGTK:
 

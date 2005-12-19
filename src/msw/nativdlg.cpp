@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        nativdlg.cpp
+// Name:        src/msw/nativdlg.cpp
 // Purpose:     Native dialog loading code (part of wxWindow)
 // Author:      Julian Smart
 // Modified by:
@@ -30,9 +30,7 @@
     #include "wx/wx.h"
 #endif
 
-#if defined(__WIN95__)
 #include "wx/spinbutt.h"
-#endif
 #include "wx/msw/private.h"
 
 // ---------------------------------------------------------------------------
@@ -267,7 +265,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         win = new wxScrollBar;
     }
 #endif
-#if defined(__WIN95__) && wxUSE_SPINBTN
+#if wxUSE_SPINBTN
     else if (str == wxT("MSCTLS_UPDOWN32"))
     {
         win = new wxSpinButton;
@@ -336,4 +334,3 @@ void wxWindow::AdoptAttributesFromHWND(void)
     if (style & WS_HSCROLL)
         m_windowStyle |= wxHSCROLL;
 }
-

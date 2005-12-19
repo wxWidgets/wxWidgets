@@ -884,7 +884,7 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
 {
     wxTopLevelWindowBase::SetIcons(icons);
 
-#if defined(__WIN95__) && !defined(__WXMICROWIN__)
+#if !defined(__WXMICROWIN__)
     const wxIcon& sml = icons.GetIcon( wxSize( 16, 16 ) );
     if( sml.Ok() && sml.GetWidth() == 16 && sml.GetHeight() == 16 )
     {
@@ -898,7 +898,7 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
         ::SendMessage( GetHwndOf( this ), WM_SETICON, ICON_BIG,
                        (LPARAM)GetHiconOf(big) );
     }
-#endif // __WIN95__
+#endif // !__WXMICROWIN__
 }
 
 bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)

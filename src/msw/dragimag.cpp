@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dragimag.cpp
+// Name:        src/msw/dragimag.cpp
 // Purpose:     wxDragImage
 // Author:      Julian Smart
 // Modified by:
@@ -26,8 +26,6 @@
 
 #if wxUSE_DRAGIMAGE
 
-#if defined(__WIN95__)
-
 #ifndef WX_PRECOMP
 #include <stdio.h>
 #include "wx/setup.h"
@@ -51,9 +49,8 @@
 #include "wx/msw/wince/missing.h"
 #endif // __WXWINCE__
 
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-#include <commctrl.h>
-#endif
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 // Wine doesn't have this yet
 #ifndef ListView_CreateDragImage
@@ -452,8 +449,5 @@ bool wxDragImage::Hide()
 
     return ret;
 }
-
-#endif
-    // __WIN95__
 
 #endif // wxUSE_DRAGIMAGE

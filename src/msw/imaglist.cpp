@@ -24,8 +24,6 @@
     #pragma hdrstop
 #endif
 
-#if defined(__WIN95__)
-
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/icon.h"
@@ -43,9 +41,8 @@
 #include "wx/msw/imaglist.h"
 #include "wx/msw/private.h"
 
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -323,7 +320,7 @@ wxBitmap wxImageList::GetBitmap(int index) const
     image = bitmap.ConvertToImage();
     image.SetMaskColour(r, g, b);
     bitmap = wxBitmap(image);
-    
+
     return bitmap;
 }
 
@@ -335,14 +332,14 @@ wxIcon wxImageList::GetIcon(int index) const
     {
         wxIcon icon;
         icon.SetHICON((WXHICON)hIcon);
-        
+
         int iconW, iconH;
         GetSize(index, iconW, iconH);
         icon.SetSize(iconW, iconH);
-        
+
         return icon;
     }
-    else               
+    else
         return wxNullIcon;
 }
 
@@ -391,6 +388,3 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
 
     return hbmpMaskInv;
 }
-
-#endif // Win95
-

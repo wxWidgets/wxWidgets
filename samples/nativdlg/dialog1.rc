@@ -9,10 +9,6 @@
 #define __WIN32__
 #endif
 
-#ifndef __WIN95__
-#define __WIN95__
-#endif
-
 //#ifdef _MSC_VER
 #define __VISUALC__ _MSC_VER
 //#endif
@@ -54,16 +50,16 @@ BEGIN
     GROUPBOX        "wxStaticBox",IDC_STATIC,7,7,198,158
     EDITTEXT        IDC_EDIT1,64,23,125,14,ES_AUTOHSCROLL
     LTEXT           "wxStaticText",IDC_STATIC,13,25,42,8
-    CONTROL         "wxCheckBox",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | 
+    CONTROL         "wxCheckBox",IDC_CHECK1,"Button",BS_AUTOCHECKBOX |
                     WS_TABSTOP,14,47,57,10
-    COMBOBOX        IDC_COMBO1,83,46,48,30,CBS_DROPDOWN | CBS_SORT | 
+    COMBOBOX        IDC_COMBO1,83,46,48,30,CBS_DROPDOWN | CBS_SORT |
                     WS_VSCROLL | WS_TABSTOP
     CONTROL         "wxRadioButton",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON,
                     141,47,64,10
-    LISTBOX         IDC_LIST1,14,69,86,40,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+    LISTBOX         IDC_LIST1,14,69,86,40,LBS_SORT | LBS_NOINTEGRALHEIGHT |
                     WS_VSCROLL | WS_TABSTOP
     SCROLLBAR       IDC_SCROLLBAR1,111,71,76,11
-    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | 
+    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH |
                     TBS_NOTICKS | WS_TABSTOP,10,116,100,15
     CONTROL         "Spin1",IDC_SPIN1,"msctls_updown32",UDS_ARROWKEYS,111,90,
                     10,14
@@ -71,4 +67,3 @@ END
 
 #endif    // English (U.K.) resources
 /////////////////////////////////////////////////////////////////////////////
-

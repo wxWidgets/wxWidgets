@@ -20,11 +20,10 @@
 #include "wx/wx.h"
 #endif
 
-#if defined(__WIN95__)
-
 #include "wx/msw/private.h"
 
-#include <commctrl.h>
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 #include "wx/tabctrl.h"
 #include "wx/app.h"
@@ -429,5 +428,3 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 
 }
 #endif
-
-#endif // __WIN95__

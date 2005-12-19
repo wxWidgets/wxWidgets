@@ -562,11 +562,11 @@ void SliderWidgetsPage::OnUpdateUIRadioSides(wxUpdateUIEvent& event)
 
 void SliderWidgetsPage::OnUpdateUIBothSides(wxUpdateUIEvent& event)
 {
-#if defined(__WIN95__) || defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
     event.Enable( m_chkTicks->GetValue() );
 #else
     event.Enable( false );
-#endif // defined(__WIN95__) || defined(__WXUNIVERSAL__)
+#endif // defined(__WXMSW__) || defined(__WXUNIVERSAL__)
 }
 
 void SliderWidgetsPage::OnSlider(wxScrollEvent& event)

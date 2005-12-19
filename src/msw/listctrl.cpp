@@ -24,7 +24,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_LISTCTRL && defined(__WIN95__)
+#if wxUSE_LISTCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"

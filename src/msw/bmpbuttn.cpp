@@ -331,8 +331,6 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
 // GRG Feb/2000, support for bmp buttons with Win95/98 standard LNF
 
-#if defined(__WIN95__)
-
 void wxBitmapButton::DrawFace( WXHDC dc, int left, int top,
     int right, int bottom, bool sel )
 {
@@ -387,73 +385,6 @@ void wxBitmapButton::DrawFace( WXHDC dc, int left, int top,
     DeleteObject(penDkShadow);
     DeleteObject(brushFace);
 }
-
-#else
-
-void wxBitmapButton::DrawFace( WXHDC dc, int left, int top,
-    int right, int bottom, bool sel )
-{
-    HPEN oldp;
-    HPEN penBorder;
-    HPEN penLight;
-    HPEN penShadow;
-    HBRUSH brushFace;
-
-    // create needed pens and brush
-    penBorder = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_WINDOWFRAME));
-    penShadow = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_BTNSHADOW));
-    penLight  = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_BTNHIGHLIGHT));
-    brushFace = CreateSolidBrush(COLOR_BTNFACE);
-
-    // draw the rectangle
-    RECT rect;
-    rect.left   = left;
-    rect.right  = right;
-    rect.top    = top;
-    rect.bottom = bottom;
-    FillRect((HDC) dc, &rect, brushFace);
-
-    // draw the border
-    oldp = (HPEN) SelectObject( (HDC) dc, penBorder);
-    MoveToEx((HDC) dc,left+1,top,NULL);LineTo((HDC) dc,right-1,top);
-    MoveToEx((HDC) dc,left,top+1,NULL);LineTo((HDC) dc,left,bottom-1);
-    MoveToEx((HDC) dc,left+1,bottom-1,NULL);LineTo((HDC) dc,right-1,bottom-1);
-    MoveToEx((HDC) dc,right-1,top+1,NULL);LineTo((HDC) dc,right-1,bottom-1);
-
-    SelectObject( (HDC) dc, penShadow);
-    if (sel)
-    {
-        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL);
-        LineTo((HDC) dc,  left+1    ,top+1);
-        LineTo((HDC) dc,  right-2   ,top+1);
-    }
-    else
-    {
-        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL);
-        LineTo((HDC) dc,  right-2   ,bottom-2);
-        LineTo((HDC) dc,  right-2   ,top);
-
-        MoveToEx((HDC) dc,left+2    ,bottom-3   ,NULL);
-        LineTo((HDC) dc,  right-3   ,bottom-3);
-        LineTo((HDC) dc,  right-3   ,top+1);
-
-        SelectObject( (HDC) dc, penLight);
-
-        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL);
-        LineTo((HDC) dc,  left+1    ,top+1);
-        LineTo((HDC) dc,  right-2   ,top+1);
-    }
-
-    // delete allocated resources
-    SelectObject((HDC) dc,oldp);
-    DeleteObject(penBorder);
-    DeleteObject(penLight);
-    DeleteObject(penShadow);
-    DeleteObject(brushFace);
-}
-
-#endif // defined(__WIN95__)
-
 
 void wxBitmapButton::DrawButtonFocus( WXHDC dc, int left, int top, int right,
     int bottom, bool WXUNUSED(sel) )
@@ -532,4 +463,3 @@ wxSize wxBitmapButton::DoGetBestSize() const
 }
 
 #endif // wxUSE_BMPBUTTON
-

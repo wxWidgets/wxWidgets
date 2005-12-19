@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////
-// File:        taskbar.cpp
+// File:        src/msw/taskbar.cpp
 // Purpose:     Implements wxTaskBarIcon class for manipulating icons on
 //              the Windows task bar.
 // Author:      Julian Smart
@@ -24,8 +24,6 @@
 #include "wx/utils.h"
 #include "wx/menu.h"
 #endif
-
-#if defined(__WIN95__)
 
 #include "wx/msw/private.h"
 #include "wx/msw/winundef.h"
@@ -325,5 +323,3 @@ long wxTaskBarIcon::WindowProc(unsigned int msg,
 
     return 0;
 }
-
-#endif // __WIN95__

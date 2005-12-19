@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dirdlg.cpp
+// Name:        src/msw/dirdlg.cpp
 // Purpose:     wxDirDialog
 // Author:      Julian Smart
 // Modified by:
@@ -26,7 +26,7 @@
 
 #if wxUSE_DIRDLG && (!defined(__WXWINCE__) || defined(__HANDHELDPC__))
 
-#if defined(__WIN95__) && !defined(__GNUWIN32_OLD__) && wxUSE_OLE
+#if !defined(__GNUWIN32_OLD__) && wxUSE_OLE
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"

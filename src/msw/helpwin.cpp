@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpwin.cpp
+// Name:        src/msw/helpwin.cpp
 // Purpose:     Help system: WinHelp implementation
 // Author:      Julian Smart
 // Modified by:
@@ -64,11 +64,7 @@ bool wxWinHelpController::DisplayContents(void)
 
     wxString str = GetValidFilename(m_helpFile);
 
-#if defined(__WIN95__)
     return (WinHelp(GetSuitableHWND(this), (const wxChar*) str, HELP_FINDER, 0L) != 0);
-#else
-    return (WinHelp(GetSuitableHWND(this), (const wxChar*) str, HELP_CONTENTS, 0L) != 0);
-#endif
 }
 
 bool wxWinHelpController::DisplaySection(int section)

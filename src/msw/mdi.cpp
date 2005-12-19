@@ -1092,7 +1092,7 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
 bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
 {
     WINDOWPOS *lpPos = (WINDOWPOS *)pos;
-#if defined(__WIN95__)
+
     if (!(lpPos->flags & SWP_NOSIZE))
     {
         RECT rectClient;
@@ -1114,7 +1114,6 @@ bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
         }
 #endif
     }
-#endif // Win95
 
     return false;
 }
@@ -1132,14 +1131,14 @@ bool wxMDIChildFrame::HandleGetMinMaxInfo(void *mmInfo)
         minHeight = GetMinHeight();
 
     // but allow GetSizeHints() to set the min size
-    if ( minWidth != -1 )
+    if ( minWidth != wxDefaultCoord )
     {
         info->ptMinTrackSize.x = minWidth;
 
         processed = true;
     }
 
-    if ( minHeight != -1 )
+    if ( minHeight != wxDefaultCoord )
     {
         info->ptMinTrackSize.y = minHeight;
 
@@ -1200,10 +1199,10 @@ void wxMDIChildFrame::MSWDestroyWindow()
 // style when a child is maximised (a double border looks silly.)
 bool wxMDIChildFrame::ResetWindowStyle(void *vrect)
 {
-#if defined(__WIN95__)
     RECT *rect = (RECT *)vrect;
     wxMDIParentFrame* pFrameWnd = (wxMDIParentFrame *)GetParent();
     wxMDIChildFrame* pChild = pFrameWnd->GetActiveChild();
+
     if (!pChild || (pChild == this))
     {
         HWND hwndClient = GetWinHwnd(pFrameWnd->GetClientWindow());
@@ -1235,7 +1234,6 @@ bool wxMDIChildFrame::ResetWindowStyle(void *vrect)
             return true;
         }
     }
-#endif // Win95
 
     return false;
 }
@@ -1264,11 +1262,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     if ( style & wxVSCROLL )
         msStyle |= WS_VSCROLL;
 
-#if defined(__WIN95__)
     DWORD exStyle = WS_EX_CLIENTEDGE;
-#else
-    DWORD exStyle = 0;
-#endif
 
     wxWindowCreationHook hook(this);
     m_hWnd = (WXHWND)::CreateWindowEx
@@ -1486,4 +1480,3 @@ static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
 }
 
 #endif // wxUSE_MDI && !defined(__WXUNIVERSAL__)
-

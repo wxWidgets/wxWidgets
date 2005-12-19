@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpbest.cpp
+// Name:        src/msw/helpbest.cpp
 // Purpose:     Tries to load MS HTML Help, falls back to wxHTML upon failure
 // Author:      Mattia Barbon
 // Modified by:
@@ -23,7 +23,7 @@
 #include "wx/filefn.h"
 #include "wx/log.h"
 
-#if wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__) \
+#if wxUSE_HELP && wxUSE_MS_HTML_HELP \
     && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
 
 #include "wx/msw/helpchm.h"
@@ -100,4 +100,4 @@ wxString wxBestHelpController::GetValidFilename( const wxString& filename ) cons
 }
 
 #endif
-    // wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__) && wxUSE_WXHTML_HELP
+    // wxUSE_HELP && wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP

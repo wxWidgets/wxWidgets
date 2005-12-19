@@ -683,10 +683,8 @@ void wxFrame::IconizeChildFrames(bool bIconize)
         // them appear in the taskbar because they are, by virtue of this
         // style, not managed by the taskbar - instead leave Windows take care
         // of them
-#ifdef __WIN95__
         if ( win->GetWindowStyle() & wxFRAME_TOOL_WINDOW )
             continue;
-#endif // Win95
 
         // the child MDI frames are a special case and should not be touched by
         // the parent frame - instead, they are managed by the user

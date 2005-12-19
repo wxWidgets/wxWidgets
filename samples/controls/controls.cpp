@@ -19,9 +19,7 @@
     #include "wx/wx.h"
 #endif
 
-#if !defined( __WXMSW__ ) || defined( __WIN95__ )
 #include "wx/spinbutt.h"
-#endif
 #include "wx/tglbtn.h"
 #include "wx/bookctrl.h"
 #include "wx/imaglist.h"
@@ -882,7 +880,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                             _T("This is also supposed to demonstrate how ")
                             _T("to use static controls with line wrapping."),
                             wxDefaultPosition,
-                            wxSize(240, -1)
+                            wxSize(240, wxDefaultCoord)
                           );
 #endif
     wrapping_sizer->Add( m_wrappingText );
@@ -915,7 +913,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
-    m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, _T(""), wxPoint(200, 160), wxSize(80, wxDefaultCoord) );
+    m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, wxEmptyString, wxPoint(200, 160), wxSize(80, wxDefaultCoord) );
     m_spinctrl->SetRange(10,30);
     m_spinctrl->SetValue(15);
 #endif // wxUSE_SPINCTRL

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/statbr95.cpp
+// Name:        src/msw/statbr95.cpp
 // Purpose:     native implementation of wxStatusBar
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -23,7 +23,7 @@
   #include "wx/dcclient.h"
 #endif
 
-#if wxUSE_STATUSBAR && defined(__WIN95__) && wxUSE_NATIVE_STATUSBAR
+#if wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR
 
 #include "wx/intl.h"
 #include "wx/log.h"
@@ -32,9 +32,8 @@
 #include "wx/msw/private.h"
 #include <windowsx.h>
 
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -386,5 +385,4 @@ wxStatusBar95::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     return wxStatusBarBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
-#endif // __WIN95__ && wxUSE_NATIVE_STATUSBAR
-
+#endif // wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR
