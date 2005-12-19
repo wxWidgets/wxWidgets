@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        control.h
+// Name:        wx/msw/control.h
 // Purpose:     wxControl class
 // Author:      Julian Smart
 // Modified by:
@@ -56,9 +56,7 @@ public:
     bool ProcessCommand(wxCommandEvent& event);
 
     // MSW-specific
-#ifdef __WIN95__
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-#endif // Win95
 
     // For ownerdraw items
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *WXUNUSED(item)) { return false; };

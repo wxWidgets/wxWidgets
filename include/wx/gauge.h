@@ -88,12 +88,8 @@ protected:
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/gauge.h"
 #elif defined(__WXMSW__)
-    #ifdef __WIN95__
-        #include "wx/msw/gauge95.h"
-        #define wxGauge wxGauge95
-    #else // !__WIN95__
-        // Gauge no longer supported on 16-bit Windows
-    #endif
+    #include "wx/msw/gauge95.h"
+    #define wxGauge wxGauge95
 #elif defined(__WXMOTIF__)
     #include "wx/motif/gauge.h"
 #elif defined(__WXGTK__)

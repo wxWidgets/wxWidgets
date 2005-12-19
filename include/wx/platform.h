@@ -116,11 +116,6 @@
 #    ifndef __WIN32__
 #        define __WIN32__
 #    endif
-
-    /* this means Win95-style UI, i.e. Win9x/NT 4+: always true now */
-#    if !defined(__WIN95__)
-#        define __WIN95__
-#    endif
 #endif /* Win32 */
 
 #if defined(__WXMSW__) || defined(__WIN32__)
@@ -128,12 +123,6 @@
 #       define __WINDOWS__
 #   endif
 #endif
-
-#ifdef __WINE__
-#   ifndef __WIN95__
-#       define __WIN95__
-#   endif
-#endif /* WINE */
 
 /* detect MS SmartPhone */
 #if defined( WIN32_PLATFORM_WFSP )

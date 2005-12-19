@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mainfrm.cpp
+// Name:        ogl/stufio/mainfrm.cpp
 // Purpose:     Studio main frame
 // Author:      Julian Smart
 // Modified by:
@@ -184,7 +184,7 @@ void csFrame::OnIdle(wxIdleEvent& event)
         wxLayoutAlgorithm layout;
         layout.LayoutMDIFrame(this);
 
-#if defined(__WXMSW__) && defined(__WIN95__)
+#if defined(__WXMSW__)
         // Need to do something else to get it to refresh properly
         // when a client frame is first displayed; moving the client
         // window doesn't cause the proper refresh. Just refreshing the
@@ -202,7 +202,7 @@ void csFrame::OnIdle(wxIdleEvent& event)
 
         }
 #endif
-#endif
+#endif // __WXMSW__
     }
     event.Skip();
 }
@@ -277,4 +277,3 @@ void csMDIChildFrame::OnActivate(wxActivateEvent& event)
     layout.LayoutMDIFrame((wxMDIParentFrame*) GetParent());
 */
 }
-

@@ -270,9 +270,7 @@ public:
                              WXWORD pos, WXHWND control);
 
     // child control notifications
-#ifdef __WIN95__
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-#endif // __WIN95__
 
     // owner-drawn controls need to process these messages
     virtual bool MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *item);
@@ -485,10 +483,7 @@ private:
     bool HandleMove(int x, int y);
     bool HandleMoving(wxRect& rect);
     bool HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags);
-
-#ifdef __WIN95__
     bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-#endif // __WIN95__
 
     // list of disabled children before last call to our Disable()
     wxWindowList *m_childrenDisabled;

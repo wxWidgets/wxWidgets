@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpbest.h
+// Name:        wx/msw/helpbest.h
 // Purpose:     Tries to load MS HTML Help, falls back to wxHTML upon failure
 // Author:      Mattia Barbon
 // Modified by:
@@ -12,7 +12,7 @@
 #ifndef _WX_HELPBEST_H_
 #define _WX_HELPBEST_H_
 
-#if wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__) \
+#if wxUSE_HELP && wxUSE_MS_HTML_HELP \
     && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
 
 #include "wx/helpbase.h"
@@ -118,7 +118,7 @@ protected:
     DECLARE_NO_COPY_CLASS(wxBestHelpController)
 };
 
-#endif // wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__) && wxUSE_WXHTML_HELP
+#endif // wxUSE_HELP && wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
 
 #endif
     // _WX_HELPBEST_H_
