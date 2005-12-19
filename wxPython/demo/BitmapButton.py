@@ -36,8 +36,8 @@ class TestPanel(wx.Panel):
 
         b = wx.BitmapButton(self, 30, bmp, (20, 120),
                        (bmp.GetWidth()+10, bmp.GetHeight()+10),
-                        style = wx.BORDER_NONE)
-        b.SetToolTipString("This is a bitmap button with \nwx.BORDER_NONE style.")
+                        style = wx.NO_BORDER)
+        b.SetToolTipString("This is a bitmap button with \nwx.NO_BORDER style.")
         self.Bind(wx.EVT_BUTTON, self.OnClick, b)
         
 
