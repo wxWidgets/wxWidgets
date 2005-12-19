@@ -305,8 +305,6 @@ wxActiveX::~wxActiveX()
 
 void wxActiveX::CreateActiveX(REFCLSID clsid)
 {
-    SetTransparent();
-
     HRESULT hret;
 
     ////////////////////////////////////////////////////////
@@ -1775,6 +1773,16 @@ void wxActiveX::OnMouse(wxMouseEvent& event)
     };
 
     wxLogTrace(wxT(""),wxT("msg sent"));
+}
+
+bool wxActiveX::MSWTranslateMessage(WXMSG *msg){
+	
+	if (msg->message == WM_KEYDOWN){		
+		HRESULT result = m_oleInPlaceActiveObject->TranslateAccelerator(msg);
+		return (result == S_OK);
+	}
+	
+	return wxWindow::MSWTranslateMessage(msg);
 }
 
 long wxActiveX::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
