@@ -382,55 +382,6 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     return wxEntry(argc, argv);
 }
 
-// May wish not to have a DllMain or WinMain, e.g. if we're programming
-// a Netscape plugin or if we're writing a console application
-#if !defined(NOMAIN)
-
-extern "C"
-{
-
-// ----------------------------------------------------------------------------
-// WinMain
-// ----------------------------------------------------------------------------
-
-// Note that WinMain is also defined in dummy.obj, which is linked to
-// an application that is using the DLL version of wxWidgets.
-
-#if defined(_WINDLL)
-
-// DLL entry point
-
-BOOL WINAPI
-DllMain(HINSTANCE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
-{
-    // Only call wxEntry if the application itself is part of the DLL.
-    // If only the wxWidgets library is in the DLL, then the
-    // initialisation will be called when the application implicitly
-    // calls WinMain.
-#ifndef WXMAKINGDLL
-    switch (fdwReason)
-    {
-        case DLL_PROCESS_ATTACH:
-            return wxEntry(hModule);
-
-        case DLL_PROCESS_DETACH:
-            wxEntryCleanup();
-            break;
-    }
-#else
-    (void)hModule;
-    (void)fdwReason;
-#endif // !WXMAKINGDLL
-
-    return TRUE;
-}
-
-#endif // _WINDLL
-
-} // extern "C"
-
-#endif // !NOMAIN
-
 #endif // wxUSE_GUI && __WXMSW__
 
 // ----------------------------------------------------------------------------
