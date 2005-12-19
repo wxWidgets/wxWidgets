@@ -138,6 +138,7 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
     switch ( GetEventKind( event ) )
     {
         case kEventTextInputUnicodeForKeyEvent :
+            {
             // this is only called when no default handler has jumped in, eg a wxControl on a floater window does not
             // get its own kEventTextInputUnicodeForKeyEvent, so we route back the
             wxControl* control = wxDynamicCast( focus , wxControl ) ;
@@ -161,6 +162,7 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
                 result = noErr ;
             }
             */
+            }
             break ;
     }
 
@@ -535,6 +537,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             eventleave.SetEventType( wxEVT_LEAVE_WINDOW );
             g_MacLastWindow->ScreenToClient( &eventleave.m_x, &eventleave.m_y );
             eventleave.SetEventObject( g_MacLastWindow ) ;
+            wxevent.SetId( g_MacLastWindow->GetId() ) ;
 
 #if wxUSE_TOOLTIPS
             wxToolTip::RelayEvent( g_MacLastWindow , eventleave);
@@ -547,6 +550,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             evententer.SetEventType( wxEVT_ENTER_WINDOW );
             currentMouseWindow->ScreenToClient( &evententer.m_x, &evententer.m_y );
             evententer.SetEventObject( currentMouseWindow ) ;
+            wxevent.SetId( currentMouseWindow->GetId() ) ;
 #if wxUSE_TOOLTIPS
             wxToolTip::RelayEvent( currentMouseWindow , evententer);
 #endif // wxUSE_TOOLTIPS
@@ -571,6 +575,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
 
         wxevent.SetEventObject( currentMouseWindow ) ;
+        wxevent.SetId( currentMouseWindow->GetId() ) ;
 
         // make tooltips current
 
