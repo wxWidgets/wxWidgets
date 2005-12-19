@@ -34,8 +34,9 @@ import sys, os
 # We happen to be doing that here in this script, so make sure to
 # remove the build_options.py file, so that config.py will recreate it.
 
-if os.path.exists("build_options.py"):
-    os.remove("build_options.py")
+for bo_name in ["build_options.py", "build_options.pyc"]:
+    if os.path.exists(bo_name):
+        os.remove(bo_name)
 
 sys.setup_is_main =  __name__ == "__main__"  # an icky hack!
 from config import *
