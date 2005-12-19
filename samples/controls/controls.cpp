@@ -1768,13 +1768,10 @@ void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
-    SetSize(800, 600);
-#if 0
     wxBusyCursor bc;
 
     wxMessageDialog dialog(this, _T("This is a control sample"), _T("About Controls"), wxOK );
     dialog.ShowModal();
-#endif
 }
 
 void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
