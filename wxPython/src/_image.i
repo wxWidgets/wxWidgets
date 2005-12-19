@@ -59,6 +59,43 @@ public:
 
 //---------------------------------------------------------------------------
 
+
+DocStr(wxPyImageHandler,
+"This is the base class for implementing image file loading/saving, and
+image creation from data, all written in Python.  To create a custom
+image handler derive a new class from wx.PyImageHandler and provide
+the following methods::
+
+    def DoCanRead(self, stream) --> bool
+        '''Check if this handler can read the image on the stream'''
+
+    def LoadFile(self, image, stream, verbose, index) --> bool
+        '''Load image data from the stream and load it into image.'''
+
+    def SaveFile(self, image, stream, verbose) --> bool
+        '''Save the iamge data in image to the stream using
+           this handler's image file format.'''
+
+    def GetImageCount(self, stream) --> int
+        '''If this image format can hold more than one image,
+           how many does the image on the stream have?'''
+
+To activate your handler create an instance of it and pass it to
+`wx.Image_AddHandler`.  Be sure to call `SetName`, `SetType`, and
+`SetExtension` from your constructor.
+
+", "");
+class wxPyImageHandler: public wxImageHandler {
+public:
+    %pythonAppend wxPyImageHandler() "self._SetSelf(self)"
+    wxPyImageHandler();
+    void _SetSelf(PyObject *self);
+};
+
+
+//---------------------------------------------------------------------------
+
+
 class wxImageHistogram /* : public wxImageHistogramBase */
 {
 public:

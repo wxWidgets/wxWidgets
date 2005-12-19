@@ -73,6 +73,9 @@ Applied Patch #1354389: wxPython MenuItem SetBitmaps fix.
 
 Applied Patch #1239456: wxPython wx.DataObject.GetAllFormats fix.
 
+Applied Patch # #1230107 which allows image handlers to be written in
+Python by deriving from wx.PyImageHandler.
+
 
 
 

@@ -498,6 +498,39 @@ public:
 
 
 //---------------------------------------------------------------------------
+// A wxImageHandler that can be derived from in Python.
+//
+
+class wxPyImageHandler: public wxImageHandler {
+protected:
+    PyObject *m_self;
+
+    // used for interning method names as PyStrings
+    static PyObject* m_DoCanRead_Name;
+    static PyObject* m_GetImageCount_Name;
+    static PyObject* m_LoadFile_Name;
+    static PyObject* m_SaveFile_Name;
+
+    // converstion helpers
+    PyObject* py_InputStream(wxInputStream* stream);
+    PyObject* py_Image(wxImage* image);
+    PyObject* py_OutputStream(wxOutputStream* stream);
+
+public:
+    wxPyImageHandler();
+    ~wxPyImageHandler();
+    void _SetSelf(PyObject *self);
+    
+    virtual bool LoadFile(wxImage* image, wxInputStream& stream,
+                          bool verbose=true, int index=-1 );
+    virtual bool SaveFile(wxImage* image, wxOutputStream& stream,
+                          bool verbose=true );
+    virtual int GetImageCount(wxInputStream& stream );
+    virtual bool DoCanRead(wxInputStream &stream);
+};
+
+
+//---------------------------------------------------------------------------
 // This class holds an instance of a Python Shadow Class object and assists
 // with looking up and invoking Python callback methods from C++ virtual
 // method redirections.  For all classes which have virtuals which should be
