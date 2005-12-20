@@ -289,8 +289,7 @@ class Shape(ShapeEvtHandler):
 
     def Delete(self):
         if self._parent:
-            i = self._parent.GetChildren().index(self)
-            self._parent.GetChildren(i).remove(self)
+            self._parent.GetChildren().remove(self)
 
         self.ClearText()
         self.ClearRegions()
@@ -301,7 +300,8 @@ class Shape(ShapeEvtHandler):
         if self._canvas:
             self.RemoveFromCanvas(self._canvas)
 
-        self.GetEventHandler().OnDelete()
+        if self.GetEventHandler():
+            self.GetEventHandler().OnDelete()
         self._eventHandler = None
         
     def __del__(self):

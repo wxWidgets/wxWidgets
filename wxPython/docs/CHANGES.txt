@@ -88,6 +88,10 @@ to synchronize with a single timer.
 Fix for bug #1336711: wx.lib.calendar.CalenDlg can yield incorrect
 result. 
 
+Applied patch from Morgan Hua for updates to ActiveGrid code
+(pydocview, ActiveGrid IDE, etc.)
+
+
 
 
 
