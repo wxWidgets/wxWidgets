@@ -73,6 +73,7 @@ static const struct TokenizerTestData
 gs_testData[] =
 {
     { _T(""),                   _T(" "),              wxTOKEN_DEFAULT      , 0 },
+
     { _T("Hello, world"),       _T(" "),              wxTOKEN_DEFAULT      , 2 },
     { _T("Hello,   world  "),   _T(" "),              wxTOKEN_DEFAULT      , 2 },
     { _T("Hello, world"),       _T(","),              wxTOKEN_DEFAULT      , 2 },
@@ -80,11 +81,27 @@ gs_testData[] =
     { _T("Hello,, world!"),     _T(",!"),             wxTOKEN_DEFAULT      , 3 },
     { _T("Hello,, world!"),     _T(",!"),             wxTOKEN_STRTOK       , 2 },
     { _T("Hello, world!"),      _T(",!"),             wxTOKEN_RET_EMPTY_ALL, 3 },
+
     { _T("username:password:uid:gid:gecos:home:shell"),
                                 _T(":"),              wxTOKEN_DEFAULT      , 7 },
+
+    { _T("1:2::3:"),            _T(":"),              wxTOKEN_DEFAULT      , 4 },
+    { _T("1:2::3:"),            _T(":"),              wxTOKEN_RET_EMPTY    , 4 },
+    { _T("1:2::3:"),            _T(":"),              wxTOKEN_RET_EMPTY_ALL, 5 },
+    { _T("1:2::3:"),            _T(":"),              wxTOKEN_RET_DELIMS   , 4 },
+    { _T("1:2::3:"),            _T(":"),              wxTOKEN_STRTOK       , 3 },
+
+    { _T("1:2::3::"),           _T(":"),              wxTOKEN_DEFAULT      , 5 },
+    { _T("1:2::3::"),           _T(":"),              wxTOKEN_RET_EMPTY    , 5 },
+    { _T("1:2::3::"),           _T(":"),              wxTOKEN_RET_EMPTY_ALL, 6 },
+    { _T("1:2::3::"),           _T(":"),              wxTOKEN_RET_DELIMS   , 5 },
+    { _T("1:2::3::"),           _T(":"),              wxTOKEN_STRTOK       , 3 },
+
     { _T("1 \t3\t4  6   "),     wxDEFAULT_DELIMITERS, wxTOKEN_DEFAULT      , 4 },
+    { _T("1 \t3\t4  6   "),     wxDEFAULT_DELIMITERS, wxTOKEN_STRTOK       , 4 },
     { _T("1 \t3\t4  6   "),     wxDEFAULT_DELIMITERS, wxTOKEN_RET_EMPTY    , 6 },
     { _T("1 \t3\t4  6   "),     wxDEFAULT_DELIMITERS, wxTOKEN_RET_EMPTY_ALL, 9 },
+
     { _T("01/02/99"),           _T("/-"),             wxTOKEN_DEFAULT      , 3 },
     { _T("01-02/99"),           _T("/-"),             wxTOKEN_RET_DELIMS   , 3 },
 };
