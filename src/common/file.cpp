@@ -213,11 +213,9 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
         wxLogSysError(_("can't create file '%s'"), szFileName);
         return false;
     }
-    else
-    {
-        Attach(fd);
-        return true;
-    }
+
+    Attach(fd);
+    return true;
 }
 
 // open the file
@@ -267,10 +265,9 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
         wxLogSysError(_("can't open file '%s'"), szFileName);
         return false;
     }
-    else {
-        Attach(fd);
-        return true;
-    }
+
+    Attach(fd);
+    return true;
 }
 
 // close
