@@ -556,6 +556,7 @@
 %rename(IMAGE_ALPHA_THRESHOLD)              wxIMAGE_ALPHA_THRESHOLD;
 %rename(IMAGE_ALPHA_OPAQUE)                 wxIMAGE_ALPHA_OPAQUE;
 %rename(ImageHandler)                       wxImageHandler;
+%rename(PyImageHandler)                     wxPyImageHandler;
 %rename(ImageHistogram)                     wxImageHistogram;
 %rename(Image_RGBValue)                     wxImage_RGBValue;
 %rename(Image_HSVValue)                     wxImage_HSVValue;

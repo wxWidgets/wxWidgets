@@ -2147,6 +2147,82 @@ class ImageHandlerPtr(ImageHandler):
         self.__class__ = ImageHandler
 _core_.ImageHandler_swigregister(ImageHandlerPtr)
 
+class PyImageHandler(ImageHandler):
+    """
+    This is the base class for implementing image file loading/saving, and
+    image creation from data, all written in Python.  To create a custom
+    image handler derive a new class from wx.PyImageHandler and provide
+    the following methods::
+
+        def DoCanRead(self, stream) --> bool
+            '''Check if this handler can read the image on the stream'''
+
+        def LoadFile(self, image, stream, verbose, index) --> bool
+            '''Load image data from the stream and load it into image.'''
+
+        def SaveFile(self, image, stream, verbose) --> bool
+            '''Save the iamge data in image to the stream using
+               this handler's image file format.'''
+
+        def GetImageCount(self, stream) --> int
+            '''If this image format can hold more than one image,
+               how many does the image on the stream have?'''
+
+    To activate your handler create an instance of it and pass it to
+    `wx.Image_AddHandler`.  Be sure to call `SetName`, `SetType`, and
+    `SetExtension` from your constructor.
+
+
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPyImageHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self) -> PyImageHandler
+
+        This is the base class for implementing image file loading/saving, and
+        image creation from data, all written in Python.  To create a custom
+        image handler derive a new class from wx.PyImageHandler and provide
+        the following methods::
+
+            def DoCanRead(self, stream) --> bool
+                '''Check if this handler can read the image on the stream'''
+
+            def LoadFile(self, image, stream, verbose, index) --> bool
+                '''Load image data from the stream and load it into image.'''
+
+            def SaveFile(self, image, stream, verbose) --> bool
+                '''Save the iamge data in image to the stream using
+                   this handler's image file format.'''
+
+            def GetImageCount(self, stream) --> int
+                '''If this image format can hold more than one image,
+                   how many does the image on the stream have?'''
+
+        To activate your handler create an instance of it and pass it to
+        `wx.Image_AddHandler`.  Be sure to call `SetName`, `SetType`, and
+        `SetExtension` from your constructor.
+
+
+        """
+        newobj = _core_.new_PyImageHandler(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._SetSelf(self)
+
+    def _SetSelf(*args, **kwargs):
+        """_SetSelf(self, PyObject self)"""
+        return _core_.PyImageHandler__SetSelf(*args, **kwargs)
+
+
+class PyImageHandlerPtr(PyImageHandler):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = PyImageHandler
+_core_.PyImageHandler_swigregister(PyImageHandlerPtr)
+
 class ImageHistogram(object):
     """Proxy of C++ ImageHistogram class"""
     def __repr__(self):
