@@ -561,38 +561,6 @@ if BUILD_STC:
     wxpExtensions.append(ext)
 
 
-
-#----------------------------------------------------------------------
-# Define the IEWIN extension module (experimental)
-#----------------------------------------------------------------------
-
-if BUILD_IEWIN:
-    msg('Preparing IEWIN...')
-    location = 'contrib/iewin'
-
-    swig_files = ['iewin.i', ]
-
-    swig_sources = run_swig(swig_files, location, '', PKGDIR,
-                            USE_SWIG, swig_force, swig_args, swig_deps)
-
-
-    ext = Extension('_iewin', ['%s/IEHtmlWin.cpp' % location,
-                               '%s/wxactivex.cpp' % location,
-                             ] + swig_sources,
-
-                    include_dirs =  includes + CONTRIBS_INC,
-                    define_macros = defines,
-
-                    library_dirs = libdirs,
-                    libraries = libs,
-
-                    extra_compile_args = cflags,
-                    extra_link_args = lflags,
-                    )
-
-    wxpExtensions.append(ext)
-
-
 #----------------------------------------------------------------------
 # Define the ACTIVEX extension module (experimental)
 #----------------------------------------------------------------------

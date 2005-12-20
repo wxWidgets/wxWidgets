@@ -87,7 +87,6 @@ BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
                    # to be loaded from a DLL and to be used from Python.
 
                    # Internet Explorer wrapper (experimental)
-BUILD_IEWIN = 0 #(os.name == 'nt')
 BUILD_ACTIVEX = (os.name == 'nt')  # new version of IEWIN and more
 
 
@@ -242,7 +241,7 @@ WXPYTHON_TYPE_TABLE = '_wxPython_table'
 
 # Boolean (int) flags
 for flag in [ 'BUILD_ACTIVEX', 'BUILD_ANIMATE', 'BUILD_DLLWIDGET',
-              'BUILD_GIZMOS', 'BUILD_GLCANVAS', 'BUILD_IEWIN',
+              'BUILD_GIZMOS', 'BUILD_GLCANVAS', 
               'BUILD_OGL', 'BUILD_STC',     
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'NO_HEADERS', 'BUILD_RENAMERS',
@@ -633,7 +632,6 @@ if CORE_ONLY:
     BUILD_STC = 0
     BUILD_GIZMOS = 0
     BUILD_DLLWIDGET = 0
-    BUILD_IEWIN = 0
     BUILD_ACTIVEX = 0
     BUILD_ANIMATE = 0
 
