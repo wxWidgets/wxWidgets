@@ -78,6 +78,7 @@ gs_testData[] =
     { _T("Hello, world"),       _T(","),              wxTOKEN_DEFAULT      , 2 },
     { _T("Hello, world!"),      _T(",!"),             wxTOKEN_DEFAULT      , 2 },
     { _T("Hello,, world!"),     _T(",!"),             wxTOKEN_DEFAULT      , 3 },
+    { _T("Hello,, world!"),     _T(",!"),             wxTOKEN_STRTOK       , 2 },
     { _T("Hello, world!"),      _T(",!"),             wxTOKEN_RET_EMPTY_ALL, 3 },
     { _T("username:password:uid:gid:gecos:home:shell"),
                                 _T(":"),              wxTOKEN_DEFAULT      , 7 },
