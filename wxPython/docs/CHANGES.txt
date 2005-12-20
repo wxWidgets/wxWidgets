@@ -85,7 +85,8 @@ sequence with Next(), Previous(), Increment(), Decrement() &
 SetCurrent(). Very handy if you have multiple throbbers that you want
 to synchronize with a single timer.
 
-
+Fix for bug #1336711: wx.lib.calendar.CalenDlg can yield incorrect
+result. 
 
 
 
