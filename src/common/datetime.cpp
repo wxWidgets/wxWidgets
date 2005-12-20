@@ -179,7 +179,7 @@ struct tm *wxLocaltime_r(const time_t* ticks, struct tm* temp)
 #if wxUSE_THREADS && !defined(__WINDOWS__)
   // No need to waste time with a mutex on windows since it's using
   // thread local storage for localtime anyway.
-  wxMutexLocker(timeLock);
+  wxMutexLocker locker(timeLock);
 #endif
   memcpy(temp, localtime(ticks), sizeof(struct tm));
   return temp;
@@ -192,7 +192,7 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
 #if wxUSE_THREADS && !defined(__WINDOWS__)
   // No need to waste time with a mutex on windows since it's
   // using thread local storage for gmtime anyway.
-  wxMutexLocker(timeLock);
+  wxMutexLocker locker(timeLock);
 #endif
   memcpy(temp, gmtime(ticks), sizeof(struct tm));
   return temp;
