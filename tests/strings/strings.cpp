@@ -21,8 +21,6 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
-#include "wx/tokenzr.h"
-
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -46,8 +44,6 @@ private:
 #endif // wxUSE_WCHAR_T
         CPPUNIT_TEST( Extraction );
         CPPUNIT_TEST( Find );
-        CPPUNIT_TEST( Tokenizer );
-        CPPUNIT_TEST( TokenizerGetPosition );
         CPPUNIT_TEST( Replace );
         CPPUNIT_TEST( Match );
         CPPUNIT_TEST( CaseChanges );
@@ -70,9 +66,6 @@ private:
 #endif // wxUSE_WCHAR_T
     void Extraction();
     void Find();
-    void SingleTokenizerTest( wxChar *str, wxChar *delims, size_t count , wxStringTokenizerMode mode );
-    void Tokenizer();
-    void TokenizerGetPosition();
     void Replace();
     void Match();
     void CaseChanges();
@@ -378,98 +371,6 @@ void StringTestCase::Find()
     TEST_FIND( _T("Well, hello world"),  9, wxString::npos );
 
     #undef TEST_FIND
-}
-
-void StringTestCase::SingleTokenizerTest( wxChar *str, wxChar *delims, size_t count , wxStringTokenizerMode mode )
-{
-    wxStringTokenizer tkz( str, delims, mode);
-    CPPUNIT_ASSERT( tkz.CountTokens() == count );
-
-    wxChar *buf, *s = NULL, *last;
-
-    if ( tkz.GetMode() == wxTOKEN_STRTOK )
-    {
-        buf = new wxChar[wxStrlen(str) + 1];
-        wxStrcpy(buf, str);
-        s = wxStrtok(buf, delims, &last);
-    }
-    else
-    {
-        buf = NULL;
-    }
-
-    size_t count2 = 0;
-    while ( tkz.HasMoreTokens() )
-    {
-        wxString token = tkz.GetNextToken();
-        if ( buf )
-        {
-            CPPUNIT_ASSERT( token == s );
-            s = wxStrtok(NULL, delims, &last);
-        }
-        count2++;
-    }
-
-    CPPUNIT_ASSERT( count2 == count );
-    if ( buf )
-    {
-        delete [] buf;
-    }
-}
-
-void StringTestCase::Tokenizer()
-{
-    SingleTokenizerTest( _T(""),                                           _T(" "),              0, wxTOKEN_DEFAULT       );
-    SingleTokenizerTest( _T("Hello, world"),                               _T(" "),              2, wxTOKEN_DEFAULT       );
-    SingleTokenizerTest( _T("Hello,   world  "),                           _T(" "),              2, wxTOKEN_DEFAULT       );
-    SingleTokenizerTest( _T("Hello, world"),                               _T(","),              2, wxTOKEN_DEFAULT       );
-    SingleTokenizerTest( _T("Hello, world!"),                              _T(",!"),             2, wxTOKEN_DEFAULT       );
-    SingleTokenizerTest( _T("Hello,, world!"),                             _T(",!"),             3, wxTOKEN_DEFAULT       );
-    SingleTokenizerTest( _T("Hello, world!"),                              _T(",!"),             3, wxTOKEN_RET_EMPTY_ALL );
-    SingleTokenizerTest( _T("username:password:uid:gid:gecos:home:shell"), _T(":"),              7, wxTOKEN_DEFAULT       );
-    SingleTokenizerTest( _T("1 \t3\t4  6   "),                             wxDEFAULT_DELIMITERS, 4, wxTOKEN_DEFAULT       );
-    SingleTokenizerTest( _T("1 \t3\t4  6   "),                             wxDEFAULT_DELIMITERS, 6, wxTOKEN_RET_EMPTY     );
-    SingleTokenizerTest( _T("1 \t3\t4  6   "),                             wxDEFAULT_DELIMITERS, 9, wxTOKEN_RET_EMPTY_ALL );
-    SingleTokenizerTest( _T("01/02/99"),                                   _T("/-"),             3, wxTOKEN_DEFAULT       );
-    SingleTokenizerTest( _T("01-02/99"),                                   _T("/-"),             3, wxTOKEN_RET_DELIMS    );
-}
-
-// call this with the string to tokenize, delimeters to use and the expected
-// positions (i.e. results of GetPosition()) after each GetNextToken() call,
-// terminate positions with 0
-static void DoTokenizerGetPosition(const wxChar *s, 
-                                   const wxChar *delims, int pos, ...)
-{
-    wxStringTokenizer tkz(s, delims);
-
-    CPPUNIT_ASSERT( tkz.GetPosition() == 0 );
-
-    va_list ap;
-    va_start(ap, pos);
-
-    for ( ;; )
-    {
-        if ( !pos )
-        {
-            CPPUNIT_ASSERT( !tkz.HasMoreTokens() );
-            break;
-        }
-
-        tkz.GetNextToken();
-
-        CPPUNIT_ASSERT( tkz.GetPosition() == (size_t)pos );
-
-        pos = va_arg(ap, int);
-    }
-
-    va_end(ap);
-}
-
-void StringTestCase::TokenizerGetPosition()
-{
-    DoTokenizerGetPosition(_T("foo"), _T("_"), 3, 0);
-    DoTokenizerGetPosition(_T("foo_bar"), _T("_"), 4, 7, 0);
-    DoTokenizerGetPosition(_T("foo_bar_"), _T("_"), 4, 8, 0);
 }
 
 void StringTestCase::Replace()

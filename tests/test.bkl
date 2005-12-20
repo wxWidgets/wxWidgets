@@ -43,6 +43,7 @@
             scopeguard/scopeguardtest.cpp
             strings/strings.cpp
             strings/stdstrings.cpp
+            strings/tokenizer.cpp
             strings/unicode.cpp
             strings/crt.cpp
             streams/bstream.cpp
