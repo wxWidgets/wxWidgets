@@ -91,6 +91,11 @@ result.
 Applied patch from Morgan Hua for updates to ActiveGrid code
 (pydocview, ActiveGrid IDE, etc.)
 
+Applied patch #1326241: Supporting "setup.py install --install-headers=path"
+
+Applied patch from Morgan Hua to fix bug #1219423: CommandManager
+should not repeat old commands after a branch.
+
 
 
 

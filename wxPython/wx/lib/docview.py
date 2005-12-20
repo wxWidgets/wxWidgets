@@ -3167,8 +3167,10 @@ class CommandProcessor(wx.Object):
         the history list.
         """
         done = command.Do()
-        if done and storeIt:
-            self._commands.append(command)
+        if done:
+            del self._redoCommands[:]
+            if storeIt:
+                self._commands.append(command)
         if self._maxCommands > -1:
             if len(self._commands) > self._maxCommands:
                 del self._commands[0]
