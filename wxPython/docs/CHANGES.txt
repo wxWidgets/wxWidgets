@@ -96,6 +96,10 @@ Applied patch #1326241: Supporting "setup.py install --install-headers=path"
 Applied patch from Morgan Hua to fix bug #1219423: CommandManager
 should not repeat old commands after a branch.
 
+Applied patch #1238825 adding search backward capabilities to the
+demo.  Modified to use the up/down options in the wx.FindReplaceDialog
+instead of a separate menu item.
+
 
 
 

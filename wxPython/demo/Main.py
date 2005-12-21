@@ -1213,6 +1213,7 @@ class wxPythonDemo(wx.Frame):
         self.SetMenuBar(self.mainmenu)
 
         self.finddata = wx.FindReplaceData()
+        self.finddata.SetFlags(wx.FR_DOWN)
 
         if 0:
             # This is another way to set Accelerators, in addition to
@@ -1530,9 +1531,7 @@ class wxPythonDemo(wx.Frame):
         
         self.nb.SetSelection(1)
         self.finddlg = wx.FindReplaceDialog(self, self.finddata, "Find",
-                        wx.FR_NOUPDOWN |
-                        wx.FR_NOMATCHCASE |
-                        wx.FR_NOWHOLEWORD)
+                        wx.FR_NOMATCHCASE | wx.FR_NOWHOLEWORD)
         self.finddlg.Show(True)
 
 
@@ -1545,13 +1544,22 @@ class wxPythonDemo(wx.Frame):
         self.nb.SetSelection(1)
         end = editor.GetLastPosition()
         textstring = editor.GetRange(0, end).lower()
-        start = editor.GetSelection()[1]
         findstring = self.finddata.GetFindString().lower()
-        loc = textstring.find(findstring, start)
+        backward = not (self.finddata.GetFlags() & wx.FR_DOWN)
+        if backward:
+            start = editor.GetSelection()[0]
+            loc = textstring.rfind(findstring, 0, start)
+        else:
+            start = editor.GetSelection()[1]
+            loc = textstring.find(findstring, start)
         if loc == -1 and start != 0:
             # string not found, start at beginning
-            start = 0
-            loc = textstring.find(findstring, start)
+            if backward:
+                start = end
+                loc = textstring.rfind(findstring, 0, start)
+            else:
+                start = 0
+                loc = textstring.find(findstring, start)
         if loc == -1:
             dlg = wx.MessageDialog(self, 'Find String Not Found',
                           'Find String Not Found in Demo File',
