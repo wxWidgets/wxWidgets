@@ -296,7 +296,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             controlBounds.right - controlBounds.left ,
                             controlBounds.bottom - controlBounds.top ) );
 #endif
-
                     }
 
                     thisWindow->MacSetCGContextRef( cgContext ) ;
@@ -1070,10 +1069,7 @@ void wxWindowMac::SetFocus()
     if ( err == errCouldntSetFocus )
         return ;
 
-    // enable for patch 1376506 - perhaps? (Stefan's version)
-#if 1
     SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );
-#endif
 
 #if !TARGET_API_MAC_OSX
     // emulate carbon events when running under CarbonLib where they are not natively available
@@ -1646,8 +1642,8 @@ void wxWindowMac::MacInvalidateBorders()
 #if 0
     if ( m_peer )
     {
-        // deleting a window while it is shown invalidates the region occupied by border or
-        // focus
+        // deleting a window while it is shown invalidates
+        // the region occupied by border or focus
 
         if ( IsShown() && ( outerBorder > 0 ) )
         {
@@ -1695,7 +1691,7 @@ void wxWindowMac::MacInvalidateBorders()
         RectRgn( updateOuter , &rect ) ;
         DiffRgn( updateOuter , updateInner ,updateOuter ) ;
 
-        /*
+/*
         wxPoint parent(0, 0);
 #if TARGET_API_MAC_OSX
         // no offsetting needed when compositing
@@ -1704,7 +1700,8 @@ void wxWindowMac::MacInvalidateBorders()
         parent -= GetParent()->GetClientAreaOrigin() ;
         OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
 #endif
-        */
+*/
+
         CopyRgn( updateOuter , updateTotal ) ;
 
         rect = r ;
@@ -1712,9 +1709,11 @@ void wxWindowMac::MacInvalidateBorders()
         InsetRect( &rect , -outerBorder , -outerBorder ) ;
         RectRgn( updateOuter , &rect ) ;
         DiffRgn( updateOuter , updateInner , updateOuter ) ;
+
 /*
         OffsetRgn( updateOuter , -parent.x , -parent.y ) ;
 */
+
         UnionRgn( updateOuter , updateTotal , updateTotal ) ;
 
         GetParent()->m_peer->SetNeedsDisplay( updateTotal  ) ;
@@ -2649,18 +2648,6 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
     //wxChildFocusEvent eventFocus(this);
     //(void)GetEventHandler()->ProcessEvent(eventFocus);
 
-#if !wxMAC_USE_CORE_GRAPHICS
-    bool bIsFocusEvent = (event.GetEventType() == wxEVT_SET_FOCUS);
-#endif
-
-    // enable for patch 1376506 - perhaps?
-#if 0
-    if ( bIsFocusEvent )
-          SetUserFocusWindow( GetControlOwner( GetPeer()->GetControlRef() ) );
-    else
-          SetUserFocusWindow( kUserFocusAuto );
-#endif
-
     if ( MacGetTopLevelWindow() && m_peer->NeedsFocusRect() )
     {
 #if wxMAC_USE_CORE_GRAPHICS
@@ -2685,6 +2672,8 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
         }
 
         DrawThemeFocusRect( &rect , bIsFocusEvent ) ;
+
+        bool bIsFocusEvent = (event.GetEventType() == wxEVT_SET_FOCUS);
         if ( !bIsFocusEvent )
         {
             // as this erases part of the frame we have to redraw borders
@@ -3068,8 +3057,8 @@ void wxWindowMac::MacCreateScrollBars( long style )
 
         wxPoint vPoint(width - scrlsize, 0) ;
         wxSize vSize(scrlsize, height - adjust) ;
-        wxPoint hPoint(0 , height - scrlsize ) ;
-        wxSize hSize( width - adjust, scrlsize) ;
+        wxPoint hPoint(0, height - scrlsize) ;
+        wxSize hSize(width - adjust, scrlsize) ;
 
         if ( style & wxVSCROLL )
             m_vScrollBar = new wxScrollBar(this, wxID_ANY, vPoint, vSize , wxVERTICAL);
@@ -3085,10 +3074,9 @@ void wxWindowMac::MacCreateScrollBars( long style )
 
 bool wxWindowMac::MacIsChildOfClientArea( const wxWindow* child ) const
 {
-    if ( child != NULL && ( child == m_hScrollBar || child == m_vScrollBar ) )
-        return false ;
-    else
-        return true ;
+    bool result = ((child == NULL) || ((child != m_hScrollBar) && (child != m_vScrollBar)));
+
+    return result ;
 }
 
 void wxWindowMac::MacRepositionScrollBars()
@@ -3208,13 +3196,15 @@ long wxWindowMac::MacGetLeftBorderSize() const
 
     if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER))
     {
+        // this metric is only the 'outset' outside the simple frame rect
         GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
-        border += 1 ; // the metric above is only the 'outset' outside the simple frame rect
+        border += 1 ;
     }
     else if (HasFlag(wxSIMPLE_BORDER))
     {
+        // this metric is only the 'outset' outside the simple frame rect
         GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-        border += 1 ; // the metric above is only the 'outset' outside the simple frame rect
+        border += 1 ;
     }
 
     return border ;
