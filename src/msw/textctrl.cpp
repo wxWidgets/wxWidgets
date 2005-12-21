@@ -899,6 +899,9 @@ void wxTextCtrl::WriteText(const wxString& value)
 
 void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
 {
+    if ( value.empty() )
+        return;
+    
     wxString valueDos;
     if ( m_windowStyle & wxTE_MULTILINE )
         valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
