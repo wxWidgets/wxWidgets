@@ -1177,7 +1177,7 @@ int TestId::m_seed = 6219;
 string TestId::MakeId()
 {
     m_seed = (m_seed * 171) % 30269;
-    return wxString::Format(_T("%-6d"), m_seed).mb_str();
+    return (const char *)wxString::Format(_T("%-6d"), m_seed).mb_str();
 }
 
 
