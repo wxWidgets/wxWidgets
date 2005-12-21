@@ -2649,7 +2649,9 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
     //wxChildFocusEvent eventFocus(this);
     //(void)GetEventHandler()->ProcessEvent(eventFocus);
 
+#if !wxMAC_USE_CORE_GRAPHICS
     bool bIsFocusEvent = (event.GetEventType() == wxEVT_SET_FOCUS);
+#endif
 
     // enable for patch 1376506 - perhaps?
 #if 0
@@ -3263,11 +3265,11 @@ wxPoint wxGetMousePosition()
 
 void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
 {
-    long evtType = event.GetEventType();
-//    if ((evtType == ewxEVT_RIGHT_DOWN) || (evtType == wxEVT_CONTEXT_MENU))
     if ( event.GetEventType() == wxEVT_RIGHT_DOWN )
     {
         // copied from wxGTK : CS
+        // VZ: shouldn't we move this to base class then?
+
         // generate a "context menu" event: this is similar to wxEVT_RIGHT_DOWN
         // except that:
         //
