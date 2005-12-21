@@ -117,7 +117,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 #elif defined(__WXPM__) || defined(__EMX__)
     char    err[256] = "";
     DosLoadModule(err, sizeof(err), (PSZ)libname.c_str(), &m_handle);
-#else
+#else // this should be the only remaining branch eventually
     m_handle = RawLoad(libname, flags);
 #endif
 
