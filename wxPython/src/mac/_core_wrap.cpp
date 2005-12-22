@@ -1593,6 +1593,21 @@ PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
 }
 
 
+// Python's PyInstance_Check does not return True for instances of new-style
+// classes.  This should get close enough for both new and old classes but I
+// should re-evaluate the need for doing instance checks...
+bool wxPyInstance_Check(PyObject* obj) {
+    return PyObject_HasAttrString(obj, "__class__") != 0;
+}
+
+
+
+// This one checks if the object is an instance of a SWIG proxy class (it has
+// a .this attribute)
+bool wxPySwigInstance_Check(PyObject* obj) {
+    return PySwigObject_Check(obj) != 0;
+}
+ 
 
 
 // Export a C API in a struct.  Other modules will be able to load this from
@@ -3002,14 +3017,14 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
     if ( !(info.window || info.sizer || (checkSize && info.gotSize) || (checkIdx && info.gotPos)) ) {
         // no expected type, figure out what kind of error message to generate
         if ( !checkSize && !checkIdx )
-            PyErr_SetString(PyExc_TypeError, "wxWindow or wxSizer expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window or wx.Sizer expected for item");
         else if ( checkSize && !checkIdx )
-            PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window, wx.Sizer, wx.Size, or (w,h) expected for item");
         else if ( !checkSize && checkIdx)
-            PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer or int (position) expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window, wx.Sizer or int (position) expected for item");
         else
             // can this one happen?
-            PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer, wxSize, or (w,h) or int (position) expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window, wx.Sizer, wx.Size, or (w,h) or int (position) expected for item");
     }
 
     return info;
