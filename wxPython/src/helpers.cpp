@@ -701,21 +701,6 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
 }
 
 
-//---------------------------------------------------------------------------
-
-// Python's PyInstance_Check does not return True for instances of new-style
-// classes.  This should get close enough for both new and old classes but I
-// should re-evaluate the need for doing instance checks...
-bool wxPyInstance_Check(PyObject* obj) {
-    return PyObject_HasAttrString(obj, "__class__") != 0;
-}
-
-
-// This one checks if the object is an instance of a SWIG proxy class (it has
-// a .this attribute)
-bool wxPySwigInstance_Check(PyObject* obj) {
-    return PyObject_HasAttrString(obj, "this") != 0;
-}
 
 //---------------------------------------------------------------------------
 
