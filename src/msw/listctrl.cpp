@@ -788,12 +788,15 @@ bool wxListCtrl::SetItem(wxListItem& info)
             data->lParam = info.m_data;
 
         // attributes
-        if (info.HasAttributes())
+        if ( info.HasAttributes() )
         {
-            if (data->attr)
-                *data->attr = *info.GetAttributes();
+            const wxListItemAttr& attrNew = *info.GetAttributes();
+
+            // don't overwrite the already set attributes if we have them
+            if ( data->attr )
+                data->attr->AssignFrom(attrNew);
             else
-                data->attr = new wxListItemAttr(*info.GetAttributes());
+                data->attr = new wxListItemAttr(attrNew);
         };
     };
 
