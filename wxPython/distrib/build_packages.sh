@@ -70,17 +70,13 @@ if [ "$OSTYPE" = "cygwin" ]; then
       UNI=-uni
   fi
   ./.make hybrid$UNI
-  
   # make tools for docs creation, etc.
   ./.make_tools
   
-  # update the language files
-  cd $WXWIN/locale
-  make allmo
-  
-  $TOOLS/Python$PY_VERSION/python `cygpath -d $WXWIN/wxPython/distrib/makemo.py`
-
   cd $WXWIN/wxPython
+
+  # update the language files
+  $TOOLS/Python$PY_VERSION/python `cygpath -d $WXWIN/wxPython/distrib/makemo.py`
 
   rm -rf build build.unicode
   rm -rf wx/*.pyd
