@@ -2671,9 +2671,8 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
             rect.bottom += pt.y ;
         }
 
-        DrawThemeFocusRect( &rect , bIsFocusEvent ) ;
-
         bool bIsFocusEvent = (event.GetEventType() == wxEVT_SET_FOCUS);
+        DrawThemeFocusRect( &rect , bIsFocusEvent ) ;
         if ( !bIsFocusEvent )
         {
             // as this erases part of the frame we have to redraw borders
