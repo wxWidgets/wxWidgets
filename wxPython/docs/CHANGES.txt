@@ -100,6 +100,9 @@ Applied patch #1238825 adding search backward capabilities to the
 demo.  Modified to use the up/down options in the wx.FindReplaceDialog
 instead of a separate menu item.
 
+Fix for bug #1266745 and #1387725 in the wx.FindReplaceDialog on MSW.
+Actually check we are using MSLU before doing the hack designed to
+workaround a bug in MSLU!
 
 
 
