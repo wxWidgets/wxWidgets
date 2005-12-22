@@ -238,7 +238,7 @@ LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
         // of UNICOWS.DLL send the correct UNICODE item after button press
         // and a bogus ANSI mode item right after this, so lets ignore
         // the second bogus message
-        if ( s_lastMsgFlags == pFR->Flags )
+        if ( wxUsingUnicowsDll() && s_lastMsgFlags == pFR->Flags )
         {
             s_lastMsgFlags = 0;
             return 0;
