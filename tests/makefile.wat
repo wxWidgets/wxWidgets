@@ -219,7 +219,7 @@ SETUPHDIR = &
 TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\include -i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\include -wx -wcd=549 -wcd=656 &
 	-wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -dwxUSE_GUI=0 $(CPPUNIT_CFLAGS) &
 	/fh=$(OBJS)\testprec_test.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
 	$(CXXFLAGS)
@@ -245,6 +245,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_scopeguardtest.obj &
 	$(OBJS)\test_strings.obj &
 	$(OBJS)\test_stdstrings.obj &
+	$(OBJS)\test_tokenizer.obj &
 	$(OBJS)\test_unicode.obj &
 	$(OBJS)\test_crt.obj &
 	$(OBJS)\test_bstream.obj &
@@ -261,7 +262,7 @@ TEST_OBJECTS =  &
 TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\include -i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\include -wx -wcd=549 -wcd=656 &
 	-wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\samples -dNOPCH &
 	$(CPPUNIT_CFLAGS) /fh=$(OBJS)\testprec_test_gui.pch $(__RTTIFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
@@ -381,6 +382,9 @@ $(OBJS)\test_strings.obj :  .AUTODEPEND .\strings\strings.cpp
 $(OBJS)\test_stdstrings.obj :  .AUTODEPEND .\strings\stdstrings.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_tokenizer.obj :  .AUTODEPEND .\strings\tokenizer.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_unicode.obj :  .AUTODEPEND .\strings\unicode.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
@@ -421,7 +425,7 @@ $(OBJS)\test_uris.obj :  .AUTODEPEND .\uris\uris.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_gui_sample.res :  .AUTODEPEND .\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\include -i=. $(__DLLFLAG_p) -i=.\..\samples $<
 
 $(OBJS)\test_gui_dummy.obj :  .AUTODEPEND .\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<

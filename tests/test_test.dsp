@@ -553,6 +553,10 @@ SOURCE=.\streams\textstreamtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\strings\tokenizer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strings\unicode.cpp
 # End Source File
 # Begin Source File
