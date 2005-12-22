@@ -416,7 +416,7 @@ public:
 %newgroup;
 
 // WXWIN_COMPATIBILITY_2_4
-
+#if 0
 class wxBookCtrlSizer: public wxSizer
 {
 public:
@@ -443,6 +443,6 @@ public:
 
 %pythoncode { NotebookSizer.__init__ = wx._deprecated(NotebookSizer.__init__, "NotebookSizer is no longer needed.") }
 %pythoncode { BookCtrlSizer.__init__ = wx._deprecated(BookCtrlSizer.__init__, "BookCtrlSizer is no longer needed.") }
-
+#endif
 
 //---------------------------------------------------------------------------

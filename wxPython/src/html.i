@@ -1111,7 +1111,8 @@ public:
 };
 
 //---------------------------------------------------------------------------
-
+// WXWIN_COMPATIBILITY_2_4
+#if 0
 struct wxHtmlContentsItem
 {
     %extend {
@@ -1122,7 +1123,7 @@ struct wxHtmlContentsItem
         wxHtmlBookRecord* GetBook() { return self->m_Book; }
     }
 };
-
+#endif
 //---------------------------------------------------------------------------
 
 class wxHtmlSearchStatus
@@ -1135,7 +1136,10 @@ public:
     int GetCurIndex();
     int GetMaxIndex();
     const wxString& GetName();
+    // WXWIN_COMPATIBILITY_2_4
+#if 0
     wxHtmlContentsItem* GetContentsItem();
+#endif
 };
 
 //---------------------------------------------------------------------------
@@ -1158,10 +1162,13 @@ public:
     // TODO: this one needs fixed...
     const wxHtmlBookRecArray& GetBookRecArray();
 
+    // WXWIN_COMPATIBILITY_2_4
+#if 0
     wxHtmlContentsItem* GetContents();
     int GetContentsCnt();
     wxHtmlContentsItem* GetIndex();
     int GetIndexCnt();
+#endif
 };
 
 //---------------------------------------------------------------------------

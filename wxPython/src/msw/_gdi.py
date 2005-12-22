@@ -719,14 +719,6 @@ class Bitmap(GDIObject):
         """CopyFromCursor(self, Cursor cursor) -> bool"""
         return _gdi_.Bitmap_CopyFromCursor(*args, **kwargs)
 
-    def GetQuality(*args, **kwargs):
-        """GetQuality(self) -> int"""
-        return _gdi_.Bitmap_GetQuality(*args, **kwargs)
-
-    def SetQuality(*args, **kwargs):
-        """SetQuality(self, int q)"""
-        return _gdi_.Bitmap_SetQuality(*args, **kwargs)
-
     def __nonzero__(self): return self.Ok() 
     def __eq__(*args, **kwargs):
         """__eq__(self, Bitmap other) -> bool"""

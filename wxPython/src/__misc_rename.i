@@ -139,7 +139,6 @@
 %rename(GetSingleChoice)                    wxGetSingleChoice;
 %rename(GetSingleChoiceIndex)               wxGetSingleChoiceIndex;
 %rename(MessageBox)                         wxMessageBox;
-%rename(GetNumberFromUser)                  wxGetNumberFromUser;
 %rename(ColourDisplay)                      wxColourDisplay;
 %rename(DisplayDepth)                       wxDisplayDepth;
 %rename(GetDisplayDepth)                    wxGetDisplayDepth;

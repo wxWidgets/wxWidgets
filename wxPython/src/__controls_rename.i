@@ -136,8 +136,6 @@
 %rename(CHB_ALIGN_MASK)                     wxCHB_ALIGN_MASK;
 %rename(Choicebook)                         wxChoicebook;
 %rename(ChoicebookEvent)                    wxChoicebookEvent;
-%rename(BookCtrlSizer)                      wxBookCtrlSizer;
-%rename(NotebookSizer)                      wxNotebookSizer;
 %rename(TOOL_STYLE_BUTTON)                  wxTOOL_STYLE_BUTTON;
 %rename(TOOL_STYLE_SEPARATOR)               wxTOOL_STYLE_SEPARATOR;
 %rename(TOOL_STYLE_CONTROL)                 wxTOOL_STYLE_CONTROL;

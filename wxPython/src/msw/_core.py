@@ -2215,6 +2215,48 @@ def ImageHistogram_MakeKey(*args, **kwargs):
     """
     return _core_.ImageHistogram_MakeKey(*args, **kwargs)
 
+class Image_RGBValue(object):
+    """Proxy of C++ Image_RGBValue class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxImage_RGBValue instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(self, byte r=0, byte g=0, byte b=0) -> Image_RGBValue"""
+        newobj = _core_.new_Image_RGBValue(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    red = property(_core_.Image_RGBValue_red_get, _core_.Image_RGBValue_red_set)
+    green = property(_core_.Image_RGBValue_green_get, _core_.Image_RGBValue_green_set)
+    blue = property(_core_.Image_RGBValue_blue_get, _core_.Image_RGBValue_blue_set)
+
+class Image_RGBValuePtr(Image_RGBValue):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Image_RGBValue
+_core_.Image_RGBValue_swigregister(Image_RGBValuePtr)
+
+class Image_HSVValue(object):
+    """Proxy of C++ Image_HSVValue class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxImage_HSVValue instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(self, double h=0.0, double s=0.0, double v=0.0) -> Image_HSVValue"""
+        newobj = _core_.new_Image_HSVValue(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    hue = property(_core_.Image_HSVValue_hue_get, _core_.Image_HSVValue_hue_set)
+    saturation = property(_core_.Image_HSVValue_saturation_get, _core_.Image_HSVValue_saturation_set)
+    value = property(_core_.Image_HSVValue_value_get, _core_.Image_HSVValue_value_set)
+
+class Image_HSVValuePtr(Image_HSVValue):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Image_HSVValue
+_core_.Image_HSVValue_swigregister(Image_HSVValuePtr)
+
 class Image(Object):
     """
     A platform-independent image class.  An image can be created from
@@ -2892,6 +2934,25 @@ class Image(Object):
         """ConvertToMonoBitmap(self, byte red, byte green, byte blue) -> Bitmap"""
         return _core_.Image_ConvertToMonoBitmap(*args, **kwargs)
 
+    def RotateHue(*args, **kwargs):
+        """
+        RotateHue(self, double angle)
+
+        Rotates the hue of each pixel of the image. Hue is a double in the
+        range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
+        """
+        return _core_.Image_RotateHue(*args, **kwargs)
+
+    def RGBtoHSV(*args, **kwargs):
+        """RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue"""
+        return _core_.Image_RGBtoHSV(*args, **kwargs)
+
+    RGBtoHSV = staticmethod(RGBtoHSV)
+    def HSVtoRGB(*args, **kwargs):
+        """HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue"""
+        return _core_.Image_HSVtoRGB(*args, **kwargs)
+
+    HSVtoRGB = staticmethod(HSVtoRGB)
     def __nonzero__(self): return self.Ok() 
 
 class ImagePtr(Image):
@@ -3029,6 +3090,14 @@ def Image_GetImageExtWildcard(*args, **kwargs):
     dialog boxes.
     """
     return _core_.Image_GetImageExtWildcard(*args, **kwargs)
+
+def Image_RGBtoHSV(*args, **kwargs):
+    """Image_RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue"""
+    return _core_.Image_RGBtoHSV(*args, **kwargs)
+
+def Image_HSVtoRGB(*args, **kwargs):
+    """Image_HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue"""
+    return _core_.Image_HSVtoRGB(*args, **kwargs)
 
 def InitAllImageHandlers():
     """
@@ -7896,22 +7965,6 @@ class Window(EvtHandler):
         Is the window in the process of being deleted?
         """
         return _core_.Window_IsBeingDeleted(*args, **kwargs)
-
-    def SetTitle(*args, **kwargs):
-        """
-        SetTitle(self, String title)
-
-        Sets the window's title. Applicable only to frames and dialogs.
-        """
-        return _core_.Window_SetTitle(*args, **kwargs)
-
-    def GetTitle(*args, **kwargs):
-        """
-        GetTitle(self) -> String
-
-        Gets the window's title. Applicable only to frames and dialogs.
-        """
-        return _core_.Window_GetTitle(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
         """

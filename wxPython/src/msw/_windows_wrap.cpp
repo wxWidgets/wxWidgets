@@ -593,7 +593,7 @@ typedef struct swig_const_info {
 #define SWIG_ConvertPtr(obj, pp, type, flags)    SWIG_Python_ConvertPtr(obj, pp, type, flags)
 #define SWIG_NewPointerObj(p, type, flags)       SWIG_Python_NewPointerObj(p, type, flags)
 #define SWIG_MustGetPtr(p, type, argnum, flags)  SWIG_Python_MustGetPtr(p, type, argnum, flags)
- 
+
 
 /* Python-specific SWIG API */
 #define SWIG_ConvertPacked(obj, ptr, sz, ty, flags)   SWIG_Python_ConvertPacked(obj, ptr, sz, ty, flags)
@@ -654,7 +654,7 @@ PySwigObject_print(PySwigObject *v, FILE *fp, int flags)
     return 1; 
   }
 }
-  
+
 SWIGRUNTIME PyObject *
 PySwigObject_repr(PySwigObject *v)
 {
@@ -720,7 +720,7 @@ SWIGRUNTIME PyTypeObject*
 PySwigObject_GetType() {
   static char PySwigObject_Type__doc__[] = 
     "Swig object carries a C/C++ instance pointer";
-  
+
   static PyNumberMethods PySwigObject_as_number = {
     (binaryfunc)0, /*nb_add*/
     (binaryfunc)0, /*nb_subtract*/
@@ -854,7 +854,7 @@ PySwigPacked_print(PySwigPacked *v, FILE *fp, int flags)
   fputs(">", fp);
   return 0; 
 }
-  
+
 SWIGRUNTIME PyObject *
 PySwigPacked_repr(PySwigPacked *v)
 {
@@ -903,7 +903,7 @@ PySwigPacked_GetType() {
   static char PySwigPacked_Type__doc__[] = 
     "Swig object carries a C/C++ instance pointer";
   static int type_init = 0;
-  
+
   static PyTypeObject PySwigPacked_Type;
   if (!type_init) {
     PyTypeObject tmp = {
@@ -950,8 +950,8 @@ PySwigPacked_GetType() {
     PySwigPacked_Type = tmp;
     type_init = 1;
   }
-  
-      
+
+
 
   return &PySwigPacked_Type;
 }
@@ -1110,7 +1110,7 @@ SWIG_Python_ConvertPtr(PyObject *obj, void **ptr, swig_type_info *ty, int flags)
   int    newref = 0;
   PyObject  *pyobj = 0;
   void *vptr;
-  
+
   if (!obj) return 0;
   if (obj == Py_None) {
     *ptr = 0;
@@ -1615,7 +1615,7 @@ SWIG_Check_bool(PyObject* obj)
 }
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,66,SWIG_define@*/
+  /*@C:\\SWIG-1.3.24\\Lib\\python\\pymacros.swg,66,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 
@@ -1683,7 +1683,7 @@ SWIG_Check_double(PyObject* obj)
 }
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,66,SWIG_define@*/
+  /*@C:\\SWIG-1.3.24\\Lib\\python\\pymacros.swg,66,SWIG_define@*/
 #define SWIG_From_double PyFloat_FromDouble
 /*@@*/
 
@@ -1694,7 +1694,7 @@ SWIG_Check_double(PyObject* obj)
 static void wxTopLevelWindow_MacSetMetalAppearance(wxTopLevelWindow *self,bool on){ /*wxPyRaiseNotImplemented();*/ }
 static bool wxTopLevelWindow_MacGetMetalAppearance(wxTopLevelWindow const *self){ /*wxPyRaiseNotImplemented();*/ return false; }
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,66,SWIG_define@*/
+  /*@C:\\SWIG-1.3.24\\Lib\\python\\pymacros.swg,66,SWIG_define@*/
 #define SWIG_From_long PyInt_FromLong
 /*@@*/
 
@@ -21510,620 +21510,6 @@ static PyObject *_wrap_PrintData_SetPrivData(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_PrintData_GetPrinterCommand(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPrinterCommand",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxString const &_result_ref = (arg1)->GetPrinterCommand();
-            result = (wxString *) &_result_ref;
-        }
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-#if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
-#else
-        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
-#endif
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_GetPrinterOptions(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPrinterOptions",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxString const &_result_ref = (arg1)->GetPrinterOptions();
-            result = (wxString *) &_result_ref;
-        }
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-#if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
-#else
-        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
-#endif
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_GetPreviewCommand(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPreviewCommand",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxString const &_result_ref = (arg1)->GetPreviewCommand();
-            result = (wxString *) &_result_ref;
-        }
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-#if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
-#else
-        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
-#endif
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_GetFontMetricPath(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetFontMetricPath",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxString const &_result_ref = (arg1)->GetFontMetricPath();
-            result = (wxString *) &_result_ref;
-        }
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-#if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
-#else
-        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
-#endif
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_GetPrinterScaleX(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    double result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPrinterScaleX",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (double)(arg1)->GetPrinterScaleX();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = SWIG_From_double((double)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_GetPrinterScaleY(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    double result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPrinterScaleY",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (double)(arg1)->GetPrinterScaleY();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = SWIG_From_double((double)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_GetPrinterTranslateX(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    long result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPrinterTranslateX",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (long)(arg1)->GetPrinterTranslateX();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = SWIG_From_long((long)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_GetPrinterTranslateY(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    long result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetPrinterTranslateY",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (long)(arg1)->GetPrinterTranslateY();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = SWIG_From_long((long)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPrinterCommand(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *arg2 = 0 ;
-    bool temp2 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "command", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPrinterCommand",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPrinterCommand((wxString const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPrinterOptions(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *arg2 = 0 ;
-    bool temp2 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "options", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPrinterOptions",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPrinterOptions((wxString const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPreviewCommand(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *arg2 = 0 ;
-    bool temp2 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "command", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPreviewCommand",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPreviewCommand((wxString const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetFontMetricPath(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    wxString *arg2 = 0 ;
-    bool temp2 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "path", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetFontMetricPath",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetFontMetricPath((wxString const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPrinterScaleX(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    double arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "x", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPrinterScaleX",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (double)(SWIG_As_double(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPrinterScaleX(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPrinterScaleY(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    double arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "y", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPrinterScaleY",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (double)(SWIG_As_double(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPrinterScaleY(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPrinterScaling(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    double arg2 ;
-    double arg3 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "x",(char *) "y", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PrintData_SetPrinterScaling",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (double)(SWIG_As_double(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        arg3 = (double)(SWIG_As_double(obj2)); 
-        if (SWIG_arg_fail(3)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPrinterScaling(arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPrinterTranslateX(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    long arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "x", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPrinterTranslateX",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (long)(SWIG_As_long(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPrinterTranslateX(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPrinterTranslateY(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    long arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "y", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetPrinterTranslateY",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (long)(SWIG_As_long(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPrinterTranslateY(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintData_SetPrinterTranslation(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintData *arg1 = (wxPrintData *) 0 ;
-    long arg2 ;
-    long arg3 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "x",(char *) "y", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PrintData_SetPrinterTranslation",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (long)(SWIG_As_long(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        arg3 = (long)(SWIG_As_long(obj2)); 
-        if (SWIG_arg_fail(3)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPrinterTranslation(arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject * PrintData_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -23732,65 +23118,6 @@ static PyObject *_wrap_PrintDialogData_GetPrintToFile(PyObject *, PyObject *args
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintDialogData_GetSetupDialog(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintDialogData *arg1 = (wxPrintDialogData *) 0 ;
-    bool result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintDialogData_GetSetupDialog",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintDialogData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPrintDialogData const *)arg1)->GetSetupDialog();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PrintDialogData_SetSetupDialog(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPrintDialogData *arg1 = (wxPrintDialogData *) 0 ;
-    bool arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "flag", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintDialogData_SetSetupDialog",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPrintDialogData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (bool)(SWIG_As_bool(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetSetupDialog(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -28515,24 +27842,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_SetFilename", (PyCFunction) _wrap_PrintData_SetFilename, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_GetPrivData", (PyCFunction) _wrap_PrintData_GetPrivData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_SetPrivData", (PyCFunction) _wrap_PrintData_SetPrivData, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_GetPrinterCommand", (PyCFunction) _wrap_PrintData_GetPrinterCommand, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_GetPrinterOptions", (PyCFunction) _wrap_PrintData_GetPrinterOptions, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_GetPreviewCommand", (PyCFunction) _wrap_PrintData_GetPreviewCommand, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_GetFontMetricPath", (PyCFunction) _wrap_PrintData_GetFontMetricPath, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_GetPrinterScaleX", (PyCFunction) _wrap_PrintData_GetPrinterScaleX, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_GetPrinterScaleY", (PyCFunction) _wrap_PrintData_GetPrinterScaleY, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_GetPrinterTranslateX", (PyCFunction) _wrap_PrintData_GetPrinterTranslateX, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_GetPrinterTranslateY", (PyCFunction) _wrap_PrintData_GetPrinterTranslateY, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetPrinterCommand", (PyCFunction) _wrap_PrintData_SetPrinterCommand, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetPrinterOptions", (PyCFunction) _wrap_PrintData_SetPrinterOptions, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetPreviewCommand", (PyCFunction) _wrap_PrintData_SetPreviewCommand, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetFontMetricPath", (PyCFunction) _wrap_PrintData_SetFontMetricPath, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetPrinterScaleX", (PyCFunction) _wrap_PrintData_SetPrinterScaleX, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetPrinterScaleY", (PyCFunction) _wrap_PrintData_SetPrinterScaleY, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetPrinterScaling", (PyCFunction) _wrap_PrintData_SetPrinterScaling, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetPrinterTranslateX", (PyCFunction) _wrap_PrintData_SetPrinterTranslateX, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetPrinterTranslateY", (PyCFunction) _wrap_PrintData_SetPrinterTranslateY, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintData_SetPrinterTranslation", (PyCFunction) _wrap_PrintData_SetPrinterTranslation, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintData_swigregister", PrintData_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PageSetupDialogData", _wrap_new_PageSetupDialogData, METH_VARARGS, NULL},
 	 { (char *)"delete_PageSetupDialogData", (PyCFunction) _wrap_delete_PageSetupDialogData, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28584,8 +27893,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintDialogData_GetSelection", (PyCFunction) _wrap_PrintDialogData_GetSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintDialogData_GetCollate", (PyCFunction) _wrap_PrintDialogData_GetCollate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintDialogData_GetPrintToFile", (PyCFunction) _wrap_PrintDialogData_GetPrintToFile, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintDialogData_GetSetupDialog", (PyCFunction) _wrap_PrintDialogData_GetSetupDialog, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PrintDialogData_SetSetupDialog", (PyCFunction) _wrap_PrintDialogData_SetSetupDialog, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintDialogData_SetFromPage", (PyCFunction) _wrap_PrintDialogData_SetFromPage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintDialogData_SetToPage", (PyCFunction) _wrap_PrintDialogData_SetToPage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PrintDialogData_SetMinPage", (PyCFunction) _wrap_PrintDialogData_SetMinPage, METH_VARARGS | METH_KEYWORDS, NULL},

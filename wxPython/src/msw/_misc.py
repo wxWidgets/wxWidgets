@@ -348,7 +348,7 @@ def GetOsDescription(*args, **kwargs):
     return _misc_.GetOsDescription(*args, **kwargs)
 
 def GetFreeMemory(*args, **kwargs):
-    """GetFreeMemory() -> long"""
+    """GetFreeMemory() -> wxMemorySize"""
     return _misc_.GetFreeMemory(*args, **kwargs)
 SHUTDOWN_POWEROFF = _misc_.SHUTDOWN_POWEROFF
 SHUTDOWN_REBOOT = _misc_.SHUTDOWN_REBOOT
@@ -485,14 +485,6 @@ def MessageBox(*args, **kwargs):
         int y=-1) -> int
     """
     return _misc_.MessageBox(*args, **kwargs)
-
-def GetNumberFromUser(*args, **kwargs):
-    """
-    GetNumberFromUser(String message, String prompt, String caption, long value, 
-        long min=0, long max=100, Window parent=None, 
-        Point pos=DefaultPosition) -> long
-    """
-    return _misc_.GetNumberFromUser(*args, **kwargs)
 
 def ColourDisplay(*args, **kwargs):
     """ColourDisplay() -> bool"""
