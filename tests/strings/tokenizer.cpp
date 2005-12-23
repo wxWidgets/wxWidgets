@@ -75,6 +75,10 @@ gs_testData[] =
     { _T(""),                   _T(" "),              wxTOKEN_DEFAULT,       0 },
     { _T(""),                   _T(" "),              wxTOKEN_RET_EMPTY,     0 },
     { _T(""),                   _T(" "),              wxTOKEN_RET_EMPTY_ALL, 0 },
+    { _T(":"),                  _T(":"),              wxTOKEN_RET_EMPTY,     1 },
+    { _T(":"),                  _T(":"),              wxTOKEN_RET_EMPTY_ALL, 2 },
+    { _T("::"),                 _T(":"),              wxTOKEN_RET_EMPTY,     1 },
+    { _T("::"),                 _T(":"),              wxTOKEN_RET_EMPTY_ALL, 3 },
 
     { _T("Hello, world"),       _T(" "),              wxTOKEN_DEFAULT,       2 },
     { _T("Hello,   world  "),   _T(" "),              wxTOKEN_DEFAULT,       2 },
