@@ -1602,9 +1602,22 @@ bool wxPyInstance_Check(PyObject* obj) {
 
 
 
-// This one checks if the object is an instance of a SWIG proxy class 
+// This one checks if the object is an instance of a SWIG proxy class (it has
+// a .this attribute, and the .this attribute is a PySwigObject.)
 bool wxPySwigInstance_Check(PyObject* obj) {
-    return PySwigObject_Check(obj) != 0;
+    static PyObject* this_str = NULL;
+    if (this_str == NULL)
+        this_str = PyString_FromString("this");
+    
+    PyObject* this_attr = PyObject_GetAttr(obj, this_str);
+    if (this_attr) {
+        bool retval = (PySwigObject_Check(this_attr) != 0);
+        Py_DECREF(this_attr);
+        return retval;
+    }
+
+    PyErr_Clear();
+    return false;
 }
  
 
