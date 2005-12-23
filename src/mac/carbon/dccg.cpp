@@ -595,7 +595,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
 
             const float dashUnit = penWidth < 1.0 ? 1.0 : penWidth;
   
-            const float dotted[] = { dashUnit  , dashUnit + 2.0 };
+            const float dotted[] = { dashUnit , dashUnit + 2.0 };
             const float short_dashed[] = { 9.0 , 6.0 };
             const float dashed[] = { 19.0 , 9.0 };
             const float dotted_dashed[] = { 9.0 , 6.0 , 3.0 , 3.0 };
@@ -631,7 +631,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                     if ((dashes != NULL) && (count > 0))
                     {
                         userLengths = new float[count] ;
-                        for( int i = 0 ; i < count ; ++i )
+                        for ( int i = 0 ; i < count ; ++i )
                         {
                             userLengths[i] = dashes[i] * dashUnit ;
 
@@ -779,13 +779,15 @@ void AddRoundedRectToPath(CGContextRef c, CGRect rect, float ovalWidth,
     CGContextSaveGState(c);
     CGContextTranslateCTM(c, CGRectGetMinX(rect), CGRectGetMinY(rect));
     CGContextScaleCTM(c, ovalWidth, ovalHeight);
+
     fw = CGRectGetWidth(rect) / ovalWidth;
     fh = CGRectGetHeight(rect) / ovalHeight;
-    CGContextMoveToPoint(c, fw, fh/2);
-    CGContextAddArcToPoint(c, fw, fh, fw/2, fh, 1);
-    CGContextAddArcToPoint(c, 0, fh, 0, fh/2, 1);
-    CGContextAddArcToPoint(c, 0, 0, fw/2, 0, 1);
-    CGContextAddArcToPoint(c, fw, 0, fw, fh/2, 1);
+
+    CGContextMoveToPoint(c, fw, fh / 2);
+    CGContextAddArcToPoint(c, fw, fh, fw / 2, fh, 1);
+    CGContextAddArcToPoint(c, 0, fh, 0, fh / 2, 1);
+    CGContextAddArcToPoint(c, 0, 0, fw / 2, 0, 1);
+    CGContextAddArcToPoint(c, fw, 0, fw, fh / 2, 1);
     CGContextClosePath(c);
     CGContextRestoreGState(c);
 } 
@@ -1319,7 +1321,7 @@ void wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
     CGContextScaleCTM( ctx , 1 , -1 ) ;
     if ( fill )
         CGContextMoveToPoint( ctx , 0 , 0 ) ;
-    CGContextAddArc( ctx, 0, 0 , rad , DegToRad(sa), DegToRad(ea), 0);
+    CGContextAddArc( ctx, 0, 0 , rad , DegToRad(sa), DegToRad(ea), 0 );
     if ( fill )
         CGContextAddLineToPoint( ctx , 0 , 0 ) ;
     CGContextRestoreGState( ctx ) ;
@@ -1357,11 +1359,11 @@ void wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     CGContextRef ctx = mctx->GetNativeContext() ;
 
     CGContextSaveGState( ctx ) ;
-    CGContextTranslateCTM( ctx, xx + ww / 2, yy + hh / 2);
+    CGContextTranslateCTM( ctx, xx + ww / 2, yy + hh / 2 );
     CGContextScaleCTM( ctx , 1 * ww / 2 , -1 * hh / 2 ) ;
     if ( fill )
         CGContextMoveToPoint( ctx , 0 , 0 ) ;
-    CGContextAddArc( ctx, 0, 0, 1, DegToRad(sa), DegToRad(ea), 0);
+    CGContextAddArc( ctx, 0, 0, 1, DegToRad(sa), DegToRad(ea), 0 );
     if ( fill )
         CGContextAddLineToPoint( ctx , 0 , 0 ) ;
     CGContextRestoreGState( ctx ) ;
@@ -1561,7 +1563,7 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
-    AddRoundedRectToPath( ctx  , CGRectMake( xx , yy , ww , hh ) , 16 ,16  ) ;
+    AddRoundedRectToPath( ctx , CGRectMake( xx , yy , ww , hh ) , 16 ,16  ) ;
     CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
 }
 
@@ -1595,9 +1597,9 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     wxMacCGContext* mctx = ((wxMacCGContext*) m_graphicContext) ;
     CGContextRef ctx = mctx->GetNativeContext() ;
     CGContextSaveGState( ctx ) ;
-    CGContextTranslateCTM( ctx, xx + ww / 2, yy + hh / 2);
+    CGContextTranslateCTM( ctx, xx + ww / 2, yy + hh / 2 );
     CGContextScaleCTM( ctx , ww / 2 , hh / 2 ) ;
-    CGContextAddArc( ctx, 0, 0, 1,  0 , 2 * M_PI , 0);
+    CGContextAddArc( ctx, 0, 0, 1, 0 , 2 * M_PI , 0 );
     CGContextRestoreGState( ctx ) ;
     CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
 }
@@ -1609,7 +1611,7 @@ bool wxDC::CanDrawBitmap(void) const
 
 bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                    wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask,
-                   wxCoord xsrcMask,  wxCoord ysrcMask )
+                   wxCoord xsrcMask, wxCoord ysrcMask )
 {
     wxCHECK_MSG( Ok(), false, wxT("wxDC(cg)::DoBlit - invalid DC") );
     wxCHECK_MSG( source->Ok(), false, wxT("wxDC(cg)::DoBlit - invalid source DC") );
@@ -1624,13 +1626,13 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     }
 
     wxCoord yysrc = source->YLOG2DEVMAC(ysrc) ;
-    wxCoord xxsrc = source->XLOG2DEVMAC(xsrc)  ;
-    wxCoord wwsrc = source->XLOG2DEVREL(width ) ;
+    wxCoord xxsrc = source->XLOG2DEVMAC(xsrc) ;
+    wxCoord wwsrc = source->XLOG2DEVREL(width) ;
     wxCoord hhsrc = source->YLOG2DEVREL(height) ;
     
     wxCoord yydest = YLOG2DEVMAC(ydest) ;
     wxCoord xxdest = XLOG2DEVMAC(xdest) ;
-    wxCoord wwdest = XLOG2DEVREL(width ) ;
+    wxCoord wwdest = XLOG2DEVREL(width) ;
     wxCoord hhdest = YLOG2DEVREL(height) ;
     
     wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>(source) ;
@@ -1786,7 +1788,7 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
     
     Rect rect ;
-    
+
     if ( m_backgroundMode == wxSOLID )
     {
         wxGraphicPath* path = m_graphicContext->CreatePath() ;
@@ -1951,7 +1953,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     converter.WC2MB( (char*) ubuf , text.wc_str(), unicharlen + 2 ) ;
 #else
     const wxWCharBuffer wchar = text.wc_str( wxConvLocal ) ;
-    size_t unicharlen = converter.WC2MB( NULL , wchar.data()  , 0 ) ;
+    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
     ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
     converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
 #endif
@@ -2011,7 +2013,7 @@ void wxDC::Clear(void)
     wxCHECK_RET( Ok(), wxT("wxDC(cg)::Clear - invalid DC") );
 
     if (m_backgroundBrush.Ok() && m_backgroundBrush.GetStyle() != wxTRANSPARENT)
-    {      
+    {
         HIRect rect = CGRectMake( -10000 , -10000 , 20000 , 20000 ) ;
         CGContextRef cg = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
         switch ( m_backgroundBrush.MacGetBrushKind() )
@@ -2051,12 +2053,12 @@ void wxDC::Clear(void)
                         HIThemeBackgroundDrawInfo drawInfo ;
                         drawInfo.version = 0 ;
                         drawInfo.state = kThemeStateActive ;
-                        drawInfo.kind = m_backgroundBrush.MacGetThemeBackground(NULL) ;
+                        drawInfo.kind = m_backgroundBrush.MacGetThemeBackground( NULL ) ;
                         if ( drawInfo.kind == kThemeBackgroundMetal )
-                            HIThemeDrawBackground( &rect , &drawInfo, cg ,
-                                kHIThemeOrientationNormal) ;
-                            HIThemeApplyBackground( &rect , &drawInfo, cg ,
-                                kHIThemeOrientationNormal) ;
+                        {
+                            HIThemeDrawBackground( &rect, &drawInfo, cg, kHIThemeOrientationNormal ) ;
+                            HIThemeApplyBackground( &rect, &drawInfo, cg, kHIThemeOrientationNormal ) ;
+                        }
                     }
 #endif
                 }
@@ -2064,6 +2066,9 @@ void wxDC::Clear(void)
 
             case kwxMacBrushColour :
                 {
+                    // FIXME: doesn't correctly render stippled brushes !!
+                    // FIXME: should this be replaced by ::SetBrush() ??
+
                     RGBColor col = MAC_WXCOLORREF( m_backgroundBrush.GetColour().GetPixel()) ;
                     CGContextSetRGBFillColor( cg , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
                     CGContextFillRect(cg, rect);
@@ -2093,10 +2098,11 @@ void wxDC::MacInstallFont() const
 
     if ( m_font.Ok() )
     {
-        OSStatus status = noErr ;
+        OSStatus status ;
+
         status = ATSUCreateAndCopyStyle( (ATSUStyle) m_font.MacGetATSUStyle() , (ATSUStyle*) &m_macATSUIStyle ) ;
 
-        wxASSERT_MSG( status == noErr, wxT("couldn't set create ATSU style") ) ;
+        wxASSERT_MSG( status == noErr, wxT("couldn't create ATSU style") ) ;
 
         Fixed atsuSize = IntToFixed( int(m_scaleY * m_font.MacGetFontSize()) ) ;
         RGBColor atsuColor = MAC_WXCOLORREF( m_textForegroundColour.GetPixel() ) ;
@@ -2110,19 +2116,17 @@ void wxDC::MacInstallFont() const
                 sizeof( Fixed ) ,
                 sizeof( RGBColor ) ,
         } ;
-        // Boolean kTrue = true ;
-        // Boolean kFalse = false ;
-        // ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
         ATSUAttributeValuePtr atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
         {
                 &atsuSize ,
                 &atsuColor ,
         } ;
 
-        status = ::ATSUSetAttributes((ATSUStyle)m_macATSUIStyle, sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
+        status = ::ATSUSetAttributes(
+            (ATSUStyle)m_macATSUIStyle, sizeof(atsuTags) / sizeof(ATSUAttributeTag) ,
             atsuTags, atsuSizes, atsuValues);
 
-        wxASSERT_MSG( status == noErr , wxT("couldn't Modify ATSU style") ) ;
+        wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") ) ;
     }
 }
 
