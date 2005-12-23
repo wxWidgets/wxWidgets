@@ -93,10 +93,10 @@ gs_testData[] =
     { _T("1:2::3:"),            _T(":"),              wxTOKEN_RET_DELIMS,    4 },
     { _T("1:2::3:"),            _T(":"),              wxTOKEN_STRTOK,        3 },
 
-    { _T("1:2::3::"),           _T(":"),              wxTOKEN_DEFAULT,       5 },
+    { _T("1:2::3::"),           _T(":"),              wxTOKEN_DEFAULT,       4 },
     { _T("1:2::3::"),           _T(":"),              wxTOKEN_RET_EMPTY,     4 },
     { _T("1:2::3::"),           _T(":"),              wxTOKEN_RET_EMPTY_ALL, 6 },
-    { _T("1:2::3::"),           _T(":"),              wxTOKEN_RET_DELIMS,    5 },
+    { _T("1:2::3::"),           _T(":"),              wxTOKEN_RET_DELIMS,    4 },
     { _T("1:2::3::"),           _T(":"),              wxTOKEN_STRTOK,        3 },
 
     { _T("1 \t3\t4  6   "),     wxDEFAULT_DELIMITERS, wxTOKEN_DEFAULT,       4 },
@@ -107,6 +107,13 @@ gs_testData[] =
     { _T("01/02/99"),           _T("/-"),             wxTOKEN_DEFAULT,       3 },
     { _T("01-02/99"),           _T("/-"),             wxTOKEN_RET_DELIMS,    3 },
 };
+
+// helper function returning the string showing the index for which the test
+// fails in the diagnostic message
+static std::string Nth(size_t n)
+{
+    return wxString::Format(_T("for loop index %lu"), (unsigned long)n).mb_str();
+}
 
 // ----------------------------------------------------------------------------
 // the tests
@@ -119,7 +126,7 @@ void TokenizerTestCase::GetCount()
         const TokenizerTestData& ttd = gs_testData[n];
 
         wxStringTokenizer tkz(ttd.str, ttd.delims, ttd.mode);
-        CPPUNIT_ASSERT_EQUAL( ttd.count, tkz.CountTokens() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( Nth(n), ttd.count, tkz.CountTokens() );
 
         size_t count = 0;
         while ( tkz.HasMoreTokens() )
@@ -128,7 +135,7 @@ void TokenizerTestCase::GetCount()
             count++;
         }
 
-        CPPUNIT_ASSERT_EQUAL( ttd.count, count );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( Nth(n), ttd.count, count );
     }
 }
 
