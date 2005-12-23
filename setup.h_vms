@@ -53,7 +53,7 @@
 #define HAVE_SSIZE_T 1
 
 /* Define if you have the ANSI C header files.  */
-#define STDC_HEADERS
+#define STDC_HEADERS 1
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef uid_t
@@ -962,7 +962,12 @@
 #define HAVE_GETSERVBYNAME 1
 
 /* Define if you have the gmtime_r function.  */
+#if __CRTL_VER >= 70000000 && \
+    (defined _POSIX_C_SOURCE || !defined _ANSI_C_SOURCE)
+#define HAVE_GMTIME_R 1
+#else
 #undef HAVE_GMTIME_R
+#endif
 
 /* Define if you have the inet_addr function.  */
 #define HAVE_INET_ADDR 1
@@ -971,7 +976,12 @@
 #define HAVE_INET_ATON 1
 
 /* Define if you have the localtime_r function.  */
+#if __CRTL_VER >= 70000000 && \
+    (defined _POSIX_C_SOURCE || !defined _ANSI_C_SOURCE)
+#define HAVE_LOCALTIME_R 1
+#else
 #undef HAVE_LOCALTIME_R
+#endif
 
 /* Define if you have the mktemp function.  */
 #define HAVE_MKTEMP 1
