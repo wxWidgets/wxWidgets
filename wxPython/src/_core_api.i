@@ -131,8 +131,7 @@ bool wxPyInstance_Check(PyObject* obj) {
 
 
 
-// This one checks if the object is an instance of a SWIG proxy class (it has
-// a .this attribute)
+// This one checks if the object is an instance of a SWIG proxy class 
 bool wxPySwigInstance_Check(PyObject* obj) {
     return PySwigObject_Check(obj) != 0;
 }
