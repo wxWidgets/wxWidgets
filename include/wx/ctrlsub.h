@@ -197,6 +197,7 @@ protected:
     virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
 
 private:
+    DECLARE_ABSTRACT_CLASS(wxControlWithItems)
     DECLARE_NO_COPY_CLASS(wxControlWithItems)
 };
 

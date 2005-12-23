@@ -31,6 +31,8 @@
     #include "wx/arrstr.h"
 #endif
 
+IMPLEMENT_ABSTRACT_CLASS(wxControlWithItems, wxControl)
+
 // ============================================================================
 // wxItemContainerImmutable implementation
 // ============================================================================
