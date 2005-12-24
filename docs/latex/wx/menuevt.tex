@@ -54,7 +54,8 @@ Constructor.
 \constfunc{wxMenu *}{GetMenu}{\void}
 
 Returns the menu which is being opened or closed. This method should only be
-used with the \texttt{OPEN} and \texttt{CLOSE} events.
+used with the \texttt{OPEN} and \texttt{CLOSE} events and even for them the
+returned pointer may be \NULL in some ports.
 
 
 \membersection{wxMenuEvent::GetMenuId}\label{wxmenueventgetmenuid}
