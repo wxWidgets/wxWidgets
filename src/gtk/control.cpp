@@ -208,7 +208,11 @@ wxString wxControl::GTKRemoveMnemonics(const wxString& label)
 /* static */
 wxString wxControl::GTKConvertMnemonics(const wxString& label)
 {
+#ifdef __WXGTK20__
     return GTKProcessMnemonics(label, MNEMONICS_CONVERT);
+#else
+    return GTKRemoveMnemonics(label);
+#endif
 }
 
 // ----------------------------------------------------------------------------
