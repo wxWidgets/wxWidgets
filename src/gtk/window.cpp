@@ -238,9 +238,9 @@ wxWindowGTK *g_focusWindowLast = (wxWindowGTK*) NULL;
 wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 
 // hack: we need something to pass to gtk_menu_popup, so we store the time of
-// the last click here
+// the last click here (extern: used from gtk/menu.cpp)
 #ifndef __WXGTK20__
-static guint32 gs_timeLastClick = 0;
+guint32 wxGtkTimeLastClick = 0;
 #endif
 
 extern bool g_mainThreadLocked;
@@ -1802,7 +1802,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
 #ifndef __WXGTK20__
-    gs_timeLastClick = gdk_event->time;
+    wxGtkTimeLastClick = gdk_event->time;
 
     if (event_type == wxEVT_LEFT_DCLICK)
     {

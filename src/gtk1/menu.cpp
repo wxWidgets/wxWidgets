@@ -44,6 +44,11 @@
 // we use normal item but with a special id for the menu title
 static const int wxGTK_TITLE_ID = -3;
 
+// defined in window.cpp
+#ifndef __WXGTK20__
+    extern guint32 wxGtkTimeLastClick;
+#endif
+
 //-----------------------------------------------------------------------------
 // idle system
 //-----------------------------------------------------------------------------
@@ -1624,7 +1629,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 #ifdef __WXGTK20__
                   gtk_get_current_event_time()
 #else
-                  gs_timeLastClick              // the time of activation
+                  wxGtkTimeLastClick            // the time of activation
 #endif
                 );
 

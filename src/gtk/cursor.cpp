@@ -69,7 +69,7 @@ wxCursor::wxCursor( int cursorId )
         case wxCURSOR_BLANK:
             {
                 static const gchar bits[] = { 0 };
-                static const GdkColor color = { 0, 0, 0, 0 };
+                static /* const -- not in GTK1 */ GdkColor color = { 0, 0, 0, 0 };
 
                 GdkPixmap *pixmap = gdk_bitmap_create_from_data(NULL, bits, 1, 1);
                 M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(pixmap,

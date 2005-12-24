@@ -1364,13 +1364,16 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
 
 void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
 {
+#ifdef __WXGTK20__
     // Store which styles were changed
     long styleChanges = style ^ m_windowStyle;
+#endif
 
     // Process wxWindow styles. This also updates the internal variable
     // Therefore m_windowStyle bits carry now the _new_ style values
     wxWindow::SetWindowStyleFlag(style);
 
+#ifdef __WXGTK20__
     // just return for now if widget does not exist yet
     if (!m_widget)
         return;
@@ -1378,11 +1381,12 @@ void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
 #ifdef __WXGTK24__
     if ( (styleChanges & wxSTAY_ON_TOP) && !gtk_check_version(2,4,0) )
         gtk_window_set_keep_above(GTK_WINDOW(m_widget), m_windowStyle & wxSTAY_ON_TOP);
-#endif
+#endif // GTK+ 2.4
 #if GTK_CHECK_VERSION(2,2,0)
     if ( (styleChanges & wxFRAME_NO_TASKBAR) && !gtk_check_version(2,2,0) )
     {
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(m_widget), m_windowStyle & wxFRAME_NO_TASKBAR);
     }
-#endif
+#endif // GTK+ 2.2
+#endif // GTK+ 2.0
 }
