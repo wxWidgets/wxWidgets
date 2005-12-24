@@ -101,12 +101,11 @@ static wxString wxReplaceUnderscore( const wxString& title )
 // activate message from GTK
 //-----------------------------------------------------------------------------
 
-extern "C" {
-static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
+static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle)
+        wxapp_install_idle_handler();
 
-    wxMenuEvent event( wxEVT_MENU_OPEN, -1, menu );
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
@@ -114,8 +113,26 @@ static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
         return;
 
     wxWindow *win = menu->GetInvokingWindow();
-    if (win) win->GetEventHandler()->ProcessEvent( event );
+    if (win)
+        win->GetEventHandler()->ProcessEvent( event );
 }
+
+extern "C" {
+
+static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
+{
+    wxMenuEvent event(wxEVT_MENU_OPEN, -1, menu);
+
+    DoCommonMenuCallbackCode(menu, event);
+}
+
+static void gtk_menu_close_callback( GtkWidget *widget, wxMenu *menu )
+{
+    wxMenuEvent event( wxEVT_MENU_CLOSE, -1, menu );
+
+    DoCommonMenuCallbackCode(menu, event);
+}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -318,6 +335,15 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
 
     gtk_signal_connect( GTK_OBJECT(menu->m_owner), "activate",
                         GTK_SIGNAL_FUNC(gtk_menu_open_callback),
+                        (gpointer)menu );
+
+    // TODO: this is not enough as we don't get the notification if the menu is
+    //       dismissed without any selection (e.g. by clicking outside it), but
+    //       I couldn't find any GTK+ signal which would be triggered by this:
+    //       neither selection-done, nor deactivate, nor cancel are
+    GtkMenuShell *menu_shell = &(GTK_MENU(menu->m_menu)->menu_shell);
+    gtk_signal_connect( GTK_OBJECT(menu_shell), "selection-done",
+                        GTK_SIGNAL_FUNC(gtk_menu_close_callback),
                         (gpointer)menu );
 
     // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
