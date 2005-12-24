@@ -51,6 +51,8 @@ wxMSW:
 
 wxGTK:
 
+- wxEVT_MENU_CLOSE and wxEVT_MENU_OPENED for popup menus are now generated
+- Implemented wxCURSOR_BLANK support
 - Fixed problem with choice editor in wxGrid whereby the editor
   lost focus when the combobox menu was shown.
 - Fixed problem trying to print from a preview, whereby wrong printer

@@ -66,6 +66,20 @@ wxCursor::wxCursor( int cursorId )
     GdkCursorType gdk_cur = GDK_LEFT_PTR;
     switch (cursorId)
     {
+        case wxCURSOR_BLANK:
+            {
+                static const gchar bits[] = { 0 };
+                static const GdkColor color = { 0, 0, 0, 0 };
+
+                GdkPixmap *pixmap = gdk_bitmap_create_from_data(NULL, bits, 1, 1);
+                M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(pixmap,
+                                                                    pixmap,
+                                                                    &color,
+                                                                    &color,
+                                                                    0, 0);
+            }
+            return;
+
         case wxCURSOR_ARROW:            // fall through to default
         case wxCURSOR_DEFAULT:          gdk_cur = GDK_LEFT_PTR; break;
         case wxCURSOR_RIGHT_ARROW:      gdk_cur = GDK_RIGHT_PTR; break;
@@ -100,6 +114,7 @@ wxCursor::wxCursor( int cursorId )
         case wxCURSOR_BASED_ARROW_UP:   gdk_cur = GDK_BASED_ARROW_UP; break;
         case wxCURSOR_BASED_ARROW_DOWN: gdk_cur = GDK_BASED_ARROW_DOWN; break;
 */
+
         default:
             wxFAIL_MSG(wxT("unsupported cursor type"));
             // will use the standard one
