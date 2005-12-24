@@ -104,6 +104,10 @@ Fix for bug #1266745 and #1387725 in the wx.FindReplaceDialog on MSW.
 Actually check we are using MSLU before doing the hack designed to
 workaround a bug in MSLU!
 
+wxMSW: wx.lib.iewin.IEHtmlWindow now properly handles tabbing, return
+and other special keys properly.
+
+
 
 
 
