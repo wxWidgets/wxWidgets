@@ -14,6 +14,7 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 All:
 
 - wxLaunchDefaultBrowser() now supports wxBROWSER_NEW_WINDOW flag
+- Added wxStringTokenizer::GetLastDelimiter(); improved documentation
 - wxGetWorkingDirectory() deprecated. Use wxGetCwd() instead.
 
 All (GUI):

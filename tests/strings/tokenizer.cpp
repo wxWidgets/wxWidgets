@@ -36,11 +36,13 @@ private:
     CPPUNIT_TEST_SUITE( TokenizerTestCase );
         CPPUNIT_TEST( GetCount );
         CPPUNIT_TEST( GetPosition );
+        CPPUNIT_TEST( LastDelimiter );
         CPPUNIT_TEST( StrtokCompat );
     CPPUNIT_TEST_SUITE_END();
 
     void GetCount();
     void GetPosition();
+    void LastDelimiter();
     void StrtokCompat();
 
     DECLARE_NO_COPY_CLASS(TokenizerTestCase)
@@ -182,6 +184,23 @@ void TokenizerTestCase::GetPosition()
     DoTestGetPosition(_T("foo"), _T("_"), 3, 0);
     DoTestGetPosition(_T("foo_bar"), _T("_"), 4, 7, 0);
     DoTestGetPosition(_T("foo_bar_"), _T("_"), 4, 8, 0);
+}
+
+void TokenizerTestCase::LastDelimiter()
+{
+    wxStringTokenizer tkz(_T("a+-b=c"), _T("+-="));
+
+    tkz.GetNextToken();
+    CPPUNIT_ASSERT_EQUAL( _T('+'), tkz.GetLastDelimiter() );
+
+    tkz.GetNextToken();
+    CPPUNIT_ASSERT_EQUAL( _T('-'), tkz.GetLastDelimiter() );
+
+    tkz.GetNextToken();
+    CPPUNIT_ASSERT_EQUAL( _T('='), tkz.GetLastDelimiter() );
+
+    tkz.GetNextToken();
+    CPPUNIT_ASSERT_EQUAL( _T('\0'), tkz.GetLastDelimiter() );
 }
 
 void TokenizerTestCase::StrtokCompat()

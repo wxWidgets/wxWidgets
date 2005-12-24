@@ -43,17 +43,23 @@ same as {\tt wxTOKEN\_STRTOK} if the delimiter string contains only
 whitespaces, same as {\tt wxTOKEN\_RET\_EMPTY} otherwise}
 \twocolitem{{\tt wxTOKEN\_RET\_EMPTY}}{In this mode, the empty tokens in the
 middle of the string will be returned, i.e. {\tt "a::b:"} will be tokenized in
-three tokens `a', `' and `b'.}
-\twocolitem{{\tt wxTOKEN\_RET\_EMPTY\_ALL}}{In this mode, empty trailing token
-(after the last delimiter character) will be returned as well. The string as
-above will contain four tokens: the already mentioned ones and another empty
-one as the last one.}
+three tokens `a', `' and `b'. Notice that all trailing delimiters are ignored
+in this mode, not just the last one, i.e. a string \texttt{"a::b::"} would
+still result in the same set of tokens.}
+\twocolitem{{\tt wxTOKEN\_RET\_EMPTY\_ALL}}{In this mode, empty trailing tokens
+(including the one after the last delimiter character) will be returned as
+well. The string \texttt{"a::b:"} will be tokenized in four tokens: the already
+mentioned ones and another empty one as the last one and a string 
+\texttt{"a::b::"} will have five tokens.}
 \twocolitem{{\tt wxTOKEN\_RET\_DELIMS}}{In this mode, the delimiter character
 after the end of the current token (there may be none if this is the last
 token) is returned appended to the token. Otherwise, it is the same mode as 
-{\tt wxTOKEN\_RET\_EMPTY}.}
+\texttt{wxTOKEN\_RET\_EMPTY}. Notice that there is no mode like this one but
+behaving like \texttt{wxTOKEN\_RET\_EMPTY\_ALL} instead of 
+\texttt{wxTOKEN\_RET\_EMPTY}, use \texttt{wxTOKEN\_RET\_EMPTY\_ALL} and 
+\helpref{GetLastDelimiter()}{wxstringtokenizergetlastdelimiter} to emulate it.}
 \twocolitem{{\tt wxTOKEN\_STRTOK}}{In this mode the class behaves exactly like
-the standard {\tt strtok()} function. The empty tokens are never returned.}
+the standard {\tt strtok()} function: the empty tokens are never returned.}
 \end{twocollist}
 
 \wxheading{Derived from}
@@ -103,9 +109,19 @@ reaches $0$ \helpref{HasMoreTokens}{wxstringtokenizerhasmoretokens} returns
 Returns \true if the tokenizer has further tokens, \false if none are left.
 
 
+\membersection{wxStringTokenizer::GetLastDelimiter}\label{wxstringtokenizergetlastdelimiter}
+
+\func{wxChar}{GetLastDelimiter}{\void}
+
+Returns the delimiter which ended scan for the last token returned by 
+\helpref{GetNextToken()}{wxstringtokenizergetnexttoken} or \texttt{NUL} if
+there had been no calls to this function yet or if it returned the trailing
+empty token in \texttt{wxTOKEN\_RET\_EMPTY\_ALL} mode.
+
+
 \membersection{wxStringTokenizer::GetNextToken}\label{wxstringtokenizergetnexttoken}
 
-\func{wxString}{GetNextToken}{\void}
+\constfunc{wxString}{GetNextToken}{\void}
 
 Returns the next token or empty string if the end of string was reached.
 

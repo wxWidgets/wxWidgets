@@ -86,9 +86,7 @@ void wxStringTokenizer::Reinit(const wxString& str)
 
     m_string = str;
     m_pos = 0;
-
-    // empty string doesn't have any tokens
-    m_hasMore = !m_string.empty();
+    m_lastDelim = _T('\0');
 }
 
 // ----------------------------------------------------------------------------
@@ -100,48 +98,60 @@ bool wxStringTokenizer::HasMoreTokens() const
 {
     wxCHECK_MSG( IsOk(), false, _T("you should call SetString() first") );
 
-    if ( m_string.find_first_not_of(m_delims) == wxString::npos )
+    if ( m_string.find_first_not_of(m_delims, m_pos) != wxString::npos )
     {
-        // no non empty tokens left, but in 2 cases we still may return true if
-        // GetNextToken() wasn't called yet for this empty token:
-        //
-        //   a) in wxTOKEN_RET_EMPTY_ALL mode we always do it
-        //   b) in wxTOKEN_RET_EMPTY mode we do it in the special case of a
-        //      string containing only the delimiter: then there is an empty
-        //      token just before it
-        return (m_mode == wxTOKEN_RET_EMPTY_ALL) ||
-               (m_mode == wxTOKEN_RET_EMPTY && m_pos == 0)
-                    ? m_hasMore : false;
-    }
-    else
-    {
-        // there are non delimiter characters left, hence we do have more
-        // tokens
+        // there are non delimiter characters left, so we do have more tokens
         return true;
     }
+
+    switch ( m_mode )
+    {
+        case wxTOKEN_RET_EMPTY:
+        case wxTOKEN_RET_DELIMS:
+            // special hack for wxTOKEN_RET_EMPTY: we should return the initial
+            // empty token even if there are only delimiters after it
+            return m_pos == 0 && !m_string.empty();
+
+        case wxTOKEN_RET_EMPTY_ALL:
+            // special hack for wxTOKEN_RET_EMPTY_ALL: we can know if we had
+            // already returned the trailing empty token after the last
+            // delimiter by examining m_lastDelim: it is set to NUL if we run
+            // up to the end of the string in GetNextToken(), but if it is not
+            // NUL yet we still have this last token to return even if m_pos is
+            // already at m_string.length()
+            return m_pos < m_string.length() || m_lastDelim != _T('\0');
+
+        case wxTOKEN_INVALID:
+        case wxTOKEN_DEFAULT:
+            wxFAIL_MSG( _T("unexpected tokenizer mode") );
+            // fall through
+
+        case wxTOKEN_STRTOK:
+            // never return empty delimiters
+            break;
+    }
+
+    return false;
 }
 
-// count the number of tokens in the string
+// count the number of (remaining) tokens in the string
 size_t wxStringTokenizer::CountTokens() const
 {
     wxCHECK_MSG( IsOk(), 0, _T("you should call SetString() first") );
 
     // VZ: this function is IMHO not very useful, so it's probably not very
-    //     important if it's implementation here is not as efficient as it
-    //     could be - but OTOH like this we're sure to get the correct answer
+    //     important if its implementation here is not as efficient as it
+    //     could be -- but OTOH like this we're sure to get the correct answer
     //     in all modes
-    wxStringTokenizer *self = (wxStringTokenizer *)this;    // const_cast
-    wxString stringInitial = m_string;
+    wxStringTokenizer tkz(m_string.c_str() + m_pos, m_delims, m_mode);
 
     size_t count = 0;
-    while ( self->HasMoreTokens() )
+    while ( tkz.HasMoreTokens() )
     {
         count++;
 
-        (void)self->GetNextToken();
+        (void)tkz.GetNextToken();
     }
-
-    self->Reinit(stringInitial);
 
     return count;
 }
@@ -152,9 +162,6 @@ size_t wxStringTokenizer::CountTokens() const
 
 wxString wxStringTokenizer::GetNextToken()
 {
-    // strtok() doesn't return empty tokens, all other modes do
-    bool allowEmpty = m_mode != wxTOKEN_STRTOK;
-
     wxString token;
     do
     {
@@ -162,40 +169,40 @@ wxString wxStringTokenizer::GetNextToken()
         {
             break;
         }
+
         // find the end of this token
-        size_t pos = m_string.find_first_of(m_delims);
+        size_t pos = m_string.find_first_of(m_delims, m_pos);
 
         // and the start of the next one
         if ( pos == wxString::npos )
         {
             // no more delimiters, the token is everything till the end of
             // string
-            token = m_string;
+            token.assign(m_string, m_pos, wxString::npos);
 
-            m_pos += m_string.length();
-            m_string.clear();
+            // skip the token
+            m_pos = m_string.length();
 
-            // no more tokens in this string, even in wxTOKEN_RET_EMPTY_ALL
-            // mode (we will return the trailing one right now in this case)
-            m_hasMore = false;
+            // it wasn't terminated
+            m_lastDelim = _T('\0');
         }
-        else
+        else // we found a delimiter at pos
         {
-            size_t pos2 = pos + 1;
-
             // in wxTOKEN_RET_DELIMS mode we return the delimiter character
-            // with token
-            token = wxString(m_string, m_mode == wxTOKEN_RET_DELIMS ? pos2
-                                                                    : pos);
+            // with token, otherwise leave it out
+            size_t len = pos - m_pos;
+            if ( m_mode == wxTOKEN_RET_DELIMS )
+                len++;
 
-            // remove token with the following it delimiter from string
-            m_string.erase(0, pos2);
+            token.assign(m_string, m_pos, len);
 
-            // keep track of the position in the original string too
-            m_pos += pos2;
+            // skip the token and the trailing delimiter
+            m_pos = pos + 1;
+
+            m_lastDelim = m_string[pos];
         }
     }
-    while ( !allowEmpty && token.empty() );
+    while ( !AllowEmpty() && token.empty() );
 
     return token;
 }
