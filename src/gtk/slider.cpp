@@ -60,6 +60,13 @@ ProcessScrollEvent(wxSlider *win, wxEventType evtType, double dvalue)
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 
+    if ( evtType != wxEVT_SCROLL_THUMBTRACK )
+    {
+        wxScrollEvent event2(wxEVT_SCROLL_CHANGED, win->GetId(), value, orient);
+        event2.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( event2 );
+    }
+
     wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
     cevent.SetEventObject( win );
     cevent.SetInt( value );
