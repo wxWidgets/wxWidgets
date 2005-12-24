@@ -36,6 +36,11 @@
 #include <TextEncodingConverter.h>
 #endif
 
+
+// set to 0 if problems arise
+#define wxMAC_EXPERIMENTAL_DC 1
+
+
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
 //-----------------------------------------------------------------------------
@@ -48,8 +53,6 @@ const short kUnsupportedMode = -2 ;
 
 extern TECObjectRef s_TECNativeCToUnicode ;
 
-// set to 0 if problems arise
-#define wxMAC_EXPERIMENTAL_DC 1
 
 wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
     m_ph( (GrafPtr) dc->m_macPort )
@@ -113,7 +116,7 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
         if ( win->GetPeer() )
         {
             int x = 0 , y = 0;
-            win->MacWindowToRootWindow( &x,&y ) ;
+            win->MacWindowToRootWindow( &x, &y ) ;
 
             // get area including focus rect
             CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip ) ;
@@ -405,8 +408,8 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
      }
      else
      {
-         RGBColor white = { 0xFFFF, 0xFFFF, 0xFFFF} ;
-         RGBColor black = { 0, 0, 0} ;
+         RGBColor white = { 0xFFFF, 0xFFFF, 0xFFFF } ;
+         RGBColor black = { 0, 0, 0 } ;
          RGBForeColor( &black ) ;
          RGBBackColor( &white ) ;
      }
@@ -458,7 +461,7 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     wxCoord ww = XLOG2DEVREL(w);
     wxCoord hh = YLOG2DEVREL(h);
 
-    Rect r = { yy , xx, yy + hh  , xx + ww } ;
+    Rect r = { yy , xx, yy + hh, xx + ww } ;
     PlotIconRef( &r , kAlignNone , kTransformNone , kPlotIconRefNormalFlags , MAC_WXHICON( icon.GetHICON() ) ) ;
 }
 
@@ -478,8 +481,8 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     {
         m_clipX1 = wxMax( m_clipX1 , xx );
         m_clipY1 = wxMax( m_clipY1 , yy );
-        m_clipX2 = wxMin( m_clipX2, (xx + ww));
-        m_clipY2 = wxMin( m_clipY2, (yy + hh));
+        m_clipX2 = wxMin( m_clipX2, (xx + ww) );
+        m_clipY2 = wxMin( m_clipY2, (yy + hh) );
     }
     else
     {
@@ -491,7 +494,7 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     }
 }
 
-void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
+void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region )
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoSetClippingRegionAsRegion - invalid DC"));
 
@@ -521,8 +524,8 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
         {
             m_clipX1 = wxMax( m_clipX1 , xx );
             m_clipY1 = wxMax( m_clipY1 , yy );
-            m_clipX2 = wxMin( m_clipX2, (xx + ww));
-            m_clipY2 = wxMin( m_clipY2, (yy + hh));
+            m_clipX2 = wxMin( m_clipX2, (xx + ww) );
+            m_clipY2 = wxMin( m_clipY2, (yy + hh) );
         }
         else
         {
@@ -749,9 +752,7 @@ bool wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
     GetCPixel( XLOG2DEVMAC(x), YLOG2DEVMAC(y), &colour );
 
     // convert from Mac colour to wx
-    col->Set( colour.red   >> 8,
-        colour.green >> 8,
-        colour.blue  >> 8);
+    col->Set( colour.red >> 8, colour.green >> 8, colour.blue >> 8);
 
     return true ;
 }
@@ -766,7 +767,7 @@ void wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
     {
         MacInstallPen() ;
         wxCoord offset = ( (m_pen.GetWidth() == 0 ? 1 :
-        m_pen.GetWidth() ) * (wxCoord)m_scaleX - 1) / 2;
+            m_pen.GetWidth() ) * (wxCoord)m_scaleX - 1) / 2;
         wxCoord xx1 = XLOG2DEVMAC(x1) - offset;
         wxCoord yy1 = YLOG2DEVMAC(y1) - offset;
         wxCoord xx2 = XLOG2DEVMAC(x2) - offset;
@@ -861,7 +862,7 @@ void wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
 
     double dx = xx1 - xxc;
     double dy = yy1 - yyc;
-    double radius = sqrt((double)(dx*dx+dy*dy));
+    double radius = sqrt((double)(dx * dx + dy * dy));
     wxCoord rad = (wxCoord)radius;
     double radius1, radius2;
 
@@ -878,10 +879,10 @@ void wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
     {
         radius1 = (xx1 - xxc == 0) ?
             (yy1 - yyc < 0) ? 90.0 : -90.0 :
-        -atan2(double(yy1-yyc), double(xx1-xxc)) * RAD2DEG;
+        -atan2(double(yy1 - yyc), double(xx1 - xxc)) * RAD2DEG;
         radius2 = (xx2 - xxc == 0) ?
             (yy2 - yyc < 0) ? 90.0 : -90.0 :
-        -atan2(double(yy2-yyc), double(xx2-xxc)) * RAD2DEG;
+        -atan2(double(yy2 - yyc), double(xx2 - xxc)) * RAD2DEG;
     }
 
     wxCoord alpha2 = wxCoord(radius2 - radius1);
@@ -985,11 +986,12 @@ void wxDC::DoDrawLines(int n, wxPoint points[],
     MacInstallPen() ;
     wxCoord offset = ( (m_pen.GetWidth() == 0 ? 1 :
     m_pen.GetWidth() ) * (wxCoord)m_scaleX - 1) / 2 ;
+
     wxCoord x1, x2 , y1 , y2 ;
     x1 = XLOG2DEVMAC(points[0].x + xoffset);
     y1 = YLOG2DEVMAC(points[0].y + yoffset);
 
-    ::MoveTo(x1 - offset, y1 - offset );
+    ::MoveTo( x1 - offset, y1 - offset );
     for (int i = 0; i < n-1; i++)
     {
         x2 = XLOG2DEVMAC(points[i + 1].x + xoffset);
@@ -1024,7 +1026,7 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[],
 
     // close the polyline if necessary
     if ( x1 != x2 || y1 != y2 )
-        ::LineTo(x1, y1 ) ;
+        ::LineTo( x1, y1 ) ;
     ClosePoly();
 
     if (m_brush.GetStyle() != wxTRANSPARENT)
@@ -1181,7 +1183,7 @@ bool wxDC::CanDrawBitmap(void) const
 
 bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                    wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask,
-                   wxCoord xsrcMask,  wxCoord ysrcMask )
+                   wxCoord xsrcMask, wxCoord ysrcMask )
 {
     wxCHECK_MSG(Ok(), false, wxT("wxDC::DoBlit - invalid DC"));
     wxCHECK_MSG(source->Ok(), false, wxT("wxDC::DoBlit - invalid source DC"));
@@ -1306,8 +1308,8 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
         else
         {
             // the modes need this, otherwise we'll end up having really nice colors...
-            RGBColor white = { 0xFFFF, 0xFFFF, 0xFFFF} ;
-            RGBColor black = { 0, 0, 0} ;
+            RGBColor white = { 0xFFFF, 0xFFFF, 0xFFFF } ;
+            RGBColor black = { 0, 0, 0 } ;
 
             RGBForeColor( &black ) ;
             RGBBackColor( &white ) ;
@@ -1372,7 +1374,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                                     GetCPixel( srcPoint.h , srcPoint.v , &srcColor ) ;
                                     SetPort( (GrafPtr) m_macPort ) ;
                                     GetCPixel( dstPoint.h , dstPoint.v , &dstColor ) ;
-                                    wxMacCalculateColour( logical_func , srcColor ,  dstColor ) ;
+                                    wxMacCalculateColour( logical_func , srcColor , dstColor ) ;
                                     SetCPixel( dstPoint.h , dstPoint.v , &dstColor ) ;
                                 }
                             }
@@ -1435,7 +1437,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                                 GetCPixel( srcPoint.h , srcPoint.v , &srcColor) ;
                                 SetPort( (GrafPtr) m_macPort ) ;
                                 GetCPixel( dstPoint.h , dstPoint.v , &dstColor ) ;
-                                wxMacCalculateColour( logical_func , srcColor ,  dstColor ) ;
+                                wxMacCalculateColour( logical_func , srcColor , dstColor ) ;
                                 SetCPixel( dstPoint.h , dstPoint.v , &dstColor ) ;
                             }
                         }
@@ -1499,7 +1501,7 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 ) ;
 #else
     const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-    size_t unicharlen = converter.WC2MB( NULL , wchar.data()  , 0 ) ;
+    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
     ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
     converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
 #endif
@@ -1553,8 +1555,8 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     status = ::ATSUMeasureText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         &textBefore , &textAfter, &ascent , &descent );
 
-    drawX += (int)(sin(angle/RAD2DEG) * FixedToInt(ascent));
-    drawY += (int)(cos(angle/RAD2DEG) * FixedToInt(ascent));
+    drawX += (int)(sin(angle / RAD2DEG) * FixedToInt(ascent));
+    drawY += (int)(cos(angle / RAD2DEG) * FixedToInt(ascent));
     status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         IntToFixed(drawX) , IntToFixed(drawY) );
 
@@ -1564,6 +1566,7 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         IntToFixed(drawX) , IntToFixed(drawY) , &rect );
     wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
+
     OffsetRect( &rect , -m_macLocalOrigin.x , -m_macLocalOrigin.y ) ;
     CalcBoundingBox(XDEV2LOG(rect.left), YDEV2LOG(rect.top) );
     CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
@@ -1749,7 +1752,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
         // If anybody knows how to do this more efficiently yet still handle
         // the fractional glyph widths that may be present when using AA
         // fonts, please change it.  Currently it is measuring from the
-        // begining of the string for each succeding substring, which is much
+        // beginning of the string for each succeeding substring, which is much
         // slower than this should be.
         for (size_t i=0; i<text.Length(); i++)
         {
@@ -1777,7 +1780,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
 
         // Copy to widths, starting at measurements[1]
         // NOTE: this doesn't take into account any multi-byte characters
-        // in buff, it probabkly should...
+        // in buff, it probably should...
         for (size_t i=0; i<text.Length(); i++)
             widths[i] = XDEV2LOGREL(measurements[i + 1]);
 
@@ -1858,6 +1861,7 @@ void wxDC::MacInstallFont() const
 
     //    if ( m_macFontInstalled )
     //        return ;
+
     Pattern blackColor ;
     MacSetupBackgroundForCurrentPort(m_backgroundBrush) ;
     if ( m_backgroundMode != wxTRANSPARENT )
@@ -1941,18 +1945,15 @@ void wxDC::MacInstallFont() const
     {
             sizeof( Fixed ) ,
     } ;
-//    Boolean kTrue = true ;
-//    Boolean kFalse = false ;
-
-//    ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
     ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
             &atsuSize ,
     } ;
+
     status = ::ATSUSetAttributes((ATSUStyle)m_macATSUIStyle, sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
         atsuTags, atsuSizes, atsuValues);
 
-    wxASSERT_MSG( status == noErr , wxT("couldn't Modify ATSU style") ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") ) ;
 }
 
 Pattern gPatterns[] =
@@ -2006,19 +2007,21 @@ void wxDC::MacInstallPen() const
     //Pattern     blackColor;
     //    if ( m_macPenInstalled )
     //        return ;
+
     RGBColor forecolor = MAC_WXCOLORREF( m_pen.GetColour().GetPixel());
     RGBColor backcolor = MAC_WXCOLORREF( m_backgroundBrush.GetColour().GetPixel());
     ::RGBForeColor( &forecolor );
     ::RGBBackColor( &backcolor );
     ::PenNormal() ;
-    int penWidth = (int) (m_pen.GetWidth() * m_scaleX) ; ;
+
     // null means only one pixel, at whatever resolution
+    int penWidth = (int) (m_pen.GetWidth() * m_scaleX) ;
     if ( penWidth == 0 )
         penWidth = 1 ;
     ::PenSize(penWidth, penWidth);
 
-    int penStyle = m_pen.GetStyle();
     Pattern pat;
+    int penStyle = m_pen.GetStyle();
     if (penStyle == wxUSER_DASH)
     {
         // FIXME: there should be exactly 8 items in the dash
@@ -2095,6 +2098,7 @@ void wxDC::MacInstallPen() const
 void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background )
 {
     Pattern whiteColor ;
+
     if ( background.Ok() )
     {
         switch ( background.MacGetBrushKind() )
@@ -2107,7 +2111,7 @@ void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background )
             {
                 Rect extent ;
                 ThemeBackgroundKind bg = background.MacGetThemeBackground( &extent ) ;
-                ::ApplyThemeBackground( bg , &extent ,kThemeStateActive , wxDisplayDepth() , true ) ;
+                ::ApplyThemeBackground( bg , &extent, kThemeStateActive , wxDisplayDepth() , true ) ;
             }
                 break ;
 
@@ -2139,10 +2143,11 @@ void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background )
 void wxDC::MacInstallBrush() const
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
-    Pattern     blackColor ;
+
     //    if ( m_macBrushInstalled )
     //        return ;
-    // foreground
+
+    Pattern     blackColor ;
     bool backgroundTransparent = (GetBackgroundMode() == wxTRANSPARENT) ;
     ::RGBForeColor( &MAC_WXCOLORREF( m_brush.GetColour().GetPixel()) );
     ::RGBBackColor( &MAC_WXCOLORREF( m_backgroundBrush.GetColour().GetPixel()) );
@@ -2195,7 +2200,7 @@ void wxDC::MacInstallBrush() const
 
             for ( int i = 0 ; i < 8 ; ++i )
             {
-                pat.pat[i] = gwbits[i*alignment+0] ;
+                pat.pat[i] = gwbits[i * alignment + 0] ;
             }
 
             UnlockPixels( GetGWorldPixMap( gw ) ) ;
