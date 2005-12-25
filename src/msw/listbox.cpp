@@ -776,16 +776,19 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
     HDC hdc = CreateIC(wxT("DISPLAY"), NULL, NULL, 0);
 #endif
 
-    wxDC dc;
-    dc.SetHDC((WXHDC)hdc);
-    dc.SetFont(GetFont());
+    {
+        wxDCTemp dc((WXHDC)hdc);
+        dc.SetFont(GetFont());
 
-    pStruct->itemHeight = dc.GetCharHeight() + 2*OWNER_DRAWN_LISTBOX_EXTRA_SPACE;
-    pStruct->itemWidth  = dc.GetCharWidth();
+        pStruct->itemHeight = dc.GetCharHeight() + 2*OWNER_DRAWN_LISTBOX_EXTRA_SPACE;
+        pStruct->itemWidth  = dc.GetCharWidth();
+    }
 
-    dc.SetHDC(0);
-
+#ifdef __WXWINCE__
+    ReleaseDC(NULL, hdc);
+#else
     DeleteDC(hdc);
+#endif
 
     return true;
 }

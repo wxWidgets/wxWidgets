@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCPRINT_H_
-#define _WX_DCPRINT_H_
+#ifndef _WX_MSW_DCPRINT_H_
+#define _WX_MSW_DCPRINT_H_
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
@@ -41,6 +41,11 @@ protected:
                         wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
                         int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
+    virtual void DoGetSize(int *w, int *h) const
+    {
+        GetDeviceSize(w, h);
+    }
+
 
     // init the dc
     void Init();
@@ -59,6 +64,5 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& data);
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
-#endif
-    // _WX_DCPRINT_H_
+#endif // _WX_MSW_DCPRINT_H_
 
