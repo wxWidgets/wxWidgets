@@ -243,6 +243,16 @@ void wxMetafileDC::GetTextExtent(const wxString& string, long *x, long *y,
         *externalLeading = tm.tmExternalLeading;
 }
 
+void wxMetafileDC::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_refData, _T("invalid wxMetafileDC") );
+
+    if ( width )
+        *width = M_METAFILEDATA->m_width;
+    if ( height )
+        *height = M_METAFILEDATA->m_height;
+}
+
 wxMetafile *wxMetafileDC::Close()
 {
     SelectOldObjects(m_hDC);

@@ -87,6 +87,12 @@ public:
     wxEnhMetaFile *Close();
 
 private:
+    virtual void DoGetSize(int *width, int *height) const;
+
+    // size passed to ctor and returned by DoGetSize()
+    int m_width,
+        m_height;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEnhMetaFileDC)
 };
 

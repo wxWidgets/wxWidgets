@@ -194,7 +194,9 @@ wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
                                  int width, int height,
                                  const wxString& description)
 {
-    ScreenHDC hdcRef;
+    m_width = width;
+    m_height = height;
+
     RECT rect;
     RECT *pRect;
     if ( width && height )
@@ -215,12 +217,21 @@ wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
         pRect = (LPRECT)NULL;
     }
 
+    ScreenHDC hdcRef;
     m_hDC = (WXHDC)::CreateEnhMetaFile(hdcRef, GetMetaFileName(filename),
                                        pRect, description);
     if ( !m_hDC )
     {
         wxLogLastError(_T("CreateEnhMetaFile"));
     }
+}
+
+void wxEnhMetaFileDC::DoGetSize(int *width, int *height) const
+{
+    if ( width )
+        *width = m_width;
+    if ( height )
+        *height = m_height;
 }
 
 wxEnhMetaFile *wxEnhMetaFileDC::Close()
