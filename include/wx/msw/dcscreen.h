@@ -20,12 +20,11 @@ public:
     // Create a DC representing the whole screen
     wxScreenDC();
 
-    // these functions are obsolete and shouldn't be used
-
-    // Compatibility with X's requirements for drawing on top of all windows
-    wxDEPRECATED( static bool StartDrawingOnTop(wxWindow* window) );
-    wxDEPRECATED( static bool StartDrawingOnTop(wxRect* rect = NULL) );
-    wxDEPRECATED( static bool EndDrawingOnTop() );
+    // Compatibility with X's requirements for drawing on top of all windows:
+    // they don't do anything under MSW
+    static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return true; }
+    static bool StartDrawingOnTop(wxRect* WXUNUSED(rect) = NULL) { return true; }
+    static bool EndDrawingOnTop() { return true; }
 
 protected:
     virtual void DoGetSize(int *w, int *h) const

@@ -37,18 +37,3 @@ wxScreenDC::wxScreenDC()
     ::SetBkMode( GetHdc(), TRANSPARENT );
 }
 
-// deprecated functions
-bool wxScreenDC::StartDrawingOnTop(wxWindow* WXUNUSED(window))
-{
-    return true;
-}
-
-bool wxScreenDC::StartDrawingOnTop(wxRect* WXUNUSED(rect))
-{
-    return true;
-}
-
-bool wxScreenDC::EndDrawingOnTop()
-{
-    return true;
-}
