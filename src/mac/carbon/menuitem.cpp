@@ -102,6 +102,9 @@ void wxMenuItem::UpdateItemStatus()
 {
     if ( !m_parentMenu )
         return ;
+ 
+    if ( IsSeparator() )
+        return ;
 
 #if TARGET_CARBON
     if ( UMAGetSystemVersion() >= 0x1000 && GetId() == wxApp::s_macPreferencesMenuItemId)
@@ -111,6 +114,7 @@ void wxMenuItem::UpdateItemStatus()
         else
             EnableMenuCommand( NULL , kHICommandPreferences ) ;
     }
+
     if ( UMAGetSystemVersion() >= 0x1000 && GetId() == wxApp::s_macExitMenuItemId)
     {
         if ( !IsEnabled() )
@@ -119,10 +123,11 @@ void wxMenuItem::UpdateItemStatus()
             EnableMenuCommand( NULL , kHICommandQuit ) ;
     }
 #endif
+
     {
         MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
         MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
-        if( mhandle == NULL || index == 0)
+        if ( mhandle == NULL || index == 0)
             return ;
 
         UMAEnableMenuItem( mhandle , index , m_isEnabled ) ;
@@ -154,7 +159,6 @@ void wxMenuItem::UpdateItemText()
     delete entry ;
 }
 
-
 void wxMenuItem::Enable(bool bDoEnable)
 {
     if (( m_isEnabled != bDoEnable
@@ -174,6 +178,7 @@ void wxMenuItem::Enable(bool bDoEnable)
         UpdateItemStatus() ;
     }
 }
+
 void wxMenuItem::UncheckRadio()
 {
     if ( m_isChecked )
@@ -185,7 +190,7 @@ void wxMenuItem::UncheckRadio()
 
 void wxMenuItem::Check(bool bDoCheck)
 {
-    wxCHECK_RET( IsCheckable(), wxT("only checkable items may be checked") );
+    wxCHECK_RET( IsCheckable() && !IsSeparator(), wxT("only checkable items may be checked") );
 
     if ( m_isChecked != bDoCheck )
     {
@@ -203,8 +208,7 @@ void wxMenuItem::Check(bool bDoCheck)
                              _T("menuitem not found in the menu items list?") );
 
                 // get the radio group range
-                int start,
-                    end;
+                int start, end;
 
                 if ( m_isRadioGroupStart )
                 {
@@ -224,9 +228,8 @@ void wxMenuItem::Check(bool bDoCheck)
                 for ( int n = start; n <= end && node; n++ )
                 {
                     if ( n != pos )
-                    {
                         ((wxMenuItem*)node->GetData())->UncheckRadio();
-                    }
+
                     node = node->GetNext();
                 }
             }
