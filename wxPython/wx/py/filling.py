@@ -310,7 +310,7 @@ class Filling(wx.SplitterWindow):
 
     def LoadSettings(self, config):
         pos = config.ReadInt('Sash/FillingPos', 200)
-        wx.CallAfter(self.SetSashPosition, pos)
+        wx.FutureCall(250, self.SetSashPosition, pos)
         zoom = config.ReadInt('View/Zoom/Filling', -99)
         if zoom != -99:
             self.text.SetZoom(zoom)
