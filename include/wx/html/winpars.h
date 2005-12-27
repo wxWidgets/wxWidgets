@@ -112,12 +112,21 @@ public:
 
     int GetAlign() const {return m_Align;}
     void SetAlign(int a) {m_Align = a;}
+
+    wxHtmlScriptMode GetScriptMode() const { return m_ScriptMode; }
+    void SetScriptMode(wxHtmlScriptMode mode) { m_ScriptMode = mode; }
+    long GetScriptBaseline() const { return m_ScriptBaseline; }
+    void SetScriptBaseline(long base) { m_ScriptBaseline = base; }
+
     const wxColour& GetLinkColor() const { return m_LinkColor; }
     void SetLinkColor(const wxColour& clr) { m_LinkColor = clr; }
     const wxColour& GetActualColor() const { return m_ActualColor; }
     void SetActualColor(const wxColour& clr) { m_ActualColor = clr ;}
     const wxHtmlLinkInfo& GetLink() const { return m_Link; }
     void SetLink(const wxHtmlLinkInfo& link);
+
+    // applies current parser state (link, sub/supscript, ...) to given cell
+    void ApplyStateToCell(wxHtmlCell *cell);
 
 #if !wxUSE_UNICODE
     void SetInputEncoding(wxFontEncoding enc);
@@ -164,6 +173,10 @@ private:
             // average height of normal-sized text
     int m_Align;
             // actual alignment
+    wxHtmlScriptMode m_ScriptMode;
+            // current script mode (sub/sup/normal)
+    long m_ScriptBaseline;
+            // current sub/supscript base
 
     wxFont* m_FontsTable[2][2][2][2][7];
     wxString m_FontsFacesTable[2][2][2][2][7];

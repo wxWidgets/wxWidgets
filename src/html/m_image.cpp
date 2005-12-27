@@ -645,7 +645,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                                           str, w, h,
                                           m_WParser->GetPixelScale(),
                                           al, mn);
-                cel->SetLink(m_WParser->GetLink());
+                m_WParser->ApplyStateToCell(cel);
                 cel->SetId(tag.GetParam(wxT("id"))); // may be empty
                 m_WParser->GetContainer()->InsertCell(cel);
                 if (str)

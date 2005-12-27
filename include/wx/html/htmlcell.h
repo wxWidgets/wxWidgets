@@ -145,6 +145,13 @@ enum
 };
 
 
+// Superscript/subscript/normal script mode of a cell
+enum wxHtmlScriptMode
+{
+    wxHTML_SCRIPT_NORMAL,
+    wxHTML_SCRIPT_SUB,
+    wxHTML_SCRIPT_SUP
+};
 
 
 // ---------------------------------------------------------------------------
@@ -175,6 +182,10 @@ public:
 
     int GetHeight() const {return m_Height;}
     int GetDescent() const {return m_Descent;}
+
+    void SetScriptMode(wxHtmlScriptMode mode, long previousBase);
+    wxHtmlScriptMode GetScriptMode() const { return m_ScriptMode; }
+    long GetScriptBaseline() { return m_ScriptBaseline; }
 
     // Formatting cells are not visible on the screen, they only alter
     // renderer's state.
@@ -297,21 +308,26 @@ public:
         { return wxEmptyString; }
 
 protected:
+    // pointer to the next cell
     wxHtmlCell *m_Next;
-            // pointer to the next cell
+    // pointer to parent cell
     wxHtmlContainerCell *m_Parent;
-            // pointer to parent cell
+
+    // dimensions of fragment (m_Descent is used to position text & images)
     long m_Width, m_Height, m_Descent;
-            // dimensions of fragment
-            // m_Descent is used to position text&images..
+    // position where the fragment is drawn:
     long m_PosX, m_PosY;
-            // position where the fragment is drawn
+
+    // superscript/subscript/normal:
+    wxHtmlScriptMode m_ScriptMode;
+    long m_ScriptBaseline;
+
+    // destination address if this fragment is hypertext link, NULL otherwise
     wxHtmlLinkInfo *m_Link;
-            // destination address if this fragment is hypertext link, NULL otherwise
+    // true if this cell can be placed on pagebreak, false otherwise
     bool m_CanLiveOnPagebreak;
-            // true if this cell can be placed on pagebreak, false otherwise
+    // unique identifier of the cell, generated from "id" property of tags
     wxString m_id;
-            // unique identifier of the cell, generated from "id" property of tags
 
     DECLARE_ABSTRACT_CLASS(wxHtmlCell)
     DECLARE_NO_COPY_CLASS(wxHtmlCell)
@@ -414,6 +430,8 @@ public:
 #if WXWIN_COMPATIBILITY_2_4
     wxDEPRECATED( wxHtmlCell* GetFirstCell() const );
 #endif
+    // returns last child cell:
+    wxHtmlCell* GetLastChild() const { return m_LastCell; }
 
     // see comment in wxHtmlCell about this method
     virtual bool IsTerminalCell() const { return false; }

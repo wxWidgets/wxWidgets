@@ -40,6 +40,8 @@ All (GUI):
 - Fixed memory leak of pending events in wxEvtHandler
 - Added wxRadioBox::IsItemEnabled/Shown()
 - Added space after list item number in wxHTML.
+- Implemented <sub> and <sup> handling in wxHTML (based on patch
+  by Sandro Sigala)
 
 wxMSW:
 

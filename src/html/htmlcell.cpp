@@ -90,6 +90,8 @@ wxHtmlCell::wxHtmlCell() : wxObject()
     m_Next = NULL;
     m_Parent = NULL;
     m_Width = m_Height = m_Descent = 0;
+    m_ScriptMode = wxHTML_SCRIPT_NORMAL;        // <sub> or <sup> mode
+    m_ScriptBaseline = 0;                       // <sub> or <sup> baseline
     m_CanLiveOnPagebreak = true;
     m_Link = NULL;
 }
@@ -99,6 +101,21 @@ wxHtmlCell::~wxHtmlCell()
     delete m_Link;
 }
 
+// Update the descent value when whe are in a <sub> or <sup>.
+// prevbase is the parent base
+void wxHtmlCell::SetScriptMode(wxHtmlScriptMode mode, long previousBase)
+{
+    m_ScriptMode = mode;
+
+    if (mode == wxHTML_SCRIPT_SUP)
+        m_ScriptBaseline = previousBase - (m_Height + 1) / 2;
+    else if (mode == wxHTML_SCRIPT_SUB)
+        m_ScriptBaseline = previousBase + (m_Height + 1) / 6;
+    else
+        m_ScriptBaseline = 0;
+
+    m_Descent += m_ScriptBaseline;
+}
 
 void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
                               const wxMouseEvent& event)

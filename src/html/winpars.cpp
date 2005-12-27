@@ -192,6 +192,8 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_LinkColor.Set(0, 0, 0xFF);
     m_ActualColor.Set(0, 0, 0);
     m_Align = wxHTML_ALIGN_LEFT;
+    m_ScriptMode = wxHTML_SCRIPT_NORMAL;
+    m_ScriptBaseline = 0;
     m_tmpLastWasSpace = false;
     m_lastWordCell = NULL;
 
@@ -366,8 +368,8 @@ void wxHtmlWinParser::DoAddText(wxChar *temp, int& templen, wxChar nbsp)
 
     wxHtmlCell *c = new wxHtmlWordCell(temp, *(GetDC()));
 
-    if (m_UseLink)
-        c->SetLink(m_Link);
+    ApplyStateToCell(c);
+
     m_Container->InsertCell(c);
     ((wxHtmlWordCell*)c)->SetPreviousWord(m_lastWordCell);
     m_lastWordCell = (wxHtmlWordCell*)c;
@@ -464,7 +466,6 @@ void wxHtmlWinParser::SetLink(const wxHtmlLinkInfo& link)
     m_UseLink = (link.GetHref() != wxEmptyString);
 }
 
-
 void wxHtmlWinParser::SetFontFace(const wxString& face)
 {
     if (GetFontFixed()) m_FontFaceFixed = face;
@@ -476,6 +477,15 @@ void wxHtmlWinParser::SetFontFace(const wxString& face)
 #endif
 }
 
+void wxHtmlWinParser::ApplyStateToCell(wxHtmlCell *cell)
+{
+    // set the link:
+    if (m_UseLink)
+        cell->SetLink(GetLink());
+
+    // apply current script mode settings:
+    cell->SetScriptMode(GetScriptMode(), GetScriptBaseline());
+}
 
 
 #if !wxUSE_UNICODE
