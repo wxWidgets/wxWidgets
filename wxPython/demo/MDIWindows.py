@@ -1,8 +1,7 @@
 
 import  wx
-
-import  MDIDemo
-import  MDISashDemo
+import os
+import sys
 
 #----------------------------------------------------------------------
 
@@ -25,14 +24,14 @@ class TestPanel(wx.Panel):
         self.SetSizer(box)
 
 
+    # These are spawned as new processes because on Mac there can be
+    # some problems related to having regular frames and MDI frames in
+    # the same app.
     def ShowMDIDemo(self, evt):
-        frame = MDIDemo.MyParentFrame()
-        frame.Show()
+        os.spawnl(os.P_NOWAIT, sys.executable, sys.executable, "MDIDemo.py")
 
     def ShowMDISashDemo(self, evt):
-        frame = MDISashDemo.MyParentFrame()
-        frame.Show()
-
+        os.spawnl(os.P_NOWAIT, sys.executable, sys.executable, "MDISashDemo.py")
 
 
 #----------------------------------------------------------------------
