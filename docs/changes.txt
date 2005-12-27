@@ -6,6 +6,8 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 ================================
 
 - wxFontData::GetColour() now returns a const colour
+- wxDC objects can't be created directly now (this never worked, now it doesn't
+  even compile)
 
 
 2.7.0
