@@ -23,6 +23,7 @@
     #include "wx/utils.h"
     #include "wx/log.h"
 
+    #include "wx/dcclient.h"
     #include "wx/dcscreen.h"
 
     #include "wx/window.h"
