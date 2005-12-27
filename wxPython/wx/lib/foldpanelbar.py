@@ -674,12 +674,13 @@ class CaptionBar(wx.Window):
         dc = wx.PaintDC(self)
         wndRect = self.GetRect()
         vertical = self.IsVertical()
-
+        
         # TODO: Maybe first a memory DC should draw all, and then paint it on
         # the caption. This way a flickering arrow during resize is not visible
         
         self.FillCaptionBackground(dc)
         dc.SetFont(self._style.GetCaptionFont())
+        dc.SetTextForeground(self._style.GetCaptionColour())
 
         if vertical:
             dc.DrawText(self._caption, 4, FPB_EXTRA_Y/2)
