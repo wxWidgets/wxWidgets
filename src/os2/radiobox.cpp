@@ -194,7 +194,7 @@ void wxRadioBox::AdjustButtons( int nX,
         // Make all buttons of the same, maximal size - like this they
         // cover the radiobox entirely and the radiobox tooltips are always
         // shown (otherwise they are not when the mouse pointer is in the
-        // radiobox part not beYInt32ing to any radiobutton)
+        // radiobox part not belonging to any radiobutton)
         //
         ::WinSetWindowPos( (HWND)m_ahRadioButtons[i]
                           ,HWND_TOP
@@ -290,9 +290,6 @@ bool wxRadioBox::Create(
     m_nSelectedButton = -1;
     m_nNoItems = 0;
 
-    SetMajorDim(nMajorDim == 0 ? nNum : nMajorDim, lStyle);
-    m_nNoRowsOrCols = nMajorDim;
-
     //
     // Common initialization
     //
@@ -316,9 +313,15 @@ bool wxRadioBox::Create(
     wxAssociateWinWithHandle(m_hWnd, this);
 
     //
-    // Some radio boxes test consecutive id.
+    // Now we can set m_nNoItems and let SetMajorDim set m_numCols/m_numRows
     //
     m_nNoItems = nNum;
+    SetMajorDim(nMajorDim == 0 ? nNum : nMajorDim, lStyle);
+    m_nNoRowsOrCols = nMajorDim;
+
+    //
+    // Some radio boxes test consecutive id.
+    //
     (void)NewControlId();
     m_ahRadioButtons = new WXHWND[nNum];
     m_pnRadioWidth   = new int[nNum];
@@ -633,7 +636,7 @@ void wxRadioBox::DoSetSize(
         // Make all buttons of the same, maximal size - like this they
         // cover the radiobox entirely and the radiobox tooltips are always
         // shown (otherwise they are not when the mouse pointer is in the
-        // radiobox part not beinting to any radiobutton)
+        // radiobox part not belonging to any radiobutton)
         //
         ::WinSetWindowPos( (HWND)m_ahRadioButtons[i]
                           ,HWND_TOP
@@ -737,7 +740,7 @@ wxSize wxRadioBox::GetMaxButtonSize() const
 } // end of wxRadioBox::GetMaxButtonSize
 
 void wxRadioBox::GetPosition( int* pnX,
-                              int* WXUNUSED(pnY) ) const
+                              int* pnY ) const
 {
     wxWindowOS2*                    pParent = GetParent();
     RECT                            vRect = { -1, -1, -1, -1 };
@@ -779,8 +782,10 @@ void wxRadioBox::GetPosition( int* pnX,
         vPoint.x = vPt.x;
         vPoint.y = vPt.y;
     }
-    *pnX = vPoint.x;
-    *pnX = vPoint.y;
+    if (pnX)
+        *pnX = vPoint.x;
+    if (pnY)
+        *pnY = vPoint.y;
 } // end of wxRadioBox::GetPosition
 
 // Get single selection, for single choice list items
