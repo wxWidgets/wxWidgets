@@ -34,6 +34,7 @@
     #include "wx/bmpbuttn.h"
     #include "wx/settings.h"
     #include "wx/dcscreen.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/stockitem.h"
