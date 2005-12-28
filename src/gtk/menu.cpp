@@ -1540,7 +1540,7 @@ void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
     *is_waiting = FALSE;
 }
 
-static void SetInvokingWindow( wxMenu *menu, wxWindow* win )
+void SetInvokingWindow( wxMenu *menu, wxWindow* win )
 {
     menu->SetInvokingWindow( win );
 
