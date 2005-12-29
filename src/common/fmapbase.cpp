@@ -247,16 +247,15 @@ wxFontMapper *wxFontMapperBase::sm_instance = NULL;
 wxFontMapperBase::wxFontMapperBase()
 {
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
-    m_config = NULL;
-    m_configIsDummy = false;
+    m_configDummy = NULL;
 #endif // wxUSE_CONFIG
 }
 
 wxFontMapperBase::~wxFontMapperBase()
 {
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
-    if ( m_configIsDummy )
-        delete m_config;
+    if ( m_configDummy )
+        delete m_configDummy;
 #endif // wxUSE_CONFIG
 }
 
@@ -322,42 +321,23 @@ void wxFontMapperBase::SetConfigPath(const wxString& prefix)
 
 wxConfigBase *wxFontMapperBase::GetConfig()
 {
-    if ( !m_config )
-    {
-        // try the default
-        m_config = wxConfig::Get(false /*don't create on demand*/ );
+    wxConfigBase *config = wxConfig::Get(false);
 
-        if ( !m_config )
-        {
-            // we still want to have a config object because otherwise we would
-            // keep asking the user the same questions in the interactive mode,
-            // so create a dummy config which won't write to any files/registry
-            // but will allow us to remember the results of the questions at
-            // least during this run
-            m_config = new wxMemoryConfig;
-            m_configIsDummy = true;
-            // VS: we can't call wxConfig::Set(m_config) here because that would
-            //     disable automatic wxConfig instance creation if this code was
-            //     called before wxApp::OnInit (this happens in wxGTK -- it sets
-            //     default wxFont encoding in wxApp::Initialize())
-        }
-    }
-
-    if ( m_configIsDummy && wxConfig::Get(false) != NULL )
+    // If there is no global configuration, use an internal memory configuration
+    if ( !config )
     {
-        // VS: in case we created dummy m_config (see above), we want to switch back
-        //     to the real one as soon as one becomes available.
-        delete m_config;
-        m_config = wxConfig::Get(false);
-        m_configIsDummy = false;
-        // FIXME: ideally, we should add keys from dummy config to the real one now,
+        if ( !m_configDummy )
+            m_configDummy = new wxMemoryConfig;
+        config = m_configDummy;
+
+        // FIXME: ideally, we should add keys from dummy config to a real one later,
         //        but it is a low-priority task because typical wxWin application
         //        either doesn't use wxConfig at all or creates wxConfig object in
         //        wxApp::OnInit(), before any real interaction with the user takes
         //        place...
     }
 
-    return m_config;
+    return config;
 }
 
 const wxString& wxFontMapperBase::GetConfigPath()

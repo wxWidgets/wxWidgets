@@ -116,9 +116,6 @@ public:
     // ----------------------------------------------------------------------
 
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
-    // set the config object to use (may be NULL to use default)
-    void SetConfig(wxConfigBase *config) { m_config = config; }
-
     // set the root config path to use (should be an absolute path)
     void SetConfigPath(const wxString& prefix);
 
@@ -129,8 +126,8 @@ public:
 
 protected:
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
-    // get the config object we're using -- if it wasn't set explicitly, this
-    // function will use wxConfig::Get() to get the global one
+    // get the config object we're using -- either the global config object
+    // or a wxMemoryConfig object created by this class otherwise
     wxConfigBase *GetConfig();
 
     // gets the root path for our settings -- if it wasn't set explicitly, use
@@ -149,8 +146,7 @@ protected:
     void RestorePath(const wxString& pathOld);
 
     // config object and path (in it) to use
-    wxConfigBase *m_config;
-    bool m_configIsDummy;
+    wxConfigBase *m_configDummy;
 
     wxString m_configRootPath;
 #endif // wxUSE_CONFIG
