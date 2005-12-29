@@ -173,6 +173,33 @@ tweaked and finished up by me.  The changes include the following:
       wx.FindReplaceDialog.
 
 
+Applied patches from Will Sadkin for wx.lib.masked modules:
+
+    * Now ignores kill focus events when being destroyed.
+
+    * Added missing call to set insertion point on changing fields.
+
+    * Modified SetKeyHandler() to accept None as means of removing
+      one.
+
+    * Fixed keyhandler processing for group and decimal character
+      changes.
+
+    * Fixed a problem that prevented input into the integer digit of a
+      integerwidth=1 numctrl, if the current value was 0.
+
+    * Fixed logic involving processing of "_signOk" flag, to remove
+      default sign key handlers if false, so that
+      SetAllowNegative(False) in the NumCtrl works properly.
+
+    * Fixed selection logic for numeric controls so that if
+      selectOnFieldEntry is true, and the integer portion of an
+      integer format control is selected and the sign position is
+      selected, the sign keys will always result in a negative value,
+      rather than toggling the previous sign.
+
+
+
 
 
 
