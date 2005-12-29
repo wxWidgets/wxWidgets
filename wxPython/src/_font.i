@@ -345,7 +345,7 @@ public:
 
     // return instance of the wxFontMapper singleton
     static wxFontMapper *Get();
-    // set the sigleton to 'mapper' instance and return previous one
+    // set the singleton to 'mapper' instance and return previous one
     static wxFontMapper *Set(wxFontMapper *mapper);
 
 

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Name:        wxPython.lib.mixins.grid
+# Name:        wx.lib.mixins.grid
 # Purpose:     Helpful mix-in classes for wx.Grid
 #
 # Author:      Robin Dunn
