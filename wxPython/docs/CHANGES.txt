@@ -198,7 +198,9 @@ Applied patches from Will Sadkin for wx.lib.masked modules:
       selected, the sign keys will always result in a negative value,
       rather than toggling the previous sign.
 
-
+wx.FontMapper.SetConfig is deprecated.  You should instead just set an
+application-wide config object with wx.Config.Set, which wx.FontMapper
+will use by default.
 
 
 
