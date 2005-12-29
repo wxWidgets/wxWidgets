@@ -31,6 +31,7 @@
 #include <stdlib.h>
 
 #include "wx/dcscreen.h"
+#include "wx/dcclient.h"
 #include "wx/sashwin.h"
 #include "wx/laywin.h"
 
