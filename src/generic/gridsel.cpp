@@ -800,10 +800,10 @@ void wxGridSelection::ClearSelection()
     wxRect r;
     wxGridCellCoords coords1, coords2;
 
-    // deselect all invidiual cells and update the screen
+    // deselect all individual cells and update the screen
     if ( m_selectionMode == wxGrid::wxGridSelectCells )
     {
-        while( ( n = m_cellSelection.GetCount() ) > 0)
+        while ( ( n = m_cellSelection.GetCount() ) > 0)
         {
             n--;
             coords1 = m_cellSelection[n];
@@ -820,7 +820,7 @@ void wxGridSelection::ClearSelection()
     }
 
     // deselect all blocks and update the screen
-    while( ( n = m_blockSelectionTopLeft.GetCount() ) > 0)
+    while ( ( n = m_blockSelectionTopLeft.GetCount() ) > 0)
     {
         n--;
         coords1 = m_blockSelectionTopLeft[n];
@@ -840,7 +840,7 @@ void wxGridSelection::ClearSelection()
     // deselect all rows and update the screen
     if ( m_selectionMode != wxGrid::wxGridSelectColumns )
     {
-        while( ( n = m_rowSelection.GetCount() ) > 0)
+        while ( ( n = m_rowSelection.GetCount() ) > 0)
         {
             n--;
             int row = m_rowSelection[n];
@@ -860,7 +860,7 @@ void wxGridSelection::ClearSelection()
     // deselect all columns and update the screen
     if ( m_selectionMode != wxGrid::wxGridSelectRows )
     {
-        while( ( n = m_colSelection.GetCount() ) > 0)
+        while ( ( n = m_colSelection.GetCount() ) > 0)
         {
             n--;
             int col = m_colSelection[n];
