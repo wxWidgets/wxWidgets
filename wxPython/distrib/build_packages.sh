@@ -77,7 +77,6 @@ if [ "$OSTYPE" = "cygwin" ]; then
 
   # update the language files
   $TOOLS/Python$PY_VERSION/python `cygpath -d $WXWIN/wxPython/distrib/makemo.py`
-
   rm -rf build build.unicode
   rm -rf wx/*.pyd
   
