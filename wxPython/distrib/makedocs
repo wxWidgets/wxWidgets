@@ -9,7 +9,7 @@ fi
 
 
 VERSION=`python -c "import setup;print setup.VERSION"`
-CONTRIBS="ogl gizmos"
+CONTRIBS="gizmos"
 DEST=wxPython-$VERSION/docs
 
 
@@ -57,7 +57,7 @@ done
 popd
 cp ../distrib/viewdocs.py $DEST
 cp ../distrib/README.viewdocs.txt $DEST/README.txt
-cp ../docs/xml/wxPython-metadata.xml $DEST
+##cp ../docs/xml/wxPython-metadata.xml $DEST
 
 rm -f ../dist/wxPython-docs-$VERSION.tar.gz
 tar cvf ../dist/wxPython-docs-$VERSION.tar $DEST

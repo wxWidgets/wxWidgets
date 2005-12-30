@@ -99,8 +99,16 @@ wxEventType wxNewEventType();
 %constant wxEventType wxEVT_NAVIGATION_KEY;
 %constant wxEventType wxEVT_KEY_DOWN;
 %constant wxEventType wxEVT_KEY_UP;
+
+%{
+#if ! wxUSE_HOTKEY
+#define wxEVT_HOTKEY -9999
+#endif
+%}
+
 %constant wxEventType wxEVT_HOTKEY;
-    
+
+
 // Set cursor event
 %constant wxEventType wxEVT_SET_CURSOR;
 
@@ -2234,8 +2242,15 @@ public:
 
 
 DocStr(wxWindowDestroyEvent,
-       "The EVT_WINDOW_DESTROY event is sent right before the window is
-destroyed.", "");
+       "The EVT_WINDOW_DESTROY event is sent from the `wx.Window` destructor
+when the GUI window is destroyed.
+
+When a class derived from `wx.Window` is destroyed its destructor will
+have already run by the time this event is sent. Therefore this event
+will not usually be received at all by the window itself.  Since it is
+received after the destructor has run, an object should not try to
+handle its own wx.WindowDestroyEvent, but it can be used to get
+notification of the destruction of another window.", "");
 class wxWindowDestroyEvent : public wxCommandEvent
 {
 public:

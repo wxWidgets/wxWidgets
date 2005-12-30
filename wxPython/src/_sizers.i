@@ -318,14 +318,14 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
     if ( !(info.window || info.sizer || (checkSize && info.gotSize) || (checkIdx && info.gotPos)) ) {
         // no expected type, figure out what kind of error message to generate
         if ( !checkSize && !checkIdx )
-            PyErr_SetString(PyExc_TypeError, "wxWindow or wxSizer expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window or wx.Sizer expected for item");
         else if ( checkSize && !checkIdx )
-            PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window, wx.Sizer, wx.Size, or (w,h) expected for item");
         else if ( !checkSize && checkIdx)
-            PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer or int (position) expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window, wx.Sizer or int (position) expected for item");
         else
             // can this one happen?
-            PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer, wxSize, or (w,h) or int (position) expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window, wx.Sizer, wx.Size, or (w,h) or int (position) expected for item");
     }
 
     return info;

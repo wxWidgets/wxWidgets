@@ -73,6 +73,15 @@ public:
     List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
     String name=ChoiceNameStr) -> bool",
         "Actually create the GUI Choice control for 2-phase creation", "");
+
+    DocDeclStr(
+        int , GetCurrentSelection() const,
+        "Unlike `GetSelection` which only returns the accepted selection value,
+i.e. the selection in the control once the user closes the dropdown
+list, this function returns the current selection.  That is, while the
+dropdown list is shown, it returns the currently selected item in
+it. When it is not shown, its result is the same as for the other
+function.", "");
     
 
     static wxVisualAttributes

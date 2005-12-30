@@ -419,7 +419,7 @@ EOF
 	$INSTALLROOT \
 	$RESOURCEDIR
 
-    mv $PKGNAME.pkg $DMGROOT
+    mv $PKGNAME.pkg $DMGROOT/$PKGNAME.pkg
 
     rm $RESOURCEDIR/postflight
     rm $RESOURCEDIR/preflight
@@ -569,7 +569,7 @@ EOF
     if [ ! -e $TARBALLDIR/wxPython-demo-$VERSION.tar.gz ]; then
 	cat > "$DMGAPPS/Samples/Build ERROR.txt" <<EOF
 
-The wxPython-demo tarball was not found when building this disk image!
+The wxPython-$VERSION-demo tarball was not found when building this disk image!
 
 EOF
 	cp "$DMGAPPS/Samples/Build ERROR.txt" $DMGAPPS

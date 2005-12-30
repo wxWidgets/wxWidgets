@@ -91,6 +91,7 @@
 %rename(SIZE_AUTO)                          wxSIZE_AUTO;
 %rename(SIZE_USE_EXISTING)                  wxSIZE_USE_EXISTING;
 %rename(SIZE_ALLOW_MINUS_ONE)               wxSIZE_ALLOW_MINUS_ONE;
+%rename(SIZE_FORCE)                         wxSIZE_FORCE;
 %rename(PORTRAIT)                           wxPORTRAIT;
 %rename(LANDSCAPE)                          wxLANDSCAPE;
 %rename(PRINT_QUALITY_HIGH)                 wxPRINT_QUALITY_HIGH;
@@ -99,6 +100,7 @@
 %rename(PRINT_QUALITY_DRAFT)                wxPRINT_QUALITY_DRAFT;
 %rename(ID_ANY)                             wxID_ANY;
 %rename(ID_SEPARATOR)                       wxID_SEPARATOR;
+%rename(ID_NONE)                            wxID_NONE;
 %rename(ID_LOWEST)                          wxID_LOWEST;
 %rename(ID_OPEN)                            wxID_OPEN;
 %rename(ID_CLOSE)                           wxID_CLOSE;
@@ -476,8 +478,12 @@
 %rename(MOD_NONE)                           wxMOD_NONE;
 %rename(MOD_ALT)                            wxMOD_ALT;
 %rename(MOD_CONTROL)                        wxMOD_CONTROL;
+%rename(MOD_ALTGR)                          wxMOD_ALTGR;
 %rename(MOD_SHIFT)                          wxMOD_SHIFT;
+%rename(MOD_META)                           wxMOD_META;
 %rename(MOD_WIN)                            wxMOD_WIN;
+%rename(MOD_CMD)                            wxMOD_CMD;
+%rename(MOD_ALL)                            wxMOD_ALL;
 %rename(UPDATE_UI_NONE)                     wxUPDATE_UI_NONE;
 %rename(UPDATE_UI_RECURSE)                  wxUPDATE_UI_RECURSE;
 %rename(UPDATE_UI_FROMIDLE)                 wxUPDATE_UI_FROMIDLE;
@@ -554,6 +560,7 @@
 %rename(IMAGE_ALPHA_THRESHOLD)              wxIMAGE_ALPHA_THRESHOLD;
 %rename(IMAGE_ALPHA_OPAQUE)                 wxIMAGE_ALPHA_OPAQUE;
 %rename(ImageHandler)                       wxImageHandler;
+%rename(PyImageHandler)                     wxPyImageHandler;
 %rename(ImageHistogram)                     wxImageHistogram;
 %rename(Image_RGBValue)                     wxImage_RGBValue;
 %rename(Image_HSVValue)                     wxImage_HSVValue;

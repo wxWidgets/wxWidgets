@@ -31,7 +31,7 @@ NAVKEYS = (wx.WXK_END, wx.WXK_LEFT, wx.WXK_RIGHT,
            wx.WXK_UP, wx.WXK_DOWN, wx.WXK_PRIOR, wx.WXK_NEXT)
 
 
-class ShellFrame(frame.Frame):
+class ShellFrame(frame.Frame, frame.ShellFrameMixin):
     """Frame containing the shell component."""
 
     name = 'Shell Frame'
@@ -40,18 +40,30 @@ class ShellFrame(frame.Frame):
     def __init__(self, parent=None, id=-1, title='PyShell',
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_FRAME_STYLE, locals=None,
-                 InterpClass=None, *args, **kwds):
+                 InterpClass=None,
+                 config=None, dataDir=None,
+                 *args, **kwds):
         """Create ShellFrame instance."""
         frame.Frame.__init__(self, parent, id, title, pos, size, style)
+        frame.ShellFrameMixin.__init__(self, config, dataDir)
+
+        if size == wx.DefaultSize:
+            self.SetSize((750, 525))
+
         intro = 'PyShell %s - The Flakiest Python Shell' % VERSION
-        intro += '\nSponsored by Orbtech - ' + \
-                 'Your source for Python programming expertise.'
         self.SetStatusText(intro.replace('\n', ', '))
         self.shell = Shell(parent=self, id=-1, introText=intro,
                            locals=locals, InterpClass=InterpClass,
+                           startupScript=self.startupScript,
+                           execStartupScript=self.execStartupScript,
                            *args, **kwds)
+
         # Override the shell so that status messages go to the status bar.
         self.shell.setStatusText = self.SetStatusText
+
+        self.shell.SetFocus()
+        self.LoadSettings()
+
 
     def OnClose(self, event):
         """Event handler for closing."""
@@ -60,6 +72,7 @@ class ShellFrame(frame.Frame):
             if event.CanVeto():
                 event.Veto(True)
         else:
+            self.SaveSettings()
             self.shell.destroy()
             self.Destroy()
 
@@ -82,21 +95,28 @@ class ShellFrame(frame.Frame):
         dialog.Destroy()
 
 
-class ShellFacade:
-    """Simplified interface to all shell-related functionality.
+    def LoadSettings(self):
+        if self.config is not None:
+            frame.ShellFrameMixin.LoadSettings(self)
+            frame.Frame.LoadSettings(self, self.config)
+            self.shell.LoadSettings(self.config)
 
-    This is a semi-transparent facade, in that all attributes of other
-    are accessible, even though only some are visible to the user."""
+    def SaveSettings(self):
+        if self.config is not None:
+            frame.ShellFrameMixin.SaveSettings(self)
+            if self.autoSaveSettings:
+                frame.Frame.SaveSettings(self, self.config)
+                self.shell.SaveSettings(self.config)
 
-    name = 'Shell Interface'
-    revision = __revision__
+    def DoSaveSettings(self):
+        if self.config is not None:
+            self.SaveSettings()
+            self.config.Flush()
+        
 
-    def __init__(self, other):
-        """Create a ShellFacade instance."""
-        d = self.__dict__
-        d['other'] = other
-        d['helpText'] = \
-"""
+
+
+HELP_TEXT = """\
 * Key bindings:
 Home              Go to the beginning of the command or line.
 Shift+Home        Select to the beginning of the command or line.
@@ -104,6 +124,7 @@ Shift+End         Select to the end of the line.
 End               Go to the end of the line.
 Ctrl+C            Copy selected text, removing prompts.
 Ctrl+Shift+C      Copy selected text, retaining prompts.
+Alt+C             Copy to the clipboard, including prefixed prompts.
 Ctrl+X            Cut selected text.
 Ctrl+V            Paste from clipboard.
 Ctrl+Shift+V      Paste and run multiple commands from clipboard.
@@ -119,7 +140,30 @@ Ctrl+Enter        Insert new line into multiline command.
 Ctrl+]            Increase font size.
 Ctrl+[            Decrease font size.
 Ctrl+=            Default font size.
+Ctrl-Space        Show Auto Completion.
+Ctrl-Alt-Space    Show Call Tip.
+Alt+Shift+C       Clear Screen.
+Shift+Enter       Complete Text from History.
+Ctrl+F            Search (backwards) TODO: regexp-wholeWords-...
+Ctrl+G            Search next
+Ctrl+H            "hide" lines containing selection / "unhide"
+F12               on/off "free-edit" mode
 """
+
+class ShellFacade:
+    """Simplified interface to all shell-related functionality.
+
+    This is a semi-transparent facade, in that all attributes of other
+    are accessible, even though only some are visible to the user."""
+
+    name = 'Shell Interface'
+    revision = __revision__
+
+    def __init__(self, other):
+        """Create a ShellFacade instance."""
+        d = self.__dict__
+        d['other'] = other
+        d['helpText'] = HELP_TEXT
 
     def help(self):
         """Display some useful information about how to use the shell."""
@@ -151,6 +195,7 @@ Ctrl+=            Default font size.
             'autoCompleteIncludeDouble',
             'autoCompleteIncludeMagic',
             'autoCompleteIncludeSingle',
+            'callTipInsert',
             'clear',
             'pause',
             'prompt',
@@ -167,6 +212,7 @@ Ctrl+=            Default font size.
         return list
 
 
+
 class Shell(editwindow.EditWindow):
     """Shell based on StyledTextCtrl."""
 
@@ -175,26 +221,32 @@ class Shell(editwindow.EditWindow):
 
     def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.CLIP_CHILDREN,
-                 introText='', locals=None, InterpClass=None, *args, **kwds):
+                 introText='', locals=None, InterpClass=None,
+                 startupScript=None, execStartupScript=True,
+                 *args, **kwds):
         """Create Shell instance."""
         editwindow.EditWindow.__init__(self, parent, id, pos, size, style)
         self.wrap()
         if locals is None:
             import __main__
             locals = __main__.__dict__
+
         # Grab these so they can be restored by self.redirect* methods.
         self.stdin = sys.stdin
         self.stdout = sys.stdout
         self.stderr = sys.stderr
+
         # Import a default interpreter class if one isn't provided.
         if InterpClass == None:
             from interpreter import Interpreter
         else:
             Interpreter = InterpClass
+
         # Create a replacement for stdin.
         self.reader = PseudoFileIn(self.readline, self.readlines)
         self.reader.input = ''
         self.reader.isreading = False
+
         # Set up the interpreter.
         self.interp = Interpreter(locals=locals,
                                   rawin=self.raw_input,
@@ -202,15 +254,20 @@ class Shell(editwindow.EditWindow):
                                   stdout=PseudoFileOut(self.writeOut),
                                   stderr=PseudoFileErr(self.writeErr),
                                   *args, **kwds)
+
         # Set up the buffer.
         self.buffer = Buffer()
+
         # Find out for which keycodes the interpreter will autocomplete.
         self.autoCompleteKeys = self.interp.getAutoCompleteKeys()
+
         # Keep track of the last non-continuation prompt positions.
         self.promptPosStart = 0
         self.promptPosEnd = 0
+
         # Keep track of multi-line commands.
         self.more = False
+
         # Create the command history.  Commands are added into the
         # front of the list (ie. at index 0) as they are entered.
         # self.historyIndex is the current position in the history; it
@@ -220,22 +277,45 @@ class Shell(editwindow.EditWindow):
         # command, not in the history.
         self.history = []
         self.historyIndex = -1
+
+        #seb add mode for "free edit"
+        self.noteMode = 0
+        self.MarkerDefine(0,stc.STC_MARK_ROUNDRECT)  # marker for hidden
+        self.searchTxt = ""
+
         # Assign handlers for keyboard events.
-        wx.EVT_CHAR(self, self.OnChar)
-        wx.EVT_KEY_DOWN(self, self.OnKeyDown)
+        self.Bind(wx.EVT_CHAR, self.OnChar)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+
         # Assign handler for idle time.
         self.waiting = False
-        wx.EVT_IDLE(self, self.OnIdle)
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
+
         # Display the introductory banner information.
         self.showIntro(introText)
+
         # Assign some pseudo keywords to the interpreter's namespace.
         self.setBuiltinKeywords()
+
         # Add 'shell' to the interpreter's local namespace.
         self.setLocalShell()
+
+        ## NOTE:  See note at bottom of this file...
+        ## #seb: File drag and drop
+        ## self.SetDropTarget( FileDropTarget(self) )
+
         # Do this last so the user has complete control over their
         # environment.  They can override anything they want.
-        self.execStartupScript(self.interp.startupScript)
+        if execStartupScript:
+            if startupScript is None:
+                startupScript = os.environ.get('PYTHONSTARTUP')
+            self.execStartupScript(startupScript)
+        else:
+            self.prompt()
+        
         wx.CallAfter(self.ScrollToLine, 0)
+
+
 
     def destroy(self):
         del self.interp
@@ -270,28 +350,31 @@ class Shell(editwindow.EditWindow):
         __builtin__.close = __builtin__.exit = __builtin__.quit = \
             'Click on the close button to leave the application.'
 
+
     def quit(self):
         """Quit the application."""
-
         # XXX Good enough for now but later we want to send a close event.
-
         # In the close event handler we can make sure they want to
         # quit.  Other applications, like PythonCard, may choose to
         # hide rather than quit so we should just post the event and
         # let the surrounding app decide what it wants to do.
         self.write('Click on the close button to leave the application.')
 
+
     def setLocalShell(self):
         """Add 'shell' to locals as reference to ShellFacade instance."""
         self.interp.locals['shell'] = ShellFacade(other=self)
+
 
     def execStartupScript(self, startupScript):
         """Execute the user's PYTHONSTARTUP script if they have one."""
         if startupScript and os.path.isfile(startupScript):
             text = 'Startup script executed: ' + startupScript
             self.push('print %r; execfile(%r)' % (text, startupScript))
+            self.interp.startupScript = startupScript
         else:
             self.push('')
+
 
     def about(self):
         """Display information about Py."""
@@ -302,16 +385,23 @@ Py Shell Revision: %s
 Py Interpreter Revision: %s
 Python Version: %s
 wxPython Version: %s
+wxPython PlatformInfo: %s
 Platform: %s""" % \
         (__author__, VERSION, self.revision, self.interp.revision,
-         sys.version.split()[0], wx.VERSION_STRING, sys.platform)
+         sys.version.split()[0], wx.VERSION_STRING, str(wx.PlatformInfo),
+         sys.platform)
         self.write(text.strip())
+
 
     def OnChar(self, event):
         """Keypress event handler.
 
         Only receives an event if OnKeyDown calls event.Skip() for the
         corresponding event."""
+
+        if self.noteMode:
+            event.Skip()
+            return
 
         # Prevent modification of previously submitted
         # commands/responses.
@@ -343,10 +433,11 @@ Platform: %s""" % \
             self.ReplaceSelection('')
             command = self.GetTextRange(stoppos, currpos) + '('
             self.write('(')
-            self.autoCallTipShow(command)
+            self.autoCallTipShow(command, self.GetCurrentPos() == self.GetTextLength())
         else:
             # Allow the normal event handling to take place.
             event.Skip()
+
 
     def OnKeyDown(self, event):
         """Key down event handler."""
@@ -364,12 +455,64 @@ Platform: %s""" % \
         currpos = self.GetCurrentPos()
         endpos = self.GetTextLength()
         selecting = self.GetSelectionStart() != self.GetSelectionEnd()
+        
+        if controlDown and key in (ord('H'), ord('h')): 
+            li = self.GetCurrentLine()
+            m = self.MarkerGet(li)
+            if m & 1<<0:
+                startP = self.PositionFromLine(li)
+                self.MarkerDelete(li, 0)
+                maxli = self.GetLineCount()
+                li += 1 # li stayed visible as header-line
+                li0 = li 
+                while li<maxli and self.GetLineVisible(li) == 0:
+                    li += 1
+                endP = self.GetLineEndPosition(li-1)
+                self.ShowLines(li0, li-1)
+                self.SetSelection( startP, endP ) # select reappearing text to allow "hide again"
+                return
+            startP,endP = self.GetSelection()
+            endP-=1
+            startL,endL = self.LineFromPosition(startP), self.LineFromPosition(endP)
+
+            if endL == self.LineFromPosition(self.promptPosEnd): # never hide last prompt
+                endL -= 1
+
+            m = self.MarkerGet(startL)
+            self.MarkerAdd(startL, 0)
+            self.HideLines(startL+1,endL)
+            self.SetCurrentPos( startP ) # to ensure caret stays visible !
+
+        if key == wx.WXK_F12: #seb
+            if self.noteMode:
+                # self.promptPosStart not used anyway - or ? 
+                self.promptPosEnd = self.PositionFromLine( self.GetLineCount()-1 ) + len(str(sys.ps1))
+                self.GotoLine(self.GetLineCount())
+                self.GotoPos(self.promptPosEnd)
+                self.prompt()  #make sure we have a prompt
+                self.SetCaretForeground("black")
+                self.SetCaretWidth(1)    #default
+                self.SetCaretPeriod(500) #default
+            else:
+                self.SetCaretForeground("red")
+                self.SetCaretWidth(4)
+                self.SetCaretPeriod(0) #steady
+
+            self.noteMode = not self.noteMode
+            return
+        if self.noteMode:
+            event.Skip()
+            return
+
         # Return (Enter) is used to submit a command to the
         # interpreter.
-        if not controlDown and key == wx.WXK_RETURN:
+        if (not controlDown and not shiftDown and not altDown) and key == wx.WXK_RETURN:
             if self.CallTipActive():
                 self.CallTipCancel()
             self.processLine()
+        #Complete Text (from already typed words)    
+        elif shiftDown and key == wx.WXK_RETURN:
+            self.OnShowCompHistory()
         # Ctrl+Return (Cntrl+Enter) is used to insert a line break.
         elif controlDown and key == wx.WXK_RETURN:
             if self.CallTipActive():
@@ -433,6 +576,9 @@ Platform: %s""" % \
         elif (controlDown and not shiftDown and key in (ord('V'), ord('v'))) \
                  or (shiftDown and not controlDown and key == wx.WXK_INSERT):
             self.Paste()
+        elif controlDown and key == wx.WXK_SPACE:
+            """AutoComplete and Calltips manually."""
+            self.OnCallTipAutoCompleteManually (shiftDown)
         # Paste from the clipboard, run commands.
         elif controlDown and shiftDown and key in (ord('V'), ord('v')):
             self.PasteAndRun()
@@ -480,6 +626,49 @@ Platform: %s""" % \
             pass
         else:
             event.Skip()
+
+    def OnShowCompHistory(self):
+        """Show possible autocompletion Words from already typed words."""
+        
+        #copy from history
+        his = self.history[:]
+        
+        #put together in one string
+        joined = " ".join (his)
+        import re
+
+        #sort out only "good" words
+        newlist = re.split("[ \.\[\]=}(\)\,0-9\"]", joined)
+        
+        #length > 1 (mix out "trash")
+        thlist = []
+        for i in newlist:
+            if len (i) > 1:
+                thlist.append (i)
+        
+        #unique (no duplicate words
+        #oneliner from german python forum => unique list
+        unlist = [thlist[i] for i in xrange(len(thlist)) if thlist[i] not in thlist[:i]]
+            
+        #sort lowercase
+        unlist.sort(lambda a, b: cmp(a.lower(), b.lower()))
+        
+        #this is more convenient, isn't it?
+        self.AutoCompSetIgnoreCase(True)
+        
+        #join again together in a string
+        stringlist = " ".join(unlist)
+
+        #pos von 0 noch ausrechnen
+
+        #how big is the offset?
+        cpos = self.GetCurrentPos() - 1
+        while chr (self.GetCharAt (cpos)).isalnum():
+            cpos -= 1
+            
+        #the most important part
+        self.AutoCompShow(self.GetCurrentPos() - cpos -1, stringlist)
+
 
     def clearCommand(self):
         """Delete the current, unexecuted command."""
@@ -589,6 +778,7 @@ Platform: %s""" % \
                 self.write(os.linesep)
             else:
                 self.push(command)
+                wx.FutureCall(1, self.EnsureCaretVisible)
         # Or replace the current command with the other command.
         else:
             # If the line contains a command (even an invalid one).
@@ -665,9 +855,10 @@ Platform: %s""" % \
             text = text[ps2size:]
         return text
 
-    def push(self, command):
+    def push(self, command, silent = False):
         """Send command to the interpreter for execution."""
-        self.write(os.linesep)
+        if not silent:
+            self.write(os.linesep)
         busy = wx.BusyCursor()
         self.waiting = True
         self.more = self.interp.push(command)
@@ -675,7 +866,8 @@ Platform: %s""" % \
         del busy
         if not self.more:
             self.addHistory(command.rstrip())
-        self.prompt()
+        if not silent:
+            self.prompt()
 
     def addHistory(self, command):
         """Add command to the command history."""
@@ -817,7 +1009,7 @@ Platform: %s""" % \
         finally:
             file.close()
 
-    def autoCompleteShow(self, command):
+    def autoCompleteShow(self, command, offset = 0):
         """Display auto-completion popup list."""
         self.AutoCompSetAutoHide(self.autoCompleteAutoHide)
         self.AutoCompSetIgnoreCase(self.autoCompleteCaseInsensitive)
@@ -827,19 +1019,19 @@ Platform: %s""" % \
                     includeDouble=self.autoCompleteIncludeDouble)
         if list:
             options = ' '.join(list)
-            offset = 0
+            #offset = 0
             self.AutoCompShow(offset, options)
 
-    def autoCallTipShow(self, command):
+    def autoCallTipShow(self, command, insertcalltip = True, forceCallTip = False):
         """Display argument spec and docstring in a popup window."""
         if self.CallTipActive():
             self.CallTipCancel()
         (name, argspec, tip) = self.interp.getCallTip(command)
         if tip:
             dispatcher.send(signal='Shell.calltip', sender=self, calltip=tip)
-        if not self.autoCallTip:
+        if not self.autoCallTip and not forceCallTip:
             return
-        if argspec:
+        if argspec and insertcalltip and self.callTipInsert:
             startpos = self.GetCurrentPos()
             self.write(argspec + ')')
             endpos = self.GetCurrentPos()
@@ -852,6 +1044,53 @@ Platform: %s""" % \
             # fallback.
             tippos = max(tippos, fallback)
             self.CallTipShow(tippos, tip)
+    
+    def OnCallTipAutoCompleteManually (self, shiftDown):
+        """AutoComplete and Calltips manually."""
+        if self.AutoCompActive():
+            self.AutoCompCancel()
+        currpos = self.GetCurrentPos()
+        stoppos = self.promptPosEnd
+
+        cpos = currpos
+        #go back until '.' is found
+        pointavailpos = -1
+        while cpos >= stoppos:
+            if self.GetCharAt(cpos) == ord ('.'):
+                pointavailpos = cpos
+                break
+            cpos -= 1
+
+        #word from non whitespace until '.'
+        if pointavailpos != -1:
+            #look backward for first whitespace char
+            textbehind = self.GetTextRange (pointavailpos + 1, currpos)
+            pointavailpos += 1
+
+            if not shiftDown:
+                #call AutoComplete
+                stoppos = self.promptPosEnd
+                textbefore = self.GetTextRange(stoppos, pointavailpos)
+                self.autoCompleteShow(textbefore, len (textbehind))
+            else:
+                #call CallTips
+                cpos = pointavailpos
+                begpos = -1
+                while cpos > stoppos:
+                    if chr(self.GetCharAt(cpos)).isspace():
+                        begpos = cpos
+                        break
+                    cpos -= 1
+                if begpos == -1:
+                    begpos = cpos
+                ctips = self.GetTextRange (begpos, currpos)
+                ctindex = ctips.find ('(')
+                if ctindex != -1 and not self.CallTipActive():
+                    #insert calltip, if current pos is '(', otherwise show it only
+                    self.autoCallTipShow(ctips[:ctindex + 1], \
+                        self.GetCharAt(currpos - 1) == ord('(') and self.GetCurrentPos() == self.GetTextLength(),\
+                        True)
+                
 
     def writeOut(self, text):
         """Replacement for stdout."""
@@ -1034,3 +1273,101 @@ Platform: %s""" % \
         This number of points is added to the size of all fonts.  It
         may be positive to magnify or negative to reduce."""
         self.SetZoom(points)
+
+
+
+    def LoadSettings(self, config):
+        self.autoComplete              = config.ReadBool('Options/AutoComplete', True)
+        self.autoCompleteIncludeMagic  = config.ReadBool('Options/AutoCompleteIncludeMagic', True)
+        self.autoCompleteIncludeSingle = config.ReadBool('Options/AutoCompleteIncludeSingle', True)
+        self.autoCompleteIncludeDouble = config.ReadBool('Options/AutoCompleteIncludeDouble', True)
+
+        self.autoCallTip = config.ReadBool('Options/AutoCallTip', True)
+        self.callTipInsert = config.ReadBool('Options/CallTipInsert', True)
+        self.SetWrapMode(config.ReadBool('View/WrapMode', True))
+
+        useAA = config.ReadBool('Options/UseAntiAliasing', self.GetUseAntiAliasing())
+        self.SetUseAntiAliasing(useAA)
+        self.lineNumbers = config.ReadBool('View/ShowLineNumbers', True)
+        self.setDisplayLineNumbers (self.lineNumbers)
+        zoom = config.ReadInt('View/Zoom/Shell', -99)
+        if zoom != -99:
+            self.SetZoom(zoom)
+
+
+    
+    def SaveSettings(self, config):
+        config.WriteBool('Options/AutoComplete', self.autoComplete)
+        config.WriteBool('Options/AutoCompleteIncludeMagic', self.autoCompleteIncludeMagic)
+        config.WriteBool('Options/AutoCompleteIncludeSingle', self.autoCompleteIncludeSingle)
+        config.WriteBool('Options/AutoCompleteIncludeDouble', self.autoCompleteIncludeDouble)
+        config.WriteBool('Options/AutoCallTip', self.autoCallTip)
+        config.WriteBool('Options/CallTipInsert', self.callTipInsert)
+        config.WriteBool('Options/UseAntiAliasing', self.GetUseAntiAliasing())
+        config.WriteBool('View/WrapMode', self.GetWrapMode())
+        config.WriteBool('View/ShowLineNumbers', self.lineNumbers)
+        config.WriteInt('View/Zoom/Shell', self.GetZoom())
+
+
+
+## NOTE: The DnD of file names is disabled until I can figure out how
+## best to still allow DnD of text.
+
+
+## #seb : File drag and drop
+## class FileDropTarget(wx.FileDropTarget):
+##     def __init__(self, obj):
+##         wx.FileDropTarget.__init__(self)
+##         self.obj = obj
+##     def OnDropFiles(self, x, y, filenames):
+##         if len(filenames) == 1:
+##             txt = 'r\"%s\"' % filenames[0]
+##         else:
+##             txt = '( '
+##             for f in filenames:
+##                 txt += 'r\"%s\" , ' % f
+##             txt += ')'
+##         self.obj.AppendText(txt)
+##         pos = self.obj.GetCurrentPos()
+##         self.obj.SetCurrentPos( pos )
+##         self.obj.SetSelection( pos, pos )
+
+
+
+## class TextAndFileDropTarget(wx.DropTarget):
+##     def __init__(self, shell):
+##         wx.DropTarget.__init__(self)
+##         self.shell = shell
+##         self.compdo = wx.DataObjectComposite()
+##         self.textdo = wx.TextDataObject()
+##         self.filedo = wx.FileDataObject()
+##         self.compdo.Add(self.textdo)
+##         self.compdo.Add(self.filedo, True)
+        
+##         self.SetDataObject(self.compdo)
+                
+##     def OnDrop(self, x, y):
+##         return True
+    
+##     def OnData(self, x, y, result):
+##         self.GetData()
+##         if self.textdo.GetTextLength() > 1:
+##             text = self.textdo.GetText()
+##             # *** Do somethign with the dragged text here...
+##             self.textdo.SetText('')
+##         else:
+##             filenames = str(self.filename.GetFilenames())
+##             if len(filenames) == 1:
+##                 txt = 'r\"%s\"' % filenames[0]
+##             else:
+##                 txt = '( '
+##                 for f in filenames:
+##                     txt += 'r\"%s\" , ' % f
+##                 txt += ')'
+##             self.shell.AppendText(txt)
+##             pos = self.shell.GetCurrentPos()
+##             self.shell.SetCurrentPos( pos )
+##             self.shell.SetSelection( pos, pos )
+
+##         return result
+    

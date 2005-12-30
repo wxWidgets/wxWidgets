@@ -693,6 +693,9 @@ details in the second return value (see wx.LIST_HITTEST flags.)", "");
     void SetItemBackgroundColour( long item, const wxColour &col);
     wxColour GetItemBackgroundColour( long item ) const;
 
+    // Font of an item.
+    void SetItemFont( long item, const wxFont &f);
+    wxFont GetItemFont( long item ) const;
 
     %pythoncode {
     %#

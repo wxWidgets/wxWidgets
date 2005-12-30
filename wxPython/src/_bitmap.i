@@ -283,10 +283,13 @@ the ``type`` parameter.", "");
     
 #ifdef __WXMSW__
     bool CopyFromCursor(const wxCursor& cursor);
+
 // WXWIN_COMPATIBILITY_2_4
   #if 0
     int GetQuality();
     void SetQuality(int q);
+    %pythoncode { GetQuality = wx._deprecated(GetQuality) }
+    %pythoncode { SetQuality = wx._deprecated(SetQuality) }
   #endif
 #endif
 
