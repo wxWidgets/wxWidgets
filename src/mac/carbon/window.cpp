@@ -265,7 +265,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
 #if wxMAC_USE_CORE_GRAPHICS
                     bool created = false ;
-                    CGContextRef cgContext = 0 ;
+                    CGContextRef cgContext = NULL ;
                     if ( cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, &cgContext) != noErr )
                     {
                         wxASSERT( thisWindow->GetPeer()->IsCompositing() == false ) ;
@@ -292,9 +292,10 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
 #if 0
                         CGContextSetRGBFillColor( cgContext , 1.0 , 1.0 , 1.0 , 1.0 ) ;
-                        CGContextFillRect(cgContext , CGRectMake( 0 , 0 ,
-                            controlBounds.right - controlBounds.left ,
-                            controlBounds.bottom - controlBounds.top ) );
+                        CGContextFillRect( cgContext ,
+                            CGRectMake( 0 , 0 ,
+                                controlBounds.right - controlBounds.left ,
+                                controlBounds.bottom - controlBounds.top ) );
 #endif
                     }
 
@@ -594,7 +595,7 @@ void wxWindowMac::MacControlUserPaneDrawProc(wxInt16 part)
     int x = 0 , y = 0;
     RgnHandle rgn = NewRgn() ;
     GetClip( rgn ) ;
-    MacWindowToRootWindow( &x,&y ) ;
+    MacWindowToRootWindow( &x, &y ) ;
     OffsetRgn( rgn , -x , -y ) ;
     wxMacWindowStateSaver sv( this ) ;
     SectRgn( rgn , (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , rgn ) ;
@@ -1270,7 +1271,7 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
 void wxWindowMac::DoClientToScreen(int *x, int *y) const
 {
     WindowRef window = (WindowRef) MacGetTopLevelWindowRef() ;
-    wxCHECK_RET( window , wxT("TopLevel Window Missing") ) ;
+    wxCHECK_RET( window , wxT("TopLevel window missing") ) ;
 
     wxPoint origin = GetClientAreaOrigin() ;
     if (x)
@@ -1281,7 +1282,7 @@ void wxWindowMac::DoClientToScreen(int *x, int *y) const
     MacWindowToRootWindow( x , y ) ;
 
     {
-        Point localwhere = { 0,0 };
+        Point localwhere = { 0, 0 };
         if (x)
            localwhere.h = * x ;
         if (y)
@@ -1442,7 +1443,7 @@ wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
         // structure is in parent coordinates, but we only need width and height, so it's ok
 
         sizeTotal.x += (structure.right - structure.left) - (content.right - content.left) ;
-        sizeTotal.y += (structure.bottom - structure.top) - (content.bottom - content.top ) ;
+        sizeTotal.y += (structure.bottom - structure.top) - (content.bottom - content.top) ;
     }
 
     DisposeRgn( rgn ) ;
@@ -1561,7 +1562,7 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     }
 
     menu->MacAfterDisplay( true ) ;
-    menu->SetInvokingWindow(NULL);
+    menu->SetInvokingWindow( NULL );
 
   return true;
 }
@@ -1717,9 +1718,9 @@ void wxWindowMac::MacInvalidateBorders()
         UnionRgn( updateOuter , updateTotal , updateTotal ) ;
 
         GetParent()->m_peer->SetNeedsDisplay( updateTotal  ) ;
-        DisposeRgn(updateOuter) ;
-        DisposeRgn(updateInner) ;
-        DisposeRgn(updateTotal) ;
+        DisposeRgn( updateOuter ) ;
+        DisposeRgn( updateInner ) ;
+        DisposeRgn( updateTotal ) ;
     }
 #endif
 }
