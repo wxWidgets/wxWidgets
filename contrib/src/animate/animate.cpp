@@ -15,14 +15,14 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
+#include "wx/log.h"
 #include "wx/wfstream.h"
 #include "wx/image.h"
 #include "wx/gifdecod.h"
-#include "wx/log.h"
 #include "wx/dcmemory.h"
-#include "wx/animate/animate.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
+#include "wx/animate/animate.h"
 
 /*
  * wxAnimationPlayer
@@ -34,15 +34,15 @@ wxAnimationPlayer::wxAnimationPlayer(wxAnimationBase *animation, bool destroyAni
 {
     m_animation = animation;
     m_destroyAnimation = destroyAnimation;
+    m_customBackgroundColour = wxColour(0, 0, 0);
     m_currentFrame = 0;
     m_window = (wxWindow*) NULL;
     m_position = wxPoint(0, 0);
-    m_looped = TRUE;
-    m_isPlaying = FALSE;
-    m_useBackgroundColour = FALSE;
-    m_customBackgroundColour = wxColour(0, 0, 0);
-    m_useCustomBackgroundColour = FALSE;
-    m_useParentBackground = FALSE;
+    m_looped = true;
+    m_isPlaying = false;
+    m_useBackgroundColour = false;
+    m_useCustomBackgroundColour = false;
+    m_useParentBackground = false;
     m_timer.SetPlayer(this);
 }
 
@@ -70,7 +70,7 @@ bool wxAnimationPlayer::Play(wxWindow& window, const wxPoint& pos, bool WXUNUSED
     m_window = & window;
 
     if (!m_animation || !m_animation->IsValid())
-        return FALSE;
+        return false;
 
     wxSize sz = GetLogicalScreenSize();
     wxRect rect(pos, sz);
@@ -81,9 +81,11 @@ bool wxAnimationPlayer::Play(wxWindow& window, const wxPoint& pos, bool WXUNUSED
         if (!Build())
         {
             wxLogWarning(_T("wxAnimationPlayer::Play: could not build the image cache."));
-            return FALSE;
+
+            return false;
         }
     }
+
     m_currentFrame = 0;
 
     // Create the backing store
@@ -91,7 +93,7 @@ bool wxAnimationPlayer::Play(wxWindow& window, const wxPoint& pos, bool WXUNUSED
 
     PlayFrame();
 
-    return TRUE;
+    return true;
 }
 
 // Build animation (list of wxImages). If not called before Play
@@ -99,43 +101,41 @@ bool wxAnimationPlayer::Play(wxWindow& window, const wxPoint& pos, bool WXUNUSED
 bool wxAnimationPlayer::Build()
 {
     ClearCache();
-    if (m_animation)
-    {
-        int n = GetFrameCount();
-        int i;
-        for (i = 0; i < n; i++)
-        {
-            wxImage* image = GetFrame(i);
-            if (image)
-            {
-                // If the frame has transparency,
-                // set the colour so converting to a bitmap
-                // will create a mask
-                wxColour transparentColour;
-                if (GetTransparentColour(transparentColour))
-                    image->SetMaskColour(transparentColour.Red(), transparentColour.Green(), transparentColour.Blue());
+    if (!m_animation)
+        return false;
 
-                wxBitmap* bitmap = new wxBitmap(* image);
-                delete image;
-                if (bitmap)
-                    m_frames.Append(bitmap);
-                else
-                    return FALSE;
-            }
-            else
-                return FALSE;
-        }
-        return TRUE;
+    int i, n;
+
+    n = GetFrameCount();
+    for (i = 0; i < n; i++)
+    {
+        wxImage* image = GetFrame(i);
+        if (image == NULL)
+            return false;
+
+        // If the frame has transparency,
+        // set the colour so converting to a bitmap
+        // will create a mask
+        wxColour transparentColour;
+        if (GetTransparentColour(transparentColour))
+            image->SetMaskColour(transparentColour.Red(), transparentColour.Green(), transparentColour.Blue());
+
+        wxBitmap* bitmap = new wxBitmap(*image);
+        delete image;
+        if (bitmap == NULL)
+            return false;
+
+        m_frames.Append(bitmap);
     }
-    else
-        return FALSE;
+
+    return true;
 }
 
 // Stop the animation
 void wxAnimationPlayer::Stop()
 {
     m_timer.Stop();
-    m_isPlaying = FALSE;
+    m_isPlaying = false;
 }
 
 // Draw the current view of the animation into this DC.
@@ -144,7 +144,6 @@ void wxAnimationPlayer::Draw(wxDC& dc)
 {
     dc.DrawBitmap(m_backingStore, m_position.x, m_position.y);
 }
-
 
 int wxAnimationPlayer::GetFrameCount() const
 {
@@ -199,7 +198,7 @@ bool wxAnimationPlayer::GetBackgroundColour(wxColour& col) const
     if (m_animation)
         return m_animation->GetBackgroundColour(col);
     else
-        return FALSE;
+        return false;
 }
 
 bool wxAnimationPlayer::GetTransparentColour(wxColour& col) const
@@ -207,7 +206,7 @@ bool wxAnimationPlayer::GetTransparentColour(wxColour& col) const
     if (m_animation)
         return m_animation->GetTransparentColour(col);
     else
-        return FALSE;
+        return false;
 }
 
 // Play the frame
@@ -224,9 +223,7 @@ bool wxAnimationPlayer::PlayFrame(int frame, wxWindow& window, const wxPoint& WX
         if (UsingCustomBackgroundColour())
             col = GetCustomBackgroundColour();
         else
-        {
             GetBackgroundColour(col);
-        }
 
         // Draw the background colour loaded from the animation
         // (or set by the user)
@@ -238,16 +235,14 @@ bool wxAnimationPlayer::PlayFrame(int frame, wxWindow& window, const wxPoint& WX
         dc.DrawBitmap(m_savedBackground, 0, 0);
     }
 
-    // Draw all intermediate frames that haven't been removed from the
-    // animation
+    // Draw all intermediate frames that haven't been removed from the animation
     int i;
     for (i = 0; i < frame; i++)
     {
         if ((GetDisposalMethod(i) == wxANIM_DONOTREMOVE) || (GetDisposalMethod(i) == wxANIM_UNSPECIFIED))
-        {
             DrawFrame(i, dc, wxPoint(0, 0));
-        }
     }
+
     DrawFrame(frame, dc, wxPoint(0, 0));
 
     dc.SelectObject(wxNullBitmap);
@@ -256,12 +251,12 @@ bool wxAnimationPlayer::PlayFrame(int frame, wxWindow& window, const wxPoint& WX
     wxClientDC clientDC(& window);
     Draw(clientDC);
 
-    return TRUE;
+    return true;
 }
 
 bool wxAnimationPlayer::PlayFrame()
 {
-    m_isPlaying = TRUE;
+    m_isPlaying = true;
 
     PlayFrame(GetCurrentFrame(), * GetWindow(), GetPosition());
 
@@ -280,13 +275,13 @@ bool wxAnimationPlayer::PlayFrame()
         if (!m_looped)
         {
             m_timer.Stop();
-            m_isPlaying = FALSE;
+            m_isPlaying = false;
         }
         else
             m_currentFrame = 0;
     }
 
-    return TRUE;
+    return true;
 }
 
 // Clear the wxImage cache
@@ -299,6 +294,7 @@ void wxAnimationPlayer::ClearCache()
         wxBitmap* bitmap = (wxBitmap*) node->GetData();
         delete bitmap;
         m_frames.Erase(node);
+
         node = next;
     }
 }
@@ -307,7 +303,7 @@ void wxAnimationPlayer::ClearCache()
 void wxAnimationPlayer::DrawBackground(wxDC& dc, const wxPoint& pos, const wxColour& colour)
 {
     wxASSERT_MSG( (m_animation != NULL), _T("Animation not present in wxAnimationPlayer"));
-    wxASSERT_MSG( (m_frames.GetCount() != 0), _T("Animation cache not present in wxAnimationPlayer"));
+    wxASSERT_MSG( (m_frames.GetCount() > 0), _T("Animation cache not present in wxAnimationPlayer"));
 
     // Optimization: if the first frame fills the whole area, and is non-transparent,
     // don't bother drawing the background
@@ -315,9 +311,7 @@ void wxAnimationPlayer::DrawBackground(wxDC& dc, const wxPoint& pos, const wxCol
     wxBitmap* firstBitmap = (wxBitmap*) m_frames.GetFirst()->GetData() ;
     wxSize screenSize = GetLogicalScreenSize();
     if (!firstBitmap->GetMask() && (firstBitmap->GetWidth() == screenSize.x) && (firstBitmap->GetHeight() == screenSize.y))
-    {
         return;
-    }
 
     wxBrush brush(colour, wxSOLID);
     wxPen pen(colour, 1, wxSOLID);
@@ -332,7 +326,7 @@ void wxAnimationPlayer::DrawBackground(wxDC& dc, const wxPoint& pos, const wxCol
 // it if drawing transparently
 void wxAnimationPlayer::SaveBackground(const wxRect& rect)
 {
-    wxASSERT( GetWindow() );
+    wxASSERT( (GetWindow() != NULL) );
 
     if (!GetWindow())
         return;
@@ -361,6 +355,7 @@ void wxAnimationPlayer::SaveBackground(const wxRect& rect)
 
         memDC.Blit(0, 0, rect.width, rect.height, & dc, rect.x, rect.y);
     }
+
     memDC.SelectObject(wxNullBitmap);
 }
 
@@ -372,10 +367,9 @@ void wxAnimationPlayer::DrawFrame(int frame, wxDC& dc, const wxPoint& pos)
     wxASSERT_MSG( !!m_frames.Item(frame), _T("Image not present in wxAnimationPlayer::DrawFrame"));
 
     wxBitmap* bitmap = (wxBitmap*) m_frames.Item(frame)->GetData() ;
-
     wxRect rect = GetFrameRect(frame);
 
-    dc.DrawBitmap(* bitmap, pos.x + rect.x, pos.y + rect.y, (bitmap->GetMask() != NULL));
+    dc.DrawBitmap(*bitmap, pos.x + rect.x, pos.y + rect.y, (bitmap->GetMask() != NULL));
 }
 
 void wxAnimationTimer::Notify()
@@ -420,6 +414,7 @@ wxImage* wxGIFAnimation::GetFrame(int i) const
 
     wxImage* image = new wxImage;
     m_decoder->ConvertToImage(image);
+
     return image;
 }
 
@@ -440,6 +435,7 @@ wxRect wxGIFAnimation::GetFrameRect(int i) const
     m_decoder->GoFrame(i + 1);
 
     wxRect rect(m_decoder->GetLeft(), m_decoder->GetTop(), m_decoder->GetWidth(), m_decoder->GetHeight());
+
     return rect;
 }
 
@@ -448,6 +444,7 @@ int wxGIFAnimation::GetDelay(int i) const
     wxASSERT_MSG( (m_decoder != (wxGIFDecoder*) NULL), _T("m_decoder must be non-NULL"));
 
     m_decoder->GoFrame(i + 1);
+
     return m_decoder->GetDelay();
 }
 
@@ -464,19 +461,15 @@ bool wxGIFAnimation::GetBackgroundColour(wxColour& col) const
 
     int i = m_decoder->GetBackgroundColour();
     if (i == -1)
-        return FALSE;
-    else
-    {
-        unsigned char* pal = m_decoder->GetPalette();
+        return false;
 
-        if (pal)
-        {
-            col = wxColour(pal[3*i + 0], pal[3*i + 1], pal[3*i + 2]);
-            return TRUE;
-        }
-        else
-            return FALSE;
-    }
+    const unsigned char *pal = m_decoder->GetPalette();
+    bool result = (pal != NULL);
+
+    if (result)
+        col = wxColour(pal[3*i + 0], pal[3*i + 1], pal[3*i + 2]);
+
+    return result;
 }
 
 bool wxGIFAnimation::GetTransparentColour(wxColour& col) const
@@ -485,19 +478,15 @@ bool wxGIFAnimation::GetTransparentColour(wxColour& col) const
 
     int i = m_decoder->GetTransparentColour();
     if (i == -1)
-        return FALSE;
-    else
-    {
-        unsigned char* pal = m_decoder->GetPalette();
+        return false;
 
-        if (pal)
-        {
-            col = wxColour(pal[3*i + 0], pal[3*i + 1], pal[3*i + 2]);
-            return TRUE;
-        }
-        else
-            return FALSE;
-    }
+    const unsigned char *pal = m_decoder->GetPalette();
+    bool result = (pal != NULL);
+
+    if (result)
+        col = wxColour(pal[3*i + 0], pal[3*i + 1], pal[3*i + 2]);
+
+    return result;
 }
 
 bool wxGIFAnimation::IsValid() const
@@ -507,34 +496,35 @@ bool wxGIFAnimation::IsValid() const
 
 bool wxGIFAnimation::LoadFile(const wxString& filename)
 {
-    if (m_decoder)
-        delete m_decoder;
-    m_decoder = NULL;
+    if (!wxFileExists(filename))
+        return false;
 
-    if (wxFileExists(filename))
+    bool result = true;
+
+    if (m_decoder)
+    {
+        delete m_decoder;
+        m_decoder = NULL;
+    }
+
     {
         wxFileInputStream stream(filename);
-        m_decoder = new wxGIFDecoder(& stream, TRUE);
 
-        if (m_decoder->ReadGIF() != wxGIF_OK)
-        {
-            delete m_decoder;
-            m_decoder = NULL;
-            return FALSE;
-        }
+        if (stream.GetLength() > 0)
+            m_decoder = new wxGIFDecoder(&stream, true);
 
-        if (!m_decoder->IsAnimation())
-        {
-            delete m_decoder;
-            m_decoder = NULL;
-
-            return FALSE;
-        }
-        else
-            return TRUE;
+        result = ((m_decoder != NULL) && (m_decoder->ReadGIF() == wxGIF_OK));
+        if (result)
+            result = m_decoder->IsAnimation();
     }
-    else
-        return FALSE;
+
+    if (!result && (m_decoder != NULL))
+    {
+        delete m_decoder;
+        m_decoder = NULL;
+    }
+
+    return result;
 }
 
 /*
@@ -558,30 +548,32 @@ bool wxAnimationCtrlBase::Create(wxWindow *parent, wxWindowID id,
     m_filename = filename;
 
     if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
-        return FALSE;
+        return false;
 
     SetBackgroundColour(parent->GetBackgroundColour());
 
     m_animationPlayer.SetCustomBackgroundColour(GetBackgroundColour());
 
-    // Want to give the impression of transparency by painting
-    // the parent background
+    // give the impression of transparency by painting
+    // with the parent background
 //    if (parent)
-//        m_animationPlayer.UseParentBackground(TRUE);
+//        m_animationPlayer.UseParentBackground(true);
+
     m_animationPlayer.SetWindow(this);
     m_animationPlayer.SetPosition(wxPoint(0, 0));
-    m_animationPlayer.SetDestroyAnimation(FALSE);
+    m_animationPlayer.SetDestroyAnimation(false);
 
     LoadFile(filename);
     
-    return TRUE;
+    return true;
 }
 
 wxAnimationCtrlBase::~wxAnimationCtrlBase()
 {
     if (m_animationPlayer.IsPlaying())
         m_animationPlayer.Stop();
-    m_animationPlayer.SetAnimation(NULL, FALSE);
+    m_animationPlayer.SetAnimation(NULL, false);
+
     delete m_animation;
 }
 
@@ -593,10 +585,11 @@ bool wxAnimationCtrlBase::LoadFile(const wxString& filename)
     wxString filename1(filename);
 
     if (filename1.IsEmpty())
+    {
         filename1 = m_filename;
-
-    if (filename1.IsEmpty())
-        return FALSE;
+        if (filename1.IsEmpty())
+            return false;
+    }
 
     if (m_animation)
     {
@@ -606,20 +599,22 @@ bool wxAnimationCtrlBase::LoadFile(const wxString& filename)
 
     m_animation = DoCreateAnimation(filename1);
     if (!m_animation)
-        return FALSE;
+        return false;
 
     if (!m_animation->LoadFile(filename) || !m_animation->IsValid())
     {
         delete m_animation;
         m_animation = NULL;
-        return FALSE;
+
+        return false;
     }
-    m_animationPlayer.SetAnimation(m_animation, FALSE);
+
+    m_animationPlayer.SetAnimation(m_animation, false);
 
     if (GetWindowStyle() & wxAN_FIT_ANIMATION)
         FitToAnimation();
 
-    return TRUE;
+    return true;
 }
 
 bool wxAnimationCtrlBase::Play(bool looped)
@@ -630,13 +625,9 @@ bool wxAnimationCtrlBase::Play(bool looped)
 wxSize wxAnimationCtrlBase::DoGetBestSize() const
 {
     if (m_animationPlayer.HasAnimation() && (GetWindowStyle() & wxAN_FIT_ANIMATION))
-    {
         return m_animationPlayer.GetLogicalScreenSize();
-    }
     else
-    {
         return GetSize();
-    }
 }
 
 void wxAnimationCtrlBase::FitToAnimation()
@@ -653,9 +644,7 @@ void wxAnimationCtrlBase::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
 
     if (GetPlayer().IsPlaying())
-    {
         GetPlayer().Draw(dc);
-    }
 }
 
 /*
@@ -669,3 +658,4 @@ wxAnimationBase* wxGIFAnimationCtrl::DoCreateAnimation(const wxString& WXUNUSED(
 {
     return new wxGIFAnimation;
 }
+
