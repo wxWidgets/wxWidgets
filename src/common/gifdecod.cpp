@@ -675,6 +675,12 @@ int wxGIFDecoder::ReadGIF()
     m_screenw = buf[0] + 256 * buf[1];
     m_screenh = buf[2] + 256 * buf[3];
 
+    const int maxScreenSize = 4 << 10;
+    if ((m_screenw <= 0) || (m_screenw > maxScreenSize) || (m_screenh <= 0) || (m_screenh > maxScreenSize))
+    {
+        return wxGIF_INVFORMAT;
+    }
+
     /* load global color map if available */
     if ((buf[4] & 0x80) == 0x80)
     {
@@ -701,7 +707,7 @@ int wxGIFDecoder::ReadGIF()
 
     bool done = false;
 
-    while(!done)
+    while (!done)
     {
         type = (unsigned char)m_f->GetC();
 
@@ -843,6 +849,11 @@ int wxGIFDecoder::ReadGIF()
 
             /* get initial code size from first byte in raster data */
             bits = (unsigned char)m_f->GetC();
+            if (bits == 0)
+            {
+                Destroy();
+                return wxGIF_INVFORMAT;
+            }
 
             /* decode image */
             int result = dgif(pimg, interl, bits);
@@ -859,7 +870,7 @@ int wxGIFDecoder::ReadGIF()
         }
     }
 
-    if (m_nimages == 0)
+    if (m_nimages <= 0)
     {
         Destroy();
         return wxGIF_INVFORMAT;
@@ -904,6 +915,12 @@ int wxGIFDecoder::ReadGIF()
             if ((buf[8] & 0x80) == 0x80)
             {
                 ncolors = 2 << (buf[8] & 0x07);
+                if (ncolors <= 0)
+                {
+                    Destroy();
+                    return wxGIF_INVFORMAT;
+                }
+
                 wxFileOffset pos = m_f->TellI();
                 wxFileOffset numBytes = 3 * ncolors;
                 m_f->SeekI(numBytes, wxFromCurrent);
