@@ -213,6 +213,8 @@ long wxGetNumberFromUser(const wxString& message,
                          long min = 0, long max = 100,
                          wxWindow *parent = NULL,
                          const wxPoint& pos = wxDefaultPosition);
+%pythoncode { GetNumberFromUser = wx._deprecated(GetNumberFromUser) }
+
 
 // GDI Functions
 
