@@ -1,6 +1,27 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.7.0.0
+-------
+
+The following deprecated items have been removed:
+
+    * wx.Bitmap SetQuality and GetQuality methods
+
+    * The wx.GetNumberFromUser function
+
+    * wx.EVT_LIST_GET_INFO and wx.EVT_LIST_SET_INFO
+
+    * wx.BookCtrlSizer and wx.NotebookSizer
+
+    * The PostScript-specific methods of wx.PrintData
+
+    * wx.PrintDialogData SetSetupDialog and GetSetupDialog methods
+
+
+
+
+
 2.6.1.1
 -------
 
