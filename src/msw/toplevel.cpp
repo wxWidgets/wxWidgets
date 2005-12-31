@@ -713,9 +713,13 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
         // "real" size and doesn't want to know that, because of implementation
         // details, the frame isn't really maximized yet but will be only once
         // it's shown, so return our size as it will be then in this case
-
-        // we don't know which display we're on yet so use the default one
-        SetSize(wxGetClientDisplayRect().GetSize());
+        if ( maximize )
+        {
+            // unfortunatrly we don't know which display we're on yet so we
+            // have to use the default one
+            SetSize(wxGetClientDisplayRect().GetSize());
+        }
+        //else: can't do anything in this case, we don't have the old size
     }
 }
 
