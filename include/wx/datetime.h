@@ -57,7 +57,7 @@ class WXDLLIMPEXP_BASE wxDateSpan;
 #define wxLocaltime_r localtime_r
 #else
 struct tm *wxLocaltime_r(const time_t*, struct tm*);
-#if !defined(__WINDOWS__)
+#if wxUSE_THREADS && !defined(__WINDOWS__)
      // On Windows, localtime _is_ threadsafe!
 #warning using pseudo thread-safe wrapper for localtime to emulate localtime_r
 #endif
@@ -67,7 +67,7 @@ struct tm *wxLocaltime_r(const time_t*, struct tm*);
 #define wxGmtime_r gmtime_r
 #else
 struct tm *wxGmtime_r(const time_t*, struct tm*);
-#if !defined(__WINDOWS__)
+#if wxUSE_THREADS && !defined(__WINDOWS__)
      // On Windows, gmtime _is_ threadsafe!
 #warning using pseudo thread-safe wrapper for gmtime to emulate gmtime_r
 #endif

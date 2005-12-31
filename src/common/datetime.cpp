@@ -169,7 +169,7 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
     #endif
 #endif // !WX_TIMEZONE && !WX_GMTOFF_IN_TM
 
-#if wxUSE_THREADS
+#if (!defined(HAVE_LOCALTIME_R) || !defined(HAVE_GMTIME_R)) && wxUSE_THREADS && !defined(__WINDOWS__)
 static wxMutex timeLock;
 #endif
 
