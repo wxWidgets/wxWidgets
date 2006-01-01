@@ -675,8 +675,7 @@ int wxGIFDecoder::ReadGIF()
     m_screenw = buf[0] + 256 * buf[1];
     m_screenh = buf[2] + 256 * buf[3];
 
-    const int maxScreenSize = 4 << 10;
-    if ((m_screenw <= 0) || (m_screenw > maxScreenSize) || (m_screenh <= 0) || (m_screenh > maxScreenSize))
+    if ((m_screenw == 0) || (m_screenh == 0))
     {
         return wxGIF_INVFORMAT;
     }
@@ -803,7 +802,7 @@ int wxGIFDecoder::ReadGIF()
             pimg->w = buf[4] + 256 * buf[5];
             pimg->h = buf[6] + 256 * buf[7];
 
-            if ((pimg->w <= 0) || (pimg->w > maxScreenSize) || (pimg->h <= 0) || (pimg->h > maxScreenSize))
+            if ((pimg->w == 0) || (pimg->w > m_screenw) || (pimg->h == 0) || (pimg->h > m_screenh))
             {
                 Destroy();
                 return wxGIF_INVFORMAT;
@@ -835,9 +834,8 @@ int wxGIFDecoder::ReadGIF()
             {
                 ncolors = 2 << (buf[8] & 0x07);
                 size_t numBytes = 3 * ncolors;
-                if (numBytes > 0)
-                    m_f->Read(pimg->pal, numBytes);
-                if ((numBytes <= 0) || (m_f->LastRead() != numBytes))
+                m_f->Read(pimg->pal, numBytes);
+                if (m_f->LastRead() != numBytes)
                 {
                     Destroy();
                     return wxGIF_INVFORMAT;
@@ -916,12 +914,6 @@ int wxGIFDecoder::ReadGIF()
             if ((buf[8] & 0x80) == 0x80)
             {
                 ncolors = 2 << (buf[8] & 0x07);
-                if (ncolors <= 0)
-                {
-                    Destroy();
-                    return wxGIF_INVFORMAT;
-                }
-
                 wxFileOffset pos = m_f->TellI();
                 wxFileOffset numBytes = 3 * ncolors;
                 m_f->SeekI(numBytes, wxFromCurrent);
