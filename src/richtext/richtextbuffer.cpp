@@ -1130,8 +1130,6 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextFragm
 
         return true;
     }
-
-    return false;
 }
 
 /// Make a copy of the fragment corresponding to the given range, putting it in 'fragment'.
