@@ -812,8 +812,10 @@ void wxSlider::GetPosition(
         vPoint.x -= vPt.x;
         vPoint.y -= vPt.y;
     }
-    *pnX = vPoint.x;
-    *pnY = vPoint.y;
+    if (pnX)
+        *pnX = vPoint.x;
+    if (pnY)
+        *pnY = vPoint.y;
 } // end of wxSlider::GetPosition
 
 int wxSlider::GetSelEnd() const

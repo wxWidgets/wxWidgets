@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/spinctrl.cpp
-// Purpose:     wxSpinCtrl class implementation for Win32
+// Name:        os2/spinctrl.cpp
+// Purpose:     wxSpinCtrl class implementation for OS/2
 // Author:      David Webster
 // Modified by:
 // Created:     10/15/99
