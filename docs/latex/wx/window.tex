@@ -2760,6 +2760,12 @@ use \helpref{SetOwnFont}{wxwindowsetownfont} instead in this case and
 see \helpref{InheritAttributes}{wxwindowinheritattributes} for more
 explanations.
 
+Please notice that the given font is \emph{not} automatically used for 
+\helpref{wxPaintDC}{wxpaintdc} objects associated with this window, you need to
+call \helpref{wxDC::SetFont()}{wxdcsetfont} too. However this font is used by
+any standard controls for drawing their text as well as by 
+\helpref{wxWindow::GetTextExtent()}{wxwindowgettextextent}.
+
 \wxheading{Parameters}
 
 \docparam{font}{Font to associate with this window, pass
