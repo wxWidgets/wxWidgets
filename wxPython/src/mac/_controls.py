@@ -506,7 +506,7 @@ class Choice(_core.ControlWithItems):
         """
         GetCurrentSelection(self) -> int
 
-        Unlike `GetSelection which only returns the accepted selection value,
+        Unlike `GetSelection` which only returns the accepted selection value,
         i.e. the selection in the control once the user closes the dropdown
         list, this function returns the current selection.  That is, while the
         dropdown list is shown, it returns the currently selected item in
@@ -697,7 +697,7 @@ class ComboBox(_core.Control,_core.ItemContainer):
         """
         GetCurrentSelection(self) -> int
 
-        Unlike `GetSelection which only returns the accepted selection value,
+        Unlike `GetSelection` which only returns the accepted selection value,
         i.e. the selection in the control once the user closes the dropdown
         list, this function returns the current selection.  That is, while the
         dropdown list is shown, it returns the currently selected item in

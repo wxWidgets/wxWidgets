@@ -493,6 +493,7 @@ def GetNumberFromUser(*args, **kwargs):
         Point pos=DefaultPosition) -> long
     """
     return _misc_.GetNumberFromUser(*args, **kwargs)
+GetNumberFromUser = wx._deprecated(GetNumberFromUser) 
 
 def ColourDisplay(*args, **kwargs):
     """ColourDisplay() -> bool"""
