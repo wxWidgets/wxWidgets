@@ -34,6 +34,7 @@
     #include "wx/frame.h"
     #include "wx/control.h"
     #include "wx/containr.h"        // wxSetFocusToChild()
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #include "wx/module.h"        // wxSetFocusToChild()
@@ -407,7 +408,7 @@ bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
         nX = (vSizeDpy.x - nWidth) / 2;
         nY = (vSizeDpy.y - nHeight) / 2;
     }
-    m_backgroundColour.Set(wxString(wxT("LIGHT GREY")));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
 
@@ -502,7 +503,7 @@ bool wxTopLevelWindowOS2::CreateFrame( const wxString& rsTitle,
     wxAssociateWinWithHandle(m_hWnd, this);
     wxAssociateWinWithHandle(m_hFrame, this);
 
-    m_backgroundColour.Set(wxString(wxT("MEDIUM GREY")));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
 

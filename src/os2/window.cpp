@@ -725,6 +725,10 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
     int                             nOldRange = nRange - nThumbVisible;
     int                             nRange1 = nOldRange;
     int                             nPageSize = nThumbVisible;
+    int         nVSBWidth  = wxSystemSettingsNative::GetMetric(wxSYS_VSCROLL_X,
+                                                               this);
+    int         nHSBHeight = wxSystemSettingsNative::GetMetric(wxSYS_HSCROLL_Y,
+                                                               this);
 
     SBCDATA                         vInfo;
     ULONG                           ulStyle = WS_VISIBLE | WS_SYNCPAINT;
@@ -786,8 +790,8 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
                                                     ,ulStyle
                                                     ,vSwp.x
                                                     ,vSwp.y
-                                                    ,vSwp.cx - 20
-                                                    ,20
+                                                    ,vSwp.cx - nVSBWidth
+                                                    ,nHSBHeight
                                                     ,hWnd
                                                     ,HWND_TOP
                                                     ,60000
@@ -804,18 +808,19 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
             // origin, not the frame's client window origin.
             // The starting x position is the same as the starting x position
             // of the owner, but in terms of the parent frame.
-            // The starting y position is 20 pels below the origin of the
-            // owner in terms of the parent frame.
-            // The horz bar is the same width as the owner and 20 pels high.
+            // The starting y position is wxSYS_HSCROLL_Y pels below the
+            // origin of the owner in terms of the parent frame.
+            // The horz bar is the same width as the owner and wxSYS_HSCROLL_Y
+            // pels high.
             //
             if (nRange1 >= nThumbVisible)
             {
                 ::WinSetWindowPos( m_hWndScrollBarHorz
                                   ,HWND_TOP
                                   ,vSwp.x + vSwpOwner.x
-                                  ,(vSwp.y + vSwpOwner.y) - 20
+                                  ,(vSwp.y + vSwpOwner.y) - nHSBHeight
                                   ,vSwpOwner.cx
-                                  ,20
+                                  ,nHSBHeight
                                   ,SWP_MOVE | SWP_SIZE | SWP_SHOW | SWP_ACTIVATE | SWP_ZORDER
                                  );
                 ::WinSendMsg( m_hWndScrollBarHorz
@@ -856,10 +861,10 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
                                                     ,WC_SCROLLBAR
                                                     ,(PSZ)NULL
                                                     ,ulStyle
-                                                    ,vSwp.x + vSwp.cx - 20
-                                                    ,vSwp.y + 20
-                                                    ,20
-                                                    ,vSwp.cy - 20
+                                                    ,vSwp.x + vSwp.cx - nVSBWidth
+                                                    ,vSwp.y + nHSBHeight
+                                                    ,nVSBWidth
+                                                    ,vSwp.cy - nHSBHeight
                                                     ,hWnd
                                                     ,HWND_TOP
                                                     ,60001
@@ -882,7 +887,7 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
             // position of the scrollbar relative to the parent frame (the vert
             // scrollbar is on the right and starts at the bottom of the
             // owner window).
-            // It is 20 pels wide and the same height as the owner.
+            // It is wxSYS_VSCROLL_X pels wide and the same height as the owner.
             //
             if (nRange1 >= nThumbVisible)
             {
@@ -890,7 +895,7 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
                                   ,HWND_TOP
                                   ,vSwp.x + vSwpOwner.x + vSwpOwner.cx
                                   ,vSwp.y + vSwpOwner.y
-                                  ,20
+                                  ,nVSBWidth
                                   ,vSwpOwner.cy
                                   ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
                                  );
@@ -1556,17 +1561,17 @@ void wxWindowOS2::DoMoveWindow(
         //
         // Uninitialized
         //
-        ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
+        ::WinQueryWindowPos(hWnd, &m_vWinSwp);
     else
     {
         int                         nYDiff = m_vWinSwp.cy - nHeight;
 
         //
         // Handle resizing of scrolled windows.  The target or window to
-        // be scrolled is the owner (gets the scroll notificaitons).  The
+        // be scrolled is the owner (gets the scroll notifications).  The
         // parent is usually the parent frame of the scrolled panel window.
         // In order to show the scrollbars the target window will be shrunk
-        // by the size of the scroll bar widths (20) and moved in the X and Y
+        // by the size of the scroll bar widths and moved in the X and Y
         // directon.  That value will be computed as part of the diff for
         // moving the children.  Everytime the window is sized the
         // toplevel OnSize is going to resize the panel to fit the client
@@ -1579,20 +1584,24 @@ void wxWindowOS2::DoMoveWindow(
         {
             int                     nAdjustWidth  = 0;
             int                     nAdjustHeight = 0;
+            int nHSBHeight = wxSystemSettingsNative::GetMetric(wxSYS_HSCROLL_Y,
+                                                               this);
+            int nVSBWidth  = wxSystemSettingsNative::GetMetric(wxSYS_VSCROLL_X,
+							       this);
             SWP                     vSwpScroll;
 
             if (GetScrollBarHorz() == NULLHANDLE ||
                 !WinIsWindowShowing(GetScrollBarHorz()))
                 nAdjustHeight = 0L;
             else
-                nAdjustHeight = 20L;
+                nAdjustHeight = nHSBHeight;
             if (GetScrollBarVert() == NULLHANDLE ||
                 !WinIsWindowShowing(GetScrollBarVert()))
                 nAdjustWidth = 0L;
             else
-                nAdjustWidth = 20L;
-            ::WinQueryWindowPos(GetHWND(), &vSwpScroll);
-            ::WinSetWindowPos( GetHWND()
+                nAdjustWidth = nVSBWidth;
+            ::WinQueryWindowPos(hWnd, &vSwpScroll);
+            ::WinSetWindowPos( hWnd
                               ,HWND_TOP
                               ,vSwpScroll.x
                               ,vSwpScroll.y + nAdjustHeight
@@ -3114,7 +3123,7 @@ bool wxWindowOS2::OS2Create( PSZ            zClass,
     SubclassWin(m_hWnd);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-    m_backgroundColour.Set(wxString(wxT("GREY")));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     LONG lColor = (LONG)m_backgroundColour.GetPixel();
 
