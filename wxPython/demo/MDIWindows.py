@@ -28,21 +28,21 @@ class TestPanel(wx.Panel):
     # some problems related to having regular frames and MDI frames in
     # the same app.
     def ShowMDIDemo(self, evt):
-        exe = self.GetPyExecutable()
-        print os.spawnlp(os.P_NOWAIT, exe, exe, "MDIDemo.py")
+        exe, spawn = self.GetPyExecutable()
+        spawn(os.P_NOWAIT, exe, exe, "MDIDemo.py")
 
     def ShowMDISashDemo(self, evt):
-        exe = self.GetPyExecutable()
-        os.spawnlp(os.P_NOWAIT, exe, exe, "MDISashDemo.py")
+        exe, spawn = self.GetPyExecutable()
+        spawn(os.P_NOWAIT, exe, exe, "MDISashDemo.py")
 
 
     def GetPyExecutable(self):
         if 'wxMac' in wx.PlatformInfo:
             # sys.executable will be wrong if running the demo from
             # an app bundle.  Just find pythonw on the path instead.
-            return 'pythonw' + sys.version[:3]
+            return 'pythonw' + sys.version[:3], os.spawnlp
         else:
-            return sys.executable
+            return sys.executable, os.spawnl
         
 #----------------------------------------------------------------------
 
