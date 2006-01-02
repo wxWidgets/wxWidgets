@@ -413,19 +413,11 @@ class TopLevelWindow(_core.Window):
         return _windows_.TopLevelWindow_IsFullScreen(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
-        """
-        SetTitle(self, String title)
-
-        Sets the window's title. Applicable only to frames and dialogs.
-        """
+        """SetTitle(self, String title)"""
         return _windows_.TopLevelWindow_SetTitle(*args, **kwargs)
 
     def GetTitle(*args, **kwargs):
-        """
-        GetTitle(self) -> String
-
-        Gets the window's title. Applicable only to frames and dialogs.
-        """
+        """GetTitle(self) -> String"""
         return _windows_.TopLevelWindow_GetTitle(*args, **kwargs)
 
     def SetShape(*args, **kwargs):
@@ -4027,78 +4019,6 @@ class PrintData(_core.Object):
         """SetPrivData(self, PyObject data)"""
         return _windows_.PrintData_SetPrivData(*args, **kwargs)
 
-    def GetPrinterCommand(*args, **kwargs):
-        """GetPrinterCommand(self) -> String"""
-        return _windows_.PrintData_GetPrinterCommand(*args, **kwargs)
-
-    def GetPrinterOptions(*args, **kwargs):
-        """GetPrinterOptions(self) -> String"""
-        return _windows_.PrintData_GetPrinterOptions(*args, **kwargs)
-
-    def GetPreviewCommand(*args, **kwargs):
-        """GetPreviewCommand(self) -> String"""
-        return _windows_.PrintData_GetPreviewCommand(*args, **kwargs)
-
-    def GetFontMetricPath(*args, **kwargs):
-        """GetFontMetricPath(self) -> String"""
-        return _windows_.PrintData_GetFontMetricPath(*args, **kwargs)
-
-    def GetPrinterScaleX(*args, **kwargs):
-        """GetPrinterScaleX(self) -> double"""
-        return _windows_.PrintData_GetPrinterScaleX(*args, **kwargs)
-
-    def GetPrinterScaleY(*args, **kwargs):
-        """GetPrinterScaleY(self) -> double"""
-        return _windows_.PrintData_GetPrinterScaleY(*args, **kwargs)
-
-    def GetPrinterTranslateX(*args, **kwargs):
-        """GetPrinterTranslateX(self) -> long"""
-        return _windows_.PrintData_GetPrinterTranslateX(*args, **kwargs)
-
-    def GetPrinterTranslateY(*args, **kwargs):
-        """GetPrinterTranslateY(self) -> long"""
-        return _windows_.PrintData_GetPrinterTranslateY(*args, **kwargs)
-
-    def SetPrinterCommand(*args, **kwargs):
-        """SetPrinterCommand(self, String command)"""
-        return _windows_.PrintData_SetPrinterCommand(*args, **kwargs)
-
-    def SetPrinterOptions(*args, **kwargs):
-        """SetPrinterOptions(self, String options)"""
-        return _windows_.PrintData_SetPrinterOptions(*args, **kwargs)
-
-    def SetPreviewCommand(*args, **kwargs):
-        """SetPreviewCommand(self, String command)"""
-        return _windows_.PrintData_SetPreviewCommand(*args, **kwargs)
-
-    def SetFontMetricPath(*args, **kwargs):
-        """SetFontMetricPath(self, String path)"""
-        return _windows_.PrintData_SetFontMetricPath(*args, **kwargs)
-
-    def SetPrinterScaleX(*args, **kwargs):
-        """SetPrinterScaleX(self, double x)"""
-        return _windows_.PrintData_SetPrinterScaleX(*args, **kwargs)
-
-    def SetPrinterScaleY(*args, **kwargs):
-        """SetPrinterScaleY(self, double y)"""
-        return _windows_.PrintData_SetPrinterScaleY(*args, **kwargs)
-
-    def SetPrinterScaling(*args, **kwargs):
-        """SetPrinterScaling(self, double x, double y)"""
-        return _windows_.PrintData_SetPrinterScaling(*args, **kwargs)
-
-    def SetPrinterTranslateX(*args, **kwargs):
-        """SetPrinterTranslateX(self, long x)"""
-        return _windows_.PrintData_SetPrinterTranslateX(*args, **kwargs)
-
-    def SetPrinterTranslateY(*args, **kwargs):
-        """SetPrinterTranslateY(self, long y)"""
-        return _windows_.PrintData_SetPrinterTranslateY(*args, **kwargs)
-
-    def SetPrinterTranslation(*args, **kwargs):
-        """SetPrinterTranslation(self, long x, long y)"""
-        return _windows_.PrintData_SetPrinterTranslation(*args, **kwargs)
-
 
 class PrintDataPtr(PrintData):
     def __init__(self, this):
@@ -4347,14 +4267,6 @@ class PrintDialogData(_core.Object):
     def GetPrintToFile(*args, **kwargs):
         """GetPrintToFile(self) -> bool"""
         return _windows_.PrintDialogData_GetPrintToFile(*args, **kwargs)
-
-    def GetSetupDialog(*args, **kwargs):
-        """GetSetupDialog(self) -> bool"""
-        return _windows_.PrintDialogData_GetSetupDialog(*args, **kwargs)
-
-    def SetSetupDialog(*args, **kwargs):
-        """SetSetupDialog(self, bool flag)"""
-        return _windows_.PrintDialogData_SetSetupDialog(*args, **kwargs)
 
     def SetFromPage(*args, **kwargs):
         """SetFromPage(self, int v)"""

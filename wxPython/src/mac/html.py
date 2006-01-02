@@ -1079,9 +1079,9 @@ class HtmlWindow(_windows.ScrolledWindow):
         """SetStandardFonts(self, int size=-1, String normal_face=EmptyString, String fixed_face=EmptyString)"""
         return _html.HtmlWindow_SetStandardFonts(*args, **kwargs)
 
-    def SetTitle(*args, **kwargs):
-        """SetTitle(self, String title)"""
-        return _html.HtmlWindow_SetTitle(*args, **kwargs)
+    def SetLabel(*args, **kwargs):
+        """SetLabel(self, String title)"""
+        return _html.HtmlWindow_SetLabel(*args, **kwargs)
 
     def SetBorders(*args, **kwargs):
         """SetBorders(self, int b)"""
@@ -1488,39 +1488,6 @@ class HtmlBookRecordPtr(HtmlBookRecord):
         self.__class__ = HtmlBookRecord
 _html.HtmlBookRecord_swigregister(HtmlBookRecordPtr)
 
-class HtmlContentsItem(object):
-    """Proxy of C++ HtmlContentsItem class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlContentsItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def GetLevel(*args, **kwargs):
-        """GetLevel(self) -> int"""
-        return _html.HtmlContentsItem_GetLevel(*args, **kwargs)
-
-    def GetID(*args, **kwargs):
-        """GetID(self) -> int"""
-        return _html.HtmlContentsItem_GetID(*args, **kwargs)
-
-    def GetName(*args, **kwargs):
-        """GetName(self) -> String"""
-        return _html.HtmlContentsItem_GetName(*args, **kwargs)
-
-    def GetPage(*args, **kwargs):
-        """GetPage(self) -> String"""
-        return _html.HtmlContentsItem_GetPage(*args, **kwargs)
-
-    def GetBook(*args, **kwargs):
-        """GetBook(self) -> HtmlBookRecord"""
-        return _html.HtmlContentsItem_GetBook(*args, **kwargs)
-
-
-class HtmlContentsItemPtr(HtmlContentsItem):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlContentsItem
-_html.HtmlContentsItem_swigregister(HtmlContentsItemPtr)
-
 class HtmlSearchStatus(object):
     """Proxy of C++ HtmlSearchStatus class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
@@ -1545,10 +1512,6 @@ class HtmlSearchStatus(object):
     def GetName(*args, **kwargs):
         """GetName(self) -> String"""
         return _html.HtmlSearchStatus_GetName(*args, **kwargs)
-
-    def GetContentsItem(*args, **kwargs):
-        """GetContentsItem(self) -> HtmlContentsItem"""
-        return _html.HtmlSearchStatus_GetContentsItem(*args, **kwargs)
 
 
 class HtmlSearchStatusPtr(HtmlSearchStatus):
@@ -1593,22 +1556,6 @@ class HtmlHelpData(object):
     def GetBookRecArray(*args, **kwargs):
         """GetBookRecArray(self) -> wxHtmlBookRecArray"""
         return _html.HtmlHelpData_GetBookRecArray(*args, **kwargs)
-
-    def GetContents(*args, **kwargs):
-        """GetContents(self) -> HtmlContentsItem"""
-        return _html.HtmlHelpData_GetContents(*args, **kwargs)
-
-    def GetContentsCnt(*args, **kwargs):
-        """GetContentsCnt(self) -> int"""
-        return _html.HtmlHelpData_GetContentsCnt(*args, **kwargs)
-
-    def GetIndex(*args, **kwargs):
-        """GetIndex(self) -> HtmlContentsItem"""
-        return _html.HtmlHelpData_GetIndex(*args, **kwargs)
-
-    def GetIndexCnt(*args, **kwargs):
-        """GetIndexCnt(self) -> int"""
-        return _html.HtmlHelpData_GetIndexCnt(*args, **kwargs)
 
 
 class HtmlHelpDataPtr(HtmlHelpData):

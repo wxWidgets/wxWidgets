@@ -502,6 +502,19 @@ class Choice(_core.ControlWithItems):
         """
         return _controls_.Choice_Create(*args, **kwargs)
 
+    def GetCurrentSelection(*args, **kwargs):
+        """
+        GetCurrentSelection(self) -> int
+
+        Unlike `GetSelection` which only returns the accepted selection value,
+        i.e. the selection in the control once the user closes the dropdown
+        list, this function returns the current selection.  That is, while the
+        dropdown list is shown, it returns the currently selected item in
+        it. When it is not shown, its result is the same as for the other
+        function.
+        """
+        return _controls_.Choice_GetCurrentSelection(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -688,6 +701,19 @@ class ComboBox(_core.Control,_core.ItemContainer):
         the combobox text field.
         """
         return _controls_.ComboBox_GetMark(*args, **kwargs)
+
+    def GetCurrentSelection(*args, **kwargs):
+        """
+        GetCurrentSelection(self) -> int
+
+        Unlike `GetSelection` which only returns the accepted selection value,
+        i.e. the selection in the control once the user closes the dropdown
+        list, this function returns the current selection.  That is, while the
+        dropdown list is shown, it returns the currently selected item in
+        it. When it is not shown, its result is the same as for the other
+        function.
+        """
+        return _controls_.ComboBox_GetCurrentSelection(*args, **kwargs)
 
     def SetStringSelection(*args, **kwargs):
         """
@@ -1166,6 +1192,17 @@ class StaticText(_core.Control):
             long style=0, String name=StaticTextNameStr) -> bool
         """
         return _controls_.StaticText_Create(*args, **kwargs)
+
+    def Wrap(*args, **kwargs):
+        """
+        Wrap(self, int width)
+
+        This functions wraps the control's label so that each of its lines
+        becomes at most ``width`` pixels wide if possible (the lines are
+        broken at words boundaries so it might not be the case if words are
+        too long). If ``width`` is negative, no wrapping is done.
+        """
+        return _controls_.StaticText_Wrap(*args, **kwargs)
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
@@ -3421,96 +3458,6 @@ EVT_CHOICEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_CHOICEBOOK_PAGE_C
 
 #---------------------------------------------------------------------------
 
-class BookCtrlSizer(_core.Sizer):
-    """Proxy of C++ BookCtrlSizer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxBookCtrlSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(self, BookCtrlBase nb) -> BookCtrlSizer"""
-        newobj = _controls_.new_BookCtrlSizer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-        self._setOORInfo(self)
-
-    def RecalcSizes(*args, **kwargs):
-        """
-        RecalcSizes(self)
-
-        Using the sizes calculated by `CalcMin` reposition and resize all the
-        items managed by this sizer.  You should not need to call this directly as
-        it is called by `Layout`.
-        """
-        return _controls_.BookCtrlSizer_RecalcSizes(*args, **kwargs)
-
-    def CalcMin(*args, **kwargs):
-        """
-        CalcMin(self) -> Size
-
-        This method is where the sizer will do the actual calculation of its
-        children's minimal sizes.  You should not need to call this directly as
-        it is called by `Layout`.
-        """
-        return _controls_.BookCtrlSizer_CalcMin(*args, **kwargs)
-
-    def GetControl(*args, **kwargs):
-        """GetControl(self) -> BookCtrlBase"""
-        return _controls_.BookCtrlSizer_GetControl(*args, **kwargs)
-
-
-class BookCtrlSizerPtr(BookCtrlSizer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = BookCtrlSizer
-_controls_.BookCtrlSizer_swigregister(BookCtrlSizerPtr)
-
-class NotebookSizer(_core.Sizer):
-    """Proxy of C++ NotebookSizer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxNotebookSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(self, Notebook nb) -> NotebookSizer"""
-        newobj = _controls_.new_NotebookSizer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-        self._setOORInfo(self)
-
-    def RecalcSizes(*args, **kwargs):
-        """
-        RecalcSizes(self)
-
-        Using the sizes calculated by `CalcMin` reposition and resize all the
-        items managed by this sizer.  You should not need to call this directly as
-        it is called by `Layout`.
-        """
-        return _controls_.NotebookSizer_RecalcSizes(*args, **kwargs)
-
-    def CalcMin(*args, **kwargs):
-        """
-        CalcMin(self) -> Size
-
-        This method is where the sizer will do the actual calculation of its
-        children's minimal sizes.  You should not need to call this directly as
-        it is called by `Layout`.
-        """
-        return _controls_.NotebookSizer_CalcMin(*args, **kwargs)
-
-    def GetNotebook(*args, **kwargs):
-        """GetNotebook(self) -> Notebook"""
-        return _controls_.NotebookSizer_GetNotebook(*args, **kwargs)
-
-
-class NotebookSizerPtr(NotebookSizer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = NotebookSizer
-_controls_.NotebookSizer_swigregister(NotebookSizerPtr)
-
-NotebookSizer.__init__ = wx._deprecated(NotebookSizer.__init__, "NotebookSizer is no longer needed.") 
-BookCtrlSizer.__init__ = wx._deprecated(BookCtrlSizer.__init__, "BookCtrlSizer is no longer needed.") 
 #---------------------------------------------------------------------------
 
 TOOL_STYLE_BUTTON = _controls_.TOOL_STYLE_BUTTON
@@ -4451,16 +4398,16 @@ wxEVT_COMMAND_LIST_COL_BEGIN_DRAG = _controls_.wxEVT_COMMAND_LIST_COL_BEGIN_DRAG
 wxEVT_COMMAND_LIST_COL_DRAGGING = _controls_.wxEVT_COMMAND_LIST_COL_DRAGGING
 wxEVT_COMMAND_LIST_COL_END_DRAG = _controls_.wxEVT_COMMAND_LIST_COL_END_DRAG
 wxEVT_COMMAND_LIST_ITEM_FOCUSED = _controls_.wxEVT_COMMAND_LIST_ITEM_FOCUSED
-wxEVT_COMMAND_LIST_GET_INFO = _controls_.wxEVT_COMMAND_LIST_GET_INFO
-wxEVT_COMMAND_LIST_SET_INFO = _controls_.wxEVT_COMMAND_LIST_SET_INFO
 EVT_LIST_BEGIN_DRAG        = wx.PyEventBinder(wxEVT_COMMAND_LIST_BEGIN_DRAG       , 1)
 EVT_LIST_BEGIN_RDRAG       = wx.PyEventBinder(wxEVT_COMMAND_LIST_BEGIN_RDRAG      , 1)
 EVT_LIST_BEGIN_LABEL_EDIT  = wx.PyEventBinder(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT , 1)
 EVT_LIST_END_LABEL_EDIT    = wx.PyEventBinder(wxEVT_COMMAND_LIST_END_LABEL_EDIT   , 1)
 EVT_LIST_DELETE_ITEM       = wx.PyEventBinder(wxEVT_COMMAND_LIST_DELETE_ITEM      , 1)
 EVT_LIST_DELETE_ALL_ITEMS  = wx.PyEventBinder(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS , 1)
-EVT_LIST_GET_INFO          = wx.PyEventBinder(wxEVT_COMMAND_LIST_GET_INFO         , 1)
-EVT_LIST_SET_INFO          = wx.PyEventBinder(wxEVT_COMMAND_LIST_SET_INFO         , 1)
+
+
+
+
 EVT_LIST_ITEM_SELECTED     = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_SELECTED    , 1)
 EVT_LIST_ITEM_DESELECTED   = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_DESELECTED  , 1)
 EVT_LIST_KEY_DOWN          = wx.PyEventBinder(wxEVT_COMMAND_LIST_KEY_DOWN         , 1)
@@ -4476,8 +4423,9 @@ EVT_LIST_COL_DRAGGING      = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_DRAGGING   
 EVT_LIST_COL_END_DRAG      = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_END_DRAG     , 1)
 EVT_LIST_ITEM_FOCUSED      = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_FOCUSED     , 1)
 
-EVT_LIST_GET_INFO = wx._deprecated(EVT_LIST_GET_INFO)
-EVT_LIST_SET_INFO = wx._deprecated(EVT_LIST_SET_INFO)
+
+
+
 
 #---------------------------------------------------------------------------
 
@@ -4806,6 +4754,14 @@ class ListCtrl(_core.Control):
     def GetItemBackgroundColour(*args, **kwargs):
         """GetItemBackgroundColour(self, long item) -> Colour"""
         return _controls_.ListCtrl_GetItemBackgroundColour(*args, **kwargs)
+
+    def SetItemFont(*args, **kwargs):
+        """SetItemFont(self, long item, Font f)"""
+        return _controls_.ListCtrl_SetItemFont(*args, **kwargs)
+
+    def GetItemFont(*args, **kwargs):
+        """GetItemFont(self, long item) -> Font"""
+        return _controls_.ListCtrl_GetItemFont(*args, **kwargs)
 
     #
     # Some helpers...

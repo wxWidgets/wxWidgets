@@ -348,7 +348,7 @@ def GetOsDescription(*args, **kwargs):
     return _misc_.GetOsDescription(*args, **kwargs)
 
 def GetFreeMemory(*args, **kwargs):
-    """GetFreeMemory() -> long"""
+    """GetFreeMemory() -> wxMemorySize"""
     return _misc_.GetFreeMemory(*args, **kwargs)
 SHUTDOWN_POWEROFF = _misc_.SHUTDOWN_POWEROFF
 SHUTDOWN_REBOOT = _misc_.SHUTDOWN_REBOOT
@@ -485,14 +485,6 @@ def MessageBox(*args, **kwargs):
         int y=-1) -> int
     """
     return _misc_.MessageBox(*args, **kwargs)
-
-def GetNumberFromUser(*args, **kwargs):
-    """
-    GetNumberFromUser(String message, String prompt, String caption, long value, 
-        long min=0, long max=100, Window parent=None, 
-        Point pos=DefaultPosition) -> long
-    """
-    return _misc_.GetNumberFromUser(*args, **kwargs)
 
 def ColourDisplay(*args, **kwargs):
     """ColourDisplay() -> bool"""
@@ -3681,6 +3673,22 @@ class DateTime(object):
         """MakeTimezone(self, wxDateTime::TimeZone tz, bool noDST=False) -> DateTime"""
         return _misc_.DateTime_MakeTimezone(*args, **kwargs)
 
+    def FromTimezone(*args, **kwargs):
+        """FromTimezone(self, wxDateTime::TimeZone tz, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_FromTimezone(*args, **kwargs)
+
+    def MakeFromTimezone(*args, **kwargs):
+        """MakeFromTimezone(self, wxDateTime::TimeZone tz, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_MakeFromTimezone(*args, **kwargs)
+
+    def ToUTC(*args, **kwargs):
+        """ToUTC(self, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_ToUTC(*args, **kwargs)
+
+    def MakeUTC(*args, **kwargs):
+        """MakeUTC(self, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_MakeUTC(*args, **kwargs)
+
     def ToGMT(*args, **kwargs):
         """ToGMT(self, bool noDST=False) -> DateTime"""
         return _misc_.DateTime_ToGMT(*args, **kwargs)
@@ -3688,6 +3696,14 @@ class DateTime(object):
     def MakeGMT(*args, **kwargs):
         """MakeGMT(self, bool noDST=False) -> DateTime"""
         return _misc_.DateTime_MakeGMT(*args, **kwargs)
+
+    def FromUTC(*args, **kwargs):
+        """FromUTC(self, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_FromUTC(*args, **kwargs)
+
+    def MakeFromUTC(*args, **kwargs):
+        """MakeFromUTC(self, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_MakeFromUTC(*args, **kwargs)
 
     def IsDST(*args, **kwargs):
         """IsDST(self, int country=Country_Default) -> int"""
@@ -5621,7 +5637,8 @@ class _wxPyDelayedInitWrapper(object):
         self._instance = None
     def _checkInstance(self):
         if self._instance is None:
-            self._instance = self._initfunc(*self._args, **self._kwargs)        
+            if wx.GetApp():
+                self._instance = self._initfunc(*self._args, **self._kwargs)        
     def __getattr__(self, name):
         self._checkInstance()
         return getattr(self._instance, name)

@@ -87,6 +87,10 @@ class XmlResource(_core.Object):
         """LoadFromString(self, String data) -> bool"""
         return _xrc.XmlResource_LoadFromString(*args, **kwargs)
 
+    def Unload(*args, **kwargs):
+        """Unload(self, String filename) -> bool"""
+        return _xrc.XmlResource_Unload(*args, **kwargs)
+
     def InitAllHandlers(*args, **kwargs):
         """InitAllHandlers(self)"""
         return _xrc.XmlResource_InitAllHandlers(*args, **kwargs)
