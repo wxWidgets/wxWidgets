@@ -502,6 +502,19 @@ class Choice(_core.ControlWithItems):
         """
         return _controls_.Choice_Create(*args, **kwargs)
 
+    def GetCurrentSelection(*args, **kwargs):
+        """
+        GetCurrentSelection(self) -> int
+
+        Unlike `GetSelection` which only returns the accepted selection value,
+        i.e. the selection in the control once the user closes the dropdown
+        list, this function returns the current selection.  That is, while the
+        dropdown list is shown, it returns the currently selected item in
+        it. When it is not shown, its result is the same as for the other
+        function.
+        """
+        return _controls_.Choice_GetCurrentSelection(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -688,6 +701,19 @@ class ComboBox(Choice):
         the combobox text field.
         """
         return _controls_.ComboBox_GetMark(*args, **kwargs)
+
+    def GetCurrentSelection(*args, **kwargs):
+        """
+        GetCurrentSelection(self) -> int
+
+        Unlike `GetSelection` which only returns the accepted selection value,
+        i.e. the selection in the control once the user closes the dropdown
+        list, this function returns the current selection.  That is, while the
+        dropdown list is shown, it returns the currently selected item in
+        it. When it is not shown, its result is the same as for the other
+        function.
+        """
+        return _controls_.ComboBox_GetCurrentSelection(*args, **kwargs)
 
     def SetStringSelection(*args, **kwargs):
         """
@@ -1166,6 +1192,17 @@ class StaticText(_core.Control):
             long style=0, String name=StaticTextNameStr) -> bool
         """
         return _controls_.StaticText_Create(*args, **kwargs)
+
+    def Wrap(*args, **kwargs):
+        """
+        Wrap(self, int width)
+
+        This functions wraps the control's label so that each of its lines
+        becomes at most ``width`` pixels wide if possible (the lines are
+        broken at words boundaries so it might not be the case if words are
+        too long). If ``width`` is negative, no wrapping is done.
+        """
+        return _controls_.StaticText_Wrap(*args, **kwargs)
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
@@ -4729,6 +4766,14 @@ class ListCtrl(_core.Control):
     def GetItemBackgroundColour(*args, **kwargs):
         """GetItemBackgroundColour(self, long item) -> Colour"""
         return _controls_.ListCtrl_GetItemBackgroundColour(*args, **kwargs)
+
+    def SetItemFont(*args, **kwargs):
+        """SetItemFont(self, long item, Font f)"""
+        return _controls_.ListCtrl_SetItemFont(*args, **kwargs)
+
+    def GetItemFont(*args, **kwargs):
+        """GetItemFont(self, long item) -> Font"""
+        return _controls_.ListCtrl_GetItemFont(*args, **kwargs)
 
     #
     # Some helpers...

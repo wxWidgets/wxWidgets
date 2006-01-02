@@ -161,6 +161,7 @@ SIZE_AUTO_HEIGHT = _core_.SIZE_AUTO_HEIGHT
 SIZE_AUTO = _core_.SIZE_AUTO
 SIZE_USE_EXISTING = _core_.SIZE_USE_EXISTING
 SIZE_ALLOW_MINUS_ONE = _core_.SIZE_ALLOW_MINUS_ONE
+SIZE_FORCE = _core_.SIZE_FORCE
 PORTRAIT = _core_.PORTRAIT
 LANDSCAPE = _core_.LANDSCAPE
 PRINT_QUALITY_HIGH = _core_.PRINT_QUALITY_HIGH
@@ -169,6 +170,7 @@ PRINT_QUALITY_LOW = _core_.PRINT_QUALITY_LOW
 PRINT_QUALITY_DRAFT = _core_.PRINT_QUALITY_DRAFT
 ID_ANY = _core_.ID_ANY
 ID_SEPARATOR = _core_.ID_SEPARATOR
+ID_NONE = _core_.ID_NONE
 ID_LOWEST = _core_.ID_LOWEST
 ID_OPEN = _core_.ID_OPEN
 ID_CLOSE = _core_.ID_CLOSE
@@ -673,8 +675,12 @@ HT_MAX = _core_.HT_MAX
 MOD_NONE = _core_.MOD_NONE
 MOD_ALT = _core_.MOD_ALT
 MOD_CONTROL = _core_.MOD_CONTROL
+MOD_ALTGR = _core_.MOD_ALTGR
 MOD_SHIFT = _core_.MOD_SHIFT
+MOD_META = _core_.MOD_META
 MOD_WIN = _core_.MOD_WIN
+MOD_CMD = _core_.MOD_CMD
+MOD_ALL = _core_.MOD_ALL
 UPDATE_UI_NONE = _core_.UPDATE_UI_NONE
 UPDATE_UI_RECURSE = _core_.UPDATE_UI_RECURSE
 UPDATE_UI_FROMIDLE = _core_.UPDATE_UI_FROMIDLE
@@ -2145,6 +2151,80 @@ class ImageHandlerPtr(ImageHandler):
         self.__class__ = ImageHandler
 _core_.ImageHandler_swigregister(ImageHandlerPtr)
 
+class PyImageHandler(ImageHandler):
+    """
+    This is the base class for implementing image file loading/saving, and
+    image creation from data, all written in Python.  To create a custom
+    image handler derive a new class from wx.PyImageHandler and provide
+    the following methods::
+
+        def DoCanRead(self, stream) --> bool
+            '''Check if this handler can read the image on the stream'''
+
+        def LoadFile(self, image, stream, verbose, index) --> bool
+            '''Load image data from the stream and load it into image.'''
+
+        def SaveFile(self, image, stream, verbose) --> bool
+            '''Save the iamge data in image to the stream using
+               this handler's image file format.'''
+
+        def GetImageCount(self, stream) --> int
+            '''If this image format can hold more than one image,
+               how many does the image on the stream have?'''
+
+    To activate your handler create an instance of it and pass it to
+    `wx.Image_AddHandler`.  Be sure to call `SetName`, `SetType`, and
+    `SetExtension` from your constructor.
+
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPyImageHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self) -> PyImageHandler
+
+        This is the base class for implementing image file loading/saving, and
+        image creation from data, all written in Python.  To create a custom
+        image handler derive a new class from wx.PyImageHandler and provide
+        the following methods::
+
+            def DoCanRead(self, stream) --> bool
+                '''Check if this handler can read the image on the stream'''
+
+            def LoadFile(self, image, stream, verbose, index) --> bool
+                '''Load image data from the stream and load it into image.'''
+
+            def SaveFile(self, image, stream, verbose) --> bool
+                '''Save the iamge data in image to the stream using
+                   this handler's image file format.'''
+
+            def GetImageCount(self, stream) --> int
+                '''If this image format can hold more than one image,
+                   how many does the image on the stream have?'''
+
+        To activate your handler create an instance of it and pass it to
+        `wx.Image_AddHandler`.  Be sure to call `SetName`, `SetType`, and
+        `SetExtension` from your constructor.
+
+        """
+        newobj = _core_.new_PyImageHandler(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._SetSelf(self)
+
+    def _SetSelf(*args, **kwargs):
+        """_SetSelf(self, PyObject self)"""
+        return _core_.PyImageHandler__SetSelf(*args, **kwargs)
+
+
+class PyImageHandlerPtr(PyImageHandler):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = PyImageHandler
+_core_.PyImageHandler_swigregister(PyImageHandlerPtr)
+
 class ImageHistogram(object):
     """Proxy of C++ ImageHistogram class"""
     def __repr__(self):
@@ -2216,11 +2296,20 @@ def ImageHistogram_MakeKey(*args, **kwargs):
     return _core_.ImageHistogram_MakeKey(*args, **kwargs)
 
 class Image_RGBValue(object):
-    """Proxy of C++ Image_RGBValue class"""
+    """
+    An object that contains values for red, green and blue which represent
+    the value of a color. It is used by `wx.Image.HSVtoRGB` and
+    `wx.Image.RGBtoHSV`, which converts between HSV color space and RGB
+    color space.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImage_RGBValue instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, byte r=0, byte g=0, byte b=0) -> Image_RGBValue"""
+        """
+        __init__(self, byte r=0, byte g=0, byte b=0) -> Image_RGBValue
+
+        Constructor.
+        """
         newobj = _core_.new_Image_RGBValue(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2237,11 +2326,20 @@ class Image_RGBValuePtr(Image_RGBValue):
 _core_.Image_RGBValue_swigregister(Image_RGBValuePtr)
 
 class Image_HSVValue(object):
-    """Proxy of C++ Image_HSVValue class"""
+    """
+    An object that contains values for hue, saturation and value which
+    represent the value of a color.  It is used by `wx.Image.HSVtoRGB` and
+    `wx.Image.RGBtoHSV`, which +converts between HSV color space and RGB
+    color space.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImage_HSVValue instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, double h=0.0, double s=0.0, double v=0.0) -> Image_HSVValue"""
+        """
+        __init__(self, double h=0.0, double s=0.0, double v=0.0) -> Image_HSVValue
+
+        Constructor.
+        """
         newobj = _core_.new_Image_HSVValue(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2944,12 +3042,20 @@ class Image(Object):
         return _core_.Image_RotateHue(*args, **kwargs)
 
     def RGBtoHSV(*args, **kwargs):
-        """RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue"""
+        """
+        RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue
+
+        Converts a color in RGB color space to HSV color space.
+        """
         return _core_.Image_RGBtoHSV(*args, **kwargs)
 
     RGBtoHSV = staticmethod(RGBtoHSV)
     def HSVtoRGB(*args, **kwargs):
-        """HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue"""
+        """
+        HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue
+
+        Converts a color in HSV color space to RGB color space.
+        """
         return _core_.Image_HSVtoRGB(*args, **kwargs)
 
     HSVtoRGB = staticmethod(HSVtoRGB)
@@ -3092,11 +3198,19 @@ def Image_GetImageExtWildcard(*args, **kwargs):
     return _core_.Image_GetImageExtWildcard(*args, **kwargs)
 
 def Image_RGBtoHSV(*args, **kwargs):
-    """Image_RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue"""
+    """
+    Image_RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue
+
+    Converts a color in RGB color space to HSV color space.
+    """
     return _core_.Image_RGBtoHSV(*args, **kwargs)
 
 def Image_HSVtoRGB(*args, **kwargs):
-    """Image_HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue"""
+    """
+    Image_HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue
+
+    Converts a color in HSV color space to RGB color space.
+    """
     return _core_.Image_HSVtoRGB(*args, **kwargs)
 
 def InitAllImageHandlers():
@@ -6468,8 +6582,15 @@ _core_.WindowCreateEvent_swigregister(WindowCreateEventPtr)
 
 class WindowDestroyEvent(CommandEvent):
     """
-    The EVT_WINDOW_DESTROY event is sent right before the window is
-    destroyed.
+    The EVT_WINDOW_DESTROY event is sent from the `wx.Window` destructor
+    when the GUI window is destroyed.
+
+    When a class derived from `wx.Window` is destroyed its destructor will
+    have already run by the time this event is sent. Therefore this event
+    will not usually be received at all by the window itself.  Since it is
+    received after the destructor has run, an object should not try to
+    handle its own wx.WindowDestroyEvent, but it can be used to get
+    notification of the destruction of another window.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowDestroyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -6477,8 +6598,15 @@ class WindowDestroyEvent(CommandEvent):
         """
         __init__(self, Window win=None) -> WindowDestroyEvent
 
-        The EVT_WINDOW_DESTROY event is sent right before the window is
-        destroyed.
+        The EVT_WINDOW_DESTROY event is sent from the `wx.Window` destructor
+        when the GUI window is destroyed.
+
+        When a class derived from `wx.Window` is destroyed its destructor will
+        have already run by the time this event is sent. Therefore this event
+        will not usually be received at all by the window itself.  Since it is
+        received after the destructor has run, an object should not try to
+        handle its own wx.WindowDestroyEvent, but it can be used to get
+        notification of the destruction of another window.
         """
         newobj = _core_.new_WindowDestroyEvent(*args, **kwargs)
         self.this = newobj.this
@@ -8145,8 +8273,8 @@ class Window(EvtHandler):
         """
         Raise(self)
 
-        Raises the window to the top of the window hierarchy if it is a
-        managed window (dialog or frame).
+        Raises the window to the top of the window hierarchy.  In current
+        version of wxWidgets this works both for manage and child windows.
         """
         return _core_.Window_Raise(*args, **kwargs)
 
@@ -8154,8 +8282,8 @@ class Window(EvtHandler):
         """
         Lower(self)
 
-        Lowers the window to the bottom of the window hierarchy if it is a
-        managed window (dialog or frame).
+        Lowers the window to the bottom of the window hierarchy.  In current
+        version of wxWidgets this works both for manage and child windows.
         """
         return _core_.Window_Lower(*args, **kwargs)
 
