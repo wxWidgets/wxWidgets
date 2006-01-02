@@ -33,7 +33,7 @@
 // get the colour from user and return it
 wxColour WXDLLEXPORT
 wxGetColourFromUser(wxWindow *parent = (wxWindow *)NULL,
-                    const wxColour& colInit = wxNullColour);
+                    const wxColour& colInit = wxNullColour, const wxString& caption = wxEmptyString);
 
 #endif // wxUSE_COLOURDLG
 

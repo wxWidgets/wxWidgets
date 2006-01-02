@@ -102,7 +102,7 @@ protected:
 // cancelled
 wxFont WXDLLEXPORT
 wxGetFontFromUser(wxWindow *parent = (wxWindow *)NULL,
-                  const wxFont& fontInit = wxNullFont);
+                  const wxFont& fontInit = wxNullFont, const wxString& caption = wxEmptyString);
 
 #endif // wxUSE_FONTDLG
 

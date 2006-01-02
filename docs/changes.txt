@@ -44,6 +44,7 @@ All (GUI):
 - Added space after list item number in wxHTML.
 - Implemented <sub> and <sup> handling in wxHTML (based on patch
   by Sandro Sigala)
+- Added caption parameter to wxGetFontFromUser and wxGetColourFromUser.
 
 wxMSW:
 

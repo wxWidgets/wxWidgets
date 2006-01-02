@@ -82,6 +82,13 @@
 #include "wx/msw/wince/time.h"
 #endif
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#ifndef __DARWIN__
+#include "InternetConfig.h"
+#endif
+#endif
+
 #if !defined(__MWERKS__) && !defined(__WXWINCE__)
     #include <sys/types.h>
     #include <sys/stat.h>
@@ -607,6 +614,34 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 #endif // __WXDEBUG__
         return true;
     }
+#elif defined(__WXMAC__)
+    OSStatus err;
+    ICInstance inst;
+    SInt32 startSel;
+    SInt32 endSel;
+
+    err = ICStart(&inst, 'STKA'); // put your app creator code here
+    if (err == noErr) {
+#if !TARGET_CARBON
+        err = ICFindConfigFile(inst, 0, nil);
+#endif
+        if (err == noErr)
+        {
+            ConstStr255Param hint = 0;
+            startSel = 0;
+            endSel = url.Length();
+            err = ICLaunchURL(inst, hint, url.fn_str(), endSel, &startSel, &endSel);
+            if (err != noErr)
+                wxLogDebug(wxT("ICLaunchURL error %d"), (int) err);
+        }
+        ICStop(inst);
+        return true;
+    }
+    else
+    {
+        wxLogDebug(wxT("ICStart error %d"), (int) err);
+        return false;
+    }
 #elif wxUSE_MIMETYPE
     // Non-windows way
     wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension (_T("html"));
@@ -954,7 +989,7 @@ wxString wxGetPasswordFromUser(const wxString& message,
 
 #if wxUSE_COLOURDLG
 
-wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit)
+wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit, const wxString& caption)
 {
     wxColourData data;
     data.SetChooseFull(true);
@@ -965,6 +1000,8 @@ wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit)
 
     wxColour colRet;
     wxColourDialog dialog(parent, &data);
+    if (!caption.IsEmpty())
+        dialog.SetTitle(caption);
     if ( dialog.ShowModal() == wxID_OK )
     {
         colRet = dialog.GetColourData().GetColour();
@@ -978,7 +1015,7 @@ wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit)
 
 #if wxUSE_FONTDLG
 
-wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit)
+wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit, const wxString& caption)
 {
     wxFontData data;
     if ( fontInit.Ok() )
@@ -988,6 +1025,8 @@ wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit)
 
     wxFont fontRet;
     wxFontDialog dialog(parent, data);
+    if (!caption.IsEmpty())
+        dialog.SetTitle(caption);
     if ( dialog.ShowModal() == wxID_OK )
     {
         fontRet = dialog.GetFontData().GetChosenFont();

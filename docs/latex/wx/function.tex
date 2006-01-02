@@ -1904,7 +1904,7 @@ See also \helpref{wxIsBusy}{wxisbusy}, \helpref{wxBusyCursor}{wxbusycursor}.
 
 \membersection{::wxGetColourFromUser}\label{wxgetcolourfromuser}
 
-\func{wxColour}{wxGetColourFromUser}{\param{wxWindow *}{parent}, \param{const wxColour\& }{colInit}}
+\func{wxColour}{wxGetColourFromUser}{\param{wxWindow *}{parent}, \param{const wxColour\& }{colInit}, \param{const wxString\& }{caption = wxEmptyString}}
 
 Shows the colour selection dialog and returns the colour selected by user or
 invalid colour (use \helpref{wxColour::Ok}{wxcolourok} to test whether a colour
@@ -1916,6 +1916,8 @@ is valid) if the dialog was cancelled.
 
 \docparam{colInit}{If given, this will be the colour initially selected in the dialog.}
 
+\docparam{caption}{If given, this will be used for the dialog caption.}
+
 \wxheading{Include files}
 
 <wx/colordlg.h>
@@ -1923,7 +1925,7 @@ is valid) if the dialog was cancelled.
 
 \membersection{::wxGetFontFromUser}\label{wxgetfontfromuser}
 
-\func{wxFont}{wxGetFontFromUser}{\param{wxWindow *}{parent}, \param{const wxFont\& }{fontInit}}
+\func{wxFont}{wxGetFontFromUser}{\param{wxWindow *}{parent}, \param{const wxFont\& }{fontInit}, \param{const wxString\& }{caption = wxEmptyString}}
 
 Shows the font selection dialog and returns the font selected by user or
 invalid font (use \helpref{wxFont::Ok}{wxfontok} to test whether a font
@@ -1934,6 +1936,8 @@ is valid) if the dialog was cancelled.
 \docparam{parent}{The parent window for the font selection dialog}
 
 \docparam{fontInit}{If given, this will be the font initially selected in the dialog.}
+
+\docparam{caption}{If given, this will be used for the dialog caption.}
 
 \wxheading{Include files}
 
