@@ -244,10 +244,6 @@ class EditWindow(stc.StyledTextCtrl):
     def GetSelection(self):
         return self.GetAnchor(), self.GetCurrentPos()
 
-    def SetSelection(self, start, end):
-        self.SetSelectionStart(start)
-        self.SetSelectionEnd(end)
-
     def ShowPosition(self, pos):
         line = self.LineFromPosition(pos)
         #self.EnsureVisible(line)
