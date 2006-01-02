@@ -3,8 +3,6 @@ import wx
 import wx.media
 import os
 
-from Main import opj
-
 #----------------------------------------------------------------------
 
 class TestPanel(wx.Panel):
@@ -54,7 +52,7 @@ class TestPanel(wx.Panel):
         sizer.Add(self.st_pos,  (3, 5))
         self.SetSizer(sizer)
 
-        self.DoLoadFile(opj("data/testmovie.mpg"))
+        self.DoLoadFile(os.path.abspath("data/testmovie.mpg"))
         self.mc.Stop()
 
         self.timer = wx.Timer(self)
