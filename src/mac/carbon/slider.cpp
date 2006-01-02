@@ -44,6 +44,10 @@ END_EVENT_TABLE()
     m_rangeMax = 0;
     m_rangeMin = 0;
     m_tickFreq = 0;
+
+    m_macMinimumStatic = NULL ;
+    m_macMaximumStatic = NULL ;
+    m_macValueStatic = NULL ;
 }
 
 bool wxSlider::Create(wxWindow *parent, wxWindowID id,
@@ -54,6 +58,18 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
                       const wxString& name)
 {
     m_macIsUserPane = false ;
+
+    m_macMinimumStatic = NULL ;
+    m_macMaximumStatic = NULL ;
+    m_macValueStatic = NULL ;
+
+    m_lineSize = 1;
+    m_tickFreq = 0;
+
+    m_rangeMax = maxValue;
+    m_rangeMin = minValue;
+
+    m_pageSize = (int)((maxValue-minValue)/10);
 
     // our styles are redundant: wxSL_LEFT/RIGHT imply wxSL_VERTICAL and
     // wxSL_TOP/BOTTOM imply wxSL_HORIZONTAL, but for backwards compatibility
@@ -72,31 +88,21 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
             break;
 
         case 0:
+        default:
             // no specific direction, do we have at least the orientation?
             if ( !(style & (wxSL_HORIZONTAL | wxSL_VERTICAL)) )
             {
                 // no, choose default
                 style |= wxSL_BOTTOM | wxSL_HORIZONTAL;
             }
-    };
+            break;
+    }
 
     wxASSERT_MSG( !(style & wxSL_VERTICAL) || !(style & wxSL_HORIZONTAL),
         _T("incompatible slider direction and orientation") );
 
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
-
-    m_macMinimumStatic = NULL ;
-    m_macMaximumStatic = NULL ;
-    m_macValueStatic = NULL ;
-
-    m_lineSize = 1;
-    m_tickFreq = 0;
-
-    m_rangeMax = maxValue;
-    m_rangeMin = minValue;
-
-    m_pageSize = (int)((maxValue-minValue)/10);
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
@@ -131,9 +137,10 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         m_macMinimumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
         m_macMaximumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
         m_macValueStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
-        SetRange(minValue, maxValue);
-        SetValue(value);
     }
+
+    SetRange(minValue, maxValue);
+    SetValue(value);
 
     MacPostControlCreate(pos,size) ;
 
@@ -160,10 +167,12 @@ int wxSlider::GetValue() const
 
 void wxSlider::SetValue(int value)
 {
-    wxString valuestring ;
-    valuestring.Printf( wxT("%d") , value ) ;
     if ( m_macValueStatic )
+    {
+        wxString valuestring ;
+        valuestring.Printf( wxT("%d") , value ) ;
         m_macValueStatic->SetLabel( valuestring ) ;
+    }
 
     // We only invert for the setting of the actual native widget
     m_peer->SetValue( ValueInvertOrNot ( value ) ) ;
