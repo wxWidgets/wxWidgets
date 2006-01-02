@@ -33,6 +33,9 @@ wxMemoryDC::wxMemoryDC() : wxWindowDC()
     
 #ifdef __WXGTK20__
     m_context = gdk_pango_context_get();
+    // Note: The Sun customised version of Pango shipping with Solaris 10
+    // crashes if the language is left NULL (see bug 1374114)
+    pango_context_set_language( m_context, gtk_get_default_language() );
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( pango_context_get_font_description( m_context ) );
 #endif
@@ -47,6 +50,7 @@ wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
     
 #ifdef __WXGTK20__
     m_context = gdk_pango_context_get();
+    pango_context_set_language( m_context, gtk_get_default_language() );
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( pango_context_get_font_description( m_context ) );
 #endif
