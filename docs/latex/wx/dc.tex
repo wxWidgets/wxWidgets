@@ -659,7 +659,10 @@ rectangle are returned as a tuple.}
 
 \constfunc{const wxFont\&}{GetFont}{\void}
 
-Gets the current font (see \helpref{wxDC::SetFont}{wxdcsetfont}).
+Gets the current font. Notice that even although each device context object has
+some default font after creation, this method would return a \texttt{wxNullFont} 
+initially and only after calling \helpref{wxDC::SetFont}{wxdcsetfont} a valid
+font is returned.
 
 
 \membersection{wxDC::GetLogicalFunction}\label{wxdcgetlogicalfunction}
