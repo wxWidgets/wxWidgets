@@ -8,6 +8,8 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 - wxFontData::GetColour() now returns a const colour
 - wxDC objects can't be created directly now (this never worked, now it doesn't
   even compile)
+- For all wxInputStreams, Eof() becomes true after an attempt has been made
+  to read _past_ the end of file.
 
 
 2.7.0
@@ -18,6 +20,10 @@ All:
 - wxLaunchDefaultBrowser() now supports wxBROWSER_NEW_WINDOW flag
 - Added wxStringTokenizer::GetLastDelimiter(); improved documentation
 - wxGetWorkingDirectory() deprecated. Use wxGetCwd() instead.
+- Speed improvements to wxRegEx when matching is done in a loop such as
+  during a search and replace.
+- Fix regerror and regfree name conficts when built-in regex and system regex
+  are both used in the same program.
 
 All (GUI):
 
@@ -53,6 +59,11 @@ wxMSW:
 - Removed wxImageList *GetImageList(int) const.
 - Fixed MDI context menu problem.
 - Removed __WIN95__ define
+- Add support for Win64 manifests and VC++ 8 automatic manifests (see the
+  wxMSW faq for details).
+- New TARGET_CPU=amd64 (or 'ia64') option for the makefile.vc files which
+  puts 64-bit builds in their own directory and adds /machine:amd64 or ia64
+  to the link command.
 
 wxGTK:
 
@@ -63,6 +74,7 @@ wxGTK:
   lost focus when the combobox menu was shown.
 - Fixed problem trying to print from a preview, whereby wrong printer
   class was used.
+- Worked around pango crashes in strncmp on Solaris 10.
 
 wxMac:
 
@@ -91,6 +103,8 @@ wxMac:
 - wxBitmapButton is created as a content icon if wxBORDER_NONE is
   specified, otherwise as a bevel button.
 - Mouse event ids set correctly (fixing problems with Connect in particular).
+- Fixed wxZipInputStream read error on wxSocketInputStream which signals the
+  end of file with an error.
 
 wxWinCE:
 
