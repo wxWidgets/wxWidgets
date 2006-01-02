@@ -38,6 +38,7 @@
     #include "wx/frame.h"
     #include "wx/control.h"
     #include "wx/containr.h"        // wxSetFocusToChild()
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #include "wx/module.h"        // wxSetFocusToChild()
@@ -56,7 +57,7 @@
 extern void          wxAssociateWinWithHandle( HWND         hWnd
                                               ,wxWindowOS2* pWin
                                              );
-bool                 wxTopLevelWindowOS2::m_sbInitialized = FALSE;
+bool                 wxTopLevelWindowOS2::m_sbInitialized = false;
 wxWindow*            wxTopLevelWindowOS2::m_spHiddenParent = NULL;
 
 // ============================================================================
@@ -136,19 +137,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxTLWHiddenParentModule, wxModule)
 
 void wxTopLevelWindowOS2::Init()
 {
-    m_bIconized = m_bMaximizeOnShow = FALSE;
+    m_bIconized = m_bMaximizeOnShow = false;
 
     //
     // Unlike (almost?) all other windows, frames are created hidden
     //
-    m_isShown = FALSE;
+    m_isShown = false;
 
     //
     // Data to save/restore when calling ShowFullScreen
     m_lFsStyle          = 0;
     m_lFsOldWindowStyle = 0;
-    m_bFsIsMaximized    = FALSE;
-    m_bFsIsShowing      = FALSE;
+    m_bFsIsMaximized    = false;
+    m_bFsIsShowing      = false;
 
     m_hFrame    = NULLHANDLE;
     memset(&m_vSwp, 0, sizeof(SWP));
@@ -364,7 +365,7 @@ bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
 
         wxLogSysError(wxT("Can't create dialog using template '%ld'"), ulDlgTemplate);
 
-        return FALSE;
+        return false;
     }
 
     //
@@ -412,7 +413,7 @@ bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
         nX = (vSizeDpy.x - nWidth) / 2;
         nY = (vSizeDpy.y - nHeight) / 2;
     }
-    m_backgroundColour.Set(wxString(wxT("LIGHT GREY")));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
 
@@ -422,7 +423,7 @@ bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
                            ,(PVOID)&lColor
                           ))
     {
-        return FALSE;
+        return false;
     }
 
     ::WinSetWindowPos( GetHwnd()
@@ -436,7 +437,7 @@ bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
     ::WinQueryWindowPos(GetHwnd(), GetSwp());
     m_hFrame = m_hWnd;
     SubclassWin(m_hWnd);
-    return TRUE;
+    return true;
 } // end of wxTopLevelWindowOS2::CreateDialog
 
 bool wxTopLevelWindowOS2::CreateFrame(
@@ -474,7 +475,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     // Clear the visible flag, we always call show
     //
     ulStyleFlags &= (unsigned long)~WS_VISIBLE;
-    m_bIconized = FALSE;
+    m_bIconized = false;
 
     //
     // Create the frame window:  We break ranks with other ports now
@@ -498,7 +499,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
-        return FALSE;
+        return false;
     }
 
     //
@@ -509,7 +510,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     wxAssociateWinWithHandle(m_hWnd, this);
     wxAssociateWinWithHandle(m_hFrame, this);
 
-    m_backgroundColour.Set(wxString(wxT("MEDIUM GREY")));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
 
@@ -522,7 +523,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
-        return FALSE;
+        return false;
     }
 
     //
@@ -559,7 +560,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError(_T("Error sizing frame. Error: %s\n"), sError.c_str());
-        return FALSE;
+        return false;
     }
     lStyle =  ::WinQueryWindowULong( m_hWnd
                                     ,QWL_STYLE
@@ -569,7 +570,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
                         ,QWL_STYLE
                         ,lStyle
                        );
-    return TRUE;
+    return true;
 } // end of wxTopLevelWindowOS2::CreateFrame
 
 bool wxTopLevelWindowOS2::Create(
@@ -609,7 +610,7 @@ bool wxTopLevelWindowOS2::Create(
     if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
     {
         //
-        // We have different dialog templates to allows creation of dialogs
+        // We have different dialog templates to allow creation of dialogs
         // with & without captions under OS2indows, resizeable or not (but a
         // resizeable dialog always has caption - otherwise it would look too
         // strange)
@@ -730,14 +731,14 @@ bool wxTopLevelWindowOS2::Show(
     }
     else
     {
-        return FALSE;
+        return false;
     }
     if (bShow)
     {
         if (m_bMaximizeOnShow)
         {
             nShowCmd = SWP_MAXIMIZE;
-            m_bMaximizeOnShow = FALSE;
+            m_bMaximizeOnShow = false;
         }
         else
         {
@@ -752,7 +753,7 @@ bool wxTopLevelWindowOS2::Show(
 
     if (bShow)
     {
-        wxActivateEvent             vEvent(wxEVT_ACTIVATE, TRUE, m_windowId);
+        wxActivateEvent             vEvent(wxEVT_ACTIVATE, true, m_windowId);
 
         ::WinQueryWindowPos(m_hFrame, &vSwp);
         m_bIconized = ( vSwp.fl & SWP_MINIMIZE ) == SWP_MINIMIZE ;
@@ -782,7 +783,7 @@ bool wxTopLevelWindowOS2::Show(
             ::WinEnableWindow(hWndParent, TRUE);
         }
     }
-    return TRUE;
+    return true;
 } // end of wxTopLevelWindowOS2::Show
 
 // ----------------------------------------------------------------------------
@@ -828,9 +829,9 @@ bool wxTopLevelWindowOS2::IsIconized() const
     // also update the current state
     ::WinQueryWindowPos(m_hFrame, (PSWP)&m_vSwp);
     if (m_vSwp.fl & SWP_MINIMIZE)
-        ((wxTopLevelWindow*)this)->m_bIconized = TRUE;
+        ((wxTopLevelWindow*)this)->m_bIconized = true;
     else
-        ((wxTopLevelWindow*)this)->m_bIconized = FALSE;
+        ((wxTopLevelWindow*)this)->m_bIconized = false;
     return m_bIconized;
 } // end of wxTopLevelWindowOS2::IsIconized
 
@@ -1008,7 +1009,7 @@ bool wxTopLevelWindowOS2::EnableCloseButton(
     if (!hMenu)
     {
         wxLogLastError(_T("GetSystemMenu"));
-        return FALSE;
+        return false;
     }
 
     //
@@ -1036,7 +1037,7 @@ bool wxTopLevelWindowOS2::EnableCloseButton(
                  ,(MPARAM)FCF_MENU
                  ,(MPARAM)0
                 );
-    return TRUE;
+    return true;
 } // end of wxTopLevelWindowOS2::EnableCloseButton
 
 // ============================================================================
@@ -1050,7 +1051,7 @@ bool wxTLWHiddenParentModule::OnInit()
 {
     m_shWnd = NULL;
     m_szClassName = NULL;
-    return TRUE;
+    return true;
 } // end of wxTLWHiddenParentModule::OnInit
 
 void wxTLWHiddenParentModule::OnExit()
