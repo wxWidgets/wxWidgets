@@ -175,7 +175,7 @@ bool wxRadioBox::Create(wxWindow *parent,
                                       choices[i],
                                       styleBtn,
                                       0, 0, 0, 0,   // will be set in SetSize()
-                                      GetHwnd(),
+                                      GetHwndOf(parent),
                                       (HMENU)newId,
                                       wxGetInstance(),
                                       NULL);
@@ -198,7 +198,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     (void)::CreateWindow(_T("BUTTON"),
                          wxEmptyString,
                          WS_GROUP | BS_AUTORADIOBUTTON | WS_CHILD,
-                         0, 0, 0, 0, GetHwnd(),
+                         0, 0, 0, 0, GetHwndOf(parent),
                          (HMENU)NewControlId(), wxGetInstance(), NULL);
 
     m_radioButtons->SetFont(GetFont());
@@ -509,8 +509,8 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (y == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         yy = currentY;
 
-    int y_offset = 0;
-    int x_offset = 0;
+    int y_offset = yy;
+    int x_offset = xx;
 
     int cx1, cy1;
     wxGetCharSize(m_hWnd, &cx1, &cy1, GetFont());
@@ -621,9 +621,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         // the radiobox entirely and the radiobox tooltips are always shown
         // (otherwise they are not when the mouse pointer is in the radiobox
         // part not belonging to any radiobutton)
-        ::MoveWindow((*m_radioButtons)[i],
-                     x_offset, y_offset, widthBtn, maxHeight,
-                     TRUE);
+        DoMoveSibling((*m_radioButtons)[i], x_offset, y_offset, widthBtn, maxHeight);
 
         // where do we put the next button?
         if ( m_windowStyle & wxRA_SPECIFY_ROWS )
@@ -666,24 +664,6 @@ WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
     }
 
     return (WXHRGN)hrgn;
-}
-
-WXLRESULT
-wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    // FIXME: Without this, the radiobox corrupts other controls as it moves
-    // in a dynamic layout. Refreshing causes flicker, but it's better than
-    // leaving droppings. Note that for some reason, wxStaticBox doesn't need
-    // this (perhaps because it has no real children?)
-    if ( nMsg == WM_MOVE )
-    {
-        WXLRESULT res = wxControl::MSWWindowProc(nMsg, wParam, lParam);
-        wxRect rect = GetRect();
-        GetParent()->Refresh(true, & rect);
-        return res;
-    }
-
-    return wxStaticBox::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 #endif // __WXWINCE__
