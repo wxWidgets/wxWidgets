@@ -317,6 +317,7 @@ size_t wxTeeInputStream::GetData(char *buffer, size_t size)
             wxFAIL; // we've already returned data that's now being ungot
             m_end = len;
         }
+        m_parent_i_stream->Reset();
         m_parent_i_stream->Ungetch(m_wback, m_wbacksize);
         free(m_wback);
         m_wback = NULL;
