@@ -59,6 +59,9 @@ wxMSW:
 - Removed wxImageList *GetImageList(int) const.
 - Fixed MDI context menu problem.
 - Removed __WIN95__ define
+- Create msw/rcdefs.h in setup.h's directory, which can be included by
+  resource files. It containts platform/compiler specific defines (such as
+  target cpu) which can be used in #ifs in .rc files.
 - Add support for Win64 manifests and VC++ 8 automatic manifests (see the
   wxMSW faq for details).
 - New TARGET_CPU=amd64 (or 'ia64') option for the makefile.vc files which
