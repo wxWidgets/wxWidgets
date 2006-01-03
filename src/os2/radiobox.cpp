@@ -195,10 +195,10 @@ void wxRadioBox::AdjustButtons( int nX,
         // Make all buttons of the same, maximal size - like this they
         // cover the radiobox entirely and the radiobox tooltips are always
         // shown (otherwise they are not when the mouse pointer is in the
-        // radiobox part not beYInt32ing to any radiobutton)
+        // radiobox part not belonging to any radiobutton)
         //
         ::WinSetWindowPos( (HWND)m_ahRadioButtons[i]
-                          ,HWND_TOP
+                          ,HWND_BOTTOM
                           ,(LONG)nXOffset
                           ,(LONG)nYOffset
                           ,(LONG)nWidthBtn
@@ -332,7 +332,7 @@ bool wxRadioBox::Create(
         long                        lStyleBtn = BS_AUTORADIOBUTTON | WS_TABSTOP | WS_VISIBLE;
         int                         nNewId = NewControlId();
 
-        if (i == 0 && lStyle == 0)
+        if (i == 0)
             lStyleBtn |= WS_GROUP;
 
         HWND                        hWndBtn = (WXHWND)::WinCreateWindow ( GetHwndOf(pParent)
@@ -341,7 +341,7 @@ bool wxRadioBox::Create(
                                                                          ,lStyleBtn
                                                                          ,0, 0, 0, 0
                                                                          ,GetWinHwnd(pParent)
-                                                                         ,HWND_TOP
+                                                                         ,HWND_BOTTOM
                                                                          ,(HMENU)nNewId
                                                                          ,NULL
                                                                          ,NULL
@@ -374,12 +374,12 @@ bool wxRadioBox::Create(
     }
 
     //
-    // Create a dummy radio control to end the group.
+    // Create a dummy control to end the group.
     //
     (void)::WinCreateWindow ( GetHwndOf(pParent)
                              ,WC_BUTTON
                              ,""
-                             ,WS_GROUP | BS_AUTORADIOBUTTON
+                             ,WS_GROUP
                              ,0, 0, 0, 0
                              ,GetWinHwnd(pParent)
                              ,HWND_TOP
@@ -398,20 +398,10 @@ bool wxRadioBox::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    ::WinSetPresParam( m_hWnd
-                      ,PP_BORDERDARKCOLOR
-                      ,sizeof(LONG)
-                      ,(PVOID)&lColor
-                     );
-    lColor = (LONG)m_backgroundColour.GetPixel();
 
+    lColor = (LONG)m_backgroundColour.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_BACKGROUNDCOLOR
-                      ,sizeof(LONG)
-                      ,(PVOID)&lColor
-                     );
-    ::WinSetPresParam( m_hWnd
-                      ,PP_BORDERLIGHTCOLOR
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
@@ -445,13 +435,8 @@ void wxRadioBox::DoSetSize(
     int                             nHeightOld;
     int                             nXx = nX;
     int                             nYy = nY;
-#if RADIOBTN_PARENT_IS_RADIOBOX
-    int                             nXOffset = 0;
-    int                             nYOffset = 0;
-#else
     int                             nXOffset = nXx;
     int                             nYOffset = nYy;
-#endif
     int                             nCx1;
     int                             nCy1;
     wxSize                          vMaxSize = GetMaxButtonSize();
@@ -634,10 +619,10 @@ void wxRadioBox::DoSetSize(
         // Make all buttons of the same, maximal size - like this they
         // cover the radiobox entirely and the radiobox tooltips are always
         // shown (otherwise they are not when the mouse pointer is in the
-        // radiobox part not beinting to any radiobutton)
+        // radiobox part not belonging to any radiobutton)
         //
         ::WinSetWindowPos( (HWND)m_ahRadioButtons[i]
-                          ,HWND_TOP
+                          ,HWND_BOTTOM
                           ,(LONG)nXOffset
                           ,(LONG)nYOffset
                           ,(LONG)nWidthBtn
@@ -823,8 +808,8 @@ void wxRadioBox::GetPosition( int* pnX,
         vPoint.x = vPt.x;
         vPoint.y = vPt.y;
     }
-    *pnX = vPoint.x;
-    *pnX = vPoint.y;
+    if (pnX)
+        *pnX = vPoint.y;
 } // end of wxRadioBox::GetPosition
 
 int wxRadioBox::GetRowCount() const
@@ -1145,11 +1130,11 @@ MRESULT wxRadioBtnWndProc(
                         switch(uVk)
                         {
                             case VK_LEFT:
-                                eDir = wxDOWN;
+                                eDir = wxLEFT;
                                 break;
 
                             case VK_RIGHT:
-                                eDir = wxDOWN;
+                                eDir = wxRIGHT;
                                 break;
 
                             case VK_DOWN:
