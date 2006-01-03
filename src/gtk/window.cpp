@@ -4738,8 +4738,19 @@ wxPoint wxGetMousePosition()
 
 }
 
+// Needed for implementing e.g. combobox on wxGTK within a modal dialog.
+void wxAddGrab(wxWindow* window)
+{
+    gtk_grab_add( (GtkWidget*) window->GetHandle() );
+}
+
+void wxRemoveGrab(wxWindow* window)
+{
+    gtk_grab_remove( (GtkWidget*) window->GetHandle() );
+}
+
 // ----------------------------------------------------------------------------
-// wxDCModule
+// wxWinModule
 // ----------------------------------------------------------------------------
 
 class wxWinModule : public wxModule
@@ -4768,4 +4779,3 @@ void wxWinModule::OnExit()
         gdk_gc_unref( g_eraseGC );
 }
 
-// vi:sts=4:sw=4:et
