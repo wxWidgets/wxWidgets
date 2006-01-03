@@ -195,6 +195,7 @@ cd bld
 	--enable-geometry \
 	--enable-optimise \
 	--enable-sound 	--with-sdl \
+	--enable-mediactrl \
 	--enable-display \
 %if %{unicode}
 	--enable-unicode \
