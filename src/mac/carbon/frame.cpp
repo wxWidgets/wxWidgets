@@ -37,6 +37,7 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 
 #define WX_MAC_STATUSBAR_HEIGHT 18
+
 // ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
@@ -44,18 +45,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 void wxFrame::Init()
 {
     m_frameMenuBar = NULL;
+    m_frameStatusBar = NULL;
+    m_winLastFocused = NULL;
 
 #if wxUSE_TOOLBAR
-    m_frameToolBar = NULL ;
+    m_frameToolBar = NULL;
 #endif
-    m_frameStatusBar = NULL;
-    m_winLastFocused = NULL ;
-
-    m_iconized = false;
 
 #if wxUSE_TOOLTIPS
-    m_hwndToolTip = 0;
+    // NB: is this used anywhere?
+    m_hwndToolTip = NULL;
 #endif
+
+    m_iconized = false;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -85,14 +87,14 @@ wxFrame::~wxFrame()
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
-    
+
 #if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__)
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
         int w, h;
         toolbar->GetSize(&w, &h);
-        
+
         if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
         {
             pt.x += w;
@@ -104,7 +106,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 #endif
         }
     }
-#endif // wxUSE_TOOLBAR
+#endif
     
     return pt;
 }
@@ -116,7 +118,7 @@ bool wxFrame::Enable(bool enable)
 
     if ( m_frameMenuBar && m_frameMenuBar == wxMenuBar::MacGetInstalledMenuBar() )
     {
-         int iMaxMenu = m_frameMenuBar->GetMenuCount();
+        int iMaxMenu = m_frameMenuBar->GetMenuCount();
         for ( int i = 0 ; i < iMaxMenu ; ++ i )
         {
             m_frameMenuBar->EnableTop( i , enable ) ;
@@ -129,12 +131,12 @@ bool wxFrame::Enable(bool enable)
 wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name)
 {
-    wxStatusBar *statusBar = NULL;
+    wxStatusBar *statusBar;
 
-    statusBar = new wxStatusBar(this, id,
-        style, name);
-    statusBar->SetSize( 100 , WX_MAC_STATUSBAR_HEIGHT ) ;
+    statusBar = new wxStatusBar(this, id, style, name);
+    statusBar->SetSize(100 , WX_MAC_STATUSBAR_HEIGHT);
     statusBar->SetFieldsCount(number);
+
     return statusBar;
 }
 
@@ -160,6 +162,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     if ( m_frameStatusBar )
     {
         wxSysColourChangedEvent event2;
+
         event2.SetEventObject( m_frameStatusBar );
         m_frameStatusBar->ProcessEvent(event2);
     }
@@ -167,7 +170,6 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     // Propagate the event to the non-top-level children
     wxWindow::OnSysColourChanged(event);
 }
-
 
 // Default activation behaviour - set the focus for the first child
 // subwindow found.
@@ -185,9 +187,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
             if ( win->IsTopLevel() )
             {
                 if ( win != this )
-                {
                     m_winLastFocused = NULL;
-                }
 
                 break;
             }
@@ -200,23 +200,23 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     else
     {
         // restore focus to the child which was last focused
-        wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
-                                            : NULL;
+        wxWindow *parent = m_winLastFocused
+            ? m_winLastFocused->GetParent()
+            : NULL;
+
         if ( !parent )
-        {
             parent = this;
-        }
 
         wxSetFocusToChild(parent, &m_winLastFocused);
 
-        if ( m_frameMenuBar != NULL )
+        if (m_frameMenuBar != NULL)
         {
             m_frameMenuBar->MacInstallMenuBar() ;
         }
         else if (wxTheApp->GetTopWindow() && wxTheApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame)))
         {
-            // Trying toplevel frame menbar
-            if( ((wxFrame*)wxTheApp->GetTopWindow())->GetMenuBar() )
+            // Trying toplevel frame membar
+            if (((wxFrame*)wxTheApp->GetTopWindow())->GetMenuBar())
                 ((wxFrame*)wxTheApp->GetTopWindow())->GetMenuBar()->MacInstallMenuBar();
          }
     }
@@ -225,9 +225,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 void wxFrame::DetachMenuBar()
 {
     if ( m_frameMenuBar )
-    {
         m_frameMenuBar->UnsetInvokingWindow();
-    }
 
     wxFrameBase::DetachMenuBar();
 }
@@ -237,21 +235,17 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
     wxFrameBase::AttachMenuBar(menuBar);
 
     if (m_frameMenuBar)
-    {
         m_frameMenuBar->SetInvokingWindow( this );
-    }
 }
 
 void wxFrame::DoGetClientSize(int *x, int *y) const
 {
-    wxTopLevelWindow::DoGetClientSize( x , y ) ;
+    wxTopLevelWindow::DoGetClientSize( x , y );
 
 #if wxUSE_STATUSBAR
     if ( GetStatusBar() && GetStatusBar()->IsShown() && y )
-    {
         *y -= WX_MAC_STATUSBAR_HEIGHT;
-    }
-#endif // wxUSE_STATUSBAR
+#endif
 
 #if wxUSE_TOOLBAR
     wxToolBar *toolbar = GetToolBar();
@@ -262,16 +256,18 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 
         if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
         {
-            if ( x )  *x -= w;
+            if ( x )
+                *x -= w;
         }
         else
         {
 #if !wxMAC_USE_NATIVE_TOOLBAR
-            if ( y )  *y -= h;
+            if ( y )
+                *y -= h;
 #endif
         }
     }
-#endif // wxUSE_TOOLBAR
+#endif
 }
 
 bool wxFrame::MacIsChildOfClientArea( const wxWindow* child ) const
@@ -279,12 +275,12 @@ bool wxFrame::MacIsChildOfClientArea( const wxWindow* child ) const
 #if wxUSE_STATUSBAR
     if ( child == GetStatusBar() )
         return false ;
-#endif // wxUSE_STATUSBAR
+#endif
 
 #if wxUSE_TOOLBAR
     if ( child == GetToolBar() )
         return false ;
-#endif // wxUSE_TOOLBAR
+#endif
 
     return wxFrameBase::MacIsChildOfClientArea( child ) ;
 }
@@ -303,14 +299,11 @@ void wxFrame::DoSetClientSize(int clientwidth, int clientheight)
 
     // find the current client size
 
-  // Find the difference between the entire window (title bar and all)
-  // and the client area; add this to the new client size to move the
-  // window
-
+    // Find the difference between the entire window (title bar and all) and
+    // the client area; add this to the new client size to move the window
     DoSetSize( -1 , -1 , currentwidth + clientwidth - currentclientwidth ,
         currentheight + clientheight - currentclientheight , wxSIZE_USE_EXISTING ) ;
 }
-
 
 #if wxUSE_TOOLBAR
 void wxFrame::SetToolBar(wxToolBar *toolbar)
@@ -320,10 +313,11 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     
 #if wxMAC_USE_NATIVE_TOOLBAR
     if ( m_frameToolBar )
-        m_frameToolBar->MacInstallNativeToolbar(false) ;
+        m_frameToolBar->MacInstallNativeToolbar( false ) ;
 #endif
-    
+
     m_frameToolBar = toolbar ;
+
 #if wxMAC_USE_NATIVE_TOOLBAR
     if ( toolbar )
         toolbar->MacInstallNativeToolbar( true ) ;
@@ -333,9 +327,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
     if ( wxFrameBase::CreateToolBar(style, id, name) )
-    {
         PositionToolBar();
-    }
 
     return m_frameToolBar;
 }
@@ -346,19 +338,20 @@ void wxFrame::PositionToolBar()
 
     GetSize( &cw , &ch ) ;
 
-    if ( GetStatusBar() && GetStatusBar()->IsShown())
+    if (GetStatusBar() && GetStatusBar()->IsShown())
     {
-      int statusX, statusY;
-      GetStatusBar()->GetClientSize(&statusX, &statusY);
-      ch -= statusY;
+        int statusX, statusY;
+
+        GetStatusBar()->GetClientSize(&statusX, &statusY);
+        ch -= statusY;
     }
 
     if (GetToolBar())
     {
         int tx, ty, tw, th;
-        tx = ty = 0 ;
 
-        GetToolBar()->GetSize(& tw, & th);
+        tx = ty = 0 ;
+        GetToolBar()->GetSize(&tw, &th);
         if (GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL)
         {
             // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
@@ -376,3 +369,4 @@ void wxFrame::PositionToolBar()
     }
 }
 #endif
+
