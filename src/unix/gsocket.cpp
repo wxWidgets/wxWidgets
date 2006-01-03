@@ -181,6 +181,9 @@ int _System soclose(int);
 #  include "wx/unix/gsockunx.h"
 #  include "wx/unix/private.h"
 #  include "wx/gsocket.h"
+#if wxUSE_THREADS && (defined(HAVE_GETHOSTBYNAME) || defined(HAVE_GETSERVBYNAME))
+#  include "wx/thread.h"
+#endif
 #else
 #  include "gsockunx.h"
 #  include "gsocket.h"
@@ -188,6 +191,175 @@ int _System soclose(int);
 #    define WXUNUSED(x)
 #  endif
 #endif /* __GSOCKET_STANDALONE__ */
+
+#if defined(HAVE_GETHOSTBYNAME)
+static struct hostent * deepCopyHostent(struct hostent *h,
+					const struct hostent *he,
+					char *buffer, int size, int *err)
+{
+  memcpy(h, he, sizeof(struct hostent));
+  int len = strlen(h->h_name);
+  if (len > size)
+    len = size - 1;
+  memcpy(buffer, h->h_name, len);
+  buffer[len] = '\0';
+  h->h_name = buffer;
+  buffer += len + 1;
+  size -= len + 1;
+  len = h->h_length;
+  for (char **p = h->h_addr_list; *p != 0; p++) {
+    if (size < len){
+      *err = ENOMEM;
+      return NULL;
+    }
+    memcpy(buffer, *p, len);
+    *p = buffer;
+    buffer += len;
+    size -= len;
+  }
+  for (char **q = h->h_aliases; size > 0 && *q != 0; q++){
+    len = strlen(*q);
+    if (len > size)
+      len = size - 1;
+    memcpy(buffer, *q, len);
+    buffer[len] = '\0';
+    *q = buffer;
+    buffer += len + 1;
+    size -= len + 1;
+  }
+  return h;
+}
+#endif
+
+struct hostent * wxGethostbyname_r(const char *hostname, struct hostent *h,
+				   void *buffer, int size, int *err)
+
+{
+  struct hostent *he;
+  *err = 0;
+#if defined(HAVE_FUNC_GETHOSTBYNAME_R_6)
+  if (gethostbyname_r(hostname, h, (char*)buffer, size, &he, err))
+    he = NULL;
+#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5)
+  he = gethostbyname_r(hostname, h, (char*)buffer, size, err);
+#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+  if (gethostbyname_r(hostname, h, (struct hostent_data*) buffer))
+  {
+    he = NULL;
+    *err = h_errno;
+  }
+  else
+    he = h;
+#elif defined(HAVE_GETHOSTBYNAME)
+#if wxUSE_THREADS
+  static wxMutex nameLock;
+  wxMutexLocker locker(nameLock);
+#endif
+  he = gethostbyname(hostname);
+  if (!he)
+    *err = h_errno;
+  else
+    he = deepCopyHostent(h, he, (char*)buffer, size, err);
+#endif
+  return he;
+}
+
+struct hostent * wxGethostbyaddr_r(const char *addr_buf, int buf_size,
+				   int proto, struct hostent *h,
+				   void *buffer, int size, int *err)
+{
+  struct hostent *he;
+  *err = 0;
+#if defined(HAVE_FUNC_GETHOSTBYNAME_R_6)
+  if (gethostbyaddr_r(addr_buf, buf_size, proto, h,
+		      (char*)buffer, size, &he, err))
+    he = NULL;
+#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5)
+  he = gethostbyaddr_r(addr_buf, buf_size, proto, h, (char*)buffer, size, err);
+#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+  if (gethostbyaddr_r(addr_buf, buf_size, proto, h,
+			(struct hostent_data*) buffer))
+  {
+    he = NULL;
+    *err = h_errno;
+  }
+  else
+    he = h;
+#elif defined(HAVE_GETHOSTBYNAME)
+#if wxUSE_THREADS
+  static wxMutex addrLock;
+  wxMutexLocker locker(addrLock);
+#endif
+  he = gethostbyaddr(addr_buf, buf_size, proto);
+  if (!he)
+    *err = h_errno;
+  else
+    he = deepCopyHostent(h, he, (char*)buffer, size, err);
+#endif
+  return he;
+}
+
+#if defined(HAVE_GETHOSTBYNAME)
+static struct servent * deepCopyServent(struct servent *s,
+					const struct servent *se,
+					char *buffer, int size)
+{
+  memcpy(s, se, sizeof(struct servent));
+  int len = strlen(s->s_name);
+  if (len > size)
+    len = size - 1;
+  memcpy(buffer, s->s_name, len);
+  buffer[len] = '\0';
+  s->s_name = buffer;
+  buffer += len + 1;
+  size -= len + 1;
+  len = strlen(s->s_proto);
+  if (len > size)
+    len = size - 1;
+  memcpy(buffer, s->s_proto, len);
+  buffer[len] = '\0';
+  s->s_proto = buffer;
+  buffer += len + 1;
+  size -= len + 1;
+  for (char **q = s->s_aliases; size > 0 && *q != 0; q++){
+    len = strlen(*q);
+    if (len > size)
+      len = size - 1;
+    memcpy(buffer, *q, len);
+    buffer[len] = '\0';
+    *q = buffer;
+    buffer += len + 1;
+    size -= len + 1;
+  }
+  return s;
+}
+#endif
+
+struct servent *wxGetservbyname_r(const char *port, const char *protocol,
+				  struct servent *serv, void *buffer, int size)
+{
+  struct servent *se;
+#if defined(HAVE_FUNC_GETSERVBYNAME_R_6)
+  if (getservbyname_r(port, protocol, serv, (char*)buffer, size, &se))
+    se = NULL;
+#elif defined(HAVE_FUNC_GETSERVBYNAME_R_5)
+  se = getservbyname_r(port, protocol, serv, (char*)buffer, size);
+#elif defined(HAVE_FUNC_GETSERVBYNAME_R_4)
+  if (getservbyname_r(port, protocol, serv, (struct servent_data*) buffer))
+    se = NULL;
+  else
+    se = serv;
+#elif defined(HAVE_GETSERVBYNAME)
+#if wxUSE_THREADS
+  static wxMutex servLock;
+  wxMutexLocker locker(servLock);
+#endif
+  se = getservbyname(port, protocol);
+  if (se)
+    se = deepCopyServent(serv, se, (char*)buffer, size);
+#endif
+  return se;
+}
 
 /* debugging helpers */
 #ifdef __GSOCKET_DEBUG__
