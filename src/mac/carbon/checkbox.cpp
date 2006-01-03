@@ -14,21 +14,25 @@
 #if wxUSE_CHECKBOX
 
 #include "wx/checkbox.h"
+#include "wx/mac/uma.h"
+
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 
-#include "wx/mac/uma.h"
 
 // Single check box item
-bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-           const wxValidator& validator,
-           const wxString& name)
+bool wxCheckBox::Create(wxWindow *parent,
+    wxWindowID id,
+    const wxString& label,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxValidator& validator,
+    const wxString& name)
 {
-    m_macIsUserPane = FALSE ;
-    
+    m_macIsUserPane = false ;
+
     if ( !wxCheckBoxBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
@@ -39,27 +43,23 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         maxValue = 2 /* kControlCheckboxMixedValue */;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_peer = new wxMacControl(this) ;
+    m_peer = new wxMacControl( this ) ;
     verify_noerr( CreateCheckBoxControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds ,
         CFSTR("") , 0 , false , m_peer->GetControlRefAddr() ) );
-    
-    m_peer->SetMaximum( maxValue ) ;
-    
-    MacPostControlCreate(pos,size) ;
 
-  return TRUE;
+    m_peer->SetMaximum( maxValue ) ;
+
+    MacPostControlCreate(pos, size) ;
+
+    return true;
 }
 
 void wxCheckBox::SetValue(bool val)
 {
     if (val)
-    {
         Set3StateValue(wxCHK_CHECKED);
-    }
     else
-    {
         Set3StateValue(wxCHK_UNCHECKED);
-    }
 }
 
 bool wxCheckBox::GetValue() const
@@ -67,7 +67,7 @@ bool wxCheckBox::GetValue() const
     return (DoGet3StateValue() != 0);
 }
 
-void wxCheckBox::Command (wxCommandEvent & event)
+void wxCheckBox::Command(wxCommandEvent & event)
 {
     int state = event.GetInt();
 
@@ -75,14 +75,14 @@ void wxCheckBox::Command (wxCommandEvent & event)
         || (state == wxCHK_UNDETERMINED),
         wxT("event.GetInt() returned an invalid checkbox state") );
 
-    Set3StateValue((wxCheckBoxState) state);
+    Set3StateValue((wxCheckBoxState)state);
 
     ProcessCommand(event);
 }
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 {
-    return (wxCheckBoxState) m_peer->GetValue() ;
+    return (wxCheckBoxState)m_peer->GetValue() ;
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
@@ -90,55 +90,61 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
     m_peer->SetValue( val ) ;
 }
 
-wxInt32 wxCheckBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
+wxInt32 wxCheckBox::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
-    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
-    wxCheckBoxState state = Get3StateValue();
+    wxCheckBoxState origState, newState;
 
-    if (state == wxCHK_UNCHECKED)
-    {
-        state = wxCHK_CHECKED;
-    }
-    else if (state == wxCHK_CHECKED)
-    {
-        // If the style flag to allow the user setting the undetermined state
-        // is set, then set the state to undetermined. Otherwise set state to
-        // unchecked.
-        if ( Is3rdStateAllowedForUser() )
-        {
-            state = wxCHK_UNDETERMINED;
-        }
-        else
-        {
-            state = wxCHK_UNCHECKED;
-        }
-    }
-    else if (state == wxCHK_UNDETERMINED)
-    {
-        state = wxCHK_UNCHECKED;
-    }
-    Set3StateValue(state);
+    newState = origState = Get3StateValue();
 
-    event.SetInt(state);
-    event.SetEventObject(this);
-    ProcessCommand(event);
+    switch (origState)
+    {
+	case wxCHK_UNCHECKED:
+            newState = wxCHK_CHECKED;
+            break;
 
-    return noErr ;
+	case wxCHK_CHECKED:
+            // If the style flag to allow the user setting the undetermined state is set,
+            // then set the state to undetermined; otherwise set state to unchecked.
+            newState = Is3rdStateAllowedForUser() ? wxCHK_UNDETERMINED : wxCHK_UNCHECKED;
+            break;
+
+	case wxCHK_UNDETERMINED:
+            newState = wxCHK_UNCHECKED;
+            break;
+
+	default:
+            break;
+    }
+
+    if (newState != origState)
+    {
+        Set3StateValue( newState );
+
+        wxCommandEvent event( wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
+        event.SetInt( newState );
+        event.SetEventObject( this );
+        ProcessCommand( event );
+    }
+
+    return noErr;
 }
 
 // Bitmap checkbox
-bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id,
-                              const wxBitmap *label,
-                              const wxPoint& pos,
-                              const wxSize& size, long style,
-                              const wxValidator& validator,
-                              const wxString& name)
+bool wxBitmapCheckBox::Create(wxWindow *parent,
+    wxWindowID id,
+    const wxBitmap *label,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxValidator& validator,
+    const wxString& name)
 {
     SetName(name);
     SetValidator(validator);
     m_windowStyle = style;
 
-    if (parent) parent->AddChild(this);
+    if (parent)
+        parent->AddChild(this);
 
     if ( id == -1 )
         m_windowId = NewControlId();
@@ -147,7 +153,7 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id,
 
     // TODO: Create the bitmap checkbox
 
-    return FALSE;
+    return false;
 }
 
 void wxBitmapCheckBox::SetLabel(const wxBitmap *bitmap)
@@ -171,7 +177,8 @@ bool wxBitmapCheckBox::GetValue() const
 {
     // TODO
     wxFAIL_MSG(wxT("wxBitmapCheckBox::GetValue() not yet implemented"));
-    return FALSE;
+
+    return false;
 }
 
 #endif
