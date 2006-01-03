@@ -1561,7 +1561,7 @@ void wxWindowOS2::DoMoveWindow(
         //
         // Uninitialized
         //
-        ::WinQueryWindowPos(hWnd, &m_vWinSwp);
+        ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
     else
     {
         int                         nYDiff = m_vWinSwp.cy - nHeight;
@@ -1600,8 +1600,8 @@ void wxWindowOS2::DoMoveWindow(
                 nAdjustWidth = 0L;
             else
                 nAdjustWidth = nVSBWidth;
-            ::WinQueryWindowPos(hWnd, &vSwpScroll);
-            ::WinSetWindowPos( hWnd
+            ::WinQueryWindowPos(GetHwnd(), &vSwpScroll);
+            ::WinSetWindowPos( GetHwnd()
                               ,HWND_TOP
                               ,vSwpScroll.x
                               ,vSwpScroll.y + nAdjustHeight
