@@ -167,13 +167,13 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
     event.SetTimestamp(e->when);
     event.m_x = where.x - orig.x;
     event.m_y = where.y - orig.y;
-    event.m_shiftDown = ( e->modifiers & EVT_SHIFTKEY ) == EVT_SHIFTKEY;
-    event.m_controlDown = ( e->modifiers & EVT_CTRLSTATE ) == EVT_CTRLSTATE;
-    event.m_altDown = ( e->modifiers & EVT_LEFTALT ) == EVT_LEFTALT;
-    event.m_metaDown = ( e->modifiers & EVT_RIGHTALT ) == EVT_RIGHTALT;
-    event.m_leftDown = ( e->modifiers & EVT_LEFTBUT ) == EVT_LEFTBUT;
-    event.m_middleDown = ( e->modifiers & EVT_MIDDLEBUT ) == EVT_MIDDLEBUT;
-    event.m_rightDown = ( e->modifiers & EVT_RIGHTBUT ) == EVT_RIGHTBUT;
+    event.m_shiftDown = ( e->modifiers & EVT_SHIFTKEY ) != 0;
+    event.m_controlDown = ( e->modifiers & EVT_CTRLSTATE ) != 0;
+    event.m_altDown = ( e->modifiers & EVT_LEFTALT ) != 0;
+    event.m_metaDown = ( e->modifiers & EVT_RIGHTALT ) != 0;
+    event.m_leftDown = ( e->modifiers & EVT_LEFTBUT ) != 0;
+    event.m_middleDown = ( e->modifiers & EVT_MIDDLEBUT ) != 0;
+    event.m_rightDown = ( e->modifiers & EVT_RIGHTBUT ) != 0;
 
     switch (e->what)
     {
@@ -458,10 +458,10 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
     event.m_scanCode = 0; // not used by wx at all
     event.m_x = where.x;
     event.m_y = where.y;
-    event.m_shiftDown = ( e->modifiers & EVT_SHIFTKEY ) == EVT_SHIFTKEY;
-    event.m_controlDown = ( e->modifiers & EVT_CTRLSTATE ) == EVT_CTRLSTATE;
-    event.m_altDown = ( e->modifiers & EVT_LEFTALT ) == EVT_LEFTALT;
-    event.m_metaDown = ( e->modifiers & EVT_RIGHTALT ) == EVT_RIGHTALT;
+    event.m_shiftDown = ( e->modifiers & EVT_SHIFTKEY ) != 0;
+    event.m_controlDown = ( e->modifiers & EVT_CTRLSTATE ) != 0;
+    event.m_altDown = ( e->modifiers & EVT_LEFTALT ) != 0;
+    event.m_metaDown = ( e->modifiers & EVT_RIGHTALT ) != 0;
 
     if ( e->what == EVT_KEYUP )
     {
