@@ -90,9 +90,9 @@ Destroys the help instance, closing down the viewer if it is running.
 
 \membersection{wxHelpController::Initialize}\label{wxhelpcontrollerinitialize}
 
-\func{virtual void}{Initialize}{\param{const wxString\& }{file}}
+\func{virtual bool}{Initialize}{\param{const wxString\& }{file}}
 
-\func{virtual void}{Initialize}{\param{const wxString\& }{file}, \param{int}{ server}}
+\func{virtual bool}{Initialize}{\param{const wxString\& }{file}, \param{int}{ server}}
 
 Initializes the help instance with a help filename, and optionally a server socket
 number if using wxHelp (now obsolete). Does not invoke the help viewer.
