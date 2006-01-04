@@ -53,6 +53,16 @@
 #include <Scrap.h>
 #endif
 
+#ifndef __DARWIN__
+#include <MacTextEditor.h>
+#include <ATSUnicode.h>
+#include <TextCommon.h>
+#include <TextEncodingConverter.h>
+#endif
+
+#include "wx/mac/uma.h"
+
+
 // if this is set to 1 then under OSX 10.2 the 'classic' MLTE implementation will be used
 // if set to 0 then the unicode textctrl will be used
 #ifndef wxMAC_AWAYS_USE_MLTE
@@ -62,24 +72,19 @@
 #ifndef __WXMAC_OSX__
 enum
 {
-    kTXNVisibilityTag             = 'visb' /*set the visibility state of the object  */
+    kTXNVisibilityTag             = 'visb' // set the visibility state of the object
 };
 #endif
 
-#ifndef __DARWIN__
-#include <MacTextEditor.h>
-#include <ATSUnicode.h>
-#include <TextCommon.h>
-#include <TextEncodingConverter.h>
-#endif
-#include "wx/mac/uma.h"
 
 class wxMacFunctor
 {
 public :
     wxMacFunctor() {}
     virtual ~wxMacFunctor() {}
+
     virtual void* operator()() = 0 ;
+
     static void* CallBackProc(void *param)
     {
         wxMacFunctor* f = (wxMacFunctor*) param ;
@@ -88,14 +93,15 @@ public :
     }
 } ;
 
-template<typename classtype,typename param1type>
+template<typename classtype, typename param1type>
+
 class wxMacObjectFunctor1 : public wxMacFunctor
 {
     typedef void (classtype::*function)( param1type p1 ) ;
     typedef void (classtype::*ref_function)( const param1type& p1 ) ;
 public :
     wxMacObjectFunctor1( classtype *obj , function f , param1type p1 ) :
-        wxMacFunctor(  )
+        wxMacFunctor()
     {
         m_object = obj ;
         m_function = f ;
@@ -103,7 +109,7 @@ public :
     }
 
     wxMacObjectFunctor1( classtype *obj , ref_function f , param1type p1 ) :
-        wxMacFunctor(  )
+        wxMacFunctor()
     {
         m_object = obj ;
         m_refFunction = f ;
@@ -123,26 +129,26 @@ private :
     param1type m_param1 ;
     union
     {
-    function m_function ;
-    ref_function m_refFunction ;
+        function m_function ;
+        ref_function m_refFunction ;
     } ;
 } ;
 
 template<typename classtype, typename param1type>
 void* wxMacMPRemoteCall( classtype *object , void (classtype::*function)( param1type p1 ) , param1type p1 )
 {
-    wxMacObjectFunctor1<classtype,param1type> params(object,function,p1) ;
+    wxMacObjectFunctor1<classtype, param1type> params(object, function, p1) ;
     void *result =
-        MPRemoteCall( wxMacFunctor::CallBackProc , &params  , kMPOwningProcessRemoteContext ) ;
+        MPRemoteCall( wxMacFunctor::CallBackProc , &params , kMPOwningProcessRemoteContext ) ;
     return result ;
 }
 
 template<typename classtype, typename param1type>
 void* wxMacMPRemoteCall( classtype *object , void (classtype::*function)( const param1type& p1 ) , param1type p1 )
 {
-    wxMacObjectFunctor1<classtype,param1type> params(object,function,p1) ;
+    wxMacObjectFunctor1<classtype,param1type> params(object, function, p1) ;
     void *result =
-        MPRemoteCall( wxMacFunctor::CallBackProc , &params  , kMPOwningProcessRemoteContext ) ;
+        MPRemoteCall( wxMacFunctor::CallBackProc , &params , kMPOwningProcessRemoteContext ) ;
     return result ;
 }
 
@@ -185,7 +191,12 @@ public :
     virtual void SetSelection( long from , long to ) = 0 ;
     virtual void GetSelection( long* from, long* to) const = 0 ;
     virtual void WriteText(const wxString& str) = 0 ;
-    virtual bool HasOwnContextMenu() const { return false ; }
+
+    virtual bool HasOwnContextMenu() const
+    { return false ; }
+
+    virtual bool SetupCursor( const wxPoint& pt )
+    { return false ; }
 
     virtual void Clear() ;
     virtual bool CanUndo() const;
@@ -198,7 +209,6 @@ public :
     virtual void ShowPosition( long WXUNUSED(pos) ) ;
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
-    virtual bool SetupCursor( const wxPoint& pt ) { return false ; }
 
 #ifndef __WXMAC_OSX__
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) = 0 ;
@@ -222,7 +232,8 @@ public :
     virtual void SetStringValue( const wxString &str) ;
 
     static TXNFrameOptions FrameOptionsFromWXStyle( long wxStyle ) ;
-    void    AdjustCreationAttributes( const wxColour& background , bool visible ) ;
+
+    void AdjustCreationAttributes( const wxColour& background , bool visible ) ;
 
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) ;
     virtual void SetBackground( const wxBrush &brush) ;
@@ -234,11 +245,12 @@ public :
     virtual void SetEditable(bool editable) ;
     virtual wxTextPos GetLastPosition() const ;
     virtual void Replace( long from , long to , const wxString &str ) ;
-    virtual void Remove( long from , long to )  ;
+    virtual void Remove( long from , long to ) ;
     virtual void GetSelection( long* from, long* to) const ;
     virtual void SetSelection( long from , long to ) ;
 
     virtual void WriteText(const wxString& str) ;
+
     virtual bool HasOwnContextMenu() const 
     { 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
@@ -249,6 +261,7 @@ public :
             return options & kTXNSupportEditCommandProcessing ;
         }
 #endif
+
         return false ;
     }
 
@@ -269,6 +282,7 @@ public :
 
 protected :
     void TXNSetAttribute( const wxTextAttr& style , long from , long to ) ;
+
     TXNObject m_txn ;
 } ;
 
@@ -292,7 +306,7 @@ public :
 protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
-} ;
+};
 
 #endif
 
@@ -304,6 +318,7 @@ public :
                              const wxPoint& pos,
                              const wxSize& size, long style ) ;
     ~wxMacUnicodeTextControl();
+
     virtual void VisibilityChanged(bool shown);
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
@@ -319,7 +334,7 @@ public :
 protected :
     // contains the tag for the content (is different for password and non-password controls)
     OSType m_valueTag ;
-} ;
+};
 
 #endif
 
@@ -353,10 +368,9 @@ protected :
     OSStatus                 DoCreate();
 
     void                    MacUpdatePosition() ;
-    void                    MacActivatePaneText(Boolean setActive) ;
-    void                    MacFocusPaneText(Boolean setFocus) ;
-
-    void                    MacSetObjectVisibility(Boolean vis) ;
+    void                    MacActivatePaneText(bool setActive) ;
+    void                    MacFocusPaneText(bool setFocus) ;
+    void                    MacSetObjectVisibility(bool vis) ;
 
 private :
     TXNFrameID              m_txnFrameID ;
@@ -365,18 +379,22 @@ private :
     // bounds of the control as we last did set the txn frames
     Rect                    m_txnControlBounds ;
     Rect                    m_txnVisBounds ;
+
 #ifdef __WXMAC_OSX__
-    static pascal void      TXNScrollInfoProc (SInt32 iValue, SInt32 iMaximumValue,
-                                TXNScrollBarOrientation iScrollBarOrientation, SInt32 iRefCon) ;
-    static pascal void      TXNScrollActionProc( ControlRef controlRef , ControlPartCode partCode ) ;
+    static pascal void TXNScrollActionProc( ControlRef controlRef , ControlPartCode partCode ) ;
+    static pascal void TXNScrollInfoProc(
+        SInt32 iValue, SInt32 iMaximumValue,
+        TXNScrollBarOrientation iScrollBarOrientation, SInt32 iRefCon ) ;
+
     ControlRef              m_sbHorizontal ;
     SInt32                  m_lastHorizontalValue ;
     ControlRef              m_sbVertical ;
     SInt32                  m_lastVerticalValue ;
 #endif
-} ;
+};
 
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
+
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
@@ -402,6 +420,7 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_CLEAR, wxTextCtrl::OnUpdateDelete)
     EVT_UPDATE_UI(wxID_SELECTALL, wxTextCtrl::OnUpdateSelectAll)
 END_EVENT_TABLE()
+
 
 // Text item
 void wxTextCtrl::Init()
@@ -445,6 +464,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     }
 
     bool forceMLTE = false ;
+
 #if wxUSE_SYSTEM_OPTIONS
     if ( (wxSystemOptions::HasOption(wxMAC_TEXTCONTROL_USE_MLTE) ) && ( wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_MLTE ) == 1) )
     {
@@ -460,12 +480,14 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
             m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
 #endif
+
     if ( !m_peer )
     {
         if ( !(m_windowStyle & wxTE_MULTILINE) && forceMLTE == false )
             m_peer = new wxMacUnicodeTextControl( this , str , pos , size , style ) ;
     }
 #endif
+
     if ( !m_peer )
     {
         m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
@@ -535,12 +557,14 @@ bool wxTextCtrl::SetFont( const wxFont& font )
         return false ;
 
     GetPeer()->SetFont( font , GetForegroundColour() , GetWindowStyle() ) ;
+
     return true ;
 }
 
 bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 {
     GetPeer()->SetStyle( start , end , style ) ;
+
     return true ;
 }
 
@@ -548,10 +572,12 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
 {
     wxTextCtrlBase::SetDefaultStyle( style ) ;
     SetStyle( kTXNUseCurrentSelection , kTXNUseCurrentSelection , GetDefaultStyle() ) ;
+
     return true ;
 }
 
 // Clipboard operations
+
 void wxTextCtrl::Copy()
 {
     if (CanCopy())
@@ -575,7 +601,8 @@ void wxTextCtrl::Paste()
     if (CanPaste())
     {
         GetPeer()->Paste() ;
-        // eventually we should add setting the default style again
+
+        // TODO: eventually we should add setting the default style again
 
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
         event.SetEventObject( this );
@@ -667,11 +694,11 @@ bool wxTextCtrl::LoadFile(const wxString& file)
 
 void wxTextCtrl::WriteText(const wxString& str)
 {
-    // TODO this MPRemoting will be moved into a remoting peer proxy for any command
+    // TODO: this MPRemoting will be moved into a remoting peer proxy for any command
     if ( !wxIsMainThread() )
     {
-        // unfortunately CW 8 is not able to correctly deduce the template types, so we have
-        // to instantiate explicitly
+        // unfortunately CW 8 is not able to correctly deduce the template types,
+        // so we have to instantiate explicitly
         wxMacMPRemoteGUICall<wxTextCtrl,wxString>( this , &wxTextCtrl::WriteText , str ) ;
         return ;
     }
@@ -717,7 +744,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
     // these are the numbers from the HIG:
     // we reduce them by the borders first
 
-    switch( m_windowVariant )
+    switch ( m_windowVariant )
     {
         case wxWINDOW_VARIANT_NORMAL :
             hText = 22 - 6 ;
@@ -850,12 +877,13 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     {
         if ( CanCopy() )
             Copy() ;
+
         return ;
     }
 
     if ( !IsEditable() && key != WXK_LEFT && key != WXK_RIGHT && key != WXK_DOWN && key != WXK_UP && key != WXK_TAB &&
         !( key == WXK_RETURN && ( (m_windowStyle & wxPROCESS_ENTER) || (m_windowStyle & wxTE_MULTILINE) ) )
-/*        && key != WXK_PRIOR && key != WXK_NEXT && key != WXK_HOME && key != WXK_END */
+//        && key != WXK_PRIOR && key != WXK_NEXT && key != WXK_HOME && key != WXK_END
         )
     {
         // eat it
@@ -879,12 +907,15 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     {
         if ( CanPaste() )
             Paste() ;
+    
         return ;
     }
+
     if ( key == 'x' && event.MetaDown() )
     {
         if ( CanCut() )
             Cut() ;
+
         return ;
     }
 
@@ -899,21 +930,24 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 if ( GetEventHandler()->ProcessEvent(event) )
                     return;
             }
+
             if ( !(m_windowStyle & wxTE_MULTILINE) )
             {
                 wxWindow *parent = GetParent();
-                while( parent && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL ) {
-                  parent = parent->GetParent() ;
+                while ( parent && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL )
+                {
+                    parent = parent->GetParent() ;
                 }
+
                 if ( parent && parent->GetDefaultItem() )
                 {
-                    wxButton *def = wxDynamicCast(parent->GetDefaultItem(),
-                                                          wxButton);
+                    wxButton *def = wxDynamicCast(parent->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
                         wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
+
                         return ;
                     }
                 }
@@ -934,12 +968,13 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 if (event.ControlDown())
                     flags |= wxNavigationKeyEvent::WinChange ;
                 Navigate(flags);
+
                 return;
             }
             else
             {
-                // This is necessary (don't know why) or the tab will not
-                // be inserted.
+                // This is necessary (don't know why);
+                // otherwise the tab will not be inserted.
                 WriteText(wxT("\t"));
             }
             break;
@@ -1187,7 +1222,7 @@ wxTextPos wxMacTextControl::GetLastPosition() const
 void wxMacTextControl::Replace( long from , long to , const wxString &val )
 {
     SetSelection( from , to ) ;
-    WriteText( val) ;
+    WriteText( val ) ;
 }
 
 void wxMacTextControl::Remove( long from , long to )
@@ -1238,9 +1273,11 @@ int wxMacTextControl::GetNumberOfLines() const
     ItemCount lines = 0 ;
     wxString content = GetStringValue() ;
     lines = 1;
+
     for (size_t i = 0; i < content.Length() ; i++)
     {
-        if (content[i] == '\r') lines++;
+        if (content[i] == '\r')
+            lines++;
     }
 
     return lines ;
@@ -1248,7 +1285,7 @@ int wxMacTextControl::GetNumberOfLines() const
 
 wxString wxMacTextControl::GetLineText(long lineNo) const
 {
-    // TODO change this if possible to reflect real lines
+    // TODO: change this if possible to reflect real lines
     wxString content = GetStringValue() ;
 
     // Find line first
@@ -1271,7 +1308,8 @@ wxString wxMacTextControl::GetLineText(long lineNo) const
             return tmp;
         }
 
-        if (content[i] == '\n') count++;
+        if (content[i] == '\n')
+            count++;
     }
 
     return wxEmptyString ;
@@ -1279,7 +1317,7 @@ wxString wxMacTextControl::GetLineText(long lineNo) const
 
 int wxMacTextControl::GetLineLength(long lineNo) const
 {
-    // TODO change this if possible to reflect real lines
+    // TODO: change this if possible to reflect real lines
     wxString content = GetStringValue() ;
 
     // Find line first
@@ -1300,7 +1338,8 @@ int wxMacTextControl::GetLineLength(long lineNo) const
             return count;
         }
 
-        if (content[i] == '\n') count++;
+        if (content[i] == '\n')
+            count++;
     }
 
     return 0 ;
@@ -1326,7 +1365,9 @@ wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer,
     CFStringRef cfr = cf ;
     Boolean isPassword = ( m_windowStyle & wxTE_PASSWORD ) != 0 ;
     m_valueTag = isPassword ? kControlEditTextPasswordCFStringTag : kControlEditTextCFStringTag ;
-    CreateEditUnicodeTextControl( MAC_WXHWND(wxPeer->MacGetTopLevelWindowRef()), &bounds , cfr , isPassword , NULL , &m_controlRef ) ;
+    CreateEditUnicodeTextControl(
+        MAC_WXHWND(wxPeer->MacGetTopLevelWindowRef()), &bounds , cfr ,
+        isPassword , NULL , &m_controlRef ) ;
 
     if ( !(m_windowStyle & wxTE_MULTILINE) )
         SetData<Boolean>( kControlEditTextPart , kControlEditTextSingleLineTag , true ) ;
@@ -1340,7 +1381,8 @@ void wxMacUnicodeTextControl::VisibilityChanged(bool shown)
 {
     if ( !(m_windowStyle & wxTE_MULTILINE) && shown )
     {
-        // work around a refresh issue insofar as not always the entire content is shown even if this would be possible
+        // work around a refresh issue insofar as not always the entire content is shown,
+        // even if this would be possible
         ControlEditTextSelectionRec sel ;
         CFStringRef value = NULL ;
 
@@ -1478,9 +1520,9 @@ public :
             TXNSetTXNObjectControls( m_txn , false , 1 , tag , m_data ) ;
     }
 
-    protected :
-        TXNObject m_txn ;
-        TXNControlData m_data[1] ;
+protected :
+    TXNObject m_txn ;
+    TXNControlData m_data[1] ;
 } ;
 
 wxMacMLTEControl::wxMacMLTEControl( wxTextCtrl *peer ) : wxMacTextControl( peer )
@@ -1497,8 +1539,9 @@ wxString wxMacMLTEControl::GetStringValue() const
 #if wxUSE_UNICODE
         Handle theText ;
         err = TXNGetDataEncoded( m_txn , kTXNStartOffset, kTXNEndOffset, &theText , kTXNUnicodeTextData );
+
         // all done
-        if ( err )
+        if ( err != noErr )
         {
             actualSize = 0 ;
         }
@@ -1508,6 +1551,7 @@ wxString wxMacMLTEControl::GetStringValue() const
             if ( actualSize > 0 )
             {
                 wxChar *ptr = NULL ;
+
 #if SIZEOF_WCHAR_T == 2
                 ptr = new wxChar[actualSize + 1 ] ;
                 wxStrncpy( ptr , (wxChar*) *theText , actualSize ) ;
@@ -1523,6 +1567,7 @@ wxString wxMacMLTEControl::GetStringValue() const
                 ptr[noChars] = 0 ;
                 HUnlock( theText ) ;
 #endif
+
                 ptr[actualSize] = 0 ;
                 result = wxString( ptr ) ;
                 delete[] ptr ;
@@ -1573,8 +1618,8 @@ void wxMacMLTEControl::SetStringValue( const wxString &str)
             wxMacEditHelper help(m_txn) ;
             SetTXNData( st , kTXNStartOffset, kTXNEndOffset ) ;
         }
-        TXNSetSelection( m_txn, 0, 0);
-        TXNShowSelection( m_txn, kTXNShowStart);
+        TXNSetSelection( m_txn, 0, 0 );
+        TXNShowSelection( m_txn, kTXNShowStart );
     }
 }
 
@@ -1641,7 +1686,7 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
     verify_noerr( TXNSetTXNObjectControls( m_txn, false, toptag,
                                         iControlTags, iControlData )) ;
 
-    // setting the default font
+    // setting the default font:
     // under 10.2 this causes a visible caret, therefore we avoid it
 
     if ( UMAGetSystemVersion() >= 0x1030 )
@@ -1679,12 +1724,15 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
     if ( UMAGetSystemVersion() >= 0x1040 )
     {
         TXNCommandEventSupportOptions options ;
-        if ( TXNGetCommandEventSupport( m_txn, &options) == noErr )
+        if ( TXNGetCommandEventSupport( m_txn, &options ) == noErr )
         {
-            options |= kTXNSupportEditCommandProcessing ;
-            options |= kTXNSupportSpellCheckCommandProcessing ;
-            options |= kTXNSupportFontCommandProcessing ;
-            options |= kTXNSupportFontCommandUpdating ;
+            options |=
+                kTXNSupportEditCommandProcessing
+                | kTXNSupportEditCommandUpdating
+                | kTXNSupportSpellCheckCommandProcessing
+                | kTXNSupportSpellCheckCommandUpdating
+                | kTXNSupportFontCommandProcessing
+                | kTXNSupportFontCommandUpdating;
             
             TXNSetCommandEventSupport( m_txn , options ) ;
         }
@@ -1709,6 +1757,7 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     Style fontStyle = normal ;
     RGBColor color ;
     int attrCounter = 0 ;
+
     if ( style.HasFont() )
     {
         const wxFont &font = style.GetFont() ;
@@ -1732,6 +1781,7 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
         typeAttr[attrCounter+2].data.dataValue = fontStyle ;
         attrCounter += 3 ;
     }
+
     if ( style.HasTextColour() )
     {
         typeAttr[attrCounter].tag = kTXNQDFontColorAttribute ;
@@ -1740,6 +1790,7 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
         color = MAC_WXCOLORREF(style.GetTextColour().GetPixel()) ;
         attrCounter += 1 ;
     }
+
     if ( attrCounter > 0 )
     {
         verify_noerr( TXNSetTypeAttributes ( m_txn , attrCounter , typeAttr, from , to) );
@@ -1796,15 +1847,16 @@ wxTextPos wxMacMLTEControl::GetLastPosition() const
 
     Handle theText ;
     OSErr err = TXNGetDataEncoded( m_txn, kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
-    /* all done */
-    if ( err )
-    {
-        actualsize = 0 ;
-    }
-    else
+
+    // all done
+    if ( err == noErr )
     {
         actualsize = GetHandleSize( theText ) ;
         DisposeHandle( theText ) ;
+    }
+    else
+    {
+        actualsize = 0 ;
     }
 
     return actualsize ;
@@ -1839,12 +1891,13 @@ void wxMacMLTEControl::GetSelection( long* from, long* to) const
 void wxMacMLTEControl::SetSelection( long from , long to )
 {
     wxMacWindowClipper c( m_peer ) ;
-    /* change the selection */
+
+    // change the selection
     if ((from == -1) && (to == -1))
         TXNSelectAll(m_txn);
     else
-        TXNSetSelection( m_txn, from, to);
-    TXNShowSelection( m_txn, kTXNShowStart);
+        TXNSetSelection( m_txn, from, to );
+    TXNShowSelection( m_txn, kTXNShowStart );
 }
 
 void wxMacMLTEControl::WriteText(const wxString& str)
@@ -1861,7 +1914,8 @@ void wxMacMLTEControl::WriteText(const wxString& str)
     }
 
     GetSelection( &dummy , &end ) ;
-    // TODO SetStyle( start , end , GetDefaultStyle() ) ;
+
+    // TODO: SetStyle( start , end , GetDefaultStyle() ) ;
 }
 
 void wxMacMLTEControl::Clear()
@@ -1882,7 +1936,7 @@ void wxMacMLTEControl::Undo()
     TXNUndo( m_txn ) ;
 }
 
-bool wxMacMLTEControl::CanRedo()  const
+bool wxMacMLTEControl::CanRedo() const
 {
     return TXNCanRedo( m_txn , NULL ) ;
 }
@@ -1895,31 +1949,32 @@ void wxMacMLTEControl::Redo()
 int wxMacMLTEControl::GetNumberOfLines() const
 {
     ItemCount lines = 0 ;
-    TXNGetLineCount(m_txn, &lines ) ;
+    TXNGetLineCount( m_txn, &lines ) ;
+
     return lines ;
 }
 
 long wxMacMLTEControl::XYToPosition(long x, long y) const
 {
     Point curpt ;
+    wxTextPos lastpos ;
 
-    wxTextPos lastpos = GetLastPosition() ;
-
-    // TODO find a better implementation : while we can get the
+    // TODO: find a better implementation : while we can get the
     // line metrics of a certain line, we don't get its starting
     // position, so it would probably be rather a binary search
     // for the start position
     long xpos = 0 ;
     long ypos = 0 ;
     int lastHeight = 0 ;
-
     ItemCount n ;
+
+    lastpos = GetLastPosition() ;
     for ( n = 0 ; n <= (ItemCount) lastpos ; ++n )
     {
         if ( y == ypos && x == xpos )
             return n ;
 
-        TXNOffsetToPoint( m_txn ,  n , &curpt);
+        TXNOffsetToPoint( m_txn ,  n , &curpt );
 
         if ( curpt.v > lastHeight )
         {
@@ -1938,12 +1993,14 @@ long wxMacMLTEControl::XYToPosition(long x, long y) const
 bool wxMacMLTEControl::PositionToXY(long pos, long *x, long *y) const
 {
     Point curpt ;
+    wxTextPos lastpos ;
 
-    wxTextPos lastpos = GetLastPosition() ;
+    if ( y )
+        *y = 0 ;
+    if ( x )
+        *x = 0 ;
 
-    if ( y ) *y = 0 ;
-    if ( x ) *x = 0 ;
-
+    lastpos = GetLastPosition() ;
     if ( pos <= lastpos )
     {
         // TODO find a better implementation : while we can get the
@@ -1970,8 +2027,10 @@ bool wxMacMLTEControl::PositionToXY(long pos, long *x, long *y) const
                 ++xpos ;
         }
 
-        if ( y ) *y = ypos ;
-        if ( x ) *x = xpos ;
+        if ( y )
+            *y = ypos ;
+        if ( x )
+            *x = xpos ;
     }
 
     return false ;
@@ -1981,21 +2040,23 @@ void wxMacMLTEControl::ShowPosition( long pos )
 {
 #if TARGET_RT_MAC_MACHO && defined(AVAILABLE_MAC_OS_X_VERSION_10_2_AND_LATER)
     {
-        Point current ;
-        Point desired ;
-        TXNOffset selstart , selend ;
-        TXNGetSelection(  m_txn , &selstart , &selend) ;
-        TXNOffsetToPoint( m_txn,  selstart , &current);
-        TXNOffsetToPoint( m_txn,  pos , &desired);
-        //TODO use HIPoints for 10.3 and above
-        if ( (UInt32) TXNScroll != (UInt32) kUnresolvedCFragSymbolAddress )
+        Point current, desired ;
+        TXNOffset selstart, selend;
+
+        TXNGetSelection( m_txn, &selstart, &selend );
+        TXNOffsetToPoint( m_txn, selstart, &current );
+        TXNOffsetToPoint( m_txn, pos, &desired );
+
+        // TODO: use HIPoints for 10.3 and above
+        if ( (UInt32)TXNScroll != (UInt32)kUnresolvedCFragSymbolAddress )
         {
             OSErr theErr = noErr;
             SInt32 dv = desired.v - current.v ;
             SInt32 dh = desired.h - current.h ;
-            TXNShowSelection( m_txn , true ) ;
+            TXNShowSelection( m_txn, kTXNShowEnd ) ; // NB: should this be kTXNShowStart or kTXNShowEnd ??
             theErr = TXNScroll( m_txn, kTXNScrollUnitsInPixels , kTXNScrollUnitsInPixels , &dv , &dh );
-            // there will be an error returned for classic mlte implementation when the control is
+
+            // there will be an error returned for classic MLTE implementation when the control is
             // invisible, but HITextView works correctly, so we don't assert that one
             // wxASSERT_MSG( theErr == noErr, _T("TXNScroll returned an error!") );
         }
@@ -2003,26 +2064,23 @@ void wxMacMLTEControl::ShowPosition( long pos )
 #endif
 }
 
-void wxMacMLTEControl::SetTXNData( const wxString& st , TXNOffset start , TXNOffset end )
+void wxMacMLTEControl::SetTXNData( const wxString& st, TXNOffset start, TXNOffset end )
 {
 #if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
     size_t len = st.Len() ;
-    TXNSetData( m_txn , kTXNUnicodeTextData,  (void*)st.wc_str(), len * 2,
-      start, end);
+    TXNSetData( m_txn, kTXNUnicodeTextData, (void*)st.wc_str(), len * 2, start, end );
 #else
     wxMBConvUTF16 converter ;
     ByteCount byteBufferLen = converter.WC2MB( NULL , st.wc_str() , 0 ) ;
-    UniChar *unibuf = (UniChar*) malloc(byteBufferLen) ;
-    converter.WC2MB( (char*) unibuf , st.wc_str() , byteBufferLen ) ;
-    TXNSetData( m_txn , kTXNUnicodeTextData,  (void*)unibuf, byteBufferLen ,
-      start, end);
+    UniChar *unibuf = (UniChar*) malloc( byteBufferLen ) ;
+    converter.WC2MB( (char*)unibuf, st.wc_str(), byteBufferLen ) ;
+    TXNSetData( m_txn, kTXNUnicodeTextData, (void*)unibuf, byteBufferLen, start, end ) ;
     free( unibuf ) ;
 #endif
 #else
-    wxCharBuffer text =  st.mb_str(wxConvLocal)  ;
-    TXNSetData( m_txn , kTXNTextData,  (void*)text.data(), strlen( text ) ,
-      start, end);
+    wxCharBuffer text =  st.mb_str(wxConvLocal) ;
+    TXNSetData( m_txn, kTXNTextData, (void*)text.data(), strlen( text ), start, end ) ;
 #endif
 }
 
@@ -2032,18 +2090,17 @@ wxString wxMacMLTEControl::GetLineText(long lineNo) const
 
     if ( lineNo < GetNumberOfLines() )
     {
-        long ypos = 0 ;
-
-        Fixed   lineWidth,
-                lineHeight,
-                currentHeight = 0;
+        Point firstPoint;
+        Fixed lineWidth, lineHeight, currentHeight;
+        long ypos ;
 
         // get the first possible position in the control
-        Point firstPoint;
         TXNOffsetToPoint(m_txn, 0, &firstPoint);
 
         // Iterate through the lines until we reach the one we want,
         // adding to our current y pixel point position
+        ypos = 0 ;
+        currentHeight = 0;
         while (ypos < lineNo)
         {
             TXNGetLineMetrics(m_txn, ypos++, &lineWidth, &lineHeight);
@@ -2056,12 +2113,13 @@ wxString wxMacMLTEControl::GetLineText(long lineNo) const
 
         wxString content = GetStringValue() ;
         Point currentPoint = thePoint;
-        while(thePoint.v == currentPoint.v && theOffset < content.length())
+        while (thePoint.v == currentPoint.v && theOffset < content.length())
         {
             line += content[theOffset];
             TXNOffsetToPoint(m_txn, ++theOffset, &currentPoint);
         }
     }
+
     return line ;
 }
 
@@ -2071,18 +2129,17 @@ int  wxMacMLTEControl::GetLineLength(long lineNo) const
 
     if ( lineNo < GetNumberOfLines() )
     {
-        long ypos = 0 ;
-
-        Fixed   lineWidth,
-                lineHeight,
-                currentHeight = 0;
+        Point firstPoint;
+        Fixed lineWidth, lineHeight, currentHeight;
+        long ypos ;
 
         // get the first possible position in the control
-        Point firstPoint;
         TXNOffsetToPoint(m_txn, 0, &firstPoint);
 
         // Iterate through the lines until we reach the one we want,
         // adding to our current y pixel point position
+        ypos = 0;
+        currentHeight = 0;
         while (ypos < lineNo)
         {
             TXNGetLineMetrics(m_txn, ypos++, &lineWidth, &lineHeight);
@@ -2095,12 +2152,13 @@ int  wxMacMLTEControl::GetLineLength(long lineNo) const
 
         wxString content = GetStringValue() ;
         Point currentPoint = thePoint;
-        while(thePoint.v == currentPoint.v && theOffset < content.length())
+        while (thePoint.v == currentPoint.v && theOffset < content.length())
         {
             ++theLength;
             TXNOffsetToPoint(m_txn, ++theOffset, &currentPoint);
         }
     }
+
     return theLength ;
 }
 
@@ -2120,8 +2178,9 @@ int  wxMacMLTEControl::GetLineLength(long lineNo) const
 TXNScrollInfoUPP gTXNScrollInfoProc = NULL ;
 ControlActionUPP gTXNScrollActionProc = NULL ;
 
-pascal void wxMacMLTEClassicControl::TXNScrollInfoProc (SInt32 iValue, SInt32 iMaximumValue, TXNScrollBarOrientation
-    iScrollBarOrientation, SInt32 iRefCon)
+pascal void wxMacMLTEClassicControl::TXNScrollInfoProc(
+    SInt32 iValue, SInt32 iMaximumValue,
+    TXNScrollBarOrientation iScrollBarOrientation, SInt32 iRefCon)
 {
     wxMacMLTEClassicControl* mlte = (wxMacMLTEClassicControl*) iRefCon ;
     SInt32 value =  wxMax( iValue , 0 ) ;
@@ -2149,7 +2208,6 @@ pascal void wxMacMLTEClassicControl::TXNScrollInfoProc (SInt32 iValue, SInt32 iM
 
 pascal void wxMacMLTEClassicControl::TXNScrollActionProc( ControlRef controlRef , ControlPartCode partCode )
 {
-    OSStatus err ;
     wxMacMLTEClassicControl* mlte = (wxMacMLTEClassicControl*) GetControlReference( controlRef ) ;
     if ( mlte == NULL )
         return ;
@@ -2157,40 +2215,49 @@ pascal void wxMacMLTEClassicControl::TXNScrollActionProc( ControlRef controlRef 
     if ( controlRef != mlte->m_sbVertical && controlRef != mlte->m_sbHorizontal )
         return ;
 
+    OSStatus err ;
     bool isHorizontal = ( controlRef == mlte->m_sbHorizontal ) ;
 
     SInt32 minimum = 0 ;
     SInt32 maximum = GetControl32BitMaximum( controlRef ) ;
     SInt32 value = GetControl32BitValue( controlRef ) ;
     SInt32 delta = 0;
+
     switch ( partCode )
     {
+
         case kControlDownButtonPart :
             delta = 10 ;
             break ;
+
         case kControlUpButtonPart :
             delta = -10 ;
             break ;
+
         case kControlPageDownPart :
             delta = GetControlViewSize( controlRef ) ;
             break ;
+
         case kControlPageUpPart :
-            delta = -GetControlViewSize( controlRef )  ;
+            delta = -GetControlViewSize( controlRef ) ;
             break ;
+
         case kControlIndicatorPart :
             delta = value -
                 ( isHorizontal ? mlte->m_lastHorizontalValue : mlte->m_lastVerticalValue ) ;
             break ;
+
         default :
             break ;
     }
+
     if ( delta != 0 )
     {
         SInt32 newValue = value ;
 
         if ( partCode != kControlIndicatorPart )
         {
-            if( value + delta < minimum )
+            if ( value + delta < minimum )
                 delta = minimum - value ;
             if ( value + delta > maximum )
                 delta = maximum - value ;
@@ -2214,7 +2281,7 @@ pascal void wxMacMLTEClassicControl::TXNScrollActionProc( ControlRef controlRef 
 #endif
 
 // make correct activations
-void wxMacMLTEClassicControl::MacActivatePaneText(Boolean setActive)
+void wxMacMLTEClassicControl::MacActivatePaneText(bool setActive)
 {
     wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
 
@@ -2224,38 +2291,35 @@ void wxMacMLTEClassicControl::MacActivatePaneText(Boolean setActive)
     ControlRef controlFocus = 0 ;
     GetKeyboardFocus( m_txnWindow , &controlFocus ) ;
     if ( controlFocus == m_controlRef )
-        TXNFocus( m_txn, setActive);
+        TXNFocus( m_txn, setActive );
 }
 
-void wxMacMLTEClassicControl::MacFocusPaneText(Boolean setFocus)
+void wxMacMLTEClassicControl::MacFocusPaneText(bool setFocus)
 {
     TXNFocus( m_txn, setFocus);
 }
 
 // guards against inappropriate redraw (hidden objects drawing onto window)
 
-void wxMacMLTEClassicControl::MacSetObjectVisibility(Boolean vis)
+void wxMacMLTEClassicControl::MacSetObjectVisibility(bool vis)
 {
     ControlRef controlFocus = 0 ;
     GetKeyboardFocus( m_txnWindow , &controlFocus ) ;
 
-    if ( controlFocus == m_controlRef && vis == false )
-    {
+    if ( !vis && (controlFocus == m_controlRef ) )
         SetKeyboardFocus( m_txnWindow , m_controlRef , kControlFocusNoPart ) ;
-    }
 
     TXNControlTag iControlTags[1] = { kTXNVisibilityTag };
     TXNControlData iControlData[1] = { {(UInt32) false } };
 
-    verify_noerr( TXNGetTXNObjectControls( m_txn , 1,
-                                        iControlTags, iControlData ) ) ;
+    verify_noerr( TXNGetTXNObjectControls( m_txn , 1, iControlTags, iControlData ) ) ;
 
     if ( iControlData[0].uValue != vis )
     {
         iControlData[0].uValue = vis ;
-        verify_noerr( TXNSetTXNObjectControls( m_txn, false , 1,
-                                        iControlTags, iControlData )) ;
+        verify_noerr( TXNSetTXNObjectControls( m_txn, false , 1, iControlTags, iControlData )) ;
     }
+
     // we right now are always clipping as partial visibility (overlapped) visibility
     // is also a problem, if we run into further problems we might set the FrameBounds to an empty
     // rect here
@@ -2314,7 +2378,7 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
                 sbBounds.left = w - 14 ;
                 sbBounds.top = -1 ;
                 sbBounds.right = w + 1 ;
-                sbBounds.bottom = m_sbHorizontal ? h - 14 : h + 1  ;
+                sbBounds.bottom = m_sbHorizontal ? h - 14 : h + 1 ;
 
                 if ( !isCompositing )
                     OffsetRect( &sbBounds , m_txnControlBounds.left , m_txnControlBounds.top ) ;
@@ -2329,9 +2393,11 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
         TXNGetRectBounds( m_txn , &oldviewRect , &olddestRect , NULL ) ;
 
         Rect viewRect = { m_txnControlBounds.top, m_txnControlBounds.left,
-            m_txnControlBounds.bottom - ( m_sbHorizontal ? 14 : 0 ) , m_txnControlBounds.right - ( m_sbVertical ? 14 : 0 ) } ;
+            m_txnControlBounds.bottom - ( m_sbHorizontal ? 14 : 0 ) ,
+            m_txnControlBounds.right - ( m_sbVertical ? 14 : 0 ) } ;
         TXNLongRect destRect = { m_txnControlBounds.top, m_txnControlBounds.left,
-            m_txnControlBounds.bottom - ( m_sbHorizontal ? 14 : 0 ) , m_txnControlBounds.right - ( m_sbVertical ? 14 : 0 ) } ;
+            m_txnControlBounds.bottom - ( m_sbHorizontal ? 14 : 0 ) ,
+            m_txnControlBounds.right - ( m_sbVertical ? 14 : 0 ) } ;
 
         if ( olddestRect.right >= 10000 )
             destRect.right = destRect.left + 32000 ;
@@ -2341,10 +2407,16 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
 
         SectRect( &viewRect , &visBounds , &viewRect ) ;
         TXNSetRectBounds( m_txn , &viewRect , &destRect , true ) ;
-/*
-        TXNSetFrameBounds( m_txn, m_txnControlBounds.top, m_txnControlBounds.left,
-            m_txnControlBounds.bottom - ( m_sbHorizontal ? 14 : 0 ) , m_txnControlBounds.right - ( m_sbVertical ? 14 : 0 ), m_txnFrameID);
-*/
+
+#if 0
+        TXNSetFrameBounds(
+            m_txn,
+            m_txnControlBounds.top,
+            m_txnControlBounds.left,
+            m_txnControlBounds.bottom - (m_sbHorizontal ? 14 : 0),
+            m_txnControlBounds.right - (m_sbVertical ? 14 : 0),
+            m_txnFrameID );
+#endif
 #else
 
         TXNSetFrameBounds( m_txn, m_txnControlBounds.top, m_txnControlBounds.left,
@@ -2354,14 +2426,12 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
         // the SetFrameBounds method unter classic sometimes does not correctly scroll a selection into sight after a
         // movement, therefore we have to force it
 
-        // according to David Surovell this problem also sometimes occurs under OSX, so we use this as well
+        // this problem has been reported in OSX as well, so we use this here once again
         
         TXNLongRect textRect ;
         TXNGetRectBounds( m_txn , NULL , NULL , &textRect ) ;
         if ( textRect.left < m_txnControlBounds.left )
-        {
-            TXNShowSelection( m_txn , false ) ;
-        }
+            TXNShowSelection( m_txn , kTXNShowStart ) ;
     }
 }
 
@@ -2392,8 +2462,10 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneHitTestProc(wxInt16 x, wxInt1
     wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
     if ( (textctrl != NULL) && textctrl->MacIsReallyShown() )
     {
-        if (PtInRect(where, &m_txnControlBounds))
+        if (PtInRect( where, &m_txnControlBounds ))
+        {
             result = kControlEditTextPart ;
+        }
         else
         {
             // sometimes we get the coords also in control local coordinates, therefore test again
@@ -2404,6 +2476,7 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneHitTestProc(wxInt16 x, wxInt1
                 where.h += x ;
                 where.v += y ;
             }
+
             if (PtInRect(where, &m_txnControlBounds))
                 result = kControlEditTextPart ;
         }
@@ -2439,10 +2512,10 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneTrackingProc( wxInt16 x, wxIn
                 ConvertEventRefToEventRecord( (EventRef) wxTheApp->MacGetCurrentEvent() , &rec ) ;
                 TXNClick( m_txn, &rec );
             }
-            break;
+                break;
 
-        default :
-            break;
+            default :
+                break;
         }
     }
 
@@ -2468,8 +2541,8 @@ void wxMacMLTEClassicControl::MacControlUserPaneIdleProc()
 
             if (PtInRect(mousep, &m_txnControlBounds))
             {
-                RgnHandle theRgn;
-                RectRgn((theRgn = NewRgn()), &m_txnControlBounds);
+                RgnHandle theRgn = NewRgn();
+                RectRgn(theRgn, &m_txnControlBounds);
                 TXNAdjustCursor(m_txn, theRgn);
                 DisposeRgn(theRgn);
             }
@@ -2489,8 +2562,8 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneKeyDownProc (wxInt16 keyCode,
     memset( &ev , 0 , sizeof( ev ) ) ;
     ev.what = keyDown ;
     ev.modifiers = modifiers ;
-    ev.message = (( keyCode << 8 ) & keyCodeMask ) + ( charCode & charCodeMask ) ;
-    TXNKeyDown( m_txn , &ev);
+    ev.message = ((keyCode << 8) & keyCodeMask) | (charCode & charCodeMask);
+    TXNKeyDown( m_txn , &ev );
 
     return kControlEntireControl;
 }
@@ -2661,7 +2734,7 @@ static pascal ControlPartCode wxMacControlUserPaneFocusProc(ControlRef control, 
         return kControlNoPart ;
 }
 
-/*
+#if 0
 static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, ControlBackgroundPtr info)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
@@ -2669,8 +2742,9 @@ static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, Contro
     if ( win )
         win->MacControlUserPaneBackgroundProc(info) ;
 }
-*/
 #endif
+
+#endif // __WXMAC_OSX__
 
 // TXNRegisterScrollInfoProc
 
@@ -2680,7 +2754,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
 
     OSStatus err = noErr ;
 
-    /* set up our globals */
+    // set up our globals
 #ifdef __WXMAC_OSX__
     if (gTPDrawProc == NULL) gTPDrawProc = NewControlUserPaneDrawUPP(wxMacControlUserPaneDrawProc);
     if (gTPHitProc == NULL) gTPHitProc = NewControlUserPaneHitTestUPP(wxMacControlUserPaneHitTestProc);
@@ -2694,13 +2768,13 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     if (gTXNScrollActionProc == NULL ) gTXNScrollActionProc = NewControlActionUPP(TXNScrollActionProc) ;
 #endif
 
-    /* set the initial settings for our private data */
+    // set the initial settings for our private data
 
     m_txnWindow = GetControlOwner(m_controlRef);
     m_txnPort = (GrafPtr) GetWindowPort(m_txnWindow);
 
 #ifdef __WXMAC_OSX__
-    /* set up the user pane procedures */
+    // set up the user pane procedures
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneDrawProcTag, sizeof(gTPDrawProc), &gTPDrawProc);
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneHitTestProcTag, sizeof(gTPHitProc), &gTPHitProc);
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneTrackingProcTag, sizeof(gTPTrackProc), &gTPTrackProc);
@@ -2709,26 +2783,24 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneActivateProcTag, sizeof(gTPActivateProc), &gTPActivateProc);
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneFocusProcTag, sizeof(gTPFocusProc), &gTPFocusProc);
 #endif
-    /* calculate the rectangles used by the control */
+    // calculate the rectangles used by the control
     UMAGetControlBoundsInWindowCoords(m_controlRef, &bounds);
 
     m_txnControlBounds = bounds ;
     m_txnVisBounds = bounds ;
 
-    CGrafPtr        origPort = NULL ;
-    GDHandle        origDev = NULL ;
+    CGrafPtr origPort ;
+    GDHandle origDev ;
+
     GetGWorld( &origPort , &origDev ) ;
-    SetPort(m_txnPort);
+    SetPort( m_txnPort );
 
-    /* create the new edit field */
-
+    // create the new edit field
     TXNFrameOptions frameOptions = FrameOptionsFromWXStyle( m_windowStyle ) ;
 
 #ifdef __WXMAC_OSX__
-
-    // the scrollbars are not correctly embedded but are inserted at the root
-    // this gives us problems as we have erratic redraws even over the structure
-    // area
+    // the scrollbars are not correctly embedded but are inserted at the root:
+    // this gives us problems as we have erratic redraws even over the structure area
 
     m_sbHorizontal = 0 ;
     m_sbVertical = 0 ;
@@ -2745,6 +2817,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
         EmbedControl( m_sbVertical , m_controlRef ) ;
         frameOptions &= ~kTXNWantVScrollBarMask ;
     }
+
     if ( frameOptions & kTXNWantHScrollBarMask )
     {
         CreateScrollBarControl( m_txnWindow , &sb , 0 , 0 , 100 , 1 , true , gTXNScrollActionProc , &m_sbHorizontal ) ;
@@ -2763,29 +2836,20 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
                               kTXNTextensionFile,
                               kTXNSystemDefaultEncoding,
                               &m_txn, &m_txnFrameID, NULL ) );
-/*
-    TXNCarbonEventInfo cInfo ;
 
+#if 0
+    TXNControlTag iControlTags[] = { kTXNUseCarbonEvents };
+    TXNControlData iControlData[] = { {(UInt32) &cInfo } };
+    int toptag = WXSIZEOF( iControlTags ) ;
+    TXNCarbonEventInfo cInfo ;
     cInfo.useCarbonEvents = false ;
     cInfo.filler = 0 ;
     cInfo.flags = 0 ;
     cInfo.fDictionary = NULL ;
 
-    TXNControlTag iControlTags[] =
-        {
-            kTXNUseCarbonEvents ,
-        };
-    TXNControlData iControlData[] =
-        {
-            {(UInt32) &cInfo },
-        };
+    verify_noerr( TXNSetTXNObjectControls( m_txn, false , toptag, iControlTags, iControlData )) ;
+#endif
 
-    int toptag = WXSIZEOF( iControlTags ) ;
-
-    verify_noerr( TXNSetTXNObjectControls( m_txn, false , toptag,
-                                        iControlTags, iControlData )) ;
-
-*/
 #ifdef __WXMAC_OSX__
     TXNRegisterScrollInfoProc( m_txn, gTXNScrollInfoProc, (SInt32) this);
 #endif
@@ -2848,14 +2912,13 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
     wxMacWindowClipper c( m_peer ) ;
     SetTXNData( st , kTXNStartOffset, kTXNEndOffset ) ;
 
-    TXNSetSelection( m_txn, 0, 0);
-    TXNShowSelection( m_txn, kTXNShowStart);
+    TXNSetSelection( m_txn, 0, 0 );
+    TXNShowSelection( m_txn, kTXNShowStart );
 }
 
 OSStatus wxMacMLTEHIViewControl::SetFocus( ControlFocusPart focusPart )
 {
-    return SetKeyboardFocus(  GetControlOwner( m_textView )  ,
-        m_textView , focusPart ) ;
+    return SetKeyboardFocus( GetControlOwner( m_textView ), m_textView, focusPart ) ;
 }
 
 bool wxMacMLTEHIViewControl::HasFocus() const
@@ -2868,7 +2931,8 @@ bool wxMacMLTEHIViewControl::HasFocus() const
 void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
 {
     wxMacMLTEControl::SetBackground( brush ) ;
-/*
+
+#if 0
     CGColorSpaceRef rgbSpace = CGColorSpaceCreateDeviceRGB();
     RGBColor col = MAC_WXCOLORREF(brush.GetColour().GetPixel()) ;
 
@@ -2881,7 +2945,7 @@ void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
     CGColorRef color = CGColorCreate (rgbSpace , component );
     HITextViewSetBackgroundColor( m_textView , color ) ;
     CGColorSpaceRelease( rgbSpace );
-*/
+#endif
 }
 
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
