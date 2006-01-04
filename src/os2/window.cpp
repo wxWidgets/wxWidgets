@@ -1299,7 +1299,10 @@ void wxWindowOS2::DoGetPosition(
 , int*                              pY
 ) const
 {
-    HWND                            hWnd = GetHwnd();
+    //
+    // Return parameters assume wxWidgets coordinate system
+    //
+    HWND                            hWnd;
     SWP                             vSwp;
     POINTL                          vPoint;
     wxWindow*                       pParent = GetParent();
@@ -1309,16 +1312,29 @@ void wxWindowOS2::DoGetPosition(
     // the WIN32 WinGetRect, but unlike WinGetRect which returns the window
     // origin position in screen coordinates, WinQueryWindowRect returns it
     // relative to itself, i.e. (0,0).  To get the same under PM we must
-    // us WinQueryWindowPos.  This call, unlike the WIN32 call, however,
+    // use WinQueryWindowPos.  This call, unlike the WIN32 call, however,
     // returns a position relative to it's parent, so no parent adujstments
     // are needed under OS/2.  Also, windows should be created using
-    // wxWindow coordinates, i.e 0,0 is the TOP left so vSwp will already
-    // reflect that.
+    // wxWindow coordinates, i.e 0,0 is the TOP left.
     //
+    if (IsKindOf(CLASSINFO(wxFrame)))
+    {
+        wxFrame*                    pFrame = wxDynamicCast(this, wxFrame);
+        hWnd = pFrame->GetFrame();
+    }
+    else
+        hWnd = GetHwnd();
+
     ::WinQueryWindowPos(hWnd, &vSwp);
 
     vPoint.x = vSwp.x;
     vPoint.y = vSwp.y;
+
+    // We need to convert to wxWidgets coordinates
+    int vHeight;
+    DoGetSize(NULL,&vHeight);
+    wxWindow* pWindow = wxDynamicCast(this,wxWindow);
+    vPoint.y = pWindow->GetOS2ParentHeight(pParent) - vPoint.y - vHeight;
 
     //
     // We may be faking the client origin. So a window that's really at (0,
@@ -1451,18 +1467,12 @@ void wxWindowOS2::DoMoveWindow(
 , int                               nHeight
 )
 {
+    //
+    // Input parameters assume wxWidgets coordinate system
+    //
     RECTL                           vRect;
     wxWindow*                       pParent = GetParent();
-
-    /* Due to OS/2's inverted coordinate system, changing the height
-       of a window requires repositioning all it's children, e.g. if
-       you want a child of height 100 to be at the top left corner of
-       the parent you need to position the lower left corner of the
-       child at (0, (height of parent - 100)), so, obviously, if the
-       height of the parent changes, the child needs to be repositioned. */
-    int                         nHeightDelta;
-    GetSize(0, &nHeightDelta);
-    nHeightDelta = nHeight - nHeightDelta;
+    HWND                            hWnd = GetHwnd();
 
     if (pParent && !IsKindOf(CLASSINFO(wxDialog)))
     {
@@ -1492,64 +1502,26 @@ void wxWindowOS2::DoMoveWindow(
     if (IsKindOf(CLASSINFO(wxFrame)))
     {
         RECTL                       vFRect;
-        HWND                        hWndFrame;
         int                         nWidthFrameDelta = 0;
         int                         nHeightFrameDelta = 0;
-        int                         nHeightFrame = 0;
-        int                         nWidthFrame = 0;
         wxFrame*                    pFrame;
 
         pFrame = wxDynamicCast(this, wxFrame);
-        hWndFrame = pFrame->GetFrame();
-        ::WinQueryWindowRect(hWndFrame, &vRect);
-        ::WinMapWindowPoints(hWndFrame, HWND_DESKTOP, (PPOINTL)&vRect, 2);
+        hWnd = pFrame->GetFrame();
+        ::WinQueryWindowRect(hWnd, &vRect);
+        ::WinMapWindowPoints(hWnd, HWND_DESKTOP, (PPOINTL)&vRect, 2);
         vFRect = vRect;
-        ::WinCalcFrameRect(hWndFrame, &vRect, TRUE);
+        ::WinCalcFrameRect(hWnd, &vRect, TRUE);
         nWidthFrameDelta = ((vRect.xLeft - vFRect.xLeft) + (vFRect.xRight - vRect.xRight));
         nHeightFrameDelta = ((vRect.yBottom - vFRect.yBottom) + (vFRect.yTop - vRect.yTop));
-        nWidthFrame = vFRect.xRight - vFRect.xLeft;
-        nHeightFrame = vFRect.yTop - vFRect.yBottom;
-
-        if (nWidth == vFRect.xRight - vFRect.xLeft &&
-            nHeight == vFRect.yTop - vFRect.yBottom)
-        {
-            //
-            // In this case the caller is not aware of OS/2's need to size both
-            // the frame and it's client and is really only moving the window,
-            // not resizeing it.  So move the frame, and back off the sizes
-            // for a proper client fit.
-            //
-            ::WinSetWindowPos( hWndFrame
-                              ,HWND_TOP
-                              ,(LONG)nX - (vRect.xLeft - vFRect.xLeft)
-                              ,(LONG)nY - (vRect.yBottom - vFRect.yBottom)
-                              ,(LONG)0
-                              ,(LONG)0
-                              ,SWP_MOVE
-                             );
-            nX += (vRect.xLeft - vFRect.xLeft);
-            nY += (vRect.yBottom - vFRect.yBottom);
-            nWidth -= nWidthFrameDelta;
-            nHeight -= nHeightFrameDelta;
-        }
-        else
-        {
-            if (nWidth > nWidthFrame - nHeightFrameDelta ||
-                nHeight > nHeightFrame - nHeightFrameDelta)
-            {
-                ::WinSetWindowPos( hWndFrame
-                                  ,HWND_TOP
-                                  ,(LONG)nX - (vRect.xLeft - vFRect.xLeft)
-                                  ,(LONG)nY - (vRect.yBottom - vFRect.yBottom)
-                                  ,(LONG)nWidth + nWidthFrameDelta
-                                  ,(LONG)nHeight + nHeightFrameDelta
-                                  ,SWP_MOVE | SWP_SIZE
-                                 );
-            }
-        }
+        // Input values refer to the window position relative to its parent
+        // which may be the Desktop so we need to calculate
+        // the new frame values to keep the wxWidgets frame origin constant
+        nY -= nHeightFrameDelta;
+        nWidth += nWidthFrameDelta;
+        nHeight += nHeightFrameDelta;
     }
-
-    ::WinSetWindowPos( GetHwnd()
+    ::WinSetWindowPos( hWnd
                       ,HWND_TOP
                       ,(LONG)nX
                       ,(LONG)nY
@@ -1561,11 +1533,9 @@ void wxWindowOS2::DoMoveWindow(
         //
         // Uninitialized
         //
-        ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
+        ::WinQueryWindowPos(hWnd, &m_vWinSwp);
     else
     {
-        int                         nYDiff = m_vWinSwp.cy - nHeight;
-
         //
         // Handle resizing of scrolled windows.  The target or window to
         // be scrolled is the owner (gets the scroll notifications).  The
@@ -1587,7 +1557,7 @@ void wxWindowOS2::DoMoveWindow(
             int nHSBHeight = wxSystemSettingsNative::GetMetric(wxSYS_HSCROLL_Y,
                                                                this);
             int nVSBWidth  = wxSystemSettingsNative::GetMetric(wxSYS_VSCROLL_X,
-							       this);
+                                                               this);
             SWP                     vSwpScroll;
 
             if (GetScrollBarHorz() == NULLHANDLE ||
@@ -1600,8 +1570,8 @@ void wxWindowOS2::DoMoveWindow(
                 nAdjustWidth = 0L;
             else
                 nAdjustWidth = nVSBWidth;
-            ::WinQueryWindowPos(GetHwnd(), &vSwpScroll);
-            ::WinSetWindowPos( GetHwnd()
+            ::WinQueryWindowPos(hWnd, &vSwpScroll);
+            ::WinSetWindowPos( hWnd
                               ,HWND_TOP
                               ,vSwpScroll.x
                               ,vSwpScroll.y + nAdjustHeight
@@ -1609,19 +1579,9 @@ void wxWindowOS2::DoMoveWindow(
                               ,vSwpScroll.cy - nAdjustHeight
                               ,SWP_MOVE | SWP_SIZE
                              );
-            nYDiff -= nAdjustHeight;
         }
-        MoveChildren(nYDiff);
-        ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
+        ::WinQueryWindowPos(hWnd, &m_vWinSwp);
     }
-#if 0
-    // FIXME: By my logic, the next line should be needed as it moves child
-    //        windows when resizing the parent (see comment at beginning of
-    //        function). However, this seems to cause lots of problems. At
-    //        least, e.g. the grid sample almost works with this line
-    //        commented out but crashes badly with it.
-    MoveChildren(nHeightDelta);
-#endif
 } // end of wxWindowOS2::DoMoveWindow
 
 //
@@ -1641,6 +1601,10 @@ void wxWindowOS2::DoSetSize( int nX,
                              int nSizeFlags )
 {
     //
+    // Input & output parameters assume wxWidgets coordinate system
+    //
+
+    //
     // Get the current size and position...
     //
     int    nCurrentX;
@@ -1655,12 +1619,7 @@ void wxWindowOS2::DoSetSize( int nX,
     //
     // ... and don't do anything (avoiding flicker) if it's already ok
     //
-    //
-    // Must convert Y coords to test for equality under OS/2
-    //
-    int                             nY2 = nY;
-
-    if (nX == nCurrentX && nY2 == nCurrentY &&
+    if (nX == nCurrentX && nY == nCurrentY &&
         nWidth == nCurrentWidth && nHeight == nCurrentHeight)
     {
         return;
@@ -1712,50 +1671,15 @@ void wxWindowOS2::DoSetSize( int nX,
 void wxWindowOS2::DoSetClientSize( int nWidth,
                                    int nHeight )
 {
-    POINTL    vPoint;
-    int       nActualWidth;
-    int       nActualHeight;
-    wxWindow* pParent = (wxWindow*)GetParent();
-    HWND      hParentWnd = (HWND)0;
+    //
+    // nX & nY assume wxWidgets coordinate system
+    //
+    int nX;
+    int nY;
 
-    if (pParent)
-        hParentWnd = (HWND)pParent->GetHWND();
+    GetPosition(&nX, &nY);
 
-    if (IsKindOf(CLASSINFO(wxFrame)))
-    {
-        wxFrame* pFrame = wxDynamicCast(this, wxFrame);
-        HWND     hFrame = pFrame->GetFrame();
-        RECTL    vRect;
-        RECTL    vRect2;
-        RECTL    vRect3;
-
-        ::WinQueryWindowRect(GetHwnd(), &vRect2);
-        ::WinQueryWindowRect(hFrame, &vRect);
-        ::WinQueryWindowRect(hParentWnd, &vRect3);
-        nActualWidth = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
-        nActualHeight = vRect2.yTop - vRect2.yBottom - vRect.yTop + nHeight;
-
-        vPoint.x = vRect2.xLeft;
-        vPoint.y = vRect2.yBottom;
-        if (pParent)
-        {
-            vPoint.x -= vRect3.xLeft;
-            vPoint.y -= vRect3.yBottom;
-        }
-    }
-    else
-    {
-        int nX;
-        int nY;
-
-        GetPosition(&nX, &nY);
-        nActualWidth  = nWidth;
-        nActualHeight = nHeight;
-
-        vPoint.x = nX;
-        vPoint.y = nY;
-    }
-    DoMoveWindow( vPoint.x, vPoint.y, nActualWidth, nActualHeight );
+    DoMoveWindow( nX, nY, nWidth, nHeight );
 
     wxSize size( nWidth, nHeight );
     wxSizeEvent vEvent( size, m_windowId );
@@ -2984,16 +2908,16 @@ void wxAssociateWinWithHandle(
     wxCHECK_RET( hWnd != (HWND)NULL,
                  wxT("attempt to add a NULL hWnd to window list ignored") );
 
-
     wxWindow*                       pOldWin = wxFindWinFromHandle((WXHWND) hWnd);
 
     if (pOldWin && (pOldWin != pWin))
     {
-        wxString                    str(pWin->GetClassInfo()->GetClassName());
-
-        wxLogError( _T("Bug! Found existing HWND %X for new window of class %s")
-                   ,(int)hWnd
-                   ,str.c_str()
+        wxString  Newstr(pWin->GetClassInfo()->GetClassName());
+        wxString Oldstr(pOldWin->GetClassInfo()->GetClassName());
+        wxLogError( _T("Bug! New window of class %s has same HWND %X as old window of class %s"),
+                    Newstr.c_str(),
+                    (int)hWnd,
+                    Oldstr.c_str()
                   );
     }
     else if (!pOldWin)
@@ -3144,7 +3068,7 @@ bool wxWindowOS2::OS2Create( PSZ            zClass,
             ,nHeight
            );
     return true;
-} // end of WinGuiBase_Window::OS2Create
+} // end of wxWindowOS2::OS2Create
 
 // ===========================================================================
 // OS2 PM message handlers
@@ -4301,88 +4225,9 @@ bool wxWindowOS2::OS2OnScroll( int nOrientation,
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::OS2OnScroll
 
-void wxWindowOS2::MoveChildren(
-  int                               nDiff
-)
-{
-    //
-    // We want to handle top levels ourself, manually
-    //
-    if (!IsTopLevel() && GetAutoLayout())
-    {
-        Layout();
-    }
-    else
-    {
-        SWP                         vSwp;
-
-        for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-             node;
-             node = node->GetNext())
-        {
-            wxWindow*               pWin = node->GetData();
-
-            ::WinQueryWindowPos( GetHwndOf(pWin)
-                                ,&vSwp
-                               );
-            // Actually, only move children that already are placed on the
-            // frame, not ones which are still at wxDefaultCoord.
-            if (vSwp.y == wxDefaultCoord)
-                continue;
-            if (pWin->IsKindOf(CLASSINFO(wxControl)))
-            {
-                wxControl*          pCtrl;
-
-                //
-                // Must deal with controls that have margins like ENTRYFIELD.  The SWP
-                // struct of such a control will have and origin offset from its intended
-                // position by the width of the margins.
-                //
-                pCtrl = wxDynamicCast(pWin, wxControl);
-                vSwp.y -= pCtrl->GetYComp();
-                vSwp.x -= pCtrl->GetXComp();
-            }
-            ::WinSetWindowPos( GetHwndOf(pWin)
-                              ,HWND_TOP
-                              ,vSwp.x
-                              ,vSwp.y - nDiff
-                              ,vSwp.cx
-                              ,vSwp.cy
-                              ,SWP_MOVE
-                             );
-            ::WinQueryWindowPos(GetHwndOf(pWin), pWin->GetSwp());
-            if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))
-            {
-                wxRadioBox*     pRadioBox;
-
-                pRadioBox = wxDynamicCast(pWin, wxRadioBox);
-                pRadioBox->AdjustButtons( (int)vSwp.x
-                                         ,(int)vSwp.y - nDiff
-                                         ,(int)vSwp.cx
-                                         ,(int)vSwp.cy
-                                         ,pRadioBox->GetSizeFlags()
-                                        );
-            }
-            if (pWin->IsKindOf(CLASSINFO(wxSlider)))
-            {
-                wxSlider*           pSlider;
-
-                pSlider = wxDynamicCast(pWin, wxSlider);
-                pSlider->AdjustSubControls( (int)vSwp.x
-                                           ,(int)vSwp.y - nDiff
-                                           ,(int)vSwp.cx
-                                           ,(int)vSwp.cy
-                                           ,(int)pSlider->GetSizeFlags()
-                                          );
-            }
-        }
-    }
-    Refresh();
-} // end of wxWindowOS2::MoveChildren
-
 //
 //  Getting the Y position for a window, like a control, is a real
-//  pain.  There are three sitatuions we must deal with in determining
+//  pain.  There are three situations we must deal with in determining
 //  the OS2 to wxWidgets Y coordinate.
 //
 //  1)  The controls are created in a dialog.
@@ -4413,11 +4258,13 @@ void wxWindowOS2::MoveChildren(
 //
 int wxWindowOS2::GetOS2ParentHeight( wxWindowOS2* pParent )
 {
+    if (pParent)
+    {
     //
     // Case 1
     //
-    if (pParent->IsKindOf(CLASSINFO(wxDialog)))
-        return(pParent->GetClientSize().y);
+        if (pParent->IsKindOf(CLASSINFO(wxDialog)))
+            return(pParent->GetClientSize().y);
 
     //
     // Case 2 -- if we are one of the separately built standard Frame
@@ -4425,40 +4272,43 @@ int wxWindowOS2::GetOS2ParentHeight( wxWindowOS2* pParent )
     //           use the frame, itself, for positioning.  Otherwise we are
     //           child window and want to use the Frame's client.
     //
-    else if (pParent->IsKindOf(CLASSINFO(wxFrame)))
-    {
-        if (IsKindOf(CLASSINFO(wxStatusBar)) ||
-            IsKindOf(CLASSINFO(wxMenuBar))   ||
-            IsKindOf(CLASSINFO(wxToolBar))
-           )
+        else if (pParent->IsKindOf(CLASSINFO(wxFrame)))
         {
-            if (IsKindOf(CLASSINFO(wxToolBar)))
+            if (IsKindOf(CLASSINFO(wxStatusBar)) ||
+                IsKindOf(CLASSINFO(wxMenuBar))   ||
+                IsKindOf(CLASSINFO(wxToolBar))
+               )
             {
-                wxFrame*            pFrame = wxDynamicCast(GetParent(), wxFrame);
+                if (IsKindOf(CLASSINFO(wxToolBar)))
+                {
+                    wxFrame*        pFrame = wxDynamicCast(GetParent(), wxFrame);
 
-                if (pFrame->GetToolBar() == this)
-                    return(pParent->GetSize().y);
+                    if (pFrame->GetToolBar() == this)
+                        return(pParent->GetSize().y);
+                    else
+                        return(pParent->GetClientSize().y);
+                }
                 else
-                    return(pParent->GetClientSize().y);
+                    return(pParent->GetSize().y);
             }
             else
-                return(pParent->GetSize().y);
+                return(pParent->GetClientSize().y);
         }
+        //
+        // Case -- this is for any window that is the sole child of a Frame.
+        //         The grandparent must exist and it must be of type CFrame
+        //         and it's height must be different. Otherwise the standard
+        //         applies.
+        //
         else
             return(pParent->GetClientSize().y);
     }
-    //
-    // Case -- this is for any window that is the sole child of a Frame.
-    //         The grandparent must exist and it must be of type CFrame
-    //         and it's height must be different. Otherwise the standard
-    //         applies.
-    //
-    // else
-    // {
-
-    return(pParent->GetClientSize().y);
-
-    // }
+    else // We must be a child of the screen
+    {
+        int nHeight;
+        wxDisplaySize(NULL,&nHeight);
+        return(nHeight);
+    }
 } // end of wxWindowOS2::GetOS2ParentHeight
 
 //
