@@ -123,6 +123,7 @@ private:
     int m_nYComp;
 
     wxString m_label;
+    WXDWORD  m_dwStyle;
 
     DECLARE_EVENT_TABLE()
 }; // end of wxControl
