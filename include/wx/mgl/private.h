@@ -17,6 +17,10 @@
 #include <mgraph.hpp>
 #include "pmapi.h"
 
+// the scitech headers define true and false
+#undef true
+#undef false
+
 class WXDLLEXPORT wxBitmap;
 
 
