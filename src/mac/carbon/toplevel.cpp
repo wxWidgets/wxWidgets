@@ -938,6 +938,7 @@ typedef struct
 {
     wxPoint m_position ;
     wxSize m_size ;
+    bool m_wasResizable ;
 }
 FullScreenData ;
 
@@ -1404,6 +1405,7 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
         m_macFullScreenData = data ;
         data->m_position = GetPosition() ;
         data->m_size = GetSize() ;
+        data->m_wasResizable = MacGetWindowAttributes() & kWindowResizableAttribute ;
 
         if ( style & wxFULLSCREEN_NOMENUBAR )
             HideMenuBar() ;
@@ -1444,11 +1446,15 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
         }
 
         SetSize( x , y , w, h ) ;
+        if( data->m_wasResizable )
+            MacChangeWindowAttributes( kWindowNoAttributes , kWindowResizableAttribute ) ;
     }
     else
     {
         ShowMenuBar() ;
         FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
+        if( data->m_wasResizable )
+            MacChangeWindowAttributes( kWindowResizableAttribute ,  kWindowNoAttributes ) ;
         SetPosition( data->m_position ) ;
         SetSize( data->m_size ) ;
 
