@@ -130,7 +130,6 @@ wxWindowDC::wxWindowDC(wxWindow *window)
         m_graphicContext = new wxMacCGContext( (CGContextRef) window->MacGetCGContextRef() ) ;
         m_graphicContext->SetPen( m_pen ) ;
         m_graphicContext->SetBrush( m_brush ) ;
-        SetBackground(MacGetBackgroundBrush(window));        
     }
     else
     {
@@ -142,7 +141,6 @@ wxWindowDC::wxWindowDC(wxWindow *window)
         m_graphicContext = new wxMacCGContext( (CGrafPtr) m_macPort ) ;
         m_graphicContext->SetPen( m_pen ) ;
         m_graphicContext->SetBrush( m_brush ) ;
-        SetBackground(MacGetBackgroundBrush(window));
     }
     // there is no out-of-order drawing on OSX
 #else
@@ -151,8 +149,8 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     CopyRgn( (RgnHandle) window->MacGetVisibleRegion(true).GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
-    SetBackground(MacGetBackgroundBrush(window));
 #endif
+    SetBackground(MacGetBackgroundBrush(window));
 
     SetFont( window->GetFont() ) ;
 }
@@ -203,7 +201,6 @@ wxClientDC::wxClientDC(wxWindow *window)
         m_graphicContext->SetPen( m_pen ) ;
         m_graphicContext->SetBrush( m_brush ) ;
         SetClippingRegion( 0 , 0 , size.x , size.y ) ;
-        SetBackground(MacGetBackgroundBrush(window));
     }
     else
     {
