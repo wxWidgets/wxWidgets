@@ -83,7 +83,6 @@ _treeList = [
     # dialogs from libraries
     ('More Dialogs', [
         'ImageBrowser',
-        'MultipleChoiceDialog',
         'ScrolledMessageDialog',
         ]),
 
