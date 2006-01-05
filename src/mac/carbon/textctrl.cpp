@@ -1653,8 +1653,11 @@ TXNFrameOptions wxMacMLTEControl::FrameOptionsFromWXStyle( long wxStyle )
         {
             frameOptions |= kTXNWantVScrollBarMask ;
 
-            if ( frameOptions & kTXNWantHScrollBarMask )
-                frameOptions |= kTXNDrawGrowIconMask ;
+            // The following code causes drawing problems on 10.4. Perhaps it can be restored for
+            // older versions of the OS, but I'm not sure it's appropriate to put a grow icon here
+            // anyways, as AFAIK users can't actually use it to resize the text ctrl.
+//            if ( frameOptions & kTXNWantHScrollBarMask )
+//                frameOptions |= kTXNDrawGrowIconMask ;
         }
     }
     else
