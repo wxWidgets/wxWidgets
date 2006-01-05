@@ -51,6 +51,7 @@ All (GUI):
 - Implemented <sub> and <sup> handling in wxHTML (based on patch
   by Sandro Sigala)
 - Added caption parameter to wxGetFontFromUser and wxGetColourFromUser.
+- Added wxGetMouseState function.
 
 wxMSW:
 

@@ -5390,6 +5390,28 @@ bool wxGetKeyState(wxKeyCode key)
 #endif
 }
 
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    POINT pt;
+    GetCursorPos( &pt );
+
+    ms.SetX(pt.x);
+    ms.SetY(pt.y);
+    ms.SetLeftDown( (GetAsyncKeyState(VK_LBUTTON) & (1<<15)) != 0 );
+    ms.SetMiddleDown( (GetAsyncKeyState(VK_MBUTTON) & (1<<15)) != 0 );
+    ms.SetRightDown( (GetAsyncKeyState(VK_RBUTTON) & (1<<15)) != 0 );
+    
+    ms.SetControlDown( (GetAsyncKeyState(VK_CONTROL) & (1<<15)) != 0 );
+    ms.SetShiftDown( (GetAsyncKeyState(VK_SHIFT) & (1<<15)) != 0 );
+    ms.SetAltDown( (GetAsyncKeyState(VK_MENU) & (1<<15)) != 0 );
+//    ms.SetMetaDown();
+    
+    return ms;
+}
+
+
 wxWindow *wxGetActiveWindow()
 {
     HWND hWnd = GetActiveWindow();

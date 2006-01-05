@@ -128,6 +128,7 @@ the corresponding topic.
 \helpref{wxGetLocalTimeMillis}{wxgetlocaltimemillis}\\
 \helpref{wxGetLocalTime}{wxgetlocaltime}\\
 \helpref{wxGetMousePosition}{wxgetmouseposition}\\
+\helpref{wxGetMouseState}{wxgetmousestate}\\
 \helpref{wxGetMultipleChoices}{wxgetmultiplechoices}\\
 \helpref{wxGetMultipleChoice}{wxgetmultiplechoice}\\
 \helpref{wxGetNumberFromUser}{wxgetnumberfromuser}\\
@@ -3007,6 +3008,55 @@ Returns the mouse position in screen coordinates.
 \wxheading{Include files}
 
 <wx/utils.h>
+
+
+\membersection{::wxGetMouseState}\label{wxgetmousestate}
+
+\func{wxMouseState}{wxGetMouseState}{\void}
+
+Returns the current state of the mouse.  Returns a wxMouseState
+instance that contains the current position of the mouse pointer in
+screen coordinants, as well as boolean values indicating the up/down
+status of the mouse buttons and the modifier keys.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+wxMouseState has the following interface:
+
+\begin{verbatim}
+class wxMouseState
+{
+public:
+    wxMouseState();
+
+    wxCoord     GetX();
+    wxCoord     GetY();
+
+    bool        LeftDown();
+    bool        MiddleDown();
+    bool        RightDown();
+
+    bool        ControlDown();
+    bool        ShiftDown();
+    bool        AltDown();
+    bool        MetaDown();
+    bool        CmdDown();
+
+    void        SetX(wxCoord x);
+    void        SetY(wxCoord y);
+
+    void        SetLeftDown(bool down);
+    void        SetMiddleDown(bool down);
+    void        SetRightDown(bool down);
+    
+    void        SetControlDown(bool down);
+    void        SetShiftDown(bool down);
+    void        SetAltDown(bool down);
+    void        SetMetaDown(bool down);
+};
+\end{verbatim}
 
 
 \membersection{::wxGetResource}\label{wxgetresource}

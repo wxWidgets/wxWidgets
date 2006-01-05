@@ -1499,6 +1499,29 @@ bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 #endif
 
 
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+
+    wxPoint pt = wxGetMousePosition();
+    ms.SetX(pt.x);
+    ms.SetY(pt.y);
+
+    UInt32 buttons = GetCurrentButtonState();
+    ms.SetLeftDown( (buttons & 0x01) != 0 );
+    ms.SetMiddleDown( (buttons & 0x04) != 0 );
+    ms.SetRightDown( (buttons & 0x02) != 0 );
+    
+    UInt32 modifiers = GetCurrentKeyModifiers();
+    ms.SetControlDown(modifiers & controlKey);
+    ms.SetShiftDown(modifiers & shiftKey);
+    ms.SetAltDown(modifiers & optionKey);
+    ms.SetMetaDown(modifiers & cmdKey);
+
+    return ms;
+}
+
+
 bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
 {
     if ( !focus )
