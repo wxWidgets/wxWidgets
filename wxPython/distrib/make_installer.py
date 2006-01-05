@@ -361,7 +361,8 @@ LicenseFile = licence\licence.txt
 Source: "demo\demo.py";                     DestDir: "{app}\demo"; DestName: "demo.pyw"; 
 Source: "demo\*.py";                        DestDir: "{app}\demo"; 
 Source: "demo\*.xml";                       DestDir: "{app}\demo"; 
-Source: "demo\*.txt";                       DestDir: "{app}\demo"; 
+Source: "demo\*.txt";                       DestDir: "{app}\demo";
+Source: "demo\*.ico";                       DestDir: "{app}\demo";
 
 Source: "demo\bitmaps\*.bmp";               DestDir: "{app}\demo\bitmaps"; 
 Source: "demo\bitmaps\*.gif";               DestDir: "{app}\demo\bitmaps"; 
