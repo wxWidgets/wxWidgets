@@ -30,5 +30,6 @@ wxMediaCtrlPtr = wx.media.MediaCtrlPtr
 wxPreMediaCtrl = wx.media.PreMediaCtrl
 wxEVT_MEDIA_FINISHED = wx.media.wxEVT_MEDIA_FINISHED
 wxEVT_MEDIA_STOP = wx.media.wxEVT_MEDIA_STOP
+wxEVT_MEDIA_LOADED = wx.media.wxEVT_MEDIA_LOADED
 
 
