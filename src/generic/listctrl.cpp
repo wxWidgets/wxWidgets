@@ -494,6 +494,8 @@ class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
 public:
     wxListTextCtrl(wxListMainWindow *owner, size_t itemEdit);
 
+    void AcceptChangesAndFinish();
+
 protected:
     void OnChar( wxKeyEvent &event );
     void OnKeyUp( wxKeyEvent &event );
@@ -790,6 +792,8 @@ public:
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
 
+    wxListTextCtrl*     m_textctrl;
+    
 protected:
     // the total count of items in a virtual list control
     size_t m_countVirt;
@@ -2068,7 +2072,8 @@ void wxListTextCtrl::Finish()
     if ( !m_finished )
     {
         wxPendingDelete.Append(this);
-
+        m_owner->m_textctrl = NULL;
+        
         m_finished = true;
 
         m_owner->SetFocusIgnoringChildren();
@@ -2097,16 +2102,21 @@ bool wxListTextCtrl::AcceptChanges()
     return true;
 }
 
+void wxListTextCtrl::AcceptChangesAndFinish()
+{
+    m_aboutToFinish = true;
+    // Notify the owner about the changes
+    AcceptChanges();
+    // Even if vetoed, close the control (consistent with MSW)
+    Finish();
+}
+
 void wxListTextCtrl::OnChar( wxKeyEvent &event )
 {
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
-            m_aboutToFinish = true;
-            // Notify the owner about the changes
-            AcceptChanges();
-            // Even if vetoed, close the control (consistent with MSW)
-            Finish();
+            AcceptChangesAndFinish();
             break;
 
         case WXK_ESCAPE:
@@ -2198,7 +2208,8 @@ void wxListMainWindow::Init()
 
     m_lastOnSame = false;
     m_renameTimer = new wxListRenameTimer( this );
-
+    m_textctrl = NULL;
+    
     m_current =
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
@@ -2847,9 +2858,8 @@ void wxListMainWindow::EditLabel( long item )
     if ( m_dirty )
         wxSafeYield();
 
-    wxListTextCtrl *text = new wxListTextCtrl(this, itemEdit);
-
-    text->SetFocus();
+    m_textctrl = new wxListTextCtrl(this, itemEdit);
+    m_textctrl->SetFocus();
 }
 
 void wxListMainWindow::OnRenameTimer()
@@ -2894,6 +2904,17 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
+#ifdef __WXMAC__
+    // On wxMac we can't depend on the EVT_KILL_FOCUS event to properly
+    // shutdown the edit control when the mouse is clicked elsewhere on the
+    // listctrl because the order of events is different (or something like
+    // that,) so explicitly end the edit if it is active.
+    if ( event.LeftDown() && m_textctrl)
+    {
+        m_textctrl->AcceptChangesAndFinish();
+    }
+#endif
+    
     event.SetEventObject( GetParent() );
     if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
         return;
