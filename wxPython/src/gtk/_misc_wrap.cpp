@@ -1403,11 +1403,11 @@ SWIG_Python_GetTypeList() {
 #define  SWIGTYPE_p_wxTimer swig_types[61] 
 #define  SWIGTYPE_p_wxPaperSize swig_types[62] 
 #define  SWIGTYPE_p_wxMimeTypesManager swig_types[63] 
-#define  SWIGTYPE_p_wxPyTipProvider swig_types[64] 
-#define  SWIGTYPE_p_wxTipProvider swig_types[65] 
-#define  SWIGTYPE_p_wxJoystick swig_types[66] 
-#define  SWIGTYPE_p_wxSystemOptions swig_types[67] 
-#define  SWIGTYPE_p_wxPyArtProvider swig_types[68] 
+#define  SWIGTYPE_p_wxPyArtProvider swig_types[64] 
+#define  SWIGTYPE_p_wxPyTipProvider swig_types[65] 
+#define  SWIGTYPE_p_wxTipProvider swig_types[66] 
+#define  SWIGTYPE_p_wxJoystick swig_types[67] 
+#define  SWIGTYPE_p_wxSystemOptions swig_types[68] 
 #define  SWIGTYPE_p_wxPoint swig_types[69] 
 #define  SWIGTYPE_p_wxJoystickEvent swig_types[70] 
 #define  SWIGTYPE_p_wxCursor swig_types[71] 
@@ -33524,13 +33524,10 @@ static void *_p_wxCustomDataObjectTo_p_wxDataObject(void *x) {
     return (void *)((wxDataObject *) (wxDataObjectSimple *) ((wxCustomDataObject *) x));
 }
 static void *_p_wxURLDataObjectTo_p_wxDataObject(void *x) {
-    return (void *)((wxDataObject *) (wxDataObjectComposite *) ((wxURLDataObject *) x));
+    return (void *)((wxDataObject *)  ((wxURLDataObject *) x));
 }
 static void *_p_wxMetafileDataObjectTo_p_wxDataObject(void *x) {
     return (void *)((wxDataObject *) (wxDataObjectSimple *) ((wxMetafileDataObject *) x));
-}
-static void *_p_wxURLDataObjectTo_p_wxDataObjectComposite(void *x) {
-    return (void *)((wxDataObjectComposite *)  ((wxURLDataObject *) x));
 }
 static void *_p_wxPyDataObjectSimpleTo_p_wxDataObjectSimple(void *x) {
     return (void *)((wxDataObjectSimple *)  ((wxPyDataObjectSimple *) x));
@@ -33930,7 +33927,7 @@ static swig_type_info _swigt__p_wxArrayString[] = {{"_p_wxArrayString", 0, "wxAr
 static swig_type_info _swigt__p_wxWindowDisabler[] = {{"_p_wxWindowDisabler", 0, "wxWindowDisabler *", 0, 0, 0, 0},{"_p_wxWindowDisabler", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_form_ops_t[] = {{"_p_form_ops_t", 0, "enum form_ops_t *|form_ops_t *", 0, 0, 0, 0},{"_p_form_ops_t", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxToolTip[] = {{"_p_wxToolTip", 0, "wxToolTip *", 0, 0, 0, 0},{"_p_wxToolTip", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxDataObjectComposite[] = {{"_p_wxDataObjectComposite", 0, "wxDataObjectComposite *", 0, 0, 0, 0},{"_p_wxDataObjectComposite", 0, 0, 0, 0, 0, 0},{"_p_wxURLDataObject", _p_wxURLDataObjectTo_p_wxDataObjectComposite, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxDataObjectComposite[] = {{"_p_wxDataObjectComposite", 0, "wxDataObjectComposite *", 0, 0, 0, 0},{"_p_wxDataObjectComposite", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxSystemSettings[] = {{"_p_wxSystemSettings", 0, "wxSystemSettings *", 0, 0, 0, 0},{"_p_wxSystemSettings", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFileConfig[] = {{"_p_wxFileConfig", 0, "wxFileConfig *", 0, 0, 0, 0},{"_p_wxFileConfig", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxVideoMode[] = {{"_p_wxVideoMode", 0, "wxVideoMode *", 0, 0, 0, 0},{"_p_wxVideoMode", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -33947,11 +33944,11 @@ static swig_type_info _swigt__p_wxFrame[] = {{"_p_wxFrame", 0, "wxFrame *", 0, 0
 static swig_type_info _swigt__p_wxTimer[] = {{"_p_wxTimer", 0, "wxTimer *", 0, 0, 0, 0},{"_p_wxTimer", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPaperSize[] = {{"_p_wxPaperSize", 0, "enum wxPaperSize *|wxPaperSize *", 0, 0, 0, 0},{"_p_wxPaperSize", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMimeTypesManager[] = {{"_p_wxMimeTypesManager", 0, "wxMimeTypesManager *", 0, 0, 0, 0},{"_p_wxMimeTypesManager", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxPyArtProvider[] = {{"_p_wxPyArtProvider", 0, "wxPyArtProvider *", 0, 0, 0, 0},{"_p_wxPyArtProvider", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyTipProvider[] = {{"_p_wxPyTipProvider", 0, "wxPyTipProvider *", 0, 0, 0, 0},{"_p_wxPyTipProvider", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxTipProvider[] = {{"_p_wxTipProvider", 0, "wxTipProvider *", 0, 0, 0, 0},{"_p_wxTipProvider", 0, 0, 0, 0, 0, 0},{"_p_wxPyTipProvider", _p_wxPyTipProviderTo_p_wxTipProvider, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxJoystick[] = {{"_p_wxJoystick", 0, "wxJoystick *", 0, 0, 0, 0},{"_p_wxJoystick", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxSystemOptions[] = {{"_p_wxSystemOptions", 0, "wxSystemOptions *", 0, 0, 0, 0},{"_p_wxSystemOptions", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxPyArtProvider[] = {{"_p_wxPyArtProvider", 0, "wxPyArtProvider *", 0, 0, 0, 0},{"_p_wxPyArtProvider", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPoint[] = {{"_p_wxPoint", 0, "wxPoint *", 0, 0, 0, 0},{"_p_wxPoint", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxJoystickEvent[] = {{"_p_wxJoystickEvent", 0, "wxJoystickEvent *", 0, 0, 0, 0},{"_p_wxJoystickEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCursor[] = {{"_p_wxCursor", 0, "wxCursor *", 0, 0, 0, 0},{"_p_wxCursor", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -34048,11 +34045,11 @@ _swigt__p_wxFrame,
 _swigt__p_wxTimer, 
 _swigt__p_wxPaperSize, 
 _swigt__p_wxMimeTypesManager, 
+_swigt__p_wxPyArtProvider, 
 _swigt__p_wxPyTipProvider, 
 _swigt__p_wxTipProvider, 
 _swigt__p_wxJoystick, 
 _swigt__p_wxSystemOptions, 
-_swigt__p_wxPyArtProvider, 
 _swigt__p_wxPoint, 
 _swigt__p_wxJoystickEvent, 
 _swigt__p_wxCursor, 

@@ -5334,7 +5334,7 @@ class CustomDataObjectPtr(CustomDataObject):
         self.__class__ = CustomDataObject
 _misc_.CustomDataObject_swigregister(CustomDataObjectPtr)
 
-class URLDataObject(DataObjectComposite):
+class URLDataObject(DataObject):
     """
     This data object holds a URL in a format that is compatible with some
     browsers such that it is able to be dragged to or from them.
