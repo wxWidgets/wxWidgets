@@ -1456,6 +1456,7 @@ public:
 
 const wxEventType wxEVT_MEDIA_FINISHED = 0;
 const wxEventType wxEVT_MEDIA_STOP = 0;
+const wxEventType wxEVT_MEDIA_LOADED = 0;
 
 #endif
 
@@ -3385,6 +3386,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"MediaCtrlNameStr",_wrap_MediaCtrlNameStr_get, _wrap_MediaCtrlNameStr_set);
     PyDict_SetItemString(d, "wxEVT_MEDIA_FINISHED", PyInt_FromLong(wxEVT_MEDIA_FINISHED));
     PyDict_SetItemString(d, "wxEVT_MEDIA_STOP", PyInt_FromLong(wxEVT_MEDIA_STOP));
+    PyDict_SetItemString(d, "wxEVT_MEDIA_LOADED", PyInt_FromLong(wxEVT_MEDIA_LOADED));
     
     
 }

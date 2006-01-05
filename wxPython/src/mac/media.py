@@ -179,7 +179,9 @@ def PreMediaCtrl(*args, **kwargs):
 
 wxEVT_MEDIA_FINISHED = _media.wxEVT_MEDIA_FINISHED
 wxEVT_MEDIA_STOP = _media.wxEVT_MEDIA_STOP
+wxEVT_MEDIA_LOADED = _media.wxEVT_MEDIA_LOADED
 EVT_MEDIA_FINISHED = wx.PyEventBinder( wxEVT_MEDIA_FINISHED, 1)
 EVT_MEDIA_STOP     = wx.PyEventBinder( wxEVT_MEDIA_STOP, 1)
+EVT_MEDIA_LOADED   = wx.PyEventBinder( wxEVT_MEDIA_LOADED, 1)    
 
 
