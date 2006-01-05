@@ -32,6 +32,7 @@ class TestPanel(wx.Panel):
 
         slider = wx.Slider(self, -1, 0, 0, 0)
         self.slider = slider
+        slider.SetMinSize((150, -1))
         self.Bind(wx.EVT_SLIDER, self.OnSeek, slider)
 
         self.st_size = wx.StaticText(self, -1, size=(100,-1))
@@ -79,8 +80,8 @@ class TestPanel(wx.Panel):
         else:
             self.mc.SetBestFittingSize()
             self.GetSizer().Layout()
-            self.slider.SetRange(0, self.mc.Length())
             self.mc.Play()
+            self.slider.SetRange(0, self.mc.Length())
         
     
     def OnPlay(self, evt):
