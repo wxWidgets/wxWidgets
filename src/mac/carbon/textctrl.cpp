@@ -569,6 +569,7 @@ void wxTextCtrl::Cut()
         GetPeer()->Cut() ;
 
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+        event.SetString( GetValue() ) ;
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event);
       }
@@ -582,6 +583,7 @@ void wxTextCtrl::Paste()
         // eventually we should add setting the default style again
 
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+        event.SetString( GetValue() ) ;
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event);
     }
@@ -990,6 +992,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
          key == WXK_BACK)
     {
         wxCommandEvent event1(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+        event1.SetString( GetValue() ) ;
         event1.SetEventObject( this );
         wxPostEvent(GetEventHandler(),event1);
     }
