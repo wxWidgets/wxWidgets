@@ -149,7 +149,7 @@ void wxPanel::OnSize(wxSizeEvent& event)
     if (GetAutoLayout())
         Layout();
 #if wxUSE_CONSTRAINTS
-#if defined(__WXPM__)
+#if defined(__WXPM__) && 0
     else
     {
         // Need to properly move child windows under OS/2
