@@ -63,6 +63,11 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style & ~(wxYES|wxOK|wxNO /*|wxCANCEL*/) , name) )
         return FALSE;
 
+    HIViewRef growBoxRef = 0 ;
+    OSStatus err = HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowGrowBoxID , &growBoxRef );
+    if ( err == noErr && growBoxRef != 0 )
+        HIGrowBoxViewSetTransparent( growBoxRef , true ) ;
+    
     return TRUE;
 }
 
