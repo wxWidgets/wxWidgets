@@ -202,6 +202,11 @@ wx.FontMapper.SetConfig is deprecated.  You should instead just set an
 application-wide config object with wx.Config.Set, which wx.FontMapper
 will use by default.
 
+Added wx.GetMouseState which returns the current state of the mouse.
+Returns an instance of a wx.MouseState object that contains the
+current position of the mouse pointer in screen coordinants, as well
+as boolean values indicating the up/down status of the mouse buttons
+and the modifier keys.
 
 
 
