@@ -9,13 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
 #include "wx/wxprec.h"
 
 #if wxUSE_NOTEBOOK
@@ -27,17 +20,11 @@
 #include "wx/image.h"
 #include "wx/notebook.h"
 #include "wx/mac/uma.h"
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
+
 
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
-
-// ----------------------------------------------------------------------------
-// event table
-// ----------------------------------------------------------------------------
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
@@ -53,13 +40,6 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxNotebook construction
-// ----------------------------------------------------------------------------
 
 // common part of all ctors
 void wxNotebook::Init()
@@ -74,63 +54,72 @@ wxNotebook::wxNotebook()
 }
 
 // the same arguments as for wxControl
-wxNotebook::wxNotebook(wxWindow *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name)
+wxNotebook::wxNotebook( wxWindow *parent,
+    wxWindowID id,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxString& name )
 {
     Init();
 
-    Create(parent, id, pos, size, style, name);
+    Create( parent, id, pos, size, style, name );
 }
 
-// Create() function
-bool wxNotebook::Create(wxWindow *parent,
-                        wxWindowID id,
-                        const wxPoint& pos,
-                        const wxSize& size,
-                        long style,
-                        const wxString& name)
+bool wxNotebook::Create( wxWindow *parent,
+    wxWindowID id,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxString& name )
 {
     m_macIsUserPane = false ;
 
-    if ( !wxNotebookBase::Create(parent, id, pos, size, style, name) )
+    if ( !wxNotebookBase::Create( parent, id, pos, size, style, name ) )
         return false;
 
-    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    Rect bounds = wxMacGetBoundsForControl( this, pos, size );
 
-    if( bounds.right <= bounds.left )
-        bounds.right = bounds.left + 100 ;
+    if ( bounds.right <= bounds.left )
+        bounds.right = bounds.left + 100;
     if ( bounds.bottom <= bounds.top )
-        bounds.bottom = bounds.top + 100 ;
+        bounds.bottom = bounds.top + 100;
 
-    UInt16 tabstyle = kControlTabDirectionNorth ;
+    UInt16 tabstyle = kControlTabDirectionNorth;
     if ( HasFlag(wxBK_LEFT) )
-        tabstyle = kControlTabDirectionWest ;
+        tabstyle = kControlTabDirectionWest;
     else if ( HasFlag( wxBK_RIGHT ) )
-        tabstyle = kControlTabDirectionEast ;
+        tabstyle = kControlTabDirectionEast;
     else if ( HasFlag( wxBK_BOTTOM ) )
-        tabstyle = kControlTabDirectionSouth ;
+        tabstyle = kControlTabDirectionSouth;
 
-    ControlTabSize tabsize = kControlTabSizeLarge ;
-    if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL )
-        tabsize = kControlTabSizeSmall ;
-    else if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
+    ControlTabSize tabsize;
+    switch (GetWindowVariant())
     {
-        if (UMAGetSystemVersion() >= 0x1030 )
-            tabsize = 3 ;
-        else
-            tabsize = kControlSizeSmall;
+    	case wxWINDOW_VARIANT_MINI:
+            if ( UMAGetSystemVersion() >= 0x1030 )
+                tabsize = 3 ;
+            else
+                tabsize = kControlSizeSmall;
+            break;
+
+    	case wxWINDOW_VARIANT_SMALL:
+            tabsize = kControlTabSizeSmall;
+            break;
+
+    	default:
+            tabsize = kControlTabSizeLarge;
+            break;
     }
 
-    m_peer = new wxMacControl(this) ;
-    verify_noerr ( CreateTabsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
-                   tabsize , tabstyle, 0, NULL,  m_peer->GetControlRefAddr() ) );
+    m_peer = new wxMacControl( this );
+    OSStatus err = CreateTabsControl(
+        MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds,
+        tabsize, tabstyle, 0, NULL, m_peer->GetControlRefAddr() );
+    verify_noerr( err );
 
+    MacPostControlCreate( pos, size );
 
-    MacPostControlCreate(pos,size) ;
     return true ;
 }
 
@@ -160,12 +149,12 @@ void wxNotebook::SetPageSize(const wxSize& size)
 
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
-    return DoGetSizeFromClientSize( sizePage ) ;
+    return DoGetSizeFromClientSize( sizePage );
 }
 
 int wxNotebook::SetSelection(size_t nPage)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("SetSelection: invalid notebook page") );
 
     if ( int(nPage) != m_nSelection )
     {
@@ -188,7 +177,7 @@ int wxNotebook::SetSelection(size_t nPage)
 
 bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("SetPageText: invalid notebook page") );
 
     wxNotebookPage *page = m_pages[nPage];
     page->SetLabel(strText);
@@ -199,25 +188,26 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 
 wxString wxNotebook::GetPageText(size_t nPage) const
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxEmptyString, wxT("GetPageText: invalid notebook page") );
 
     wxNotebookPage *page = m_pages[nPage];
+
     return page->GetLabel();
 }
 
 int wxNotebook::GetPageImage(size_t nPage) const
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, _T("invalid notebook page") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("GetPageImage: invalid notebook page") );
 
     return m_images[nPage];
 }
 
 bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), false, _T("invalid notebook page") );
-
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), false,
+        wxT("SetPageImage: invalid notebook page") );
     wxCHECK_MSG( m_imageList && nImage < m_imageList->GetImageCount(), false,
-        _T("invalid image index in SetPageImage()") );
+        wxT("SetPageImage: invalid image index") );
 
     if ( nImage != m_images[nPage] )
     {
@@ -239,19 +229,22 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 // remove one page from the notebook, without deleting the window
 wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
 {
-    wxCHECK( IS_VALID_PAGE(nPage), NULL );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), NULL,
+        wxT("DoRemovePage: invalid notebook page") );
+
     wxNotebookPage* page = m_pages[nPage] ;
     m_pages.RemoveAt(nPage);
 
     MacSetupTabs();
 
-    if(m_nSelection >= (int)GetPageCount()) {
+    if (m_nSelection >= (int)GetPageCount())
         m_nSelection = GetPageCount() - 1;
-    }
-    if(m_nSelection >= 0) {
+
+    if (m_nSelection >= 0)
         m_pages[m_nSelection]->Show(true);
-    }
+
     InvalidateBestSize();
+
     return page;
 }
 
@@ -262,38 +255,35 @@ bool wxNotebook::DeleteAllPages()
     MacSetupTabs();
     m_nSelection = -1 ;
     InvalidateBestSize();
+
     return true;
 }
 
-
 // same as AddPage() but does it at given position
 bool wxNotebook::InsertPage(size_t nPage,
-                            wxNotebookPage *pPage,
-                            const wxString& strText,
-                            bool bSelect,
-                            int imageId)
+    wxNotebookPage *pPage,
+    const wxString& strText,
+    bool bSelect,
+    int imageId )
 {
-    if ( !wxNotebookBase::InsertPage(nPage, pPage, strText, bSelect, imageId) )
+    if ( !wxNotebookBase::InsertPage( nPage, pPage, strText, bSelect, imageId ) )
         return false;
 
-    wxASSERT_MSG( pPage->GetParent() == this,
-                    _T("notebook pages must have notebook as parent") );
+    wxASSERT_MSG( pPage->GetParent() == this, wxT("notebook pages must have notebook as parent") );
 
     // don't show pages by default (we'll need to adjust their size first)
     pPage->Show( false ) ;
 
-    pPage->SetLabel(strText);
+    pPage->SetLabel( strText );
 
-    m_images.Insert(imageId, nPage);
+    m_images.Insert( imageId, nPage );
 
     MacSetupTabs();
 
     wxRect rect = GetPageRect() ;
-    pPage->SetSize(rect);
-    if ( pPage->GetAutoLayout() ) {
+    pPage->SetSize( rect );
+    if ( pPage->GetAutoLayout() )
         pPage->Layout();
-    }
-
 
     // now deal with the selection
     // ---------------------------
@@ -304,6 +294,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     if ( int(nPage) <= m_nSelection )
     {
         m_nSelection++;
+
         // while this still is the same page showing, we need to update the tabs
         m_peer->SetValue( m_nSelection + 1 ) ;
     }
@@ -317,25 +308,23 @@ bool wxNotebook::InsertPage(size_t nPage,
         selNew = 0;
 
     if ( selNew != -1 )
-        SetSelection(selNew);
+        SetSelection( selNew );
 
     InvalidateBestSize();
+
     return true;
 }
 
 int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
 {
     int resultV = wxNOT_FOUND;
-#if TARGET_API_MAC_OSX
-    const int	countPages = GetPageCount();
 
-    HIPoint hipoint= { pt.x , pt.y } ;
+#if TARGET_API_MAC_OSX
+    const int countPages = GetPageCount();
+
+    HIPoint hipoint = { pt.x , pt.y } ;
     HIViewPartCode outPart = 0 ;
-    OSStatus err = HIViewGetPartHit (
-       m_peer->GetControlRef() ,
-       &hipoint ,
-       &outPart
-       );
+    OSStatus err = HIViewGetPartHit( m_peer->GetControlRef(), &hipoint, &outPart );
 
     int max = m_peer->GetMaximum() ;
     if ( outPart == 0 && max > 0 )
@@ -356,23 +345,15 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
         else
              m_peer->SetValue( 1 ) ;
 
-        err = HIViewGetPartHit (
-                  m_peer->GetControlRef() ,
-                  &hipoint ,
-                  &outPart
-                );
+        err = HIViewGetPartHit( m_peer->GetControlRef(), &hipoint, &outPart );
 
         m_peer->SetValue( val ) ;
         if ( max == 1 )
-        {
             m_peer->SetMaximum( 1 ) ;
-        }
     }
 
     if ( outPart >= 1 && outPart <= countPages )
-    {
         resultV = outPart ;
-    }
 #endif // TARGET_API_MAC_OSX
 
     if (flags != NULL)
@@ -385,14 +366,15 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
         else
             *flags |= wxNB_HITTEST_NOWHERE;
     }
+
     return resultV;
 }
 
-/* Added by Mark Newsam
-* When a page is added or deleted to the notebook this function updates
-* information held in the control so that it matches the order
-* the user would expect.
-*/
+// Added by Mark Newsam
+// When a page is added or deleted to the notebook this function updates
+// information held in the control so that it matches the order
+// the user would expect.
+//
 void wxNotebook::MacSetupTabs()
 {
     m_peer->SetMaximum( GetPageCount() ) ;
@@ -401,43 +383,46 @@ void wxNotebook::MacSetupTabs()
     ControlTabInfoRecV1 info;
 
     const size_t countPages = GetPageCount();
-    for(size_t ii = 0; ii < countPages; ii++)
+    for (size_t ii = 0; ii < countPages; ii++)
     {
         page = m_pages[ii];
         info.version = kControlTabInfoVersionOne;
         info.iconSuiteID = 0;
-        wxMacCFStringHolder cflabel( page->GetLabel() , m_font.GetEncoding() ) ;
+        wxMacCFStringHolder cflabel( page->GetLabel(), m_font.GetEncoding() ) ;
         info.name = cflabel ;
-        m_peer->SetData<ControlTabInfoRecV1>( ii+1, kControlTabInfoTag, &info ) ;
+        m_peer->SetData<ControlTabInfoRecV1>( ii + 1, kControlTabInfoTag, &info ) ;
 
         if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
         {
-            const wxBitmap bmap = GetImageList()->GetBitmap( GetPageImage(ii ) ) ;
+            const wxBitmap bmap = GetImageList()->GetBitmap( GetPageImage( ii ) ) ;
             if ( bmap.Ok() )
             {
                 ControlButtonContentInfo info ;
 
-                wxMacCreateBitmapButton( &info , bmap ) ;
-#ifdef __WXDEBUG__
-                OSStatus err =
-#endif // __WXDEBUG__
-                    m_peer->SetData<ControlButtonContentInfo>( ii+1,kControlTabImageContentTag, &info );
+                wxMacCreateBitmapButton( &info, bmap ) ;
+
+                OSStatus err = m_peer->SetData<ControlButtonContentInfo>( ii + 1, kControlTabImageContentTag, &info );
                 wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
+
                 wxMacReleaseBitmapButton( &info ) ;
             }
         }
-        m_peer->SetTabEnabled( ii + 1 , true ) ;
+
+        m_peer->SetTabEnabled( ii + 1, true ) ;
     }
+
     Rect bounds;
     m_peer->GetRectInWindowCoords( &bounds ) ;
-    InvalWindowRect((WindowRef)MacGetTopLevelWindowRef(), &bounds);
+    InvalWindowRect( (WindowRef)MacGetTopLevelWindowRef(), &bounds );
 }
 
 wxRect wxNotebook::GetPageRect() const
 {
     wxSize size = GetClientSize() ;
+
     return wxRect( 0 , 0 , size.x , size.y ) ;
 }
+
 // ----------------------------------------------------------------------------
 // wxNotebook callbacks
 // ----------------------------------------------------------------------------
@@ -446,15 +431,15 @@ wxRect wxNotebook::GetPageRect() const
 //     time because doing it in ::Create() doesn't work (for unknown reasons)
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
-
     unsigned int nCount = m_pages.Count();
     wxRect rect = GetPageRect() ;
-    for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
+
+    for ( unsigned int nPage = 0; nPage < nCount; nPage++ )
+    {
         wxNotebookPage *pPage = m_pages[nPage];
         pPage->SetSize(rect);
-        if ( pPage->GetAutoLayout() ) {
+        if ( pPage->GetAutoLayout() )
             pPage->Layout();
-        }
     }
 
     // Processing continues to next OnSize
@@ -482,11 +467,13 @@ void wxNotebook::OnSetFocus(wxFocusEvent& event)
 
 void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 {
-    if ( event.IsWindowChange() ) {
+    if ( event.IsWindowChange() )
+    {
         // change pages
-        AdvanceSelection(event.GetDirection());
+        AdvanceSelection( event.GetDirection() );
     }
-    else {
+    else
+    {
         // we get this event in 2 cases
         //
         // a) one of our pages might have generated it because the user TABbed
@@ -501,7 +488,8 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         // from in this case and so can't choose between setting the focus to
         // first or last panel child
         wxWindow *parent = GetParent();
-        // the cast is here to fic a GCC ICE
+
+        // the cast is here to fix a GCC ICE
         if ( ((wxWindow*)event.GetEventObject()) == parent )
         {
             // no, it doesn't come from child, case (b): forward to a page
@@ -509,10 +497,10 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
             {
                 // so that the page knows that the event comes from it's parent
                 // and is being propagated downwards
-                event.SetEventObject(this);
+                event.SetEventObject( this );
 
                 wxWindow *page = m_pages[m_nSelection];
-                if ( !page->GetEventHandler()->ProcessEvent(event) )
+                if ( !page->GetEventHandler()->ProcessEvent( event ) )
                 {
                     page->SetFocus();
                 }
@@ -527,9 +515,10 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         else
         {
             // it comes from our child, case (a), pass to the parent
-            if ( parent ) {
-                event.SetCurrentFocus(this);
-                parent->GetEventHandler()->ProcessEvent(event);
+            if ( parent )
+            {
+                event.SetCurrentFocus( this );
+                parent->GetEventHandler()->ProcessEvent( event );
             }
         }
     }
@@ -546,7 +535,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 void wxNotebook::SetConstraintSizes(bool WXUNUSED(recurse))
 {
     // don't set the sizes of the pages - their correct size is not yet known
-    wxControl::SetConstraintSizes(false);
+    wxControl::SetConstraintSizes( false );
 }
 
 bool wxNotebook::DoPhase(int WXUNUSED(nPhase))
@@ -568,15 +557,16 @@ void wxNotebook::Command(wxCommandEvent& event)
 // hide the currently active panel and show the new one
 void wxNotebook::ChangePage(int nOldSel, int nSel)
 {
+    if (nOldSel == nSel)
+        return;
+
     if ( nOldSel != -1 )
-    {
-        m_pages[nOldSel]->Show(false);
-    }
+        m_pages[nOldSel]->Show( false );
 
     if ( nSel != -1 )
     {
         wxNotebookPage *pPage = m_pages[nSel];
-        pPage->Show(true);
+        pPage->Show( true );
         pPage->SetFocus();
     }
 
@@ -591,26 +581,29 @@ wxInt32 wxNotebook::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
     SInt32 newSel = m_peer->GetValue() - 1 ;
     if ( newSel != m_nSelection )
     {
-        wxNotebookEvent changing(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
-            newSel , m_nSelection);
-        changing.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(changing);
+        wxNotebookEvent changing(
+            wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
+            newSel , m_nSelection );
+        changing.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( changing );
 
-        if(changing.IsAllowed())
+        if ( changing.IsAllowed() )
         {
-            wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId,
-                newSel, m_nSelection);
-            event.SetEventObject(this);
-
-            GetEventHandler()->ProcessEvent(event);
+            wxNotebookEvent event(
+                wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId,
+                newSel, m_nSelection );
+            event.SetEventObject( this );
+            GetEventHandler()->ProcessEvent( event );
         }
         else
         {
             m_peer->SetValue( m_nSelection + 1 ) ;
         }
+
         status = noErr ;
     }
-    return status ;
+
+    return (wxInt32)status ;
 }
 
 #endif
