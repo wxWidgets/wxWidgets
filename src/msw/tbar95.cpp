@@ -315,7 +315,6 @@ void wxToolBar::Recreate()
     }
 
     Realize();
-    UpdateSize();
 }
 
 wxToolBar::~wxToolBar()
@@ -1051,6 +1050,7 @@ bool wxToolBar::Realize()
 
     InvalidateBestSize();
     SetBestFittingSize();
+    UpdateSize();
 
     return true;
 }
