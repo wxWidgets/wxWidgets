@@ -72,7 +72,7 @@ public:
     // get current tokenizer state
         // returns the part of the string which remains to tokenize (*not* the
         // initial string)
-    wxString GetString() const { return m_string; }
+    wxString GetString() const { return m_string.substr(m_pos); }
 
         // returns the current position (i.e. one index after the last
         // returned token or 0 if GetNextToken() has never been called) in the
