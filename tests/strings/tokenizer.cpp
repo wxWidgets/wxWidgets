@@ -36,12 +36,14 @@ private:
     CPPUNIT_TEST_SUITE( TokenizerTestCase );
         CPPUNIT_TEST( GetCount );
         CPPUNIT_TEST( GetPosition );
+        CPPUNIT_TEST( GetString );
         CPPUNIT_TEST( LastDelimiter );
         CPPUNIT_TEST( StrtokCompat );
     CPPUNIT_TEST_SUITE_END();
 
     void GetCount();
     void GetPosition();
+    void GetString();
     void LastDelimiter();
     void StrtokCompat();
 
@@ -184,6 +186,43 @@ void TokenizerTestCase::GetPosition()
     DoTestGetPosition(_T("foo"), _T("_"), 3, 0);
     DoTestGetPosition(_T("foo_bar"), _T("_"), 4, 7, 0);
     DoTestGetPosition(_T("foo_bar_"), _T("_"), 4, 8, 0);
+}
+
+// helper for GetString(): the parameters are the same as for DoTestGetPosition
+// but it checks GetString() return value instead of GetPosition()
+static void
+DoTestGetString(const wxChar *s, const wxChar *delims, int pos, ...)
+{
+    wxStringTokenizer tkz(s, delims);
+
+    CPPUNIT_ASSERT_EQUAL( wxString(s), tkz.GetString() );
+
+    va_list ap;
+    va_start(ap, pos);
+
+    for ( ;; )
+    {
+        if ( !pos )
+        {
+            CPPUNIT_ASSERT_EQUAL( wxString(), tkz.GetString() );
+            break;
+        }
+
+        tkz.GetNextToken();
+
+        CPPUNIT_ASSERT_EQUAL( wxString(s + pos), tkz.GetString() );
+
+        pos = va_arg(ap, int);
+    }
+
+    va_end(ap);
+}
+
+void TokenizerTestCase::GetString()
+{
+    DoTestGetString(_T("foo"), _T("_"), 3, 0);
+    DoTestGetString(_T("foo_bar"), _T("_"), 4, 7, 0);
+    DoTestGetString(_T("foo_bar_"), _T("_"), 4, 8, 0);
 }
 
 void TokenizerTestCase::LastDelimiter()
