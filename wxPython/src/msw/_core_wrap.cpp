@@ -2963,6 +2963,15 @@ static PyObject *wxSizerItem_GetUserData(wxSizerItem *self){
                 return Py_None;
             }
         }
+static void wxSizerItem_SetUserData(wxSizerItem *self,PyObject *userData){
+            wxPyUserData* data = NULL;
+            if ( userData ) {
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
+                data = new wxPyUserData(userData);
+                wxPyEndBlockThreads(blocked);
+            }
+            self->SetUserData(data);
+        }
 
 // Figure out the type of the sizer item
 
@@ -40255,6 +40264,34 @@ static PyObject *_wrap_SizerItem_GetUserData(PyObject *, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_SizerItem_SetUserData(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSizerItem *arg1 = (wxSizerItem *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "userData", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:SizerItem_SetUserData",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxSizerItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    arg2 = obj1;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxSizerItem_SetUserData(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * SizerItem_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -47201,6 +47238,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SizerItem_IsShown", (PyCFunction) _wrap_SizerItem_IsShown, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SizerItem_GetPosition", (PyCFunction) _wrap_SizerItem_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SizerItem_GetUserData", (PyCFunction) _wrap_SizerItem_GetUserData, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"SizerItem_SetUserData", (PyCFunction) _wrap_SizerItem_SetUserData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SizerItem_swigregister", SizerItem_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Sizer__setOORInfo", (PyCFunction) _wrap_Sizer__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Sizer_Add", (PyCFunction) _wrap_Sizer_Add, METH_VARARGS | METH_KEYWORDS, NULL},

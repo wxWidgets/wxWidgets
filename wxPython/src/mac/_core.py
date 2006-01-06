@@ -11579,6 +11579,14 @@ class SizerItem(Object):
         """
         return _core_.SizerItem_GetUserData(*args, **kwargs)
 
+    def SetUserData(*args, **kwargs):
+        """
+        SetUserData(self, PyObject userData)
+
+        Associate a Python object with this sizer item.
+        """
+        return _core_.SizerItem_SetUserData(*args, **kwargs)
+
 
 class SizerItemPtr(SizerItem):
     def __init__(self, this):
