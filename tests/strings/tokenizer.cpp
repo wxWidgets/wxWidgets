@@ -123,7 +123,8 @@ gs_testData[] =
 // fails in the diagnostic message
 static std::string Nth(size_t n)
 {
-    return wxString::Format(_T("for loop index %lu"), (unsigned long)n).mb_str();
+    return std::string(wxString::Format(_T("for loop index %lu"),
+                                        (unsigned long)n).mb_str());
 }
 
 // ----------------------------------------------------------------------------
