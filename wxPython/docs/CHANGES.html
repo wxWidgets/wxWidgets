@@ -11,7 +11,174 @@
 <div class="document" id="recent-changes-for-wxpython">
 <h1 class="title">Recent Changes for wxPython</h1>
 <div class="section" id="id1">
-<h1><a name="id1">2.6.1.0</a></h1>
+<h1><a name="id1">2.6.2.1</a></h1>
+<p>wxMSW: Fix for bug #1211907, popup menu indenting inconsistent with
+bitmaps.</p>
+<p>wxMac: Don't send an event for wx.RadioButton deselections, just the
+selections.  This was done to make it consistent with the other
+platforms.</p>
+<p>wxMSW: Always set flat toolbar style, even under XP with themes: this
+is necessary or separators aren't shown at all.</p>
+<p>Fixes for bug #1217872, pydocview.DocService not correctly initialized.</p>
+<p>Fix for bug #1217874, Error in parameter name in DocManager.CreateView.</p>
+<p>Added wrappers for the wx.RendererNative class.</p>
+<p>Added the wx.lib.splitter module, which contains the
+MultiSplitterWindow class.  This class is much like the standard
+wx.SplitterWindow class, except it allows more than one split, so it
+can manage more than two child windows.</p>
+<p>Docview and IDE patch from Morgan Hua with fix for bug #1217890
+&quot;Closing view crashes Python&quot; plus some new features:</p>
+<pre class="literal-block">
+New feature added to the IDE is 'Extensions'.  Under
+Tools|Options|Extensions, you can add calls to external programs.
+For example you can add a &quot;Notepad&quot; extension (under windows) that
+will exec Notepad on the currently open file.  A new &quot;Notepad&quot;
+menu item will appear under the Tools menu.
+</pre>
+<p>Some fixes to XRCed to make encoding errors a bit more user friendly.</p>
+<p>XRCed changes from Roman Rolinsky:</p>
+<blockquote>
+<ul class="simple">
+<li>Added new controls (Choicebook, Listbook, StatusBar,
+DatePicker), and completed style flags. Test window is opened
+for an available parent control if no specific view
+defined. Better handling of exceptions (highlighting does not
+'stick' anymore).</li>
+<li>Use system clipboard for Copy/Paste.</li>
+<li>Improved some dialogs (window styles, growable cols). Changed
+the range for wxSpinCtrl min/max to all integers (default 0/100
+is not always good).</li>
+</ul>
+</blockquote>
+<p>Updates for wx.lib.foldpanelbar and wx.lib.hyperlink from Andrea
+Gavana.</p>
+<p>Fix for Bug #1283496: wxPython TheClipboard class causes problems for
+pychecker.  Ensure the app has been created before initializing
+wx.TheClipboard.</p>
+<p>Fix for Bug #1352602: FileBrowseButtonWithHistory can't type in Value.</p>
+<p>wxHTML: Added space after list item number.</p>
+<p>wx.lib.printout:  Applied patch #1384440.</p>
+<p>wxMSW:  Fix for Bug #1293225 Window_FromHWND crashes if parent is
+None.</p>
+<p>Fix for Bug #1261669, use a wx.TE_RICH2 style for the Process demo so
+it doesn't fill up too soon.</p>
+<p>Applied Patch #1354389: wxPython MenuItem SetBitmaps fix.</p>
+<p>Applied Patch #1239456: wxPython wx.DataObject.GetAllFormats fix.</p>
+<p>Applied Patch # #1230107 which allows image handlers to be written in
+Python by deriving from wx.PyImageHandler.</p>
+<p>Applied patch #1072210: generalize printout.py to allow text printing.</p>
+<p>Applied patch #1243907: Give Throbber much more flexibility by
+allowing the user to set the rest image, the direction, the current
+index, custom sequence.  Allows user to manually step through the
+sequence with Next(), Previous(), Increment(), Decrement() &amp;
+SetCurrent(). Very handy if you have multiple throbbers that you want
+to synchronize with a single timer.</p>
+<p>Fix for bug #1336711: wx.lib.calendar.CalenDlg can yield incorrect
+result.</p>
+<p>Applied patch from Morgan Hua for updates to ActiveGrid code
+(pydocview, ActiveGrid IDE, etc.)</p>
+<p>Applied patch #1326241: Supporting &quot;setup.py install --install-headers=path&quot;</p>
+<p>Applied patch from Morgan Hua to fix bug #1219423: CommandManager
+should not repeat old commands after a branch.</p>
+<p>Applied patch #1238825 adding search backward capabilities to the
+demo.  Modified to use the up/down options in the wx.FindReplaceDialog
+instead of a separate menu item.</p>
+<p>Fix for bug #1266745 and #1387725 in the wx.FindReplaceDialog on MSW.
+Actually check we are using MSLU before doing the hack designed to
+workaround a bug in MSLU!</p>
+<p>wxMSW: wx.lib.iewin.IEHtmlWindow now properly handles tabbing, return
+and other special keys properly.</p>
+<p>Lots of PyCrust enhancments started by Franz Steinaeusler, Adi Sieker,
+and Sebastian Haase, and which in turn were further enhanced, fixed
+tweaked and finished up by me.  The changes include the following:</p>
+<blockquote>
+<ul class="simple">
+<li>The Autocomplete and Calltip windows can now be opened manually
+with Ctrl-Space and Ctrl-Shift-Space.</li>
+<li>In the stand alone PyCrust app the various option settings,
+window size and position, and etc. are saved and restored at the
+next run.</li>
+<li>Added a help dialog bound to the F1 key that shows the key
+bindings.</li>
+<li>Added a new text completion function that suggests words from
+the history.  Bound to Shift-Return.</li>
+<li>F11 will toggle the maximized state of the frame.</li>
+<li>switched to Bind() from wx.EVT_*().</li>
+<li>Display of line numbers can be toggled.</li>
+<li>F12 toggles a &quot;free edit&quot; mode of the shell buffer.  This mode
+is useful, for example, if you would like to remove some output
+or errors or etc. from the buffer before doing a copy/paste.
+The free edit mode is designated by the use of a red,
+non-flashing caret.</li>
+<li>Ctrl-H will fold/unfold (hide/show) the selected lines.</li>
+<li>General code cleanup and fixes.</li>
+<li>Use wx.StandardPaths to determine the location of the config
+files.</li>
+<li>Use wx.SP_LIVE_UPDATE on crust and filling windows.</li>
+<li>Extended the saving of the config info and other new features to
+the PyShell app too.  Additionally, other apps that embed a
+PyCrust or a PyShell can pass their own wx.Config object and
+have the Py code save/restore its settings to/from there.</li>
+<li>All of the classes with config info get an opportunity to
+save/load their own settings instead of putting all the
+save/load code in one place that then has to reach all over the
+place to do anything.</li>
+<li>Enable editing of the startup python code, which will either be
+the file pointed to by PYTHONSTARTUP or a file in the config dir
+if PYTHONSTARTUP is not set in the environment.</li>
+<li>Added an option to skip the running of the startup code when
+PyShell or PyCrust starts.</li>
+<li>PyCrust adds a pp(item) function to the shell's namespace that
+pretty prints the item in the Display tab of the notebook.
+Added code to raise that tab when pp() is called.</li>
+<li>Added an option for whether to insert text for function
+parameters when popping up the call tip.</li>
+<li>Added Find and Find-Next functions that use the
+wx.FindReplaceDialog.</li>
+</ul>
+</blockquote>
+<p>Applied patches from Will Sadkin for wx.lib.masked modules:</p>
+<blockquote>
+<ul class="simple">
+<li>Now ignores kill focus events when being destroyed.</li>
+<li>Added missing call to set insertion point on changing fields.</li>
+<li>Modified SetKeyHandler() to accept None as means of removing
+one.</li>
+<li>Fixed keyhandler processing for group and decimal character
+changes.</li>
+<li>Fixed a problem that prevented input into the integer digit of a
+integerwidth=1 numctrl, if the current value was 0.</li>
+<li>Fixed logic involving processing of &quot;_signOk&quot; flag, to remove
+default sign key handlers if false, so that
+SetAllowNegative(False) in the NumCtrl works properly.</li>
+<li>Fixed selection logic for numeric controls so that if
+selectOnFieldEntry is true, and the integer portion of an
+integer format control is selected and the sign position is
+selected, the sign keys will always result in a negative value,
+rather than toggling the previous sign.</li>
+</ul>
+</blockquote>
+<p>wx.FontMapper.SetConfig is deprecated.  You should instead just set an
+application-wide config object with wx.Config.Set, which wx.FontMapper
+will use by default.</p>
+<p>Added wx.GetMouseState which returns the current state of the mouse.
+It returns an instance of a wx.MouseState object that contains the
+current position of the mouse pointer in screen coordinants, as well
+as boolean values indicating the up/down status of the mouse buttons
+and the modifier keys.</p>
+<p>Added wx.SizerItem.SetUserData</p>
+<p>A variety of updates to wx.lib.floatcanvas, including Added
+DrawObjects, including a ScaledTextBox, with auto-wrapping, etc, and
+Scaled and Unscaled Bitmap Objects.</p>
+<blockquote>
+WARNING: Changed all DrawObjects to take an (x,y) pair rather
+than individual x,y parameters. Also changed rectangles and
+ellipses to take (w,h) pair. This is an API change, but should
+be easy to accommodate, all you need to do is add a parenthesis
+pair:  (...x, y, ...) ---&gt;  (...(x,y), ...)</blockquote>
+</div>
+<div class="section" id="id2">
+<h1><a name="id2">2.6.1.0</a></h1>
 <ul class="simple">
 <li>4-June-2005</li>
 </ul>
@@ -38,8 +205,8 @@ calls.</p>
 <p>wx.FileConfig: fixed DeleteEntry to set the dirty flag properly so the
 change will get written at the next flush.</p>
 </div>
-<div class="section" id="id2">
-<h1><a name="id2">2.6.0.1</a></h1>
+<div class="section" id="id3">
+<h1><a name="id3">2.6.0.1</a></h1>
 <ul class="simple">
 <li>30-May-2005</li>
 </ul>
@@ -151,8 +318,8 @@ usual.</p>
 there is a range of allowed values (so a wx.SpinCtrl is used instead
 of a wx.TextCtrl.)</p>
 </div>
-<div class="section" id="id3">
-<h1><a name="id3">2.6.0.0</a></h1>
+<div class="section" id="id4">
+<h1><a name="id4">2.6.0.0</a></h1>
 <ul class="simple">
 <li>26-Apr-2005</li>
 </ul>
@@ -229,8 +396,8 @@ EVT_KEY_UP and EVT_TEXT events from its embedded text control.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="id4">
-<h1><a name="id4">2.5.5.1</a></h1>
+<div class="section" id="id5">
+<h1><a name="id5">2.5.5.1</a></h1>
 <ul class="simple">
 <li>8-Apr-2005</li>
 </ul>
@@ -298,8 +465,8 @@ list of top-level windows that currently exist in the application.</p>
 folks.</p>
 <p>Added the ActiveGrid IDE as a sample application.</p>
 </div>
-<div class="section" id="id5">
-<h1><a name="id5">2.5.4.1</a></h1>
+<div class="section" id="id6">
+<h1><a name="id6">2.5.4.1</a></h1>
 <ul class="simple">
 <li>16-Mar-2005</li>
 </ul>
@@ -532,8 +699,8 @@ wx.Image.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="id6">
-<h1><a name="id6">2.5.3.1</a></h1>
+<div class="section" id="id7">
+<h1><a name="id7">2.5.3.1</a></h1>
 <ul class="simple">
 <li>9-Nov-2004</li>
 </ul>
@@ -689,8 +856,8 @@ it.</p>
 <p>wxPython on OSX can now be built in Unicode mode, can support multiple
 version installs, and comes with an uninstaller script.</p>
 </div>
-<div class="section" id="id7">
-<h1><a name="id7">2.5.2.8</a></h1>
+<div class="section" id="id8">
+<h1><a name="id8">2.5.2.8</a></h1>
 <ul class="simple">
 <li>27-Aug-2004</li>
 </ul>
@@ -721,8 +888,8 @@ wxCheckListBox.</li>
 </ul>
 </blockquote>
 </div>
-<div class="section" id="id8">
-<h1><a name="id8">2.5.2.7</a></h1>
+<div class="section" id="id9">
+<h1><a name="id9">2.5.2.7</a></h1>
 <ul class="simple">
 <li>14-Aug-2004</li>
 </ul>
@@ -905,8 +1072,8 @@ migrating away from using activexwrapper as well.  Please see the
 MigrationGuide for more details on using the new module.</p>
 <p>Floats are allowed again as function parameters where ints are expected.</p>
 </div>
-<div class="section" id="id10">
-<h1><a name="id10">2.4.2.4</a></h1>
+<div class="section" id="id11">
+<h1><a name="id11">2.4.2.4</a></h1>
 <ul class="simple">
 <li>1-Oct-2003</li>
 </ul>
@@ -918,8 +1085,8 @@ demonstrated in the Threads sample in the demo.</p>
 <p>Added wxMaskedNumCtrl.</p>
 <p>Added Chris Barker's FloatCanvas.</p>
 </div>
-<div class="section" id="id11">
-<h1><a name="id11">2.4.1.2</a></h1>
+<div class="section" id="id12">
+<h1><a name="id12">2.4.1.2</a></h1>
 <ul class="simple">
 <li>19-Jun-2003</li>
 </ul>
@@ -973,8 +1140,8 @@ release,) SetItemMinSize can now take a wxSize (or 2-tuple) parameter,
 and Spacers can be specified with a wxSize (or 2-tuple) parameter</p>
 <p>Added wxCursorFromBits.</p>
 </div>
-<div class="section" id="id12">
-<h1><a name="id12">2.4.0.7</a></h1>
+<div class="section" id="id13">
+<h1><a name="id13">2.4.0.7</a></h1>
 <ul class="simple">
 <li>24-Mar-2003</li>
 </ul>
@@ -1013,8 +1180,8 @@ think I am testing in the future...</p>
 <p>Updated pycolourchooser.</p>
 <p>Updated to 0.9b of PyCrust.</p>
 </div>
-<div class="section" id="id13">
-<h1><a name="id13">2.4.0.4</a></h1>
+<div class="section" id="id14">
+<h1><a name="id14">2.4.0.4</a></h1>
 <ul class="simple">
 <li>7-Mar-2003</li>
 </ul>
@@ -1074,8 +1241,8 @@ doesn't have a standard place for them.</p>
 <p>Fixed typemaps for wxGridCellCoordsArray.</p>
 <p>Updated to the 0.9a version of PyCrust</p>
 </div>
-<div class="section" id="id14">
-<h1><a name="id14">2.4.0.2</a></h1>
+<div class="section" id="id15">
+<h1><a name="id15">2.4.0.2</a></h1>
 <ul class="simple">
 <li>23-Jan-2003</li>
 </ul>
@@ -1083,8 +1250,8 @@ doesn't have a standard place for them.</p>
 <p>Added wxIntCtrl from Will Sadkin.</p>
 <p>Added wxPyColourChooser by Michael Gilfix.</p>
 </div>
-<div class="section" id="id15">
-<h1><a name="id15">2.4.0.1</a></h1>
+<div class="section" id="id16">
+<h1><a name="id16">2.4.0.1</a></h1>
 <ul class="simple">
 <li>10-Jan-2003</li>
 </ul>
@@ -1093,15 +1260,15 @@ enhancements.</p>
 <p>Added function wrappers for the common dialogs from Kevin Altis.  See
 wxPython/lib/dialogs.py for more details.</p>
 </div>
-<div class="section" id="id16">
-<h1><a name="id16">2.3.4.2</a></h1>
+<div class="section" id="id17">
+<h1><a name="id17">2.3.4.2</a></h1>
 <ul class="simple">
 <li>21-Dec-2002</li>
 </ul>
 <p>Various bug fixes.</p>
 </div>
-<div class="section" id="id17">
-<h1><a name="id17">2.3.4.1</a></h1>
+<div class="section" id="id18">
+<h1><a name="id18">2.3.4.1</a></h1>
 <ul class="simple">
 <li>18-Dec-2002</li>
 </ul>
@@ -1158,8 +1325,8 @@ windows when desired.</p>
 HTMLHelp viewer does.  Changed how the wxPythonDocs tarball is built
 and added a script to launch the doc viewer.</p>
 </div>
-<div class="section" id="id18">
-<h1><a name="id18">2.3.3.1</a></h1>
+<div class="section" id="id19">
+<h1><a name="id19">2.3.3.1</a></h1>
 <ul class="simple">
 <li>19-Sep-2002</li>
 </ul>
@@ -1304,8 +1471,8 @@ example.</p>
 <p>Added wxPython.lib.mixins.rubberband module from Robb Shecter.</p>
 <p>Added wxTimeCtrl from Will Sadkin.</p>
 </div>
-<div class="section" id="id19">
-<h1><a name="id19">2.3.2.1</a></h1>
+<div class="section" id="id20">
+<h1><a name="id20">2.3.2.1</a></h1>
 <ul class="simple">
 <li>20-Dec-2001</li>
 </ul>
@@ -1314,8 +1481,8 @@ well as the Python thread state.  This time it works on SMP machines
 without barfing and is also still compatible with Python debuggers.</p>
 <p>Added some patches from library contributors.</p>
 </div>
-<div class="section" id="id20">
-<h1><a name="id20">2.3.2</a></h1>
+<div class="section" id="id21">
+<h1><a name="id21">2.3.2</a></h1>
 <ul class="simple">
 <li>11-Dec-2001</li>
 </ul>
@@ -1400,8 +1567,8 @@ SendCommand method, but it is still quite powerful.  See
 wxPython/contrib/dllwidget and wxPython/demo/dllwidget for more
 details.</p>
 </div>
-<div class="section" id="id21">
-<h1><a name="id21">2.3.1</a></h1>
+<div class="section" id="id22">
+<h1><a name="id22">2.3.1</a></h1>
 <ul class="simple">
 <li>10-Jul-2001</li>
 </ul>
@@ -1417,8 +1584,8 @@ subclass wxXmlResourceHandler, etc...</p>
 <p>Fixed img2py to work correctly with Python 2.1.</p>
 <p>Added enhanced wxVTKRenderWindow by Prabhu Ramachandran</p>
 </div>
-<div class="section" id="id22">
-<h1><a name="id22">2.3.0</a></h1>
+<div class="section" id="id23">
+<h1><a name="id23">2.3.0</a></h1>
 <ul class="simple">
 <li>22-May-2001</li>
 </ul>
@@ -1517,16 +1684,16 @@ please send it to me for inclusion in this package.</p>
 by having smaller functional apps to play with.  They can be found in
 wxPython/samples.</p>
 </div>
-<div class="section" id="id23">
-<h1><a name="id23">2.2.7</a></h1>
+<div class="section" id="id24">
+<h1><a name="id24">2.2.7</a></h1>
 <ul class="simple">
 <li>19-Jun-2001</li>
 </ul>
 <p>No changes happened in the Python wrappers for this release, only
 changes and fixes in the wxWindows library.</p>
 </div>
-<div class="section" id="id24">
-<h1><a name="id24">2.2.5</a></h1>
+<div class="section" id="id25">
+<h1><a name="id25">2.2.5</a></h1>
 <ul class="simple">
 <li>30-Jan-2001</li>
 </ul>

@@ -52,6 +52,7 @@ _treeList = [
         'HyperLinkCtrl',
         'MultiSplitterWindow',
         'Throbber',
+        'GetMouseState',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -82,7 +83,6 @@ _treeList = [
     # dialogs from libraries
     ('More Dialogs', [
         'ImageBrowser',
-        'MultipleChoiceDialog',
         'ScrolledMessageDialog',
         ]),
 

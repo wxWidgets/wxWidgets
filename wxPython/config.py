@@ -138,8 +138,14 @@ FLAVOUR = ""       # Optional flavour string to be appended to VERSION
 EP_ADD_OPTS = 1    # When doing MULTIVERSION installs the wx port and
                    # ansi/unicode settings can optionally be added to the
                    # subdir path used in site-packages
-                   
-                   
+
+EP_FULL_VER = 0    # When doing MULTIVERSION installs the default is to
+                   # put only 2 or 3 (depending on stable/unstable) of
+                   # the version compnonents into the "extra path"
+                   # subdir of site-packages.  Setting this option to
+                   # 1 will cause the full 4 components of the version
+                   # number to be used instead.
+                                      
 WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
                    # it to pass an alternate version of wx-config or alternate
                    # flags, eg. as required by the .deb in-tree build.  By
@@ -254,7 +260,7 @@ for flag in [ 'BUILD_ACTIVEX', 'BUILD_ANIMATE', 'BUILD_DLLWIDGET',
               'BUILD_OGL', 'BUILD_STC',     
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'NO_HEADERS', 'BUILD_RENAMERS',
-             'FULL_DOCS', 'INSTALL_MULTIVERSION', 'EP_ADD_OPTS',
+             'FULL_DOCS', 'INSTALL_MULTIVERSION', 'EP_ADD_OPTS', 'EP_FULL_VER',
              'MONOLITHIC', 'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(flag) == 0:
@@ -290,13 +296,14 @@ UNDEF_NDEBUG=%d
 INSTALL_MULTIVERSION=%d
 FLAVOUR="%s"
 EP_ADD_OPTS=%d
+EP_FULL_VER=%d
 WX_CONFIG="%s"
 WXPORT="%s"
 MONOLITHIC=%d
 FINAL=%d
 HYBRID=%d
 """ % (UNICODE, UNDEF_NDEBUG, INSTALL_MULTIVERSION, FLAVOUR, EP_ADD_OPTS,
-       SYS_WX_CONFIG, WXPORT, MONOLITHIC, FINAL, HYBRID)
+       EP_FULL_VER, SYS_WX_CONFIG, WXPORT, MONOLITHIC, FINAL, HYBRID)
 
 try: 
     from build_options import *

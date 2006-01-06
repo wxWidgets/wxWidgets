@@ -95,7 +95,7 @@ class TestPanel(wx.Panel):
         ID_MENU_NO  = wx.NewId()
         menuPopUp.Append(ID_MENU_YES, "Yes, absolutely!")
         menuPopUp.Append(ID_MENU_NO,  "I've had better")
-        self.PopupMenu(menuPopUp, self._hyper3.GetPosition())
+        self.PopupMenu(menuPopUp)
         menuPopUp.Destroy()
         
 

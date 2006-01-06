@@ -225,6 +225,23 @@ wx.FontMapper.SetConfig is deprecated.  You should instead just set an
 application-wide config object with wx.Config.Set, which wx.FontMapper
 will use by default.
 
+Added wx.GetMouseState which returns the current state of the mouse.
+It returns an instance of a wx.MouseState object that contains the
+current position of the mouse pointer in screen coordinants, as well
+as boolean values indicating the up/down status of the mouse buttons
+and the modifier keys.
+
+Added wx.SizerItem.SetUserData
+
+A variety of updates to wx.lib.floatcanvas, including Added
+DrawObjects, including a ScaledTextBox, with auto-wrapping, etc, and
+Scaled and Unscaled Bitmap Objects.
+
+       WARNING: Changed all DrawObjects to take an (x,y) pair rather
+       than individual x,y parameters. Also changed rectangles and
+       ellipses to take (w,h) pair. This is an API change, but should
+       be easy to accommodate, all you need to do is add a parenthesis
+       pair:  (...x, y, ...) --->  (...(x,y), ...) 
 
 
 

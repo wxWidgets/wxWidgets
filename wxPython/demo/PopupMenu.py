@@ -97,7 +97,7 @@ class TestPanel(wx.Panel):
 
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
-        self.PopupMenu(menu, event.GetPosition())
+        self.PopupMenu(menu)
         menu.Destroy()
 
 

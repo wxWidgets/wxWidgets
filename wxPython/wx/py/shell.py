@@ -1087,8 +1087,8 @@ Platform: %s""" % \
                 ctindex = ctips.find ('(')
                 if ctindex != -1 and not self.CallTipActive():
                     #insert calltip, if current pos is '(', otherwise show it only
-                    self.autoCallTipShow(ctips[:ctindex + 1], \
-                        self.GetCharAt(currpos - 1) == ord('(') and self.GetCurrentPos() == self.GetTextLength(),\
+                    self.autoCallTipShow(ctips[:ctindex + 1], 
+                        self.GetCharAt(currpos - 1) == ord('(') and self.GetCurrentPos() == self.GetTextLength(),
                         True)
                 
 
@@ -1213,52 +1213,64 @@ Platform: %s""" % \
                     self.write(command)
             wx.TheClipboard.Close()
 
+
     def PasteAndRun(self):
         """Replace selection with clipboard contents, run commands."""
+        text = ''
         if wx.TheClipboard.Open():
-            ps1 = str(sys.ps1)
-            ps2 = str(sys.ps2)
             if wx.TheClipboard.IsSupported(wx.DataFormat(wx.DF_TEXT)):
                 data = wx.TextDataObject()
                 if wx.TheClipboard.GetData(data):
-                    endpos = self.GetTextLength()
-                    self.SetCurrentPos(endpos)
-                    startpos = self.promptPosEnd
-                    self.SetSelection(startpos, endpos)
-                    self.ReplaceSelection('')
                     text = data.GetText()
-                    text = text.lstrip()
-                    text = self.fixLineEndings(text)
-                    text = self.lstripPrompt(text)
-                    text = text.replace(os.linesep + ps1, '\n')
-                    text = text.replace(os.linesep + ps2, '\n')
-                    text = text.replace(os.linesep, '\n')
-                    lines = text.split('\n')
-                    commands = []
-                    command = ''
-                    for line in lines:
-                        if line.strip() == ps2.strip():
-                            # If we are pasting from something like a
-                            # web page that drops the trailing space
-                            # from the ps2 prompt of a blank line.
-                            line = ''
-                        if line.strip() != '' and line.lstrip() == line:
-                            # New command.
-                            if command:
-                                # Add the previous command to the list.
-                                commands.append(command)
-                            # Start a new command, which may be multiline.
-                            command = line
-                        else:
-                            # Multiline command. Add to the command.
-                            command += '\n'
-                            command += line
-                    commands.append(command)
-                    for command in commands:
-                        command = command.replace('\n', os.linesep + ps2)
-                        self.write(command)
-                        self.processLine()
             wx.TheClipboard.Close()
+        if text:
+            self.Execute(text)
+            
+
+    def Execute(self, text):
+        """Replace selection with text and run commands."""
+        ps1 = str(sys.ps1)
+        ps2 = str(sys.ps2)
+        endpos = self.GetTextLength()
+        self.SetCurrentPos(endpos)
+        startpos = self.promptPosEnd
+        self.SetSelection(startpos, endpos)
+        self.ReplaceSelection('')
+        text = text.lstrip()
+        text = self.fixLineEndings(text)
+        text = self.lstripPrompt(text)
+        text = text.replace(os.linesep + ps1, '\n')
+        text = text.replace(os.linesep + ps2, '\n')
+        text = text.replace(os.linesep, '\n')
+        lines = text.split('\n')
+        commands = []
+        command = ''
+        for line in lines:
+            if line.strip() == ps2.strip():
+                # If we are pasting from something like a
+                # web page that drops the trailing space
+                # from the ps2 prompt of a blank line.
+                line = ''
+            lstrip = line.lstrip()
+            if line.strip() != '' and lstrip == line and \
+                    lstrip[:4] not in ['else','elif'] and \
+                    lstrip[:6] != 'except':
+                # New command.
+                if command:
+                    # Add the previous command to the list.
+                    commands.append(command)
+                # Start a new command, which may be multiline.
+                command = line
+            else:
+                # Multiline command. Add to the command.
+                command += '\n'
+                command += line
+        commands.append(command)
+        for command in commands:
+            command = command.replace('\n', os.linesep + ps2)
+            self.write(command)
+            self.processLine()
+
 
     def wrap(self, wrap=True):
         """Sets whether text is word wrapped."""

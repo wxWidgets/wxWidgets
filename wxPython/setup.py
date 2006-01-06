@@ -727,7 +727,7 @@ else:
 
 
 if INSTALL_MULTIVERSION:
-    EXTRA_PATH = getExtraPath(addOpts=EP_ADD_OPTS)
+    EXTRA_PATH = getExtraPath(addOpts=EP_ADD_OPTS, shortVer=not EP_FULL_VER)
     open("src/wx.pth", "w").write(EXTRA_PATH)
     CLEANUP.append("src/wx.pth")
 else:

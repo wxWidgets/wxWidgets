@@ -261,6 +261,18 @@ isn't any.", "");
                 return Py_None;
             }
         }
+
+        DocStr(SetUserData,
+               "Associate a Python object with this sizer item.", "");
+        void SetUserData(PyObject* userData) {
+            wxPyUserData* data = NULL;
+            if ( userData ) {
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
+                data = new wxPyUserData(userData);
+                wxPyEndBlockThreads(blocked);
+            }
+            self->SetUserData(data);
+        }
     }
 };
 
