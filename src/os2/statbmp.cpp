@@ -24,7 +24,7 @@
 #include <stdio.h>
 
 // ---------------------------------------------------------------------------
-// macors
+// macros
 // ---------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
@@ -121,7 +121,10 @@ bool wxStaticBitmap::Create( wxWindow*         pParent,
     }
     wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create static bitmap") );
     m_pImage = ConvertImage(rBitmap);
-    m_pImage->SetHandle((WXHWND)::WinSendMsg(m_hWnd, SM_QUERYHANDLE, (MPARAM)0, (MPARAM)0));
+    ::WinSendMsg(   m_hWnd,
+                    SM_SETHANDLE,
+                    MPFROMHWND(rBitmap.GetHandle()),
+                    (MPARAM)0);
 
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
@@ -193,13 +196,15 @@ void wxStaticBitmap::SetImage(
 
     GetPosition(&nX, &nY);
     GetSize(&nWidth, &nHeight);
+    // Convert to OS/2 coordinate system
+    nY = wxWindow::GetOS2ParentHeight(GetParent()) - nY - nHeight;
 
     RECTL                           vRect;
 
     vRect.xLeft   = nX;
-    vRect.yTop    = nY;
+    vRect.yTop    = nY + nHeight;
     vRect.xRight  = nX + nWidth;
-    vRect.yBottom = nY + nHeight;
+    vRect.yBottom = nY;
 
     ::WinInvalidateRect(GetHwndOf(GetParent()), &vRect, TRUE);
 }
