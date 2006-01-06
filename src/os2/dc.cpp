@@ -1268,7 +1268,7 @@ void wxDC::DoDrawIcon(
     //
     // Need to copy back into a bitmap.  ::WinDrawPointer uses device coords
     // and I don't feel like figuring those out for scrollable windows so
-    // just convert to a bitmap then let the DoDrawBitmap routing display it
+    // just convert to a bitmap then let the DoDrawBitmap routine display it
     //
     if (rIcon.IsXpm())
     {

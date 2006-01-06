@@ -65,24 +65,20 @@ bool wxStaticBox::Create(
     SetBackgroundColour(GetParent()->GetBackgroundColour());
 
     wxColour                        vColour;
-
     vColour.Set(wxString(wxT("BLACK")));
-
     LONG                            lColor = (LONG)vColour.GetPixel();
-
     ::WinSetPresParam( m_hWnd
                       ,PP_FOREGROUNDCOLOR
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    lColor = (LONG)m_backgroundColour.GetPixel();
 
+    lColor = (LONG)m_backgroundColour.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_BACKGROUNDCOLOR
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    SetFont(*wxSMALL_FONT);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x
