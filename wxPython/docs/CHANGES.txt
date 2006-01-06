@@ -208,6 +208,9 @@ current position of the mouse pointer in screen coordinants, as well
 as boolean values indicating the up/down status of the mouse buttons
 and the modifier keys.
 
+Added wx.SizerItem.SetUserData
+
+
 
 
 
