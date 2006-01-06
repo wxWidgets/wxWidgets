@@ -367,11 +367,12 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     if (parent)
         parent->AddChild(this);
 
+    MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
 
-    
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     wxModelessWindows.Append(this);
+
     return false;
 }
 
@@ -387,29 +388,35 @@ void wxMDIChildFrame::SetMenuBar(wxMenuBar *menu_bar)
 
 void wxMDIChildFrame::MacActivate(long timestamp, bool activating)
 {
-    wxLogTrace(TRACE_MDI, wxT("MDI child=%p  MacActivate(0x%08lx,%s)"),this,timestamp,activating?wxT("ACTIV"):wxT("deact"));
+    wxLogTrace(TRACE_MDI, wxT("MDI child=%p  MacActivate(0x%08lx,%s)"),this, timestamp, activating ? wxT("ACTIV") : wxT("deact"));
+
     wxMDIParentFrame *mdiparent = wxDynamicCast(m_parent, wxMDIParentFrame);
     wxASSERT(mdiparent);
-    if(activating)
+
+    if (activating)
     {
-        if(s_macDeactivateWindow == m_parent)
+        if (s_macDeactivateWindow == m_parent)
         {
             wxLogTrace(TRACE_MDI, wxT("parent had been scheduled for deactivation, rehighlighting"));
+
             UMAHighlightAndActivateWindow((WindowRef)s_macDeactivateWindow->MacGetWindowRef(), true);
-            wxLogTrace(TRACE_MDI, wxT("done highliting parent"));
+
+            wxLogTrace(TRACE_MDI, wxT("finished highliting parent"));
+
             s_macDeactivateWindow = NULL;
         }
-        else if((mdiparent->m_currentChild==this) || !s_macDeactivateWindow)
-            mdiparent->wxFrame::MacActivate(timestamp,activating);
-        
-        if(mdiparent->m_currentChild && mdiparent->m_currentChild!=this)
-            mdiparent->m_currentChild->wxFrame::MacActivate(timestamp,false);
+        else if ((mdiparent->m_currentChild == this) || !s_macDeactivateWindow)
+            mdiparent->wxFrame::MacActivate(timestamp, activating);
+
+        if (mdiparent->m_currentChild && mdiparent->m_currentChild != this)
+            mdiparent->m_currentChild->wxFrame::MacActivate(timestamp, false);
         mdiparent->m_currentChild = this;
 
-        if(s_macDeactivateWindow==this)
+        if (s_macDeactivateWindow == this)
         {
-            wxLogTrace(TRACE_MDI, wxT("Avoided deactivation/activation of this=%p"),this);
-            s_macDeactivateWindow=NULL;
+            wxLogTrace(TRACE_MDI, wxT("Avoided deactivation/activation of this=%p"), this);
+
+            s_macDeactivateWindow = NULL;
         }
         else
             wxFrame::MacActivate(timestamp, activating);
@@ -417,18 +424,19 @@ void wxMDIChildFrame::MacActivate(long timestamp, bool activating)
     else
     {
         // We were scheduled for deactivation, and now we do it.
-        if(s_macDeactivateWindow==this)
+        if (s_macDeactivateWindow == this)
         {
             s_macDeactivateWindow = NULL;
-            wxFrame::MacActivate(timestamp,activating);
-            if(mdiparent->m_currentChild==this)
-                mdiparent->wxFrame::MacActivate(timestamp,activating);
+            wxFrame::MacActivate(timestamp, activating);
+            if (mdiparent->m_currentChild == this)
+                mdiparent->wxFrame::MacActivate(timestamp, activating);
         }
         else // schedule ourselves for deactivation
         {
-            if(s_macDeactivateWindow)
-                wxLogTrace(TRACE_MDI, wxT("window=%p SHOULD have been deactivated, oh well!"),s_macDeactivateWindow);
+            if (s_macDeactivateWindow)
+                wxLogTrace(TRACE_MDI, wxT("window=%p SHOULD have been deactivated, oh well!"), s_macDeactivateWindow);
             wxLogTrace(TRACE_MDI, wxT("Scheduling delayed deactivation"));
+
             s_macDeactivateWindow = this;
         }
     }
@@ -464,10 +472,11 @@ wxMDIClientWindow::~wxMDIClientWindow()
 
 bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 {
-    if ( !wxWindow::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, style))
+    if ( !wxWindow::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, style) )
         return false;
-    
+
     wxModelessWindows.Append(this);
+
     return true;
 }
 
