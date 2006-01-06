@@ -389,8 +389,28 @@
     #define wxMbstowcs mbstowcs
     #define wxWcstombs wcstombs
 #else /* !TCHAR-aware compilers */
+    /*
+        There are 2 unrelated problems with these functions under Mac:
+            a) Metrowerks MSL CRT implements them strictly in C99 sense and
+               doesn't support (very common) extension of allowing to call
+               mbstowcs(NULL, ...) which makes it pretty useless as you can't
+               know the size of the needed buffer
+            b) OS X <= 10.2 declares and even defined these functions but
+               doesn't really implement them -- they always return an error
 
-    #if !defined(__MWERKS__) && defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
+        So use our own replacements in both cases.
+     */
+    #if defined(__MWERKS__)
+        #define wxNEED_WX_MBSTOWCS
+    #endif
+
+    #ifdef __DARWIN__
+        #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2
+            #define wxNEED_WX_MBSTOWCS
+        #endif
+    #endif
+
+    #ifdef wxNEED_WX_MBSTOWCS
         /* even though they are defined and "implemented", they are bad and just
            stubs so we need our own - we need these even in ANSI builds!! */
         WXDLLIMPEXP_BASE size_t wxMbstowcs (wchar_t *, const char *, size_t);
