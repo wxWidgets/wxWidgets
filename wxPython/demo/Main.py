@@ -53,6 +53,7 @@ _treeList = [
         'MultiSplitterWindow',
         'Throbber',
         'GetMouseState',
+        'FloatCanvas',
         ]),
 
     # managed windows == things with a (optional) caption you can close
