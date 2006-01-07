@@ -705,8 +705,8 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
     }
     else // hidden
     {
-        // we can't maximize the hidden frame because it shows it as well, so
-        // just remember that we should do it later in this case
+        // we can't maximize the hidden frame because it shows it as well,
+        // so just remember that we should do it later in this case
         m_maximizeOnShow = maximize;
 
         // after calling Maximize() the client code expects to get the frame
@@ -715,7 +715,7 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
         // it's shown, so return our size as it will be then in this case
         if ( maximize )
         {
-            // unfortunatrly we don't know which display we're on yet so we
+            // unfortunately we don't know which display we're on yet so we
             // have to use the default one
             SetSize(wxGetClientDisplayRect().GetSize());
         }

@@ -527,7 +527,7 @@ size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
             {
                 // BASE64 encode string
                 unsigned int lsb, d, l;
-                for (d = 0, l = 0;; psz++)
+                for (d = 0, l = 0; /*nothing*/; psz++)
                 {
                     for (lsb = 0; lsb < 2; lsb ++)
                     {
