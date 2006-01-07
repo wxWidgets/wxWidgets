@@ -199,8 +199,16 @@ class MimeTypesDemoPanel(wx.Panel):
             mtypes = wx.TheMimeTypesManager.EnumAllFileTypes()
         except wx.PyAssertionError:
             mtypes = []
+        
+        # TODO: On wxMac, EnumAllFileTypes produces tons of dupes, which
+        # causes quirky behavior because the list control doesn't expect
+        # dupes, and simply wastes space. So remove the dupes for now,
+        # then remove this hack when we fix EnumAllFileTypes on Mac.
+        mimes = []
         for mt in mtypes:
-            self.mimelist.Append(mt)
+            if mt not in mimes:
+                self.mimelist.Append(mt)
+                mimes.append(mt)
 
         # Do a lookup of *.wav for a starting position
         self.OnLookup()
