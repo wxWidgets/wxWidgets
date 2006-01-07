@@ -14,16 +14,14 @@
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
-
-// Colour
-
 #include "wx/mac/private.h"
 
-static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green ) ;
+IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
+
+static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green );
 static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green )
 {
-    RGBColor* col = (RGBColor*) color ;
+    RGBColor* col = (RGBColor*) color;
     col->red = (red << 8) + red;
     col->blue = (blue << 8) + blue;
     col->green = (green << 8) + green;
@@ -36,7 +34,7 @@ void wxColour::Init()
     m_blue =
     m_green = 0;
 
-    wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
+    wxComposeRGBColor( &m_pixel, m_red, m_blue, m_green );
 }
 
 wxColour::wxColour (const wxColour& col)
@@ -47,7 +45,7 @@ wxColour::wxColour (const wxColour& col)
     m_blue = col.m_blue;
     m_isInit = col.m_isInit;
 
-    memcpy( &m_pixel , &col.m_pixel , 6 ) ;
+    memcpy( &m_pixel, &col.m_pixel, 6 );
 }
 
 wxColour& wxColour::operator =(const wxColour& col)
@@ -57,7 +55,7 @@ wxColour& wxColour::operator =(const wxColour& col)
     m_blue = col.m_blue;
     m_isInit = col.m_isInit;
 
-    memcpy( &m_pixel , &col.m_pixel , 6 ) ;
+    memcpy( &m_pixel, &col.m_pixel, 6 );
 
     return *this;
 }
@@ -66,7 +64,7 @@ void wxColour::InitFromName(const wxString& name)
 {
     if ( wxTheColourDatabase )
     {
-        wxColour col = wxTheColourDatabase->Find(name);
+        wxColour col = wxTheColourDatabase->Find( name );
         if ( col.Ok() )
         {
             *this = col;
@@ -89,14 +87,14 @@ void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
     m_blue = b;
     m_isInit = true;
 
-    wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
+    wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green );
 }
 
 void wxColour::Set( const WXCOLORREF* color )
 {
-    RGBColor* col = (RGBColor*) color ;
-    memcpy( &m_pixel , color , 6 ) ;
-    m_red = col->red>>8 ;
-    m_blue = col->blue>>8 ;
-    m_green = col->green>>8 ;
+    RGBColor* col = (RGBColor*) color;
+    memcpy( &m_pixel, color, 6 );
+    m_red = col->red >> 8;
+    m_blue = col->blue >> 8;
+    m_green = col->green >> 8;
 }

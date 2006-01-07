@@ -1446,14 +1446,14 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
         }
 
         SetSize( x , y , w, h ) ;
-        if( data->m_wasResizable )
+        if ( data->m_wasResizable )
             MacChangeWindowAttributes( kWindowNoAttributes , kWindowResizableAttribute ) ;
     }
     else
     {
         ShowMenuBar() ;
         FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
-        if( data->m_wasResizable )
+        if ( data->m_wasResizable )
             MacChangeWindowAttributes( kWindowResizableAttribute ,  kWindowNoAttributes ) ;
         SetPosition( data->m_position ) ;
         SetSize( data->m_size ) ;
