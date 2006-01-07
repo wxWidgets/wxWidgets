@@ -190,8 +190,8 @@ bool wxBrush::RealizeResource()
 {
     return true;
 }
-unsigned long wxBrush::MacGetThemeBackground( WXRECTPTR extent) const
-unsigned long wxBrush::MacGetThemeBackground( WXRECTPTR extent)  const
+
+unsigned long wxBrush::MacGetThemeBackground(WXRECTPTR extent) const
 {
     if ( M_BRUSHDATA && M_BRUSHDATA->m_macBrushKind == kwxMacBrushThemeBackground )
     {
