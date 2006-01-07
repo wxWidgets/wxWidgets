@@ -1374,12 +1374,7 @@ void wxMDIChildFrame::OnIdle(wxIdleEvent& event)
 static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
 {
     ::SendMessage(GetWinHwnd(win), WM_MDISETMENU,
-#ifdef __WIN32__
-                  (WPARAM)hmenuFrame, (LPARAM)hmenuWindow
-#else
-                  0, MAKELPARAM(hmenuFrame, hmenuWindow)
-#endif
-                 );
+                  (WPARAM)hmenuFrame, (LPARAM)hmenuWindow);
 
     // update menu bar of the parent window
     wxWindow *parent = win->GetParent();
