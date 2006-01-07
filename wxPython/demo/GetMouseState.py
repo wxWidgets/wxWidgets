@@ -3,6 +3,18 @@ import wx
 
 #----------------------------------------------------------------------
 
+class StaticText(wx.StaticText):
+    """
+    A StaticText that only updates the label if it has changed, to
+    help reduce potential flicker since these controls would be
+    updated very frequently otherwise.
+    """
+    def SetLabel(self, label):
+        if label <> self.GetLabel():
+            wx.StaticText.SetLabel(self, label)
+
+#----------------------------------------------------------------------
+
 class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
@@ -23,57 +35,57 @@ class TestPanel(wx.Panel):
         fgs = wx.FlexGridSizer(cols=2, hgap=5, vgap=10)
         row.Add(fgs, 0, wx.ALL, 30)
 
-        lbl = wx.StaticText(self, -1, "X pos:")
-        self.x = wx.StaticText(self, -1, "00000")
+        lbl = StaticText(self, -1, "X pos:")
+        self.x = StaticText(self, -1, "00000")
         fgs.Add(lbl)
         fgs.Add(self.x)
 
-        lbl = wx.StaticText(self, -1, "Y pos:")
-        self.y = wx.StaticText(self, -1, "00000")
+        lbl = StaticText(self, -1, "Y pos:")
+        self.y = StaticText(self, -1, "00000")
         fgs.Add(lbl)
         fgs.Add(self.y)
 
 
-        lbl = wx.StaticText(self, -1, "Left down:")
-        self.lft = wx.StaticText(self, -1, "False")
+        lbl = StaticText(self, -1, "Left down:")
+        self.lft = StaticText(self, -1, "False")
         fgs.Add(lbl)
         fgs.Add(self.lft)
 
-        lbl = wx.StaticText(self, -1, "Middle Down:")
-        self.mid = wx.StaticText(self, -1, "False")
+        lbl = StaticText(self, -1, "Middle Down:")
+        self.mid = StaticText(self, -1, "False")
         fgs.Add(lbl)
         fgs.Add(self.mid)
 
-        lbl = wx.StaticText(self, -1, "Right down:")
-        self.rgt = wx.StaticText(self, -1, "False")
+        lbl = StaticText(self, -1, "Right down:")
+        self.rgt = StaticText(self, -1, "False")
         fgs.Add(lbl)
         fgs.Add(self.rgt)
 
         fgs = wx.FlexGridSizer(cols=2, hgap=5, vgap=10)
         row.Add(fgs, 0, wx.ALL, 30)
 
-        lbl = wx.StaticText(self, -1, "Control down:")
-        self.ctrl = wx.StaticText(self, -1, "False")
+        lbl = StaticText(self, -1, "Control down:")
+        self.ctrl = StaticText(self, -1, "False")
         fgs.Add(lbl)
         fgs.Add(self.ctrl)
 
-        lbl = wx.StaticText(self, -1, "Shift down:")
-        self.shft = wx.StaticText(self, -1, "False")
+        lbl = StaticText(self, -1, "Shift down:")
+        self.shft = StaticText(self, -1, "False")
         fgs.Add(lbl)
         fgs.Add(self.shft)
 
-        lbl = wx.StaticText(self, -1, "Alt down:")
-        self.alt = wx.StaticText(self, -1, "False")
+        lbl = StaticText(self, -1, "Alt down:")
+        self.alt = StaticText(self, -1, "False")
         fgs.Add(lbl)
         fgs.Add(self.alt)
 
-        lbl = wx.StaticText(self, -1, "Meta down:")
-        self.meta = wx.StaticText(self, -1, "False")
+        lbl = StaticText(self, -1, "Meta down:")
+        self.meta = StaticText(self, -1, "False")
         fgs.Add(lbl)
         fgs.Add(self.meta)
 
-        lbl = wx.StaticText(self, -1, "Cmd down:")
-        self.cmd = wx.StaticText(self, -1, "False")
+        lbl = StaticText(self, -1, "Cmd down:")
+        self.cmd = StaticText(self, -1, "False")
         fgs.Add(lbl)
         fgs.Add(self.cmd)
         
@@ -114,7 +126,7 @@ overview = """<html><body>
 The mouse and modifier state can be polled with the wx.GetMouseState
 function.  It returns an instance of a wx.MouseState object that
 contains the current position of the mouse pointer in screen
-coordinants, as well as boolean values indicating the up/down status
+coordinates, as well as boolean values indicating the up/down status
 of the mouse buttons and the modifier keys.
 
 
