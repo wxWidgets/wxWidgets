@@ -807,6 +807,11 @@ bool wxMDIChildFrame::Show(bool show)
     if ( show )
         ::BringWindowToTop(GetHwnd());
 
+    // we need to refresh the MDI frame window menu to include (or exclude if
+    // we've been hidden) this frame
+    wxMDIParentFrame *parent = (wxMDIParentFrame *)GetParent();
+    MDISetMenu(parent->GetClientWindow(), NULL, NULL);
+
     return true;
 }
 
@@ -1373,8 +1378,16 @@ void wxMDIChildFrame::OnIdle(wxIdleEvent& event)
 
 static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
 {
-    ::SendMessage(GetWinHwnd(win), WM_MDISETMENU,
-                  (WPARAM)hmenuFrame, (LPARAM)hmenuWindow);
+    if ( hmenuFrame || hmenuWindow )
+    {
+        if ( !::SendMessage(GetWinHwnd(win),
+                            WM_MDISETMENU,
+                            (WPARAM)hmenuFrame,
+                            (LPARAM)hmenuWindow) )
+        {
+            wxLogLastError(_T("SendMessage(WM_MDISETMENU)"));
+        }
+    }
 
     // update menu bar of the parent window
     wxWindow *parent = win->GetParent();
