@@ -42,7 +42,7 @@ class TestPanel(wx.Panel):
     def GetPyExecutable(self):
         if 'wxMac' in wx.PlatformInfo:
             # sys.executable will be wrong if running the demo from
-            # an app bundle.  But the bundle's always using a system
+            # an app bundle.  But the bundle is always using a system
             # framework so just hardcode the path to it.
             if sys.version[:3] == "2.4":
                 return '/usr/local/bin/pythonw', os.spawnl
