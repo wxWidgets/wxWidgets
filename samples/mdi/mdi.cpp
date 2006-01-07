@@ -234,6 +234,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     subframe->SetIcon(wxIcon( mondrian_xpm ));
 #endif
 
+#if wxUSE_MENUS
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
@@ -260,6 +261,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 
     // Associate the menu bar with the frame
     subframe->SetMenuBar(menu_bar);
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     subframe->CreateStatusBar();
