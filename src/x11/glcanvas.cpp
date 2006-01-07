@@ -128,7 +128,7 @@ void wxGLContext::SetCurrent()
     { 
         Display* display = (Display*) wxGetDisplay();
         glXMakeCurrent(display, (Window) wxGetClientAreaWindow(m_window), 
-                       m_glContext );;
+                       m_glContext );
     }
 }
 

@@ -147,7 +147,7 @@ void wxPen::SetStipple( wxBitmap *stipple )
 {
     AllocExclusive();
 
-    M_PENDATA->m_stipple = *stipple;;
+    M_PENDATA->m_stipple = *stipple;
 }
 
 void wxPen::SetStyle( int style )
