@@ -139,6 +139,7 @@ WXDLLEXPORT_DATA(const wxChar *) wxTreeCtrlNameStr = wxT("treeCtrl");
 WXDLLEXPORT_DATA(const wxChar *) wxEnhDialogNameStr = wxT("Shell");
 WXDLLEXPORT_DATA(const wxChar *) wxToolBarNameStr = wxT("toolbar");
 WXDLLEXPORT_DATA(const wxChar *) wxVirtListBoxNameStr = wxT("virtListBox");
+WXDLLEXPORT_DATA(const wxChar *) wxDataViewCtrlNameStr = wxT("dataviewCtrl");
 
 // Default messages
 WXDLLEXPORT_DATA(const wxChar *) wxGetTextFromUserPromptStr = wxT("Input Text");
