@@ -454,6 +454,13 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <if cond="MONOLITHIC=='0'">$(EXTRALIBS_GUI)</if>
     </set>
 
+    <if cond="TOOLKIT=='MGL' and FORMAT=='watcom'">
+        <set var="MGLLIBPATH">$(DOLLAR)(%SCITECH)/lib/$(BUILD)/dos32/ow10</set>
+        <set var="MGLPMLIBPATH">
+            <if cond="DOS32=='DOS4GW'">dos4gw</if>
+        </set>
+    </if>
+
     <template id="wx" template="common_settings">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
@@ -467,6 +474,10 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
+        <if cond="TOOLKIT=='MGL' and FORMAT=='watcom'">
+            <lib-path>$(MGLLIBPATH)</lib-path>
+            <lib-path>$(MGLLIBPATH)/$(MGLPMLIBPATH)</lib-path>
+        </if>
         <warnings>max</warnings>
         <cppflags-watcom>
             -wcd=549 <!-- 'sizeof' operand contains compiler generated information -->
@@ -497,6 +508,13 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
             <if cond="FORMAT=='watcom'">
                 <sys-lib>upm32</sys-lib>
             </if>
+        </if>
+
+        <!-- system libraries on mgl: -->
+        <if cond="FORMAT=='watcom' and TOOLKIT=='MGL'">
+            <sys-lib>mgl</sys-lib>
+            <sys-lib>mglcpp</sys-lib>
+            <sys-lib>pm</sys-lib>
         </if>
 
         <!-- system libraries on windows: -->
@@ -635,6 +653,9 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     </template>
 
     <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'">
+        <if cond="FORMAT=='watcom' and TOOLKIT=='MGL'">
+            <include>$(DOLLAR)(%SCITECH)/include</include>
+        </if>
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>
         <include>$(INC_PNG)</include>

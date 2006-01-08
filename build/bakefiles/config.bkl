@@ -352,7 +352,7 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRALIBS_ODBC"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
-            <if cond="COMPILER=='wat'">opengl32.lib glu32.lib</if>
+            <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">opengl32.lib glu32.lib</if>
             <if cond="COMPILER in ['vc','evc']">opengl32.lib glu32.lib</if>
             <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
         </set>
@@ -455,6 +455,7 @@ Set the version of your Mingw installation here.
     <!-- Need for wxUniv within wxMGL: -->
     <if cond="FORMAT!='autoconf' and TOOLKIT=='MGL'">
         <set var="WXUNIV">1</set>
+        <set var="USE_THREADS">0</set>
     </if>
 
 </makefile>
