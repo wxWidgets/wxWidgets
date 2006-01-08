@@ -68,6 +68,7 @@ wxMSW:
 - New TARGET_CPU=amd64 (or 'ia64') option for the makefile.vc files which
   puts 64-bit builds in their own directory and adds /machine:amd64 or ia64
   to the link command.
+- wxStatusBar::GetFieldRect now returns correct values under XP.
 
 wxGTK:
 
