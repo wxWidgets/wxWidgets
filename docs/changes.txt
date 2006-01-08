@@ -96,7 +96,7 @@ wxMac:
 - Corrected wxExecute.
 - Now makes use of full printer resolution.
 - Corrected CGImage handling in wxBitmap.
-- Now uses simple hide/how transition for top-level windows.
+- Now uses simple hide/show transition for top-level windows.
 - Uses reasonable temporary path for wxFileName::CreateTempFileName.
 - Added support for default key handling (escape, enter, command-period) even
   if there is no control on the frame or dialog that has the focus.
