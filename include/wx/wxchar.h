@@ -400,7 +400,7 @@
 
         So use our own replacements in both cases.
      */
-    #if defined(__MWERKS__)
+    #if defined(__MWERKS__) && defined(__MSL__)
         #define wxNEED_WX_MBSTOWCS
     #endif
 
