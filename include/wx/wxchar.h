@@ -141,9 +141,17 @@
     #define wxHAVE_TCHAR_SUPPORT
 #endif /* compilers with (good) TCHAR support */
 
-#ifdef __MWERKS__
-    #define HAVE_WPRINTF
-#endif
+#if defined(__MWERKS__)
+    /* Metrowerks only has wide char support for OS X >= 10.3 */
+    #if !defined(__DARWIN__) || \
+         (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3)
+        #define wxHAVE_MWERKS_UNICODE
+    #endif
+
+    #ifdef wxHAVE_MWERKS_UNICODE
+        #define HAVE_WPRINTF
+    #endif
+#endif /* __MWERKS__ */
 
 #ifdef wxHAVE_TCHAR_SUPPORT
     /* get TCHAR definition if we've got it */
@@ -839,14 +847,14 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
  */
 #ifndef wxVsnprintf_
     #if wxUSE_UNICODE
-        #if defined(__MWERKS__)
+        #ifdef wxHAVE_MWERKS_UNICODE
             #define HAVE_WCSRTOMBS 1
             #define HAVE_VSWPRINTF 1
-        #endif
+        #endif /* Metrowerks with Unicode support */
         #if defined(__WATCOMC__)
             #define wxVsnprintf_    _vsnwprintf
             #define wxSnprintf_     _snwprintf
-        #endif
+        #endif /* Watcom */
         #if defined(HAVE__VSNWPRINTF)
             #define wxVsnprintf_    _vsnwprintf
         /* MinGW?MSVCRT has the wrong vswprintf */
