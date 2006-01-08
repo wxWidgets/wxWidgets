@@ -1944,7 +1944,15 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
     struct in_addr *array_addr;
 
     /* It is a real name, we solve it */
-    if ((he = gethostbyname(hostname)) == NULL)
+    struct hostent h;
+#if defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+    struct hostent_data buffer;
+#else
+    char buffer[1024];
+#endif
+    int err;
+    he = wxGethostbyname_r(hostname, &h, (void*)&buffer, sizeof(buffer), &err);
+    if (he == NULL)
     {
       /* Reset to invalid address */
       addr->s_addr = INADDR_NONE;
@@ -1994,11 +2002,14 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
     return GSOCK_INVPORT;
   }
 
-#if defined(__WXPM__) && defined(__EMX__)
-  se = getservbyname(port, (char*)protocol);
+#if defined(HAVE_FUNC_GETSERVBYNAME_R_4)
+    struct servent_data buffer;
 #else
-  se = getservbyname(port, protocol);
+  char buffer[1024];
 #endif
+  struct servent serv;
+  se = wxGetservbyname_r(port, protocol, &serv,
+			 (void*)&buffer, sizeof(buffer));
   if (!se)
   {
     /* the cast to int suppresses compiler warnings about subscript having the
@@ -2048,7 +2059,15 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t
   addr = (struct sockaddr_in *)address->m_addr;
   addr_buf = (char *)&(addr->sin_addr);
 
-  he = gethostbyaddr(addr_buf, sizeof(addr->sin_addr), AF_INET);
+  struct hostent temphost;
+#if defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+  struct hostent_data buffer;
+#else
+  char buffer[1024];
+#endif
+  int err;
+  he = wxGethostbyaddr_r(addr_buf, sizeof(addr->sin_addr), AF_INET, &temphost,
+			 (void*)&buffer, sizeof(buffer), &err);
   if (he == NULL)
   {
     address->m_error = GSOCK_NOHOST;
