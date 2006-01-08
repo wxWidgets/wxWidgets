@@ -176,9 +176,9 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 pSubMenu->MacBeforeDisplay( true ) ;
 
             if ( pos == (size_t)-1 )
-                UMAAppendSubMenuItem(MAC_WXHMENU(m_hMenu), pItem->GetText(), wxFont::GetDefaultEncoding(), pSubMenu->m_macMenuId);
+                UMAAppendSubMenuItem(MAC_WXHMENU(m_hMenu), wxStripMenuCodes(pItem->GetText()), wxFont::GetDefaultEncoding(), pSubMenu->m_macMenuId);
             else
-                UMAInsertSubMenuItem(MAC_WXHMENU(m_hMenu), pItem->GetText(), wxFont::GetDefaultEncoding(), pos, pSubMenu->m_macMenuId);
+                UMAInsertSubMenuItem(MAC_WXHMENU(m_hMenu), wxStripMenuCodes(pItem->GetText()), wxFont::GetDefaultEncoding(), pos, pSubMenu->m_macMenuId);
 
             pItem->UpdateItemBitmap() ;
             pItem->UpdateItemStatus() ;
@@ -705,7 +705,7 @@ void wxMenuBar::MacInstallMenuBar()
                         {
                             if ( mh )
                             {
-                                UMAAppendMenuItem(mh, item->GetText() , wxFont::GetDefaultEncoding(), entry);
+                                UMAAppendMenuItem(mh, wxStripMenuCodes(item->GetText()) , wxFont::GetDefaultEncoding(), entry);
                                 SetMenuItemCommandID( mh , CountMenuItems(mh) , wxIdToMacCommand ( item->GetId() ) ) ;
                                 SetMenuItemRefCon( mh , CountMenuItems(mh) , (UInt32)item ) ;
                             }
@@ -731,7 +731,7 @@ void wxMenuBar::MacInstallMenuBar()
         if ( aboutMenuItem )
         {
             wxAcceleratorEntry* entry = wxGetAccelFromString( aboutMenuItem->GetText() ) ;
-            UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , aboutMenuItem->GetText() , wxFont::GetDefaultEncoding() );
+            UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , wxStripMenuCodes ( aboutMenuItem->GetText() ) , wxFont::GetDefaultEncoding() );
             UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 , true );
             SetMenuItemCommandID( GetMenuHandle( kwxMacAppleMenuId ) , 1 , kHICommandAbout ) ;
             SetMenuItemRefCon(GetMenuHandle( kwxMacAppleMenuId ) , 1 , (UInt32)aboutMenuItem ) ;
