@@ -40,6 +40,10 @@
     #include <commctrl.h>
 #endif
 
+#if wxUSE_UXTHEME
+    #include "wx/msw/uxtheme.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -271,6 +275,23 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
     {
         wxLogLastError(wxT("SendMessage(SB_GETRECT)"));
     }
+
+#if wxUSE_UXTHEME
+    wxUxThemeHandle theme((wxStatusBar95 *)this, L"Status"); // const_cast
+    if ( theme )
+    {
+        // by default Windows has a 2 pixel border to the right of the left
+        // divider (or it could be a bug) but it looks wrong so remove it
+        if ( i != 0 )
+        {
+            r.left -= 2;
+        }
+
+        wxUxThemeEngine::Get()->GetThemeBackgroundContentRect(theme, NULL,
+                                                              1 /* SP_PANE */, 0,
+                                                              &r, &r);
+    }
+#endif
 
     wxCopyRECTToRect(r, rect);
 
