@@ -335,6 +335,8 @@
 
 #define wxUSE_GRID         0
 
+#define wxUSE_DATAVIEWCTRL   0
+
 #define wxUSE_MINIFRAME 0
 
 
