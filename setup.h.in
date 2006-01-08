@@ -597,6 +597,10 @@
  */
 #define wxUSE_LIBGNOMEPRINT 0
 /*
+ * Use the Hildon framework
+ */
+#define wxUSE_LIBHILDON 0
+/*
  * Use iODBC
  */
 #define wxUSE_BUILTIN_IODBC 0

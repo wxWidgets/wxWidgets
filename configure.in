@@ -395,6 +395,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBMSPACK=no
   DEFAULT_wxUSE_LIBSDL=no
   DEFAULT_wxUSE_LIBGNOMEPRINT=no
+  DEFAULT_wxUSE_LIBHILDON=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -593,6 +594,7 @@ else
   DEFAULT_wxUSE_LIBMSPACK=yes
   DEFAULT_wxUSE_LIBSDL=no
   DEFAULT_wxUSE_LIBGNOMEPRINT=no
+  DEFAULT_wxUSE_LIBHILDON=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -816,6 +818,7 @@ WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file forma
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
 WX_ARG_WITH(gnomeprint,    [  --with-gnomeprint       use GNOME print for printing under Unix], wxUSE_LIBGNOMEPRINT)
+WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770], wxUSE_LIBHILDON)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -5378,6 +5381,22 @@ dnl                     EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
     fi
 fi
 
+if test "$WXGTK20" = 1; then
+    if test "$wxUSE_LIBHILDON" = "yes" ; then
+        PKG_CHECK_MODULES(HILDON, 
+                          [hildon-lgpl >= 0.9],
+            [
+                EXTRALIBS_HILDON="$HILDON_LIBS"
+                CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
+                AC_DEFINE(wxUSE_LIBHILDON)
+            ],
+            [
+                AC_MSG_WARN([libhildon_lgpl not found])
+                        wxUSE_LIBHILDON="no"
+            ]
+        )
+    fi
+fi
 
 if test "$wxUSE_CMDLINE_PARSER" = "yes"; then
   AC_DEFINE(wxUSE_CMDLINE_PARSER)
@@ -7056,7 +7075,7 @@ EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_ODBC="$ODBC_LINK"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_GNOMEPRINT`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEPRINT`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -7156,6 +7175,7 @@ AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(WITH_PLUGIN_SDL)
 AC_SUBST(EXTRALIBS_GNOMEPRINT)
+AC_SUBST(EXTRALIBS_HILDON)
 AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
@@ -7469,6 +7489,7 @@ echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
 echo "                                       gnomeprint         ${wxUSE_LIBGNOMEPRINT-none}"
+echo "                                       hildon             ${wxUSE_LIBHILDON-none}"
 
 echo ""
 
