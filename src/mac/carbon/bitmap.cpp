@@ -938,7 +938,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         int rowBytes = ( destwidth + 3 ) & 0xFFFFFFC ;
         size_t maskbufsize = rowBytes * destheight ;
 
-        int sourcelinesize = M_BITMAPDATA->m_bitmapMask->GetBytesPerRow()  ;
+        int sourcelinesize = M_BITMAPDATA->m_bitmapMask->GetBytesPerRow() ;
         int destlinesize = rowBytes ;
 
         unsigned char *source = (unsigned char *) M_BITMAPDATA->m_bitmapMask->GetRawAccess() ;
@@ -1131,7 +1131,7 @@ wxImage wxBitmap::ConvertToImage() const
 
     // The following masking algorithm is the same as well in msw/gtk:
     // the colour used as transparent one in wxImage and the one it is
-    // replaced with when it really occurs in the bitmap
+    // replaced with when it actually occurs in the bitmap
     static const int MASK_RED = 1;
     static const int MASK_GREEN = 2;
     static const int MASK_BLUE = 3;
@@ -1161,6 +1161,7 @@ wxImage wxBitmap::ConvertToImage() const
                 }
                 else if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
                     b = MASK_BLUE_REPLACEMENT ;
+
                 maskp++ ;
                 maskp++ ;
             }
@@ -1184,8 +1185,8 @@ wxImage wxBitmap::ConvertToImage() const
 
 #endif //wxUSE_IMAGE
 
-bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type,
-                        const wxPalette *palette) const
+bool wxBitmap::SaveFile( const wxString& filename,
+    wxBitmapType type, const wxPalette *palette ) const
 {
     bool success = false;
     wxBitmapHandler *handler = FindHandler(type);
@@ -1334,31 +1335,31 @@ wxMask::wxMask()
 
 // Construct a mask from a bitmap and a colour indicating
 // the transparent area
-wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
+wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
 {
     Init() ;
-    Create(bitmap, colour);
+    Create( bitmap, colour );
 }
 
 // Construct a mask from a mono bitmap (copies the bitmap).
-wxMask::wxMask(const wxBitmap& bitmap)
+wxMask::wxMask( const wxBitmap& bitmap )
 {
     Init() ;
-    Create(bitmap);
+    Create( bitmap );
 }
 
 // Construct a mask from a mono bitmap (copies the bitmap).
 wxMask::wxMask( const wxMemoryBuffer& data, int width , int height , int bytesPerRow )
 {
     Init() ;
-    Create(data, width , height , bytesPerRow );
+    Create( data, width , height , bytesPerRow );
 }
 
 wxMask::~wxMask()
 {
     if ( m_maskBitmap )
     {
-        DisposeGWorld( (GWorldPtr) m_maskBitmap ) ;
+        DisposeGWorld( (GWorldPtr)m_maskBitmap ) ;
         m_maskBitmap = NULL ;
     }
 }
@@ -1374,21 +1375,23 @@ void *wxMask::GetRawAccess() const
     return m_memBuf.GetData() ;
 }
 
-// The default ColorTable for k8IndexedGrayPixelFormat in Intel seems to be broken, so we'll use an non-indexed
-// bitmap mask instead, in order to keep the code simple, the change is done for ppc implementations as well
+// The default ColorTable for k8IndexedGrayPixelFormat in Intel appears to be broken, so we'll use an non-indexed
+// bitmap mask instead; in order to keep the code simple, the change applies to PowerPC implementations as well
 
 void wxMask::RealizeNative()
 {
     if ( m_maskBitmap )
     {
-       DisposeGWorld(  (GWorldPtr) m_maskBitmap ) ;
+       DisposeGWorld( (GWorldPtr)m_maskBitmap ) ;
        m_maskBitmap = NULL ;
     }
 
     Rect rect = { 0 , 0 , m_height , m_width } ;
 
-    verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_maskBitmap , k24RGBPixelFormat , &rect , NULL , NULL , 0 ,
-        (char*) m_memBuf.GetData() , m_bytesPerRow ) ) ;
+    OSStatus err = NewGWorldFromPtr(
+        (GWorldPtr*) &m_maskBitmap , k24RGBPixelFormat , &rect , NULL , NULL , 0 ,
+        (char*) m_memBuf.GetData() , m_bytesPerRow ) ;
+    verify_noerr( err ) ;
 }
 
 // Create a mask from a mono bitmap (copies the bitmap).
@@ -1480,7 +1483,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
             g = *srcdata++ ;
             b = *srcdata++ ;
 
-            if ( colour == wxColour( r , g , b) )
+            if ( colour == wxColour( r , g , b ) )
             {
                 *destdata++ = 0xFF ;
                 *destdata++ = 0xFF ;
@@ -1549,6 +1552,7 @@ public:
     virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
           int desiredWidth, int desiredHeight);
 };
+
 IMPLEMENT_DYNAMIC_CLASS(wxPICTResourceHandler, wxBitmapHandler)
 
 
@@ -1563,6 +1567,7 @@ bool wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lon
     if ( thePict )
     {
         wxMetafile mf ;
+
         mf.SetHMETAFILE( (WXHMETAFILE) thePict ) ;
         bitmap->Create( mf.GetWidth() , mf.GetHeight() ) ;
         wxMemoryDC dc ;
@@ -1572,7 +1577,7 @@ bool wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lon
 
         return true ;
     }
-#endif //wxUSE_METAFILE
+#endif
 
     return false ;
 }
@@ -1605,7 +1610,7 @@ void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
     if ( !Ok() )
         return;
 
-    // TODO : if we have some information about the API we should check
+    // TODO: if we have some information about the API we should check
     // this code looks strange...
 
     if ( !M_BITMAPDATA->HasAlpha() )
