@@ -428,9 +428,19 @@
         #define wxWcstombs wcstombs
     #endif
 
-    /* No UNICODE in the c library except wchar_t typedef on mac OSX 10.2 and less - roll our own */
-    #if !defined(__MWERKS__) && wxUSE_UNICODE && defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
-
+    /* 
+       The system C library on Mac OS X 10.2 and below does not support
+       unicode: in other words all wide-character functions such as towupper et
+       al. do simply not exist so we need to provide our own in that context,
+       except for the wchar_t definition/typedef itself.
+       
+       We need to do this for both project builder and CodeWarrior as
+       the latter uses the system C library in Mach builds for wide character
+       support, which as mentioned does not exist on 10.2 and below.
+    */
+    #if wxUSE_UNICODE && \
+        defined(__DARWIN__) && \
+            ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
         /* we need everything! */
         #define wxNEED_WX_STRING_H
         #define wxNEED_WX_CTYPE_H
