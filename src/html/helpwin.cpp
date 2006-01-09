@@ -209,37 +209,6 @@ void wxHtmlHelpWindow::UpdateMergedIndex()
 // wxHtmlHelpWindow
 //---------------------------------------------------------------------------
 
-// Command IDs :
-enum
-{
-    //wxID_HTML_HELPFRAME = wxID_HIGHEST + 1,
-    wxID_HTML_PANEL = wxID_HIGHEST + 2,
-    wxID_HTML_BACK,
-    wxID_HTML_FORWARD,
-    wxID_HTML_UPNODE,
-    wxID_HTML_UP,
-    wxID_HTML_DOWN,
-    wxID_HTML_PRINT,
-    wxID_HTML_OPENFILE,
-    wxID_HTML_OPTIONS,
-    wxID_HTML_BOOKMARKSLIST,
-    wxID_HTML_BOOKMARKSADD,
-    wxID_HTML_BOOKMARKSREMOVE,
-    wxID_HTML_TREECTRL,
-    wxID_HTML_INDEXPAGE,
-    wxID_HTML_INDEXLIST,
-    wxID_HTML_INDEXTEXT,
-    wxID_HTML_INDEXBUTTON,
-    wxID_HTML_INDEXBUTTONALL,
-    wxID_HTML_NOTEBOOK,
-    wxID_HTML_SEARCHPAGE,
-    wxID_HTML_SEARCHTEXT,
-    wxID_HTML_SEARCHLIST,
-    wxID_HTML_SEARCHBUTTON,
-    wxID_HTML_SEARCHCHOICE,
-    wxID_HTML_COUNTINFO
-};
-
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxHtmlHelpWindow, wxWindow)
