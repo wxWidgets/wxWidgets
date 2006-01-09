@@ -61,6 +61,11 @@
 #   define wxUSE_SOCKETS 0
 #endif /* wxUSE_SOCKETS */
 
+#if wxUSE_THREADS
+#   undef wxUSE_THREADS
+#   define wxUSE_THREADS 0
+#endif /* wxUSE_SOCKETS */
+
 #if wxUSE_PROTOCOL
 #   undef wxUSE_PROTOCOL
 #   define wxUSE_PROTOCOL 0
