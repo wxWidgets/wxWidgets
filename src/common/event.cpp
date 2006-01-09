@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        event.cpp
+// Name:        src/common/event.cpp
 // Purpose:     Event classes
 // Author:      Julian Smart
 // Modified by:
@@ -25,7 +25,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/app.h"
     #include "wx/list.h"
 
