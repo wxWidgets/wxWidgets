@@ -2333,7 +2333,15 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             wxTRANSPARENT_PEN;
 
         wxColour colText;
-        if ( item->IsSelected() )
+        if ( item->IsSelected()
+#ifdef __WXMAC__
+            // On wxMac, if the tree doesn't have the focus we draw an empty
+            // rectangle, so we want to make sure that the text is visible
+            // against the normal background, not the highlightbackground, so
+            // don't use the highlight text colour unless we have the focus.
+             && m_hasFocus
+#endif
+            )
         {
             colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
         }
