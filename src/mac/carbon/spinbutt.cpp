@@ -16,29 +16,23 @@
 #include "wx/spinbutt.h"
 #include "wx/mac/uma.h"
 
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxWin macros
-// ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
+
 
 wxSpinButton::wxSpinButton()
    : wxSpinButtonBase()
 {
 }
 
-bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-        long style, const wxString& name)
+bool wxSpinButton::Create( wxWindow *parent,
+    wxWindowID id, const wxPoint& pos, const wxSize& size,
+    long style, const wxString& name )
 {
-    m_macIsUserPane = false ;
+    m_macIsUserPane = false;
 
-    if ( !wxSpinButtonBase::Create(parent, id, pos, size,
-                                   style, wxDefaultValidator, name) )
+    if ( !wxSpinButtonBase::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 
     m_min = 0;
@@ -47,14 +41,16 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
     if (!parent)
         return false;
 
-    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size );
 
-    m_peer = new wxMacControl(this) ;
-    verify_noerr ( CreateLittleArrowsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 0 , m_min , m_max , 1 ,
-     m_peer->GetControlRefAddr() ) );
+    m_peer = new wxMacControl( this );
+    OSStatus err = CreateLittleArrowsControl(
+        MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, 0, m_min, m_max, 1,
+        m_peer->GetControlRefAddr() );
+    verify_noerr( err );
 
-    m_peer->SetActionProc( GetwxMacLiveScrollbarActionProc() ) ;
-    MacPostControlCreate(pos,size) ;
+    m_peer->SetActionProc( GetwxMacLiveScrollbarActionProc() );
+    MacPostControlCreate( pos, size );
 
     return true;
 }
@@ -62,9 +58,6 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
 wxSpinButton::~wxSpinButton()
 {
 }
-
-// Attributes
-////////////////////////////////////////////////////////////////////////////
 
 int wxSpinButton::GetMin() const
 {
@@ -80,30 +73,31 @@ int wxSpinButton::GetValue() const
 {
     int n = m_value;
 
-    if (n < m_min) n = m_min;
-    if (n > m_max) n = m_max;
+    if (n < m_min)
+        n = m_min;
+    else if (n > m_max)
+        n = m_max;
 
     return n;
 }
 
 void wxSpinButton::SetValue(int val)
 {
-    m_value = val ;
+    m_value = val;
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     m_min = minVal;
     m_max = maxVal;
-    m_peer->SetMaximum( maxVal ) ;
-    m_peer->SetMinimum( minVal ) ;
+    m_peer->SetMaximum( maxVal );
+    m_peer->SetMinimum( minVal );
 }
 
 void wxSpinButton::MacHandleValueChanged( int inc )
 {
-
     wxEventType scrollEvent = wxEVT_NULL;
-    int oldValue = m_value ;
+    int oldValue = m_value;
 
     m_value = oldValue + inc;
 
@@ -124,78 +118,83 @@ void wxSpinButton::MacHandleValueChanged( int inc )
     }
 
     if ( m_value - oldValue == -1 )
-        scrollEvent = wxEVT_SCROLL_LINEDOWN ;
+        scrollEvent = wxEVT_SCROLL_LINEDOWN;
     else if ( m_value - oldValue == 1 )
-        scrollEvent = wxEVT_SCROLL_LINEUP ;
+        scrollEvent = wxEVT_SCROLL_LINEUP;
     else
-        scrollEvent = wxEVT_SCROLL_THUMBTRACK ;
+        scrollEvent = wxEVT_SCROLL_THUMBTRACK;
 
-    wxSpinEvent event(scrollEvent, m_windowId);
+    wxSpinEvent event( scrollEvent, m_windowId );
 
-    event.SetPosition(m_value);
+    event.SetPosition( m_value );
     event.SetEventObject( this );
-    if ((GetEventHandler()->ProcessEvent( event )) &&
-        !event.IsAllowed() )
-    {
-        m_value = oldValue ;
-    }
-    m_peer->SetValue( m_value ) ;
+    if ((GetEventHandler()->ProcessEvent( event )) && !event.IsAllowed())
+        m_value = oldValue;
 
-    /* always send a thumbtrack event */
+    m_peer->SetValue( m_value );
+
+    // always send a thumbtrack event
     if (scrollEvent != wxEVT_SCROLL_THUMBTRACK)
     {
         scrollEvent = wxEVT_SCROLL_THUMBTRACK;
-        wxSpinEvent event2( scrollEvent, GetId());
+        wxSpinEvent event2( scrollEvent, GetId() );
         event2.SetPosition( m_value );
         event2.SetEventObject( this );
         GetEventHandler()->ProcessEvent( event2 );
     }
 }
 
-void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown )
+void wxSpinButton::MacHandleControlClick( WXWidget control, wxInt16 controlpart, bool mouseStillDown )
 {
     int nScrollInc = 0;
 
-    switch( controlpart )
+    switch ( controlpart )
     {
     case kControlUpButtonPart :
         nScrollInc = 1;
-        break ;
+        break;
+
     case kControlDownButtonPart :
         nScrollInc = -1;
-        break ;
+        break;
+
+    default:
+        break;
     }
+
     MacHandleValueChanged( nScrollInc ) ;
 }
 
 wxInt32 wxSpinButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF event )
 {
-    /*
+#if 0
     // these have been handled by the live action proc already
     int nScrollInc = 0;
-    wxMacCarbonEvent cEvent( (EventRef) event ) ;
+    wxMacCarbonEvent cEvent( (EventRef)event );
 
-    switch( cEvent.GetParameter<ControlPartCode>(kEventParamControlPart,typeControlPartCode) )
+    switch ( cEvent.GetParameter<ControlPartCode>(kEventParamControlPart, typeControlPartCode) )
     {
     case kControlUpButtonPart :
         nScrollInc = 1;
-        break ;
+        break;
+
     case kControlDownButtonPart :
         nScrollInc = -1;
-        break ;
-    }
-    MacHandleValueChanged( nScrollInc ) ;
-    */
-    return noErr ;
-}
+        break;
 
-// ----------------------------------------------------------------------------
-// size calculation
-// ----------------------------------------------------------------------------
+    default :
+        break;
+    }
+
+    MacHandleValueChanged( nScrollInc ) ;
+#endif
+
+    return noErr;
+}
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
-    return wxSize(16,24);
+    return wxSize( 16, 24 );
 }
 
 #endif // wxUSE_SPINBTN

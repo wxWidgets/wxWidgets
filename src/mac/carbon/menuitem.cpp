@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// headers & declarations
-// ============================================================================
-
 #include "wx/wxprec.h"
 
 #include "wx/app.h"
@@ -20,23 +16,9 @@
 #include "wx/menuitem.h"
 
 #include "wx/mac/uma.h"
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// dynamic classes implementation
-// ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
-// ----------------------------------------------------------------------------
-// wxMenuItem
-// ----------------------------------------------------------------------------
-
-//
-// ctor & dtor
-// -----------
 
 wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        int id,
@@ -50,10 +32,8 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
 
     // In other languages there is no difference in naming the Exit/Quit menu item between MacOS and Windows guidelines
     // therefore these item must not be translated
-    if ( wxStripMenuCodes(m_text).Upper() ==  wxT("EXIT") )
-    {
-        m_text =wxT("Quit\tCtrl+Q") ;
-    }
+    if ( wxStripMenuCodes(m_text).Upper() == wxT("EXIT") )
+        m_text = wxT("Quit\tCtrl+Q") ;
 
     m_radioGroup.start = -1;
     m_isRadioGroupStart = false;
@@ -79,7 +59,7 @@ void wxMenuItem::UpdateItemBitmap()
 
     MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
     MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
-    if( mhandle == NULL || index == 0)
+    if ( mhandle == NULL || index == 0)
         return ;
 
     if ( m_bitmap.Ok() )
@@ -102,7 +82,7 @@ void wxMenuItem::UpdateItemStatus()
 {
     if ( !m_parentMenu )
         return ;
- 
+
     if ( IsSeparator() )
         return ;
 
@@ -150,7 +130,7 @@ void wxMenuItem::UpdateItemText()
 
     MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
     MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
-    if( mhandle == NULL || index == 0)
+    if (mhandle == NULL || index == 0)
         return ;
 
     UMASetMenuItemText( mhandle , index , wxStripMenuCodes(m_text) , wxFont::GetDefaultEncoding() ) ;
@@ -264,7 +244,7 @@ void wxMenuItem::SetAsRadioGroupStart()
 void wxMenuItem::SetRadioGroupStart(int start)
 {
     wxASSERT_MSG( !m_isRadioGroupStart,
-                  _T("should only be called for the next radio items") );
+                  wxT("should only be called for the next radio items") );
 
     m_radioGroup.start = start;
 }
@@ -272,7 +252,7 @@ void wxMenuItem::SetRadioGroupStart(int start)
 void wxMenuItem::SetRadioGroupEnd(int end)
 {
     wxASSERT_MSG( m_isRadioGroupStart,
-                  _T("should only be called for the first radio item") );
+                  wxT("should only be called for the first radio item") );
 
     m_radioGroup.end = end;
 }

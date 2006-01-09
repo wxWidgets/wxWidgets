@@ -242,7 +242,8 @@ void UMASetMenuTitle( MenuRef menu , const wxString& title , wxFontEncoding enco
 
 void UMASetMenuItemText( MenuRef menu,  MenuItemIndex item, const wxString& title, wxFontEncoding encoding )
 {
-    wxString str = title ; // we don't strip the accels here anynmore, must be done before
+    // we don't strip the accels here anymore, must be done before
+    wxString str = title ;
 
 #if TARGET_CARBON
     SetMenuItemTextWithCFString( menu , item , wxMacCFStringHolder(str , encoding) ) ;

@@ -8,15 +8,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
-// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -26,32 +17,25 @@
 #include "wx/statline.h"
 #include "wx/statbox.h"
 
-// ============================================================================
-// implementation
-// ============================================================================
-
 IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
 
-// ----------------------------------------------------------------------------
-// wxStaticLine
-// ----------------------------------------------------------------------------
 
 bool wxStaticLine::Create( wxWindow *parent,
-                           wxWindowID id,
-                           const wxPoint &pos,
-                           const wxSize &size,
-                           long style,
-                           const wxString &name)
+    wxWindowID id,
+    const wxPoint &pos,
+    const wxSize &size,
+    long style,
+    const wxString &name )
 {
-    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+    if ( !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ) )
+        return false;
 
-    // ok, this is ugly but it's better than nothing: use a thin static box to
-    // emulate static line
+    // this is ugly but it's better than nothing:
+    // use a thin static box to emulate static line
 
-    wxSize sizeReal = AdjustSize(size);
+    wxSize sizeReal = AdjustSize( size );
 
-//    m_statbox = new wxStaticBox(parent, id, wxT(""), pos, sizeReal, style, name);
+//    m_statbox = new wxStaticBox( parent, id, wxT(""), pos, sizeReal, style, name );
 
-    return TRUE;
+    return true;
 }
