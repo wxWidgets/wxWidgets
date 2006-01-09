@@ -221,6 +221,9 @@ Type: files; Name: "{app}\%(PKGDIR)s\wxPython\lib\mixins\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyo";
 
+Type: files; Name: "{app}\wxversion.pyc";
+Type: files; Name: "{app}\wxversion.pyo";
+
 %(UNINSTALL_BATCH)s
 
 '''
