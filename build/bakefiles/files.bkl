@@ -2571,7 +2571,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="HTML_HDR" hints="files">
     wx/html/helpctrl.h
     wx/html/helpdata.h
+    wx/html/helpdlg.h
     wx/html/helpfrm.h
+    wx/html/helpwin.h
     wx/html/htmlcell.h
     wx/html/htmldefs.h
     wx/html/htmlfilt.h

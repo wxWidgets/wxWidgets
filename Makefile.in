@@ -2691,8 +2691,10 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/mediactrl.h \
 	$(MEDIA_PLATFORM_HDR) \
 	wx/html/helpctrl.h \
+	wx/html/helpdlg.h \
 	wx/html/helpdata.h \
 	wx/html/helpfrm.h \
+	wx/html/helpwin.h \
 	wx/html/htmlcell.h \
 	wx/html/htmldefs.h \
 	wx/html/htmlfilt.h \
