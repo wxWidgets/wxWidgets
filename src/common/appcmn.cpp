@@ -372,6 +372,10 @@ void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
     (void)ProcessEvent(event);
 }
 
+// ----------------------------------------------------------------------------
+// idle handling
+// ----------------------------------------------------------------------------
+
 void wxAppBase::DeletePendingObjects()
 {
     wxList::compatibility_iterator node = wxPendingDelete.GetFirst();
@@ -462,6 +466,24 @@ void wxAppBase::OnIdle(wxIdleEvent& WXUNUSED(event))
 #endif // wxUSE_LOG
 
 }
+
+// ----------------------------------------------------------------------------
+// exceptions support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_EXCEPTIONS
+
+bool wxAppBase::OnExceptionInMainLoop()
+{
+    throw;
+
+    // some compilers are too stupid to know that we never return after throw
+#if defined(__DMC__) || (defined(_MSC_VER) && _MSC_VER < 1200)
+    return false;
+#endif
+}
+
+#endif // wxUSE_EXCEPTIONS
 
 // ----------------------------------------------------------------------------
 // wxGUIAppTraitsBase

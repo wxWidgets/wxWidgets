@@ -116,20 +116,6 @@ public:
     // crash.
     virtual void OnFatalException() { }
 
-#if wxUSE_EXCEPTIONS
-    // function called if an uncaught exception is caught inside the main
-    // event loop: it may return true to continue running the event loop or
-    // false to stop it (in the latter case it may rethrow the exception as
-    // well)
-    virtual bool OnExceptionInMainLoop();
-
-    // Called when an unhandled C++ exception occurs inside OnRun(): note that
-    // the exception type is lost by now, so if you really want to handle the
-    // exception you should override OnRun() and put a try/catch around
-    // MainLoop() call there
-    virtual void OnUnhandledException() { }
-#endif // wxUSE_EXCEPTIONS
-
     // Called from wxExit() function, should terminate the application a.s.a.p.
     virtual void Exit();
 
@@ -237,6 +223,12 @@ public:
     virtual void HandleEvent(wxEvtHandler *handler,
                              wxEventFunction func,
                              wxEvent& event) const;
+
+    // Called when an unhandled C++ exception occurs inside OnRun(): note that
+    // the exception type is lost by now, so if you really want to handle the
+    // exception you should override OnRun() and put a try/catch around
+    // MainLoop() call there or use OnExceptionInMainLoop()
+    virtual void OnUnhandledException() { }
 #endif // wxUSE_EXCEPTIONS
 
     // process all events in the wxPendingEvents list -- it is necessary to
@@ -430,8 +422,14 @@ public:
         // Returns true if more idle time is requested.
     virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
 
-        // Perform standard OnIdle behaviour: call from port's OnIdle
-    void OnIdle(wxIdleEvent& event);
+
+#if wxUSE_EXCEPTIONS
+    // Function called if an uncaught exception is caught inside the main
+    // event loop: it may return true to continue running the event loop or
+    // false to stop it (in the latter case it may rethrow the exception as
+    // well)
+    virtual bool OnExceptionInMainLoop();
+#endif // wxUSE_EXCEPTIONS
 
 
     // top level window functions
@@ -510,6 +508,9 @@ public:
     //
     // returns true if the program is successfully initialized
     bool Initialized() { return true; }
+
+    // perform standard OnIdle behaviour, ensure that this is always called
+    void OnIdle(wxIdleEvent& event);
 
 
 protected:
