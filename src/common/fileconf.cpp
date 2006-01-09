@@ -308,18 +308,22 @@ wxString wxFileConfig::GetLocalDir()
 
 #if defined(__WXMAC__) || defined(__DOS__)
     // no local dir concept on Mac OS 9 or MS-DOS
-    return GetGlobalDir() ;
+    strDir << GetGlobalDir() ;
 #else
     wxGetHomeDir(&strDir);
 
-#ifdef  __UNIX__
-#ifdef __VMS
-    if (strDir.Last() != wxT(']'))
-#endif
-    if (strDir.Last() != wxT('/')) strDir << wxT('/');
-#else
-    if (strDir.Last() != wxT('\\')) strDir << wxT('\\');
-#endif
+    #ifdef  __UNIX__
+        if (
+            (strDir.Last() != wxT('/'))
+        #ifdef __VMS
+            && (strDir.Last() != wxT(']'))
+        #endif
+            )
+            strDir << wxT('/');
+    #else
+        if (strDir.Last() != wxT('\\'))
+            strDir << wxT('\\');
+    #endif
 #endif
 
     return strDir;
