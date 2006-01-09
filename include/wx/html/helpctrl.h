@@ -21,6 +21,23 @@
 
 #define wxID_HTML_HELPFRAME   (wxID_HIGHEST + 1)
 
+// This style indicates that the window is
+// embedded in the application and must not be
+// destroyed by the help controller.
+#define wxHF_EMBEDDED                0x00008000
+
+// Create a dialog for the help window.
+#define wxHF_DIALOG                  0x00010000
+
+// Create a frame for the help window.
+#define wxHF_FRAME                   0x00020000
+
+// Make the dialog modal when displaying help.
+#define wxHF_MODAL                   0x00040000
+
+class WXDLLIMPEXP_HTML wxHtmlHelpDialog;
+class WXDLLIMPEXP_HTML wxHtmlHelpWindow;
+
 class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxEvtHandler
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlHelpController)
@@ -41,7 +58,9 @@ public:
     bool KeywordSearch(const wxString& keyword,
                        wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
 
-    wxHtmlHelpFrame* GetFrame() { return m_helpFrame; }
+    wxHtmlHelpWindow* GetHelpWindow() { return m_helpWindow; }
+    void SetHelpWindow(wxHtmlHelpWindow* helpWindow);
+
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
 
     // Assigns config object to the Ctrl. This config is then
@@ -81,16 +100,19 @@ public:
 
     // Make the help controller's frame 'modal' if
     // needed
-    void AddGrabIfNeeded();
+    void MakeModalIfNeeded();
+
+    // Find the top-most parent window
+    wxWindow* FindTopLevelWindow();
 
 protected:
+    virtual wxWindow* CreateHelpWindow();
     virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData *data);
-
-    virtual void CreateHelpWindow();
+    virtual wxHtmlHelpDialog* CreateHelpDialog(wxHtmlHelpData *data);
     virtual void DestroyHelpWindow();
 
     wxHtmlHelpData      m_helpData;
-    wxHtmlHelpFrame*    m_helpFrame;
+    wxHtmlHelpWindow*   m_helpWindow;
     wxConfigBase *      m_Config;
     wxString            m_ConfigRoot;
     wxString            m_titleFormat;
@@ -98,6 +120,26 @@ protected:
     // DECLARE_EVENT_TABLE()
 
     DECLARE_NO_COPY_CLASS(wxHtmlHelpController)
+};
+
+/*
+ * wxHtmlModalHelp
+ * A convenience class particularly for use on wxMac,
+ * where you can only show modal dialogs from a modal
+ * dialog.
+ *
+ * Use like this:
+ *
+ * wxHtmlModalHelp help(parent, filename, topic);
+ *
+ * If topic is empty, the help contents is displayed.
+ */
+
+class WXDLLIMPEXP_HTML wxHtmlModalHelp
+{
+public:
+    wxHtmlModalHelp(wxWindow* parent, const wxString& helpFile, const wxString& topic = wxEmptyString,
+        int style = wxHF_DEFAULT_STYLE | wxHF_DIALOG | wxHF_MODAL);
 };
 
 #endif // wxUSE_WXHTML_HELP

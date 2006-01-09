@@ -545,7 +545,15 @@ SOURCE=..\..\src\html\helpdata.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\html\helpdlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\html\helpfrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\html\helpwin.cpp
 # End Source File
 # Begin Source File
 

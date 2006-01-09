@@ -5,10 +5,6 @@
 
 \section{\class{wxHtmlHelpController}}\label{wxhtmlhelpcontroller}
 
-{\bf WARNING!} Although this class has an API compatible with other wxWidgets
-help controllers as documented by \helpref{wxHelpController}{wxhelpcontroller}, it
-is recommended that you use the enhanced capabilities of wxHtmlHelpController's API.
-
 This help controller provides an easy way of displaying HTML help in your
 application (see {\it test} sample). The help system is based on {\bf books} 
 (see \helpref{AddBook}{wxhtmlhelpcontrolleraddbook}). A book is a logical
@@ -16,12 +12,16 @@ section of documentation (for example "User's Guide" or "Programmer's Guide" or
 "C++ Reference" or "wxWidgets Reference"). The help controller can handle as
 many books as you want.
 
+Although this class has an API compatible with other wxWidgets
+help controllers as documented by \helpref{wxHelpController}{wxhelpcontroller}, it
+is recommended that you use the enhanced capabilities of wxHtmlHelpController's API.
+
 wxHTML uses Microsoft's HTML Help Workshop project files (.hhp, .hhk, .hhc) as its
 native format. The file format is described \helpref{here}{helpformat}.
 Have a look at docs/html/ directory where sample project files are stored.
 
 You can use Tex2RTF to produce these files when generating HTML, if you set {\bf htmlWorkshopFiles} to {\bf true} in
-your tex2rtf.ini file.
+your tex2rtf.ini file. The commercial tool HelpBlocks (www.helpblocks.com) can also create these files.
 
 \wxheading{Note}
 
@@ -34,7 +34,11 @@ sample for demonstration of its use.
 
 \wxheading{See also}
 
-\helpref{Information about wxBestHelpController}{wxhelpcontroller}
+\helpref{Information about wxBestHelpController}{wxhelpcontroller}, 
+\helpref{wxHtmlHelpFrame}{wxhtmlhelpframe}, 
+\helpref{wxHtmlHelpDialog}{wxhtmlhelpdialog}, 
+\helpref{wxHtmlHelpWindow}{wxhtmlhelpwindow},
+\helpref{wxHtmlModalHelp}{wxhtmlmodalhelp}
 
 \wxheading{Derived from}
 
@@ -48,24 +52,24 @@ wxHelpControllerBase
 
 \membersection{wxHtmlHelpController::wxHtmlHelpController}\label{wxhtmlhelpcontrollerwxhtmlhelpcontroller}
 
-\func{}{wxHtmlHelpController}{\param{int }{style = wxHF\_DEFAULT\_STYLE}}
+\func{}{wxHtmlHelpController}{\param{int }{style = wxHF\_DEFAULT\_STYLE}, \param{wxWindow* }{parentWindow = NULL}}
 
 Constructor.
 
 \wxheading{Parameters}
 
-{\it style} is combination of these flags:
+{\it style} is a combination of these flags:
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxHF\_TOOLBAR}}{Help frame has toolbar.}
-\twocolitem{\windowstyle{wxHF\_FLAT\_TOOLBAR}}{Help frame has toolbar with flat buttons (aka coolbar).}
-\twocolitem{\windowstyle{wxHF\_CONTENTS}}{Help frame has contents panel.}
-\twocolitem{\windowstyle{wxHF\_INDEX}}{Help frame has index panel.}
-\twocolitem{\windowstyle{wxHF\_SEARCH}}{Help frame has search panel.}
-\twocolitem{\windowstyle{wxHF\_BOOKMARKS}}{Help frame has bookmarks controls.}
-\twocolitem{\windowstyle{wxHF\_OPEN\_FILES}}{Allow user to open arbitrary HTML document.}
-\twocolitem{\windowstyle{wxHF\_PRINT}}{Toolbar contains "print" button.}
-\twocolitem{\windowstyle{wxHF\_MERGE\_BOOKS}}{Contents pane does not show
+\twocolitem{\windowstyle{wxHF\_TOOLBAR}}{The help window has a toolbar.}
+\twocolitem{\windowstyle{wxHF\_FLAT\_TOOLBAR}}{The help window has a toolbar with flat buttons (aka coolbar).}
+\twocolitem{\windowstyle{wxHF\_CONTENTS}}{The help window has a contents panel.}
+\twocolitem{\windowstyle{wxHF\_INDEX}}{The help window has an index panel.}
+\twocolitem{\windowstyle{wxHF\_SEARCH}}{The help window has a search panel.}
+\twocolitem{\windowstyle{wxHF\_BOOKMARKS}}{The help window has bookmarks controls.}
+\twocolitem{\windowstyle{wxHF\_OPEN\_FILES}}{Allows user to open arbitrary HTML document.}
+\twocolitem{\windowstyle{wxHF\_PRINT}}{The toolbar contains "print" button.}
+\twocolitem{\windowstyle{wxHF\_MERGE\_BOOKS}}{The contents pane does not show
 book nodes. All books are merged together and appear as single book to the
 user.}
 \twocolitem{\windowstyle{wxHF\_ICONS\_BOOK}}{All nodes in contents pane
@@ -75,32 +79,38 @@ a book icon, book's sections have a folder icon. This is the default.}
 \twocolitem{\windowstyle{wxHF\_ICONS\_BOOK\_CHAPTER}}{Both book nodes and
 nodes of top-level sections of a book (i.e. chapters) have a book icon,
 all other sections (sections, subsections, ...) have a folder icon.}
+\twocolitem{\windowstyle{wxHF\_EMBEDDED}}{Specifies that the help controller controls an embedded window of class \helpref{wxHtmlHelpWindow}{wxhtmlhelpwindow} that
+should not be destroyed when the controller is destroyed.}
+\twocolitem{\windowstyle{wxHF\_DIALOG}}{Specifies that the help controller should create a dialog containing the help window.}
+\twocolitem{\windowstyle{wxHF\_FRAME}}{Specifies that the help controller should create a frame containing the help window. This is the default if neither wxHF\_DIALOG nor wxHF\_EMBEDDED is specified.}
+\twocolitem{\windowstyle{wxHF\_MODAL}}{Specifies that the help controller should create a modal dialog containing the help window (used with the wxHF\_DIALOG style).}
 \twocolitem{\windowstyle{wxHF\_DEFAULT\_STYLE}}{{\tt wxHF\_TOOLBAR | wxHF\_CONTENTS
 | wxHF\_INDEX | wxHF\_SEARCH | wxHF\_BOOKMARKS | wxHF\_PRINT}}
 \end{twocollist}
 
+{\it parentWindow} is an optional window to be used as the parent for the help window.
+
 \membersection{wxHtmlHelpController::AddBook}\label{wxhtmlhelpcontrolleraddbook}
 
-\func{bool}{AddBook}{\param{const wxFileName\& }{book\_file}, \param{bool }{show\_wait\_msg}}
+\func{bool}{AddBook}{\param{const wxFileName\& }{bookFile}, \param{bool }{showWaitMsg}}
 
-\func{bool}{AddBook}{\param{const wxString\& }{book\_url}, \param{bool }{show\_wait\_msg}}
+\func{bool}{AddBook}{\param{const wxString\& }{bookUrl}, \param{bool }{showWaitMsg}}
 
 Adds book (\helpref{.hhp file}{helpformat} - HTML Help Workshop project file) into the list of loaded books.
 This must be called at least once before displaying  any help.
 
-{\it book\_file} or {\it book\_url}  may be either .hhp file or ZIP archive
+{\it bookFile} or {\it bookUrl}  may be either .hhp file or ZIP archive
 that contains arbitrary number of .hhp files in 
 top-level directory. This ZIP archive must have .zip or .htb extension
-(the latter stands for "HTML book"). In other words,
-{\tt AddBook(wxFileName("help.zip"))}
-is possible and, in fact, recommended way.
+(the latter stands for "HTML book"). In other words, {\tt AddBook(wxFileName("help.zip"))} 
+is possible and is the recommended way.
 
 \wxheading{Parameters}
 
-\docparam{show\_wait\_msg}{If true then a decoration-less window with progress message is displayed.}
-\docparam{book\_file}{Help book filename. It is recommended to use this prototype
+\docparam{showWaitMsg}{If true then a decoration-less window with progress message is displayed.}
+\docparam{bookFile}{Help book filename. It is recommended to use this prototype
 instead of the one taking URL, because it is less error-prone.}
-\docparam{book\_url}{Help book URL (note that syntax of filename and URL is 
+\docparam{bookUrl}{Help book URL (note that syntax of filename and URL is 
 different on most platforms)}
 
 \wxheading{Note}
@@ -109,13 +119,19 @@ Don't forget to install wxFileSystem ZIP handler with
 {\tt wxFileSystem::AddHandler(new wxZipFSHandler);} before calling this method
 on a .zip or .htb file!
 
+\membersection{wxHtmlHelpController::CreateHelpDialog}\label{wxhtmlhelpcontrollercreatehelpdialog}
+
+\func{virtual wxHtmlHelpDialog*}{CreateHelpDialog}{\param{wxHtmlHelpData * }{data}}
+
+This protected virtual method may be overridden so that when specifying the wxHF\_DIALOG style, the controller
+uses a different dialog.
+
 \membersection{wxHtmlHelpController::CreateHelpFrame}\label{wxhtmlhelpcontrollercreatehelpframe}
 
 \func{virtual wxHtmlHelpFrame*}{CreateHelpFrame}{\param{wxHtmlHelpData * }{data}}
 
 This protected virtual method may be overridden so that the controller
-uses slightly different frame. See {\it samples/html/helpview} sample for
-an example.
+uses a different frame.
 
 \membersection{wxHtmlHelpController::Display}\label{wxhtmlhelpcontrollerdisplay}
 

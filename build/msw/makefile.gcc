@@ -767,7 +767,9 @@ HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_helpbest.o \
 	$(OBJS)\htmldll_helpctrl.o \
 	$(OBJS)\htmldll_helpdata.o \
+	$(OBJS)\htmldll_helpdlg.o \
 	$(OBJS)\htmldll_helpfrm.o \
+	$(OBJS)\htmldll_helpwin.o \
 	$(OBJS)\htmldll_htmlcell.o \
 	$(OBJS)\htmldll_htmlfilt.o \
 	$(OBJS)\htmldll_htmlpars.o \
@@ -799,7 +801,9 @@ HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_helpbest.o \
 	$(OBJS)\htmllib_helpctrl.o \
 	$(OBJS)\htmllib_helpdata.o \
+	$(OBJS)\htmllib_helpdlg.o \
 	$(OBJS)\htmllib_helpfrm.o \
+	$(OBJS)\htmllib_helpwin.o \
 	$(OBJS)\htmllib_htmlcell.o \
 	$(OBJS)\htmllib_htmlfilt.o \
 	$(OBJS)\htmllib_htmlpars.o \
@@ -1071,7 +1075,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_helpbest.o \
 	$(OBJS)\monodll_helpctrl.o \
 	$(OBJS)\monodll_helpdata.o \
+	$(OBJS)\monodll_helpdlg.o \
 	$(OBJS)\monodll_helpfrm.o \
+	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_htmlcell.o \
 	$(OBJS)\monodll_htmlfilt.o \
 	$(OBJS)\monodll_htmlpars.o \
@@ -1603,7 +1609,9 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_helpbest.o \
 	$(OBJS)\monolib_helpctrl.o \
 	$(OBJS)\monolib_helpdata.o \
+	$(OBJS)\monolib_helpdlg.o \
 	$(OBJS)\monolib_helpfrm.o \
+	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_htmlcell.o \
 	$(OBJS)\monolib_htmlfilt.o \
 	$(OBJS)\monolib_htmlpars.o \
@@ -4514,6 +4522,9 @@ $(OBJS)\monodll_helpctrl.o: ../../src/html/helpctrl.cpp
 $(OBJS)\monodll_helpdata.o: ../../src/html/helpdata.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_helpdlg.o: ../../src/html/helpdlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_helpfrm.o: ../../src/html/helpfrm.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -4954,6 +4965,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_helpwin.o: ../../src/msw/helpwin.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_helpwin.o: ../../src/html/helpwin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -6338,6 +6354,9 @@ $(OBJS)\monolib_helpctrl.o: ../../src/html/helpctrl.cpp
 $(OBJS)\monolib_helpdata.o: ../../src/html/helpdata.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_helpdlg.o: ../../src/html/helpdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_helpfrm.o: ../../src/html/helpfrm.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6778,6 +6797,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_helpwin.o: ../../src/msw/helpwin.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_helpwin.o: ../../src/html/helpwin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10988,7 +11012,13 @@ $(OBJS)\htmldll_helpctrl.o: ../../src/html/helpctrl.cpp
 $(OBJS)\htmldll_helpdata.o: ../../src/html/helpdata.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\htmldll_helpdlg.o: ../../src/html/helpdlg.cpp
+	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\htmldll_helpfrm.o: ../../src/html/helpfrm.cpp
+	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\htmldll_helpwin.o: ../../src/html/helpwin.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmldll_htmlcell.o: ../../src/html/htmlcell.cpp
@@ -11057,7 +11087,13 @@ $(OBJS)\htmllib_helpctrl.o: ../../src/html/helpctrl.cpp
 $(OBJS)\htmllib_helpdata.o: ../../src/html/helpdata.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\htmllib_helpdlg.o: ../../src/html/helpdlg.cpp
+	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\htmllib_helpfrm.o: ../../src/html/helpfrm.cpp
+	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\htmllib_helpwin.o: ../../src/html/helpwin.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmllib_htmlcell.o: ../../src/html/htmlcell.cpp

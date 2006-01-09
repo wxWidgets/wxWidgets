@@ -2545,7 +2545,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(HTML_SRC_PLATFORM)
     src/html/helpctrl.cpp
     src/html/helpdata.cpp
+    src/html/helpdlg.cpp
     src/html/helpfrm.cpp
+    src/html/helpwin.cpp
     src/html/htmlcell.cpp
     src/html/htmlfilt.cpp
     src/html/htmlpars.cpp

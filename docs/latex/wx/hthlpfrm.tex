@@ -3,6 +3,79 @@
 % helpfrm.h at 24/Oct/99 18:03:10
 %
 
+\section{\class{wxHtmlHelpDialog}}\label{wxhtmlhelpdialog}
+
+This class is used by \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} 
+to display help.
+It is an internal class and should not be used directly - except for the case
+when you're writing your own HTML help controller.
+
+\wxheading{Derived from}
+
+\helpref{wxFrame}{wxframe}
+
+\wxheading{Include files}
+
+<wx/html/helpdlg.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxHtmlHelpDialog::wxHtmlHelpDialog}\label{wxhtmlhelpdialogwxhtmlhelpdialog}
+
+\func{}{wxHtmlHelpDialog}{\param{wxHtmlHelpData* }{data = NULL}}
+
+\func{}{wxHtmlHelpDialog}{\param{wxWindow* }{parent}, \param{int }{wxWindowID}, \param{const wxString\& }{title = wxEmptyString}, \param{int }{style = wxHF\_DEFAULT\_STYLE}, \param{wxHtmlHelpData* }{data = NULL}}
+
+Constructor. For the values of {\it style}, please see the documentation for \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}.
+
+\membersection{wxHtmlHelpDialog::AddToolbarButtons}\label{wxhtmlhelpdialogaddtoolbarbuttons}
+
+\func{virtual void}{AddToolbarButtons}{\param{wxToolBar *}{toolBar}, \param{int }{style}} 
+
+You may override this virtual method to add more buttons to the help window's
+toolbar. {\it toolBar} is a pointer to the toolbar and {\it style} is the style
+flag as passed to the Create method.
+
+wxToolBar::Realize is called immediately after returning from this function.
+
+\membersection{wxHtmlHelpDialog::Create}\label{wxhtmlhelpdialogcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{title = wxEmptyString}, \param{int }{style = wxHF\_DEFAULT\_STYLE}}
+
+Creates the dialog. See \helpref{the constructor}{wxhtmlhelpdialogwxhtmlhelpdialog}
+for a description of the parameters.
+
+\membersection{wxHtmlHelpDialog::GetController}\label{wxhtmlhelpdialoggetcontroller}
+
+\constfunc{wxHtmlHelpController* }{GetController}{\void} 
+
+Returns the help controller associated with the dialog.
+
+\membersection{wxHtmlHelpDialog::ReadCustomization}\label{wxhtmlhelpdialogreadcustomization}
+
+\func{void}{ReadCustomization}{\param{wxConfigBase* }{cfg}, \param{const wxString\& }{path = wxEmptyString}}
+
+Reads the user's settings for this dialog see \helpref{wxHtmlHelpController::ReadCustomization}{wxhtmlhelpcontrollerreadcustomization})
+
+\membersection{wxHtmlHelpDialog::SetController}\label{wxhtmlhelpdialogsetcontroller}
+
+\func{void}{SetController}{\param{wxHtmlHelpController* }{contoller}} 
+
+Sets the help controller associated with the dialog.
+
+\membersection{wxHtmlHelpDialog::SetTitleFormat}\label{wxhtmlhelpdialogsettitleformat}
+
+\func{void}{SetTitleFormat}{\param{const wxString\& }{format}}
+
+Sets the dialog's title format. {\it format} must contain exactly one "\%s"
+(it will be replaced by the page title).
+
+\membersection{wxHtmlHelpDialog::WriteCustomization}\label{wxhtmlhelpdialogwritecustomization}
+
+\func{void}{WriteCustomization}{\param{wxConfigBase* }{cfg}, \param{const wxString\& }{path = wxEmptyString}}
+
+Saves the user's settings for this dialog (see \helpref{wxHtmlHelpController::WriteCustomization}{wxhtmlhelpcontrollerwritecustomization}).
+
 \section{\class{wxHtmlHelpFrame}}\label{wxhtmlhelpframe}
 
 This class is used by \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} 
@@ -26,41 +99,107 @@ when you're writing your own HTML help controller.
 
 \func{}{wxHtmlHelpFrame}{\param{wxWindow* }{parent}, \param{int }{wxWindowID}, \param{const wxString\& }{title = wxEmptyString}, \param{int }{style = wxHF\_DEFAULT\_STYLE}, \param{wxHtmlHelpData* }{data = NULL}}
 
-Constructor.
+Constructor. For the values of {\it style}, please see the documentation for \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}.
 
-{\it style} is combination of these flags:
+\membersection{wxHtmlHelpFrame::AddToolbarButtons}\label{wxhtmlhelpframeaddtoolbarbuttons}
 
-\begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxHF\_TOOLBAR}}{Help frame has toolbar.}
-\twocolitem{\windowstyle{wxHF\_FLAT\_TOOLBAR}}{Help frame has toolbar with flat buttons (aka coolbar).}
-\twocolitem{\windowstyle{wxHF\_CONTENTS}}{Help frame has contents panel.}
-\twocolitem{\windowstyle{wxHF\_INDEX}}{Help frame has index panel.}
-\twocolitem{\windowstyle{wxHF\_SEARCH}}{Help frame has search panel.}
-\twocolitem{\windowstyle{wxHF\_BOOKMARKS}}{Help frame has bookmarks controls.}
-\twocolitem{\windowstyle{wxHF\_OPEN\_FILES}}{Allow user to open arbitrary HTML document.}
-\twocolitem{\windowstyle{wxHF\_PRINT}}{Toolbar contains "print" button.}
-\twocolitem{\windowstyle{wxHF\_MERGE\_BOOKS}}{Contents pane does not show
-book nodes. All books are merged together and appear as single book to the
-user.}
-\twocolitem{\windowstyle{wxHF\_ICONS\_BOOK}}{All nodes in contents pane
-have a book icon. This is how Microsoft's HTML help viewer behaves.}
-\twocolitem{\windowstyle{wxHF\_ICONS\_FOLDER}}{Book nodes in contents pane have
-a book icon, book's sections have a folder icon. This is the default.}
-\twocolitem{\windowstyle{wxHF\_ICONS\_BOOK\_CHAPTER}}{Both book nodes and
-nodes of top-level sections of a book (i.e. chapters) have a book icon,
-all other sections (sections, subsections, ...) have a folder icon.}
-\twocolitem{\windowstyle{wxHF\_DEFAULT\_STYLE}}{{\tt wxHF\_TOOLBAR | wxHF\_CONTENTS
-| wxHF\_INDEX | wxHF\_SEARCH | wxHF\_BOOKMARKS | wxHF\_PRINT}}
-\end{twocollist}
+\func{virtual void}{AddToolbarButtons}{\param{wxToolBar *}{toolBar}, \param{int }{style}} 
+
+You may override this virtual method to add more buttons to the help window's
+toolbar. {\it toolBar} is a pointer to the toolbar and {\it style} is the style
+flag as passed to the Create method.
+
+wxToolBar::Realize is called immediately after returning from this function.
 
 \membersection{wxHtmlHelpFrame::Create}\label{wxhtmlhelpframecreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{title = wxEmptyString}, \param{int }{style = wxHF\_DEFAULT\_STYLE}}
 
 Creates the frame. See \helpref{the constructor}{wxhtmlhelpframewxhtmlhelpframe}
-for parameters description.
+for a description of the parameters.
 
-\membersection{wxHtmlHelpFrame::CreateContents}\label{wxhtmlhelpframecreatecontents}
+\membersection{wxHtmlHelpFrame::GetController}\label{wxhtmlhelpframegetcontroller}
+
+\constfunc{wxHtmlHelpController* }{GetController}{\void} 
+
+Returns the help controller associated with the frame.
+
+\membersection{wxHtmlHelpFrame::ReadCustomization}\label{wxhtmlhelpframereadcustomization}
+
+\func{void}{ReadCustomization}{\param{wxConfigBase* }{cfg}, \param{const wxString\& }{path = wxEmptyString}}
+
+Reads the user's settings for this frame see \helpref{wxHtmlHelpController::ReadCustomization}{wxhtmlhelpcontrollerreadcustomization})
+
+\membersection{wxHtmlHelpFrame::SetController}\label{wxhtmlhelpframesetcontroller}
+
+\func{void}{SetController}{\param{wxHtmlHelpController* }{contoller}} 
+
+Sets the help controller associated with the frame.
+
+\membersection{wxHtmlHelpFrame::SetTitleFormat}\label{wxhtmlhelpframesettitleformat}
+
+\func{void}{SetTitleFormat}{\param{const wxString\& }{format}}
+
+Sets the frame's title format. {\it format} must contain exactly one "\%s"
+(it will be replaced by the page title).
+
+\membersection{wxHtmlHelpFrame::WriteCustomization}\label{wxhtmlhelpframewritecustomization}
+
+\func{void}{WriteCustomization}{\param{wxConfigBase* }{cfg}, \param{const wxString\& }{path = wxEmptyString}}
+
+Saves the user's settings for this frame (see \helpref{wxHtmlHelpController::WriteCustomization}{wxhtmlhelpcontrollerwritecustomization}).
+
+\section{\class{wxHtmlHelpWindow}}\label{wxhtmlhelpwindow}
+
+This class is used by \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} 
+to display help within a frame or dialog, but you can use it yourself to create an embedded HTML help window.
+
+For example:
+
+\begin{verbatim}
+    // m_embeddedHelpWindow is a wxHtmlHelpWindow
+    // m_embeddedHtmlHelp is a wxHtmlHelpController
+
+    // Create embedded HTML Help window
+    m_embeddedHelpWindow = new wxHtmlHelpWindow;
+    m_embeddedHtmlHelp.UseConfig(config, rootPath); // Set your own config object here
+    m_embeddedHtmlHelp.SetHelpWindow(m_embeddedHelpWindow);    
+    m_embeddedHelpWindow->Create(this,
+        wxID_ANY, wxDefaultPosition, GetClientSize(), wxTAB_TRAVERSAL|wxNO_BORDER, wxHF_DEFAULT_STYLE);        
+    m_embeddedHtmlHelp.AddBook(wxFileName(_T("doc.zip")));
+\end{verbatim}
+
+You should pass the style wxHF\_EMBEDDED to the style parameter of wxHtmlHelpController to allow
+the embedded window to be destroyed independently of the help controller.
+
+\wxheading{Derived from}
+
+\helpref{wxWindow}{wxwindow}
+
+\wxheading{Include files}
+
+<wx/html/helpwin.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxHtmlHelpWindow::wxHtmlHelpWindow}\label{wxhtmlhelpwindowwxhtmlhelpwindow}
+
+\func{}{wxHtmlHelpWindow}{\param{wxHtmlHelpData* }{data = NULL}}
+
+\func{}{wxHtmlHelpWindow}{\param{wxWindow* }{parent}, \param{int }{wxWindowID}, \param{int }{style = wxHF\_DEFAULT\_STYLE}, \param{wxHtmlHelpData* }{data = NULL}}
+
+Constructor.
+
+Constructor. For the values of {\it style}, please see the documentation for \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}.
+
+\membersection{wxHtmlHelpWindow::Create}\label{wxhtmlhelpwindowcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{title = wxEmptyString}, \param{int }{style = wxHF\_DEFAULT\_STYLE}}
+
+Creates the frame. See \helpref{the constructor}{wxhtmlhelpwindowwxhtmlhelpwindow}
+for a description of the parameters.
+
+\membersection{wxHtmlHelpWindow::CreateContents}\label{wxhtmlhelpwindowcreatecontents}
 
 \func{void}{CreateContents}{\void}
 
@@ -68,7 +207,7 @@ Creates contents panel. (May take some time.)
 
 Protected.
 
-\membersection{wxHtmlHelpFrame::CreateIndex}\label{wxhtmlhelpframecreateindex}
+\membersection{wxHtmlHelpWindow::CreateIndex}\label{wxhtmlhelpwindowcreateindex}
 
 \func{void}{CreateIndex}{\void}
 
@@ -76,13 +215,13 @@ Creates index panel. (May take some time.)
 
 Protected.
 
-\membersection{wxHtmlHelpFrame::CreateSearch}\label{wxhtmlhelpframecreatesearch}
+\membersection{wxHtmlHelpWindow::CreateSearch}\label{wxhtmlhelpwindowcreatesearch}
 
 \func{void}{CreateSearch}{\void}
 
 Creates search panel.
 
-\membersection{wxHtmlHelpFrame::Display}\label{wxhtmlhelpframedisplay}
+\membersection{wxHtmlHelpWindow::Display}\label{wxhtmlhelpwindowdisplay}
 
 \func{bool}{Display}{\param{const wxString\& }{x}}
 
@@ -105,38 +244,38 @@ The second form takes numeric ID as the parameter.
 \pythonnote{The second form of this method is named DisplayId in
 wxPython.}
 
-\membersection{wxHtmlHelpFrame::DisplayContents}\label{wxhtmlhelpframedisplaycontents}
+\membersection{wxHtmlHelpWindow::DisplayContents}\label{wxhtmlhelpwindowdisplaycontents}
 
 \func{bool}{DisplayContents}{\void}
 
 Displays contents panel.
 
-\membersection{wxHtmlHelpFrame::DisplayIndex}\label{wxhtmlhelpframedisplayindex}
+\membersection{wxHtmlHelpWindow::DisplayIndex}\label{wxhtmlhelpwindowdisplayindex}
 
 \func{bool}{DisplayIndex}{\void}
 
 Displays index panel.
 
-\membersection{wxHtmlHelpFrame::GetData}\label{wxhtmlhelpframegetdata}
+\membersection{wxHtmlHelpWindow::GetData}\label{wxhtmlhelpwindowgetdata}
 
 \func{wxHtmlHelpData*}{GetData}{\void}
 
-Return wxHtmlHelpData object.
+Returns the wxHtmlHelpData object, which is usually a pointer to the controller's data.
 
-\membersection{wxHtmlHelpFrame::KeywordSearch}\label{wxhtmlhelpframekeywordsearch}
+\membersection{wxHtmlHelpWindow::KeywordSearch}\label{wxhtmlhelpwindowkeywordsearch}
 
 \func{bool}{KeywordSearch}{\param{const wxString\& }{keyword}, \param{wxHelpSearchMode }{mode = wxHELP\_SEARCH\_ALL}}
 
 Search for given keyword. Optionally it searches through the index (mode =
 wxHELP\_SEARCH\_INDEX), default the content (mode = wxHELP\_SEARCH\_ALL).
 
-\membersection{wxHtmlHelpFrame::ReadCustomization}\label{wxhtmlhelpframereadcustomization}
+\membersection{wxHtmlHelpWindow::ReadCustomization}\label{wxhtmlhelpwindowreadcustomization}
 
 \func{void}{ReadCustomization}{\param{wxConfigBase* }{cfg}, \param{const wxString\& }{path = wxEmptyString}}
 
-Reads user's settings for this frame (see \helpref{wxHtmlHelpController::ReadCustomization}{wxhtmlhelpcontrollerreadcustomization})
+Reads the user's settings for this window (see \helpref{wxHtmlHelpController::ReadCustomization}{wxhtmlhelpcontrollerreadcustomization})
 
-\membersection{wxHtmlHelpFrame::RefreshLists}\label{wxhtmlhelpframerefreshlists}
+\membersection{wxHtmlHelpWindow::RefreshLists}\label{wxhtmlhelpwindowrefreshlists}
 
 \func{void}{RefreshLists}{\void}
 
@@ -144,34 +283,75 @@ Refresh all panels. This is necessary if a new book was added.
 
 Protected.
 
-\membersection{wxHtmlHelpFrame::SetTitleFormat}\label{wxhtmlhelpframesettitleformat}
+\membersection{wxHtmlHelpWindow::SetTitleFormat}\label{wxhtmlhelpwindowsettitleformat}
 
 \func{void}{SetTitleFormat}{\param{const wxString\& }{format}}
 
 Sets the frame's title format. {\it format} must contain exactly one "\%s"
 (it will be replaced by the page title).
 
-\membersection{wxHtmlHelpFrame::UseConfig}\label{wxhtmlhelpframeuseconfig}
+\membersection{wxHtmlHelpWindow::UseConfig}\label{wxhtmlhelpwindowuseconfig}
 
 \func{void}{UseConfig}{\param{wxConfigBase* }{config}, \param{const wxString\& }{rootpath = wxEmptyString}}
 
-Add books to search choice panel.
+Associates a wxConfig object with the help window. It is recommended that you use \helpref{wxHtmlHelpController::UseConfig}{wxhtmlhelpcontrolleruseconfig} instead.
 
-\membersection{wxHtmlHelpFrame::WriteCustomization}\label{wxhtmlhelpframewritecustomization}
+\membersection{wxHtmlHelpWindow::WriteCustomization}\label{wxhtmlhelpwindowwritecustomization}
 
 \func{void}{WriteCustomization}{\param{wxConfigBase* }{cfg}, \param{const wxString\& }{path = wxEmptyString}}
 
-Saves user's settings for this frame (see \helpref{wxHtmlHelpController::WriteCustomization}{wxhtmlhelpcontrollerwritecustomization}).
+Saves the user's settings for this window(see \helpref{wxHtmlHelpController::WriteCustomization}{wxhtmlhelpcontrollerwritecustomization}).
 
-\membersection{wxHtmlHelpFrame::AddToolbarButtons}\label{wxhtmlhelpframeaddtoolbarbuttons}
+\membersection{wxHtmlHelpWindow::AddToolbarButtons}\label{wxhtmlhelpwindowaddtoolbarbuttons}
 
 \func{virtual void}{AddToolbarButtons}{\param{wxToolBar *}{toolBar}, \param{int }{style}} 
 
-You may override this virtual method to add more buttons into help frame's
+You may override this virtual method to add more buttons to the help window's
 toolbar. {\it toolBar} is a pointer to the toolbar and {\it style} is the style
-flag as passed to Create method.
+flag as passed to the Create method.
 
 wxToolBar::Realize is called immediately after returning from this function.
 
 See {\it samples/html/helpview} for an example.
+
+\section{\class{wxHtmlModalHelp}}\label{wxhtmlmodalhelp}
+
+This class uses \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} 
+to display help in a modal dialog. This is useful on platforms such as wxMac
+where if you display help from a modal dialog, the help window must itself be a modal
+dialog.
+
+Create objects of this class on the stack, for example:
+
+\begin{verbatim}
+    // The help can be browsed during the lifetime of this object; when the user quits
+    // the help, program execution will continue.
+    wxHtmlModalHelp help(parent, wxT("help"), wxT("My topic"));
+\end{verbatim}
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/html/helpctrl.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxHtmlModalHelp::wxHtmlModalHelp}\label{wxhtmlmodalhelpctor}
+
+\func{}{wxHtmlModalHelp}{\param{wxWindow* }{parent}, \param{const wxString\& }{helpFile}, \param{const wxString\& }{topic = wxEmptyString},
+        \param{int }{style = wxHF\_DEFAULT\_STYLE | wxHF\_DIALOG | wxHF\_MODAL}}
+
+\wxheading{Parameters}
+
+{\it parent} is the parent of the dialog.
+
+{\it helpFile} is the HTML help file to show.
+
+{\it topic} is an optional topic. If this is empty, the help contents will be shown.
+
+{\it style} is a combination of the flags described in the \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} documentation.
+
 
