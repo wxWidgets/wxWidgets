@@ -256,7 +256,7 @@ public:
     bool IsShown() const;
 
     void SetUserData(wxObject* userData)
-        { delete userData; m_userData = userData; }
+        { delete m_userData; m_userData = userData; }
     wxObject* GetUserData() const
         { return m_userData; }
     wxPoint GetPosition() const
