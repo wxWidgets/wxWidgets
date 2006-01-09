@@ -1857,7 +1857,9 @@ If path is empty, the current directory will be used. If filename is empty,
 no default filename will be supplied. The wildcard determines what files
 are displayed in the file selector, and file extension supplies a type
 extension for the required filename. Flags may be a combination of wxOPEN,
-wxSAVE, wxOVERWRITE\_PROMPT, wxFILE\_MUST\_EXIST, wxMULTIPLE or 0.
+wxSAVE, wxOVERWRITE\_PROMPT or wxFILE\_MUST\_EXIST. Note that wxMULTIPLE
+can only be used with \helpref{wxFileDialog}{wxfiledialog} and not here as this
+function only returns a single file name.
 
 Both the Unix and Windows versions implement a wildcard filter. Typing a
 filename containing wildcards (*, ?) in the filename text item, and
