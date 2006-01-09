@@ -159,7 +159,7 @@ tweaked and finished up by me.  The changes include the following:
       The free edit mode is designated by the use of a red,
       non-flashing caret.
 
-    * Ctrl-H will fold/unfold (hide/show) the selected lines.
+    * Ctrl-Shift-F will fold/unfold (hide/show) the selected lines.
 
     * General code cleanup and fixes.
 

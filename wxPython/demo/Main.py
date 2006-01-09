@@ -53,6 +53,7 @@ _treeList = [
         'MultiSplitterWindow',
         'Throbber',
         'GetMouseState',
+        'FloatCanvas',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -161,12 +162,11 @@ _treeList = [
         'HtmlWindow',
         'HyperLinkCtrl',
         'IntCtrl',
-        'MediaCtrl',
-        'MultiSplitterWindow',
         'MVCTree',   
         'MaskedEditControls',
         'MaskedNumCtrl',
-        'MimeTypesManager',
+        'MediaCtrl',
+        'MultiSplitterWindow',
         'PyCrust',
         'PyPlot',
         'PyShell',
@@ -233,7 +233,9 @@ _treeList = [
         'DrawXXXList',
         'FileHistory',
         'FontEnumerator',
+        'GLCanvas',
         'Joystick',
+        'MimeTypesManager',
         'MouseGestures',
         'OGL',
         'PrintFramework',
@@ -241,11 +243,6 @@ _treeList = [
         'Sound',
         'StandardPaths',
         'Unicode',
-        ]),
-
-    # need libs not coming with the demo
-    ('Samples using an external library', [
-        'GLCanvas',
         ]),
 
 

@@ -176,26 +176,37 @@ class Frame(wx.Frame):
                      'Call Tip Options')
                 
         if wx.Platform == "__WXMAC__":
-            m.Append(ID_USEAA, '&Use AntiAliasing\tCtrl+Shift+A',
+            m.Append(ID_USEAA, '&Use AntiAliasing',
                      'Use anti-aliased fonts', wx.ITEM_CHECK)
             
         m.AppendSeparator()
-        m.Append(ID_SAVEHISTORY, '&Save History\tAlt+Ctrl+A', 'Automatically save history on close', wx.ITEM_CHECK)
+        m.Append(ID_SAVEHISTORY, '&Save History',
+                 'Automatically save history on close', wx.ITEM_CHECK)
         self.startupMenu = wx.Menu()
-        self.startupMenu.Append(ID_EXECSTARTUPSCRIPT, 'E&xecute Startup Script\tAlt+Ctrl+X', 'Execute Startup Script', wx.ITEM_CHECK)
-        self.startupMenu.Append(ID_EDITSTARTUPSCRIPT, '&Edit Startup Script\tAlt+Ctrl+E', 'Edit Startup Script')
+        self.startupMenu.Append(ID_EXECSTARTUPSCRIPT,
+                                'E&xecute Startup Script',
+                                'Execute Startup Script', wx.ITEM_CHECK)
+        self.startupMenu.Append(ID_EDITSTARTUPSCRIPT,
+                                '&Edit Startup Script',
+                                'Edit Startup Script')
         m.AppendMenu(ID_STARTUP, '&Startup', self.startupMenu, 'Startup Options')
 
         self.settingsMenu = wx.Menu()
-        self.settingsMenu.Append(ID_AUTO_SAVESETTINGS, '&Auto Save Settings\tAlt+Ctrl+A', 'Automatically save settings on close', wx.ITEM_CHECK)
-        self.settingsMenu.Append(ID_SAVESETTINGS, '&Save Settings\tAlt+Ctrl+S', 'Save settings now')
-        self.settingsMenu.Append(ID_DELSETTINGSFILE, '&Revert to default\tAlt+Ctrl+R', 'Revert to the default settings')
+        self.settingsMenu.Append(ID_AUTO_SAVESETTINGS,
+                                 '&Auto Save Settings',
+                                 'Automatically save settings on close', wx.ITEM_CHECK)
+        self.settingsMenu.Append(ID_SAVESETTINGS,
+                                 '&Save Settings',
+                                 'Save settings now')
+        self.settingsMenu.Append(ID_DELSETTINGSFILE,
+                                 '&Revert to default',
+                                 'Revert to the default settings')
         m.AppendMenu(ID_SETTINGS, '&Settings', self.settingsMenu, 'Settings Options')           
 
         m = self.helpMenu = wx.Menu()
         m.Append(ID_HELP, '&Help\tF1', 'Help!')
         m.AppendSeparator()
-        m.Append(ID_ABOUT, '&About...\tAlt+A', 'About this program')
+        m.Append(ID_ABOUT, '&About...', 'About this program')
 
         b = self.menuBar = wx.MenuBar()
         b.Append(self.fileMenu, '&File')

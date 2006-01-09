@@ -1905,7 +1905,7 @@ class FloatCanvas(wx.Panel):
         self.ObjectUnderMouse = None
         
         # called just to make sure everything is initialized
-        self.OnSize(None)
+        ##self.OnSize(None)
 
         self.InHereNum = 0
 

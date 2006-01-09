@@ -447,6 +447,7 @@ Platform: %s""" % \
         if self.AutoCompActive():
             event.Skip()
             return
+        
         # Prevent modification of previously submitted
         # commands/responses.
         controlDown = event.ControlDown()
@@ -456,7 +457,7 @@ Platform: %s""" % \
         endpos = self.GetTextLength()
         selecting = self.GetSelectionStart() != self.GetSelectionEnd()
         
-        if controlDown and key in (ord('H'), ord('h')): 
+        if controlDown and shiftDown and key in (ord('F'), ord('f')): 
             li = self.GetCurrentLine()
             m = self.MarkerGet(li)
             if m & 1<<0:
@@ -510,10 +511,12 @@ Platform: %s""" % \
             if self.CallTipActive():
                 self.CallTipCancel()
             self.processLine()
-        #Complete Text (from already typed words)    
+            
+        # Complete Text (from already typed words)    
         elif shiftDown and key == wx.WXK_RETURN:
             self.OnShowCompHistory()
-        # Ctrl+Return (Cntrl+Enter) is used to insert a line break.
+            
+        # Ctrl+Return (Ctrl+Enter) is used to insert a line break.
         elif controlDown and key == wx.WXK_RETURN:
             if self.CallTipActive():
                 self.CallTipCancel()
@@ -521,40 +524,50 @@ Platform: %s""" % \
                 self.processLine()
             else:
                 self.insertLineBreak()
+                
         # Let Ctrl-Alt-* get handled normally.
         elif controlDown and altDown:
             event.Skip()
+            
         # Clear the current, unexecuted command.
         elif key == wx.WXK_ESCAPE:
             if self.CallTipActive():
                 event.Skip()
             else:
                 self.clearCommand()
+
         # Increase font size.
-        elif controlDown and key in (ord(']'),):
+        elif controlDown and key in (ord(']'), wx.WXK_NUMPAD_ADD):
             dispatcher.send(signal='FontIncrease')
+
         # Decrease font size.
-        elif controlDown and key in (ord('['),):
+        elif controlDown and key in (ord('['), wx.WXK_NUMPAD_SUBTRACT):
             dispatcher.send(signal='FontDecrease')
+
         # Default font size.
-        elif controlDown and key in (ord('='),):
+        elif controlDown and key in (ord('='), wx.WXK_NUMPAD_DIVIDE):
             dispatcher.send(signal='FontDefault')
+
         # Cut to the clipboard.
         elif (controlDown and key in (ord('X'), ord('x'))) \
-        or (shiftDown and key == wx.WXK_DELETE):
+                 or (shiftDown and key == wx.WXK_DELETE):
             self.Cut()
+
         # Copy to the clipboard.
         elif controlDown and not shiftDown \
-            and key in (ord('C'), ord('c'), wx.WXK_INSERT):
+                 and key in (ord('C'), ord('c'), wx.WXK_INSERT):
             self.Copy()
+
         # Copy to the clipboard, including prompts.
         elif controlDown and shiftDown \
-            and key in (ord('C'), ord('c'), wx.WXK_INSERT):
+                 and key in (ord('C'), ord('c'), wx.WXK_INSERT):
             self.CopyWithPrompts()
+
         # Copy to the clipboard, including prefixed prompts.
         elif altDown and not controlDown \
-            and key in (ord('C'), ord('c'), wx.WXK_INSERT):
+                 and key in (ord('C'), ord('c'), wx.WXK_INSERT):
             self.CopyWithPromptsPrefixed()
+
         # Home needs to be aware of the prompt.
         elif key == wx.WXK_HOME:
             home = self.promptPosEnd
@@ -565,6 +578,7 @@ Platform: %s""" % \
                     self.EnsureCaretVisible()
             else:
                 event.Skip()
+
         #
         # The following handlers modify text, so we need to see if
         # there is a selection that includes text prior to the prompt.
@@ -572,60 +586,77 @@ Platform: %s""" % \
         # Don't modify a selection with text prior to the prompt.
         elif selecting and key not in NAVKEYS and not self.CanEdit():
             pass
+
         # Paste from the clipboard.
         elif (controlDown and not shiftDown and key in (ord('V'), ord('v'))) \
                  or (shiftDown and not controlDown and key == wx.WXK_INSERT):
             self.Paste()
+
+        # manually invoke AutoComplete and Calltips
         elif controlDown and key == wx.WXK_SPACE:
-            """AutoComplete and Calltips manually."""
-            self.OnCallTipAutoCompleteManually (shiftDown)
+            self.OnCallTipAutoCompleteManually(shiftDown)
+
         # Paste from the clipboard, run commands.
         elif controlDown and shiftDown and key in (ord('V'), ord('v')):
             self.PasteAndRun()
+            
         # Replace with the previous command from the history buffer.
         elif (controlDown and key == wx.WXK_UP) \
                  or (altDown and key in (ord('P'), ord('p'))):
             self.OnHistoryReplace(step=+1)
+            
         # Replace with the next command from the history buffer.
         elif (controlDown and key == wx.WXK_DOWN) \
                  or (altDown and key in (ord('N'), ord('n'))):
             self.OnHistoryReplace(step=-1)
+            
         # Insert the previous command from the history buffer.
         elif (shiftDown and key == wx.WXK_UP) and self.CanEdit():
             self.OnHistoryInsert(step=+1)
+            
         # Insert the next command from the history buffer.
         elif (shiftDown and key == wx.WXK_DOWN) and self.CanEdit():
             self.OnHistoryInsert(step=-1)
+            
         # Search up the history for the text in front of the cursor.
         elif key == wx.WXK_F8:
             self.OnHistorySearch()
+            
         # Don't backspace over the latest non-continuation prompt.
         elif key == wx.WXK_BACK:
             if selecting and self.CanEdit():
                 event.Skip()
             elif currpos > self.promptPosEnd:
                 event.Skip()
+                
         # Only allow these keys after the latest prompt.
         elif key in (wx.WXK_TAB, wx.WXK_DELETE):
             if self.CanEdit():
                 event.Skip()
+                
         # Don't toggle between insert mode and overwrite mode.
         elif key == wx.WXK_INSERT:
             pass
+        
         # Don't allow line deletion.
         elif controlDown and key in (ord('L'), ord('l')):
             pass
+
         # Don't allow line transposition.
         elif controlDown and key in (ord('T'), ord('t')):
             pass
+
         # Basic navigation keys should work anywhere.
         elif key in NAVKEYS:
             event.Skip()
+
         # Protect the readonly portion of the shell.
         elif not self.CanEdit():
             pass
+
         else:
             event.Skip()
+
 
     def OnShowCompHistory(self):
         """Show possible autocompletion Words from already typed words."""
