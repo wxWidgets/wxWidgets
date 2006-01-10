@@ -71,6 +71,7 @@ wxMSW:
   puts 64-bit builds in their own directory and adds /machine:amd64 or ia64
   to the link command.
 - wxStatusBar::GetFieldRect now returns correct values under XP.
+- wxStatusBar no longer corrupts surrounding windows on resize.
 
 wxGTK:
 
