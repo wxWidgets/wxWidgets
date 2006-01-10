@@ -34,7 +34,11 @@ extern "C"
 #include "wx/module.h"
 
 #ifndef TIFFLINKAGEMODE
-  #define TIFFLINKAGEMODE LINKAGEMODE
+  #if defined(__WATCOMC__) && defined(__WXMGL__)
+    #define TIFFLINKAGEMODE cdecl
+  #else
+    #define TIFFLINKAGEMODE LINKAGEMODE
+  #endif
 #endif
 
 //-----------------------------------------------------------------------------
