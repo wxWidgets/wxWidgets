@@ -26,6 +26,7 @@ The following deprecated items have been removed:
 
 2.6.2.1
 -------
+* 10-Jan-2006
 
 wxMSW: Fix for bug #1211907, popup menu indenting inconsistent with
 bitmaps.
