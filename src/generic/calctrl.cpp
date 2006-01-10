@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/calctrl.cpp
+// Name:        src/generic/calctrl.cpp
 // Purpose:     implementation fo the generic wxCalendarCtrl
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -59,6 +59,8 @@ BEGIN_EVENT_TABLE(wxCalendarCtrl, wxControl)
 
     EVT_LEFT_DOWN(wxCalendarCtrl::OnClick)
     EVT_LEFT_DCLICK(wxCalendarCtrl::OnDClick)
+
+    EVT_SYS_COLOUR_CHANGED(wxCalendarCtrl::OnSysColourChanged)
 END_EVENT_TABLE()
 
 #if wxUSE_EXTENDED_RTTI
@@ -175,8 +177,15 @@ void wxCalendarCtrl::Init()
         m_attrs[n] = NULL;
     }
 
+    InitColours();
+}
+
+void wxCalendarCtrl::InitColours()
+{
     m_colHighlightFg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_colHighlightBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    m_colBackground = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    m_colSorrounding = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
 
     m_colHolidayFg = *wxRED;
     // don't set m_colHolidayBg - by default, same as our bg colour
@@ -194,7 +203,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
                             const wxString& name)
 {
     if ( !wxControl::Create(parent, id, pos, size,
-                            style | wxCLIP_CHILDREN | wxWANTS_CHARS,
+                            style | wxCLIP_CHILDREN | wxWANTS_CHARS | wxFULL_REPAINT_ON_RESIZE,
                             wxDefaultValidator, name) )
     {
         return false;
@@ -231,7 +240,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
 
     // Since we don't paint the whole background make sure that the platform
     // will use the right one.
-    SetBackgroundColour(GetBackgroundColour());
+    SetBackgroundColour(m_colBackground);
 
     SetHolidayAttrs();
 
@@ -888,8 +897,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #endif
 
     wxCoord y = 0;
-    wxCoord x0 = (GetSize().x - m_widthCol*7) /2;
-    if (x0 < 0) x0 = 0;
+    wxCoord x0 = wxMax( (GetSize().x - m_widthCol*7) /2 , 0 );
 
     if ( HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
@@ -939,8 +947,8 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             if ( IsDateInRange(ldpm) && ( ( ldpm.GetYear() == m_date.GetYear() ) ? true : AllowYearChange() ) )
             {
                 m_leftArrowRect = wxRect(larrowx - 3, arrowy - 3, (arrowheight / 2) + 8, (arrowheight + 6));
-                dc.SetBrush(wxBrush(*wxBLACK, wxSOLID));
-                dc.SetPen(wxPen(*wxBLACK, 1, wxSOLID));
+                dc.SetBrush(*wxBLACK_BRUSH);
+                dc.SetPen(*wxBLACK_PEN);
                 dc.DrawPolygon(3, leftarrow, larrowx , arrowy, wxWINDING_RULE);
                 dc.SetBrush(*wxTRANSPARENT_BRUSH);
                 dc.DrawRectangle(m_leftArrowRect);
@@ -949,8 +957,8 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             if ( IsDateInRange(fdnm) && ( ( fdnm.GetYear() == m_date.GetYear() ) ? true : AllowYearChange() ) )
             {
                 m_rightArrowRect = wxRect(rarrowx - 4, arrowy - 3, (arrowheight / 2) + 8, (arrowheight + 6));
-                dc.SetBrush(wxBrush(*wxBLACK, wxSOLID));
-                dc.SetPen(wxPen(*wxBLACK, 1, wxSOLID));
+                dc.SetBrush(*wxBLACK_BRUSH);
+                dc.SetPen(*wxBLACK_PEN);
                 dc.DrawPolygon(3, rightarrow, rarrowx , arrowy, wxWINDING_RULE);
                 dc.SetBrush(*wxTRANSPARENT_BRUSH);
                 dc.DrawRectangle(m_rightArrowRect);
@@ -961,7 +969,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 
     // first draw the week days
-    if ( IsExposed(x0, y, 7*m_widthCol, m_heightRow) )
+    if ( IsExposed(x0, y, x0 + 7*m_widthCol, m_heightRow) )
     {
 #if DEBUG_PAINT
         wxLogDebug("painting the header");
@@ -1003,7 +1011,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     for ( size_t nWeek = 1; nWeek <= 6; nWeek++, y += m_heightRow )
     {
         // if the update region doesn't intersect this row, don't paint it
-        if ( !IsExposed(0, y, 7*m_widthCol, m_heightRow - 1) )
+        if ( !IsExposed(x0, y, x0 + 7*m_widthCol, m_heightRow - 1) )
         {
             date += wxDateSpan::Week();
 
@@ -1016,6 +1024,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         for ( int wd = 0; wd < 7; wd++ )
         {
+            dc.SetTextBackground(m_colBackground);
             if ( IsDateShown(date) )
             {
                 // don't use wxDate::Format() which prepends 0s
@@ -1034,7 +1043,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 {
                     // surrounding week or out-of-range
                     // draw "disabled"
-                    dc.SetTextForeground(*wxLIGHT_GREY);
+                    dc.SetTextForeground(m_colSorrounding);
                     changedColours = true;
                 }
                 else
@@ -1176,7 +1185,7 @@ void wxCalendarCtrl::RefreshDate(const wxDateTime& date)
     // always refresh the whole row at once because our OnPaint() will draw
     // the whole row anyhow - and this allows the small optimisation in
     // OnClick() below to work
-    rect.x = 0;
+    rect.x = wxMax( (GetSize().x - m_widthCol*7) /2 , 0 );
 
     rect.y = (m_heightRow * GetWeek(date)) + m_rowOffset;
 
@@ -1242,38 +1251,39 @@ void wxCalendarCtrl::HighlightRange(wxPaintDC* pDC, const wxDateTime& fromdate, 
             {
                 int numpoints;
                 wxPoint corners[8]; // potentially 8 corners in polygon
+                wxCoord x0 = wxMax( (GetSize().x - m_widthCol*7) /2 , 0 );
 
                 if ( fw == tw )
                 {
                     // simple case: same week
                     numpoints = 4;
-                    corners[0] = wxPoint((fd - 1) * m_widthCol, (fw * m_heightRow) + m_rowOffset);
-                    corners[1] = wxPoint((fd - 1) * m_widthCol, ((fw + 1 ) * m_heightRow) + m_rowOffset);
-                    corners[2] = wxPoint(td * m_widthCol, ((tw + 1) * m_heightRow) + m_rowOffset);
-                    corners[3] = wxPoint(td * m_widthCol, (tw * m_heightRow) + m_rowOffset);
+                    corners[0] = wxPoint(x0 + (fd - 1) * m_widthCol, (fw * m_heightRow) + m_rowOffset);
+                    corners[1] = wxPoint(x0 + (fd - 1) * m_widthCol, ((fw + 1 ) * m_heightRow) + m_rowOffset);
+                    corners[2] = wxPoint(x0 + td * m_widthCol, ((tw + 1) * m_heightRow) + m_rowOffset);
+                    corners[3] = wxPoint(x0 + td * m_widthCol, (tw * m_heightRow) + m_rowOffset);
                 }
                 else
                 {
                     int cidx = 0;
                     // "complex" polygon
-                    corners[cidx] = wxPoint((fd - 1) * m_widthCol, (fw * m_heightRow) + m_rowOffset); cidx++;
+                    corners[cidx] = wxPoint(x0 + (fd - 1) * m_widthCol, (fw * m_heightRow) + m_rowOffset); cidx++;
 
                     if ( fd > 1 )
                     {
-                        corners[cidx] = wxPoint((fd - 1) * m_widthCol, ((fw + 1) * m_heightRow) + m_rowOffset); cidx++;
-                        corners[cidx] = wxPoint(0, ((fw + 1) * m_heightRow) + m_rowOffset); cidx++;
+                        corners[cidx] = wxPoint(x0 + (fd - 1) * m_widthCol, ((fw + 1) * m_heightRow) + m_rowOffset); cidx++;
+                        corners[cidx] = wxPoint(x0, ((fw + 1) * m_heightRow) + m_rowOffset); cidx++;
                     }
 
-                    corners[cidx] = wxPoint(0, ((tw + 1) * m_heightRow) + m_rowOffset); cidx++;
-                    corners[cidx] = wxPoint(td * m_widthCol, ((tw + 1) * m_heightRow) + m_rowOffset); cidx++;
+                    corners[cidx] = wxPoint(x0, ((tw + 1) * m_heightRow) + m_rowOffset); cidx++;
+                    corners[cidx] = wxPoint(x0 + td * m_widthCol, ((tw + 1) * m_heightRow) + m_rowOffset); cidx++;
 
                     if ( td < 7 )
                     {
-                        corners[cidx] = wxPoint(td * m_widthCol, (tw * m_heightRow) + m_rowOffset); cidx++;
-                        corners[cidx] = wxPoint(7 * m_widthCol, (tw * m_heightRow) + m_rowOffset); cidx++;
+                        corners[cidx] = wxPoint(x0 + td * m_widthCol, (tw * m_heightRow) + m_rowOffset); cidx++;
+                        corners[cidx] = wxPoint(x0 + 7 * m_widthCol, (tw * m_heightRow) + m_rowOffset); cidx++;
                     }
 
-                    corners[cidx] = wxPoint(7 * m_widthCol, (fw * m_heightRow) + m_rowOffset); cidx++;
+                    corners[cidx] = wxPoint(x0 + 7 * m_widthCol, (fw * m_heightRow) + m_rowOffset); cidx++;
 
                     numpoints = cidx;
                 }
@@ -1489,7 +1499,10 @@ wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // Header: Days
-    int wday = pos.x / m_widthCol;
+
+    wxCoord x0 = wxMax( (GetSize().x - m_widthCol*7) /2 , 0 );
+
+    int wday = ( pos.x - x0 ) / m_widthCol;
 //    if ( y < m_heightRow )
     if ( y < (m_heightRow + m_rowOffset) )
     {
@@ -1597,6 +1610,20 @@ void wxCalendarCtrl::OnYearTextChange(wxCommandEvent& event)
 {
     SetUserChangedYear();
     OnYearChange(event);
+}
+
+// Responds to colour changes, and passes event on to children.
+void wxCalendarCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    // reinit colours
+    InitColours();
+
+    // Propagate the event to the children
+    wxControl::OnSysColourChanged(event);
+
+    // Redraw control area
+    SetBackgroundColour(m_colBackground);
+    Refresh();
 }
 
 // ----------------------------------------------------------------------------

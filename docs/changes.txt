@@ -52,6 +52,8 @@ All (GUI):
   by Sandro Sigala)
 - Added caption parameter to wxGetFontFromUser and wxGetColourFromUser.
 - Added wxGetMouseState function.
+- wxCalendarCtrl positioning fixes for dimensions other than best size.
+- wxCalendarCtrl colour schema changed and adjusted to system settings.
 
 wxMSW:
 

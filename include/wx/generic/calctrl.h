@@ -161,9 +161,14 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
 private:
     // common part of all ctors
     void Init();
+
+    // startup colours and reinitialization after colour changes in system
+    void InitColours();
 
     // event handlers
     void OnPaint(wxPaintEvent& event);
@@ -286,7 +291,9 @@ private:
              m_colHolidayFg,
              m_colHolidayBg,
              m_colHeaderFg,
-             m_colHeaderBg;
+             m_colHeaderBg,
+             m_colBackground,
+             m_colSorrounding;
 
     // the attributes for each of the month days
     wxCalendarDateAttr *m_attrs[31];
