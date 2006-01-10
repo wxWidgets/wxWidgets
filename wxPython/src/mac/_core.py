@@ -10885,6 +10885,14 @@ class MenuItem(Object):
         """SetAccel(self, AcceleratorEntry accel)"""
         return _core_.MenuItem_SetAccel(*args, **kwargs)
 
+    def SetBitmap(*args, **kwargs):
+        """SetBitmap(self, Bitmap bitmap)"""
+        return _core_.MenuItem_SetBitmap(*args, **kwargs)
+
+    def GetBitmap(*args, **kwargs):
+        """GetBitmap(self) -> Bitmap"""
+        return _core_.MenuItem_GetBitmap(*args, **kwargs)
+
     def SetFont(*args, **kwargs):
         """SetFont(self, Font font)"""
         return _core_.MenuItem_SetFont(*args, **kwargs)
@@ -10945,14 +10953,6 @@ class MenuItem(Object):
     def ResetOwnerDrawn(*args, **kwargs):
         """ResetOwnerDrawn(self)"""
         return _core_.MenuItem_ResetOwnerDrawn(*args, **kwargs)
-
-    def SetBitmap(*args, **kwargs):
-        """SetBitmap(self, Bitmap bitmap)"""
-        return _core_.MenuItem_SetBitmap(*args, **kwargs)
-
-    def GetBitmap(*args, **kwargs):
-        """GetBitmap(self) -> Bitmap"""
-        return _core_.MenuItem_GetBitmap(*args, **kwargs)
 
 
 class MenuItemPtr(MenuItem):

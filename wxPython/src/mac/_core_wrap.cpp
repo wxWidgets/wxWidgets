@@ -2829,7 +2829,7 @@ static void wxMenuItem_SetTextColour(wxMenuItem *self,wxColour const &colText){}
 static wxColour wxMenuItem_GetTextColour(wxMenuItem *self){ return wxNullColour; }
 static void wxMenuItem_SetBackgroundColour(wxMenuItem *self,wxColour const &colBack){}
 static wxColour wxMenuItem_GetBackgroundColour(wxMenuItem *self){ return wxNullColour; }
-static void wxMenuItem_SetBitmaps(wxMenuItem *self,wxBitmap const &bmpChecked,wxBitmap const &bmpUnchecked=wxNullBitmap){}
+static void wxMenuItem_SetBitmaps(wxMenuItem *self,wxBitmap const &bmpChecked,wxBitmap const &bmpUnchecked=wxNullBitmap){ self->SetBitmap( bmpChecked ); }
 static void wxMenuItem_SetDisabledBitmap(wxMenuItem *self,wxBitmap const &bmpDisabled){}
 static wxBitmap const &wxMenuItem_GetDisabledBitmap(wxMenuItem const *self){ return wxNullBitmap; }
 static void wxMenuItem_SetMarginWidth(wxMenuItem *self,int nWidth){}
@@ -37497,6 +37497,73 @@ static PyObject *_wrap_MenuItem_SetAccel(PyObject *, PyObject *args, PyObject *k
 }
 
 
+static PyObject *_wrap_MenuItem_SetBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxBitmap *arg2 = 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "bitmap", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MenuItem_SetBitmap",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+        if (arg2 == NULL) {
+            SWIG_null_ref("wxBitmap");
+        }
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetBitmap((wxBitmap const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MenuItem_GetBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
+    wxBitmap *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuItem_GetBitmap",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxBitmap const &_result_ref = (arg1)->GetBitmap();
+            result = (wxBitmap *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxBitmap* resultptr = new wxBitmap(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBitmap, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_MenuItem_SetFont(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMenuItem *arg1 = (wxMenuItem *) 0 ;
@@ -37964,73 +38031,6 @@ static PyObject *_wrap_MenuItem_ResetOwnerDrawn(PyObject *, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_MenuItem_SetBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
-    wxBitmap *arg2 = 0 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "bitmap", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MenuItem_SetBitmap",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
-        if (SWIG_arg_fail(2)) SWIG_fail;
-        if (arg2 == NULL) {
-            SWIG_null_ref("wxBitmap");
-        }
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetBitmap((wxBitmap const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_MenuItem_GetBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMenuItem *arg1 = (wxMenuItem *) 0 ;
-    wxBitmap *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MenuItem_GetBitmap",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMenuItem, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxBitmap const &_result_ref = (arg1)->GetBitmap();
-            result = (wxBitmap *) &_result_ref;
-        }
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        wxBitmap* resultptr = new wxBitmap(*result);
-        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBitmap, 1);
-    }
     return resultobj;
     fail:
     return NULL;
@@ -47135,6 +47135,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MenuItem_GetHelp", (PyCFunction) _wrap_MenuItem_GetHelp, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_GetAccel", (PyCFunction) _wrap_MenuItem_GetAccel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_SetAccel", (PyCFunction) _wrap_MenuItem_SetAccel, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_SetBitmap", (PyCFunction) _wrap_MenuItem_SetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MenuItem_GetBitmap", (PyCFunction) _wrap_MenuItem_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_SetFont", (PyCFunction) _wrap_MenuItem_SetFont, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_GetFont", (PyCFunction) _wrap_MenuItem_GetFont, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_SetTextColour", (PyCFunction) _wrap_MenuItem_SetTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -47150,8 +47152,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MenuItem_IsOwnerDrawn", (PyCFunction) _wrap_MenuItem_IsOwnerDrawn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_SetOwnerDrawn", (PyCFunction) _wrap_MenuItem_SetOwnerDrawn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_ResetOwnerDrawn", (PyCFunction) _wrap_MenuItem_ResetOwnerDrawn, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"MenuItem_SetBitmap", (PyCFunction) _wrap_MenuItem_SetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"MenuItem_GetBitmap", (PyCFunction) _wrap_MenuItem_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuItem_swigregister", MenuItem_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Control", (PyCFunction) _wrap_new_Control, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreControl", (PyCFunction) _wrap_new_PreControl, METH_VARARGS | METH_KEYWORDS, NULL},
