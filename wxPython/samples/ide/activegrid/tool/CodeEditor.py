@@ -21,6 +21,7 @@ import string
 import sys
 import DebuggerService
 import MarkerService
+from UICommon import CaseInsensitiveCompare
 _ = wx.GetTranslation
 if wx.Platform == '__WXMSW__':
     _WINDOWS = True
@@ -354,18 +355,6 @@ class CodeView(STCTextEditor.TextView):
         return ['Put', 'Editor Specific', 'Keywords', 'Here']
 
 
-    def CaseInsensitiveCompare(self, s1, s2):
-        """ GetAutoCompleteKeywordList() method used to show keywords in case insensitive order """
-        s1L = s1.lower()
-        s2L = s2.lower()
-        if s1L == s2L:
-            return 0
-        elif s1L < s2L:
-            return -1
-        else:
-            return 1
-
-
     def GetAutoCompleteKeywordList(self, context, hint):            
         """ Replace this method with Editor specific keywords """
         kw = self.GetAutoCompleteDefaultKeywords()
@@ -380,7 +369,7 @@ class CodeView(STCTextEditor.TextView):
         else:
             replaceLen = 0
             
-        kw.sort(self.CaseInsensitiveCompare)
+        kw.sort(CaseInsensitiveCompare)
         return " ".join(kw), replaceLen
         
 
@@ -410,6 +399,7 @@ class CodeView(STCTextEditor.TextView):
 
     def OnSetIndentWidth(self):
         dialog = wx.TextEntryDialog(self._GetParentFrame(), _("Enter new indent width (2-10):"), _("Set Indent Width"), "%i" % self.GetCtrl().GetIndent())
+        dialog.CenterOnParent()
         if dialog.ShowModal() == wx.ID_OK:
             try:
                 indent = int(dialog.GetValue())
@@ -480,7 +470,7 @@ class CodeView(STCTextEditor.TextView):
         if hint == "ViewStuff":
             self.GetCtrl().SetViewDefaults()
         elif hint == "Font":
-            font, color = self.GetFontAndColorFromConfig()
+            font, color = self.GetCtrl().GetFontAndColorFromConfig()
             self.GetCtrl().SetFont(font)
             self.GetCtrl().SetFontColor(color)
         else:

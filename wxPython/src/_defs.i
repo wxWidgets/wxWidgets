@@ -497,6 +497,7 @@ enum {
     wxSIZE_AUTO,
     wxSIZE_USE_EXISTING,
     wxSIZE_ALLOW_MINUS_ONE,
+    wxSIZE_FORCE,
     wxPORTRAIT,
     wxLANDSCAPE,
     wxPRINT_QUALITY_HIGH,
@@ -506,6 +507,7 @@ enum {
 
     wxID_ANY,
     wxID_SEPARATOR,
+    wxID_NONE,
 
     wxID_LOWEST,
     wxID_OPEN,

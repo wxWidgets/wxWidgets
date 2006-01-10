@@ -30,7 +30,7 @@ class EditorFrame(frame.Frame):
         self._defaultText = title + ' - the tastiest Python editor.'
         self._statusText = self._defaultText
         self.SetStatusText(self._statusText)
-        wx.EVT_IDLE(self, self.OnIdle)
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
         self._setup()
         if filename:
             self.bufferCreate(filename)
@@ -137,7 +137,7 @@ class EditorFrame(frame.Frame):
         self.bufferDestroy()
         buffer = Buffer()
         self.panel = panel = wx.Panel(parent=self, id=-1)
-        wx.EVT_ERASE_BACKGROUND(panel, lambda x: x)        
+        panel.Bind (wx.EVT_ERASE_BACKGROUND, lambda x: x)        
         editor = Editor(parent=panel)
         panel.editor = editor
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -318,7 +318,7 @@ class EditorNotebookFrame(EditorFrame):
         """Create new buffer."""
         buffer = Buffer()
         panel = wx.Panel(parent=self.notebook, id=-1)
-        wx.EVT_ERASE_BACKGROUND(panel, lambda x: x)        
+        panel.Bind(wx.EVT_ERASE_BACKGROUND, lambda x: x)        
         editor = Editor(parent=panel)
         panel.editor = editor
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -366,11 +366,9 @@ class EditorNotebook(wx.Notebook):
     def __init__(self, parent):
         """Create EditorNotebook instance."""
         wx.Notebook.__init__(self, parent, id=-1, style=wx.CLIP_CHILDREN)
-        wx.EVT_NOTEBOOK_PAGE_CHANGING(self, self.GetId(),
-                                      self.OnPageChanging)
-        wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(),
-                                     self.OnPageChanged)
-        wx.EVT_IDLE(self, self.OnIdle)
+        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGING, self.OnPageChanging, id=self.GetId())
+        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged, id=self.GetId())
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
 
     def OnIdle(self, event):
         """Event handler for idle time."""
@@ -552,7 +550,7 @@ class EditorShellNotebook(wx.Notebook):
             self.AddPage(page=self.editor.window, text='Editor', select=True)
             self.AddPage(page=self.shell, text='Shell')
         self.editor.setFocus()
-        wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
+        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged, id=self.GetId())
 
     def OnPageChanged(self, event):
         """Page changed event handler."""
@@ -583,8 +581,8 @@ class Editor:
         self.id = self.window.GetId()
         self.buffer = None
         # Assign handlers for keyboard events.
-        wx.EVT_CHAR(self.window, self.OnChar)
-        wx.EVT_KEY_DOWN(self.window, self.OnKeyDown)
+        self.window.Bind(wx.EVT_CHAR, self.OnChar)
+        self.window.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
     def _setBuffer(self, buffer, text):
         """Set the editor to a buffer.  Private callback called by buffer."""
