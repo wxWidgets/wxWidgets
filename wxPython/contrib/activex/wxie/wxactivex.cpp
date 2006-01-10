@@ -1171,6 +1171,7 @@ void wxActiveX::GetTypeInfo(ITypeInfo *ti, bool defInterface, bool defEventSink)
         };
 
         // Get properties
+        // See bug #1280715 in the wxActiveX SF project
         for (int i = 0; i < ta->cVars; i++) {
             VARDESC FAR *vd = NULL;
 
