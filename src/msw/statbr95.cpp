@@ -307,8 +307,11 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
     {
         // parent pos/size isn't deferred so do it now but don't send
         // WM_WINDOWPOSCHANGING since we don't want to change pos/size later
+        // we must use SWP_NOCOPYBITS here otherwise it paints incorrectly
+        // if other windows are size deferred
         ::SetWindowPos(GetHwnd(), NULL, x, y, width, height,
-                       SWP_NOZORDER | SWP_NOSENDCHANGING);
+                       SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE |
+                       SWP_NOCOPYBITS | SWP_NOSENDCHANGING);
     }
 
     // adjust fields widths to the new size
