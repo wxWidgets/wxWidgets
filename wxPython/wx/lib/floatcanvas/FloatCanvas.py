@@ -1630,8 +1630,9 @@ class ScaledTextBox(DrawObject, TextObjectMixin):
         ## If so, limit it. Would it be better just to not draw it?
         ## note that this limit is dependent on how much memory you have, etc.
         Size = min(Size, self.MaxFontSize)
-
-        dc.SetFont(self.SetFont(Size, self.Family, self.Style, self.Weight, self.Underline, self.FaceName))
+        
+        font = self.SetFont(Size, self.Family, self.Style, self.Weight, self.Underline, self.FaceName)
+        dc.SetFont(font)
         dc.SetTextForeground(self.Color)
         dc.SetBackgroundMode(wx.TRANSPARENT)
 
@@ -1906,8 +1907,11 @@ class FloatCanvas(wx.Panel):
         
         # called just to make sure everything is initialized
         # this is a bug on OS-X, maybe it's not required?
-        self.OnSize(None)
-
+        self.SizeTimer = wx.PyTimer(self.OnSizeTimer) # timer to give a delay when re-sizing so that bufferes aren't re-built too many times.
+        
+        self.InitializePanel()
+        self.MakeNewBuffers()
+        
         self.InHereNum = 0
 
         self.CreateCursors()
@@ -2272,7 +2276,6 @@ class FloatCanvas(wx.Panel):
             pass
         
     def MakeNewBuffers(self):
-        #print "Making new buffers"
         self._BackgroundDirty = True
         # Make new offscreen bitmap:
         self._Buffer = wx.EmptyBitmap(*self.PanelSize)
@@ -2308,7 +2311,15 @@ class FloatCanvas(wx.Panel):
         else:
            self._ForegroundHTdc = None 
     
-    def OnSize(self,event):
+    def OnSize(self, event=None):
+        self.InitializePanel()
+        self.SizeTimer.Start(50, oneShot=True)
+
+    def OnSizeTimer(self, event=None):
+        self.MakeNewBuffers()
+        self.Draw()
+
+    def InitializePanel(self):
         self.PanelSize = self.GetClientSizeTuple()
         if self.PanelSize == (0,0):
             ## OS-X sometimes gives a Size event when the panel is size (0,0)
@@ -2319,8 +2330,6 @@ class FloatCanvas(wx.Panel):
             self.AspectRatio = 1.0
         else:
             self.AspectRatio = float(self.PanelSize[0]) / self.PanelSize[1]
-        self.MakeNewBuffers()
-        self.Draw()
         
     def OnPaint(self, event):
         dc = wx.PaintDC(self)
@@ -2344,7 +2353,7 @@ class FloatCanvas(wx.Panel):
         animation, for instance.
         
         """
-        if sometrue(self.PanelSize < 1 ): # it's possible for this to get called before being properly initialized.
+        if sometrue(self.PanelSize <= 2 ): # it's possible for this to get called before being properly initialized.
             return
         if self.Debug: start = clock()
         ScreenDC =  wx.ClientDC(self)
@@ -2457,8 +2466,6 @@ class FloatCanvas(wx.Panel):
             pass
         else:
             raise FloatCanvasError('CoordType must be either "Panel", "Pixel", or "World"')
-
-        #print "shifting by:", shift
         
         self.ViewPortCenter = self.ViewPortCenter + shift 
         self.MapProjectionVector = self.ProjectionFun(self.ViewPortCenter)
