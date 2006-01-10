@@ -828,7 +828,7 @@ void wxWindowMSW::MSWUpdateUIState()
         // won't send WM_UPDATEUISTATE
         ::SendMessage(GetHwnd(), WM_CHANGEUISTATE,
                       MAKEWPARAM(UIS_CLEAR, UISF_HIDEFOCUS), 0);
-    } 
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -1607,7 +1607,7 @@ wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
     if ( hdwp )
     {
         hdwp = ::DeferWindowPos(hdwp, (HWND)hwnd, NULL, x, y, width, height,
-                                SWP_NOZORDER);
+                                SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
         if ( !hdwp )
         {
             wxLogLastError(_T("DeferWindowPos"));
@@ -2383,28 +2383,6 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 #endif // !__WXWINCE__
 
-#if !(defined(_WIN32_WCE) && _WIN32_WCE < 400)
-        case WM_WINDOWPOSCHANGED:
-            {
-                WINDOWPOS *lpPos = (WINDOWPOS *)lParam;
-
-                if ( !(lpPos->flags & SWP_NOSIZE) )
-                {
-                    RECT rc;
-                    ::GetClientRect(GetHwnd(), &rc);
-
-                    AutoHRGN hrgnClient(::CreateRectRgnIndirect(&rc));
-                    AutoHRGN hrgnNew(::CreateRectRgn(lpPos->x,  lpPos->y,
-                                                     lpPos->cx, lpPos->cy));
-
-                    // we need to invalidate any new exposed areas here
-                    // to force them to repaint
-                    if ( ::CombineRgn(hrgnNew, hrgnNew, hrgnClient, RGN_DIFF) != NULLREGION )
-                        ::InvalidateRgn(GetHwnd(), hrgnNew, TRUE);
-                }
-            }
-            break;
-#endif
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         case WM_ACTIVATEAPP:
             // This implicitly sends a wxEVT_ACTIVATE_APP event
@@ -4629,7 +4607,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             GenerateMouseLeave();
         }
     }
-#endif // HAVE_TRACKMOUSEEVENT 
+#endif // HAVE_TRACKMOUSEEVENT
 
 #if wxUSE_MOUSEEVENT_HACK
     // Window gets a click down message followed by a mouse move message even
@@ -5377,12 +5355,12 @@ wxMouseState wxGetMouseState()
     ms.SetLeftDown( (GetAsyncKeyState(VK_LBUTTON) & (1<<15)) != 0 );
     ms.SetMiddleDown( (GetAsyncKeyState(VK_MBUTTON) & (1<<15)) != 0 );
     ms.SetRightDown( (GetAsyncKeyState(VK_RBUTTON) & (1<<15)) != 0 );
-    
+
     ms.SetControlDown( (GetAsyncKeyState(VK_CONTROL) & (1<<15)) != 0 );
     ms.SetShiftDown( (GetAsyncKeyState(VK_SHIFT) & (1<<15)) != 0 );
     ms.SetAltDown( (GetAsyncKeyState(VK_MENU) & (1<<15)) != 0 );
 //    ms.SetMetaDown();
-    
+
     return ms;
 }
 
