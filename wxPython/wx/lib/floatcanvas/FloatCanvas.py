@@ -1881,7 +1881,7 @@ class FloatCanvas(wx.Panel):
 
         ## create the Hit Test Dicts:
         self.HitDict = None
-
+        self._HTdc = None
 
         self._DrawList = []
         self._ForeDrawList = []
@@ -1905,7 +1905,8 @@ class FloatCanvas(wx.Panel):
         self.ObjectUnderMouse = None
         
         # called just to make sure everything is initialized
-        ##self.OnSize(None)
+        # this is a bug on OS-X, maybe it's not required?
+        self.OnSize(None)
 
         self.InHereNum = 0
 
@@ -2271,6 +2272,7 @@ class FloatCanvas(wx.Panel):
             pass
         
     def MakeNewBuffers(self):
+        #print "Making new buffers"
         self._BackgroundDirty = True
         # Make new offscreen bitmap:
         self._Buffer = wx.EmptyBitmap(*self.PanelSize)
@@ -2307,7 +2309,11 @@ class FloatCanvas(wx.Panel):
            self._ForegroundHTdc = None 
     
     def OnSize(self,event):
-        self.PanelSize  = array(self.GetClientSizeTuple(),Int32)
+        self.PanelSize = self.GetClientSizeTuple()
+        if self.PanelSize == (0,0):
+            ## OS-X sometimes gives a Size event when the panel is size (0,0)
+            self.PanelSize = (2,2)
+        self.PanelSize  = array(self.PanelSize,  Int32)
         self.HalfPanelSize = self.PanelSize / 2 # lrk: added for speed in WorldToPixel
         if self.PanelSize[0] == 0 or self.PanelSize[1] == 0:
             self.AspectRatio = 1.0
