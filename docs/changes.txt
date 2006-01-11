@@ -18,6 +18,7 @@ All:
 All (GUI):
 
 - Added space after list item number in wxHTML.
+- wxCalendarCtrl: drawing and positioning fixes.
 
 wxGTK:
 
