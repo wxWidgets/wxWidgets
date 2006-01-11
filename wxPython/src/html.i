@@ -25,7 +25,7 @@
 #include <wx/html/htmlwin.h>
 #include <wx/html/htmprint.h>
 #include <wx/html/helpctrl.h>
-#include <wx/html/helpwin.h>
+#include <wx/html/helpwnd.h>
 #include <wx/html/helpfrm.h>
 #include <wx/html/helpdlg.h>
 
