@@ -312,7 +312,7 @@ public:
 private:
     wxString    m_url;
 
-    DECLARE_DYNAMIC_CLASS(wxHtmlWindowEvent);
+    DECLARE_DYNAMIC_CLASS(wxHtmlWindowEvent)
 };
 
 typedef void (wxEvtHandler::*wxHtmlWindowEventFunction)(wxHtmlWindowEvent&);
