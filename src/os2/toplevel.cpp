@@ -426,6 +426,9 @@ bool wxTopLevelWindowOS2::CreateDialog( ULONG           ulDlgTemplate,
         return false;
     }
 
+    // Convert to OS/2 coordinates
+    nY = GetOS2ParentHeight(pParent) - nY - nHeight;
+
     ::WinSetWindowPos( GetHwnd()
                       ,HWND_TOP
                       ,nX
@@ -537,17 +540,47 @@ bool wxTopLevelWindowOS2::CreateFrame(
     // Now size everything.  If adding a menu the client will need to be resized.
     //
 
-    if (pParent)
-    {
-        nY = pParent->GetSize().y - (nY + nHeight);
-    }
-    else
-    {
-        RECTL                   vRect;
+    if (!OS2GetCreateWindowCoords( rPos
+                                  ,rSize
+                                  ,nX
+                                  ,nY
+                                  ,nWidth
+                                  ,nHeight
+                                 ))
+        nX = nWidth = (int)CW_USEDEFAULT;
 
-        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
-        nY = vRect.yTop - (nY + nHeight);
+    //
+    // We can't use CW_USEDEFAULT here as we're not calling CreateWindow()
+    // and passing CW_USEDEFAULT to MoveWindow() results in resizing the
+    // window to (0, 0) size which breaks quite a lot of things, e.g. the
+    // sizer calculation in wxSizer::Fit()
+    //
+    if (nWidth == (int)CW_USEDEFAULT)
+    {
+        //
+        // The exact number doesn't matter, the dialog will be resized
+        // again soon anyhow but it should be big enough to allow
+        // calculation relying on "totalSize - clientSize > 0" work, i.e.
+        // at least greater than the title bar height
+        //
+        nWidth = nHeight = 100;
     }
+    if (nX == (int)CW_USEDEFAULT)
+    {
+        //
+        // Centre it on the screen for now - what else can we do?
+        // TODO: We could try FCF_SHELLPOSITION but it will require moving
+        //       things around a bit.
+        //
+        wxSize                      vSizeDpy = wxGetDisplaySize();
+
+        nX = (vSizeDpy.x - nWidth) / 2;
+        nY = (vSizeDpy.y - nHeight) / 2;
+    }
+
+    // Convert to OS/2 coordinates
+    nY = GetOS2ParentHeight(pParent) - nY - nHeight;
+
     if (!::WinSetWindowPos( m_hFrame
                            ,HWND_TOP
                            ,nX
@@ -760,12 +793,8 @@ bool wxTopLevelWindowOS2::Show(
         ::WinQueryWindowPos(m_hWnd, &m_vSwpClient);
         ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)~0, 0);
         ::WinQueryWindowPos(m_hWnd, &vSwp);
-        ::WinEnableWindow(m_hFrame, TRUE);
+        ::WinEnableWindow(m_hFrame, true);
 
-        //
-        // Deal with children
-        //
-        MoveChildren(m_vSwpClient.cy - vSwp.cy);
         vEvent.SetEventObject(this);
         GetEventHandler()->ProcessEvent(vEvent);
     }
