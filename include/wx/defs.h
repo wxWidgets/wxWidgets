@@ -617,7 +617,7 @@ typedef int wxWindowID;
     #define except(x) catch(...)
 #endif /*  Metrowerks */
 
-#if defined(__WATCOMC__) && (__WATCOMC__ < 1240)
+#if wxONLY_WATCOM_EARLIER_THAN(1,4)
     typedef short mode_t;
 #endif
 
@@ -1000,7 +1000,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 #if defined(__PALMOS__) && !defined(HAVE_SSIZE_T)
     #define HAVE_SSIZE_T
 #endif
-#if defined(__WATCOMC__) && __WATCOMC__ > 1230
+#if wxCHECK_WATCOM_VERSION(1,4)
     #define HAVE_SSIZE_T
 #endif
 #ifndef HAVE_SSIZE_T
