@@ -25,7 +25,7 @@
 
 #include "wx/busyinfo.h"
 #include "wx/html/helpctrl.h"
-#include "wx/html/helpwin.h"
+#include "wx/html/helpwnd.h"
 #include "wx/html/helpfrm.h"
 #include "wx/html/helpdlg.h"
 
@@ -44,6 +44,8 @@ wxHtmlHelpController::wxHtmlHelpController(int style, wxWindow* parentWindow):
     wxHelpControllerBase(parentWindow)
 {
     m_helpWindow = NULL;
+    m_helpFrame = NULL;
+    m_helpDialog = NULL;
     m_Config = NULL;
     m_ConfigRoot = wxEmptyString;
     m_titleFormat = _("Help: %s");
@@ -77,6 +79,8 @@ void wxHtmlHelpController::DestroyHelpWindow()
         parent->Destroy();
         m_helpWindow = NULL;
     }
+    m_helpDialog = NULL;
+    m_helpFrame = NULL;
 }
 
 void wxHtmlHelpController::OnCloseFrame(wxCloseEvent& evt)
@@ -90,6 +94,8 @@ void wxHtmlHelpController::OnCloseFrame(wxCloseEvent& evt)
 
     m_helpWindow->SetController(NULL);
     m_helpWindow = NULL;
+    m_helpDialog = NULL;
+    m_helpFrame = NULL;
 }
 
 void wxHtmlHelpController::SetTitleFormat(const wxString& title)
@@ -151,6 +157,7 @@ wxHtmlHelpFrame* wxHtmlHelpController::CreateHelpFrame(wxHtmlHelpData *data)
     frame->SetController(this);
     frame->SetTitleFormat(m_titleFormat);    
     frame->Create(m_parentWindow, -1, wxEmptyString, m_FrameStyle);
+    m_helpFrame = frame;
     return frame;
 }
 
@@ -160,6 +167,7 @@ wxHtmlHelpDialog* wxHtmlHelpController::CreateHelpDialog(wxHtmlHelpData *data)
     dialog->SetController(this);
     dialog->SetTitleFormat(m_titleFormat);    
     dialog->Create(m_parentWindow, -1, wxEmptyString, m_FrameStyle);
+    m_helpDialog = dialog;
     return dialog;
 }
 

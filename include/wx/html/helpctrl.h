@@ -37,6 +37,8 @@
 
 class WXDLLIMPEXP_HTML wxHtmlHelpDialog;
 class WXDLLIMPEXP_HTML wxHtmlHelpWindow;
+class WXDLLIMPEXP_HTML wxHtmlHelpFrame;
+class WXDLLIMPEXP_HTML wxHtmlHelpDialog;
 
 class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxEvtHandler
 {
@@ -60,6 +62,9 @@ public:
 
     wxHtmlHelpWindow* GetHelpWindow() { return m_helpWindow; }
     void SetHelpWindow(wxHtmlHelpWindow* helpWindow);
+
+    wxHtmlHelpFrame* GetHelpFrame() { return m_helpFrame; }
+    wxHtmlHelpDialog* GetHelpDialog() { return m_helpDialog; }
 
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
 
@@ -117,7 +122,8 @@ protected:
     wxString            m_ConfigRoot;
     wxString            m_titleFormat;
     int                 m_FrameStyle;
-    // DECLARE_EVENT_TABLE()
+    wxHtmlHelpFrame*    m_helpFrame;
+    wxHtmlHelpDialog*   m_helpDialog;
 
     DECLARE_NO_COPY_CLASS(wxHtmlHelpController)
 };

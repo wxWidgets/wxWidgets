@@ -553,7 +553,7 @@ SOURCE=..\..\src\html\helpfrm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\html\helpwin.cpp
+SOURCE=..\..\src\html\helpwnd.cpp
 # End Source File
 # Begin Source File
 
@@ -1066,7 +1066,15 @@ SOURCE=..\..\include\wx\html\helpdata.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\html\helpdlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\html\helpfrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\helpwnd.h
 # End Source File
 # Begin Source File
 

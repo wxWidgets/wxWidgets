@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpwin.h
+// Name:        helpwnd.h
 // Purpose:     wxHtmlHelpWindow
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik

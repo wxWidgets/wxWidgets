@@ -108,7 +108,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_helpdata.obj &
 	$(OBJS)\monodll_helpdlg.obj &
 	$(OBJS)\monodll_helpfrm.obj &
-	$(OBJS)\monodll_helpwin.obj &
+	$(OBJS)\monodll_helpwnd.obj &
 	$(OBJS)\monodll_htmlcell.obj &
 	$(OBJS)\monodll_htmlfilt.obj &
 	$(OBJS)\monodll_htmlpars.obj &
@@ -646,7 +646,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_helpdata.obj &
 	$(OBJS)\monolib_helpdlg.obj &
 	$(OBJS)\monolib_helpfrm.obj &
-	$(OBJS)\monolib_helpwin.obj &
+	$(OBJS)\monolib_helpwnd.obj &
 	$(OBJS)\monolib_htmlcell.obj &
 	$(OBJS)\monolib_htmlfilt.obj &
 	$(OBJS)\monolib_htmlpars.obj &
@@ -3162,7 +3162,7 @@ HTMLDLL_OBJECTS =  &
 	$(OBJS)\htmldll_helpdata.obj &
 	$(OBJS)\htmldll_helpdlg.obj &
 	$(OBJS)\htmldll_helpfrm.obj &
-	$(OBJS)\htmldll_helpwin.obj &
+	$(OBJS)\htmldll_helpwnd.obj &
 	$(OBJS)\htmldll_htmlcell.obj &
 	$(OBJS)\htmldll_htmlfilt.obj &
 	$(OBJS)\htmldll_htmlpars.obj &
@@ -3196,7 +3196,7 @@ HTMLLIB_OBJECTS =  &
 	$(OBJS)\htmllib_helpdata.obj &
 	$(OBJS)\htmllib_helpdlg.obj &
 	$(OBJS)\htmllib_helpfrm.obj &
-	$(OBJS)\htmllib_helpwin.obj &
+	$(OBJS)\htmllib_helpwnd.obj &
 	$(OBJS)\htmllib_htmlcell.obj &
 	$(OBJS)\htmllib_htmlfilt.obj &
 	$(OBJS)\htmllib_htmlpars.obj &
@@ -4728,6 +4728,9 @@ $(OBJS)\monodll_helpdlg.obj :  .AUTODEPEND ..\..\src\html\helpdlg.cpp
 $(OBJS)\monodll_helpfrm.obj :  .AUTODEPEND ..\..\src\html\helpfrm.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_helpwnd.obj :  .AUTODEPEND ..\..\src\html\helpwnd.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_htmlcell.obj :  .AUTODEPEND ..\..\src\html\htmlcell.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -5165,11 +5168,6 @@ $(OBJS)\monodll_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_helpwin.obj :  .AUTODEPEND ..\..\src\html\helpwin.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -6560,6 +6558,9 @@ $(OBJS)\monolib_helpdlg.obj :  .AUTODEPEND ..\..\src\html\helpdlg.cpp
 $(OBJS)\monolib_helpfrm.obj :  .AUTODEPEND ..\..\src\html\helpfrm.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_helpwnd.obj :  .AUTODEPEND ..\..\src\html\helpwnd.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_htmlcell.obj :  .AUTODEPEND ..\..\src\html\htmlcell.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -6997,11 +6998,6 @@ $(OBJS)\monolib_helpchm.obj :  .AUTODEPEND ..\..\src\msw\helpchm.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_helpwin.obj :  .AUTODEPEND ..\..\src\msw\helpwin.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_helpwin.obj :  .AUTODEPEND ..\..\src\html\helpwin.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11218,7 +11214,7 @@ $(OBJS)\htmldll_helpdlg.obj :  .AUTODEPEND ..\..\src\html\helpdlg.cpp
 $(OBJS)\htmldll_helpfrm.obj :  .AUTODEPEND ..\..\src\html\helpfrm.cpp
 	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
-$(OBJS)\htmldll_helpwin.obj :  .AUTODEPEND ..\..\src\html\helpwin.cpp
+$(OBJS)\htmldll_helpwnd.obj :  .AUTODEPEND ..\..\src\html\helpwnd.cpp
 	$(CXX) -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_htmlcell.obj :  .AUTODEPEND ..\..\src\html\htmlcell.cpp
@@ -11293,7 +11289,7 @@ $(OBJS)\htmllib_helpdlg.obj :  .AUTODEPEND ..\..\src\html\helpdlg.cpp
 $(OBJS)\htmllib_helpfrm.obj :  .AUTODEPEND ..\..\src\html\helpfrm.cpp
 	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
-$(OBJS)\htmllib_helpwin.obj :  .AUTODEPEND ..\..\src\html\helpwin.cpp
+$(OBJS)\htmllib_helpwnd.obj :  .AUTODEPEND ..\..\src\html\helpwnd.cpp
 	$(CXX) -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_htmlcell.obj :  .AUTODEPEND ..\..\src\html\htmlcell.cpp
