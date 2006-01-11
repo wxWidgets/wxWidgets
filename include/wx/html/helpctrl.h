@@ -63,8 +63,8 @@ public:
     wxHtmlHelpWindow* GetHelpWindow() { return m_helpWindow; }
     void SetHelpWindow(wxHtmlHelpWindow* helpWindow);
 
-    wxHtmlHelpFrame* GetHelpFrame() { return m_helpFrame; }
-    wxHtmlHelpDialog* GetHelpDialog() { return m_helpDialog; }
+    wxHtmlHelpFrame* GetFrame() { return m_helpFrame; }
+    wxHtmlHelpDialog* GetDialog() { return m_helpDialog; }
 
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
 
