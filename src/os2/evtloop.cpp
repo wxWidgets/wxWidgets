@@ -199,8 +199,6 @@ bool wxEventLoopImpl::SendIdleMessage()
 // wxEventLoop implementation
 // ============================================================================
 
-wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
-
 // ----------------------------------------------------------------------------
 // wxEventLoop running and exiting
 // ----------------------------------------------------------------------------

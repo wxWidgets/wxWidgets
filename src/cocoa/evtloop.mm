@@ -48,8 +48,6 @@ private:
 // wxEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
-wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
-
 wxEventLoop::~wxEventLoop()
 {
     wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );

@@ -52,7 +52,6 @@
 // wxEventLoop implementation
 // ============================================================================
 
-wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
 wxWindowMSW *wxEventLoop::ms_winCritical = NULL;
 
 // ----------------------------------------------------------------------------

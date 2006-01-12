@@ -63,6 +63,9 @@ WX_CHECK_BUILD_OPTIONS("wxCore")
 // this defines wxEventLoopPtr
 wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoop)
 
+// define it here as we don't have common/evtloopcmn.cpp for now
+wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
+
 // ============================================================================
 // wxAppBase implementation
 // ============================================================================
