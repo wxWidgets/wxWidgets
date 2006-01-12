@@ -95,6 +95,11 @@ class ShellFrame(frame.Frame, frame.ShellFrameMixin):
         dialog.Destroy()
 
 
+    def OnHelp(self, event):
+        """Show a help dialog."""
+        frame.ShellFrameMixin.OnHelp(self, event)
+
+
     def LoadSettings(self):
         if self.config is not None:
             frame.ShellFrameMixin.LoadSettings(self)
