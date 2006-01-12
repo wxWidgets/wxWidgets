@@ -357,8 +357,7 @@ int wxEventLoop::Run()
 
     m_impl = new wxEventLoopImpl;
 
-    wxEventLoop *oldLoop = ms_activeLoop;
-    ms_activeLoop = this;
+    wxEventLoopActivator activate(this);
 
     m_impl->m_keepGoing = TRUE;
     while ( m_impl->m_keepGoing )
@@ -399,8 +398,6 @@ int wxEventLoop::Run()
     int exitcode = m_impl->GetExitCode();
     delete m_impl;
     m_impl = NULL;
-
-    ms_activeLoop = oldLoop;
 
     return exitcode;
 }

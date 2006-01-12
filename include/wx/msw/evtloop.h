@@ -26,7 +26,6 @@ public:
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
-    virtual bool IsRunning() const;
 
     // MSW-specific methods
     // --------------------

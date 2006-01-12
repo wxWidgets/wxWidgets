@@ -51,34 +51,6 @@
 #include <Menu.h>
 #include <Form.h>
 
-// ----------------------------------------------------------------------------
-// helper class
-// ----------------------------------------------------------------------------
-
-// this object sets the wxEventLoop given to the ctor as the currently active
-// one and unsets it in its dtor
-class wxEventLoopActivator
-{
-public:
-    wxEventLoopActivator(wxEventLoop **pActive,
-                         wxEventLoop *evtLoop)
-    {
-        m_pActive = pActive;
-        m_evtLoopOld = *pActive;
-        *pActive = evtLoop;
-    }
-
-    ~wxEventLoopActivator()
-    {
-        // restore the previously active event loop
-        *m_pActive = m_evtLoopOld;
-    }
-
-private:
-    wxEventLoop *m_evtLoopOld;
-    wxEventLoop **m_pActive;
-};
-
 // ============================================================================
 // wxEventLoop implementation
 // ============================================================================
@@ -121,6 +93,8 @@ int wxEventLoop::Run()
 {
     status_t    error;
     EventType    event;
+
+    wxEventLoopActivator activate(this);
 
     do {
         wxTheApp && wxTheApp->ProcessIdle();

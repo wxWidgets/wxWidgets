@@ -108,8 +108,7 @@ int wxEventLoop::Run()
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
 
-    wxEventLoop *oldLoop = ms_activeLoop;
-    ms_activeLoop = this;
+    wxEventLoopActivator activate(this);
 
     m_impl = new wxEventLoopImpl;
     m_impl->SetKeepGoing( true );
@@ -123,8 +122,6 @@ int wxEventLoop::Run()
     int exitcode = m_impl->GetExitCode();
     delete m_impl;
     m_impl = NULL;
-
-    ms_activeLoop = oldLoop;
 
     return exitcode;
 }
