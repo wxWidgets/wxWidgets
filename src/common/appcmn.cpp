@@ -80,9 +80,7 @@ wxAppBase::wxAppBase()
     m_useBestVisual = false;
     m_isActive = true;
 
-#if wxUSE_EVTLOOP_IN_APP
     m_mainLoop = NULL;
-#endif // wxUSE_EVTLOOP_IN_APP
 
     // We don't want to exit the app if the user code shows a dialog from its
     // OnInit() -- but this is what would happen if we set m_exitOnFrameDelete
@@ -265,51 +263,37 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
 
 int wxAppBase::MainLoop()
 {
-#if wxUSE_EVTLOOP_IN_APP
     wxEventLoopTiedPtr mainLoop(&m_mainLoop, new wxEventLoop);
 
     return m_mainLoop->Run();
-#else // !wxUSE_EVTLOOP_IN_APP
-    return 0;
-#endif // wxUSE_EVTLOOP_IN_APP/!wxUSE_EVTLOOP_IN_APP
 }
 
 void wxAppBase::ExitMainLoop()
 {
-#if wxUSE_EVTLOOP_IN_APP
     // we should exit from the main event loop, not just any currently active
     // (e.g. modal dialog) event loop
     if ( m_mainLoop && m_mainLoop->IsRunning() )
     {
         m_mainLoop->Exit(0);
     }
-#endif // wxUSE_EVTLOOP_IN_APP
 }
 
 bool wxAppBase::Pending()
 {
-#if wxUSE_EVTLOOP_IN_APP
     // use the currently active message loop here, not m_mainLoop, because if
     // we're showing a modal dialog (with its own event loop) currently the
     // main event loop is not running anyhow
     wxEventLoop * const loop = wxEventLoop::GetActive();
 
     return loop && loop->Pending();
-#else // wxUSE_EVTLOOP_IN_APP
-    return false;
-#endif // wxUSE_EVTLOOP_IN_APP/!wxUSE_EVTLOOP_IN_APP
 }
 
 bool wxAppBase::Dispatch()
 {
-#if wxUSE_EVTLOOP_IN_APP
     // see comment in Pending()
     wxEventLoop * const loop = wxEventLoop::GetActive();
 
     return loop && loop->Dispatch();
-#else // wxUSE_EVTLOOP_IN_APP
-    return true;
-#endif // wxUSE_EVTLOOP_IN_APP/!wxUSE_EVTLOOP_IN_APP
 }
 
 // ----------------------------------------------------------------------------

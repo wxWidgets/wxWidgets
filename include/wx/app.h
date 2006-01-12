@@ -34,13 +34,7 @@ class WXDLLIMPEXP_BASE wxCmdLineParser;
 class WXDLLIMPEXP_BASE wxLog;
 class WXDLLIMPEXP_BASE wxMessageOutput;
 
-// wxUSE_EVTLOOP_IN_APP is a temporary hack needed until all ports are updated
-// to use wxEventLoop, otherwise we get linking errors on wxMac, it's going to
-// disappear a.s.a.p.
-#ifdef __WXMAC__
-    #define wxUSE_EVTLOOP_IN_APP 0
-#else
-    #define wxUSE_EVTLOOP_IN_APP 1
+#if wxUSE_GUI
     class WXDLLEXPORT wxEventLoop;
 #endif
 
@@ -373,12 +367,8 @@ public:
         // (already) be dispatched
     static bool IsMainLoopRunning()
     {
-#if wxUSE_EVTLOOP_IN_APP
         wxAppBase *app = wx_static_cast(wxAppBase *, GetInstance());
         return app && app->m_mainLoop != NULL;
-#else
-        return false;
-#endif
     }
 
         // execute the main GUI loop, the function returns when the loop ends
@@ -521,11 +511,9 @@ protected:
     virtual wxAppTraits *CreateTraits();
 
 
-#if wxUSE_EVTLOOP_IN_APP
     // the main event loop of the application (may be NULL if the loop hasn't
     // been started yet or has already terminated)
     wxEventLoop *m_mainLoop;
-#endif // wxUSE_EVTLOOP_IN_APP
 
     // the main top level window (may be NULL)
     wxWindow *m_topWindow;

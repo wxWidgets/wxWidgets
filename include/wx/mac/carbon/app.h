@@ -47,13 +47,6 @@ class WXDLLEXPORT wxApp: public wxAppBase
     wxApp();
     virtual ~wxApp() {}
 
-    virtual int MainLoop();
-    virtual void ExitMainLoop();
-    virtual bool Pending() ;
-    virtual bool Dispatch() ;
-
-    virtual void Exit();
-
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
 
@@ -69,6 +62,8 @@ class WXDLLEXPORT wxApp: public wxAppBase
     void OnEndSession(wxCloseEvent& event);
     void OnQueryEndSession(wxCloseEvent& event);
 
+    void                  MacDoOneEvent() ;
+
 protected:
     bool                  m_showOnInit;
     int                   m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
@@ -79,8 +74,6 @@ public:
     // Implementation
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
-
-    bool IsExiting() { return !m_keepGoing ; }
 
     // the installed application event handler
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
@@ -98,8 +91,6 @@ public:
     int                   m_nCmdShow;
 
 private:
-    bool                  m_keepGoing ;
-
     // mac specifics
 
     WXEVENTHANDLERREF     m_macEventHandler ;
@@ -131,7 +122,6 @@ public:
     WXHRGN                m_macSleepRgn ;
     WXHRGN                m_macHelpRgn ;
 
-    void                  MacDoOneEvent() ;
     WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
     void                  MacHandleOneEvent( WXEVENTREF ev ) ;
 

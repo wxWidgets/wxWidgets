@@ -1833,6 +1833,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/dirdlg.h \
 	wx/mac/display.h \
 	wx/mac/dnd.h \
+	wx/mac/evtloop.h \
 	wx/mac/filedlg.h \
 	wx/mac/font.h \
 	wx/mac/fontdlg.h \
@@ -1917,6 +1918,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/carbon/dirdlg.h \
 	wx/mac/carbon/display.h \
 	wx/mac/carbon/dnd.h \
+	wx/mac/carbon/evtloop.h \
 	wx/mac/carbon/filedlg.h \
 	wx/mac/carbon/font.h \
 	wx/mac/carbon/fontdlg.h \
@@ -3674,6 +3676,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_dirdlg.o \
 	monodll_display.o \
 	monodll_dnd.o \
+	monodll_evtloop.o \
 	monodll_filedlg.o \
 	monodll_font.o \
 	monodll_fontdlg.o \
@@ -5159,6 +5162,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_dirdlg.o \
 	monolib_display.o \
 	monolib_dnd.o \
+	monolib_evtloop.o \
 	monolib_filedlg.o \
 	monolib_font.o \
 	monolib_fontdlg.o \
@@ -6869,6 +6873,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_dirdlg.o \
 	coredll_display.o \
 	coredll_dnd.o \
+	coredll_evtloop.o \
 	coredll_filedlg.o \
 	coredll_font.o \
 	coredll_fontdlg.o \
@@ -8067,6 +8072,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_dirdlg.o \
 	corelib_display.o \
 	corelib_dnd.o \
+	corelib_evtloop.o \
 	corelib_filedlg.o \
 	corelib_font.o \
 	corelib_fontdlg.o \
@@ -11929,6 +11935,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
+
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
 
@@ -15429,6 +15438,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
@@ -19348,6 +19360,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
+
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
 
@@ -21861,6 +21876,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm

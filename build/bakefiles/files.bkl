@@ -1806,6 +1806,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/dirdlg.cpp
     src/mac/carbon/display.cpp
     src/mac/carbon/dnd.cpp
+    src/mac/carbon/evtloop.cpp
     src/mac/carbon/filedlg.cpp
     src/mac/carbon/font.cpp
     src/mac/carbon/fontdlg.cpp
@@ -1892,6 +1893,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/dirdlg.h
     wx/mac/display.h
     wx/mac/dnd.h
+    wx/mac/evtloop.h
     wx/mac/filedlg.h
     wx/mac/font.h
     wx/mac/fontdlg.h
@@ -1979,6 +1981,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/dirdlg.h
     wx/mac/carbon/display.h
     wx/mac/carbon/dnd.h
+    wx/mac/carbon/evtloop.h
     wx/mac/carbon/filedlg.h
     wx/mac/carbon/font.h
     wx/mac/carbon/fontdlg.h

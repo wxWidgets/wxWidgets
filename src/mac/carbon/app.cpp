@@ -65,16 +65,6 @@
 
 extern wxList wxPendingDelete;
 
-// set wxMAC_USE_RAEL to 1 if RunApplicationEventLoop should be used
-// if 0 the lower level CarbonEventLoop will be used
-// on the long run RAEL should replace the low level event loop
-// we will have to clean up event handling to make sure we don't
-// miss handling of things like pending events etc
-// perhaps we will also have to pipe events through an ueber-event-handler
-// to make sure we have one place to do all these house-keeping functions
-
-#define wxMAC_USE_RAEL 0
-
 #if wxUSE_THREADS
 extern size_t g_numberOfThreads;
 #endif
@@ -1108,50 +1098,6 @@ wxApp::wxApp()
 #endif
 }
 
-int wxApp::MainLoop()
-{
-    m_keepGoing = true;
-
-#if wxMAC_USE_RAEL
-    RunApplicationEventLoop() ;
-#else
-    while (m_keepGoing)
-    {
-        MacDoOneEvent() ;
-    }
-#endif
-
-    return 0;
-}
-
-void wxApp::ExitMainLoop()
-{
-    m_keepGoing = false;
-
-#if wxMAC_USE_RAEL
-    QuitApplicationEventLoop() ;
-#endif
-}
-
-// Is a message/event pending?
-bool wxApp::Pending()
-{
-    // without the receive event (with pull param = false ) nothing is ever reported
-    EventRef theEvent;
-
-    ReceiveNextEvent(0, NULL, kEventDurationNoWait, false, &theEvent);
-
-    return GetNumEventsInQueue( GetMainEventQueue() ) > 0 ;
-}
-
-// Dispatch a message.
-bool wxApp::Dispatch()
-{
-    MacDoOneEvent() ;
-
-    return true;
-}
-
 void wxApp::OnIdle(wxIdleEvent& event)
 {
     wxAppBase::OnIdle(event);
@@ -1175,12 +1121,6 @@ void wxApp::WakeUpIdle()
 #endif
 
     wxMacWakeUp() ;
-}
-
-void wxApp::Exit()
-{
-    wxApp::CleanUp();
-    ::ExitToShell() ;
 }
 
 void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))

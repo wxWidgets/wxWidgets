@@ -75,7 +75,9 @@ protected:
     #include "wx/palmos/evtloop.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/evtloop.h"
-#else
+#elif defined(__WXMAC__)
+    #include "wx/mac/evtloop.h"
+#else // other platform
 
 class WXDLLEXPORT wxEventLoopImpl;
 
@@ -95,9 +97,9 @@ protected:
     wxEventLoopImpl *m_impl;
 
     DECLARE_NO_COPY_CLASS(wxEventLoop)
-        };
+};
 
-#endif // __WXMSW__/!__WXMSW__
+#endif // platforms
 
 inline bool wxEventLoopBase::IsRunning() const { return GetActive() == this; }
 
