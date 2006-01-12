@@ -461,6 +461,10 @@ SOURCE=.\common\event.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\evtloopcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\extended.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
@@ -1070,7 +1074,15 @@ SOURCE=.\html\helpdata.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\html\helpdlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\html\helpfrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\html\helpwnd.cpp
 # End Source File
 # Begin Source File
 
@@ -1648,6 +1660,10 @@ SOURCE=.\richtext\richtextbuffer.cpp
 # Begin Source File
 
 SOURCE=.\richtext\richtextctrl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\richtext\richtexthtml.cpp
 # End Source File
 # Begin Source File
 
@@ -3919,7 +3935,15 @@ SOURCE=..\include\wx\html\helpdata.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\html\helpdlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\html\helpfrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\html\helpwnd.h
 # End Source File
 # Begin Source File
 

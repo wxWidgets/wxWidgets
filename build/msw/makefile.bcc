@@ -1260,6 +1260,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dpycmn.obj \
 	$(OBJS)\monodll_dseldlg.obj \
 	$(OBJS)\monodll_effects.obj \
+	$(OBJS)\monodll_evtloopcmn.obj \
 	$(OBJS)\monodll_fddlgcmn.obj \
 	$(OBJS)\monodll_fldlgcmn.obj \
 	$(OBJS)\monodll_fontcmn.obj \
@@ -1457,6 +1458,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dpycmn.obj \
 	$(OBJS)\monodll_dseldlg.obj \
 	$(OBJS)\monodll_effects.obj \
+	$(OBJS)\monodll_evtloopcmn.obj \
 	$(OBJS)\monodll_fddlgcmn.obj \
 	$(OBJS)\monodll_fldlgcmn.obj \
 	$(OBJS)\monodll_fontcmn.obj \
@@ -1788,6 +1790,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dpycmn.obj \
 	$(OBJS)\monolib_dseldlg.obj \
 	$(OBJS)\monolib_effects.obj \
+	$(OBJS)\monolib_evtloopcmn.obj \
 	$(OBJS)\monolib_fddlgcmn.obj \
 	$(OBJS)\monolib_fldlgcmn.obj \
 	$(OBJS)\monolib_fontcmn.obj \
@@ -1985,6 +1988,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dpycmn.obj \
 	$(OBJS)\monolib_dseldlg.obj \
 	$(OBJS)\monolib_effects.obj \
+	$(OBJS)\monolib_evtloopcmn.obj \
 	$(OBJS)\monolib_fddlgcmn.obj \
 	$(OBJS)\monolib_fldlgcmn.obj \
 	$(OBJS)\monolib_fontcmn.obj \
@@ -2250,6 +2254,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dpycmn.obj \
 	$(OBJS)\coredll_dseldlg.obj \
 	$(OBJS)\coredll_effects.obj \
+	$(OBJS)\coredll_evtloopcmn.obj \
 	$(OBJS)\coredll_fddlgcmn.obj \
 	$(OBJS)\coredll_fldlgcmn.obj \
 	$(OBJS)\coredll_fontcmn.obj \
@@ -2447,6 +2452,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dpycmn.obj \
 	$(OBJS)\coredll_dseldlg.obj \
 	$(OBJS)\coredll_effects.obj \
+	$(OBJS)\coredll_evtloopcmn.obj \
 	$(OBJS)\coredll_fddlgcmn.obj \
 	$(OBJS)\coredll_fldlgcmn.obj \
 	$(OBJS)\coredll_fontcmn.obj \
@@ -2647,6 +2653,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dpycmn.obj \
 	$(OBJS)\corelib_dseldlg.obj \
 	$(OBJS)\corelib_effects.obj \
+	$(OBJS)\corelib_evtloopcmn.obj \
 	$(OBJS)\corelib_fddlgcmn.obj \
 	$(OBJS)\corelib_fldlgcmn.obj \
 	$(OBJS)\corelib_fontcmn.obj \
@@ -2844,6 +2851,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dpycmn.obj \
 	$(OBJS)\corelib_dseldlg.obj \
 	$(OBJS)\corelib_effects.obj \
+	$(OBJS)\corelib_evtloopcmn.obj \
 	$(OBJS)\corelib_fddlgcmn.obj \
 	$(OBJS)\corelib_fldlgcmn.obj \
 	$(OBJS)\corelib_fontcmn.obj \
@@ -5262,6 +5270,11 @@ $(OBJS)\monodll_effects.obj: ..\..\src\common\effects.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_evtloopcmn.obj: ..\..\src\common\evtloopcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_fddlgcmn.obj: ..\..\src\common\fddlgcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -6988,6 +7001,11 @@ $(OBJS)\monolib_dseldlg.obj: ..\..\src\common\dseldlg.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_effects.obj: ..\..\src\common\effects.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_evtloopcmn.obj: ..\..\src\common\evtloopcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -8791,6 +8809,11 @@ $(OBJS)\coredll_effects.obj: ..\..\src\common\effects.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_evtloopcmn.obj: ..\..\src\common\evtloopcmn.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_fddlgcmn.obj: ..\..\src\common\fddlgcmn.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -9926,6 +9949,11 @@ $(OBJS)\corelib_dseldlg.obj: ..\..\src\common\dseldlg.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_effects.obj: ..\..\src\common\effects.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_evtloopcmn.obj: ..\..\src\common\evtloopcmn.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 

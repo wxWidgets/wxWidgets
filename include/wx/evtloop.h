@@ -66,6 +66,44 @@ protected:
     DECLARE_NO_COPY_CLASS(wxEventLoopBase)
 };
 
+#if defined(__WXMSW__) || defined(__WXMAC__)
+
+// this class can be used to implement a standard event loop logic using
+// Pending() and Dispatch()
+//
+// it also handles idle processing automatically
+class WXDLLEXPORT wxEventLoopManual : public wxEventLoopBase
+{
+public:
+    wxEventLoopManual();
+
+    // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
+    // terminating when Exit() is called
+    virtual int Run();
+
+    // sets the "should exit" flag and wakes up the loop so that it terminates
+    // soon
+    virtual void Exit(int rc);
+
+protected:
+    // implement this to wake up the loop: usually done by posting a dummy event
+    // to it (called from Exit())
+    virtual void WakeUp() = 0;
+
+    // may be overridden to perform some action at the start of each new event
+    // loop iteration
+    virtual void OnNextIteration() { }
+
+
+    // the loop exit code
+    int m_exitcode;
+
+    // should we exit the loop?
+    bool m_shouldExit;
+};
+
+#endif // platforms using "manual" loop
+
 // we're moving away from old m_impl wxEventLoop model as otherwise the user
 // code doesn't have access to platform-specific wxEventLoop methods and this
 // can sometimes be very useful (e.g. under MSW this is necessary for

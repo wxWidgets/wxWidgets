@@ -3065,6 +3065,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_dpycmn.o \
 	monodll_dseldlg.o \
 	monodll_effects.o \
+	monodll_evtloopcmn.o \
 	monodll_fddlgcmn.o \
 	monodll_fldlgcmn.o \
 	monodll_fontcmn.o \
@@ -3214,6 +3215,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_dpycmn.o \
 	monodll_dseldlg.o \
 	monodll_effects.o \
+	monodll_evtloopcmn.o \
 	monodll_fddlgcmn.o \
 	monodll_fldlgcmn.o \
 	monodll_fontcmn.o \
@@ -4550,6 +4552,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_dpycmn.o \
 	monolib_dseldlg.o \
 	monolib_effects.o \
+	monolib_evtloopcmn.o \
 	monolib_fddlgcmn.o \
 	monolib_fldlgcmn.o \
 	monolib_fontcmn.o \
@@ -4699,6 +4702,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_dpycmn.o \
 	monolib_dseldlg.o \
 	monolib_effects.o \
+	monolib_evtloopcmn.o \
 	monolib_fddlgcmn.o \
 	monolib_fldlgcmn.o \
 	monolib_fontcmn.o \
@@ -6261,6 +6265,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_dpycmn.o \
 	coredll_dseldlg.o \
 	coredll_effects.o \
+	coredll_evtloopcmn.o \
 	coredll_fddlgcmn.o \
 	coredll_fldlgcmn.o \
 	coredll_fontcmn.o \
@@ -6410,6 +6415,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_dpycmn.o \
 	coredll_dseldlg.o \
 	coredll_effects.o \
+	coredll_evtloopcmn.o \
 	coredll_fddlgcmn.o \
 	coredll_fldlgcmn.o \
 	coredll_fontcmn.o \
@@ -7460,6 +7466,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_dpycmn.o \
 	corelib_dseldlg.o \
 	corelib_effects.o \
+	corelib_evtloopcmn.o \
 	corelib_fddlgcmn.o \
 	corelib_fldlgcmn.o \
 	corelib_fontcmn.o \
@@ -7609,6 +7616,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_dpycmn.o \
 	corelib_dseldlg.o \
 	corelib_effects.o \
+	corelib_evtloopcmn.o \
 	corelib_fddlgcmn.o \
 	corelib_fldlgcmn.o \
 	corelib_fontcmn.o \
@@ -13552,6 +13560,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_effects.o: $(srcdir)/src/common/effects.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/effects.cpp
 
+@COND_USE_GUI_1@monodll_evtloopcmn.o: $(srcdir)/src/common/evtloopcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/evtloopcmn.cpp
+
 @COND_USE_GUI_1@monodll_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
 
@@ -17055,6 +17066,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_effects.o: $(srcdir)/src/common/effects.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/effects.cpp
+
+@COND_USE_GUI_1@monolib_evtloopcmn.o: $(srcdir)/src/common/evtloopcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/evtloopcmn.cpp
 
 @COND_USE_GUI_1@monolib_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
@@ -20947,6 +20961,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_effects.o: $(srcdir)/src/common/effects.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/effects.cpp
 
+@COND_USE_GUI_1@coredll_evtloopcmn.o: $(srcdir)/src/common/evtloopcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/evtloopcmn.cpp
+
 @COND_USE_GUI_1@coredll_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
 
@@ -23463,6 +23480,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_effects.o: $(srcdir)/src/common/effects.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/effects.cpp
+
+@COND_USE_GUI_1@corelib_evtloopcmn.o: $(srcdir)/src/common/evtloopcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/evtloopcmn.cpp
 
 @COND_USE_GUI_1@corelib_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp

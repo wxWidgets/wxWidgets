@@ -16,13 +16,12 @@
 // wxEventLoop
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxEventLoop : public wxEventLoopBase
+class WXDLLEXPORT wxEventLoop : public wxEventLoopManual
 {
 public:
     wxEventLoop();
 
     // implement base class pure virtuals
-    virtual int Run();
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
@@ -60,12 +59,6 @@ protected:
 
     // critical window or NULL
     static wxWindowMSW *ms_winCritical;
-
-    // the loop exit code
-    int m_exitcode;
-
-    // should we exit the loop?
-    bool m_shouldExit;
 };
 
 #endif // _WX_MSW_EVTLOOP_H_

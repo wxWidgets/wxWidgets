@@ -27,10 +27,12 @@
 // wxEventLoop
 // ----------------------------------------------------------------------------
 
+#if wxMAC_USE_RUN_APP_EVENT_LOOP
+
 class WXDLLEXPORT wxEventLoop : public wxEventLoopBase
 {
 public:
-    wxEventLoop();
+    wxEventLoop() { m_exitcode = 0; }
 
     // implement base class pure virtuals
     virtual int Run();
@@ -39,14 +41,25 @@ public:
     virtual bool Dispatch();
 
 private:
-    // the loop exit code
     int m_exitcode;
-
-#if !wxMAC_USE_RUN_APP_EVENT_LOOP
-    // should we exit the loop?
-    bool m_shouldExit;
-#endif // !wxMAC_USE_RUN_APP_EVENT_LOOP
 };
+
+#else // manual event loop
+
+class WXDLLEXPORT wxEventLoop : public wxEventLoopManual
+{
+public:
+    wxEventLoop() { }
+
+    virtual bool Pending() const;
+    virtual bool Dispatch();
+
+protected:
+    // implement base class pure virtual
+    virtual void WakeUp();
+};
+
+#endif // auto/manual event loop
 
 #endif // _WX_MAC_CARBON_EVTLOOP_H_
 
