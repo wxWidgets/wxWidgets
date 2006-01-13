@@ -4893,12 +4893,20 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
     MENUITEMINFO mii;
     wxZeroMemory(mii);
     mii.cbSize = sizeof(MENUITEMINFO);
+
+    // we could use MIIM_FTYPE here as we only need to know if the item is
+    // ownerdrawn or not and not dwTypeData which MIIM_TYPE also returns, but
+    // MIIM_FTYPE is not supported under Win95
     mii.fMask = MIIM_TYPE | MIIM_DATA;
 
     // find if we have this letter in any owner drawn item
     const int count = ::GetMenuItemCount(hmenu);
     for ( int i = 0; i < count; i++ )
     {
+        // previous loop iteration could modify it, reset it back before
+        // calling GetMenuItemInfo() to prevent it from overflowing dwTypeData
+        mii.cch = 0;
+
         if ( ::GetMenuItemInfo(hmenu, i, TRUE, &mii) )
         {
             if ( mii.fType == MFT_OWNERDRAW )
@@ -4936,8 +4944,7 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
         }
         else // failed to get the menu text?
         {
-            // it's not fatal, so don't show error, but still log
-            // it
+            // it's not fatal, so don't show error, but still log it
             wxLogLastError(_T("GetMenuItemInfo"));
         }
     }
