@@ -1172,7 +1172,8 @@ void wxActiveX::GetTypeInfo(ITypeInfo *ti, bool defInterface, bool defEventSink)
 
         // Get properties
         // See bug #1280715 in the wxActiveX SF project
-        for (int i = 0; i < ta->cVars; i++) {
+        int i;
+        for (i = 0; i < ta->cVars; i++) {
             VARDESC FAR *vd = NULL;
 
             typeInfo->GetVarDesc(i, &vd) ;
@@ -1197,7 +1198,7 @@ void wxActiveX::GetTypeInfo(ITypeInfo *ti, bool defInterface, bool defEventSink)
         }        
 
         // Get Function Names
-        for (int i = 0; i < ta->cFuncs; i++)
+        for (i = 0; i < ta->cFuncs; i++)
         {
             FUNCDESC FAR *fd = NULL;
 
