@@ -293,10 +293,6 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
     return true;
 }
 
-#ifndef SWP_NOSENDCHANGING
-#define SWP_NOSENDCHANGING 0
-#endif
-
 void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
 {
     if ( GetParent()->IsSizeDeferred() )
