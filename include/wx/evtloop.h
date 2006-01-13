@@ -83,7 +83,7 @@ public:
 
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
-    virtual void Exit(int rc);
+    virtual void Exit(int rc = 0);
 
 protected:
     // implement this to wake up the loop: usually done by posting a dummy event
