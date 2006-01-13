@@ -22,7 +22,6 @@ public:
     wxEventLoop();
 
     // implement base class pure virtuals
-    virtual void Exit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
 
@@ -52,6 +51,10 @@ public:
     }
 
 protected:
+    // override/implement base class virtuals
+    virtual void WakeUp();
+    virtual void OnNextIteration();
+
     // check if the given window is a child of ms_winCritical (which must be
     // non NULL)
     static bool IsChildOfCriticalWindow(wxWindowMSW *win);
