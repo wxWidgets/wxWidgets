@@ -1497,6 +1497,7 @@ public:
 
     /// Get the window that can optionally be used for the help window's parent.
     virtual wxWindow* GetParentWindow() const;
+
 };
 
 
@@ -1514,6 +1515,9 @@ public:
 
     wxHtmlHelpWindow* GetHelpWindow();
     void SetHelpWindow(wxHtmlHelpWindow* helpWindow);
+
+    wxHtmlHelpFrame* GetFrame();
+    wxHtmlHelpDialog* GetDialog();
 
     void SetTitleFormat(const wxString& format);
     void SetTempDir(const wxString& path);
