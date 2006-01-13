@@ -663,6 +663,7 @@
 %rename(SetDefaultPyEncoding)               wxSetDefaultPyEncoding;
 %rename(GetDefaultPyEncoding)               wxGetDefaultPyEncoding;
 %rename(EventLoop)                          wxEventLoop;
+%rename(EventLoopActivator)                 wxEventLoopActivator;
 %rename(AcceleratorEntry)                   wxAcceleratorEntry;
 %rename(AcceleratorTable)                   wxAcceleratorTable;
 %rename(NullAcceleratorTable)               wxNullAcceleratorTable;

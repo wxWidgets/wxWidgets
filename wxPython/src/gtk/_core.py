@@ -7865,6 +7865,30 @@ def EventLoop_SetActive(*args, **kwargs):
     """EventLoop_SetActive(EventLoop loop)"""
     return _core_.EventLoop_SetActive(*args, **kwargs)
 
+class EventLoopActivator(object):
+    """Proxy of C++ EventLoopActivator class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxEventLoopActivator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(self, EventLoop evtLoop) -> EventLoopActivator"""
+        newobj = _core_.new_EventLoopActivator(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_core_.delete_EventLoopActivator):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+
+class EventLoopActivatorPtr(EventLoopActivator):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = EventLoopActivator
+_core_.EventLoopActivator_swigregister(EventLoopActivatorPtr)
+
 #---------------------------------------------------------------------------
 
 class AcceleratorEntry(object):
@@ -10871,6 +10895,14 @@ class MenuItem(Object):
         """SetAccel(self, AcceleratorEntry accel)"""
         return _core_.MenuItem_SetAccel(*args, **kwargs)
 
+    def SetBitmap(*args, **kwargs):
+        """SetBitmap(self, Bitmap bitmap)"""
+        return _core_.MenuItem_SetBitmap(*args, **kwargs)
+
+    def GetBitmap(*args, **kwargs):
+        """GetBitmap(self) -> Bitmap"""
+        return _core_.MenuItem_GetBitmap(*args, **kwargs)
+
     def SetFont(*args, **kwargs):
         """SetFont(self, Font font)"""
         return _core_.MenuItem_SetFont(*args, **kwargs)
@@ -10931,14 +10963,6 @@ class MenuItem(Object):
     def ResetOwnerDrawn(*args, **kwargs):
         """ResetOwnerDrawn(self)"""
         return _core_.MenuItem_ResetOwnerDrawn(*args, **kwargs)
-
-    def SetBitmap(*args, **kwargs):
-        """SetBitmap(self, Bitmap bitmap)"""
-        return _core_.MenuItem_SetBitmap(*args, **kwargs)
-
-    def GetBitmap(*args, **kwargs):
-        """GetBitmap(self) -> Bitmap"""
-        return _core_.MenuItem_GetBitmap(*args, **kwargs)
 
 
 class MenuItemPtr(MenuItem):
@@ -11564,6 +11588,14 @@ class SizerItem(Object):
         isn't any.
         """
         return _core_.SizerItem_GetUserData(*args, **kwargs)
+
+    def SetUserData(*args, **kwargs):
+        """
+        SetUserData(self, PyObject userData)
+
+        Associate a Python object with this sizer item.
+        """
+        return _core_.SizerItem_SetUserData(*args, **kwargs)
 
 
 class SizerItemPtr(SizerItem):

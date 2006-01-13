@@ -1565,13 +1565,193 @@ class HtmlHelpDataPtr(HtmlHelpData):
         self.__class__ = HtmlHelpData
 _html.HtmlHelpData_swigregister(HtmlHelpDataPtr)
 
+HF_TOOLBAR = _html.HF_TOOLBAR
+HF_CONTENTS = _html.HF_CONTENTS
+HF_INDEX = _html.HF_INDEX
+HF_SEARCH = _html.HF_SEARCH
+HF_BOOKMARKS = _html.HF_BOOKMARKS
+HF_OPEN_FILES = _html.HF_OPEN_FILES
+HF_PRINT = _html.HF_PRINT
+HF_FLAT_TOOLBAR = _html.HF_FLAT_TOOLBAR
+HF_MERGE_BOOKS = _html.HF_MERGE_BOOKS
+HF_ICONS_BOOK = _html.HF_ICONS_BOOK
+HF_ICONS_BOOK_CHAPTER = _html.HF_ICONS_BOOK_CHAPTER
+HF_ICONS_FOLDER = _html.HF_ICONS_FOLDER
+HF_DEFAULT_STYLE = _html.HF_DEFAULT_STYLE
+HF_EMBEDDED = _html.HF_EMBEDDED
+HF_DIALOG = _html.HF_DIALOG
+HF_FRAME = _html.HF_FRAME
+HF_MODAL = _html.HF_MODAL
+ID_HTML_PANEL = _html.ID_HTML_PANEL
+ID_HTML_BACK = _html.ID_HTML_BACK
+ID_HTML_FORWARD = _html.ID_HTML_FORWARD
+ID_HTML_UPNODE = _html.ID_HTML_UPNODE
+ID_HTML_UP = _html.ID_HTML_UP
+ID_HTML_DOWN = _html.ID_HTML_DOWN
+ID_HTML_PRINT = _html.ID_HTML_PRINT
+ID_HTML_OPENFILE = _html.ID_HTML_OPENFILE
+ID_HTML_OPTIONS = _html.ID_HTML_OPTIONS
+ID_HTML_BOOKMARKSLIST = _html.ID_HTML_BOOKMARKSLIST
+ID_HTML_BOOKMARKSADD = _html.ID_HTML_BOOKMARKSADD
+ID_HTML_BOOKMARKSREMOVE = _html.ID_HTML_BOOKMARKSREMOVE
+ID_HTML_TREECTRL = _html.ID_HTML_TREECTRL
+ID_HTML_INDEXPAGE = _html.ID_HTML_INDEXPAGE
+ID_HTML_INDEXLIST = _html.ID_HTML_INDEXLIST
+ID_HTML_INDEXTEXT = _html.ID_HTML_INDEXTEXT
+ID_HTML_INDEXBUTTON = _html.ID_HTML_INDEXBUTTON
+ID_HTML_INDEXBUTTONALL = _html.ID_HTML_INDEXBUTTONALL
+ID_HTML_NOTEBOOK = _html.ID_HTML_NOTEBOOK
+ID_HTML_SEARCHPAGE = _html.ID_HTML_SEARCHPAGE
+ID_HTML_SEARCHTEXT = _html.ID_HTML_SEARCHTEXT
+ID_HTML_SEARCHLIST = _html.ID_HTML_SEARCHLIST
+ID_HTML_SEARCHBUTTON = _html.ID_HTML_SEARCHBUTTON
+ID_HTML_SEARCHCHOICE = _html.ID_HTML_SEARCHCHOICE
+ID_HTML_COUNTINFO = _html.ID_HTML_COUNTINFO
+class HtmlHelpWindow(_core.Window):
+    """Proxy of C++ HtmlHelpWindow class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxHtmlHelpWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, int ??, Point pos=DefaultPosition, Size size=DefaultSize, 
+            int style=wxTAB_TRAVERSAL|wxNO_BORDER, 
+            int helpStyle=HF_DEFAULT_STYLE, 
+            HtmlHelpData data=None) -> HtmlHelpWindow
+        """
+        newobj = _html.new_HtmlHelpWindow(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            int style=wxTAB_TRAVERSAL|wxNO_BORDER, 
+            int helpStyle=HF_DEFAULT_STYLE) -> bool
+        """
+        return _html.HtmlHelpWindow_Create(*args, **kwargs)
+
+    def GetData(*args, **kwargs):
+        """GetData(self) -> HtmlHelpData"""
+        return _html.HtmlHelpWindow_GetData(*args, **kwargs)
+
+    def GetController(*args, **kwargs):
+        """GetController(self) -> HtmlHelpController"""
+        return _html.HtmlHelpWindow_GetController(*args, **kwargs)
+
+    def SetController(*args, **kwargs):
+        """SetController(self, HtmlHelpController controller)"""
+        return _html.HtmlHelpWindow_SetController(*args, **kwargs)
+
+    def Display(*args, **kwargs):
+        """Display(self, String x) -> bool"""
+        return _html.HtmlHelpWindow_Display(*args, **kwargs)
+
+    def DisplayID(*args, **kwargs):
+        """DisplayID(self, int id) -> bool"""
+        return _html.HtmlHelpWindow_DisplayID(*args, **kwargs)
+
+    def DisplayContents(*args, **kwargs):
+        """DisplayContents(self) -> bool"""
+        return _html.HtmlHelpWindow_DisplayContents(*args, **kwargs)
+
+    def DisplayIndex(*args, **kwargs):
+        """DisplayIndex(self) -> bool"""
+        return _html.HtmlHelpWindow_DisplayIndex(*args, **kwargs)
+
+    def KeywordSearch(*args, **kwargs):
+        """KeywordSearch(self, String keyword, wxHelpSearchMode mode=wxHELP_SEARCH_ALL) -> bool"""
+        return _html.HtmlHelpWindow_KeywordSearch(*args, **kwargs)
+
+    def UseConfig(*args, **kwargs):
+        """UseConfig(self, ConfigBase config, String rootpath=wxEmptyString)"""
+        return _html.HtmlHelpWindow_UseConfig(*args, **kwargs)
+
+    def ReadCustomization(*args, **kwargs):
+        """ReadCustomization(self, ConfigBase cfg, String path=wxEmptyString)"""
+        return _html.HtmlHelpWindow_ReadCustomization(*args, **kwargs)
+
+    def WriteCustomization(*args, **kwargs):
+        """WriteCustomization(self, ConfigBase cfg, String path=wxEmptyString)"""
+        return _html.HtmlHelpWindow_WriteCustomization(*args, **kwargs)
+
+    def NotifyPageChanged(*args, **kwargs):
+        """NotifyPageChanged(self)"""
+        return _html.HtmlHelpWindow_NotifyPageChanged(*args, **kwargs)
+
+    def RefreshLists(*args, **kwargs):
+        """RefreshLists(self)"""
+        return _html.HtmlHelpWindow_RefreshLists(*args, **kwargs)
+
+    def GetHtmlWindow(*args, **kwargs):
+        """GetHtmlWindow(self) -> wxHtmlWindow"""
+        return _html.HtmlHelpWindow_GetHtmlWindow(*args, **kwargs)
+
+    def GetSplitterWindow(*args, **kwargs):
+        """GetSplitterWindow(self) -> SplitterWindow"""
+        return _html.HtmlHelpWindow_GetSplitterWindow(*args, **kwargs)
+
+    def GetToolBar(*args, **kwargs):
+        """GetToolBar(self) -> wxToolBar"""
+        return _html.HtmlHelpWindow_GetToolBar(*args, **kwargs)
+
+    def GetCfgData(*args, **kwargs):
+        """GetCfgData(self) -> wxHtmlHelpFrameCfg"""
+        return _html.HtmlHelpWindow_GetCfgData(*args, **kwargs)
+
+    def GetTreeCtrl(*args, **kwargs):
+        """GetTreeCtrl(self) -> wxTreeCtrl"""
+        return _html.HtmlHelpWindow_GetTreeCtrl(*args, **kwargs)
+
+
+class HtmlHelpWindowPtr(HtmlHelpWindow):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = HtmlHelpWindow
+_html.HtmlHelpWindow_swigregister(HtmlHelpWindowPtr)
+
+def PreHtmlHelpWindow(*args, **kwargs):
+    """PreHtmlHelpWindow(HtmlHelpData data=None) -> HtmlHelpWindow"""
+    val = _html.new_PreHtmlHelpWindow(*args, **kwargs)
+    val.thisown = 1
+    self._setOORInfo(self)
+    return val
+
+class HtmlWindowEvent(_core.NotifyEvent):
+    """Proxy of C++ HtmlWindowEvent class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxHtmlWindowEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> HtmlWindowEvent"""
+        newobj = _html.new_HtmlWindowEvent(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def SetURL(*args, **kwargs):
+        """SetURL(self, String url)"""
+        return _html.HtmlWindowEvent_SetURL(*args, **kwargs)
+
+    def GetURL(*args, **kwargs):
+        """GetURL(self) -> String"""
+        return _html.HtmlWindowEvent_GetURL(*args, **kwargs)
+
+
+class HtmlWindowEventPtr(HtmlWindowEvent):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = HtmlWindowEvent
+_html.HtmlWindowEvent_swigregister(HtmlWindowEventPtr)
+
 class HtmlHelpFrame(_windows.Frame):
     """Proxy of C++ HtmlHelpFrame class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int ??, String title=EmptyString, int style=HF_DEFAULTSTYLE, 
+        __init__(self, Window parent, int ??, String title=EmptyString, int style=wxHF_DEFAULTSTYLE, 
             HtmlHelpData data=None) -> HtmlHelpFrame
         """
         newobj = _html.new_HtmlHelpFrame(*args, **kwargs)
@@ -1579,6 +1759,10 @@ class HtmlHelpFrame(_windows.Frame):
         self.thisown = 1
         del newobj.thisown
         self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """Create(self, Window parent, int id, String title=EmptyString, int style=HF_DEFAULT_STYLE) -> bool"""
+        return _html.HtmlHelpFrame_Create(*args, **kwargs)
 
     def GetData(*args, **kwargs):
         """GetData(self) -> HtmlHelpData"""
@@ -1588,37 +1772,41 @@ class HtmlHelpFrame(_windows.Frame):
         """SetTitleFormat(self, String format)"""
         return _html.HtmlHelpFrame_SetTitleFormat(*args, **kwargs)
 
-    def Display(*args, **kwargs):
-        """Display(self, String x)"""
-        return _html.HtmlHelpFrame_Display(*args, **kwargs)
+    def AddGrabIfNeeded(*args, **kwargs):
+        """AddGrabIfNeeded(self)"""
+        return _html.HtmlHelpFrame_AddGrabIfNeeded(*args, **kwargs)
 
-    def DisplayID(*args, **kwargs):
-        """DisplayID(self, int id)"""
-        return _html.HtmlHelpFrame_DisplayID(*args, **kwargs)
+    def GetController(*args, **kwargs):
+        """GetController(self) -> HtmlHelpController"""
+        return _html.HtmlHelpFrame_GetController(*args, **kwargs)
 
-    def DisplayContents(*args, **kwargs):
-        """DisplayContents(self)"""
-        return _html.HtmlHelpFrame_DisplayContents(*args, **kwargs)
+    def SetController(*args, **kwargs):
+        """SetController(self, HtmlHelpController controller)"""
+        return _html.HtmlHelpFrame_SetController(*args, **kwargs)
 
-    def DisplayIndex(*args, **kwargs):
-        """DisplayIndex(self)"""
-        return _html.HtmlHelpFrame_DisplayIndex(*args, **kwargs)
+    def GetHelpWindow(*args, **kwargs):
+        """GetHelpWindow(self) -> HtmlHelpWindow"""
+        return _html.HtmlHelpFrame_GetHelpWindow(*args, **kwargs)
 
-    def KeywordSearch(*args, **kwargs):
-        """KeywordSearch(self, String keyword) -> bool"""
-        return _html.HtmlHelpFrame_KeywordSearch(*args, **kwargs)
+    # For compatibility from before the refactor
+    def Display(self, x):
+        return self.GetHelpWindow().Display(x)
+    def DisplayID(self, x):
+        return self.GetHelpWindow().DisplayID(id)
+    def DisplayContents(self):
+        return self.GetHelpWindow().DisplayContents()
+    def DisplayIndex(self):
+        return self.GetHelpWindow().DisplayIndex()
 
-    def UseConfig(*args, **kwargs):
-        """UseConfig(self, ConfigBase config, String rootpath=EmptyString)"""
-        return _html.HtmlHelpFrame_UseConfig(*args, **kwargs)
-
-    def ReadCustomization(*args, **kwargs):
-        """ReadCustomization(self, ConfigBase cfg, String path=EmptyString)"""
-        return _html.HtmlHelpFrame_ReadCustomization(*args, **kwargs)
-
-    def WriteCustomization(*args, **kwargs):
-        """WriteCustomization(self, ConfigBase cfg, String path=EmptyString)"""
-        return _html.HtmlHelpFrame_WriteCustomization(*args, **kwargs)
+    def KeywordSearch(self, keyword):
+        return self.GetHelpWindow().KeywordSearch(keyword)
+         
+    def UseConfig(self, config, rootpath=""):
+        return self.GetHelpWindow().UseConfig(config, rootpath)
+    def ReadCustomization(self, config, rootpath=""):
+        return self.GetHelpWindow().ReadCustomization(config, rootpath)
+    def WriteCustomization(self, config, rootpath=""):
+        return self.GetHelpWindow().WriteCustomization(config, rootpath)
 
 
 class HtmlHelpFramePtr(HtmlHelpFrame):
@@ -1628,21 +1816,155 @@ class HtmlHelpFramePtr(HtmlHelpFrame):
         self.__class__ = HtmlHelpFrame
 _html.HtmlHelpFrame_swigregister(HtmlHelpFramePtr)
 
-HF_TOOLBAR = _html.HF_TOOLBAR
-HF_FLATTOOLBAR = _html.HF_FLATTOOLBAR
-HF_CONTENTS = _html.HF_CONTENTS
-HF_INDEX = _html.HF_INDEX
-HF_SEARCH = _html.HF_SEARCH
-HF_BOOKMARKS = _html.HF_BOOKMARKS
-HF_OPENFILES = _html.HF_OPENFILES
-HF_PRINT = _html.HF_PRINT
-HF_DEFAULTSTYLE = _html.HF_DEFAULTSTYLE
-class HtmlHelpController(_core.Object):
+def PreHtmlHelpFrame(*args, **kwargs):
+    """PreHtmlHelpFrame(HtmlHelpData data=None) -> HtmlHelpFrame"""
+    val = _html.new_PreHtmlHelpFrame(*args, **kwargs)
+    val.thisown = 1
+    self._setOORInfo(self)
+    return val
+
+class HtmlHelpDialog(_windows.Dialog):
+    """Proxy of C++ HtmlHelpDialog class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxHtmlHelpDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, int ??, String title=EmptyString, int style=HF_DEFAULT_STYLE, 
+            HtmlHelpData data=None) -> HtmlHelpDialog
+        """
+        newobj = _html.new_HtmlHelpDialog(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """Create(self, Window parent, int id, String title=EmptyString, int style=HF_DEFAULT_STYLE) -> bool"""
+        return _html.HtmlHelpDialog_Create(*args, **kwargs)
+
+    def GetData(*args, **kwargs):
+        """GetData(self) -> HtmlHelpData"""
+        return _html.HtmlHelpDialog_GetData(*args, **kwargs)
+
+    def GetController(*args, **kwargs):
+        """GetController(self) -> HtmlHelpController"""
+        return _html.HtmlHelpDialog_GetController(*args, **kwargs)
+
+    def SetController(*args, **kwargs):
+        """SetController(self, HtmlHelpController controller)"""
+        return _html.HtmlHelpDialog_SetController(*args, **kwargs)
+
+    def GetHelpWindow(*args, **kwargs):
+        """GetHelpWindow(self) -> HtmlHelpWindow"""
+        return _html.HtmlHelpDialog_GetHelpWindow(*args, **kwargs)
+
+    def SetTitleFormat(*args, **kwargs):
+        """SetTitleFormat(self, String format)"""
+        return _html.HtmlHelpDialog_SetTitleFormat(*args, **kwargs)
+
+
+class HtmlHelpDialogPtr(HtmlHelpDialog):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = HtmlHelpDialog
+_html.HtmlHelpDialog_swigregister(HtmlHelpDialogPtr)
+
+def PreHtmlHelpDialog(*args, **kwargs):
+    """PreHtmlHelpDialog(HtmlHelpData data=None) -> HtmlHelpDialog"""
+    val = _html.new_PreHtmlHelpDialog(*args, **kwargs)
+    val.thisown = 1
+    self._setOORInfo(self)
+    return val
+
+class HelpControllerBase(_core.Object):
+    """Proxy of C++ HelpControllerBase class"""
+    def __init__(self): raise RuntimeError, "No constructor defined"
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxHelpControllerBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def Initialize(*args):
+        """
+        Initialize(self, String file, int server) -> bool
+        Initialize(self, String file) -> bool
+        """
+        return _html.HelpControllerBase_Initialize(*args)
+
+    def SetViewer(*args, **kwargs):
+        """SetViewer(self, String viewer, long flags=0)"""
+        return _html.HelpControllerBase_SetViewer(*args, **kwargs)
+
+    def LoadFile(*args, **kwargs):
+        """LoadFile(self, String file=wxEmptyString) -> bool"""
+        return _html.HelpControllerBase_LoadFile(*args, **kwargs)
+
+    def DisplayContents(*args, **kwargs):
+        """DisplayContents(self) -> bool"""
+        return _html.HelpControllerBase_DisplayContents(*args, **kwargs)
+
+    def DisplayContextPopup(*args, **kwargs):
+        """DisplayContextPopup(self, int contextId) -> bool"""
+        return _html.HelpControllerBase_DisplayContextPopup(*args, **kwargs)
+
+    def DisplayTextPopup(*args, **kwargs):
+        """DisplayTextPopup(self, String text, Point pos) -> bool"""
+        return _html.HelpControllerBase_DisplayTextPopup(*args, **kwargs)
+
+    def DisplaySection(*args):
+        """
+        DisplaySection(self, int sectionNo) -> bool
+        DisplaySection(self, String section) -> bool
+        """
+        return _html.HelpControllerBase_DisplaySection(*args)
+
+    def DisplayBlock(*args, **kwargs):
+        """DisplayBlock(self, long blockNo) -> bool"""
+        return _html.HelpControllerBase_DisplayBlock(*args, **kwargs)
+
+    def KeywordSearch(*args, **kwargs):
+        """KeywordSearch(self, String k, wxHelpSearchMode mode=wxHELP_SEARCH_ALL) -> bool"""
+        return _html.HelpControllerBase_KeywordSearch(*args, **kwargs)
+
+    def SetFrameParameters(*args, **kwargs):
+        """
+        SetFrameParameters(self, String title, Size size, Point pos=DefaultPosition, 
+            bool newFrameEachTime=False)
+        """
+        return _html.HelpControllerBase_SetFrameParameters(*args, **kwargs)
+
+    def GetFrameParameters(*args, **kwargs):
+        """GetFrameParameters(self, Size size=None, Point pos=None, bool newFrameEachTime=None) -> Frame"""
+        return _html.HelpControllerBase_GetFrameParameters(*args, **kwargs)
+
+    def Quit(*args, **kwargs):
+        """Quit(self) -> bool"""
+        return _html.HelpControllerBase_Quit(*args, **kwargs)
+
+    def OnQuit(*args, **kwargs):
+        """OnQuit(self)"""
+        return _html.HelpControllerBase_OnQuit(*args, **kwargs)
+
+    def SetParentWindow(*args, **kwargs):
+        """SetParentWindow(self, Window win)"""
+        return _html.HelpControllerBase_SetParentWindow(*args, **kwargs)
+
+    def GetParentWindow(*args, **kwargs):
+        """GetParentWindow(self) -> Window"""
+        return _html.HelpControllerBase_GetParentWindow(*args, **kwargs)
+
+
+class HelpControllerBasePtr(HelpControllerBase):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = HelpControllerBase
+_html.HelpControllerBase_swigregister(HelpControllerBasePtr)
+
+class HtmlHelpController(HelpControllerBase):
     """Proxy of C++ HtmlHelpController class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpController instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int style=HF_DEFAULTSTYLE) -> HtmlHelpController"""
+        """__init__(self, int style=HF_DEFAULT_STYLE, Window parentWindow=None) -> HtmlHelpController"""
         newobj = _html.new_HtmlHelpController(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1652,6 +1974,22 @@ class HtmlHelpController(_core.Object):
         try:
             if self.thisown: destroy(self)
         except: pass
+
+    def GetHelpWindow(*args, **kwargs):
+        """GetHelpWindow(self) -> HtmlHelpWindow"""
+        return _html.HtmlHelpController_GetHelpWindow(*args, **kwargs)
+
+    def SetHelpWindow(*args, **kwargs):
+        """SetHelpWindow(self, HtmlHelpWindow helpWindow)"""
+        return _html.HtmlHelpController_SetHelpWindow(*args, **kwargs)
+
+    def GetFrame(*args, **kwargs):
+        """GetFrame(self) -> HtmlHelpFrame"""
+        return _html.HtmlHelpController_GetFrame(*args, **kwargs)
+
+    def GetDialog(*args, **kwargs):
+        """GetDialog(self) -> HtmlHelpDialog"""
+        return _html.HtmlHelpController_GetDialog(*args, **kwargs)
 
     def SetTitleFormat(*args, **kwargs):
         """SetTitleFormat(self, String format)"""
@@ -1697,9 +2035,13 @@ class HtmlHelpController(_core.Object):
         """WriteCustomization(self, ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlHelpController_WriteCustomization(*args, **kwargs)
 
-    def GetFrame(*args, **kwargs):
-        """GetFrame(self) -> HtmlHelpFrame"""
-        return _html.HtmlHelpController_GetFrame(*args, **kwargs)
+    def MakeModalIfNeeded(*args, **kwargs):
+        """MakeModalIfNeeded(self)"""
+        return _html.HtmlHelpController_MakeModalIfNeeded(*args, **kwargs)
+
+    def FindTopLevelWindow(*args, **kwargs):
+        """FindTopLevelWindow(self) -> Window"""
+        return _html.HtmlHelpController_FindTopLevelWindow(*args, **kwargs)
 
     def Destroy(self): pass 
 
@@ -1709,5 +2051,26 @@ class HtmlHelpControllerPtr(HtmlHelpController):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = HtmlHelpController
 _html.HtmlHelpController_swigregister(HtmlHelpControllerPtr)
+
+class HtmlModalHelp(object):
+    """Proxy of C++ HtmlModalHelp class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxHtmlModalHelp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, String helpFile, String topic=wxEmptyString, 
+            int style=wxHF_DEFAULT_STYLE|wxHF_DIALOG|wxHF_MODAL) -> HtmlModalHelp
+        """
+        newobj = _html.new_HtmlModalHelp(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+
+class HtmlModalHelpPtr(HtmlModalHelp):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = HtmlModalHelp
+_html.HtmlModalHelp_swigregister(HtmlModalHelpPtr)
 
 
