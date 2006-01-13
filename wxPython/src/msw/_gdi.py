@@ -727,6 +727,8 @@ class Bitmap(GDIObject):
         """SetQuality(self, int q)"""
         return _gdi_.Bitmap_SetQuality(*args, **kwargs)
 
+    GetQuality = wx._deprecated(GetQuality) 
+    SetQuality = wx._deprecated(SetQuality) 
     def __nonzero__(self): return self.Ok() 
     def __eq__(*args, **kwargs):
         """__eq__(self, Bitmap other) -> bool"""
@@ -1696,6 +1698,9 @@ class FontMapper(object):
     def SetConfig(*args, **kwargs):
         """SetConfig(self, ConfigBase config)"""
         return _gdi_.FontMapper_SetConfig(*args, **kwargs)
+
+    SetConfig = wx._deprecated(SetConfig,
+        "Set a config object for the whole app instead, with `wx.Config.Set`.")
 
     def SetConfigPath(*args, **kwargs):
         """SetConfigPath(self, String prefix)"""

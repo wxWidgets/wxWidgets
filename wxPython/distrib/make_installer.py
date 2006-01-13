@@ -221,6 +221,9 @@ Type: files; Name: "{app}\%(PKGDIR)s\wxPython\lib\mixins\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyo";
 
+Type: files; Name: "{app}\wxversion.pyc";
+Type: files; Name: "{app}\wxversion.pyo";
+
 %(UNINSTALL_BATCH)s
 
 '''
@@ -361,7 +364,8 @@ LicenseFile = licence\licence.txt
 Source: "demo\demo.py";                     DestDir: "{app}\demo"; DestName: "demo.pyw"; 
 Source: "demo\*.py";                        DestDir: "{app}\demo"; 
 Source: "demo\*.xml";                       DestDir: "{app}\demo"; 
-Source: "demo\*.txt";                       DestDir: "{app}\demo"; 
+Source: "demo\*.txt";                       DestDir: "{app}\demo";
+Source: "demo\*.ico";                       DestDir: "{app}\demo";
 
 Source: "demo\bitmaps\*.bmp";               DestDir: "{app}\demo\bitmaps"; 
 Source: "demo\bitmaps\*.gif";               DestDir: "{app}\demo\bitmaps"; 

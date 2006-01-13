@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/notebook.cpp
+// Name:        src/msw/notebook.cpp
 // Purpose:     implementation of wxNotebook
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -94,7 +94,7 @@
 static WXFARPROC gs_wndprocNotebookSpinBtn = (WXFARPROC)NULL;
 
 // the pointer to standard tab control wnd proc
-static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL; 
+static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL;
 
 LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
                                            UINT message,
@@ -499,7 +499,7 @@ void wxNotebook::SetImageList(wxImageList* imageList)
 
   if ( imageList )
   {
-    TabCtrl_SetImageList(GetHwnd(), (HIMAGELIST)imageList->GetHIMAGELIST());
+    (void) TabCtrl_SetImageList(GetHwnd(), (HIMAGELIST)imageList->GetHIMAGELIST());
   }
 }
 
@@ -816,7 +816,7 @@ LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
                             hwnd, message, wParam, lParam);
 }
 
- 
+
 
 void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {

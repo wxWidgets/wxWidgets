@@ -603,7 +603,10 @@ void wxWindowMac::MacControlUserPaneActivateProc(bool activating)
 
 wxInt16 wxWindowMac::MacControlUserPaneFocusProc(wxInt16 action)
 {
-    return kControlNoPart ;
+	if ( AcceptsFocus() )
+		return 1 ;
+	else
+    	return kControlNoPart ;
 }
 
 void wxWindowMac::MacControlUserPaneBackgroundProc(void* info)
@@ -1051,6 +1054,8 @@ void wxWindowMac::SetFocus()
         if ( err == errCouldntSetFocus )
             return ;
 
+        SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );
+        
 #if !TARGET_API_MAC_OSX
         // emulate carbon events when running under carbonlib where they are not natively available
         if ( former )

@@ -156,10 +156,7 @@ bool wxComboBox::Create(
     //
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
-    SetFont(*wxSMALL_FONT);
-
-    int                             i;
-    for (i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
         Append(asChoices[i]);
     }

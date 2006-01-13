@@ -813,7 +813,10 @@ wxTextCtrl::StreamIn(const wxString& value,
                   (selectionOnly ? SFF_SELECTION : 0),
                   (LPARAM)&eds);
 
-    wxASSERT_MSG( ucf.GotUpdate(), _T("EM_STREAMIN didn't send EN_UPDATE?") );
+    // It's okay for EN_UPDATE to not be sent if the selection is empty and
+    // the text is empty, otherwise warn the programmer about it.
+    wxASSERT_MSG( ucf.GotUpdate() || ( !HasSelection() && value.empty() ),
+                  _T("EM_STREAMIN didn't send EN_UPDATE?") );
 
     if ( eds.dwError )
     {
@@ -965,7 +968,8 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
         UpdatesCountFilter ucf(m_updatesCount);
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
-                      0, (LPARAM)valueDos.c_str());
+                      // EM_REPLACESEL takes 1 to indicate the operation should be redoable
+                      selectionOnly ? 1 : 0, (LPARAM)valueDos.c_str());
 
         if ( !ucf.GotUpdate() )
         {
@@ -1776,6 +1780,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 // Insert tab since calling the default Windows handler
                 // doesn't seem to do it
                 WriteText(wxT("\t"));
+                return;
             }
             break;
     }

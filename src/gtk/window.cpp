@@ -2675,6 +2675,31 @@ wxWindow *wxGetActiveWindow()
     return wxWindow::FindFocus();
 }
 
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+
+    gint x;
+    gint y;
+    GdkModifierType mask;
+
+    gdk_window_get_pointer(NULL, &x, &y, &mask);
+
+    ms.SetX(x);
+    ms.SetY(y);
+    ms.SetLeftDown(mask & GDK_BUTTON1_MASK);
+    ms.SetMiddleDown(mask & GDK_BUTTON2_MASK);
+    ms.SetRightDown(mask & GDK_BUTTON3_MASK);
+
+    ms.SetControlDown(mask & GDK_CONTROL_MASK);
+    ms.SetShiftDown(mask & GDK_SHIFT_MASK);
+    ms.SetAltDown(mask & GDK_MOD1_MASK);
+    ms.SetMetaDown(mask & GDK_MOD2_MASK);
+    
+    return ms;
+}
+ 
 //-----------------------------------------------------------------------------
 // wxWindowGTK
 //-----------------------------------------------------------------------------
@@ -2906,6 +2931,11 @@ wxWindowGTK::~wxWindowGTK()
         gdk_ic_attr_destroy (m_icattr);
 #endif
 
+#ifdef __WXGTK20__
+    // delete before the widgets to avoid a crash on solaris
+    delete m_imData;
+#endif
+
     if (m_wxwindow)
     {
         gtk_widget_destroy( m_wxwindow );
@@ -2917,10 +2947,6 @@ wxWindowGTK::~wxWindowGTK()
         gtk_widget_destroy( m_widget );
         m_widget = (GtkWidget*) NULL;
     }
-
-#ifdef __WXGTK20__
-    delete m_imData;
-#endif
 }
 
 bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const wxSize &size )
@@ -4872,9 +4898,19 @@ wxPoint wxGetMousePosition()
     return wxPoint(rootX, rootY);
 
 }
+// Needed for implementing e.g. combobox on wxGTK within a modal dialog.
+void wxAddGrab(wxWindow* window)
+{
+    gtk_grab_add( (GtkWidget*) window->GetHandle() );
+}
+
+void wxRemoveGrab(wxWindow* window)
+{
+    gtk_grab_remove( (GtkWidget*) window->GetHandle() );
+}
 
 // ----------------------------------------------------------------------------
-// wxDCModule
+// wxWinModule
 // ----------------------------------------------------------------------------
 
 class wxWinModule : public wxModule

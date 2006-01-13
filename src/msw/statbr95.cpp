@@ -40,6 +40,10 @@
     #include <commctrl.h>
 #endif
 
+#if wxUSE_UXTHEME
+    #include "wx/msw/uxtheme.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -272,6 +276,23 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
         wxLogLastError(wxT("SendMessage(SB_GETRECT)"));
     }
 
+#if wxUSE_UXTHEME
+    wxUxThemeHandle theme((wxStatusBar95 *)this, L"Status"); // const_cast
+    if ( theme )
+    {
+        // by default Windows has a 2 pixel border to the right of the left
+        // divider (or it could be a bug) but it looks wrong so remove it
+        if ( i != 0 )
+        {
+            r.left -= 2;
+        }
+
+        wxUxThemeEngine::Get()->GetThemeBackgroundContentRect(theme, NULL,
+                                                              1 /* SP_PANE */, 0,
+                                                              &r, &r);
+    }
+#endif
+
     wxCopyRECTToRect(r, rect);
 
     return true;
@@ -291,8 +312,11 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
     {
         // parent pos/size isn't deferred so do it now but don't send
         // WM_WINDOWPOSCHANGING since we don't want to change pos/size later
+        // we must use SWP_NOCOPYBITS here otherwise it paints incorrectly
+        // if other windows are size deferred
         ::SetWindowPos(GetHwnd(), NULL, x, y, width, height,
-                       SWP_NOZORDER | SWP_NOSENDCHANGING);
+                       SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE |
+                       SWP_NOCOPYBITS | SWP_NOSENDCHANGING);
     }
 
     // adjust fields widths to the new size

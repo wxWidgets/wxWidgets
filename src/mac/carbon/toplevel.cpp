@@ -138,6 +138,7 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
     switch ( GetEventKind( event ) )
     {
         case kEventTextInputUnicodeForKeyEvent :
+            {
             // this is only called when no default handler has jumped in, eg a wxControl on a floater window does not
             // get its own kEventTextInputUnicodeForKeyEvent, so we route back the
             wxControl* control = wxDynamicCast( focus , wxControl ) ;
@@ -161,6 +162,7 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
                 result = noErr ;
             }
             */
+            }
             break ;
     }
 
@@ -174,7 +176,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
     // FindFocus does not return the actual focus window,but the enclosing window
     wxWindow* focus = wxWindow::DoFindFocus();
     if ( focus == NULL )
-        return result ;
+        focus = (wxTopLevelWindowMac*) data ;
 
     unsigned char charCode ;
     wxChar uniChar = 0 ;
@@ -535,6 +537,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             eventleave.SetEventType( wxEVT_LEAVE_WINDOW );
             g_MacLastWindow->ScreenToClient( &eventleave.m_x, &eventleave.m_y );
             eventleave.SetEventObject( g_MacLastWindow ) ;
+            wxevent.SetId( g_MacLastWindow->GetId() ) ;
 
 #if wxUSE_TOOLTIPS
             wxToolTip::RelayEvent( g_MacLastWindow , eventleave);
@@ -547,6 +550,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             evententer.SetEventType( wxEVT_ENTER_WINDOW );
             currentMouseWindow->ScreenToClient( &evententer.m_x, &evententer.m_y );
             evententer.SetEventObject( currentMouseWindow ) ;
+            wxevent.SetId( currentMouseWindow->GetId() ) ;
 #if wxUSE_TOOLTIPS
             wxToolTip::RelayEvent( currentMouseWindow , evententer);
 #endif // wxUSE_TOOLTIPS
@@ -571,6 +575,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
 
         wxevent.SetEventObject( currentMouseWindow ) ;
+        wxevent.SetId( currentMouseWindow->GetId() ) ;
 
         // make tooltips current
 
@@ -1210,6 +1215,14 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     // the root control level handleer
     MacInstallEventHandler( (WXWidget) m_peer->GetControlRef() ) ;
 
+#if TARGET_API_MAC_OSX
+    if ( m_macUsesCompositing && m_macWindow != NULL )
+    {
+        if ( GetExtraStyle() & wxFRAME_EX_METAL )
+            MacSetMetalAppearance( true ) ;
+    }
+#endif
+
     // the frame window event handler
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     MacInstallTopLevelWindowEventHandler() ;
@@ -1282,7 +1295,10 @@ bool wxTopLevelWindowMac::Show(bool show)
     if (show)
     {
         #if wxUSE_SYSTEM_OPTIONS //code contributed by Ryan Wilcox December 18, 2003
-        if ( (wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) ) && ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1) )
+        bool plainTransition = UMAGetSystemVersion() >= 0x1000 ;
+        if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
+            plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
+        if ( plainTransition )
         {
            ::ShowWindow( (WindowRef)m_macWindow );
         }
@@ -1300,7 +1316,10 @@ bool wxTopLevelWindowMac::Show(bool show)
     else
     {
         #if wxUSE_SYSTEM_OPTIONS
-        if ( (wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) ) && ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1) )
+        bool plainTransition = UMAGetSystemVersion() >= 0x1000 ;
+        if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
+            plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
+        if ( plainTransition )
         {
            ::HideWindow((WindowRef) m_macWindow );
         }
@@ -1380,6 +1399,22 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
 bool wxTopLevelWindowMac::IsFullScreen() const
 {
     return m_macFullScreenData != NULL ;
+}
+
+void wxTopLevelWindowMac::SetExtraStyle(long exStyle) 
+{
+    if ( GetExtraStyle() == exStyle )
+        return ;
+    
+    wxTopLevelWindowBase::SetExtraStyle( exStyle ) ;
+#if TARGET_API_MAC_OSX
+    if ( m_macUsesCompositing && m_macWindow != NULL )
+    {
+        bool metal = GetExtraStyle() & wxFRAME_EX_METAL ;
+        if ( MacGetMetalAppearance() != metal )
+            MacSetMetalAppearance( metal ) ;
+    }
+#endif
 }
 
 // we are still using coordinates of the content view, todo switch to structure bounds

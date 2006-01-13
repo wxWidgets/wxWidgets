@@ -25,6 +25,7 @@ X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
 MGLDIR   = $(WXDIR)/src/mgl
 MOTIFDIR = $(WXDIR)/src/motif
+MSDOSDIR = $(WXDIR)/src/msdos
 MSWDIR   = $(WXDIR)/src/msw
 PMDIR    = $(WXDIR)/src/os2
 MACDIR   = $(WXDIR)/src/mac
@@ -205,15 +206,17 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
+	mkdir $(DISTDIR)/include/wx/msdos
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/src/unix
+	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	cp $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
-	list='$(ALL_BASE_HEADERS)'; for p in $$list; do \
+	list='$(ALL_PORTS_BASE_HEADERS)'; for p in $$list; do \
 	  cp $(WXDIR)/include/$$p $(DISTDIR)/include/$$p; \
 	done
 	list='$(ALL_BASE_SOURCES)'; for p in $$list; do \
@@ -382,8 +385,12 @@ UNIV_DIST: ALL_GUI_DIST
 MGL_DIST: UNIV_DIST
 	cp $(WXDIR)/wxMGL.spec $(DISTDIR)
 	cp $(INCDIR)/wx/mgl/*.h $(DISTDIR)/include/wx/mgl
+	mkdir $(DISTDIR)/include/wx/msdos
+	cp $(INCDIR)/wx/msdos/*.h $(DISTDIR)/include/wx/msdos
 	cp $(SRCDIR)/mgl/make* $(DISTDIR)/src/mgl
 	cp $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
+	mkdir $(DISTDIR)/src/msdos
+	cp $(SRCDIR)/msdos/*.cpp $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 
@@ -615,6 +622,8 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/html/printing/Makefile.in $(DISTDIR)/samples/html/printing
 	cp $(SAMPDIR)/html/printing/*.cpp $(DISTDIR)/samples/html/printing
 	cp $(SAMPDIR)/html/printing/*.htm $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.gif $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.ico $(DISTDIR)/samples/html/printing
 	mkdir $(DISTDIR)/samples/html/test
 	cp $(SAMPDIR)/html/test/Makefile.in $(DISTDIR)/samples/html/test
 	cp $(SAMPDIR)/html/test/*.cpp $(DISTDIR)/samples/html/test

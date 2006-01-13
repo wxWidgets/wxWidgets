@@ -2,6 +2,87 @@
 wxWidgets Change Log - For more verbose changes, see the manual
 ---------------------------------------------------------------
 
+2.6.3
+-----
+
+All:
+
+- Fixed crash when loading message catalogs in Unicode build.
+- Spurious error message from wxLaunchDefaultBrowser fixed.
+- Compilation fixes for (more strict) g++ 4.1
+- Speed improvements to wxRegEx when matching is done in a loop such as
+  during a search and replace.
+- Fix regerror and regfree name conficts when built-in regex and system regex
+  are both used in the same program.
+
+All (GUI):
+
+- Added space after list item number in wxHTML.
+- wxCalendarCtrl: drawing and positioning fixes.
+
+wxGTK:
+
+- Fixed problem with choice editor in wxGrid whereby the editor
+  lost focus when the combobox menu was shown.
+- Fixed problem trying to print from a preview, whereby wrong printer
+  class was used.
+- Worked around pango crashes in strncmp on Solaris 10.
+
+wxMSW
+
+- Fixed MDI context menu problem.
+- Create msw/rcdefs.h in setup.h's directory, which can be included by
+  resource files. It containts platform/compiler specific defines (such as
+  target cpu) which can be used in #ifs in .rc files.
+- Add support for Win64 manifests and VC++ 8 automatic manifests (see the
+  wxMSW faq for details).
+- New TARGET_CPU=amd64 (or 'ia64') option for the makefile.vc files which
+  puts 64-bit builds in their own directory and adds /machine:amd64 or ia64
+  to the link command.
+- wxStatusBar::GetFieldRect now returns correct values under XP.
+- wxStatusBar no longer corrupts surrounding windows on resize.
+
+wxWinCE:
+
+- ::wxGetUserName() implemented.
+- Fixed wxFileDialog breakage on WinCE in previous version.
+
+wxMac:
+
+- Fixed problem with clipboard support for custom data flavors.
+- Fixed focus handling for generic controls in carbon-cfm.
+- Fixed a printing crash bug, for example using File->Print and changing
+  Popup from 'Copies & Pages' to e.g. 'Layout'.
+- Improved support for help and application menu items.
+- Added default implementations for wxTextCtrl::Replace and wxTextCtrl::Remove.
+- Added support for 10.4 context menu.
+- Added support for wxFRAME_EX_METAL and wxDIALOG_EX_METAL styles.
+- Added wxNotebook::HitTest support.
+- Corrected idle wake-up.
+- Corrected wxExecute.
+- Now makes use of full printer resolution.
+- Corrected CGImage handling in wxBitmap.
+- Now uses simple hide/how transition for top-level windows.
+- Uses reasonable temporary path for wxFileName::CreateTempFileName.
+- Added support for default key handling (escape, enter, command-period) even
+  if there is no control on the frame or dialog that has the focus.
+- Fixed joystick bugs including a link error and a crash if no joysticks
+  were found.
+- Removed an errorneous assertion from wxDir.
+- Uses CoreFoundation based and thread-safe implementation for message boxes
+  under Mach-O.
+- wxBitmapButton is created as a content icon if wxBORDER_NONE is
+  specified, otherwise as a bevel button.
+- Mouse event ids set correctly (fixing problems with Connect in particular).
+- Fixed wxZipInputStream read error on wxSocketInputStream which signals the
+  end of file with an error.
+
+wxODBC
+
+- wxDb::DBMS() was incorrectly indicating that DB2 databases were
+  dBase databases.
+
+
 2.6.2
 -----
 

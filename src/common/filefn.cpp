@@ -1341,12 +1341,12 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 {
 #if defined(__WXPALMOS__)
     // TODO ?
-    return NULL;
+    if(buf && sz>0) buf[0] = _T('\0');
+    return buf;
 #elif defined(__WXWINCE__)
     // TODO
-    wxUnusedVar(buf);
-    wxUnusedVar(sz);
-    return NULL;
+    if(buf && sz>0) buf[0] = _T('\0');
+    return buf;
 #else
     if ( !buf )
     {
@@ -1965,8 +1965,7 @@ wxFileKind wxGetFileKind(FILE *fp)
 {
     // Note: The watcom rtl dll doesn't have fileno (the static lib does).
     //       Should be fixed in version 1.4.
-#if defined(wxFILEKIND_STUB) || \
-        (defined(__WATCOMC__) && __WATCOMC__ <= 1230 && defined(__SW_BR))
+#if defined(wxFILEKIND_STUB) || wxONLY_WATCOM_EARLIER_THAN(1,4)
     (void)fp;
     return wxFILE_KIND_DISK;
 #else

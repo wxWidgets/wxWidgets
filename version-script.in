@@ -6,6 +6,17 @@
 #       new development branch.
 
 
+# public symbols added in release 2.6.3 (please keep in alphabetical order):
+
+@WX_VERSION_TAG@.3 {
+    global:
+        # for wxString::operator<<(wxString&, wxLongLongNative const&)
+        # note no trailing '*' or it also matches wxGetDiskSpace
+        *wxString*wxLongLongNative;
+        *wxString*wxULongLongNative;
+        *wx_truncate_cast_impl*;
+};
+
 # public symbols added in release 2.6.2 (please keep in alphabetical order):
 
 @WX_VERSION_TAG@.2 {

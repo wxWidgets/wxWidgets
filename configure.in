@@ -391,6 +391,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBMSPACK=no
   DEFAULT_wxUSE_LIBSDL=no
   DEFAULT_wxUSE_LIBGNOMEPRINT=no
+  DEFAULT_wxUSE_LIBHILDON=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -587,6 +588,7 @@ else
   DEFAULT_wxUSE_LIBMSPACK=yes
   DEFAULT_wxUSE_LIBSDL=no
   DEFAULT_wxUSE_LIBGNOMEPRINT=no
+  DEFAULT_wxUSE_LIBHILDON=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -807,6 +809,7 @@ WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file forma
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
 WX_ARG_WITH(gnomeprint,    [  --with-gnomeprint       use GNOME print for printing under Unix], wxUSE_LIBGNOMEPRINT)
+WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770], wxUSE_LIBHILDON)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -2197,6 +2200,7 @@ if test "$build" != "$host" -a "$GCC" = yes; then
         dnl strip out any that don't start '^/usr'.
         SEARCH_LIB=`for x in $SEARCH_LIB; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
         SEARCH_INCLUDE=`for x in $SEARCH_INCLUDE; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
+        SEARCH_INCLUDE="$SEARCH_INCLUDE $cross_root/include"
 
         dnl also have pkg-config search for *.pc files under this 'root'
         if test -z "$PKG_CONFIG_PATH"; then
@@ -2299,7 +2303,7 @@ if test "$wxUSE_REGEX" != "no"; then
     if test "$wxUSE_REGEX" = "sys" -o "$wxUSE_REGEX" = "yes" ; then
         dnl according to Unix 98 specs, regcomp() is in libc but I believe that
         dnl on some old systems it may be in libregex - check for it too?
-        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp)])
+        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp re_search)])
 
         if test "x$ac_cv_func_regcomp" != "xyes"; then
             if test "$wxUSE_REGEX" = "sys" ; then
@@ -2743,8 +2747,32 @@ if test "$wxUSE_GUI" = "yes"; then
 
                 dnl detect GTK2
                 wx_cv_lib_gtk=
-                if test "x$wxGTK_VERSION" != "x1"; then
+                if test "x$wxGTK_VERSION" != "x1"
+                then
+                    dnl The gthread.pc that ships with solaris returns '-mt',
+                    dnl it's correct for Sun CC, but gcc requires '-pthreads'.
+                    dnl So disable the compile check and remove the -mt below.
+                    case "${host}" in
+                        *-*-solaris2* )
+                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
+		                enable_gtktest=no
+                            fi
+                    esac
+
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+
+                    dnl Remove the '-mt' for gcc on solaris
+                    case "${host}" in
+                        *-*-solaris2* )
+                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
+                                GTK_CFLAGS=`echo $GTK_CFLAGS | sed 's/-mt//'`
+                                GTK_LIBS=`echo $GTK_LIBS | sed 's/-mt//'`
+                            fi
+                            dnl solaris also requires -lX11 for static lib
+                            if test "$wxUSE_SHARED" != "yes"; then
+                                GTK_LIBS="$GTK_LIBS -lX11"
+                            fi
+                    esac
                 fi
 
                 dnl detect GTK1.x
@@ -5260,6 +5288,23 @@ dnl                     EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
     fi
 fi
 
+if test "$WXGTK20" = 1; then
+    if test "$wxUSE_LIBHILDON" = "yes" ; then
+        PKG_CHECK_MODULES(HILDON, 
+                          [hildon-lgpl >= 0.9],
+            [
+                EXTRALIBS_HILDON="$HILDON_LIBS"
+                CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
+                AC_DEFINE(wxUSE_LIBHILDON)
+            ],
+            [
+                AC_MSG_WARN([libhildon_lgpl not found])
+                        wxUSE_LIBHILDON="no"
+            ]
+        )
+    fi
+fi
+
 
 if test "$wxUSE_CMDLINE_PARSER" = "yes"; then
   AC_DEFINE(wxUSE_CMDLINE_PARSER)
@@ -6861,7 +6906,7 @@ EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_ODBC="$ODBC_LINK"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_GNOMEPRINT`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEPRINT`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -6968,6 +7013,7 @@ AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(WITH_PLUGIN_SDL)
 AC_SUBST(EXTRALIBS_GNOMEPRINT)
+AC_SUBST(EXTRALIBS_HILDON)
 AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
@@ -7204,6 +7250,23 @@ AC_PROG_MAKE_SET
 
 AC_CONFIG_HEADERS([lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in])
 
+if test "$USE_WIN32" = 1; then
+    AC_CONFIG_COMMANDS(
+        [
+            rcdefs.h
+        ],
+        [
+            mkdir -p $outdir &&
+            $CPP $infile | sed 's/^# *[1-9].*//;s/^ *//;/./,/^$/!d' > $outdir/rcdefs.h
+        ],
+        [
+            CPP="$CPP"
+            infile="$srcdir/include/wx/msw/genrcdefs.h"
+            outdir="lib/wx/include/$TOOLCHAIN_FULLNAME/wx/msw"
+        ]
+    )
+fi
+
 AC_CONFIG_FILES([ lib/wx/config/${TOOLCHAIN_FULLNAME}:wx-config.in ],
                 [ chmod +x lib/wx/config/${TOOLCHAIN_FULLNAME} ],
                 [ TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}" ])
@@ -7320,6 +7383,7 @@ echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
 echo "                                       gnomeprint         ${wxUSE_LIBGNOMEPRINT-none}"
+echo "                                       hildon             ${wxUSE_LIBHILDON-none}"
 
 echo ""
 

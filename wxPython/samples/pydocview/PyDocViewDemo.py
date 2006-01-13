@@ -12,12 +12,12 @@
 
 
 import sys
+import os.path
 import wx
 import wx.lib.docview as docview
 import wx.lib.pydocview as pydocview
 import TextEditor
 import FindService
-import os.path
 _ = wx.GetTranslation
 
 
@@ -90,7 +90,7 @@ class TextEditorApplication(pydocview.DocApp):
         if os.path.exists("tips.txt"):
             wx.CallAfter(self.ShowTip, wx.GetApp().GetTopWindow(), wx.CreateFileTipProvider("tips.txt", 0))
 
-        wx.UpdateUIEvent.SetUpdateInterval(400)  # Overhead of updating menus was too much.  Change to update every 400 milliseconds.
+        wx.UpdateUIEvent.SetUpdateInterval(1000)  # Overhead of updating menus was too much.  Change to update every N milliseconds.
 
         # Tell the framework that everything is great
         return True

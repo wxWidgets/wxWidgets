@@ -60,9 +60,14 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     // All dialogs should really have this style
     style |= wxTAB_TRAVERSAL;
 
-    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style & ~(wxYES|wxOK|wxNO|wxCANCEL) , name) )
+    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style & ~(wxYES|wxOK|wxNO /*|wxCANCEL*/) , name) )
         return FALSE;
 
+    HIViewRef growBoxRef = 0 ;
+    OSStatus err = HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowGrowBoxID , &growBoxRef );
+    if ( err == noErr && growBoxRef != 0 )
+        HIGrowBoxViewSetTransparent( growBoxRef , true ) ;
+    
     return TRUE;
 }
 

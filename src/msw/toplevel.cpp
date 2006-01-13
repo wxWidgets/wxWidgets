@@ -533,7 +533,17 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     // focus rectangles) work under Win2k+
     if ( ret )
     {
-        MSWUpdateUIState();
+        static int s_needToUpdate = -1;
+        if ( s_needToUpdate == -1 )
+        {
+            int verMaj, verMin;
+            s_needToUpdate = wxGetOsVersion(&verMaj, &verMin) == wxWINDOWS_NT &&
+                                verMaj >= 5;
+        }
+
+        if ( s_needToUpdate )
+            ::SendMessage(GetHwnd(), WM_CHANGEUISTATE,
+                          MAKEWPARAM(UIS_INITIALIZE, 0), 0);
     }
 
     // Note: if we include PocketPC in this test, dialogs can fail to show up,
@@ -665,9 +675,12 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
         // "real" size and doesn't want to know that, because of implementation
         // details, the frame isn't really maximized yet but will be only once
         // it's shown, so return our size as it will be then in this case
-
-        // we don't know which display we're on yet so use the default one
-        SetSize(wxGetClientDisplayRect().GetSize());
+        if ( maximize )
+        {
+            // we don't know which display we're on yet so use the default one
+            SetSize(wxGetClientDisplayRect().GetSize());
+        }
+        //else: can't do anything in this case, we don't have the old size
     }
 }
 

@@ -1140,6 +1140,10 @@ SOURCE=..\..\include\wx\msw\gccpriv.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\libraries.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\mimetype.h
 # End Source File
 # Begin Source File

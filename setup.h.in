@@ -576,6 +576,11 @@
  */
 #undef WX_NO_REGEX_ADVANCED
 /*
+ * On GNU systems use re_search instead of regexec, since the latter does a
+ * strlen on the search text affecting the performance of some operations.
+ */
+#undef HAVE_RE_SEARCH
+/*
  * Use SDL for audio (Unix)
  */
 #define wxUSE_LIBSDL 0
@@ -589,6 +594,10 @@
  * Use GNOME print for printing under GTK+ 2.0
  */
 #define wxUSE_LIBGNOMEPRINT 0
+/*
+ * Use the Hildon framework
+ */
+#define wxUSE_LIBHILDON 0
 /*
  * Use iODBC
  */

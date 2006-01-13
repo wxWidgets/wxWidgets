@@ -42,7 +42,8 @@ class Interpreter(InteractiveInterpreter):
         self.more = 0
         # List of lists to support recursive push().
         self.commandBuffer = []
-        self.startupScript = os.environ.get('PYTHONSTARTUP')
+        self.startupScript = None
+        
 
     def push(self, command):
         """Send command to the interpreter to be executed.

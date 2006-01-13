@@ -1,8 +1,15 @@
 #!/bin/bash
 # ----------------------------------------------------------------------
 
+# To Robin: I tried to avoid making any changes to the existing
+# build scripts, but my env requires me to specify Windows paths...
+# if this breaks something at your end, let me know and we can
+# figure out some solution for both of us.
+if [ "$SWIGDIR" = "" ]; then
+  SWIGDIR=$PROJECTS\\SWIG-cvs
+fi
 
-FLAGS="USE_SWIG=1 SWIG=$PROJECTS/SWIG-cvs/swig.exe"
+FLAGS="USE_SWIG=1 SWIG=$SWIGDIR\\swig.exe"
 
 #  Use non-default python?
 case $1 in

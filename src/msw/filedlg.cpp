@@ -279,7 +279,7 @@ int wxFileDialog::ShowModal()
     // comcdlg32.dll, but as we don't use the extended fields anyhow, set
     // the struct size to the old value - otherwise, the programs compiled
     // with new headers will not work with the old libraries
-#if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0500)
+#if !defined(__WXWINCE__) && defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0500)
     of.lStructSize       = sizeof(OPENFILENAME) -
                            (sizeof(void *) + 2*sizeof(DWORD));
 #else // old headers
@@ -396,6 +396,9 @@ int wxFileDialog::ShowModal()
     bool success = (m_dialogStyle & wxSAVE ? GetSaveFileName(&of)
                                            : GetOpenFileName(&of)) != 0;
 
+#ifdef __WXWINCE__
+    DWORD errCode = GetLastError();
+#else
     DWORD errCode = CommDlgExtendedError();
 
 #ifdef __WIN32__
@@ -417,6 +420,7 @@ int wxFileDialog::ShowModal()
         }
     }
 #endif // __WIN32__
+#endif // __WXWINCE__
 
     if ( success )
     {
@@ -490,6 +494,28 @@ int wxFileDialog::ShowModal()
     {
         // common dialog failed - why?
 #ifdef __WXDEBUG__
+#ifdef __WXWINCE__
+        if (errCode == 0)
+        {
+            // OK, user cancelled the dialog
+        }
+        else if (errCode == ERROR_INVALID_PARAMETER)
+        {
+            wxLogError(wxT("Invalid parameter passed to file dialog function."));
+        }
+        else if (errCode == ERROR_OUTOFMEMORY)
+        {
+            wxLogError(wxT("Out of memory when calling file dialog function."));
+        }
+        else if (errCode == ERROR_CALL_NOT_IMPLEMENTED)
+        {
+            wxLogError(wxT("Call not implemented when calling file dialog function."));
+        }
+        else
+        {
+            wxLogError(wxT("Unknown error %d when calling file dialog function."), errCode);
+        }
+#else
         DWORD dwErr = CommDlgExtendedError();
         if ( dwErr != 0 )
         {
@@ -498,6 +524,7 @@ int wxFileDialog::ShowModal()
                        dwErr);
         }
         //else: it was just cancelled
+#endif
 #endif
     }
 

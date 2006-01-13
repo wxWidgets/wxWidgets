@@ -422,8 +422,9 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
             CFRelease(cfurlAppPath);
 
             //PHEW!  Success!
+            //Since a filename might have spaces in it, surround it with quotes
             if(cfsUnixPath)
-                return wxMacCFStringHolder(cfsUnixPath).AsString(wxLocale::GetSystemEncoding());
+                return wxString(wxT("'")) + wxMacCFStringHolder(cfsUnixPath).AsString(wxLocale::GetSystemEncoding()) + wxString(wxT("'"));
         }
         else
         {
