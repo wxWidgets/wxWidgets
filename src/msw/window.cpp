@@ -1511,14 +1511,24 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 {
-    // this is only for top level windows whose resizing is never deferred, so
-    // we can safely use the current size here
-    RECT rect = wxGetClientRect(GetHwnd());
+    if ( IsTopLevel() || m_pendingSize == wxDefaultSize )
+    {
+        // top level windows resizing is never deferred, so we can safely use
+        // the current size here
+        RECT rect = wxGetClientRect(GetHwnd());
 
-    if ( x )
-        *x = rect.right;
-    if ( y )
-        *y = rect.bottom;
+        if ( x )
+            *x = rect.right;
+        if ( y )
+            *y = rect.bottom;
+    }
+    else // non top level
+    {
+        // size is the same as client size for non top level windows, so
+        // forward to GetSize() to take into account deferred sizing (which
+        // wxGetClientRect() doesn't)
+        DoGetSize(x, y);
+    }
 }
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
