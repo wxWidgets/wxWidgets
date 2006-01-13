@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import wx
+import wx.lib.stattext as st
 import os
 
 class MyFrame(wx.Frame):
@@ -11,7 +12,7 @@ class MyFrame(wx.Frame):
                           )
         p = wx.Panel(self, style=wx.RAISED_BORDER)
         p.SetBackgroundColour("sky blue")
-        self.label = wx.StaticText(p, -1, "wx XXX")
+        self.label = st.GenStaticText(p, -1, "wx XXX")
         self.label.SetFont(wx.Font(14, wx.SWISS, wx.NORMAL, wx.BOLD))
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.label, 1, wx.ALIGN_CENTER|wx.ALL, 4)
@@ -65,6 +66,7 @@ class MyFrame(wx.Frame):
     def OnLeftDown(self, evt):
         win = evt.GetEventObject()
         win.CaptureMouse()
+        self.capture = win
         pos = win.ClientToScreen(evt.GetPosition())
         origin = self.GetPosition()
         dx = pos.x - origin.x
@@ -72,8 +74,8 @@ class MyFrame(wx.Frame):
         self.delta = wx.Point(dx, dy)
 
     def OnLeftUp(self, evt):
-        win = evt.GetEventObject()
-        win.ReleaseMouse()
+        if self.capture.HasCapture():
+            self.capture.ReleaseMouse()
 
     def OnMouseMove(self, evt):
         if evt.Dragging() and evt.LeftIsDown():
