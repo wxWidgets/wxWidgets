@@ -20,7 +20,7 @@
 %newgroup
 
 %{
-#ifdef __WXMAC__
+#if 0   // #ifdef __WXMAC__
 
 // A dummy class that raises an exception if used...    
 class wxEventLoop
@@ -70,6 +70,19 @@ public:
     // set currently active (running) event loop
     static void SetActive(wxEventLoop* loop);
 };
+
+
+
+// This object sets the wxEventLoop given to the ctor as the currently active
+// one and unsets it in its dtor, this is especially useful in presence of
+// exceptions but is more tidy even when we don't use them
+class wxEventLoopActivator
+{
+public:
+    wxEventLoopActivator(wxEventLoop *evtLoop);
+    ~wxEventLoopActivator();
+};
+ 
 
 
 //---------------------------------------------------------------------------

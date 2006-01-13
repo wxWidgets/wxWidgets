@@ -20,6 +20,7 @@ The following deprecated items have been removed:
 
     * wx.FontMapper SetConfig method
 
+wx.EventLoop is now implemented for wxMac.
 
 
 
