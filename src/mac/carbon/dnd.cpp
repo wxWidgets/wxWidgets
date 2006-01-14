@@ -24,19 +24,20 @@
     #include <Scrap.h>
 #endif
 
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
 
 typedef struct
 {
-    wxWindow* m_currentTargetWindow ;
-    wxDropTarget* m_currentTarget ;
-    wxDropSource* m_currentSource ;
+    wxWindow* m_currentTargetWindow;
+    wxDropTarget* m_currentTarget;
+    wxDropSource* m_currentSource;
 }
-MacTrackingGlobals ;
+MacTrackingGlobals;
 
-MacTrackingGlobals gTrackingGlobals ;
+MacTrackingGlobals gTrackingGlobals;
 
 void wxMacEnsureTrackingHandlersInstalled() ;
 
@@ -112,7 +113,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
         FlavorType theType ;
         UInt16 flavors = 0 ;
 
-        CountDragItems((DragReference)m_currentDrag, &items);
+        CountDragItems( (DragReference)m_currentDrag, &items );
         for (UInt16 index = 1; index <= items && !supported; ++index)
         {
             flavors = 0 ;
@@ -136,7 +137,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
 
 bool wxDropTarget::GetData()
 {
-    if (!m_dataObject)
+    if (m_dataObject == NULL)
         return false;
 
     if ( !CurrentDragHasSupportedFormat() )
@@ -194,8 +195,8 @@ bool wxDropTarget::GetData()
             flavors = 0 ;
             GetDragItemReferenceNumber( (DragReference)m_currentDrag, index, &theItem );
             CountDragItemFlavors( (DragReference)m_currentDrag, theItem , &flavors );
+            wxDataFormat preferredFormat = m_dataObject->GetPreferredFormat( wxDataObject::Set );
             bool hasPreferredFormat = false ;
-            wxDataFormat preferredFormat = m_dataObject->GetPreferredFormat( wxDataObject::Set ) ;
 
             for ( UInt16 flavor = 1 ; flavor <= flavors ; ++flavor )
             {
@@ -210,8 +211,8 @@ bool wxDropTarget::GetData()
 
             for ( UInt16 flavor = 1 ; flavor <= flavors ; ++flavor )
             {
-                result = GetFlavorType((DragReference)m_currentDrag, theItem, flavor , &theType);
-                wxDataFormat format(theType) ;
+                result = GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
+                wxDataFormat format( theType ) ;
                 if ( (hasPreferredFormat && format == preferredFormat)
                     || (!hasPreferredFormat && m_dataObject->IsSupportedFormat( format )))
                 {
@@ -224,14 +225,14 @@ bool wxDropTarget::GetData()
                         GetFlavorDataSize( (DragReference)m_currentDrag, theItem, theType, &dataSize );
                         if ( theType == kScrapFlavorTypeText )
                         {
-                            // this increment is only valid for allocating, on the next GetFlavorData
-                            // call it is reset again to the original value
+                            // this increment is only valid for allocating:
+                            // on the next GetFlavorData call it is reset again to the original value
                             dataSize++ ;
                         }
                         else if ( theType == kScrapFlavorTypeUnicode )
                         {
-                            // this increment is only valid for allocating, on the next GetFlavorData
-                            // call it is reset again to the original value
+                            // this increment is only valid for allocating:
+                            // on the next GetFlavorData call it is reset again to the original value
                             dataSize++ ;
                             dataSize++ ;
                         }
@@ -295,6 +296,7 @@ wxDropSource::wxDropSource(wxWindow *win,
             : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
 {
     wxMacEnsureTrackingHandlersInstalled() ;
+
     m_window = win;
 }
 
@@ -306,6 +308,7 @@ wxDropSource::wxDropSource(wxDataObject& data,
             : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
 {
     wxMacEnsureTrackingHandlersInstalled() ;
+
     SetData( data );
     m_window = win;
 }
@@ -353,7 +356,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
                 dataPtr[ dataSize ] = 0 ;
             }
 
-            AddDragItemFlavor(theDrag, theItem, type , dataPtr, dataSize, 0);
+            AddDragItemFlavor( theDrag, theItem, type , dataPtr, dataSize, 0 );
         }
         else if (type == kDragFlavorTypeHFS )
         {
@@ -361,14 +364,14 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
             OSErr err = noErr;
             CInfoPBRec cat;
 
-            wxMacFilename2FSSpec( wxString( dataPtr , *wxConvCurrent ) , &theFlavor.fileSpec ) ;
+            wxMacFilename2FSSpec( wxString( dataPtr, *wxConvCurrent ), &theFlavor.fileSpec ) ;
 
             memset( &cat, 0, sizeof(cat) );
             cat.hFileInfo.ioNamePtr = theFlavor.fileSpec.name;
             cat.hFileInfo.ioVRefNum = theFlavor.fileSpec.vRefNum;
             cat.hFileInfo.ioDirID = theFlavor.fileSpec.parID;
             cat.hFileInfo.ioFDirIndex = 0;
-            err = PBGetCatInfoSync(&cat);
+            err = PBGetCatInfoSync( &cat );
             if (err == noErr)
             {
                 theFlavor.fdFlags = cat.hFileInfo.ioFlFndrInfo.fdFlags;
@@ -388,12 +391,12 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
                     theFlavor.fileType = cat.hFileInfo.ioFlFndrInfo.fdType;
                 }
 
-                AddDragItemFlavor(theDrag, theItem, type , &theFlavor, sizeof(theFlavor), 0);
+                AddDragItemFlavor( theDrag, theItem, type , &theFlavor, sizeof(theFlavor), 0 );
             }
         }
         else
         {
-            AddDragItemFlavor(theDrag, theItem, type , dataPtr, dataSize, 0);
+            AddDragItemFlavor( theDrag, theItem, type , dataPtr, dataSize, 0 );
         }
 
         delete [] dataPtr ;
@@ -434,17 +437,17 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     DiffRgn( dragRegion , tempRgn , dragRegion ) ;
     DisposeRgn( tempRgn ) ;
 
-    // TODO:work with promises in order to return data only when drag
-    // was successfully completed
+    // TODO: work with promises in order to return data
+    // only when drag was successfully completed
 
-    gTrackingGlobals.m_currentSource = this ;
-    result = TrackDrag(theDrag, ev , dragRegion);
-    DisposeRgn(dragRegion);
-    DisposeDrag(theDrag);
-    gTrackingGlobals.m_currentSource = NULL ;
+    gTrackingGlobals.m_currentSource = this;
+    result = TrackDrag( theDrag, ev, dragRegion );
+    DisposeRgn( dragRegion );
+    DisposeDrag( theDrag );
+    gTrackingGlobals.m_currentSource = NULL;
 
-    bool optionDown = GetCurrentKeyModifiers() & optionKey ;
-    wxDragResult dndresult = wxDragCopy ;
+    bool optionDown = GetCurrentKeyModifiers() & optionKey;
+    wxDragResult dndresult = wxDragCopy;
     if ( flags != wxDrag_CopyOnly )
         // on mac the option key is always the indication for copy
         dndresult = optionDown ? wxDragCopy : wxDragMove;
@@ -458,7 +461,7 @@ bool wxDropSource::MacInstallDefaultCursor(wxDragResult effect)
     bool result = cursor.Ok();
 
     if ( result )
-        cursor.MacInstall() ;
+        cursor.MacInstall();
 
     return result;
 }
@@ -470,10 +473,10 @@ bool gTrackingGlobalsInstalled = false ;
 
 pascal OSErr wxMacWindowDragTrackingHandler(
     DragTrackingMessage theMessage, WindowPtr theWindow,
-    void *handlerRefCon, DragReference theDrag) ;
+    void *handlerRefCon, DragReference theDrag );
 pascal OSErr wxMacWindowDragReceiveHandler(
     WindowPtr theWindow, void *handlerRefCon,
-    DragReference theDrag) ;
+    DragReference theDrag );
 
 void wxMacEnsureTrackingHandlersInstalled()
 {
@@ -481,24 +484,27 @@ void wxMacEnsureTrackingHandlersInstalled()
     {
         OSErr result;
 
-        result = InstallTrackingHandler(NewDragTrackingHandlerUPP(wxMacWindowDragTrackingHandler), 0L,&gTrackingGlobals);
-        wxASSERT( result == noErr ) ;
+        result = InstallTrackingHandler( NewDragTrackingHandlerUPP(wxMacWindowDragTrackingHandler), 0L, &gTrackingGlobals );
+        wxASSERT( result == noErr );
 
-        result = InstallReceiveHandler(NewDragReceiveHandlerUPP(wxMacWindowDragReceiveHandler), 0L, &gTrackingGlobals);
-        wxASSERT( result == noErr ) ;
+        result = InstallReceiveHandler( NewDragReceiveHandlerUPP(wxMacWindowDragReceiveHandler), 0L, &gTrackingGlobals );
+        wxASSERT( result == noErr );
 
-        gTrackingGlobalsInstalled = true ;
+        gTrackingGlobalsInstalled = true;
     }
 }
 
 pascal OSErr wxMacWindowDragTrackingHandler(
     DragTrackingMessage theMessage, WindowPtr theWindow,
-    void *handlerRefCon, DragReference theDrag)
+    void *handlerRefCon, DragReference theDrag )
 {
     MacTrackingGlobals* trackingGlobals = (MacTrackingGlobals*) handlerRefCon;
+
     Point mouse, localMouse;
     DragAttributes attributes;
-    GetDragAttributes(theDrag, &attributes);
+
+    GetDragAttributes( theDrag, &attributes );
+
     wxTopLevelWindowMac* toplevel = wxFindWinFromMacWindow( theWindow ) ;
 
     bool optionDown = GetCurrentKeyModifiers() & optionKey ;
@@ -511,24 +517,28 @@ pascal OSErr wxMacWindowDragTrackingHandler(
             break;
 
         case kDragTrackingEnterWindow:
-            trackingGlobals->m_currentTargetWindow = NULL ;
-            trackingGlobals->m_currentTarget = NULL ;
+            if (trackingGlobals != NULL)
+            {
+                trackingGlobals->m_currentTargetWindow = NULL ;
+                trackingGlobals->m_currentTarget = NULL ;
+            }
             break;
 
         case kDragTrackingInWindow:
+            if (trackingGlobals == NULL)
+                break;
             if (toplevel == NULL)
                 break;
 
-            GetDragMouse(theDrag, &mouse, 0L);
+            GetDragMouse( theDrag, &mouse, 0L );
             localMouse = mouse;
-            GlobalToLocal(&localMouse);
+            GlobalToLocal( &localMouse );
 
             {
                 wxWindow *win = NULL ;
                 ControlPartCode controlPart ;
                 ControlRef control = wxMacFindControlUnderMouse(
-                    toplevel , localMouse ,
-                    theWindow , &controlPart ) ;
+                    toplevel , localMouse , theWindow , &controlPart ) ;
                 if ( control )
                     win = wxFindControlFromMacControl( control ) ;
                 else
@@ -632,6 +642,9 @@ pascal OSErr wxMacWindowDragTrackingHandler(
             break;
 
         case kDragTrackingLeaveWindow:
+            if (trackingGlobals == NULL)
+                break;
+
             if (trackingGlobals->m_currentTarget)
             {
                 trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
