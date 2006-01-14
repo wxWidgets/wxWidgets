@@ -602,7 +602,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                 }
 
                 // set cursor for OnEnter and OnDragOver
-                if ( !trackingGlobals->m_currentSource && trackingGlobals->m_currentSource->GiveFeedback( result ) )
+                if ( trackingGlobals->m_currentSource && !trackingGlobals->m_currentSource->GiveFeedback( result ) )
                 {
                   if ( !trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) )
                   {
