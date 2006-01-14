@@ -4991,14 +4991,16 @@ fi
 AC_CHECK_FUNC(localtime_r, [ AC_DEFINE(HAVE_LOCALTIME_R) ])
 AC_CHECK_FUNC(gmtime_r, [ AC_DEFINE(HAVE_GMTIME_R) ])
 AC_CHECK_FUNC(readdir_r, [ AC_DEFINE(HAVE_READDIR_R) ])
-dnl By preference, use getaddrinfo which avoids thread safety issues.
-dnl If that is not available, check for gethostbyname_r/gethostbyaddr_r
-dnl and getservbyname_r
-AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO),
+dnl By preference, we probably should use getaddrinfo which avoids thread
+dnl safety issues and supports IPv6, however there currently is no code
+dnl for it, so testing for it is temporarily disabled and we are restricted
+dnl to gethostbyname_r/gethostbyaddr_r  and getservbyname_r
+
+dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
     dnl no getaddrinfo, so check for gethostbyname_r and
     dnl related functions (taken from python's configure.in)
     dnl sigh -- gethostbyname_r is a mess; it can have 3, 5 or 6 arguments
-    [ AX_FUNC_WHICH_GETHOSTBYNAME_R
+      AX_FUNC_WHICH_GETHOSTBYNAME_R
       if test "x$ac_cv_func_which_gethostbyname_r" = "xno" -o \
 	      "x$ac_cv_func_which_gethostbyname_r" = "xunknown" ; then
           AC_CHECK_FUNC(gethostbyname, [ AC_DEFINE(HAVE_GETHOSTBYNAME) ])
@@ -5019,8 +5021,8 @@ AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO),
       dnl (also, I'm lazy and there no m4 file that's ready for use for this
       dnl  function, although it should be easy to rewrite the gethostbyname_r
       dnl  check to fit this case, if it's really needed.                - SN )
-    ]
-)
+dnl    ]
+dnl )
 
 if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
