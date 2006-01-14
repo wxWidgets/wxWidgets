@@ -25,11 +25,11 @@ bool wxWriteResource(const wxString& section, const wxString& entry, const wxStr
 {
     wxString filename( file );
     if (filename.IsEmpty()) filename = wxT(".wxWindows");
-    
+
     wxFileConfig conf( wxTheApp->GetAppName(), wxTheApp->GetVendorName(), filename );
-    
+
     conf.SetPath( section );
-    
+
     return conf.Write( entry, value );
 }
 

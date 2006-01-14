@@ -115,7 +115,7 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
                         wxT("selection received for targets, format %s"),
                         format.GetId().c_str() );
 
-//            printf( "format %s requested %s\n", 
+//            printf( "format %s requested %s\n",
 //                    gdk_atom_name( atoms[i] ),
 //                    gdk_atom_name( clipboard->m_targetRequested ) );
 
@@ -262,7 +262,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
                wxString::FromAscii(gdk_atom_name(selection_data->selection)).c_str()
                );
 #endif
-    
+
     if (!data->IsSupportedFormat( format )) return;
 
     int size = data->GetDataSize( format );
@@ -450,9 +450,9 @@ bool wxClipboard::AddData( wxDataObject *data )
                     wxT("wxClipboard now supports atom %s"),
                     array[i].GetId().c_str() );
 
-//        printf( "added %s\n", 
+//        printf( "added %s\n",
 //                    gdk_atom_name( array[i].GetFormatId() ) );
-                    
+
         gtk_selection_add_target( GTK_WIDGET(m_clipboardWidget),
                                   clipboard,
                                   array[i],

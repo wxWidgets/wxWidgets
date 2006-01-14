@@ -53,7 +53,7 @@ bool wxGauge::Create( wxWindow *parent,
 
     PostCreation(size);
     SetBestSize(size);
-    
+
     return TRUE;
 }
 

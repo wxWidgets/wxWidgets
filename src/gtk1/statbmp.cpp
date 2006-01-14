@@ -83,7 +83,7 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
         GdkBitmap *mask = (GdkBitmap *) NULL;
         if (m_bitmap.GetMask())
             mask = m_bitmap.GetMask()->GetBitmap();
-    
+
 #ifdef __WXGTK20__
         if (m_bitmap.HasPixbuf())
         {

@@ -34,7 +34,7 @@ wxCheckListBox::wxCheckListBox() : wxListBox()
 wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                                const wxPoint& pos,
                                const wxSize& size,
-                               int nStrings, 
+                               int nStrings,
                                const wxString *choices,
                                long style,
                                const wxValidator& validator,

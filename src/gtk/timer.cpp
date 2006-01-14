@@ -28,13 +28,13 @@ static gint timeout_callback( gpointer data )
     wxTimer *timer = (wxTimer*)data;
 
     // Don't change the order of anything in this callback!
-    
+
     if (timer->IsOneShot())
     {
         // This sets m_tag to -1
         timer->Stop();
     }
-    
+
     // When getting called from GDK's timer handler we
     // are no longer within GDK's grab on the GUI
     // thread so we must lock it here ourselves.

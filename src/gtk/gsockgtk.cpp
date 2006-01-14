@@ -47,7 +47,7 @@ bool GSocketGUIFunctionsTableConcrete::OnInit(void)
 void GSocketGUIFunctionsTableConcrete::OnExit(void)
 {
 }
-    
+
 bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
 {
   gint *m_id;

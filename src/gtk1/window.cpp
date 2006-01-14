@@ -2693,10 +2693,10 @@ wxMouseState wxGetMouseState()
     ms.SetShiftDown(mask & GDK_SHIFT_MASK);
     ms.SetAltDown(mask & GDK_MOD1_MASK);
     ms.SetMetaDown(mask & GDK_MOD2_MASK);
-    
+
     return ms;
 }
- 
+
 //-----------------------------------------------------------------------------
 // wxWindowGTK
 //-----------------------------------------------------------------------------

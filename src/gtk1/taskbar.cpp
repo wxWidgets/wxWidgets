@@ -33,17 +33,17 @@ wxTaskBarIconAreaBase::wxTaskBarIconAreaBase()
     {
         m_widget = GTK_WIDGET(egg_tray_icon_new("systray icon"));
         gtk_window_set_resizable(GTK_WINDOW(m_widget), false);
-        
+
         wxLogTrace(_T("systray"), _T("using freedesktop.org systray spec"));
     }
-    
+
     wxTopLevelWindow::Create(
             NULL, wxID_ANY, _T("systray icon"),
             wxDefaultPosition, wxDefaultSize,
             wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR | wxSIMPLE_BORDER |
             wxFRAME_SHAPED,
             wxEmptyString /*eggtray doesn't like setting wmclass*/);
-            
+
     m_invokingWindow = NULL;
 }
 
@@ -54,16 +54,16 @@ bool wxTaskBarIconAreaBase::IsProtocolSupported()
     {
         Display *display = GDK_DISPLAY();
         Screen *screen = DefaultScreenOfDisplay(display);
-    
+
         wxString name;
         name.Printf(_T("_NET_SYSTEM_TRAY_S%d"), XScreenNumberOfScreen(screen));
         Atom atom = XInternAtom(display, name.ToAscii(), False);
-        
+
         Window manager = XGetSelectionOwner(display, atom);
-        
+
         s_supported = (manager != None);
     }
-    
+
     return (bool)s_supported;
 }
 
