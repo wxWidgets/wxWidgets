@@ -59,7 +59,7 @@ wxDragResult wxDropTarget::OnDragOver( wxCoord WXUNUSED(x),
 
 bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
 {
-    if (!m_dataObject)
+    if (m_dataObject == NULL)
         return false;
 
     return CurrentDragHasSupportedFormat() ;
@@ -68,7 +68,7 @@ bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
 wxDragResult wxDropTarget::OnData( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                                    wxDragResult def )
 {
-    if (!m_dataObject)
+    if (m_dataObject == NULL)
         return wxDragNone;
 
     if (!CurrentDragHasSupportedFormat())
@@ -80,6 +80,7 @@ wxDragResult wxDropTarget::OnData( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
 bool wxDropTarget::CurrentDragHasSupportedFormat()
 {
     bool supported = false ;
+
     if ( gTrackingGlobals.m_currentSource != NULL )
     {
         wxDataObject* data = gTrackingGlobals.m_currentSource->GetDataObject() ;
@@ -87,7 +88,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
         if ( data )
         {
             size_t formatcount = data->GetFormatCount() ;
-            wxDataFormat *array = new wxDataFormat[ formatcount  ];
+            wxDataFormat *array = new wxDataFormat[formatcount];
             data->GetAllFormats( array );
             for (size_t i = 0; !supported && i < formatcount ; i++)
             {
@@ -112,15 +113,15 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
         UInt16 flavors = 0 ;
 
         CountDragItems((DragReference)m_currentDrag, &items);
-        for (UInt16 index = 1; index <= items && !supported ; ++index)
+        for (UInt16 index = 1; index <= items && !supported; ++index)
         {
             flavors = 0 ;
-            GetDragItemReferenceNumber((DragReference)m_currentDrag, index, &theItem);
-            CountDragItemFlavors( (DragReference)m_currentDrag, theItem , &flavors ) ;
+            GetDragItemReferenceNumber( (DragReference)m_currentDrag, index, &theItem );
+            CountDragItemFlavors( (DragReference)m_currentDrag, theItem, &flavors );
 
             for ( UInt16 flavor = 1 ; flavor <= flavors ; ++flavor )
             {
-                result = GetFlavorType((DragReference)m_currentDrag, theItem, flavor , &theType);
+                result = GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
                 if ( m_dataObject->IsSupportedFormat( wxDataFormat( theType ) ) )
                 {
                     supported = true ;
@@ -161,7 +162,7 @@ bool wxDropTarget::GetData()
 
                     if (size == 0)
                     {
-                        m_dataObject->SetData(format , 0 , 0 ) ;
+                        m_dataObject->SetData( format , 0 , 0 );
                     }
                     else
                     {
@@ -187,19 +188,19 @@ bool wxDropTarget::GetData()
         UInt16 flavors ;
         bool firstFileAdded = false ;
 
-        CountDragItems((DragReference)m_currentDrag, &items);
+        CountDragItems( (DragReference)m_currentDrag, &items );
         for (UInt16 index = 1; index <= items; ++index)
         {
             flavors = 0 ;
-            GetDragItemReferenceNumber((DragReference)m_currentDrag, index, &theItem);
-            CountDragItemFlavors( (DragReference)m_currentDrag, theItem , &flavors ) ;
+            GetDragItemReferenceNumber( (DragReference)m_currentDrag, index, &theItem );
+            CountDragItemFlavors( (DragReference)m_currentDrag, theItem , &flavors );
             bool hasPreferredFormat = false ;
             wxDataFormat preferredFormat = m_dataObject->GetPreferredFormat( wxDataObject::Set ) ;
 
             for ( UInt16 flavor = 1 ; flavor <= flavors ; ++flavor )
             {
-                result = GetFlavorType((DragReference)m_currentDrag, theItem, flavor , &theType);
-                wxDataFormat format(theType) ;
+                result = GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
+                wxDataFormat format( theType );
                 if ( preferredFormat == format )
                 {
                     hasPreferredFormat = true ;
@@ -211,15 +212,16 @@ bool wxDropTarget::GetData()
             {
                 result = GetFlavorType((DragReference)m_currentDrag, theItem, flavor , &theType);
                 wxDataFormat format(theType) ;
-                if ( (hasPreferredFormat && format == preferredFormat) || (!hasPreferredFormat && m_dataObject->IsSupportedFormat( format )))
+                if ( (hasPreferredFormat && format == preferredFormat)
+                    || (!hasPreferredFormat && m_dataObject->IsSupportedFormat( format )))
                 {
-                    result = GetFlavorFlags((DragReference)m_currentDrag, theItem, theType, &theFlags);
+                    result = GetFlavorFlags( (DragReference)m_currentDrag, theItem, theType, &theFlags );
                     if (result == noErr)
                     {
                         Size dataSize ;
                         Ptr theData ;
 
-                        GetFlavorDataSize((DragReference)m_currentDrag, theItem, theType, &dataSize);
+                        GetFlavorDataSize( (DragReference)m_currentDrag, theItem, theType, &dataSize );
                         if ( theType == kScrapFlavorTypeText )
                         {
                             // this increment is only valid for allocating, on the next GetFlavorData
@@ -235,7 +237,8 @@ bool wxDropTarget::GetData()
                         }
 
                         theData = new char[dataSize];
-                        GetFlavorData((DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L);
+
+                        GetFlavorData( (DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L );
                         if ( theType == kScrapFlavorTypeText )
                         {
                             theData[dataSize] = 0 ;
@@ -244,7 +247,7 @@ bool wxDropTarget::GetData()
  #if wxUSE_UNICODE
                         else if ( theType == kScrapFlavorTypeUnicode )
                         {
-                            theData[dataSize] = 0 ;
+                            theData[dataSize + 0] =
                             theData[dataSize + 1] = 0 ;
                             m_dataObject->SetData( wxDataFormat(wxDF_UNICODETEXT), dataSize , theData );
                         }
@@ -545,10 +548,10 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                         if ( trackingGlobals->m_currentTarget )
                         {
                             HideDragHilite( theDrag );
-                            trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag ) ;
-                            trackingGlobals->m_currentTarget->OnLeave() ;
+                            trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
+                            trackingGlobals->m_currentTarget->OnLeave();
                             trackingGlobals->m_currentTarget = NULL;
-                            trackingGlobals->m_currentTargetWindow = NULL ;
+                            trackingGlobals->m_currentTargetWindow = NULL;
                         }
                     }
 
@@ -573,7 +576,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                                 RgnHandle hiliteRgn = NewRgn() ;
                                 Rect r = { y , x , y + win->GetSize().y , x + win->GetSize().x } ;
                                 RectRgn( hiliteRgn , &r ) ;
-                                ShowDragHilite(theDrag, hiliteRgn, true);
+                                ShowDragHilite( theDrag, hiliteRgn, true );
                                 DisposeRgn( hiliteRgn ) ;
                             }
                         }
@@ -631,12 +634,12 @@ pascal OSErr wxMacWindowDragTrackingHandler(
         case kDragTrackingLeaveWindow:
             if (trackingGlobals->m_currentTarget)
             {
-                trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag ) ;
-                trackingGlobals->m_currentTarget->OnLeave() ;
-                HideDragHilite(theDrag);
-                trackingGlobals->m_currentTarget = NULL ;
+                trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
+                trackingGlobals->m_currentTarget->OnLeave();
+                HideDragHilite( theDrag );
+                trackingGlobals->m_currentTarget = NULL;
             }
-            trackingGlobals->m_currentTargetWindow = NULL ;
+            trackingGlobals->m_currentTargetWindow = NULL;
             break;
 
         default:
