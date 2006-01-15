@@ -1207,14 +1207,14 @@ void wxApp::MacDoOneEvent()
 
     switch (status)
     {
-    	case eventLoopTimedOutErr :
+        case eventLoopTimedOutErr :
             if ( wxTheApp->ProcessIdle() )
                 sleepTime = kEventDurationNoWait ;
             else
                 sleepTime = kEventDurationSecond;
             break;
 
-    	case eventLoopQuitErr :
+        case eventLoopQuitErr :
             // according to QA1061 this may also occur
             // when a WakeUp Process is executed
             break;

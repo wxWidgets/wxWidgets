@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:       socket.cpp
+// Name:       src/mac/carbon/cfsocket.cpp
 // Purpose:    Socket handler classes
 // Authors:    Guilhem Lavaux, Guillermo Rodriguez Garcia
 // Created:    April 1997
@@ -9,11 +9,6 @@
 // License:    see wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// ==========================================================================
-// Declarations
-// ==========================================================================
-
-// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -47,11 +42,9 @@
 
 // DLL options compatibility check:
 #include "wx/build.h"
+
 WX_CHECK_BUILD_OPTIONS("wxNet")
 
-// --------------------------------------------------------------------------
-// macros and constants
-// --------------------------------------------------------------------------
 
 // discard buffer
 #define MAX_DISCARD_SIZE (10 * 1024)
@@ -81,9 +74,6 @@ WX_CHECK_BUILD_OPTIONS("wxNet")
 
 #define wxTRACE_Socket _T("wxSocket")
 
-// --------------------------------------------------------------------------
-// wxWin macros
-// --------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxSocketBase, wxObject)
 IMPLEMENT_CLASS(wxSocketServer, wxSocketBase)
@@ -123,8 +113,7 @@ struct _GSocket
   int m_establishing;
   unsigned long m_timeout;
 
-
-  /* Callbacks */
+  // Callbacks
   GSocketEventFlags m_detected;
   GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
   char *m_data[GSOCK_MAX_EVENT];
@@ -133,7 +122,7 @@ struct _GSocket
   CFRunLoopSourceRef    m_runLoopSource;
   CFReadStreamRef       m_readStream ;
   CFWriteStreamRef      m_writeStream ;
-} ;
+};
 
 struct _GAddress
 {
@@ -176,26 +165,26 @@ bool wxSocketBase::Initialize()
 #if 0
         wxAppTraits *traits = wxAppConsole::GetInstance() ?
                               wxAppConsole::GetInstance()->GetTraits() : NULL;
-        GSocketGUIFunctionsTable *functions = 
+        GSocketGUIFunctionsTable *functions =
             traits ? traits->GetSocketGUIFunctionsTable() : NULL;
         GSocket_SetGUIFunctions(functions);
-        
+
         if ( !GSocket_Init() )
         {
             m_countInit--;
 
-            return FALSE;
+            return false;
         }
 #endif
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxSocketBase::Shutdown()
 {
     // we should be initialized
-    wxASSERT_MSG( m_countInit, _T("extra call to Shutdown()") );
+    wxASSERT_MSG( m_countInit, wxT("extra call to Shutdown()") );
     if ( !--m_countInit )
     {
 #if 0
@@ -219,10 +208,10 @@ void wxSocketBase::Init()
   m_establishing =
   m_reading      =
   m_writing      =
-  m_error        = FALSE;
+  m_error        = false;
   m_lcount       = 0;
   m_timeout      = 600;
-  m_beingDeleted = FALSE;
+  m_beingDeleted = false;
 
   // pushback buffer
   m_unread       = NULL;
@@ -233,7 +222,7 @@ void wxSocketBase::Init()
   m_id           = -1;
   m_handler      = NULL;
   m_clientData   = NULL;
-  m_notify       = FALSE;
+  m_notify       = false;
   m_eventmask    = 0;
 
   if ( !IsInitialized() )
@@ -249,7 +238,7 @@ wxSocketBase::wxSocketBase()
   Init();
 }
 
-wxSocketBase::wxSocketBase(wxSocketFlags flags, wxSocketType type)
+wxSocketBase::wxSocketBase( wxSocketFlags flags, wxSocketType type)
 {
   Init();
 
@@ -285,13 +274,13 @@ bool wxSocketBase::Destroy()
   // Delayed destruction: the socket will be deleted during the next
   // idle loop iteration. This ensures that all pending events have
   // been processed.
-  m_beingDeleted = TRUE;
+  m_beingDeleted = true;
 
   // Shutdown and close the socket
   Close();
 
   // Supress events from now on
-  Notify(FALSE);
+  Notify(false);
 
   // schedule this object for deletion
   wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
@@ -306,7 +295,7 @@ bool wxSocketBase::Destroy()
       delete this;
   }
 
-  return TRUE;
+  return true;
 }
 
 // --------------------------------------------------------------------------
@@ -324,19 +313,18 @@ bool wxSocketBase::Close()
   InterruptWait();
 
   if (m_socket)
-  {
     GSocket_Shutdown(m_socket);
-  }
 
-  m_connected = FALSE;
-  m_establishing = FALSE;
-  return TRUE;
+  m_connected = false;
+  m_establishing = false;
+
+  return true;
 }
 
 wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
 {
   // Mask read events
-  m_reading = TRUE;
+  m_reading = true;
 
   m_lcount = _Read(buffer, nbytes);
 
@@ -347,7 +335,7 @@ wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
     m_error = (m_lcount == 0);
 
   // Allow read events from now on
-  m_reading = FALSE;
+  m_reading = false;
 
   return *this;
 }
@@ -357,7 +345,7 @@ wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
   int total = 0;
 
   // Try the pushback buffer first
-  total = GetPushback(buffer, nbytes, FALSE);
+  total = GetPushback(buffer, nbytes, false);
   nbytes -= total;
   buffer  = (char *)buffer + total;
 
@@ -389,7 +377,7 @@ wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
   }
   else
   {
-    bool more = TRUE;
+    bool more = true;
 
     while (more)
     {
@@ -425,13 +413,14 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
   {
     unsigned char sig[4];
     unsigned char len[4];
-  } msg;
+  }
+  msg;
 
   // Mask read events
-  m_reading = TRUE;
+  m_reading = true;
 
   total = 0;
-  error = TRUE;
+  error = true;
   old_flags = m_flags;
   SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
@@ -445,7 +434,7 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
 
   if (sig != 0xfeeddead)
   {
-    wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
+    wxLogWarning( wxT("wxSocket: invalid signature in ReadMsg.") );
     goto exit;
   }
 
@@ -499,17 +488,17 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
 
   if (sig != 0xdeadfeed)
   {
-    wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
+    wxLogWarning( wxT("wxSocket: invalid signature in ReadMsg.") );
     goto exit;
   }
 
   // everything was OK
-  error = FALSE;
+  error = false;
 
 exit:
   m_error = error;
   m_lcount = total;
-  m_reading = FALSE;
+  m_reading = false;
   SetFlags(old_flags);
 
   return *this;
@@ -518,7 +507,7 @@ exit:
 wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
 {
   // Mask read events
-  m_reading = TRUE;
+  m_reading = true;
 
   m_lcount = _Read(buffer, nbytes);
   Pushback(buffer, m_lcount);
@@ -530,7 +519,7 @@ wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
     m_error = (m_lcount == 0);
 
   // Allow read events again
-  m_reading = FALSE;
+  m_reading = false;
 
   return *this;
 }
@@ -538,7 +527,7 @@ wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
 wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
 {
   // Mask write events
-  m_writing = TRUE;
+  m_writing = true;
 
   m_lcount = _Write(buffer, nbytes);
 
@@ -549,7 +538,7 @@ wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
     m_error = (m_lcount == 0);
 
   // Allow write events again
-  m_writing = FALSE;
+  m_writing = false;
 
   return *this;
 }
@@ -580,7 +569,7 @@ wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
   }
   else
   {
-    bool more = TRUE;
+    bool more = true;
 
     while (more)
     {
@@ -615,12 +604,13 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
   {
     unsigned char sig[4];
     unsigned char len[4];
-  } msg;
+  }
+  msg;
 
   // Mask write events
-  m_writing = TRUE;
+  m_writing = true;
 
-  error = TRUE;
+  error = true;
   total = 0;
   SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
@@ -652,12 +642,12 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
     goto exit;
 
   // everything was OK
-  error = FALSE;
+  error = false;
 
 exit:
   m_error = error;
   m_lcount = total;
-  m_writing = FALSE;
+  m_writing = false;
 
   return *this;
 }
@@ -667,7 +657,7 @@ wxSocketBase& wxSocketBase::Unread(const void *buffer, wxUint32 nbytes)
   if (nbytes != 0)
     Pushback(buffer, nbytes);
 
-  m_error = FALSE;
+  m_error = false;
   m_lcount = nbytes;
 
   return *this;
@@ -680,7 +670,7 @@ wxSocketBase& wxSocketBase::Discard()
   wxUint32 total = 0;
 
   // Mask read events
-  m_reading = TRUE;
+  m_reading = true;
 
   SetFlags(wxSOCKET_NOWAIT);
 
@@ -693,10 +683,10 @@ wxSocketBase& wxSocketBase::Discard()
 
   delete[] buffer;
   m_lcount = total;
-  m_error  = FALSE;
+  m_error  = false;
 
   // Allow read events again
-  m_reading = FALSE;
+  m_reading = false;
 
   return *this;
 }
@@ -714,17 +704,16 @@ wxSocketBase& wxSocketBase::Discard()
 bool wxSocketBase::_Wait(long seconds,
                          long milliseconds,
                          wxSocketEventFlags flags)
-{  
-
+{
   GSocketEventFlags result;
   long timeout;
 
-  // Set this to TRUE to interrupt ongoing waits
-  m_interrupt = FALSE;
+  // Set this to true to interrupt ongoing waits
+  m_interrupt = false;
 
   // Check for valid socket
   if (!m_socket)
-    return FALSE;
+    return false;
 
   // Check for valid timeout value.
   if (seconds != -1)
@@ -734,7 +723,7 @@ bool wxSocketBase::_Wait(long seconds,
 
 #if !defined(wxUSE_GUI) || !wxUSE_GUI
   GSocket_SetTimeout(m_socket, timeout);
-#endif 
+#endif
 
   // Wait in an active polling loop.
   //
@@ -747,7 +736,7 @@ bool wxSocketBase::_Wait(long seconds,
   // we are just polling). Also, if just polling, do not yield.
 
   wxStopWatch chrono;
-  bool done = FALSE;
+  bool done = false;
 
   while (!done)
   {
@@ -756,33 +745,35 @@ bool wxSocketBase::_Wait(long seconds,
     // Incoming connection (server) or connection established (client)
     if (result & GSOCK_CONNECTION_FLAG)
     {
-      m_connected = TRUE;
-      m_establishing = FALSE;
-      return TRUE;
+      m_connected = true;
+      m_establishing = false;
+
+      return true;
     }
 
     // Data available or output buffer ready
     if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
     {
-      return TRUE;
+      return true;
     }
 
     // Connection lost
     if (result & GSOCK_LOST_FLAG)
     {
-      m_connected = FALSE;
-      m_establishing = FALSE;
+      m_connected = false;
+      m_establishing = false;
+
       return (flags & GSOCK_LOST_FLAG) != 0;
     }
 
     // Wait more?
     if ((!timeout) || (chrono.Time() > timeout) || (m_interrupt))
-      done = TRUE;
+      done = true;
     else
       PROCESS_EVENTS();
   }
 
-  return FALSE;
+  return false;
 }
 
 bool wxSocketBase::Wait(long seconds, long milliseconds)
@@ -797,15 +788,14 @@ bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
 {
   // Check pushback buffer before entering _Wait
   if (m_unread)
-    return TRUE;
+    return true;
 
   // Note that GSOCK_INPUT_LOST has to be explicitly passed to
   // _Wait becuase of the semantics of WaitForRead: a return
-  // value of TRUE means that a GSocket_Read call will return
+  // value of true means that a GSocket_Read call will return
   // immediately, not that there is actually data to read.
 
-  return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG |
-                                      GSOCK_LOST_FLAG);
+  return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
 }
 
 bool wxSocketBase::WaitForWrite(long seconds, long milliseconds)
@@ -831,19 +821,19 @@ bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
   GAddress *peer;
 
   if (!m_socket)
-    return FALSE;
+    return false;
 
   peer = GSocket_GetPeer(m_socket);
 
     // copying a null address would just trigger an assert anyway
 
   if (!peer)
-    return FALSE;
+    return false;
 
   addr_man.SetAddress(peer);
   GAddress_destroy(peer);
 
-  return TRUE;
+  return true;
 }
 
 bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
@@ -852,13 +842,14 @@ bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
   GAddress *local;
 
   if (!m_socket)
-    return FALSE;
+    return false;
 
   local = GSocket_GetLocal(m_socket);
   addr_man.SetAddress(local);
   GAddress_destroy(local);
 #endif
-  return TRUE;
+
+  return true;
 }
 
 //
@@ -894,7 +885,7 @@ void wxSocketBase::RestoreState()
   m_notify     = state->m_notify;
   m_eventmask  = state->m_eventmask;
   m_clientData = state->m_clientData;
-  
+
   m_states.Erase(node);
   delete state;
 }
@@ -954,15 +945,15 @@ void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
 void wxSocketBase::OnRequest(wxSocketNotify notification)
 {
   // NOTE: We duplicate some of the code in _Wait, but this doesn't
-  //   hurt. It has to be here because the (GSocket) event might arrive
-  //   a bit delayed, and it has to be in _Wait as well because we don't
-  //   know whether the Wait functions are being used.
+  // hurt. It has to be here because the (GSocket) event might arrive
+  // a bit delayed, and it has to be in _Wait as well because we don't
+  // know whether the Wait functions are being used.
 
-  switch(notification)
+  switch (notification)
   {
     case wxSOCKET_CONNECTION:
-      m_establishing = FALSE;
-      m_connected = TRUE;
+      m_establishing = false;
+      m_connected = true;
       break;
 
     // If we are in the middle of a R/W operation, do not
@@ -980,8 +971,8 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
       break;
 
     case wxSOCKET_LOST:
-      m_connected = FALSE;
-      m_establishing = FALSE;
+      m_connected = false;
+      m_establishing = false;
       break;
 
     default:
@@ -994,12 +985,24 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
   wxUnusedVar(flag);
   switch (notification)
   {
-    case GSOCK_INPUT:      flag = GSOCK_INPUT_FLAG; break;
-    case GSOCK_OUTPUT:     flag = GSOCK_OUTPUT_FLAG; break;
-    case GSOCK_CONNECTION: flag = GSOCK_CONNECTION_FLAG; break;
-    case GSOCK_LOST:       flag = GSOCK_LOST_FLAG; break;
+    case GSOCK_INPUT:
+      flag = GSOCK_INPUT_FLAG;
+      break;
+
+    case GSOCK_OUTPUT:
+      flag = GSOCK_OUTPUT_FLAG;
+      break;
+
+    case GSOCK_CONNECTION:
+      flag = GSOCK_CONNECTION_FLAG;
+      break;
+
+    case GSOCK_LOST:
+      flag = GSOCK_LOST_FLAG;
+      break;
+
     default:
-      wxLogWarning(_("wxSocket: unknown event!."));
+      wxLogWarning( wxT("wxSocket: unknown event!") );
       return;
   }
 
@@ -1039,7 +1042,8 @@ void wxSocketBase::SetEventHandler(wxEvtHandler& handler, int id)
 
 void wxSocketBase::Pushback(const void *buffer, wxUint32 size)
 {
-  if (!size) return;
+  if (!size)
+    return;
 
   if (m_unread == NULL)
     m_unread = malloc(size);
@@ -1097,17 +1101,17 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
                                wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_SERVER)
 {
-    wxLogTrace( wxTRACE_Socket, _T("Opening wxSocketServer") );
+    wxLogTrace( wxTRACE_Socket, wxT("Opening wxSocketServer") );
 
     m_socket = GSocket_new();
 
     if (!m_socket)
     {
-        wxLogTrace( wxTRACE_Socket, _T("*** GSocket_new failed") );
+        wxLogTrace( wxTRACE_Socket, wxT("*** GSocket_new failed") );
         return;
     }
 
-        // Setup the socket as server
+    // Setup the socket as server
 
 #if 0
     GSocket_SetLocal(m_socket, addr_man.GetAddress());
@@ -1116,7 +1120,7 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
         GSocket_destroy(m_socket);
         m_socket = NULL;
 
-        wxLogTrace( wxTRACE_Socket, _T("*** GSocket_SetServer failed") );
+        wxLogTrace( wxTRACE_Socket, wxT("*** GSocket_SetServer failed") );
         return;
     }
 
@@ -1136,9 +1140,9 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
   GSocket *child_socket;
 
   if (!m_socket)
-    return FALSE;
+    return false;
 
-  // If wait == FALSE, then the call should be nonblocking.
+  // If wait == false, then the call should be nonblocking.
   // When we are finished, we put the socket to blocking mode
   // again.
 
@@ -1152,18 +1156,19 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
     GSocket_SetNonBlocking(m_socket, 0);
 
   if (!child_socket)
-    return FALSE;
+    return false;
 
   sock.m_type = wxSOCKET_BASE;
   sock.m_socket = child_socket;
-  sock.m_connected = TRUE;
+  sock.m_connected = true;
 
   GSocket_SetTimeout(sock.m_socket, sock.m_timeout * 1000);
   GSocket_SetCallback(sock.m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                                      GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
                                      wx_socket_callback, (char *)&sock);
 #endif
-  return TRUE;
+
+  return true;
 }
 
 wxSocketBase *wxSocketServer::Accept(bool wait)
@@ -1209,7 +1214,7 @@ wxSocketClient::~wxSocketClient()
 
 bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
 {
-  GSocketError err ;
+  GSocketError err;
 
   if (m_socket)
   {
@@ -1219,18 +1224,18 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
   }
 
   m_socket = GSocket_new();
-  m_connected = FALSE;
-  m_establishing = FALSE;
+  m_connected = false;
+  m_establishing = false;
 
   if (!m_socket)
-    return FALSE;
+    return false;
 
   GSocket_SetTimeout(m_socket, m_timeout * 1000);
   GSocket_SetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                                 GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
                                 wx_socket_callback, (char *)this);
 
-  // If wait == FALSE, then the call should be nonblocking.
+  // If wait == false, then the call should be nonblocking.
   // When we are finished, we put the socket to blocking mode
   // again.
 
@@ -1246,25 +1251,24 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
   if (err != GSOCK_NOERROR)
   {
     if (err == GSOCK_WOULDBLOCK)
-      m_establishing = TRUE;
+      m_establishing = true;
 
-    return FALSE;
+    return false;
   }
 
-  m_connected = TRUE;
-  return TRUE;
+  m_connected = true;
+  return true;
 }
 
 bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
 {
   if (m_connected)                      // Already connected
-    return TRUE;
+    return true;
 
   if (!m_establishing || !m_socket)     // No connection in progress
-    return FALSE;
+    return false;
 
-  return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG |
-                                      GSOCK_LOST_FLAG);
+  return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
 }
 
 // ==========================================================================
@@ -1281,7 +1285,7 @@ wxDatagramSocket::wxDatagramSocket( wxSockAddress& addr,
   // Create the socket
   m_socket = GSocket_new();
 
-  if(!m_socket)
+  if (!m_socket)
     return;
 
   // Setup the socket as non connection oriented
@@ -1294,8 +1298,8 @@ wxDatagramSocket::wxDatagramSocket( wxSockAddress& addr,
   }
 
   // Initialize all stuff
-  m_connected = FALSE;
-  m_establishing = FALSE;
+  m_connected = false;
+  m_establishing = false;
   GSocket_SetTimeout( m_socket, m_timeout );
   GSocket_SetCallback( m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                                  GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
@@ -1392,6 +1396,7 @@ GAddress *GAddress_copy(GAddress *address)
       free(addr2);
       return NULL;
     }
+
     memcpy(addr2->m_addr, address->m_addr, addr2->m_len);
   }
 
@@ -1400,7 +1405,7 @@ GAddress *GAddress_copy(GAddress *address)
 
 void GAddress_destroy(GAddress *address)
 {
-  assert(address != NULL);
+  assert( address != NULL );
 
   if (address->m_addr)
     free(address->m_addr);
@@ -1417,7 +1422,7 @@ void GAddress_SetFamily(GAddress *address, GAddressType type)
 
 GAddressType GAddress_GetFamily(GAddress *address)
 {
-  assert(address != NULL);
+  assert( address != NULL );
 
   return address->m_family;
 }
@@ -1431,14 +1436,17 @@ GSocketError _GAddress_translate_from(GAddress *address,
     case AF_INET:
       address->m_family = GSOCK_INET;
       break;
+
     case AF_UNIX:
       address->m_family = GSOCK_UNIX;
       break;
+
 #ifdef AF_INET6
     case AF_INET6:
       address->m_family = GSOCK_INET6;
       break;
 #endif
+
     default:
     {
       address->m_error = GSOCK_INVOP;
@@ -1457,6 +1465,7 @@ GSocketError _GAddress_translate_from(GAddress *address,
     address->m_error = GSOCK_MEMERR;
     return GSOCK_MEMERR;
   }
+
   memcpy(address->m_addr, addr, len);
 
   return GSOCK_NOERROR;
@@ -1513,13 +1522,12 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   struct hostent *he;
   struct in_addr *addr;
 
-  assert(address != NULL);
-
-  CHECK_ADDRESS(address, INET);
+  assert( address != NULL );
+  CHECK_ADDRESS( address, INET );
 
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
 
-  /* If it is a numeric host name, convert it now */
+  // If it is a numeric host name, convert it now
 #if defined(HAVE_INET_ATON)
   if (inet_aton(hostname, addr) == 0)
   {
@@ -1527,19 +1535,19 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   if ( (addr->s_addr = inet_addr(hostname)) == -1 )
   {
 #else
-  /* Use gethostbyname by default */
+  // Use gethostbyname by default
 #ifndef __WXMAC__
-  int val = 1;  /* VA doesn't like constants in conditional expressions */
+  int val = 1;  // VA doesn't like constants in conditional expressions
   if (val)
 #endif
   {
 #endif
     struct in_addr *array_addr;
 
-    /* It is a real name, we solve it */
+    // It is a real name, we solve it
     if ((he = gethostbyname(hostname)) == NULL)
     {
-      /* Reset to invalid address */
+      // Reset to invalid address
       addr->s_addr = INADDR_NONE;
       address->m_error = GSOCK_NOHOST;
       return GSOCK_NOHOST;
@@ -1547,6 +1555,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
     array_addr = (struct in_addr *) *(he->h_addr_list);
     addr->s_addr = array_addr[0].s_addr;
   }
+
   return GSOCK_NOERROR;
 }
 
@@ -1560,9 +1569,8 @@ GSocketError GAddress_INET_SetHostAddress(GAddress *address,
 {
   struct in_addr *addr;
 
-  assert(address != NULL);
-
-  CHECK_ADDRESS(address, INET);
+  assert( address != NULL );
+  CHECK_ADDRESS( address, INET );
 
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
   addr->s_addr = htonl(hostaddr) ;
@@ -1576,20 +1584,20 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
   struct servent *se;
   struct sockaddr_in *addr;
 
-  assert(address != NULL);
-  CHECK_ADDRESS(address, INET);
+  assert( address != NULL );
+  CHECK_ADDRESS( address, INET );
 
   if (!port)
   {
     address->m_error = GSOCK_INVPORT;
     return GSOCK_INVPORT;
   }
- 
+
   se = getservbyname(port, protocol);
   if (!se)
   {
-    /* the cast to int suppresses compiler warnings about subscript having the
-       type char */
+    // the cast to int suppresses compiler warnings
+    // about subscript having the type char
     if (isdigit((int)port[0]))
     {
       int port_int;
@@ -1614,9 +1622,9 @@ GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
 {
   struct sockaddr_in *addr;
 
-  assert(address != NULL);
-  CHECK_ADDRESS(address, INET);
- 
+  assert( address != NULL );
+  CHECK_ADDRESS( address, INET );
+
   addr = (struct sockaddr_in *)address->m_addr;
   addr->sin_port = htons(port);
 
@@ -1629,8 +1637,8 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t
   char *addr_buf;
   struct sockaddr_in *addr;
 
-  assert(address != NULL); 
-  CHECK_ADDRESS(address, INET);
+  assert( address != NULL );
+  CHECK_ADDRESS( address, INET );
 
   addr = (struct sockaddr_in *)address->m_addr;
   addr_buf = (char *)&(addr->sin_addr);
@@ -1651,8 +1659,8 @@ unsigned long GAddress_INET_GetHostAddress(GAddress *address)
 {
   struct sockaddr_in *addr;
 
-  assert(address != NULL); 
-  CHECK_ADDRESS_RETVAL(address, INET, 0); 
+  assert( address != NULL );
+  CHECK_ADDRESS_RETVAL( address, INET, 0 );
 
   addr = (struct sockaddr_in *)address->m_addr;
 
@@ -1663,10 +1671,11 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
 {
   struct sockaddr_in *addr;
 
-  assert(address != NULL); 
-  CHECK_ADDRESS_RETVAL(address, INET, 0); 
+  assert( address != NULL );
+  CHECK_ADDRESS_RETVAL( address, INET, 0 );
 
   addr = (struct sockaddr_in *)address->m_addr;
+
   return ntohs(addr->sin_port);
 }
 
@@ -1700,9 +1709,8 @@ GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path)
 {
   struct sockaddr_un *addr;
 
-  assert(address != NULL); 
-
-  CHECK_ADDRESS(address, UNIX); 
+  assert( address != NULL );
+  CHECK_ADDRESS( address, UNIX );
 
   addr = ((struct sockaddr_un *)address->m_addr);
   strncpy(addr->sun_path, path, UNIX_SOCK_PATHLEN);
@@ -1715,8 +1723,8 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 {
   struct sockaddr_un *addr;
 
-  assert(address != NULL);
-  CHECK_ADDRESS(address, UNIX);
+  assert( address != NULL );
+  CHECK_ADDRESS( address, UNIX );
 
   addr = (struct sockaddr_un *)address->m_addr;
 
@@ -1741,19 +1749,19 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
  *    GSOCK_INVSOCK - the socket is not valid.
  *    GSOCK_INVADDR - the address is not valid.
  */
- 
+
 GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
 {
-  assert(socket != NULL);
+  assert( socket != NULL );
 
-  /* the socket must be initialized, or it must be a server */
+  // the socket must be initialized, or it must be a server
   if ((socket->m_fd != INVALID_SOCKET && !socket->m_server))
   {
     socket->m_error = GSOCK_INVSOCK;
     return GSOCK_INVSOCK;
   }
 
-  /* check address */
+  // check address
   if (address == NULL || address->m_family == GSOCK_NOFAMILY)
   {
     socket->m_error = GSOCK_INVADDR;
@@ -1772,7 +1780,7 @@ GSocketError GSocket_SetPeer(GSocket *socket, GAddress *address)
 {
   assert(socket != NULL);
 
-  /* check address */
+  // check address
   if (address == NULL || address->m_family == GSOCK_NOFAMILY)
   {
     socket->m_error = GSOCK_INVADDR;
@@ -1794,13 +1802,13 @@ GAddress *GSocket_GetLocal(GSocket *socket)
   socklen_t size = sizeof(addr);
   GSocketError err;
 
-  assert(socket != NULL);
+  assert( socket != NULL );
 
-  /* try to get it from the m_local var first */
+  // try to get it from the m_local var first
   if (socket->m_local)
     return GAddress_copy(socket->m_local);
 
-  /* else, if the socket is initialized, try getsockname */
+  // else, if the socket is initialized, try getsockname
   if (socket->m_fd == INVALID_SOCKET)
   {
     socket->m_error = GSOCK_INVSOCK;
@@ -1813,7 +1821,7 @@ GAddress *GSocket_GetLocal(GSocket *socket)
     return NULL;
   }
 
-  /* got a valid address from getsockname, create a GAddress object */
+  // got a valid address from getsockname, create a GAddress object
   address = GAddress_new();
   if (address == NULL)
   {
@@ -1836,16 +1844,12 @@ GAddress *GSocket_GetPeer(GSocket *socket)
 {
   assert(socket != NULL);
 
-  /* try to get it from the m_peer var */
+  // try to get it from the m_peer var
   if (socket->m_peer)
     return GAddress_copy(socket->m_peer);
 
   return NULL;
 }
-
-//
-//
-//
 
 
 GSocket *GSocket_new(void)
@@ -1855,92 +1859,94 @@ GSocket *GSocket_new(void)
 
   if (socket == NULL)
     return NULL;
-    
+
   socket->m_fd                  = INVALID_SOCKET;
 
   for (int i=0;i<GSOCK_MAX_EVENT;i++)
   {
-    socket->m_cbacks[i]         = NULL;
+    socket->m_cbacks[i] = NULL;
   }
+
   socket->m_detected            = 0;
 
   socket->m_local               = NULL;
   socket->m_peer                = NULL;
   socket->m_error               = GSOCK_NOERROR;
 
-  socket->m_non_blocking        = FALSE ;
-  socket->m_stream              = TRUE;
-//  socket->m_oriented            = TRUE;
-  socket->m_server              = FALSE;
-  socket->m_establishing        = FALSE;
-  socket->m_timeout             = 10*60*1000;
-                                /* 10 minutes * 60 sec * 1000 millisec */
-  
+  socket->m_non_blocking        = false ;
+  socket->m_stream              = true;
+//  socket->m_oriented            = true;
+  socket->m_server              = false;
+  socket->m_establishing        = false;
+  socket->m_timeout             = 10 * 60 * 1000;
+                                // 10 minutes * 60 sec * 1000 millisec
+
   socket->m_cfSocket            = NULL ;
   socket->m_runLoopSource       = NULL ;
   socket->m_readStream          = NULL;
   socket->m_writeStream         = NULL;
-    
+
   return socket ;
 }
 
 void GSocket_close(GSocket *socket)
 {
-  if ( socket->m_cfSocket != NULL )
-  {
-    if ( socket->m_readStream )
+    if ( socket->m_cfSocket != NULL )
     {
-		  CFReadStreamClose(socket->m_readStream);
-      CFRelease( socket->m_readStream ) ;
-      socket->m_readStream = NULL ;
-    }
-    if ( socket->m_writeStream )
-    {
-		  CFWriteStreamClose(socket->m_writeStream);
-      CFRelease( socket->m_writeStream ) ;
-      socket->m_writeStream = NULL ;
-    }
+        if ( socket->m_readStream )
+        {
+            CFReadStreamClose(socket->m_readStream);
+            CFRelease( socket->m_readStream ) ;
+            socket->m_readStream = NULL ;
+        }
 
-    CFSocketInvalidate( socket->m_cfSocket ) ;
-    CFRelease( socket->m_cfSocket ) ;
-    socket->m_cfSocket = NULL ;
-    socket->m_fd = INVALID_SOCKET ;
-  }
+        if ( socket->m_writeStream )
+        {
+            CFWriteStreamClose(socket->m_writeStream);
+            CFRelease( socket->m_writeStream ) ;
+            socket->m_writeStream = NULL ;
+        }
+
+        CFSocketInvalidate( socket->m_cfSocket ) ;
+        CFRelease( socket->m_cfSocket ) ;
+        socket->m_cfSocket = NULL ;
+        socket->m_fd = INVALID_SOCKET ;
+    }
 }
 
 void GSocket_Shutdown(GSocket *socket)
 {
-  GSocket_close( socket ) ;
+    GSocket_close( socket );
 
-  /* Disable GUI callbacks */
-  for (int evt = 0; evt < GSOCK_MAX_EVENT; evt++)
-    socket->m_cbacks[evt] = NULL;
+    // Disable GUI callbacks
+    for (int evt = 0; evt < GSOCK_MAX_EVENT; evt++)
+        socket->m_cbacks[evt] = NULL;
 
-  socket->m_detected = GSOCK_LOST_FLAG;
+    socket->m_detected = GSOCK_LOST_FLAG;
 }
 
 void GSocket_destroy(GSocket *socket)
 {
-  assert(socket != NULL);
+  assert( socket != NULL );
 
-  /* Check that the socket is really shutdowned */
+  // Check that the socket is really shut down
   if (socket->m_fd != INVALID_SOCKET)
     GSocket_Shutdown(socket);
 
-  /* Destroy private addresses */
+  // Destroy private addresses
   if (socket->m_local)
     GAddress_destroy(socket->m_local);
 
   if (socket->m_peer)
     GAddress_destroy(socket->m_peer);
 
-  /* Destroy the socket itself */
+  // Destroy the socket itself
   free(socket);
 }
 
 GSocketError GSocket_Connect(GSocket *socket, GSocketStream stream)
 {
-  assert(socket != NULL);
+  assert( socket != NULL );
 
   if (socket->m_fd != INVALID_SOCKET)
   {
@@ -1954,68 +1960,69 @@ GSocketError GSocket_Connect(GSocket *socket, GSocketStream stream)
     return GSOCK_INVADDR;
   }
 
-  /* Streamed or dgram socket? */
+  // Streamed or dgram socket?
   socket->m_stream   = (stream == GSOCK_STREAMED);
-  socket->m_oriented = TRUE;
-  socket->m_server   = FALSE;
-  socket->m_establishing = FALSE;
+  socket->m_oriented = true;
+  socket->m_server = false;
+  socket->m_establishing = false;
 
   GSocketError returnErr = GSOCK_NOERROR ;
   CFSocketError err ;
-  
+
   CFAllocatorRef alloc = kCFAllocatorDefault ;
   CFSocketContext ctx ;
   memset( &ctx , 0 , sizeof( ctx ) ) ;
   ctx.info = socket ;
   socket->m_cfSocket = CFSocketCreate( alloc , socket->m_peer->m_realfamily ,
-     stream == GSOCK_STREAMED ? SOCK_STREAM : SOCK_DGRAM , 0 , 
+     stream == GSOCK_STREAMED ? SOCK_STREAM : SOCK_DGRAM , 0 ,
       kCFSocketReadCallBack | kCFSocketWriteCallBack | kCFSocketConnectCallBack , wxMacCFSocketCallback , &ctx  ) ;
   _GSocket_Enable(socket, GSOCK_CONNECTION);
-     
-  socket->m_fd = CFSocketGetNative( socket->m_cfSocket ) ; 
 
-  CFStreamCreatePairWithSocket ( alloc , socket->m_fd , &socket->m_readStream , &socket->m_writeStream  ); 
-	if ((socket->m_readStream == NULL) || (socket->m_writeStream == NULL))
+  socket->m_fd = CFSocketGetNative( socket->m_cfSocket ) ;
+
+  CFStreamCreatePairWithSocket ( alloc , socket->m_fd , &socket->m_readStream , &socket->m_writeStream  );
+  if ((socket->m_readStream == NULL) || (socket->m_writeStream == NULL))
   {
     GSocket_close(socket);
     socket->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
-    
+
   if ( !CFReadStreamOpen( socket->m_readStream ) || !CFWriteStreamOpen( socket->m_writeStream ) )
   {
     GSocket_close(socket);
     socket->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
-  
+
   CFRunLoopSourceRef rls = CFSocketCreateRunLoopSource(alloc , socket->m_cfSocket , 0);
   CFRunLoopAddSource(CFRunLoopGetCurrent() , rls, kCFRunLoopCommonModes);
   CFRelease(rls);
-  
+
   CFDataRef address = CFDataCreateWithBytesNoCopy(alloc, (const UInt8*) socket->m_peer->m_addr, socket->m_peer->m_len , kCFAllocatorNull);
   if ( !address )
     return GSOCK_MEMERR ;
-    
+
   err = CFSocketConnectToAddress( socket->m_cfSocket , address, socket->m_non_blocking ? -1 : socket->m_timeout / 1000  ) ;
   CFRelease(address);
-  
+
   if (err != kCFSocketSuccess)
   {
     if ( err == kCFSocketTimeout )
-    {  
+    {
       GSocket_close(socket);
       socket->m_error = GSOCK_TIMEDOUT ;
       return GSOCK_TIMEDOUT ;
     }
+
     // we don't know whether a connect in progress will be issued like this
     if ( err != kCFSocketTimeout && socket->m_non_blocking )
     {
-      socket->m_establishing = TRUE;
+      socket->m_establishing = true;
       socket->m_error = GSOCK_WOULDBLOCK;
       return GSOCK_WOULDBLOCK;
     }
-    
+
     GSocket_close(socket);
     socket->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
@@ -2027,25 +2034,26 @@ GSocketError GSocket_Connect(GSocket *socket, GSocketStream stream)
 /* Flags */
 
 /* GSocket_SetNonBlocking:
- *  Sets the socket to non-blocking mode. All IO calls will return
- *  immediately.
+ *  Sets the socket to non-blocking mode.
+ *  All IO calls will return immediately.
  */
 void GSocket_SetNonBlocking(GSocket *socket, int non_block)
 {
-  assert(socket != NULL);
+  assert( socket != NULL );
 
 //  GSocket_Debug( ("GSocket_SetNonBlocking: %d\n", (int)non_block) );
 
   socket->m_non_blocking = non_block;
 }
 
-/* GSocket_SetTimeout:
+/*
+ *  GSocket_SetTimeout:
  *  Sets the timeout for blocking calls. Time is expressed in
  *  milliseconds.
  */
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 {
-  assert(socket != NULL);
+  assert( socket != NULL );
 
   socket->m_timeout = millisec;
 }
@@ -2057,7 +2065,7 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
  */
 GSocketError GSocket_GetError(GSocket *socket)
 {
-  assert(socket != NULL);
+  assert( socket != NULL );
 
   return socket->m_error;
 }
@@ -2069,7 +2077,7 @@ GSocketError GSocket_GetError(GSocket *socket)
  *   operation, there is still data available, the callback function will
  *   be called again.
  * GSOCK_OUTPUT:
- *   The socket is available for writing. That is, the next write call 
+ *   The socket is available for writing. That is, the next write call
  *   won't block. This event is generated only once, when the connection is
  *   first established, and then only if a call failed with GSOCK_WOULDBLOCK,
  *   when the output buffer empties again. This means that the app should
@@ -2097,7 +2105,7 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
 {
   int count;
 
-  assert(socket != NULL);
+  assert( socket != NULL );
 
   for (count = 0; count < GSOCK_MAX_EVENT; count++)
   {
@@ -2142,21 +2150,25 @@ void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
     switch (event)
     {
      case GSOCK_CONNECTION:
-         if(socket->m_server)
+         if (socket->m_server)
             c = kCFSocketReadCallBack;
          else
             c = kCFSocketConnectCallBack;
          break;
+
      case GSOCK_LOST:
      case GSOCK_INPUT:
          c = kCFSocketReadCallBack;
          break;
+
      case GSOCK_OUTPUT:
          c = kCFSocketWriteCallBack;
          break;
+
      default:
          c = 0;
     }
+
     CFSocketEnableCallBacks(socket->m_cfSocket, c);
 }
 
@@ -2166,21 +2178,26 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
     switch (event)
     {
      case GSOCK_CONNECTION:
-         if(socket->m_server)
+         if (socket->m_server)
             c = kCFSocketReadCallBack;
          else
             c = kCFSocketConnectCallBack;
          break;
+
      case GSOCK_LOST:
      case GSOCK_INPUT:
          c = kCFSocketReadCallBack;
          break;
+
      case GSOCK_OUTPUT:
          c = kCFSocketWriteCallBack;
          break;
+
      default:
          c = 0;
+         break;
     }
+
     CFSocketDisableCallBacks(socket->m_cfSocket, c);
 }
 
@@ -2215,14 +2232,17 @@ void wxMacCFSocketCallback(CFSocketRef s, CFSocketCallBackType callbackType,
         CALL_CALLBACK( socket , GSOCK_CONNECTION ) ;
       }
       break;
+
     case kCFSocketReadCallBack:
       CALL_CALLBACK( socket , GSOCK_INPUT ) ;
       break;
+
     case kCFSocketWriteCallBack:
       CALL_CALLBACK( socket , GSOCK_OUTPUT ) ;
       break;
+
     default:
-      break;  /* We shouldn't get here. */
+      break;  // We shouldn't get here.
   }
 }
 
@@ -2238,17 +2258,19 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
 }
 
 int GSocket_Write(GSocket *socket, const char *buffer, int size)
-{                        
+{
   int ret;
 
   assert(socket != NULL);
   ret = CFWriteStreamWrite( socket->m_writeStream , (UInt8*) buffer , size ) ;
+
   return ret;
 }
 
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
-  assert(socket != NULL);
+  assert( socket != NULL );
+
   return flags & socket->m_detected;
 }
 
@@ -2262,7 +2284,7 @@ public:
     virtual bool OnInit()
     {
         // wxSocketBase will call GSocket_Init() itself when/if needed
-        return TRUE;
+        return true;
     }
 
     virtual void OnExit()
@@ -2279,4 +2301,4 @@ IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
 
 #endif
   // wxUSE_SOCKETS
-  
+

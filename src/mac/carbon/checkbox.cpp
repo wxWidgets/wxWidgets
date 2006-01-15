@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checkbox.cpp
+// Name:        src/mac/carbon/checkbox.cpp
 // Purpose:     wxCheckBox
 // Author:      Stefan Csomor
 // Modified by:
@@ -98,21 +98,21 @@ wxInt32 wxCheckBox::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENT
 
     switch (origState)
     {
-	case wxCHK_UNCHECKED:
+        case wxCHK_UNCHECKED:
             newState = wxCHK_CHECKED;
             break;
 
-	case wxCHK_CHECKED:
+        case wxCHK_CHECKED:
             // If the style flag to allow the user setting the undetermined state is set,
             // then set the state to undetermined; otherwise set state to unchecked.
             newState = Is3rdStateAllowedForUser() ? wxCHK_UNDETERMINED : wxCHK_UNCHECKED;
             break;
 
-	case wxCHK_UNDETERMINED:
+        case wxCHK_UNDETERMINED:
             newState = wxCHK_UNCHECKED;
             break;
 
-	default:
+        default:
             break;
     }
 

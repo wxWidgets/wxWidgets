@@ -115,17 +115,17 @@ wxSize wxButton::DoGetBestSize() const
 
     switch (GetWindowVariant())
     {
-    	case wxWINDOW_VARIANT_NORMAL:
-    	case wxWINDOW_VARIANT_LARGE:
+        case wxWINDOW_VARIANT_NORMAL:
+        case wxWINDOW_VARIANT_LARGE:
             sz.y = 20 ;
             charspace = 10 ;
             break;
 
-    	case wxWINDOW_VARIANT_SMALL:
+        case wxWINDOW_VARIANT_SMALL:
             sz.y = 17 ;
             break;
 
-    	case wxWINDOW_VARIANT_MINI:
+        case wxWINDOW_VARIANT_MINI:
             sz.y = 15 ;
             break;
 
