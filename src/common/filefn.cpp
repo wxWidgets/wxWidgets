@@ -301,7 +301,12 @@ wxFileExists (const wxString& filename)
 #else // !__WIN32__
     wxStructStat st;
 #ifndef wxNEED_WX_UNISTD_H
-    return wxStat( filename.fn_str() , &st) == 0 && (st.st_mode & S_IFREG);
+    return (wxStat( filename.fn_str() , &st) == 0 && (st.st_mode & S_IFREG))
+#ifdef __OS2__
+      || (errno == EACCES) // if access is denied something with that name
+                            // exists and is opened in exclusive mode.
+#endif
+      ;
 #else
     return wxStat( filename , &st) == 0 && (st.st_mode & S_IFREG);
 #endif

@@ -1989,7 +1989,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 
         return true;
     }
-#elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
+#elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || defined(__OS2__) || (defined(__DOS__) && defined(__WATCOMC__))
     wxStructStat stBuf;
     if ( wxStat( GetFullPath().c_str(), &stBuf) == 0 )
     {
