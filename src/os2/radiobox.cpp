@@ -66,7 +66,6 @@ wxRadioBox::wxRadioBox()
 {
     m_nSelectedButton = -1;
     m_nNoItems = 0;
-    m_nNoRowsOrCols = 0;
     m_ahRadioButtons = NULL;
     m_nMajorDim = 0;
     m_pnRadioWidth = NULL;
@@ -89,143 +88,6 @@ wxRadioBox::~wxRadioBox()
     if (m_pnRadioHeight)
         delete[] m_pnRadioHeight;
 } // end of wxRadioBox::~wxRadioBox
-
-void wxRadioBox::AdjustButtons( int nX,
-                                int nY,
-                                int nWidth,
-                                int nHeight,
-                                int WXUNUSED(nSizeFlags) )
-{
-    wxSize vMaxSize;
-    int    nXOffset = nX;
-    int    nYOffset = nY + nHeight;
-    int    nCx1;
-    int    nCy1;
-    int    nStartX;
-    int    nStartY;
-    int    nMaxWidth;
-    int    nMaxHeight;
-    wxFont vFont = GetFont();
-
-    wxGetCharSize( m_hWnd
-                  ,&nCx1
-                  ,&nCy1
-                  ,&vFont
-                 );
-    vMaxSize   = GetMaxButtonSize();
-    nMaxWidth  = vMaxSize.x;
-    nMaxHeight = vMaxSize.y;
-
-    nXOffset += nCx1;
-    nYOffset -= (nMaxHeight + ((3*nCy1)/2));
-
-    nStartX = nXOffset;
-    nStartY = nYOffset;
-
-    for (int i = 0; i < m_nNoItems; i++)
-    {
-        //
-        // The last button in the row may be wider than the other ones as the
-        // radiobox may be wider than the sum of the button widths (as it
-        // happens, for example, when the radiobox label is very long)
-        //
-        bool                        bIsLastInTheRow;
-
-        if (m_windowStyle & wxRA_SPECIFY_COLS)
-        {
-            //
-            // Item is the last in its row if it is a multiple of the number of
-            // columns or if it is just the last item
-            //
-            int                     n = i + 1;
-
-            bIsLastInTheRow = ((n % m_nMajorDim) == 0) || (n == m_nNoItems);
-        }
-        else // winRA_SPECIFY_ROWS
-        {
-            //
-            // Item is the last in the row if it is in the last columns
-            //
-            bIsLastInTheRow = i >= (m_nNoItems/m_nMajorDim) * m_nMajorDim;
-        }
-
-        //
-        // Is this the start of new row/column?
-        //
-        if (i && (i % m_nMajorDim == 0))
-        {
-            if (m_windowStyle & wxRA_SPECIFY_ROWS)
-            {
-
-                //
-                // Start of new column
-                //
-                nYOffset = nStartY;
-                nXOffset += nMaxWidth + nCx1;
-            }
-            else // start of new row
-            {
-                nXOffset = nStartX;
-                nYOffset -= nMaxHeight;
-                if (m_pnRadioWidth[0] > 0L)
-                    nYOffset -= nCy1/2;
-            }
-        }
-
-        int                         nWidthBtn;
-
-        if (bIsLastInTheRow)
-        {
-            //
-            // Make the button go to the end of radio box
-            //
-            nWidthBtn = nStartX + nWidth - nXOffset - (2 * nCx1);
-            if (nWidthBtn < nMaxWidth)
-                nWidthBtn = nMaxWidth;
-        }
-        else
-        {
-            //
-            // Normal button, always of the same size
-            //
-            nWidthBtn = nMaxWidth;
-        }
-
-        //
-        // Make all buttons of the same, maximal size - like this they
-        // cover the radiobox entirely and the radiobox tooltips are always
-        // shown (otherwise they are not when the mouse pointer is in the
-        // radiobox part not belonging to any radiobutton)
-        //
-        ::WinSetWindowPos( (HWND)m_ahRadioButtons[i]
-                          ,HWND_BOTTOM
-                          ,(LONG)nXOffset
-                          ,(LONG)nYOffset
-                          ,(LONG)nWidthBtn
-                          ,(LONG)nMaxHeight
-                          ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
-                         );
-        //
-        // Where do we put the next button?
-        //
-        if (m_windowStyle & wxRA_SPECIFY_ROWS)
-        {
-            //
-            // Below this one
-            //
-            nYOffset -= nMaxHeight;
-            if (m_pnRadioWidth[0] > 0)
-                nYOffset -= nCy1/2;
-        }
-        else
-        {
-            //
-            // To the right of this one
-            //
-            nXOffset += nWidthBtn + nCx1;
-        }
-    }
-} // end of wxRadioBox::AdjustButtons
 
 void wxRadioBox::Command (
   wxCommandEvent&                   rEvent
@@ -292,7 +154,6 @@ bool wxRadioBox::Create(
     m_nNoItems = 0;
 
     m_nMajorDim     = nMajorDim == 0 ? nNum : nMajorDim;
-    m_nNoRowsOrCols = nMajorDim;
 
     //
     // Common initialization
@@ -764,53 +625,6 @@ int wxRadioBox::GetNumVer() const
         return (m_nNoItems + m_nMajorDim - 1)/m_nMajorDim;
     }
 } // end of wxRadioBox::GetNumVer
-
-void wxRadioBox::GetPosition( int* pnX,
-                              int* WXUNUSED(pnY) ) const
-{
-    wxWindowOS2*                    pParent = GetParent();
-    RECT                            vRect = { -1, -1, -1, -1 };
-    POINTL                          vPoint;
-    int                             i;
-
-    for (i = 0; i < m_nNoItems; i++)
-        wxFindMaxSize( m_ahRadioButtons[i]
-                      ,&vRect
-                     );
-    if (m_hWnd)
-        wxFindMaxSize( m_hWnd
-                      ,&vRect
-                     );
-
-    //
-    // Since we now have the absolute screen coords, if there's a parent we
-    // must subtract its top left corner
-    //
-    vPoint.x = vRect.xLeft;
-    vPoint.y = vRect.yTop;
-    if (pParent)
-    {
-        SWP                             vSwp;
-
-        ::WinQueryWindowPos((HWND)pParent->GetHWND(), &vSwp);
-        vPoint.x = vSwp.x;
-        vPoint.y = vSwp.y;
-    }
-
-    //
-    // We may be faking the client origin. So a window that's really at (0, 30)
-    // may appear (to wxWin apps) to be at (0, 0).
-    //
-    if (GetParent())
-    {
-        wxPoint                     vPt(GetParent()->GetClientAreaOrigin());
-
-        vPoint.x = vPt.x;
-        vPoint.y = vPt.y;
-    }
-    if (pnX)
-        *pnX = vPoint.y;
-} // end of wxRadioBox::GetPosition
 
 int wxRadioBox::GetRowCount() const
 {
