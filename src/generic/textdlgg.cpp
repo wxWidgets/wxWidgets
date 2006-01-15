@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textdlgg.cpp
+// Name:        src/generic/textdlgg.cpp
 // Purpose:     wxTextEntryDialog
 // Author:      Julian Smart
 // Modified by:
@@ -96,7 +96,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 #if wxUSE_STATTEXT
     // 1) text message
     topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(10,0) );
-#endif        
+#endif
 
     // 2) text ctrl
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value,
@@ -107,25 +107,19 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 #if wxUSE_VALIDATORS
     wxTextValidator validator( wxFILTER_NONE, &m_value );
     m_textctrl->SetValidator( validator );
-#endif
-  // wxUSE_VALIDATORS
+#endif // wxUSE_VALIDATORS
 
-    // smart phones does not support or do not waste space for wxButtons
-#ifdef __SMARTPHONE__
-
-    SetRightMenu(wxID_CANCEL, _("Cancel"));
-
-#else // __SMARTPHONE__/!__SMARTPHONE__
-
-#if wxUSE_STATLINE
-    // 3) static line
-    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
-#endif
-
-    // 4) buttons
-    topsizer->Add( CreateButtonSizer( style ), 0, wxEXPAND | wxALL, 10 );
-
-#endif // !__SMARTPHONE__
+    // 3) buttons if any
+    wxSizer *buttonSizer = CreateButtonSizer( style & ButtonSizerFlags , true, wxLARGESMALL(10,0) );
+    if(buttonSizer->GetChildren().GetCount() > 0 )
+    {
+        topsizer->Add( buttonSizer, 0, wxEXPAND | wxALL, wxLARGESMALL(10,0) );
+    }
+    else
+    {
+        topsizer->AddSpacer( wxLARGESMALL(15,0) );
+        delete buttonSizer;
+    }
 
     SetAutoLayout( true );
     SetSizer( topsizer );

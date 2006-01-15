@@ -123,6 +123,8 @@ wxWinCE:
 - ::wxGetUserName() implemented.
 - wxDisplay enumeration support.
 - Fixed wxFileDialog breakage on WinCE due to incorrect structure size.
+- new wxSystemOption "wince.dialog.real-ok-cancel" to switch between WinCE
+  guidelines with Ok-only dialogs and dialogs using wxButtons.
 
 Unix:
 

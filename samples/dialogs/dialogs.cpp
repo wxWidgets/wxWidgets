@@ -1381,7 +1381,11 @@ SettingsDialog::SettingsDialog(wxWindow* win)
         |wxRESIZE_BORDER
 #endif
     );
-    CreateButtons(wxOK|wxCANCEL|wxHELP);
+    CreateButtons(wxOK|wxCANCEL
+#ifndef __POCKETPC__
+         |wxHELP
+#endif
+    );
 
     wxBookCtrlBase* notebook = GetBookCtrl();
 

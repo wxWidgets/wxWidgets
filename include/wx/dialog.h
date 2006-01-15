@@ -32,6 +32,13 @@ extern WXDLLEXPORT_DATA(const wxChar*) wxDialogNameStr;
 class WXDLLEXPORT wxDialogBase : public wxTopLevelWindow
 {
 public:
+
+    enum
+    {
+        // all flags allowed in wxDialogBase::CreateButtonSizer()
+        ButtonSizerFlags = wxOK|wxCANCEL|wxYES|wxNO|wxHELP|wxNO_DEFAULT
+    };
+
     wxDialogBase() { Init(); }
     virtual ~wxDialogBase() { }
 
@@ -56,9 +63,11 @@ public:
     wxSizer *CreateTextSizer( const wxString &message );
 #endif // wxUSE_STATTEXT // && wxUSE_TEXTCTRL
 
-#if wxUSE_BUTTON
     // places buttons into a horizontal wxBoxSizer
-    wxSizer *CreateButtonSizer( long flags );
+    wxSizer *CreateButtonSizer( long flags,
+                                bool separated = false,
+                                wxCoord distance = 0 );
+#if wxUSE_BUTTON
     wxStdDialogButtonSizer *CreateStdDialogButtonSizer( long flags );
 #endif // wxUSE_BUTTON
 

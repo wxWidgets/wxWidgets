@@ -30,6 +30,7 @@
 
 #include "wx/bookctrl.h"
 #include "wx/generic/propdlg.h"
+#include "wx/sysopt.h"
 
 //-----------------------------------------------------------------------------
 // wxPropertySheetDialog
@@ -89,19 +90,27 @@ void wxPropertySheetDialog::LayoutDialog()
 // Creates the buttons, if any
 void wxPropertySheetDialog::CreateButtons(int flags)
 {
-#if defined(__SMARTPHONE__)
-    // TODO: create a right-click menu with all the other IDs available.
-    // Perhaps that could be embedded in CreateButtonSizer() directly.
-    SetRightMenu(wxID_CANCEL);
-    SetLeftMenu(wxID_OK);
-    wxUnusedVar(flags);
-#elif defined(__POCKETPC__)
-    // Do nothing
-    wxUnusedVar(flags);
-#else
-    wxSizer* sizer = CreateButtonSizer(flags);
-    m_innerSizer->Add( sizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxRIGHT, 2);
-    m_innerSizer->AddSpacer(2);
+#ifdef __POCKETPC__
+    // keep system option status
+    const wxChar *optionName = wxT("wince.dialog.real-ok-cancel");
+    const int status = wxSystemOptions::GetOptionInt(optionName);
+    wxSystemOptions::SetOption(optionName,0);
+#endif
+
+    wxSizer *buttonSizer = CreateButtonSizer( flags & ButtonSizerFlags );
+    if(buttonSizer->GetChildren().GetCount() > 0 )
+    {
+        m_innerSizer->Add( buttonSizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxRIGHT, 2);
+        m_innerSizer->AddSpacer(2);
+    }
+    else
+    {
+        delete buttonSizer;
+    }
+
+#ifdef __POCKETPC__
+    // restore system option
+    wxSystemOptions::SetOption(optionName,status);
 #endif
 }
 

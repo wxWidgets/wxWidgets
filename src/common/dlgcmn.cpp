@@ -36,6 +36,9 @@
     #include "wx/containr.h"
 #endif
 
+#include "wx/statline.h"
+#include "wx/sysopt.h"
+
 #if wxUSE_STATTEXT
 
 // ----------------------------------------------------------------------------
@@ -273,11 +276,12 @@ wxStaticTextBase
 
 #endif // wxUSE_STATTEXT
 
-#if wxUSE_BUTTON
-
-wxSizer *wxDialogBase::CreateButtonSizer( long flags )
+wxSizer *wxDialogBase::CreateButtonSizer( long flags, bool separated, wxCoord distance )
 {
 #ifdef __SMARTPHONE__
+    wxUnusedVar(separated);
+    wxUnusedVar(distance);
+
     wxDialog* dialog = (wxDialog*) this;
     if (flags & wxOK){
         dialog->SetLeftMenu(wxID_OK);
@@ -296,14 +300,64 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
     }
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
     return sizer;
-#else
-    return CreateStdDialogButtonSizer( flags );
-#endif
+
+#else // !__SMARTPHONE__
+
+#ifdef __POCKETPC__
+    // PocketPC guidelines recommend for Ok/Cancel dialogs to use
+    // OK button located inside caption bar and implement Cancel functionality
+    // through Undo outside dialog. As native behaviour this will be default
+    // here but can be easily replaced with real wxButtons
+    // with "wince.dialog.real-ok-cancel" option set to 1
+    if ( ((flags & ~(wxCANCEL|wxNO_DEFAULT))== wxOK) &&
+         (wxSystemOptions::GetOptionInt(wxT("wince.dialog.real-ok-cancel"))==0)
+       )
+    {
+        wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+        return sizer;
+    }
+#endif // __POCKETPC__
+
+#if wxUSE_BUTTON
+
+    wxSizer* buttonSizer = CreateStdDialogButtonSizer( flags );
+
+    // Mac Human Interface Guidelines recommend not to use static lines as grouping elements
+#if wxUSE_STATLINE && !defined(__WXMAC__)
+    if(!separated)
+        return buttonSizer;
+
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxBOTTOM, distance );
+    topsizer->Add( buttonSizer, 0, wxEXPAND );
+    return topsizer;
+
+#else // !wxUSE_STATLINE
+
+    wxUnusedVar(separated);
+    wxUnusedVar(distance);
+    return buttonSizer;
+
+#endif // wxUSE_STATLINE/!wxUSE_STATLINE
+
+#else // !wxUSE_BUTTON
+
+    wxUnusedVar(separated);
+    wxUnusedVar(distance);
+    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    return sizer;
+
+#endif // wxUSE_BUTTON/!wxUSE_BUTTON
+
+#endif // __SMARTPHONE__/!__SMARTPHONE__
 }
+
+#if wxUSE_BUTTON
 
 wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
 {
     wxStdDialogButtonSizer *sizer = new wxStdDialogButtonSizer();
+
     wxButton *ok = NULL;
     wxButton *yes = NULL;
     wxButton *no = NULL;
@@ -364,6 +418,5 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
 
     return sizer;
 }
-
 
 #endif // wxUSE_BUTTON
