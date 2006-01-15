@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+WXPYTHONDIR="/=WXPYDIR"
+
+if [ "$1" = "configure" ]; then
+	=PY /usr/lib/=PY/compileall.py -q ${WXPYTHONDIR}
+	=PY -O /usr/lib/=PY/compileall.py -q ${WXPYTHONDIR}
+fi
+
+update-alternatives --install /usr/lib/=PY/site-packages/wx.pth  wx.pth	\
+			      /usr/lib/wx/python/wx=V-dbg.pth    $(( =PRIO - 10 ))
+
+#DEBHELPER#
+
