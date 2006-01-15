@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/app.h"
 
 // ----------------------------------------------------------------------------
 // globals
@@ -149,4 +150,3 @@ void wxEventLoopManual::Exit(int rc)
 }
 
 #endif // __WXMSW__ || __WXMAC__
-
