@@ -491,7 +491,7 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1 
+// Recommended setting: 1
 #define wxUSE_MEDIACTRL     1
 
 // Use QuickTime
@@ -911,6 +911,14 @@
     #define wxUSE_GLCANVAS 0
 #endif
 
+// wxRichTextCtrl allows editing of styled text.
+//
+// Default is 1.
+//
+// Recommended setting: 1, set to 0 if you want compile a
+// smaller library.
+#define wxUSE_RICHTEXT       1
+
 // wxTreeLayout class
 #define wxUSE_TREELAYOUT 1
 
@@ -991,7 +999,7 @@
 #define wxUSE_WXHTML_HELP 1
 
 // Use resources
-#define wxUSE_RESOURCES 1
+#define wxUSE_RESOURCES 0
 
 // Window layout constraint system
 #define wxUSE_CONSTRAINTS 1
