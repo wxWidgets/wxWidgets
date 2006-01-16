@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<bakefile-gen>
+
+    <add-flags formats="watcom">
+        -DPLATFORM_MSDOS=1
+    </add-flags>
+
+    <include file="../bakefiles/Bakefiles.bkgen"/>
+
+    <add-flags files="wx.bkl" formats="watcom">
+        -o../mgl/makefile.wat
+    </add-flags>
+
+    <add-flags files="../bakefiles/wx.bkl" formats="watcom">
+        -DOPTIONS_FILE=config.wat
+    </add-flags>
+    <add-flags files="../../*/*" formats="watcom">
+        -DOPTIONS_FILE=../build/mgl/config.wat
+    </add-flags>
+    <add-flags files="../../*/*/*" formats="watcom">
+        -DOPTIONS_FILE=../../build/mgl/config.wat
+    </add-flags>
+    <add-flags files="../../*/*/*/*" formats="watcom">
+        -DOPTIONS_FILE=../../../build/mgl/config.wat
+    </add-flags>
+    <add-flags files="../../*/*/*/*/*" formats="watcom">
+        -DOPTIONS_FILE=../../../../build/mgl/config.wat
+    </add-flags>
+
+</bakefile-gen>
