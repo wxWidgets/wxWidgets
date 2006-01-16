@@ -178,6 +178,7 @@ MyFrame::MyFrame(wxWindow *parent,
     InitToolBar(GetToolBar());
 #endif // wxUSE_TOOLBAR
 
+#if wxUSE_ACCEL
     // Accelerators
     wxAcceleratorEntry entries[3];
     entries[0].Set(wxACCEL_CTRL, (int) 'N', MDI_NEW_WINDOW);
@@ -185,6 +186,7 @@ MyFrame::MyFrame(wxWindow *parent,
     entries[2].Set(wxACCEL_CTRL, (int) 'A', MDI_ABOUT);
     wxAcceleratorTable accel(3, entries);
     SetAcceleratorTable(accel);
+#endif // wxUSE_ACCEL
 }
 
 void MyFrame::OnClose(wxCloseEvent& event)
@@ -280,7 +282,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     subframe->Show(true);
 }
 
-void MyFrame::OnSize(wxSizeEvent& 
+void MyFrame::OnSize(wxSizeEvent&
                                   #ifdef __WXUNIVERSAL__
                                   event
                                   #else
@@ -297,7 +299,7 @@ void MyFrame::OnSize(wxSizeEvent&
     // FIXME: On wxX11, we need the MDI frame to process this
     // event, but on other platforms this should not
     // be done.
-#ifdef __WXUNIVERSAL__   
+#ifdef __WXUNIVERSAL__
     event.Skip();
 #endif
 }
@@ -519,5 +521,3 @@ void MyChild::OnClose(wxCloseEvent& event)
 
     event.Skip();
 }
-
-

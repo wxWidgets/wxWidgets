@@ -101,7 +101,7 @@ bool ctConfigToolDoc::Save()
 {
     if (!IsModified() && m_savedYet) return true;
 
-    bool ret = (m_documentFile == wxT("") || !m_savedYet) ?
+    bool ret = (m_documentFile.empty() || !m_savedYet) ?
                  SaveAs() :
                  OnSaveDocument(m_documentFile);
     if ( ret )
@@ -124,9 +124,9 @@ bool ctConfigToolDoc::OnCreate(const wxString& path, long flags)
         //rootItem->InitProperties();
         rootItem->GetProperties().AddProperty(
         new ctProperty(
-        wxT("The item description."),
-        wxVariant(wxT(""), wxT("description")),
-        wxT("multiline")));
+            wxT("The item description."),
+            wxVariant(wxEmptyString, wxT("description")),
+            wxT("multiline")));
 
         rootItem->SetPropertyString(_T("description"),
             _T("<B>This is the top-level configuration item.</B>"));
@@ -501,7 +501,7 @@ bool ctConfigToolDoc::DoOpen(wxSimpleHtmlTag* tag, ctConfigItem* parent)
                             wxString type(wxT("string"));
                             wxString choices;
                             wxString editorType(wxT("string"));
-                            wxString description(wxT(""));
+                            wxString description;
                             childTag->GetAttributeValue(type, wxT("type"));
                             childTag->GetAttributeValue(type, wxT("editor-type"));
                             childTag->GetAttributeValue(type, wxT("choices"));
@@ -514,7 +514,7 @@ bool ctConfigToolDoc::DoOpen(wxSimpleHtmlTag* tag, ctConfigItem* parent)
                             else if (type == wxT("long"))
                                 prop->GetVariant() = wxVariant((long) 0, name);
                             else
-                                prop->GetVariant() = wxVariant(wxT(""), name);
+                                prop->GetVariant() = wxVariant(wxEmptyString, name);
                             prop->SetDescription(description);
                             prop->SetCustom(true);
                             prop->SetEditorType(editorType);
@@ -797,6 +797,8 @@ wxString ctConfigToolDoc::GetFrameworkDir(bool makeUnix)
 #ifdef __WXMSW__
         if (makeUnix)
             path.Replace(wxT("\\"), wxT("/"));
+#else
+        wxUnusedVar(makeUnix);
 #endif
     }
     return path;

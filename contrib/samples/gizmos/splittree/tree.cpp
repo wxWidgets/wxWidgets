@@ -94,7 +94,7 @@ static char * icon2_xpm[] = {
 // resources
 // ----------------------------------------------------------------------------
 // the application icon
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#ifndef __WXMSW__
     #include "mondrian.xpm"
 #endif
 
@@ -186,7 +186,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetIcon(wxICON(mondrian));
 
     // create a menu bar
-    wxMenu *menuFile = new wxMenu(wxT(""), wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
