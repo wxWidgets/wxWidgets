@@ -45,7 +45,7 @@ public:
 
     void OnExit(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
-    void Enable();
+    void EnableControls();
     void Disconnect();
 
 protected:
@@ -86,7 +86,7 @@ public:
     virtual bool Poke(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
     virtual bool OnAdvise(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
     virtual bool OnDisconnect();
-protected:    
+protected:
     void Log(const wxString& command, const wxString& topic,
         const wxString& item, wxChar *data, int size, wxIPCFormat format);
 };
@@ -105,4 +105,3 @@ public:
 protected:
     MyConnection     *m_connection;
 };
-
