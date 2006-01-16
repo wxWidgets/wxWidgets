@@ -14,13 +14,13 @@
 
 #include "wx/panel.h"
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxDialogNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxDialogNameStr[];
 
 class WXDLLEXPORT wxDialogModalData;
 
 #if wxUSE_TOOLBAR && (defined(__SMARTPHONE__) || defined(__POCKETPC__))
 class WXDLLEXPORT wxToolBar;
-extern WXDLLEXPORT_DATA(const wxChar*) wxToolBarNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
 #endif
 
 // Dialog boxes

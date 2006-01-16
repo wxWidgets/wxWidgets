@@ -32,7 +32,7 @@ class WXDLLEXPORT wxImage;
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxToolBarNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
 extern WXDLLEXPORT_DATA(const wxSize) wxDefaultSize;
 extern WXDLLEXPORT_DATA(const wxPoint) wxDefaultPosition;
 

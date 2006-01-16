@@ -28,7 +28,7 @@ class WXDLLIMPEXP_CORE wxGauge;
 // global data
 //-----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_CORE const wxChar* wxGaugeNameStr;
+extern WXDLLIMPEXP_CORE const wxChar wxGaugeNameStr[];
 
 //-----------------------------------------------------------------------------
 // wxGaugeBox

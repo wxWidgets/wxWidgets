@@ -21,8 +21,8 @@
 #include "wx/window.h"
 #include "wx/iconbndl.h"
 
-// the default names for various classs
-extern WXDLLEXPORT_DATA(const wxChar*) wxFrameNameStr;
+// the default names for various classes
+extern WXDLLEXPORT_DATA(const wxChar) wxFrameNameStr[];
 
 class WXDLLEXPORT wxTopLevelWindowBase;
 

@@ -18,7 +18,7 @@
 // type is an 'or' (|) of wxOK, wxCANCEL, wxYES_NO
 // Returns wxYES/NO/OK/CANCEL
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxMessageBoxCaptionStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxMessageBoxCaptionStr[];
 
 class WXDLLEXPORT wxGenericMessageDialog: public wxDialog, public wxMessageDialogBase
 {

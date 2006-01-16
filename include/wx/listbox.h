@@ -30,7 +30,7 @@ class WXDLLIMPEXP_BASE wxArrayString;
 // global data
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxListBoxNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxListBoxNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxListBox interface is defined by the class wxListBoxBase

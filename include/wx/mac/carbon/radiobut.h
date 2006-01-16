@@ -56,7 +56,7 @@ public:
 #if 0
 class WXDLLEXPORT wxBitmap ;
 
-WXDLLEXPORT_DATA(extern const char*) wxBitmapRadioButtonNameStr;
+WXDLLEXPORT_DATA(extern const wxChar) wxBitmapRadioButtonNameStr[];
 
 class WXDLLEXPORT wxBitmapRadioButton: public wxRadioButton
 {

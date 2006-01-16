@@ -24,7 +24,7 @@
 #include "wx/textctrl.h"
 #include "wx/bitmap.h"
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxDataViewCtrlNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxDataViewCtrlNameStr[];
 
 
 

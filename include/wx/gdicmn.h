@@ -590,7 +590,7 @@ extern WXDLLEXPORT_DATA(wxCursor*)    wxCROSS_CURSOR;
 
 extern WXDLLEXPORT_DATA(wxColourDatabase*)  wxTheColourDatabase;
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxPanelNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxPanelNameStr[];
 
 extern WXDLLEXPORT_DATA(const wxSize) wxDefaultSize;
 extern WXDLLEXPORT_DATA(const wxPoint) wxDefaultPosition;

@@ -16,7 +16,7 @@
 
 #include "wx/tbarbase.h"
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxButtonBarNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxButtonBarNameStr[];
 
 class WXDLLEXPORT wxMemoryDC;
 

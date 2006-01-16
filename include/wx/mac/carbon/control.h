@@ -12,7 +12,7 @@
 #ifndef _WX_CONTROL_H_
 #define _WX_CONTROL_H_
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
+WXDLLEXPORT_DATA(extern const wxChar) wxControlNameStr[];
 
 // General item class
 class WXDLLEXPORT wxControl : public wxControlBase

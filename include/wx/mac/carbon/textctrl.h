@@ -22,7 +22,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
+WXDLLEXPORT_DATA(extern const wxChar) wxTextCtrlNameStr[];
 
 class wxMacTextControl ;
 

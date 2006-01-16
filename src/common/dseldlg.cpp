@@ -35,7 +35,7 @@
 // implementation
 // ============================================================================
 
-const wxChar *wxDirSelectorPromptStr = wxT("Select a directory");
+const wxChar wxDirSelectorPromptStr[] = wxT("Select a directory");
 
 wxString wxDirSelector(const wxString& message,
                        const wxString& defaultPath,

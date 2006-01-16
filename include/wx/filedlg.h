@@ -36,8 +36,8 @@ enum
     wxCHANGE_DIR        = 0x0040
 };
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxFileSelectorPromptStr;
-extern WXDLLEXPORT_DATA(const wxChar*) wxFileSelectorDefaultWildcardStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorPromptStr[];
+extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorDefaultWildcardStr[];
 
 //----------------------------------------------------------------------------
 // wxFileDialogBase

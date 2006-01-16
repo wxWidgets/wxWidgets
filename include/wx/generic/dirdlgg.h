@@ -20,8 +20,8 @@ class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxTreeEvent;
 
 // we may be included directly as well as from wx/dirdlg.h (FIXME)
-extern WXDLLEXPORT_DATA(const wxChar*) wxDirDialogNameStr;
-extern WXDLLEXPORT_DATA(const wxChar*) wxDirSelectorPromptStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogNameStr[];
+extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
 #ifndef wxDD_DEFAULT_STYLE
 
 #ifdef __WXWINCE__

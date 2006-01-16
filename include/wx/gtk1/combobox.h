@@ -27,7 +27,7 @@ class WXDLLIMPEXP_CORE wxComboBox;
 // global data
 //-----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_CORE const wxChar* wxComboBoxNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxComboBoxNameStr[];
 extern WXDLLIMPEXP_BASE const wxChar* wxEmptyString;
 
 //-----------------------------------------------------------------------------

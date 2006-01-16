@@ -33,7 +33,7 @@
 
 #include "wx/control.h"
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxRadioButtonNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxRadioButtonNameStr[];
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/radiobut.h"

@@ -25,7 +25,7 @@ class WXDLLIMPEXP_CORE wxButton;
 // global data
 //-----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_CORE const wxChar *wxButtonNameStr;
+extern WXDLLIMPEXP_CORE const wxChar wxButtonNameStr[];
 
 //-----------------------------------------------------------------------------
 // wxButton

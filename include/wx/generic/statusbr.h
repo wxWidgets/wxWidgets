@@ -17,7 +17,7 @@
 #include "wx/statusbr.h"
 #include "wx/arrstr.h"
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxPanelNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxPanelNameStr[];
 
 class WXDLLEXPORT wxStatusBarGeneric : public wxStatusBarBase
 {

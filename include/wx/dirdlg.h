@@ -20,9 +20,10 @@
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxDirDialogNameStr;
-extern WXDLLEXPORT_DATA(const wxChar*) wxDirDialogDefaultFolderStr;
-extern WXDLLEXPORT_DATA(const wxChar*) wxDirSelectorPromptStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogNameStr[];
+extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogDefaultFolderStr[];
+extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
+
 
 #ifdef __WXWINCE__
     #define wxDD_DEFAULT_STYLE \

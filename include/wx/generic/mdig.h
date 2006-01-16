@@ -20,8 +20,8 @@
 #include "wx/panel.h"
 #include "wx/notebook.h"
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxFrameNameStr;
-extern WXDLLEXPORT_DATA(const wxChar*) wxStatusLineNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxFrameNameStr[];
+extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[];
 
 
 //-----------------------------------------------------------------------------

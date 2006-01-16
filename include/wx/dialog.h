@@ -27,7 +27,7 @@ class WXDLLEXPORT wxStdDialogButtonSizer;
 #define wxDEFAULT_DIALOG_STYLE  (wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX)
 #endif
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxDialogNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxDialogNameStr[];
 
 class WXDLLEXPORT wxDialogBase : public wxTopLevelWindow
 {

@@ -14,7 +14,7 @@
 
 class WXDLLIMPEXP_CORE wxImageList;
 
-// extern WXDLLEXPORT_DATA(const wxChar*) wxToolBarNameStr;
+// extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
 
 /*
  * Flags returned by HitTest

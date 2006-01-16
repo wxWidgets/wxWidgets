@@ -14,7 +14,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar) wxStaticBoxNameStr[];
 
 // Group box
 class WXDLLEXPORT wxStaticBox: public wxControl

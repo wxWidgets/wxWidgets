@@ -44,7 +44,7 @@
 #define wxSL_NOTIFY_DRAG     0x0000
 
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxSliderNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxSliderNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxSliderBase: define wxSlider interface

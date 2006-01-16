@@ -16,7 +16,7 @@
 
 #if wxUSE_COMBOBOX
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxComboBoxNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxComboBoxNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxComboBoxBase: this interface defines the methods wxComboBox must implement

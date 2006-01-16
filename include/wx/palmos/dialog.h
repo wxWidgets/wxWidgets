@@ -14,7 +14,7 @@
 
 #include "wx/panel.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
+WXDLLEXPORT_DATA(extern const wxChar) wxDialogNameStr[];
 
 class WXDLLEXPORT wxDialogModalData;
 

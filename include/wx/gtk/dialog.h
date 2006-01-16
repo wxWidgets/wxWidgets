@@ -23,7 +23,7 @@ class WXDLLIMPEXP_CORE wxDialog;
 // global data
 //-----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_CORE const wxChar *wxDialogNameStr;
+extern WXDLLIMPEXP_CORE const wxChar wxDialogNameStr[];
 
 //-----------------------------------------------------------------------------
 // wxDialog

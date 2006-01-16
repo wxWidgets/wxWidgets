@@ -14,9 +14,9 @@
 
 #include "wx/panel.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
+WXDLLEXPORT_DATA(extern const wxChar) wxDialogNameStr[];
 
-class WXDLLEXPORT wxMacToolTip ;
+class WXDLLEXPORT wxMacToolTip;
 
 // Dialog boxes
 class WXDLLEXPORT wxDialog : public wxDialogBase

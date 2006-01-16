@@ -26,7 +26,7 @@
 // global data
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const wxChar*) wxChoiceNameStr;
+extern WXDLLEXPORT_DATA(const wxChar) wxChoiceNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxChoice allows to select one of a non-modifiable list of strings

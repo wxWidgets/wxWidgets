@@ -17,7 +17,7 @@
 #include  "wx/dynarray.h"
 #include  "wx/arrstr.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxChoiceNameStr;
+WXDLLEXPORT_DATA(extern const wxChar) wxChoiceNameStr[];
 
 WX_DEFINE_ARRAY( char * , wxChoiceDataArray ) ;
 
