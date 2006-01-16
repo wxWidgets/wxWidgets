@@ -21,7 +21,7 @@
 // in the wrapper code.
 
 #include <wx/hashmap.h>
-WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
+    WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 
 
 // Maintains a hashmap of className to swig_type_info pointers.  Given the

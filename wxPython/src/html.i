@@ -242,7 +242,7 @@ public:
 
 %{
 class wxPyHtmlTagHandler : public wxHtmlTagHandler {
-    DECLARE_DYNAMIC_CLASS(wxPyHtmlTagHandler);
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlTagHandler)
 public:
     wxPyHtmlTagHandler() : wxHtmlTagHandler() {};
 
@@ -280,7 +280,7 @@ public:
 
 %{
 class wxPyHtmlWinTagHandler : public wxHtmlWinTagHandler {
-    DECLARE_DYNAMIC_CLASS(wxPyHtmlWinTagHandler);
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlWinTagHandler)
 public:
     wxPyHtmlWinTagHandler() : wxHtmlWinTagHandler() {};
 
@@ -639,7 +639,7 @@ public:
 
 %{ // here's the C++ version
 class wxPyHtmlFilter : public wxHtmlFilter {
-    DECLARE_ABSTRACT_CLASS(wxPyHtmlFilter);
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlFilter)
 public:
     wxPyHtmlFilter() : wxHtmlFilter() {}
 
@@ -707,7 +707,7 @@ public:
 
 %{
 class wxPyHtmlWindow : public wxHtmlWindow {
-    DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow);
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow)
 public:
     wxPyHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                    const wxPoint& pos = wxDefaultPosition,

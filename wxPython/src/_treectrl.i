@@ -263,7 +263,7 @@ public:
 
 %{ // C++ version of Python aware wxTreeCtrl
 class wxPyTreeCtrl : public wxTreeCtrl {
-    DECLARE_ABSTRACT_CLASS(wxPyTreeCtrl);
+    DECLARE_ABSTRACT_CLASS(wxPyTreeCtrl)
 public:
     wxPyTreeCtrl() : wxTreeCtrl() {}
     wxPyTreeCtrl(wxWindow *parent, wxWindowID id,

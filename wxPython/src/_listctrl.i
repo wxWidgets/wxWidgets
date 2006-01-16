@@ -364,7 +364,7 @@ EVT_LIST_SET_INFO = wx._deprecated(EVT_LIST_SET_INFO)
 
 %{  // C++ Version of a Python aware class
 class wxPyListCtrl : public wxListCtrl {
-    DECLARE_ABSTRACT_CLASS(wxPyListCtrl);
+    DECLARE_ABSTRACT_CLASS(wxPyListCtrl)
 public:
     wxPyListCtrl() : wxListCtrl() {}
     wxPyListCtrl(wxWindow* parent, wxWindowID id,

@@ -717,7 +717,7 @@ public:
 %{
 class wxPyPreviewFrame : public wxPreviewFrame
 {
-    DECLARE_CLASS(wxPyPreviewFrame);
+    DECLARE_CLASS(wxPyPreviewFrame)
 public:
     wxPyPreviewFrame(wxPrintPreview* preview, wxFrame* parent,
                      const wxString& title,
@@ -776,7 +776,7 @@ public:
 %{
 class wxPyPreviewControlBar : public wxPreviewControlBar
 {
-    DECLARE_CLASS(wxPyPreviewControlBar);
+    DECLARE_CLASS(wxPyPreviewControlBar)
 public:
     wxPyPreviewControlBar(wxPrintPreview *preview,
                           long buttons,
