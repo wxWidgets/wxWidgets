@@ -39090,12 +39090,6 @@ fi
       fi
                               echo "$as_me:$LINENO: checking for getservbyname_r" >&5
 echo $ECHO_N "checking for getservbyname_r... $ECHO_C" >&6
-if test "${ac_cv_func_which_getservbyname_r+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-
-echo "$as_me:$LINENO: checking for getservbyname_r" >&5
-echo $ECHO_N "checking for getservbyname_r... $ECHO_C" >&6
 if test "${ac_cv_func_getservbyname_r+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -39185,27 +39179,22 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_func_getservbyname_r" >&5
 echo "${ECHO_T}$ac_cv_func_getservbyname_r" >&6
 if test $ac_cv_func_getservbyname_r = yes; then
-
-        cat >conftest.$ac_ext <<_ACEOF
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#               include <netdb.h>
-
+#include <netdb.h>
 int
 main ()
 {
 
-
-        char *name;
-        char *proto;
-        struct servent *se;
-        struct servent_data data;
-        (void) getservbyname_r(name, proto, se, &data);
-
+            char *name;
+            char *proto;
+            struct servent *se;
+            struct servent_data data;
+            (void) getservbyname_r(name, proto, se, &data);
 
   ;
   return 0;
@@ -39238,26 +39227,23 @@ else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-
-  cat >conftest.$ac_ext <<_ACEOF
+cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#   include <netdb.h>
-
+#include <netdb.h>
 int
 main ()
 {
 
-        char *name;
-        char *proto;
-        struct servent *se, *res;
-        char buffer[2048];
-        int buflen = 2048;
-        (void) getservbyname_r(name, proto, se, buffer, buflen, &res)
+                char *name;
+                char *proto;
+                struct servent *se, *res;
+                char buffer[2048];
+                int buflen = 2048;
+                (void) getservbyname_r(name, proto, se, buffer, buflen, &res);
 
   ;
   return 0;
@@ -39290,26 +39276,23 @@ else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-
-  cat >conftest.$ac_ext <<_ACEOF
+cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#   include <netdb.h>
-
+#include <netdb.h>
 int
 main ()
 {
 
-        char *name;
-        char *proto;
-        struct servent *se;
-        char buffer[2048];
-        int buflen = 2048;
-        (void) getservbyname_r(name, proto, se, buffer, buflen)
+                    char *name;
+                    char *proto;
+                    struct servent *se;
+                    char buffer[2048];
+                    int buflen = 2048;
+                    (void) getservbyname_r(name, proto, se, buffer, buflen)
 
   ;
   return 0;
@@ -39343,26 +39326,19 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 ac_cv_func_which_getservbyname_r=no
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 else
   ac_cv_func_which_getservbyname_r=no
 fi
 
-fi
-echo "$as_me:$LINENO: result: $ac_cv_func_which_getservbyname_r" >&5
-echo "${ECHO_T}$ac_cv_func_which_getservbyname_r" >&6
 
 if test $ac_cv_func_which_getservbyname_r = six; then
   cat >>confdefs.h <<\_ACEOF
@@ -39378,7 +39354,6 @@ elif test $ac_cv_func_which_getservbyname_r = four; then
   cat >>confdefs.h <<\_ACEOF
 #define HAVE_FUNC_GETSERVBYNAME_R_4 1
 _ACEOF
-
 
 fi
 
@@ -39564,7 +39539,9 @@ _ACEOF
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D__WXDEBUG__"
 else
     if test "$wxUSE_GTK" = 1 ; then
-        CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
+        if test "x$wxGTK_VERSION" = "x1" ; then
+            CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
+        fi
     fi
 fi
 
