@@ -62,7 +62,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if !defined(__WATCOMC__)
+#if !wxONLY_WATCOM_EARLIER_THAN(1,4)
     #if !(defined(_MSC_VER) && (_MSC_VER > 800))
         #include <errno.h>
     #endif
