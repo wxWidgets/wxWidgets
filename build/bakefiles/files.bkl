@@ -115,6 +115,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/gccpriv.h
     wx/msw/libraries.h
     wx/msw/mimetype.h
+    wx/msw/private.h
     wx/msw/stackwalk.h
     wx/msw/stdpaths.h
     wx/msw/winundef.h
@@ -1402,7 +1403,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/pen.h
     wx/msw/printdlg.h
     wx/msw/printwin.h
-    wx/msw/private.h
     wx/msw/radiobox.h
     wx/msw/radiobut.h
     wx/msw/regconf.h
