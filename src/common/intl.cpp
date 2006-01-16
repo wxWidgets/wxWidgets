@@ -1795,6 +1795,7 @@ bool wxLocale::Init(int language, int flags)
         return false;
     }
 #else
+    wxUnusedVar(flags);
     return false;
     #define WX_NO_LOCALE_SUPPORT
 #endif
