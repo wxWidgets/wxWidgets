@@ -10,13 +10,14 @@ class MyFrame(wx.Frame):
                           style=wx.FRAME_NO_TASKBAR|wx.STAY_ON_TOP,
                           name="wxprojview"
                           )
-        p = wx.Panel(self, style=wx.RAISED_BORDER)
+        p = wx.Panel(self)#, style=wx.SIMPLE_BORDER)
+        
         p.SetBackgroundColour("sky blue")
         self.label = st.GenStaticText(p, -1, "wx XXX")
         self.label.SetBackgroundColour("sky blue")
         self.label.SetFont(wx.Font(14, wx.SWISS, wx.NORMAL, wx.BOLD))
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.label, 1, wx.ALIGN_CENTER|wx.ALL, 4)
+        sizer.Add(self.label, 1, wx.ALIGN_CENTER|wx.ALL, 2)
         p.SetSizerAndFit(sizer)
         self.SetClientSize(p.GetSize())
 
