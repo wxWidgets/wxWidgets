@@ -1538,7 +1538,7 @@ static bool wxWizardPage_Create(wxWizardPage *self,wxWizard *parent,wxBitmap con
         }
   // C++ Version of a Python aware class
 class wxPyWizardPage : public wxWizardPage {
-    DECLARE_ABSTRACT_CLASS(wxPyWizardPage);
+    DECLARE_ABSTRACT_CLASS(wxPyWizardPage)
 public:
     wxPyWizardPage() : wxWizardPage() {}
     wxPyWizardPage(wxWizard *parent,

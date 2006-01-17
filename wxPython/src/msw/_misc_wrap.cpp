@@ -2937,7 +2937,7 @@ static bool wxVideoMode___ne__(wxVideoMode *self,wxVideoMode const *other){ retu
 #include <wx/dynarray.h>
 #include <wx/vidmode.h>
 
-WX_DECLARE_OBJARRAY(wxVideoMode, wxArrayVideoModes);
+    WX_DECLARE_OBJARRAY(wxVideoMode, wxArrayVideoModes);
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxArrayVideoModes);
 const wxVideoMode wxDefaultVideoMode;

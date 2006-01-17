@@ -4797,7 +4797,7 @@ class ListCtrl(_core.Control):
         return _controls_.ListCtrl_InsertItem(*args, **kwargs)
 
     def InsertStringItem(*args, **kwargs):
-        """InsertStringItem(self, long index, String label) -> long"""
+        """InsertStringItem(self, long index, String label, int imageIndex=-1) -> long"""
         return _controls_.ListCtrl_InsertStringItem(*args, **kwargs)
 
     def InsertImageItem(*args, **kwargs):

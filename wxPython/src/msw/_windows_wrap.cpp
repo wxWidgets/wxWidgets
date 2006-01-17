@@ -1745,7 +1745,7 @@ static wxTipWindow *new_wxTipWindow(wxWindow *parent,wxString const &text,int ma
 
 class wxPyVScrolledWindow  : public wxVScrolledWindow
 {
-    DECLARE_ABSTRACT_CLASS(wxPyVScrolledWindow);
+    DECLARE_ABSTRACT_CLASS(wxPyVScrolledWindow)
 public:
     wxPyVScrolledWindow() : wxVScrolledWindow() {}
 
@@ -1865,7 +1865,7 @@ SWIGINTERNSHORT PyObject*
 
 class wxPyVListBox  : public wxVListBox
 {
-    DECLARE_ABSTRACT_CLASS(wxPyVListBox);
+    DECLARE_ABSTRACT_CLASS(wxPyVListBox)
 public:
     wxPyVListBox() : wxVListBox() {}
 
@@ -1948,7 +1948,7 @@ static PyObject *wxPyVListBox_GetNextSelected(wxPyVListBox *self,unsigned long c
 
 class wxPyHtmlListBox  : public wxHtmlListBox
 {
-    DECLARE_ABSTRACT_CLASS(wxPyHtmlListBox);
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlListBox)
 public:
     wxPyHtmlListBox() : wxHtmlListBox() {}
 
@@ -2036,7 +2036,7 @@ enum {
 // Otherwise make a class that can virtualize CreatePopupMenu
 class wxPyTaskBarIcon : public wxTaskBarIcon
 {
-    DECLARE_ABSTRACT_CLASS(wxPyTaskBarIcon);
+    DECLARE_ABSTRACT_CLASS(wxPyTaskBarIcon)
 public:
     wxPyTaskBarIcon() : wxTaskBarIcon()
     {}
@@ -2536,7 +2536,7 @@ IMP_PYCALLBACK_VOID_        (wxPyPrintPreview, wxPrintPreview, DetermineScaling)
 
 class wxPyPreviewFrame : public wxPreviewFrame
 {
-    DECLARE_CLASS(wxPyPreviewFrame);
+    DECLARE_CLASS(wxPyPreviewFrame)
 public:
     wxPyPreviewFrame(wxPrintPreview* preview, wxFrame* parent,
                      const wxString& title,
@@ -2566,7 +2566,7 @@ IMP_PYCALLBACK_VOID_(wxPyPreviewFrame, wxPreviewFrame, CreateControlBar);
 
 class wxPyPreviewControlBar : public wxPreviewControlBar
 {
-    DECLARE_CLASS(wxPyPreviewControlBar);
+    DECLARE_CLASS(wxPyPreviewControlBar)
 public:
     wxPyPreviewControlBar(wxPrintPreview *preview,
                           long buttons,

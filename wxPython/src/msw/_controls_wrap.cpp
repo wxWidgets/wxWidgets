@@ -1848,7 +1848,7 @@ static void wxListItemAttr_Destroy(wxListItemAttr *self){ delete self; }
 
   // C++ Version of a Python aware class
 class wxPyListCtrl : public wxListCtrl {
-    DECLARE_ABSTRACT_CLASS(wxPyListCtrl);
+    DECLARE_ABSTRACT_CLASS(wxPyListCtrl)
 public:
     wxPyListCtrl() : wxListCtrl() {}
     wxPyListCtrl(wxWindow* parent, wxWindowID id,
@@ -1940,7 +1940,7 @@ static bool wxTreeItemId___ne__(wxTreeItemId *self,wxTreeItemId const *other){ r
 static void wxPyTreeItemData_Destroy(wxPyTreeItemData *self){ delete self; }
  // C++ version of Python aware wxTreeCtrl
 class wxPyTreeCtrl : public wxTreeCtrl {
-    DECLARE_ABSTRACT_CLASS(wxPyTreeCtrl);
+    DECLARE_ABSTRACT_CLASS(wxPyTreeCtrl)
 public:
     wxPyTreeCtrl() : wxTreeCtrl() {}
     wxPyTreeCtrl(wxWindow *parent, wxWindowID id,
@@ -26105,16 +26105,18 @@ static PyObject *_wrap_ListCtrl_InsertStringItem(PyObject *, PyObject *args, PyO
     wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
     long arg2 ;
     wxString *arg3 = 0 ;
+    int arg4 = (int) -1 ;
     long result;
     bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "index",(char *) "label", NULL 
+        (char *) "self",(char *) "index",(char *) "label",(char *) "imageIndex", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ListCtrl_InsertStringItem",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:ListCtrl_InsertStringItem",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyListCtrl, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -26126,9 +26128,15 @@ static PyObject *_wrap_ListCtrl_InsertStringItem(PyObject *, PyObject *args, PyO
         if (arg3 == NULL) SWIG_fail;
         temp3 = true;
     }
+    if (obj3) {
+        {
+            arg4 = (int)(SWIG_As_int(obj3)); 
+            if (SWIG_arg_fail(4)) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (long)(arg1)->InsertItem(arg2,(wxString const &)*arg3);
+        result = (long)(arg1)->InsertItem(arg2,(wxString const &)*arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

@@ -1533,7 +1533,7 @@ static void wxHtmlWinParser_SetFonts(wxHtmlWinParser *self,wxString normal_face,
         }
 
 class wxPyHtmlTagHandler : public wxHtmlTagHandler {
-    DECLARE_DYNAMIC_CLASS(wxPyHtmlTagHandler);
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlTagHandler)
 public:
     wxPyHtmlTagHandler() : wxHtmlTagHandler() {};
 
@@ -1553,7 +1553,7 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
 
 
 class wxPyHtmlWinTagHandler : public wxHtmlWinTagHandler {
-    DECLARE_DYNAMIC_CLASS(wxPyHtmlWinTagHandler);
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlWinTagHandler)
 public:
     wxPyHtmlWinTagHandler() : wxHtmlWinTagHandler() {};
 
@@ -1820,7 +1820,7 @@ SWIGINTERNSHORT PyObject*
 
  // here's the C++ version
 class wxPyHtmlFilter : public wxHtmlFilter {
-    DECLARE_ABSTRACT_CLASS(wxPyHtmlFilter);
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlFilter)
 public:
     wxPyHtmlFilter() : wxHtmlFilter() {}
 
@@ -1866,7 +1866,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlFilter, wxHtmlFilter);
 
 
 class wxPyHtmlWindow : public wxHtmlWindow {
-    DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow);
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow)
 public:
     wxPyHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                    const wxPoint& pos = wxDefaultPosition,
