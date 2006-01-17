@@ -1,4 +1,11 @@
 #!/usr/bin/env python
+#----------------------------------------------------------------------
+#
+#  A little app I use on my system to help me remember which version of
+#  wx I am corrently working on.  I don't expect this to work for anybody
+#  else as it uses things that are specific to my setup.
+#
+#----------------------------------------------------------------------
 
 import wx
 import wx.lib.stattext as st
@@ -42,9 +49,12 @@ class MyFrame(wx.Frame):
 
 
     def OnUpdateVersion(self, evt):
-        ver = '??'
+        ver = '?.?'
         if 'wxMSW' in wx.PlatformInfo:
-            pass
+            info = open("c:/wxcurenv").read()
+            p1 = info.find("WXCUR=") + 6
+            p2 = info.find("\n", p1)
+            ver = info[p1:p2]
         else:
             link = '/opt/wx/current'
             if os.path.islink(link):
