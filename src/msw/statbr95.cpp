@@ -306,8 +306,11 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
         // we must use SWP_NOCOPYBITS here otherwise it paints incorrectly
         // if other windows are size deferred
         ::SetWindowPos(GetHwnd(), NULL, x, y, width, height,
-                       SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE |
-                       SWP_NOCOPYBITS | SWP_NOSENDCHANGING);
+                       SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE
+#ifndef __WXWINCE__                       
+                       | SWP_NOCOPYBITS | SWP_NOSENDCHANGING
+#endif
+                       );
     }
 
     // adjust fields widths to the new size
