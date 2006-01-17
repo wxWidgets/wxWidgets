@@ -664,6 +664,9 @@ This function may be overloaded in the derived class for a control with
 for the specified {\tt item} or {\tt NULL} to use the default appearance
 parameters.
 
+wxListCtrl will not delete the pointer or keep a reference of it. You can 
+return the same wxListItemAttr pointer for every OnGetItemAttr call.
+
 The base class version always returns {\tt NULL}.
 
 \wxheading{See also}
