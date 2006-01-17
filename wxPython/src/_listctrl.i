@@ -657,13 +657,16 @@ details in the second return value (see wx.LIST_HITTEST flags.)", "");
     long InsertItem(wxListItem& info);
 
     // Insert a string item
-    %Rename(InsertStringItem,  long, InsertItem(long index, const wxString& label));
+    %Rename(InsertStringItem,
+            long, InsertItem(long index, const wxString& label, int imageIndex=-1));
 
     // Insert an image item
-    %Rename(InsertImageItem,  long, InsertItem(long index, int imageIndex));
+    %Rename(InsertImageItem,
+            long, InsertItem(long index, int imageIndex));
 
     // Insert an image/string item
-    %Rename(InsertImageStringItem,  long, InsertItem(long index, const wxString& label, int imageIndex));
+    %Rename(InsertImageStringItem,
+            long, InsertItem(long index, const wxString& label, int imageIndex));
 
     // For list view mode (only), inserts a column.
     %Rename(InsertColumnItem,  long, InsertColumn(long col, wxListItem& info));
