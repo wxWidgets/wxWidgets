@@ -57,7 +57,9 @@
 
 /* Almost all compiler have strdup(), but not quite all: CodeWarrior under Mac */
 /* and VC++ for Windows CE don't provide it */
-#if !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
+#if defined(__VISUALC__) && __VISUALC__ >= 1400
+    #define wxStrdupA _strdup
+#elif !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
     /* use #define, not inline wrapper, as it is tested with #ifndef below */
     #define wxStrdupA strdup
 #endif
