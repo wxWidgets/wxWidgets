@@ -616,7 +616,7 @@ bool wxToolBar::Realize()
         if (doTransparent)
             dcAllButtons.SetBackground(*wxTRANSPARENT_BRUSH);
         else
-            dcAllButtons.SetBackground(*wxLIGHT_GREY_BRUSH);
+            dcAllButtons.SetBackground(wxBrush(GetBackgroundColour()));
 #endif
         dcAllButtons.Clear();
 
@@ -1073,7 +1073,7 @@ bool wxToolBar::Realize()
     InvalidateBestSize();
     SetBestFittingSize();
     UpdateSize();
-    
+
     return true;
 }
 
