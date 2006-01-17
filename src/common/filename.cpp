@@ -1245,12 +1245,14 @@ wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
 {
     wxString sepVol;
 
+#ifndef __WXWINCE__
     if ( (GetFormat(format) == wxPATH_DOS) ||
          (GetFormat(format) == wxPATH_VMS) )
     {
         sepVol = wxFILE_SEP_DSK;
     }
     //else: leave empty
+#endif
 
     return sepVol;
 }
