@@ -269,8 +269,16 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     LONG style = ::GetWindowLong( (HWND)GetHWND(), GWL_STYLE ) ;
     ::SetWindowLong( (HWND)GetHWND(), GWL_STYLE, ( style & ~( SS_BITMAP|SS_ICON ) ) |
                      ( m_isIcon ? SS_ICON : SS_BITMAP ) );
-    ::SendMessage(GetHwnd(), STM_SETIMAGE,
+    HGDIOBJ oldHandle = (HGDIOBJ)::SendMessage(GetHwnd(), STM_SETIMAGE,
                   m_isIcon ? IMAGE_ICON : IMAGE_BITMAP, (LPARAM)handle);
+    // detect if this is still the handle we passed before or
+    // if the static-control made a copy of the bitmap!
+    if (m_currentHandle != 0 && oldHandle != m_currentHandle)
+    {
+        // the static control made a copy and we are responsible for deleting it
+        DeleteObject(oldHandle);      
+    }
+    m_currentHandle = (HGDIOBJ)handle;                  	
 #endif // Win32
 
     if ( ImageIsOk() )

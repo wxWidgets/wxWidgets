@@ -59,7 +59,7 @@ protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     // ctor/dtor helpers
-    void Init() { m_isIcon = true; m_image = NULL; }
+    void Init() { m_isIcon = true; m_image = NULL; m_currentHandle = 0; }
     void Free();
 
     // true if icon/bitmap is valid
@@ -71,6 +71,8 @@ protected:
     // we can have either an icon or a bitmap
     bool m_isIcon;
     wxGDIImage *m_image;
+    // handle used in last call to STM_SETIMAGE
+    HGDIOBJ m_currentHandle;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
