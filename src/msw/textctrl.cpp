@@ -2524,7 +2524,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
     if ( changeSel )
     {
-        DoSetSelection(position, position, false /* don't scroll caret into view */);
+        DoSetSelection(position, position+1, false /* don't scroll caret into view */);
     }
 
     // get the selection formatting
