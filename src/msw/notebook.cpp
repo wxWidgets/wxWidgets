@@ -450,7 +450,22 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
     tcItem.mask = TCIF_TEXT;
     tcItem.pszText = (wxChar *)strText.c_str();
 
-    return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
+    if ( !HasFlag(wxNB_MULTILINE) )
+        return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
+
+    // multiline - we need to set new page size if a line is added or removed
+    int rows = GetRowCount();
+    bool ret = TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
+
+    if ( ret && rows != GetRowCount() )
+    {
+        const wxRect r = GetPageSize();
+        const size_t count = m_pages.Count();
+        for ( size_t page = 0; page < count; page++ )
+            m_pages[page]->SetSize(r);
+    }
+
+    return ret;
 }
 
 wxString wxNotebook::GetPageText(size_t nPage) const
