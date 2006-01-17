@@ -206,7 +206,8 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 
         //// Printer name
         if (devMode->dmDeviceName[0] != 0)
-            data.SetPrinterName( devMode->dmDeviceName );
+            // This syntax fixes a crash when using VS 7.1
+            data.SetPrinterName( wxString(devMode->dmDeviceName, CCHDEVICENAME) );
 
         //// Colour
         if (devMode->dmFields & DM_COLOR)
