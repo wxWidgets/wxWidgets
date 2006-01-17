@@ -13,6 +13,7 @@
 #define _WX_VLBOX_H_
 
 #include "wx/vscroll.h"         // base class
+#include "wx/bitmap.h"
 
 class WXDLLEXPORT wxSelectionStore;
 
@@ -286,6 +287,8 @@ private:
     // the selection bg colour
     wxColour m_colBgSel;
 
+    // double buffer
+    wxBitmap* m_doubleBuffer;
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxVListBox)
