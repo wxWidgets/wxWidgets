@@ -1170,50 +1170,73 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     WXPixmap mask = NULL;
     if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
 
-        if (useMask && mask)
+    bool setClipMask = false;
+
+    if (!m_currentClippingRegion.IsNull() || (useMask && mask))
+    {
+        // XSetClipMask() call is necessary (because of clip region and/or transparent mask)
+        setClipMask = true;
+        Pixmap new_pixmap = 0;
+
+        if (!m_currentClippingRegion.IsNull())
         {
-            WXPixmap new_mask = NULL;
-#if 0
-            if (!m_currentClippingRegion.IsNull())
-            {
-                GdkColor col;
-                new_mask = gdk_pixmap_new( wxGetRootWindow()->window, ww, hh, 1 );
-                GdkGC *gc = gdk_gc_new( new_mask );
-                col.pixel = 0;
-                gdk_gc_set_foreground( gc, &col );
-                gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
-                col.pixel = 0;
-                gdk_gc_set_background( gc, &col );
-                col.pixel = 1;
-                gdk_gc_set_foreground( gc, &col );
-                gdk_gc_set_clip_region( gc, m_currentClippingRegion.GetRegion() );
-                gdk_gc_set_clip_origin( gc, -xx, -yy );
-                gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
-                gdk_gc_set_stipple( gc, mask );
-                gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
-                gdk_gc_unref( gc );
-            }
-#endif
-            if (is_mono)
-            {
-                if (new_mask)
-                    XSetClipMask( (Display*) m_display, (GC) m_textGC, (Pixmap) new_mask );
-                else
-                    XSetClipMask( (Display*) m_display, (GC) m_textGC, (Pixmap) mask );
-                XSetClipOrigin( (Display*) m_display, (GC) m_textGC, xx, yy );
-            }
+            // clipping necessary => create new_pixmap
+            Display *xdisplay = (Display*) m_display;
+            int xscreen = DefaultScreen( xdisplay );
+            Window xroot = RootWindow( xdisplay, xscreen );
+
+            new_pixmap = XCreatePixmap( xdisplay, xroot, w, h, 1 );
+            GC gc = XCreateGC( xdisplay, new_pixmap, 0, NULL );
+
+            int bpp = wxTheApp->GetVisualInfo(m_display)->m_visualDepth;
+            if (bpp == 8)
+                XSetForeground( xdisplay, gc, WhitePixel(xdisplay,xscreen) );
             else
+                XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
+        
+            XSetFillStyle( xdisplay, gc, FillSolid );
+            XFillRectangle( xdisplay, new_pixmap, gc, 0, 0, w, h );
+
+            if (bpp == 8)
+                XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
+            else
+                XSetForeground( xdisplay, gc, WhitePixel(xdisplay,xscreen) );
+
+            if (useMask && mask)
             {
-                if (new_mask)
-                    XSetClipMask( (Display*) m_display, (GC) m_penGC, (Pixmap) new_mask );
-                else
-                    XSetClipMask( (Display*) m_display, (GC) m_penGC, (Pixmap) mask );
-                XSetClipOrigin( (Display*) m_display, (GC) m_penGC, xx, yy );
+                // transparent mask => call XSetStipple
+                XSetFillStyle( xdisplay, gc, FillStippled );
+                XSetTSOrigin( xdisplay, gc, 0, 0);
+                XSetStipple( xdisplay, gc, (Pixmap) mask);
             }
 
-            if (new_mask)
-               XFreePixmap( (Display*) m_display, (Pixmap) new_mask );
+            wxCoord clip_x, clip_y, clip_w, clip_h;
+            m_currentClippingRegion.GetBox(clip_x, clip_y, clip_w, clip_h);
+            XFillRectangle( xdisplay, new_pixmap, gc, clip_x-xx, clip_y-yy, clip_w, clip_h );
+
+            XFreeGC( xdisplay, gc );
         }
+
+        if (is_mono)
+        {
+            if (new_pixmap)
+                XSetClipMask( (Display*) m_display, (GC) m_textGC, new_pixmap );
+            else
+                XSetClipMask( (Display*) m_display, (GC) m_textGC, (Pixmap) mask );
+            XSetClipOrigin( (Display*) m_display, (GC) m_textGC, xx, yy );
+        }
+        else
+        {
+            if (new_pixmap)
+                XSetClipMask( (Display*) m_display, (GC) m_penGC, new_pixmap );
+            else
+                XSetClipMask( (Display*) m_display, (GC) m_penGC, (Pixmap) mask );
+            XSetClipOrigin( (Display*) m_display, (GC) m_penGC, xx, yy );
+        }
+
+        if (new_pixmap)
+            XFreePixmap( (Display*) m_display, new_pixmap );
+    }
 
     // Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
     // drawing a mono-bitmap (XBitmap) we use the current text GC
@@ -1225,7 +1248,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
             (GC) m_penGC, 0, 0, w, h, xx, yy );
 
     // remove mask again if any
-    if (useMask && mask)
+    if (setClipMask)
     {
         if (is_mono)
         {
