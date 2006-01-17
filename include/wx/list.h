@@ -135,6 +135,13 @@ private:
 
 #endif // defined( __VISUALC__ )
 
+// Visual C++ 2005 complains about the const
+#if defined(__VISUALC__) && __VISUALC__ >= 1400
+#define _WX_DELETEFUNCTIONCONST
+#else
+#define _WX_DELETEFUNCTIONCONST const
+#endif
+
 #define WX_DECLARE_LIST_XO(elT, liT, decl)                                    \
     VC6_WORKAROUND(elT, liT, decl)                                            \
     decl liT : public std::list<elT>                                          \
@@ -143,7 +150,7 @@ private:
         bool m_destroy;                                                       \
     private:                                                                  \
         typedef elT _WX_LIST_ITEM_TYPE_##liT;                                 \
-        static void DeleteFunction( const _WX_LIST_ITEM_TYPE_##liT X );       \
+        static void DeleteFunction( _WX_DELETEFUNCTIONCONST _WX_LIST_ITEM_TYPE_##liT X );       \
     public:                                                                   \
         class compatibility_iterator                                          \
         {                                                                     \
