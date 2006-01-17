@@ -25,6 +25,21 @@ wx.EventLoop is now implemented for wxMac.
 
 
 
+2.6.2.2
+-------
+
+Change the wx.ListCtrl InsertStringItem wrapper to use the form that
+takes an imageIndex, and set the default to -1.  This ensures that on
+wxMSW that if there is an image list but they don't specify an image,
+the native control doesn't use one anyway.
+
+wxMSW: wx.ListCtrl in report mode is now able to support images in
+other columns besides the first one.  Simply pass an image index to
+SetStringItem.
+
+
+
+
 2.6.2.1
 -------
 * 10-Jan-2006

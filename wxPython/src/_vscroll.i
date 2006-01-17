@@ -35,7 +35,7 @@
 %{
 class wxPyVScrolledWindow  : public wxVScrolledWindow
 {
-    DECLARE_ABSTRACT_CLASS(wxPyVScrolledWindow);
+    DECLARE_ABSTRACT_CLASS(wxPyVScrolledWindow)
 public:
     wxPyVScrolledWindow() : wxVScrolledWindow() {}
 
@@ -224,7 +224,7 @@ MAKE_CONST_WXSTRING(VListBoxNameStr);
 %{
 class wxPyVListBox  : public wxVListBox
 {
-    DECLARE_ABSTRACT_CLASS(wxPyVListBox);
+    DECLARE_ABSTRACT_CLASS(wxPyVListBox)
 public:
     wxPyVListBox() : wxVListBox() {}
 
@@ -463,7 +463,7 @@ public:
 %{
 class wxPyHtmlListBox  : public wxHtmlListBox
 {
-    DECLARE_ABSTRACT_CLASS(wxPyHtmlListBox);
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlListBox)
 public:
     wxPyHtmlListBox() : wxHtmlListBox() {}
 

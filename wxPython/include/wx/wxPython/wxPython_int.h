@@ -286,7 +286,7 @@ PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr);
 #ifndef wxPyUSE_EXPORTED_API
 
 class wxPyCallback : public wxObject {
-    DECLARE_ABSTRACT_CLASS(wxPyCallback);
+    DECLARE_ABSTRACT_CLASS(wxPyCallback)
 public:
     wxPyCallback(PyObject* func);
     wxPyCallback(const wxPyCallback& other);
@@ -606,7 +606,7 @@ enum {
 
 class wxPyApp: public wxApp
 {
-    DECLARE_ABSTRACT_CLASS(wxPyApp);
+    DECLARE_ABSTRACT_CLASS(wxPyApp)
 
 public:
     wxPyApp();
