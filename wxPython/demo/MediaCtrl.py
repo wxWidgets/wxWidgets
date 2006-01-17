@@ -5,6 +5,18 @@ import os
 
 #----------------------------------------------------------------------
 
+class StaticText(wx.StaticText):
+    """
+    A StaticText that only updates the label if it has changed, to
+    help reduce potential flicker since these controls would be
+    updated very frequently otherwise.
+    """
+    def SetLabel(self, label):
+        if label <> self.GetLabel():
+            wx.StaticText.SetLabel(self, label)
+
+#----------------------------------------------------------------------
+
 class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
@@ -18,11 +30,14 @@ class TestPanel(wx.Panel):
             self.Destroy()
             raise
 
+        self.Bind(wx.media.EVT_MEDIA_LOADED, self.OnMediaLoaded)
+
         btn1 = wx.Button(self, -1, "Load File")
         self.Bind(wx.EVT_BUTTON, self.OnLoadFile, btn1)
         
         btn2 = wx.Button(self, -1, "Play")
         self.Bind(wx.EVT_BUTTON, self.OnPlay, btn2)
+        self.playBtn = btn2
         
         btn3 = wx.Button(self, -1, "Pause")
         self.Bind(wx.EVT_BUTTON, self.OnPause, btn3)
@@ -35,9 +50,9 @@ class TestPanel(wx.Panel):
         slider.SetMinSize((150, -1))
         self.Bind(wx.EVT_SLIDER, self.OnSeek, slider)
 
-        self.st_size = wx.StaticText(self, -1, size=(100,-1))
-        self.st_len  = wx.StaticText(self, -1, size=(100,-1))
-        self.st_pos  = wx.StaticText(self, -1, size=(100,-1))
+        self.st_size = StaticText(self, -1, size=(100,-1))
+        self.st_len  = StaticText(self, -1, size=(100,-1))
+        self.st_pos  = StaticText(self, -1, size=(100,-1))
         
         
         # setup the layout
@@ -53,8 +68,8 @@ class TestPanel(wx.Panel):
         sizer.Add(self.st_pos,  (3, 5))
         self.SetSizer(sizer)
 
-        self.DoLoadFile(os.path.abspath("data/testmovie.mpg"))
-        self.mc.Stop()
+        #self.DoLoadFile(os.path.abspath("data/testmovie.mpg"))
+        wx.CallAfter(self.DoLoadFile, os.path.abspath("data/testmovie.mpg"))
 
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.OnTimer)
@@ -73,6 +88,8 @@ class TestPanel(wx.Panel):
 
 
     def DoLoadFile(self, path):
+        self.playBtn.Disable()
+        noLog = wx.LogNull()
         if not self.mc.Load(path):
             wx.MessageBox("Unable to load %s: Unsupported format?" % path,
                           "ERROR",
@@ -80,13 +97,19 @@ class TestPanel(wx.Panel):
         else:
             self.mc.SetBestFittingSize()
             self.GetSizer().Layout()
-            self.mc.Play()
             self.slider.SetRange(0, self.mc.Length())
-        
+
+    def OnMediaLoaded(self, evt):
+        self.playBtn.Enable()
     
     def OnPlay(self, evt):
-        self.mc.Play()
-    
+        if not self.mc.Play():
+            wx.MessageBox("Unable to Play media : Unsupported format?",
+                          "ERROR",
+                          wx.ICON_ERROR | wx.OK)
+        else:
+            self.slider.SetRange(0, self.mc.Length())
+
     def OnPause(self, evt):
         self.mc.Pause()
     
@@ -148,4 +171,3 @@ if __name__ == '__main__':
     import sys,os
     import run
     run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
-
