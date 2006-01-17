@@ -117,8 +117,7 @@ static void ResolveShellFunctions()
     wxDynamicLibrary dllShellFunctions( shellDllName );
     if ( !dllShellFunctions.IsLoaded() )
     {
-        wxString traceMessage = wxString::Format( _T("Failed to load %s.dll"), shellDllName );
-        wxLogTrace(TRACE_MASK, traceMessage );
+        wxLogTrace(TRACE_MASK, _T("Failed to load %s.dll"), shellDllName.c_str() );
     }
 
     // don't give errors if the functions are unavailable, we're ready to deal
