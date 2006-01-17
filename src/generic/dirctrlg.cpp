@@ -117,6 +117,14 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         path.Printf(wxT("%c:\\"), driveBuffer[i]);
         name.Printf(wxT("%c:"), driveBuffer[i]);
 
+#if !defined(__WXWINCE__)
+        wxChar pname[52];
+        if (GetVolumeInformation( path.c_str(), pname, 52, NULL, NULL, NULL, NULL, NULL ))
+        {
+            name.Printf(wxT("%s %s"), (const wxChar*) name, pname );
+        }
+#endif
+
         int imageId;
         int driveType = ::GetDriveType(path);
         switch (driveType)
