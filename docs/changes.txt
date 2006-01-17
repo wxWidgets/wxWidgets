@@ -73,6 +73,8 @@ wxMSW:
   to the link command.
 - wxStatusBar::GetFieldRect now returns correct values under XP.
 - wxStatusBar no longer corrupts surrounding windows on resize.
+- Enable wxListCtrl in report mode to be able to use images in other
+  columns, if ComCtl32 >= 470.
 
 wxGTK:
 

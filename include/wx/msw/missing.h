@@ -109,6 +109,10 @@
     #define LVS_EX_LABELTIP 0x00004000
 #endif
 
+#ifndef LVS_EX_SUBITEMIMAGES
+    #define LVS_EX_SUBITEMIMAGES 0x00000002
+#endif
+
  /*
   * In addition to the above, the following are required for several compilers.
   */
