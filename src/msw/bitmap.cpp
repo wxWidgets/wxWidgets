@@ -1636,22 +1636,32 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         return 0;
     }
 
-    wxMask* mask;
-    wxBitmap newbmp;
     if ( bmp.HasAlpha() )
     {
-        // Convert alpha to a mask.  NOTE: It would be better to actually put
-        // the alpha into the icon instead of making a mask, but I don't have
-        // time to figure that out today.
-        wxImage img = bmp.ConvertToImage();
-        img.ConvertAlphaToMask();
-        newbmp = wxBitmap(img);
-        mask = newbmp.GetMask();
+        // Create an empty mask bitmap.
+        // it doesn't seem to work if we mess with the mask at all.
+        HBITMAP hMonoBitmap = CreateBitmap(bmp.GetWidth(),bmp.GetHeight(),1,1,NULL);
+
+        ICONINFO iconInfo;
+        wxZeroMemory(iconInfo);
+        iconInfo.fIcon = iconWanted;  // do we want an icon or a cursor?
+        if ( !iconWanted )
+        {
+            iconInfo.xHotspot = hotSpotX;
+            iconInfo.yHotspot = hotSpotY;
+        }
+
+        iconInfo.hbmMask = hMonoBitmap;
+        iconInfo.hbmColor = GetHbitmapOf(bmp);
+
+        HICON hicon = ::CreateIconIndirect(&iconInfo);
+
+        ::DeleteObject(hMonoBitmap);
+
+        return hicon;
     }
-    else
-    {
-        mask = bmp.GetMask();
-    }
+
+    wxMask* mask = bmp.GetMask();
 
     if ( !mask )
     {
