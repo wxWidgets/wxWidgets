@@ -45,6 +45,17 @@
     #define CBXS_HOT           2
     #define CBXS_PRESSED       3
     #define CBXS_DISABLED      4
+
+    #define TVP_GLYPH			2
+    
+    #define GLPS_CLOSED			1
+    #define GLPS_OPENED         2
+
+    #define HP_HEADERITEM       1
+
+    #define HIS_NORMAL          1
+    #define HIS_HOT             2
+    #define HIS_PRESSED         3
 #endif
 
 // ----------------------------------------------------------------------------
@@ -97,6 +108,14 @@ public:
                                         wxDC& dc,
                                         const wxRect& rect,
                                         int flags = 0);
+    virtual void DrawTreeItemButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+    virtual void DrawHeaderButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect &rect,
+                                    int flags=0);
 private:
     DECLARE_NO_COPY_CLASS(wxRendererXP)
 };
@@ -260,6 +279,60 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
     }
 
     m_rendererNative.DrawSplitterSash(win, dc, size, position, orient, flags);
+}
+
+void
+wxRendererXP::DrawTreeItemButton(wxWindow *win, 
+                                 wxDC &dc, 
+                                 const wxRect &rect, 
+                                 int flags) 
+{
+    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    RECT r;
+    r.left = rect.x;
+    r.top = rect.y;
+    r.right = rect.x + rect.width;
+    r.bottom = rect.y + rect.height;
+    int state = (flags & wxCONTROL_EXPANDED) ? GLPS_OPENED : GLPS_CLOSED;
+    wxUxThemeEngine::Get()->DrawThemeBackground
+                                (
+                                    hTheme,
+                                    (HDC) dc.GetHDC(),
+                                    TVP_GLYPH,
+                                    state,
+                                    &r,
+                                    NULL
+                                );
+}
+
+void
+wxRendererXP::DrawHeaderButton(wxWindow *win, 
+                               wxDC &dc, 
+                               const wxRect &rect, 
+                               int flags) 
+{
+    wxUxThemeHandle hTheme(win, L"HEADER");
+    RECT r;
+    r.left = rect.x;
+    r.top = rect.y;
+    r.right = rect.x + rect.width;
+    r.bottom = rect.y + rect.height;
+    int state;
+    if ( flags & wxCONTROL_PRESSED )
+        state = HIS_PRESSED;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = HIS_HOT;
+    else
+        state = HIS_NORMAL;
+    wxUxThemeEngine::Get()->DrawThemeBackground
+                                (
+                                    hTheme,
+                                    (HDC) dc.GetHDC(),
+                                    HP_HEADERITEM,
+                                    state,
+                                    &r,
+                                    NULL
+                                );
 }
 
 #endif // wxUSE_UXTHEME
