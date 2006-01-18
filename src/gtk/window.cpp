@@ -1163,12 +1163,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     bool ret = false;
     bool return_after_IM = false;
 
-    if( wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
-    {
-        // Emit KEY_DOWN event
-        ret = win->GetEventHandler()->ProcessEvent( event );
-    }
-    else
+    if( wxTranslateGTKKeyEventToWx(event, win, gdk_event) == false )
     {
         // Return after IM processing as we cannot do
         // anything with it anyhow.
@@ -1203,6 +1198,9 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 #endif
     if (return_after_IM)
         return false;
+        
+    // Emit KEY_DOWN event
+    ret = win->GetEventHandler()->ProcessEvent( event );
 
 #ifndef __WXGTK20__
     // This is for GTK+ 1.2 only. The char event generatation for GTK+ 2.0 is done
