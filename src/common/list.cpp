@@ -752,7 +752,7 @@ wxNode *wxStringList::Prepend(const wxChar *s)
 
 #else // wxUSE_STL = 1
 
-    #include <wx/listimpl.cpp>
+    #include "wx/listimpl.cpp"
     WX_DEFINE_LIST(wxObjectList);
 
 // with wxUSE_STL wxStringList contains wxString objects, not pointers
