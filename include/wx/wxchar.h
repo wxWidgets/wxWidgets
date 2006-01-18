@@ -14,7 +14,9 @@
 #ifndef _WX_WXCHAR_H_
 #define _WX_WXCHAR_H_
 
-#include "wx/defs.h"        /* for wxUSE_UNICODE */
+/* defs.h indirectly includes this file, so don't include it here */
+#include "wx/platform.h"
+#include "wx/dlimpexp.h"
 
 #if defined(HAVE_STRTOK_R) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     char *strtok_r(char *, const char *, char **);
@@ -48,7 +50,7 @@
 /*
     Standard headers we need here.
 
-    NB: don't include any wxWidgets headers here because almost of them include
+    NB: don't include any wxWidgets headers here because almost all of them include
         this one!
  */
 
