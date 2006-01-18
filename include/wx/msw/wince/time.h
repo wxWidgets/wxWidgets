@@ -40,7 +40,8 @@ size_t __cdecl wcsftime(wchar_t *, size_t, const wchar_t *, const struct tm *);
 
 extern long timezone;
 
-#endif // !_TM_DEFINED
+#endif
+    // old code
 
 #endif // __WINCE_TIME_
 
