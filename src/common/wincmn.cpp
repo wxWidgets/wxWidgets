@@ -2350,7 +2350,7 @@ wxAccessible* wxWindowBase::CreateAccessible()
 
 #if wxUSE_STL
 
-#include wx/listimpl.cpp"
+#include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxWindowList);
 
 #else
