@@ -448,7 +448,7 @@ wxSize wxRadioBox::GetMaxButtonSize() const
         int width, height;
         if ( m_radioWidth[i] < 0 )
         {
-            GetTextExtent(wxGetWindowText((*m_radioButtons)[i]), &width, &height);
+            GetTextExtent(wxStripMenuCodes(wxGetWindowText((*m_radioButtons)[i])), &width, &height);
 
             // adjust the size to take into account the radio box itself
             // FIXME this is totally bogus!
@@ -488,7 +488,7 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
 
     // and also wide enough for its label
     int widthLabel;
-    GetTextExtent(GetTitle(), &widthLabel, NULL);
+    GetTextExtent(wxStripMenuCodes(GetTitle()), &widthLabel, NULL);
     widthLabel += RADIO_SIZE; // FIXME this is bogus too
     if ( widthLabel > width )
         width = widthLabel;
