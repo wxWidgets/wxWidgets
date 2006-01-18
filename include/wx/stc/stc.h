@@ -3201,9 +3201,9 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #ifndef SWIG
 #if wxUSE_UNICODE
 
-wxString stc2wx(const char* str);
-wxString stc2wx(const char* str, size_t len);
-const wxWX2MBbuf wx2stc(const wxString& str);
+WXDLLIMPEXP_STC wxString stc2wx(const char* str);
+WXDLLIMPEXP_STC wxString stc2wx(const char* str, size_t len);
+WXDLLIMPEXP_STC const wxWX2MBbuf wx2stc(const wxString& str);
 
 #else // not UNICODE
 
