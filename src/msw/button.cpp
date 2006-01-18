@@ -218,7 +218,7 @@ wxSize wxButton::DoGetBestSize() const
 
     wxCoord wBtn,
             hBtn;
-    dc.GetMultiLineTextExtent(GetLabel(), &wBtn, &hBtn);
+    dc.GetMultiLineTextExtent(wxStripMenuCodes(GetLabel()), &wBtn, &hBtn);
 
     // add a margin -- the button is wider than just its label
     wBtn += 3*GetCharWidth();

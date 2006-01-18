@@ -160,7 +160,7 @@ wxSize wxStaticBox::DoGetBestSize() const
     wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
     int wBox;
-    GetTextExtent(wxGetWindowText(m_hWnd), &wBox, &cy);
+    GetTextExtent(wxStripMenuCodes(wxGetWindowText(m_hWnd)), &wBox, &cy);
 
     wBox += 3*cx;
     int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
