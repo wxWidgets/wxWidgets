@@ -133,7 +133,12 @@ wxCondError wxConditionInternal::Wait()
     wxSemaError err = m_semaphore.Wait();
     m_mutex.Lock();
 
-    return err == wxSEMA_NO_ERROR ? wxCOND_NO_ERROR : wxCOND_MISC_ERROR;
+    if ( err == wxSEMA_NO_ERROR )
+        return wxCOND_NO_ERROR;
+    else if ( err == wxSEMA_TIMEOUT )
+        return wxCOND_TIMEOUT;
+    else
+        return wxCOND_MISC_ERROR;
 }
 
 wxCondError wxConditionInternal::WaitTimeout(unsigned long milliseconds)
