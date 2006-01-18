@@ -657,7 +657,7 @@ struct wxXPMColourMapData
 {
     unsigned char R,G,B;
 };
-WX_DECLARE_STRING_HASH_MAP(wxXPMColourMapData, wxXPMColourMap)
+WX_DECLARE_STRING_HASH_MAP(wxXPMColourMapData, wxXPMColourMap);
 
 wxImage wxXPMDecoder::ReadData(const char **xpm_data)
 {

@@ -19,7 +19,7 @@
 #include "wx/protocol/protocol.h"
 
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxString, wxStringToStringHashMap,
-                                      class WXDLLIMPEXP_NET )
+                                      class WXDLLIMPEXP_NET );
 
 class WXDLLIMPEXP_NET wxHTTP : public wxProtocol
 {
