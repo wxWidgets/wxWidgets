@@ -1242,20 +1242,22 @@ wxString wxFileName::GetForbiddenChars(wxPathFormat format)
 }
 
 /* static */
-wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
+wxString wxFileName::GetVolumeSeparator(wxPathFormat WXUNUSED_IN_WINCE(format))
 {
+#ifdef __WXWINCE__
+    return wxEmptyString;
+#else
     wxString sepVol;
 
-#ifndef __WXWINCE__
     if ( (GetFormat(format) == wxPATH_DOS) ||
          (GetFormat(format) == wxPATH_VMS) )
     {
         sepVol = wxFILE_SEP_DSK;
     }
     //else: leave empty
-#endif
 
     return sepVol;
+#endif
 }
 
 /* static */
@@ -1895,6 +1897,8 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
         }
     }
 #elif defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
+    wxUnusedVar(dtCreate);
+
     if ( !dtAccess && !dtMod )
     {
         // can't modify the creation time anyhow, don't try
