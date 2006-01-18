@@ -532,6 +532,12 @@ void wxDb::initialize()
     typeInfBlob.CaseSensitive = 0;
     typeInfBlob.MaximumScale  = 0;
 
+    typeInfMemo.TypeName.Empty();
+    typeInfMemo.FsqlType      = 0;
+    typeInfMemo.Precision     = 0;
+    typeInfMemo.CaseSensitive = 0;
+    typeInfMemo.MaximumScale  = 0;
+
     // Error reporting is turned OFF by default
     silent = true;
 
@@ -650,6 +656,16 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
         SQL_VARBINARY
     };
 
+    // These are the possible SQL types we check for use agains the datasource we are connected
+    // to for the purpose of determining which data type to use for the MEMO column types
+	// (a type which allow to store large strings; like VARCHAR just with a bigger precision)
+    //
+    // NOTE: The first type in this enumeration that is determined to be supported by the
+    //       datasource/driver is the one that will be used.
+    SWORD PossibleSqlMemoTypes[] = {
+        SQL_LONGVARCHAR,
+    };
+
 
     // Query the data source regarding data type information
 
@@ -756,6 +772,16 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
     else if (failOnDataTypeUnsupported)
         return false;
 
+    // --------------- MEMO ---------------
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlMemoTypes) &&
+                     !getDataTypeInfo(PossibleSqlMemoTypes[iIndex], typeInfMemo); ++iIndex)
+    {}
+
+    if (iIndex < WXSIZEOF(PossibleSqlMemoTypes))
+        typeInfMemo.FsqlType = PossibleSqlMemoTypes[iIndex];
+    else if (failOnDataTypeUnsupported)
+        return false;
+
     return true;
 }  // wxDb::determineDataTypes
 
@@ -790,6 +816,7 @@ bool wxDb::open(bool failOnDataTypeUnsupported)
     cout << wxT("FLOAT   DATA TYPE: ") << typeInfFloat.TypeName << endl;
     cout << wxT("DATE    DATA TYPE: ") << typeInfDate.TypeName << endl;
     cout << wxT("BLOB    DATA TYPE: ") << typeInfBlob.TypeName << endl;
+    cout << wxT("MEMO    DATA TYPE: ") << typeInfMemo.TypeName << endl;
     cout << endl;
 #endif
 
@@ -1050,12 +1077,20 @@ bool wxDb::Open(wxDb *copyDb)
     typeInfBlob.CaseSensitive    = copyDb->typeInfBlob.CaseSensitive;
     typeInfBlob.MaximumScale     = copyDb->typeInfBlob.MaximumScale;
 
+    // Memo
+    typeInfMemo.FsqlType         = copyDb->typeInfMemo.FsqlType;
+    typeInfMemo.TypeName         = copyDb->typeInfMemo.TypeName;
+    typeInfMemo.Precision        = copyDb->typeInfMemo.Precision;
+    typeInfMemo.CaseSensitive    = copyDb->typeInfMemo.CaseSensitive;
+    typeInfMemo.MaximumScale     = copyDb->typeInfMemo.MaximumScale;
+
 #ifdef DBDEBUG_CONSOLE
     cout << wxT("VARCHAR DATA TYPE: ") << typeInfVarchar.TypeName << endl;
     cout << wxT("INTEGER DATA TYPE: ") << typeInfInteger.TypeName << endl;
     cout << wxT("FLOAT   DATA TYPE: ") << typeInfFloat.TypeName << endl;
     cout << wxT("DATE    DATA TYPE: ") << typeInfDate.TypeName << endl;
     cout << wxT("BLOB    DATA TYPE: ") << typeInfBlob.TypeName << endl;
+    cout << wxT("MEMO    DATA TYPE: ") << typeInfMemo.TypeName << endl;
     cout << endl;
 #endif
 
@@ -2286,6 +2321,9 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
             case SQL_CHAR:
                 pColInf[colNum].dbDataType = DB_DATA_TYPE_VARCHAR;
                 break;
+            case SQL_LONGVARCHAR:
+                pColInf[colNum].dbDataType = DB_DATA_TYPE_MEMO;
+				break;
             case SQL_TINYINT:
             case SQL_SMALLINT:
             case SQL_INTEGER:
@@ -3069,6 +3107,9 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
                         case SQL_CHAR:
                             colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
                         break;
+                        case SQL_LONGVARCHAR:                        
+                            colInf[colNo].dbDataType = DB_DATA_TYPE_MEMO;
+							break;
                         case SQL_TINYINT:
                         case SQL_SMALLINT:
                         case SQL_INTEGER:

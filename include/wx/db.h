@@ -158,6 +158,7 @@ const int DB_DATA_TYPE_INTEGER        = 2;
 const int DB_DATA_TYPE_FLOAT          = 3;
 const int DB_DATA_TYPE_DATE           = 4;
 const int DB_DATA_TYPE_BLOB           = 5;
+const int DB_DATA_TYPE_MEMO           = 6;
 
 const int DB_SELECT_KEYFIELDS         = 1;
 const int DB_SELECT_WHERE             = 2;
@@ -555,6 +556,7 @@ private:
     wxDbSqlTypeInfo typeInfFloat;
     wxDbSqlTypeInfo typeInfDate;
     wxDbSqlTypeInfo typeInfBlob;
+    wxDbSqlTypeInfo typeInfMemo;
 #endif
 
 public:
@@ -694,6 +696,7 @@ public:
     wxDbSqlTypeInfo GetTypeInfFloat()      {return typeInfFloat;}
     wxDbSqlTypeInfo GetTypeInfDate()       {return typeInfDate;}
     wxDbSqlTypeInfo GetTypeInfBlob()       {return typeInfBlob;}
+    wxDbSqlTypeInfo GetTypeInfMemo()       {return typeInfMemo;}
 
     // tableName can refer to a table, view, alias or synonym
     bool         TableExists(const wxString &tableName, const wxChar *userID=NULL,
