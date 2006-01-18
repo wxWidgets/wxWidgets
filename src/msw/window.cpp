@@ -938,11 +938,13 @@ void wxWindowMSW::SetScrollbar(int orient,
     HWND hWnd = GetHwnd();
     if ( hWnd )
     {
+        // We have to set the variables here to make them valid in events
+        // triggered by ::SetScrollInfo()
+        *(orient == wxHORIZONTAL ? &m_xThumbSize : &m_yThumbSize) = pageSize;
+        
         ::SetScrollInfo(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
                         &info, refresh);
     }
-
-    *(orient == wxHORIZONTAL ? &m_xThumbSize : &m_yThumbSize) = pageSize;
 }
 
 void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
