@@ -43,7 +43,7 @@ struct WXDLLEXPORT wxTreeViewItem;
 #define wxTREE_INSERT_LAST  0xFFFF0002
 
 // hash storing attributes for our items
-WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr);
+WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr)
 
 // ----------------------------------------------------------------------------
 // wxTreeCtrl

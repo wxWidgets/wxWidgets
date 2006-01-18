@@ -474,7 +474,7 @@ public:
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 };
 
-WX_DECLARE_STRING_HASH_MAP( wxColour *, wxStringToColourHashMap );
+WX_DECLARE_STRING_HASH_MAP( wxColour *, wxStringToColourHashMap )
 
 class WXDLLEXPORT wxColourDatabase
 {

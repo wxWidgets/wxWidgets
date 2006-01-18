@@ -2525,7 +2525,7 @@ void wxCSConv::SetName(const wxChar *charset)
 #include "wx/hashmap.h"
 
 WX_DECLARE_HASH_MAP( wxFontEncoding, wxString, wxIntegerHash, wxIntegerEqual,
-                     wxEncodingNameCache );
+                     wxEncodingNameCache )
 
 static wxEncodingNameCache gs_nameCache;
 #endif

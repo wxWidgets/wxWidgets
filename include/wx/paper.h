@@ -66,7 +66,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPrintPaperType)
 };
 
-WX_DECLARE_STRING_HASH_MAP(wxPrintPaperType*, wxStringToPrintPaperTypeHashMap);
+WX_DECLARE_STRING_HASH_MAP(wxPrintPaperType*, wxStringToPrintPaperTypeHashMap)
 
 class WXDLLEXPORT wxPrintPaperTypeList;
 

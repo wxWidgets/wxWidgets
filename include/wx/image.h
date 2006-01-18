@@ -118,7 +118,7 @@ public:
 
 WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
                              wxIntegerHash, wxIntegerEqual,
-                             wxImageHistogramBase);
+                             wxImageHistogramBase)
 
 class WXDLLEXPORT wxImageHistogram : public wxImageHistogramBase
 {
