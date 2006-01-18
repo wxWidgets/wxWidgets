@@ -33,11 +33,9 @@
 #define MM_METRIC        7
 #endif
 
-//-----------------------------------------------------------------------------
-// global variables
-//-----------------------------------------------------------------------------
 
 extern int wxPageNumber;
+
 
 class wxMacPortStateHelper ;
 
@@ -79,20 +77,14 @@ public:
     virtual wxGraphicPath* CreatePath() = 0 ;
 } ;
 
-//-----------------------------------------------------------------------------
-// wxDC
-//-----------------------------------------------------------------------------
-
 class WXDLLEXPORT wxDC: public wxDCBase
 {
     DECLARE_DYNAMIC_CLASS(wxDC)
     DECLARE_NO_COPY_CLASS(wxDC)
 
-  public:
-
+public:
     wxDC();
     ~wxDC();
-
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -117,10 +109,10 @@ class WXDLLEXPORT wxDC: public wxDCBase
     virtual wxCoord GetCharHeight() const;
     virtual wxCoord GetCharWidth() const;
     virtual void DoGetTextExtent(const wxString& string,
-                                 wxCoord *x, wxCoord *y,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL,
-                                 wxFont *theFont = NULL) const;
+        wxCoord *x, wxCoord *y,
+        wxCoord *descent = NULL,
+        wxCoord *externalLeading = NULL,
+        wxFont *theFont = NULL) const;
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
     virtual bool CanDrawBitmap() const;
@@ -142,8 +134,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
 
     virtual void ComputeScaleAndOrigin();
 
-  public:
-
+public:
     wxCoord XDEV2LOG(wxCoord x) const
     {
       long new_x = x - m_deviceOriginX ;
@@ -152,6 +143,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
     }
+
     wxCoord XDEV2LOGREL(wxCoord x) const
     {
       if (x > 0)
@@ -159,6 +151,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(x) / m_scaleX - 0.5);
     }
+
     wxCoord YDEV2LOG(wxCoord y) const
     {
       long new_y = y - m_deviceOriginY ;
@@ -167,6 +160,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
     }
+
     wxCoord YDEV2LOGREL(wxCoord y) const
     {
       if (y > 0)
@@ -174,6 +168,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(y) / m_scaleY - 0.5);
     }
+
     wxCoord XLOG2DEV(wxCoord x) const
     {
       long new_x = x - m_logicalOriginX;
@@ -182,6 +177,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX ;
     }
+
     wxCoord XLOG2DEVREL(wxCoord x) const
     {
       if (x > 0)
@@ -189,6 +185,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(x) * m_scaleX - 0.5);
     }
+
     wxCoord YLOG2DEV(wxCoord y) const
     {
       long new_y = y - m_logicalOriginY ;
@@ -197,6 +194,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY ;
     }
+
     wxCoord YLOG2DEVREL(wxCoord y) const
     {
       if (y > 0)
@@ -204,6 +202,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(y) * m_scaleY - 0.5);
     }
+
     wxCoord XLOG2DEVMAC(wxCoord x) const
     {
       long new_x = x - m_logicalOriginX;
@@ -212,6 +211,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x ;
     }
+
     wxCoord YLOG2DEVMAC(wxCoord y) const
     {
       long new_y = y - m_logicalOriginY ;
@@ -220,13 +220,13 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y ;
     }
+
 #if wxMAC_USE_CORE_GRAPHICS
     wxGraphicContext* GetGraphicContext() { return m_graphicContext ; }
 #else
     WXHRGN MacGetCurrentClipRgn() { return m_macCurrentClipRgn ; }
     static void MacSetupBackgroundForCurrentPort(const wxBrush& background ) ;
 #endif
-//
 
 protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -281,65 +281,59 @@ protected:
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle = wxODDEVEN_RULE);
 
-  protected:
-    //begin wxmac
-    // Variables used for scaling
-    double       m_mm_to_pix_x,m_mm_to_pix_y;
-    // not yet used
-    bool         m_needComputeScaleX,m_needComputeScaleY;
+protected:
+    // scaling variables
+    double       m_mm_to_pix_x, m_mm_to_pix_y;
+
+     // To be set using SetDeviceOrigin()
+     // by external classes such as wxScrolledWindow
+    long         m_externalDeviceOriginX, m_externalDeviceOriginY;
+
 #if !wxMAC_USE_CORE_GRAPHICS
     // If un-scrolled is non-zero or d.o. changes with scrolling.
     // Set using SetInternalDeviceOrigin().
-    long         m_internalDeviceOriginX,m_internalDeviceOriginY;
-#endif
-     // To be set by external classes such as wxScrolledWindow
-     // using SetDeviceOrigin()
-    long         m_externalDeviceOriginX,m_externalDeviceOriginY;
+    long         m_internalDeviceOriginX, m_internalDeviceOriginY;
 
-    // Begin implementation for Mac
-    public:
-
-#if !wxMAC_USE_CORE_GRAPHICS
     WXHBITMAP            m_macMask ;
 #endif
 
-    // in order to preserve the const inheritance of the virtual functions, we have to
-    // use mutable variables starting from CWPro 5
+    // not yet used
+    bool         m_needComputeScaleX, m_needComputeScaleY;
 
+public:
+    // implementation
     void                    MacInstallFont() const ;
-#if !wxMAC_USE_CORE_GRAPHICS
-    void                    MacInstallPen() const ;
-    void                    MacInstallBrush() const ;
-#endif
 
+    // in order to preserve the const inheritance of the virtual functions,
+    // we have to use mutable variables starting from CWPro 5
     wxPoint                         m_macLocalOrigin ;
     mutable void*                   m_macATSUIStyle ;
 
     WXHDC                           m_macPort ;
+
 #if wxMAC_USE_CORE_GRAPHICS
-    // CoreGraphics
     wxGraphicContext                * m_graphicContext ;
     wxPoint                         m_macLocalOriginInPort ;
 #else
+    void                            MacInstallPen() const ;
+    void                            MacInstallBrush() const ;
+
+    void                            MacSetupPort( wxMacPortStateHelper* ph ) const ;
+    void                            MacCleanupPort( wxMacPortStateHelper* ph ) const ;
+    mutable wxMacPortStateHelper*   m_macCurrentPortStateHelper ;
+
     mutable bool                    m_macFontInstalled ;
     mutable bool                    m_macPenInstalled ;
     mutable bool                    m_macBrushInstalled ;
 
     WXHRGN                          m_macBoundaryClipRgn ;
     WXHRGN                          m_macCurrentClipRgn ;
-    void                            MacSetupPort( wxMacPortStateHelper* ph ) const ;
-    void                            MacCleanupPort( wxMacPortStateHelper* ph ) const ;
-    mutable wxMacPortStateHelper*   m_macCurrentPortStateHelper ;
     mutable bool                    m_macFormerAliasState ;
     mutable short                   m_macFormerAliasSize ;
     mutable bool                    m_macAliasWasEnabled ;
     mutable void*                   m_macForegroundPixMap ;
     mutable void*                   m_macBackgroundPixMap ;
 #endif
-    
-#if wxMAC_USE_CORE_GRAPHICS
-#endif
 };
 
-#endif
-    // _WX_DC_H_
+#endif // _WX_DC_H_
