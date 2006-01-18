@@ -857,7 +857,7 @@ void wxCalendarCtrl::RecalcGeometry()
         {
             // 1.5 times the width gives nice margins even if the weekday
             // names are short
-            m_widthCol = width+width/2;
+	     m_widthCol = width+width/2;
         }
     }
     wxDateTime::WeekDay wd;
@@ -1451,8 +1451,12 @@ wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
                                                 wxDateTime::WeekDay *wd)
 {
     RecalcGeometry();
+    // use the correct x-pos 
+    wxCoord x0 = wxMax((GetSize().x - m_widthCol*7) /2, 0);
+    wxPoint pos_corr = pos;
+    pos_corr.x -= x0;
 
-    wxCoord y = pos.y;
+    wxCoord y = pos_corr.y;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
     if ( (GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
@@ -1461,7 +1465,7 @@ wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
 
         // we need to find out if the hit is on left arrow, on month or on right arrow
         // left arrow?
-        if ( wxRegion(m_leftArrowRect).Contains(pos) == wxInRegion )
+        if ( wxRegion(m_leftArrowRect).Contains(pos_corr) == wxInRegion )
         {
             if ( date )
             {
@@ -1478,7 +1482,7 @@ wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
             return wxCAL_HITTEST_DECMONTH;
         }
 
-        if ( wxRegion(m_rightArrowRect).Contains(pos) == wxInRegion )
+        if ( wxRegion(m_rightArrowRect).Contains(pos_corr) == wxInRegion )
         {
             if ( date )
             {
@@ -1500,9 +1504,7 @@ wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // Header: Days
 
-    wxCoord x0 = wxMax( (GetSize().x - m_widthCol*7) /2 , 0 );
-
-    int wday = ( pos.x - x0 ) / m_widthCol;
+    int wday = pos_corr.x / m_widthCol;
 //    if ( y < m_heightRow )
     if ( y < (m_heightRow + m_rowOffset) )
     {
