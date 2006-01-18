@@ -53,7 +53,7 @@ public:
     // Called to transfer data to the window
     virtual bool TransferToWindow();
 
-    // Called to transfer data to the window
+    // Called to transfer data from the window
     virtual bool TransferFromWindow();
 
     // ACCESSORS
