@@ -29,10 +29,6 @@
     #include "wx/wx.h"
 #endif
 
-#if !wxUSE_DISPLAY
-    #error "To compile this sample you must build the library with wxUSE_DISPLAY set to 1"
-#endif
-
 #include "wx/bookctrl.h"
 
 #include "wx/display.h"
@@ -79,11 +75,15 @@ public:
 
     void OnLeftClick(wxMouseEvent& event);
 
+#if wxUSE_DISPLAY
     void OnDisplayChanged(wxDisplayChangedEvent& event);
+#endif
 
 private:
+#if wxUSE_DISPLAY
     // convert video mode to textual description
     wxString VideoModeToText(const wxVideoMode& mode);
+#endif
 
     // GUI controls
     wxBookCtrl *m_book;
@@ -143,8 +143,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_LEFT_UP(MyFrame::OnLeftClick)
 
-
+#if wxUSE_DISPLAY
     EVT_DISPLAY_CHANGED(MyFrame::OnDisplayChanged)
+#endif
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -165,6 +166,11 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+#if !wxUSE_DISPLAY
+    wxMessageBox(_("Please recompile wxWidgets and this sample with wxUSE_DISPLAY set to 1."));
+    return false;
+#else
+
 #ifdef __WXMSW__
     if ( argc == 2 && !wxStricmp(argv[1],  _T("/dx")) )
     {
@@ -184,6 +190,7 @@ bool MyApp::OnInit()
     // loop and the application will run. If we returned false here, the
     // application would exit immediately.
     return true;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -224,6 +231,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_DISPLAY
     // create child controls
 
     wxPanel *panel = new wxPanel(this, wxID_ANY);
@@ -299,8 +307,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     panel->SetSizer(sizer);
     sizer->Fit(this);
     sizer->SetSizeHints(this);
+#endif
 }
 
+#if wxUSE_DISPLAY
 wxString MyFrame::VideoModeToText(const wxVideoMode& mode)
 {
     wxString s;
@@ -318,6 +328,7 @@ wxString MyFrame::VideoModeToText(const wxVideoMode& mode)
 
     return s;
 }
+#endif
 
 // event handlers
 
@@ -351,6 +362,7 @@ void MyFrame::OnFullScreen(wxCommandEvent& event)
 
 void MyFrame::OnChangeMode(wxCommandEvent& event)
 {
+#if wxUSE_DISPLAY
     wxDisplay dpy(m_book->GetSelection());
 
     // you wouldn't write this in real code, would you?
@@ -360,17 +372,21 @@ void MyFrame::OnChangeMode(wxCommandEvent& event)
     {
         wxLogError(_T("Changing video mode failed!"));
     }
+#endif
 }
 
 void MyFrame::OnResetMode(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_DISPLAY
     wxDisplay dpy(m_book->GetSelection());
 
     dpy.ResetMode();
+#endif
 }
 
 void MyFrame::OnLeftClick(wxMouseEvent& event)
 {
+#if wxUSE_DISPLAY
     if ( HasCapture() )
     {
         // mouse events are in client coords, wxDisplay works in screen ones
@@ -386,8 +402,10 @@ void MyFrame::OnLeftClick(wxMouseEvent& event)
 
         ReleaseMouse();
     }
+#endif
 }
 
+#if wxUSE_DISPLAY
 void MyFrame::OnDisplayChanged(wxDisplayChangedEvent& event)
 {
     // update the current mode text
@@ -405,3 +423,5 @@ void MyFrame::OnDisplayChanged(wxDisplayChangedEvent& event)
 
     event.Skip();
 }
+#endif
+
