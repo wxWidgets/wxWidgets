@@ -61,6 +61,7 @@
 
 #ifndef __DARWIN__
 #include <InternetConfig.h> //For mime types
+#include <CoreServices.h>
 #endif
 
 /*   START CODE SAMPLE FROM TECHNOTE 1002 (http://developer.apple.com/technotes/tn/tn1002.html) */
