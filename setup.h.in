@@ -1064,8 +1064,9 @@
    with wx/msw/setup.h */
 #define wxUSE_XPM_IN_MSW wxUSE_XPM
 
-// Set to 0 to disable PostScript print/preview architecture code under Windows
-// (just use Windows printing).
+/* Set to 0 to disable PostScript print/preview architecture code under Windows
+  (just use Windows printing).
+ */
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 
 #endif /* __WIN32__ */

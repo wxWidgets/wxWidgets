@@ -71,7 +71,7 @@
 
 #    undef wxUSE_STACKWALKER
 #    define wxUSE_STACKWALKER 0
-#endif // compiler doesn't support SEH
+#endif /* compiler doesn't support SEH */
 
 /* wxUSE_DEBUG_NEW_ALWAYS doesn't work with CodeWarrior */
 #if defined(__MWERKS__)
