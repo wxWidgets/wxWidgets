@@ -604,6 +604,19 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     // use the directory specified by the prefix
     SplitPath(prefix, &dir, &name, NULL /* extension */);
 
+    if (dir.empty())
+    {
+        dir = wxGetenv(_T("TMPDIR"));
+        if (dir.empty())
+        {
+            dir = wxGetenv(_T("TMP"));
+            if (dir.empty())
+            {
+                dir = wxGetenv(_T("TEMP"));
+            }
+        }
+    }
+
 #if defined(__WXWINCE__)
     if (dir.empty())
     {
@@ -651,27 +664,14 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 #else // !Windows
     if ( dir.empty() )
     {
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-        dir = wxMacFindFolder(  (short) kOnSystemDisk, kTemporaryFolderType, kCreateFolder ) ;
-#else // !Mac
-        dir = wxGetenv(_T("TMP"));
-        if ( dir.empty() )
-        {
-            dir = wxGetenv(_T("TEMP"));
-        }
-
-        if ( dir.empty() )
-        {
-            // default
-            #if defined(__DOS__) || defined(__OS2__)
-                dir = _T(".");
-            #elif defined(__WXMAC__)
-                dir = wxMacFindFolder(  (short) kOnSystemDisk, kTemporaryFolderType, kCreateFolder ) ;
-            #else
-                dir = _T("/tmp");
-            #endif
-        }
-#endif // Mac/!Mac
+        // default
+#if defined(__DOS__) || defined(__OS2__)
+        dir = _T(".");
+#elif defined(__WXMAC__)
+        dir = wxMacFindFolder(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
+#else
+        dir = _T("/tmp");
+#endif
     }
 
     path = dir;
@@ -752,9 +752,6 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     path = pathTry;
 #endif // HAVE_MKTEMP/!HAVE_MKTEMP
 
-    if ( !path.empty() )
-    {
-    }
 #endif // HAVE_MKSTEMP/!HAVE_MKSTEMP
 
 #endif // Windows/!Windows
