@@ -223,7 +223,7 @@ SETUPHDIR = &
 STCDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) -wx &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\stc\..\..\..\include -wx &
 	-wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\stc\..\..\include &
 	-i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ &
 	-dSCI_LEXER -dLINK_LEXERS -dWXUSINGDLL -dWXMAKINGDLL_STC $(__RTTIFLAG) &
@@ -303,7 +303,7 @@ STCDLL_OBJECTS =  &
 STCLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) -wx &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\stc\..\..\..\include -wx &
 	-wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\stc\..\..\include &
 	-i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ &
 	-dSCI_LEXER -dLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
@@ -423,7 +423,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 !endif
 
 $(OBJS)\stcdll_version.res :  .AUTODEPEND ../../src/stc\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\src\stc\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc_wat$(VENDORTAG) $<
 
 $(OBJS)\stcdll_PlatWX.obj :  .AUTODEPEND ../../src/stc\PlatWX.cpp
 	$(CXX) -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<

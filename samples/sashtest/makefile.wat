@@ -215,7 +215,7 @@ SETUPHDIR = &
 SASHTEST_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	$(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -wx -wcd=549 &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include -wx -wcd=549 &
 	-wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH &
 	$(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 SASHTEST_OBJECTS =  &
@@ -253,5 +253,5 @@ $(OBJS)\sashtest_sashtest.obj :  .AUTODEPEND .\sashtest.cpp
 	$(CXX) -zq -fo=$^@ $(SASHTEST_CXXFLAGS) $<
 
 $(OBJS)\sashtest_sashtest.res :  .AUTODEPEND .\sashtest.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 

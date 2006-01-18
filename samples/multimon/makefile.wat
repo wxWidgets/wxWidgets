@@ -210,8 +210,8 @@ SETUPHDIR = &
 MULTIMON_TEST_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) &
 	$(__THREADSFLAG_5) $(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) &
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include &
-	-i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) &
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=.\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) &
 	-i=.\..\..\samples -dNOPCH $(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) &
 	$(CXXFLAGS)
 MULTIMON_TEST_OBJECTS =  &
@@ -246,7 +246,7 @@ $(OBJS)\multimon_test.exe :  $(MULTIMON_TEST_OBJECTS) $(OBJS)\multimon_test_samp
 	wlink @$(OBJS)\multimon_test.lbc
 
 $(OBJS)\multimon_test_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 $(OBJS)\multimon_test_multimon_test.obj :  .AUTODEPEND .\multimon_test.cpp
 	$(CXX) -zq -fo=$^@ $(MULTIMON_TEST_CXXFLAGS) $<

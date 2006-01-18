@@ -223,7 +223,7 @@ SETUPHDIR = &
 PLOTDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\plot\..\..\..\include &
 	-wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\plot\..\..\include &
 	-dWXUSINGDLL -dWXMAKINGDLL_PLOT /fh=$(OBJS)\wxprec_plotdll.pch &
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
@@ -233,7 +233,7 @@ PLOTDLL_OBJECTS =  &
 PLOTLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\plot\..\..\..\include &
 	-wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\plot\..\..\include &
 	/fh=$(OBJS)\wxprec_plotlib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -286,7 +286,7 @@ $(OBJS)\plotdll_dummy.obj :  .AUTODEPEND ../../src/plot\..\..\..\src\msw\dummy.c
 	$(CXX) -zq -fo=$^@ $(PLOTDLL_CXXFLAGS) $<
 
 $(OBJS)\plotdll_version.res :  .AUTODEPEND ../../src/plot\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\src\plot\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_wat$(VENDORTAG) $<
 
 $(OBJS)\plotdll_plot.obj :  .AUTODEPEND ../../src/plot\plot.cpp
 	$(CXX) -zq -fo=$^@ $(PLOTDLL_CXXFLAGS) $<

@@ -25,7 +25,7 @@ GIZMOSDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_9)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I..\..\src\gizmos\..\..\..\include /I$(SETUPHDIR) /W4 \
+	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\src\gizmos\..\..\..\include /W4 \
 	/I..\..\src\gizmos\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_GIZMOS \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_gizmosdll.pch" $(CPPFLAGS) $(CXXFLAGS)
@@ -44,7 +44,7 @@ GIZMOS_XRCDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_23)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I..\..\src\gizmos\..\..\..\include /I$(SETUPHDIR) /W4 \
+	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\src\gizmos\..\..\..\include /W4 \
 	/I..\..\src\gizmos\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_GIZMOS_XRC \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_gizmos_xrcdll.pch" $(CPPFLAGS) $(CXXFLAGS)
@@ -58,7 +58,7 @@ GIZMOSLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_36)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I..\..\src\gizmos\..\..\..\include /I$(SETUPHDIR) /W4 \
+	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\src\gizmos\..\..\..\include /W4 \
 	/I..\..\src\gizmos\..\..\include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gizmoslib.pch" $(CPPFLAGS) $(CXXFLAGS)
 GIZMOSLIB_OBJECTS =  \
@@ -75,7 +75,7 @@ GIZMOS_XRCLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_49)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I..\..\src\gizmos\..\..\..\include /I$(SETUPHDIR) /W4 \
+	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\src\gizmos\..\..\..\include /W4 \
 	/I..\..\src\gizmos\..\..\include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gizmos_xrclib.pch" $(CPPFLAGS) \
 	$(CXXFLAGS)
@@ -109,10 +109,16 @@ WXUNICODEFLAG = u
 !if "$(WXUNIV)" == "1"
 WXUNIVNAME = univ
 !endif
-!if "$(TARGET_CPU)" == "AMD64"
+!if "$(TARGET_CPU)" == "amd64"
 DIR_SUFFIX_CPU = _amd64
 !endif
-!if "$(TARGET_CPU)" == "IA64"
+!if "$(TARGET_CPU)" == "amd64"
+DIR_SUFFIX_CPU = _amd64
+!endif
+!if "$(TARGET_CPU)" == "ia64"
+DIR_SUFFIX_CPU = _ia64
+!endif
+!if "$(TARGET_CPU)" == "ia64"
 DIR_SUFFIX_CPU = _ia64
 !endif
 !if "$(SHARED)" == "1"
@@ -124,10 +130,16 @@ LIBTYPE_SUFFIX = lib
 !if "$(SHARED)" == "1"
 LIBTYPE_SUFFIX = dll
 !endif
-!if "$(TARGET_CPU)" == "AMD64"
+!if "$(TARGET_CPU)" == "amd64"
 LINK_TARGET_CPU = /MACHINE:AMD64
 !endif
-!if "$(TARGET_CPU)" == "IA64"
+!if "$(TARGET_CPU)" == "amd64"
+LINK_TARGET_CPU = /MACHINE:AMD64
+!endif
+!if "$(TARGET_CPU)" == "ia64"
+LINK_TARGET_CPU = /MACHINE:IA64
+!endif
+!if "$(TARGET_CPU)" == "ia64"
 LINK_TARGET_CPU = /MACHINE:IA64
 !endif
 !if "$(MONOLITHIC)" == "0"
@@ -213,12 +225,6 @@ __NO_VC_CRTDBG_p_0 = /d __NO_VC_CRTDBG__
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
 __NO_VC_CRTDBG_p_0 = /d __NO_VC_CRTDBG__
-!endif
-!if "$(TARGET_CPU)" == "AMD64"
-__RES_TARGET_CPU_p = /d WX_CPU_AMD64
-!endif
-!if "$(TARGET_CPU)" == "IA64"
-__RES_TARGET_CPU_p = /d WX_CPU_IA64
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p_0 = /d __WXUNIVERSAL__
@@ -417,7 +423,7 @@ $(OBJS)\gizmosdll_dummy.obj: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOSDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\gizmosdll_version.res: ../../src/gizmos\..\..\..\src\msw\version.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  $(__RES_TARGET_CPU_p) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) /i ..\..\src\gizmos\..\..\..\include /i $(SETUPHDIR) /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_vc$(VENDORTAG) $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) /i $(SETUPHDIR) /i ..\..\src\gizmos\..\..\..\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_vc$(VENDORTAG) $**
 
 $(OBJS)\gizmosdll_dynamicsash.obj: ../../src/gizmos\dynamicsash.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOSDLL_CXXFLAGS) $**
@@ -441,7 +447,7 @@ $(OBJS)\gizmos_xrcdll_dummy.obj: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOS_XRCDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\gizmos_xrcdll_version.res: ../../src/gizmos\..\..\..\src\msw\version.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  $(__RES_TARGET_CPU_p) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) /i ..\..\src\gizmos\..\..\..\include /i $(SETUPHDIR) /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_vc$(VENDORTAG) $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) /i $(SETUPHDIR) /i ..\..\src\gizmos\..\..\..\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_vc$(VENDORTAG) $**
 
 $(OBJS)\gizmos_xrcdll_xh_statpict.obj: ../../src/gizmos\xh_statpict.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOS_XRCDLL_CXXFLAGS) $**

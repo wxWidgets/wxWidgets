@@ -28,6 +28,9 @@ CPPFLAGS =
 # Standard linker flags 
 LDFLAGS = 
 
+# The C preprocessor 
+CPP = $(CC) /EP /nologo
+
 # What type of library to build? [0,1]
 SHARED = 0
 

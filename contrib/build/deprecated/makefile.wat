@@ -223,17 +223,17 @@ SETUPHDIR = &
 DEPRECATEDDLL_CFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include &
-	-i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=..\..\src\deprecated\..\..\include -dWXUSINGDLL &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=..\..\src\deprecated\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 &
+	-wcd=667 -i=..\..\src\deprecated\..\..\include -dWXUSINGDLL &
 	-dWXMAKINGDLL_DEPRECATED -i=..\..\src\deprecated $(CPPFLAGS) $(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) &
 	$(__THREADSFLAG) $(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) &
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=..\..\src\deprecated\..\..\..\include -i=$(SETUPHDIR) -wx -wcd=549 &
-	-wcd=656 -wcd=657 -wcd=667 -i=..\..\src\deprecated\..\..\include &
-	-dWXUSINGDLL -dWXMAKINGDLL_DEPRECATED -i=..\..\src\deprecated &
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=..\..\src\deprecated\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 &
+	-wcd=667 -i=..\..\src\deprecated\..\..\include -dWXUSINGDLL &
+	-dWXMAKINGDLL_DEPRECATED -i=..\..\src\deprecated &
 	/fh=$(OBJS)\wxprec_deprecateddll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 DEPRECATEDDLL_OBJECTS =  &
@@ -249,16 +249,16 @@ DEPRECATEDDLL_OBJECTS =  &
 DEPRECATEDLIB_CFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include &
-	-i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=..\..\src\deprecated\..\..\include -i=..\..\src\deprecated $(CPPFLAGS) &
-	$(CFLAGS)
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=..\..\src\deprecated\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 &
+	-wcd=667 -i=..\..\src\deprecated\..\..\include -i=..\..\src\deprecated &
+	$(CPPFLAGS) $(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include &
-	-i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=..\..\src\deprecated\..\..\include -i=..\..\src\deprecated &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=..\..\src\deprecated\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 &
+	-wcd=667 -i=..\..\src\deprecated\..\..\include -i=..\..\src\deprecated &
 	/fh=$(OBJS)\wxprec_deprecatedlib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 DEPRECATEDLIB_OBJECTS =  &
@@ -317,7 +317,7 @@ $(OBJS)\deprecateddll_dummy.obj :  .AUTODEPEND ../../src/deprecated\..\..\..\src
 	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_version.res :  .AUTODEPEND ../../src/deprecated\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\deprecated\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\src\deprecated\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_wat$(VENDORTAG) $<
 
 $(OBJS)\deprecateddll_prop.obj :  .AUTODEPEND ../../src/deprecated\prop.cpp
 	$(CXX) -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<

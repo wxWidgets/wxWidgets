@@ -23,7 +23,7 @@ FL_DEMO1_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	/I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
+	/I$(SETUPHDIR) /I.\..\..\..\include /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
 	/I.\..\..\..\samples /DNOPCH /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 FL_DEMO1_OBJECTS =  \
@@ -34,7 +34,7 @@ FL_DEMO2_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	/I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
+	/I$(SETUPHDIR) /I.\..\..\..\include /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
 	/I.\..\..\..\samples /DNOPCH /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 FL_DEMO2_OBJECTS =  \
@@ -45,7 +45,7 @@ FL_SAMPLE1_CXXFLAGS = /M$(__RUNTIME_LIBS_36)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	/I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
+	/I$(SETUPHDIR) /I.\..\..\..\include /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
 	/I.\..\..\..\samples /DNOPCH /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE1_OBJECTS =  \
@@ -56,7 +56,7 @@ FL_SAMPLE2_CXXFLAGS = /M$(__RUNTIME_LIBS_50)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	/I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
+	/I$(SETUPHDIR) /I.\..\..\..\include /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
 	/I.\..\..\..\samples /DNOPCH /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE2_OBJECTS =  \
@@ -67,7 +67,7 @@ FL_SAMPLE3_CXXFLAGS = /M$(__RUNTIME_LIBS_64)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	/I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
+	/I$(SETUPHDIR) /I.\..\..\..\include /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
 	/I.\..\..\..\samples /DNOPCH /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 FL_SAMPLE3_OBJECTS =  \
@@ -94,10 +94,16 @@ WXUNICODEFLAG = u
 !if "$(WXUNIV)" == "1"
 WXUNIVNAME = univ
 !endif
-!if "$(TARGET_CPU)" == "AMD64"
+!if "$(TARGET_CPU)" == "amd64"
 DIR_SUFFIX_CPU = _amd64
 !endif
-!if "$(TARGET_CPU)" == "IA64"
+!if "$(TARGET_CPU)" == "amd64"
+DIR_SUFFIX_CPU = _amd64
+!endif
+!if "$(TARGET_CPU)" == "ia64"
+DIR_SUFFIX_CPU = _ia64
+!endif
+!if "$(TARGET_CPU)" == "ia64"
 DIR_SUFFIX_CPU = _ia64
 !endif
 !if "$(SHARED)" == "1"
@@ -109,10 +115,16 @@ LIBTYPE_SUFFIX = lib
 !if "$(SHARED)" == "1"
 LIBTYPE_SUFFIX = dll
 !endif
-!if "$(TARGET_CPU)" == "AMD64"
+!if "$(TARGET_CPU)" == "amd64"
 LINK_TARGET_CPU = /MACHINE:AMD64
 !endif
-!if "$(TARGET_CPU)" == "IA64"
+!if "$(TARGET_CPU)" == "amd64"
+LINK_TARGET_CPU = /MACHINE:AMD64
+!endif
+!if "$(TARGET_CPU)" == "ia64"
+LINK_TARGET_CPU = /MACHINE:IA64
+!endif
+!if "$(TARGET_CPU)" == "ia64"
 LINK_TARGET_CPU = /MACHINE:IA64
 !endif
 !if "$(MONOLITHIC)" == "0"
@@ -246,12 +258,6 @@ __NO_VC_CRTDBG_p_12 = /d __NO_VC_CRTDBG__
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
 __NO_VC_CRTDBG_p_12 = /d __NO_VC_CRTDBG__
-!endif
-!if "$(TARGET_CPU)" == "AMD64"
-__RES_TARGET_CPU_p = /d WX_CPU_AMD64
-!endif
-!if "$(TARGET_CPU)" == "IA64"
-__RES_TARGET_CPU_p = /d WX_CPU_IA64
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
@@ -394,29 +400,29 @@ $(OBJS)\fl_demo1_fl_demo1.obj: .\fl_demo1.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_DEMO1_CXXFLAGS) $**
 
 $(OBJS)\fl_demo1_fl_demo1.res: .\fl_demo1.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  $(__RES_TARGET_CPU_p) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i $(SETUPHDIR) /i .\..\..\..\include /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_demo2_fl_demo2.obj: .\fl_demo2.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_DEMO2_CXXFLAGS) $**
 
 $(OBJS)\fl_demo2_fl_demo2.res: .\fl_demo2.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  $(__RES_TARGET_CPU_p) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i $(SETUPHDIR) /i .\..\..\..\include /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample1_fl_sample1.obj: .\fl_sample1.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_SAMPLE1_CXXFLAGS) $**
 
 $(OBJS)\fl_sample1_fl_sample1.res: .\fl_sample1.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  $(__RES_TARGET_CPU_p) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i $(SETUPHDIR) /i .\..\..\..\include /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample2_fl_sample2.obj: .\fl_sample2.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_SAMPLE2_CXXFLAGS) $**
 
 $(OBJS)\fl_sample2_fl_sample2.res: .\fl_sample2.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  $(__RES_TARGET_CPU_p) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i $(SETUPHDIR) /i .\..\..\..\include /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample3_fl_sample3.obj: .\fl_sample3.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_SAMPLE3_CXXFLAGS) $**
 
 $(OBJS)\fl_sample3_fl_sample3.res: .\fl_sample3.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  $(__RES_TARGET_CPU_p) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) $(__MSLU_DEFINE_p_12) /i $(SETUPHDIR) /i .\..\..\..\include /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 

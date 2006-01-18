@@ -247,7 +247,7 @@ SETUPHDIR = &
 GIZMOSDLL_CXXFLAGS = -bd $(__DEBUGINFO_3) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\gizmos\..\..\..\include &
 	-wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\gizmos\..\..\include &
 	-dWXUSINGDLL -dWXMAKINGDLL_GIZMOS /fh=$(OBJS)\wxprec_gizmosdll.pch &
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
@@ -262,18 +262,18 @@ GIZMOSDLL_OBJECTS =  &
 GIZMOS_XRCDLL_CXXFLAGS = -bd $(__DEBUGINFO_3) $(__OPTIMIZEFLAG) &
 	$(__THREADSFLAG) $(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) &
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 &
-	-wcd=657 -wcd=667 -i=..\..\src\gizmos\..\..\include -dWXUSINGDLL &
-	-dWXMAKINGDLL_GIZMOS_XRC /fh=$(OBJS)\wxprec_gizmos_xrcdll.pch &
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=..\..\src\gizmos\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
+	-i=..\..\src\gizmos\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_GIZMOS_XRC &
+	/fh=$(OBJS)\wxprec_gizmos_xrcdll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 GIZMOS_XRCDLL_OBJECTS =  &
 	$(OBJS)\gizmos_xrcdll_dummy.obj &
 	$(OBJS)\gizmos_xrcdll_xh_statpict.obj
 GIZMOSLIB_CXXFLAGS = $(__DEBUGINFO_3) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\gizmos\..\..\..\include &
 	-wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\gizmos\..\..\include &
 	/fh=$(OBJS)\wxprec_gizmoslib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -288,7 +288,7 @@ GIZMOSLIB_OBJECTS =  &
 GIZMOS_XRCLIB_CXXFLAGS = $(__DEBUGINFO_3) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\gizmos\..\..\..\include &
 	-wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\gizmos\..\..\include &
 	/fh=$(OBJS)\wxprec_gizmos_xrclib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -370,7 +370,7 @@ $(OBJS)\gizmosdll_dummy.obj :  .AUTODEPEND ../../src/gizmos\..\..\..\src\msw\dum
 	$(CXX) -zq -fo=$^@ $(GIZMOSDLL_CXXFLAGS) $<
 
 $(OBJS)\gizmosdll_version.res :  .AUTODEPEND ../../src/gizmos\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\src\gizmos\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_wat$(VENDORTAG) $<
 
 $(OBJS)\gizmosdll_dynamicsash.obj :  .AUTODEPEND ../../src/gizmos\dynamicsash.cpp
 	$(CXX) -zq -fo=$^@ $(GIZMOSDLL_CXXFLAGS) $<
@@ -394,7 +394,7 @@ $(OBJS)\gizmos_xrcdll_dummy.obj :  .AUTODEPEND ../../src/gizmos\..\..\..\src\msw
 	$(CXX) -zq -fo=$^@ $(GIZMOS_XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\gizmos_xrcdll_version.res :  .AUTODEPEND ../../src/gizmos\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\src\gizmos\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_wat$(VENDORTAG) $<
 
 $(OBJS)\gizmos_xrcdll_xh_statpict.obj :  .AUTODEPEND ../../src/gizmos\xh_statpict.cpp
 	$(CXX) -zq -fo=$^@ $(GIZMOS_XRCDLL_CXXFLAGS) $<

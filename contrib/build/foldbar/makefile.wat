@@ -223,8 +223,8 @@ SETUPHDIR = &
 FOLDBARDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\foldbar\..\..\..\include &
-	-i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=..\..\src\foldbar\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
 	-i=..\..\src\foldbar\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_FOLDBAR &
 	/fh=$(OBJS)\wxprec_foldbardll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -236,8 +236,8 @@ FOLDBARDLL_OBJECTS =  &
 FOLDBARLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\foldbar\..\..\..\include &
-	-i=$(SETUPHDIR) -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=..\..\src\foldbar\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
 	-i=..\..\src\foldbar\..\..\include /fh=$(OBJS)\wxprec_foldbarlib.pch &
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 FOLDBARLIB_OBJECTS =  &
@@ -291,7 +291,7 @@ $(OBJS)\foldbardll_dummy.obj :  .AUTODEPEND ../../src/foldbar\..\..\..\src\msw\d
 	$(CXX) -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
 
 $(OBJS)\foldbardll_version.res :  .AUTODEPEND ../../src/foldbar\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\foldbar\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\src\foldbar\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_wat$(VENDORTAG) $<
 
 $(OBJS)\foldbardll_captionbar.obj :  .AUTODEPEND ../../src/foldbar\captionbar.cpp
 	$(CXX) -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<

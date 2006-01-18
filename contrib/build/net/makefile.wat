@@ -223,7 +223,7 @@ SETUPHDIR = &
 NETUTILSDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) -wx &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\net\..\..\..\include -wx &
 	-wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\net\..\..\include &
 	-dWXUSINGDLL -dWXMAKINGDLL_NETUTILS /fh=$(OBJS)\wxprec_netutilsdll.pch &
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
@@ -235,7 +235,7 @@ NETUTILSDLL_OBJECTS =  &
 NETUTILSLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) -wx &
+	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\net\..\..\..\include -wx &
 	-wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\net\..\..\include &
 	/fh=$(OBJS)\wxprec_netutilslib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -290,7 +290,7 @@ $(OBJS)\netutilsdll_dummy.obj :  .AUTODEPEND ../../src/net\..\..\..\src\msw\dumm
 	$(CXX) -zq -fo=$^@ $(NETUTILSDLL_CXXFLAGS) $<
 
 $(OBJS)\netutilsdll_version.res :  .AUTODEPEND ../../src/net\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=..\..\src\net\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG) $<
 
 $(OBJS)\netutilsdll_email.obj :  .AUTODEPEND ../../src/net\email.cpp
 	$(CXX) -zq -fo=$^@ $(NETUTILSDLL_CXXFLAGS) $<
