@@ -83,7 +83,7 @@ public:                                                                      \
     /* count() == 0 | 1 */                                                   \
     size_type count( const const_key_type& key )                             \
         { return GetNode( key ) ? 1 : 0; }                                   \
-}
+};
 
 #endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
 

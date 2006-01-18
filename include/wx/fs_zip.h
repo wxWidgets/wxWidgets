@@ -22,7 +22,7 @@
 #include "wx/hashmap.h"
 
 
-WX_DECLARE_STRING_HASH_MAP(int, wxZipFilenameHashMap);
+WX_DECLARE_STRING_HASH_MAP(int, wxZipFilenameHashMap)
 
 
 //---------------------------------------------------------------------------
