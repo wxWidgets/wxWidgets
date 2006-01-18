@@ -186,6 +186,13 @@
     /*     char wchar_t is always unsigned) and (b) was how the previous */
     /*     definitions worked so keep it like this */
 
+    /* Sun's SunPro compiler supports the wchar_t type and wide character */
+    /* functions, but does not define __WCHAR_TYPE__. Define it here to */
+    /* allow unicode enabled builds. */
+    #if defined(__SUNPRO_CC) || defined(__SUNPRO_C)
+    #define __WCHAR_TYPE__ wxchar_t
+    #endif
+
     /* GNU libc has __WCHAR_TYPE__ which requires special treatment, see */
     /* comment below */
     #if !defined(__WCHAR_TYPE__) || \
