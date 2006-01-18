@@ -1405,9 +1405,7 @@ bool wxZipInputStream::LoadEndRecord()
         else {
             wxLogNull nolog;
             wxFileOffset pos = m_parent_i_stream->TellI();
-            // FIXME
-            //if (pos != wxInvalidOffset)
-            if (pos >= 0 && pos <= LONG_MAX)
+            if (pos != wxInvalidOffset)
                 m_offsetAdjustment = m_position = pos;
             return true;
         }
