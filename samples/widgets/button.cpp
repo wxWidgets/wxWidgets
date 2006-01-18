@@ -341,7 +341,7 @@ void ButtonWidgetsPage::CreateButton()
             // fall through
 
         case ButtonVAlign_Centre:
-            flags |= wxALIGN_CENTRE_VERTICAL;
+            // centre vertical alignment is the default (no style)
             break;
 
         case ButtonVAlign_Bottom:
