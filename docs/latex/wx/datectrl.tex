@@ -150,6 +150,17 @@ set.
 Returns the currently selected. If there is no selection or the selection is
 outside of the current range, an invalid object is returned.
 
+\membersection{wxDatePickerCtrl::SetFormat}\label{wxdatepickerctrlsetformat}
+
+\func{void}{SetFormat}{\param{const wxChar*}{ format}}
+
+Sets the display format for the date in the control. See wxDateTime for the meaning of format strings.
+
+\wxheading{Remarks}
+
+If the format parameter is invalid,
+the behaviour is undefined.
+
 
 \membersection{wxDatePickerCtrl::SetRange}\label{wxdatepickerctrlsetrange}
 
