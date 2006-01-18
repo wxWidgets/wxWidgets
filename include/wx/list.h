@@ -136,7 +136,7 @@ private:
 #endif // defined( __VISUALC__ )
 
 // Visual C++ 2005 complains about the const
-#if defined(__VISUALC__) && __VISUALC__ >= 1400
+#if (defined(__VISUALC__) && __VISUALC__ >= 1400) || defined(__MWERKS__)
 #define _WX_DELETEFUNCTIONCONST
 #else
 #define _WX_DELETEFUNCTIONCONST const
