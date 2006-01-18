@@ -640,7 +640,7 @@ public: \
     /* count() == 0 | 1 */ \
     size_type count( const const_key_type& key ) \
         { return GetNode( key ) ? 1 : 0; } \
-};
+}
 
 #endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
 
@@ -699,7 +699,7 @@ public: \
 // Declarations of common hashmap classes
 
 WX_DECLARE_HASH_MAP_WITH_DECL( long, long, wxIntegerHash, wxIntegerEqual,
-                               wxLongToLongHashMap, class WXDLLIMPEXP_BASE )
+                               wxLongToLongHashMap, class WXDLLIMPEXP_BASE );
 
 
 #endif // _WX_HASHMAP_H_

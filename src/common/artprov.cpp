@@ -44,7 +44,7 @@ WX_DEFINE_LIST(wxArtProvidersList)
 // Cache class - stores already requested bitmaps
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash)
+WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash);
 
 class WXDLLEXPORT wxArtProviderCache
 {

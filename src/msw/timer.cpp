@@ -40,7 +40,7 @@
 // define a hash containing all the timers: it is indexed by timer id and
 // contains the corresponding timer
 WX_DECLARE_HASH_MAP(unsigned long, wxTimer *, wxIntegerHash, wxIntegerEqual,
-                    wxTimerMap)
+                    wxTimerMap);
 
 // instead of using a global here, wrap it in a static function as otherwise it
 // could have been used before being initialized if a timer object were created

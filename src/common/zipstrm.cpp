@@ -604,7 +604,7 @@ static void Unique(wxZipMemory*& zm, size_t size)
 // Collection of weak references to entries
 
 WX_DECLARE_HASH_MAP(long, wxZipEntry*, wxIntegerHash,
-                    wxIntegerEqual, wx__OffsetZipEntryMap)
+                    wxIntegerEqual, wx__OffsetZipEntryMap);
 
 class wxZipWeakLinks
 {

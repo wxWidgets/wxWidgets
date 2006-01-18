@@ -96,7 +96,7 @@ static void DDELogError(const wxString& s, UINT error = DMLERR_NO_ERROR);
 // global variables
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_STRING_HASH_MAP( HSZ, wxAtomMap )
+WX_DECLARE_STRING_HASH_MAP( HSZ, wxAtomMap );
 
 static DWORD DDEIdInst = 0L;
 static wxDDEConnection *DDECurrentlyConnecting = NULL;

@@ -870,7 +870,7 @@ wxPluralFormsCalculator* wxPluralFormsCalculator::make(const char* s)
 // This is a "low-level" class and is used only by wxMsgCatalog
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxString, wxMessagesHash)
+WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxString, wxMessagesHash);
 
 class wxMsgCatalogFile
 {

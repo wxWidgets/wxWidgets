@@ -29,7 +29,7 @@ class WXDLLIMPEXP_BASE wxPluginLibrary;
 
 
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxPluginLibrary *, wxDLManifest,
-                                     class WXDLLIMPEXP_BASE)
+                                     class WXDLLIMPEXP_BASE);
 typedef wxDLManifest wxDLImports;
 
 // ---------------------------------------------------------------------------
