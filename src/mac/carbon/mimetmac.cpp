@@ -55,6 +55,7 @@
 
 #ifndef __DARWIN__
     #include <InternetConfig.h>
+    #include <CoreServices.h>
 #endif
 
 
