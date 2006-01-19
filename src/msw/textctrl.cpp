@@ -1265,10 +1265,14 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
         // ES_DISABLENOSCROLL
         //
         // this is very ugly but I don't see any other way to make this work
+        long style = 0;
         if ( GetRichVersion() > 1 )
         {
             if ( !HasFlag(wxTE_NOHIDESEL) )
             {
+                // setting ECO_NOHIDESEL also sets WS_VISIBLE and possibly
+                // others, remember the style so we can reset it later if needed
+                style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
                 ::SendMessage(GetHwnd(), EM_SETOPTIONS,
                               ECOOP_OR, ECO_NOHIDESEL);
             }
@@ -1284,6 +1288,8 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
         {
             ::SendMessage(GetHwnd(), EM_SETOPTIONS,
                           ECOOP_AND, ~ECO_NOHIDESEL);
+            if ( style != ::GetWindowLong(GetHwnd(), GWL_STYLE) )
+                ::SetWindowLong(GetHwnd(), GWL_STYLE, style);
         }
 #endif // wxUSE_RICHEDIT
     }
@@ -1967,7 +1973,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
     int hText = cy;
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2); 
+        hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2);
     }
     //else: for single line control everything is ok
 
