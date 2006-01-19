@@ -71,8 +71,9 @@ protected:
     // we can have either an icon or a bitmap
     bool m_isIcon;
     wxGDIImage *m_image;
+
     // handle used in last call to STM_SETIMAGE
-    HGDIOBJ m_currentHandle;
+    WXHANDLE m_currentHandle;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
