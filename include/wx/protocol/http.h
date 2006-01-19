@@ -2,7 +2,7 @@
 // Name:        http.h
 // Purpose:     HTTP protocol
 // Author:      Guilhem Lavaux
-// Modified by:
+// Modified by: Simo Virokannas (authentication, Dec 2005)
 // Created:     August 1997
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
@@ -43,6 +43,9 @@ public:
 
   int GetResponse() { return m_http_response; }
 
+  virtual void SetUser(const wxString& user) { m_username = user; }
+  virtual void SetPassword(const wxString& passwd ) { m_password = passwd; }
+
 protected:
   enum wxHTTP_Req
   {
@@ -58,6 +61,8 @@ protected:
   void SendHeaders();
   bool ParseHeaders();
 
+  wxString GenerateAuthString(const wxString& user, const wxString& pass) const;
+
   // find the header in m_headers
   wxHeaderIterator FindHeader(const wxString& header);
   wxHeaderConstIterator FindHeader(const wxString& header) const;
@@ -72,6 +77,8 @@ protected:
   wxSockAddress *m_addr;
   wxString m_post_buf;
   int m_http_response;
+  wxString m_username;
+  wxString m_password;
 
   DECLARE_DYNAMIC_CLASS(wxHTTP)
   DECLARE_PROTOCOL(wxHTTP)
