@@ -75,6 +75,8 @@ wxMSW:
 - wxStatusBar no longer corrupts surrounding windows on resize.
 - Enable wxListCtrl in report mode to be able to use images in other
   columns, if ComCtl32 >= 470.
+- Fixed problem where using SetValue and wxTE_RICH2 would cause control to
+  show.
 
 wxGTK:
 
