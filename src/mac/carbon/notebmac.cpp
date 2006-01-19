@@ -353,7 +353,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
     }
 
     if ( outPart >= 1 && outPart <= countPages )
-        resultV = outPart ;
+        resultV = outPart - 1 ;
 #endif // TARGET_API_MAC_OSX
 
     if (flags != NULL)
@@ -361,7 +361,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
         *flags = 0;
 
         // we cannot differentiate better
-        if (resultV >= 1)
+        if (resultV >= 0)
             *flags |= wxNB_HITTEST_ONLABEL;
         else
             *flags |= wxNB_HITTEST_NOWHERE;
