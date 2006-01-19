@@ -62,10 +62,6 @@ enum
     wxJS_AXIS_RUDDER,
     wxJS_AXIS_U,
     wxJS_AXIS_V,
-
-    //For the Get[XXX](Min/Max) functions
-    wxJS_AXIS_MAX = 255, //32767,
-    wxJS_AXIS_MIN = 0, //-32767
 };
 
 //---------------------------------------------------------------------------
@@ -74,12 +70,18 @@ enum
 class wxHIDJoystick : public wxHIDDevice
 {
 public:
+    wxHIDJoystick();
+    ~wxHIDJoystick();
+    
 	bool Create(int nWhich);
 	virtual void BuildCookies(wxCFArray& Array);
 	void MakeCookies(wxCFArray& Array);
     IOHIDElementCookie* GetCookies();
     IOHIDQueueInterface** GetQueue();
     
+    int  m_nXMax, m_nYMax, m_nZMax, m_nRudderMax, m_nUMax, m_nVMax,
+         m_nXMin, m_nYMin, m_nZMin, m_nRudderMin, m_nUMin, m_nVMin;
+
     friend class wxJoystick;
 };
 
@@ -108,6 +110,19 @@ private:
 //===========================================================================
 //  IMPLEMENTATION
 //===========================================================================
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// wxGetIntFromCFDictionary
+//
+// Helper function that gets a integer from a dictionary key
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+void wxGetIntFromCFDictionary(CFTypeRef cfDict, CFStringRef key, int* pOut)
+{
+        CFNumberGetValue(
+          (CFNumberRef) CFDictionaryGetValue((CFDictionaryRef) cfDict, 
+                                              key), 
+		                kCFNumberIntType, pOut);
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
@@ -320,35 +335,34 @@ bool wxJoystick::ReleaseCapture()
 //---------------------------------------------------------------------------
 // wxJoystick::Get[XXX]
 //
-// All values in hid range from 0 to 255, making these all kind of 
-// superflous. These are mainly here due to the msw-centric api
-// that wxJoystick has... it should REALLY do its own scaling... oh well :)
+// Gets the minimum and maximum values for each axis, returning 0 if the
+// axis doesn't exist.
 //---------------------------------------------------------------------------
 int wxJoystick::GetXMin() const
-{	return wxJS_AXIS_MIN;	}
+{	return m_hid->m_nXMin;	}
 int wxJoystick::GetYMin() const
-{	return wxJS_AXIS_MIN;	}
+{	return m_hid->m_nYMin;	}
 int wxJoystick::GetZMin() const
-{	return wxJS_AXIS_MIN;	}
-int wxJoystick::GetUMin() const
-{	return wxJS_AXIS_MIN;	}
-int wxJoystick::GetVMin() const
-{	return wxJS_AXIS_MIN;	}
+{	return m_hid->m_nZMin;	}
 int wxJoystick::GetRudderMin() const
-{	return wxJS_AXIS_MIN;	}
+{	return m_hid->m_nRudderMin;	}
+int wxJoystick::GetUMin() const
+{	return m_hid->m_nUMin;	}
+int wxJoystick::GetVMin() const
+{	return m_hid->m_nVMin;	}
 
 int wxJoystick::GetXMax() const
-{	return wxJS_AXIS_MAX;	}
+{	return m_hid->m_nXMax;	}
 int wxJoystick::GetYMax() const
-{	return wxJS_AXIS_MAX;	}
+{	return m_hid->m_nYMax;	}
 int wxJoystick::GetZMax() const
-{	return wxJS_AXIS_MAX;	}
-int wxJoystick::GetUMax() const
-{	return wxJS_AXIS_MAX;	}
-int wxJoystick::GetVMax() const
-{	return wxJS_AXIS_MAX;	}
+{	return m_hid->m_nZMax;	}
 int wxJoystick::GetRudderMax() const
-{	return wxJS_AXIS_MAX;	}
+{	return m_hid->m_nRudderMax;	}
+int wxJoystick::GetUMax() const
+{	return m_hid->m_nUMax;	}
+int wxJoystick::GetVMax() const
+{	return m_hid->m_nVMax;	}
 
 //---------------------------------------------------------------------------
 // wxJoystick::Get[XXX]
@@ -371,10 +385,10 @@ int wxJoystick::GetPollingMax() const
 // Just queries the native hid implementation if the cookie was found
 // when enumerating the cookies of the joystick device
 //---------------------------------------------------------------------------
-bool wxJoystick::HasRudder() const
-{	return m_hid->HasElement(wxJS_AXIS_RUDDER);	}
 bool wxJoystick::HasZ() const
 {	return m_hid->HasElement(wxJS_AXIS_Z);	}
+bool wxJoystick::HasRudder() const
+{	return m_hid->HasElement(wxJS_AXIS_RUDDER);	}
 bool wxJoystick::HasU() const
 {	return m_hid->HasElement(wxJS_AXIS_U);	}
 bool wxJoystick::HasV() const
@@ -403,6 +417,26 @@ bool wxJoystick::HasPOVCTS() const
 // wxHIDJoystick
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//---------------------------------------------------------------------------
+// wxHIDJoystick ctor
+// 
+// Initializes the min/max members
+//---------------------------------------------------------------------------
+wxHIDJoystick::wxHIDJoystick() :
+ m_nXMax(0), m_nYMax(0), m_nZMax(0), m_nRudderMax(0), m_nUMax(0), m_nVMax(0),
+ m_nXMin(0), m_nYMin(0), m_nZMin(0), m_nRudderMin(0), m_nUMin(0), m_nVMin(0)
+{
+}
+
+//---------------------------------------------------------------------------
+// wxHIDJoystick dtor
+//
+// Nothing...
+//---------------------------------------------------------------------------
+wxHIDJoystick::~wxHIDJoystick()
+{
+}
 
 //---------------------------------------------------------------------------
 // wxHIDJoystick::Create
@@ -474,11 +508,11 @@ void wxHIDJoystick::MakeCookies(wxCFArray& Array)
         {
             CFNumberGetValue(
 			(CFNumberRef) CFDictionaryGetValue((CFDictionaryRef) Array[i], CFSTR(kIOHIDElementUsageKey)), 
-				kCFNumberLongType, &nUsage);
+				kCFNumberIntType, &nUsage);
 			
             CFNumberGetValue(
 			(CFNumberRef) CFDictionaryGetValue((CFDictionaryRef) Array[i], CFSTR(kIOHIDElementUsagePageKey)), 
-				kCFNumberLongType, &nPage);
+				kCFNumberIntType, &nPage);
 
 #if 0
             wxLogSysError(wxT("[%i][%i]"), nUsage, nPage);
@@ -487,23 +521,43 @@ void wxHIDJoystick::MakeCookies(wxCFArray& Array)
                 AddCookieInQueue(Array[i], nUsage-1 );
             else if (nPage == kHIDPage_GenericDesktop)
             {
+                //axis...
                 switch(nUsage)
                 {
                     case kHIDUsage_GD_X:
                         AddCookieInQueue(Array[i], wxJS_AXIS_X);
+                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMaxKey),
+                                                 &m_nXMax);
+                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMinKey),
+                                                 &m_nXMin);
                         break;                    
                     case kHIDUsage_GD_Y:
                         AddCookieInQueue(Array[i], wxJS_AXIS_Y);
+                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMaxKey),
+                                                 &m_nYMax);
+                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMinKey),
+                                                 &m_nYMin);
                         break;
                     case kHIDUsage_GD_Z:
                         AddCookieInQueue(Array[i], wxJS_AXIS_Z);
+                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMaxKey),
+                                                 &m_nZMax);
+                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMinKey),
+                                                 &m_nZMin);
                         break;
                     default:
                         break;
                 }
             }
             else if (nPage == kHIDPage_Simulation && nUsage == kHIDUsage_Sim_Rudder)
+            {
+                //rudder...
                 AddCookieInQueue(Array[i], wxJS_AXIS_RUDDER );
+                wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMaxKey),
+                                         &m_nRudderMax);
+                wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMinKey),
+                                         &m_nRudderMin);
+            }
         }
 	}
 }
