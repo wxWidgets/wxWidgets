@@ -687,7 +687,19 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord 
     if (m_pen.GetStyle() == wxTRANSPARENT) return;
     if (n <= 0) return;
 
-    GdkPoint *gpts = new GdkPoint[n];
+    //Check, if scaling is necessary
+    bool doScale(true);
+    long val(10);
+    if (!xoffset)
+        if (!yoffset)
+            if (XLOG2DEV(val)==val)
+                if (YLOG2DEV(val)==val)
+                    doScale = false;
+
+    GdkPoint *gpts = NULL;
+
+    if (doScale){
+        gpts = new GdkPoint[n];
     if (! gpts)
     {
         wxFAIL_MSG( wxT("Cannot allocate PolyLine") );
@@ -704,10 +716,20 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord 
         gpts[i].x = x1;
         gpts[i].y = y1;
     }
+    }
+    else {
+        for (int i = 0; i < n; i++) {
+            CalcBoundingBox( points[i].x, points[i].y );
+        }
+
+        //GdkPoint and wxPoint have the same memory allignment, so we can cast one into another
+        gpts = reinterpret_cast<GdkPoint*>(points);
+    }
 
     if (m_window)
         gdk_draw_lines( m_window, m_penGC, gpts, n);
 
+    if (doScale)
     delete[] gpts;
 }
 
@@ -717,7 +739,21 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
 
     if (n <= 0) return;
 
-    GdkPoint *gdkpoints = new GdkPoint[n+1];
+    //Check, if scaling is necessary
+    bool doScale(true);
+    long val(10);
+    if (!xoffset)
+        if (!yoffset)
+            if (XLOG2DEV(val)==val)
+                if (YLOG2DEV(val)==val){
+                    doScale = false;
+                }
+
+    GdkPoint *gdkpoints = NULL;
+
+    if (doScale){
+        gdkpoints = new GdkPoint[n+1]; //FIXME: Why the "+1"
+
     int i;
     for (i = 0 ; i < n ; i++)
     {
@@ -726,9 +762,24 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
 
         CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
     }
+    }
+    else {
+        int i(0);
+        for (; i < n ; ++i) {
+            CalcBoundingBox( points[i].x, points[i].y );
+        }
+        //GdkPoint and wxPoint have the same memory allignment, so we can cast one into another
+        gdkpoints = reinterpret_cast<GdkPoint*> (points);
+    }
 
     if (m_window)
     {
+        //I think wxSOLID is the most often used style (it is for me),
+        //so I put it in front of the if ... ifelse's
+        if (m_brush.GetStyle() == wxSOLID)
+        {
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gdkpoints, n );
+        }else
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
             if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
@@ -782,6 +833,7 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
         }
     }
 
+    if (doScale)
     delete[] gdkpoints;
 }
 
