@@ -2629,6 +2629,111 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
         { return theClass::sm_eventHashTable; } \
     const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
+#define BEGIN_EVENT_TABLE_TEMPLATE1(theClass, baseClass, T1) \
+    template<typename T1> \
+    const wxEventTable theClass<T1>::sm_eventTable = \
+        { &baseClass::sm_eventTable, &theClass<T1>::sm_eventTableEntries[0] }; \
+    template<typename T1> \
+    const wxEventTable *theClass<T1>::GetEventTable() const \
+        { return &theClass<T1>::sm_eventTable; } \
+    template<typename T1> \
+    wxEventHashTable theClass<T1>::sm_eventHashTable(theClass<T1>::sm_eventTable); \
+    template<typename T1> \
+    wxEventHashTable &theClass<T1>::GetEventHashTable() const \
+        { return theClass<T1>::sm_eventHashTable; } \
+    template<typename T1> \
+    const wxEventTableEntry theClass<T1>::sm_eventTableEntries[] = { \
+
+#define BEGIN_EVENT_TABLE_TEMPLATE2(theClass, baseClass, T1, T2) \
+    template<typename T1, typename T2> \
+    const wxEventTable theClass<T1, T2>::sm_eventTable = \
+        { &baseClass::sm_eventTable, &theClass<T1, T2>::sm_eventTableEntries[0] }; \
+    template<typename T1, typename T2> \
+    const wxEventTable *theClass<T1, T2>::GetEventTable() const \
+        { return &theClass<T1, T2>::sm_eventTable; } \
+    template<typename T1, typename T2> \
+    wxEventHashTable theClass<T1, T2>::sm_eventHashTable(theClass<T1, T2>::sm_eventTable); \
+    template<typename T1, typename T2> \
+    wxEventHashTable &theClass<T1, T2>::GetEventHashTable() const \
+        { return theClass<T1, T2>::sm_eventHashTable; } \
+    template<typename T1, typename T2> \
+    const wxEventTableEntry theClass<T1, T2>::sm_eventTableEntries[] = { \
+
+#define BEGIN_EVENT_TABLE_TEMPLATE3(theClass, baseClass, T1, T2, T3) \
+    template<typename T1, typename T2, typename T3> \
+    const wxEventTable theClass<T1, T2, T3>::sm_eventTable = \
+        { &baseClass::sm_eventTable, &theClass<T1, T2, T3>::sm_eventTableEntries[0] }; \
+    template<typename T1, typename T2, typename T3> \
+    const wxEventTable *theClass<T1, T2, T3>::GetEventTable() const \
+        { return &theClass<T1, T2, T3>::sm_eventTable; } \
+    template<typename T1, typename T2, typename T3> \
+    wxEventHashTable theClass<T1, T2, T3>::sm_eventHashTable(theClass<T1, T2, T3>::sm_eventTable); \
+    template<typename T1, typename T2, typename T3> \
+    wxEventHashTable &theClass<T1, T2, T3>::GetEventHashTable() const \
+        { return theClass<T1, T2, T3>::sm_eventHashTable; } \
+    template<typename T1, typename T2, typename T3> \
+    const wxEventTableEntry theClass<T1, T2, T3>::sm_eventTableEntries[] = { \
+
+#define BEGIN_EVENT_TABLE_TEMPLATE4(theClass, baseClass, T1, T2, T3, T4) \
+    template<typename T1, typename T2, typename T3, typename T4> \
+    const wxEventTable theClass<T1, T2, T3, T4>::sm_eventTable = \
+        { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4>::sm_eventTableEntries[0] }; \
+    template<typename T1, typename T2, typename T3, typename T4> \
+    const wxEventTable *theClass<T1, T2, T3, T4>::GetEventTable() const \
+        { return &theClass<T1, T2, T3, T4>::sm_eventTable; } \
+    template<typename T1, typename T2, typename T3, typename T4> \
+    wxEventHashTable theClass<T1, T2, T3, T4>::sm_eventHashTable(theClass<T1, T2, T3, T4>::sm_eventTable); \
+    template<typename T1, typename T2, typename T3, typename T4> \
+    wxEventHashTable &theClass<T1, T2, T3, T4>::GetEventHashTable() const \
+        { return theClass<T1, T2, T3, T4>::sm_eventHashTable; } \
+    template<typename T1, typename T2, typename T3, typename T4> \
+    const wxEventTableEntry theClass<T1, T2, T3, T4>::sm_eventTableEntries[] = { \
+
+#define BEGIN_EVENT_TABLE_TEMPLATE5(theClass, baseClass, T1, T2, T3, T4, T5) \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5> \
+    const wxEventTable theClass<T1, T2, T3, T4, T5>::sm_eventTable = \
+        { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4, T5>::sm_eventTableEntries[0] }; \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5> \
+    const wxEventTable *theClass<T1, T2, T3, T4, T5>::GetEventTable() const \
+        { return &theClass<T1, T2, T3, T4, T5>::sm_eventTable; } \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5> \
+    wxEventHashTable theClass<T1, T2, T3, T4, T5>::sm_eventHashTable(theClass<T1, T2, T3, T4, T5>::sm_eventTable); \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5> \
+    wxEventHashTable &theClass<T1, T2, T3, T4, T5>::GetEventHashTable() const \
+        { return theClass<T1, T2, T3, T4, T5>::sm_eventHashTable; } \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5> \
+    const wxEventTableEntry theClass<T1, T2, T3, T4, T5>::sm_eventTableEntries[] = { \
+
+#define BEGIN_EVENT_TABLE_TEMPLATE7(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7) \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> \
+    const wxEventTable theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTable = \
+        { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTableEntries[0] }; \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> \
+    const wxEventTable *theClass<T1, T2, T3, T4, T5, T6, T7>::GetEventTable() const \
+        { return &theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTable; } \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> \
+    wxEventHashTable theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventHashTable(theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTable); \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> \
+    wxEventHashTable &theClass<T1, T2, T3, T4, T5, T6, T7>::GetEventHashTable() const \
+        { return theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventHashTable; } \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> \
+    const wxEventTableEntry theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTableEntries[] = { \
+
+#define BEGIN_EVENT_TABLE_TEMPLATE8(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7, T8) \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> \
+    const wxEventTable theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTable = \
+        { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTableEntries[0] }; \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> \
+    const wxEventTable *theClass<T1, T2, T3, T4, T5, T6, T7, T8>::GetEventTable() const \
+        { return &theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTable; } \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> \
+    wxEventHashTable theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventHashTable(theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTable); \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> \
+    wxEventHashTable &theClass<T1, T2, T3, T4, T5, T6, T7, T8>::GetEventHashTable() const \
+        { return theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventHashTable; } \
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> \
+    const wxEventTableEntry theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTableEntries[] = { \
+
 #define END_EVENT_TABLE() DECLARE_EVENT_TABLE_ENTRY( wxEVT_NULL, 0, 0, 0, 0 ) };
 
 /*
