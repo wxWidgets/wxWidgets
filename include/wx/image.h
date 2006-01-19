@@ -160,7 +160,7 @@ public:
     public:
       RGBValue(unsigned char r=0, unsigned char g=0, unsigned char b=0)
         : red(r), green(g), blue(b) {}
-        unsigned char red;  
+        unsigned char red;
         unsigned char green;
         unsigned char blue;
     };
@@ -171,7 +171,7 @@ public:
     public:
         HSVValue(double h=0.0, double s=0.0, double v=0.0)
             : hue(h), saturation(s), value(v) {}
-        double hue;  
+        double hue;
         double saturation;
         double value;
     };
@@ -240,6 +240,10 @@ public:
     // replace one colour with another
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                   unsigned char r2, unsigned char g2, unsigned char b2 );
+
+    // Convert to greyscale image. Uses the luminance component (Y) of the image.
+    // The luma value (YUV) is calculated using (R * lr) + (G * lg) + (B * lb), defaults to ITU-T BT.601
+    wxImage ConvertToGreyscale( double lr = 0.299, double lg = 0.587, double lb = 0.114 ) const;
 
     // convert to monochrome image (<r,g,b> will be replaced by white,
     // everything else by black)

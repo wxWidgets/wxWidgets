@@ -304,6 +304,16 @@ Deprecated, use equivalent \helpref{wxBitmap constructor}{wxbitmapctor}
 (which takes wxImage and depth as its arguments) instead.
 
 
+\membersection{wxImage::ConvertToGreyscale}\label{wximageconverttogreyscale}
+
+\constfunc{wxImage}{ConvertToGreyscale}{\param{double}{ lr = 0.299}, \param{double}{ lg = 0.587}, \param{double}{ lb = 0.114}}
+
+Returns a greyscale version of the image. The returned image uses the luminance
+component of the original to calculate the greyscale. Defaults to using
+ITU-T BT.601 when converting to YUV, where every pixel equals
+(R * {\it lr}) + (G * {\it lg}) + (B * {\it lb}).
+
+
 \membersection{wxImage::ConvertToMono}\label{wxbitmapconverttomono}
 
 \constfunc{wxImage}{ConvertToMono}{\param{unsigned char}{ r}, \param{unsigned char}{ g}, \param{unsigned char}{ b}}
