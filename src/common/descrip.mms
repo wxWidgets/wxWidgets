@@ -1,8 +1,8 @@
 #*****************************************************************************
 #                                                                            *
 # Make file for VMS                                                          *
-# Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 9 November 1999                                                     *
+# Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
+# Date : 19 January 2006                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -77,6 +77,7 @@ OBJECTS = \
 		dynlib.obj,\
 		encconv.obj,\
 		event.obj,\
+		evtloopcmn.obj,\
 		extended.obj,\
 		fddlgcmn.obj,\
 		ffile.obj,\
@@ -218,6 +219,7 @@ SOURCES = \
 		dynlib.cpp,\
 		encconv.cpp,\
 		event.cpp,\
+		evtloopcmn.cpp,\
 		extended.c,\
 		ffile.cpp,\
 		fddlgcmn.cpp,\
@@ -393,6 +395,7 @@ dynarray.obj : dynarray.cpp
 dynlib.obj : dynlib.cpp
 encconv.obj : encconv.cpp
 event.obj : event.cpp
+evtloopcmn.obj : evtloopcmn.cpp
 extended.obj : extended.c
 ffile.obj : ffile.cpp
 fddlgcmn.obj : fddlgcmn.cpp
