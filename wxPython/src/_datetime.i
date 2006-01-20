@@ -30,7 +30,7 @@ MAKE_CONST_WXSTRING(DefaultTimeSpanFormat);
     $1 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong($input));
     temp = true;
 }
-%typemap(python,freearg) wxDateTime::TimeZone& {
+%typemap(freearg) wxDateTime::TimeZone& {
     if (temp$argnum) delete $1;
 }
 
@@ -42,7 +42,7 @@ MAKE_CONST_WXSTRING(DefaultTimeSpanFormat);
 
 // Convert a wxLongLong to a Python Long by getting the hi/lo dwords, then
 // shifting and oring them together
-%typemap(python, out) wxLongLong {
+%typemap(out) wxLongLong {
     PyObject *hi, *lo, *shifter, *shifted;
     hi = PyLong_FromLong( $1.GetHi() );
     lo = PyLong_FromLong( $1.GetLo() );
