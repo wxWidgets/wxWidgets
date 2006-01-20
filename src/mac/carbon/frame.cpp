@@ -232,10 +232,25 @@ void wxFrame::DetachMenuBar()
 
 void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 {
+    wxToplLevelWindowMac* tlw = wxFindWinFromMacWindow(FrontNonFloatingWindow()) ;
+
+    bool makeCurrent = false ;
+    
+    // if this is already the current menubar or we are the frontmost window
+    if ( m_frameMenuBar == wxMenuBar::MacGetInstalledMenuBar() || tlw == this )
+        makeCurrent = true ;
+    // or we have a situation where this is a App Level Menubar like MDI
+    else if ( tlw != NULL && tlw->GetMenuBar() == NULL && ((wxFrame*)wxTheApp->GetTopWindow()) == this )
+        makeCurrent = true ;
+    
     wxFrameBase::AttachMenuBar(menuBar);
 
     if (m_frameMenuBar)
+    {
         m_frameMenuBar->SetInvokingWindow( this );
+        if (makeCurrent)
+            m_frameMenuBar->MacInstallMenuBar() ;
+    }
 }
 
 void wxFrame::DoGetClientSize(int *x, int *y) const
