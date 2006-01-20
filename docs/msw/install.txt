@@ -115,9 +115,8 @@ informal and more detailed description of the process summarized below.
 
 Please note that the VC++ 6.0 project files will work for VC++ .NET also.
 
-Also note that you can make the project files work with VC++ 5.0 but you'll
-need to edit .dsp file by hand before this is possible (change the version in
-the .dsp file header from 6.0 to 5.0).
+Also note that VC++ 5.0 also works if you are lucky enough to have the now
+unavailable Service Pack 3 is installed (vssp3_1.exe). See note(5) below.
 
 Using project files (VC++ 6 and later):
 
@@ -185,6 +184,13 @@ the project. After this, delete everything (including PCH) and recompile.
 Note (4): to create your own IDE files, copy .dsp and .dsw
 files from an existing wxWidgets sample and adapt them, or
 visit http://wiki.wxwindows.org/wiki.pl?MSVC.
+
+Note (5): Unfortunately for VC++ 5.0 users, Microsoft made SP3 unavailable at
+the end of 2005. VC++ 5.0 also lacks a file wxWidgets uses "oleacc.lib", which
+came with the Platform SDK, also now unavailable for VC++ 5.0. Oleacc.lib is
+not needed unless wxUSE_ACCESSIBILITY is set to 1 in include\wx\msw\setup.h,
+so if you do not need this file you could remove it from the project's link
+settings.
 
 Microsoft Visual C++ compilation for 64-bit Windows
 ----------------------------------------------------------------
