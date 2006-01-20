@@ -107,7 +107,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
         }
     }
 #endif
-    
+
     return pt;
 }
 
@@ -232,24 +232,23 @@ void wxFrame::DetachMenuBar()
 
 void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 {
-    wxToplLevelWindowMac* tlw = wxFindWinFromMacWindow(FrontNonFloatingWindow()) ;
+    wxTopLevelWindowMac* tlw = wxFindWinFromMacWindow( FrontNonFloatingWindow() );
+    bool makeCurrent = false;
 
-    bool makeCurrent = false ;
-    
     // if this is already the current menubar or we are the frontmost window
-    if ( m_frameMenuBar == wxMenuBar::MacGetInstalledMenuBar() || tlw == this )
-        makeCurrent = true ;
-    // or we have a situation where this is a App Level Menubar like MDI
-    else if ( tlw != NULL && tlw->GetMenuBar() == NULL && ((wxFrame*)wxTheApp->GetTopWindow()) == this )
-        makeCurrent = true ;
-    
-    wxFrameBase::AttachMenuBar(menuBar);
+    if ( (tlw == this) || (m_frameMenuBar == wxMenuBar::MacGetInstalledMenuBar()) )
+        makeCurrent = true;
+    // or there is an app-level menubar like MDI
+    else if ( (GetMenuBar() == NULL) && (((wxFrame*)wxTheApp->GetTopWindow()) == this) )
+        makeCurrent = true;
+
+    wxFrameBase::AttachMenuBar( menuBar );
 
     if (m_frameMenuBar)
     {
         m_frameMenuBar->SetInvokingWindow( this );
         if (makeCurrent)
-            m_frameMenuBar->MacInstallMenuBar() ;
+            m_frameMenuBar->MacInstallMenuBar();
     }
 }
 
@@ -325,7 +324,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
     if ( m_frameToolBar == toolbar )
         return ;
-    
+
 #if wxMAC_USE_NATIVE_TOOLBAR
     if ( m_frameToolBar )
         m_frameToolBar->MacInstallNativeToolbar( false ) ;
