@@ -279,6 +279,14 @@ MustHaveApp(wxDialog);
 
 class wxDialog : public wxTopLevelWindow {
 public:
+
+    enum
+    {
+        // all flags allowed in wxDialogBase::CreateButtonSizer()
+        ButtonSizerFlags = wxOK|wxCANCEL|wxYES|wxNO|wxHELP|wxNO_DEFAULT
+    };
+
+    
     %pythonAppend wxDialog   "self._setOORInfo(self)"
     %pythonAppend wxDialog() ""
     %typemap(out) wxDialog*;    // turn off this typemap
@@ -314,7 +322,9 @@ public:
     wxSizer* CreateTextSizer( const wxString &message );
 
     // places buttons into a horizontal wxBoxSizer
-    wxSizer* CreateButtonSizer( long flags );
+    wxSizer* CreateButtonSizer( long flags,
+                                bool separated = false,
+                                wxCoord distance = 0  );
     wxStdDialogButtonSizer* CreateStdDialogButtonSizer( long flags );
 
     //void SetModal(bool flag);
