@@ -945,7 +945,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         unsigned char *destdata = (unsigned char * ) maskbuf.GetWriteBuf( maskbufsize ) ;
         wxASSERT( (source != NULL) && (destdata != NULL) ) ;
 
-        source += rect.x + rect.y * sourcelinesize ;
+        source += rect.x * 3 + rect.y * sourcelinesize ;
         unsigned char *dest = destdata ;
 
         for (int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
