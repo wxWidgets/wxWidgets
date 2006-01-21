@@ -323,8 +323,8 @@ wxBitmap wxImageList::GetBitmap(int index) const
     bitmap = wxBitmap(image);
 #else
     wxBitmap bitmap;
-    return bitmap;
 #endif
+    return bitmap;
 }
 
 // Get the icon
