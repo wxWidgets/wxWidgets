@@ -311,7 +311,7 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
               ((m_validatorStyle & wxFILTER_ALPHA) && !wxIsalpha(keyCode)) ||
               ((m_validatorStyle & wxFILTER_ALPHANUMERIC) && !wxIsalnum(keyCode)) ||
               ((m_validatorStyle & wxFILTER_NUMERIC) && !wxIsdigit(keyCode)
-                                && keyCode != wxT('.') && keyCode != wxT(',') && keyCode != wxT('-'))
+                                && keyCode != wxT('.') && keyCode != wxT(',') && keyCode != wxT('-') && keyCode != wxT('+') && keyCode != wxT('e') && keyCode != wxT('E'))
              )
            )
         {
