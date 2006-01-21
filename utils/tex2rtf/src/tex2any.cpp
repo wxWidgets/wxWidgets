@@ -2616,11 +2616,21 @@ void DefaultOnMacro(int macroId, int no_args, bool start)
 
     case ltCINSERT:
       if (start)
-        TexOutput(_T("<<"), true);
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&lt;&lt;"));
+        else
+            TexOutput(_T("<<"), true);
+      }
       break;
     case ltCEXTRACT:
       if (start)
-        TexOutput(_T(">>"), true);
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&gt;&gt;"));
+        else
+            TexOutput(_T(">>"), true);
+      }
       break;
     case ltDESTRUCT:
       if (start)
@@ -2855,10 +2865,22 @@ void DefaultOnMacro(int macroId, int no_args, bool start)
     // Binary operation symbols
     case ltLE:
     case ltLEQ:
-      if (start) TexOutput(_T("<="));
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&lt;="));
+        else
+            TexOutput(_T("<="));
+      }
       break;
     case ltLL:
-      if (start) TexOutput(_T("<<"));
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&lt;&lt;"));
+        else
+            TexOutput(_T("<<"));
+      }
       break;
     case ltSUBSET:
       if (start) TexOutput(_T("SUBSET"));
@@ -2877,10 +2899,24 @@ void DefaultOnMacro(int macroId, int no_args, bool start)
       break;
     case ltGE:
     case ltGEQ:
-      if (start) TexOutput(_T(">="));
+    {
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&gt;="));
+        else
+            TexOutput(_T(">="));
+      }
       break;
+    }
     case ltGG:
-      if (start) TexOutput(_T(">>"));
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&gt;&gt;"));
+        else
+            TexOutput(_T(">>"));
+      }
       break;
     case ltSUPSET:
       if (start) TexOutput(_T("SUPSET"));
@@ -2962,22 +2998,58 @@ void DefaultOnMacro(int macroId, int no_args, bool start)
 
     // Arrows
     case ltLEFTARROW:
-      if (start) TexOutput(_T("<--"));
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&lt;--"));
+        else
+            TexOutput(_T("<--"));
+      }
       break;
     case ltLEFTARROW2:
-      if (start) TexOutput(_T("<=="));
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&lt;=="));
+        else
+            TexOutput(_T("<=="));
+      }
       break;
     case ltRIGHTARROW:
-      if (start) TexOutput(_T("-->"));
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("--&gt;"));
+        else
+            TexOutput(_T("-->"));
+      }
       break;
     case ltRIGHTARROW2:
-      if (start) TexOutput(_T("==>"));
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("==&gt;"));
+        else
+            TexOutput(_T("==>"));
+      }
       break;
     case ltLEFTRIGHTARROW:
-      if (start) TexOutput(_T("<-->"));
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&lt;--&gt;"));
+        else
+            TexOutput(_T("<-->"));
+      }
       break;
     case ltLEFTRIGHTARROW2:
-      if (start) TexOutput(_T("<==>"));
+      if (start)
+      {
+        if (convertMode == TEX_HTML)
+            TexOutput(_T("&lt;==&gt;"));
+        else
+            TexOutput(_T("<==>"));
+      }
       break;
     case ltUPARROW:
       if (start) TexOutput(_T("UPARROW"));
