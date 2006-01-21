@@ -656,7 +656,7 @@ bool wxToolBar::Realize()
                 if ( m_disabledImgList )
                 {
                     wxBitmap bmpDisabled = tool->GetDisabledBitmap();
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && wxUSE_WXDIB
                     if ( !bmpDisabled.Ok() )
                     {
                         // no disabled bitmap specified but we still need to

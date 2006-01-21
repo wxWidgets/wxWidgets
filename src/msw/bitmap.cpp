@@ -483,7 +483,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 // Create from XPM data
 bool wxBitmap::CreateFromXpm(const char **data)
 {
-#if wxUSE_IMAGE && wxUSE_XPM
+#if wxUSE_IMAGE && wxUSE_XPM && wxUSE_WXDIB
     Init();
 
     wxCHECK_MSG( data != NULL, false, wxT("invalid bitmap data") )
@@ -1011,7 +1011,7 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
 
         return handler->LoadFile(this, filename, type, -1, -1);
     }
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && wxUSE_WXDIB
     else // no bitmap handler found
     {
         wxImage image;
@@ -1055,7 +1055,7 @@ bool wxBitmap::SaveFile(const wxString& filename,
     {
         return handler->SaveFile(this, filename, type, palette);
     }
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && wxUSE_WXDIB
     else // no bitmap handler found
     {
         // FIXME what about palette? shouldn't we use it?

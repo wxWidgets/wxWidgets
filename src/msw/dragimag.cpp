@@ -236,10 +236,14 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor)
 
     dc2.SelectObject(wxNullBitmap);
 
+#if wxUSE_WXDIB
     // Make the bitmap masked
     wxImage image = bitmap.ConvertToImage();
     image.SetMaskColour(255, 255, 255);
     return Create(wxBitmap(image), cursor);
+#else
+    return false;
+#endif
 }
 
 #if wxUSE_TREECTRL

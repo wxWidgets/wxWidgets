@@ -106,6 +106,8 @@ static ShellFunctions gs_shellFuncs;
 
 static void ResolveShellFunctions()
 {
+#if wxUSE_DYNLIB_CLASS
+
     // start with the newest functions, fall back to the oldest ones
 #ifdef __WXWINCE__
     wxString shellDllName(_T("coredll"));
@@ -153,6 +155,7 @@ static void ResolveShellFunctions()
     // because we also link to it statically, so it's ok
 
     gs_shellFuncs.initialized = true;
+#endif
 }
 
 // ============================================================================

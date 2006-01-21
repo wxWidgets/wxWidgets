@@ -111,6 +111,7 @@ wxDatePickerCtrl::Create(wxWindow *parent,
             return false;
         }
 
+#if wxUSE_DYNLIB_CLASS
         INITCOMMONCONTROLSEX icex;
         icex.dwSize = sizeof(icex);
         icex.dwICC = ICC_DATE_CLASSES;
@@ -126,6 +127,7 @@ wxDatePickerCtrl::Create(wxWindow *parent,
         }
 
         s_initDone = true;
+#endif        
     }
 
 

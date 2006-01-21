@@ -238,4 +238,23 @@
 #    endif
 #endif  /* wxUSE_DYNAMIC_LOADER */
 
+#if !wxUSE_DYNLIB_CLASS
+#   if wxUSE_UXTHEME
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_UXTHEME requires wxUSE_DYNLIB_CLASS"
+#       else
+#           undef wxUSE_UXTHEME
+#           define wxUSE_UXTHEME 0
+#       endif
+#   endif
+#   if wxUSE_MEDIACTRL
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_MEDIACTRL requires wxUSE_DYNLIB_CLASS"
+#       else
+#           undef wxUSE_MEDIACTRL
+#           define wxUSE_MEDIACTRL 0
+#       endif
+#   endif
+#endif  /* wxUSE_DYNLIB_CLASS */
+
 #endif /* _WX_MSW_CHKCONF_H_ */

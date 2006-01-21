@@ -844,7 +844,11 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
     memdc.SelectObject(bmp);
 
     // if there is no special brush just use the solid background colour
+#if wxUSE_UXTHEME
     HBRUSH hbr = (HBRUSH)m_hbrBackground;
+#else
+    HBRUSH hbr = 0;
+#endif    
     wxBrush brush;
     if ( !hbr )
     {

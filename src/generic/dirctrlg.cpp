@@ -1483,7 +1483,7 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
     return m_smallImageList;
 }
 
-#if wxUSE_MIMETYPE && wxUSE_IMAGE
+#if wxUSE_MIMETYPE && wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
 // VS: we don't need this function w/o wxMimeTypesManager because we'll only have
 //     one icon and we won't resize it
 
@@ -1643,7 +1643,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     {
         m_smallImageList->Add(bmp);
     }
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
     else
     {
         wxImage img = bmp.ConvertToImage();

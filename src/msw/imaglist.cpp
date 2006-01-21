@@ -290,6 +290,7 @@ bool wxImageList::Draw(int index,
 // Get the bitmap
 wxBitmap wxImageList::GetBitmap(int index) const
 {
+#if wxUSE_WXDIB
     int bmp_width = 0, bmp_height = 0;
     GetSize(index, bmp_width, bmp_height);
 
@@ -320,8 +321,10 @@ wxBitmap wxImageList::GetBitmap(int index) const
     image = bitmap.ConvertToImage();
     image.SetMaskColour(r, g, b);
     bitmap = wxBitmap(image);
-
+#else
+    wxBitmap bitmap;
     return bitmap;
+#endif
 }
 
 // Get the icon
