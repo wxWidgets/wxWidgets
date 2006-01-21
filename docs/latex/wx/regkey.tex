@@ -265,5 +265,10 @@ Renames a value.
 
 \func{bool}{SetValue}{\param{const wxChar *}{szValue}, \param{long}{ lValue}}
 
-Sets the numeric value.
+\func{bool}{SetValue}{\param{const wxChar *}{szValue}, \param{const wxString\&}{ strValue}}
+
+\func{bool}{SetValue}{\param{const wxChar *}{szValue}, \param{const wxMemoryBuffer\&}{ buf}}
+
+Sets the given \arg{szValue} which must be numeric, string or binary depending
+on the overload used. If the value doesn't exist, it is created.
 
