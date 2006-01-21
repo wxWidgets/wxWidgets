@@ -647,7 +647,7 @@ class wxPyPrintPreview : public wxPrintPreview
 public:
     wxPyPrintPreview(wxPyPrintout* printout,
                      wxPyPrintout* printoutForPrinting,
-                     wxPrintDialogData* data=NULL)
+                     wxPrintDialogData* data)
         : wxPrintPreview(printout, printoutForPrinting, data)
     {}
     wxPyPrintPreview(wxPyPrintout* printout,
