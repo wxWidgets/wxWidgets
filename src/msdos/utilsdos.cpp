@@ -477,3 +477,13 @@ wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
     info.os = wxDOS;
     return info;
 }
+
+//----------------------------------------------------------------------------
+// OS Description
+//----------------------------------------------------------------------------
+
+wxString wxGetOsDescription()
+{
+    wxString osname(_T("DOS"));
+    return osname;
+}
