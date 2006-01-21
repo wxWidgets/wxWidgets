@@ -1185,7 +1185,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
             int xscreen = DefaultScreen( xdisplay );
             Window xroot = RootWindow( xdisplay, xscreen );
 
-            new_pixmap = XCreatePixmap( xdisplay, xroot, w, h, 1 );
+            new_pixmap = XCreatePixmap( xdisplay, xroot, ww, hh, 1 );
             GC gc = XCreateGC( xdisplay, new_pixmap, 0, NULL );
 
             int bpp = wxTheApp->GetVisualInfo(m_display)->m_visualDepth;
@@ -1195,7 +1195,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
                 XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
         
             XSetFillStyle( xdisplay, gc, FillSolid );
-            XFillRectangle( xdisplay, new_pixmap, gc, 0, 0, w, h );
+            XFillRectangle( xdisplay, new_pixmap, gc, 0, 0, ww, hh );
 
             if (bpp == 8)
                 XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
@@ -1242,10 +1242,10 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     // drawing a mono-bitmap (XBitmap) we use the current text GC
     if (is_mono)
         XCopyPlane( (Display*) m_display, (Pixmap) use_bitmap.GetBitmap(), (Window) m_window,
-            (GC) m_textGC, 0, 0, w, h, xx, yy, 1 );
+            (GC) m_textGC, 0, 0, ww, hh, xx, yy, 1 );
     else
         XCopyArea( (Display*) m_display, (Pixmap) use_bitmap.GetPixmap(), (Window) m_window,
-            (GC) m_penGC, 0, 0, w, h, xx, yy );
+            (GC) m_penGC, 0, 0, ww, hh, xx, yy );
 
     // remove mask again if any
     if (setClipMask)
