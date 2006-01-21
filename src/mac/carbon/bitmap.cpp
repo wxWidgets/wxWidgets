@@ -352,7 +352,11 @@ IconRef wxBitmapRefData::GetIconRef()
                     *dest++ = b ;
 
                     if ( mask )
-                        *maskdest++ = *masksource++ ;
+                    {
+                        *maskdest++ = 0xFF - *masksource++ ;
+                        masksource++ ;
+                        masksource++ ;
+                    }
                     else if ( hasAlpha )
                         *maskdest++ = a ;
                     else
@@ -500,9 +504,9 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
             for ( int y = 0 ; y < h ; ++y , sourcemaskstart += maskrowbytes)
             {
                 unsigned char *sourcemask = sourcemaskstart ;
-                for( int x = 0 ; x < w ; ++x , sourcemask++ , destalpha += 4 )
+                for ( int x = 0 ; x < w ; ++x , sourcemask+=3 , destalpha += 4 )
                 {
-                    *destalpha = *sourcemask ;
+                    *destalpha = 0xFF - *sourcemask ;
                 }
             }
         }
@@ -883,12 +887,13 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         int sourcelinesize = M_BITMAPDATA->m_bitmapMask->GetBytesPerRow()  ;
         int destlinesize = rowBytes ;
         unsigned char *source = (unsigned char *) M_BITMAPDATA->m_bitmapMask->GetRawAccess() ;
-        source += rect.x + rect.y * sourcelinesize ;
+        source += rect.x * 3  + rect.y * sourcelinesize ;
         unsigned char *dest = destdata ;
 
         for(int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
         {
-            memcpy( dest , source , destlinesize ) ;
+            for (int xx = 0; xx < destlinesize; xx++ )
+                *(dest+xx) = 0xFF - *(source+xx*3) ;
         }
         maskbuf.UngetWriteBuf( maskbufsize ) ;
         ret.SetMask( new wxMask( maskbuf , destwidth , destheight , rowBytes ) ) ;
@@ -1080,7 +1085,7 @@ wxImage wxBitmap::ConvertToImage() const
             unsigned char b = (color&0x000000FF);
             if ( hasMask )
             {
-                if ( *maskp++ == 0 )
+                if ( *maskp++ == 0xFF )
                 {
                     r = MASK_RED ;
                     g = MASK_GREEN ;
@@ -1088,6 +1093,9 @@ wxImage wxBitmap::ConvertToImage() const
                 }
                 else if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
                     b = MASK_BLUE_REPLACEMENT ;
+
+                maskp++ ;
+                maskp++ ;
             }
             else if ( hasAlpha )
                 *alpha++ = a ;
@@ -1302,8 +1310,8 @@ void *wxMask::GetRawAccess() const
     return m_memBuf.GetData() ;
 }
 
-// this can be a k8IndexedGrayPixelFormat GWorld, because it never stores other values than black or white
-// so no rainbox colors will be created by QD when blitting
+// The default ColorTable for k8IndexedGrayPixelFormat in Intel appears to be broken, so we'll use an non-indexed
+// bitmap mask instead; in order to keep the code simple, the change applies to PowerPC implementations as well
 
 void wxMask::RealizeNative()
 {
@@ -1313,8 +1321,11 @@ void wxMask::RealizeNative()
        m_maskBitmap = NULL ;
     }
     Rect rect = { 0 , 0 , m_height , m_width } ;
-    verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_maskBitmap , k8IndexedGrayPixelFormat , &rect , NULL , NULL , 0 ,
-        (char*) m_memBuf.GetData() , m_bytesPerRow ) ) ;
+
+    OSStatus err = NewGWorldFromPtr(
+        (GWorldPtr*) &m_maskBitmap , k24RGBPixelFormat , &rect , NULL , NULL , 0 ,
+        (char*) m_memBuf.GetData() , m_bytesPerRow ) ;
+    verify_noerr( err ) ;
 }
 
 // Create a mask from a mono bitmap (copies the bitmap).
@@ -1334,7 +1345,8 @@ bool wxMask::Create(const wxBitmap& bitmap)
 {
     m_width = bitmap.GetWidth() ;
     m_height = bitmap.GetHeight() ;
-    m_bytesPerRow = ( m_width + 3 ) & 0xFFFFFFC ;
+    m_bytesPerRow = ( m_width * 3 + 3 ) & 0xFFFFFFC ;
+
     size_t size = m_bytesPerRow * m_height ;
     unsigned char * destdatabase = (unsigned char*) m_memBuf.GetWriteBuf( size ) ;
     memset( destdatabase , 0 , size ) ;
@@ -1349,9 +1361,17 @@ bool wxMask::Create(const wxBitmap& bitmap)
             unsigned char g = *srcdata++ ;
             unsigned char b = *srcdata++ ;
             if ( ( r + g + b ) > 0x10 )
-                *destdata++ = 0x00 ;
-            else
+            {
                 *destdata++ = 0xFF ;
+                *destdata++ = 0xFF ;
+                *destdata++ = 0xFF ;
+            }
+            else
+            {
+                *destdata++ = 0x00 ;
+                *destdata++ = 0x00 ;
+                *destdata++ = 0x00 ;
+            }
         }
     }
     m_memBuf.UngetWriteBuf( size ) ;
@@ -1365,7 +1385,8 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
     m_width = bitmap.GetWidth() ;
     m_height = bitmap.GetHeight() ;
-    m_bytesPerRow = ( m_width + 3 ) & 0xFFFFFFC ;
+    m_bytesPerRow = ( m_width * 3 + 3 ) & 0xFFFFFFC ;
+
     size_t size = m_bytesPerRow * m_height ;
 
     unsigned char * destdatabase = (unsigned char*) m_memBuf.GetWriteBuf( size ) ;
@@ -1381,9 +1402,17 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
             unsigned char g = *srcdata++ ;
             unsigned char b = *srcdata++ ;
             if ( colour == wxColour( r , g , b) )
-                *destdata++ = 0x00 ;
-            else
+            {
                 *destdata++ = 0xFF ;
+                *destdata++ = 0xFF ;
+                *destdata++ = 0xFF ;
+            }
+            else
+            {
+                *destdata++ = 0x00 ;
+                *destdata++ = 0x00 ;
+                *destdata++ = 0x00 ;
+            }
         }
     }
     m_memBuf.UngetWriteBuf( size ) ;
