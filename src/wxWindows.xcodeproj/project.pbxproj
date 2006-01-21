@@ -290,7 +290,6 @@
 		4086C822063AB2FF00D4CD53 /* jerror.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A8616901FA022C0175ACA7 /* jerror.c */; };
 		4086C823063AB2FF00D4CD53 /* jfdctflt.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A8616B01FA022C0175ACA7 /* jfdctflt.c */; };
 		4086C824063AB2FF00D4CD53 /* accel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A8619A01FA022C0175ACA7 /* accel.cpp */; };
-		4086C825063AB2FF00D4CD53 /* aga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A8619B01FA022C0175ACA7 /* aga.cpp */; };
 		4086C826063AB2FF00D4CD53 /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A8619C01FA022C0175ACA7 /* app.cpp */; };
 		4086C827063AB2FF00D4CD53 /* bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A8619F01FA022C0175ACA7 /* bitmap.cpp */; };
 		4086C828063AB2FF00D4CD53 /* bmpbuttn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861A001FA022C0175ACA7 /* bmpbuttn.cpp */; };
@@ -667,7 +666,6 @@
 		4086CB35063AB30000D4CD53 /* jerror.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A8616901FA022C0175ACA7 /* jerror.c */; };
 		4086CB36063AB30000D4CD53 /* jfdctflt.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A8616B01FA022C0175ACA7 /* jfdctflt.c */; };
 		4086CB37063AB30000D4CD53 /* accel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A8619A01FA022C0175ACA7 /* accel.cpp */; };
-		4086CB38063AB30000D4CD53 /* aga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A8619B01FA022C0175ACA7 /* aga.cpp */; };
 		4086CB39063AB30000D4CD53 /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A8619C01FA022C0175ACA7 /* app.cpp */; };
 		4086CB3A063AB30000D4CD53 /* bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A8619F01FA022C0175ACA7 /* bitmap.cpp */; };
 		4086CB3B063AB30000D4CD53 /* bmpbuttn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861A001FA022C0175ACA7 /* bmpbuttn.cpp */; };
@@ -968,6 +966,10 @@
 		40AF915307C8C912006A6D3C /* tif_extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 40AF915107C8C912006A6D3C /* tif_extension.c */; };
 		40AF915607C8C912006A6D3C /* tif_color.c in Sources */ = {isa = PBXBuildFile; fileRef = 40AF915007C8C912006A6D3C /* tif_color.c */; };
 		40AF915707C8C912006A6D3C /* tif_extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 40AF915107C8C912006A6D3C /* tif_extension.c */; };
+		40CDE8D20982505E00E8156D /* evtloopcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40CDE8D00982505E00E8156D /* evtloopcmn.cpp */; };
+		40CDE8D40982505E00E8156D /* evtloopcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40CDE8D00982505E00E8156D /* evtloopcmn.cpp */; };
+		40CDE8DA098250AB00E8156D /* evtloop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40CDE8D9098250AB00E8156D /* evtloop.cpp */; };
+		40CDE8DB098250AB00E8156D /* evtloop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40CDE8D9098250AB00E8156D /* evtloop.cpp */; };
 		40DCE35006C744C90000D83E /* gsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40DCE34F06C744C90000D83E /* gsocket.cpp */; };
 		40DCE35206C744C90000D83E /* gsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40DCE34F06C744C90000D83E /* gsocket.cpp */; };
 		40ECB13A074BD1D0005AAC48 /* stdpaths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ECB139074BD1D0005AAC48 /* stdpaths.cpp */; };
@@ -1138,6 +1140,8 @@
 		40AF913507C8BD1F006A6D3C /* combobox.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = combobox.cpp; sourceTree = "<group>"; };
 		40AF915007C8C912006A6D3C /* tif_color.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tif_color.c; sourceTree = "<group>"; };
 		40AF915107C8C912006A6D3C /* tif_extension.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tif_extension.c; sourceTree = "<group>"; };
+		40CDE8D00982505E00E8156D /* evtloopcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = evtloopcmn.cpp; sourceTree = "<group>"; };
+		40CDE8D9098250AB00E8156D /* evtloop.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = evtloop.cpp; sourceTree = "<group>"; };
 		40DCE34F06C744C90000D83E /* gsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gsocket.cpp; sourceTree = "<group>"; };
 		40ECB139074BD1D0005AAC48 /* stdpaths.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stdpaths.cpp; sourceTree = "<group>"; };
 		40F10E5606AD0230003C7AC3 /* tglbtn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = tglbtn.cpp; sourceTree = "<group>"; };
@@ -1740,7 +1744,6 @@
 		F5A8618E01FA022C0175ACA7 /* jquant2.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = jquant2.c; sourceTree = "<group>"; };
 		F5A8618F01FA022C0175ACA7 /* jutils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = jutils.c; sourceTree = "<group>"; };
 		F5A8619A01FA022C0175ACA7 /* accel.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = accel.cpp; sourceTree = "<group>"; };
-		F5A8619B01FA022C0175ACA7 /* aga.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = aga.cpp; sourceTree = "<group>"; };
 		F5A8619C01FA022C0175ACA7 /* app.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = app.cpp; sourceTree = "<group>"; };
 		F5A8619F01FA022C0175ACA7 /* bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = bitmap.cpp; sourceTree = "<group>"; };
 		F5A861A001FA022C0175ACA7 /* bmpbuttn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = bmpbuttn.cpp; sourceTree = "<group>"; };
@@ -2521,6 +2524,7 @@
 				F5A8600201FA022B0175ACA7 /* effects.cpp */,
 				F5A8600301FA022B0175ACA7 /* encconv.cpp */,
 				F5A8600401FA022B0175ACA7 /* event.cpp */,
+				40CDE8D00982505E00E8156D /* evtloopcmn.cpp */,
 				F5AC2EDC03803A3601000133 /* execcmn.cpp */,
 				F5A8600501FA022B0175ACA7 /* extended.c */,
 				F5A8600601FA022B0175ACA7 /* fddlgcmn.cpp */,
@@ -2773,7 +2777,6 @@
 			isa = PBXGroup;
 			children = (
 				F5A8619A01FA022C0175ACA7 /* accel.cpp */,
-				F5A8619B01FA022C0175ACA7 /* aga.cpp */,
 				F5A8619C01FA022C0175ACA7 /* app.cpp */,
 				F5A861A201FA022C0175ACA7 /* button.cpp */,
 				F5A8619F01FA022C0175ACA7 /* bitmap.cpp */,
@@ -2803,6 +2806,7 @@
 				CADEF54103C8C0A800000133 /* display.cpp */,
 				F5A861B801FA022C0175ACA7 /* dnd.cpp */,
 				40AF90E507C8B18C006A6D3C /* drawer.cpp */,
+				40CDE8D9098250AB00E8156D /* evtloop.cpp */,
 				F5A861B901FA022C0175ACA7 /* filedlg.cpp */,
 				F5A861BB01FA022C0175ACA7 /* font.cpp */,
 				40AF90E607C8B18C006A6D3C /* fontdlgosx.mm */,
@@ -3415,7 +3419,6 @@
 				4086C822063AB2FF00D4CD53 /* jerror.c in Sources */,
 				4086C823063AB2FF00D4CD53 /* jfdctflt.c in Sources */,
 				4086C824063AB2FF00D4CD53 /* accel.cpp in Sources */,
-				4086C825063AB2FF00D4CD53 /* aga.cpp in Sources */,
 				4086C826063AB2FF00D4CD53 /* app.cpp in Sources */,
 				4086C827063AB2FF00D4CD53 /* bitmap.cpp in Sources */,
 				4086C828063AB2FF00D4CD53 /* bmpbuttn.cpp in Sources */,
@@ -3664,6 +3667,8 @@
 				40011CBD0893D5B400E4DE95 /* utilsexc_base.cpp in Sources */,
 				400EDEB4089D4FFD00E848D9 /* propdlg.cpp in Sources */,
 				409F02710976CA5600D1030F /* xh_grid.cpp in Sources */,
+				40CDE8D40982505E00E8156D /* evtloopcmn.cpp in Sources */,
+				40CDE8DB098250AB00E8156D /* evtloop.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3889,7 +3894,6 @@
 				4086CB35063AB30000D4CD53 /* jerror.c in Sources */,
 				4086CB36063AB30000D4CD53 /* jfdctflt.c in Sources */,
 				4086CB37063AB30000D4CD53 /* accel.cpp in Sources */,
-				4086CB38063AB30000D4CD53 /* aga.cpp in Sources */,
 				4086CB39063AB30000D4CD53 /* app.cpp in Sources */,
 				4086CB3A063AB30000D4CD53 /* bitmap.cpp in Sources */,
 				4086CB3B063AB30000D4CD53 /* bmpbuttn.cpp in Sources */,
@@ -4138,6 +4142,8 @@
 				40011CBC0893D5B400E4DE95 /* utilsexc_base.cpp in Sources */,
 				400EDEB3089D4FFD00E848D9 /* propdlg.cpp in Sources */,
 				409F02700976CA5600D1030F /* xh_grid.cpp in Sources */,
+				40CDE8D20982505E00E8156D /* evtloopcmn.cpp in Sources */,
+				40CDE8DA098250AB00E8156D /* evtloop.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
