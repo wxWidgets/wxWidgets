@@ -547,7 +547,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
                 <sys-lib>advapi32</sys-lib>
                 <sys-lib>wsock32</sys-lib>
             </if>
-            <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
+            <if cond="FORMAT=='borland'">
                 <sys-lib>oleacc</sys-lib>
             </if>
             <if cond="FORMAT!='msevc4prj'">
