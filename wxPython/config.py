@@ -875,9 +875,7 @@ swig_force = force
 swig_args = ['-c++',
              '-Wall',
              '-nodefault',
-
              '-python',
-             '-keyword',
              '-new_repr',
              '-modern',
              '-D'+WXPLAT,

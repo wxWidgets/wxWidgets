@@ -21,6 +21,25 @@ running setup.py, like this:
 
 ------------------------------------------------------------------------
 
+swig-1.3.27.patch
+
+    SWIG changed slightly how the runtime type_info data is structured
+    in order to optimize load time and runtime access.  wxPython
+    uncovered a bug in the implementation, so this patch includes the
+    fix that was checked in to CVS for 1.3.28.
+
+    SWIG changed how the import statments are output to the proxy
+    file, but this also caused the order to change (they all moved to
+    the very top of the file) so this broke the module docstring, as
+    well as some behavior that Chandler development is depending upon,
+    so this patch changes back to how it was done in prior releases.
+
+    Bug fix for SWIG's definition of the %makedefault macro.
+
+
+
+------------------------------------------------------------------------
+
 swig-1.3.24.patch
 
     A bug was introduced in SWIG 1.3.23 and remains in 1.3.24 that
