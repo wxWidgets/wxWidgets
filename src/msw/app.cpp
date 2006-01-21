@@ -593,6 +593,7 @@ int wxApp::GetComCtl32Version()
         // we're prepared to handle the errors
         wxLogNull noLog;
 
+#if wxUSE_DYNLIB_CLASS
         // do we have it?
         wxDynamicLibrary dllComCtl32(_T("comctl32.dll"), wxDL_VERBATIM);
 
@@ -650,6 +651,7 @@ int wxApp::GetComCtl32Version()
                 }
             }
         }
+#endif        
     }
 
     return s_verComCtl32;

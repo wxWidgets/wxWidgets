@@ -450,6 +450,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
 
 void wxHtmlImageCell::SetImage(const wxImage& img)
 {
+#if !defined(__WXMSW__) || wxUSE_WXDIB
     if ( img.Ok() )
     {
         delete m_bitmap;
@@ -475,6 +476,7 @@ void wxHtmlImageCell::SetImage(const wxImage& img)
 */
             m_bitmap = new wxBitmap(img);
     }
+#endif
 }
 
 #if wxUSE_GIF && wxUSE_TIMER
@@ -501,6 +503,7 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
     if ( m_window->GetClientRect().Intersects(rect) &&
          m_gifDecoder->ConvertToImage(&img) )
     {
+#if !defined(__WXMSW__) || wxUSE_WXDIB
         if ( (int)m_gifDecoder->GetWidth() != m_Width ||
              (int)m_gifDecoder->GetHeight() != m_Height ||
              m_gifDecoder->GetLeft() != 0 || m_gifDecoder->GetTop() != 0 )
@@ -512,6 +515,7 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
                           true /* use mask */);
         }
         else
+#endif            
             SetImage(img);
         m_window->Refresh(img.HasMask(), &rect);
     }
