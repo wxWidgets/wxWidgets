@@ -168,20 +168,23 @@ void PNGLINKAGEMODE wx_PNG_stream_writer( png_structp png_ptr, png_bytep data,
     WX_PNG_INFO(png_ptr)->stream.out->Write(data, length);
 }
 
-// from pngerror.c
-// so that the libpng doesn't send anything on stderr
-void
-PNGLINKAGEMODE wx_png_error(png_structp WXUNUSED(png_ptr), png_const_charp message)
-{
-    wxLogFatalError( wxString::FromAscii(message) );
-}
-
 void
 PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 {
     wxPNGInfoStruct *info = png_ptr ? WX_PNG_INFO(png_ptr) : NULL;
     if ( !info || info->verbose )
         wxLogWarning( wxString::FromAscii(message) );
+}
+
+// from pngerror.c
+// so that the libpng doesn't send anything on stderr
+void
+PNGLINKAGEMODE wx_png_error(png_structp WXUNUSED(png_ptr), png_const_charp message)
+{
+    // JS: deliver it to wx_png_warning and don't perform any more actions:
+    // libpng will jump back to the calling function (LoadFile and SaveFile)
+    // and allow it to handle the error
+    wx_png_warning(NULL, message);
 }
 
 } // extern "C"
