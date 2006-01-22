@@ -19,9 +19,6 @@ extern "C" {
 #include <gdk/gdkx.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkadjustment.h>
-#ifndef __WXGTK20__
-#include <gtk/gtkfeatures.h>
-#endif
 
 #include "wx/dlimpexp.h"
 

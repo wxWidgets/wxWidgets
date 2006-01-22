@@ -108,10 +108,8 @@ public:
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP
 
-#ifdef __WXGTK20__
     virtual void AddChild( wxWindowBase *child );
     virtual void RemoveChild( wxWindowBase *child );
-#endif
 
     // implementation
     // --------------
@@ -160,10 +158,8 @@ public:
     virtual bool IsOwnGtkWindow( GdkWindow *window );
     void ConnectWidget( GtkWidget *widget );
 
-#ifdef __WXGTK20__
     // Returns the default context which usually is anti-aliased
     PangoContext   *GtkGetPangoDefaultContext();
-#endif
 
 #if wxUSE_TOOLTIPS
     virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
@@ -201,21 +197,7 @@ public:
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
 
-#ifdef __WXGTK20__
     wxGtkIMData         *m_imData;
-#else // GTK 1
-#ifdef HAVE_XIM
-    // XIM support for wxWidgets
-    GdkIC               *m_ic;
-    GdkICAttr           *m_icattr;
-#endif // HAVE_XIM
-#endif // GTK 2/1
-
-#ifndef __WXGTK20__
-    // The area to be cleared (and not just refreshed)
-    // We cannot make this distinction under GTK 2.0.
-    wxRegion             m_clearRegion;
-#endif
 
     // scrolling stuff
     GtkAdjustment       *m_hAdjust,*m_vAdjust;
@@ -234,10 +216,8 @@ public:
     bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
     bool                 m_clipPaintRegion:1;   // true after ScrollWindow()
-#ifdef __WXGTK20__
     bool                 m_dirtyTabOrder:1;     // tab order changed, GTK focus
                                                 // chain needs update
-#endif
     bool                 m_needsStyleChange:1;  // May not be able to change
                                                 // background style until OnIdle
 
@@ -269,12 +249,10 @@ protected:
     // common part of all ctors (not virtual because called from ctor)
     void Init();
 
-#ifdef __WXGTK20__
     virtual void DoMoveInTabOrder(wxWindow *win, MoveKind move);
 
     // Copies m_children tab order to GTK focus chain:
     void RealizeTabOrder();
-#endif
 
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create

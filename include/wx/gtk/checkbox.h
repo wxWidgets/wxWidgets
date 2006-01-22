@@ -43,7 +43,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation
     // --------------
 
@@ -59,10 +59,8 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
-#ifdef __WXGTK20__
     void DoSet3StateValue(wxCheckBoxState state);
     wxCheckBoxState DoGet3StateValue() const;
-#endif
 
 private:
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
