@@ -20,21 +20,15 @@
 #include "wx/dcmemory.h"
 #include "wx/app.h"
 
-#ifdef __WXGTK20__
 #include "wx/rawbmp.h"
     // need this to get gdk_image_new_bitmap()
     #define GDK_ENABLE_BROKEN
-#endif
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
-#ifdef __WXGTK20__
-    #include <gdk/gdkimage.h>
-#else // GTK+ 1.2
-    #include <gdk/gdkrgb.h>
-#endif // GTK+ 2.0/1.2
+#include <gdk/gdkimage.h>
 
 #include "wx/math.h"
 
@@ -240,9 +234,7 @@ public:
 
     GdkPixmap      *m_pixmap;
     GdkBitmap      *m_bitmap;
-#ifdef __WXGTK20__
     GdkPixbuf      *m_pixbuf;
-#endif
     wxMask         *m_mask;
     int             m_width;
     int             m_height;
@@ -254,9 +246,7 @@ wxBitmapRefData::wxBitmapRefData()
 {
     m_pixmap = (GdkPixmap *) NULL;
     m_bitmap = (GdkBitmap *) NULL;
-#ifdef __WXGTK20__
     m_pixbuf = (GdkPixbuf *) NULL;
-#endif
     m_mask = (wxMask *) NULL;
     m_width = 0;
     m_height = 0;
@@ -270,10 +260,8 @@ wxBitmapRefData::~wxBitmapRefData()
         gdk_pixmap_unref( m_pixmap );
     if (m_bitmap)
         gdk_bitmap_unref( m_bitmap );
-#ifdef __WXGTK20__
     if (m_pixbuf)
         gdk_pixbuf_unref( m_pixbuf );
-#endif
     delete m_mask;
 #if wxUSE_PALETTE
     delete m_palette;
@@ -321,14 +309,12 @@ bool wxBitmap::Create( int width, int height, int depth )
         M_BMPDATA->m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, width, height, 1 );
         M_BMPDATA->m_bpp = 1;
     }
-#ifdef __WXGTK20__
     else if (depth == 32)
     {
         M_BMPDATA->m_pixbuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB, true,
                                               8, width, height);
         M_BMPDATA->m_bpp = 32;
     }
-#endif
     else
     {
         M_BMPDATA->m_pixmap = gdk_pixmap_new( wxGetRootWindow()->window, width, height, depth );
@@ -381,7 +367,6 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
 
     wxBitmap bmp;
 
-#ifdef __WXGTK20__
     if (HasPixbuf())
     {
         bmp.SetWidth(width);
@@ -397,7 +382,6 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
                          GDK_INTERP_BILINEAR);
     }
     else
-#endif // __WXGTK20__
     {
         GdkImage *img = (GdkImage*) NULL;
         if (GetPixmap())
@@ -587,10 +571,9 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
     }
     else
     {
-#ifdef __WXGTK20__
         if (image.HasAlpha())
             return CreateFromImageAsPixbuf(image);
-#endif
+
         return CreateFromImageAsPixmap(image);
     }
 }
@@ -935,7 +918,6 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& img)
     return true;
 }
 
-#ifdef __WXGTK20__
 bool wxBitmap::CreateFromImageAsPixbuf(const wxImage& image)
 {
     int width = image.GetWidth();
@@ -978,7 +960,6 @@ bool wxBitmap::CreateFromImageAsPixbuf(const wxImage& image)
 
     return true;
 }
-#endif // __WXGTK20__
 
 wxImage wxBitmap::ConvertToImage() const
 {
@@ -995,7 +976,6 @@ wxImage wxBitmap::ConvertToImage() const
         return wxNullImage;
     }
 
-#ifdef __WXGTK20__
     if (HasPixbuf())
     {
         GdkPixbuf *pixbuf = GetPixbuf();
@@ -1023,7 +1003,6 @@ wxImage wxBitmap::ConvertToImage() const
         }
     }
     else
-#endif // __WXGTK20__
     {
         // the colour used as transparent one in wxImage and the one it is
         // replaced with when it really occurs in the bitmap
@@ -1223,9 +1202,7 @@ bool wxBitmap::Ok() const
 {
     return (m_refData != NULL) &&
            (
-#ifdef __WXGTK20__
               M_BMPDATA->m_pixbuf ||
-#endif
               M_BMPDATA->m_bitmap || M_BMPDATA->m_pixmap
            );
 }
@@ -1283,7 +1260,6 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     wxBitmap ret( rect.width, rect.height, M_BMPDATA->m_bpp );
     wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
 
-#ifdef __WXGTK20__
     if (HasPixbuf())
     {
         GdkPixbuf *pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB,
@@ -1295,7 +1271,6 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
                              pixbuf, 0, 0);
     }
     else
-#endif // __WXGTK20__
     {
         if (ret.GetPixmap())
         {
@@ -1439,9 +1414,7 @@ void wxBitmap::SetPixmap( GdkPixmap *pixmap )
         m_refData = new wxBitmapRefData();
 
     M_BMPDATA->m_pixmap = pixmap;
-#ifdef __WXGTK20__
     PurgeOtherRepresentations(Pixmap);
-#endif
 }
 
 void wxBitmap::SetBitmap( GdkPixmap *bitmap )
@@ -1450,16 +1423,13 @@ void wxBitmap::SetBitmap( GdkPixmap *bitmap )
         m_refData = new wxBitmapRefData();
 
     M_BMPDATA->m_bitmap = bitmap;
-#ifdef __WXGTK20__
     PurgeOtherRepresentations(Pixmap);
-#endif
 }
 
 GdkPixmap *wxBitmap::GetPixmap() const
 {
     wxCHECK_MSG( Ok(), (GdkPixmap *) NULL, wxT("invalid bitmap") );
 
-#ifdef __WXGTK20__
     // create the pixmap on the fly if we use Pixbuf representation:
     if (HasPixbuf() && !HasPixmap())
     {
@@ -1470,7 +1440,6 @@ GdkPixmap *wxBitmap::GetPixmap() const
                                           &M_BMPDATA->m_mask->m_bitmap,
                                           128 /*threshold*/);
     }
-#endif // __WXGTK20__
 
     return M_BMPDATA->m_pixmap;
 }
@@ -1489,7 +1458,6 @@ GdkBitmap *wxBitmap::GetBitmap() const
     return M_BMPDATA->m_bitmap;
 }
 
-#ifdef __WXGTK20__
 GdkPixbuf *wxBitmap::GetPixbuf() const
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
@@ -1569,11 +1537,8 @@ void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
     }
 }
 
-#endif // __WXGTK20__
-
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
-#ifdef __WXGTK20__
     if (bpp != 32)
         return NULL;
 
@@ -1593,9 +1558,6 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     data.m_stride = gdk_pixbuf_get_rowstride( pixbuf );
 
     return gdk_pixbuf_get_pixels( pixbuf );
-#else
-    return NULL;
-#endif
 }
 
 void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
@@ -1605,18 +1567,12 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 
 bool wxBitmap::HasAlpha() const
 {
-#ifdef __WXGTK20__
     return HasPixbuf();
-#else
-    return false;
-#endif
 }
 
 void wxBitmap::UseAlpha()
 {
-#ifdef __WXGTK20__
     GetPixbuf();
-#endif
 }
 
 //-----------------------------------------------------------------------------

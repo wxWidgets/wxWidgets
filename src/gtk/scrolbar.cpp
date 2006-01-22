@@ -118,11 +118,6 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
             g_currentUpDownEvent = wxEVT_SCROLL_LINEUP;
       }
 
-#ifndef __WXGTK20__
-    // There is no slider field any more
-    win->m_isScrolling = (gdk_event->window == widget->slider);
-#endif
-
     return FALSE;
 }
 }
@@ -344,14 +339,7 @@ void wxScrollBar::SetViewLength( int viewLength )
 bool wxScrollBar::IsOwnGtkWindow( GdkWindow *window )
 {
     GtkRange *range = GTK_RANGE(m_widget);
-    return ( (window == GTK_WIDGET(range)->window)
-#ifndef __WXGTK20__
-                || (window == range->trough)
-                || (window == range->slider)
-                || (window == range->step_forw)
-                || (window == range->step_back)
-#endif // GTK+ 1.x
-           );
+    return ( (window == GTK_WIDGET(range)->window) );
 }
 
 wxSize wxScrollBar::DoGetBestSize() const

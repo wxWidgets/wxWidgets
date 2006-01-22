@@ -385,11 +385,7 @@ wxString wxRadioBox::GetString( int n ) const
 
     GtkLabel *label = GTK_LABEL( BUTTON_CHILD(node->GetData()) );
 
-#ifdef __WXGTK20__
     wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
-#else
-    wxString str( label->label );
-#endif
 
     return str;
 }
@@ -528,10 +524,7 @@ void wxRadioBox::GtkEnableEvents()
 void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style( m_widget, style );
-
-#ifdef __WXGTK20__
     gtk_widget_modify_style(GTK_FRAME(m_widget)->label_widget, style);
-#endif
 
     wxList::compatibility_iterator node = m_boxes.GetFirst();
     while (node)

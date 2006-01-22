@@ -45,25 +45,8 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
 
     int selection = wxNOT_FOUND;
 
-#ifdef __WXGTK20__
     selection = gtk_option_menu_get_history( GTK_OPTION_MENU(choice->GetHandle()) );
-#else
-    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(choice->GetHandle()) ) );
-    int count = 0;
 
-    GList *child = menu_shell->children;
-    while (child)
-    {
-        GtkBin *bin = GTK_BIN( child->data );
-        if (!bin->child)
-        {
-            selection = count;
-            break;
-        }
-        child = child->next;
-        count++;
-    }
-#endif
     choice->m_selection_hack = selection;
 
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId() );
@@ -355,11 +338,7 @@ int wxChoice::FindString( const wxString &string, bool bCase ) const
 
         wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
-#ifdef __WXGTK20__
          wxString tmp( wxGTK_CONV_BACK( gtk_label_get_text( label) ) );
-#else
-         wxString tmp( label->label );
-#endif
         if (string.IsSameAs( tmp, bCase ))
             return count;
 
@@ -427,11 +406,7 @@ wxString wxChoice::GetString( int n ) const
 
             wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
-#ifdef __WXGTK20__
             return wxString( wxGTK_CONV_BACK( gtk_label_get_text( label) ) );
-#else
-            return wxString( label->label );
-#endif
         }
         child = child->next;
         count++;
@@ -622,11 +597,7 @@ wxSize wxChoice::DoGetBestSize() const
 
 bool wxChoice::IsOwnGtkWindow( GdkWindow *window )
 {
-#ifdef __WXGTK20__
     return GTK_BUTTON(m_widget)->event_window;
-#else
-    return (window == m_widget->window);
-#endif
 }
 
 // static

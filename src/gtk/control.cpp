@@ -107,11 +107,7 @@ void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
 
     const wxString labelGTK = GTKConvertMnemonics(label);
 
-#ifdef __WXGTK20__
     gtk_label_set_text_with_mnemonic(w, wxGTK_CONV(labelGTK));
-#else
-    gtk_label_set(w, wxGTK_CONV(labelGTK));
-#endif
 }
 
 void wxControl::GTKSetLabelForFrame(GtkFrame *w, const wxString& label)
@@ -208,11 +204,7 @@ wxString wxControl::GTKRemoveMnemonics(const wxString& label)
 /* static */
 wxString wxControl::GTKConvertMnemonics(const wxString& label)
 {
-#ifdef __WXGTK20__
     return GTKProcessMnemonics(label, MNEMONICS_CONVERT);
-#else
-    return GTKRemoveMnemonics(label);
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -263,7 +255,6 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
                               style->bg[state].blue  >> SHIFT);
 
     // get the style's font
-#ifdef __WXGTK20__
     if ( !style->font_desc )
         style = gtk_widget_get_default_style();
     if ( style && style->font_desc )
@@ -286,10 +277,6 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
             attr.font = wxFont(wxString::FromAscii(font_name));
         g_free (font_name);
     }
-#else
-    // TODO: isn't there a way to get a standard gtk 1.2 font?
-    attr.font = wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
-#endif
 
     return attr;
 }

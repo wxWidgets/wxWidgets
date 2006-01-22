@@ -274,7 +274,6 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     // Text data will be in UTF8 in Unicode mode.
     data->GetDataHere( selection_data->target, d );
 
-#ifdef __WXGTK20__
     // NB: GTK+ requires special treatment of UTF8_STRING data, the text
     //     would show as UTF-8 data interpreted as latin1 (?) in other
     //     GTK+ apps if we used gtk_selection_data_set()
@@ -286,7 +285,6 @@ selection_handler( GtkWidget *WXUNUSED(widget),
             size-1 );
     }
     else
-#endif
     {
         gtk_selection_data_set(
             selection_data,

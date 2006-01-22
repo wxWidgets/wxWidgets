@@ -37,14 +37,12 @@ wxScreenDC::wxScreenDC()
     m_cmap = gdk_colormap_get_system();
     m_window = GDK_ROOT_PARENT();
 
-#ifdef __WXGTK20__
     m_context = gdk_pango_context_get();
     // Note: The Sun customised version of Pango shipping with Solaris 10
     // crashes if the language is left NULL (see bug 1374114)
     pango_context_set_language( m_context, gtk_get_default_language() );
     m_layout = pango_layout_new( m_context );
 //    m_fontdesc = pango_font_description_copy( widget->style->font_desc );
-#endif
 
     m_isScreenDC = TRUE;
 

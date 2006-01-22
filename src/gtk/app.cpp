@@ -164,30 +164,12 @@ bool wxApp::Yield(bool onlyIfNeeded)
 // wxWakeUpIdle
 //-----------------------------------------------------------------------------
 
-// RR/KH: The wxMutexGui calls are not needed on GTK2 according to
-// the GTK faq, http://www.gtk.org/faq/#AEN500
-// The calls to gdk_threads_enter() and leave() are specifically noted
-// as not being necessary.  The MutexGui calls are still left in for GTK1.
-// Eliminating the MutexGui calls fixes the long-standing "random" lockup
-// when using wxPostEvent (which calls WakeUpIdle) from a thread.
+// RR/KH: No wxMutexGui calls are needed here according to the GTK faq,
+// http://www.gtk.org/faq/#AEN500 - this caused problems for wxPostEvent.
 
 void wxApp::WakeUpIdle()
 {
-#ifndef __WXGTK20__
-#if wxUSE_THREADS
-    if (!wxThread::IsMain())
-        wxMutexGuiEnter();
-#endif // wxUSE_THREADS_
-#endif // __WXGTK2__
-
     wxapp_install_idle_handler();
-
-#ifndef __WXGTK20__
-#if wxUSE_THREADS
-    if (!wxThread::IsMain())
-        wxMutexGuiLeave();
-#endif // wxUSE_THREADS_
-#endif // __WXGTK2__
 }
 
 //-----------------------------------------------------------------------------
@@ -245,11 +227,7 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
         if (wxTopLevelWindows.GetCount() > 0)
         {
             wxWindow* win = (wxWindow*) wxTopLevelWindows.GetLast()->GetData();
-#ifdef __WXGTK20__
             if (win->IsKindOf(CLASSINFO(wxMessageDialog)))
-#else
-            if (win->IsKindOf(CLASSINFO(wxGenericMessageDialog)))
-#endif
                 win->OnInternalIdle();
         }
         return TRUE;
@@ -469,14 +447,8 @@ bool wxApp::OnInitGui()
     // chosen a specific visual, then derive the GdkVisual from that
     if (m_glVisualInfo != NULL)
     {
-#ifdef __WXGTK20__
         // seems gtk_widget_set_default_visual no longer exists?
         GdkVisual* vis = gtk_widget_get_default_visual();
-#else
-        GdkVisual* vis = gdkx_visual_get(
-            ((XVisualInfo *) m_glVisualInfo) ->visualid );
-        gtk_widget_set_default_visual( vis );
-#endif
 
         GdkColormap *colormap = gdk_colormap_new( vis, FALSE );
         gtk_widget_set_default_colormap( colormap );
@@ -490,13 +462,8 @@ bool wxApp::OnInitGui()
     else
     if ((gdk_visual_get_best() != gdk_visual_get_system()) && (m_useBestVisual))
     {
-#ifdef __WXGTK20__
         /* seems gtk_widget_set_default_visual no longer exists? */
         GdkVisual* vis = gtk_widget_get_default_visual();
-#else
-        GdkVisual* vis = gdk_visual_get_best();
-        gtk_widget_set_default_visual( vis );
-#endif
 
         GdkColormap *colormap = gdk_colormap_new( vis, FALSE );
         gtk_widget_set_default_colormap( colormap );
@@ -575,7 +542,7 @@ GdkVisual *wxApp::GetGdkVisual()
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     bool init_result;
-    
+
 #if wxUSE_THREADS
     // GTK 1.2 up to version 1.2.3 has broken threads
     if ((gtk_major_version == 1) &&
@@ -595,19 +562,13 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     // We should have the wxUSE_WCHAR_T test on the _outside_
 #if wxUSE_WCHAR_T
-    #if defined(__WXGTK20__)
-        // gtk+ 2.0 supports Unicode through UTF-8 strings
-        wxConvCurrent = &wxConvUTF8;
-    #else // GTK 1.x
-        if (!wxOKlibc())
-            wxConvCurrent = &wxConvLocal;
-    #endif
+    // gtk+ 2.0 supports Unicode through UTF-8 strings
+    wxConvCurrent = &wxConvUTF8;
 #else // !wxUSE_WCHAR_T
     if (!wxOKlibc())
         wxConvCurrent = (wxMBConv*) NULL;
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 
-#ifdef __WXGTK20__
     // decide which conversion to use for the file names
 
     // (1) this variable exists for the sole purpose of specifying the encoding
@@ -617,7 +578,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     if (encName == _T("@locale"))
         encName.clear();
     encName.MakeUpper();
-#if wxUSE_INTL        
+#if wxUSE_INTL
     if (encName.empty())
     {
         // (2) if a non default locale is set, assume that the user wants his
@@ -634,7 +595,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #endif // wxUSE_INTL
     static wxConvBrokenFileNames fileconv(encName);
     wxConvFileName = &fileconv;
-#endif // __WXGTK20__
 
 #if wxUSE_UNICODE
     // gtk_init() wants UTF-8, not wchar_t, so convert
@@ -648,7 +608,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     argvGTK[argc] = NULL;
 
     int argcGTK = argc;
-    
+
 #ifdef __WXGPE__
     init_result = true;  // is there a _check() version of this?
     gpe_application_init( &argcGTK, &argvGTK );
@@ -688,7 +648,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         wxLogError(wxT("Unable to initialize gtk, is DISPLAY set properly?"));
         return false;
     }
-    
+
     // we can not enter threads before gtk_init is done
     gdk_threads_enter();
 

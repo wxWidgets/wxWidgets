@@ -887,11 +887,7 @@ wxString wxListBox::GetRealLabel(GList *item) const
 
     wxString str;
 
-#ifdef __WXGTK20__
     str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
-#else
-    str = wxString( label->label );
-#endif
 
 #if wxUSE_CHECKLISTBOX
     // checklistboxes have "[±] " prepended to their lables, remove it

@@ -109,54 +109,6 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
 }
 
 //-----------------------------------------------------------------------------
-// "draw" of m_mainWidget
-//-----------------------------------------------------------------------------
-
-#ifndef __WXGTK20__
-extern "C" {
-static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNUSED(rect), wxFrame *win )
-{
-    if (g_isIdle) wxapp_install_idle_handler();
-
-    if (!win->m_hasVMT) return;
-
-    GtkPizza *pizza = GTK_PIZZA(widget);
-
-    gtk_draw_shadow( widget->style,
-                     pizza->bin_window,
-                     GTK_STATE_NORMAL,
-                     GTK_SHADOW_OUT,
-                     0, 0,
-                     win->m_width, win->m_height );
-
-    if (!win->GetTitle().empty() &&
-        ((win->GetWindowStyle() & wxCAPTION) ||
-         (win->GetWindowStyle() & wxTINY_CAPTION_HORIZ) ||
-         (win->GetWindowStyle() & wxTINY_CAPTION_VERT)))
-    {
-        wxClientDC dc(win);
-        dc.SetFont( *wxSMALL_FONT );
-        int height = dc.GetCharHeight();
-
-        GdkGC *gc = gdk_gc_new( pizza->bin_window );
-        gdk_gc_set_foreground( gc, &widget->style->bg[GTK_STATE_SELECTED] );
-        gdk_draw_rectangle( pizza->bin_window, gc, TRUE,
-                            3,
-                            3,
-                            win->m_width - 7,
-                            height+1 );
-        gdk_gc_unref( gc );
-
-        // Hack alert
-        dc.m_window = pizza->bin_window;
-        dc.SetTextForeground( *wxWHITE );
-        dc.DrawText( win->GetTitle(), 6, 3 );
-    }
-}
-}
-#endif
-
-//-----------------------------------------------------------------------------
 // "button_press_event" of m_mainWidget
 //-----------------------------------------------------------------------------
 
@@ -379,11 +331,6 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",
         GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
 
-#ifndef __WXGTK20__
-    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "draw",
-       GTK_SIGNAL_FUNC(gtk_window_own_draw_callback), (gpointer)this );
-#endif
-
     /* these are required for dragging the mini frame around */
     gtk_signal_connect( GTK_OBJECT(m_mainWidget), "button_press_event",
       GTK_SIGNAL_FUNC(gtk_window_button_press_callback), (gpointer)this );
@@ -401,11 +348,7 @@ void wxMiniFrame::SetTitle( const wxString &title )
 {
     wxFrame::SetTitle( title );
 
-#ifdef __WXGTK20__
     gdk_window_invalidate_rect( GTK_PIZZA(m_mainWidget)->bin_window, NULL, true );
-#else
-    gtk_widget_draw( m_mainWidget, (GdkRectangle*) NULL );
-#endif
 }
 
 #endif

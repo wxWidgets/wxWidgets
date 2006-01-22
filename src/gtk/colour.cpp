@@ -92,14 +92,8 @@ void wxColourRefData::FreeColour()
 {
     if (m_colormap)
     {
-#ifdef __WXGTK20__
         if ((m_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
             (m_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
-#else
-        GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) m_colormap;
-        if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-            (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
-#endif
         {
             int idx = m_color.pixel;
             colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] - 1;
@@ -117,14 +111,8 @@ void wxColourRefData::AllocColour( GdkColormap *cmap )
 
     FreeColour();
 
-#ifdef __WXGTK20__
     if ( (cmap->visual->type == GDK_VISUAL_GRAYSCALE) ||
          (cmap->visual->type == GDK_VISUAL_PSEUDO_COLOR) )
-#else
-    GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) cmap;
-    if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-        (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
-#endif
     {
         m_hasPixel = gdk_colormap_alloc_color( cmap, &m_color, FALSE, TRUE );
         int idx = m_color.pixel;

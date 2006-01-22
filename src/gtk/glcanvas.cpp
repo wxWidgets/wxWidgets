@@ -252,26 +252,6 @@ gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_e
 }
 
 //-----------------------------------------------------------------------------
-// "draw" of m_wxwindow
-//-----------------------------------------------------------------------------
-
-#ifndef __WXGTK20__
-extern "C" {
-static void
-gtk_glwindow_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxGLCanvas *win )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    win->m_exposed = TRUE;
-
-    win->GetUpdateRegion().Union( rect->x, rect->y,
-                                  rect->width, rect->height );
-}
-}
-#endif
-
-//-----------------------------------------------------------------------------
 // "size_allocate" of m_wxwindow
 //-----------------------------------------------------------------------------
 
@@ -429,9 +409,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
         m_glWidget = m_wxwindow;
     }
 
-#ifdef __WXGTK20__
     gtk_widget_set_double_buffered( m_glWidget, FALSE );
-#endif
 
     gtk_pizza_set_clear( GTK_PIZZA(m_wxwindow), FALSE );
 
@@ -444,17 +422,10 @@ bool wxGLCanvas::Create( wxWindow *parent,
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
         GTK_SIGNAL_FUNC(gtk_glwindow_expose_callback), (gpointer)this );
 
-#ifndef __WXGTK20__
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
-        GTK_SIGNAL_FUNC(gtk_glwindow_draw_callback), (gpointer)this );
-#endif
-
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_glcanvas_size_callback), (gpointer)this );
 
-#ifdef __WXGTK20__
     if (gtk_check_version(2,2,0) != NULL)
-#endif
     {
         gtk_widget_pop_visual();
         gtk_widget_pop_colormap();

@@ -76,7 +76,6 @@ gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), w
     /* the default button has a border around it */
     if (GTK_WIDGET_CAN_DEFAULT(m_widget))
     {
-#ifdef __WXGTK20__
         GtkBorder *default_border = NULL;
         gtk_widget_style_get( m_widget, "default_border", &default_border, NULL );
         if (default_border)
@@ -87,12 +86,6 @@ gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), w
             bottom_border += default_border->bottom;
             g_free( default_border );
         }
-#else
-        left_border = 6;
-        right_border = 6;
-        top_border = 6;
-        bottom_border = 5;
-#endif
         win->DoMoveWindow( win->m_x-top_border,
                            win->m_y-left_border,
                            win->m_width+left_border+right_border,
@@ -130,11 +123,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
         return FALSE;
     }
 
-#ifdef __WXGTK20__
     m_widget = gtk_button_new_with_mnemonic("");
-#else
-    m_widget = gtk_button_new_with_label("");
-#endif
 
     float x_alignment = 0.5;
     if (HasFlag(wxBU_LEFT))
@@ -197,7 +186,6 @@ void wxButton::SetDefault()
 /* static */
 wxSize wxButtonBase::GetDefaultSize()
 {
-#ifdef __WXGTK20__
     static wxSize size = wxDefaultSize;
     if (size == wxDefaultSize)
     {
@@ -228,9 +216,6 @@ wxSize wxButtonBase::GetDefaultSize()
         gtk_widget_destroy(wnd);
     }
     return size;
-#else
-    return wxSize(80,26);
-#endif
 }
 
 void wxButton::SetLabel( const wxString &lbl )
@@ -246,7 +231,6 @@ void wxButton::SetLabel( const wxString &lbl )
 
     const wxString labelGTK = GTKConvertMnemonics(label);
 
-#ifdef __WXGTK20__
     if (wxIsStockID(m_windowId) && wxIsStockLabel(m_windowId, label))
     {
         const char *stock = wxGetStockGtkID(m_windowId);
@@ -262,9 +246,6 @@ void wxButton::SetLabel( const wxString &lbl )
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
 
     ApplyWidgetStyle( false );
-#else // GTK+ 1
-    gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), wxGTK_CONV(labelGTK));
-#endif // GTK+ 2/1
 }
 
 bool wxButton::Enable( bool enable )
@@ -279,11 +260,7 @@ bool wxButton::Enable( bool enable )
 
 bool wxButton::IsOwnGtkWindow( GdkWindow *window )
 {
-#ifdef __WXGTK20__
     return GTK_BUTTON(m_widget)->event_window;
-#else
-    return (window == m_widget->window);
-#endif
 }
 
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
@@ -312,10 +289,6 @@ wxSize wxButton::DoGetBestSize() const
         // set it back again
         GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
     }
-
-#ifndef __WXGTK20__
-    ret.x += 10;  // add a few pixels for sloppy (but common) themes
-#endif
 
     if (!HasFlag(wxBU_EXACTFIT))
     {

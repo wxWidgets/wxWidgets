@@ -344,7 +344,6 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         {
             if (!gs_objects.m_fontSystem.Ok())
             {
-#ifdef __WXGTK20__
                 GtkWidget *widget = gtk_button_new();
                 GtkStyle *def = gtk_rc_get_style( widget );
                 if ( !def || !def->font_desc )
@@ -371,9 +370,6 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                     g_free (font_name);
                 }
                 gtk_widget_destroy( widget );
-#else
-                gs_objects.m_fontSystem = wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
-#endif
             }
             return gs_objects.m_fontSystem;
         }
@@ -385,18 +381,15 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 {
-#ifdef __WXGTK20__
     bool success = false;
 
     guchar *data = NULL;
     GdkWindow *window = NULL;
     if(win && GTK_WIDGET_REALIZED(win->GetHandle()))
         window = win->GetHandle()->window;
-#endif
 
     switch (index)
     {
-#ifdef __WXGTK20__
         case wxSYS_BORDER_X:
         case wxSYS_BORDER_Y:
         case wxSYS_EDGE_X:
@@ -484,7 +477,6 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             }
 
             return -1; // no window specified
-#endif // gtk2
 
         case wxSYS_CURSOR_X:
         case wxSYS_CURSOR_Y:
@@ -500,7 +492,6 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 #endif
                 return 16;
 
-#ifdef __WXGTK20__
         case wxSYS_DCLICK_X:
         case wxSYS_DCLICK_Y:
             gint dclick_distance;
@@ -514,9 +505,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                                 "gtk-double-click-distance", &dclick_distance, NULL);
 
             return dclick_distance * 2;
-#endif // gtk2
 
-#ifdef __WXGTK20__
         case wxSYS_DRAG_X:
         case wxSYS_DRAG_Y:
             gint drag_threshold;
@@ -536,7 +525,6 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             }
 
             return drag_threshold * 2;
-#endif
 
         // MBN: ditto for icons
         case wxSYS_ICON_X:     return 32;
@@ -561,8 +549,6 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
         case wxSYS_HSCROLL_Y:  return 15;
         case wxSYS_VSCROLL_X:  return 15;
 
-// a gtk1 implementation should be possible too if gtk2 efficiency/convenience functions aren't used
-#ifdef __WXGTK20__
         case wxSYS_CAPTION_Y:
             if (!window)
                 // No realized window specified, and no implementation for that case yet.
@@ -635,7 +621,6 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             // ...
 
             return -1;
-#endif // gtk2
 
         case wxSYS_PENWINDOWS_PRESENT:
             // No MS Windows for Pen computing extension available in X11 based gtk+.

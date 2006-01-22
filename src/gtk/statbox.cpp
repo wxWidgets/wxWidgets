@@ -88,9 +88,7 @@ void wxStaticBox::SetLabel( const wxString& label )
 void wxStaticBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-#ifdef __WXGTK20__
     gtk_widget_modify_style(GTK_FRAME(m_widget)->label_widget, style);
-#endif
 }
 
 // static
