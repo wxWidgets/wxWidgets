@@ -4183,8 +4183,7 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
 
         m_table = table;
         m_table->SetView( this );
-        if (takeOwnership)
-            m_ownTable = true;
+        m_ownTable = takeOwnership;
         m_selection = new wxGridSelection( this, selmode );
 
         CalcDimensions();
