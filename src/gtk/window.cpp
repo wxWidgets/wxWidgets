@@ -1147,7 +1147,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
     if (ret)
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        g_signal_stop_emission_by_name (widget, "key_press_event");
         return TRUE;
     }
 
@@ -1242,7 +1242,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget,
     if ( !win->GetEventHandler()->ProcessEvent( event ) )
         return FALSE;
 
-    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_release_event" );
+    g_signal_stop_emission_by_name (widget, "key_release_event");
     return TRUE;
 }
 }
@@ -1550,7 +1550,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "button_press_event" );
+        g_signal_stop_emission_by_name (widget, "button_press_event");
         return TRUE;
     }
 
@@ -1629,7 +1629,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget,
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "button_release_event" );
+        g_signal_stop_emission_by_name (widget, "button_release_event");
         return TRUE;
     }
 
@@ -1705,7 +1705,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "motion_notify_event" );
+        g_signal_stop_emission_by_name (widget, "motion_notify_event");
         return TRUE;
     }
 
@@ -1762,7 +1762,7 @@ static gint gtk_window_wheel_callback (GtkWidget * widget,
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "scroll_event" );
+        g_signal_stop_emission_by_name (widget, "scroll_event");
         return TRUE;
     }
 
@@ -1845,7 +1845,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
 
         if ( DoSendFocusEvents(win) )
         {
-           gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
+           g_signal_stop_emission_by_name (widget, "focus_in_event");
            return TRUE;
         }
     }
@@ -1950,7 +1950,7 @@ gint gtk_window_enter_callback( GtkWidget *widget,
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
-       gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "enter_notify_event" );
+       g_signal_stop_emission_by_name (widget, "enter_notify_event");
        return TRUE;
     }
 
@@ -2002,7 +2002,7 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "leave_notify_event" );
+        g_signal_stop_emission_by_name (widget, "leave_notify_event");
         return TRUE;
     }
 
@@ -2555,39 +2555,35 @@ bool wxWindowGTK::Create( wxWindow *parent,
     m_vAdjust->step_increment = 1.0;
     m_vAdjust->page_increment = 1.0;
     m_vAdjust->page_size = 5.0;
-    gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
+    g_signal_emit_by_name (m_vAdjust, "changed");
     m_hAdjust->lower = 0.0;
     m_hAdjust->upper = 1.0;
     m_hAdjust->value = 0.0;
     m_hAdjust->step_increment = 1.0;
     m_hAdjust->page_increment = 1.0;
     m_hAdjust->page_size = 5.0;
-    gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
+    g_signal_emit_by_name (m_hAdjust, "changed");
 
     // these handlers block mouse events to any window during scrolling such as
     // motion events and prevent GTK and wxWidgets from fighting over where the
     // slider should be
-
-    gtk_signal_connect( GTK_OBJECT(scrolledWindow->vscrollbar), "button_press_event",
-          (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(scrolledWindow->hscrollbar), "button_press_event",
-          (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(scrolledWindow->vscrollbar), "button_release_event",
-          (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(scrolledWindow->hscrollbar), "button_release_event",
-          (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
+    g_signal_connect (scrolledWindow->vscrollbar, "button_press_event",
+                      G_CALLBACK (gtk_scrollbar_button_press_callback), this);
+    g_signal_connect (scrolledWindow->hscrollbar, "button_press_event",
+                      G_CALLBACK (gtk_scrollbar_button_press_callback), this);
+    g_signal_connect (scrolledWindow->vscrollbar, "button_release_event",
+                      G_CALLBACK (gtk_scrollbar_button_release_callback), this);
+    g_signal_connect (scrolledWindow->hscrollbar, "button_release_event",
+                      G_CALLBACK (gtk_scrollbar_button_release_callback), this);
 
     // these handlers get notified when screen updates are required either when
     // scrolling or when the window size (and therefore scrollbar configuration)
     // has changed
 
-    gtk_signal_connect( GTK_OBJECT(m_hAdjust), "value_changed",
-          (GtkSignalFunc) gtk_window_hscroll_callback, (gpointer) this );
-    gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
-          (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
+    g_signal_connect (m_hAdjust, "value_changed",
+                      G_CALLBACK (gtk_window_hscroll_callback), this);
+    g_signal_connect (m_vAdjust, "value_changed",
+                      G_CALLBACK (gtk_window_vscroll_callback), this);
 
     gtk_widget_show( m_wxwindow );
 
@@ -2621,10 +2617,12 @@ wxWindowGTK::~wxWindowGTK()
     // propagated to this (soon to be) dead object
     if (m_focusWidget != NULL)
     {
-        gtk_signal_disconnect_by_func( GTK_OBJECT(m_focusWidget),
-            (GtkSignalFunc) gtk_window_focus_in_callback, (gpointer) this );
-        gtk_signal_disconnect_by_func( GTK_OBJECT(m_focusWidget),
-            (GtkSignalFunc) gtk_window_focus_out_callback, (gpointer) this );
+        g_signal_handlers_disconnect_by_func (m_focusWidget,
+                                              (gpointer) gtk_window_focus_in_callback,
+                                              this);
+        g_signal_handlers_disconnect_by_func (m_focusWidget,
+                                              (gpointer) gtk_window_focus_out_callback,
+                                              this);
     }
 
     if (m_widget)
@@ -2680,8 +2678,8 @@ void wxWindowGTK::PostCreation()
 
             gtk_pizza_set_external( GTK_PIZZA(m_wxwindow), TRUE );
 
-            gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
-                GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
+            g_signal_connect (m_wxwindow, "expose_event",
+                              G_CALLBACK (gtk_window_expose_callback), this);
 
             // gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), !HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
         }
@@ -2692,13 +2690,12 @@ void wxWindowGTK::PostCreation()
         // Cannot handle drawing preedited text yet
         gtk_im_context_set_use_preedit( m_imData->context, FALSE );
 
-        g_signal_connect (G_OBJECT (m_imData->context), "commit",
+        g_signal_connect (m_imData->context, "commit",
                           G_CALLBACK (gtk_wxwindow_commit_cb), this);
 
         // these are called when the "sunken" or "raised" borders are drawn
-        gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
-          GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
-
+        g_signal_connect (m_widget, "expose_event",
+                          G_CALLBACK (gtk_window_own_expose_callback), this);
     }
 
     // focus handling
@@ -2708,11 +2705,10 @@ void wxWindowGTK::PostCreation()
         if (m_focusWidget == NULL)
             m_focusWidget = m_widget;
 
-        gtk_signal_connect( GTK_OBJECT(m_focusWidget), "focus_in_event",
-            GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
-
-        gtk_signal_connect_after( GTK_OBJECT(m_focusWidget), "focus_out_event",
-            GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
+        g_signal_connect (m_focusWidget, "focus_in_event",
+                          G_CALLBACK (gtk_window_focus_in_callback), this);
+        g_signal_connect_after (m_focusWidget, "focus_out_event",
+                                G_CALLBACK (gtk_window_focus_out_callback), this);
     }
 
     // connect to the various key and mouse handlers
@@ -2723,31 +2719,31 @@ void wxWindowGTK::PostCreation()
 
     /* We cannot set colours, fonts and cursors before the widget has
        been realized, so we do this directly after realization */
-    gtk_signal_connect( GTK_OBJECT(connect_widget), "realize",
-                            GTK_SIGNAL_FUNC(gtk_window_realized_callback), (gpointer) this );
+    g_signal_connect (connect_widget, "realize",
+                      G_CALLBACK (gtk_window_realized_callback), this);
 
     if (m_wxwindow)
     {
         // Catch native resize events
-        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "size_allocate",
-                            GTK_SIGNAL_FUNC(gtk_window_size_callback), (gpointer)this );
+        g_signal_connect (m_wxwindow, "size_allocate",
+                          G_CALLBACK (gtk_window_size_callback), this);
 
         // Initialize XIM support
-        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
-                            GTK_SIGNAL_FUNC(gtk_wxwindow_realized_callback), (gpointer) this );
+        g_signal_connect (m_wxwindow, "realize",
+                          G_CALLBACK (gtk_wxwindow_realized_callback), this);
 
         // And resize XIM window
-        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "size_allocate",
-                            GTK_SIGNAL_FUNC(gtk_wxwindow_size_callback), (gpointer)this );
+        g_signal_connect (m_wxwindow, "size_allocate",
+                          G_CALLBACK (gtk_wxwindow_size_callback), this);
     }
 
     if (GTK_IS_COMBO(m_widget))
     {
         GtkCombo *gcombo = GTK_COMBO(m_widget);
 
-        gtk_signal_connect( GTK_OBJECT(gcombo->entry), "size_request",
-                            GTK_SIGNAL_FUNC(wxgtk_combo_size_request_callback),
-                            (gpointer) this );
+        g_signal_connect (gcombo->entry, "size_request",
+                          G_CALLBACK (wxgtk_combo_size_request_callback),
+                          this);
     }
     else
     {
@@ -2755,9 +2751,9 @@ void wxWindowGTK::PostCreation()
         // GTK controls, such as the toolbar. With this callback, the
         // toolbar gets to know the correct size (the one set by the
         // programmer). Sadly, it misbehaves for wxComboBox.
-        gtk_signal_connect( GTK_OBJECT(m_widget), "size_request",
-                            GTK_SIGNAL_FUNC(wxgtk_window_size_request_callback),
-                            (gpointer) this );
+        g_signal_connect (m_widget, "size_request",
+                          G_CALLBACK (wxgtk_window_size_request_callback),
+                          this);
     }
 
     InheritAttributes();
@@ -2772,31 +2768,24 @@ void wxWindowGTK::PostCreation()
 
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 {
-    gtk_signal_connect( GTK_OBJECT(widget), "key_press_event",
-      GTK_SIGNAL_FUNC(gtk_window_key_press_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(widget), "key_release_event",
-      GTK_SIGNAL_FUNC(gtk_window_key_release_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(widget), "button_press_event",
-      GTK_SIGNAL_FUNC(gtk_window_button_press_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(widget), "button_release_event",
-      GTK_SIGNAL_FUNC(gtk_window_button_release_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(widget), "motion_notify_event",
-      GTK_SIGNAL_FUNC(gtk_window_motion_notify_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(widget), "scroll_event",
-      GTK_SIGNAL_FUNC(gtk_window_wheel_callback), (gpointer)this );
-    g_signal_connect(widget, "popup_menu",
-        G_CALLBACK(wxgtk_window_popup_menu_callback), this);
-
-    gtk_signal_connect( GTK_OBJECT(widget), "enter_notify_event",
-      GTK_SIGNAL_FUNC(gtk_window_enter_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(widget), "leave_notify_event",
-      GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
+    g_signal_connect (widget, "key_press_event",
+                      G_CALLBACK (gtk_window_key_press_callback), this);
+    g_signal_connect (widget, "key_release_event",
+                      G_CALLBACK (gtk_window_key_release_callback), this);
+    g_signal_connect (widget, "button_press_event",
+                      G_CALLBACK (gtk_window_button_press_callback), this);
+    g_signal_connect (widget, "button_release_event",
+                      G_CALLBACK (gtk_window_button_release_callback), this);
+    g_signal_connect (widget, "motion_notify_event",
+                      G_CALLBACK (gtk_window_motion_notify_callback), this);
+    g_signal_connect (widget, "scroll_event",
+                      G_CALLBACK (gtk_window_wheel_callback), this);
+    g_signal_connect (widget, "popup_menu",
+                     G_CALLBACK (wxgtk_window_popup_menu_callback), this);
+    g_signal_connect (widget, "enter_notify_event",
+                      G_CALLBACK (gtk_window_enter_callback), this);
+    g_signal_connect (widget, "leave_notify_event",
+                      G_CALLBACK (gtk_window_leave_callback), this);
 }
 
 bool wxWindowGTK::Destroy()
@@ -4087,21 +4076,21 @@ void wxWindowGTK::SetScrollbar( int orient, int pos, int thumbVisible,
     }
 
     if (orient == wxHORIZONTAL)
-        gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
+        g_signal_emit_by_name (m_hAdjust, "changed");
     else
-        gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
+        g_signal_emit_by_name (m_vAdjust, "changed");
 }
 
 void wxWindowGTK::GtkUpdateScrollbar(int orient)
 {
     GtkAdjustment *adj = orient == wxHORIZONTAL ? m_hAdjust : m_vAdjust;
-    GtkSignalFunc fn = orient == wxHORIZONTAL
-                        ? (GtkSignalFunc)gtk_window_hscroll_callback
-                        : (GtkSignalFunc)gtk_window_vscroll_callback;
+    gpointer fn = orient == wxHORIZONTAL
+            ? (gpointer) gtk_window_hscroll_callback
+            : (gpointer) gtk_window_vscroll_callback;
 
-    gtk_signal_disconnect_by_func(GTK_OBJECT(adj), fn, (gpointer)this);
-    gtk_signal_emit_by_name(GTK_OBJECT(adj), "value_changed");
-    gtk_signal_connect(GTK_OBJECT(adj), "value_changed", fn, (gpointer)this);
+    g_signal_handlers_disconnect_by_func (adj, fn, this);
+    g_signal_emit_by_name (adj, "value_changed");
+    g_signal_connect (adj, "value_changed", G_CALLBACK (fn), this);
 }
 
 void wxWindowGTK::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )

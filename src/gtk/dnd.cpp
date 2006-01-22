@@ -547,17 +547,14 @@ void wxDropTarget::UnregisterWidget( GtkWidget *widget )
 
     gtk_drag_dest_unset( widget );
 
-    gtk_signal_disconnect_by_func( GTK_OBJECT(widget),
-                      GTK_SIGNAL_FUNC(target_drag_leave), (gpointer) this );
-
-    gtk_signal_disconnect_by_func( GTK_OBJECT(widget),
-                      GTK_SIGNAL_FUNC(target_drag_motion), (gpointer) this );
-
-    gtk_signal_disconnect_by_func( GTK_OBJECT(widget),
-                      GTK_SIGNAL_FUNC(target_drag_drop), (gpointer) this );
-
-    gtk_signal_disconnect_by_func( GTK_OBJECT(widget),
-                      GTK_SIGNAL_FUNC(target_drag_data_received), (gpointer) this );
+    g_signal_handlers_disconnect_by_func (widget,
+                                          (gpointer) target_drag_leave, this);
+    g_signal_handlers_disconnect_by_func (widget,
+                                          (gpointer) target_drag_motion, this);
+    g_signal_handlers_disconnect_by_func (widget,
+                                          (gpointer) target_drag_drop, this);
+    g_signal_handlers_disconnect_by_func (widget,
+                                          (gpointer) target_drag_data_received, this);
 }
 
 void wxDropTarget::RegisterWidget( GtkWidget *widget )
@@ -580,17 +577,17 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
                        0,                           /* number of targets = 0 */
                        (GdkDragAction) 0 );         /* we don't supply any actions here */
 
-    gtk_signal_connect( GTK_OBJECT(widget), "drag_leave",
-                      GTK_SIGNAL_FUNC(target_drag_leave), (gpointer) this );
+    g_signal_connect (widget, "drag_leave",
+                      G_CALLBACK (target_drag_leave), this);
 
-    gtk_signal_connect( GTK_OBJECT(widget), "drag_motion",
-                      GTK_SIGNAL_FUNC(target_drag_motion), (gpointer) this );
+    g_signal_connect (widget, "drag_motion",
+                      G_CALLBACK (target_drag_motion), this);
 
-    gtk_signal_connect( GTK_OBJECT(widget), "drag_drop",
-                      GTK_SIGNAL_FUNC(target_drag_drop), (gpointer) this );
+    g_signal_connect (widget, "drag_drop",
+                      G_CALLBACK (target_drag_drop), this);
 
-    gtk_signal_connect( GTK_OBJECT(widget), "drag_data_received",
-                      GTK_SIGNAL_FUNC(target_drag_data_received), (gpointer) this );
+    g_signal_connect (widget, "drag_data_received",
+                      G_CALLBACK (target_drag_data_received), this);
 }
 
 //----------------------------------------------------------------------------
@@ -828,8 +825,8 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
     gtk_widget_set_usize (m_iconWindow, width, height);
     gtk_widget_realize (m_iconWindow);
 
-    gtk_signal_connect( GTK_OBJECT(m_iconWindow), "configure_event",
-        GTK_SIGNAL_FUNC(gtk_dnd_window_configure_callback), (gpointer)this );
+    g_signal_connect (m_iconWindow, "configure_event",
+                      G_CALLBACK (gtk_dnd_window_configure_callback), this);
 
     gdk_window_set_back_pixmap (m_iconWindow->window, pixmap, FALSE);
 
@@ -934,29 +931,34 @@ void wxDropSource::RegisterWindow()
 {
     if (!m_widget) return;
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "drag_data_get",
-                      GTK_SIGNAL_FUNC (source_drag_data_get), (gpointer) this);
-    gtk_signal_connect (GTK_OBJECT(m_widget), "drag_data_delete",
-                      GTK_SIGNAL_FUNC (source_drag_data_delete),  (gpointer) this );
-    gtk_signal_connect (GTK_OBJECT(m_widget), "drag_begin",
-                      GTK_SIGNAL_FUNC (source_drag_begin),  (gpointer) this );
-    gtk_signal_connect (GTK_OBJECT(m_widget), "drag_end",
-                      GTK_SIGNAL_FUNC (source_drag_end),  (gpointer) this );
+    g_signal_connect (m_widget, "drag_data_get",
+                      G_CALLBACK (source_drag_data_get), this);
+    g_signal_connect (m_widget, "drag_data_delete",
+                      G_CALLBACK (source_drag_data_delete), this);
+    g_signal_connect (m_widget, "drag_begin",
+                      G_CALLBACK (source_drag_begin), this);
+    g_signal_connect (m_widget, "drag_end",
+                      G_CALLBACK (source_drag_end), this);
 
 }
 
 void wxDropSource::UnregisterWindow()
 {
-    if (!m_widget) return;
+    if (!m_widget)
+        return;
 
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
-                      GTK_SIGNAL_FUNC(source_drag_data_get), (gpointer) this );
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
-                      GTK_SIGNAL_FUNC(source_drag_data_delete), (gpointer) this );
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
-                      GTK_SIGNAL_FUNC(source_drag_begin), (gpointer) this );
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
-                      GTK_SIGNAL_FUNC(source_drag_end), (gpointer) this );
+    g_signal_handlers_disconnect_by_func (m_widget,
+                                          (gpointer) source_drag_data_get,
+                                          this);
+    g_signal_handlers_disconnect_by_func (m_widget,
+                                          (gpointer) source_drag_data_delete,
+                                          this);
+    g_signal_handlers_disconnect_by_func (m_widget,
+                                          (gpointer) source_drag_begin,
+                                          this);
+    g_signal_handlers_disconnect_by_func (m_widget,
+                                          (gpointer) source_drag_end,
+                                          this);
 }
 
 #endif

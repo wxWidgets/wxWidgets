@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
-// Copyright:   (c) 1998 Robert Roebling, Vadim Zeitlin
+// Copyright:   (c) 1998 Robert Roebling, Vadim Zeitlin, 2005 Mart Raudsepp
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -58,7 +58,7 @@ static void wxGtkOnRemoveTag(GtkTextBuffer *buffer,
 
     if (!name || strncmp(name, prefix, strlen(prefix)))
         // anonymous tag or not starting with prefix - don't remove
-        g_signal_stop_emission_by_name(buffer, "remove_tag");
+        g_signal_stop_emission_by_name (buffer, "remove_tag");
 
     g_free(name);
 }
@@ -73,10 +73,10 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
     static gchar buf[1024];
     GtkTextTag *tag;
 
-    gulong remove_handler_id = g_signal_connect( text_buffer, "remove_tag",
-            G_CALLBACK(wxGtkOnRemoveTag), gpointer("WX"));
+    gulong remove_handler_id = g_signal_connect (text_buffer, "remove_tag",
+            G_CALLBACK (wxGtkOnRemoveTag), gpointer("WX"));
     gtk_text_buffer_remove_all_tags(text_buffer, start, end);
-    g_signal_handler_disconnect( text_buffer, remove_handler_id );
+    g_signal_handler_disconnect (text_buffer, remove_handler_id);
 
     if (attr.HasFont())
     {
@@ -128,11 +128,11 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
                                           gtk_text_iter_get_line(start) );
         gtk_text_iter_forward_line(&para_end);
 
-        remove_handler_id = g_signal_connect( text_buffer, "remove_tag",
+        remove_handler_id = g_signal_connect (text_buffer, "remove_tag",
                                               G_CALLBACK(wxGtkOnRemoveTag),
                                               gpointer("WXALIGNMENT"));
         gtk_text_buffer_remove_all_tags( text_buffer, &para_start, &para_end );
-        g_signal_handler_disconnect( text_buffer, remove_handler_id );
+        g_signal_handler_disconnect (text_buffer, remove_handler_id);
 
         GtkJustification align;
         switch (attr.GetAlignment())
@@ -208,7 +208,7 @@ gtk_insert_text_callback(GtkEditable *editable,
     if ( entry->text_length == entry->text_max_length )
     {
         // we don't need to run the base class version at all
-        gtk_signal_emit_stop_by_name(GTK_OBJECT(editable), "insert_text");
+        g_signal_stop_emission_by_name (editable, "insert_text");
 
         // remember that the next changed signal is to be ignored to avoid
         // generating a dummy wxEVT_COMMAND_TEXT_UPDATED event
@@ -234,7 +234,7 @@ au_apply_tag_callback(GtkTextBuffer *buffer,
                       gpointer textctrl)
 {
     if(tag == gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(buffer), "wxUrl"))
-        g_signal_stop_emission_by_name(buffer, "apply_tag");
+        g_signal_stop_emission_by_name (buffer, "apply_tag");
 }
 }
 
@@ -330,14 +330,14 @@ au_check_word( GtkTextIter *s, GtkTextIter *e )
 
     if(n < WXSIZEOF(URIPrefixes))
     {
-        gulong signal_id = g_signal_handler_find(buffer,
-                                                 (GSignalMatchType) (G_SIGNAL_MATCH_FUNC),
-                                                 0, 0, NULL,
-                                                 (gpointer)au_apply_tag_callback, NULL);
+        gulong signal_id = g_signal_handler_find (buffer,
+                                                  (GSignalMatchType) (G_SIGNAL_MATCH_FUNC),
+                                                  0, 0, NULL,
+                                                  (gpointer)au_apply_tag_callback, NULL);
 
-        g_signal_handler_block(buffer, signal_id);
+        g_signal_handler_block (buffer, signal_id);
         gtk_text_buffer_apply_tag(buffer, tag, &start, &end);
-        g_signal_handler_unblock(buffer, signal_id);
+        g_signal_handler_unblock (buffer, signal_id);
     }
 }
 }
@@ -664,8 +664,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
     // We want to be notified about text changes.
     if (multi_line)
     {
-        g_signal_connect( G_OBJECT(m_buffer), "changed",
-            GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
+        g_signal_connect (m_buffer, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
 
         // .. and handle URLs on multi-line controls with wxTE_AUTO_URL style
         if (style & wxTE_AUTO_URL)
@@ -683,10 +683,10 @@ bool wxTextCtrl::Create( wxWindow *parent,
                                        NULL);
 
             // Check for URLs after each text change
-            g_signal_connect_after( G_OBJECT(m_buffer), "insert_text",
-                GTK_SIGNAL_FUNC(au_insert_text_callback), (gpointer)this);
-            g_signal_connect_after( G_OBJECT(m_buffer), "delete_range",
-                GTK_SIGNAL_FUNC(au_delete_range_callback), (gpointer)this);
+            g_signal_connect_after (m_buffer, "insert_text",
+                                    G_CALLBACK (au_insert_text_callback), this);
+            g_signal_connect_after (m_buffer, "delete_range",
+                                    G_CALLBACK (au_delete_range_callback), this);
 
             // Block all wxUrl tag applying unless we do it ourselves, in which case we
             // block this callback temporarily. This takes care of gtk+ internal
@@ -694,8 +694,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
             // which is undesired because only a part of the URL might be copied.
             // The insert-text signal emitted inside it will take care of newly formed
             // or wholly copied URLs.
-            g_signal_connect( G_OBJECT(m_buffer), "apply_tag",
-                GTK_SIGNAL_FUNC(au_apply_tag_callback), NULL);
+            g_signal_connect (m_buffer, "apply_tag",
+                              G_CALLBACK (au_apply_tag_callback), NULL);
 
             // Check for URLs in the initial string passed to Create
             gtk_text_buffer_get_start_iter(m_buffer, &start);
@@ -705,8 +705,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
     else
     {
-        gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-            GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
+        g_signal_connect (m_text, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
     }
 
     m_cursor = wxCursor( wxCURSOR_IBEAM );
@@ -1099,19 +1099,13 @@ void wxTextCtrl::SetMaxLength(unsigned long len)
         // we shouldn't check anything any more
         if ( len )
         {
-            gtk_signal_connect( GTK_OBJECT(m_text),
-                                "insert_text",
-                                GTK_SIGNAL_FUNC(gtk_insert_text_callback),
-                                (gpointer)this);
+            g_signal_connect (m_text, "insert_text",
+                              G_CALLBACK (gtk_insert_text_callback), this);
         }
         else // no checking
         {
-            gtk_signal_disconnect_by_func
-            (
-                GTK_OBJECT(m_text),
-                GTK_SIGNAL_FUNC(gtk_insert_text_callback),
-                (gpointer)this
-            );
+            g_signal_handlers_disconnect_by_func (m_text,
+                    (gpointer) gtk_insert_text_callback, this);
         }
     }
 }
@@ -1256,7 +1250,7 @@ void wxTextCtrl::Cut()
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if (m_windowStyle & wxTE_MULTILINE)
-        g_signal_emit_by_name(m_text, "cut-clipboard");
+        g_signal_emit_by_name (m_text, "cut-clipboard");
     else
         gtk_editable_cut_clipboard(GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG);
 }
@@ -1266,7 +1260,7 @@ void wxTextCtrl::Copy()
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if (m_windowStyle & wxTE_MULTILINE)
-        g_signal_emit_by_name(m_text, "copy-clipboard");
+        g_signal_emit_by_name (m_text, "copy-clipboard");
     else
         gtk_editable_copy_clipboard(GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG);
 }
@@ -1276,7 +1270,7 @@ void wxTextCtrl::Paste()
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if (m_windowStyle & wxTE_MULTILINE)
-        g_signal_emit_by_name(m_text, "paste-clipboard");
+        g_signal_emit_by_name (m_text, "paste-clipboard");
     else
         gtk_editable_paste_clipboard(GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG);
 }
@@ -1628,10 +1622,10 @@ void wxTextCtrl::Freeze()
         if ( !m_frozenness++ )
         {
             // freeze textview updates and remove buffer
-            g_signal_connect( G_OBJECT(m_text), "expose_event",
-                GTK_SIGNAL_FUNC(gtk_text_exposed_callback), (gpointer)this);
-            g_signal_connect( G_OBJECT(m_widget), "expose_event",
-                GTK_SIGNAL_FUNC(gtk_text_exposed_callback), (gpointer)this);
+            g_signal_connect (m_text, "expose_event",
+                              G_CALLBACK (gtk_text_exposed_callback), this);
+            g_signal_connect (m_widget, "expose_event",
+                              G_CALLBACK (gtk_text_exposed_callback), this);
             gtk_widget_set_sensitive(m_widget, false);
             g_object_ref(m_buffer);
             gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), gtk_text_buffer_new(NULL));
@@ -1651,8 +1645,10 @@ void wxTextCtrl::Thaw()
             gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
             g_object_unref(m_buffer);
             gtk_widget_set_sensitive(m_widget, true);
-            g_signal_handlers_disconnect_by_func(m_widget, (gpointer)gtk_text_exposed_callback, this);
-            g_signal_handlers_disconnect_by_func(m_text, (gpointer)gtk_text_exposed_callback, this);
+            g_signal_handlers_disconnect_by_func (m_widget,
+                    (gpointer) gtk_text_exposed_callback, this);
+            g_signal_handlers_disconnect_by_func (m_text,
+                    (gpointer) gtk_text_exposed_callback, this);
         }
     }
 }

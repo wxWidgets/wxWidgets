@@ -117,14 +117,14 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkAdjustment *adj,
             else
             {
                 // We need to actually scroll window
-                gtk_signal_emit_by_name( GTK_OBJECT(adj), "value_changed" );
+                g_signal_emit_by_name (adj, "value_changed");
             }
         }
     }
 
     *lines = (int)(adj->upper + 0.5);
     *linesPerPage = (int)(adj->page_increment + 0.5);
-    gtk_signal_emit_by_name( GTK_OBJECT(adj), "changed" );
+    g_signal_emit_by_name (adj, "changed");
 }
 
 void wxScrollHelperNative::AdjustScrollbars()

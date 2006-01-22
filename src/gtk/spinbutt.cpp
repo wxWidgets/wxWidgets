@@ -69,16 +69,14 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
         /* program has vetoed */
         win->m_adjust->value = win->m_oldPos;
 
-        gtk_signal_disconnect_by_func( GTK_OBJECT (win->m_adjust),
-                                       (GtkSignalFunc) gtk_spinbutt_callback,
-                                       (gpointer) win );
+        g_signal_handlers_disconnect_by_func (win->m_adjust,
+                                              (gpointer) gtk_spinbutt_callback,
+                                              win);
 
-        gtk_signal_emit_by_name( GTK_OBJECT(win->m_adjust), "value_changed" );
+        g_signal_emit_by_name (win->m_adjust, "value_changed");
 
-        gtk_signal_connect( GTK_OBJECT (win->m_adjust),
-                            "value_changed",
-                            (GtkSignalFunc) gtk_spinbutt_callback,
-                            (gpointer) win );
+        g_signal_connect (win->m_adjust, "value_changed",
+                          G_CALLBACK (gtk_spinbutt_callback), win);
         return;
     }
 
@@ -138,10 +136,8 @@ bool wxSpinButton::Create(wxWindow *parent,
     gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
                               (int)(m_windowStyle & wxSP_WRAP) );
 
-    gtk_signal_connect( GTK_OBJECT (m_adjust),
-                        "value_changed",
-                        (GtkSignalFunc) gtk_spinbutt_callback,
-                        (gpointer) this );
+    g_signal_connect (m_adjust, "value_changed",
+                      G_CALLBACK (gtk_spinbutt_callback), this);
 
     m_parent->DoAddChild( this );
 
@@ -181,7 +177,7 @@ void wxSpinButton::SetValue( int value )
 
     m_adjust->value = fpos;
 
-    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
+    g_signal_emit_by_name (m_adjust, "value_changed");
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
@@ -200,7 +196,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     m_adjust->lower = fmin;
     m_adjust->upper = fmax;
 
-    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    g_signal_emit_by_name (m_adjust, "changed");
 
     // these two calls are required due to some bug in GTK
     Refresh();

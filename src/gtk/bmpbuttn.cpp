@@ -155,17 +155,18 @@ bool wxBitmapButton::Create( wxWindow *parent,
         OnSetBitmap();
     }
 
-    gtk_signal_connect_after( GTK_OBJECT(m_widget), "clicked",
-      GTK_SIGNAL_FUNC(gtk_bmpbutton_clicked_callback), (gpointer*)this );
+    g_signal_connect_after (m_widget, "clicked",
+                            G_CALLBACK (gtk_bmpbutton_clicked_callback),
+                            this);
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "enter",
-      GTK_SIGNAL_FUNC(gtk_bmpbutton_enter_callback), (gpointer*)this );
-    gtk_signal_connect( GTK_OBJECT(m_widget), "leave",
-      GTK_SIGNAL_FUNC(gtk_bmpbutton_leave_callback), (gpointer*)this );
-    gtk_signal_connect( GTK_OBJECT(m_widget), "pressed",
-      GTK_SIGNAL_FUNC(gtk_bmpbutton_press_callback), (gpointer*)this );
-    gtk_signal_connect( GTK_OBJECT(m_widget), "released",
-      GTK_SIGNAL_FUNC(gtk_bmpbutton_release_callback), (gpointer*)this );
+    g_signal_connect (m_widget, "enter",
+                      G_CALLBACK (gtk_bmpbutton_enter_callback), this);
+    g_signal_connect (m_widget, "leave",
+                      G_CALLBACK (gtk_bmpbutton_leave_callback), this);
+    g_signal_connect (m_widget, "pressed",
+                      G_CALLBACK (gtk_bmpbutton_press_callback), this);
+    g_signal_connect (m_widget, "released",
+                      G_CALLBACK (gtk_bmpbutton_release_callback), this);
 
     m_parent->DoAddChild( this );
 

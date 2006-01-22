@@ -833,12 +833,12 @@ void	      GDK_WINDOW_SET_HINTS	 (GdkWindow	  *window,
 			flags);
 }
 
-void	      GDK_WINDOW_SET_ICON	 (GdkWindow	  *window, 
+void	      GDK_WINDOW_SET_ICON	 (GdkWindow	  *window,
 					  GdkWindow	  *icon_window,
 					  GdkPixmap	  *pixmap,
 					  GdkBitmap	  *mask)
 {
-   gdk_window_set_icon	 (window, 
+   gdk_window_set_icon	 (window,
 			icon_window,
 			pixmap,
 			mask);
@@ -848,7 +848,7 @@ gboolean GDK_WINDOW_SET_STATIC_GRAVITIES (GdkWindow *window,
 					  gboolean   use_static)
 {
    return gdk_window_set_static_gravities (window,
-					  use_static);   
+					  use_static);
 }
 
 void	      GDK_WINDOW_SET_USER_DATA	 (GdkWindow	  *window,
@@ -1029,10 +1029,10 @@ GtkWidget *GTK_COMBO_NEW                   (void)
    return gtk_combo_new                   ();
 }
 
-void       GTK_COMBO_SET_USE_ARROWS_ALWAYS (GtkCombo*    combo, 
+void       GTK_COMBO_SET_USE_ARROWS_ALWAYS (GtkCombo*    combo,
                                             gint         val)
 {
-   gtk_combo_set_use_arrows_always (combo, 
+   gtk_combo_set_use_arrows_always (combo,
                                     val);
 }
 
@@ -1891,23 +1891,23 @@ guint  GTK_SIGNAL_NEW			  (const gchar	       *name,
   guint i;
   va_list args;
   guint signal_id;
-  
+
   g_return_val_if_fail (nparams < MAX_SIGNAL_PARAMS, 0);
-  
+
   if (nparams > 0)
     {
       params = g_new (GtkType, nparams);
-      
+
       va_start (args, nparams);
-      
+
       for (i = 0; i < nparams; i++)
 	params[i] = va_arg (args, GtkType);
-      
+
       va_end (args);
     }
   else
     params = NULL;
-  
+
   signal_id = gtk_signal_newv (name,
 			       signal_flags,
 			       object_type,
@@ -1916,9 +1916,9 @@ guint  GTK_SIGNAL_NEW			  (const gchar	       *name,
 			       return_val,
 			       nparams,
 			       params);
-  
+
   g_free (params);
-  
+
   return signal_id;
 }
 
@@ -2441,10 +2441,10 @@ void       GTK_WINDOW_SET_TITLE                (GtkWindow           *window,
 					title);
 }
 
-void       GTK_WINDOW_SET_TRANSIENT_FOR        (GtkWindow           *window, 
+void       GTK_WINDOW_SET_TRANSIENT_FOR        (GtkWindow           *window,
 						GtkWindow           *parent)
 {
-   gtk_window_set_transient_for        (window, 
+   gtk_window_set_transient_for        (window,
 					parent);
 }
 
@@ -2525,7 +2525,7 @@ void		G_LOG			(const gchar	*log_domain,
 					 ...)
 {
   va_list args;
-  
+
   va_start (args, format);
   g_logv (log_domain, log_level, format, args);
   va_end (args);

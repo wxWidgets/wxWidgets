@@ -456,14 +456,12 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                     return false;
                 }
 
-                gtk_signal_connect( GTK_OBJECT(tool->m_item),
-                                    "enter_notify_event",
-                                    GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
-                                    (gpointer)tool );
-                gtk_signal_connect( GTK_OBJECT(tool->m_item),
-                                    "leave_notify_event",
-                                    GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
-                                    (gpointer)tool );
+                g_signal_connect (tool->m_item, "enter_notify_event",
+                                  G_CALLBACK (gtk_toolbar_tool_callback),
+                                  tool);
+                g_signal_connect (tool->m_item, "leave_notify_event",
+                                  G_CALLBACK (gtk_toolbar_tool_callback),
+                                  tool);
             }
             break;
 

@@ -320,25 +320,19 @@ wxClipboard::wxClipboard()
     m_targetsWidget = gtk_window_new( GTK_WINDOW_POPUP );
     gtk_widget_realize( m_targetsWidget );
 
-    gtk_signal_connect( GTK_OBJECT(m_targetsWidget),
-                        "selection_received",
-                        GTK_SIGNAL_FUNC( targets_selection_received ),
-                        (gpointer) this );
+    g_signal_connect (m_targetsWidget, "selection_received",
+                      G_CALLBACK (targets_selection_received), this);
 
     /* we use m_clipboardWidget to get and to offer data */
 
     m_clipboardWidget = gtk_window_new( GTK_WINDOW_POPUP );
     gtk_widget_realize( m_clipboardWidget );
 
-    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget),
-                        "selection_received",
-                        GTK_SIGNAL_FUNC( selection_received ),
-                        (gpointer) this );
+    g_signal_connect (m_clipboardWidget, "selection_received",
+                      G_CALLBACK (selection_received), this);
 
-    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget),
-                        "selection_clear_event",
-                        GTK_SIGNAL_FUNC( selection_clear_clip ),
-                        (gpointer) NULL );
+    g_signal_connect (m_clipboardWidget, "selection_clear_event",
+                      G_CALLBACK (selection_clear_clip), NULL);
 
     if (!g_clipboardAtom) g_clipboardAtom = gdk_atom_intern( "CLIPBOARD", FALSE );
     if (!g_targetsAtom) g_targetsAtom = gdk_atom_intern ("TARGETS", FALSE);
@@ -459,10 +453,8 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     delete[] array;
 
-    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget),
-                        "selection_get",
-                        GTK_SIGNAL_FUNC(selection_handler),
-                        (gpointer) NULL );
+    g_signal_connect (m_clipboardWidget, "selection_get",
+                      G_CALLBACK (selection_handler), NULL);
 
 #if wxUSE_THREADS
     /* disable GUI threads */

@@ -76,7 +76,7 @@ static gint gtk_dialog_focus_callback( GtkWidget *widget, GtkDirectionType WXUNU
         wxapp_install_idle_handler();
 
     // This disables GTK's tab traversal
-    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus" );
+    g_signal_stop_emission_by_name (widget, "focus");
     return TRUE;
 }
 }
@@ -192,8 +192,8 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
 
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
-        GTK_SIGNAL_FUNC(gtk_dialog_delete_callback), (gpointer)this );
+    g_signal_connect (m_widget, "delete_event",
+                      G_CALLBACK (gtk_dialog_delete_callback), this);
 
     m_wxwindow = gtk_pizza_new();
     gtk_widget_show( m_wxwindow );
@@ -207,15 +207,15 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
 
     /*  we cannot set MWM hints  before the widget has
         been realized, so we do this directly after realization */
-    gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
-                        GTK_SIGNAL_FUNC(gtk_dialog_realized_callback), (gpointer) this );
+    g_signal_connect (m_widget, "realize",
+                      G_CALLBACK (gtk_dialog_realized_callback), this);
 
     // disable native tab traversal
-    gtk_signal_connect( GTK_OBJECT(m_widget), "focus",
-        GTK_SIGNAL_FUNC(gtk_dialog_focus_callback), (gpointer)this );
+    g_signal_connect (m_widget, "focus",
+                      G_CALLBACK (gtk_dialog_focus_callback), this);
 
-    gtk_signal_connect (GTK_OBJECT(m_widget), "button_press_event",
-        GTK_SIGNAL_FUNC(gtk_popup_button_press), (gpointer)this );
+    g_signal_connect (m_widget, "button_press_event",
+                      G_CALLBACK (gtk_popup_button_press), this);
 
     return TRUE;
 }

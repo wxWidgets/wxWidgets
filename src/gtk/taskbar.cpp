@@ -98,10 +98,9 @@ bool wxTaskBarIconAreaBase::DoPopupMenu( wxMenu *menu, int x, int y )
 
     bool is_waiting = true;
 
-    gulong handler = gtk_signal_connect( GTK_OBJECT(menu->m_menu),
-                                         "hide",
-                                         GTK_SIGNAL_FUNC(gtk_pop_hide_callback),
-                                         (gpointer)&is_waiting );
+    gulong handler = g_signal_connect (menu->m_menu, "hide",
+                                       G_CALLBACK (gtk_pop_hide_callback),
+                                       &is_waiting);
 
     wxPoint pos;
     gpointer userdata;
@@ -134,7 +133,7 @@ bool wxTaskBarIconAreaBase::DoPopupMenu( wxMenu *menu, int x, int y )
         gtk_main_iteration();
     }
 
-    gtk_signal_disconnect(GTK_OBJECT(menu->m_menu), handler);
+    g_signal_handler_disconnect (menu->m_menu, handler);
 
     return true;
 }

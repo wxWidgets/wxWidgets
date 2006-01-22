@@ -111,8 +111,8 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
          !eventChanging.IsAllowed() )
     {
         /* program doesn't allow the page change */
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(notebook->m_widget),
-                                      "switch_page" );
+        g_signal_stop_emission_by_name (notebook->m_widget,
+                                        "switch_page");
     }
     else // change allowed
     {
@@ -219,7 +219,7 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
         // m_selection = page;
         gtk_notebook_set_page( GTK_NOTEBOOK(widget), page );
 
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        g_signal_stop_emission_by_name (widget, "key_press_event");
         return TRUE;
     }
 
@@ -247,7 +247,7 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
              client->SetFocus();
         }
 
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        g_signal_stop_emission_by_name (widget, "key_press_event");
         return TRUE;
     }
 
@@ -334,8 +334,8 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
     gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page",
-      GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer)this );
+    g_signal_connect (m_widget, "switch_page",
+                      G_CALLBACK (gtk_notebook_page_change_callback), this);
 
     m_parent->DoAddChild( this );
 
@@ -346,13 +346,13 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     if (m_windowStyle & wxBK_BOTTOM)
         gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_BOTTOM );
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "key_press_event",
-      GTK_SIGNAL_FUNC(gtk_notebook_key_press_callback), (gpointer)this );
+    g_signal_connect (m_widget, "key_press_event",
+                      G_CALLBACK (gtk_notebook_key_press_callback), this);
 
     PostCreation(size);
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
-                            GTK_SIGNAL_FUNC(gtk_notebook_realized_callback), (gpointer) this );
+    g_signal_connect (m_widget, "realize",
+                      G_CALLBACK (gtk_notebook_realized_callback), this);
 
     return TRUE;
 }
@@ -600,13 +600,14 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
     // gtk_notebook_remove_page() sends "switch_page" signal with some strange
     // new page index (when deleting selected page 0, new page is 1 although,
     // clearly, the selection should stay 0), so suppress this
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
-      GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer) this );
+    g_signal_handlers_disconnect_by_func (m_widget,
+                                          (gpointer) gtk_notebook_page_change_callback,
+                                          this);
 
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page",
-      GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer)this );
+    g_signal_connect (m_widget, "switch_page",
+                      G_CALLBACK (gtk_notebook_page_change_callback), this);
 
     wxGtkNotebookPage* p = GetNotebookPage(page);
     m_pagesData.DeleteObject(p);
@@ -637,8 +638,9 @@ bool wxNotebook::InsertPage( size_t position,
     win->m_widget->parent = NULL;
 
     // don't receive switch page during addition
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
-      GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer) this );
+    g_signal_handlers_disconnect_by_func (m_widget,
+                                          (gpointer) gtk_notebook_page_change_callback,
+                                          this);
 
     if (m_themeEnabled)
         win->SetThemeEnabled(TRUE);
@@ -657,8 +659,8 @@ bool wxNotebook::InsertPage( size_t position,
     nb_page->m_box = gtk_hbox_new( FALSE, 1 );
     gtk_container_border_width( GTK_CONTAINER(nb_page->m_box), 2 );
 
-    gtk_signal_connect( GTK_OBJECT(win->m_widget), "size_allocate",
-      GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)win );
+    g_signal_connect (win->m_widget, "size_allocate",
+                      G_CALLBACK (gtk_page_size_callback), win);
 
     gtk_notebook_insert_page( notebook, win->m_widget, nb_page->m_box, position );
 
@@ -709,8 +711,8 @@ bool wxNotebook::InsertPage( size_t position,
       SetSelection( position );
     }
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page",
-      GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer)this );
+    g_signal_connect (m_widget, "switch_page",
+                      G_CALLBACK (gtk_notebook_page_change_callback), this);
 
     InvalidateBestSize();
     return TRUE;

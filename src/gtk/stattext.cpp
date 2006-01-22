@@ -94,12 +94,9 @@ bool wxStaticText::Create(wxWindow *parent,
         // always shrinks to its minimal size for some reason and so no
         // alignment except the default left doesn't work (in fact it does,
         // but you don't see it)
-        gtk_signal_disconnect_by_func
-        (
-            GTK_OBJECT(m_widget),
-            GTK_SIGNAL_FUNC(wxgtk_window_size_request_callback),
-            (gpointer) this
-        );
+        g_signal_handlers_disconnect_by_func (m_widget,
+                                              (gpointer) wxgtk_window_size_request_callback,
+                                              this);
     }
 
     return TRUE;

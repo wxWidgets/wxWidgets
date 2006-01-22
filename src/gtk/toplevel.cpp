@@ -223,7 +223,7 @@ static gint gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUS
         wxapp_install_idle_handler();
 
     // This disables GTK's tab traversal
-    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus" );
+    g_signal_stop_emission_by_name (widget, "focus");
     return TRUE;
 }
 }
@@ -561,8 +561,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
-        GTK_SIGNAL_FUNC(gtk_frame_delete_callback), (gpointer)this );
+    g_signal_connect (m_widget, "delete_event",
+                      G_CALLBACK (gtk_frame_delete_callback), this);
 
     // m_mainWidget holds the toolbar, the menubar and the client area
     m_mainWidget = gtk_pizza_new();
@@ -573,8 +573,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if (m_miniEdge == 0) // wxMiniFrame has its own version.
     {
        // For m_mainWidget themes
-       gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",
-                GTK_SIGNAL_FUNC(gtk_window_expose_callback), (gpointer)this );
+       g_signal_connect (m_mainWidget, "expose_event",
+                         G_CALLBACK (gtk_window_expose_callback), this);
     }
 
     // m_wxwindow only represents the client area without toolbar and menubar
@@ -589,8 +589,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if (m_parent) m_parent->AddChild( this );
 
     // the user resized the frame by dragging etc.
-    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
-        GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
+    g_signal_connect (m_widget, "size_allocate",
+                      G_CALLBACK (gtk_frame_size_callback), this);
 
     PostCreation();
 
@@ -601,28 +601,28 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
     //  we cannot set MWM hints and icons before the widget has
     //  been realized, so we do this directly after realization
-    gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
-                        GTK_SIGNAL_FUNC(gtk_frame_realized_callback), (gpointer) this );
+    g_signal_connect (m_widget, "realize",
+                      G_CALLBACK (gtk_frame_realized_callback), this);
 
     // map and unmap for iconized state
-    gtk_signal_connect( GTK_OBJECT(m_widget), "map_event",
-        GTK_SIGNAL_FUNC(gtk_frame_map_callback), (gpointer)this );
-    gtk_signal_connect( GTK_OBJECT(m_widget), "unmap_event",
-        GTK_SIGNAL_FUNC(gtk_frame_unmap_callback), (gpointer)this );
+    g_signal_connect (m_widget, "map_event",
+                      G_CALLBACK (gtk_frame_map_callback), this);
+    g_signal_connect (m_widget, "unmap_event",
+                      G_CALLBACK (gtk_frame_unmap_callback), this);
 
     // the only way to get the window size is to connect to this event
-    gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
-        GTK_SIGNAL_FUNC(gtk_frame_configure_callback), (gpointer)this );
+    g_signal_connect (m_widget, "configure_event",
+                      G_CALLBACK (gtk_frame_configure_callback), this);
 
     // disable native tab traversal
-    gtk_signal_connect( GTK_OBJECT(m_widget), "focus",
-        GTK_SIGNAL_FUNC(gtk_frame_focus_callback), (gpointer)this );
+    g_signal_connect (m_widget, "focus",
+                      G_CALLBACK (gtk_frame_focus_callback), this);
 
     // activation
-    gtk_signal_connect( GTK_OBJECT(m_widget), "focus_in_event",
-        GTK_SIGNAL_FUNC(gtk_frame_focus_in_callback), (gpointer)this );
-    gtk_signal_connect( GTK_OBJECT(m_widget), "focus_out_event",
-        GTK_SIGNAL_FUNC(gtk_frame_focus_out_callback), (gpointer)this );
+    g_signal_connect (m_widget, "focus_in_event",
+                      G_CALLBACK (gtk_frame_focus_in_callback), this);
+    g_signal_connect (m_widget, "focus_out_event",
+                      G_CALLBACK (gtk_frame_focus_out_callback), this);
 
     // decorations
     if ((m_miniEdge > 0) || (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER))

@@ -534,16 +534,14 @@ printf("m_tree = %p\n", m_tree);
 
   gtk_widget_show(GTK_WIDGET(item));
 
-  gtk_signal_connect(GTK_OBJECT(item), "select",
-    GTK_SIGNAL_FUNC(gtk_treeitem_select_callback), (gpointer)this );
-
-  gtk_signal_connect(GTK_OBJECT(item), "deselect",
-    GTK_SIGNAL_FUNC(gtk_treeitem_select_callback), (gpointer)this );
-
-  gtk_signal_connect(GTK_OBJECT(item), "expand",
-    GTK_SIGNAL_FUNC(gtk_treeitem_expand_callback), (gpointer)this );
-  gtk_signal_connect(GTK_OBJECT(item), "collapse",
-    GTK_SIGNAL_FUNC(gtk_treeitem_collapse_callback), (gpointer)this );
+  g_signal_connect (item, "select",
+                    G_CALLBACK (gtk_treeitem_select_callback), this);
+  g_signal_connect (item, "deselect",
+                    G_CALLBACK (gtk_treeitem_select_callback), this);
+  g_signal_connect (item, "expand",
+                    G_CALLBACK (gtk_treeitem_expand_callback), this);
+  g_signal_connect (item, "collapse",
+                    G_CALLBACK (gtk_treeitem_collapse_callback), this);
 
   return item;
 }
@@ -856,16 +854,14 @@ long wxTreeCtrl::InsertItem(long parent, wxTreeItem& info, long insertAfter) {
 
   gtk_widget_show(GTK_WIDGET(item));
 
-  gtk_signal_connect(GTK_OBJECT(item), "select",
-    GTK_SIGNAL_FUNC(gtk_treeitem_select_callback), (gpointer)this );
-
-  gtk_signal_connect(GTK_OBJECT(item), "deselect",
-    GTK_SIGNAL_FUNC(gtk_treeitem_select_callback), (gpointer)this );
-
-  gtk_signal_connect(GTK_OBJECT(item), "expand",
-    GTK_SIGNAL_FUNC(gtk_treeitem_expand_callback), (gpointer)this );
-  gtk_signal_connect(GTK_OBJECT(item), "collapse",
-    GTK_SIGNAL_FUNC(gtk_treeitem_collapse_callback), (gpointer)this );
+  g_signal_connect (item, "select",
+                    G_CALLBACK (gtk_treeitem_select_callback), this);
+  g_signal_connect (item, "deselect",
+                    G_CALLBACK (gtk_treeitem_select_callback), this);
+  g_signal_connect (item, "expand",
+                    G_CALLBACK (gtk_treeitem_expand_callback), this);
+  g_signal_connect (item, "collapse",
+                    G_CALLBACK (gtk_treeitem_collapse_callback), this);
 
   return info.m_itemId;
 }

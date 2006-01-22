@@ -124,14 +124,14 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
 
     GtkFontSelectionDialog *sel = GTK_FONT_SELECTION_DIALOG(m_widget);
 
-    gtk_signal_connect( GTK_OBJECT(sel->ok_button), "clicked",
-      GTK_SIGNAL_FUNC(gtk_fontdialog_ok_callback), (gpointer*)this );
+    g_signal_connect (sel->ok_button, "clicked",
+                      G_CALLBACK (gtk_fontdialog_ok_callback), this);
 
-    gtk_signal_connect( GTK_OBJECT(sel->cancel_button), "clicked",
-      GTK_SIGNAL_FUNC(gtk_fontdialog_cancel_callback), (gpointer*)this );
+    g_signal_connect (sel->cancel_button, "clicked",
+                      G_CALLBACK (gtk_fontdialog_cancel_callback), this);
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
-        GTK_SIGNAL_FUNC(gtk_fontdialog_delete_callback), (gpointer)this );
+    g_signal_connect (m_widget, "delete_event",
+                      G_CALLBACK (gtk_fontdialog_delete_callback), this);
 
     wxFont font = m_fontData.GetInitialFont();
     if( font.Ok() )

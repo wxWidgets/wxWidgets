@@ -81,7 +81,7 @@ gtk_mdi_page_change_callback( GtkNotebook *WXUNUSED(widget),
     {
         wxMDIChildFrame *child_frame = wxDynamicCast( node->GetData(), wxMDIChildFrame );
         // CE: we come here in the destructor with a null child_frame - I think because
-        // gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page", (see below)
+        // g_signal_connect (m_widget, "switch_page", (see below)
         // isn't deleted early enough
         if (!child_frame)
           return ;
@@ -463,8 +463,8 @@ static void wxInsertChildInMDI( wxMDIClientWindow* parent, wxMDIChildFrame* chil
     GtkWidget *label_widget = gtk_label_new( s.mbc_str() );
     gtk_misc_set_alignment( GTK_MISC(label_widget), 0.0, 0.5 );
 
-    gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",
-      GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)child );
+    g_signal_connect (child->m_widget, "size_allocate",
+                      G_CALLBACK (gtk_page_size_callback), child);
 
     GtkNotebook *notebook = GTK_NOTEBOOK(parent->m_widget);
 
@@ -511,8 +511,8 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
 
     m_widget = gtk_notebook_new();
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page",
-      GTK_SIGNAL_FUNC(gtk_mdi_page_change_callback), (gpointer)parent );
+    g_signal_connect (m_widget, "switch_page",
+                      G_CALLBACK (gtk_mdi_page_change_callback), parent);
 
     gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
 

@@ -413,17 +413,18 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     gtk_pizza_set_clear( GTK_PIZZA(m_wxwindow), FALSE );
 
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
-                            GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "map",
-                            GTK_SIGNAL_FUNC(gtk_glwindow_map_callback), (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
-        GTK_SIGNAL_FUNC(gtk_glwindow_expose_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
-        GTK_SIGNAL_FUNC(gtk_glcanvas_size_callback), (gpointer)this );
+    g_signal_connect (m_wxwindow, "realize",
+                      G_CALLBACK (gtk_glwindow_realized_callback),
+                      this);
+    g_signal_connect (m_wxwindow, "map",
+                      G_CALLBACK (gtk_glwindow_map_callback),
+                      this);
+    g_signal_connect (m_wxwindow, "expose_event",
+                      G_CALLBACK (gtk_glwindow_expose_callback),
+                      this);
+    g_signal_connect (m_widget, "size_allocate",
+                      G_CALLBACK (gtk_glcanvas_size_callback),
+                      this);
 
     if (gtk_check_version(2,2,0) != NULL)
     {

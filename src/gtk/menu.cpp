@@ -185,10 +185,8 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     //     don't get it when the menu is dismissed by clicking outside the
     //     toolbar) so we connect to the global one, even if it means that we
     //     can't pass the menu which was closed in wxMenuEvent object
-    gtk_signal_connect( GTK_OBJECT(GTK_MENU_SHELL(m_menubar)),
-                        "deactivate",
-                        GTK_SIGNAL_FUNC(gtk_menu_close_callback),
-                        (gpointer)this );
+    g_signal_connect (m_menubar, "deactivate",
+                      G_CALLBACK (gtk_menu_close_callback), this);
 
 }
 
@@ -311,9 +309,9 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
     else
         gtk_menu_shell_insert( GTK_MENU_SHELL(m_menubar), menu->m_owner, pos );
 
-    gtk_signal_connect( GTK_OBJECT(menu->m_owner), "activate",
-                        GTK_SIGNAL_FUNC(gtk_menu_open_callback),
-                        (gpointer)menu );
+    g_signal_connect (menu->m_owner, "activate",
+                      G_CALLBACK (gtk_menu_open_callback),
+                      menu);
 
     // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
     // addings menu later on.
@@ -1062,13 +1060,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     {
         wxASSERT_MSG( menuItem, wxT("invalid menuitem") );
 
-        gtk_signal_connect( GTK_OBJECT(menuItem), "select",
-                            GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
-                            (gpointer)this );
-
-        gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
-                            GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
-                            (gpointer)this );
+        g_signal_connect (menuItem, "select",
+                          G_CALLBACK (gtk_menu_hilight_callback), this);
+        g_signal_connect (menuItem, "deselect",
+                          G_CALLBACK (gtk_menu_nolight_callback), this);
 
         if ( mitem->IsSubMenu() && mitem->GetKind() != wxITEM_RADIO && mitem->GetKind() != wxITEM_CHECK )
         {
@@ -1084,9 +1079,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         }
         else
         {
-            gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
-                                GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
-                                (gpointer)this );
+            g_signal_connect (menuItem, "activate",
+                              G_CALLBACK (gtk_menu_clicked_callback),
+                              this);
         }
     }
 
@@ -1485,10 +1480,9 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     bool is_waiting = true;
 
-    gulong handler = gtk_signal_connect( GTK_OBJECT(menu->m_menu),
-                                         "hide",
-                                         GTK_SIGNAL_FUNC(gtk_pop_hide_callback),
-                                         (gpointer)&is_waiting );
+    gulong handler = g_signal_connect (menu->m_menu, "hide",
+                                       G_CALLBACK (gtk_pop_hide_callback),
+                                       &is_waiting);
 
     wxPoint pos;
     gpointer userdata;
@@ -1524,7 +1518,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
         gtk_main_iteration();
     }
 
-    gtk_signal_disconnect(GTK_OBJECT(menu->m_menu), handler);
+    g_signal_handler_disconnect (menu->m_menu, handler);
 
     wxMenuEvent eventClose(wxEVT_MENU_CLOSE, -1, menu);
     DoCommonMenuCallbackCode(menu, eventClose);

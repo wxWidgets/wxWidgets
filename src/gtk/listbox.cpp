@@ -349,7 +349,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 
     if (ret)
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        g_signal_stop_emission_by_name (widget, "key_press_event");
         return TRUE;
     }
 
@@ -534,8 +534,8 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_widget_show( GTK_WIDGET(m_list) );
 
-    gtk_signal_connect( GTK_OBJECT(m_list), "realize",
-                        GTK_SIGNAL_FUNC(gtk_listbox_realized_callback), (gpointer) this );
+    g_signal_connect (m_list, "realize",
+                      G_CALLBACK (gtk_listbox_realized_callback), this);
 
     if ( style & wxLB_SORT )
     {
@@ -696,34 +696,30 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
     else
         gtk_list_insert_items( GTK_LIST (m_list), gitem_list, pos );
 
-    gtk_signal_connect_after( GTK_OBJECT(list_item), "select",
-      GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+    g_signal_connect_after (list_item, "select",
+                            G_CALLBACK (gtk_listitem_select_callback),
+                            this);
 
     if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
-        gtk_signal_connect_after( GTK_OBJECT(list_item), "deselect",
-          GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
+        g_signal_connect_after (list_item, "deselect",
+                                G_CALLBACK (gtk_listitem_deselect_callback),
+                                this);
 
-    gtk_signal_connect( GTK_OBJECT(list_item),
-                        "button_press_event",
-                        (GtkSignalFunc)gtk_listbox_button_press_callback,
-                        (gpointer) this );
-
-    gtk_signal_connect_after( GTK_OBJECT(list_item),
-                        "button_release_event",
-                        (GtkSignalFunc)gtk_listbox_button_release_callback,
-                        (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(list_item),
-                           "key_press_event",
-                           (GtkSignalFunc)gtk_listbox_key_press_callback,
-                           (gpointer)this );
-
-
-    gtk_signal_connect( GTK_OBJECT(list_item), "focus_in_event",
-            GTK_SIGNAL_FUNC(gtk_listitem_focus_in_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(list_item), "focus_out_event",
-            GTK_SIGNAL_FUNC(gtk_listitem_focus_out_callback), (gpointer)this );
+    g_signal_connect (list_item, "button_press_event",
+                      G_CALLBACK (gtk_listbox_button_press_callback),
+                      this);
+    g_signal_connect_after (list_item, "button_release_event",
+                            G_CALLBACK (gtk_listbox_button_release_callback),
+                            this);
+    g_signal_connect (list_item, "key_press_event",
+                      G_CALLBACK (gtk_listbox_key_press_callback),
+                           this);
+    g_signal_connect (list_item, "focus_in_event",
+                      G_CALLBACK (gtk_listitem_focus_in_callback),
+                      this);
+    g_signal_connect (list_item, "focus_out_event",
+                      G_CALLBACK (gtk_listitem_focus_out_callback),
+                      this);
 
     ConnectWidget( list_item );
 

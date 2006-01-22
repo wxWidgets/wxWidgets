@@ -202,14 +202,12 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         gtk_range_set_inverted( GTK_RANGE(m_widget), TRUE );
 
     GtkEnableEvents();
-    gtk_signal_connect( GTK_OBJECT(m_widget),
-                        "button_press_event",
-                        (GtkSignalFunc)gtk_slider_button_press_callback,
-                        (gpointer) this );
-    gtk_signal_connect( GTK_OBJECT(m_widget),
-                        "button_release_event",
-                        (GtkSignalFunc)gtk_slider_button_release_callback,
-                        (gpointer) this );
+    g_signal_connect (m_widget, "button_press_event",
+                      G_CALLBACK (gtk_slider_button_press_callback),
+                      this);
+    g_signal_connect (m_widget, "button_release_event",
+                      G_CALLBACK (gtk_slider_button_release_callback),
+                      this);
 
     SetRange( minValue, maxValue );
     SetValue( value );
@@ -237,7 +235,7 @@ void wxSlider::SetValue( int value )
 
     GtkDisableEvents();
 
-    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
+    g_signal_emit_by_name (m_adjust, "value_changed");
 
     GtkEnableEvents();
 }
@@ -260,7 +258,7 @@ void wxSlider::SetRange( int minValue, int maxValue )
 
     GtkDisableEvents();
 
-    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    g_signal_emit_by_name (m_adjust, "changed");
 
     GtkEnableEvents();
 }
@@ -285,7 +283,7 @@ void wxSlider::SetPageSize( int pageSize )
 
     GtkDisableEvents();
 
-    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    g_signal_emit_by_name (m_adjust, "changed");
 
     GtkEnableEvents();
 }
@@ -305,7 +303,7 @@ void wxSlider::SetThumbLength( int len )
 
     GtkDisableEvents();
 
-    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    g_signal_emit_by_name (m_adjust, "changed");
 
     GtkEnableEvents();
 }
@@ -332,17 +330,15 @@ bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
 
 void wxSlider::GtkDisableEvents()
 {
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_adjust),
-                        GTK_SIGNAL_FUNC(gtk_slider_callback),
-                        (gpointer) this );
+    g_signal_handlers_disconnect_by_func (m_adjust,
+                                          (gpointer) gtk_slider_callback,
+                                          this);
 }
 
 void wxSlider::GtkEnableEvents()
 {
-    gtk_signal_connect( GTK_OBJECT (m_adjust),
-                        "value_changed",
-                        GTK_SIGNAL_FUNC(gtk_slider_callback),
-                        (gpointer) this );
+    g_signal_connect (m_adjust, "value_changed",
+                      G_CALLBACK (gtk_slider_callback), this);
 }
 
 // static

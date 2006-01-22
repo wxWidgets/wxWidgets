@@ -161,10 +161,8 @@ bool wxCheckBox::Create(wxWindow *parent,
     }
     SetLabel( label );
 
-    gtk_signal_connect( GTK_OBJECT(m_widgetCheckbox),
-                        "toggled",
-                        GTK_SIGNAL_FUNC(gtk_checkbox_toggled_callback),
-                        (gpointer *)this );
+    g_signal_connect (m_widgetCheckbox, "toggled",
+                      G_CALLBACK (gtk_checkbox_toggled_callback), this);
 
     m_parent->DoAddChild( this );
 

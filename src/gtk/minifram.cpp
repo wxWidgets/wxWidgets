@@ -323,23 +323,22 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
         gtk_widget_show( close_button );
 
-        gtk_signal_connect( GTK_OBJECT(close_button), "clicked",
-          GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
+        g_signal_connect (close_button, "clicked",
+                          G_CALLBACK (gtk_button_clicked_callback),
+                          this);
     }
 
     /* these are called when the borders are drawn */
-    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",
-        GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
+    g_signal_connect (m_mainWidget, "expose_event",
+                      G_CALLBACK (gtk_window_own_expose_callback), this );
 
     /* these are required for dragging the mini frame around */
-    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "button_press_event",
-      GTK_SIGNAL_FUNC(gtk_window_button_press_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "button_release_event",
-      GTK_SIGNAL_FUNC(gtk_window_button_release_callback), (gpointer)this );
-
-    gtk_signal_connect( GTK_OBJECT(m_mainWidget), "motion_notify_event",
-      GTK_SIGNAL_FUNC(gtk_window_motion_notify_callback), (gpointer)this );
+    g_signal_connect (m_mainWidget, "button_press_event",
+                      G_CALLBACK (gtk_window_button_press_callback), this);
+    g_signal_connect (m_mainWidget, "button_release_event",
+                      G_CALLBACK (gtk_window_button_release_callback), this);
+    g_signal_connect (m_mainWidget, "motion_notify_event",
+                      G_CALLBACK (gtk_window_motion_notify_callback), this);
 
     return true;
 }

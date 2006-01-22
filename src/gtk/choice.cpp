@@ -541,8 +541,9 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, int pos, const wxString& item)
     // it has to change. Adapted from Matt Ownby.
     InvalidateBestSize();
 
-    gtk_signal_connect_after( GTK_OBJECT( menu_item ), "activate",
-      GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
+    g_signal_connect_after (menu_item, "activate",
+                            G_CALLBACK (gtk_choice_clicked_callback),
+                            this);
 
     gtk_widget_show( menu_item );
 

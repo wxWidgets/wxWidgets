@@ -86,7 +86,7 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
         return FALSE;
     }
 
-    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+    g_signal_stop_emission_by_name (widget, "key_press_event");
 
     if ((gdk_event->keyval == GDK_Up) ||
         (gdk_event->keyval == GDK_Left))
@@ -234,8 +234,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, wxGTK_CONV( label ) ) );
         gtk_widget_show( GTK_WIDGET(m_radio) );
 
-        gtk_signal_connect( GTK_OBJECT(m_radio), "key_press_event",
-           GTK_SIGNAL_FUNC(gtk_radiobox_keypress_callback), (gpointer)this );
+        g_signal_connect (m_radio, "key_press_event",
+                          G_CALLBACK (gtk_radiobox_keypress_callback), this);
 
         m_boxes.Append( (wxObject*) m_radio );
 
@@ -262,14 +262,12 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
         if (!i) gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_radio), TRUE );
 
-        gtk_signal_connect( GTK_OBJECT(m_radio), "clicked",
-            GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
-
-        gtk_signal_connect( GTK_OBJECT(m_radio), "focus_in_event",
-            GTK_SIGNAL_FUNC(gtk_radiobutton_focus_in), (gpointer)this );
-
-        gtk_signal_connect( GTK_OBJECT(m_radio), "focus_out_event",
-            GTK_SIGNAL_FUNC(gtk_radiobutton_focus_out), (gpointer)this );
+        g_signal_connect (m_radio, "clicked",
+                          G_CALLBACK (gtk_radiobutton_clicked_callback), this);
+        g_signal_connect (m_radio, "focus_in_event",
+                          G_CALLBACK (gtk_radiobutton_focus_in), this);
+        g_signal_connect (m_radio, "focus_out_event",
+                          G_CALLBACK (gtk_radiobutton_focus_out), this);
     }
 
     m_parent->DoAddChild( this );
@@ -502,8 +500,9 @@ void wxRadioBox::GtkDisableEvents()
     wxList::compatibility_iterator node = m_boxes.GetFirst();
     while (node)
     {
-        gtk_signal_disconnect_by_func( GTK_OBJECT(node->GetData()),
-           GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+        g_signal_handlers_disconnect_by_func (node->GetData(),
+                                              (gpointer) gtk_radiobutton_clicked_callback,
+                                              this);
 
         node = node->GetNext();
     }
@@ -514,8 +513,8 @@ void wxRadioBox::GtkEnableEvents()
     wxList::compatibility_iterator node = m_boxes.GetFirst();
     while (node)
     {
-        gtk_signal_connect( GTK_OBJECT(node->GetData()), "clicked",
-           GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+        g_signal_connect (node->GetData(), "clicked",
+                          G_CALLBACK (gtk_radiobutton_clicked_callback), this);
 
         node = node->GetNext();
     }

@@ -136,11 +136,12 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     // Quickly set the value of the combo box
     // as GTK+ does that only AFTER the event
     // is sent.
-    gtk_signal_disconnect_by_func( GTK_OBJECT(GTK_COMBO(combo->GetHandle())->entry),
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)combo );
+    g_signal_handlers_disconnect_by_func (GTK_COMBO (combo->GetHandle())->entry,
+                                          (gpointer) gtk_text_changed_callback,
+                                          combo);
     combo->SetValue( combo->GetStringSelection() );
-    gtk_signal_connect_after( GTK_OBJECT(GTK_COMBO(combo->GetHandle())->entry), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)combo );
+    g_signal_connect_after (GTK_COMBO (combo->GetHandle())->entry, "changed",
+                            G_CALLBACK (gtk_text_changed_callback), combo);
 
     // throw a SELECTED event only if the combobox popup is hidden (wxID_NONE)
     // because when combobox popup is shown, gtk_combo_select_child_callback is
@@ -227,10 +228,11 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     GtkCombo *combo = GTK_COMBO(m_widget);
 
     // Disable GTK's broken events ...
-    gtk_signal_disconnect( GTK_OBJECT(combo->entry), combo->entry_change_id );
+    g_signal_handler_disconnect (combo->entry, combo->entry_change_id);
     // ... and add surrogate handler.
-    combo->entry_change_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "changed",
-                  (GtkSignalFunc) gtk_dummy_callback, combo);
+    combo->entry_change_id = g_signal_connect (combo->entry, "changed",
+                                               G_CALLBACK (gtk_dummy_callback),
+                                               combo);
 
     // make it more useable
     gtk_combo_set_use_arrows_always( GTK_COMBO(m_widget), TRUE );
@@ -272,16 +274,17 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     // "show" and "hide" events are generated when user click on the combobox button which popups a list
     // this list is the "popwin" gtk widget
-    gtk_signal_connect( GTK_OBJECT(GTK_COMBO(combo)->popwin), "hide",
-                        GTK_SIGNAL_FUNC(gtk_popup_hide_callback), (gpointer)this );
-    gtk_signal_connect( GTK_OBJECT(GTK_COMBO(combo)->popwin), "show",
-                        GTK_SIGNAL_FUNC(gtk_popup_show_callback), (gpointer)this );
+    g_signal_connect (GTK_COMBO(combo)->popwin, "hide",
+                      G_CALLBACK (gtk_popup_hide_callback), this);
+    g_signal_connect (GTK_COMBO(combo)->popwin, "show",
+                      G_CALLBACK (gtk_popup_show_callback), this);
 
-    gtk_signal_connect_after( GTK_OBJECT(combo->entry), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this );
+    g_signal_connect_after (combo->entry, "changed",
+                            G_CALLBACK (gtk_text_changed_callback), this);
 
-    gtk_signal_connect_after( GTK_OBJECT(combo->list), "select-child",
-      GTK_SIGNAL_FUNC(gtk_combo_select_child_callback), (gpointer)this );
+    g_signal_connect_after (combo->list, "select-child",
+                            G_CALLBACK (gtk_combo_select_child_callback),
+                            this);
 
     SetBestSize(size); // need this too because this is a wxControlWithItems
 
@@ -866,18 +869,22 @@ void wxComboBox::OnChar( wxKeyEvent &event )
 
 void wxComboBox::DisableEvents()
 {
-    gtk_signal_disconnect_by_func( GTK_OBJECT(GTK_COMBO(m_widget)->list),
-      GTK_SIGNAL_FUNC(gtk_combo_select_child_callback), (gpointer)this );
-    gtk_signal_disconnect_by_func( GTK_OBJECT(GTK_COMBO(m_widget)->entry),
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this );
+    g_signal_handlers_disconnect_by_func (GTK_COMBO(m_widget)->list,
+                                          (gpointer) gtk_combo_select_child_callback,
+                                          this);
+    g_signal_handlers_disconnect_by_func (GTK_COMBO(m_widget)->entry,
+                                          (gpointer) gtk_text_changed_callback,
+                                          this);
 }
 
 void wxComboBox::EnableEvents()
 {
-    gtk_signal_connect_after( GTK_OBJECT(GTK_COMBO(m_widget)->list), "select-child",
-      GTK_SIGNAL_FUNC(gtk_combo_select_child_callback), (gpointer)this );
-    gtk_signal_connect_after( GTK_OBJECT(GTK_COMBO(m_widget)->entry), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this );
+    g_signal_connect_after (GTK_COMBO(m_widget)->list, "select-child",
+                            G_CALLBACK (gtk_combo_select_child_callback),
+                            this);
+    g_signal_connect_after (GTK_COMBO(m_widget)->entry, "changed",
+                            G_CALLBACK (gtk_text_changed_callback),
+                            this );
 }
 
 void wxComboBox::OnSize( wxSizeEvent &event )
