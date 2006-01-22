@@ -2119,8 +2119,9 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
     }
 
     if ( index != wxNOT_FOUND )
-    {
-        fileType = new wxFileType;
+    {   // don't throw away fileType that was already found
+        if ( !fileType)
+            fileType = new wxFileType;
         fileType->m_impl->Init(this, index);
     }
     return fileType;
