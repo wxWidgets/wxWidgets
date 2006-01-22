@@ -46,6 +46,7 @@ wxMSW
   columns, if ComCtl32 >= 470.
 - Fixed problem where using SetValue and wxTE_RICH2 would cause control to
   show.
+- Numpad special keys are now distinguished from normal keys.
 
 wxWinCE:
 
