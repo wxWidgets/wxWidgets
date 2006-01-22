@@ -231,6 +231,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/apptbase.h
     wx/os2/apptrait.h
     wx/os2/mimetype.h
+    wx/os2/private.h
     wx/os2/stdpaths.h
     wx/os2/chkconf.h
 </set>
@@ -1719,7 +1720,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/pnghand.h
     wx/os2/pngread.h
     wx/os2/print.h
-    wx/os2/private.h
     wx/os2/radiobox.h
     wx/os2/radiobut.h
     wx/os2/region.h
