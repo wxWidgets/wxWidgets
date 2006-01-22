@@ -5185,19 +5185,9 @@ int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
         case VK_CAPITAL:    id = WXK_CAPITAL; break;
         case VK_SPACE:      id = WXK_SPACE; break;
         case VK_ESCAPE:     id = WXK_ESCAPE; break;
-        case VK_PRIOR:      id = WXK_PRIOR; break;
-        case VK_NEXT :      id = WXK_NEXT; break;
-        case VK_END:        id = WXK_END; break;
-        case VK_HOME :      id = WXK_HOME; break;
-        case VK_LEFT :      id = WXK_LEFT; break;
-        case VK_UP:         id = WXK_UP; break;
-        case VK_RIGHT:      id = WXK_RIGHT; break;
-        case VK_DOWN :      id = WXK_DOWN; break;
         case VK_SELECT:     id = WXK_SELECT; break;
         case VK_PRINT:      id = WXK_PRINT; break;
         case VK_EXECUTE:    id = WXK_EXECUTE; break;
-        case VK_INSERT:     id = WXK_INSERT; break;
-        case VK_DELETE:     id = WXK_DELETE; break;
         case VK_HELP :      id = WXK_HELP; break;
         case VK_NUMPAD0:    id = WXK_NUMPAD0; break;
         case VK_NUMPAD1:    id = WXK_NUMPAD1; break;
@@ -5261,10 +5251,40 @@ int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
         case VK_APPS:       id = WXK_WINDOWS_MENU; break;
 #endif // VK_APPS defined
 
+        // use the "extended" bit (24) of lParam to distinguish extended keys
+        // from normal keys as the same key is sent
+        case VK_PRIOR:
+            id = lParam & (1 << 24) ? WXK_PRIOR : WXK_NUMPAD_PRIOR;
+            break;
+        case VK_NEXT:
+            id = lParam & (1 << 24) ? WXK_NEXT : WXK_NUMPAD_NEXT;
+            break;
+        case VK_END:
+            id = lParam & (1 << 24) ? WXK_END : WXK_NUMPAD_END;
+            break;
+        case VK_HOME:
+            id = lParam & (1 << 24) ? WXK_HOME : WXK_NUMPAD_HOME;
+            break;
+        case VK_LEFT:
+            id = lParam & (1 << 24) ? WXK_LEFT : WXK_NUMPAD_LEFT;
+            break;
+        case VK_UP:
+            id = lParam & (1 << 24) ? WXK_UP : WXK_NUMPAD_UP;
+            break;
+        case VK_RIGHT:
+            id = lParam & (1 << 24) ? WXK_RIGHT : WXK_NUMPAD_RIGHT;
+            break;
+        case VK_DOWN:
+            id = lParam & (1 << 24) ? WXK_DOWN : WXK_NUMPAD_DOWN;
+            break;
+        case VK_INSERT:
+            id = lParam & (1 << 24) ? WXK_INSERT : WXK_NUMPAD_INSERT;
+            break;
+        case VK_DELETE:
+            id = lParam & (1 << 24) ? WXK_DELETE : WXK_NUMPAD_DELETE;
+            break;
+        // this order is correct as the numpad enter is the extended key
         case VK_RETURN:
-            // the same key is sent for both the "return" key on the main
-            // keyboard and the numeric keypad but we want to distinguish
-            // between them: we do this using the "extended" bit (24) of lParam
             id = lParam & (1 << 24) ? WXK_NUMPAD_ENTER : WXK_RETURN;
             break;
 
