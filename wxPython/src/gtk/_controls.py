@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _controls_
@@ -4708,7 +4708,7 @@ class ListCtrl(_core.Control):
         return _controls_.ListCtrl_InsertItem(*args, **kwargs)
 
     def InsertStringItem(*args, **kwargs):
-        """InsertStringItem(self, long index, String label) -> long"""
+        """InsertStringItem(self, long index, String label, int imageIndex=-1) -> long"""
         return _controls_.ListCtrl_InsertStringItem(*args, **kwargs)
 
     def InsertImageItem(*args, **kwargs):
@@ -6439,5 +6439,6 @@ def PreDatePickerCtrl(*args, **kwargs):
     val = _controls_.new_PreDatePickerCtrl(*args, **kwargs)
     val.thisown = 1
     return val
+
 
 

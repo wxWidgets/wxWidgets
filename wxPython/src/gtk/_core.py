@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _core_
@@ -2936,6 +2936,16 @@ class Image(Object):
         ``(r2,g2,b2)``.
         """
         return _core_.Image_Replace(*args, **kwargs)
+
+    def ConvertToGreyscale(*args, **kwargs):
+        """
+        ConvertToGreyscale(self, double lr=0.299, double lg=0.587, double lb=0.114) -> Image
+
+        Convert to greyscale image. Uses the luminance component (Y) of the
+        image.  The luma value (YUV) is calculated using (R * lr) + (G * lg) + (B * lb),
+        defaults to ITU-T BT.601
+        """
+        return _core_.Image_ConvertToGreyscale(*args, **kwargs)
 
     def ConvertToMono(*args, **kwargs):
         """
@@ -13624,5 +13634,6 @@ _core_._wxPyFixStockObjects()
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
+
 
 
