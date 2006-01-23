@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _windows_
@@ -628,6 +628,7 @@ class Dialog(TopLevelWindow):
     """Proxy of C++ Dialog class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    ButtonSizerFlags = _windows_.Dialog_ButtonSizerFlags
     def __init__(self, *args, **kwargs):
         """
         __init__(self, Window parent, int id=-1, String title=EmptyString, 
@@ -661,7 +662,7 @@ class Dialog(TopLevelWindow):
         return _windows_.Dialog_CreateTextSizer(*args, **kwargs)
 
     def CreateButtonSizer(*args, **kwargs):
-        """CreateButtonSizer(self, long flags) -> Sizer"""
+        """CreateButtonSizer(self, long flags, bool separated=False, int distance=0) -> Sizer"""
         return _windows_.Dialog_CreateButtonSizer(*args, **kwargs)
 
     def CreateStdDialogButtonSizer(*args, **kwargs):
@@ -2401,6 +2402,13 @@ class ColourDialogPtr(ColourDialog):
         self.__class__ = ColourDialog
 _windows_.ColourDialog_swigregister(ColourDialogPtr)
 
+
+def GetColourFromUser(*args, **kwargs):
+    """
+    GetColourFromUser(Window parent=(wxWindow *) NULL, Colour colInit=wxNullColour, 
+        String caption=EmptyString) -> Colour
+    """
+    return _windows_.GetColourFromUser(*args, **kwargs)
 class DirDialog(Dialog):
     """
     wx.DirDialog allows the user to select a directory by browising the
@@ -3004,6 +3012,10 @@ class FontDialogPtr(FontDialog):
         self.__class__ = FontDialog
 _windows_.FontDialog_swigregister(FontDialogPtr)
 
+
+def GetFontFromUser(*args, **kwargs):
+    """GetFontFromUser(Window parent=None, Font fontInit=wxNullFont, String caption=EmptyString) -> Font"""
+    return _windows_.GetFontFromUser(*args, **kwargs)
 class MessageDialog(Dialog):
     """
     This class provides a simple dialog that shows a single or multi-line
@@ -4967,5 +4979,6 @@ class PyPreviewControlBarPtr(PyPreviewControlBar):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyPreviewControlBar
 _windows_.PyPreviewControlBar_swigregister(PyPreviewControlBarPtr)
+
 
 

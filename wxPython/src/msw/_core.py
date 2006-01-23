@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _core_
@@ -2936,6 +2936,16 @@ class Image(Object):
         ``(r2,g2,b2)``.
         """
         return _core_.Image_Replace(*args, **kwargs)
+
+    def ConvertToGreyscale(*args, **kwargs):
+        """
+        ConvertToGreyscale(self, double lr=0.299, double lg=0.587, double lb=0.114) -> Image
+
+        Convert to greyscale image. Uses the luminance component (Y) of the
+        image.  The luma value (YUV) is calculated using (R * lr) + (G * lg) + (B * lb),
+        defaults to ITU-T BT.601
+        """
+        return _core_.Image_ConvertToGreyscale(*args, **kwargs)
 
     def ConvertToMono(*args, **kwargs):
         """
@@ -7865,6 +7875,30 @@ def EventLoop_SetActive(*args, **kwargs):
     """EventLoop_SetActive(EventLoop loop)"""
     return _core_.EventLoop_SetActive(*args, **kwargs)
 
+class EventLoopActivator(object):
+    """Proxy of C++ EventLoopActivator class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxEventLoopActivator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(self, EventLoop evtLoop) -> EventLoopActivator"""
+        newobj = _core_.new_EventLoopActivator(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_core_.delete_EventLoopActivator):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+
+class EventLoopActivatorPtr(EventLoopActivator):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = EventLoopActivator
+_core_.EventLoopActivator_swigregister(EventLoopActivatorPtr)
+
 #---------------------------------------------------------------------------
 
 class AcceleratorEntry(object):
@@ -10875,6 +10909,14 @@ class MenuItem(Object):
         """SetAccel(self, AcceleratorEntry accel)"""
         return _core_.MenuItem_SetAccel(*args, **kwargs)
 
+    def SetBitmap(*args, **kwargs):
+        """SetBitmap(self, Bitmap bitmap)"""
+        return _core_.MenuItem_SetBitmap(*args, **kwargs)
+
+    def GetBitmap(*args, **kwargs):
+        """GetBitmap(self) -> Bitmap"""
+        return _core_.MenuItem_GetBitmap(*args, **kwargs)
+
     def SetFont(*args, **kwargs):
         """SetFont(self, Font font)"""
         return _core_.MenuItem_SetFont(*args, **kwargs)
@@ -10935,14 +10977,6 @@ class MenuItem(Object):
     def ResetOwnerDrawn(*args, **kwargs):
         """ResetOwnerDrawn(self)"""
         return _core_.MenuItem_ResetOwnerDrawn(*args, **kwargs)
-
-    def SetBitmap(*args, **kwargs):
-        """SetBitmap(self, Bitmap bitmap)"""
-        return _core_.MenuItem_SetBitmap(*args, **kwargs)
-
-    def GetBitmap(*args, **kwargs):
-        """GetBitmap(self) -> Bitmap"""
-        return _core_.MenuItem_GetBitmap(*args, **kwargs)
 
 
 class MenuItemPtr(MenuItem):
@@ -11568,6 +11602,14 @@ class SizerItem(Object):
         isn't any.
         """
         return _core_.SizerItem_GetUserData(*args, **kwargs)
+
+    def SetUserData(*args, **kwargs):
+        """
+        SetUserData(self, PyObject userData)
+
+        Associate a Python object with this sizer item.
+        """
+        return _core_.SizerItem_SetUserData(*args, **kwargs)
 
 
 class SizerItemPtr(SizerItem):
@@ -13596,5 +13638,6 @@ _core_._wxPyFixStockObjects()
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
+
 
 
