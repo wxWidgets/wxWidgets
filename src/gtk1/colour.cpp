@@ -112,8 +112,9 @@ void wxColourRefData::AllocColour( GdkColormap *cmap )
 
     FreeColour();
 
-    if ( (cmap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-         (cmap->visual->type == GDK_VISUAL_PSEUDO_COLOR) )
+    GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) cmap;
+    if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
+        (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
     {
         m_hasPixel = gdk_colormap_alloc_color( cmap, &m_color, FALSE, TRUE );
         int idx = m_color.pixel;

@@ -171,7 +171,7 @@ wxSaveFileSelector(const wxChar *what,
 #elif defined(__WXGTK20__)
 #include "wx/gtk/filedlg.h"
 #elif defined(__WXGTK__)
-#include "wx/generic/filedlgg.h"
+#include "wx/gtk1/filedlg.h"
 #elif defined(__WXX11__)
 #include "wx/generic/filedlgg.h"
 #elif defined(__WXMGL__)
