@@ -5167,6 +5167,13 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font)
     //   the_font.ReleaseResource();
 }
 
+// use the "extended" bit (24) of lParam to distinguish extended keys
+// from normal keys as the same key is sent
+static inline int ChooseNormalOrExtended(int lParam, int keyNormal, int keyExtended)
+{
+    return lParam & (1 << 24) ? keyExtended : keyNormal;
+}
+
 // Returns 0 if was a normal ASCII value, not a special key. This indicates that
 // the key should be ignored by WM_KEYDOWN and processed by WM_CHAR instead.
 int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
@@ -5251,41 +5258,40 @@ int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
         case VK_APPS:       id = WXK_WINDOWS_MENU; break;
 #endif // VK_APPS defined
 
-        // use the "extended" bit (24) of lParam to distinguish extended keys
-        // from normal keys as the same key is sent
+        // handle extended keys
         case VK_PRIOR:
-            id = lParam & (1 << 24) ? WXK_PRIOR : WXK_NUMPAD_PRIOR;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_PRIOR, WXK_PRIOR);
             break;
         case VK_NEXT:
-            id = lParam & (1 << 24) ? WXK_NEXT : WXK_NUMPAD_NEXT;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_NEXT, WXK_NEXT);
             break;
         case VK_END:
-            id = lParam & (1 << 24) ? WXK_END : WXK_NUMPAD_END;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_END, WXK_END);
             break;
         case VK_HOME:
-            id = lParam & (1 << 24) ? WXK_HOME : WXK_NUMPAD_HOME;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_HOME, WXK_HOME);
             break;
         case VK_LEFT:
-            id = lParam & (1 << 24) ? WXK_LEFT : WXK_NUMPAD_LEFT;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_LEFT, WXK_LEFT);
             break;
         case VK_UP:
-            id = lParam & (1 << 24) ? WXK_UP : WXK_NUMPAD_UP;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_UP, WXK_UP);
             break;
         case VK_RIGHT:
-            id = lParam & (1 << 24) ? WXK_RIGHT : WXK_NUMPAD_RIGHT;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_RIGHT, WXK_RIGHT);
             break;
         case VK_DOWN:
-            id = lParam & (1 << 24) ? WXK_DOWN : WXK_NUMPAD_DOWN;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_DOWN, WXK_DOWN);
             break;
         case VK_INSERT:
-            id = lParam & (1 << 24) ? WXK_INSERT : WXK_NUMPAD_INSERT;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_INSERT, WXK_INSERT);
             break;
         case VK_DELETE:
-            id = lParam & (1 << 24) ? WXK_DELETE : WXK_NUMPAD_DELETE;
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_DELETE, WXK_DELETE);
             break;
         // this order is correct as the numpad enter is the extended key
         case VK_RETURN:
-            id = lParam & (1 << 24) ? WXK_NUMPAD_ENTER : WXK_RETURN;
+            id = ChooseNormalOrExtended(lParam, WXK_RETURN, WXK_NUMPAD_ENTER);
             break;
 
         default:
