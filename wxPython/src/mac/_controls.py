@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _controls_
@@ -6515,5 +6515,6 @@ def PreDatePickerCtrl(*args, **kwargs):
     val = _controls_.new_PreDatePickerCtrl(*args, **kwargs)
     val.thisown = 1
     return val
+
 
 
