@@ -1165,7 +1165,9 @@ WXLRESULT wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXL
 
 bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
 {
-    return wxFrame::MSWTranslateMessage(msg);
+    // we must pass the parent frame to ::TranslateAccelerator(), otherwise it
+    // doesn't do its job correctly for MDI child menus
+    return MSWDoTranslateMessage((wxMDIChildFrame *)GetParent(), msg);
 }
 
 // ---------------------------------------------------------------------------

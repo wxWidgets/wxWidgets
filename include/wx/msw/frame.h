@@ -122,13 +122,22 @@ protected:
     // propagate our state change to all child frames
     void IconizeChildFrames(bool bIconize);
 
-    // we add menu bar accel processing
-    bool MSWTranslateMessage(WXMSG* pMsg);
+    // override base class version to add menu bar accel processing
+    virtual bool MSWTranslateMessage(WXMSG *msg)
+    {
+        return MSWDoTranslateMessage(this, msg);
+    }
+
+    // the real implementation of MSWTranslateMessage(), also used by
+    // wxMDIChildFrame
+    bool MSWDoTranslateMessage(wxFrame *frame, WXMSG *msg);
 
     // window proc for the frames
-    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWWindowProc(WXUINT message,
+                                    WXWPARAM wParam,
+                                    WXLPARAM lParam);
 
-    // handle WM_INITMENUPOPUP message
+    // handle WM_INITMENUPOPUP message to generate wxEVT_MENU_OPEN
     bool HandleInitMenuPopup(WXHMENU hMenu);
 
     virtual bool IsMDIChild() const { return false; }

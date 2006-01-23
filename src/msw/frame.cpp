@@ -726,7 +726,7 @@ WXHICON wxFrame::GetDefaultIcon() const
 // preprocessing
 // ---------------------------------------------------------------------------
 
-bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
+bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
 {
     if ( wxWindow::MSWTranslateMessage(pMsg) )
         return true;
@@ -737,7 +737,7 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
     if ( menuBar )
     {
         const wxAcceleratorTable& acceleratorTable = menuBar->GetAccelTable();
-        return acceleratorTable.Translate(this, pMsg);
+        return acceleratorTable.Translate(frame, pMsg);
     }
 #endif // wxUSE_MENUS && wxUSE_ACCEL
 
