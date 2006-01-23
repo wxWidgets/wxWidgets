@@ -135,8 +135,10 @@ protected:
     #include "wx/msw/listbox.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/listbox.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/listbox.h"
+#elif defined(__WXGTK__)
+  #include "wx/gtk1/listbox.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/listbox.h"
 #elif defined(__WXPM__)

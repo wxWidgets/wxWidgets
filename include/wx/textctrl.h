@@ -422,8 +422,10 @@ protected:
     #include "wx/msw/textctrl.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/textctrl.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/textctrl.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/textctrl.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/textctrl.h"
 #elif defined(__WXCOCOA__)

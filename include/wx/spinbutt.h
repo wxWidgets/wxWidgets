@@ -78,8 +78,10 @@ protected:
     #include "wx/msw/spinbutt.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/spinbutt.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/spinbutt.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/spinbutt.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/spinbutt.h"
 #elif defined(__WXCOCOA__)

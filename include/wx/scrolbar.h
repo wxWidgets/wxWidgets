@@ -62,8 +62,10 @@ private:
     #include "wx/msw/scrolbar.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/scrolbar.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/scrolbar.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/scrolbar.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/scrolbar.h"
 #elif defined(__WXCOCOA__)

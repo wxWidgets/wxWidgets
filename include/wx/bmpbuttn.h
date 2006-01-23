@@ -105,8 +105,10 @@ inline void wxBitmapButtonBase::SetLabel(const wxBitmap& bitmap)
     #include "wx/msw/bmpbuttn.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/bmpbuttn.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/bmpbuttn.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/bmpbuttn.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/bmpbuttn.h"
 #elif defined(__WXCOCOA__)

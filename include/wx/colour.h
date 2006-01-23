@@ -18,8 +18,10 @@
 #include "wx/msw/colour.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/colour.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
 #include "wx/gtk/colour.h"
+#elif defined(__WXGTK__)
+#include "wx/gtk1/colour.h"
 #elif defined(__WXMGL__)
 #include "wx/mgl/colour.h"
 #elif defined(__WXX11__)

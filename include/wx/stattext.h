@@ -49,8 +49,10 @@ private:
     #include "wx/msw/stattext.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/stattext.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/stattext.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/stattext.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/stattext.h"
 #elif defined(__WXCOCOA__)

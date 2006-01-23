@@ -18,8 +18,10 @@
 #include "wx/msw/dcclient.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/dcclient.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
 #include "wx/gtk/dcclient.h"
+#elif defined(__WXGTK__)
+#include "wx/gtk1/dcclient.h"
 #elif defined(__WXX11__)
 #include "wx/x11/dcclient.h"
 #elif defined(__WXMGL__)

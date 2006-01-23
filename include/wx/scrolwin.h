@@ -245,8 +245,10 @@ protected:
         { return ScrollGetWindowSizeForVirtualSize(size); }
 
 // include the declaration of wxScrollHelperNative if needed
-#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/scrolwin.h"
+#elif defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
+    #include "wx/gtk1/scrolwin.h"
 #else
     typedef wxScrollHelper wxScrollHelperNative;
 #endif

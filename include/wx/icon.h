@@ -20,8 +20,10 @@
   #include "wx/msw/icon.h"
 #elif defined(__WXMOTIF__)
   #include "wx/motif/icon.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
   #include "wx/gtk/icon.h"
+#elif defined(__WXGTK__)
+  #include "wx/gtk1/icon.h"
 #elif defined(__WXX11__)
   #include "wx/x11/icon.h"
 #elif defined(__WXMGL__)

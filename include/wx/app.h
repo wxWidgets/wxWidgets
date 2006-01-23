@@ -555,8 +555,10 @@ protected:
         #include "wx/motif/app.h"
     #elif defined(__WXMGL__)
         #include "wx/mgl/app.h"
-    #elif defined(__WXGTK__)
+    #elif defined(__WXGTK20__)
         #include "wx/gtk/app.h"
+    #elif defined(__WXGTK__)
+        #include "wx/gtk1/app.h"
     #elif defined(__WXX11__)
         #include "wx/x11/app.h"
     #elif defined(__WXMAC__)

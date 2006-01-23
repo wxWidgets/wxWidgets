@@ -113,8 +113,10 @@ protected:
     #include "wx/msw/control.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/control.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/control.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/control.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/control.h"
 #elif defined(__WXCOCOA__)

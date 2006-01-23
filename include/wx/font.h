@@ -233,8 +233,10 @@ private:
     #include "wx/msw/font.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/font.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/font.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/font.h"
 #elif defined(__WXX11__)
     #include "wx/x11/font.h"
 #elif defined(__WXMGL__)

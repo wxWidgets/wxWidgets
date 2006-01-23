@@ -18,8 +18,10 @@
 #include "wx/msw/pen.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
 #include "wx/x11/pen.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
 #include "wx/gtk/pen.h"
+#elif defined(__WXGTK__)
+#include "wx/gtk1/pen.h"
 #elif defined(__WXMGL__)
 #include "wx/mgl/pen.h"
 #elif defined(__WXMAC__)

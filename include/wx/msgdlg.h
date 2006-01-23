@@ -49,8 +49,10 @@ private:
 #include "wx/msw/msgdlg.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/msgdlg.h"
-#elif defined(__WXGTK__) && defined(__WXGTK20__)
+#elif defined(__WXGTK20__)
 #include "wx/gtk/msgdlg.h"
+#elif defined(__WXGTK__)
+#include "wx/generic/msgdlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/msgdlgg.h"
 #elif defined(__WXMAC__)

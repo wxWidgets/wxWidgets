@@ -22,8 +22,10 @@
 #include "wx/msw/glcanvas.h"
 #elif defined(__WXMOTIF__)
 #include "wx/x11/glcanvas.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
 #include "wx/gtk/glcanvas.h"
+#elif defined(__WXGTK__)
+#include "wx/gtk1/glcanvas.h"
 #elif defined(__WXX11__)
 #include "wx/x11/glcanvas.h"
 #elif defined(__WXMAC__)

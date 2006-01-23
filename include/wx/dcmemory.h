@@ -18,8 +18,10 @@
 #include "wx/msw/dcmemory.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/dcmemory.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
 #include "wx/gtk/dcmemory.h"
+#elif defined(__WXGTK__)
+#include "wx/gtk1/dcmemory.h"
 #elif defined(__WXX11__)
 #include "wx/x11/dcmemory.h"
 #elif defined(__WXMGL__)

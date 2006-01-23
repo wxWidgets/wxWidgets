@@ -86,8 +86,10 @@ protected:
     #define wxFontDialog wxGenericFontDialog
 #elif defined(__WXMSW__)
     #include "wx/msw/fontdlg.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/fontdlg.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/fontdlg.h"
 #elif defined(__WXPM__)
     #include "wx/os2/fontdlg.h"
 #elif defined(__WXMAC__)

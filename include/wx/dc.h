@@ -804,8 +804,10 @@ private:
     #include "wx/msw/dc.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/dc.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/dc.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/dc.h"
 #elif defined(__WXX11__)
     #include "wx/x11/dc.h"
 #elif defined(__WXMGL__)

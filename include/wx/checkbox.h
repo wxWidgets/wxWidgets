@@ -127,8 +127,10 @@ private:
     #include "wx/msw/checkbox.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/checkbox.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/checkbox.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/checkbox.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/checkbox.h"
 #elif defined(__WXCOCOA__)

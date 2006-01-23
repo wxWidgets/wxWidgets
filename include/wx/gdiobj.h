@@ -18,8 +18,10 @@
 #include "wx/msw/gdiobj.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/gdiobj.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
 #include "wx/gtk/gdiobj.h"
+#elif defined(__WXGTK__)
+#include "wx/gtk1/gdiobj.h"
 #elif defined(__WXX11__)
 #include "wx/x11/gdiobj.h"
 #elif defined(__WXMGL__)

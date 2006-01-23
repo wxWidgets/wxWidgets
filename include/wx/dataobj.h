@@ -76,8 +76,10 @@ public:
     #include "wx/msw/ole/dataform.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/dataform.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/dataform.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/dataform.h"
 #elif defined(__WXX11__)
     #include "wx/x11/dataform.h"
 #elif defined(__WXMAC__)
