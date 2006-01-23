@@ -1155,7 +1155,27 @@ WXLRESULT wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXL
 
 bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
 {
-    return wxFrame::MSWTranslateMessage(msg);
+    // NB: this duplicates the code in wxFrame::MSWTranslateMessage() to avoid
+    //     breaking backwards compatibility; cvs HEAD has a better version of
+    //     this fix
+
+    if ( wxWindow::MSWTranslateMessage(pMsg) )
+        return true;
+
+#if wxUSE_MENUS && wxUSE_ACCEL && !defined(__WXUNIVERSAL__)
+    // try the menu bar accels
+    wxMenuBar *menuBar = GetMenuBar();
+    if ( menuBar )
+    {
+        const wxAcceleratorTable& acceleratorTable = menuBar->GetAccelTable();
+
+        // the difference with wxFrame version is that we must pass the top
+        // level frame to Translate() here, not "this" pointer
+        return acceleratorTable.Translate(GetParent(), pMsg);
+    }
+#endif // wxUSE_MENUS && wxUSE_ACCEL
+
+    return false;
 }
 
 // ---------------------------------------------------------------------------
