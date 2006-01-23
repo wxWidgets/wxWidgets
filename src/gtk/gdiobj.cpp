@@ -7,6 +7,7 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/defs.h"
 #include "wx/gdiobj.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
