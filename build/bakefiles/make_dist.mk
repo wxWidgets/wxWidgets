@@ -5,7 +5,7 @@
 
 ############################# Dirs #################################
 
-WXDIR = @abs_top_srcdir@
+WXDIR = $(top_srcdir)
 
 # Subordinate library possibilities
 
@@ -64,8 +64,8 @@ DISTDIR=./_dist_dir/$(DISTDIRNAME)
 
 ########################## Tools ###############################
 
-CP_PR = @LNDIR@
-CP_P = $(LN_S) -f
+CP_PR = cp -pR
+CP_P = cp -p
 
 ########################## make dist rules ###############################
 
@@ -115,7 +115,6 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(REGEXDIR)/*.c $(DISTDIR)/src/regex
 	$(CP_P) $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
 	$(CP_P) $(REGEXDIR)/README $(DISTDIR)/src/regex
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/src/expat; esac
 	$(CP_PR) $(EXPATDIR) $(DISTDIR)/src/expat
 	#(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
 	mkdir $(DISTDIR)/src/iodbc
@@ -304,7 +303,6 @@ GTK_DIST: UNIV_DIST
 	mkdir $(DISTDIR)/include/wx/mac/corefoundation
 	$(CP_P) $(WXDIR)/include/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
 
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 X11_DIST: UNIV_DIST
@@ -319,7 +317,6 @@ X11_DIST: UNIV_DIST
 	mkdir $(DISTDIR)/include/wx/mac
 	mkdir $(DISTDIR)/include/wx/mac/corefoundation
 	$(CP_P) $(WXDIR)/include/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MOTIF_DIST: ALL_GUI_DIST
@@ -339,7 +336,6 @@ MOTIF_DIST: ALL_GUI_DIST
 	$(CP_P) $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
 		$(X11INC)/bitmap.h $(X11INC)/glcanvas.h $(X11INC)/private.h $(X11INC)/region.h \
 		$(DISTDIR)/include/wx/x11
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MACX_DIST: ALL_GUI_DIST
@@ -372,7 +368,6 @@ MACX_DIST: ALL_GUI_DIST
 	$(CP_P) $(MACDIR)/carbon/morefilex/*.h $(DISTDIR)/src/mac/carbon/morefilex
 	$(CP_P) $(MACDIR)/carbon/morefilex/*.c $(DISTDIR)/src/mac/carbon/morefilex
 	$(CP_P) $(MACDIR)/carbon/morefilex/*.cpp $(DISTDIR)/src/mac/carbon/morefilex
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 COCOA_DIST: ALL_GUI_DIST
@@ -387,7 +382,6 @@ COCOA_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/mac/carbon
 	$(CP_P) $(MACDIR)/carbon/Info.plist.in $(DISTDIR)/src/mac/carbon
 	$(CP_P) $(MACDIR)/carbon/wxmac.icns $(DISTDIR)/src/mac/carbon
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MSW_DIST: UNIV_DIST
@@ -408,7 +402,6 @@ MSW_DIST: UNIV_DIST
 	$(CP_P) $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/*.rc $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
@@ -430,7 +423,6 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	$(CP_P) $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
 	$(CP_P) $(SRCDIR)/*.??? $(DISTDIR)/src
 	$(CP_P) $(SRCDIR)/*.?? $(DISTDIR)/src
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 UNIV_DIST: ALL_GUI_DIST
@@ -451,7 +443,6 @@ MGL_DIST: UNIV_DIST
 	$(CP_P) $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
 	mkdir $(DISTDIR)/src/msdos
 	$(CP_P) $(SRCDIR)/msdos/*.cpp $(DISTDIR)/src/msdos
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/contrib; esac
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 DEMOS_DIST: ALL_GUI_DIST
@@ -468,7 +459,6 @@ DEMOS_DIST: ALL_GUI_DIST
 	$(CP_P) $(DEMODIR)/bombs/*.rc $(DISTDIR)/demos/bombs
 	$(CP_P) $(DEMODIR)/bombs/readme.txt $(DISTDIR)/demos/bombs
 
-	case "$(CP_PR)" in *lndir) mkdir $(DISTDIR)/demos/dbbrowse; esac
 	$(CP_PR) $(DEMODIR)/dbbrowse $(DISTDIR)/demos/dbbrowse
 
 	mkdir $(DISTDIR)/demos/forty
