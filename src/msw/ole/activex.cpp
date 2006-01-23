@@ -24,6 +24,9 @@
 #endif
 
 #include "wx/dcclient.h"
+
+#ifndef __WXWINCE__
+
 #include "wx/msw/ole/activex.h"
 
 
@@ -829,3 +832,6 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
 
     event.Skip();
 }
+
+#endif
+    // __WXWINCE__
