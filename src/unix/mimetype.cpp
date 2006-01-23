@@ -27,18 +27,7 @@
 //    will be preserved during unassociate
 // 9) KDE does not yet handle multiple actions; Netscape mode never will
 
-/*
-    TODO: this file is a mess, we need to split it and reformet/review
-          everything (VZ)
- */
-
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
+// TODO: this file is a mess, we need to split it and review everything (VZ)
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -55,8 +44,7 @@
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
-#endif //WX_PRECOMP
-
+#endif
 
 #include "wx/log.h"
 #include "wx/file.h"
@@ -159,7 +147,7 @@ class wxMimeTextFile : public wxTextFile
 public:
     // constructors
     wxMimeTextFile () : wxTextFile () {};
-    wxMimeTextFile(const wxString& strFile) : wxTextFile(strFile)  {};
+    wxMimeTextFile(const wxString& strFile) : wxTextFile(strFile) {};
 
     int pIndexOf(const wxString & sSearch, bool bIncludeComments = false, int iStart = 0)
     {
@@ -180,6 +168,7 @@ public:
                 sLine.MakeLower();
                 if (sLine.Contains(sTest))
                     nResult = (int) i;
+
                 i++;
             }
         }
@@ -208,6 +197,7 @@ public:
             return false;
         if (nIndex >= (int)GetLineCount() )
             return false;
+
         GetLine(nIndex) = GetLine(nIndex).Prepend(wxT("#"));
         return true;
     }
@@ -367,24 +357,25 @@ static bool IsKnownUnimportantField(const wxString& field);
 // just before the field name.
 
 
-bool wxMimeTypesManagerImpl::CheckGnomeDirsExist ()
+bool wxMimeTypesManagerImpl::CheckGnomeDirsExist()
 {
     wxString gnomedir;
     wxGetHomeDir( &gnomedir );
     wxString sTmp = gnomedir;
     sTmp = sTmp + wxT("/.gnome");
-    if (! wxDir::Exists ( sTmp ) )
+    if (! wxDir::Exists( sTmp ) )
     {
-        if (!wxMkdir ( sTmp ))
+        if (!wxMkdir( sTmp ))
         {
             wxLogError(wxT("Failed to create directory %s/.gnome."), sTmp.c_str());
             return false;
         }
     }
+
     sTmp = sTmp + wxT("/mime-info");
-    if (! wxDir::Exists ( sTmp ) )
+    if (! wxDir::Exists( sTmp ) )
     {
-        if (!wxMkdir ( sTmp ))
+        if (!wxMkdir( sTmp ))
         {
             wxLogError(wxT("Failed to create directory %s/mime-info."), sTmp.c_str());
             return false;
@@ -404,9 +395,9 @@ bool wxMimeTypesManagerImpl::WriteGnomeKeyFile(int index, bool delete_index)
     // create it anyway as a private mime store
 
 #if defined(__WXGTK20__) && wxUSE_UNICODE
-    if (! outfile.Open ( wxConvUTF8) )
+    if (! outfile.Open( wxConvUTF8) )
 #else
-    if (! outfile.Open () )
+    if (! outfile.Open() )
 #endif
     {
         if (delete_index)
@@ -421,7 +412,7 @@ bool wxMimeTypesManagerImpl::WriteGnomeKeyFile(int index, bool delete_index)
     int nIndex = outfile.pIndexOf(strType);
     if ( nIndex == wxNOT_FOUND )
     {
-        outfile.AddLine ( strType + wxT(':') );
+        outfile.AddLine( strType + wxT(':') );
         // see file:/usr/doc/gnome-libs-devel-1.0.40/devel-docs/mime-type-handling.txt
         // as this does not deal with internationalisation
         //        wxT( "\t[en_US]") + verb + wxT ('=') + cmd + wxT(" %f");
@@ -429,13 +420,14 @@ bool wxMimeTypesManagerImpl::WriteGnomeKeyFile(int index, bool delete_index)
         size_t count = entries->GetCount();
         for ( size_t i = 0; i < count; i++ )
         {
-            sTmp = entries->GetVerbCmd(i);
+            sTmp = entries->GetVerbCmd( i );
             sTmp.Replace( wxT("%s"), wxT("%f") );
             sTmp = wxT( "\t") + sTmp;
             outfile.AddLine( sTmp );
         }
+
         //for international use do something like this
-        //outfile.AddLine ( wxString( "\t[en_US]icon-filename=") + cmd );
+        //outfile.AddLine( wxString( "\t[en_US]icon-filename=") + cmd );
         outfile.AddLine( wxT( "\ticon-filename=") + m_aIcons[index] );
     }
     else
@@ -446,14 +438,14 @@ bool wxMimeTypesManagerImpl::WriteGnomeKeyFile(int index, bool delete_index)
         wxMimeTypeCommands sOld;
         size_t nOld = nIndex + 1;
         bool oldEntryEnd = false;
-        while ( (nOld < outfile.GetLineCount() )&& (!oldEntryEnd))
+        while ( (nOld < outfile.GetLineCount() ) && !oldEntryEnd)
         {
             sTmp = outfile.GetLine(nOld);
             if ( (sTmp[0u] == wxT('\t')) || (sTmp[0u] == wxT('#')) )
             {
                 // we have another line to deal with
                 outfile.CommentLine(nOld);
-                nOld ++;
+                nOld++;
 
                 // add the line to our store
                 if ((!delete_index) && (sTmp[0u] == wxT('\t')))
@@ -482,10 +474,10 @@ bool wxMimeTypesManagerImpl::WriteGnomeKeyFile(int index, bool delete_index)
 
             for (i=0; i < sOld.GetCount(); i++)
             {
-                sTmp = sOld.GetVerbCmd(i);
+                sTmp = sOld.GetVerbCmd( i );
                 sTmp.Replace( wxT("%s"), wxT("%f") );
                 sTmp = wxT("\t") + sTmp;
-                nIndex ++;
+                nIndex++;
                 outfile.InsertLine( sTmp, nIndex );
             }
         }
@@ -495,13 +487,12 @@ bool wxMimeTypesManagerImpl::WriteGnomeKeyFile(int index, bool delete_index)
     return bTmp;
 }
 
-
 bool wxMimeTypesManagerImpl::WriteGnomeMimeFile(int index, bool delete_index)
 {
     wxString gnomedir;
     wxGetHomeDir( &gnomedir );
 
-    wxMimeTextFile outfile( gnomedir + wxT("/.gnome/mime-info/user.mime"));
+    wxMimeTextFile outfile( gnomedir + wxT("/.gnome/mime-info/user.mime") );
     // if this fails probably Gnome is not installed ??
     // create it anyway as a private mime store
     if (! outfile.Open() )
@@ -526,15 +517,15 @@ bool wxMimeTypesManagerImpl::WriteGnomeMimeFile(int index, bool delete_index)
         if (delete_index)
         {
             outfile.CommentLine(nIndex);
-            outfile.CommentLine(nIndex+1);
+            outfile.CommentLine(nIndex + 1);
         }
         else
         {
             // check for next line being the right one to replace ??
-            wxString sOld = outfile.GetLine(nIndex+1);
-            if (sOld.Contains( wxT("\text: ")))
+            wxString sOld = outfile.GetLine(nIndex + 1);
+            if (sOld.Contains( wxT("\text: ") ))
             {
-                outfile.GetLine(nIndex+1) = wxT("\text: ") + m_aExtensions.Item(index);
+                outfile.GetLine(nIndex + 1) = wxT("\text: ") + m_aExtensions.Item(index);
             }
             else
             {
@@ -572,14 +563,14 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
     const wxChar *pc;
     size_t nLineCount = textfile.GetLineCount();
     size_t nLine = 0;
-    while ( nLine < nLineCount)
+    while ( nLine < nLineCount )
     {
         pc = textfile[nLine].c_str();
         if ( *pc != wxT('#') )
         {
 
             wxLogTrace(TRACE_MIME, wxT("--- Reading from Gnome file %s '%s' ---"),
-                    filename.c_str(),pc);
+                    filename.c_str(), pc);
 
             wxString sTmp(pc);
             if (sTmp.Contains(wxT("=")) )
@@ -640,7 +631,7 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
                     // overwrite any existing data
                     if (! curMimeType.empty())
                     {
-                        AddToMimeData( curMimeType, curIconFile, entry, strExtensions, strDesc);
+                        AddToMimeData( curMimeType, curIconFile, entry, strExtensions, strDesc );
 
                         // now get ready for next bit
                         entry = new wxMimeTypeCommands;
@@ -652,14 +643,12 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
         } // end of not a comment
 
         // ignore blank lines
-        nLine ++;
+        nLine++;
     } // end of while, save any data
 
     if (! curMimeType.empty())
         AddToMimeData( curMimeType, curIconFile, entry, strExtensions, strDesc);
 }
-
-
 
 void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& filename)
 {
@@ -707,7 +696,7 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& file
 
             if ( !pc )
             {
-                // the end - this can only happen if nLine == nLineCount
+                // the end: this can only happen if nLine == nLineCount
                 break;
             }
 
@@ -789,7 +778,7 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeFilesFromDir(
         cont = dir.GetNext(&filename);
     }
 
-    // Hack alert: We scan all icons and deduce the
+    // FIXME: Hack alert: We scan all icons and deduce the
     //             mime-type from the file name.
     dirname = dirbase;
     dirname << wxT("/pixmaps/document-icons");
@@ -800,7 +789,7 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeFilesFromDir(
 
     if ( !wxDir::Exists(dirname) )
     {
-        // Jst test for default GPE dir also
+        // Just test for default GPE dir also
         dirname = wxT("/usr/share/gpe/pixmaps/default/filemanager/document-icons");
 
         if ( !wxDir::Exists(dirname) )
@@ -814,7 +803,7 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeFilesFromDir(
     {
         wxString mimeType = filename;
         mimeType.Remove( 0, 6 ); // remove "gnome-"
-        mimeType.Remove( mimeType.Len()-4, 4 ); // remove ".png"
+        mimeType.Remove( mimeType.Len() - 4, 4 ); // remove ".png"
         int pos = mimeType.Find( wxT("-") );
         if (pos != wxNOT_FOUND)
         {
@@ -958,7 +947,7 @@ bool wxMimeTypesManagerImpl::WriteKDEMimeFile(int index, bool delete_index)
     mimeoutfile.CommentLine(wxT("Icon=") );
     if (!delete_index)
         mimeoutfile.AddLine(wxT("Icon=") + sTmp );
-    appoutfile.CommentLine(wxT("Icon=")  );
+    appoutfile.CommentLine(wxT("Icon=") );
     if (!delete_index)
         appoutfile.AddLine(wxT("Icon=") + sTmp );
 
@@ -1017,7 +1006,7 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
         return;
 
     wxLogTrace(TRACE_MIME, wxT("loading KDE file %s"),
-                           (dirbase+filename).c_str());
+                           (dirbase + filename).c_str());
 
     wxMimeTypeCommands * entry = new wxMimeTypeCommands;
     wxArrayString sExts;
@@ -1038,6 +1027,7 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
     nIndex = wxNOT_FOUND;
 
     wxString comment;
+
 #if wxUSE_INTL
     wxLocale *locale = wxGetLocale();
     if ( locale )
@@ -1046,7 +1036,7 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
         comment << wxT("Comment[") + locale->GetName() + wxT("]=");
         nIndex = file.pIndexOf(comment);
     }
-#endif // wxUSE_INTL
+#endif
 
     if ( nIndex == wxNOT_FOUND )
     {
@@ -1070,8 +1060,10 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
         while ( tokenizer.HasMoreTokens() )
         {
             wxString e = tokenizer.GetNextToken();
+
+            // don't support too difficult patterns
             if ( e.Left(2) != wxT("*.") )
-                continue; // don't support too difficult patterns
+                continue;
 
             if ( !mime_extension.empty() )
             {
@@ -1091,9 +1083,10 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
     if ( nIndex != wxNOT_FOUND )
     {
         strIcon = file.GetCmd(nIndex);
-        wxLogTrace(TRACE_MIME, wxT("  icon %s"), strIcon.c_str());
-        //it could be the real path, but more often a short name
 
+        wxLogTrace(TRACE_MIME, wxT("  icon %s"), strIcon.c_str());
+
+        // it could be the real path, but more often a short name
         if (!wxFileExists(strIcon))
         {
             // icon is just the short name
@@ -1131,8 +1124,8 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
 
     if ( nIndex != wxNOT_FOUND )
     {
-        wxString sTmp = file.GetCmd(nIndex);
         // we expect %f; others including  %F and %U and %u are possible
+        wxString sTmp = file.GetCmd(nIndex);
         if (0 == sTmp.Replace( wxT("%f"), wxT("%s") ))
             sTmp = sTmp + wxT(" %s");
         entry->AddOrReplaceVerb(wxString(wxT("open")), sTmp );
@@ -1238,7 +1231,7 @@ void wxMimeTypesManagerImpl::GetKDEMimeInfo(const wxString& sExtraDir)
         if (configFile.FileExists() && config.Open(configFile.GetFullPath()))
         {
             // $(KDEDIR)/share/config -> $(KDEDIR)/share
-            configFile.RemoveDir( configFile.GetDirCount()-1 );
+            configFile.RemoveDir( configFile.GetDirCount() - 1 );
             // $(KDEDIR)/share/ -> $(KDEDIR)/share/icons
             configFile.AppendDir( wxT("icons") );
 
@@ -1271,7 +1264,7 @@ void wxMimeTypesManagerImpl::GetKDEMimeInfo(const wxString& sExtraDir)
 
         // Just try a few likely icons theme names
 
-        int pos = configFile.GetDirCount()-3;
+        int pos = configFile.GetDirCount() - 3;
 
         if (!wxDir::Exists(configFile.GetPath()))
         {
@@ -1388,7 +1381,7 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
 
     // verbs and commands have been cleared already in mimecmn.cpp...
     // if we find no entries in the exact match, try the inexact match
-    for (size_t n = 0; ((count ==0) && (n < m_index.GetCount())); n++)
+    for (size_t n = 0; ((count == 0) && (n < m_index.GetCount())); n++)
     {
         // list of verb = command pairs for this mimetype
         sPairs = m_manager->m_aEntries [m_index[n]];
@@ -1396,13 +1389,13 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
         for ( i = 0; i < sPairs->GetCount(); i++ )
         {
             vrb = sPairs->GetVerb(i);
-            // some gnome entries have . inside
+            // some gnome entries have "." inside
             vrb = vrb.AfterLast(wxT('.'));
             cmd = sPairs->GetCmd(i);
             if (! cmd.empty() )
             {
                  cmd = wxFileType::ExpandCommand(cmd, params);
-                 count ++;
+                 count++;
                  if ( vrb.IsSameAs(wxT("open")))
                  {
                      verbs->Insert(vrb, 0u);
@@ -1436,8 +1429,8 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
                 extensions.Add(strExt);
                 strExt.Empty();
             }
-            //else: repeated spaces (shouldn't happen, but it's not that
-            //      important if it does happen)
+            //else: repeated spaces
+            // (shouldn't happen, but it's not that important if it does happen)
 
             if ( *p == wxT('\0') )
                 break;
@@ -1460,7 +1453,7 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
     return true;
 }
 
-// set an arbitrary command,
+// set an arbitrary command:
 // could adjust the code to ask confirmation if it already exists and
 // overwriteprompt is true, but this is currently ignored as *Associate* has
 // no overwrite prompt
@@ -1521,7 +1514,6 @@ bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int WXUNUSED(index)
 // ----------------------------------------------------------------------------
 // wxMimeTypesManagerImpl (Unix)
 // ----------------------------------------------------------------------------
-
 
 wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
 {
@@ -1649,7 +1641,7 @@ bool wxMimeTypesManagerImpl::WriteToMimeTypes(int index, bool delete_index)
     wxMimeTextFile file;
     if ( wxFile::Exists(strUserMailcap) )
     {
-        bTemp =  file.Open(strUserMailcap);
+        bTemp = file.Open(strUserMailcap);
     }
     else
     {
@@ -1682,7 +1674,7 @@ bool wxMimeTypesManagerImpl::WriteToMimeTypes(int index, bool delete_index)
         if (!delete_index)
         {
             // add the new entries in
-            wxString sTmp = strType.Append(wxT(' '), 40-strType.Len() );
+            wxString sTmp = strType.Append( wxT(' '), 40 - strType.Len() );
             sTmp = sTmp + m_aExtensions[index];
             file.AddLine(sTmp);
         }
@@ -1709,7 +1701,7 @@ bool wxMimeTypesManagerImpl::WriteToNSMimeTypes(int index, bool delete_index)
     wxMimeTextFile file;
     if ( wxFile::Exists(strUserMailcap) )
     {
-        bTemp =  file.Open(strUserMailcap);
+        bTemp = file.Open(strUserMailcap);
     }
     else
     {
@@ -1773,16 +1765,16 @@ bool wxMimeTypesManagerImpl::WriteToNSMimeTypes(int index, bool delete_index)
             sTmp = wxT("desc=\"") + m_aDescriptions[index]+ wxT("\" \\"); //.trim ??
             if (!delete_index)
             {
-                nIndex ++;
+                nIndex++;
                 file.InsertLine(sTmp, nIndex);
             }
         }
 
-        wxString sExts =  m_aExtensions.Item(index);
+        wxString sExts = m_aExtensions.Item(index);
         sTmp = wxT("exts=\"") + sExts.Trim(false).Trim() + wxT("\"");
         if (!delete_index)
         {
-            nIndex ++;
+            nIndex++;
             file.InsertLine(sTmp, nIndex);
         }
 
@@ -1800,7 +1792,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap(int index, bool delete_index)
             ( m_mailcapStylesInited & wxMAILCAP_STANDARD) ) )
         return false;
 
-    bool bTemp;
+    bool bTemp = false;
     wxString strHome = wxGetenv(wxT("HOME"));
 
     // and now the users mailcap
@@ -1809,7 +1801,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap(int index, bool delete_index)
     wxMimeTextFile file;
     if ( wxFile::Exists(strUserMailcap) )
     {
-        bTemp =  file.Open(strUserMailcap);
+        bTemp = file.Open(strUserMailcap);
     }
     else
     {
@@ -1830,6 +1822,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap(int index, bool delete_index)
         sTmp = m_aTypes[index];
         wxString sOld;
         int nIndex = file.pIndexOf(sTmp);
+
         // get rid of all the unwanted entries...
         if (nIndex == wxNOT_FOUND)
         {
@@ -1846,6 +1839,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap(int index, bool delete_index)
                 if (nIndex < (int) file.GetLineCount())
                     sOld = sOld + file[nIndex];
             }
+
             if (nIndex < (int)
                 file.GetLineCount()) file.CommentLine(nIndex);
         }
@@ -1853,7 +1847,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap(int index, bool delete_index)
         sTmp = sTmp + wxT(";") + sCmd; //includes wxT(" %s ");
 
         // write it in the format that Netscape uses (default)
-        if (! ( m_mailcapStylesInited & wxMAILCAP_STANDARD  ) )
+        if (! ( m_mailcapStylesInited & wxMAILCAP_STANDARD ) )
         {
             if (! delete_index)
                 file.InsertLine(sTmp, nIndex);
@@ -1886,7 +1880,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap(int index, bool delete_index)
                         bKnownToken = true;
                     if (s.Contains(wxT("x11-bitmap=")))
                         bKnownToken = true;
-    
+
                     size_t i;
                     for (i=0; i < entries->GetCount(); i++)
                     {
@@ -1909,7 +1903,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap(int index, bool delete_index)
             {
                 sTmp = sTmp + wxT("; \\");
                 file.InsertLine(sTmp, nIndex);
-                nIndex ++;
+                nIndex++;
                 sTmp = wxT("       description=\"") + m_aDescriptions[index] + wxT("\"");
             }
 
@@ -1917,7 +1911,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap(int index, bool delete_index)
             {
                 sTmp = sTmp + wxT("; \\");
                 file.InsertLine(sTmp, nIndex);
-                nIndex ++;
+                nIndex++;
                 sTmp = wxT("       x11-bitmap=\"") + m_aIcons[index] + wxT("\"");
             }
 
@@ -1929,7 +1923,7 @@ bool wxMimeTypesManagerImpl::WriteToMailCap(int index, bool delete_index)
                     {
                         sTmp = sTmp + wxT("; \\");
                         file.InsertLine(sTmp, nIndex);
-                        nIndex ++;
+                        nIndex++;
                         sTmp = wxT("       ") + entries->GetVerbCmd(i);
                     }
             }
@@ -1971,7 +1965,7 @@ wxFileType * wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
         // clean up to just a space before and after
         sExt.Trim().Trim(false);
         sExt = wxT(' ') + sExt + wxT(' ');
-        for (nIndex = 0; nIndex < m_aExtensions.GetCount(); nIndex ++)
+        for (nIndex = 0; nIndex < m_aExtensions.GetCount(); nIndex++)
         {
             sExtStore = m_aExtensions.Item(nIndex);
             if (sExtStore.Replace(sExt, wxT(" ") ) > 0)
@@ -2095,7 +2089,7 @@ int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
             // add any new entries...
             if ( entry )
             {
-                wxMimeTypeCommands *entryOld  =  m_aEntries[nIndex];
+                wxMimeTypeCommands *entryOld = m_aEntries[nIndex];
 
                 size_t count = entry->GetCount();
                 for ( size_t i = 0; i < count; i++ )
@@ -2167,8 +2161,7 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ex
     return NULL;
 }
 
-wxFileType *
-wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
+wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 {
     InitIfNeeded();
 
@@ -2213,7 +2206,6 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 
     return fileType;
 }
-
 
 wxString wxMimeTypesManagerImpl::GetCommand(const wxString & verb, size_t nIndex) const
 {
@@ -2308,7 +2300,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
 
     wxTextFile file(strFileName);
 #if defined(__WXGTK20__) && wxUSE_UNICODE
-    if ( !file.Open( wxConvUTF8) )
+    if ( !file.Open(wxConvUTF8) )
 #else
     if ( !file.Open() )
 #endif
@@ -2605,7 +2597,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
 
     wxTextFile file(strFileName);
 #if defined(__WXGTK20__) && wxUSE_UNICODE
-    if ( !file.Open( wxConvUTF8) )
+    if ( !file.Open(wxConvUTF8) )
 #else
     if ( !file.Open() )
 #endif
@@ -2778,8 +2770,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
             continue;
         }
 
-        // if the test command failed, it's as if the entry were not there at
-        // all
+        // if the test command failed, it's as if the entry were not there at all
         if ( data.testfailed )
         {
             continue;
