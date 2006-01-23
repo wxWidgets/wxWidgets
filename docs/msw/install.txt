@@ -261,10 +261,13 @@ If you receive this error add bufferoverflowu.lib to link, e.g.:
 
 See http://support.microsoft.com/?id=894573 for more information.
 
-Borland C++ 5.0/5.5 compilation
+Borland C++ compilation
 ----------------------------------------------------------------
 
-Compiling using the makefiles (updated 24 Sept 02):
+The minimum version required is 5.5, which can be downloaded for free from:
+http://www.borland.com/products/downloads/download_cbuilder.html#
+
+Compiling using the makefiles:
 
 1. Change directory to build\msw. Type 'make -f makefile.bcc' to
    make the wxWidgets core library. Ignore the compiler warnings.
@@ -287,11 +290,11 @@ recompile wxWidgets. The same applies if compiling using the IDE.
 Note (3): If you wish debug messages to be sent to the console in
 debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
 
-Compiling using the IDE files for Borland C++ 5.0: not supported - please
-use version 2.4.1 (using the make utility in commandline mode works fine_
+Cmpilation succeeds with CBuilderX personal edition and CBuilder6, but 
+you may have to copy make.exe from the 5.5 download to the new bin directory.
+Compiling using the IDE files for Borland C++ 5.0 and using CBuilder IDE 
+(v1-v6): not supported 
 
-Compiling using CBuilder (v1-v6): not supported - please
-use version 2.4.1 (using the make utility in commandline mode works fine_
 
 ** REMEMBER **
 
