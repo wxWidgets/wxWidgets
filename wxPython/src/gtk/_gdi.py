@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _gdi_
@@ -4214,7 +4214,10 @@ class BufferedDC(MemoryDC):
     def __init__(self, *args):
         """
         __init__(self, DC dc, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, DC dc, Bitmap buffer=NullBitmap) -> BufferedDC
+        __init__(self, DC dc) -> BufferedDC
         __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, DC dc, Size area) -> BufferedDC
 
         Constructs a buffered DC.
         """
@@ -5276,5 +5279,6 @@ def RendererNative_Set(*args, **kwargs):
     renderer.  Returns the previous renderer used with Set or None.
     """
     return _gdi_.RendererNative_Set(*args, **kwargs)
+
 
 

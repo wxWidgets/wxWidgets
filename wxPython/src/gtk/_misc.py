@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _misc_
@@ -1319,6 +1319,7 @@ class TimerRunner(object):
         """
         __init__(self, wxTimer timer) -> TimerRunner
         __init__(self, wxTimer timer, int milli, bool oneShot=False) -> TimerRunner
+        __init__(self, wxTimer timer, int milli) -> TimerRunner
         """
         newobj = _misc_.new_TimerRunner(*args)
         self.this = newobj.this
@@ -6260,5 +6261,6 @@ def StandardPaths_Get(*args, **kwargs):
     Return the global standard paths singleton
     """
     return _misc_.StandardPaths_Get(*args, **kwargs)
+
 
 

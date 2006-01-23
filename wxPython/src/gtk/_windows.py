@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _windows_
@@ -4790,6 +4790,7 @@ class PrintPreview(_core.Object):
     def __init__(self, *args):
         """
         __init__(self, Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PrintPreview
+        __init__(self, Printout printout, Printout printoutForPrinting) -> PrintPreview
         __init__(self, Printout printout, Printout printoutForPrinting, PrintData data) -> PrintPreview
         """
         newobj = _windows_.new_PrintPreview(*args)
@@ -4900,6 +4901,7 @@ class PyPrintPreview(PrintPreview):
     def __init__(self, *args):
         """
         __init__(self, Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PyPrintPreview
+        __init__(self, Printout printout, Printout printoutForPrinting) -> PyPrintPreview
         __init__(self, Printout printout, Printout printoutForPrinting, PrintData data) -> PyPrintPreview
         """
         newobj = _windows_.new_PyPrintPreview(*args)
@@ -5035,5 +5037,6 @@ class PyPreviewControlBarPtr(PyPreviewControlBar):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyPreviewControlBar
 _windows_.PyPreviewControlBar_swigregister(PyPreviewControlBarPtr)
+
 
 
