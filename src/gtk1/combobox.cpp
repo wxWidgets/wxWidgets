@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/combobox.cpp
+// Name:        src/gtk1/combobox.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -20,7 +20,7 @@
 
 #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
 
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -238,16 +238,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     // and case-sensitive
     gtk_combo_set_case_sensitive( GTK_COMBO(m_widget), TRUE );
 
-#ifdef __WXGTK20__
-    if (style & wxNO_BORDER)
-        g_object_set( GTK_ENTRY( combo->entry ), "has-frame", FALSE, NULL );
-#endif
-
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
-#ifndef __WXGTK20__
     // gtk_list_set_selection_mode( GTK_LIST(list), GTK_SELECTION_MULTIPLE );
-#endif
 
     for (int i = 0; i < n; i++)
     {
@@ -550,11 +543,7 @@ int wxComboBox::FindString( const wxString &item, bool bCase ) const
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-#ifdef __WXGTK20__
-        wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
-#else
         wxString str( label->label );
-#endif
         if (item.IsSameAs( str , bCase ) )
             return count;
 
@@ -607,11 +596,7 @@ wxString wxComboBox::GetString( int n ) const
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-#ifdef __WXGTK20__
-        str = wxGTK_CONV_BACK( gtk_label_get_text(label) );
-#else
         str = wxString( label->label );
-#endif
     }
     else
     {
@@ -632,11 +617,7 @@ wxString wxComboBox::GetStringSelection() const
     {
         GtkBin *bin = GTK_BIN( selection->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-#ifdef __WXGTK20__
-        wxString tmp( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
-#else
         wxString tmp( label->label );
-#endif
         return tmp;
     }
 
@@ -832,15 +813,8 @@ void wxComboBox::GetSelection( long* from, long* to ) const
     if (IsEditable())
     {
         GtkEditable *editable = GTK_EDITABLE(GTK_COMBO(m_widget)->entry);
-#ifdef __WXGTK20__
-        gint start, end;
-        gtk_editable_get_selection_bounds(editable, & start, & end);
-        *from = start;
-        *to = end;
-#else
         *from = (long) editable->selection_start_pos;
         *to = (long) editable->selection_end_pos;
-#endif
     }
 }
 

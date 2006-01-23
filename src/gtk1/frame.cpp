@@ -34,12 +34,12 @@
 #include "wx/dcclient.h"
 
 #include <glib.h>
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkx.h>
 
-#include "wx/gtk/win_gtk.h"
+#include "wx/gtk1/win_gtk.h"
 
 // ----------------------------------------------------------------------------
 // constants

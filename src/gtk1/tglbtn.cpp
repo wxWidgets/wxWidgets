@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/tglbtn.cpp
+// Name:        wx/gtk1/tglbtn.cpp
 // Purpose:     Definition of the wxToggleButton class, which implements a
 //              toggle button under wxGTK.
 // Author:      John Norris, minor changes by Axel Schlueter
@@ -18,7 +18,7 @@
 
 #if wxUSE_TOGGLEBTN
 
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;

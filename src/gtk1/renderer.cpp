@@ -26,21 +26,11 @@
 
 #include "wx/renderer.h"
 #include <gtk/gtk.h>
-#include "wx/gtk/win_gtk.h"
+#include "wx/gtk1/win_gtk.h"
 
 #include "wx/window.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
-
-#ifdef __WXGTK20__
-    #include "wx/settings.h"
-#endif // GTK 2.0
-
-#ifdef __WXGTK20__
-    #define WXUNUSED_IN_GTK1(arg) arg
-#else
-    #define WXUNUSED_IN_GTK1(arg)
-#endif
 
 // RR: After a correction to the orientation of the sash
 //     this doesn't seem to be required anymore and it
@@ -59,14 +49,6 @@ public:
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0);
-
-#ifdef __WXGTK20__
-    // draw the expanded/collapsed icon for a tree control item
-    virtual void DrawTreeItemButton(wxWindow *win,
-                                    wxDC& dc,
-                                    const wxRect& rect,
-                                    int flags = 0);
-#endif // GTK+ 2.0
 
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
@@ -96,11 +78,6 @@ private:
 
     // used by DrawHeaderButton and DrawComboBoxDropButton
     static GtkWidget *GetButtonWidget();
-
-#ifdef __WXGTK20__
-    // used by DrawTreeItemButton()
-    static GtkWidget *GetTreeWidget();
-#endif // GTK+ 2.0
 };
 
 // ============================================================================
@@ -137,28 +114,6 @@ wxRendererGTK::GetButtonWidget()
     return s_button;
 }
 
-#ifdef __WXGTK20__
-
-GtkWidget *
-wxRendererGTK::GetTreeWidget()
-{
-    static GtkWidget *s_tree = NULL;
-    static GtkWidget *s_window = NULL;
-
-    if ( !s_tree )
-    {
-        s_tree = gtk_tree_view_new();
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
-        gtk_container_add( GTK_CONTAINER(s_window), s_tree );
-        gtk_widget_realize( s_tree );
-    }
-
-    return s_tree;
-}
-
-#endif // GTK+ 2.0
-
 // ----------------------------------------------------------------------------
 // list/tree controls drawing
 // ----------------------------------------------------------------------------
@@ -187,66 +142,19 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     );
 }
 
-#ifdef __WXGTK20__
-
-// draw a ">" or "v" button
-void
-wxRendererGTK::DrawTreeItemButton(wxWindow* win,
-                                  wxDC& dc, const wxRect& rect, int flags)
-{
-    GtkWidget *tree = GetTreeWidget();
-
-    GtkStateType state;
-    if ( flags & wxCONTROL_CURRENT )
-        state = GTK_STATE_PRELIGHT;
-    else
-        state = GTK_STATE_NORMAL;
-
-    // VZ: I don't know how to get the size of the expander so as to centre it
-    //     in the given rectangle, +2/3 below is just what looks good here...
-    gtk_paint_expander
-    (
-        tree->style,
-        GTK_PIZZA(win->m_wxwindow)->bin_window,
-        state,
-        NULL,
-        tree,
-        "treeview",
-        dc.LogicalToDeviceX(rect.x) + 2,
-        dc.LogicalToDeviceY(rect.y) + 3,
-        flags & wxCONTROL_EXPANDED ? GTK_EXPANDER_EXPANDED
-                                   : GTK_EXPANDER_COLLAPSED
-    );
-}
-
-#endif // GTK+ 2.0
-
 // ----------------------------------------------------------------------------
 // splitter sash drawing
 // ----------------------------------------------------------------------------
 
-#ifndef __WXGTK20__
-    // the full sash width (should be even)
-    static const wxCoord SASH_SIZE = 8;
+// the full sash width (should be even)
+static const wxCoord SASH_SIZE = 8;
 
-    // margin around the sash
-    static const wxCoord SASH_MARGIN = 2;
-#endif // GTK+ 2.x/1.x
+// margin around the sash
+static const wxCoord SASH_MARGIN = 2;
 
 static int GetGtkSplitterFullSize()
 {
-#ifdef __WXGTK20__
-    static GtkWidget *s_paned = NULL;
-    if (s_paned == NULL)
-        s_paned = gtk_vpaned_new();
-
-    gint handle_size;
-    gtk_widget_style_get (s_paned, "handle_size", &handle_size, NULL);
-
-    return handle_size;
-#else
     return SASH_SIZE + SASH_MARGIN;
-#endif
 }
 
 wxSplitterRenderParams
@@ -257,11 +165,7 @@ wxRendererGTK::GetSplitterParams(const wxWindow *WXUNUSED(win))
            (
                GetGtkSplitterFullSize(),
                0,
-#ifdef __WXGTK20__
-               true     // hot sensitive
-#else // GTK+ 1.x
                false    // not
-#endif // GTK+ 2.x/1.x
            );
 }
 
@@ -280,7 +184,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
                                 const wxSize& size,
                                 wxCoord position,
                                 wxOrientation orient,
-                                int WXUNUSED_IN_GTK1(flags))
+                                int WXUNUSED(flags))
 {
     if ( !win->m_wxwindow->window )
     {
@@ -350,23 +254,6 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     );
 #endif
 
-#ifdef __WXGTK20__
-    gtk_paint_handle
-    (
-        win->m_wxwindow->style,
-        GTK_PIZZA(win->m_wxwindow)->bin_window,
-        flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
-        GTK_SHADOW_NONE,
-        NULL /* no clipping */,
-        win->m_wxwindow,
-        "paned",
-        rect.x,
-        rect.y,
-        rect.width,
-        rect.height,
-        isVert ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
-    );
-#else // GTK+ 1.x
 
     // leave some margin before sash itself
     position += SASH_MARGIN / 2;
@@ -404,7 +291,6 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         isVert ? size.y - 2*SASH_SIZE : position,
         SASH_SIZE, SASH_SIZE
     );
-#endif // GTK+ 2.x/1.x
 }
 
 void
@@ -506,4 +392,3 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     DrawDropArrow(win,dc,rect,flags);
 
 }
-

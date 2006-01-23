@@ -15,7 +15,7 @@
 #if wxUSE_CHECKLISTBOX
 
 #include "wx/checklst.h"
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

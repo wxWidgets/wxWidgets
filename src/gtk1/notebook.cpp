@@ -22,8 +22,8 @@
 #include "wx/bitmap.h"
 #include "wx/fontutil.h"
 
-#include "wx/gtk/private.h"
-#include "wx/gtk/win_gtk.h"
+#include "wx/gtk1/private.h"
+#include "wx/gtk1/win_gtk.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -738,7 +738,9 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
     const size_t count = GetPageCount();
     size_t i = 0;
 
-#ifdef __WXGTK20__
+    // MR: Code to fix HitTest index return when tabs are scrolled.
+    // No idea if it would work for GTK1
+#if 0
     GtkNotebook * notebook = GTK_NOTEBOOK(m_widget);
     if (gtk_notebook_get_scrollable(notebook));
         i = g_list_position( notebook->children, notebook->first_tab );
@@ -750,11 +752,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
         GtkWidget *box = nb_page->m_box;
 
         // VZ: don't know how to find the border width in GTK+ 1.2
-#ifdef __WXGTK20__
-        const gint border = gtk_container_get_border_width(GTK_CONTAINER(box));
-#else // !GTK+ 2.x
         const gint border = 0;
-#endif
         if ( IsPointInsideWidget(pt, box, x, y, border) )
         {
             // ok, we're inside this tab -- now find out where, if needed

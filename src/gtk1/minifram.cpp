@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/minifram.cpp
+// Name:        src/gtk1/minifram.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -17,8 +17,8 @@
 #include "wx/dcscreen.h"
 
 #include "gtk/gtk.h"
-#include "wx/gtk/win_gtk.h"
-#include "wx/gtk/private.h"
+#include "wx/gtk1/win_gtk.h"
+#include "wx/gtk1/private.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
@@ -112,7 +112,6 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
 // "draw" of m_mainWidget
 //-----------------------------------------------------------------------------
 
-#ifndef __WXGTK20__
 extern "C" {
 static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNUSED(rect), wxFrame *win )
 {
@@ -154,7 +153,6 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
     }
 }
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // "button_press_event" of m_mainWidget
@@ -379,10 +377,8 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     gtk_signal_connect( GTK_OBJECT(m_mainWidget), "expose_event",
         GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
 
-#ifndef __WXGTK20__
     gtk_signal_connect( GTK_OBJECT(m_mainWidget), "draw",
        GTK_SIGNAL_FUNC(gtk_window_own_draw_callback), (gpointer)this );
-#endif
 
     /* these are required for dragging the mini frame around */
     gtk_signal_connect( GTK_OBJECT(m_mainWidget), "button_press_event",
@@ -401,11 +397,7 @@ void wxMiniFrame::SetTitle( const wxString &title )
 {
     wxFrame::SetTitle( title );
 
-#ifdef __WXGTK20__
-    gdk_window_invalidate_rect( GTK_PIZZA(m_mainWidget)->bin_window, NULL, true );
-#else
     gtk_widget_draw( m_mainWidget, (GdkRectangle*) NULL );
-#endif
 }
 
 #endif

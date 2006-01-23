@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/listbox.cpp
+// Name:        src/gtk1/listbox.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -21,7 +21,7 @@
 #include "wx/intl.h"
 #include "wx/checklst.h"
 #include "wx/settings.h"
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 #if wxUSE_TOOLTIPS
 #include "wx/tooltip.h"
@@ -887,16 +887,12 @@ wxString wxListBox::GetRealLabel(GList *item) const
 
     wxString str;
 
-#ifdef __WXGTK20__
-    str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
-#else
     str = wxString( label->label );
-#endif
 
 #if wxUSE_CHECKLISTBOX
     // checklistboxes have "[±] " prepended to their lables, remove it
     //
-    // NB: 4 below is the length of wxCHECKLBOX_STRING from wx/gtk/checklst.h
+    // NB: 4 below is the length of wxCHECKLBOX_STRING from wx/gtk1/checklst.h
     if ( m_hasCheckBoxes )
         str.erase(0, 4);
 #endif // wxUSE_CHECKLISTBOX

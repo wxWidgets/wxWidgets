@@ -16,7 +16,7 @@
 
 #include "wx/checkbox.h"
 
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -48,60 +48,8 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
 
     if (cb->m_blockEvent) return;
 
-#ifdef __WXGTK20__
-    // Transitions for 3state checkbox must be done manually, GTK's checkbox
-    // is 2state with additional "undetermined state" flag which isn't
-    // changed automatically:
-    if (cb->Is3State())
-    {
-        GtkToggleButton *toggle = GTK_TOGGLE_BUTTON(widget);
-
-        if (cb->Is3rdStateAllowedForUser())
-        {
-            // The 3 states cycle like this when clicked:
-            // checked -> undetermined -> unchecked -> checked -> ...
-            bool active = gtk_toggle_button_get_active(toggle);
-            bool inconsistent = gtk_toggle_button_get_inconsistent(toggle);
-
-            cb->m_blockEvent = true;
-
-            if (!active && !inconsistent)
-            {
-                // checked -> undetermined
-                gtk_toggle_button_set_active(toggle, true);
-                gtk_toggle_button_set_inconsistent(toggle, true);
-            }
-            else if (!active && inconsistent)
-            {
-                // undetermined -> unchecked
-                gtk_toggle_button_set_inconsistent(toggle, false);
-            }
-            else if (active && !inconsistent)
-            {
-                // unchecked -> checked
-                // nothing to do
-            }
-            else
-            {
-                wxFAIL_MSG(_T("3state wxCheckBox in unexpected state!"));
-            }
-
-            cb->m_blockEvent = false;
-        }
-        else
-        {
-            // user's action unsets undetermined state:
-            gtk_toggle_button_set_inconsistent(toggle, false);
-        }
-    }
-#endif
-
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, cb->GetId());
-#ifdef __WXGTK20__
-    event.SetInt(cb->Get3StateValue());
-#else
     event.SetInt(cb->GetValue());
-#endif
     event.SetEventObject(cb);
     cb->GetEventHandler()->ProcessEvent(event);
 }
@@ -197,33 +145,8 @@ bool wxCheckBox::GetValue() const
 {
     wxCHECK_MSG( m_widgetCheckbox != NULL, FALSE, wxT("invalid checkbox") );
 
-#ifdef __WXGTK20__
-    return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_widgetCheckbox));
-#else
     return GTK_TOGGLE_BUTTON(m_widgetCheckbox)->active;
-#endif
 }
-
-#ifdef __WXGTK20__
-void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
-{
-    SetValue(state != wxCHK_UNCHECKED);
-    gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_widgetCheckbox),
-                                       state == wxCHK_UNDETERMINED);
-}
-
-wxCheckBoxState wxCheckBox::DoGet3StateValue() const
-{
-    if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(m_widgetCheckbox)))
-    {
-        return wxCHK_UNDETERMINED;
-    }
-    else
-    {
-        return GetValue() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
-    }
-}
-#endif
 
 void wxCheckBox::SetLabel( const wxString& label )
 {

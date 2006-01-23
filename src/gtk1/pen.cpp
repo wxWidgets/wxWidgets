@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/pen.cpp
+// Name:        src/gtk1/pen.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

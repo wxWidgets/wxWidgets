@@ -26,7 +26,7 @@
 #endif
 
 #include "wx/scrolwin.h"
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 // ============================================================================
 // implementation

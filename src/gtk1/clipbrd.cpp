@@ -36,10 +36,6 @@
 GdkAtom  g_clipboardAtom   = 0;
 GdkAtom  g_targetsAtom     = 0;
 
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-extern GdkAtom g_altTextAtom;
-#endif
-
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
 // (there will be a *lot* of them!)
@@ -274,27 +270,12 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     // Text data will be in UTF8 in Unicode mode.
     data->GetDataHere( selection_data->target, d );
 
-#ifdef __WXGTK20__
-    // NB: GTK+ requires special treatment of UTF8_STRING data, the text
-    //     would show as UTF-8 data interpreted as latin1 (?) in other
-    //     GTK+ apps if we used gtk_selection_data_set()
-    if (format == wxDataFormat(wxDF_UNICODETEXT))
-    {
-        gtk_selection_data_set_text(
-            selection_data,
-            (const gchar*)d,
-            size-1 );
-    }
-    else
-#endif
-    {
-        gtk_selection_data_set(
+    gtk_selection_data_set(
             selection_data,
             GDK_SELECTION_TYPE_STRING,
-            8*sizeof(gchar),
+            8 * sizeof(gchar),
             (unsigned char*) d,
             size-1 );
-    }
 
     free(d);
 }
@@ -532,15 +513,6 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
                            (guint32) GDK_CURRENT_TIME );
 
     while (m_waiting) gtk_main_iteration();
-
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-    if (!m_formatSupported && format == wxDataFormat(wxDF_UNICODETEXT))
-    {
-        // Another try with plain STRING format
-        extern GdkAtom g_altTextAtom;
-        return IsSupported(g_altTextAtom);
-    }
-#endif
 
     return m_formatSupported;
 }

@@ -206,18 +206,6 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
 }
 
 // ----------------------------------------------------------------------------
-// wxTextDataObject
-// ----------------------------------------------------------------------------
-
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-void wxTextDataObject::GetAllFormats(wxDataFormat *formats, wxDataObjectBase::Direction dir) const
-{
-    *formats++ = GetPreferredFormat();
-    *formats = g_altTextAtom;
-}
-#endif
-
-// ----------------------------------------------------------------------------
 // wxFileDataObject
 // ----------------------------------------------------------------------------
 

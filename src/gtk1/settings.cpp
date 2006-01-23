@@ -344,36 +344,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         {
             if (!gs_objects.m_fontSystem.Ok())
             {
-#ifdef __WXGTK20__
-                GtkWidget *widget = gtk_button_new();
-                GtkStyle *def = gtk_rc_get_style( widget );
-                if ( !def || !def->font_desc )
-                    def = gtk_widget_get_default_style();
-                if ( def && def->font_desc )
-                {
-                    wxNativeFontInfo info;
-                    info.description =
-                        pango_font_description_copy(def->font_desc);
-                    gs_objects.m_fontSystem = wxFont(info);
-                }
-                else
-                {
-                    GtkSettings *settings = gtk_settings_get_default();
-                    gchar *font_name = NULL;
-                    g_object_get ( settings,
-                                   "gtk-font-name",
-                                   &font_name,
-                                   NULL);
-                    if (!font_name)
-                        gs_objects.m_fontSystem = wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
-                    else
-                        gs_objects.m_fontSystem = wxFont(wxString::FromAscii(font_name));
-                    g_free (font_name);
-                }
-                gtk_widget_destroy( widget );
-#else
                 gs_objects.m_fontSystem = wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
-#endif
             }
             return gs_objects.m_fontSystem;
         }
@@ -385,184 +356,27 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 {
-#ifdef __WXGTK20__
-    bool success = false;
-
-    guchar *data = NULL;
-    GdkWindow *window = NULL;
-    if(win && GTK_WIDGET_REALIZED(win->GetHandle()))
-        window = win->GetHandle()->window;
-#endif
-
     switch (index)
     {
-#ifdef __WXGTK20__
-        case wxSYS_BORDER_X:
-        case wxSYS_BORDER_Y:
-        case wxSYS_EDGE_X:
-        case wxSYS_EDGE_Y:
-        case wxSYS_FRAMESIZE_X:
-        case wxSYS_FRAMESIZE_Y:
-            // If a window is specified/realized, and it is a toplevel window, we can query from wm.
-            // The returned border thickness is outside the client area in that case.
-            if (window)
-            {
-                wxTopLevelWindow *tlw = wxDynamicCast(win, wxTopLevelWindow);
-                if (!tlw)
-                    return -1; // not a tlw, not sure how to approach
-                else
-                {
-                    // Check if wm supports frame extents - we can't know
-                    // the border widths if it does not.
-#if GTK_CHECK_VERSION(2,2,0)
-                    if (!gtk_check_version(2,2,0))
-                    {
-                        if (!gdk_x11_screen_supports_net_wm_hint(
-                                gdk_drawable_get_screen(window),
-                                gdk_atom_intern("_NET_FRAME_EXTENTS", false) ) )
-                            return -1;
-                    }
-                    else
-#endif
-                    {
-                        if (!gdk_net_wm_supports(gdk_atom_intern("_NET_FRAME_EXTENTS", false)))
-                            return -1;
-                    }
-
-                    // Get the frame extents from the windowmanager.
-                    // In most cases the top extent is the titlebar, so we use the bottom extent
-                    // for the heights.
-
-                    Atom type;
-                    gint format;
-                    gulong nitems;
-
-#if GTK_CHECK_VERSION(2,2,0)
-                    if (!gtk_check_version(2,2,0))
-                    {
-                        gulong bytes_after;
-                        success = (XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_drawable_get_display(window)),
-                                            GDK_WINDOW_XWINDOW(window),
-                                            gdk_x11_get_xatom_by_name_for_display (
-                                                    gdk_drawable_get_display(window),
-                                                    "_NET_FRAME_EXTENTS" ),
-                                            0, // left, right, top, bottom, CARDINAL[4]/32
-                                            G_MAXLONG, // size of long
-                                            false, // do not delete property
-                                            XA_CARDINAL, // 32 bit
-                                            &type, &format, &nitems, &bytes_after, &data
-                                           ) == Success);
-                    }
-#endif
-                    if (success)
-                    {
-                        int border_return = -1;
-
-                        if ((type == XA_CARDINAL) && (format == 32) && (nitems >= 4) && (data))
-                        {
-                            long *borders;
-                            borders = (long*)data;
-                            switch(index)
-                            {
-                                case wxSYS_BORDER_X:
-                                case wxSYS_EDGE_X:
-                                case wxSYS_FRAMESIZE_X:
-                                    border_return = borders[1]; // width of right extent
-                                    break;
-                                default:
-                                    border_return = borders[3]; // height of bottom extent
-                                    break;
-                            }
-                        }
-
-                        if (data)
-                            XFree(data);
-
-                        return border_return;
-                    }
-                }
-            }
-
-            return -1; // no window specified
-#endif // gtk2
-
         case wxSYS_CURSOR_X:
         case wxSYS_CURSOR_Y:
-#ifdef __WXGTK24__
-            if (!gtk_check_version(2,4,0))
-            {
-                if (window)
-                    return gdk_display_get_default_cursor_size(gdk_drawable_get_display(window));
-                else
-                    return gdk_display_get_default_cursor_size(gdk_display_get_default());
-            }
-            else
-#endif
-                return 16;
-
-#ifdef __WXGTK20__
-        case wxSYS_DCLICK_X:
-        case wxSYS_DCLICK_Y:
-            gint dclick_distance;
-#if GTK_CHECK_VERSION(2,2,0)
-            if (window && !gtk_check_version(2,2,0))
-                g_object_get(gtk_settings_get_for_screen(gdk_drawable_get_screen(window)),
-                                "gtk-double-click-distance", &dclick_distance, NULL);
-            else
-#endif
-                g_object_get(gtk_settings_get_default(),
-                                "gtk-double-click-distance", &dclick_distance, NULL);
-
-            return dclick_distance * 2;
-#endif // gtk2
-
-#ifdef __WXGTK20__
-        case wxSYS_DRAG_X:
-        case wxSYS_DRAG_Y:
-            gint drag_threshold;
-#if GTK_CHECK_VERSION(2,2,0)
-            if (window && !gtk_check_version(2,2,0))
-            {
-                g_object_get(
-                        gtk_settings_get_for_screen(gdk_drawable_get_screen(window)),
-                        "gtk-dnd-drag-threshold",
-                        &drag_threshold, NULL);
-            }
-            else
-#endif
-            {
-                g_object_get(gtk_settings_get_default(),
-                             "gtk-dnd-drag-threshold", &drag_threshold, NULL);
-            }
-
-            return drag_threshold * 2;
-#endif
+            return 16;
 
         // MBN: ditto for icons
         case wxSYS_ICON_X:     return 32;
         case wxSYS_ICON_Y:     return 32;
 
         case wxSYS_SCREEN_X:
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,2,0)
-            if (window && !gtk_check_version(2,2,0))
-                return gdk_screen_get_width(gdk_drawable_get_screen(window));
-            else
-#endif
-                return gdk_screen_width();
+            return gdk_screen_width();
 
         case wxSYS_SCREEN_Y:
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,2,0)
-            if (window && !gtk_check_version(2,2,0))
-                return gdk_screen_get_height(gdk_drawable_get_screen(window));
-            else
-#endif
-                return gdk_screen_height();
+            return gdk_screen_height();
 
         case wxSYS_HSCROLL_Y:  return 15;
         case wxSYS_VSCROLL_X:  return 15;
 
 // a gtk1 implementation should be possible too if gtk2 efficiency/convenience functions aren't used
-#ifdef __WXGTK20__
+#if 0
         case wxSYS_CAPTION_Y:
             if (!window)
                 // No realized window specified, and no implementation for that case yet.

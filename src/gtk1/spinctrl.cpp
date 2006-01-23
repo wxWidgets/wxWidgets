@@ -19,7 +19,7 @@
 
 #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
 #include "wx/math.h"
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system

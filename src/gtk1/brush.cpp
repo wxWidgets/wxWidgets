@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/brush.cpp
+// Name:        src/gtk1/brush.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

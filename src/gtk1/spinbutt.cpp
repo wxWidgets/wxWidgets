@@ -17,7 +17,7 @@
 
 #include "wx/utils.h"
 #include "wx/math.h"
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system

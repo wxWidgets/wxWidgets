@@ -34,14 +34,12 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap 
     Create( parent, id, bitmap, pos, size, style, name );
 }
 
-#ifndef __WXGTK20__
 // empty bitmap, so that we can create GtkPixmap widget:
 static char * bogus_xpm[] = {
 "2 2 1 1",
 " 	c None",
 "  ",
 "  "};
-#endif
 
 bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
                              const wxPoint &pos, const wxSize &size,
@@ -58,12 +56,8 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 
     m_bitmap = bitmap;
 
-#ifdef __WXGTK20__
-    m_widget = gtk_image_new();
-#else
     wxBitmap bmp(bitmap.Ok() ? bitmap : wxBitmap(bogus_xpm));
     m_widget = gtk_pixmap_new(bmp.GetPixmap(), NULL);
-#endif
 
     if (bitmap.Ok())
         SetBitmap(bitmap);
@@ -84,7 +78,6 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
         if (m_bitmap.GetMask())
             mask = m_bitmap.GetMask()->GetBitmap();
 
-#ifdef __WXGTK20__
         if (m_bitmap.HasPixbuf())
         {
             gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
@@ -93,9 +86,6 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
         else
             gtk_image_set_from_pixmap(GTK_IMAGE(m_widget),
                                       m_bitmap.GetPixmap(), mask);
-#else
-        gtk_pixmap_set(GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask);
-#endif
 
         InvalidateBestSize();
         SetSize(GetBestSize());

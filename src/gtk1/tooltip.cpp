@@ -17,7 +17,7 @@
 #include "wx/tooltip.h"
 #include "wx/window.h"
 
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------
 // global data

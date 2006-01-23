@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/choice.cpp
+// Name:        src/gtk1/choice.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -14,7 +14,7 @@
 #include "wx/choice.h"
 #include "wx/arrstr.h"
 
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -45,9 +45,6 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
 
     int selection = wxNOT_FOUND;
 
-#ifdef __WXGTK20__
-    selection = gtk_option_menu_get_history( GTK_OPTION_MENU(choice->GetHandle()) );
-#else
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(choice->GetHandle()) ) );
     int count = 0;
 
@@ -63,7 +60,7 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
         child = child->next;
         count++;
     }
-#endif
+
     choice->m_selection_hack = selection;
 
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId() );
@@ -355,12 +352,9 @@ int wxChoice::FindString( const wxString &string, bool bCase ) const
 
         wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
-#ifdef __WXGTK20__
-         wxString tmp( wxGTK_CONV_BACK( gtk_label_get_text( label) ) );
-#else
          wxString tmp( label->label );
-#endif
-        if (string.IsSameAs( tmp, bCase ))
+
+         if (string.IsSameAs( tmp, bCase ))
             return count;
 
         child = child->next;
@@ -427,11 +421,7 @@ wxString wxChoice::GetString( int n ) const
 
             wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
-#ifdef __WXGTK20__
-            return wxString( wxGTK_CONV_BACK( gtk_label_get_text( label) ) );
-#else
             return wxString( label->label );
-#endif
         }
         child = child->next;
         count++;
@@ -622,11 +612,7 @@ wxSize wxChoice::DoGetBestSize() const
 
 bool wxChoice::IsOwnGtkWindow( GdkWindow *window )
 {
-#ifdef __WXGTK20__
-    return GTK_BUTTON(m_widget)->event_window;
-#else
     return (window == m_widget->window);
-#endif
 }
 
 // static

@@ -20,7 +20,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/gtk/treectrl.h"
+#include "wx/gtk1/treectrl.h"
 #include "wx/textctrl.h"
 #include "wx/log.h"
 

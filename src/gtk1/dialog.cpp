@@ -20,7 +20,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "wx/gtk/win_gtk.h"
+#include "wx/gtk1/win_gtk.h"
 
 //-----------------------------------------------------------------------------
 // global data

@@ -14,7 +14,7 @@
 
 #include "wx/radiobut.h"
 
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system

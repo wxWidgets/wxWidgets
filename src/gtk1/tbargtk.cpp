@@ -26,7 +26,7 @@
 #include "wx/frame.h"
 
 #include <glib.h>
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 // ----------------------------------------------------------------------------
 // globals
@@ -56,11 +56,7 @@ static void GetGtkStyle(long style,
     {
         *gtkStyle = style & wxTB_NOICONS
                         ? GTK_TOOLBAR_TEXT
-                        : (
-#ifdef __WXGTK20__
-                          style & wxTB_HORZ_LAYOUT ? GTK_TOOLBAR_BOTH_HORIZ :
-#endif // __WXGTK20__
-                          GTK_TOOLBAR_BOTH);
+                        : GTK_TOOLBAR_BOTH;
     }
     else // no text, hence we must have the icons or what would we show?
     {
@@ -128,12 +124,7 @@ public:
         {
             GdkBitmap *mask = bitmap.GetMask() ? bitmap.GetMask()->GetBitmap()
                                                : (GdkBitmap *)NULL;
-#ifdef __WXGTK20__
-            if (bitmap.HasPixbuf())
-                gtk_image_set_from_pixbuf( GTK_IMAGE(m_pixmap), bitmap.GetPixbuf() );
-            else
-#endif // !__WXGTK20__
-                gtk_pixmap_set( GTK_PIXMAP(m_pixmap), bitmap.GetPixmap(), mask );
+            gtk_pixmap_set( GTK_PIXMAP(m_pixmap), bitmap.GetPixmap(), mask );
         }
     }
 
@@ -292,20 +283,11 @@ bool wxToolBar::Create( wxWindow *parent,
         return false;
     }
 
-#ifdef __WXGTK20__
-    m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
-    GtkSetStyle();
-
-    // Doesn't work this way.
-    // GtkToolbarSpaceStyle space_style = GTK_TOOLBAR_SPACE_EMPTY;
-    // gtk_widget_style_set (GTK_WIDGET (m_toolbar), "space_style", &space_style, NULL);
-#else
     GtkOrientation orient;
     GtkToolbarStyle gtkStyle;
     GetGtkStyle(style, &orient, &gtkStyle);
 
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new(orient, gtkStyle) );
-#endif
 
     SetToolSeparation(7);
 
@@ -328,11 +310,8 @@ bool wxToolBar::Create( wxWindow *parent,
 
     gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
 
-    // FIXME: there is no such function for toolbars in 2.0
-#ifndef __WXGTK20__
     if (style & wxTB_FLAT)
         gtk_toolbar_set_button_relief( GTK_TOOLBAR(m_toolbar), GTK_RELIEF_NONE );
-#endif
 
     m_parent->DoAddChild( this );
 
@@ -363,13 +342,9 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
-#ifndef __WXGTK20__
     // if we have inserted a space before all the tools we must change the GTK
     // index by 1
     size_t posGtk = m_xMargin > 1 ? pos + 1 : pos;
-#else
-    size_t posGtk = pos;
-#endif
 
     if ( tool->IsButton() )
     {
@@ -388,26 +363,14 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
             GtkWidget *tool_pixmap = (GtkWidget *)NULL;
 
+            GdkPixmap *pixmap = bitmap.GetPixmap();
 
-#ifdef __WXGTK20__
-            if (bitmap.HasPixbuf())
-            {
-                tool_pixmap = gtk_image_new();
-                tool->m_pixmap = tool_pixmap;
-                tool->SetPixmap(bitmap);
-            }
-            else
-#endif
-            {
-                GdkPixmap *pixmap = bitmap.GetPixmap();
+            GdkBitmap *mask = (GdkBitmap *)NULL;
+            if ( bitmap.GetMask() )
+                mask = bitmap.GetMask()->GetBitmap();
 
-                GdkBitmap *mask = (GdkBitmap *)NULL;
-                if ( bitmap.GetMask() )
-                    mask = bitmap.GetMask()->GetBitmap();
-
-                tool_pixmap = gtk_pixmap_new( pixmap, mask );
-                gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
-            }
+            tool_pixmap = gtk_pixmap_new( pixmap, mask );
+            gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
 
             gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 
@@ -527,12 +490,6 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
         case wxTOOL_STYLE_BUTTON:
             gtk_widget_destroy( tool->m_item );
             break;
-
-#ifdef __WXGTK20__
-        case wxTOOL_STYLE_SEPARATOR:
-            gtk_toolbar_remove_space( m_toolbar, pos );
-            break;
-#endif
     }
 
     InvalidateBestSize();
@@ -595,10 +552,8 @@ void wxToolBar::SetMargins( int x, int y )
     wxCHECK_RET( GetToolsCount() == 0,
                  wxT("wxToolBar::SetMargins must be called before adding tools.") );
 
-#ifndef __WXGTK20__
     if (x > 1)
         gtk_toolbar_append_space( m_toolbar );  // oh well
-#endif
 
     m_xMargin = x;
     m_yMargin = y;
@@ -606,10 +561,7 @@ void wxToolBar::SetMargins( int x, int y )
 
 void wxToolBar::SetToolSeparation( int separation )
 {
-    // FIXME: this function disappeared
-#ifndef __WXGTK20__
     gtk_toolbar_set_space_size( m_toolbar, separation );
-#endif
 
     m_toolSeparation = separation;
 }
@@ -683,15 +635,11 @@ void wxToolBar::OnInternalIdle()
 wxVisualAttributes
 wxToolBar::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-#ifdef __WXGTK20__
-    return GetDefaultAttributesFromGTKWidget(gtk_toolbar_new);
-#else
     wxVisualAttributes attr;
     GtkWidget* widget = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
     attr = GetDefaultAttributesFromGTKWidget(widget);
     gtk_widget_destroy(widget);
     return attr;
-#endif
 }
 
 #endif // wxUSE_TOOLBAR_NATIVE

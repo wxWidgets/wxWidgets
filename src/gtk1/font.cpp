@@ -29,7 +29,7 @@
 
 #include <strings.h>
 
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 #include <gdk/gdkprivate.h>
 
 // ----------------------------------------------------------------------------
@@ -73,13 +73,8 @@ public:
     // do we have the native font info?
     bool HasNativeFont() const
     {
-#ifdef __WXGTK20__
-        // we always have a Pango font description
-        return TRUE;
-#else // GTK 1.x
         // only use m_nativeFontInfo if it had been initialized
         return !m_nativeFontInfo.IsDefault();
-#endif // GTK 2.0/1.x
     }
 
     // setters: all of them also take care to modify m_nativeFontInfo if we
@@ -102,7 +97,7 @@ public:
     //
     // VZ: I need this as my gdb either shows wildly wrong values or crashes
     //     when I ask it to "p fontRefData" :-(
-#if defined(__WXDEBUG__) && !defined(__WXGTK20__)
+#if defined(__WXDEBUG__)
     void Dump() const
     {
         wxPrintf(_T("%s-%s-%s-%d-%d\n"),
@@ -135,10 +130,8 @@ private:
     // clear m_scaled_xfonts if any
     void ClearGdkFonts();
 
-#ifndef __WXGTK20__
     // the map of font sizes to "GdkFont *"
     wxScaledFontList  m_scaled_xfonts;
-#endif // GTK 2.0/1.x
 
     int             m_pointSize;
     int             m_family,
@@ -186,84 +179,12 @@ void wxFontRefData::Init(int pointSize,
     m_encoding = encoding;
 
     m_noAA = FALSE;
-
-#ifdef __WXGTK20__
-    // Create native font info
-    m_nativeFontInfo.description = pango_font_description_new();
-
-    // And set its values
-    if (!m_faceName.empty())
-    {
-       pango_font_description_set_family( m_nativeFontInfo.description, wxGTK_CONV(m_faceName) );
-    }
-    else
-    {
-        switch (m_family)
-        {
-            case wxFONTFAMILY_MODERN:
-            case wxFONTFAMILY_TELETYPE:
-               pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
-               break;
-            case wxFONTFAMILY_ROMAN:
-               pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
-               break;
-            case wxFONTFAMILY_SWISS:
-               // SWISS = sans serif
-            default:
-               pango_font_description_set_family( m_nativeFontInfo.description, "sans" );
-               break;
-        }
-    }
-
-    SetStyle( m_style );
-    SetPointSize( m_pointSize );
-    SetWeight( m_weight );
-#endif // GTK 2.0
 }
 
 void wxFontRefData::InitFromNative()
 {
     m_noAA = FALSE;
 
-#ifdef __WXGTK20__
-    // Get native info
-    PangoFontDescription *desc = m_nativeFontInfo.description;
-
-    // init fields
-    m_faceName = wxGTK_CONV_BACK( pango_font_description_get_family( desc ) );
-
-    // Pango sometimes needs to have a size
-    int pango_size = pango_font_description_get_size( desc );
-    if (pango_size == 0)
-        m_nativeFontInfo.SetPointSize(12);
-
-    m_pointSize = m_nativeFontInfo.GetPointSize();
-    m_style = m_nativeFontInfo.GetStyle();
-    m_weight = m_nativeFontInfo.GetWeight();
-
-    if (m_faceName == wxT("monospace"))
-    {
-        m_family = wxFONTFAMILY_TELETYPE;
-    }
-    else if (m_faceName == wxT("sans"))
-    {
-        m_family = wxFONTFAMILY_SWISS;
-    }
-    else if (m_faceName == wxT("serif"))
-    {
-        m_family = wxFONTFAMILY_ROMAN;
-    }
-    else
-    {
-        m_family = wxFONTFAMILY_UNKNOWN;
-    }
-
-    // Pango description are never underlined (?)
-    m_underlined = FALSE;
-
-    // Cannot we choose that
-    m_encoding = wxFONTENCODING_SYSTEM;
-#else // GTK 1.x
     // get the font parameters from the XLFD
     // -------------------------------------
 
@@ -361,7 +282,6 @@ void wxFontRefData::InitFromNative()
         // may be give a warning here? or use wxFontMapper?
         m_encoding = wxFONTENCODING_SYSTEM;
     }
-#endif // GTK 2.0/1.x
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
@@ -395,19 +315,14 @@ wxFontRefData::wxFontRefData(int size, int family, int style,
 
 wxFontRefData::wxFontRefData(const wxString& fontname)
 {
-    // VZ: FromString() should really work in both cases, doesn't it?
-#ifdef __WXGTK20__
-    m_nativeFontInfo.FromString( fontname );
-#else // GTK 1.x
+    // FromString() should really work in GTK1 too, doesn't it?
     m_nativeFontInfo.SetXFontName(fontname);
-#endif // GTK 2.0/1.x
 
     InitFromNative();
 }
 
 void wxFontRefData::ClearGdkFonts()
 {
-#ifndef __WXGTK20__
     for ( wxScaledFontList::iterator i = m_scaled_xfonts.begin();
           i != m_scaled_xfonts.end();
           ++i )
@@ -417,7 +332,6 @@ void wxFontRefData::ClearGdkFonts()
     }
 
     m_scaled_xfonts.clear();
-#endif // GTK 1.x
 }
 
 wxFontRefData::~wxFontRefData()
@@ -433,9 +347,6 @@ void wxFontRefData::SetPointSize(int pointSize)
 {
     m_pointSize = pointSize;
 
-#ifdef __WXGTK20__
-    m_nativeFontInfo.SetPointSize(pointSize);
-#else
     if ( HasNativeFont() )
     {
         wxString size;
@@ -446,7 +357,6 @@ void wxFontRefData::SetPointSize(int pointSize)
 
         m_nativeFontInfo.SetXFontComponent(wxXLFD_POINTSIZE, size);
     }
-#endif
 }
 
 void wxFontRefData::SetFamily(int family)
@@ -460,9 +370,6 @@ void wxFontRefData::SetStyle(int style)
 {
     m_style = style;
 
-#ifdef __WXGTK20__
-    m_nativeFontInfo.SetStyle((wxFontStyle)style);
-#else
     if ( HasNativeFont() )
     {
         wxString slant;
@@ -486,16 +393,12 @@ void wxFontRefData::SetStyle(int style)
 
         m_nativeFontInfo.SetXFontComponent(wxXLFD_SLANT, slant);
     }
-#endif
 }
 
 void wxFontRefData::SetWeight(int weight)
 {
     m_weight = weight;
 
-#ifdef __WXGTK20__
-    m_nativeFontInfo.SetWeight((wxFontWeight)weight);
-#else //!__WXGTK20__
     if ( HasNativeFont() )
     {
         wxString boldness;
@@ -520,7 +423,6 @@ void wxFontRefData::SetWeight(int weight)
 
         m_nativeFontInfo.SetXFontComponent(wxXLFD_WEIGHT, boldness);
     }
-#endif
 }
 
 void wxFontRefData::SetUnderlined(bool underlined)
@@ -534,21 +436,16 @@ void wxFontRefData::SetFaceName(const wxString& facename)
 {
     m_faceName = facename;
 
-#ifdef __WXGTK20__
-    m_nativeFontInfo.SetFaceName(facename);
-#else
     if ( HasNativeFont() )
     {
         m_nativeFontInfo.SetXFontComponent(wxXLFD_FAMILY, facename);
     }
-#endif
 }
 
 void wxFontRefData::SetEncoding(wxFontEncoding encoding)
 {
     m_encoding = encoding;
 
-#ifndef __WXGTK20__
     if ( HasNativeFont() )
     {
         wxNativeEncodingInfo info;
@@ -558,7 +455,6 @@ void wxFontRefData::SetEncoding(wxFontEncoding encoding)
             m_nativeFontInfo.SetXFontComponent(wxXLFD_ENCODING, info.xencoding);
         }
     }
-#endif
 }
 
 void wxFontRefData::SetNativeFontInfo(const wxNativeFontInfo& info)
@@ -586,17 +482,7 @@ wxFont::wxFont(const wxNativeFontInfo& info)
 {
     Init();
 
-#ifdef __WXGTK20__
-    Create( info.GetPointSize(),
-            info.GetFamily(),
-            info.GetStyle(),
-            info.GetWeight(),
-            info.GetUnderlined(),
-            info.GetFaceName(),
-            info.GetEncoding() );
-#else
     (void) Create(info.GetXFontName());
-#endif
 }
 
 bool wxFont::Create( int pointSize,
@@ -745,7 +631,6 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
 
-#ifndef __WXGTK20__
     if ( !M_FONTDATA->HasNativeFont() )
     {
         // NB: this call has important side-effect: it not only finds
@@ -753,7 +638,6 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
         //     by calling its SetXFontName method
         GetInternalFont();
     }
-#endif
 
     return &(M_FONTDATA->m_nativeFontInfo);
 }
@@ -762,7 +646,6 @@ bool wxFont::IsFixedWidth() const
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
 
-#ifndef __WXGTK20__
     if ( M_FONTDATA->HasNativeFont() )
     {
         // the monospace fonts are supposed to have "M" in the spacing field
@@ -771,7 +654,6 @@ bool wxFont::IsFixedWidth() const
 
         return spacing.Upper() == _T('M');
     }
-#endif
 
     return wxFontBase::IsFixedWidth();
 }
@@ -847,7 +729,6 @@ void wxFont::SetNoAntiAliasing( bool no )
 // get internal representation of font
 // ----------------------------------------------------------------------------
 
-#ifndef __WXGTK20__
 static GdkFont *g_systemDefaultGuiFont = (GdkFont*) NULL;
 
 // this is also used from tbargtk.cpp and tooltip.cpp, hence extern
@@ -939,5 +820,3 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
 
     return font;
 }
-#endif  // not GTK 2.0
-

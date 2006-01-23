@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/utilsgtk.cpp
+// Name:        src/gtk1/utilsgtk.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -31,9 +31,7 @@
 #include "glib.h"
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
-#ifndef __WXGTK20__
 #include "gtk/gtkfeatures.h"
-#endif
 #include "gdk/gdkx.h"
 
 #ifdef HAVE_X11_XKBLIB_H
@@ -80,43 +78,6 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
     return FALSE;
 }
 #endif
-
-#ifdef __WXGTK20__
-// Escapes string so that it is valid Pango markup XML string:
-wxString wxEscapeStringForPangoMarkup(const wxString& str)
-{
-    size_t len = str.length();
-    wxString out;
-    out.Alloc(len);
-    for (size_t i = 0; i < len; i++)
-    {
-        wxChar c = str[i];
-        switch (c)
-        {
-            case _T('&'):
-                out << _T("&amp;");
-                break;
-            case _T('<'):
-                out << _T("&lt;");
-                break;
-            case _T('>'):
-                out << _T("&gt;");
-                break;
-            case _T('\''):
-                out << _T("&apos;");
-                break;
-            case _T('"'):
-                out << _T("&quot;");
-                break;
-            default:
-                out << c;
-                break;
-        }
-    }
-    return out;
-}
-#endif
-
 
 // ----------------------------------------------------------------------------
 // display characterstics
@@ -168,11 +129,7 @@ int wxDisplayDepth()
 wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
-#ifdef __WXGTK20__
-    info.shortName = _T("gtk2");
-#else
     info.shortName = _T("gtk");
-#endif
     info.name = _T("wxGTK");
 #ifdef __WXUNIVERSAL__
     info.shortName << _T("univ");

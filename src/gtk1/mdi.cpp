@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/mdi.cpp
+// Name:        src/gtk1/mdi.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -18,12 +18,12 @@
 #include "wx/dialog.h"
 #include "wx/menu.h"
 #include "wx/intl.h"
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
-#include "wx/gtk/win_gtk.h"
+#include "wx/gtk1/win_gtk.h"
 
 //-----------------------------------------------------------------------------
 // constants

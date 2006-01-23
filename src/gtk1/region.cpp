@@ -21,9 +21,8 @@
 
 #include "wx/region.h"
 #include "wx/log.h"
-#include "wx/gtk/private.h"
+#include "wx/gtk1/private.h"
 
-#ifndef __WXGTK20__
 
 // ----------------------------------------------------------------------------
 // wxGdkRegion: creates a new region in ctor and destroys in dtor
@@ -41,7 +40,6 @@ private:
     GdkRegion *m_region;
 };
 
-#endif // __WXGTK20__
 
 // ----------------------------------------------------------------------------
 // wxRegionRefData: private class containing the information about the region
@@ -58,11 +56,7 @@ public:
     wxRegionRefData(const wxRegionRefData& refData)
         : wxObjectRefData()
     {
-#ifdef __WXGTK20__
-        m_region = gdk_region_copy(refData.m_region);
-#else
         m_region = gdk_regions_union(wxGdkRegion(), refData.m_region);
-#endif
     }
 
     ~wxRegionRefData()
@@ -100,21 +94,13 @@ void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 
     m_refData = new wxRegionRefData();
 
-#ifdef __WXGTK20__
-    M_REGIONDATA->m_region = gdk_region_rectangle( &rect );
-#else
     M_REGIONDATA->m_region = gdk_region_union_with_rect( wxGdkRegion(), &rect );
-#endif
 }
 
 wxRegion::wxRegion( GdkRegion *region )
 {
     m_refData = new wxRegionRefData();
-#ifdef __WXGTK20__
-    M_REGIONDATA->m_region = gdk_region_copy( region );
-#else
     M_REGIONDATA->m_region = gdk_regions_union(wxGdkRegion(), region);
-#endif
 }
 
 wxRegion::wxRegion( size_t n, const wxPoint *points, int fillStyle )
@@ -202,13 +188,9 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
         rect.width = width;
         rect.height = height;
 
-#ifdef __WXGTK20__
-        gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
-#else
         GdkRegion *reg = gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
         gdk_region_destroy( M_REGIONDATA->m_region );
         M_REGIONDATA->m_region = reg;
-#endif
     }
 
     return TRUE;
@@ -234,13 +216,9 @@ bool wxRegion::Union( const wxRegion& region )
         AllocExclusive();
     }
 
-#ifdef __WXGTK20__
-    gdk_region_union( M_REGIONDATA->m_region, region.GetRegion() );
-#else
     GdkRegion *reg = gdk_regions_union( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
-#endif
 
     return TRUE;
 }
@@ -272,13 +250,9 @@ bool wxRegion::Intersect( const wxRegion& region )
 
     AllocExclusive();
 
-#ifdef __WXGTK20__
-    gdk_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
-#else
     GdkRegion *reg = gdk_regions_intersect( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
-#endif
 
     return TRUE;
 }
@@ -308,13 +282,9 @@ bool wxRegion::Subtract( const wxRegion& region )
 
     AllocExclusive();
 
-#ifdef __WXGTK20__
-    gdk_region_subtract( M_REGIONDATA->m_region, region.GetRegion() );
-#else
     GdkRegion *reg = gdk_regions_subtract( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
-#endif
 
     return TRUE;
 }
@@ -343,13 +313,9 @@ bool wxRegion::Xor( const wxRegion& region )
 
     AllocExclusive();
 
-#ifdef __WXGTK20__
-    gdk_region_xor( M_REGIONDATA->m_region, region.GetRegion() );
-#else
     GdkRegion *reg = gdk_regions_xor( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
-#endif
 
     return TRUE;
 }
@@ -458,8 +424,6 @@ GdkRegion *wxRegion::GetRegion() const
 // wxRegionIterator
 // ----------------------------------------------------------------------------
 
-#ifndef __WXGTK20__
-
 // the following structures must match the private structures
 // in X11 region code ( xc/lib/X11/region.h )
 
@@ -477,7 +441,6 @@ struct _XRegion {
     _XBox *rects, extents;
 };
 
-#endif // GTK+ 1.x
 
 class wxRIRefData: public wxObjectRefData
 {
@@ -508,27 +471,6 @@ void wxRIRefData::CreateRects( const wxRegion& region )
     if (!gdkregion)
         return;
 
-#ifdef __WXGTK20__
-    GdkRectangle *gdkrects = NULL;
-    gint numRects = 0;
-    gdk_region_get_rectangles( gdkregion, &gdkrects, &numRects );
-
-    m_numRects = numRects;
-    if (numRects)
-    {
-        m_rects = new wxRect[m_numRects];
-        for (size_t i=0; i < m_numRects; ++i)
-        {
-            GdkRectangle &gr = gdkrects[i];
-            wxRect &wr = m_rects[i];
-            wr.x = gr.x;
-            wr.y = gr.y;
-            wr.width = gr.width;
-            wr.height = gr.height;
-        }
-    }
-    g_free( gdkrects );
-#else // GTK+ 1.x
     Region r = ((GdkRegionPrivate *)gdkregion)->xregion;
     if (r)
     {
@@ -547,7 +489,6 @@ void wxRIRefData::CreateRects( const wxRegion& region )
             }
         }
     }
-#endif // GTK+ 2.0/1.x
 }
 
 wxRegionIterator::wxRegionIterator()
