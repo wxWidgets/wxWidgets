@@ -1558,7 +1558,7 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
         return false;
     }
 
-    if (!handler->CanRead(stream))
+    if (stream.IsSeekable() && !handler->CanRead(stream))
     {
         wxLogError(_("Image file is not of type %d."), type);
         return false;
@@ -1582,7 +1582,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
         return false;
     }
 
-    if (!handler->CanRead(stream))
+    if (stream.IsSeekable() && !handler->CanRead(stream))
     {
         wxLogError(_("Image file is not of type %s."), (const wxChar*) mimetype);
         return false;
