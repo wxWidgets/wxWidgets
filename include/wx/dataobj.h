@@ -166,8 +166,10 @@ public:
     #include "wx/motif/dataobj.h"
 #elif defined(__WXX11__)
     #include "wx/x11/dataobj.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/dataobj.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/dataobj.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/dataobj.h"
 #elif defined(__WXCOCOA__)
@@ -495,8 +497,10 @@ private:
 
     // wxURLDataObject defined in msw/ole/dataobj2.h
 #else // !__WXMSW__
-    #if defined(__WXGTK__)
+    #if defined(__WXGTK20__)
         #include "wx/gtk/dataobj2.h"
+    #elif defined(__WXGTK__)
+        #include "wx/gtk1/dataobj2.h"
     #elif defined(__WXX11__)
         #include "wx/x11/dataobj2.h"
     #elif defined(__WXMOTIF__)
