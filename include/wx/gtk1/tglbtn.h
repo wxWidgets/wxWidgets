@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/tglbtn.h
+// Name:        wx/gtk1/tglbtn.h
 // Purpose:     Declaration of the wxToggleButton class, which implements a
 //              toggle button under wxGTK.
 // Author:      John Norris, minor changes by Axel Schlueter
@@ -125,7 +125,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
- 
+
     // implementation
     bool m_blockEvent;
 

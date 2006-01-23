@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/brush.h
+// Name:        wx/gtk1/brush.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

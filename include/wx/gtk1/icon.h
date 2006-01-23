@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        icon.h
+// Name:        wx/gtk1/icon.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

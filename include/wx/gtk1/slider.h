@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/slider.h
+// Name:        wx/gtk1/slider.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -58,7 +58,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation
     bool IsOwnGtkWindow( GdkWindow *window );
     void GtkDisableEvents();

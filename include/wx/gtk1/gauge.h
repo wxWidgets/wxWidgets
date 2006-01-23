@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge.h
+// Name:        wx/gtk1/gauge.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -71,10 +71,10 @@ public:
     int GetValue() const;
 
     bool IsVertical() const { return HasFlag(wxGA_VERTICAL); }
-    
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation
     // -------------
 

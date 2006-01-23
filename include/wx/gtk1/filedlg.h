@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.h
+// Name:        wx/gtk1/filedlg.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        font.h
+// Name:        wx/gtk1/font.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -97,9 +97,7 @@ public:
     // implementation from now on
     void Unshare();
 
-#ifndef __WXGTK20__
     GdkFont* GetInternalFont(float scale = 1.0) const;
-#endif
 
     // no data :-)
 

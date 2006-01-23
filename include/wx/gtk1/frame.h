@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/frame.h
+// Name:        wx/gtk1/frame.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -60,7 +60,7 @@ public:
                                          long style = wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE,
                                          wxWindowID id = 0,
                                          const wxString& name = wxStatusLineNameStr);
-                                         
+
     void SetStatusBar(wxStatusBar *statbar);
 #endif // wxUSE_STATUSBAR
 
@@ -70,7 +70,7 @@ public:
                                      const wxString& name = wxToolBarNameStr);
     void SetToolBar(wxToolBar *toolbar);
 #endif // wxUSE_TOOLBAR
-    
+
     wxPoint GetClientAreaOrigin() const { return wxPoint(0, 0); }
 
     // implementation from now on

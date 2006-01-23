@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        notebook.h
+// Name:        wx/gtk1/notebook.h
 // Purpose:     wxNotebook class
 // Author:      Robert Roebling
 // Modified by:

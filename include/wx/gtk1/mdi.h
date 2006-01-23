@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/mdi.h
+// Name:        wx/gtk1/mdi.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/accel.h
+// Name:        wx/gtk1/accel.h
 // Purpose:     wxAcceleratorTable redirection file
 // Author:      Julian Smart
 // Modified by:

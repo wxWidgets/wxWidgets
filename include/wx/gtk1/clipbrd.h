@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        clipboard.h
+// Name:        wx/gtk1/clipboard.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -57,7 +57,7 @@ public:
     // primary == FALSE resets it.
     virtual void UsePrimarySelection(bool primary = TRUE)
         { m_usePrimary = primary; }
-    
+
     // implementation from now on
     bool              m_open;
     bool              m_ownsClipboard;

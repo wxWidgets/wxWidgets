@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dnd.h
+// Name:        wx/gtk1/dnd.h
 // Purpose:     declaration of the wxDropTarget class
 // Author:      Robert Roebling
 // RCS-ID:      $Id$

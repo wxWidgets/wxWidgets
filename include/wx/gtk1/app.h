@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/app.h
+// Name:        wx/gtk1/app.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -54,7 +54,7 @@ public:
 
     gint            m_idleTag;
     void RemoveIdleTag();
-    
+
     unsigned char  *m_colorCube;
 
     // Used by the the wxGLApp and wxGLCanvas class for GL-based X visual
@@ -64,7 +64,7 @@ public:
     // This returns the current visual: either that used by wxRootWindow
     // or the XVisualInfo* for SGI.
     GdkVisual      *GetGdkVisual();
-    
+
 private:
     // true if we're inside an assert modal dialog
 #ifdef __WXDEBUG__

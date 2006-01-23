@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrolbar.h
+// Name:        wx/gtk1/scrolbar.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -65,7 +65,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation
     // --------------
 

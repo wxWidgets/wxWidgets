@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tbargtk.h
+// Name:        wx/gtk1/tbargtk.h
 // Purpose:     GTK toolbar
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -54,7 +54,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation from now on
     // --------------------------
 

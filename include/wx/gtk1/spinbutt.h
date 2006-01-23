@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/spinbutt.h
+// Name:        wx/gtk1/spinbutt.h
 // Purpose:     wxSpinButton class
 // Author:      Robert Roebling
 // Modified by:
@@ -44,7 +44,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation
     void OnSize( wxSizeEvent &event );
 

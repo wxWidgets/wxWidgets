@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/statline.h
+// Name:        wx/gtk1/statline.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

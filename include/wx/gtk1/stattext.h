@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        stattext.h
+// Name:        wx/gtk1/stattext.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -37,7 +37,7 @@ public:
                  wxWindowID id,
                  const wxString &label,
                  const wxPoint &pos = wxDefaultPosition,
-                 const wxSize &size = wxDefaultSize, 
+                 const wxSize &size = wxDefaultSize,
                  long style = 0,
                  const wxString &name = wxStaticTextNameStr );
 
@@ -45,7 +45,7 @@ public:
                 wxWindowID id,
                 const wxString &label,
                 const wxPoint &pos = wxDefaultPosition,
-                const wxSize &size = wxDefaultSize, 
+                const wxSize &size = wxDefaultSize,
                 long style = 0,
                 const wxString &name = wxStaticTextNameStr );
 
@@ -57,7 +57,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // see wx/stattext.h
     void Wrap(int width);
 
@@ -68,7 +68,7 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
-                           
+
     virtual wxSize DoGetBestSize() const;
 
     DECLARE_DYNAMIC_CLASS(wxStaticText)

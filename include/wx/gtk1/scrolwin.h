@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/scrolwin.h
+// Name:        wx/gtk1/scrolwin.h
 // Purpose:     wxScrolledWindow class
 // Author:      Robert Roebling
 // Modified by: Vadim Zeitlin (2005-10-10): wxScrolledWindow is now common

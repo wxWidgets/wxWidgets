@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/bmpbutton.h
+// Name:        wx/gtk1/bmpbutton.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

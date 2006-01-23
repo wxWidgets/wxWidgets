@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/stabox.h
+// Name:        wx/gtk1/stabox.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -44,7 +44,7 @@ public:
 
 protected:
     void DoApplyWidgetStyle(GtkRcStyle *style);
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBox)
 };

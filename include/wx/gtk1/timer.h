@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/timer.h
+// Name:        wx/gtk1/timer.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

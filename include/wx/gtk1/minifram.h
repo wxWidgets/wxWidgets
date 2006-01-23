@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minifram.h
+// Name:        wx/gtk1/minifram.h
 // Purpose:     wxMiniFrame class
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -54,7 +54,7 @@ public:
 
     virtual void SetTitle( const wxString &title );
  // implementation
- 
+
     bool   m_isDragging;
     int    m_oldX,m_oldY;
     int    m_diffX,m_diffY;

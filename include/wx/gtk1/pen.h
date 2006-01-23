@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/pen.h
+// Name:        wx/gtk1/pen.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -22,7 +22,7 @@
 
 class WXDLLIMPEXP_CORE wxPen;
 
-#if defined(__WXGTK127__) || defined(__WXGTK20__)
+#if defined(__WXGTK127__)
 typedef    gint8 wxGTKDash;
 #else
 typedef    gchar wxGTKDash;

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/textctrl.h
+// Name:        wx/gtk1/textctrl.h
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
@@ -86,16 +86,6 @@ public:
 
     virtual void ShowPosition(long pos);
 
-#ifdef __WXGTK20__
-    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
-    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
-                                            wxTextCoord *col,
-                                            wxTextCoord *row) const
-    {
-        return wxTextCtrlBase::HitTest(pt, col, row);
-    }
-#endif // __WXGTK20__
-
     // Clipboard operations
     virtual void Copy();
     virtual void Cut();
@@ -145,12 +135,8 @@ public:
     void CalculateScrollbar();
     void OnInternalIdle();
 
-#ifdef __WXGTK20__
-    void SetUpdateFont(bool WXUNUSED(update)) { }
-#else // !__WXGTK20__
     void SetUpdateFont(bool update) { m_updateFont = update; }
     void UpdateFontIfNeeded();
-#endif // __WXGTK20__/!__WXGTK20__
 
     void SetModified() { m_modified = true; }
 
@@ -196,11 +182,6 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
 
-#ifdef __WXGTK20__
-    // has the control been frozen by Freeze()?
-    bool IsFrozen() const { return m_frozenness > 0; }
-#endif
-
 private:
     // change the font for everything in this control
     void ChangeFontGlobally();
@@ -210,24 +191,8 @@ private:
 
     bool        m_modified:1;
     bool        m_vScrollbarVisible:1;
-#ifndef __WXGTK20__
     bool        m_updateFont:1;
-#endif // !__WXGTK20__
     bool        m_ignoreNextUpdate:1;
-
-#ifdef __WXGTK20__
-    // Our text buffer. Convenient, and holds the buffer while using
-    // a dummy one when m_frozenness > 0
-    GtkTextBuffer *m_buffer;
-
-    // number of calls to Freeze() minus number of calls to Thaw()
-    unsigned int m_frozenness;
-
-    // For wxTE_AUTO_URL
-    void OnUrlMouseEvent(wxMouseEvent&);
-    GdkCursor *m_gdkHandCursor;
-    GdkCursor *m_gdkXTermCursor;
-#endif
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/combobox.h
+// Name:        wx/gtk1/combobox.h
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97

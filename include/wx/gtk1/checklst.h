@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        checklst.h
+// Name:        wx/gtk1/checklst.h
 // Purpose:     wxCheckListBox class
 // Author:      Robert Roebling
 // Modified by:
@@ -52,7 +52,7 @@ public:
     void Check( int index, bool check = TRUE );
 
     int GetItemHeight() const;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 };

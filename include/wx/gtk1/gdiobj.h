@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gdiobj.h
+// Name:        wx/gtk1/gdiobj.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

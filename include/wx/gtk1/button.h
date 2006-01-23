@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/button.h
+// Name:        wx/gtk1/button.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -67,7 +67,7 @@ public:
     // Since this wxButton doesn't derive from wxButtonBase (why?) we need
     // to override this here too...
     virtual bool ShouldInheritColours() const { return false; }
-    
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 

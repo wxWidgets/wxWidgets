@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/colour.h
+// Name:        wx/gtk1/colour.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

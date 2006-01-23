@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/colordlg.h
+// Name:        wx/gtk1/colordlg.h
 // Purpose:     wxColourDialog
 // Author:      Vaclav Slavik
 // Modified by:
@@ -44,7 +44,7 @@ protected:
     // copy data between the dialog and m_colourData:
     void ColourDataToDialog();
     void DialogToColourData();
-    
+
     wxColourData m_data;
 
     DECLARE_DYNAMIC_CLASS(wxColourDialog)

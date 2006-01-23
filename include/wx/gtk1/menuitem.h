@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        menuitem.h
+// Name:        wx/gtk1/menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Robert Roebling
 // RCS-ID:      $Id$

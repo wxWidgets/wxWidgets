@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/listbox.h
+// Name:        wx/gtk1/listbox.h
 // Purpose:     wxListBox class declaration
 // Author:      Robert Roebling
 // Id:          $Id$

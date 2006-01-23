@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/menu.h
+// Name:        wx/gtk1/menu.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -44,9 +44,7 @@ public:
     // common part of Append and Insert
     bool GtkAppend(wxMenu *menu, const wxString& title, int pos=-1);
 
-#ifndef __WXGTK20__
     GtkAccelGroup   *m_accel;
-#endif
     GtkWidget       *m_menubar;
     long             m_style;
     wxWindow        *m_invokingWindow;

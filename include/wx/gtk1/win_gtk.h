@@ -1,5 +1,5 @@
 /* ///////////////////////////////////////////////////////////////////////////
-// Name:        win_gtk.h
+// Name:        wx/gtk1/win_gtk.h
 // Purpose:     wxWidgets's GTK base widget = GtkPizza
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -19,9 +19,7 @@ extern "C" {
 #include <gdk/gdkx.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkadjustment.h>
-#ifndef __WXGTK20__
 #include <gtk/gtkfeatures.h>
-#endif
 
 #include "wx/dlimpexp.h"
 

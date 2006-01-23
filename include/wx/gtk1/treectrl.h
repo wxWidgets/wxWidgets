@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treectrl.h
+// Name:        wx/gtk1/treectrl.h
 // Purpose:     wxTreeCtrl class
 // Author:      Denis Pershin
 // Modified by:

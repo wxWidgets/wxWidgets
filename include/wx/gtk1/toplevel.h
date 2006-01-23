@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/toplevel.h
+// Name:        wx/gtk1/toplevel.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

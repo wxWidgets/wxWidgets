@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/radiobox.h
+// Name:        wx/gtk1/radiobox.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$

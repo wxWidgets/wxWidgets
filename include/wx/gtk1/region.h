@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/region.h
+// Name:        wx/gtk1/region.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
