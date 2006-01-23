@@ -36,6 +36,14 @@
 #include <types.h>
 #include <netinet/in.h>
 #endif
+#ifdef __NETBSD__
+#ifndef _NETBSD_SOURCE
+#define _NETBSD_SOURCE
+#endif
+#ifndef _LIBC
+#define _LIBC
+#endif
+#endif
 #include <netdb.h>
 #include <sys/ioctl.h>
 
