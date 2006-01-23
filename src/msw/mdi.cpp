@@ -1153,7 +1153,7 @@ WXLRESULT wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXL
                            (UINT)message, (WPARAM)wParam, (LPARAM)lParam);
 }
 
-bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
+bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* pMsg)
 {
     // NB: this duplicates the code in wxFrame::MSWTranslateMessage() to avoid
     //     breaking backwards compatibility; cvs HEAD has a better version of
