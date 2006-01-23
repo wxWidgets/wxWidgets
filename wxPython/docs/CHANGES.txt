@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.6.2.2
+2.6.3.0
 -------
 
 Change the wx.ListCtrl InsertStringItem wrapper to use the form that
