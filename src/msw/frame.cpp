@@ -734,14 +734,14 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
 #if wxUSE_MENUS && wxUSE_ACCEL && !defined(__WXUNIVERSAL__)
     // try the menu bar accels
     wxMenuBar *menuBar = GetMenuBar();
-    if ( !menuBar )
-        return false;
-
-    const wxAcceleratorTable& acceleratorTable = menuBar->GetAccelTable();
-    return acceleratorTable.Translate(this, pMsg);
-#else
-    return false;
+    if ( menuBar )
+    {
+        const wxAcceleratorTable& acceleratorTable = menuBar->GetAccelTable();
+        return acceleratorTable.Translate(this, pMsg);
+    }
 #endif // wxUSE_MENUS && wxUSE_ACCEL
+
+    return false;
 }
 
 // ---------------------------------------------------------------------------
