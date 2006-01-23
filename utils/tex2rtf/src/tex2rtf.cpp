@@ -406,7 +406,7 @@ bool MyApp::OnInit()
 
     wxString path = TexPathList.FindValidPath(MacroFile);
     if (!path.empty())
-      ReadCustomMacros((wxChar *)path.c_str());
+        ReadCustomMacros(path);
 
 #if wxUSE_STATUSBAR
     wxString inStr(_T("In "));
@@ -448,7 +448,7 @@ bool MyApp::OnInit()
 
     wxString path = TexPathList.FindValidPath(MacroFile);
     if (!path.empty())
-        ReadCustomMacros((wxChar*)path.c_str());
+        ReadCustomMacros(path);
 
     Go();
     if (runTwice)
@@ -762,7 +762,7 @@ void MyFrame::OnLoadMacros(wxCommandEvent& WXUNUSED(event))
     if (!s.empty() && wxFileExists(s))
     {
         MacroFile = copystring(s);
-        ReadCustomMacros((wxChar *)s.c_str());
+        ReadCustomMacros(s);
         ShowCustomMacros();
     }
 #endif // wxUSE_FILEDLG
