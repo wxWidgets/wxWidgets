@@ -1749,9 +1749,10 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
 {
     // setting the client size is less obvious than it could have been
     // because in the result of changing the total size the window scrollbar
-    // may [dis]appear and/or its menubar may [un]wrap and so the client size
-    // will not be correct as the difference between the total and client size
-    // changes - so we keep changing it until we get it right
+    // may [dis]appear and/or its menubar may [un]wrap (and AdjustWindowRect()
+    // doesn't take neither into account) and so the client size will not be
+    // correct as the difference between the total and client size changes --
+    // so we keep changing it until we get it right
     //
     // normally this loop shouldn't take more than 3 iterations (usually 1 but
     // if scrollbars [dis]appear as the result of the first call, then 2 and it
@@ -1792,7 +1793,9 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         }
 
         // don't call DoMoveWindow() because we want to move window immediately
-        // and not defer it here
+        // and not defer it here as otherwise the value returned by
+        // GetClient/WindowRect() wouldn't change as the window wouldn't be
+        // really resized
         if ( !::MoveWindow(GetHwnd(),
                            rectWin.left,
                            rectWin.top,
