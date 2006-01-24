@@ -874,7 +874,6 @@ swig_cmd = SWIG
 swig_force = force
 swig_args = ['-c++',
              '-Wall',
-             '-nodefault',
              '-python',
              '-new_repr',
              '-modern',

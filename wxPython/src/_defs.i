@@ -19,6 +19,17 @@
 // Turn on kwargs by default
 %feature("kwargs", "1");
 
+// Don't generate separate wrappers for each default args combination
+%feature("compactdefaultargs");
+
+// Don't generate default ctors or dtors if the C++ doesn't have them
+%feature("nodefault");
+
+// This is the SWIG 1.3.28 way to do the above...
+// // Don't generate default ctors or dtors if the C++ doesn't have them
+// %feature("nodefaultctor");
+// %feature("nodefaultdtor");
+
 //---------------------------------------------------------------------------
 // Tell SWIG to wrap all the wrappers with our thread protection by default
 
