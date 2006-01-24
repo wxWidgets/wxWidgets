@@ -356,6 +356,7 @@ IconRef wxBitmapRefData::GetIconRef()
                         *maskdest++ = 0xFF - *masksource++ ;
                         masksource++ ;
                         masksource++ ;
+                        masksource++ ;
                     }
                     else if ( hasAlpha )
                         *maskdest++ = a ;
@@ -504,7 +505,7 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
             for ( int y = 0 ; y < h ; ++y , sourcemaskstart += maskrowbytes)
             {
                 unsigned char *sourcemask = sourcemaskstart ;
-                for ( int x = 0 ; x < w ; ++x , sourcemask+=3 , destalpha += 4 )
+                for ( int x = 0 ; x < w ; ++x , sourcemask += 4 , destalpha += 4 )
                 {
                     *destalpha = 0xFF - *sourcemask ;
                 }
@@ -880,20 +881,19 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
     if ( M_BITMAPDATA->m_bitmapMask )
     {
         wxMemoryBuffer maskbuf ;
-        int rowBytes = ( destwidth + 3 ) & 0xFFFFFFC ;
+        int rowBytes = ( destwidth * 4 + 3 ) & 0xFFFFFFC ;
         size_t maskbufsize = rowBytes * destheight ;
         unsigned char * destdata = (unsigned char * ) maskbuf.GetWriteBuf( maskbufsize ) ;
 
         int sourcelinesize = M_BITMAPDATA->m_bitmapMask->GetBytesPerRow()  ;
         int destlinesize = rowBytes ;
         unsigned char *source = (unsigned char *) M_BITMAPDATA->m_bitmapMask->GetRawAccess() ;
-        source += rect.x * 3  + rect.y * sourcelinesize ;
+        source += rect.x * 4 + rect.y * sourcelinesize ;
         unsigned char *dest = destdata ;
 
         for(int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
         {
-            for (int xx = 0; xx < destlinesize; xx++ )
-                *(dest+xx) = 0xFF - *(source+xx*3) ;
+            memcpy( dest , source , destlinesize ) ;
         }
         maskbuf.UngetWriteBuf( maskbufsize ) ;
         ret.SetMask( new wxMask( maskbuf , destwidth , destheight , rowBytes ) ) ;
@@ -1094,6 +1094,7 @@ wxImage wxBitmap::ConvertToImage() const
                 else if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
                     b = MASK_BLUE_REPLACEMENT ;
 
+                maskp++ ;
                 maskp++ ;
                 maskp++ ;
             }
@@ -1323,7 +1324,7 @@ void wxMask::RealizeNative()
     Rect rect = { 0 , 0 , m_height , m_width } ;
 
     OSStatus err = NewGWorldFromPtr(
-        (GWorldPtr*) &m_maskBitmap , k24RGBPixelFormat , &rect , NULL , NULL , 0 ,
+        (GWorldPtr*) &m_maskBitmap , k32ARGBPixelFormat , &rect , NULL , NULL , 0 ,
         (char*) m_memBuf.GetData() , m_bytesPerRow ) ;
     verify_noerr( err ) ;
 }
@@ -1345,8 +1346,8 @@ bool wxMask::Create(const wxBitmap& bitmap)
 {
     m_width = bitmap.GetWidth() ;
     m_height = bitmap.GetHeight() ;
-    m_bytesPerRow = ( m_width * 3 + 3 ) & 0xFFFFFFC ;
-
+    m_bytesPerRow = ( m_width * 4 + 3 ) & 0xFFFFFFC ;
+    
     size_t size = m_bytesPerRow * m_height ;
     unsigned char * destdatabase = (unsigned char*) m_memBuf.GetWriteBuf( size ) ;
     memset( destdatabase , 0 , size ) ;
@@ -1365,9 +1366,11 @@ bool wxMask::Create(const wxBitmap& bitmap)
                 *destdata++ = 0xFF ;
                 *destdata++ = 0xFF ;
                 *destdata++ = 0xFF ;
+                *destdata++ = 0xFF ;
             }
             else
             {
+                *destdata++ = 0x00 ;
                 *destdata++ = 0x00 ;
                 *destdata++ = 0x00 ;
                 *destdata++ = 0x00 ;
@@ -1385,8 +1388,8 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
     m_width = bitmap.GetWidth() ;
     m_height = bitmap.GetHeight() ;
-    m_bytesPerRow = ( m_width * 3 + 3 ) & 0xFFFFFFC ;
-
+    m_bytesPerRow = ( m_width * 4 + 3 ) & 0xFFFFFFC ;
+    
     size_t size = m_bytesPerRow * m_height ;
 
     unsigned char * destdatabase = (unsigned char*) m_memBuf.GetWriteBuf( size ) ;
@@ -1406,9 +1409,11 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
                 *destdata++ = 0xFF ;
                 *destdata++ = 0xFF ;
                 *destdata++ = 0xFF ;
+                *destdata++ = 0xFF ;
             }
             else
             {
+                *destdata++ = 0x00 ;
                 *destdata++ = 0x00 ;
                 *destdata++ = 0x00 ;
                 *destdata++ = 0x00 ;
