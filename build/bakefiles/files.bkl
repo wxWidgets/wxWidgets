@@ -115,6 +115,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/gccpriv.h
     wx/msw/libraries.h
     wx/msw/mimetype.h
+    wx/msw/mslu.h
     wx/msw/private.h
     wx/msw/stackwalk.h
     wx/msw/stdpaths.h
@@ -1551,7 +1552,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/minifram.h
     wx/msw/missing.h
     wx/msw/msgdlg.h
-    wx/msw/mslu.h
     wx/msw/msvcrt.h
     wx/msw/notebook.h
     wx/msw/ole/access.h
