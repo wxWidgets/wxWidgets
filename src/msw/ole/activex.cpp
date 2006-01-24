@@ -24,9 +24,7 @@
 #endif
 
 #include "wx/dcclient.h"
-
-#ifndef __WXWINCE__
-
+#include "wx/math.h"
 #include "wx/msw/ole/activex.h"
 
 
@@ -440,7 +438,9 @@ public:
     HRESULT STDMETHODCALLTYPE LockContainer(BOOL){return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
-    #ifdef _UNICODE
+    #ifdef __WXWINCE__
+    GetObject
+    #elif defined(_UNICODE)
     GetObjectW
     #else
     GetObjectA
@@ -747,7 +747,7 @@ static void PixelsToHimetric(SIZEL &sz)
     };
 
 #define HIMETRIC_INCH   2540
-#define CONVERT(x, logpixels)   MulDiv(HIMETRIC_INCH, (x), (logpixels))
+#define CONVERT(x, logpixels)   wxMulDivInt32(HIMETRIC_INCH, (x), (logpixels))
 
     sz.cx = CONVERT(sz.cx, logX);
     sz.cy = CONVERT(sz.cy, logY);
@@ -832,6 +832,3 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
 
     event.Skip();
 }
-
-#endif
-    // __WXWINCE__
