@@ -288,10 +288,10 @@ needed for exporting an array from a user DLL.
 Example:
 
 \begin{verbatim}
-WX_DEFINE_ARRAY_INT(int, wxArrayInt);
+WX_DEFINE_ARRAY_INT(int, MyArrayInt);
 
 class MyClass;
-WX_DEFINE_ARRAY(MyClass *, wxArrayOfMyClass);
+WX_DEFINE_ARRAY(MyClass *, ArrayOfMyClass);
 \end{verbatim}
 
 Note that wxWidgets predefines the following standard array classes: wxArrayInt,
@@ -313,10 +313,10 @@ needed for exporting an array from a user DLL.
 Example:
 
 \begin{verbatim}
-WX_DEFINE_SORTED_ARRAY_INT(wxSortedArrayInt);
+WX_DEFINE_SORTED_ARRAY_INT(int, MySortedArrayInt);
 
 class MyClass;
-WX_DEFINE_SORTED_ARRAY(MyClass *, wxArrayOfMyClass);
+WX_DEFINE_SORTED_ARRAY(MyClass *, ArrayOfMyClass);
 \end{verbatim}
 
 You will have to initialize the objects of this class by passing a comparison
