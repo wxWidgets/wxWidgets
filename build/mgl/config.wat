@@ -116,8 +116,3 @@ CPPUNIT_CFLAGS =
 # to run the tests, include CppUnit library here. 
 CPPUNIT_LIBS = 
 
-# Version of C runtime library to use. You can change this to
-# static if SHARED=0, but it is highly recommended to not do
-# it if SHARED=1 unless you know what you are doing. [dynamic,static]
-RUNTIME_LIBS = dynamic
-

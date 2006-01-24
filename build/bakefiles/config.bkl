@@ -456,6 +456,7 @@ Set the version of your Mingw installation here.
     <if cond="FORMAT!='autoconf' and TOOLKIT=='MGL'">
         <set var="WXUNIV">1</set>
         <set var="USE_THREADS">0</set>
+        <set var="RUNTIME_LIBS">static</set>
     </if>
 
 </makefile>
