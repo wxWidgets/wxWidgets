@@ -1563,24 +1563,19 @@ public:
     void Notify()
     {
         LONG        evCode;
-        LONG_PTR    evParam1,
-                    evParam2;
+        LONG_PTR    evParam1, evParam2;
 
-        //
         // DirectShow keeps a list of queued events, and we need
-        // to go through them one by one, stopping at (Hopefully only one)
+        // to go through them one by one, stopping at (hopefully only one)
         // EC_COMPLETE message
-        //
-        while( m_pME->GetEvent(&evCode, &evParam1, &evParam2, 0) == 0 )
+        while ( m_pME->GetEvent(&evCode, &evParam1, &evParam2, 0) == 0 )
         {
             // Cleanup memory that GetEvent allocated
-            HRESULT hr = m_pME->FreeEventParams(evCode,
-                                                evParam1, evParam2);
+            HRESULT hr = m_pME->FreeEventParams(evCode, evParam1, evParam2);
             if (hr != 0)
             {
-                // Even though this makes a messagebox this
-                // is windows where we can do gui stuff in seperate
-                // threads :)
+                // Even though this makes a messagebox, this is Windows,
+                // where we can do GUI stuff in separate threads :)
                 wxFAIL_MSG(m_pBE->GetErrorString(hr));
             }
             // If this is the end of the clip, notify handler
@@ -1589,7 +1584,6 @@ public:
                 if ( m_pBE->SendStopEvent() )
                 {
                     Stop();
-
                     m_pBE->QueueFinishEvent();
                 }
             }
@@ -1618,7 +1612,8 @@ wxAMMediaBackend::wxAMMediaBackend()
 //---------------------------------------------------------------------------
 wxAMMediaBackend::~wxAMMediaBackend()
 {
-    Clear(); //Free memory from Load()
+    // Free memory from Load()
+    Clear();
 
     if (m_pAX)
     {
@@ -1666,8 +1661,8 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     }
 #endif
 
-    // Now determine which (if any) media player interface is
-    // available - IMediaPlayer or IActiveMovie
+    // determine which (if any) media player interface
+    // is available - IMediaPlayer or IActiveMovie
     if ( ::CoCreateInstance(CLSID_MediaPlayer, NULL,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IMediaPlayer, (void**)&m_pMP) != 0 )
@@ -1675,7 +1670,10 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
         if ( ::CoCreateInstance(CLSID_ActiveMovie, NULL,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IActiveMovie, (void**)&m_pAM) != 0 )
+        {
             return false;
+        }
+
         m_pAM->QueryInterface(IID_IMediaPlayer, (void**)&m_pMP);
     }
     else
@@ -1683,30 +1681,28 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
         m_pMP->QueryInterface(IID_IActiveMovie, (void**)&m_pAM);
     }
 
-    //
     // Create window
     // By default wxWindow(s) is created with a border -
     // so we need to get rid of those
     //
     // Since we don't have a child window like most other
     // backends, we don't need wxCLIP_CHILDREN
-    //
     if ( !ctrl->wxControl::Create(parent, id, pos, size,
                             (style & ~wxBORDER_MASK) | wxBORDER_NONE,
                             validator, name) )
+    {
         return false;
+    }
 
-    // Now create the ActiveX container along with the media player
+    // Create the ActiveX container along with the media player
     // interface and query them
-    //
     m_ctrl = wxStaticCast(ctrl, wxMediaCtrl);
     m_pAX = new wxActiveXContainer(ctrl,
                 m_pMP ? IID_IMediaPlayer : IID_IActiveMovie,
                 m_pAM);
 
-    //  Here we set up wx-specific stuff for the default
-    //  settings wxMediaCtrl says it will stay to
-    //
+    // Set up wx-specific stuff for the default
+    // settings wxMediaCtrl says it will conform to (???)
     if (m_pMP)
     {
         m_pMP->put_DisplaySize(mpFitToSize);
@@ -1747,8 +1743,7 @@ bool wxAMMediaBackend::Load(const wxString& fileName)
 //---------------------------------------------------------------------------
 bool wxAMMediaBackend::Load(const wxURI& location)
 {
-    //  Turn off loading from a proxy as user
-    //  may have set it previously
+    // Turn off loading from a proxy, as user may have set it previously
     INSPlay* pPlay = NULL;
     m_pAM->QueryInterface(IID_INSPlay, (void**) &pPlay);
     if (pPlay)
@@ -1788,14 +1783,15 @@ bool wxAMMediaBackend::Load(const wxURI& location, const wxURI& proxy)
 //---------------------------------------------------------------------------
 bool wxAMMediaBackend::DoLoad(const wxString& location)
 {
-    Clear(); //Clear up previously allocated memory
+    //Clear up previously allocated memory
+    Clear();
 
     HRESULT hr;
 
-    // Play the movie the normal way through the embedded
-    // WMP.  Supposively Open is better in theory because
+    // Play the movie the normal way through the embedded WMP.
+    // Supposedly, Open is better in theory because
     // the docs say its async and put_FileName is not -
-    // but in practice they both seem to be async anyway
+    // but in practice they both appear to be async anyway
     if (m_pMP)
         hr = m_pMP->Open( wxBasicString(location).Get() );
     else
@@ -1830,10 +1826,8 @@ void wxAMMediaBackend::FinishLoad()
     m_pAM->get_ImageSourceWidth((long*)&m_bestSize.x);
     m_pAM->get_ImageSourceHeight((long*)&m_bestSize.y);
 
-    //
-    //Start the play timer to catch stop events
-    //Previous load timer cleans up itself
-    //
+    // Start the play timer to catch stop events
+    // Previous load timer cleans up itself
     m_pTimer = new wxAMPlayTimer(this);
 
     NotifyMovieLoaded();
