@@ -83,7 +83,7 @@
 #endif
 
 #if !wxUSE_MEDIACTRL || !wxUSE_MENUS || !wxUSE_SLIDER || !wxUSE_TIMER || \
-    !wxUSE_NOTEBOOK || !wxUSE_LISTCTRL || !wxUSE_DRAG_AND_DROP
+    !wxUSE_NOTEBOOK || !wxUSE_LISTCTRL
 #error "Not all required elements are enabled.  Please modify setup.h!"
 #endif
 
@@ -331,6 +331,7 @@ public:
 //  Drop target for playlist (i.e. user drags a file from explorer unto
 //  playlist it adds the file)
 // ----------------------------------------------------------------------------
+#if wxUSE_DRAG_AND_DROP
 class wxPlayListDropTarget : public wxFileDropTarget
 {
 public:
@@ -347,6 +348,7 @@ public:
     }
     wxMediaPlayerListCtrl& m_list;
 };
+#endif
 
 // ============================================================================
 //
@@ -1579,7 +1581,10 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_playlist->InsertColumn(1,_("File"), wxLIST_FORMAT_LEFT, /*wxLIST_AUTOSIZE_USEHEADER*/305);
     m_playlist->InsertColumn(2,_("Length"), wxLIST_FORMAT_CENTER, 75);
 
+#if wxUSE_DRAG_AND_DROP
     m_playlist->SetDropTarget(new wxPlayListDropTarget(*m_playlist));
+#endif
+
     sizer->Add(m_playlist, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5);
 
     //
