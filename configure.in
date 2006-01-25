@@ -205,6 +205,10 @@ case "${host}" in
     AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
+
+    dnl some standard declarations in NetBSD headers are only included if
+    dnl _NETBSD_SOURCE and _LIBC are defined, e.g. getservbyname_r in netdb.h
+    CPPFLAGS="-D_NETBSD_SOURCE -D_LIBC $CPPFLAGS"
   ;;
   *-*-osf* )
     USE_ALPHA=1
