@@ -299,7 +299,7 @@ struct hostent * wxGethostbyaddr_r(const char *addr_buf, int buf_size,
   return he;
 }
 
-#if defined(HAVE_GETHOSTBYNAME)
+#if defined(HAVE_GETSERVBYNAME)
 static struct servent * deepCopyServent(struct servent *s,
 					const struct servent *se,
 					char *buffer, int size)
