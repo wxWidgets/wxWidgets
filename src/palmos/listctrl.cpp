@@ -622,6 +622,14 @@ int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
     return -1;
 }
 
+int wxListCtrl::OnGetItemColumnImage(long item, long column) const
+{
+    if (!column)
+        return OnGetItemImage(item);
+
+    return -1;
+}
+
 wxListItemAttr *wxListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) const
 {
     // no attributes by default

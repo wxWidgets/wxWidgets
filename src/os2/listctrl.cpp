@@ -2718,6 +2718,17 @@ int wxListCtrl::OnGetItemImage (
     return -1;
 } // end of wxListCtrl::OnGetItemImage
 
+int wxListCtrl::OnGetItemColumnImage (
+  long                              lItem,
+  long                              lColumn
+) const
+{
+    if (!lColumn)
+        return OnGetItemImage(lItem);
+
+    return -1;
+} // end of wxListCtrl::OnGetItemColumnImage
+
 wxListItemAttr* wxListCtrl::OnGetItemAttr (
   long                              WXUNUSED_UNLESS_DEBUG(lItem)
 ) const
