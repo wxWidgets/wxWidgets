@@ -73,6 +73,7 @@ ALL_DIST: distrib_clean
 	cp $(WXDIR)/autoconf_inc.m4 $(DISTDIR)
 	cp $(WXDIR)/wxwin.m4 $(DISTDIR)
 	cp $(WXDIR)/aclocal.m4 $(DISTDIR)
+	cp $(WXDIR)/acinclude.m4 $(DISTDIR)
 	cp $(WXDIR)/config.sub $(DISTDIR)
 	cp $(WXDIR)/config.guess $(DISTDIR)
 	cp $(WXDIR)/install-sh $(DISTDIR)
