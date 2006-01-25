@@ -604,7 +604,8 @@ dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([AC_BAKEFILE_RES_COMPILERS],
 [
-    RESCOMP=
+    dnl RESCOMP may already have been determined, don't overwrite
+    dnl RESCOMP=
     SETFILE=
 
     case ${BAKEFILE_HOST} in 
