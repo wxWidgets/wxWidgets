@@ -919,6 +919,7 @@ public:
 //---------------------------------------------------------------------------
 //  MCI Includes
 //---------------------------------------------------------------------------
+#ifndef __WXWINCE__
 #include <mmsystem.h>
 
 class WXDLLIMPEXP_MEDIA wxMCIMediaBackend : public wxMediaBackendCommonBase
@@ -974,6 +975,7 @@ public:
 
     DECLARE_DYNAMIC_CLASS(wxMCIMediaBackend)
 };
+#endif
 
 //---------------------------------------------------------------------------
 //
@@ -2160,6 +2162,7 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#ifndef __WXWINCE__
 IMPLEMENT_DYNAMIC_CLASS(wxMCIMediaBackend, wxMediaBackend)
 
 //---------------------------------------------------------------------------
@@ -2678,7 +2681,9 @@ LRESULT CALLBACK wxMCIMediaBackend::OnNotifyWndProc(HWND hWnd, UINT nMsg,
     }
     return DefWindowProc(hWnd, nMsg, wParam, lParam);
 }
-
+#endif
+    // __WXWINCE__
+    
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
 // wxQTMediaBackend
