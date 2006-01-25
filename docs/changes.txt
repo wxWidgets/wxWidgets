@@ -14,11 +14,19 @@ All:
   during a search and replace.
 - Fix regerror and regfree name conficts when built-in regex and system regex
   are both used in the same program.
+- wxCondition::WaitTimeout() now returns correct value when timeout occurs.
+- Bug in wxLogStream::DoLogString in Unicode builds fixed.
+- Fixed Unicode builds using SunPro compiler by defining__WCHAR_TYPE__.
+- wxFileName now also looks for TMPDIR on Unix.
+- Fixed occasional wxThread cleanup crash.
+- Fixed build error in list.h with VC++ 2005.
 
 All (GUI):
 
 - Added space after list item number in wxHTML.
-- wxCalendarCtrl: drawing and positioning fixes.
+- wxCalendarCtrl drawing, positioning and hit-testing fixes.
+- More checking of image validity before loading into wxImage.
+- Added double-buffering to wxVListBox and fixed a scrolling issue.
 
 wxGTK:
 
@@ -27,8 +35,10 @@ wxGTK:
 - Fixed problem trying to print from a preview, whereby wrong printer
   class was used.
 - Worked around pango crashes in strncmp on Solaris 10.
+- Polygon and line drawing speeded up if there is no scaling.
+- Fixed problems with CJK input method.
 
-wxMSW
+wxMSW:
 
 - Fixed crash with ownerdrawn menu items accelerators (Perry Miller)
 - Fixed MDI context menu problem.
@@ -47,12 +57,26 @@ wxMSW
 - Fixed problem where using SetValue and wxTE_RICH2 would cause control to
   show.
 - Numpad special keys are now distinguished from normal keys.
+- Menu codes now stripped before measuring control labels.
+- MFC sample now compiles in Unicode mode.
+- Fixed SetScrollbar thumb size setting bug (set orientation before triggering
+  events).
+- Fixed icon to cursor conversion problem for bitmaps with masks.
+- Fixed wxToolBar background colour problem for some video cards.
+- wxGenericDirCtrl now shows volume name.
+- Multiline notebook tab label change now resizes the control
+  correctly if an extra row is removed or added.
+- Fixed a crash when dismissing wxPrintDialog under VC++ 7.1.
+- Fixed out by one error in wxTextCtrl::GetStyle.
+- Fixed problem with getting input in universal/unicode build of wxMSW.
 
 wxWinCE:
 
 - ::wxGetUserName() implemented.
 - Fixed wxFileDialog breakage on WinCE in previous version.
 - Checkable items in wxToolMenuBarTool supported.
+- Fixed date formatting and mktime.
+- Fixed getting standard folder paths on WinCE.
 
 wxMac:
 
@@ -83,11 +107,23 @@ wxMac:
 - Mouse event ids set correctly (fixing problems with Connect in particular).
 - Fixed wxZipInputStream read error on wxSocketInputStream which signals the
   end of file with an error.
+- Xcode wxWidgets and minimal sample project files updated to create Universal
+  binaries.
+- Fix for setting wxMenuBar more than once.
+- wxListBox minimum size bug fixed.
+- Fixed wxNotebook off-by-one bug in HitTest.
+- Fixed joystick GetXMin/Max bug.
+- Fixed Unix domain socket problem in wxIPC.
 
-wxODBC
+wxX11:
+
+- Bitmap clipping with masks and scaling improved.
+
+wxODBC:
 
 - wxDb::DBMS() was incorrectly indicating that DB2 databases were
   dBase databases.
+- Fixed buffer overflow problem in Unicode builds.
 
 
 2.6.2
