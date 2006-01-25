@@ -1086,18 +1086,17 @@ void wxWindowMSW::DissociateHandle()
 bool wxCheckWindowWndProc(WXHWND hWnd,
                           WXFARPROC WXUNUSED_IN_WINCE(wndProc))
 {
-    // Unicows note: the code below works, but only because WNDCLASS contains
-    // original window handler rather that the unicows fake one. This may not
-    // be on purpose, though; if it stops working with future versions of
-    // unicows.dll, we can override unicows hooks by setting
-    // Unicows_{Set,Get}WindowLong and Unicows_RegisterClass to our own
-    // versions that keep track of fake<->real wnd proc mapping.
-
-    // On WinCE (at least), the wndproc comparison doesn't work,
-    // so have to use something like this.
-#ifdef __WXWINCE__
+// TODO: This list of window class names should be factored out so they can be
+// managed in one place and then accessed from here and other places, such as
+// wxApp::RegisterWindowClasses() and wxApp::UnregisterWindowClasses()
+    
+#ifdef __WXWINCE__    
     extern       wxChar *wxCanvasClassName;
     extern       wxChar *wxCanvasClassNameNR;
+#else
+    extern const wxChar *wxCanvasClassName;
+    extern const wxChar *wxCanvasClassNameNR;
+#endif
     extern const wxChar *wxMDIFrameClassName;
     extern const wxChar *wxMDIFrameClassNameNoRedraw;
     extern const wxChar *wxMDIChildFrameClassName;
@@ -1113,17 +1112,6 @@ bool wxCheckWindowWndProc(WXHWND hWnd,
         return true; // Effectively means don't subclass
     else
         return false;
-#else
-    WNDCLASS cls;
-    if ( !::GetClassInfo(wxGetInstance(), wxGetWindowClass(hWnd), &cls) )
-    {
-        wxLogLastError(_T("GetClassInfo"));
-
-        return false;
-    }
-
-    return wndProc == (WXFARPROC)cls.lpfnWndProc;
-#endif
 }
 
 // ----------------------------------------------------------------------------
