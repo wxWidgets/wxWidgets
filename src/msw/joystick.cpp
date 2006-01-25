@@ -299,6 +299,9 @@ int wxJoystick::GetProductId() const
 
 wxString wxJoystick::GetProductName() const
 {
+#ifdef __WINE__
+    return wxEmptyString;
+#else
     JOYCAPS joyCaps;
     if (joyGetDevCaps(m_joystick, &joyCaps, sizeof(joyCaps)) != JOYERR_NOERROR)
         return wxEmptyString;
@@ -316,6 +319,7 @@ wxString wxJoystick::GetProductName() const
     key2.QueryValue(REGSTR_VAL_JOYOEMNAME, str);
 
     return str;
+#endif
 }
 
 int wxJoystick::GetXMin() const

@@ -25,8 +25,12 @@
 
 #include "wx/dcclient.h"
 #include "wx/math.h"
-#include "wx/msw/ole/activex.h"
 
+// I don't know why members of tagVARIANT aren't found when compiling
+// with Wine
+#ifndef __WINE__
+
+#include "wx/msw/ole/activex.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
@@ -852,3 +856,6 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
 
     event.Skip();
 }
+
+#endif
+// __WINE__
