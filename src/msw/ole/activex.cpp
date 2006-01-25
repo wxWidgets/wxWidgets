@@ -731,10 +731,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         ::SetActiveWindow(m_oleObjectHWND);
         ::ShowWindow(m_oleObjectHWND, SW_SHOW);
 
-        {
-            wxLogNull  noLog;
-            this->AssociateHandle(m_oleObjectHWND);
-        }
+        this->AssociateHandle(m_oleObjectHWND);
         this->Reparent(m_realparent);
 
         wxWindow* pWnd = m_realparent;
