@@ -2331,7 +2331,9 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
 
     if ( mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT,
                         (DWORD)(LPVOID)&openParms) != 0)
+    {
         return false;
+    }
 
     m_hDev = openParms.wDeviceID;
 
@@ -2343,8 +2345,8 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
     if (mciSendCommand(m_hDev, MCI_SET, MCI_SET_TIME_FORMAT,
                          (DWORD)(LPVOID)&setParms) != 0)
     {
-    }
         return false;
+    }
 
     // tell the MCI device to display the video in our wxMediaCtrl
     MCI_DGV_WINDOW_PARMS windowParms;
@@ -2514,7 +2516,9 @@ wxLongLong wxMCIMediaBackend::GetPosition()
 
     if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM,
                        (DWORD)(LPSTR)&statusParms) != 0)
+    {
         return 0;
+    }
 
     return statusParms.dwReturn;
 }
@@ -2533,7 +2537,9 @@ double wxMCIMediaBackend::GetVolume()
 
     if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM,
                        (DWORD)(LPSTR)&statusParms) != 0)
+    {
         return 0;
+    }
 
     return ((double)statusParms.dwReturn) / 1000.0;
 }
@@ -2558,7 +2564,9 @@ bool wxMCIMediaBackend::SetVolume(double dVolume)
                         // MCI_DGV_SETAUDIO + (_ITEM | _VALUE)
                         0x00800000L | 0x01000000L,
                        (DWORD)(LPSTR)&audioParms) != 0)
+    {
         return false;
+    }
 
     return true;
 }
@@ -2575,7 +2583,9 @@ wxLongLong wxMCIMediaBackend::GetDuration()
 
     if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM,
                         (DWORD)(LPSTR)&statusParms) != 0)
+    {
         return 0;
+    }
 
     return statusParms.dwReturn;
 }
@@ -2940,44 +2950,49 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
 {
     if (m_movie)
         Cleanup();
-
+ 
+    bool result = true;
+    OSErr err = noErr;
     short movieResFile = 0; //= 0 because of annoying VC6 warning
     FSSpec sfFile;
 
-    if (m_lib.NativePathNameToFSSpec(
+    err = m_lib.NativePathNameToFSSpec(
         (char*) (const char*) fileName.mb_str(),
-        &sfFile, 0) != noErr)
+        &sfFile, 0);
+    result = (err == noErr);
+
+    if (result)
     {
-        return false;
+        err = m_lib.OpenMovieFile(&sfFile, &movieResFile, fsRdPerm);
+        result = (err == noErr);
     }
 
-    if (m_lib.OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)
-        return false;
+    if (result)
+    {
+        short movieResID = 0;
+        Str255 movieName;
 
-    short movieResID = 0;
-    Str255 movieName;
-
-    OSErr err = m_lib.NewMovieFromFile(
+        err = m_lib.NewMovieFromFile(
                    &m_movie,
                    movieResFile,
                    &movieResID,
                    movieName,
                    newMovieActive,
-                   NULL ); //wasChanged
+                   NULL ); // wasChanged
+        result = (err == noErr && m_lib.GetMoviesStickyError() == noErr);
 
-    // m_lib.GetMoviesStickyError() because it may not find the
-    // proper codec and play black video and other strange effects,
-    // not to mention mess up the dynamic backend loading scheme
-    // of wxMediaCtrl - so it just does what the QuickTime player does
-    if (err == noErr && m_lib.GetMoviesStickyError() == noErr)
-    {
-        m_lib.CloseMovieFile (movieResFile);
-
-        FinishLoad();
-        return true;
+        // check m_lib.GetMoviesStickyError() because it may not find the
+        // proper codec and play black video and other strange effects,
+        // not to mention mess up the dynamic backend loading scheme
+        // of wxMediaCtrl - so it just does what the QuickTime player does
+        if (result)
+        {
+            m_lib.CloseMovieFile(movieResFile);
+            FinishLoad();
+        }
     }
-    else
-        return false;
+
+    return result;
 }
 
 //---------------------------------------------------------------------------
@@ -2999,7 +3014,7 @@ void wxQTMediaBackend::PPRMProc (Movie theMovie,
 
     long lTime = pBE->m_lib.GetMovieTime(theMovie,NULL);
     Fixed rate = pBE->m_lib.GetMoviePreferredRate(theMovie);
-    pBE->m_lib.PrerollMovie(theMovie,lTime,rate);
+    pBE->m_lib.PrerollMovie(theMovie, lTime, rate);
     pBE->m_timer = new wxQTLoadTimer(pBE->m_movie, pBE, &pBE->m_lib);
     pBE->m_timer->Start(MOVIE_DELAY);
 }
@@ -3047,23 +3062,23 @@ bool wxQTMediaBackend::Load(const wxURI& location)
         playRate = m_lib.GetMoviePreferredRate(m_movie);
         wxASSERT(m_lib.GetMoviesError() == noErr);
 
-        //  Note that the callback here is optional,
-        //  but without it PrePrerollMovie can be buggy
-        //  (see Apple ml).  Also, some may wonder
-        //  why we need this at all - this is because
-        //  Apple docs say QuickTime streamed movies
-        //  require it if you don't use a Movie Controller,
-        //  which we don't by default.
+        // Note that the callback here is optional,
+        // but without it PrePrerollMovie can be buggy
+        // (see Apple ml).  Also, some may wonder
+        // why we need this at all - this is because
+        // Apple docs say QuickTime streamed movies
+        // require it if you don't use a Movie Controller,
+        // which we don't by default.
         //
         m_lib.PrePrerollMovie(m_movie, timeNow, playRate,
                               (WXFARPROC)wxQTMediaBackend::PPRMProc,
                               (void*)this);
+
         return true;
     }
     else
         return false;
 }
-
 
 //---------------------------------------------------------------------------
 // wxQTMediaBackend::FinishLoad
@@ -3081,11 +3096,12 @@ void wxQTMediaBackend::FinishLoad()
     // Create the playing/streaming timer
     m_timer = new wxQTPlayTimer(m_movie, (wxQTMediaBackend*) this, &m_lib);
     wxASSERT(m_timer);
+
     m_timer->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
 
     // get the real size of the movie
     Rect outRect;
-    memset(&outRect, 0, sizeof(Rect)); // for annoying VC6 warning
+    memset(&outRect, 0, sizeof(Rect)); // suppress annoying VC6 warning
     m_lib.GetMovieNaturalBoundsRect (m_movie, &outRect);
     wxASSERT(m_lib.GetMoviesError() == noErr);
 
@@ -3172,7 +3188,7 @@ bool wxQTMediaBackend::Stop()
 //---------------------------------------------------------------------------
 // wxQTMediaBackend::GetPlaybackRate
 //
-// 1) Get the movie playback rate from ::GetMovieRate
+// Get the movie playback rate from ::GetMovieRate
 //---------------------------------------------------------------------------
 double wxQTMediaBackend::GetPlaybackRate()
 {
@@ -3182,7 +3198,7 @@ double wxQTMediaBackend::GetPlaybackRate()
 //---------------------------------------------------------------------------
 // wxQTMediaBackend::SetPlaybackRate
 //
-// 1) Convert dRate to Fixed and Set the movie rate through SetMovieRate
+// Convert dRate to Fixed and Set the movie rate through SetMovieRate
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::SetPlaybackRate(double dRate)
 {
@@ -3199,12 +3215,12 @@ bool wxQTMediaBackend::SetPlaybackRate(double dRate)
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::SetPosition(wxLongLong where)
 {
-    //NB:  For some reason SetMovieTime does not work
-    //correctly with the Quicktime Windows SDK (6)
-    //From Muskelkatermann at the wxForum
-    //http://www.solidsteel.nl/users/wxwidgets/viewtopic.php?t=2957
-    //RN - note that I have not verified this but there
-    //is no harm in calling SetMovieTimeValue instead
+    // NB:  For some reason SetMovieTime does not work
+    // correctly with the Quicktime Windows SDK (6)
+    // From Muskelkatermann at the wxForum
+    // http://www.solidsteel.nl/users/wxwidgets/viewtopic.php?t=2957
+    // RN - note that I have not verified this but there
+    // is no harm in calling SetMovieTimeValue instead
 #if 0
     TimeRecord theTimeRecord;
     memset(&theTimeRecord, 0, sizeof(TimeRecord));
@@ -3290,8 +3306,8 @@ wxLongLong wxQTMediaBackend::GetDuration()
 //---------------------------------------------------------------------------
 // wxQTMediaBackend::GetState
 //
-// Determines the current state - if we are at the beginning we
-// are stopped
+// Determines the current state:
+// if we are at the beginning, then we are stopped
 //---------------------------------------------------------------------------
 wxMediaState wxQTMediaBackend::GetState()
 {
@@ -3343,11 +3359,13 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
 {
     if (m_pMC)
     {
-        //restore old wndproc
+        // restore old wndproc
         wxSetWindowProc((HWND)m_ctrl->GetHWND(), wxWndProc);
         m_lib.DisposeMovieController(m_pMC);
         m_pMC = NULL;
-        m_bestSize.y -= 16; //movie controller height
+
+        // movie controller height
+        m_bestSize.y -= 16;
     }
 
     if (flags && m_movie)
@@ -3355,7 +3373,7 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
         Rect rect;
         wxRect wxrect = m_ctrl->GetClientRect();
 
-        //make room for controller
+        // make room for controller
         if (wxrect.width < 320)
             wxrect.width = 320;
 
@@ -3373,33 +3391,31 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
             m_lib.MCDoAction(m_pMC, 32, (void*)true); //mcActionSetKeysEnabled
             m_lib.MCSetActionFilterWithRefCon(m_pMC,
                 (WXFARPROC)wxQTMediaBackend::MCFilterProc, (void*)this);
-            m_bestSize.y += 16; //movie controller height
+            m_bestSize.y += 16; // movie controller height
 
-            //
-            // By default the movie controller uses its own color
-            // pallette for the movie which can be bad on some files -
-            // so turn it off.  Also turn off its frame/border for
-            // the movie
-            //
-            // Also we take care of a couple of the interface flags here
-            //
+            // By default the movie controller uses its own colour palette
+            // for the movie which can be bad on some files, so turn it off.
+            // Also turn off its frame/border for the movie
+            // Also take care of a couple of the interface flags here
             long mcFlags = 0;
             m_lib.MCDoAction(m_pMC, 39/*mcActionGetFlags*/, (void*)&mcFlags);
-            mcFlags |= (  //(1<< 0)/*mcFlagSuppressMovieFrame*/ |
-                 (1<< 3)/*mcFlagsUseWindowPalette*/
-                   | ((flags & wxMEDIACTRLPLAYERCONTROLS_STEP)
+
+            mcFlags |= 
+                // (1<< 0) /*mcFlagSuppressMovieFrame*/ |
+                (1<< 3) /*mcFlagsUseWindowPalette*/
+                | ((flags & wxMEDIACTRLPLAYERCONTROLS_STEP)
                       ? 0 : (1<< 1) /*mcFlagSuppressStepButtons*/)
-                   | ((flags & wxMEDIACTRLPLAYERCONTROLS_VOLUME)
+                | ((flags & wxMEDIACTRLPLAYERCONTROLS_VOLUME)
                       ? 0 : (1<< 2) /*mcFlagSuppressSpeakerButton*/)
-     //              | (1<< 4) /*mcFlagDontInvalidate*/ //if we take care of repainting ourselves
-                      );
+//              | (1<< 4) /*mcFlagDontInvalidate*/ // if we take care of repainting ourselves
+                      ;
+
             m_lib.MCDoAction(m_pMC, 38/*mcActionSetFlags*/, (void*)mcFlags);
 
-            //intercept the wndproc of our control window
-            wxSetWindowProc((HWND)m_ctrl->GetHWND(),
-                wxQTMediaBackend::QTWndProc);
+            // intercept the wndproc of our control window
+            wxSetWindowProc((HWND)m_ctrl->GetHWND(), wxQTMediaBackend::QTWndProc);
 
-            //set the user data of our window
+            // set the user data of our window
             wxSetWindowUserData((HWND)m_ctrl->GetHWND(), this);
         }
     }
@@ -3414,34 +3430,36 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
 //
 // Callback for when the movie controller recieves a message
 //---------------------------------------------------------------------------
-Boolean
-wxQTMediaBackend::MCFilterProc(MovieController WXUNUSED(theController),
+Boolean wxQTMediaBackend::MCFilterProc(MovieController WXUNUSED(theController),
                                short action,
                                void * WXUNUSED(params),
                                LONG_PTR refCon)
 {
-    if (action != 1) // don't process idle events
-    {
-        wxQTMediaBackend* pThis = (wxQTMediaBackend*)refCon;
+    wxQTMediaBackend* pThis = (wxQTMediaBackend*)refCon;
 
-        switch (action)
-        {
-        case 8:
-            // play button triggered - MC will set movie to opposite state
-            // of current - playing ? paused : playing
+    switch (action)
+    {
+    case 8:
+        // play button triggered - MC will set movie to opposite state
+        // of current - playing ? paused : playing
+        if (pThis)
             pThis->m_bPlaying = !(pThis->m_bPlaying);
 
-            // NB: Sometimes it doesn't redraw properly -
-            // if you click on the button but don't move the mouse
-            // the button will not change its state until you move
-            // mcActionDraw and Refresh/Update combo do nothing
-            // to help this unfortunately
-            break;
+        // NB: Sometimes it doesn't redraw properly -
+        // if you click on the button but don't move the mouse
+        // the button will not change its state until you move
+        // mcActionDraw and Refresh/Update combo do nothing
+        // to help this unfortunately
+        break;
 
-        default:
-            break;
-        }
+    case 1:
+        // don't process idle events
+        break;
+
+    default:
+        break;
     }
+
     return 0;
 }
 
@@ -3464,7 +3482,7 @@ void wxQTMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int w, int h)
 {
     if (m_movie)
     {
-        //make room for controller
+        // make room for controller
         if (m_pMC)
         {
             if (w < 320)
@@ -3489,8 +3507,8 @@ void wxQTMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int w, int h)
 // Suggestion from Greg Hazel to repaint the movie when idle
 // (on pause also)
 //
-// TODO:  We may be repainting too much here - under what exact circumstances
-// do we need this?  I think Move also repaints correctly for the Movie
+// TODO: We may be repainting too much here - under what exact circumstances
+// do we need this? I think Move also repaints correctly for the Movie
 // Controller, so in that instance we don't need this either
 //---------------------------------------------------------------------------
 void wxQTMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
@@ -3503,22 +3521,21 @@ void wxQTMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
         m_pLib.MCDoAction(m_qtb->m_pMC, 2 /*mcActionDraw*/,
                             m_pLib.GetNativeWindowPort(m_hwnd));
     }
-    else // no movie controller
+    else if ( m_qtb->m_movie )
     {
-        if ( m_qtb->m_movie )
-        {
-            CGrafPtr port = (CGrafPtr)m_pLib.GetNativeWindowPort(m_hwnd);
+        // no movie controller
+        CGrafPtr port = (CGrafPtr)m_pLib.GetNativeWindowPort(m_hwnd);
 
-            m_pLib.BeginUpdate(port);
-            m_pLib.UpdateMovie(m_qtb->m_movie);
-            wxASSERT(m_pLib.GetMoviesError() == noErr);
-            m_pLib.EndUpdate(port);
-        }
-        else // no movie
-        {
-            // let the system repaint the window
-            evt.Skip();
-        }
+        m_pLib.BeginUpdate(port);
+        m_pLib.UpdateMovie(m_qtb->m_movie);
+        wxASSERT(m_pLib.GetMoviesError() == noErr);
+        m_pLib.EndUpdate(port);
+    }
+    else
+    {
+        // no movie
+        // let the system repaint the window
+        evt.Skip();
     }
 }
 
