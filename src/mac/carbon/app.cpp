@@ -1461,95 +1461,17 @@ wxMouseState wxGetMouseState()
     return ms;
 }
 
+// TODO : once the new key/char handling is tested, move all the code to wxWindow
 
 bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
 {
     if ( !focus )
         return false ;
 
-    short keycode ;
-    short keychar ;
-    keychar = short(keymessage & charCodeMask);
-    keycode = short(keymessage & keyCodeMask) >> 8 ;
-
-    if ( modifiers & ( controlKey|shiftKey|optionKey ) )
-    {
-        // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
-        // and look at the character after
-        UInt32 state = 0;
-        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey|shiftKey|optionKey))) | keycode, &state);
-        keychar = short(keyInfo & charCodeMask);
-    }
-
-    long keyval = wxMacTranslateKey(keychar, keycode) ;
-    long realkeyval = keyval ;
-    if ( keyval == keychar )
-    {
-        // we are not on a special character combo -> pass the real os event-value to EVT_CHAR, but not to EVT_KEY (make upper first)
-        realkeyval = short(keymessage & charCodeMask) ;
-        keyval = wxToupper( keyval ) ;
-    }
-
-    // Check for NUMPAD keys
-    if (keyval >= '0' && keyval <= '9' && keycode >= 82 && keycode <= 92)
-    {
-        keyval = keyval - '0' + WXK_NUMPAD0;
-    }
-    else if (keycode >= 67 && keycode <= 81)
-    {
-        switch (keycode)
-        {
-        case 76 :
-            keyval = WXK_NUMPAD_ENTER;
-            break;
-
-        case 81:
-            keyval = WXK_NUMPAD_EQUAL;
-            break;
-
-        case 67:
-            keyval = WXK_NUMPAD_MULTIPLY;
-            break;
-
-        case 75:
-            keyval = WXK_NUMPAD_DIVIDE;
-            break;
-
-        case 78:
-            keyval = WXK_NUMPAD_SUBTRACT;
-            break;
-
-        case 69:
-            keyval = WXK_NUMPAD_ADD;
-            break;
-
-        case 65:
-            keyval = WXK_NUMPAD_DECIMAL;
-            break;
-
-        default:
-            break;
-        } // end switch
-    }
-
-    wxKeyEvent event(wxEVT_KEY_DOWN);
-    bool handled = false ;
-    event.m_shiftDown = modifiers & shiftKey;
-    event.m_controlDown = modifiers & controlKey;
-    event.m_altDown = modifiers & optionKey;
-    event.m_metaDown = modifiers & cmdKey;
-    event.m_keyCode = keyval ;
-
-#if wxUSE_UNICODE
-    event.m_uniChar = uniChar ;
-#endif
-
-    event.m_rawCode = keymessage;
-    event.m_rawFlags = modifiers;
-    event.m_x = wherex;
-    event.m_y = wherey;
-    event.SetTimestamp(when);
-    event.SetEventObject(focus);
+    bool handled; 
+    wxKeyEvent event(wxEVT_KEY_DOWN) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+        
     handled = focus->GetEventHandler()->ProcessEvent( event ) ;
     if ( handled && event.GetSkipped() )
         handled = false ;
@@ -1576,36 +1498,54 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     }
 #endif // wxUSE_ACCEL
 
-    if (!handled)
+    return handled ;
+}
+
+bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+{
+    if ( !focus )
+        return false ;
+
+    bool handled;
+    wxKeyEvent event( wxEVT_KEY_UP ) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+    
+    return handled ;
+}
+
+bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+{
+    if ( !focus )
+        return false ;
+    
+    wxKeyEvent event(wxEVT_CHAR) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    long keyval = event.m_keyCode ;
+    short realkeyval = short(keymessage & charCodeMask) ;
+
+    bool handled = false ;
+
+    wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
+        
+    if (tlw)
     {
-        wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
-
-        if (tlw)
-        {
-            event.Skip( false ) ;
-            event.SetEventType( wxEVT_CHAR_HOOK );
-            // raw value again
-            event.m_keyCode = realkeyval ;
-
-            handled = tlw->GetEventHandler()->ProcessEvent( event );
-            if ( handled && event.GetSkipped() )
-                handled = false ;
-        }
-    }
-
-    if ( !handled )
-    {
-        event.Skip( false ) ;
-        event.SetEventType( wxEVT_CHAR ) ;
-
-        // raw value again
+        event.SetEventType( wxEVT_CHAR_HOOK );
+        // send original character, not the uppercase version
         event.m_keyCode = realkeyval ;
-
-        handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+        
+        handled = tlw->GetEventHandler()->ProcessEvent( event );
         if ( handled && event.GetSkipped() )
             handled = false ;
     }
 
+    if ( !handled )
+    {
+        event.SetEventType( wxEVT_CHAR );
+        event.Skip( false ) ;
+        handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+    }
+        
     if ( !handled && (keyval == WXK_TAB) )
     {
         wxWindow* iter = focus->GetParent() ;
@@ -1657,20 +1597,17 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
             }
         }
     }
-
     return handled ;
 }
 
-bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+// This method handles common code for SendKeyDown, SendKeyUp, and SendChar events. 
+void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
 {
-    if ( !focus )
-        return false ;
-
     short keycode, keychar ;
 
     keychar = short(keymessage & charCodeMask);
     keycode = short(keymessage & keyCodeMask) >> 8 ;
-    if ( modifiers & (controlKey | shiftKey | optionKey) )
+    if ( !(event.GetEventType() == wxEVT_CHAR) && (modifiers & (controlKey | shiftKey | optionKey) ) )
     {
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
         // and look at the character after
@@ -1680,7 +1617,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     }
 
     long keyval = wxMacTranslateKey(keychar, keycode) ;
-    if ( keyval == keychar )
+    if ( keyval == keychar && ( event.GetEventType() == wxEVT_KEY_UP || event.GetEventType() == wxEVT_KEY_DOWN ) )
         keyval = wxToupper( keyval ) ;
 
     // Check for NUMPAD keys
@@ -1725,9 +1662,6 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
         } // end switch
     }
 
-    bool handled = false ;
-
-    wxKeyEvent event(wxEVT_KEY_UP);
     event.m_shiftDown = modifiers & shiftKey;
     event.m_controlDown = modifiers & controlKey;
     event.m_altDown = modifiers & optionKey;
@@ -1743,7 +1677,4 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     event.m_y = wherey;
     event.SetTimestamp(when);
     event.SetEventObject(focus);
-    handled = focus->GetEventHandler()->ProcessEvent( event ) ;
-
-    return handled ;
 }

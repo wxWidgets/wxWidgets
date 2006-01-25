@@ -87,8 +87,6 @@ static const EventTypeSpec eventList[] =
 {
     // TODO: remove control related event like key and mouse (except for WindowLeave events)
 #if 1
-    { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
-
     { kEventClassKeyboard, kEventRawKeyDown } ,
     { kEventClassKeyboard, kEventRawKeyRepeat } ,
     { kEventClassKeyboard, kEventRawKeyUp } ,
@@ -111,62 +109,6 @@ static const EventTypeSpec eventList[] =
     { kEventClassMouse , kEventMouseMoved } ,
     { kEventClassMouse , kEventMouseDragged } ,
 } ;
-
-static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
-{
-    OSStatus result = eventNotHandledErr ;
-    wxWindow* focus ;
-    UInt32 keyCode, modifiers ;
-    Point point ;
-    EventRef rawEvent ;
-    unsigned char charCode ;
-
-    GetEventParameter( event, kEventParamTextInputSendKeyboardEvent, typeEventRef, NULL, sizeof(rawEvent), NULL, &rawEvent ) ;
-
-    GetEventParameter( rawEvent, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
-    GetEventParameter( rawEvent, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
-    GetEventParameter( rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
-    GetEventParameter( rawEvent, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
-
-    focus = wxWindow::FindFocus() ;
-
-    switch ( GetEventKind( event ) )
-    {
-        case kEventTextInputUnicodeForKeyEvent :
-            {
-                // this is only called when no default handler has jumped in, e.g. a wxControl on a floater window does not
-                // get its own kEventTextInputUnicodeForKeyEvent, so we reroute the event back to the control
-                wxControl* control = wxDynamicCast( focus , wxControl ) ;
-                if ( control )
-                {
-                    ControlRef macControl = (ControlRef) control->GetHandle() ;
-                    if ( macControl )
-                    {
-                        ::HandleControlKey( macControl , keyCode , charCode , modifiers ) ;
-                        result = noErr ;
-                    }
-                }
-
-#if 0
-                // this may lead to double events sent to a window in case all handlers have skipped the key down event
-                UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
-                UInt32 message = (keyCode << 8) + charCode;
-
-                if ( (focus != NULL) &&
-                    wxTheApp->MacSendKeyDownEvent( focus , message , modifiers , when , point.h , point.v ) )
-                {
-                    result = noErr ;
-                }
-#endif
-            }
-            break ;
-
-        default:
-            break ;
-    }
-
-    return result ;
-}
 
 static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
@@ -864,10 +806,6 @@ pascal OSStatus wxMacTopLevelEventHandler( EventHandlerCallRef handler , EventRe
     {
         case kEventClassKeyboard :
             result = KeyboardEventHandler( handler, event , data ) ;
-            break ;
-
-        case kEventClassTextInput :
-            result = TextInputEventHandler( handler, event , data ) ;
             break ;
 
         case kEventClassWindow :

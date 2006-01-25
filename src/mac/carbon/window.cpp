@@ -161,6 +161,9 @@ static const EventTypeSpec eventList[] =
     { kEventClassControl , kEventControlHit } ,
 
 #if TARGET_API_MAC_OSX
+    { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
+    { kEventClassTextInput, kEventTextInputUpdateActiveInputArea } ,
+        
     { kEventClassControl , kEventControlDraw } ,
     { kEventClassControl , kEventControlVisibilityChanged } ,
     { kEventClassControl , kEventControlEnabledStateChanged } ,
@@ -484,6 +487,127 @@ static pascal OSStatus wxMacWindowServiceEventHandler( EventHandlerCallRef handl
     return result ;
 }
 
+pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    wxWindowMac* focus = (wxWindowMac*) data ;
+    
+    wchar_t* uniChars = NULL ;
+    UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
+    
+    UniChar* charBuf;
+    UInt32 dataSize = 0 ;
+    int numChars = 0 ;
+    UniChar buf[2] ;
+    if ( GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, 0 , &dataSize, NULL ) == noErr )
+    {
+        numChars = dataSize / sizeof( UniChar) ;
+        charBuf = buf ;
+        
+        if ( dataSize > sizeof(buf) )
+            charBuf = new UniChar[ numChars ] ;
+        else
+            charBuf = buf ;
+        
+        uniChars = new wchar_t[ numChars ] ;
+        GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
+#if SIZEOF_WCHAR_T == 2
+        uniChars = charBuf ;
+        memcpy( uniChars , charBuf , dataSize ) ;
+#else
+        // the resulting string will never have more chars than the utf16 version, so this is safe
+        wxMBConvUTF16 converter ;
+        numChars = converter.MB2WC( uniChars , (const char*)charBuf , numChars ) ;
+#endif
+    }
+    
+    switch ( GetEventKind( event ) )
+    {
+        case kEventTextInputUpdateActiveInputArea :
+            {
+                // An IME input event may return several characters, but we need to send one char at a time to
+                // EVT_CHAR
+                for (int pos=0 ; pos < numChars ; pos++)
+                {
+                    
+                    WXEVENTREF formerEvent = wxTheApp->MacGetCurrentEvent() ;
+                    WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
+                    wxTheApp->MacSetCurrentEvent( event , handler ) ;
+                    
+                    UInt32 message = (0  << 8) + ((char)uniChars[pos] );
+                    if ( wxTheApp->MacSendCharEvent(
+                                                    focus , message , 0 , when , 0 , 0 , uniChars[pos] ) )
+                    {
+                        result = noErr ;
+                    }
+                    
+                    wxTheApp->MacSetCurrentEvent( formerEvent , formerHandler ) ;
+                }
+            }
+            break ;
+        case kEventTextInputUnicodeForKeyEvent :
+            {
+                UInt32 keyCode, modifiers ;
+                Point point ;
+                EventRef rawEvent ;
+                unsigned char charCode ;
+
+                GetEventParameter( event, kEventParamTextInputSendKeyboardEvent, typeEventRef, NULL, sizeof(rawEvent), NULL, &rawEvent ) ;
+                GetEventParameter( rawEvent, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
+                GetEventParameter( rawEvent, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
+                GetEventParameter( rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
+                GetEventParameter( rawEvent, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
+                
+                UInt32 message = (keyCode << 8) + charCode;
+                // this is only called when no default handler has jumped in, e.g. a wxControl on a floater window does not
+                // get its own kEventTextInputUnicodeForKeyEvent, so we reroute the event back to the control
+                
+                // NOTE to Stefan: Is this still needed? Shouldn't we be calling SendToEventTarget rather than
+                // HandleControlKey? (which, IIRC, is not Unicode friendly?) TODO :: MEMORY LEAK IN uniChar etc.
+                /*
+                wxControl* control = wxDynamicCast( focus , wxControl ) ;
+                if ( control )
+                {
+                    ControlRef macControl = (ControlRef) control->GetHandle() ;
+                    if ( macControl )
+                    {
+                        ::HandleControlKey( macControl , keyCode , charCode , modifiers ) ;
+                        result = noErr ;
+                    }
+                }
+                */
+                
+                // An IME input event may return several characters, but we need to send one char at a time to
+                // EVT_CHAR
+                for (int pos=0 ; pos < numChars ; pos++)
+                {
+                    
+                    WXEVENTREF formerEvent = wxTheApp->MacGetCurrentEvent() ;
+                    WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
+                    wxTheApp->MacSetCurrentEvent( event , handler ) ;
+                    
+                    if ( wxTheApp->MacSendCharEvent(
+                        focus , message , modifiers , when , point.h , point.v , uniChars[pos] ) )
+                    {
+                        result = noErr ;
+                    }
+                    
+                    wxTheApp->MacSetCurrentEvent( formerEvent , formerHandler ) ;
+                }
+            }
+            break;
+        default:
+            break ;
+    }
+    
+    delete[] uniChars ;
+    if ( charBuf != buf )
+        delete[] charBuf ;
+    
+    return result ;
+    
+}
+
 pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     EventRef formerEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
@@ -501,6 +625,9 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
             result = wxMacWindowServiceEventHandler( handler, event , data ) ;
             break ;
 
+        case kEventClassTextInput :
+            result = wxMacUnicodeTextEventHandler( handler , event , data ) ;
+            break ;
         default :
             break ;
     }
