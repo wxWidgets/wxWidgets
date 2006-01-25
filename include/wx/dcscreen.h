@@ -12,6 +12,8 @@
 #ifndef _WX_DCSCREEN_H_BASE_
 #define _WX_DCSCREEN_H_BASE_
 
+#include "wx/defs.h"
+
 #if defined(__WXPALMOS__)
 #include "wx/palmos/dcscreen.h"
 #elif defined(__WXMSW__)
