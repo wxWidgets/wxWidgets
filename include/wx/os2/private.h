@@ -388,7 +388,7 @@ WXDLLEXPORT extern wxString wxGetWindowClass(WXHWND hWnd);
 WXDLLEXPORT extern WXWORD wxGetWindowId(WXHWND hWnd);
 
 // Convert a PM Error code to a string
-WXDLLEXPORT extern wxString wxPMErrorToStr(ERRORID vError);
+WXDLLIMPEXP_BASE extern wxString wxPMErrorToStr(ERRORID vError);
 
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
@@ -423,4 +423,4 @@ WXDLLEXPORT extern COLORREF wxColourToRGB(const wxColour& rColor);
 
 #endif // __WXPM__
 
-#endif // _WX_PRIVATE_H_
+#endif // _WX_OS2_PRIVATE_H_

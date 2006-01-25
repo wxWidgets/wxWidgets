@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utils.cpp
+// Name:        src/os2/utils.cpp
 // Purpose:     Various utilities
 // Author:      David Webster
 // Modified by:
@@ -13,7 +13,6 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/setup.h"
     #include "wx/utils.h"
     #include "wx/app.h"
 #endif  //WX_PRECOMP
@@ -442,9 +441,9 @@ wxChar* wxGetUserHome ( const wxString &rUser )
     return (wxChar*)wxEmptyString; // No home known!
 }
 
-wxString WXDLLEXPORT wxPMErrorToStr(ERRORID vError)
+wxString wxPMErrorToStr(ERRORID vError)
 {
-    wxString                        sError;
+    wxString sError;
 
     //
     // Remove the high order byte -- it is useless
@@ -495,7 +494,7 @@ wxString WXDLLEXPORT wxPMErrorToStr(ERRORID vError)
         default:
             sError = wxT("Unknown error");
     }
-    return(sError);
+    return sError;
 } // end of wxPMErrorToStr
 
 // replacement for implementation in unix/utilsunx.cpp,

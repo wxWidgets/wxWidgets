@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/dataobj.h
+// Name:        wx/os2/dataobj.h
 // Purpose:     declaration of the wxDataObject
 // Author:      Stefan Csomor
 // Modified by:
@@ -9,14 +9,14 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MAC_DATAOBJ_H_
-#define _WX_MAC_DATAOBJ_H_
+#ifndef _WX_OS2_DATAOBJ_H_
+#define _WX_OS2_DATAOBJ_H_
 
 // ----------------------------------------------------------------------------
 // wxDataObject is the same as wxDataObjectBase under wxGTK
 // ----------------------------------------------------------------------------
 
-class wxDataObject : public wxDataObjectBase
+class WXDLLIMPEXP_CORE wxDataObject : public wxDataObjectBase
 {
 public:
     wxDataObject();
@@ -36,5 +36,4 @@ private:
     PDRAGITEM                       m_pDataObject;
 };
 
-#endif // _WX_MAC_DATAOBJ_H_
-
+#endif // _WX_OS2_DATAOBJ_H_

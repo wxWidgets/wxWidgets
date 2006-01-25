@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/dataobj2.h
+// Name:        wx/os2/dataobj2.h
 // Purpose:     declaration of standard wxDataObjectSimple-derived classes
 // Author:      Stefan Csomor (adapted from Robert Roebling's gtk port
 // Modified by:
@@ -9,14 +9,14 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MAC_DATAOBJ2_H_
-#define _WX_MAC_DATAOBJ2_H_
+#ifndef _WX_OS2_DATAOBJ2_H_
+#define _WX_OS2_DATAOBJ2_H_
 
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject is a specialization of wxDataObject for bitmaps
 // ----------------------------------------------------------------------------
 
-class wxBitmapDataObject : public wxBitmapDataObjectBase
+class WXDLLIMPEXP_CORE wxBitmapDataObject : public wxBitmapDataObjectBase
 {
 public:
     // ctors
@@ -82,5 +82,4 @@ private:
     { return(wxDataObjectSimple::SetData(rFormat, nLen, pBuf)); }
 };
 
-#endif // _WX_MAC_DATAOBJ2_H_
-
+#endif // _WX_OS2_DATAOBJ2_H_
