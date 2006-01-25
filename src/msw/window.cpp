@@ -1089,8 +1089,8 @@ bool wxCheckWindowWndProc(WXHWND hWnd,
 // TODO: This list of window class names should be factored out so they can be
 // managed in one place and then accessed from here and other places, such as
 // wxApp::RegisterWindowClasses() and wxApp::UnregisterWindowClasses()
-    
-#ifdef __WXWINCE__    
+
+#ifdef __WXWINCE__
     extern       wxChar *wxCanvasClassName;
     extern       wxChar *wxCanvasClassNameNR;
 #else
@@ -1495,14 +1495,33 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 {
-    // this is only for top level windows whose resizing is never deferred, so
-    // we can safely use the current size here
-    RECT rect = wxGetClientRect(GetHwnd());
+    if ( IsTopLevel() || m_pendingSize == wxDefaultSize )
+    {
+        // top level windows resizing is never deferred, so we can safely use
+        // the current size here
+        RECT rect = wxGetClientRect(GetHwnd());
 
-    if ( x )
-        *x = rect.right;
-    if ( y )
-        *y = rect.bottom;
+        if ( x )
+            *x = rect.right;
+        if ( y )
+            *y = rect.bottom;
+    }
+    else // non top level and using deferred sizing
+    {
+        // we need to calculate the *pending* client size here
+        RECT rect;
+        rect.left = m_pendingPosition.x;
+        rect.top = m_pendingPosition.y;
+        rect.right = rect.left + m_pendingSize.x;
+        rect.bottom = rect.top + m_pendingSize.y;
+
+        ::SendMessage(GetHwnd(), WM_NCCALCSIZE, FALSE, (LPARAM)&rect);
+
+        if ( x )
+            *x = rect.right - rect.left;
+        if ( y )
+            *y = rect.bottom - rect.top;
+    }
 }
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
