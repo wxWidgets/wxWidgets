@@ -5480,7 +5480,7 @@ int wxGenericListCtrl::OnGetItemColumnImage(long item, long column) const
         return OnGetItemImage(item);
 
    return -1;
-
+}
 
 wxListItemAttr *
 wxGenericListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) const
@@ -5540,7 +5540,6 @@ void wxGenericListCtrl::Refresh(bool eraseBackground, const wxRect *rect)
                 rectHeader.Offset(-x, -y);
                 m_headerWin->Refresh(eraseBackground, &rectHeader);
             }
-
         }
 
         // Refresh the main window
