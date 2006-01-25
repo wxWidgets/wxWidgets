@@ -366,6 +366,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_NO_DEPS=no
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
+  DEFAULT_wxUSE_UNIVERSAL_BINARY=no
   DEFAULT_wxUSE_RPATH=yes
   DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=yes
@@ -567,6 +568,7 @@ else
   DEFAULT_wxUSE_NO_DEPS=no
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
+  DEFAULT_wxUSE_UNIVERSAL_BINARY=no
   DEFAULT_wxUSE_RPATH=yes
   DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=no
@@ -866,6 +868,7 @@ WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
+WX_ARG_ENABLE(enable-universal_binary, [  --enable-universal_binary create Mac PowerPC and Intel Universal binary (not yet working)], wxUSE_UNIVERSAL_BINARY)
 
 WX_ARG_ENABLE(compat24,      [  --enable-compat24       enable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, enable)
 WX_ARG_ENABLE(compat26,      [  --disable-compat26      disable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6, disable)
@@ -3421,6 +3424,18 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         else
             dnl platform.h needs TARGET_CARBON before setup.h
             CPPFLAGS="$CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -DTARGET_CARBON $CPPFLAGS"
+        fi
+
+        if test "x$wxUSE_UNIVERSAL_BINARY" = "xyes"; then
+            CXXFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CXXFLAGS"
+            CFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CFLAGS"
+            LDFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $LDFLAGS"
+            DEPSMODE=none
+            bk_use_pch=no
+
+            # TODO: where do we add "-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk" for libtool (static builds only)?
+            #       The makefile currently uses AR and RANLIB, which libtool apparently supercedes.
+            # TODO: how can we avoid a hardwired reference to the SDK, above? (Someone used -lSystemStubs to avoid it)
         fi
 
         TOOLKIT=MAC
