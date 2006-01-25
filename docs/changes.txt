@@ -24,6 +24,15 @@ All:
   during a search and replace.
 - Fix regerror and regfree name conficts when built-in regex and system regex
   are both used in the same program.
+- Basic authentication supported added to wxHTTP.
+- wxCondition::WaitTimeout() now returns correct value when timeout occurs.
+- Fixed occasional wxThread cleanup crash.
+- Bug in wxLogStream::DoLogString in Unicode builds fixed.
+- Added support for memo fields to wxODBC.
+- Fixed Unicode builds using SunPro compiler by defining__WCHAR_TYPE__.
+- wxFileName now also looks for TMPDIR on Unix.
+- Fixed build error in list.h with VC++ 2005.
+- Fixed wxODBC buffer overflow problem in Unicode builds.
 
 All (GUI):
 
@@ -54,8 +63,14 @@ All (GUI):
 - Added wxGetMouseState function.
 - Added wxHtmlHelpWindow, wxHtmlHelpDialog and wxHtmlModalHelp classes,
   allowing HTML help to be embedded in an application.
-- wxCalendarCtrl positioning fixes for dimensions other than best size.
+- wxCalendarCtrl positioning and hit-testing fixes for dimensions other than
+  best size.
 - wxCalendarCtrl colour schema changed and adjusted to system settings.
+- More checking of image validity before loading into wxImage.
+- Added wxImage::ConvertToGreyscale.
+- Added ability to use templates with static event tables
+  with BEGIN_EVENT_TABLE_TEMPLATEn() macros
+- Added double-buffering to wxVListBox and fixed a scrolling issue.
 
 wxMSW:
 
@@ -80,6 +95,21 @@ wxMSW:
 - Fixed problem where using SetValue and wxTE_RICH2 would cause control to
   show.
 - Numpad special keys are now distinguished from normal keys.
+- Fixed GDI leak in wxStaticBitmap when setting images after
+  initial construction.
+- Menu codes now stripped before measuring control labels.
+- MFC sample now compiles in Unicode mode.
+- Fixed SetScrollbar thumb size setting bug (set orientation before triggering
+  events).
+- Fixed icon to cursor conversion problem for bitmaps with masks.
+- Fixed wxToolBar background colour problem for some video cards.
+- wxGenericDirCtrl now shows volume name.
+- Added XP theme support for DrawHeaderButton, DrawTreeItemButton.
+- Multiline notebook tab label change now resizes the control
+  correctly if an extra row is removed or added.
+- Fixed a crash when dismissing wxPrintDialog under VC++ 7.1.
+- Fixed out by one error in wxTextCtrl::GetStyle.
+- Fixed problem with getting input in universal/unicode build of wxMSW.
 
 wxGTK:
 
@@ -91,6 +121,8 @@ wxGTK:
 - Fixed problem trying to print from a preview, whereby wrong printer
   class was used.
 - Worked around pango crashes in strncmp on Solaris 10.
+- Polygon and line drawing speeded up if there is no scaling.
+- Fixed problems with CJK input method.
 
 wxMac:
 
@@ -121,6 +153,13 @@ wxMac:
 - Mouse event ids set correctly (fixing problems with Connect in particular).
 - Fixed wxZipInputStream read error on wxSocketInputStream which signals the
   end of file with an error.
+- Xcode wxWidgets and minimal sample project files updated to create Universal
+  binaries.
+- Fix for setting wxMenuBar more than once.
+- wxListBox minimum size bug fixed.
+- Fixed wxNotebook off-by-one bug in HitTest.
+- Fixed joystick GetXMin/Max bug.
+- Fixed Unix domain socket problem in wxIPC.
 
 wxWinCE:
 
@@ -133,6 +172,13 @@ wxWinCE:
 - New wxSystemOption "wince.dialog.real-ok-cancel" to switch between WinCE
   guidelines with Ok-only dialogs and dialogs using wxButtons.
 - Checkable items in wxToolMenuBarTool supported.
+- Fixed date formatting and mktime.
+- Fixed getting standard folder paths on WinCE.
+
+wxX11:
+
+- Invisible text problem fixed.
+- Bitmap clipping with masks and scaling improved.
 
 Unix:
 
