@@ -1512,12 +1512,21 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
         if ( y )
             *y = rect.bottom;
     }
-    else // non top level
+    else // non top level and using deferred sizing
     {
-        // size is the same as client size for non top level windows, so
-        // forward to GetSize() to take into account deferred sizing (which
-        // wxGetClientRect() doesn't)
-        DoGetSize(x, y);
+        // we need to calculate the *pending* client size here
+        RECT rect;
+        rect.left = m_pendingPosition.x;
+        rect.top = m_pendingPosition.y;
+        rect.right = rect.left + m_pendingSize.x;
+        rect.bottom = rect.top + m_pendingSize.y;
+
+        ::SendMessage(GetHwnd(), WM_NCCALCSIZE, FALSE, (LPARAM)&rect);
+
+        if ( x )
+            *x = rect.right - rect.left;
+        if ( y )
+            *y = rect.bottom - rect.top;
     }
 }
 
