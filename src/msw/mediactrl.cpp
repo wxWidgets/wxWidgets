@@ -1619,10 +1619,7 @@ wxAMMediaBackend::~wxAMMediaBackend()
 
     if(m_pAX)
     {
-        {
-            wxLogNull noLog;
-            m_pAX->DissociateHandle();
-        }
+        m_pAX->DissociateHandle();
         delete m_pAX;
         m_pAM->Release();
 
