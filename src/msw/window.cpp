@@ -1090,7 +1090,7 @@ void wxWindowMSW::DissociateHandle()
 
 
 bool wxCheckWindowWndProc(WXHWND hWnd,
-                          WXFARPROC WXUNUSED_IN_WINCE(wndProc))
+                          WXFARPROC WXUNUSED(wndProc))
 {
 // TODO: This list of window class names should be factored out so they can be
 // managed in one place and then accessed from here and other places, such as

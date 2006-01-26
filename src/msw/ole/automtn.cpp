@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        automtn.cpp
+// Name:        src/msw/ole/automtn.cpp
 // Purpose:     OLE automation utilities
 // Author:      Julian Smart
 // Modified by:
@@ -597,8 +597,8 @@ bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
         oleVariant.vt = VT_DATE;
         
         long dosDateTime = date.GetAsDOS();
-        short dosDate = (dosDateTime & 0xFFFF0000) >> 16;
-        short dosTime = dosDateTime & 0xFFFF;
+        short dosDate = short((dosDateTime & 0xFFFF0000) >> 16);
+        short dosTime = short(dosDateTime & 0xFFFF);
         
         DosDateTimeToVariantTime(dosDate, dosTime, & oleVariant.date);
     }
@@ -930,4 +930,3 @@ void ShowException(LPOLESTR szMember, HRESULT hr, EXCEPINFO *pexcep, unsigned in
 #endif
 
 #endif // wxUSE_OLE && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) && !defined(__CYGWIN10__)
-
