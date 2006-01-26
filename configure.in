@@ -872,7 +872,7 @@ WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
-WX_ARG_ENABLE(enable-universal_binary, [  --enable-universal_binary create Mac PowerPC and Intel Universal binary (not yet working)], wxUSE_UNIVERSAL_BINARY)
+WX_ARG_ENABLE(universal_binary, [  --enable-universal_binary create Mac PowerPC and Intel Universal binary (not yet working)], wxUSE_UNIVERSAL_BINARY)
 
 WX_ARG_ENABLE(compat24,      [  --enable-compat24       enable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, enable)
 WX_ARG_ENABLE(compat26,      [  --disable-compat26      disable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6, disable)
@@ -3428,18 +3428,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         else
             dnl platform.h needs TARGET_CARBON before setup.h
             CPPFLAGS="$CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -DTARGET_CARBON $CPPFLAGS"
-        fi
-
-        if test "x$wxUSE_UNIVERSAL_BINARY" = "xyes"; then
-            CXXFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CXXFLAGS"
-            CFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CFLAGS"
-            LDFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $LDFLAGS"
-            DEPSMODE=none
-            bk_use_pch=no
-
-            # TODO: where do we add "-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk" for libtool (static builds only)?
-            #       The makefile currently uses AR and RANLIB, which libtool apparently supercedes.
-            # TODO: how can we avoid a hardwired reference to the SDK, above? (Someone used -lSystemStubs to avoid it)
         fi
 
         TOOLKIT=MAC
@@ -6911,7 +6899,6 @@ fi
 AC_SUBST(CORE_BASE_LIBS)
 AC_SUBST(CORE_GUI_LIBS)
 
-
 dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
@@ -7238,7 +7225,38 @@ if test "$wxUSE_WINE" = "yes"; then
     BAKEFILE_FORCE_PLATFORM=win32
 fi
 
+dnl ---------------------------------------------------------------------------
+dnl Add Universal binary support 
+dnl Note we don't do this earlier because adding these cpp/ld flags could
+dnl cause configure tests to fail.
+dnl ---------------------------------------------------------------------------
+if test "$wxUSE_MAC" = 1 ; then
+    if test "$wxUSE_UNIVERSAL_BINARY" = "yes" ; then
+        CXXFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CXXFLAGS"
+        CFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CFLAGS"
+        LDFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $LDFLAGS"
+        bk_use_pch=no
+    fi
+    # TODO: where do we add "-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk" for libtool (static builds only)?
+    #       The makefile currently uses AR and RANLIB, which libtool apparently supercedes.
+    # TODO: how can we avoid a hardwired reference to the SDK, above? (Someone used -lSystemStubs to avoid it)
+fi
+
 AC_BAKEFILE([m4_include(autoconf_inc.m4)])
+
+dnl HACK ALERT!! 
+dnl For now, we need to alter bk-deps not to generate deps
+dnl when we've configured a Universal binary build.
+dnl The next version of Bakefile will have the correct fix for this
+dnl at which time, this hack can be removed.
+
+if test "$wxUSE_MAC" = 1 ; then
+    if test "$wxUSE_UNIVERSAL_BINARY" = "yes" ; then
+        sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
+        mv temp bk-deps
+        chmod +x bk-deps
+    fi
+fi
 
 if test "$wxUSE_SHARED" = "yes"; then
 
