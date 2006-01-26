@@ -66,6 +66,7 @@ class WXDLLEXPORT wxComboPopup
 {
 public:
     wxComboPopup(wxComboControl *combo) { m_combo = combo; }
+    virtual ~wxComboPopup() {}
 
     // we must have an associated control which is subclassed by the combobox
     virtual wxControl *GetControl() = 0;

@@ -86,6 +86,8 @@ private:
 class WXDLLEXPORT wxControlWithThumb
 {
 public:
+    virtual ~wxControlWithThumb() {}
+
     // simple accessors
     // ----------------
 

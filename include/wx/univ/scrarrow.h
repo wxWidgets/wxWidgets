@@ -81,6 +81,8 @@ private:
 class WXDLLEXPORT wxControlWithArrows
 {
 public:
+    virtual ~wxControlWithArrows() {}
+
     // get the renderer to use for drawing the arrows
     virtual wxRenderer *GetRenderer() const = 0;
 
