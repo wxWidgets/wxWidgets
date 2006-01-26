@@ -261,9 +261,18 @@ wxImage wxImage::Copy() const
     image.SetMask( M_IMGDATA->m_hasMask );
 
     memcpy( data, GetData(), M_IMGDATA->m_width*M_IMGDATA->m_height*3 );
-
-    // also copy the image options
+    
     wxImageRefData *imgData = (wxImageRefData *)image.m_refData;
+    
+    // also copy the alpha channel
+    if (HasAlpha())
+    {
+        image.SetAlpha();
+        unsigned char* alpha = image.GetAlpha();
+        memcpy( alpha, GetAlpha(), M_IMGDATA->m_width*M_IMGDATA->m_height );
+    }
+    
+    // also copy the image options
     imgData->m_optionNames = M_IMGDATA->m_optionNames;
     imgData->m_optionValues = M_IMGDATA->m_optionValues;
 
