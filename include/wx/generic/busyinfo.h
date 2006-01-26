@@ -12,8 +12,6 @@
 
 #include "wx/defs.h"
 
-#include "wx/frame.h"
-
 #if wxUSE_BUSYINFO
 
 class WXDLLIMPEXP_CORE wxFrame;
