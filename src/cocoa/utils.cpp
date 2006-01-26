@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utils.cpp
+// Name:        src/cocoa/utils.cpp
 // Purpose:     Various utilities
 // Author:      AUTHOR
 // Modified by:
@@ -9,7 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
+#include "wx/wxprec.h"
+
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/apptrait.h"
