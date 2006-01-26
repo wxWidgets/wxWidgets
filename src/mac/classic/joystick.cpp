@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.cpp
+// Name:        src/mac/classic/joystick.cpp
 // Purpose:     wxJoystick class
 // Author:      Stefan Csomor
 // Modified by:
@@ -9,11 +9,11 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
-
-#include "wx/joystick.h"
+#include "wx/wxprec.h"
 
 #if wxUSE_JOYSTICK
+
+#include "wx/joystick.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 
@@ -85,7 +85,7 @@ void wxJoystick::SetMovementThreshold(int threshold)
 bool wxJoystick::IsOk() const
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 int wxJoystick::GetNumberJoysticks()
@@ -109,7 +109,7 @@ int wxJoystick::GetProductId() const
 wxString wxJoystick::GetProductName() const
 {
     // TODO
-    return wxString(wxT(""));
+    return wxEmptyString;
 }
 
 int wxJoystick::GetXMin() const
@@ -223,43 +223,43 @@ int wxJoystick::GetVMax() const
 bool wxJoystick::HasRudder() const
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxJoystick::HasZ() const
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxJoystick::HasU() const
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxJoystick::HasV() const
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxJoystick::HasPOV() const
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxJoystick::HasPOV4Dir() const
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxJoystick::HasPOVCTS() const
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Operations
@@ -268,15 +268,14 @@ bool wxJoystick::HasPOVCTS() const
 bool wxJoystick::SetCapture(wxWindow* win, int pollingFreq)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxJoystick::ReleaseCapture()
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 #endif
     // wxUSE_JOYSTICK
-

@@ -9,7 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
+#include "wx/wxprec.h"
+
 #include "wx/menu.h"
 #include "wx/window.h"
 #include "wx/dc.h"

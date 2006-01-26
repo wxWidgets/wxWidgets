@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        accel.cpp
+// Name:        src/mac/classic/accel.cpp
 // Purpose:     wxAcceleratorTable
 // Author:      Stefan Csomor
 // Modified by:
@@ -9,7 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
+#include "wx/wxprec.h"
+
 #include "wx/accel.h"
 #include "wx/string.h"
 
@@ -98,5 +99,3 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 
     return -1;
 }
-
-

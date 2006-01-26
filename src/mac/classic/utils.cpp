@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utils.cpp
+// Name:        src/mac/classic/utils.cpp
 // Purpose:     Various utilities
 // Author:      Stefan Csomor
 // Modified by:
@@ -9,7 +9,8 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
+#include "wx/wxprec.h"
+
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/apptrait.h"
@@ -1399,4 +1400,3 @@ extern bool WXDLLEXPORT wxIsDebuggerRunning()
 #endif // defined(__WXMAC__) && !defined(__DARWIN__) && (__MWERKS__ >= 0x2400)
 
 #endif // wxUSE_GUI
-

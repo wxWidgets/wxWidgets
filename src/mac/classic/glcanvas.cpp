@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        glcanvas.cpp
+// Name:        src/mac/classic/glcanvas.cpp
 // Purpose:     wxGLCanvas, for using OpenGL with wxWidgets under Macintosh
 // Author:      Stefan Csomor
 // Modified by:
@@ -14,8 +14,6 @@
 #if defined(__BORLANDC__)
 #pragma hdrstop
 #endif
-
-#include "wx/setup.h"
 
 #if wxUSE_GLCANVAS
 
@@ -44,12 +42,12 @@ wxGLContext::wxGLContext(
                          )
 {
     m_window = win;
-    
+
     m_drawable = (AGLDrawable) UMAGetWindowPort(MAC_WXHWND(win->MacGetRootWindow()));
-    
+
     m_glContext = aglCreateContext(fmt, other ? other->m_glContext : NULL);
     wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGl context") );
-    
+
     GLboolean b;
     b = aglSetDrawable(m_glContext, m_drawable);
     wxCHECK_RET( b, wxT("Couldn't bind OpenGl context") );
@@ -147,14 +145,14 @@ wxGLCanvas::~wxGLCanvas()
 static AGLPixelFormat ChoosePixelFormat(const int *attribList)
 {
     GLint data[512];
-    GLint defaultAttribs[] = { AGL_RGBA, 
-        AGL_DOUBLEBUFFER, 
-        AGL_MINIMUM_POLICY, 
+    GLint defaultAttribs[] = { AGL_RGBA,
+        AGL_DOUBLEBUFFER,
+        AGL_MINIMUM_POLICY,
         AGL_DEPTH_SIZE, 1,  // use largest available depth buffer
-        AGL_RED_SIZE, 1, 
-        AGL_GREEN_SIZE, 1, 
-        AGL_BLUE_SIZE, 1, 
-        AGL_ALPHA_SIZE, 0, 
+        AGL_RED_SIZE, 1,
+        AGL_GREEN_SIZE, 1,
+        AGL_BLUE_SIZE, 1,
+        AGL_ALPHA_SIZE, 0,
         AGL_NONE };
     GLint *attribs;
     if (!attribList)
@@ -164,7 +162,7 @@ static AGLPixelFormat ChoosePixelFormat(const int *attribList)
     else
     {
         int arg=0, p=0;
-        
+
         data[p++] = AGL_MINIMUM_POLICY; // make _SIZE tags behave more like GLX
         while( (attribList[arg]!=0) && (p<512) )
         {
@@ -187,9 +185,9 @@ static AGLPixelFormat ChoosePixelFormat(const int *attribList)
                 data[p++]=AGL_BLUE_SIZE; data[p++]=attribList[arg++]; break;
             case WX_GL_MIN_ALPHA:
                 data[p++]=AGL_ALPHA_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_DEPTH_SIZE: 
+            case WX_GL_DEPTH_SIZE:
                 data[p++]=AGL_DEPTH_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_STENCIL_SIZE: 
+            case WX_GL_STENCIL_SIZE:
                 data[p++]=AGL_STENCIL_SIZE; data[p++]=attribList[arg++]; break;
             case WX_GL_MIN_ACCUM_RED:
                 data[p++]=AGL_ACCUM_RED_SIZE; data[p++]=attribList[arg++]; break;
@@ -202,12 +200,12 @@ static AGLPixelFormat ChoosePixelFormat(const int *attribList)
             default:
                 break;
             }
-        }       
-        data[p] = 0; 
-        
+        }
+        data[p] = 0;
+
         attribs = data;
     }
-    
+
     return aglChoosePixelFormat(NULL, 0, attribs);
 }
 
@@ -216,14 +214,14 @@ bool wxGLCanvas::Create(wxWindow *parent, const wxGLContext *shared, wxWindowID 
                         int *attribList, const wxPalette& palette)
 {
     wxWindow::Create( parent, id, pos, size, style, name );
-    
+
     AGLPixelFormat fmt = ChoosePixelFormat(attribList);
     wxCHECK_MSG( fmt, false, wxT("Couldn't create OpenGl pixel format") );
-    
+
     m_glContext = new wxGLContext(fmt, this, palette, shared);
     m_macCanvasIsShown = true ;
     aglDestroyPixelFormat(fmt);
-    
+
     return true;
 }
 
@@ -245,30 +243,30 @@ void wxGLCanvas::SetViewport()
     // adjust glViewport to just this window
     int x = 0 ;
     int y = 0 ;
-    
+
     wxWindow* iter = this ;
     while( iter->GetParent() )
     {
-    	iter = iter->GetParent() ;
+        iter = iter->GetParent() ;
     }
-    
+
     if ( iter && iter->IsTopLevel() )
     {
-	    MacClientToRootWindow( &x , &y ) ;
-	    int width, height;
-	    GetClientSize(& width, & height);
-	    Rect bounds ;
-	    GetWindowPortBounds( MAC_WXHWND(MacGetRootWindow()) , &bounds ) ;
-	    GLint parms[4] ;
-	    parms[0] = x ;
-	    parms[1] = bounds.bottom - bounds.top - ( y + height ) ;
-	    parms[2] = width ;
-	    parms[3] = height ;
-	    
-	    if ( !m_macCanvasIsShown )
-	    	parms[0] += 20000 ;
-	    aglSetInteger( m_glContext->m_glContext , AGL_BUFFER_RECT , parms ) ;
-   	}
+        MacClientToRootWindow( &x , &y ) ;
+        int width, height;
+        GetClientSize(& width, & height);
+        Rect bounds ;
+        GetWindowPortBounds( MAC_WXHWND(MacGetRootWindow()) , &bounds ) ;
+        GLint parms[4] ;
+        parms[0] = x ;
+        parms[1] = bounds.bottom - bounds.top - ( y + height ) ;
+        parms[2] = width ;
+        parms[3] = height ;
+
+        if ( !m_macCanvasIsShown )
+            parms[0] += 20000 ;
+        aglSetInteger( m_glContext->m_glContext , AGL_BUFFER_RECT , parms ) ;
+    }
 }
 
 void wxGLCanvas::OnSize(wxSizeEvent& event)
@@ -312,11 +310,11 @@ void wxGLCanvas::SetColour(const wxChar *colour)
         m_glContext->SetColour(colour);
 }
 
-bool wxGLCanvas::Show(bool show) 
+bool wxGLCanvas::Show(bool show)
 {
     if ( !wxWindow::Show( show ) )
-        return FALSE ;
-        
+        return false ;
+
     if ( !show )
     {
         if ( m_macCanvasIsShown )
@@ -333,10 +331,10 @@ bool wxGLCanvas::Show(bool show)
             SetViewport() ;
         }
     }
-    return TRUE ;
+    return true ;
 }
 
-void wxGLCanvas::MacSuperShown( bool show ) 
+void wxGLCanvas::MacSuperShown( bool show )
 {
     if ( !show )
     {
@@ -354,7 +352,7 @@ void wxGLCanvas::MacSuperShown( bool show )
             SetViewport() ;
         }
     }
-        
+
     wxWindow::MacSuperShown( show ) ;
 }
 

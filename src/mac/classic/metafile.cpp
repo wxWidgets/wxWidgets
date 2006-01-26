@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        metafile.cpp
+// Name:        src/mac/classic/metafile.cpp
 // Purpose:     wxMetaFile, wxMetaFileDC etc. These classes are optional.
 // Author:      Stefan Csomor
 // Modified by:
@@ -14,10 +14,6 @@
 
 #ifdef __BORLANDC__
 #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/setup.h"
 #endif
 
 #if wxUSE_METAFILE
@@ -68,7 +64,7 @@ wxMetaFile::wxMetaFile(const wxString& file)
     M_METAFILEDATA->m_metafile = 0;
     wxASSERT_MSG( file.IsEmpty() , wxT("no file based metafile support yet") ) ;
 /*
-    if (!file.IsNull() && (file.Cmp("") == 0))
+    if (!file.empty())
         M_METAFILEDATA->m_metafile = (WXHANDLE) GetMetaFile(file);
 */
 }
@@ -82,8 +78,8 @@ bool wxMetaFile::SetClipboard(int width, int height)
 #if wxUSE_DRAG_AND_DROP
     //TODO finishi this port , we need the data obj first
     if (!m_refData)
-        return FALSE;
-    
+        return false;
+
     bool alreadyOpen=wxTheClipboard->IsOpened() ;
     if (!alreadyOpen)
     {
@@ -93,11 +89,11 @@ bool wxMetaFile::SetClipboard(int width, int height)
     wxDataObject *data =
         new wxMetafileDataObject( *this) ;
     bool success = wxTheClipboard->SetData(data);
-    if (!alreadyOpen) 
+    if (!alreadyOpen)
         wxTheClipboard->Close();
     return (bool) success;
 #endif
-    return TRUE ;
+    return true ;
 }
 
 void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
@@ -113,17 +109,17 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
 bool wxMetaFile::Play(wxDC *dc)
 {
     if (!m_refData)
-        return FALSE;
-    
+        return false;
+
     if (!dc->Ok() )
-        return FALSE;
-        
+        return false;
+
     {
         wxMacPortSetter helper( dc ) ;
         PicHandle pict = (PicHandle) GetHMETAFILE() ;
         DrawPicture( pict , &(**pict).picFrame ) ;
     }
-    return TRUE;
+    return true;
 }
 
 wxSize wxMetaFile::GetSize() const
@@ -149,23 +145,23 @@ wxSize wxMetaFile::GetSize() const
 // give origin/extent arguments to wxMakeMetaFilePlaceable.
 
 wxMetaFileDC::wxMetaFileDC(const wxString& filename ,
-                    int width , int height ,
-                    const wxString& WXUNUSED(description) )
+                           int width , int height ,
+                           const wxString& WXUNUSED(description) )
 {
     wxASSERT_MSG( width == 0 || height == 0 , _T("no arbitration of metafilesize supported") ) ;
-    wxASSERT_MSG( filename.IsEmpty() , _T("no file based metafile support yet")) ;
-    
+    wxASSERT_MSG( filename.empty() , _T("no file based metafile support yet")) ;
+
     m_metaFile = new wxMetaFile(filename) ;
     Rect r={0,0,height,width} ;
-    
+
     RectRgn( (RgnHandle) m_macBoundaryClipRgn , &r ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
 
     m_metaFile->SetHMETAFILE( OpenPicture( &r ) ) ;
-    ::GetPort( (GrafPtr*) &m_macPort ) ;    
-    m_ok = TRUE ;
-    
-    SetMapMode(wxMM_TEXT); 
+    ::GetPort( (GrafPtr*) &m_macPort ) ;
+    m_ok = true ;
+
+    SetMapMode(wxMM_TEXT);
 }
 
 wxMetaFileDC::~wxMetaFileDC()

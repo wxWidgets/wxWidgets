@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------
  * Project: GSocket (Generic Socket) for WX
- * Name:    gsocket.c
+ * Name:    src/mac/classic/gsocket.c
  * Authors: Guilhem Lavaux,
  *          Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
  *          Stefan CSomor
@@ -14,7 +14,6 @@
  */
 
 #ifndef __GSOCKET_STANDALONE__
-#include "wx/setup.h"
 #include "wx/platform.h"
 #endif
 
@@ -92,29 +91,29 @@ OTNotifyUPP gOTNotifierUPP = NULL ;
 OSStatus DoNegotiateIPReuseAddrOption(EndpointRef ep, Boolean enableReuseIPMode);
 
 /* Input: ep - endpointref on which to negotiate the option
-			enableReuseIPMode - desired option setting - true/false
+               enableReuseIPMode - desired option setting - true/false
    Return: kOTNoError indicates that the option was successfully negotiated
-   			OSStatus is an error if < 0, otherwise, the status field is
-   			returned and is > 0.
-   	
-   	IMPORTANT NOTE: The endpoint is assumed to be in synchronous more, otherwise
-   			this code will not function as desired
+           OSStatus is an error if < 0, otherwise, the status field is
+           returned and is > 0.
+
+   IMPORTANT NOTE: The endpoint is assumed to be in synchronous more, otherwise
+                   this code will not function as desired
 */
 
 
 OSStatus DoNegotiateIPReuseAddrOption(EndpointRef ep, Boolean enableReuseIPMode)
 
 {
-	UInt8		buf[kOTFourByteOptionSize];	// define buffer for fourByte Option size
-	TOption*	opt;						// option ptr to make items easier to access
-	TOptMgmt	req;
-	TOptMgmt	ret;
-	OSStatus	err;
-	
-	if (!OTIsSynchronous(ep))
-	{
-		return (-1);
-	}
+    UInt8    buf[kOTFourByteOptionSize]; // define buffer for fourByte Option size
+    TOption* opt;                        // option ptr to make items easier to access
+    TOptMgmt req;
+    TOptMgmt ret;
+    OSStatus err;
+
+    if (!OTIsSynchronous(ep))
+    {
+        return (-1);
+    }
 	opt = (TOption*)buf;					// set option ptr to buffer
 	req.opt.buf	= buf;
 	req.opt.len	= sizeof(buf);
@@ -225,7 +224,7 @@ int GSocket_Verify_Inited()
 #else	
     if ( gInetSvcRef )
       return TRUE ;
- 
+
     InitOpenTransport() ;
     gOTInited = 1 ;
     gInetSvcRef = OTOpenInternetServices(kDefaultInternetServicesPath, NULL, &err);
@@ -259,7 +258,7 @@ void GSocket_Cleanup()
 
 GSocket *GSocket_new()
 {
-     
+
   int i;
   GSocket *socket;
 
@@ -427,7 +426,7 @@ GAddress *GSocket_GetLocal(GSocket *socket)
 
 	
 /* we do not support multihoming with this code at the moment
-   OTGetProtAddress will have to be used then - but we don't have a handy 
+   OTGetProtAddress will have to be used then - but we don't have a handy
    method to use right now
 */
   {
@@ -474,11 +473,11 @@ GAddress *GSocket_GetPeer(GSocket *socket)
  *  Sets up this socket as a server. The local address must have been
  *  set with GSocket_SetLocal() before GSocket_SetServer() is called.
  *  Returns GSOCK_NOERROR on success, one of the following otherwise:
- * 
+ *
  *  Error codes:
  *    GSOCK_INVSOCK - the socket is in use.
  *    GSOCK_INVADDR - the local address has not been set.
- *    GSOCK_IOERR   - low-level error. 
+ *    GSOCK_IOERR   - low-level error.
  */
 GSocketError GSocket_SetServer(GSocket *sck)
 {
@@ -546,7 +545,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
  *    GSOCK_TIMEDOUT   - timeout, no incoming connections.
  *    GSOCK_WOULDBLOCK - the call would block and the socket is nonblocking.
  *    GSOCK_MEMERR     - couldn't allocate memory.
- *    GSOCK_IOERR      - low-level error. 
+ *    GSOCK_IOERR      - low-level error.
  */
 GSocket *GSocket_WaitConnection(GSocket *socket)
 {
@@ -663,7 +662,7 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   sck->m_oriented = FALSE;
 
   /* Create the socket */
-  
+
 // TODO
 #if 0
   sck->m_endpoint = socket(sck->m_local->m_realfamily, SOCK_DGRAM, 0);
@@ -723,7 +722,7 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
  *    GSOCK_TIMEDOUT   - timeout, the connection failed.
  *    GSOCK_WOULDBLOCK - connection in progress (nonblocking sockets only)
  *    GSOCK_MEMERR     - couldn't allocate memory.
- *    GSOCK_IOERR      - low-level error. 
+ *    GSOCK_IOERR      - low-level error.
  */
 GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 {
@@ -756,10 +755,10 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 
   /* Create the socket */
 #if TARGET_CARBON
-  sck->m_endpoint = 
+  sck->m_endpoint =
   	OTOpenEndpointInContext( OTCreateConfiguration( kTCPName) , 0 , &info , &err , NULL ) ;
 #else
-  sck->m_endpoint = 
+  sck->m_endpoint =
   	OTOpenEndpoint( OTCreateConfiguration( kTCPName) , 0 , &info , &err ) ;
 #endif
   if ( sck->m_endpoint == kOTInvalidEndpointRef || err != kOTNoError )
@@ -791,7 +790,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
      * is in blocking mode, we select() for the specified timeout
      * checking for writability to see if the connection request
      * completes.
-     */ 
+     */
 	
     if ((err == kOTNoDataErr ) && (!sck->m_non_blocking))
     {
@@ -868,7 +867,7 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
     ret = _GSocket_Recv_Stream(socket, buffer, size);
   else
     ret = _GSocket_Recv_Dgram(socket, buffer, size);
-    
+
   if (ret == -1)
   {
     if (errno == EWOULDBLOCK)
@@ -876,12 +875,12 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
     else
       socket->m_error = GSOCK_IOERR;
   }
-  
+
   return ret;
 }
 
 int GSocket_Write(GSocket *socket, const char *buffer, int size)
-{                        
+{
   int ret;
 
   assert(socket != NULL);
@@ -901,7 +900,7 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     ret = _GSocket_Send_Stream(socket, buffer, size);
   else
     ret = _GSocket_Send_Dgram(socket, buffer, size);
-    
+
   if (ret == -1)
   {
     if (errno == EWOULDBLOCK)
@@ -917,7 +916,7 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     socket->m_detected &= ~GSOCK_OUTPUT_FLAG;
     return -1;
   }
-  
+
   return ret;
 }
 
@@ -934,7 +933,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
   wxMacProcessNotifierEvents() ;
   /*
   state = OTGetEndpointState(socket->m_endpoint);
-  
+
   if ( ( flags & GSOCK_INPUT_FLAG ) && ! ( socket->m_detected & GSOCK_INPUT_FLAG ) )
   {
   	size_t sz = 0 ;
@@ -1002,7 +1001,7 @@ GSocketError GSocket_GetError(GSocket *socket)
  *   operation, there is still data available, the callback function will
  *   be called again.
  * GSOCK_OUTPUT:
- *   The socket is available for writing. That is, the next write call 
+ *   The socket is available for writing. That is, the next write call
  *   won't block. This event is generated only once, when the connection is
  *   first established, and then only if a call failed with GSOCK_WOULDBLOCK,
  *   when the output buffer empties again. This means that the app should
@@ -1290,7 +1289,7 @@ GSocketError _GAddress_Init_INET(GAddress *address)
 {
   address->m_family = GSOCK_INET;
   address->m_host = kOTAnyInetAddress ;
-  
+
   return GSOCK_NOERROR;
 }
 
@@ -1311,7 +1310,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   	address->m_host = INADDR_NONE ;
     address->m_error = GSOCK_NOHOST;
     return GSOCK_NOHOST;
-  }  
+  }
   address->m_host = hinfo.addrs[0] ;
   return GSOCK_NOERROR;
 }
@@ -1333,17 +1332,17 @@ GSocketError GAddress_INET_SetHostAddress(GAddress *address,
   return GSOCK_NOERROR;
 }
 
-struct service_entry 
+struct service_entry
 {
 	char * name ;
 	unsigned short port ;
-	char * protocol ; 
+	char * protocol ;
 } ;
 typedef struct service_entry service_entry ;
 
 service_entry gServices[] =
 {
-	{ "http" , 80 , "tcp" } 
+	{ "http" , 80 , "tcp" }
 } ;
 
 GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
@@ -1386,17 +1385,17 @@ GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
   assert(address != NULL);
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
   address->m_port = port ;
- 
+
   return GSOCK_NOERROR;
 }
 
 GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t sbuf)
 {
   InetDomainName name ;
- if ( GSocket_Verify_Inited() == FALSE )
+  if ( GSocket_Verify_Inited() == FALSE )
     return GSOCK_IOERR ;
-  
-  assert(address != NULL); 
+
+  assert(address != NULL);
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
 
   OTInetAddressToName( gInetSvcRef , address->m_host , name ) ;
@@ -1406,16 +1405,16 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t
 
 unsigned long GAddress_INET_GetHostAddress(GAddress *address)
 {
-  assert(address != NULL); 
-  CHECK_ADDRESS(address, INET, 0); 
+  assert(address != NULL);
+  CHECK_ADDRESS(address, INET, 0);
 
   return address->m_host;
 }
 
 unsigned short GAddress_INET_GetPort(GAddress *address)
 {
-  assert(address != NULL); 
-  CHECK_ADDRESS(address, INET, 0); 
+  assert(address != NULL);
+  CHECK_ADDRESS(address, INET, 0);
 
   return address->m_port;
 }
@@ -1424,12 +1423,12 @@ void _GSocket_Enable_Events(GSocket *socket)
 {
   if ( socket->m_takesEvents )
   	return ;
-  
+
   {
 	  OTResult	state ;
 	  socket->m_takesEvents			= TRUE ;
 	  state = OTGetEndpointState(socket->m_endpoint);
-	  
+
 	  {
 	  	OTByteCount sz = 0 ;
 	  	OTCountDataBytes( socket->m_endpoint , &sz ) ;
@@ -1467,20 +1466,20 @@ GSocketError _GSocket_Input_Timeout(GSocket *socket)
     Microseconds(&start);
     now = start ;
     socket->m_takesEvents = FALSE ;
-    
+
     while( (now.hi * 4294967296.0 + now.lo) - (start.hi * 4294967296.0 + start.lo) < socket->m_timeout * 1000.0 )
     {
     	OTResult state ;
    		OTByteCount sz = 0 ;
  		  state = OTGetEndpointState(socket->m_endpoint);
-  
+
   		OTCountDataBytes( socket->m_endpoint , &sz ) ;
   		if ( state == T_INCON || sz > 0 )
   		{
         	socket->m_takesEvents = formerTakesEvents ;
   			return GSOCK_NOERROR;
     	}
-    	Microseconds(&now); 
+    	Microseconds(&now);
     }
     socket->m_takesEvents = formerTakesEvents ;
     socket->m_error = GSOCK_TIMEDOUT;
@@ -1502,18 +1501,18 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
     Microseconds(&start);
     now = start ;
     socket->m_takesEvents = FALSE ;
-    
+
     while( (now.hi * 4294967296.0 + now.lo) - (start.hi * 4294967296.0 + start.lo) < socket->m_timeout * 1000.0 )
     {
     	OTResult state ;
  		state = OTGetEndpointState(socket->m_endpoint);
-  
+
   		if ( state == T_DATAXFER || state == T_INREL )
  		{
         	socket->m_takesEvents = formerTakesEvents ;
   			return GSOCK_NOERROR;
     	}
-    	Microseconds(&now); 
+    	Microseconds(&now);
     }
     socket->m_takesEvents = formerTakesEvents ;
     socket->m_error = GSOCK_TIMEDOUT;
@@ -1527,7 +1526,7 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
  *   operation, there is still data available, the callback function will
  *   be called again.
  * GSOCK_OUTPUT:
- *   The socket is available for writing. That is, the next write call 
+ *   The socket is available for writing. That is, the next write call
  *   won't block. This event is generated only once, when the connection is
  *   first established, and then only if a call failed with GSOCK_WOULDBLOCK,
  *   when the output buffer empties again. This means that the app should

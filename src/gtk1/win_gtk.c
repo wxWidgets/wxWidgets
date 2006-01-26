@@ -1,5 +1,5 @@
 /* ///////////////////////////////////////////////////////////////////////////
-// Name:        win_gtk.c
+// Name:        src/gtk1/win_gtk.c
 // Purpose:     Native GTK+ widget for wxWidgets, based on GtkLayout and
 //              GtkFixed. It makes use of the gravity window property and
 //              therefore does not work with GTK 1.0.
@@ -13,7 +13,7 @@
 #define XCheckIfEvent XCHECKIFEVENT
 #endif
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/gtk1/win_gtk.h"
 #include "gtk/gtksignal.h"
 #include "gtk/gtkprivate.h"
@@ -1202,4 +1202,3 @@ gtk_pizza_main_filter (GdkXEvent *gdk_xevent,
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
