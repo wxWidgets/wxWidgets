@@ -12,8 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/setup.h"
-
 #if wxUSE_COMBOBOX
 
 #include "wx/combobox.h"
@@ -115,8 +113,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                    (XtPointer) this);
 
     wxSize best = GetBestSize();
-    if( size.x != -1 ) best.x = size.x;
-    if( size.y != -1 ) best.y = size.y;
+    if( size.x != wxDefaultCoord ) best.x = size.x;
+    if( size.y != wxDefaultCoord ) best.y = size.y;
 
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, best.x, best.y);

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/glcanvas.cpp
+// Name:        src/gtk/glcanvas.cpp
 // Purpose:     wxGLCanvas, for using OpenGL/Mesa with wxWidgets and GTK
 // Author:      Robert Roebling
 // Modified by:
@@ -11,8 +11,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/setup.h"
 
 #if wxUSE_GLCANVAS
 

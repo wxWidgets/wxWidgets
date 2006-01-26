@@ -27,7 +27,6 @@
     #include "wx/window.h"
     #include "wx/msgdlg.h"
     #include "wx/accel.h"
-    #include "wx/setup.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
     #include "wx/utils.h"

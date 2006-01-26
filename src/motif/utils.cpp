@@ -24,7 +24,6 @@
 #define XtDisplay XTDISPLAY
 #endif
 
-#include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/apptrait.h"
 #include "wx/app.h"

@@ -22,8 +22,6 @@
 
 #if wxUSE_POSTSCRIPT
 
-#include "wx/setup.h"
-
 #include "wx/dcmemory.h"
 #include "wx/utils.h"
 #include "wx/intl.h"

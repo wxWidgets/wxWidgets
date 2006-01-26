@@ -19,7 +19,6 @@
 #if wxUSE_STATUSBAR
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
 #include "wx/frame.h"
 #include "wx/settings.h"
 #include "wx/dcclient.h"

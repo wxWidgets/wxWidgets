@@ -26,7 +26,6 @@
 #define XtScreen XTSCREEN
 #endif
 
-#include "wx/setup.h"
 #include "wx/menu.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
@@ -2492,7 +2491,7 @@ void wxWindow::ChangeFont(bool keepOriginalSize)
         GetSize(& width1, & height1);
         if (keepOriginalSize && (width != width1 || height != height1))
         {
-            SetSize(-1, -1, width, height);
+            SetSize(wxDefaultCoord, wxDefaultCoord, width, height);
         }
     }
 }

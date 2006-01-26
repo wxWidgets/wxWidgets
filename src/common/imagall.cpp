@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagall.cpp
+// Name:        src/common/imagall.cpp
 // Purpose:     wxImage access all handler
 // Author:      Sylvain Bougnoux
 // RCS-ID:      $Id$
@@ -15,7 +15,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-#  include "wx/setup.h"
 #endif
 
 #include "wx/image.h"

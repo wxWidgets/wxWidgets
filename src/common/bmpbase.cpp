@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.cpp
+// Name:        src/common/bitmap.cpp
 // Purpose:     wxBitmapBase
 // Author:      VaclavSlavik
 // Created:     2001/04/11
@@ -21,7 +21,6 @@
     defined(__WXMOTIF__) || \
     defined(__WXX11__)
 
-#include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/palette.h"
 #include "wx/bitmap.h"

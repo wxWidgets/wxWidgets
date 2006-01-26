@@ -12,7 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/setup.h"
 #include "wx/accel.h"
 #include "wx/string.h"
 #include "wx/utils.h"
