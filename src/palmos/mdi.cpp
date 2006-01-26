@@ -27,7 +27,6 @@
 #if wxUSE_MDI && !defined(__WXUNIVERSAL__)
 
 #ifndef WX_PRECOMP
-    #include "wx/setup.h"
     #include "wx/frame.h"
     #include "wx/menu.h"
     #include "wx/app.h"
@@ -407,4 +406,3 @@ static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
 }
 
 #endif // wxUSE_MDI && !defined(__WXUNIVERSAL__)
-

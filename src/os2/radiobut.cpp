@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobut.cpp
+// Name:        src/os2/radiobut.cpp
 // Purpose:     wxRadioButton
 // Author:      David Webster
 // Modified by:
@@ -17,12 +17,11 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/setup.h"
-#include "wx/radiobut.h"
-#include "wx/brush.h"
-#include "wx/dcscreen.h"
-#include "wx/settings.h"
+    #include <stdio.h>
+    #include "wx/radiobut.h"
+    #include "wx/brush.h"
+    #include "wx/dcscreen.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/os2/private.h"

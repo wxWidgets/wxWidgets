@@ -22,7 +22,6 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/event.h"
-    #include "wx/setup.h"
     #include "wx/frame.h"
     #include "wx/menu.h"
     #include "wx/app.h"

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        accel.cpp
+// Name:        src/os2/accel.cpp
 // Purpose:     wxAcceleratorTable
 // Author:      David Webster
 // Modified by:
@@ -14,7 +14,6 @@
 
 #ifndef WX_PRECOMP
 #include <stdio.h>
-#include "wx/setup.h"
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/frame.h"

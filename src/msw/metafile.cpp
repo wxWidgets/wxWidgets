@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/metafile.cpp
+// Name:        src/msw/metafile.cpp
 // Purpose:     wxMetafileDC etc.
 // Author:      Julian Smart
 // Modified by: VZ 07.01.00: implemented wxMetaFileDataObject
@@ -22,10 +22,6 @@
 
 #ifdef __BORLANDC__
     #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-    #include "wx/setup.h"
 #endif
 
 #ifndef WX_PRECOMP
@@ -197,7 +193,7 @@ wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, i
     m_minY = 10000;
     m_maxX = -10000;
     m_maxY = -10000;
-    if ( !file.IsEmpty() && wxFileExists(file))
+    if ( !file.empty() && wxFileExists(file))
         wxRemoveFile(file);
     m_hDC = (WXHDC) CreateMetaFile(file);
 
@@ -521,4 +517,3 @@ bool wxMetafileDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 #endif // wxUSE_DRAG_AND_DROP
 
 #endif // wxUSE_METAFILE
-

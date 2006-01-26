@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/ole/access.cpp
+// Name:        src/msw/ole/access.cpp
 // Purpose:     implementation of wxIAccessible and wxAccessible
 // Author:      Julian Smart
 // Modified by:
@@ -23,11 +23,10 @@
 #if defined(__BORLANDC__)
   #pragma hdrstop
 #endif
-#ifndef WX_PRECOMP
-#include "wx/window.h"
-#endif
 
-#include "wx/setup.h"
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif
 
 #if wxUSE_OLE && wxUSE_ACCESSIBILITY
 
@@ -962,7 +961,7 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
     }
     else
     {
-        if (description.IsEmpty())
+        if (description.empty())
         {
             * pszDescription = NULL;
             return S_FALSE;
@@ -1019,7 +1018,7 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
     }
     else
     {
-        if (helpString.IsEmpty())
+        if (helpString.empty())
         {
             * pszHelp = NULL;
             return S_FALSE;
@@ -1124,7 +1123,7 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
     }
     else
     {
-        if (keyboardShortcut.IsEmpty())
+        if (keyboardShortcut.empty())
         {
             * pszKeyboardShortcut = NULL;
             return S_FALSE;

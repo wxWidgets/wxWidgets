@@ -1,18 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sound_sdl.cpp
+// Name:        src/unix/sound_sdl.cpp
 // Purpose:     wxSound backend using SDL
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2004/01/31
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004, Open Source Applications Foundation
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/setup.h"
 
 #if defined(__BORLANDC__)
 #pragma hdrstop
@@ -42,7 +40,7 @@ class wxSoundBackendSDLNotification : public wxEvent
 public:
     DECLARE_DYNAMIC_CLASS(wxSoundBackendSDLNotification)
     wxSoundBackendSDLNotification();
-	wxEvent *Clone() const { return new wxSoundBackendSDLNotification(*this); }
+    wxEvent *Clone() const { return new wxSoundBackendSDLNotification(*this); }
 };
 
 typedef void (wxEvtHandler::*wxSoundBackendSDLNotificationFunction)
@@ -72,11 +70,11 @@ class wxSoundBackendSDLEvtHandler;
 class wxSoundBackendSDL : public wxSoundBackend
 {
 public:
-    wxSoundBackendSDL() 
+    wxSoundBackendSDL()
         : m_initialized(false), m_playing(false), m_audioOpen(false),
           m_data(NULL), m_evtHandler(NULL) {}
     virtual ~wxSoundBackendSDL();
-    
+
     wxString GetName() const { return _T("Simple DirectMedia Layer"); }
     int GetPriority() const { return 9; }
     bool IsAvailable() const;
@@ -86,14 +84,14 @@ public:
 
     void FillAudioBuffer(Uint8 *stream, int len);
     void FinishedPlayback();
-    
+
     void Stop();
     bool IsPlaying() const { return m_playing; }
-    
+
 private:
     bool OpenAudio();
     void CloseAudio();
-    
+
     bool                        m_initialized;
     bool                        m_playing, m_audioOpen;
     // playback information:
@@ -205,19 +203,19 @@ bool wxSoundBackendSDL::OpenAudio()
     {
         if (!m_evtHandler)
             m_evtHandler = new wxSoundBackendSDLEvtHandler(this);
-        
+
         m_spec.silence = 0;
         m_spec.samples = 4096;
         m_spec.size = 0;
         m_spec.callback = wx_sdl_audio_callback;
         m_spec.userdata = (void*)this;
-                
+
         wxLogTrace(_T("sound"), _T("opening SDL audio..."));
         if (SDL_OpenAudio(&m_spec, NULL) >= 0)
         {
 #if wxUSE_LOG_DEBUG
             char driver[256];
-            SDL_AudioDriverName(driver, 256);                    
+            SDL_AudioDriverName(driver, 256);
             wxLogTrace(_T("sound"), _T("opened audio, driver '%s'"),
                        wxString(driver, wxConvLocal).c_str());
 #endif
@@ -248,7 +246,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
                              volatile wxSoundPlaybackStatus *WXUNUSED(status))
 {
     Stop();
-    
+
     int format;
     if (data->m_bitsPerSample == 8)
         format = AUDIO_U8;
@@ -271,7 +269,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
             CloseAudio();
         }
     }
-    
+
     if (needsOpen)
     {
         m_spec.format = format;
@@ -280,7 +278,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
         if (!OpenAudio())
             return false;
     }
-    
+
     SDL_LockAudio();
     wxLogTrace(_T("sound"), _T("playing new sound"));
     m_playing = true;

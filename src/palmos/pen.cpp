@@ -17,12 +17,11 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/setup.h"
-#include "wx/list.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/pen.h"
+    #include <stdio.h>
+    #include "wx/list.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/pen.h"
 #endif
 
 static int wx2msPenStyle(int wx_style);

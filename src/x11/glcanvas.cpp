@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        glcanvas.cpp
+// Name:        src/x11/glcanvas.cpp
 // Purpose:     wxGLCanvas, for using OpenGL with wxWidgets
 //              Uses the GLX extension.
 // Author:      Julian Smart and Wolfram Gloger
@@ -7,10 +7,15 @@
 // Created:     1995, 1999
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Wolfram Gloger
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#if defined(__BORLANDC__)
+#pragma hdrstop
+#endif
 
 #if wxUSE_GLCANVAS
 
@@ -46,9 +51,10 @@ static inline WXWindow wxGetClientAreaWindow(wxWindow* win)
 static int bitcount( unsigned long n )
 {
     int bits;
-    for (bits=0; n>0;) {
-	if(n & 1) bits++;
-	n = n >> 1;
+    for (bits=0; n>0;)
+    {
+        if(n & 1) bits++;
+        n = n >> 1;
     }
     return bits;
 }
@@ -60,7 +66,7 @@ static int bitcount( unsigned long n )
 
 IMPLEMENT_CLASS(wxGLContext,wxObject)
 
-wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win, 
+wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win,
                           const wxPalette& WXUNUSED(palette) )
 {
     m_window = win;
@@ -68,17 +74,17 @@ wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win,
 
     wxGLCanvas *gc = (wxGLCanvas*) win;
     XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
-    
+
     wxCHECK_RET( vi, wxT("invalid visual for OpenGL") );
-    
+
     m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi,
                                     None, GL_TRUE);
-  
+
     wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGL context") );
 }
 
-wxGLContext::wxGLContext( 
-               bool WXUNUSED(isRGB), wxWindow *win, 
+wxGLContext::wxGLContext(
+               bool WXUNUSED(isRGB), wxWindow *win,
                const wxPalette& WXUNUSED(palette),
                const wxGLContext *other        /* for sharing display lists */
 )
@@ -88,28 +94,28 @@ wxGLContext::wxGLContext(
 
     wxGLCanvas *gc = (wxGLCanvas*) win;
     XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
-    
+
     wxCHECK_RET( vi, wxT("invalid visual for OpenGL") );
-    
+
     if( other != 0 )
-        m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi, 
+        m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi,
                                         other->m_glContext, GL_TRUE );
     else
         m_glContext = glXCreateContext( (Display *)wxGetDisplay(), vi,
                                         None, GL_TRUE );
-    
+
     wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGL context") );
 }
 
 wxGLContext::~wxGLContext()
 {
     if (!m_glContext) return;
-    
+
     if (m_glContext == glXGetCurrentContext())
     {
         glXMakeCurrent( (Display*) wxGetDisplay(), None, NULL);
     }
-	
+
     glXDestroyContext( (Display*) wxGetDisplay(), m_glContext );
 }
 
@@ -124,10 +130,10 @@ void wxGLContext::SwapBuffers()
 
 void wxGLContext::SetCurrent()
 {
-    if (m_glContext) 
-    { 
+    if (m_glContext)
+    {
         Display* display = (Display*) wxGetDisplay();
-        glXMakeCurrent(display, (Window) wxGetClientAreaWindow(m_window), 
+        glXMakeCurrent(display, (Window) wxGetClientAreaWindow(m_window),
                        m_glContext );
     }
 }
@@ -191,36 +197,36 @@ END_EVENT_TABLE()
 
 
 wxGLCanvas::wxGLCanvas( wxWindow *parent, wxWindowID id,
-                        const wxPoint& pos, const wxSize& size, 
-			long style, const wxString& name,
-                        int *attribList, 
-			const wxPalette& palette )
+                        const wxPoint& pos, const wxSize& size,
+                        long style, const wxString& name,
+                        int *attribList,
+                        const wxPalette& palette )
 : wxScrolledWindow(parent, id, pos, size, style, name)
 {
     Create( parent, NULL, NULL, id, pos, size, style, name, attribList, palette );
 }
 
-wxGLCanvas::wxGLCanvas( wxWindow *parent, 
+wxGLCanvas::wxGLCanvas( wxWindow *parent,
                         const wxGLContext *shared,
                         wxWindowID id,
-                        const wxPoint& pos, const wxSize& size, 
-			long style, const wxString& name,
-                        int *attribList, 
-			const wxPalette& palette )
+                        const wxPoint& pos, const wxSize& size,
+                        long style, const wxString& name,
+                        int *attribList,
+                        const wxPalette& palette )
 : wxScrolledWindow(parent, id, pos, size, style, name)
-{			
+{
     Create( parent, shared, NULL, id, pos, size, style, name, attribList, palette );
 }
 
-wxGLCanvas::wxGLCanvas( wxWindow *parent, 
+wxGLCanvas::wxGLCanvas( wxWindow *parent,
                         const wxGLCanvas *shared,
                         wxWindowID id,
-                        const wxPoint& pos, const wxSize& size, 
-			long style, const wxString& name,
-                        int *attribList, 
-			const wxPalette& palette )
+                        const wxPoint& pos, const wxSize& size,
+                        long style, const wxString& name,
+                        int *attribList,
+                        const wxPalette& palette )
 : wxScrolledWindow(parent, id, pos, size, style, name)
-{			
+{
     Create( parent, NULL, shared, id, pos, size, style, name, attribList, palette );
 }
 
@@ -229,19 +235,19 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
 bool wxGLCanvas::Create(wxWindow *parent,
   const wxGLContext *shared, const wxGLCanvas *shared_context_of,
   wxWindowID id = -1, const wxPoint& pos,
-  const wxSize& size, long style, 
+  const wxSize& size, long style,
   const wxString& name, int *attribList, const wxPalette& palette):
     wxScrolledWindow(parent, id, pos, size, style, name)
 */
 
-bool wxGLCanvas::Create( wxWindow *parent, 
+bool wxGLCanvas::Create( wxWindow *parent,
                          const wxGLContext *shared,
                          const wxGLCanvas *shared_context_of,
                          wxWindowID id,
-                         const wxPoint& pos, const wxSize& size, 
-			 long style, const wxString& name,
-                         int *attribList, 
-			 const wxPalette& palette)
+                         const wxPoint& pos, const wxSize& size,
+                         long style, const wxString& name,
+                         int *attribList,
+                         const wxPalette& palette)
 {
     XVisualInfo *vi, vi_templ;
     XWindowAttributes xwa;
@@ -254,14 +260,15 @@ bool wxGLCanvas::Create( wxWindow *parent,
     Display* display = (Display*) wxGetDisplay();
 
     // Check for the presence of the GLX extension
-    if(!glXQueryExtension(display, NULL, NULL)) {
-	wxLogDebug(wxT("wxGLCanvas: GLX extension is missing\n"));
-	return FALSE;
+    if(!glXQueryExtension(display, NULL, NULL))
+    {
+        wxLogDebug(wxT("wxGLCanvas: GLX extension is missing\n"));
+        return false;
     }
 
     if(attribList) {
       int data[512], arg=0, p=0;
-       
+
       while( (attribList[arg]!=0) && (p<512) )
       {
         switch( attribList[arg++] )
@@ -283,9 +290,9 @@ bool wxGLCanvas::Create( wxWindow *parent,
             data[p++]=GLX_BLUE_SIZE; data[p++]=attribList[arg++]; break;
           case WX_GL_MIN_ALPHA:
             data[p++]=GLX_ALPHA_SIZE; data[p++]=attribList[arg++]; break;
-          case WX_GL_DEPTH_SIZE: 
+          case WX_GL_DEPTH_SIZE:
             data[p++]=GLX_DEPTH_SIZE; data[p++]=attribList[arg++]; break;
-          case WX_GL_STENCIL_SIZE: 
+          case WX_GL_STENCIL_SIZE:
             data[p++]=GLX_STENCIL_SIZE; data[p++]=attribList[arg++]; break;
           case WX_GL_MIN_ACCUM_RED:
             data[p++]=GLX_ACCUM_RED_SIZE; data[p++]=attribList[arg++]; break;
@@ -298,64 +305,64 @@ bool wxGLCanvas::Create( wxWindow *parent,
           default:
             break;
         }
-      }       
-      data[p] = 0; 
+      }
+      data[p] = 0;
 
       attribList = (int*) data;
       // Get an appropriate visual
       vi = glXChooseVisual(display, DefaultScreen(display), attribList);
       if(!vi) return FALSE;
-      
+
       // Here we should make sure that vi is the same visual as the
       // one used by the xwindow drawable in wxCanvas.  However,
       // there is currently no mechanism for this in wx_canvs.cc.
     } else {
-	// By default, we use the visual of xwindow
+        // By default, we use the visual of xwindow
         // NI: is this really senseful ? opengl in e.g. color index mode ?
-	XGetWindowAttributes(display, (Window)wxGetClientAreaWindow(this), &xwa);
-	vi_templ.visualid = XVisualIDFromVisual(xwa.visual);
-	vi = XGetVisualInfo(display, VisualIDMask, &vi_templ, &n);
-	if(!vi) return FALSE;
-	glXGetConfig(display, vi, GLX_USE_GL, &val);
-	if(!val) return FALSE;
-	// Basically, this is it.  It should be possible to use vi
-	// in glXCreateContext() below.  But this fails with Mesa.
-	// I notified the Mesa author about it; there may be a fix.
+      XGetWindowAttributes(display, (Window)wxGetClientAreaWindow(this), &xwa);
+      vi_templ.visualid = XVisualIDFromVisual(xwa.visual);
+      vi = XGetVisualInfo(display, VisualIDMask, &vi_templ, &n);
+      if(!vi) return FALSE;
+      glXGetConfig(display, vi, GLX_USE_GL, &val);
+      if(!val) return FALSE;
+      // Basically, this is it.  It should be possible to use vi
+      // in glXCreateContext() below.  But this fails with Mesa.
+      // I notified the Mesa author about it; there may be a fix.
 #ifdef OLD_MESA
-	// Construct an attribute list matching the visual
-	int a_list[32];
-	n = 0;
-	if(vi->c_class==TrueColor || vi->c_class==DirectColor) { // RGBA visual
-	    a_list[n++] = GLX_RGBA;
-	    a_list[n++] = GLX_RED_SIZE;
-	    a_list[n++] = bitcount(vi->red_mask);
-	    a_list[n++] = GLX_GREEN_SIZE;
-	    a_list[n++] = bitcount(vi->green_mask);
-	    a_list[n++] = GLX_BLUE_SIZE;
-	    a_list[n++] = bitcount(vi->blue_mask);
-	    glXGetConfig(display, vi, GLX_ALPHA_SIZE, &val);
-	    a_list[n++] = GLX_ALPHA_SIZE;
-	    a_list[n++] = val;
-	} else { // Color index visual
-	    glXGetConfig(display, vi, GLX_BUFFER_SIZE, &val);
-	    a_list[n++] = GLX_BUFFER_SIZE;
-	    a_list[n++] = val;
-	}
-	a_list[n] = None;
-	// XFree(vi);
-	vi = glXChooseVisual(display, DefaultScreen(display), a_list);
-	if(!vi) return FALSE;
+      // Construct an attribute list matching the visual
+      int a_list[32];
+      n = 0;
+      if(vi->c_class==TrueColor || vi->c_class==DirectColor) { // RGBA visual
+          a_list[n++] = GLX_RGBA;
+          a_list[n++] = GLX_RED_SIZE;
+          a_list[n++] = bitcount(vi->red_mask);
+          a_list[n++] = GLX_GREEN_SIZE;
+          a_list[n++] = bitcount(vi->green_mask);
+          a_list[n++] = GLX_BLUE_SIZE;
+          a_list[n++] = bitcount(vi->blue_mask);
+          glXGetConfig(display, vi, GLX_ALPHA_SIZE, &val);
+          a_list[n++] = GLX_ALPHA_SIZE;
+          a_list[n++] = val;
+      } else { // Color index visual
+          glXGetConfig(display, vi, GLX_BUFFER_SIZE, &val);
+          a_list[n++] = GLX_BUFFER_SIZE;
+          a_list[n++] = val;
+      }
+      a_list[n] = None;
+      // XFree(vi);
+      vi = glXChooseVisual(display, DefaultScreen(display), a_list);
+      if(!vi) return FALSE;
 #endif /* OLD_MESA */
     }
 
     m_vi = vi;  // safe for later use
-    
+
     wxCHECK_MSG( m_vi, FALSE, wxT("required visual couldn't be found") );
 
     // Create the GLX context and make it current
 
     wxGLContext *share= m_sharedContext;
-    if (share==NULL && m_sharedContextOf) 
+    if (share==NULL && m_sharedContextOf)
         share = m_sharedContextOf->GetContext();
 
     m_glContext = new wxGLContext( TRUE, this, wxNullPalette, share );
@@ -365,13 +372,13 @@ bool wxGLCanvas::Create( wxWindow *parent,
 #endif
     SetCurrent();
 
-    return TRUE;
+    return true;
 }
 
 wxGLCanvas::~wxGLCanvas(void)
 {
     XVisualInfo *vi = (XVisualInfo *) m_vi;
-    
+
     if (vi) XFree( vi );
     if (m_glContext) delete m_glContext;
 
@@ -402,4 +409,3 @@ void wxGLCanvas::SetColour(const wxChar *col)
 
 #endif
     // wxUSE_GLCANVAS
-

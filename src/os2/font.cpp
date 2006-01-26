@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        font.cpp
+// Name:        src/os2/font.cpp
 // Purpose:     wxFont class
 // Author:      David Webster
 // Modified by:
@@ -22,7 +22,6 @@
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
-    #include "wx/setup.h"
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
@@ -1115,7 +1114,7 @@ bool wxFont::GetUnderlined() const
 
 wxString wxFont::GetFaceName() const
 {
-    wxCHECK_MSG( Ok(), wxT(""), wxT("invalid font") );
+    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
 
     return M_FONTDATA->GetFaceName();
 } // end of wxFont::GetFaceName

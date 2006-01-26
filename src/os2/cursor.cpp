@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.cpp
+// Name:        src/os2/cursor.cpp
 // Purpose:     wxCursor class
 // Author:      David Webster
 // Modified by:
@@ -14,7 +14,6 @@
 
 #ifndef WX_PRECOMP
 #include <stdio.h>
-#include "wx/setup.h"
 #include "wx/list.h"
 #include "wx/utils.h"
 #include "wx/app.h"

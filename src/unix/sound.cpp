@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sound.cpp
+// Name:        src/unix/sound.cpp
 // Purpose:     wxSound
 // Author:      Marcel Rasche, Vaclav Slavik
 // Modified by:
@@ -11,8 +11,6 @@
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/setup.h"
 
 #if defined(__BORLANDC__)
 #pragma hdrstop

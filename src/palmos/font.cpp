@@ -25,7 +25,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/setup.h"
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
@@ -523,4 +522,3 @@ bool wxFont::IsFixedWidth() const
 {
     return false;
 }
-

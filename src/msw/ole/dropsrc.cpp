@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/ole/dropsrc.cpp
+// Name:        src/msw/ole/dropsrc.cpp
 // Purpose:     implementation of wxIDropSource and wxDropSource
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -23,11 +23,10 @@
 #if defined(__BORLANDC__)
   #pragma hdrstop
 #endif
-#ifndef WX_PRECOMP
-#include "wx/window.h"
-#endif
 
-#include "wx/setup.h"
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
 

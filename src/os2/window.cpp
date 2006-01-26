@@ -20,7 +20,6 @@
     #include <os2.h>
     #include "wx/window.h"
     #include "wx/accel.h"
-    #include "wx/setup.h"
     #include "wx/menu.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"

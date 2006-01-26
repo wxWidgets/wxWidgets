@@ -9,6 +9,13 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#if defined(__BORLANDC__)
+#pragma hdrstop
+#endif
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -17,7 +24,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/setup.h"
 #include "wx/menu.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"

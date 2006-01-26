@@ -17,7 +17,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/setup.h"
   #include "wx/frame.h"
   #include "wx/settings.h"
   #include "wx/dcclient.h"
@@ -307,7 +306,7 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
         // if other windows are size deferred
         ::SetWindowPos(GetHwnd(), NULL, x, y, width, height,
                        SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE
-#ifndef __WXWINCE__                       
+#ifndef __WXWINCE__
                        | SWP_NOCOPYBITS | SWP_NOSENDCHANGING
 #endif
                        );

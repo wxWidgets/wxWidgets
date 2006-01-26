@@ -17,10 +17,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/setup.h"
-  #include "wx/frame.h"
-  #include "wx/settings.h"
-  #include "wx/dcclient.h"
+    #include "wx/frame.h"
+    #include "wx/settings.h"
+    #include "wx/dcclient.h"
 #endif
 
 #if wxUSE_NATIVE_STATUSBAR
@@ -269,4 +268,3 @@ void wxStatusBarPalm::DoMoveWindow(int x, int y, int width, int height)
 }
 
 #endif // wxUSE_NATIVE_STATUSBAR
-

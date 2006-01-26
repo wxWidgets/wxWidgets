@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        reparent.cpp
+// Name:        src/x11/reparent.cpp
 // Purpose:     wxWindow
 // Author:      Julian Smart
 // Modified by:
@@ -9,6 +9,13 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#if defined(__BORLANDC__)
+#pragma hdrstop
+#endif
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -16,8 +23,6 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
-#include "wx/setup.h"
 
 #if !wxUSE_NANOX
 
@@ -88,7 +93,7 @@ bool wxReparenter::Reparent(wxWindow* newParent, wxAdoptedWindow* toReparent)
                      &children, &numchildren) || Xerror)
     {
         XSetErrorHandler(old);
-        return TRUE;
+        return true;
     }
 
     if (numchildren > 0)
@@ -118,7 +123,7 @@ bool wxReparenter::Reparent(wxWindow* newParent, wxAdoptedWindow* toReparent)
     }
 
     XSetErrorHandler(old);
-    return TRUE;
+    return true;
 }
 
 // Wait for an appropriate window to be created.
@@ -132,7 +137,7 @@ bool wxReparenter::WaitAndReparent(wxWindow* newParent, wxAdoptedWindow* toRepar
     sm_toReparent = toReparent;
     sm_exactMatch = exactMatch;
     sm_name = windowName;
-    
+
     Display* display = wxGlobalDisplay();
     XSelectInput(display,
         RootWindowOfScreen(DefaultScreenOfDisplay(display)),
@@ -142,10 +147,10 @@ bool wxReparenter::WaitAndReparent(wxWindow* newParent, wxAdoptedWindow* toRepar
         WM_STATE = XInternAtom(display, "WM_STATE", False);
 
 #ifdef __WXDEBUG__
-    if (!windowName.IsEmpty())
+    if (!windowName.empty())
         wxLogDebug(_T("Waiting for window %s"), windowName.c_str());
 #endif
-    
+
     sm_done = FALSE;
 
     wxEventLoop eventLoop;
@@ -169,7 +174,7 @@ bool wxReparenter::WaitAndReparent(wxWindow* newParent, wxAdoptedWindow* toRepar
 #endif
         }
     }
-    return TRUE;
+    return true;
 }
 
 bool wxReparenter::ProcessXEvent(WXEvent* event)
@@ -183,13 +188,13 @@ bool wxReparenter::ProcessXEvent(WXEvent* event)
         {
             wxLogDebug(_T("Window was mapped"));
         }
-        
+
         if (xevent->type == MapNotify && !xevent->xmap.override_redirect &&
             (client = (Window) FindAClientWindow((WXWindow) xevent->xmap.window, sm_name)))
         {
             wxLogDebug(_T("Found a client window, about to reparent"));
             wxASSERT(sm_toReparent->GetParent() == NULL);
-            
+
             sm_toReparent->SetHandle((WXWindow) client);
             sm_newParent->AddChild(sm_toReparent);
             sm_done = Reparent(sm_newParent, sm_toReparent);
@@ -202,7 +207,7 @@ bool wxReparenter::ProcessXEvent(WXEvent* event)
             sm_toReparent->SetHandle((WXWindow) xevent->xmap.window);
             sm_newParent->AddChild(sm_toReparent);
             wxASSERT(sm_toReparent->GetParent() == NULL);
-            
+
             sm_done = Reparent(sm_newParent, sm_toReparent);
             return sm_done;
         }
@@ -223,7 +228,7 @@ WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)
     Window result = 0;
     XErrorHandler old;
     char *clientName;
-    
+
     Xerror = False;
     old = XSetErrorHandler(ErrorHandler);
     rvalue = XGetWindowProperty((Display*) wxGetDisplay(),
@@ -241,26 +246,26 @@ WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)
             XFree((char *) propreturn);
         }
         XFetchName((Display*) wxGetDisplay(), (Window) window, &clientName);
-        
+
         wxString str1(name);
         wxString str2 = wxString::FromAscii(clientName);
         str1.Lower();
         str2.Lower();
-        
+
         bool matches;
         if (sm_exactMatch)
             matches = (name == wxString::FromAscii(clientName));
         else
             matches = (str1.Contains(str2) || str2.Contains(str1));
-        
+
         XFree(clientName);
-        
+
         if (matches)
             return (WXWindow) window;
         else
             return NULL;
     }
-    
+
     old = XSetErrorHandler(ErrorHandler);
     if (!XQueryTree((Display*) wxGetDisplay(), (Window) window, &returnroot, &returnparent,
         &children, &numchildren) || Xerror)
@@ -269,7 +274,7 @@ WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)
         return NULL;
     }
     XSetErrorHandler(old);
-    
+
     result = 0;
     for (i=0; i<(int)numchildren && !result ;i++) {
         result = (Window) FindAClientWindow((WXWindow) children[i], name);

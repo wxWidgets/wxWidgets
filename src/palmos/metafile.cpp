@@ -25,10 +25,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/setup.h"
-#endif
-
-#ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
 #endif
@@ -190,4 +186,3 @@ bool wxMetafileDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 #endif // wxUSE_DRAG_AND_DROP
 
 #endif // wxUSE_METAFILE
-

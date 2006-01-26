@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utils.cpp
+// Name:        src/x11/utils.cpp
 // Purpose:     Various utilities
 // Author:      Julian Smart
 // Modified by:
@@ -9,6 +9,13 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#if defined(__BORLANDC__)
+#pragma hdrstop
+#endif
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -17,7 +24,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/apptrait.h"
@@ -198,11 +204,11 @@ bool wxSetDisplay(const wxString& display_name)
 {
     gs_displayName = display_name;
 
-    if ( display_name.IsEmpty() )
+    if ( display_name.empty() )
     {
         gs_currentDisplay = NULL;
 
-        return TRUE;
+        return true;
     }
     else
     {
@@ -211,7 +217,7 @@ bool wxSetDisplay(const wxString& display_name)
         if (display)
         {
             gs_currentDisplay = (WXDisplay*) display;
-            return TRUE;
+            return true;
         }
         else
             return FALSE;
@@ -351,20 +357,20 @@ wxString wxGetXEventName(XEvent& event)
     return str;
 #else
     int type = event.xany.type;
-	    static char* event_name[] = {
-		"", "unknown(-)",                                         // 0-1
-		"KeyPress", "KeyRelease", "ButtonPress", "ButtonRelease", // 2-5
-		"MotionNotify", "EnterNotify", "LeaveNotify", "FocusIn",  // 6-9
-		"FocusOut", "KeymapNotify", "Expose", "GraphicsExpose",   // 10-13
-		"NoExpose", "VisibilityNotify", "CreateNotify",           // 14-16
-		"DestroyNotify", "UnmapNotify", "MapNotify", "MapRequest",// 17-20
-		"ReparentNotify", "ConfigureNotify", "ConfigureRequest",  // 21-23
-		"GravityNotify", "ResizeRequest", "CirculateNotify",      // 24-26
-		"CirculateRequest", "PropertyNotify", "SelectionClear",   // 27-29
-		"SelectionRequest", "SelectionNotify", "ColormapNotify",  // 30-32
-		"ClientMessage", "MappingNotify",                         // 33-34
-		"unknown(+)"};                                            // 35
-	    type = wxMin(35, type); type = wxMax(1, type);
+    static char* event_name[] = {
+        "", "unknown(-)",                                         // 0-1
+        "KeyPress", "KeyRelease", "ButtonPress", "ButtonRelease", // 2-5
+        "MotionNotify", "EnterNotify", "LeaveNotify", "FocusIn",  // 6-9
+        "FocusOut", "KeymapNotify", "Expose", "GraphicsExpose",   // 10-13
+        "NoExpose", "VisibilityNotify", "CreateNotify",           // 14-16
+        "DestroyNotify", "UnmapNotify", "MapNotify", "MapRequest",// 17-20
+        "ReparentNotify", "ConfigureNotify", "ConfigureRequest",  // 21-23
+        "GravityNotify", "ResizeRequest", "CirculateNotify",      // 24-26
+        "CirculateRequest", "PropertyNotify", "SelectionClear",   // 27-29
+        "SelectionRequest", "SelectionNotify", "ColormapNotify",  // 30-32
+        "ClientMessage", "MappingNotify",                         // 33-34
+        "unknown(+)"};                                            // 35
+        type = wxMin(35, type); type = wxMax(1, type);
         return wxString::FromAscii(event_name[type]);
 #endif
 }

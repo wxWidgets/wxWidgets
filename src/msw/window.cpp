@@ -28,7 +28,6 @@
     #include "wx/msw/wrapwin.h"
     #include "wx/window.h"
     #include "wx/accel.h"
-    #include "wx/setup.h"
     #include "wx/menu.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
@@ -941,7 +940,7 @@ void wxWindowMSW::SetScrollbar(int orient,
         // We have to set the variables here to make them valid in events
         // triggered by ::SetScrollInfo()
         *(orient == wxHORIZONTAL ? &m_xThumbSize : &m_yThumbSize) = pageSize;
-        
+
         ::SetScrollInfo(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
                         &info, refresh);
     }
@@ -1095,8 +1094,8 @@ bool wxCheckWindowWndProc(WXHWND hWnd,
 // TODO: This list of window class names should be factored out so they can be
 // managed in one place and then accessed from here and other places, such as
 // wxApp::RegisterWindowClasses() and wxApp::UnregisterWindowClasses()
-    
-#ifdef __WXWINCE__    
+
+#ifdef __WXWINCE__
     extern       wxChar *wxCanvasClassName;
     extern       wxChar *wxCanvasClassNameNR;
 #else

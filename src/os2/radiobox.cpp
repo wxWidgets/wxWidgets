@@ -14,7 +14,6 @@
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
-    #include "wx/setup.h"
     #include "wx/wxchar.h"
     #include "wx/string.h"
     #include "wx/bitmap.h"
@@ -86,7 +85,7 @@ wxRadioBox::~wxRadioBox()
             wxRemoveHandleAssociation(pWin);
 
             ::WinDestroyWindow((HWND)m_ahRadioButtons[i]);
-	}
+    }
         delete[] m_ahRadioButtons;
     }
     if (m_pnRadioWidth)
@@ -620,11 +619,9 @@ void wxRadioBox::GetSize( int* pnWidth, int* pnHeight ) const
 } // end of wxRadioBox::GetSize
 
 // Find string for position
-wxString wxRadioBox::GetString(
-  int                               nNum
-) const
+wxString wxRadioBox::GetString( int nNum ) const
 {
-    wxCHECK_MSG( IsValid(nNum), wxString(""), wxT("invalid radiobox index") );
+    wxCHECK_MSG( IsValid(nNum), wxEmptyString, wxT("invalid radiobox index") );
     return wxGetWindowText(m_ahRadioButtons[nNum]);
 } // end of wxRadioBox::GetString
 
@@ -655,8 +652,8 @@ wxSize wxRadioBox::GetTotalButtonSize( const wxSize& rSizeBtn ) const
     //
     // And also wide enough for its label
     //
-    wxString                        sStr = wxGetWindowText(GetHwnd());
-    if (!sStr.IsEmpty())
+    wxString sStr = wxGetWindowText(GetHwnd());
+    if (!sStr.empty())
     {
         GetTextExtent( sStr
                       ,&nWidthLabel

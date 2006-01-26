@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        penwin.cpp
+// Name:        src/msw/penwin.cpp
 // Purpose:     PenWindows code
 // Author:      Julian Smart
 // Modified by:
@@ -17,8 +17,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
-#include "wx/window.h"
+    #include "wx/window.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -113,4 +112,3 @@ void wxCleanUpPenWin(void)
   }
 #endif
 }
-

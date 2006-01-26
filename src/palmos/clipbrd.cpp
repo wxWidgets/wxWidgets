@@ -24,10 +24,6 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/setup.h"
-#endif
-
 #if wxUSE_CLIPBOARD
 
 #ifndef WX_PRECOMP
@@ -203,4 +199,3 @@ bool wxClipboard::GetData( wxDataObject& data )
 }
 
 #endif // wxUSE_CLIPBOARD
-

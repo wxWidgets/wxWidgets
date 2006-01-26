@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utilsexec.cpp
+// Name:        src/os2/utilsexec.cpp
 // Purpose:     Various utilities
 // Author:      David Webster
 // Modified by:
@@ -13,10 +13,9 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/intl.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/log.h"

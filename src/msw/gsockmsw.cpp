@@ -52,7 +52,6 @@
 
 #ifndef __GSOCKET_STANDALONE__
 #   include "wx/platform.h"
-#   include "wx/setup.h"
 #endif
 
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)

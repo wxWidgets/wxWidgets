@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        ole/uuid.cpp
+// Name:        src/msw/ole/uuid.cpp
 // Purpose:     implements Uuid class, see uuid.h for details
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -19,8 +19,6 @@
 #if defined(__BORLANDC__)
 #pragma hdrstop
 #endif
-
-#include  "wx/setup.h"
 
 #if wxUSE_OLE && ( wxUSE_DRAG_AND_DROP || (defined(__WXDEBUG__) && wxUSE_DATAOBJ) )
 
