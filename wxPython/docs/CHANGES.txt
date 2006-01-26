@@ -25,7 +25,7 @@ wx.EventLoop is now implemented for wxMac.
 
 
 
-2.6.2.2
+2.6.3.0
 -------
 
 Change the wx.ListCtrl InsertStringItem wrapper to use the form that
@@ -35,7 +35,11 @@ the native control doesn't use one anyway.
 
 wxMSW: wx.ListCtrl in report mode is now able to support images in
 other columns besides the first one.  Simply pass an image index to
-SetStringItem.
+SetStringItem.  For virtual list controls you can specify the image to
+use on the extra columns by overriding OnGetItemColumnImage in your
+derived class.  It is passed the item number and the column number as
+parameters, and the default version simply calls OnGetItemImage for
+column zero, or returns -1 for other columns.
 
 
 
