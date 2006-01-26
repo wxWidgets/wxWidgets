@@ -117,6 +117,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/mimetype.h
     wx/msw/mslu.h
     wx/msw/private.h
+    wx/msw/regconf.h
+    wx/msw/registry.h
     wx/msw/stackwalk.h
     wx/msw/stdpaths.h
     wx/msw/winundef.h
@@ -1568,9 +1570,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/printwin.h
     wx/msw/radiobox.h
     wx/msw/radiobut.h
-    wx/msw/regconf.h
     wx/msw/region.h
-    wx/msw/registry.h
     wx/msw/rcdefs.h
     wx/msw/scrolbar.h
     wx/msw/setup0.h
