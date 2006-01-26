@@ -165,7 +165,7 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
     #define wxPIXEL_FORMAT_ALPHA 3
 #elif defined(__WXGTK__)
     // Under GTK+ 2.X we use GdkPixbuf, which should be RGBA
-    typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
+    typedef wxPixelFormat<unsigned char, 32, 0, 1, 2> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
 #endif
