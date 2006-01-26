@@ -990,23 +990,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     if (!eat_key)
     {
         // perform keystroke handling
-        if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
-        {
-            CallNextEventHandler( (EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef(), (EventRef)wxTheApp->MacGetCurrentEvent() ) ;
-        }
-        else
-        {
-            EventRecord rec ;
-            if ( wxMacConvertEventToRecord( (EventRef) wxTheApp->MacGetCurrentEvent() , &rec ) )
-            {
-                short keycode, keychar ;
-                EventRecord *ev = &rec ;
-                keychar = short(ev->message & charCodeMask);
-                keycode = short(ev->message & keyCodeMask) >> 8 ;
-
-                m_peer->HandleKey( keycode , keychar , ev->modifiers ) ;
-            }
-        }
+        event.Skip(true) ;
     }
 
     if ( ( key >= 0x20 && key < WXK_START ) ||
