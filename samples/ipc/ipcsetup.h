@@ -12,7 +12,7 @@
 // You may set this to 0 to prevent DDE from being used even under Windows
 //#define wxUSE_DDE_FOR_IPC 0
 
-#include <wx/ipc.h>
+#include "wx/ipc.h"
 
 // the default service name
 #define IPC_SERVICE _T("4242")

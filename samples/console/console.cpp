@@ -897,8 +897,8 @@ static void TestFileNameCwd()
 
 #ifdef TEST_FILETIME
 
-#include <wx/filename.h>
-#include <wx/datetime.h>
+#include "wx/filename.h"
+#include "wx/datetime.h"
 
 static void TestFileGetTimes()
 {
@@ -1554,7 +1554,7 @@ static void TestRegExInteractive()
 
 #ifdef TEST_ODBC
 
-#include <wx/db.h>
+#include "wx/db.h"
 
 static void TestDbOpen()
 {

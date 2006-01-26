@@ -48,7 +48,7 @@
         #error wxToolBarSimple is not compiled in, set wxUSE_TOOLBAR_SIMPLE \
                to 1 in setup.h and recompile the library.
     #else
-        #include <wx/tbarsmpl.h>
+        #include "wx/tbarsmpl.h"
     #endif
 #endif // USE_GENERIC_TBAR
 

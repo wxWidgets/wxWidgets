@@ -30,7 +30,7 @@
     #include "wx/wx.h"
 #endif
 
-#include <wx/msw/ole/automtn.h>
+#include "wx/msw/ole/automtn.h"
 
 #ifndef __WXMSW__
 #error "Sorry, this sample works under Windows only."
@@ -215,4 +215,3 @@ void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
         return;
     }
 }
-

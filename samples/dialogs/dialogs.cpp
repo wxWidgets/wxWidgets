@@ -40,7 +40,7 @@
 
 #if wxUSE_PROGRESSDLG
 #if wxUSE_STOPWATCH && wxUSE_LONGLONG
-    #include <wx/datetime.h>      // wxDateTime
+    #include "wx/datetime.h"      // wxDateTime
 #endif
 
     #include "wx/progdlg.h"

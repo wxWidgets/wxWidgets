@@ -9,12 +9,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include <wx/wx.h>
-#include <wx/display.h>
+#include "wx/wx.h"
+#include "wx/display.h"
 
 class TestApp : public wxApp
 {
-	bool OnInit();
+    bool OnInit();
 };
 
 DECLARE_APP(TestApp)
@@ -22,7 +22,7 @@ IMPLEMENT_APP(TestApp)
 
 bool TestApp::OnInit()
 {
-  bool is_use_display = 
+  bool is_use_display =
                         #if wxUSE_DISPLAY
                         true
                         #else
@@ -33,22 +33,22 @@ bool TestApp::OnInit()
   {
     wxMessageBox( _T("This sample has to be compiled with wxUSE_DISPLAY"), _T("Building error"), wxOK);
   }
-  #if wxUSE_DISPLAY
+#if wxUSE_DISPLAY
   else
   {
-	size_t count = wxDisplay::GetCount();
+    size_t count = wxDisplay::GetCount();
     wxLogDebug ( _T("I detected %i display(s) on your system"), count );
-	size_t i = 0;
-	while ( i < count )
-	{
-		wxDisplay display ( i );
-		wxRect r = display.GetGeometry();
-      wxLogDebug ( _T("Display #%i \"%s\" = ( %i, %i, %i, %i ) @ %i bits"),
-			i, display.GetName().c_str(), r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight(),
-			display.GetCurrentMode().GetDepth() );
-		i++;
-	}
+    size_t i = 0;
+    while ( i < count )
+    {
+        wxDisplay display ( i );
+        wxRect r = display.GetGeometry();
+        wxLogDebug ( _T("Display #%i \"%s\" = ( %i, %i, %i, %i ) @ %i bits"),
+            i, display.GetName().c_str(), r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight(),
+            display.GetCurrentMode().GetDepth() );
+        i++;
+    }
   }
-  #endif
-	return false;
+#endif
+  return false;
 }

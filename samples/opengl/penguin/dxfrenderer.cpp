@@ -39,7 +39,7 @@
 
 #include "dxfrenderer.h"
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 WX_DEFINE_LIST(DXFEntityList)
 WX_DEFINE_LIST(DXFLayerList)
 
@@ -557,7 +557,7 @@ bool DXFRenderer::Load(wxInputStream& stream)
                         return false;
                 }
                 else if (line2 == wxT("TABLES"))
-                { 
+                {
                     if (!ParseTables(stream))
                         return false;
                 }
