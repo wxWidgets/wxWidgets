@@ -20,6 +20,7 @@ All:
 - wxFileName now also looks for TMPDIR on Unix.
 - Fixed occasional wxThread cleanup crash.
 - Fixed build error in list.h with VC++ 2005.
+- wxImage::Copy() forgot the alpha channel.
 
 All (GUI):
 
