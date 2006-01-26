@@ -22,9 +22,12 @@
 #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
-#include "wx/toplevel.h"
-#include "wx/app.h"
+#ifndef WX_PRECOMP
+    #include "wx/defs.h"
+    #include "wx/toplevel.h"
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/mgl/private.h"
 
 // ----------------------------------------------------------------------------
@@ -115,8 +118,8 @@ wxTopLevelWindowMGL::~wxTopLevelWindowMGL()
     if (wxTheApp->GetTopWindow() == this)
         wxTheApp->SetTopWindow(NULL);
 
-    if ((wxTopLevelWindows.Number() == 0) &&
-        (wxTheApp->GetExitOnFrameDelete()))
+    if (wxTopLevelWindows.IsEmpty() &&
+        wxTheApp->GetExitOnFrameDelete())
     {
         wxTheApp->ExitMainLoop();
     }

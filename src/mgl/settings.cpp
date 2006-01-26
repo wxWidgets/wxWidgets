@@ -68,6 +68,9 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
                 gs_fontDefault = new wxFont(10, wxSWISS, wxNORMAL, wxNORMAL, false, "Arial");
             return *gs_fontDefault;
         }
+        default:
+        {
+        }
     }
 
     return wxNullFont;
@@ -88,6 +91,9 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         case wxSYS_VSCROLL_X:
         case wxSYS_HSCROLL_Y:
             return 15;
+        default:
+        {
+        }
     }
 
     return -1;  // unsupported metric
@@ -101,6 +107,9 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
             return false;
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
             return false;
+        default:
+        {
+        }
     }
 
     return false;

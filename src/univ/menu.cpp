@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/menu.cpp
+// Name:        src/univ/menu.cpp
 // Purpose:     wxMenuItem, wxMenu and wxMenuBar implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_MENUS
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/control.h"      // for FindAccelIndex()
@@ -31,8 +33,6 @@
     #include "wx/accel.h"
     #include "wx/log.h"
 #endif // WX_PRECOMP
-
-#if wxUSE_MENUS
 
 #include "wx/popupwin.h"
 #include "wx/evtloop.h"
@@ -2491,7 +2491,7 @@ void wxMenuBar::OnDismiss()
 
 bool wxMenuBar::ReleaseMouseCapture()
 {
-#if __WXX11__
+#ifdef __WXX11__
     // With wxX11, when a menu is closed by clicking away from it, a control
     // under the click will still get an event, even though the menu has the
     // capture (bug?). So that control may already have taken the capture by
@@ -2607,4 +2607,3 @@ void wxWindow::DismissPopupMenu()
 }
 
 #endif // wxUSE_MENUS
-
