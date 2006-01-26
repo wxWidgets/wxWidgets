@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HELPWIN_H_
-#define _WX_HELPWIN_H_
+#ifndef _WX_HELPWND_H_
+#define _WX_HELPWND_H_
 
 #include "wx/defs.h"
 
@@ -327,3 +327,4 @@ END_DECLARE_EVENT_TYPES()
 #endif // wxUSE_WXHTML_HELP
 
 #endif
+
