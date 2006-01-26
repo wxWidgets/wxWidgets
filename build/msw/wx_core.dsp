@@ -8387,6 +8387,10 @@ SOURCE=..\..\include\wx\busyinfo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\busyinfo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\button.h
 # End Source File
 # Begin Source File

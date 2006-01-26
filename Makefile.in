@@ -467,6 +467,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/gccpriv.h \
 	wx/msw/libraries.h \
 	wx/msw/mimetype.h \
+	wx/msw/mslu.h \
 	wx/msw/private.h \
 	wx/msw/stackwalk.h \
 	wx/msw/stdpaths.h \
@@ -1542,6 +1543,7 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/gccpriv.h \
 	wx/msw/libraries.h \
 	wx/msw/mimetype.h \
+	wx/msw/mslu.h \
 	wx/msw/private.h \
 	wx/msw/stackwalk.h \
 	wx/msw/stdpaths.h \
@@ -2678,6 +2680,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/bitmap.h \
 	wx/bookctrl.h \
 	wx/busyinfo.h \
+	wx/generic/busyinfo.h \
 	wx/caret.h \
 	wx/choicebk.h \
 	wx/clipbrd.h \
