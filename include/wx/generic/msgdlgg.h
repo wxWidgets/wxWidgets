@@ -12,7 +12,7 @@
 #ifndef __MSGDLGH_G__
 #define __MSGDLGH_G__
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/dialog.h"
 
 // type is an 'or' (|) of wxOK, wxCANCEL, wxYES_NO

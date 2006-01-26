@@ -12,7 +12,7 @@
 #ifndef _WX_COLORDLG_H_
 #define _WX_COLORDLG_H_
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
 

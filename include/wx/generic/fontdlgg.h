@@ -12,7 +12,7 @@
 #ifndef _WX_GENERIC_FONTDLGG_H
 #define _WX_GENERIC_FONTDLGG_H
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/gdicmn.h"
 #include "wx/font.h"
 #include "wx/dialog.h"
@@ -90,4 +90,3 @@ WXDLLEXPORT int wxFontWeightStringToInt(wxChar *weight);
 WXDLLEXPORT int wxFontStyleStringToInt(wxChar *style);
 
 #endif // _WX_GENERIC_FONTDLGG_H
-

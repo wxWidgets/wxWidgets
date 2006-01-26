@@ -12,7 +12,7 @@
 #ifndef __COLORDLGH_G__
 #define __COLORDLGH_G__
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/gdicmn.h"
 #include "wx/dialog.h"
 #include "wx/cmndata.h"

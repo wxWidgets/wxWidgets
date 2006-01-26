@@ -12,7 +12,7 @@
 #ifndef __COLORDLG_H__
 #define __COLORDLG_H__
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/gdicmn.h"
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
@@ -44,7 +44,7 @@ protected:
     // copy data between the dialog and m_colourData:
     void ColourDataToDialog();
     void DialogToColourData();
-    
+
     wxColourData m_data;
 
     DECLARE_DYNAMIC_CLASS(wxColourDialog)

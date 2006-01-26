@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/msgdlg.h
+// Name:        wx/gtk1/msgdlg.h
 // Purpose:     wxMessageDialog for GTK+2
 // Author:      Vaclav Slavik
 // Modified by:
@@ -12,7 +12,7 @@
 #ifndef __MSGDLG_H__
 #define __MSGDLG_H__
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/dialog.h"
 
 // type is an 'or' (|) of wxOK, wxCANCEL, wxYES_NO
