@@ -1082,8 +1082,14 @@ public:
     virtual void ReservedWindowFunc6() {}
     virtual void ReservedWindowFunc7() {}
     virtual void ReservedWindowFunc8() {}
-    virtual void ReservedWindowFunc9() {}
 
+    // This takes the place of ReservedWindowFunc9 in order to not change the
+    // binary layout of the vtable for wxListCtrl in the stable 2.6 series.
+    // This function is only used in wxListCtrl.
+    virtual int OnGetItemColumnImage(long WXUNUSED(item), long WXUNUSED(column)) const
+        { return -1; }
+
+    
 protected:
     // event handling specific to wxWindow
     virtual bool TryValidator(wxEvent& event);

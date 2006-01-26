@@ -2296,9 +2296,9 @@ void wxListMainWindow::CacheLineData(size_t line)
     for ( size_t col = 0; col < countCol; col++ )
     {
         ld->SetText(col, listctrl->OnGetItemText(line, col));
+        ld->SetImage(listctrl->OnGetItemColumnImage(line, col));
     }
 
-    ld->SetImage(listctrl->OnGetItemImage(line));
     ld->SetAttr(listctrl->OnGetItemAttr(line));
 }
 
@@ -5591,7 +5591,15 @@ int wxGenericListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
     wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
                 -1,
-                wxT("List control has an image list, OnGetItemImage should be overridden."));
+                wxT("List control has an image list, OnGetItemImage or OnGetItemColumnImage should be overridden."));
+    return -1;
+}
+
+int wxGenericListCtrl::OnGetItemColumnImage(long item, long column) const
+{
+    if (!column)
+        return OnGetItemImage(item);
+
     return -1;
 }
 

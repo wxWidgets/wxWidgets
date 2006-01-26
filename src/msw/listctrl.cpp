@@ -2251,7 +2251,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #ifdef NM_CUSTOMDRAW
                     if ( lvi.mask & LVIF_IMAGE )
                     {
-                        lvi.iImage = OnGetItemImage(item);
+                        lvi.iImage = OnGetItemColumnImage(item, lvi.iSubItem);
                     }
 #endif // NM_CUSTOMDRAW
 
@@ -2517,7 +2517,15 @@ int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
     wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
                 -1,
-                wxT("List control has an image list, OnGetItemImage should be overridden."));
+                wxT("List control has an image list, OnGetItemImage or OnGetItemColumnImage should be overridden."));
+    return -1;
+}
+
+int wxListCtrl::OnGetItemColumnImage(long item, long column) const
+{
+    if (!column)
+        return OnGetItemImage(item);
+
     return -1;
 }
 
