@@ -1469,7 +1469,7 @@ wxChar *RegisterSetting(const wxString& settingName, const wxString& settingValu
     else
     {
         wxChar buf[200];
-        wxSnprintf(buf, sizeof(buf), _T("Initialisation file error: unrecognised setting %s."), settingName);
+        wxSnprintf(buf, sizeof(buf), _T("Initialisation file error: unrecognised setting %s."), settingName.c_str());
         if (interactive)
             OnInform(buf);
         wxStrcpy(errorCode, buf);
@@ -1549,7 +1549,7 @@ bool ReadCustomMacros(const wxString& filename)
 
     }
     wxChar mbuf[200];
-    wxSnprintf(mbuf, sizeof(mbuf), _T("Read initialization file %s."), filename);
+    wxSnprintf(mbuf, sizeof(mbuf), _T("Read initialization file %s."), filename.c_str());
     OnInform(mbuf);
     return true;
 }
