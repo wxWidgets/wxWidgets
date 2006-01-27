@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/app.h"
 
 #include <Carbon/Carbon.h>
 
