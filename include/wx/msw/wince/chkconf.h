@@ -40,10 +40,6 @@
 #undef wxUSE_ON_FATAL_EXCEPTION
 #define wxUSE_ON_FATAL_EXCEPTION 0
 
-// media stuff not supported under CE
-#undef wxUSE_MEDIACTRL
-#define wxUSE_MEDIACTRL 0
-
 #undef wxUSE_WXHTML_HELP
 #define wxUSE_WXHTML_HELP 0
 
