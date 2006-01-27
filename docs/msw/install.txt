@@ -115,9 +115,9 @@ informal and more detailed description of the process summarized below.
 
 Please note that the VC++ 6.0 project files will work for VC++ .NET also.
 
-Also note that you can make the project files work with VC++ 5.0 but you'll
-need to edit .dsp file by hand before this is possible (change the version in
-the .dsp file header from 6.0 to 5.0).
+VC++ 5.0 can also be used, providing Service Pack 3 is applied. Without it
+you will have trouble with internal compiler errors. It is available for
+download at: ftp://ftp.microsoft.com/developr/visualstudio/sp3/full.
 
 Using project files (VC++ 6 and later):
 
