@@ -36,7 +36,7 @@
 
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
-#include "wx/stopwatch.h"
+#include "wx/datetime.h"
 
 // DLL options compatibility check:
 #include "wx/build.h"
@@ -694,10 +694,6 @@ bool wxSocketBase::_Wait(long seconds,
   else
     timeout = m_timeout * 1000;
 
-#if !defined(wxUSE_GUI) || !wxUSE_GUI
-  m_socket->SetTimeout(timeout);
-#endif
-
   // Wait in an active polling loop.
   //
   // NOTE: We duplicate some of the code in OnRequest, but this doesn't
@@ -708,8 +704,19 @@ bool wxSocketBase::_Wait(long seconds,
   // Do this at least once (important if timeout == 0, when
   // we are just polling). Also, if just polling, do not yield.
 
-  wxStopWatch chrono;
+  wxDateTime current_time = wxDateTime::UNow();
+  unsigned int time_limit = (current_time.GetTicks() * 1000) + current_time.GetMillisecond() + timeout;
   bool done = false;
+  bool valid_result = false;
+
+#if !defined(wxUSE_GUI) || !wxUSE_GUI
+    // This is used to avoid a busy loop on wxBase - having a select
+    // timeout of 50 ms per iteration should be enough.
+    if (timeout > 50)
+      m_socket->SetTimeout(50);
+    else
+      m_socket->SetTimeout(timeout);
+#endif 
 
   while (!done)
   {
@@ -720,13 +727,15 @@ bool wxSocketBase::_Wait(long seconds,
     {
       m_connected = true;
       m_establishing = false;
-      return true;
+      valid_result = true;
+      break;
     }
 
     // Data available or output buffer ready
     if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
     {
-      return true;
+      valid_result = true;
+      break;
     }
 
     // Connection lost
@@ -734,17 +743,33 @@ bool wxSocketBase::_Wait(long seconds,
     {
       m_connected = false;
       m_establishing = false;
-      return (flags & GSOCK_LOST_FLAG) != 0;
+      valid_result = ((flags & GSOCK_LOST_FLAG) != 0);
+      break;
     }
 
     // Wait more?
-    if ((!timeout) || (chrono.Time() > timeout) || (m_interrupt))
+    current_time = wxDateTime::UNow();
+    int time_left = time_limit - ((current_time.GetTicks() * 1000) + current_time.GetMillisecond());
+    if ((!timeout) || (time_left <= 0) || (m_interrupt))
       done = true;
     else
-      PROCESS_EVENTS();
+    {
+#if !defined(wxUSE_GUI) || !wxUSE_GUI
+        // If there's less than 50 ms left, just call select with that timeout.
+        if (time_left < 50)
+          m_socket->SetTimeout(time_left);
+#else
+        PROCESS_EVENTS();
+#endif
+     }
   }
 
-  return false;
+  // Set timeout back to original value (we overwrote it for polling)
+#if !defined(wxUSE_GUI) || !wxUSE_GUI
+  m_socket->SetTimeout(m_timeout*1000);
+#endif
+
+  return valid_result;
 }
 
 bool wxSocketBase::Wait(long seconds, long milliseconds)
