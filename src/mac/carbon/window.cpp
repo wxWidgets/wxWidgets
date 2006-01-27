@@ -559,24 +559,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
                 GetEventParameter( rawEvent, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
                 
                 UInt32 message = (keyCode << 8) + charCode;
-                // this is only called when no default handler has jumped in, e.g. a wxControl on a floater window does not
-                // get its own kEventTextInputUnicodeForKeyEvent, so we reroute the event back to the control
-                
-                // NOTE to Stefan: Is this still needed? Shouldn't we be calling SendToEventTarget rather than
-                // HandleControlKey? (which, IIRC, is not Unicode friendly?) TODO :: MEMORY LEAK IN uniChar etc.
-                /*
-                wxControl* control = wxDynamicCast( focus , wxControl ) ;
-                if ( control )
-                {
-                    ControlRef macControl = (ControlRef) control->GetHandle() ;
-                    if ( macControl )
-                    {
-                        ::HandleControlKey( macControl , keyCode , charCode , modifiers ) ;
-                        result = noErr ;
-                    }
-                }
-                */
-                
+
                 // An IME input event may return several characters, but we need to send one char at a time to
                 // EVT_CHAR
                 for (int pos=0 ; pos < numChars ; pos++)
