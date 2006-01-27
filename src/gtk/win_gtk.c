@@ -13,7 +13,7 @@
 #define XCheckIfEvent XCHECKIFEVENT
 #endif
 
-#include "wx/defs.h"
+#include "wx/platform.h"
 #include "wx/gtk/win_gtk.h"
 #include "gtk/gtksignal.h"
 #include "gtk/gtkprivate.h"
