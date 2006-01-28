@@ -543,6 +543,8 @@
 #if defined (__WXMAC__)
 #    if ( !defined(__MACH__) || ( defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ ) )
 #        define WORDS_BIGENDIAN 1
+#    else
+#        undef WORDS_BIGENDIAN
 #    endif
 #endif
 
