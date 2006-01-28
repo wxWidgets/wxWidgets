@@ -621,9 +621,10 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     SInt32 endSel;
 
     err = ICStart(&inst, 'STKA'); // put your app creator code here
-    if (err == noErr) {
+    if (err == noErr)
+    {
 #if !TARGET_CARBON
-        err = ICFindConfigFile(inst, 0, nil);
+        err = ICFindConfigFile(inst, 0, NULL);
 #endif
         if (err == noErr)
         {
@@ -644,31 +645,34 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     }
 #elif wxUSE_MIMETYPE
     // Non-windows way
-    wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension (_T("html"));
+    bool ok = false;
+    wxString cmd;
+
+    wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(_T("html"));
     if ( ft )
     {
         wxString mt;
         ft->GetMimeType(&mt);
 
-        wxString cmd;
-        bool ok = ft->GetOpenCommand(&cmd, wxFileType::MessageParameters(url));
+        ok = ft->GetOpenCommand(&cmd, wxFileType::MessageParameters(url));
         delete ft;
-
-        if ( !ok || cmd.empty() )
-        {
-            // fallback to checking for the BROWSER environment variable
-            cmd = wxGetenv(wxT("BROWSER"));
-            if ( !cmd.empty() )
-                cmd << _T(' ') << url;
-        }
-
-        if ( !cmd.empty() && wxExecute(cmd) )
-            return true;
     }
-    else // no file type for html extension
+
+    if ( !ok || cmd.empty() )
     {
-        wxLogError(_T("No default application configured for HTML files."));
+        // fallback to checking for the BROWSER environment variable
+        cmd = wxGetenv(wxT("BROWSER"));
+        if ( !cmd.empty() )
+            cmd << _T(' ') << url;
     }
+
+    ok = ( !cmd.empty() && wxExecute(cmd) );
+    if (ok)
+        return ok;
+
+    // no file type for HTML extension
+    wxLogError(_T("No default application configured for HTML files."));
+
 #endif // !wxUSE_MIMETYPE && !__WXMSW__
 
     wxLogSysError(_T("Failed to open URL \"%s\" in default browser."),
