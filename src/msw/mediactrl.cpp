@@ -1470,14 +1470,14 @@ public:
 #ifdef __WXWINCE__
     IWMP* m_pWMP;
 
-    IWMP* GetMP() {return m_pWMP;}
-    IWMP* GetAM() {return m_pWMP;}
+    IWMP* GetMP() { return m_pWMP; }
+    IWMP* GetAM() { return m_pWMP; }
 #else
     IActiveMovie* m_pAM;
     IMediaPlayer* m_pMP;
 
-    IMediaPlayer* GetMP() {return m_pMP;}
-    IActiveMovie* GetAM() {return m_pAM;}
+    IMediaPlayer* GetMP() { return m_pMP; }
+    IActiveMovie* GetAM() { return m_pAM; }
 #endif
     wxTimer* m_pTimer;
     wxSize m_bestSize;
@@ -1912,7 +1912,7 @@ public:
     static void PPRMProc (Movie theMovie, OSErr theErr, void* theRefCon);
 
     // TODO: Last param actually long - does this work on 64bit machines?
-    static Boolean MCFilterProc (MovieController theController,
+    static Boolean MCFilterProc(MovieController theController,
         short action, void *params, LONG_PTR refCon);
 
     static LRESULT CALLBACK QTWndProc(HWND, UINT, WPARAM, LPARAM);
@@ -2085,11 +2085,10 @@ public:
 
     void Notify()
     {
-       // NB:  Stop events could get triggered by the interface
-       // if ShowPlayerControls is enabled,
-       // so we need this hack here to make an attempt
-       // at it not getting sent - but its far from ideal -
-       // they can still get sent in some cases
+       // NB: Stop events could get triggered by the interface
+       // if ShowPlayerControls is enabled, so the "GetPosition == GetDuration"
+       // hack is needed here to make an attempt at it not getting sent
+       // - but its far from ideal - they can still get sent in some cases
         if (m_parent->GetState() == wxMEDIASTATE_STOPPED &&
             m_parent->GetPosition() == m_parent->GetDuration())
         {
@@ -2319,12 +2318,12 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     {
         GetMP()->put_DisplaySize(mpFitToSize);
 
-#ifndef __WXWINCE__ //Not in CE's IWMP
+#ifndef __WXWINCE__ // Not in CE's IWMP
         // TODO: Unsure what actual effect this has
         GetMP()->put_WindowlessVideo(VARIANT_TRUE);
 #endif
     }
-#ifndef __WXWINCE__ //Not in CE's IWMP
+#ifndef __WXWINCE__ // Not in CE's IWMP
     else
         GetAM()->put_MovieWindowSize(amvDoubleOriginalSize);
 #endif
@@ -2438,7 +2437,7 @@ bool wxAMMediaBackend::DoLoad(const wxString& location)
 //---------------------------------------------------------------------------
 void wxAMMediaBackend::FinishLoad()
 {
-    //Get the original video size
+    // Get the original video size
     GetAM()->get_ImageSourceWidth((long*)&m_bestSize.x);
     GetAM()->get_ImageSourceHeight((long*)&m_bestSize.y);
 
@@ -2563,8 +2562,7 @@ bool wxAMMediaBackend::Stop()
 bool wxAMMediaBackend::SetPosition(wxLongLong where)
 {
     HRESULT hr = GetAM()->put_CurrentPosition(
-                        ((LONGLONG)where.GetValue()) / 1000.0
-                                     );
+                        ((LONGLONG)where.GetValue()) / 1000.0 );
     if (FAILED(hr))
     {
         wxAMLOG(hr);
@@ -4014,14 +4012,14 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
                                 //                        mcScaleMovieToFit |
                                 //                        mcWithBadge |
                                                         mcWithFrame);
-            m_lib.MCDoAction(m_pMC, 32, (void*)true); //mcActionSetKeysEnabled
+            m_lib.MCDoAction(m_pMC, 32, (void*)true); // mcActionSetKeysEnabled
             m_lib.MCSetActionFilterWithRefCon(m_pMC,
                 (WXFARPROC)wxQTMediaBackend::MCFilterProc, (void*)this);
             m_bestSize.y += 16; // movie controller height
 
             // By default the movie controller uses its own colour palette
             // for the movie which can be bad on some files, so turn it off.
-            // Also turn off its frame/border for the movie
+            // Also turn off its frame / border for the movie
             // Also take care of a couple of the interface flags here
             long mcFlags = 0;
             m_lib.MCDoAction(m_pMC, 39/*mcActionGetFlags*/, (void*)&mcFlags);
@@ -4061,10 +4059,18 @@ Boolean wxQTMediaBackend::MCFilterProc(MovieController WXUNUSED(theController),
                                void * WXUNUSED(params),
                                LONG_PTR refCon)
 {
+// NB: potential optimisation
+//    if (action == 1)
+//        return 0;
+
     wxQTMediaBackend* pThis = (wxQTMediaBackend*)refCon;
 
     switch (action)
     {
+    case 1:
+        // don't process idle events
+        break;
+
     case 8:
         // play button triggered - MC will set movie to opposite state
         // of current - playing ? paused : playing
@@ -4076,10 +4082,6 @@ Boolean wxQTMediaBackend::MCFilterProc(MovieController WXUNUSED(theController),
         // the button will not change its state until you move
         // mcActionDraw and Refresh/Update combo do nothing
         // to help this unfortunately
-        break;
-
-    case 1:
-        // don't process idle events
         break;
 
     default:
