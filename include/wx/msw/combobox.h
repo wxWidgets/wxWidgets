@@ -91,7 +91,7 @@ public:
     virtual wxTextPos GetLastPosition() const;
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
-    virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
+    virtual void SetSelection(int n);
     virtual void SetSelection(long from, long to);
     virtual int GetSelection() const;
     virtual void GetSelection(long* from, long* to) const;
