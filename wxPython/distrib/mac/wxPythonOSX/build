@@ -35,6 +35,9 @@ function usage {
     echo "   skiptar        Don't unpack the tarball"
     echo "   inplace        Don't use the tarball, build from the CVS tree instead"
     echo "                  (The Docs and Demo tarballs are still required for a full build.)"
+    echo "   reswig         Regenerate SWIG wrappers"
+    echo "   universal      Generate Universal wxWidgets binary (requires Universal Python "
+    echo "                  to general Universal wxPython)."
     echo "   unicode        Make a unicode build"
     echo "   skipconfig     Don't run configure"
     echo "   skipbuild      Don't build wxWidgets or wxPython"
@@ -76,6 +79,8 @@ skipdmg=no
 skipclean=no
 inplace=no
 unicode=no
+reswig=no
+universal=no
 
 for flag in $*; do
     case ${flag} in
@@ -83,11 +88,12 @@ for flag in $*; do
 	skipconfig)  skipconfig=yes; skiptar=yes                ;;
 	skipbuild)   skipbuild=yes; skipconfig=yes; skiptar=yes ;;
 	skipinstall) skipinstall=yes                            ;;
-        skipdmg)     skipdmg=yes                                ;;
+    skipdmg)     skipdmg=yes                                ;;
 	skipclean)   skipclean=yes                              ;;
 	inplace)     inplace=yes; skiptar=yes                   ;;
 	unicode)     unicode=yes                                ;;
-
+	reswig)      reswig=yes                                 ;;
+	universal)   universal=yes                              ;;
 	*)  echo "Unknown flag \"${flag}\""
 	    usage
 	    exit 1
@@ -152,6 +158,7 @@ fi
 PREFIX=/usr/local/lib/wxPython-$CHARTYPE-$VERSION
 BINPREFIX=/usr/local/bin
 
+SWIGBIN=/opt/swig/bin/swig
 WXROOT=`dirname $PWD`
 PROGDIR="`dirname \"$0\"`"
 TMPDIR=$PWD/_build_dmg
@@ -226,6 +233,10 @@ if [ $KIND = panther ]; then
     OTHER_CFG_OPTS=--enable-mediactrl
 fi
 
+UNIVOPT=
+if [ $universal = yes ]; then
+    UNIVOPT=--enable-universal_binary
+fi
 # Configure wxWidgets
 if [ $skipconfig != yes ]; then
     $WXDIR/configure \
@@ -240,7 +251,8 @@ if [ $skipconfig != yes ]; then
 	--enable-precomp=no \
 	--enable-optimise \
 	--disable-debugreport \
-	$UNICODEOPT $OTHER_CFG_OPTS
+	--disable-precompiled-headers \
+	$UNICODEOPT $UNIVOPT $OTHER_CFG_OPTS
 
 fi
 
@@ -265,6 +277,11 @@ if [ $skipbuild != yes ]; then
     make $MAKEJOBS -C contrib/src/gizmos
     make $MAKEJOBS -C contrib/src/stc
 
+SWIGIT=0
+if [ $reswig = yes ]; then
+    SWIGIT=1
+fi
+
     # Build wxPython
     cd $WXROOT/wxPython
     $PYTHON setup.py \
@@ -273,6 +290,8 @@ if [ $skipbuild != yes ]; then
 	EP_ADD_OPTS=1 \
 	WX_CONFIG="$WXBLD/wx-config --inplace" \
 	BUILD_BASE=$WXBLD/wxPython \
+	SWIG=$SWIGBIN \
+	USE_SWIG=$SWIGIT \
 	build
 fi
 
