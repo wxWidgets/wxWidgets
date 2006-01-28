@@ -1665,15 +1665,19 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     long menuResult = ::PopUpMenuSelect((MenuHandle) menu->GetHMenu() , y, x, 0) ;
     if ( HiWord(menuResult) != 0 )
     {
-        MenuCommand id ;
-        GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &id ) ;
-        wxMenuItem* item = NULL ;
+        MenuCommand macid;
+        GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &macid );
+        int id = wxMacCommandToId( macid ); 
+        wxMenuItem* item = NULL ; 
         wxMenu* realmenu ;
         item = menu->FindItem( id, &realmenu ) ;
-        if (item->IsCheckable())
-            item->Check( !item->IsChecked() ) ;
+        if ( item )
+        {
+            if (item->IsCheckable())
+                item->Check( !item->IsChecked() ) ;
 
-        menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
+            menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
+        }
     }
 
     menu->MacAfterDisplay( true ) ;
