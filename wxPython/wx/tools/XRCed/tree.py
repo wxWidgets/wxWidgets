@@ -441,7 +441,7 @@ class XML_Tree(wxTreeCtrl):
         EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemExpandedCollapsed)
 
         self.selection = None
-	self.selectionChanging = False
+        self.selectionChanging = False
         self.needUpdate = False
         self.pendingHighLight = None
         self.ctrl = self.shift = False
@@ -683,10 +683,10 @@ class XML_Tree(wxTreeCtrl):
 
     def OnSelChanged(self, evt):
         if self.selectionChanging: return
-	self.selectionChanging = True
+        self.selectionChanging = True
         self.UnselectAll()
         self.SelectItem(evt.GetItem())
-	self.selectionChanging = False
+        self.selectionChanging = False
 
     def ChangeSelection(self, item):
         # Apply changes

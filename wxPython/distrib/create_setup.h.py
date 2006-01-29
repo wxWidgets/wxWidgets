@@ -3,26 +3,26 @@ import sys, os, string, shutil, re
 #TODO: copy .make files to build/msw
 
 # update setup_h defines to match official wxPython settings
-defines = {	
-	'wxDIALOG_UNIT_COMPATIBILITY'	:'0',
-	'wxUSE_DEBUG_CONTEXT'			:'0',
-	'wxUSE_MEMORY_TRACING'          :'0',
-	'wxUSE_DIALUP_MANAGER'          :'0',
-	'wxUSE_GLCANVAS'                :'1',
-	'wxUSE_POSTSCRIPT'              :'1',
-	'wxUSE_AFM_FOR_POSTSCRIPT'      :'0',
-	'wxUSE_DISPLAY'                 :'1',
-	'wxUSE_DEBUGREPORT'             :'0'
-	}
+defines = {
+ 'wxDIALOG_UNIT_COMPATIBILITY' :'0',
+ 'wxUSE_DEBUG_CONTEXT'   :'0',
+ 'wxUSE_MEMORY_TRACING'          :'0',
+ 'wxUSE_DIALUP_MANAGER'          :'0',
+ 'wxUSE_GLCANVAS'                :'1',
+ 'wxUSE_POSTSCRIPT'              :'1',
+ 'wxUSE_AFM_FOR_POSTSCRIPT'      :'0',
+ 'wxUSE_DISPLAY'                 :'1',
+ 'wxUSE_DEBUGREPORT'             :'0'
+}
 
 uni_defines = {
-	'wxUSE_UNICODE'                 :'1',
-	'wxUSE_UNICODE_MSLU'            :'1'
+ 'wxUSE_UNICODE'                 :'1',
+ 'wxUSE_UNICODE_MSLU'            :'1'
 }
 
 debug_defines = {
-	'wxUSE_DEBUG_CONTEXT'			:'1',
-	'wxUSE_MEMORY_TRACING'          :'1',
+ 'wxUSE_DEBUG_CONTEXT'   :'1',
+ 'wxUSE_MEMORY_TRACING'          :'1',
 }
 
 if "UNICODE=1" in sys.argv:

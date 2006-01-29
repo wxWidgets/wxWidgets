@@ -621,7 +621,7 @@ def main():
     ISSFILE         = "__wxPython.iss"
     ISSDEMOFILE     = "__wxPythonDemo.iss"
     IFSFILE         = "__wxPython.ifs"
-    IFSFILEREF		= "CodeFile = " + IFSFILE
+    IFSFILEREF    = "CodeFile = " + IFSFILE
     IFSFILEREF = ""
     UNINSTALL_BATCH = get_batch_files()
     PKGDIR          = open('src/wx.pth').read()

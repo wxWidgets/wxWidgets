@@ -155,12 +155,12 @@ WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
 
 SYS_WX_CONFIG = None # When installing an in tree build, setup.py uses wx-config
                      # for two different purposes.  First, to determine the prefix
-		     # where files will be installed, and secondly, to initialise
-		     # build_options.py with the correct options for it.
-		     # WX_CONFIG is used for the first task.  SYS_WX_CONFIG may
-		     # be set independently, to the value that should appear in
-		     # build_options.py, if it is different to that.  The default
-		     # is to use the value of WX_CONFIG.
+                     # where files will be installed, and secondly, to initialise
+                     # build_options.py with the correct options for it.
+                     # WX_CONFIG is used for the first task.  SYS_WX_CONFIG may
+                     # be set independently, to the value that should appear in
+                     # build_options.py, if it is different to that.  The default
+                     # is to use the value of WX_CONFIG.
 
 WXPORT = 'gtk2'    # On Linux/Unix there are several ports of wxWidgets available.
                    # Setting this value lets you select which will be used for
