@@ -43,9 +43,9 @@
 //---------------------------------------------------------------------------
 // WX Includes
 //---------------------------------------------------------------------------
-#include "wx/log.h"         //wxLogDebug
-#include "wx/math.h"        //log10 & pow
-#include "wx/msw/private.h" //user info and wndproc setting/getting
+#include "wx/log.h"         // wxLogDebug
+#include "wx/math.h"        // log10 & pow
+#include "wx/msw/private.h" // user info and wndproc setting/getting
 #include "wx/dcclient.h"
 #include "wx/timer.h"
 #include "wx/dynlib.h"
@@ -64,22 +64,20 @@ LRESULT WXDLLIMPEXP_CORE APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
 
 //===========================================================================
-//  BACKEND DECLARATIONS
+// BACKEND DECLARATIONS
 //===========================================================================
 
 //---------------------------------------------------------------------------
-//
-//  wxAMMediaBackend
-//
+// wxAMMediaBackend
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
-//  wxActiveXContainer - includes all the COM-specific stuff we need
+// wxActiveXContainer - includes all the COM-specific stuff we need
 //---------------------------------------------------------------------------
 #include "wx/msw/ole/activex.h"
 
 //---------------------------------------------------------------------------
-//  IIDS - used by CoCreateInstance and IUnknown::QueryInterface
+// IIDS - used by CoCreateInstance and IUnknown::QueryInterface
 //
 //  [idl name]          [idl decription]
 //  amcompat.idl        Microsoft Active Movie Control (Ver 2.0)
@@ -87,25 +85,25 @@ LRESULT WXDLLIMPEXP_CORE APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
 //  msdxm.idl           Windows Media Player (Ver 1.0)
 //  quartz.idl
 //
-//  First, when I say I "from XXX.idl", I mean I go into the COM Browser
-//  ($Microsoft Visual Studio$/Common/Tools/OLEVIEW.EXE), open
-//  "type libraries", open a specific type library (for quartz for example its
-//  "ActiveMovie control type library (V1.0)"), save it as an .idl, compile the
-//  idl using the midl compiler that comes with visual studio
-//  ($Microsoft Visual Studio$/VC98/bin/midl.exe on VC6) with the /h argument
-//  to make it generate stubs (a .h & .c file), then clean up the generated
-//  interfaces I want with the STDMETHOD wrappers and then put them into
-//  mediactrl.cpp.
+// First, when I say I "from XXX.idl", I mean I go into the COM Browser
+// ($Microsoft Visual Studio$/Common/Tools/OLEVIEW.EXE), open
+// "type libraries", open a specific type library (for quartz for example its
+// "ActiveMovie control type library (V1.0)"), save it as an .idl, compile the
+// idl using the midl compiler that comes with visual studio
+// ($Microsoft Visual Studio$/VC98/bin/midl.exe on VC6) with the /h argument
+// to make it generate stubs (a .h & .c file), then clean up the generated
+// interfaces I want with the STDMETHOD wrappers and then put them into
+// mediactrl.cpp.
 //
-//  According to the MSDN docs, IMediaPlayer requires Windows 98 SE
-//  or greater.  NetShow is available on Windows 3.1 and I'm guessing
-//  IActiveMovie is too.  IMediaPlayer is essentially the Windows Media
-//  Player 6.4 SDK.
+// According to the MSDN docs, IMediaPlayer requires Windows 98 SE
+// or greater. NetShow is available on Windows 3.1 and I'm guessing
+// IActiveMovie is too. IMediaPlayer is essentially the Windows Media
+// Player 6.4 SDK.
 //
-//  IWMP is from PlayerOCX.idl on PocketPC 2000, which uses CLSID_MediaPlayer
-//  as well as the main windows line.
+// IWMP is from PlayerOCX.idl on PocketPC 2000, which uses CLSID_MediaPlayer
+// as well as the main windows line.
 //
-//  Some of these are not used but are kept here for future reference anyway
+// Some of these are not used but are kept here for future reference anyway
 //---------------------------------------------------------------------------
 const IID IID_IActiveMovie          = {0x05589FA2,0xC356,0x11CE,{0xBF,0x01,0x00,0xAA,0x00,0x55,0x59,0x5A}};
 const IID IID_IActiveMovie2         = {0xB6CD6554,0xE9CB,0x11D0,{0x82,0x1F,0x00,0xA0,0xC9,0x1F,0x9C,0xA0}};
@@ -159,7 +157,7 @@ struct IMediaEvent : public IDispatch
 };
 
 //---------------------------------------------------------------------------
-//  ACTIVEMOVIE COM INTERFACES (dumped from amcompat.idl from MSVC COM Browser)
+// ACTIVEMOVIE COM INTERFACES (dumped from amcompat.idl from MSVC COM Browser)
 //---------------------------------------------------------------------------
 
 enum ReadyStateConstants
@@ -749,556 +747,555 @@ struct INSPlay1 : public INSPlay
 struct IWMP : public IDispatch
 {
 public:
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AutoSize( 
+    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AutoSize(
         /* [in] */ VARIANT_BOOL vbool) = 0;
-    
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoSize( 
+
+    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoSize(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
-    
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BorderStyle( 
+
+    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BorderStyle(
         /* [in] */ long style) = 0;
-    
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BorderStyle( 
+
+    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BorderStyle(
         /* [retval][out] */ long __RPC_FAR *pstyle) = 0;
-    
-    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Enabled( 
+
+    virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Enabled(
         /* [in] */ VARIANT_BOOL vbool) = 0;
-    
-    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Enabled( 
+
+    virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Enabled(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbool) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileName( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileName(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FileName( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FileName(
         /* [in] */ BSTR newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Volume( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Volume(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Volume( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Volume(
         /* [in] */ long newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Mute( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Mute(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Mute( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Mute(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoStart( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoStart(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AutoStart( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AutoStart(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayCount( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayCount(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlayCount( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlayCount(
         /* [in] */ long newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowStatusBar( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowStatusBar(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowStatusBar( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowStatusBar(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowAudioControls( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowAudioControls(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowAudioControls( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowAudioControls(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowCaptioning( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowCaptioning(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowCaptioning( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowCaptioning(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowControls( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowControls(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowControls( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowControls(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowDisplay( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowDisplay(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowDisplay( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowDisplay(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowGotoBar( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowGotoBar(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowGotoBar( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowGotoBar(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowPositionControls( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowPositionControls(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowPositionControls( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowPositionControls(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowTracker( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowTracker(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowTracker( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ShowTracker(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Startup( void) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Shutdown( void) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Bandwidth( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Startup( void ) = 0;
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Shutdown( void ) = 0;
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Bandwidth(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BaseURL( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BaseURL(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_BaseURL( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_BaseURL(
         /* [in] */ BSTR pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BufferingCount( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BufferingCount(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BufferingProgress( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BufferingProgress(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BufferingTime( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BufferingTime(
         /* [retval][out] */ double __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanSeek( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanSeek(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanSeekToMarkers( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanSeekToMarkers(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChannelDescription( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChannelDescription(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChannelName( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChannelName(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChannelURL( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChannelURL(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClientID( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClientID(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectionSpeed( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectionSpeed(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ContactAddress( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ContactAddress(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ContactEmail( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ContactEmail(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ContactPhone( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ContactPhone(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentMarker( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentMarker(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentMarker( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentMarker(
         /* [in] */ long newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentPosition( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentPosition(
         /* [retval][out] */ double __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentPosition( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentPosition(
         /* [in] */ double newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultFrame( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultFrame(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultFrame( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultFrame(
         /* [in] */ BSTR newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Duration( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Duration(
         /* [retval][out] */ double __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EntryCount( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EntryCount(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorCode( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorCode(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorDescription( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorDescription(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasError( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasError(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasMultipleItems( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasMultipleItems(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ImageSourceHeight( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ImageSourceHeight(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ImageSourceWidth( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ImageSourceWidth(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InvokeURLs( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InvokeURLs(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_InvokeURLs( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_InvokeURLs(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsBroadcast( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsBroadcast(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsDurationValid( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsDurationValid(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LostPackets( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LostPackets(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MarkerCount( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MarkerCount(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OpenState( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OpenState(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayState( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayState(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PreviewMode( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PreviewMode(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PreviewMode( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PreviewMode(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReadyState( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReadyState(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReceivedPackets( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReceivedPackets(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReceptionQuality( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReceptionQuality(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecoveredPackets( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecoveredPackets(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SAMIFileName( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SAMIFileName(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SAMIFileName( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SAMIFileName(
         /* [in] */ BSTR newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SAMILang( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SAMILang(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SAMILang( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SAMILang(
         /* [in] */ BSTR newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SAMIStyle( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SAMIStyle(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SAMIStyle( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SAMIStyle(
         /* [in] */ BSTR newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SelectionEnd( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SelectionEnd(
         /* [retval][out] */ double __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SelectionEnd( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SelectionEnd(
         /* [in] */ double newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SelectionStart( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SelectionStart(
         /* [retval][out] */ double __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SelectionStart( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SelectionStart(
         /* [in] */ double newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendErrorEvents( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendErrorEvents(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendErrorEvents( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendErrorEvents(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendKeyboardEvents( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendKeyboardEvents(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendKeyboardEvents( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendKeyboardEvents(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendMouseClickEvents( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendMouseClickEvents(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendMouseClickEvents( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendMouseClickEvents(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendMouseMoveEvents( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendMouseMoveEvents(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendMouseMoveEvents( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendMouseMoveEvents(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendOpenStateChangeEvents( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendOpenStateChangeEvents(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendOpenStateChangeEvents( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendOpenStateChangeEvents(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendPlayStateChangeEvents( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendPlayStateChangeEvents(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendPlayStateChangeEvents( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendPlayStateChangeEvents(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendWarningEvents( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendWarningEvents(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendWarningEvents( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendWarningEvents(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SourceLink( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SourceLink(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AboutBox( void) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCodecDescription( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCodecDescription(
         /* [in] */ long nCodec,
         /* [retval][out] */ BSTR __RPC_FAR *pDescription) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCodecInstalled( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCodecInstalled(
         /* [in] */ BSTR __RPC_FAR *pstrCodec,
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsInstalled) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCurrentEntry( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCurrentEntry(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMarkerName( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMarkerName(
         /* [in] */ long nMarker,
         /* [retval][out] */ BSTR __RPC_FAR *pMarkerName) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMarkerTime( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMarkerTime(
         /* [in] */ long nMarker,
         /* [retval][out] */ double __RPC_FAR *pMarkerTime) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMediaInfoString( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMediaInfoString(
         /* [in] */ long MPMediaInfoType,
         /* [retval][out] */ BSTR __RPC_FAR *pstrMediaInfo) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Next( void) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Open( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Open(
         BSTR pstrClip) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Play( void) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Previous( void) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Rate( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Rate(
         /* [retval][out] */ double __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Rate( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Rate(
         /* [in] */ double newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplaySize( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplaySize(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplaySize( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplaySize(
         /* [in] */ long newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SourceProtocol( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SourceProtocol(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorCorrection( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorCorrection(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FinalConstruct( void) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowChangeDisplaySize( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowChangeDisplaySize(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowChangeDisplaySize( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowChangeDisplaySize(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowScan( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowScan(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowScan( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowScan(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AnimationAtStart( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AnimationAtStart(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AnimationAtStart( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AnimationAtStart(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AudioStream( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AudioStream(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AudioStream( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AudioStream(
         /* [in] */ long newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoRewind( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoRewind(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AutoRewind( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AutoRewind(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Balance( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Balance(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Balance( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Balance(
         /* [in] */ long newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanPreview( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanPreview(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanScan( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanScan(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CaptioningID( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CaptioningID(
         /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClickToPlay( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClickToPlay(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ClickToPlay( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ClickToPlay(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CodecCount( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CodecCount(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CreationDate( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CreationDate(
         /* [retval][out] */ DATE __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CursorType( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CursorType(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CursorType( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CursorType(
         /* [in] */ long newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayBackColor( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayBackColor(
         /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayBackColor( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayBackColor(
         /* [in] */ VB_OLE_COLOR newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayForeColor( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayForeColor(
         /* [retval][out] */ VB_OLE_COLOR __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayForeColor( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayForeColor(
         /* [in] */ VB_OLE_COLOR newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayMode( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayMode(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayMode( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayMode(
         /* [in] */ long newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableContextMenu( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableContextMenu(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableContextMenu( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableContextMenu(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableFullScreenControls( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableFullScreenControls(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableFullScreenControls( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableFullScreenControls(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnablePositionControls( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnablePositionControls(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnablePositionControls( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnablePositionControls(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableTracker( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableTracker(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableTracker( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableTracker(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Language( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Language(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamCount( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamCount(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TransparentAtStart( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TransparentAtStart(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_TransparentAtStart( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_TransparentAtStart(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VideoBorder3D( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VideoBorder3D(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_VideoBorder3D( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_VideoBorder3D(
         /* [in] */ VARIANT_BOOL newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VideoBorderColor( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VideoBorderColor(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_VideoBorderColor( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_VideoBorderColor(
         /* [in] */ long newVal) = 0;
-    
-    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VideoBorderWidth( 
+
+    virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VideoBorderWidth(
         /* [retval][out] */ long __RPC_FAR *pVal) = 0;
-    
-    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_VideoBorderWidth( 
+
+    virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_VideoBorderWidth(
         /* [in] */ long newVal) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FastForward( void) = 0;
-    
+
     virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FastReverse( void) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCodecURL( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCodecURL(
         /* [retval][out] */ BSTR __RPC_FAR *pstrCodecURL) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMediaParameter( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMediaParameter(
         /* [in] */ long nParam,
         BSTR szParameterName,
         /* [retval][out] */ BSTR __RPC_FAR *pstrParameterValue) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMediaParameterName( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMediaParameterName(
         /* [in] */ long nParam,
         long nIndex,
         /* [retval][out] */ BSTR __RPC_FAR *pstrParameterName) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMoreInfoURL( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMoreInfoURL(
         /* [retval][out] */ BSTR __RPC_FAR *pstrMoreInfoURL) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStreamGroup( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStreamGroup(
         /* [retval][out] */ BSTR __RPC_FAR *pstrStreamGroup) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStreamName( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStreamName(
         /* [retval][out] */ BSTR __RPC_FAR *pstrStreamName) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStreamSelected( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStreamSelected(
         /* [in] */ long nStream,
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *fIsSelected) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsSoundCardEnabled( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsSoundCardEnabled(
         /* [retval][out] */ VARIANT_BOOL __RPC_FAR *fIsEnabled) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetCurrentEntry( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetCurrentEntry(
         long nValue) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShowDialog( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShowDialog(
         long nValue) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StreamSelect( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StreamSelect(
         long nSelect) = 0;
-    
-    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnWindowMessage( 
+
+    virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnWindowMessage(
         UINT msg,
         WPARAM wParam,
         LPARAM lParam,
         LRESULT __RPC_FAR *plResult) = 0;
-    
 };
 
 //---------------------------------------------------------------------------
@@ -1464,9 +1461,10 @@ public:
         return total;
     }
 
-    //WinCE helpers
+    // WinCE helpers
 
     wxActiveXContainer* m_pAX;
+
 #ifdef __WXWINCE__
     IWMP* m_pWMP;
 
@@ -1479,6 +1477,7 @@ public:
     IMediaPlayer* GetMP() { return m_pMP; }
     IActiveMovie* GetAM() { return m_pAM; }
 #endif
+
     wxTimer* m_pTimer;
     wxSize m_bestSize;
 
@@ -1492,9 +1491,7 @@ public:
 };
 
 //---------------------------------------------------------------------------
-//
 //  wxMCIMediaBackend
-//
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
@@ -1506,7 +1503,6 @@ public:
 class WXDLLIMPEXP_MEDIA wxMCIMediaBackend : public wxMediaBackendCommonBase
 {
 public:
-
     wxMCIMediaBackend();
     ~wxMCIMediaBackend();
 
@@ -1559,7 +1555,6 @@ public:
 #endif
 
 //---------------------------------------------------------------------------
-//
 //  wxQTMediaBackend
 //
 // We don't include Quicktime headers here and define all the types
@@ -1573,8 +1568,8 @@ public:
 //---------------------------------------------------------------------------
 //  QT Includes
 //---------------------------------------------------------------------------
-//#include <qtml.h>                   //Windoze QT include
-//#include <QuickTimeComponents.h>    //Standard QT stuff
+//#include <qtml.h>                   // Windoze QT include
+//#include <QuickTimeComponents.h>    // Standard QT stuff
 #include "wx/dynlib.h"
 
 //---------------------------------------------------------------------------
@@ -1655,7 +1650,8 @@ struct EventRecord
     wxUint16                  modifiers;
 };
 
-enum {
+enum
+{
     mcTopLeftMovie              = 1,
     mcScaleMovieToFit           = 2,
     mcWithBadge                 = 4,
@@ -1764,7 +1760,6 @@ public:
     wxDL_METHOD_DEFINE(ComponentInstance, NewMovieController, (Movie m, const Rect* mr, long fl), (m,mr,fl), 0);
     wxDL_VOIDMETHOD_DEFINE(DisposeMovieController, (ComponentInstance ci), (ci));
     wxDL_METHOD_DEFINE(int, MCSetVisible, (ComponentInstance m, int b), (m, b), 0);
-
 
     wxDL_VOIDMETHOD_DEFINE(PrePrerollMovie, (Movie m, long t, Fixed r, WXFARPROC p1, void* p2), (m,t,r,p1,p2) );
     wxDL_VOIDMETHOD_DEFINE(PrerollMovie, (Movie m, long t, Fixed r), (m,t,r) );
@@ -1928,6 +1923,7 @@ public:
     ComponentInstance m_pMC;        // Movie Controller
 
     friend class wxQTMediaEvtHandler;
+
     DECLARE_DYNAMIC_CLASS(wxQTMediaBackend)
 };
 
@@ -2027,11 +2023,13 @@ public:
         if (m_parent->GetMP())
         {
             MPReadyStateConstants nState;
+
 #ifdef __WXWINCE__ //Cast to long needed for IWMP (??)
             m_parent->GetMP()->get_ReadyState((long*)&nState);
 #else
             m_parent->GetMP()->get_ReadyState(&nState);
 #endif
+
             if (nState != mpReadyStateLoading)
             {
                 Stop();
@@ -2067,7 +2065,7 @@ public:
     }
 
 protected:
-    wxAMMediaBackend* m_parent;     //Backend pointer
+    wxAMMediaBackend* m_parent;     // Backend pointer
 };
 
 //---------------------------------------------------------------------------
@@ -2200,8 +2198,9 @@ wxAMMediaBackend::~wxAMMediaBackend()
 
     if (m_pAX)
     {
-        m_pAX->DissociateHandle();            
+        m_pAX->DissociateHandle();
         delete m_pAX;
+
 #ifndef __WXWINCE__
         m_pAM->Release();
 #endif
@@ -2236,8 +2235,8 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                                      const wxValidator& validator,
                                      const wxString& name)
 {
-    // First get the AMGetErrorText procedure in debug
-    // mode for more meaningful messages
+    // First get the AMGetErrorText procedure in
+    // debug mode for more meaningful messages
 #ifdef __WXDEBUG__
     if ( m_dllQuartz.Load(_T("quartz.dll"), wxDL_VERBATIM) )
     {
@@ -2249,16 +2248,16 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 #ifdef __WXWINCE__
    CLSID clsid;
 
-   //Try progids first - *.WMP is PocketPC and Mediaplayer.1 is CE.NET
-   //later versions support straight creation from CLSID
+   // Try progids first - *.WMP is PocketPC and Mediaplayer.1 is CE.NET
+   // later versions support straight creation from CLSID
    if (CLSIDFromProgID(L"WPCEOCX.WMP", &clsid) != S_OK &&
        CLSIDFromProgID(L"MediaPlayer.MediaPlayer.1", &clsid) != S_OK)
    {
        clsid = CLSID_MediaPlayer;
    }
 
-   //While the CLSID is the same as CLSID_MediaPlayer
-   //CE only supports the IWMP interface
+   // While the CLSID is the same as CLSID_MediaPlayer
+   // CE only supports the IWMP interface
    if ( ::CoCreateInstance(clsid, NULL,
                                  CLSCTX_INPROC_SERVER,
                                  IID_IWMP, (void**)&m_pWMP) != 0 )
@@ -2792,11 +2791,9 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
 // End of wxAMMediaBackend
 //---------------------------------------------------------------------------
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
+//---------------------------------------------------------------------------
 // wxMCIMediaBackend
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//---------------------------------------------------------------------------
 
 #ifndef __WXWINCE__
 IMPLEMENT_DYNAMIC_CLASS(wxMCIMediaBackend, wxMediaBackend)
@@ -2888,7 +2885,7 @@ wxMCIMediaBackend::wxMCIMediaBackend() : m_hNotifyWnd(NULL), m_bVideo(false)
 //---------------------------------------------------------------------------
 // wxMCIMediaBackend Destructor
 //
-// We close the mci device - note that there may not be an mci device here,
+// We close the MCI device - note that there may not be an MCI device here,
 // or it may fail - but we don't really care, since we're destructing
 //---------------------------------------------------------------------------
 wxMCIMediaBackend::~wxMCIMediaBackend()
@@ -2904,7 +2901,7 @@ wxMCIMediaBackend::~wxMCIMediaBackend()
 //---------------------------------------------------------------------------
 // wxMCIMediaBackend::Create
 //
-// Here we just tell wxMediaCtrl that mci does exist (which it does, on all
+// Here we just tell wxMediaCtrl that MCI does exist (which it does, on all
 // msw systems, at least in some form dating back to win16 days)
 //---------------------------------------------------------------------------
 bool wxMCIMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
@@ -2953,7 +2950,7 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
     MCI_OPEN_PARMS openParms;
     openParms.lpstrElementName = (wxChar*) fileName.c_str();
 
-    if ( mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT,
+    if (mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT,
                         (DWORD)(LPVOID)&openParms) != 0)
     {
         return false;
@@ -3014,7 +3011,7 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
 //
 // MCI doesn't support URLs directly (?)
 //
-// TODO:  Use wxURL/wxFileSystem and mmioInstallProc
+// TODO: Use wxURL/wxFileSystem and mmioInstallProc
 //---------------------------------------------------------------------------
 bool wxMCIMediaBackend::Load(const wxURI& WXUNUSED(location))
 {
@@ -3036,8 +3033,8 @@ bool wxMCIMediaBackend::Play()
     MCI_PLAY_PARMS playParms;
     playParms.dwCallback = (DWORD)m_hNotifyWnd;
 
-    bool bOK = ( mciSendCommand(m_hDev, MCI_PLAY, MCI_NOTIFY,
-                            (DWORD)(LPVOID)&playParms) == 0 );
+    bool bOK = (mciSendCommand(m_hDev, MCI_PLAY, MCI_NOTIFY,
+                            (DWORD)(LPVOID)&playParms) == 0);
 
     if (bOK)
         m_ctrl->Show(m_bVideo);
@@ -3257,6 +3254,7 @@ wxSize wxMCIMediaBackend::GetVideoSize() const
 
         return wxSize(whereParms.rc.right, whereParms.rc.bottom);
     }
+
     return wxSize(0, 0);
 }
 
@@ -3326,14 +3324,13 @@ LRESULT CALLBACK wxMCIMediaBackend::OnNotifyWndProc(HWND hWnd, UINT nMsg,
 }
 #endif // __WXWINCE__
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
+//---------------------------------------------------------------------------
 // wxQTMediaBackend
 //
 // TODO: Use a less kludgy way to pause/get state/set state
 // FIXME: Greg Hazel reports that sometimes files that cannot be played
 // with this backend are treated as playable anyway - not verified though.
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//---------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend)
 
@@ -3345,7 +3342,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend)
 
 
 //---------------------------------------------------------------------------
-//          wxQTLoadTimer
+// wxQTLoadTimer
 //
 //  QT, esp. QT for Windows is very picky about how you go about
 //  async loading.  If you were to go through a Windows message loop
@@ -3362,7 +3359,7 @@ public:
     void Notify()
     {
         m_pLib->MoviesTask(m_movie, 0);
-        //kMovieLoadStatePlayable
+        // kMovieLoadStatePlayable
         if (m_pLib->GetMovieLoadState(m_movie) >= 10000)
         {
             m_parent->FinishLoad();
@@ -3378,7 +3375,7 @@ protected:
 
 
 // --------------------------------------------------------------------------
-//          wxQTPlayTimer - Handle Asyncronous Playing
+// wxQTPlayTimer - Handle Asyncronous Playing
 //
 // 1) Checks to see if the movie is done, and if not continues
 //    streaming the movie
@@ -3539,7 +3536,6 @@ bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     //
     // Since we don't have a child window like most other
     // backends, we don't need wxCLIP_CHILDREN
-    //
     if ( !ctrl->wxControl::Create(parent, id, pos, size,
                             (style & ~wxBORDER_MASK) | wxBORDER_NONE,
                             validator, name) )
@@ -3574,7 +3570,7 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
 {
     if (m_movie)
         Cleanup();
- 
+
     bool result = true;
     OSErr err = noErr;
     short movieResFile = 0; //= 0 because of annoying VC6 warning
@@ -3669,7 +3665,7 @@ bool wxQTMediaBackend::Load(const wxURI& location)
     // create the movie from the handle that refers to the URI
     OSErr err = m_lib.NewMovieFromDataRef(&m_movie, newMovieActive |
                                                     newMovieAsyncOK
-                                                    /*|newMovieIdleImportOK*/,
+                                                    /* | newMovieIdleImportOK */,
                                 NULL, theHandle,
                                 URLDataHandlerSubType);
 
@@ -4024,7 +4020,7 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
             long mcFlags = 0;
             m_lib.MCDoAction(m_pMC, 39/*mcActionGetFlags*/, (void*)&mcFlags);
 
-            mcFlags |= 
+            mcFlags |=
                 // (1<< 0) /*mcFlagSuppressMovieFrame*/ |
                 (1<< 3) /*mcFlagsUseWindowPalette*/
                 | ((flags & wxMEDIACTRLPLAYERCONTROLS_STEP)
