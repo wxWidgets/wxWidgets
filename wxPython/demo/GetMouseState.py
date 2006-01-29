@@ -110,6 +110,10 @@ class TestPanel(wx.Panel):
         self.cmd.SetLabel( str(ms.cmdDown) )
 
 
+    def ShutdownDemo(self):
+        self.timer.Stop()
+        del self.timer
+        
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
