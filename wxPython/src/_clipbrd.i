@@ -65,7 +65,7 @@ True on success.", "");
     
 
 
-    %apply SWIGTYPE *DISOWN { wxDataObject *data };
+    %disownarg( wxDataObject *data );
     
     DocDeclStr(
         virtual bool , AddData( wxDataObject *data ),
@@ -84,8 +84,8 @@ do not delete the data explicitly.
 
 :see: `wx.DataObject`", "");
     
-
-    %clear wxDataObject *data;
+    %cleardisown( wxDataObject *data );
+    
     
     DocDeclStr(
         virtual bool , IsSupported( const wxDataFormat& format ),

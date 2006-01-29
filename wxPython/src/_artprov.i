@@ -245,19 +245,22 @@ public:
 
     %pythonAppend wxPyArtProvider "self._setCallbackInfo(self, ArtProvider)"
     wxPyArtProvider();
+    ~wxPyArtProvider();
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
+    %disownarg( wxPyArtProvider *provider );
     DocDeclStr(
         static void , PushProvider(wxPyArtProvider *provider),
         "Add new provider to the top of providers stack.", "");
+    %cleardisown( wxPyArtProvider *provider );
     
 
     DocDeclStr(
         static bool , PopProvider(),
         "Remove latest added provider and delete it.", "");
     
-
+    %pythonAppend RemoveProvider "args[1].thisown = 1";
     DocDeclStr(
         static bool , RemoveProvider(wxPyArtProvider *provider),
         "Remove provider. The provider must have been added previously!  The
@@ -286,6 +289,7 @@ topmost provider if platform_dependent = false", "");
     
     
 
+    %pythonAppend Destroy "args[0].thisown = 0"
     %extend { void Destroy() { delete self; }}
 };
 

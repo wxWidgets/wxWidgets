@@ -12,8 +12,8 @@
 
 
 //---------------------------------------------------------------------------
-// Globally turn on the autodoc feature
 
+// Globally turn on the autodoc feature
 %feature("autodoc", "1");  // 0 == no param types, 1 == show param types
 
 // Turn on kwargs by default
@@ -22,24 +22,39 @@
 // Don't generate separate wrappers for each default args combination
 %feature("compactdefaultargs");
 
+#if SWIG_VERSION < 0x010328
 // Don't generate default ctors or dtors if the C++ doesn't have them
 %feature("nodefault");
-
+#else
 // This is the SWIG 1.3.28 way to do the above...
-// // Don't generate default ctors or dtors if the C++ doesn't have them
-// %feature("nodefaultctor");
-// %feature("nodefaultdtor");
+%feature("nodefaultctor");
+%feature("nodefaultdtor");
+#endif
+
+// For now, just supress the warning about using Python keywords as parameter
+// names.  Will need to come back later and correct these rather than just
+// hide them...
+#pragma SWIG nowarn=314
 
 //---------------------------------------------------------------------------
-// Tell SWIG to wrap all the wrappers with our thread protection by default
 
+// Tell SWIG to wrap all the wrappers with our thread protection
+%define %threadWrapperOn
 %exception {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     $action
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
 }
+%enddef
 
+// This one will turn off the generation of the thread wrapper code
+%define %threadWrapperOff
+%exception 
+%enddef
+
+// Turn it on by default
+%threadWrapperOn
 
 // This one can be used to add a check for an existing wxApp before the real
 // work is done.  An exception is raised if there isn't one.
@@ -75,10 +90,19 @@ typedef unsigned long   wxUIntPtr;
 
 #define %pythonAppend   %feature("pythonappend")
 #define %pythonPrepend  %feature("pythonprepend")
-#define %kwargs         %feature("kwargs")
-#define %nokwargs       %feature("kwargs", "0")
 #define %noautodoc      %feature("noautodoc")
 
+#if SWIG_VERSION >= 0x010327
+#define %kwargs         %feature("kwargs", "1")
+#define %nokwargs       %feature("kwargs", "0")
+#else
+#define %kwargs         %feature("kwargs")
+#define %nokwargs       %feature("nokwargs")
+#endif
+
+#define %disownarg(typespec)   %typemap(in) typespec = SWIGTYPE* DISOWN
+#define %cleardisown(typespec) %typemap(in) typespec
+    
 
 
 #ifndef %pythoncode

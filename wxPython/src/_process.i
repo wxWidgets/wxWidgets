@@ -187,7 +187,11 @@ long wxExecute(const wxString& command,
 {
     PyObject* o;
     o = PyInt_FromLong((long) (*$1));
+#if SWIG_VERSION < 0x010328
     $result = t_output_helper($result, o);
+#else
+    $result = SWIG_Python_AppendOutput($result, o);
+#endif
 }
 
 int wxKill(long pid, wxSignal sig = wxSIGTERM, wxKillError* rc, int flags = wxKILL_NOCHILDREN);

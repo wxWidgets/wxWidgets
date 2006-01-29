@@ -341,11 +341,6 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-
-    %pythoncode {
-        def SendSizeEvent(self):
-            self.ProcessEvent(wx.SizeEvent((-1,-1)))
-    }
 };
 
 //---------------------------------------------------------------------------

@@ -1255,7 +1255,10 @@ public:
 
     wxHtmlHelpData* GetData();
     wxHtmlHelpController* GetController() const;
+
+    %disownarg( wxHtmlHelpController* controller );
     void SetController(wxHtmlHelpController* controller);
+    %cleardisown( wxHtmlHelpController* controller );
 
     // Displays page x. If not found it will offect the user a choice of
     // searching books.
@@ -1360,7 +1363,9 @@ public:
     wxHtmlHelpController* GetController() const;
 
     /// Sets the help controller associated with the window.
+    %disownarg( wxHtmlHelpController* controller );
     void SetController(wxHtmlHelpController* controller);
+    %cleardisown( wxHtmlHelpController* controller );
 
     /// Returns the help window.
     wxHtmlHelpWindow* GetHelpWindow() const;
@@ -1417,7 +1422,9 @@ public:
     wxHtmlHelpController* GetController() const;
 
     /// Sets the controller associated with this dialog.
+    %disownarg( wxHtmlHelpController* controller );
     void SetController(wxHtmlHelpController* controller);
+    %cleardisown( wxHtmlHelpController* controller );
 
     /// Returns the help window.
     wxHtmlHelpWindow* GetHelpWindow() const;
@@ -1533,8 +1540,6 @@ public:
 
     void MakeModalIfNeeded();
     wxWindow* FindTopLevelWindow();
-
-    %pythoncode { def Destroy(self): pass }
 };
 
 

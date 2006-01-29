@@ -137,7 +137,8 @@ class wxPyDropTarget // : public wxDropTarget
 public:
     %pythonAppend wxPyDropTarget
        "self._setCallbackInfo(self, DropTarget)"
-    %apply SWIGTYPE *DISOWN { wxDataObject *dataObject };
+
+    %disownarg( wxDataObject *dataObject );
 
     wxPyDropTarget(wxDataObject *dataObject = NULL);
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -148,7 +149,7 @@ public:
     wxDataObject *GetDataObject();
     void SetDataObject(wxDataObject *dataObject);
 
-    %clear wxDataObject *dataObject;
+    %cleardisown( wxDataObject *dataObject );
 
     wxDragResult base_OnEnter(wxCoord x, wxCoord y, wxDragResult def);
     wxDragResult base_OnDragOver(wxCoord x, wxCoord y, wxDragResult def);

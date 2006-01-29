@@ -79,15 +79,15 @@ public:
     // GetSelection which only works for listboxes with single selection)
     //virtual int GetSelections(wxArrayInt& aSelections) const;
     %extend {
-      PyObject* GetSelections() {
-          wxArrayInt lst;
-          self->GetSelections(lst);
-          PyObject *tup = PyTuple_New(lst.GetCount());
-          for(size_t i=0; i<lst.GetCount(); i++) {
-              PyTuple_SetItem(tup, i, PyInt_FromLong(lst[i]));
-          }
-          return tup;
-      }
+        PyObject* GetSelections() {
+            wxArrayInt lst;
+            self->GetSelections(lst);
+            PyObject *tup = PyTuple_New(lst.GetCount());
+            for(size_t i=0; i<lst.GetCount(); i++) {
+                PyTuple_SetItem(tup, i, PyInt_FromLong(lst[i]));
+            }
+            return tup;
+        }
     }
 
     // set the specified item at the first visible item or scroll to max

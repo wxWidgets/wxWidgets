@@ -72,6 +72,7 @@ public:
         }
     }
 
+    %pythonAppend _setOORInfo   "args[0].thisown = 0";
     %extend {
         void _setOORInfo(PyObject* _self, bool incref=true) {
             if (_self && _self != Py_None) {

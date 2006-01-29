@@ -106,8 +106,9 @@ PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
     PyObject* robj = NULL;
 
     swig_type_info* swigType = wxPyFindSwigType(className);
-    wxCHECK_MSG(swigType != NULL, NULL, wxT("Unknown type in wxPyConvertSwigPtr"));
+    wxCHECK_MSG(swigType != NULL, NULL, wxT("Unknown type in wxPyMakeSwigPtr"));
 
+#if SWIG_VERSION < 0x010328
 #ifdef SWIG_COBJECT_TYPES
     robj = PySwigObject_FromVoidPtrAndDesc((void *) ptr, (char *)swigType->name);
 #else
@@ -117,7 +118,9 @@ PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
             PyString_FromString(result) : 0;
     }
 #endif
-
+#else // SWIG_VERSION >= 1.3.28
+    robj = PySwigObject_New(ptr, swigType, 0);
+#endif
     return robj;
 }
 

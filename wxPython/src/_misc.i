@@ -24,8 +24,13 @@ MustHaveApp(wxToolTip);
 
 class wxToolTip : public wxObject {
 public:
+    %typemap(out) wxToolTip*;    // turn off this typemap
     wxToolTip(const wxString &tip);
+    // Turn it back on again
+    %typemap(out) wxToolTip* { $result = wxPyMake_wxObject($1, $owner); }
 
+    ~wxToolTip();
+    
     void SetTip(const wxString& tip);
     wxString GetTip();
     // *** Not in the "public" interface void SetWindow(wxWindow *win);
@@ -43,9 +48,10 @@ MustHaveApp(wxCaret);
 class wxCaret {
 public:
     wxCaret(wxWindow* window, const wxSize& size);
-//    ~wxCaret(); Window takes ownership
+    ~wxCaret(); 
 
     %extend {
+        %pythonAppend Destroy "args[0].thisown = 0"
         DocStr(Destroy,
                "Deletes the C++ object this Python object is a proxy for.", "");
         void Destroy() {
@@ -307,6 +313,56 @@ bool wxDrawWindowOnDC(wxWindow* window, const wxDC& dc
 
 %}
 
+
+
+#if 0
+%{
+    void t_output_tester1(int* a, int* b, int* c, int* d)
+    {
+        *a = 1234;
+        *b = 2345;
+        *c = 3456;
+        *d = 4567;
+    }
+    PyObject* t_output_tester2(int* a, int* b, int* c, int* d)
+    {
+        *a = 1234;
+        *b = 2345;
+        *c = 3456;
+        *d = 4567;
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    PyObject* t_output_tester3(int* a, int* b, int* c, int* d)
+    {
+        *a = 1234;
+        *b = 2345;
+        *c = 3456;
+        *d = 4567;
+        PyObject* res = PyTuple_New(2);
+        PyTuple_SetItem(res, 0, PyInt_FromLong(1));
+        PyTuple_SetItem(res, 1, PyInt_FromLong(2));
+        return res;
+    }
+    PyObject* t_output_tester4()
+    {
+        PyObject* res = PyTuple_New(2);
+        PyTuple_SetItem(res, 0, PyInt_FromLong(132));
+        PyTuple_SetItem(res, 1, PyInt_FromLong(244));
+        return res;
+    }
+%}    
+
+%newobject t_output_tester2;
+%newobject t_output_tester3;
+%newobject t_output_tester4;
+
+void      t_output_tester1(int* OUTPUT, int* OUTPUT, int* OUTPUT, int* OUTPUT);
+PyObject* t_output_tester2(int* OUTPUT, int* OUTPUT, int* OUTPUT, int* OUTPUT);
+PyObject* t_output_tester3(int* OUTPUT, int* OUTPUT, int* OUTPUT, int* OUTPUT);
+PyObject* t_output_tester4();
+
+#endif
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

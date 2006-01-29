@@ -230,14 +230,11 @@ data.", "");
     
 
 
-    // return all formats in the provided array (of size GetFormatCount())
-    //virtual void GetAllFormats(wxDataFormat *formats,
-    //                           Direction dir = Get) const;
-    DocAStr(GetAllFormats,
-            "GetAllFormats(self, int dir=Get) -> [formats]",
-            "Returns a list of all the wx.DataFormats that this dataobject supports
-in the given direction.", "");
     %extend {
+        DocAStr(GetAllFormats,
+                "GetAllFormats(self, int dir=Get) -> [formats]",
+                "Returns a list of all the wx.DataFormats that this dataobject supports
+in the given direction.", "");
         PyObject* GetAllFormats(Direction dir = Get) {
             size_t count = self->GetFormatCount(dir);
             wxDataFormat* formats = new wxDataFormat[count];
@@ -262,12 +259,11 @@ in the given direction.", "");
     // True if data copied successfully, False otherwise
     // virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
 
-    DocAStr(GetDataHere,
-            "GetDataHere(self, DataFormat format) -> String",
-            "Get the data bytes in the specified format, returns None on failure.
-", "
-:todo: This should use the python buffer interface isntead...");
     %extend {
+        DocAStr(GetDataHere,
+                "GetDataHere(self, DataFormat format) -> String",
+                "Get the data bytes in the specified format, returns None on failure.", "
+:todo: This should use the python buffer interface isntead...");
         PyObject* GetDataHere(const wxDataFormat& format) {
             PyObject* rval = NULL;
             size_t size = self->GetDataSize(format);            
@@ -353,12 +349,12 @@ assumed that the format is supported in both directions.", "");
 
 
     
-    DocAStr(GetDataHere,
-            "GetDataHere(self) -> String",
-            "Returns the data bytes from the data object as a string, returns None
+    %extend {
+        DocAStr(GetDataHere,
+                "GetDataHere(self) -> String",
+                "Returns the data bytes from the data object as a string, returns None
 on failure.  Must be implemented in the derived class if the object
 supports rendering its data.", "");
-    %extend {
         PyObject* GetDataHere() {
             PyObject* rval = NULL;
             size_t size = self->GetDataSize();            
@@ -379,12 +375,12 @@ supports rendering its data.", "");
     }
 
     
-    DocAStr(SetData,
-            "SetData(self, String data) -> bool",
-            "Copy the data value to the data object.  Must be implemented in the
+    %extend {
+        DocAStr(SetData,
+                "SetData(self, String data) -> bool",
+                "Copy the data value to the data object.  Must be implemented in the
 derived class if the object supports setting its data.
 ", "");
-    %extend {
         bool SetData(PyObject* data) {
             bool rval;
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
@@ -520,14 +516,14 @@ class wxDataObjectComposite : public wxDataObject {
 public:
     wxDataObjectComposite();
 
-    %apply SWIGTYPE *DISOWN { wxDataObjectSimple *dataObject };
+    %disownarg( wxDataObjectSimple *dataObject );
     
     DocDeclStr(
         void , Add(wxDataObjectSimple *dataObject, bool preferred = false),
         "Adds the dataObject to the list of supported objects and it becomes
 the preferred object if preferred is True.", "");
     
-    %clear wxDataObjectSimple *dataObject;
+    %cleardisown( wxDataObjectSimple *dataObject );
 };
 
 //---------------------------------------------------------------------------
@@ -757,10 +753,10 @@ public:
     wxCustomDataObject();
     
     
-    DocAStr(SetData,
-            "SetData(self, String data) -> bool",
-            "Copy the data value to the data object.", "");
     %extend {
+        DocAStr(SetData,
+                "SetData(self, String data) -> bool",
+                "Copy the data value to the data object.", "");
         bool SetData(PyObject* data) {
             bool rval;
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
@@ -783,10 +779,10 @@ public:
         "Get the size of the data.", "");
     
 
-    DocAStr(GetData,
-            "GetData(self) -> String",
-            "Returns the data bytes from the data object as a string.", "");
     %extend {
+        DocAStr(GetData,
+                "GetData(self) -> String",
+                "Returns the data bytes from the data object as a string.", "");
         PyObject* GetData() {
             PyObject* obj;
             wxPyBlock_t blocked = wxPyBeginBlockThreads();

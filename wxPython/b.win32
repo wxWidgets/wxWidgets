@@ -6,7 +6,7 @@
 # if this breaks something at your end, let me know and we can
 # figure out some solution for both of us.
 if [ "$SWIGDIR" = "" ]; then
-  SWIGDIR=$PROJECTS\\SWIG-cvs
+  SWIGDIR=$PROJECTS\\SWIG-1.3.27
 fi
 
 FLAGS="USE_SWIG=1 SWIG=$SWIGDIR\\swig.exe"

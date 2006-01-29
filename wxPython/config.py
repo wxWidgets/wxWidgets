@@ -700,6 +700,7 @@ if os.name == 'nt':
                 ('WXUSINGDLL', '1'),
 
                 ('SWIG_TYPE_TABLE', WXPYTHON_TYPE_TABLE),
+                ('SWIG_PYTHON_OUTPUT_TUPLE', None),
                 ('WXP_USE_THREAD', '1'),
                 ]
 
@@ -754,7 +755,7 @@ elif os.name == 'posix':
     WXDIR = '..'
     includes = ['include', 'src']
     defines = [('SWIG_TYPE_TABLE', WXPYTHON_TYPE_TABLE),
-               ('HAVE_CONFIG_H', None),
+               ('SWIG_PYTHON_OUTPUT_TUPLE', None),
                ('WXP_USE_THREAD', '1'),
                ]
     if UNDEF_NDEBUG:
@@ -873,7 +874,7 @@ i_files_includes = [ '-I' + opj(WXPY_SRC, 'src'),
 swig_cmd = SWIG
 swig_force = force
 swig_args = ['-c++',
-             '-Wall',
+             #'-Wall',
              '-python',
              '-new_repr',
              '-modern',

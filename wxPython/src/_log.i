@@ -54,7 +54,7 @@ class wxLog
 {
 public:
     wxLog();
-
+    ~wxLog();
 
     // these functions allow to completely disable all log messages
     // is logging disabled now?
@@ -80,9 +80,12 @@ public:
     // create one if none exists
     static wxLog *GetActiveTarget();
 
+    %disownarg( wxLog* pLogger );
+    %newobject SetActiveTarget;
     // change log target, pLogger may be NULL
     static wxLog *SetActiveTarget(wxLog *pLogger);
-
+    %cleardisown( wxLog* pLogger );
+    
     // suspend the message flushing of the main target until the next call
     // to Resume() - this is mainly for internal use (to prevent wxYield()
     // from flashing the messages)
@@ -149,6 +152,7 @@ public:
         }
     }
 
+    %pythonAppend Destroy "args[0].thisown = 0";
     %extend { void Destroy() { delete self; } }
 };
 
@@ -222,7 +226,7 @@ public:
 unsigned long wxSysErrorCode();
 const wxString wxSysErrorMsg(unsigned long nErrCode = 0);
 
-%{// Make somce wrappers that double any % signs so they are 'escaped'
+%{// Make some wrappers that double any % signs so they are 'escaped'
     void wxPyLogFatalError(const wxString& msg)
     {
         wxString m(msg);

@@ -325,52 +325,52 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 // NOTE: For those classes that also call _setOORInfo these typemaps should be
 // disabled for the constructor.
 
-%typemap(out) wxEvtHandler*             { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxMenu*                   { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxValidator*              { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxEvtHandler*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxMenu*                   { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxValidator*              { $result = wxPyMake_wxObject($1, (bool)$owner); }
 
-%typemap(out) wxApp*                    { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxPyApp*                  { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxDC*                     { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxFSFile*                 { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxFileSystem*             { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxImageList*              { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxImage*                  { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxListItem*               { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxMenuItem*               { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxMouseEvent*             { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxObject*                 { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxPyPrintout*             { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxToolBarToolBase*        { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxToolTip*                { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxApp*                    { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxPyApp*                  { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxDC*                     { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxFSFile*                 { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxFileSystem*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxImageList*              { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxImage*                  { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxListItem*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxMenuItem*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxMouseEvent*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxObject*                 { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxPyPrintout*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxToolBarToolBase*        { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxToolTip*                { $result = wxPyMake_wxObject($1, (bool)$owner); }
 
 
-%typemap(out) wxBitmapButton*           { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxButton*                 { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxControl*                { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxFrame*                  { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxGrid*                   { $result = wxPyMake_wxObject($1, $owner); }
-//%typemap(out) wxListCtrl*               { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxMDIChildFrame*          { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxMDIClientWindow*        { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxMenuBar*                { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxNotebook*               { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxStaticBox*              { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxStatusBar*              { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxTextCtrl*               { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxToolBar*                { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxToolBarBase*            { $result = wxPyMake_wxObject($1, $owner); }
-//%typemap(out) wxTreeCtrl*               { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxPyTreeCtrl*             { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxWindow*                 { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxPyHtmlWindow*           { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxWizardPage*             { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxPyWizardPage*           { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxPanel*                  { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxDialog*                 { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxScrolledWindow*         { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxBitmapButton*           { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxButton*                 { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxControl*                { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxFrame*                  { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxGrid*                   { $result = wxPyMake_wxObject($1, (bool)$owner); }
+//%typemap(out) wxListCtrl*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxMDIChildFrame*          { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxMDIClientWindow*        { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxMenuBar*                { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxNotebook*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxStaticBox*              { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxStatusBar*              { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxTextCtrl*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxToolBar*                { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxToolBarBase*            { $result = wxPyMake_wxObject($1, (bool)$owner); }
+//%typemap(out) wxTreeCtrl*               { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxPyTreeCtrl*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxWindow*                 { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxPyHtmlWindow*           { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxWizardPage*             { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxPyWizardPage*           { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxPanel*                  { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxDialog*                 { $result = wxPyMake_wxObject($1, (bool)$owner); }
+%typemap(out) wxScrolledWindow*         { $result = wxPyMake_wxObject($1, (bool)$owner); }
 
-%typemap(out) wxSizer*                  { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxSizer*                  { $result = wxPyMake_wxObject($1, (bool)$owner); }
 
 
 //---------------------------------------------------------------------------

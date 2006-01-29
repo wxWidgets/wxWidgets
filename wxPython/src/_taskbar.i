@@ -104,9 +104,11 @@ public:
     %pythonAppend wxPyTaskBarIcon   "self._setCallbackInfo(self, TaskBarIcon, 0)"
 
     wxPyTaskBarIcon();
+    ~wxPyTaskBarIcon();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class, int incref);
 
+    %pythonAppend Destroy "args[0].thisown = 0";
     %extend {
         void Destroy() {
             self->RemoveIcon();

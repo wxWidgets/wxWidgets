@@ -259,6 +259,7 @@ instead.");
     
 
 
+    %pythonAppend Destroy "args[0].thisown = 0"
     DocDeclStr(
         virtual bool , Destroy(),
         "Destroys the window safely.  Frames and dialogs are not destroyed
@@ -1454,9 +1455,11 @@ be reset back to default.", "");
 
     
 
+    %disownarg( wxCaret *caret );
     DocDeclStr(
         void , SetCaret(wxCaret *caret),
         "Sets the caret associated with the window.", "");
+    %cleardisown( wxCaret *caret );
     
     DocDeclStr(
         wxCaret *, GetCaret() const,
@@ -1767,7 +1770,10 @@ wxHelpProvider implementation, and not in the window object itself.", "");
     DocStr(SetToolTip,
            "Attach a tooltip to the window.", "");
     %Rename(SetToolTipString, void,  SetToolTip( const wxString &tip ));
+
+    %disownarg( wxToolTip *tip );
     void SetToolTip( wxToolTip *tip );
+    %cleardisown( wxToolTip *tip );
 
     DocDeclStr(
         wxToolTip* , GetToolTip() const,
@@ -1782,16 +1788,12 @@ wxHelpProvider implementation, and not in the window object itself.", "");
     // drag and drop
     // -------------
 
-    // set/retrieve the drop target associated with this window (may be
-    // NULL; it's owned by the window and will be deleted by it)
-    %apply SWIGTYPE *DISOWN { wxPyDropTarget *dropTarget };
-    
+    %disownarg( wxPyDropTarget *dropTarget );
     DocDeclStr(
         virtual void , SetDropTarget( wxPyDropTarget *dropTarget ),
         "Associates a drop target with this window.  If the window already has
 a drop target, it is deleted.", "");   
-
-    %clear wxPyDropTarget *dropTarget;
+    %cleardisown( wxPyDropTarget *dropTarget );
 
     
     DocDeclStr(
@@ -1855,6 +1857,7 @@ this function gets called automatically by the default EVT_SIZE
 handler when the window is resized.", "");
     
 
+    %disownarg( wxSizer *sizer );
     DocDeclStr(
         void , SetSizer(wxSizer *sizer, bool deleteOld = true ),
         "Sets the window to have the given layout sizer. The window will then
@@ -1868,7 +1871,8 @@ non-None, and False otherwise.", "");
         void , SetSizerAndFit( wxSizer *sizer, bool deleteOld = true ),
         "The same as SetSizer, except it also sets the size hints for the
 window based on the sizer's minimum size.", "");
-    
+    %cleardisown( wxSizer *sizer );
+
 
     DocDeclStr(
         wxSizer *, GetSizer() const,
@@ -1962,6 +1966,11 @@ wxControl where it returns true.", "");
             self._setOORInfo(self)
         if hasattr(self, '_setCallbackInfo'):
             self._setCallbackInfo(self, self.__class__)
+    }
+
+    %pythoncode {
+    def SendSizeEvent(self):
+        self.GetEventhandler().ProcessEvent(wx.SizeEvent((-1,-1)))
     }
 };
 

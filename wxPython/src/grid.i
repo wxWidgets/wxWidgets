@@ -44,11 +44,11 @@ MAKE_CONST_WXSTRING_NOSWIG(DefaultDateTimeFormat);
 //---------------------------------------------------------------------------
 // OOR related typemaps and helper functions
 
-%typemap(out) wxGridCellRenderer*     { $result = wxPyMake_wxGridCellRenderer($1, $owner); }
-%typemap(out) wxGridCellEditor*       { $result = wxPyMake_wxGridCellEditor($1, $owner); }
-%typemap(out) wxGridCellAttr*         { $result = wxPyMake_wxGridCellAttr($1, $owner); }
-%typemap(out) wxGridCellAttrProvider* { $result = wxPyMake_wxGridCellAttrProvider($1, $owner); }
-%typemap(out) wxGridTableBase*        { $result = wxPyMake_wxGridTableBase($1, $owner); }
+%typemap(out) wxGridCellRenderer*     { $result = wxPyMake_wxGridCellRenderer($1, (bool)$owner); }
+%typemap(out) wxGridCellEditor*       { $result = wxPyMake_wxGridCellEditor($1,   (bool)$owner); }
+%typemap(out) wxGridCellAttr*         { $result = wxPyMake_wxGridCellAttr($1,     (bool)$owner); }
+%typemap(out) wxGridCellAttrProvider* { $result = wxPyMake_wxGridCellAttrProvider($1, (bool)$owner); }
+%typemap(out) wxGridTableBase*        { $result = wxPyMake_wxGridTableBase($1,    (bool)$owner); }
 
 
 %{
@@ -796,6 +796,8 @@ public:
     virtual void StartingKey(wxKeyEvent& event);
     virtual void StartingClick();
     virtual void HandleReturn(wxKeyEvent& event);
+
+    %pythonAppend Destroy "args[0].thisown = 0"
     virtual void Destroy();
 
 };
@@ -1362,6 +1364,7 @@ public:
     wxPyGridTableBase();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
+    %pythonAppend Destroy "args[0].thisown = 0"
     %extend { void Destroy() { delete self; } }
 
     wxString base_GetTypeName( int row, int col );
