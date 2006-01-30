@@ -617,6 +617,14 @@
 // Recommended setting: 1
 #define wxUSE_TREEBOOK 1
 
+// wxToolbook control is similar to wxNotebook but uses wxToolBar instead of
+// tabs
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_TOOLBOOK 1
+
 // wxTabDialog is a generic version of wxNotebook but it is incompatible with
 // the new class. It shouldn't be used in new code.
 //
