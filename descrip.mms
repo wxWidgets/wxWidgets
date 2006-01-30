@@ -40,7 +40,7 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [-.gtk]
+	set default [-.gtk1]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.contrib.src.deprecated]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
