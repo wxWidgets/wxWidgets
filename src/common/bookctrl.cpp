@@ -252,10 +252,9 @@ wxRect wxBookCtrlBase::GetPageRect() const
     return rectPage;
 }
 
-void wxBookCtrlBase::OnSize(wxSizeEvent& event)
+// Lay out controls
+void wxBookCtrlBase::DoSize()
 {
-    event.Skip();
-
     if ( !m_bookctrl )
     {
         // we're not fully created yet or OnSize() should be hidden by derived class
@@ -301,6 +300,13 @@ void wxBookCtrlBase::OnSize(wxSizeEvent& event)
         wxCHECK_RET( page, _T("NULL page?") );
         page->SetSize(GetPageRect());
     }
+}
+
+void wxBookCtrlBase::OnSize(wxSizeEvent& event)
+{
+    event.Skip();
+    
+    DoSize();
 }
 
 wxSize wxBookCtrlBase::GetControllerSize() const
