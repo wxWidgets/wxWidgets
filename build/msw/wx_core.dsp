@@ -4783,6 +4783,10 @@ SOURCE=..\..\src\generic\tipwin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\toolbkg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\treebkg.cpp
 # End Source File
 # Begin Source File
@@ -7811,10 +7815,6 @@ SOURCE=..\..\include\wx\msw\msgdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\mslu.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\msvcrt.h
 # End Source File
 # Begin Source File
@@ -8964,6 +8964,10 @@ SOURCE=..\..\include\wx\tipwin.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\toolbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\toolbook.h
 # End Source File
 # Begin Source File
 

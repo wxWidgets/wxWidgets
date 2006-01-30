@@ -2170,7 +2170,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/minifram.h \
 	wx/msw/missing.h \
 	wx/msw/msgdlg.h \
-	wx/msw/mslu.h \
 	wx/msw/msvcrt.h \
 	wx/msw/notebook.h \
 	wx/msw/ole/access.h \
@@ -2368,7 +2367,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/minifram.h \
 	wx/msw/missing.h \
 	wx/msw/msgdlg.h \
-	wx/msw/mslu.h \
 	wx/msw/msvcrt.h \
 	wx/msw/notebook.h \
 	wx/msw/ole/access.h \
@@ -2753,6 +2751,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/tbarbase.h \
 	wx/tglbtn.h \
 	wx/tipwin.h \
+	wx/toolbook.h \
 	wx/tooltip.h \
 	wx/toplevel.h \
 	wx/treebase.h \
@@ -3213,6 +3212,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_splitter.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
+	monodll_toolbkg.o \
 	monodll_treectlg.o \
 	monodll_treebkg.o \
 	monodll_vlbox.o \
@@ -3363,6 +3363,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_splitter.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
+	monodll_toolbkg.o \
 	monodll_treectlg.o \
 	monodll_treebkg.o \
 	monodll_vlbox.o \
@@ -4825,6 +4826,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_splitter.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
+	monolib_toolbkg.o \
 	monolib_treectlg.o \
 	monolib_treebkg.o \
 	monolib_vlbox.o \
@@ -4975,6 +4977,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_splitter.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
+	monolib_toolbkg.o \
 	monolib_treectlg.o \
 	monolib_treebkg.o \
 	monolib_vlbox.o \
@@ -6663,6 +6666,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_splitter.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
+	coredll_toolbkg.o \
 	coredll_treectlg.o \
 	coredll_treebkg.o \
 	coredll_vlbox.o \
@@ -6813,6 +6817,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_splitter.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
+	coredll_toolbkg.o \
 	coredll_treectlg.o \
 	coredll_treebkg.o \
 	coredll_vlbox.o \
@@ -7989,6 +7994,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_splitter.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
+	corelib_toolbkg.o \
 	corelib_treectlg.o \
 	corelib_treebkg.o \
 	corelib_vlbox.o \
@@ -8139,6 +8145,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_splitter.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
+	corelib_toolbkg.o \
 	corelib_treectlg.o \
 	corelib_treebkg.o \
 	corelib_vlbox.o \
@@ -14616,6 +14623,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_tipwin.o: $(srcdir)/src/generic/tipwin.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tipwin.cpp
 
+@COND_USE_GUI_1@monodll_toolbkg.o: $(srcdir)/src/generic/toolbkg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/toolbkg.cpp
+
 @COND_USE_GUI_1@monodll_treectlg.o: $(srcdir)/src/generic/treectlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/treectlg.cpp
 
@@ -18377,6 +18387,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_tipwin.o: $(srcdir)/src/generic/tipwin.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tipwin.cpp
+
+@COND_USE_GUI_1@monolib_toolbkg.o: $(srcdir)/src/generic/toolbkg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/toolbkg.cpp
 
 @COND_USE_GUI_1@monolib_treectlg.o: $(srcdir)/src/generic/treectlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/treectlg.cpp
@@ -22524,6 +22537,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_tipwin.o: $(srcdir)/src/generic/tipwin.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tipwin.cpp
 
+@COND_USE_GUI_1@coredll_toolbkg.o: $(srcdir)/src/generic/toolbkg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/toolbkg.cpp
+
 @COND_USE_GUI_1@coredll_treectlg.o: $(srcdir)/src/generic/treectlg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/treectlg.cpp
 
@@ -25287,6 +25303,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_tipwin.o: $(srcdir)/src/generic/tipwin.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tipwin.cpp
 
+@COND_USE_GUI_1@corelib_toolbkg.o: $(srcdir)/src/generic/toolbkg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/toolbkg.cpp
+
 @COND_USE_GUI_1@corelib_treectlg.o: $(srcdir)/src/generic/treectlg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/treectlg.cpp
 
@@ -26322,6 +26341,7 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(WXDIR)/configure $(DISTDIR)
 	$(CP_P) $(WXDIR)/autoconf_inc.m4 $(DISTDIR)
 	$(CP_P) $(WXDIR)/wxwin.m4 $(DISTDIR)
+	$(CP_P) $(WXDIR)/acinclude.m4 $(DISTDIR)
 	$(CP_P) $(WXDIR)/aclocal.m4 $(DISTDIR)
 	$(CP_P) $(WXDIR)/config.sub $(DISTDIR)
 	$(CP_P) $(WXDIR)/config.guess $(DISTDIR)

@@ -78,6 +78,7 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(WXDIR)/configure $(DISTDIR)
 	$(CP_P) $(WXDIR)/autoconf_inc.m4 $(DISTDIR)
 	$(CP_P) $(WXDIR)/wxwin.m4 $(DISTDIR)
+	$(CP_P) $(WXDIR)/acinclude.m4 $(DISTDIR)
 	$(CP_P) $(WXDIR)/aclocal.m4 $(DISTDIR)
 	$(CP_P) $(WXDIR)/config.sub $(DISTDIR)
 	$(CP_P) $(WXDIR)/config.guess $(DISTDIR)

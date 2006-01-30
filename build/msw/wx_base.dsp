@@ -1299,6 +1299,10 @@ SOURCE=..\..\include\wx\msw\mimetype.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\mslu.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\private.h
 # End Source File
 # Begin Source File

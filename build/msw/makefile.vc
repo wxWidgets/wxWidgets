@@ -1488,6 +1488,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splitter.obj \
 	$(OBJS)\monodll_textdlgg.obj \
 	$(OBJS)\monodll_tipwin.obj \
+	$(OBJS)\monodll_toolbkg.obj \
 	$(OBJS)\monodll_treectlg.obj \
 	$(OBJS)\monodll_treebkg.obj \
 	$(OBJS)\monodll_vlbox.obj \
@@ -1686,6 +1687,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splitter.obj \
 	$(OBJS)\monodll_textdlgg.obj \
 	$(OBJS)\monodll_tipwin.obj \
+	$(OBJS)\monodll_toolbkg.obj \
 	$(OBJS)\monodll_treectlg.obj \
 	$(OBJS)\monodll_treebkg.obj \
 	$(OBJS)\monodll_vlbox.obj \
@@ -2024,6 +2026,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splitter.obj \
 	$(OBJS)\monolib_textdlgg.obj \
 	$(OBJS)\monolib_tipwin.obj \
+	$(OBJS)\monolib_toolbkg.obj \
 	$(OBJS)\monolib_treectlg.obj \
 	$(OBJS)\monolib_treebkg.obj \
 	$(OBJS)\monolib_vlbox.obj \
@@ -2222,6 +2225,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splitter.obj \
 	$(OBJS)\monolib_textdlgg.obj \
 	$(OBJS)\monolib_tipwin.obj \
+	$(OBJS)\monolib_toolbkg.obj \
 	$(OBJS)\monolib_treectlg.obj \
 	$(OBJS)\monolib_treebkg.obj \
 	$(OBJS)\monolib_vlbox.obj \
@@ -2518,6 +2522,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_splitter.obj \
 	$(OBJS)\coredll_textdlgg.obj \
 	$(OBJS)\coredll_tipwin.obj \
+	$(OBJS)\coredll_toolbkg.obj \
 	$(OBJS)\coredll_treectlg.obj \
 	$(OBJS)\coredll_treebkg.obj \
 	$(OBJS)\coredll_vlbox.obj \
@@ -2716,6 +2721,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_splitter.obj \
 	$(OBJS)\coredll_textdlgg.obj \
 	$(OBJS)\coredll_tipwin.obj \
+	$(OBJS)\coredll_toolbkg.obj \
 	$(OBJS)\coredll_treectlg.obj \
 	$(OBJS)\coredll_treebkg.obj \
 	$(OBJS)\coredll_vlbox.obj \
@@ -2923,6 +2929,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_splitter.obj \
 	$(OBJS)\corelib_textdlgg.obj \
 	$(OBJS)\corelib_tipwin.obj \
+	$(OBJS)\corelib_toolbkg.obj \
 	$(OBJS)\corelib_treectlg.obj \
 	$(OBJS)\corelib_treebkg.obj \
 	$(OBJS)\corelib_vlbox.obj \
@@ -3121,6 +3128,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_splitter.obj \
 	$(OBJS)\corelib_textdlgg.obj \
 	$(OBJS)\corelib_tipwin.obj \
+	$(OBJS)\corelib_toolbkg.obj \
 	$(OBJS)\corelib_treectlg.obj \
 	$(OBJS)\corelib_treebkg.obj \
 	$(OBJS)\corelib_vlbox.obj \
@@ -5928,6 +5936,11 @@ $(OBJS)\monodll_tipwin.obj: ..\..\src\generic\tipwin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_toolbkg.obj: ..\..\src\generic\toolbkg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_treectlg.obj: ..\..\src\generic\treectlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -7659,6 +7672,11 @@ $(OBJS)\monolib_textdlgg.obj: ..\..\src\generic\textdlgg.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_tipwin.obj: ..\..\src\generic\tipwin.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_toolbkg.obj: ..\..\src\generic\toolbkg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -9467,6 +9485,11 @@ $(OBJS)\coredll_tipwin.obj: ..\..\src\generic\tipwin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_toolbkg.obj: ..\..\src\generic\toolbkg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_treectlg.obj: ..\..\src\generic\treectlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -10607,6 +10630,11 @@ $(OBJS)\corelib_textdlgg.obj: ..\..\src\generic\textdlgg.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_tipwin.obj: ..\..\src\generic\tipwin.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_toolbkg.obj: ..\..\src\generic\toolbkg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 !endif
 

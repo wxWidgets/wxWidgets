@@ -634,6 +634,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/splitter.cpp
     src/generic/textdlgg.cpp
     src/generic/tipwin.cpp
+    src/generic/toolbkg.cpp
     src/generic/treectlg.cpp
     src/generic/treebkg.cpp
     src/generic/vlbox.cpp
@@ -800,6 +801,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tbarbase.h
     wx/tglbtn.h
     wx/tipwin.h
+    wx/toolbook.h
     wx/tooltip.h
     wx/toplevel.h
     wx/treebase.h
