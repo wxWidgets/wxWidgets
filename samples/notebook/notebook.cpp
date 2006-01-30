@@ -211,6 +211,9 @@ MyFrame::MyFrame()
 #if wxUSE_TREEBOOK
     menuType->AppendRadioItem(ID_BOOK_TREEBOOK,   wxT("&Treebook\tCtrl-4"));
 #endif
+#if wxUSE_TOOLBOOK
+    menuType->AppendRadioItem(ID_BOOK_TOOLBOOK,   wxT("T&oolbook\tCtrl-5"));
+#endif
 
     menuType->Check(ID_BOOK_NOTEBOOK + m_type, true);
 
@@ -329,23 +332,30 @@ MyFrame::~MyFrame()
     #define CASE_TREEBOOK(x)
 #endif
 
-#define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, after)                       \
+#if wxUSE_TOOLBOOK
+    #define CASE_TOOLBOOK(x) case Type_Toolbook: x; break;
+#else
+    #define CASE_TOOLBOOK(x)
+#endif
+
+#define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, toolb, after)                       \
     switch ( m_type )                                                         \
     {                                                                         \
         CASE_NOTEBOOK(before nb after)                                        \
         CASE_LISTBOOK(before lb after)                                        \
         CASE_CHOICEBOOK(before cb after)                                      \
         CASE_TREEBOOK(before tb after)                                        \
+        CASE_TOOLBOOK(before toolb after)                                        \
                                                                               \
         default:                                                              \
             wxFAIL_MSG( _T("unknown book control type") );                    \
     }
 
-int MyFrame::TranslateBookFlag(int nb, int lb, int chb, int tbk) const
+int MyFrame::TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbk) const
 {
     int flag = 0;
 
-    DISPATCH_ON_TYPE(flag =, nb,  lb,  chb,  tbk, + 0);
+    DISPATCH_ON_TYPE(flag =, nb,  lb,  chb,  tbk, toolbk, + 0);
 
     return flag;
 }
@@ -388,6 +398,7 @@ void MyFrame::RecreateBook()
                          wxListbook,
                          wxChoicebook,
                          wxTreebook,
+                         wxToolbook,
                      (m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, flags));
 
     if ( !m_bookCtrl )
@@ -491,6 +502,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_ADD_PAGE_BEFORE, MyFrame::OnAddPageBefore)
     EVT_UPDATE_UI_RANGE(ID_ADD_PAGE_BEFORE, ID_ADD_SUB_PAGE,
                             MyFrame::OnUpdateTreeMenu)
+#endif
+#if wxUSE_TOOLBOOK
+    EVT_TOOLBOOK_PAGE_CHANGED(wxID_ANY, MyFrame::OnToolbook)
+    EVT_TOOLBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnToolbook)
 #endif
 
     // Update title in idle time
@@ -748,6 +763,13 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
             _T("wxTreebook")
         },
 #endif // wxUSE_TREEBOOK
+#if wxUSE_TOOLBOOK
+        {
+            wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED,
+            wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING,
+            _T("wxToolbook")
+        },
+#endif // wxUSE_TOOLBOOK
     };
 
 

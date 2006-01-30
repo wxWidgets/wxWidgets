@@ -13,6 +13,7 @@
 #include "wx/listbook.h"
 #include "wx/treebook.h"
 #include "wx/notebook.h"
+#include "wx/toolbook.h"
 
 #if wxUSE_LOG && !defined( __SMARTPHONE__ )
     #define USE_LOG 1
@@ -64,6 +65,9 @@ public:
 #if wxUSE_TREEBOOK
     void OnTreebook(wxTreebookEvent& event) { OnBookCtrl(event); }
 #endif
+#if wxUSE_TOOLBOOK
+    void OnToolbook(wxToolbookEvent& event) { OnBookCtrl(event); }
+#endif
 
     void OnIdle(wxIdleEvent& event);
 
@@ -78,7 +82,7 @@ private:
 
     void RecreateBook();
     wxPanel *CreateNewPage() const;
-    int TranslateBookFlag(int nb, int lb, int chb, int tbk) const;
+    int TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbk) const;
 
     // Sample setup
     enum BookType
@@ -87,6 +91,7 @@ private:
         Type_Listbook,
         Type_Choicebook,
         Type_Treebook,
+        Type_Toolbook,
         Type_Max
     } m_type;
     int m_orient;
@@ -117,6 +122,7 @@ enum ID_COMMANDS
     ID_BOOK_LISTBOOK,
     ID_BOOK_CHOICEBOOK,
     ID_BOOK_TREEBOOK,
+    ID_BOOK_TOOLBOOK,
     ID_BOOK_MAX,
 
     ID_ORIENT_DEFAULT,
