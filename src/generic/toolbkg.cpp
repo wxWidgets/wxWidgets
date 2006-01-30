@@ -24,7 +24,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_LISTBOOK
+#if wxUSE_TOOLBOOK
 
 #include "wx/toolbar.h"
 #include "wx/toolbook.h"
