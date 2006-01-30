@@ -976,7 +976,12 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     bool ret = false;
     bool return_after_IM = false;
 
-    if( wxTranslateGTKKeyEventToWx(event, win, gdk_event) == false )
+    if( wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
+    {
+        // Emit KEY_DOWN event
+        ret = win->GetEventHandler()->ProcessEvent( event );
+    }
+    else
     {
         // Return after IM processing as we cannot do
         // anything with it anyhow.
@@ -1010,9 +1015,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
     if (return_after_IM)
         return false;
-
-    // Emit KEY_DOWN event
-    ret = win->GetEventHandler()->ProcessEvent( event );
 
 #if wxUSE_ACCEL
     if (!ret)
