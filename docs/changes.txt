@@ -37,7 +37,7 @@ All:
 
 All (GUI):
 
-- Added wxTreebook (uses a wxListCtrl to control pages).
+- Added wxTreebook (uses a wxTreeCtrl to control pages).
 - Added wxKeyEvent::GetModifiers()
 - Added wxDialog::SetEscapeId().
 - wxItemContainerImmutable::FindString unified (affects wxRadioBox, wxListBox,
