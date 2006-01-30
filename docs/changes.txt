@@ -37,7 +37,7 @@ All:
 
 All (GUI):
 
-- Added wxTreeBook.
+- Added wxTreebook (uses a wxListCtrl to control pages).
 - Added wxKeyEvent::GetModifiers()
 - Added wxDialog::SetEscapeId().
 - wxItemContainerImmutable::FindString unified (affects wxRadioBox, wxListBox,
@@ -72,6 +72,7 @@ All (GUI):
 - Added ability to use templates with static event tables
   with BEGIN_EVENT_TABLE_TEMPLATEn() macros
 - Added double-buffering to wxVListBox and fixed a scrolling issue.
+- Added wxToolbook (uses a wxToolBar to control pages).
 
 wxMSW:
 
