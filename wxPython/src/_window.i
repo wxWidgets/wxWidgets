@@ -1964,6 +1964,11 @@ wxControl where it returns true.", "");
         if hasattr(self, '_setCallbackInfo'):
             self._setCallbackInfo(self, self.__class__)
     }
+
+    %pythoncode {
+    def SendSizeEvent(self):
+        self.GetEventhandler().ProcessEvent(wx.SizeEvent((-1,-1)))
+    }
 };
 
 
