@@ -179,6 +179,7 @@ wxWinCE:
 - Checkable items in wxToolMenuBarTool supported.
 - Fixed date formatting and mktime.
 - Fixed getting standard folder paths on WinCE.
+- Support for backspace key on smartphone.
 
 wxX11:
 

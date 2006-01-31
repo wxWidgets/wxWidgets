@@ -84,6 +84,7 @@ public:
     virtual void SetLeftMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL);
     virtual void SetRightMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
+    virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
 #endif // __SMARTPHONE__ && __WXWINCE__
 
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
