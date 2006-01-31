@@ -1042,6 +1042,10 @@ SOURCE=.\generic\tipwin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\toolbkg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\treebkg.cpp
 # End Source File
 # Begin Source File
@@ -2968,6 +2972,10 @@ SOURCE=..\include\wx\tokenzr.h
 # Begin Source File
 
 SOURCE=..\include\wx\toolbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\toolbook.h
 # End Source File
 # Begin Source File
 
