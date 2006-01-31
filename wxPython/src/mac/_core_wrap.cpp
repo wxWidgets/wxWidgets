@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -39487,8 +39488,10 @@ static PyObject *_wrap_SizerItem_CalcMin(PyObject *, PyObject *args, PyObject *k
 static PyObject *_wrap_SizerItem_SetDimension(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
-    wxPoint arg2 ;
-    wxSize arg3 ;
+    wxPoint *arg2 = 0 ;
+    wxSize *arg3 = 0 ;
+    wxPoint temp2 ;
+    wxSize temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -39500,28 +39503,16 @@ static PyObject *_wrap_SizerItem_SetDimension(PyObject *, PyObject *args, PyObje
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxSizerItem, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        wxPoint * argp;
-        SWIG_Python_ConvertPtr(obj1, (void **)&argp, SWIGTYPE_p_wxPoint, SWIG_POINTER_EXCEPTION);
-        if (SWIG_arg_fail(2)) SWIG_fail;
-        if (argp == NULL) {
-            SWIG_null_ref("wxPoint");
-        }
-        if (SWIG_arg_fail(2)) SWIG_fail;
-        arg2 = *argp;
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
     }
     {
-        wxSize * argp;
-        SWIG_Python_ConvertPtr(obj2, (void **)&argp, SWIGTYPE_p_wxSize, SWIG_POINTER_EXCEPTION);
-        if (SWIG_arg_fail(3)) SWIG_fail;
-        if (argp == NULL) {
-            SWIG_null_ref("wxSize");
-        }
-        if (SWIG_arg_fail(3)) SWIG_fail;
-        arg3 = *argp;
+        arg3 = &temp3;
+        if ( ! wxSize_helper(obj2, &arg3)) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetDimension(arg2,arg3);
+        (arg1)->SetDimension((wxPoint const &)*arg2,(wxSize const &)*arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
