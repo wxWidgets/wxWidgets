@@ -26,6 +26,7 @@
 
 #if wxUSE_TOOLBOOK
 
+#include "wx/imaglist.h"
 #include "wx/toolbar.h"
 #include "wx/toolbook.h"
 #include "wx/settings.h"
