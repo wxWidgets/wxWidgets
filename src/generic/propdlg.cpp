@@ -101,6 +101,7 @@ void wxPropertySheetDialog::LayoutDialog(int centreFlags)
 #if defined(__SMARTPHONE__)
     if (m_bookCtrl)
         m_bookCtrl->SetFocus();
+    wxUnusedVar(centreFlags);
 #endif
 }
 
