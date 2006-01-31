@@ -10137,6 +10137,9 @@ class Window(EvtHandler):
         if hasattr(self, '_setCallbackInfo'):
             self._setCallbackInfo(self, self.__class__)
 
+    def SendSizeEvent(self):
+        self.GetEventhandler().ProcessEvent(wx.SizeEvent((-1,-1)))
+
 
 class WindowPtr(Window):
     def __init__(self, this):
