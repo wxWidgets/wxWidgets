@@ -25,6 +25,7 @@
 #include "wx/datetime.h"
 #include "wx/image.h"
 #include "wx/bookctrl.h"
+#include "wx/artprov.h"
 
 #if wxUSE_COLOURDLG
     #include "wx/colordlg.h"
@@ -191,6 +192,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if USE_SETTINGS_DIALOG
     EVT_MENU(DIALOGS_PROPERTY_SHEET,                MyFrame::OnPropertySheet)
+    EVT_MENU(DIALOGS_PROPERTY_SHEET_TOOLBOOK,       MyFrame::OnPropertySheetToolBook)
 #endif
 
     EVT_MENU(DIALOGS_REQUEST,                       MyFrame::OnRequestUserAttention)
@@ -358,6 +360,7 @@ bool MyApp::OnInit()
 
 #if USE_SETTINGS_DIALOG
     file_menu->Append(DIALOGS_PROPERTY_SHEET, _T("&Property Sheet Dialog\tCtrl-P"));
+    file_menu->Append(DIALOGS_PROPERTY_SHEET_TOOLBOOK, _T("Property Sheet Dialog using &ToolBook"));
 #endif
 
     file_menu->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
@@ -973,6 +976,12 @@ void MyFrame::OnPropertySheet(wxCommandEvent& WXUNUSED(event))
     SettingsDialog dialog(this);
     dialog.ShowModal();
 }
+
+void MyFrame::OnPropertySheetToolBook(wxCommandEvent& WXUNUSED(event))
+{
+    SettingsDialog dialog(this, true);
+    dialog.ShowModal();
+}
 #endif // USE_SETTINGS_DIALOG
 
 void MyFrame::OnRequestUserAttention(wxCommandEvent& WXUNUSED(event))
@@ -1371,9 +1380,34 @@ IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
 BEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
 END_EVENT_TABLE()
 
-SettingsDialog::SettingsDialog(wxWindow* win)
+SettingsDialog::SettingsDialog(wxWindow* win, bool useToolBook)
 {
     SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
+
+    int tabImage1 = -1;
+    int tabImage2 = -1;
+    
+    if (useToolBook)
+    {
+        tabImage1 = 0;
+        tabImage2 = 1;
+        SetSheetStyle(wxPROPSHEET_TOOLBOOK|wxPROPSHEET_SHRINKTOFIT);
+
+        // create a dummy image list with a few icons
+        const wxSize imageSize(32, 32);
+
+        m_imageList = new wxImageList(imageSize.GetWidth(), imageSize.GetHeight());
+        m_imageList->
+            Add(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER, imageSize));
+        m_imageList->
+            Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, imageSize));
+        m_imageList->
+            Add(wxArtProvider::GetIcon(wxART_WARNING, wxART_OTHER, imageSize));
+        m_imageList->
+            Add(wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, imageSize));
+    }
+    else
+        m_imageList = NULL;
 
     Create(win, wxID_ANY, _("Preferences"), wxDefaultPosition, wxDefaultSize,
         wxDEFAULT_DIALOG_STYLE
@@ -1381,21 +1415,30 @@ SettingsDialog::SettingsDialog(wxWindow* win)
         |wxRESIZE_BORDER
 #endif
     );
-    CreateButtons(wxOK|wxCANCEL
+
+    // If using a toolbook, also follow Mac style and don't create buttons    
+    if (!useToolBook)
+        CreateButtons(wxOK|wxCANCEL
 #ifndef __POCKETPC__
-         |wxHELP
+                      |wxHELP
 #endif
     );
 
     wxBookCtrlBase* notebook = GetBookCtrl();
+    notebook->SetImageList(m_imageList);
 
     wxPanel* generalSettings = CreateGeneralSettingsPage(notebook);
     wxPanel* aestheticSettings = CreateAestheticSettingsPage(notebook);
 
-    notebook->AddPage(generalSettings, _("General"));
-    notebook->AddPage(aestheticSettings, _("Aesthetics"));
+    notebook->AddPage(generalSettings, _("General"), true, tabImage1);
+    notebook->AddPage(aestheticSettings, _("Aesthetics"), false, tabImage2);
 
     LayoutDialog();
+}
+
+SettingsDialog::~SettingsDialog()
+{
+    delete m_imageList;
 }
 
 wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)

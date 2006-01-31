@@ -73,6 +73,8 @@ All (GUI):
   with BEGIN_EVENT_TABLE_TEMPLATEn() macros
 - Added double-buffering to wxVListBox and fixed a scrolling issue.
 - Added wxToolbook (uses a wxToolBar to control pages).
+- Added SetSheetStyle to wxPropertySheetDialog and allowed it to
+  behave like a Mac OS X settings dialog.
 
 wxMSW:
 

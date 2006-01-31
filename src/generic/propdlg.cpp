@@ -29,6 +29,20 @@
 #endif
 
 #include "wx/bookctrl.h"
+
+#if wxUSE_NOTEBOOK
+#include "wx/notebook.h"
+#endif
+#if wxUSE_CHOICEBOOK
+#include "wx/choicebk.h"
+#endif
+#if wxUSE_TOOLBOOK
+#include "wx/toolbook.h"
+#endif
+#if wxUSE_LISTBOOK
+#include "wx/listbook.h"
+#endif
+
 #include "wx/generic/propdlg.h"
 #include "wx/sysopt.h"
 
@@ -40,6 +54,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPropertySheetDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxPropertySheetDialog, wxDialog)
     EVT_ACTIVATE(wxPropertySheetDialog::OnActivate)
+    EVT_IDLE(wxPropertySheetDialog::OnIdle)
 END_EVENT_TABLE()
 
 bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxString& title,
@@ -69,17 +84,19 @@ bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxStri
 
 void wxPropertySheetDialog::Init()
 {
+    m_sheetStyle = wxPROPSHEET_DEFAULT;
     m_innerSizer = NULL;
     m_bookCtrl = NULL;
 }
 
 // Layout the dialog, to be called after pages have been created
-void wxPropertySheetDialog::LayoutDialog()
+void wxPropertySheetDialog::LayoutDialog(int centreFlags)
 {
 #if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
-    Centre(wxBOTH);
+    if (centreFlags)
+        Centre(centreFlags);
 #endif
 #if defined(__SMARTPHONE__)
     if (m_bookCtrl)
@@ -123,7 +140,32 @@ wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 #else
     style |= wxBK_DEFAULT;
 #endif
-    return new wxBookCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+
+    wxBookCtrlBase* bookCtrl = NULL;
+    
+#if wxUSE_NOTEBOOK
+    if (GetSheetStyle() & wxPROPSHEET_NOTEBOOK)
+        bookCtrl = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+#endif
+#if wxUSE_CHOICEBOOK
+    if (GetSheetStyle() & wxPROPSHEET_CHOICEBOOK)
+        bookCtrl = new wxChoicebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+#endif
+#if wxUSE_TOOLBOOK
+    if (GetSheetStyle() & wxPROPSHEET_TOOLBOOK)
+        bookCtrl = new wxToolbook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+#endif
+#if wxUSE_LISTBOOK
+    if (GetSheetStyle() & wxPROPSHEET_LISTBOOK)
+        bookCtrl = new wxListbook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+#endif
+    if (!bookCtrl)
+        bookCtrl = new wxBookCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+    
+    if (GetSheetStyle() & wxPROPSHEET_SHRINKTOFIT)
+        bookCtrl->SetShrinkMode(true);
+    
+    return bookCtrl;
 }
 
 // Adds the book control to the inner sizer.
@@ -157,4 +199,25 @@ void wxPropertySheetDialog::OnActivate(wxActivateEvent& event)
         event.Skip();
 }
 
+// Resize dialog if necessary
+void wxPropertySheetDialog::OnIdle(wxIdleEvent& event)
+{
+    event.Skip();
+    
+    if ((GetSheetStyle() & wxPROPSHEET_SHRINKTOFIT) && GetBookCtrl())
+    {
+        int sel = GetBookCtrl()->GetSelection();
+        if (sel != -1 && sel != m_selectedPage)
+        {
+            GetBookCtrl()->InvalidateBestSize();
+            InvalidateBestSize();
+            SetSizeHints(-1, -1, -1, -1);
+
+            m_selectedPage = sel;
+            LayoutDialog(0);
+        }
+    }
+}
+
 #endif // wxUSE_BOOKCTRL
+
