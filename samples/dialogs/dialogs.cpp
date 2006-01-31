@@ -26,6 +26,7 @@
 #include "wx/image.h"
 #include "wx/bookctrl.h"
 #include "wx/artprov.h"
+#include "wx/imaglist.h"
 
 #if wxUSE_COLOURDLG
     #include "wx/colordlg.h"
