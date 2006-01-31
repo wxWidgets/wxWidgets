@@ -121,7 +121,7 @@ of item.", "");
 needed by borders.", "");
 
     DocDeclStr(
-        void , SetDimension( wxPoint pos, wxSize size ),
+        void , SetDimension( const wxPoint& pos, const wxSize& size ),
         "Set the position and size of the space allocated for this item by the
 sizer, and adjust the position and size of the item (window or
 subsizer) to be within that space taking alignment and borders into
