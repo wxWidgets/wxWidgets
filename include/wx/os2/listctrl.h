@@ -507,16 +507,9 @@ protected:
                                   ) const;
 
     //
-    // Return the icon for the given item. In report view, OnGetItemImage will
-    // only be called for the first column. See OnGetItemColumnImage for 
-    // details.
+    // Return the icon for the given item
     //
     virtual int OnGetItemImage(long lItem) const;
-
-    //
-    // Return the icon for the given item and column
-    //
-    virtual int OnGetItemColumnImage(long lItem, long lColumn) const;
 
     //
     // Return the attribute for the item (may return NULL if none)

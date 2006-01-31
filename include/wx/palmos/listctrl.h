@@ -378,12 +378,7 @@ protected:
     // return the text for the given column of the given item
     virtual wxString OnGetItemText(long item, long column) const;
 
-    // return the text for the given column of the given item
-    virtual wxString OnGetItemText(long item, long column) const;
-
-    // return the icon for the given item. In report view, OnGetItemImage will
-    // only be called for the first column. See OnGetItemColumnImage for 
-    // details.
+    // return the icon for the given item
     virtual int OnGetItemImage(long item) const;
 
     // return the attribute for the item (may return NULL if none)
