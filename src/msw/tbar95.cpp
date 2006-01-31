@@ -1049,7 +1049,6 @@ bool wxToolBar::Realize()
     }
 
     InvalidateBestSize();
-    SetBestFittingSize();
     UpdateSize();
 
     return true;
