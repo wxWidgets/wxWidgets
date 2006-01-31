@@ -341,6 +341,9 @@ public:
 
     void SetImage( int image ) { SetImage(0, image); }
     int GetImage() const { return GetImage(0); }
+    void SetImage( int index, int image );
+    int GetImage( int index ) const;
+
     bool HasImage() const { return GetImage() != -1; }
     bool HasText() const { return !GetText(0).empty(); }
 
@@ -390,11 +393,6 @@ private:
     // draw the text on the DC with the correct justification; also add an
     // ellipsis if the text is too large to fit in the current width
     void DrawTextFormatted(wxDC *dc, const wxString &text, int col, int x, int y, int width);
-
-    // these are only used by GetImage/SetImage above, we don't support images
-    // with subitems at the public API level yet
-    void SetImage( int index, int image );
-    int GetImage( int index ) const;
 };
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxListLineData, wxListLineDataArray);
@@ -2226,7 +2224,7 @@ void wxListMainWindow::CacheLineData(size_t line)
     for ( size_t col = 0; col < countCol; col++ )
     {
         ld->SetText(col, listctrl->OnGetItemText(line, col));
-        ld->SetImage(listctrl->OnGetItemColumnImage(line, col));
+        ld->SetImage(col, listctrl->OnGetItemColumnImage(line, col));
     }
 
     ld->SetAttr(listctrl->OnGetItemAttr(line));
