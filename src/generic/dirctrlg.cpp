@@ -119,7 +119,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 
 #if !defined(__WXWINCE__)
         wxChar pname[52];
-        if (GetVolumeInformation( path.c_str(), pname, 52, NULL, NULL, NULL, NULL, NULL ))
+        if (GetVolumeInformation( path.c_str(), pname, 52, NULL, NULL, NULL, NULL, 0 ))
         {
             name.Printf(wxT("%s %s"), (const wxChar*) name, pname );
         }
