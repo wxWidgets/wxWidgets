@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1620,7 +1621,7 @@ static swig_module_info swig_module = {swig_types, 163, 0, 0, 0, 0};
 
  static const wxString wxPyButtonNameStr(wxButtonNameStr); 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 
@@ -1786,7 +1787,7 @@ SWIG_Check_bool(PyObject* obj)
  static const wxString wxPyChoiceNameStr(wxChoiceNameStr); 
  static const wxString wxPyComboBoxNameStr(wxComboBoxNameStr); 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_long PyInt_FromLong
 /*@@*/
 
@@ -2033,6 +2034,7 @@ public:
 
     // use the virtual version to avoid a confusing assert in the base class
     DEC_PYCALLBACK_INT_LONG_virtual(OnGetItemImage);
+//    DEC_PYCALLBACK_INT_LONGLONG(OnGetItemColumnImage);
 
     PYPRIVATE;
 };
@@ -2042,7 +2044,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyListCtrl, wxListCtrl);
 IMP_PYCALLBACK_STRING_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemText);
 IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
 IMP_PYCALLBACK_INT_LONG_virtual(wxPyListCtrl, wxListCtrl, OnGetItemImage);
- 
+//IMP_PYCALLBACK_INT_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemColumnImage); 
+
 
 static wxListItem *wxPyListCtrl_GetColumn(wxPyListCtrl *self,int col){
             wxListItem item;
@@ -2146,11 +2149,11 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyTreeCtrl, wxTreeCtrl);
 
 
 #if UINT_MAX < LONG_MAX
-/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_unsigned_SS_int SWIG_From_long
 /*@@*/
 #else
-/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_unsigned_SS_int SWIG_From_unsigned_SS_long
 /*@@*/
 #endif

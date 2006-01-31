@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1612,7 +1613,7 @@ static swig_module_info swig_module = {swig_types, 157, 0, 0, 0, 0};
 
  static const wxString wxPyEmptyString(wxEmptyString); 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 

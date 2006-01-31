@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1801,12 +1802,12 @@ SWIG_Check_unsigned_SS_long(PyObject* obj)
 }
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_unsigned_SS_char PyInt_FromLong
 /*@@*/
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_long PyInt_FromLong
 /*@@*/
 
@@ -1859,7 +1860,7 @@ SWIG_Check_int(PyObject* obj)
 }
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 
@@ -2237,7 +2238,7 @@ static wxArrayInt wxDC_GetPartialTextExtents(wxDC *self,wxString const &text){
             return widths;
         }
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_double PyFloat_FromDouble
 /*@@*/
 

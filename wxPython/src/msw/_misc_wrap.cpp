@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1626,7 +1627,7 @@ static swig_module_info swig_module = {swig_types, 172, 0, 0, 0, 0};
 
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 
@@ -1729,7 +1730,7 @@ SWIG_Check_int(PyObject* obj)
  static const wxString wxPyFileSelectorDefaultWildcardStr(wxFileSelectorDefaultWildcardStr); 
  static const wxString wxPyDirSelectorPromptStr(wxDirSelectorPromptStr); 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_long PyInt_FromLong
 /*@@*/
 
@@ -2686,7 +2687,7 @@ static double wxConfigBase_ReadFloat(wxConfigBase *self,wxString const &key,doub
             return rv;
         }
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_double PyFloat_FromDouble
 /*@@*/
 
@@ -2716,11 +2717,11 @@ static PyObject *wxDateTime_GetAmPmStrings(){
         }
 
 #if UINT_MAX < LONG_MAX
-/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_unsigned_SS_int SWIG_From_long
 /*@@*/
 #else
-/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_unsigned_SS_int SWIG_From_unsigned_SS_long
 /*@@*/
 #endif

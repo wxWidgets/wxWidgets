@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -2119,7 +2120,7 @@ SWIG_FromCharPtr(const char* cptr)
 #define wxGRID_DEFAULT_SCROLLBAR_WIDTH    WXGRID_DEFAULT_SCROLLBAR_WIDTH
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 
@@ -2578,12 +2579,12 @@ static void wxGridTableBase__setOORInfo(wxGridTableBase *self,PyObject *_self){
                 self->SetClientObject(new wxPyOORClientData(_self));
         }
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_long PyInt_FromLong
 /*@@*/
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_double PyFloat_FromDouble
 /*@@*/
 

@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1687,7 +1688,7 @@ static swig_module_info swig_module = {swig_types, 218, 0, 0, 0, 0};
  static const wxString wxPyStaticPictureNameStr(wxStaticPictureNameStr); 
  static const wxString wxPyEmptyString(wxEmptyString); 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 
@@ -1968,17 +1969,17 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyTreeListCtrl, wxTreeListCtrl)
 
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_long PyInt_FromLong
 /*@@*/
 
 
 #if UINT_MAX < LONG_MAX
-/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_unsigned_SS_int SWIG_From_long
 /*@@*/
 #else
-/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_unsigned_SS_int SWIG_From_unsigned_SS_long
 /*@@*/
 #endif
@@ -2252,7 +2253,7 @@ SWIG_Check_float(PyObject* obj)
 }
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_float PyFloat_FromDouble
 /*@@*/
 

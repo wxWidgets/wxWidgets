@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1776,7 +1777,7 @@ SWIG_Check_bool(PyObject* obj)
 }
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 
@@ -1844,7 +1845,7 @@ SWIG_Check_double(PyObject* obj)
 }
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_double PyFloat_FromDouble
 /*@@*/
 
@@ -1855,7 +1856,7 @@ SWIG_Check_double(PyObject* obj)
 static void wxTopLevelWindow_MacSetMetalAppearance(wxTopLevelWindow *self,bool on){ /*wxPyRaiseNotImplemented();*/ }
 static bool wxTopLevelWindow_MacGetMetalAppearance(wxTopLevelWindow const *self){ /*wxPyRaiseNotImplemented();*/ return false; }
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_long PyInt_FromLong
 /*@@*/
 
