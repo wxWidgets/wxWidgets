@@ -61,12 +61,13 @@ bool wxStaticText::Create(wxWindow *parent,
         return FALSE;
     }
 
-    // notice that we call the base class version which will just remove the
-    // '&' characters from the string, but not set the label's text to it
+    // the base class version which
+    // will not set the label's text to it
     // because the label is not yet created and because SetLabel() has a side
     // effect of changing the control size which might not be desirable
+    wxString label1(wxStripMenuCodes(label));
     wxControl::SetLabel(label);
-    m_widget = gtk_label_new( wxGTK_CONV( m_label ) );
+    m_widget = gtk_label_new( wxGTK_CONV( label1 ) );
 
     GtkJustification justify;
     if ( style & wxALIGN_CENTER )
@@ -101,7 +102,9 @@ void wxStaticText::SetLabel( const wxString &label )
 {
     wxControl::SetLabel(label);
 
-    gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( m_label ) );
+    wxString label1(wxStripMenuCodes(label));
+
+    gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( label1 ) );
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))

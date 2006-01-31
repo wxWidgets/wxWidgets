@@ -61,12 +61,14 @@ bool wxStaticText::Create(wxWindow *parent,
         return FALSE;
     }
 
-    // notice that we call the base class version which will just remove the
-    // '&' characters from the string, but not set the label's text to it
-    // because the label is not yet created and because SetLabel() has a side
+    // notice that we call the base class version which will
+    // not set the label's text to it because the label is no
+    // yet created and because SetLabel() has a side
     // effect of changing the control size which might not be desirable
+    // wxContro::SetLabel no longer strips menu codes, so do it here.
+    wxString label1(wxStripMenuCodes(label));
     wxControl::SetLabel(label);
-    m_widget = gtk_label_new( wxGTK_CONV( m_label ) );
+    m_widget = gtk_label_new( wxGTK_CONV( label1 ) );
 
     GtkJustification justify;
     if ( style & wxALIGN_CENTER )
@@ -113,6 +115,7 @@ wxString wxStaticText::GetLabel() const
 void wxStaticText::SetLabel( const wxString &label )
 {
     wxControl::SetLabel(label);
+    wxString label1(wxStripMenuCodes(label));
 
     // Build the colorized version of the label (markup only allowed
     // under GTK2):
@@ -124,11 +127,11 @@ void wxStaticText::SetLabel( const wxString &label )
         colorlabel.Printf(_T("<span foreground=\"#%02x%02x%02x\">%s</span>"),
                           m_foregroundColour.Red(), m_foregroundColour.Green(),
                           m_foregroundColour.Blue(),
-                          wxEscapeStringForPangoMarkup(label).c_str());
+                          wxEscapeStringForPangoMarkup(label1).c_str());
         gtk_label_set_markup( GTK_LABEL(m_widget), wxGTK_CONV( colorlabel ) );
     }
     else
-        gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( m_label ) );
+        gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( label1 ) );
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))
