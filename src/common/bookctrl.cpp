@@ -53,6 +53,7 @@ void wxBookCtrlBase::Init()
     m_bookctrl = NULL;
     m_imageList = NULL;
     m_ownsImageList = false;
+    m_shrinkToFit = false;
 
 #if defined(__WXWINCE__)
     m_internalBorder = 1;
@@ -143,6 +144,9 @@ wxSize wxBookCtrlBase::DoGetBestSize() const
                 bestSize.y = childBestSize.y;
         }
     }
+    
+    if (m_shrinkToFit && GetCurrentPage())
+        bestSize = GetCurrentPage()->GetBestSize();
 
     // convert display area to window area, adding the size necessary for the
     // tabs
