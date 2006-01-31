@@ -4,7 +4,7 @@ RCS file: /cvsroot/swig/SWIG/Doc/Manual/Python.html,v
 retrieving revision 1.31
 diff -u -4 -r1.31 Python.html
 --- Doc/Manual/Python.html	6 Oct 2005 21:49:58 -0000	1.31
-+++ Doc/Manual/Python.html	21 Jan 2006 00:44:17 -0000
++++ Doc/Manual/Python.html	29 Jan 2006 02:05:55 -0000
 @@ -4461,10 +4461,10 @@
  <H2><a name="Python_nn65"></a>26.10 Docstring Features</H2>
  
@@ -24,7 +24,7 @@ RCS file: /cvsroot/swig/SWIG/Lib/swig.swg,v
 retrieving revision 1.49
 diff -u -4 -r1.49 swig.swg
 --- Lib/swig.swg	15 Oct 2005 00:15:30 -0000	1.49
-+++ Lib/swig.swg	21 Jan 2006 00:44:17 -0000
++++ Lib/swig.swg	29 Jan 2006 02:05:55 -0000
 @@ -51,9 +51,9 @@
  
  #define %nodefault       %feature("nodefault","1")
@@ -42,7 +42,7 @@ RCS file: /cvsroot/swig/SWIG/Lib/swiginit.swg,v
 retrieving revision 1.5
 diff -u -4 -r1.5 swiginit.swg
 --- Lib/swiginit.swg	12 Sep 2005 23:25:03 -0000	1.5
-+++ Lib/swiginit.swg	21 Jan 2006 00:44:17 -0000
++++ Lib/swiginit.swg	29 Jan 2006 02:05:55 -0000
 @@ -40,14 +40,19 @@
  **/
  
@@ -192,7 +192,7 @@ RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.107
 diff -u -4 -r1.107 python.cxx
 --- Source/Modules/python.cxx	7 Oct 2005 13:17:41 -0000	1.107
-+++ Source/Modules/python.cxx	21 Jan 2006 00:44:17 -0000
++++ Source/Modules/python.cxx	29 Jan 2006 02:05:56 -0000
 @@ -36,9 +36,8 @@
  static  File         *f_directors_h = 0;
  static  File         *f_init = 0;
@@ -203,7 +203,28 @@ diff -u -4 -r1.107 python.cxx
  
  static  String       *methods;
  static  String       *class_name;
-@@ -322,9 +321,8 @@
+@@ -281,8 +280,20 @@
+     Swig_banner(f_runtime);
+ 
+     Printf(f_runtime,"#define SWIGPYTHON\n");
+ 
++    String *package_version = NewString(PACKAGE_VERSION);
++    char *token = strtok(Char(package_version), ".");
++    String *vers = NewString("#define SWIG_VERSION 0x");
++    while (token) {
++      int len = strlen(token);
++      Printf(vers, "%s%s", (len == 1) ? "0" : "", token);
++      token = strtok(NULL, ".");
++    }
++    Printf(f_runtime, "%s\n", vers);
++    Delete(package_version);
++    Delete(vers);
++
+     if (directorsEnabled()) {
+       Printf(f_runtime,"#define SWIG_DIRECTORS\n");
+     }
+ 
+@@ -322,9 +333,8 @@
        }
        Delete(filen); filen = NULL;
  
@@ -213,7 +234,7 @@ diff -u -4 -r1.107 python.cxx
  
        Swig_register_filebyname("shadow",f_shadow);
        Swig_register_filebyname("python",f_shadow);
-@@ -343,8 +341,10 @@
+@@ -343,8 +353,10 @@
        if (mod_docstring && Len(mod_docstring)) {
          Printv(f_shadow, "\n\"\"\"\n", mod_docstring, "\n\"\"\"\n", NIL);
          Delete(mod_docstring); mod_docstring = NULL;
@@ -224,7 +245,7 @@ diff -u -4 -r1.107 python.cxx
        /* if (!modern) */
        /* always needed, a class can be forced to be no-modern, such as an exception */
        { 
-@@ -445,10 +445,8 @@
+@@ -445,10 +457,8 @@
      Printf(f_wrappers,"}\n");
      Printf(f_wrappers,"#endif\n");
  
@@ -235,7 +256,7 @@ diff -u -4 -r1.107 python.cxx
        Printv(f_shadow_py, f_shadow_stubs, "\n",NIL);
  
        Close(f_shadow_py);
-@@ -507,12 +505,9 @@
+@@ -507,12 +517,9 @@
          }
  
          // finally, output the name of the imported module
@@ -249,7 +270,7 @@ diff -u -4 -r1.107 python.cxx
        }
      }
      return Language::importDirective(n);
-@@ -774,10 +769,15 @@
+@@ -774,10 +781,15 @@
          
        // Do the param type too?
        if (showTypes) {
