@@ -37,6 +37,7 @@
 #include <shellapi.h>
 #include <aygshell.h>
 #include <tpcshell.h>
+#include <tpcuser.h>
 #include "wx/msw/wince/missing.h"
 
 #include "wx/msw/wince/resources.h"
