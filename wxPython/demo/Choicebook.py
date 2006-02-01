@@ -14,8 +14,7 @@ pageTexts = [ "Yet",
 
 class TestCB(wx.Choicebook):
     def __init__(self, parent, id, log):
-        wx.Choicebook.__init__(self, parent, id
-                            )
+        wx.Choicebook.__init__(self, parent, id)
         self.log = log
 
         # Now make a bunch of panels for the choice book

@@ -22,6 +22,9 @@ The following deprecated items have been removed:
 
 wx.EventLoop is now implemented for wxMac.
 
+Added wxPython wrappers for the new wx.Treebook and wx.Toolbook
+classes. 
+
 
 
 

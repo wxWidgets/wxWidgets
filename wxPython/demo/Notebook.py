@@ -13,12 +13,13 @@ import  images
 
 class TestNB(wx.Notebook):
     def __init__(self, parent, id, log):
-        wx.Notebook.__init__(self, parent, id, size=(21,21),
-                             #style=
-                             #wx.NB_TOP # | wx.NB_MULTILINE
-                             #wx.NB_BOTTOM
-                             #wx.NB_LEFT
-                             #wx.NB_RIGHT
+        wx.Notebook.__init__(self, parent, id, size=(21,21), style=
+                             wx.BK_DEFAULT
+                             #wx.BK_TOP 
+                             #wx.BK_BOTTOM
+                             #wx.BK_LEFT
+                             #wx.BK_RIGHT
+                             # | wx.NB_MULTILINE
                              )
         self.log = log
 

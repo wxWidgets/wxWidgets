@@ -64,7 +64,9 @@
 #include <wx/taskbar.h>
 #include <wx/tglbtn.h>
 #include <wx/tipwin.h>
+#include <wx/toolbook.h>
 #include <wx/tooltip.h>
+#include <wx/treebook.h>
 #include <wx/vlbox.h>
 #include <wx/vscroll.h>
 #include <wx/dateevt.h>

@@ -47,13 +47,8 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
-        'FoldPanelBar',
-        'GIFAnimationCtrl',
-        'HyperLinkCtrl',
-        'MultiSplitterWindow',
-        'Throbber',
-        'GetMouseState',
-        'FloatCanvas',
+        'Treebook',
+        'Toolbook',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -94,7 +89,6 @@ _treeList = [
         'CheckBox',
         'CheckListBox',
         'Choice',
-        'Choicebook',
         'ComboBox',
         'Gauge',
         'Grid',
@@ -103,9 +97,7 @@ _treeList = [
         'ListCtrl',
         'ListCtrl_virtual',
         'ListCtrl_edit',
-        'Listbook',
         'Menu',
-        'Notebook',
         'PopupMenu',
         'PopupWindow',
         'RadioBox',
@@ -126,6 +118,14 @@ _treeList = [
         'ToolBar',
         'TreeCtrl',
         'Validator',
+        ]),
+    
+    ('"Book" Controls', [
+        'Choicebook',
+        'Listbook',
+        'Notebook',
+        'Toolbook',
+        'Treebook',
         ]),
 
     ('Custom Controls', [
