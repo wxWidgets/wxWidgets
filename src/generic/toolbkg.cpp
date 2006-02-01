@@ -91,14 +91,19 @@ wxToolbook::Create(wxWindow *parent,
                             wxDefaultValidator, name) )
         return false;
 
-    // TODO: make configurable
+    
+    int orient = wxTB_HORIZONTAL;
+    if ( (style & (wxBK_LEFT | wxBK_RIGHT)) != 0)
+        orient = wxTB_VERTICAL;
+    
+    // TODO: make more configurable
     m_bookctrl = new wxToolBar
                  (
                     this,
                     wxID_TOOLBOOKTOOLBAR,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    wxTB_HORIZONTAL|wxTB_TEXT|wxTB_FLAT|wxTB_NODIVIDER
+                    orient | wxTB_TEXT|wxTB_FLAT|wxTB_NODIVIDER
                  );
 
     return true;
