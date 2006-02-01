@@ -58,18 +58,17 @@ static const wxChar eHOSTNAME[]  = _T("HostName");
 // functions beyond those provided by WinSock
 
 // Get full hostname (eg. DoDo.BSn-Germany.crg.de)
-bool wxGetHostName(
-  wxChar*                           zBuf
-, int                               nMaxSize
-)
+bool wxGetHostName( wxChar* zBuf, int nMaxSize )
 {
-#if wxUSE_NET_API
-    char                            zServer[256];
-    char                            zComputer[256];
-    unsigned long                   ulLevel = 0;
-    unsigned char*                  zBuffer = NULL;
-    unsigned long                   ulBuffer = 256;
-    unsigned long*                  pulTotalAvail = NULL;
+    if (!zBuf) return false;
+
+#if defined(wxUSE_NET_API) && wxUSE_NET_API
+    char           zServer[256];
+    char           zComputer[256];
+    unsigned long  ulLevel = 0;
+    unsigned char* zBuffer = NULL;
+    unsigned long  ulBuffer = 256;
+    unsigned long* pulTotalAvail = NULL;
 
     NetBios32GetInfo( (const unsigned char*)zServer
                      ,(const unsigned char*)zComputer
@@ -80,8 +79,8 @@ bool wxGetHostName(
                     );
     strcpy(zBuf, zServer);
 #else
-    wxChar*                         zSysname;
-    const wxChar*                   zDefaultHost = _T("noname");
+    wxChar*        zSysname;
+    const wxChar*  zDefaultHost = _T("noname");
 
     if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL)
     {
@@ -94,9 +93,13 @@ bool wxGetHostName(
                                );
     }
     else
+    {
         wxStrncpy(zBuf, zSysname, nMaxSize - 1);
+    }
+
     zBuf[nMaxSize] = _T('\0');
 #endif
+
     return *zBuf ? true : false;
 }
 

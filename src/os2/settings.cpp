@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        settings.cpp
+// Name:        src/os2/settings.cpp
 // Purpose:     wxSettings
 // Author:      David Webster
 // Modified by:
@@ -62,7 +62,7 @@ wxArrayString wxSystemSettingsModule::sm_optionValues;
 
 bool wxSystemSettingsModule::OnInit()
 {
-    return TRUE;
+    return true;
 }
 
 void wxSystemSettingsModule::OnExit()
@@ -287,6 +287,8 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index,
         // TODO case wxSYS_PENWINDOWS_PRESENT:
         // TODO case wxSYS_SHOW_SOUNDS:
         // TODO case wxSYS_SWAP_BUTTONS:
+
+        default:
     }
     return -1;  // unsupported metric
 }

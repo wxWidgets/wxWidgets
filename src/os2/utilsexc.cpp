@@ -238,29 +238,7 @@ long wxExecute(
                     );
 }
 
-bool wxGetFullHostName( wxChar* zBuf,
-                        int nMaxSize)
+bool wxGetFullHostName( wxChar* zBuf, int nMaxSize)
 {
-#if wxUSE_NET_API
-    char                            zServer[256];
-    char                            zComputer[256];
-    unsigned long                   ulLevel = 0;
-    unsigned char*                  zBuffer = NULL;
-    unsigned long                   ulBuffer = 256;
-    unsigned long*                  pulTotalAvail = NULL;
-
-    NetBios32GetInfo( (const unsigned char*)zServer
-                     ,(const unsigned char*)zComputer
-                     ,ulLevel
-                     ,zBuffer
-                     ,ulBuffer
-                     ,pulTotalAvail
-                    );
-    strncpy(zBuf, zComputer, nMaxSize);
-    zBuf[nMaxSize] = _T('\0');
-#else
-    wxUnusedVar(nMaxSize);
-    strcpy((char*)zBuf, "noname");
-#endif
-    return *zBuf ? true : false;
+    return wxGetHostName( zBuf, nMaxSize );
 }

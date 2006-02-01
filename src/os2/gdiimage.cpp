@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/gdiimage.cpp
+// Name:        src/os2/gdiimage.cpp
 // Purpose:     wxGDIImage implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -120,7 +120,7 @@ public:
                         ,int         WXUNUSED(nDepth) = 1
                        )
     {
-        return(FALSE);
+        return false;
     }
 
     virtual bool Save( wxGDIImage*     WXUNUSED(pImage)
@@ -128,7 +128,7 @@ public:
                       ,int             WXUNUSED(nType)
                      )
     {
-        return(FALSE);
+        return false;
     }
     virtual bool Load( wxGDIImage*     pImage
                       ,const wxString& rName
@@ -139,7 +139,7 @@ public:
                      )
     {
         wxIcon*                     pIcon = wxDynamicCast(pImage, wxIcon);
-        wxCHECK_MSG(pIcon, FALSE, _T("wxIconHandler only works with icons"));
+        wxCHECK_MSG(pIcon, false, _T("wxIconHandler only works with icons"));
 
         return LoadIcon( pIcon
                         ,rName
@@ -395,7 +395,7 @@ bool wxBMPFileHandler::LoadFile( wxBitmap*       pBitmap,
                                  int             WXUNUSED(nDesiredWidth),
                                  int             WXUNUSED(nDesiredHeight) )
 {
-#if wxUSE_IMAGE_LOADING_IN_OS2
+#if defined(wxUSE_IMAGE_LOADING_IN_OS2) && wxUSE_IMAGE_LOADING_IN_OS2
     wxPalette* pPalette = NULL;
 
     bool bSuccess = false; /* wxLoadIntoBitmap( WXSTRINGCAST rName
@@ -422,7 +422,7 @@ bool wxBMPFileHandler::SaveFile( wxBitmap*        pBitmap,
                                  int              WXUNUSED(nType),
                                  const wxPalette* pPal )
 {
-#if wxUSE_IMAGE_LOADING_IN_OS2
+#if defined(wxUSE_IMAGE_LOADING_IN_OS2) && wxUSE_IMAGE_LOADING_IN_OS2
     wxPalette* pActualPalette = (wxPalette *)pPal;
 
     if (!pActualPalette)
@@ -450,7 +450,7 @@ bool wxICOFileHandler::LoadIcon( wxIcon*         pIcon,
                                  int             WXUNUSED(nDesiredWidth),
                                  int             WXUNUSED(nDesiredHeight) )
 {
-#if wxUSE_RESOURCE_LOADING_IN_OS2
+#if defined(wxUSE_RESOURCE_LOADING_IN_OS2) && wxUSE_RESOURCE_LOADING_IN_OS2
     pIcon->UnRef();
 
     return false;
