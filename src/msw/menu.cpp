@@ -408,7 +408,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         if ( pItem->GetBitmap().Ok() &&
                 !pItem->GetTextColour().Ok() &&
                     !pItem->GetBackgroundColour().Ok() &&
-                        !pItem->GetFont().Ok() )
+                        !pItem->GetFont().Ok() &&
+                            !pItem->GetBitmap(true).Ok() )
         {
             // try to use InsertMenuItem() as it's guaranteed to look correctly
             // while our owner-drawning code is not
