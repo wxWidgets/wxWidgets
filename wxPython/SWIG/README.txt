@@ -43,7 +43,10 @@ swig-1.3.27.patch
 
     Bug fix for SWIG's definition of the %makedefault macro.
 
+    Add a SWIG_VERSION macro to the wrapper file so C/C++ code can
+    integrate with different versions of the generated runtime code.
 
+    
 
 ------------------------------------------------------------------------
 
