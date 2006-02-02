@@ -9,7 +9,6 @@ if [ "$SWIGDIR" = "" ]; then
   SWIGDIR=$PROJECTS\\SWIG-1.3.27
 fi
 
-FLAGS="USE_SWIG=1 SWIG=$SWIGDIR\\swig.exe"
 
 #  Use non-default python?
 case $1 in
@@ -25,6 +24,22 @@ PYTHON=$TOOLS/python$VER/python.exe
 
 SETUP="$PYTHON -u setup.py"
 $PYTHON -c "import sys;print '\n', sys.version, '\n'"
+
+
+FLAGS="USE_SWIG=1 SWIG=$SWIGDIR\\swig.exe"
+UNIFLAG="UNICODE=1"
+
+for p in $*; do
+    if [ "$p" = "UNICODE=0" -o "$p" = "UNICODE=1" ]; then
+	UNIFLAG=""
+	break
+    fi
+done
+
+FLAGS="$FLAGS $UNIFLAG"
+
+
+
 
 
 
