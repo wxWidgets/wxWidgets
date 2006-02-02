@@ -980,6 +980,14 @@
 		40F10E5D06AD0230003C7AC3 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F10E5706AD0230003C7AC3 /* thread.cpp */; };
 		40FF2B0D0869B1530013E961 /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40FF2B0C0869B1530013E961 /* webkit.mm */; };
 		40FF2B0E0869B1530013E961 /* webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40FF2B0C0869B1530013E961 /* webkit.mm */; };
+		43DFF59D09926B080033000B /* helpdlg.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DFF59B09926B080033000B /* helpdlg.h */; };
+		43DFF59E09926B080033000B /* helpwnd.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DFF59C09926B080033000B /* helpwnd.h */; };
+		43DFF59F09926B080033000B /* helpdlg.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DFF59B09926B080033000B /* helpdlg.h */; };
+		43DFF5A009926B080033000B /* helpwnd.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DFF59C09926B080033000B /* helpwnd.h */; };
+		43DFF5BA09926F7B0033000B /* helpdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DFF5B809926F7B0033000B /* helpdlg.cpp */; };
+		43DFF5BB09926F7B0033000B /* helpwnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DFF5B909926F7B0033000B /* helpwnd.cpp */; };
+		43DFF5BC09926F7B0033000B /* helpdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DFF5B809926F7B0033000B /* helpdlg.cpp */; };
+		43DFF5BD09926F7B0033000B /* helpwnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DFF5B909926F7B0033000B /* helpwnd.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -1147,6 +1155,10 @@
 		40F10E5606AD0230003C7AC3 /* tglbtn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = tglbtn.cpp; sourceTree = "<group>"; };
 		40F10E5706AD0230003C7AC3 /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = thread.cpp; sourceTree = "<group>"; };
 		40FF2B0C0869B1530013E961 /* webkit.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = webkit.mm; path = htmlctrl/webkit/webkit.mm; sourceTree = "<group>"; };
+		43DFF59B09926B080033000B /* helpdlg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = helpdlg.h; sourceTree = "<group>"; };
+		43DFF59C09926B080033000B /* helpwnd.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = helpwnd.h; sourceTree = "<group>"; };
+		43DFF5B809926F7B0033000B /* helpdlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = helpdlg.cpp; sourceTree = "<group>"; };
+		43DFF5B909926F7B0033000B /* helpwnd.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = helpwnd.cpp; sourceTree = "<group>"; };
 		CA0CB57B0450773900000102 /* accesscmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = accesscmn.cpp; sourceTree = "<group>"; };
 		CA0CB57C0450773900000102 /* datacmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = datacmn.cpp; sourceTree = "<group>"; };
 		CA0CB57D0450773900000102 /* dpycmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = dpycmn.cpp; sourceTree = "<group>"; };
@@ -1950,13 +1962,13 @@
 		40670A8107377A3600F7C08C /* mac/corefoundation */ = {
 			isa = PBXGroup;
 			children = (
-				40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */,
+				40670A8207377A6300F7C08C /* cfstring.cpp */,
+				40607C740749432A00DC0420 /* gsockosx.cpp */,
 				40AF90B307C8A9CF006A6D3C /* hid.cpp */,
 				40AF90B407C8A9CF006A6D3C /* hidjoystick.cpp */,
-				40607C740749432A00DC0420 /* gsockosx.cpp */,
-				40607C750749432A00DC0420 /* utilsexc_cf.cpp */,
-				40670A8207377A6300F7C08C /* cfstring.cpp */,
 				40670A8307377A6300F7C08C /* stdpaths_cf.cpp */,
+				40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */,
+				40607C750749432A00DC0420 /* utilsexc_cf.cpp */,
 			);
 			name = mac/corefoundation;
 			path = mac/carbon;
@@ -1987,7 +1999,6 @@
 		40ADC36408156DCA0009DA36 /* xrc */ = {
 			isa = PBXGroup;
 			children = (
-				409F026F0976CA5600D1030F /* xh_grid.cpp */,
 				40ADC36508156DEB0009DA36 /* xh_bmp.cpp */,
 				40ADC36608156DEB0009DA36 /* xh_bmpbt.cpp */,
 				40ADC36708156DEB0009DA36 /* xh_bttn.cpp */,
@@ -2002,6 +2013,7 @@
 				40ADC37008156DEB0009DA36 /* xh_frame.cpp */,
 				40ADC37108156DEB0009DA36 /* xh_gauge.cpp */,
 				40ADC37208156DEB0009DA36 /* xh_gdctl.cpp */,
+				409F026F0976CA5600D1030F /* xh_grid.cpp */,
 				40ADC37308156DEB0009DA36 /* xh_html.cpp */,
 				40ADC37408156DEB0009DA36 /* xh_listb.cpp */,
 				40ADC37508156DEB0009DA36 /* xh_listbk.cpp */,
@@ -2339,7 +2351,9 @@
 				F5A85D0101FA022B0175ACA7 /* forcelnk.h */,
 				F5A85D0201FA022B0175ACA7 /* helpctrl.h */,
 				F5A85D0301FA022B0175ACA7 /* helpdata.h */,
+				43DFF59B09926B080033000B /* helpdlg.h */,
 				F5A85D0401FA022B0175ACA7 /* helpfrm.h */,
+				43DFF59C09926B080033000B /* helpwnd.h */,
 				F5A85D0501FA022B0175ACA7 /* htmlcell.h */,
 				F5A85D0601FA022B0175ACA7 /* htmldefs.h */,
 				F5A85D0701FA022B0175ACA7 /* htmlfilt.h */,
@@ -2642,7 +2656,6 @@
 		F5A8606E01FA022C0175ACA7 /* generic */ = {
 			isa = PBXGroup;
 			children = (
-				400EDEB2089D4FFD00E848D9 /* propdlg.cpp */,
 				F5A8607001FA022C0175ACA7 /* busyinfo.cpp */,
 				F5A8607101FA022C0175ACA7 /* calctrl.cpp */,
 				F5A8607201FA022C0175ACA7 /* caret.cpp */,
@@ -2672,6 +2685,7 @@
 				F5A8608E01FA022C0175ACA7 /* printps.cpp */,
 				F5A8608F01FA022C0175ACA7 /* prntdlgg.cpp */,
 				F5A8609001FA022C0175ACA7 /* progdlgg.cpp */,
+				400EDEB2089D4FFD00E848D9 /* propdlg.cpp */,
 				CA60176C04D43CAA00000080 /* renderg.cpp */,
 				F5A8609401FA022C0175ACA7 /* sashwin.cpp */,
 				F5A8609501FA022C0175ACA7 /* scrlwing.cpp */,
@@ -2698,7 +2712,9 @@
 				40AF90C207C8AA17006A6D3C /* chm.cpp */,
 				F5A8610401FA022C0175ACA7 /* helpctrl.cpp */,
 				F5A8610501FA022C0175ACA7 /* helpdata.cpp */,
+				43DFF5B809926F7B0033000B /* helpdlg.cpp */,
 				F5A8610601FA022C0175ACA7 /* helpfrm.cpp */,
+				43DFF5B909926F7B0033000B /* helpwnd.cpp */,
 				F5A8610701FA022C0175ACA7 /* htmlcell.cpp */,
 				F5A8610801FA022C0175ACA7 /* htmlfilt.cpp */,
 				F5A8610901FA022C0175ACA7 /* htmlpars.cpp */,
@@ -2953,11 +2969,11 @@
 		F5A8648A01FA022D0175ACA7 /* unix */ = {
 			isa = PBXGroup;
 			children = (
-				40AF90BD07C8AA08006A6D3C /* dlunix.cpp */,
-				40ECB139074BD1D0005AAC48 /* stdpaths.cpp */,
 				CA60177204D43D2300000080 /* baseunix.cpp */,
+				40AF90BD07C8AA08006A6D3C /* dlunix.cpp */,
 				40DCE34F06C744C90000D83E /* gsocket.cpp */,
 				F5A8649201FA022D0175ACA7 /* snglinst.cpp */,
+				40ECB139074BD1D0005AAC48 /* stdpaths.cpp */,
 				F5A8649401FA022D0175ACA7 /* utilsunx.cpp */,
 			);
 			path = unix;
@@ -2972,6 +2988,8 @@
 			files = (
 				4086C745063AB2FF00D4CD53 /* setup.h in Headers */,
 				40011F3D0897D8DF00E4DE95 /* setup0.h in Headers */,
+				43DFF59D09926B080033000B /* helpdlg.h in Headers */,
+				43DFF59E09926B080033000B /* helpwnd.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2981,6 +2999,8 @@
 			files = (
 				4086CA58063AB30000D4CD53 /* setup.h in Headers */,
 				40011F3C0897D8DF00E4DE95 /* setup0.h in Headers */,
+				43DFF59F09926B080033000B /* helpdlg.h in Headers */,
+				43DFF5A009926B080033000B /* helpwnd.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3669,6 +3689,8 @@
 				409F02710976CA5600D1030F /* xh_grid.cpp in Sources */,
 				40CDE8D40982505E00E8156D /* evtloopcmn.cpp in Sources */,
 				40CDE8DB098250AB00E8156D /* evtloop.cpp in Sources */,
+				43DFF5BA09926F7B0033000B /* helpdlg.cpp in Sources */,
+				43DFF5BB09926F7B0033000B /* helpwnd.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4144,6 +4166,8 @@
 				409F02700976CA5600D1030F /* xh_grid.cpp in Sources */,
 				40CDE8D20982505E00E8156D /* evtloopcmn.cpp in Sources */,
 				40CDE8DA098250AB00E8156D /* evtloop.cpp in Sources */,
+				43DFF5BC09926F7B0033000B /* helpdlg.cpp in Sources */,
+				43DFF5BD09926F7B0033000B /* helpwnd.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
