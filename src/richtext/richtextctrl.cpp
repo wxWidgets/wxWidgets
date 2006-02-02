@@ -454,6 +454,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         EndBatchUndo();
         SetDefaultStyleToCursorStyle();
+
+        ScrollIntoView(m_caretPosition, WXK_RIGHT);
     }
     else if (event.GetKeyCode() == WXK_BACK)
     {
@@ -483,6 +485,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             SetDefaultStyleToCursorStyle();
         }
 
+        ScrollIntoView(m_caretPosition, WXK_LEFT);
     }
     else if (event.GetKeyCode() == WXK_DELETE)
     {
@@ -524,6 +527,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         EndBatchUndo();
 
         SetDefaultStyleToCursorStyle();
+        ScrollIntoView(m_caretPosition, WXK_RIGHT);
     }
 #if 0
     else
