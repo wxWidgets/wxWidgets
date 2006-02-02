@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1652,7 +1653,7 @@ SWIG_AsVal_long(PyObject* obj, long* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -1781,31 +1782,30 @@ SWIG_Check_bool(PyObject* obj)
 /*@@*/
 
 
-  static PyObject* t_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    PyObject*   o3;
-    
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyTuple_Check(target)) {
-            o2 = target;
-            target = PyTuple_New(1);
-            PyTuple_SetItem(target, 0, o2);
-        }            
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
-
-        o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
-        Py_DECREF(o3);
+    static PyObject* t_output_helper(PyObject* result, PyObject* obj)
+    {
+        PyObject*   o2;
+        PyObject*   o3;
+        if (!result) {
+            result = obj;
+        } else if (result == Py_None) {
+            Py_DECREF(result);
+            result = obj;
+        } else {
+            if (!PyTuple_Check(result)) {
+                o2 = result;
+                result = PyTuple_New(1);
+                PyTuple_SET_ITEM(result, 0, o2);
+            }
+            o3 = PyTuple_New(1);            
+            PyTuple_SetItem(o3, 0, obj);      
+            o2 = result;
+            result = PySequence_Concat(o2, o3); 
+            Py_DECREF(o2);                      
+            Py_DECREF(o3);
+        }
+        return result;
     }
-    return target;
-  }
 
 
 
@@ -1817,7 +1817,7 @@ SWIG_AsVal_double(PyObject *obj, double* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -1982,7 +1982,7 @@ SWIG_AsVal_unsigned_SS_long(PyObject* obj, unsigned long* val)
 {
     long v = 0;
     if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        SWIG_type_error("unsigned number", obj);
+        SWIG_Python_TypeError("unsigned number", obj);
     }
     else if (val)
         *val = (unsigned long)v;
@@ -5212,7 +5212,7 @@ static PyObject *_wrap_Frame_CreateStatusBar(PyObject *, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     {
         if (temp5)
@@ -5248,7 +5248,7 @@ static PyObject *_wrap_Frame_GetStatusBar(PyObject *, PyObject *args, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -5561,7 +5561,7 @@ static PyObject *_wrap_Frame_CreateToolBar(PyObject *, PyObject *args, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     {
         if (temp4)
@@ -5597,7 +5597,7 @@ static PyObject *_wrap_Frame_GetToolBar(PyObject *, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -6071,7 +6071,7 @@ static PyObject *_wrap_Dialog_CreateTextSizer(PyObject *, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     {
         if (temp2)
@@ -6129,7 +6129,7 @@ static PyObject *_wrap_Dialog_CreateButtonSizer(PyObject *, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -13136,6 +13136,31 @@ static PyObject *_wrap_new_TaskBarIcon(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_delete_TaskBarIcon(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxPyTaskBarIcon *arg1 = (wxPyTaskBarIcon *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_TaskBarIcon",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTaskBarIcon, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_TaskBarIcon__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyTaskBarIcon *arg1 = (wxPyTaskBarIcon *) 0 ;
@@ -17492,7 +17517,7 @@ static PyObject *_wrap_MDIParentFrame_GetActiveChild(PyObject *, PyObject *args,
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -17520,7 +17545,7 @@ static PyObject *_wrap_MDIParentFrame_GetClientWindow(PyObject *, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -24031,7 +24056,7 @@ static PyObject *_wrap_PrintDialog_GetPrintDC(PyObject *, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 1); 
+        resultobj = wxPyMake_wxObject(result, (bool)1); 
     }
     return resultobj;
     fail:
@@ -24285,7 +24310,7 @@ static PyObject *_wrap_Printer_PrintDialog(PyObject *, PyObject *args, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -24407,7 +24432,7 @@ static PyObject *_wrap_new_Printout(PyObject *, PyObject *args, PyObject *kwargs
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 1); 
+        resultobj = wxPyMake_wxObject(result, (bool)1); 
     }
     {
         if (temp1)
@@ -24506,7 +24531,7 @@ static PyObject *_wrap_Printout_GetDC(PyObject *, PyObject *args, PyObject *kwar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -25720,19 +25745,21 @@ static PyObject *_wrap_new_PrintPreview__SWIG_0(PyObject *, PyObject *args) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     wxPyPrintout *arg2 = (wxPyPrintout *) 0 ;
-    wxPrintDialogData *arg3 = (wxPrintDialogData *) 0 ;
+    wxPrintDialogData *arg3 = (wxPrintDialogData *) NULL ;
     wxPrintPreview *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OOO:new_PrintPreview",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO|O:new_PrintPreview",&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
-    SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxPrintDialogData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(3)) SWIG_fail;
+    if (obj2) {
+        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxPrintDialogData, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
     {
         if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -25749,34 +25776,6 @@ static PyObject *_wrap_new_PrintPreview__SWIG_0(PyObject *, PyObject *args) {
 
 
 static PyObject *_wrap_new_PrintPreview__SWIG_1(PyObject *, PyObject *args) {
-    PyObject *resultobj = NULL;
-    wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
-    wxPyPrintout *arg2 = (wxPyPrintout *) 0 ;
-    wxPrintPreview *result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OO:new_PrintPreview",&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(2)) SWIG_fail;
-    {
-        if (!wxPyCheckForApp()) SWIG_fail;
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxPrintPreview *)new wxPrintPreview(arg1,arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPrintPreview, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_PrintPreview__SWIG_2(PyObject *, PyObject *args) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     wxPyPrintout *arg2 = (wxPyPrintout *) 0 ;
@@ -25817,7 +25816,7 @@ static PyObject *_wrap_new_PrintPreview(PyObject *self, PyObject *args) {
     for (ii = 0; (ii < argc) && (ii < 3); ii++) {
         argv[ii] = PyTuple_GetItem(args,ii);
     }
-    if (argc == 2) {
+    if ((argc >= 2) && (argc <= 3)) {
         int _v;
         {
             void *ptr;
@@ -25839,32 +25838,9 @@ static PyObject *_wrap_new_PrintPreview(PyObject *self, PyObject *args) {
                 }
             }
             if (_v) {
-                return _wrap_new_PrintPreview__SWIG_1(self,args);
-            }
-        }
-    }
-    if (argc == 3) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxPyPrintout, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                void *ptr;
-                if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxPyPrintout, 0) == -1) {
-                    _v = 0;
-                    PyErr_Clear();
-                } else {
-                    _v = 1;
+                if (argc <= 2) {
+                    return _wrap_new_PrintPreview__SWIG_0(self,args);
                 }
-            }
-            if (_v) {
                 {
                     void *ptr;
                     if (SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_wxPrintDialogData, 0) == -1) {
@@ -25912,7 +25888,7 @@ static PyObject *_wrap_new_PrintPreview(PyObject *self, PyObject *args) {
                     }
                 }
                 if (_v) {
-                    return _wrap_new_PrintPreview__SWIG_2(self,args);
+                    return _wrap_new_PrintPreview__SWIG_1(self,args);
                 }
             }
         }
@@ -26034,7 +26010,7 @@ static PyObject *_wrap_PrintPreview_GetPrintout(PyObject *, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -26062,7 +26038,7 @@ static PyObject *_wrap_PrintPreview_GetPrintoutForPrinting(PyObject *, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -26602,19 +26578,21 @@ static PyObject *_wrap_new_PyPrintPreview__SWIG_0(PyObject *, PyObject *args) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     wxPyPrintout *arg2 = (wxPyPrintout *) 0 ;
-    wxPrintDialogData *arg3 = (wxPrintDialogData *) 0 ;
+    wxPrintDialogData *arg3 = (wxPrintDialogData *) NULL ;
     wxPyPrintPreview *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OOO:new_PyPrintPreview",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO|O:new_PyPrintPreview",&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
-    SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxPrintDialogData, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(3)) SWIG_fail;
+    if (obj2) {
+        SWIG_Python_ConvertPtr(obj2, (void **)&arg3, SWIGTYPE_p_wxPrintDialogData, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
     {
         if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -26631,34 +26609,6 @@ static PyObject *_wrap_new_PyPrintPreview__SWIG_0(PyObject *, PyObject *args) {
 
 
 static PyObject *_wrap_new_PyPrintPreview__SWIG_1(PyObject *, PyObject *args) {
-    PyObject *resultobj = NULL;
-    wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
-    wxPyPrintout *arg2 = (wxPyPrintout *) 0 ;
-    wxPyPrintPreview *result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OO:new_PyPrintPreview",&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(2)) SWIG_fail;
-    {
-        if (!wxPyCheckForApp()) SWIG_fail;
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxPyPrintPreview *)new wxPyPrintPreview(arg1,arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyPrintPreview, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_PyPrintPreview__SWIG_2(PyObject *, PyObject *args) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     wxPyPrintout *arg2 = (wxPyPrintout *) 0 ;
@@ -26699,7 +26649,7 @@ static PyObject *_wrap_new_PyPrintPreview(PyObject *self, PyObject *args) {
     for (ii = 0; (ii < argc) && (ii < 3); ii++) {
         argv[ii] = PyTuple_GetItem(args,ii);
     }
-    if (argc == 2) {
+    if ((argc >= 2) && (argc <= 3)) {
         int _v;
         {
             void *ptr;
@@ -26721,32 +26671,9 @@ static PyObject *_wrap_new_PyPrintPreview(PyObject *self, PyObject *args) {
                 }
             }
             if (_v) {
-                return _wrap_new_PyPrintPreview__SWIG_1(self,args);
-            }
-        }
-    }
-    if (argc == 3) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxPyPrintout, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                void *ptr;
-                if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxPyPrintout, 0) == -1) {
-                    _v = 0;
-                    PyErr_Clear();
-                } else {
-                    _v = 1;
+                if (argc <= 2) {
+                    return _wrap_new_PyPrintPreview__SWIG_0(self,args);
                 }
-            }
-            if (_v) {
                 {
                     void *ptr;
                     if (SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_wxPrintDialogData, 0) == -1) {
@@ -26794,7 +26721,7 @@ static PyObject *_wrap_new_PyPrintPreview(PyObject *self, PyObject *args) {
                     }
                 }
                 if (_v) {
-                    return _wrap_new_PyPrintPreview__SWIG_2(self,args);
+                    return _wrap_new_PyPrintPreview__SWIG_1(self,args);
                 }
             }
         }
@@ -27845,6 +27772,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlListBox_GetFileSystem", (PyCFunction) _wrap_HtmlListBox_GetFileSystem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlListBox_swigregister", HtmlListBox_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_TaskBarIcon", (PyCFunction) _wrap_new_TaskBarIcon, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_TaskBarIcon", (PyCFunction) _wrap_delete_TaskBarIcon, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TaskBarIcon__setCallbackInfo", (PyCFunction) _wrap_TaskBarIcon__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TaskBarIcon_Destroy", (PyCFunction) _wrap_TaskBarIcon_Destroy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TaskBarIcon_IsOk", (PyCFunction) _wrap_TaskBarIcon_IsOk, METH_VARARGS | METH_KEYWORDS, NULL},

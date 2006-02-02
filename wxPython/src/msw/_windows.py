@@ -699,9 +699,6 @@ class Dialog(TopLevelWindow):
         return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-    def SendSizeEvent(self):
-        self.ProcessEvent(wx.SizeEvent((-1,-1)))
-
 
 class DialogPtr(Dialog):
     def __init__(self, this):
@@ -2198,6 +2195,12 @@ class TaskBarIcon(_core.EvtHandler):
         del newobj.thisown
         self._setCallbackInfo(self, TaskBarIcon, 0)
 
+    def __del__(self, destroy=_windows_.delete_TaskBarIcon):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class, int incref)"""
         return _windows_.TaskBarIcon__setCallbackInfo(*args, **kwargs)
@@ -2208,7 +2211,9 @@ class TaskBarIcon(_core.EvtHandler):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        return _windows_.TaskBarIcon_Destroy(*args, **kwargs)
+        val = _windows_.TaskBarIcon_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
     def IsOk(*args, **kwargs):
         """IsOk(self) -> bool"""

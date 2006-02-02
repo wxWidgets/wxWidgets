@@ -2043,7 +2043,6 @@ class HtmlHelpController(HelpControllerBase):
         """FindTopLevelWindow(self) -> Window"""
         return _html.HtmlHelpController_FindTopLevelWindow(*args, **kwargs)
 
-    def Destroy(self): pass 
 
 class HtmlHelpControllerPtr(HtmlHelpController):
     def __init__(self, this):

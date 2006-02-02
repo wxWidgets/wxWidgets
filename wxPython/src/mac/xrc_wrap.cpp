@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1607,7 +1608,7 @@ SWIG_AsVal_long(PyObject* obj, long* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -2562,7 +2563,7 @@ static PyObject *_wrap_XmlResource_LoadToolBar(PyObject *, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     {
         if (temp3)
@@ -2610,7 +2611,7 @@ static PyObject *_wrap_XmlResource_LoadDialog(PyObject *, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     {
         if (temp3)
@@ -2710,7 +2711,7 @@ static PyObject *_wrap_XmlResource_LoadPanel(PyObject *, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     {
         if (temp3)
@@ -2810,7 +2811,7 @@ static PyObject *_wrap_XmlResource_LoadFrame(PyObject *, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     {
         if (temp3)
@@ -2918,7 +2919,7 @@ static PyObject *_wrap_XmlResource_LoadObject(PyObject *, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     {
         if (temp3)
@@ -5366,7 +5367,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateResource(PyObject *, PyObject *a
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -5507,7 +5508,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParent(PyObject *, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -5535,7 +5536,7 @@ static PyObject *_wrap_XmlResourceHandler_GetInstance(PyObject *, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -6668,7 +6669,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateResFromNode(PyObject *, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:

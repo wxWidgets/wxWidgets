@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1624,7 +1625,7 @@ SWIG_AsVal_long(PyObject* obj, long* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -1711,7 +1712,7 @@ SWIG_AsVal_unsigned_SS_long(PyObject* obj, unsigned long* val)
 {
     long v = 0;
     if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        SWIG_type_error("unsigned number", obj);
+        SWIG_Python_TypeError("unsigned number", obj);
     }
     else if (val)
         *val = (unsigned long)v;
@@ -1863,31 +1864,30 @@ SWIG_Check_int(PyObject* obj)
 /*@@*/
 
 
-  static PyObject* t_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    PyObject*   o3;
-    
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyTuple_Check(target)) {
-            o2 = target;
-            target = PyTuple_New(1);
-            PyTuple_SetItem(target, 0, o2);
-        }            
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
-
-        o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
-        Py_DECREF(o3);
+    static PyObject* t_output_helper(PyObject* result, PyObject* obj)
+    {
+        PyObject*   o2;
+        PyObject*   o3;
+        if (!result) {
+            result = obj;
+        } else if (result == Py_None) {
+            Py_DECREF(result);
+            result = obj;
+        } else {
+            if (!PyTuple_Check(result)) {
+                o2 = result;
+                result = PyTuple_New(1);
+                PyTuple_SET_ITEM(result, 0, o2);
+            }
+            o3 = PyTuple_New(1);            
+            PyTuple_SetItem(o3, 0, obj);      
+            o2 = result;
+            result = PySequence_Concat(o2, o3); 
+            Py_DECREF(o2);                      
+            Py_DECREF(o3);
+        }
+        return result;
     }
-    return target;
-  }
 
 
 static PyObject *wxPen_GetDashes(wxPen *self){
@@ -2192,7 +2192,7 @@ SWIG_AsVal_double(PyObject *obj, double* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -17483,27 +17483,32 @@ static PyObject * MemoryDC_swigregister(PyObject *, PyObject *args) {
 static PyObject *_wrap_new_BufferedDC__SWIG_0(PyObject *, PyObject *args) {
     PyObject *resultobj = NULL;
     wxDC *arg1 = (wxDC *) 0 ;
-    wxBitmap *arg2 = 0 ;
-    int arg3 ;
+    wxBitmap const &arg2_defvalue = wxNullBitmap ;
+    wxBitmap *arg2 = (wxBitmap *) &arg2_defvalue ;
+    int arg3 = (int) wxBUFFER_CLIENT_AREA ;
     wxBufferedDC *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OOO:new_BufferedDC",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O|OO:new_BufferedDC",&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
-        if (SWIG_arg_fail(2)) SWIG_fail;
-        if (arg2 == NULL) {
-            SWIG_null_ref("wxBitmap");
+    if (obj1) {
+        {
+            SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+            if (SWIG_arg_fail(2)) SWIG_fail;
+            if (arg2 == NULL) {
+                SWIG_null_ref("wxBitmap");
+            }
+            if (SWIG_arg_fail(2)) SWIG_fail;
         }
-        if (SWIG_arg_fail(2)) SWIG_fail;
     }
-    {
-        arg3 = static_cast<int >(SWIG_As_int(obj2)); 
-        if (SWIG_arg_fail(3)) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = static_cast<int >(SWIG_As_int(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
     }
     {
         if (!wxPyCheckForApp()) SWIG_fail;
@@ -17523,118 +17528,31 @@ static PyObject *_wrap_new_BufferedDC__SWIG_0(PyObject *, PyObject *args) {
 static PyObject *_wrap_new_BufferedDC__SWIG_1(PyObject *, PyObject *args) {
     PyObject *resultobj = NULL;
     wxDC *arg1 = (wxDC *) 0 ;
-    wxBitmap *arg2 = 0 ;
-    wxBufferedDC *result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OO:new_BufferedDC",&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
-        if (SWIG_arg_fail(2)) SWIG_fail;
-        if (arg2 == NULL) {
-            SWIG_null_ref("wxBitmap");
-        }
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        if (!wxPyCheckForApp()) SWIG_fail;
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxBitmap const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBufferedDC, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_BufferedDC__SWIG_2(PyObject *, PyObject *args) {
-    PyObject *resultobj = NULL;
-    wxDC *arg1 = (wxDC *) 0 ;
-    wxBufferedDC *result;
-    PyObject * obj0 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:new_BufferedDC",&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        if (!wxPyCheckForApp()) SWIG_fail;
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxBufferedDC *)new wxBufferedDC(arg1);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBufferedDC, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_BufferedDC__SWIG_3(PyObject *, PyObject *args) {
-    PyObject *resultobj = NULL;
-    wxDC *arg1 = (wxDC *) 0 ;
     wxSize *arg2 = 0 ;
-    int arg3 ;
+    int arg3 = (int) wxBUFFER_CLIENT_AREA ;
     wxBufferedDC *result;
     wxSize temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OOO:new_BufferedDC",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO|O:new_BufferedDC",&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
     }
-    {
-        arg3 = static_cast<int >(SWIG_As_int(obj2)); 
-        if (SWIG_arg_fail(3)) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = static_cast<int >(SWIG_As_int(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
     }
     {
         if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxSize const &)*arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBufferedDC, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_BufferedDC__SWIG_4(PyObject *, PyObject *args) {
-    PyObject *resultobj = NULL;
-    wxDC *arg1 = (wxDC *) 0 ;
-    wxSize *arg2 = 0 ;
-    wxBufferedDC *result;
-    wxSize temp2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OO:new_BufferedDC",&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = &temp2;
-        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        if (!wxPyCheckForApp()) SWIG_fail;
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxBufferedDC *)new wxBufferedDC(arg1,(wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -17655,7 +17573,7 @@ static PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
     for (ii = 0; (ii < argc) && (ii < 3); ii++) {
         argv[ii] = PyTuple_GetItem(args,ii);
     }
-    if (argc == 1) {
+    if ((argc >= 1) && (argc <= 3)) {
         int _v;
         {
             void *ptr;
@@ -17667,21 +17585,9 @@ static PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
             }
         }
         if (_v) {
-            return _wrap_new_BufferedDC__SWIG_2(self,args);
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxDC, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
+            if (argc <= 1) {
+                return _wrap_new_BufferedDC__SWIG_0(self,args);
             }
-        }
-        if (_v) {
             {
                 void *ptr = 0;
                 if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxBitmap, 0) == -1) {
@@ -17692,78 +17598,38 @@ static PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
                 }
             }
             if (_v) {
-                return _wrap_new_BufferedDC__SWIG_1(self,args);
-            }
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxDC, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                _v = wxPySimple_typecheck(argv[1], wxT("wxSize"), 2);
-            }
-            if (_v) {
-                return _wrap_new_BufferedDC__SWIG_4(self,args);
-            }
-        }
-    }
-    if (argc == 3) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxDC, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                _v = wxPySimple_typecheck(argv[1], wxT("wxSize"), 2);
-            }
-            if (_v) {
-                _v = SWIG_Check_int(argv[2]);
-                if (_v) {
-                    return _wrap_new_BufferedDC__SWIG_3(self,args);
+                if (argc <= 2) {
+                    return _wrap_new_BufferedDC__SWIG_0(self,args);
                 }
-            }
-        }
-    }
-    if (argc == 3) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxDC, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                void *ptr = 0;
-                if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxBitmap, 0) == -1) {
-                    _v = 0;
-                    PyErr_Clear();
-                } else {
-                    _v = (ptr != 0);
-                }
-            }
-            if (_v) {
                 _v = SWIG_Check_int(argv[2]);
                 if (_v) {
                     return _wrap_new_BufferedDC__SWIG_0(self,args);
+                }
+            }
+        }
+    }
+    if ((argc >= 2) && (argc <= 3)) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxDC, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                _v = wxPySimple_typecheck(argv[1], wxT("wxSize"), 2);
+            }
+            if (_v) {
+                if (argc <= 2) {
+                    return _wrap_new_BufferedDC__SWIG_1(self,args);
+                }
+                _v = SWIG_Check_int(argv[2]);
+                if (_v) {
+                    return _wrap_new_BufferedDC__SWIG_1(self,args);
                 }
             }
         }
@@ -18531,7 +18397,7 @@ static PyObject *_wrap_new_ImageList(PyObject *, PyObject *args, PyObject *kwarg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 1); 
+        resultobj = wxPyMake_wxObject(result, (bool)1); 
     }
     return resultobj;
     fail:

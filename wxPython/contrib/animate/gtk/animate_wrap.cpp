@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1590,7 +1591,7 @@ SWIG_AsVal_long(PyObject* obj, long* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }

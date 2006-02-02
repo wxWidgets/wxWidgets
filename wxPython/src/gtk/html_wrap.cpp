@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1701,7 +1702,7 @@ SWIG_AsVal_long(PyObject* obj, long* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -1874,31 +1875,30 @@ SWIGINTERNINLINE PyObject*
 }
 
 
-  static PyObject* t_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    PyObject*   o3;
-    
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyTuple_Check(target)) {
-            o2 = target;
-            target = PyTuple_New(1);
-            PyTuple_SetItem(target, 0, o2);
-        }            
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
-
-        o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
-        Py_DECREF(o3);
+    static PyObject* t_output_helper(PyObject* result, PyObject* obj)
+    {
+        PyObject*   o2;
+        PyObject*   o3;
+        if (!result) {
+            result = obj;
+        } else if (result == Py_None) {
+            Py_DECREF(result);
+            result = obj;
+        } else {
+            if (!PyTuple_Check(result)) {
+                o2 = result;
+                result = PyTuple_New(1);
+                PyTuple_SET_ITEM(result, 0, o2);
+            }
+            o3 = PyTuple_New(1);            
+            PyTuple_SetItem(o3, 0, obj);      
+            o2 = result;
+            result = PySequence_Concat(o2, o3); 
+            Py_DECREF(o2);                      
+            Py_DECREF(o3);
+        }
+        return result;
     }
-    return target;
-  }
 
 
 
@@ -1970,7 +1970,7 @@ SWIG_AsVal_unsigned_SS_long(PyObject* obj, unsigned long* val)
 {
     long v = 0;
     if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        SWIG_type_error("unsigned number", obj);
+        SWIG_Python_TypeError("unsigned number", obj);
     }
     else if (val)
         *val = (unsigned long)v;
@@ -2242,7 +2242,7 @@ SWIG_AsVal_double(PyObject *obj, double* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -2522,7 +2522,7 @@ static PyObject *_wrap_HtmlLinkInfo_GetEvent(PyObject *, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -2953,7 +2953,7 @@ static PyObject *_wrap_HtmlParser_GetFS(PyObject *, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -2989,7 +2989,7 @@ static PyObject *_wrap_HtmlParser_Parse(PyObject *, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     {
         if (temp2)
@@ -3340,7 +3340,7 @@ static PyObject *_wrap_HtmlWinParser_GetDC(PyObject *, PyObject *args, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -3424,7 +3424,7 @@ static PyObject *_wrap_HtmlWinParser_GetWindow(PyObject *, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -11680,7 +11680,7 @@ static PyObject *_wrap_HtmlHelpWindow_SetController(PyObject *, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlHelpWindow_SetController",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxHtmlHelpWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlHelpController, SWIG_POINTER_EXCEPTION | 0);
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlHelpController, SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN);
     if (SWIG_arg_fail(2)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12154,7 +12154,7 @@ static PyObject *_wrap_HtmlHelpWindow_GetToolBar(PyObject *, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -12636,7 +12636,7 @@ static PyObject *_wrap_HtmlHelpFrame_SetController(PyObject *, PyObject *args, P
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlHelpFrame_SetController",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxHtmlHelpFrame, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlHelpController, SWIG_POINTER_EXCEPTION | 0);
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlHelpController, SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN);
     if (SWIG_arg_fail(2)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12912,7 +12912,7 @@ static PyObject *_wrap_HtmlHelpDialog_SetController(PyObject *, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlHelpDialog_SetController",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxHtmlHelpDialog, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlHelpController, SWIG_POINTER_EXCEPTION | 0);
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlHelpController, SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN);
     if (SWIG_arg_fail(2)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();

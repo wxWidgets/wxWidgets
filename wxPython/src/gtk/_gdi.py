@@ -4207,10 +4207,7 @@ class BufferedDC(MemoryDC):
     def __init__(self, *args):
         """
         __init__(self, DC dc, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedDC
-        __init__(self, DC dc, Bitmap buffer=NullBitmap) -> BufferedDC
-        __init__(self, DC dc) -> BufferedDC
         __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
-        __init__(self, DC dc, Size area) -> BufferedDC
 
         Constructs a buffered DC.
         """

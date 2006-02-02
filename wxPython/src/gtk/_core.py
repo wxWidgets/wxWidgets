@@ -708,7 +708,9 @@ class Object(object):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        return _core_.Object_Destroy(*args, **kwargs)
+        val = _core_.Object_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
 
 class ObjectPtr(Object):
@@ -2415,7 +2417,9 @@ class Image(Object):
 
         Destroys the image data.
         """
-        return _core_.Image_Destroy(*args, **kwargs)
+        val = _core_.Image_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
     def Scale(*args, **kwargs):
         """
@@ -3596,7 +3600,9 @@ class EvtHandler(Object):
 
     def _setOORInfo(*args, **kwargs):
         """_setOORInfo(self, PyObject _self, bool incref=True)"""
-        return _core_.EvtHandler__setOORInfo(*args, **kwargs)
+        val = _core_.EvtHandler__setOORInfo(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
     def Bind(self, event, handler, source=None, id=wx.ID_ANY, id2=wx.ID_ANY):
         """
@@ -8109,7 +8115,9 @@ class Window(EvtHandler):
         Returns True if the window has either been successfully deleted, or it
         has been added to the list of windows pending real deletion.
         """
-        return _core_.Window_Destroy(*args, **kwargs)
+        val = _core_.Window_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
     def DestroyChildren(*args, **kwargs):
         """
@@ -10157,6 +10165,9 @@ class Window(EvtHandler):
         if hasattr(self, '_setCallbackInfo'):
             self._setCallbackInfo(self, self.__class__)
 
+    def SendSizeEvent(self):
+        self.GetEventhandler().ProcessEvent(wx.SizeEvent((-1,-1)))
+
 
 class WindowPtr(Window):
     def __init__(self, this):
@@ -10513,7 +10524,9 @@ class Menu(EvtHandler):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        return _core_.Menu_Destroy(*args, **kwargs)
+        val = _core_.Menu_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
     def DestroyId(*args, **kwargs):
         """
@@ -10521,7 +10534,9 @@ class Menu(EvtHandler):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        return _core_.Menu_DestroyId(*args, **kwargs)
+        val = _core_.Menu_DestroyId(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
     def DestroyItem(*args, **kwargs):
         """
@@ -10529,7 +10544,9 @@ class Menu(EvtHandler):
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        return _core_.Menu_DestroyItem(*args, **kwargs)
+        val = _core_.Menu_DestroyItem(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
     def GetMenuItemCount(*args, **kwargs):
         """GetMenuItemCount(self) -> size_t"""
@@ -11336,6 +11353,12 @@ class SizerItem(Object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_core_.delete_SizerItem):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def DeleteWindows(*args, **kwargs):
         """
         DeleteWindows(self)
@@ -11681,6 +11704,12 @@ class Sizer(Object):
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __del__(self, destroy=_core_.delete_Sizer):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def _setOORInfo(*args, **kwargs):
         """_setOORInfo(self, PyObject _self)"""
         return _core_.Sizer__setOORInfo(*args, **kwargs)
@@ -12604,6 +12633,12 @@ class GBPosition(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_core_.delete_GBPosition):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def GetRow(*args, **kwargs):
         """GetRow(self) -> int"""
         return _core_.GBPosition_GetRow(*args, **kwargs)
@@ -12683,6 +12718,12 @@ class GBSpan(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_core_.delete_GBSpan):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def GetRowspan(*args, **kwargs):
         """GetRowspan(self) -> int"""
         return _core_.GBSpan_GetRowspan(*args, **kwargs)
@@ -12763,6 +12804,12 @@ class GBSizerItem(SizerItem):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_core_.delete_GBSizerItem):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def GetPos(*args, **kwargs):
         """
         GetPos(self) -> GBPosition

@@ -2954,6 +2954,12 @@ def ToggleButton_GetClassDefaultAttributes(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+BK_DEFAULT = _controls_.BK_DEFAULT
+BK_TOP = _controls_.BK_TOP
+BK_BOTTOM = _controls_.BK_BOTTOM
+BK_LEFT = _controls_.BK_LEFT
+BK_RIGHT = _controls_.BK_RIGHT
+BK_ALIGN_MASK = _controls_.BK_ALIGN_MASK
 class BookCtrlBase(_core.Control):
     """Proxy of C++ BookCtrlBase class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
@@ -3010,6 +3016,26 @@ class BookCtrlBase(_core.Control):
     def CalcSizeFromPage(*args, **kwargs):
         """CalcSizeFromPage(self, Size sizePage) -> Size"""
         return _controls_.BookCtrlBase_CalcSizeFromPage(*args, **kwargs)
+
+    def GetInternalBorder(*args, **kwargs):
+        """GetInternalBorder(self) -> unsigned int"""
+        return _controls_.BookCtrlBase_GetInternalBorder(*args, **kwargs)
+
+    def SetInternalBorder(*args, **kwargs):
+        """SetInternalBorder(self, unsigned int internalBorder)"""
+        return _controls_.BookCtrlBase_SetInternalBorder(*args, **kwargs)
+
+    def IsVertical(*args, **kwargs):
+        """IsVertical(self) -> bool"""
+        return _controls_.BookCtrlBase_IsVertical(*args, **kwargs)
+
+    def SetShrinkMode(*args, **kwargs):
+        """SetShrinkMode(self, bool shrink)"""
+        return _controls_.BookCtrlBase_SetShrinkMode(*args, **kwargs)
+
+    def GetShrinkMode(*args, **kwargs):
+        """GetShrinkMode(self) -> bool"""
+        return _controls_.BookCtrlBase_GetShrinkMode(*args, **kwargs)
 
     def DeletePage(*args, **kwargs):
         """DeletePage(self, size_t n) -> bool"""
@@ -3328,10 +3354,6 @@ class Listbook(BookCtrlBase):
         """
         return _controls_.Listbook_Create(*args, **kwargs)
 
-    def IsVertical(*args, **kwargs):
-        """IsVertical(self) -> bool"""
-        return _controls_.Listbook_IsVertical(*args, **kwargs)
-
     def GetListView(*args, **kwargs):
         """GetListView(self) -> ListView"""
         return _controls_.Listbook_GetListView(*args, **kwargs)
@@ -3404,10 +3426,6 @@ class Choicebook(BookCtrlBase):
         """
         return _controls_.Choicebook_Create(*args, **kwargs)
 
-    def IsVertical(*args, **kwargs):
-        """IsVertical(self) -> bool"""
-        return _controls_.Choicebook_IsVertical(*args, **kwargs)
-
     def GetChoiceCtrl(*args, **kwargs):
         """GetChoiceCtrl(self) -> Choice"""
         return _controls_.Choicebook_GetChoiceCtrl(*args, **kwargs)
@@ -3457,6 +3475,193 @@ EVT_CHOICEBOOK_PAGE_CHANGED  = wx.PyEventBinder( wxEVT_COMMAND_CHOICEBOOK_PAGE_C
 EVT_CHOICEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, 1 )
 
 #---------------------------------------------------------------------------
+
+class Treebook(BookCtrlBase):
+    """Proxy of C++ Treebook class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxTreebook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=BK_DEFAULT, 
+            String name=EmptyString) -> Treebook
+        """
+        newobj = _controls_.new_Treebook(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=BK_DEFAULT, 
+            String name=EmptyString) -> bool
+        """
+        return _controls_.Treebook_Create(*args, **kwargs)
+
+    def InsertPage(*args, **kwargs):
+        """
+        InsertPage(self, size_t pos, Window page, String text, bool select=False, 
+            int imageId=NOT_FOUND) -> bool
+        """
+        return _controls_.Treebook_InsertPage(*args, **kwargs)
+
+    def InsertSubPage(*args, **kwargs):
+        """
+        InsertSubPage(self, size_t pos, Window page, String text, bool select=False, 
+            int imageId=NOT_FOUND) -> bool
+        """
+        return _controls_.Treebook_InsertSubPage(*args, **kwargs)
+
+    def AddPage(*args, **kwargs):
+        """AddPage(self, Window page, String text, bool select=False, int imageId=NOT_FOUND) -> bool"""
+        return _controls_.Treebook_AddPage(*args, **kwargs)
+
+    def AddSubPage(*args, **kwargs):
+        """AddSubPage(self, Window page, String text, bool select=False, int imageId=NOT_FOUND) -> bool"""
+        return _controls_.Treebook_AddSubPage(*args, **kwargs)
+
+    def DeletePage(*args, **kwargs):
+        """DeletePage(self, size_t pos) -> bool"""
+        return _controls_.Treebook_DeletePage(*args, **kwargs)
+
+    def IsNodeExpanded(*args, **kwargs):
+        """IsNodeExpanded(self, size_t pos) -> bool"""
+        return _controls_.Treebook_IsNodeExpanded(*args, **kwargs)
+
+    def ExpandNode(*args, **kwargs):
+        """ExpandNode(self, size_t pos, bool expand=True) -> bool"""
+        return _controls_.Treebook_ExpandNode(*args, **kwargs)
+
+    def CollapseNode(*args, **kwargs):
+        """CollapseNode(self, size_t pos) -> bool"""
+        return _controls_.Treebook_CollapseNode(*args, **kwargs)
+
+    def GetPageParent(*args, **kwargs):
+        """GetPageParent(self, size_t pos) -> int"""
+        return _controls_.Treebook_GetPageParent(*args, **kwargs)
+
+    def GetTreeCtrl(*args, **kwargs):
+        """GetTreeCtrl(self) -> wxTreeCtrl"""
+        return _controls_.Treebook_GetTreeCtrl(*args, **kwargs)
+
+
+class TreebookPtr(Treebook):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Treebook
+_controls_.Treebook_swigregister(TreebookPtr)
+
+def PreTreebook(*args, **kwargs):
+    """PreTreebook() -> Treebook"""
+    val = _controls_.new_PreTreebook(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+class TreebookEvent(BookCtrlBaseEvent):
+    """Proxy of C++ TreebookEvent class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxTreebookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
+            int nOldSel=NOT_FOUND) -> TreebookEvent
+        """
+        newobj = _controls_.new_TreebookEvent(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+
+class TreebookEventPtr(TreebookEvent):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = TreebookEvent
+_controls_.TreebookEvent_swigregister(TreebookEventPtr)
+
+wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED = _controls_.wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED
+wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING = _controls_.wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING
+wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED = _controls_.wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED
+wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED = _controls_.wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED
+EVT_TREEBOOK_PAGE_CHANGED= wx.PyEventBinder( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED, 1 )
+EVT_TREEBOOK_PAGE_CHANGING= wx.PyEventBinder( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, 1)
+EVT_TREEBOOK_NODE_COLLAPSED= wx.PyEventBinder( wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED, 1 )
+EVT_TREEBOOK_NODE_EXPANDED= wx.PyEventBinder( wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED, 1 )
+
+#---------------------------------------------------------------------------
+
+class Toolbook(BookCtrlBase):
+    """Proxy of C++ Toolbook class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxToolbook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=BK_DEFAULT, 
+            String name=EmptyString) -> Toolbook
+        """
+        newobj = _controls_.new_Toolbook(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=wxEmptyString) -> bool
+        """
+        return _controls_.Toolbook_Create(*args, **kwargs)
+
+    def GetToolBar(*args, **kwargs):
+        """GetToolBar(self) -> ToolBarBase"""
+        return _controls_.Toolbook_GetToolBar(*args, **kwargs)
+
+    def Realize(*args, **kwargs):
+        """Realize(self)"""
+        return _controls_.Toolbook_Realize(*args, **kwargs)
+
+
+class ToolbookPtr(Toolbook):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Toolbook
+_controls_.Toolbook_swigregister(ToolbookPtr)
+
+def PreToolbook(*args, **kwargs):
+    """PreToolbook() -> Toolbook"""
+    val = _controls_.new_PreToolbook(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+class ToolbookEvent(BookCtrlBaseEvent):
+    """Proxy of C++ ToolbookEvent class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxToolbookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
+            int nOldSel=NOT_FOUND) -> ToolbookEvent
+        """
+        newobj = _controls_.new_ToolbookEvent(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+
+class ToolbookEventPtr(ToolbookEvent):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = ToolbookEvent
+_controls_.ToolbookEvent_swigregister(ToolbookEventPtr)
+
+wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED = _controls_.wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED
+wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING = _controls_.wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING
+EVT_TOOLBOOK_PAGE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED, 1)
+EVT_TOOLBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, 1)
 
 #---------------------------------------------------------------------------
 
@@ -4093,6 +4298,12 @@ class ListItemAttr(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_controls_.delete_ListItemAttr):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def SetTextColour(*args, **kwargs):
         """SetTextColour(self, Colour colText)"""
         return _controls_.ListItemAttr_SetTextColour(*args, **kwargs)
@@ -4129,9 +4340,15 @@ class ListItemAttr(object):
         """GetFont(self) -> Font"""
         return _controls_.ListItemAttr_GetFont(*args, **kwargs)
 
+    def AssignFrom(*args, **kwargs):
+        """AssignFrom(self, ListItemAttr source)"""
+        return _controls_.ListItemAttr_AssignFrom(*args, **kwargs)
+
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        return _controls_.ListItemAttr_Destroy(*args, **kwargs)
+        val = _controls_.ListItemAttr_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
 
 class ListItemAttrPtr(ListItemAttr):
@@ -5042,6 +5259,12 @@ class TreeItemData(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_controls_.delete_TreeItemData):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def GetData(*args, **kwargs):
         """GetData(self) -> PyObject"""
         return _controls_.TreeItemData_GetData(*args, **kwargs)
@@ -5060,7 +5283,9 @@ class TreeItemData(object):
 
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        return _controls_.TreeItemData_Destroy(*args, **kwargs)
+        val = _controls_.TreeItemData_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
 
 class TreeItemDataPtr(TreeItemData):
@@ -6167,7 +6392,9 @@ class HelpProvider(object):
 
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        return _controls_.HelpProvider_Destroy(*args, **kwargs)
+        val = _controls_.HelpProvider_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
 
 class HelpProviderPtr(HelpProvider):

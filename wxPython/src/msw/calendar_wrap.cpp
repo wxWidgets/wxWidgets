@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1557,7 +1558,7 @@ static swig_module_info swig_module = {swig_types, 105, 0, 0, 0, 0};
 #include <wx/calctrl.h>
 
 
-  /*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
+  /*@c:\\PROJECTS\\SWIG-1.3.27\\Lib\\python\\pymacros.swg,72,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 
@@ -1596,7 +1597,7 @@ SWIG_AsVal_long(PyObject* obj, long* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -1726,7 +1727,7 @@ SWIG_AsVal_unsigned_SS_long(PyObject* obj, unsigned long* val)
 {
     long v = 0;
     if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        SWIG_type_error("unsigned number", obj);
+        SWIG_Python_TypeError("unsigned number", obj);
     }
     else if (val)
         *val = (unsigned long)v;

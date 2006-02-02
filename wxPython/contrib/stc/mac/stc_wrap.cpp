@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1601,7 +1602,7 @@ SWIG_AsVal_long(PyObject* obj, long* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -1725,31 +1726,30 @@ SWIG_Check_bool(PyObject* obj)
 }
 
 
-  static PyObject* t_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    PyObject*   o3;
-    
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyTuple_Check(target)) {
-            o2 = target;
-            target = PyTuple_New(1);
-            PyTuple_SetItem(target, 0, o2);
-        }            
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
-
-        o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
-        Py_DECREF(o3);
+    static PyObject* t_output_helper(PyObject* result, PyObject* obj)
+    {
+        PyObject*   o2;
+        PyObject*   o3;
+        if (!result) {
+            result = obj;
+        } else if (result == Py_None) {
+            Py_DECREF(result);
+            result = obj;
+        } else {
+            if (!PyTuple_Check(result)) {
+                o2 = result;
+                result = PyTuple_New(1);
+                PyTuple_SET_ITEM(result, 0, o2);
+            }
+            o3 = PyTuple_New(1);            
+            PyTuple_SetItem(o3, 0, obj);      
+            o2 = result;
+            result = PySequence_Concat(o2, o3); 
+            Py_DECREF(o2);                      
+            Py_DECREF(o3);
+        }
+        return result;
     }
-    return target;
-  }
 
 
 

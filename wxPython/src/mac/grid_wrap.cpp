@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -2162,7 +2163,7 @@ SWIG_AsVal_long(PyObject* obj, long* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -2494,31 +2495,30 @@ static void wxGridCellAttr__setOORInfo(wxGridCellAttr *self,PyObject *_self){
                 self->SetClientObject(new wxPyOORClientData(_self));
         }
 
-  static PyObject* t_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    PyObject*   o3;
-    
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyTuple_Check(target)) {
-            o2 = target;
-            target = PyTuple_New(1);
-            PyTuple_SetItem(target, 0, o2);
-        }            
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
-
-        o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
-        Py_DECREF(o3);
+    static PyObject* t_output_helper(PyObject* result, PyObject* obj)
+    {
+        PyObject*   o2;
+        PyObject*   o3;
+        if (!result) {
+            result = obj;
+        } else if (result == Py_None) {
+            Py_DECREF(result);
+            result = obj;
+        } else {
+            if (!PyTuple_Check(result)) {
+                o2 = result;
+                result = PyTuple_New(1);
+                PyTuple_SET_ITEM(result, 0, o2);
+            }
+            o3 = PyTuple_New(1);            
+            PyTuple_SetItem(o3, 0, obj);      
+            o2 = result;
+            result = PySequence_Concat(o2, o3); 
+            Py_DECREF(o2);                      
+            Py_DECREF(o3);
+        }
+        return result;
     }
-    return target;
-  }
 
 
 static void wxGridCellAttrProvider__setOORInfo(wxGridCellAttrProvider *self,PyObject *_self){
@@ -2531,7 +2531,7 @@ SWIG_AsVal_unsigned_SS_long(PyObject* obj, unsigned long* val)
 {
     long v = 0;
     if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        SWIG_type_error("unsigned number", obj);
+        SWIG_Python_TypeError("unsigned number", obj);
     }
     else if (val)
         *val = (unsigned long)v;
@@ -2617,7 +2617,7 @@ SWIG_AsVal_double(PyObject *obj, double* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -3179,7 +3179,7 @@ static PyObject *_wrap_GridCellRenderer_Clone(PyObject *, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellRenderer(result, 0); 
+        resultobj = wxPyMake_wxGridCellRenderer(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -3804,7 +3804,7 @@ static PyObject *_wrap_GridCellEditor_GetCellAttr(PyObject *, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttr(result, 0); 
+        resultobj = wxPyMake_wxGridCellAttr(result,     (bool)0); 
     }
     return resultobj;
     fail:
@@ -4101,7 +4101,7 @@ static PyObject *_wrap_GridCellEditor_Clone(PyObject *, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellEditor(result, 0); 
+        resultobj = wxPyMake_wxGridCellEditor(result,   (bool)0); 
     }
     return resultobj;
     fail:
@@ -5295,7 +5295,7 @@ static PyObject *_wrap_new_GridCellAttr(PyObject *, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttr(result, 1); 
+        resultobj = wxPyMake_wxGridCellAttr(result,     (bool)1); 
     }
     return resultobj;
     fail:
@@ -5323,7 +5323,7 @@ static PyObject *_wrap_GridCellAttr_Clone(PyObject *, PyObject *args, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttr(result, 0); 
+        resultobj = wxPyMake_wxGridCellAttr(result,     (bool)0); 
     }
     return resultobj;
     fail:
@@ -6190,7 +6190,7 @@ static PyObject *_wrap_GridCellAttr_GetRenderer(PyObject *, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellRenderer(result, 0); 
+        resultobj = wxPyMake_wxGridCellRenderer(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -6234,7 +6234,7 @@ static PyObject *_wrap_GridCellAttr_GetEditor(PyObject *, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellEditor(result, 0); 
+        resultobj = wxPyMake_wxGridCellEditor(result,   (bool)0); 
     }
     return resultobj;
     fail:
@@ -6348,7 +6348,7 @@ static PyObject *_wrap_new_GridCellAttrProvider(PyObject *, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttrProvider(result, 1); 
+        resultobj = wxPyMake_wxGridCellAttrProvider(result, (bool)1); 
     }
     return resultobj;
     fail:
@@ -6422,7 +6422,7 @@ static PyObject *_wrap_GridCellAttrProvider_GetAttr(PyObject *, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttr(result, 0); 
+        resultobj = wxPyMake_wxGridCellAttr(result,     (bool)0); 
     }
     return resultobj;
     fail:
@@ -6713,7 +6713,7 @@ static PyObject *_wrap_PyGridCellAttrProvider_base_GetAttr(PyObject *, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttr(result, 0); 
+        resultobj = wxPyMake_wxGridCellAttr(result,     (bool)0); 
     }
     return resultobj;
     fail:
@@ -6916,7 +6916,7 @@ static PyObject *_wrap_GridTableBase_GetAttrProvider(PyObject *, PyObject *args,
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttrProvider(result, 0); 
+        resultobj = wxPyMake_wxGridCellAttrProvider(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -6973,7 +6973,7 @@ static PyObject *_wrap_GridTableBase_GetView(PyObject *, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -8088,7 +8088,7 @@ static PyObject *_wrap_GridTableBase_GetAttr(PyObject *, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttr(result, 0); 
+        resultobj = wxPyMake_wxGridCellAttr(result,     (bool)0); 
     }
     return resultobj;
     fail:
@@ -8957,7 +8957,7 @@ static PyObject *_wrap_PyGridTableBase_base_GetAttr(PyObject *, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttr(result, 0); 
+        resultobj = wxPyMake_wxGridCellAttr(result,     (bool)0); 
     }
     return resultobj;
     fail:
@@ -9250,7 +9250,7 @@ static PyObject *_wrap_GridTableMessage_GetTableObject(PyObject *, PyObject *arg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridTableBase(result, 0); 
+        resultobj = wxPyMake_wxGridTableBase(result,    (bool)0); 
     }
     return resultobj;
     fail:
@@ -10176,7 +10176,7 @@ static PyObject *_wrap_Grid_GetTable(PyObject *, PyObject *args, PyObject *kwarg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridTableBase(result, 0); 
+        resultobj = wxPyMake_wxGridTableBase(result,    (bool)0); 
     }
     return resultobj;
     fail:
@@ -13349,7 +13349,7 @@ static PyObject *_wrap_Grid_GetOrCreateCellAttr(PyObject *, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellAttr(result, 0); 
+        resultobj = wxPyMake_wxGridCellAttr(result,     (bool)0); 
     }
     return resultobj;
     fail:
@@ -15225,7 +15225,7 @@ static PyObject *_wrap_Grid_GetDefaultRenderer(PyObject *, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellRenderer(result, 0); 
+        resultobj = wxPyMake_wxGridCellRenderer(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -15265,7 +15265,7 @@ static PyObject *_wrap_Grid_GetCellRenderer(PyObject *, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellRenderer(result, 0); 
+        resultobj = wxPyMake_wxGridCellRenderer(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -15363,7 +15363,7 @@ static PyObject *_wrap_Grid_GetDefaultEditor(PyObject *, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellEditor(result, 0); 
+        resultobj = wxPyMake_wxGridCellEditor(result,   (bool)0); 
     }
     return resultobj;
     fail:
@@ -15403,7 +15403,7 @@ static PyObject *_wrap_Grid_GetCellEditor(PyObject *, PyObject *args, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellEditor(result, 0); 
+        resultobj = wxPyMake_wxGridCellEditor(result,   (bool)0); 
     }
     return resultobj;
     fail:
@@ -16346,7 +16346,7 @@ static PyObject *_wrap_Grid_GetDefaultEditorForCell(PyObject *, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellEditor(result, 0); 
+        resultobj = wxPyMake_wxGridCellEditor(result,   (bool)0); 
     }
     return resultobj;
     fail:
@@ -16386,7 +16386,7 @@ static PyObject *_wrap_Grid_GetDefaultRendererForCell(PyObject *, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellRenderer(result, 0); 
+        resultobj = wxPyMake_wxGridCellRenderer(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -16422,7 +16422,7 @@ static PyObject *_wrap_Grid_GetDefaultEditorForType(PyObject *, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellEditor(result, 0); 
+        resultobj = wxPyMake_wxGridCellEditor(result,   (bool)0); 
     }
     {
         if (temp2)
@@ -16466,7 +16466,7 @@ static PyObject *_wrap_Grid_GetDefaultRendererForType(PyObject *, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxGridCellRenderer(result, 0); 
+        resultobj = wxPyMake_wxGridCellRenderer(result, (bool)0); 
     }
     {
         if (temp2)

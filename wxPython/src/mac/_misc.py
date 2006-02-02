@@ -778,6 +778,12 @@ class ToolTip(_core.Object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_misc_.delete_ToolTip):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def SetTip(*args, **kwargs):
         """SetTip(self, String tip)"""
         return _misc_.ToolTip_SetTip(*args, **kwargs)
@@ -826,13 +832,21 @@ class Caret(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_misc_.delete_Caret):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def Destroy(*args, **kwargs):
         """
         Destroy(self)
 
         Deletes the C++ object this Python object is a proxy for.
         """
-        return _misc_.Caret_Destroy(*args, **kwargs)
+        val = _misc_.Caret_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
     def IsOk(*args, **kwargs):
         """IsOk(self) -> bool"""
@@ -1310,7 +1324,6 @@ class TimerRunner(object):
         """
         __init__(self, wxTimer timer) -> TimerRunner
         __init__(self, wxTimer timer, int milli, bool oneShot=False) -> TimerRunner
-        __init__(self, wxTimer timer, int milli) -> TimerRunner
         """
         newobj = _misc_.new_TimerRunner(*args)
         self.this = newobj.this
@@ -1367,6 +1380,12 @@ class Log(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_misc_.delete_Log):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def IsEnabled(*args, **kwargs):
         """IsEnabled() -> bool"""
         return _misc_.Log_IsEnabled(*args, **kwargs)
@@ -1488,7 +1507,9 @@ class Log(object):
     TimeStamp = staticmethod(TimeStamp)
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        return _misc_.Log_Destroy(*args, **kwargs)
+        val = _misc_.Log_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
 
 class LogPtr(Log):
@@ -2691,6 +2712,12 @@ class ArtProvider(object):
         del newobj.thisown
         self._setCallbackInfo(self, ArtProvider)
 
+    def __del__(self, destroy=_misc_.delete_ArtProvider):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.ArtProvider__setCallbackInfo(*args, **kwargs)
@@ -2720,7 +2747,9 @@ class ArtProvider(object):
         Remove provider. The provider must have been added previously!  The
         provider is _not_ deleted.
         """
-        return _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
+        val = _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
+        args[1].thisown = 1
+        return val
 
     RemoveProvider = staticmethod(RemoveProvider)
     def GetBitmap(*args, **kwargs):
@@ -2755,7 +2784,9 @@ class ArtProvider(object):
     GetSizeHint = staticmethod(GetSizeHint)
     def Destroy(*args, **kwargs):
         """Destroy(self)"""
-        return _misc_.ArtProvider_Destroy(*args, **kwargs)
+        val = _misc_.ArtProvider_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
 
 class ArtProviderPtr(ArtProvider):
@@ -2844,7 +2875,9 @@ def ArtProvider_RemoveProvider(*args, **kwargs):
     Remove provider. The provider must have been added previously!  The
     provider is _not_ deleted.
     """
-    return _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
+    val = _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
+    args[1].thisown = 1
+    return val
 
 def ArtProvider_GetBitmap(*args, **kwargs):
     """
@@ -4840,7 +4873,6 @@ class DataObject(object):
         GetDataHere(self, DataFormat format) -> String
 
         Get the data bytes in the specified format, returns None on failure.
-
         """
         return _misc_.DataObject_GetDataHere(*args, **kwargs)
 

@@ -9,6 +9,7 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
+#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1665,7 +1666,7 @@ SWIG_AsVal_long(PyObject* obj, long* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -1801,31 +1802,30 @@ SWIG_Check_bool(PyObject* obj)
 }
 
 
-  static PyObject* t_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    PyObject*   o3;
-    
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyTuple_Check(target)) {
-            o2 = target;
-            target = PyTuple_New(1);
-            PyTuple_SetItem(target, 0, o2);
-        }            
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
-
-        o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
-        Py_DECREF(o3);
+    static PyObject* t_output_helper(PyObject* result, PyObject* obj)
+    {
+        PyObject*   o2;
+        PyObject*   o3;
+        if (!result) {
+            result = obj;
+        } else if (result == Py_None) {
+            Py_DECREF(result);
+            result = obj;
+        } else {
+            if (!PyTuple_Check(result)) {
+                o2 = result;
+                result = PyTuple_New(1);
+                PyTuple_SET_ITEM(result, 0, o2);
+            }
+            o3 = PyTuple_New(1);            
+            PyTuple_SetItem(o3, 0, obj);      
+            o2 = result;
+            result = PySequence_Concat(o2, o3); 
+            Py_DECREF(o2);                      
+            Py_DECREF(o3);
+        }
+        return result;
     }
-    return target;
-  }
 
 
 
@@ -1838,7 +1838,7 @@ SWIG_AsVal_unsigned_SS_long(PyObject* obj, unsigned long* val)
 {
     long v = 0;
     if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        SWIG_type_error("unsigned number", obj);
+        SWIG_Python_TypeError("unsigned number", obj);
     }
     else if (val)
         *val = (unsigned long)v;
@@ -2140,7 +2140,7 @@ static wxString wxLog_TimeStamp(){
             return msg;
         }
 static void wxLog_Destroy(wxLog *self){ delete self; }
-// Make somce wrappers that double any % signs so they are 'escaped'
+// Make some wrappers that double any % signs so they are 'escaped'
     void wxPyLogFatalError(const wxString& msg)
     {
         wxString m(msg);
@@ -2661,7 +2661,7 @@ SWIG_AsVal_double(PyObject *obj, double* val)
         return 1;
     }
     else {
-        SWIG_type_error("number", obj);
+        SWIG_Python_TypeError("number", obj);
     }
     return 0;
 }
@@ -7014,9 +7014,7 @@ static PyObject *_wrap_new_ToolTip(PyObject *, PyObject *args, PyObject *kwargs)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = wxPyMake_wxObject(result, 1); 
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxToolTip, 1);
     {
         if (temp1)
         delete arg1;
@@ -7027,6 +7025,31 @@ static PyObject *_wrap_new_ToolTip(PyObject *, PyObject *args, PyObject *kwargs)
         if (temp1)
         delete arg1;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_ToolTip(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxToolTip *arg1 = (wxToolTip *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_ToolTip",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxToolTip, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -7221,6 +7244,31 @@ static PyObject *_wrap_new_Caret(PyObject *, PyObject *args, PyObject *kwargs) {
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCaret, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_Caret(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxCaret *arg1 = (wxCaret *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_Caret",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxCaret, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -9468,13 +9516,13 @@ static PyObject *_wrap_new_TimerRunner__SWIG_1(PyObject *, PyObject *args) {
     PyObject *resultobj = NULL;
     wxTimer *arg1 = 0 ;
     int arg2 ;
-    bool arg3 ;
+    bool arg3 = (bool) false ;
     wxTimerRunner *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OOO:new_TimerRunner",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO|O:new_TimerRunner",&obj0,&obj1,&obj2)) goto fail;
     {
         SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxTimer, SWIG_POINTER_EXCEPTION | 0);
         if (SWIG_arg_fail(1)) SWIG_fail;
@@ -9487,50 +9535,16 @@ static PyObject *_wrap_new_TimerRunner__SWIG_1(PyObject *, PyObject *args) {
         arg2 = static_cast<int >(SWIG_As_int(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
-    {
-        arg3 = static_cast<bool >(SWIG_As_bool(obj2)); 
-        if (SWIG_arg_fail(3)) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = static_cast<bool >(SWIG_As_bool(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
     }
     {
         if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxTimerRunner *)new wxTimerRunner(*arg1,arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxTimerRunner, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_TimerRunner__SWIG_2(PyObject *, PyObject *args) {
-    PyObject *resultobj = NULL;
-    wxTimer *arg1 = 0 ;
-    int arg2 ;
-    wxTimerRunner *result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OO:new_TimerRunner",&obj0,&obj1)) goto fail;
-    {
-        SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxTimer, SWIG_POINTER_EXCEPTION | 0);
-        if (SWIG_arg_fail(1)) SWIG_fail;
-        if (arg1 == NULL) {
-            SWIG_null_ref("wxTimer");
-        }
-        if (SWIG_arg_fail(1)) SWIG_fail;
-    }
-    {
-        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        if (!wxPyCheckForApp()) SWIG_fail;
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxTimerRunner *)new wxTimerRunner(*arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -9566,7 +9580,7 @@ static PyObject *_wrap_new_TimerRunner(PyObject *self, PyObject *args) {
             return _wrap_new_TimerRunner__SWIG_0(self,args);
         }
     }
-    if (argc == 2) {
+    if ((argc >= 2) && (argc <= 3)) {
         int _v;
         {
             void *ptr = 0;
@@ -9580,24 +9594,9 @@ static PyObject *_wrap_new_TimerRunner(PyObject *self, PyObject *args) {
         if (_v) {
             _v = SWIG_Check_int(argv[1]);
             if (_v) {
-                return _wrap_new_TimerRunner__SWIG_2(self,args);
-            }
-        }
-    }
-    if (argc == 3) {
-        int _v;
-        {
-            void *ptr = 0;
-            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxTimer, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            } else {
-                _v = (ptr != 0);
-            }
-        }
-        if (_v) {
-            _v = SWIG_Check_int(argv[1]);
-            if (_v) {
+                if (argc <= 2) {
+                    return _wrap_new_TimerRunner__SWIG_1(self,args);
+                }
                 _v = SWIG_Check_bool(argv[2]);
                 if (_v) {
                     return _wrap_new_TimerRunner__SWIG_1(self,args);
@@ -9698,6 +9697,31 @@ static PyObject *_wrap_new_Log(PyObject *, PyObject *args, PyObject *kwargs) {
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxLog, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_Log(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxLog *arg1 = (wxLog *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_Log",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxLog, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -9875,7 +9899,7 @@ static PyObject *_wrap_Log_SetActiveTarget(PyObject *, PyObject *args, PyObject 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Log_SetActiveTarget",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxLog, SWIG_POINTER_EXCEPTION | 0);
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxLog, SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9884,7 +9908,7 @@ static PyObject *_wrap_Log_SetActiveTarget(PyObject *, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxLog, 0);
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxLog, 1);
     return resultobj;
     fail:
     return NULL;
@@ -10568,7 +10592,7 @@ static PyObject *_wrap_LogWindow_GetFrame(PyObject *, PyObject *args, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, (bool)0); 
     }
     return resultobj;
     fail:
@@ -12499,7 +12523,11 @@ static PyObject *_wrap_Kill(PyObject *, PyObject *args, PyObject *kwargs) {
     {
         PyObject* o;
         o = PyInt_FromLong((long) (*arg3));
+        
         resultobj = t_output_helper(resultobj, o);
+        
+        
+        
     }
     return resultobj;
     fail:
@@ -17493,6 +17521,31 @@ static PyObject *_wrap_new_ArtProvider(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_delete_ArtProvider(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxPyArtProvider *arg1 = (wxPyArtProvider *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_ArtProvider",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyArtProvider, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_ArtProvider__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyArtProvider *arg1 = (wxPyArtProvider *) 0 ;
@@ -17533,7 +17586,7 @@ static PyObject *_wrap_ArtProvider_PushProvider(PyObject *, PyObject *args, PyOb
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ArtProvider_PushProvider",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyArtProvider, SWIG_POINTER_EXCEPTION | 0);
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyArtProvider, SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -32735,6 +32788,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MutexGuiLocker_swigregister", MutexGuiLocker_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Thread_IsMain", (PyCFunction) _wrap_Thread_IsMain, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_ToolTip", (PyCFunction) _wrap_new_ToolTip, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_ToolTip", (PyCFunction) _wrap_delete_ToolTip, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ToolTip_SetTip", (PyCFunction) _wrap_ToolTip_SetTip, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ToolTip_GetTip", (PyCFunction) _wrap_ToolTip_GetTip, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ToolTip_GetWindow", (PyCFunction) _wrap_ToolTip_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -32742,6 +32796,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ToolTip_SetDelay", (PyCFunction) _wrap_ToolTip_SetDelay, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ToolTip_swigregister", ToolTip_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Caret", (PyCFunction) _wrap_new_Caret, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_Caret", (PyCFunction) _wrap_delete_Caret, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Caret_Destroy", (PyCFunction) _wrap_Caret_Destroy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Caret_IsOk", (PyCFunction) _wrap_Caret_IsOk, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Caret_IsVisible", (PyCFunction) _wrap_Caret_IsVisible, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -32825,6 +32880,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TimerRunner_Start", (PyCFunction) _wrap_TimerRunner_Start, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TimerRunner_swigregister", TimerRunner_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Log", (PyCFunction) _wrap_new_Log, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_Log", (PyCFunction) _wrap_delete_Log, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Log_IsEnabled", (PyCFunction) _wrap_Log_IsEnabled, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Log_EnableLogging", (PyCFunction) _wrap_Log_EnableLogging, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Log_OnLog", (PyCFunction) _wrap_Log_OnLog, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -33042,6 +33098,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_MimeTypesManager", (PyCFunction) _wrap_delete_MimeTypesManager, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MimeTypesManager_swigregister", MimeTypesManager_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ArtProvider", (PyCFunction) _wrap_new_ArtProvider, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_ArtProvider", (PyCFunction) _wrap_delete_ArtProvider, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider__setCallbackInfo", (PyCFunction) _wrap_ArtProvider__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_PushProvider", (PyCFunction) _wrap_ArtProvider_PushProvider, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ArtProvider_PopProvider", (PyCFunction) _wrap_ArtProvider_PopProvider, METH_VARARGS | METH_KEYWORDS, NULL},
