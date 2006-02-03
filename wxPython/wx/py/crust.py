@@ -291,17 +291,17 @@ class CrustFrame(frame.Frame, frame.ShellFrameMixin):
             self.crust.LoadSettings(self.config)
 
 
-    def SaveSettings(self):
+    def SaveSettings(self, force=False):
         if self.config is not None:
             frame.ShellFrameMixin.SaveSettings(self)
-            if self.autoSaveSettings:
+            if self.autoSaveSettings or force:
                 frame.Frame.SaveSettings(self, self.config)
                 self.crust.SaveSettings(self.config)
 
 
     def DoSaveSettings(self):
         if self.config is not None:
-            self.SaveSettings()
+            self.SaveSettings(force=True)
             self.config.Flush()
         
 

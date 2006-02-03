@@ -106,16 +106,16 @@ class ShellFrame(frame.Frame, frame.ShellFrameMixin):
             frame.Frame.LoadSettings(self, self.config)
             self.shell.LoadSettings(self.config)
 
-    def SaveSettings(self):
+    def SaveSettings(self, force=False):
         if self.config is not None:
             frame.ShellFrameMixin.SaveSettings(self)
-            if self.autoSaveSettings:
+            if self.autoSaveSettings or force:
                 frame.Frame.SaveSettings(self, self.config)
                 self.shell.SaveSettings(self.config)
 
     def DoSaveSettings(self):
         if self.config is not None:
-            self.SaveSettings()
+            self.SaveSettings(force=True)
             self.config.Flush()
         
 
