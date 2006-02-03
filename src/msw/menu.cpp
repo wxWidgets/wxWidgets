@@ -1058,7 +1058,11 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 
     m_titles[pos] = title;
 
-    if ( IsAttached() )
+#if defined(WINCE_WITHOUT_COMMANDBAR)
+    if (IsAttached())
+#else
+    if (GetHmenu())
+#endif
     {
         int mswpos = MSWPositionForWxMenu(menuOld,pos);
 
@@ -1083,7 +1087,8 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
         }
 #endif // wxUSE_ACCEL
 
-        Refresh();
+        if (IsAttached())
+            Refresh();
     }
 
     return menuOld;
@@ -1094,7 +1099,13 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     // Find out which MSW item before which we'll be inserting before
     // wxMenuBarBase::Insert is called and GetMenu(pos) is the new menu.
     // If IsAttached() is false this won't be used anyway
-    int mswpos = (!IsAttached() || (pos == m_menus.GetCount()))
+    bool isAttached =
+#if defined(WINCE_WITHOUT_COMMANDBAR)
+        IsAttached();
+#else
+        (GetHmenu() != 0);
+#endif
+    int mswpos = (!isAttached || (pos == m_menus.GetCount()))
         ?   -1 // append the menu
         :   MSWPositionForWxMenu(GetMenu(pos),pos);
 
@@ -1103,9 +1114,9 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     m_titles.Insert(title, pos);
 
-    if ( IsAttached() )
+    if ( isAttached )
     {
-#if defined(WINCE_WITHOUT_COMMANDAR)
+#if defined(WINCE_WITHOUT_COMMANDBAR)
         if (!GetToolBar())
             return false;
         TBBUTTON tbButton;
@@ -1141,7 +1152,8 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         }
 #endif // wxUSE_ACCEL
 
-        Refresh();
+        if (IsAttached())
+            Refresh();
     }
 
     return true;
@@ -1157,9 +1169,13 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 
     m_titles.Add(title);
 
-    if ( IsAttached() )
+#if defined(WINCE_WITHOUT_COMMANDBAR)
+    if (IsAttached())
+#else
+    if (GetHmenu())
+#endif
     {
-#if defined(WINCE_WITHOUT_COMMANDAR)
+#if defined(WINCE_WITHOUT_COMMANDBAR)
         if (!GetToolBar())
             return false;
         TBBUTTON tbButton;
@@ -1196,7 +1212,8 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
         }
 #endif // wxUSE_ACCEL
 
-        Refresh();
+        if (IsAttached())
+            Refresh();
     }
 
     return true;
@@ -1208,9 +1225,13 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if ( !menu )
         return NULL;
 
-    if ( IsAttached() )
+#if defined(WINCE_WITHOUT_COMMANDBAR)
+    if (IsAttached())
+#else
+    if (GetHmenu())
+#endif
     {
-#if defined(WINCE_WITHOUT_COMMANDAR)
+#if defined(WINCE_WITHOUT_COMMANDBAR)
         if (GetToolBar())
         {
             if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_DELETEBUTTON, (UINT) pos, (LPARAM) 0))
@@ -1233,7 +1254,8 @@ wxMenu *wxMenuBar::Remove(size_t pos)
         }
 #endif // wxUSE_ACCEL
 
-        Refresh();
+        if (IsAttached())
+            Refresh();
     }
 
 
