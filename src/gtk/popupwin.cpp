@@ -120,7 +120,7 @@ gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
     gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
     gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
 
-    gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
+    gtk_window_set_resizable(GTK_WINDOW(win->m_widget), FALSE);
 
     return FALSE;
 }
