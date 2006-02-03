@@ -68,9 +68,9 @@ bool wxTimer::Start( int millisecs, bool oneShot )
     (void)wxTimerBase::Start(millisecs, oneShot);
 
     if (m_tag != -1)
-        gtk_timeout_remove( m_tag );
+        g_source_remove( m_tag );
 
-    m_tag = gtk_timeout_add( m_milli, timeout_callback, this );
+    m_tag = g_timeout_add( m_milli, timeout_callback, this );
 
     return TRUE;
 }
@@ -79,7 +79,7 @@ void wxTimer::Stop()
 {
     if (m_tag != -1)
     {
-        gtk_timeout_remove( m_tag );
+        g_source_remove( m_tag );
         m_tag = -1;
     }
 }

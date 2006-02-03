@@ -101,7 +101,7 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
     XFree(wm_hints);
 }
 
-static gint gtk_frame_urgency_timer_callback( wxTopLevelWindowGTK *win )
+static gboolean gtk_frame_urgency_timer_callback( wxTopLevelWindowGTK *win )
 {
 #if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,7,0)
     if(!gtk_check_version(2,7,0))
@@ -150,7 +150,7 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
     switch( win->m_urgency_hint )
     {
         default:
-            gtk_timeout_remove( win->m_urgency_hint );
+            g_source_remove( win->m_urgency_hint );
             // no break, fallthrough to remove hint too
         case -1:
 #if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,7,0)
@@ -1247,7 +1247,7 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
     ::wxYieldIfNeeded();
 
     if(m_urgency_hint >= 0)
-        gtk_timeout_remove(m_urgency_hint);
+        g_source_remove(m_urgency_hint);
 
     m_urgency_hint = -2;
 
@@ -1257,7 +1257,7 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
 
         if (flags & wxUSER_ATTENTION_INFO)
         {
-            m_urgency_hint = gtk_timeout_add(5000, (GtkFunction)gtk_frame_urgency_timer_callback, this);
+            m_urgency_hint = g_timeout_add(5000, (GSourceFunc)gtk_frame_urgency_timer_callback, this);
         } else {
             m_urgency_hint = -1;
         }
