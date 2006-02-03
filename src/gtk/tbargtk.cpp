@@ -540,7 +540,7 @@ void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
 
         m_blockEvent = true;
 
-        gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(item), toggle );
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(item), toggle );
 
         m_blockEvent = false;
     }

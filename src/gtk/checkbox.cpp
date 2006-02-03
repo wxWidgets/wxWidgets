@@ -180,7 +180,7 @@ void wxCheckBox::SetValue( bool state )
 
     m_blockEvent = TRUE;
 
-    gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widgetCheckbox), state );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_widgetCheckbox), state );
 
     m_blockEvent = FALSE;
 }

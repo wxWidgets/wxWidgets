@@ -260,7 +260,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
         ConnectWidget( GTK_WIDGET(m_radio) );
 
-        if (!i) gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_radio), TRUE );
+        if (!i)
+            gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_radio), TRUE );
 
         g_signal_connect (m_radio, "clicked",
                           G_CALLBACK (gtk_radiobutton_clicked_callback), this);
