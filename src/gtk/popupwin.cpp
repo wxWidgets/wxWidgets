@@ -288,7 +288,7 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
 
     if ((m_width != old_width) || (m_height != old_height))
     {
-        gtk_widget_set_usize( m_widget, m_width, m_height );
+        gtk_widget_set_size_request( m_widget, m_width, m_height );
 
         /* actual resizing is deferred to GtkOnSize in idle time and
            when showing the dialog */

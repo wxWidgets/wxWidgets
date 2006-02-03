@@ -822,7 +822,7 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
 
     gtk_widget_pop_colormap ();
 
-    gtk_widget_set_usize (m_iconWindow, width, height);
+    gtk_widget_set_size_request (m_iconWindow, width, height);
     gtk_widget_realize (m_iconWindow);
 
     g_signal_connect (m_iconWindow, "configure_event",

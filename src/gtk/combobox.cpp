@@ -290,7 +290,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     // This is required for tool bar support
 //    wxSize setsize = GetSize();
-//    gtk_widget_set_usize( m_widget, setsize.x, setsize.y );
+//    gtk_widget_set_size_request( m_widget, setsize.x, setsize.y );
 
     return true;
 }

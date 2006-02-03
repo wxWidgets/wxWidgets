@@ -306,7 +306,7 @@ gtk_pizza_put (GtkPizza   *pizza,
 
     gtk_widget_set_parent (widget, GTK_WIDGET (pizza));
 
-    gtk_widget_set_usize (widget, width, height);
+    gtk_widget_set_size_request (widget, width, height);
 }
 
 void
@@ -370,7 +370,7 @@ gtk_pizza_resize (GtkPizza    *pizza,
             child->width = width;
             child->height = height;
 
-            gtk_widget_set_usize (widget, width, height);
+            gtk_widget_set_size_request (widget, width, height);
 
             if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (pizza))
                 gtk_widget_queue_resize (widget);
@@ -412,7 +412,7 @@ gtk_pizza_set_size (GtkPizza   *pizza,
             child->width = width;
             child->height = height;
 
-            gtk_widget_set_usize (widget, width, height);
+            gtk_widget_set_size_request (widget, width, height);
 
             if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (pizza))
                 gtk_widget_queue_resize (widget);
