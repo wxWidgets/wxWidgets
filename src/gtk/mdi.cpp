@@ -164,7 +164,7 @@ void wxMDIParentFrame::OnInternalIdle()
     if (m_justInserted)
     {
         GtkNotebook *notebook = GTK_NOTEBOOK(m_clientWindow->m_widget);
-        gtk_notebook_set_page( notebook, g_list_length( notebook->children ) - 1 );
+        gtk_notebook_set_current_page( notebook, g_list_length( notebook->children ) - 1 );
 
         /* need to set the menubar of the child */
         wxMDIChildFrame *active_child_frame = GetActiveChild();
@@ -397,7 +397,7 @@ void wxMDIChildFrame::Activate()
     wxMDIParentFrame* parent = (wxMDIParentFrame*) GetParent();
     GtkNotebook* notebook = GTK_NOTEBOOK(parent->m_widget);
     gint pageno = gtk_notebook_page_num( notebook, m_widget );
-    gtk_notebook_set_page( notebook, pageno );
+    gtk_notebook_set_current_page( notebook, pageno );
 }
 
 void wxMDIChildFrame::OnActivate( wxActivateEvent& WXUNUSED(event) )

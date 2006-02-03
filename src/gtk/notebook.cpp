@@ -217,7 +217,7 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
         }
 
         // m_selection = page;
-        gtk_notebook_set_page( GTK_NOTEBOOK(widget), page );
+        gtk_notebook_set_current_page( GTK_NOTEBOOK(widget), page );
 
         g_signal_stop_emission_by_name (widget, "key_press_event");
         return TRUE;
@@ -422,7 +422,7 @@ int wxNotebook::SetSelection( size_t page )
 
     // cache the selection
     m_selection = page;
-    gtk_notebook_set_page( GTK_NOTEBOOK(m_widget), page );
+    gtk_notebook_set_current_page( GTK_NOTEBOOK(m_widget), page );
 
     wxNotebookPage *client = GetPage(page);
     if ( client )
