@@ -924,7 +924,7 @@ void wxMenu::Init()
     {
         GtkWidget *tearoff = gtk_tearoff_menu_item_new();
 
-        gtk_menu_append(GTK_MENU(m_menu), tearoff);
+        gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), tearoff);
     }
 
     m_prevRadio = NULL;

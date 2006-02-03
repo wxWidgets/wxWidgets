@@ -495,7 +495,7 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, int pos, const wxString& item)
         // sorted control, need to insert at the correct index
         index = m_strings->Add(item);
 
-        gtk_menu_insert( GTK_MENU(menu), menu_item, index );
+        gtk_menu_shell_insert( GTK_MENU_SHELL(menu), menu_item, index );
 
         if ( index )
         {
@@ -515,13 +515,13 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, int pos, const wxString& item)
         // normal control, just append
         if (pos == (int)m_clientList.GetCount())
         {
-            gtk_menu_append( GTK_MENU(menu), menu_item );
+            gtk_menu_shell_append( GTK_MENU_SHELL(menu), menu_item );
             m_clientList.Append( (wxObject*) NULL );
             index = m_clientList.GetCount() - 1;
         }
         else
         {
-            gtk_menu_insert( GTK_MENU(menu), menu_item, pos );
+            gtk_menu_shell_insert( GTK_MENU_SHELL(menu), menu_item, pos );
             m_clientList.Insert( pos, (wxObject*) NULL );
             index = pos;
         }
