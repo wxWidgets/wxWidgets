@@ -145,8 +145,8 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     else
 #endif
     {
-        if (GTK_IS_MISC(BUTTON_CHILD(m_widget)))
-            gtk_misc_set_alignment (GTK_MISC (BUTTON_CHILD (m_widget)),
+        if (GTK_IS_MISC(GTK_BIN(m_widget)->child))
+            gtk_misc_set_alignment(GTK_MISC(GTK_BIN(m_widget)->child),
                                 x_alignment, y_alignment);
     }
 
@@ -255,7 +255,7 @@ bool wxButton::Enable( bool enable )
     if ( !wxControl::Enable( enable ) )
         return FALSE;
 
-    gtk_widget_set_sensitive( BUTTON_CHILD(m_widget), enable );
+    gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
 
     return TRUE;
 }
@@ -268,7 +268,7 @@ bool wxButton::IsOwnGtkWindow( GdkWindow *window )
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(BUTTON_CHILD(m_widget), style);
+    gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
 }
 
 wxSize wxButton::DoGetBestSize() const

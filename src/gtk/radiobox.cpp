@@ -381,7 +381,7 @@ wxString wxRadioBox::GetString( int n ) const
 
     wxCHECK_MSG( node, wxEmptyString, wxT("radiobox wrong index") );
 
-    GtkLabel *label = GTK_LABEL( BUTTON_CHILD(node->GetData()) );
+    GtkLabel *label = GTK_LABEL(GTK_BIN(node->GetData())->child);
 
     wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
 
@@ -403,7 +403,7 @@ void wxRadioBox::SetString( int item, const wxString& label )
 
     wxCHECK_RET( node, wxT("radiobox wrong index") );
 
-    GtkLabel *g_label = GTK_LABEL( BUTTON_CHILD(node->GetData()) );
+    GtkLabel *g_label = GTK_LABEL(GTK_BIN(node->GetData())->child);
 
     gtk_label_set( g_label, wxGTK_CONV( label ) );
 }
@@ -417,7 +417,7 @@ bool wxRadioBox::Enable( bool enable )
     while (node)
     {
         GtkButton *button = GTK_BUTTON( node->GetData() );
-        GtkLabel *label = GTK_LABEL( BUTTON_CHILD(button) );
+        GtkLabel *label = GTK_LABEL(GTK_BIN(button)->child);
 
         gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
         gtk_widget_set_sensitive( GTK_WIDGET(label), enable );
@@ -436,7 +436,7 @@ bool wxRadioBox::Enable( int item, bool enable )
     wxCHECK_MSG( node, false, wxT("radiobox wrong index") );
 
     GtkButton *button = GTK_BUTTON( node->GetData() );
-    GtkLabel *label = GTK_LABEL( BUTTON_CHILD(button) );
+    GtkLabel *label = GTK_LABEL(GTK_BIN(button)->child);
 
     gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
     gtk_widget_set_sensitive( GTK_WIDGET(label), enable );
@@ -531,7 +531,7 @@ void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
         GtkWidget *widget = GTK_WIDGET( node->GetData() );
 
         gtk_widget_modify_style( widget, style );
-        gtk_widget_modify_style( BUTTON_CHILD(node->GetData()), style );
+        gtk_widget_modify_style(GTK_BIN(widget)->child, style);
 
         node = node->GetNext();
     }

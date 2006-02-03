@@ -79,7 +79,6 @@ ProcessScrollEvent(wxSlider *win, wxEventType evtType, double dvalue)
 
 extern "C" {
 static void gtk_slider_callback( GtkAdjustment *adjust,
-                                 SCROLLBAR_CBACK_ARG
                                  wxSlider *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();

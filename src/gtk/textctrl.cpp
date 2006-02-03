@@ -830,7 +830,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         gtk_editable_delete_selection( GTK_EDITABLE(m_text) );
 
         // This moves the cursor pos to behind the inserted text.
-        gint len = GET_EDITABLE_POS(m_text);
+        gint len = gtk_editable_get_position(GTK_EDITABLE(m_text));
 
 #if wxUSE_UNICODE
         wxCharBuffer buffer( wxConvUTF8.cWX2MB( text ) );
@@ -977,7 +977,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
         gtk_entry_set_position( GTK_ENTRY(m_text), (int)pos );
 
         // Bring editable's cursor uptodate. Bug in GTK.
-        SET_EDITABLE_POS(m_text, (guint32)pos);
+        gtk_editable_set_position(GTK_EDITABLE(m_text), int(pos));
     }
 }
 
@@ -1191,7 +1191,7 @@ long wxTextCtrl::GetInsertionPoint() const
     }
     else
     {
-        return (long) GET_EDITABLE_POS(m_text);
+        return (long) gtk_editable_get_position(GTK_EDITABLE(m_text));
     }
 }
 
@@ -1252,7 +1252,7 @@ void wxTextCtrl::Cut()
     if (m_windowStyle & wxTE_MULTILINE)
         g_signal_emit_by_name (m_text, "cut-clipboard");
     else
-        gtk_editable_cut_clipboard(GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG);
+        gtk_editable_cut_clipboard(GTK_EDITABLE(m_text));
 }
 
 void wxTextCtrl::Copy()
@@ -1262,7 +1262,7 @@ void wxTextCtrl::Copy()
     if (m_windowStyle & wxTE_MULTILINE)
         g_signal_emit_by_name (m_text, "copy-clipboard");
     else
-        gtk_editable_copy_clipboard(GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG);
+        gtk_editable_copy_clipboard(GTK_EDITABLE(m_text));
 }
 
 void wxTextCtrl::Paste()
@@ -1272,7 +1272,7 @@ void wxTextCtrl::Paste()
     if (m_windowStyle & wxTE_MULTILINE)
         g_signal_emit_by_name (m_text, "paste-clipboard");
     else
-        gtk_editable_paste_clipboard(GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG);
+        gtk_editable_paste_clipboard(GTK_EDITABLE(m_text));
 }
 
 // Undo/redo

@@ -12,7 +12,6 @@
 #ifndef _WX_GTK_PRIVATE_H_
 #define _WX_GTK_PRIVATE_H_
 
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
 #include "wx/event.h"
@@ -39,31 +38,6 @@
     gtk_signal_compat_matched((object), (func), (data), \
                               (GSignalMatchType)(G_SIGNAL_MATCH_FUNC | \
                                                  G_SIGNAL_MATCH_DATA), 0)
-
-// child is not a member of GTK_BUTTON() any more in GTK+ 2.0
-#define BUTTON_CHILD(w) GTK_BIN((w))->child
-
-// event_window has disappeared from GtkToggleButton in GTK+ 2.0
-#define TOGGLE_BUTTON_EVENT_WIN(w) GTK_BUTTON((w))->event_window
-
-// gtk_editable_{copy|cut|paste}_clipboard() had an extra argument under
-// previous GTK+ versions but no more
-#if defined(__WXGTK20__) || (GTK_MINOR_VERSION > 0)
-    #define DUMMY_CLIPBOARD_ARG
-#else
-    #define DUMMY_CLIPBOARD_ARG  ,0
-#endif
-
-// _GtkEditable is now private
-#define GET_EDITABLE_POS(w) gtk_editable_get_position(GTK_EDITABLE(w))
-#define SET_EDITABLE_POS(w, pos) \
-    gtk_editable_set_position(GTK_EDITABLE(w), (pos))
-
-// this GtkNotebook struct field has been renamed
-#define NOTEBOOK_PANEL(nb)  GTK_NOTEBOOK(nb)->event_window
-
-#define SCROLLBAR_CBACK_ARG
-#define GET_SCROLL_TYPE(w)   GTK_SCROLL_JUMP
 
 // translate a GTK+ scroll type to a wxEventType
 inline wxEventType GtkScrollTypeToWx(guint scrollType)

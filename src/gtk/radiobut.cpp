@@ -125,7 +125,7 @@ void wxRadioButton::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobutton") );
 
-    GTKSetLabelForLabel(GTK_LABEL(BUTTON_CHILD(m_widget)), label);
+    GTKSetLabelForLabel(GTK_LABEL(GTK_BIN(m_widget)->child), label);
 }
 
 void wxRadioButton::SetValue( bool val )
@@ -163,7 +163,7 @@ bool wxRadioButton::Enable( bool enable )
     if ( !wxControl::Enable( enable ) )
         return FALSE;
 
-    gtk_widget_set_sensitive( BUTTON_CHILD(m_widget), enable );
+    gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
 
     return TRUE;
 }
@@ -171,12 +171,12 @@ bool wxRadioButton::Enable( bool enable )
 void wxRadioButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(BUTTON_CHILD(m_widget), style);
+    gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
 }
 
 bool wxRadioButton::IsOwnGtkWindow( GdkWindow *window )
 {
-    return window == TOGGLE_BUTTON_EVENT_WIN(m_widget);
+    return window == GTK_BUTTON(m_widget)->event_window;
 }
 
 void wxRadioButton::OnInternalIdle()
@@ -184,7 +184,7 @@ void wxRadioButton::OnInternalIdle()
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-    GdkWindow *win = TOGGLE_BUTTON_EVENT_WIN(m_widget);
+    GdkWindow *win = GTK_BUTTON(m_widget)->event_window;
     if ( win && cursor.Ok())
     {
         /* I now set the cursor the anew in every OnInternalIdle call

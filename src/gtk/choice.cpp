@@ -334,7 +334,7 @@ int wxChoice::FindString( const wxString &string, bool bCase ) const
         if (bin->child)
             label = GTK_LABEL(bin->child);
         if (!label)
-            label = GTK_LABEL( BUTTON_CHILD(m_widget) );
+            label = GTK_LABEL(GTK_BIN(m_widget)->child);
 
         wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
@@ -373,7 +373,7 @@ void wxChoice::SetString( int n, const wxString& str )
             if (bin->child)
                 label = GTK_LABEL(bin->child);
             if (!label)
-                label = GTK_LABEL( BUTTON_CHILD(m_widget) );
+                label = GTK_LABEL(GTK_BIN(m_widget)->child);
 
             wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
@@ -402,7 +402,7 @@ wxString wxChoice::GetString( int n ) const
             if (bin->child)
                 label = GTK_LABEL(bin->child);
             if (!label)
-                label = GTK_LABEL( BUTTON_CHILD(m_widget) );
+                label = GTK_LABEL(GTK_BIN(m_widget)->child);
 
             wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
@@ -475,7 +475,7 @@ void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
         if (bin->child)
             label = bin->child;
         if (!label)
-            label = BUTTON_CHILD(m_widget);
+            label = GTK_BIN(m_widget)->child;
 
         gtk_widget_modify_style( label, style );
 

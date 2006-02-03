@@ -156,7 +156,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     else
     {
         m_widgetCheckbox = gtk_check_button_new_with_label("");
-        m_widgetLabel = BUTTON_CHILD( m_widgetCheckbox );
+        m_widgetLabel = GTK_BIN(m_widgetCheckbox)->child;
         m_widget = m_widgetCheckbox;
     }
     SetLabel( label );
@@ -236,7 +236,7 @@ void wxCheckBox::DoApplyWidgetStyle(GtkRcStyle *style)
 
 bool wxCheckBox::IsOwnGtkWindow( GdkWindow *window )
 {
-    return window == TOGGLE_BUTTON_EVENT_WIN(m_widget);
+    return window == GTK_BUTTON(m_widget)->event_window;
 }
 
 void wxCheckBox::OnInternalIdle()
@@ -244,7 +244,7 @@ void wxCheckBox::OnInternalIdle()
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-    GdkWindow *event_window = TOGGLE_BUTTON_EVENT_WIN(m_widgetCheckbox);
+    GdkWindow *event_window = GTK_BUTTON(m_widgetCheckbox)->event_window;
     if ( event_window && cursor.Ok() )
     {
         /* I now set the cursor the anew in every OnInternalIdle call

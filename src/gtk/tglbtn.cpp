@@ -136,7 +136,7 @@ void wxToggleBitmapButton::OnSetBitmap()
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
 
-    GtkWidget *child = BUTTON_CHILD(m_widget);
+    GtkWidget *child = GTK_BIN(m_widget)->child;
     if (child == NULL)
     {
         // initial bitmap
@@ -156,7 +156,7 @@ bool wxToggleBitmapButton::Enable(bool enable /*=true*/)
     if (!wxControl::Enable(enable))
         return false;
 
-    gtk_widget_set_sensitive(BUTTON_CHILD(m_widget), enable);
+    gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
 
     return true;
 }
@@ -164,12 +164,12 @@ bool wxToggleBitmapButton::Enable(bool enable /*=true*/)
 void wxToggleBitmapButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(BUTTON_CHILD(m_widget), style);
+    gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
 }
 
 bool wxToggleBitmapButton::IsOwnGtkWindow(GdkWindow *window)
 {
-    return window == TOGGLE_BUTTON_EVENT_WIN(m_widget);
+    return window == GTK_BUTTON(m_widget)->event_window;
 }
 
 void wxToggleBitmapButton::OnInternalIdle()
@@ -179,7 +179,7 @@ void wxToggleBitmapButton::OnInternalIdle()
     if (g_globalCursor.Ok())
         cursor = g_globalCursor;
 
-    GdkWindow *win = TOGGLE_BUTTON_EVENT_WIN(m_widget);
+    GdkWindow *win = GTK_BUTTON(m_widget)->event_window;
     if ( win && cursor.Ok() )
     {
       /* I now set the cursor the anew in every OnInternalIdle call
@@ -289,7 +289,7 @@ void wxToggleButton::SetLabel(const wxString& label)
 
     wxControl::SetLabel(label);
 
-    gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), wxGTK_CONV( GetLabel() ) );
+    gtk_label_set(GTK_LABEL(GTK_BIN(m_widget)->child), wxGTK_CONV(GetLabel()));
 }
 
 bool wxToggleButton::Enable(bool enable /*=true*/)
@@ -297,7 +297,7 @@ bool wxToggleButton::Enable(bool enable /*=true*/)
     if (!wxControl::Enable(enable))
         return false;
 
-    gtk_widget_set_sensitive(BUTTON_CHILD(m_widget), enable);
+    gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
 
     return true;
 }
@@ -305,12 +305,12 @@ bool wxToggleButton::Enable(bool enable /*=true*/)
 void wxToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(BUTTON_CHILD(m_widget), style);
+    gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
 }
 
 bool wxToggleButton::IsOwnGtkWindow(GdkWindow *window)
 {
-    return window == TOGGLE_BUTTON_EVENT_WIN(m_widget);
+    return window == GTK_BUTTON(m_widget)->event_window;
 }
 
 void wxToggleButton::OnInternalIdle()
@@ -320,7 +320,7 @@ void wxToggleButton::OnInternalIdle()
     if (g_globalCursor.Ok())
         cursor = g_globalCursor;
 
-    GdkWindow *win = TOGGLE_BUTTON_EVENT_WIN(m_widget);
+    GdkWindow *win = GTK_BUTTON(m_widget)->event_window;
     if ( win && cursor.Ok() )
     {
       /* I now set the cursor the anew in every OnInternalIdle call

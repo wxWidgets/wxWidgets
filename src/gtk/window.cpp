@@ -2018,7 +2018,6 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
 extern "C" {
 static void gtk_window_vscroll_callback( GtkAdjustment *adjust,
-                                         SCROLLBAR_CBACK_ARG
                                          wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
@@ -2035,7 +2034,7 @@ static void gtk_window_vscroll_callback( GtkAdjustment *adjust,
 
     win->m_oldVerticalPos = adjust->value;
 
-    wxEventType         command = GtkScrollWinTypeToWx(GET_SCROLL_TYPE(sw->vscrollbar));
+    wxEventType command = GtkScrollWinTypeToWx(GTK_SCROLL_JUMP);
 
     int value = (int)(adjust->value+0.5);
 
@@ -2051,7 +2050,6 @@ static void gtk_window_vscroll_callback( GtkAdjustment *adjust,
 
 extern "C" {
 static void gtk_window_hscroll_callback( GtkAdjustment *adjust,
-                                         SCROLLBAR_CBACK_ARG
                                          wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
@@ -2065,7 +2063,7 @@ static void gtk_window_hscroll_callback( GtkAdjustment *adjust,
     float diff = adjust->value - win->m_oldHorizontalPos;
     if (fabs(diff) < 0.2) return;
 
-    wxEventType         command = GtkScrollWinTypeToWx(GET_SCROLL_TYPE(sw->hscrollbar));
+    wxEventType command = GtkScrollWinTypeToWx(GTK_SCROLL_JUMP);
 
     win->m_oldHorizontalPos = adjust->value;
 
