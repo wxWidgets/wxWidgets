@@ -105,7 +105,7 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
     XFree(wm_hints);
 }
 
-static gint gtk_frame_urgency_timer_callback( GtkWidget *win )
+static gboolean gtk_frame_urgency_timer_callback( GtkWidget *win )
 {
 #if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,7,0)
     if(!gtk_check_version(2,7,0))
