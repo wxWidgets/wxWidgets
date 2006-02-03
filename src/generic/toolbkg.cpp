@@ -275,10 +275,11 @@ void wxToolbook::Realize()
     if (m_needsRealizing)
     {
         GetToolBar()->SetToolBitmapSize(m_maxBitmapSize);
-        
+
+        int remap = wxSystemOptions::GetOptionInt(wxT("msw.remap"));
         wxSystemOptions::SetOption(wxT("msw.remap"), 0);
         GetToolBar()->Realize();
-        wxSystemOptions::SetOption(wxT("msw.remap"), 1);
+        wxSystemOptions::SetOption(wxT("msw.remap"), remap);
     }
     
     m_needsRealizing = false;
