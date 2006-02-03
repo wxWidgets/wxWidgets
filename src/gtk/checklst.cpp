@@ -93,7 +93,7 @@ void wxCheckListBox::Check( int index, bool check )
 
         str.SetChar( 1, check ? wxCHECKLBOX_CHECKED : wxCHECKLBOX_UNCHECKED );
 
-        gtk_label_set( label, wxGTK_CONV( str ) );
+        gtk_label_set_text( label, wxGTK_CONV( str ) );
 
         return;
     }

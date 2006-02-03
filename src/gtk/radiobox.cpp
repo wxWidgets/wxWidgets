@@ -406,7 +406,7 @@ void wxRadioBox::SetString( int item, const wxString& label )
 
     GtkLabel *g_label = GTK_LABEL(GTK_BIN(node->GetData())->child);
 
-    gtk_label_set( g_label, wxGTK_CONV( label ) );
+    gtk_label_set_text( g_label, wxGTK_CONV( label ) );
 }
 
 bool wxRadioBox::Enable( bool enable )

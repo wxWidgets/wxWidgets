@@ -289,7 +289,7 @@ void wxToggleButton::SetLabel(const wxString& label)
 
     wxControl::SetLabel(label);
 
-    gtk_label_set(GTK_LABEL(GTK_BIN(m_widget)->child), wxGTK_CONV(GetLabel()));
+    gtk_label_set_text(GTK_LABEL(GTK_BIN(m_widget)->child), wxGTK_CONV(GetLabel()));
 }
 
 bool wxToggleButton::Enable(bool enable /*=true*/)

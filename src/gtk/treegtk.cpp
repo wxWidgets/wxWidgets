@@ -222,7 +222,7 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text) {
     return;
 
   GtkLabel *l = GTK_LABEL(gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "w_label"));
-  gtk_label_set(l, text);
+  gtk_label_set_text(l, text);
 }
 
 void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image) {
@@ -665,7 +665,7 @@ void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges) {
 #warning "Need to implement EndEditLabel"
 /*
   GtkLabel *m_label = (GtkLabel *)gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)m_editItem), "w_label");
-  gtk_label_set(m_label, m_textCtrl->GetValue());
+  gtk_label_set_text(m_label, m_textCtrl->GetValue());
 
   gtk_object_remove_data(GTK_OBJECT((GtkTreeItem *)m_editItem), "w_edit");
 

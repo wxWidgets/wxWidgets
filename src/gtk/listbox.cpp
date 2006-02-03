@@ -913,7 +913,7 @@ void wxListBox::SetString( int n, const wxString &string )
 #endif // wxUSE_CHECKLISTBOX
         str += string;
 
-        gtk_label_set( label, wxGTK_CONV( str ) );
+        gtk_label_set_text( label, wxGTK_CONV( str ) );
     }
     else
     {

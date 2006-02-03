@@ -515,7 +515,7 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
         GtkLabel *glabel = GTK_LABEL( GTK_BIN(menu->m_owner)->child );
 
         /* set new text */
-        gtk_label_set( glabel, wxGTK_CONV( str ) );
+        gtk_label_set_text( glabel, wxGTK_CONV( str ) );
 
         /* reparse key accel */
         (void)gtk_label_parse_uline (GTK_LABEL(glabel), wxGTK_CONV( str ) );

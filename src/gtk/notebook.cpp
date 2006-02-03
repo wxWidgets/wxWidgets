@@ -441,7 +441,7 @@ bool wxNotebook::SetPageText( size_t page, const wxString &text )
 
     nb_page->m_text = text;
 
-    gtk_label_set( nb_page->m_label, wxGTK_CONV( nb_page->m_text ) );
+    gtk_label_set_text( nb_page->m_label, wxGTK_CONV( nb_page->m_text ) );
 
     return TRUE;
 }
