@@ -511,17 +511,7 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
     menu->SetTitle( str );
 
     if (menu->m_owner)
-    {
-        GtkLabel *glabel = GTK_LABEL( GTK_BIN(menu->m_owner)->child );
-
-        /* set new text */
-        gtk_label_set_text( glabel, wxGTK_CONV( str ) );
-
-        /* reparse key accel */
-        (void)gtk_label_parse_uline (GTK_LABEL(glabel), wxGTK_CONV( str ) );
-        gtk_accel_label_refetch( GTK_ACCEL_LABEL(glabel) );
-    }
-
+        gtk_label_set_text_with_mnemonic( GTK_LABEL( GTK_BIN(menu->m_owner)->child), wxGTK_CONV(str) );
 }
 
 //-----------------------------------------------------------------------------
@@ -875,7 +865,7 @@ void wxMenuItem::Check( bool check )
     {
         case wxITEM_CHECK:
         case wxITEM_RADIO:
-            gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
+            gtk_check_menu_item_set_active( (GtkCheckMenuItem*)m_menuItem, (gint)check );
             break;
 
         default:
