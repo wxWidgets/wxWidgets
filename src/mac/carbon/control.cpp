@@ -27,39 +27,38 @@
 #include "wx/sizer.h"
 #include "wx/stattext.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
-
 #include "wx/mac/uma.h"
 #include "wx/mac/private.h"
 
-// Item members
+IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
+
 
 wxControl::wxControl()
 {
 }
 
-bool wxControl::Create(wxWindow *parent,
+bool wxControl::Create( wxWindow *parent,
        wxWindowID id,
        const wxPoint& pos,
        const wxSize& size,
        long style,
        const wxValidator& validator,
-       const wxString& name)
+       const wxString& name )
 {
-    bool rval = wxWindow::Create(parent, id, pos, size, style, name);
+    bool rval = wxWindow::Create( parent, id, pos, size, style, name );
 
 #if 0
     // no automatic inheritance as we most often need transparent backgrounds
     if ( parent )
     {
-        m_backgroundColour = parent->GetBackgroundColour() ;
-        m_foregroundColour = parent->GetForegroundColour() ;
+        m_backgroundColour = parent->GetBackgroundColour();
+        m_foregroundColour = parent->GetForegroundColour();
     }
 #endif
 
 #if wxUSE_VALIDATORS
-    if (rval) 
-        SetValidator(validator);
+    if (rval)
+        SetValidator( validator );
 #endif
 
     return rval;
@@ -70,26 +69,26 @@ wxControl::~wxControl()
     m_isBeingDeleted = true;
 }
 
-bool wxControl::ProcessCommand (wxCommandEvent & event)
+bool wxControl::ProcessCommand( wxCommandEvent &event )
 {
     // Tries:
     // 1) OnCommand, starting at this window and working up parent hierarchy
     // 2) OnCommand then calls ProcessEvent to search the event tables.
-    return GetEventHandler()->ProcessEvent(event);
+    return GetEventHandler()->ProcessEvent( event );
 }
 
-void  wxControl::OnKeyDown( wxKeyEvent &event ) 
+void  wxControl::OnKeyDown( wxKeyEvent &event )
 {
     if ( m_peer == NULL || !m_peer->Ok() )
-        return ;
+        return;
 
-    char charCode ;
-    UInt32 keyCode, modifiers ;
+    UInt32 keyCode, modifiers;
+    char charCode;
 
-    GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL,&charCode );
-    GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode  );
-    GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
+    GetEventParameter( (EventRef)wxTheApp->MacGetCurrentEvent(), kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode  );
+    GetEventParameter( (EventRef)wxTheApp->MacGetCurrentEvent(), kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
+    GetEventParameter( (EventRef)wxTheApp->MacGetCurrentEvent(), kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
 
-    m_peer->HandleKey( keyCode , charCode , modifiers ) ;
+    m_peer->HandleKey( keyCode, charCode, modifiers );
 }
 
