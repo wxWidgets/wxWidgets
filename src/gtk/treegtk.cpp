@@ -714,7 +714,7 @@ long wxTreeCtrl::GetChild(long item) const {
   GtkTreeItem *next = NULL;
 
   p = findGtkTreeItem(item);
-  GList *list = gtk_container_children(GTK_CONTAINER(p));
+  GList *list = gtk_container_get_children(GTK_CONTAINER(p));
   next = GTK_TREE_ITEM(list->data);
 
   if (next != NULL)
@@ -726,7 +726,7 @@ long wxTreeCtrl::GetChild(long item) const {
 long wxTreeCtrl::GetFirstVisibleItem(void) const {
   GtkTreeItem *next = NULL;
 
-  GList *list = gtk_container_children(GTK_CONTAINER(m_anchor));
+  GList *list = gtk_container_get_children(GTK_CONTAINER(m_anchor));
   next = GTK_TREE_ITEM(list->data);
 //  gtk_container_foreach(GTK_CONTAINER(m_anchor), gtk_treectrl_next_visible_callback, &next);
 
@@ -741,7 +741,7 @@ long wxTreeCtrl::GetNextVisibleItem(long item) const {
   GtkTreeItem *next = NULL;
 
   p = findGtkTreeItem(item);
-  GList *list = gtk_container_children(GTK_CONTAINER(p));
+  GList *list = gtk_container_get_children(GTK_CONTAINER(p));
   next = GTK_TREE_ITEM(list->data);
 //  gtk_container_foreach(GTK_CONTAINER(p), gtk_treectrl_next_visible_callback, &next);
 
