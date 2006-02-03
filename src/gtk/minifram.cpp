@@ -75,12 +75,13 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
 
     GtkPizza *pizza = GTK_PIZZA(widget);
 
-    gtk_draw_shadow( widget->style,
-                     pizza->bin_window,
-                     GTK_STATE_NORMAL,
-                     GTK_SHADOW_OUT,
-                     0, 0,
-                     win->m_width, win->m_height );
+    gtk_paint_shadow (widget->style,
+                      pizza->bin_window,
+                      GTK_STATE_NORMAL,
+                      GTK_SHADOW_OUT,
+                      NULL, NULL, NULL, // FIXME: No clipping?
+                      0, 0,
+                      win->m_width, win->m_height);
 
     if (!win->GetTitle().empty() &&
         ((win->GetWindowStyle() & wxCAPTION) ||

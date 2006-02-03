@@ -358,23 +358,25 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
 
     if (win->HasFlag(wxRAISED_BORDER))
     {
-        gtk_draw_shadow( widget->style,
-                         widget->window,
-                         GTK_STATE_NORMAL,
-                         GTK_SHADOW_OUT,
-                         dx, dy,
-                         widget->allocation.width-dw, widget->allocation.height-dh );
+        gtk_paint_shadow (widget->style,
+                          widget->window,
+                          GTK_STATE_NORMAL,
+                          GTK_SHADOW_OUT,
+                          NULL, NULL, NULL, // FIXME: No clipping?
+                          dx, dy,
+                          widget->allocation.width-dw, widget->allocation.height-dh );
         return;
     }
 
     if (win->HasFlag(wxSUNKEN_BORDER))
     {
-        gtk_draw_shadow( widget->style,
-                         widget->window,
-                         GTK_STATE_NORMAL,
-                         GTK_SHADOW_IN,
-                         dx, dy,
-                         widget->allocation.width-dw, widget->allocation.height-dh );
+        gtk_paint_shadow (widget->style,
+                          widget->window,
+                          GTK_STATE_NORMAL,
+                          GTK_SHADOW_IN,
+                          NULL, NULL, NULL, // FIXME: No clipping?
+                          dx, dy,
+                          widget->allocation.width-dw, widget->allocation.height-dh );
         return;
     }
 
