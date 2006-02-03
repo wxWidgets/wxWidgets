@@ -62,8 +62,8 @@ void wxGauge::DoSetGauge()
     wxASSERT_MSG( 0 <= m_gaugePos && m_gaugePos <= m_rangeMax,
                   _T("invalid gauge position in DoSetGauge()") );
 
-    gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget),
-                             m_rangeMax ? ((float)m_gaugePos)/m_rangeMax : 0.);
+    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (m_widget),
+                                   m_rangeMax ? ((float)m_gaugePos)/m_rangeMax : 0.);
 }
 
 wxSize wxGauge::DoGetBestSize() const
