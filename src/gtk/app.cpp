@@ -419,7 +419,7 @@ wxApp::wxApp()
     wxapp_install_idle_handler();
 
 #if wxUSE_THREADS
-    g_main_set_poll_func( wxapp_poll_func );
+    g_main_context_set_poll_func( NULL, wxapp_poll_func );
 #endif
 
     m_colorCube = (unsigned char*) NULL;
