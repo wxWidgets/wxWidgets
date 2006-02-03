@@ -125,7 +125,11 @@
 // resizing complicated window hierarchies, but this can in theory result in
 // different behaviour than the old code so we keep the possibility to use it
 // by setting this to 0 (in the future this should be removed completely)
+#ifdef __WXWINCE__
+#define USE_DEFERRED_SIZING 0
+#else
 #define USE_DEFERRED_SIZING 1
+#endif
 
 // ---------------------------------------------------------------------------
 // global variables
@@ -1495,7 +1499,9 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 {
+#if USE_DEFERRED_SIZING
     if ( IsTopLevel() || m_pendingSize == wxDefaultSize )
+#endif
     {
         // top level windows resizing is never deferred, so we can safely use
         // the current size here
@@ -1506,6 +1512,7 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
         if ( y )
             *y = rect.bottom;
     }
+#if USE_DEFERRED_SIZING
     else // non top level and using deferred sizing
     {
         // we need to calculate the *pending* client size here
@@ -1522,6 +1529,7 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
         if ( y )
             *y = rect.bottom - rect.top;
     }
+#endif
 }
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
