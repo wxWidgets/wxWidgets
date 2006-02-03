@@ -68,7 +68,7 @@ static gint wxlistbox_idle_callback( gpointer gdata )
     wxlistbox_idle_struct* data = (wxlistbox_idle_struct*) gdata;
     gdk_threads_enter();
 
-    gtk_idle_remove( data->m_tag );
+    g_source_remove( data->m_tag );
 
     // check that the items haven't been deleted from the listbox since we had
     // installed this callback
@@ -1069,7 +1069,7 @@ void wxListBox::DoSetFirstItem( int n )
         wxlistbox_idle_struct* data = new wxlistbox_idle_struct;
         data->m_listbox = this;
         data->m_item = n;
-        data->m_tag = gtk_idle_add_priority( 800, wxlistbox_idle_callback, (gpointer) data );
+        data->m_tag = g_idle_add_full( 800, wxlistbox_idle_callback, data, NULL );
 
         return;
     }

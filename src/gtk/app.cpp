@@ -374,14 +374,14 @@ void wxapp_install_idle_handler()
     g_isIdle = FALSE;
 
     if (g_pendingTag == 0)
-        g_pendingTag = gtk_idle_add_priority( 900, wxapp_pending_callback, (gpointer) NULL );
+        g_pendingTag = g_idle_add_full( 900, wxapp_pending_callback, NULL, NULL );
 
     // This routine gets called by all event handlers
     // indicating that the idle is over. It may also
     // get called from other thread for sending events
     // to the main thread (and processing these in
     // idle time). Very low priority.
-    wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
+    wxTheApp->m_idleTag = g_idle_add_full( 1000, wxapp_idle_callback, NULL, NULL );
 }
 
 //-----------------------------------------------------------------------------
@@ -431,9 +431,11 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
-    if (m_idleTag) gtk_idle_remove( m_idleTag );
+    if (m_idleTag)
+        g_source_remove( m_idleTag );
 
-    if (m_colorCube) free(m_colorCube);
+    if (m_colorCube)
+        free(m_colorCube);
 }
 
 bool wxApp::OnInitGui()
@@ -695,7 +697,7 @@ void wxApp::RemoveIdleTag()
 #endif
     if (!g_isIdle)
     {
-        gtk_idle_remove( wxTheApp->m_idleTag );
+        g_source_remove( wxTheApp->m_idleTag );
         wxTheApp->m_idleTag = 0;
         g_isIdle = TRUE;
     }
