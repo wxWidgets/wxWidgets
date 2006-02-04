@@ -9,14 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -27,6 +19,7 @@
 #if wxUSE_TOOLBOOK
 
 #include "wx/imaglist.h"
+#include "wx/icon.h"
 #include "wx/toolbar.h"
 #include "wx/toolbook.h"
 #include "wx/settings.h"
@@ -70,8 +63,7 @@ void wxToolbook::Init()
     m_needsRealizing = false;
 }
 
-bool
-wxToolbook::Create(wxWindow *parent,
+bool wxToolbook::Create(wxWindow *parent,
                    wxWindowID id,
                    const wxPoint& pos,
                    const wxSize& size,
@@ -79,9 +71,7 @@ wxToolbook::Create(wxWindow *parent,
                    const wxString& name)
 {
     if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
-    {
         style |= wxBK_TOP;
-    }
 
     // no border for this control
     style &= ~wxBORDER_MASK;
@@ -91,11 +81,10 @@ wxToolbook::Create(wxWindow *parent,
                             wxDefaultValidator, name) )
         return false;
 
-    
     int orient = wxTB_HORIZONTAL;
     if ( (style & (wxBK_LEFT | wxBK_RIGHT)) != 0)
         orient = wxTB_VERTICAL;
-    
+
     // TODO: make more configurable
     m_bookctrl = new wxToolBar
                  (
@@ -139,7 +128,7 @@ void wxToolbook::OnSize(wxSizeEvent& event)
 {
     if (m_needsRealizing)
         Realize();
-    
+
     wxBookCtrlBase::OnSize(event);
 }
 
@@ -161,7 +150,6 @@ wxSize wxToolbook::CalcSizeFromPage(const wxSize& sizePage) const
     return size;
 }
 
-
 // ----------------------------------------------------------------------------
 // accessing the pages
 // ----------------------------------------------------------------------------
@@ -169,7 +157,7 @@ wxSize wxToolbook::CalcSizeFromPage(const wxSize& sizePage) const
 bool wxToolbook::SetPageText(size_t n, const wxString& strText)
 {
     // Assume tool ids start from 1
-    wxToolBarToolBase* tool = GetToolBar()->FindById(n+1);
+    wxToolBarToolBase* tool = GetToolBar()->FindById(n + 1);
     if (tool)
     {
         tool->SetLabel(strText);
@@ -181,11 +169,9 @@ bool wxToolbook::SetPageText(size_t n, const wxString& strText)
 
 wxString wxToolbook::GetPageText(size_t n) const
 {
-    wxToolBarToolBase* tool = GetToolBar()->FindById(n+1);
+    wxToolBarToolBase* tool = GetToolBar()->FindById(n + 1);
     if (tool)
-    {
         return tool->GetLabel();
-    }
     else
         return wxEmptyString;
 }
@@ -202,8 +188,8 @@ bool wxToolbook::SetPageImage(size_t n, int imageId)
     wxASSERT( GetImageList() != NULL );
     if (!GetImageList())
         return false;
-    
-    wxToolBarToolBase* tool = GetToolBar()->FindById(n+1);
+
+    wxToolBarToolBase* tool = GetToolBar()->FindById(n + 1);
     if (tool)
     {
         // Find the image list index for this tool
@@ -257,7 +243,7 @@ int wxToolbook::SetSelection(size_t n)
 
             // change m_selection now to ignore the selection change event
             m_selection = n;
-            GetToolBar()->ToggleTool(n+1, true);
+            GetToolBar()->ToggleTool(n + 1, true);
 
             // program allows the page change
             event.SetEventType(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED);
@@ -281,9 +267,9 @@ void wxToolbook::Realize()
         GetToolBar()->Realize();
         wxSystemOptions::SetOption(wxT("msw.remap"), remap);
     }
-    
+
     m_needsRealizing = false;
-    
+
     if (m_selection == -1)
         m_selection = 0;
 
@@ -293,7 +279,7 @@ void wxToolbook::Realize()
         m_selection = -1;
         SetSelection(sel);
     }
-    
+
     DoSize();
 }
 
@@ -308,8 +294,7 @@ void wxToolbook::OnIdle(wxIdleEvent& event)
 // adding/removing the pages
 // ----------------------------------------------------------------------------
 
-bool
-wxToolbook::InsertPage(size_t n,
+bool wxToolbook::InsertPage(size_t n,
                        wxWindow *page,
                        const wxString& text,
                        bool bSelect,
@@ -319,9 +304,9 @@ wxToolbook::InsertPage(size_t n,
         return false;
 
     m_needsRealizing = true;
-    
+
     wxASSERT(GetImageList() != NULL);
-    
+
     if (!GetImageList())
         return false;
 
@@ -335,12 +320,12 @@ wxToolbook::InsertPage(size_t n,
     wxBitmap bitmap;
     bitmap.CopyFromIcon(icon);
 #endif
-    
+
     m_maxBitmapSize.x = wxMax(bitmap.GetWidth(), m_maxBitmapSize.x);
     m_maxBitmapSize.y = wxMax(bitmap.GetHeight(), m_maxBitmapSize.y);
-    
+
     GetToolBar()->SetToolBitmapSize(m_maxBitmapSize);
-    GetToolBar()->AddRadioTool(n+1, text, bitmap, wxNullBitmap, text);
+    GetToolBar()->AddRadioTool(n + 1, text, bitmap, wxNullBitmap, text);
 
     if (bSelect)
     {
@@ -361,7 +346,7 @@ wxWindow *wxToolbook::DoRemovePage(size_t page)
 
     if ( win )
     {
-        GetToolBar()->DeleteTool(page+1);
+        GetToolBar()->DeleteTool(page + 1);
 
         if (m_selection >= (int)page)
         {
@@ -396,7 +381,7 @@ bool wxToolbook::DeleteAllPages()
 
 void wxToolbook::OnToolSelected(wxCommandEvent& event)
 {
-    const int selNew = event.GetId() -1;
+    const int selNew = event.GetId() - 1;
 
     if ( selNew == m_selection )
     {
@@ -410,9 +395,7 @@ void wxToolbook::OnToolSelected(wxCommandEvent& event)
 
     // change wasn't allowed, return to previous state
     if (m_selection != selNew)
-    {
         GetToolBar()->ToggleTool(m_selection, false);
-    }
 }
 
 #endif // wxUSE_TOOLBOOK
