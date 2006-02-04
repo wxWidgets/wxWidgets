@@ -634,7 +634,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if (style & wxTE_READONLY)
     {
         if (!multi_line)
-            gtk_entry_set_editable( GTK_ENTRY(m_text), FALSE );
+            gtk_editable_set_editable( GTK_EDITABLE(m_text), FALSE );
         else
             gtk_text_view_set_editable( GTK_TEXT_VIEW( m_text), FALSE);
     }
@@ -846,7 +846,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buffer, strlen(buffer), &len );
 
         // Bring entry's cursor uptodate.
-        gtk_entry_set_position( GTK_ENTRY(m_text), len );
+        gtk_editable_set_position( GTK_EDITABLE(m_text), len );
     }
 
     m_modified = oldModified;
@@ -974,9 +974,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
     }
     else
     {
-        gtk_entry_set_position( GTK_ENTRY(m_text), (int)pos );
-
-        // Bring editable's cursor uptodate. Bug in GTK.
+        // FIXME: Is the editable's cursor really uptodate without double set_position in GTK2?
         gtk_editable_set_position(GTK_EDITABLE(m_text), int(pos));
     }
 }
@@ -993,7 +991,7 @@ void wxTextCtrl::SetInsertionPointEnd()
     }
     else
     {
-        gtk_entry_set_position( GTK_ENTRY(m_text), -1 );
+        gtk_editable_set_position( GTK_EDITABLE(m_text), -1 );
     }
 }
 
@@ -1007,7 +1005,7 @@ void wxTextCtrl::SetEditable( bool editable )
     }
     else
     {
-        gtk_entry_set_editable( GTK_ENTRY(m_text), editable );
+        gtk_editable_set_editable( GTK_EDITABLE(m_text), editable );
     }
 }
 
