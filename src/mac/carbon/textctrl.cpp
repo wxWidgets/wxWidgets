@@ -1109,7 +1109,7 @@ void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
         m_privateContextMenu->AppendSeparator();
         m_privateContextMenu->Append(wxID_SELECTALL, _("Select &All"));
     }
-
+    
     if (m_privateContextMenu != NULL)
         PopupMenu(m_privateContextMenu);
 }
@@ -1439,7 +1439,9 @@ bool wxMacUnicodeTextControl::CanPaste() const
 
 void wxMacUnicodeTextControl::SetEditable(bool editable)
 {
-    SetData<Boolean>( 0 , kControlEditTextLockedTag , (Boolean) !editable ) ;
+#if 0 // leads to problem because text cannot be selected anymore
+    SetData<Boolean>( kControlEditTextPart , kControlEditTextLockedTag , (Boolean) !editable ) ;
+#endif
 }
 
 void wxMacUnicodeTextControl::GetSelection( long* from, long* to ) const
