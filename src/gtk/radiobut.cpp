@@ -103,7 +103,7 @@ bool wxRadioButton::Create( wxWindow *parent,
         if (chief)
         {
             // we are part of the group started by chief
-            radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
+            radioButtonGroup = gtk_radio_button_get_group( GTK_RADIO_BUTTON(chief->m_widget) );
         }
     }
 
