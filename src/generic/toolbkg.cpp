@@ -19,11 +19,14 @@
 #if wxUSE_TOOLBOOK
 
 #include "wx/imaglist.h"
-#include "wx/icon.h"
 #include "wx/toolbar.h"
 #include "wx/toolbook.h"
 #include "wx/settings.h"
 #include "wx/sysopt.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/icon.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
@@ -395,7 +398,9 @@ void wxToolbook::OnToolSelected(wxCommandEvent& event)
 
     // change wasn't allowed, return to previous state
     if (m_selection != selNew)
+    {
         GetToolBar()->ToggleTool(m_selection, false);
+    }
 }
 
 #endif // wxUSE_TOOLBOOK
