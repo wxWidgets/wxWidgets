@@ -18,6 +18,7 @@
 #include "wx/dirdlg.h"
 
 #include "wx/cmndata.h"
+#include "wx/filename.h"
 
 #include "wx/mac/private.h"
 
@@ -28,6 +29,34 @@
 #endif
 
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
+
+static pascal void NavEventProc(
+                                NavEventCallbackMessage inSelector,
+                                NavCBRecPtr ioParams,
+                                NavCallBackUserData ioUserData );
+
+static NavEventUPP sStandardNavEventFilter = NewNavEventUPP(NavEventProc);
+
+static pascal void NavEventProc(
+                                NavEventCallbackMessage inSelector,
+                                NavCBRecPtr ioParams,
+                                NavCallBackUserData ioUserData )
+{
+    wxDirDialog * data = ( wxDirDialog *) ioUserData ;
+    if ( inSelector == kNavCBStart )
+    {
+        if (data && !data->GetPath().IsEmpty() )
+        {
+            // Set default location for the modern Navigation APIs
+            // Apple Technical Q&A 1151
+            FSSpec theFSSpec;
+            wxMacFilename2FSSpec(data->GetPath(), &theFSSpec);
+            AEDesc theLocation = { typeNull, NULL };
+            if (noErr == ::AECreateDesc(typeFSS, &theFSSpec, sizeof(FSSpec), &theLocation))
+                ::NavCustomControl(ioParams->context, kNavCtlSetLocation, (void *) &theLocation);
+        }
+    }
+}
 
 wxDirDialog::wxDirDialog(wxWindow *parent,
                          const wxString& message,
@@ -57,7 +86,7 @@ int wxDirDialog::ShowModal()
     {
         wxMacCFStringHolder message(m_message, m_font.GetEncoding());
         options.message = message;
-        err = NavCreateChooseFolderDialog(&options, NULL, NULL, NULL, &dialog);
+        err = NavCreateChooseFolderDialog(&options, sStandardNavEventFilter , NULL,  this , &dialog);
         if (err == noErr) 
         {        
             err = NavDialogRun(dialog);
