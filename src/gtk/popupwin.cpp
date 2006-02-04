@@ -282,7 +282,8 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
         {
             /* we set the position here and when showing the dialog
                for the first time in idle time */
-            gtk_widget_set_uposition( m_widget, m_x, m_y );
+            // Where does that happen in idle time? I do not see it anywhere - MR
+            gtk_window_move( GTK_WINDOW(m_widget), m_x, m_y );
         }
     }
 
