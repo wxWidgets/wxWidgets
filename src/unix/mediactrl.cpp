@@ -478,10 +478,10 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
     if(!GTK_WIDGET_REALIZED(m_ctrl->m_wxwindow))
     {
         //Not realized yet - set to connect at realization time
-        gtk_signal_connect( GTK_OBJECT(m_ctrl->m_wxwindow),
-                            "realize",
-                            GTK_SIGNAL_FUNC(wxGStreamerMediaBackend::OnGTKRealize),
-                            (gpointer) this );
+        g_signal_connect (m_ctrl->m_wxwindow,
+                          "realize",
+                          G_CALLBACK (wxGStreamerMediaBackend::OnGTKRealize),
+                          this);
     }
     else
     {
