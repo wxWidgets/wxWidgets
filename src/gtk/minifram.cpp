@@ -302,6 +302,10 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         gtk_widget_show( pw );
 
         GtkWidget *close_button = gtk_button_new();
+#ifdef __WXGTK24__
+        if (!gtk_check_version(2,4,0))
+            gtk_button_set_focus_on_click( GTK_BUTTON(close_button), FALSE );
+#endif
         gtk_container_add( GTK_CONTAINER(close_button), pw );
 
         gtk_pizza_put( GTK_PIZZA(m_mainWidget),
