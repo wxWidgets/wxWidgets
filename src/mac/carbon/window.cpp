@@ -158,9 +158,11 @@ enum
 
 static const EventTypeSpec eventList[] =
 {
+    { kEventClassCommand, kEventProcessCommand } ,
+    { kEventClassCommand, kEventCommandUpdateStatus } ,
+    
     { kEventClassControl , kEventControlHit } ,
 
-#if TARGET_API_MAC_OSX
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
     { kEventClassTextInput, kEventTextInputUpdateActiveInputArea } ,
         
@@ -176,7 +178,6 @@ static const EventTypeSpec eventList[] =
 
 //    { kEventClassControl , kEventControlInvalidateForSizeChange } , // 10.3 only
 //    { kEventClassControl , kEventControlBoundsChanged } ,
-#endif
 } ;
 
 static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
@@ -591,6 +592,104 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
     
 }
 
+static pascal OSStatus wxMacWindowCommandEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    wxWindowMac* focus = (wxWindowMac*) data ;
+    
+    HICommand command ;
+    
+    wxMacCarbonEvent cEvent( event ) ;
+    cEvent.GetParameter<HICommand>(kEventParamDirectObject,typeHICommand,&command) ;
+    
+    wxMenuItem* item = NULL ;
+    wxMenu* itemMenu = wxFindMenuFromMacCommand( command , item ) ;
+    int id = wxMacCommandToId( command.commandID ) ;
+    
+    if ( item )
+    {
+        wxASSERT( itemMenu != NULL ) ;
+        
+        switch ( cEvent.GetKind() )
+        {
+            case kEventProcessCommand :
+                {
+                    if (item->IsCheckable())
+                        item->Check( !item->IsChecked() ) ;
+                    
+                    if ( itemMenu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) )
+                        result = noErr ;
+                    else
+                    {
+                        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED , id);
+                        event.SetEventObject(focus);
+                        event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
+                        
+                        if ( focus->GetEventHandler()->ProcessEvent(event) )
+                            result = noErr ;
+                    }
+                }
+            break ;
+                
+            case kEventCommandUpdateStatus:
+                {
+                    wxUpdateUIEvent event(id);
+                    event.SetEventObject( itemMenu );
+                    
+                    bool processed = false;
+                    
+                    // Try the menu's event handler
+                    {
+                        wxEvtHandler *handler = itemMenu->GetEventHandler();
+                        if ( handler )
+                            processed = handler->ProcessEvent(event);
+                    }
+                    
+                    // Try the window the menu was popped up from
+                    // (and up through the hierarchy)
+                    if ( !processed )
+                    {
+                        const wxMenuBase *menu = itemMenu;
+                        while ( menu )
+                        {
+                            wxWindow *win = menu->GetInvokingWindow();
+                            if ( win )
+                            {
+                                processed = win->GetEventHandler()->ProcessEvent(event);
+                                break;
+                            }
+                            
+                            menu = menu->GetParent();
+                        }
+                    }
+                    
+                    if ( !processed )
+                    {
+                        processed = focus->GetEventHandler()->ProcessEvent(event);
+                    }
+                    
+                    if ( processed )
+                    {
+                        // if anything changed, update the changed attribute
+                        if (event.GetSetText())
+                            itemMenu->SetLabel(id, event.GetText());
+                        if (event.GetSetChecked())
+                            itemMenu->Check(id, event.GetChecked());
+                        if (event.GetSetEnabled())
+                            itemMenu->Enable(id, event.GetEnabled());
+                        
+                        result = noErr ;
+                    }
+                }
+                break ;
+                
+            default :
+                break ;
+        }
+    }
+    return result ;
+}
+
 pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     EventRef formerEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
@@ -600,6 +699,10 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
 
     switch ( GetEventClass( event ) )
     {
+        case kEventClassCommand :
+            result = wxMacWindowCommandEventHandler( handler , event , data ) ;
+            break ;
+
         case kEventClassControl :
             result = wxMacWindowControlEventHandler( handler, event, data ) ;
             break ;
