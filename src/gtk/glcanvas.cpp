@@ -401,7 +401,6 @@ bool wxGLCanvas::Create( wxWindow *parent,
         colormap = gdk_colormap_new( visual, TRUE );
 
         gtk_widget_push_colormap( colormap );
-        gtk_widget_push_visual( visual );
 
         wxWindow::Create( parent, id, pos, size, style, name );
         m_glWidget = m_wxwindow;
@@ -426,7 +425,6 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     if (gtk_check_version(2,2,0) != NULL)
     {
-        gtk_widget_pop_visual();
         gtk_widget_pop_colormap();
     }
 
