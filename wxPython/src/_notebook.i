@@ -473,12 +473,11 @@ public:
                             int imageId = wxNOT_FOUND);
 
     // Inserts a new sub-page to the end of children of the page at given pos.
-    %Rename(InsertSubPage,
-            virtual bool, AddSubPage(size_t pos,
-                                     wxWindow *page,
-                                     const wxString& text,
-                                     bool select = false,
-                                     int imageId = wxNOT_FOUND));
+    virtual bool InsertSubPage(size_t pos,
+                               wxWindow *page,
+                               const wxString& text,
+                               bool select = false,
+                               int imageId = wxNOT_FOUND);
 
     // Adds a new page at top level after all other pages.
     virtual bool AddPage(wxWindow *page,
