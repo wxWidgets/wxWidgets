@@ -18,15 +18,15 @@
 
 #if wxUSE_TOOLBOOK
 
-#include "wx/imaglist.h"
-#include "wx/toolbar.h"
-#include "wx/toolbook.h"
-#include "wx/settings.h"
-#include "wx/sysopt.h"
-
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
+    #include "wx/settings.h"
+    #include "wx/toolbar.h"
 #endif
+
+#include "wx/imaglist.h"
+#include "wx/sysopt.h"
+#include "wx/toolbook.h"
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
