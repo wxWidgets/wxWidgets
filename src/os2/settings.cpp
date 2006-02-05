@@ -289,6 +289,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index,
         // TODO case wxSYS_SWAP_BUTTONS:
 
         default:
+            break;
     }
     return -1;  // unsupported metric
 }
