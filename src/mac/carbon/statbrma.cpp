@@ -24,7 +24,20 @@ BEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBarGeneric)
 END_EVENT_TABLE()
 
 
+wxStatusBarMac::wxStatusBarMac(wxWindow *parent,
+        wxWindowID id,
+        long style,
+        const wxString& name)
+        :
+        wxStatusBarGeneric()
+{
+    SetParent( NULL );
+    Create( parent, id, style, name );
+}
+
 wxStatusBarMac::wxStatusBarMac()
+        :
+        wxStatusBarGeneric()
 {
     SetParent( NULL );
 }
@@ -37,7 +50,7 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
                             long style ,
                             const wxString& name)
 {
-    if ( !wxStatusBarGeneric::Create( parent , id , style , name ) )
+    if ( !wxStatusBarGeneric::Create( parent, id, style, name ) )
         return false;
 
     if ( parent->MacGetTopLevelWindow()->MacGetMetalAppearance() )
@@ -46,31 +59,31 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
     // normal system font is too tall for fitting into the standard height
     SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 
-    return true ;
+    return true;
 }
 
 void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
 {
-    int leftMargin = 2;
-    int w, h ;
-    GetSize( &w , &h ) ;
+    int w, h;
+    GetSize( &w , &h );
     wxRect rect;
-    GetFieldRect(i, rect);
+    GetFieldRect( i, rect );
 
     if ( !MacIsReallyHilited() )
-        dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
+        dc.SetTextForeground( wxColour( 0x80, 0x80, 0x80 ) );
 
-    wxString text(GetStatusText(i));
+    wxString text(GetStatusText( i ));
 
     long x, y;
 
     dc.GetTextExtent(text, &x, &y);
 
-    int xpos = rect.x + leftMargin + 1 ;
-    int ypos = 1 ;
+    int leftMargin = 2;
+    int xpos = rect.x + leftMargin + 1;
+    int ypos = 1;
 
     if ( MacGetTopLevelWindow()->MacGetMetalAppearance() )
-        ypos++ ;
+        ypos++;
 
     dc.SetClippingRegion(rect.x, 0, rect.width, h);
 
