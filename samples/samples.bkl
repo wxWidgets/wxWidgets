@@ -63,7 +63,6 @@
     <subproject id="propsize" template="sub"/>
     <subproject id="regtest" template="sub"/>
     <subproject id="render" template="sub"/>
-    <subproject id="richedit" template="sub"/>
     <subproject id="rotate" template="sub"/>
     <subproject id="sashtest" template="sub"/>
     <subproject id="scroll" template="sub"/>
