@@ -204,9 +204,14 @@ Acts according to BUILD by default.
         </description>
     </option>
 
+    <!-- currently only VC++ can compile wxDebugReport which is in QA lib -->
+    <set var="USE_QA_DEFAULT">
+        <if cond="FORMAT in ['msvc','msvc6prj']">1</if>
+        <if cond="FORMAT not in ['msvc','msvc6prj']">0</if>
+    </set>
     <option name="USE_QA">
         <values>0,1</values>
-        <default-value>0</default-value>
+        <default-value>USE_QA_DEFAULT</default-value>
         <description>
             Build quality assurance classes library (USE_GUI must be 1)?
         </description>
