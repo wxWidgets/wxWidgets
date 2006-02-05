@@ -205,7 +205,7 @@ DoTestGetString(const wxChar *s, const wxChar *delims, int pos, ...)
     {
         if ( !pos )
         {
-            CPPUNIT_ASSERT_EQUAL( wxString(), tkz.GetString() );
+            CPPUNIT_ASSERT( tkz.GetString().empty() ) ;
             break;
         }
 
