@@ -335,7 +335,7 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
     if ((win->m_gdkFunc & GDK_FUNC_RESIZE) == 0)
         gtk_window_set_resizable(GTK_WINDOW(win->m_widget), FALSE);
     else
-        gtk_window_set_resizable(GTK_WINDOW(win->m_widget), TRUE);
+        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
 
     // reset the icon
     wxIconBundle iconsOld = win->GetIcons();
