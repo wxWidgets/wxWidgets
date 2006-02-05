@@ -61,13 +61,8 @@ bool wxStaticText::Create(wxWindow *parent,
         return FALSE;
     }
 
-    // the base class version which
-    // will not set the label's text to it
-    // because the label is not yet created and because SetLabel() has a side
-    // effect of changing the control size which might not be desirable
-    wxString label1(wxStripMenuCodes(label));
-    wxControl::SetLabel(label);
-    m_widget = gtk_label_new( wxGTK_CONV( label1 ) );
+    m_label = label;
+    m_widget = gtk_label_new( wxGTK_CONV( GTKRemoveMnemonics(label)) );
 
     GtkJustification justify;
     if ( style & wxALIGN_CENTER )
@@ -100,18 +95,13 @@ wxString wxStaticText::GetLabel() const
 
 void wxStaticText::SetLabel( const wxString &label )
 {
-    wxControl::SetLabel(label);
+    wxCHECK_RET( m_widget != NULL, wxT("invalid static text") );
 
-    wxString label1(wxStripMenuCodes(label));
-
-    gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( label1 ) );
+    GTKSetLabelForLabel(GTK_LABEL(m_widget), label);
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))
-    {
-        InvalidateBestSize();
         SetSize( GetBestSize() );
-    }
 }
 
 bool wxStaticText::SetFont( const wxFont &font )
