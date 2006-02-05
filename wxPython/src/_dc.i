@@ -59,22 +59,15 @@ public:
     ~wxDC();
 
 
-    DocDeclStr(
-        virtual void , BeginDrawing(),
-        "Allows for optimization of drawing code on platforms that need it.  On
-other platforms this is just an empty function and is harmless.  To
-take advantage of this postential optimization simply enclose each
-group of calls to the drawing primitives within calls to
-`BeginDrawing` and `EndDrawing`.", "");
-    
-    DocDeclStr(
-        virtual void , EndDrawing(),
-        "Ends the group of drawing primitives started with `BeginDrawing`, and
-invokes whatever optimization is available for this DC type on the
-current platform.", "");
+    %pythoncode {
+        %# These have been deprecated in wxWidgets.  Since they never
+        %# really did anything to begin with, just make them be NOPs.
+        def BeginDrawing(self):  pass
+        def EndDrawing(self):  pass
+    }
     
 
-
+    
 // TODO    virtual void DrawObject(wxDrawObject* drawobject);
 
 
