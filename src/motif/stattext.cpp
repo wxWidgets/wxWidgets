@@ -60,6 +60,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
             XmNalignment, ((style & wxALIGN_RIGHT)  ? XmALIGNMENT_END :
                           ((style & wxALIGN_CENTRE) ? XmALIGNMENT_CENTER :
                                                       XmALIGNMENT_BEGINNING)),
+            XmNrecomputeSize, ((style & wxST_NO_AUTORESIZE) ? TRUE : FALSE),
             NULL);
 
     m_mainWidget = borderWidget ? borderWidget : m_labelWidget;
@@ -79,29 +80,10 @@ void wxStaticText::SetLabel(const wxString& label)
     // This variable means we don't need so many casts later.
     Widget widget = (Widget) m_labelWidget;
 
-    if (GetWindowStyle() & wxST_NO_AUTORESIZE)
-    {
-        XtUnmanageChild(widget);
-        Dimension width, height;
-        XtVaGetValues(widget, XmNwidth, &width, XmNheight, &height, NULL);
-
         XtVaSetValues(widget,
             XmNlabelString, label_str(),
             XmNlabelType, XmSTRING,
             NULL);
-        XtVaSetValues(widget,
-            XmNwidth, width,
-            XmNheight, height,
-            NULL);
-        XtManageChild(widget);
-    }
-    else
-    {
-        XtVaSetValues(widget,
-            XmNlabelString, label_str(),
-            XmNlabelType, XmSTRING,
-            NULL);
-    }
 }
 
 #endif // wxUSE_STATTEXT
