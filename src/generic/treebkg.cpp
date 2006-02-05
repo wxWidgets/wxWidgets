@@ -125,11 +125,11 @@ bool wxTreebook::InsertPage(size_t pagePos,
     return DoInsertPage(pagePos, page, text, bSelect, imageId);
 }
 
-bool wxTreebook::AddSubPage(size_t pagePos,
-                            wxWindow *page,
-                            const wxString& text,
-                            bool bSelect,
-                            int imageId)
+bool wxTreebook::InsertSubPage(size_t pagePos,
+                               wxWindow *page,
+                               const wxString& text,
+                               bool bSelect,
+                               int imageId)
 {
     return DoInsertSubPage(pagePos, page, text, bSelect, imageId);
 }

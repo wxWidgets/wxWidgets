@@ -18,10 +18,11 @@ of preference sections on the left and select section page on the right.
 
 To use the class simply create it and populate with pages using
 \helpref{InsertPage}{wxtreebookinsertpage},
+\helpref{InsertSubPage}{wxtreebookinsertsubpage},
 \helpref{AddPage}{wxtreebookaddpage},
 \helpref{AddSubPage}{wxtreebookaddsubpage}.
 
-If your tree is no more than 1 level in depth then you could
+If your tree is no more than $1$ level in depth then you could
 simply use \helpref{AddPage}{wxtreebookaddpage} and 
 \helpref{AddSubPage}{wxtreebookaddsubpage} to sequentially populate your tree
 by adding at every step a page or a subpage to the end of the tree.
@@ -104,7 +105,7 @@ Also deletes all the pages owned by the control (inserted previously into it).
     \param{int }{imageId = wxNOT\_FOUND}}
 
 Adds a new page. The page is placed at the topmost level after all other pages.
-NULL could be specified for page to create an empty page.
+\NULL could be specified for page to create an empty page.
 
 
 
@@ -112,10 +113,8 @@ NULL could be specified for page to create an empty page.
 
 \func{bool}{AddSubPage}{\param{wxWindow* }{page}, \param{const wxString\& }{text}, \param{bool }{bSelect = false}, \param{int }{imageId = wxNOT\_FOUND}}
 
-\func{bool}{AddSubPage}{\param{size\_t }{pagePos}, \param{wxWindow* }{page}, \param{const wxString\& }{text}, \param{bool }{bSelect = false}, \param{int }{imageId = wxNOT\_FOUND}}
-
-Adds a new child-page to either the last or the specified top-level.
-NULL could be specified for page to create an empty page.
+Adds a new child-page to the last top-level page.
+\NULL could be specified for page to create an empty page.
 
 
 
@@ -215,7 +214,16 @@ depending on the platform and so wxTreebookEvent::GetSelection should be used in
 
 Inserts a new page just before the page indicated by pagePos.
 The new page is placed before pagePos page and on the same level.
-NULL could be specified for page to create an empty page.
+\NULL could be specified for page to create an empty page.
+
+
+\membersection{wxTreebook::InsertSubPage}\label{wxtreebookinsertsubpage}
+
+\func{bool}{InsertSubPage}{\param{size\_t }{pagePos}, \param{wxWindow* }{page}, \param{const wxString\& }{text}, \param{bool }{bSelect = false}, \param{int }{imageId = wxNOT\_FOUND}}
+
+Inserts a sub page under the specified page.
+
+\NULL could be specified for page to create an empty page.
 
 
 \membersection{wxTreebook::IsNodeExpanded}\label{wxtreebookisnodeexpanded}

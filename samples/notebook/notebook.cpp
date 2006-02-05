@@ -436,7 +436,7 @@ void MyFrame::RecreateBook()
                 if ( parent != wxNOT_FOUND )
                 {
                     wxStaticCast(m_bookCtrl, wxTreebook)->
-                        AddSubPage(parent, page, str, false, image);
+                        InsertSubPage(parent, page, str, false, image);
 
                     // skip adding it again below
                     continue;
@@ -600,15 +600,18 @@ void MyFrame::OnAddSubPage(wxCommandEvent& WXUNUSED(event))
         }
 
         static unsigned s_subPageAdded = 0;
-        currBook->AddSubPage(selPos,
-                             CreateNewPage(),
-                             wxString::Format
-                             (
-                                ADDED_SUB_PAGE_NAME wxT("%u"),
-                                ++s_subPageAdded
-                             ),
-                             true,
-                             GetIconIndex(currBook));
+        currBook->InsertSubPage
+                  (
+                    selPos,
+                    CreateNewPage(),
+                    wxString::Format
+                    (
+                     ADDED_SUB_PAGE_NAME wxT("%u"),
+                     ++s_subPageAdded
+                    ),
+                    true,
+                    GetIconIndex(currBook)
+                  );
     }
 }
 
