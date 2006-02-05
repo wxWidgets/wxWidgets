@@ -34,7 +34,6 @@ All:
 - Fixed build error in list.h with VC++ 2005.
 - Fixed wxODBC buffer overflow problem in Unicode builds.
 - Fixed wxSocketBase::InterruptWait on wxBase.
-- wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated.
 
 All (GUI):
 
@@ -76,6 +75,7 @@ All (GUI):
 - Added wxToolbook (uses a wxToolBar to control pages).
 - Added SetSheetStyle to wxPropertySheetDialog and allowed it to
   behave like a Mac OS X settings dialog.
+- wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated.
 
 wxMSW:
 
