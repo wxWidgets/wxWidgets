@@ -123,7 +123,7 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
         }
         else
         {
-            m_tbk->AddSubPage(m_treeContext.Item(depth - 1), wnd,
+            m_tbk->InsertSubPage(m_treeContext.Item(depth - 1), wnd,
                 GetText(wxT("label")), GetBool(wxT("selected")), imgIndex);
         }
 
