@@ -2364,33 +2364,40 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                             nLostWeekDays += year++ % 4 ? 1 : 2;
                         }
 
+                        // Keep year below 2000 so the 2digit year number
+                        // can never match the month or day of the month
+                        if (year>=2000) year-=28;
+			
                         // at any rate, we couldn't go further than 1988 + 9 + 28!
-                        wxASSERT_MSG( year < 2030,
+			            wxASSERT_MSG( year < 2030,
                                       _T("logic error in wxDateTime::Format") );
 
                         wxString strYear, strYear2;
                         strYear.Printf(_T("%d"), year);
                         strYear2.Printf(_T("%d"), year % 100);
 
-                        // find two strings not occurring in format (this is surely
+                        // find four strings not occurring in format (this is surely
                         // not the optimal way of doing it... improvements welcome!)
                         wxString fmt = format;
-                        wxString replacement = (wxChar)-1;
-                        while ( fmt.Find(replacement) != wxNOT_FOUND )
-                        {
-                            replacement << (wxChar)-1;
-                        }
-
-                        wxString replacement2 = (wxChar)-2;
-                        while ( fmt.Find(replacement) != wxNOT_FOUND )
-                        {
-                            replacement << (wxChar)-2;
+                        wxString replacement,replacement2,replacement3,replacement4;
+                        for (int rnr=1; rnr<5 ; rnr++) {
+                            wxString r = (wxChar)-rnr;
+ 	                    while ( fmt.Find(r) != wxNOT_FOUND ) {
+                 	            r << (wxChar)-rnr;
+                            }
+ 
+                            switch (rnr) {
+                               case 1: replacement=r; break;
+                               case 2: replacement2=r; break;
+                               case 3: replacement3=r; break;
+                               case 4: replacement4=r; break;
+                           }
                         }
 
                         // replace all occurrences of year with it
                         bool wasReplaced = fmt.Replace(strYear, replacement) > 0;
-                        if ( !wasReplaced )
-                            wasReplaced = fmt.Replace(strYear2, replacement2) > 0;
+                        // evaluation order ensures we always attempt the replacement.
+                        wasReplaced = (fmt.Replace(strYear2, replacement2) > 0) | wasReplaced ;
 
                         // use strftime() to format the same date but in supported
                         // year
@@ -2415,11 +2422,17 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                                                     &tmAdjusted);
 
                         // now replace the occurrence of 1999 with the real year
+			// we do this in two stages to stop the 2 digit year
+			// matching any substring of the 4 digit year.
+			// Any day,month hours and minutes components should be safe due
+			// to ensuring the range of the years.
                         wxString strYearReal, strYearReal2;
                         strYearReal.Printf(_T("%04d"), yearReal);
                         strYearReal2.Printf(_T("%02d"), yearReal % 100);
-                        str.Replace(strYear, strYearReal);
-                        str.Replace(strYear2, strYearReal2);
+                        str.Replace(strYear, replacement3);
+                        str.Replace(strYear2,replacement4);
+                        str.Replace(replacement3, strYearReal);
+                        str.Replace(replacement4, strYearReal2);
 
                         // and replace back all occurrences of replacement string
                         if ( wasReplaced )
