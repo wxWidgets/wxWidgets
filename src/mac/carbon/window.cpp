@@ -41,10 +41,14 @@
     #include "wx/caret.h"
 #endif
 
-#define MAC_SCROLLBAR_SIZE 15
-#define MAC_SMALL_SCROLLBAR_SIZE 11
+#if wxUSE_DRAG_AND_DROP
+#include "wx/dnd.h"
+#endif
 
 #include "wx/mac/uma.h"
+
+#define MAC_SCROLLBAR_SIZE 15
+#define MAC_SMALL_SCROLLBAR_SIZE 11
 
 #ifndef __DARWIN__
 #include <Windows.h>
@@ -57,10 +61,6 @@
 #ifndef __HIVIEW__
     #include <HIToolbox/HIView.h>
 #endif
-#endif
-
-#if  wxUSE_DRAG_AND_DROP
-#include "wx/dnd.h"
 #endif
 
 #include <string.h>
@@ -160,12 +160,12 @@ static const EventTypeSpec eventList[] =
 {
     { kEventClassCommand, kEventProcessCommand } ,
     { kEventClassCommand, kEventCommandUpdateStatus } ,
-    
+
     { kEventClassControl , kEventControlHit } ,
 
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
     { kEventClassTextInput, kEventTextInputUpdateActiveInputArea } ,
-        
+
     { kEventClassControl , kEventControlDraw } ,
     { kEventClassControl , kEventControlVisibilityChanged } ,
     { kEventClassControl , kEventControlEnabledStateChanged } ,
@@ -492,10 +492,10 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
 {
     OSStatus result = eventNotHandledErr ;
     wxWindowMac* focus = (wxWindowMac*) data ;
-    
+
     wchar_t* uniChars = NULL ;
     UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
-    
+
     UniChar* charBuf;
     UInt32 dataSize = 0 ;
     int numChars = 0 ;
@@ -504,12 +504,12 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
     {
         numChars = dataSize / sizeof( UniChar) ;
         charBuf = buf ;
-        
+
         if ( dataSize > sizeof(buf) )
             charBuf = new UniChar[ numChars ] ;
         else
             charBuf = buf ;
-        
+
         uniChars = new wchar_t[ numChars ] ;
         GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
 #if SIZEOF_WCHAR_T == 2
@@ -521,7 +521,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
         numChars = converter.MB2WC( uniChars , (const char*)charBuf , numChars ) ;
 #endif
     }
-    
+
     switch ( GetEventKind( event ) )
     {
         case kEventTextInputUpdateActiveInputArea :
@@ -530,18 +530,17 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
                 // EVT_CHAR
                 for (int pos=0 ; pos < numChars ; pos++)
                 {
-                    
                     WXEVENTREF formerEvent = wxTheApp->MacGetCurrentEvent() ;
                     WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
                     wxTheApp->MacSetCurrentEvent( event , handler ) ;
-                    
+
                     UInt32 message = (0  << 8) + ((char)uniChars[pos] );
                     if ( wxTheApp->MacSendCharEvent(
                                                     focus , message , 0 , when , 0 , 0 , uniChars[pos] ) )
                     {
                         result = noErr ;
                     }
-                    
+
                     wxTheApp->MacSetCurrentEvent( formerEvent , formerHandler ) ;
                 }
             }
@@ -558,24 +557,23 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
                 GetEventParameter( rawEvent, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
                 GetEventParameter( rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
                 GetEventParameter( rawEvent, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
-                
+
                 UInt32 message = (keyCode << 8) + charCode;
 
                 // An IME input event may return several characters, but we need to send one char at a time to
                 // EVT_CHAR
                 for (int pos=0 ; pos < numChars ; pos++)
                 {
-                    
                     WXEVENTREF formerEvent = wxTheApp->MacGetCurrentEvent() ;
                     WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
                     wxTheApp->MacSetCurrentEvent( event , handler ) ;
-                    
+
                     if ( wxTheApp->MacSendCharEvent(
                         focus , message , modifiers , when , point.h , point.v , uniChars[pos] ) )
                     {
                         result = noErr ;
                     }
-                    
+
                     wxTheApp->MacSetCurrentEvent( formerEvent , formerHandler ) ;
                 }
             }
@@ -583,40 +581,39 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
         default:
             break ;
     }
-    
-    delete[] uniChars ;
+
+    delete [] uniChars ;
     if ( charBuf != buf )
-        delete[] charBuf ;
+        delete [] charBuf ;
     
     return result ;
-    
 }
 
 static pascal OSStatus wxMacWindowCommandEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
     wxWindowMac* focus = (wxWindowMac*) data ;
-    
+
     HICommand command ;
-    
+
     wxMacCarbonEvent cEvent( event ) ;
     cEvent.GetParameter<HICommand>(kEventParamDirectObject,typeHICommand,&command) ;
-    
+
     wxMenuItem* item = NULL ;
     wxMenu* itemMenu = wxFindMenuFromMacCommand( command , item ) ;
     int id = wxMacCommandToId( command.commandID ) ;
-    
+
     if ( item )
     {
         wxASSERT( itemMenu != NULL ) ;
-        
+
         switch ( cEvent.GetKind() )
         {
             case kEventProcessCommand :
                 {
                     if (item->IsCheckable())
                         item->Check( !item->IsChecked() ) ;
-                    
+
                     if ( itemMenu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) )
                         result = noErr ;
                     else
@@ -624,27 +621,27 @@ static pascal OSStatus wxMacWindowCommandEventHandler( EventHandlerCallRef handl
                         wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED , id);
                         event.SetEventObject(focus);
                         event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
-                        
+
                         if ( focus->GetEventHandler()->ProcessEvent(event) )
                             result = noErr ;
                     }
                 }
             break ;
-                
+
             case kEventCommandUpdateStatus:
                 {
                     wxUpdateUIEvent event(id);
                     event.SetEventObject( itemMenu );
-                    
+
                     bool processed = false;
-                    
+
                     // Try the menu's event handler
                     {
                         wxEvtHandler *handler = itemMenu->GetEventHandler();
                         if ( handler )
                             processed = handler->ProcessEvent(event);
                     }
-                    
+
                     // Try the window the menu was popped up from
                     // (and up through the hierarchy)
                     if ( !processed )
@@ -658,16 +655,16 @@ static pascal OSStatus wxMacWindowCommandEventHandler( EventHandlerCallRef handl
                                 processed = win->GetEventHandler()->ProcessEvent(event);
                                 break;
                             }
-                            
+
                             menu = menu->GetParent();
                         }
                     }
-                    
+
                     if ( !processed )
                     {
                         processed = focus->GetEventHandler()->ProcessEvent(event);
                     }
-                    
+
                     if ( processed )
                     {
                         // if anything changed, update the changed attribute
@@ -677,12 +674,12 @@ static pascal OSStatus wxMacWindowCommandEventHandler( EventHandlerCallRef handl
                             itemMenu->Check(id, event.GetChecked());
                         if (event.GetSetEnabled())
                             itemMenu->Enable(id, event.GetEnabled());
-                        
+
                         result = noErr ;
                     }
                 }
                 break ;
-                
+
             default :
                 break ;
         }
@@ -714,6 +711,7 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
         case kEventClassTextInput :
             result = wxMacUnicodeTextEventHandler( handler , event , data ) ;
             break ;
+
         default :
             break ;
     }
@@ -964,7 +962,6 @@ void wxWindowMac::Init()
     wxWindowBase::SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 }
 
-// Destructor
 wxWindowMac::~wxWindowMac()
 {
     SendDestroyEvent();
@@ -985,7 +982,7 @@ wxWindowMac::~wxWindowMac()
             break;
         }
     }
-#endif // __WXUNIVERSAL__
+#endif
 
     // destroy children before destroying this window itself
     DestroyChildren();
@@ -1770,8 +1767,8 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     {
         MenuCommand macid;
         GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &macid );
-        int id = wxMacCommandToId( macid ); 
-        wxMenuItem* item = NULL ; 
+        int id = wxMacCommandToId( macid );
+        wxMenuItem* item = NULL ;
         wxMenu* realmenu ;
         item = menu->FindItem( id, &realmenu ) ;
         if ( item )
