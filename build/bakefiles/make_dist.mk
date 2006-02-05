@@ -899,15 +899,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/rotate/*.cpp $(DISTDIR)/samples/rotate
 	$(CP_P) $(SAMPDIR)/rotate/*.png $(DISTDIR)/samples/rotate
 
-	mkdir $(DISTDIR)/samples/richedit
-	$(CP_P) $(SAMPDIR)/richedit/Makefile.in $(DISTDIR)/samples/richedit
-	$(CP_P) $(SAMPDIR)/richedit/makefile.unx $(DISTDIR)/samples/richedit
-	$(CP_P) $(SAMPDIR)/richedit/*.cpp $(DISTDIR)/samples/richedit
-	$(CP_P) $(SAMPDIR)/richedit/*.h $(DISTDIR)/samples/richedit
-	$(CP_P) $(SAMPDIR)/richedit/*.xpm $(DISTDIR)/samples/richedit
-	$(CP_P) $(SAMPDIR)/richedit/README $(DISTDIR)/samples/richedit
-	$(CP_P) $(SAMPDIR)/richedit/TODO $(DISTDIR)/samples/richedit
-
 	mkdir $(DISTDIR)/samples/richtext
 	mkdir $(DISTDIR)/samples/richtext/bitmaps
 	$(CP_P) $(SAMPDIR)/richtext/Makefile.in $(DISTDIR)/samples/richtext
