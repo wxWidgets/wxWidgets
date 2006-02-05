@@ -58,11 +58,7 @@ wxMemoryDC::wxMemoryDC(wxDC *dc)
 {
     wxCHECK_RET( dc, _T("NULL dc in wxMemoryDC ctor") );
 
-    dc->BeginDrawing();
-
     CreateCompatible(dc);
-
-    dc->EndDrawing();
 
     Init();
 }

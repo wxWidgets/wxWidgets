@@ -771,9 +771,7 @@ void LifeCanvas::DrawCell(wxInt32 i, wxInt32 j, bool alive)
     dc.SetPen(alive? *wxBLACK_PEN : *wxWHITE_PEN);
     dc.SetBrush(alive? *wxBLACK_BRUSH : *wxWHITE_BRUSH);
 
-    dc.BeginDrawing();
     DrawCell(i, j, dc);
-    dc.EndDrawing();
 }
 
 void LifeCanvas::DrawCell(wxInt32 i, wxInt32 j, wxDC &dc)
@@ -810,8 +808,6 @@ void LifeCanvas::DrawChanged()
                       m_viewportY + m_viewportH,
                       true);
 
-    dc.BeginDrawing();
-
     if (m_cellsize == 1)
     {
         dc.SetPen(*wxBLACK_PEN);
@@ -830,7 +826,6 @@ void LifeCanvas::DrawChanged()
         for (size_t m = 0; m < ncells; m++)
             DrawCell(cells[m].i, cells[m].j, dc);
     }
-    dc.EndDrawing();
 }
 
 // event handlers
@@ -859,7 +854,6 @@ void LifeCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     bool done = m_life->FindMore(&cells, &ncells);
 
     // erase all damaged cells and draw the grid
-    dc.BeginDrawing();
     dc.SetBrush(*wxWHITE_BRUSH);
 
     if (m_cellsize <= 2)
@@ -897,8 +891,6 @@ void LifeCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     // last set
     for (size_t m = 0; m < ncells; m++)
         DrawCell(cells[m].i, cells[m].j, dc);
-
-    dc.EndDrawing();
 }
 
 void LifeCanvas::OnMouse(wxMouseEvent& event)
@@ -951,7 +943,6 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
         wxClientDC dc(this);
         dc.SetPen(alive? *wxBLACK_PEN : *wxWHITE_PEN);
         dc.SetBrush(alive? *wxBLACK_BRUSH : *wxWHITE_BRUSH);
-        dc.BeginDrawing();
 
         // draw a line of cells using Bresenham's algorithm
         wxInt32 d, ii, jj, di, ai, si, dj, aj, sj;
@@ -1007,8 +998,6 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
         DrawCell(ii, jj, dc);
         m_mi = ii;
         m_mj = jj;
-
-        dc.EndDrawing();
     }
 
     ((LifeFrame *) wxGetApp().GetTopWindow())->UpdateInfoText();

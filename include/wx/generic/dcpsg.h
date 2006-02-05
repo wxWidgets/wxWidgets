@@ -44,9 +44,6 @@ public:
 
   virtual bool Ok() const;
 
-  virtual void BeginDrawing() {}
-  virtual void EndDrawing() {}
-
   bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style=wxFLOOD_SURFACE );
   bool DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const;
 

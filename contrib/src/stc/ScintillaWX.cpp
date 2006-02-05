@@ -678,7 +678,6 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
     PRectangle rcClient = GetClientRectangle();
     paintingAllText = rcPaint.Contains(rcClient);
 
-    dc->BeginDrawing();
     ClipChildren(*dc, rcPaint);
     Paint(surfaceWindow, rcPaint);
 
@@ -689,7 +688,6 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
         FullPaint();
     }
     paintState = notPainting;
-    dc->EndDrawing();
 }
 
 

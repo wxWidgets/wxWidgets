@@ -118,7 +118,6 @@ void DiagramView::OnDraw(wxDC *dc)
 
   // This part was added to preform the print preview and printing functions
 
-  dc->BeginDrawing(); // Allows optimization of drawing code under MS Windows.
   wxDiagram *diagram_p=((DiagramDocument*)GetDocument())->GetDiagram();  // Get the current diagram
   if (diagram_p->GetShapeList())
   {
@@ -135,7 +134,6 @@ void DiagramView::OnDraw(wxDC *dc)
         current = current->GetNext();  // Procede to the next shape in the list
     }
   }
-  dc->EndDrawing(); // Allows optimization of drawing code under MS Windows.
 }
 
 void DiagramView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))

@@ -1683,8 +1683,6 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     PrepareDC( dc );
     AdjustDC( dc );
 
-    dc.BeginDrawing();
-
     dc.SetFont( GetFont() );
 
     // width and height of the entire header window
@@ -1794,8 +1792,6 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         x += wCol;
     }
-
-    dc.EndDrawing();
 }
 
 void wxListHeaderWindow::DrawCurrent()
@@ -2591,8 +2587,6 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     int dev_x, dev_y;
     CalcScrolledPosition( 0, 0, &dev_x, &dev_y );
 
-    dc.BeginDrawing();
-
     dc.SetFont( GetFont() );
 
     if ( InReportView() )
@@ -2700,8 +2694,6 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
     }
 #endif
-
-    dc.EndDrawing();
 }
 
 void wxListMainWindow::HighlightAll( bool on )

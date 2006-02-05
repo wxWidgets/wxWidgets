@@ -813,7 +813,6 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
     // Draw only when control is windowless or deactivated
     if (m_viewObject)
     {
-        dc.BeginDrawing();
         int w, h;
         GetParent()->GetSize(&w, &h);
         RECT posRect;
@@ -830,8 +829,6 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
         RECTL *prcBounds = (RECTL *) &posRect;
         m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
             (HDC)dc.GetHDC(), prcBounds, NULL, NULL, 0);
-
-        dc.EndDrawing();
     }
 
 //  We've got this one I think

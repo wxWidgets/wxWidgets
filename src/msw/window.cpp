@@ -4079,13 +4079,10 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 
     dc.SetHDC(hdc);
     dc.SetWindow((wxWindow *)this);
-    dc.BeginDrawing();
 
     wxEraseEvent event(m_windowId, &dc);
     event.SetEventObject(this);
     bool rc = GetEventHandler()->ProcessEvent(event);
-
-    dc.EndDrawing();
 
     // must be called manually as ~wxDC doesn't do anything for wxDCTemp
     dc.SelectOldObjects(hdc);

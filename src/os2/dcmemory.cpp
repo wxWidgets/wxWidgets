@@ -38,9 +38,7 @@ wxMemoryDC::wxMemoryDC(
   wxDC*                             pOldDC
 )
 {
-    pOldDC->BeginDrawing();
     CreateCompatible(pOldDC);
-    pOldDC->EndDrawing();
     Init();
 } // end of wxMemoryDC::wxMemoryDC
 

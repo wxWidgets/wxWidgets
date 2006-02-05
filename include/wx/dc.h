@@ -136,8 +136,10 @@ public:
 
     ~wxDCBase() { }
 
-    virtual void BeginDrawing() { }
-    virtual void EndDrawing() { }
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( virtual void BeginDrawing() );
+    wxDEPRECATED( virtual void EndDrawing() );
+#endif // WXWIN_COMPATIBILITY_2_6
 
     // graphic primitives
     // ------------------

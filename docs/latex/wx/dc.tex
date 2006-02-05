@@ -33,22 +33,6 @@ them.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxDC::BeginDrawing}\label{wxdcbegindrawing}
-
-\func{void}{BeginDrawing}{\void}
-
-Allows optimization of drawing code under MS Windows. Enclose
-drawing primitives between {\bf BeginDrawing} and {\bf EndDrawing}\rtfsp
-calls.
-
-Drawing to a wxDialog panel device context outside of a
-system-generated OnPaint event {\it requires} this pair of calls to
-enclose drawing code. This is because a Windows dialog box does not have
-a retained device context associated with it, and selections such as pen
-and brush settings would be lost if the device context were obtained and
-released for each drawing operation.
-
-
 \membersection{wxDC::Blit}\label{wxdcblit}
 
 \func{bool}{Blit}{\param{wxCoord}{ xdest}, \param{wxCoord}{ ydest}, \param{wxCoord}{ width}, \param{wxCoord}{ height},
@@ -554,15 +538,6 @@ wxUSE\_DC\_CACHEING preprocessor symbol for portability.
 \func{void}{EndDoc}{\void}
 
 Ends a document (only relevant when outputting to a printer).
-
-
-\membersection{wxDC::EndDrawing}\label{wxdcenddrawing}
-
-\func{void}{EndDrawing}{\void}
-
-Allows optimization of drawing code under MS Windows. Enclose
-drawing primitives between {\bf BeginDrawing} and {\bf EndDrawing}\rtfsp
-calls.
 
 
 \membersection{wxDC::EndPage}\label{wxdcendpage}

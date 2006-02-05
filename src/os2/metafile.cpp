@@ -93,12 +93,8 @@ bool wxMetafile::Play(wxDC *dc)
     if (!m_refData)
         return FALSE;
 
-    dc->BeginDrawing();
-
  //   if (dc->GetHDC() && M_METAFILEDATA->m_metafile)
  //       PlayMetaFile((HDC) dc->GetHDC(), (HMETAFILE) M_METAFILEDATA->m_metafile);
-
-    dc->EndDrawing();
 
     return true;
 }

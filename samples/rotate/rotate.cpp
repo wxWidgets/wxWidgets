@@ -213,7 +213,6 @@ void MyCanvas::OnPaint (wxPaintEvent &)
     size_t numImages = m_images.GetCount();
 
     wxPaintDC dc(this);
-    dc.BeginDrawing();
 
     dc.SetTextForeground(wxColour(255, 255, 255));
     dc.DrawText(wxT("Click on the canvas to draw a duck."), 10, 10);
@@ -222,8 +221,6 @@ void MyCanvas::OnPaint (wxPaintEvent &)
         MyRenderedImage & image = m_images.Item(i);
         dc.DrawBitmap(image.m_bmp, image.m_x, image.m_y, true);
     }
-
-    dc.EndDrawing();
 }
 
 // ----------------------------------------------------------------------------

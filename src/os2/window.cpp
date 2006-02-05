@@ -3737,7 +3737,6 @@ bool wxWindowOS2::HandleEraseBkgnd( WXHDC hDC )
 
     vDC.m_hPS = (HPS)hDC; // this is really a PS
     vDC.SetWindow((wxWindow*)this);
-    vDC.BeginDrawing();
 
     wxEraseEvent vEvent(m_windowId, &vDC);
 
@@ -3745,7 +3744,6 @@ bool wxWindowOS2::HandleEraseBkgnd( WXHDC hDC )
 
     rc = GetEventHandler()->ProcessEvent(vEvent);
 
-    vDC.EndDrawing();
     vDC.m_hPS = NULLHANDLE;
     return true;
 } // end of wxWindowOS2::HandleEraseBkgnd

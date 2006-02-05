@@ -367,8 +367,6 @@ void wxGenericColourDialog::InitializeColours(void)
 
 void wxGenericColourDialog::PaintBasicColours(wxDC& dc)
 {
-  dc.BeginDrawing();
-
   int i;
   for (i = 0; i < 6; i++)
   {
@@ -387,13 +385,10 @@ void wxGenericColourDialog::PaintBasicColours(wxDC& dc)
       dc.DrawRectangle( x, y, smallRectangleSize.x, smallRectangleSize.y);
     }
   }
-  dc.EndDrawing();
 }
 
 void wxGenericColourDialog::PaintCustomColours(wxDC& dc)
 {
-  dc.BeginDrawing();
-
   int i;
   for (i = 0; i < 2; i++)
   {
@@ -413,15 +408,12 @@ void wxGenericColourDialog::PaintCustomColours(wxDC& dc)
       dc.DrawRectangle( x, y, smallRectangleSize.x, smallRectangleSize.y);
     }
   }
-  dc.EndDrawing();
 }
 
 void wxGenericColourDialog::PaintHighlight(wxDC& dc, bool draw)
 {
   if ( colourSelection < 0 )
       return;
-
-  dc.BeginDrawing();
 
   // Number of pixels bigger than the standard rectangle size
   // for drawing a highlight
@@ -462,14 +454,10 @@ void wxGenericColourDialog::PaintHighlight(wxDC& dc, bool draw)
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle( x, y, (smallRectangleSize.x + (2*deltaX)), (smallRectangleSize.y + (2*deltaY)));
   }
-
-  dc.EndDrawing();
 }
 
 void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
 {
-  dc.BeginDrawing();
-
   dc.SetPen(*wxBLACK_PEN);
 
   wxBrush *brush = new wxBrush(colourData.m_dataColour, wxSOLID);
@@ -480,8 +468,6 @@ void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
 
   dc.SetBrush(wxNullBrush);
   delete brush;
-
-  dc.EndDrawing();
 }
 
 void wxGenericColourDialog::OnBasicColourClick(int which)

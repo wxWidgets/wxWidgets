@@ -89,7 +89,6 @@ void wxStaticPicture::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxPaintDC dc( this );
     PrepareDC( dc );
-    dc.BeginDrawing();
 
     wxSize sz = GetSize();
     wxSize bmpsz( Bitmap.GetWidth(), Bitmap.GetHeight() );
@@ -145,7 +144,5 @@ void wxStaticPicture::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
     else
         dc.DrawBitmap( Bitmap, pos.x, pos.y );
-
-    dc.EndDrawing();
 }
 
