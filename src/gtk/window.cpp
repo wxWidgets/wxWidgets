@@ -2954,7 +2954,10 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 void wxWindowGTK::OnInternalIdle()
 {
     if ( m_dirtyTabOrder )
+    {
+        m_dirtyTabOrder = false;
         RealizeTabOrder();
+    }
 
     // Update style if the window was not yet realized
     // and SetBackgroundStyle(wxBG_STYLE_CUSTOM) was called
@@ -3537,12 +3540,13 @@ void wxWindowGTK::RealizeTabOrder()
 {
     if (m_wxwindow)
     {
-        if (m_children.size() > 0)
+        if ( !m_children.empty() )
         {
             GList *chain = NULL;
 
-            for (wxWindowList::const_iterator i = m_children.begin();
-                    i != m_children.end(); ++i)
+            for ( wxWindowList::const_iterator i = m_children.begin();
+                  i != m_children.end();
+                  ++i )
             {
                 chain = g_list_prepend(chain, (*i)->m_widget);
             }
@@ -3552,13 +3556,11 @@ void wxWindowGTK::RealizeTabOrder()
             gtk_container_set_focus_chain(GTK_CONTAINER(m_wxwindow), chain);
             g_list_free(chain);
         }
-        else
+        else // no children
         {
             gtk_container_unset_focus_chain(GTK_CONTAINER(m_wxwindow));
         }
     }
-
-    m_dirtyTabOrder = false;
 }
 
 void wxWindowGTK::Raise()
