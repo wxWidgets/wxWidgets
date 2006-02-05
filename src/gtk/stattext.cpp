@@ -61,14 +61,9 @@ bool wxStaticText::Create(wxWindow *parent,
         return FALSE;
     }
 
-    // notice that we call the base class version which will
-    // not set the label's text to it because the label is no
-    // yet created and because SetLabel() has a side
-    // effect of changing the control size which might not be desirable
-    // wxContro::SetLabel no longer strips menu codes, so do it here.
-    wxString label1(wxStripMenuCodes(label));
-    wxControl::SetLabel(label);
-    m_widget = gtk_label_new( wxGTK_CONV( label1 ) );
+    const wxString labelGTK = GTKConvertMnemonics(label);
+    m_label = label;
+    m_widget = gtk_label_new_with_mnemonic(wxGTK_CONV(labelGTK));
 
     GtkJustification justify;
     if ( style & wxALIGN_CENTER )
@@ -83,7 +78,7 @@ bool wxStaticText::Create(wxWindow *parent,
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
     gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
 
-        gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
+    gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
 
     m_parent->DoAddChild( this );
 
@@ -114,32 +109,13 @@ wxString wxStaticText::GetLabel() const
 
 void wxStaticText::SetLabel( const wxString &label )
 {
-    wxControl::SetLabel(label);
-    wxString label1(wxStripMenuCodes(label));
+    wxCHECK_RET( m_widget != NULL, wxT("invalid static text") );
 
-    // Build the colorized version of the label (markup only allowed
-    // under GTK2):
-    // FIXME: Does this handle background correct? I recall bug reports - MR
-    if (m_foregroundColour.Ok())
-    {
-        // If the color has been set, create a markup string to pass to
-        // the label setter
-        wxString colorlabel;
-        colorlabel.Printf(_T("<span foreground=\"#%02x%02x%02x\">%s</span>"),
-                          m_foregroundColour.Red(), m_foregroundColour.Green(),
-                          m_foregroundColour.Blue(),
-                          wxEscapeStringForPangoMarkup(label1).c_str());
-        gtk_label_set_markup( GTK_LABEL(m_widget), wxGTK_CONV( colorlabel ) );
-    }
-    else
-        gtk_label_set_text( GTK_LABEL(m_widget), wxGTK_CONV( label1 ) );
+    GTKSetLabelForLabel(GTK_LABEL(m_widget), label);
 
     // adjust the label size to the new label unless disabled
-    if (!HasFlag(wxST_NO_AUTORESIZE))
-    {
-        InvalidateBestSize();
+    if ( !HasFlag(wxST_NO_AUTORESIZE) )
         SetSize( GetBestSize() );
-    }
 }
 
 bool wxStaticText::SetFont( const wxFont &font )
