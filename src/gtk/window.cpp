@@ -47,6 +47,7 @@
 #include "wx/settings.h"
 #include "wx/log.h"
 #include "wx/fontutil.h"
+#include "wx/stattext.h"
 
 #ifdef __WXDEBUG__
     #include "wx/thread.h"
@@ -3542,13 +3543,40 @@ void wxWindowGTK::RealizeTabOrder()
     {
         if ( !m_children.empty() )
         {
+#if wxUSE_STATTEXT
+            // we don't only construct the correct focus chain but also use
+            // this opportunity to update the mnemonic widgets for all labels
+            //
+            // it would be nice to extract this code from here and put it in
+            // stattext.cpp to reduce dependencies but there is no really easy
+            // way to do it unfortunately
+            wxStaticText *lastLabel = NULL;
+#endif // wxUSE_STATTEXT
+
             GList *chain = NULL;
 
             for ( wxWindowList::const_iterator i = m_children.begin();
                   i != m_children.end();
                   ++i )
             {
-                chain = g_list_prepend(chain, (*i)->m_widget);
+                wxWindowGTK *win = *i;
+#if wxUSE_STATTEXT
+                if ( lastLabel )
+                {
+                    if ( win->AcceptsFocusFromKeyboard() )
+                    {
+                        GtkLabel *l = GTK_LABEL(lastLabel->m_widget);
+                        gtk_label_set_mnemonic_widget(l, win->m_widget);
+                        lastLabel = NULL;
+                    }
+                }
+                else // check if this one is a label
+                {
+                    lastLabel = wxDynamicCast(win, wxStaticText);
+                }
+#endif // wxUSE_STATTEXT
+
+                chain = g_list_prepend(chain, win->m_widget);
             }
 
             chain = g_list_reverse(chain);
