@@ -105,7 +105,7 @@ void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
     // don't call the virtual function which might call this one back again
     wxControl::SetLabel(label);
 
-    const wxString labelGTK = GTKConvertMnemonics(label);
+    const wxString labelGTK = GTKRemoveMnemonics(label);
 
     gtk_label_set(w, wxGTK_CONV(labelGTK));
 }
@@ -114,25 +114,14 @@ void wxControl::GTKSetLabelForFrame(GtkFrame *w, const wxString& label)
 {
     wxControl::SetLabel(label);
 
-    // frames don't support mnemonics even under GTK+ 2
     const wxString labelGTK = GTKRemoveMnemonics(label);
 
     gtk_frame_set_label(w, labelGTK.empty() ? (char *)NULL
                                             : wxGTK_CONV(labelGTK));
 }
 
-// worker function implementing both GTKConvert/RemoveMnemonics()
-//
-// notice that under GTK+ 1 we only really need to support MNEMONICS_REMOVE as
-// it doesn't support mnemonics anyhow but this would make the code so ugly
-// that we do the same thing for GKT+ 1 and 2
-enum MnemonicsFlag
-{
-    MNEMONICS_REMOVE,
-    MNEMONICS_CONVERT
-};
-
-static wxString GTKProcessMnemonics(const wxString& label, MnemonicsFlag flag)
+/* static */
+wxString wxControl::GTKRemoveMnemonics(const wxString& label)
 {
     const size_t len = label.length();
     wxString labelGTK;
@@ -141,70 +130,29 @@ static wxString GTKProcessMnemonics(const wxString& label, MnemonicsFlag flag)
     {
         wxChar ch = label[i];
 
-        switch ( ch )
+        if ( ch == _T('&') )
         {
-            case wxT('&'):
-                if ( i == len - 1 )
-                {
-                    // "&" at the end of string is an error
-                    wxLogDebug(wxT("Invalid label \"%s\"."), label.c_str());
-                    break;
-                }
-
-                ch = label[++i]; // skip '&' itself
-                switch ( ch )
-                {
-                    case wxT('&'):
-                        // special case: "&&" is not a mnemonic at all but just
-                        // an escaped "&"
-                        labelGTK += wxT('&');
-                        break;
-
-                    case wxT('_'):
-                        if ( flag == MNEMONICS_CONVERT )
-                        {
-                            // '_' can't be a GTK mnemonic apparently so
-                            // replace it with something similar
-                            labelGTK += wxT("_-");
-                            break;
-                        }
-                        //else: fall through
-
-                    default:
-                        if ( flag == MNEMONICS_CONVERT )
-                            labelGTK += wxT('_');
-                        labelGTK += ch;
-                }
+            if ( i == len - 1 )
+            {
+                // "&" at the end of string is an error
+                wxLogDebug(wxT("Invalid label \"%s\"."), label.c_str());
                 break;
+            }
 
-            case wxT('_'):
-                if ( flag == MNEMONICS_CONVERT )
-                {
-                    // escape any existing underlines in the string so that
-                    // they don't become mnemonics accidentally
-                    labelGTK += wxT("__");
-                    break;
-                }
-                //else: fall through
-
-            default:
-                labelGTK += ch;
+            ch = label[++i]; // skip '&' itself
+            if ( ch == _T('&') )
+            {
+                // special case: "&&" is not a mnemonic at all but just an
+                // escaped "&"
+                labelGTK += wxT('&');
+                continue;
+            }
         }
+
+        labelGTK += ch;
     }
 
     return labelGTK;
-}
-
-/* static */
-wxString wxControl::GTKRemoveMnemonics(const wxString& label)
-{
-    return GTKProcessMnemonics(label, MNEMONICS_REMOVE);
-}
-
-/* static */
-wxString wxControl::GTKConvertMnemonics(const wxString& label)
-{
-    return GTKRemoveMnemonics(label);
 }
 
 // ----------------------------------------------------------------------------

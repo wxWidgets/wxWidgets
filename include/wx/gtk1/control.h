@@ -72,12 +72,6 @@ protected:
     // remove mnemonics ("&"s) from the label
     static wxString GTKRemoveMnemonics(const wxString& label);
 
-    // converts wx label to GTK+ label, i.e. basically replace "&"s with "_"s
-    //
-    // for GTK+ 1 (which doesn't support mnemonics) this is the same as
-    // GTKRemoveMnemonics()
-    static wxString GTKConvertMnemonics(const wxString &label);
-
     // These are used by GetDefaultAttributes
     static wxVisualAttributes
         GetDefaultAttributesFromGTKWidget(GtkWidget* widget,

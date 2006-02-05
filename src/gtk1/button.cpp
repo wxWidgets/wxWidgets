@@ -185,7 +185,7 @@ void wxButton::SetLabel( const wxString &lbl )
 
     wxControl::SetLabel(label);
 
-    const wxString labelGTK = GTKConvertMnemonics(label);
+    const wxString labelGTK = GTKRemoveMnemonics(label);
 
     gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), wxGTK_CONV(labelGTK));
 }
