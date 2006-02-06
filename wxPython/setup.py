@@ -480,8 +480,9 @@ if BUILD_GLCANVAS:
     gl_libs = []
     if os.name == 'posix':
         gl_config = os.popen(WX_CONFIG + ' --libs gl', 'r').read()[:-1]
-        gl_lflags = gl_config.split() + lflags
+        gl_lflags = gl_config.split()
         gl_libs = libs
+        
     else:
         gl_libs = libs + ['opengl32', 'glu32'] + makeLibName('gl')
         gl_lflags = lflags
