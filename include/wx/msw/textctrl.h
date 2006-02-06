@@ -158,6 +158,12 @@ public:
     virtual bool SetForegroundColour(const wxColour& colour);
 #endif // wxUSE_RICHEDIT
 
+#if wxUSE_INKEDIT && wxUSE_RICHEDIT
+    bool IsInkEdit() const { return m_isInkEdit != 0; }
+#else
+    bool IsInkEdit() const { return false; }
+#endif
+
     virtual void AdoptAttributesFromHWND();
 
     virtual bool AcceptsFocus() const;
@@ -260,6 +266,11 @@ private:
     wxMenu* m_privateContextMenu;
 
     bool m_isNativeCaretShown;
+
+#if wxUSE_INKEDIT && wxUSE_RICHEDIT
+    int  m_isInkEdit;
+#endif
+
 };
 
 #endif

@@ -255,6 +255,14 @@
 #           define wxUSE_MEDIACTRL 0
 #       endif
 #   endif
+#   if wxUSE_INKEDIT
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_INKEDIT requires wxUSE_DYNLIB_CLASS"
+#       else
+#           undef wxUSE_INKEDIT
+#           define wxUSE_INKEDIT 0
+#       endif
+#   endif
 #endif  /* wxUSE_DYNLIB_CLASS */
 
 #endif /* _WX_MSW_CHKCONF_H_ */
