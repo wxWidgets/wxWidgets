@@ -132,8 +132,8 @@ public:
     bool IsVertical() const { return HasFlag(wxBK_BOTTOM | wxBK_TOP); }
 
     // set/get option to shrink to fit current page
-    void SetShrinkMode(bool shrink) { m_shrinkToFit = shrink; }
-    bool GetShrinkMode() const { return m_shrinkToFit; }
+    void SetFitToCurrentPage(bool fit) { m_fitToCurrentPage = fit; }
+    bool GetFitToCurrentPage() const { return m_fitToCurrentPage; }
 
     // operations
     // ----------
@@ -234,7 +234,7 @@ protected:
     wxControl *m_bookctrl;
 
     // Whether to shrink to fit current page
-    bool m_shrinkToFit;
+    bool m_fitToCurrentPage;
 
 private:
 

@@ -164,7 +164,7 @@ wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
         bookCtrl = new wxBookCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
     
     if (GetSheetStyle() & wxPROPSHEET_SHRINKTOFIT)
-        bookCtrl->SetShrinkMode(true);
+        bookCtrl->SetFitToCurrentPage(true);
     
     return bookCtrl;
 }
