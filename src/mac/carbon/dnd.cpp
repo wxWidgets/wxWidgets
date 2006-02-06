@@ -245,26 +245,34 @@ bool wxDropTarget::GetData()
                             theData[dataSize] = 0 ;
                             m_dataObject->SetData( wxDataFormat(wxDF_TEXT), dataSize , theData );
                         }
- #if wxUSE_UNICODE
+#if wxUSE_UNICODE
                         else if ( theType == kScrapFlavorTypeUnicode )
                         {
                             theData[dataSize + 0] =
                             theData[dataSize + 1] = 0 ;
                             m_dataObject->SetData( wxDataFormat(wxDF_UNICODETEXT), dataSize , theData );
                         }
- #endif
+#endif
                         else if ( theType == kDragFlavorTypeHFS )
                         {
-                            HFSFlavor* theFile = (HFSFlavor*) theData ;
-                            wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec ) ;
-                            if ( !firstFileAdded )
-                            {
-                                // reset file list
-                                ((wxFileDataObject*)m_dataObject)->SetData( 0 , "" ) ;
-                                firstFileAdded = true ;
-                            }
+                            wxFileDataObject *fdo = dynamic_cast<wxFileDataObject*>(m_dataObject);
+                            wxASSERT( fdo != NULL );
 
-                            ((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
+                            if ((theData != NULL) && (fdo != NULL))
+                            {
+                                HFSFlavor* theFile = (HFSFlavor*) theData ;
+                                wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec ) ;
+
+                                if ( !firstFileAdded )
+                                {
+                                    // reset file list
+                                    fdo->SetData( 0 , "" ) ;
+                                    firstFileAdded = true ;
+                                }
+
+                                if (!name.IsEmpty())
+                                    fdo->AddFile( name ) ;
+                            }
                         }
                         else
                         {
