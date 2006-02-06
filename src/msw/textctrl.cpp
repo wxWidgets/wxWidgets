@@ -351,21 +351,24 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         // found (or if msw.inkedit != 0 and the InkEd.dll is present).
         // However, an application can veto ink edit controls by either specifying
         // msw.inkedit = 0 or by removing wxTE_RICH[2] from the style.
-        
+        //
         if ((wxSystemSettings::HasFeature(wxSYS_TABLET_PRESENT) || wxSystemOptions::GetOptionInt(wxT("msw.inkedit")) != 0) &&
             !(wxSystemOptions::HasOption(wxT("msw.inkedit")) && wxSystemOptions::GetOptionInt(wxT("msw.inkedit")) == 0))
         {
             if (wxRichEditModule::LoadInkEdit())
-            {                
-                windowClass = INKEDIT_CLASS;                
+            {
+                windowClass = INKEDIT_CLASS;
+
+#if wxUSE_INKEDIT && wxUSE_RICHEDIT
                 m_isInkEdit = 1;
-                
+#endif
+
                 // Fake rich text version for other calls
                 m_verRichEdit = 2;
             }
         }
 #endif
-        
+
         if (!IsInkEdit())
         {
             if ( m_verRichEdit == 2 )
