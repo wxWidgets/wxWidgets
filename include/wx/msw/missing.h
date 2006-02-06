@@ -96,6 +96,27 @@
     #define VK_OEM_PERIOD   0xBE
 #endif
 
+#ifndef SM_TABLETPC
+    #define SM_TABLETPC 86
+#endif
+
+#ifndef INKEDIT_CLASS
+#   define INKEDIT_CLASSW  L"INKEDIT"
+#   ifdef UNICODE
+#       define INKEDIT_CLASS   INKEDIT_CLASSW
+#   else
+#       define INKEDIT_CLASS   "INKEDIT"
+#   endif
+#endif
+
+#ifndef EM_SETINKINSERTMODE
+#   define EM_SETINKINSERTMODE (WM_USER + 0x0204)
+#endif
+
+#ifndef EM_SETUSEMOUSEFORINPUT
+#define EM_SETUSEMOUSEFORINPUT (WM_USER + 0x224)
+#endif
+
 // ----------------------------------------------------------------------------
 // ListView common control
 // Needed by listctrl.cpp

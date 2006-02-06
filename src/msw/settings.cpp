@@ -40,9 +40,8 @@
 #include "wx/module.h"
 #include "wx/fontutil.h"
 
-#ifdef __WXWINCE__ // for SM_CXCURSOR and SM_CYCURSOR
-#include "wx/msw/wince/missing.h"
-#endif // __WXWINCE__
+// for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC
+#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -418,6 +417,9 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
         case wxSYS_CAN_ICONIZE_FRAME:
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
             return true;
+
+        case wxSYS_TABLET_PRESENT:
+            return ::GetSystemMetrics(SM_TABLETPC) != 0;
 
         default:
             wxFAIL_MSG( _T("unknown system feature") );
