@@ -1113,6 +1113,10 @@ bool wxCheckWindowWndProc(WXHWND hWnd,
     wxString str(wxGetWindowClass(hWnd));
     if (str == wxCanvasClassName ||
         str == wxCanvasClassNameNR ||
+#if wxUSE_GLCANVAS
+        str == _T("wxGLCanvasClass") ||
+        str == _T("wxGLCanvasClassNR") ||
+#endif // wxUSE_GLCANVAS
         str == wxMDIFrameClassName ||
         str == wxMDIFrameClassNameNoRedraw ||
         str == wxMDIChildFrameClassName ||
