@@ -102,8 +102,6 @@ protected:
                      _T("No window associated with validator") );
         wxCHECK_MSG( m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)), false,
                      _T("wxTextValidator is only for wxTextCtrl's") );
-        wxCHECK_MSG( m_stringValue, false,
-                     _T("No variable storage for validator") );
 
         return true;
     }
