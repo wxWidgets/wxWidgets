@@ -107,8 +107,8 @@ public:
     bool IsVertical() const;
 
     // set/get option to shrink to fit current page
-    void SetShrinkMode(bool shrink);
-    bool GetShrinkMode() const;
+    void SetFitToCurrentPage(bool fit);
+    bool GetFitToCurrentPage() const;
 
 
     // remove one page from the control and delete it
