@@ -1,7 +1,0 @@
-?package(python-wxtools):needs="X11" section="Apps/Programming"\
-  title="pycrust" command="/usr/bin/pycrust"
-?package(python-wxtools):needs="X11" section="Apps/Programming"\
-  title="pyshell" command="/usr/bin/pyshell"
-?package(python-wxtools):needs="X11" section="Apps/Programming"\
-  title="xrced" command="/usr/bin/xrced"
-
