@@ -53,13 +53,14 @@
 
 static void AdjustFontSize(wxFont& font, wxDC& dc, const wxSize& pixelSize)
 {
-    int currentSize = font.GetPointSize();
+    int currentSize;
     int largestGood = 0;
     int smallestBad = 0;
 
     bool initialGoodFound = false;
     bool initialBadFound = false;
 
+    currentSize = font.GetPointSize();
     while (currentSize > 0)
     {
         dc.SetFont(font);
