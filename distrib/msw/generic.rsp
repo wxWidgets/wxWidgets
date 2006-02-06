@@ -1038,19 +1038,6 @@ samples/render/*.rc
 samples/render/*.pro
 samples/render/*.bkl
 
-samples/richedit/*.cpp
-samples/richedit/*.h
-samples/richedit/makefile*
-samples/richedit/*.xbm
-samples/richedit/*.xpm
-samples/richedit/*.ico
-samples/richedit/*.bmp
-samples/richedit/*.rc
-samples/richedit/*.pro
-samples/richedit/*.bkl
-samples/richedit/README
-samples/richedit/TODO
-
 samples/richtext/*.cpp
 samples/richtext/*.h
 samples/richtext/makefile*

@@ -17,6 +17,8 @@ distrib/mac/*-sh
 
 src/html/htmlctrl/webkit/*.mm
 
+samples/Info.plist
+
 samples/html/htmlctrl/*.cpp
 samples/html/htmlctrl/Makefile.in
 samples/html/htmlctrl/makefile.gcc
