@@ -366,7 +366,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         }
 #endif
         
-        if (!m_isInkEdit)
+        if (!IsInkEdit())
         {
             if ( m_verRichEdit == 2 )
             {            
