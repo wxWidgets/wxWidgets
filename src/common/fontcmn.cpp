@@ -53,13 +53,15 @@
 
 static void AdjustFontSize(wxFont& font, wxDC& dc, const wxSize& pixelSize)
 {
-    int currentSize;
+    int currentSize = 0;
     int largestGood = 0;
     int smallestBad = 0;
 
     bool initialGoodFound = false;
     bool initialBadFound = false;
 
+    // NB: this assignment was separated from the variable definition
+    // in order to fix a gcc v3.3.3 compiler crash
     currentSize = font.GetPointSize();
     while (currentSize > 0)
     {
