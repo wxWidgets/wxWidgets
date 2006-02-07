@@ -2598,9 +2598,6 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
         wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
 }
 
-void wxPyPrintout::base_GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
-    wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
-}
 
 
 IMP_PYCALLBACK_BOOL_INTINT(wxPyPrintout, wxPrintout, OnBeginDocument);
@@ -2616,8 +2613,7 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
 
 
 #define DEC_PYCALLBACK_BOOL_PREWINDC(CBNAME)                                            \
-    bool CBNAME(wxPreviewCanvas* a, wxDC& b);                                           \
-    bool base_##CBNAME(wxPreviewCanvas* a, wxDC& b)
+    bool CBNAME(wxPreviewCanvas* a, wxDC& b)
 
 
 #define IMP_PYCALLBACK_BOOL_PREWINDC(CLASS, PCLASS, CBNAME)                             \
@@ -2636,10 +2632,7 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
         if (! found)                                                                    \
             rval = PCLASS::CBNAME(a, b);                                                \
         return rval;                                                                    \
-    }                                                                                   \
-    bool CLASS::base_##CBNAME(wxPreviewCanvas* a, wxDC& b) {                            \
-        return PCLASS::CBNAME(a, b);                                                    \
-    }
+    }                                       
 
 
 
@@ -18131,7 +18124,7 @@ static PyObject *_wrap_PyWindow_DoEraseBackground(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyWindow_base_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     int arg2 ;
@@ -18147,7 +18140,7 @@ static PyObject *_wrap_PyWindow_base_DoMoveWindow(PyObject *, PyObject *args, Py
         (char *) "self",(char *) "x",(char *) "y",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:PyWindow_base_DoMoveWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:PyWindow_DoMoveWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -18168,7 +18161,7 @@ static PyObject *_wrap_PyWindow_base_DoMoveWindow(PyObject *, PyObject *args, Py
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoMoveWindow(arg2,arg3,arg4,arg5);
+        (arg1)->DoMoveWindow(arg2,arg3,arg4,arg5);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18180,7 +18173,7 @@ static PyObject *_wrap_PyWindow_base_DoMoveWindow(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyWindow_base_DoSetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_DoSetSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     int arg2 ;
@@ -18198,7 +18191,7 @@ static PyObject *_wrap_PyWindow_base_DoSetSize(PyObject *, PyObject *args, PyObj
         (char *) "self",(char *) "x",(char *) "y",(char *) "width",(char *) "height",(char *) "sizeFlags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO|O:PyWindow_base_DoSetSize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO|O:PyWindow_DoSetSize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -18225,7 +18218,7 @@ static PyObject *_wrap_PyWindow_base_DoSetSize(PyObject *, PyObject *args, PyObj
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoSetSize(arg2,arg3,arg4,arg5,arg6);
+        (arg1)->DoSetSize(arg2,arg3,arg4,arg5,arg6);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18237,7 +18230,7 @@ static PyObject *_wrap_PyWindow_base_DoSetSize(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_PyWindow_base_DoSetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_DoSetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     int arg2 ;
@@ -18249,7 +18242,7 @@ static PyObject *_wrap_PyWindow_base_DoSetClientSize(PyObject *, PyObject *args,
         (char *) "self",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyWindow_base_DoSetClientSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyWindow_DoSetClientSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -18262,7 +18255,7 @@ static PyObject *_wrap_PyWindow_base_DoSetClientSize(PyObject *, PyObject *args,
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoSetClientSize(arg2,arg3);
+        (arg1)->DoSetClientSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18274,7 +18267,7 @@ static PyObject *_wrap_PyWindow_base_DoSetClientSize(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyWindow_base_DoSetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_DoSetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     int arg2 ;
@@ -18286,7 +18279,7 @@ static PyObject *_wrap_PyWindow_base_DoSetVirtualSize(PyObject *, PyObject *args
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyWindow_base_DoSetVirtualSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyWindow_DoSetVirtualSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -18299,7 +18292,7 @@ static PyObject *_wrap_PyWindow_base_DoSetVirtualSize(PyObject *, PyObject *args
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoSetVirtualSize(arg2,arg3);
+        (arg1)->DoSetVirtualSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18311,7 +18304,7 @@ static PyObject *_wrap_PyWindow_base_DoSetVirtualSize(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_PyWindow_base_DoGetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_DoGetSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -18327,12 +18320,12 @@ static PyObject *_wrap_PyWindow_base_DoGetSize(PyObject *, PyObject *args, PyObj
     
     arg2 = &temp2; res2 = SWIG_NEWOBJ;
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_DoGetSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_DoGetSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxPyWindow const *)arg1)->base_DoGetSize(arg2,arg3);
+        ((wxPyWindow const *)arg1)->DoGetSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18348,7 +18341,7 @@ static PyObject *_wrap_PyWindow_base_DoGetSize(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_PyWindow_base_DoGetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_DoGetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -18364,12 +18357,12 @@ static PyObject *_wrap_PyWindow_base_DoGetClientSize(PyObject *, PyObject *args,
     
     arg2 = &temp2; res2 = SWIG_NEWOBJ;
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_DoGetClientSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_DoGetClientSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxPyWindow const *)arg1)->base_DoGetClientSize(arg2,arg3);
+        ((wxPyWindow const *)arg1)->DoGetClientSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18385,7 +18378,7 @@ static PyObject *_wrap_PyWindow_base_DoGetClientSize(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyWindow_base_DoGetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_DoGetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -18401,12 +18394,12 @@ static PyObject *_wrap_PyWindow_base_DoGetPosition(PyObject *, PyObject *args, P
     
     arg2 = &temp2; res2 = SWIG_NEWOBJ;
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_DoGetPosition",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_DoGetPosition",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxPyWindow const *)arg1)->base_DoGetPosition(arg2,arg3);
+        ((wxPyWindow const *)arg1)->DoGetPosition(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18422,7 +18415,7 @@ static PyObject *_wrap_PyWindow_base_DoGetPosition(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_PyWindow_base_DoGetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_DoGetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     wxSize result;
@@ -18431,12 +18424,12 @@ static PyObject *_wrap_PyWindow_base_DoGetVirtualSize(PyObject *, PyObject *args
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_DoGetVirtualSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_DoGetVirtualSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxPyWindow const *)arg1)->base_DoGetVirtualSize();
+        result = ((wxPyWindow const *)arg1)->DoGetVirtualSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18452,7 +18445,7 @@ static PyObject *_wrap_PyWindow_base_DoGetVirtualSize(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_PyWindow_base_DoGetBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_DoGetBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     wxSize result;
@@ -18461,12 +18454,12 @@ static PyObject *_wrap_PyWindow_base_DoGetBestSize(PyObject *, PyObject *args, P
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_DoGetBestSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_DoGetBestSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxPyWindow const *)arg1)->base_DoGetBestSize();
+        result = ((wxPyWindow const *)arg1)->DoGetBestSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18482,7 +18475,7 @@ static PyObject *_wrap_PyWindow_base_DoGetBestSize(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_PyWindow_base_InitDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_InitDialog(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -18490,12 +18483,12 @@ static PyObject *_wrap_PyWindow_base_InitDialog(PyObject *, PyObject *args, PyOb
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_InitDialog",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_InitDialog",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_InitDialog();
+        (arg1)->InitDialog();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18507,7 +18500,7 @@ static PyObject *_wrap_PyWindow_base_InitDialog(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_PyWindow_base_TransferDataToWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_TransferDataToWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     bool result;
@@ -18516,12 +18509,12 @@ static PyObject *_wrap_PyWindow_base_TransferDataToWindow(PyObject *, PyObject *
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_TransferDataToWindow",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_TransferDataToWindow",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_TransferDataToWindow();
+        result = (bool)(arg1)->TransferDataToWindow();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18535,7 +18528,7 @@ static PyObject *_wrap_PyWindow_base_TransferDataToWindow(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyWindow_base_TransferDataFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_TransferDataFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     bool result;
@@ -18544,12 +18537,12 @@ static PyObject *_wrap_PyWindow_base_TransferDataFromWindow(PyObject *, PyObject
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_TransferDataFromWindow",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_TransferDataFromWindow",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_TransferDataFromWindow();
+        result = (bool)(arg1)->TransferDataFromWindow();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18563,7 +18556,7 @@ static PyObject *_wrap_PyWindow_base_TransferDataFromWindow(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_PyWindow_base_Validate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_Validate(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     bool result;
@@ -18572,12 +18565,12 @@ static PyObject *_wrap_PyWindow_base_Validate(PyObject *, PyObject *args, PyObje
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_Validate",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_Validate",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_Validate();
+        result = (bool)(arg1)->Validate();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18591,7 +18584,7 @@ static PyObject *_wrap_PyWindow_base_Validate(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyWindow_base_AcceptsFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_AcceptsFocus(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     bool result;
@@ -18600,12 +18593,12 @@ static PyObject *_wrap_PyWindow_base_AcceptsFocus(PyObject *, PyObject *args, Py
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_AcceptsFocus",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_AcceptsFocus",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyWindow const *)arg1)->base_AcceptsFocus();
+        result = (bool)((wxPyWindow const *)arg1)->AcceptsFocus();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18619,7 +18612,7 @@ static PyObject *_wrap_PyWindow_base_AcceptsFocus(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyWindow_base_AcceptsFocusFromKeyboard(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_AcceptsFocusFromKeyboard(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     bool result;
@@ -18628,12 +18621,12 @@ static PyObject *_wrap_PyWindow_base_AcceptsFocusFromKeyboard(PyObject *, PyObje
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_AcceptsFocusFromKeyboard",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_AcceptsFocusFromKeyboard",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyWindow const *)arg1)->base_AcceptsFocusFromKeyboard();
+        result = (bool)((wxPyWindow const *)arg1)->AcceptsFocusFromKeyboard();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18647,7 +18640,7 @@ static PyObject *_wrap_PyWindow_base_AcceptsFocusFromKeyboard(PyObject *, PyObje
 }
 
 
-static PyObject *_wrap_PyWindow_base_GetMaxSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_GetMaxSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     wxSize result;
@@ -18656,12 +18649,12 @@ static PyObject *_wrap_PyWindow_base_GetMaxSize(PyObject *, PyObject *args, PyOb
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_GetMaxSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_GetMaxSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxPyWindow const *)arg1)->base_GetMaxSize();
+        result = ((wxPyWindow const *)arg1)->GetMaxSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18677,7 +18670,7 @@ static PyObject *_wrap_PyWindow_base_GetMaxSize(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_PyWindow_base_AddChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_AddChild(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -18687,14 +18680,14 @@ static PyObject *_wrap_PyWindow_base_AddChild(PyObject *, PyObject *args, PyObje
         (char *) "self",(char *) "child", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyWindow_base_AddChild",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyWindow_AddChild",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_AddChild(arg2);
+        (arg1)->AddChild(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18706,7 +18699,7 @@ static PyObject *_wrap_PyWindow_base_AddChild(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyWindow_base_RemoveChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_RemoveChild(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -18716,14 +18709,14 @@ static PyObject *_wrap_PyWindow_base_RemoveChild(PyObject *, PyObject *args, PyO
         (char *) "self",(char *) "child", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyWindow_base_RemoveChild",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyWindow_RemoveChild",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_RemoveChild(arg2);
+        (arg1)->RemoveChild(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18735,7 +18728,7 @@ static PyObject *_wrap_PyWindow_base_RemoveChild(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_PyWindow_base_ShouldInheritColours(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_ShouldInheritColours(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     bool result;
@@ -18744,12 +18737,12 @@ static PyObject *_wrap_PyWindow_base_ShouldInheritColours(PyObject *, PyObject *
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_ShouldInheritColours",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_ShouldInheritColours",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyWindow const *)arg1)->base_ShouldInheritColours();
+        result = (bool)((wxPyWindow const *)arg1)->ShouldInheritColours();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18763,7 +18756,7 @@ static PyObject *_wrap_PyWindow_base_ShouldInheritColours(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyWindow_base_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     wxVisualAttributes result;
@@ -18772,12 +18765,12 @@ static PyObject *_wrap_PyWindow_base_GetDefaultAttributes(PyObject *, PyObject *
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_GetDefaultAttributes",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_GetDefaultAttributes",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->base_GetDefaultAttributes();
+        result = (arg1)->GetDefaultAttributes();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18793,7 +18786,7 @@ static PyObject *_wrap_PyWindow_base_GetDefaultAttributes(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyWindow_base_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyWindow_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -18801,12 +18794,12 @@ static PyObject *_wrap_PyWindow_base_OnInternalIdle(PyObject *, PyObject *args, 
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_base_OnInternalIdle",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyWindow_OnInternalIdle",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnInternalIdle();
+        (arg1)->OnInternalIdle();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19025,7 +19018,7 @@ static PyObject *_wrap_PyPanel_DoEraseBackground(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_PyPanel_base_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     int arg2 ;
@@ -19041,7 +19034,7 @@ static PyObject *_wrap_PyPanel_base_DoMoveWindow(PyObject *, PyObject *args, PyO
         (char *) "self",(char *) "x",(char *) "y",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:PyPanel_base_DoMoveWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:PyPanel_DoMoveWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -19062,7 +19055,7 @@ static PyObject *_wrap_PyPanel_base_DoMoveWindow(PyObject *, PyObject *args, PyO
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoMoveWindow(arg2,arg3,arg4,arg5);
+        (arg1)->DoMoveWindow(arg2,arg3,arg4,arg5);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19074,7 +19067,7 @@ static PyObject *_wrap_PyPanel_base_DoMoveWindow(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_PyPanel_base_DoSetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_DoSetSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     int arg2 ;
@@ -19092,7 +19085,7 @@ static PyObject *_wrap_PyPanel_base_DoSetSize(PyObject *, PyObject *args, PyObje
         (char *) "self",(char *) "x",(char *) "y",(char *) "width",(char *) "height",(char *) "sizeFlags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO|O:PyPanel_base_DoSetSize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO|O:PyPanel_DoSetSize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -19119,7 +19112,7 @@ static PyObject *_wrap_PyPanel_base_DoSetSize(PyObject *, PyObject *args, PyObje
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoSetSize(arg2,arg3,arg4,arg5,arg6);
+        (arg1)->DoSetSize(arg2,arg3,arg4,arg5,arg6);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19131,7 +19124,7 @@ static PyObject *_wrap_PyPanel_base_DoSetSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyPanel_base_DoSetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_DoSetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     int arg2 ;
@@ -19143,7 +19136,7 @@ static PyObject *_wrap_PyPanel_base_DoSetClientSize(PyObject *, PyObject *args, 
         (char *) "self",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyPanel_base_DoSetClientSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyPanel_DoSetClientSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -19156,7 +19149,7 @@ static PyObject *_wrap_PyPanel_base_DoSetClientSize(PyObject *, PyObject *args, 
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoSetClientSize(arg2,arg3);
+        (arg1)->DoSetClientSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19168,7 +19161,7 @@ static PyObject *_wrap_PyPanel_base_DoSetClientSize(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_PyPanel_base_DoSetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_DoSetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     int arg2 ;
@@ -19180,7 +19173,7 @@ static PyObject *_wrap_PyPanel_base_DoSetVirtualSize(PyObject *, PyObject *args,
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyPanel_base_DoSetVirtualSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyPanel_DoSetVirtualSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -19193,7 +19186,7 @@ static PyObject *_wrap_PyPanel_base_DoSetVirtualSize(PyObject *, PyObject *args,
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoSetVirtualSize(arg2,arg3);
+        (arg1)->DoSetVirtualSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19205,7 +19198,7 @@ static PyObject *_wrap_PyPanel_base_DoSetVirtualSize(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyPanel_base_DoGetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_DoGetSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -19221,12 +19214,12 @@ static PyObject *_wrap_PyPanel_base_DoGetSize(PyObject *, PyObject *args, PyObje
     
     arg2 = &temp2; res2 = SWIG_NEWOBJ;
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_DoGetSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_DoGetSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxPyPanel const *)arg1)->base_DoGetSize(arg2,arg3);
+        ((wxPyPanel const *)arg1)->DoGetSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19242,7 +19235,7 @@ static PyObject *_wrap_PyPanel_base_DoGetSize(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyPanel_base_DoGetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_DoGetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -19258,12 +19251,12 @@ static PyObject *_wrap_PyPanel_base_DoGetClientSize(PyObject *, PyObject *args, 
     
     arg2 = &temp2; res2 = SWIG_NEWOBJ;
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_DoGetClientSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_DoGetClientSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxPyPanel const *)arg1)->base_DoGetClientSize(arg2,arg3);
+        ((wxPyPanel const *)arg1)->DoGetClientSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19279,7 +19272,7 @@ static PyObject *_wrap_PyPanel_base_DoGetClientSize(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_PyPanel_base_DoGetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_DoGetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -19295,12 +19288,12 @@ static PyObject *_wrap_PyPanel_base_DoGetPosition(PyObject *, PyObject *args, Py
     
     arg2 = &temp2; res2 = SWIG_NEWOBJ;
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_DoGetPosition",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_DoGetPosition",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxPyPanel const *)arg1)->base_DoGetPosition(arg2,arg3);
+        ((wxPyPanel const *)arg1)->DoGetPosition(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19316,7 +19309,7 @@ static PyObject *_wrap_PyPanel_base_DoGetPosition(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyPanel_base_DoGetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_DoGetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     wxSize result;
@@ -19325,12 +19318,12 @@ static PyObject *_wrap_PyPanel_base_DoGetVirtualSize(PyObject *, PyObject *args,
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_DoGetVirtualSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_DoGetVirtualSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxPyPanel const *)arg1)->base_DoGetVirtualSize();
+        result = ((wxPyPanel const *)arg1)->DoGetVirtualSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19346,7 +19339,7 @@ static PyObject *_wrap_PyPanel_base_DoGetVirtualSize(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyPanel_base_DoGetBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_DoGetBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     wxSize result;
@@ -19355,12 +19348,12 @@ static PyObject *_wrap_PyPanel_base_DoGetBestSize(PyObject *, PyObject *args, Py
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_DoGetBestSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_DoGetBestSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxPyPanel const *)arg1)->base_DoGetBestSize();
+        result = ((wxPyPanel const *)arg1)->DoGetBestSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19376,7 +19369,7 @@ static PyObject *_wrap_PyPanel_base_DoGetBestSize(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_PyPanel_base_InitDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_InitDialog(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     PyObject * obj0 = 0 ;
@@ -19384,12 +19377,12 @@ static PyObject *_wrap_PyPanel_base_InitDialog(PyObject *, PyObject *args, PyObj
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_InitDialog",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_InitDialog",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_InitDialog();
+        (arg1)->InitDialog();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19401,7 +19394,7 @@ static PyObject *_wrap_PyPanel_base_InitDialog(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_PyPanel_base_TransferDataToWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_TransferDataToWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     bool result;
@@ -19410,12 +19403,12 @@ static PyObject *_wrap_PyPanel_base_TransferDataToWindow(PyObject *, PyObject *a
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_TransferDataToWindow",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_TransferDataToWindow",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_TransferDataToWindow();
+        result = (bool)(arg1)->TransferDataToWindow();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19429,7 +19422,7 @@ static PyObject *_wrap_PyPanel_base_TransferDataToWindow(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyPanel_base_TransferDataFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_TransferDataFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     bool result;
@@ -19438,12 +19431,12 @@ static PyObject *_wrap_PyPanel_base_TransferDataFromWindow(PyObject *, PyObject 
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_TransferDataFromWindow",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_TransferDataFromWindow",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_TransferDataFromWindow();
+        result = (bool)(arg1)->TransferDataFromWindow();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19457,7 +19450,7 @@ static PyObject *_wrap_PyPanel_base_TransferDataFromWindow(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyPanel_base_Validate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_Validate(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     bool result;
@@ -19466,12 +19459,12 @@ static PyObject *_wrap_PyPanel_base_Validate(PyObject *, PyObject *args, PyObjec
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_Validate",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_Validate",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_Validate();
+        result = (bool)(arg1)->Validate();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19485,7 +19478,7 @@ static PyObject *_wrap_PyPanel_base_Validate(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_PyPanel_base_AcceptsFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_AcceptsFocus(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     bool result;
@@ -19494,12 +19487,12 @@ static PyObject *_wrap_PyPanel_base_AcceptsFocus(PyObject *, PyObject *args, PyO
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_AcceptsFocus",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_AcceptsFocus",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyPanel const *)arg1)->base_AcceptsFocus();
+        result = (bool)((wxPyPanel const *)arg1)->AcceptsFocus();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19513,7 +19506,7 @@ static PyObject *_wrap_PyPanel_base_AcceptsFocus(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_PyPanel_base_AcceptsFocusFromKeyboard(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_AcceptsFocusFromKeyboard(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     bool result;
@@ -19522,12 +19515,12 @@ static PyObject *_wrap_PyPanel_base_AcceptsFocusFromKeyboard(PyObject *, PyObjec
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_AcceptsFocusFromKeyboard",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_AcceptsFocusFromKeyboard",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyPanel const *)arg1)->base_AcceptsFocusFromKeyboard();
+        result = (bool)((wxPyPanel const *)arg1)->AcceptsFocusFromKeyboard();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19541,7 +19534,7 @@ static PyObject *_wrap_PyPanel_base_AcceptsFocusFromKeyboard(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_PyPanel_base_GetMaxSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_GetMaxSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     wxSize result;
@@ -19550,12 +19543,12 @@ static PyObject *_wrap_PyPanel_base_GetMaxSize(PyObject *, PyObject *args, PyObj
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_GetMaxSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_GetMaxSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxPyPanel const *)arg1)->base_GetMaxSize();
+        result = ((wxPyPanel const *)arg1)->GetMaxSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19571,7 +19564,7 @@ static PyObject *_wrap_PyPanel_base_GetMaxSize(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_PyPanel_base_AddChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_AddChild(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -19581,14 +19574,14 @@ static PyObject *_wrap_PyPanel_base_AddChild(PyObject *, PyObject *args, PyObjec
         (char *) "self",(char *) "child", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPanel_base_AddChild",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPanel_AddChild",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_AddChild(arg2);
+        (arg1)->AddChild(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19600,7 +19593,7 @@ static PyObject *_wrap_PyPanel_base_AddChild(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_PyPanel_base_RemoveChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_RemoveChild(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -19610,14 +19603,14 @@ static PyObject *_wrap_PyPanel_base_RemoveChild(PyObject *, PyObject *args, PyOb
         (char *) "self",(char *) "child", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPanel_base_RemoveChild",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPanel_RemoveChild",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_RemoveChild(arg2);
+        (arg1)->RemoveChild(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19629,7 +19622,7 @@ static PyObject *_wrap_PyPanel_base_RemoveChild(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_PyPanel_base_ShouldInheritColours(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_ShouldInheritColours(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     bool result;
@@ -19638,12 +19631,12 @@ static PyObject *_wrap_PyPanel_base_ShouldInheritColours(PyObject *, PyObject *a
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_ShouldInheritColours",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_ShouldInheritColours",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyPanel const *)arg1)->base_ShouldInheritColours();
+        result = (bool)((wxPyPanel const *)arg1)->ShouldInheritColours();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19657,7 +19650,7 @@ static PyObject *_wrap_PyPanel_base_ShouldInheritColours(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyPanel_base_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     wxVisualAttributes result;
@@ -19666,12 +19659,12 @@ static PyObject *_wrap_PyPanel_base_GetDefaultAttributes(PyObject *, PyObject *a
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_GetDefaultAttributes",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_GetDefaultAttributes",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->base_GetDefaultAttributes();
+        result = (arg1)->GetDefaultAttributes();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19687,7 +19680,7 @@ static PyObject *_wrap_PyPanel_base_GetDefaultAttributes(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyPanel_base_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPanel_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
     PyObject * obj0 = 0 ;
@@ -19695,12 +19688,12 @@ static PyObject *_wrap_PyPanel_base_OnInternalIdle(PyObject *, PyObject *args, P
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_base_OnInternalIdle",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPanel_OnInternalIdle",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnInternalIdle();
+        (arg1)->OnInternalIdle();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19919,7 +19912,7 @@ static PyObject *_wrap_PyScrolledWindow_DoEraseBackground(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     int arg2 ;
@@ -19935,7 +19928,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoMoveWindow(PyObject *, PyObject *
         (char *) "self",(char *) "x",(char *) "y",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:PyScrolledWindow_base_DoMoveWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:PyScrolledWindow_DoMoveWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -19956,7 +19949,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoMoveWindow(PyObject *, PyObject *
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoMoveWindow(arg2,arg3,arg4,arg5);
+        (arg1)->DoMoveWindow(arg2,arg3,arg4,arg5);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -19968,7 +19961,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoMoveWindow(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_DoSetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_DoSetSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     int arg2 ;
@@ -19986,7 +19979,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoSetSize(PyObject *, PyObject *arg
         (char *) "self",(char *) "x",(char *) "y",(char *) "width",(char *) "height",(char *) "sizeFlags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO|O:PyScrolledWindow_base_DoSetSize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO|O:PyScrolledWindow_DoSetSize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -20013,7 +20006,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoSetSize(PyObject *, PyObject *arg
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoSetSize(arg2,arg3,arg4,arg5,arg6);
+        (arg1)->DoSetSize(arg2,arg3,arg4,arg5,arg6);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20025,7 +20018,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoSetSize(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_DoSetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_DoSetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     int arg2 ;
@@ -20037,7 +20030,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoSetClientSize(PyObject *, PyObjec
         (char *) "self",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyScrolledWindow_base_DoSetClientSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyScrolledWindow_DoSetClientSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -20050,7 +20043,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoSetClientSize(PyObject *, PyObjec
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoSetClientSize(arg2,arg3);
+        (arg1)->DoSetClientSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20062,7 +20055,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoSetClientSize(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_DoSetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_DoSetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     int arg2 ;
@@ -20074,7 +20067,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoSetVirtualSize(PyObject *, PyObje
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyScrolledWindow_base_DoSetVirtualSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyScrolledWindow_DoSetVirtualSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -20087,7 +20080,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoSetVirtualSize(PyObject *, PyObje
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DoSetVirtualSize(arg2,arg3);
+        (arg1)->DoSetVirtualSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20099,7 +20092,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoSetVirtualSize(PyObject *, PyObje
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_DoGetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_DoGetSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -20115,12 +20108,12 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetSize(PyObject *, PyObject *arg
     
     arg2 = &temp2; res2 = SWIG_NEWOBJ;
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_DoGetSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_DoGetSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxPyScrolledWindow const *)arg1)->base_DoGetSize(arg2,arg3);
+        ((wxPyScrolledWindow const *)arg1)->DoGetSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20136,7 +20129,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetSize(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_DoGetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_DoGetClientSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -20152,12 +20145,12 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetClientSize(PyObject *, PyObjec
     
     arg2 = &temp2; res2 = SWIG_NEWOBJ;
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_DoGetClientSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_DoGetClientSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxPyScrolledWindow const *)arg1)->base_DoGetClientSize(arg2,arg3);
+        ((wxPyScrolledWindow const *)arg1)->DoGetClientSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20173,7 +20166,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetClientSize(PyObject *, PyObjec
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_DoGetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_DoGetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -20189,12 +20182,12 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetPosition(PyObject *, PyObject 
     
     arg2 = &temp2; res2 = SWIG_NEWOBJ;
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_DoGetPosition",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_DoGetPosition",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxPyScrolledWindow const *)arg1)->base_DoGetPosition(arg2,arg3);
+        ((wxPyScrolledWindow const *)arg1)->DoGetPosition(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20210,7 +20203,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetPosition(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_DoGetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_DoGetVirtualSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     wxSize result;
@@ -20219,12 +20212,12 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetVirtualSize(PyObject *, PyObje
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_DoGetVirtualSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_DoGetVirtualSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxPyScrolledWindow const *)arg1)->base_DoGetVirtualSize();
+        result = ((wxPyScrolledWindow const *)arg1)->DoGetVirtualSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20240,7 +20233,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetVirtualSize(PyObject *, PyObje
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_DoGetBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_DoGetBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     wxSize result;
@@ -20249,12 +20242,12 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetBestSize(PyObject *, PyObject 
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_DoGetBestSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_DoGetBestSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxPyScrolledWindow const *)arg1)->base_DoGetBestSize();
+        result = ((wxPyScrolledWindow const *)arg1)->DoGetBestSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20270,7 +20263,7 @@ static PyObject *_wrap_PyScrolledWindow_base_DoGetBestSize(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_InitDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_InitDialog(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -20278,12 +20271,12 @@ static PyObject *_wrap_PyScrolledWindow_base_InitDialog(PyObject *, PyObject *ar
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_InitDialog",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_InitDialog",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_InitDialog();
+        (arg1)->InitDialog();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20295,7 +20288,7 @@ static PyObject *_wrap_PyScrolledWindow_base_InitDialog(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_TransferDataToWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_TransferDataToWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     bool result;
@@ -20304,12 +20297,12 @@ static PyObject *_wrap_PyScrolledWindow_base_TransferDataToWindow(PyObject *, Py
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_TransferDataToWindow",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_TransferDataToWindow",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_TransferDataToWindow();
+        result = (bool)(arg1)->TransferDataToWindow();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20323,7 +20316,7 @@ static PyObject *_wrap_PyScrolledWindow_base_TransferDataToWindow(PyObject *, Py
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_TransferDataFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_TransferDataFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     bool result;
@@ -20332,12 +20325,12 @@ static PyObject *_wrap_PyScrolledWindow_base_TransferDataFromWindow(PyObject *, 
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_TransferDataFromWindow",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_TransferDataFromWindow",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_TransferDataFromWindow();
+        result = (bool)(arg1)->TransferDataFromWindow();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20351,7 +20344,7 @@ static PyObject *_wrap_PyScrolledWindow_base_TransferDataFromWindow(PyObject *, 
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_Validate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_Validate(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     bool result;
@@ -20360,12 +20353,12 @@ static PyObject *_wrap_PyScrolledWindow_base_Validate(PyObject *, PyObject *args
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_Validate",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_Validate",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_Validate();
+        result = (bool)(arg1)->Validate();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20379,7 +20372,7 @@ static PyObject *_wrap_PyScrolledWindow_base_Validate(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_AcceptsFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_AcceptsFocus(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     bool result;
@@ -20388,12 +20381,12 @@ static PyObject *_wrap_PyScrolledWindow_base_AcceptsFocus(PyObject *, PyObject *
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_AcceptsFocus",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_AcceptsFocus",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyScrolledWindow const *)arg1)->base_AcceptsFocus();
+        result = (bool)((wxPyScrolledWindow const *)arg1)->AcceptsFocus();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20407,7 +20400,7 @@ static PyObject *_wrap_PyScrolledWindow_base_AcceptsFocus(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_AcceptsFocusFromKeyboard(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_AcceptsFocusFromKeyboard(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     bool result;
@@ -20416,12 +20409,12 @@ static PyObject *_wrap_PyScrolledWindow_base_AcceptsFocusFromKeyboard(PyObject *
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_AcceptsFocusFromKeyboard",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_AcceptsFocusFromKeyboard",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyScrolledWindow const *)arg1)->base_AcceptsFocusFromKeyboard();
+        result = (bool)((wxPyScrolledWindow const *)arg1)->AcceptsFocusFromKeyboard();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20435,7 +20428,7 @@ static PyObject *_wrap_PyScrolledWindow_base_AcceptsFocusFromKeyboard(PyObject *
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_GetMaxSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_GetMaxSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     wxSize result;
@@ -20444,12 +20437,12 @@ static PyObject *_wrap_PyScrolledWindow_base_GetMaxSize(PyObject *, PyObject *ar
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_GetMaxSize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_GetMaxSize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxPyScrolledWindow const *)arg1)->base_GetMaxSize();
+        result = ((wxPyScrolledWindow const *)arg1)->GetMaxSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20465,7 +20458,7 @@ static PyObject *_wrap_PyScrolledWindow_base_GetMaxSize(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_AddChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_AddChild(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -20475,14 +20468,14 @@ static PyObject *_wrap_PyScrolledWindow_base_AddChild(PyObject *, PyObject *args
         (char *) "self",(char *) "child", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyScrolledWindow_base_AddChild",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyScrolledWindow_AddChild",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_AddChild(arg2);
+        (arg1)->AddChild(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20494,7 +20487,7 @@ static PyObject *_wrap_PyScrolledWindow_base_AddChild(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_RemoveChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_RemoveChild(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -20504,14 +20497,14 @@ static PyObject *_wrap_PyScrolledWindow_base_RemoveChild(PyObject *, PyObject *a
         (char *) "self",(char *) "child", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyScrolledWindow_base_RemoveChild",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyScrolledWindow_RemoveChild",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_RemoveChild(arg2);
+        (arg1)->RemoveChild(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20523,7 +20516,7 @@ static PyObject *_wrap_PyScrolledWindow_base_RemoveChild(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_ShouldInheritColours(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_ShouldInheritColours(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     bool result;
@@ -20532,12 +20525,12 @@ static PyObject *_wrap_PyScrolledWindow_base_ShouldInheritColours(PyObject *, Py
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_ShouldInheritColours",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_ShouldInheritColours",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyScrolledWindow const *)arg1)->base_ShouldInheritColours();
+        result = (bool)((wxPyScrolledWindow const *)arg1)->ShouldInheritColours();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20551,7 +20544,7 @@ static PyObject *_wrap_PyScrolledWindow_base_ShouldInheritColours(PyObject *, Py
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     wxVisualAttributes result;
@@ -20560,12 +20553,12 @@ static PyObject *_wrap_PyScrolledWindow_base_GetDefaultAttributes(PyObject *, Py
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_GetDefaultAttributes",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_GetDefaultAttributes",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->base_GetDefaultAttributes();
+        result = (arg1)->GetDefaultAttributes();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20581,7 +20574,7 @@ static PyObject *_wrap_PyScrolledWindow_base_GetDefaultAttributes(PyObject *, Py
 }
 
 
-static PyObject *_wrap_PyScrolledWindow_base_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyScrolledWindow_OnInternalIdle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
     PyObject * obj0 = 0 ;
@@ -20589,12 +20582,12 @@ static PyObject *_wrap_PyScrolledWindow_base_OnInternalIdle(PyObject *, PyObject
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_base_OnInternalIdle",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyScrolledWindow_OnInternalIdle",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnInternalIdle();
+        (arg1)->OnInternalIdle();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24808,7 +24801,7 @@ static PyObject *_wrap_Printout_SetIsPreview(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Printout_base_OnBeginDocument(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Printout_OnBeginDocument(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     int arg2 ;
@@ -24821,7 +24814,7 @@ static PyObject *_wrap_Printout_base_OnBeginDocument(PyObject *, PyObject *args,
         (char *) "self",(char *) "startPage",(char *) "endPage", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Printout_base_OnBeginDocument",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Printout_OnBeginDocument",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -24834,7 +24827,7 @@ static PyObject *_wrap_Printout_base_OnBeginDocument(PyObject *, PyObject *args,
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_OnBeginDocument(arg2,arg3);
+        result = (bool)(arg1)->OnBeginDocument(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24848,7 +24841,7 @@ static PyObject *_wrap_Printout_base_OnBeginDocument(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Printout_base_OnEndDocument(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Printout_OnEndDocument(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     PyObject * obj0 = 0 ;
@@ -24856,12 +24849,12 @@ static PyObject *_wrap_Printout_base_OnEndDocument(PyObject *, PyObject *args, P
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_base_OnEndDocument",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_OnEndDocument",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnEndDocument();
+        (arg1)->OnEndDocument();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24873,7 +24866,7 @@ static PyObject *_wrap_Printout_base_OnEndDocument(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Printout_base_OnBeginPrinting(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Printout_OnBeginPrinting(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     PyObject * obj0 = 0 ;
@@ -24881,12 +24874,12 @@ static PyObject *_wrap_Printout_base_OnBeginPrinting(PyObject *, PyObject *args,
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_base_OnBeginPrinting",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_OnBeginPrinting",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnBeginPrinting();
+        (arg1)->OnBeginPrinting();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24898,7 +24891,7 @@ static PyObject *_wrap_Printout_base_OnBeginPrinting(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_Printout_base_OnEndPrinting(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Printout_OnEndPrinting(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     PyObject * obj0 = 0 ;
@@ -24906,12 +24899,12 @@ static PyObject *_wrap_Printout_base_OnEndPrinting(PyObject *, PyObject *args, P
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_base_OnEndPrinting",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_OnEndPrinting",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnEndPrinting();
+        (arg1)->OnEndPrinting();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24923,7 +24916,7 @@ static PyObject *_wrap_Printout_base_OnEndPrinting(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_Printout_base_OnPreparePrinting(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Printout_OnPreparePrinting(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     PyObject * obj0 = 0 ;
@@ -24931,12 +24924,12 @@ static PyObject *_wrap_Printout_base_OnPreparePrinting(PyObject *, PyObject *arg
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_base_OnPreparePrinting",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_OnPreparePrinting",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnPreparePrinting();
+        (arg1)->OnPreparePrinting();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24948,7 +24941,7 @@ static PyObject *_wrap_Printout_base_OnPreparePrinting(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_Printout_base_HasPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Printout_HasPage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     int arg2 ;
@@ -24959,7 +24952,7 @@ static PyObject *_wrap_Printout_base_HasPage(PyObject *, PyObject *args, PyObjec
         (char *) "self",(char *) "page", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Printout_base_HasPage",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Printout_HasPage",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -24968,7 +24961,7 @@ static PyObject *_wrap_Printout_base_HasPage(PyObject *, PyObject *args, PyObjec
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_HasPage(arg2);
+        result = (bool)(arg1)->HasPage(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24982,7 +24975,7 @@ static PyObject *_wrap_Printout_base_HasPage(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Printout_base_GetPageInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Printout_GetPageInfo(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -25006,12 +24999,12 @@ static PyObject *_wrap_Printout_base_GetPageInfo(PyObject *, PyObject *args, PyO
     arg3 = &temp3; res3 = SWIG_NEWOBJ;
     arg4 = &temp4; res4 = SWIG_NEWOBJ;
     arg5 = &temp5; res5 = SWIG_NEWOBJ;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_base_GetPageInfo",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Printout_GetPageInfo",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintout, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_GetPageInfo(arg2,arg3,arg4,arg5);
+        (arg1)->GetPageInfo(arg2,arg3,arg4,arg5);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26648,7 +26641,7 @@ static PyObject *_wrap_PyPrintPreview__setCallbackInfo(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_PyPrintPreview_base_SetCurrentPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPrintPreview_SetCurrentPage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintPreview *arg1 = (wxPyPrintPreview *) 0 ;
     int arg2 ;
@@ -26659,7 +26652,7 @@ static PyObject *_wrap_PyPrintPreview_base_SetCurrentPage(PyObject *, PyObject *
         (char *) "self",(char *) "pageNum", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPrintPreview_base_SetCurrentPage",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPrintPreview_SetCurrentPage",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintPreview, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -26668,7 +26661,7 @@ static PyObject *_wrap_PyPrintPreview_base_SetCurrentPage(PyObject *, PyObject *
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_SetCurrentPage(arg2);
+        result = (bool)(arg1)->SetCurrentPage(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26682,7 +26675,7 @@ static PyObject *_wrap_PyPrintPreview_base_SetCurrentPage(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyPrintPreview_base_PaintPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPrintPreview_PaintPage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintPreview *arg1 = (wxPyPrintPreview *) 0 ;
     wxPreviewCanvas *arg2 = (wxPreviewCanvas *) 0 ;
@@ -26695,7 +26688,7 @@ static PyObject *_wrap_PyPrintPreview_base_PaintPage(PyObject *, PyObject *args,
         (char *) "self",(char *) "canvas",(char *) "dc", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyPrintPreview_base_PaintPage",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyPrintPreview_PaintPage",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintPreview, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxPreviewCanvas, SWIG_POINTER_EXCEPTION | 0);
@@ -26710,7 +26703,7 @@ static PyObject *_wrap_PyPrintPreview_base_PaintPage(PyObject *, PyObject *args,
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_PaintPage(arg2,*arg3);
+        result = (bool)(arg1)->PaintPage(arg2,*arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26724,7 +26717,7 @@ static PyObject *_wrap_PyPrintPreview_base_PaintPage(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_PyPrintPreview_base_DrawBlankPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPrintPreview_DrawBlankPage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintPreview *arg1 = (wxPyPrintPreview *) 0 ;
     wxPreviewCanvas *arg2 = (wxPreviewCanvas *) 0 ;
@@ -26737,7 +26730,7 @@ static PyObject *_wrap_PyPrintPreview_base_DrawBlankPage(PyObject *, PyObject *a
         (char *) "self",(char *) "canvas",(char *) "dc", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyPrintPreview_base_DrawBlankPage",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyPrintPreview_DrawBlankPage",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintPreview, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxPreviewCanvas, SWIG_POINTER_EXCEPTION | 0);
@@ -26752,7 +26745,7 @@ static PyObject *_wrap_PyPrintPreview_base_DrawBlankPage(PyObject *, PyObject *a
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_DrawBlankPage(arg2,*arg3);
+        result = (bool)(arg1)->DrawBlankPage(arg2,*arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26766,7 +26759,7 @@ static PyObject *_wrap_PyPrintPreview_base_DrawBlankPage(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyPrintPreview_base_RenderPage(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPrintPreview_RenderPage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintPreview *arg1 = (wxPyPrintPreview *) 0 ;
     int arg2 ;
@@ -26777,7 +26770,7 @@ static PyObject *_wrap_PyPrintPreview_base_RenderPage(PyObject *, PyObject *args
         (char *) "self",(char *) "pageNum", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPrintPreview_base_RenderPage",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPrintPreview_RenderPage",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintPreview, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -26786,7 +26779,7 @@ static PyObject *_wrap_PyPrintPreview_base_RenderPage(PyObject *, PyObject *args
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_RenderPage(arg2);
+        result = (bool)(arg1)->RenderPage(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26800,7 +26793,7 @@ static PyObject *_wrap_PyPrintPreview_base_RenderPage(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_PyPrintPreview_base_SetZoom(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPrintPreview_SetZoom(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintPreview *arg1 = (wxPyPrintPreview *) 0 ;
     int arg2 ;
@@ -26810,7 +26803,7 @@ static PyObject *_wrap_PyPrintPreview_base_SetZoom(PyObject *, PyObject *args, P
         (char *) "self",(char *) "percent", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPrintPreview_base_SetZoom",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPrintPreview_SetZoom",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintPreview, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -26819,7 +26812,7 @@ static PyObject *_wrap_PyPrintPreview_base_SetZoom(PyObject *, PyObject *args, P
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_SetZoom(arg2);
+        (arg1)->SetZoom(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26831,7 +26824,7 @@ static PyObject *_wrap_PyPrintPreview_base_SetZoom(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_PyPrintPreview_base_Print(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPrintPreview_Print(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintPreview *arg1 = (wxPyPrintPreview *) 0 ;
     bool arg2 ;
@@ -26842,7 +26835,7 @@ static PyObject *_wrap_PyPrintPreview_base_Print(PyObject *, PyObject *args, PyO
         (char *) "self",(char *) "interactive", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPrintPreview_base_Print",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPrintPreview_Print",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintPreview, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -26851,7 +26844,7 @@ static PyObject *_wrap_PyPrintPreview_base_Print(PyObject *, PyObject *args, PyO
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_Print(arg2);
+        result = (bool)(arg1)->Print(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26865,7 +26858,7 @@ static PyObject *_wrap_PyPrintPreview_base_Print(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_PyPrintPreview_base_DetermineScaling(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPrintPreview_DetermineScaling(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPrintPreview *arg1 = (wxPyPrintPreview *) 0 ;
     PyObject * obj0 = 0 ;
@@ -26873,12 +26866,12 @@ static PyObject *_wrap_PyPrintPreview_base_DetermineScaling(PyObject *, PyObject
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPrintPreview_base_DetermineScaling",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPrintPreview_DetermineScaling",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPrintPreview, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_DetermineScaling();
+        (arg1)->DetermineScaling();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -27080,7 +27073,7 @@ static PyObject *_wrap_PyPreviewFrame_SetControlBar(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_PyPreviewFrame_base_Initialize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPreviewFrame_Initialize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPreviewFrame *arg1 = (wxPyPreviewFrame *) 0 ;
     PyObject * obj0 = 0 ;
@@ -27088,12 +27081,12 @@ static PyObject *_wrap_PyPreviewFrame_base_Initialize(PyObject *, PyObject *args
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPreviewFrame_base_Initialize",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPreviewFrame_Initialize",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPreviewFrame, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_Initialize();
+        (arg1)->Initialize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -27105,7 +27098,7 @@ static PyObject *_wrap_PyPreviewFrame_base_Initialize(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_PyPreviewFrame_base_CreateCanvas(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPreviewFrame_CreateCanvas(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPreviewFrame *arg1 = (wxPyPreviewFrame *) 0 ;
     PyObject * obj0 = 0 ;
@@ -27113,12 +27106,12 @@ static PyObject *_wrap_PyPreviewFrame_base_CreateCanvas(PyObject *, PyObject *ar
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPreviewFrame_base_CreateCanvas",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPreviewFrame_CreateCanvas",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPreviewFrame, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_CreateCanvas();
+        (arg1)->CreateCanvas();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -27130,7 +27123,7 @@ static PyObject *_wrap_PyPreviewFrame_base_CreateCanvas(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_PyPreviewFrame_base_CreateControlBar(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPreviewFrame_CreateControlBar(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPreviewFrame *arg1 = (wxPyPreviewFrame *) 0 ;
     PyObject * obj0 = 0 ;
@@ -27138,12 +27131,12 @@ static PyObject *_wrap_PyPreviewFrame_base_CreateControlBar(PyObject *, PyObject
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPreviewFrame_base_CreateControlBar",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPreviewFrame_CreateControlBar",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPreviewFrame, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_CreateControlBar();
+        (arg1)->CreateControlBar();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -27306,7 +27299,7 @@ static PyObject *_wrap_PyPreviewControlBar_SetPrintPreview(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyPreviewControlBar_base_CreateButtons(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPreviewControlBar_CreateButtons(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPreviewControlBar *arg1 = (wxPyPreviewControlBar *) 0 ;
     PyObject * obj0 = 0 ;
@@ -27314,12 +27307,12 @@ static PyObject *_wrap_PyPreviewControlBar_base_CreateButtons(PyObject *, PyObje
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPreviewControlBar_base_CreateButtons",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyPreviewControlBar_CreateButtons",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPreviewControlBar, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_CreateButtons();
+        (arg1)->CreateButtons();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -27331,7 +27324,7 @@ static PyObject *_wrap_PyPreviewControlBar_base_CreateButtons(PyObject *, PyObje
 }
 
 
-static PyObject *_wrap_PyPreviewControlBar_base_SetZoomControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyPreviewControlBar_SetZoomControl(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyPreviewControlBar *arg1 = (wxPyPreviewControlBar *) 0 ;
     int arg2 ;
@@ -27341,7 +27334,7 @@ static PyObject *_wrap_PyPreviewControlBar_base_SetZoomControl(PyObject *, PyObj
         (char *) "self",(char *) "zoom", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPreviewControlBar_base_SetZoomControl",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPreviewControlBar_SetZoomControl",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPreviewControlBar, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -27350,7 +27343,7 @@ static PyObject *_wrap_PyPreviewControlBar_base_SetZoomControl(PyObject *, PyObj
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_SetZoomControl(arg2);
+        (arg1)->SetZoomControl(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -27796,81 +27789,81 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyWindow__setCallbackInfo", (PyCFunction) _wrap_PyWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_SetBestSize", (PyCFunction) _wrap_PyWindow_SetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_DoEraseBackground", (PyCFunction) _wrap_PyWindow_DoEraseBackground, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_DoMoveWindow", (PyCFunction) _wrap_PyWindow_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_DoSetSize", (PyCFunction) _wrap_PyWindow_base_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_DoSetClientSize", (PyCFunction) _wrap_PyWindow_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_DoSetVirtualSize", (PyCFunction) _wrap_PyWindow_base_DoSetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_DoGetSize", (PyCFunction) _wrap_PyWindow_base_DoGetSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_DoGetClientSize", (PyCFunction) _wrap_PyWindow_base_DoGetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_DoGetPosition", (PyCFunction) _wrap_PyWindow_base_DoGetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_DoGetVirtualSize", (PyCFunction) _wrap_PyWindow_base_DoGetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_DoGetBestSize", (PyCFunction) _wrap_PyWindow_base_DoGetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_InitDialog", (PyCFunction) _wrap_PyWindow_base_InitDialog, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_TransferDataToWindow", (PyCFunction) _wrap_PyWindow_base_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_TransferDataFromWindow", (PyCFunction) _wrap_PyWindow_base_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_Validate", (PyCFunction) _wrap_PyWindow_base_Validate, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_AcceptsFocus", (PyCFunction) _wrap_PyWindow_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_PyWindow_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_GetMaxSize", (PyCFunction) _wrap_PyWindow_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_AddChild", (PyCFunction) _wrap_PyWindow_base_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_RemoveChild", (PyCFunction) _wrap_PyWindow_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_ShouldInheritColours", (PyCFunction) _wrap_PyWindow_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_GetDefaultAttributes", (PyCFunction) _wrap_PyWindow_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_OnInternalIdle", (PyCFunction) _wrap_PyWindow_base_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoMoveWindow", (PyCFunction) _wrap_PyWindow_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoSetSize", (PyCFunction) _wrap_PyWindow_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoSetClientSize", (PyCFunction) _wrap_PyWindow_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoSetVirtualSize", (PyCFunction) _wrap_PyWindow_DoSetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoGetSize", (PyCFunction) _wrap_PyWindow_DoGetSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoGetClientSize", (PyCFunction) _wrap_PyWindow_DoGetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoGetPosition", (PyCFunction) _wrap_PyWindow_DoGetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoGetVirtualSize", (PyCFunction) _wrap_PyWindow_DoGetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoGetBestSize", (PyCFunction) _wrap_PyWindow_DoGetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_InitDialog", (PyCFunction) _wrap_PyWindow_InitDialog, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_TransferDataToWindow", (PyCFunction) _wrap_PyWindow_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_TransferDataFromWindow", (PyCFunction) _wrap_PyWindow_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_Validate", (PyCFunction) _wrap_PyWindow_Validate, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_AcceptsFocus", (PyCFunction) _wrap_PyWindow_AcceptsFocus, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_PyWindow_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_GetMaxSize", (PyCFunction) _wrap_PyWindow_GetMaxSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_AddChild", (PyCFunction) _wrap_PyWindow_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_RemoveChild", (PyCFunction) _wrap_PyWindow_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_ShouldInheritColours", (PyCFunction) _wrap_PyWindow_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_GetDefaultAttributes", (PyCFunction) _wrap_PyWindow_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_OnInternalIdle", (PyCFunction) _wrap_PyWindow_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_swigregister", PyWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyPanel", (PyCFunction) _wrap_new_PyPanel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PrePyPanel", (PyCFunction) _wrap_new_PrePyPanel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel__setCallbackInfo", (PyCFunction) _wrap_PyPanel__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_SetBestSize", (PyCFunction) _wrap_PyPanel_SetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_DoEraseBackground", (PyCFunction) _wrap_PyPanel_DoEraseBackground, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_DoMoveWindow", (PyCFunction) _wrap_PyPanel_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_DoSetSize", (PyCFunction) _wrap_PyPanel_base_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_DoSetClientSize", (PyCFunction) _wrap_PyPanel_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_DoSetVirtualSize", (PyCFunction) _wrap_PyPanel_base_DoSetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_DoGetSize", (PyCFunction) _wrap_PyPanel_base_DoGetSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_DoGetClientSize", (PyCFunction) _wrap_PyPanel_base_DoGetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_DoGetPosition", (PyCFunction) _wrap_PyPanel_base_DoGetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_DoGetVirtualSize", (PyCFunction) _wrap_PyPanel_base_DoGetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_DoGetBestSize", (PyCFunction) _wrap_PyPanel_base_DoGetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_InitDialog", (PyCFunction) _wrap_PyPanel_base_InitDialog, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_TransferDataToWindow", (PyCFunction) _wrap_PyPanel_base_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_TransferDataFromWindow", (PyCFunction) _wrap_PyPanel_base_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_Validate", (PyCFunction) _wrap_PyPanel_base_Validate, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_AcceptsFocus", (PyCFunction) _wrap_PyPanel_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_PyPanel_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_GetMaxSize", (PyCFunction) _wrap_PyPanel_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_AddChild", (PyCFunction) _wrap_PyPanel_base_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_RemoveChild", (PyCFunction) _wrap_PyPanel_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_ShouldInheritColours", (PyCFunction) _wrap_PyPanel_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_GetDefaultAttributes", (PyCFunction) _wrap_PyPanel_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_OnInternalIdle", (PyCFunction) _wrap_PyPanel_base_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoMoveWindow", (PyCFunction) _wrap_PyPanel_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoSetSize", (PyCFunction) _wrap_PyPanel_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoSetClientSize", (PyCFunction) _wrap_PyPanel_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoSetVirtualSize", (PyCFunction) _wrap_PyPanel_DoSetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoGetSize", (PyCFunction) _wrap_PyPanel_DoGetSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoGetClientSize", (PyCFunction) _wrap_PyPanel_DoGetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoGetPosition", (PyCFunction) _wrap_PyPanel_DoGetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoGetVirtualSize", (PyCFunction) _wrap_PyPanel_DoGetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoGetBestSize", (PyCFunction) _wrap_PyPanel_DoGetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_InitDialog", (PyCFunction) _wrap_PyPanel_InitDialog, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_TransferDataToWindow", (PyCFunction) _wrap_PyPanel_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_TransferDataFromWindow", (PyCFunction) _wrap_PyPanel_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_Validate", (PyCFunction) _wrap_PyPanel_Validate, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_AcceptsFocus", (PyCFunction) _wrap_PyPanel_AcceptsFocus, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_PyPanel_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_GetMaxSize", (PyCFunction) _wrap_PyPanel_GetMaxSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_AddChild", (PyCFunction) _wrap_PyPanel_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_RemoveChild", (PyCFunction) _wrap_PyPanel_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_ShouldInheritColours", (PyCFunction) _wrap_PyPanel_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_GetDefaultAttributes", (PyCFunction) _wrap_PyPanel_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_OnInternalIdle", (PyCFunction) _wrap_PyPanel_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_swigregister", PyPanel_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyScrolledWindow", (PyCFunction) _wrap_new_PyScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PrePyScrolledWindow", (PyCFunction) _wrap_new_PrePyScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow__setCallbackInfo", (PyCFunction) _wrap_PyScrolledWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_SetBestSize", (PyCFunction) _wrap_PyScrolledWindow_SetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_DoEraseBackground", (PyCFunction) _wrap_PyScrolledWindow_DoEraseBackground, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_DoMoveWindow", (PyCFunction) _wrap_PyScrolledWindow_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_DoSetSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_DoSetClientSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_DoSetVirtualSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoSetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_DoGetSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoGetSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_DoGetClientSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoGetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_DoGetPosition", (PyCFunction) _wrap_PyScrolledWindow_base_DoGetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_DoGetVirtualSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoGetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_DoGetBestSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoGetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_InitDialog", (PyCFunction) _wrap_PyScrolledWindow_base_InitDialog, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_TransferDataToWindow", (PyCFunction) _wrap_PyScrolledWindow_base_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_TransferDataFromWindow", (PyCFunction) _wrap_PyScrolledWindow_base_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_Validate", (PyCFunction) _wrap_PyScrolledWindow_base_Validate, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_AcceptsFocus", (PyCFunction) _wrap_PyScrolledWindow_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_PyScrolledWindow_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_GetMaxSize", (PyCFunction) _wrap_PyScrolledWindow_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_AddChild", (PyCFunction) _wrap_PyScrolledWindow_base_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_RemoveChild", (PyCFunction) _wrap_PyScrolledWindow_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_ShouldInheritColours", (PyCFunction) _wrap_PyScrolledWindow_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_GetDefaultAttributes", (PyCFunction) _wrap_PyScrolledWindow_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_OnInternalIdle", (PyCFunction) _wrap_PyScrolledWindow_base_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoMoveWindow", (PyCFunction) _wrap_PyScrolledWindow_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoSetSize", (PyCFunction) _wrap_PyScrolledWindow_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoSetClientSize", (PyCFunction) _wrap_PyScrolledWindow_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoSetVirtualSize", (PyCFunction) _wrap_PyScrolledWindow_DoSetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoGetSize", (PyCFunction) _wrap_PyScrolledWindow_DoGetSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoGetClientSize", (PyCFunction) _wrap_PyScrolledWindow_DoGetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoGetPosition", (PyCFunction) _wrap_PyScrolledWindow_DoGetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoGetVirtualSize", (PyCFunction) _wrap_PyScrolledWindow_DoGetVirtualSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoGetBestSize", (PyCFunction) _wrap_PyScrolledWindow_DoGetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_InitDialog", (PyCFunction) _wrap_PyScrolledWindow_InitDialog, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_TransferDataToWindow", (PyCFunction) _wrap_PyScrolledWindow_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_TransferDataFromWindow", (PyCFunction) _wrap_PyScrolledWindow_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_Validate", (PyCFunction) _wrap_PyScrolledWindow_Validate, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_AcceptsFocus", (PyCFunction) _wrap_PyScrolledWindow_AcceptsFocus, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_PyScrolledWindow_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_GetMaxSize", (PyCFunction) _wrap_PyScrolledWindow_GetMaxSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_AddChild", (PyCFunction) _wrap_PyScrolledWindow_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_RemoveChild", (PyCFunction) _wrap_PyScrolledWindow_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_ShouldInheritColours", (PyCFunction) _wrap_PyScrolledWindow_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_GetDefaultAttributes", (PyCFunction) _wrap_PyScrolledWindow_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_OnInternalIdle", (PyCFunction) _wrap_PyScrolledWindow_OnInternalIdle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_swigregister", PyScrolledWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PrintData", _wrap_new_PrintData, METH_VARARGS, NULL},
 	 { (char *)"delete_PrintData", (PyCFunction) _wrap_delete_PrintData, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28005,13 +27998,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Printout_GetPPIPrinter", (PyCFunction) _wrap_Printout_GetPPIPrinter, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Printout_IsPreview", (PyCFunction) _wrap_Printout_IsPreview, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Printout_SetIsPreview", (PyCFunction) _wrap_Printout_SetIsPreview, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Printout_base_OnBeginDocument", (PyCFunction) _wrap_Printout_base_OnBeginDocument, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Printout_base_OnEndDocument", (PyCFunction) _wrap_Printout_base_OnEndDocument, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Printout_base_OnBeginPrinting", (PyCFunction) _wrap_Printout_base_OnBeginPrinting, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Printout_base_OnEndPrinting", (PyCFunction) _wrap_Printout_base_OnEndPrinting, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Printout_base_OnPreparePrinting", (PyCFunction) _wrap_Printout_base_OnPreparePrinting, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Printout_base_HasPage", (PyCFunction) _wrap_Printout_base_HasPage, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Printout_base_GetPageInfo", (PyCFunction) _wrap_Printout_base_GetPageInfo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_OnBeginDocument", (PyCFunction) _wrap_Printout_OnBeginDocument, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_OnEndDocument", (PyCFunction) _wrap_Printout_OnEndDocument, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_OnBeginPrinting", (PyCFunction) _wrap_Printout_OnBeginPrinting, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_OnEndPrinting", (PyCFunction) _wrap_Printout_OnEndPrinting, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_OnPreparePrinting", (PyCFunction) _wrap_Printout_OnPreparePrinting, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_HasPage", (PyCFunction) _wrap_Printout_HasPage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Printout_GetPageInfo", (PyCFunction) _wrap_Printout_GetPageInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Printout_swigregister", Printout_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PreviewCanvas", (PyCFunction) _wrap_new_PreviewCanvas, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PreviewCanvas_swigregister", PreviewCanvas_swigregister, METH_VARARGS, NULL},
@@ -28057,27 +28050,27 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintPreview_swigregister", PrintPreview_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyPrintPreview", _wrap_new_PyPrintPreview, METH_VARARGS, NULL},
 	 { (char *)"PyPrintPreview__setCallbackInfo", (PyCFunction) _wrap_PyPrintPreview__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPrintPreview_base_SetCurrentPage", (PyCFunction) _wrap_PyPrintPreview_base_SetCurrentPage, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPrintPreview_base_PaintPage", (PyCFunction) _wrap_PyPrintPreview_base_PaintPage, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPrintPreview_base_DrawBlankPage", (PyCFunction) _wrap_PyPrintPreview_base_DrawBlankPage, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPrintPreview_base_RenderPage", (PyCFunction) _wrap_PyPrintPreview_base_RenderPage, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPrintPreview_base_SetZoom", (PyCFunction) _wrap_PyPrintPreview_base_SetZoom, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPrintPreview_base_Print", (PyCFunction) _wrap_PyPrintPreview_base_Print, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPrintPreview_base_DetermineScaling", (PyCFunction) _wrap_PyPrintPreview_base_DetermineScaling, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPrintPreview_SetCurrentPage", (PyCFunction) _wrap_PyPrintPreview_SetCurrentPage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPrintPreview_PaintPage", (PyCFunction) _wrap_PyPrintPreview_PaintPage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPrintPreview_DrawBlankPage", (PyCFunction) _wrap_PyPrintPreview_DrawBlankPage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPrintPreview_RenderPage", (PyCFunction) _wrap_PyPrintPreview_RenderPage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPrintPreview_SetZoom", (PyCFunction) _wrap_PyPrintPreview_SetZoom, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPrintPreview_Print", (PyCFunction) _wrap_PyPrintPreview_Print, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPrintPreview_DetermineScaling", (PyCFunction) _wrap_PyPrintPreview_DetermineScaling, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPrintPreview_swigregister", PyPrintPreview_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyPreviewFrame", (PyCFunction) _wrap_new_PyPreviewFrame, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPreviewFrame__setCallbackInfo", (PyCFunction) _wrap_PyPreviewFrame__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPreviewFrame_SetPreviewCanvas", (PyCFunction) _wrap_PyPreviewFrame_SetPreviewCanvas, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPreviewFrame_SetControlBar", (PyCFunction) _wrap_PyPreviewFrame_SetControlBar, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPreviewFrame_base_Initialize", (PyCFunction) _wrap_PyPreviewFrame_base_Initialize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPreviewFrame_base_CreateCanvas", (PyCFunction) _wrap_PyPreviewFrame_base_CreateCanvas, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPreviewFrame_base_CreateControlBar", (PyCFunction) _wrap_PyPreviewFrame_base_CreateControlBar, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPreviewFrame_Initialize", (PyCFunction) _wrap_PyPreviewFrame_Initialize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPreviewFrame_CreateCanvas", (PyCFunction) _wrap_PyPreviewFrame_CreateCanvas, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPreviewFrame_CreateControlBar", (PyCFunction) _wrap_PyPreviewFrame_CreateControlBar, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPreviewFrame_swigregister", PyPreviewFrame_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyPreviewControlBar", (PyCFunction) _wrap_new_PyPreviewControlBar, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPreviewControlBar__setCallbackInfo", (PyCFunction) _wrap_PyPreviewControlBar__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPreviewControlBar_SetPrintPreview", (PyCFunction) _wrap_PyPreviewControlBar_SetPrintPreview, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPreviewControlBar_base_CreateButtons", (PyCFunction) _wrap_PyPreviewControlBar_base_CreateButtons, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPreviewControlBar_base_SetZoomControl", (PyCFunction) _wrap_PyPreviewControlBar_base_SetZoomControl, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPreviewControlBar_CreateButtons", (PyCFunction) _wrap_PyPreviewControlBar_CreateButtons, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPreviewControlBar_SetZoomControl", (PyCFunction) _wrap_PyPreviewControlBar_SetZoomControl, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPreviewControlBar_swigregister", PyPreviewControlBar_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };

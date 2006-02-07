@@ -2682,27 +2682,10 @@ class DC(_core.Object):
             if self.thisown: destroy(self)
         except: pass
 
-    def BeginDrawing(*args, **kwargs):
-        """
-        BeginDrawing(self)
-
-        Allows for optimization of drawing code on platforms that need it.  On
-        other platforms this is just an empty function and is harmless.  To
-        take advantage of this postential optimization simply enclose each
-        group of calls to the drawing primitives within calls to
-        `BeginDrawing` and `EndDrawing`.
-        """
-        return _gdi_.DC_BeginDrawing(*args, **kwargs)
-
-    def EndDrawing(*args, **kwargs):
-        """
-        EndDrawing(self)
-
-        Ends the group of drawing primitives started with `BeginDrawing`, and
-        invokes whatever optimization is available for this DC type on the
-        current platform.
-        """
-        return _gdi_.DC_EndDrawing(*args, **kwargs)
+    # These have been deprecated in wxWidgets.  Since they never
+    # really did anything to begin with, just make them be NOPs.
+    def BeginDrawing(self):  pass
+    def EndDrawing(self):  pass
 
     def FloodFill(*args, **kwargs):
         """
