@@ -729,7 +729,6 @@ public:
     }
 
     void OnLinkClicked(const wxHtmlLinkInfo& link);
-//-    void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
     wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
                                       const wxString& url,
@@ -759,9 +758,6 @@ void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     if (! found)
         wxHtmlWindow::OnLinkClicked(link);
 }
-// void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
-//     wxHtmlWindow::OnLinkClicked(link);
-// }
 
 
 wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
