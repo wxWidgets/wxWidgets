@@ -1586,7 +1586,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/stattext.h
     wx/msw/tabctrl.h
     wx/msw/tbar95.h
-    wx/msw/tbarmsw.h
     wx/msw/textctrl.h
     wx/msw/tglbtn.h
     wx/msw/timer.h
