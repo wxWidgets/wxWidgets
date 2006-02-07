@@ -2119,7 +2119,7 @@ public:
     }
 
     void OnLinkClicked(const wxHtmlLinkInfo& link);
-    void base_OnLinkClicked(const wxHtmlLinkInfo& link);
+//-    void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
     wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
                                       const wxString& url,
@@ -2149,9 +2149,9 @@ void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     if (! found)
         wxHtmlWindow::OnLinkClicked(link);
 }
-void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
-    wxHtmlWindow::OnLinkClicked(link);
-}
+// void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
+//     wxHtmlWindow::OnLinkClicked(link);
+// }
 
 
 wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
@@ -8858,7 +8858,7 @@ static PyObject *_wrap_HtmlWindow_ToText(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_HtmlWindow_base_OnLinkClicked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_OnLinkClicked(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlLinkInfo *arg2 = 0 ;
@@ -8868,7 +8868,7 @@ static PyObject *_wrap_HtmlWindow_base_OnLinkClicked(PyObject *, PyObject *args,
         (char *) "self",(char *) "link", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWindow_base_OnLinkClicked",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWindow_OnLinkClicked",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyHtmlWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -8881,7 +8881,7 @@ static PyObject *_wrap_HtmlWindow_base_OnLinkClicked(PyObject *, PyObject *args,
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnLinkClicked((wxHtmlLinkInfo const &)*arg2);
+        (arg1)->OnLinkClicked((wxHtmlLinkInfo const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8893,7 +8893,7 @@ static PyObject *_wrap_HtmlWindow_base_OnLinkClicked(PyObject *, PyObject *args,
 }
 
 
-static PyObject *_wrap_HtmlWindow_base_OnSetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_OnSetTitle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxString *arg2 = 0 ;
@@ -8904,7 +8904,7 @@ static PyObject *_wrap_HtmlWindow_base_OnSetTitle(PyObject *, PyObject *args, Py
         (char *) "self",(char *) "title", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWindow_base_OnSetTitle",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWindow_OnSetTitle",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyHtmlWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -8914,7 +8914,7 @@ static PyObject *_wrap_HtmlWindow_base_OnSetTitle(PyObject *, PyObject *args, Py
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnSetTitle((wxString const &)*arg2);
+        (arg1)->OnSetTitle((wxString const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8934,7 +8934,7 @@ static PyObject *_wrap_HtmlWindow_base_OnSetTitle(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_HtmlWindow_base_OnCellMouseHover(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_OnCellMouseHover(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
@@ -8948,7 +8948,7 @@ static PyObject *_wrap_HtmlWindow_base_OnCellMouseHover(PyObject *, PyObject *ar
         (char *) "self",(char *) "cell",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:HtmlWindow_base_OnCellMouseHover",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:HtmlWindow_OnCellMouseHover",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyHtmlWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlCell, SWIG_POINTER_EXCEPTION | 0);
@@ -8963,7 +8963,7 @@ static PyObject *_wrap_HtmlWindow_base_OnCellMouseHover(PyObject *, PyObject *ar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnCellMouseHover(arg2,arg3,arg4);
+        (arg1)->OnCellMouseHover(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8975,7 +8975,7 @@ static PyObject *_wrap_HtmlWindow_base_OnCellMouseHover(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_HtmlWindow_base_OnCellClicked(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_HtmlWindow_OnCellClicked(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyHtmlWindow *arg1 = (wxPyHtmlWindow *) 0 ;
     wxHtmlCell *arg2 = (wxHtmlCell *) 0 ;
@@ -8991,7 +8991,7 @@ static PyObject *_wrap_HtmlWindow_base_OnCellClicked(PyObject *, PyObject *args,
         (char *) "self",(char *) "cell",(char *) "x",(char *) "y",(char *) "event", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:HtmlWindow_base_OnCellClicked",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:HtmlWindow_OnCellClicked",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyHtmlWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlCell, SWIG_POINTER_EXCEPTION | 0);
@@ -9014,7 +9014,7 @@ static PyObject *_wrap_HtmlWindow_base_OnCellClicked(PyObject *, PyObject *args,
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnCellClicked(arg2,arg3,arg4,(wxMouseEvent const &)*arg5);
+        (arg1)->OnCellClicked(arg2,arg3,arg4,(wxMouseEvent const &)*arg5);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -14755,10 +14755,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlWindow_SelectAll", (PyCFunction) _wrap_HtmlWindow_SelectAll, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlWindow_SelectionToText", (PyCFunction) _wrap_HtmlWindow_SelectionToText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlWindow_ToText", (PyCFunction) _wrap_HtmlWindow_ToText, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"HtmlWindow_base_OnLinkClicked", (PyCFunction) _wrap_HtmlWindow_base_OnLinkClicked, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"HtmlWindow_base_OnSetTitle", (PyCFunction) _wrap_HtmlWindow_base_OnSetTitle, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"HtmlWindow_base_OnCellMouseHover", (PyCFunction) _wrap_HtmlWindow_base_OnCellMouseHover, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"HtmlWindow_base_OnCellClicked", (PyCFunction) _wrap_HtmlWindow_base_OnCellClicked, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlWindow_OnLinkClicked", (PyCFunction) _wrap_HtmlWindow_OnLinkClicked, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlWindow_OnSetTitle", (PyCFunction) _wrap_HtmlWindow_OnSetTitle, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlWindow_OnCellMouseHover", (PyCFunction) _wrap_HtmlWindow_OnCellMouseHover, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlWindow_OnCellClicked", (PyCFunction) _wrap_HtmlWindow_OnCellClicked, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlWindow_GetClassDefaultAttributes", (PyCFunction) _wrap_HtmlWindow_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlWindow_swigregister", HtmlWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_HtmlDCRenderer", (PyCFunction) _wrap_new_HtmlDCRenderer, METH_VARARGS | METH_KEYWORDS, NULL},

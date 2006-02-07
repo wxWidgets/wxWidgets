@@ -2022,7 +2022,7 @@ IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
 IMP_PYCALLBACK_STRING_STRING(wxPyTipProvider, wxTipProvider, PreprocessTip);
 
 
-//IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
+IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
 
 IMPLEMENT_ABSTRACT_CLASS(wxPyTimer, wxTimer);
 
@@ -2031,21 +2031,6 @@ wxPyTimer::wxPyTimer(wxEvtHandler *owner, int id)
 {
     if (owner == NULL) SetOwner(this);
 }
-
-
-void wxPyTimer::Notify() {
-    bool found;
-    wxPyBlock_t blocked = wxPyBeginBlockThreads();
-    if ((found = wxPyCBH_findCallback(m_myInst, "Notify")))
-        wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
-    wxPyEndBlockThreads(blocked);
-    if (! found)
-        wxTimer::Notify();
-}   
-void wxPyTimer::base_Notify() {
-    wxTimer::Notify();
-}
-
 
 
 SWIGINTERN PyObject *
@@ -2265,8 +2250,10 @@ public:
             wxLog::DoLogString(szString, t);
     }
 
+    DEC_PYCALLBACK_VOID_(Flush);
     PYPRIVATE;
 };
+IMP_PYCALLBACK_VOID_(wxPyLog, wxLog, Flush);
 
 
 
@@ -9290,6 +9277,31 @@ static PyObject *_wrap_Timer_Stop(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
+static PyObject *_wrap_Timer_Notify(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxPyTimer *arg1 = (wxPyTimer *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Timer_Notify",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTimer, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->Notify();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Timer_IsRunning(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyTimer *arg1 = (wxPyTimer *) 0 ;
@@ -11890,7 +11902,7 @@ static PyObject *_wrap_Process__setCallbackInfo(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_Process_base_OnTerminate(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Process_OnTerminate(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyProcess *arg1 = (wxPyProcess *) 0 ;
     int arg2 ;
@@ -11902,7 +11914,7 @@ static PyObject *_wrap_Process_base_OnTerminate(PyObject *, PyObject *args, PyOb
         (char *) "self",(char *) "pid",(char *) "status", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Process_base_OnTerminate",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Process_OnTerminate",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyProcess, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -11915,7 +11927,7 @@ static PyObject *_wrap_Process_base_OnTerminate(PyObject *, PyObject *args, PyOb
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnTerminate(arg2,arg3);
+        (arg1)->OnTerminate(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30037,7 +30049,7 @@ static PyObject *_wrap_DropSource_DoDragDrop(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_DropSource_base_GiveFeedback(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DropSource_GiveFeedback(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyDropSource *arg1 = (wxPyDropSource *) 0 ;
     wxDragResult arg2 ;
@@ -30048,7 +30060,7 @@ static PyObject *_wrap_DropSource_base_GiveFeedback(PyObject *, PyObject *args, 
         (char *) "self",(char *) "effect", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DropSource_base_GiveFeedback",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DropSource_GiveFeedback",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyDropSource, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30057,7 +30069,7 @@ static PyObject *_wrap_DropSource_base_GiveFeedback(PyObject *, PyObject *args, 
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_GiveFeedback(arg2);
+        result = (bool)(arg1)->GiveFeedback(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30217,7 +30229,7 @@ static PyObject *_wrap_DropTarget_SetDataObject(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_DropTarget_base_OnEnter(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DropTarget_OnEnter(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyDropTarget *arg1 = (wxPyDropTarget *) 0 ;
     int arg2 ;
@@ -30232,7 +30244,7 @@ static PyObject *_wrap_DropTarget_base_OnEnter(PyObject *, PyObject *args, PyObj
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropTarget_base_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropTarget_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30249,7 +30261,7 @@ static PyObject *_wrap_DropTarget_base_OnEnter(PyObject *, PyObject *args, PyObj
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDragResult)(arg1)->base_OnEnter(arg2,arg3,arg4);
+        result = (wxDragResult)(arg1)->OnEnter(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30261,7 +30273,7 @@ static PyObject *_wrap_DropTarget_base_OnEnter(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_DropTarget_base_OnDragOver(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DropTarget_OnDragOver(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyDropTarget *arg1 = (wxPyDropTarget *) 0 ;
     int arg2 ;
@@ -30276,7 +30288,7 @@ static PyObject *_wrap_DropTarget_base_OnDragOver(PyObject *, PyObject *args, Py
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropTarget_base_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropTarget_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30293,7 +30305,7 @@ static PyObject *_wrap_DropTarget_base_OnDragOver(PyObject *, PyObject *args, Py
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDragResult)(arg1)->base_OnDragOver(arg2,arg3,arg4);
+        result = (wxDragResult)(arg1)->OnDragOver(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30305,7 +30317,7 @@ static PyObject *_wrap_DropTarget_base_OnDragOver(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_DropTarget_base_OnLeave(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DropTarget_OnLeave(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyDropTarget *arg1 = (wxPyDropTarget *) 0 ;
     PyObject * obj0 = 0 ;
@@ -30313,12 +30325,12 @@ static PyObject *_wrap_DropTarget_base_OnLeave(PyObject *, PyObject *args, PyObj
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DropTarget_base_OnLeave",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DropTarget_OnLeave",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnLeave();
+        (arg1)->OnLeave();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30330,7 +30342,7 @@ static PyObject *_wrap_DropTarget_base_OnLeave(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_DropTarget_base_OnDrop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DropTarget_OnDrop(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyDropTarget *arg1 = (wxPyDropTarget *) 0 ;
     int arg2 ;
@@ -30343,7 +30355,7 @@ static PyObject *_wrap_DropTarget_base_OnDrop(PyObject *, PyObject *args, PyObje
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:DropTarget_base_OnDrop",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:DropTarget_OnDrop",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30356,7 +30368,7 @@ static PyObject *_wrap_DropTarget_base_OnDrop(PyObject *, PyObject *args, PyObje
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_OnDrop(arg2,arg3);
+        result = (bool)(arg1)->OnDrop(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30515,7 +30527,63 @@ static PyObject *_wrap_TextDropTarget__setCallbackInfo(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_TextDropTarget_base_OnEnter(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_TextDropTarget_OnDropText(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxPyTextDropTarget *arg1 = (wxPyTextDropTarget *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    wxString *arg4 = 0 ;
+    bool result;
+    bool temp4 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "x",(char *) "y",(char *) "text", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_OnDropText",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTextDropTarget, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = static_cast<int >(SWIG_As_int(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = wxString_in_helper(obj3);
+        if (arg4 == NULL) SWIG_fail;
+        temp4 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->OnDropText(arg2,arg3,(wxString const &)*arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp4)
+        delete arg4;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp4)
+        delete arg4;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_TextDropTarget_OnEnter(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyTextDropTarget *arg1 = (wxPyTextDropTarget *) 0 ;
     int arg2 ;
@@ -30530,7 +30598,7 @@ static PyObject *_wrap_TextDropTarget_base_OnEnter(PyObject *, PyObject *args, P
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_base_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTextDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30547,7 +30615,7 @@ static PyObject *_wrap_TextDropTarget_base_OnEnter(PyObject *, PyObject *args, P
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDragResult)(arg1)->base_OnEnter(arg2,arg3,arg4);
+        result = (wxDragResult)(arg1)->OnEnter(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30559,7 +30627,7 @@ static PyObject *_wrap_TextDropTarget_base_OnEnter(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_TextDropTarget_base_OnDragOver(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_TextDropTarget_OnDragOver(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyTextDropTarget *arg1 = (wxPyTextDropTarget *) 0 ;
     int arg2 ;
@@ -30574,7 +30642,7 @@ static PyObject *_wrap_TextDropTarget_base_OnDragOver(PyObject *, PyObject *args
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_base_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTextDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30591,7 +30659,7 @@ static PyObject *_wrap_TextDropTarget_base_OnDragOver(PyObject *, PyObject *args
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDragResult)(arg1)->base_OnDragOver(arg2,arg3,arg4);
+        result = (wxDragResult)(arg1)->OnDragOver(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30603,7 +30671,7 @@ static PyObject *_wrap_TextDropTarget_base_OnDragOver(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_TextDropTarget_base_OnLeave(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_TextDropTarget_OnLeave(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyTextDropTarget *arg1 = (wxPyTextDropTarget *) 0 ;
     PyObject * obj0 = 0 ;
@@ -30611,12 +30679,12 @@ static PyObject *_wrap_TextDropTarget_base_OnLeave(PyObject *, PyObject *args, P
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TextDropTarget_base_OnLeave",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TextDropTarget_OnLeave",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTextDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnLeave();
+        (arg1)->OnLeave();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30628,7 +30696,7 @@ static PyObject *_wrap_TextDropTarget_base_OnLeave(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_TextDropTarget_base_OnDrop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_TextDropTarget_OnDrop(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyTextDropTarget *arg1 = (wxPyTextDropTarget *) 0 ;
     int arg2 ;
@@ -30641,7 +30709,7 @@ static PyObject *_wrap_TextDropTarget_base_OnDrop(PyObject *, PyObject *args, Py
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TextDropTarget_base_OnDrop",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TextDropTarget_OnDrop",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTextDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30654,7 +30722,7 @@ static PyObject *_wrap_TextDropTarget_base_OnDrop(PyObject *, PyObject *args, Py
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_OnDrop(arg2,arg3);
+        result = (bool)(arg1)->OnDrop(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30668,7 +30736,7 @@ static PyObject *_wrap_TextDropTarget_base_OnDrop(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_TextDropTarget_base_OnData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_TextDropTarget_OnData(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyTextDropTarget *arg1 = (wxPyTextDropTarget *) 0 ;
     int arg2 ;
@@ -30683,7 +30751,7 @@ static PyObject *_wrap_TextDropTarget_base_OnData(PyObject *, PyObject *args, Py
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_base_OnData",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_OnData",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTextDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30700,7 +30768,7 @@ static PyObject *_wrap_TextDropTarget_base_OnData(PyObject *, PyObject *args, Py
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDragResult)(arg1)->base_OnData(arg2,arg3,arg4);
+        result = (wxDragResult)(arg1)->OnData(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30772,7 +30840,73 @@ static PyObject *_wrap_FileDropTarget__setCallbackInfo(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_FileDropTarget_base_OnEnter(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileDropTarget_OnDropFiles(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxPyFileDropTarget *arg1 = (wxPyFileDropTarget *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    wxArrayString *arg4 = 0 ;
+    bool result;
+    bool temp4 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "x",(char *) "y",(char *) "filenames", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_OnDropFiles",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyFileDropTarget, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = static_cast<int >(SWIG_As_int(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        if (! PySequence_Check(obj3)) {
+            PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
+            SWIG_fail;
+        }
+        arg4 = new wxArrayString;
+        temp4 = true;
+        int i, len=PySequence_Length(obj3);
+        for (i=0; i<len; i++) {
+            PyObject* item = PySequence_GetItem(obj3, i);
+            wxString* s = wxString_in_helper(item);
+            if (PyErr_Occurred())  SWIG_fail;
+            arg4->Add(*s);
+            delete s;
+            Py_DECREF(item);
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->OnDropFiles(arg2,arg3,(wxArrayString const &)*arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp4) delete arg4;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp4) delete arg4;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_FileDropTarget_OnEnter(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyFileDropTarget *arg1 = (wxPyFileDropTarget *) 0 ;
     int arg2 ;
@@ -30787,7 +30921,7 @@ static PyObject *_wrap_FileDropTarget_base_OnEnter(PyObject *, PyObject *args, P
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_base_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyFileDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30804,7 +30938,7 @@ static PyObject *_wrap_FileDropTarget_base_OnEnter(PyObject *, PyObject *args, P
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDragResult)(arg1)->base_OnEnter(arg2,arg3,arg4);
+        result = (wxDragResult)(arg1)->OnEnter(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30816,7 +30950,7 @@ static PyObject *_wrap_FileDropTarget_base_OnEnter(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_FileDropTarget_base_OnDragOver(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileDropTarget_OnDragOver(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyFileDropTarget *arg1 = (wxPyFileDropTarget *) 0 ;
     int arg2 ;
@@ -30831,7 +30965,7 @@ static PyObject *_wrap_FileDropTarget_base_OnDragOver(PyObject *, PyObject *args
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_base_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyFileDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30848,7 +30982,7 @@ static PyObject *_wrap_FileDropTarget_base_OnDragOver(PyObject *, PyObject *args
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDragResult)(arg1)->base_OnDragOver(arg2,arg3,arg4);
+        result = (wxDragResult)(arg1)->OnDragOver(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30860,7 +30994,7 @@ static PyObject *_wrap_FileDropTarget_base_OnDragOver(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_FileDropTarget_base_OnLeave(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileDropTarget_OnLeave(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyFileDropTarget *arg1 = (wxPyFileDropTarget *) 0 ;
     PyObject * obj0 = 0 ;
@@ -30868,12 +31002,12 @@ static PyObject *_wrap_FileDropTarget_base_OnLeave(PyObject *, PyObject *args, P
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:FileDropTarget_base_OnLeave",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:FileDropTarget_OnLeave",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyFileDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_OnLeave();
+        (arg1)->OnLeave();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30885,7 +31019,7 @@ static PyObject *_wrap_FileDropTarget_base_OnLeave(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_FileDropTarget_base_OnDrop(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileDropTarget_OnDrop(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyFileDropTarget *arg1 = (wxPyFileDropTarget *) 0 ;
     int arg2 ;
@@ -30898,7 +31032,7 @@ static PyObject *_wrap_FileDropTarget_base_OnDrop(PyObject *, PyObject *args, Py
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:FileDropTarget_base_OnDrop",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:FileDropTarget_OnDrop",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyFileDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30911,7 +31045,7 @@ static PyObject *_wrap_FileDropTarget_base_OnDrop(PyObject *, PyObject *args, Py
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_OnDrop(arg2,arg3);
+        result = (bool)(arg1)->OnDrop(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -30925,7 +31059,7 @@ static PyObject *_wrap_FileDropTarget_base_OnDrop(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_FileDropTarget_base_OnData(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_FileDropTarget_OnData(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyFileDropTarget *arg1 = (wxPyFileDropTarget *) 0 ;
     int arg2 ;
@@ -30940,7 +31074,7 @@ static PyObject *_wrap_FileDropTarget_base_OnData(PyObject *, PyObject *args, Py
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_base_OnData",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_OnData",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyFileDropTarget, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -30957,7 +31091,7 @@ static PyObject *_wrap_FileDropTarget_base_OnData(PyObject *, PyObject *args, Py
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDragResult)(arg1)->base_OnData(arg2,arg3,arg4);
+        result = (wxDragResult)(arg1)->OnData(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -32867,6 +33001,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Timer_GetOwner", (PyCFunction) _wrap_Timer_GetOwner, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Timer_Start", (PyCFunction) _wrap_Timer_Start, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Timer_Stop", (PyCFunction) _wrap_Timer_Stop, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Timer_Notify", (PyCFunction) _wrap_Timer_Notify, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Timer_IsRunning", (PyCFunction) _wrap_Timer_IsRunning, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Timer_GetInterval", (PyCFunction) _wrap_Timer_GetInterval, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Timer_IsOneShot", (PyCFunction) _wrap_Timer_IsOneShot, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -32956,7 +33091,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Process_Open", (PyCFunction) _wrap_Process_Open, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_Process", (PyCFunction) _wrap_new_Process, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Process__setCallbackInfo", (PyCFunction) _wrap_Process__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Process_base_OnTerminate", (PyCFunction) _wrap_Process_base_OnTerminate, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Process_OnTerminate", (PyCFunction) _wrap_Process_OnTerminate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Process_Redirect", (PyCFunction) _wrap_Process_Redirect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Process_IsRedirected", (PyCFunction) _wrap_Process_IsRedirected, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Process_Detach", (PyCFunction) _wrap_Process_Detach, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -33433,36 +33568,38 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DropSource_GetDataObject", (PyCFunction) _wrap_DropSource_GetDataObject, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropSource_SetCursor", (PyCFunction) _wrap_DropSource_SetCursor, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropSource_DoDragDrop", (PyCFunction) _wrap_DropSource_DoDragDrop, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"DropSource_base_GiveFeedback", (PyCFunction) _wrap_DropSource_base_GiveFeedback, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DropSource_GiveFeedback", (PyCFunction) _wrap_DropSource_GiveFeedback, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropSource_swigregister", DropSource_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_DropTarget", (PyCFunction) _wrap_new_DropTarget, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget__setCallbackInfo", (PyCFunction) _wrap_DropTarget__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_DropTarget", (PyCFunction) _wrap_delete_DropTarget, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget_GetDataObject", (PyCFunction) _wrap_DropTarget_GetDataObject, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget_SetDataObject", (PyCFunction) _wrap_DropTarget_SetDataObject, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"DropTarget_base_OnEnter", (PyCFunction) _wrap_DropTarget_base_OnEnter, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"DropTarget_base_OnDragOver", (PyCFunction) _wrap_DropTarget_base_OnDragOver, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"DropTarget_base_OnLeave", (PyCFunction) _wrap_DropTarget_base_OnLeave, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"DropTarget_base_OnDrop", (PyCFunction) _wrap_DropTarget_base_OnDrop, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DropTarget_OnEnter", (PyCFunction) _wrap_DropTarget_OnEnter, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DropTarget_OnDragOver", (PyCFunction) _wrap_DropTarget_OnDragOver, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DropTarget_OnLeave", (PyCFunction) _wrap_DropTarget_OnLeave, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DropTarget_OnDrop", (PyCFunction) _wrap_DropTarget_OnDrop, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget_GetData", (PyCFunction) _wrap_DropTarget_GetData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget_SetDefaultAction", (PyCFunction) _wrap_DropTarget_SetDefaultAction, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget_GetDefaultAction", (PyCFunction) _wrap_DropTarget_GetDefaultAction, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DropTarget_swigregister", DropTarget_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_TextDropTarget", (PyCFunction) _wrap_new_TextDropTarget, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextDropTarget__setCallbackInfo", (PyCFunction) _wrap_TextDropTarget__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TextDropTarget_base_OnEnter", (PyCFunction) _wrap_TextDropTarget_base_OnEnter, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TextDropTarget_base_OnDragOver", (PyCFunction) _wrap_TextDropTarget_base_OnDragOver, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TextDropTarget_base_OnLeave", (PyCFunction) _wrap_TextDropTarget_base_OnLeave, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TextDropTarget_base_OnDrop", (PyCFunction) _wrap_TextDropTarget_base_OnDrop, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"TextDropTarget_base_OnData", (PyCFunction) _wrap_TextDropTarget_base_OnData, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TextDropTarget_OnDropText", (PyCFunction) _wrap_TextDropTarget_OnDropText, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TextDropTarget_OnEnter", (PyCFunction) _wrap_TextDropTarget_OnEnter, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TextDropTarget_OnDragOver", (PyCFunction) _wrap_TextDropTarget_OnDragOver, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TextDropTarget_OnLeave", (PyCFunction) _wrap_TextDropTarget_OnLeave, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TextDropTarget_OnDrop", (PyCFunction) _wrap_TextDropTarget_OnDrop, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TextDropTarget_OnData", (PyCFunction) _wrap_TextDropTarget_OnData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextDropTarget_swigregister", TextDropTarget_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileDropTarget", (PyCFunction) _wrap_new_FileDropTarget, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FileDropTarget__setCallbackInfo", (PyCFunction) _wrap_FileDropTarget__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"FileDropTarget_base_OnEnter", (PyCFunction) _wrap_FileDropTarget_base_OnEnter, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"FileDropTarget_base_OnDragOver", (PyCFunction) _wrap_FileDropTarget_base_OnDragOver, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"FileDropTarget_base_OnLeave", (PyCFunction) _wrap_FileDropTarget_base_OnLeave, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"FileDropTarget_base_OnDrop", (PyCFunction) _wrap_FileDropTarget_base_OnDrop, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"FileDropTarget_base_OnData", (PyCFunction) _wrap_FileDropTarget_base_OnData, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FileDropTarget_OnDropFiles", (PyCFunction) _wrap_FileDropTarget_OnDropFiles, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FileDropTarget_OnEnter", (PyCFunction) _wrap_FileDropTarget_OnEnter, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FileDropTarget_OnDragOver", (PyCFunction) _wrap_FileDropTarget_OnDragOver, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FileDropTarget_OnLeave", (PyCFunction) _wrap_FileDropTarget_OnLeave, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FileDropTarget_OnDrop", (PyCFunction) _wrap_FileDropTarget_OnDrop, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FileDropTarget_OnData", (PyCFunction) _wrap_FileDropTarget_OnData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FileDropTarget_swigregister", FileDropTarget_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Clipboard", (PyCFunction) _wrap_new_Clipboard, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_Clipboard", (PyCFunction) _wrap_delete_Clipboard, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -35497,6 +35634,9 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"SYS_CAN_ICONIZE_FRAME", SWIG_From_int(static_cast<int >(wxSYS_CAN_ICONIZE_FRAME))); 
+    }
+    {
+        PyDict_SetItemString(d,"SYS_TABLET_PRESENT", SWIG_From_int(static_cast<int >(wxSYS_TABLET_PRESENT))); 
     }
     {
         PyDict_SetItemString(d,"SYS_SCREEN_NONE", SWIG_From_int(static_cast<int >(wxSYS_SCREEN_NONE))); 

@@ -134,9 +134,14 @@ class PyGridCellRenderer(GridCellRenderer):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _grid.PyGridCellRenderer__setCallbackInfo(*args, **kwargs)
 
-    def base_SetParameters(*args, **kwargs):
-        """base_SetParameters(self, String params)"""
-        return _grid.PyGridCellRenderer_base_SetParameters(*args, **kwargs)
+    def SetParameters(*args, **kwargs):
+        """SetParameters(self, String params)"""
+        return _grid.PyGridCellRenderer_SetParameters(*args, **kwargs)
+
+    def base_SetParameters(*args, **kw):
+        return PyGridCellRenderer.SetParameters(*args, **kw)
+    base_SetParameters = wx._deprecated(base_SetParameters,
+                                   "Please use PyGridCellRenderer.SetParameters instead.")
 
 
 class PyGridCellRendererPtr(PyGridCellRenderer):
@@ -421,41 +426,88 @@ class PyGridCellEditor(GridCellEditor):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _grid.PyGridCellEditor__setCallbackInfo(*args, **kwargs)
 
-    def base_SetSize(*args, **kwargs):
-        """base_SetSize(self, Rect rect)"""
-        return _grid.PyGridCellEditor_base_SetSize(*args, **kwargs)
+    def SetSize(*args, **kwargs):
+        """SetSize(self, Rect rect)"""
+        return _grid.PyGridCellEditor_SetSize(*args, **kwargs)
 
-    def base_Show(*args, **kwargs):
-        """base_Show(self, bool show, GridCellAttr attr=None)"""
-        return _grid.PyGridCellEditor_base_Show(*args, **kwargs)
+    def Show(*args, **kwargs):
+        """Show(self, bool show, GridCellAttr attr=None)"""
+        return _grid.PyGridCellEditor_Show(*args, **kwargs)
 
-    def base_PaintBackground(*args, **kwargs):
-        """base_PaintBackground(self, Rect rectCell, GridCellAttr attr)"""
-        return _grid.PyGridCellEditor_base_PaintBackground(*args, **kwargs)
+    def PaintBackground(*args, **kwargs):
+        """PaintBackground(self, Rect rectCell, GridCellAttr attr)"""
+        return _grid.PyGridCellEditor_PaintBackground(*args, **kwargs)
 
-    def base_IsAcceptedKey(*args, **kwargs):
-        """base_IsAcceptedKey(self, KeyEvent event) -> bool"""
-        return _grid.PyGridCellEditor_base_IsAcceptedKey(*args, **kwargs)
+    def IsAcceptedKey(*args, **kwargs):
+        """IsAcceptedKey(self, KeyEvent event) -> bool"""
+        return _grid.PyGridCellEditor_IsAcceptedKey(*args, **kwargs)
 
-    def base_StartingKey(*args, **kwargs):
-        """base_StartingKey(self, KeyEvent event)"""
-        return _grid.PyGridCellEditor_base_StartingKey(*args, **kwargs)
+    def StartingKey(*args, **kwargs):
+        """StartingKey(self, KeyEvent event)"""
+        return _grid.PyGridCellEditor_StartingKey(*args, **kwargs)
 
-    def base_StartingClick(*args, **kwargs):
-        """base_StartingClick(self)"""
-        return _grid.PyGridCellEditor_base_StartingClick(*args, **kwargs)
+    def StartingClick(*args, **kwargs):
+        """StartingClick(self)"""
+        return _grid.PyGridCellEditor_StartingClick(*args, **kwargs)
 
-    def base_HandleReturn(*args, **kwargs):
-        """base_HandleReturn(self, KeyEvent event)"""
-        return _grid.PyGridCellEditor_base_HandleReturn(*args, **kwargs)
+    def HandleReturn(*args, **kwargs):
+        """HandleReturn(self, KeyEvent event)"""
+        return _grid.PyGridCellEditor_HandleReturn(*args, **kwargs)
 
-    def base_Destroy(*args, **kwargs):
-        """base_Destroy(self)"""
-        return _grid.PyGridCellEditor_base_Destroy(*args, **kwargs)
+    def Destroy(*args, **kwargs):
+        """Destroy(self)"""
+        val = _grid.PyGridCellEditor_Destroy(*args, **kwargs)
+        args[0].thisown = 0
+        return val
 
-    def base_SetParameters(*args, **kwargs):
-        """base_SetParameters(self, String params)"""
-        return _grid.PyGridCellEditor_base_SetParameters(*args, **kwargs)
+    def SetParameters(*args, **kwargs):
+        """SetParameters(self, String params)"""
+        return _grid.PyGridCellEditor_SetParameters(*args, **kwargs)
+
+    def base_SetSize(*args, **kw):
+        return PyGridCellEditor.SetSize(*args, **kw)
+    base_SetSize = wx._deprecated(base_SetSize,
+                                   "Please use PyGridCellEditor.SetSize instead.")
+
+    def base_Show(*args, **kw):
+        return PyGridCellEditor.Show(*args, **kw)
+    base_Show = wx._deprecated(base_Show,
+                                   "Please use PyGridCellEditor.Show instead.")
+
+    def base_PaintBackground(*args, **kw):
+        return PyGridCellEditor.PaintBackground(*args, **kw)
+    base_PaintBackground = wx._deprecated(base_PaintBackground,
+                                   "Please use PyGridCellEditor.PaintBackground instead.")
+
+    def base_IsAcceptedKey(*args, **kw):
+        return PyGridCellEditor.IsAcceptedKey(*args, **kw)
+    base_IsAcceptedKey = wx._deprecated(base_IsAcceptedKey,
+                                   "Please use PyGridCellEditor.IsAcceptedKey instead.")
+
+    def base_StartingKey(*args, **kw):
+        return PyGridCellEditor.StartingKey(*args, **kw)
+    base_StartingKey = wx._deprecated(base_StartingKey,
+                                   "Please use PyGridCellEditor.StartingKey instead.")
+
+    def base_StartingClick(*args, **kw):
+        return PyGridCellEditor.StartingClick(*args, **kw)
+    base_StartingClick = wx._deprecated(base_StartingClick,
+                                   "Please use PyGridCellEditor.StartingClick instead.")
+
+    def base_HandleReturn(*args, **kw):
+        return PyGridCellEditor.HandleReturn(*args, **kw)
+    base_HandleReturn = wx._deprecated(base_HandleReturn,
+                                   "Please use PyGridCellEditor.HandleReturn instead.")
+
+    def base_Destroy(*args, **kw):
+        return PyGridCellEditor.Destroy(*args, **kw)
+    base_Destroy = wx._deprecated(base_Destroy,
+                                   "Please use PyGridCellEditor.Destroy instead.")
+
+    def base_SetParameters(*args, **kw):
+        return PyGridCellEditor.SetParameters(*args, **kw)
+    base_SetParameters = wx._deprecated(base_SetParameters,
+                                   "Please use PyGridCellEditor.SetParameters instead.")
 
 
 class PyGridCellEditorPtr(PyGridCellEditor):
@@ -859,21 +911,41 @@ class PyGridCellAttrProvider(GridCellAttrProvider):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _grid.PyGridCellAttrProvider__setCallbackInfo(*args, **kwargs)
 
-    def base_GetAttr(*args, **kwargs):
-        """base_GetAttr(self, int row, int col, int kind) -> GridCellAttr"""
-        return _grid.PyGridCellAttrProvider_base_GetAttr(*args, **kwargs)
+    def GetAttr(*args, **kwargs):
+        """GetAttr(self, int row, int col, int kind) -> GridCellAttr"""
+        return _grid.PyGridCellAttrProvider_GetAttr(*args, **kwargs)
 
-    def base_SetAttr(*args, **kwargs):
-        """base_SetAttr(self, GridCellAttr attr, int row, int col)"""
-        return _grid.PyGridCellAttrProvider_base_SetAttr(*args, **kwargs)
+    def SetAttr(*args, **kwargs):
+        """SetAttr(self, GridCellAttr attr, int row, int col)"""
+        return _grid.PyGridCellAttrProvider_SetAttr(*args, **kwargs)
 
-    def base_SetRowAttr(*args, **kwargs):
-        """base_SetRowAttr(self, GridCellAttr attr, int row)"""
-        return _grid.PyGridCellAttrProvider_base_SetRowAttr(*args, **kwargs)
+    def SetRowAttr(*args, **kwargs):
+        """SetRowAttr(self, GridCellAttr attr, int row)"""
+        return _grid.PyGridCellAttrProvider_SetRowAttr(*args, **kwargs)
 
-    def base_SetColAttr(*args, **kwargs):
-        """base_SetColAttr(self, GridCellAttr attr, int col)"""
-        return _grid.PyGridCellAttrProvider_base_SetColAttr(*args, **kwargs)
+    def SetColAttr(*args, **kwargs):
+        """SetColAttr(self, GridCellAttr attr, int col)"""
+        return _grid.PyGridCellAttrProvider_SetColAttr(*args, **kwargs)
+
+    def base_GetAttr(*args, **kw):
+        return PyGridCellAttrProvider.GetAttr(*args, **kw)
+    base_GetAttr = wx._deprecated(base_GetAttr,
+                                   "Please use PyGridCellAttrProvider.GetAttr instead.")
+
+    def base_SetAttr(*args, **kw):
+        return PyGridCellAttrProvider.SetAttr(*args, **kw)
+    base_SetAttr = wx._deprecated(base_SetAttr,
+                                   "Please use PyGridCellAttrProvider.SetAttr instead.")
+
+    def base_SetRowAttr(*args, **kw):
+        return PyGridCellAttrProvider.SetRowAttr(*args, **kw)
+    base_SetRowAttr = wx._deprecated(base_SetRowAttr,
+                                   "Please use PyGridCellAttrProvider.SetRowAttr instead.")
+
+    def base_SetColAttr(*args, **kw):
+        return PyGridCellAttrProvider.SetColAttr(*args, **kw)
+    base_SetColAttr = wx._deprecated(base_SetColAttr,
+                                   "Please use PyGridCellAttrProvider.SetColAttr instead.")
 
 
 class PyGridCellAttrProviderPtr(PyGridCellAttrProvider):
@@ -1062,81 +1134,176 @@ class PyGridTableBase(GridTableBase):
         args[0].thisown = 0
         return val
 
-    def base_GetTypeName(*args, **kwargs):
-        """base_GetTypeName(self, int row, int col) -> String"""
-        return _grid.PyGridTableBase_base_GetTypeName(*args, **kwargs)
+    def GetTypeName(*args, **kwargs):
+        """GetTypeName(self, int row, int col) -> String"""
+        return _grid.PyGridTableBase_GetTypeName(*args, **kwargs)
 
-    def base_CanGetValueAs(*args, **kwargs):
-        """base_CanGetValueAs(self, int row, int col, String typeName) -> bool"""
-        return _grid.PyGridTableBase_base_CanGetValueAs(*args, **kwargs)
+    def CanGetValueAs(*args, **kwargs):
+        """CanGetValueAs(self, int row, int col, String typeName) -> bool"""
+        return _grid.PyGridTableBase_CanGetValueAs(*args, **kwargs)
 
-    def base_CanSetValueAs(*args, **kwargs):
-        """base_CanSetValueAs(self, int row, int col, String typeName) -> bool"""
-        return _grid.PyGridTableBase_base_CanSetValueAs(*args, **kwargs)
+    def CanSetValueAs(*args, **kwargs):
+        """CanSetValueAs(self, int row, int col, String typeName) -> bool"""
+        return _grid.PyGridTableBase_CanSetValueAs(*args, **kwargs)
 
-    def base_Clear(*args, **kwargs):
-        """base_Clear(self)"""
-        return _grid.PyGridTableBase_base_Clear(*args, **kwargs)
+    def Clear(*args, **kwargs):
+        """Clear(self)"""
+        return _grid.PyGridTableBase_Clear(*args, **kwargs)
 
-    def base_InsertRows(*args, **kwargs):
-        """base_InsertRows(self, size_t pos=0, size_t numRows=1) -> bool"""
-        return _grid.PyGridTableBase_base_InsertRows(*args, **kwargs)
+    def InsertRows(*args, **kwargs):
+        """InsertRows(self, size_t pos=0, size_t numRows=1) -> bool"""
+        return _grid.PyGridTableBase_InsertRows(*args, **kwargs)
 
-    def base_AppendRows(*args, **kwargs):
-        """base_AppendRows(self, size_t numRows=1) -> bool"""
-        return _grid.PyGridTableBase_base_AppendRows(*args, **kwargs)
+    def AppendRows(*args, **kwargs):
+        """AppendRows(self, size_t numRows=1) -> bool"""
+        return _grid.PyGridTableBase_AppendRows(*args, **kwargs)
 
-    def base_DeleteRows(*args, **kwargs):
-        """base_DeleteRows(self, size_t pos=0, size_t numRows=1) -> bool"""
-        return _grid.PyGridTableBase_base_DeleteRows(*args, **kwargs)
+    def DeleteRows(*args, **kwargs):
+        """DeleteRows(self, size_t pos=0, size_t numRows=1) -> bool"""
+        return _grid.PyGridTableBase_DeleteRows(*args, **kwargs)
 
-    def base_InsertCols(*args, **kwargs):
-        """base_InsertCols(self, size_t pos=0, size_t numCols=1) -> bool"""
-        return _grid.PyGridTableBase_base_InsertCols(*args, **kwargs)
+    def InsertCols(*args, **kwargs):
+        """InsertCols(self, size_t pos=0, size_t numCols=1) -> bool"""
+        return _grid.PyGridTableBase_InsertCols(*args, **kwargs)
 
-    def base_AppendCols(*args, **kwargs):
-        """base_AppendCols(self, size_t numCols=1) -> bool"""
-        return _grid.PyGridTableBase_base_AppendCols(*args, **kwargs)
+    def AppendCols(*args, **kwargs):
+        """AppendCols(self, size_t numCols=1) -> bool"""
+        return _grid.PyGridTableBase_AppendCols(*args, **kwargs)
 
-    def base_DeleteCols(*args, **kwargs):
-        """base_DeleteCols(self, size_t pos=0, size_t numCols=1) -> bool"""
-        return _grid.PyGridTableBase_base_DeleteCols(*args, **kwargs)
+    def DeleteCols(*args, **kwargs):
+        """DeleteCols(self, size_t pos=0, size_t numCols=1) -> bool"""
+        return _grid.PyGridTableBase_DeleteCols(*args, **kwargs)
 
-    def base_GetRowLabelValue(*args, **kwargs):
-        """base_GetRowLabelValue(self, int row) -> String"""
-        return _grid.PyGridTableBase_base_GetRowLabelValue(*args, **kwargs)
+    def GetRowLabelValue(*args, **kwargs):
+        """GetRowLabelValue(self, int row) -> String"""
+        return _grid.PyGridTableBase_GetRowLabelValue(*args, **kwargs)
 
-    def base_GetColLabelValue(*args, **kwargs):
-        """base_GetColLabelValue(self, int col) -> String"""
-        return _grid.PyGridTableBase_base_GetColLabelValue(*args, **kwargs)
+    def GetColLabelValue(*args, **kwargs):
+        """GetColLabelValue(self, int col) -> String"""
+        return _grid.PyGridTableBase_GetColLabelValue(*args, **kwargs)
 
-    def base_SetRowLabelValue(*args, **kwargs):
-        """base_SetRowLabelValue(self, int row, String value)"""
-        return _grid.PyGridTableBase_base_SetRowLabelValue(*args, **kwargs)
+    def SetRowLabelValue(*args, **kwargs):
+        """SetRowLabelValue(self, int row, String value)"""
+        return _grid.PyGridTableBase_SetRowLabelValue(*args, **kwargs)
 
-    def base_SetColLabelValue(*args, **kwargs):
-        """base_SetColLabelValue(self, int col, String value)"""
-        return _grid.PyGridTableBase_base_SetColLabelValue(*args, **kwargs)
+    def SetColLabelValue(*args, **kwargs):
+        """SetColLabelValue(self, int col, String value)"""
+        return _grid.PyGridTableBase_SetColLabelValue(*args, **kwargs)
 
-    def base_CanHaveAttributes(*args, **kwargs):
-        """base_CanHaveAttributes(self) -> bool"""
-        return _grid.PyGridTableBase_base_CanHaveAttributes(*args, **kwargs)
+    def CanHaveAttributes(*args, **kwargs):
+        """CanHaveAttributes(self) -> bool"""
+        return _grid.PyGridTableBase_CanHaveAttributes(*args, **kwargs)
 
-    def base_GetAttr(*args, **kwargs):
-        """base_GetAttr(self, int row, int col, int kind) -> GridCellAttr"""
-        return _grid.PyGridTableBase_base_GetAttr(*args, **kwargs)
+    def GetAttr(*args, **kwargs):
+        """GetAttr(self, int row, int col, int kind) -> GridCellAttr"""
+        return _grid.PyGridTableBase_GetAttr(*args, **kwargs)
 
-    def base_SetAttr(*args, **kwargs):
-        """base_SetAttr(self, GridCellAttr attr, int row, int col)"""
-        return _grid.PyGridTableBase_base_SetAttr(*args, **kwargs)
+    def SetAttr(*args, **kwargs):
+        """SetAttr(self, GridCellAttr attr, int row, int col)"""
+        return _grid.PyGridTableBase_SetAttr(*args, **kwargs)
 
-    def base_SetRowAttr(*args, **kwargs):
-        """base_SetRowAttr(self, GridCellAttr attr, int row)"""
-        return _grid.PyGridTableBase_base_SetRowAttr(*args, **kwargs)
+    def SetRowAttr(*args, **kwargs):
+        """SetRowAttr(self, GridCellAttr attr, int row)"""
+        return _grid.PyGridTableBase_SetRowAttr(*args, **kwargs)
 
-    def base_SetColAttr(*args, **kwargs):
-        """base_SetColAttr(self, GridCellAttr attr, int col)"""
-        return _grid.PyGridTableBase_base_SetColAttr(*args, **kwargs)
+    def SetColAttr(*args, **kwargs):
+        """SetColAttr(self, GridCellAttr attr, int col)"""
+        return _grid.PyGridTableBase_SetColAttr(*args, **kwargs)
+
+    def base_GetTypeName(*args, **kw):
+        return PyGridTableBase.GetTypeName(*args, **kw)
+    base_GetTypeName = wx._deprecated(base_GetTypeName,
+                                   "Please use PyGridTableBase.GetTypeName instead.")
+
+    def base_CanGetValueAs(*args, **kw):
+        return PyGridTableBase.CanGetValueAs(*args, **kw)
+    base_CanGetValueAs = wx._deprecated(base_CanGetValueAs,
+                                   "Please use PyGridTableBase.CanGetValueAs instead.")
+
+    def base_CanSetValueAs(*args, **kw):
+        return PyGridTableBase.CanSetValueAs(*args, **kw)
+    base_CanSetValueAs = wx._deprecated(base_CanSetValueAs,
+                                   "Please use PyGridTableBase.CanSetValueAs instead.")
+
+    def base_Clear(*args, **kw):
+        return PyGridTableBase.Clear(*args, **kw)
+    base_Clear = wx._deprecated(base_Clear,
+                                   "Please use PyGridTableBase.Clear instead.")
+
+    def base_InsertRows(*args, **kw):
+        return PyGridTableBase.InsertRows(*args, **kw)
+    base_InsertRows = wx._deprecated(base_InsertRows,
+                                   "Please use PyGridTableBase.InsertRows instead.")
+
+    def base_AppendRows(*args, **kw):
+        return PyGridTableBase.AppendRows(*args, **kw)
+    base_AppendRows = wx._deprecated(base_AppendRows,
+                                   "Please use PyGridTableBase.AppendRows instead.")
+
+    def base_DeleteRows(*args, **kw):
+        return PyGridTableBase.DeleteRows(*args, **kw)
+    base_DeleteRows = wx._deprecated(base_DeleteRows,
+                                   "Please use PyGridTableBase.DeleteRows instead.")
+
+    def base_InsertCols(*args, **kw):
+        return PyGridTableBase.InsertCols(*args, **kw)
+    base_InsertCols = wx._deprecated(base_InsertCols,
+                                   "Please use PyGridTableBase.InsertCols instead.")
+
+    def base_AppendCols(*args, **kw):
+        return PyGridTableBase.AppendCols(*args, **kw)
+    base_AppendCols = wx._deprecated(base_AppendCols,
+                                   "Please use PyGridTableBase.AppendCols instead.")
+
+    def base_DeleteCols(*args, **kw):
+        return PyGridTableBase.DeleteCols(*args, **kw)
+    base_DeleteCols = wx._deprecated(base_DeleteCols,
+                                   "Please use PyGridTableBase.DeleteCols instead.")
+
+    def base_GetRowLabelValue(*args, **kw):
+        return PyGridTableBase.GetRowLabelValue(*args, **kw)
+    base_GetRowLabelValue = wx._deprecated(base_GetRowLabelValue,
+                                   "Please use PyGridTableBase.GetRowLabelValue instead.")
+
+    def base_GetColLabelValue(*args, **kw):
+        return PyGridTableBase.GetColLabelValue(*args, **kw)
+    base_GetColLabelValue = wx._deprecated(base_GetColLabelValue,
+                                   "Please use PyGridTableBase.GetColLabelValue instead.")
+
+    def base_SetRowLabelValue(*args, **kw):
+        return PyGridTableBase.SetRowLabelValue(*args, **kw)
+    base_SetRowLabelValue = wx._deprecated(base_SetRowLabelValue,
+                                   "Please use PyGridTableBase.SetRowLabelValue instead.")
+
+    def base_SetColLabelValue(*args, **kw):
+        return PyGridTableBase.SetColLabelValue(*args, **kw)
+    base_SetColLabelValue = wx._deprecated(base_SetColLabelValue,
+                                   "Please use PyGridTableBase.SetColLabelValue instead.")
+
+    def base_CanHaveAttributes(*args, **kw):
+        return PyGridTableBase.CanHaveAttributes(*args, **kw)
+    base_CanHaveAttributes = wx._deprecated(base_CanHaveAttributes,
+                                   "Please use PyGridTableBase.CanHaveAttributes instead.")
+
+    def base_GetAttr(*args, **kw):
+        return PyGridTableBase.GetAttr(*args, **kw)
+    base_GetAttr = wx._deprecated(base_GetAttr,
+                                   "Please use PyGridTableBase.GetAttr instead.")
+
+    def base_SetAttr(*args, **kw):
+        return PyGridTableBase.SetAttr(*args, **kw)
+    base_SetAttr = wx._deprecated(base_SetAttr,
+                                   "Please use PyGridTableBase.SetAttr instead.")
+
+    def base_SetRowAttr(*args, **kw):
+        return PyGridTableBase.SetRowAttr(*args, **kw)
+    base_SetRowAttr = wx._deprecated(base_SetRowAttr,
+                                   "Please use PyGridTableBase.SetRowAttr instead.")
+
+    def base_SetColAttr(*args, **kw):
+        return PyGridTableBase.SetColAttr(*args, **kw)
+    base_SetColAttr = wx._deprecated(base_SetColAttr,
+                                   "Please use PyGridTableBase.SetColAttr instead.")
 
 
 class PyGridTableBasePtr(PyGridTableBase):

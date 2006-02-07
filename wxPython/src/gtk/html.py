@@ -1160,21 +1160,41 @@ class HtmlWindow(_windows.ScrolledWindow):
         """ToText(self) -> String"""
         return _html.HtmlWindow_ToText(*args, **kwargs)
 
-    def base_OnLinkClicked(*args, **kwargs):
-        """base_OnLinkClicked(self, HtmlLinkInfo link)"""
-        return _html.HtmlWindow_base_OnLinkClicked(*args, **kwargs)
+    def OnLinkClicked(*args, **kwargs):
+        """OnLinkClicked(self, HtmlLinkInfo link)"""
+        return _html.HtmlWindow_OnLinkClicked(*args, **kwargs)
 
-    def base_OnSetTitle(*args, **kwargs):
-        """base_OnSetTitle(self, String title)"""
-        return _html.HtmlWindow_base_OnSetTitle(*args, **kwargs)
+    def OnSetTitle(*args, **kwargs):
+        """OnSetTitle(self, String title)"""
+        return _html.HtmlWindow_OnSetTitle(*args, **kwargs)
 
-    def base_OnCellMouseHover(*args, **kwargs):
-        """base_OnCellMouseHover(self, HtmlCell cell, int x, int y)"""
-        return _html.HtmlWindow_base_OnCellMouseHover(*args, **kwargs)
+    def OnCellMouseHover(*args, **kwargs):
+        """OnCellMouseHover(self, HtmlCell cell, int x, int y)"""
+        return _html.HtmlWindow_OnCellMouseHover(*args, **kwargs)
 
-    def base_OnCellClicked(*args, **kwargs):
-        """base_OnCellClicked(self, HtmlCell cell, int x, int y, MouseEvent event)"""
-        return _html.HtmlWindow_base_OnCellClicked(*args, **kwargs)
+    def OnCellClicked(*args, **kwargs):
+        """OnCellClicked(self, HtmlCell cell, int x, int y, MouseEvent event)"""
+        return _html.HtmlWindow_OnCellClicked(*args, **kwargs)
+
+    def base_OnLinkClicked(*args, **kw):
+        return HtmlWindow.OnLinkClicked(*args, **kw)
+    base_OnLinkClicked = wx._deprecated(base_OnLinkClicked,
+                                   "Please use HtmlWindow.OnLinkClicked instead.")
+
+    def base_OnSetTitle(*args, **kw):
+        return HtmlWindow.OnSetTitle(*args, **kw)
+    base_OnSetTitle = wx._deprecated(base_OnSetTitle,
+                                   "Please use HtmlWindow.OnSetTitle instead.")
+
+    def base_OnCellMouseHover(*args, **kw):
+        return HtmlWindow.OnCellMouseHover(*args, **kw)
+    base_OnCellMouseHover = wx._deprecated(base_OnCellMouseHover,
+                                   "Please use HtmlWindow.OnCellMouseHover instead.")
+
+    def base_OnCellClicked(*args, **kw):
+        return HtmlWindow.OnCellClicked(*args, **kw)
+    base_OnCellClicked = wx._deprecated(base_OnCellClicked,
+                                   "Please use HtmlWindow.OnCellClicked instead.")
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
