@@ -393,9 +393,6 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
         wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
 }
 
-void wxPyPrintout::base_GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
-    wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
-}
 
 
 IMP_PYCALLBACK_BOOL_INTINT(wxPyPrintout, wxPrintout, OnBeginDocument);
@@ -452,15 +449,22 @@ public:
     void SetIsPreview(bool p);
 
     
-    bool base_OnBeginDocument(int startPage, int endPage);
-    void base_OnEndDocument();
-    void base_OnBeginPrinting();
-    void base_OnEndPrinting();
-    void base_OnPreparePrinting();
-    bool base_HasPage(int page);
+    bool OnBeginDocument(int startPage, int endPage);
+    void OnEndDocument();
+    void OnBeginPrinting();
+    void OnEndPrinting();
+    void OnPreparePrinting();
+    bool HasPage(int page);
     DocDeclA(
-        void, base_GetPageInfo(int *OUTPUT, int *OUTPUT, int *OUTPUT, int *OUTPUT),
-        "base_GetPageInfo() -> (minPage, maxPage, pageFrom, pageTo)");
+        void, GetPageInfo(int *OUTPUT, int *OUTPUT, int *OUTPUT, int *OUTPUT),
+        "GetPageInfo() -> (minPage, maxPage, pageFrom, pageTo)");
+    
+    %MAKE_BASE_FUNC(Printout, OnBeginDocument);
+    %MAKE_BASE_FUNC(Printout, OnEndDocument);
+    %MAKE_BASE_FUNC(Printout, OnBeginPrinting);
+    %MAKE_BASE_FUNC(Printout, OnEndPrinting);
+    %MAKE_BASE_FUNC(Printout, OnPreparePrinting);
+    %MAKE_BASE_FUNC(Printout, GetPageInfo);
 };
 
 //---------------------------------------------------------------------------
@@ -617,8 +621,7 @@ public:
 %{
 
 #define DEC_PYCALLBACK_BOOL_PREWINDC(CBNAME)                                            \
-    bool CBNAME(wxPreviewCanvas* a, wxDC& b);                                           \
-    bool base_##CBNAME(wxPreviewCanvas* a, wxDC& b)
+    bool CBNAME(wxPreviewCanvas* a, wxDC& b)
 
 
 #define IMP_PYCALLBACK_BOOL_PREWINDC(CLASS, PCLASS, CBNAME)                             \
@@ -637,10 +640,7 @@ public:
         if (! found)                                                                    \
             rval = PCLASS::CBNAME(a, b);                                                \
         return rval;                                                                    \
-    }                                                                                   \
-    bool CLASS::base_##CBNAME(wxPreviewCanvas* a, wxDC& b) {                            \
-        return PCLASS::CBNAME(a, b);                                                    \
-    }
+    }                                       
 
 
 
@@ -706,13 +706,21 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     
-    bool base_SetCurrentPage(int pageNum);
-    bool base_PaintPage(wxPreviewCanvas *canvas, wxDC& dc);
-    bool base_DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc);
-    bool base_RenderPage(int pageNum);
-    void base_SetZoom(int percent);
-    bool base_Print(bool interactive);
-    void base_DetermineScaling();
+    bool SetCurrentPage(int pageNum);
+    bool PaintPage(wxPreviewCanvas *canvas, wxDC& dc);
+    bool DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc);
+    bool RenderPage(int pageNum);
+    void SetZoom(int percent);
+    bool Print(bool interactive);
+    void DetermineScaling();
+
+    %MAKE_BASE_FUNC(PyPrintPreview, SetCurrentPage);
+    %MAKE_BASE_FUNC(PyPrintPreview, PaintPage);
+    %MAKE_BASE_FUNC(PyPrintPreview, DrawBlankPage);
+    %MAKE_BASE_FUNC(PyPrintPreview, RenderPage);
+    %MAKE_BASE_FUNC(PyPrintPreview, SetZoom);
+    %MAKE_BASE_FUNC(PyPrintPreview, Print);
+    %MAKE_BASE_FUNC(PyPrintPreview, DetermineScaling);
 };
 
 
@@ -769,9 +777,13 @@ public:
     void SetPreviewCanvas(wxPreviewCanvas* canvas);
     void SetControlBar(wxPreviewControlBar* bar);
 
-    void base_Initialize();
-    void base_CreateCanvas();
-    void base_CreateControlBar();
+    void Initialize();
+    void CreateCanvas();
+    void CreateControlBar();
+
+    %MAKE_BASE_FUNC(PyPreviewFrame, Initialize);
+    %MAKE_BASE_FUNC(PyPreviewFrame, CreateCanvas);
+    %MAKE_BASE_FUNC(PyPreviewFrame, CreateControlBar);
 };
 
 
@@ -825,8 +837,11 @@ public:
 
     void SetPrintPreview(wxPrintPreview* preview);
 
-    void base_CreateButtons();
-    void base_SetZoomControl(int zoom);
+    void CreateButtons();
+    void SetZoomControl(int zoom);
+
+    %MAKE_BASE_FUNC(PreviewControlBar, CreateButtons);
+    %MAKE_BASE_FUNC(PreviewControlBar, SetZoomControl);
 };
 
 //---------------------------------------------------------------------------

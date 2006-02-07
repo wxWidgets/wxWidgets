@@ -2896,7 +2896,7 @@ class DocPrintout(wx.Printout):
         """
         Not quite sure why this was overridden, but it was in wxWindows! :)
         """
-        if not wx.Printout.base_OnBeginDocument(self, startPage, endPage):
+        if not wx.Printout.OnBeginDocument(self, startPage, endPage):
             return False
         return True
 

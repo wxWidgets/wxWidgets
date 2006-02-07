@@ -154,6 +154,9 @@ public:
 
     %pythonAppend Destroy "args[0].thisown = 0";
     %extend { void Destroy() { delete self; } }
+
+    void DoLog(wxLogLevel level, const wxChar *szString, long t);
+    void DoLogString(const wxChar *szString, long t);
 };
 
 
@@ -388,8 +391,10 @@ public:
             wxLog::DoLogString(szString, t);
     }
 
+    DEC_PYCALLBACK_VOID_(Flush);
     PYPRIVATE;
 };
+IMP_PYCALLBACK_VOID_(wxPyLog, wxLog, Flush);
 %}
 
 // Now tell SWIG about it

@@ -104,8 +104,9 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    void base_OnTerminate(int pid, int status);
-
+    void OnTerminate(int pid, int status);
+    %MAKE_BASE_FUNC(Process, OnTerminate);
+        
     // call Redirect before passing the object to wxExecute() to redirect the
     // launched process stdin/stdout, then use GetInputStream() and
     // GetOutputStream() to get access to them

@@ -381,6 +381,23 @@ typedef unsigned long   wxUIntPtr;
     %enddef
 #endif
 
+
+//---------------------------------------------------------------------------
+// Generates a base_On* method that just wraps a call to the On*, and mark it
+// deprecated.  We need this because there is no longer any need for a
+// base_On* method to be able to call the C++ base class method, since our
+// virtualization code can now sense when an attempt is being made to call
+// the base class version from the derived class override.
+        
+%define %MAKE_BASE_FUNC(Class, Method)
+    %pythoncode {
+        def base_##Method(*args, **kw):
+            return Class.Method(*args, **kw)
+        base_##Method = wx._deprecated(base_##Method,
+                                       "Please use Class.Method instead.")
+    }
+%enddef    
+    
 //---------------------------------------------------------------------------
 // Forward declarations and %renames for some classes, so the autodoc strings
 // will be able to use the right types even when the real class declaration is

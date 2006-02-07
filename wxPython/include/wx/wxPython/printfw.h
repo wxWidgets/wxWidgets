@@ -32,7 +32,6 @@ public:
 
     // Since this one would be tough and ugly to do with the Macros...
     void GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo);
-    void base_GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo);
 
     PYPRIVATE;
     DECLARE_ABSTRACT_CLASS(wxPyPrintout)

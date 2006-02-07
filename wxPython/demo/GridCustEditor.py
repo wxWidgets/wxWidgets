@@ -11,15 +11,6 @@ class MyCellEditor(gridlib.PyGridCellEditor):
     grid editors.  All the methods that can be overridden are shown here.  The
     ones that must be overridden are marked with "*Must Override*" in the
     docstring.
-
-    Notice that in order to call the base class version of these special
-    methods we use the method name preceded by "base_".  This is because these
-    methods are "virtual" in C++ so if we try to call wx.GridCellEditor.Create
-    for example, then when the wxPython extension module tries to call
-    ptr->Create(...) then it actually calls the derived class version which
-    looks up the method in this class and calls it, causing a recursion loop.
-    If you don't understand any of this, don't worry, just call the "base_"
-    version instead.
     """
     def __init__(self, log):
         self.log = log
@@ -58,7 +49,7 @@ class MyCellEditor(gridlib.PyGridCellEditor):
         to set colours or fonts for the control.
         """
         self.log.write("MyCellEditor: Show(self, %s, %s)\n" % (show, attr))
-        self.base_Show(show, attr)
+        super(MyCellEditor, self).Show(show, attr)
 
 
     def PaintBackground(self, rect, attr):
@@ -126,7 +117,7 @@ class MyCellEditor(gridlib.PyGridCellEditor):
         self.log.write("MyCellEditor: IsAcceptedKey: %d\n" % (evt.GetKeyCode()))
 
         ## We can ask the base class to do it
-        #return self.base_IsAcceptedKey(evt)
+        #return super(MyCellEditor, self).IsAcceptedKey(evt)
 
         # or do it ourselves
         return (not (evt.ControlDown() or evt.AltDown()) and
@@ -172,7 +163,7 @@ class MyCellEditor(gridlib.PyGridCellEditor):
     def Destroy(self):
         """final cleanup"""
         self.log.write("MyCellEditor: Destroy\n")
-        self.base_Destroy()
+        super(MyCellEditor, self).Destroy()
 
 
     def Clone(self):

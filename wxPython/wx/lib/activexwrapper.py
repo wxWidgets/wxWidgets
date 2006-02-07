@@ -135,7 +135,7 @@ def axw_OEB(self, event):
 
 
 def axw_Cleanup(self):
-    del self._wnd
+    #del self._wnd
     self.close()
     pass
 

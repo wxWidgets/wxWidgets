@@ -51,7 +51,6 @@ MAKE_CONST_WXSTRING2(HtmlPrintingTitleStr, wxT("Printing"))
 // wx/html include files (more or less.)
 
 //---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
 %newgroup
 
 
@@ -730,7 +729,7 @@ public:
     }
 
     void OnLinkClicked(const wxHtmlLinkInfo& link);
-    void base_OnLinkClicked(const wxHtmlLinkInfo& link);
+//-    void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
     wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
                                       const wxString& url,
@@ -760,9 +759,9 @@ void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     if (! found)
         wxHtmlWindow::OnLinkClicked(link);
 }
-void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
-    wxHtmlWindow::OnLinkClicked(link);
-}
+// void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
+//     wxHtmlWindow::OnLinkClicked(link);
+// }
 
 
 wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
@@ -939,12 +938,16 @@ public:
     // Converts current page to text:
     wxString ToText();
 
-    void base_OnLinkClicked(const wxHtmlLinkInfo& link);
-    void base_OnSetTitle(const wxString& title);
-    void base_OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
-    void base_OnCellClicked(wxHtmlCell *cell,
-                            wxCoord x, wxCoord y,
-                            const wxMouseEvent& event);
+    void OnLinkClicked(const wxHtmlLinkInfo& link);
+    void OnSetTitle(const wxString& title);
+    void OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
+    void OnCellClicked(wxHtmlCell *cell,
+                       wxCoord x, wxCoord y,
+                       const wxMouseEvent& event);
+    %MAKE_BASE_FUNC(HtmlWindow, OnLinkClicked);
+    %MAKE_BASE_FUNC(HtmlWindow, OnSetTitle);
+    %MAKE_BASE_FUNC(HtmlWindow, OnCellMouseHover);
+    %MAKE_BASE_FUNC(HtmlWindow, OnCellClicked);
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

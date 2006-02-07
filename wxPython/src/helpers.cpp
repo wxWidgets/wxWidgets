@@ -177,6 +177,18 @@ int wxPyApp::OnExit() {
 }
 
 
+
+void wxPyApp::ExitMainLoop() {
+    bool found;
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if ((found = wxPyCBH_findCallback(m_myInst, "ExitMainLoop")))
+        wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
+    wxPyEndBlockThreads(blocked);
+    if (! found)
+        wxApp::ExitMainLoop();
+}  
+
+
 #ifdef __WXDEBUG__
 void wxPyApp::OnAssert(const wxChar *file,
                      int line,
@@ -468,6 +480,7 @@ void wxPyApp::_BootstrapApp()
         PyObject* method = m_myInst.GetLastFound();
         PyObject* argTuple = PyTuple_New(0);
         retval = PyEval_CallObject(method, argTuple);
+        m_myInst.clearRecursionGuard(method);
         Py_DECREF(argTuple);
         Py_DECREF(method);
         if (retval == NULL)
@@ -1717,45 +1730,80 @@ PyObject* PyFindClassWithAttr(PyObject *klass, PyObject *name)
 
 
 static
-PyObject* PyMethod_GetDefiningClass(PyObject* method, const char* name)
+PyObject* PyMethod_GetDefiningClass(PyObject* method, PyObject* nameo)
 {
     PyObject* mgc = PyMethod_GET_CLASS(method);
 
 #if PYTHON_API_VERSION <= 1010    // prior to Python 2.2, the easy way
     return mgc;
 #else                             // 2.2 and after, the hard way...
-
-    PyObject* nameo = PyString_FromString(name);
-    PyObject* klass = PyFindClassWithAttr(mgc, nameo);
-    Py_DECREF(nameo);
-    return klass;
+    return PyFindClassWithAttr(mgc, nameo);
 #endif
 }
 
 
 
+// To avoid recursion when an overridden virtual method wants to call the base
+// class version, temporarily set an attribute in the instance with the same
+// name as the method.  Then the PyObject_GetAttr in the next findCallback
+// will return this attribute and the PyMethod_Check will fail.
+
+void wxPyCallbackHelper::setRecursionGuard(PyObject* method) const
+{
+    PyFunctionObject* func = (PyFunctionObject*)PyMethod_Function(method);
+    PyObject_SetAttr(m_self, func->func_name, Py_None);
+}
+
+void wxPyCallbackHelper::clearRecursionGuard(PyObject* method) const
+{
+    PyFunctionObject* func = (PyFunctionObject*)PyMethod_Function(method);
+    if (PyObject_HasAttr(m_self, func->func_name)) {
+        PyObject_DelAttr(m_self, func->func_name);
+    }
+}
+
+// bool wxPyCallbackHelper::hasRecursionGuard(PyObject* method) const
+// {
+//     PyFunctionObject* func = (PyFunctionObject*)PyMethod_Function(method);
+//     if (PyObject_HasAttr(m_self, func->func_name)) {
+//         PyObject* attr = PyObject_GetAttr(m_self, func->func_name);
+//         bool retval = (attr == Py_None);
+//         Py_DECREF(attr);
+//         return retval;
+//     }
+//     return false;
+// }
+
+
 bool wxPyCallbackHelper::findCallback(const char* name) const {
     wxPyCallbackHelper* self = (wxPyCallbackHelper*)this; // cast away const
+    PyObject *method, *klass;
+    PyObject* nameo = PyString_FromString(name);
     self->m_lastFound = NULL;
 
     // If the object (m_self) has an attibute of the given name...
-    if (m_self && PyObject_HasAttrString(m_self, (char*)name)) {
-        PyObject *method, *klass;
-        method = PyObject_GetAttrString(m_self, (char*)name);
+    if (m_self && PyObject_HasAttr(m_self, nameo)) {
+        method = PyObject_GetAttr(m_self, nameo);
 
         // ...and if that attribute is a method, and if that method's class is
-        // not from a base class...
+        // not from the registered class or a base class...
         if (PyMethod_Check(method) &&
-            (klass = PyMethod_GetDefiningClass(method, (char*)name)) != NULL &&
-            ((klass == m_class) || PyObject_IsSubclass(klass, m_class))) {
+            (klass = PyMethod_GetDefiningClass(method, nameo)) != NULL &&
+            (klass != m_class) &&
+            PyObject_IsSubclass(klass, m_class)) {
 
-            // ...then we'll save a pointer to the method so callCallback can call it.
+            // ...then we'll save a pointer to the method so callCallback can
+            // call it.  But first, set a recursion guard in case the
+            // overridden method wants to call the base class version.
+            setRecursionGuard(method);
             self->m_lastFound = method;
         }
         else {
             Py_DECREF(method);
         }
     }
+    
+    Py_DECREF(nameo);
     return m_lastFound != NULL;
 }
 
@@ -1784,6 +1832,8 @@ PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
     PyObject* method = m_lastFound;
 
     result = PyEval_CallObject(method, argTuple);
+    clearRecursionGuard(method);
+    
     Py_DECREF(argTuple);
     Py_DECREF(method);
     if (!result) {

@@ -17,8 +17,16 @@ import wx
 import wx.activex
 
 clsID = '{CA8A9780-280D-11CF-A24D-444553540000}'
-progID = 'PDF.PdfCtrl.5'
+progID = 'AcroPDF.PDF.1'
 
+
+
+# Create eventTypes and event binders
+wxEVT_Error = wx.activex.RegisterActiveXEvent('OnError')
+wxEVT_Message = wx.activex.RegisterActiveXEvent('OnMessage')
+
+EVT_Error = wx.PyEventBinder(wxEVT_Error, 1)
+EVT_Message = wx.PyEventBinder(wxEVT_Message, 1)
 
 
 # Derive a new class from ActiveXWindow
@@ -30,6 +38,27 @@ class PDFWindow(wx.activex.ActiveXWindow):
             ID, pos, size, style, name)
         
     # Methods exported by the ActiveX object
+    def QueryInterface(self, riid):
+        return self.CallAXMethod('QueryInterface', riid)
+
+    def AddRef(self):
+        return self.CallAXMethod('AddRef')
+
+    def Release(self):
+        return self.CallAXMethod('Release')
+
+    def GetTypeInfoCount(self):
+        return self.CallAXMethod('GetTypeInfoCount')
+
+    def GetTypeInfo(self, itinfo, lcid):
+        return self.CallAXMethod('GetTypeInfo', itinfo, lcid)
+
+    def GetIDsOfNames(self, riid, rgszNames, cNames, lcid):
+        return self.CallAXMethod('GetIDsOfNames', riid, rgszNames, cNames, lcid)
+
+    def Invoke(self, dispidMember, riid, lcid, wFlags, pdispparams):
+        return self.CallAXMethod('Invoke', dispidMember, riid, lcid, wFlags, pdispparams)
+
     def LoadFile(self, fileName):
         return self.CallAXMethod('LoadFile', fileName)
 
@@ -102,28 +131,120 @@ class PDFWindow(wx.activex.ActiveXWindow):
     def setShowScrollbars(self, On):
         return self.CallAXMethod('setShowScrollbars', On)
 
-    def AboutBox(self):
-        return self.CallAXMethod('AboutBox')
+    def GetVersions(self):
+        return self.CallAXMethod('GetVersions')
+
+    def setCurrentHightlight(self, a, b, c, d):
+        return self.CallAXMethod('setCurrentHightlight', a, b, c, d)
+
+    def setCurrentHighlight(self, a, b, c, d):
+        return self.CallAXMethod('setCurrentHighlight', a, b, c, d)
+
+    def postMessage(self, strArray):
+        return self.CallAXMethod('postMessage', strArray)
+
+    # Getters, Setters and properties
+    def _get_src(self):
+        return self.GetAXProp('src')
+    def _set_src(self, src):
+        self.SetAXProp('src', src)
+    src = property(_get_src, _set_src)
+
+    def _get_messageHandler(self):
+        return self.GetAXProp('messageHandler')
+    def _set_messageHandler(self, messageHandler):
+        self.SetAXProp('messageHandler', messageHandler)
+    messagehandler = property(_get_messageHandler, _set_messageHandler)
 
 
 #  PROPERTIES
 #  --------------------
+#  src
+#      type:string  arg:string  canGet:True  canSet:True
+#  
+#  messagehandler
+#      type:VT_VARIANT  arg:VT_VARIANT  canGet:True  canSet:True
+#  
 #  
 #  
 #  
 #  METHODS
 #  --------------------
+#  QueryInterface
+#      retType:  VT_VOID
+#      params:
+#          riid
+#              in:True  out:False  optional:False  type:unsupported type 29
+#          ppvObj
+#              in:False  out:True  optional:False  type:unsupported type 26
+#  
+#  AddRef
+#      retType:  int
+#  
+#  Release
+#      retType:  int
+#  
+#  GetTypeInfoCount
+#      retType:  VT_VOID
+#      params:
+#          pctinfo
+#              in:False  out:True  optional:False  type:int
+#  
+#  GetTypeInfo
+#      retType:  VT_VOID
+#      params:
+#          itinfo
+#              in:True  out:False  optional:False  type:int
+#          lcid
+#              in:True  out:False  optional:False  type:int
+#          pptinfo
+#              in:False  out:True  optional:False  type:unsupported type 26
+#  
+#  GetIDsOfNames
+#      retType:  VT_VOID
+#      params:
+#          riid
+#              in:True  out:False  optional:False  type:unsupported type 29
+#          rgszNames
+#              in:True  out:False  optional:False  type:unsupported type 26
+#          cNames
+#              in:True  out:False  optional:False  type:int
+#          lcid
+#              in:True  out:False  optional:False  type:int
+#          rgdispid
+#              in:False  out:True  optional:False  type:int
+#  
+#  Invoke
+#      retType:  VT_VOID
+#      params:
+#          dispidMember
+#              in:True  out:False  optional:False  type:int
+#          riid
+#              in:True  out:False  optional:False  type:unsupported type 29
+#          lcid
+#              in:True  out:False  optional:False  type:int
+#          wFlags
+#              in:True  out:False  optional:False  type:int
+#          pdispparams
+#              in:True  out:False  optional:False  type:unsupported type 29
+#          pvarResult
+#              in:False  out:True  optional:False  type:VT_VARIANT
+#          pexcepinfo
+#              in:False  out:True  optional:False  type:unsupported type 29
+#          puArgErr
+#              in:False  out:True  optional:False  type:int
+#  
 #  LoadFile
 #      retType:  bool
 #      params:
 #          fileName
-#              in:False  out:False  optional:False  type:string
+#              in:True  out:False  optional:False  type:string
 #  
 #  setShowToolbar
 #      retType:  VT_VOID
 #      params:
 #          On
-#              in:False  out:False  optional:False  type:bool
+#              in:True  out:False  optional:False  type:bool
 #  
 #  gotoFirstPage
 #      retType:  VT_VOID
@@ -141,7 +262,7 @@ class PDFWindow(wx.activex.ActiveXWindow):
 #      retType:  VT_VOID
 #      params:
 #          n
-#              in:False  out:False  optional:False  type:int
+#              in:True  out:False  optional:False  type:int
 #  
 #  goForwardStack
 #      retType:  VT_VOID
@@ -153,19 +274,19 @@ class PDFWindow(wx.activex.ActiveXWindow):
 #      retType:  VT_VOID
 #      params:
 #          pageMode
-#              in:False  out:False  optional:False  type:string
+#              in:True  out:False  optional:False  type:string
 #  
 #  setLayoutMode
 #      retType:  VT_VOID
 #      params:
 #          layoutMode
-#              in:False  out:False  optional:False  type:string
+#              in:True  out:False  optional:False  type:string
 #  
 #  setNamedDest
 #      retType:  VT_VOID
 #      params:
 #          namedDest
-#              in:False  out:False  optional:False  type:string
+#              in:True  out:False  optional:False  type:string
 #  
 #  Print
 #      retType:  VT_VOID
@@ -177,61 +298,61 @@ class PDFWindow(wx.activex.ActiveXWindow):
 #      retType:  VT_VOID
 #      params:
 #          percent
-#              in:False  out:False  optional:False  type:double
+#              in:True  out:False  optional:False  type:double
 #  
 #  setZoomScroll
 #      retType:  VT_VOID
 #      params:
 #          percent
-#              in:False  out:False  optional:False  type:double
+#              in:True  out:False  optional:False  type:double
 #          left
-#              in:False  out:False  optional:False  type:double
+#              in:True  out:False  optional:False  type:double
 #          top
-#              in:False  out:False  optional:False  type:double
+#              in:True  out:False  optional:False  type:double
 #  
 #  setView
 #      retType:  VT_VOID
 #      params:
 #          viewMode
-#              in:False  out:False  optional:False  type:string
+#              in:True  out:False  optional:False  type:string
 #  
 #  setViewScroll
 #      retType:  VT_VOID
 #      params:
 #          viewMode
-#              in:False  out:False  optional:False  type:string
+#              in:True  out:False  optional:False  type:string
 #          offset
-#              in:False  out:False  optional:False  type:double
+#              in:True  out:False  optional:False  type:double
 #  
 #  setViewRect
 #      retType:  VT_VOID
 #      params:
 #          left
-#              in:False  out:False  optional:False  type:double
+#              in:True  out:False  optional:False  type:double
 #          top
-#              in:False  out:False  optional:False  type:double
+#              in:True  out:False  optional:False  type:double
 #          width
-#              in:False  out:False  optional:False  type:double
+#              in:True  out:False  optional:False  type:double
 #          height
-#              in:False  out:False  optional:False  type:double
+#              in:True  out:False  optional:False  type:double
 #  
 #  printPages
 #      retType:  VT_VOID
 #      params:
 #          from
-#              in:False  out:False  optional:False  type:int
+#              in:True  out:False  optional:False  type:int
 #          to
-#              in:False  out:False  optional:False  type:int
+#              in:True  out:False  optional:False  type:int
 #  
 #  printPagesFit
 #      retType:  VT_VOID
 #      params:
 #          from
-#              in:False  out:False  optional:False  type:int
+#              in:True  out:False  optional:False  type:int
 #          to
-#              in:False  out:False  optional:False  type:int
+#              in:True  out:False  optional:False  type:int
 #          shrinkToFit
-#              in:False  out:False  optional:False  type:bool
+#              in:True  out:False  optional:False  type:bool
 #  
 #  printAll
 #      retType:  VT_VOID
@@ -240,22 +361,58 @@ class PDFWindow(wx.activex.ActiveXWindow):
 #      retType:  VT_VOID
 #      params:
 #          shrinkToFit
-#              in:False  out:False  optional:False  type:bool
+#              in:True  out:False  optional:False  type:bool
 #  
 #  setShowScrollbars
 #      retType:  VT_VOID
 #      params:
 #          On
-#              in:False  out:False  optional:False  type:bool
+#              in:True  out:False  optional:False  type:bool
 #  
-#  AboutBox
+#  GetVersions
+#      retType:  VT_VARIANT
+#  
+#  setCurrentHightlight
 #      retType:  VT_VOID
+#      params:
+#          a
+#              in:True  out:False  optional:False  type:int
+#          b
+#              in:True  out:False  optional:False  type:int
+#          c
+#              in:True  out:False  optional:False  type:int
+#          d
+#              in:True  out:False  optional:False  type:int
+#  
+#  setCurrentHighlight
+#      retType:  VT_VOID
+#      params:
+#          a
+#              in:True  out:False  optional:False  type:int
+#          b
+#              in:True  out:False  optional:False  type:int
+#          c
+#              in:True  out:False  optional:False  type:int
+#          d
+#              in:True  out:False  optional:False  type:int
+#  
+#  postMessage
+#      retType:  VT_VOID
+#      params:
+#          strArray
+#              in:True  out:False  optional:False  type:VT_VARIANT
 #  
 #  
 #  
 #  
 #  EVENTS
 #  --------------------
+#  Error
+#      retType:  VT_VOID
+#  
+#  Message
+#      retType:  VT_VOID
+#  
 #  
 #  
 #  

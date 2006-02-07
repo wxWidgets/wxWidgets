@@ -418,14 +418,6 @@ Pierre Hjälm!) in order to make it be more easily maintainable and
 less likely to get rusty because nobody cares about the C++ lib any
 more.
 
-<p>The Python version should be mostly drop-in compatible with the
-wrapped C++ version, except for the location of the package
-(wx.lib.ogl instead of wx.ogl) and that the base class methods are
-called the normal Python way (superclass.Method(self, ...)) instead of the
-hacky way that had to be done to support overloaded methods with the
-old SWIG (self.base_Method(...))
-
-
 """
 
 if __name__ == '__main__':

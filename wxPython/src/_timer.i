@@ -32,7 +32,7 @@ enum {
 
 
 %{
-//IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
+IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
 
 IMPLEMENT_ABSTRACT_CLASS(wxPyTimer, wxTimer);
 
@@ -41,21 +41,6 @@ wxPyTimer::wxPyTimer(wxEvtHandler *owner, int id)
 {
     if (owner == NULL) SetOwner(this);
 }
-
-
-void wxPyTimer::Notify() {
-    bool found;
-    wxPyBlock_t blocked = wxPyBeginBlockThreads();
-    if ((found = wxPyCBH_findCallback(m_myInst, "Notify")))
-        wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
-    wxPyEndBlockThreads(blocked);
-    if (! found)
-        wxTimer::Notify();
-}   
-void wxPyTimer::base_Notify() {
-    wxTimer::Notify();
-}
-
 %}
 
 
@@ -101,7 +86,7 @@ public:
 
     // override this in your wxTimer-derived class if you want to process timer
     // messages in it, use non default ctor or SetOwner() otherwise
-    //virtual void Notify();
+    virtual void Notify();
 
     // return True if the timer is running
     virtual bool IsRunning() const;
