@@ -134,6 +134,7 @@ SYS_SHOW_SOUNDS = _misc_.SYS_SHOW_SOUNDS
 SYS_SWAP_BUTTONS = _misc_.SYS_SWAP_BUTTONS
 SYS_CAN_DRAW_FRAME_DECORATIONS = _misc_.SYS_CAN_DRAW_FRAME_DECORATIONS
 SYS_CAN_ICONIZE_FRAME = _misc_.SYS_CAN_ICONIZE_FRAME
+SYS_TABLET_PRESENT = _misc_.SYS_TABLET_PRESENT
 SYS_SCREEN_NONE = _misc_.SYS_SCREEN_NONE
 SYS_SCREEN_TINY = _misc_.SYS_SCREEN_TINY
 SYS_SCREEN_PDA = _misc_.SYS_SCREEN_PDA
@@ -1252,6 +1253,10 @@ class Timer(_core.EvtHandler):
         """Stop(self)"""
         return _misc_.Timer_Stop(*args, **kwargs)
 
+    def Notify(*args, **kwargs):
+        """Notify(self)"""
+        return _misc_.Timer_Notify(*args, **kwargs)
+
     def IsRunning(*args, **kwargs):
         """IsRunning(self) -> bool"""
         return _misc_.Timer_IsRunning(*args, **kwargs)
@@ -1933,9 +1938,14 @@ class Process(_core.EvtHandler):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.Process__setCallbackInfo(*args, **kwargs)
 
-    def base_OnTerminate(*args, **kwargs):
-        """base_OnTerminate(self, int pid, int status)"""
-        return _misc_.Process_base_OnTerminate(*args, **kwargs)
+    def OnTerminate(*args, **kwargs):
+        """OnTerminate(self, int pid, int status)"""
+        return _misc_.Process_OnTerminate(*args, **kwargs)
+
+    def base_OnTerminate(*args, **kw):
+        return Process.OnTerminate(*args, **kw)
+    base_OnTerminate = wx._deprecated(base_OnTerminate,
+                                   "Please use Process.OnTerminate instead.")
 
     def Redirect(*args, **kwargs):
         """Redirect(self)"""
@@ -5482,9 +5492,14 @@ class DropSource(object):
         """DoDragDrop(self, int flags=Drag_CopyOnly) -> int"""
         return _misc_.DropSource_DoDragDrop(*args, **kwargs)
 
-    def base_GiveFeedback(*args, **kwargs):
-        """base_GiveFeedback(self, int effect) -> bool"""
-        return _misc_.DropSource_base_GiveFeedback(*args, **kwargs)
+    def GiveFeedback(*args, **kwargs):
+        """GiveFeedback(self, int effect) -> bool"""
+        return _misc_.DropSource_GiveFeedback(*args, **kwargs)
+
+    def base_GiveFeedback(*args, **kw):
+        return DropSource.GiveFeedback(*args, **kw)
+    base_GiveFeedback = wx._deprecated(base_GiveFeedback,
+                                   "Please use DropSource.GiveFeedback instead.")
 
 
 class DropSourcePtr(DropSource):
@@ -5536,21 +5551,41 @@ class DropTarget(object):
         """SetDataObject(self, DataObject dataObject)"""
         return _misc_.DropTarget_SetDataObject(*args, **kwargs)
 
-    def base_OnEnter(*args, **kwargs):
-        """base_OnEnter(self, int x, int y, int def) -> int"""
-        return _misc_.DropTarget_base_OnEnter(*args, **kwargs)
+    def OnEnter(*args, **kwargs):
+        """OnEnter(self, int x, int y, int def) -> int"""
+        return _misc_.DropTarget_OnEnter(*args, **kwargs)
 
-    def base_OnDragOver(*args, **kwargs):
-        """base_OnDragOver(self, int x, int y, int def) -> int"""
-        return _misc_.DropTarget_base_OnDragOver(*args, **kwargs)
+    def OnDragOver(*args, **kwargs):
+        """OnDragOver(self, int x, int y, int def) -> int"""
+        return _misc_.DropTarget_OnDragOver(*args, **kwargs)
 
-    def base_OnLeave(*args, **kwargs):
-        """base_OnLeave(self)"""
-        return _misc_.DropTarget_base_OnLeave(*args, **kwargs)
+    def OnLeave(*args, **kwargs):
+        """OnLeave(self)"""
+        return _misc_.DropTarget_OnLeave(*args, **kwargs)
 
-    def base_OnDrop(*args, **kwargs):
-        """base_OnDrop(self, int x, int y) -> bool"""
-        return _misc_.DropTarget_base_OnDrop(*args, **kwargs)
+    def OnDrop(*args, **kwargs):
+        """OnDrop(self, int x, int y) -> bool"""
+        return _misc_.DropTarget_OnDrop(*args, **kwargs)
+
+    def base_OnEnter(*args, **kw):
+        return DropTarget.OnEnter(*args, **kw)
+    base_OnEnter = wx._deprecated(base_OnEnter,
+                                   "Please use DropTarget.OnEnter instead.")
+
+    def base_OnDragOver(*args, **kw):
+        return DropTarget.OnDragOver(*args, **kw)
+    base_OnDragOver = wx._deprecated(base_OnDragOver,
+                                   "Please use DropTarget.OnDragOver instead.")
+
+    def base_OnLeave(*args, **kw):
+        return DropTarget.OnLeave(*args, **kw)
+    base_OnLeave = wx._deprecated(base_OnLeave,
+                                   "Please use DropTarget.OnLeave instead.")
+
+    def base_OnDrop(*args, **kw):
+        return DropTarget.OnDrop(*args, **kw)
+    base_OnDrop = wx._deprecated(base_OnDrop,
+                                   "Please use DropTarget.OnDrop instead.")
 
     def GetData(*args, **kwargs):
         """GetData(self) -> bool"""
@@ -5589,25 +5624,59 @@ class TextDropTarget(DropTarget):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.TextDropTarget__setCallbackInfo(*args, **kwargs)
 
-    def base_OnEnter(*args, **kwargs):
-        """base_OnEnter(self, int x, int y, int def) -> int"""
-        return _misc_.TextDropTarget_base_OnEnter(*args, **kwargs)
+    def OnDropText(*args, **kwargs):
+        """OnDropText(self, int x, int y, String text) -> bool"""
+        return _misc_.TextDropTarget_OnDropText(*args, **kwargs)
 
-    def base_OnDragOver(*args, **kwargs):
-        """base_OnDragOver(self, int x, int y, int def) -> int"""
-        return _misc_.TextDropTarget_base_OnDragOver(*args, **kwargs)
+    def OnEnter(*args, **kwargs):
+        """OnEnter(self, int x, int y, int def) -> int"""
+        return _misc_.TextDropTarget_OnEnter(*args, **kwargs)
 
-    def base_OnLeave(*args, **kwargs):
-        """base_OnLeave(self)"""
-        return _misc_.TextDropTarget_base_OnLeave(*args, **kwargs)
+    def OnDragOver(*args, **kwargs):
+        """OnDragOver(self, int x, int y, int def) -> int"""
+        return _misc_.TextDropTarget_OnDragOver(*args, **kwargs)
 
-    def base_OnDrop(*args, **kwargs):
-        """base_OnDrop(self, int x, int y) -> bool"""
-        return _misc_.TextDropTarget_base_OnDrop(*args, **kwargs)
+    def OnLeave(*args, **kwargs):
+        """OnLeave(self)"""
+        return _misc_.TextDropTarget_OnLeave(*args, **kwargs)
 
-    def base_OnData(*args, **kwargs):
-        """base_OnData(self, int x, int y, int def) -> int"""
-        return _misc_.TextDropTarget_base_OnData(*args, **kwargs)
+    def OnDrop(*args, **kwargs):
+        """OnDrop(self, int x, int y) -> bool"""
+        return _misc_.TextDropTarget_OnDrop(*args, **kwargs)
+
+    def OnData(*args, **kwargs):
+        """OnData(self, int x, int y, int def) -> int"""
+        return _misc_.TextDropTarget_OnData(*args, **kwargs)
+
+    def base_OnDropText(*args, **kw):
+        return TextDropTarget.OnDropText(*args, **kw)
+    base_OnDropText = wx._deprecated(base_OnDropText,
+                                   "Please use TextDropTarget.OnDropText instead.")
+
+    def base_OnEnter(*args, **kw):
+        return TextDropTarget.OnEnter(*args, **kw)
+    base_OnEnter = wx._deprecated(base_OnEnter,
+                                   "Please use TextDropTarget.OnEnter instead.")
+
+    def base_OnDragOver(*args, **kw):
+        return TextDropTarget.OnDragOver(*args, **kw)
+    base_OnDragOver = wx._deprecated(base_OnDragOver,
+                                   "Please use TextDropTarget.OnDragOver instead.")
+
+    def base_OnLeave(*args, **kw):
+        return TextDropTarget.OnLeave(*args, **kw)
+    base_OnLeave = wx._deprecated(base_OnLeave,
+                                   "Please use TextDropTarget.OnLeave instead.")
+
+    def base_OnDrop(*args, **kw):
+        return TextDropTarget.OnDrop(*args, **kw)
+    base_OnDrop = wx._deprecated(base_OnDrop,
+                                   "Please use TextDropTarget.OnDrop instead.")
+
+    def base_OnData(*args, **kw):
+        return TextDropTarget.OnData(*args, **kw)
+    base_OnData = wx._deprecated(base_OnData,
+                                   "Please use TextDropTarget.OnData instead.")
 
 
 class TextDropTargetPtr(TextDropTarget):
@@ -5633,25 +5702,59 @@ class FileDropTarget(DropTarget):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.FileDropTarget__setCallbackInfo(*args, **kwargs)
 
-    def base_OnEnter(*args, **kwargs):
-        """base_OnEnter(self, int x, int y, int def) -> int"""
-        return _misc_.FileDropTarget_base_OnEnter(*args, **kwargs)
+    def OnDropFiles(*args, **kwargs):
+        """OnDropFiles(self, int x, int y, wxArrayString filenames) -> bool"""
+        return _misc_.FileDropTarget_OnDropFiles(*args, **kwargs)
 
-    def base_OnDragOver(*args, **kwargs):
-        """base_OnDragOver(self, int x, int y, int def) -> int"""
-        return _misc_.FileDropTarget_base_OnDragOver(*args, **kwargs)
+    def OnEnter(*args, **kwargs):
+        """OnEnter(self, int x, int y, int def) -> int"""
+        return _misc_.FileDropTarget_OnEnter(*args, **kwargs)
 
-    def base_OnLeave(*args, **kwargs):
-        """base_OnLeave(self)"""
-        return _misc_.FileDropTarget_base_OnLeave(*args, **kwargs)
+    def OnDragOver(*args, **kwargs):
+        """OnDragOver(self, int x, int y, int def) -> int"""
+        return _misc_.FileDropTarget_OnDragOver(*args, **kwargs)
 
-    def base_OnDrop(*args, **kwargs):
-        """base_OnDrop(self, int x, int y) -> bool"""
-        return _misc_.FileDropTarget_base_OnDrop(*args, **kwargs)
+    def OnLeave(*args, **kwargs):
+        """OnLeave(self)"""
+        return _misc_.FileDropTarget_OnLeave(*args, **kwargs)
 
-    def base_OnData(*args, **kwargs):
-        """base_OnData(self, int x, int y, int def) -> int"""
-        return _misc_.FileDropTarget_base_OnData(*args, **kwargs)
+    def OnDrop(*args, **kwargs):
+        """OnDrop(self, int x, int y) -> bool"""
+        return _misc_.FileDropTarget_OnDrop(*args, **kwargs)
+
+    def OnData(*args, **kwargs):
+        """OnData(self, int x, int y, int def) -> int"""
+        return _misc_.FileDropTarget_OnData(*args, **kwargs)
+
+    def base_OnDropFiles(*args, **kw):
+        return FileDropTarget.OnDropFiles(*args, **kw)
+    base_OnDropFiles = wx._deprecated(base_OnDropFiles,
+                                   "Please use FileDropTarget.OnDropFiles instead.")
+
+    def base_OnEnter(*args, **kw):
+        return FileDropTarget.OnEnter(*args, **kw)
+    base_OnEnter = wx._deprecated(base_OnEnter,
+                                   "Please use FileDropTarget.OnEnter instead.")
+
+    def base_OnDragOver(*args, **kw):
+        return FileDropTarget.OnDragOver(*args, **kw)
+    base_OnDragOver = wx._deprecated(base_OnDragOver,
+                                   "Please use FileDropTarget.OnDragOver instead.")
+
+    def base_OnLeave(*args, **kw):
+        return FileDropTarget.OnLeave(*args, **kw)
+    base_OnLeave = wx._deprecated(base_OnLeave,
+                                   "Please use FileDropTarget.OnLeave instead.")
+
+    def base_OnDrop(*args, **kw):
+        return FileDropTarget.OnDrop(*args, **kw)
+    base_OnDrop = wx._deprecated(base_OnDrop,
+                                   "Please use FileDropTarget.OnDrop instead.")
+
+    def base_OnData(*args, **kw):
+        return FileDropTarget.OnData(*args, **kw)
+    base_OnData = wx._deprecated(base_OnData,
+                                   "Please use FileDropTarget.OnData instead.")
 
 
 class FileDropTargetPtr(FileDropTarget):

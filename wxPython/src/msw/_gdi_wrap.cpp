@@ -13076,56 +13076,6 @@ static PyObject *_wrap_delete_DC(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_DC_BeginDrawing(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj = NULL;
-    wxDC *arg1 = (wxDC *) 0 ;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_BeginDrawing",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->BeginDrawing();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_DC_EndDrawing(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj = NULL;
-    wxDC *arg1 = (wxDC *) 0 ;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_EndDrawing",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->EndDrawing();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_DC_FloodFill(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxDC *arg1 = (wxDC *) 0 ;
@@ -22749,8 +22699,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"EncodingConverter_CanConvert", (PyCFunction) _wrap_EncodingConverter_CanConvert, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"EncodingConverter_swigregister", EncodingConverter_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_DC", (PyCFunction) _wrap_delete_DC, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"DC_BeginDrawing", (PyCFunction) _wrap_DC_BeginDrawing, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"DC_EndDrawing", (PyCFunction) _wrap_DC_EndDrawing, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DC_FloodFill", (PyCFunction) _wrap_DC_FloodFill, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DC_FloodFillPoint", (PyCFunction) _wrap_DC_FloodFillPoint, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DC_GetPixel", (PyCFunction) _wrap_DC_GetPixel, METH_VARARGS | METH_KEYWORDS, NULL},
