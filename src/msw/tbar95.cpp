@@ -1230,17 +1230,16 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 
 void wxToolBar::UpdateSize()
 {
+    ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
+
     // In case Realize is called after the initial display (IOW the programmer
     // may have rebuilt the toolbar) give the frame the option of resizing the
     // toolbar to full width again, but only if the parent is a frame and the
     // toolbar is managed by the frame.  Otherwise assume that some other
     // layout mechanism is controlling the toolbar size and leave it alone.
-
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if ( frame && frame->GetToolBar() == this )
     {
-        // the toolbar size changed
-        ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
         frame->SendSizeEvent();
     }
 }
