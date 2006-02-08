@@ -742,10 +742,11 @@ bool wxTopLevelWindowMSW::IsIconized() const
 #ifdef __WXWINCE__
     return false;
 #else
-    // also update the current state
-    ((wxTopLevelWindowMSW *)this)->m_iconized = ::IsIconic(GetHwnd()) != 0;
-
-    return m_iconized;
+    // don't use m_iconized, it may be briefly out of sync with the real state
+    // as it's only modified when we receive a WM_SIZE and we could be called
+    // from an event handler from one of the messages we receive before it,
+    // such as WM_MOVE
+    return ::IsIconic(GetHwnd()) != 0;
 #endif
 }
 
