@@ -234,10 +234,6 @@ bool wxToolBar::Create(wxWindow *parent,
 
     wxSetCCUnicodeFormat(GetHwnd());
 
-    // set up the colors and fonts
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-
     // workaround for flat toolbar on Windows XP classic style: we have to set
     // the style after creating the control; doing it at creation time doesn't work
 #if wxUSE_UXTHEME
@@ -1344,27 +1340,45 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 // colour: for example, when it must blend in with a notebook page.
 void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 {
-    if ( !UseBgCol() )
+    RECT rect = wxGetClientRect(GetHwnd());
+    HDC hdc = GetHdcOf((*event.GetDC()));
+
+    if ( UseBgCol() )
     {
+        // do draw our background
+        //
+        // notice that this 'dumb' implementation may cause flicker for some of
+        // the controls in which case they should intercept wxEraseEvent and
+        // process it themselves somehow
+        AutoHBRUSH hBrush(wxColourToRGB(GetBackgroundColour()));
+
+        wxCHANGE_HDC_MAP_MODE(hdc, MM_TEXT);
+        ::FillRect(hdc, &rect, hBrush);
+    }
+    else // we have no non default background colour
+    {
+#if wxUSE_UXTHEME
+        // we may need to draw themed colour so that we appear correctly on
+        // e.g. notebook page under XP with themes but only do it if the parent
+        // draws themed background itself
+        if ( !GetParent()->UseBgCol() )
+        {
+            wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive();
+            if ( theme )
+            {
+                HRESULT
+                    hr = theme->DrawThemeParentBackground(GetHwnd(), hdc, &rect);
+                if ( SUCCEEDED(hr) )
+                    return;
+
+                wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+            }
+        }
+#endif // wxUSE_UXTHEME
+
         event.Skip();
         return;
     }
-
-    wxColour bgCol = GetBackgroundColour();
-
-    // notice that this 'dumb' implementation may cause flicker for some of the
-    // controls in which case they should intercept wxEraseEvent and process it
-    // themselves somehow
-
-    RECT rect = wxGetClientRect(GetHwnd());
-
-    AutoHBRUSH hBrush(wxColourToRGB(bgCol));
-
-    HDC hdc = GetHdcOf((*event.GetDC()));
-
-    wxCHANGE_HDC_MAP_MODE(hdc, MM_TEXT);
-
-    ::FillRect(hdc, &rect, hBrush);
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
