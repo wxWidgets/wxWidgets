@@ -1112,13 +1112,6 @@ bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
             lpPos->cx = rectClient.right - rectClient.left;
             lpPos->cy = rectClient.bottom - rectClient.top;
         }
-#if wxUSE_TOOLBAR
-        wxMDIParentFrame* pFrameWnd = (wxMDIParentFrame *)GetParent();
-        if (pFrameWnd && pFrameWnd->GetToolBar() && pFrameWnd->GetToolBar()->IsShown())
-        {
-            pFrameWnd->GetToolBar()->Refresh();
-        }
-#endif
     }
 
     return false;
