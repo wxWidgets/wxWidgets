@@ -442,6 +442,7 @@ margins                    Size                    -1,-1
 packing                    Integer                 -1
 separation                 Integer                 -1
 bg                         Background colour       None
+dontattachtoframe          Boolean                 False
 
 wxToolBar node may have children <object> and <object_ref> nodes. Their class
 may be either "tool", "separator" or any wxWidgets class derived from
