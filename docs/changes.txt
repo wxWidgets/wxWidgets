@@ -76,7 +76,7 @@ All (GUI):
 - Added SetSheetStyle to wxPropertySheetDialog and allowed it to
   behave like a Mac OS X settings dialog.
 - wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated.
-- Added <disabled> XRC tag for wxToolBar elements
+- Added <disabled> XRC tag for wxToolBar elements and <bg> for wxToolBar itself
 
 wxMSW:
 

@@ -118,6 +118,8 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         long separation = GetLong(wxT("separation"), -1);
         if (separation != -1)
             toolbar->SetToolSeparation(separation);
+        if (HasParam(wxT("bg")))
+            toolbar->SetBackgroundColour(GetColour(wxT("bg")));
 
         wxXmlNode *children_node = GetParamNode(wxT("object"));
         if (!children_node)
