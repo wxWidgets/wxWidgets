@@ -89,10 +89,8 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_CP437,
     wxFONTENCODING_UTF7,
     wxFONTENCODING_UTF8,
-    wxFONTENCODING_UTF16,
     wxFONTENCODING_UTF16BE,
     wxFONTENCODING_UTF16LE,
-    wxFONTENCODING_UTF32,
     wxFONTENCODING_UTF32BE,
     wxFONTENCODING_UTF32LE,
     wxFONTENCODING_EUC_JP,
@@ -138,12 +136,17 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Windows/DOS OEM (CP 437)" ),
     wxTRANSLATE( "Unicode 7 bit (UTF-7)" ),
     wxTRANSLATE( "Unicode 8 bit (UTF-8)" ),
+#ifdef WORDS_BIGENDIAN
     wxTRANSLATE( "Unicode 16 bit (UTF-16)" ),
-    wxTRANSLATE( "Unicode 16 bit Big Endian (UTF-16BE)" ),
     wxTRANSLATE( "Unicode 16 bit Little Endian (UTF-16LE)" ),
     wxTRANSLATE( "Unicode 32 bit (UTF-32)" ),
-    wxTRANSLATE( "Unicode 32 bit Big Endian (UTF-32BE)" ),
     wxTRANSLATE( "Unicode 32 bit Little Endian (UTF-32LE)" ),
+#else // WORDS_BIGENDIAN
+    wxTRANSLATE( "Unicode 16 bit Big Endian (UTF-16BE)" ),
+    wxTRANSLATE( "Unicode 16 bit (UTF-16)" ),
+    wxTRANSLATE( "Unicode 32 bit Big Endian (UTF-32BE)" ),
+    wxTRANSLATE( "Unicode 32 bit (UTF-32)" ),
+#endif // WORDS_BIGENDIAN
     wxTRANSLATE( "Extended Unix Codepage for Japanese (EUC-JP)" ),
     wxTRANSLATE( "US-ASCII" ),
     wxTRANSLATE( "BIG5" ),
@@ -195,12 +198,17 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][10] =
 
     { wxT( "UTF-7" ), wxT("utf7"), NULL },
     { wxT( "UTF-8" ), wxT("utf8"), NULL },
-    { wxT( "UTF-16" ), wxT("UCS-2"), wxT("UCS2"), NULL },
-    { wxT( "UTF-16BE" ), wxT("UCS-2BE"), NULL },
+#ifdef WORDS_BIGENDIAN
+    { wxT( "UTF-16BE" ), wxT("UCS-2BE"), wxT( "UTF-16" ), wxT("UCS-2"), wxT("UCS2"), NULL },
     { wxT( "UTF-16LE" ), wxT("UCS-2LE"), NULL },
-    { wxT( "UTF-32" ), wxT( "UCS-4" ), wxT("UCS4"), NULL },
-    { wxT( "UTF-32BE" ), wxT( "UCS-4BE" ), NULL },
+    { wxT( "UTF-32BE" ), wxT( "UCS-4BE" ), wxT( "UTF-32" ), wxT( "UCS-4" ), wxT("UCS4"), NULL },
     { wxT( "UTF-32LE" ), wxT( "UCS-4LE" ), NULL },
+#else // WORDS_BIGENDIAN
+    { wxT( "UTF-16BE" ), wxT("UCS-2BE"), NULL },
+    { wxT( "UTF-16LE" ), wxT("UCS-2LE"), wxT( "UTF-16" ), wxT("UCS-2"), wxT("UCS2"), NULL },
+    { wxT( "UTF-32BE" ), wxT( "UCS-4BE" ), NULL },
+    { wxT( "UTF-32LE" ), wxT( "UCS-4LE" ), wxT( "UTF-32" ), wxT( "UCS-4" ), wxT("UCS4"), NULL },
+#endif // WORDS_BIGENDIAN
 
     { wxT( "EUC-JP" ), wxT( "eucJP" ), wxT( "euc_jp" ), wxT( "IBM-eucJP" ), NULL },
 
