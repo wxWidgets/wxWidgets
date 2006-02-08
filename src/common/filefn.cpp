@@ -242,8 +242,7 @@ bool wxPathList::Member (const wxString& path)
 
 wxString wxPathList::FindValidPath (const wxString& file)
 {
-  if (wxFileExists (wxExpandPath(wxFileFunctionsBuffer, file)))
-    return wxString(wxFileFunctionsBuffer);
+  wxExpandPath(wxFileFunctionsBuffer, file);
 
   wxChar buf[_MAXPATHLEN];
   wxStrcpy(buf, wxFileFunctionsBuffer);
