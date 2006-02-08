@@ -457,6 +457,7 @@ appear within wxToolBar node. Their attributes are as follows:
     bitmap2                Bitmap                  wxNullBitmap
     toggle                 Boolean                 0
     radio                  Boolean                 0
+    disabled               Boolean                 0
     label                  I18nString              ""
     tooltip                I18nString              ""
     longhelp               I18nString              ""
