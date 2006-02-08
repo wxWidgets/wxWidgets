@@ -1368,10 +1368,13 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
             {
                 HRESULT
                     hr = theme->DrawThemeParentBackground(GetHwnd(), hdc, &rect);
-                if ( SUCCEEDED(hr) )
+                if ( hr == S_OK )
                     return;
 
-                wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+                // it can also return S_FALSE which seems to simply say that it
+                // didn't draw anything but no error really occurred
+                if ( FAILED(hr) )
+                    wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
             }
         }
 #endif // wxUSE_UXTHEME
