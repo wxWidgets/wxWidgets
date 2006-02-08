@@ -1344,34 +1344,27 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 // colour: for example, when it must blend in with a notebook page.
 void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 {
-    wxColour bgCol = GetBackgroundColour();
-    if (!bgCol.Ok())
+    if ( !UseBgCol() )
     {
         event.Skip();
         return;
     }
 
+    wxColour bgCol = GetBackgroundColour();
+
     // notice that this 'dumb' implementation may cause flicker for some of the
     // controls in which case they should intercept wxEraseEvent and process it
     // themselves somehow
 
-    RECT rect;
-    ::GetClientRect(GetHwnd(), &rect);
+    RECT rect = wxGetClientRect(GetHwnd());
 
-    HBRUSH hBrush = ::CreateSolidBrush(wxColourToRGB(bgCol));
+    AutoHBRUSH hBrush(wxColourToRGB(bgCol));
 
     HDC hdc = GetHdcOf((*event.GetDC()));
 
-#ifndef __WXWINCE__
-    int mode = ::SetMapMode(hdc, MM_TEXT);
-#endif
+    wxCHANGE_HDC_MAP_MODE(hdc, MM_TEXT);
 
     ::FillRect(hdc, &rect, hBrush);
-    ::DeleteObject(hBrush);
-
-#ifndef __WXWINCE__
-    ::SetMapMode(hdc, mode);
-#endif
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
