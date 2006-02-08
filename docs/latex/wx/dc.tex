@@ -750,10 +750,8 @@ dimension from the baseline of the font to the bottom of the
 descender, and {\it externalLeading} is any extra vertical space added
 to the font by the font designer (usually is zero).
 
-The optional parameter {\it font} specifies an alternative
-to the currently selected font: but note that this does not
-yet work under Windows, so you need to set a font for
-the device context first.
+If the optional parameter {\it font} is specified and valid, then it is used
+for the text extent calculation. Otherwise the currently selected font is.
 
 See also \helpref{wxFont}{wxfont}, \helpref{wxDC::SetFont}{wxdcsetfont}.
 
