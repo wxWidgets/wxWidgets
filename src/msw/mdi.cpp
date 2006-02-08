@@ -214,6 +214,8 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
       return false;
   }
 
+  SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
+
   // unlike (almost?) all other windows, frames are created hidden
   m_isShown = false;
 
