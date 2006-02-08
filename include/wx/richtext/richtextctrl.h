@@ -671,6 +671,7 @@ public:
     long GetFirstVisiblePosition() const;
 
 // Overrides
+protected:
 
     virtual wxSize DoGetBestSize() const ;
 

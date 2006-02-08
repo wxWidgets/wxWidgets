@@ -103,10 +103,6 @@ public:
     void SetConstraintSizes(bool recurse);
     bool DoPhase(int phase);
 #endif
-
-    // set all page's attributes
-    void DoApplyWidgetStyle(GtkRcStyle *style);
-
     // report if window belongs to notebook
     bool IsOwnGtkWindow( GdkWindow *window );
 
@@ -127,6 +123,9 @@ public:
     bool m_inSwitchPage;
 
 protected:
+    // set all page's attributes
+    void DoApplyWidgetStyle(GtkRcStyle *style);
+
     // remove one page from the notebook but do not destroy it
     virtual wxNotebookPage *DoRemovePage(size_t nPage);
 

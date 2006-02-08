@@ -393,8 +393,6 @@ public:
 
     size_t GetCount() const { return wxHashTableBase::GetCount(); }
 protected:
-    virtual void DoDeleteContents( wxHashTableBase_Node* node );
-
     // copy helper
     void DoCopy( const wxHashTable& copy );
 
@@ -402,6 +400,8 @@ protected:
     // m_curr to it and m_currBucket to its bucket
     void GetNextNode( size_t bucketStart );
 private:
+    virtual void DoDeleteContents( wxHashTableBase_Node* node );
+
     // current node
     Node* m_curr;
 
@@ -525,7 +525,7 @@ private:
         eltype *Delete(long key) { return (eltype*)DoDelete(key, key); }      \
         eltype *Delete(long lhash, long key)                                  \
             { return (eltype*)DoDelete(key, lhash); }                         \
-    protected:                                                                \
+    private:                                                                  \
         virtual void DoDeleteContents( wxHashTableBase_Node* node )           \
             { delete (eltype*)node->GetData(); }                              \
                                                                               \

@@ -130,9 +130,9 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
-protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
+protected:
     // common part of all ctors
     void Init() { m_selectionOld = -1; }
 

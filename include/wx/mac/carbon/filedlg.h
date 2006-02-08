@@ -36,7 +36,8 @@ public:
     virtual void GetFilenames(wxArrayString& files) const { files = m_fileNames ; }
 
     virtual int ShowModal();
-    
+
+protected:
     // not supported for file dialog, RR
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),

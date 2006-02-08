@@ -85,13 +85,14 @@ class WXDLLEXPORT wxMetafileDC: public wxDC
 
   // Should be called at end of drawing
   virtual wxMetafile *Close(void);
-  virtual void DoGetSize(int *width, int *height) const ;
 
   // Implementation
   inline wxMetafile *GetMetaFile(void) const { return m_metaFile; }
   inline void SetMetaFile(wxMetafile *mf) { m_metaFile = mf; }
 
 protected:
+    virtual void DoGetSize(int *width, int *height) const;
+
   wxMetafile*   m_metaFile;
 };
 

@@ -47,16 +47,16 @@ public:
     // take account of this
     virtual wxPoint GetBoxAreaOrigin() const;
 
+    // returning true from here ensures that we act as a container window for
+    // our children
+    virtual bool IsStaticBox() const { return true; }
+
 protected:
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // get the size of the border
     wxRect GetBorderGeometry() const;
-
-    // returning true from here ensures that we act as a container window for
-    // our children
-    virtual bool IsStaticBox() const { return true; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBox)

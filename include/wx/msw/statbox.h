@@ -38,17 +38,19 @@ public:
     /// Implementation only
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
 protected:
     virtual wxSize DoGetBestSize() const;
 
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const;
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
-
 #ifndef __WXWINCE__
+public:
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
+protected:
     // return the region with all the windows inside this static box excluded
     virtual WXHRGN MSWGetRegionWithoutChildren();
 

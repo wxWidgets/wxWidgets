@@ -118,8 +118,6 @@ public:
     // implement base class pure virtuals
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual wxPoint GetClientAreaOrigin() const;
-    virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoSetClientSize(int width, int height);
     virtual void SetIcon(const wxIcon& icon) { SetIcons( wxIconBundle( icon ) ); }
     virtual void SetIcons(const wxIconBundle& icons);
 
@@ -139,11 +137,14 @@ public:
     virtual int GetMinWidth() const;
     virtual int GetMinHeight() const;
 
+    virtual wxWindow *GetInputWindow() const { return wx_const_cast(wxTopLevelWindow*, this); }
+
 protected:
+    virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoSetClientSize(int width, int height);
+
     // handle titlebar button click event
     virtual void ClickTitleBarButton(long button);
-
-    virtual wxWindow *GetInputWindow() const { return (wxWindow*)this; }
 
     // return wxTOPLEVEL_xxx combination based on current state of the frame
     long GetDecorationsStyle() const;

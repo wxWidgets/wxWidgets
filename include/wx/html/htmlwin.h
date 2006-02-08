@@ -213,6 +213,8 @@ public:
     wxString ToText();
 #endif // wxUSE_CLIPBOARD
 
+    virtual void OnInternalIdle();
+
 protected:
     void Init();
 
@@ -239,8 +241,6 @@ protected:
     void OnMouseEnter(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);
 #endif // wxUSE_CLIPBOARD
-
-    virtual void OnInternalIdle();
 
     // Returns new filter (will be stored into m_DefaultFilter variable)
     virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}

@@ -83,21 +83,8 @@ public:
     virtual int FindString(const wxString& s, bool bCase = false) const;
 
     virtual bool IsSelected(int n) const;
-    virtual void DoSetSelection(int n, bool select);
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
-
-    virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, int pos);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
-
-    virtual void DoSetFirstItem(int n);
-
-    virtual void DoSetItemClientData(int n, void* clientData);
-    virtual void* DoGetItemClientData(int n) const;
-    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(int n) const;
-    virtual void       DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
 
     // wxCheckListBox support
     static wxVisualAttributes
@@ -116,6 +103,17 @@ public:
     // events in the latter case
     bool            MacIsSelectionSuppressed() const { return m_suppressSelection ; }
 protected:
+    virtual void DoSetSelection(int n, bool select);
+    virtual int DoAppend(const wxString& item);
+    virtual void DoInsertItems(const wxArrayString& items, int pos);
+    virtual void DoSetItems(const wxArrayString& items, void **clientData);
+    virtual void DoSetFirstItem(int n);
+    virtual void DoSetItemClientData(int n, void* clientData);
+    virtual void* DoGetItemClientData(int n) const;
+    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(int n) const;
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+
     void            MacDelete( int n ) ;
     void            MacInsert( int n , const wxString& item) ;
     void            MacAppend( const wxString& item) ;

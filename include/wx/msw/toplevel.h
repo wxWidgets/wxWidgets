@@ -92,6 +92,15 @@ public:
     virtual bool HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam);
 #endif
 
+    // translate wxWidgets flags to Windows ones
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
+
+    // choose the right parent to use with CreateWindow()
+    virtual WXHWND MSWGetParent() const;
+
+    // window proc for the frames
+    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
 protected:
     // common part of all ctors
     void Init();
@@ -110,15 +119,6 @@ protected:
 
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);
-
-    // translate wxWidgets flags to Windows ones
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
-
-    // choose the right parent to use with CreateWindow()
-    virtual WXHWND MSWGetParent() const;
-
-    // window proc for the frames
-    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     // is the window currently iconized?
     bool m_iconized;

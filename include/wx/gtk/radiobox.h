@@ -114,7 +114,6 @@ public:
     void GtkDisableEvents();
     void GtkEnableEvents();
     bool IsOwnGtkWindow( GdkWindow *window );
-    void DoApplyWidgetStyle(GtkRcStyle *style);
 #if wxUSE_TOOLTIPS
     void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
@@ -126,6 +125,8 @@ public:
     wxList           m_boxes;
 
 protected:
+    void DoApplyWidgetStyle(GtkRcStyle *style);
+
     // common part of all ctors
     void Init();
 

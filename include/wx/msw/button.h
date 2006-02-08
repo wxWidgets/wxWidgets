@@ -55,6 +55,7 @@ public:
     virtual bool SetForegroundColour(const wxColour &colour);
 
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
 private:
     void MakeOwnerDrawn();
@@ -72,7 +73,6 @@ protected:
 
     // usually overridden base class virtuals
     virtual wxSize DoGetBestSize() const;
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const ;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxButton)

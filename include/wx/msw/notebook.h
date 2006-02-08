@@ -181,12 +181,18 @@ public:
   }
 #endif // wxUSE_UXTHEME
 
+  // translate wxWin styles to the Windows ones
+  virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+
+  // return the themed brush for painting our children
+  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, WXHWND hWnd);
+
+  // draw child background
+  virtual bool MSWPrintChild(WXHDC hDC, wxWindow *win);
+
 protected:
   // common part of all ctors
   void Init();
-
-  // translate wxWin styles to the Windows ones
-  virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
   // remove one page from the notebook, without deleting
   virtual wxNotebookPage *DoRemovePage(size_t nPage);
@@ -205,12 +211,6 @@ protected:
 
   // creates the brush to be used for drawing the tab control background
   void UpdateBgBrush();
-
-  // return the themed brush for painting our children
-  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, WXHWND hWnd);
-
-  // draw child background
-  virtual bool MSWPrintChild(WXHDC hDC, wxWindow *win);
 
   // common part of QueryBgBitmap() and MSWPrintChild()
   //

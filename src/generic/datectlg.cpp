@@ -128,9 +128,8 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator);
 
-    virtual void DoMoveWindow(int x, int y, int w, int h);
-
 protected:
+    virtual void DoMoveWindow(int x, int y, int w, int h);
 
     void OnSize(wxSizeEvent& event);
     void OnMouseEnter(wxMouseEvent& event);

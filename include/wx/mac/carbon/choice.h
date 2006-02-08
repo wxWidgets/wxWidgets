@@ -69,9 +69,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxChoiceNameStr);
 
-    // implement base class pure virtuals
-    virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, int pos);
     virtual void Delete(int n);
     virtual void Clear();
 
@@ -87,14 +84,14 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const ;
+    virtual int DoAppend(const wxString& item);
+    virtual int DoInsert(const wxString& item, int pos);
 
-public: // for wxComboBox only
     virtual void DoSetItemClientData( int n, void* clientData );
     virtual void* DoGetItemClientData( int n ) const;
     virtual void DoSetItemClientObject( int n, wxClientData* clientData );
     virtual wxClientData* DoGetItemClientObject( int n ) const;
 
-protected:
     // free all memory we have (used by Clear() and dtor)
     // prevent collision with some BSD definitions of macro Free()
     void FreeData();

@@ -28,10 +28,11 @@ class WXDLLEXPORT wxLogTextCtrl : public wxLog
 public:
     wxLogTextCtrl(wxTextCtrl *pTextCtrl);
 
-private:
+protected:
     // implement sink function
     virtual void DoLogString(const wxChar *szString, time_t t);
 
+private:
     // the control we use
     wxTextCtrl *m_pTextCtrl;
 

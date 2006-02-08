@@ -163,6 +163,14 @@ public:
 
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
+protected:
+    // override some base class virtuals
+    virtual wxSize DoGetBestSize() const;
+    virtual void DoGetPosition(int *x, int *y) const;
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+
 private:
     // common part of all ctors
     void Init();
@@ -178,13 +186,6 @@ private:
     void OnMonthChange(wxCommandEvent& event);
     void OnYearChange(wxCommandEvent& event);
     void OnYearTextChange(wxCommandEvent& event);
-
-    // override some base class virtuals
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoGetPosition(int *x, int *y) const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
-    virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // (re)calc m_widthCol and m_heightRow
     void RecalcGeometry();

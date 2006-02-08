@@ -108,12 +108,6 @@ public:
 
     virtual wxCoord GetCharHeight() const;
     virtual wxCoord GetCharWidth() const;
-    virtual void DoGetTextExtent(const wxString& string,
-        wxCoord *x, wxCoord *y,
-        wxCoord *descent = NULL,
-        wxCoord *externalLeading = NULL,
-        wxFont *theFont = NULL) const;
-    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
     virtual bool CanDrawBitmap() const;
     virtual bool CanGetTextExtent() const;
@@ -229,6 +223,13 @@ public:
 #endif
 
 protected:
+    virtual void DoGetTextExtent(const wxString& string,
+        wxCoord *x, wxCoord *y,
+        wxCoord *descent = NULL,
+        wxCoord *externalLeading = NULL,
+        wxFont *theFont = NULL) const;
+    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
+
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
 

@@ -54,11 +54,11 @@ public:
   wxIDropSource(wxDropSource *pDropSource);
   virtual ~wxIDropSource() { }
 
-  DECLARE_IUNKNOWN_METHODS;
-
   // IDropSource
   STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState);
   STDMETHODIMP GiveFeedback(DWORD dwEffect);
+
+    DECLARE_IUNKNOWN_METHODS;
 
 private:
   DWORD         m_grfInitKeyState;  // button which started the d&d operation

@@ -382,5 +382,16 @@ void wxFrame::PositionToolBar()
         }
     }
 }
+
+void wxFrame::PositionBars()
+{
+#if wxUSE_STATUSBAR
+    PositionStatusBar();
+#endif
+#if wxUSE_TOOLBAR
+    PositionToolBar();
+#endif
+}
+
 #endif
 

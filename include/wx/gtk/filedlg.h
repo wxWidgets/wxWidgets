@@ -51,6 +51,7 @@ public:
 //private:
     bool m_destroyed_by_delete;
 
+protected:
     // override this from wxTLW since the native
     // form doesn't have any m_wxwindow
     virtual void DoSetSize(int x, int y,

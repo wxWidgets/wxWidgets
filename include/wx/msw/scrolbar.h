@@ -56,9 +56,10 @@ public:
     // override wxControl version to not use solid background here
     virtual WXHBRUSH MSWControlColor(WXHDC pDC, WXHWND hWnd);
 
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
 protected:
     virtual wxSize DoGetBestSize() const;
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     int m_pageSize;
     int m_viewSize;

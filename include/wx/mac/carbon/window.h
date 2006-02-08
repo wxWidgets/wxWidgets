@@ -82,9 +82,9 @@ public:
                                int *externalLeading = NULL,
                                const wxFont *theFont = NULL )
                                const;
-
+protected:
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
-
+public:
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true );
     virtual void SetScrollPos( int orient, int pos, bool refresh = true );

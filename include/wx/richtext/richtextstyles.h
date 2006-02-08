@@ -192,9 +192,6 @@ public:
         const wxSize& size = wxDefaultSize, long style = 0);
     ~wxRichTextStyleListBox();
 
-    /// Returns the HTML for this item
-    virtual wxString OnGetItem(size_t n) const;
-
     /// Creates a suitable HTML fragment for a definition
     wxString CreateHTML(wxRichTextStyleDefinition* def) const;
 
@@ -225,6 +222,10 @@ public:
 
     // Convert units in tends of a millimetre to device units
     int ConvertTenthsMMToPixels(wxDC& dc, int units) const;
+
+protected:
+    /// Returns the HTML for this item
+    virtual wxString OnGetItem(size_t n) const;
 
 private:
 

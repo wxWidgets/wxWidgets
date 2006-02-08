@@ -50,8 +50,6 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
 
     virtual bool Show(bool show = true);
     virtual bool IsShown() const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual wxSize DoGetBestSize() const ;
     virtual bool Realize();
 
     virtual void SetToolBitmapSize(const wxSize& size);
@@ -75,7 +73,8 @@ protected:
     // common part of all ctors
     void Init();
 
-    // implement base class pure virtuals
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual wxSize DoGetBestSize() const;
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
 

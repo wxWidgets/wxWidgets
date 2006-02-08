@@ -34,6 +34,19 @@ public:
     virtual size_t GetDataSize() const { return m_pngSize; }
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
+    // Must provide overloads to avoid hiding them (and warnings about it)
+    virtual size_t GetDataSize(const wxDataFormat&) const
+    {
+        return GetDataSize();
+    }
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    {
+        return GetDataHere(buf);
+    }
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    {
+        return SetData(len, buf);
+    }
 
 protected:
     void Init() { m_pngData = (void *)NULL; m_pngSize = 0; }
@@ -44,15 +57,6 @@ protected:
     void       *m_pngData;
 
     void DoConvertToPng();
-
-private:
-    // virtual function hiding supression
-    size_t GetDataSize(const wxDataFormat& format) const
-        { return(wxDataObjectSimple::GetDataSize(format)); }
-    bool GetDataHere(const wxDataFormat& format, void* pBuf) const
-        { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
-    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
-        { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
 };
 
 // ----------------------------------------------------------------------------
@@ -70,15 +74,19 @@ public:
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
-
-private:
-    // virtual function hiding supression
-    size_t GetDataSize(const wxDataFormat& format) const
-        { return(wxDataObjectSimple::GetDataSize(format)); }
-    bool GetDataHere(const wxDataFormat& format, void* pBuf) const
-        { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
-    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
-        { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
+    // Must provide overloads to avoid hiding them (and warnings about it)
+    virtual size_t GetDataSize(const wxDataFormat&) const
+    {
+        return GetDataSize();
+    }
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    {
+        return GetDataHere(buf);
+    }
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    {
+        return SetData(len, buf);
+    }
 };
 
 #endif // _WX_X11_DATAOBJ2_H_

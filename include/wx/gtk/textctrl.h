@@ -139,7 +139,6 @@ public:
 
     GtkWidget* GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
-    void DoApplyWidgetStyle(GtkRcStyle *style);
     void CalculateScrollbar();
     void OnInternalIdle();
 
@@ -174,6 +173,7 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+    void DoApplyWidgetStyle(GtkRcStyle *style);
 
     // common part of all ctors
     void Init();

@@ -86,9 +86,10 @@ public:
     // obtain a pointer to the new metafile (caller should delete it)
     wxEnhMetaFile *Close();
 
-private:
+protected:
     virtual void DoGetSize(int *width, int *height) const;
 
+private:
     // size passed to ctor and returned by DoGetSize()
     int m_width,
         m_height;

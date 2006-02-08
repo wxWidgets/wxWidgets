@@ -75,10 +75,12 @@ public:
     wxBitmap  m_bitmap;
 
     void OnSetBitmap();
-    void DoApplyWidgetStyle(GtkRcStyle *style);
     bool IsOwnGtkWindow(GdkWindow *window);
 
     virtual void OnInternalIdle();
+
+protected:
+    void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual wxSize DoGetBestSize() const;
 
 private:
@@ -129,10 +131,12 @@ public:
     // implementation
     bool m_blockEvent;
 
-    void DoApplyWidgetStyle(GtkRcStyle *style);
     bool IsOwnGtkWindow(GdkWindow *window);
 
     virtual void OnInternalIdle();
+
+protected:
+    void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual wxSize DoGetBestSize() const;
 
 private:

@@ -52,6 +52,8 @@ public:
        @returns true if ABORT button has not been pressed
    */
    virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
+    // Must provide overload to avoid hiding it (and warnings about it)
+    virtual void Update() { wxDialog::Update(); }
 
    /* Can be called to continue after the cancel button has been pressed, but
        the program decided to continue the operation (e.g., user didn't
@@ -150,10 +152,6 @@ private:
     class WXDLLEXPORT wxWindowDisabler *m_winDisabler;
 
     DECLARE_EVENT_TABLE()
-private:
-    // Virtual function hiding supression
-    virtual void Update() { wxDialog::Update(); }
-
     DECLARE_NO_COPY_CLASS(wxProgressDialog)
 };
 

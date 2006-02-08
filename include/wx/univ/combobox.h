@@ -163,6 +163,11 @@ public:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
+    // we have our own input handler and our own actions
+    virtual bool PerformAction(const wxControlAction& action,
+                               long numArg = 0l,
+                               const wxString& strArg = wxEmptyString);
+
 protected:
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestClientSize() const;
@@ -170,11 +175,6 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
-
-    // we have our own input handler and our own actions
-    virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = 0l,
-                               const wxString& strArg = wxEmptyString);
 
     // event handlers
     void OnKey(wxKeyEvent& event);

@@ -70,6 +70,11 @@ public:
 
     static WXHBITMAP MapBitmap(WXHBITMAP bitmap, int width, int height);
 
+    // override WndProc mainly to process WM_SIZE
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
 protected:
     // common part of all ctors
     void Init();
@@ -98,12 +103,8 @@ protected:
                                           const wxString& longHelp);
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
-    // override WndProc mainly to process WM_SIZE
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
     // return the appropriate size and flags for the toolbar control
     virtual wxSize DoGetBestSize() const;
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     // handlers for various events
     bool HandleSize(WXWPARAM wParam, WXLPARAM lParam);

@@ -241,6 +241,7 @@ protected:
         { ScrollDoSetVirtualSize(x, y); }                                     \
     virtual wxSize GetBestVirtualSize() const                                 \
         { return ScrollGetBestVirtualSize(); }                                \
+protected:                                                                    \
     virtual wxSize GetWindowSizeForVirtualSize(const wxSize& size) const      \
         { return ScrollGetWindowSizeForVirtualSize(size); }
 
@@ -282,18 +283,18 @@ public:
                 long style = wxScrolledWindowStyle,
                 const wxString& name = wxPanelNameStr);
 
+    // we need to return a special WM_GETDLGCODE value to process just the
+    // arrows but let the other navigation characters through
+#ifdef __WXMSW__
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+#endif // __WXMSW__
+
     WX_FORWARD_TO_SCROLL_HELPER()
 
 protected:
     // this is needed for wxEVT_PAINT processing hack described in
     // wxScrollHelperEvtHandler::ProcessEvent()
     void OnPaint(wxPaintEvent& event);
-
-    // we need to return a special WM_GETDLGCODE value to process just the
-    // arrows but let the other navigation characters through
-#ifdef __WXMSW__
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-#endif // __WXMSW__
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxScrolledWindow)

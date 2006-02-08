@@ -21,12 +21,13 @@ public:
     wxMemoryDC( wxDC *dc ); // Create compatible DC
     ~wxMemoryDC();
     virtual void SelectObject( const wxBitmap& bitmap );
-    void DoGetSize( int *width, int *height ) const;
 
     // implementation
     wxBitmap  m_selected;
 
-private:
+protected:
+    void DoGetSize( int *width, int *height ) const;
+
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 };
 

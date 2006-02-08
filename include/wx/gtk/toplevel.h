@@ -78,10 +78,6 @@ public:
     // implementation from now on
     // --------------------------
 
-    // move the window to the specified location and resize it: this is called
-    // from both DoSetSize() and DoSetClientSize()
-    virtual void DoMoveWindow(int x, int y, int width, int height);
-
     // GTK callbacks
     virtual void GtkOnSize( int x, int y, int width, int height );
     virtual void OnInternalIdle();
@@ -110,6 +106,10 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    // move the window to the specified location and resize it: this is called
+    // from both DoSetSize() and DoSetClientSize()
+    virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // override wxWindow methods to take into account tool/menu/statusbars
     virtual void DoSetSize(int x, int y,

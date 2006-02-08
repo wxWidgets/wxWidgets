@@ -30,7 +30,6 @@ public:
     wxMemoryDC( wxDC *dc ); // Create compatible DC
     ~wxMemoryDC();
     virtual void SelectObject( const wxBitmap& bitmap );
-    void DoGetSize( int *width, int *height ) const;
 
     // these get reimplemented for mono-bitmaps to behave
     // more like their Win32 couterparts. They now interpret
@@ -45,7 +44,9 @@ public:
     // implementation
     wxBitmap  m_selected;
 
-private:
+protected:
+    void DoGetSize( int *width, int *height ) const;
+
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 };
 

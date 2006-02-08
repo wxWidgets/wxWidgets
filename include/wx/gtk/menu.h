@@ -69,11 +69,6 @@ public:
 
     virtual ~wxMenu();
 
-    // implement base class virtuals
-    virtual wxMenuItem* DoAppend(wxMenuItem *item);
-    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
-    virtual wxMenuItem* DoRemove(wxMenuItem *item);
-
     // TODO: virtual void SetTitle(const wxString& title);
 
     // implementation
@@ -83,6 +78,11 @@ public:
     GtkWidget       *m_menu;  // GtkMenu
     GtkWidget       *m_owner;
     GtkAccelGroup   *m_accel;
+
+protected:
+    virtual wxMenuItem* DoAppend(wxMenuItem *item);
+    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
+    virtual wxMenuItem* DoRemove(wxMenuItem *item);
 
 private:
     // common code for all constructors:

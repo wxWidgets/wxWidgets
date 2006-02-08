@@ -72,7 +72,6 @@ public:
                                      wxWindowID id = -1,
                                      const wxString& name = wxToolBarNameStr);
 
-    virtual void PositionToolBar();
     virtual void SetToolBar(wxToolBar *toolbar);
 #endif // wxUSE_TOOLBAR
 
@@ -82,8 +81,6 @@ public:
                                            long style = wxST_SIZEGRIP,
                                            wxWindowID id = 0,
                                            const wxString& name = wxStatusLineNameStr);
-
-    virtual void PositionStatusBar();
 #endif // wxUSE_STATUSBAR
 
     // tooltip management
@@ -97,9 +94,18 @@ public:
     void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
     wxWindow *GetLastFocus() const { return m_winLastFocused; }
 
+    void PositionBars();
+
 protected:
     // common part of all ctors
     void Init();
+
+#if wxUSE_TOOLBAR
+    virtual void PositionToolBar();
+#endif
+#if wxUSE_STATUSBAR
+    virtual void PositionStatusBar();
+#endif
 
     // override base class virtuals
     virtual void DoGetClientSize(int *width, int *height) const;

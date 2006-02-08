@@ -106,8 +106,6 @@ public:
     // NB: all menu related functions are implemented in menu.cpp
 
 #if wxUSE_MENUS
-    virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
-
     // this is wxUniv-specific private method to be used only by wxMenu
     void DismissPopupMenu();
 #endif // wxUSE_MENUS
@@ -187,7 +185,9 @@ protected:
     // common part of all ctors
     void Init();
 
-    // overridden base class virtuals
+#if wxUSE_MENUS
+    virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
+#endif // wxUSE_MENUS
 
     // we deal with the scrollbars in these functions
     virtual void DoSetClientSize(int width, int height);

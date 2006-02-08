@@ -28,15 +28,15 @@ public:
 
     virtual bool Show(bool show = true);
 
-protected:
-    // popups handle the position like wxTopLevelWindow, not wxWindow
-    virtual void DoGetPosition(int *x, int *y) const;
-
     // return the style to be used for the popup windows
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
 
     // get the HWND to be used as parent of this window with CreateWindow()
     virtual WXHWND MSWGetParent() const;
+
+protected:
+    // popups handle the position like wxTopLevelWindow, not wxWindow
+    virtual void DoGetPosition(int *x, int *y) const;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxPopupWindow)
 };

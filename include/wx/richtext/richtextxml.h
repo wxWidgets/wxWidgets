@@ -35,9 +35,6 @@ public:
         { }
 
 #if wxUSE_STREAMS
-    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
-    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
-
     /// Recursively export an object
     bool ExportXML(wxOutputStream& stream, wxMBConv* convMem, wxMBConv* convFile, wxRichTextObject& obj, int level);
 
@@ -66,7 +63,10 @@ public:
     wxString GetText(wxXmlNode *node, const wxString& param = wxEmptyString, bool translate = false);
 
 protected:
-
+#if wxUSE_STREAMS
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
+#endif
 };
 
 #endif

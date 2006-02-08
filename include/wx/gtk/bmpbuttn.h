@@ -56,7 +56,6 @@ public:
     void NotFocus();
     void StartSelect();
     void EndSelect();
-    void DoApplyWidgetStyle(GtkRcStyle *style);
 
     bool         m_hasFocus:1;
     bool         m_isSelected:1;
@@ -64,6 +63,7 @@ public:
 protected:
     virtual void OnSetBitmap();
     virtual wxSize DoGetBestSize() const;
+    void DoApplyWidgetStyle(GtkRcStyle *style);
 
     void Init();
 

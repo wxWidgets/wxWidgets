@@ -281,10 +281,6 @@ public:
     virtual size_t GetDataSize(const wxDataFormat& format) const;
     virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
     virtual bool SetData(const wxDataFormat& format, size_t len, const void *buf);
-
-protected:
-    // returns the pointer to the object which supports this format or NULL
-    wxDataObjectSimple *GetObject(const wxDataFormat& format) const;
 #if defined(__WXMSW__)
     virtual const void* GetSizeFromBuffer( const void* buffer, size_t* size,
                                            const wxDataFormat& format );
@@ -292,6 +288,10 @@ protected:
                                    const wxDataFormat& format );
     virtual size_t GetBufferOffset( const wxDataFormat& format );
 #endif
+
+protected:
+    // returns the pointer to the object which supports this format or NULL
+    wxDataObjectSimple *GetObject(const wxDataFormat& format) const;
 
 private:
     // the list of all (simple) data objects whose formats we support
@@ -359,13 +359,19 @@ public:
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
-
-    size_t GetDataSize(const wxDataFormat& format) const
-        { return(wxDataObjectSimple::GetDataSize(format)); }
-    bool GetDataHere(const wxDataFormat& format, void *pBuf) const
-        { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
-    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
-        { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
+    // Must provide overloads to avoid hiding them (and warnings about it)
+    virtual size_t GetDataSize(const wxDataFormat&) const
+    {
+        return GetDataSize();
+    }
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    {
+        return GetDataHere(buf);
+    }
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    {
+        return SetData(len, buf);
+    }
 #endif
 
 private:
@@ -415,19 +421,8 @@ public:
     // get a reference to our array
     const wxArrayString& GetFilenames() const { return m_filenames; }
 
-    // the Get() functions do nothing for us
-    virtual size_t GetDataSize() const { return 0; }
-    virtual bool GetDataHere(void *WXUNUSED(buf)) const { return false; }
-
 protected:
     wxArrayString m_filenames;
-
-private:
-    // Virtual function hiding supression
-    size_t GetDataSize(const wxDataFormat& format) const
-        { return(wxDataObjectSimple::GetDataSize(format)); }
-    bool GetDataHere(const wxDataFormat& format, void* pBuf) const
-        { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
 
     DECLARE_NO_COPY_CLASS(wxFileDataObjectBase)
 };
@@ -472,18 +467,23 @@ public:
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t size, const void *buf);
+    // Must provide overloads to avoid hiding them (and warnings about it)
+    virtual size_t GetDataSize(const wxDataFormat&) const
+    {
+        return GetDataSize();
+    }
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    {
+        return GetDataHere(buf);
+    }
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    {
+        return SetData(len, buf);
+    }
 
 private:
     size_t m_size;
     void  *m_data;
-
-    // virtual function hiding supression
-    size_t GetDataSize(const wxDataFormat& format) const
-        { return(wxDataObjectSimple::GetDataSize(format)); }
-    bool GetDataHere(const wxDataFormat& format, void* pBuf) const
-        { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
-    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
-        { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
 
     DECLARE_NO_COPY_CLASS(wxCustomDataObject)
 };

@@ -40,14 +40,14 @@ public:
     virtual void SetLabel(const wxString& label);
     virtual bool SetFont( const wxFont &font );
 
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+
 protected:
     // implement/override some base class virtuals
     virtual wxBorder GetDefaultBorder() const;
     virtual void DoSetSize(int x, int y, int w, int h,
                            int sizeFlags = wxSIZE_AUTO);
     virtual wxSize DoGetBestSize() const;
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
-
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText)
 };

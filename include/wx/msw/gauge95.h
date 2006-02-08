@@ -51,8 +51,9 @@ public:
     virtual bool SetForegroundColour(const wxColour& col);
     virtual bool SetBackgroundColour(const wxColour& col);
 
-protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
+protected:
     virtual wxSize DoGetBestSize() const;
 
 

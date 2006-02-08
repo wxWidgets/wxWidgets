@@ -70,6 +70,12 @@ public:
 
     virtual bool SetShape(const wxRegion& region);
 
+    // For implementation purposes - sometimes decorations make the
+    // client area smaller
+    virtual wxPoint GetClientAreaOrigin() const;
+
+    virtual void OnInternalIdle();
+
 protected:
     // common part of all ctors
     void Init();
@@ -77,13 +83,8 @@ protected:
     // set the icon for the window
     void DoSetIcon( const wxIcon& icon );
 
-    // For implementation purposes - sometimes decorations make the
-    // client area smaller
-    virtual wxPoint GetClientAreaOrigin() const;
-
     // For implementation of delayed resize events
     bool m_needResizeInIdle;
-    virtual void OnInternalIdle();
 
     virtual void DoGetClientSize( int *width, int *height ) const;
     virtual void DoGetSize( int *width, int *height ) const;

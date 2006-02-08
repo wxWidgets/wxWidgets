@@ -58,16 +58,16 @@ public:
     virtual int GetBorderX() const;
     virtual int GetBorderY() const;
 
+    // wxInputConsumer pure virtual
+    virtual wxWindow *GetInputWindow() const
+        { return wx_const_cast(wxStatusBar*, this); }
+
 protected:
     // recalculate the field widths
     void OnSize(wxSizeEvent& event);
 
     // draw the statusbar
     virtual void DoDraw(wxControlRenderer *renderer);
-
-    // wxInputConsumer pure virtual
-    virtual wxWindow *GetInputWindow() const
-        { return wxConstCast(this, wxStatusBar); }
 
     // tell them about our preferred height
     virtual wxSize DoGetBestSize() const;

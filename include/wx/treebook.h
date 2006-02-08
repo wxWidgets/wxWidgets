@@ -138,6 +138,9 @@ public:
     virtual bool DeleteAllPages();
 
 protected:
+    // Implementation of a page removal. See DeletPage for comments.
+    wxTreebookPage *DoRemovePage(size_t pos);
+
     // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
     virtual bool AllowNullPage() const { return true; }
 
@@ -179,9 +182,6 @@ private:
                          const wxString& text,
                          bool bSelect = false,
                          int imageId = wxNOT_FOUND);
-
-    // Implementation of a page removal. See DeletPage for comments.
-    wxTreebookPage *DoRemovePage(size_t pos);
 
     // Sets selection in the tree control and updates the page being shown.
     int DoSetSelection(size_t pos);

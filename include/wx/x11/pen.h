@@ -65,7 +65,7 @@ public:
     wxDash* GetDash() const;
     wxBitmap* GetStipple() const;
 
-private:
+protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;

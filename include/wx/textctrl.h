@@ -378,11 +378,6 @@ public:
     virtual void SelectAll();
     virtual void SetEditable(bool editable) = 0;
 
-    // override streambuf method
-#if wxHAS_TEXT_WINDOW_STREAM
-    int overflow(int i);
-#endif // wxHAS_TEXT_WINDOW_STREAM
-
     // stream-like insertion operators: these are always available, whether we
     // were, or not, compiled with streambuf support
     wxTextCtrl& operator<<(const wxString& s);
@@ -398,6 +393,11 @@ public:
     virtual bool ShouldInheritColours() const { return false; }
 
 protected:
+    // override streambuf method
+#if wxHAS_TEXT_WINDOW_STREAM
+    int overflow(int i);
+#endif // wxHAS_TEXT_WINDOW_STREAM
+
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default
     wxString m_filename;

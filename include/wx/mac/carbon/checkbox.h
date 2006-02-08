@@ -34,11 +34,12 @@ public:
     virtual void SetValue(bool);
     virtual bool GetValue() const;
 
-    void DoSet3StateValue(wxCheckBoxState val);
-    virtual wxCheckBoxState DoGet3StateValue() const;
-
     virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     virtual void Command(wxCommandEvent& event);
+
+protected:
+    void DoSet3StateValue(wxCheckBoxState val);
+    virtual wxCheckBoxState DoGet3StateValue() const;
 
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
 };

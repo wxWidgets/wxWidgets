@@ -30,11 +30,6 @@ public:
         : wxRichTextFileHandler(name, ext, type)
         { }
 
-#if wxUSE_STREAMS
-    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
-    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
-#endif
-
     /// Can we save using this handler?
     virtual bool CanSave() const { return true; }
 
@@ -51,7 +46,10 @@ public:
     virtual void OutputParagraphFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, wxOutputStream& stream, bool start);
 
 protected:
-
+#if wxUSE_STREAMS
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
+#endif
 };
 
 #endif

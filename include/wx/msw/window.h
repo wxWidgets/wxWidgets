@@ -97,10 +97,6 @@ public:
                                const wxFont *theFont = (const wxFont *) NULL)
                                const;
 
-#if wxUSE_MENUS_NATIVE
-    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
-#endif // wxUSE_MENUS_NATIVE
-
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true );
     virtual void SetScrollPos( int orient, int pos, bool refresh = true );
@@ -403,6 +399,11 @@ public:
     virtual void OnInternalIdle();
 
 protected:
+
+#if wxUSE_MENUS_NATIVE
+    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+#endif // wxUSE_MENUS_NATIVE
+
     // the window handle
     WXHWND                m_hWnd;
 

@@ -109,11 +109,11 @@ public:
 
     virtual bool IsSelected(int n) const
         { return m_selections.Index(n) != wxNOT_FOUND; }
-    virtual void DoSetSelection(int n, bool select);
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
 
 protected:
+    virtual void DoSetSelection(int n, bool select);
     virtual int DoAppendOnly(const wxString& item);
     virtual int DoAppend(const wxString& item);
     virtual void DoInsertItems(const wxArrayString& items, int pos);

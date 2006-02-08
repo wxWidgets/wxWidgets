@@ -34,8 +34,6 @@ public:
     // implementation
     // --------------
 
-    virtual void DoMoveWindow(int x, int y, int width, int height);
-
     virtual void OnInternalIdle();
 
 
@@ -45,6 +43,8 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+
+    virtual void DoMoveWindow(int x, int y, int width, int height);
 
 private:
     DECLARE_EVENT_TABLE()

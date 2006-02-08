@@ -723,12 +723,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                 wxFrame *frame = wxDynamicCast( toplevelWindow , wxFrame ) ;
                 if ( frame )
                 {
-#if wxUSE_STATUSBAR
-                    frame->PositionStatusBar();
-#endif
-#if wxUSE_TOOLBAR
-                    frame->PositionToolBar();
-#endif
+                    frame->PositionBars();
                 }
 
                 wxSizeEvent event( r.GetSize() , toplevelWindow->GetId() ) ;

@@ -71,12 +71,12 @@ public:
   // accessors
   size_t GetItemHeight() const { return m_nItemHeight; }
 
-protected:
   // we create our items ourselves and they have non-standard size,
   // so we need to override these functions
   virtual wxOwnerDrawn *CreateLboxItem(size_t n);
   virtual bool          MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
 
+protected:
   // this can't be called DoHitTest() because wxWindow already has this method
   int DoHitTestItem(wxCoord x, wxCoord y) const;
 

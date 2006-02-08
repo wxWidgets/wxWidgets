@@ -127,6 +127,11 @@ public:
     virtual void SetSelection(int n) { DoSetSelection(n, true); }
     void SetSelection(int n, bool select) { DoSetSelection(n, select); }
 
+    // used to process wxUniv actions
+    bool PerformAction(const wxControlAction& action,
+                       long numArg,
+                       const wxString& strArg);
+
 protected:
     // we shouldn't return height too big from here
     virtual wxSize DoGetBestClientSize() const;
@@ -139,11 +144,6 @@ protected:
 
     // called whenever the user selects or activates a listbox item
     void OnSelect(wxCommandEvent& event);
-
-    // used to process wxUniv actions
-    bool PerformAction(const wxControlAction& action,
-                       long numArg,
-                       const wxString& strArg);
 
 private:
     // has the mouse been released on this control?

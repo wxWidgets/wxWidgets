@@ -38,10 +38,11 @@ public:
   void SetLabel( const wxString &str ) ;
   bool SetFont( const wxFont &font );
 
+    virtual bool AcceptsFocus() const { return FALSE; }
+
 protected :
 
   virtual wxSize DoGetBestSize() const ;
-  virtual bool AcceptsFocus() const { return FALSE; }
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText)
 };

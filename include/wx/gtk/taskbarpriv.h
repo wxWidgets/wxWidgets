@@ -28,7 +28,8 @@ public:
     bool IsProtocolSupported();
     
     wxEvtHandler *m_invokingWindow;
-    
+
+protected:
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
 #endif // wxUSE_MENUS_NATIVE

@@ -45,10 +45,10 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void Command(wxCommandEvent& event);
     virtual bool SetForegroundColour(const wxColour& colour);
+    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
 
 protected:
     virtual wxSize DoGetBestSize() const;
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
 
     virtual void DoSet3StateValue(wxCheckBoxState value);
     virtual wxCheckBoxState DoGet3StateValue() const;

@@ -32,8 +32,8 @@ class WXDLLEXPORT wxWindowDC: public wxDC
   wxWindowDC(wxWindow *win);
 
   ~wxWindowDC(void);
-  virtual void DoGetSize( int *width, int *height ) const;
   protected :
+    virtual void DoGetSize( int *width, int *height ) const;
     wxWindow     *m_window;
 };
 
@@ -49,6 +49,8 @@ class WXDLLEXPORT wxClientDC: public wxWindowDC
   wxClientDC(wxWindow *win);
 
   ~wxClientDC(void);
+
+protected:
   virtual void DoGetSize( int *width, int *height ) const;
 };
 
@@ -63,6 +65,8 @@ class WXDLLEXPORT wxPaintDC: public wxWindowDC
   wxPaintDC(wxWindow *win);
 
   ~wxPaintDC(void);
+
+protected:
   virtual void DoGetSize( int *width, int *height ) const;
 };
 

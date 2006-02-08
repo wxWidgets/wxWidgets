@@ -92,6 +92,8 @@ public:
     virtual bool Enable(bool show = true);
     virtual bool SetFont(const wxFont& font);
 
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+
 protected:
     // common part of all ctors
     void Init();
@@ -113,8 +115,6 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
-
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
 
     // the labels windows, if any

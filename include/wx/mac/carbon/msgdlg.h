@@ -39,6 +39,7 @@ public:
 
     int ShowModal();
 
+protected:
     // not supported for message dialog, RR
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),

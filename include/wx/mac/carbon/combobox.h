@@ -29,9 +29,6 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
  public:
     inline wxComboBox() {}
     virtual ~wxComboBox();
-    // override the base class virtuals involved in geometry calculations
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // forward these functions to all subcontrols
     virtual bool Enable(bool enable = true);
@@ -129,6 +126,10 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
 protected:
+    // override the base class virtuals involved in geometry calculations
+    virtual wxSize DoGetBestSize() const;
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+
     virtual int DoAppend(const wxString& item) ;
     virtual int DoInsert(const wxString& item, int pos) ;
 

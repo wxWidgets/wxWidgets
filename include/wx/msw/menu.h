@@ -56,11 +56,6 @@ public:
 
     virtual ~wxMenu();
 
-    // implement base class virtuals
-    virtual wxMenuItem* DoAppend(wxMenuItem *item);
-    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
-    virtual wxMenuItem* DoRemove(wxMenuItem *item);
-
     virtual void Break();
 
     virtual void SetTitle(const wxString& title);
@@ -90,6 +85,11 @@ public:
     // helper used by wxMenu itself (returns the index in m_accels)
     int FindAccel(int id) const;
 #endif // wxUSE_ACCEL
+
+protected:
+    virtual wxMenuItem* DoAppend(wxMenuItem *item);
+    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
+    virtual wxMenuItem* DoRemove(wxMenuItem *item);
 
 private:
     // common part of all ctors

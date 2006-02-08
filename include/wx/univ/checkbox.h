@@ -97,17 +97,18 @@ public:
     // overridden base class virtuals
     virtual bool IsPressed() const { return m_isPressed; }
 
+    virtual bool PerformAction(const wxControlAction& action,
+                               long numArg = -1,
+                               const wxString& strArg = wxEmptyString);
+
+    virtual bool CanBeHighlighted() const { return true; }
+
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state));
     virtual wxCheckBoxState DoGet3StateValue() const;
 
-    virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = -1,
-                               const wxString& strArg = wxEmptyString);
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxSize DoGetBestClientSize() const;
-
-    virtual bool CanBeHighlighted() const { return true; }
 
     // get the size of the bitmap using either the current one or the default
     // one (query renderer then)

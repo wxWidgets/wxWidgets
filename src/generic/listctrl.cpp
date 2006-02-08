@@ -520,8 +520,6 @@ public:
 
     virtual ~wxListMainWindow();
 
-    wxWindow *GetMainWindowOfCompositeControl() { return GetParent(); }
-
     bool HasFlag(int flag) const { return m_parent->HasFlag(flag); }
 
     // return true if this is a virtual list control
@@ -780,6 +778,8 @@ public:
     wxListTextCtrl*     m_textctrl;
 
 protected:
+    wxWindow *GetMainWindowOfCompositeControl() { return GetParent(); }
+
     // the total count of items in a virtual list control
     size_t m_countVirt;
 

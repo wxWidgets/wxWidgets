@@ -43,6 +43,15 @@ public:
         SetSizeHints(-1,-1);
     }
 
+    bool ProcessEvent(wxEvent &event)
+    {
+        // Hand button down events to wxSpinCtrl. Doesn't work.
+        if (event.GetEventType() == wxEVT_LEFT_DOWN && m_spin->ProcessEvent( event ))
+            return TRUE;
+
+        return wxTextCtrl::ProcessEvent( event );
+    }
+
 protected:
     void OnTextChange(wxCommandEvent& event)
     {
@@ -70,15 +79,6 @@ protected:
         }
 
         event.Skip();
-    }
-
-    bool ProcessEvent(wxEvent &event)
-    {
-        // Hand button down events to wxSpinCtrl. Doesn't work.
-        if (event.GetEventType() == wxEVT_LEFT_DOWN && m_spin->ProcessEvent( event ))
-            return TRUE;
-
-        return wxTextCtrl::ProcessEvent( event );
     }
 
 private:

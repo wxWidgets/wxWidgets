@@ -36,9 +36,8 @@ public:
 
     virtual int ShowModal();
 
-    virtual void DoGetPosition( int *x, int *y ) const;
-
 protected:
+    virtual void DoGetPosition( int *x, int *y ) const;
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetSize(int x, int y,

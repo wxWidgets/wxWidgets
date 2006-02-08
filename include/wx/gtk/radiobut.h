@@ -51,13 +51,13 @@ public:
 
     virtual bool IsRadioButton() const { return TRUE; }
 
-    void DoApplyWidgetStyle(GtkRcStyle *style);
     bool IsOwnGtkWindow( GdkWindow *window );
     void OnInternalIdle();
 
     bool m_blockEvent;
 
 protected:
+    void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual wxSize DoGetBestSize() const;
 
 private:

@@ -60,10 +60,11 @@ public:
     wxIcon GetIcon() const;
 
     virtual bool HasTransparentBackground() { return true; }
-    
-private:
+
+protected:
     virtual void DoDraw(wxControlRenderer *renderer);
 
+private:
     // the bitmap which we show
     wxBitmap m_bitmap;
 

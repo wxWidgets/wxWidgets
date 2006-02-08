@@ -76,20 +76,8 @@ public:
     virtual int FindString(const wxString& s, bool bCase = false) const;
 
     virtual bool IsSelected(int n) const;
-    virtual void DoSetSelection(int n, bool select);
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
-
-    virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, int pos);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
-
-    virtual void DoSetFirstItem(int n);
-
-    virtual void DoSetItemClientData(int n, void* clientData);
-    virtual void* DoGetItemClientData(int n) const;
-    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(int n) const;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -100,7 +88,6 @@ public:
     int GtkGetIndex( GtkWidget *item ) const;
     GtkWidget *GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
-    void DoApplyWidgetStyle(GtkRcStyle *style);
     void OnInternalIdle();
 
 #if wxUSE_TOOLTIPS
@@ -121,6 +108,16 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+    virtual void DoSetSelection(int n, bool select);
+    virtual int DoAppend(const wxString& item);
+    virtual void DoInsertItems(const wxArrayString& items, int pos);
+    virtual void DoSetItems(const wxArrayString& items, void **clientData);
+    virtual void DoSetFirstItem(int n);
+    virtual void DoSetItemClientData(int n, void* clientData);
+    virtual void* DoGetItemClientData(int n) const;
+    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(int n) const;
+    void DoApplyWidgetStyle(GtkRcStyle *style);
 
     // return the string label for the given item
     wxString GetRealLabel(struct _GList *item) const;

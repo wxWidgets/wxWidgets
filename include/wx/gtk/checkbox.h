@@ -47,7 +47,6 @@ public:
     // implementation
     // --------------
 
-    void DoApplyWidgetStyle(GtkRcStyle *style);
     bool IsOwnGtkWindow( GdkWindow *window );
     void OnInternalIdle();
 
@@ -58,6 +57,7 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+    void DoApplyWidgetStyle(GtkRcStyle *style);
 
     void DoSet3StateValue(wxCheckBoxState state);
     wxCheckBoxState DoGet3StateValue() const;

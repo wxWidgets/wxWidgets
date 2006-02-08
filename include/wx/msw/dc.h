@@ -72,12 +72,6 @@ public:
 
     virtual wxCoord GetCharHeight() const;
     virtual wxCoord GetCharWidth() const;
-    virtual void DoGetTextExtent(const wxString& string,
-                                 wxCoord *x, wxCoord *y,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL,
-                                 wxFont *theFont = NULL) const;
-    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
     virtual bool CanDrawBitmap() const;
     virtual bool CanGetTextExtent() const;
@@ -159,6 +153,13 @@ protected:
     // create an uninitialized DC: this should be only used by the derived
     // classes
     wxDC() { Init(); }
+
+    virtual void DoGetTextExtent(const wxString& string,
+                                 wxCoord *x, wxCoord *y,
+                                 wxCoord *descent = NULL,
+                                 wxCoord *externalLeading = NULL,
+                                 wxFont *theFont = NULL) const;
+    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
@@ -301,6 +302,7 @@ public:
         SetHDC((WXHDC)NULL);
     }
 
+protected:
     virtual void DoGetSize(int *w, int *h) const
     {
         wxFAIL_MSG( _T("no way to retrieve the size of generic DC") );

@@ -52,11 +52,11 @@ public:
     virtual wxBitmap GetBitmap() const;
     virtual wxIcon GetIcon() const;
 
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
 protected:
     virtual wxBorder GetDefaultBorder() const;
     virtual wxSize DoGetBestSize() const;
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     // ctor/dtor helpers
     void Init() { m_isIcon = true; m_image = NULL; m_currentHandle = 0; }

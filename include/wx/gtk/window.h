@@ -91,10 +91,6 @@ public:
                                const wxFont *theFont = (const wxFont *) NULL)
                                const;
 
-#if wxUSE_MENUS_NATIVE
-    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
-#endif // wxUSE_MENUS_NATIVE
-
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true );
     virtual void SetScrollPos( int orient, int pos, bool refresh = true );
@@ -226,6 +222,7 @@ public:
     // wxMDIFrame, wxNotebook etc. this is the callback that will get used.
     wxInsertChildFunction  m_insertCallback;
 
+protected:
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
@@ -238,6 +235,10 @@ public:
     virtual void DoSetClientSize(int width, int height);
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
+#if wxUSE_MENUS_NATIVE
+    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+#endif // wxUSE_MENUS_NATIVE
+
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
 
@@ -245,7 +246,6 @@ public:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
-protected:
     // common part of all ctors (not virtual because called from ctor)
     void Init();
 

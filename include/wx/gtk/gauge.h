@@ -74,6 +74,8 @@ public:
     
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    virtual wxVisualAttributes GetDefaultAttributes() const;
     
     // implementation
     // -------------
@@ -90,8 +92,6 @@ protected:
     void DoSetGauge();
 
     virtual wxSize DoGetBestSize() const;
-
-    virtual wxVisualAttributes GetDefaultAttributes() const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGauge)

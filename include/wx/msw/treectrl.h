@@ -251,16 +251,6 @@ protected:
     wxTextCtrl  *m_textCtrl;        // text control in which it is edited
     wxTreeItemId m_idEdited;        // the item being edited
 
-private:
-    // the common part of all ctors
-    void Init();
-
-    // helper functions
-    inline bool DoGetItem(wxTreeViewItem *tvItem) const;
-    inline void DoSetItem(wxTreeViewItem *tvItem);
-
-    inline void DoExpand(const wxTreeItemId& item, int flag);
-
     virtual wxTreeItemId DoInsertItem(const wxTreeItemId& parent,
                                       size_t pos,
                                       const wxString& text,
@@ -272,6 +262,16 @@ private:
                                        int image = -1, int selImage = -1,
                                        wxTreeItemData *data = NULL);
     virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags);
+
+private:
+    // the common part of all ctors
+    void Init();
+
+    // helper functions
+    inline bool DoGetItem(wxTreeViewItem *tvItem) const;
+    inline void DoSetItem(wxTreeViewItem *tvItem);
+
+    inline void DoExpand(const wxTreeItemId& item, int flag);
 
     int DoGetItemImageFromData(const wxTreeItemId& item,
                                wxTreeItemIcon which) const;

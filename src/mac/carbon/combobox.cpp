@@ -210,6 +210,8 @@ protected:
 private:
     wxComboBox *m_cb;
 
+    friend class wxComboBox;
+
     DECLARE_EVENT_TABLE()
 };
 
