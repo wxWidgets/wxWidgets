@@ -2475,13 +2475,23 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
         if (GetItemRect(i, itemRect))
         {
-            int col;
+            // this is a fix for bug 673394: erase the pixels which we would
+            // otherwise leave on the screen
+            static const int gap = 2;
+            dc.SetPen(*wxTRANSPARENT_PEN);
+            dc.SetBrush(wxBrush(GetBackgroundColour()));
+            dc.DrawRectangle(0, firstItemRect.GetY() - gap,
+                             clientSize.GetWidth(), gap);
+
+            dc.SetPen(pen);
+            dc.SetBrush(*wxTRANSPARENT_BRUSH);
             int x = itemRect.GetX();
-            for (col = 0; col < GetColumnCount(); col++)
+            for (int col = 0; col < GetColumnCount(); col++)
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth ;
-                dc.DrawLine(x-1, firstItemRect.GetY() - 2, x-1, itemRect.GetBottom());
+                dc.DrawLine(x-1, firstItemRect.GetY() - gap,
+                            x-1, itemRect.GetBottom());
             }
         }
     }
