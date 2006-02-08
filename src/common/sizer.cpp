@@ -447,7 +447,20 @@ bool wxSizerItem::IsShown() const
             return m_window->IsShown();
 
         case Item_Sizer:
-            return m_sizer->IsShown();
+            // arbitrarily decide that if at least one of our elements is
+            // shown, so are we (this arbitrariness is the reason for
+            // deprecating this function)
+            {
+                for ( wxSizerItemList::compatibility_iterator
+                        node = m_sizer->GetChildren().GetFirst();
+                      node;
+                      node = node->GetNext() )
+                {
+                    if ( node->GetData()->IsShown() )
+                        return true;
+                }
+            }
+            return false;
 
         case Item_Spacer:
             return m_spacer->IsShown();
@@ -474,11 +487,6 @@ int wxSizerItem::GetOption() const
 //---------------------------------------------------------------------------
 // wxSizer
 //---------------------------------------------------------------------------
-
-wxSizer::wxSizer()
-{
-    m_isShown = true;
-}
 
 wxSizer::~wxSizer()
 {

@@ -11,6 +11,13 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 - For all wxInputStreams, Eof() becomes true after an attempt has been made
   to read _past_ the end of file.
 
+Deprecated methods since 2.6.x and their replacements
+-----------------------------------------------------
+
+- wxGetWorkingDirectory() deprecated in favour of wxGetCwd()
+- wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated, just don't use them
+- wxSizerItem::IsShown(): no replacement as it doesn't have clear semantics
+
 
 2.7.0
 -----
@@ -19,7 +26,6 @@ All:
 
 - wxLaunchDefaultBrowser() now supports wxBROWSER_NEW_WINDOW flag
 - Added wxStringTokenizer::GetLastDelimiter(); improved documentation
-- wxGetWorkingDirectory() deprecated. Use wxGetCwd() instead.
 - Speed improvements to wxRegEx when matching is done in a loop such as
   during a search and replace.
 - Fix regerror and regfree name conficts when built-in regex and system regex
@@ -75,7 +81,6 @@ All (GUI):
 - Added wxToolbook (uses a wxToolBar to control pages).
 - Added SetSheetStyle to wxPropertySheetDialog and allowed it to
   behave like a Mac OS X settings dialog.
-- wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated.
 - Added <disabled> XRC tag for wxToolBar elements and <bg> for wxToolBar itself
 
 wxMSW:

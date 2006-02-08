@@ -253,7 +253,6 @@ public:
     wxSize GetSpacer() const;
 
     void Show(bool show);
-    bool IsShown() const;
 
     void SetUserData(wxObject* userData)
         { delete m_userData; m_userData = userData; }
@@ -269,6 +268,11 @@ public:
     void SetSpacer(const wxSize& size);
     void SetSpacer(int width, int height) { SetSpacer(wxSize(width, height)); }
 
+    // this function is deprecated because if this item is a sizer, then it
+    // doesn't really make sense: sizer is neither shown nor hidden, because
+    // some of its elements may be hidden while others are shown
+    wxDEPRECATED( bool IsShown() const );
+
 protected:
     // common part of several ctors
     void Init() { m_userData = NULL; }
@@ -276,6 +280,8 @@ protected:
     // common part of ctors taking wxSizerFlags
     void Init(const wxSizerFlags& flags);
 
+
+    // discriminated union: depending on m_kind one of the fields is valid
     enum
     {
         Item_None,
@@ -322,7 +328,7 @@ WX_DECLARE_EXPORTED_LIST( wxSizerItem, wxSizerItemList );
 class WXDLLEXPORT wxSizer: public wxObject, public wxClientDataContainer
 {
 public:
-    wxSizer();
+    wxSizer() { }
     ~wxSizer();
 
     // methods for adding elements to the sizer: there are Add/Insert/Prepend
@@ -486,18 +492,13 @@ public:
     // Recursively call wxWindow::Show () on all sizer items.
     virtual void ShowItems (bool show);
 
-    void Show(bool show)
-    {   m_isShown = show;
-        ShowItems(show);
-    }
-    bool IsShown() const { return m_isShown; }
+    void Show(bool show) { ShowItems(show); }
 
 protected:
     wxSize              m_size;
     wxSize              m_minSize;
     wxPoint             m_position;
     wxSizerItemList     m_children;
-    bool                m_isShown;
 
     wxSize GetMaxWindowSize( wxWindow *window ) const;
     wxSize GetMinWindowSize( wxWindow *window );
