@@ -64,20 +64,17 @@
 #include "wx/msw/winundef.h"
 
 
-// types DWORD_PTR, ULONG_PTR and so on might be not defined in old headers but
-// unfortunately I don't know of any standard way to test for this (as they're
-// typedefs and not #defines), so simply overwrite them in any case in Win32
-// mode -- and if compiling for Win64 they'd better have new headers anyhow
-//
-// this is ugly but what else can we do? even testing for compiler version
-// wouldn't help as you can perfectly well be using an older compiler (VC6)
-// with newer SDK headers
-#if !defined(__WIN64__) && !defined(__WXWINCE__)
+// Types DWORD_PTR, ULONG_PTR and so on are used for 64-bit compatability 
+// in the WINAPI SDK (they are an integral type that is the size of a
+// pointer) on MSVC 7 and later. However, they are not available in older 
+// Platform SDKs, and since they are typedefs and not #defines we simply 
+// overwrite them if there is a chance that they're not defined
+#if !defined(_MSC_VER) || (_MSC_VER < 1300)
     #define UINT_PTR unsigned int
     #define LONG_PTR long
     #define ULONG_PTR unsigned long
     #define DWORD_PTR unsigned long
-#endif // !__WIN64__
+#endif // !defined(_MSC_VER) || _MSC_VER < 1300
 
 #endif // _WX_WRAPWIN_H_
 
