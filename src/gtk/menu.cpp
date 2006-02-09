@@ -1411,13 +1411,13 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
 
 #if wxUSE_MENUS_NATIVE
 
-extern "C"
+extern "C" WXDLLIMPEXP_CORE
 void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
 {
     *is_waiting = FALSE;
 }
 
-void SetInvokingWindow( wxMenu *menu, wxWindow* win )
+WXDLLIMPEXP_CORE void SetInvokingWindow( wxMenu *menu, wxWindow* win )
 {
     menu->SetInvokingWindow( win );
 
@@ -1434,7 +1434,7 @@ void SetInvokingWindow( wxMenu *menu, wxWindow* win )
     }
 }
 
-extern "C"
+extern "C" WXDLLIMPEXP_CORE
 void wxPopupMenuPositionCallback( GtkMenu *menu,
                                   gint *x, gint *y,
                                   gboolean * WXUNUSED(whatever),
