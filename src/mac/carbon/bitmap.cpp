@@ -759,7 +759,7 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
                 int index = x / 8 ;
                 int bit = x % 8 ;
                 int mask = 1 << bit ;
-                if ( linestart[index] & mask )
+                if ( !(linestart[index] & mask ) )
                 {
                     *destination++ = 0xFF ;
                     *destination++ = 0 ;
