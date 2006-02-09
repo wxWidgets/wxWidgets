@@ -319,13 +319,8 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
                 return DV_E_FORMATETC;
             }
 
-            if ( !format.IsStandard() ) {
-                // for custom formats, put the size with the data - alloc the
-                // space for it
-                // MB: not completely sure this is correct,
-                //     even if I can't figure out what's wrong
-                size += m_pDataObject->GetBufferOffset( format );
-            }
+            // we may need extra space for the buffer size
+            size += m_pDataObject->GetBufferOffset( format );
 
             HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, size);
             if ( hGlobal == NULL ) {
@@ -387,10 +382,14 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
                 }
 
                 wxDataFormat format = pformatetc->cfFormat;
-                if ( !format.IsStandard() ) {
-                    // for custom formats, put the size with the data
-                    pBuf = m_pDataObject->SetSizeInBuffer( pBuf, GlobalSize(hGlobal), format );
-                }
+
+                // possibly put the size in the beginning of the buffer
+                pBuf = m_pDataObject->SetSizeInBuffer
+                                      (
+                                        pBuf,
+                                        ::GlobalSize(hGlobal),
+                                        format
+                                      );
 
                 if ( !m_pDataObject->GetDataHere(format, pBuf) )
                     return E_UNEXPECTED;
@@ -492,14 +491,9 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                         break;
 #endif
                     default:
-                        {
-                            // we suppose that the size precedes the data
-                            pBuf = m_pDataObject->GetSizeFromBuffer( pBuf, &size, format );
-                            if (! format.IsStandard() ) {
-                                // see GetData for corresponding increment
-                                size -= m_pDataObject->GetBufferOffset( format  );
-                            }
-                        }
+                        pBuf = m_pDataObject->
+                                    GetSizeFromBuffer(pBuf, &size, format);
+                        size -= m_pDataObject->GetBufferOffset(format);
                 }
 
                 bool ok = m_pDataObject->SetData(format, size, pBuf);
@@ -683,27 +677,50 @@ void wxDataObject::SetAutoDelete()
     m_pIDataObject = NULL;
 }
 
-size_t wxDataObject::GetBufferOffset( const wxDataFormat& WXUNUSED(format) )
+size_t wxDataObject::GetBufferOffset(const wxDataFormat& format )
 {
-    return sizeof(size_t);
+    // if we prepend the size of the data to the buffer itself, account for it
+    return NeedsVerbatimData(format) ? 0 : sizeof(size_t);
 }
 
 const void* wxDataObject::GetSizeFromBuffer( const void* buffer, size_t* size,
-                                             const wxDataFormat& WXUNUSED(format) )
+                                               const wxDataFormat& format )
 {
-    size_t* p = (size_t*)buffer;
-    *size = *p;
+    SIZE_T realsz = ::HeapSize(::GetProcessHeap(), 0, buffer);
+    if ( realsz == (SIZE_T)-1 )
+    {
+        // note that HeapSize() does not set last error
+        wxLogApiError(wxT("HeapSize"), 0);
+        return NULL;
+    }
 
-    return p + 1;
+    *size = realsz;
+
+    // check if this data has its size prepended (as it was by default for wx
+    // programs prior 2.6.3):
+    size_t *p = (size_t *)buffer;
+    if ( *p == realsz )
+    {
+        if ( NeedsVerbatimData(format) )
+            wxLogDebug(wxT("Apparent data format mismatch: size not needed"));
+
+        p++; // this data has its size prepended; skip first DWORD
+    }
+
+    return p;
 }
 
 void* wxDataObject::SetSizeInBuffer( void* buffer, size_t size,
-                                       const wxDataFormat& WXUNUSED(format) )
+                                      const wxDataFormat& format )
 {
-    size_t* p = (size_t*)buffer;
-    *p = size;
+    size_t* p = (size_t *)buffer;
+    if ( !NeedsVerbatimData(format) )
+    {
+        // prepend the size to the data and skip it
+        *p++ = size;
+    }
 
-    return p + 1;
+    return p;
 }
 
 #ifdef __WXDEBUG__

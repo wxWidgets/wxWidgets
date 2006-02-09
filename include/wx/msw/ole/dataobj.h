@@ -40,6 +40,19 @@ public:
     bool IsSupportedFormat(const wxDataFormat& format) const
         { return wxDataObjectBase::IsSupported(format, Get); }
 
+    // if this method returns false, this wxDataObject will be copied to
+    // the clipboard with its size prepended to it, which is compatible with
+    // older wx versions
+    //
+    // if returns true, then this wxDataObject will be copied to the clipboard
+    // without any additional information and ::HeapSize() function will be used
+    // to get the size of that data
+    virtual bool NeedsVerbatimData(const wxDataFormat& WXUNUSED(format)) const
+    {
+        // return false from here only for compatibility with earlier wx versions
+        return true;
+    }
+
     // function to return symbolic name of clipboard format (for debug messages)
 #ifdef __WXDEBUG__
     static const wxChar *GetFormatName(wxDataFormat format);
@@ -56,6 +69,7 @@ public:
     virtual void* SetSizeInBuffer( void* buffer, size_t size,
                                    const wxDataFormat& format );
     virtual size_t GetBufferOffset( const wxDataFormat& format );
+
 private:
     IDataObject *m_pIDataObject; // pointer to the COM interface
 
