@@ -89,6 +89,13 @@ Appends the files in the history list, to all menus managed by the file history 
 Appends the files in the history list, to the given menu only.
 
 
+\membersection{wxFileHistory::GetCount}\label{wxfilehistorygetcount}
+
+\constfunc{size\_t}{GetCount}{\void}
+
+Returns the number of files currently stored in the file history.
+
+
 \membersection{wxFileHistory::GetHistoryFile}\label{wxfilehistorygethistoryfile}
 
 \constfunc{wxString}{GetHistoryFile}{\param{size\_t}{ index}}
@@ -98,16 +105,20 @@ Returns the file at this index (zero-based).
 
 \membersection{wxFileHistory::GetMaxFiles}\label{wxfilehistorygetmaxfiles}
 
-\constfunc{size\_t}{GetMaxFiles}{\void}
+\constfunc{int}{GetMaxFiles}{\void}
 
 Returns the maximum number of files that can be stored.
 
 
-\membersection{wxFileHistory::GetCount}\label{wxfilehistorygetcount}
+\membersection{wxFileHistory::GetMenus}\label{wxfilehistorygetmenus}
 
-\constfunc{size\_t}{GetCount}{\void}
+\constfunc{const wxList\&}{GetMenus}{\void}
 
-Returns the number of files currently stored in the file history.
+Returns the list of menus that are managed by this file history object.
+
+\wxheading{See also}
+
+\helpref{wxFileHistory::UseMenu}{wxfilehistoryusemenu}
 
 
 \membersection{wxFileHistory::Load}\label{wxfilehistoryload}
