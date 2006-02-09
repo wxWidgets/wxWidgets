@@ -49,6 +49,7 @@ private:
         CPPUNIT_TEST( Assignment );
         CPPUNIT_TEST( Comparison );
         CPPUNIT_TEST( Unescaping );
+        CPPUNIT_TEST( FileScheme );
 #if TEST_URL
         CPPUNIT_TEST( URLCompat );
 #if wxUSE_PROTOCOL_HTTP
@@ -68,6 +69,7 @@ private:
     void Assignment();
     void Comparison();
     void Unescaping();
+    void FileScheme();
 
 #if TEST_URL
     void URLCompat();
@@ -299,6 +301,26 @@ void URITestCase::Unescaping()
     CPPUNIT_ASSERT(works2.IsSameAs(broken2));
 
 }
+
+void URITestCase::FileScheme()
+{
+    //file:// variety (NOT CONFORMANT TO THE RFC)
+    CPPUNIT_ASSERT(wxURI(wxString(wxT("file://e:/wxcode/script1.xml"))).GetPath() 
+                    == wxT("e:/wxcode/script1.xml") );
+
+    //file:/// variety
+    CPPUNIT_ASSERT(wxURI(wxString(wxT("file:///e:/wxcode/script1.xml"))).GetPath() 
+                    == wxT("/e:/wxcode/script1.xml") );
+
+    //file:/ variety
+    CPPUNIT_ASSERT(wxURI(wxString(wxT("file:/e:/wxcode/script1.xml"))).GetPath() 
+                    == wxT("/e:/wxcode/script1.xml") );
+
+    //file: variety
+    CPPUNIT_ASSERT(wxURI(wxString(wxT("file:e:/wxcode/script1.xml"))).GetPath() 
+                    == wxT("e:/wxcode/script1.xml") );
+}
+
 #if TEST_URL
 
 const wxChar* pszProblemUrls[] = { wxT("http://www.csdn.net"),
