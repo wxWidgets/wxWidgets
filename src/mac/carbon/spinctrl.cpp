@@ -15,7 +15,7 @@
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 #include "wx/textctrl.h"
-
+#include "wx/containr.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -138,6 +138,13 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
     
+BEGIN_EVENT_TABLE(wxSpinCtrl, wxControl)
+  WX_EVENT_TABLE_CONTROL_CONTAINER(wxSpinCtrl)
+END_EVENT_TABLE()
+
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxSpinCtrl)
+
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -150,6 +157,7 @@ void wxSpinCtrl::Init()
 {
     m_text = NULL;
     m_btn = NULL;
+    m_container.SetContainerWindow(this);
 }
 
 bool wxSpinCtrl::Create(wxWindow *parent,
@@ -271,13 +279,6 @@ bool wxSpinCtrl::Show(bool show)
     if ( !wxControl::Show(show) )
         return FALSE;
     return TRUE;
-}
-
-void wxSpinCtrl::SetFocus()
-{
-    if ( m_text != NULL) {
-        m_text->SetFocus();
-    }
 }
 
 // ----------------------------------------------------------------------------

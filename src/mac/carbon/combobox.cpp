@@ -16,9 +16,16 @@
 #include "wx/combobox.h"
 #include "wx/button.h"
 #include "wx/menu.h"
+#include "wx/containr.h"
 #include "wx/mac/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
+
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxComboBox)
+
+BEGIN_EVENT_TABLE(wxComboBox, wxControl)
+    WX_EVENT_TABLE_CONTROL_CONTAINER(wxComboBox)
+END_EVENT_TABLE()
 
 
 static int nextPopUpMenuId = 1000 ;
@@ -219,6 +226,11 @@ BEGIN_EVENT_TABLE(wxComboBoxChoice, wxChoice)
     EVT_CHOICE(-1, wxComboBoxChoice::OnChoice)
 END_EVENT_TABLE()
 
+wxComboBox::wxComboBox()
+{
+    m_container.SetContainerWindow(this);
+}
+
 wxComboBox::~wxComboBox()
 {
     // delete client objects
@@ -311,12 +323,6 @@ bool wxComboBox::Show(bool show)
         return false;
 
     return true;
-}
-
-void wxComboBox::SetFocus()
-{
-    if ( m_text != NULL)
-        m_text->SetFocus();
 }
 
 void wxComboBox::DelegateTextChanged( const wxString& value )
