@@ -20,23 +20,13 @@ class WXDLLEXPORT wxAcceleratorTable : public wxObject
 {
 public:
     // default ctor
-    wxAcceleratorTable() : wxObject() { }
-
-    // copy ctor
-    wxAcceleratorTable(const wxAcceleratorTable& accel) : wxObject(accel) { Ref(accel); }
+    wxAcceleratorTable() { }
 
     // load from .rc resource (Windows specific)
     wxAcceleratorTable(const wxString& resource);
 
     // initialize from array
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
-
-    wxAcceleratorTable& operator=(const wxAcceleratorTable& accel)
-    {
-        if ( *this != accel )
-            Ref(accel);
-        return *this;
-    }
 
     bool operator==(const wxAcceleratorTable& accel) const;
     bool operator!=(const wxAcceleratorTable& accel) const

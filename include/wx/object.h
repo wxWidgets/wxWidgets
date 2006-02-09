@@ -381,6 +381,24 @@ inline void* wxCheckCast(void *ptr)
 #endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
 
 // ----------------------------------------------------------------------------
+// wxObjectRefData: ref counted data meant to be stored in wxObject
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxObjectRefData
+{
+    friend class WXDLLIMPEXP_BASE wxObject;
+
+public:
+    wxObjectRefData() : m_count(1) { }
+    virtual ~wxObjectRefData() { }
+
+    int GetRefCount() const { return m_count; }
+
+private:
+    int m_count;
+};
+
+// ----------------------------------------------------------------------------
 // wxObject: the root class of wxWidgets object hierarchy
 // ----------------------------------------------------------------------------
 
@@ -388,24 +406,22 @@ class WXDLLIMPEXP_BASE wxObject
 {
     DECLARE_ABSTRACT_CLASS(wxObject)
 
-private:
-    void InitFrom(const wxObject& other);
-
 public:
     wxObject() { m_refData = NULL; }
     virtual ~wxObject() { UnRef(); }
 
     wxObject(const wxObject& other)
     {
-        InitFrom(other);
+         m_refData = other.m_refData;
+         if (m_refData)
+             m_refData->m_count++;
     }
 
     wxObject& operator=(const wxObject& other)
     {
         if ( this != &other )
         {
-            UnRef();
-            InitFrom(other);
+            Ref(other);
         }
         return *this;
     }
@@ -484,25 +500,6 @@ protected:
 
     wxObjectRefData *m_refData;
 };
-
-// ----------------------------------------------------------------------------
-// wxObjectRefData: ref counted data meant to be stored in wxObject
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_BASE wxObjectRefData
-{
-    friend class WXDLLIMPEXP_BASE wxObject;
-
-public:
-    wxObjectRefData() : m_count(1) { }
-    virtual ~wxObjectRefData() { }
-
-    int GetRefCount() const { return m_count; }
-
-private:
-    int m_count;
-};
-
 
 inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
 {

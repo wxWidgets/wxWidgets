@@ -56,12 +56,6 @@ public:
 
     virtual ~wxRegion();
 
-    // Copying
-    wxRegion(const wxRegion& r) : wxGDIObject(r)
-        { Ref(r); }
-    wxRegion& operator = (const wxRegion& r)
-        { Ref(r); return (*this); }
-
     // Modify region
     // -------------
 

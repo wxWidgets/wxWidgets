@@ -28,17 +28,12 @@ public:
     wxPen();
     wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
     wxPen(const wxBitmap& stipple, int width);
-    wxPen(const wxPen& pen)
-        : wxGDIObject()
-        { Ref(pen); }
     ~wxPen();
 
     // wxObjectRefData
     wxObjectRefData *CreateRefData() const;
     wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
-    inline wxPen& operator = (const wxPen& pen)
-    {   if (*this == pen) return (*this); Ref(pen); return *this; }
     inline bool operator == (const wxPen& pen) const
     {   return m_refData == pen.m_refData; }
     inline bool operator != (const wxPen& pen) const

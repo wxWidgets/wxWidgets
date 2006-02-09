@@ -20,9 +20,6 @@ class WXDLLEXPORT wxIcon : public wxBitmap
 public:
     wxIcon();
 
-    // Copy constructors
-    inline wxIcon(const wxIcon& icon) { Ref(icon); }
-
     // Initialize with XBM data
     wxIcon(const char bits[], int width, int height);
 
@@ -58,8 +55,6 @@ public:
     // ctors, assignment operators...), but it's ok to have such function
     void CopyFromBitmap(const wxBitmap& bmp);
 
-    wxIcon& operator = (const wxIcon& icon)
-        { if (this != &icon) Ref(icon); return *this; }
     bool operator == (const wxIcon& icon) const
         { return m_refData == icon.m_refData; }
     bool operator != (const wxIcon& icon) const

@@ -31,19 +31,6 @@ wxIcon::wxIcon(char **bits, int WXUNUSED(width), int WXUNUSED(height)) :
 {
 }
 
-wxIcon::wxIcon(const wxIcon& icon) : wxBitmap()
-{
-    Ref(icon);
-}
-
-wxIcon& wxIcon::operator = (const wxIcon& icon)
-{
-    if (*this == icon) 
-        return (*this);
-    Ref(icon);
-    return *this;
-}
-
 void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
 {
     wxIcon *icon = (wxIcon*)(&bmp);

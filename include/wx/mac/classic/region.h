@@ -53,13 +53,6 @@ public:
 
     ~wxRegion();
 
-    //# Copying
-    wxRegion(const wxRegion& r)
-        : wxGDIObject()
-    { Ref(r); }
-    wxRegion& operator = (const wxRegion& r)
-    { Ref(r); return (*this); }
-
     //# Modify region
     // Clear current region
     void Clear();

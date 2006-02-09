@@ -860,10 +860,6 @@ wxString wxNativeFontInfo::ToString() const
 // wxFont
 // ----------------------------------------------------------------------------
 
-void wxFont::Init()
-{
-} // end of wxFont::Init
-
 bool wxFont::Create( const wxNativeFontInfo& rInfo,
                      WXHFONT hFont )
 {

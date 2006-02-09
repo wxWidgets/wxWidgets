@@ -44,7 +44,6 @@ class WXDLLEXPORT wxMetafile: public wxGDIObject
 {
 public:
     wxMetafile(const wxString& file = wxEmptyString);
-    wxMetafile(const wxMetafile& metafile) { Ref(metafile); }
     virtual ~wxMetafile();
 
     // After this is called, the metafile cannot be used for anything
@@ -69,8 +68,6 @@ public:
     void SetWindowsMappingMode(int mm);
 
     // Operators
-    wxMetafile& operator=(const wxMetafile& metafile)
-        { if (*this != metafile) Ref(metafile); return *this; }
     bool operator==(const wxMetafile& metafile) const
         { return m_refData == metafile.m_refData; }
     bool operator!=(const wxMetafile& metafile) const

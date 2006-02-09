@@ -40,9 +40,6 @@ class WXDLLEXPORT wxIcon: public wxIconBase
 public:
     wxIcon();
 
-    // Copy constructors
-    inline wxIcon(const wxIcon& icon) { Ref(icon); }
-
     wxIcon( const char bits[]
            ,int        nWidth
            ,int        nHeight
@@ -67,8 +64,6 @@ public:
                   ,int             nDesiredHeight = -1
                  );
 
-    inline wxIcon& operator = (const wxIcon& rIcon)
-       { if (*this != rIcon) Ref(rIcon); return *this; }
     inline bool operator == (const wxIcon& rIcon) const
        { return m_refData == rIcon.m_refData; }
     inline bool operator != (const wxIcon& rIcon) const

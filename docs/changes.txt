@@ -40,6 +40,7 @@ All:
 - Fixed build error in list.h with VC++ 2005.
 - Fixed wxODBC buffer overflow problem in Unicode builds.
 - Fixed wxSocketBase::InterruptWait on wxBase.
+- Important code cleanup (Paul Cornett)
 
 All (GUI):
 

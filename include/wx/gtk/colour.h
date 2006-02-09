@@ -53,12 +53,6 @@ public:
     wxColour( const wxChar *colourName ) { InitFromName( wxString(colourName) ); }
 #endif
 
-
-    wxColour( const wxColour& col )
-        : wxGDIObject()
-        { Ref(col); }
-    wxColour& operator = ( const wxColour& col ) { Ref(col); return *this; }
-
     ~wxColour();
 
     bool Ok() const { return m_refData != NULL; }

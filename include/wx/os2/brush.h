@@ -45,10 +45,8 @@ public:
     wxBrush();
     wxBrush(const wxColour& rCol, int nStyle = wxSOLID);
     wxBrush(const wxBitmap& rStipple);
-    inline wxBrush(const wxBrush& rBrush) { Ref(rBrush); }
     ~wxBrush();
 
-    inline wxBrush& operator = (const wxBrush& rBrush) { if (*this == rBrush) return (*this); Ref(rBrush); return *this; }
     inline bool operator == (const wxBrush& rBrush) const { return m_refData == rBrush.m_refData; }
     inline bool operator != (const wxBrush& rBrush) const { return m_refData != rBrush.m_refData; }
 

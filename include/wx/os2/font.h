@@ -25,8 +25,7 @@ class WXDLLEXPORT wxFont : public wxFontBase
 {
 public:
     // ctors and such
-    wxFont() { Init(); }
-    wxFont(const wxFont& rFont) { Init(); Ref(rFont); }
+    wxFont() { }
 
     wxFont( int             nSize
            ,int             nFamily
@@ -37,8 +36,6 @@ public:
            ,wxFontEncoding  vEncoding = wxFONTENCODING_DEFAULT
           )
     {
-        Init();
-
         (void)Create( nSize
                      ,nFamily
                      ,nStyle
@@ -54,8 +51,6 @@ public:
           )
 
     {
-        Init();
-
         (void)Create( rInfo
                      ,hFont
                     );
@@ -76,11 +71,6 @@ public:
                );
 
     virtual ~wxFont();
-
-    //
-    // Assignment
-    //
-    wxFont& operator=(const wxFont& rFont);
 
     //
     // Implement base class pure virtuals
@@ -123,10 +113,6 @@ public:
 protected:
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& rInfo);
 
-    //
-    // Common part of all ctors
-    //
-    void Init(void);
     void Unshare(void);
 
 private:

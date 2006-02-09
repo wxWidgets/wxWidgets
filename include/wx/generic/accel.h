@@ -23,12 +23,6 @@ public:
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
     virtual ~wxAcceleratorTable();
 
-    wxAcceleratorTable(const wxAcceleratorTable& accel)
-        : wxObject()
-        { Ref(accel); }
-    wxAcceleratorTable& operator=(const wxAcceleratorTable& accel)
-      { if ( m_refData != accel.m_refData ) Ref(accel); return *this; }
-
 #if WXWIN_COMPATIBILITY_2_4
     bool operator==(const wxAcceleratorTable& accel) const
         { return m_refData == accel.m_refData; }

@@ -300,14 +300,6 @@ void wxFontBase::SetNativeFontInfoUserDesc(const wxString& info)
     }
 }
 
-wxFont& wxFont::operator=(const wxFont& font)
-{
-    if ( this != &font )
-        Ref(font);
-
-    return (wxFont &)*this;
-}
-
 bool wxFontBase::operator==(const wxFont& font) const
 {
     // either it is the same font, i.e. they share the same common data or they

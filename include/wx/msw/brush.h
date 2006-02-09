@@ -28,7 +28,6 @@ public:
     wxBrush();
     wxBrush(const wxColour& col, int style = wxSOLID);
     wxBrush(const wxBitmap& stipple);
-    wxBrush(const wxBrush& brush) : wxBrushBase(brush) { Ref(brush); }
     virtual ~wxBrush();
 
     virtual void SetColour(const wxColour& col);
@@ -36,7 +35,6 @@ public:
     virtual void SetStyle(int style);
     virtual void SetStipple(const wxBitmap& stipple);
 
-    wxBrush& operator=(const wxBrush& brush);
     bool operator==(const wxBrush& brush) const;
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
 

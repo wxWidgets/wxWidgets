@@ -355,11 +355,6 @@ wxImage wxBitmap::ConvertToImage() const
     return image;
 }
 
-wxBitmap::wxBitmap(const wxBitmap& bmp)
-{
-    Ref(bmp);
-}
-
 wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type)
 {
     LoadFile(filename, type);
@@ -377,13 +372,6 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     bdc->clearDevice();
     bdc->putMonoImage(0, 0, width, (width + 7) / 8, height, (void*)bits);
     delete bdc;
-}
-
-wxBitmap& wxBitmap::operator = (const wxBitmap& bmp)
-{
-    if ( *this == bmp ) return (*this);
-    Ref(bmp);
-    return *this;
 }
 
 bool wxBitmap::operator == (const wxBitmap& bmp) const

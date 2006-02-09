@@ -68,10 +68,6 @@ class WXDLLEXPORT wxBitmap: public wxGDIObject
 public:
     // Platform-specific default constructor
     wxBitmap();
-    // Copy constructors
-    wxBitmap(const wxBitmap& bitmap)
-    :   wxGDIObject()
-    {   Ref(bitmap); }
     // Initialize with raw data.
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     // Initialize with XPM data
@@ -138,8 +134,6 @@ public:
 
     int GetBitmapType() const;
   
-    inline wxBitmap& operator = (const wxBitmap& bitmap)
-    {   if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
     inline bool operator == (const wxBitmap& bitmap) const
     {   return m_refData == bitmap.m_refData; }
     inline bool operator != (const wxBitmap& bitmap) const

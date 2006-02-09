@@ -345,14 +345,8 @@ void wxFontRefData::SetNativeFontInfo(const wxNativeFontInfo& info)
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
-void wxFont::Init()
-{
-}
-
 wxFont::wxFont(const wxNativeFontInfo& info)
 {
-    Init();
-
     Create( info.GetPointSize(),
             info.GetFamily(),
             info.GetStyle(),

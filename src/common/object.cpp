@@ -283,15 +283,6 @@ wxObject *wxCreateDynamicObject(const wxChar *name)
 // wxObject
 // ----------------------------------------------------------------------------
 
-// Initialize ref data from another object (needed for copy constructor and
-// assignment operator)
-void wxObject::InitFrom(const wxObject& other)
-{
-    m_refData = other.m_refData;
-    if ( m_refData )
-        m_refData->m_count++;
-}
-
 void wxObject::Ref(const wxObject& clone)
 {
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT

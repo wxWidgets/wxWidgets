@@ -241,12 +241,6 @@ void wxBitmapRefData::Free()
 // wxBitmap creation
 // ----------------------------------------------------------------------------
 
-// this function should be called from all wxBitmap ctors
-void wxBitmap::Init()
-{
-    // m_refData = NULL; done in the base class ctor
-}
-
 wxGDIImageRefData *wxBitmap::CreateData() const
 {
     return new wxBitmapRefData;
@@ -416,8 +410,6 @@ wxBitmap::~wxBitmap()
 
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 {
-    Init();
-
 #ifndef __WXMICROWIN__
     wxBitmapRefData *refData = new wxBitmapRefData;
     m_refData = refData;
@@ -484,8 +476,6 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 bool wxBitmap::CreateFromXpm(const char **data)
 {
 #if wxUSE_IMAGE && wxUSE_XPM && wxUSE_WXDIB
-    Init();
-
     wxCHECK_MSG( data != NULL, false, wxT("invalid bitmap data") )
 
     wxXPMDecoder decoder;
@@ -502,29 +492,21 @@ bool wxBitmap::CreateFromXpm(const char **data)
 
 wxBitmap::wxBitmap(int w, int h, int d)
 {
-    Init();
-
     (void)Create(w, h, d);
 }
 
 wxBitmap::wxBitmap(int w, int h, const wxDC& dc)
 {
-    Init();
-
     (void)Create(w, h, dc);
 }
 
 wxBitmap::wxBitmap(void *data, long type, int width, int height, int depth)
 {
-    Init();
-
     (void)Create(data, type, width, height, depth);
 }
 
 wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 {
-    Init();
-
     LoadFile(filename, (int)type);
 }
 

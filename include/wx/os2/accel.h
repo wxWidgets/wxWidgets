@@ -38,14 +38,8 @@ public:
                        ,const wxAcceleratorEntry vaEntries[]
                       ); // Load from array
 
-    // Copy constructors
-    inline wxAcceleratorTable(const wxAcceleratorTable& rAccel) { Ref(rAccel); }
-    inline wxAcceleratorTable(const wxAcceleratorTable* pAccel) { if (pAccel) Ref(*pAccel); }
-
     ~wxAcceleratorTable();
 
-    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& rAccel)
-    { if (*this == rAccel) return (*this); Ref(rAccel); return *this; };
     inline bool operator== (const wxAcceleratorTable& rAccel) const
     { return m_refData == rAccel.m_refData; };
     inline bool operator!= (const wxAcceleratorTable& rAccel) const

@@ -190,9 +190,6 @@ public:
     wxImage( wxInputStream& stream, const wxString& mimetype, int index = -1 );
 #endif // wxUSE_STREAMS
 
-    wxImage( const wxImage& image );
-    wxImage( const wxImage* image );
-
     bool Create( int width, int height, bool clear = true );
     bool Create( int width, int height, unsigned char* data, bool static_data = false );
     bool Create( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
@@ -363,13 +360,6 @@ public:
     // Rotates the hue of each pixel of the image. angle is a double in the range
     // -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
     void RotateHue(double angle);
-
-    wxImage& operator = (const wxImage& image)
-    {
-        if ( (*this) != image )
-            Ref(image);
-        return *this;
-    }
 
     bool operator == (const wxImage& image) const
         { return m_refData == image.m_refData; }

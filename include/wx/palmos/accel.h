@@ -22,9 +22,6 @@ public:
     // default ctor
     wxAcceleratorTable();
 
-    // copy ctor
-    wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }
-
     // load from .rc resource (Windows specific)
     wxAcceleratorTable(const wxString& resource);
 
@@ -32,8 +29,6 @@ public:
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
 
     virtual ~wxAcceleratorTable();
-
-    wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) { if ( *this != accel ) Ref(accel); return *this; }
 
 #if WXWIN_COMPATIBILITY_2_4
     bool operator==(const wxAcceleratorTable& accel) const

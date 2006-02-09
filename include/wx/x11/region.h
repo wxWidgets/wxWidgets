@@ -82,9 +82,6 @@ public:
 
     ~wxRegion();
 
-    wxRegion( const wxRegion& region ) { Ref(region); }
-    wxRegion& operator = ( const wxRegion& region ) { Ref(region); return *this; }
-
     bool Ok() const { return m_refData != NULL; }
 
     bool operator == ( const wxRegion& region ) const;

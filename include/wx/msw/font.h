@@ -22,8 +22,7 @@ class WXDLLEXPORT wxFont : public wxFontBase
 {
 public:
     // ctors and such
-    wxFont() { Init(); }
-    wxFont(const wxFont& font) : wxFontBase(font) { Init(); Ref(font); }
+    wxFont() { }
 
     wxFont(int size,
            int family,
@@ -33,8 +32,6 @@ public:
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        Init();
-
         (void)Create(size, family, style, weight, underlined, face, encoding);
     }
 
@@ -46,16 +43,12 @@ public:
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        Init();
-
         (void)Create(pixelSize, family, style, weight,
                      underlined, face, encoding);
     }
 
     wxFont(const wxNativeFontInfo& info, WXHFONT hFont = 0)
     {
-        Init();
-
         Create(info, hFont);
     }
 
@@ -88,9 +81,6 @@ public:
     bool Create(const wxNativeFontInfo& info, WXHFONT hFont = 0);
 
     virtual ~wxFont();
-
-    // assignment
-    wxFont& operator=(const wxFont& font);
 
     // implement base class pure virtuals
     virtual int GetPointSize() const;
@@ -144,9 +134,6 @@ protected:
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
-
-    // common part of all ctors
-    void Init();
 
     void Unshare();
 

@@ -65,11 +65,6 @@ wxBrush::~wxBrush()
 // wxBrush house keeping stuff
 // ----------------------------------------------------------------------------
 
-wxBrush& wxBrush::operator=(const wxBrush& brush)
-{
-    return *this;
-}
-
 bool wxBrush::operator==(const wxBrush& brush) const
 {
     return false;

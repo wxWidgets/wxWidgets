@@ -39,10 +39,6 @@ public:
     wxColour( const wxChar *colourName )
         { InitFromName(colourName); }
 
-    // copy ctors and assignment operators
-    wxColour( const wxColour& col );
-    wxColour& operator = ( const wxColour& col );
-
     // dtor
     ~wxColour();
 

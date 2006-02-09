@@ -167,22 +167,9 @@ wxCursor::wxCursor(const wxString& cursor_file,
     }
 }
 
-wxCursor::wxCursor(const wxCursor &cursor)
-{
-    Ref(cursor);
-}
-
 wxCursor::~wxCursor()
 {
     // wxObject unrefs data
-}
-
-wxCursor& wxCursor::operator = (const wxCursor& cursor)
-{
-    if ( *this == cursor )
-        return (*this);
-    Ref(cursor);
-    return *this;
 }
 
 bool wxCursor::operator == (const wxCursor& cursor) const

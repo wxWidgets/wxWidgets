@@ -58,9 +58,6 @@ public:
     // Get colour from name or wxNullColour
     static wxColour CreateByName(const wxString& name);
 
-    wxColour( const wxColour& col ) { Ref(col); }
-    wxColour& operator = ( const wxColour& col ) { Ref(col); return *this; }
-
     ~wxColour();
 
     bool Ok() const { return m_refData != NULL; }

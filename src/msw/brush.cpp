@@ -243,16 +243,6 @@ wxBrush::~wxBrush()
 // wxBrush house keeping stuff
 // ----------------------------------------------------------------------------
 
-wxBrush& wxBrush::operator=(const wxBrush& brush)
-{
-    if ( this != &brush )
-    {
-        Ref(brush);
-    }
-
-    return *this;
-}
-
 bool wxBrush::operator==(const wxBrush& brush) const
 {
     const wxBrushRefData *brushData = (wxBrushRefData *)brush.m_refData;

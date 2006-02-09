@@ -27,8 +27,7 @@ class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
     // ctors and such
-    wxFont() { Init(); }
-    wxFont(const wxFont& font) { Init(); Ref(font); }
+    wxFont() { }
 
     wxFont(int size,
         int family,
@@ -38,8 +37,6 @@ public:
         const wxString& face = wxEmptyString,
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        Init();
-
         (void)Create(size, family, style, weight, underlined, face, encoding);
     }
 
@@ -59,9 +56,6 @@ public:
     bool Create(const wxNativeFontInfo& fontinfo);
 
     virtual ~wxFont();
-
-    // assignment
-    wxFont& operator=(const wxFont& font);
 
     // implement base class pure virtuals
     virtual int GetPointSize() const;
@@ -119,9 +113,6 @@ public:
     static WXString GetFontTag();
 protected:
     virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info );
-
-    // common part of all ctors
-    void Init();
 
     void Unshare();
 

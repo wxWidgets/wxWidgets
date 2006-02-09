@@ -33,9 +33,7 @@ public:
     wxPen() {}
     wxPen(const wxColour &colour, int width = 1, int style = wxSOLID);
     wxPen(const wxBitmap& stipple, int width);
-    wxPen(const wxPen& pen);
     ~wxPen() {}
-    wxPen& operator = (const wxPen& pen);
     bool operator == (const wxPen& pen) const;
     bool operator != (const wxPen& pen) const;
 

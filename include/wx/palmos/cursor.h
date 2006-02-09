@@ -22,7 +22,6 @@ class WXDLLEXPORT wxCursor : public wxGDIImage
 public:
     // constructors
     wxCursor();
-    wxCursor(const wxCursor& cursor) { Ref(cursor); }
     wxCursor(const wxImage& image);
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
@@ -32,9 +31,6 @@ public:
              int hotSpotX = 0, int hotSpotY = 0);
     wxCursor(int idCursor);
     virtual ~wxCursor();
-
-    wxCursor& operator=(const wxCursor& cursor)
-        { if (*this == cursor) return (*this); Ref(cursor); return *this; }
 
     bool operator==(const wxCursor& cursor) const;
     bool operator!=(const wxCursor& cursor) const

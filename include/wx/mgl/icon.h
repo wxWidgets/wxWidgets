@@ -28,7 +28,6 @@ class WXDLLEXPORT wxIcon: public wxBitmap
 {
 public:
     wxIcon() : wxBitmap() {}
-    wxIcon(const wxIcon& icon);
     wxIcon(const char **bits, int width=-1, int height=-1);
     wxIcon(char **bits, int width=-1, int height=-1);
 
@@ -43,7 +42,6 @@ public:
     {
     }
 
-    wxIcon& operator=(const wxIcon& icon);
     bool operator==(const wxIcon& icon) const { return m_refData == icon.m_refData; }
     bool operator!=(const wxIcon& icon) const { return !(*this == icon); }
 

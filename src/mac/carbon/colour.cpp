@@ -37,29 +37,6 @@ void wxColour::Init()
     wxComposeRGBColor( &m_pixel, m_red, m_blue, m_green );
 }
 
-wxColour::wxColour (const wxColour& col)
-    : wxObject()
-{
-    m_red = col.m_red;
-    m_green = col.m_green;
-    m_blue = col.m_blue;
-    m_isInit = col.m_isInit;
-
-    memcpy( &m_pixel, &col.m_pixel, 6 );
-}
-
-wxColour& wxColour::operator =(const wxColour& col)
-{
-    m_red = col.m_red;
-    m_green = col.m_green;
-    m_blue = col.m_blue;
-    m_isInit = col.m_isInit;
-
-    memcpy( &m_pixel, &col.m_pixel, 6 );
-
-    return *this;
-}
-
 void wxColour::InitFromName(const wxString& name)
 {
     if ( wxTheColourDatabase )

@@ -32,10 +32,6 @@ wxFontRefData::~wxFontRefData()
     // TODO: delete font data
 }
 
-void wxFont::Init()
-{
-}
-
 bool wxFont::Create(const wxNativeFontInfo&)
 {
     return FALSE;

@@ -66,21 +66,8 @@ wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green
     Create(n, red, green, blue);
 }
 
-wxPalette::wxPalette(const wxPalette& palette)
-    : wxPaletteBase()
-{
-    Ref(palette);
-}
-
 wxPalette::~wxPalette()
 {
-}
-
-wxPalette& wxPalette::operator = (const wxPalette& palette)
-{
-    if (*this == palette) return (*this);
-    Ref(palette);
-    return *this;
 }
 
 bool wxPalette::operator == (const wxPalette& palette) const

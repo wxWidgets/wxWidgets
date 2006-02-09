@@ -44,9 +44,6 @@ public:
         // default
     wxIcon() { }
 
-        // copy
-    wxIcon(const wxIcon& icon) { Ref(icon); }
-
         // from raw data
     wxIcon(const char bits[], int width, int height);
 
@@ -68,8 +65,6 @@ public:
                           long type = wxBITMAP_TYPE_ICO_RESOURCE,
                           int desiredWidth = -1, int desiredHeight = -1);
 
-    wxIcon& operator = (const wxIcon& icon)
-        { if ( *this != icon ) Ref(icon); return *this; }
     bool operator == (const wxIcon& icon) const
         { return m_refData == icon.m_refData; }
     bool operator != (const wxIcon& icon) const

@@ -372,10 +372,6 @@ void wxFontRefData::MacFindFont()
 // wxFont
 // ----------------------------------------------------------------------------
 
-void wxFont::Init()
-{
-}
-
 bool wxFont::Create(const wxNativeFontInfo& info)
 {
     return Create(

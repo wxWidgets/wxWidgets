@@ -143,18 +143,6 @@ wxBrush::wxBrush(const wxBitmap &stippleBitmap)
         M_BRUSHDATA->m_style = wxSTIPPLE;
 }
 
-wxBrush::wxBrush(const wxBrush &brush)
-{
-    Ref(brush);
-}
-
-wxBrush& wxBrush::operator = (const wxBrush& brush)
-{
-    if (*this == brush) return (*this);
-    Ref(brush);
-    return *this;
-}
-
 bool wxBrush::operator == (const wxBrush& brush) const
 {
     return m_refData == brush.m_refData;

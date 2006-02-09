@@ -103,18 +103,6 @@ wxPen::wxPen(const wxBitmap& stipple, int width)
     wxBitmapToPixPattern(stipple, &(M_PENDATA->m_pixPattern), NULL);
 }
 
-wxPen::wxPen(const wxPen& pen)
-{
-    Ref(pen);
-}
-
-wxPen& wxPen::operator = (const wxPen& pen)
-{
-    if (*this == pen) return (*this);
-    Ref(pen);
-    return *this;
-}
-
 bool wxPen::operator == (const wxPen& pen) const
 {
     return m_refData == pen.m_refData;

@@ -49,12 +49,6 @@ public:
     wxRegion();
     ~wxRegion();
 
-    //# Copying
-    inline wxRegion(const wxRegion& r)
-        { Ref(r); }
-    inline wxRegion& operator = (const wxRegion& r)
-        { Ref(r); return (*this); }
-
     //# Modify region
     // Clear current region
     void Clear(void);

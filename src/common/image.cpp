@@ -148,17 +148,6 @@ wxImage::wxImage( wxInputStream& stream, const wxString& mimetype, int index )
 }
 #endif // wxUSE_STREAMS
 
-wxImage::wxImage( const wxImage& image )
-    : wxObject()
-{
-    Ref(image);
-}
-
-wxImage::wxImage( const wxImage* image )
-{
-    if (image) Ref(*image);
-}
-
 wxImage::wxImage( const char** xpmData )
 {
     Create(xpmData);

@@ -34,7 +34,6 @@ class WXDLLEXPORT wxPalette: public wxPaletteBase
 
 public:
   wxPalette(void);
-  inline wxPalette(const wxPalette& palette) : wxPaletteBase(palette) { Ref(palette); }
 
   wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
   ~wxPalette(void);
@@ -44,7 +43,6 @@ public:
 
   virtual bool Ok(void) const { return (m_refData != NULL) ; }
 
-  inline wxPalette& operator = (const wxPalette& palette) { if (*this == palette) return (*this); Ref(palette); return *this; }
   inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
   inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
 

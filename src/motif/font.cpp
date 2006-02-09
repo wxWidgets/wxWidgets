@@ -215,13 +215,7 @@ wxFontRefData::~wxFontRefData()
 
 wxFont::wxFont(const wxNativeFontInfo& info)
 {
-    Init();
-
     (void)Create(info.GetXFontName());
-}
-
-void wxFont::Init()
-{
 }
 
 bool wxFont::Create(int pointSize,

@@ -70,7 +70,11 @@ public:
 
     // Copy constructors
     inline wxBitmap(const wxBitmap& rBitmap)
-      { Init(); Ref(rBitmap); SetHandle(rBitmap.GetHandle()); }
+        : wxGDIImage(rBitmap)
+    {
+        Init();
+        SetHandle(rBitmap.GetHandle());
+    }
 
     // Initialize with raw data
     wxBitmap( const char bits[]
@@ -111,13 +115,6 @@ public:
     // the copy ctor but the resulting bitmap is invalid!
     inline wxBitmap(const wxIcon& rIcon)
       { Init(); CopyFromIcon(rIcon); }
-
-    wxBitmap& operator=(const wxBitmap& rBitmap)
-    {
-        if ( m_refData != rBitmap.m_refData )
-            Ref(rBitmap);
-        return(*this);
-    }
 
     wxBitmap& operator=(const wxIcon& rIcon)
     {

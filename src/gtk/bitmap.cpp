@@ -1143,12 +1143,6 @@ wxImage wxBitmap::ConvertToImage() const
     return image;
 }
 
-wxBitmap::wxBitmap( const wxBitmap& bmp )
-        : wxBitmapBase()
-{
-    Ref( bmp );
-}
-
 wxBitmap::wxBitmap( const wxString &filename, wxBitmapType type )
 {
     LoadFile( filename, type );
@@ -1178,14 +1172,6 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
 
 wxBitmap::~wxBitmap()
 {
-}
-
-wxBitmap& wxBitmap::operator = ( const wxBitmap& bmp )
-{
-    if ( m_refData != bmp.m_refData )
-        Ref( bmp );
-
-    return *this;
 }
 
 bool wxBitmap::operator == ( const wxBitmap& bmp ) const

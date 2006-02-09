@@ -43,11 +43,6 @@ class WXDLLEXPORT wxCursor: public wxBitmap
 public:
   wxCursor();
 
-  // Copy constructors
-  wxCursor(const wxCursor& cursor)
-      : wxBitmap()
-  { Ref(cursor); }
-
   wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);
 
@@ -63,7 +58,6 @@ public:
 	bool CreateFromXpm(const char **bits) ;
   virtual bool Ok() const { return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ; }
 
-  inline wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
   inline bool operator == (const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
   inline bool operator != (const wxCursor& cursor) const { return m_refData != cursor.m_refData; }
 

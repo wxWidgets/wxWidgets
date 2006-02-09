@@ -363,10 +363,6 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
 // wxFont
 // ----------------------------------------------------------------------------
 
-void wxFont::Init()
-{
-}
-
 bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
 {
     return false;

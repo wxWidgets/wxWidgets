@@ -522,14 +522,8 @@ void wxFontRefData::SetNativeFontInfo(const wxNativeFontInfo& info)
 // wxFont
 // ----------------------------------------------------------------------------
 
-void wxFont::Init()
-{
-}
-
 wxFont::wxFont(const wxNativeFontInfo& info)
 {
-    Init();
-
 #if wxUSE_UNICODE
     Create( info.GetPointSize(),
             info.GetFamily(),

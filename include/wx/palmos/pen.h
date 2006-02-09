@@ -77,16 +77,7 @@ public:
     wxPen();
     wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
     wxPen(const wxBitmap& stipple, int width);
-    wxPen(const wxPen& pen) { Ref(pen); }
     virtual ~wxPen();
-
-    wxPen& operator=(const wxPen& pen)
-    {
-        if ( this != &pen )
-            Ref(pen);
-
-        return *this;
-    }
 
     bool operator==(const wxPen& pen) const
     {

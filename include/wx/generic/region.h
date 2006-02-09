@@ -35,13 +35,6 @@ public:
     wxRegionGeneric();
     ~wxRegionGeneric();
 
-    //# Copying
-    wxRegionGeneric(const wxRegionGeneric& r)
-    :   wxGDIObject()
-    {   Ref(r); }
-    wxRegionGeneric& operator= (const wxRegionGeneric& r)
-    {   Ref(r); return (*this); }
-
     bool Ok() const { return m_refData != NULL; }
 
     bool operator == ( const wxRegionGeneric& region ) const;

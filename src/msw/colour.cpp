@@ -80,22 +80,6 @@ void wxColour::Init()
     m_green = 0;
 }
 
-wxColour::wxColour(const wxColour& col)
-         :wxObject()
-{
-    *this = col;
-}
-
-wxColour& wxColour::operator=(const wxColour& col)
-{
-    m_red = col.m_red;
-    m_green = col.m_green;
-    m_blue = col.m_blue;
-    m_isInit = col.m_isInit;
-    m_pixel = col.m_pixel;
-    return *this;
-}
-
 void wxColour::InitFromName(const wxString& name)
 {
     if ( wxTheColourDatabase )

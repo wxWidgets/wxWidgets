@@ -28,7 +28,6 @@ class WXDLLIMPEXP_CORE wxIcon: public wxBitmap
 {
 public:
     wxIcon();
-    wxIcon( const wxIcon& icon);
     wxIcon( const char **bits, int width=-1, int height=-1 );
 
     // For compatibility with wxMSW where desired size is sometimes required to
@@ -45,7 +44,6 @@ public:
     {
     }
 
-    wxIcon& operator=(const wxIcon& icon);
     bool operator==(const wxIcon& icon) const { return m_refData == icon.m_refData; }
     bool operator!=(const wxIcon& icon) const { return !(*this == icon); }
 
