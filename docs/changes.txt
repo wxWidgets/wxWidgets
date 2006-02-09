@@ -123,6 +123,7 @@ wxMSW:
 - Fixed out by one error in wxTextCtrl::GetStyle.
 - Fixed problem with getting input in universal/unicode build of wxMSW.
 - Link oleacc.lib conditionally.
+- Drag and drop now works inside static boxes.
 
 wxGTK:
 
