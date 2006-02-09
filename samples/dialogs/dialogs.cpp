@@ -154,6 +154,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if USE_MODAL_PRESENTATION
     EVT_MENU(DIALOGS_MODAL,                         MyFrame::ModalDlg)
     EVT_MENU(DIALOGS_MODELESS,                      MyFrame::ModelessDlg)
+    EVT_MENU(DIALOGS_CENTRE_SCREEN,                 MyFrame::DlgCenteredScreen)
+    EVT_MENU(DIALOGS_CENTRE_PARENT,                 MyFrame::DlgCenteredParent)
 #endif // USE_MODAL
 
 #if wxUSE_STARTUP_TIPS
@@ -353,10 +355,12 @@ bool MyApp::OnInit()
 #endif // wxUSE_FINDREPLDLG
 
 #if USE_MODAL_PRESENTATION
-    wxMenu *modal_menu = new wxMenu;
-    modal_menu->Append(DIALOGS_MODAL, _T("Mo&dal dialog\tCtrl-W"));
-    modal_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"));
-    file_menu->Append(wxID_ANY,_T("&Modal/Modeless"),modal_menu);
+    wxMenu *dialogs_menu = new wxMenu;
+    dialogs_menu->Append(DIALOGS_MODAL, _T("&Modal dialog\tCtrl-W"));
+    dialogs_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Mode&less dialog\tCtrl-Z"));
+    dialogs_menu->AppendCheckItem(DIALOGS_CENTRE_SCREEN, _T("Centered on &screen\tShift-Ctrl-1"));
+    dialogs_menu->AppendCheckItem(DIALOGS_CENTRE_PARENT, _T("Centered on &parent\tShift-Ctrl-2"));
+    file_menu->Append(wxID_ANY, _T("&Generic dialogs"), dialogs_menu);
 #endif // USE_MODAL_PRESENTATION
 
 #if USE_SETTINGS_DIALOG
@@ -942,6 +946,25 @@ void MyFrame::ModelessDlg(wxCommandEvent& event)
             m_dialog->Hide();
     }
 }
+
+void MyFrame::DlgCenteredScreen(wxCommandEvent& WXUNUSED(event))
+{
+    wxDialog dlg(this, wxID_ANY, _T("Dialog centered on screen"),
+                 wxDefaultPosition, wxSize(200, 100));
+    new wxButton(&dlg, wxID_OK, _T("Close"), wxPoint(10, 10));
+    dlg.CentreOnScreen();
+    dlg.ShowModal();
+}
+
+void MyFrame::DlgCenteredParent(wxCommandEvent& WXUNUSED(event))
+{
+    wxDialog dlg(this, wxID_ANY, _T("Dialog centered on parent"),
+                 wxDefaultPosition, wxSize(200, 100));
+    new wxButton(&dlg, wxID_OK, _T("Close"), wxPoint(10, 10));
+    dlg.CentreOnParent();
+    dlg.ShowModal();
+}
+
 #endif // USE_MODAL_PRESENTATION
 
 #if wxUSE_STARTUP_TIPS

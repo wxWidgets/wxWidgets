@@ -231,6 +231,8 @@ public:
 #if USE_MODAL_PRESENTATION
     void ModalDlg(wxCommandEvent& event);
     void ModelessDlg(wxCommandEvent& event);
+    void DlgCenteredScreen(wxCommandEvent& event);
+    void DlgCenteredParent(wxCommandEvent& event);
 #endif // USE_MODAL_PRESENTATION
 
 #if wxUSE_PROGRESSDLG
@@ -320,6 +322,8 @@ enum
     DIALOGS_LOG_DIALOG,
     DIALOGS_MODAL,
     DIALOGS_MODELESS,
+    DIALOGS_CENTRE_SCREEN,
+    DIALOGS_CENTRE_PARENT,
     DIALOGS_MODELESS_BTN,
     DIALOGS_PROGRESS,
     DIALOGS_BUSYINFO,
