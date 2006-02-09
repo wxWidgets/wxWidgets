@@ -939,7 +939,7 @@ subsizer.  Returns True if the item was found.", "");
 
         DocAStr(IsShown,
                 "IsShown(self, item)",
-                "Determines if the item is currently shown. sizer.  To make a sizer
+                "Determines if the item is currently shown. To make a sizer
 item disappear or reappear, use Show followed by `Layout`.  The *item*
 parameter can be either a window, a sizer, or the zero-based index of
 the item.", "");
@@ -971,10 +971,6 @@ the item.", "");
         void , ShowItems(bool show),
         "Recursively call `wx.SizerItem.Show` on all sizer items.", "");
 
-    // TODO:
-    //          void Show(bool show);
-    //          bool IsShown();
-    
 };
 
 
