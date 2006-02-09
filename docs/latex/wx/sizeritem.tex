@@ -155,6 +155,16 @@ If this item is tracking a window then return it.  NULL otherwise.
 Is this item a sizer?
 
 
+\membersection{wxSizerItem::IsShown}\label{wxsizeritemisshown}
+
+\constfunc{bool}{IsShown}{\void}
+
+Returns \true if this item is a window or a spacer and it is shown or if this
+item is a sizer and not all its elements are hidden. In other words, for sizer
+items, all of the child elements must be hidden for the sizer itself to be
+considered hidden.
+
+
 \membersection{wxSizerItem::IsSpacer}\label{wxsizeritemisspacer}
 
 \constfunc{bool}{IsSpacer}{\void}

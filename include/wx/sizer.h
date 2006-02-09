@@ -252,6 +252,10 @@ public:
         { return m_kind == Item_Sizer ? m_sizer : NULL; }
     wxSize GetSpacer() const;
 
+    // this function behaves obviously for the windows and spacers but for the
+    // sizers it returns true if any sizer element is shown and only returns
+    // false if all of them are hidden
+    bool IsShown() const;
     void Show(bool show);
 
     void SetUserData(wxObject* userData)
@@ -267,11 +271,6 @@ public:
     void SetSizer(wxSizer *sizer);
     void SetSpacer(const wxSize& size);
     void SetSpacer(int width, int height) { SetSpacer(wxSize(width, height)); }
-
-    // this function is deprecated because if this item is a sizer, then it
-    // doesn't really make sense: sizer is neither shown nor hidden, because
-    // some of its elements may be hidden while others are shown
-    wxDEPRECATED( bool IsShown() const );
 
 protected:
     // common part of several ctors

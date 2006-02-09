@@ -16,7 +16,6 @@ Deprecated methods since 2.6.x and their replacements
 
 - wxGetWorkingDirectory() deprecated in favour of wxGetCwd()
 - wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated, just don't use them
-- wxSizerItem::IsShown(): no replacement as it doesn't have clear semantics
 
 
 2.7.0
