@@ -36,18 +36,28 @@ SETUP="python$PYVER -u setup.py"
 FLAGS="USE_SWIG=1 SWIG=/opt/swig/bin/swig" 
 OTHERFLAGS=""
 PORTFLAGS=""
+UNIFLAG="UNICODE=1"
 
 
 
 if [ "$1" = "gtk1" -o "$1" = "gtk" ]; then 
-    PORTFLAGS="WXPORT=gtk UNICODE=0"
+    PORTFLAGS="WXPORT=gtk"
+    UNIFLAG="UNICODE=0"
     shift
 elif [ "$1" = "gtk2" ]; then 
-    PORTFLAGS="WXPORT=gtk2 UNICODE=1"
+    PORTFLAGS="WXPORT=gtk2"
+    UNIFLAG="UNICODE=1"
     shift
 fi
 
-FLAGS="$FLAGS $PORTFLAGS"
+for p in $*; do
+    if [ "$p" = "UNICODE=0" -o "$p" = "UNICODE=1" ]; then
+	UNIFLAG=""
+	break
+    fi
+done
+
+FLAGS="$FLAGS $PORTFLAGS $UNIFLAG"
 
 
 
