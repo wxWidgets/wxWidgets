@@ -25,6 +25,10 @@ wx.EventLoop is now implemented for wxMac.
 Added wxPython wrappers for the new wx.Treebook and wx.Toolbook
 classes. 
 
+wx.DC.BeginDrawing and EndDrawing have been deprecated in the C++
+code, so since they never really did anything before they are now just
+empty stubs in wxPython.
+
 Solved a problem that has been around for a very long time in how C++
 methods are virtualized for overriding in derived Python classes.
 Previously we couldn't do it for methods that needed to exist in the
