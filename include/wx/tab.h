@@ -12,7 +12,11 @@
 #ifndef _WX_TAB_H_BASE_
 #define _WX_TAB_H_BASE_
 
+#include "wx/defs.h"
+
+#if wxUSE_TAB_DIALOG
 #include "wx/generic/tabg.h"
+#endif
 
 #endif
     // _WX_TAB_H_BASE_

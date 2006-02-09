@@ -11,6 +11,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_TAB_DIALOG
+
 #include "wx/control.h"
 #include "wx/tabctrl.h"
 #include "wx/mac/uma.h"
@@ -196,3 +198,4 @@ void wxTabCtrl::SetPadding(const wxSize& padding)
     // TODO:
 }
 
+#endif // wxUSE_TAB_DIALOG

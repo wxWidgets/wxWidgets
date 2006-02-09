@@ -11,6 +11,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_TAB_DIALOG
+
 #include "wx/control.h"
 #include "wx/tabctrl.h"
 #include "wx/mac/uma.h"
@@ -198,3 +200,4 @@ wxTabEvent::wxTabEvent(wxEventType commandType, int id):
 {
 }
 
+#endif // wxUSE_TAB_DIALOG

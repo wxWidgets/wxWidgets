@@ -16,6 +16,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_TAB_DIALOG
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -428,3 +430,5 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 
 }
 #endif
+
+#endif // wxUSE_TAB_DIALOG

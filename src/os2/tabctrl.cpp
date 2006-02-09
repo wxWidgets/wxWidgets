@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_TAB_DIALOG
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -354,3 +356,5 @@ wxTabEvent::wxTabEvent(wxEventType commandType, int id)
            :wxCommandEvent(commandType, id)
 {
 }
+
+#endif // wxUSE_TAB_DIALOG

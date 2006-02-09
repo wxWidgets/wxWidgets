@@ -16,6 +16,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_TAB_DIALOG
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -177,3 +179,4 @@ void wxTabCtrl::SetPadding(const wxSize& padding)
 #endif
     // __WIN95__
 
+#endif // wxUSE_TAB_DIALOG
