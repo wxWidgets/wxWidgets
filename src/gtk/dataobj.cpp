@@ -280,9 +280,9 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
                 AddFile(wxURI::Unescape(filename.c_str() + lenPrefix));
                 filename.Empty();
             }
-            else
+            else if ( !filename.empty() )
             {
-                wxLogDebug(_T("Unsupported URI '%s' in wxFileDataObject"),
+                wxLogDebug(_T("Unsupported URI \"%s\" in wxFileDataObject"),
                            filename.c_str());
             }
 
