@@ -360,9 +360,11 @@ bool MyApp::OnInit()
 #endif // USE_MODAL_PRESENTATION
 
 #if USE_SETTINGS_DIALOG
-    file_menu->Append(DIALOGS_PROPERTY_SHEET, _T("&Property Sheet Dialog\tCtrl-P"));
-    file_menu->Append(DIALOGS_PROPERTY_SHEET_TOOLBOOK, _T("Property Sheet Dialog using &ToolBook"));
-#endif
+    wxMenu *sheet_menu = new wxMenu;
+    sheet_menu->Append(DIALOGS_PROPERTY_SHEET, _T("&Standard property sheet\tShift-Ctrl-P"));
+    sheet_menu->Append(DIALOGS_PROPERTY_SHEET_TOOLBOOK, _T("&Toolbook sheet\tShift-Ctrl-T"));
+    file_menu->Append(wxID_ANY, _T("&Property sheets"), sheet_menu);
+#endif // USE_SETTINGS_DIALOG
 
     file_menu->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
 
