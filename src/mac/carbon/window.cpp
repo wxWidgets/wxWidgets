@@ -1256,14 +1256,22 @@ void wxWindowMac::MacSetBackgroundBrush( const wxBrush &brush )
 
 bool wxWindowMac::MacCanFocus() const
 {
-    // there is currently no way to determine whether the window is running in full keyboard
-    // access mode, therefore we cannot rely on these features, yet the only other way would be
-    // to issue a SetKeyboardFocus event and verify after whether it succeeded, this would risk problems
-    // in event handlers...
-    UInt32 features = 0 ;
-    m_peer->GetFeatures( &features ) ;
+    // TODO : evaluate performance hits by looking up this value, eventually cache the results for a 1 sec or so
+    // CAUTION : the value returned currently is 0 or 2, I've also found values of 1 having the same meaning, but the value range
+    // is nowhere documented
+    Boolean keyExistsAndHasValidFormat ;
+    CFIndex fullKeyboardAccess = CFPreferencesGetAppIntegerValue ( CFSTR("AppleKeyboardUIMode" ) ,
+        kCFPreferencesCurrentApplication, &keyExistsAndHasValidFormat);  
+    
+    if ( keyExistsAndHasValidFormat && fullKeyboardAccess > 0 )
+        return true ;
+    else
+    {
+        UInt32 features = 0 ;
+        m_peer->GetFeatures( &features ) ;
 
-    return features & ( kControlSupportsFocus | kControlGetsFocusOnClick ) ;
+        return features & ( kControlSupportsFocus | kControlGetsFocusOnClick ) ;
+    }
 }
 
 void wxWindowMac::SetFocus()
