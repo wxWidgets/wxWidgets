@@ -151,10 +151,6 @@ public:
     virtual void Freeze();
     virtual void Thaw();
 
-    // textctrl specific scrolling
-    virtual bool ScrollLines(int lines);
-    virtual bool ScrollPages(int pages);
-
     // implementation only from now on
 
     // wxGTK-specific: called recursively by Enable,
@@ -177,13 +173,6 @@ protected:
 
     // common part of all ctors
     void Init();
-
-    // get the vertical adjustment, if any, NULL otherwise
-    GtkAdjustment *GetVAdj() const;
-
-    // scroll the control by the given number of pixels, return true if the
-    // scroll position changed
-    bool DoScroll(GtkAdjustment *adj, int diff);
 
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.

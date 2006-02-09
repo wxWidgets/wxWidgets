@@ -136,6 +136,7 @@ wxGTK:
 - Worked around pango crashes in strncmp on Solaris 10.
 - Polygon and line drawing speeded up if there is no scaling.
 - Fixed problems with CJK input method.
+- Implemented ScrollLines/Pages() for all windows (Paul Cornett)
 
 wxMac:
 

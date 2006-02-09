@@ -186,6 +186,10 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
         m_widget = gtk_hscrollbar_new( (GtkAdjustment *) NULL );
 
     m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
+    if ( style & wxSB_VERTICAL )
+    {
+        SetVScrollAdjustment(m_adjust);
+    }
 
     g_signal_connect (m_adjust, "value_changed",
                       G_CALLBACK (gtk_scrollbar_callback), this);

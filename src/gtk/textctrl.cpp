@@ -618,7 +618,10 @@ bool wxTextCtrl::Create( wxWindow *parent,
     PostCreation(size);
 
     if (multi_line)
+    {
         gtk_widget_show(m_text);
+        SetVScrollAdjustment(gtk_scrolled_window_get_vadjustment((GtkScrolledWindow*)m_widget));
+    }
 
     if (!value.empty())
     {
@@ -1703,64 +1706,6 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
     //event.Skip(!GetEventHandler()->ProcessEvent(url_event));
     GetEventHandler()->ProcessEvent(url_event);
 }
-
-// ----------------------------------------------------------------------------
-// scrolling
-// ----------------------------------------------------------------------------
-
-GtkAdjustment *wxTextCtrl::GetVAdj() const
-{
-    if ( !IsMultiLine() )
-        return NULL;
-
-    return gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_widget));
-}
-
-bool wxTextCtrl::DoScroll(GtkAdjustment *adj, int diff)
-{
-    float value = adj->value + diff;
-
-    if ( value < 0 )
-        value = 0;
-
-    float upper = adj->upper - adj->page_size;
-    if ( value > upper )
-        value = upper;
-
-    // did we noticeably change the scroll position?
-    if ( fabs(adj->value - value) < 0.2 )
-    {
-        // well, this is what Robert does in wxScrollBar, so it must be good...
-        return false;
-    }
-
-    adj->value = value;
-
-    gtk_adjustment_value_changed(GTK_ADJUSTMENT(adj));
-
-    return true;
-}
-
-bool wxTextCtrl::ScrollLines(int lines)
-{
-    GtkAdjustment *adj = GetVAdj();
-    if ( !adj )
-        return false;
-
-    int diff = (int)ceil(lines*adj->step_increment);
-
-    return DoScroll(adj, diff);
-}
-
-bool wxTextCtrl::ScrollPages(int pages)
-{
-    GtkAdjustment *adj = GetVAdj();
-    if ( !adj )
-        return false;
-
-    return DoScroll(adj, (int)ceil(pages*adj->page_increment));
-}
-
 
 // static
 wxVisualAttributes

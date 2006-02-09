@@ -99,6 +99,8 @@ public:
     virtual int GetScrollRange( int orient ) const;
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = (wxRect *) NULL );
+    virtual bool ScrollLines(int lines);
+    virtual bool ScrollPages(int pages);
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
@@ -267,6 +269,10 @@ protected:
     // helper function to ease native widgets wrapping, called by
     // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+
+protected:
+    // GtkAdjustment to be used by Scroll{Lines,Pages}
+    void SetVScrollAdjustment(GtkAdjustment* adj);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)
