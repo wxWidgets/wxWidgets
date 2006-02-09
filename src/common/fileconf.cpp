@@ -1160,9 +1160,6 @@ bool wxFileConfig::DeleteAll()
                         m_strLocalFile.c_str());
           return false;
       }
-
-      m_strLocalFile =
-      m_strGlobalFile = wxEmptyString;
   }
 
   Init();
