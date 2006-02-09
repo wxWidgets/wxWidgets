@@ -2462,7 +2462,11 @@ wxCSConv::wxCSConv(const wxChar *charset)
         SetName(charset);
     }
 
+#if wxUSE_FONTMAP
+    m_encoding = wxFontMapperBase::GetEncodingFromName(charset);
+#else
     m_encoding = wxFONTENCODING_SYSTEM;
+#endif
 }
 
 wxCSConv::wxCSConv(wxFontEncoding encoding)
@@ -2542,7 +2546,8 @@ wxMBConv *wxCSConv::DoCreate() const
     // check for the special case of ASCII or ISO8859-1 charset: as we have
     // special knowledge of it anyhow, we don't need to create a special
     // conversion object
-    if ( m_encoding == wxFONTENCODING_ISO8859_1 )
+    if ( m_encoding == wxFONTENCODING_ISO8859_1 ||
+            m_encoding == wxFONTENCODING_DEFAULT )
     {
         // don't convert at all
         return NULL;
