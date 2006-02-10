@@ -202,6 +202,10 @@ wxWinCE:
   is reccommended that you use wxMEDIABACKEND_WMP10 on this platform
   directly, however.
 
+wxUniv:
+
+- Send wxEVT_SCROLL_XXX events from wxSlider (Danny Raynor)
+
 wxX11:
 
 - Invisible text problem fixed.
