@@ -8505,6 +8505,7 @@ class Window(EvtHandler):
         """
         return _core_.Window_CenterOnScreen(*args, **kwargs)
 
+    CenterOnScreen = wx._deprecated(CenterOnScreen) 
     CentreOnScreen = CenterOnScreen 
     def CenterOnParent(*args, **kwargs):
         """

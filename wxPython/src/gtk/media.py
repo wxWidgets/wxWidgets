@@ -54,6 +54,10 @@ __docfilter__ = wx.__DocFilter(globals())
 MEDIASTATE_STOPPED = _media.MEDIASTATE_STOPPED
 MEDIASTATE_PAUSED = _media.MEDIASTATE_PAUSED
 MEDIASTATE_PLAYING = _media.MEDIASTATE_PLAYING
+MEDIACTRLPLAYERCONTROLS_NONE = _media.MEDIACTRLPLAYERCONTROLS_NONE
+MEDIACTRLPLAYERCONTROLS_STEP = _media.MEDIACTRLPLAYERCONTROLS_STEP
+MEDIACTRLPLAYERCONTROLS_VOLUME = _media.MEDIACTRLPLAYERCONTROLS_VOLUME
+MEDIACTRLPLAYERCONTROLS_DEFAULT = _media.MEDIACTRLPLAYERCONTROLS_DEFAULT
 class MediaEvent(_core.NotifyEvent):
     """Proxy of C++ MediaEvent class"""
     def __repr__(self):
@@ -71,6 +75,11 @@ class MediaEventPtr(MediaEvent):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MediaEvent
 _media.MediaEvent_swigregister(MediaEventPtr)
+cvar = _media.cvar
+MEDIABACKEND_DIRECTSHOW = cvar.MEDIABACKEND_DIRECTSHOW
+MEDIABACKEND_MCI = cvar.MEDIABACKEND_MCI
+MEDIABACKEND_QUICKTIME = cvar.MEDIABACKEND_QUICKTIME
+MEDIABACKEND_GSTREAMER = cvar.MEDIABACKEND_GSTREAMER
 
 class MediaCtrl(_core.Control):
     """Proxy of C++ MediaCtrl class"""
@@ -145,7 +154,7 @@ class MediaCtrl(_core.Control):
         return _media.MediaCtrl_SetVolume(*args, **kwargs)
 
     def ShowPlayerControls(*args, **kwargs):
-        """ShowPlayerControls(self, wxMediaCtrlPlayerControls flags=wxMEDIACTRLPLAYERCONTROLS_DEFAULT) -> bool"""
+        """ShowPlayerControls(self, int flags=MEDIACTRLPLAYERCONTROLS_DEFAULT) -> bool"""
         return _media.MediaCtrl_ShowPlayerControls(*args, **kwargs)
 
     def Load(*args, **kwargs):
@@ -168,7 +177,6 @@ class MediaCtrlPtr(MediaCtrl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MediaCtrl
 _media.MediaCtrl_swigregister(MediaCtrlPtr)
-cvar = _media.cvar
 MediaCtrlNameStr = cvar.MediaCtrlNameStr
 
 def PreMediaCtrl(*args, **kwargs):

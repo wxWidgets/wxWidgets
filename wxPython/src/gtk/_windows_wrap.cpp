@@ -4775,6 +4775,39 @@ static PyObject *_wrap_TopLevelWindow_MacGetMetalAppearance(PyObject *, PyObject
 }
 
 
+static PyObject *_wrap_TopLevelWindow_CenterOnScreen(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+    int arg2 = (int) wxBOTH ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dir", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:TopLevelWindow_CenterOnScreen",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxTopLevelWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->CenterOnScreen(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * TopLevelWindow_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -28139,6 +28172,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TopLevelWindow_IsActive", (PyCFunction) _wrap_TopLevelWindow_IsActive, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_MacSetMetalAppearance", (PyCFunction) _wrap_TopLevelWindow_MacSetMetalAppearance, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_MacGetMetalAppearance", (PyCFunction) _wrap_TopLevelWindow_MacGetMetalAppearance, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TopLevelWindow_CenterOnScreen", (PyCFunction) _wrap_TopLevelWindow_CenterOnScreen, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_swigregister", TopLevelWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Frame", (PyCFunction) _wrap_new_Frame, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreFrame", (PyCFunction) _wrap_new_PreFrame, METH_VARARGS | METH_KEYWORDS, NULL},
