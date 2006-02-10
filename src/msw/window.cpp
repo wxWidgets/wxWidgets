@@ -1428,6 +1428,10 @@ void wxWindowMSW::Update()
 // a drop target
 static inline void AdjustStaticBoxZOrder(wxWindow *parent)
 {
+    // no sibling static boxes if we have no parent (ie TLW)
+    if ( !parent )
+        return;
+
     for ( wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
           node;
           node = node->GetNext() )
