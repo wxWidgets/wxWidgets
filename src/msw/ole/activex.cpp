@@ -1115,28 +1115,6 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
     // Draw only when control is windowless or deactivated
     if (m_viewObject)
     {
-#if 0
-        dc.BeginDrawing();
-        RECT rcClient;
-        ::GetClientRect((HWND)GetHandle(), &rcClient);
-
-        HBITMAP hBitmap = CreateCompatibleBitmap((HDC)dc.GetHDC(),
-                                rcClient.right - rcClient.left,
-                                rcClient.bottom - rcClient.top);
-        HDC hdcCompatible = ::CreateCompatibleDC((HDC)dc.GetHDC());
-        HBITMAP hBitmapOld = (HBITMAP)SelectObject(hdcCompatible, hBitmap);
-
-        m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
-            hdcCompatible, (RECTL *) &rcClient, (RECTL *) &rcClient, NULL, 0);
-
-        ::BitBlt((HDC)dc.GetHDC(), 0, 0, rcClient.right, rcClient.bottom,  hdcCompatible, 0, 0, SRCCOPY);
-
-        ::SelectObject(hdcCompatible, hBitmapOld);
-        ::DeleteObject(hBitmap);
-        ::DeleteDC(hdcCompatible);
-        dc.EndDrawing();
-#else
-        dc.BeginDrawing();
         int w, h;
         GetParent()->GetSize(&w, &h);
         RECT posRect;
@@ -1149,9 +1127,6 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
         RECTL *prcBounds = (RECTL *) &posRect;
         m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
             (HDC)dc.GetHDC(), prcBounds, NULL, NULL, 0);
-
-        dc.EndDrawing();
-#endif
     }
 }
 
