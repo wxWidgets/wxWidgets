@@ -1220,6 +1220,17 @@ public:
 
 
     DocDeclStr(
+        int, GetModifiers() const,
+        "Returns a bitmask of the current modifier settings.  Can be used to
+check if the key event has exactly the given modifiers without having
+to explicitly check that the other modifiers are not down.  For
+example::
+
+    if event.GetModifers() == wx.MOD_CONTROL:
+        DoSomething()
+", "");
+
+    DocDeclStr(
         bool , ControlDown() const,
         "Returns ``True`` if the Control key was down at the time of the event.", "");
     
