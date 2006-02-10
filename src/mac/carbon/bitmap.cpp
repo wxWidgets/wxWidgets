@@ -1079,10 +1079,17 @@ wxImage wxBitmap::ConvertToImage() const
         for (int xx = 0; xx < width; xx++)
         {
             long color = *((long*) source) ;
+#ifdef WORDS_BIGENDIAN
             unsigned char a = ((color&0xFF000000) >> 24) ;
             unsigned char r = ((color&0x00FF0000) >> 16) ;
             unsigned char g = ((color&0x0000FF00) >> 8) ;
             unsigned char b = (color&0x000000FF);
+#else
+            unsigned char b = ((color&0xFF000000) >> 24) ;
+            unsigned char g = ((color&0x00FF0000) >> 16) ;
+            unsigned char r = ((color&0x0000FF00) >> 8) ;
+            unsigned char a = (color&0x000000FF);
+#endif
             if ( hasMask )
             {
                 if ( *maskp++ == 0xFF )
