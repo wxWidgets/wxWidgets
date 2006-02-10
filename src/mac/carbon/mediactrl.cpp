@@ -826,9 +826,9 @@ bool wxQTMediaBackend::Pause()
 // 1) Stop the movie
 // 2) Seek to the beginning of the movie
 //---------------------------------------------------------------------------
-bool wxQTMediaBackend::Stop()
+bool wxQTMediaBackend::DoStop()
 {
-    if (!wxQTMediaBackend::Pause())
+    if (!wxQTMediaBackend::DoPause())
         return false;
 
     ::GoToBeginningOfMovie(m_movie);
