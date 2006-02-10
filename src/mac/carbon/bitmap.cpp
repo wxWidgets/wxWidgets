@@ -1146,11 +1146,17 @@ wxImage wxBitmap::ConvertToImage() const
         for (int xx = 0; xx < width; xx++)
         {
             color = *((long*) source) ;
+#ifdef WORDS_BIGENDIAN
             a = ((color&0xFF000000) >> 24) ;
             r = ((color&0x00FF0000) >> 16) ;
             g = ((color&0x0000FF00) >> 8) ;
             b = (color&0x000000FF);
-
+#else
+            b = ((color&0xFF000000) >> 24) ;
+            g = ((color&0x00FF0000) >> 16) ;
+            r = ((color&0x0000FF00) >> 8) ;
+            a = (color&0x000000FF);
+#endif
             if ( hasMask )
             {
                 if ( *maskp++ == 0xFF )
