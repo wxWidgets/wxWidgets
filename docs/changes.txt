@@ -77,12 +77,14 @@ All (GUI):
 - Added wxImage::ConvertToGreyscale.
 - Added ability to use templates with static event tables
   with BEGIN_EVENT_TABLE_TEMPLATEn() macros
+- Added play, pause, and state change events to wxMediaCtrl
 - Added double-buffering to wxVListBox and fixed a scrolling issue.
 - Added wxToolbook (uses a wxToolBar to control pages).
 - Added SetSheetStyle to wxPropertySheetDialog and allowed it to
   behave like a Mac OS X settings dialog.
 - Added <disabled> XRC tag for wxToolBar elements and <bg> for wxToolBar itself
 - Fixed centering of top level windows on secondary displays
+- Implemented wxDisplay::GetFromWindow() for platforms other than MSW
 
 wxMSW:
 
@@ -117,6 +119,8 @@ wxMSW:
 - Fixed wxToolBar background colour problem for some video cards.
 - wxGenericDirCtrl now shows volume name.
 - Added XP theme support for DrawHeaderButton, DrawTreeItemButton.
+- Made the wxActiveXContainer class public and documentated
+- Added a Windows Media Player 9/10 backend for wxMediaCtrl
 - Multiline notebook tab label change now resizes the control
   correctly if an extra row is removed or added.
 - Fixed a crash when dismissing wxPrintDialog under VC++ 7.1.
@@ -130,6 +134,10 @@ wxGTK:
 - wxEVT_MENU_CLOSE and wxEVT_MENU_OPENED for popup menus are now generated
 - Implemented wxCURSOR_BLANK support
 - wxSlider generates all scroll events now and not only wxEVT_SCROLL_THUMBTRACK
+- Fixed a host of bugs in wxMediaCtrl as well as added a GStreamer 0.10
+  implementation
+- Improved configure checks for GStreamer. You may also now specify
+  --enable-gstreamer8 to force configure to check for GStreamer 0.8.\
 - Fixed problem with choice editor in wxGrid whereby the editor
   lost focus when the combobox menu was shown.
 - Fixed problem trying to print from a preview, whereby wrong printer
@@ -190,6 +198,9 @@ wxWinCE:
 - Fixed date formatting and mktime.
 - Fixed getting standard folder paths on WinCE.
 - Support for backspace key on smartphone.
+- Made both windows wxMediaCtrl Windows backends compilable with wxWinCE - it
+  is reccommended that you use wxMEDIABACKEND_WMP10 on this platform
+  directly, however.
 
 wxX11:
 
