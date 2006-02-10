@@ -317,6 +317,14 @@ public:
     void SetReturnCode(int returnCode);
     int GetReturnCode() const;
 
+    // The identifier for the affirmative button
+    void SetAffirmativeId(int affirmativeId);
+    int GetAffirmativeId() const;
+
+    // Identifier for Esc key translation
+    void SetEscapeId(int escapeId);
+    int GetEscapeId() const;
+
     // splits text up at newlines and places the
     // lines into a vertical wxBoxSizer
     wxSizer* CreateTextSizer( const wxString &message );
