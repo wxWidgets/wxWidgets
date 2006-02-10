@@ -121,6 +121,18 @@ FIXME: this template has (at least) the following bugs:
         </option>
     </if>
 
+    <if cond="not isdefined('WX_MONOLITHIC')">
+        <set var="WX_MONOLITHIC_DEFAULT" overwrite="0">0</set>
+        <option name="WX_MONOLITHIC">
+            <values>0,1</values>
+            <default-value>$(WX_MONOLITHIC_DEFAULT)</default-value>
+            <description>
+                Use monolithic build of wxWidgets?
+            </description>
+        </option>
+    </if>
+
+
     <!--                     HELPER VARIABLES                       -->
     <!--                                                            -->
 
@@ -167,6 +179,76 @@ FIXME: this template has (at least) the following bugs:
     <set var="WXLIBINCLUDE">$(WXLIBPATH)$(DIRSEP)$(WXPORT)$(WXLIBPOSTFIX)</set>
 
 
+    <!--    All the possible mixes for the wx library names          -->
+    <set var="WXLIB_BASE_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wxbase$(WX_VERSION)</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wxbase$(WX_VERSION)d</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wxbase$(WX_VERSION)u</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wxbase$(WX_VERSION)ud</if>
+
+        <!--
+            the trick used to support monolithic builds is here: when the
+            <wx-lib>base</wx-lib> tag is found, and user selected
+            WX_MONOLITHIC=1, then the base library is translated to the
+            monolithic library
+        -->
+        <if cond="WX_MONOLITHIC=='1' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)</if>
+        <if cond="WX_MONOLITHIC=='1' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d</if>
+        <if cond="WX_MONOLITHIC=='1' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u</if>
+        <if cond="WX_MONOLITHIC=='1' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud</if>
+    </set>
+
+    <!--   Libraries whose name is prefixed with 'wxbase'            -->
+    <set var="WXLIB_NET_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wxbase$(WX_VERSION)_net</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wxbase$(WX_VERSION)d_net</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wxbase$(WX_VERSION)u_net</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wxbase$(WX_VERSION)ud_net</if>
+    </set>
+    <set var="WXLIB_XML_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wxbase$(WX_VERSION)_xml</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wxbase$(WX_VERSION)d_xml</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wxbase$(WX_VERSION)u_xml</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wxbase$(WX_VERSION)ud_xml</if>
+    </set>
+    <set var="WXLIB_ODBC_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wxbase$(WX_VERSION)_odbc</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wxbase$(WX_VERSION)d_odbc</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wxbase$(WX_VERSION)u_odbc</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wxbase$(WX_VERSION)ud_odbc</if>
+    </set>
+
+    <!--   Libraries whose name is prefixed with 'wx' only          -->
+    <set var="WXLIB_CORE_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)_core</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_core</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_core</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_core</if>
+    </set>
+    <set var="WXLIB_XRC_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)_xrc</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_xrc</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_xrc</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_xrc</if>
+    </set>
+    <set var="WXLIB_HTML_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)_html</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_html</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_html</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_html</if>
+    </set>
+    <set var="WXLIB_ADV_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)_adv</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_adv</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_adv</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_adv</if>
+    </set>
+
+
+
+
+
+
     <!--                        WX TEMPLATE                         -->
     <!--                                                            -->
     <!--                                                            -->
@@ -189,14 +271,19 @@ FIXME: this template has (at least) the following bugs:
 
     <!-- this tag is used to include wx libraries: -->
     <define-tag name="wx-lib" rules="exe,dll,module">
-        <if cond="value=='base'">
-            <sys-lib>wxbase$(WX_VERSION)$(WXLIBPOSTFIX)</sys-lib>
-        </if>
-        <if cond="value in ['net','xml', 'odbc']">
-            <sys-lib>wxbase$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
-        </if>
-        <if cond="value not in ['base','net', 'odbc', 'xml']">
-            <sys-lib>wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
+        <if cond="value=='base'"><sys-lib>$(WXLIB_BASE_NAME)</sys-lib></if>
+        <if cond="value=='core'"><sys-lib>$(WXLIB_CORE_NAME)</sys-lib></if>
+
+        <if cond="value=='net'"><sys-lib>$(WXLIB_NET_NAME)</sys-lib></if>
+        <if cond="value=='xml'"><sys-lib>$(WXLIB_XML_NAME)</sys-lib></if>
+        <if cond="value=='odbc'"><sys-lib>$(WXLIB_ODBC_NAME)</sys-lib></if>
+
+        <if cond="value=='xrc'"><sys-lib>$(WXLIB_XRC_NAME)</sys-lib></if>
+        <if cond="value=='html'"><sys-lib>$(WXLIB_HTML_NAME)</sys-lib></if>
+        <if cond="value=='adv'"><sys-lib>$(WXLIB_ADV_NAME)</sys-lib></if>
+
+        <if cond="value not in [ 'base', 'core', 'net', 'xml', 'odbc', 'xrc', 'html', 'adv' ]">
+            <error>Unknown wxWidgets library given in the wx-lib tag</error>
         </if>
     </define-tag>
 
