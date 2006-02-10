@@ -33,6 +33,9 @@ class MyHtmlWindow(html.HtmlWindow):
 
     def OnCellClicked(self, cell, x, y, evt):
         self.log.WriteText('OnCellClicked: %s, (%d %d)\n' % (cell, x, y))
+        if isinstance(cell, html.HtmlWordCell):
+            sel = html.HtmlSelection()
+            self.log.WriteText('     %s\n' % cell.ConvertToText(sel))
         super(MyHtmlWindow, self).OnCellClicked(cell, x, y, evt)
 
 

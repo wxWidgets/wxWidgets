@@ -384,6 +384,10 @@ private:
 
 
 //---------------------------------------------------------------------------
+
+%typemap(out) wxHtmlCell*         { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) const wxHtmlCell*   { $result = wxPyMake_wxObject($1, $owner); }
+
 //---------------------------------------------------------------------------
 %newgroup
 
@@ -499,7 +503,12 @@ enum
 
 class wxHtmlCell : public wxObject {
 public:
+    %typemap(out) wxHtmlCell*;    // turn off this typemap
+
     wxHtmlCell();
+
+    // Turn it back on again
+    %typemap(out) wxHtmlCell* { $result = wxPyMake_wxObject($1, $owner); }
 
     int GetPosX();
     int GetPosY();
@@ -582,6 +591,9 @@ class  wxHtmlWordCell : public wxHtmlCell
 {
 public:
     wxHtmlWordCell(const wxString& word, wxDC& dc);
+    wxString ConvertToText(wxHtmlSelection *sel) const;
+    bool IsLinebreakAllowed() const;
+    void SetPreviousWord(wxHtmlWordCell *cell);
 };
 
 
@@ -1138,10 +1150,6 @@ public:
     int GetCurIndex();
     int GetMaxIndex();
     const wxString& GetName();
-    // WXWIN_COMPATIBILITY_2_4
-#if 0
-    wxHtmlContentsItem* GetContentsItem();
-#endif
 };
 
 //---------------------------------------------------------------------------
@@ -1164,13 +1172,6 @@ public:
     // TODO: this one needs fixed...
     const wxHtmlBookRecArray& GetBookRecArray();
 
-    // WXWIN_COMPATIBILITY_2_4
-#if 0
-    wxHtmlContentsItem* GetContents();
-    int GetContentsCnt();
-    wxHtmlContentsItem* GetIndex();
-    int GetIndexCnt();
-#endif
 };
 
 //---------------------------------------------------------------------------
