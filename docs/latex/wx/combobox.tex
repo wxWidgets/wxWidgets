@@ -55,6 +55,7 @@ when <RETURN> is pressed in the combobox.}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxComboBox::wxComboBox}\label{wxcomboboxctor}
 
 \func{}{wxComboBox}{\void}
@@ -107,11 +108,13 @@ a list of strings.}
 \perlnote{In wxPerl there is just an array reference in place of {\tt n}
 and {\tt choices}.}
 
+
 \membersection{wxComboBox::\destruct{wxComboBox}}\label{wxcomboboxdtor}
 
 \func{}{\destruct{wxComboBox}}{\void}
 
 Destructor, destroying the combobox.
+
 
 \membersection{wxComboBox::Create}\label{wxcomboboxcreate}
 
@@ -129,12 +132,14 @@ Creates the combobox for two-step construction. Derived classes
 should call or replace this function. See \helpref{wxComboBox::wxComboBox}{wxcomboboxctor}\rtfsp
 for further details.
 
+
 \membersection{wxComboBox::CanCopy}\label{wxcomboboxcancopy}
 
 \constfunc{bool}{CanCopy}{\void}
 
 Returns true if the combobox is editable and there is a text selection to copy to the clipboard.
 Only available on Windows.
+
 
 \membersection{wxComboBox::CanCut}\label{wxcomboboxcancut}
 
@@ -143,12 +148,14 @@ Only available on Windows.
 Returns true if the combobox is editable and there is a text selection to copy to the clipboard.
 Only available on Windows.
 
+
 \membersection{wxComboBox::CanPaste}\label{wxcomboboxcanpaste}
 
 \constfunc{bool}{CanPaste}{\void}
 
 Returns true if the combobox is editable and there is text on the clipboard that can be pasted into the
 text field. Only available on Windows.
+
 
 \membersection{wxComboBox::CanRedo}\label{wxcomboboxcanredo}
 
@@ -157,6 +164,7 @@ text field. Only available on Windows.
 Returns true if the combobox is editable and the last undo can be redone.
 Only available on Windows.
 
+
 \membersection{wxComboBox::CanUndo}\label{wxcomboboxcanundo}
 
 \constfunc{bool}{CanUndo}{\void}
@@ -164,11 +172,13 @@ Only available on Windows.
 Returns true if the combobox is editable and the last edit can be undone.
 Only available on Windows.
 
+
 \membersection{wxComboBox::Copy}\label{wxcomboboxcopy}
 
 \func{void}{Copy}{\void}
 
 Copies the selected text to the clipboard.
+
 
 \membersection{wxComboBox::Cut}\label{wxcomboboxcut}
 
@@ -176,11 +186,16 @@ Copies the selected text to the clipboard.
 
 Copies the selected text to the clipboard and removes the selection.
 
+
 \membersection{wxComboBox::GetInsertionPoint}\label{wxcomboboxgetinsertionpoint}
 
 \constfunc{long}{GetInsertionPoint}{\void}
 
 Returns the insertion point for the combobox's text field.
+
+\textbf{Note:} Under wxMSW, this function always returns $0$ if the combobox
+doesn't have the focus.
+
 
 \membersection{wxComboBox::GetLastPosition}\label{wxcomboboxgetlastposition}
 
@@ -188,11 +203,13 @@ Returns the insertion point for the combobox's text field.
 
 Returns the last position in the combobox text field.
 
+
 \membersection{wxComboBox::GetValue}\label{wxcomboboxgetvalue}
 
 \constfunc{wxString}{GetValue}{\void}
 
 Returns the current value in the combobox text field.
+
 
 \membersection{wxComboBox::Paste}\label{wxcomboboxpaste}
 
@@ -200,11 +217,13 @@ Returns the current value in the combobox text field.
 
 Pastes text from the clipboard to the text field.
 
+
 \membersection{wxComboBox::Redo}\label{wxcomboboxredo}
 
 \func{void}{Redo}{\void}
 
 Redoes the last undo in the text field. Windows only.
+
 
 \membersection{wxComboBox::Replace}\label{wxcomboboxreplace}
 
@@ -220,6 +239,7 @@ Replaces the text between two positions with the given text, in the combobox tex
 
 \docparam{text}{The text to insert.}
 
+
 \membersection{wxComboBox::Remove}\label{wxcomboboxremove}
 
 \func{void}{Remove}{\param{long}{ from}, \param{long}{ to}}
@@ -232,6 +252,7 @@ Removes the text between the two positions in the combobox text field.
 
 \docparam{to}{The last position.}
 
+
 \membersection{wxComboBox::SetInsertionPoint}\label{wxcomboboxsetinsertionpoint}
 
 \func{void}{SetInsertionPoint}{\param{long}{ pos}}
@@ -242,11 +263,13 @@ Sets the insertion point in the combobox text field.
 
 \docparam{pos}{The new insertion point.}
 
+
 \membersection{wxComboBox::SetInsertionPointEnd}\label{wxcomboboxsetinsertionpointend}
 
 \func{void}{SetInsertionPointEnd}{\void}
 
 Sets the insertion point at the end of the combobox text field.
+
 
 \membersection{wxComboBox::SetSelection}\label{wxcomboboxsetselection}
 
@@ -264,6 +287,7 @@ Selects the text between the two positions, in the combobox text field.
 name is kept for
 \helpref{wxControlWithItems::SetSelection}{wxcontrolwithitemssetselection}.}
 
+
 \membersection{wxComboBox::SetValue}\label{wxcomboboxsetvalue}
 
 \func{void}{SetValue}{\param{const wxString\& }{text}}
@@ -276,6 +300,7 @@ the combobox choices list, otherwise the call to SetValue() is ignored.
 \wxheading{Parameters}
 
 \docparam{text}{The text to set.}
+
 
 \membersection{wxComboBox::Undo}\label{wxcomboboxundo}
 
