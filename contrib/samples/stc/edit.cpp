@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// File:        edit.cpp
+// File:        contrib/samples/stc/edit.cpp
 // Purpose:     STC test module
 // Maintainer:  Wyo
 // Created:     2003-09-01
@@ -17,7 +17,7 @@
 // headers
 //----------------------------------------------------------------------------
 
-// For compilers that support precompilation, includes <wx/wx.h>.
+// For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

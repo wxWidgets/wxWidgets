@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// File:        prefs.cpp
+// File:        contrib/samples/stc/prefs.cpp
 // Purpose:     STC test Preferences initialization
 // Maintainer:  Wyo
 // Created:     2003-09-01
@@ -12,7 +12,7 @@
 // headers
 //----------------------------------------------------------------------------
 
-// For compilers that support precompilation, includes <wx/wx.h>.
+// For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

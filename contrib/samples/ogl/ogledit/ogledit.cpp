@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        ogledit.cpp
+// Name:        contrib/samples/ogl/ogledit/ogledit.cpp
 // Purpose:     OGLEdit sample app
 // Author:      Julian Smart
 // Modified by:
@@ -17,7 +17,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
 #if !wxUSE_DOC_VIEW_ARCHITECTURE

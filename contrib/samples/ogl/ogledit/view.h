@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        view.h
+// Name:        contrib/samples/ogl/ogledit/view.h
 // Purpose:     View-related classes
 // Author:      Julian Smart
 // Modified by:
@@ -13,7 +13,7 @@
 #define _OGLSAMPLE_VIEW_H_
 
 #include "doc.h"
-#include <wx/ogl/ogl.h>
+#include "wx/ogl/ogl.h"
 
 class MyCanvas: public wxShapeCanvas
 {

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        doc.cpp
+// Name:        contrib/samples/ogl/studio/doc.cpp
 // Purpose:     Implements document functionality
 // Author:      Julian Smart
 // Modified by:
@@ -17,13 +17,13 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
 #include "studio.h"
 #include "doc.h"
 #include "view.h"
-#include <wx/ogl/basicp.h>
+#include "wx/ogl/basicp.h"
 
 IMPLEMENT_DYNAMIC_CLASS(csDiagramDocument, wxDocument)
 
@@ -591,4 +591,3 @@ bool csCommandState::Undo()
 
     return true;
 }
-

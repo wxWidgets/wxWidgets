@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        csprint.cpp
+// Name:        contrib/samples/ogl/studio/csprint.cpp
 // Purpose:     Printing and clipboard functionality
 // Author:      Julian Smart
 // Modified by:
@@ -17,15 +17,15 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/ogl/ogl.h> // base header of OGL, includes and adjusts wx/deprecated/setup.h
+#include "wx/ogl/ogl.h" // base header of OGL, includes and adjusts wx/deprecated/setup.h
 
-#include <wx/clipbrd.h>
+#include "wx/clipbrd.h"
 
 #ifdef __WXMSW__
-#include <wx/metafile.h>
+#include "wx/metafile.h"
 #endif
 
 #include "studio.h"
@@ -318,5 +318,3 @@ bool csDiagramClipboard::OnAddShape(wxDiagram* diagramTo, wxShape* newShape, wxD
 
     return true;
 }
-
-

@@ -1,29 +1,29 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        Studio.h
+// Name:        contrib/samples/ogl/studio/studio.h
 // Purpose:     Studio application class
 // Author:      Julian Smart
 // Modified by:
 // Created:     27/7/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _STUDIO_STUDIO_H_
 #define _STUDIO_STUDIO_H_
 
-#include <wx/docmdi.h>
-#include <wx/help.h>
-#include <wx/cshelp.h>
-#include <wx/helphtml.h>
+#include "wx/docmdi.h"
+#include "wx/help.h"
+#include "wx/cshelp.h"
+#include "wx/helphtml.h"
 #ifdef __WXMSW__
-    #include <wx/msw/helpchm.h>
+    #include "wx/msw/helpchm.h"
 #else
-    #include <wx/html/helpctrl.h>
+    #include "wx/html/helpctrl.h"
 #endif
 
-#include <wx/ogl/ogl.h>
-#include <wx/ogl/canvas.h>
+#include "wx/ogl/ogl.h"
+#include "wx/ogl/canvas.h"
 #include "shapes.h"
 
 class csEditorToolPalette;
@@ -175,4 +175,3 @@ DECLARE_APP(csApp)
 
 #endif
   // _STUDIO_STUDIO_H_
-

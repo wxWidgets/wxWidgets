@@ -9,17 +9,17 @@
 // Include wxWindows' headers
 
 #ifndef WX_PRECOMP
-    #include <wx/wx.h>
+    #include "wx/wx.h"
 #endif
 
-#include <wx/image.h>
-#include <wx/statline.h>
-#include <wx/spinbutt.h>
-#include <wx/spinctrl.h>
-#include <wx/splitter.h>
-#include <wx/listctrl.h>
-#include <wx/treectrl.h>
-#include <wx/notebook.h>
+#include "wx/image.h"
+#include "wx/statline.h"
+#include "wx/spinbutt.h"
+#include "wx/spinctrl.h"
+#include "wx/splitter.h"
+#include "wx/listctrl.h"
+#include "wx/treectrl.h"
+#include "wx/notebook.h"
 
 // Declare window functions
 
@@ -29,7 +29,7 @@
 #define ID_TEXTCTRL_MDL 20
 #define ID_LISTBOX_MFTR 11
 #define ID_LISTBOX_MDL 21
-wxSizer *MonitorDialogFunc( wxPanel *parent, bool call_fit = TRUE, bool set_sizer = TRUE );
+wxSizer *MonitorDialogFunc( wxPanel *parent, bool call_fit = true, bool set_sizer = true );
 
 // Declare bitmap functions
 

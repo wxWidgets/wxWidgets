@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// File:        stctest.cpp
+// File:        contrib/samples/stc/stctest.cpp
 // Purpose:     STC test application
 // Maintainer:  Otto Wyss
 // Created:     2003-09-01
@@ -12,7 +12,7 @@
 // headers
 //----------------------------------------------------------------------------
 
-// For compilers that support precompilation, includes <wx/wx.h>.
+// For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

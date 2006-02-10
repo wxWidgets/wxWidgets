@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cspalette.cpp
+// Name:        contrib/samples/ogl/studio/cspalette.cpp
 // Purpose:     OGLEdit palette
 // Author:      Julian Smart
 // Modified by:
@@ -17,10 +17,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/laywin.h>
+#include "wx/laywin.h"
 
 #include <ctype.h>
 #include <stdlib.h>

@@ -1,21 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        symbols.h
+// Name:        contrib/samples/ogl/studio/symbols.h
 // Purpose:     Symbol classes (symbol database)
 // Author:      Julian Smart
 // Modified by:
 // Created:     12/07/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _STUDIO_SYMBOLS_H_
 #define _STUDIO_SYMBOLS_H_
 
-#include <wx/docview.h>
-#include <wx/string.h>
+#include "wx/docview.h"
+#include "wx/string.h"
 
-#include <wx/ogl/ogl.h> // base header of OGL, includes and adjusts wx/deprecated/setup.h
+#include "wx/ogl/ogl.h" // base header of OGL, includes and adjusts wx/deprecated/setup.h
 
 /*
  * csSymbol

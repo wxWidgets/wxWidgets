@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        palette.cpp
+// Name:        samples/ogl/ogledit/palette.cpp
 // Purpose:     OGLEdit palette
 // Author:      Julian Smart
 // Modified by:
@@ -17,10 +17,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/toolbar.h>
+#include "wx/toolbar.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -101,4 +101,3 @@ EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
   palette->currentlySelected = PALETTE_ARROW;
   return palette;
 }
-
