@@ -29,6 +29,8 @@
     #include "wx/app.h"
 #endif // WX_PRECOMP
 
+#include "wx/display.h"
+
 // ----------------------------------------------------------------------------
 // event table
 // ----------------------------------------------------------------------------
@@ -149,6 +151,35 @@ wxSize wxTopLevelWindowBase::GetDefaultSize()
     }
 
     return size;
+}
+
+void wxTopLevelWindowBase::DoCentre(int dir)
+{
+    wxRect rectCentre;
+    if ( !(dir & wxCENTRE_ON_SCREEN) && GetParent() )
+    {
+        // centre on parent window
+        rectCentre = GetParent()->GetRect();
+    }
+    else
+    {
+        // we were explicitely asked to centre this window on the entire screen
+        // or if we have no parent anyhow and so can't centre on it
+#if wxUSE_DISPLAY
+        const int nDisplay = wxDisplay::GetFromWindow(this);
+        if ( nDisplay != wxNOT_FOUND )
+        {
+            rectCentre = wxDisplay(nDisplay).GetGeometry();
+        }
+        else
+#endif // wxUSE_DISPLAY
+        {
+            wxDisplaySize(&rectCentre.width, &rectCentre.height);
+        }
+    }
+
+    // window may be at -1 if it's centered on a secondary display, for example
+    SetSize(GetRect().CentreIn(rectCentre, dir), wxSIZE_ALLOW_MINUS_ONE);
 }
 
 // ----------------------------------------------------------------------------

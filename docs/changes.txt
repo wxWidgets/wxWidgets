@@ -82,6 +82,7 @@ All (GUI):
 - Added SetSheetStyle to wxPropertySheetDialog and allowed it to
   behave like a Mac OS X settings dialog.
 - Added <disabled> XRC tag for wxToolBar elements and <bg> for wxToolBar itself
+- Fixed centering of top level windows on secondary displays
 
 wxMSW:
 

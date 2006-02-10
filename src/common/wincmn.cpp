@@ -74,10 +74,6 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
-#if wxUSE_DISPLAY
-    #include "wx/display.h"
-#endif
-
 #if wxUSE_SYSTEM_OPTIONS
     #include "wx/sysopt.h"
 #endif
@@ -400,142 +396,12 @@ bool wxWindowBase::DestroyChildren()
 // ----------------------------------------------------------------------------
 
 // centre the window with respect to its parent in either (or both) directions
-void wxWindowBase::Centre(int direction)
+void wxWindowBase::DoCentre(int dir)
 {
-    // the position/size of the parent window or of the entire screen
-    wxPoint posParent;
-    int widthParent, heightParent;
+    wxCHECK_RET( !(dir & wxCENTRE_ON_SCREEN) && GetParent(),
+                 _T("this method only implements centering child windows") );
 
-    wxWindow *parent = NULL;
-    wxTopLevelWindow *winTop = NULL;
-
-    if ( !(direction & wxCENTRE_ON_SCREEN) )
-    {
-        // find the parent to centre this window on: it should be the
-        // immediate parent for the controls but the top level parent for the
-        // top level windows (like dialogs)
-        parent = GetParent();
-        if ( IsTopLevel() )
-        {
-            while ( parent && !parent->IsTopLevel() )
-            {
-                parent = parent->GetParent();
-            }
-        }
-
-        // there is no wxTopLevelWindow under wxMotif yet
-#ifndef __WXMOTIF__
-        // we shouldn't center the dialog on the iconized window: under
-        // Windows, for example, this places it completely off the screen
-        if ( parent )
-        {
-            winTop = wxDynamicCast(parent, wxTopLevelWindow);
-            if ( winTop && winTop->IsIconized() )
-            {
-                winTop = NULL;
-                parent = NULL;
-            }
-        }
-#endif // __WXMOTIF__
-
-        // did we find the parent?
-        if ( !parent )
-        {
-            // no other choice
-            direction |= wxCENTRE_ON_SCREEN;
-        }
-    }
-
-    if ( direction & wxCENTRE_ON_SCREEN )
-    {
-        //RN:  If we are using wxDisplay we get
-        //the dimensions of the monitor the window is on,
-        //otherwise we get the dimensions of the primary monitor
-        //FIXME:  wxDisplay::GetFromWindow only implemented on MSW
-#if wxUSE_DISPLAY && defined(__WXMSW__)
-        int nDisplay = wxDisplay::GetFromWindow((wxWindow*)this);
-        if(nDisplay != wxNOT_FOUND)
-        {
-            wxDisplay windowDisplay(nDisplay);
-            wxRect displayRect = windowDisplay.GetGeometry();
-            widthParent = displayRect.width;
-            heightParent = displayRect.height;
-        }
-        else
-#endif
-        // centre with respect to the whole screen
-        wxDisplaySize(&widthParent, &heightParent);
-    }
-    else
-    {
-        if ( IsTopLevel() )
-        {
-            if(winTop)
-                winTop->GetRectForTopLevelChildren(&posParent.x, &posParent.y, &widthParent, &heightParent);
-            else
-            {
-                // centre on the parent
-                parent->GetSize(&widthParent, &heightParent);
-
-                // adjust to the parents position
-                posParent = parent->GetPosition();
-            }
-        }
-        else
-        {
-            // centre inside the parents client rectangle
-            parent->GetClientSize(&widthParent, &heightParent);
-        }
-    }
-
-    int width, height;
-    GetSize(&width, &height);
-
-    int xNew = wxDefaultCoord,
-        yNew = wxDefaultCoord;
-
-    if ( direction & wxHORIZONTAL )
-        xNew = (widthParent - width)/2;
-
-    if ( direction & wxVERTICAL )
-        yNew = (heightParent - height)/2;
-
-    xNew += posParent.x;
-    yNew += posParent.y;
-
-    // FIXME:  This needs to get the client display rect of the display
-    // the window is (via wxDisplay::GetFromWindow).
-
-    // Base size of the visible dimensions of the display
-    // to take into account the taskbar. And the Mac menu bar at top.
-    wxRect clientrect = wxGetClientDisplayRect();
-
-    // NB: in wxMSW, negative position may not necessarily mean "out of screen",
-    //     but it may mean that the window is placed on other than the main
-    //     display. Therefore we only make sure centered window is on the main display
-    //     if the parent is at least partially present here.
-    if (posParent.x + widthParent >= 0)  // if parent is (partially) on the main display
-    {
-        if (xNew < clientrect.GetLeft())
-            xNew = clientrect.GetLeft();
-        else if (xNew + width > clientrect.GetRight())
-            xNew = clientrect.GetRight() - width;
-    }
-    if (posParent.y + heightParent >= 0)  // if parent is (partially) on the main display
-    {
-        if (yNew + height > clientrect.GetBottom())
-            yNew = clientrect.GetBottom() - height;
-
-        // Make certain that the title bar is initially visible
-        // always, even if this would push the bottom of the
-        // dialog off the visible area of the display
-        if (yNew < clientrect.GetTop())
-            yNew = clientrect.GetTop();
-    }
-
-    // move the window to this position (keeping the old size but using
-    // SetSize() and not Move() to allow xNew and/or yNew to be wxDefaultCoord)
-    SetSize(xNew, yNew, width, height, wxSIZE_ALLOW_MINUS_ONE);
+    SetSize(GetRect().CentreIn(GetParent()->GetClientSize(), dir));
 }
 
 // fits the window around the children

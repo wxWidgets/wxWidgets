@@ -177,6 +177,11 @@ public:
     virtual void SetRightMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL) = 0;
 #endif // __SMARTPHONE__
 
+    // centre the window on screen: this is just a shortcut
+    void CentreOnScreen(int dir = wxBOTH) { DoCentre(dir | wxCENTRE_ON_SCREEN); }
+    void CenterOnScreen(int dir = wxBOTH) { CentreOnScreen(dir); }
+
+
     // implementation only from now on
     // -------------------------------
 
@@ -215,6 +220,10 @@ protected:
     // toolbar which may shift the origin of the client area
     virtual void DoClientToScreen(int *x, int *y) const;
     virtual void DoScreenToClient(int *x, int *y) const;
+
+    // add support for wxCENTRE_ON_SCREEN
+    virtual void DoCentre(int dir);
+
 
     // test whether this window makes part of the frame
     // (menubar, toolbar and statusbar are excluded from automatic layout)
