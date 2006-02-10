@@ -63,7 +63,12 @@ enum wxMediaCtrlPlayerControls
     wxMEDIACTRLPLAYERCONTROLS_DEFAULT
 };
 
-    
+static wxString wxMEDIABACKEND_DIRECTSHOW(wxEmptyString);
+static wxString wxMEDIABACKEND_MCI       (wxEmptyString);
+static wxString wxMEDIABACKEND_QUICKTIME (wxEmptyString);
+static wxString wxMEDIABACKEND_GSTREAMER (wxEmptyString);
+
+
 class wxMediaEvent : public wxNotifyEvent
 {
 public:
@@ -139,10 +144,19 @@ enum wxMediaState
 };
 
 
+enum wxMediaCtrlPlayerControls
+{
+    wxMEDIACTRLPLAYERCONTROLS_NONE,
+    wxMEDIACTRLPLAYERCONTROLS_STEP,
+    wxMEDIACTRLPLAYERCONTROLS_VOLUME,
+    wxMEDIACTRLPLAYERCONTROLS_DEFAULT
+};
 
-// MAKE_CONST_WXSTRING(MEDIABACKEND_DIRECTSHOW);
-// MAKE_CONST_WXSTRING(MEDIABACKEND_MCI       );
-// MAKE_CONST_WXSTRING(MEDIABACKEND_QUICKTIME );
+
+MAKE_CONST_WXSTRING(MEDIABACKEND_DIRECTSHOW);
+MAKE_CONST_WXSTRING(MEDIABACKEND_MCI       );
+MAKE_CONST_WXSTRING(MEDIABACKEND_QUICKTIME );
+MAKE_CONST_WXSTRING(MEDIABACKEND_GSTREAMER );
 
 //---------------------------------------------------------------------------
 
