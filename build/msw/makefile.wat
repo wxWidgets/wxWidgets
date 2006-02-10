@@ -101,7 +101,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_OBJECTS) &
 	$(____ADVANCED_SRC_FILENAMES_OBJECTS) &
 	$(OBJS)\monodll_mediactrlcmn.obj &
-	$(OBJS)\monodll_mediactrl.obj &
+	$(OBJS)\monodll_mediactrl_am.obj &
+	$(OBJS)\monodll_mediactrl_wmp10.obj &
 	$(OBJS)\monodll_activex.obj &
 	$(OBJS)\monodll_helpbest.obj &
 	$(OBJS)\monodll_helpctrl.obj &
@@ -643,7 +644,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_1_OBJECTS) &
 	$(____ADVANCED_SRC_FILENAMES_1_OBJECTS) &
 	$(OBJS)\monolib_mediactrlcmn.obj &
-	$(OBJS)\monolib_mediactrl.obj &
+	$(OBJS)\monolib_mediactrl_am.obj &
+	$(OBJS)\monolib_mediactrl_wmp10.obj &
 	$(OBJS)\monolib_activex.obj &
 	$(OBJS)\monolib_helpbest.obj &
 	$(OBJS)\monolib_helpctrl.obj &
@@ -2144,8 +2146,10 @@ __mediadll___depname =
 !ifeq MONOLITHIC 0
 !ifeq SHARED 1
 !ifeq USE_GUI 1
+!ifeq USE_MEDIA 1
 __mediadll___depname = &
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media_wat$(VENDORTAG).dll
+!endif
 !endif
 !endif
 !endif
@@ -2153,8 +2157,10 @@ __medialib___depname =
 !ifeq MONOLITHIC 0
 !ifeq SHARED 0
 !ifeq USE_GUI 1
+!ifeq USE_MEDIA 1
 __medialib___depname = &
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib
+!endif
 !endif
 !endif
 !endif
@@ -2432,11 +2438,12 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 	WXUNIV="$(WXUNIV)" UNICODE="$(UNICODE)" BUILD="$(BUILD)" &
 	DEBUG_INFO="$(DEBUG_INFO)" DEBUG_FLAG="$(DEBUG_FLAG)" &
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" &
-	USE_XRC="$(USE_XRC)" USE_OPENGL="$(USE_OPENGL)" USE_ODBC="$(USE_ODBC)" &
-	USE_QA="$(USE_QA)" USE_EXCEPTIONS="$(USE_EXCEPTIONS)" &
-	USE_RTTI="$(USE_RTTI)" USE_THREADS="$(USE_THREADS)" &
-	OFFICIAL_BUILD="$(OFFICIAL_BUILD)" VENDOR="$(VENDOR)" &
-	WX_FLAVOUR="$(WX_FLAVOUR)" WX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" CFG="$(CFG)" &
+	USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" USE_OPENGL="$(USE_OPENGL)" &
+	USE_ODBC="$(USE_ODBC)" USE_QA="$(USE_QA)" &
+	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" &
+	USE_THREADS="$(USE_THREADS)" OFFICIAL_BUILD="$(OFFICIAL_BUILD)" &
+	VENDOR="$(VENDOR)" WX_FLAVOUR="$(WX_FLAVOUR)" &
+	WX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" CFG="$(CFG)" &
 	CPPUNIT_CFLAGS="$(CPPUNIT_CFLAGS)" CPPUNIT_LIBS="$(CPPUNIT_LIBS)" &
 	RUNTIME_LIBS="$(RUNTIME_LIBS)"
 WX_RELEASE_NODOT = 27
@@ -3102,7 +3109,8 @@ MEDIADLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 MEDIADLL_OBJECTS =  &
 	$(OBJS)\mediadll_dummy.obj &
 	$(OBJS)\mediadll_mediactrlcmn.obj &
-	$(OBJS)\mediadll_mediactrl.obj &
+	$(OBJS)\mediadll_mediactrl_am.obj &
+	$(OBJS)\mediadll_mediactrl_wmp10.obj &
 	$(OBJS)\mediadll_activex.obj
 MEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
@@ -3115,7 +3123,8 @@ MEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 MEDIALIB_OBJECTS =  &
 	$(OBJS)\medialib_dummy.obj &
 	$(OBJS)\medialib_mediactrlcmn.obj &
-	$(OBJS)\medialib_mediactrl.obj &
+	$(OBJS)\medialib_mediactrl_am.obj &
+	$(OBJS)\medialib_mediactrl_wmp10.obj &
 	$(OBJS)\medialib_activex.obj
 ODBCDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
@@ -3656,6 +3665,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 !ifeq MONOLITHIC 0
 !ifeq SHARED 1
 !ifeq USE_GUI 1
+!ifeq USE_MEDIA 1
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media_wat$(VENDORTAG).dll :  $(MEDIADLL_OBJECTS) $(OBJS)\mediadll_version.res $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__coredll___depname) $(__basedll___depname)
 	@%create $(OBJS)\mediadll.lbc
 	@%append $(OBJS)\mediadll.lbc option quiet
@@ -3671,14 +3681,17 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 !endif
 !endif
 !endif
+!endif
 
 !ifeq MONOLITHIC 0
 !ifeq SHARED 0
 !ifeq USE_GUI 1
+!ifeq USE_MEDIA 1
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib :  $(MEDIALIB_OBJECTS)
 	@%create $(OBJS)\medialib.lbc
 	@for %i in ($(MEDIALIB_OBJECTS)) do @%append $(OBJS)\medialib.lbc +%i
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\medialib.lbc
+!endif
 !endif
 !endif
 !endif
@@ -3947,6 +3960,7 @@ build_cfg_file : .SYMBOLIC $(SETUPHDIR)
 	@echo USE_THREADS=$(USE_THREADS) >>$(BUILD_CFG_FILE)
 	@echo USE_GUI=$(USE_GUI) >>$(BUILD_CFG_FILE)
 	@echo USE_HTML=$(USE_HTML) >>$(BUILD_CFG_FILE)
+	@echo USE_MEDIA=$(USE_MEDIA) >>$(BUILD_CFG_FILE)
 	@echo USE_ODBC=$(USE_ODBC) >>$(BUILD_CFG_FILE)
 	@echo USE_OPENGL=$(USE_OPENGL) >>$(BUILD_CFG_FILE)
 	@echo USE_QA=$(USE_QA) >>$(BUILD_CFG_FILE)
@@ -4723,7 +4737,10 @@ $(OBJS)\monodll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 $(OBJS)\monodll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
+$(OBJS)\monodll_mediactrl_am.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_am.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_mediactrl_wmp10.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_wmp10.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
@@ -6563,7 +6580,10 @@ $(OBJS)\monolib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 $(OBJS)\monolib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
+$(OBJS)\monolib_mediactrl_am.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_am.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_mediactrl_wmp10.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_wmp10.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
@@ -11195,7 +11215,10 @@ $(OBJS)\mediadll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 $(OBJS)\mediadll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mediadll_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
+$(OBJS)\mediadll_mediactrl_am.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_am.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
+
+$(OBJS)\mediadll_mediactrl_wmp10.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_wmp10.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mediadll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
@@ -11207,7 +11230,10 @@ $(OBJS)\medialib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 $(OBJS)\medialib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\medialib_mediactrl.obj :  .AUTODEPEND ..\..\src\msw\mediactrl.cpp
+$(OBJS)\medialib_mediactrl_am.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_am.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
+
+$(OBJS)\medialib_mediactrl_wmp10.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_wmp10.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\medialib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp

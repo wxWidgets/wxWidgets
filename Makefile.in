@@ -4474,10 +4474,12 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS = \
-@COND_TOOLKIT_MSW@	monodll_mediactrl.o monodll_activex.o
+@COND_TOOLKIT_MSW@	monodll_mediactrl_am.o monodll_mediactrl_wmp10.o \
+@COND_TOOLKIT_MSW@	monodll_activex.o
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS = 
 @COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS = \
-@COND_TOOLKIT_WINCE@	monodll_mediactrl.o monodll_activex.o
+@COND_TOOLKIT_WINCE@	monodll_mediactrl_am.o monodll_mediactrl_wmp10.o \
+@COND_TOOLKIT_WINCE@	monodll_activex.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
@@ -6092,10 +6094,12 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_MSW@	monolib_mediactrl.o monolib_activex.o
+@COND_TOOLKIT_MSW@	monolib_mediactrl_am.o monolib_mediactrl_wmp10.o \
+@COND_TOOLKIT_MSW@	monolib_activex.o
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS_1 = 
 @COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_WINCE@	monolib_mediactrl.o monolib_activex.o
+@COND_TOOLKIT_WINCE@	monolib_mediactrl_am.o monolib_mediactrl_wmp10.o \
+@COND_TOOLKIT_WINCE@	monolib_activex.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
@@ -9372,11 +9376,11 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_WINCE@	= advlib_datectrl.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_3 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advlib_sound_sdl.o
-COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___mediadll___depname = \
+COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1___mediadll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@__mediadll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___mediadll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@__install_mediadll___depname \
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	= install_mediadll
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@__mediadll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1___mediadll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@__install_mediadll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	= install_mediadll
 COND_PLATFORM_MACOSX_1___mediadll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__mediadll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___mediadll___macinstnamecmd)
@@ -9423,16 +9427,18 @@ COND_USE_SOSYMLINKS_1___mediadll___so_symlinks_inst_cmd = rm -f \
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS_2 = mediadll_mediactrl.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_2 = mediadll_mediactrl.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_MSW@	mediadll_mediactrl.o mediadll_activex.o
+@COND_TOOLKIT_MSW@	mediadll_mediactrl_am.o mediadll_mediactrl_wmp10.o \
+@COND_TOOLKIT_MSW@	mediadll_activex.o
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS_2 = 
 @COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_WINCE@	mediadll_mediactrl.o mediadll_activex.o
+@COND_TOOLKIT_WINCE@	mediadll_mediactrl_am.o mediadll_mediactrl_wmp10.o \
+@COND_TOOLKIT_WINCE@	mediadll_activex.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_2 = mediadll_mediactrl.o
-COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___medialib___depname = \
+COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__medialib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___medialib___depname)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__install_medialib___depname \
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	= install_medialib
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@__medialib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@__install_medialib___depname \
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@	= install_medialib
 @COND_GCC_PCH_1@__medialib_PCH_INC = -I.pch/wxprec_medialib
 @COND_ICC_PCH_1@__medialib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	.pch/wxprec_medialib/wx/wxprec.h.gch
@@ -9443,10 +9449,12 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___medialib___depname = \
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS_3 = medialib_mediactrl.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_3 = medialib_mediactrl.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_MSW@	medialib_mediactrl.o medialib_activex.o
+@COND_TOOLKIT_MSW@	medialib_mediactrl_am.o medialib_mediactrl_wmp10.o \
+@COND_TOOLKIT_MSW@	medialib_activex.o
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS_3 = 
 @COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_WINCE@	medialib_mediactrl.o medialib_activex.o
+@COND_TOOLKIT_WINCE@	medialib_mediactrl_am.o medialib_mediactrl_wmp10.o \
+@COND_TOOLKIT_WINCE@	medialib_activex.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_3 = medialib_mediactrl.o
 COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1___odbcdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -10416,28 +10424,28 @@ distclean: clean
 @COND_USE_PCH_1@.pch/wxprec_advlib/wx/wxprec.h.gch: 
 @COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_advlib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(ADVLIB_CXXFLAGS)
 
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(MEDIADLL_OBJECTS) $(__mediadll___win32rc) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@ $(MEDIADLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mediadll___macinstnamecmd) $(__mediadll___importlib) $(__mediadll___soname_flags) $(WXMACVERSION_CMD)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(__mediadll___so_symlinks_cmd)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(MEDIADLL_OBJECTS) $(__mediadll___win32rc) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__coredll___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(SHARED_LD_CXX) $@ $(MEDIADLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mediadll___macinstnamecmd) $(__mediadll___importlib) $(__mediadll___soname_flags) $(WXMACVERSION_CMD)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(__mediadll___so_symlinks_cmd)
 
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@install_mediadll: 
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	(cd $(DESTDIR)$(libdir) ; $(__mediadll___so_symlinks_inst_cmd))
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@install_mediadll: 
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	(cd $(DESTDIR)$(libdir) ; $(__mediadll___so_symlinks_inst_cmd))
 
 @COND_USE_PCH_1@.pch/wxprec_mediadll/wx/wxprec.h.gch: 
 @COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_mediadll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(MEDIADLL_CXXFLAGS)
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(MEDIALIB_OBJECTS)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	rm -f $@
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(AR) rcu $@ $(MEDIALIB_OBJECTS)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(RANLIB) $@
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(MEDIALIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@	rm -f $@
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@	$(AR) rcu $@ $(MEDIALIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@	$(RANLIB) $@
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@install_medialib: 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@install_medialib: 
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
 
 @COND_USE_PCH_1@.pch/wxprec_medialib/wx/wxprec.h.gch: 
 @COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_medialib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(MEDIALIB_CXXFLAGS)
@@ -14823,11 +14831,23 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_mediactrl_am.o: $(srcdir)/src/msw/mediactrl_am.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_am.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_mediactrl_am.o: $(srcdir)/src/msw/mediactrl_am.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_am.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_mediactrl_wmp10.o: $(srcdir)/src/msw/mediactrl_wmp10.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_wmp10.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_mediactrl_wmp10.o: $(srcdir)/src/msw/mediactrl_wmp10.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_wmp10.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1@monodll_mediactrl.o: $(srcdir)/src/mac/carbon/mediactrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/mediactrl.cpp
@@ -14843,12 +14863,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
@@ -18588,11 +18602,23 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_mediactrl_am.o: $(srcdir)/src/msw/mediactrl_am.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_am.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_mediactrl_am.o: $(srcdir)/src/msw/mediactrl_am.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_am.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_mediactrl_wmp10.o: $(srcdir)/src/msw/mediactrl_wmp10.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_wmp10.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_mediactrl_wmp10.o: $(srcdir)/src/msw/mediactrl_wmp10.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_wmp10.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1@monolib_mediactrl.o: $(srcdir)/src/mac/carbon/mediactrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/mediactrl.cpp
@@ -18608,12 +18634,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
@@ -25707,11 +25727,23 @@ mediadll_version_rc.o: $(srcdir)/src/msw/version.rc $(MEDIADLL_ODEP)
 mediadll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIADLL_ODEP)
 	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
 
-@COND_TOOLKIT_MSW@mediadll_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MEDIADLL_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
+@COND_TOOLKIT_MSW@mediadll_mediactrl_am.o: $(srcdir)/src/msw/mediactrl_am.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_am.cpp
 
-@COND_TOOLKIT_WINCE@mediadll_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MEDIADLL_ODEP)
-@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
+@COND_TOOLKIT_WINCE@mediadll_mediactrl_am.o: $(srcdir)/src/msw/mediactrl_am.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_am.cpp
+
+@COND_TOOLKIT_MSW@mediadll_mediactrl_wmp10.o: $(srcdir)/src/msw/mediactrl_wmp10.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_wmp10.cpp
+
+@COND_TOOLKIT_WINCE@mediadll_mediactrl_wmp10.o: $(srcdir)/src/msw/mediactrl_wmp10.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_wmp10.cpp
+
+@COND_TOOLKIT_MSW@mediadll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE@mediadll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MAC@mediadll_mediactrl.o: $(srcdir)/src/mac/carbon/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/mac/carbon/mediactrl.cpp
@@ -25728,20 +25760,26 @@ mediadll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_X11@mediadll_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
 
-@COND_TOOLKIT_MSW@mediadll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIADLL_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE@mediadll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIADLL_ODEP)
-@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
 medialib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIALIB_ODEP)
 	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
 
-@COND_TOOLKIT_MSW@medialib_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MEDIALIB_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
+@COND_TOOLKIT_MSW@medialib_mediactrl_am.o: $(srcdir)/src/msw/mediactrl_am.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_am.cpp
 
-@COND_TOOLKIT_WINCE@medialib_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MEDIALIB_ODEP)
-@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl.cpp
+@COND_TOOLKIT_WINCE@medialib_mediactrl_am.o: $(srcdir)/src/msw/mediactrl_am.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_am.cpp
+
+@COND_TOOLKIT_MSW@medialib_mediactrl_wmp10.o: $(srcdir)/src/msw/mediactrl_wmp10.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_wmp10.cpp
+
+@COND_TOOLKIT_WINCE@medialib_mediactrl_wmp10.o: $(srcdir)/src/msw/mediactrl_wmp10.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_wmp10.cpp
+
+@COND_TOOLKIT_MSW@medialib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE@medialib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MAC@medialib_mediactrl.o: $(srcdir)/src/mac/carbon/mediactrl.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/mac/carbon/mediactrl.cpp
@@ -25757,12 +25795,6 @@ medialib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIALIB_ODEP)
 
 @COND_TOOLKIT_X11@medialib_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
-
-@COND_TOOLKIT_MSW@medialib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIALIB_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE@medialib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIALIB_ODEP)
-@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 odbcdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ODBCDLL_ODEP)
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_49)  $(__EXCEPTIONS_DEFINE_p_49) $(__RTTI_DEFINE_p_49) $(__THREAD_DEFINE_p_49)   --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include

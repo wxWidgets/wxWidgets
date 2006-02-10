@@ -1411,7 +1411,11 @@ SOURCE=.\msw\mdi.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\mediactrl.cpp
+SOURCE=.\msw\mediactrl_am.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\mediactrl_wmp10.cpp
 # End Source File
 # Begin Source File
 
