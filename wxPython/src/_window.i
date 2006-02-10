@@ -568,6 +568,7 @@ relative to the screen.", "");
     DocDeclStr(
         void , CenterOnScreen(int dir = wxBOTH),
         "Center on screen (only works for top level windows)", "");
+    %pythoncode { CenterOnScreen = wx._deprecated(CenterOnScreen) }
     %pythoncode { CentreOnScreen = CenterOnScreen }
 
 
