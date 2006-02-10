@@ -68,6 +68,19 @@ Width member.
 Height member.
 
 
+\membersection{wxRect::CentreIn}\label{wxrectcentrein}
+
+\constfunc{wxRect}{CentreIn}{\param{const wxRect\& }{r}, \param{int }{dir = wxBOTH}}
+
+\constfunc{wxRect}{CenterIn}{\param{const wxRect\& }{r}, \param{int }{dir = wxBOTH}}
+
+Returns the rectangle having the same size as this one but centered relatively
+to the given rectangle \arg{r}. By default, rectangle is centred in both
+directions but if \arg{dir} includes only \texttt{wxVERTICAL} or only 
+\texttt{wxHORIZONTAL} flag, then it is only centered in this direction while
+the other component of its position remains unchanged.
+
+
 \membersection{wxRect::Deflate}\label{wxrectdeflate}
 
 \func{void}{Deflate}{\param{wxCoord }{dx}, \param{wxCoord }{dy}}
