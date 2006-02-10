@@ -287,7 +287,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
                 AC_TRY_COMPILE([],
                     [
                         #ifndef __INTEL_COMPILER
-                        #error Not icc
+                        #error Not ICC
                         #endif
                     ],
                     bakefile_cv_prog_icc=yes,
@@ -514,50 +514,61 @@ dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([AC_BAKEFILE_DEPS],
 [
+    AC_ARG_ENABLE([dependency-tracking],
+                  AS_HELP_STRING([--disable-dependency-tracking],
+                                 [don't use dependency tracking even if the compiler can]),
+                  [bk_use_trackdeps="$enableval"])
+    
     AC_MSG_CHECKING([for dependency tracking method])
-    DEPS_TRACKING=1
 
-    if test "x$GCC" = "xyes"; then
-        DEPSMODE=gcc
-        case "${BAKEFILE_HOST}" in
-            *-*-darwin* )
-                dnl -cpp-precomp (the default) conflicts with -MMD option
-                dnl used by bk-deps (see also http://developer.apple.com/documentation/Darwin/Conceptual/PortingUnix/compiling/chapter_4_section_3.html)
-                DEPSFLAG="-no-cpp-precomp -MMD"
-            ;;
-            * )
-                DEPSFLAG="-MMD"
-            ;;
-        esac
-        AC_MSG_RESULT([gcc])
-    elif test "x$MWCC" = "xyes"; then
-        DEPSMODE=mwcc
-        DEPSFLAG="-MM"
-        AC_MSG_RESULT([mwcc])
-    elif test "x$SUNCC" = "xyes"; then
-        DEPSMODE=unixcc
-        DEPSFLAG="-xM1"
-        AC_MSG_RESULT([Sun cc])
-    elif test "x$SGICC" = "xyes"; then
-        DEPSMODE=unixcc
-        DEPSFLAG="-M"
-        AC_MSG_RESULT([SGI cc])
-    elif test "x$HPCC" = "xyes"; then
-        DEPSMODE=unixcc
-        DEPSFLAG="+make"
-        AC_MSG_RESULT([HP cc])
-    elif test "x$COMPAQCC" = "xyes"; then
-        DEPSMODE=gcc
-        DEPSFLAG="-MD"
-        AC_MSG_RESULT([Compaq cc])
-    else
+    if test "x$bk_use_trackdeps" = "xno" ; then
         DEPS_TRACKING=0
-        AC_MSG_RESULT([none])
-    fi
+        AC_MSG_RESULT([disabled])
+    else
+        DEPS_TRACKING=1
 
-    if test $DEPS_TRACKING = 1 ; then
-        AC_BAKEFILE_CREATE_FILE_BK_DEPS
-        chmod +x bk-deps
+        if test "x$GCC" = "xyes"; then
+            DEPSMODE=gcc
+            case "${BAKEFILE_HOST}" in
+                *-*-darwin* )
+                    dnl -cpp-precomp (the default) conflicts with -MMD option
+                    dnl used by bk-deps (see also http://developer.apple.com/documentation/Darwin/Conceptual/PortingUnix/compiling/chapter_4_section_3.html)
+                    DEPSFLAG="-no-cpp-precomp -MMD"
+                ;;
+                * )
+                    DEPSFLAG="-MMD"
+                ;;
+            esac
+            AC_MSG_RESULT([gcc])
+        elif test "x$MWCC" = "xyes"; then
+            DEPSMODE=mwcc
+            DEPSFLAG="-MM"
+            AC_MSG_RESULT([mwcc])
+        elif test "x$SUNCC" = "xyes"; then
+            DEPSMODE=unixcc
+            DEPSFLAG="-xM1"
+            AC_MSG_RESULT([Sun cc])
+        elif test "x$SGICC" = "xyes"; then
+            DEPSMODE=unixcc
+            DEPSFLAG="-M"
+            AC_MSG_RESULT([SGI cc])
+        elif test "x$HPCC" = "xyes"; then
+            DEPSMODE=unixcc
+            DEPSFLAG="+make"
+            AC_MSG_RESULT([HP cc])
+        elif test "x$COMPAQCC" = "xyes"; then
+            DEPSMODE=gcc
+            DEPSFLAG="-MD"
+            AC_MSG_RESULT([Compaq cc])
+        else
+            DEPS_TRACKING=0
+            AC_MSG_RESULT([none])
+        fi
+
+        if test $DEPS_TRACKING = 1 ; then
+            AC_BAKEFILE_CREATE_FILE_BK_DEPS
+            chmod +x bk-deps
+        fi
     fi
 
     AC_SUBST(DEPS_TRACKING)
@@ -643,6 +654,8 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
                   [bk_use_pch="$enableval"])
 
     GCC_PCH=0
+    ICC_PCH=0
+    USE_PCH=0
 
     case ${BAKEFILE_HOST} in 
         *-*-cygwin* )
@@ -667,7 +680,8 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
                     #endif
                     #if (__GNUC__ == 3) && \
                        ((!defined(__APPLE_CC__) && (__GNUC_MINOR__ < 4)) || \
-                       ( defined(__APPLE_CC__) && (__GNUC_MINOR__ < 3)))
+                       ( defined(__APPLE_CC__) && (__GNUC_MINOR__ < 3))) || \
+                       ( defined(__INTEL_COMPILER) )
                         #error "no pch support"
                     #endif
                 ],
@@ -676,9 +690,23 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
                     GCC_PCH=1
                 ],
                 [
-                    AC_MSG_RESULT([no])
+                    AC_TRY_COMPILE([],
+                        [
+                            #if !defined(__INTEL_COMPILER) || \
+                                (__INTEL_COMPILER < 800)
+                                #error "no pch support"
+                            #endif
+                        ],
+                        [
+                            AC_MSG_RESULT([yes])
+                            ICC_PCH=1
+                        ],
+                        [
+                            AC_MSG_RESULT([no])
+                        ])
                 ])
-            if test $GCC_PCH = 1 ; then
+            if test $GCC_PCH = 1 -o $ICC_PCH = 1 ; then
+                USE_PCH=1
                 AC_BAKEFILE_CREATE_FILE_BK_MAKE_PCH
                 chmod +x bk-make-pch
             fi
@@ -686,6 +714,7 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
     fi
 
     AC_SUBST(GCC_PCH)
+    AC_SUBST(ICC_PCH)
 ])
 
 
@@ -716,6 +745,10 @@ AC_DEFUN([AC_BAKEFILE],
     AC_PREREQ(2.58)
 
     if test "x$BAKEFILE_HOST" = "x"; then
+               if test "x${host}" = "x" ; then
+                       AC_MSG_ERROR([You must call the autoconf "CANONICAL_HOST" macro in your configure.ac (or .in) file.])
+               fi
+
         BAKEFILE_HOST="${host}"
     fi
 
@@ -731,7 +764,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_BAKEFILE_DEPS
     AC_BAKEFILE_RES_COMPILERS
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.1.9"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.0"
    
     dnl includes autoconf_inc.m4:
     $1
@@ -1464,9 +1497,11 @@ header="${D}{2}"
 shift
 shift
 
-compiler=
-headerfile=
+compiler=""
+headerfile=""
+
 while test ${D}{#} -gt 0; do
+    add_to_cmdline=1
     case "${D}{1}" in
         -I* )
             incdir=\`echo ${D}{1} | sed -e 's/-I\\(.*\\)/\\1/g'\`
@@ -1474,13 +1509,19 @@ while test ${D}{#} -gt 0; do
                 headerfile="${D}{incdir}/${D}{header}"
             fi
         ;;
+        -use-pch|-use_pch )
+            shift
+            add_to_cmdline=0
+        ;;
     esac
-    compiler="${D}{compiler} ${D}{1}"
+    if test ${D}add_to_cmdline = 1 ; then
+        compiler="${D}{compiler} ${D}{1}"
+    fi
     shift
 done
 
 if test "x${D}{headerfile}" = "x" ; then
-    echo "error: can't find header ${D}{header} in include paths" >2
+    echo "error: can't find header ${D}{header} in include paths" >&2
 else
     if test -f ${D}{outfile} ; then
         rm -f ${D}{outfile}
@@ -1489,8 +1530,21 @@ else
     fi
     depsfile=".deps/\`echo ${D}{outfile} | tr '/.' '__'\`.d"
     mkdir -p .deps
-    # can do this because gcc is >= 3.4:
-    ${D}{compiler} -o ${D}{outfile} -MMD -MF "${D}{depsfile}" "${D}{headerfile}"
+    if test "x${GCC_PCH}" = "x1" ; then
+        # can do this because gcc is >= 3.4:
+        ${D}{compiler} -o ${D}{outfile} -MMD -MF "${D}{depsfile}" "${D}{headerfile}"
+    elif test "x${ICC_PCH}" = "x1" ; then
+        filename=pch_gen-${D}${D}
+        file=${D}{filename}.c
+        dfile=${D}{filename}.d
+        cat > ${D}file <<EOT
+#include "${D}header"
+EOT
+        # using -MF icc complains about differing command lines in creation/use
+        ${D}compiler -c -create_pch ${D}outfile -MMD ${D}file && \\
+          sed -e "s,^.*:,${D}outfile:," -e "s, ${D}file,," < ${D}dfile > ${D}depsfile && \\
+          rm -f ${D}file ${D}dfile ${D}{filename}.o
+    fi
     exit ${D}{?}
 fi
 EOF
