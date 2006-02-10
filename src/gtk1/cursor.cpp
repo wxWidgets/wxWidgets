@@ -153,13 +153,6 @@ wxCursor::wxCursor(const char bits[], int width, int  height,
     gdk_bitmap_unref( mask );
 }
 
-
-wxCursor::wxCursor( const wxCursor &cursor )
-    : wxObject()
-{
-    Ref( cursor );
-}
-
 #if wxUSE_IMAGE
 
 wxCursor::wxCursor( const wxImage & image )
@@ -318,16 +311,6 @@ wxCursor::wxCursor( const wxImage & image )
 
 wxCursor::~wxCursor()
 {
-}
-
-wxCursor& wxCursor::operator = ( const wxCursor& cursor )
-{
-    if (*this == cursor)
-        return (*this);
-
-    Ref( cursor );
-
-    return *this;
 }
 
 bool wxCursor::operator == ( const wxCursor& cursor ) const

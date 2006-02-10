@@ -69,11 +69,9 @@ public:
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char **bits ) { (void)CreateFromXpm(bits); }
     wxBitmap( char **bits ) { (void)CreateFromXpm((const char **)bits); }
-    wxBitmap( const wxBitmap& bmp );
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
     wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     ~wxBitmap();
-    wxBitmap& operator = ( const wxBitmap& bmp );
     bool operator == ( const wxBitmap& bmp ) const;
     bool operator != ( const wxBitmap& bmp ) const;
     bool Ok() const;

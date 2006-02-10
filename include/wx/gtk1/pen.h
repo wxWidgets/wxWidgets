@@ -40,11 +40,6 @@ public:
     wxPen( const wxColour &colour, int width = 1, int style = wxSOLID );
     ~wxPen();
 
-    wxPen( const wxPen& pen )
-        : wxGDIObject()
-        { Ref(pen); }
-    wxPen& operator = ( const wxPen& pen ) { Ref(pen); return *this; }
-
     bool Ok() const { return m_refData != NULL; }
 
     bool operator == ( const wxPen& pen ) const;
