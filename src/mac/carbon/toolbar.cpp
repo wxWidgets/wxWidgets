@@ -884,31 +884,41 @@ bool wxToolBar::Realize()
             {
                 if ( insertAll || (tool->GetIndex() != currentPosition) )
                 {
-                    OSStatus err = noErr ;
+                    OSStatus err = noErr;
                     if ( !insertAll )
                     {
+                        insertAll = true;
+
                         // if this is the first tool that gets newly inserted or repositioned
                         // first remove all 'old' tools from here to the right, because of this
                         // all following tools will have to be reinserted (insertAll). i = 100 because there's
                         // no way to determine how many there are in a toolbar, so just a high number :-(
                         for ( CFIndex i = 100 ; i >= currentPosition ; --i )
                         {
-                            err = HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef , i ) ;
+                            err = HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, i );
                         }
-                        wxASSERT_MSG( err == noErr, _T("HIToolbarRemoveItemAtIndex failed") );
-                        insertAll = true ;
+
+                        if (err != noErr)
+                        {
+                            wxString errMsg = wxString::Format( wxT("HIToolbarRemoveItemAtIndex failed [%ld]"), (long)err );
+                            wxASSERT_MSG( 0, errMsg.c_str() );
+                        }
                     }
 
-                    err = HIToolbarInsertItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, hiItemRef , currentPosition ) ;
-                    wxASSERT_MSG( err == noErr, _T("HIToolbarInsertItemAtIndex failed") );
-
-                    tool->SetIndex( currentPosition ) ;
+                    err = HIToolbarInsertItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, hiItemRef, currentPosition );
+                    if (err != noErr)
+                    {
+                        wxString errMsg = wxString::Format( wxT("HIToolbarInsertItemAtIndex failed [%ld]"), (long)err );
+                        wxASSERT_MSG( 0, errMsg.c_str() );
+                    }
+ 
+                    tool->SetIndex( currentPosition );
                 }
 
-                currentPosition++ ;
+                currentPosition++;
             }
         }
-#endif // wxMAC_USE_NATIVE_TOOLBAR
+#endif
 
         // update radio button (and group) state
         lastIsRadio = curIsRadio;
@@ -925,7 +935,7 @@ bool wxToolBar::Realize()
         {
             if ( !lastIsRadio )
             {
-                if ( tool->Toggle(true) )
+                if ( tool->Toggle( true ) )
                 {
                     DoToggleTool( tool, true );
                     setChoiceInGroup = true;
@@ -943,7 +953,7 @@ bool wxToolBar::Realize()
                     if ( (toggleTool == NULL) || !toggleTool->IsButton() || (toggleTool->GetKind() != wxITEM_RADIO) )
                         break;
 
-                    if ( toggleTool->Toggle(false) )
+                    if ( toggleTool->Toggle( false ) )
                         DoToggleTool( toggleTool, false );
 
                     nodePrev = nodePrev->GetPrevious();
@@ -1274,7 +1284,7 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
 
 #if wxMAC_USE_NATIVE_TOOLBAR
     CFIndex removeIndex = tool->GetIndex();
-#endif 
+#endif
 
     switch ( tool->GetStyle() )
     {
@@ -1337,8 +1347,8 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 #if wxMAC_USE_NATIVE_TOOLBAR
     if ( m_macUsesNativeToolbar )
     {
-        event.Skip(true) ;
-        return ;
+        event.Skip(true);
+        return;
     }
 #endif
 
@@ -1347,20 +1357,20 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     int w, h ;
     GetSize( &w , &h ) ;
 
-#if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-    if ( !MacGetTopLevelWindow()->MacGetMetalAppearance() )
-    {
-        if ( UMAGetSystemVersion() >= 0x1030 )
-        {
-            HIThemePlacardDrawInfo info ;
-            memset( &info, 0, sizeof(info) ) ;
-            info.version = 0 ;
-            info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
+    bool drawMetalTheme = MacGetTopLevelWindow()->MacGetMetalAppearance();
+    bool minimumUmaAvailable = (UMAGetSystemVersion() >= 0x1030);
 
-            CGContextRef cgContext = (CGContextRef) MacGetCGContextRef() ;
-            HIRect rect = CGRectMake( 0 , 0 , w , h ) ;
-            HIThemeDrawPlacard( &rect , & info , cgContext, kHIThemeOrientationNormal) ;
-        }
+#if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+    if ( !drawMetalTheme && minimumUmaAvailable )
+    {
+        HIThemePlacardDrawInfo info;
+        memset( &info, 0, sizeof(info) );
+        info.version = 0;
+        info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive;
+
+        CGContextRef cgContext = (CGContextRef) MacGetCGContextRef();
+        HIRect rect = CGRectMake( 0, 0, w, h );
+        HIThemeDrawPlacard( &rect, &info, cgContext, kHIThemeOrientationNormal );
     }
     else
     {
@@ -1368,57 +1378,55 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     }
 
 #else
-    wxMacPortSetter helper(&dc) ;
 
-    Rect toolbarrect = { dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) ,
-        dc.YLOG2DEVMAC(h) , dc.XLOG2DEVMAC(w) } ;
-/*
-    if ( toolbarrect.left < 0 )
-        toolbarrect.left = 0 ;
-    if ( toolbarrect.top < 0 )
-        toolbarrect.top = 0 ;
-*/
+    const bool drawBorder = true;
 
-    if ( !MacGetTopLevelWindow()->MacGetMetalAppearance() )
+    if (drawBorder)
     {
-        UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
-    }
-    else
-    {
-#if TARGET_API_MAC_OSX
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-        if ( UMAGetSystemVersion() >= 0x1030 )
+        wxMacPortSetter helper(&dc) ;
+
+        if ( !drawMetalTheme || !minimumUmaAvailable )
         {
+            Rect toolbarrect = { dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) ,
+                dc.YLOG2DEVMAC(h) , dc.XLOG2DEVMAC(w) } ;
+
+#if 0
+            if ( toolbarrect.left < 0 )
+                toolbarrect.left = 0 ;
+            if ( toolbarrect.top < 0 )
+                toolbarrect.top = 0 ;
+#endif
+
+            UMADrawThemePlacard( &toolbarrect, IsEnabled() ? kThemeStateActive : kThemeStateInactive );
+        }
+        else
+        {
+#if TARGET_API_MAC_OSX
             HIRect hiToolbarrect = CGRectMake(
                 dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) ,
                 dc.YLOG2DEVREL(h) , dc.XLOG2DEVREL(w) );
             CGContextRef cgContext ;
             Rect bounds ;
+
             GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
             QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
+
             CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
             CGContextScaleCTM( cgContext , 1 , -1 ) ;
 
-            {
-                HIThemeBackgroundDrawInfo drawInfo ;
-                drawInfo.version = 0 ;
-                drawInfo.state = kThemeStateActive ;
-                drawInfo.kind = kThemeBackgroundMetal ;
-                HIThemeApplyBackground( &hiToolbarrect, &drawInfo , cgContext, kHIThemeOrientationNormal) ;
-            }
+            HIThemeBackgroundDrawInfo drawInfo ;
+            drawInfo.version = 0 ;
+            drawInfo.state = kThemeStateActive ;
+            drawInfo.kind = kThemeBackgroundMetal ;
+            HIThemeApplyBackground( &hiToolbarrect, &drawInfo, cgContext, kHIThemeOrientationNormal );
 
             QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
-        }
-        else
 #endif
-        {
-            UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
         }
-#endif
     }
 #endif
 
-    event.Skip() ;
+    event.Skip();
 }
 
 #endif // wxUSE_TOOLBAR
