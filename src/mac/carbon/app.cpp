@@ -1452,10 +1452,14 @@ wxMouseState wxGetMouseState()
     ms.SetX(pt.x);
     ms.SetY(pt.y);
 
+#ifdef __DARWIN__
     UInt32 buttons = GetCurrentButtonState();
     ms.SetLeftDown( (buttons & 0x01) != 0 );
     ms.SetMiddleDown( (buttons & 0x04) != 0 );
     ms.SetRightDown( (buttons & 0x02) != 0 );
+#else
+    ms.SetLeftDown( Button() ) ;
+#endif
     
     UInt32 modifiers = GetCurrentKeyModifiers();
     ms.SetControlDown(modifiers & controlKey);
