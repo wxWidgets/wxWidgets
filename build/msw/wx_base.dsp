@@ -1307,6 +1307,14 @@ SOURCE=..\..\include\wx\msw\private.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\regconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\registry.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\stackwalk.h
 # End Source File
 # Begin Source File

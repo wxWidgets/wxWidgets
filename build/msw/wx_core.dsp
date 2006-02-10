@@ -7859,15 +7859,7 @@ SOURCE=..\..\include\wx\msw\rcdefs.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\regconf.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\region.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\registry.h
 # End Source File
 # Begin Source File
 
@@ -7927,10 +7919,6 @@ SOURCE=..\..\include\wx\msw\tbar95.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\tbarmsw.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\textctrl.h
 # End Source File
 # Begin Source File
@@ -7976,6 +7964,10 @@ SOURCE=..\..\include\wx\msw\window.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\accel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\busyinfo.h
 # End Source File
 # Begin Source File
 
@@ -8384,10 +8376,6 @@ SOURCE=..\..\include\wx\brush.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\busyinfo.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\busyinfo.h
 # End Source File
 # Begin Source File
 
