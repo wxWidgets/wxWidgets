@@ -159,14 +159,8 @@ doesn't belong to any display", "");
     DocStr(GetFromWindow,
            "Find the display where the given window lies, return wx.NOT_FOUND if
 it is not shown at all.", "");
-#ifdef __WXMSW__
     static int GetFromWindow(wxWindow *window);
-#else
-    %extend {
-        static int GetFromWindow(wxWindow *window) 
-            { wxPyRaiseNotImplemented(); return wxNOT_FOUND; }
-    }
-#endif
+
     
     DocDeclStr(
         virtual bool , IsOk() const,
