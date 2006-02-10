@@ -20,6 +20,12 @@ The following deprecated items have been removed:
 
     * wx.FontMapper SetConfig method
 
+    * wx.html.HtmlSearchStatus.GetContentsItem method
+
+    * wx.html.HtmlHelpData.GetContents, GetContentsCnt, GetIndex, and
+      GetIndexCnt methods
+
+
 wx.EventLoop is now implemented for wxMac.
 
 Added wxPython wrappers for the new wx.Treebook and wx.Toolbook
@@ -80,7 +86,6 @@ affected by this are:
     * wx.grid.PyGridTableBase
     * wx.html.HtmlWindow
     * wx.wizard.PyWizardPage
-
 
 
 

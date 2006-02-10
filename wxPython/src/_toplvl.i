@@ -144,6 +144,11 @@ public:
         bool MacGetMetalAppearance() const    { /*wxPyRaiseNotImplemented();*/ return false; }
     }
 #endif
+
+    DocDeclStr(
+        void , CenterOnScreen(int dir = wxBOTH),
+        "Center the window on screen", "");
+    %pythoncode { CentreOnScreen = CenterOnScreen }
 };
 
 
