@@ -271,6 +271,10 @@ public:
         wxBitmap , GetBitmapSelected(),
         "Returns the bitmap for the selected state.", "");
     
+    DocDeclStr(
+        wxBitmap , GetBitmapHover(),
+        "Returns the bitmap used when the mouse is over the button, may be invalid.", "");
+   
 
     DocDeclStr(
         void , SetBitmapDisabled(const wxBitmap& bitmap),
@@ -291,8 +295,14 @@ public:
         void , SetBitmapLabel(const wxBitmap& bitmap),
         "Sets the bitmap label for the button.  This is the bitmap used for the
 unselected state, and for all other states if no other bitmaps are provided.", "");
-    
 
+    
+    DocDeclStr(
+        void , SetBitmapHover(const wxBitmap& hover),
+        "Sets the bitmap to be shown when the mouse is over the button.  This function
+is new since wxWidgets version 2.7.0 and the hover bitmap is currently only
+supported in wxMSW.", "");
+    
     void SetMargins(int x, int y);
     int GetMarginX() const;
     int GetMarginY() const;
