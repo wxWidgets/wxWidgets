@@ -44,5 +44,19 @@ wxDisplayBase::wxDisplayBase(size_t index)
                     wxT("An invalid index was passed to wxDisplay") );
 }
 
+// MSW has its own specific implementation of this
+#ifndef __WXMSW__
+
+int wxDisplayBase::GetFromWindow(wxWindow *window)
+{
+    wxCHECK_MSG( window, wxNOT_FOUND, _T("NULL window") );
+
+    // consider that the window belong to the display containing its centre
+    const wxRect r(window->GetRect());
+    return GetFromPoint(wxPoint(r.x + r.width/2, r.y + r.height/2));
+}
+
+#endif // !__WXMSW__
+
 #endif // wxUSE_DISPLAY
 
