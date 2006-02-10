@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/ole/activex.cpp
+// Name:        msw/ole/activex.cpp
 // Purpose:     wxActiveXContainer implementation
 // Author:      Ryan Norton <wxprojects@comcast.net>, Lindsay Mathieson <???>
 // Modified by:
@@ -25,15 +25,25 @@
 
 #include "wx/dcclient.h"
 #include "wx/math.h"
+
+// I don't know why members of tagVARIANT aren't found when compiling
+// with Wine
+#ifndef __WINE__
+
 #include "wx/msw/ole/activex.h"
+// autointerfaces that we only use here
+WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceSite, IOleInPlaceSite)
+WX_DECLARE_AUTOOLE(wxAutoIOleDocument, IOleDocument)
+WX_DECLARE_AUTOOLE(wxAutoIPersistStreamInit, IPersistStreamInit)
+WX_DECLARE_AUTOOLE(wxAutoIAdviseSink, IAdviseSink)
+WX_DECLARE_AUTOOLE(wxAutoIProvideClassInfo, IProvideClassInfo)
+WX_DECLARE_AUTOOLE(wxAutoITypeInfo, ITypeInfo)
+WX_DECLARE_AUTOOLE(wxAutoIConnectionPoint, IConnectionPoint)
+WX_DECLARE_AUTOOLE(wxAutoIConnectionPointContainer, IConnectionPointContainer)
 
+DEFINE_EVENT_TYPE(wxEVT_ACTIVEX);
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// wxActiveXContainer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+// Ole class helpers (sort of MFC-like) from wxActiveX
 #define DECLARE_OLE_UNKNOWN(cls)\
     private:\
     class TAutoInitInt\
@@ -59,21 +69,21 @@
         if (! ppvObject)\
         {\
             return E_FAIL;\
-        }\
+        };\
         const char *desc = NULL;\
         cls::_GetInterface(this, iid, ppvObject, desc);\
         if (! *ppvObject)\
         {\
             return E_NOINTERFACE;\
-        }\
+        };\
         ((IUnknown * )(*ppvObject))->AddRef();\
         return S_OK;\
-    }\
+    };\
     ULONG STDMETHODCALLTYPE cls::AddRef()\
     {\
         InterlockedIncrement(&refCount.l);\
         return refCount.l;\
-    }\
+    };\
     ULONG STDMETHODCALLTYPE cls::Release()\
     {\
         if (refCount.l > 0)\
@@ -83,7 +93,7 @@
             {\
                 delete this;\
                 return 0;\
-            }\
+            };\
             return refCount.l;\
         }\
         else\
@@ -93,7 +103,7 @@
     {\
         InterlockedIncrement(&lockCount.l);\
         return lockCount.l;\
-    }\
+    };\
     ULONG STDMETHODCALLTYPE cls::ReleaseLock()\
     {\
         if (lockCount.l > 0)\
@@ -131,7 +141,52 @@
 #define END_OLE_TABLE\
     }
 
+// ============================================================================
+// implementation
+// ============================================================================
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// PixelsToHimetric
+//
+// Utility to convert from pixels to the himetric values in some COM methods
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+#define HIMETRIC_PER_INCH   2540
+#define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
+
+static void PixelsToHimetric(SIZEL &sz)
+{
+    static int logX = 0;
+    static int logY = 0;
+
+    if (logY == 0)
+    {
+        // initaliase
+        HDC dc = GetDC(NULL);
+        logX = GetDeviceCaps(dc, LOGPIXELSX);
+        logY = GetDeviceCaps(dc, LOGPIXELSY);
+        ReleaseDC(NULL, dc);
+    };
+
+#define HIMETRIC_INCH   2540
+#define CONVERT(x, logpixels)   wxMulDivInt32(HIMETRIC_INCH, (x), (logpixels))
+
+    sz.cx = CONVERT(sz.cx, logX);
+    sz.cy = CONVERT(sz.cy, logY);
+
+#undef CONVERT
+#undef HIMETRIC_INCH
+}
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//
+// FrameSite
+//
+// Handles the actual wxActiveX container implementation
+//
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 class FrameSite :
     public IOleClientSite,
     public IOleInPlaceSiteEx,
@@ -207,7 +262,7 @@ public:
             case DISPID_AMBIENT_SILENT:
                 V_BOOL(pVarResult)= TRUE;
                 return S_OK;
-#ifndef __WINE__
+
             case DISPID_AMBIENT_APPEARANCE:
                 pVarResult->vt = VT_BOOL;
                 pVarResult->boolVal = m_bAmbientAppearance;
@@ -242,7 +297,7 @@ public:
                 pVarResult->vt = VT_BOOL;
                 pVarResult->boolVal = m_bAmbientShowHatching;
                 break;
-#endif
+
             default:
                 return DISP_E_MEMBERNOTFOUND;
         }
@@ -326,7 +381,7 @@ public:
         if (! SUCCEEDED(hr))
         {
             return E_UNEXPECTED;
-        }
+        };
 
         hr = QueryInterface(IID_IOleInPlaceUIWindow, (void **) ppDoc);
         if (! SUCCEEDED(hr))
@@ -334,7 +389,7 @@ public:
             (*ppFrame)->Release();
             *ppFrame = NULL;
             return E_UNEXPECTED;
-        }
+        };
 
         RECT rect;
         ::GetClientRect(m_hWndParent, &rect);
@@ -343,13 +398,13 @@ public:
             lprcPosRect->left = lprcPosRect->top = 0;
             lprcPosRect->right = rect.right;
             lprcPosRect->bottom = rect.bottom;
-        }
+        };
         if (lprcClipRect)
         {
             lprcClipRect->left = lprcClipRect->top = 0;
             lprcClipRect->right = rect.right;
             lprcClipRect->bottom = rect.bottom;
-        }
+        };
 
         memset(lpFrameInfo, 0, sizeof(OLEINPLACEFRAMEINFO));
         lpFrameInfo->cb = sizeof(OLEINPLACEFRAMEINFO);
@@ -368,8 +423,18 @@ public:
     {
         if (m_window->m_oleInPlaceObject.Ok() && lprcPosRect)
         {
+           //
+           // Result of several hours and days of bug hunting -
+           // this is called by an object when it wants to resize
+           // itself to something different then our parent window -
+           // don't let it :)
+           //
+//            m_window->m_oleInPlaceObject->SetObjectRects(
+//                lprcPosRect, lprcPosRect);
+           RECT rcClient;
+           ::GetClientRect(m_hWndParent, &rcClient);
             m_window->m_oleInPlaceObject->SetObjectRects(
-                lprcPosRect, lprcPosRect);
+                &rcClient, &rcClient);
         }
         return S_OK;
     }
@@ -419,8 +484,8 @@ public:
         case OLEGETMONIKER_UNASSIGN     : return "OLEGETMONIKER_UNASSIGN";
         case OLEGETMONIKER_TEMPFORUSER  : return "OLEGETMONIKER_TEMPFORUSER";
         default                         : return "Bad Enum";
-        }
-    }
+        };
+    };
 
     const char *OleGetWhicMonikerStr(DWORD dwWhichMoniker)
     {
@@ -430,8 +495,8 @@ public:
         case OLEWHICHMK_OBJREL      : return "OLEWHICHMK_OBJREL";
         case OLEWHICHMK_OBJFULL     : return "OLEWHICHMK_OBJFULL";
         default                     : return "Bad Enum";
-        }
-    }
+        };
+    };
     STDMETHOD(GetMoniker)(DWORD, DWORD, IMoniker **){return E_FAIL;}
     HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER * ppContainer)
     {
@@ -458,7 +523,7 @@ public:
     HRESULT STDMETHODCALLTYPE LockContainer(BOOL){return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
-    #if defined(__WXWINCE__)
+    #ifdef __WXWINCE__
     GetObject
     #elif defined(_UNICODE)
     GetObjectW
@@ -558,11 +623,11 @@ public:
                 return E_FAIL;
 
             m_window->m_docView->SetInPlaceSite(inPlaceSite);
-        }
+        };
 
         m_window->m_docView->UIActivate(TRUE);
         return S_OK;
-    }
+    };
 
 
 protected:
@@ -601,10 +666,135 @@ DEFINE_OLE_TABLE(FrameSite)
     OLE_IINTERFACE(IOleDocumentSite)
     OLE_IINTERFACE(IAdviseSink)
     OLE_IINTERFACE(IOleControlSite)
-END_OLE_TABLE
+END_OLE_TABLE;
 
 
-wxActiveXContainer::wxActiveXContainer(wxWindow * parent, REFIID iid, IUnknown* pUnk)
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//
+// wxActiveXEvents
+//
+// Handles and sends activex events received from the ActiveX control
+// to the appropriate wxEvtHandler
+//
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+class wxActiveXEvents : public IDispatch
+{
+private:
+    DECLARE_OLE_UNKNOWN(wxActiveXEvents);
+
+
+    wxActiveXContainer *m_activeX;
+    IID m_customId;
+    bool m_haveCustomId;
+
+    friend bool wxActiveXEventsInterface(wxActiveXEvents *self, REFIID iid, void **_interface, const char *&desc);
+
+public:
+    wxActiveXEvents(wxActiveXContainer *ax) : m_activeX(ax), m_haveCustomId(false) {}
+    wxActiveXEvents(wxActiveXContainer *ax, REFIID iid) : m_activeX(ax), m_haveCustomId(true), m_customId(iid) {}
+    virtual ~wxActiveXEvents()
+    {
+    }
+
+    // IDispatch
+    STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR**, unsigned int, LCID, DISPID*)
+    {
+        return E_NOTIMPL;
+    }
+
+    STDMETHODIMP GetTypeInfo(unsigned int, LCID, ITypeInfo**)
+    {
+        return E_NOTIMPL;
+    }
+
+    STDMETHODIMP GetTypeInfoCount(unsigned int*)
+    {
+        return E_NOTIMPL;
+    }
+
+
+    STDMETHODIMP Invoke(DISPID dispIdMember, REFIID WXUNUSED(riid),
+                        LCID WXUNUSED(lcid),
+                          WORD wFlags, DISPPARAMS * pDispParams,
+                          VARIANT * WXUNUSED(pVarResult), EXCEPINFO * WXUNUSED(pExcepInfo),
+                          unsigned int * WXUNUSED(puArgErr))
+    {
+        if (wFlags & (DISPATCH_PROPERTYGET | DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
+            return E_NOTIMPL;
+
+        wxASSERT(m_activeX);
+
+        // ActiveX Event
+
+        // Dispatch Event
+        wxActiveXEvent  event;
+        event.SetEventType(wxEVT_ACTIVEX);
+        event.m_params.NullList();
+        event.m_dispid = dispIdMember;
+
+        // arguments
+        if (pDispParams)
+        {
+            for (DWORD i = pDispParams->cArgs; i > 0; i--)
+            {
+                VARIANTARG& va = pDispParams->rgvarg[i-1];
+                wxVariant vx;
+
+//                        vx.SetName(px.name);
+                wxConvertOleToVariant(va, vx);
+                event.m_params.Append(vx);
+            }
+        }
+
+        // process the events from the activex method
+           m_activeX->ProcessEvent(event);
+        for (DWORD i = 0; i < pDispParams->cArgs; i++)
+        {
+            VARIANTARG& va = pDispParams->rgvarg[i];
+            wxVariant& vx =
+                event.m_params[pDispParams->cArgs - i - 1];
+            wxConvertVariantToOle(vx, va);
+        }
+
+        if(event.GetSkipped())
+            return DISP_E_MEMBERNOTFOUND;
+
+        return S_OK;
+    }
+};
+
+bool wxActiveXEventsInterface(wxActiveXEvents *self, REFIID iid, void **_interface, const char *&desc)
+{
+    if (self->m_haveCustomId && IsEqualIID(iid, self->m_customId))
+    {
+//        WXOLE_TRACE("Found Custom Dispatch Interface");
+        *_interface = (IUnknown *) (IDispatch *) self;
+        desc = "Custom Dispatch Interface";
+        return true;
+    };
+
+    return false;
+}
+
+DEFINE_OLE_TABLE(wxActiveXEvents)
+    OLE_IINTERFACE(IUnknown)
+    OLE_INTERFACE(IID_IDispatch, IDispatch)
+    OLE_INTERFACE_CUSTOM(wxActiveXEventsInterface)
+END_OLE_TABLE;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//
+// wxActiveXContainer
+//
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//---------------------------------------------------------------------------
+// wxActiveXContainer Constructor
+//
+// Initializes members and creates the native ActiveX container
+//---------------------------------------------------------------------------
+wxActiveXContainer::wxActiveXContainer(wxWindow * parent,
+                                       REFIID iid, IUnknown* pUnk)
     : m_realparent(parent)
 {
     m_bAmbientUserMode = true;
@@ -612,6 +802,12 @@ wxActiveXContainer::wxActiveXContainer(wxWindow * parent, REFIID iid, IUnknown* 
     CreateActiveX(iid, pUnk);
 }
 
+//---------------------------------------------------------------------------
+// wxActiveXContainer Destructor
+//
+// Destroys members (the FrameSite et al. are destroyed implicitly
+// through COM ref counting)
+//---------------------------------------------------------------------------
 wxActiveXContainer::~wxActiveXContainer()
 {
     // disconnect connection points
@@ -633,6 +829,14 @@ wxActiveXContainer::~wxActiveXContainer()
     }
 }
 
+//---------------------------------------------------------------------------
+// wxActiveXContainer::CreateActiveX
+//
+// Actually creates the ActiveX container through the FrameSite
+// and sets up ActiveX events
+//
+// TODO: Document this more
+//---------------------------------------------------------------------------
 void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 {
     HRESULT hret;
@@ -652,6 +856,111 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     // Get Dispatch interface
     hret = m_Dispatch.QueryInterface(IID_IDispatch, m_ActiveX);
 
+    //
+    // SETUP TYPEINFO AND ACTIVEX EVENTS
+    //
+
+    // get type info via class info
+    wxAutoIProvideClassInfo classInfo(IID_IProvideClassInfo, m_ActiveX);
+    wxASSERT(classInfo.Ok());
+
+    // type info
+    wxAutoITypeInfo typeInfo;
+    hret = classInfo->GetClassInfo(typeInfo.GetRef());
+    wxASSERT(typeInfo.Ok());
+
+    // TYPEATTR
+    TYPEATTR *ta = NULL;
+    hret = typeInfo->GetTypeAttr(&ta);
+    wxASSERT(ta);
+
+    // this should be a TKIND_COCLASS
+    wxASSERT(ta->typekind == TKIND_COCLASS);
+
+    // iterate contained interfaces
+    for (int i = 0; i < ta->cImplTypes; i++)
+    {
+        HREFTYPE rt = 0;
+
+        // get dispatch type info handle
+        hret = typeInfo->GetRefTypeOfImplType(i, &rt);
+        if (! SUCCEEDED(hret))
+            continue;
+
+        // get dispatch type info interface
+        wxAutoITypeInfo  ti;
+        hret = typeInfo->GetRefTypeInfo(rt, ti.GetRef());
+        if (! ti.Ok())
+            continue;
+
+        // check if default event sink
+        bool defInterface = false;
+        bool defEventSink = false;
+        int impTypeFlags = 0;
+        typeInfo->GetImplTypeFlags(i, &impTypeFlags);
+
+        if (impTypeFlags & IMPLTYPEFLAG_FDEFAULT)
+        {
+            if (impTypeFlags & IMPLTYPEFLAG_FSOURCE)
+            {
+                // WXOLE_TRACEOUT("Default Event Sink");
+                defEventSink = true;
+                if (impTypeFlags & IMPLTYPEFLAG_FDEFAULTVTABLE)
+                {
+                    // WXOLE_TRACEOUT("*ERROR* - Default Event Sink is via vTable");
+                    defEventSink = false;
+                    wxFAIL_MSG(wxT("Default event sink is in vtable!"));
+                }
+            }
+            else
+            {
+                // WXOLE_TRACEOUT("Default Interface");
+                defInterface = true;
+            }
+        }
+
+
+        // wxAutoOleInterface<> assumes a ref has already been added
+        // TYPEATTR
+        TYPEATTR *ta = NULL;
+        hret = ti->GetTypeAttr(&ta);
+        wxASSERT(ta);
+
+        if (ta->typekind == TKIND_DISPATCH)
+        {
+            // WXOLE_TRACEOUT("GUID = " << GetIIDName(ta->guid).c_str());
+            if (defEventSink)
+            {
+                wxAutoIConnectionPoint    cp;
+                DWORD                    adviseCookie = 0;
+
+                wxAutoIConnectionPointContainer cpContainer(IID_IConnectionPointContainer, m_ActiveX);
+                wxASSERT( cpContainer.Ok());
+
+                HRESULT hret =
+                    cpContainer->FindConnectionPoint(ta->guid, cp.GetRef());
+                wxASSERT ( SUCCEEDED(hret));
+
+                IDispatch* disp;
+                frame->QueryInterface(IID_IDispatch, (void**)&disp);
+                hret = cp->Advise(new wxActiveXEvents(this, ta->guid),
+                                  &adviseCookie);
+                wxASSERT_MSG( SUCCEEDED(hret),
+                    wxString::Format(wxT("Cannot connect!\nHRESULT:%X"), hret)
+                            );
+            }
+        }
+
+        ti->ReleaseTypeAttr(ta);
+    }
+
+    // free
+    typeInfo->ReleaseTypeAttr(ta);
+
+    //
+    // END
+    //
+
     // Get IOleObject interface
     hret = m_oleObject.QueryInterface(IID_IOleObject, m_ActiveX);
     wxASSERT(SUCCEEDED(hret));
@@ -663,6 +972,8 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     // document advise
     m_docAdviseCookie = 0;
     hret = m_oleObject->Advise(adviseSink, &m_docAdviseCookie);
+    // TODO:Needed?
+//    hret = m_viewObject->SetAdvise(DVASPECT_CONTENT, 0, adviseSink);
     m_oleObject->SetHostNames(L"wxActiveXContainer", NULL);
     OleSetContainedObject(m_oleObject, TRUE);
     OleRun(m_oleObject);
@@ -739,6 +1050,8 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
         pWnd->Connect(id, wxEVT_SIZE,
             wxSizeEventHandler(wxActiveXContainer::OnSize), 0, this);
+//        this->Connect(GetId(), wxEVT_PAINT,
+//            wxPaintEventHandler(wxActiveXContainer::OnPaint), 0, this);
         pWnd->Connect(id, wxEVT_SET_FOCUS,
             wxFocusEventHandler(wxActiveXContainer::OnSetFocus), 0, this);
         pWnd->Connect(id, wxEVT_KILL_FOCUS,
@@ -746,34 +1059,12 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     }
 }
 
-#define HIMETRIC_PER_INCH   2540
-#define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
-
-static void PixelsToHimetric(SIZEL &sz)
-{
-    static int logX = 0;
-    static int logY = 0;
-
-    if (logY == 0)
-    {
-        // initaliase
-        HDC dc = GetDC(NULL);
-        logX = GetDeviceCaps(dc, LOGPIXELSX);
-        logY = GetDeviceCaps(dc, LOGPIXELSY);
-        ReleaseDC(NULL, dc);
-    };
-
-#define HIMETRIC_INCH   2540
-#define CONVERT(x, logpixels)   wxMulDivInt32(HIMETRIC_INCH, (x), (logpixels))
-
-    sz.cx = CONVERT(sz.cx, logX);
-    sz.cy = CONVERT(sz.cy, logY);
-
-#undef CONVERT
-#undef HIMETRIC_INCH
-}
-
-
+//---------------------------------------------------------------------------
+// wxActiveXContainer::OnSize
+//
+// Called when the parent is resized - we need to do this to actually
+// move the ActiveX control to where the parent is
+//---------------------------------------------------------------------------
 void wxActiveXContainer::OnSize(wxSizeEvent& event)
 {
     int w, h;
@@ -791,6 +1082,9 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
     // extents are in HIMETRIC units
     if (m_oleObject.Ok())
     {
+        m_oleObject->DoVerb(OLEIVERB_HIDE, 0, m_clientSite, 0,
+            (HWND)m_realparent->GetHWND(), &posRect);
+
         SIZEL sz = {w, h};
         PixelsToHimetric(sz);
 
@@ -799,7 +1093,10 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
         m_oleObject->GetExtent(DVASPECT_CONTENT, &sz2);
         if (sz2.cx !=  sz.cx || sz.cy != sz2.cy)
             m_oleObject->SetExtent(DVASPECT_CONTENT, &sz);
-    };
+
+        m_oleObject->DoVerb(OLEIVERB_SHOW, 0, m_clientSite, 0,
+            (HWND)m_realparent->GetHWND(), &posRect);
+    }
 
     if (m_oleInPlaceObject.Ok())
         m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
@@ -807,12 +1104,39 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
+//---------------------------------------------------------------------------
+// wxActiveXContainer::OnPaint
+//
+// Called when the parent is resized - repaints the ActiveX control
+//---------------------------------------------------------------------------
 void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
     // Draw only when control is windowless or deactivated
     if (m_viewObject)
     {
+#if 0
+        dc.BeginDrawing();
+        RECT rcClient;
+        ::GetClientRect((HWND)GetHandle(), &rcClient);
+
+        HBITMAP hBitmap = CreateCompatibleBitmap((HDC)dc.GetHDC(),
+                                rcClient.right - rcClient.left,
+                                rcClient.bottom - rcClient.top);
+        HDC hdcCompatible = ::CreateCompatibleDC((HDC)dc.GetHDC());
+        HBITMAP hBitmapOld = (HBITMAP)SelectObject(hdcCompatible, hBitmap);
+
+        m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
+            hdcCompatible, (RECTL *) &rcClient, (RECTL *) &rcClient, NULL, 0);
+
+        ::BitBlt((HDC)dc.GetHDC(), 0, 0, rcClient.right, rcClient.bottom,  hdcCompatible, 0, 0, SRCCOPY);
+
+        ::SelectObject(hdcCompatible, hBitmapOld);
+        ::DeleteObject(hBitmap);
+        ::DeleteDC(hdcCompatible);
+        dc.EndDrawing();
+#else
+        dc.BeginDrawing();
         int w, h;
         GetParent()->GetSize(&w, &h);
         RECT posRect;
@@ -821,20 +1145,21 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
         posRect.right = w;
         posRect.bottom = h;
 
-#if defined(_WIN32_WCE) && _WIN32_WCE < 400
-        ::InvalidateRect(m_oleObjectHWND, NULL, false);
-#else
         ::RedrawWindow(m_oleObjectHWND, NULL, NULL, RDW_INTERNALPAINT);
-#endif
         RECTL *prcBounds = (RECTL *) &posRect;
         m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
             (HDC)dc.GetHDC(), prcBounds, NULL, NULL, 0);
-    }
 
-//  We've got this one I think
-//    event.Skip();
+        dc.EndDrawing();
+#endif
+    }
 }
 
+//---------------------------------------------------------------------------
+// wxActiveXContainer::OnSetFocus
+//
+// Called when the focus is set on the parent - activates the activex control
+//---------------------------------------------------------------------------
 void wxActiveXContainer::OnSetFocus(wxFocusEvent& event)
 {
     if (m_oleInPlaceActiveObject.Ok())
@@ -843,6 +1168,12 @@ void wxActiveXContainer::OnSetFocus(wxFocusEvent& event)
     event.Skip();
 }
 
+//---------------------------------------------------------------------------
+// wxActiveXContainer::OnKillFocus
+//
+// Called when the focus is killed on the parent -
+// deactivates the activex control
+//---------------------------------------------------------------------------
 void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
 {
     if (m_oleInPlaceActiveObject.Ok())
@@ -850,3 +1181,6 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
 
     event.Skip();
 }
+
+#endif
+// __WINE__

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/ole/activex.h
+// Name:        wx/activex.h
 // Purpose:     wxActiveXContainer class
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:
@@ -42,6 +42,7 @@
 //  WX includes
 //---------------------------------------------------------------------------
 #include "wx/window.h"
+#include "wx/variant.h"
 
 //---------------------------------------------------------------------------
 // MSW COM includes
@@ -150,10 +151,6 @@ WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceObject, IOleInPlaceObject)
 WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceActiveObject, IOleInPlaceActiveObject)
 WX_DECLARE_AUTOOLE(wxAutoIOleDocumentView, IOleDocumentView)
 WX_DECLARE_AUTOOLE(wxAutoIViewObject, IViewObject)
-WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceSite, IOleInPlaceSite)
-WX_DECLARE_AUTOOLE(wxAutoIOleDocument, IOleDocument)
-WX_DECLARE_AUTOOLE(wxAutoIPersistStreamInit, IPersistStreamInit)
-WX_DECLARE_AUTOOLE(wxAutoIAdviseSink, IAdviseSink)
 
 class wxActiveXContainer : public wxWindow
 {
@@ -168,6 +165,7 @@ public:
 
 protected:
     friend class FrameSite;
+    friend class wxActiveXEvents;
 
     wxAutoIDispatch            m_Dispatch;
     wxAutoIOleClientSite      m_clientSite;
@@ -185,4 +183,50 @@ protected:
     void CreateActiveX(REFIID, IUnknown*);
 };
 
+
+// Events
+class wxActiveXEvent : public wxCommandEvent
+{
+private:
+    friend class wxActiveXEvents;
+    wxVariant m_params;
+    DISPID m_dispid;
+
+public:
+    virtual wxEvent *Clone() const
+    { return new wxActiveXEvent(*this); }
+
+    int ParamCount() const
+    {   return m_params.GetCount();  }
+
+    wxString ParamType(int idx) const
+    {
+        wxASSERT(idx >= 0 && idx < m_params.GetCount());
+        return m_params[idx].GetType();
+    }
+
+    wxString ParamName(int idx) const
+    {
+        wxASSERT(idx >= 0 && idx < m_params.GetCount());
+        return m_params[idx].GetName();
+    }
+
+    wxVariant& operator[] (int idx)
+    {
+        wxASSERT(idx >= 0 && idx < ParamCount());
+        return m_params[idx];
+    }
+
+    DISPID GetDispatchId() const
+    {   return m_dispid;    }
+};
+
+#define wxACTIVEX_ID    14001
+DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_MEDIA, wxEVT_ACTIVEX, wxACTIVEX_ID)
+typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
+#define EVT_ACTIVEX(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_ACTIVEX, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxActiveXEventFunction) & fn, (wxObject *) NULL ),
+#define wxActiveXEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxActiveXEventFunction, &func)
+
 #endif // _WX_MSW_OLE_ACTIVEXCONTAINER_H_
+

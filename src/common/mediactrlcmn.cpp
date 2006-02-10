@@ -9,6 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// TODO: Platform specific backend defaults?
+
 //===========================================================================
 // Definitions
 //===========================================================================
@@ -16,6 +18,10 @@
 //---------------------------------------------------------------------------
 // Pre-compiled header stuff
 //---------------------------------------------------------------------------
+
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+#pragma implementation "mediactrl.h"
+#endif
 
 #include "wx/wxprec.h"
 
@@ -44,12 +50,15 @@
 // RTTI and Event implementations
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IMPLEMENT_CLASS(wxMediaCtrl, wxControl)
-IMPLEMENT_CLASS(wxMediaBackend, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent)
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED)
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_LOADED)
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP)
+IMPLEMENT_CLASS(wxMediaCtrl, wxControl);
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_STATECHANGED)
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_PLAY)
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_PAUSE)
+IMPLEMENT_CLASS(wxMediaBackend, wxObject);
+IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent);
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED);
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_LOADED);
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
@@ -228,7 +237,7 @@ bool wxMediaCtrl::DoCreate(wxClassInfo* classInfo,
 }
 
 //---------------------------------------------------------------------------
-// wxMediaCtrl::NextBackend
+// wxMediaCtrl::NextBackend (static)
 //
 //
 // Search through the RTTI hashmap one at a
@@ -239,8 +248,7 @@ bool wxMediaCtrl::DoCreate(wxClassInfo* classInfo,
 // STL isn't compatible with and will have a compilation error
 // on a wxNode, however, wxHashTable::compatibility_iterator is
 // incompatible with the old 2.4 stable version - but since
-// we're in 2.5 only we don't need to worry about this
-// static
+// we're in 2.5+ only we don't need to worry about the new version
 //---------------------------------------------------------------------------
 wxClassInfo* wxMediaCtrl::NextBackend()
 {
@@ -507,9 +515,37 @@ void wxMediaBackendCommonBase::QueueEvent(wxEventType evtType)
     m_ctrl->AddPendingEvent(theEvent);
 }
 
-#include "wx/html/forcelnk.h"
-FORCE_LINK(basewxmediabackends)
+void wxMediaBackendCommonBase::QueuePlayEvent()
+{
+    QueueEvent(wxEVT_MEDIA_STATECHANGED);
+    QueueEvent(wxEVT_MEDIA_PLAY);
+}
 
+void wxMediaBackendCommonBase::QueuePauseEvent()
+{
+    QueueEvent(wxEVT_MEDIA_STATECHANGED);
+    QueueEvent(wxEVT_MEDIA_PAUSE);
+}
+
+void wxMediaBackendCommonBase::QueueStopEvent()
+{
+    QueueEvent(wxEVT_MEDIA_STATECHANGED);
+    QueueEvent(wxEVT_MEDIA_STOP);
+}
+
+
+//
+// Force link default backends in -
+// see http://wiki.wxwidgets.org/wiki.pl?RTTI
+//
+#include "wx/html/forcelnk.h"
+
+#ifdef __WXMSW__ // MSW has huge backends so we do it seperately
+FORCE_LINK(wxmediabackend_am);
+FORCE_LINK(wxmediabackend_wmp10);
+#else
+FORCE_LINK(basewxmediabackends);
+#endif
 //---------------------------------------------------------------------------
 // End of compilation guard and of file
 //---------------------------------------------------------------------------

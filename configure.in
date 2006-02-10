@@ -422,6 +422,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_SOUND=no
   DEFAULT_wxUSE_MEDIACTRL=no
+  DEFAULT_wxUSE_GSTREAMER8=no
   DEFAULT_wxUSE_INTL=no
   DEFAULT_wxUSE_CONFIG=no
   DEFAULT_wxUSE_FONTMAP=no
@@ -624,6 +625,7 @@ else
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_SOUND=yes
   DEFAULT_wxUSE_MEDIACTRL=no
+  DEFAULT_wxUSE_GSTREAMER8=no
   DEFAULT_wxUSE_INTL=yes
   DEFAULT_wxUSE_CONFIG=yes
   DEFAULT_wxUSE_FONTMAP=yes
@@ -935,6 +937,7 @@ WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUS
 WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
 WX_ARG_ENABLE(mediactrl,     [  --enable-mediactrl      use wxMediaCtrl class], wxUSE_MEDIACTRL)
+WX_ARG_ENABLE(gstreamer8,     [  --enable-gstreamer8      force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
 WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWidgets implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
 WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZip streams], wxUSE_ZIPSTREAM)
 
@@ -6754,6 +6757,8 @@ dnl ---------------------------------------------------------------------------
 dnl wxMediaCtrl
 dnl ---------------------------------------------------------------------------
 
+USE_MEDIA=0
+
 if test "$wxUSE_MEDIACTRL" = "yes"; then
     dnl -----------------------------------------------------------------------
     dnl GStreamer
@@ -6762,77 +6767,57 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
         wxUSE_GSTREAMER="yes"
 
         dnl -------------------------------------------------------------------
-        dnl Test for gstreamer module from pkg-config
+        dnl Test for at least 0.8 gstreamer module from pkg-config
+        dnl Even totem doesn't accept 0.9 evidently.
+        dnl
+        dnl So, we first check to see if 0.10 if available - if not we
+        dnl try the older 0.8 version
         dnl -------------------------------------------------------------------
-        PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.8,
+        GST_VERSION_MAJOR=0
+        GST_VERSION_MINOR=10
+        GST_VERSION_RELEASE=0
+        GSTREAMER_REQ=$GST_VERSION_MAJOR.$GST_VERSION_MINOR.$GST_VERSION_RELEASE
+        GST_MAJORMINOR=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+
+        if test "$wxUSE_GSTREAMER8" = "no"; then
+            PKG_CHECK_MODULES(GST, gstreamer-$GST_MAJORMINOR
+                               gstreamer-plugins-base-$GST_MAJORMINOR
+                               gconf-2.0,
         [
-            CPPFLAGS="$GSTREAMER_CFLAGS $CPPFLAGS"
-            LIBS="$LIBS $GSTREAMER_LIBS -lgstplay-0.8"
+                    CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
+                    LIBS="$LIBS $GST_LIBS -lgstinterfaces-$GST_MAJORMINOR"
         ],
         [
-            AC_MSG_WARN([GStreamer installation not found])
-            wxUSE_GSTREAMER="no"
+                    GST_VERSION_MINOR=8
         ])
-
-        dnl -------------------------------------------------------------------
-        dnl Perform a check for a GStreamer element using gst-inspect
-        dnl Thomas Vander Stichele <thomas at apestaart dot org>
-        dnl Last modification: 25/01/2005
-        dnl
-        dnl AM_GST_ELEMENT_CHECK(ELEMENT-NAME, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
-        dnl -------------------------------------------------------------------
-        AC_DEFUN([AM_GST_ELEMENT_CHECK],
-        [
-        if test "x$GST_INSPECT" == "x"; then
-            AC_CHECK_PROG(GST_INSPECT, gst-inspect, gst-inspect, [])
-        fi
-
-        if test "x$GST_INSPECT" != "x"; then
-            AC_MSG_CHECKING(GStreamer element $1)
-            if [ $GST_INSPECT $1 > /dev/null 2> /dev/null ]; then
-            AC_MSG_RESULT(found.)
-            $2
             else
-            AC_MSG_RESULT(not found.)
-            $3
-            fi
+            GST_VERSION_MINOR=8
         fi
-        ])
 
-        dnl -------------------------------------------------------------------
-        dnl Test for x video sink (video useless without)
-        dnl -------------------------------------------------------------------
-        AM_GST_ELEMENT_CHECK(xvimagesink,[],
-                        [
-                            wxUSE_GSTREAMER="no"
-                            AC_MSG_WARN([x video sink not found - cannot use GStreamer])
-                        ])
+        GSTREAMER_REQ=$GST_VERSION_MAJOR.$GST_VERSION_MINOR.$GST_VERSION_RELEASE
+        GST_MAJORMINOR=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
-        dnl -------------------------------------------------------------------
-        dnl Check for gstplay-0.8 lib and corresponding x overlay header
-        dnl -------------------------------------------------------------------
-        AC_CHECK_HEADER(gst/xoverlay/xoverlay.h, [],
+        if test x$GST_VERSION_MINOR = x8; then
+            PKG_CHECK_MODULES(GST, gstreamer-$GST_MAJORMINOR
+                gstreamer-interfaces-$GST_MAJORMINOR
+                gstreamer-gconf-$GST_MAJORMINOR,
                         [
-                            wxUSE_GSTREAMER="no"
-                            AC_MSG_WARN([xoverlay header not found, cannot use GStreamer])
+                    CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
+                    LIBS="$LIBS $GST_LIBS"
                         ],
-                        [#include <gst/gst.h>])
-
-        AC_MSG_CHECKING([for gstplay 0.8])
-        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],gstplay-0.8)
-
-        if test "$ac_find_libraries" = "" ; then
-            AC_MSG_RESULT([no])
+                [
+                    AC_MSG_WARN([Proper GStreamer .8/.10 installation not found])
             wxUSE_GSTREAMER="no"
-        else
-            AC_MSG_RESULT([yes])
+                ])
         fi
+
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
             AC_DEFINE(wxUSE_GSTREAMER)
             AC_MSG_RESULT([GStreamer detection successful])
         fi
     fi
+    USE_MEDIA=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
     AC_DEFINE(wxUSE_MEDIACTRL)
 fi

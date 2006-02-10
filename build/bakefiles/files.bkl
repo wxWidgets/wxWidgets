@@ -2657,7 +2657,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MEDIA_MSW_SRC" hints="files">
-    src/msw/mediactrl.cpp
+    src/msw/mediactrl_am.cpp
+    src/msw/mediactrl_wmp10.cpp
     src/msw/ole/activex.cpp
 </set>
 <set var="MEDIA_MSW_HDR" hints="files">
