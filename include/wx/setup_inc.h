@@ -242,10 +242,29 @@
 // Recommended setting: 0 unless you do plan to develop MT applications
 #define wxUSE_THREADS 1
 
-// If enabled (1), compiles wxWidgets streams classes
+// If enabled, compiles wxWidgets streams classes
+//
+// wx stream classes are used for image IO, process IO redirection, network
+// protocols implementation and much more and so disabling this results in a
+// lot of other functionality being lost.
+//
+// Default is 1
+//
+// Recommended setting: 1 as setting it to 0 disables many other things
 #define wxUSE_STREAMS       1
 
-// Use standard C++ streams if 1. If 0, use wxWin streams implementation only.
+// Use standard C++ streams if 1 instead of wx streams in some places. If
+// disabled (default),.wx streams are used everywhere and wxWidgets doesn't
+// depend on the standard streams library.
+//
+// Notice that enabling this does not replace wx streams with std streams
+// everywhere, in a lot of places wx streams are used no matter what.
+//
+// Default is 0
+//
+// Recommended setting: 1 if you use the standard streams anyhow and so
+//                      dependency on the standard streams library is not a
+//                      problem
 #define wxUSE_STD_IOSTREAM  0
 
 // Enable conversion to standard C++ string if 1.
