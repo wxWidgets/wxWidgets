@@ -134,6 +134,8 @@ public:
     wxLongLongNative& operator=(wxULongLong_t ll)
         { m_ll = ll; return *this; }
     wxLongLongNative& operator=(const wxULongLongNative &ll);
+    wxLongLongNative& operator=(int l)
+        { m_ll = l; return *this; }
     wxLongLongNative& operator=(long l)
         { m_ll = l; return *this; }
     wxLongLongNative& operator=(unsigned long l)
@@ -365,6 +367,8 @@ public:
         { m_ll = ll; return *this; }
     wxULongLongNative& operator=(wxLongLong_t ll)
         { m_ll = ll; return *this; }
+    wxULongLongNative& operator=(int l)
+        { m_ll = l; return *this; }
     wxULongLongNative& operator=(long l)
         { m_ll = l; return *this; }
     wxULongLongNative& operator=(unsigned long l)
@@ -606,6 +610,12 @@ public:
 
         return *this;
     }
+        // from int
+    wxLongLongWx& operator=(int l)
+    {
+        return operator=((long)l);
+    }
+
     wxLongLongWx& operator=(unsigned long l)
     {
         m_lo = l;
