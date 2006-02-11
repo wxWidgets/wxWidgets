@@ -190,10 +190,16 @@ wxDebugReport::wxDebugReport()
     // of course, this doesn't protect us against malicious users...
     wxFileName fn;
     fn.AssignTempFileName(appname);
+#if wxUSE_DATETIME
     m_dir.Printf(_T("%s%c%s_dbgrpt-%lu-%s"),
                  fn.GetPath().c_str(), wxFILE_SEP_PATH, appname.c_str(),
                  wxGetProcessId(),
                  wxDateTime::Now().Format(_T("%Y%m%dT%H%M%S")).c_str());
+#else
+    m_dir.Printf(_T("%s%c%s_dbgrpt-%lu"),
+                 fn.GetPath().c_str(), wxFILE_SEP_PATH, appname.c_str(),
+                 wxGetProcessId());
+#endif
 
     // as we are going to save the process state there use restrictive
     // permissions

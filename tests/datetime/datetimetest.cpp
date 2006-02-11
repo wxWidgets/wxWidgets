@@ -27,6 +27,8 @@
 // the macro below to do it
 //#define CHANGE_SYSTEM_DATE
 
+#if wxUSE_DATETIME
+
 #ifndef __WINDOWS__
     #undef CHANGE_SYSTEM_DATE
 #endif
@@ -823,3 +825,4 @@ void DateTimeTestCase::TestDSTBug()
 #endif // CHANGE_SYSTEM_DATE
 }
 
+#endif // wxUSE_DATETIME
