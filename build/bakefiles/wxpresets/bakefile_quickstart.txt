@@ -235,6 +235,8 @@ options are:
 
     Option              Values              Description
     ------              ------              -------------
+    WX_MONOLITHIC       0(default),1        Set this to 1 if you built wx 
+                                            as a monolithic library
     WX_SHARED           0(default),1        Specify static or dynamic wx libs
     WX_UNICODE          0(defualt),1        Use ANSI or UNICODE wx libs
     WX_DEBUG            0,1(default)        Use release or debug wx libs
