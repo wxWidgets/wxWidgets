@@ -1833,9 +1833,13 @@ are none.", "");
     DocDeclStr(
         void , SetAutoLayout( bool autoLayout ),
         "Determines whether the Layout function will be called automatically
-when the window is resized.  It is called implicitly by SetSizer but
-if you use SetConstraints you should call it manually or otherwise the
-window layout won't be correctly updated when its size changes.", "");
+when the window is resized.  lease note that this only happens for the
+windows usually used to contain children, namely `wx.Panel` and
+`wx.TopLevelWindow` (and the classes deriving from them).
+
+This method is called implicitly by `SetSizer` but if you use
+`SetConstraints` you should call it manually or otherwise the window
+layout won't be correctly updated when its size changes.", "");
     
     DocDeclStr(
         bool , GetAutoLayout() const,
