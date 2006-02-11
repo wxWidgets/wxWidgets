@@ -300,6 +300,12 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     SHInitExtraControls();
 #endif
 
+#ifndef __WXWINCE__
+    // Don't show a message box if a function such as SHGetFileInfo
+    // fails to find a device.
+    SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
+#endif
+    
     wxOleInitialize();
 
     RegisterWindowClasses();
