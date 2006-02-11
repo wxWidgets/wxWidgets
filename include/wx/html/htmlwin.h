@@ -312,7 +312,6 @@ protected:
     // time of the last doubleclick event, used to detect tripleclicks
     // (tripleclicks are used to select whole line):
     wxMilliClock_t m_lastDoubleClick;
-#endif // wxUSE_LONGLONG/!wxUSE_LONGLONG
 
     // helper class to automatically scroll the window if the user is selecting
     // text and the mouse leaves wxHtmlWindow:
