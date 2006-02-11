@@ -831,6 +831,17 @@
    check consistency of the settings
  */
 
+#if wxUSE_ARCHIVE_STREAMS
+#   if !wxUSE_DATETIME
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxArchive requires wxUSE_DATETIME"
+#       else
+#           undef wxUSE_ARCHIVE_STREAMS
+#           define wxUSE_ARCHIVE_STREAMS 0
+#       endif
+#   endif
+#endif /* wxUSE_ARCHIVE_STREAMS */
+
 #if wxUSE_CRASHREPORT && !wxUSE_ON_FATAL_EXCEPTION
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_CRASHREPORT requires wxUSE_ON_FATAL_EXCEPTION"
