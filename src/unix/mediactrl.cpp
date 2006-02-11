@@ -990,7 +990,30 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     //
     //init gstreamer
     //
+#if wxUSE_UNICODE
+    int i;
+    char **argvGST = new char*[wxTheApp->argc + 1];
+    for ( i = 0; i < wxTheApp->argc; i++ )
+    {
+        argvGST[i] = wxStrdupA(wxConvUTF8.cWX2MB(wxTheApp->argv[i]));
+    }
+
+    argvGST[wxTheApp->argc] = NULL;
+
+    int argcGST = wxTheApp->argc;
+
+    gst_init(&argcGST, &argvGST);
+
+    // free our copy
+    for ( i = 0; i < argcGST; i++ )
+    {
+        free(argvGST[i]);
+    }
+
+    delete [] argvGST;
+#else
     gst_init(&wxTheApp->argc, &wxTheApp->argv);
+#endif
 
     //
     // wxControl creation
