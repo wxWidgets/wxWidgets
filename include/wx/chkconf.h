@@ -949,6 +949,17 @@
 #   endif
 #endif /* wxUSE_MIMETYPE */
 
+#if wxUSE_ODBC
+#   if !wxUSE_DATETIME
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxODBC requires wxUSE_DATETIME"
+#       else
+#           undef wxUSE_ODBC
+#           define wxUSE_ODBC 0
+#       endif
+#   endif
+#endif /* wxUSE_ODBC */
+
 #if wxUSE_TEXTFILE && !wxUSE_TEXTBUFFER
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_TEXTFILE requires wxUSE_TEXTBUFFER"
