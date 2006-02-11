@@ -593,6 +593,18 @@ GSocketError GSocket::Connect(GSocketStream stream)
   ioctlsocket(m_fd, FIONBIO, (u_long FAR *) &arg);
   gs_gui_functions->Enable_Events(this);
 
+  // If the reuse flag is set, use the applicable socket reuse flag
+  if (m_reusable)
+  {
+     setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
+  }
+
+  // If a local address has been set, then we need to bind to it before calling connect
+  if (m_local && m_local->m_addr)
+  {
+    bind(m_fd, m_local->m_addr, m_local->m_len);
+  }
+
   /* Connect it to the peer address, with a timeout (see below) */
   ret = connect(m_fd, m_peer->m_addr, m_peer->m_len);
 
