@@ -76,6 +76,31 @@ wxLongLong.
 Assignment operator from native long long (only for compilers supporting it).
 
 
+\membersection{wxLongLong::operator=}\label{wxlonglongoperatorassignull}
+
+\func{wxLongLong\& operator}{operator=}{\param{wxULongLong\_t }{ll}}
+
+Assignment operator from native unsigned long long (only for compilers 
+supporting it).
+
+\membersection{wxLongLong::operator=}\label{wxlonglongoperatorassignlong}
+
+\func{wxLongLong\& operator}{operator=}{\param{long }{l}}
+
+Assignment operator from long.
+
+\membersection{wxLongLong::operator=}\label{wxlonglongoperatorassignulong}
+
+\func{wxLongLong\& operator}{operator=}{\param{unsigned long }{l}}
+
+Assignment operator from unsigned long.
+
+\membersection{wxLongLong::operator=}\label{wxlonglongoperatorassignulonglong}
+
+\func{wxLongLong\& operator}{operator=}{\param{const wxULongLong \& }{ll}}
+
+Assignment operator from unsigned long long. The sign bit will be copied too.
+
 \membersection{wxLongLong::Abs}\label{wxlonglongabs}
 
 \constfunc{wxLongLong}{Abs}{\void}

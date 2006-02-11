@@ -1013,6 +1013,23 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 
     typedef wxLongLong_t wxInt64;
     typedef wxULongLong_t wxUint64;
+
+    #define wxHAS_INT64 1
+
+#elif wxUSE_LONGLONG
+    /*  these macros allow to definea 64 bit constants in a portable way */
+    #define wxLL(x) wxLongLong(x)
+    #define wxULL(x) wxULongLong(x)
+
+    #define wxInt64 wxLongLong
+    #define wxUint64 wxULongLong
+
+    #define wxHAS_INT64 1
+
+#else // !wxUSE_LONGLONG
+
+    #define wxHAS_INT64 0
+
 #endif
 
 
@@ -1174,7 +1191,7 @@ typedef float wxFloat32;
         (((wxUint64) (val) & (wxUint64) wxULL(0x0000ff0000000000)) >> 24) | \
         (((wxUint64) (val) & (wxUint64) wxULL(0x00ff000000000000)) >> 40) | \
         (((wxUint64) (val) & (wxUint64) wxULL(0xff00000000000000)) >> 56)))
-#else /*  !wxLongLong_t */
+#elif wxUSE_LONGLONG /*  !wxLongLong_t */
     #define wxUINT64_SWAP_ALWAYS(val) \
        ((wxUint64) ( \
         ((wxULongLong(val) & wxULongLong(0L, 0x000000ffU)) << 56) | \
@@ -1207,8 +1224,10 @@ typedef float wxFloat32;
     #define wxINT32_SWAP_ON_BE(val)   wxINT32_SWAP_ALWAYS(val)
     #define wxUINT32_SWAP_ON_LE(val)  (val)
     #define wxINT32_SWAP_ON_LE(val)   (val)
-    #define wxUINT64_SWAP_ON_BE(val)  wxUINT64_SWAP_ALWAYS(val)
-    #define wxUINT64_SWAP_ON_LE(val)  (val)
+    #if wxHAS_INT64
+        #define wxUINT64_SWAP_ON_BE(val)  wxUINT64_SWAP_ALWAYS(val)
+        #define wxUINT64_SWAP_ON_LE(val)  (val)
+    #endif
 #else
     #define wxUINT16_SWAP_ON_LE(val)  wxUINT16_SWAP_ALWAYS(val)
     #define wxINT16_SWAP_ON_LE(val)   wxINT16_SWAP_ALWAYS(val)
@@ -1218,8 +1237,10 @@ typedef float wxFloat32;
     #define wxINT32_SWAP_ON_LE(val)   wxINT32_SWAP_ALWAYS(val)
     #define wxUINT32_SWAP_ON_BE(val)  (val)
     #define wxINT32_SWAP_ON_BE(val)   (val)
-    #define wxUINT64_SWAP_ON_LE(val)  wxUINT64_SWAP_ALWAYS(val)
-    #define wxUINT64_SWAP_ON_BE(val)  (val)
+    #if wxHAS_INT64
+        #define wxUINT64_SWAP_ON_LE(val)  wxUINT64_SWAP_ALWAYS(val)
+        #define wxUINT64_SWAP_ON_BE(val)  (val)
+    #endif
 #endif
 
 /*  ---------------------------------------------------------------------------- */

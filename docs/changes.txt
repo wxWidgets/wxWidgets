@@ -40,6 +40,7 @@ All:
 - Fixed wxODBC buffer overflow problem in Unicode builds.
 - Fixed wxSocketBase::InterruptWait on wxBase.
 - Important code cleanup (Paul Cornett)
+- Added support for wxLongLong in wx stream classes (Mark Junker)
 
 All (GUI):
 

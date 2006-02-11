@@ -24,6 +24,10 @@
 #include "wx/txtstrm.h"
 #include "wx/wfstream.h"
 
+#if wxUSE_LONGLONG
+#include "wx/longlong.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -36,9 +40,17 @@ public:
 private:
     CPPUNIT_TEST_SUITE( TextStreamTestCase );
         CPPUNIT_TEST( Endline );
+#if wxUSE_LONGLONG
+        CPPUNIT_TEST( TestLongLong );
+        CPPUNIT_TEST( TestLongLong );
+#endif
     CPPUNIT_TEST_SUITE_END();
 
     void Endline();
+#if wxUSE_LONGLONG
+    void TestLongLong();
+    void TestULongLong();
+#endif // wxUSE_LONGLONG
 
 
     DECLARE_NO_COPY_CLASS(TextStreamTestCase)
@@ -85,3 +97,64 @@ void TextStreamTestCase::Endline()
 
     delete pInFile;
 }
+
+#if wxUSE_LONGLONG
+
+template <typename T>
+static void DoTestRoundTrip(const T *values, size_t numValues)
+{
+    {
+        wxFileOutputStream fileOut(_T("test.txt"));
+        wxTextOutputStream textOut(fileOut);
+
+        for ( size_t n = 0; n < numValues; n++ )
+        {
+            textOut << values[n] << endl;
+        }
+    }
+
+    {
+        wxFileInputStream fileIn(_T("test.txt"));
+        wxTextInputStream textIn(fileIn);
+
+        T value;
+        for ( size_t n = 0; n < numValues; n++ )
+        {
+            textIn >> value;
+
+            CPPUNIT_ASSERT( value == values[n] );
+        }
+    }
+}
+
+void TextStreamTestCase::TestLongLong()
+{
+    static const wxLongLong llvalues[] =
+    {
+        0,
+        1,
+        -1,
+        0x12345678l,
+        -0x12345678l,
+        wxLL(0x123456789abcdef0),
+        wxLL(-0x123456789abcdef0),
+    };
+
+    DoTestRoundTrip(llvalues, WXSIZEOF(llvalues));
+}
+
+void TextStreamTestCase::TestULongLong()
+{
+    static const wxULongLong ullvalues[] =
+    {
+        0,
+        1,
+        0x12345678l,
+        wxULL(0x123456789abcdef0),
+    };
+
+    DoTestRoundTrip(ullvalues, WXSIZEOF(ullvalues));
+}
+
+#endif // wxUSE_LONGLONG
+

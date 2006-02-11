@@ -14,6 +14,9 @@
 #define _WX_LONGLONG_H
 
 #include "wx/defs.h"
+
+#if wxUSE_LONGLONG
+
 #include "wx/string.h"
 
 #include <limits.h>     // for LONG_MAX
@@ -39,7 +42,12 @@
     // unknown pragma should never be an error -- except that, actually, some
     // broken compilers don't like it, so we have to disable it in this case
     // <sigh>
-    #if !(defined(__WATCOMC__) || defined(__VISAGECPP__))
+    #ifdef __GNUC__
+        #warning "Your compiler does not appear to support 64 bit "\
+                 "integers, using emulation class instead.\n" \
+                 "Please report your compiler version to " \
+                 "wx-dev@lists.wxwidgets.org!"
+    #elif !(defined(__WATCOMC__) || defined(__VISAGECPP__))
         #pragma warning "Your compiler does not appear to support 64 bit "\
                         "integers, using emulation class instead.\n" \
                         "Please report your compiler version to " \
@@ -123,8 +131,16 @@ public:
         // from native 64 bit integer
     wxLongLongNative& operator=(wxLongLong_t ll)
         { m_ll = ll; return *this; }
+    wxLongLongNative& operator=(wxULongLong_t ll)
+        { m_ll = ll; return *this; }
+    wxLongLongNative& operator=(const wxULongLongNative &ll);
+    wxLongLongNative& operator=(long l)
+        { m_ll = l; return *this; }
+    wxLongLongNative& operator=(unsigned long l)
+        { m_ll = l; return *this; }
 #if wxUSE_LONGLONG_WX
     wxLongLongNative& operator=(wxLongLongWx ll);
+    wxLongLongNative& operator=(const class wxULongLongWx &ll);
 #endif
 
 
@@ -307,6 +323,13 @@ public:
     friend WXDLLIMPEXP_BASE
     wxString& operator<<(wxString&, const wxLongLongNative&);
 
+#if wxUSE_STREAMS
+    friend WXDLLIMPEXP_BASE
+    class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxLongLongNative&);
+    friend WXDLLIMPEXP_BASE
+    class wxTextInputStream& operator>>(class wxTextInputStream&, wxLongLongNative&);
+#endif
+
 private:
     wxLongLong_t  m_ll;
 };
@@ -328,6 +351,10 @@ public:
         m_ll |= (wxULongLong_t) lo;
     }
 
+#if wxUSE_LONGLONG_WX
+    wxULongLongNative(const class wxULongLongWx &ll);
+#endif
+
     // default copy ctor is ok
 
     // no dtor
@@ -336,6 +363,18 @@ public:
         // from native 64 bit integer
     wxULongLongNative& operator=(wxULongLong_t ll)
         { m_ll = ll; return *this; }
+    wxULongLongNative& operator=(wxLongLong_t ll)
+        { m_ll = ll; return *this; }
+    wxULongLongNative& operator=(long l)
+        { m_ll = l; return *this; }
+    wxULongLongNative& operator=(unsigned long l)
+        { m_ll = l; return *this; }
+    wxULongLongNative& operator=(const wxLongLongNative &ll)
+        { m_ll = ll.GetValue(); return *this; }
+#if wxUSE_LONGLONG_WX
+    wxULongLongNative& operator=(wxLongLongWx ll);
+    wxULongLongNative& operator=(const class wxULongLongWx &ll);
+#endif
 
     // assignment operators from wxULongLongNative is ok
 
@@ -494,9 +533,23 @@ public:
     friend WXDLLIMPEXP_BASE
     wxString& operator<<(wxString&, const wxULongLongNative&);
 
+#if wxUSE_STREAMS
+    friend WXDLLIMPEXP_BASE
+    class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxULongLongNative&);
+    friend WXDLLIMPEXP_BASE
+    class wxTextInputStream& operator>>(class wxTextInputStream&, wxULongLongNative&);
+#endif
+
 private:
     wxULongLong_t  m_ll;
 };
+
+inline
+wxLongLongNative& wxLongLongNative::operator=(const wxULongLongNative &ll)
+{
+    m_ll = ll.GetValue();
+    return *this;
+}
 
 #endif // wxUSE_LONGLONG_NATIVE
 
@@ -553,7 +606,22 @@ public:
 
         return *this;
     }
-        // from double
+    wxLongLongWx& operator=(unsigned long l)
+    {
+        m_lo = l;
+        m_hi = 0;
+
+#ifdef wxLONGLONG_TEST_MODE
+        m_ll = l;
+
+        Check();
+#endif // wxLONGLONG_TEST_MODE
+
+        return *this;
+    }
+    wxLongLongWx& operator=(const class wxULongLongWx &ll);
+
+    // from double
     wxLongLongWx& Assign(double d);
         // can't have assignment operator from 2 longs
 
@@ -693,6 +761,13 @@ public:
     friend WXDLLIMPEXP_BASE
     wxString& operator<<(wxString&, const wxLongLongWx&);
 
+#if wxUSE_STREAMS
+    friend WXDLLIMPEXP_BASE
+    class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxLongLongWx&);
+    friend WXDLLIMPEXP_BASE
+    class wxTextInputStream& operator>>(class wxTextInputStream&, wxLongLongWx&);
+#endif
+
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs
 
@@ -767,6 +842,26 @@ public:
         Check();
 #endif // wxLONGLONG_TEST_MODE
 
+        return *this;
+    }
+    wxULongLongWx& operator=(long l)
+    {
+        m_lo = l;
+        m_hi = (unsigned long) ((l<0) ? -1l : 0);
+
+#ifdef wxLONGLONG_TEST_MODE
+        m_ll = (wxULongLong_t) (wxLongLong_t) l;
+
+        Check();
+#endif // wxLONGLONG_TEST_MODE
+
+        return *this;
+    }
+    wxULongLongWx& operator=(const class wxLongLongWx &ll) {
+        // Should we use an assert like it was before in the constructor?
+        // wxASSERT(ll.GetHi() >= 0);
+        m_hi = (unsigned long)ll.GetHi();
+        m_lo = ll.GetLo();
         return *this;
     }
 
@@ -879,6 +974,13 @@ public:
     friend WXDLLIMPEXP_BASE
     wxString& operator<<(wxString&, const wxULongLongWx&);
 
+#if wxUSE_STREAMS
+    friend WXDLLIMPEXP_BASE
+    class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxULongLongWx&);
+    friend WXDLLIMPEXP_BASE
+    class wxTextInputStream& operator>>(class wxTextInputStream&, wxULongLongWx&);
+#endif
+
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs
 
@@ -928,5 +1030,17 @@ inline wxLongLong operator-(unsigned long l, const wxULongLong& ull)
     wxULongLong ret = wxULongLong(l) - ull;
     return wxLongLong((long)ret.GetHi(),ret.GetLo());
 }
+
+#if wxUSE_LONGLONG_NATIVE && wxUSE_STREAMS
+
+WXDLLIMPEXP_BASE class wxTextOutputStream &operator<<(class wxTextOutputStream &stream, wxULongLong_t value);
+WXDLLIMPEXP_BASE class wxTextOutputStream &operator<<(class wxTextOutputStream &stream, wxLongLong_t value);
+
+WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &stream, wxULongLong_t &value);
+WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &stream, wxLongLong_t &value);
+
+#endif
+
+#endif // wxUSE_LONGLONG
 
 #endif // _WX_LONGLONG_H
