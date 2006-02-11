@@ -544,7 +544,7 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
 }
 
 
-bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
+WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 {
     ClearVariant(&oleVariant);
     if (variant.IsNull())
@@ -666,7 +666,7 @@ bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 #define VT_TYPEMASK 0xfff
 #endif
 
-bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
+WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 {
     switch (oleVariant.vt & VT_TYPEMASK)
     {

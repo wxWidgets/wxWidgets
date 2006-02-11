@@ -66,7 +66,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
   return false;
 }
 
-BSTR wxConvertStringToOle(const wxString& str)
+WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str)
 {
 /*
     unsigned int len = strlen((const char*) str);
@@ -80,7 +80,7 @@ BSTR wxConvertStringToOle(const wxString& str)
     return bstr.Get();
 }
 
-wxString wxConvertStringFromOle(BSTR bStr)
+WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 {
 #if wxUSE_UNICODE
     wxString str(bStr);
