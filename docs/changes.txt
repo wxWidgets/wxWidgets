@@ -82,13 +82,13 @@ All (GUI):
 - Added wxToolbook (uses a wxToolBar to control pages).
 - Added SetSheetStyle to wxPropertySheetDialog and allowed it to
   behave like a Mac OS X settings dialog.
-- Added <disabled> XRC tag for wxToolBar elements and <bg> for wxToolBar itself
-- Fixed centering of top level windows on secondary displays
-- Implemented wxDisplay::GetFromWindow() for platforms other than MSW
+- Added <disabled> XRC tag for wxToolBar elements and <bg> for wxToolBar itself.
+- Fixed centering of top level windows on secondary displays.
+- Implemented wxDisplay::GetFromWindow() for platforms other than MSW.
 
 wxMSW:
 
-- Fixed crash with ownerdrawn menu items accelerators (Perry Miller)
+- Fixed crash with ownerdrawn menu items accelerators (Perry Miller).
 - wxFileDialog respects absence of wxCHANGE_DIR flag under NT (Brad Anderson).
 - Switching page of a hidden notebook doesn't lose focus (Jamie Gadd).
 - Removed wxImageList *GetImageList(int) const.
@@ -128,6 +128,7 @@ wxMSW:
 - Fixed problem with getting input in universal/unicode build of wxMSW.
 - Link oleacc.lib conditionally.
 - Drag and drop now works inside static boxes.
+- Fall back to unthemed wxNotebook if specified orientation not available.
 
 wxGTK:
 
