@@ -12,10 +12,6 @@
 #ifndef _WX_HELPDLG_H_
 #define _WX_HELPDLG_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "helpdlgex.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_WXHTML_HELP

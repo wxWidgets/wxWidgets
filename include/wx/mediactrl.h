@@ -22,9 +22,6 @@
 // ----------------------------------------------------------------------------
 // Pre-compiled header stuff
 // ----------------------------------------------------------------------------
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "mediactrl.h"
-#endif
 
 #include "wx/defs.h"
 
