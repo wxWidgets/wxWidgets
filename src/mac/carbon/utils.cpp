@@ -644,7 +644,7 @@ wxChar *wxGetUserHome (const wxString& user)
     return NULL;
 }
 
-bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
+bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspaceSize_t *pFree)
 {
     if ( path.empty() )
         return false;
@@ -674,9 +674,9 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
             if ( noErr == err )
             {
                 if ( pTotal )
-                    *pTotal = wxLongLong( totalBytes ) ;
+                    *pTotal = wxDiskspaceSize_t( totalBytes ) ;
                 if ( pFree )
-                    *pFree = wxLongLong( freeBytes ) ;
+                    *pFree = wxDiskspaceSize_t( freeBytes ) ;
             }
         }
     }

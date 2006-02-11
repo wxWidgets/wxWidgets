@@ -529,7 +529,7 @@ wxChar *wxGetUserHome (const wxString& user)
     return NULL;
 }
 
-bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
+bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspaceSize_t *pFree)
 {
     if ( path.empty() )
         return false;
@@ -553,10 +553,10 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
     OSErr err = XGetVolumeInfoNoName( volumeName , 0 , &pb ) ;
     if ( err == noErr ) {
       if ( pTotal ) {
-        (*pTotal) = wxLongLong( pb.ioVTotalBytes ) ;
+        (*pTotal) = wxDiskspaceSize_t( pb.ioVTotalBytes ) ;
       }
       if ( pFree ) {
-        (*pFree) = wxLongLong( pb.ioVFreeBytes ) ;
+        (*pFree) = wxDiskspaceSize_t( pb.ioVFreeBytes ) ;
       }
     }
 

@@ -449,10 +449,16 @@ WXDLLIMPEXP_BASE const wxMB2WXbuf wxGetUserHome(const wxString& user = wxEmptySt
 WXDLLIMPEXP_BASE wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
 #endif
 
+#if wxUSE_LONGLONG
+    typedef wxLongLong wxDiskspaceSize_t;
+#else
+    typedef long wxDiskspaceSize_t;
+#endif
+
 // get number of total/free bytes on the disk where path belongs
 WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,
-                                wxLongLong *pTotal = NULL,
-                                wxLongLong *pFree = NULL);
+                                     wxDiskspaceSize_t *pTotal = NULL,
+                                     wxDiskspaceSize_t *pFree = NULL);
 
 #if wxUSE_GUI // GUI only things from now on
 

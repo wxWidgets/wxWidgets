@@ -927,7 +927,7 @@ wxMemorySize wxGetFreeMemory()
     return -1;
 }
 
-bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
+bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspaceSize_t *pFree)
 {
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // the case to "char *" is needed for AIX 4.3
@@ -942,19 +942,19 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
     // under Solaris we also have to use f_frsize field instead of f_bsize
     // which is in general a multiple of f_frsize
 #ifdef HAVE_STATVFS
-    wxLongLong blockSize = fs.f_frsize;
+    wxDiskspaceSize_t blockSize = fs.f_frsize;
 #else // HAVE_STATFS
-    wxLongLong blockSize = fs.f_bsize;
+    wxDiskspaceSize_t blockSize = fs.f_bsize;
 #endif // HAVE_STATVFS/HAVE_STATFS
 
     if ( pTotal )
     {
-        *pTotal = wxLongLong(fs.f_blocks) * blockSize;
+        *pTotal = wxDiskspaceSize_t(fs.f_blocks) * blockSize;
     }
 
     if ( pFree )
     {
-        *pFree = wxLongLong(fs.f_bavail) * blockSize;
+        *pFree = wxDiskspaceSize_t(fs.f_bavail) * blockSize;
     }
 
     return true;

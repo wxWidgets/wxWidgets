@@ -480,8 +480,8 @@ wxChar *wxGetUserHome(const wxString& WXUNUSED(user))
 }
 
 bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
-                    wxLongLong *WXUNUSED_IN_WINCE(pTotal),
-                    wxLongLong *WXUNUSED_IN_WINCE(pFree))
+                    wxDiskspaceSize_t *WXUNUSED_IN_WINCE(pTotal),
+                    wxDiskspaceSize_t *WXUNUSED_IN_WINCE(pFree))
 {
 #ifdef __WXWINCE__
     // TODO-CE
@@ -536,12 +536,20 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
 #endif
         if ( pTotal )
         {
-            *pTotal = wxLongLong(UL(bytesTotal).HighPart, UL(bytesTotal).LowPart);
+#if wxUSE_LONGLONG
+            *pTotal = wxDiskspaceSize_t(UL(bytesTotal).HighPart, UL(bytesTotal).LowPart);
+#else
+            *pTotal = wxDiskspaceSize_t(UL(bytesTotal).LowPart);
+#endif
         }
 
         if ( pFree )
         {
+#if wxUSE_LONGLONG
             *pFree = wxLongLong(UL(bytesFree).HighPart, UL(bytesFree).LowPart);
+#else
+            *pFree = wxDiskspaceSize_t(UL(bytesFree).LowPart);
+#endif
         }
     }
     else
@@ -569,7 +577,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
             return false;
         }
 
-        wxLongLong lBytesPerCluster = lSectorsPerCluster;
+        wxDiskspaceSize_t lBytesPerCluster = (wxDiskspaceSize_t) lSectorsPerCluster;
         lBytesPerCluster *= lBytesPerSector;
 
         if ( pTotal )
