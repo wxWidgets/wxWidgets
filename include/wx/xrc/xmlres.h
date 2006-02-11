@@ -68,12 +68,18 @@ class wxXmlResourceModule;
 class WXDLLIMPEXP_XRC wxXmlResourceDataRecord
 {
 public:
-    wxXmlResourceDataRecord() : Doc(NULL), Time(wxDateTime::Now()) {}
+    wxXmlResourceDataRecord() : Doc(NULL) {
+#if wxUSE_DATETIME
+        Time = wxDateTime::Now();
+#endif
+    }
     ~wxXmlResourceDataRecord() {delete Doc;}
 
     wxString File;
     wxXmlDocument *Doc;
+#if wxUSE_DATETIME
     wxDateTime Time;
+#endif
 };
 
 
