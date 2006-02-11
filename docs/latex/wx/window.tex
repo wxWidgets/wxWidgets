@@ -2455,16 +2455,21 @@ See also \helpref{wxAccessible}{wxaccessible}.
 \func{void}{SetAutoLayout}{\param{bool}{ autoLayout}}
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
-be called automatically when the window is resized. It is called implicitly by
-\helpref{wxWindow::SetSizer}{wxwindowsetsizer} but if you use
+be called automatically when the window is resized. Please note that this only
+happens for the windows usually used to contain children, namely 
+\helpref{wxPanel}{wxpanel} and \helpref{wxTopLevelWindow}{wxtoplevelwindow} 
+(and the classes deriving from them).
+
+This method is called implicitly by 
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer} but if you use 
 \helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} you should call it
 manually or otherwise the window layout won't be correctly updated when its
 size changes.
 
 \wxheading{Parameters}
 
-\docparam{autoLayout}{Set this to {\tt true} if you wish the Layout function to be called
-from within wxWindow::OnSize functions.}
+\docparam{autoLayout}{Set this to \true if you wish the Layout function to be
+called automatically when the window is resized.}
 
 \wxheading{See also}
 
