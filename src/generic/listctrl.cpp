@@ -4673,10 +4673,10 @@ void wxGenericListCtrl::CalculateAndSetHeaderHeight()
         {
             m_headerHeight = h;
 
-            m_headerWin->SetSize(m_headerWin->GetSize().x, m_headerHeight);
-
             if ( HasHeader() )
                 ResizeReportView(true);
+            else    //why is this needed if it doesn't have a header?
+                m_headerWin->SetSize(m_headerWin->GetSize().x, m_headerHeight);
         }
     }
 }
@@ -5291,7 +5291,12 @@ void wxGenericListCtrl::ResizeReportView(bool showHeader)
     if ( showHeader )
     {
         m_headerWin->SetSize( 0, 0, cw, m_headerHeight );
-        m_mainWin->SetSize( 0, m_headerHeight + 1, cw, ch - m_headerHeight - 1 );
+        if(ch > m_headerHeight)
+            m_mainWin->SetSize( 0, m_headerHeight + 1, 
+                                   cw, ch - m_headerHeight - 1 );
+        else
+            m_mainWin->SetSize( 0, m_headerHeight + 1, 
+                                   cw, 0);
     }
     else // no header window
     {
