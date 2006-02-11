@@ -71,7 +71,8 @@ wxMSW:
 - Fixed a crash when dismissing wxPrintDialog under VC++ 7.1.
 - Fixed out by one error in wxTextCtrl::GetStyle.
 - Fixed problem with getting input in universal/unicode build of wxMSW.
-- Link oleacc.lib conditionally
+- Link oleacc.lib conditionally.
+- Fall back to unthemed wxNotebook if specified orientation not available.
 
 wxWinCE:
 
