@@ -121,6 +121,7 @@ public:
   // addresses
   virtual bool GetLocal(wxSockAddress& addr_man) const;
   virtual bool GetPeer(wxSockAddress& addr_man) const;
+  virtual bool SetLocal(wxSockAddress& local);
 
   // base IO
   virtual bool  Close();
@@ -217,7 +218,7 @@ private:
   // the initialization count, GSocket is initialized if > 0
   static size_t m_countInit;
 
-    DECLARE_NO_COPY_CLASS(wxSocketBase)
+  DECLARE_NO_COPY_CLASS(wxSocketBase)
 };
 
 
@@ -254,8 +255,12 @@ public:
   virtual ~wxSocketClient();
 
   virtual bool Connect(wxSockAddress& addr, bool wait = true);
+  virtual bool Connect(wxSockAddress& addr, wxSockAddress& local, bool wait = true);
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
+
+private:
+  virtual bool DoConnect(wxSockAddress& addr, wxSockAddress* local, bool wait = true);
 
   DECLARE_NO_COPY_CLASS(wxSocketClient)
 };
