@@ -851,9 +851,11 @@ static void ReleaseVariant(VARIANTARG *pvarg)
                 break;
 
             case VT_I2:
+            case VT_I4:
             case VT_BOOL:
             case VT_R8:
             case VT_ERROR:        // to avoid erroring on an error return from Excel
+            case VT_EMPTY:
                 // no work for these types
                 break;
 
