@@ -19,9 +19,54 @@
 // Helper functions for dealing with SWIG objects and such.  These are
 // located here so they know about the SWIG types and functions declared
 // in the wrapper code.
+%}
 
+
+#if SWIG_VERSION < 0x010328
+%{
+// Make a SWIGified pointer object suitable for a .this attribute
+PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
+    
+    PyObject* robj = NULL;
+
+    swig_type_info* swigType = wxPyFindSwigType(className);
+    wxCHECK_MSG(swigType != NULL, NULL, wxT("Unknown type in wxPyMakeSwigPtr"));
+
+#ifdef SWIG_COBJECT_TYPES
+    robj = PySwigObject_FromVoidPtrAndDesc((void *) ptr, (char *)swigType->name);
+#else
+    {
+        char result[1024];
+        robj = SWIG_PackVoidPtr(result, ptr, swigType->name, sizeof(result)) ?
+            PyString_FromString(result) : 0;
+    }
+#endif
+    return robj;
+}
+%}
+
+#else // SWIG_VERSION >= 1.3.28
+%{
+// Make a SWIGified pointer object suitable for a .this attribute
+PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
+    
+    PyObject* robj = NULL;
+
+    swig_type_info* swigType = wxPyFindSwigType(className);
+    wxCHECK_MSG(swigType != NULL, NULL, wxT("Unknown type in wxPyMakeSwigPtr"));
+
+    robj = PySwigObject_New(ptr, swigType, 0);
+    return robj;
+}
+%}
+#endif
+
+
+
+
+%{    
 #include <wx/hashmap.h>
-    WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
+WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 
 
 // Maintains a hashmap of className to swig_type_info pointers.  Given the
@@ -100,29 +145,6 @@ bool wxPyConvertSwigPtr(PyObject* obj, void **ptr,
 }
 
 
-// Make a SWIGified pointer object suitable for a .this attribute
-PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
-    
-    PyObject* robj = NULL;
-
-    swig_type_info* swigType = wxPyFindSwigType(className);
-    wxCHECK_MSG(swigType != NULL, NULL, wxT("Unknown type in wxPyMakeSwigPtr"));
-
-#if SWIG_VERSION < 0x010328
-#ifdef SWIG_COBJECT_TYPES
-    robj = PySwigObject_FromVoidPtrAndDesc((void *) ptr, (char *)swigType->name);
-#else
-    {
-        char result[1024];
-        robj = SWIG_PackVoidPtr(result, ptr, swigType->name, sizeof(result)) ?
-            PyString_FromString(result) : 0;
-    }
-#endif
-#else // SWIG_VERSION >= 1.3.28
-    robj = PySwigObject_New(ptr, swigType, 0);
-#endif
-    return robj;
-}
 
 
 // Python's PyInstance_Check does not return True for instances of new-style

@@ -93,6 +93,7 @@ typedef unsigned long   wxUIntPtr;
 #define %noautodoc      %feature("noautodoc")
 
 #if SWIG_VERSION >= 0x010327
+#undef %kwargs
 #define %kwargs         %feature("kwargs", "1")
 #define %nokwargs       %feature("kwargs", "0")
 #else
