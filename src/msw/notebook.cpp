@@ -282,7 +282,7 @@ bool wxNotebook::Create(wxWindow *parent,
     const int verComCtl32 = wxApp::GetComCtl32Version();
     if ( verComCtl32 == 600 )
     {
-        style &= ~(wxNB_BOTTOM | wxNB_LEFT | wxNB_RIGHT);
+        style &= ~(wxBK_BOTTOM | wxBK_LEFT | wxBK_RIGHT);
     }
 #endif //wxUSE_UXTHEME
 
@@ -355,7 +355,7 @@ bool wxNotebook::Create(wxWindow *parent,
     if ( verComCtl32 == 600 ) 
     {
         // check if we use themes at all -- if we don't, we're still okay
-        if ( wxUxThemeEngine::GetIfActive() && (style & (wxNB_BOTTOM|wxNB_LEFT|wxNB_RIGHT)))
+        if ( wxUxThemeEngine::GetIfActive() && (style & (wxBK_BOTTOM|wxBK_LEFT|wxBK_RIGHT)))
         {
             wxUxThemeEngine::GetIfActive()->SetWindowTheme((HWND)this->GetHandle(), L"", L"");
             SetBackgroundColour(GetThemeBackgroundColour());    //correct the background color for the new non-themed control
