@@ -686,8 +686,8 @@ size_t wxDataObject::GetBufferOffset(const wxDataFormat& format )
 const void* wxDataObject::GetSizeFromBuffer( const void* buffer, size_t* size,
                                                const wxDataFormat& format )
 {
-    SIZE_T realsz = ::HeapSize(::GetProcessHeap(), 0, buffer);
-    if ( realsz == (SIZE_T)-1 )
+    size_t realsz = ::HeapSize(::GetProcessHeap(), 0, buffer);
+    if ( realsz == (size_t)-1 )
     {
         // note that HeapSize() does not set last error
         wxLogApiError(wxT("HeapSize"), 0);
