@@ -19,6 +19,10 @@
 // Helper functions for dealing with SWIG objects and such.  These are
 // located here so they know about the SWIG types and functions declared
 // in the wrapper code.
+
+static
+swig_type_info* wxPyFindSwigType(const wxChar* className);
+ 
 %}
 
 
