@@ -97,11 +97,12 @@ void wxPropertySheetDialog::LayoutDialog(int centreFlags)
     GetSizer()->SetSizeHints(this);
     if (centreFlags)
         Centre(centreFlags);
+#else
+    wxUnusedVar(centreFlags);
 #endif
 #if defined(__SMARTPHONE__)
     if (m_bookCtrl)
         m_bookCtrl->SetFocus();
-    wxUnusedVar(centreFlags);
 #endif
 }
 
