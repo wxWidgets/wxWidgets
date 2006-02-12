@@ -394,6 +394,14 @@ gtk_pizza_set_size (GtkPizza   *pizza,
     g_return_if_fail (GTK_IS_PIZZA (pizza));
     g_return_if_fail (widget != NULL);
 
+    /* this really shouldn't happen -- but it does, a lot, right now and we
+       can't pass negative values to gtk_widget_set_size_request(), so filter
+       them out here */
+    if ( width < 0 )
+        width = 0;
+    if ( height < 0 )
+        height = 0;
+
     children = pizza->children;
     while (children)
     {
