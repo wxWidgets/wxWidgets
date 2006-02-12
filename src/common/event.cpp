@@ -1139,7 +1139,7 @@ void wxEvtHandler::ProcessPendingEvents()
 
         wxENTER_CRIT_SECT( Lock() );
 
-        if ( !--n )
+        if ( --n == 0 )
             break;
     }
 

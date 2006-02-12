@@ -1359,7 +1359,7 @@ void wxWindowMSW::Thaw()
 {
     wxASSERT_MSG( m_frozenness > 0, _T("Thaw() without matching Freeze()") );
 
-    if ( !--m_frozenness )
+    if ( --m_frozenness == 0 )
     {
         if ( IsShown() )
         {

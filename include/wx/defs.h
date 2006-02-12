@@ -73,6 +73,12 @@
 #   pragma warning(disable:4512)    /*  operator=() couldn't be generated */
 #   pragma warning(disable:4710)    /*  function not inlined */
 
+    /* For VC++ 5.0 for release mode, the warning 'C4702: unreachable code */
+    /* is buggy, and occurs for code that does actually get executed */
+#   if !defined __WXDEBUG__ && __VISUALC__ <= 1100
+#       pragma warning(disable:4702)    /* unreachable code */ 
+#   endif
+
 /* Deprecated functions such as sprintf, localtime */
 #if __VISUALC__ >= 1400
 #define _CRT_SECURE_NO_DEPRECATE 1
@@ -895,40 +901,42 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
        explicit with /Wp64 option, suppress them as we really know what we're
        doing here. Same thing with icc with -Wall.
      */
-#if defined(__VISUALC__) || defined(__INTELC__)
-    #pragma warning(push)
-    #ifdef __VISUALC__
-        /* pointer truncation from '' to '' */
-        #pragma warning(disable: 4311)
-    #elif defined(__INTELC__)
-        /* conversion from pointer to same-sized integral type */
-        #pragma warning(disable: 1684)
+#ifdef __VISUALC__
+    #if __VISUALC__ >= 1200
+        #pragma warning(push)
     #endif
+    /* pointer truncation from '' to '' */
+    #pragma warning(disable: 4311)
+#elif defined(__INTELC__)
+    #pragma warning(push)
+    /* conversion from pointer to same-sized integral type */
+    #pragma warning(disable: 1684)
 #endif
 
     return wx_reinterpret_cast(wxUIntPtr, p);
 
-#if defined(__VISUALC__) || defined(__INTELC__)
+#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
     #pragma warning(pop)
 #endif
 }
 
 inline void *wxUIntToPtr(wxUIntPtr p)
 {
-#if defined(__VISUALC__) || defined(__INTELC__)
-    #pragma warning(push)
-    #ifdef __VISUALC__
-        /* conversion to type of greater size */
-        #pragma warning(disable: 4312)
-    #elif defined(__INTELC__)
-        /* invalid type conversion: "wxUIntPtr={unsigned long}" to "void *" */
-        #pragma warning(disable: 171)
+#ifdef __VISUALC__
+    #if __VISUALC__ >= 1200
+        #pragma warning(push)
     #endif
+    /* conversion to type of greater size */
+    #pragma warning(disable: 4312)
+#elif defined(__INTELC__)
+    #pragma warning(push)
+    /* invalid type conversion: "wxUIntPtr={unsigned long}" to "void *" */
+    #pragma warning(disable: 171)
 #endif
 
     return wx_reinterpret_cast(void *, p);
 
-#if defined(__VISUALC__) || defined(__INTELC__)
+#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
     #pragma warning(pop)
 #endif
 }

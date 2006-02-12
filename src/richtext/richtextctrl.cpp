@@ -703,7 +703,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
     startX = 0;
     startY = startY * ppuY;
 
-    int sx, sy;
+    int sx = 0, sy = 0;
     GetVirtualSize(& sx, & sy);
     sx = 0;
     if (ppuY != 0)
@@ -796,7 +796,7 @@ bool wxRichTextCtrl::IsPositionVisible(long pos) const
     startX = 0;
     startY = startY * ppuY;
 
-    int sx, sy;
+    int sx = 0, sy = 0;
     GetVirtualSize(& sx, & sy);
     sx = 0;
     if (ppuY != 0)

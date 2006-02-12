@@ -392,7 +392,7 @@ void wxRadioBox::DoSetToolTip(wxToolTip *tooltip)
 
 wxSize wxRadioBox::GetMaxButtonSize() const
 {
-    int widthMax, heightMax, width, height;
+    int widthMax, heightMax, width = 0, height = 0;
     widthMax = heightMax = 0;
 
     int count = GetCount();
