@@ -22,6 +22,8 @@
 
 #if wxUSE_SPINBTN 
 
+#include "wx/containr.h"
+
 class WXDLLEXPORT wxSpinButton;
 class WXDLLEXPORT wxTextCtrl;
 
