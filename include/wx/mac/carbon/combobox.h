@@ -12,6 +12,7 @@
 #ifndef _WX_COMBOBOX_H_
 #define _WX_COMBOBOX_H_
 
+#include "wx/containr.h"
 #include "wx/choice.h"
 
 WXDLLEXPORT_DATA(extern const wxChar) wxComboBoxNameStr[];
