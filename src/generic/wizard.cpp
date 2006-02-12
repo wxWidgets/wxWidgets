@@ -52,6 +52,8 @@ class wxWizardSizer : public wxSizer
 public:
     wxWizardSizer(wxWizard *owner);
 
+    virtual wxSizerItem *Insert(size_t index, wxSizerItem *item);
+
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
 
@@ -61,6 +63,10 @@ public:
     // return the border which can be either set using wxWizard::SetBorder() or
     // have default value
     int GetBorder() const;
+
+    // hide the pages which we temporarily "show" when they're added to this
+    // sizer (see Insert())
+    void HidePages();
 
 private:
     wxSize SiblingSize(wxSizerItem *child);
@@ -175,6 +181,31 @@ wxWizardSizer::wxWizardSizer(wxWizard *owner)
              : m_owner(owner)
 {
     m_childSizeValid = false;
+}
+
+wxSizerItem *wxWizardSizer::Insert(size_t index, wxSizerItem *item)
+{
+    if ( item->IsWindow() )
+    {
+        // we must pretend that the window is shown as otherwise it wouldn't be
+        // taken into account for the layout -- but avoid really showing it, so
+        // just set the internal flag instead of calling wxWindow::Show()
+        item->GetWindow()->wxWindowBase::Show();
+    }
+
+    return wxSizer::Insert(index, item);
+}
+
+void wxWizardSizer::HidePages()
+{
+    for ( wxSizerItemList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxSizerItem * const item = node->GetData();
+        if ( item->IsWindow() )
+            item->GetWindow()->wxWindowBase::Show(false);
+    }
 }
 
 void wxWizardSizer::RecalcSizes()
@@ -511,6 +542,10 @@ void wxWizard::FinishLayout()
         if ( m_posWizard == wxDefaultPosition )
             CentreOnScreen();
     }
+
+    // now that our layout is computed correctly, hide the pages artificially
+    // shown in wxWizardSizer::Insert() back again
+    m_sizerPage->HidePages();
 }
 
 void wxWizard::FitToPage(const wxWizardPage *page)
