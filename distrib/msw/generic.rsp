@@ -24,13 +24,11 @@ build/bakefiles/formats/*.bkl
 build/bakefiles/formats/*.empy
 build/bakefiles/formats/README
 build/bakefiles/formats/*.bkmanifest
-build/bakefiles/wxpresets/*.bkl
 build/bakefiles/wxpresets/*.txt
 build/bakefiles/wxpresets/presets/*.bkl
 build/bakefiles/wxpresets/sample/*.bkl
 build/bakefiles/wxpresets/sample/*.in
 build/bakefiles/wxpresets/sample/*.cpp
-build/bakefiles/wxpresets/*.bkl
 build/update-setup-h
 
 build/aclocal/*.m4
