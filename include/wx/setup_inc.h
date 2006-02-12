@@ -254,7 +254,7 @@
 #define wxUSE_STREAMS       1
 
 // Use standard C++ streams if 1 instead of wx streams in some places. If
-// disabled (default),.wx streams are used everywhere and wxWidgets doesn't
+// disabled (default), wx streams are used everywhere and wxWidgets doesn't
 // depend on the standard streams library.
 //
 // Notice that enabling this does not replace wx streams with std streams
