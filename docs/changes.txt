@@ -204,7 +204,7 @@ wxWinCE:
 - Fixed getting standard folder paths on WinCE.
 - Support for backspace key on smartphone.
 - Made both windows wxMediaCtrl Windows backends compilable with wxWinCE - it
-  is reccommended that you use wxMEDIABACKEND_WMP10 on this platform
+  is recommended that you use wxMEDIABACKEND_WMP10 on this platform
   directly, however.
 
 wxUniv:
