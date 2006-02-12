@@ -5035,7 +5035,10 @@ if test "$wxUSE_OPTIMISE" = "no" ; then
     fi
 else
     if test "$GCC" = yes ; then
-        OPTIMISE="-O2"
+        dnl Switch on optimisation but keep strict-aliasing off for now (see
+        dnl -fstrict-aliasing in the gcc manual). When it is switched back on
+        dnl consider using -Wstrict-aliasing=2.
+        OPTIMISE="-O2 -fno-strict-aliasing"
 
         dnl VZ: does anybody know what does this do??
         case "${host}" in

@@ -37524,7 +37524,7 @@ if test "$wxUSE_OPTIMISE" = "no" ; then
     fi
 else
     if test "$GCC" = yes ; then
-        OPTIMISE="-O2"
+                                OPTIMISE="-O2 -fno-strict-aliasing"
 
                 case "${host}" in
             i586-*-*|i686-*-* )
@@ -44822,8 +44822,7 @@ EOF
 
 
 
-    RESCOMP=
-    SETFILE=
+            SETFILE=
 
     case ${BAKEFILE_HOST} in
         *-*-cygwin* | *-*-mingw32* )
