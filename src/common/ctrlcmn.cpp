@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        ctrlcmn.cpp
+// Name:        src/common/ctrlcmn.cpp
 // Purpose:     wxControl common interface
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -29,6 +29,7 @@
 #ifndef WX_PRECOMP
     #include "wx/control.h"
     #include "wx/log.h"
+    #include "wx/radiobut.h"
 #endif
 
 #if wxUSE_STATBMP
@@ -177,4 +178,3 @@ wxSize wxStaticBitmapBase::DoGetBestSize() const
 #endif // wxUSE_STATBMP
 
 #endif // wxUSE_CONTROLS
-
