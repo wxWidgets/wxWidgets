@@ -42,14 +42,14 @@ AC_LANG_POP(C++)
 dnl Based on autoconf _AC_LANG_COMPILER_GNU
 AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER_XLC],
 [AC_CACHE_CHECK([whether we are using the IBM xlC _AC_LANG compiler],
-    [wx_cv_[]_AC_LANG_ABBREV[]_compiler_xlc],
+    [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_xlc],
     [AC_TRY_COMPILE([],[#ifndef __xlC__
        choke me
 #endif
 ],
-        [wx_compiler_xlc=yes],
-        [wx_compiler_xlc=no])
-    wx_cv_[]_AC_LANG_ABBREV[]_compiler_xlc=$wx_compiler_xlc
+        [bakefile_compiler_xlc=yes],
+        [bakefile_compiler_xlc=no])
+    bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_xlc=$bakefile_compiler_xlc
     ])
 ])
 
@@ -57,7 +57,7 @@ dnl Loosely based on autoconf AC_PROG_CC
 AC_DEFUN([AC_BAKEFILE_PROG_XLCC],
 [AC_LANG_PUSH(C)
 _AC_BAKEFILE_LANG_COMPILER_XLC
-XLCC=`test $wx_cv_c_compiler_xlc = yes && echo yes`
+XLCC=`test $bakefile_cv_c_compiler_xlc = yes && echo yes`
 AC_LANG_POP(C)
 ])
 
@@ -65,7 +65,7 @@ dnl Loosely based on autoconf AC_PROG_CXX
 AC_DEFUN([AC_BAKEFILE_PROG_XLCXX],
 [AC_LANG_PUSH(C++)
 _AC_BAKEFILE_LANG_COMPILER_XLC
-XLCXX=`test $wx_cv_cxx_compiler_xlc = yes && echo yes`
+XLCXX=`test $bakefile_cv_cxx_compiler_xlc = yes && echo yes`
 AC_LANG_POP(C++)
 ])
 
@@ -97,6 +97,10 @@ AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER],
     fi
 ])
 
+dnl recent versions of SGI mipsPro compiler define _SGI_COMPILER_VERSION
+dnl
+dnl NB: old versions define _COMPILER_VERSION but this could probably be
+dnl     defined by other compilers too so don't test for it to be safe
 AC_DEFUN([AC_BAKEFILE_PROG_SGICC],
 [
     _AC_BAKEFILE_LANG_COMPILER(SGI, C, _SGI_COMPILER_VERSION, SGICC=yes)
@@ -107,18 +111,49 @@ AC_DEFUN([AC_BAKEFILE_PROG_SGICXX],
     _AC_BAKEFILE_LANG_COMPILER(SGI, C++, _SGI_COMPILER_VERSION, SGICXX=yes)
 ])
 
-dnl Loosely based on autoconf AC_PROG_CC
+dnl Sun compiler defines __SUNPRO_C/__SUNPRO_CC
 AC_DEFUN([AC_BAKEFILE_PROG_SUNCC],
 [
     _AC_BAKEFILE_LANG_COMPILER(Sun, C, __SUNPRO_C, SUNCC=yes)
 ])
 
-dnl Loosely based on autoconf AC_PROG_CC
 AC_DEFUN([AC_BAKEFILE_PROG_SUNCXX],
 [
     _AC_BAKEFILE_LANG_COMPILER(Sun, C++, __SUNPRO_CC, SUNCXX=yes)
 ])
 
+dnl Intel icc compiler defines __INTEL_COMPILER for both C and C++
+AC_DEFUN([AC_BAKEFILE_PROG_INTELCC],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Intel, C, __INTEL_COMPILER, INTELCC=yes)
+])
+
+AC_DEFUN([AC_BAKEFILE_PROG_INTELCXX],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Intel, C++, __INTEL_COMPILER, INTELCXX=yes)
+])
+
+dnl HP-UX aCC: see http://docs.hp.com/en/6162/preprocess.htm#macropredef
+AC_DEFUN([AC_BAKEFILE_PROG_HPCC],
+[
+    _AC_BAKEFILE_LANG_COMPILER(HP, C, __HP_cc, HPCC=yes)
+])
+
+AC_DEFUN([AC_BAKEFILE_PROG_HPCXX],
+[
+    _AC_BAKEFILE_LANG_COMPILER(HP, C++, __HP_aCC, HPCXX=yes)
+])
+
+dnl Tru64 cc and cxx
+AC_DEFUN([AC_BAKEFILE_PROG_COMPAQCC],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Compaq, C, __DECC, COMPAQCC=yes)
+])
+
+AC_DEFUN([AC_BAKEFILE_PROG_COMPAQCXX],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Compaq, C++, __DECCXX, COMPAQCXX=yes)
+])
 
 dnl ===========================================================================
 dnl macros to detect specialty compiler options
@@ -126,7 +161,7 @@ dnl ===========================================================================
 
 dnl Figure out if we need to pass -ext o to compiler (MetroWerks)
 AC_DEFUN([AC_BAKEFILE_METROWERKS_EXTO],
-[AC_CACHE_CHECK([if the _AC_LANG compiler requires -ext o], wx_cv_[]_AC_LANG_ABBREV[]_exto,
+[AC_CACHE_CHECK([if the _AC_LANG compiler requires -ext o], bakefile_cv_[]_AC_LANG_ABBREV[]_exto,
 dnl First create an empty conf test
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 dnl Now remove .o and .c.o or .cc.o
@@ -137,7 +172,7 @@ dnl If the test succeeded look for conftest.c.o or conftest.cc.o
 [for ac_file in `(ls conftest.* 2>/dev/null)`; do
     case $ac_file in
         conftest.$ac_ext.o)
-            wx_cv_[]_AC_LANG_ABBREV[]_exto="-ext o"
+            bakefile_cv_[]_AC_LANG_ABBREV[]_exto="-ext o"
             ;;
         *)
             ;;
@@ -149,12 +184,12 @@ done],
 rm -f conftest.$ac_ext.o conftest.$ac_objext conftest.$ac_ext
 ]) dnl AC_CACHE_CHECK
 
-if test "x$wx_cv_[]_AC_LANG_ABBREV[]_exto" '!=' "x"; then
+if test "x$bakefile_cv_[]_AC_LANG_ABBREV[]_exto" '!=' "x"; then
     if test "[]_AC_LANG_ABBREV[]" = "c"; then
-        CFLAGS="$wx_cv_[]_AC_LANG_ABBREV[]_exto $CFLAGS"
+        CFLAGS="$bakefile_cv_[]_AC_LANG_ABBREV[]_exto $CFLAGS"
     fi
     if test "[]_AC_LANG_ABBREV[]" = "cxx"; then
-        CXXFLAGS="$wx_cv_[]_AC_LANG_ABBREV[]_exto $CXXFLAGS"
+        CXXFLAGS="$bakefile_cv_[]_AC_LANG_ABBREV[]_exto $CXXFLAGS"
     fi
 fi
 ]) dnl AC_DEFUN
@@ -163,33 +198,61 @@ fi
 dnl ===========================================================================
 dnl Macros to do all of the compiler detections as one macro
 dnl ===========================================================================
+
+dnl check for different proprietary compilers depending on target platform
+dnl _AC_BAKEFILE_PROG_COMPILER(LANG)
+AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
+[
+    AC_PROG_$1
+    AC_BAKEFILE_PROG_INTEL$1
+    dnl if we're using gcc, we can't be using any of incompatible compilers
+    if test "x$G$1" != "xyes"; then
+        if test "x$1" = "xC"; then
+            AC_BAKEFILE_METROWERKS_EXTO
+            if test "x$bakefile_cv_c_exto" '!=' "x"; then
+                unset ac_cv_prog_cc_g
+                _AC_PROG_CC_G
+            fi
+        fi
+
+        dnl most of these compilers are only used under well-defined OS so
+        dnl don't waste time checking for them on other ones
+        case `uname -s` in
+            AIX*)
+                AC_BAKEFILE_PROG_XL$1
+                ;;
+
+            Darwin)
+                AC_BAKEFILE_PROG_MW$1
+                AC_BAKEFILE_PROG_XL$1
+                ;;
+
+            IRIX*)
+                AC_BAKEFILE_PROG_SGI$1
+                ;;
+
+            HP-UX*)
+                AC_BAKEFILE_PROG_HP$1
+                ;;
+
+            OSF1)
+                AC_BAKEFILE_PROG_COMPAQ$1
+                ;;
+
+            SunOS)
+                AC_BAKEFILE_PROG_SUN$1
+                ;;
+        esac
+    fi
+])
+
 AC_DEFUN([AC_BAKEFILE_PROG_CC],
 [
-    AC_PROG_CC
-    AC_BAKEFILE_METROWERKS_EXTO
-    dnl By the time we find out that we need -ext o some tests have failed.
-    if test "x$wx_cv_c_exto" '!=' "x"; then
-        unset ac_cv_prog_cc_g
-        _AC_PROG_CC_G
-    fi
-    AC_BAKEFILE_PROG_MWCC
-    AC_BAKEFILE_PROG_XLCC
-    AC_BAKEFILE_PROG_SGICC
-    AC_BAKEFILE_PROG_SUNCC
+    _AC_BAKEFILE_PROG_COMPILER(CC)
 ])
 
 AC_DEFUN([AC_BAKEFILE_PROG_CXX],
 [
-    AC_PROG_CXX
-    AC_BAKEFILE_METROWERKS_EXTO
-    dnl By the time we find out that we need -ext o some tests have failed.
-    if test "x$wx_cv_cxx_exto" '!=' "x"; then
-        unset ac_cv_prog_cxx_g
-        _AC_PROG_CXX_G
-    fi
-    AC_BAKEFILE_PROG_MWCXX
-    AC_BAKEFILE_PROG_XLCXX
-    AC_BAKEFILE_PROG_SGICXX
-    AC_BAKEFILE_PROG_SUNCXX
+    _AC_BAKEFILE_PROG_COMPILER(CXX)
 ])
 
