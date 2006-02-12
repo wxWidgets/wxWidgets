@@ -41,7 +41,7 @@ WX_DECLARE_AUTOOLE(wxAutoITypeInfo, ITypeInfo)
 WX_DECLARE_AUTOOLE(wxAutoIConnectionPoint, IConnectionPoint)
 WX_DECLARE_AUTOOLE(wxAutoIConnectionPointContainer, IConnectionPointContainer)
 
-DEFINE_EVENT_TYPE(wxEVT_ACTIVEX);
+DEFINE_EVENT_TYPE(wxEVT_ACTIVEX)
 
 // Ole class helpers (sort of MFC-like) from wxActiveX
 #define DECLARE_OLE_UNKNOWN(cls)\
@@ -69,21 +69,21 @@ DEFINE_EVENT_TYPE(wxEVT_ACTIVEX);
         if (! ppvObject)\
         {\
             return E_FAIL;\
-        };\
+        }\
         const char *desc = NULL;\
         cls::_GetInterface(this, iid, ppvObject, desc);\
         if (! *ppvObject)\
         {\
             return E_NOINTERFACE;\
-        };\
+        }\
         ((IUnknown * )(*ppvObject))->AddRef();\
         return S_OK;\
-    };\
+    }\
     ULONG STDMETHODCALLTYPE cls::AddRef()\
     {\
         InterlockedIncrement(&refCount.l);\
         return refCount.l;\
-    };\
+    }\
     ULONG STDMETHODCALLTYPE cls::Release()\
     {\
         if (refCount.l > 0)\
@@ -93,7 +93,7 @@ DEFINE_EVENT_TYPE(wxEVT_ACTIVEX);
             {\
                 delete this;\
                 return 0;\
-            };\
+            }\
             return refCount.l;\
         }\
         else\
@@ -103,7 +103,7 @@ DEFINE_EVENT_TYPE(wxEVT_ACTIVEX);
     {\
         InterlockedIncrement(&lockCount.l);\
         return lockCount.l;\
-    };\
+    }\
     ULONG STDMETHODCALLTYPE cls::ReleaseLock()\
     {\
         if (lockCount.l > 0)\
@@ -381,7 +381,7 @@ public:
         if (! SUCCEEDED(hr))
         {
             return E_UNEXPECTED;
-        };
+        }
 
         hr = QueryInterface(IID_IOleInPlaceUIWindow, (void **) ppDoc);
         if (! SUCCEEDED(hr))
@@ -389,7 +389,7 @@ public:
             (*ppFrame)->Release();
             *ppFrame = NULL;
             return E_UNEXPECTED;
-        };
+        }
 
         RECT rect;
         ::GetClientRect(m_hWndParent, &rect);
@@ -398,13 +398,13 @@ public:
             lprcPosRect->left = lprcPosRect->top = 0;
             lprcPosRect->right = rect.right;
             lprcPosRect->bottom = rect.bottom;
-        };
+        }
         if (lprcClipRect)
         {
             lprcClipRect->left = lprcClipRect->top = 0;
             lprcClipRect->right = rect.right;
             lprcClipRect->bottom = rect.bottom;
-        };
+        }
 
         memset(lpFrameInfo, 0, sizeof(OLEINPLACEFRAMEINFO));
         lpFrameInfo->cb = sizeof(OLEINPLACEFRAMEINFO);
@@ -484,8 +484,8 @@ public:
         case OLEGETMONIKER_UNASSIGN     : return "OLEGETMONIKER_UNASSIGN";
         case OLEGETMONIKER_TEMPFORUSER  : return "OLEGETMONIKER_TEMPFORUSER";
         default                         : return "Bad Enum";
-        };
-    };
+        }
+    }
 
     const char *OleGetWhicMonikerStr(DWORD dwWhichMoniker)
     {
@@ -495,8 +495,8 @@ public:
         case OLEWHICHMK_OBJREL      : return "OLEWHICHMK_OBJREL";
         case OLEWHICHMK_OBJFULL     : return "OLEWHICHMK_OBJFULL";
         default                     : return "Bad Enum";
-        };
-    };
+        }
+    }
     STDMETHOD(GetMoniker)(DWORD, DWORD, IMoniker **){return E_FAIL;}
     HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER * ppContainer)
     {
@@ -623,11 +623,11 @@ public:
                 return E_FAIL;
 
             m_window->m_docView->SetInPlaceSite(inPlaceSite);
-        };
+        }
 
         m_window->m_docView->UIActivate(TRUE);
         return S_OK;
-    };
+    }
 
 
 protected:
@@ -666,7 +666,7 @@ DEFINE_OLE_TABLE(FrameSite)
     OLE_IINTERFACE(IOleDocumentSite)
     OLE_IINTERFACE(IAdviseSink)
     OLE_IINTERFACE(IOleControlSite)
-END_OLE_TABLE;
+END_OLE_TABLE
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -771,7 +771,7 @@ bool wxActiveXEventsInterface(wxActiveXEvents *self, REFIID iid, void **_interfa
         *_interface = (IUnknown *) (IDispatch *) self;
         desc = "Custom Dispatch Interface";
         return true;
-    };
+    }
 
     return false;
 }
@@ -780,7 +780,7 @@ DEFINE_OLE_TABLE(wxActiveXEvents)
     OLE_IINTERFACE(IUnknown)
     OLE_INTERFACE(IID_IDispatch, IDispatch)
     OLE_INTERFACE_CUSTOM(wxActiveXEventsInterface)
-END_OLE_TABLE;
+END_OLE_TABLE
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
