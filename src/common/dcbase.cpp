@@ -788,12 +788,6 @@ void wxDCBase::GradientFillConcentric(const wxRect& rect,
     wxUint8 nR, nG, nB;
 
 
-    //offsets of the current pixel
-    wxInt32 x, y;
-
-    //Color difference
-    wxInt32 nGradient;
-
     //Radius
     wxInt32 cx = rect.GetWidth() / 2;
     wxInt32 cy = rect.GetHeight() / 2;
@@ -807,19 +801,16 @@ void wxDCBase::GradientFillConcentric(const wxRect& rect,
     wxInt32 nCircleOffX = circleCenter.x - (rect.GetWidth() / 2);
     wxInt32 nCircleOffY = circleCenter.y - (rect.GetHeight() / 2);
 
-    for (x = 0; x < rect.GetWidth(); x++)
+    for ( wxInt32 x = 0; x < rect.GetWidth(); x++ )
     {
-        for (y = 0; y < rect.GetHeight(); y++)
+        for ( wxInt32 y = 0; y < rect.GetHeight(); y++ )
         {
             //get color difference
-            nGradient = (
-                         (nRadius -
-                          (wxInt32)sqrt(
-                                        pow(x - cx - nCircleOffX, 2) +
-                                        pow(y - cy - nCircleOffY, 2)
-                                        )
-                          ) * 100
-                         ) / nRadius;
+            wxInt32 nGradient = ((nRadius -
+                                  (wxInt32)sqrt(
+                                    pow((double)(x - cx - nCircleOffX), 2) +
+                                    pow((double)(y - cy - nCircleOffY), 2)
+                                  )) * 100) / nRadius;
 
             //normalize Gradient
             if (nGradient < 0 )
