@@ -88,6 +88,10 @@ affected by this are:
     * wx.wizard.PyWizardPage
 
 
+Added the wx.DC.GradientFillConcentric and wx.DC.GradientFillLinear
+methods.
+
+
 
 
 2.6.3.0

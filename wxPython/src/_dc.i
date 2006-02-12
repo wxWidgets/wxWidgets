@@ -90,6 +90,35 @@ exactly. However the function will still return true.", "");
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE);
     %Rename(FloodFillPoint, bool, FloodFill(const wxPoint& pt, const wxColour& col, int style = wxFLOOD_SURFACE));
 
+    // fill the area specified by rect with a radial gradient, starting from
+    // initialColour in the centre of the cercle and fading to destColour.
+
+    DocDeclStr(
+        void , GradientFillConcentric(const wxRect& rect,
+                                      const wxColour& initialColour, 
+                                      const wxColour& destColour,
+                                      const wxPoint& circleCenter),
+        "Fill the area specified by rect with a radial gradient, starting from
+initialColour in the center of the circle and fading to destColour on
+the outside of the circle.  The circleCenter argument is the relative
+coordinants of the center of the circle in the specified rect.
+
+Note: Currently this function is very slow, don't use it for real-time
+drawing.", "");
+    
+
+    DocDeclStr(
+        void , GradientFillLinear(const wxRect& rect,
+                                  const wxColour& initialColour, 
+                                  const wxColour& destColour,
+                                  wxDirection nDirection = wxEAST),
+        "Fill the area specified by rect with a linear gradient, starting from
+initialColour and eventually fading to destColour. The nDirection
+parameter specifies the direction of the colour change, default is to
+use initialColour on the left part of the rectangle and destColour on
+the right side.", "");
+    
+   
     
     DocStr(
         GetPixel,
