@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/notebook.h
+// Name:        wx/msw/notebook.h
 // Purpose:     MSW/GTK compatible notebook (a.k.a. property sheet)
 // Author:      Robert Roebling
 // Modified by: Vadim Zeitlin for Windows version
@@ -179,16 +179,16 @@ public:
 
       return true;
   }
-#endif // wxUSE_UXTHEME
-
-  // translate wxWin styles to the Windows ones
-  virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
   // return the themed brush for painting our children
   virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, WXHWND hWnd);
 
   // draw child background
   virtual bool MSWPrintChild(WXHDC hDC, wxWindow *win);
+#endif // wxUSE_UXTHEME
+
+  // translate wxWin styles to the Windows ones
+  virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
 protected:
   // common part of all ctors
