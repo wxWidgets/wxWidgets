@@ -39394,7 +39394,7 @@ if test "$wxUSE_OPTIMISE" = "no" ; then
     fi
 else
     if test "$GCC" = yes ; then
-        OPTIMISE_CFLAGS="-O2"
+                                OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
     else
         OPTIMISE_CFLAGS="-O"
     fi
