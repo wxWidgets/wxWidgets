@@ -41,6 +41,8 @@ All:
 - Fixed wxSocketBase::InterruptWait on wxBase.
 - Important code cleanup (Paul Cornett)
 - Added support for wxLongLong in wx stream classes (Mark Junker)
+- wxSOCKET_REUSEADDR can be used with wxSocketClient.
+- Overloaded Connect and SetLocal methods for binding to local address/port.
 
 All (GUI):
 
