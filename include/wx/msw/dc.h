@@ -164,6 +164,11 @@ protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
 
+    virtual void DoGradientFillLinear(const wxRect& rect,
+                                      const wxColour& initialColour,
+                                      const wxColour& destColour,
+                                      wxDirection nDirection = wxEAST);
+
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
 
     virtual void DoDrawPoint(wxCoord x, wxCoord y);

@@ -158,6 +158,27 @@ public:
                    int style = wxFLOOD_SURFACE)
         { return DoFloodFill(pt.x, pt.y, col, style); }
 
+    // fill the area specified by rect with a radial gradient, starting from
+    // initialColour in the centre of the cercle and fading to destColour.
+    void GradientFillConcentric(const wxRect& rect,
+                                const wxColour& initialColour, 
+                                const wxColour& destColour)
+        { GradientFillConcentric(rect, initialColour, destColour,
+                                 wxPoint(rect.GetWidth() / 2,
+                                         rect.GetHeight() / 2)); }
+
+    void GradientFillConcentric(const wxRect& rect,
+                                const wxColour& initialColour, 
+                                const wxColour& destColour,
+                                const wxPoint& circleCenter);
+
+    // fill the area specified by rect with a linear gradient
+    void GradientFillLinear(const wxRect& rect,
+                            const wxColour& initialColour, 
+                            const wxColour& destColour,
+                            wxDirection nDirection = wxEAST)
+        { DoGradientFillLinear(rect, initialColour, destColour, nDirection); }
+
     bool GetPixel(wxCoord x, wxCoord y, wxColour *col) const
         { return DoGetPixel(x, y, col); }
     bool GetPixel(const wxPoint& pt, wxColour *col) const
@@ -645,6 +666,11 @@ protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE) = 0;
 
+    virtual void DoGradientFillLinear(const wxRect& rect,
+                                      const wxColour& initialColour,
+                                      const wxColour& destColour,
+                                      wxDirection nDirection = wxEAST);
+    
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const = 0;
 
     virtual void DoDrawPoint(wxCoord x, wxCoord y) = 0;

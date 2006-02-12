@@ -680,6 +680,165 @@ void wxDCBase::DrawLabel(const wxString& text,
     CalcBoundingBox(x0 + width0, y0 + height);
 }
 
+
+void wxDCBase::DoGradientFillLinear(const wxRect& rect,
+                                    const wxColour& initialColour,
+                                    const wxColour& destColour,
+                                    wxDirection nDirection)
+{
+    // save old pen
+    wxPen oldPen = m_pen;
+
+    wxUint8 nR1 = destColour.Red();
+    wxUint8 nG1 = destColour.Green();
+    wxUint8 nB1 = destColour.Blue();
+    wxUint8 nR2 = initialColour.Red();
+    wxUint8 nG2 = initialColour.Green();
+    wxUint8 nB2 = initialColour.Blue();
+    wxUint8 nR, nG, nB;
+
+    if ( nDirection == wxEAST || nDirection == wxWEST )
+    {
+        wxInt32 x = rect.GetWidth();
+        wxInt32 w = x;              // width of area to shade
+        wxInt32 xDelta = w/256;     // height of one shade bend
+        if (xDelta < 1)
+            xDelta = 1;
+
+        while (x >= xDelta)
+        {
+            x -= xDelta;
+            if (nR1 > nR2)
+                nR = nR1 - (nR1-nR2)*(w-x)/w;
+            else
+                nR = nR1 + (nR2-nR1)*(w-x)/w;
+
+            if (nG1 > nG2)
+                nG = nG1 - (nG1-nG2)*(w-x)/w;
+            else
+                nG = nG1 + (nG2-nG1)*(w-x)/w;
+
+            if (nB1 > nB2)
+                nB = nB1 - (nB1-nB2)*(w-x)/w;
+            else
+                nB = nB1 + (nB2-nB1)*(w-x)/w;
+
+            SetPen(wxPen(wxColour(nR, nG, nB), 1, wxSOLID));
+            if(nDirection == wxEAST)
+                DrawRectangle(rect.GetLeft()+x, rect.GetTop(),
+                        xDelta, rect.GetHeight());
+            else //nDirection == wxWEST
+                DrawRectangle(rect.GetRight()-x-xDelta, rect.GetTop(),
+                        xDelta, rect.GetHeight());
+        }
+    }
+    else  // nDirection == wxNORTH || nDirection == wxSOUTH
+    {
+        wxInt32 y = rect.GetHeight();
+        wxInt32 w = y;              // height of area to shade
+        wxInt32 yDelta = w/255;     // height of one shade bend
+        if (yDelta < 1)
+            yDelta = 1;
+
+        while (y > 0)
+        {
+            y -= yDelta;
+            if (nR1 > nR2)
+                nR = nR1 - (nR1-nR2)*(w-y)/w;
+            else
+                nR = nR1 + (nR2-nR1)*(w-y)/w;
+
+            if (nG1 > nG2)
+                nG = nG1 - (nG1-nG2)*(w-y)/w;
+            else
+                nG = nG1 + (nG2-nG1)*(w-y)/w;
+
+            if (nB1 > nB2)
+                nB = nB1 - (nB1-nB2)*(w-y)/w;
+            else
+                nB = nB1 + (nB2-nB1)*(w-y)/w;
+
+            SetPen(wxPen(wxColour(nR, nG, nB), 1, wxSOLID));
+            if(nDirection == wxNORTH)
+                DrawRectangle(rect.GetLeft(), rect.GetTop()+y,
+                        rect.GetWidth(), yDelta);
+            else //nDirection == wxSOUTH
+                DrawRectangle(rect.GetLeft(), rect.GetBottom()-y-yDelta,
+                        rect.GetWidth(), yDelta);
+        }
+    }
+
+    SetPen(oldPen);
+}
+
+void wxDCBase::GradientFillConcentric(const wxRect& rect,
+                                      const wxColour& initialColour,
+                                      const wxColour& destColour,
+                                      const wxPoint& circleCenter)
+{
+    //save the old pen color
+    wxColour oldPenColour = m_pen.GetColour();
+
+    wxUint8 nR1 = destColour.Red();
+    wxUint8 nG1 = destColour.Green();
+    wxUint8 nB1 = destColour.Blue();
+    wxUint8 nR2 = initialColour.Red();
+    wxUint8 nG2 = initialColour.Green();
+    wxUint8 nB2 = initialColour.Blue();
+    wxUint8 nR, nG, nB;
+
+
+    //offsets of the current pixel
+    wxInt32 x, y;
+
+    //Color difference
+    wxInt32 nGradient;
+
+    //Radius
+    wxInt32 cx = rect.GetWidth() / 2;
+    wxInt32 cy = rect.GetHeight() / 2;
+    wxInt32 nRadius;
+    if (cx < cy)
+        nRadius = cx;
+    else
+        nRadius = cy;
+
+    //Offset of circle
+    wxInt32 nCircleOffX = circleCenter.x - (rect.GetWidth() / 2);
+    wxInt32 nCircleOffY = circleCenter.y - (rect.GetHeight() / 2);
+
+    for (x = 0; x < rect.GetWidth(); x++)
+    {
+        for (y = 0; y < rect.GetHeight(); y++)
+        {
+            //get color difference
+            nGradient = (
+                         (nRadius -
+                          (wxInt32)sqrt(
+                                        pow(x - cx - nCircleOffX, 2) +
+                                        pow(y - cy - nCircleOffY, 2)
+                                        )
+                          ) * 100
+                         ) / nRadius;
+
+            //normalize Gradient
+            if (nGradient < 0 )
+                nGradient = 0;
+
+            //get dest colors
+            nR = nR1 + ((nR2 - nR1) * nGradient / 100);
+            nG = nG1 + ((nG2 - nG1) * nGradient / 100);
+            nB = nB1 + ((nB2 - nB1) * nGradient / 100);
+
+            //set the pixel
+            m_pen.SetColour(wxColour(nR,nG,nB));
+            DrawPoint(wxPoint(x + rect.GetLeft(), y + rect.GetTop()));
+        }
+    }
+    //return old pen color
+    m_pen.SetColour(oldPenColour);
+}
+
 /*
 Notes for wxWidgets DrawEllipticArcRot(...)
 

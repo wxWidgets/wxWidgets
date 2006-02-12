@@ -196,6 +196,37 @@ private:
     DECLARE_NO_COPY_CLASS(StretchBltModeChanger)
 };
 
+// support for dynamic loading of msimg32.dll which we use for some functions
+class wxMSImg32DLL
+{
+public:
+    // return the symbol with the given name if the DLL not loaded or symbol
+    // not present
+    static void *GetSymbol(const wxChar *name)
+    {
+        wxLogNull noLog;
+
+        if ( !ms_triedToLoad )
+        {
+            ms_triedToLoad = true;
+            ms_dll.Load(_T("msimg32"));
+        }
+
+        return ms_dll.IsLoaded() ? ms_dll.GetSymbol(name) : NULL;
+    }
+
+private:
+    static wxDynamicLibrary ms_dll;
+    static bool ms_triedToLoad;
+};
+
+wxDynamicLibrary wxMSImg32DLL::ms_dll;
+bool wxMSImg32DLL::ms_triedToLoad = false;
+
+// helper macro for getting the symbols from msimg32.dll: it supposes that a
+// type "name_t" is defined and casts the returned symbol to it automatically
+#define wxMSIMG32_SYMBOL(name) (name ## _t)wxMSImg32DLL::GetSymbol(_T(#name))
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -2483,32 +2514,7 @@ static bool AlphaBlt(HDC hdcDst,
                                         HDC,int,int,int,int,
                                         BLENDFUNCTION);
 
-    // bitmaps can be drawn only from GUI thread so there is no need to
-    // protect this static variable from multiple threads
-    static bool s_triedToLoad = false;
-    static AlphaBlend_t pfnAlphaBlend = NULL;
-    if ( !s_triedToLoad )
-    {
-        s_triedToLoad = true;
-
-        // don't give errors about the DLL being unavailable, we're
-        // prepared to handle this
-        wxLogNull nolog;
-
-        wxDynamicLibrary dll(_T("msimg32.dll"));
-        if ( dll.IsLoaded() )
-        {
-            pfnAlphaBlend = (AlphaBlend_t)dll.GetSymbol(_T("AlphaBlend"));
-            if ( pfnAlphaBlend )
-            {
-                // we must keep the DLL loaded if we want to be able to
-                // call AlphaBlend() so just never unload it at all, not a
-                // big deal
-                dll.Detach();
-            }
-        }
-    }
-
+    static AlphaBlend_t pfnAlphaBlend = wxMSIMG32_SYMBOL(AlphaBlend);
     if ( pfnAlphaBlend )
     {
         BLENDFUNCTION bf;
@@ -2609,3 +2615,68 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
 }
 
 #endif // #ifdef wxHAVE_RAW_BITMAP
+
+void wxDC::DoGradientFillLinear (const wxRect& rect,
+                                 const wxColour& initialColour,
+                                 const wxColour& destColour,
+                                 wxDirection nDirection)
+{
+    // use native function if we have compile-time support it and can load it
+    // during run-time (linking to it statically would make the program
+    // unusable on earlier Windows versions)
+#if defined(GRADIENT_FILL_RECT_H) && wxUSE_DYNLIB_CLASS
+    typedef BOOL
+        (WINAPI *GradientFill_t)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
+    static GradientFill_t pfnGradientFill = wxMSIMG32_SYMBOL(GradientFill);
+
+    if ( pfnGradientFill )
+    {
+        GRADIENT_RECT grect;
+        grect.UpperLeft = 0;
+        grect.LowerRight = 1;
+
+        // invert colours direction if not filling from left-to-right or
+        // top-to-bottom
+        int firstVertex = nDirection == wxNORTH || nDirection == wxWEST ? 1 : 0;
+
+        // one vertex for upper left and one for upper-right
+        TRIVERTEX vertices[2];
+
+        vertices[0].x = rect.GetLeft();
+        vertices[0].y = rect.GetTop();
+        vertices[1].x = rect.GetRight();
+        vertices[1].y = rect.GetBottom();
+
+        vertices[firstVertex].Red = initialColour.Red() << 8;
+        vertices[firstVertex].Green = initialColour.Green() << 8;
+        vertices[firstVertex].Blue = initialColour.Blue() << 8;
+        vertices[firstVertex].Alpha = 0;
+        vertices[1 - firstVertex].Red = destColour.Red() << 8;
+        vertices[1 - firstVertex].Green = destColour.Green() << 8;
+        vertices[1 - firstVertex].Blue = destColour.Blue() << 8;
+        vertices[1 - firstVertex].Alpha = 0;
+
+        if (nDirection == wxWEST ||
+            nDirection == wxEAST)
+        if ( (*pfnGradientFill)
+             (
+                GetHdc(),
+                vertices,
+                WXSIZEOF(vertices),
+                &grect,
+                1,
+                nDirection == wxWEST || nDirection == wxEAST
+                    ? GRADIENT_FILL_RECT_H
+                    : GRADIENT_FILL_RECT_V
+             ) )
+        {
+            // skip call of the base class version below
+            return;
+        }
+
+        wxLogLastError(_T("GradientFill"));
+    }
+#endif // wxUSE_DYNLIB_CLASS
+
+    wxDCBase::DoGradientFillLinear(rect, initialColour, destColour, nDirection);
+}
