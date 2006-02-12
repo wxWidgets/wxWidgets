@@ -1667,7 +1667,9 @@ public:
     {
         m_checked =
         m_enabled =
+        m_shown =
         m_setEnabled =
+        m_setShown =
         m_setText =
         m_setChecked = false;
     }
@@ -1675,7 +1677,9 @@ public:
         : wxCommandEvent(event),
           m_checked(event.m_checked),
           m_enabled(event.m_enabled),
+          m_shown(event.m_shown),
           m_setEnabled(event.m_setEnabled),
+          m_setShown(event.m_setShown),
           m_setText(event.m_setText),
           m_setChecked(event.m_setChecked),
           m_text(event.m_text)
@@ -1683,13 +1687,16 @@ public:
 
     bool GetChecked() const { return m_checked; }
     bool GetEnabled() const { return m_enabled; }
+    bool GetShown() const { return m_shown; }
     wxString GetText() const { return m_text; }
     bool GetSetText() const { return m_setText; }
     bool GetSetChecked() const { return m_setChecked; }
     bool GetSetEnabled() const { return m_setEnabled; }
+    bool GetSetShown() const { return m_setShown; }
 
     void Check(bool check) { m_checked = check; m_setChecked = true; }
     void Enable(bool enable) { m_enabled = enable; m_setEnabled = true; }
+    void Show(bool show) { m_shown = show; m_setShown = true; }
     void SetText(const wxString& text) { m_text = text; m_setText = true; }
 
     // Sets the interval between updates in milliseconds.
@@ -1719,7 +1726,9 @@ public:
 protected:
     bool          m_checked;
     bool          m_enabled;
+    bool          m_shown;
     bool          m_setEnabled;
+    bool          m_setShown;
     bool          m_setText;
     bool          m_setChecked;
     wxString      m_text;

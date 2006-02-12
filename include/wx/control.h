@@ -62,6 +62,9 @@ public:
     virtual void SetLabel( const wxString &label );
     virtual bool SetFont(const wxFont& font);
 
+    // wxControl-specific processing after processing the update event
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
+
     // Reserved for future use
     virtual void ReservedControlFunc1() {}
     virtual void ReservedControlFunc2() {}

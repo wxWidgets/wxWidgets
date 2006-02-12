@@ -27,7 +27,7 @@ functions that take a wxUpdateUIEvent argument.
 \wxheading{Remarks}
 
 Without update UI events, an application has to work hard to check/uncheck, enable/disable,
-and set the text for elements such as menu items and toolbar buttons.
+show/hide, and set the text for elements such as menu items and toolbar buttons.
 The code for doing this has to be mixed up with the code that is invoked when
 an action is invoked for a menu item or button.
 
@@ -116,6 +116,12 @@ Check or uncheck the UI element.
 
 Enable or disable the UI element.
 
+\membersection{wxUpdateUIEvent::Show}\label{wxupdateuieventshow}
+
+\func{void}{Show}{\param{bool}{ show}}
+
+Show or hide the UI element.
+
 \membersection{wxUpdateUIEvent::GetChecked}\label{wxupdateuieventgetchecked}
 
 \constfunc{bool}{GetChecked}{\void}
@@ -128,6 +134,12 @@ Returns true if the UI element should be checked.
 
 Returns true if the UI element should be enabled.
 
+\membersection{wxUpdateUIEvent::GetShown}\label{wxupdateuieventgetshown}
+
+\constfunc{bool}{GetShown}{\void}
+
+Returns true if the UI element should be shown.
+
 \membersection{wxUpdateUIEvent::GetSetChecked}\label{wxupdateuieventgetsetchecked}
 
 \constfunc{bool}{GetSetChecked}{\void}
@@ -139,6 +151,12 @@ Returns true if the application has called \helpref{wxUpdateUIEvent::Check}{wxup
 \constfunc{bool}{GetSetEnabled}{\void}
 
 Returns true if the application has called \helpref{wxUpdateUIEvent::Enable}{wxupdateuieventenable}. For wxWidgets internal use only.
+
+\membersection{wxUpdateUIEvent::GetSetShown}\label{wxupdateuieventgetsetshown}
+
+\constfunc{bool}{GetSetShown}{\void}
+
+Returns true if the application has called \helpref{wxUpdateUIEvent::Show}{wxupdateuieventshow}. For wxWidgets internal use only.
 
 \membersection{wxUpdateUIEvent::GetSetText}\label{wxupdateuieventgetsettext}
 

@@ -108,6 +108,13 @@ public:
 
     virtual bool HasTransparentBackground() { return true; }
 
+    // wxCheckBox-specific processing after processing the update event
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event)
+    {
+        if ( event.GetSetChecked() )
+            SetValue(event.GetChecked());
+    }
+
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) { wxFAIL; }
 

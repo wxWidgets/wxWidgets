@@ -471,9 +471,12 @@ wxString wxTextCtrlBase::GetRange(long from, long to) const
 // do the window-specific processing after processing the update event
 void wxTextCtrlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 {
-    if ( event.GetSetEnabled() )
-        Enable(event.GetEnabled());
+    // call inherited, but skip the wxControl's version, and call directly the
+    // wxWindow's one instead, because the only reason why we are overriding this
+    // function is that we want to use SetValue() instead of wxControl::SetLabel()
+    wxWindowBase::DoUpdateWindowUI(event);
 
+    // update text
     if ( event.GetSetText() )
     {
         if ( event.GetText() != GetValue() )

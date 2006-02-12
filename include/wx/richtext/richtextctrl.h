@@ -607,7 +607,10 @@ public:
     void InitCommandEvent(wxCommandEvent& event) const;
 
     /// do the window-specific processing after processing the update event
+    //  (duplicated code from wxTextCtrlBase)
+#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
+#endif
 
     /// Should we inherit colours?
     virtual bool ShouldInheritColours() const { return false; }

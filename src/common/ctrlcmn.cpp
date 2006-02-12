@@ -124,6 +124,32 @@ bool wxControlBase::SetFont(const wxFont& font)
     return wxWindow::SetFont(font);
 }
 
+// wxControl-specific processing after processing the update event
+void wxControlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
+{
+    // call inherited
+    wxWindowBase::DoUpdateWindowUI(event);
+
+    // update label
+    if ( event.GetSetText() )
+    {
+        if ( event.GetText() != GetLabel() )
+            SetLabel(event.GetText());
+    }
+
+    // Unfortunately we don't yet have common base class for
+    // wxRadioButton, so we handle updates of radiobuttons here.
+    // TODO: If once wxRadioButtonBase will exist, move this code there.
+#if wxUSE_RADIOBTN
+    if ( event.GetSetChecked() )
+    {
+        wxRadioButton *radiobtn = wxDynamicCastThis(wxRadioButton);
+        if ( radiobtn )
+            radiobtn->SetValue(event.GetChecked());
+    }
+#endif // wxUSE_RADIOBTN
+}
+
 // ----------------------------------------------------------------------------
 // wxStaticBitmap
 // ----------------------------------------------------------------------------

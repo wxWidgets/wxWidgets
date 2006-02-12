@@ -1581,17 +1581,20 @@ wxString wxRichTextCtrl::GetStringSelection() const
 }
 
 // do the window-specific processing after processing the update event
+#if !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
 void wxRichTextCtrl::DoUpdateWindowUI(wxUpdateUIEvent& event)
 {
-    if ( event.GetSetEnabled() )
-        Enable(event.GetEnabled());
+    // call inherited
+    wxWindowBase::DoUpdateWindowUI(event);
 
+    // update text
     if ( event.GetSetText() )
     {
         if ( event.GetText() != GetValue() )
             SetValue(event.GetText());
     }
 }
+#endif // !wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
 
 // ----------------------------------------------------------------------------
 // hit testing

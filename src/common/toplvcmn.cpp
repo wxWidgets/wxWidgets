@@ -288,9 +288,12 @@ bool wxTopLevelWindowBase::SendIconizeEvent(bool iconized)
 // do the window-specific processing after processing the update event
 void wxTopLevelWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 {
-    if ( event.GetSetEnabled() )
-        Enable(event.GetEnabled());
+    // call inherited, but skip the wxControl's version, and call directly the
+    // wxWindow's one instead, because the only reason why we are overriding this
+    // function is that we want to use SetTitle() instead of wxControl::SetLabel()
+    wxWindowBase::DoUpdateWindowUI(event);
 
+    // update title
     if ( event.GetSetText() )
     {
         if ( event.GetText() != GetTitle() )
