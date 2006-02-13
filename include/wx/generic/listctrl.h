@@ -219,6 +219,11 @@ public:
     virtual bool ShouldInheritColours() const { return false; }
     virtual void SetFocus();
 
+    // take into account the coordinates difference between the container
+    // window and the list control window itself here
+    virtual void DoClientToScreen( int *x, int *y ) const;
+    virtual void DoScreenToClient( int *x, int *y ) const;
+
     virtual wxSize DoGetBestSize() const;
 
     // implementation
