@@ -123,19 +123,14 @@ else
 fi
 echo "" # add a blank line for readability
 
-# TODO: look into whether or not we need to keep anonymous password, and if so
-# add support for something like expect to at least offer the possibility
-# of automatically entering the password if such a tool is installed
-# on the user's computer. For now people have to type the password manually...
-echo "Grabbing source tree, please use 'anoncvs' for the password when prompted..."
 cd $STARTDIR/temp-wx
-cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
+cvs -d:pserver:anoncvs:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
 
 cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout $TAGNAME wxWidgets
 
-#if [ "$REBAKE" = "1" ]; then
-#
-#fi
+if [ "$REBAKE" = "1" ]; then
+    echo "TODO! Implement re-baking..."
+fi
 
 # Copy extra .zips over to deliver/extra so they'll get picked up...
 if [ ! -d $WXDIR/deliver ]; then
