@@ -429,7 +429,12 @@ Returns the last time the file was last modified.
 
 \constfunc{wxString}{GetName}{\void}
 
-Returns the name part of the filename.
+Returns the name part of the filename (without extension).
+
+\wxheading{See also}
+
+\helpref{GetFullName}{wxfilenamegetfullname}
+
 
 
 \membersection{wxFileName::GetPath}\label{wxfilenamegetpath}
@@ -802,7 +807,11 @@ The full name is the file name and extension (but without the path).
 
 \func{void}{SetName}{\param{const wxString\& }{name}}
 
-Sets the name.
+Sets the name part (without extension).
+
+\wxheading{See also}
+
+\helpref{SetFullName}{wxfilenamesetfullname}
 
 
 \membersection{wxFileName::SetTimes}\label{wxfilenamesettimes}

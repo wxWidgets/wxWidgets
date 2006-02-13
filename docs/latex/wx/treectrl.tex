@@ -104,8 +104,7 @@ wxTreeCtrl class uses the standard common treeview control under Win32
 implemented in the system library {\tt comctl32.dll}. Some versions of this
 library are known to have bugs with handling the tree control colours: the
 usual symptom is that the expanded items leave black (or otherwise incorrectly
-coloured) background behind them, especially for the controls using non
-default background colour. The recommended solution is to upgrade the {\tt comctl32.dll}
+coloured) background behind them, especially for the controls using non-default background colour. The recommended solution is to upgrade the {\tt comctl32.dll}
 to a newer version: see 
 \urlref{http://www.microsoft.com/downloads/release.asp?ReleaseID=11916}{http://www.microsoft.com/downloads/release.asp?ReleaseID=11916}.
 
@@ -258,7 +257,7 @@ This function may cause a subsequent call to GetNextChild to fail.
 
 \func{void}{DeleteAllItems}{\void}
 
-Deletes all the items in the control. Note that this may not generate 
+Deletes all items in the control. Note that this may not generate 
 {\tt EVT\_TREE\_DELETE\_ITEM} events under some Windows versions although
 normally such event is generated for each removed item.
 

@@ -1498,7 +1498,7 @@ This is just a wrapper for \helpref{ScrollLines}{wxwindowscrolllines}$(-1)$.
 
 \func{void}{Lower}{\void}
 
-Lowers the window to the bottom of the window hierarchy.
+Lowers the window to the bottom of the window hierarchy (z-order).
 
 \wxheading{See also}
 
@@ -2197,9 +2197,9 @@ remove the event handler.
 
 \func{void}{Raise}{\void}
 
-Raises the window to the top of the window hierarchy.
+Raises the window to the top of the window hierarchy (z-order).
 
-In current version of wxWidgets this works both for manage and child windows.
+In current version of wxWidgets this works both for managed and child windows.
 
 \wxheading{See also}
 
@@ -3131,7 +3131,7 @@ value should be used.}
 {\bf wxSIZE\_AUTO\_WIDTH}: a $wxDefaultCoord$ width value is taken to indicate
 a wxWidgets-supplied default width.\\
 {\bf wxSIZE\_AUTO\_HEIGHT}: a $wxDefaultCoord$ height value is taken to indicate
-a wxWidgets-supplied default width.\\
+a wxWidgets-supplied default height.\\
 {\bf wxSIZE\_AUTO}: $wxDefaultCoord$ size values are taken to indicate
 a wxWidgets-supplied default size.\\
 {\bf wxSIZE\_USE\_EXISTING}: existing dimensions should be used

@@ -21,8 +21,8 @@
 
 \constfunc{int}{GetResponse}{\void}
 
-Returns the HTTP response code returned by the server. Please refer to the RFC
-2616 for the list of the responses.
+Returns the HTTP response code returned by the server. Please refer to
+\urlref{RFC 2616}{http://www.faqs.org/rfcs/rfc2616.html} for the list of responses.
 
 
 \membersection{wxHTTP::GetInputStream}\label{wxhttpgetinputstream}
@@ -48,7 +48,7 @@ this value will be 0 when the stream is finished.
 Returns the initialized stream. You will have to delete it yourself once you
 don't use it anymore. The destructor closes the network connection.
 The next time you will try to get a file the network connection will have
-to be reestablished: but you don't have to take care of this wxHTTP reestablishes it automatically.
+to be reestablished: but you don't have to take care of this since wxHTTP reestablishes it automatically.
 
 \wxheading{See also}
 
@@ -73,6 +73,6 @@ If the field doesn't exist, it will return an empty string and not a NULL string
 
 \wxheading{Note}
 
-The header is not case-sensitive: I mean that "CONTENT-TYPE" and "content-type" 
+The header is not case-sensitive, i.e. "CONTENT-TYPE" and "content-type" 
 represent the same header.
 
