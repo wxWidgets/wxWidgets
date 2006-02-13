@@ -43,6 +43,7 @@ wxGTK:
 wxMSW:
 
 - Fixed crash with ownerdrawn menu items accelerators (Perry Miller)
+- wxFileDialog respects absence of wxCHANGE_DIG flag under NT (Brad Anderson).
 - Fixed MDI context menu problem.
 - Create msw/rcdefs.h in setup.h's directory, which can be included by
   resource files. It containts platform/compiler specific defines (such as
