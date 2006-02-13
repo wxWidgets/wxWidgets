@@ -1937,7 +1937,11 @@ public:
     DocDeclStr(
         bool , GetEnabled() const,
         "Returns ``True`` if the UI element should be enabled.", "");
-    
+
+    DocDeclStr(
+        bool , GetShown() const,
+        "Returns ``True`` if the UI element should be shown.", "");
+        
     DocDeclStr(
         wxString , GetText() const,
         "Returns the text that should be set for the UI element.", "");
@@ -1957,7 +1961,11 @@ internal use only.", "");
         "Returns ``True`` if the application has called `Enable`. For wxWidgets
 internal use only.", "");
     
-
+    DocDeclStr(
+        bool , GetSetShown() const,
+        "Returns ``True`` if the application has called `Show`. For wxWidgets
+internal use only.", "");
+    
 
     DocDeclStr(
         void , Check(bool check),
@@ -1966,6 +1974,11 @@ internal use only.", "");
     DocDeclStr(
         void , Enable(bool enable),
         "Enable or disable the UI element.", "");
+
+    DocDeclStr(
+        void , Show(bool show),
+        "Show or hide the UI element.", "");
+    
     
     DocDeclStr(
         void , SetText(const wxString& text),
