@@ -89,7 +89,7 @@ class TestPanel(wx.Panel):
 
     def DoLoadFile(self, path):
         self.playBtn.Disable()
-        noLog = wx.LogNull()
+        #noLog = wx.LogNull()
         if not self.mc.Load(path):
             wx.MessageBox("Unable to load %s: Unsupported format?" % path,
                           "ERROR",
@@ -128,6 +128,9 @@ class TestPanel(wx.Panel):
         self.st_len.SetLabel('length: %d seconds' % (self.mc.Length()/1000))
         self.st_pos.SetLabel('position: %d' % offset)
 
+    def ShutdownDemo(self):
+        self.timer.Stop()
+        del self.timer
 
 #----------------------------------------------------------------------
 
