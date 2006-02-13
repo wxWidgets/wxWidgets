@@ -1188,19 +1188,12 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
             new_pixmap = XCreatePixmap( xdisplay, xroot, ww, hh, 1 );
             GC gc = XCreateGC( xdisplay, new_pixmap, 0, NULL );
 
-            int bpp = wxTheApp->GetVisualInfo(m_display)->m_visualDepth;
-            if (bpp == 8)
-                XSetForeground( xdisplay, gc, WhitePixel(xdisplay,xscreen) );
-            else
-                XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
+            XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
         
             XSetFillStyle( xdisplay, gc, FillSolid );
             XFillRectangle( xdisplay, new_pixmap, gc, 0, 0, ww, hh );
 
-            if (bpp == 8)
-                XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
-            else
-                XSetForeground( xdisplay, gc, WhitePixel(xdisplay,xscreen) );
+            XSetForeground( xdisplay, gc, WhitePixel(xdisplay,xscreen) );
 
             if (useMask && mask)
             {
