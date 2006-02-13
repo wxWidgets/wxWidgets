@@ -137,6 +137,10 @@ class MyCanvas(wx.ScrolledWindow):
         dc.SetPen(old_pen)
         dc.DrawRectangle(490,90, 20,20)
 
+        dc.GradientFillLinear((20, 260, 50, 50),
+                              "red", "blue")
+        dc.GradientFillConcentric((20, 325, 50, 50),
+                                  "red", "blue", (25,25))
         self.DrawSavedLines(dc)
         dc.EndDrawing()
 
