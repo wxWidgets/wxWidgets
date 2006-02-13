@@ -129,10 +129,12 @@ public:
 
     // assignment operators
         // from native 64 bit integer
+#ifndef wxLongLongIsLong
     wxLongLongNative& operator=(wxLongLong_t ll)
         { m_ll = ll; return *this; }
     wxLongLongNative& operator=(wxULongLong_t ll)
         { m_ll = ll; return *this; }
+#endif // !wxLongLongNative
     wxLongLongNative& operator=(const wxULongLongNative &ll);
     wxLongLongNative& operator=(int l)
         { m_ll = l; return *this; }
@@ -363,10 +365,12 @@ public:
 
     // assignment operators
         // from native 64 bit integer
+#ifndef wxLongLongIsLong
     wxULongLongNative& operator=(wxULongLong_t ll)
         { m_ll = ll; return *this; }
     wxULongLongNative& operator=(wxLongLong_t ll)
         { m_ll = ll; return *this; }
+#endif // !wxLongLongNative
     wxULongLongNative& operator=(int l)
         { m_ll = l; return *this; }
     wxULongLongNative& operator=(long l)
