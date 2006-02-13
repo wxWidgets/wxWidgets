@@ -36,8 +36,8 @@ import images
 
 # For debugging
 ##wx.Trap();
-##print "wx.VERSION_STRING = ", wx.VERSION_STRING
-##print os.getpid();
+##print "wx.VERSION_STRING = %s (%s)" % (wx.VERSION_STRING, wx.USE_UNICODE and 'unicode' or 'ansi')
+##print "pid:", os.getpid()
 ##raw_input("Press Enter...")
 
 
