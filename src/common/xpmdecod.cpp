@@ -217,7 +217,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
         return wxNullImage;
     }
 
-    xpm_lines = new const char*[lines_cnt];
+    xpm_lines = new const char*[lines_cnt + 1];
     xpm_lines[0] = xpm_buffer;
     line = 1;
     for (p = xpm_buffer; (*p != '\0') && (line < lines_cnt); p++)
@@ -229,6 +229,8 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
             line++;
         }
     }
+
+    xpm_lines[lines_cnt] = NULL;
 
     /*
      *  Read the image:
@@ -657,6 +659,8 @@ WX_DECLARE_STRING_HASH_MAP(wxXPMColourMapData, wxXPMColourMap);
 
 wxImage wxXPMDecoder::ReadData(const char **xpm_data)
 {
+    wxCHECK_MSG(xpm_data, wxNullImage, wxT("NULL XPM data") );
+
     wxImage img;
     int count;
     unsigned width, height, colors_cnt, chars_per_pixel;
@@ -676,7 +680,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
                    &width, &height, &colors_cnt, &chars_per_pixel);
     if ( count != 4 || width * height * colors_cnt == 0 )
     {
-        wxLogError(_T("XPM: Not XPM data!"));
+        wxLogError(_("XPM: incorrect header format!"));
         return wxNullImage;
     }
 
@@ -685,8 +689,8 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     //     8bit RGB...
     wxCHECK_MSG(chars_per_pixel < 64, wxNullImage, wxT("XPM colormaps this large not supported."));
 
-    img.Create(width, height);
-    if ( !img.Ok() ) return img;
+    if ( !img.Create(width, height) )
+        return wxNullImage;
 
     img.SetMask(false);
     key[chars_per_pixel] = wxT('\0');
@@ -697,37 +701,46 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
      */
     for (i = 0; i < colors_cnt; i++)
     {
-        wxXPMColourMapData clr_data = {255,0,255};
+        const char *xmpColLine = xpm_data[1 + i];
+
+        // we must have at least " x y" after the colour index, hence +5
+        if ( !xmpColLine || strlen(xmpColLine) < chars_per_pixel + 5 )
+        {
+            wxLogError(_("XPM: incorrect colour description in line %d"),
+                       (int)(1 + i));
+            return wxNullImage;
+        }
+
+        wxXPMColourMapData clr_data;
 
         for (i_key = 0; i_key < chars_per_pixel; i_key++)
-            key[i_key] = (wxChar)xpm_data[1 + i][i_key];
-        clr_def = ParseColor(xpm_data[1 + i] + chars_per_pixel);
+            key[i_key] = (wxChar)xmpColLine[i_key];
+        clr_def = ParseColor(xmpColLine + chars_per_pixel);
 
         if ( clr_def == NULL )
         {
-            wxLogError(_("XPM: malformed colour definition '%s'!"),
-                       xpm_data[1+i]);
+            wxLogError(_("XPM: malformed colour definition '%s' at line %d!"),
+                       xmpColLine, (int)(1 + i));
+            return wxNullImage;
         }
-        else
+
+        bool isNone = false;
+        if ( !GetRGBFromName(clr_def, &isNone,
+                             &clr_data.R, &clr_data.G, &clr_data.B) )
         {
-            bool isNone = false;
-            if ( !GetRGBFromName(clr_def, &isNone,
-                                 &clr_data.R, &clr_data.G, &clr_data.B) )
-            {
-                wxLogError(_("XPM: malformed colour definition '%s'!"),
-                           xpm_data[1+i]);
-            }
-            else
-            {
-                if ( isNone )
-                {
-                    img.SetMask(true);
-                    img.SetMaskColour(255, 0, 255);
-                    hasMask = true;
-                    maskKey = key;
-                }
-            }
+            wxLogError(_("XPM: malformed colour definition '%s' at line %d!"),
+                       xmpColLine, (int)(1 + i));
+            return wxNullImage;
         }
+
+        if ( isNone )
+        {
+            img.SetMask(true);
+            img.SetMaskColour(255, 0, 255);
+            hasMask = true;
+            maskKey = key;
+        }
+
         clr_tbl[key] = clr_data;
     }
 
@@ -761,9 +774,19 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     {
         for (i = 0; i < width; i++, img_data += 3)
         {
+            const char *xpmImgLine = xpm_data[1 + colors_cnt + j];
+            if ( !xpmImgLine || strlen(xpmImgLine) < width*chars_per_pixel )
+            {
+                wxLogError(_("XPM: truncated image data at line %d!"),
+                           (int)(1 + colors_cnt + j));
+                return wxNullImage;
+            }
+
             for (i_key = 0; i_key < chars_per_pixel; i_key++)
-                key[i_key] = (wxChar)xpm_data[1 + colors_cnt + j]
-                                             [chars_per_pixel * i + i_key];
+            {
+                key[i_key] = (wxChar)xpmImgLine[chars_per_pixel * i + i_key];
+            }
+
             entry = clr_tbl.find(key);
             if ( entry == end )
             {
