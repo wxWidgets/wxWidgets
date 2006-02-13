@@ -37,8 +37,8 @@ empty stubs in wxPython.
 
 Solved a problem that has been around for a very long time in how C++
 methods are virtualized for overriding in derived Python classes.
-Previously we couldn't do it for methods that needed to exist in the
-base class wrappers such that they could be called normally.  (The
+Previously we couldn't do it for methods that needed to also exist in
+the base class wrappers such that they could be called normally.  (The
 reasons are long and complex, but suffice it to say that it was due to
 mixing C++'s dynamic dispatch, and Python's runtime lookup of the
 method attributes resulting in endless recursion of function calls.)
@@ -48,21 +48,28 @@ example wx.Printout.base_OnBeginDocument.  Now that the problem has
 finally been solved I have replaced all the base_Whatever() methods
 with the real Whatever() method as well as a simple wrapper named
 base_Whatever that is marked as deprecated.  So now instead of writing
-your overridden methods like this:
+your overridden methods like this::
 
     def OnBeginDocument(self, start, end):
 	# do something here
 	return self.base_OnBeginDocument(start, end)
 
-You can do it the *right way* like this:
+You can now call the base class method the normal way, like this::
+
+    def OnBeginDocument(self, start, end):
+	# do something here
+	return Printout.OnBeginDocument(self, start, end)
+
+Or like this with super()::
 
     def OnBeginDocument(self, start, end):
 	# do something here
 	return super(MyPrintout, self).OnBeginDocument(start, end)
 
-Note that the old way still works, but you will get a
-DeprecationWarning from calling base_OnBeginDocument.  The classes
-affected by this are:
+
+Note that the old way with the "base_" function still works, but you
+will get a DeprecationWarning from calling base_OnBeginDocument.  The
+classes affected by this are:
 
     * wx.DropSource
     * wx.DropTarget
