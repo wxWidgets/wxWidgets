@@ -737,6 +737,9 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
         {
             img.SetMask(true);
             img.SetMaskColour(255, 0, 255);
+            clr_data.R =
+            clr_data.B = 255;
+            clr_data.G = 0;
             hasMask = true;
             maskKey = key;
         }
