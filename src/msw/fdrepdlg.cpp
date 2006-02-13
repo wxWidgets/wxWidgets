@@ -190,8 +190,7 @@ void wxFindReplaceDialogImpl::SubclassDialog(HWND hwnd)
 
     // check that we don't subclass the parent twice: this would be a bad idea
     // as then we'd have infinite recursion in wxFindReplaceWindowProc
-    wxCHECK_RET( wxGetWindowProc(hwnd) !=
-                        wx_reinterpret_cast(void *, wxFindReplaceWindowProc),
+    wxCHECK_RET( wxGetWindowProc(hwnd) != (void *)wxFindReplaceWindowProc,
                  _T("can't have more than one find dialog currently") );
 
     // set the new one and save the old as user data to allow access to it
