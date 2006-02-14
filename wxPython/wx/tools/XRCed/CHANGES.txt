@@ -1,3 +1,11 @@
+0.1.7-1
+-------
+
+Important update of Paste command code which was passing too much data
+thru clipboard using cPickle. Objects created while unpickling (from
+minidom) were clogging memory. Now using toxml() (why didn't I do it 
+before - was I drunk or what? :) ).
+
 0.1.7-0
 -------
 
