@@ -226,11 +226,6 @@ BEGIN_EVENT_TABLE(wxComboBoxChoice, wxChoice)
     EVT_CHOICE(-1, wxComboBoxChoice::OnChoice)
 END_EVENT_TABLE()
 
-wxComboBox::wxComboBox()
-{
-    m_container.SetContainerWindow(this);
-}
-
 wxComboBox::~wxComboBox()
 {
     // delete client objects
@@ -333,6 +328,11 @@ void wxComboBox::DelegateTextChanged( const wxString& value )
 void wxComboBox::DelegateChoice( const wxString& value )
 {
     SetStringSelection( value );
+}
+
+void wxComboBox::Init()
+{
+    m_container.SetContainerWindow(this);
 }
 
 bool wxComboBox::Create(wxWindow *parent,
