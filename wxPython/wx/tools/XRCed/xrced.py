@@ -925,7 +925,7 @@ Homepage: http://xrced.sourceforge.net\
         # Update tools
         g.tools.UpdateUI()
 
-        undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
+        #undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
         # Update view?
         if g.testWin and tree.IsHighlatable(selected):
             if conf.autoRefresh:
