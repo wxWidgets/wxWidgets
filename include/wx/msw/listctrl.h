@@ -380,6 +380,11 @@ protected:
     // free memory taken by all internal data
     void FreeAllInternalData();
 
+    // get the item attribute, either by quering it for virtual control, or by
+    // returning the one previously set using setter methods for a normal one
+    wxListItemAttr *DoGetItemAttr(long item) const;
+
+
     wxTextCtrl*       m_textCtrl;        // The control used for editing a label
     wxImageList *     m_imageListNormal; // The image list for normal icons
     wxImageList *     m_imageListSmall;  // The image list for small icons

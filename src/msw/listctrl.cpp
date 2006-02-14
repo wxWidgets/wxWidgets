@@ -214,7 +214,7 @@ public:
 // Get the internal data structure
 static wxListItemInternalData *wxGetInternalData(HWND hwnd, long itemId);
 static wxListItemInternalData *wxGetInternalData(const wxListCtrl *ctl, long itemId);
-static wxListItemAttr *wxGetInternalDataAttr(wxListCtrl *ctl, long itemId);
+static wxListItemAttr *wxGetInternalDataAttr(const wxListCtrl *ctl, long itemId);
 static void wxDeleteInternalData(wxListCtrl* ctl, long itemId);
 
 
@@ -2155,7 +2155,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case NM_CUSTOMDRAW:
                 *result = OnCustomDraw(lParam);
 
-                return true;
+                return *result != CDRF_DODEFAULT;
 #endif // _WIN32_IE >= 0x300
 
             case LVN_ODCACHEHINT:
@@ -2346,13 +2346,214 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     return processed;
 }
 
+// ----------------------------------------------------------------------------
+// custom draw stuff
+// ----------------------------------------------------------------------------
+
 // see comment at the end of wxListCtrl::GetColumn()
 #ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
 
+static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
+{
+    RECT rc;
+    ListView_GetItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, &rc, LVIR_BOUNDS);
+
+    RECT rcIcon;
+    ListView_GetItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, &rcIcon, LVIR_ICON);
+
+    // exclude the icon part, neither the selection background nor focus rect
+    // should cover it
+    rc.left = rcIcon.right;
+
+    return rc;
+}
+
+static void HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+{
+    NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
+
+    HDC hdc = nmcd.hdc;
+    HWND hwndList = nmcd.hdr.hwndFrom;
+    const DWORD item = nmcd.dwItemSpec;
+
+
+    // the font must be valid, otherwise we wouldn't be painting the item at all
+    SelectInHDC selFont(hdc, hfont);
+
+    // get the rectangle to paint
+    RECT rc;
+    ListView_GetSubItemRect(hwndList, item, pLVCD->iSubItem, LVIR_BOUNDS, &rc);
+    if ( !pLVCD->iSubItem )
+    {
+        // broken ListView_GetSubItemRect() returns the entire item rect for
+        // 0th subitem while we really need just the part for this column
+        RECT rc2;
+        ListView_GetSubItemRect(hwndList, item, 1, LVIR_BOUNDS, &rc2);
+
+        rc.right = rc2.left;
+        rc.left += 4;
+    }
+    else // not first subitem
+    {
+        rc.left += 6;
+    }
+
+    // get the image and text to draw
+    wxChar text[512];
+    LV_ITEM it;
+    wxZeroMemory(it);
+    it.mask = LVIF_TEXT | LVIF_IMAGE;
+    it.iItem = item;
+    it.iSubItem = pLVCD->iSubItem;
+    it.pszText = text;
+    it.cchTextMax = WXSIZEOF(text);
+    ListView_GetItem(hwndList, &it);
+
+    if ( it.iImage != -1 )
+    {
+        HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_SMALL);
+
+        ImageList_Draw(himl, it.iImage, hdc, rc.left, rc.top,
+                       nmcd.uItemState & CDIS_SELECTED ? ILD_SELECTED
+                                                       : ILD_TRANSPARENT);
+
+        int wImage, hImage;
+        ImageList_GetIconSize(himl, &wImage, &hImage);
+
+        rc.left += wImage + 2;
+    }
+
+    ::SetBkMode(hdc, TRANSPARENT);
+
+    // TODO: support for centred/right aligned columns
+    ::DrawText(hdc, text, -1, &rc,
+               DT_WORD_ELLIPSIS | DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER);
+}
+
+static void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
+{
+    if ( nmcd.uItemState & CDIS_FOCUS )
+    {
+        RECT rc = GetCustomDrawnItemRect(nmcd);
+
+        // don't use the provided HDC, it's in some strange state by now
+        ::DrawFocusRect(WindowHDC(nmcd.hdr.hwndFrom), &rc);
+    }
+}
+
+// pLVCD->clrText and clrTextBk should contain the colours to use
+static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+{
+    NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
+
+    HWND hwndList = nmcd.hdr.hwndFrom;
+
+    // unfortunately we can't trust CDIS_SELECTED, it is often set even when
+    // the item is not at all selected for some reason (comctl32 6), but we
+    // also can't always trust ListView_GetItem() as it could return the old
+    // item status if we're called just after the (de)selection, so remember
+    // the last item to gain selection and also check for it here
+    for ( int i = -1;; )
+    {
+        i = ListView_GetNextItem(hwndList, i, LVNI_SELECTED);
+        if ( i == -1 )
+        {
+            nmcd.uItemState &= ~CDIS_SELECTED;
+            break;
+        }
+
+        if ( (DWORD)i == nmcd.dwItemSpec )
+        {
+            nmcd.uItemState |= CDIS_SELECTED;
+            break;
+        }
+    }
+
+    if ( nmcd.uItemState & CDIS_SELECTED )
+    {
+        int syscolFg, syscolBg;
+        if ( ::GetFocus() == hwndList )
+        {
+            syscolFg = COLOR_HIGHLIGHTTEXT;
+            syscolBg = COLOR_HIGHLIGHT;
+        }
+        else // selected but unfocused
+        {
+            syscolFg = COLOR_WINDOWTEXT;
+            syscolBg = COLOR_BTNFACE;
+
+            // don't grey out the icon in this case neither
+            nmcd.uItemState &= ~CDIS_SELECTED;
+        }
+
+        pLVCD->clrText = ::GetSysColor(syscolFg);
+        pLVCD->clrTextBk = ::GetSysColor(syscolBg);
+    }
+    //else: not selected, use normal colours from pLVCD
+
+    HDC hdc = nmcd.hdc;
+    RECT rc = GetCustomDrawnItemRect(nmcd);
+
+    ::SetTextColor(hdc, pLVCD->clrText);
+    ::FillRect(hdc, &rc, AutoHBRUSH(pLVCD->clrTextBk));
+
+    // we could use CDRF_NOTIFYSUBITEMDRAW here but it results in weird repaint
+    // problems so just draw everything except the focus rect from here instead
+    const int colCount = Header_GetItemCount(ListView_GetHeader(hwndList));
+    for ( int col = 0; col < colCount; col++ )
+    {
+        pLVCD->iSubItem = col;
+        HandleSubItemPrepaint(pLVCD, hfont);
+    }
+
+    HandleItemPostpaint(nmcd);
+}
+
+static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
+                                   LPNMLVCUSTOMDRAW pLVCD,
+                                   wxListItemAttr *attr)
+{
+    if ( !attr )
+    {
+        // nothing to do for this item
+        return CDRF_DODEFAULT;
+    }
+
+
+    // set the colours to use for text drawing
+    pLVCD->clrText = wxColourToRGB(attr->HasTextColour()
+                                    ? attr->GetTextColour()
+                                    : listctrl->GetTextColour());
+    pLVCD->clrTextBk = wxColourToRGB(attr->HasBackgroundColour()
+                                        ? attr->GetBackgroundColour()
+                                        : listctrl->GetBackgroundColour());
+
+    // select the font if non default one is specified
+    if ( attr->HasFont() )
+    {
+        wxFont font = attr->GetFont();
+        if ( font.GetEncoding() != wxFONTENCODING_SYSTEM )
+        {
+            // the standard control ignores the font encoding/charset, at least
+            // with recent comctl32.dll versions (5 and 6, it uses to work with
+            // 4.something) so we have to draw the item entirely ourselves in
+            // this case
+            HandleItemPaint(pLVCD, GetHfontOf(font));
+            return CDRF_SKIPDEFAULT;
+        }
+
+        ::SelectObject(pLVCD->nmcd.hdc, GetHfontOf(font));
+
+        return CDRF_NEWFONT;
+    }
+
+    return CDRF_DODEFAULT;
+}
+
 WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 {
-    LPNMLVCUSTOMDRAW lplvcd = (LPNMLVCUSTOMDRAW)lParam;
-    NMCUSTOMDRAW& nmcd = lplvcd->nmcd;
+    LPNMLVCUSTOMDRAW pLVCD = (LPNMLVCUSTOMDRAW)lParam;
+    NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
     switch ( nmcd.dwDrawStage )
     {
         case CDDS_PREPAINT:
@@ -2361,78 +2562,22 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             //
             // for virtual controls, always suppose that we have attributes as
             // there is no way to check for this
-            return IsVirtual() || m_hasAnyAttr ? CDRF_NOTIFYITEMDRAW
-                                               : CDRF_DODEFAULT;
+            if ( IsVirtual() || m_hasAnyAttr )
+                return CDRF_NOTIFYITEMDRAW;
+            break;
 
         case CDDS_ITEMPREPAINT:
-            {
-                size_t item = (size_t)nmcd.dwItemSpec;
-                if ( item >= (size_t)GetItemCount() )
-                {
-                    // we get this message with item == 0 for an empty control,
-                    // we must ignore it as calling OnGetItemAttr() would be
-                    // wrong
-                    return CDRF_DODEFAULT;
-                }
+            const int item = nmcd.dwItemSpec;
 
-                wxListItemAttr *attr =
-                    IsVirtual() ? OnGetItemAttr(item)
-                                : wxGetInternalDataAttr(this, item);
+            // we get this message with item == 0 for an empty control, we
+            // must ignore it as calling OnGetItemAttr() would be wrong
+            if ( item < 0 || item >= GetItemCount() )
+                break;
 
-                if ( !attr )
-                {
-                    // nothing to do for this item
-                    return CDRF_DODEFAULT;
-                }
-
-                HFONT hFont;
-                wxColour colText, colBack;
-                if ( attr->HasFont() )
-                {
-                    wxFont font = attr->GetFont();
-                    hFont = (HFONT)font.GetResourceHandle();
-                }
-                else
-                {
-                    hFont = 0;
-                }
-
-                if ( attr->HasTextColour() )
-                {
-                    colText = attr->GetTextColour();
-                }
-                else
-                {
-                    colText = GetTextColour();
-                }
-
-                if ( attr->HasBackgroundColour() )
-                {
-                    colBack = attr->GetBackgroundColour();
-                }
-                else
-                {
-                    colBack = GetBackgroundColour();
-                }
-
-                lplvcd->clrText = wxColourToRGB(colText);
-                lplvcd->clrTextBk = wxColourToRGB(colBack);
-
-                // note that if we wanted to set colours for
-                // individual columns (subitems), we would have
-                // returned CDRF_NOTIFYSUBITEMREDRAW from here
-                if ( hFont )
-                {
-                    ::SelectObject(nmcd.hdc, hFont);
-
-                    return CDRF_NEWFONT;
-                }
-            }
-            // fall through to return CDRF_DODEFAULT
-
-        default:
-            return CDRF_DODEFAULT;
+            return HandleItemPrepaint(this, pLVCD, DoGetItemAttr(item));
     }
+
+    return CDRF_DODEFAULT;
 }
 
 #endif // NM_CUSTOMDRAW supported
@@ -2566,6 +2711,12 @@ wxListItemAttr *wxListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) cons
     return NULL;
 }
 
+wxListItemAttr *wxListCtrl::DoGetItemAttr(long item) const
+{
+    return IsVirtual() ? OnGetItemAttr(item)
+                       : wxGetInternalDataAttr(this, item);
+}
+
 void wxListCtrl::SetItemCount(long count)
 {
     wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
@@ -2630,7 +2781,8 @@ wxListItemInternalData *wxGetInternalData(const wxListCtrl *ctl, long itemId)
     return wxGetInternalData(GetHwndOf(ctl), itemId);
 }
 
-static wxListItemAttr *wxGetInternalDataAttr(wxListCtrl *ctl, long itemId)
+static
+wxListItemAttr *wxGetInternalDataAttr(const wxListCtrl *ctl, long itemId)
 {
     wxListItemInternalData *data = wxGetInternalData(ctl, itemId);
 
