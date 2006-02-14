@@ -214,7 +214,14 @@ wxgtk_list_store_get_flags (GtkTreeModel *tree_model)
 {
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), 0);
 
-    return GTK_TREE_MODEL_ITERS_PERSIST | GTK_TREE_MODEL_LIST_ONLY;
+    // GTK+ list store uses a linked list for storing the
+    // items and a pointer to a child is used as the member
+    // field of a GtkTreeIter. This means that the iter is
+    // valid in the GtkListStore as long as the child exists.
+    // We use the index of the row and since the index of a
+    // specific row will change if a row above is deleted,
+    // the iter does not persist
+    return /* GTK_TREE_MODEL_ITERS_PERSIST | */ GTK_TREE_MODEL_LIST_ONLY;
 }
 
 static gint
@@ -343,18 +350,22 @@ static gboolean
 wxgtk_list_store_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
-    GtkWxListStore *list_store = (GtkListStore *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), FALSE);
+    GtkWxListStore *list_store = (GtkListStore *) tree_model;
     
-#if 0
-  g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, FALSE);
+    g_return_val_if_fail (list_store->stamp == iter->stamp, FALSE);
 
-  iter->user_data = G_SLIST (iter->user_data)->next;
+    int n = (int) iter->user_data;
+    
+    if (n == -1)
+        return FALSE;
+        
+    if (n >= (int) list_store->model->GetRowCount())
+        return FALSE;
+        
+    iter->user_data = (gpointer) n++;
 
-  return (iter->user_data != NULL);
-#endif
-
-    return NULL;
+    return TRUE;
 }
 
 static gboolean
@@ -362,21 +373,17 @@ wxgtk_list_store_iter_children (GtkTreeModel *tree_model,
 			      GtkTreeIter  *iter,
 			      GtkTreeIter  *parent)
 {
-    /* this is a list, nodes have no children */
+    g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), FALSE);
+    GtkWxListStore *list_store = (GtkListStore *) tree_model;
+    
+    // this is a list, nodes have no children
     if (parent)
         return FALSE;
 
-    /* but if parent == NULL we return the list itself */
-    if (GTK_WX_LIST_STORE (tree_model)->root)
-    {
-        iter->stamp = GTK_WX_LIST_STORE (tree_model)->stamp;
-        iter->user_data = GTK_WX_LIST_STORE (tree_model)->root;
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
+    iter->stamp = list_store->stamp;
+    iter->user_data = (gpointer) -1;
+    
+    return TRUE;
 }
 
 static gboolean
@@ -391,11 +398,12 @@ wxgtk_list_store_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), -1);
+    GtkWxListStore *list_store = (GtkListStore *) tree_model;
     
     if (iter == NULL)
-        return GTK_WX_LIST_STORE (tree_model)->model->GetLength();
+        return (gint) list_store->model->GetRowCount();
 
-    g_return_val_if_fail (GTK_WX_LIST_STORE (tree_model)->stamp == iter->stamp, -1);
+    g_return_val_if_fail (list_store->stamp == iter->stamp, -1);
   
     return 0;
 }
@@ -406,25 +414,22 @@ wxgtk_list_store_iter_nth_child (GtkTreeModel *tree_model,
 			       GtkTreeIter  *parent,
 			       gint          n)
 {
-#if 0
-  GSList *child;
+    g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), FALSE);
+    GtkWxListStore *list_store = (GtkListStore *) tree_model;
+    
+    if (parent)
+        return FALSE;
 
-  g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), FALSE);
+    if (n < 0)
+        return FALSE;
+        
+    if (n >= (gint) list_store->model->GetRowCount())
+        return FALSE;
 
-  if (parent)
-    return FALSE;
-
-  child = g_slist_nth (G_SLIST (GTK_LIST_STORE (tree_model)->root), n);
-
-  if (child)
-    {
-      iter->stamp = GTK_LIST_STORE (tree_model)->stamp;
-      iter->user_data = child;
-      return TRUE;
-    }
-  else
-#endif
-    return FALSE;
+    iter->stamp = list_store->stamp;
+    iter->user_data = (gpointer) n;
+    
+    return TRUE;
 }
 
 static gboolean
