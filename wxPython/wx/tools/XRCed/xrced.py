@@ -415,7 +415,7 @@ class Frame(wxFrame):
         xxx = tree.GetPyData(selected)
         wx.TheClipboard.Open()
         data = wx.CustomDataObject('XRCED')
-        data.SetData(cPickle.dumps(xxx.element))
+        data.SetData(cPickle.dumps(xxx.element.toxml()))
         wx.TheClipboard.SetData(data)
         wx.TheClipboard.Close()
         self.SetStatusText('Copied')
@@ -455,10 +455,10 @@ class Frame(wxFrame):
             return
         wx.TheClipboard.GetData(data)
         wx.TheClipboard.Close()
-        elem = cPickle.loads(data.GetData())
+        xml = cPickle.loads(data.GetData()) # xml representation of element
+        elem = minidom.parseString(xml).childNodes[0]
         # Tempopary xxx object to test things
         xxx = MakeXXXFromDOM(parent, elem)
-
         # Check compatibility
         error = False
         # Top-level
@@ -925,7 +925,7 @@ Homepage: http://xrced.sourceforge.net\
         # Update tools
         g.tools.UpdateUI()
 
-        #undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
+        undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
         # Update view?
         if g.testWin and tree.IsHighlatable(selected):
             if conf.autoRefresh:
