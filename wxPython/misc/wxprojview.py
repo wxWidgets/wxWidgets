@@ -10,14 +10,15 @@
 import wx
 import wx.lib.stattext as st
 import os
+import sys
 
 class MyFrame(wx.Frame):
-    def __init__(self):
+    def __init__(self, style=0):
         wx.Frame.__init__(self, None, title="wx Active Project",
-                          style=wx.FRAME_NO_TASKBAR|wx.STAY_ON_TOP,
-                          name="wxprojview"
+                          style=wx.FRAME_NO_TASKBAR | style
+                          ,name="wxprojview"
                           )
-        p = wx.Panel(self)#, style=wx.SIMPLE_BORDER)
+        p = wx.Panel(self)
         
         p.SetBackgroundColour("sky blue")
         self.label = st.GenStaticText(p, -1, "wx XXX")
@@ -104,6 +105,9 @@ class MyFrame(wx.Frame):
 app = wx.PySimpleApp()
 app.SetAppName("wxprojview")
 app.SetVendorName("Robin Dunn")
-frm = MyFrame()
+style = wx.STAY_ON_TOP
+if len(sys.argv) > 1 and sys.argv[1] == 'nostayontop':
+    style=0
+frm = MyFrame(style)
 frm.Show()
 app.MainLoop()
