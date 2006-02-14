@@ -198,6 +198,7 @@ public:
     virtual double GetVolume();
 
     //------------implementation from now on-----------------------------------
+    bool DoLoad(const wxString& locstring);
     wxMediaCtrl* GetControl() { return m_ctrl; } // for C Callbacks
     void HandleStateChange(GstElementState oldstate, GstElementState newstate);
     bool QueryVideoSizeFromElement(GstElement* element);
@@ -990,6 +991,8 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     //
     //init gstreamer
     //
+
+    //Convert arguments to unicode if enabled
 #if wxUSE_UNICODE
     int i;
     char **argvGST = new char*[wxTheApp->argc + 1];
@@ -1001,19 +1004,45 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     argvGST[wxTheApp->argc] = NULL;
 
     int argcGST = wxTheApp->argc;
+#else
+#define argcGST wxTheApp->argc
+#define argvGST wxTheApp->argv
+#endif
 
-    gst_init(&argcGST, &argvGST);
+    //Really init gstreamer
+    gboolean bInited;
+    GError* error = NULL;
+#if GST_VERSION_MAJOR > 0 || GST_VERSION_MINOR >= 10
+    bInited = gst_init_check(&argcGST, &argvGST, &error);
+#else
+    bInited = gst_init_check(&argcGST, &argvGST);
+#endif
 
-    // free our copy
+    // Cleanup arguments for unicode case
+#if wxUSE_UNICODE
     for ( i = 0; i < argcGST; i++ )
     {
         free(argvGST[i]);
     }
 
     delete [] argvGST;
-#else
-    gst_init(&wxTheApp->argc, &wxTheApp->argv);
 #endif
+
+    if(!bInited)    //gst_init_check fail?
+    {
+        if(error)
+        {
+            wxLogSysError(wxT("Could not initialize GStreamer\n")
+                          wxT("Error Message:%s"), 
+                          (const wxChar*) wxConvUTF8.cMB2WX(error->message)
+                         );
+            g_error_free(error);
+        }
+        else
+            wxLogSysError(wxT("Could not initialize GStreamer"));
+
+        return false;
+    }
 
     //
     // wxControl creation
@@ -1144,19 +1173,39 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 //-----------------------------------------------------------------------------
 // wxGStreamerMediaBackend::Load (File version)
 //
-// Just calls the URI version
+// Just calls DoLoad() with a prepended file scheme
 //-----------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::Load(const wxString& fileName)
 {
-    return Load(
-                    wxURI(
-                            wxString( wxT("file://") ) + fileName
-                         )
-               );
+    return DoLoad(wxString( wxT("file://") ) + fileName);
 }
 
 //-----------------------------------------------------------------------------
 // wxGStreamerMediaBackend::Load (URI version)
+//
+// In the case of a file URI passes it unencoded -
+// also, as of 0.10.3 and earlier GstURI (the uri parser for gstreamer)
+// is sort of broken and only accepts uris with at least two slashes
+// after the scheme (i.e. file: == not ok, file:// == ok)
+//-----------------------------------------------------------------------------
+bool wxGStreamerMediaBackend::Load(const wxURI& location)
+{
+    if(location.GetScheme().CmpNoCase(wxT("file")) == 0)
+    {
+        wxString uristring = location.BuildUnescapedURI();
+
+        //Workaround GstURI leading "//" problem and make sure it leads
+        //with that
+        return DoLoad(wxString(wxT("file://")) + 
+                      uristring.Right(uristring.Length() - 5)
+                     );
+    }
+    else 
+        return DoLoad(location.BuildURI());
+}
+
+//-----------------------------------------------------------------------------
+// wxGStreamerMediaBackend::DoLoad
 //
 // Loads the media
 // 1) Reset member variables and set playbin back to ready state
@@ -1167,7 +1216,7 @@ bool wxGStreamerMediaBackend::Load(const wxString& fileName)
 // video size or duration - no amount of clever hacking is going to get
 // around that, unfortunately.
 //-----------------------------------------------------------------------------
-bool wxGStreamerMediaBackend::Load(const wxURI& location)
+bool wxGStreamerMediaBackend::DoLoad(const wxString& locstring)
 {
     wxMutexLocker lock(m_asynclock); // lock state events and async callbacks
 
@@ -1188,12 +1237,6 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
 
     // Make sure the passed URI is valid and tell playbin to load it
     // non-file uris are encoded
-    wxString locstring;
-    if(location.GetScheme().CmpNoCase(wxT("file")))
-        locstring = location.BuildUnescapedURI();
-    else
-        locstring = location.BuildURI();
-
     wxASSERT(gst_uri_protocol_is_valid("file"));
     wxASSERT(gst_uri_is_valid(locstring.mb_str()));
 
