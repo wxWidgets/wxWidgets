@@ -9,7 +9,6 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
-#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -4829,6 +4828,39 @@ static PyObject *_wrap_TopLevelWindow_MacGetMetalAppearance(PyObject *, PyObject
 }
 
 
+static PyObject *_wrap_TopLevelWindow_CenterOnScreen(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+    int arg2 = (int) wxBOTH ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dir", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:TopLevelWindow_CenterOnScreen",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxTopLevelWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->CenterOnScreen(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * TopLevelWindow_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -6085,6 +6117,124 @@ static PyObject *_wrap_Dialog_GetReturnCode(PyObject *, PyObject *args, PyObject
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)((wxDialog const *)arg1)->GetReturnCode();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int(static_cast<int >(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Dialog_SetAffirmativeId(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxDialog *arg1 = (wxDialog *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "affirmativeId", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Dialog_SetAffirmativeId",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDialog, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetAffirmativeId(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Dialog_GetAffirmativeId(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxDialog *arg1 = (wxDialog *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Dialog_GetAffirmativeId",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDialog, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxDialog const *)arg1)->GetAffirmativeId();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int(static_cast<int >(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Dialog_SetEscapeId(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxDialog *arg1 = (wxDialog *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "escapeId", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Dialog_SetEscapeId",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDialog, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetEscapeId(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Dialog_GetEscapeId(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxDialog *arg1 = (wxDialog *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Dialog_GetEscapeId",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDialog, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxDialog const *)arg1)->GetEscapeId();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -27676,6 +27826,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TopLevelWindow_IsActive", (PyCFunction) _wrap_TopLevelWindow_IsActive, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_MacSetMetalAppearance", (PyCFunction) _wrap_TopLevelWindow_MacSetMetalAppearance, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_MacGetMetalAppearance", (PyCFunction) _wrap_TopLevelWindow_MacGetMetalAppearance, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TopLevelWindow_CenterOnScreen", (PyCFunction) _wrap_TopLevelWindow_CenterOnScreen, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_swigregister", TopLevelWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Frame", (PyCFunction) _wrap_new_Frame, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreFrame", (PyCFunction) _wrap_new_PreFrame, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -27706,6 +27857,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Dialog_Create", (PyCFunction) _wrap_Dialog_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_SetReturnCode", (PyCFunction) _wrap_Dialog_SetReturnCode, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_GetReturnCode", (PyCFunction) _wrap_Dialog_GetReturnCode, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Dialog_SetAffirmativeId", (PyCFunction) _wrap_Dialog_SetAffirmativeId, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Dialog_GetAffirmativeId", (PyCFunction) _wrap_Dialog_GetAffirmativeId, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Dialog_SetEscapeId", (PyCFunction) _wrap_Dialog_SetEscapeId, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Dialog_GetEscapeId", (PyCFunction) _wrap_Dialog_GetEscapeId, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_CreateTextSizer", (PyCFunction) _wrap_Dialog_CreateTextSizer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_CreateButtonSizer", (PyCFunction) _wrap_Dialog_CreateButtonSizer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_CreateStdDialogButtonSizer", (PyCFunction) _wrap_Dialog_CreateStdDialogButtonSizer, METH_VARARGS | METH_KEYWORDS, NULL},

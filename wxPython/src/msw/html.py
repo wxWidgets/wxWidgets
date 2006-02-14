@@ -831,6 +831,18 @@ class HtmlWordCell(HtmlCell):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def ConvertToText(*args, **kwargs):
+        """ConvertToText(self, HtmlSelection sel) -> String"""
+        return _html.HtmlWordCell_ConvertToText(*args, **kwargs)
+
+    def IsLinebreakAllowed(*args, **kwargs):
+        """IsLinebreakAllowed(self) -> bool"""
+        return _html.HtmlWordCell_IsLinebreakAllowed(*args, **kwargs)
+
+    def SetPreviousWord(*args, **kwargs):
+        """SetPreviousWord(self, HtmlWordCell cell)"""
+        return _html.HtmlWordCell_SetPreviousWord(*args, **kwargs)
+
 
 class HtmlWordCellPtr(HtmlWordCell):
     def __init__(self, this):

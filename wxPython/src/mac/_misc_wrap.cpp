@@ -9,7 +9,6 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
-#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -3129,7 +3128,6 @@ public:
 };
 #endif
 
-static int wxDisplay_GetFromWindow(wxWindow *window){ wxPyRaiseNotImplemented(); return wxNOT_FOUND; }
 static PyObject *wxDisplay_GetModes(wxDisplay *self,wxVideoMode const &mode=wxDefaultVideoMode){
             PyObject* pyList = NULL;
             wxArrayVideoModes arr = self->GetModes(mode);
@@ -32272,7 +32270,7 @@ static PyObject *_wrap_Display_GetFromWindow(PyObject *, PyObject *args, PyObjec
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)wxDisplay_GetFromWindow(arg1);
+        result = (int)wxDisplay::GetFromWindow(arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

@@ -9,7 +9,6 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
-#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1589,7 +1588,7 @@ static swig_module_info swig_module = {swig_types, 132, 0, 0, 0, 0};
 // in the wrapper code.
 
 #include <wx/hashmap.h>
-    WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
+WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 
 
 // Maintains a hashmap of className to swig_type_info pointers.  Given the
@@ -1668,6 +1667,7 @@ bool wxPyConvertSwigPtr(PyObject* obj, void **ptr,
 }
 
 
+
 // Make a SWIGified pointer object suitable for a .this attribute
 PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
     
@@ -1676,7 +1676,6 @@ PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
     swig_type_info* swigType = wxPyFindSwigType(className);
     wxCHECK_MSG(swigType != NULL, NULL, wxT("Unknown type in wxPyMakeSwigPtr"));
 
-#if SWIG_VERSION < 0x010328
 #ifdef SWIG_COBJECT_TYPES
     robj = PySwigObject_FromVoidPtrAndDesc((void *) ptr, (char *)swigType->name);
 #else
@@ -1686,20 +1685,16 @@ PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
             PyString_FromString(result) : 0;
     }
 #endif
-#else // SWIG_VERSION >= 1.3.28
-    robj = PySwigObject_New(ptr, swigType, 0);
-#endif
     return robj;
 }
 
-
+    
 // Python's PyInstance_Check does not return True for instances of new-style
 // classes.  This should get close enough for both new and old classes but I
 // should re-evaluate the need for doing instance checks...
 bool wxPyInstance_Check(PyObject* obj) {
     return PyObject_HasAttrString(obj, "__class__") != 0;
 }
-
 
 
 // This one checks if the object is an instance of a SWIG proxy class (it has
@@ -1719,7 +1714,6 @@ bool wxPySwigInstance_Check(PyObject* obj) {
     PyErr_Clear();
     return false;
 }
- 
 
 
 // Export a C API in a struct.  Other modules will be able to load this from
@@ -6326,6 +6320,51 @@ static PyObject *_wrap_Rect_Intersects(PyObject *, PyObject *args, PyObject *kwa
     }
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Rect_CenterIn(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxRect *arg1 = (wxRect *) 0 ;
+    wxRect *arg2 = 0 ;
+    int arg3 = (int) wxBOTH ;
+    wxRect result;
+    wxRect temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "r",(char *) "dir", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:Rect_CenterIn",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRect, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = static_cast<int >(SWIG_As_int(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->CenterIn((wxRect const &)*arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect(static_cast<wxRect & >(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRect, 1);
     }
     return resultobj;
     fail:
@@ -19123,6 +19162,34 @@ static PyObject *_wrap_new_KeyEvent(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
+static PyObject *_wrap_KeyEvent_GetModifiers(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:KeyEvent_GetModifiers",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxKeyEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxKeyEvent const *)arg1)->GetModifiers();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int(static_cast<int >(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_KeyEvent_ControlDown(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
@@ -21643,6 +21710,34 @@ static PyObject *_wrap_UpdateUIEvent_GetEnabled(PyObject *, PyObject *args, PyOb
 }
 
 
+static PyObject *_wrap_UpdateUIEvent_GetShown(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:UpdateUIEvent_GetShown",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxUpdateUIEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxUpdateUIEvent const *)arg1)->GetShown();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_UpdateUIEvent_GetText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
@@ -21759,6 +21854,34 @@ static PyObject *_wrap_UpdateUIEvent_GetSetEnabled(PyObject *, PyObject *args, P
 }
 
 
+static PyObject *_wrap_UpdateUIEvent_GetSetShown(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:UpdateUIEvent_GetSetShown",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxUpdateUIEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxUpdateUIEvent const *)arg1)->GetSetShown();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_UpdateUIEvent_Check(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
@@ -21810,6 +21933,37 @@ static PyObject *_wrap_UpdateUIEvent_Enable(PyObject *, PyObject *args, PyObject
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Enable(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_UpdateUIEvent_Show(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxUpdateUIEvent *arg1 = (wxUpdateUIEvent *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "show", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:UpdateUIEvent_Show",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxUpdateUIEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<bool >(SWIG_As_bool(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->Show(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -27407,39 +27561,6 @@ static PyObject *_wrap_Window_Center(PyObject *, PyObject *args, PyObject *kwarg
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Center(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Window_CenterOnScreen(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj = NULL;
-    wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 = (int) wxBOTH ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "dir", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Window_CenterOnScreen",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    if (obj1) {
-        {
-            arg2 = static_cast<int >(SWIG_As_int(obj1)); 
-            if (SWIG_arg_fail(2)) SWIG_fail;
-        }
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->CenterOnScreen(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -46398,6 +46519,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Rect_InsideXY", (PyCFunction) _wrap_Rect_InsideXY, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_Inside", (PyCFunction) _wrap_Rect_Inside, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_Intersects", (PyCFunction) _wrap_Rect_Intersects, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Rect_CenterIn", (PyCFunction) _wrap_Rect_CenterIn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_x_set", (PyCFunction) _wrap_Rect_x_set, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_x_get", (PyCFunction) _wrap_Rect_x_get, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_y_set", (PyCFunction) _wrap_Rect_y_set, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -46793,6 +46915,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SetCursorEvent_HasCursor", (PyCFunction) _wrap_SetCursorEvent_HasCursor, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SetCursorEvent_swigregister", SetCursorEvent_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_KeyEvent", (PyCFunction) _wrap_new_KeyEvent, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"KeyEvent_GetModifiers", (PyCFunction) _wrap_KeyEvent_GetModifiers, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"KeyEvent_ControlDown", (PyCFunction) _wrap_KeyEvent_ControlDown, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"KeyEvent_MetaDown", (PyCFunction) _wrap_KeyEvent_MetaDown, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"KeyEvent_AltDown", (PyCFunction) _wrap_KeyEvent_AltDown, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -46892,12 +47015,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_UpdateUIEvent", (PyCFunction) _wrap_new_UpdateUIEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_GetChecked", (PyCFunction) _wrap_UpdateUIEvent_GetChecked, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_GetEnabled", (PyCFunction) _wrap_UpdateUIEvent_GetEnabled, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"UpdateUIEvent_GetShown", (PyCFunction) _wrap_UpdateUIEvent_GetShown, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_GetText", (PyCFunction) _wrap_UpdateUIEvent_GetText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_GetSetText", (PyCFunction) _wrap_UpdateUIEvent_GetSetText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_GetSetChecked", (PyCFunction) _wrap_UpdateUIEvent_GetSetChecked, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_GetSetEnabled", (PyCFunction) _wrap_UpdateUIEvent_GetSetEnabled, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"UpdateUIEvent_GetSetShown", (PyCFunction) _wrap_UpdateUIEvent_GetSetShown, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_Check", (PyCFunction) _wrap_UpdateUIEvent_Check, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_Enable", (PyCFunction) _wrap_UpdateUIEvent_Enable, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"UpdateUIEvent_Show", (PyCFunction) _wrap_UpdateUIEvent_Show, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_SetText", (PyCFunction) _wrap_UpdateUIEvent_SetText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_SetUpdateInterval", (PyCFunction) _wrap_UpdateUIEvent_SetUpdateInterval, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"UpdateUIEvent_GetUpdateInterval", (PyCFunction) _wrap_UpdateUIEvent_GetUpdateInterval, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -47098,7 +47224,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetBestFittingSize", (PyCFunction) _wrap_Window_GetBestFittingSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetAdjustedBestSize", (PyCFunction) _wrap_Window_GetAdjustedBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_Center", (PyCFunction) _wrap_Window_Center, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Window_CenterOnScreen", (PyCFunction) _wrap_Window_CenterOnScreen, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_CenterOnParent", (PyCFunction) _wrap_Window_CenterOnParent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_Fit", (PyCFunction) _wrap_Window_Fit, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_FitInside", (PyCFunction) _wrap_Window_FitInside, METH_VARARGS | METH_KEYWORDS, NULL},

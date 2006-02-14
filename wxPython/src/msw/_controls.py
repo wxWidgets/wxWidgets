@@ -240,6 +240,14 @@ class BitmapButton(Button):
         """
         return _controls_.BitmapButton_GetBitmapSelected(*args, **kwargs)
 
+    def GetBitmapHover(*args, **kwargs):
+        """
+        GetBitmapHover(self) -> Bitmap
+
+        Returns the bitmap used when the mouse is over the button, may be invalid.
+        """
+        return _controls_.BitmapButton_GetBitmapHover(*args, **kwargs)
+
     def SetBitmapDisabled(*args, **kwargs):
         """
         SetBitmapDisabled(self, Bitmap bitmap)
@@ -272,6 +280,16 @@ class BitmapButton(Button):
         unselected state, and for all other states if no other bitmaps are provided.
         """
         return _controls_.BitmapButton_SetBitmapLabel(*args, **kwargs)
+
+    def SetBitmapHover(*args, **kwargs):
+        """
+        SetBitmapHover(self, Bitmap hover)
+
+        Sets the bitmap to be shown when the mouse is over the button.  This function
+        is new since wxWidgets version 2.7.0 and the hover bitmap is currently only
+        supported in wxMSW.
+        """
+        return _controls_.BitmapButton_SetBitmapHover(*args, **kwargs)
 
     def SetMargins(*args, **kwargs):
         """SetMargins(self, int x, int y)"""

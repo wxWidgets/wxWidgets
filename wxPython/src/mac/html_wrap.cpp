@@ -9,7 +9,6 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
-#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -2119,7 +2118,6 @@ public:
     }
 
     void OnLinkClicked(const wxHtmlLinkInfo& link);
-//-    void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
     wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
                                       const wxString& url,
@@ -2149,9 +2147,6 @@ void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     if (! found)
         wxHtmlWindow::OnLinkClicked(link);
 }
-// void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
-//     wxHtmlWindow::OnLinkClicked(link);
-// }
 
 
 wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
@@ -4709,7 +4704,9 @@ static PyObject *_wrap_HtmlSelection_GetFromCell(PyObject *, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlCell, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4735,7 +4732,9 @@ static PyObject *_wrap_HtmlSelection_GetToCell(PyObject *, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlCell, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -5900,7 +5899,9 @@ static PyObject *_wrap_HtmlCell_GetNext(PyObject *, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlCell, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -5952,7 +5953,9 @@ static PyObject *_wrap_HtmlCell_GetFirstChild(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlCell, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6336,7 +6339,9 @@ static PyObject *_wrap_HtmlCell_Find(PyObject *, PyObject *args, PyObject *kwarg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlCell, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6511,7 +6516,9 @@ static PyObject *_wrap_HtmlCell_FindCellByPos(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlCell, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6567,7 +6574,9 @@ static PyObject *_wrap_HtmlCell_GetFirstTerminal(PyObject *, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlCell, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6593,7 +6602,9 @@ static PyObject *_wrap_HtmlCell_GetLastTerminal(PyObject *, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlCell, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6747,6 +6758,99 @@ static PyObject *_wrap_new_HtmlWordCell(PyObject *, PyObject *args, PyObject *kw
         if (temp1)
         delete arg1;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_HtmlWordCell_ConvertToText(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxHtmlWordCell *arg1 = (wxHtmlWordCell *) 0 ;
+    wxHtmlSelection *arg2 = (wxHtmlSelection *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "sel", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWordCell_ConvertToText",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxHtmlWordCell, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlSelection, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxHtmlWordCell const *)arg1)->ConvertToText(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_HtmlWordCell_IsLinebreakAllowed(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxHtmlWordCell *arg1 = (wxHtmlWordCell *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:HtmlWordCell_IsLinebreakAllowed",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxHtmlWordCell, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxHtmlWordCell const *)arg1)->IsLinebreakAllowed();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_HtmlWordCell_SetPreviousWord(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxHtmlWordCell *arg1 = (wxHtmlWordCell *) 0 ;
+    wxHtmlWordCell *arg2 = (wxHtmlWordCell *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "cell", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HtmlWordCell_SetPreviousWord",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxHtmlWordCell, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxHtmlWordCell, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetPreviousWord(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -7310,7 +7414,9 @@ static PyObject *_wrap_HtmlContainerCell_GetFirstChild(PyObject *, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxHtmlCell, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14691,6 +14797,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlCell_ConvertToText", (PyCFunction) _wrap_HtmlCell_ConvertToText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlCell_swigregister", HtmlCell_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_HtmlWordCell", (PyCFunction) _wrap_new_HtmlWordCell, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlWordCell_ConvertToText", (PyCFunction) _wrap_HtmlWordCell_ConvertToText, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlWordCell_IsLinebreakAllowed", (PyCFunction) _wrap_HtmlWordCell_IsLinebreakAllowed, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HtmlWordCell_SetPreviousWord", (PyCFunction) _wrap_HtmlWordCell_SetPreviousWord, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlWordCell_swigregister", HtmlWordCell_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_HtmlContainerCell", (PyCFunction) _wrap_new_HtmlContainerCell, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlContainerCell_InsertCell", (PyCFunction) _wrap_HtmlContainerCell_InsertCell, METH_VARARGS | METH_KEYWORDS, NULL},

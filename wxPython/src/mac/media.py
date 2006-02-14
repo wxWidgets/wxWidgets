@@ -54,6 +54,10 @@ __docfilter__ = wx.__DocFilter(globals())
 MEDIASTATE_STOPPED = _media.MEDIASTATE_STOPPED
 MEDIASTATE_PAUSED = _media.MEDIASTATE_PAUSED
 MEDIASTATE_PLAYING = _media.MEDIASTATE_PLAYING
+MEDIACTRLPLAYERCONTROLS_NONE = _media.MEDIACTRLPLAYERCONTROLS_NONE
+MEDIACTRLPLAYERCONTROLS_STEP = _media.MEDIACTRLPLAYERCONTROLS_STEP
+MEDIACTRLPLAYERCONTROLS_VOLUME = _media.MEDIACTRLPLAYERCONTROLS_VOLUME
+MEDIACTRLPLAYERCONTROLS_DEFAULT = _media.MEDIACTRLPLAYERCONTROLS_DEFAULT
 class MediaEvent(_core.NotifyEvent):
     """Proxy of C++ MediaEvent class"""
     def __repr__(self):
@@ -71,6 +75,13 @@ class MediaEventPtr(MediaEvent):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MediaEvent
 _media.MediaEvent_swigregister(MediaEventPtr)
+cvar = _media.cvar
+MEDIABACKEND_DIRECTSHOW = cvar.MEDIABACKEND_DIRECTSHOW
+MEDIABACKEND_MCI = cvar.MEDIABACKEND_MCI
+MEDIABACKEND_QUICKTIME = cvar.MEDIABACKEND_QUICKTIME
+MEDIABACKEND_GSTREAMER = cvar.MEDIABACKEND_GSTREAMER
+MEDIABACKEND_REALPLAYER = cvar.MEDIABACKEND_REALPLAYER
+MEDIABACKEND_WMP10 = cvar.MEDIABACKEND_WMP10
 
 class MediaCtrl(_core.Control):
     """Proxy of C++ MediaCtrl class"""
@@ -145,7 +156,7 @@ class MediaCtrl(_core.Control):
         return _media.MediaCtrl_SetVolume(*args, **kwargs)
 
     def ShowPlayerControls(*args, **kwargs):
-        """ShowPlayerControls(self, wxMediaCtrlPlayerControls flags=wxMEDIACTRLPLAYERCONTROLS_DEFAULT) -> bool"""
+        """ShowPlayerControls(self, int flags=MEDIACTRLPLAYERCONTROLS_DEFAULT) -> bool"""
         return _media.MediaCtrl_ShowPlayerControls(*args, **kwargs)
 
     def Load(*args, **kwargs):
@@ -161,6 +172,14 @@ class MediaCtrl(_core.Control):
         return _media.MediaCtrl_LoadURIWithProxy(*args, **kwargs)
 
     LoadFromURI = LoadURI 
+    def GetDownloadProgress(*args, **kwargs):
+        """GetDownloadProgress(self) -> wxFileOffset"""
+        return _media.MediaCtrl_GetDownloadProgress(*args, **kwargs)
+
+    def GetDownloadTotal(*args, **kwargs):
+        """GetDownloadTotal(self) -> wxFileOffset"""
+        return _media.MediaCtrl_GetDownloadTotal(*args, **kwargs)
+
 
 class MediaCtrlPtr(MediaCtrl):
     def __init__(self, this):
@@ -168,7 +187,6 @@ class MediaCtrlPtr(MediaCtrl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MediaCtrl
 _media.MediaCtrl_swigregister(MediaCtrlPtr)
-cvar = _media.cvar
 MediaCtrlNameStr = cvar.MediaCtrlNameStr
 
 def PreMediaCtrl(*args, **kwargs):
@@ -180,9 +198,15 @@ def PreMediaCtrl(*args, **kwargs):
 wxEVT_MEDIA_FINISHED = _media.wxEVT_MEDIA_FINISHED
 wxEVT_MEDIA_STOP = _media.wxEVT_MEDIA_STOP
 wxEVT_MEDIA_LOADED = _media.wxEVT_MEDIA_LOADED
-EVT_MEDIA_FINISHED = wx.PyEventBinder( wxEVT_MEDIA_FINISHED, 1)
-EVT_MEDIA_STOP     = wx.PyEventBinder( wxEVT_MEDIA_STOP, 1)
-EVT_MEDIA_LOADED   = wx.PyEventBinder( wxEVT_MEDIA_LOADED, 1)    
+wxEVT_MEDIA_STATECHANGED = _media.wxEVT_MEDIA_STATECHANGED
+wxEVT_MEDIA_PLAY = _media.wxEVT_MEDIA_PLAY
+wxEVT_MEDIA_PAUSE = _media.wxEVT_MEDIA_PAUSE
+EVT_MEDIA_FINISHED       = wx.PyEventBinder( wxEVT_MEDIA_FINISHED, 1)
+EVT_MEDIA_STOP           = wx.PyEventBinder( wxEVT_MEDIA_STOP, 1)
+EVT_MEDIA_LOADED         = wx.PyEventBinder( wxEVT_MEDIA_LOADED, 1)
+EVT_MEDIA_STATECHANGED   = wx.PyEventBinder( wxEVT_MEDIA_STATECHANGED, 1)
+EVT_MEDIA_PLAY           = wx.PyEventBinder( wxEVT_MEDIA_PLAY, 1)
+EVT_MEDIA_PAUSE          = wx.PyEventBinder( wxEVT_MEDIA_PAUSE, 1)
 
 
 

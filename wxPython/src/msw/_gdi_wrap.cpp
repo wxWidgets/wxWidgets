@@ -9,7 +9,6 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
-#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -13181,6 +13180,113 @@ static PyObject *_wrap_DC_FloodFillPoint(PyObject *, PyObject *args, PyObject *k
 }
 
 
+static PyObject *_wrap_DC_GradientFillConcentric(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxDC *arg1 = (wxDC *) 0 ;
+    wxRect *arg2 = 0 ;
+    wxColour *arg3 = 0 ;
+    wxColour *arg4 = 0 ;
+    wxPoint *arg5 = 0 ;
+    wxRect temp2 ;
+    wxColour temp3 ;
+    wxColour temp4 ;
+    wxPoint temp5 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "rect",(char *) "initialColour",(char *) "destColour",(char *) "circleCenter", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:DC_GradientFillConcentric",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxColour_helper(obj2, &arg3)) SWIG_fail;
+    }
+    {
+        arg4 = &temp4;
+        if ( ! wxColour_helper(obj3, &arg4)) SWIG_fail;
+    }
+    {
+        arg5 = &temp5;
+        if ( ! wxPoint_helper(obj4, &arg5)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->GradientFillConcentric((wxRect const &)*arg2,(wxColour const &)*arg3,(wxColour const &)*arg4,(wxPoint const &)*arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DC_GradientFillLinear(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxDC *arg1 = (wxDC *) 0 ;
+    wxRect *arg2 = 0 ;
+    wxColour *arg3 = 0 ;
+    wxColour *arg4 = 0 ;
+    wxDirection arg5 = (wxDirection) wxEAST ;
+    wxRect temp2 ;
+    wxColour temp3 ;
+    wxColour temp4 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "rect",(char *) "initialColour",(char *) "destColour",(char *) "nDirection", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:DC_GradientFillLinear",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxColour_helper(obj2, &arg3)) SWIG_fail;
+    }
+    {
+        arg4 = &temp4;
+        if ( ! wxColour_helper(obj3, &arg4)) SWIG_fail;
+    }
+    if (obj4) {
+        {
+            arg5 = static_cast<wxDirection >(SWIG_As_int(obj4)); 
+            if (SWIG_arg_fail(5)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->GradientFillLinear((wxRect const &)*arg2,(wxColour const &)*arg3,(wxColour const &)*arg4,arg5);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_DC_GetPixel(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxDC *arg1 = (wxDC *) 0 ;
@@ -22701,6 +22807,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_DC", (PyCFunction) _wrap_delete_DC, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DC_FloodFill", (PyCFunction) _wrap_DC_FloodFill, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DC_FloodFillPoint", (PyCFunction) _wrap_DC_FloodFillPoint, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DC_GradientFillConcentric", (PyCFunction) _wrap_DC_GradientFillConcentric, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DC_GradientFillLinear", (PyCFunction) _wrap_DC_GradientFillLinear, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DC_GetPixel", (PyCFunction) _wrap_DC_GetPixel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DC_GetPixelPoint", (PyCFunction) _wrap_DC_GetPixelPoint, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DC_DrawLine", (PyCFunction) _wrap_DC_DrawLine, METH_VARARGS | METH_KEYWORDS, NULL},

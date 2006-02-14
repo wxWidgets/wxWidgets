@@ -1321,7 +1321,7 @@ class Rect(object):
         """
         Offset(self, Point pt)
 
-        Same as OffsetXY but uses dx,dy from Point
+        Same as `OffsetXY` but uses dx,dy from Point
         """
         return _core_.Rect_Offset(*args, **kwargs)
 
@@ -1397,6 +1397,16 @@ class Rect(object):
         """
         return _core_.Rect_Intersects(*args, **kwargs)
 
+    def CenterIn(*args, **kwargs):
+        """
+        CenterIn(self, Rect r, int dir=BOTH) -> Rect
+
+        Center this rectangle within the one passed to the method, which is
+        usually, but not necessarily, the larger one.
+        """
+        return _core_.Rect_CenterIn(*args, **kwargs)
+
+    CentreIn = CenterIn 
     x = property(_core_.Rect_x_get, _core_.Rect_x_set)
     y = property(_core_.Rect_y_get, _core_.Rect_y_set)
     width = property(_core_.Rect_width_get, _core_.Rect_width_set)
@@ -5098,6 +5108,21 @@ class KeyEvent(Event):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def GetModifiers(*args, **kwargs):
+        """
+        GetModifiers(self) -> int
+
+        Returns a bitmask of the current modifier settings.  Can be used to
+        check if the key event has exactly the given modifiers without having
+        to explicitly check that the other modifiers are not down.  For
+        example::
+
+            if event.GetModifers() == wx.MOD_CONTROL:
+                DoSomething()
+
+        """
+        return _core_.KeyEvent_GetModifiers(*args, **kwargs)
+
     def ControlDown(*args, **kwargs):
         """
         ControlDown(self) -> bool
@@ -8525,15 +8550,6 @@ class Window(EvtHandler):
         return _core_.Window_Center(*args, **kwargs)
 
     Centre = Center 
-    def CenterOnScreen(*args, **kwargs):
-        """
-        CenterOnScreen(self, int dir=BOTH)
-
-        Center on screen (only works for top level windows)
-        """
-        return _core_.Window_CenterOnScreen(*args, **kwargs)
-
-    CentreOnScreen = CenterOnScreen 
     def CenterOnParent(*args, **kwargs):
         """
         CenterOnParent(self, int dir=BOTH)
@@ -10038,9 +10054,13 @@ class Window(EvtHandler):
         SetAutoLayout(self, bool autoLayout)
 
         Determines whether the Layout function will be called automatically
-        when the window is resized.  It is called implicitly by SetSizer but
-        if you use SetConstraints you should call it manually or otherwise the
-        window layout won't be correctly updated when its size changes.
+        when the window is resized.  lease note that this only happens for the
+        windows usually used to contain children, namely `wx.Panel` and
+        `wx.TopLevelWindow` (and the classes deriving from them).
+
+        This method is called implicitly by `SetSizer` but if you use
+        `SetConstraints` you should call it manually or otherwise the window
+        layout won't be correctly updated when its size changes.
         """
         return _core_.Window_SetAutoLayout(*args, **kwargs)
 
@@ -12062,7 +12082,7 @@ class Sizer(Object):
         """
         IsShown(self, item)
 
-        Determines if the item is currently shown. sizer.  To make a sizer
+        Determines if the item is currently shown. To make a sizer
         item disappear or reappear, use Show followed by `Layout`.  The *item*
         parameter can be either a window, a sizer, or the zero-based index of
         the item.

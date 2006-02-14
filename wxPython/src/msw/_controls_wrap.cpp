@@ -9,7 +9,6 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
-#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -3160,6 +3159,36 @@ static PyObject *_wrap_BitmapButton_GetBitmapSelected(PyObject *, PyObject *args
 }
 
 
+static PyObject *_wrap_BitmapButton_GetBitmapHover(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxBitmapButton *arg1 = (wxBitmapButton *) 0 ;
+    wxBitmap result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:BitmapButton_GetBitmapHover",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxBitmapButton, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetBitmapHover();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxBitmap * resultptr;
+        resultptr = new wxBitmap(static_cast<wxBitmap & >(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxBitmap, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_BitmapButton_SetBitmapDisabled(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxBitmapButton *arg1 = (wxBitmapButton *) 0 ;
@@ -3289,6 +3318,41 @@ static PyObject *_wrap_BitmapButton_SetBitmapLabel(PyObject *, PyObject *args, P
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetBitmapLabel((wxBitmap const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_BitmapButton_SetBitmapHover(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxBitmapButton *arg1 = (wxBitmapButton *) 0 ;
+    wxBitmap *arg2 = 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "hover", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:BitmapButton_SetBitmapHover",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxBitmapButton, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+        if (arg2 == NULL) {
+            SWIG_null_ref("wxBitmap");
+        }
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetBitmapHover((wxBitmap const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -36448,10 +36512,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"BitmapButton_GetBitmapDisabled", (PyCFunction) _wrap_BitmapButton_GetBitmapDisabled, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BitmapButton_GetBitmapFocus", (PyCFunction) _wrap_BitmapButton_GetBitmapFocus, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BitmapButton_GetBitmapSelected", (PyCFunction) _wrap_BitmapButton_GetBitmapSelected, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"BitmapButton_GetBitmapHover", (PyCFunction) _wrap_BitmapButton_GetBitmapHover, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BitmapButton_SetBitmapDisabled", (PyCFunction) _wrap_BitmapButton_SetBitmapDisabled, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BitmapButton_SetBitmapFocus", (PyCFunction) _wrap_BitmapButton_SetBitmapFocus, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BitmapButton_SetBitmapSelected", (PyCFunction) _wrap_BitmapButton_SetBitmapSelected, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BitmapButton_SetBitmapLabel", (PyCFunction) _wrap_BitmapButton_SetBitmapLabel, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"BitmapButton_SetBitmapHover", (PyCFunction) _wrap_BitmapButton_SetBitmapHover, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BitmapButton_SetMargins", (PyCFunction) _wrap_BitmapButton_SetMargins, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BitmapButton_GetMarginX", (PyCFunction) _wrap_BitmapButton_GetMarginX, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BitmapButton_GetMarginY", (PyCFunction) _wrap_BitmapButton_GetMarginY, METH_VARARGS | METH_KEYWORDS, NULL},

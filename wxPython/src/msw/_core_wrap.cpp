@@ -9,7 +9,6 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
-#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1588,8 +1587,34 @@ static swig_module_info swig_module = {swig_types, 132, 0, 0, 0, 0};
 // located here so they know about the SWIG types and functions declared
 // in the wrapper code.
 
+static
+swig_type_info* wxPyFindSwigType(const wxChar* className);
+ 
+
+
+// Make a SWIGified pointer object suitable for a .this attribute
+PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
+    
+    PyObject* robj = NULL;
+
+    swig_type_info* swigType = wxPyFindSwigType(className);
+    wxCHECK_MSG(swigType != NULL, NULL, wxT("Unknown type in wxPyMakeSwigPtr"));
+
+#ifdef SWIG_COBJECT_TYPES
+    robj = PySwigObject_FromVoidPtrAndDesc((void *) ptr, (char *)swigType->name);
+#else
+    {
+        char result[1024];
+        robj = SWIG_PackVoidPtr(result, ptr, swigType->name, sizeof(result)) ?
+            PyString_FromString(result) : 0;
+    }
+#endif
+    return robj;
+}
+
+    
 #include <wx/hashmap.h>
-    WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
+WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 
 
 // Maintains a hashmap of className to swig_type_info pointers.  Given the
@@ -1668,29 +1693,6 @@ bool wxPyConvertSwigPtr(PyObject* obj, void **ptr,
 }
 
 
-// Make a SWIGified pointer object suitable for a .this attribute
-PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
-    
-    PyObject* robj = NULL;
-
-    swig_type_info* swigType = wxPyFindSwigType(className);
-    wxCHECK_MSG(swigType != NULL, NULL, wxT("Unknown type in wxPyMakeSwigPtr"));
-
-#if SWIG_VERSION < 0x010328
-#ifdef SWIG_COBJECT_TYPES
-    robj = PySwigObject_FromVoidPtrAndDesc((void *) ptr, (char *)swigType->name);
-#else
-    {
-        char result[1024];
-        robj = SWIG_PackVoidPtr(result, ptr, swigType->name, sizeof(result)) ?
-            PyString_FromString(result) : 0;
-    }
-#endif
-#else // SWIG_VERSION >= 1.3.28
-    robj = PySwigObject_New(ptr, swigType, 0);
-#endif
-    return robj;
-}
 
 
 // Python's PyInstance_Check does not return True for instances of new-style
@@ -6309,6 +6311,51 @@ static PyObject *_wrap_Rect_Intersects(PyObject *, PyObject *args, PyObject *kwa
     }
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Rect_CenterIn(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxRect *arg1 = (wxRect *) 0 ;
+    wxRect *arg2 = 0 ;
+    int arg3 = (int) wxBOTH ;
+    wxRect result;
+    wxRect temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "r",(char *) "dir", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:Rect_CenterIn",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRect, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = static_cast<int >(SWIG_As_int(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->CenterIn((wxRect const &)*arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect(static_cast<wxRect & >(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRect, 1);
     }
     return resultobj;
     fail:
@@ -19106,6 +19153,34 @@ static PyObject *_wrap_new_KeyEvent(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
+static PyObject *_wrap_KeyEvent_GetModifiers(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:KeyEvent_GetModifiers",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxKeyEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxKeyEvent const *)arg1)->GetModifiers();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int(static_cast<int >(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_KeyEvent_ControlDown(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
@@ -27390,39 +27465,6 @@ static PyObject *_wrap_Window_Center(PyObject *, PyObject *args, PyObject *kwarg
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Center(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Window_CenterOnScreen(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj = NULL;
-    wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 = (int) wxBOTH ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "dir", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Window_CenterOnScreen",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    if (obj1) {
-        {
-            arg2 = static_cast<int >(SWIG_As_int(obj1)); 
-            if (SWIG_arg_fail(2)) SWIG_fail;
-        }
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->CenterOnScreen(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -46416,6 +46458,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Rect_InsideXY", (PyCFunction) _wrap_Rect_InsideXY, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_Inside", (PyCFunction) _wrap_Rect_Inside, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_Intersects", (PyCFunction) _wrap_Rect_Intersects, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Rect_CenterIn", (PyCFunction) _wrap_Rect_CenterIn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_x_set", (PyCFunction) _wrap_Rect_x_set, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_x_get", (PyCFunction) _wrap_Rect_x_get, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Rect_y_set", (PyCFunction) _wrap_Rect_y_set, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -46811,6 +46854,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SetCursorEvent_HasCursor", (PyCFunction) _wrap_SetCursorEvent_HasCursor, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SetCursorEvent_swigregister", SetCursorEvent_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_KeyEvent", (PyCFunction) _wrap_new_KeyEvent, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"KeyEvent_GetModifiers", (PyCFunction) _wrap_KeyEvent_GetModifiers, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"KeyEvent_ControlDown", (PyCFunction) _wrap_KeyEvent_ControlDown, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"KeyEvent_MetaDown", (PyCFunction) _wrap_KeyEvent_MetaDown, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"KeyEvent_AltDown", (PyCFunction) _wrap_KeyEvent_AltDown, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -47116,7 +47160,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetBestFittingSize", (PyCFunction) _wrap_Window_GetBestFittingSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetAdjustedBestSize", (PyCFunction) _wrap_Window_GetAdjustedBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_Center", (PyCFunction) _wrap_Window_Center, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Window_CenterOnScreen", (PyCFunction) _wrap_Window_CenterOnScreen, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_CenterOnParent", (PyCFunction) _wrap_Window_CenterOnParent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_Fit", (PyCFunction) _wrap_Window_Fit, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_FitInside", (PyCFunction) _wrap_Window_FitInside, METH_VARARGS | METH_KEYWORDS, NULL},

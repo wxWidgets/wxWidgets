@@ -9,7 +9,6 @@
  * ----------------------------------------------------------------------------- */
 
 #define SWIGPYTHON
-#define SWIG_VERSION 0x010327
 
 #ifdef __cplusplus
 template<class T> class SwigValueWrapper {
@@ -1478,54 +1477,53 @@ SWIG_Python_SetModule(swig_module_info *swig_module) {
 #define SWIGTYPE_p_wxLayoutConstraints swig_types[43]
 #define SWIGTYPE_p_wxMaximizeEvent swig_types[44]
 #define SWIGTYPE_p_wxMediaCtrl swig_types[45]
-#define SWIGTYPE_p_wxMediaCtrlPlayerControls swig_types[46]
-#define SWIGTYPE_p_wxMediaEvent swig_types[47]
-#define SWIGTYPE_p_wxMenu swig_types[48]
-#define SWIGTYPE_p_wxMenuBar swig_types[49]
-#define SWIGTYPE_p_wxMenuEvent swig_types[50]
-#define SWIGTYPE_p_wxMenuItem swig_types[51]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[52]
-#define SWIGTYPE_p_wxMouseEvent swig_types[53]
-#define SWIGTYPE_p_wxMoveEvent swig_types[54]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[55]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[56]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[57]
-#define SWIGTYPE_p_wxObject swig_types[58]
-#define SWIGTYPE_p_wxPCXHandler swig_types[59]
-#define SWIGTYPE_p_wxPNGHandler swig_types[60]
-#define SWIGTYPE_p_wxPNMHandler swig_types[61]
-#define SWIGTYPE_p_wxPaintEvent swig_types[62]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[63]
-#define SWIGTYPE_p_wxPaperSize swig_types[64]
-#define SWIGTYPE_p_wxPyApp swig_types[65]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[66]
-#define SWIGTYPE_p_wxPyEvent swig_types[67]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[68]
-#define SWIGTYPE_p_wxPySizer swig_types[69]
-#define SWIGTYPE_p_wxPyValidator swig_types[70]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[71]
-#define SWIGTYPE_p_wxScrollEvent swig_types[72]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[73]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[74]
-#define SWIGTYPE_p_wxShowEvent swig_types[75]
-#define SWIGTYPE_p_wxSizeEvent swig_types[76]
-#define SWIGTYPE_p_wxSizer swig_types[77]
-#define SWIGTYPE_p_wxSizerItem swig_types[78]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[79]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[80]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[81]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[82]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[83]
-#define SWIGTYPE_p_wxValidator swig_types[84]
-#define SWIGTYPE_p_wxWindow swig_types[85]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[86]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[87]
-#define SWIGTYPE_p_wxXPMHandler swig_types[88]
-#define SWIGTYPE_ptrdiff_t swig_types[89]
-#define SWIGTYPE_std__ptrdiff_t swig_types[90]
-#define SWIGTYPE_unsigned_int swig_types[91]
-static swig_type_info *swig_types[93];
-static swig_module_info swig_module = {swig_types, 92, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxMediaEvent swig_types[46]
+#define SWIGTYPE_p_wxMenu swig_types[47]
+#define SWIGTYPE_p_wxMenuBar swig_types[48]
+#define SWIGTYPE_p_wxMenuEvent swig_types[49]
+#define SWIGTYPE_p_wxMenuItem swig_types[50]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[51]
+#define SWIGTYPE_p_wxMouseEvent swig_types[52]
+#define SWIGTYPE_p_wxMoveEvent swig_types[53]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[54]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[55]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[56]
+#define SWIGTYPE_p_wxObject swig_types[57]
+#define SWIGTYPE_p_wxPCXHandler swig_types[58]
+#define SWIGTYPE_p_wxPNGHandler swig_types[59]
+#define SWIGTYPE_p_wxPNMHandler swig_types[60]
+#define SWIGTYPE_p_wxPaintEvent swig_types[61]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[62]
+#define SWIGTYPE_p_wxPaperSize swig_types[63]
+#define SWIGTYPE_p_wxPyApp swig_types[64]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[65]
+#define SWIGTYPE_p_wxPyEvent swig_types[66]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[67]
+#define SWIGTYPE_p_wxPySizer swig_types[68]
+#define SWIGTYPE_p_wxPyValidator swig_types[69]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[70]
+#define SWIGTYPE_p_wxScrollEvent swig_types[71]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[72]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[73]
+#define SWIGTYPE_p_wxShowEvent swig_types[74]
+#define SWIGTYPE_p_wxSizeEvent swig_types[75]
+#define SWIGTYPE_p_wxSizer swig_types[76]
+#define SWIGTYPE_p_wxSizerItem swig_types[77]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[78]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[79]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[80]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[81]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[82]
+#define SWIGTYPE_p_wxValidator swig_types[83]
+#define SWIGTYPE_p_wxWindow swig_types[84]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[85]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[86]
+#define SWIGTYPE_p_wxXPMHandler swig_types[87]
+#define SWIGTYPE_ptrdiff_t swig_types[88]
+#define SWIGTYPE_std__ptrdiff_t swig_types[89]
+#define SWIGTYPE_unsigned_int swig_types[90]
+static swig_type_info *swig_types[92];
+static swig_module_info swig_module = {swig_types, 91, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1562,7 +1560,14 @@ enum wxMediaCtrlPlayerControls
     wxMEDIACTRLPLAYERCONTROLS_DEFAULT
 };
 
-    
+static wxString wxMEDIABACKEND_DIRECTSHOW(wxEmptyString);
+static wxString wxMEDIABACKEND_MCI       (wxEmptyString);
+static wxString wxMEDIABACKEND_QUICKTIME (wxEmptyString);
+static wxString wxMEDIABACKEND_GSTREAMER (wxEmptyString);
+static wxString wxMEDIABACKEND_REALPLAYER(wxEmptyString);
+static wxString wxMEDIABACKEND_WMP10     (wxEmptyString);
+
+
 class wxMediaEvent : public wxNotifyEvent
 {
 public:
@@ -1617,11 +1622,18 @@ public:
     bool Load(const wxString& fileName) { return false; }
     bool LoadURI(const wxString& fileName) { return false; }
     bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy) { return false; }
+
+    wxFileOffset GetDownloadProgress() { return 0; }
+    wxFileOffset GetDownloadTotal()    { return 0; }
+    
 };
 
 const wxEventType wxEVT_MEDIA_FINISHED = 0;
 const wxEventType wxEVT_MEDIA_STOP = 0;
 const wxEventType wxEVT_MEDIA_LOADED = 0;
+const wxEventType wxEVT_MEDIA_STATECHANGED = 0;
+const wxEventType wxEVT_MEDIA_PLAY = 0;
+const wxEventType wxEVT_MEDIA_PAUSE = 0;
 
 #endif
 
@@ -1630,6 +1642,12 @@ const wxEventType wxEVT_MEDIA_LOADED = 0;
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
 
+ static const wxString wxPyMEDIABACKEND_DIRECTSHOW(wxMEDIABACKEND_DIRECTSHOW); 
+ static const wxString wxPyMEDIABACKEND_MCI(wxMEDIABACKEND_MCI); 
+ static const wxString wxPyMEDIABACKEND_QUICKTIME(wxMEDIABACKEND_QUICKTIME); 
+ static const wxString wxPyMEDIABACKEND_GSTREAMER(wxMEDIABACKEND_GSTREAMER); 
+ static const wxString wxPyMEDIABACKEND_REALPLAYER(wxMEDIABACKEND_REALPLAYER); 
+ static const wxString wxPyMEDIABACKEND_WMP10(wxMEDIABACKEND_WMP10); 
 
 #include <limits.h>
 
@@ -1787,6 +1805,126 @@ SWIG_Check_double(PyObject* obj)
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_MEDIABACKEND_DIRECTSHOW_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable MEDIABACKEND_DIRECTSHOW is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_MEDIABACKEND_DIRECTSHOW_get(void) {
+    PyObject *pyobj = NULL;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyMEDIABACKEND_DIRECTSHOW)->c_str(), (&wxPyMEDIABACKEND_DIRECTSHOW)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyMEDIABACKEND_DIRECTSHOW)->c_str(), (&wxPyMEDIABACKEND_DIRECTSHOW)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_MEDIABACKEND_MCI_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable MEDIABACKEND_MCI is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_MEDIABACKEND_MCI_get(void) {
+    PyObject *pyobj = NULL;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyMEDIABACKEND_MCI)->c_str(), (&wxPyMEDIABACKEND_MCI)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyMEDIABACKEND_MCI)->c_str(), (&wxPyMEDIABACKEND_MCI)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_MEDIABACKEND_QUICKTIME_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable MEDIABACKEND_QUICKTIME is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_MEDIABACKEND_QUICKTIME_get(void) {
+    PyObject *pyobj = NULL;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyMEDIABACKEND_QUICKTIME)->c_str(), (&wxPyMEDIABACKEND_QUICKTIME)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyMEDIABACKEND_QUICKTIME)->c_str(), (&wxPyMEDIABACKEND_QUICKTIME)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_MEDIABACKEND_GSTREAMER_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable MEDIABACKEND_GSTREAMER is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_MEDIABACKEND_GSTREAMER_get(void) {
+    PyObject *pyobj = NULL;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyMEDIABACKEND_GSTREAMER)->c_str(), (&wxPyMEDIABACKEND_GSTREAMER)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyMEDIABACKEND_GSTREAMER)->c_str(), (&wxPyMEDIABACKEND_GSTREAMER)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_MEDIABACKEND_REALPLAYER_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable MEDIABACKEND_REALPLAYER is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_MEDIABACKEND_REALPLAYER_get(void) {
+    PyObject *pyobj = NULL;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyMEDIABACKEND_REALPLAYER)->c_str(), (&wxPyMEDIABACKEND_REALPLAYER)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyMEDIABACKEND_REALPLAYER)->c_str(), (&wxPyMEDIABACKEND_REALPLAYER)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_MEDIABACKEND_WMP10_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable MEDIABACKEND_WMP10 is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_MEDIABACKEND_WMP10_get(void) {
+    PyObject *pyobj = NULL;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyMEDIABACKEND_WMP10)->c_str(), (&wxPyMEDIABACKEND_WMP10)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyMEDIABACKEND_WMP10)->c_str(), (&wxPyMEDIABACKEND_WMP10)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_MediaEvent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
@@ -2505,14 +2643,8 @@ static PyObject *_wrap_MediaCtrl_ShowPlayerControls(PyObject *, PyObject *args, 
     if (SWIG_arg_fail(1)) SWIG_fail;
     if (obj1) {
         {
-            wxMediaCtrlPlayerControls * argp;
-            SWIG_Python_ConvertPtr(obj1, (void **)&argp, SWIGTYPE_p_wxMediaCtrlPlayerControls, SWIG_POINTER_EXCEPTION);
+            arg2 = static_cast<wxMediaCtrlPlayerControls >(SWIG_As_int(obj1)); 
             if (SWIG_arg_fail(2)) SWIG_fail;
-            if (argp == NULL) {
-                SWIG_null_ref("wxMediaCtrlPlayerControls");
-            }
-            if (SWIG_arg_fail(2)) SWIG_fail;
-            arg2 = *argp;
         }
     }
     {
@@ -2679,6 +2811,68 @@ static PyObject *_wrap_MediaCtrl_LoadURIWithProxy(PyObject *, PyObject *args, Py
 }
 
 
+static PyObject *_wrap_MediaCtrl_GetDownloadProgress(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    wxFileOffset result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetDownloadProgress",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetDownloadProgress();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        if (sizeof(wxFileOffset) > sizeof(long))
+        resultobj = PyLong_FromLongLong(result);
+        else
+        resultobj = PyInt_FromLong(result);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MediaCtrl_GetDownloadTotal(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
+    wxFileOffset result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetDownloadTotal",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMediaCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetDownloadTotal();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        if (sizeof(wxFileOffset) > sizeof(long))
+        resultobj = PyLong_FromLongLong(result);
+        else
+        resultobj = PyInt_FromLong(result);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * MediaCtrl_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -2707,6 +2901,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MediaCtrl_Load", (PyCFunction) _wrap_MediaCtrl_Load, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_LoadURI", (PyCFunction) _wrap_MediaCtrl_LoadURI, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_LoadURIWithProxy", (PyCFunction) _wrap_MediaCtrl_LoadURIWithProxy, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_GetDownloadProgress", (PyCFunction) _wrap_MediaCtrl_GetDownloadProgress, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MediaCtrl_GetDownloadTotal", (PyCFunction) _wrap_MediaCtrl_GetDownloadTotal, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MediaCtrl_swigregister", MediaCtrl_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
@@ -3192,7 +3388,6 @@ static swig_type_info _swigt__p_wxPyValidator = {"_p_wxPyValidator", 0, 0, 0, 0}
 static swig_type_info _swigt__p_wxMenu = {"_p_wxMenu", 0, 0, 0, 0};
 static swig_type_info _swigt__p_wxFileOffset = {"_p_wxFileOffset", "wxFileOffset *", 0, 0, 0};
 static swig_type_info _swigt__p_wxMediaCtrl = {"_p_wxMediaCtrl", "wxMediaCtrl *", 0, 0, 0};
-static swig_type_info _swigt__p_wxMediaCtrlPlayerControls = {"_p_wxMediaCtrlPlayerControls", "wxMediaCtrlPlayerControls *", 0, 0, 0};
 static swig_type_info _swigt__p_wxMediaEvent = {"_p_wxMediaEvent", "wxMediaEvent *", 0, 0, 0};
 static swig_type_info _swigt__p_wxNotifyEvent = {"_p_wxNotifyEvent", "wxNotifyEvent *", 0, 0, 0};
 static swig_type_info _swigt__p_wxObject = {"_p_wxObject", "wxObject *", 0, 0, 0};
@@ -3280,7 +3475,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxLayoutConstraints,
   &_swigt__p_wxMaximizeEvent,
   &_swigt__p_wxMediaCtrl,
-  &_swigt__p_wxMediaCtrlPlayerControls,
   &_swigt__p_wxMediaEvent,
   &_swigt__p_wxMenu,
   &_swigt__p_wxMenuBar,
@@ -3380,7 +3574,6 @@ static swig_cast_info _swigc__p_wxMenu[] = {{&_swigt__p_wxMenu, 0, 0, 0},{0, 0, 
 static swig_cast_info _swigc__p_wxEvtHandler[] = {  {&_swigt__p_wxControl, _p_wxControlTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxWindow, _p_wxWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxEvtHandler, 0, 0, 0},  {&_swigt__p_wxMediaCtrl, _p_wxMediaCtrlTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyApp, _p_wxPyAppTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxValidator, _p_wxValidatorTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMenu, _p_wxMenuTo_p_wxEvtHandler, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFileOffset[] = {  {&_swigt__p_wxFileOffset, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMediaCtrl[] = {  {&_swigt__p_wxMediaCtrl, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxMediaCtrlPlayerControls[] = {  {&_swigt__p_wxMediaCtrlPlayerControls, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxMediaEvent[] = {  {&_swigt__p_wxMediaEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxNotifyEvent[] = {  {&_swigt__p_wxNotifyEvent, 0, 0, 0},  {&_swigt__p_wxMediaEvent, _p_wxMediaEventTo_p_wxNotifyEvent, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxLayoutConstraints[] = {{&_swigt__p_wxLayoutConstraints, 0, 0, 0},{0, 0, 0, 0}};
@@ -3468,7 +3661,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxLayoutConstraints,
   _swigc__p_wxMaximizeEvent,
   _swigc__p_wxMediaCtrl,
-  _swigc__p_wxMediaCtrlPlayerControls,
   _swigc__p_wxMediaEvent,
   _swigc__p_wxMenu,
   _swigc__p_wxMenuBar,
@@ -4020,11 +4212,32 @@ SWIGEXPORT void SWIG_init(void) {
     {
         PyDict_SetItemString(d,"MEDIASTATE_PLAYING", SWIG_From_int(static_cast<int >(wxMEDIASTATE_PLAYING))); 
     }
+    {
+        PyDict_SetItemString(d,"MEDIACTRLPLAYERCONTROLS_NONE", SWIG_From_int(static_cast<int >(wxMEDIACTRLPLAYERCONTROLS_NONE))); 
+    }
+    {
+        PyDict_SetItemString(d,"MEDIACTRLPLAYERCONTROLS_STEP", SWIG_From_int(static_cast<int >(wxMEDIACTRLPLAYERCONTROLS_STEP))); 
+    }
+    {
+        PyDict_SetItemString(d,"MEDIACTRLPLAYERCONTROLS_VOLUME", SWIG_From_int(static_cast<int >(wxMEDIACTRLPLAYERCONTROLS_VOLUME))); 
+    }
+    {
+        PyDict_SetItemString(d,"MEDIACTRLPLAYERCONTROLS_DEFAULT", SWIG_From_int(static_cast<int >(wxMEDIACTRLPLAYERCONTROLS_DEFAULT))); 
+    }
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"MEDIABACKEND_DIRECTSHOW",_wrap_MEDIABACKEND_DIRECTSHOW_get, _wrap_MEDIABACKEND_DIRECTSHOW_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"MEDIABACKEND_MCI",_wrap_MEDIABACKEND_MCI_get, _wrap_MEDIABACKEND_MCI_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"MEDIABACKEND_QUICKTIME",_wrap_MEDIABACKEND_QUICKTIME_get, _wrap_MEDIABACKEND_QUICKTIME_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"MEDIABACKEND_GSTREAMER",_wrap_MEDIABACKEND_GSTREAMER_get, _wrap_MEDIABACKEND_GSTREAMER_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"MEDIABACKEND_REALPLAYER",_wrap_MEDIABACKEND_REALPLAYER_get, _wrap_MEDIABACKEND_REALPLAYER_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"MEDIABACKEND_WMP10",_wrap_MEDIABACKEND_WMP10_get, _wrap_MEDIABACKEND_WMP10_set);
     SWIG_addvarlink(SWIG_globals,(char*)"MediaCtrlNameStr",_wrap_MediaCtrlNameStr_get, _wrap_MediaCtrlNameStr_set);
     PyDict_SetItemString(d, "wxEVT_MEDIA_FINISHED", PyInt_FromLong(wxEVT_MEDIA_FINISHED));
     PyDict_SetItemString(d, "wxEVT_MEDIA_STOP", PyInt_FromLong(wxEVT_MEDIA_STOP));
     PyDict_SetItemString(d, "wxEVT_MEDIA_LOADED", PyInt_FromLong(wxEVT_MEDIA_LOADED));
+    PyDict_SetItemString(d, "wxEVT_MEDIA_STATECHANGED", PyInt_FromLong(wxEVT_MEDIA_STATECHANGED));
+    PyDict_SetItemString(d, "wxEVT_MEDIA_PLAY", PyInt_FromLong(wxEVT_MEDIA_PLAY));
+    PyDict_SetItemString(d, "wxEVT_MEDIA_PAUSE", PyInt_FromLong(wxEVT_MEDIA_PAUSE));
     
     
 }

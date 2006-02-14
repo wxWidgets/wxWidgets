@@ -2729,6 +2729,34 @@ class DC(_core.Object):
         """
         return _gdi_.DC_FloodFillPoint(*args, **kwargs)
 
+    def GradientFillConcentric(*args, **kwargs):
+        """
+        GradientFillConcentric(self, Rect rect, Colour initialColour, Colour destColour, 
+            Point circleCenter)
+
+        Fill the area specified by rect with a radial gradient, starting from
+        initialColour in the center of the circle and fading to destColour on
+        the outside of the circle.  The circleCenter argument is the relative
+        coordinants of the center of the circle in the specified rect.
+
+        Note: Currently this function is very slow, don't use it for real-time
+        drawing.
+        """
+        return _gdi_.DC_GradientFillConcentric(*args, **kwargs)
+
+    def GradientFillLinear(*args, **kwargs):
+        """
+        GradientFillLinear(self, Rect rect, Colour initialColour, Colour destColour, 
+            int nDirection=EAST)
+
+        Fill the area specified by rect with a linear gradient, starting from
+        initialColour and eventually fading to destColour. The nDirection
+        parameter specifies the direction of the colour change, default is to
+        use initialColour on the left part of the rectangle and destColour on
+        the right side.
+        """
+        return _gdi_.DC_GradientFillLinear(*args, **kwargs)
+
     def GetPixel(*args, **kwargs):
         """
         GetPixel(self, int x, int y) -> Colour

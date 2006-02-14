@@ -448,6 +448,15 @@ class TopLevelWindow(_core.Window):
         """MacGetMetalAppearance(self) -> bool"""
         return _windows_.TopLevelWindow_MacGetMetalAppearance(*args, **kwargs)
 
+    def CenterOnScreen(*args, **kwargs):
+        """
+        CenterOnScreen(self, int dir=BOTH)
+
+        Center the window on screen
+        """
+        return _windows_.TopLevelWindow_CenterOnScreen(*args, **kwargs)
+
+    CentreOnScreen = CenterOnScreen 
 
 class TopLevelWindowPtr(TopLevelWindow):
     def __init__(self, this):
@@ -656,6 +665,22 @@ class Dialog(TopLevelWindow):
     def GetReturnCode(*args, **kwargs):
         """GetReturnCode(self) -> int"""
         return _windows_.Dialog_GetReturnCode(*args, **kwargs)
+
+    def SetAffirmativeId(*args, **kwargs):
+        """SetAffirmativeId(self, int affirmativeId)"""
+        return _windows_.Dialog_SetAffirmativeId(*args, **kwargs)
+
+    def GetAffirmativeId(*args, **kwargs):
+        """GetAffirmativeId(self) -> int"""
+        return _windows_.Dialog_GetAffirmativeId(*args, **kwargs)
+
+    def SetEscapeId(*args, **kwargs):
+        """SetEscapeId(self, int escapeId)"""
+        return _windows_.Dialog_SetEscapeId(*args, **kwargs)
+
+    def GetEscapeId(*args, **kwargs):
+        """GetEscapeId(self) -> int"""
+        return _windows_.Dialog_GetEscapeId(*args, **kwargs)
 
     def CreateTextSizer(*args, **kwargs):
         """CreateTextSizer(self, String message) -> Sizer"""
