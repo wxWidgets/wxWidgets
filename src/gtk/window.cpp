@@ -1867,7 +1867,7 @@ static gboolean gtk_window_focus_in_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
-    bool ret = FALSE;
+    gboolean ret = FALSE;
 
     // does the window itself think that it has the focus?
     if ( !win->m_hasFocus )
@@ -1930,7 +1930,7 @@ static gboolean gtk_window_focus_out_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
-    bool ret = FALSE;
+    gboolean ret = FALSE;
 
     // don't send the window a kill focus event if it thinks that it doesn't
     // have focus already
