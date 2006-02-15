@@ -2709,7 +2709,7 @@ void wxWindowGTK::PostCreation()
             g_signal_connect (m_wxwindow, "expose_event",
                               G_CALLBACK (gtk_window_expose_callback), this);
 
-            // gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), !HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
+            gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
         }
 
         // Create input method handler
