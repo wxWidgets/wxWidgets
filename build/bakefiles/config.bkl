@@ -219,7 +219,7 @@ Acts according to BUILD by default.
     </set>
     <option name="USE_QA">
         <values>0,1</values>
-        <default-value>USE_QA_DEFAULT</default-value>
+        <default-value>$(USE_QA_DEFAULT)</default-value>
         <description>
             Build quality assurance classes library (USE_GUI must be 1)?
         </description>
