@@ -5202,9 +5202,14 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font)
 
 // use the "extended" bit (24) of lParam to distinguish extended keys
 // from normal keys as the same key is sent
-static inline int ChooseNormalOrExtended(int lParam, int keyNormal, int keyExtended)
+static inline
+int ChooseNormalOrExtended(int lParam, int keyNormal, int keyExtended)
 {
-    return lParam & (1 << 24) ? keyExtended : keyNormal;
+    // except that if lParam is 0, it means we don't have real lParam from
+    // WM_KEYDOWN but are just translating just a VK constant (e.g. done from
+    // msw/treectrl.cpp when processing TVN_KEYDOWN) -- then assume this is a
+    // non-numpad (hence extended) key as this is a more common case
+    return !lParam || (lParam & (1 << 24)) ? keyExtended : keyNormal;
 }
 
 // Returns 0 if was a normal ASCII value, not a special key. This indicates that
@@ -5322,9 +5327,10 @@ int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
         case VK_DELETE:
             id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_DELETE, WXK_DELETE);
             break;
-        // this order is correct as the numpad enter is the extended key
         case VK_RETURN:
-            id = ChooseNormalOrExtended(lParam, WXK_RETURN, WXK_NUMPAD_ENTER);
+            // don't use ChooseNormalOrExtended() here as the keys are reversed
+            // here: numpad enter is the extended one
+            id = lParam && (lParam & (1 << 24)) ? WXK_NUMPAD_ENTER : WXK_RETURN;
             break;
 
         default:
