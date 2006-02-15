@@ -1,30 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/fontenum.cpp
+// Name:        src/mac/carbon/fontenum.cpp
 // Purpose:     wxFontEnumerator class for MacOS
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #if wxUSE_FONTMAP
-
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
   #include "wx/font.h"
@@ -38,9 +26,6 @@
 
 #include "wx/mac/private.h"
 
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
 
 class wxFontEnumeratorHelper
 {
@@ -65,9 +50,10 @@ private:
     // if not empty, enum only the fonts with this facename
     wxString m_facename;
 
-    // if TRUE, enum only fixed fonts
+    // if true, enum only fixed fonts
     bool m_fixedOnly;
 };
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -80,68 +66,62 @@ wxFontEnumeratorHelper::wxFontEnumeratorHelper(wxFontEnumerator *fontEnum)
 {
     m_fontEnum = fontEnum;
     m_charset = -1;
-    m_fixedOnly = FALSE;
+    m_fixedOnly = false;
 }
 
 bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
 {
     wxNativeEncodingInfo info;
-    if ( !wxGetNativeFontEncoding(encoding, &info) )
+    if ( !wxGetNativeFontEncoding( encoding, &info ) )
     {
-        if ( !wxFontMapper::Get()->GetAltForEncoding(encoding, &info) )
-        {
+        if ( !wxFontMapper::Get()->GetAltForEncoding( encoding, &info ) )
             // no such encodings at all
-            return FALSE;
-        }
+            return false;
     }
+
     m_charset = info.charset;
     m_facename = info.facename;
 
-    return TRUE;
+    return true;
 }
 
 void wxFontEnumeratorHelper::DoEnumerate()
 {
-    MenuHandle    menu ;
-    Str255        p_name ;
+    MenuHandle    menu;
+    Str255        p_name;
+    short         lines;
 
-    short         lines ;
-    
-    menu = NewMenu( 32000 , "\pFont" )  ;
-    AppendResMenu( menu , 'FONT' ) ;
-    lines = CountMenuItems( menu ) ;
+    menu = NewMenu( 32000, "\pFont" );
+    AppendResMenu( menu, 'FONT' );
+    lines = CountMenuItems( menu );
 
-    for ( int i = 1 ; i < lines+1  ; i ++ )
+    for ( int i = 1; i < lines + 1; i ++ )
     {
-        GetMenuItemText( menu , i , p_name ) ;
-        wxString c_name = wxMacMakeStringFromPascal(p_name) ;
+        GetMenuItemText( menu, i, p_name );
+        wxString c_name = wxMacMakeStringFromPascal( p_name );
 
-        /*
-          
-          if ( m_fixedOnly )
+#if 0
+        if ( m_fixedOnly )
         {
-            // check that it's a fixed pitch font (there is *no* error here, the
-            // flag name is misleading!)
+            // check that it's a fixed pitch font:
+            // there is *no* error here: the flag name is misleading!
             if ( tm->tmPitchAndFamily & TMPF_FIXED_PITCH )
-            {
                 // not a fixed pitch font
-                return TRUE;
-            }
+                return true;
         }
-    
+
         if ( m_charset != -1 )
         {
             // check that we have the right encoding
             if ( lf->lfCharSet != m_charset )
-            {
-                return TRUE;
-            }
+                return true;
         }
-    
-        */
-        m_fontEnum->OnFacename( c_name ) ;
+#endif
+
+        m_fontEnum->OnFacename( c_name );
     }
-    DisposeMenu( menu ) ;
+
+    DisposeMenu( menu );
 }
 
 // ----------------------------------------------------------------------------
@@ -160,14 +140,14 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
     }
     // else: no such fonts, unknown encoding
 
-    return TRUE;
+    return true;
 }
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 {
     wxFAIL_MSG(wxT("wxFontEnumerator::EnumerateEncodings() not yet implemented"));
 
-    return TRUE;
+    return true;
 }
 
 #endif
