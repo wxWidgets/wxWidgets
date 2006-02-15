@@ -2113,20 +2113,28 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
+    bool ret = false;
+
     // does the window itself think that it has the focus?
     if ( !win->m_hasFocus )
     {
         // not yet, notify it
         win->m_hasFocus = true;
 
-        if ( DoSendFocusEvents(win) )
-        {
-           gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
-           return TRUE;
-        }
+        (void)DoSendFocusEvents(win);
+        
+        ret = true;
     }
 
-    return FALSE;
+    // Disable default focus handling for custom windows
+    // since the default GTK+ handler issues a repaint
+    if (win->m_wxwindow)
+    {
+        g_signal_stop_emission_by_name (widget, "focus_in_event");
+        return ret;
+    }
+        
+    return false;
 }
 }
 
@@ -2171,6 +2179,8 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
     }
 #endif // wxUSE_CARET
 
+    bool ret = false;
+
     // don't send the window a kill focus event if it thinks that it doesn't
     // have focus already
     if ( win->m_hasFocus )
@@ -2180,14 +2190,20 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
         wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
         event.SetEventObject( win );
 
-        // even if we did process the event in wx code, still let GTK itself
-        // process it too as otherwise bad things happen, especially in GTK2
-        // where the text control simply aborts the program if it doesn't get
-        // the matching focus out event
         (void)win->GetEventHandler()->ProcessEvent( event );
+        
+        ret = true;
     }
-
-    return FALSE;
+    
+    // Disable default focus handling for custom windows
+    // since the default GTK+ handler issues a repaint
+    if (win->m_wxwindow)
+    {
+        g_signal_stop_emission_by_name (widget, "focus_out_event");
+        return ret;
+    }
+           
+    return false;
 }
 }
 
