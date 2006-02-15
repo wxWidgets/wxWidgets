@@ -1835,9 +1835,9 @@ static bool DoSendFocusEvents(wxWindow *win)
 }
 
 extern "C" {
-static gint gtk_window_focus_in_callback( GtkWidget *widget,
-                                          GdkEvent *WXUNUSED(event),
-                                          wxWindow *win )
+static gboolean gtk_window_focus_in_callback( GtkWidget *widget,
+                                              GdkEvent *WXUNUSED(event),
+                                              wxWindow *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -1894,7 +1894,9 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
+static gboolean gtk_window_focus_out_callback( GtkWidget *widget,
+                                               GdkEventFocus *gdk_event,
+                                               wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -1958,10 +1960,10 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static
-gint gtk_window_enter_callback( GtkWidget *widget,
-                                GdkEventCrossing *gdk_event,
-                                wxWindowGTK *win )
+static gboolean
+gtk_window_enter_callback( GtkWidget *widget,
+                           GdkEventCrossing *gdk_event,
+                           wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -2003,7 +2005,10 @@ gint gtk_window_enter_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindowGTK *win )
+static gboolean
+gtk_window_leave_callback( GtkWidget *widget,
+                           GdkEventCrossing *gdk_event,
+                           wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
