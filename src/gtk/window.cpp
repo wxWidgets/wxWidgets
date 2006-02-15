@@ -2750,8 +2750,8 @@ void wxWindowGTK::PostCreation()
 
         g_signal_connect (m_focusWidget, "focus_in_event",
                           G_CALLBACK (gtk_window_focus_in_callback), this);
-        g_signal_connect_after (m_focusWidget, "focus_out_event",
-                                G_CALLBACK (gtk_window_focus_out_callback), this);
+        g_signal_connect (m_focusWidget, "focus_out_event",
+                          G_CALLBACK (gtk_window_focus_out_callback), this);
     }
 
     // connect to the various key and mouse handlers
