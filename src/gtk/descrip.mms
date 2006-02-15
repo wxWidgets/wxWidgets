@@ -1,8 +1,8 @@
 #*****************************************************************************
 #                                                                            *
 # Make file for VMS                                                          *
-# Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 2 March 2000                                                        *
+# Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
+# Date : 13 February 2006                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -14,9 +14,16 @@ CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
 CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm
 .else
+.ifdef __WXGTK2__
+CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1)/float=ieee\
+	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1)/float=ieee\
+	/name=(as_is,short)/ieee=denorm
+.else
 CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
 CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
+.endif
 .endif
 
 .suffixes : .cpp
@@ -28,6 +35,7 @@ CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
 
 OBJECTS = \
 	app.obj,\
+	artgtk.obj,\
 	bitmap.obj,\
 	brush.obj,\
 	clipbrd.obj,\
@@ -96,6 +104,7 @@ OBJECTS0= \
 
 SOURCES =\
 	app.cpp,\
+	artgtk.cpp, \
 	bitmap.cpp,\
         bmpbuttn.cpp,\
 	brush.cpp,\
@@ -166,13 +175,21 @@ all : $(SOURCES)
 	library [--.lib]libwx_gtk_univ.olb $(OBJECTS)
 	library [--.lib]libwx_gtk_univ.olb [.CXX_REPOSITORY]*.obj
 .else
+.ifdef __WXGTK2__
+	library [--.lib]libwx_gtk2.olb $(OBJECTS)
+	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS0)
+	library [--.lib]libwx_gtk2.olb $(OBJECTS0)
+.else
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
 	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS0)
 	library [--.lib]libwx_gtk.olb $(OBJECTS0)
 .endif
+.endif
 
 app.obj : app.cpp
+artgtk.obj : artgtk.cpp
 bitmap.obj : bitmap.cpp
 bmpbuttn.obj : bmpbuttn.cpp
 brush.obj : brush.cpp

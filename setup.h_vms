@@ -2,8 +2,8 @@
  *                                                                           *
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
- * Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                             *
- * Date : 18 August 2005                                                     *
+ * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
+ * Date : 9 February 2006                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -79,10 +79,18 @@
 #define __WXGTK127__ 1
 
 /* Define this if your version of GTK+ is greater than 2.0 */
-/* #undef __WXGTK20__ */
+#ifdef VMS_GTK2
+#define __WXGTK20__ 1
 
 /* Define this if your version of GTK+ is greater than 2.4 */
-/* #undef __WXGTK24__ */
+#define __WXGTK24__ 1
+
+#include <types.h>
+typedef pid_t GPid;
+
+#define G_GNUC_INTERNAL
+
+#endif
 #endif
 
 /*
@@ -345,6 +353,8 @@
 #define wxUSE_CHOICEBOOK 1
 
 #define wxUSE_TREEBOOK 1
+
+#define wxUSE_TOOLBOOK 1
 
 #define wxUSE_TAB_DIALOG    1
 

@@ -1,8 +1,8 @@
 #*****************************************************************************
 #                                                                            *
 # Make file for VMS                                                          *
-# Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 9 November 1999                                                     *
+# Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
+# Date : 10 February 2006                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -24,8 +24,15 @@ CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
 CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
 	/name=(as_is,short)
 .else
+.ifdef __WXGTK2__
+CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1)/float=ieee\
+	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WX_GTK__=1,VMS_GTK2==1)/float=ieee\
+	/name=(as_is,short)
+.else
 CXX_DEFINE =
 CC_DEFINE =
+.endif
 .endif
 .endif
 .endif
@@ -41,6 +48,7 @@ OBJECTS = \
 		busyinfo.obj,\
 		calctrl.obj,\
 		caret.obj,\
+		choicbkg.obj,\
 		choicdgg.obj,\
 		colrdlgg.obj,\
 		datectlg.obj,\
@@ -55,6 +63,7 @@ OBJECTS = \
 		helpext.obj,\
 		imaglist.obj,\
 		laywin.obj,\
+		listbkg.obj,\
 		listctrl.obj,\
 		logg.obj,\
 		msgdlgg.obj,\
@@ -73,6 +82,8 @@ OBJECTS = \
 		textdlgg.obj,\
 		tipdlg.obj,\
 		tipwin.obj,\
+		toolbkg.obj,\
+		treebkg.obj,\
 		treectlg.obj,\
 		wizard.obj
 
@@ -81,6 +92,7 @@ SOURCES = \
 		busyinfo.cpp,\
 		calctrl.cpp,\
 		caret.cpp,\
+		choicbkg.cpp,\
 		choicdgg.cpp,\
 		colrdlgg.cpp,\
 		datectlg.cpp,\
@@ -96,6 +108,7 @@ SOURCES = \
 		helpext.cpp,\
 		imaglist.cpp,\
 		laywin.cpp,\
+		listbkg.cpp,\
 		listctrl.cpp,\
 		logg.cpp,\
 		msgdlgg.cpp,\
@@ -117,6 +130,8 @@ SOURCES = \
 		textdlgg.cpp,\
 		tipdlg.cpp,\
 		tipwin.cpp,\
+		toolbkg.cpp,\
+		treebkg.cpp,\
 		treectlg.cpp,\
 		wizard.cpp,\
 		dragimgg.cpp,\
@@ -151,8 +166,12 @@ all : $(SOURCES)
 .ifdef __WXGTK__
 	library/crea [--.lib]libwx_gtk.olb $(OBJECTS)$(OBJECTS0)
 .else
+.ifdef __WXGTK2__
+	library/crea [--.lib]libwx_gtk2.olb $(OBJECTS)$(OBJECTS0)
+.else
 .ifdef __WXX11__
 	library/crea [--.lib]libwx_x11_univ.olb $(OBJECTS)$(OBJECTS0)
+.endif
 .endif
 .endif
 .endif
@@ -212,3 +231,7 @@ splash.obj : splash.cpp
 timer.obj : timer.cpp
 vlbox.obj : vlbox.cpp
 vscroll.obj : vscroll.cpp
+listbkg.obj : listbkg.cpp
+choicbkg.obj : choicbkg.cpp
+toolbkg.obj : toolbkg.cpp
+treebkg.obj : treebkg.cpp
