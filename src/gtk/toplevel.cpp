@@ -173,7 +173,7 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
     event.SetEventObject(g_activeFrame);
     g_activeFrame->GetEventHandler()->ProcessEvent(event);
 
-    return FALSE;
+    return TRUE;
 }
 }
 
@@ -208,7 +208,7 @@ static gint gtk_frame_focus_out_callback( GtkWidget *widget,
         g_activeFrame = NULL;
     }
 
-    return FALSE;
+    return TRUE;
 }
 }
 
