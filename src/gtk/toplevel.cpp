@@ -120,7 +120,7 @@ static gboolean gtk_frame_urgency_timer_callback( wxTopLevelWindowGTK *win )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_frame_focus_in_callback( GtkWidget *widget,
+static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
                                          GdkEvent *WXUNUSED(event),
                                          wxTopLevelWindowGTK *win )
 {
@@ -173,7 +173,7 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
     event.SetEventObject(g_activeFrame);
     g_activeFrame->GetEventHandler()->ProcessEvent(event);
 
-    return false;
+    return FALSE;
 }
 }
 
@@ -182,7 +182,7 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_frame_focus_out_callback( GtkWidget *widget,
+static gboolean gtk_frame_focus_out_callback( GtkWidget *widget,
                                           GdkEventFocus *WXUNUSED(gdk_event),
                                           wxTopLevelWindowGTK *win )
 {
@@ -208,7 +208,7 @@ static gint gtk_frame_focus_out_callback( GtkWidget *widget,
         g_activeFrame = NULL;
     }
 
-    return false;
+    return FALSE;
 }
 }
 
@@ -217,7 +217,7 @@ static gint gtk_frame_focus_out_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
+static gboolean gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -619,9 +619,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                       G_CALLBACK (gtk_frame_focus_callback), this);
 
     // activation
-    g_signal_connect (m_widget, "focus_in_event",
+    g_signal_connect_after (m_widget, "focus_in_event",
                       G_CALLBACK (gtk_frame_focus_in_callback), this);
-    g_signal_connect (m_widget, "focus_out_event",
+    g_signal_connect_after (m_widget, "focus_out_event",
                       G_CALLBACK (gtk_frame_focus_out_callback), this);
 
     // decorations

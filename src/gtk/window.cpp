@@ -1877,15 +1877,15 @@ static gboolean gtk_window_focus_in_callback( GtkWidget *widget,
 
         (void)DoSendFocusEvents(win);
         
-        ret = TRUE;
+        ret = true;
     }
 
     // Disable default focus handling for custom windows
     // since the default GTK+ handler issues a repaint
     if (win->m_wxwindow)
-        g_signal_stop_emission_by_name (widget, "focus_in_event");
+        return ret;
         
-    return ret;
+    return false;
 }
 }
 
@@ -1943,15 +1943,15 @@ static gboolean gtk_window_focus_out_callback( GtkWidget *widget,
 
         (void)win->GetEventHandler()->ProcessEvent( event );
         
-        ret = TRUE;
+        ret = true;
     }
     
     // Disable default focus handling for custom windows
     // since the default GTK+ handler issues a repaint
     if (win->m_wxwindow)
-        g_signal_stop_emission_by_name (widget, "focus_out_event");
+        return ret;
            
-    return ret;
+    return false;
 }
 }
 
@@ -2748,10 +2748,20 @@ void wxWindowGTK::PostCreation()
         if (m_focusWidget == NULL)
             m_focusWidget = m_widget;
 
-        g_signal_connect (m_focusWidget, "focus_in_event",
+        if (m_wxwindow)
+        {
+            g_signal_connect (m_focusWidget, "focus_in_event",
                           G_CALLBACK (gtk_window_focus_in_callback), this);
-        g_signal_connect_after (m_focusWidget, "focus_out_event",
+            g_signal_connect (m_focusWidget, "focus_out_event",
                                 G_CALLBACK (gtk_window_focus_out_callback), this);
+        }
+        else
+        {
+            g_signal_connect_after (m_focusWidget, "focus_in_event",
+                          G_CALLBACK (gtk_window_focus_in_callback), this);
+            g_signal_connect_after (m_focusWidget, "focus_out_event",
+                                G_CALLBACK (gtk_window_focus_out_callback), this);
+        }
     }
 
     // connect to the various key and mouse handlers
