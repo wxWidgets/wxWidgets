@@ -2130,7 +2130,9 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     // since the default GTK+ handler issues a repaint
     if (win->m_wxwindow)
     {
+#ifdef __WXGTK20__
         g_signal_stop_emission_by_name (widget, "focus_in_event");
+#endif
         return ret;
     }
         
@@ -2199,7 +2201,9 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
     // since the default GTK+ handler issues a repaint
     if (win->m_wxwindow)
     {
+#ifdef __WXGTK20__
         g_signal_stop_emission_by_name (widget, "focus_out_event");
+#endif
         return ret;
     }
            
