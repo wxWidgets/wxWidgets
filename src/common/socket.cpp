@@ -694,6 +694,8 @@ bool wxSocketBase::_Wait(long seconds,
   else
     timeout = m_timeout * 1000;
 
+  bool has_event_loop = wxTheApp ? (wxTheApp->GetTraits() ? true : false) : false;
+
   // Wait in an active polling loop.
   //
   // NOTE: We duplicate some of the code in OnRequest, but this doesn't
@@ -709,14 +711,15 @@ bool wxSocketBase::_Wait(long seconds,
   bool done = false;
   bool valid_result = false;
 
-#if !defined(wxUSE_GUI) || !wxUSE_GUI
+  if (!has_event_loop) 
+  {
     // This is used to avoid a busy loop on wxBase - having a select
     // timeout of 50 ms per iteration should be enough.
     if (timeout > 50)
       m_socket->SetTimeout(50);
     else
       m_socket->SetTimeout(timeout);
-#endif 
+  }
 
   while (!done)
   {
@@ -754,20 +757,22 @@ bool wxSocketBase::_Wait(long seconds,
       done = true;
     else
     {
-#if !defined(wxUSE_GUI) || !wxUSE_GUI
+      if (has_event_loop) 
+      {
+          PROCESS_EVENTS();
+      }
+      else 
+      {
         // If there's less than 50 ms left, just call select with that timeout.
         if (time_left < 50)
           m_socket->SetTimeout(time_left);
-#else
-        PROCESS_EVENTS();
-#endif
-     }
+      }
+    }
   }
 
   // Set timeout back to original value (we overwrote it for polling)
-#if !defined(wxUSE_GUI) || !wxUSE_GUI
-  m_socket->SetTimeout(m_timeout*1000);
-#endif
+  if (!has_event_loop)
+    m_socket->SetTimeout(m_timeout*1000);
 
   return valid_result;
 }
