@@ -474,8 +474,8 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     if ( tool->IsControl() )
     {
         nButtonsToDelete = ((wxToolBarTool *)tool)->GetSeparatorsCount();
-
         width *= nButtonsToDelete;
+        tool->GetControl()->Destroy();
     }
 
     // do delete all buttons
