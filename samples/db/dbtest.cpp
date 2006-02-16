@@ -2919,7 +2919,7 @@ m_pImage(NULL)
 
         if(m_pImage->Ok())
         {
-            m_pBmp = new wxBitmap(m_pImage);
+            m_pBmp = new wxBitmap(*m_pImage);
             m_pDisplayBmp = new wxStaticBitmap(this, IMAGE_DIALOG_STATIC_BMP, *m_pBmp, wxPoint(5,5), wxDefaultSize);
 
             SetSize(m_pBmp->GetWidth() + 10, m_pBmp->GetHeight() + 30);
