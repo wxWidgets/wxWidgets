@@ -1,3 +1,8 @@
+0.1.7-2
+-------
+
+Fixed Cut command, added support for MenuBar inside Frame/Dialog.
+
 0.1.7-1
 -------
 

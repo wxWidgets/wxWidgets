@@ -15,7 +15,7 @@ import sys
 # Global constants
 
 progname = 'XRCed'
-version = '0.1.7-1'
+version = '0.1.7-2'
 # Minimal wxWindows version
 MinWxVersion = (2,6,0)
 if wxVERSION[:3] < MinWxVersion:
