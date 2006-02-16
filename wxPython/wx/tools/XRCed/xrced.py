@@ -463,9 +463,12 @@ class Frame(wxFrame):
         error = False
         # Top-level
         x = xxx.treeObject()
-        if x.__class__ in [xxxDialog, xxxFrame, xxxMenuBar, xxxWizard]:
+        if x.__class__ in [xxxDialog, xxxFrame, xxxWizard]:
             # Top-level classes
             if parent.__class__ != xxxMainNode: error = True
+        elif x.__class__ == xxxMenuBar:
+            # Menubar can be put in frame or dialog
+            if parent.__class__ not in [xxxMainNode, xxxFrame, xxxDialog]: error = True
         elif x.__class__ == xxxToolBar:
             # Toolbar can be top-level of child of panel or frame
             if parent.__class__ not in [xxxMainNode, xxxPanel, xxxFrame] and \
@@ -576,7 +579,7 @@ class Frame(wxFrame):
         if evt.GetId() == wxID_CUT:
             wx.TheClipboard.Open()
             data = wx.CustomDataObject('XRCED')
-            data.SetData(cPickle.dumps(elem))
+            data.SetData(cPickle.dumps(elem.toxml()))
             wx.TheClipboard.SetData(data)
             wx.TheClipboard.Close()
         tree.pendingHighLight = None
@@ -925,7 +928,7 @@ Homepage: http://xrced.sourceforge.net\
         # Update tools
         g.tools.UpdateUI()
 
-        undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
+        #undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
         # Update view?
         if g.testWin and tree.IsHighlatable(selected):
             if conf.autoRefresh:
