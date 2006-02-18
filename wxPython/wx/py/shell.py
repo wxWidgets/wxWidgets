@@ -541,6 +541,10 @@ Platform: %s""" % \
             else:
                 self.clearCommand()
 
+        # Clear the current command
+        elif key == wx.WXK_BACK and controlDown and shiftDown:
+            self.clearCommand()
+
         # Increase font size.
         elif controlDown and key in (ord(']'), wx.WXK_NUMPAD_ADD):
             dispatcher.send(signal='FontIncrease')
