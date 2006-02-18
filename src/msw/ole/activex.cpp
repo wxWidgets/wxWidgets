@@ -691,7 +691,7 @@ private:
 
 public:
     wxActiveXEvents(wxActiveXContainer *ax) : m_activeX(ax), m_haveCustomId(false) {}
-    wxActiveXEvents(wxActiveXContainer *ax, REFIID iid) : m_activeX(ax), m_haveCustomId(true), m_customId(iid) {}
+    wxActiveXEvents(wxActiveXContainer *ax, REFIID iid) : m_activeX(ax), m_customId(iid), m_haveCustomId(true) {}
     virtual ~wxActiveXEvents()
     {
     }
