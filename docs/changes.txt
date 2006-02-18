@@ -39,6 +39,8 @@ wxGTK:
 - Worked around pango crashes in strncmp on Solaris 10.
 - Polygon and line drawing speeded up if there is no scaling.
 - Fixed problems with CJK input method.
+- Fixed wxNotebook::HitTest when the leftmost visible tab is not the
+  actual first tab (has arrows for scrolling and is scrolled).
 
 wxMSW:
 
