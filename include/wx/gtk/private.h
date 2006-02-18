@@ -30,15 +30,6 @@
     #define wxGTK_CONV_BACK(s)  wxConvLocal.cWC2WX( (wxConvUTF8.cMB2WC( s ) ) )
 #endif
 
-// FIXME: Make gtk2 only, so no macros needed - MR
-// GTK+ 2.0 compatibility define is broken when used from C++ as it
-// casts enum to int implicitly
-#undef gtk_signal_disconnect_by_func
-#define gtk_signal_disconnect_by_func(object,func,data) \
-    gtk_signal_compat_matched((object), (func), (data), \
-                              (GSignalMatchType)(G_SIGNAL_MATCH_FUNC | \
-                                                 G_SIGNAL_MATCH_DATA), 0)
-
 // translate a GTK+ scroll type to a wxEventType
 inline wxEventType GtkScrollTypeToWx(guint scrollType)
 {
