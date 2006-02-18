@@ -159,6 +159,8 @@ class FillingTree(wx.TreeCtrl):
 
     def display(self):
         item = self.item
+        if not item:
+            return
         if self.IsExpanded(item):
             self.addChildren(item)
         self.setText('')
