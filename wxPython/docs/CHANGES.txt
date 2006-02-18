@@ -98,6 +98,8 @@ classes affected by this are:
 Added the wx.DC.GradientFillConcentric and wx.DC.GradientFillLinear
 methods.
 
+Added the wx.HVScrolledWindow class.
+
 
 
 
