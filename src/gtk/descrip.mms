@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 13 February 2006                                                    *
+# Date : 20 February 2006                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -39,6 +39,7 @@ OBJECTS = \
 	bitmap.obj,\
 	brush.obj,\
 	clipbrd.obj,\
+	colordlg.obj,\
 	colour.obj,\
 	cursor.obj,\
 	data.obj,\
@@ -113,6 +114,7 @@ SOURCES =\
 	checklst.cpp,\
 	choice.cpp,\
 	clipbrd.cpp,\
+	colordlg.cpp,\
 	colour.cpp,\
         combobox.cpp,\
 	control.cpp,\
@@ -198,6 +200,7 @@ checkbox.obj : checkbox.cpp
 checklst.obj : checklst.cpp
 choice.obj : choice.cpp
 clipbrd.obj :clipbrd.cpp
+colordlg.obj : colordlg.cpp
 colour.obj : colour.cpp
 combobox.obj : combobox.cpp
 control.obj : control.cpp

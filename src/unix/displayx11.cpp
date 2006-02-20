@@ -33,10 +33,12 @@
  * Xlibint.h conflicts with a function declaration in wx/list.h.  */
 extern "C" {
   #include <X11/Xlib.h>
+#ifndef __VMS
   #include <X11/Xlibint.h>
-  #include <X11/extensions/Xinerama.h>
+# include <X11/extensions/Xinerama.h>
 #ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
   #include <X11/extensions/xf86vmode.h>
+#endif
 #endif
 }
 
@@ -51,7 +53,8 @@ size_t wxDisplayBase::GetCount()
 {
   Display *disp = (Display*)wxGetDisplay();
 
-  if ( XineramaIsActive(disp) )
+#ifndef __VMS
+   if ( XineramaIsActive(disp) )
   {
     XineramaScreenInfo *screenarr;
     int numscreens;
@@ -60,6 +63,7 @@ size_t wxDisplayBase::GetCount()
     return numscreens;
   }
   else
+#endif   
   {
     return 1;
   }
@@ -69,7 +73,8 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
 {
   Display *disp = (Display*)wxGetDisplay();
 
-  if ( XineramaIsActive(disp) )
+#ifndef __VMS
+   if ( XineramaIsActive(disp) )
   {
     int which_screen = -1;
     XineramaScreenInfo *screenarr;
@@ -92,7 +97,8 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
     return which_screen;
   }
   else
-  {
+#endif
+     {
     wxSize size = wxGetDisplaySize();
     if (p.x >= 0 &&
         p.x < size.GetWidth() &&
@@ -110,7 +116,8 @@ wxDisplay::wxDisplay(size_t index) : wxDisplayBase ( index ), m_priv( new wxDisp
 {
   Display *disp = (Display*)wxGetDisplay();
 
-  if ( XineramaIsActive(disp) )
+#ifndef __VMS
+   if ( XineramaIsActive(disp) )
   {
     XineramaScreenInfo *screenarr;
     int numscreens;
@@ -122,7 +129,8 @@ wxDisplay::wxDisplay(size_t index) : wxDisplayBase ( index ), m_priv( new wxDisp
     XFree(screenarr);
   }
   else
-  {
+#endif
+     {
     wxSize size = wxGetDisplaySize();
     m_priv->m_rect = wxRect(0, 0, size.GetWidth(), size.GetHeight());
     m_priv->m_depth = wxDisplayDepth();

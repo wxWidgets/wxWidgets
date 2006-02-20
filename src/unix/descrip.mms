@@ -46,6 +46,7 @@ CC_DEFINE =
 OBJECTS =       baseunix.obj,\
 		dialup.obj,\
 		dir.obj,\
+		displayx11.obj,\
 		dlunix.obj,\
 		fontenum.obj,\
 		fontutil.obj,\
@@ -64,6 +65,7 @@ OBJECTS =       baseunix.obj,\
 SOURCES =       baseunix.cpp,\
 		dialup.cpp,\
 		dir.cpp,\
+		displayx11.cpp,\
 		dlunix.cpp,\
 		fontenum.cpp,\
 		fontutil.cpp,\
@@ -115,3 +117,4 @@ sound.obj : sound.cpp
 sound_sdl.obj : sound_sdl.cpp
 stdpaths.obj : stdpaths.cpp
 taskbarx11.obj : taskbarx11.cpp
+displayx11.obj : displayx11.cpp

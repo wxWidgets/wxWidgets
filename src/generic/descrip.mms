@@ -231,6 +231,7 @@ splash.obj : splash.cpp
 timer.obj : timer.cpp
 vlbox.obj : vlbox.cpp
 vscroll.obj : vscroll.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn vscroll.cpp
 listbkg.obj : listbkg.cpp
 choicbkg.obj : choicbkg.cpp
 toolbkg.obj : toolbkg.cpp
