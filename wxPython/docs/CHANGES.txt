@@ -26,6 +26,28 @@ need to modify any of the *.i files or to add your own, then you will
 want to be sure to use a matching SWIG.  See wxPython/SWIG/README.txt
 in the source tarbal for details.
 
+wx.Image.Copy now also copies the alpha channel.
+
+wxMSW: Fixed problem in wx.TextCtrl where using SetValue and
+wx.TE_RICH2 would cause the control to be shown if it was hidden. 
+
+wxMSW: Numpad special keys are now distinguished from normal keys in
+key events.
+
+wxMSW: Multiline notebook tab label change now resizes the control
+correctly if an extra row is removed or added.
+
+wxMSW: On XP fall back to unthemed wxNotebook if specified orientation
+not available in the themed version.
+
+Added wx.Toolbar.GetToolsCount.
+
+Added wx.GridSizer.CalcRowsCols.
+
+Added wx.OutputStream.LastWrite.
+
+
+
 
 
 2.6.2.1
