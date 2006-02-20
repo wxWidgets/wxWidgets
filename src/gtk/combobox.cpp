@@ -166,6 +166,39 @@ gtkcombo_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUS
 }
 }
 
+#ifdef __WXGTK24__
+extern "C" {
+static void
+gtkcombobox_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
+{
+    if (g_isIdle) wxapp_install_idle_handler();
+
+    if (!combo->m_hasVMT) return;
+
+    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
+    event.SetString( combo->GetValue() );
+    event.SetEventObject( combo );
+    combo->GetEventHandler()->ProcessEvent( event );
+}
+}
+
+extern "C" {
+static void
+gtkcombobox_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
+{
+    if (g_isIdle) wxapp_install_idle_handler();
+
+    if (!combo->m_hasVMT) return;
+
+    wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
+    event.SetInt( combo->GetSelection() );
+    event.SetString( combo->GetStringSelection() );
+    event.SetEventObject( combo );
+    combo->GetEventHandler()->ProcessEvent( event );
+}
+}
+#endif
+
 //-----------------------------------------------------------------------------
 // wxComboBox
 //-----------------------------------------------------------------------------
@@ -224,73 +257,126 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         return false;
     }
 
-    m_widget = gtk_combo_new();
-    GtkCombo *combo = GTK_COMBO(m_widget);
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        m_widget = gtk_combo_box_entry_new_text();
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        
+        gtk_entry_set_editable( GTK_ENTRY( GTK_BIN(m_widget)->child ), TRUE );
+        
+        for (int i = 0; i < n; i++)
+        {
+            gtk_combo_box_append_text( combobox,  wxGTK_CONV( choices[i] ) );
 
-    // Disable GTK's broken events ...
-    g_signal_handler_disconnect (combo->entry, combo->entry_change_id);
-    // ... and add surrogate handler.
-    combo->entry_change_id = g_signal_connect (combo->entry, "changed",
+            m_clientDataList.Append( (wxObject*)NULL );
+            m_clientObjectList.Append( (wxObject*)NULL );
+        }
+    }
+    else
+#endif
+    {
+        m_widget = gtk_combo_new();
+        GtkCombo* combo = GTK_COMBO(m_widget);
+        
+        // Disable GTK's broken events ...
+        g_signal_handler_disconnect (combo->entry, combo->entry_change_id);
+        // ... and add surrogate handler.
+        combo->entry_change_id = g_signal_connect (combo->entry, "changed",
                                                G_CALLBACK (gtkcombo_dummy_callback),
                                                combo);
 
-    // make it more useable
-    gtk_combo_set_use_arrows_always( GTK_COMBO(m_widget), TRUE );
+        // make it more useable
+        gtk_combo_set_use_arrows_always( GTK_COMBO(m_widget), TRUE );
 
-    // and case-sensitive
-    gtk_combo_set_case_sensitive( GTK_COMBO(m_widget), TRUE );
+        // and case-sensitive
+        gtk_combo_set_case_sensitive( GTK_COMBO(m_widget), TRUE );
 
-    if (style & wxNO_BORDER)
-        g_object_set( GTK_ENTRY( combo->entry ), "has-frame", FALSE, NULL );
+        if (style & wxNO_BORDER)
+            g_object_set( GTK_ENTRY( combo->entry ), "has-frame", FALSE, NULL );
+            
+        GtkWidget *list = combo->list;
 
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
+        for (int i = 0; i < n; i++)
+        {
+            GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( choices[i] ) );
 
-    for (int i = 0; i < n; i++)
-    {
-        GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( choices[i] ) );
+            m_clientDataList.Append( (wxObject*)NULL );
+            m_clientObjectList.Append( (wxObject*)NULL );
 
-        m_clientDataList.Append( (wxObject*)NULL );
-        m_clientObjectList.Append( (wxObject*)NULL );
+            gtk_container_add( GTK_CONTAINER(list), list_item );
 
-        gtk_container_add( GTK_CONTAINER(list), list_item );
-
-        gtk_widget_show( list_item );
+            gtk_widget_show( list_item );
+        }
     }
+
 
     m_parent->DoAddChild( this );
 
-    m_focusWidget = combo->entry;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
+    m_focusWidget = GTK_WIDGET( entry );
 
     PostCreation(size);
 
-    ConnectWidget( combo->button );
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        ConnectWidget( m_widget );
+    else
+#endif
+        ConnectWidget( GTK_COMBO(m_widget)->button );
 
-    // MSW's combo box shows the value and the selection is -1
-    gtk_entry_set_text( GTK_ENTRY(combo->entry), wxGTK_CONV(value) );
-    gtk_list_unselect_all( GTK_LIST(combo->list) );
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        gtk_entry_set_text( entry, wxGTK_CONV(value) );
+        
+        if (style & wxCB_READONLY)
+            gtk_entry_set_editable( entry, FALSE );
+            
+        g_signal_connect_after (entry, "changed",
+                            G_CALLBACK (gtkcombobox_text_changed_callback), this);
+                            
+        g_signal_connect_after (m_widget, "changed",
+                            G_CALLBACK (gtkcombobox_changed_callback), this);
+    }
+    else
+#endif
+    {
+        GtkCombo *combo = GTK_COMBO(m_widget);
+        // MSW's combo box shows the value and the selection is -1
+        gtk_entry_set_text( entry, wxGTK_CONV(value) );
+        gtk_list_unselect_all( GTK_LIST(combo->list) );
 
-    if (style & wxCB_READONLY)
-        gtk_entry_set_editable( GTK_ENTRY( combo->entry ), FALSE );
+        if (style & wxCB_READONLY)
+            gtk_entry_set_editable( entry, FALSE );
 
-    // "show" and "hide" events are generated when user click on the combobox button which popups a list
-    // this list is the "popwin" gtk widget
-    g_signal_connect (GTK_COMBO(combo)->popwin, "hide",
+        // "show" and "hide" events are generated when user click on the combobox button which popups a list
+        // this list is the "popwin" gtk widget
+        g_signal_connect (GTK_COMBO(combo)->popwin, "hide",
                       G_CALLBACK (gtkcombo_popup_hide_callback), this);
-    g_signal_connect (GTK_COMBO(combo)->popwin, "show",
+        g_signal_connect (GTK_COMBO(combo)->popwin, "show",
                       G_CALLBACK (gtkcombo_popup_show_callback), this);
-
-    g_signal_connect_after (combo->entry, "changed",
-                            G_CALLBACK (gtkcombo_text_changed_callback), this);
-
-    g_signal_connect_after (combo->list, "select-child",
+        g_signal_connect_after (combo->list, "select-child",
                             G_CALLBACK (gtkcombo_combo_select_child_callback),
                             this);
+        g_signal_connect_after (entry, "changed",
+                            G_CALLBACK (gtkcombo_text_changed_callback), this);
+                            
+        // This is required for tool bar support
+        // Doesn't currently work
+//        wxSize setsize = GetSize();
+//        gtk_widget_set_size_request( m_widget, setsize.x, setsize.y );
+    }
 
     SetBestSize(size); // need this too because this is a wxControlWithItems
 
-    // This is required for tool bar support
-//    wxSize setsize = GetSize();
-//    gtk_widget_set_size_request( m_widget, setsize.x, setsize.y );
 
     return true;
 }
@@ -324,41 +410,50 @@ int wxComboBox::DoAppend( const wxString &item )
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
-    DisableEvents();
-
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-
-    GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
-
-    gtk_container_add( GTK_CONTAINER(list), list_item );
-
-    if (GTK_WIDGET_REALIZED(m_widget))
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
     {
-        gtk_widget_realize( list_item );
-        gtk_widget_realize( GTK_BIN(list_item)->child );
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        gtk_combo_box_append_text( combobox,  wxGTK_CONV( item ) );
     }
-
-    // Apply current widget style to the new list_item
-    GtkRcStyle *style = CreateWidgetStyle();
-    if (style)
+    else
+#endif
     {
-        gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
-        GtkBin *bin = GTK_BIN( list_item );
-        GtkWidget *label = GTK_WIDGET( bin->child );
-        gtk_widget_modify_style( label, style );
-        gtk_rc_style_unref( style );
+        DisableEvents();
+
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
+        GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
+
+        gtk_container_add( GTK_CONTAINER(list), list_item );
+
+        if (GTK_WIDGET_REALIZED(m_widget))
+        {
+            gtk_widget_realize( list_item );
+            gtk_widget_realize( GTK_BIN(list_item)->child );
+        }
+
+        // Apply current widget style to the new list_item
+        GtkRcStyle *style = CreateWidgetStyle();
+        if (style)
+        {
+            gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
+            GtkBin *bin = GTK_BIN( list_item );
+            GtkWidget *label = GTK_WIDGET( bin->child );
+            gtk_widget_modify_style( label, style );
+            gtk_rc_style_unref( style );
+        }
+
+        gtk_widget_show( list_item );
+
+        EnableEvents();
     }
-
-    gtk_widget_show( list_item );
-
+    
     const int count = GetCount();
 
     if ( (int)m_clientDataList.GetCount() < count )
         m_clientDataList.Append( (wxObject*) NULL );
     if ( (int)m_clientObjectList.GetCount() < count )
         m_clientObjectList.Append( (wxObject*) NULL );
-
-    EnableEvents();
 
     InvalidateBestSize();
 
@@ -378,34 +473,43 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
     if (pos == count)
         return Append(item);
 
-    DisableEvents();
-
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-
-    GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
-
-    GList *gitem_list = g_list_alloc ();
-    gitem_list->data = list_item;
-    gtk_list_insert_items( GTK_LIST (list), gitem_list, pos );
-
-    if (GTK_WIDGET_REALIZED(m_widget))
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
     {
-        gtk_widget_realize( list_item );
-        gtk_widget_realize( GTK_BIN(list_item)->child );
-
-        ApplyWidgetStyle();
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        gtk_combo_box_insert_text( combobox, pos, wxGTK_CONV( item ) );
     }
+    else
+#endif
+    {
+        DisableEvents();
 
-    gtk_widget_show( list_item );
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
+        GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
 
+        GList *gitem_list = g_list_alloc ();
+        gitem_list->data = list_item;
+        gtk_list_insert_items( GTK_LIST (list), gitem_list, pos );
+
+        if (GTK_WIDGET_REALIZED(m_widget))
+        {
+            gtk_widget_realize( list_item );
+            gtk_widget_realize( GTK_BIN(list_item)->child );
+
+            ApplyWidgetStyle();
+        }
+
+        gtk_widget_show( list_item );
+
+        EnableEvents();
+    }
+    
     count = GetCount();
 
     if ( (int)m_clientDataList.GetCount() < count )
         m_clientDataList.Insert( pos, (wxObject*) NULL );
     if ( (int)m_clientObjectList.GetCount() < count )
         m_clientObjectList.Insert( pos, (wxObject*) NULL );
-
-    EnableEvents();
 
     InvalidateBestSize();
 
@@ -458,9 +562,21 @@ void wxComboBox::Clear()
 
     DisableEvents();
 
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-    gtk_list_clear_items( GTK_LIST(list), 0, GetCount() );
-
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        int i;
+        for (i = 0; i++; i < GetCount())
+            gtk_combo_box_remove_text( combobox, 0 );
+    }
+    else
+#endif
+    {
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
+        gtk_list_clear_items( GTK_LIST(list), 0, GetCount() );
+    }
+    
     wxList::compatibility_iterator node = m_clientObjectList.GetFirst();
     while (node)
     {
@@ -481,22 +597,36 @@ void wxComboBox::Delete( int n )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    GtkList *listbox = GTK_LIST( GTK_COMBO(m_widget)->list );
-
-    GList *child = g_list_nth( listbox->children, n );
-
-    if (!child)
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
     {
-        wxFAIL_MSG(wxT("wrong index"));
-        return;
+        wxCHECK_RET( (n >= 0) && (n <= GetCount()), wxT("invalid index") );
+    
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        gtk_combo_box_remove_text( combobox, n );
     }
+    else
+#endif
+    {
+        GtkList *listbox = GTK_LIST( GTK_COMBO(m_widget)->list );
 
-    DisableEvents();
+        GList *child = g_list_nth( listbox->children, n );
 
-    GList *list = g_list_append( (GList*) NULL, child->data );
-    gtk_list_remove_items( listbox, list );
-    g_list_free( list );
+        if (!child)
+        {
+            wxFAIL_MSG(wxT("wrong index"));
+            return;
+        }
 
+        DisableEvents();
+
+        GList *list = g_list_append( (GList*) NULL, child->data );
+        gtk_list_remove_items( listbox, list );
+        g_list_free( list );
+
+        EnableEvents();
+    }
+    
     wxList::compatibility_iterator node = m_clientObjectList.Item( n );
     if (node)
     {
@@ -509,8 +639,6 @@ void wxComboBox::Delete( int n )
     if (node)
         m_clientDataList.Erase( node );
 
-    EnableEvents();
-
     InvalidateBestSize();
 }
 
@@ -518,20 +646,41 @@ void wxComboBox::SetString(int n, const wxString &text)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-
-    GList *child = g_list_nth( GTK_LIST(list)->children, n );
-    if (child)
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
     {
-        GtkBin *bin = GTK_BIN( child->data );
-        GtkLabel *label = GTK_LABEL( bin->child );
-        gtk_label_set_text(label, wxGTK_CONV(text));
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        wxCHECK_RET( (n >= 0) && (n <= GetCount()), wxT("invalid index") );
+        
+        GtkTreeModel *model = gtk_combo_box_get_model( combobox );
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
+        {
+            GValue value = { 0, };
+            g_value_init( &value, G_TYPE_STRING );
+            g_value_set_string( &value, wxGTK_CONV( text ) );
+            gtk_list_store_set_value( GTK_LIST_STORE(model), &iter, 0, &value );
+            g_value_unset( &value );
+        }
     }
     else
+#endif
     {
-        wxFAIL_MSG( wxT("wxComboBox: wrong index") );
-    }
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
 
+        GList *child = g_list_nth( GTK_LIST(list)->children, n );
+        if (child)
+        {
+            GtkBin *bin = GTK_BIN( child->data );
+            GtkLabel *label = GTK_LABEL( bin->child );
+            gtk_label_set_text(label, wxGTK_CONV(text));
+        }
+        else
+        {
+            wxFAIL_MSG( wxT("wxComboBox: wrong index") );
+        }
+    }
+    
     InvalidateBestSize();
 }
 
@@ -539,21 +688,49 @@ int wxComboBox::FindString( const wxString &item, bool bCase ) const
 {
     wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid combobox") );
 
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-
-    GList *child = GTK_LIST(list)->children;
-    int count = 0;
-    while (child)
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
     {
-        GtkBin *bin = GTK_BIN( child->data );
-        GtkLabel *label = GTK_LABEL( bin->child );
-        wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        GtkTreeModel* model = gtk_combo_box_get_model( combobox );
+        GtkTreeIter iter;
+        gtk_tree_model_get_iter_first( model, &iter );
+        if (!gtk_list_store_iter_is_valid(GTK_LIST_STORE(model), &iter ))
+            return -1;
+        int count = 0;
+        do 
+        {
+            GValue value = { 0, };
+            gtk_tree_model_get_value( model, &iter, 0, &value );
+            wxString str = wxGTK_CONV_BACK( g_value_get_string( &value ) );
+            g_value_unset( &value );
+            
+            if (item.IsSameAs( str, bCase ) )
+                return count;
+                
+            count++;
+                
+        } while (gtk_tree_model_iter_next( model, &iter ));
+    }
+    else
+#endif
+    {
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
 
-        if (item.IsSameAs( str , bCase ) )
-            return count;
+        GList *child = GTK_LIST(list)->children;
+        int count = 0;
+        while (child)
+        {
+            GtkBin *bin = GTK_BIN( child->data );
+            GtkLabel *label = GTK_LABEL( bin->child );
+            wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
 
-        count++;
-        child = child->next;
+            if (item.IsSameAs( str , bCase ) )
+                return count;
+
+            count++;
+            child = child->next;
+        }
     }
 
     return wxNOT_FOUND;
@@ -561,9 +738,17 @@ int wxComboBox::FindString( const wxString &item, bool bCase ) const
 
 int wxComboBox::GetSelection() const
 {
-    // if the popup is currently opened, use the selection as it had been
-    // before it dropped down
-    return g_SelectionBeforePopup == wxID_NONE ? GetCurrentSelection()
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        return gtk_combo_box_get_active( combobox );
+    }
+    else
+#endif
+        // if the popup is currently opened, use the selection as it had been
+        // before it dropped down
+        return g_SelectionBeforePopup == wxID_NONE ? GetCurrentSelection()
                                                : g_SelectionBeforePopup;
 }
 
@@ -571,18 +756,28 @@ int wxComboBox::GetCurrentSelection() const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-
-    GList *selection = GTK_LIST(list)->selection;
-    if (selection)
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
     {
-        GList *child = GTK_LIST(list)->children;
-        int count = 0;
-        while (child)
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        return gtk_combo_box_get_active( combobox );
+    }
+    else
+#endif
+    {
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
+
+        GList *selection = GTK_LIST(list)->selection;
+        if (selection)
         {
-            if (child->data == selection->data) return count;
-            count++;
-            child = child->next;
+            GList *child = GTK_LIST(list)->children;
+            int count = 0;
+            while (child)
+            {
+                if (child->data == selection->data) return count;
+                count++;
+                child = child->next;
+            }
         }
     }
 
@@ -593,19 +788,39 @@ wxString wxComboBox::GetString( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid combobox") );
 
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-
     wxString str;
-    GList *child = g_list_nth( GTK_LIST(list)->children, n );
-    if (child)
+    
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
     {
-        GtkBin *bin = GTK_BIN( child->data );
-        GtkLabel *label = GTK_LABEL( bin->child );
-        str = wxGTK_CONV_BACK( gtk_label_get_text(label) );
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        GtkTreeModel *model = gtk_combo_box_get_model( combobox );
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
+        {
+            GValue value = { 0, };
+            gtk_tree_model_get_value( model, &iter, 0, &value );
+            wxString tmp = wxGTK_CONV_BACK( g_value_get_string( &value ) );
+            g_value_unset( &value );
+            return tmp;
+        }
     }
     else
-    {
-        wxFAIL_MSG( wxT("wxComboBox: wrong index") );
+#endif
+    {    
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
+
+        GList *child = g_list_nth( GTK_LIST(list)->children, n );
+        if (child)
+        {
+            GtkBin *bin = GTK_BIN( child->data );
+            GtkLabel *label = GTK_LABEL( bin->child );
+            str = wxGTK_CONV_BACK( gtk_label_get_text(label) );
+        }
+        else
+        {
+            wxFAIL_MSG( wxT("wxComboBox: wrong index") );
+        }
     }
 
     return str;
@@ -615,18 +830,31 @@ wxString wxComboBox::GetStringSelection() const
 {
     wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid combobox") );
 
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-
-    GList *selection = GTK_LIST(list)->selection;
-    if (selection)
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
     {
-        GtkBin *bin = GTK_BIN( selection->data );
-        GtkLabel *label = GTK_LABEL( bin->child );
-        wxString tmp( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
-        return tmp;
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        int sel = gtk_combo_box_get_active( combobox );
+        if (sel == -1)
+            return wxEmptyString;
+        return GetString( sel );
     }
+    else
+#endif
+    {    
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
 
-    wxFAIL_MSG( wxT("wxComboBox: no selection") );
+        GList *selection = GTK_LIST(list)->selection;
+        if (selection)
+        {
+            GtkBin *bin = GTK_BIN( selection->data );
+            GtkLabel *label = GTK_LABEL( bin->child );
+            wxString tmp( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
+            return tmp;
+        }
+
+        wxFAIL_MSG( wxT("wxComboBox: no selection") );
+    }
 
     return wxEmptyString;
 }
@@ -635,12 +863,32 @@ int wxComboBox::GetCount() const
 {
     wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid combobox") );
 
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        GtkTreeModel* model = gtk_combo_box_get_model( combobox );
+        GtkTreeIter iter;
+        gtk_tree_model_get_iter_first( model, &iter );
+        if (!gtk_list_store_iter_is_valid(GTK_LIST_STORE(model), &iter ))
+            return 0;
+        int ret = 1;
+        while (gtk_tree_model_iter_next( model, &iter ))
+            ret++;
+        return ret;
+    }
+    else
+#endif
+    {    
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
 
-    GList *child = GTK_LIST(list)->children;
-    int count = 0;
-    while (child) { count++; child = child->next; }
-    return count;
+        GList *child = GTK_LIST(list)->children;
+        int count = 0;
+        while (child) { count++; child = child->next; }
+        return count;
+    }
+    
+    return 0;
 }
 
 void wxComboBox::SetSelection( int n )
@@ -649,17 +897,34 @@ void wxComboBox::SetSelection( int n )
 
     DisableEvents();
 
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-    gtk_list_unselect_item( GTK_LIST(list), m_prevSelection );
-    gtk_list_select_item( GTK_LIST(list), n );
-    m_prevSelection = n;
-
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+        gtk_combo_box_set_active( combobox, n );
+    }
+    else
+#endif
+    {
+        GtkWidget *list = GTK_COMBO(m_widget)->list;
+        gtk_list_unselect_item( GTK_LIST(list), m_prevSelection );
+        gtk_list_select_item( GTK_LIST(list), n );
+        m_prevSelection = n;
+    }
+    
     EnableEvents();
 }
 
 wxString wxComboBox::GetValue() const
 {
-    GtkEntry *entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
     wxString tmp( wxGTK_CONV_BACK( gtk_entry_get_text( entry ) ) );
 
 #if 0
@@ -678,10 +943,17 @@ void wxComboBox::SetValue( const wxString& value )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
     wxString tmp;
     if (!value.IsNull()) tmp = value;
-    gtk_entry_set_text( GTK_ENTRY(entry), wxGTK_CONV( tmp ) );
+    gtk_entry_set_text( entry, wxGTK_CONV( tmp ) );
 
     InvalidateBestSize();
 }
@@ -690,7 +962,14 @@ void wxComboBox::Copy()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
     gtk_editable_copy_clipboard(GTK_EDITABLE(entry));
 }
 
@@ -698,7 +977,14 @@ void wxComboBox::Cut()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
     gtk_editable_cut_clipboard(GTK_EDITABLE(entry));
 }
 
@@ -706,7 +992,14 @@ void wxComboBox::Paste()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
     gtk_editable_paste_clipboard(GTK_EDITABLE(entry));
 }
 
@@ -774,19 +1067,41 @@ void wxComboBox::SetInsertionPoint( long pos )
     if ( pos == GetLastPosition() )
         pos = -1;
 
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-    gtk_entry_set_position( GTK_ENTRY(entry), (int)pos );
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
+    gtk_entry_set_position( entry, (int)pos );
 }
 
 long wxComboBox::GetInsertionPoint() const
 {
-    return (long) gtk_editable_get_position(GTK_EDITABLE(GTK_COMBO(m_widget)->entry));
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
+    return (long) gtk_editable_get_position(GTK_EDITABLE(entry));
 }
 
 wxTextPos wxComboBox::GetLastPosition() const
 {
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-    int pos = GTK_ENTRY(entry)->text_length;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
+    int pos = entry->text_length;
     return (long) pos-1;
 }
 
@@ -794,7 +1109,14 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
     gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
     if (value.IsNull()) return;
     gint pos = (gint)to;
@@ -809,15 +1131,30 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
 
 void wxComboBox::SetSelection( long from, long to )
 {
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
     gtk_editable_select_region( GTK_EDITABLE(entry), (gint)from, (gint)to );
 }
 
 void wxComboBox::GetSelection( long* from, long* to ) const
 {
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
     if (IsEditable())
     {
-        GtkEditable *editable = GTK_EDITABLE(GTK_COMBO(m_widget)->entry);
+        GtkEditable *editable = GTK_EDITABLE(entry);
         gint start, end;
         gtk_editable_get_selection_bounds(editable, & start, & end);
         *from = start;
@@ -827,7 +1164,14 @@ void wxComboBox::GetSelection( long* from, long* to ) const
 
 void wxComboBox::SetEditable( bool editable )
 {
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
     gtk_entry_set_editable( GTK_ENTRY(entry), editable );
 }
 
@@ -869,67 +1213,130 @@ void wxComboBox::OnChar( wxKeyEvent &event )
 
 void wxComboBox::DisableEvents()
 {
-    g_signal_handlers_disconnect_by_func (GTK_COMBO(m_widget)->list,
-                                          (gpointer) gtkcombo_combo_select_child_callback,
-                                          this);
-    g_signal_handlers_disconnect_by_func (GTK_COMBO(m_widget)->entry,
-                                          (gpointer) gtkcombo_text_changed_callback,
-                                          this);
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        g_signal_handlers_disconnect_by_func (GTK_BIN(m_widget)->child, 
+                (gpointer)gtkcombobox_text_changed_callback, this);
+                            
+        g_signal_handlers_disconnect_by_func (m_widget,
+                (gpointer)gtkcombobox_changed_callback, this);
+    }
+    else
+#endif    
+    {
+        g_signal_handlers_disconnect_by_func (GTK_COMBO(m_widget)->list,
+                (gpointer) gtkcombo_combo_select_child_callback, this);
+                
+        g_signal_handlers_disconnect_by_func (GTK_COMBO(m_widget)->entry,
+                (gpointer) gtkcombo_text_changed_callback, this);
+    }
 }
 
 void wxComboBox::EnableEvents()
 {
-    g_signal_connect_after (GTK_COMBO(m_widget)->list, "select-child",
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        g_signal_connect_after (GTK_BIN(m_widget)->child, "changed",
+                            G_CALLBACK (gtkcombobox_text_changed_callback), this);
+                            
+        g_signal_connect_after (m_widget, "changed",
+                            G_CALLBACK (gtkcombobox_changed_callback), this);
+    }
+    else
+#endif    
+    {
+        g_signal_connect_after (GTK_COMBO(m_widget)->list, "select-child",
                             G_CALLBACK (gtkcombo_combo_select_child_callback),
                             this);
-    g_signal_connect_after (GTK_COMBO(m_widget)->entry, "changed",
+        g_signal_connect_after (GTK_COMBO(m_widget)->entry, "changed",
                             G_CALLBACK (gtkcombo_text_changed_callback),
                             this );
+    }
 }
 
 void wxComboBox::OnSize( wxSizeEvent &event )
 {
-    // NB: In some situations (e.g. on non-first page of a wizard, if the
-    //     size used is default size), GtkCombo widget is resized correctly,
-    //     but it's look is not updated, it's rendered as if it was much wider.
-    //     No other widgets are affected, so it looks like a bug in GTK+.
-    //     Manually requesting resize calculation (as gtk_pizza_set_size does)
-    //     fixes it.
-    if (GTK_WIDGET_VISIBLE(m_widget))
-        gtk_widget_queue_resize(m_widget);
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        // Do nothing
+    }
+    else
+#endif
+    {
+        // NB: In some situations (e.g. on non-first page of a wizard, if the
+        //     size used is default size), GtkCombo widget is resized correctly,
+        //     but it's look is not updated, it's rendered as if it was much wider.
+        //     No other widgets are affected, so it looks like a bug in GTK+.
+        //     Manually requesting resize calculation (as gtk_pizza_set_size does)
+        //     fixes it.
+        if (GTK_WIDGET_VISIBLE(m_widget))
+            gtk_widget_queue_resize(m_widget);
+    }
 
     event.Skip();
 }
 
 void wxComboBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        // Do nothing
+    }
+    else
+#endif
+    {
 //    gtk_widget_modify_style( GTK_COMBO(m_widget)->button, syle );
 
-    gtk_widget_modify_style( GTK_COMBO(m_widget)->entry, style );
-    gtk_widget_modify_style( GTK_COMBO(m_widget)->list, style );
+        gtk_widget_modify_style( GTK_COMBO(m_widget)->entry, style );
+        gtk_widget_modify_style( GTK_COMBO(m_widget)->list, style );
 
-    GtkList *list = GTK_LIST( GTK_COMBO(m_widget)->list );
-    GList *child = list->children;
-    while (child)
-    {
-        gtk_widget_modify_style( GTK_WIDGET(child->data), style );
+        GtkList *list = GTK_LIST( GTK_COMBO(m_widget)->list );
+        GList *child = list->children;
+        while (child)
+        {
+            gtk_widget_modify_style( GTK_WIDGET(child->data), style );
 
-        GtkBin *bin = GTK_BIN(child->data);
-        gtk_widget_modify_style( bin->child, style );
+            GtkBin *bin = GTK_BIN(child->data);
+            gtk_widget_modify_style( bin->child, style );
 
-        child = child->next;
+            child = child->next;
+        }
     }
 }
 
 GtkWidget* wxComboBox::GetConnectWidget()
 {
-    return GTK_COMBO(m_widget)->entry;
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+    else
+#endif    
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        
+    return GTK_WIDGET( entry );
 }
 
 bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
 {
-    return ( (window == GTK_ENTRY( GTK_COMBO(m_widget)->entry )->text_area) ||
-             (window == GTK_COMBO(m_widget)->button->window ) );
+    GtkEntry *entry = NULL;
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
+        return (window == entry->text_area);
+    }
+    else
+#endif    
+    {
+        entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
+        return ( (window == entry->text_area) ||
+                 (window == GTK_COMBO(m_widget)->button->window ) );
+    }
 }
 
 wxSize wxComboBox::DoGetBestSize() const
@@ -962,7 +1369,12 @@ wxSize wxComboBox::DoGetBestSize() const
 wxVisualAttributes
 wxComboBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_combo_new, true);
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+        return GetDefaultAttributesFromGTKWidget(gtk_combo_box_entry_new, true);
+    else
+#endif
+        return GetDefaultAttributesFromGTKWidget(gtk_combo_new, true);
 }
 
 // ----------------------------------------------------------------------------
