@@ -18,6 +18,12 @@
 
 #if wxUSE_TOGGLEBTN
 
+// FIXME: Use GtkImage instead of GtkPixmap.
+#include <gtk/gtkversion.h>
+#ifdef GTK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#endif
+
 #include "wx/gtk/private.h"
 
 extern void wxapp_install_idle_handler();

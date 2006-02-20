@@ -14,6 +14,14 @@
 #include "wx/choice.h"
 #include "wx/arrstr.h"
 
+// FIXME: We use GtkOptionMenu which has been deprecated since GTK+ 2.3.0 in
+// favour of GtkComboBox.
+// Later use GtkComboBox if GTK+ runtime version is new enough.
+#include <gtk/gtkversion.h>
+#if defined(GTK_DISABLE_DEPRECATED) && GTK_CHECK_VERSION(2,3,0)
+#undef GTK_DISABLE_DEPRECATED
+#endif
+
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------

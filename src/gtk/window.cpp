@@ -56,6 +56,12 @@
 #include "wx/math.h"
 #include <ctype.h>
 
+// FIXME: Due to a hack we use GtkCombo in here, which is deprecated since gtk2.3.0
+#include <gtk/gtkversion.h>
+#if defined(GTK_DISABLE_DEPRECATED) && GTK_CHECK_VERSION(2,3,0)
+#undef GTK_DISABLE_DEPRECATED
+#endif
+
 #include "wx/gtk/private.h"
 #include <gdk/gdkprivate.h>
 #include <gdk/gdkkeysyms.h>

@@ -20,6 +20,12 @@
 
 #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
 
+// We use GtkCombo which has been deprecated since GTK+ 2.3.0
+// in favour of GtkComboBox for <GTK2.4 runtime
+#include <gtk/gtkversion.h>
+#if defined(GTK_DISABLE_DEPRECATED) && GTK_CHECK_VERSION(2,3,0)
+#undef GTK_DISABLE_DEPRECATED
+#endif
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------

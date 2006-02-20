@@ -17,6 +17,12 @@
 #include "wx/fontutil.h"
 #include "wx/toplevel.h"
 
+// Using gtk_list_new, which is deprecated since GTK2
+// Using gtk_object_sink, which is deprecated since GTK+-2.9.0
+#ifdef GTK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#endif
+
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkprivate.h>

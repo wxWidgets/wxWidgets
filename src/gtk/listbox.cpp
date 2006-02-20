@@ -21,14 +21,19 @@
 #include "wx/intl.h"
 #include "wx/checklst.h"
 #include "wx/settings.h"
+
+// FIXME: Use GtkTreeView/GtkListModel instead?
+#include <gtk/gtkversion.h>
+#ifdef GTK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#endif
+
 #include "wx/gtk/private.h"
 
 #if wxUSE_TOOLTIPS
 #include "wx/tooltip.h"
 #endif
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 //-----------------------------------------------------------------------------

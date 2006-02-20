@@ -25,7 +25,13 @@
 
 #include "wx/frame.h"
 
-#include <glib.h>
+// FIXME: Use GtkImage instead of GtkPixmap. Use the new toolbar API for when gtk runtime is new enough?
+// Beware that the new and old toolbar API may not be mixed in usage.
+#include <gtk/gtkversion.h>
+#ifdef GTK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#endif
+
 #include "wx/gtk/private.h"
 
 // ----------------------------------------------------------------------------

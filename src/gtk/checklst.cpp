@@ -15,6 +15,12 @@
 #if wxUSE_CHECKLISTBOX
 
 #include "wx/checklst.h"
+
+// FIXME: We use GtkList to implement wxListBox
+#ifdef GTK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#endif
+
 #include "wx/gtk/private.h"
 
 #include <gdk/gdk.h>

@@ -68,11 +68,18 @@ void wxToolTip::Enable( bool flag )
         gtk_tooltips_disable( ss_tooltips );
 }
 
+G_BEGIN_DECLS
+void gtk_tooltips_set_delay (GtkTooltips *tooltips,
+                             guint delay);
+G_END_DECLS
+
 void wxToolTip::SetDelay( long msecs )
 {
     if (!ss_tooltips)
         return;
 
+    // FIXME: This is a deprecated function and might not even have an effect.
+    // Try to not use it, after which remove the prototype above.
     gtk_tooltips_set_delay( ss_tooltips, (int)msecs );
 }
 

@@ -30,6 +30,29 @@
     #define wxGTK_CONV_BACK(s)  wxConvLocal.cWC2WX( (wxConvUTF8.cMB2WC( s ) ) )
 #endif
 
+// Some deprecated GTK+ prototypes we still use often
+// FIXME: Don't use them if possible.
+G_BEGIN_DECLS
+
+// Should use gtk_image_new, but the mask seems to be handled different,
+// and we need to migrate
+GtkWidget* gtk_pixmap_new (GdkPixmap *pixmap,
+                           GdkBitmap *mask);
+
+// Deprecated since GTK+-1.3.7:
+// Trivial wrapper around gtk_window_move, with some side effects we seem to rely on
+void gtk_widget_set_uposition (GtkWidget *widget,
+                               gint      x,
+                               gint      y);
+
+// We rely on the allow_shrink parameter in one place
+void gtk_window_set_policy (GtkWindow *window,
+                            gint       allow_shrink,
+                            gint       allow_grow,
+                            gint       auto_shrink);
+
+G_END_DECLS
+
 // translate a GTK+ scroll type to a wxEventType
 inline wxEventType GtkScrollTypeToWx(guint scrollType)
 {

@@ -22,6 +22,12 @@
 #include "wx/bitmap.h"
 #include "wx/fontutil.h"
 
+// FIXME: Use GtkImage instead of GtkPixmap. Don't use gtk_container_border_width
+#include <gtk/gtkversion.h>
+#ifdef GTK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#endif
+
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
 
