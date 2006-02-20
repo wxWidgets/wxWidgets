@@ -4021,6 +4021,10 @@ class ToolBarBase(_core.Control):
         """IsVertical(self) -> bool"""
         return _controls_.ToolBarBase_IsVertical(*args, **kwargs)
 
+    def GetToolsCount(*args, **kwargs):
+        """GetToolsCount(self) -> size_t"""
+        return _controls_.ToolBarBase_GetToolsCount(*args, **kwargs)
+
 
 class ToolBarBasePtr(ToolBarBase):
     def __init__(self, this):

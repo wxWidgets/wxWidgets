@@ -1744,6 +1744,10 @@ class OutputStream(object):
         """write(self, PyObject obj)"""
         return _core_.OutputStream_write(*args, **kwargs)
 
+    def LastWrite(*args, **kwargs):
+        """LastWrite(self) -> size_t"""
+        return _core_.OutputStream_LastWrite(*args, **kwargs)
+
 
 class OutputStreamPtr(OutputStream):
     def __init__(self, this):
@@ -12279,7 +12283,7 @@ class GridSizer(Sizer):
         """
         GetCols(self) -> int
 
-        Returns the number of columns in the sizer.
+        Returns the number of columns in the sizer, as specified in the constructor.
         """
         return _core_.GridSizer_GetCols(*args, **kwargs)
 
@@ -12287,7 +12291,7 @@ class GridSizer(Sizer):
         """
         GetRows(self) -> int
 
-        Returns the number of rows in the sizer.
+        Returns the number of rows in the sizer, as specified in the constructor.
         """
         return _core_.GridSizer_GetRows(*args, **kwargs)
 
@@ -12306,6 +12310,24 @@ class GridSizer(Sizer):
         Returns the horizontal gap (in pixels) between cells in the sizer.
         """
         return _core_.GridSizer_GetHGap(*args, **kwargs)
+
+    def CalcRowsCols(self):
+        """
+        CalcRowsCols() -> (rows, cols)
+
+        Calculates how many rows and columns will be in the sizer based
+        on the current number of items and also the rows, cols specified
+        in the constructor.
+        """
+        nitems = len(self.GetChildren())
+        rows = self.GetRows()
+        cols = self.GetCols()
+        assert rows != 0 or cols != 0, "Grid sizer must have either rows or columns fixed"
+        if cols != 0:
+            rows = (nitems + cols - 1) / cols
+        elif rows != 0:
+            cols = (nitems + rows - 1) / rows
+        return (rows, cols)
 
 
 class GridSizerPtr(GridSizer):

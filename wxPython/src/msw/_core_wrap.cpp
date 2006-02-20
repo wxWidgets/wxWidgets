@@ -8077,6 +8077,34 @@ static PyObject *_wrap_OutputStream_write(PyObject *, PyObject *args, PyObject *
 }
 
 
+static PyObject *_wrap_OutputStream_LastWrite(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxOutputStream *arg1 = (wxOutputStream *) 0 ;
+    size_t result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:OutputStream_LastWrite",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxOutputStream, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (size_t)((wxOutputStream const *)arg1)->LastWrite();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_unsigned_SS_long(static_cast<unsigned long >(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * OutputStream_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -46307,6 +46335,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"InputStream_TellI", (PyCFunction) _wrap_InputStream_TellI, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"InputStream_swigregister", InputStream_swigregister, METH_VARARGS, NULL},
 	 { (char *)"OutputStream_write", (PyCFunction) _wrap_OutputStream_write, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"OutputStream_LastWrite", (PyCFunction) _wrap_OutputStream_LastWrite, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"OutputStream_swigregister", OutputStream_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FSFile", (PyCFunction) _wrap_new_FSFile, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_FSFile", (PyCFunction) _wrap_delete_FSFile, METH_VARARGS | METH_KEYWORDS, NULL},
