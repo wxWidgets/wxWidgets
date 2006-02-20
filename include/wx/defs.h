@@ -2873,6 +2873,7 @@ typedef GtkWidget *WXWidget;
 #ifdef __WXGTK20__
 #define G_DISABLE_DEPRECATED
 #define PANGO_DISABLE_DEPRECATED
+#define GTK_DISABLE_DEPRECATED
 #endif
 
 #endif /*  __WXGTK__ */
