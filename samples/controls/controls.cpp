@@ -436,6 +436,7 @@ const int  ID_COMBO_APPEND      = 144;
 const int  ID_COMBO_DELETE      = 145;
 const int  ID_COMBO_FONT        = 146;
 const int  ID_COMBO_ENABLE      = 147;
+const int  ID_COMBO_SET_TEXT    = 148;
 
 const int  ID_RADIOBOX          = 160;
 const int  ID_RADIOBOX_SEL_NUM  = 161;
@@ -513,6 +514,7 @@ EVT_BUTTON    (ID_COMBO_CLEAR,          MyPanel::OnComboButtons)
 EVT_BUTTON    (ID_COMBO_APPEND,         MyPanel::OnComboButtons)
 EVT_BUTTON    (ID_COMBO_DELETE,         MyPanel::OnComboButtons)
 EVT_BUTTON    (ID_COMBO_FONT,           MyPanel::OnComboButtons)
+EVT_BUTTON    (ID_COMBO_SET_TEXT,       MyPanel::OnComboButtons)
 EVT_CHECKBOX  (ID_COMBO_ENABLE,         MyPanel::OnComboButtons)
 EVT_RADIOBOX  (ID_RADIOBOX,             MyPanel::OnRadio)
 EVT_BUTTON    (ID_RADIOBOX_SEL_NUM,     MyPanel::OnRadioButtons)
@@ -797,6 +799,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_COMBO_APPEND, _T("&Append 'Hi!'"), wxPoint(340,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_DELETE, _T("D&elete selected item"), wxPoint(180,130), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_FONT, _T("Set &Italic font"), wxPoint(340,130), wxSize(140,30) );
+    (void)new wxButton( panel, ID_COMBO_SET_TEXT, _T("Set 'Hi!' at #2"), wxPoint(340,180), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_COMBO_ENABLE, _T("&Disable"), wxPoint(20,130), wxSize(140,30) );
     m_book->AddPage(panel, _T("wxComboBox"), false, Image_Combo);
 
@@ -1417,6 +1420,11 @@ void MyPanel::OnComboButtons( wxCommandEvent &event )
         case ID_COMBO_FONT:
             {
                 m_combo->SetFont( *wxITALIC_FONT );
+                break;
+            }
+        case ID_COMBO_SET_TEXT:
+            {
+                m_combo->SetString( 2, wxT("Hi!") );
                 break;
             }
     }
