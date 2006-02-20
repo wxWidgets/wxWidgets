@@ -18,6 +18,7 @@
 
 #include "wx/control.h"         // the base class
 #include "wx/datetime.h"
+#include "wx/dateevt.h"
 
 #define wxDatePickerCtrlNameStr _T("datectrl")
 
