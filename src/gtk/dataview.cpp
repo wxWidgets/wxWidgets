@@ -111,16 +111,10 @@ static gboolean     wxgtk_list_store_iter_parent     (GtkTreeModel      *tree_mo
 						    GtkTreeIter       *iter,
 						    GtkTreeIter       *child);
 
-static void gtk_list_store_set_n_columns   (GtkWxListStore *list_store,
-					    gint          n_columns);
-static void gtk_list_store_set_column_type (GtkWxListStore *list_store,
-					    gint          column,
-					    GType         type);
-                        
 static GObjectClass *parent_class = NULL;
 
 GType
-wxgtk_list_store_get_type (void)
+gtk_wx_list_store_get_type (void)
 {
   static GType list_store_type = 0;
 
@@ -203,7 +197,7 @@ wxgtk_list_store_finalize (GObject *object)
     /* GtkWxListStore *list_store = GTK_WX_LIST_STORE (object); */
 
     /* we need to sort out, which class deletes what */
-    /* delete model; */
+    /* delete list_store->model; */
 
     /* must chain up */
     (* parent_class->finalize) (object);
@@ -352,7 +346,7 @@ wxgtk_list_store_iter_next (GtkTreeModel  *tree_model,
     if (n >= (int) list_store->model->GetNumberOfRows())
         return FALSE;
         
-    iter->user_data = (gpointer) n++;
+    iter->user_data = (gpointer) ++n;
 
     return TRUE;
 }
@@ -475,7 +469,7 @@ bool wxDataViewCtrl::AppendStringColumn( const wxString &label )
         = gtk_cell_renderer_text_new();
     
     GtkTreeViewColumn *column
-        = gtk_tree_view_column_new_with_attributes( wxGTK_CONV(label), renderer, "text", index, NULL );
+        = gtk_tree_view_column_new_with_attributes( wxGTK_CONV(label), renderer, "text", -1, NULL );
 
     gtk_tree_view_append_column( GTK_TREE_VIEW(m_widget), column );
 
