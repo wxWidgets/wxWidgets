@@ -21,9 +21,8 @@
 #include "wx/gtk/win_gtk.h"
 
 #include <gobject/gvaluecollector.h>
-#include "gtktreemodel.h"
-#include "gtktreedatalist.h"
-#include "gtktreednd.h"
+#include <gtk/gtktreemodel.h>
+#include <gtk/gtktreednd.h>
 
 //-----------------------------------------------------------------------------
 // classes
@@ -77,8 +76,9 @@ struct _GtkWxListStoreClass
   
 };
 
+static GtkWxListStore *wxgtk_list_store_new          ();
 static void         wxgtk_list_store_init            (GtkWxListStore      *list_store);
-static void         wxgtk_list_store_class_init      (GtkWxListStoreClass *class);
+static void         wxgtk_list_store_class_init      (GtkWxListStoreClass *klass);
 static void         wxgtk_list_store_tree_model_init (GtkTreeModelIface *iface);
 static void         wxgtk_list_store_finalize        (GObject           *object);
 static GtkTreeModelFlags wxgtk_list_store_get_flags  (GtkTreeModel      *tree_model);
@@ -147,7 +147,7 @@ wxgtk_list_store_get_type (void)
       };
 
       list_store_type = g_type_register_static (G_TYPE_OBJECT, "GtkWxListStore",
-						&list_store_info, 0);
+						&list_store_info, (GTypeFlags)0 );
 
       g_type_add_interface_static (list_store_type,
 				   GTK_TYPE_TREE_MODEL,
@@ -157,12 +157,19 @@ wxgtk_list_store_get_type (void)
   return list_store_type;
 }
 
+static GtkWxListStore *
+wxgtk_list_store_new()
+{
+  GtkWxListStore *retval = (GtkWxListStore *) g_object_new (GTK_TYPE_WX_LIST_STORE, NULL);
+  return retval;
+}
+
 static void
-wxgtk_list_store_class_init (GtkWxListStoreClass *class)
+wxgtk_list_store_class_init (GtkWxListStoreClass *klass)
 {
     GObjectClass *object_class;
-    parent_class = g_type_class_peek_parent (class);
-    object_class = (GObjectClass*) class;
+    parent_class = (GObjectClass*) g_type_class_peek_parent (klass);
+    object_class = (GObjectClass*) klass;
     object_class->finalize = wxgtk_list_store_finalize;
 }
 
@@ -187,13 +194,13 @@ static void
 wxgtk_list_store_init (GtkWxListStore *list_store)
 {
     list_store->model = NULL;
-    list_store->stamp = g_random_init();
+    list_store->stamp = g_random_int();
 }
 
 static void
 wxgtk_list_store_finalize (GObject *object)
 {
-    GtkWxListStore *list_store = GTK_LIST_STORE (object);
+    /* GtkWxListStore *list_store = GTK_WX_LIST_STORE (object); */
 
     /* we need to sort out, which class deletes what */
     /* delete model; */
@@ -212,7 +219,7 @@ wxgtk_list_store_finalize (GObject *object)
 static GtkTreeModelFlags
 wxgtk_list_store_get_flags (GtkTreeModel *tree_model)
 {
-    g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), 0);
+    g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), (GtkTreeModelFlags)0 );
 
     // GTK+ list store uses a linked list for storing the
     // items and a pointer to a child is used as the member
@@ -240,13 +247,12 @@ wxgtk_list_store_get_column_type (GtkTreeModel *tree_model,
     GtkWxListStore *list_store = (GtkWxListStore *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), G_TYPE_INVALID);
 
-    GType gtype = G_TYPE_STRING;
+    GType gtype = G_TYPE_INVALID;
     
-#if 0
-    wxString wxtype = list_store->model->GetColType( index );
-    // convert wxtype to GType
-    gtype = ..
-#endif
+    wxString wxtype = list_store->model->GetColType( (size_t) index );
+    
+    if (wxtype == wxT("string"))
+        gtype = G_TYPE_STRING;
 
     return gtype;
 }
@@ -260,9 +266,9 @@ wxgtk_list_store_get_iter (GtkTreeModel *tree_model,
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), FALSE);
     g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
 
-    i = gtk_tree_path_get_indices (path)[0];
+    size_t i = (size_t)gtk_tree_path_get_indices (path)[0];
 
-    if (i >= list_store->model->GetCount())
+    if (i >= list_store->model->GetNumberOfRows())
         return FALSE;
 
     iter->stamp = list_store->stamp;
@@ -276,14 +282,12 @@ static GtkTreePath *
 wxgtk_list_store_get_path (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter)
 {
-    GtkWxListStore *list_store = (GtkListStore *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), NULL);
-  
     g_return_val_if_fail (iter->stamp == GTK_WX_LIST_STORE (tree_model)->stamp, NULL);
   
     GtkTreePath *retval = gtk_tree_path_new ();
     // user_data is just the index
-    int i = (int) item->user_data;
+    int i = (int) iter->user_data;
     gtk_tree_path_append_index (retval, i);
     return retval;
 }
@@ -294,11 +298,20 @@ wxgtk_list_store_get_value (GtkTreeModel *tree_model,
 			  gint          column,
 			  GValue       *value)
 {
-    GtkWxListStore *list_store = (GtkListStore *) tree_model;
+    GtkWxListStore *list_store = (GtkWxListStore *) tree_model;
     g_return_if_fail (GTK_IS_WX_LIST_STORE (tree_model) );
 
-    g_value_init( value, G_TYPE_STRING );
-    g_value_set_string( value, "Hello" );
+    wxDataViewListModel *model = list_store->model;
+    wxString mtype = model->GetColType( (size_t) column );
+    if (mtype == wxT("string"))
+    {
+        g_value_init( value, G_TYPE_STRING );
+        wxVariant variant = model->GetValue( (size_t) column, (size_t) iter->user_data );
+        g_value_set_string( value, wxGTK_CONV(variant.GetString()) );
+    }
+    else
+    {
+    }
     
 #if 0
   GtkTreeDataList *list;
@@ -327,7 +340,7 @@ wxgtk_list_store_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), FALSE);
-    GtkWxListStore *list_store = (GtkListStore *) tree_model;
+    GtkWxListStore *list_store = (GtkWxListStore *) tree_model;
     
     g_return_val_if_fail (list_store->stamp == iter->stamp, FALSE);
 
@@ -336,7 +349,7 @@ wxgtk_list_store_iter_next (GtkTreeModel  *tree_model,
     if (n == -1)
         return FALSE;
         
-    if (n >= (int) list_store->model->GetRowCount())
+    if (n >= (int) list_store->model->GetNumberOfRows())
         return FALSE;
         
     iter->user_data = (gpointer) n++;
@@ -350,7 +363,7 @@ wxgtk_list_store_iter_children (GtkTreeModel *tree_model,
 			      GtkTreeIter  *parent)
 {
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), FALSE);
-    GtkWxListStore *list_store = (GtkListStore *) tree_model;
+    GtkWxListStore *list_store = (GtkWxListStore *) tree_model;
     
     // this is a list, nodes have no children
     if (parent)
@@ -374,10 +387,10 @@ wxgtk_list_store_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), -1);
-    GtkWxListStore *list_store = (GtkListStore *) tree_model;
+    GtkWxListStore *list_store = (GtkWxListStore *) tree_model;
     
     if (iter == NULL)
-        return (gint) list_store->model->GetRowCount();
+        return (gint) list_store->model->GetNumberOfRows();
 
     g_return_val_if_fail (list_store->stamp == iter->stamp, -1);
   
@@ -391,7 +404,7 @@ wxgtk_list_store_iter_nth_child (GtkTreeModel *tree_model,
 			       gint          n)
 {
     g_return_val_if_fail (GTK_IS_WX_LIST_STORE (tree_model), FALSE);
-    GtkWxListStore *list_store = (GtkListStore *) tree_model;
+    GtkWxListStore *list_store = (GtkWxListStore *) tree_model;
     
     if (parent)
         return FALSE;
@@ -399,7 +412,7 @@ wxgtk_list_store_iter_nth_child (GtkTreeModel *tree_model,
     if (n < 0)
         return FALSE;
         
-    if (n >= (gint) list_store->model->GetRowCount())
+    if (n >= (gint) list_store->model->GetNumberOfRows())
         return FALSE;
 
     iter->stamp = list_store->stamp;
@@ -469,17 +482,15 @@ bool wxDataViewCtrl::AppendStringColumn( const wxString &label )
     return true;
 }
 
-bool wxDataViewCtrl::AssociateModel( wxDataViewStore *model )
+bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 {
     if (!wxDataViewCtrlBase::AssociateModel( model ))
         return false;
 
-    // Right now we only have the GTK+ port's
-    // list store variant, so cast to that...
-    
-    wxDataViewListStore *liststore = (wxDataViewListStore*) store;
-    
-    gtk_tree_view_set_model( GTK_TREE_VIEW(m_widget), GTK_TREE_MODEL(liststore->GetGtkListStore()) );
+    GtkWxListStore *wxmodel = wxgtk_list_store_new();
+    wxmodel->model = (wxDataViewListModel*) model;
+
+    gtk_tree_view_set_model( GTK_TREE_VIEW(m_widget), GTK_TREE_MODEL(wxmodel) );
     
     return true;
 }
