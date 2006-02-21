@@ -54,8 +54,8 @@
 #endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
-  #include "wx/prntbase.h"
-  #include "wx/printdlg.h"
+    #include "wx/prntbase.h"
+    #include "wx/printdlg.h"
 #endif
 
 #include "wx/msgdlg.h"
@@ -64,19 +64,20 @@
 #include "wx/confbase.h"
 #include "wx/file.h"
 #include "wx/cmdproc.h"
+#include "wx/tokenzr.h"
 
 #include <stdio.h>
 #include <string.h>
 
 #if wxUSE_STD_IOSTREAM
-  #include "wx/ioswrap.h"
-  #if wxUSE_IOSTREAMH
-    #include <fstream.h>
-  #else
-    #include <fstream>
-  #endif
+    #include "wx/ioswrap.h"
+    #if wxUSE_IOSTREAMH
+        #include <fstream.h>
+    #else
+        #include <fstream>
+    #endif
 #else
-  #include "wx/wfstream.h"
+    #include "wx/wfstream.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -796,6 +797,17 @@ wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
 // that of the template
 bool wxDocTemplate::FileMatchesTemplate(const wxString& path)
 {
+    wxStringTokenizer parser (GetFileFilter(), wxT(";"));
+    wxString anything = wxT ("*");
+    while (parser.HasMoreTokens())
+    {
+        wxString filter = parser.GetNextToken();
+        wxString filterExt = FindExtension (filter);
+        if ( filter.IsSameAs (anything)    ||
+             filterExt.IsSameAs (anything) ||
+             filterExt.IsSameAs (FindExtension (path)) )
+            return true;
+    }
     return GetDefaultExtension().IsSameAs(FindExtension(path));
 }
 
@@ -2445,4 +2457,3 @@ bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
 #endif // wxUSE_STD_IOSTREAM/!wxUSE_STD_IOSTREAM
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
-

@@ -29,6 +29,7 @@ All (GUI):
 - wxCalendarCtrl drawing, positioning and hit-testing fixes.
 - More checking of image validity before loading into wxImage.
 - Added double-buffering to wxVListBox and fixed a scrolling issue.
+- More than one filter allowed in in wxDocTemplate filter.
 
 wxGTK:
 
