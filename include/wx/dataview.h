@@ -111,11 +111,11 @@ public:
 
     virtual bool AppendStringColumn( const wxString &label ) = 0;
     
-    virtual bool AssociateModel( wxDataViewModel *model );
-    wxDataViewModel* GetModel();
+    virtual bool AssociateModel( wxDataViewListModel *model );
+    wxDataViewListModel* GetModel();
     
 private:
-    wxDataViewModel    *m_model;
+    wxDataViewListModel    *m_model;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)

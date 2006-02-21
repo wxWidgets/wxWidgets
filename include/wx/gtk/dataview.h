@@ -52,7 +52,7 @@ public:
 
     virtual bool AppendStringColumn( const wxString &label );
 
-    virtual bool AssociateModel( wxDataViewModel *model );
+    virtual bool AssociateModel( wxDataViewListModel *model );
     
     
 private:

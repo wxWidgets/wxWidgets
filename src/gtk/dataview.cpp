@@ -423,6 +423,84 @@ wxgtk_list_store_iter_parent (GtkTreeModel *tree_model,
     return FALSE;
 }
 
+// --------------------------------------------------------- 
+// wxGtkDataViewListModelNotifier
+// --------------------------------------------------------- 
+
+class wxGtkDataViewListModelNotifier: public wxDataViewListModelNotifier
+{
+public:
+    wxGtkDataViewListModelNotifier( GtkWxListStore* gtk_store, wxDataViewListModel *wx_model );
+    
+    virtual bool RowAppended();
+    virtual bool RowPrepended();
+    virtual bool RowInserted( size_t before );
+    virtual bool RowDeleted( size_t row );
+    virtual bool RowChanged( size_t row );
+    virtual bool ValueChanged( size_t row, size_t col );
+    virtual bool Cleared();
+    
+    GtkWxListStore      *m_gtk_store;
+    wxDataViewListModel *m_wx_model;
+};
+
+// --------------------------------------------------------- 
+// wxGtkDataViewListModelNotifier
+// --------------------------------------------------------- 
+
+wxGtkDataViewListModelNotifier::wxGtkDataViewListModelNotifier( 
+    GtkWxListStore* gtk_store, wxDataViewListModel *wx_model )
+{
+    m_gtk_store = gtk_store;
+    m_wx_model = wx_model;
+}
+    
+bool wxGtkDataViewListModelNotifier::RowAppended()
+{
+    size_t pos = m_wx_model->GetNumberOfRows()-1;
+    
+    GtkTreeIter iter;
+    iter.stamp = m_gtk_store->stamp;
+    iter.user_data = (gpointer) pos;
+    
+    GtkTreePath *path = gtk_tree_path_new ();
+    gtk_tree_path_append_index (path, (gint) pos);
+    gtk_tree_model_row_inserted (GTK_TREE_MODEL (m_gtk_store), path, &iter);
+    gtk_tree_path_free (path);
+    
+    return true;
+}
+
+bool wxGtkDataViewListModelNotifier::RowPrepended()
+{
+    return false;
+}
+
+bool wxGtkDataViewListModelNotifier::RowInserted( size_t before )
+{
+    return false;
+}
+
+bool wxGtkDataViewListModelNotifier::RowDeleted( size_t row )
+{
+    return false;
+}
+
+bool wxGtkDataViewListModelNotifier::RowChanged( size_t row )
+{
+    return false;
+}
+
+bool wxGtkDataViewListModelNotifier::ValueChanged( size_t row, size_t col )
+{
+    return false;
+}
+
+bool wxGtkDataViewListModelNotifier::Cleared()
+{
+    return false;
+}
+
 
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
@@ -476,15 +554,20 @@ bool wxDataViewCtrl::AppendStringColumn( const wxString &label )
     return true;
 }
 
-bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
+bool wxDataViewCtrl::AssociateModel( wxDataViewListModel *model )
 {
     if (!wxDataViewCtrlBase::AssociateModel( model ))
         return false;
 
-    GtkWxListStore *wxmodel = wxgtk_list_store_new();
-    wxmodel->model = (wxDataViewListModel*) model;
+    GtkWxListStore *gtk_store = wxgtk_list_store_new();
+    gtk_store->model = model;
 
-    gtk_tree_view_set_model( GTK_TREE_VIEW(m_widget), GTK_TREE_MODEL(wxmodel) );
+    wxGtkDataViewListModelNotifier *notifier = 
+        new wxGtkDataViewListModelNotifier( gtk_store, model );
+
+    model->SetNotifier( notifier );    
+
+    gtk_tree_view_set_model( GTK_TREE_VIEW(m_widget), GTK_TREE_MODEL(gtk_store) );
     
     return true;
 }

@@ -129,7 +129,7 @@ wxDataViewCtrlBase::~wxDataViewCtrlBase()
         delete m_model;
 }
 
-bool wxDataViewCtrlBase::AssociateModel( wxDataViewModel *model )
+bool wxDataViewCtrlBase::AssociateModel( wxDataViewListModel *model )
 {
     if (m_model)
         delete m_model;
@@ -139,7 +139,7 @@ bool wxDataViewCtrlBase::AssociateModel( wxDataViewModel *model )
     return true;
 }
 
-wxDataViewModel* wxDataViewCtrlBase::GetModel()
+wxDataViewListModel* wxDataViewCtrlBase::GetModel()
 {
     return m_model;
 }
