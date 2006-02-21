@@ -15,6 +15,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/object.h"
 #include "wx/dataview.h"
 #include "wx/log.h"
 #include "wx/image.h"

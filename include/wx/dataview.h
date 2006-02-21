@@ -42,7 +42,7 @@ public:
     virtual ~wxDataViewModel() { }
     
 protected:
-    DECLARE_NO_COPY_CLASS(wxDataViewModel)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewModel)
 };
 
 // --------------------------------------------------------- 
@@ -96,7 +96,7 @@ private:
     wxDataViewListModelNotifier *m_notifier;
 
 protected:
-    DECLARE_NO_COPY_CLASS(wxDataViewListModel)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewListModel)
 };
 
 // --------------------------------------------------------- 
@@ -118,7 +118,7 @@ private:
     wxDataViewModel    *m_model;
 
 protected:
-    DECLARE_NO_COPY_CLASS(wxDataViewCtrlBase)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
 };
 
 
