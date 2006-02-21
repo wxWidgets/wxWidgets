@@ -10,6 +10,8 @@
 
 @WX_VERSION_TAG@.3 {
     global:
+        *wxGenericListCtrl*DoClientToScreen*;
+        *wxGenericListCtrl*DoScreenToClient*;
         # for wxString::operator<<(wxString&, wxLongLongNative const&)
         # note no trailing '*' or it also matches wxGetDiskSpace
         *wxString*wxLongLongNative;
