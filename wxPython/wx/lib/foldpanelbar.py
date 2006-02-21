@@ -501,7 +501,7 @@ class CaptionBar(wx.Window):
                  iconWidth=16, iconHeight=16, collapsed=False):
         """ Default Class Constructor."""
         
-        wx.Window.__init__(self, parent, wx.ID_ANY, pos=wx.DefaultPosition,
+        wx.Window.__init__(self, parent, wx.ID_ANY, pos=pos,
                            size=(20,20), style=wx.NO_BORDER)
 
         self._controlCreated = False
@@ -1488,7 +1488,7 @@ class FoldPanelItem(wx.Panel):
                  collapsed=False, cbstyle=EmptyCaptionBarStyle):
         """ Default Class Constructor. """
         
-        wx.Panel.__init__(self, parent, id, style=wx.CLIP_CHILDREN)
+        wx.Panel.__init__(self, parent, id, wx.Point(0,0), style=wx.CLIP_CHILDREN)
         self._controlCreated = False
         self._UserSize = 0
         self._PanelSize = 0
