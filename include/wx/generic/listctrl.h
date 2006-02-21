@@ -247,10 +247,12 @@ protected:
     // it calls our OnGetXXX() functions
     friend class WXDLLEXPORT wxListMainWindow;
 
+#if wxABI_VERSION >= 20603
     // take into account the coordinates difference between the container
     // window and the list control window itself here
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
+#endif // 2.6.3
 
 private:
     // Virtual function hiding supression
