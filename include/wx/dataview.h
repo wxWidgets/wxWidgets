@@ -19,6 +19,7 @@
 #include "wx/control.h"
 #include "wx/textctrl.h"
 #include "wx/bitmap.h"
+#include "wx/variant.h"
 
 // ----------------------------------------------------------------------------
 // wxDataViewCtrl flags 
@@ -61,7 +62,7 @@ public:
     virtual bool RowChanged( size_t row ) = 0;
     virtual bool ValueChanged( size_t row, size_t col ) = 0;
     virtual bool Cleared() = 0;
-}
+};
 
 // --------------------------------------------------------- 
 // wxDataViewListModel
