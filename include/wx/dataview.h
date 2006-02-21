@@ -16,17 +16,109 @@
 
 #if wxUSE_DATAVIEWCTRL
 
-// ----------------------------------------------------------------------------
-// wxDataViewCtrl flags 
-// ----------------------------------------------------------------------------
-
 #include "wx/control.h"
 #include "wx/textctrl.h"
 #include "wx/bitmap.h"
 
+// ----------------------------------------------------------------------------
+// wxDataViewCtrl flags 
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// wxDataViewCtrl globals
+// ----------------------------------------------------------------------------
+
 extern WXDLLEXPORT_DATA(const wxChar) wxDataViewCtrlNameStr[];
 
+// --------------------------------------------------------- 
+// wxDataViewModel
+// --------------------------------------------------------- 
 
+class wxDataViewModel: public wxObject
+{
+public:
+    wxDataViewModel() { }
+    virtual ~wxDataViewModel() { }
+    
+protected:
+    DECLARE_NO_COPY_CLASS(wxDataViewModel)
+};
+
+// --------------------------------------------------------- 
+// wxDataViewListModelNotifier
+// --------------------------------------------------------- 
+
+class wxDataViewListModelNotifier
+{
+public:
+    wxDataViewListModelNotifier() { }
+    virtual ~wxDataViewListModelNotifier() { }
+    
+    virtual bool RowAppended() = 0;
+    virtual bool RowPrepended() = 0;
+    virtual bool RowInserted( size_t before ) = 0;
+    virtual bool RowDeleted( size_t row ) = 0;
+    virtual bool RowChanged( size_t row ) = 0;
+    virtual bool ValueChanged( size_t row, size_t col ) = 0;
+    virtual bool Cleared() = 0;
+}
+
+// --------------------------------------------------------- 
+// wxDataViewListModel
+// --------------------------------------------------------- 
+
+class wxDataViewListModel: public wxDataViewModel
+{
+public:
+    wxDataViewListModel();
+    virtual ~wxDataViewListModel();
+
+    virtual size_t GetNumberOfRows() = 0;
+    virtual size_t GetNumberOfCols() = 0;
+    // as reported by wxVariant
+    virtual wxString GetColType( size_t col ) = 0;
+    virtual wxVariant GetValue( size_t col, size_t row ) = 0;
+
+    // delegated notifiers
+    bool RowAppended();
+    bool RowPrepended();
+    bool RowInserted( size_t before );
+    bool RowDeleted( size_t row );
+    bool RowChanged( size_t row );
+    bool ValueChanged( size_t row, size_t col );
+    bool Cleared();
+    
+    void SetNotifier( wxDataViewListModelNotifier *notifier );
+    wxDataViewListModelNotifier* GetNotifier();
+    
+private:
+    wxDataViewListModelNotifier *m_notifier;
+
+protected:
+    DECLARE_NO_COPY_CLASS(wxDataViewListModel)
+};
+
+// --------------------------------------------------------- 
+// wxDataViewCtrlBase
+// --------------------------------------------------------- 
+
+class wxDataViewCtrlBase: public wxControl
+{
+public:
+    wxDataViewCtrlBase();
+    ~wxDataViewCtrlBase();
+
+    virtual bool AppendStringColumn( const wxString &label ) = 0;
+    
+    virtual bool AssociateModel( wxDataViewModel *model );
+    wxDataViewModel* GetModel();
+    
+private:
+    wxDataViewModel    *m_model;
+
+protected:
+    DECLARE_NO_COPY_CLASS(wxDataViewCtrlBase)
+};
 
 
 
