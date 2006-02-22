@@ -29,6 +29,9 @@
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_CORE wxDataViewCtrl;
+class WXDLLIMPEXP_CORE wxDataViewColumn;
+
 extern WXDLLEXPORT_DATA(const wxChar) wxDataViewCtrlNameStr[];
 
 // --------------------------------------------------------- 
@@ -100,6 +103,48 @@ protected:
 };
 
 // --------------------------------------------------------- 
+// wxDataViewColumn
+// --------------------------------------------------------- 
+
+enum wxDataViewColumnType
+{
+    wxDATAVIEW_COL_TEXT,
+    wxDATAVIEW_COL_ICON,
+    wxDATAVIEW_COL_ICONTEXT,
+    wxDATAVIEW_COL_CHECK,
+    wxDATAVIEW_COL_DATETIME,
+    wxDATAVIEW_COL_PROGRESS,
+    wxDATAVIEW_COL_CHOICE,
+    wxDATAVIEW_COL_CUSTOM
+};
+
+enum wxDataViewColumnFlags
+{
+    wxDATAVIEW_COL_RESIZABLE  = 1,
+    wxDATAVIEW_COL_SORTABLE   = 2,
+    wxDATAVIEW_COL_HIDDEN     = 4
+};
+
+class wxDataViewColumnBase: public wxObject
+{
+public:
+    wxDataViewColumnBase( const wxString &title, wxDataViewCtrl *ctrl, 
+            wxDataViewColumnType kind, int flags = 0 );
+
+    virtual void SetTitle( const wxString &title );
+    virtual wxString GetTitle();
+
+private:
+    wxDataViewCtrl          *m_ctrl;
+    wxDataViewColumnType     m_kind;
+    int                      m_flags;
+    wxString                 m_title;
+
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumnBase)
+};
+
+// --------------------------------------------------------- 
 // wxDataViewCtrlBase
 // --------------------------------------------------------- 
 
@@ -109,19 +154,24 @@ public:
     wxDataViewCtrlBase();
     ~wxDataViewCtrlBase();
 
-    virtual bool AppendStringColumn( const wxString &label ) = 0;
     
     virtual bool AssociateModel( wxDataViewListModel *model );
     wxDataViewListModel* GetModel();
     
+    virtual bool AppendStringColumn( const wxString &label );
+    virtual bool AppendColumn( wxDataViewColumn *col );    
+    virtual size_t GetNumberOfColumns();
+    virtual bool DeleteColumn( size_t pos );
+    virtual bool ClearColumns();
+    virtual wxDataViewColumn* GetColumn( size_t pos );
+    
 private:
     wxDataViewListModel    *m_model;
+    wxList                  m_cols;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
 };
-
-
 
 #if defined(__WXGTK20__)
     #include "wx/gtk/dataview.h"

@@ -22,6 +22,29 @@
 class WXDLLIMPEXP_CORE wxDataViewCtrl;
 
 // --------------------------------------------------------- 
+// wxDataViewColumn
+// --------------------------------------------------------- 
+
+class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
+{
+public:
+    wxDataViewColumn( const wxString &title, wxDataViewCtrl *ctrl, 
+            wxDataViewColumnType kind, int flags = 0 );
+    virtual ~wxDataViewColumn();
+
+    virtual void SetTitle( const wxString &title );
+
+    // implementation
+    void* GetGtkHandle() { return m_column; }
+
+private:
+    void*   m_column;
+
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)
+};
+
+// --------------------------------------------------------- 
 // wxDataViewCtrl
 // --------------------------------------------------------- 
 
@@ -50,10 +73,8 @@ public:
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator );
 
-    virtual bool AppendStringColumn( const wxString &label );
-
     virtual bool AssociateModel( wxDataViewListModel *model );
-    
+    virtual bool AppendColumn( wxDataViewColumn *col );    
     
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)

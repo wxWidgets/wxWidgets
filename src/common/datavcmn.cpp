@@ -113,6 +113,31 @@ wxDataViewListModelNotifier* wxDataViewListModel::GetNotifier()
 }
 
 // --------------------------------------------------------- 
+// wxDataViewColumnBase
+// --------------------------------------------------------- 
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
+
+wxDataViewColumnBase::wxDataViewColumnBase( const wxString &title, wxDataViewCtrl *ctrl, 
+    wxDataViewColumnType kind, int flags)
+{
+    m_ctrl = ctrl;
+    m_kind = kind;
+    m_flags = flags;
+    m_title = title;
+}
+
+void wxDataViewColumnBase::SetTitle( const wxString &title )
+{
+    m_title = title;
+}
+
+wxString wxDataViewColumnBase::GetTitle()
+{
+    return m_title;
+}
+
+// --------------------------------------------------------- 
 // wxDataViewCtrlBase
 // --------------------------------------------------------- 
 
@@ -121,6 +146,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewCtrlBase, wxControl)
 wxDataViewCtrlBase::wxDataViewCtrlBase()
 {
     m_model = NULL;
+    m_cols.DeleteContents( true );
 }
 
 wxDataViewCtrlBase::~wxDataViewCtrlBase()
@@ -142,5 +168,36 @@ bool wxDataViewCtrlBase::AssociateModel( wxDataViewListModel *model )
 wxDataViewListModel* wxDataViewCtrlBase::GetModel()
 {
     return m_model;
+}
+
+bool wxDataViewCtrlBase::AppendStringColumn( const wxString &label )
+{
+    return AppendColumn( new wxDataViewColumn( label, (wxDataViewCtrl*) this, wxDATAVIEW_COL_TEXT ) );
+}
+
+bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )
+{
+    m_cols.Append( (wxObject*) col );
+    return true;
+}
+
+size_t wxDataViewCtrlBase::GetNumberOfColumns()
+{
+    return m_cols.GetCount();
+}
+
+bool wxDataViewCtrlBase::DeleteColumn( size_t pos )
+{
+    return false;
+}
+
+bool wxDataViewCtrlBase::ClearColumns()
+{
+    return false;
+}
+
+wxDataViewColumn* wxDataViewCtrlBase::GetColumn( size_t pos )
+{
+    return (wxDataViewColumn*) m_cols[ pos ];
 }
 

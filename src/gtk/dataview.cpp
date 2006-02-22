@@ -502,6 +502,53 @@ bool wxGtkDataViewListModelNotifier::Cleared()
 }
 
 
+// --------------------------------------------------------- 
+// wxDataViewColumn
+// --------------------------------------------------------- 
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
+
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCtrl *ctrl, 
+            wxDataViewColumnType kind, int flags ) :
+    wxDataViewColumnBase( title, ctrl, kind, flags )
+{
+    GtkCellRenderer *renderer = NULL;
+    
+    if (kind == wxDATAVIEW_COL_TEXT)
+    {
+        renderer = gtk_cell_renderer_text_new();
+    } else
+    if (kind == wxDATAVIEW_COL_CHECK)
+    {
+        renderer = gtk_cell_renderer_toggle_new();
+    } else
+    if (kind == wxDATAVIEW_COL_ICON)
+    {
+        renderer = gtk_cell_renderer_pixbuf_new();
+    }
+    else
+        return;
+
+    GtkTreeViewColumn *column = 
+        gtk_tree_view_column_new_with_attributes( wxGTK_CONV(title), renderer, "text", 0, NULL );
+       
+    // bind to data here... not above.
+    
+    m_column = (void*) column;
+}
+
+wxDataViewColumn::~wxDataViewColumn()
+{
+}
+
+void wxDataViewColumn::SetTitle( const wxString &title )
+{
+    wxDataViewColumnBase::SetTitle( title );
+    
+    GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
+    gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
@@ -541,19 +588,6 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-bool wxDataViewCtrl::AppendStringColumn( const wxString &label )
-{
-    GtkCellRenderer *renderer 
-        = gtk_cell_renderer_text_new();
-    
-    GtkTreeViewColumn *column
-        = gtk_tree_view_column_new_with_attributes( wxGTK_CONV(label), renderer, "text", -1, NULL );
-
-    gtk_tree_view_append_column( GTK_TREE_VIEW(m_widget), column );
-
-    return true;
-}
-
 bool wxDataViewCtrl::AssociateModel( wxDataViewListModel *model )
 {
     if (!wxDataViewCtrlBase::AssociateModel( model ))
@@ -569,6 +603,18 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewListModel *model )
 
     gtk_tree_view_set_model( GTK_TREE_VIEW(m_widget), GTK_TREE_MODEL(gtk_store) );
     
+    return true;
+}
+
+bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
+{
+    if (!wxDataViewCtrlBase::AppendColumn(col))
+        return false;
+        
+    GtkTreeViewColumn *column = (GtkTreeViewColumn *)col->GetGtkHandle();
+
+    gtk_tree_view_append_column( GTK_TREE_VIEW(m_widget), column );
+
     return true;
 }
 
