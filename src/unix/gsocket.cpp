@@ -1213,37 +1213,28 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
       return (result & flags);
     }
 
+    /* Check for exceptions and errors */
+    if (wxFD_ISSET(m_fd, &exceptfds))
+    {
+      m_establishing = false;
+      m_detected = GSOCK_LOST_FLAG;
+
+      /* LOST event: Abort any further processing */
+      return (GSOCK_LOST_FLAG & flags);
+    }
+
     /* Check for readability */
     if (wxFD_ISSET(m_fd, &readfds))
     {
-      char c;
+      result |= GSOCK_INPUT_FLAG;
 
-      int num = recv(m_fd, &c, 1, MSG_PEEK | GSOCKET_MSG_NOSIGNAL);
-
-      if (num > 0)
+      if (m_server && m_stream)
       {
-        result |= GSOCK_INPUT_FLAG;
-      }
-      else
-      {
-        if (m_server && m_stream)
-        {
-          result |= GSOCK_CONNECTION_FLAG;
-          m_detected |= GSOCK_CONNECTION_FLAG;
-        }
-        /* If recv returned zero, then the connection is lost, and errno is not set.
-         * Otherwise, recv has returned an error (-1), in which case we have lost the
-         * socket only if errno does _not_ indicate that there may be more data to read.
-         */
-        else if (num == 0 ||
-                 (errno != EWOULDBLOCK) && (errno != EAGAIN) && (errno != EINTR))
-        {
-          m_detected = GSOCK_LOST_FLAG;
-          m_establishing = false;
-
-          /* LOST event: Abort any further processing */
-          return (GSOCK_LOST_FLAG & flags);
-        }
+        /* This is a TCP server socket that detected a connection.
+          While the INPUT_FLAG is also set, it doesn't matter on
+          this kind of  sockets, as we can only Accept() from them. */        
+        result |= GSOCK_CONNECTION_FLAG;
+        m_detected |= GSOCK_CONNECTION_FLAG;
       }
     }
 
@@ -1276,16 +1267,6 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
       {
         result |= GSOCK_OUTPUT_FLAG;
       }
-    }
-
-    /* Check for exceptions and errors (is this useful in Unices?) */
-    if (wxFD_ISSET(m_fd, &exceptfds))
-    {
-      m_establishing = false;
-      m_detected = GSOCK_LOST_FLAG;
-
-      /* LOST event: Abort any further processing */
-      return (GSOCK_LOST_FLAG & flags);
     }
 
     return (result & flags);
