@@ -1974,6 +1974,15 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
     {
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
     }
+    
+    if ( !g_captureWindow )
+    {
+        wxSetCursorEvent cevent( event.m_x, event.m_y );
+        if (win->GetEventHandler()->ProcessEvent( cevent ))
+        {
+            // Rewrite cursor handling here (away from idle).
+        }
+    }
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -2236,6 +2245,15 @@ gint gtk_window_enter_callback( GtkWidget *widget,
     event.m_x = x + pt.x;
     event.m_y = y + pt.y;
 
+    if ( !g_captureWindow )
+    {
+        wxSetCursorEvent cevent( event.m_x, event.m_y );
+        if (win->GetEventHandler()->ProcessEvent( cevent ))
+        {
+            // Rewrite cursor handling here (away from idle).
+        }
+    }
+    
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "enter_notify_event" );
