@@ -573,7 +573,7 @@ void wxComboBox::Clear()
     {
         GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
         int i;
-        for (i = 0; i++; i < GetCount())
+        for (i = 0; i < GetCount(); i++)
             gtk_combo_box_remove_text( combobox, 0 );
     }
     else
