@@ -386,7 +386,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& WXUNUSED(rc))
         const int x = 9;
 
         // TODO: RTL?
-        RECT rc = { x, 0, GetSize().x - x, y };
+        RECT rc = { x, 0, GetSize().x, y };
 
         const wxString label = GetLabel();
         ::DrawText(hdc, label, label.length(), &rc, DT_SINGLELINE | DT_VCENTER);
