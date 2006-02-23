@@ -95,7 +95,7 @@ WX_DEFINE_LIST(wxGtkNotebookPagesList)
 extern "C" {
 static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
                                               GtkNotebookPage *WXUNUSED(page),
-                                              gint page,
+                                              guint page,
                                               wxNotebook *notebook )
 {
     // are you trying to call SetSelection() from a notebook event handler?
@@ -175,7 +175,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint
+static void
 gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 {
     if (g_isIdle)
@@ -184,8 +184,6 @@ gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
     /* GTK 1.2 up to version 1.2.5 is broken so that we have to call a queue_resize
        here in order to make repositioning before showing to take effect. */
     gtk_widget_queue_resize( win->m_widget );
-
-    return FALSE;
 }
 }
 
@@ -194,7 +192,10 @@ gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNotebook *notebook )
+static gboolean
+gtk_notebook_key_press_callback( GtkWidget   *widget,
+                                 GdkEventKey *gdk_event,
+                                 wxNotebook  *notebook )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
