@@ -525,9 +525,52 @@ wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewC
     m_renderer = (void*) gtk_cell_renderer_text_new();
 }
 
+bool wxDataViewTextCell::SetValue( const wxVariant &value )
+{
+    wxString tmp = value;
+    
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_STRING );
+    g_value_set_string( &gvalue, wxGTK_CONV( tmp ) );
+    g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
+    g_value_unset( &gvalue );
+    
+    return true;
+}
+
 // --------------------------------------------------------- 
 // wxDataViewColumn
 // --------------------------------------------------------- 
+
+
+extern "C" {
+static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
+                            GtkCellRenderer *cell,
+                            GtkTreeModel *model,
+                            GtkTreeIter *iter,
+                            gpointer data );
+}
+
+
+static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
+                            GtkCellRenderer *renderer,
+                            GtkTreeModel *model,
+                            GtkTreeIter *iter,
+                            gpointer data )
+{
+    g_return_if_fail (GTK_IS_WX_LIST_STORE (model));
+    GtkWxListStore *list_store = (GtkWxListStore *) model;
+    
+    wxDataViewCell *cell = (wxDataViewCell*) data;
+    
+    wxVariant value = list_store->model->GetValue( (size_t) iter->user_data,
+                                                   cell->GetOwner()->GetModelColumn() );
+
+    if (value.GetType() != cell->GetVariantType())
+        wxPrintf( wxT("Wrong type\n") );
+                                            
+    cell->SetValue( value );
+}
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
@@ -543,8 +586,8 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell,
     
     gtk_tree_view_column_pack_start( column, renderer, TRUE );
     
-    // only correct for wxDataViewTextCell    
-    gtk_tree_view_column_set_attributes( column, renderer, "text", model_column, NULL );
+    gtk_tree_view_column_set_cell_data_func( column, renderer, 
+        wxGtkTreeCellDataFunc, (gpointer) cell, NULL );
        
     m_column = (void*) column;
 }
