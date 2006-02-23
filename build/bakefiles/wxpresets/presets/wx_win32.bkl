@@ -125,6 +125,7 @@ FIXME: this template has (at least) the following bugs:
         <set var="WX_MONOLITHIC_DEFAULT" overwrite="0">0</set>
         <option name="WX_MONOLITHIC">
             <values>0,1</values>
+            <values-description>Multilib,Monolithic</values-description>
             <default-value>$(WX_MONOLITHIC_DEFAULT)</default-value>
             <description>
                 Use monolithic build of wxWidgets?
@@ -225,6 +226,12 @@ FIXME: this template has (at least) the following bugs:
         <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_core</if>
         <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_core</if>
     </set>
+    <set var="WXLIB_MEDIA_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)_media</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_media</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_media</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_media</if>
+    </set>
     <set var="WXLIB_XRC_NAME">
         <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)_xrc</if>
         <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_xrc</if>
@@ -242,6 +249,24 @@ FIXME: this template has (at least) the following bugs:
         <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_adv</if>
         <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_adv</if>
         <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_adv</if>
+    </set>
+    <set var="WXLIB_QA_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)_qa</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_qa</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_qa</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_qa</if>
+    </set>
+    <set var="WXLIB_DBGRID_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)_dbgrid</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_dbgrid</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_dbgrid</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_dbgrid</if>
+    </set>
+    <set var="WXLIB_GL_NAME">
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)_gl</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)d_gl</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WXPORT)$(WX_VERSION)u_gl</if>
+        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WXPORT)$(WX_VERSION)ud_gl</if>
     </set>
 
 
@@ -268,6 +293,13 @@ FIXME: this template has (at least) the following bugs:
     <!--    we want for our stuff, and the wxWindows libs.          -->
 
 
+    <!-- list of known libraries used by wx-lib tag below -->
+    <set var="LIB_LIST">base core net xml odbc xrc html adv media gl dbgrid qa</set>
+
+    <!-- NOTE: refer to the NET contrib using NETUTILS instead of NET
+               (which is already in LIB_LIST) -->
+    <set var="CONTRIBLIB_LIST">animate applet deprecated fl foldbar gizmos mmedia netutils ogl plot stc svg</set>
+    <set var="ALLLIB_LIST">$(LIB_LIST) $(CONTRIBLIB_LIST)</set>
 
     <!-- this tag is used to include wx libraries: -->
     <define-tag name="wx-lib" rules="exe,dll,module">
@@ -278,11 +310,21 @@ FIXME: this template has (at least) the following bugs:
         <if cond="value=='xml'"><sys-lib>$(WXLIB_XML_NAME)</sys-lib></if>
         <if cond="value=='odbc'"><sys-lib>$(WXLIB_ODBC_NAME)</sys-lib></if>
 
+        <if cond="value=='media'"><sys-lib>$(WXLIB_MEDIA_NAME)</sys-lib></if>
         <if cond="value=='xrc'"><sys-lib>$(WXLIB_XRC_NAME)</sys-lib></if>
         <if cond="value=='html'"><sys-lib>$(WXLIB_HTML_NAME)</sys-lib></if>
         <if cond="value=='adv'"><sys-lib>$(WXLIB_ADV_NAME)</sys-lib></if>
+        <if cond="value=='gl'"><sys-lib>$(WXLIB_GL_NAME)</sys-lib></if>
+        <if cond="value=='dbgrid'"><sys-lib>$(WXLIB_DBGRID_NAME)</sys-lib></if>
+        <if cond="value=='qa'"><sys-lib>$(WXLIB_QA_NAME)</sys-lib></if>
 
-        <if cond="value not in [ 'base', 'core', 'net', 'xml', 'odbc', 'xrc', 'html', 'adv' ]">
+        <!-- wx-lib can be used also to link against contrib libraries
+             (which always have the same name, regardless of WX_MONOLITHIC value) -->
+        <if cond="value in CONTRIBLIB_LIST.split()">
+            <sys-lib>wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
+        </if>
+
+        <if cond="value not in ALLLIB_LIST.split()">
             <error>Unknown wxWidgets library given in the wx-lib tag</error>
         </if>
     </define-tag>
