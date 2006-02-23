@@ -137,6 +137,8 @@ public:
     void SetOwner( wxDataViewColumn *owner )    { m_owner = owner; }
     wxDataViewColumn* GetOwner()                { return m_owner; }
     
+    wxString GetVariantType()   { return m_variantType; }
+    
 private:
     wxDataViewCellMode      m_mode;
     wxString                m_variantType;
