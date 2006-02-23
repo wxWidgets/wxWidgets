@@ -113,18 +113,37 @@ wxDataViewListModelNotifier* wxDataViewListModel::GetNotifier()
 }
 
 // --------------------------------------------------------- 
+// wxDataViewCellBase
+// --------------------------------------------------------- 
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewCellBase, wxObject)
+
+wxDataViewCellBase::wxDataViewCellBase( const wxString &varianttype, wxDataViewCellMode mode )
+{
+    m_variantType = varianttype;
+    m_mode = mode;
+}
+    
+// --------------------------------------------------------- 
 // wxDataViewColumnBase
 // --------------------------------------------------------- 
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
 
-wxDataViewColumnBase::wxDataViewColumnBase( const wxString &title, wxDataViewCtrl *ctrl, 
-    wxDataViewColumnType kind, int flags)
+wxDataViewColumnBase::wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, size_t model_column, int flags)
 {
-    m_ctrl = ctrl;
-    m_kind = kind;
+    m_cell = cell;
+    m_model_column = model_column;
     m_flags = flags;
     m_title = title;
+    m_owner = NULL;
+    m_cell->SetOwner( (wxDataViewColumn*) this );
+}
+
+wxDataViewColumnBase::~wxDataViewColumnBase()
+{
+    if (m_cell)
+        delete m_cell;
 }
 
 void wxDataViewColumnBase::SetTitle( const wxString &title )
@@ -170,14 +189,15 @@ wxDataViewListModel* wxDataViewCtrlBase::GetModel()
     return m_model;
 }
 
-bool wxDataViewCtrlBase::AppendStringColumn( const wxString &label )
+bool wxDataViewCtrlBase::AppendStringColumn( const wxString &label, size_t model_column )
 {
-    return AppendColumn( new wxDataViewColumn( label, (wxDataViewCtrl*) this, wxDATAVIEW_COL_TEXT ) );
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewTextCell(), model_column ) );
 }
 
 bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )
 {
     m_cols.Append( (wxObject*) col );
+    col->SetOwner( (wxDataViewCtrl*) this );
     return true;
 }
 

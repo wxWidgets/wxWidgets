@@ -22,14 +22,47 @@
 class WXDLLIMPEXP_CORE wxDataViewCtrl;
 
 // --------------------------------------------------------- 
+// wxDataViewCell
+// --------------------------------------------------------- 
+
+class wxDataViewCell: public wxDataViewCellBase
+{
+public:
+    wxDataViewCell( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+
+    // implementation
+    void* GetGtkHandle() { return m_renderer; }
+
+protected:
+    // holds the GTK handle
+    void*   m_renderer;
+
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCell)
+};
+    
+// --------------------------------------------------------- 
+// wxDataViewTextCell
+// --------------------------------------------------------- 
+
+class wxDataViewTextCell: public wxDataViewCell
+{
+public:
+    wxDataViewTextCell( const wxString &varianttype = wxT("string"), 
+                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextCell)
+};
+    
+// --------------------------------------------------------- 
 // wxDataViewColumn
 // --------------------------------------------------------- 
 
 class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
-    wxDataViewColumn( const wxString &title, wxDataViewCtrl *ctrl, 
-            wxDataViewColumnType kind, int flags = 0 );
+    wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column, int flags = 0 );
     virtual ~wxDataViewColumn();
 
     virtual void SetTitle( const wxString &title );
@@ -38,6 +71,7 @@ public:
     void* GetGtkHandle() { return m_column; }
 
 private:
+    // holds the GTK handle
     void*   m_column;
 
 protected:

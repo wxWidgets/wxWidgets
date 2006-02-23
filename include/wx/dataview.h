@@ -31,6 +31,7 @@
 
 class WXDLLIMPEXP_CORE wxDataViewCtrl;
 class WXDLLIMPEXP_CORE wxDataViewColumn;
+class WXDLLIMPEXP_CORE wxDataViewCell;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxDataViewCtrlNameStr[];
 
@@ -103,20 +104,51 @@ protected:
 };
 
 // --------------------------------------------------------- 
-// wxDataViewColumn
+// wxDataViewCellBase
 // --------------------------------------------------------- 
 
-enum wxDataViewColumnType
+enum wxDataViewCellMode
 {
-    wxDATAVIEW_COL_TEXT,
-    wxDATAVIEW_COL_ICON,
-    wxDATAVIEW_COL_ICONTEXT,
-    wxDATAVIEW_COL_CHECK,
-    wxDATAVIEW_COL_DATETIME,
-    wxDATAVIEW_COL_PROGRESS,
-    wxDATAVIEW_COL_CHOICE,
-    wxDATAVIEW_COL_CUSTOM
+    wxDATAVIEW_CELL_INERT,
+    wxDATAVIEW_CELL_ACTIVATABLE,
+    wxDATAVIEW_CELL_EDITABLE
 };
+
+enum wxDataViewCellRenderState
+{
+    wxDATAVIEW_CELL_SELECTED    = 1,
+    wxDATAVIEW_CELL_PRELIT      = 2,
+    wxDATAVIEW_CELL_INSENSITIVE = 4,
+    wxDATAVIEW_CELL_FOCUSED     = 8
+};
+
+class wxDataViewCellBase: public wxObject
+{
+public:
+    wxDataViewCellBase( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+
+    virtual bool SetValue( const wxVariant &value ) { return true; }
+    virtual bool GetValue( wxVariant &value )       { return true; }
+    virtual bool BeginEdit()    { return true; }
+    virtual bool EndEdit()      { return true; }
+    
+    virtual bool Render( wxRect cell, wxRect exposed, wxDC *dc, int state ) { return true; }
+    
+    void SetOwner( wxDataViewColumn *owner )    { m_owner = owner; }
+    wxDataViewColumn* GetOwner()                { return m_owner; }
+    
+private:
+    wxDataViewCellMode      m_mode;
+    wxString                m_variantType;
+    wxDataViewColumn       *m_owner;
+
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCellBase)
+};
+
+// --------------------------------------------------------- 
+// wxDataViewColumnBase
+// --------------------------------------------------------- 
 
 enum wxDataViewColumnFlags
 {
@@ -128,17 +160,26 @@ enum wxDataViewColumnFlags
 class wxDataViewColumnBase: public wxObject
 {
 public:
-    wxDataViewColumnBase( const wxString &title, wxDataViewCtrl *ctrl, 
-            wxDataViewColumnType kind, int flags = 0 );
+    wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, size_t model_column, int flags = 0 );
+    ~wxDataViewColumnBase();
 
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle();
+    
+    wxDataViewCell* GetCell()               { return m_cell; }
+    
+    size_t GetModelColumn()                 { return m_model_column; }
+    
+    void SetOwner( wxDataViewCtrl *owner )  { m_owner = owner; }
+    wxDataViewCtrl *GetOwner()              { return m_owner; }
 
 private:
     wxDataViewCtrl          *m_ctrl;
-    wxDataViewColumnType     m_kind;
+    wxDataViewCell          *m_cell;
+    int                      m_model_column;
     int                      m_flags;
     wxString                 m_title;
+    wxDataViewCtrl          *m_owner;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumnBase)
@@ -153,12 +194,11 @@ class wxDataViewCtrlBase: public wxControl
 public:
     wxDataViewCtrlBase();
     ~wxDataViewCtrlBase();
-
     
     virtual bool AssociateModel( wxDataViewListModel *model );
     wxDataViewListModel* GetModel();
     
-    virtual bool AppendStringColumn( const wxString &label );
+    virtual bool AppendStringColumn( const wxString &label, size_t model_column );
     virtual bool AppendColumn( wxDataViewColumn *col );    
     virtual size_t GetNumberOfColumns();
     virtual bool DeleteColumn( size_t pos );

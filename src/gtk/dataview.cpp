@@ -501,6 +501,29 @@ bool wxGtkDataViewListModelNotifier::Cleared()
     return false;
 }
 
+// --------------------------------------------------------- 
+// wxDataViewCell
+// --------------------------------------------------------- 
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewCell, wxDataViewCellBase)
+
+wxDataViewCell::wxDataViewCell( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewCellBase( varianttype, mode )
+{
+    m_renderer = NULL;
+}
+
+// --------------------------------------------------------- 
+// wxDataViewTextCell
+// --------------------------------------------------------- 
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewTextCell, wxDataViewCell)
+
+wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewCell( varianttype, mode )
+{
+    m_renderer = (void*) gtk_cell_renderer_text_new();
+}
 
 // --------------------------------------------------------- 
 // wxDataViewColumn
@@ -508,32 +531,21 @@ bool wxGtkDataViewListModelNotifier::Cleared()
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCtrl *ctrl, 
-            wxDataViewColumnType kind, int flags ) :
-    wxDataViewColumnBase( title, ctrl, kind, flags )
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, 
+    size_t model_column, int flags ) :
+    wxDataViewColumnBase( title, cell, model_column, flags )
 {
-    GtkCellRenderer *renderer = NULL;
+    GtkCellRenderer *renderer = (GtkCellRenderer *) cell->GetGtkHandle();
     
-    if (kind == wxDATAVIEW_COL_TEXT)
-    {
-        renderer = gtk_cell_renderer_text_new();
-    } else
-    if (kind == wxDATAVIEW_COL_CHECK)
-    {
-        renderer = gtk_cell_renderer_toggle_new();
-    } else
-    if (kind == wxDATAVIEW_COL_ICON)
-    {
-        renderer = gtk_cell_renderer_pixbuf_new();
-    }
-    else
-        return;
-
-    GtkTreeViewColumn *column = 
-        gtk_tree_view_column_new_with_attributes( wxGTK_CONV(title), renderer, "text", 0, NULL );
+    GtkTreeViewColumn *column = gtk_tree_view_column_new();
+   
+    gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
+    
+    gtk_tree_view_column_pack_start( column, renderer, TRUE );
+    
+    // only correct for wxDataViewTextCell    
+    gtk_tree_view_column_set_attributes( column, renderer, "text", model_column, NULL );
        
-    // bind to data here... not above.
-    
     m_column = (void*) column;
 }
 
