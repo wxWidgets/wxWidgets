@@ -47,7 +47,7 @@ public:
             tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col ); 
             return tmp;
         }
-}
+};
 
 // -------------------------------------
 // MyApp
@@ -127,12 +127,14 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     
     
     dataview = new wxDataViewCtrl( this, -1 );
-    dataview->AppendStringColumn( wxT("first") );
-    dataview->AppendStringColumn( wxT("second") );
-    dataview->AppendStringColumn( wxT("third") );
     
     MyTextModel *model = new MyTextModel;
-    dataview->AssociateModel( Model );
+    dataview->AssociateModel( model );
+    
+    dataview->AppendStringColumn( wxT("first"), 0 );
+    dataview->AppendStringColumn( wxT("second"), 1 );
+    dataview->AppendStringColumn( wxT("third"), 2 );
+    
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
