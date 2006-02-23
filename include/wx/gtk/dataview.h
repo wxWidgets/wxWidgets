@@ -52,6 +52,7 @@ public:
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
 
     bool SetValue( const wxVariant &value );
+    bool GetValue( wxVariant &value );
     
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextCell)

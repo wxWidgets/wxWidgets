@@ -33,7 +33,12 @@
 class MyTextModel: public wxDataViewListModel
 {
 public:
-    MyTextModel() {}
+    MyTextModel() 
+    {
+        size_t i;
+        for (i = 0; i < 1000; i++)
+            m_list.Add( wxT("Test") );
+    }
     
     virtual size_t GetNumberOfRows() 
         { return 1000; }
@@ -42,11 +47,30 @@ public:
     // as reported by wxVariant
     virtual wxString GetColType( size_t col )
         { return wxT("string"); }
+        
     virtual wxVariant GetValue( size_t col, size_t row )
-        {   wxString tmp; 
-            tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col ); 
-            return tmp;
+        {   
+            if (col == 2)
+            {
+                return m_list[row];
+            }
+            else
+            {
+                wxString tmp; 
+                tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col ); 
+                return tmp;
+            }
         }
+    virtual bool SetValue( wxVariant &value, size_t col, size_t row )
+        {
+            if (col == 2)
+            {
+                m_list[row] = value.GetString();
+            }
+            return true;
+        }
+    
+    wxArrayString m_list;
 };
 
 // -------------------------------------
@@ -73,7 +97,8 @@ public:
     void OnAbout(wxCommandEvent& event);
     
 private:
-    wxDataViewCtrl* dataview;
+    wxDataViewCtrl* dataview_left;
+    wxDataViewCtrl* dataview_right;
 };
 
 // -------------------------------------
@@ -126,15 +151,33 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     CreateStatusBar();
     
     
-    dataview = new wxDataViewCtrl( this, -1 );
+    // Left wxDataViewCtrl
+    dataview_left = new wxDataViewCtrl( this, -1 );
     
     MyTextModel *model = new MyTextModel;
-    dataview->AssociateModel( model );
+    dataview_left->AssociateModel( model );
     
-    dataview->AppendStringColumn( wxT("first"), 0 );
-    dataview->AppendStringColumn( wxT("second"), 1 );
-    dataview->AppendStringColumn( wxT("third"), 2 );
+    dataview_left->AppendStringColumn( wxT("first"), 0 );
+    dataview_left->AppendStringColumn( wxT("second"), 1 );
+    wxDataViewTextCell *cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), cell, 2 );
+    dataview_left->AppendColumn( column );
     
+    // Right wxDataViewCtrl using the same model
+    dataview_right = new wxDataViewCtrl( this, -1 );
+    dataview_right->AssociateModel( model );
+    
+    cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    column = new wxDataViewColumn( wxT("editable"), cell, 2 );
+    dataview_right->AppendColumn( column );
+    dataview_right->AppendStringColumn( wxT("first"), 0 );
+    dataview_right->AppendStringColumn( wxT("second"), 1 );
+    
+    wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
+    sizer->Add( dataview_left, 1, wxGROW );
+    sizer->Add(10,10);
+    sizer->Add( dataview_right, 1, wxGROW );
+    SetSizer( sizer );
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )

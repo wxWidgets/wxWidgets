@@ -83,10 +83,10 @@ bool wxDataViewListModel::RowChanged( size_t row )
     return false;
 }
 
-bool wxDataViewListModel::ValueChanged( size_t row, size_t col )
+bool wxDataViewListModel::ValueChanged( size_t col, size_t row )
 {
     if (m_notifier)
-        return m_notifier->RowAppended();
+        return m_notifier->ValueChanged( col, row );
         
     return false;
 }

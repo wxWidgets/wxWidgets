@@ -80,9 +80,12 @@ public:
 
     virtual size_t GetNumberOfRows() = 0;
     virtual size_t GetNumberOfCols() = 0;
-    // as reported by wxVariant
+    // return type as reported by wxVariant
     virtual wxString GetColType( size_t col ) = 0;
+    // get value into a wxVariant
     virtual wxVariant GetValue( size_t col, size_t row ) = 0;
+    // set value, call ValueChanged() afterwards!
+    virtual bool SetValue( wxVariant &variant, size_t col, size_t row ) = 0;
 
     // delegated notifiers
     bool RowAppended();
@@ -90,7 +93,7 @@ public:
     bool RowInserted( size_t before );
     bool RowDeleted( size_t row );
     bool RowChanged( size_t row );
-    bool ValueChanged( size_t row, size_t col );
+    bool ValueChanged( size_t col, size_t row );
     bool Cleared();
     
     void SetNotifier( wxDataViewListModelNotifier *notifier );
@@ -129,6 +132,7 @@ public:
 
     virtual bool SetValue( const wxVariant &value ) { return true; }
     virtual bool GetValue( wxVariant &value )       { return true; }
+    virtual bool Validate( wxVariant &value )       { return true; }
     virtual bool BeginEdit()    { return true; }
     virtual bool EndEdit()      { return true; }
     
@@ -139,7 +143,7 @@ public:
     
     wxString GetVariantType()   { return m_variantType; }
     
-private:
+protected:
     wxDataViewCellMode      m_mode;
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;

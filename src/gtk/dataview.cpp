@@ -437,7 +437,7 @@ public:
     virtual bool RowInserted( size_t before );
     virtual bool RowDeleted( size_t row );
     virtual bool RowChanged( size_t row );
-    virtual bool ValueChanged( size_t row, size_t col );
+    virtual bool ValueChanged( size_t col, size_t row );
     virtual bool Cleared();
     
     GtkWxListStore      *m_gtk_store;
@@ -488,12 +488,19 @@ bool wxGtkDataViewListModelNotifier::RowDeleted( size_t row )
 
 bool wxGtkDataViewListModelNotifier::RowChanged( size_t row )
 {
-    return false;
+    GtkTreeIter iter;
+    iter.stamp = m_gtk_store->stamp;
+    iter.user_data = (gpointer) row;
+    GtkTreePath *path = gtk_tree_model_get_path (GTK_TREE_MODEL (m_gtk_store), &iter);
+    gtk_tree_model_row_changed (GTK_TREE_MODEL (m_gtk_store), path, &iter);
+    gtk_tree_path_free (path);
+
+    return true;
 }
 
-bool wxGtkDataViewListModelNotifier::ValueChanged( size_t row, size_t col )
+bool wxGtkDataViewListModelNotifier::ValueChanged( size_t col, size_t row )
 {
-    return false;
+    return RowChanged( row );
 }
 
 bool wxGtkDataViewListModelNotifier::Cleared()
@@ -517,12 +524,50 @@ wxDataViewCell::wxDataViewCell( const wxString &varianttype, wxDataViewCellMode 
 // wxDataViewTextCell
 // --------------------------------------------------------- 
 
+extern "C" {
+static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer, 
+    gchar *arg1, gchar *arg2, gpointer user_data );
+}
+
+static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer, 
+    gchar *arg1, gchar *arg2, gpointer user_data )
+{
+    wxDataViewTextCell *cell = (wxDataViewTextCell*) user_data;
+    
+    wxString tmp = wxGTK_CONV_BACK( arg2 );
+    wxVariant value = tmp;
+    if (!cell->Validate( value ))
+        return;
+        
+    wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
+    
+    GtkTreePath *path = gtk_tree_path_new_from_string( arg1 );
+    size_t model_row = (size_t)gtk_tree_path_get_indices (path)[0];
+    gtk_tree_path_free( path );
+    
+    size_t model_col = cell->GetOwner()->GetModelColumn();
+    
+    model->SetValue( value, model_col, model_row );
+    model->ValueChanged( model_col, model_row );
+}
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewTextCell, wxDataViewCell)
 
 wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewCellMode mode ) :
     wxDataViewCell( varianttype, mode )
 {
     m_renderer = (void*) gtk_cell_renderer_text_new();
+    
+    if (m_mode & wxDATAVIEW_CELL_EDITABLE)
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, true );
+        g_object_set_property( G_OBJECT(m_renderer), "editable", &gvalue );
+        g_value_unset( &gvalue );
+        
+        g_signal_connect_after( m_renderer, "edited", G_CALLBACK(wxGtkTextRendererEditedCallback), this );
+    }
 }
 
 bool wxDataViewTextCell::SetValue( const wxVariant &value )
@@ -535,6 +580,19 @@ bool wxDataViewTextCell::SetValue( const wxVariant &value )
     g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
     g_value_unset( &gvalue );
     
+    return true;
+}
+
+bool wxDataViewTextCell::GetValue( wxVariant &value )
+{
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_STRING );
+    g_object_get_property( G_OBJECT(m_renderer), "text", &gvalue );
+    wxString tmp = wxGTK_CONV_BACK( g_value_get_string( &gvalue ) ); 
+    g_value_unset( &gvalue );
+    
+    value = tmp;
+
     return true;
 }
 
@@ -562,9 +620,11 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
     GtkWxListStore *list_store = (GtkWxListStore *) model;
     
     wxDataViewCell *cell = (wxDataViewCell*) data;
+
+    size_t model_row = (size_t) iter->user_data;
     
-    wxVariant value = list_store->model->GetValue( (size_t) iter->user_data,
-                                                   cell->GetOwner()->GetModelColumn() );
+    wxVariant value = list_store->model->GetValue( 
+        cell->GetOwner()->GetModelColumn(), model_row );
 
     if (value.GetType() != cell->GetVariantType())
         wxPrintf( wxT("Wrong type\n") );
