@@ -265,7 +265,10 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxTopLevelWindowGTK *win )
+static gboolean
+gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget),
+                           GdkEvent *WXUNUSED(event),
+                           wxTopLevelWindowGTK *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -285,8 +288,10 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint
-gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxTopLevelWindowGTK *win )
+static gboolean
+gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget),
+                              GdkEventConfigure *WXUNUSED(event),
+                              wxTopLevelWindowGTK *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -380,7 +385,10 @@ gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxWindow *win )
+static gboolean
+gtk_window_expose_callback( GtkWidget *widget,
+                            GdkEventExpose *gdk_event,
+                            wxWindow *win )
 {
     GtkPizza *pizza = GTK_PIZZA(widget);
 
