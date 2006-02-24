@@ -508,6 +508,7 @@ wxDateTimeFromTimeT = wx._misc.DateTimeFromTimeT
 wxDateTimeFromJDN = wx._misc.DateTimeFromJDN
 wxDateTimeFromHMS = wx._misc.DateTimeFromHMS
 wxDateTimeFromDMY = wx._misc.DateTimeFromDMY
+wxDateTimeFromDateTime = wx._misc.DateTimeFromDateTime
 wxDateTime_SetToWeekOfYear = wx._misc.DateTime_SetToWeekOfYear
 wxTimeSpan = wx._misc.TimeSpan
 wxTimeSpanPtr = wx._misc.TimeSpanPtr
