@@ -111,6 +111,7 @@ FoldPanelBar is supported on the following platforms:
   * Mac OSX (Thanks To Robin Dunn For The CaptionBar Size Patch)
 
 
+FoldPanelBar is based upon Jorgen Bodde's C++ implementation.
 Latest Revision: Andrea Gavana @ 05 Nov 2005, 23.30 CET
 
 """
