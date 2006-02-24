@@ -25,6 +25,7 @@
 #include "wx/scrolwin.h"
 #include "wx/settings.h"
 #include "wx/listbase.h"
+#include "wx/textctrl.h"
 
 #if wxUSE_DRAG_AND_DROP
 class WXDLLEXPORT wxDropTarget;
