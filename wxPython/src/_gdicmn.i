@@ -113,8 +113,8 @@ enum wxStockCursor
 
 DocStr( wxSize,
 "wx.Size is a useful data structure used to represent the size of
-something.  It simply contians integer width and height
-proprtites.  In most places in wxPython where a wx.Size is
+something.  It simply contains integer width and height
+properties.  In most places in wxPython where a wx.Size is
 expected a (width, height) tuple can be used instead.", "");
 
 class wxSize
