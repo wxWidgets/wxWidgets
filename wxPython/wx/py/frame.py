@@ -503,7 +503,9 @@ class Frame(wx.Frame):
         else:
             win = wx.Window.FindFocus()
         win.DoFindNext(self.findData, self.findDlg)
-
+        if self.findDlg is not None:
+            self.OnFindClose(None)
+        
     def OnFindClose(self, event):
         self.findDlg.Destroy()
         self.findDlg = None
