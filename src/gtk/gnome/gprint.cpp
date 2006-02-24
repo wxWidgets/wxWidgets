@@ -1548,6 +1548,7 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
             gs_lgp -> gnome_print_setdash( m_gpc, num, g_dashes, 0);
             g_free( g_dashes );
         }
+        break;
         case wxSOLID:
         case wxTRANSPARENT:
         default:              gs_lgp->gnome_print_setdash( m_gpc, 0, NULL, 0 );   break;
