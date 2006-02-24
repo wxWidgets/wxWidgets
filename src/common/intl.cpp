@@ -1802,7 +1802,7 @@ bool wxLocale::Init(int language, int flags)
 
 #ifndef WX_NO_LOCALE_SUPPORT
     wxChar *szLocale = retloc ? wxStrdup(retloc) : NULL;
-    bool ret = Init(name, canonical, retloc,
+    bool ret = Init(name, canonical, szLocale,
                     (flags & wxLOCALE_LOAD_DEFAULT) != 0,
                     (flags & wxLOCALE_CONV_ENCODING) != 0);
     free(szLocale);
@@ -1811,7 +1811,7 @@ bool wxLocale::Init(int language, int flags)
         m_language = lang;
 
     return ret;
-#endif
+#endif // !WX_NO_LOCALE_SUPPORT
 }
 
 
