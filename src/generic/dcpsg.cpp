@@ -1037,12 +1037,26 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
         case wxSHORT_DASH:    psdash = short_dashed;   break;
         case wxLONG_DASH:     psdash = wxCoord_dashed; break;
         case wxDOT_DASH:      psdash = dotted_dashed;  break;
+        case wxUSER_DASH:
+        {
+            wxDash *dashes;
+            int nDashes = m_pen.GetDashes (&dashes);
+            PsPrint ("[");
+            for (int i = 0; i < nDashes; ++i)
+            {
+                sprintf( buffer, "%d ", dashes [i] );
+                PsPrint( buffer );
+            }
+            PsPrint ("] 0 setdash\n");
+            psdash = 0; 
+        } 
+        break;
         case wxSOLID:
         case wxTRANSPARENT:
         default:              psdash = "[] 0";         break;
     }
 
-    if ( (oldStyle != m_pen.GetStyle()) )
+    if ( psdash && (oldStyle != m_pen.GetStyle()) )
     {
         PsPrint( psdash );
         PsPrint( " setdash\n" );
