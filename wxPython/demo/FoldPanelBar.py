@@ -171,7 +171,7 @@ class Extended(wx.Frame):
               "Please report any bug/requests or improvements\n" + \
               "To me at the following adresses:\n\n" + \
               "andrea.gavana@agip.it\n" + "andrea_gavana@tin.it\n\n" + \
-              "Based On Julian Smart C++ demo implementation.\n\n" + \
+              "Based On Jorgen Bodde C++ demo implementation.\n\n" + \
               "Welcome To wxPython " + wx.VERSION_STRING + "!!"
               
         dlg = wx.MessageDialog(self, msg, "FoldPanelBar Extended Demo",
