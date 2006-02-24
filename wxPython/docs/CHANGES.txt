@@ -46,6 +46,12 @@ Added wx.GridSizer.CalcRowsCols.
 
 Added wx.OutputStream.LastWrite.
 
+wxGTK: EVT_SET_CURSOR is now sent.
+
+wxGTK: Fix RequestMore for idle events.
+
+wxGTK: Implement user dashes for PS and GNOME printing.
+
 
 
 
