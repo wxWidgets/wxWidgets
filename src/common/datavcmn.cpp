@@ -189,9 +189,14 @@ wxDataViewListModel* wxDataViewCtrlBase::GetModel()
     return m_model;
 }
 
-bool wxDataViewCtrlBase::AppendStringColumn( const wxString &label, size_t model_column )
+bool wxDataViewCtrlBase::AppendTextColumn( const wxString &label, size_t model_column )
 {
     return AppendColumn( new wxDataViewColumn( label, new wxDataViewTextCell(), model_column ) );
+}
+
+bool wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, size_t model_column )
+{
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewToggleCell(), model_column ) );
 }
 
 bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )

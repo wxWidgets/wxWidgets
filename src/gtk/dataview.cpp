@@ -473,7 +473,16 @@ bool wxGtkDataViewListModelNotifier::RowAppended()
 
 bool wxGtkDataViewListModelNotifier::RowPrepended()
 {
-    return false;
+    GtkTreeIter iter;
+    iter.stamp = m_gtk_store->stamp;
+    iter.user_data = (gpointer) 0;
+    
+    GtkTreePath *path = gtk_tree_path_new ();
+    gtk_tree_path_append_index (path, (gint) 0);
+    gtk_tree_model_row_inserted (GTK_TREE_MODEL (m_gtk_store), path, &iter);
+    gtk_tree_path_free (path);
+    
+    return true;
 }
 
 bool wxGtkDataViewListModelNotifier::RowInserted( size_t before )
@@ -597,9 +606,93 @@ bool wxDataViewTextCell::GetValue( wxVariant &value )
 }
 
 // --------------------------------------------------------- 
-// wxDataViewColumn
+// wxDataViewToggleCell
 // --------------------------------------------------------- 
 
+extern "C" {
+static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer, 
+    gchar *path, gpointer user_data );
+}
+
+static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer, 
+    gchar *path, gpointer user_data )
+{
+    wxDataViewToggleCell *cell = (wxDataViewToggleCell*) user_data;
+
+    // get old value    
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_BOOLEAN );
+    g_object_get_property( G_OBJECT(renderer), "active", &gvalue );
+    bool tmp = g_value_get_boolean( &gvalue ); 
+    g_value_unset( &gvalue );
+    // invert it
+    tmp = !tmp;
+    
+    wxVariant value = tmp;
+    if (!cell->Validate( value ))
+        return;
+        
+    wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
+    
+    GtkTreePath *gtk_path = gtk_tree_path_new_from_string( path );
+    size_t model_row = (size_t)gtk_tree_path_get_indices (gtk_path)[0];
+    gtk_tree_path_free( gtk_path );
+    
+    size_t model_col = cell->GetOwner()->GetModelColumn();
+    
+    model->SetValue( value, model_col, model_row );
+    model->ValueChanged( model_col, model_row );
+}
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleCell, wxDataViewCell)
+
+wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype, 
+                        wxDataViewCellMode mode ) :
+    wxDataViewCell( varianttype, mode )
+{
+    m_renderer = (void*) gtk_cell_renderer_toggle_new();
+    
+    if (m_mode & wxDATAVIEW_CELL_EDITABLE)
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, true );
+        g_object_set_property( G_OBJECT(m_renderer), "activatable", &gvalue );
+        g_value_unset( &gvalue );
+        
+        g_signal_connect_after( m_renderer, "toggled", G_CALLBACK(wxGtkToggleRendererToggledCallback), this );
+    }
+}
+
+bool wxDataViewToggleCell::SetValue( const wxVariant &value )
+{
+    bool tmp = value;
+    
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_BOOLEAN );
+    g_value_set_boolean( &gvalue, tmp );
+    g_object_set_property( G_OBJECT(m_renderer), "active", &gvalue );
+    g_value_unset( &gvalue );
+    
+    return true;
+}
+
+bool wxDataViewToggleCell::GetValue( wxVariant &value )
+{
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_BOOLEAN );
+    g_object_get_property( G_OBJECT(m_renderer), "active", &gvalue );
+    bool tmp = g_value_get_boolean( &gvalue ); 
+    g_value_unset( &gvalue );
+    
+    value = tmp;
+
+    return true;
+}
+    
+// --------------------------------------------------------- 
+// wxDataViewColumn
+// --------------------------------------------------------- 
 
 extern "C" {
 static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,

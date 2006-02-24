@@ -59,6 +59,23 @@ protected:
 };
     
 // --------------------------------------------------------- 
+// wxDataViewToggleCell
+// --------------------------------------------------------- 
+
+class wxDataViewToggleCell: public wxDataViewCell
+{
+public:
+    wxDataViewToggleCell( const wxString &varianttype = wxT("bool"), 
+                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+
+    bool SetValue( const wxVariant &value );
+    bool GetValue( wxVariant &value );
+    
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleCell)
+};
+    
+// --------------------------------------------------------- 
 // wxDataViewColumn
 // --------------------------------------------------------- 
 

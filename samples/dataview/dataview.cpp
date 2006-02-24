@@ -38,18 +38,30 @@ public:
         size_t i;
         for (i = 0; i < 1000; i++)
             m_list.Add( wxT("Test") );
+        for (i = 0; i < 500; i++)
+            { m_bools.Add( 0 ); m_bools.Add( 1 ); }
     }
     
     virtual size_t GetNumberOfRows() 
         { return 1000; }
     virtual size_t GetNumberOfCols()
-        { return 3; }
+        { return 4; }
+        
     // as reported by wxVariant
     virtual wxString GetColType( size_t col )
-        { return wxT("string"); }
+        {
+            if (col == 3)
+                return wxT("bool");
+                 
+            return wxT("string"); 
+        }
         
     virtual wxVariant GetValue( size_t col, size_t row )
-        {   
+        {
+            if (col == 3)
+            {
+                return (bool) m_bools[row];
+            } else   
             if (col == 2)
             {
                 return m_list[row];
@@ -63,6 +75,10 @@ public:
         }
     virtual bool SetValue( wxVariant &value, size_t col, size_t row )
         {
+            if (col == 3)
+            {
+                m_bools[row] = (int) value.GetBool();
+            } else
             if (col == 2)
             {
                 m_list[row] = value.GetString();
@@ -71,6 +87,7 @@ public:
         }
     
     wxArrayString m_list;
+    wxArrayInt    m_bools;
 };
 
 // -------------------------------------
@@ -112,7 +129,7 @@ IMPLEMENT_APP  (MyApp)
 
 bool MyApp::OnInit(void)
 {
-    MyFrame *frame = new MyFrame(NULL, _T("Dynamic wxWidgets App"), 50, 50, 450, 340);
+    MyFrame *frame = new MyFrame(NULL, _T("Dynamic wxWidgets App"), 50, 50, 600, 340);
 
     frame->Show(true);
 
@@ -157,21 +174,25 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     MyTextModel *model = new MyTextModel;
     dataview_left->AssociateModel( model );
     
-    dataview_left->AppendStringColumn( wxT("first"), 0 );
-    dataview_left->AppendStringColumn( wxT("second"), 1 );
-    wxDataViewTextCell *cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), cell, 2 );
+    dataview_left->AppendTextColumn( wxT("first"), 0 );
+    dataview_left->AppendTextColumn( wxT("second"), 1 );
+    wxDataViewTextCell *text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 2 );
     dataview_left->AppendColumn( column );
+    dataview_left->AppendToggleColumn( wxT("fourth"), 3 );
     
     // Right wxDataViewCtrl using the same model
     dataview_right = new wxDataViewCtrl( this, -1 );
     dataview_right->AssociateModel( model );
     
-    cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    column = new wxDataViewColumn( wxT("editable"), cell, 2 );
+    text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    column = new wxDataViewColumn( wxT("editable"), text_cell, 2 );
     dataview_right->AppendColumn( column );
-    dataview_right->AppendStringColumn( wxT("first"), 0 );
-    dataview_right->AppendStringColumn( wxT("second"), 1 );
+    dataview_right->AppendTextColumn( wxT("first"), 0 );
+    dataview_right->AppendTextColumn( wxT("second"), 1 );
+    wxDataViewToggleCell *toggle_cell = new wxDataViewToggleCell( wxT("bool"), wxDATAVIEW_CELL_EDITABLE );
+    column = new wxDataViewColumn( wxT("bool"), toggle_cell, 3 );
+    dataview_right->AppendColumn( column );
     
     wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
     sizer->Add( dataview_left, 1, wxGROW );
