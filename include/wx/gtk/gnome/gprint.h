@@ -285,6 +285,8 @@ private:
     wxGnomePrinter         *m_printer;
     GnomePrintContext      *m_gpc;
 
+    void makeEllipticalPath(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    
 private:
     wxCoord XDEV2LOG(wxCoord x) const
     {
