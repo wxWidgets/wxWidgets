@@ -107,7 +107,7 @@ public:
         wxBitmap(int width, int height, int depth=-1),
         "Creates a new bitmap of the given size.  A depth of -1 indicates the
 depth of the current screen or visual. Some platforms only support 1
-for monochrome and -1 for the current colour setting.", "",
+for monochrome and -1 for the current display depth.", "",
         EmptyBitmap);
 
     DocCtorStrName(
