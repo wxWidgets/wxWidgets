@@ -299,6 +299,7 @@ public:
     bool HandleSysColorChange();
     bool HandleDisplayChange();
     bool HandleCaptureChanged(WXHWND gainedCapture);
+    bool HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandleQueryEndSession(long logOff, bool *mayEnd);
     bool HandleEndSession(bool endSession, long logOff);

@@ -87,11 +87,6 @@ public:
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
 #endif // __SMARTPHONE__ && __WXWINCE__
 
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-    // Soft Input Panel (SIP) change notification
-    virtual bool HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam);
-#endif
-
     // translate wxWidgets flags to Windows ones
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
 

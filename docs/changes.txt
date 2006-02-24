@@ -134,6 +134,8 @@ wxMSW:
 - Link oleacc.lib conditionally.
 - Drag and drop now works inside static boxes.
 - Fall back to unthemed wxNotebook if specified orientation not available.
+- wxListCtrl and wxTreeCtrl now resize their standard font if the user
+  changes the system font.
 
 wxGTK:
 

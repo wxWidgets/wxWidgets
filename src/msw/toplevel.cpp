@@ -312,15 +312,6 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
     return (WXHWND)hwndParent;
 }
 
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-bool wxTopLevelWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
-{
-    SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
-    if (!info) return false;
-    return SHHandleWMSettingChange(GetHwnd(), wParam, lParam, info) == TRUE;
-}
-#endif
-
 WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
@@ -343,11 +334,6 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
             if (wxTheApp)
                 wxTheApp->SetActive(wParam != 0, FindFocus());
 
-            break;
-        }
-        case WM_SETTINGCHANGE:
-        {
-            processed = HandleSettingChange(wParam,lParam);
             break;
         }
         case WM_HIBERNATE:
@@ -1095,8 +1081,8 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 LONG APIENTRY _EXPORT
 wxDlgProc(HWND hDlg,
           UINT message,
-          WPARAM wParam,
-          LPARAM lParam)
+          WPARAM WXUNUSED(wParam),
+          LPARAM WXUNUSED(lParam))
 {
     switch ( message )
     {
@@ -1127,18 +1113,6 @@ wxDlgProc(HWND hDlg,
             // the first control in the dialog box, but as we set the focus
             // ourselves, we return FALSE for it as well
             return FALSE;
-        }
-
-        case WM_SETTINGCHANGE:
-        {
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-            wxTopLevelWindow *tlw = wxDynamicCast(wxGetWindowFromHWND(hDlg), wxTopLevelWindow);
-            if(tlw) return tlw->HandleSettingChange(wParam,lParam) ? TRUE : FALSE;
-#else
-            wxUnusedVar(wParam);
-            wxUnusedVar(lParam);
-#endif
-            break;
         }
     }
 

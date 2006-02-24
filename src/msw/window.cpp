@@ -2849,6 +2849,10 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             processed = HandleCaptureChanged((WXHWND) (HWND) lParam);
             break;
 
+        case WM_SETTINGCHANGE:
+            processed = HandleSettingChange(wParam, lParam);
+            break;
+
         case WM_QUERYNEWPALETTE:
             processed = HandleQueryNewPalette();
             break;
@@ -3931,6 +3935,41 @@ bool wxWindowMSW::HandleCaptureChanged(WXHWND hWndGainedCapture)
     event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
+{
+    // despite MSDN saying "(This message cannot be sent directly to a window.)"
+    // we need to send this to child windows (it is only sent to top-level
+    // windows) so {list,tree}ctrls can adjust their font size if necessary
+    // this is exactly how explorer does it to enable the font size changes
+
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+    while ( node )
+    {
+        // top-level windows already get this message from the system
+        wxWindow *win = node->GetData();
+        if ( !win->IsTopLevel() )
+        {
+            ::SendMessage(GetHwndOf(win), WM_SETTINGCHANGE, wParam, lParam);
+        }
+
+        node = node->GetNext();
+    }
+
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    if ( IsTopLevel() )
+    {
+        SHACTIVATEINFO *info = (SHACTIVATEINFO*) m_activateInfo;
+        if ( info )
+        {
+            return SHHandleWMSettingChange(GetHwnd(), wParam, lParam, info) == TRUE;
+        }
+    }
+#endif // defined(__SMARTPHONE__) || defined(__POCKETPC__)
+
+    // let the system handle it
+    return false;
 }
 
 bool wxWindowMSW::HandleQueryNewPalette()
