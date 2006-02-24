@@ -8,6 +8,7 @@ import wx
 import os
 from version import VERSION
 import editwindow
+import dispatcher
 
 ID_NEW = wx.ID_NEW
 ID_OPEN = wx.ID_OPEN
@@ -44,6 +45,8 @@ ID_USEAA = wx.NewId()
 ID_SHOW_LINENUMBERS = wx.NewId()
 ID_AUTO_SAVESETTINGS = wx.NewId()
 ID_SAVEHISTORY = wx.NewId()
+ID_SAVEHISTORYNOW = wx.NewId()
+ID_CLEARHISTORY = wx.NewId()
 ID_SAVESETTINGS = wx.NewId()
 ID_DELSETTINGSFILE = wx.NewId()
 ID_EDITSTARTUPSCRIPT = wx.NewId()
@@ -138,9 +141,9 @@ class Frame(wx.Frame):
         m.Append(ID_SELECTALL, 'Select A&ll \tCtrl+A',
                  'Select all text')
         m.AppendSeparator()
-        m.Append(ID_EMPTYBUFFER, 'E&mpty Buffer',
+        m.Append(ID_EMPTYBUFFER, 'E&mpty Buffer...',
                  'Delete all the contents of the edit buffer')
-        m.Append(ID_FIND, '&Find Text \tCtrl+F',
+        m.Append(ID_FIND, '&Find Text... \tCtrl+F',
                  'Search for text in the edit buffer')
         m.Append(ID_FINDNEXT, 'Find &Next \tF3',
                  'Find next/previous instance of the search text')
@@ -180,14 +183,22 @@ class Frame(wx.Frame):
                      'Use anti-aliased fonts', wx.ITEM_CHECK)
             
         m.AppendSeparator()
-        m.Append(ID_SAVEHISTORY, '&Save History',
+
+        self.historyMenu = wx.Menu()
+        self.historyMenu.Append(ID_SAVEHISTORY, '&Autosave History',
                  'Automatically save history on close', wx.ITEM_CHECK)
+        self.historyMenu.Append(ID_SAVEHISTORYNOW, '&Save History Now',
+                 'Save history')
+        self.historyMenu.Append(ID_CLEARHISTORY, '&Clear History ',
+                 'Clear history')
+        m.AppendMenu(-1, "&History", self.historyMenu, "History Options")
+
         self.startupMenu = wx.Menu()
         self.startupMenu.Append(ID_EXECSTARTUPSCRIPT,
                                 'E&xecute Startup Script',
                                 'Execute Startup Script', wx.ITEM_CHECK)
         self.startupMenu.Append(ID_EDITSTARTUPSCRIPT,
-                                '&Edit Startup Script',
+                                '&Edit Startup Script...',
                                 'Edit Startup Script')
         m.AppendMenu(ID_STARTUP, '&Startup', self.startupMenu, 'Startup Options')
 
@@ -249,6 +260,8 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnShowLineNumbers, id=ID_SHOW_LINENUMBERS)
         self.Bind(wx.EVT_MENU, self.OnAutoSaveSettings, id=ID_AUTO_SAVESETTINGS)
         self.Bind(wx.EVT_MENU, self.OnSaveHistory, id=ID_SAVEHISTORY)
+        self.Bind(wx.EVT_MENU, self.OnSaveHistoryNow, id=ID_SAVEHISTORYNOW)
+        self.Bind(wx.EVT_MENU, self.OnClearHistory, id=ID_CLEARHISTORY)
         self.Bind(wx.EVT_MENU, self.OnSaveSettings, id=ID_SAVESETTINGS)
         self.Bind(wx.EVT_MENU, self.OnDelSettingsFile, id=ID_DELSETTINGSFILE)
         self.Bind(wx.EVT_MENU, self.OnEditStartupScript, id=ID_EDITSTARTUPSCRIPT)
@@ -288,6 +301,8 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_DELSETTINGSFILE)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_EXECSTARTUPSCRIPT)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_SAVEHISTORY)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_SAVEHISTORYNOW)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_CLEARHISTORY)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_EDITSTARTUPSCRIPT)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_FIND)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_FINDNEXT)
@@ -436,7 +451,13 @@ class Frame(wx.Frame):
         win.SetUseAntiAliasing(event.IsChecked())
 
     def OnSaveHistory(self, event):
-        self.saveHistory = event.IsChecked()
+        self.autoSaveHistory = event.IsChecked()
+
+    def OnSaveHistoryNow(self, event):
+        self.SaveHistory()
+
+    def OnClearHistory(self, event):
+        self.shell.clearHistory()
 
     def OnAutoSaveSettings(self, event):
         self.autoSaveSettings = event.IsChecked()
@@ -474,6 +495,9 @@ class Frame(wx.Frame):
         self.findDlg.Show()
         
     def OnFindNext(self, event):
+        if not self.findData.GetFindString():
+            self.OnFindText(event)
+            return
         if isinstance(event, wx.FindDialogEvent):
             win = self.findDlg.GetParent()
         else:
@@ -567,8 +591,14 @@ class Frame(wx.Frame):
                 event.Enable(self.config is not None)
 
             elif id == ID_SAVEHISTORY:
-                event.Check(self.saveHistory)
+                event.Check(self.autoSaveHistory)
                 event.Enable(self.dataDir is not None)
+            elif id == ID_SAVEHISTORYNOW:
+                event.Enable(self.dataDir is not None and
+                             hasattr(self, 'SaveHistory'))
+            elif id == ID_CLEARHISTORY:
+                event.Enable(self.dataDir is not None)
+                
             elif id == ID_EDITSTARTUPSCRIPT:
                 event.Enable(hasattr(self, 'EditStartupScript'))
                 event.Enable(self.dataDir is not None)
@@ -576,9 +606,8 @@ class Frame(wx.Frame):
             elif id == ID_FIND:
                 event.Enable(hasattr(win, 'DoFindNext'))
             elif id == ID_FINDNEXT:
-                event.Enable(hasattr(win, 'DoFindNext') and
-                             self.findData.GetFindString() != '')
-                
+                event.Enable(hasattr(win, 'DoFindNext'))
+                                             
             else:
                 event.Enable(False)
         except AttributeError:
@@ -645,7 +674,7 @@ class ShellFrameMixin:
             self.startupScript = os.path.join(self.dataDir, 'startup')
             
         self.autoSaveSettings = False
-        self.saveHistory = False
+        self.autoSaveHistory = False
 
         # We need this one before we have a chance to load the settings...
         self.execStartupScript = True
@@ -672,7 +701,7 @@ class ShellFrameMixin:
         if self.config is not None:
             self.autoSaveSettings = self.config.ReadBool('Options/AutoSaveSettings', False)
             self.execStartupScript = self.config.ReadBool('Options/ExecStartupScript', True)
-            self.saveHistory  = self.config.ReadBool('Options/SaveHistory', False)
+            self.autoSaveHistory  = self.config.ReadBool('Options/AutoSaveHistory', False)
             self.LoadHistory()
 
 
@@ -681,8 +710,9 @@ class ShellFrameMixin:
             # always save this one
             self.config.WriteBool('Options/AutoSaveSettings', self.autoSaveSettings)
             if self.autoSaveSettings:
-                self.config.WriteBool('Options/SaveHistory', self.saveHistory)
+                self.config.WriteBool('Options/AutoSaveHistory', self.autoSaveHistory)
                 self.config.WriteBool('Options/ExecStartupScript', self.execStartupScript)
+            if self.autoSaveHistory:
                 self.SaveHistory()
 
 
@@ -690,20 +720,17 @@ class ShellFrameMixin:
     def SaveHistory(self):
         if self.dataDir:
             try:
-                # always open the file so that when we are not
-                # saving the history, the old file is emptied.
                 name = os.path.join(self.dataDir, 'history')
                 f = file(name, 'w')
-                if self.saveHistory:
-                    hist = '\n'.join(self.shell.history)
-                    f.write(hist)
+                hist = '\x00\n'.join(self.shell.history)
+                f.write(hist)
                 f.close()
             except:
                 d = wx.MessageDialog(self, "Error saving history file.",
                                      "Error", wx.ICON_EXCLAMATION)
                 d.ShowModal()
                 d.Destroy()
-
+                raise
 
     def LoadHistory(self):
         if self.dataDir:
@@ -713,7 +740,8 @@ class ShellFrameMixin:
                     f = file(name, 'U')
                     hist = f.read()
                     f.close()
-                    self.shell.history = hist.split('\n')
+                    self.shell.history = hist.split('\x00\n')
+                    dispatcher.send(signal="Shell.loadHistory", history=self.shell.history)
                 except:
                     d = wx.MessageDialog(self, "Error loading history file.",
                                          "Error", wx.ICON_EXCLAMATION)

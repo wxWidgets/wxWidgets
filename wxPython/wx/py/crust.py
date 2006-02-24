@@ -63,7 +63,7 @@ class Crust(wx.SplitterWindow):
         self.notebook.AddPage(page=self.calltip, text='Calltip')
         
         self.sessionlisting = SessionListing(parent=self.notebook)
-        self.notebook.AddPage(page=self.sessionlisting, text='Session')
+        self.notebook.AddPage(page=self.sessionlisting, text='History')
         
         self.dispatcherlisting = DispatcherListing(parent=self.notebook)
         self.notebook.AddPage(page=self.dispatcherlisting, text='Dispatcher')
@@ -162,6 +162,10 @@ class Calltip(wx.TextCtrl):
         self.SetBackgroundColour(wx.Colour(255, 255, 208))
         dispatcher.connect(receiver=self.display, signal='Shell.calltip')
 
+        df = self.GetFont()
+        font = wx.Font(df.GetPointSize(), wx.TELETYPE, wx.NORMAL, wx.NORMAL)
+        self.SetFont(font)
+
     def display(self, calltip):
         """Receiver for Shell.calltip signal."""
         ## self.SetValue(calltip)  # Caused refresh problem on Windows.
@@ -177,16 +181,28 @@ class SessionListing(wx.TextCtrl):
         style = (wx.TE_MULTILINE | wx.TE_READONLY |
                  wx.TE_RICH2 | wx.TE_DONTWRAP)
         wx.TextCtrl.__init__(self, parent, id, style=style)
-        dispatcher.connect(receiver=self.push, signal='Interpreter.push')
+        dispatcher.connect(receiver=self.addHistory, signal="Shell.addHistory")
+        dispatcher.connect(receiver=self.clearHistory, signal="Shell.clearHistory")
+        dispatcher.connect(receiver=self.loadHistory, signal="Shell.loadHistory")
 
-    def push(self, command, more):
-        """Receiver for Interpreter.push signal."""
-        if command and not more:
+        df = self.GetFont()
+        font = wx.Font(df.GetPointSize(), wx.TELETYPE, wx.NORMAL, wx.NORMAL)
+        self.SetFont(font)
+
+    def loadHistory(self, history):
+        # preload the existing history, if any
+        hist = history[:]
+        hist.reverse()
+        self.SetValue('\n'.join(hist) + '\n')
+        self.SetInsertionPointEnd()
+
+    def addHistory(self, command):
+        if command:
             self.SetInsertionPointEnd()
-            start, end = self.GetSelection()
-            if start != end:
-                self.SetSelection(0, 0)
             self.AppendText(command + '\n')
+
+    def clearHistory(self):
+        self.SetValue("")
 
 
 class DispatcherListing(wx.TextCtrl):
@@ -197,6 +213,10 @@ class DispatcherListing(wx.TextCtrl):
                  wx.TE_RICH2 | wx.TE_DONTWRAP)
         wx.TextCtrl.__init__(self, parent, id, style=style)
         dispatcher.connect(receiver=self.spy)
+
+        df = self.GetFont()
+        font = wx.Font(df.GetPointSize(), wx.TELETYPE, wx.NORMAL, wx.NORMAL)
+        self.SetFont(font)
 
     def spy(self, signal, sender):
         """Receiver for Any signal from Any sender."""
