@@ -138,8 +138,10 @@ public:
 
     void SetItemCount(long count);
 
-    void EditLabel( long item ) { Edit(item); }
-    void Edit( long item );
+    wxTextCtrl *EditLabel(long item,
+                          wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+    wxTextCtrl* GetEditControl() const;
+    void Edit( long item ) { EditLabel(item); }
 
     bool EnsureVisible( long item );
     long FindItem( long start, const wxString& str, bool partial = false );

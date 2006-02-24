@@ -471,13 +471,18 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-//  wxListTextCtrl (internal)
+// wxListTextCtrlWrapper: wraps a wxTextCtrl to make it work for inline editing
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
+class WXDLLEXPORT wxListTextCtrlWrapper : public wxEvtHandler
 {
 public:
-    wxListTextCtrl(wxListMainWindow *owner, size_t itemEdit);
+    // NB: text must be a valid object but not Create()d yet
+    wxListTextCtrlWrapper(wxListMainWindow *owner,
+                          wxTextCtrl *text,
+                          size_t itemEdit);
+
+    wxTextCtrl *GetText() const { return m_text; }
 
     void AcceptChangesAndFinish();
 
@@ -491,6 +496,7 @@ protected:
 
 private:
     wxListMainWindow   *m_owner;
+    wxTextCtrl         *m_text;
     wxString            m_startValue;
     size_t              m_itemEdited;
     bool                m_finished;
@@ -598,7 +604,19 @@ public:
     void MoveToFocus() { MoveToItem(m_current); }
 
     // start editing the label of the given item
-    void EditLabel( long item );
+    wxTextCtrl *EditLabel(long item,
+                          wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+    wxTextCtrl *GetEditControl() const
+    {
+        return m_textctrlWrapper ? m_textctrlWrapper->GetText() : NULL;
+    }
+
+    void FinishEditing(wxTextCtrl *text)
+    {
+        delete text;
+        m_textctrlWrapper = NULL;
+        SetFocusIgnoringChildren();
+    }
 
     // suspend/resume redrawing the control
     void Freeze();
@@ -775,8 +793,6 @@ public:
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
 
-    wxListTextCtrl*     m_textctrl;
-
 protected:
     wxWindow *GetMainWindowOfCompositeControl() { return GetParent(); }
 
@@ -848,6 +864,11 @@ private:
 
     // if this is > 0, the control is frozen and doesn't redraw itself
     size_t m_freezeCount;
+
+    // wrapper around the text control currently used for in place editing or
+    // NULL if no item is being edited
+    wxListTextCtrlWrapper *m_textctrlWrapper;
+
 
     DECLARE_DYNAMIC_CLASS(wxListMainWindow)
     DECLARE_EVENT_TABLE()
@@ -1977,20 +1998,23 @@ void wxListRenameTimer::Notify()
 }
 
 //-----------------------------------------------------------------------------
-// wxListTextCtrl (internal)
+// wxListTextCtrlWrapper (internal)
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxListTextCtrl,wxTextCtrl)
-    EVT_CHAR           (wxListTextCtrl::OnChar)
-    EVT_KEY_UP         (wxListTextCtrl::OnKeyUp)
-    EVT_KILL_FOCUS     (wxListTextCtrl::OnKillFocus)
+BEGIN_EVENT_TABLE(wxListTextCtrlWrapper, wxEvtHandler)
+    EVT_CHAR           (wxListTextCtrlWrapper::OnChar)
+    EVT_KEY_UP         (wxListTextCtrlWrapper::OnKeyUp)
+    EVT_KILL_FOCUS     (wxListTextCtrlWrapper::OnKillFocus)
 END_EVENT_TABLE()
 
-wxListTextCtrl::wxListTextCtrl(wxListMainWindow *owner, size_t itemEdit)
+wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
+                                             wxTextCtrl *text,
+                                             size_t itemEdit)
               : m_startValue(owner->GetItemText(itemEdit)),
                 m_itemEdited(itemEdit)
 {
     m_owner = owner;
+    m_text = text;
     m_finished = false;
     m_aboutToFinish = false;
 
@@ -1999,27 +2023,28 @@ wxListTextCtrl::wxListTextCtrl(wxListMainWindow *owner, size_t itemEdit)
     m_owner->CalcScrolledPosition(rectLabel.x, rectLabel.y,
                                   &rectLabel.x, &rectLabel.y);
 
-    (void)Create(owner, wxID_ANY, m_startValue,
-                 wxPoint(rectLabel.x-4,rectLabel.y-4),
-                 wxSize(rectLabel.width+11,rectLabel.height+8));
+    m_text->Create(owner, wxID_ANY, m_startValue,
+                   wxPoint(rectLabel.x-4,rectLabel.y-4),
+                   wxSize(rectLabel.width+11,rectLabel.height+8));
+    m_text->PushEventHandler(this);
 }
 
-void wxListTextCtrl::Finish()
+void wxListTextCtrlWrapper::Finish()
 {
     if ( !m_finished )
     {
-        wxPendingDelete.Append(this);
-        m_owner->m_textctrl = NULL;
-
         m_finished = true;
 
-        m_owner->SetFocusIgnoringChildren();
+        m_text->PopEventHandler(this);
+        m_owner->FinishEditing(m_text);
+
+        delete this;
     }
 }
 
-bool wxListTextCtrl::AcceptChanges()
+bool wxListTextCtrlWrapper::AcceptChanges()
 {
-    const wxString value = GetValue();
+    const wxString value = m_text->GetValue();
 
     if ( value == m_startValue )
         // nothing changed, always accept
@@ -2035,7 +2060,7 @@ bool wxListTextCtrl::AcceptChanges()
     return true;
 }
 
-void wxListTextCtrl::AcceptChangesAndFinish()
+void wxListTextCtrlWrapper::AcceptChangesAndFinish()
 {
     m_aboutToFinish = true;
 
@@ -2046,7 +2071,7 @@ void wxListTextCtrl::AcceptChangesAndFinish()
     Finish();
 }
 
-void wxListTextCtrl::OnChar( wxKeyEvent &event )
+void wxListTextCtrlWrapper::OnChar( wxKeyEvent &event )
 {
     switch ( event.m_keyCode )
     {
@@ -2064,7 +2089,7 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
     }
 }
 
-void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
+void wxListTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
 {
     if (m_finished)
     {
@@ -2074,20 +2099,20 @@ void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
 
     // auto-grow the textctrl:
     wxSize parentSize = m_owner->GetSize();
-    wxPoint myPos = GetPosition();
-    wxSize mySize = GetSize();
+    wxPoint myPos = m_text->GetPosition();
+    wxSize mySize = m_text->GetSize();
     int sx, sy;
-    GetTextExtent(GetValue() + _T("MM"), &sx, &sy);
+    m_text->GetTextExtent(m_text->GetValue() + _T("MM"), &sx, &sy);
     if (myPos.x + sx > parentSize.x)
         sx = parentSize.x - myPos.x;
     if (mySize.x > sx)
         sx = mySize.x;
-    SetSize(sx, wxDefaultCoord);
+    m_text->SetSize(sx, wxDefaultCoord);
 
     event.Skip();
 }
 
-void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
+void wxListTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 {
     if ( !m_finished && !m_aboutToFinish )
     {
@@ -2143,7 +2168,7 @@ void wxListMainWindow::Init()
 
     m_lastOnSame = false;
     m_renameTimer = new wxListRenameTimer( this );
-    m_textctrl = NULL;
+    m_textctrlWrapper = NULL;
 
     m_current =
     m_lineLastClicked =
@@ -2751,10 +2776,13 @@ void wxListMainWindow::ChangeCurrent(size_t current)
     SendNotify(current, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
 }
 
-void wxListMainWindow::EditLabel( long item )
+wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass)
 {
-    wxCHECK_RET( (item >= 0) && ((size_t)item < GetItemCount()),
+    wxCHECK_MSG( (item >= 0) && ((size_t)item < GetItemCount()), NULL,
                  wxT("wrong index in wxGenericListCtrl::EditLabel()") );
+
+    wxASSERT_MSG( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)),
+                 wxT("EditLabel() needs a text control") );
 
     size_t itemEdit = (size_t)item;
 
@@ -2762,20 +2790,23 @@ void wxListMainWindow::EditLabel( long item )
     le.SetEventObject( GetParent() );
     le.m_itemIndex = item;
     wxListLineData *data = GetLine(itemEdit);
-    wxCHECK_RET( data, _T("invalid index in EditLabel()") );
+    wxCHECK_MSG( data, NULL, _T("invalid index in EditLabel()") );
     data->GetItem( 0, le.m_item );
 
     if ( GetParent()->GetEventHandler()->ProcessEvent( le ) && !le.IsAllowed() )
+    {
         // vetoed by user code
-        return;
+        return NULL;
+    }
 
     // We have to call this here because the label in question might just have
     // been added and no screen update taken place.
     if ( m_dirty )
         wxSafeYield();
 
-    m_textctrl = new wxListTextCtrl(this, itemEdit);
-    m_textctrl->SetFocus();
+    wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
+    m_textctrlWrapper = new wxListTextCtrlWrapper(this, text, item);
+    return m_textctrlWrapper->GetText();
 }
 
 void wxListMainWindow::OnRenameTimer()
@@ -2825,9 +2856,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     // shutdown the edit control when the mouse is clicked elsewhere on the
     // listctrl because the order of events is different (or something like
     // that), so explicitly end the edit if it is active.
-    if ( event.LeftDown() && m_textctrl)
-        m_textctrl->AcceptChangesAndFinish();
-#endif
+    if ( event.LeftDown() && m_textctrlWrapper )
+        m_textctrlWrapper->AcceptChangesAndFinish();
+#endif // __WXMAC__
 
     event.SetEventObject( GetParent() );
     if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
@@ -5150,9 +5181,15 @@ bool wxGenericListCtrl::DeleteColumn( int col )
     return true;
 }
 
-void wxGenericListCtrl::Edit( long item )
+wxTextCtrl *wxGenericListCtrl::EditLabel(long item,
+                                         wxClassInfo* textControlClass)
 {
-    m_mainWin->EditLabel( item );
+    return m_mainWin->EditLabel( item, textControlClass );
+}
+
+wxTextCtrl *wxGenericListCtrl::GetEditControl() const
+{
+    return m_mainWin->GetEditControl();
 }
 
 bool wxGenericListCtrl::EnsureVisible( long item )
