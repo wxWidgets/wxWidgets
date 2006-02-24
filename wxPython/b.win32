@@ -90,19 +90,19 @@ elif [ "$1" = "a" ]; then
     shift
     CMD=
 
-#     $0 22 d
-#     $0 22 h
-#     $0 22 r
-#     $0 22 d UNICODE=1
-#     $0 22 h UNICODE=1
-#     $0 22 r UNICODE=1
-    
-    $0 23 d
-    $0 23 h
-    $0 23 r
+    $0 23 d UNICODE=0
+    $0 23 h UNICODE=0
+    $0 23 r UNICODE=0
     $0 23 d UNICODE=1
     $0 23 h UNICODE=1
     $0 23 r UNICODE=1
+
+    $0 24 d UNICODE=0
+    $0 24 h UNICODE=0
+    $0 24 r UNICODE=0
+    $0 24 d UNICODE=1
+    $0 24 h UNICODE=1
+    $0 24 r UNICODE=1
 
 
 # "b" --> both debug and hybrid builds
