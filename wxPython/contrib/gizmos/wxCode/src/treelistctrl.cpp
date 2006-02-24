@@ -3449,8 +3449,8 @@ void wxTreeListMainWindow::PaintLevel (wxTreeListItem *item, wxDC &dc,
             int total_width = m_owner->GetHeaderWindow()->GetWidth();
             // if the background colour is white, choose a
             // contrasting color for the lines
-            dc.SetPen (*((GetBackgroundColour() == *wxWHITE)?
-                        wxMEDIUM_GREY_PEN : wxWHITE_PEN));
+            dc.SetPen(((GetBackgroundColour() == *wxWHITE) ?
+                       wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT) : *wxWHITE_PEN));
             dc.DrawLine(0, y_top, total_width, y_top);
             dc.DrawLine(0, y, total_width, y);
         }
