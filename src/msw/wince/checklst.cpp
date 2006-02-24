@@ -211,16 +211,25 @@ int wxCheckListBox::GetCount() const
 
 int wxCheckListBox::GetSelection() const
 {
+    int i;
+    for (i = 0; i < GetCount(); i++)
+    {
+        int selState = ListView_GetItemState(GetHwnd(), i, LVIS_SELECTED);
+        if (selState == LVIS_SELECTED)
+            return i;
+    }
+
     return wxNOT_FOUND;
 }
 
 int wxCheckListBox::GetSelections(wxArrayInt& aSelections) const
 {
-    int n = GetCount();
-    while ( n > 0 )
+    int i;
+    for (i = 0; i < GetCount(); i++)
     {
-        n--;
-        if(IsChecked(n)) aSelections.Insert(n,0);
+        int selState = ListView_GetItemState(GetHwnd(), i, LVIS_SELECTED);
+        if (selState == LVIS_SELECTED)
+            aSelections.Add(i);
     }
 
     return aSelections.GetCount();
@@ -238,7 +247,8 @@ wxString wxCheckListBox::GetString(int n) const
 
 bool wxCheckListBox::IsSelected(int n) const
 {
-    return IsChecked(n);
+    int selState = ListView_GetItemState(GetHwnd(), n, LVIS_SELECTED);
+    return (selState == LVIS_SELECTED);
 }
 
 void wxCheckListBox::SetString(int n, const wxString& s)
@@ -317,7 +327,93 @@ void wxCheckListBox::DoSetItems(const wxArrayString& items, void **clientData)
 
 void wxCheckListBox::DoSetSelection(int n, bool select)
 {
-    Check(n,select);
+    ListView_SetItemState(GetHwnd(), n, select ? LVIS_SELECTED : 0, LVIS_SELECTED);
 }
+
+bool wxCheckListBox::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
+{
+    // prepare the event
+    // -----------------
+
+    wxCommandEvent event(wxEVT_NULL, m_windowId);
+    event.SetEventObject(this);
+
+    wxEventType eventType = wxEVT_NULL;
+
+    NMHDR *nmhdr = (NMHDR *)lParam;
+
+    if ( nmhdr->hwndFrom == GetHwnd() )
+    {
+        // almost all messages use NM_LISTVIEW
+        NM_LISTVIEW *nmLV = (NM_LISTVIEW *)nmhdr;
+
+        const int iItem = nmLV->iItem;
+
+        bool processed = true;
+        switch ( nmhdr->code )
+        {
+            case LVN_ITEMCHANGED:
+                // we translate this catch all message into more interesting
+                // (and more easy to process) wxWidgets events
+
+                // first of all, we deal with the state change events only and
+                // only for valid items (item == -1 for the virtual list
+                // control)
+                if ( nmLV->uChanged & LVIF_STATE && iItem != -1 )
+                {
+                    // temp vars for readability
+                    const UINT stOld = nmLV->uOldState;
+                    const UINT stNew = nmLV->uNewState;
+
+                    // Check image changed
+                    if ((stOld & LVIS_STATEIMAGEMASK) != (stNew & LVIS_STATEIMAGEMASK))
+                    {
+                        event.SetEventType(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED);
+                        event.SetInt(IsChecked(iItem));
+                        (void) GetEventHandler()->ProcessEvent(event);
+                    }
+
+                    if ( (stNew & LVIS_SELECTED) != (stOld & LVIS_SELECTED) )
+                    {
+                        eventType = wxEVT_COMMAND_LISTBOX_SELECTED;
+
+                        event.SetExtraLong( (stNew & LVIS_SELECTED) != 0 ); // is a selection
+                        event.SetInt(iItem);
+                    }
+                }
+
+                if ( eventType == wxEVT_NULL )
+                {
+                    // not an interesting event for us
+                    return false;
+                }
+
+                break;
+
+            default:
+                processed = false;
+        }
+
+        if ( !processed )
+            return wxControl::MSWOnNotify(idCtrl, lParam, result);
+    }
+    else
+    {
+        // where did this one come from?
+        return false;
+    }
+
+    // process the event
+    // -----------------
+
+    event.SetEventType(eventType);
+
+    bool processed = GetEventHandler()->ProcessEvent(event);
+    if ( processed )
+        *result = 0;
+
+    return processed;
+}
+
 
 #endif

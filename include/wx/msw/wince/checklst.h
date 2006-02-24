@@ -65,6 +65,8 @@ public:
     virtual bool IsSelected(int n) const;
     virtual void SetString(int n, const wxString& s);
 
+    // Implementation
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 protected:
 
     void OnSize(wxSizeEvent& event);
