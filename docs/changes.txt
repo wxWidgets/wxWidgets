@@ -88,6 +88,7 @@ wxWinCE:
 - Checkable items in wxToolMenuBarTool supported.
 - Fixed date formatting and mktime.
 - Fixed getting standard folder paths on WinCE.
+- Backported wxCheckListBox implementation from 2.7.
 
 wxMac:
 
