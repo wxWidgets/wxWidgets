@@ -23,7 +23,8 @@ class TestPanel(wx.Panel):
         self.OnChangeMonth()
 
         cal2 = wx.calendar.CalendarCtrl(self, -1, wx.DateTime_Now(), pos = (325,50))
-
+        self.Bind(wx.calendar.EVT_CALENDAR_SEL_CHANGED,
+                  self.OnCalSelChanged, cal2)
 
     def OnCalSelected(self, evt):
         self.log.write('OnCalSelected: %s\n' % evt.GetDate())
@@ -33,6 +34,14 @@ class TestPanel(wx.Panel):
         for month, day in self.holidays:
             if month == cur_month:
                 self.cal.SetHoliday(day)
+
+    def OnCalSelChanged(self, evt):
+        cal = evt.GetEventObject()
+        self.log.write("OnCalSelChanged:\n\t%s: %s\n\t%s: %s\n\t%s: %s\n\t" %
+                       ("EventObject", cal,
+                        "Date       ", cal.GetDate(),
+                        "Ticks      ", cal.GetDate().GetTicks(),
+                        ))
 
 #----------------------------------------------------------------------
 
