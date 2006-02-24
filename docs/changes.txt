@@ -39,9 +39,12 @@ wxGTK:
   class was used.
 - Worked around pango crashes in strncmp on Solaris 10.
 - Polygon and line drawing speeded up if there is no scaling.
-- Fixed problems with CJK input method.
+- Fixed problems with CJK input method (reverted)
 - Fixed wxNotebook::HitTest when the leftmost visible tab is not the
   actual first tab (has arrows for scrolling and is scrolled).
+- Send wxSetCursorEvent
+- Fix RequestMore for idle events.
+- Implement user dashes for PS and GNOME printing.
 
 wxMSW:
 
