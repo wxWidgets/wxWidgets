@@ -251,13 +251,13 @@ class EditWindow(stc.StyledTextCtrl):
 
     def DoFindNext(self, findData, findDlg=None):
         backward = not (findData.GetFlags() & wx.FR_DOWN)
-        matchcase = findData.GetFlags() & wx.FR_MATCHCASE
+        matchcase = (findData.GetFlags() & wx.FR_MATCHCASE) != 0
         end = self.GetLastPosition()
         textstring = self.GetRange(0, end)
         findstring = findData.GetFindString()
         if not matchcase:
-            textstring.lower()
-            findstring.lower()
+            textstring = textstring.lower()
+            findstring = findstring.lower()
         if backward:
             start = self.GetSelection()[0]
             loc = textstring.rfind(findstring, 0, start)
