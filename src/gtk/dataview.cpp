@@ -16,6 +16,7 @@
 
 #include "wx/dataview.h"
 #include "wx/stockitem.h"
+#include "wx/dcclient.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
@@ -72,11 +73,11 @@ struct _GtkWxListStore
 
 struct _GtkWxListStoreClass
 {
-  GObjectClass parent_class;
+  GObjectClass list_parent_class;
   
 };
 
-static GtkWxListStore *wxgtk_list_store_new          ();
+static GtkWxListStore *wxgtk_list_store_new          (void);
 static void         wxgtk_list_store_init            (GtkWxListStore      *list_store);
 static void         wxgtk_list_store_class_init      (GtkWxListStoreClass *klass);
 static void         wxgtk_list_store_tree_model_init (GtkTreeModelIface *iface);
@@ -111,7 +112,7 @@ static gboolean     wxgtk_list_store_iter_parent     (GtkTreeModel      *tree_mo
 						    GtkTreeIter       *iter,
 						    GtkTreeIter       *child);
 
-static GObjectClass *parent_class = NULL;
+static GObjectClass *list_parent_class = NULL;
 
 GType
 gtk_wx_list_store_get_type (void)
@@ -152,18 +153,17 @@ gtk_wx_list_store_get_type (void)
 }
 
 static GtkWxListStore *
-wxgtk_list_store_new()
+wxgtk_list_store_new(void)
 {
-  GtkWxListStore *retval = (GtkWxListStore *) g_object_new (GTK_TYPE_WX_LIST_STORE, NULL);
-  return retval;
+    GtkWxListStore *retval = (GtkWxListStore *) g_object_new (GTK_TYPE_WX_LIST_STORE, NULL);
+    return retval;
 }
 
 static void
 wxgtk_list_store_class_init (GtkWxListStoreClass *klass)
 {
-    GObjectClass *object_class;
-    parent_class = (GObjectClass*) g_type_class_peek_parent (klass);
-    object_class = (GObjectClass*) klass;
+    list_parent_class = (GObjectClass*) g_type_class_peek_parent (klass);
+    GObjectClass *object_class = (GObjectClass*) klass;
     object_class->finalize = wxgtk_list_store_finalize;
 }
 
@@ -200,7 +200,7 @@ wxgtk_list_store_finalize (GObject *object)
     /* delete list_store->model; */
 
     /* must chain up */
-    (* parent_class->finalize) (object);
+    (* list_parent_class->finalize) (object);
 }
                         
 } // extern "C"
@@ -421,6 +421,215 @@ wxgtk_list_store_iter_parent (GtkTreeModel *tree_model,
 			    GtkTreeIter  *child)
 {
     return FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// define new GTK+ class wxGtkCellRenderer
+//-----------------------------------------------------------------------------
+
+extern "C" {
+
+#define GTK_TYPE_WX_CELL_RENDERER               (gtk_wx_cell_renderer_get_type ())
+#define GTK_WX_CELL_RENDERER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WX_CELL_RENDERER, GtkWxCellRenderer))
+#define GTK_WX_CELL_RENDERER_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WX_CELL_RENDERER, GtkWxCellRendererClass))
+#define GTK_IS_WX_CELL_RENDERER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WX_CELL_RENDERER))
+#define GTK_IS_WX_CELL_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WX_CELL_RENDERER))
+#define GTK_WX_CELL_RENDERER_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WX_CELL_RENDERER, GtkWxCellRendererClass))
+
+GType            gtk_wx_cell_renderer_get_type (void);
+
+typedef struct _GtkWxCellRenderer GtkWxCellRenderer;
+typedef struct _GtkWxCellRendererClass GtkWxCellRendererClass;
+
+struct _GtkWxCellRenderer
+{
+  GtkCellRenderer parent;
+
+  /*< private >*/
+  wxDataViewCustomCell *cell;
+};
+
+struct _GtkWxCellRendererClass
+{
+  GtkCellRendererClass cell_parent_class;
+
+};
+
+
+static GtkCellRenderer *gtk_wx_cell_renderer_new   (void);
+static void gtk_wx_cell_renderer_init       (GtkWxCellRenderer      *cell);
+static void gtk_wx_cell_renderer_class_init (GtkWxCellRendererClass *klass);
+static void gtk_wx_cell_renderer_finalize   (GObject                *object);
+static void gtk_wx_cell_renderer_get_size   (GtkCellRenderer        *cell,
+						 GtkWidget                  *widget,
+						 GdkRectangle               *rectangle,
+						 gint                       *x_offset,
+						 gint                       *y_offset,
+						 gint                       *width,
+						 gint                       *height);
+static void gtk_wx_cell_renderer_render     (GtkCellRenderer        *cell,
+						 GdkWindow                  *window,
+						 GtkWidget                  *widget,
+						 GdkRectangle               *background_area,
+						 GdkRectangle               *cell_area,
+						 GdkRectangle               *expose_area,
+						 GtkCellRendererState        flags);
+
+static GObjectClass *cell_parent_class = NULL;
+
+}  // extern "C"
+
+GType 
+gtk_wx_cell_renderer_get_type (void)
+{
+  static GType cell_wx_type = 0;
+
+  if (!cell_wx_type)
+    {
+      static const GTypeInfo cell_wx_info =
+      {
+	sizeof (GtkWxCellRendererClass),
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_wx_cell_renderer_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkWxCellRenderer),
+	0,              /* n_preallocs */
+	(GInstanceInitFunc) gtk_wx_cell_renderer_init,
+      };
+
+      cell_wx_type =
+	g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkWxCellRenderer",
+			        &cell_wx_info, (GTypeFlags)0);
+    }
+
+  return cell_wx_type;
+}
+
+static void
+gtk_wx_cell_renderer_init (GtkWxCellRenderer *cell)
+{
+    cell->cell = NULL;
+}
+
+static void
+gtk_wx_cell_renderer_class_init (GtkWxCellRendererClass *klass)
+{
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (klass);
+
+    cell_parent_class = (GObjectClass*) g_type_class_peek_parent (klass);
+
+    object_class->finalize = gtk_wx_cell_renderer_finalize;
+
+    cell_class->get_size = gtk_wx_cell_renderer_get_size;
+    cell_class->render = gtk_wx_cell_renderer_render;
+}
+
+static void
+gtk_wx_cell_renderer_finalize (GObject *object)
+{
+    /* must chain up */
+    (* G_OBJECT_CLASS (cell_parent_class)->finalize) (object);
+}
+
+GtkCellRenderer*
+gtk_wx_cell_renderer_new (void)
+{
+    return (GtkCellRenderer*) g_object_new (GTK_TYPE_WX_CELL_RENDERER, NULL);
+}
+
+static void
+gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
+				   GtkWidget       *widget,
+				   GdkRectangle    *cell_area,
+				   gint            *x_offset,
+				   gint            *y_offset,
+				   gint            *width,
+				   gint            *height)
+{
+    GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
+    wxDataViewCustomCell *cell = wxrenderer->cell;
+  
+    wxSize size = cell->GetSize();
+
+    gint calc_width  = (gint) renderer->xpad * 2 + size.x;
+    gint calc_height = (gint) renderer->ypad * 2 + size.y;
+  
+    if (x_offset) 
+        *x_offset = 0;
+    if (y_offset) 
+        *y_offset = 0;
+
+    if (cell_area && size.x > 0 && size.y > 0)
+    {
+        if (x_offset)
+	    {
+            *x_offset = (gint)((renderer->xalign *
+                               (cell_area->width - calc_width - 2 * renderer->xpad)));
+            *x_offset = MAX (*x_offset, 0) + renderer->xpad;
+	    }
+        if (y_offset)
+        {
+            *y_offset = (gint)((renderer->yalign *
+                               (cell_area->height - calc_height - 2 * renderer->ypad)));
+            *y_offset = MAX (*y_offset, 0) + renderer->ypad;
+        }
+    }
+
+    if (width)
+        *width = calc_width;
+  
+    if (height)
+        *height = calc_height;
+}
+
+static void
+gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
+				 GdkWindow            *window,
+				 GtkWidget            *widget,
+				 GdkRectangle         *background_area,
+				 GdkRectangle         *cell_area,
+				 GdkRectangle         *expose_area,
+				 GtkCellRendererState  flags)
+
+{
+    GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
+    wxDataViewCustomCell *cell = wxrenderer->cell;
+    
+    GdkRectangle rect;
+    gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
+				     &rect.x,
+				     &rect.y,
+				     &rect.width,
+				     &rect.height);
+
+    rect.x += cell_area->x;
+    rect.y += cell_area->y;
+    rect.width  -= renderer->xpad * 2;
+    rect.height -= renderer->ypad * 2;
+    
+    GdkRectangle dummy;
+    if (gdk_rectangle_intersect (expose_area, &rect, &dummy))
+    {
+        wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
+        wxWindowDC* dc = (wxWindowDC*) cell->GetDC();
+        dc->m_window = window;
+        
+        int state = 0;
+        if (flags & GTK_CELL_RENDERER_SELECTED)
+            state |= wxDATAVIEW_CELL_SELECTED;
+        if (flags & GTK_CELL_RENDERER_PRELIT)
+            state |= wxDATAVIEW_CELL_PRELIT;
+        if (flags & GTK_CELL_RENDERER_INSENSITIVE)
+            state |= wxDATAVIEW_CELL_INSENSITIVE;
+        if (flags & GTK_CELL_RENDERER_INSENSITIVE)
+            state |= wxDATAVIEW_CELL_INSENSITIVE;
+        if (flags & GTK_CELL_RENDERER_FOCUSED)
+            state |= wxDATAVIEW_CELL_FOCUSED;
+        cell->Render( renderrect, dc, state );
+    }   
 }
 
 // --------------------------------------------------------- 
@@ -688,6 +897,63 @@ bool wxDataViewToggleCell::GetValue( wxVariant &value )
     value = tmp;
 
     return true;
+}
+    
+// --------------------------------------------------------- 
+// wxDataViewCustomCell
+// --------------------------------------------------------- 
+
+class wxDataViewCtrlDC: public wxWindowDC
+{
+public:
+    wxDataViewCtrlDC( wxDataViewCtrl *window )
+    {
+        GtkWidget *widget = window->GetHandle();
+        // Set later
+        m_window = NULL;
+        
+        m_context = window->GtkGetPangoDefaultContext();
+        m_layout = pango_layout_new( m_context );
+        m_fontdesc = pango_font_description_copy( widget->style->font_desc );
+
+        m_cmap = gtk_widget_get_colormap( widget ? widget : window->m_widget );
+
+        SetUpDC();
+
+        m_owner = window;
+    }
+};
+
+// --------------------------------------------------------- 
+// wxDataViewCustomCell
+// --------------------------------------------------------- 
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomCell, wxDataViewCell)
+
+wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype, 
+                          wxDataViewCellMode mode ) :
+    wxDataViewCell( varianttype, mode )
+{
+    m_dc = NULL;
+    
+    GtkWxCellRenderer *renderer = (GtkWxCellRenderer *) gtk_wx_cell_renderer_new();
+    renderer->cell = this;
+    
+    m_renderer = (void*) renderer;
+}
+
+wxDataViewCustomCell::~wxDataViewCustomCell()
+{
+    if (m_dc)
+        delete m_dc;
+}
+
+wxDC *wxDataViewCustomCell::GetDC()
+{
+    if (m_dc == NULL)
+        m_dc = new wxDataViewCtrlDC( GetOwner()->GetOwner() );
+        
+    return m_dc;
 }
     
 // --------------------------------------------------------- 

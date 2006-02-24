@@ -40,12 +40,14 @@ public:
             m_list.Add( wxT("Test") );
         for (i = 0; i < 500; i++)
             { m_bools.Add( 0 ); m_bools.Add( 1 ); }
+        for (i = 0; i < 500; i++)
+            { m_colours.Add( wxT("red") ); m_colours.Add( wxT("green") ); }
     }
     
     virtual size_t GetNumberOfRows() 
         { return 1000; }
     virtual size_t GetNumberOfCols()
-        { return 4; }
+        { return 5; }
         
     // as reported by wxVariant
     virtual wxString GetColType( size_t col )
@@ -61,7 +63,11 @@ public:
             if (col == 3)
             {
                 return (bool) m_bools[row];
-            } else   
+            } else 
+            if (col == 4)
+            {
+                return m_colours[row];
+            }
             if (col == 2)
             {
                 return m_list[row];
@@ -88,6 +94,45 @@ public:
     
     wxArrayString m_list;
     wxArrayInt    m_bools;
+    wxArrayString m_colours;
+};
+
+// -------------------------------------
+// MyCustomCell
+// -------------------------------------
+
+class MyCustomCell: public wxDataViewCustomCell
+{
+public:
+    MyCustomCell() :
+        wxDataViewCustomCell( wxT("string"), wxDATAVIEW_CELL_INERT ) 
+    { 
+        m_colour = wxT("black"); 
+    }
+    bool SetValue( const wxVariant &value )
+    {
+        m_colour = value.GetString();
+        return true;
+    }
+    bool Render( wxRect rect, wxDC *dc, int state )
+    {
+        dc->SetPen( *wxBLACK_PEN );
+        if (m_colour == wxT("red"))
+            dc->SetBrush( *wxRED_BRUSH );
+        else if (m_colour == wxT("green"))
+            dc->SetBrush( *wxGREEN_BRUSH );
+        else 
+            dc->SetBrush( *wxBLACK_BRUSH );
+        dc->DrawRectangle( rect );
+        return true;
+    }
+    wxSize GetSize()
+    {
+        return wxSize(20,8);
+    }
+
+private:
+    wxString m_colour;    
 };
 
 // -------------------------------------
@@ -176,10 +221,16 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     
     dataview_left->AppendTextColumn( wxT("first"), 0 );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
+    
     wxDataViewTextCell *text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 2 );
     dataview_left->AppendColumn( column );
+    
     dataview_left->AppendToggleColumn( wxT("fourth"), 3 );
+    
+    MyCustomCell *custom_cell = new MyCustomCell;
+    column = new wxDataViewColumn( wxT("custom"), custom_cell, 4 );
+    dataview_left->AppendColumn( column );
     
     // Right wxDataViewCtrl using the same model
     dataview_right = new wxDataViewCtrl( this, -1 );

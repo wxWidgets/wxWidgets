@@ -76,6 +76,30 @@ protected:
 };
     
 // --------------------------------------------------------- 
+// wxDataViewCustomCell
+// --------------------------------------------------------- 
+
+class wxDataViewCustomCell: public wxDataViewCell
+{
+public:
+    wxDataViewCustomCell( const wxString &varianttype = wxT("string"), 
+                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+    ~wxDataViewCustomCell();
+    
+    virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
+    virtual wxSize GetSize() = 0;
+    
+    // Create DC on request
+    virtual wxDC *GetDC();
+    
+private:
+    wxDC        *m_dc;
+    
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomCell)
+};
+    
+// --------------------------------------------------------- 
 // wxDataViewColumn
 // --------------------------------------------------------- 
 

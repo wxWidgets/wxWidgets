@@ -136,12 +136,10 @@ public:
     virtual bool BeginEdit()    { return true; }
     virtual bool EndEdit()      { return true; }
     
-    virtual bool Render( wxRect cell, wxRect exposed, wxDC *dc, int state ) { return true; }
+    wxString GetVariantType()   { return m_variantType; }
     
     void SetOwner( wxDataViewColumn *owner )    { m_owner = owner; }
     wxDataViewColumn* GetOwner()                { return m_owner; }
-    
-    wxString GetVariantType()   { return m_variantType; }
     
 protected:
     wxDataViewCellMode      m_mode;
