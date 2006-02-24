@@ -119,6 +119,34 @@ derived class.  It is passed the item number and the column number as
 parameters, and the default version simply calls OnGetItemImage for
 column zero, or returns -1 for other columns.
 
+Switched to using SWIG 1.3.27 for generating the wrapper code.  There
+are some small changes needed to SWIG to work around some bugs that
+wxPython exposes, and to be able to generate code that matches that
+which wxPython is using.  If you are building wxPython yourself and
+need to modify any of the \*.i files or to add your own, then you will
+want to be sure to use a matching SWIG.  See wxPython/SWIG/README.txt
+in the source tarbal for details.
+
+wx.Image.Copy now also copies the alpha channel.
+
+wxMSW: Fixed problem in wx.TextCtrl where using SetValue and
+wx.TE_RICH2 would cause the control to be shown if it was hidden. 
+
+wxMSW: Numpad special keys are now distinguished from normal keys in
+key events.
+
+wxMSW: Multiline notebook tab label change now resizes the control
+correctly if an extra row is removed or added.
+
+wxMSW: On XP fall back to unthemed wxNotebook if specified orientation
+not available in the themed version.
+
+Added wx.Toolbar.GetToolsCount.
+
+Added wx.GridSizer.CalcRowsCols.
+
+Added wx.OutputStream.LastWrite.
+
 
 
 
@@ -148,7 +176,7 @@ wx.SplitterWindow class, except it allows more than one split, so it
 can manage more than two child windows.
 
 Docview and IDE patch from Morgan Hua with fix for bug #1217890
-"Closing view crashes Python" plus some new features::
+"Closing view crashes Python" plus some new features:
 
     New feature added to the IDE is 'Extensions'.  Under
     Tools|Options|Extensions, you can add calls to external programs.
