@@ -4199,6 +4199,12 @@ def DateTimeFromDMY(*args, **kwargs):
     val.thisown = 1
     return val
 
+def DateTimeFromDateTime(*args, **kwargs):
+    """DateTimeFromDateTime(DateTime date) -> DateTime"""
+    val = _misc_.new_DateTimeFromDateTime(*args, **kwargs)
+    val.thisown = 1
+    return val
+
 def DateTime_SetToWeekOfYear(*args, **kwargs):
     """DateTime_SetToWeekOfYear(int year, int numWeek, int weekday=Mon) -> DateTime"""
     return _misc_.DateTime_SetToWeekOfYear(*args, **kwargs)

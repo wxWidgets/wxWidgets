@@ -20896,6 +20896,38 @@ static PyObject *_wrap_new_DateTimeFromDMY(PyObject *, PyObject *args, PyObject 
 }
 
 
+static PyObject *_wrap_new_DateTimeFromDateTime(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxDateTime *arg1 = 0 ;
+    wxDateTime *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "date", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_DateTimeFromDateTime",kwnames,&obj0)) goto fail;
+    {
+        SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(1)) SWIG_fail;
+        if (arg1 == NULL) {
+            SWIG_null_ref("wxDateTime");
+        }
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxDateTime *)new wxDateTime((wxDateTime const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_delete_DateTime(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
@@ -33295,6 +33327,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_DateTimeFromJDN", (PyCFunction) _wrap_new_DateTimeFromJDN, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_DateTimeFromHMS", (PyCFunction) _wrap_new_DateTimeFromHMS, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_DateTimeFromDMY", (PyCFunction) _wrap_new_DateTimeFromDMY, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"new_DateTimeFromDateTime", (PyCFunction) _wrap_new_DateTimeFromDateTime, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_DateTime", (PyCFunction) _wrap_delete_DateTime, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_SetToCurrent", (PyCFunction) _wrap_DateTime_SetToCurrent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_SetTimeT", (PyCFunction) _wrap_DateTime_SetTimeT, METH_VARARGS | METH_KEYWORDS, NULL},

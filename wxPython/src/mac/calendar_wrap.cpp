@@ -2726,7 +2726,7 @@ static PyObject *_wrap_CalendarCtrl_SetDate(PyObject *, PyObject *args, PyObject
 static PyObject *_wrap_CalendarCtrl_GetDate(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    wxDateTime *result;
+    wxDateTime result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -2737,15 +2737,16 @@ static PyObject *_wrap_CalendarCtrl_GetDate(PyObject *, PyObject *args, PyObject
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxDateTime const &_result_ref = ((wxCalendarCtrl const *)arg1)->GetDate();
-            result = (wxDateTime *) &_result_ref;
-        }
+        result = ((wxCalendarCtrl const *)arg1)->GetDate();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 0);
+    {
+        wxDateTime * resultptr;
+        resultptr = new wxDateTime(static_cast<wxDateTime const & >(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxDateTime, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -2837,7 +2838,7 @@ static PyObject *_wrap_CalendarCtrl_SetUpperDateLimit(PyObject *, PyObject *args
 static PyObject *_wrap_CalendarCtrl_GetLowerDateLimit(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    wxDateTime *result;
+    wxDateTime result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -2848,15 +2849,16 @@ static PyObject *_wrap_CalendarCtrl_GetLowerDateLimit(PyObject *, PyObject *args
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxDateTime const &_result_ref = ((wxCalendarCtrl const *)arg1)->GetLowerDateLimit();
-            result = (wxDateTime *) &_result_ref;
-        }
+        result = ((wxCalendarCtrl const *)arg1)->GetLowerDateLimit();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 0);
+    {
+        wxDateTime * resultptr;
+        resultptr = new wxDateTime(static_cast<wxDateTime const & >(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxDateTime, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -2866,7 +2868,7 @@ static PyObject *_wrap_CalendarCtrl_GetLowerDateLimit(PyObject *, PyObject *args
 static PyObject *_wrap_CalendarCtrl_GetUpperDateLimit(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    wxDateTime *result;
+    wxDateTime result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -2877,15 +2879,16 @@ static PyObject *_wrap_CalendarCtrl_GetUpperDateLimit(PyObject *, PyObject *args
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxDateTime const &_result_ref = ((wxCalendarCtrl const *)arg1)->GetUpperDateLimit();
-            result = (wxDateTime *) &_result_ref;
-        }
+        result = ((wxCalendarCtrl const *)arg1)->GetUpperDateLimit();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 0);
+    {
+        wxDateTime * resultptr;
+        resultptr = new wxDateTime(static_cast<wxDateTime const & >(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxDateTime, 1);
+    }
     return resultobj;
     fail:
     return NULL;
