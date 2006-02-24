@@ -1529,6 +1529,22 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
         case wxSHORT_DASH:    gs_lgp->gnome_print_setdash( m_gpc, 2, short_dashed, 0 ); break;
         case wxLONG_DASH:     gs_lgp->gnome_print_setdash( m_gpc, 2, wxCoord_dashed, 0 ); break;
         case wxDOT_DASH:      gs_lgp->gnome_print_setdash( m_gpc, 4, dotted_dashed, 0 );  break;
+        case wxUSER_DASH: 
+        {
+            // It may be noted that libgnomeprint between at least
+            // versions 2.8.0 and 2.12.1 makes a copy of the dashes
+            // and then leak the memory since it doesn't set the
+            // internal flag "privatedash" to 0.
+            wxDash *wx_dashes;
+            int num = m_pen.GetDashes (&wx_dashes);
+            gdouble *g_dashes = g_new( gdouble, num );
+            int i;
+            for (i = 0; i < num; ++i)
+                g_dashes[i] = (gdouble) wx_dashes[i];
+            gs_lgp -> gnome_print_setdash( m_gpc, num, g_dashes, 0);
+            g_free( g_dashes );
+        }
+        break;
         case wxSOLID:
         case wxTRANSPARENT:
         default:              gs_lgp->gnome_print_setdash( m_gpc, 0, NULL, 0 );   break;
