@@ -159,6 +159,7 @@ public:
             Py_DECREF(str);
         }
     }
+    size_t LastWrite() const;
 };
 
 
