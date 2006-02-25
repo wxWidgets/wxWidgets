@@ -318,10 +318,10 @@ bool wxTopLevelWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
     SHACTIVATEINFO *info = (SHACTIVATEINFO*) m_activateInfo;
     if ( info )
     {
-        return SHHandleWMSettingChange(GetHwnd(), wParam, lParam, info) == TRUE;
+        SHHandleWMSettingChange(GetHwnd(), wParam, lParam, info);
     }
 
-    return false;
+    return wxWindowMSW::HandleSettingChange(wParam, lParam);
 }
 #endif
 
@@ -347,18 +347,6 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
             if (wxTheApp)
                 wxTheApp->SetActive(wParam != 0, FindFocus());
 
-            break;
-        }
-        case WM_SETTINGCHANGE:
-        {
-            processed = HandleSettingChange(wParam, lParam);
-
-            // if it was processed will still need to allow the base class to
-            // forward this message to child windows
-            if ( processed )
-            {
-                wxTopLevelWindowBase::MSWWindowProc(message, wParam, lParam);
-            }
             break;
         }
         case WM_HIBERNATE:

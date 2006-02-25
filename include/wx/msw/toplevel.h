@@ -89,7 +89,7 @@ public:
 
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     // Soft Input Panel (SIP) change notification
-    bool HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam);
+    virtual bool HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam);
 #endif
 
     // translate wxWidgets flags to Windows ones
