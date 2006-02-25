@@ -203,6 +203,11 @@ bool wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, size_t model
     return AppendColumn( new wxDataViewColumn( label, new wxDataViewToggleCell(), model_column ) );
 }
 
+bool wxDataViewCtrlBase::AppendProgressColumn( const wxString &label, size_t model_column )
+{
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewProgressCell(), model_column ) );
+}
+
 bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )
 {
     m_cols.Append( (wxObject*) col );

@@ -931,15 +931,25 @@ public:
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomCell, wxDataViewCell)
 
 wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype, 
-                          wxDataViewCellMode mode ) :
+                          wxDataViewCellMode mode, bool no_init ) :
     wxDataViewCell( varianttype, mode )
 {
     m_dc = NULL;
     
+    if (no_init)
+        m_renderer = NULL;
+    else
+        Init();
+}
+
+bool wxDataViewCustomCell::Init()
+{
     GtkWxCellRenderer *renderer = (GtkWxCellRenderer *) gtk_wx_cell_renderer_new();
     renderer->cell = this;
     
     m_renderer = (void*) renderer;
+    
+    return true;
 }
 
 wxDataViewCustomCell::~wxDataViewCustomCell()
@@ -954,6 +964,87 @@ wxDC *wxDataViewCustomCell::GetDC()
         m_dc = new wxDataViewCtrlDC( GetOwner()->GetOwner() );
         
     return m_dc;
+}
+    
+// --------------------------------------------------------- 
+// wxDataViewProgressCell
+// --------------------------------------------------------- 
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressCell, wxDataViewCustomCell)
+
+wxDataViewProgressCell::wxDataViewProgressCell( const wxString &label, 
+    const wxString &varianttype, wxDataViewCellMode mode ) :
+    wxDataViewCustomCell( varianttype, mode, true )  
+{
+    m_label = label;
+    m_value = 0;
+    
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        m_renderer = (void*) gtk_cell_renderer_progress_new();
+        
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_STRING );
+        g_value_set_boolean( &gvalue, wxGTK_CONV(m_label) );
+        g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
+        g_value_unset( &gvalue );
+    }
+    else
+#endif
+    {
+        // Use custom cell code
+        wxDataViewCustomCell::Init();
+    }
+}
+
+wxDataViewProgressCell::~wxDataViewProgressCell()
+{
+}
+
+bool wxDataViewProgressCell::SetValue( const wxVariant &value )
+{
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        gint tmp = (int) value;
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_INT );
+        g_value_set_boolean( &gvalue, tmp );
+        g_object_set_property( G_OBJECT(m_renderer), "value", &gvalue );
+        g_value_unset( &gvalue );
+    }
+    else
+#endif
+    {
+        m_value = (long) value;
+    
+        if (m_value < 0) m_value = 0;
+        if (m_value > 100) m_value = 100;
+    }
+    
+    return true;
+}
+    
+bool wxDataViewProgressCell::Render( wxRect cell, wxDC *dc, int state )
+{
+    double pct = (double)m_value / 100.0;
+    wxRect bar = cell;
+    bar.width = (int)(cell.width * pct);
+    dc->SetPen( *wxTRANSPARENT_PEN );
+    dc->SetBrush( *wxBLUE_BRUSH );
+    dc->DrawRectangle( bar );
+
+    dc->SetBrush( *wxTRANSPARENT_BRUSH );
+    dc->SetPen( *wxBLACK_PEN );
+    dc->DrawRectangle( cell );
+    
+    return true;
+}
+
+wxSize wxDataViewProgressCell::GetSize()
+{
+    return wxSize(40,12);
 }
     
 // --------------------------------------------------------- 

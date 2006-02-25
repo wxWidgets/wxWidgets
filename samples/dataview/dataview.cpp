@@ -42,16 +42,21 @@ public:
             { m_bools.Add( 0 ); m_bools.Add( 1 ); }
         for (i = 0; i < 500; i++)
             { m_colours.Add( wxT("red") ); m_colours.Add( wxT("green") ); }
+        for (i = 0; i < 1000; i++)
+            { m_progress.Add( i/10 ); }
     }
     
     virtual size_t GetNumberOfRows() 
         { return 1000; }
     virtual size_t GetNumberOfCols()
-        { return 5; }
+        { return 6; }
         
     // as reported by wxVariant
     virtual wxString GetColType( size_t col )
         {
+            if (col == 5)
+                return wxT("long");
+                
             if (col == 3)
                 return wxT("bool");
                  
@@ -60,14 +65,18 @@ public:
         
     virtual wxVariant GetValue( size_t col, size_t row )
         {
+            if (col == 5)
+            {
+                return (long) m_progress[row];
+            } else
+            if (col == 4)
+            {
+                return m_colours[row];
+            } else
             if (col == 3)
             {
                 return (bool) m_bools[row];
             } else 
-            if (col == 4)
-            {
-                return m_colours[row];
-            }
             if (col == 2)
             {
                 return m_list[row];
@@ -95,6 +104,7 @@ public:
     wxArrayString m_list;
     wxArrayInt    m_bools;
     wxArrayString m_colours;
+    wxArrayInt    m_progress;
 };
 
 // -------------------------------------
@@ -231,6 +241,8 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     MyCustomCell *custom_cell = new MyCustomCell;
     column = new wxDataViewColumn( wxT("custom"), custom_cell, 4 );
     dataview_left->AppendColumn( column );
+    
+    dataview_left->AppendProgressColumn( wxT("progress"), 5 );
     
     // Right wxDataViewCtrl using the same model
     dataview_right = new wxDataViewCtrl( this, -1 );

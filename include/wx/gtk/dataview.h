@@ -83,8 +83,10 @@ class wxDataViewCustomCell: public wxDataViewCell
 {
 public:
     wxDataViewCustomCell( const wxString &varianttype = wxT("string"), 
-                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                          bool no_init = false );
     ~wxDataViewCustomCell();
+    bool Init();
     
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
     virtual wxSize GetSize() = 0;
@@ -97,6 +99,31 @@ private:
     
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomCell)
+};
+    
+// --------------------------------------------------------- 
+// wxDataViewProgressCell
+// --------------------------------------------------------- 
+
+class wxDataViewProgressCell: public wxDataViewCustomCell
+{
+public:
+    wxDataViewProgressCell( const wxString &label = wxEmptyString, 
+                            const wxString &varianttype = wxT("long"), 
+                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+    ~wxDataViewProgressCell();
+    
+    bool SetValue( const wxVariant &value );
+    
+    virtual bool Render( wxRect cell, wxDC *dc, int state );
+    virtual wxSize GetSize();
+    
+private:
+    wxString    m_label;
+    int         m_value;
+    
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressCell)
 };
     
 // --------------------------------------------------------- 
