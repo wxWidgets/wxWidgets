@@ -15,6 +15,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_DATAVIEWCTRL
+
 #include "wx/object.h"
 #include "wx/dataview.h"
 #include "wx/log.h"
@@ -226,3 +230,4 @@ wxDataViewColumn* wxDataViewCtrlBase::GetColumn( size_t pos )
     return (wxDataViewColumn*) m_cols[ pos ];
 }
 
+#endif
