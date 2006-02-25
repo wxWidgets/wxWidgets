@@ -45,6 +45,10 @@ wxGTK:
 - Send wxSetCursorEvent
 - Fix RequestMore for idle events.
 - Implement user dashes for PS and GNOME printing.
+- Correct update region code. Don't always invalidate the
+  whole window upon resize. Reenable support for the
+  wxNO_FULL_REPAINT_ON_RESIZE flag. Also disable refreshing
+  custom controls when focusing in and out.
 
 wxMSW:
 
