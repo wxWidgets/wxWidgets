@@ -344,8 +344,8 @@ protected: \
         { \
             if( m_equals( m_getKey( (*node)->m_value ), key ) ) \
                 return node; \
-            /* Tell the compiler to not do any strict-aliasing assumptions with the void cast */ \
-            node = (Node**)(void*)&(*node)->m_nxt; \
+            /* Tell the compiler to not do any strict-aliasing assumptions with a void cast? Can we make such a runtime guarantee? */ \
+            node = (Node**)&(*node)->m_nxt; \
         } \
  \
         return NULL; \
