@@ -343,7 +343,7 @@ wxgtk_list_store_iter_next (GtkTreeModel  *tree_model,
     if (n == -1)
         return FALSE;
         
-    if (n >= (int) list_store->model->GetNumberOfRows())
+    if (n >= (int) list_store->model->GetNumberOfRows()-1)
         return FALSE;
         
     iter->user_data = (gpointer) ++n;
@@ -908,7 +908,7 @@ class wxDataViewCtrlDC: public wxWindowDC
 public:
     wxDataViewCtrlDC( wxDataViewCtrl *window )
     {
-        GtkWidget *widget = window->GetHandle();
+        GtkWidget *widget = window->m_treeview;
         // Set later
         m_window = NULL;
         
@@ -1143,8 +1143,16 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
         wxFAIL_MSG( wxT("wxDataViewCtrl creation failed") );
         return FALSE;
     }
+
+    m_widget = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (m_widget), GTK_SHADOW_IN);
+
+    m_treeview = gtk_tree_view_new();
+    gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
     
-    m_widget = gtk_tree_view_new();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (m_widget),
+        GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+    gtk_widget_show (m_treeview);
     
     m_parent->DoAddChild( this );
 
@@ -1166,7 +1174,8 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewListModel *model )
 
     model->SetNotifier( notifier );    
 
-    gtk_tree_view_set_model( GTK_TREE_VIEW(m_widget), GTK_TREE_MODEL(gtk_store) );
+    gtk_tree_view_set_model( GTK_TREE_VIEW(m_treeview), GTK_TREE_MODEL(gtk_store) );
+    g_object_unref( gtk_store );
     
     return true;
 }
@@ -1178,7 +1187,7 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
         
     GtkTreeViewColumn *column = (GtkTreeViewColumn *)col->GetGtkHandle();
 
-    gtk_tree_view_append_column( GTK_TREE_VIEW(m_widget), column );
+    gtk_tree_view_append_column( GTK_TREE_VIEW(m_treeview), column );
 
     return true;
 }

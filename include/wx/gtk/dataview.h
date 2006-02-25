@@ -179,7 +179,11 @@ public:
            const wxValidator& validator = wxDefaultValidator );
 
     virtual bool AssociateModel( wxDataViewListModel *model );
-    virtual bool AppendColumn( wxDataViewColumn *col );    
+    virtual bool AppendColumn( wxDataViewColumn *col );
+    
+private:
+    friend class wxDataViewCtrlDC;
+    GtkWidget       *m_treeview;
     
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)
