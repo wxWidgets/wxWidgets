@@ -2427,7 +2427,10 @@ static void HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 
     // TODO: support for centred/right aligned columns
     ::DrawText(hdc, text, -1, &rc,
-               DT_WORD_ELLIPSIS | DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER);
+#ifndef __WXWINCE__
+               DT_WORD_ELLIPSIS |
+#endif // __WXWINCE__
+               DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER);
 }
 
 static void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
