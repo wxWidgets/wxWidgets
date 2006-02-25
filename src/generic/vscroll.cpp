@@ -492,7 +492,7 @@ void wxHVScrolledWindow::Init()
     // we're initially empty
     m_rowsMax =
     m_columnsMax =
-    m_rowsFirst = 
+    m_rowsFirst =
     m_columnsFirst = 0;
 
     // these should always be strictly positive
@@ -769,17 +769,17 @@ void wxHVScrolledWindow::SetRowColumnCounts(size_t rowCount, size_t columnCount)
     // and our estimate for their total height and width
     m_heightTotal = EstimateTotalHeight();
     m_widthTotal = EstimateTotalWidth();
-    
+
     // recalculate the scrollbars parameters
     if(m_rowsFirst >= rowCount)
         m_rowsFirst = rowCount-1;
 
     if(m_columnsFirst >= columnCount)
         m_columnsFirst = columnCount-1;
-    
+
     if(m_rowsFirst < 0)
         m_rowsFirst = 0;
-    
+
     if(m_columnsFirst < 0)
         m_columnsFirst = 0;
 
@@ -844,12 +844,14 @@ void wxHVScrolledWindow::RefreshRowColumn(size_t row, size_t column)
     rect.height = OnGetRowHeight(row);
     rect.width = OnGetColumnWidth(column);
 
-    for ( size_t n = GetVisibleRowsBegin(); n < row; n++ )
+    size_t n;
+
+    for ( n = GetVisibleRowsBegin(); n < row; n++ )
     {
         rect.y += OnGetRowHeight(n);
     }
 
-    for ( size_t n = GetVisibleColumnsBegin(); n < column; n++ )
+    for ( n = GetVisibleColumnsBegin(); n < column; n++ )
     {
         rect.x += OnGetColumnWidth(n);
     }
@@ -942,26 +944,28 @@ void wxHVScrolledWindow::RefreshRowsColumns(size_t fromRow, size_t toRow,
 
     // calculate the rect occupied by these lines on screen
     wxRect rect;
-    for ( size_t nBefore = GetVisibleRowsBegin();
+    size_t nBefore, nBetween;
+
+    for ( nBefore = GetVisibleRowsBegin();
           nBefore < fromRow;
           nBefore++ )
     {
         rect.y += OnGetRowHeight(nBefore);
     }
 
-    for ( size_t nBetween = fromRow; nBetween <= toRow; nBetween++ )
+    for ( nBetween = fromRow; nBetween <= toRow; nBetween++ )
     {
         rect.height += OnGetRowHeight(nBetween);
     }
 
-    for ( size_t nBefore = GetVisibleColumnsBegin();
+    for ( nBefore = GetVisibleColumnsBegin();
           nBefore < fromColumn;
           nBefore++ )
     {
         rect.x += OnGetColumnWidth(nBefore);
     }
 
-    for ( size_t nBetween = fromColumn; nBetween <= toColumn; nBetween++ )
+    for ( nBetween = fromColumn; nBetween <= toColumn; nBetween++ )
     {
         rect.width += OnGetColumnWidth(nBetween);
     }
@@ -985,7 +989,7 @@ bool wxHVScrolledWindow::Layout()
         // virtual size and scrolled position of the window.
 
         int x, y, w, h;
-        
+
         y = -GetRowsHeight(0, GetVisibleRowsBegin());
         x = -GetColumnsWidth(0, GetVisibleColumnsBegin());
         GetVirtualSize(&w, &h);
@@ -1011,7 +1015,7 @@ wxPoint wxHVScrolledWindow::HitTest(wxCoord x, wxCoord y) const
         if ( y < 0 )
             hit.y = row;
     }
-    
+
     for ( size_t column = GetVisibleColumnsBegin();
           column <= columnMax;
           column++ )
@@ -1056,7 +1060,7 @@ bool wxHVScrolledWindow::ScrollToRow(size_t row)
     size_t lineFirstLast = FindFirstFromBottom(m_rowsMax - 1, true);
     if ( row > lineFirstLast )
         row = lineFirstLast;
-    
+
     // anything to do?
     if ( row == m_rowsFirst )
     {
@@ -1078,7 +1082,7 @@ bool wxHVScrolledWindow::ScrollToRow(size_t row)
     // finally, scroll the actual window contents vertically
     if(m_physicalScrolling)
         ScrollWindow(0, GetRowsHeight(GetVisibleRowsBegin(), lineFirstOld));
-    
+
     return true;
 }
 
@@ -1358,7 +1362,7 @@ void wxHVScrolledWindow::OnScroll(wxScrollWinEvent& event)
 
         ScrollToRow(rowsFirstNew);
     }
-    
+
 
 #ifdef __WXMAC__
     Update();
@@ -1387,4 +1391,3 @@ void wxHVScrolledWindow::OnMouseWheel(wxMouseEvent& event)
 }
 
 #endif
-
