@@ -3957,17 +3957,6 @@ bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
         node = node->GetNext();
     }
 
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-    if ( IsTopLevel() )
-    {
-        SHACTIVATEINFO *info = (SHACTIVATEINFO*) m_activateInfo;
-        if ( info )
-        {
-            return SHHandleWMSettingChange(GetHwnd(), wParam, lParam, info) == TRUE;
-        }
-    }
-#endif // defined(__SMARTPHONE__) || defined(__POCKETPC__)
-
     // let the system handle it
     return false;
 }

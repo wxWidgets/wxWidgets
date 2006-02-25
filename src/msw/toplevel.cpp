@@ -312,6 +312,19 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
     return (WXHWND)hwndParent;
 }
 
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+bool wxTopLevelWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
+{
+    SHACTIVATEINFO *info = (SHACTIVATEINFO*) m_activateInfo;
+    if ( info )
+    {
+        return SHHandleWMSettingChange(GetHwnd(), wParam, lParam, info) == TRUE;
+    }
+
+    return false;
+}
+#endif
+
 WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
@@ -334,6 +347,18 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
             if (wxTheApp)
                 wxTheApp->SetActive(wParam != 0, FindFocus());
 
+            break;
+        }
+        case WM_SETTINGCHANGE:
+        {
+            processed = HandleSettingChange(wParam, lParam);
+
+            // if it was processed will still need to allow the base class to
+            // forward this message to child windows
+            if ( processed )
+            {
+                wxTopLevelWindowBase::MSWWindowProc(message, wParam, lParam);
+            }
             break;
         }
         case WM_HIBERNATE:
