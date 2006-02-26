@@ -2469,6 +2469,7 @@ COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/calctrl.h \
+	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
 	wx/generic/calctrl.h \
@@ -2498,11 +2499,13 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/richtext/richtextstyles.h \
 	wx/richtext/richtextxml.h \
 	wx/datectrl.h \
+	wx/dataview.h \
 	$(ADVANCED_PLATFORM_HDR) \
 	$(ADVANCED_PLATFORM_NATIVE_HDR)
 @COND_WXUNIV_0@ADVANCED_HDR = $(COND_WXUNIV_0_ADVANCED_HDR)
 COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/calctrl.h \
+	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
 	wx/generic/calctrl.h \
@@ -4425,6 +4428,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
+	monodll_datavcmn.o \
 	monodll_calctrl.o \
 	monodll_datectlg.o \
 	monodll_grid.o \
@@ -4446,6 +4450,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
+	monodll_datavcmn.o \
 	monodll_calctrl.o \
 	monodll_datectlg.o \
 	monodll_grid.o \
@@ -6045,6 +6050,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
+	monolib_datavcmn.o \
 	monolib_calctrl.o \
 	monolib_datectlg.o \
 	monolib_grid.o \
@@ -6066,6 +6072,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
+	monolib_datavcmn.o \
 	monolib_calctrl.o \
 	monolib_datectlg.o \
 	monolib_grid.o \
@@ -9273,6 +9280,7 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd = rm -f \
 @COND_USE_SOSYMLINKS_1@__advdll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd)
 @COND_PLATFORM_WIN32_1@__advdll___win32rc = advdll_version_rc.o
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
+	advdll_datavcmn.o \
 	advdll_calctrl.o \
 	advdll_datectlg.o \
 	advdll_grid.o \
@@ -9294,6 +9302,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
+	advdll_datavcmn.o \
 	advdll_calctrl.o \
 	advdll_datectlg.o \
 	advdll_grid.o \
@@ -9330,6 +9339,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 @COND_USE_PCH_1@___pch_wxprec_advlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= .pch/wxprec_advlib/wx/wxprec.h.gch
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
+	advlib_datavcmn.o \
 	advlib_calctrl.o \
 	advlib_datectlg.o \
 	advlib_grid.o \
@@ -9351,6 +9361,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
+	advlib_datavcmn.o \
 	advlib_calctrl.o \
 	advlib_datectlg.o \
 	advlib_grid.o \
@@ -9911,6 +9922,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_sound.o \
 	monodll_taskbarx11.o \
 	monodll_taskbar.o \
+	monodll_dataview.o \
 	monodll_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS =  \
@@ -9957,6 +9969,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_sound.o \
 	monolib_taskbarx11.o \
 	monolib_taskbar.o \
+	monolib_dataview.o \
 	monolib_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_0)
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
@@ -10003,6 +10016,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_sound.o \
 	advdll_taskbarx11.o \
 	advdll_taskbar.o \
+	advdll_dataview.o \
 	advdll_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_8)
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
@@ -10037,6 +10051,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_sound.o \
 	advlib_taskbarx11.o \
 	advlib_taskbar.o \
+	advlib_dataview.o \
 	advlib_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_9)
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
@@ -14696,6 +14711,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
 
+@COND_USE_GUI_1@monodll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
+
 @COND_USE_GUI_1@monodll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
@@ -14821,6 +14839,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
@@ -18467,6 +18488,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
 
+@COND_USE_GUI_1@monolib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
+
 @COND_USE_GUI_1@monolib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
@@ -18592,6 +18616,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
@@ -25394,6 +25421,9 @@ advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
+advdll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
+
 advdll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
@@ -25547,6 +25577,9 @@ advdll_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
 
@@ -25558,6 +25591,9 @@ advdll_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(ADVDLL_ODEP)
 
 advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
+
+advlib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
 advlib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
@@ -25711,6 +25747,9 @@ advlib_richtexthtml.o: $(srcdir)/src/richtext/richtexthtml.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_X11@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c

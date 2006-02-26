@@ -555,7 +555,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/ctrlcmn.cpp
     src/common/ctrlsub.cpp
     src/common/datacmn.cpp
-    src/common/datavcmn.cpp
     src/common/dcbase.cpp
     src/common/dlgcmn.cpp
     src/common/dndcmn.cpp
@@ -654,7 +653,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/control.h
     wx/ctrlsub.h
     wx/cursor.h
-    wx/dataview.h
     wx/dc.h
     wx/dcclient.h
     wx/dcmemory.h
@@ -933,7 +931,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/colordlg.cpp
     src/gtk/combobox.cpp
     src/gtk/control.cpp
-    src/gtk/dataview.cpp
     src/gtk/dialog.cpp
     src/gtk/filedlg.cpp
     src/gtk/fontdlg.cpp
@@ -977,7 +974,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/choice.h
     wx/gtk/combobox.h
     wx/gtk/control.h
-    wx/gtk/dataview.h
     wx/gtk/dialog.h
     wx/gtk/filedlg.h
     wx/gtk/fontdlg.h
@@ -2515,6 +2511,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="ADVANCED_CMN_SRC" hints="files">
+    src/common/datavcmn.cpp
     src/generic/calctrl.cpp
     src/generic/datectlg.cpp
     src/generic/grid.cpp
@@ -2536,6 +2533,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_HDR" hints="files">
     wx/calctrl.h
+    wx/dataview.h
     wx/dateevt.h
     wx/dcbuffer.h
     wx/generic/calctrl.h
@@ -2568,6 +2566,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_NATIVE_HDR" hints="files">
     wx/datectrl.h
+    wx/dataview.h
 </set>
 
 <set var="ADVANCED_MSW_SRC" hints="files">
@@ -2643,6 +2642,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_GTK_SRC" hints="files">
     src/gtk/taskbar.cpp
+    src/gtk/dataview.cpp
     src/gtk/eggtrayicon.c
 </set>
 <set var="ADVANCED_GTK1_SRC" hints="files">
