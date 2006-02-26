@@ -90,7 +90,20 @@ public:
     
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
     virtual wxSize GetSize() = 0;
-    virtual bool Activate( wxRect cell ) { return false; };
+    
+    virtual bool Activate( wxRect cell,
+                           wxDataViewListModel *model, size_t col, size_t row )   
+                           { return false; }
+    
+    virtual bool LeftClick( wxPoint cursor, wxRect cell, 
+                           wxDataViewListModel *model, size_t col, size_t row )   
+                           { return false; }
+    virtual bool RightClick( wxPoint cursor, wxRect cell,
+                           wxDataViewListModel *model, size_t col, size_t row )   
+                           { return false; }
+    virtual bool StartDrag( wxPoint cursor, wxRect cell, 
+                           wxDataViewListModel *model, size_t col, size_t row )   
+                           { return false; }
     
     // Create DC on request
     virtual wxDC *GetDC();
@@ -125,6 +138,30 @@ private:
     
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressCell)
+};
+    
+// --------------------------------------------------------- 
+// wxDataViewDateCell
+// --------------------------------------------------------- 
+
+class wxDataViewDateCell: public wxDataViewCustomCell
+{
+public:
+    wxDataViewDateCell( const wxString &varianttype = wxT("datetime"), 
+                        wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE );
+    
+    bool SetValue( const wxVariant &value );
+    
+    virtual bool Render( wxRect cell, wxDC *dc, int state );
+    virtual wxSize GetSize();
+    virtual bool Activate( wxRect cell,
+                           wxDataViewListModel *model, size_t col, size_t row );
+    
+private:
+    wxDateTime    m_date;
+    
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateCell)
 };
     
 // --------------------------------------------------------- 

@@ -203,6 +203,7 @@ public:
     virtual bool AppendTextColumn( const wxString &label, size_t model_column );
     virtual bool AppendToggleColumn( const wxString &label, size_t model_column );
     virtual bool AppendProgressColumn( const wxString &label, size_t model_column );
+    virtual bool AppendDateColumn( const wxString &label, size_t model_column );
     virtual bool AppendColumn( wxDataViewColumn *col );    
     virtual size_t GetNumberOfColumns();
     virtual bool DeleteColumn( size_t pos );

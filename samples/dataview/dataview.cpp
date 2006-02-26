@@ -30,6 +30,10 @@
 // MyTextModel
 // -------------------------------------
 
+WX_DECLARE_LIST(wxDateTime,wxArrayDate);
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(wxArrayDate);
+
 class MyTextModel: public wxDataViewListModel
 {
 public:
@@ -44,16 +48,24 @@ public:
             { m_colours.Add( wxT("red") ); m_colours.Add( wxT("green") ); }
         for (i = 0; i < 1000; i++)
             { m_progress.Add( i/10 ); }
+        for (i = 0; i < 1000; i++)
+            { 
+                wxDateTime *date = new wxDateTime( wxDateTime::Now() );
+                m_dates.Append( date ); 
+            }
     }
     
     virtual size_t GetNumberOfRows() 
         { return 1000; }
     virtual size_t GetNumberOfCols()
-        { return 6; }
+        { return 7; }
         
     // as reported by wxVariant
     virtual wxString GetColType( size_t col )
         {
+            if (col == 6)
+                return wxT("datetime");
+                
             if (col == 5)
                 return wxT("long");
                 
@@ -65,6 +77,10 @@ public:
         
     virtual wxVariant GetValue( size_t col, size_t row )
         {
+            if (col == 6)
+            {
+                return (wxDateTime) *m_dates[row];
+            } else
             if (col == 5)
             {
                 return (long) m_progress[row];
@@ -90,6 +106,10 @@ public:
         }
     virtual bool SetValue( wxVariant &value, size_t col, size_t row )
         {
+            if (col == 6)
+            {
+                *m_dates[row] = value.GetDateTime();
+            } else
             if (col == 3)
             {
                 m_bools[row] = (int) value.GetBool();
@@ -105,6 +125,7 @@ public:
     wxArrayInt    m_bools;
     wxArrayString m_colours;
     wxArrayInt    m_progress;
+    wxArrayDate   m_dates;
 };
 
 // -------------------------------------
@@ -125,7 +146,7 @@ public:
         return true;
     }
     bool Render( wxRect rect, wxDC *dc, int state )
-    {
+    {   
         dc->SetPen( *wxBLACK_PEN );
         if (m_colour == wxT("red"))
             dc->SetBrush( *wxRED_BRUSH );
@@ -140,9 +161,9 @@ public:
     {
         return wxSize(20,8);
     }
-    bool Activate( wxRect rect )
+    bool Activate( wxRect rect,
+                   wxDataViewListModel *model, size_t col, size_t row )
     {
-        wxPrintf( wxT("activate\n") );
         return false;
     }
 
@@ -249,6 +270,8 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     
     dataview_left->AppendProgressColumn( wxT("progress"), 5 );
     
+    dataview_left->AppendDateColumn( wxT("date"), 6 );
+    
     // Right wxDataViewCtrl using the same model
     dataview_right = new wxDataViewCtrl( this, -1 );
     dataview_right->AssociateModel( model );
@@ -263,9 +286,9 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     dataview_right->AppendColumn( column );
 
     wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
-    sizer->Add( dataview_left, 1, wxGROW );
+    sizer->Add( dataview_left, 3, wxGROW );
     sizer->Add(10,10);
-    sizer->Add( dataview_right, 1, wxGROW );
+    sizer->Add( dataview_right, 2, wxGROW );
     SetSizer( sizer );
 }
 

@@ -25,6 +25,8 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreednd.h>
 
+#include <gdk/gdkkeysyms.h>
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -447,6 +449,7 @@ struct _GtkWxCellRenderer
 
   /*< private >*/
   wxDataViewCustomCell *cell;
+  guint32 last_click;
 };
 
 struct _GtkWxCellRendererClass
@@ -522,6 +525,7 @@ static void
 gtk_wx_cell_renderer_init (GtkWxCellRenderer *cell)
 {
     cell->cell = NULL;
+    cell->last_click = 0;
 }
 
 static void
@@ -627,7 +631,11 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     {
         wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
         wxWindowDC* dc = (wxWindowDC*) cell->GetDC();
-        dc->m_window = window;
+        if (dc->m_window == NULL)
+        {
+            dc->m_window = window;
+            dc->SetUpDC();
+        }
         
         int state = 0;
         if (flags & GTK_CELL_RENDERER_SELECTED)
@@ -670,8 +678,54 @@ gtk_wx_cell_renderer_activate(
     rect.height -= renderer->ypad * 2;
     
     wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
+    
+    wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
+    
+    GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
+    size_t model_row = (size_t)gtk_tree_path_get_indices (treepath)[0];
+    gtk_tree_path_free( treepath );
+    
+    size_t model_col = cell->GetOwner()->GetModelColumn();
+    
+    if (event->type == GDK_BUTTON_PRESS)
+    {
+        GdkEventButton *button_event = (GdkEventButton*) event;
+        wxPoint pt( ((int) button_event->x) - renderrect.x, 
+                    ((int) button_event->y) - renderrect.y );
         
-    return cell->Activate( renderrect );
+        bool ret = false;
+        if (button_event->button == 1)
+        {
+            if (cell->LeftClick( pt, renderrect, model, model_col, model_row ))
+                ret = true;
+            if (button_event->time - wxrenderer->last_click < 400)
+                if (cell->Activate( renderrect, model, model_col, model_row ))
+                    ret = true;
+        }
+        if (button_event->button == 3)
+        {
+            if (cell->RightClick( pt, renderrect, model, model_col, model_row ))
+                ret = true;
+        }
+        
+        wxrenderer->last_click = button_event->time;
+        
+        return ret;
+    }
+    
+    if (event->type == GDK_KEY_PRESS)
+    {
+        wxPrintf( wxT("key\n") );
+        GdkEventKey *key_event = (GdkEventKey*) event;
+        if ((key_event->keyval == GDK_Return) ||
+            (key_event->keyval == GDK_Linefeed) || 
+            (key_event->keyval == GDK_Execute))
+        {
+            return cell->Activate( renderrect, model, model_col, model_row );
+        } 
+    }
+    
+    return false;
 }
 
 // --------------------------------------------------------- 
@@ -963,16 +1017,16 @@ public:
         GtkWidget *widget = window->m_treeview;
         // Set later
         m_window = NULL;
-        
+
         m_context = window->GtkGetPangoDefaultContext();
         m_layout = pango_layout_new( m_context );
         m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
         m_cmap = gtk_widget_get_colormap( widget ? widget : window->m_widget );
 
-        SetUpDC();
-
-        m_owner = window;
+        // Set m_window later
+        // SetUpDC();
+        // m_owner = window;
     }
 };
 
@@ -1022,7 +1076,13 @@ wxDataViewCustomCell::~wxDataViewCustomCell()
 wxDC *wxDataViewCustomCell::GetDC()
 {
     if (m_dc == NULL)
+    {
+        if (GetOwner() == NULL)
+            return NULL;
+        if (GetOwner()->GetOwner() == NULL)
+            return NULL;
         m_dc = new wxDataViewCtrlDC( GetOwner()->GetOwner() );
+    }
         
     return m_dc;
 }
@@ -1108,6 +1168,49 @@ wxSize wxDataViewProgressCell::GetSize()
     return wxSize(40,12);
 }
     
+// --------------------------------------------------------- 
+// wxDataViewDateCell
+// --------------------------------------------------------- 
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateCell, wxDataViewCustomCell)
+
+wxDataViewDateCell::wxDataViewDateCell( const wxString &varianttype,
+                        wxDataViewCellMode mode ) :
+    wxDataViewCustomCell( varianttype, mode )
+{
+}
+    
+bool wxDataViewDateCell::SetValue( const wxVariant &value )
+{
+    m_date = value.GetDateTime();
+    
+    return true;
+}
+
+bool wxDataViewDateCell::Render( wxRect cell, wxDC *dc, int state )
+{
+    dc->SetFont( GetOwner()->GetOwner()->GetFont() );
+    wxString tmp = m_date.FormatDate();
+    dc->DrawText( tmp, cell.x, cell.y );
+
+    return true;
+}
+
+wxSize wxDataViewDateCell::GetSize()
+{
+    wxDataViewCtrl* view = GetOwner()->GetOwner();
+    wxString tmp = m_date.FormatDate();
+    wxCoord x,y,d;
+    view->GetTextExtent( tmp, &x, &y, &d );
+    return wxSize(x,y+d);
+}
+
+bool wxDataViewDateCell::Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row )
+{
+
+    return true;
+}
+
 // --------------------------------------------------------- 
 // wxDataViewColumn
 // --------------------------------------------------------- 

@@ -208,6 +208,11 @@ bool wxDataViewCtrlBase::AppendProgressColumn( const wxString &label, size_t mod
     return AppendColumn( new wxDataViewColumn( label, new wxDataViewProgressCell(), model_column ) );
 }
 
+bool wxDataViewCtrlBase::AppendDateColumn( const wxString &label, size_t model_column )
+{
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewDateCell(), model_column ) );
+}
+
 bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )
 {
     m_cols.Append( (wxObject*) col );
