@@ -90,6 +90,7 @@ public:
     
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
     virtual wxSize GetSize() = 0;
+    virtual bool Activate( wxRect cell ) { return false; };
     
     // Create DC on request
     virtual wxDC *GetDC();

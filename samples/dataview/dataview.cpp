@@ -115,7 +115,7 @@ class MyCustomCell: public wxDataViewCustomCell
 {
 public:
     MyCustomCell() :
-        wxDataViewCustomCell( wxT("string"), wxDATAVIEW_CELL_INERT ) 
+        wxDataViewCustomCell( wxT("string"), wxDATAVIEW_CELL_ACTIVATABLE ) 
     { 
         m_colour = wxT("black"); 
     }
@@ -139,6 +139,11 @@ public:
     wxSize GetSize()
     {
         return wxSize(20,8);
+    }
+    bool Activate( wxRect rect )
+    {
+        wxPrintf( wxT("activate\n") );
+        return false;
     }
 
 private:
@@ -231,7 +236,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     
     dataview_left->AppendTextColumn( wxT("first"), 0 );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
-    
+
     wxDataViewTextCell *text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 2 );
     dataview_left->AppendColumn( column );
@@ -247,7 +252,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     // Right wxDataViewCtrl using the same model
     dataview_right = new wxDataViewCtrl( this, -1 );
     dataview_right->AssociateModel( model );
-    
+
     text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     column = new wxDataViewColumn( wxT("editable"), text_cell, 2 );
     dataview_right->AppendColumn( column );
@@ -256,7 +261,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     wxDataViewToggleCell *toggle_cell = new wxDataViewToggleCell( wxT("bool"), wxDATAVIEW_CELL_EDITABLE );
     column = new wxDataViewColumn( wxT("bool"), toggle_cell, 3 );
     dataview_right->AppendColumn( column );
-    
+
     wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
     sizer->Add( dataview_left, 1, wxGROW );
     sizer->Add(10,10);

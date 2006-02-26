@@ -133,8 +133,6 @@ public:
     virtual bool SetValue( const wxVariant &value ) { return true; }
     virtual bool GetValue( wxVariant &value )       { return true; }
     virtual bool Validate( wxVariant &value )       { return true; }
-    virtual bool BeginEdit()    { return true; }
-    virtual bool EndEdit()      { return true; }
     
     wxString GetVariantType()   { return m_variantType; }
     

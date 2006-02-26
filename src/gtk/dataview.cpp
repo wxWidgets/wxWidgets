@@ -452,28 +452,40 @@ struct _GtkWxCellRenderer
 struct _GtkWxCellRendererClass
 {
   GtkCellRendererClass cell_parent_class;
-
 };
 
 
 static GtkCellRenderer *gtk_wx_cell_renderer_new   (void);
-static void gtk_wx_cell_renderer_init       (GtkWxCellRenderer      *cell);
-static void gtk_wx_cell_renderer_class_init (GtkWxCellRendererClass *klass);
-static void gtk_wx_cell_renderer_finalize   (GObject                *object);
-static void gtk_wx_cell_renderer_get_size   (GtkCellRenderer        *cell,
-						 GtkWidget                  *widget,
-						 GdkRectangle               *rectangle,
-						 gint                       *x_offset,
-						 gint                       *y_offset,
-						 gint                       *width,
-						 gint                       *height);
-static void gtk_wx_cell_renderer_render     (GtkCellRenderer        *cell,
-						 GdkWindow                  *window,
-						 GtkWidget                  *widget,
-						 GdkRectangle               *background_area,
-						 GdkRectangle               *cell_area,
-						 GdkRectangle               *expose_area,
-						 GtkCellRendererState        flags);
+static void gtk_wx_cell_renderer_init (
+                        GtkWxCellRenderer      *cell );
+static void gtk_wx_cell_renderer_class_init(
+                        GtkWxCellRendererClass *klass );
+static void gtk_wx_cell_renderer_finalize (
+                        GObject                *object );
+static void gtk_wx_cell_renderer_get_size (
+                        GtkCellRenderer         *cell,
+						GtkWidget               *widget,
+						GdkRectangle            *rectangle,
+						gint                    *x_offset,
+						gint                    *y_offset,
+						gint                    *width,
+						gint                    *height );
+static void gtk_wx_cell_renderer_render (
+                        GtkCellRenderer         *cell,
+						GdkWindow               *window,
+						GtkWidget               *widget,
+						GdkRectangle            *background_area,
+						GdkRectangle            *cell_area,
+						GdkRectangle            *expose_area,
+						GtkCellRendererState     flags );
+static gboolean gtk_wx_cell_renderer_activate(
+                        GtkCellRenderer         *cell,
+                        GdkEvent                *event,
+                        GtkWidget               *widget,
+                        const gchar             *path,
+                        GdkRectangle            *background_area,
+                        GdkRectangle            *cell_area,
+                        GtkCellRendererState     flags );
 
 static GObjectClass *cell_parent_class = NULL;
 
@@ -482,29 +494,28 @@ static GObjectClass *cell_parent_class = NULL;
 GType 
 gtk_wx_cell_renderer_get_type (void)
 {
-  static GType cell_wx_type = 0;
+    static GType cell_wx_type = 0;
 
-  if (!cell_wx_type)
+    if (!cell_wx_type)
     {
-      static const GTypeInfo cell_wx_info =
-      {
-	sizeof (GtkWxCellRendererClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_wx_cell_renderer_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkWxCellRenderer),
-	0,              /* n_preallocs */
-	(GInstanceInitFunc) gtk_wx_cell_renderer_init,
-      };
+        static const GTypeInfo cell_wx_info =
+        {
+            sizeof (GtkWxCellRendererClass),
+            NULL,		/* base_init */
+            NULL,		/* base_finalize */
+            (GClassInitFunc) gtk_wx_cell_renderer_class_init,
+            NULL,		/* class_finalize */
+            NULL,		/* class_data */
+            sizeof (GtkWxCellRenderer),
+            0,          /* n_preallocs */
+            (GInstanceInitFunc) gtk_wx_cell_renderer_init,
+        };
 
-      cell_wx_type =
-	g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkWxCellRenderer",
-			        &cell_wx_info, (GTypeFlags)0);
+        cell_wx_type = g_type_register_static( GTK_TYPE_CELL_RENDERER, 
+            "GtkWxCellRenderer", &cell_wx_info, (GTypeFlags)0 );
     }
 
-  return cell_wx_type;
+    return cell_wx_type;
 }
 
 static void
@@ -525,6 +536,7 @@ gtk_wx_cell_renderer_class_init (GtkWxCellRendererClass *klass)
 
     cell_class->get_size = gtk_wx_cell_renderer_get_size;
     cell_class->render = gtk_wx_cell_renderer_render;
+    cell_class->activate = gtk_wx_cell_renderer_activate;
 }
 
 static void
@@ -630,6 +642,36 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
             state |= wxDATAVIEW_CELL_FOCUSED;
         cell->Render( renderrect, dc, state );
     }   
+}
+
+static gboolean 
+gtk_wx_cell_renderer_activate(
+                        GtkCellRenderer         *renderer,
+                        GdkEvent                *event,
+                        GtkWidget               *widget,
+                        const gchar             *path,
+                        GdkRectangle            *background_area,
+                        GdkRectangle            *cell_area,
+                        GtkCellRendererState     flags )
+{
+    GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
+    wxDataViewCustomCell *cell = wxrenderer->cell;
+    
+    GdkRectangle rect;
+    gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
+				     &rect.x,
+				     &rect.y,
+				     &rect.width,
+				     &rect.height);
+
+    rect.x += cell_area->x;
+    rect.y += cell_area->y;
+    rect.width  -= renderer->xpad * 2;
+    rect.height -= renderer->ypad * 2;
+    
+    wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
+        
+    return cell->Activate( renderrect );
 }
 
 // --------------------------------------------------------- 
@@ -863,13 +905,23 @@ wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype,
     
     if (m_mode & wxDATAVIEW_CELL_EDITABLE)
     {
+        g_signal_connect_after( m_renderer, "toggled", G_CALLBACK(wxGtkToggleRendererToggledCallback), this );
+    }
+    else
+    {
+
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_BOOLEAN );
-        g_value_set_boolean( &gvalue, true );
+        g_value_set_boolean( &gvalue, false );
         g_object_set_property( G_OBJECT(m_renderer), "activatable", &gvalue );
         g_value_unset( &gvalue );
-        
-        g_signal_connect_after( m_renderer, "toggled", G_CALLBACK(wxGtkToggleRendererToggledCallback), this );
+
+        GValue gvalue2 = { 0, };
+        g_value_init( &gvalue2, gtk_cell_renderer_mode_get_type() );
+        g_value_set_enum( &gvalue2, GTK_CELL_RENDERER_MODE_INERT );
+        g_object_set_property( G_OBJECT(m_renderer), "mode", &gvalue2 );
+        g_value_unset( &gvalue2 );
+
     }
 }
 
@@ -948,6 +1000,15 @@ bool wxDataViewCustomCell::Init()
     renderer->cell = this;
     
     m_renderer = (void*) renderer;
+    
+    if (m_mode & wxDATAVIEW_CELL_ACTIVATABLE)
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, gtk_cell_renderer_mode_get_type() );
+        g_value_set_enum( &gvalue, GTK_CELL_RENDERER_MODE_ACTIVATABLE );
+        g_object_set_property( G_OBJECT(m_renderer), "mode", &gvalue );
+        g_value_unset( &gvalue );
+    }
     
     return true;
 }
