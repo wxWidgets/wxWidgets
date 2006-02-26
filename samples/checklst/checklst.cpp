@@ -46,8 +46,7 @@ class CheckListBoxFrame : public wxFrame
 {
 public:
     // ctor & dtor
-    CheckListBoxFrame(wxFrame *frame, const wxChar *title,
-                      int x, int y, int w, int h);
+    CheckListBoxFrame(wxFrame *frame, const wxChar *title);
     virtual ~CheckListBoxFrame(){};
 
     // notifications
@@ -83,19 +82,20 @@ private:
 
 enum
 {
-    Menu_About = 100,
-    Menu_Quit,
+    Menu_About = wxID_ABOUT,
+    Menu_Quit = wxID_EXIT,
 
-    Menu_CheckFirst,
+    Menu_CheckFirst = wxID_HIGHEST,
     Menu_UncheckFirst,
     Menu_ToggleFirst,
     Menu_Selection,
     Menu_AddItems,
 
-    Control_First = 1000,
+    Control_First,
     Control_Listbox,
-    Btn_Up,
-    Btn_Down
+
+    Btn_Up = wxID_UP,
+    Btn_Down = wxID_DOWN
 };
 
 BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
@@ -124,8 +124,7 @@ bool CheckListBoxApp::OnInit(void)
     CheckListBoxFrame *pFrame = new CheckListBoxFrame
                                     (
                                      NULL,
-                                     _T("wxWidgets Checklistbox Sample"),
-                                     50, 50, 480, 320
+                                     _T("wxWidgets Checklistbox Sample")
                                     );
     SetTopWindow(pFrame);
 
@@ -134,16 +133,14 @@ bool CheckListBoxApp::OnInit(void)
 
 // main frame constructor
 CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
-                                     const wxChar *title,
-                                     int x, int y, int w, int h)
-                 : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
+                                     const wxChar *title)
+                 : wxFrame(frame, wxID_ANY, title)
 {
 #if wxUSE_STATUSBAR
     // create the status line
     const int widths[] = { -1, 60 };
     CreateStatusBar(2);
     SetStatusWidths(2, widths);
-    wxLogStatus(this, _T("no selection"));
 #endif // wxUSE_STATUSBAR
 
     // Make a menubar
@@ -161,7 +158,7 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     menuList->Append(Menu_UncheckFirst, _T("Uncheck the first item\tCtrl-U"));
     menuList->Append(Menu_ToggleFirst, _T("Toggle the first item\tCtrl-T"));
     menuList->AppendSeparator();
-    menuList->AppendCheckItem(Menu_AddItems, _T("Add more items\tCtrl-A"));
+    menuList->Append(Menu_AddItems, _T("Add more items\tCtrl-A"));
     menuList->AppendSeparator();
     menuList->AppendCheckItem(Menu_Selection, _T("Multiple selection\tCtrl-M"));
 
@@ -172,14 +169,13 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     SetMenuBar(menu_bar);
 
     // make a panel with some controls
-    m_panel = new wxPanel(this, wxID_ANY, wxPoint(0, 0),
-                          wxSize(400, 200), wxTAB_TRAVERSAL);
+    m_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
 
     CreateCheckListbox();
 
     // create buttons for moving the items around
-    wxButton *button1 = new wxButton(m_panel, Btn_Up, _T("   &Up  "), wxPoint(420, 90));
-    wxButton *button2 = new wxButton(m_panel, Btn_Down, _T("&Down"), wxPoint(420, 120));
+    wxButton *button1 = new wxButton(m_panel, Btn_Up);
+    wxButton *button2 = new wxButton(m_panel, Btn_Down);
 
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
@@ -197,8 +193,10 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     m_panel->SetAutoLayout( true );
     m_panel->SetSizer( mainsizer );
 
+#ifndef __WXWINCE__
     // don't allow frame to get smaller than what the sizers tell ye
     mainsizer->SetSizeHints( this );
+#endif
 
     Show(true);
 }
@@ -369,7 +367,7 @@ void CheckListBoxFrame::OnButtonMove(bool up)
     {
         selection = m_pListBox->GetSelection();
     }
-    if ( selection != -1 )
+    if ( selection != wxNOT_FOUND )
     {
         wxString label = m_pListBox->GetString(selection);
 
@@ -393,6 +391,7 @@ void CheckListBoxFrame::OnButtonMove(bool up)
             int selectionNew = up ? positionNew : positionNew - 1;
             m_pListBox->Check(selectionNew, wasChecked);
             m_pListBox->SetSelection(selectionNew);
+            m_pListBox->SetFocus();
 
             AdjustColour(selection);
             AdjustColour(selectionNew);
@@ -407,7 +406,7 @@ void CheckListBoxFrame::OnButtonMove(bool up)
 }
 
 // not implemented in ports other than (native) MSW yet
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINCE__)
 void CheckListBoxFrame::AdjustColour(size_t index)
 {
     // even items have grey backround, odd ones - white
