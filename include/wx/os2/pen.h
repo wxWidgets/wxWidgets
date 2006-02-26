@@ -33,6 +33,8 @@ protected:
     int                             m_nJoin;
     int                             m_nCap;
     wxBitmap                        m_vStipple;
+    int                             m_nbDash;
+    wxDash *                        m_dash;
     wxColour                        m_vColour;
     WXHPEN                          m_hPen;// in OS/2 GPI this will be the PS the pen is associated with
 };
@@ -83,10 +85,13 @@ public:
     inline int       GetJoin(void) const { return (M_PENDATA ? M_PENDATA->m_nJoin : 0); };
     inline int       GetCap(void) const { return (M_PENDATA ? M_PENDATA->m_nCap : 0); };
     inline int       GetPS(void) const { return (M_PENDATA ? M_PENDATA->m_hPen : 0); };
-
-    int GetDashes(wxDash **ptr) const;
-    int GetDashCount() const;
-    wxDash* GetDash() const;
+    inline int       GetDashes(wxDash **ptr) const
+    {
+        *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
+        return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
+    }
+    inline wxDash*   GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*)NULL); };
+    inline int       GetDashCount() const { return (M_PENDATA ? M_PENDATA->m_nbDash : 0); };
 
     inline wxBitmap* GetStipple(void) const { return (M_PENDATA ? (& M_PENDATA->m_vStipple) : (wxBitmap*) NULL); };
 

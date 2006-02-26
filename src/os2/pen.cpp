@@ -32,6 +32,8 @@ wxPenRefData::wxPenRefData()
     m_nWidth  = 1;
     m_nJoin   = wxJOIN_ROUND ;
     m_nCap    = wxCAP_ROUND ;
+    m_nbDash  = 0 ;
+    m_dash    = (wxDash*)NULL;
     m_hPen    = 0L;
 } // end of wxPenRefData::wxPenRefData
 
@@ -43,6 +45,8 @@ wxPenRefData::wxPenRefData(
     m_nWidth  = rData.m_nWidth;
     m_nJoin   = rData.m_nJoin;
     m_nCap    = rData.m_nCap;
+    m_nbDash  = rData.m_nbDash;
+    m_dash    = rData.m_dash;
     m_vColour = rData.m_vColour;
     m_hPen    = 0L;
 } // end of wxPenRefData::wxPenRefData
@@ -403,25 +407,6 @@ void wxPen::SetDashes( int WXUNUSED(nNbDashes),
     // Does nothing under OS/2
     //
 } // end of wxPen::SetDashes
-
-int wxPen::GetDashes( wxDash **ptr ) const
-{
-     // TODO
-     *ptr = (wxDash*) NULL;
-     return 0;
-}
-
-int wxPen::GetDashCount() const
-{
-     // TODO
-    return 0;
-}
-
-wxDash* wxPen::GetDash() const
-{
-     // TODO
-    return NULL;
-}
 
 void wxPen::SetJoin(
   int                               nJoin
