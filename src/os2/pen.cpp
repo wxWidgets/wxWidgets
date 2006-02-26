@@ -404,6 +404,25 @@ void wxPen::SetDashes( int WXUNUSED(nNbDashes),
     //
 } // end of wxPen::SetDashes
 
+int wxPen::GetDashes( wxDash **ptr ) const
+{
+     // TODO
+     *ptr = (wxDash*) NULL;
+     return 0;
+}
+
+int wxPen::GetDashCount() const
+{
+     // TODO
+    return 0;
+}
+
+wxDash* wxPen::GetDash() const
+{
+     // TODO
+    return NULL;
+}
+
 void wxPen::SetJoin(
   int                               nJoin
 )

@@ -84,6 +84,10 @@ public:
     inline int       GetCap(void) const { return (M_PENDATA ? M_PENDATA->m_nCap : 0); };
     inline int       GetPS(void) const { return (M_PENDATA ? M_PENDATA->m_hPen : 0); };
 
+    int GetDashes(wxDash **ptr) const;
+    int GetDashCount() const;
+    wxDash* GetDash() const;
+
     inline wxBitmap* GetStipple(void) const { return (M_PENDATA ? (& M_PENDATA->m_vStipple) : (wxBitmap*) NULL); };
 
     //
