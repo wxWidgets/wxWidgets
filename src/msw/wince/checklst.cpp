@@ -286,9 +286,18 @@ wxClientData* wxCheckListBox::DoGetItemClientObject(int n) const
 
 void wxCheckListBox::DoInsertItems(const wxArrayString& items, int pos)
 {
+    wxCHECK_RET( pos >= 0 && pos <= GetCount(),
+                 wxT("invalid index in wxListBox::InsertItems") );
+
     for( size_t i = 0; i < items.GetCount(); i++ )
     {
-        Insert(items[i],pos+i);
+        LVITEM newItem;
+        wxZeroMemory(newItem);
+        newItem.iItem = i+pos;
+        int ret = ListView_InsertItem( (HWND)GetHWND(), & newItem );
+        wxASSERT_MSG( int(i+pos) == ret , _T("Item not added") );
+        SetString( ret , items[i] );
+        m_itemsClientData.Insert(NULL, ret);
     }
 }
 
