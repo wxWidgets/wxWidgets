@@ -285,6 +285,10 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     column = new wxDataViewColumn( wxT("bool"), toggle_cell, 3 );
     dataview_right->AppendColumn( column );
 
+    dataview_right->AppendDateColumn( wxT("date"), 6 );
+    
+    // layout dataview controls.
+    
     wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
     sizer->Add( dataview_left, 3, wxGROW );
     sizer->Add(10,10);

@@ -17,6 +17,9 @@
 #include "wx/dataview.h"
 #include "wx/stockitem.h"
 #include "wx/dcclient.h"
+#include "wx/calctrl.h"
+#include "wx/popupwin.h"
+#include "wx/sizer.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
@@ -698,6 +701,7 @@ gtk_wx_cell_renderer_activate(
         {
             if (cell->LeftClick( pt, renderrect, model, model_col, model_row ))
                 ret = true;
+            // TODO: query system double-click time
             if (button_event->time - wxrenderer->last_click < 400)
                 if (cell->Activate( renderrect, model, model_col, model_row ))
                     ret = true;
@@ -711,18 +715,6 @@ gtk_wx_cell_renderer_activate(
         wxrenderer->last_click = button_event->time;
         
         return ret;
-    }
-    
-    if (event->type == GDK_KEY_PRESS)
-    {
-        wxPrintf( wxT("key\n") );
-        GdkEventKey *key_event = (GdkEventKey*) event;
-        if ((key_event->keyval == GDK_Return) ||
-            (key_event->keyval == GDK_Linefeed) || 
-            (key_event->keyval == GDK_Execute))
-        {
-            return cell->Activate( renderrect, model, model_col, model_row );
-        } 
     }
     
     return false;
@@ -1172,6 +1164,51 @@ wxSize wxDataViewProgressCell::GetSize()
 // wxDataViewDateCell
 // --------------------------------------------------------- 
 
+class wxDataViewDateCellPopupTransient: public wxPopupTransientWindow
+{
+public: 
+    wxDataViewDateCellPopupTransient( wxWindow* parent, wxDateTime *value,
+        wxDataViewListModel *model, size_t col, size_t row ) :
+        wxPopupTransientWindow( parent, wxBORDER_SIMPLE )
+    {
+        m_model = model;
+        m_col = col;
+        m_row = row;
+        m_cal = new wxCalendarCtrl( this, -1, *value );
+        wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
+        sizer->Add( m_cal, 1, wxGROW );
+        SetSizer( sizer );
+        sizer->Fit( this );
+    }
+    
+    virtual void OnDismiss()
+    {
+    }
+    
+    void OnCalendar( wxCalendarEvent &event );
+    
+    wxCalendarCtrl      *m_cal;
+    wxDataViewListModel *m_model; 
+    size_t               m_col;
+    size_t               m_row;
+    
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxDataViewDateCellPopupTransient,wxPopupTransientWindow)
+    EVT_CALENDAR( -1, wxDataViewDateCellPopupTransient::OnCalendar )
+END_EVENT_TABLE()
+
+void wxDataViewDateCellPopupTransient::OnCalendar( wxCalendarEvent &event )
+{
+    wxDateTime date = event.GetDate();
+    wxVariant value = date;
+    m_model->SetValue( value, m_col, m_row );
+    m_model->ValueChanged( m_col, m_row );
+    DismissAndNotify();
+}
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateCell, wxDataViewCustomCell)
 
 wxDataViewDateCell::wxDataViewDateCell( const wxString &varianttype,
@@ -1207,6 +1244,15 @@ wxSize wxDataViewDateCell::GetSize()
 
 bool wxDataViewDateCell::Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row )
 {
+    wxVariant variant = model->GetValue( col, row );
+    wxDateTime value = variant.GetDateTime();
+
+    wxDataViewDateCellPopupTransient *popup = new wxDataViewDateCellPopupTransient( 
+        GetOwner()->GetOwner()->GetParent(), &value, model, col, row );
+    wxPoint pos = wxGetMousePosition();
+    popup->Move( pos );
+    popup->Layout();
+    popup->Popup( popup->m_cal );
 
     return true;
 }
