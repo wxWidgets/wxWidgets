@@ -66,7 +66,7 @@ class Job(object):
         self.proc = None
         if self.label:
             if not os.path.exists(self.LOGBASE):
-                os.mkdirs(self.LOGBASE)
+                os.makedirs(self.LOGBASE)
             self.log = file("%s/%s.log" % (self.LOGBASE, label), "w", 0)
 
     def start(self):
