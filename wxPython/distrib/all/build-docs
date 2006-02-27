@@ -3,8 +3,10 @@
 
 set -o errexit
 
+set
+
 # read the config variables from the file given on the command line
-. $1
+# . $1
 
 
 if [ $skipdocs != yes ]; then 

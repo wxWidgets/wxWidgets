@@ -24,6 +24,29 @@ __all__ = ["Job", "Task", "TaskRunner"]
 
 #----------------------------------------------------------------------
 
+# For environment settings
+class Config:
+    def asDict(self):
+        return self.__dict__.copy()
+
+    def write(self, filename="config", outfile=None):
+        if outfile is None:
+            f = file(filename, "w")
+        else:
+            f = outfile
+        for k, v in self.__dict__.items():
+            f.write('%s="%s"\n' % (k, v))
+            
+    def read(self, filename="config"):
+        myfile = open(filename, "r")
+        for line in myfile.readlines():
+            line = line.strip()
+            if len(line) > 0 and line[0] == "#":
+                continue # it's a comment, move on
+            data = line.split("=")
+            if len(data) == 2:
+                self.__dict__[data[0]] = data[1]
+        myfile.close()
 
 class Job(object):
     """
@@ -35,17 +58,21 @@ class Job(object):
 
     LOGBASE="."
     
-    def __init__(self, label, args):
+    def __init__(self, label, command, args=[], env=os.environ):
         self.label = label
+        self.command = command
         self.args = args
+        self.env = env
         self.proc = None
         if self.label:
+            if not os.path.exists(self.LOGBASE):
+                os.mkdirs(self.LOGBASE)
             self.log = file("%s/%s.log" % (self.LOGBASE, label), "w", 0)
 
     def start(self):
-        self.proc = Popen(self.args, # the command and args to execute
-                          stdout=PIPE, stderr=STDOUT,
-                          bufsize=0, # line-buffered
+        self.proc = Popen([self.command] + self.args, # the command and args to execute
+                          stdout=PIPE, stderr=STDOUT, env=self.env,
+                          bufsize=0 # line-buffered
                           )
         # put the file in non-blocking mode
         #flags = fcntl.fcntl (self.proc.stdout, fcntl.F_GETFL, 0)
