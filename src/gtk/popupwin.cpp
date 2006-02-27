@@ -39,13 +39,16 @@ static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPo
 {
     GtkWidget *child = gtk_get_event_widget (gdk_event);
 
-  /* We don't ask for button press events on the grab widget, so
-   *  if an event is reported directly to the grab widget, it must
-   *  be on a window outside the application (and thus we remove
-   *  the popup window). Otherwise, we check if the widget is a child
-   *  of the grab widget, and only remove the popup window if it
-   *  is not.
-   */
+    /* Ignore events sent out before we connected to the signal */
+    if (win->m_time >= ((GdkEventButton*)gdk_event)->time)
+        return FALSE;
+
+    /*  We don't ask for button press events on the grab widget, so
+     *  if an event is reported directly to the grab widget, it must
+     *  be on a window outside the application (and thus we remove
+     *  the popup window). Otherwise, we check if the widget is a child
+     *  of the grab widget, and only remove the popup window if it
+     *  is not. */
     if (child != widget)
     {
         while (child)
@@ -75,7 +78,7 @@ static gint gtk_dialog_focus_callback( GtkWidget *widget, GtkDirectionType WXUNU
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    // This disables GTK's tab traversal
+    /* This disables GTK's tab traversal */
     g_signal_stop_emission_by_name (widget, "focus");
     return TRUE;
 }
@@ -213,6 +216,8 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     // disable native tab traversal
     g_signal_connect (m_widget, "focus",
                       G_CALLBACK (gtk_dialog_focus_callback), this);
+
+    m_time = gtk_get_current_event_time();
 
     g_signal_connect (m_widget, "button_press_event",
                       G_CALLBACK (gtk_popup_button_press), this);

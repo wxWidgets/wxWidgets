@@ -35,6 +35,9 @@ public:
     // --------------
 
     virtual void OnInternalIdle();
+    
+    // GTK time when connecting to button_press signal
+    wxUint32  m_time;
 
 
 protected:
