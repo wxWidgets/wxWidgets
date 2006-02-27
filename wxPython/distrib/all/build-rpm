@@ -6,10 +6,10 @@ set -o errexit
 # read the config variables from the file given on the command line
 # . $1
 
-coHost=$2
-host=$3
-reltag=$4
-shift;shift;shift;shift
+coHost=$1
+host=$2
+reltag=$3
+shift;shift;shift
 pyver=$@
 
 if [ $pyver = config ]; then

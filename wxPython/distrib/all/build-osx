@@ -7,9 +7,9 @@ set -o errexit
 # . $1
 
 
-host=$2
-flavor=$3
-pyver=$4
+host=$1
+flavor=$2
+pyver=$3
 
 if [ $skiposx != yes ]; then
     # test if the target machine is online
