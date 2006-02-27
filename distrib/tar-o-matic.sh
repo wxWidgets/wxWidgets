@@ -2,7 +2,7 @@
 
 # create wx tarballs automatically given a tag, or from CVS HEAD
 PROGNAME=$0
-VERSION=$1
+VERSION=""
 TAG="" 
 STARTDIR=$PWD
 
@@ -12,6 +12,8 @@ SPINWXMOTIF=0
 SPINWXMAC=0
 SPINWXBASE=0
 SPINWXMGL=0
+SPINWXALL=0
+SPINWXMSW=0
 SPINDOCS=0
 SPINEVERYTHING=0
 REBAKE=0
@@ -50,6 +52,8 @@ usage()
     echo "    --wxmotif      Spin wxMotif"
     echo "    --wxmac        Spin wxMac"
     echo "    --wxmgl        Spin wxMGL"
+    echo "    --wxall        Spin wxALL"
+    echo "    --wxmsw        Spin wxMSW"
     echo "    --docs         Spin docs"
     echo "    --all          Spin EVERYTHING"
     echo "    --updatecvs    Update from CVS"
@@ -78,6 +82,7 @@ if [ "$1" = "--about" ]; then
 	exit
 fi
 
+VERSION=$1
 shift 1
 
 FINDTAG=`echo "$1" | sed /\-\-/p`
@@ -93,6 +98,7 @@ for i in "$@"; do
 	--wxmac) SPINWXMAC=1 ;;
 	--wxbase) SPINWXBASE=1 ;;
 	--wxmgl) SPINWXMGL=1 ;;
+	--wxmsw) SPINWXMSW=1 ;;
 	--wxmotif) SPINWXMOTIF=1 ;;
 	--docs) SPINDOCS=1 ;;
 	--all) SPINEVERYTHING=1 ;;
@@ -126,6 +132,7 @@ echo "" # add a blank line for readability
 cd $STARTDIR/temp-wx
 cvs -d:pserver:anoncvs:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
 
+echo "cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout $TAGNAME wxWidgets"
 cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout $TAGNAME wxWidgets
 
 if [ "$REBAKE" = "1" ]; then
