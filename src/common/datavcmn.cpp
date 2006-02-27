@@ -34,11 +34,26 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewModel, wxObject)
 // wxDataViewListModel
 // --------------------------------------------------------- 
 
+class wxDataViewViewingColumn: public wxObject
+{
+public:
+    wxDataViewViewingColumn( wxDataViewColumn *view_column, size_t model_column )
+    {
+        m_viewColumn = view_column;
+        m_modelColumn = model_column;
+    }
+    
+    wxDataViewColumn   *m_viewColumn;
+    size_t              m_modelColumn;
+};
+
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewListModel, wxDataViewModel)
 
 wxDataViewListModel::wxDataViewListModel()
 {
     m_notifier = NULL;
+    m_viewingColumns.DeleteContents( true );
 }
 
 wxDataViewListModel::~wxDataViewListModel()
@@ -89,10 +104,23 @@ bool wxDataViewListModel::RowChanged( size_t row )
 
 bool wxDataViewListModel::ValueChanged( size_t col, size_t row )
 {
+    bool ret = false;
+
     if (m_notifier)
-        return m_notifier->ValueChanged( col, row );
+        ret = m_notifier->ValueChanged( col, row );
         
-    return false;
+    wxNode *node = m_viewingColumns.GetFirst();
+    while (node)
+    {
+        wxDataViewViewingColumn* tmp = (wxDataViewViewingColumn*) node->GetData();
+        
+        if (tmp->m_modelColumn == col)
+            m_notifier->ValueChanged( tmp->m_viewColumn, col, row );
+    
+        node = node->GetNext();
+    }
+    
+    return ret;
 }
 
 bool wxDataViewListModel::Cleared()
@@ -101,6 +129,28 @@ bool wxDataViewListModel::Cleared()
         return m_notifier->Cleared();
         
     return false;
+}
+
+void wxDataViewListModel::AddViewingColumn( wxDataViewColumn *view_column, size_t model_column )
+{
+    m_viewingColumns.Append( new wxDataViewViewingColumn( view_column, model_column ) );
+}
+
+void wxDataViewListModel::RemoveViewingColumn( wxDataViewColumn *column )
+{
+    wxNode *node = m_viewingColumns.GetFirst();
+    while (node)
+    {
+        wxDataViewViewingColumn* tmp = (wxDataViewViewingColumn*) node->GetData();
+        
+        if (tmp->m_viewColumn == column)
+        {
+            m_viewingColumns.DeleteObject( tmp );
+            return;
+        }
+    
+        node = node->GetNext();
+    }
 }
 
 void wxDataViewListModel::SetNotifier( wxDataViewListModelNotifier *notifier )
@@ -148,6 +198,11 @@ wxDataViewColumnBase::~wxDataViewColumnBase()
 {
     if (m_cell)
         delete m_cell;
+        
+    if (GetOwner())
+    {
+        GetOwner()->GetModel()->RemoveViewingColumn( (wxDataViewColumn*) this );
+    }
 }
 
 void wxDataViewColumnBase::SetTitle( const wxString &title )
@@ -217,6 +272,7 @@ bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )
 {
     m_cols.Append( (wxObject*) col );
     col->SetOwner( (wxDataViewCtrl*) this );
+    m_model->AddViewingColumn( col, col->GetModelColumn() );
     return true;
 }
 

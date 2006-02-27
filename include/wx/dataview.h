@@ -64,8 +64,9 @@ public:
     virtual bool RowInserted( size_t before ) = 0;
     virtual bool RowDeleted( size_t row ) = 0;
     virtual bool RowChanged( size_t row ) = 0;
-    virtual bool ValueChanged( size_t row, size_t col ) = 0;
+    virtual bool ValueChanged( size_t col, size_t row ) = 0;
     virtual bool Cleared() = 0;
+    virtual bool ValueChanged( wxDataViewColumn *view_column, size_t model_column, size_t row ) = 0;
 };
 
 // --------------------------------------------------------- 
@@ -95,12 +96,18 @@ public:
     bool RowChanged( size_t row );
     bool ValueChanged( size_t col, size_t row );
     bool Cleared();
+
+    // Used internally    
+    void AddViewingColumn( wxDataViewColumn *view_column, size_t model_column );
+    void RemoveViewingColumn( wxDataViewColumn *column );
     
+    // Used internally    
     void SetNotifier( wxDataViewListModelNotifier *notifier );
     wxDataViewListModelNotifier* GetNotifier();
     
 private:
     wxDataViewListModelNotifier *m_notifier;
+    wxList                       m_viewingColumns;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewListModel)

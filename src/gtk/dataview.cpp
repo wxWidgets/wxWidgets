@@ -736,6 +736,7 @@ public:
     virtual bool RowChanged( size_t row );
     virtual bool ValueChanged( size_t col, size_t row );
     virtual bool Cleared();
+    virtual bool ValueChanged( wxDataViewColumn *view_column, size_t model_column, size_t row );
     
     GtkWxListStore      *m_gtk_store;
     wxDataViewListModel *m_wx_model;
@@ -810,6 +811,11 @@ bool wxGtkDataViewListModelNotifier::ValueChanged( size_t col, size_t row )
 }
 
 bool wxGtkDataViewListModelNotifier::Cleared()
+{
+    return false;
+}
+
+bool wxGtkDataViewListModelNotifier::ValueChanged( wxDataViewColumn *view_column, size_t model_column, size_t row )
 {
     return false;
 }
