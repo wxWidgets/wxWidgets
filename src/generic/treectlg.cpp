@@ -3144,6 +3144,8 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     }
     else if ( (event.LeftUp() || event.RightUp()) && m_isDragging )
     {
+        ReleaseMouse();
+
         // erase the highlighting
         DrawDropEffect(m_dropTarget);
 
@@ -3165,8 +3167,6 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
         m_isDragging = false;
         m_dropTarget = (wxGenericTreeItem *)NULL;
-
-        ReleaseMouse();
 
         SetCursor(m_oldCursor);
 
