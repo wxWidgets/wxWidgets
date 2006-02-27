@@ -817,13 +817,6 @@ bool wxGtkDataViewListModelNotifier::Cleared()
 
 bool wxGtkDataViewListModelNotifier::ValueChanged( wxDataViewColumn *view_column, size_t model_column, size_t row )
 {
-    wxDataViewCell *cell = view_column->GetCell();
-    if (!cell)
-        return false;
-        
-    wxVariant variant = m_wx_model->GetValue( model_column, row );
-    cell->SetValue( variant );
-    
     GtkTreeView *widget = GTK_TREE_VIEW(view_column->GetOwner()->m_treeview);
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(view_column->GetGtkHandle());
 
