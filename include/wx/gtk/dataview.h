@@ -221,6 +221,7 @@ public:
     
 private:
     friend class wxDataViewCtrlDC;
+    friend class wxGtkDataViewListModelNotifier;
     GtkWidget       *m_treeview;
     
 private:

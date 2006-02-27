@@ -817,7 +817,29 @@ bool wxGtkDataViewListModelNotifier::Cleared()
 
 bool wxGtkDataViewListModelNotifier::ValueChanged( wxDataViewColumn *view_column, size_t model_column, size_t row )
 {
-    return false;
+    wxDataViewCell *cell = view_column->GetCell();
+    if (!cell)
+        return false;
+        
+    wxVariant variant = m_wx_model->GetValue( model_column, row );
+    cell->SetValue( variant );
+    
+    GtkTreeView *widget = GTK_TREE_VIEW(view_column->GetOwner()->m_treeview);
+    GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(view_column->GetGtkHandle());
+
+    // Get cell area
+    GtkTreePath *path = gtk_tree_path_new();
+    gtk_tree_path_append_index( path, row );
+    GdkRectangle cell_area;
+    gtk_tree_view_get_cell_area( widget, path, column, &cell_area );
+    gtk_tree_path_free( path ); 
+
+    int ydiff = column->button->allocation.height;
+    // Redraw
+    gtk_widget_queue_draw_area( GTK_WIDGET(widget), 
+        cell_area.x, ydiff + cell_area.y, cell_area.width, cell_area.height );
+
+    return true;
 }
 
 // --------------------------------------------------------- 
