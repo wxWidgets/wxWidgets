@@ -131,7 +131,6 @@ def main(args):
     config_env = config.asDict()
     config_env.update(os.environ)
 
-    print `config_env`
     # Things that need to be done before any of the builds
     initialTask = Task([ Job("cleanup", "distrib/all/build-setup", env=config_env),
                          Job("makedocs", "distrib/all/build-docs", env=config_env),
