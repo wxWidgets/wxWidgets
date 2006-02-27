@@ -251,7 +251,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
 
   for (wxStringList::compatibility_iterator node = GetFirst(); node; node = node->GetNext())
     {
-      const wxChar *path = node->GetData();
+      const wxString path(node->GetData());
       wxStrcpy (wxFileFunctionsBuffer, path);
       wxChar ch = wxFileFunctionsBuffer[wxStrlen(wxFileFunctionsBuffer)-1];
       if (ch != wxT('\\') && ch != wxT('/'))
