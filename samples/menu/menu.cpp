@@ -930,7 +930,7 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::ShowContextMenu(const wxPoint& pos)
 {
-    wxMenu menu(_T("Test popup"));
+    wxMenu menu;
 
     menu.Append(Menu_Help_About, _T("&About"));
     menu.Append(Menu_Popup_Submenu, _T("&Submenu"), CreateDummyMenu(NULL));
