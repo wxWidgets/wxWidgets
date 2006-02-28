@@ -496,6 +496,9 @@ MyFrame::MyFrame()
                  _T("menubar itself.\n\n")
                  _T("Right click the band below to test popup menus.\n"));
 #endif
+#ifdef __POCKETPC__
+    EnableContextMenu();
+#endif
 }
 
 MyFrame::~MyFrame()
