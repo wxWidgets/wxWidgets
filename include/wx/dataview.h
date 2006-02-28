@@ -89,21 +89,21 @@ public:
     virtual bool SetValue( wxVariant &variant, size_t col, size_t row ) = 0;
 
     // delegated notifiers
-    bool RowAppended();
-    bool RowPrepended();
-    bool RowInserted( size_t before );
-    bool RowDeleted( size_t row );
-    bool RowChanged( size_t row );
-    bool ValueChanged( size_t col, size_t row );
-    bool Cleared();
+    virtual bool RowAppended();
+    virtual bool RowPrepended();
+    virtual bool RowInserted( size_t before );
+    virtual bool RowDeleted( size_t row );
+    virtual bool RowChanged( size_t row );
+    virtual bool ValueChanged( size_t col, size_t row );
+    virtual bool Cleared();
 
     // Used internally    
-    void AddViewingColumn( wxDataViewColumn *view_column, size_t model_column );
-    void RemoveViewingColumn( wxDataViewColumn *column );
+    virtual void AddViewingColumn( wxDataViewColumn *view_column, size_t model_column );
+    virtual void RemoveViewingColumn( wxDataViewColumn *column );
     
     // Used internally    
-    void SetNotifier( wxDataViewListModelNotifier *notifier );
-    wxDataViewListModelNotifier* GetNotifier();
+    virtual void SetNotifier( wxDataViewListModelNotifier *notifier );
+    virtual wxDataViewListModelNotifier* GetNotifier();
     
 private:
     wxDataViewListModelNotifier *m_notifier;
@@ -111,6 +111,51 @@ private:
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewListModel)
+};
+
+// --------------------------------------------------------- 
+// wxDataViewSortedListModel
+// --------------------------------------------------------- 
+
+typedef int (wxCALLBACK *wxDataViewListModelCompare)
+    (size_t row1, size_t row2, size_t col, wxDataViewListModel* model );
+
+WX_DEFINE_SORTED_EXPORTED_ARRAY_SIZE_T(size_t, wxDataViewSortedIndexArray );
+
+class wxDataViewSortedListModel: public wxDataViewListModel
+{
+public:
+    wxDataViewSortedListModel( wxDataViewListModel *child );
+    virtual ~wxDataViewSortedListModel();
+
+    virtual size_t GetNumberOfRows();
+    virtual size_t GetNumberOfCols();
+    // return type as reported by wxVariant
+    virtual wxString GetColType( size_t col );
+    // get value into a wxVariant
+    virtual wxVariant GetValue( size_t col, size_t row );
+    // set value, call ValueChanged() afterwards!
+    virtual bool SetValue( wxVariant &variant, size_t col, size_t row );
+
+    // delegated notifiers
+    virtual bool RowAppended();
+    virtual bool RowPrepended();
+    virtual bool RowInserted( size_t before );
+    virtual bool RowDeleted( size_t row );
+    virtual bool RowChanged( size_t row );
+    virtual bool ValueChanged( size_t col, size_t row );
+    virtual bool Cleared();
+
+    // Used internally    
+    void SetNotifier( wxDataViewListModelNotifier *notifier );
+    wxDataViewListModelNotifier* GetNotifier();
+    
+private:
+    wxDataViewListModel             *m_child;
+    wxDataViewSortedIndexArray       m_array;
+
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewSortedListModel)
 };
 
 // --------------------------------------------------------- 

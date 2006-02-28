@@ -167,6 +167,182 @@ wxDataViewListModelNotifier* wxDataViewListModel::GetNotifier()
 }
 
 // --------------------------------------------------------- 
+// wxDataViewSortedListModel
+// --------------------------------------------------------- 
+
+int wxCALLBACK wxDataViewListModelSortedDefaultCompare
+      (size_t row1, size_t row2, size_t col, wxDataViewListModel* model )
+{
+    wxVariant value1 = model->GetValue( col, row1 );
+    wxVariant value2 = model->GetValue( col, row2 );
+    if (value1.GetType() == wxT("string"))
+    {
+        wxString str1 = value1.GetString();
+        wxString str2 = value2.GetString();
+        return str1.Cmp( str2 );
+    }
+    if (value1.GetType() == wxT("long"))
+    {
+        long l1 = value1.GetLong();
+        long l2 = value2.GetLong();
+        return l1-l2;
+    }
+    if (value1.GetType() == wxT("double"))
+    {
+        double d1 = value1.GetDouble();
+        double d2 = value2.GetDouble();
+        if (d1 == d2) return 0;
+        if (d1 < d2) return 1;
+        return -1;
+    }
+    if (value1.GetType() == wxT("datetime"))
+    {
+        wxDateTime dt1 = value1.GetDateTime();
+        wxDateTime dt2 = value2.GetDateTime();
+        if (dt1.IsEqualTo(dt2)) return 0;
+        if (dt1.IsEarlierThan(dt2)) return 1;
+        return -1;
+    }
+
+    return 0;
+}
+
+static wxDataViewListModelCompare   s_CmpFunc;
+static wxDataViewListModel         *s_CmpModel;
+static size_t                       s_CmpCol;
+
+int LINKAGEMODE wxDataViewIntermediateCmp( size_t row1, size_t row2 )
+{
+    return s_CmpFunc( row1, row2, s_CmpCol, s_CmpModel );
+}
+
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewSortedListModel, wxDataViewListModel)
+
+wxDataViewSortedListModel::wxDataViewSortedListModel( wxDataViewListModel *child ) :
+  m_array( wxDataViewIntermediateCmp )
+{
+    m_child = child;
+    s_CmpCol = 0;
+    s_CmpModel = child;
+    s_CmpFunc = wxDataViewListModelSortedDefaultCompare;
+}
+
+wxDataViewSortedListModel::~wxDataViewSortedListModel()
+{
+}
+
+size_t wxDataViewSortedListModel::GetNumberOfRows()
+{
+    return m_child->GetNumberOfRows();
+}
+
+size_t wxDataViewSortedListModel::GetNumberOfCols()
+{
+    return m_child->GetNumberOfCols();
+}
+
+wxString wxDataViewSortedListModel::GetColType( size_t col )
+{
+    return m_child->GetColType( col );
+}
+
+wxVariant wxDataViewSortedListModel::GetValue( size_t col, size_t row )
+{
+    size_t child_row = m_array[row];
+    return m_child->GetValue( col, child_row );
+}
+
+bool wxDataViewSortedListModel::SetValue( wxVariant &variant, size_t col, size_t row )
+{
+    size_t child_row = m_array[row];
+    bool ret = m_child->SetValue( variant, col, child_row );
+    // resort in ::ValueChanged()
+    return ret;
+}
+
+bool wxDataViewSortedListModel::RowAppended()
+{
+    // you can only append
+    bool ret = m_child->RowAppended();
+    
+    // report RowInsrted
+    
+    return ret;
+}
+
+bool wxDataViewSortedListModel::RowPrepended()
+{
+    // you can only append
+    bool ret = m_child->RowAppended();
+    
+    // report RowInsrted
+    
+    return ret;
+}
+
+bool wxDataViewSortedListModel::RowInserted( size_t before )
+{
+    // you can only append
+    bool ret = m_child->RowAppended();
+    
+    // report different RowInsrted
+    
+    return ret;
+}
+
+bool wxDataViewSortedListModel::RowDeleted( size_t row )
+{
+    size_t child_row = m_array[row];
+    
+    bool ret = m_child->RowDeleted( child_row );
+    
+    wxDataViewListModel::RowDeleted( row );
+    
+    return ret;
+}
+
+bool wxDataViewSortedListModel::RowChanged( size_t row )
+{
+    size_t child_row = m_array[row];
+    bool ret = m_child->RowChanged( child_row );
+    
+    // report delete old pos, inserted new pos
+    
+    return ret;
+}
+
+bool wxDataViewSortedListModel::ValueChanged( size_t col, size_t row )
+{
+    size_t child_row = m_array[row];
+    bool ret = m_child->ValueChanged( col, child_row );
+    
+    // Do nothing if not the sorted col..
+    // report delete old pos, inserted new pos
+    
+    return ret;
+}
+
+bool wxDataViewSortedListModel::Cleared()
+{
+    bool ret = m_child->Cleared();
+    
+    wxDataViewListModel::Cleared();
+    
+    return ret;
+}
+
+void wxDataViewSortedListModel::SetNotifier( wxDataViewListModelNotifier *notifier )
+{
+    wxDataViewListModel::SetNotifier( notifier );
+}
+
+wxDataViewListModelNotifier* wxDataViewSortedListModel::GetNotifier()
+{
+    return wxDataViewListModel::GetNotifier();
+}
+
+// --------------------------------------------------------- 
 // wxDataViewCellBase
 // --------------------------------------------------------- 
 
