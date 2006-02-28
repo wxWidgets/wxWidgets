@@ -114,6 +114,12 @@
 #include "wx/msw/missing.h"
 
 #if defined(__WXWINCE__)
+#ifdef __POCKETPC__
+    #include <windows.h>
+    #include <shellapi.h>
+    #include <ole2.h>
+    #include <aygshell.h>
+#endif
     #include "wx/msw/wince/missing.h"
 #endif
 
@@ -478,6 +484,10 @@ void wxWindowMSW::Init()
 
     m_pendingPosition = wxDefaultPosition;
     m_pendingSize = wxDefaultSize;
+    
+#ifdef __POCKETPC__
+    m_contextMenuEnabled = false;
+#endif
 }
 
 // Destructor
@@ -2544,6 +2554,36 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     wxCHECK_MSG( win, 0,
                                  _T("FindWindowForMouseEvent() returned NULL") );
                 }
+
+#ifdef __POCKETPC__
+                if (IsContextMenuEnabled() && message == WM_LBUTTONDOWN)
+                {
+                    SHRGINFO shrgi = {0};
+                    
+                    shrgi.cbSize = sizeof(SHRGINFO);
+                    shrgi.hwndClient = (HWND) GetHWND();
+                    shrgi.ptDown.x = x;
+                    shrgi.ptDown.y = y;
+                    
+                    shrgi.dwFlags = SHRG_RETURNCMD;
+                    // shrgi.dwFlags = SHRG_NOTIFYPARENT;
+                    
+                    if (GN_CONTEXTMENU == ::SHRecognizeGesture(&shrgi))
+                    {
+                        wxPoint pt(x, y);
+                        pt = ClientToScreen(pt);
+                        
+                        wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU, GetId(), pt);
+                        
+                        evtCtx.SetEventObject(this);
+                        if (GetEventHandler()->ProcessEvent(evtCtx))
+                            processed = true;
+                        else
+                            return MSWDefWindowProc(message, wParam, lParam);
+                    }
+                }
+#endif                
+
 #else // !__WXWINCE__
                 wxWindowMSW *win = this;
 #endif // __WXWINCE__/!__WXWINCE__
