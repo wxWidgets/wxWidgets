@@ -431,15 +431,10 @@ wxDataViewCtrlBase::wxDataViewCtrlBase()
 
 wxDataViewCtrlBase::~wxDataViewCtrlBase()
 {
-    if (m_model)
-        delete m_model;
 }
 
 bool wxDataViewCtrlBase::AssociateModel( wxDataViewListModel *model )
 {
-    if (m_model)
-        delete m_model;
-        
     m_model = model;
     
     return true;

@@ -172,6 +172,49 @@ private:
 };
 
 // -------------------------------------
+// MyUnsortedTextModel
+// -------------------------------------
+
+class MyUnsortedTextModel: public wxDataViewListModel
+{
+public:
+    MyUnsortedTextModel()
+    {
+        m_list.Add( wxT("This") );
+        m_list.Add( wxT("is") );
+        m_list.Add( wxT("an") );
+        m_list.Add( wxT("unsorted") );
+        m_list.Add( wxT("list") );
+        m_list.Add( wxT("of") );
+        m_list.Add( wxT("words.") );
+    }
+
+    virtual size_t GetNumberOfRows() { return m_list.GetCount(); }
+    virtual size_t GetNumberOfCols() { return 2; }
+    virtual wxString GetColType( size_t col ) { return wxT("string"); }
+    virtual wxVariant GetValue( size_t col, size_t row )
+    {
+        if (col == 0)
+            return m_list[row];
+        wxString tmp;
+        tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col ); 
+        return tmp;
+    }
+    virtual bool SetValue( wxVariant &variant, size_t col, size_t row )
+    {
+        if (col == 0)
+        {
+            m_list[row] = variant.GetString();
+            return true;
+        }
+        return false;
+        
+    }
+
+    wxArrayString m_list;
+};
+
+// -------------------------------------
 // MyApp
 // -------------------------------------
 
@@ -200,6 +243,24 @@ private:
 };
 
 // -------------------------------------
+// MySortingFrame
+// -------------------------------------
+
+class MySortingFrame: public wxFrame
+{
+public:
+    MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
+
+public:
+    void OnQuit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+    
+private:
+    wxDataViewCtrl* dataview_left;
+    wxDataViewCtrl* dataview_right;
+};
+
+// -------------------------------------
 // MyApp
 // -------------------------------------
 
@@ -210,9 +271,11 @@ IMPLEMENT_APP  (MyApp)
 
 bool MyApp::OnInit(void)
 {
-    MyFrame *frame = new MyFrame(NULL, _T("Dynamic wxWidgets App"), 50, 50, 600, 340);
-
+    MyFrame *frame = new MyFrame(NULL, wxT("wxDataViewCtrl test"), 10, 10, 800, 340);
     frame->Show(true);
+
+    MySortingFrame *frame2 = new MySortingFrame(NULL, wxT("wxDataViewCtrl test"), 10, 350, 400, 240);
+    frame2->Show(true);
 
     SetTopWindow(frame);
 
@@ -309,4 +372,75 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
     dialog.ShowModal();
 }
 
+// -------------------------------------
+// MySortingFrame
+// -------------------------------------
+
+MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
+  wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
+{
+#ifdef __WXMSW__
+    SetIcon(wxIcon(_T("mondrian")));
+#else
+    SetIcon(wxIcon(mondrian_xpm));
+#endif
+
+    wxMenu *file_menu = new wxMenu;
+
+    file_menu->Append(DYNAMIC_ABOUT, _T("&About"));
+    file_menu->Append(DYNAMIC_QUIT, _T("E&xit"));
+    wxMenuBar *menu_bar = new wxMenuBar;
+    menu_bar->Append(file_menu, _T("&File"));
+    SetMenuBar(menu_bar);
+
+    // You used to have to do some casting for param 4, but now there are type-safe handlers
+    Connect( DYNAMIC_QUIT,  wxID_ANY,
+                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MySortingFrame::OnQuit) );
+    Connect( DYNAMIC_ABOUT, wxID_ANY,
+                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MySortingFrame::OnAbout) );
+
+    CreateStatusBar();
+    
+    
+    // Left wxDataViewCtrl
+    dataview_left = new wxDataViewCtrl( this, -1 );
+
+    MyUnsortedTextModel *model = new MyUnsortedTextModel;
+    dataview_left->AssociateModel( model );
+    wxDataViewTextCell *text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 0 );
+    dataview_left->AppendColumn( column );
+    dataview_left->AppendTextColumn( wxT("second"), 1 );
+    
+    // Right wxDataViewCtrl using the sorting model
+    dataview_right = new wxDataViewCtrl( this, -1 );
+    wxDataViewSortedListModel *sorted_model = 
+        new wxDataViewSortedListModel( model );
+    dataview_right->AssociateModel( sorted_model );
+    text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    column = new wxDataViewColumn( wxT("editable"), text_cell, 0 );
+    dataview_right->AppendColumn( column );
+    dataview_right->AppendTextColumn( wxT("second"), 1 );
+
+    // layout dataview controls.
+    
+    wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
+    sizer->Add( dataview_left, 1, wxGROW );
+    sizer->Add(10,10);
+    sizer->Add( dataview_right, 1, wxGROW );
+    SetSizer( sizer );
+}
+
+void MySortingFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
+{
+    Close(true);
+}
+
+void MySortingFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
+{
+    wxMessageDialog dialog(this, _T("This demonstrates the dataview control sorting"),
+        _T("About DataView"), wxOK);
+
+    dialog.ShowModal();
+}
 
