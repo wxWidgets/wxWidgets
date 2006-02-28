@@ -205,10 +205,12 @@ wxWinCE:
 - Checkable items in wxToolMenuBarTool supported.
 - Fixed date formatting and mktime.
 - Fixed getting standard folder paths on WinCE.
-- Support for backspace key on smartphone.
+- Support for backspace key on Smartphone.
 - Made both windows wxMediaCtrl Windows backends compilable with wxWinCE - it
   is recommended that you use wxMEDIABACKEND_WMP10 on this platform
   directly, however.
+- Added support for the context menu event (wxContextMenuEvent)
+  and added platform-specific wxWindow::EnableContextMenu.
 
 wxUniv:
 

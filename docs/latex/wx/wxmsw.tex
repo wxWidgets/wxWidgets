@@ -239,6 +239,14 @@ the Ctrl+Q accelerator can be used to quit the application, so wxWidgets
 defines this accelerator by default and if your application handles
 wxID\_EXIT, it will do the right thing.
 
+\subsubsection{Context menus in wxWinCE}
+
+To enable context menus in PocketPC, you currently need to call wxWindow::EnableContextMenu,
+a wxWinCE-only function. Otherwise the context menu event (wxContextMenuEvent) will
+never be sent. This API is subject to change.
+
+Context menus are not supported in Smartphone.
+
 \subsubsection{Control differences on wxWinCE}
 
 These controls and styles are specific to wxWinCE:
