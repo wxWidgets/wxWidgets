@@ -121,7 +121,7 @@ public:
   // addresses
   virtual bool GetLocal(wxSockAddress& addr_man) const;
   virtual bool GetPeer(wxSockAddress& addr_man) const;
-  virtual bool SetLocal(wxSockAddress& local);
+  virtual bool SetLocal(wxIPV4address& local);
 
   // base IO
   virtual bool  Close();
@@ -202,6 +202,7 @@ private:
   wxList        m_states;           // stack of states
   bool          m_interrupt;        // interrupt ongoing wait operations?
   bool          m_beingDeleted;     // marked for delayed deletion?
+  wxIPV4address m_localAddress;     // bind to local address?
 
   // pushback buffer
   void         *m_unread;           // pushback buffer
