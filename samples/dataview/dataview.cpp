@@ -246,6 +246,21 @@ private:
 // MySortingFrame
 // -------------------------------------
 
+enum my_events
+{
+    ID_APPEND_ROW_LEFT = 1000,
+    ID_PREPEND_ROW_LEFT,
+    ID_INSERT_ROW_LEFT,
+    ID_DELETE_ROW_LEFT,
+    ID_EDIT_ROW_LEFT,
+    
+    ID_APPEND_ROW_RIGHT,
+    ID_PREPEND_ROW_RIGHT,
+    ID_INSERT_ROW_RIGHT,
+    ID_DELETE_ROW_RIGHT,
+    ID_EDIT_ROW_RIGHT
+};
+
 class MySortingFrame: public wxFrame
 {
 public:
@@ -255,9 +270,23 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     
+    void OnAppendRowLeft(wxCommandEvent& event);
+    void OnPrependRowLeft(wxCommandEvent& event);
+    void OnInsertRowLeft(wxCommandEvent& event);
+    void OnDeleteRowLeft(wxCommandEvent& event);
+    void OnEditRowLeft(wxCommandEvent& event);
+    
+    void OnAppendRowRight(wxCommandEvent& event);
+    void OnPrependRowRight(wxCommandEvent& event);
+    void OnInsertRowRight(wxCommandEvent& event);
+    void OnDeleteRowRight(wxCommandEvent& event);
+    void OnEditRowRight(wxCommandEvent& event);
+    
 private:
     wxDataViewCtrl* dataview_left;
     wxDataViewCtrl* dataview_right;
+    
+    DECLARE_EVENT_TABLE()
 };
 
 // -------------------------------------
@@ -271,10 +300,10 @@ IMPLEMENT_APP  (MyApp)
 
 bool MyApp::OnInit(void)
 {
-    MyFrame *frame = new MyFrame(NULL, wxT("wxDataViewCtrl test"), 10, 10, 800, 340);
+    MyFrame *frame = new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 10, 10, 800, 340);
     frame->Show(true);
 
-    MySortingFrame *frame2 = new MySortingFrame(NULL, wxT("wxDataViewCtrl test"), 10, 350, 400, 240);
+    MySortingFrame *frame2 = new MySortingFrame(NULL, wxT("wxDataViewCtrl sorting test"), 10, 350, 600, 300);
     frame2->Show(true);
 
     SetTopWindow(frame);
@@ -376,6 +405,10 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 // MySortingFrame
 // -------------------------------------
 
+BEGIN_EVENT_TABLE(MySortingFrame,wxFrame)
+    EVT_BUTTON( ID_APPEND_ROW_LEFT, MySortingFrame::OnAppendRowLeft )
+END_EVENT_TABLE()
+
 MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
@@ -424,11 +457,35 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
 
     // layout dataview controls.
     
-    wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
-    sizer->Add( dataview_left, 1, wxGROW );
-    sizer->Add(10,10);
-    sizer->Add( dataview_right, 1, wxGROW );
-    SetSizer( sizer );
+    wxBoxSizer *top_sizer = new wxBoxSizer( wxHORIZONTAL );
+    top_sizer->Add( dataview_left, 1, wxGROW );
+    top_sizer->Add(10,10);
+    top_sizer->Add( dataview_right, 1, wxGROW );
+    
+    wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
+    button_sizer->Add( 10, 10, 1 );
+    wxFlexGridSizer *left_sizer = new wxFlexGridSizer( 2 );
+    left_sizer->Add( new wxButton( this, ID_APPEND_ROW_LEFT, wxT("Append") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( this, ID_PREPEND_ROW_LEFT, wxT("Prepend") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( this, ID_INSERT_ROW_LEFT, wxT("Insert") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( this, ID_DELETE_ROW_LEFT, wxT("Delete") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( this, ID_EDIT_ROW_LEFT, wxT("Edit") ), 0, wxALL, 5 );
+    button_sizer->Add( left_sizer );
+    button_sizer->Add( 10, 10, 2 );
+    wxFlexGridSizer *right_sizer = new wxFlexGridSizer( 2 );
+    right_sizer->Add( new wxButton( this, ID_APPEND_ROW_RIGHT, wxT("Append") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( this, ID_PREPEND_ROW_RIGHT, wxT("Prepend") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( this, ID_INSERT_ROW_RIGHT, wxT("Insert") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( this, ID_DELETE_ROW_RIGHT, wxT("Delete") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( this, ID_EDIT_ROW_RIGHT, wxT("Edit") ), 0, wxALL, 5 );
+    button_sizer->Add( right_sizer );
+    button_sizer->Add( 10, 10, 1 );
+    
+    wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
+    main_sizer->Add( top_sizer, 1, wxGROW );
+    main_sizer->Add( button_sizer, 0, wxGROW );
+    
+    SetSizer( main_sizer );
 }
 
 void MySortingFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
@@ -442,5 +499,45 @@ void MySortingFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
         _T("About DataView"), wxOK);
 
     dialog.ShowModal();
+}
+
+void MySortingFrame::OnAppendRowLeft(wxCommandEvent& event)
+{
+}
+
+void MySortingFrame::OnPrependRowLeft(wxCommandEvent& event)
+{
+}
+
+void MySortingFrame::OnInsertRowLeft(wxCommandEvent& event)
+{
+}
+
+void MySortingFrame::OnDeleteRowLeft(wxCommandEvent& event)
+{
+}
+
+void MySortingFrame::OnEditRowLeft(wxCommandEvent& event)
+{
+}
+
+void MySortingFrame::OnAppendRowRight(wxCommandEvent& event)
+{
+}
+
+void MySortingFrame::OnPrependRowRight(wxCommandEvent& event)
+{
+}
+
+void MySortingFrame::OnInsertRowRight(wxCommandEvent& event)
+{
+}
+
+void MySortingFrame::OnDeleteRowRight(wxCommandEvent& event)
+{
+}
+
+void MySortingFrame::OnEditRowRight(wxCommandEvent& event)
+{
 }
 
