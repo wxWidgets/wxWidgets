@@ -29,6 +29,8 @@
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_CORE wxDataViewModel;
+class WXDLLIMPEXP_CORE wxDataViewListModel;
 class WXDLLIMPEXP_CORE wxDataViewCtrl;
 class WXDLLIMPEXP_CORE wxDataViewColumn;
 class WXDLLIMPEXP_CORE wxDataViewCell;
@@ -53,7 +55,8 @@ protected:
 // wxDataViewListModelNotifier
 // --------------------------------------------------------- 
 
-class wxDataViewListModelNotifier
+
+class wxDataViewListModelNotifier: public wxObject
 {
 public:
     wxDataViewListModelNotifier() { }
@@ -66,12 +69,30 @@ public:
     virtual bool RowChanged( size_t row ) = 0;
     virtual bool ValueChanged( size_t col, size_t row ) = 0;
     virtual bool Cleared() = 0;
-    virtual bool ValueChanged( wxDataViewColumn *view_column, size_t model_column, size_t row ) = 0;
+    
+    void SetOwner( wxDataViewListModel *owner ) { m_owner = owner; }
+    wxDataViewListModel *GetOwner()             { return m_owner; }
+    
+private:
+    wxDataViewListModel *m_owner;
 };
 
 // --------------------------------------------------------- 
 // wxDataViewListModel
 // --------------------------------------------------------- 
+
+class wxDataViewViewingColumn: public wxObject
+{
+public:
+    wxDataViewViewingColumn( wxDataViewColumn *view_column, size_t model_column )
+    {
+        m_viewColumn = view_column;
+        m_modelColumn = model_column;
+    }
+    
+    wxDataViewColumn   *m_viewColumn;
+    size_t              m_modelColumn;
+};
 
 class wxDataViewListModel: public wxDataViewModel
 {
@@ -101,13 +122,11 @@ public:
     virtual void AddViewingColumn( wxDataViewColumn *view_column, size_t model_column );
     virtual void RemoveViewingColumn( wxDataViewColumn *column );
     
-    // Used internally    
-    virtual void SetNotifier( wxDataViewListModelNotifier *notifier );
-    virtual wxDataViewListModelNotifier* GetNotifier();
+    virtual void AddNotifier( wxDataViewListModelNotifier *notifier );
+    virtual void RemoveNotifier( wxDataViewListModelNotifier *notifier );
     
-private:
-    wxDataViewListModelNotifier *m_notifier;
-    wxList                       m_viewingColumns;
+    wxList                      m_notifiers;
+    wxList                      m_viewingColumns;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewListModel)
@@ -146,10 +165,8 @@ public:
     virtual bool ValueChanged( size_t col, size_t row );
     virtual bool Cleared();
 
-    // Used internally    
-    void SetNotifier( wxDataViewListModelNotifier *notifier );
-    wxDataViewListModelNotifier* GetNotifier();
-    
+    virtual void Resort();
+
 private:
     wxDataViewListModel             *m_child;
     wxDataViewSortedIndexArray       m_array;

@@ -34,89 +34,108 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewModel, wxObject)
 // wxDataViewListModel
 // --------------------------------------------------------- 
 
-class wxDataViewViewingColumn: public wxObject
-{
-public:
-    wxDataViewViewingColumn( wxDataViewColumn *view_column, size_t model_column )
-    {
-        m_viewColumn = view_column;
-        m_modelColumn = model_column;
-    }
-    
-    wxDataViewColumn   *m_viewColumn;
-    size_t              m_modelColumn;
-};
-
-
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewListModel, wxDataViewModel)
 
 wxDataViewListModel::wxDataViewListModel()
 {
-    m_notifier = NULL;
     m_viewingColumns.DeleteContents( true );
+    m_notifiers.DeleteContents( true );
 }
 
 wxDataViewListModel::~wxDataViewListModel()
 {
-    if (m_notifier)
-        delete m_notifier;
 }
 
 bool wxDataViewListModel::RowAppended()
 {
-    if (m_notifier)
-        return m_notifier->RowAppended();
+    bool ret = true;
+
+    wxNode *node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
+        if (!notifier->RowAppended())
+            ret = false;
+        node = node->GetNext();
+    }
         
-    return false;
+    return ret;
 }
 
 bool wxDataViewListModel::RowPrepended()
 {
-    if (m_notifier)
-        return m_notifier->RowPrepended();
+    bool ret = true;
+
+    wxNode *node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
+        if (!notifier->RowPrepended())
+            ret = false;
+        node = node->GetNext();
+    }
         
-    return false;
+    return ret;
 }
 
 bool wxDataViewListModel::RowInserted( size_t before )
 {
-    if (m_notifier)
-        return m_notifier->RowInserted( before );
+    bool ret = true;
+
+    wxNode *node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
+        if (!notifier->RowInserted(before))
+            ret = false;
+        node = node->GetNext();
+    }
         
-    return false;
+    return ret;
 }
 
 bool wxDataViewListModel::RowDeleted( size_t row )
 {
-    if (m_notifier)
-        return m_notifier->RowDeleted( row );
+    bool ret = true;
+
+    wxNode *node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
+        if (!notifier->RowDeleted( row ))
+            ret = false;
+        node = node->GetNext();
+    }
         
-    return false;
+    return ret;
 }
 
 bool wxDataViewListModel::RowChanged( size_t row )
 {
-    if (m_notifier)
-        return m_notifier->RowChanged( row );
+    bool ret = true;
+
+    wxNode *node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
+        if (!notifier->RowChanged( row ))
+            ret = false;
+        node = node->GetNext();
+    }
         
-    return false;
+    return ret;
 }
 
 bool wxDataViewListModel::ValueChanged( size_t col, size_t row )
 {
-    bool ret = false;
+    bool ret = true;
 
-    if (m_notifier)
-        ret = m_notifier->ValueChanged( col, row );
-        
-    wxNode *node = m_viewingColumns.GetFirst();
+    wxNode *node = m_notifiers.GetFirst();
     while (node)
     {
-        wxDataViewViewingColumn* tmp = (wxDataViewViewingColumn*) node->GetData();
-        
-        if (tmp->m_modelColumn == col)
-            m_notifier->ValueChanged( tmp->m_viewColumn, col, row );
-    
+        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
+        if (!notifier->ValueChanged( col, row ))
+            ret = false;
         node = node->GetNext();
     }
     
@@ -125,10 +144,18 @@ bool wxDataViewListModel::ValueChanged( size_t col, size_t row )
 
 bool wxDataViewListModel::Cleared()
 {
-    if (m_notifier)
-        return m_notifier->Cleared();
+    bool ret = true;
+
+    wxNode *node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
+        if (!notifier->Cleared())
+            ret = false;
+        node = node->GetNext();
+    }
         
-    return false;
+    return ret;
 }
 
 void wxDataViewListModel::AddViewingColumn( wxDataViewColumn *view_column, size_t model_column )
@@ -153,17 +180,15 @@ void wxDataViewListModel::RemoveViewingColumn( wxDataViewColumn *column )
     }
 }
 
-void wxDataViewListModel::SetNotifier( wxDataViewListModelNotifier *notifier )
+void wxDataViewListModel::AddNotifier( wxDataViewListModelNotifier *notifier )
 {
-    if (m_notifier)
-        delete m_notifier;
-        
-   m_notifier = notifier;
+    m_notifiers.Append( notifier );
+    notifier->SetOwner( this );
 }
 
-wxDataViewListModelNotifier* wxDataViewListModel::GetNotifier()
+void wxDataViewListModel::RemoveNotifier( wxDataViewListModelNotifier *notifier )
 {
-    return m_notifier;
+    m_notifiers.DeleteObject( notifier );
 }
 
 // --------------------------------------------------------- 
@@ -226,10 +251,21 @@ wxDataViewSortedListModel::wxDataViewSortedListModel( wxDataViewListModel *child
     s_CmpCol = 0;
     s_CmpModel = child;
     s_CmpFunc = wxDataViewListModelSortedDefaultCompare;
+    
+    Resort();    
 }
 
 wxDataViewSortedListModel::~wxDataViewSortedListModel()
 {
+}
+
+void wxDataViewSortedListModel::Resort()
+{
+    m_array.Clear();
+    size_t n = m_child->GetNumberOfRows();
+    size_t i;
+    for (i = 0; i < n; i++)
+        m_array.Add( i );
 }
 
 size_t wxDataViewSortedListModel::GetNumberOfRows()
@@ -330,16 +366,6 @@ bool wxDataViewSortedListModel::Cleared()
     wxDataViewListModel::Cleared();
     
     return ret;
-}
-
-void wxDataViewSortedListModel::SetNotifier( wxDataViewListModelNotifier *notifier )
-{
-    wxDataViewListModel::SetNotifier( notifier );
-}
-
-wxDataViewListModelNotifier* wxDataViewSortedListModel::GetNotifier()
-{
-    return wxDataViewListModel::GetNotifier();
 }
 
 // --------------------------------------------------------- 

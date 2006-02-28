@@ -222,7 +222,8 @@ public:
 private:
     friend class wxDataViewCtrlDC;
     friend class wxGtkDataViewListModelNotifier;
-    GtkWidget       *m_treeview;
+    GtkWidget                   *m_treeview;
+    wxDataViewListModelNotifier *m_notifier;
     
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)
