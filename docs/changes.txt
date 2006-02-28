@@ -93,6 +93,8 @@ wxWinCE:
 - Fixed date formatting and mktime.
 - Fixed getting standard folder paths on WinCE.
 - Backported wxCheckListBox implementation from 2.7.
+- Added support for the context menu event (wxContextMenuEvent)
+  and added platform-specific wxWindow::EnableContextMenu.
 
 wxMac:
 
