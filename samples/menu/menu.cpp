@@ -496,6 +496,9 @@ MyFrame::MyFrame()
                  _T("menubar itself.\n\n")
                  _T("Right click the band below to test popup menus.\n"));
 #endif
+#ifdef __POCKETPC__
+    EnableContextMenu();
+#endif
 }
 
 MyFrame::~MyFrame()
@@ -930,7 +933,7 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::ShowContextMenu(const wxPoint& pos)
 {
-    wxMenu menu(_T("Test popup"));
+    wxMenu menu;
 
     menu.Append(Menu_Help_About, _T("&About"));
     menu.Append(Menu_Popup_Submenu, _T("&Submenu"), CreateDummyMenu(NULL));
