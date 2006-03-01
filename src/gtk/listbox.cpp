@@ -565,15 +565,8 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     }
 
 
-    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(m_widget), 
-                                           GTK_WIDGET(m_treeview) );
-
-    /* make list scroll when moving the focus down using cursor keys */
-    gtk_container_set_focus_vadjustment(
-        GTK_CONTAINER(m_treeview),
-        gtk_scrolled_window_get_vadjustment(
-        GTK_SCROLLED_WINDOW(m_widget)));
-
+    gtk_container_add (GTK_CONTAINER (m_widget), GTK_WIDGET(m_treeview) );
+    
     gtk_widget_show( GTK_WIDGET(m_treeview) );
 
     wxListBox::DoInsertItems(wxArrayString(n, choices), 0); // insert initial items
